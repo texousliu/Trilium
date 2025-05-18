@@ -57,14 +57,6 @@ const TPL = /*html*/`
 </div>
 `;
 
-// TODO: Deduplicate
-interface Theme {
-    title: string;
-    val: string;
-}
-
-type Response = Record<string, Theme[]>;
-
 /**
  * Contains appearance settings for code blocks within text notes, such as the theme for the syntax highlighter.
  */
@@ -78,10 +70,10 @@ export default class CodeBlockOptions extends OptionsWidget {
         this.$widget = $(TPL);
         this.$themeSelect = this.$widget.find(".theme-select");
         // Populate the list of themes.
-        for (const name of Object.keys(Themes)) {
+        for (const [ id, theme ] of Object.entries(Themes)) {
             const option = $("<option>")
-                .attr("value", `default:${name}`)
-                .text(name);
+                .attr("value", `default:${id}`)
+                .text(theme.name);
             this.$themeSelect.append(option);
         }
         this.$themeSelect.on("change", async () => {

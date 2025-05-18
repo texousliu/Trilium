@@ -46,7 +46,10 @@ export function highlight(code: string, options: HighlightOptions) {
 }
 
 export async function loadTheme(theme: Theme) {
-    console.log("Got", theme.default);
+    console.log("Got theme", theme);
+
+    const loadedTheme = await theme.load();
+    console.log("Got", loadedTheme.default);
 }
 
 export const { highlightAuto } = hljs;
