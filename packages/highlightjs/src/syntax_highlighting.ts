@@ -6,7 +6,7 @@ type MimeRecord = Record<string, (() => Promise<{ default: LanguageFn}>) | null>
 const byMimeType: MimeRecord = {
     "text/plain": () => import("highlight.js/lib/languages/plaintext"),
     "application/dart": () => import("highlight.js/lib/languages/dart"),
-    "application/edn": null,
+    "application/edn": () => import("highlight.js/lib/languages/clojure"),
     "application/javascript;env=backend": () => import("highlight.js/lib/languages/javascript"),
     "application/javascript;env=frontend": () => import("highlight.js/lib/languages/javascript"),
     "application/json": () => import("highlight.js/lib/languages/json"),
@@ -19,7 +19,7 @@ const byMimeType: MimeRecord = {
     "application/typescript": () => import("highlight.js/lib/languages/typescript"),
     "application/x-aspx": null,
     "application/x-bat": () => import("highlight.js/lib/languages/dos"),
-    "application/x-cypher-query": null,
+    "application/x-cypher-query": () => import("highlightjs-cypher"),
     "application/x-ejs": null,
     "application/x-erb": () => import("highlight.js/lib/languages/erb"),
     "application/x-jsp": () => import("highlight.js/lib/languages/java"),
