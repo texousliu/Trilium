@@ -1,5 +1,5 @@
 import { ALLOWED_PROTOCOLS } from "../../../services/link.js";
-import { MIME_TYPE_AUTO } from "../../../services/mime_type_definitions.js";
+import { MIME_TYPE_AUTO } from "@triliumnext/commons";
 import { getHighlightJsNameForMime } from "../../../services/mime_types.js";
 import options from "../../../services/options.js";
 import { ensureMimeTypesForHighlighting, isSyntaxHighlightEnabled } from "../../../services/syntax_highlight.js";

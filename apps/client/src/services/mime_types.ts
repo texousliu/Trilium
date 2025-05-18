@@ -1,5 +1,4 @@
-import { normalizeMimeTypeForCKEditor, type MimeType } from "@triliumnext/commons";
-import { MIME_TYPE_AUTO, MIME_TYPES_DICT } from "./mime_type_definitions.js";
+import { normalizeMimeTypeForCKEditor, type MimeType, MIME_TYPE_AUTO, MIME_TYPES_DICT } from "@triliumnext/commons";
 import options from "./options.js";
 
 let mimeTypes: MimeType[] | null = null;
