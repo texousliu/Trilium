@@ -1283,6 +1283,9 @@ importers:
 
   packages/highlightjs:
     dependencies:
+      '@triliumnext/commons':
+        specifier: workspace:*
+        version: link:../commons
       highlight.js:
         specifier: 11.11.1
         version: 11.11.1

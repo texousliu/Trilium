@@ -3,6 +3,7 @@ import { t } from "../../../../services/i18n.js";
 import library_loader from "../../../../services/library_loader.js";
 import server from "../../../../services/server.js";
 import OptionsWidget from "../options_widget.js";
+import { ensureMimeTypesForHighlighting } from "../../../../services/syntax_highlight.js";
 
 const SAMPLE_LANGUAGE = "javascript";
 const SAMPLE_CODE = `\
@@ -91,11 +92,14 @@ export default class CodeBlockOptions extends OptionsWidget {
     #setupPreview(shouldEnableSyntaxHighlight: boolean) {
         const text = SAMPLE_CODE;
         if (shouldEnableSyntaxHighlight) {
-            import("@triliumnext/highlightjs").then((hljs) => {
+            import("@triliumnext/highlightjs").then(async (hljs) => {
+                await ensureMimeTypesForHighlighting();
                 const highlightedText = hljs.highlight(text, {
                     language: SAMPLE_LANGUAGE
                 });
-                this.$sampleEl.html(highlightedText.value);
+                if (highlightedText) {
+                    this.$sampleEl.html(highlightedText.value);
+                }
             });
         } else {
             this.$sampleEl.text(text);

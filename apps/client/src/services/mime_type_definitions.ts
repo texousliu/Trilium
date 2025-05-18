@@ -1,21 +1,12 @@
 // TODO: deduplicate with /src/services/import/mime_type_definitions.ts
 
+import type { MimeTypeDefinition } from "@triliumnext/commons";
+
 /**
  * A pseudo-MIME type which is used in the editor to automatically determine the language used in code blocks via heuristics.
  */
 export const MIME_TYPE_AUTO = "text-x-trilium-auto";
 
-export interface MimeTypeDefinition {
-    default?: boolean;
-    title: string;
-    mime: string;
-    /** The name of the language/mime type as defined by highlight.js (or one of the aliases), in order to be used for syntax highlighting such as inside code blocks. */
-    highlightJs?: string;
-    /** If specified, will load the corresponding highlight.js file from the `libraries/highlightjs/${id}.js` instead of `node_modules/@highlightjs/cdn-assets/languages/${id}.min.js`. */
-    highlightJsSource?: "libraries";
-    /** If specified, will load the corresponding highlight file from the given path instead of `node_modules`. */
-    codeMirrorSource?: string;
-}
 
 /**
  * For highlight.js-supported languages, see https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md.

@@ -1,4 +1,4 @@
-import { highlight, highlightAuto } from "@triliumnext/highlightjs";
+import { ensureMimeTypes, highlight, highlightAuto } from "@triliumnext/highlightjs";
 import mime_types from "./mime_types.js";
 import options from "./options.js";
 
@@ -47,17 +47,18 @@ export async function applySingleBlockSyntaxHighlight($codeBlock: JQuery<HTMLEle
     if (normalizedMimeType === mime_types.MIME_TYPE_AUTO) {
         highlightedText = highlightAuto(text);
     } else if (normalizedMimeType) {
-        const language = mime_types.getHighlightJsNameForMime(normalizedMimeType);
-        if (language) {
-            highlightedText = highlight(text, { language });
-        } else {
-            console.warn(`Unknown mime type: ${normalizedMimeType}.`);
-        }
+        await ensureMimeTypesForHighlighting();
+        highlightedText = highlight(text, { language: normalizedMimeType });
     }
 
     if (highlightedText) {
         $codeBlock.html(highlightedText.value);
     }
+}
+
+export async function ensureMimeTypesForHighlighting() {
+    const mimeTypes = mime_types.getMimeTypes();
+    await ensureMimeTypes(mimeTypes);
 }
 
 /**

@@ -1,12 +1,6 @@
-import { MIME_TYPE_AUTO, MIME_TYPES_DICT, normalizeMimeTypeForCKEditor, type MimeTypeDefinition } from "./mime_type_definitions.js";
+import type { MimeType } from "@triliumnext/commons";
+import { MIME_TYPE_AUTO, MIME_TYPES_DICT, normalizeMimeTypeForCKEditor } from "./mime_type_definitions.js";
 import options from "./options.js";
-
-interface MimeType extends MimeTypeDefinition {
-    /**
-     * True if this mime type was enabled by the user in the "Available MIME types in the dropdown" option in the Code Notes settings.
-     */
-    enabled: boolean;
-}
 
 let mimeTypes: MimeType[] | null = null;
 
