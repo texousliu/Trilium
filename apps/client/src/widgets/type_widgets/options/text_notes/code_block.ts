@@ -4,6 +4,7 @@ import library_loader from "../../../../services/library_loader.js";
 import server from "../../../../services/server.js";
 import OptionsWidget from "../options_widget.js";
 import { ensureMimeTypesForHighlighting } from "../../../../services/syntax_highlight.js";
+import { Themes } from "@triliumnext/highlightjs";
 
 const SAMPLE_LANGUAGE = "javascript";
 const SAMPLE_CODE = `\
@@ -76,6 +77,13 @@ export default class CodeBlockOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
         this.$themeSelect = this.$widget.find(".theme-select");
+        // Populate the list of themes.
+        for (const name of Object.keys(Themes)) {
+            const option = $("<option>")
+                .attr("value", `default:${name}`)
+                .text(name);
+            this.$themeSelect.append(option);
+        }
         this.$themeSelect.on("change", async () => {
             const newTheme = String(this.$themeSelect.val());
             library_loader.loadHighlightingTheme(newTheme);
@@ -107,25 +115,6 @@ export default class CodeBlockOptions extends OptionsWidget {
     }
 
     async optionsLoaded(options: OptionMap) {
-        const themeGroups = await server.get<Response>("options/codeblock-themes");
-        this.$themeSelect.empty();
-
-        for (const [key, themes] of Object.entries(themeGroups)) {
-            const $group = key ? $("<optgroup>").attr("label", key) : null;
-
-            for (const theme of themes) {
-                const option = $("<option>").attr("value", theme.val).text(theme.title);
-
-                if ($group) {
-                    $group.append(option);
-                } else {
-                    this.$themeSelect.append(option);
-                }
-            }
-            if ($group) {
-                this.$themeSelect.append($group);
-            }
-        }
         this.$themeSelect.val(options.codeBlockTheme);
         this.setCheckboxState(this.$wordWrap, options.codeBlockWordWrap);
         this.$widget.closest(".note-detail-printable").toggleClass("word-wrap", options.codeBlockWordWrap === "true");

@@ -31,7 +31,6 @@ const HIGHLIGHT_JS: Library = {
             }
         }
 
-        const currentTheme = String(optionsService.get("codeBlockTheme"));
         loadHighlightingTheme(currentTheme);
 
         return Array.from(scriptsToLoad);

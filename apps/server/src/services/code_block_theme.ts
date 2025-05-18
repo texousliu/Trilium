@@ -5,7 +5,6 @@
  */
 
 import fs from "fs";
-import themeNames from "./code_block_theme_names.json" with { type: "json" };
 import { t } from "i18next";
 import { join } from "path";
 import { isDev, isElectron, getResourceDir } from "./utils.js";
@@ -69,10 +68,6 @@ export function readThemesFromFileSystem(path: string): ColorTheme[] {
         .map((name) => {
             const nameWithoutExtension = name.replace(".min.css", "");
             let title = nameWithoutExtension.replace(/-/g, " ");
-
-            if (title in themeNames) {
-                title = (themeNames as Record<string, string>)[title];
-            }
 
             return {
                 val: `default:${nameWithoutExtension}`,

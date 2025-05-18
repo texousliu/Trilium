@@ -1,4 +1,4 @@
-import { ensureMimeTypes, highlight, highlightAuto } from "@triliumnext/highlightjs";
+import { ensureMimeTypes, highlight, highlightAuto, loadTheme } from "@triliumnext/highlightjs";
 import mime_types from "./mime_types.js";
 import options from "./options.js";
 
@@ -57,6 +57,11 @@ export async function applySingleBlockSyntaxHighlight($codeBlock: JQuery<HTMLEle
 }
 
 export async function ensureMimeTypesForHighlighting() {
+    // Load theme.
+    const currentTheme = String(options.get("codeBlockTheme"));
+    loadTheme(currentTheme);
+
+    // Load mime types.
     const mimeTypes = mime_types.getMimeTypes();
     await ensureMimeTypes(mimeTypes);
 }

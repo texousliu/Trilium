@@ -1,7 +1,10 @@
 import hljs from "../node_modules/highlight.js/es/core.js";
 import { normalizeMimeTypeForCKEditor, type MimeType } from "@triliumnext/commons";
-import definitions from "./syntax_highlighting.js";
+import syntaxDefinitions from "./syntax_highlighting.js";
+import { type Theme } from "./themes.js";
 import { type HighlightOptions } from "highlight.js";
+
+export { default as Themes } from "./themes.js";
 
 const registeredMimeTypes = new Set<string>();
 const unsupportedMimeTypes = new Set<string>();
@@ -18,7 +21,7 @@ export async function ensureMimeTypes(mimeTypes: MimeType[]) {
         }
 
         registeredMimeTypes.add(mime);
-        const loader = definitions[mime];
+        const loader = syntaxDefinitions[mime];
         if (!loader) {
             unsupportedMimeTypes.add(mime);
             continue;
@@ -40,6 +43,10 @@ export function highlight(code: string, options: HighlightOptions) {
     }
 
     return hljs.highlight(code, options);
+}
+
+export async function loadTheme(theme: Theme) {
+    console.log("Got", theme.default);
 }
 
 export const { highlightAuto } = hljs;
