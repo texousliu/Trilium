@@ -91,7 +91,7 @@ export default class CodeBlockOptions extends OptionsWidget {
     #setupPreview(shouldEnableSyntaxHighlight: boolean) {
         const text = SAMPLE_CODE;
         if (shouldEnableSyntaxHighlight) {
-            library_loader.requireLibrary(library_loader.HIGHLIGHT_JS).then(() => {
+            import("@triliumnext/highlightjs").then((hljs) => {
                 const highlightedText = hljs.highlight(text, {
                     language: SAMPLE_LANGUAGE
                 });

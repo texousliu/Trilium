@@ -121,6 +121,5 @@ export default {
     requireCss,
     requireLibrary,
     loadHighlightingTheme,
-    KATEX,
-    HIGHLIGHT_JS
+    KATEX
 };
