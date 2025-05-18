@@ -24,7 +24,7 @@ const byMimeType: MimeRecord = {
     "application/x-erb": () => import("highlight.js/lib/languages/erb"),
     "application/x-jsp": () => import("highlight.js/lib/languages/java"),
     "application/x-powershell": () => import("highlight.js/lib/languages/powershell"),
-    "application/xml-dtd": null,
+    "application/xml-dtd": () => import("highlight.js/lib/languages/xml"),
     "application/xquery": () => import("highlight.js/lib/languages/xquery"),
     "message/http": () => import("highlight.js/lib/languages/http"),
     "text/apl": null,
