@@ -24,7 +24,7 @@ export async function ensureMimeTypes(mimeTypes: MimeType[]) {
             continue;
         }
 
-        const language = (await loader).default;
+        const language = (await loader()).default;
         hljs.registerLanguage(mime, language);
     }
 }
