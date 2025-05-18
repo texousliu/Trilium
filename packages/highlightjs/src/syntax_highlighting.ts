@@ -31,7 +31,7 @@ const byMimeType: MimeRecord = {
     "text/coffeescript": () => import("highlight.js/lib/languages/coffeescript"),
     "text/css": () => import("highlight.js/lib/languages/css"),
     "text/html": () => import("highlight.js/lib/languages/xml"),
-    "text/jinja2": null,
+    "text/jinja2": () => import("highlight.js/lib/languages/django"),
     "text/jsx": () => import("highlight.js/lib/languages/javascript"),
     "text/mirc": null,
     "text/tiki": null,
