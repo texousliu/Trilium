@@ -2,6 +2,8 @@ import { ensureMimeTypes, highlight, highlightAuto, loadTheme, Themes } from "@t
 import mime_types from "./mime_types.js";
 import options from "./options.js";
 
+let highlightingLoaded = false;
+
 export function getStylesheetUrl(theme: string) {
     if (!theme) {
         return null;
@@ -24,6 +26,8 @@ export async function applySyntaxHighlight($container: JQuery<HTMLElement>) {
     if (!isSyntaxHighlightEnabled()) {
         return;
     }
+
+    await ensureMimeTypesForHighlighting();
 
     const codeBlocks = $container.find("pre code");
     for (const codeBlock of codeBlocks) {
@@ -58,6 +62,10 @@ export async function applySingleBlockSyntaxHighlight($codeBlock: JQuery<HTMLEle
 }
 
 export async function ensureMimeTypesForHighlighting() {
+    if (highlightingLoaded) {
+        return;
+    }
+
     // Load theme.
     const currentThemeName = String(options.get("codeBlockTheme"));
     loadHighlightingTheme(currentThemeName);
@@ -65,6 +73,8 @@ export async function ensureMimeTypesForHighlighting() {
     // Load mime types.
     const mimeTypes = mime_types.getMimeTypes();
     await ensureMimeTypes(mimeTypes);
+
+    highlightingLoaded = true;
 }
 
 export function loadHighlightingTheme(themeName: string) {
