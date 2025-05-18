@@ -45,6 +45,7 @@ export async function applySingleBlockSyntaxHighlight($codeBlock: JQuery<HTMLEle
 
     let highlightedText = null;
     if (normalizedMimeType === mime_types.MIME_TYPE_AUTO) {
+        await ensureMimeTypesForHighlighting();
         highlightedText = highlightAuto(text);
     } else if (normalizedMimeType) {
         await ensureMimeTypesForHighlighting();
