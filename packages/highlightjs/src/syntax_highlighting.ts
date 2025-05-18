@@ -155,7 +155,7 @@ const byMimeType: MimeRecord = {
     "text/x-tornado": null,
     "text/x-ttcn-asn": null,
     "text/x-ttcn-cfg": null,
-    "text/x-ttcn": null,
+    "text/x-ttcn": () => import("./languages/ttcn3.js"),
     "text/x-twig": () => import("highlight.js/lib/languages/twig"),
     "text/x-vb": () => import("highlight.js/lib/languages/vbnet"),
     "text/x-verilog": () => import("highlight.js/lib/languages/verilog"),
