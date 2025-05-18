@@ -173,14 +173,6 @@ export default class SyntaxHighlighting extends Plugin {
             return;
         }
 
-        // Find the corresponding language for the given mimetype.
-        const highlightJsLanguage = this.config.mapLanguageName(mimeType);
-
-        if (mimeType !== this.config.defaultMimeType && !highlightJsLanguage) {
-            console.warn(`Unsupported highlight.js for mime type ${mimeType}.`);
-            return;
-        }
-
         // Don't highlight if the code is too big, as the typing performance will be highly degraded.
         if (codeBlock.childCount >= HIGHLIGHT_MAX_BLOCK_COUNT) {
             return;
@@ -230,8 +222,13 @@ export default class SyntaxHighlighting extends Plugin {
         if (mimeType === this.config.defaultMimeType) {
             highlightRes = this.hljs.highlightAuto(text);
         } else {
-            highlightRes = this.hljs.highlight(text, { language: highlightJsLanguage });
+            highlightRes = this.hljs.highlight(text, { language: mimeType });
         }
+
+        if (!highlightRes) {
+            return;
+        }
+
         dbg("text\n" + text);
         dbg("html\n" + highlightRes.value);
 

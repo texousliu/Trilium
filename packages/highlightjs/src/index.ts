@@ -1,5 +1,5 @@
 import hljs from "../node_modules/highlight.js/es/core.js";
-import type { MimeType } from "@triliumnext/commons";
+import { normalizeMimeTypeForCKEditor, type MimeType } from "@triliumnext/commons";
 import definitions from "./syntax_highlighting.js";
 import { type HighlightOptions } from "highlight.js";
 
@@ -12,7 +12,7 @@ export async function ensureMimeTypes(mimeTypes: MimeType[]) {
             continue;
         }
 
-        const mime = mimeType.mime;
+        const mime = normalizeMimeTypeForCKEditor(mimeType.mime);
         if (registeredMimeTypes.has(mime)) {
             continue;
         }
@@ -25,7 +25,6 @@ export async function ensureMimeTypes(mimeTypes: MimeType[]) {
         }
 
         const language = (await loader).default;
-        console.info(`Registered highlighting for ${mime}.`);
         hljs.registerLanguage(mime, language);
     }
 }
@@ -36,7 +35,7 @@ export function highlight(code: string, options: HighlightOptions) {
     }
 
     if (!registeredMimeTypes.has(options.language)) {
-        console.warn(`Unable to find highlighting for ${code}.`);
+        console.warn(`Unable to find highlighting for ${options.language}.`);
         return null;
     }
 

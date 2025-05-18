@@ -1,6 +1,9 @@
+import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
 import type { LanguageFn } from "highlight.js";
 
-const byMimeType: Record<string, (Promise<{ default: LanguageFn}> | null)> = {
+type MimeRecord = Record<string, (Promise<{ default: LanguageFn}> | null)>;
+
+const byMimeType: MimeRecord = {
     "text/plain": import("highlight.js/lib/languages/plaintext"),
     "application/dart": import("highlight.js/lib/languages/dart"),
     "application/edn": null,
@@ -166,4 +169,10 @@ const byMimeType: Record<string, (Promise<{ default: LanguageFn}> | null)> = {
     "text/xml": import("highlight.js/lib/languages/xml"),
 }
 
-export default byMimeType;
+const normalizedByMimeType: MimeRecord = {};
+for (const [mimeType, loader] of Object.entries(byMimeType)) {
+    const normalizedMimeType = normalizeMimeTypeForCKEditor(mimeType);
+    normalizedByMimeType[normalizedMimeType] = loader;
+}
+
+export default normalizedByMimeType;

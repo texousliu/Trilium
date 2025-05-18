@@ -127,9 +127,10 @@ const renderer = new CustomMarkdownRenderer({ async: false });
 
 import htmlSanitizer from "../html_sanitizer.js";
 import importUtils from "./utils.js";
-import { getMimeTypeFromHighlightJs, MIME_TYPE_AUTO, normalizeMimeTypeForCKEditor } from "./mime_type_definitions.js";
+import { getMimeTypeFromHighlightJs, MIME_TYPE_AUTO } from "./mime_type_definitions.js";
 import { ADMONITION_TYPE_MAPPINGS } from "../export/markdown.js";
 import utils from "../utils.js";
+import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
 
 function renderToHtml(content: string, title: string) {
     // Double-escape slashes in math expression because they are otherwise consumed by the parser somewhere.
