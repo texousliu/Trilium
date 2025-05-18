@@ -104,10 +104,7 @@ export function buildConfig() {
             definitionsUrl: emojiDefinitionsUrl
         },
         syntaxHighlighting: {
-            async loadHighlightJs() {
-                await library_loader.requireLibrary(library_loader.HIGHLIGHT_JS);
-                return hljs;
-            },
+            loadHighlightJs: async () => await import("@triliumnext/highlightjs"),
             mapLanguageName: getHighlightJsNameForMime,
             defaultMimeType: MIME_TYPE_AUTO,
             enabled: isSyntaxHighlightEnabled
