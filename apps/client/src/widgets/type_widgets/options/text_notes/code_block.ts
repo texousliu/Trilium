@@ -1,11 +1,11 @@
-import type { OptionMap } from "@triliumnext/commons";
+import { normalizeMimeTypeForCKEditor, type OptionMap } from "@triliumnext/commons";
 import { t } from "../../../../services/i18n.js";
 import server from "../../../../services/server.js";
 import OptionsWidget from "../options_widget.js";
 import { ensureMimeTypesForHighlighting, loadHighlightingTheme } from "../../../../services/syntax_highlight.js";
 import { Themes } from "@triliumnext/highlightjs";
 
-const SAMPLE_LANGUAGE = "javascript";
+const SAMPLE_LANGUAGE = normalizeMimeTypeForCKEditor("application/javascript;env=frontend");
 const SAMPLE_CODE = `\
 const n = 10;
 greet(n); // Print "Hello World" for n times
