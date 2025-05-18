@@ -23,7 +23,7 @@ function setupLeftPaneResizer(leftPaneVisible: boolean) {
     // Window resizing causes `window.innerWidth` to change, so `reservedWidth` needs to be recalculated each time.
     const reservedWidth = reservedPx / window.innerWidth * 100;
     if (!leftPaneVisible) {
-        $("#rest-pane").css("width", layoutOrientation === "vertical" ? `calc(100% - ${reservedWidth})` : "100%");
+        $("#rest-pane").css("width", layoutOrientation === "vertical" ? `${(100 - reservedWidth) * 100}%` : "100%");
         return;
     }
 
