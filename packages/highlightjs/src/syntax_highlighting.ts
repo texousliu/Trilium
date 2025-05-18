@@ -110,7 +110,7 @@ const byMimeType: MimeRecord = {
     "text/x-octave": null,
     "text/x-oz": null,
     "text/x-pascal": () => import("highlight.js/lib/languages/delphi"),
-    "text/x-perl": null,
+    "text/x-perl": () => import("highlight.js/lib/languages/perl"),
     "text/x-pgsql": () => import("highlight.js/lib/languages/sql"),
     "text/x-php": () => import("highlight.js/lib/languages/php"),
     "text/x-pig": null,
