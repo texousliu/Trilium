@@ -19,6 +19,7 @@
     "name": "highlightjs"
   },
   "dependencies": {
+    "@exercism/highlightjs-gdscript": "0.0.1",
     "@triliumnext/commons": "workspace:*",
     "highlight.js": "11.11.1"
   }

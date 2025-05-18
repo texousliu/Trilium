@@ -74,7 +74,7 @@ const byMimeType: MimeRecord = {
     "text/x-fortran": () => import("highlight.js/lib/languages/fortran"),
     "text/x-fsharp": () => import("highlight.js/lib/languages/fsharp"),
     "text/x-gas": null,
-    "text/x-gdscript": null,
+    "text/x-gdscript": () => import("@exercism/highlightjs-gdscript"),
     "text/x-gfm": () => import("highlight.js/lib/languages/markdown"),
     "text/x-go": () => import("highlight.js/lib/languages/go"),
     "text/x-groovy": () => import("highlight.js/lib/languages/groovy"),
