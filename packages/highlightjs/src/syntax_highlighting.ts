@@ -33,7 +33,7 @@ const byMimeType: MimeRecord = {
     "text/html": () => import("highlight.js/lib/languages/xml"),
     "text/jinja2": () => import("highlight.js/lib/languages/django"),
     "text/jsx": () => import("highlight.js/lib/languages/javascript"),
-    "text/mirc": null,
+    "text/mirc": () => import("./languages/mirc.js"),
     "text/tiki": null,
     "text/troff": null,
     "text/turtle": null,
