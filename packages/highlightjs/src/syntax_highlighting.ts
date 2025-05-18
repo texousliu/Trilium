@@ -48,7 +48,7 @@ const byMimeType: MimeRecord = {
     "text/x-c++src": () => import("highlight.js/lib/languages/cpp"),
     "text/x-cassandra": null,
     "text/x-clojure": () => import("highlight.js/lib/languages/clojure"),
-    "text/x-clojurescript": null,
+    "text/x-clojurescript": () => import("highlight.js/lib/languages/clojure"),
     "text/x-cmake": () => import("highlight.js/lib/languages/cmake"),
     "text/x-cobol": null,
     "text/x-common-lisp": () => import("highlight.js/lib/languages/lisp"),
