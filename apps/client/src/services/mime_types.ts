@@ -38,8 +38,8 @@ export function getHighlightJsNameForMime(mimeType: string) {
         for (const mimeType of mimeTypes) {
             // The mime stored by CKEditor is text-x-csrc instead of text/x-csrc so we keep this format for faster lookup.
             const normalizedMime = normalizeMimeTypeForCKEditor(mimeType.mime);
-            if (mimeType.highlightJs) {
-                mimeToHighlightJsMapping[normalizedMime] = mimeType.highlightJs;
+            if (mimeType.mdLanguageCode) {
+                mimeToHighlightJsMapping[normalizedMime] = mimeType.mdLanguageCode;
             }
         }
     }

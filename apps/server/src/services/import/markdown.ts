@@ -3,7 +3,7 @@
 import { parse, Renderer, type Tokens } from "marked";
 import htmlSanitizer from "../html_sanitizer.js";
 import importUtils from "./utils.js";
-import { getMimeTypeFromHighlightJs, MIME_TYPE_AUTO } from "@triliumnext/commons";
+import { getMimeTypeFromMarkdownName, MIME_TYPE_AUTO } from "@triliumnext/commons";
 import { ADMONITION_TYPE_MAPPINGS } from "../export/markdown.js";
 import utils from "../utils.js";
 import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
@@ -156,9 +156,9 @@ function renderToHtml(content: string, title: string) {
 
 function getNormalizedMimeFromMarkdownLanguage(language: string | undefined) {
     if (language) {
-        const highlightJsName = getMimeTypeFromHighlightJs(language);
-        if (highlightJsName) {
-            return normalizeMimeTypeForCKEditor(highlightJsName.mime);
+        const mimeDefinition = getMimeTypeFromMarkdownName(language);
+        if (mimeDefinition) {
+            return normalizeMimeTypeForCKEditor(mimeDefinition.mime);
         }
     }
 
