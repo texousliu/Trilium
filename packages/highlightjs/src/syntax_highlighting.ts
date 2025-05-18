@@ -122,7 +122,7 @@ const byMimeType: MimeRecord = {
     "text/x-python": () => import("highlight.js/lib/languages/python"),
     "text/x-q": () => import("highlight.js/lib/languages/q"),
     "text/x-rpm-changes": null,
-    "text/x-rpm-spec": null,
+    "text/x-rpm-spec": () => import("./languages/rpm-specfile.js"),
     "text/x-rsrc": () => import("highlight.js/lib/languages/r"),
     "text/x-rst": null,
     "text/x-ruby": () => import("highlight.js/lib/languages/ruby"),
