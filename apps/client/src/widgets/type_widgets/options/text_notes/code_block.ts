@@ -74,10 +74,10 @@ export default class CodeBlockOptions extends OptionsWidget {
         for (const [key, themes] of Object.entries(themeGroups)) {
             const $group = key ? $("<optgroup>").attr("label", key) : null;
 
-            for (const [id, theme] of Object.entries(themes)) {
+            for (const theme of themes) {
                 const option = $("<option>")
-                    .attr("value", "default:" + id)
-                    .text(theme.name);
+                    .attr("value", theme.val)
+                    .text(theme.title);
 
                 if ($group) {
                     $group.append(option);
@@ -129,19 +129,36 @@ export default class CodeBlockOptions extends OptionsWidget {
     }
 }
 
+interface ThemeData {
+    val: string;
+    title: string;
+}
+
 function groupThemesByLightOrDark() {
-    const darkThemes: Record<string, Theme> = {};
-    const lightThemes: Record<string, Theme> = {};
+    const darkThemes: ThemeData[] = [];
+    const lightThemes: ThemeData[] = [];
 
     for (const [ id, theme ] of Object.entries(Themes)) {
+        const data: ThemeData = {
+            val: "default:" + id,
+            title: theme.name
+        };
+
         if (theme.name.includes("Dark")) {
-            darkThemes[id] = theme;
+            darkThemes.push(data);
         } else {
-            lightThemes[id] = theme;
+            lightThemes.push(data);
         }
     }
 
-    const output: Record<string, Record<string, Theme>> = {};
+    const output: Record<string, ThemeData[]> = {
+        "": [
+            {
+                val: "none",
+                title: t("code_block.theme_none")
+            }
+        ]
+    };
     output[t("code_block.theme_group_light")] = lightThemes;
     output[t("code_block.theme_group_dark")] = darkThemes;
     return output;
