@@ -1,5 +1,6 @@
 import { describe, it } from "vitest";
 import definitions from "./syntax_highlighting.js";
+import hljs from "highlight.js";
 
 describe("Syntax highlighting definitions", () => {
     it("every entry is readable", async () => {
@@ -8,7 +9,12 @@ describe("Syntax highlighting definitions", () => {
                 continue;
             }
 
-            await mapping.loader;
+            const language = (await mapping.loader).default;
+
+            hljs.registerLanguage(mime, language);
+            hljs.highlight("Hello world", {
+                language: mime
+            });
         }
     });
 });
