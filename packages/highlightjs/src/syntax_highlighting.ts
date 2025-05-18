@@ -60,7 +60,7 @@ const byMimeType: MimeRecord = {
     "text/x-diff": () => import("highlight.js/lib/languages/diff"),
     "text/x-django": () => import("highlight.js/lib/languages/django"),
     "text/x-dockerfile": () => import("highlight.js/lib/languages/dockerfile"),
-    "text/x-dylan": null,
+    "text/x-dylan": () => import("./languages/dylan.js"),
     "text/x-ebnf": () => import("highlight.js/lib/languages/ebnf"),
     "text/x-ecl": null,
     "text/x-eiffel": null,
