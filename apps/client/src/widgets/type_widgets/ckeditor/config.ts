@@ -104,7 +104,7 @@ export function buildConfig() {
         },
         syntaxHighlighting: {
             loadHighlightJs: async () => {
-                ensureMimeTypesForHighlighting();
+                await ensureMimeTypesForHighlighting();
                 return await import("@triliumnext/highlightjs");
             },
             mapLanguageName: getHighlightJsNameForMime,
