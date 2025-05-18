@@ -13,15 +13,15 @@
  * Category: scripting
  */
 
-import type { HLJSApi } from "highlight.js";
+import type { HLJSApi, Language, Mode } from "highlight.js";
 
-export default function hljsDefineTerraform(hljs: HLJSApi) {
-    var NUMBERS = {
+export default function hljsDefineTerraform(hljs: HLJSApi): Language {
+    const NUMBERS: Mode = {
         className: 'number',
         begin: '\\b\\d+(\\.\\d+)?',
         relevance: 0
     };
-    var STRINGS = {
+    const STRINGS: Mode = {
         className: 'string',
         begin: '"',
         end: '"',
@@ -63,15 +63,30 @@ export default function hljsDefineTerraform(hljs: HLJSApi) {
                             }]
                         }]
                     },
-                    'self']
+                    'self' as const]
             }]
         }]
     };
 
     return {
         aliases: ['tf', 'hcl'],
-        keywords: 'resource variable provider output locals module data terraform|10',
-        literal: 'false true null',
+        keywords: {
+            keyword: [
+                "resource",
+                "variable",
+                "provider",
+                "output",
+                "locals",
+                "module",
+                "data",
+                "terraform|10"
+            ],
+            literal: [
+                "false",
+                "true",
+                "null"
+            ]
+        },
         contains: [
             hljs.COMMENT('\\#', '$'),
             NUMBERS,
