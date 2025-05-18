@@ -129,7 +129,7 @@ const byMimeType: MimeRecord = {
     "text/x-rustsrc": () => import("highlight.js/lib/languages/rust"),
     "text/x-sas": () => import("highlight.js/lib/languages/sas"),
     "text/x-sass": () => import("highlight.js/lib/languages/scss"),
-    "text/x-scala": null,
+    "text/x-scala": () => import("highlight.js/lib/languages/scala"),
     "text/x-scheme": null,
     "text/x-scss": () => import("highlight.js/lib/languages/scss"),
     "text/x-sh": () => import("highlight.js/lib/languages/bash"),
