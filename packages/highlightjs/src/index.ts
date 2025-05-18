@@ -8,6 +8,7 @@ export { default as Themes } from "./themes.js";
 
 const registeredMimeTypes = new Set<string>();
 const unsupportedMimeTypes = new Set<string>();
+let highlightingThemeEl: HTMLStyleElement | null = null;
 
 export async function ensureMimeTypes(mimeTypes: MimeType[]) {
     for (const mimeType of mimeTypes) {
@@ -45,11 +46,22 @@ export function highlight(code: string, options: HighlightOptions) {
     return hljs.highlight(code, options);
 }
 
-export async function loadTheme(theme: Theme) {
-    console.log("Got theme", theme);
+export async function loadTheme(theme: "none" | Theme) {
+    if (theme === "none") {
+        if (highlightingThemeEl) {
+            highlightingThemeEl.remove();
+            highlightingThemeEl = null;
+        }
+        return;
+    }
 
-    const loadedTheme = await theme.load();
-    console.log("Got", loadedTheme.default);
+    if (!highlightingThemeEl) {
+        highlightingThemeEl = document.createElement("style");
+        document.querySelector("head")?.append(highlightingThemeEl);
+    }
+
+    const themeCss = (await theme.load()).default as string;
+    highlightingThemeEl.textContent = themeCss;
 }
 
 export const { highlightAuto } = hljs;

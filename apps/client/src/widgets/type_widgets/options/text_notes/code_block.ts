@@ -1,9 +1,8 @@
 import type { OptionMap } from "@triliumnext/commons";
 import { t } from "../../../../services/i18n.js";
-import library_loader from "../../../../services/library_loader.js";
 import server from "../../../../services/server.js";
 import OptionsWidget from "../options_widget.js";
-import { ensureMimeTypesForHighlighting } from "../../../../services/syntax_highlight.js";
+import { ensureMimeTypesForHighlighting, loadHighlightingTheme } from "../../../../services/syntax_highlight.js";
 import { Themes } from "@triliumnext/highlightjs";
 
 const SAMPLE_LANGUAGE = "javascript";
@@ -78,7 +77,7 @@ export default class CodeBlockOptions extends OptionsWidget {
         }
         this.$themeSelect.on("change", async () => {
             const newTheme = String(this.$themeSelect.val());
-            library_loader.loadHighlightingTheme(newTheme);
+            loadHighlightingTheme(newTheme);
             await server.put(`options/codeBlockTheme/${newTheme}`);
         });
 

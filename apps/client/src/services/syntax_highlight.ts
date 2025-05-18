@@ -59,20 +59,24 @@ export async function applySingleBlockSyntaxHighlight($codeBlock: JQuery<HTMLEle
 export async function ensureMimeTypesForHighlighting() {
     // Load theme.
     const currentThemeName = String(options.get("codeBlockTheme"));
+    loadHighlightingTheme(currentThemeName);
+
+    // Load mime types.
+    const mimeTypes = mime_types.getMimeTypes();
+    await ensureMimeTypes(mimeTypes);
+}
+
+export function loadHighlightingTheme(themeName: string) {
     const themePrefix = "default:";
     let theme = null;
-    if (currentThemeName.includes(themePrefix)) {
-        theme = Themes[currentThemeName.substring(themePrefix.length)];
+    if (themeName.includes(themePrefix)) {
+        theme = Themes[themeName.substring(themePrefix.length)];
     }
     if (!theme) {
         theme = Themes.default;
     }
 
     loadTheme(theme);
-
-    // Load mime types.
-    const mimeTypes = mime_types.getMimeTypes();
-    await ensureMimeTypes(mimeTypes);
 }
 
 /**

@@ -31,8 +31,6 @@ const HIGHLIGHT_JS: Library = {
             }
         }
 
-        loadHighlightingTheme(currentTheme);
-
         return Array.from(scriptsToLoad);
     }
 };
@@ -90,35 +88,8 @@ async function requireCss(url: string, prependAssetPath = true) {
     }
 }
 
-let highlightingThemeEl: JQuery<HTMLElement> | null = null;
-function loadHighlightingTheme(theme: string) {
-    if (!theme) {
-        return;
-    }
-
-    if (theme === "none") {
-        // Deactivate the theme.
-        if (highlightingThemeEl) {
-            highlightingThemeEl.remove();
-            highlightingThemeEl = null;
-        }
-        return;
-    }
-
-    if (!highlightingThemeEl) {
-        highlightingThemeEl = $(`<link rel="stylesheet" type="text/css" />`);
-        $("head").append(highlightingThemeEl);
-    }
-
-    const url = getStylesheetUrl(theme);
-    if (url) {
-        highlightingThemeEl.attr("href", url);
-    }
-}
-
 export default {
     requireCss,
     requireLibrary,
-    loadHighlightingTheme,
     KATEX
 };
