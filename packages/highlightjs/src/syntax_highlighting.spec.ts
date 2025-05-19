@@ -1,6 +1,6 @@
 import { describe, it } from "vitest";
 import definitions from "./syntax_highlighting.js";
-import hljs from "highlight.js";
+import hljs from "@highlightjs/cdn-assets/es/core.js";
 
 describe("Syntax highlighting definitions", () => {
     it("every entry is readable", async () => {
