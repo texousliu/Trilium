@@ -187,3 +187,9 @@ CREATE TABLE IF NOT EXISTS "embedding_providers" (
     "dateModified" TEXT NOT NULL,
     "utcDateModified" TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS sessions (
+    id TEXT PRIMARY KEY,
+    data TEXT,
+    expires INTEGER
+);
