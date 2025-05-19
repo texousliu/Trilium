@@ -62,7 +62,7 @@ function setupGlobs() {
     });
 
     for (const appCssNoteId of glob.appCssNoteIds || []) {
-        libraryLoader.requireCss(`api/notes/download/${appCssNoteId}`, false);
+        requireCss(`api/notes/download/${appCssNoteId}`, false);
     }
 
     utils.initHelpButtons($(window));
@@ -72,6 +72,18 @@ function setupGlobs() {
 
         return false;
     });
+}
+
+async function requireCss(url: string, prependAssetPath = true) {
+    const cssLinks = Array.from(document.querySelectorAll("link")).map((el) => el.href);
+
+    if (!cssLinks.some((l) => l.endsWith(url))) {
+        if (prependAssetPath) {
+            url = `${window.glob.assetPath}/${url}`;
+        }
+
+        $("head").append($('<link rel="stylesheet" type="text/css" />').attr("href", url));
+    }
 }
 
 export default {
