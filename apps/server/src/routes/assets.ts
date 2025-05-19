@@ -25,13 +25,11 @@ async function register(app: express.Application) {
         if (!publicUrl) {
             throw new Error("Missing TRILIUM_PUBLIC_SERVER");
         }
-        app.use(`/@fs`, proxy(publicUrl, {
-            proxyReqPathResolver: (req) => `/@fs` + req.url
+        app.use(assetPath + `/@fs`, proxy(publicUrl, {
+            proxyReqPathResolver: (req) => assetPath + `/@fs` + req.url
         }))
     } else {
-        const clientStaticCache = persistentCacheStatic(path.join(resourceDir, "public"));
-        app.use(`/${assetPath}/app`, clientStaticCache);
-        app.use(`/${assetPath}/app-dist`, clientStaticCache);
+        app.use(`/${assetPath}/src`, persistentCacheStatic(path.join(resourceDir, "public", "src")));
         app.use(`/${assetPath}/stylesheets`, persistentCacheStatic(path.join(resourceDir, "public", "stylesheets")));
         app.use(`/${assetPath}/libraries`, persistentCacheStatic(path.join(resourceDir, "public", "libraries")));
         app.use(`/${assetPath}/fonts`, persistentCacheStatic(path.join(resourceDir, "public", "fonts")));

@@ -55,9 +55,9 @@ export default defineConfig(() => ({
                 runtime: join(__dirname, "src", "runtime.ts")
             },
             output: {
-                entryFileNames: "[name].js",
-                chunkFileNames: "[name].js",
-                assetFileNames: "[name,].js"
+                entryFileNames: "src/[name].js",
+                chunkFileNames: "src/[name].js",
+                assetFileNames: "src/[name,].js"
             },
             onwarn(warning, rollupWarn) {
                 if (warning.code === "MODULE_LEVEL_DIRECTIVE") {
