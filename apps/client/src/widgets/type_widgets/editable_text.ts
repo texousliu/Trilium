@@ -1,5 +1,4 @@
 import { t } from "../../services/i18n.js";
-import libraryLoader from "../../services/library_loader.js";
 import noteAutocompleteService, { type Suggestion } from "../../services/note_autocomplete.js";
 import mimeTypesService from "../../services/mime_types.js";
 import utils, { hasTouchBar } from "../../services/utils.js";

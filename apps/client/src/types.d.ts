@@ -22,7 +22,6 @@ interface CustomGlobals {
     getReferenceLinkTitle: (href: string) => Promise<string>;
     getReferenceLinkTitleSync: (href: string) => string;
     getActiveContextNote: () => FNote | null;
-    requireLibrary: typeof library_loader.requireLibrary;
     ESLINT: Library;
     appContext: AppContext;
     froca: Froca;
