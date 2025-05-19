@@ -80,6 +80,7 @@ module.exports = composePlugins(
       }))
     }));
 
+    inlineCss(config);
     inlineSvg(config);
     externalJson(config);
 
@@ -101,6 +102,17 @@ function inlineSvg(config) {
     resourceQuery: /raw/,
     type: 'asset/source',
   });
+}
+
+function inlineCss(config) {
+  if (!config.module?.rules) {
+    return;
+  }
+
+  // Alter Nx's asset rule to avoid inlining SVG if they have ?raw prepended.
+  console.log(config.module.rules.map((r) => r.test.toString()));
+  const existingRule = config.module.rules.find((r) => r.test.toString().startsWith("/\\.css"));
+  existingRule.resourceQuery = { not: [/raw/] };
 }
 
 function externalJson(config) {
