@@ -4,15 +4,15 @@ export interface Theme {
 }
 
 const themeDefinitions: Record<string, Theme> = {
-    "1c light": {
+    "1c-light": {
         name: "1C (Light)",
         load: () => import("../node_modules/highlight.js/styles/1c-light.css?raw")
     },
-    "a11y dark": {
+    "a11y-dark": {
         name: "a11y (Dark)",
         load: () => import("../node_modules/highlight.js/styles/a11y-dark.css?raw")
     },
-    "a11y light": {
+    "a11y-light": {
         name: "a11y (Light)",
         load: () => import("../node_modules/highlight.js/styles/a11y-light.css?raw")
     },
@@ -20,7 +20,7 @@ const themeDefinitions: Record<string, Theme> = {
         name: "Agate (Dark)",
         load: () => import("../node_modules/highlight.js/styles/agate.css?raw")
     },
-    "an old hope": {
+    "an-old-hope": {
         name: "An Old Hope (Dark)",
         load: () => import("../node_modules/highlight.js/styles/an-old-hope.css?raw")
     },
@@ -28,7 +28,7 @@ const themeDefinitions: Record<string, Theme> = {
         name: "Android Studio (Dark)",
         load: () => import("../node_modules/highlight.js/styles/androidstudio.css?raw")
     },
-    "arduino light": {
+    "arduino-light": {
         name: "Arduino (Light)",
         load: () => import("../node_modules/highlight.js/styles/arduino-light.css?raw")
     },
@@ -40,43 +40,43 @@ const themeDefinitions: Record<string, Theme> = {
         name: "Ascetic (Light)",
         load: () => import("../node_modules/highlight.js/styles/ascetic.css?raw")
     },
-    "atom one dark reasonable": {
+    "atom-one-dark-reasonable": {
         name: "Atom One with ReasonML support (Dark)",
         load: () => import("../node_modules/highlight.js/styles/atom-one-dark-reasonable.css?raw")
     },
-    "atom one dark": {
+    "atom-one-dark": {
         name: "Atom One (Dark)",
         load: () => import("../node_modules/highlight.js/styles/atom-one-dark.css?raw")
     },
-    "atom one light": {
+    "atom-one-light": {
         name: "Atom One (Light)",
         load: () => import("../node_modules/highlight.js/styles/atom-one-light.css?raw")
     },
-    "brown paper": {
+    "brown-paper": {
         name: "Brown Paper (Light)",
         load: () => import("../node_modules/highlight.js/styles/brown-paper.css?raw")
     },
-    "codepen embed": {
+    "codepen-embed": {
         name: "CodePen Embed (Dark)",
         load: () => import("../node_modules/highlight.js/styles/codepen-embed.css?raw")
     },
-    "color brewer": {
+    "color-brewer": {
         name: "Color Brewer (Light)",
         load: () => import("../node_modules/highlight.js/styles/color-brewer.css?raw")
     },
-    "cybertopia cherry": {
+    "cybertopia-cherry": {
         name: "Cybertopia Cherry (Dark)",
         load: () => import("../node_modules/highlight.js/styles/cybertopia-cherry.css?raw")
     },
-    "cybertopia dimmer": {
+    "cybertopia-dimmer": {
         name: "Cybertopia Dimmer (Dark)",
         load: () => import("../node_modules/highlight.js/styles/cybertopia-dimmer.css?raw")
     },
-    "cybertopia icecap": {
+    "cybertopia-icecap": {
         name: "Cybertopia Icecap (Dark)",
         load: () => import("../node_modules/highlight.js/styles/cybertopia-icecap.css?raw")
     },
-    "cybertopia saturated": {
+    "cybertopia-saturated": {
         name: "Cybertopia Saturated (Dark)",
         load: () => import("../node_modules/highlight.js/styles/cybertopia-saturated.css?raw")
     },
@@ -108,11 +108,11 @@ const themeDefinitions: Record<string, Theme> = {
         name: "Foundation 4 Docs (Light)",
         load: () => import("../node_modules/highlight.js/styles/foundation.css?raw")
     },
-    "github dark dimmed": {
+    "github-dark-dimmed": {
         name: "GitHub Dimmed (Dark)",
         load: () => import("../node_modules/highlight.js/styles/github-dark-dimmed.css?raw")
     },
-    "github dark": {
+    "github-dark": {
         name: "GitHub (Dark)",
         load: () => import("../node_modules/highlight.js/styles/github-dark.css?raw")
     },
@@ -128,11 +128,11 @@ const themeDefinitions: Record<string, Theme> = {
         name: "Google Code (Light)",
         load: () => import("../node_modules/highlight.js/styles/googlecode.css?raw")
     },
-    "gradient dark": {
+    "gradient-dark": {
         name: "Gradient (Dark)",
         load: () => import("../node_modules/highlight.js/styles/gradient-dark.css?raw")
     },
-    "gradient light": {
+    "gradient-light": {
         name: "Gradient (Light)",
         load: () => import("../node_modules/highlight.js/styles/gradient-light.css?raw")
     },
@@ -148,27 +148,27 @@ const themeDefinitions: Record<string, Theme> = {
         name: "Idea (Light)",
         load: () => import("../node_modules/highlight.js/styles/idea.css?raw")
     },
-    "intellij light": {
+    "intellij-light": {
         name: "IntelliJ (Light)",
         load: () => import("../node_modules/highlight.js/styles/intellij-light.css?raw")
     },
-    "ir black": {
+    "ir-black": {
         name: "IR Black (Dark)",
         load: () => import("../node_modules/highlight.js/styles/ir-black.css?raw")
     },
-    "isbl editor dark": {
+    "isbl-editor-dark": {
         name: "ISBL Editor (Dark)",
         load: () => import("../node_modules/highlight.js/styles/isbl-editor-dark.css?raw")
     },
-    "isbl editor light": {
+    "isbl-editor-light": {
         name: "ISBL Editor (Light)",
         load: () => import("../node_modules/highlight.js/styles/isbl-editor-light.css?raw")
     },
-    "kimbie dark": {
+    "kimbie-dark": {
         name: "Kimbie (Dark)",
         load: () => import("../node_modules/highlight.js/styles/kimbie-dark.css?raw")
     },
-    "kimbie light": {
+    "kimbie-light": {
         name: "Kimbie (Light)",
         load: () => import("../node_modules/highlight.js/styles/kimbie-light.css?raw")
     },
@@ -184,11 +184,11 @@ const themeDefinitions: Record<string, Theme> = {
         name: "Magula (Light)",
         load: () => import("../node_modules/highlight.js/styles/magula.css?raw")
     },
-    "mono blue": {
+    "mono-blue": {
         name: "Mono Blue (Light)",
         load: () => import("../node_modules/highlight.js/styles/mono-blue.css?raw")
     },
-    "monokai sublime": {
+    "monokai-sublime": {
         name: "Monokai Sublime (Dark)",
         load: () => import("../node_modules/highlight.js/styles/monokai-sublime.css?raw")
     },
@@ -196,15 +196,15 @@ const themeDefinitions: Record<string, Theme> = {
         name: "Monokai (Dark)",
         load: () => import("../node_modules/highlight.js/styles/monokai.css?raw")
     },
-    "night owl": {
+    "night-owl": {
         name: "Night Owl (Dark)",
         load: () => import("../node_modules/highlight.js/styles/night-owl.css?raw")
     },
-    "nnfx dark": {
+    "nnfx-dark": {
         name: "NNFX (Dark)",
         load: () => import("../node_modules/highlight.js/styles/nnfx-dark.css?raw")
     },
-    "nnfx light": {
+    "nnfx-light": {
         name: "NNFX (Light)",
         load: () => import("../node_modules/highlight.js/styles/nnfx-light.css?raw")
     },
@@ -216,19 +216,19 @@ const themeDefinitions: Record<string, Theme> = {
         name: "Obsidian (Dark)",
         load: () => import("../node_modules/highlight.js/styles/obsidian.css?raw")
     },
-    "panda syntax dark": {
+    "panda-syntax-dark": {
         name: "Panda (Dark)",
         load: () => import("../node_modules/highlight.js/styles/panda-syntax-dark.css?raw")
     },
-    "panda syntax light": {
+    "panda-syntax-light": {
         name: "Panda (Light)",
         load: () => import("../node_modules/highlight.js/styles/panda-syntax-light.css?raw")
     },
-    "paraiso dark": {
+    "paraiso-dark": {
         name: "Paraiso (Dark)",
         load: () => import("../node_modules/highlight.js/styles/paraiso-dark.css?raw")
     },
-    "paraiso light": {
+    "paraiso-light": {
         name: "Paraiso (Light)",
         load: () => import("../node_modules/highlight.js/styles/paraiso-light.css?raw")
     },
@@ -240,11 +240,11 @@ const themeDefinitions: Record<string, Theme> = {
         name: "PureBasic (Light)",
         load: () => import("../node_modules/highlight.js/styles/purebasic.css?raw")
     },
-    "qtcreator dark": {
+    "qtcreator-dark": {
         name: "Qt Creator (Dark)",
         load: () => import("../node_modules/highlight.js/styles/qtcreator-dark.css?raw")
     },
-    "qtcreator light": {
+    "qtcreator-light": {
         name: "Qt Creator (Light)",
         load: () => import("../node_modules/highlight.js/styles/qtcreator-light.css?raw")
     },
@@ -256,23 +256,23 @@ const themeDefinitions: Record<string, Theme> = {
         name: "RouterOS Script (Light)",
         load: () => import("../node_modules/highlight.js/styles/routeros.css?raw")
     },
-    "rose pine dawn": {
+    "rose-pine-dawn": {
         name: "Rose Pine Dawn (Light)",
         load: () => import("../node_modules/highlight.js/styles/rose-pine-dawn.css?raw")
     },
-    "rose pine moon": {
+    "rose-pine-moon": {
         name: "Rose Pine Moon (Dark)",
         load: () => import("../node_modules/highlight.js/styles/rose-pine-moon.css?raw")
     },
-    "rose pine": {
+    "rose-pine": {
         name: "Rose Pine (Dark)",
         load: () => import("../node_modules/highlight.js/styles/rose-pine.css?raw")
     },
-    "school book": {
+    "school-book": {
         name: "School Book (Light)",
         load: () => import("../node_modules/highlight.js/styles/school-book.css?raw")
     },
-    "shades of purple": {
+    "shades-of-purple": {
         name: "Shades of Purple (Dark)",
         load: () => import("../node_modules/highlight.js/styles/shades-of-purple.css?raw")
     },
@@ -280,11 +280,11 @@ const themeDefinitions: Record<string, Theme> = {
         name: "Srcery (Dark)",
         load: () => import("../node_modules/highlight.js/styles/srcery.css?raw")
     },
-    "stackoverflow dark": {
+    "stackoverflow-dark": {
         name: "Stack Overflow (Dark)",
         load: () => import("../node_modules/highlight.js/styles/stackoverflow-dark.css?raw")
     },
-    "stackoverflow light": {
+    "stackoverflow-light": {
         name: "Stack Overflow (Light)",
         load: () => import("../node_modules/highlight.js/styles/stackoverflow-light.css?raw")
     },
@@ -292,19 +292,19 @@ const themeDefinitions: Record<string, Theme> = {
         name: "Sunburst (Dark)",
         load: () => import("../node_modules/highlight.js/styles/sunburst.css?raw")
     },
-    "tokyo night dark": {
+    "tokyo-night-dark": {
         name: "Tokyo Night (Dark)",
         load: () => import("../node_modules/highlight.js/styles/tokyo-night-dark.css?raw")
     },
-    "tokyo night light": {
+    "tokyo-night-light": {
         name: "Tokyo Night (Light)",
         load: () => import("../node_modules/highlight.js/styles/tokyo-night-light.css?raw")
     },
-    "tomorrow night blue": {
+    "tomorrow-night-blue": {
         name: "Tomorrow Night Blue (Dark)",
         load: () => import("../node_modules/highlight.js/styles/tomorrow-night-blue.css?raw")
     },
-    "tomorrow night bright": {
+    "tomorrow-night-bright": {
         name: "Tomorrow Night Bright (Dark)",
         load: () => import("../node_modules/highlight.js/styles/tomorrow-night-bright.css?raw")
     },
