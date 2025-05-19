@@ -11,11 +11,11 @@ import FAttachment from "../entities/fattachment.js";
 import imageContextMenuService from "../menus/image_context_menu.js";
 import { applySingleBlockSyntaxHighlight, applySyntaxHighlight } from "./syntax_highlight.js";
 import { loadElkIfNeeded, postprocessMermaidSvg } from "./mermaid.js";
-import { normalizeMimeTypeForCKEditor } from "./mime_type_definitions.js";
 import renderDoc from "./doc_renderer.js";
 import { t } from "../services/i18n.js";
 import WheelZoom from 'vanilla-js-wheel-zoom';
 import { renderMathInElement } from "./math.js";
+import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
 
 let idCounter = 1;
 

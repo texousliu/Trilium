@@ -123,15 +123,6 @@ declare global {
     var require: RequireMethod;
     var __non_webpack_require__: RequireMethod | undefined;
 
-    // Libraries
-    // TODO: Replace once library loader is replaced with webpack.
-    var hljs: {
-        highlightAuto(text: string);
-        highlight(text: string, {
-            language: string
-        });
-    };
-
     /*
      * Panzoom
      */

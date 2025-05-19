@@ -364,9 +364,6 @@ importers:
       '@electron/remote':
         specifier: 2.1.2
         version: 2.1.2(electron@36.2.1)
-      '@highlightjs/cdn-assets':
-        specifier: 11.11.1
-        version: 11.11.1
       better-sqlite3:
         specifier: ^11.9.1
         version: 11.10.0
@@ -1283,6 +1280,24 @@ importers:
       tslib:
         specifier: ^2.3.0
         version: 2.8.1
+
+  packages/highlightjs:
+    dependencies:
+      '@exercism/highlightjs-gdscript':
+        specifier: 0.0.1
+        version: 0.0.1
+      '@triliumnext/commons':
+        specifier: workspace:*
+        version: link:../commons
+      highlight.js:
+        specifier: 11.11.1
+        version: 11.11.1
+      highlightjs-cobol:
+        specifier: 0.3.3
+        version: 0.3.3
+      highlightjs-cypher:
+        specifier: 1.2.0
+        version: 1.2.0
 
   packages/turndown-plugin-gfm:
     dependencies:
@@ -3127,6 +3142,9 @@ packages:
     resolution: {integrity: sha512-nULYsQxkWHnbmHvcs+efMkJ4/9TtvNyFeLyHdeGxW0zHs6P+jYVqcRff9A6Vq9w9JXeDRnRh2VKvTtS19GW2qA==}
     engines: {node: '>=10'}
 
+  '@exercism/highlightjs-gdscript@0.0.1':
+    resolution: {integrity: sha512-LiCFDhXCr3iIEGESHEsSCpCI7qNa2suHcrBWeOYSEtEwCXc+IQpEh5i4K8qPcOMJB9ckVOgLgbSNML8TyvPCVg==}
+
   '@file-type/xml@0.4.3':
     resolution: {integrity: sha512-pGRmkHf+NofNy/52r06HOTsEwdNnBsFEhN6U95s33P+ezuoxZEyBTV9lOB1/Zr0So6/9vDVfWZXLpgd0fy8cOQ==}
 
@@ -3365,10 +3383,6 @@ packages:
 
   '@hapi/topo@5.1.0':
     resolution: {integrity: sha512-foQZKJig7Ob0BMAYBfcJk8d77QtOe7Wo4ox7ff1lQYoNNAb6jwcY1ncdoy2e9wQZzvNy7ODZCYJkK8kzmcAnAg==}
-
-  '@highlightjs/cdn-assets@11.11.1':
-    resolution: {integrity: sha512-VEPdHzwelZ12hEX18BHduqxMZGolcUsrbeokHYxOUIm8X2+M7nx5QPtPeQgRxR9XjhdLv4/7DD5BWOlSrJ3k7Q==}
-    engines: {node: '>=12.0.0'}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -8754,6 +8768,16 @@ packages:
   helmet@8.1.0:
     resolution: {integrity: sha512-jOiHyAZsmnr8LqoPGmCjYAaiuWwjAPLgY8ZX2XrmHawt99/u1y6RgrZMTeoPfpUbV96HOalYgz1qzkRbw54Pmg==}
     engines: {node: '>=18.0.0'}
+
+  highlight.js@11.11.1:
+    resolution: {integrity: sha512-Xwwo44whKBVCYoliBQwaPvtd/2tYFkRQtXDWj1nackaV2JPXx3L0+Jvd8/qCJ2p+ML0/XVkJ2q+Mr+UVdpJK5w==}
+    engines: {node: '>=12.0.0'}
+
+  highlightjs-cobol@0.3.3:
+    resolution: {integrity: sha512-sdEHzA1UQM9Fjx6wMkWLq8VN70SHascq84aFJJzenOF2TwHE4nwtKCbhHGzOWQKN0AUnn0yAHfXQqaH8i2C8YA==}
+
+  highlightjs-cypher@1.2.0:
+    resolution: {integrity: sha512-mOY/g6R1MgXiYx07icl8nwtXCRDSy4Y9EAlDZKia8Thqe766v6cjnrD6/xWak9UXoLQfWqbHhmRmYuw0SiO+CA==}
 
   history@4.10.1:
     resolution: {integrity: sha512-36nwAD620w12kuzPAsyINPWJqlNbij+hpK1k9XRloDtym8mxzGYl2c17LnV6IAGB2Dmg4tEa7G7DlawS0+qjew==}
@@ -16061,7 +16085,7 @@ snapshots:
       find-up: 5.0.0
       fs-extra: 10.1.0
       log-symbols: 4.1.0
-      semver: 7.7.1
+      semver: 7.7.2
     transitivePeerDependencies:
       - bluebird
       - supports-color
@@ -16098,7 +16122,7 @@ snapshots:
       log-symbols: 4.1.0
       node-fetch: 2.7.0(encoding@0.1.13)
       rechoir: 0.8.0
-      semver: 7.7.1
+      semver: 7.7.2
       source-map-support: 0.5.21
       sudo-prompt: 9.2.1
       username: 5.1.0
@@ -16825,6 +16849,8 @@ snapshots:
 
   '@excalidraw/random-username@1.1.0': {}
 
+  '@exercism/highlightjs-gdscript@0.0.1': {}
+
   '@file-type/xml@0.4.3':
     dependencies:
       sax: 1.4.1
@@ -17041,8 +17067,6 @@ snapshots:
   '@hapi/topo@5.1.0':
     dependencies:
       '@hapi/hoek': 9.3.0
-
-  '@highlightjs/cdn-assets@11.11.1': {}
 
   '@humanfs/core@0.19.1': {}
 
@@ -17566,7 +17590,7 @@ snapshots:
       debug: 4.4.1(supports-color@8.1.1)
       electron-installer-common: 0.10.4
       lodash: 4.17.21
-      semver: 7.7.1
+      semver: 7.7.2
       yargs: 16.2.0
     transitivePeerDependencies:
       - supports-color
@@ -17888,7 +17912,7 @@ snapshots:
       minimatch: 9.0.3
       picocolors: 1.1.1
       resolve.exports: 2.0.3
-      semver: 7.7.1
+      semver: 7.7.2
       tslib: 2.8.1
       yargs-parser: 21.1.1
     transitivePeerDependencies:
@@ -19568,7 +19592,7 @@ snapshots:
       graphemer: 1.4.0
       ignore: 5.3.2
       natural-compare-lite: 1.4.0
-      semver: 7.7.1
+      semver: 7.7.2
       tsutils: 3.21.0(typescript@4.9.5)
     optionalDependencies:
       typescript: 4.9.5
@@ -21477,7 +21501,7 @@ snapshots:
       postcss-modules-scope: 3.2.1(postcss@8.5.3)
       postcss-modules-values: 4.0.0(postcss@8.5.3)
       postcss-value-parser: 4.2.0
-      semver: 7.7.1
+      semver: 7.7.2
     optionalDependencies:
       webpack: 5.98.0(@swc/core@1.11.24(@swc/helpers@0.5.17))(esbuild@0.25.4)(webpack-cli@6.0.1)
 
@@ -23218,7 +23242,7 @@ snapshots:
       minimatch: 3.1.2
       node-abort-controller: 3.1.1
       schema-utils: 3.3.0
-      semver: 7.7.1
+      semver: 7.7.2
       tapable: 2.2.1
       typescript: 5.8.3
       webpack: 5.98.0(@swc/core@1.11.24(@swc/helpers@0.5.17))(esbuild@0.25.4)(webpack-cli@6.0.1)
@@ -23710,6 +23734,18 @@ snapshots:
     optional: true
 
   helmet@8.1.0: {}
+
+  highlight.js@11.11.1: {}
+
+  highlightjs-cobol@0.3.3:
+    dependencies:
+      minimist: 1.2.8
+      mkdirp: 1.0.4
+
+  highlightjs-cypher@1.2.0:
+    dependencies:
+      minimist: 1.2.8
+      mkdirp: 1.0.4
 
   history@4.10.1:
     dependencies:
@@ -24578,7 +24614,7 @@ snapshots:
       jest-util: 29.7.0
       natural-compare: 1.4.0
       pretty-format: 29.7.0
-      semver: 7.7.1
+      semver: 7.7.2
     transitivePeerDependencies:
       - supports-color
 
@@ -25792,7 +25828,7 @@ snapshots:
 
   node-abi@4.8.0:
     dependencies:
-      semver: 7.7.1
+      semver: 7.7.2
 
   node-abort-controller@3.1.1: {}
 
@@ -25800,7 +25836,7 @@ snapshots:
 
   node-api-version@0.2.1:
     dependencies:
-      semver: 7.7.1
+      semver: 7.7.2
 
   node-domexception@1.0.0: {}
 
@@ -25834,7 +25870,7 @@ snapshots:
       make-fetch-happen: 14.0.3
       nopt: 8.1.0
       proc-log: 5.0.0
-      semver: 7.7.1
+      semver: 7.7.2
       tar: 7.4.3
       tinyglobby: 0.2.13
       which: 5.0.0
@@ -25902,7 +25938,7 @@ snapshots:
     dependencies:
       hosted-git-info: 7.0.2
       proc-log: 3.0.0
-      semver: 7.7.1
+      semver: 7.7.2
       validate-npm-package-name: 5.0.1
 
   npm-run-path@2.0.2:
@@ -26620,7 +26656,7 @@ snapshots:
       cosmiconfig: 7.1.0
       klona: 2.0.6
       postcss: 8.5.3
-      semver: 7.7.1
+      semver: 7.7.2
       webpack: 5.98.0(@swc/core@1.11.24(@swc/helpers@0.5.17))(esbuild@0.25.4)(webpack-cli@6.0.1)
 
   postcss-loader@8.1.1(postcss@8.5.3)(typescript@5.0.4)(webpack@5.99.8(@swc/core@1.11.24(@swc/helpers@0.5.17))(esbuild@0.25.4)(webpack-cli@6.0.1)):
@@ -28918,7 +28954,7 @@ snapshots:
       chalk: 4.1.2
       enhanced-resolve: 5.18.1
       micromatch: 4.0.8
-      semver: 7.7.1
+      semver: 7.7.2
       source-map: 0.7.4
       typescript: 5.0.4
       webpack: 5.99.8(@swc/core@1.11.24(@swc/helpers@0.5.17))(esbuild@0.25.4)(webpack-cli@6.0.1)
@@ -28928,7 +28964,7 @@ snapshots:
       chalk: 4.1.2
       enhanced-resolve: 5.18.1
       micromatch: 4.0.8
-      semver: 7.7.1
+      semver: 7.7.2
       source-map: 0.7.4
       typescript: 5.8.3
       webpack: 5.98.0(@swc/core@1.11.24(@swc/helpers@0.5.17))(esbuild@0.25.4)(webpack-cli@6.0.1)

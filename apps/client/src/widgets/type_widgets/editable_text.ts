@@ -12,13 +12,13 @@ import appContext, { type CommandListenerData, type EventData } from "../../comp
 import dialogService from "../../services/dialog.js";
 import options from "../../services/options.js";
 import toast from "../../services/toast.js";
-import { normalizeMimeTypeForCKEditor } from "../../services/mime_type_definitions.js";
 import { buildSelectedBackgroundColor } from "../../components/touch_bar.js";
 import { buildConfig, buildToolbarConfig } from "./ckeditor/config.js";
 import type FNote from "../../entities/fnote.js";
 import { getMermaidConfig } from "../../services/mermaid.js";
 import { PopupEditor, ClassicEditor, EditorWatchdog, type CKTextEditor, type MentionFeed, type WatchdogConfig } from "@triliumnext/ckeditor5";
 import "@triliumnext/ckeditor5/index.css";
+import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
 
 const ENABLE_INSPECTOR = false;
 

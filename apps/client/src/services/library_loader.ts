@@ -1,7 +1,3 @@
-import mimeTypesService from "./mime_types.js";
-import optionsService from "./options.js";
-import { getStylesheetUrl } from "./syntax_highlight.js";
-
 export interface Library {
     js?: string[] | (() => string[]);
     css?: string[];
@@ -10,32 +6,6 @@ export interface Library {
 const KATEX: Library = {
     js: ["node_modules/katex/dist/katex.min.js", "node_modules/katex/dist/contrib/mhchem.min.js", "node_modules/katex/dist/contrib/auto-render.min.js"],
     css: ["node_modules/katex/dist/katex.min.css"]
-};
-
-const HIGHLIGHT_JS: Library = {
-    js: () => {
-        const mimeTypes = mimeTypesService.getMimeTypes();
-        const scriptsToLoad = new Set<string>();
-        scriptsToLoad.add("node_modules/@highlightjs/cdn-assets/highlight.min.js");
-        for (const mimeType of mimeTypes) {
-            const id = mimeType.highlightJs;
-            if (!mimeType.enabled || !id) {
-                continue;
-            }
-
-            if (mimeType.highlightJsSource === "libraries") {
-                scriptsToLoad.add(`libraries/highlightjs/${id}.js`);
-            } else {
-                // Built-in module.
-                scriptsToLoad.add(`node_modules/@highlightjs/cdn-assets/languages/${id}.min.js`);
-            }
-        }
-
-        const currentTheme = String(optionsService.get("codeBlockTheme"));
-        loadHighlightingTheme(currentTheme);
-
-        return Array.from(scriptsToLoad);
-    }
 };
 
 async function requireLibrary(library: Library) {
@@ -91,35 +61,7 @@ async function requireCss(url: string, prependAssetPath = true) {
     }
 }
 
-let highlightingThemeEl: JQuery<HTMLElement> | null = null;
-function loadHighlightingTheme(theme: string) {
-    if (!theme) {
-        return;
-    }
-
-    if (theme === "none") {
-        // Deactivate the theme.
-        if (highlightingThemeEl) {
-            highlightingThemeEl.remove();
-            highlightingThemeEl = null;
-        }
-        return;
-    }
-
-    if (!highlightingThemeEl) {
-        highlightingThemeEl = $(`<link rel="stylesheet" type="text/css" />`);
-        $("head").append(highlightingThemeEl);
-    }
-
-    const url = getStylesheetUrl(theme);
-    if (url) {
-        highlightingThemeEl.attr("href", url);
-    }
-}
-
 export default {
     requireCss,
-    requireLibrary,
-    loadHighlightingTheme,
-    HIGHLIGHT_JS
+    requireLibrary
 };
