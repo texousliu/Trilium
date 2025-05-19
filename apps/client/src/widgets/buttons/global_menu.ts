@@ -231,7 +231,7 @@ const TPL = /*html*/`
             ${t("global_menu.about")}
         </li>
 
-        <li class="dropdown-item update-to-latest-version-button" style="display:none" data-trigger-command="downloadLatestVersion">
+        <li class="dropdown-item update-to-latest-version-button" style="display: none" data-trigger-command="downloadLatestVersion">
             <span class="bx bx-sync"></span>
 
             <span class="version-text"></span>
