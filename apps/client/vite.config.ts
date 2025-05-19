@@ -2,12 +2,14 @@
 import { join } from 'path';
 import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy'
+import asset_path from './src/asset_path';
 
 const assets = [ "assets", "stylesheets", "libraries", "fonts", "translations" ];
 
 export default defineConfig(() => ({
     root: __dirname,
     cacheDir: '../../node_modules/.vite/apps/client',
+    base: "/" + asset_path,
     server: {
         port: 4200,
         host: 'localhost',
