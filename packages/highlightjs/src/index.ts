@@ -1,8 +1,7 @@
-import hljs from "@highlightjs/cdn-assets/es/core.js";
+import hljs, { type HighlightOptions } from "@highlightjs/cdn-assets/es/core.js";
 import { normalizeMimeTypeForCKEditor, type MimeType } from "@triliumnext/commons";
 import syntaxDefinitions from "./syntax_highlighting.js";
 import { type Theme } from "./themes.js";
-import { type HighlightOptions } from "highlight.js";
 
 export { default as Themes, type Theme } from "./themes.js";
 
