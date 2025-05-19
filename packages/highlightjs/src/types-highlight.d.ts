@@ -272,7 +272,7 @@ declare module '@highlightjs/cdn-assets/es/core.js' {
 
 }
 
-declare module 'highlight.js/lib/languages/*' {
+declare module '@highlightjs/cdn-assets/lib/languages/*' {
     import { LanguageFn } from "highlight.js";
     const defineLanguage: LanguageFn;
     export default defineLanguage;
