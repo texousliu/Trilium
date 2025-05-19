@@ -11,7 +11,7 @@ import options from "./services/options.js";
 import type ElectronRemote from "@electron/remote";
 import type Electron from "electron";
 import "./stylesheets/bootstrap.scss";
-import "boxicons";
+import "boxicons/css/boxicons.min.css";
 import "jquery-hotkeys";
 import "autocomplete.js/index_jquery.js";
 
