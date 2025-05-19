@@ -9,7 +9,7 @@ describe("Syntax highlighting definitions", () => {
                 continue;
             }
 
-            const language = (await loader).default;
+            const language = (await loader()).default;
 
             hljs.registerLanguage(mime, language);
             hljs.highlight("Hello world", {
