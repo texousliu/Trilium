@@ -1,5 +1,5 @@
 import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
-import type { LanguageFn } from "highlight.js";
+import type { LanguageFn } from "@highlightjs/cdn-assets/es/core.js";
 
 type MimeRecord = Record<string, (() => Promise<{ default: LanguageFn}>) | null>;
 
