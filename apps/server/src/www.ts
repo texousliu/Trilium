@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-
-import sessionParser from "./routes/session_parser.js";
 import fs from "fs";
 import http from "http";
 import https from "https";
@@ -79,6 +77,7 @@ async function startTrilium() {
 
     const httpServer = startHttpServer(app);
 
+    const sessionParser = (await import("./routes/session_parser.js")).default;
     ws.init(httpServer, sessionParser as any); // TODO: Not sure why session parser is incompatible.
 
     if (utils.isElectron) {
