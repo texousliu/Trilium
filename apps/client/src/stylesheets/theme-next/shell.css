@@ -127,6 +127,7 @@ body.layout-horizontal > .horizontal {
     --launcher-pane-button-gap: var(--launcher-pane-vert-button-gap);
 
     width: var(--launcher-pane-size) !important;
+    min-width: var(--launcher-pane-size) !important;
     padding-bottom: var(--launcher-pane-button-gap);
 }
 
