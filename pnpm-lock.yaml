@@ -209,6 +209,9 @@ importers:
       '@triliumnext/commons':
         specifier: workspace:*
         version: link:../../packages/commons
+      '@triliumnext/highlightjs':
+        specifier: workspace:*
+        version: link:../../packages/highlightjs
       autocomplete.js:
         specifier: 0.38.1
         version: 0.38.1
