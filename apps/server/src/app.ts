@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import compression from "compression";
 import config from "./services/config.js";
-import utils, { getResourceDir } from "./services/utils.js";
+import utils, { getResourceDir, isDev } from "./services/utils.js";
 import assets from "./routes/assets.js";
 import routes from "./routes/routes.js";
 import custom from "./routes/custom.js";
@@ -63,7 +63,7 @@ export default async function buildApp() {
         console.log("Database not initialized yet. LLM features will be initialized after setup.");
     }
 
-    const publicDir = path.join(getResourceDir(), "public");
+    const publicDir = isDev ? path.join(getResourceDir(), "../dist/public") : path.join(getResourceDir(), "public");
     const publicAssetsDir = path.join(publicDir, "assets");
     const assetsDir = RESOURCE_DIR;
 
