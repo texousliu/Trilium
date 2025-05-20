@@ -1827,7 +1827,10 @@
     "color-scheme": "Color Scheme"
   },
   "code_block": {
-    "word_wrapping": "Word wrapping"
+    "word_wrapping": "Word wrapping",
+    "theme_none": "No syntax highlighting",
+    "theme_group_light": "Light themes",
+    "theme_group_dark": "Dark themes"
   },
   "classic_editor_toolbar": {
     "title": "Formatting"

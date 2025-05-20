@@ -90,8 +90,6 @@ async function register(app: express.Application) {
     app.use(`/${assetPath}/node_modules/normalize.css/`, persistentCacheStatic(path.join(nodeModulesDir, "normalize.css/")));
 
     app.use(`/${assetPath}/node_modules/jquery.fancytree/dist/`, persistentCacheStatic(path.join(nodeModulesDir, "jquery.fancytree/dist/")));
-
-    app.use(`/${assetPath}/node_modules/@highlightjs/cdn-assets/`, persistentCacheStatic(path.join(nodeModulesDir, "@highlightjs/cdn-assets/")));
 }
 
 export default {

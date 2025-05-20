@@ -1,10 +1,11 @@
-import type { OptionMap } from "@triliumnext/commons";
+import { normalizeMimeTypeForCKEditor, type OptionMap } from "@triliumnext/commons";
 import { t } from "../../../../services/i18n.js";
-import library_loader from "../../../../services/library_loader.js";
 import server from "../../../../services/server.js";
 import OptionsWidget from "../options_widget.js";
+import { ensureMimeTypesForHighlighting, loadHighlightingTheme } from "../../../../services/syntax_highlight.js";
+import { Themes, type Theme } from "@triliumnext/highlightjs";
 
-const SAMPLE_LANGUAGE = "javascript";
+const SAMPLE_LANGUAGE = normalizeMimeTypeForCKEditor("application/javascript;env=frontend");
 const SAMPLE_CODE = `\
 const n = 10;
 greet(n); // Print "Hello World" for n times
@@ -55,14 +56,6 @@ const TPL = /*html*/`
 </div>
 `;
 
-// TODO: Deduplicate
-interface Theme {
-    title: string;
-    val: string;
-}
-
-type Response = Record<string, Theme[]>;
-
 /**
  * Contains appearance settings for code blocks within text notes, such as the theme for the syntax highlighter.
  */
@@ -75,9 +68,31 @@ export default class CodeBlockOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
         this.$themeSelect = this.$widget.find(".theme-select");
+
+        // Populate the list of themes.
+        const themeGroups = groupThemesByLightOrDark();
+        for (const [key, themes] of Object.entries(themeGroups)) {
+            const $group = key ? $("<optgroup>").attr("label", key) : null;
+
+            for (const theme of themes) {
+                const option = $("<option>")
+                    .attr("value", theme.val)
+                    .text(theme.title);
+
+                if ($group) {
+                    $group.append(option);
+                } else {
+                    this.$themeSelect.append(option);
+                }
+            }
+            if ($group) {
+                this.$themeSelect.append($group);
+            }
+        }
+
         this.$themeSelect.on("change", async () => {
             const newTheme = String(this.$themeSelect.val());
-            library_loader.loadHighlightingTheme(newTheme);
+            loadHighlightingTheme(newTheme);
             await server.put(`options/codeBlockTheme/${newTheme}`);
         });
 
@@ -91,11 +106,14 @@ export default class CodeBlockOptions extends OptionsWidget {
     #setupPreview(shouldEnableSyntaxHighlight: boolean) {
         const text = SAMPLE_CODE;
         if (shouldEnableSyntaxHighlight) {
-            library_loader.requireLibrary(library_loader.HIGHLIGHT_JS).then(() => {
+            import("@triliumnext/highlightjs").then(async (hljs) => {
+                await ensureMimeTypesForHighlighting();
                 const highlightedText = hljs.highlight(text, {
                     language: SAMPLE_LANGUAGE
                 });
-                this.$sampleEl.html(highlightedText.value);
+                if (highlightedText) {
+                    this.$sampleEl.html(highlightedText.value);
+                }
             });
         } else {
             this.$sampleEl.text(text);
@@ -103,29 +121,45 @@ export default class CodeBlockOptions extends OptionsWidget {
     }
 
     async optionsLoaded(options: OptionMap) {
-        const themeGroups = await server.get<Response>("options/codeblock-themes");
-        this.$themeSelect.empty();
-
-        for (const [key, themes] of Object.entries(themeGroups)) {
-            const $group = key ? $("<optgroup>").attr("label", key) : null;
-
-            for (const theme of themes) {
-                const option = $("<option>").attr("value", theme.val).text(theme.title);
-
-                if ($group) {
-                    $group.append(option);
-                } else {
-                    this.$themeSelect.append(option);
-                }
-            }
-            if ($group) {
-                this.$themeSelect.append($group);
-            }
-        }
         this.$themeSelect.val(options.codeBlockTheme);
         this.setCheckboxState(this.$wordWrap, options.codeBlockWordWrap);
         this.$widget.closest(".note-detail-printable").toggleClass("word-wrap", options.codeBlockWordWrap === "true");
 
         this.#setupPreview(options.codeBlockTheme !== "none");
     }
+}
+
+interface ThemeData {
+    val: string;
+    title: string;
+}
+
+function groupThemesByLightOrDark() {
+    const darkThemes: ThemeData[] = [];
+    const lightThemes: ThemeData[] = [];
+
+    for (const [ id, theme ] of Object.entries(Themes)) {
+        const data: ThemeData = {
+            val: "default:" + id,
+            title: theme.name
+        };
+
+        if (theme.name.includes("Dark")) {
+            darkThemes.push(data);
+        } else {
+            lightThemes.push(data);
+        }
+    }
+
+    const output: Record<string, ThemeData[]> = {
+        "": [
+            {
+                val: "none",
+                title: t("code_block.theme_none")
+            }
+        ]
+    };
+    output[t("code_block.theme_group_light")] = lightThemes;
+    output[t("code_block.theme_group_dark")] = darkThemes;
+    return output;
 }
