@@ -1,19 +1,8 @@
-import library_loader from "./library_loader.js";
+import { ensureMimeTypes, highlight, highlightAuto, loadTheme, Themes } from "@triliumnext/highlightjs";
 import mime_types from "./mime_types.js";
 import options from "./options.js";
 
-export function getStylesheetUrl(theme: string) {
-    if (!theme) {
-        return null;
-    }
-
-    const defaultPrefix = "default:";
-    if (theme.startsWith(defaultPrefix)) {
-        return `${window.glob.assetPath}/node_modules/@highlightjs/cdn-assets/styles/${theme.substr(defaultPrefix.length)}.min.css`;
-    }
-
-    return null;
-}
+let highlightingLoaded = false;
 
 /**
  * Identifies all the code blocks (as `pre code`) under the specified hierarchy and uses the highlight.js library to obtain the highlighted text which is then applied on to the code blocks.
@@ -24,6 +13,8 @@ export async function applySyntaxHighlight($container: JQuery<HTMLElement>) {
     if (!isSyntaxHighlightEnabled()) {
         return;
     }
+
+    await ensureMimeTypesForHighlighting();
 
     const codeBlocks = $container.find("pre code");
     for (const codeBlock of codeBlocks) {
@@ -43,25 +34,47 @@ export async function applySingleBlockSyntaxHighlight($codeBlock: JQuery<HTMLEle
     $codeBlock.parent().toggleClass("hljs");
     const text = $codeBlock.text();
 
-    if (!window.hljs) {
-        await library_loader.requireLibrary(library_loader.HIGHLIGHT_JS);
-    }
-
     let highlightedText = null;
     if (normalizedMimeType === mime_types.MIME_TYPE_AUTO) {
-        highlightedText = hljs.highlightAuto(text);
+        await ensureMimeTypesForHighlighting();
+        highlightedText = highlightAuto(text);
     } else if (normalizedMimeType) {
-        const language = mime_types.getHighlightJsNameForMime(normalizedMimeType);
-        if (language) {
-            highlightedText = hljs.highlight(text, { language });
-        } else {
-            console.warn(`Unknown mime type: ${normalizedMimeType}.`);
-        }
+        await ensureMimeTypesForHighlighting();
+        highlightedText = highlight(text, { language: normalizedMimeType });
     }
 
     if (highlightedText) {
         $codeBlock.html(highlightedText.value);
     }
+}
+
+export async function ensureMimeTypesForHighlighting() {
+    if (highlightingLoaded) {
+        return;
+    }
+
+    // Load theme.
+    const currentThemeName = String(options.get("codeBlockTheme"));
+    loadHighlightingTheme(currentThemeName);
+
+    // Load mime types.
+    const mimeTypes = mime_types.getMimeTypes();
+    await ensureMimeTypes(mimeTypes);
+
+    highlightingLoaded = true;
+}
+
+export function loadHighlightingTheme(themeName: string) {
+    const themePrefix = "default:";
+    let theme = null;
+    if (themeName.includes(themePrefix)) {
+        theme = Themes[themeName.substring(themePrefix.length)];
+    }
+    if (!theme) {
+        theme = Themes.default;
+    }
+
+    loadTheme(theme);
 }
 
 /**

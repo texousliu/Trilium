@@ -124,13 +124,6 @@ declare global {
     var __non_webpack_require__: RequireMethod | undefined;
 
     // Libraries
-    // TODO: Replace once library loader is replaced with webpack.
-    var hljs: {
-        highlightAuto(text: string);
-        highlight(text: string, {
-            language: string
-        });
-    };
     var renderMathInElement: (element: HTMLElement, options: {
         trust: boolean;
     }) => void;
