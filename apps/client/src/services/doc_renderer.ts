@@ -48,5 +48,5 @@ function getUrl(docNameValue: string, language: string) {
     // Cannot have spaces in the URL due to how JQuery.load works.
     docNameValue = docNameValue.replaceAll(" ", "%20");
 
-    return `${window.glob.appPath}/doc_notes/${language}/${docNameValue}.html`;
+    return `${new URL(window.glob.assetPath).pathname}/doc_notes/${language}/${docNameValue}.html`;
 }
