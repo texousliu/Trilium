@@ -1,4 +1,4 @@
-import assetPath from "../services/asset_path.js";
+import { assetUrlFragment } from "../services/asset_path.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import express from "express";
@@ -25,22 +25,22 @@ async function register(app: express.Application) {
         if (!publicUrl) {
             throw new Error("Missing TRILIUM_PUBLIC_SERVER");
         }
-        app.use(assetPath + `/@fs`, proxy(publicUrl, {
-            proxyReqPathResolver: (req) => assetPath + `/@fs` + req.url
-        }))
+        app.use("/" + assetUrlFragment + `/@fs`, proxy(publicUrl, {
+            proxyReqPathResolver: (req) => "/" + assetUrlFragment + `/@fs` + req.url
+        }));
     } else {
-        app.use(`/${assetPath}/src`, persistentCacheStatic(path.join(resourceDir, "public", "src")));
-        app.use(`/${assetPath}/stylesheets`, persistentCacheStatic(path.join(resourceDir, "public", "stylesheets")));
-        app.use(`/${assetPath}/libraries`, persistentCacheStatic(path.join(resourceDir, "public", "libraries")));
-        app.use(`/${assetPath}/fonts`, persistentCacheStatic(path.join(resourceDir, "public", "fonts")));
-        app.use(`/${assetPath}/translations/`, persistentCacheStatic(path.join(resourceDir, "public", "translations")));
-        app.use(`/${assetPath}/images`, persistentCacheStatic(path.join(resourceDir, "assets", "images")));
-        app.use(`/${assetPath}/app-dist/doc_notes`, persistentCacheStatic(path.join(resourceDir, "assets", "doc_notes")));
+        app.use(`/${assetUrlFragment}/src`, persistentCacheStatic(path.join(resourceDir, "public", "src")));
+        app.use(`/${assetUrlFragment}/stylesheets`, persistentCacheStatic(path.join(resourceDir, "public", "stylesheets")));
+        app.use(`/${assetUrlFragment}/libraries`, persistentCacheStatic(path.join(resourceDir, "public", "libraries")));
+        app.use(`/${assetUrlFragment}/fonts`, persistentCacheStatic(path.join(resourceDir, "public", "fonts")));
+        app.use(`/${assetUrlFragment}/translations/`, persistentCacheStatic(path.join(resourceDir, "public", "translations")));
+        app.use(`/${assetUrlFragment}/images`, persistentCacheStatic(path.join(resourceDir, "assets", "images")));
+        app.use(`/${assetUrlFragment}/app-dist/doc_notes`, persistentCacheStatic(path.join(resourceDir, "assets", "doc_notes")));
     }
     app.use(`/assets/vX/fonts`, express.static(path.join(srcRoot, "public/fonts")));
     app.use(`/assets/vX/images`, express.static(path.join(srcRoot, "..", "images")));
     app.use(`/assets/vX/stylesheets`, express.static(path.join(srcRoot, "public/stylesheets")));
-    app.use(`/${assetPath}/libraries`, persistentCacheStatic(path.join(srcRoot, "public/libraries")));
+    app.use(`/${assetUrlFragment}/libraries`, persistentCacheStatic(path.join(srcRoot, "public/libraries")));
     app.use(`/assets/vX/libraries`, express.static(path.join(srcRoot, "..", "libraries")));
 }
 
