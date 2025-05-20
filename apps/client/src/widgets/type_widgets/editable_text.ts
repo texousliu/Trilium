@@ -1,5 +1,4 @@
 import { t } from "../../services/i18n.js";
-import libraryLoader from "../../services/library_loader.js";
 import noteAutocompleteService, { type Suggestion } from "../../services/note_autocomplete.js";
 import mimeTypesService from "../../services/mime_types.js";
 import utils, { hasTouchBar } from "../../services/utils.js";
@@ -310,7 +309,9 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             math: {
                 engine: "katex",
                 outputType: "span", // or script
-                lazyLoad: async () => await libraryLoader.requireLibrary(libraryLoader.KATEX),
+                lazyLoad: async () => {
+                    (window as any).katex = (await import("../../services/math.js")).default
+                },
                 forceOutputType: false, // forces output to use outputType
                 enablePreview: true // Enable preview view
             },

@@ -21,7 +21,7 @@ export default class FindInHtml {
     }
 
     async performFind(searchTerm: string, matchCase: boolean, wholeWord: boolean) {
-        await import("script-loader!mark.js/dist/jquery.mark.min.js");
+        await import("mark.js");
 
         const $content = await this.parent?.noteContext?.getContentElement();
 
@@ -42,7 +42,7 @@ export default class FindInHtml {
                             const containerTop = scrollingContainer?.getBoundingClientRect().top ?? 0;
                             const closestIndex = this.$results.toArray().findIndex(el => el.getBoundingClientRect().top >= containerTop);
                             this.currentIndex = closestIndex >= 0 ? closestIndex : 0;
-                            
+
                             await this.jumpTo();
 
                             res({

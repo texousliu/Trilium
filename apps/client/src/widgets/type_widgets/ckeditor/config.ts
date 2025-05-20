@@ -4,7 +4,7 @@ import { getHighlightJsNameForMime } from "../../../services/mime_types.js";
 import options from "../../../services/options.js";
 import { ensureMimeTypesForHighlighting, isSyntaxHighlightEnabled } from "../../../services/syntax_highlight.js";
 import utils from "../../../services/utils.js";
-import emojiDefinitionsUrl from "@triliumnext/ckeditor5/emoji_definitions/en.json?external";
+import emojiDefinitionsUrl from "@triliumnext/ckeditor5/emoji_definitions/en.json?url";
 
 const TEXT_FORMATTING_GROUP = {
     label: "Text formatting",
@@ -100,7 +100,7 @@ export function buildConfig() {
             allowedProtocols: ALLOWED_PROTOCOLS
         },
         emoji: {
-            definitionsUrl: emojiDefinitionsUrl
+            definitionsUrl: new URL(import.meta.url).origin + emojiDefinitionsUrl
         },
         syntaxHighlighting: {
             loadHighlightJs: async () => {
