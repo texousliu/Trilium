@@ -213,10 +213,10 @@ $$`;
     });
 
     it("converts math expressions inside list items into Mathtex format", () => {
-    const input = `- First item with formula: $E = mc^2$`;
-    const expected = /*html*/`<ul><li>First item with formula: <span class="math-tex">\\(E = mc^2\\)</span></li></ul>`;
-    expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
-});
+        const input = `- First item with formula: $E = mc^2$`;
+        const expected = /*html*/`<ul><li>First item with formula: <span class="math-tex">\\(E = mc^2\\)</span></li></ul>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
 
     it("converts display math expressions into Mathtex format", () => {
         const input = `$$\sqrt{x^{2}+1}$$`;
