@@ -67,6 +67,11 @@ export default defineConfig(() => ({
             }
         }
     },
+    optimizeDeps: {
+        exclude: [
+            "@triliumnext/highlightjs"
+        ]
+    },
     css: {
         preprocessorOptions: {
             scss: {
