@@ -191,9 +191,6 @@ importers:
       '@fullcalendar/timegrid':
         specifier: 6.1.17
         version: 6.1.17(@fullcalendar/core@6.1.17)
-      '@highlightjs/cdn-assets':
-        specifier: 11.11.1
-        version: 11.11.1
       '@mermaid-js/layout-elk':
         specifier: 0.1.7
         version: 0.1.7(mermaid@11.6.0)
