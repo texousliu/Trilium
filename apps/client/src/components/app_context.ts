@@ -283,6 +283,9 @@ export type CommandMappings = {
 type EventMappings = {
     initialRenderComplete: {};
     frocaReloaded: {};
+    setLeftPaneVisibility: {
+        leftPaneVisible: boolean | null;
+    }
     protectedSessionStarted: {};
     notesReloaded: {
         noteIds: string[];

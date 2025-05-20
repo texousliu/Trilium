@@ -35,13 +35,9 @@ export default class LeftPaneToggleWidget extends CommandButtonWidget {
         super.refreshIcon();
         splitService.setupLeftPaneResizer(this.currentLeftPaneVisible);
     }
-
-    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        if (loadResults.isOptionReloaded("leftPaneVisible") && document.hasFocus()) {
-            // options.is("leftPaneVisible") changed — it may or may not be the same as currentLeftPaneVisible, but as long as the window is focused, the left pane visibility should be toggled.
-            // See PR description for detailed explanation of multi-window edge cases: https://github.com/TriliumNext/Notes/pull/1962
-            this.currentLeftPaneVisible = !this.currentLeftPaneVisible;        
-            this.refreshIcon();
-        }
+    
+    setLeftPaneVisibilityEvent({ leftPaneVisible }: EventData<"setLeftPaneVisibility">) {
+        this.currentLeftPaneVisible = leftPaneVisible ?? !this.currentLeftPaneVisible;
+        this.refreshIcon();
     }
 }

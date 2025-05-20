@@ -20,18 +20,17 @@ export default class LeftPaneContainer extends FlexContainer<Component> {
         return super.isEnabled() && this.currentLeftPaneVisible;
     }
 
-    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        if (loadResults.isOptionReloaded("leftPaneVisible") && document.hasFocus()) {
-            // options.is("leftPaneVisible") changed — it may or may not be the same as currentLeftPaneVisible, but as long as the window is focused, the left pane visibility should be toggled.
-            this.currentLeftPaneVisible = !this.currentLeftPaneVisible;
-            const visible = this.isEnabled();
-            this.toggleInt(visible);
+    setLeftPaneVisibilityEvent({ leftPaneVisible }: EventData<"setLeftPaneVisibility">) {
+        this.currentLeftPaneVisible = leftPaneVisible ?? !this.currentLeftPaneVisible;
+        const visible = this.isEnabled();
+        this.toggleInt(visible);
 
-            if (visible) {
-                this.triggerEvent("focusTree", {});
-            } else {
-                this.triggerEvent("focusOnDetail", { ntxId: appContext.tabManager.getActiveContext()?.ntxId });
-            }
+        if (visible) {
+            this.triggerEvent("focusTree", {});
+        } else {
+            this.triggerEvent("focusOnDetail", { ntxId: appContext.tabManager.getActiveContext()?.ntxId });
         }
+
+        options.save("leftPaneVisible", this.currentLeftPaneVisible.toString());
     }
 }
