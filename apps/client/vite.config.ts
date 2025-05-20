@@ -1,5 +1,5 @@
 /// <reference types='vitest' />
-import { join } from 'path';
+import { join, resolve } from 'path';
 import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 import asset_path from './src/asset_path';
@@ -35,6 +35,15 @@ export default defineConfig(() => ({
             ]
         })
     ],
+    resolve: {
+        alias: [
+            // Force the use of dist in development mode because upstream ESM is broken (some hybrid between CJS and ESM, will be improved in upcoming versions).
+            {
+                find: "@triliumnext/highlightjs",
+                replacement: resolve(__dirname, "node_modules/@triliumnext/highlightjs/dist")
+            }
+        ]
+    },
     // Uncomment this if you are using workers.
     // worker: {
     //  plugins: [ nxViteTsPaths() ],
