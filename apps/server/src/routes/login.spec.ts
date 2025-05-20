@@ -14,15 +14,12 @@ describe("Login Route test", () => {
 
     it("should return the login page, when using a GET request", async () => {
 
-        // RegExp for login page specific string in HTML: e.g. "assets/v0.92.7/app/login.css"
-        const loginCssRegexp = /assets\/v[0-9.a-z]+\/app\/login\.css/;
-
+        // RegExp for login page specific string in HTML
         const res = await supertest(app)
             .get("/login")
             .expect(200)
 
-
-        expect(loginCssRegexp.test(res.text)).toBe(true);
+        expect(res.text).toMatch(/assets\/v[0-9.a-z]+\/src\/login\.js/);
 
     });
 
