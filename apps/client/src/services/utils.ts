@@ -125,22 +125,14 @@ function formatDateISO(date: Date) {
 }
 
 
-// old version
-// function formatDateTime(date: Date) {
-//     return `${formatDate(date)} ${formatTime(date)}`;
-// }
-
-// new version 
-export function formatDateTime(date: Date, userSuppliedFormat?: string): string { 
-    const DEFAULT_FORMAT = 'YYYY-MM-DD HH:mm'; 
-    let formatToUse = DEFAULT_FORMAT;
-
-    if (userSuppliedFormat && typeof userSuppliedFormat === 'string' && userSuppliedFormat.trim() !== "") {
-        formatToUse = userSuppliedFormat.trim();
-    }
+export function formatDateTime(date: Date, userSuppliedFormat?: string): string {
+    const DEFAULT_FORMAT = 'YYYY-MM-DD HH:mm';
+    const formatToUse = (typeof userSuppliedFormat === 'string' && userSuppliedFormat.trim() !== "")
+        ? userSuppliedFormat.trim()
+        : DEFAULT_FORMAT;
 
     if (!date) {
-        date = new Date(); 
+        date = new Date();
     }
 
     try {

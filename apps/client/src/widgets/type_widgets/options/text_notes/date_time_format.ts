@@ -5,28 +5,28 @@ import type { OptionMap } from "@triliumnext/commons";
 
 const TPL = /*html*/`
 <div class="options-section">
-    <h4>${t("options.customDateTimeFormatTitle", "Custom Date/Time Format (Alt+T)")}</h4>
+    <h4>${t("custom_date_time_format.title")}</h4>
 
     <p>
-        ${t("options.customDateTimeFormatDesc1", "Define a custom format for the date and time inserted using the Alt+T shortcut.")}
-        ${t("options.customDateTimeFormatDesc2", "Uses <a href=\"https://day.js.org/docs/en/display/format\" target=\"_blank\" rel=\"noopener noreferrer\">Day.js format tokens</a>. Refer to the Day.js documentation for valid tokens.")}
+        ${t("custom_date_time_format.desc1")}
+        ${t("custom_date_time_format.desc2")}
     </p>
     <p>
-        <strong>${t("options.customDateTimeFormatImportant", "Important:")}</strong>
-        ${t("options.customDateTimeFormatDesc3", "If you provide a format string that Day.js does not recognize (e.g., mostly plain text without valid Day.js tokens), the text you typed might be inserted literally. If the format string is left empty, or if Day.js encounters a critical internal error with your format, a default format (e.g., YYYY-MM-DD HH:mm) will be used.")}
+        <strong>${t("custom_date_time_format.important_label")}</strong>
+        ${t("custom_date_time_format.desc3")}
     </p>
 
     <div class="form-group">
         <label for="customDateTimeFormatInput" style="margin-right: 10px;">
-            ${t("options.customDateTimeFormatLabel", "Format String:")}
+            ${t("custom_date_time_format.format_string_label")}
         </label>
         <input type="text" id="customDateTimeFormatInput" class="form-control custom-datetime-format-input" 
-               placeholder="${t("options.customDateTimeFormatPlaceholder", "e.g., DD/MM/YYYY HH:mm:ss or dddd, MMMM D")}" 
+               placeholder="${t("custom_date_time_format.placeholder")}" 
                style="width: 300px; display: inline-block;">
     </div>
     <p style="margin-top: 5px;">
-        <em>${t("options.customDateTimeFormatExamplesLabel", "Examples of valid Day.js formats:")}</em>
-        <code>YYYY-MM-DD HH:mm</code> (${t("options.customDateTimeFormatExampleDefault", "Default-like")}),
+        <em>${t("custom_date_time_format.examples_label")}</em>
+        <code>YYYY-MM-DD HH:mm</code> (${t("custom_date_time_format.example_default")}),
         <code>DD.MM.YYYY</code>,
         <code>MMMM D, YYYY h:mm A</code>,
         <code>[Today is] dddd</code>

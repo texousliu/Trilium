@@ -287,7 +287,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
             // Touch bar integration
             if (hasTouchBar) {
-                for (const event of ["bold", "italic", "underline", "paragraph", "heading"]) {
+                for (const event of [ "bold", "italic", "underline", "paragraph", "heading" ]) {
                     editor.commands.get(event)?.on("change", () => this.triggerCommand("refreshTouchBar"));
                 }
             }
@@ -373,15 +373,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             });
         }
     }
-    // old version
-    // insertDateTimeToTextCommand() {
-    //     const date = new Date();
-    //     const dateString = utils.formatDateTime(date);
 
-    //     this.addTextToEditor(dateString);
-    // }
-
-    // new version
     async insertDateTimeToTextCommand() { 
         const date = new Date();
         let userPreferredFormat = "";
