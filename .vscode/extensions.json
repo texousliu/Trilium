@@ -9,7 +9,6 @@
     "redhat.vscode-yaml",
     "tobermory.es6-string-html",
     "vitest.explorer",
-    "yzhang.markdown-all-in-one",
-    "aaron-bond.better-comments"
+    "yzhang.markdown-all-in-one"
   ]
 }
