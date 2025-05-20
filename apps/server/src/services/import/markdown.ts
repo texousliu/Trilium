@@ -23,19 +23,7 @@ class CustomMarkdownRenderer extends Renderer {
     }
 
     paragraph(data: Tokens.Paragraph): string {
-        let text = super.paragraph(data).trimEnd();
-
-        if (text.includes("$")) {
-            // Display math
-            text = text.replaceAll(/(?<!\\)\$\$(.+)\$\$/g,
-                `<span class="math-tex">\\\[$1\\\]</span>`);
-
-            // Inline math
-            text = text.replaceAll(/(?<!\\)\$(.+?)\$/g,
-                `<span class="math-tex">\\\($1\\\)</span>`);
-        }
-
-        return text;
+        return super.paragraph(data).trimEnd();
     }
 
     code({ text, lang }: Tokens.Code): string {
@@ -132,11 +120,17 @@ class CustomMarkdownRenderer extends Renderer {
 function renderToHtml(content: string, title: string) {
     // Double-escape slashes in math expression because they are otherwise consumed by the parser somewhere.
     content = content.replaceAll("\\$", "\\\\$");
+    
+    // Extract formulas and replace them with placeholders to prevent interference from Markdown rendering
+    const { processedText, formulaMap } = extractFormulas(content);
 
-    let html = parse(content, {
+    let html = parse(processedText, {
         async: false,
         renderer: renderer
     }) as string;
+
+    // After rendering, replace placeholders back with the formula HTML
+    html = restoreFormulas(html, formulaMap);
 
     // h1 handling needs to come before sanitization
     html = importUtils.handleH1(html, title);
@@ -163,6 +157,38 @@ function getNormalizedMimeFromMarkdownLanguage(language: string | undefined) {
     }
 
     return MIME_TYPE_AUTO;
+}
+
+function extractFormulas(text: string): { processedText: string, formulaMap: Map<string, string> } {
+    const formulaMap = new Map<string, string>();
+    let formulaId = 0;
+
+    // Display math
+    text = text.replace(/(?<!\\)\$\$(.+?)\$\$/gs, (_, formula) => {
+        const key = `<!--FORMULA_BLOCK_${formulaId++}-->`;
+        formulaMap.set(key, `$$${formula}$$`);
+        return key;
+    });
+
+    // Inline math
+    text = text.replace(/(?<!\\)\$(.+?)\$/g, (_, formula) => {
+        const key = `<!--FORMULA_INLINE_${formulaId++}-->`;
+        formulaMap.set(key, `$${formula}$`);
+        return key;
+    });
+    return { processedText: text, formulaMap };
+}
+
+function restoreFormulas(html: string, formulaMap: Map<string, string>): string {
+    for (const [key, formula] of formulaMap.entries()) {
+        const isBlock = formula.startsWith("$$");
+        const inner = formula.replace(/^\${1,2}|\${1,2}$/g, "");
+        const rendered = isBlock
+            ? `<span class="math-tex">\\[${inner}\\]</span>`
+            : `<span class="math-tex">\\(${inner}\\)</span>`;
+        html = html.replaceAll(key, rendered);
+    }
+    return html;
 }
 
 const renderer = new CustomMarkdownRenderer({ async: false });
