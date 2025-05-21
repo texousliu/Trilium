@@ -5,6 +5,7 @@ import express from "express";
 import { getResourceDir, isDev } from "../services/utils.js";
 import type serveStatic from "serve-static";
 import proxy from "express-http-proxy";
+import { existsSync } from "fs";
 
 const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOptions<express.Response<unknown, Record<string, unknown>>>) => {
     if (!isDev) {
@@ -29,13 +30,18 @@ async function register(app: express.Application) {
             proxyReqPathResolver: (req) => "/" + assetUrlFragment + `/@fs` + req.url
         }));
     } else {
-        app.use(`/${assetUrlFragment}/src`, persistentCacheStatic(path.join(resourceDir, "public", "src")));
-        app.use(`/${assetUrlFragment}/stylesheets`, persistentCacheStatic(path.join(resourceDir, "public", "stylesheets")));
-        app.use(`/${assetUrlFragment}/libraries`, persistentCacheStatic(path.join(resourceDir, "public", "libraries")));
-        app.use(`/${assetUrlFragment}/fonts`, persistentCacheStatic(path.join(resourceDir, "public", "fonts")));
-        app.use(`/${assetUrlFragment}/translations/`, persistentCacheStatic(path.join(resourceDir, "public", "translations")));
+        const publicDir = path.join(resourceDir, "public");
+        if (!existsSync(publicDir)) {
+            throw new Error("Public directory is missing at: " + path.resolve(publicDir));
+        }
+
+        app.use(`/${assetUrlFragment}/src`, persistentCacheStatic(path.join(publicDir, "src")));
+        app.use(`/${assetUrlFragment}/stylesheets`, persistentCacheStatic(path.join(publicDir, "stylesheets")));
+        app.use(`/${assetUrlFragment}/libraries`, persistentCacheStatic(path.join(publicDir, "libraries")));
+        app.use(`/${assetUrlFragment}/fonts`, persistentCacheStatic(path.join(publicDir, "fonts")));
+        app.use(`/${assetUrlFragment}/translations/`, persistentCacheStatic(path.join(publicDir, "translations")));
         app.use(`/${assetUrlFragment}/images`, persistentCacheStatic(path.join(resourceDir, "assets", "images")));
-        app.use(`/node_modules/`, persistentCacheStatic(path.join(resourceDir, "public/node_modules")));
+        app.use(`/node_modules/`, persistentCacheStatic(path.join(publicDir, "node_modules")));
     }
     app.use(`/${assetUrlFragment}/doc_notes`, persistentCacheStatic(path.join(resourceDir, "assets", "doc_notes")));
     app.use(`/assets/vX/fonts`, express.static(path.join(srcRoot, "public/fonts")));
