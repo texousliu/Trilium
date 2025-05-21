@@ -173,6 +173,15 @@
     border-bottom-right-radius: var(--ck-border-radius);
 }
 
+/* Current color checkmark */
+:root .ck.ck-color-selector .ck-icon {
+    color: white;
+}
+
+:root .ck.ck-color-selector .ck-icon__fill {
+    fill: black !important;
+}
+
 /* Table dropdown */
 
 .ck-insert-table-dropdown__grid {
