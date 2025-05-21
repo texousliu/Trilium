@@ -188,6 +188,13 @@
           "outputFileName": "main.js",
           "tsConfig": "apps/server/tsconfig.app.json",
           "platform": "node",
+          "assets": [
+            {
+              "glob": "**/*",
+              "input": "apps/server/src/assets",
+              "output": "assets"
+            }
+          ],
           "format": [
             "esm"
           ],
