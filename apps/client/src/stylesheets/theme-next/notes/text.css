@@ -163,6 +163,9 @@
 /* Table dropdown */
 
 .ck-insert-table-dropdown__grid {
+    --ck-insert-table-dropdown-box-width: 16px;
+    --ck-insert-table-dropdown-box-height: 16px;
+    --ck-insert-table-dropdown-box-margin: 2px;
     --ck-color-base-border: var(--ck-color-panel-border); /* Cell box color */
     --ck-color-focus-border: var(--hover-item-text-color); /* Selected cell box border color */
     --ck-color-focus-outer-shadow: var(--hover-item-background-color); /* Selected cell box background color */
