@@ -240,4 +240,6 @@
     --ck-editor-toolbar-button-on-background: #00000017;
     --ck-editor-toolbar-button-on-color: black;
     --ck-editor-toolbar-button-on-shadow: 1px 1px 1px rgba(0, 0, 0, .35);
+    --ck-editor-toolbar-dropdown-button-open-background: #0000000f;
+
 }
