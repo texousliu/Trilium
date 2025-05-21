@@ -27,7 +27,7 @@
     --ck-border-radius: 6px;
 }
 
-.ck.ck-toolbar .ck-button.ck-on:not(.ck-dropdown__button):not(.ck-list-item-button) {
+.ck.ck-toolbar .ck-button.ck-on:not(.ck-dropdown__button):not(.ck-list-item-button):not(.ck-button_with-text) {
     --ck-color-button-on-background: var(--ck-editor-toolbar-button-on-background);
     --ck-color-button-on-color: var(--ck-editor-toolbar-button-on-color);
     box-shadow: var(--ck-editor-toolbar-button-on-shadow);
