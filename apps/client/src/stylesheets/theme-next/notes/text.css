@@ -33,6 +33,11 @@
     box-shadow: var(--ck-editor-toolbar-button-on-shadow);
 }
 
+.ck.ck-toolbar .ck-button.ck-dropdown__button {
+    --ck-color-button-on-background: var(--ck-editor-toolbar-dropdown-button-open-background);
+    --ck-color-button-on-color: currentColor;
+}
+
 /* Disabled button */
 :root .classic-toolbar-widget .ck.ck-button.ck-disabled {
     opacity: .75;
