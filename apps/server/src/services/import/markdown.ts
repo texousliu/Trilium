@@ -120,9 +120,9 @@ class CustomMarkdownRenderer extends Renderer {
 function renderToHtml(content: string, title: string) {
     // Double-escape slashes in math expression because they are otherwise consumed by the parser somewhere.
     content = content.replaceAll("\\$", "\\\\$");
-    
+
     // Extract formulas and replace them with placeholders to prevent interference from Markdown rendering
-    const { processedText, formulaMap } = extractFormulas(content);
+    const { processedText, placeholderMap: formulaMap } = extractFormulas(content);
 
     let html = parse(processedText, {
         async: false,
@@ -130,7 +130,7 @@ function renderToHtml(content: string, title: string) {
     }) as string;
 
     // After rendering, replace placeholders back with the formula HTML
-    html = restoreFormulas(html, formulaMap);
+    html = restoreFromMap(html, formulaMap);
 
     // h1 handling needs to come before sanitization
     html = importUtils.handleH1(html, title);
@@ -159,36 +159,57 @@ function getNormalizedMimeFromMarkdownLanguage(language: string | undefined) {
     return MIME_TYPE_AUTO;
 }
 
-function extractFormulas(text: string): { processedText: string, formulaMap: Map<string, string> } {
-    const formulaMap = new Map<string, string>();
-    let formulaId = 0;
+function extractCodeBlocks(text: string): { processedText: string, placeholderMap: Map<string, string> } {
+    const codeMap = new Map<string, string>();
+    let id = 0;
+    const timestamp = Date.now();
 
-    // Display math
-    text = text.replace(/(?<!\\)\$\$(.+?)\$\$/gs, (_, formula) => {
-        const key = `<!--FORMULA_BLOCK_${formulaId++}-->`;
-        formulaMap.set(key, `$$${formula}$$`);
+    // Multi-line code block and Inline code
+    text = text.replace(/```[\s\S]*?```/g, (m) => {
+        const key = `<!--CODE_BLOCK_${timestamp}_${id++}-->`;
+        codeMap.set(key, m);
+        return key;
+    }).replace(/`[^`\n]+`/g, (m) => {
+        const key = `<!--INLINE_CODE_${timestamp}_${id++}-->`;
+        codeMap.set(key, m);
         return key;
     });
 
-    // Inline math
-    text = text.replace(/(?<!\\)\$(.+?)\$/g, (_, formula) => {
-        const key = `<!--FORMULA_INLINE_${formulaId++}-->`;
-        formulaMap.set(key, `$${formula}$`);
-        return key;
-    });
-    return { processedText: text, formulaMap };
+    return { processedText: text, placeholderMap: codeMap };
 }
 
-function restoreFormulas(html: string, formulaMap: Map<string, string>): string {
-    for (const [key, formula] of formulaMap.entries()) {
-        const isBlock = formula.startsWith("$$");
-        const inner = formula.replace(/^\${1,2}|\${1,2}$/g, "");
-        const rendered = isBlock
-            ? `<span class="math-tex">\\[${inner}\\]</span>`
-            : `<span class="math-tex">\\(${inner}\\)</span>`;
-        html = html.replaceAll(key, rendered);
-    }
-    return html;
+function extractFormulas(text: string): { processedText: string, placeholderMap: Map<string, string> } {
+    // Protect the $ signs inside code blocks from being recognized as formulas.
+    const { processedText: noCodeText, placeholderMap: codeMap } = extractCodeBlocks(text);
+
+    const formulaMap = new Map<string, string>();
+    let id = 0;
+    const timestamp = Date.now();
+
+    // Display math and Inline math
+    let processedText = noCodeText.replace(/(?<!\\)\$\$((?:(?!\n{2,})[\s\S])+?)\$\$/g, (_, formula) => {
+        const key = `<!--FORMULA_BLOCK_${timestamp}_${id++}-->`;
+        const rendered = `<span class="math-tex">\\[${formula}\\]</span>`;
+        formulaMap.set(key, rendered);
+        return key;
+    }).replace(/(?<!\\)\$(.+?)\$/g, (_, formula) => {
+        const key = `<!--FORMULA_INLINE_${timestamp}_${id++}-->`;
+        const rendered = `<span class="math-tex">\\(${formula}\\)</span>`;
+        formulaMap.set(key, rendered);
+        return key;
+    });
+
+    processedText = restoreFromMap(processedText, codeMap);
+
+    return { processedText, placeholderMap: formulaMap };
+}
+
+function restoreFromMap(text: string, map: Map<string, string>): string {
+    if (map.size === 0) return text;
+    const pattern = [...map.keys()]
+        .map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+        .join('|');
+    return text.replace(new RegExp(pattern, 'g'), match => map.get(match) ?? match);
 }
 
 const renderer = new CustomMarkdownRenderer({ async: false });

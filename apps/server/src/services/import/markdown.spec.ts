@@ -206,6 +206,16 @@ $$`;
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
+    it("ignores math formulas inside code blocks and converts inline math expressions correctly", () => {
+        const result = markdownService.renderToHtml(trimIndentation`\
+            \`\`\`unknownlanguage
+            $$a+b$$
+            \`\`\`
+        `, "title");
+        expect(result).toBe(trimIndentation`\
+            <pre><code class="language-text-x-trilium-auto">$$a+b$$</code></pre>`);
+    });
+
     it("converts specific inline math expression into Mathtex format", () => {
         const input = `This is a formula: $\\mathcal{L}_{task} + \\mathcal{L}_{od}$ inside a sentence.`;
         const expected = /*html*/`<p>This is a formula: <span class="math-tex">\\(\\mathcal{L}_{task} + \\mathcal{L}_{od}\\)</span> inside a sentence.</p>`;
@@ -264,7 +274,7 @@ $$`;
     });
 
     it("imports todo lists properly", () => {
-         const input = trimIndentation`\
+        const input = trimIndentation`\
             - [x] Hello
             - [ ] World`;
         const expected = `<ul class="todo-list"><li><label class="todo-list__label"><input type="checkbox" checked="checked" disabled="disabled"><span class="todo-list__label__description">Hello</span></label></li><li><label class="todo-list__label"><input type="checkbox" disabled="disabled"><span class="todo-list__label__description">World</span></label></li></ul>`;
