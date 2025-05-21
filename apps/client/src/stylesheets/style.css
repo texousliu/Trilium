@@ -2019,7 +2019,7 @@ footer.file-footer button {
 .admonition.note { --accent-color: var(--admonition-note-accent-color); }
 .admonition.tip { --accent-color: var(--admonition-tip-accent-color); }
 .admonition.important { --accent-color: var(--admonition-important-accent-color); }
-.admonition.caution { --accent-color: var(--admonition-important-caution-color); }
+.admonition.caution { --accent-color: var(--admonition-caution-accent-color); }
 .admonition.warning { --accent-color: var(--admonition-warning-accent-color); }
 
 .admonition.note::before { content: "\eb21"; }
