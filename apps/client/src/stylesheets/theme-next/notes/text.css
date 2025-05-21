@@ -27,6 +27,12 @@
     --ck-border-radius: 6px;
 }
 
+.ck-button.ck-on:not(.ck-dropdown__button) {
+    --ck-color-button-on-background: var(--ck-editor-toolbar-button-on-background);
+    --ck-color-button-on-color: var(--ck-editor-toolbar-button-on-color);
+    box-shadow: var(--ck-editor-toolbar-button-on-shadow);
+}
+
 /* Disabled button */
 :root .classic-toolbar-widget .ck.ck-button.ck-disabled {
     opacity: .75;
