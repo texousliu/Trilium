@@ -105,21 +105,13 @@
     "tmp": "0.2.3",
     "turndown": "7.2.0",
     "unescape": "1.0.1",
-    "webpack": "5.99.9",
     "ws": "8.18.2",
     "xml2js": "0.6.2",
-    "yauzl": "3.2.0",
-    "copy-webpack-plugin": "13.0.0"
+    "yauzl": "3.2.0"
   },
   "nx": {
     "name": "server",
     "targets": {
-      "build": {
-        "dependsOn": [
-          "^build",
-          "client:build"
-        ]
-      },
       "serve": {
         "executor": "@nx/js:node",
         "defaultConfiguration": "development",
@@ -183,7 +175,46 @@
             "command": "docker run -p 8081:8080 triliumnext-alpine"
           }
         }
+      },
+      "build": {
+        "executor": "@nx/esbuild:esbuild",
+        "outputs": [
+          "{options.outputPath}"
+        ],
+        "defaultConfiguration": "production",
+        "options": {
+          "main": "apps/server/src/main.ts",
+          "outputPath": "apps/server/dist",
+          "outputFileName": "main.js",
+          "tsConfig": "apps/server/tsconfig.app.json",
+          "platform": "node",
+          "format": [
+            "esm"
+          ],
+          "declarationRootDir": "apps/server/src"
+        },
+        "configurations": {
+          "development": {
+            "minify": false
+          },
+          "production": {
+            "minify": true
+          }
+        }
       }
     }
-  }
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "development": "./src/main.ts",
+      "types": "./dist/main.d.ts",
+      "import": "./dist/main.js",
+      "default": "./dist/main.js"
+    }
+  },
+  "types": "./dist/main.d.ts",
+  "module": "./dist/main.js",
+  "type": "module",
+  "main": "./dist/main.js"
 }
