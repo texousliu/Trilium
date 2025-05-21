@@ -50,7 +50,7 @@ function init(app: Express.Application) {
             }
         };
 
-        return app._router.handle(req, res, () => {});
+        return (app as any)._router.handle(req, res, () => {});
     });
 }
 
