@@ -1,5 +1,4 @@
 import { t } from "../../services/i18n.js";
-import libraryLoader from "../../services/library_loader.js";
 import noteAutocompleteService, { type Suggestion } from "../../services/note_autocomplete.js";
 import mimeTypesService from "../../services/mime_types.js";
 import utils, { hasTouchBar } from "../../services/utils.js";
@@ -12,13 +11,13 @@ import appContext, { type CommandListenerData, type EventData } from "../../comp
 import dialogService from "../../services/dialog.js";
 import options from "../../services/options.js";
 import toast from "../../services/toast.js";
-import { normalizeMimeTypeForCKEditor } from "../../services/mime_type_definitions.js";
 import { buildSelectedBackgroundColor } from "../../components/touch_bar.js";
 import { buildConfig, buildToolbarConfig } from "./ckeditor/config.js";
 import type FNote from "../../entities/fnote.js";
 import { getMermaidConfig } from "../../services/mermaid.js";
 import { PopupEditor, ClassicEditor, EditorWatchdog, type CKTextEditor, type MentionFeed, type WatchdogConfig } from "@triliumnext/ckeditor5";
 import "@triliumnext/ckeditor5/index.css";
+import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
 
 const ENABLE_INSPECTOR = false;
 
@@ -301,15 +300,18 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     async createEditor() {
         await this.watchdog.create(this.$editor[0], {
             placeholder: t("editable_text.placeholder"),
-            //@ts-ignore TODO: FIX TYPES
-            mention: mentionSetup,
+            mention: {
+                feeds: mentionSetup,
+            },
             codeBlock: {
                 languages: buildListOfLanguages()
             },
             math: {
                 engine: "katex",
                 outputType: "span", // or script
-                lazyLoad: async () => await libraryLoader.requireLibrary(libraryLoader.KATEX),
+                lazyLoad: async () => {
+                    (window as any).katex = (await import("../../services/math.js")).default
+                },
                 forceOutputType: false, // forces output to use outputType
                 enablePreview: true // Enable preview view
             },

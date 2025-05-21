@@ -1,11 +1,10 @@
-import library_loader from "../../../services/library_loader.js";
 import { ALLOWED_PROTOCOLS } from "../../../services/link.js";
-import { MIME_TYPE_AUTO } from "../../../services/mime_type_definitions.js";
+import { MIME_TYPE_AUTO } from "@triliumnext/commons";
 import { getHighlightJsNameForMime } from "../../../services/mime_types.js";
 import options from "../../../services/options.js";
-import { isSyntaxHighlightEnabled } from "../../../services/syntax_highlight.js";
+import { ensureMimeTypesForHighlighting, isSyntaxHighlightEnabled } from "../../../services/syntax_highlight.js";
 import utils from "../../../services/utils.js";
-import emojiDefinitionsUrl from "@triliumnext/ckeditor5/emoji_definitions/en.json?external";
+import emojiDefinitionsUrl from "@triliumnext/ckeditor5/emoji_definitions/en.json?url";
 
 const TEXT_FORMATTING_GROUP = {
     label: "Text formatting",
@@ -101,12 +100,12 @@ export function buildConfig() {
             allowedProtocols: ALLOWED_PROTOCOLS
         },
         emoji: {
-            definitionsUrl: emojiDefinitionsUrl
+            definitionsUrl: new URL(import.meta.url).origin + emojiDefinitionsUrl
         },
         syntaxHighlighting: {
-            async loadHighlightJs() {
-                await library_loader.requireLibrary(library_loader.HIGHLIGHT_JS);
-                return hljs;
+            loadHighlightJs: async () => {
+                await ensureMimeTypesForHighlighting();
+                return await import("@triliumnext/highlightjs");
             },
             mapLanguageName: getHighlightJsNameForMime,
             defaultMimeType: MIME_TYPE_AUTO,

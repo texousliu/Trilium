@@ -73,7 +73,8 @@
 }
 
 /* Dropdown list item */
-:root ul.ck.ck-list button.ck-button {
+:root ul.ck.ck-list button.ck-button,
+:root .ck.ck-collapsible > button.ck-button {
     padding: 2px 16px;
     background: transparent;
     border-radius: 6px !important;
@@ -81,12 +82,11 @@
 }
 
 /* Checked list item */
-:root ul.ck.ck-list button.ck-button.ck-on:not(:hover) {
-    background: transparent !important;
-}
 
 :root ul.ck.ck-list button.ck-button:hover,
-:root ul.ck.ck-list button.ck-button.ck-on:hover {
+:root ul.ck.ck-list button.ck-button.ck-on:hover,
+:root .ck.ck-collapsible > button.ck-button:not(.ck-disabled):hover,
+:root .ck.ck-collapsible > button.ck-button:not(.ck-disabled):not(:focus):hover {
     background: var(--hover-item-background-color);
     color: var(--hover-item-color);
 }
@@ -97,6 +97,57 @@
     margin-left: calc(0px - var(--ck-editor-popup-padding));
     width: calc(100% + (var(--ck-editor-popup-padding) * 2));
     background: var(--menu-item-delimiter-color);
+}
+
+/* Collapsible section */
+
+.ck.ck-collapsible {
+    position: relative;
+    border: unset !important;
+    padding-top: var(--ck-editor-popup-padding);
+}
+
+.ck.ck-collapsible::before {
+    /* Adds a background shade which overlaps the dropdown's padding */
+
+    --negative-padding: calc(0px - var(--ck-editor-popup-padding));
+
+    display: block;
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: var(--negative-padding);
+    left: var(--negative-padding);
+    right: var(--negative-padding);
+    border-top: 1px solid var(--ck-color-base-border);
+    background: rgba(0, 0, 0, .025);
+}
+
+.ck.ck-collapsible:last-child::before {
+    border-radius: 0 0 var(--dropdown-border-radius) var(--dropdown-border-radius);
+}
+
+.ck.ck-collapsible.ck-collapsible_collapsed > button.ck-button {
+    font-weight: normal !important;
+}
+
+.ck.ck-collapsible .ck-collapsible__children {
+    padding-top: 1em;
+}
+
+/* Font size dropdown */
+
+.ck-fontsize-option {
+    min-height: 2rem !important;
+}
+
+.ck-fontsize-option.text-tiny   {--size: .75em;}
+.ck-fontsize-option.text-small  {--size: .85em;}
+.ck-fontsize-option.text-big    {--size: 1.4em;}
+.ck-fontsize-option.text-huge   {--size: 1.8em;}
+
+:root .ck-fontsize-option .ck-button__label {
+    font-size: var(--size);
 }
 
 /* Color picker dropdown */
@@ -112,10 +163,41 @@
 /* Table dropdown */
 
 .ck-insert-table-dropdown__grid {
+    --ck-insert-table-dropdown-box-width: 16px;
+    --ck-insert-table-dropdown-box-height: 16px;
+    --ck-insert-table-dropdown-box-margin: 2px;
     --ck-color-base-border: var(--ck-color-panel-border); /* Cell box color */
     --ck-color-focus-border: var(--hover-item-text-color); /* Selected cell box border color */
     --ck-color-focus-outer-shadow: var(--hover-item-background-color); /* Selected cell box background color */
     --ck-border-radius: 0;
+}
+
+/* Admonitions dropdown */
+
+.ck-tn-admonition-note {        --icon: "\eb21";    --accent: var(--admonition-note-accent-color);}
+.ck-tn-admonition-tip {         --icon: "\ea0d";    --accent: var(--admonition-tip-accent-color);}
+.ck-tn-admonition-important {   --icon: "\ea7c";    --accent: var(--admonition-important-accent-color);}
+.ck-tn-admonition-caution {     --icon: "\eac7";    --accent: var(--admonition-caution-accent-color);}
+.ck-tn-admonition-warning {     --icon: "\eac5";    --accent: var(--admonition-warning-accent-color);}
+
+:root .ck.ck-tn-admonition-option .ck-button__label {
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+    margin: 4px;
+    padding-right: 2em;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+}
+
+:root .ck.ck-tn-admonition-option .ck-button__label::before {
+    display: inline-block;
+    content: var(--icon);
+    width: 2em;
+    text-align: center;
+    font-size: 1.4em;
+    font-family: boxicons;
+    color: var(--accent);
 }
 
 /* Action buttons */

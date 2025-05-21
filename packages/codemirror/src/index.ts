@@ -20,6 +20,8 @@ export interface EditorConfig {
     lineWrapping?: boolean;
     vimKeybindings?: boolean;
     readOnly?: boolean;
+    /** Disables some of the nice-to-have features (bracket matching, syntax highlighting, indentation markers) in order to improve performance. */
+    preferPerformance?: boolean;
     tabIndex?: number;
     onContentChanged?: ContentChangedListener;
 }
@@ -51,19 +53,10 @@ export default class CodeMirror extends EditorView {
             ...extensions,
             languageCompartment.of([]),
             lineWrappingCompartment.of(config.lineWrapping ? EditorView.lineWrapping : []),
-            themeCompartment.of([
-                syntaxHighlighting(defaultHighlightStyle, { fallback: true })
-            ]),
-
             searchMatchHighlightTheme,
             searchHighlightCompartment.of([]),
-
             highlightActiveLine(),
-            highlightSelectionMatches(),
-            bracketMatching(),
             lineNumbers(),
-            foldGutter(),
-            indentationMarkers(),
             indentUnit.of(" ".repeat(4)),
             keymap.of([
                 ...defaultKeymap,
@@ -71,6 +64,19 @@ export default class CodeMirror extends EditorView {
                 ...smartIndentWithTab
             ])
         ]
+
+        if (!config.preferPerformance) {
+            extensions = [
+                ...extensions,
+                themeCompartment.of([
+                    syntaxHighlighting(defaultHighlightStyle, { fallback: true })
+                ]),
+                highlightSelectionMatches(),
+                bracketMatching(),
+                foldGutter(),
+                indentationMarkers(),
+            ];
+        }
 
         if (!config.readOnly) {
             // Logic specific to editable notes

@@ -1,6 +1,12 @@
 "use strict";
 
 import { parse, Renderer, type Tokens } from "marked";
+import htmlSanitizer from "../html_sanitizer.js";
+import importUtils from "./utils.js";
+import { getMimeTypeFromMarkdownName, MIME_TYPE_AUTO } from "@triliumnext/commons";
+import { ADMONITION_TYPE_MAPPINGS } from "../export/markdown.js";
+import utils from "../utils.js";
+import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
 
 /**
  * Keep renderer code up to date with https://github.com/markedjs/marked/blob/master/src/Renderer.ts.
@@ -123,14 +129,6 @@ class CustomMarkdownRenderer extends Renderer {
 
 }
 
-const renderer = new CustomMarkdownRenderer({ async: false });
-
-import htmlSanitizer from "../html_sanitizer.js";
-import importUtils from "./utils.js";
-import { getMimeTypeFromHighlightJs, MIME_TYPE_AUTO, normalizeMimeTypeForCKEditor } from "./mime_type_definitions.js";
-import { ADMONITION_TYPE_MAPPINGS } from "../export/markdown.js";
-import utils from "../utils.js";
-
 function renderToHtml(content: string, title: string) {
     // Double-escape slashes in math expression because they are otherwise consumed by the parser somewhere.
     content = content.replaceAll("\\$", "\\\\$");
@@ -158,14 +156,16 @@ function renderToHtml(content: string, title: string) {
 
 function getNormalizedMimeFromMarkdownLanguage(language: string | undefined) {
     if (language) {
-        const highlightJsName = getMimeTypeFromHighlightJs(language);
-        if (highlightJsName) {
-            return normalizeMimeTypeForCKEditor(highlightJsName.mime);
+        const mimeDefinition = getMimeTypeFromMarkdownName(language);
+        if (mimeDefinition) {
+            return normalizeMimeTypeForCKEditor(mimeDefinition.mime);
         }
     }
 
     return MIME_TYPE_AUTO;
 }
+
+const renderer = new CustomMarkdownRenderer({ async: false });
 
 export default {
     renderToHtml

@@ -22,7 +22,6 @@ interface CustomGlobals {
     getReferenceLinkTitle: (href: string) => Promise<string>;
     getReferenceLinkTitleSync: (href: string) => string;
     getActiveContextNote: () => FNote | null;
-    requireLibrary: typeof library_loader.requireLibrary;
     ESLINT: Library;
     appContext: AppContext;
     froca: Froca;
@@ -122,24 +121,6 @@ declare global {
     //@ts-ignore
     var require: RequireMethod;
     var __non_webpack_require__: RequireMethod | undefined;
-
-    // Libraries
-    // TODO: Replace once library loader is replaced with webpack.
-    var hljs: {
-        highlightAuto(text: string);
-        highlight(text: string, {
-            language: string
-        });
-    };
-    var renderMathInElement: (element: HTMLElement, options: {
-        trust: boolean;
-    }) => void;
-
-    var katex: {
-        renderToString(text: string, opts: {
-            throwOnError: boolean
-        });
-    }
 
     /*
      * Panzoom

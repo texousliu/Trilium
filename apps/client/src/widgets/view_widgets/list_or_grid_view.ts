@@ -215,7 +215,7 @@ class ListOrGridView extends ViewMode {
 
         const highlightedTokens = this.parentNote.highlightedTokens || [];
         if (highlightedTokens.length > 0) {
-            await import("script-loader!mark.js/dist/jquery.mark.min.js");
+            await import("mark.js");
 
             const regex = highlightedTokens.map((token) => utils.escapeRegExp(token)).join("|");
 

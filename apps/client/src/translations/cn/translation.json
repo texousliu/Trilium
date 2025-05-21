@@ -1621,7 +1621,10 @@
     "color-scheme": "颜色方案"
   },
   "code_block": {
-    "word_wrapping": "自动换行"
+    "word_wrapping": "自动换行",
+    "theme_none": "无语法高亮",
+    "theme_group_light": "浅色主题",
+    "theme_group_dark": "深色主题"
   },
   "classic_editor_toolbar": {
     "title": "格式化"
