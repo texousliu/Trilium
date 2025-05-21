@@ -73,7 +73,8 @@
 }
 
 /* Dropdown list item */
-:root ul.ck.ck-list button.ck-button {
+:root ul.ck.ck-list button.ck-button,
+:root .ck.ck-collapsible > button.ck-button {
     padding: 2px 16px;
     background: transparent;
     border-radius: 6px !important;
@@ -83,7 +84,9 @@
 /* Checked list item */
 
 :root ul.ck.ck-list button.ck-button:hover,
-:root ul.ck.ck-list button.ck-button.ck-on:hover {
+:root ul.ck.ck-list button.ck-button.ck-on:hover,
+:root .ck.ck-collapsible > button.ck-button:not(.ck-disabled):hover,
+:root .ck.ck-collapsible > button.ck-button:not(.ck-disabled):not(:focus):hover {
     background: var(--hover-item-background-color);
     color: var(--hover-item-color);
 }
@@ -94,6 +97,42 @@
     margin-left: calc(0px - var(--ck-editor-popup-padding));
     width: calc(100% + (var(--ck-editor-popup-padding) * 2));
     background: var(--menu-item-delimiter-color);
+}
+
+/* Collapsible section */
+
+.ck.ck-collapsible {
+    position: relative;
+    border: unset !important;
+    padding-top: var(--ck-editor-popup-padding);
+}
+
+.ck.ck-collapsible::before {
+    /* Adds a background shade which overlaps the dropdown's padding */
+
+    --negative-padding: calc(0px - var(--ck-editor-popup-padding));
+
+    display: block;
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: var(--negative-padding);
+    left: var(--negative-padding);
+    right: var(--negative-padding);
+    border-top: 1px solid var(--ck-color-base-border);
+    background: rgba(0, 0, 0, .025);
+}
+
+.ck.ck-collapsible:last-child::before {
+    border-radius: 0 0 var(--dropdown-border-radius) var(--dropdown-border-radius);
+}
+
+.ck.ck-collapsible.ck-collapsible_collapsed > button.ck-button {
+    font-weight: normal !important;
+}
+
+.ck.ck-collapsible .ck-collapsible__children {
+    padding-top: 1em;
 }
 
 /* Font size dropdown */
