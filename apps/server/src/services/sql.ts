@@ -352,7 +352,6 @@ function disableSlowQueryLogging<T>(cb: () => T) {
 }
 
 export default {
-    dbConnection,
     insert,
     replace,
 
