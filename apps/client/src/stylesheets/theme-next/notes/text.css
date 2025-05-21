@@ -119,8 +119,8 @@
     bottom: var(--negative-padding);
     left: var(--negative-padding);
     right: var(--negative-padding);
-    border-top: 1px solid var(--ck-color-base-border);
-    background: rgba(0, 0, 0, .025);
+    border-top: 1px solid var(--ck-editor-popup-border-color);
+    background: var(--menu-section-background-color);
 }
 
 .ck.ck-collapsible:last-child::before {
