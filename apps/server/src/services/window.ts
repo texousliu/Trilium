@@ -7,9 +7,9 @@ import log from "./log.js";
 import sqlInit from "./sql_init.js";
 import cls from "./cls.js";
 import keyboardActionsService from "./keyboard_actions.js";
-import * as remoteMain from "@electron/remote/main";
-import { BrowserWindow, shell, type App, type BrowserWindowConstructorOptions, type WebContents } from "electron";
-import { dialog, ipcMain } from "electron";
+import * as remoteMain from "@electron/remote/main/index.js";
+import electron from "electron";
+import type { App, BrowserWindowConstructorOptions, BrowserWindow, WebContents } from "electron";
 import { formatDownloadTitle, isDev, isMac, isWindows } from "./utils.js";
 
 import { fileURLToPath } from "url";
@@ -28,14 +28,14 @@ function trackWindowFocus(win: BrowserWindow) {
         allWindows = allWindows.filter(w => !w.isDestroyed() && w !== win);
         allWindows.push(win);
         if (!optionService.getOptionBool("disableTray")) {
-            ipcMain.emit("reload-tray");
+            electron.ipcMain.emit("reload-tray");
         }
     });
 
     win.on("closed", () => {
         allWindows = allWindows.filter(w => !w.isDestroyed());
         if (!optionService.getOptionBool("disableTray")) {
-            ipcMain.emit("reload-tray");
+            electron.ipcMain.emit("reload-tray");
         }
     });
 }
@@ -66,7 +66,7 @@ async function createExtraWindow(extraWindowHash: string) {
     trackWindowFocus(win);
 }
 
-ipcMain.on("create-extra-window", (event, arg) => {
+electron.ipcMain.on("create-extra-window", (event, arg) => {
     createExtraWindow(arg.extraWindowHash);
 });
 
@@ -76,13 +76,13 @@ interface ExportAsPdfOpts {
     pageSize: "A0" | "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "Legal" | "Letter" | "Tabloid" | "Ledger";
 }
 
-ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
-    const browserWindow = BrowserWindow.fromWebContents(e.sender);
+electron.ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
+    const browserWindow = electron.BrowserWindow.fromWebContents(e.sender);
     if (!browserWindow) {
         return;
     }
 
-    const filePath = dialog.showSaveDialogSync(browserWindow, {
+    const filePath = electron.dialog.showSaveDialogSync(browserWindow, {
         defaultPath: formatDownloadTitle(opts.title, "file", "application/pdf"),
         filters: [
             {
@@ -111,18 +111,18 @@ ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
             `
         });
     } catch (e) {
-        dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-export-message"));
+        electron.dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-export-message"));
         return;
     }
 
     try {
         await fs.writeFile(filePath, buffer);
     } catch (e) {
-        dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-save-message"));
+        electron.dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-save-message"));
         return;
     }
 
-    shell.openPath(filePath);
+    electron.shell.openPath(filePath);
 });
 
 async function createMainWindow(app: App) {
