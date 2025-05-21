@@ -210,6 +210,13 @@ function getColumn<T>(query: string, params: Params = []): T[] {
 }
 
 function execute(query: string, params: Params = []): RunResult {
+    if (config.General.readOnly && (query.startsWith("UPDATE") || query.startsWith("INSERT") || query.startsWith("DELETE"))) {
+        log.error(`read-only DB ignored: ${query} with parameters ${JSON.stringify(params)}`);
+        return {
+            changes: 0,
+            lastInsertRowid: 0
+        };
+    }
     return wrap(query, (s) => s.run(params)) as RunResult;
 }
 
