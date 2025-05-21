@@ -27,12 +27,14 @@
     --ck-border-radius: 6px;
 }
 
+/* Toolbar button in on state */
 .ck.ck-toolbar .ck-button.ck-on:not(.ck-dropdown__button):not(.ck-list-item-button):not(.ck-button_with-text) {
     --ck-color-button-on-background: var(--ck-editor-toolbar-button-on-background);
     --ck-color-button-on-color: var(--ck-editor-toolbar-button-on-color);
     box-shadow: var(--ck-editor-toolbar-button-on-shadow);
 }
 
+/* Toolbar button with its dropdown open */
 .ck.ck-toolbar .ck-button.ck-dropdown__button {
     --ck-color-button-on-background: var(--ck-editor-toolbar-dropdown-button-open-background);
     --ck-color-button-on-color: currentColor;
