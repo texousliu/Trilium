@@ -40,27 +40,11 @@ ENV TRILIUM_UID=${UID}
 ENV TRILIUM_GID=${GID}
 ENV TRILIUM_DATA_DIR=/home/${USER}/trilium-data
 
-# This script will handle UID/GID remapping if needed and then start the app
-CMD [ "sh", "-c", "\
-if [ \"${TRILIUM_UID}\" != \"$(id -u)\" ] || [ \"${TRILIUM_GID}\" != \"$(id -g)\" ]; then \
-  echo \"Remapping user ${USER} to UID:GID ${TRILIUM_UID}:${TRILIUM_GID}\"; \
-  # Use 'id -u' and 'id -g' to get current UID and GID \
-  if [ \"${TRILIUM_GID}\" != \"$(id -g)\" ]; then \
-    # Need root to modify user/group, but we can't use sudo, so we need to exit \
-    echo \"ERROR: Cannot change GID at runtime in rootless mode.\"; \
-    echo \"       Please use docker run with --user ${TRILIUM_UID}:${TRILIUM_GID} instead.\"; \
-    exit 1; \
-  fi; \
-  if [ \"${TRILIUM_UID}\" != \"$(id -u)\" ]; then \
-    echo \"ERROR: Cannot change UID at runtime in rootless mode.\"; \
-    echo \"       Please use docker run with --user ${TRILIUM_UID}:${TRILIUM_GID} instead.\"; \
-    exit 1; \
-  fi; \
-fi; \
-# Make sure data directory has correct permissions \
-mkdir -p \"${TRILIUM_DATA_DIR}\"; \
-# Start the app \
-exec node ./main \
-" ]
+# Copy the entrypoint script
+COPY rootless-entrypoint.sh /home/${USER}/app/
+RUN chmod +x /home/${USER}/app/rootless-entrypoint.sh
+
+# Use the entrypoint script
+CMD ["/home/${USER}/app/rootless-entrypoint.sh"]
 
 HEALTHCHECK --start-period=10s CMD node /home/${USER}/app/docker_healthcheck.js
