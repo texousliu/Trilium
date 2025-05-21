@@ -254,6 +254,10 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
             return false;
         }
 
+        if (options.is("databaseReadonly")) {
+            return true;
+        }
+
         if (this.note.isLabelTruthy("readOnly")) {
             return true;
         }
