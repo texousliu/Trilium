@@ -96,6 +96,21 @@
     background: var(--menu-item-delimiter-color);
 }
 
+/* Font size dropdown */
+
+.ck-fontsize-option {
+    min-height: 2rem !important;
+}
+
+.ck-fontsize-option.text-tiny   {--size: .75em;}
+.ck-fontsize-option.text-small  {--size: .85em;}
+.ck-fontsize-option.text-big    {--size: 1.4em;}
+.ck-fontsize-option.text-huge   {--size: 1.8em;}
+
+:root .ck-fontsize-option .ck-button__label {
+    font-size: var(--size);
+}
+
 /* Color picker dropdown */
 
 /* Color picker button */
