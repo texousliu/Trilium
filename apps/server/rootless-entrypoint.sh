@@ -8,13 +8,15 @@ if [ "${TRILIUM_UID}" != "$(id -u)" ] || [ "${TRILIUM_GID}" != "$(id -g)" ]; the
   # Check GID mismatch
   if [ "${TRILIUM_GID}" != "$(id -g)" ]; then
     echo "ERROR: Cannot change GID at runtime in rootless mode."
-    echo "       Please use docker run with --user ${TRILIUM_UID}:${TRILIUM_GID} instead."
+    echo "       Current GID: $(id -g), Expected GID: ${TRILIUM_GID}"
+    echo "       Please use docker run with --user $(id -u):$(id -g) instead."
     exit 1
   fi
   # Check UID mismatch
   if [ "${TRILIUM_UID}" != "$(id -u)" ]; then
     echo "ERROR: Cannot change UID at runtime in rootless mode."
-    echo "       Please use docker run with --user ${TRILIUM_UID}:${TRILIUM_GID} instead."
+    echo "       Current UID: $(id -u), Expected UID: ${TRILIUM_UID}"
+    echo "       Please use docker run with --user $(id -u):$(id -g) instead."
     exit 1
   fi
 fi
