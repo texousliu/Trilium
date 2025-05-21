@@ -7,7 +7,6 @@ import log from "./log.js";
 import sqlInit from "./sql_init.js";
 import cls from "./cls.js";
 import keyboardActionsService from "./keyboard_actions.js";
-import * as remoteMain from "@electron/remote/main/index.js";
 import electron from "electron";
 import type { App, BrowserWindowConstructorOptions, BrowserWindow, WebContents } from "electron";
 import { formatDownloadTitle, isDev, isMac, isWindows } from "./utils.js";
@@ -226,7 +225,8 @@ function getWindowExtraOpts() {
     return extraOpts;
 }
 
-function configureWebContents(webContents: WebContents, spellcheckEnabled: boolean) {
+async function configureWebContents(webContents: WebContents, spellcheckEnabled: boolean) {
+    const remoteMain = (await import("@electron/remote/main/index.js")).default;
     remoteMain.enable(webContents);
 
     webContents.setWindowOpenHandler((details) => {
