@@ -10,7 +10,8 @@
  * Toolbar
  */
 
-.ck.ck-toolbar {
+.ck.ck-toolbar,
+.ck.ck-block-toolbar-button {
     --ck-color-toolbar-background: transparent;
 
     --ck-color-button-default-background: transparent;
@@ -19,6 +20,7 @@
 
     --ck-color-button-on-background: transparent;
     --ck-color-button-on-hover-background: var(--hover-item-background-color);
+    --ck-color-button-default-active-background: var(--hover-item-background-color);
     
     --ck-focus-ring: 1px solid transparent;
     --ck-color-focus-border: var(--input-focus-outline-color);
@@ -41,11 +43,19 @@
     --ck-color-button-on-color: currentColor;
 }
 
-:root .ck.ck-toolbar .ck-button:not(.ck-disabled):active {
+/* The toolbar show / hide button for the current text block */
+.ck.ck-block-toolbar-button {
+    --ck-color-button-on-background: transparent;
+    --ck-color-button-on-color: currentColor;
+}
+
+:root .ck.ck-toolbar .ck-button:not(.ck-disabled):active,
+.ck.ck-block-toolbar-button:active {
     background-color: var(--hover-item-background-color);
 }
 
-.ck.ck-toolbar .ck-button:active:not(.ck-list-item-button):not(.ck-button_with-text):not(.ck-disabled) svg:not(.ck-dropdown__arrow) {
+.ck.ck-toolbar .ck-button:active:not(.ck-list-item-button):not(.ck-button_with-text):not(.ck-disabled) svg:not(.ck-dropdown__arrow),
+.ck.ck-block-toolbar-button:active svg {
     transform: scale(.8);
 }
 
