@@ -224,7 +224,7 @@
       "build": {
         "dependsOn": [
           "client:build",
-          "build"
+          "build-without-client"
         ]
       }
     }
