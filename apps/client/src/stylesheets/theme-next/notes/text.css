@@ -259,7 +259,9 @@
 /* Numbered list */
 
 :root .ck.ck-list-properties_with-numbered-properties .ck.ck-list-styles-list {
+    min-width: 200px;
     grid-template-columns: repeat(3, auto);
+    justify-content: space-between;
     padding-bottom: calc(var(--ck-spacing-medium) + var(--menu-padding-size));
 }
 
