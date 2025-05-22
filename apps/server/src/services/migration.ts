@@ -1,6 +1,6 @@
 import backupService from "./backup.js";
 import sql from "./sql.js";
-import fs from "fs-extra";
+import fs from "fs";
 import log from "./log.js";
 import { crash } from "./utils.js";
 import resourceDir from "./resource_dir.js";
