@@ -188,6 +188,10 @@
           "outputFileName": "main.js",
           "tsConfig": "apps/server/tsconfig.app.json",
           "platform": "node",
+          "external": [
+            "electron",
+            "@electron/remote"
+          ],
           "format": [
             "esm"
           ],
@@ -206,6 +210,7 @@
           },
           "production": {
             "minify": true,
+            "thirdParty": true,
             "assets": [
               {
                 "glob": "**/*",
