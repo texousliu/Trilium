@@ -20,9 +20,10 @@
     --ck-color-button-on-background: transparent;
     --ck-color-button-on-hover-background: var(--hover-item-background-color);
     
-    --ck-focus-ring: 1px solid var(--input-focus-outline-color);
+    --ck-focus-ring: 1px solid transparent; /* TODO: Find a solution to keep it visible in an elegant way */
     --ck-color-focus-border: var(--input-focus-outline-color);
     --ck-focus-outer-shadow: none;
+    --ck-focus-disabled-outer-shadow: none;
 
     --ck-border-radius: 6px;
 }
@@ -38,6 +39,14 @@
 .ck.ck-toolbar .ck-button.ck-dropdown__button {
     --ck-color-button-on-background: var(--ck-editor-toolbar-dropdown-button-open-background);
     --ck-color-button-on-color: currentColor;
+}
+
+:root .ck.ck-toolbar .ck-button:not(.ck-disabled):active {
+    background-color: var(--hover-item-background-color);
+}
+
+.ck.ck-toolbar .ck-button:active:not(.ck-list-item-button):not(.ck-button_with-text):not(.ck-disabled) svg:not(.ck-dropdown__arrow) {
+    transform: scale(.8);
 }
 
 /* Disabled button */
