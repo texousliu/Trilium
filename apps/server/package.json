@@ -211,6 +211,9 @@
           "production": {
             "minify": true,
             "thirdParty": true,
+            "esbuildOptions": {
+              "splitting": true
+            },
             "assets": [
               {
                 "glob": "**/*",
