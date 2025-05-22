@@ -506,8 +506,8 @@ importers:
         specifier: 4.3.9
         version: 4.3.9
       '@types/compression':
-        specifier: 1.7.5
-        version: 1.7.5
+        specifier: 1.8.0
+        version: 1.8.0
       '@types/cookie-parser':
         specifier: 1.4.8
         version: 1.4.8(@types/express@5.0.2)
@@ -4905,8 +4905,8 @@ packages:
   '@types/color-name@1.1.5':
     resolution: {integrity: sha512-j2K5UJqGTxeesj6oQuGpMgifpT5k9HprgQd8D1Y0lOFqKHl3PJu5GMeS4Y5EgjS55AE6OQxf8mPED9uaGbf4Cg==}
 
-  '@types/compression@1.7.5':
-    resolution: {integrity: sha512-AAQvK5pxMpaT+nDvhHrsBhLSYG5yQdtkaJE1WYieSNY2mVFKAgmU4ks65rkZD5oqnGCFLyQpUr1CqI4DmUMyDg==}
+  '@types/compression@1.8.0':
+    resolution: {integrity: sha512-g4vmPIwbTii9dX1HVioHbOolubEaf4re4vDxuzpKrzz9uI7uarBExi9begX0cXyIB85jXZ5X2A/v8rsHZxSAPw==}
 
   '@types/connect-history-api-fallback@1.5.4':
     resolution: {integrity: sha512-n6Cr2xS1h4uAulPRdlw6Jl6s1oG8KrVilPN2yUITEs+K48EzMJJ3W1xy8K5eWuFvjp3R74AOIGSmp2UfBJ8HFw==}
@@ -18799,9 +18799,10 @@ snapshots:
 
   '@types/color-name@1.1.5': {}
 
-  '@types/compression@1.7.5':
+  '@types/compression@1.8.0':
     dependencies:
-      '@types/express': 5.0.2
+      '@types/express': 4.17.22
+      '@types/node': 22.15.21
 
   '@types/connect-history-api-fallback@1.5.4':
     dependencies:
