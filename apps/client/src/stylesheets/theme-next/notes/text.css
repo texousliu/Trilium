@@ -136,8 +136,13 @@
     box-shadow: unset;
 }
 
-:root .ck.ck-list__item{
+:root .ck.ck-list__item {
     min-width: 10em;
+}
+
+/* Item with icon */
+:root .ck.ck-button_with-text svg:first-child {
+    color: var(--menu-item-icon-color);
 }
 
 /* Checked list item */
