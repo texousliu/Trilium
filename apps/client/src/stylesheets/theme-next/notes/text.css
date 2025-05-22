@@ -136,6 +136,10 @@
     box-shadow: unset;
 }
 
+:root .ck.ck-list__item{
+    min-width: 10em;
+}
+
 /* Checked list item */
 
 :root ul.ck.ck-list button.ck-button:hover,
@@ -195,6 +199,12 @@
 
 .ck.ck-collapsible .ck-collapsible__children {
     padding-top: 1em;
+}
+
+/* Heading dropdown */
+
+:root .ck.ck-dropdown.ck-heading-dropdown .ck-dropdown__panel .ck-list__item {
+    min-width: 170px;
 }
 
 /* Font size dropdown */
