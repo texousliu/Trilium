@@ -45,6 +45,6 @@ ENV TRILIUM_DATA_DIR=/home/${USER}/trilium-data
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
 # Use the entrypoint script
-CMD ["/home/${USER}/app/rootless-entrypoint.sh"]
+CMD /home/${USER}/app/rootless-entrypoint.sh
 
 HEALTHCHECK --start-period=10s CMD node /home/${USER}/app/docker_healthcheck.js
