@@ -256,6 +256,13 @@
     fill: black !important;
 }
 
+/* Numbered list */
+
+:root .ck.ck-list-properties_with-numbered-properties .ck.ck-list-styles-list {
+    grid-template-columns: repeat(3, auto);
+    padding-bottom: calc(var(--ck-spacing-medium) + var(--menu-padding-size));
+}
+
 /* Table dropdown */
 
 .ck-insert-table-dropdown__grid {
