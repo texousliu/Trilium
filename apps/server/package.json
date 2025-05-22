@@ -116,7 +116,7 @@
         "executor": "@nx/js:node",
         "defaultConfiguration": "development",
         "dependsOn": [
-          "build"
+          "build-without-client"
         ],
         "options": {
           "buildTarget": "server:build",
@@ -124,7 +124,7 @@
         },
         "configurations": {
           "development": {
-            "buildTarget": "server:build:development"
+            "buildTarget": "server:build-without-client"
           },
           "production": {
             "buildTarget": "server:build:production"
@@ -176,7 +176,7 @@
           }
         }
       },
-      "build": {
+      "build-without-client": {
         "executor": "@nx/esbuild:esbuild",
         "outputs": [
           "{options.outputPath}"
@@ -220,6 +220,12 @@
             ]
           }
         }
+      },
+      "build": {
+        "dependsOn": [
+          "client:build",
+          "build"
+        ]
       }
     }
   },
