@@ -20,7 +20,7 @@
     --ck-color-button-on-background: transparent;
     --ck-color-button-on-hover-background: var(--hover-item-background-color);
     
-    --ck-focus-ring: 1px solid transparent; /* TODO: Find a solution to keep it visible in an elegant way */
+    --ck-focus-ring: 1px solid transparent;
     --ck-color-focus-border: var(--input-focus-outline-color);
     --ck-focus-outer-shadow: none;
     --ck-focus-disabled-outer-shadow: none;
@@ -52,6 +52,11 @@
 /* Disabled button */
 :root .classic-toolbar-widget .ck.ck-button.ck-disabled {
     opacity: .75;
+}
+
+/* Focus visible */
+.ck.ck-toolbar .ck-button:focus-visible {
+    --ck-focus-ring: 1px solid var(--input-focus-outline-color);
 }
 
 /* 
