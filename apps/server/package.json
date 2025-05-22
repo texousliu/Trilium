@@ -216,6 +216,21 @@
                 "glob": "**/*",
                 "input": "apps/client/dist",
                 "output": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "apps/server/node_modules/better-sqlite3",
+                "output": "node_modules/better-sqlite3"
+              },
+              {
+                "glob": "**/*",
+                "input": "apps/server/node_modules/bindings",
+                "output": "node_modules/bindings"
+              },
+              {
+                "glob": "**/*",
+                "input": "apps/server/node_modules/file-uri-to-path",
+                "output": "node_modules/file-uri-to-path"
               }
             ]
           }
