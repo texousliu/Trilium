@@ -231,6 +231,7 @@
   },
   "exports": {
     "./package.json": "./package.json",
+    "./src/*": "./src/*",
     ".": {
       "development": "./src/main.ts",
       "types": "./dist/main.d.ts",
