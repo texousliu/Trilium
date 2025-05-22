@@ -212,7 +212,7 @@
             "minify": true,
             "thirdParty": true,
             "esbuildOptions": {
-              "splitting": true
+              "splitting": false
             },
             "assets": [
               {
