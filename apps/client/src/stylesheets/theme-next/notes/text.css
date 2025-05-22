@@ -267,6 +267,7 @@
 
 /* Table dropdown */
 
+/* Table rows / columns button grid container */
 .ck-insert-table-dropdown__grid {
     --ck-insert-table-dropdown-box-width: 16px;
     --ck-insert-table-dropdown-box-height: 16px;
@@ -275,6 +276,11 @@
     --ck-color-focus-border: var(--hover-item-text-color); /* Selected cell box border color */
     --ck-color-focus-outer-shadow: var(--hover-item-background-color); /* Selected cell box background color */
     --ck-border-radius: 0;
+}
+
+/* Selected rows / column counter */
+.ck.ck-insert-table-dropdown__label {
+    margin-top: var(--ck-spacing-medium);
 }
 
 /* Admonitions dropdown */
