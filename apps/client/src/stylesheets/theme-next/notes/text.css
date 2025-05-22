@@ -179,6 +179,11 @@
 
 /* Color picker dropdown */
 
+/* Color palette */
+:root .ck.ck-color-selector .ck-color-grid {
+    --ck-editor-toolbar-button-on-shadow: none; /* Remove the shadow of the selected color button */
+}
+
 /* Color picker button */
 :root .ck.ck-color-selector .ck-color-grids-fragment .ck-button.ck-color-selector__color-picker {
     --ck-color-base-border: transparent; /* Remove the top border */
