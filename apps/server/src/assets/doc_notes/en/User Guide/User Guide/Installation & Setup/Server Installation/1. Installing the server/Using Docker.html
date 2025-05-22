@@ -78,12 +78,17 @@ docker inspect [container_name]</code></pre>
   you may need to add a <code>TZ</code> environment variable with the <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">TZ identifier</a> of
   your local timezone.</p>
 <h2>Rootless Docker Image</h2>
+<aside class="admonition note">
+  <p>Please keep in mind that the data directory is at <code>/home/trilium/trilium-data</code> instead
+    of the typical <code>/home/node/trilium-data</code>. This is because a new
+    user is created and used to run Trilium within the rootless containers.</p>
+</aside>
 <p>If you would prefer to run Trilium without having to run the Docker container
   as <code>root</code>, you can use either of the provided Debian (default)
   and Alpine-based images with the <code>rootless</code> tag.&nbsp;</p>
 <p><em><strong>If you're unsure, stick to the “rootful” Docker image referenced above.</strong></em>
 </p>
-<p>Below are some commands to pull the rootless images:</p><pre><code class="language-text-x-sh"># For Debian-based image
+<p>Below are some commands to pull the rootless images:</p><pre><code class="language-text-x-trilium-auto"># For Debian-based image
 docker pull triliumnext/notes:rootless
 
 # For Alpine-based image
@@ -111,14 +116,14 @@ TRILIUM_UID=$(id -u) TRILIUM_GID=$(id -g) docker-compose -f docker-compose.rootl
 # Specify a custom data directory
 TRILIUM_DATA_DIR=/path/to/your/data TRILIUM_UID=$(id -u) TRILIUM_GID=$(id -g) docker-compose -f docker-compose.rootless.yml up -d
 </code></pre>
-<h4><strong>Using Docker CLI</strong></h4><pre><code class="language-text-x-sh"># Build the image
+<h4><strong>Using Docker CLI</strong></h4><pre><code class="language-text-x-trilium-auto"># Build the image
 docker build -t triliumnext/notes:rootless -f apps/server/Dockerfile.rootless .
 
 # Run with default UID/GID (1000:1000)
-docker run -d --name trilium -p 8080:8080 -v ~/trilium-data:/home/node/trilium-data triliumnext/notes:rootless
+docker run -d --name trilium -p 8080:8080 -v ~/trilium-data:/home/trilium/trilium-data triliumnext/notes:rootless
 
 # Run with custom UID/GID
-docker run -d --name trilium -p 8080:8080 --user $(id -u):$(id -g) -v ~/trilium-data:/home/node/trilium-data triliumnext/notes:rootless
+docker run -d --name trilium -p 8080:8080 --user $(id -u):$(id -g) -v ~/trilium-data:/home/trilium/trilium-data triliumnext/notes:rootless
 </code></pre>
 <h3>Environment Variables</h3>
 <ul>
@@ -136,7 +141,7 @@ docker run -d --name trilium -p 8080:8080 --user $(id -u):$(id -g) -v ~/trilium-
     using</li>
   <li>You're setting both <code>TRILIUM_UID</code> and <code>TRILIUM_GID</code> to
     match the owner of the host directory</li>
-</ol><pre><code class="language-text-x-sh"># For example, if your data directory is owned by UID 1001 and GID 1001:
+</ol><pre><code class="language-text-x-trilium-auto"># For example, if your data directory is owned by UID 1001 and GID 1001:
 TRILIUM_UID=1001 TRILIUM_GID=1001 docker-compose -f docker-compose.rootless.yml up -d
 </code></pre>
 <h3>Considerations</h3>
@@ -183,4 +188,3 @@ docker build --build-arg USER=myuser --build-arg UID=1001 --build-arg GID=1001 \
   <li><code>UID</code>: User ID for the non-root user (default: 1000)</li>
   <li><code>GID</code>: Group ID for the non-root user (default: 1000)</li>
 </ul>
-<p>&nbsp;</p>

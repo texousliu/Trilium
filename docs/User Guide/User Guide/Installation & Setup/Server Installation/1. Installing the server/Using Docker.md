@@ -121,13 +121,16 @@ If you are having timezone issues and you are not using docker-compose, you may 
 
 ## Rootless Docker Image
 
+> [!NOTE]
+> Please keep in mind that the data directory is at `/home/trilium/trilium-data` instead of the typical `/home/node/trilium-data`. This is because a new user is created and used to run Trilium within the rootless containers.
+
 If you would prefer to run Trilium without having to run the Docker container as `root`, you can use either of the provided Debian (default) and Alpine-based images with the `rootless` tag. 
 
 _**If you're unsure, stick to the “rootful” Docker image referenced above.**_
 
 Below are some commands to pull the rootless images:
 
-```sh
+```
 # For Debian-based image
 docker pull triliumnext/notes:rootless
 
@@ -166,15 +169,15 @@ TRILIUM_DATA_DIR=/path/to/your/data TRILIUM_UID=$(id -u) TRILIUM_GID=$(id -g) do
 
 #### **Using Docker CLI**
 
-```sh
+```
 # Build the image
 docker build -t triliumnext/notes:rootless -f apps/server/Dockerfile.rootless .
 
 # Run with default UID/GID (1000:1000)
-docker run -d --name trilium -p 8080:8080 -v ~/trilium-data:/home/node/trilium-data triliumnext/notes:rootless
+docker run -d --name trilium -p 8080:8080 -v ~/trilium-data:/home/trilium/trilium-data triliumnext/notes:rootless
 
 # Run with custom UID/GID
-docker run -d --name trilium -p 8080:8080 --user $(id -u):$(id -g) -v ~/trilium-data:/home/node/trilium-data triliumnext/notes:rootless
+docker run -d --name trilium -p 8080:8080 --user $(id -u):$(id -g) -v ~/trilium-data:/home/trilium/trilium-data triliumnext/notes:rootless
 
 ```
 
@@ -191,7 +194,7 @@ If you encounter permission issues with the data volume, ensure that:
 1.  The host directory has appropriate permissions for the UID/GID you're using
 2.  You're setting both `TRILIUM_UID` and `TRILIUM_GID` to match the owner of the host directory
 
-```sh
+```
 # For example, if your data directory is owned by UID 1001 and GID 1001:
 TRILIUM_UID=1001 TRILIUM_GID=1001 docker-compose -f docker-compose.rootless.yml up -d
 
