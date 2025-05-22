@@ -26,6 +26,9 @@ RUN rm -rf \
 
 WORKDIR /home/${USER}/app
 COPY ./dist /home/${USER}/app
+# Also copy the rootless entrypoint script
+COPY rootless-entrypoint.sh /home/${USER}/app/
+RUN chmod +x /home/${USER}/app/rootless-entrypoint.sh
 RUN rm -rf /home/${USER}/app/node_modules/better-sqlite3
 COPY --from=builder /usr/src/app/node_modules/better-sqlite3 /home/${USER}/app/node_modules/better-sqlite3
 RUN chown -R ${USER}:${USER} /home/${USER}
@@ -39,10 +42,6 @@ EXPOSE 8080
 ENV TRILIUM_UID=${UID}
 ENV TRILIUM_GID=${GID}
 ENV TRILIUM_DATA_DIR=/home/${USER}/trilium-data
-
-# Copy the entrypoint script
-COPY rootless-entrypoint.sh /home/${USER}/app/
-RUN chmod +x /home/${USER}/app/rootless-entrypoint.sh
 
 # Use the entrypoint script
 CMD ["/home/${USER}/app/rootless-entrypoint.sh"]
