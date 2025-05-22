@@ -11,7 +11,7 @@
     "targets": {
       "e2e": {
         "dependsOn": [
-          "server:build"
+          "server:start-prod"
         ]
       }
     }
