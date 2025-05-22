@@ -157,6 +157,11 @@
     margin-inline-end: var(--menu-padding-size);
 }
 
+:root .ck.ck-list-item-button .ck-list-item-button__check-holder svg {
+    transform: scale(1.2);
+    color: var(--menu-item-icon-color);
+}
+
 /* Separator */
 :root .ck .ck-list__separator {
     margin: .5em 0;
