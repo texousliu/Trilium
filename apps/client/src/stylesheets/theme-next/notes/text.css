@@ -90,10 +90,28 @@
     padding: var(--ck-editor-popup-padding);
 }
 
+:root .ck.ck-dropdown__panel {
+    --ck-editor-popup-padding: var(--menu-padding-size);
+}
+
+/* Dropdown panel containing a toolbar */
+:root .ck.ck-dropdown__panel:has(>.ck-toolbar) {
+    --ck-editor-popup-padding: calc(var(--menu-padding-size) - var(--ck-spacing-small));
+}
+
+/* Bulleted / number list toolbar */
+.ck-list-styles-list {
+    --ck-spacing-large: var(--ck-spacing-small);
+}
+
 :root ul.ck.ck-list,
 :root div.ck.ck-balloon-panel:not(.ck-tooltip) {
     border: none;
     background: transparent;
+}
+
+:root .ck.ck-list {
+    padding: 0;
 }
 
 /* Tooltip */
@@ -126,6 +144,13 @@
 :root .ck.ck-collapsible > button.ck-button:not(.ck-disabled):not(:focus):hover {
     background: var(--hover-item-background-color);
     color: var(--hover-item-color);
+}
+
+/* List item checkmark container */
+
+:root .ck.ck-list-item-button .ck-list-item-button__check-holder {
+    margin-inline-start: var(--ck-spacing-small);
+    margin-inline-end: var(--menu-padding-size);
 }
 
 /* Separator */
