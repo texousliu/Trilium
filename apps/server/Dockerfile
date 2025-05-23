@@ -25,4 +25,4 @@ FROM node:22.16.0-bullseye-slim
     # Configure container
     EXPOSE 8080
     CMD [ "sh", "./start-docker.sh" ]
-    HEALTHCHECK --start-period=10s CMD exec gosu node node /usr/src/app/docker_healthcheck.js
+    HEALTHCHECK --start-period=10s CMD exec gosu node node /usr/src/app/docker_healthcheck.cjs

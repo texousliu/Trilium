@@ -208,7 +208,6 @@
         "options": {
           "main": "apps/server/src/main.ts",
           "outputPath": "apps/server/dist",
-          "outputFileName": "main.js",
           "tsConfig": "apps/server/tsconfig.app.json",
           "platform": "node",
           "external": [
@@ -226,6 +225,9 @@
           "esbuildOptions": {
             "splitting": false
           },
+          "additionalEntryPoints": [
+            "apps/server/src/docker_healthcheck.ts"
+          ],
           "assets": [
             {
               "glob": "**/*",
