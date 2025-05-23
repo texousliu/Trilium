@@ -183,7 +183,7 @@
             "electron",
             "@electron/remote",
             "better-sqlite3",
-            "jsdom"
+            "./xhr-sync-worker.js"
           ],
           "format": [
             "cjs"
@@ -232,6 +232,11 @@
                 "glob": "**/*",
                 "input": "apps/server/node_modules/file-uri-to-path",
                 "output": "node_modules/file-uri-to-path"
+              },
+              {
+                "glob": "xhr-sync-worker.js",
+                "input": "apps/server/node_modules/jsdom/lib/jsdom/living/xhr",
+                "output": ""
               }
             ]
           }
