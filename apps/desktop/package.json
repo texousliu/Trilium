@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Build your personal knowledge base with TriliumNext Notes",
   "private": true,
-  "main": "main.js",
+  "main": "main.cjs",
   "dependencies": {
     "@electron/remote": "2.1.2",
     "better-sqlite3": "^11.9.1",
@@ -73,7 +73,12 @@
             {
               "glob": "**/*",
               "input": "apps/server/dist/assets",
-              "output": "."
+              "output": "assets"
+            },
+            {
+              "glob": "**/*",
+              "input": "apps/server/dist/public",
+              "output": "public"
             },
             {
               "glob": "xhr-sync-worker.js",
@@ -108,11 +113,11 @@
         "defaultConfiguration": "default",
         "configurations": {
           "default": {
-            "command": "electron .",
+            "command": "electron main.cjs",
             "cwd": "{projectRoot}/dist"
           },
           "nixos": {
-            "command": "nix-shell -p electron_35 --run \"electron {projectRoot}/dist/main.js\"",
+            "command": "nix-shell -p electron_35 --run \"electron {projectRoot}/dist/main.cjs\"",
             "cwd": ".",
             "forwardAllArgs": false
           }
@@ -126,11 +131,11 @@
         "defaultConfiguration": "default",
         "configurations": {
           "default": {
-            "command": "electron .",
+            "command": "electron main.cjs",
             "cwd": "{projectRoot}/dist"
           },
           "nixos": {
-            "command": "nix-shell -p electron_35 --run \"electron {projectRoot}/dist/main.js\"",
+            "command": "nix-shell -p electron_35 --run \"electron {projectRoot}/dist/main.cjs\"",
             "cwd": ".",
             "forwardAllArgs": false
           }
