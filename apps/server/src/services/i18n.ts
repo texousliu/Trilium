@@ -16,7 +16,7 @@ let dayjsLocale: string;
 
 export async function initializeTranslations() {
     const resourceDir = getResourceDir();
-    const Backend = (await import("i18next-fs-backend")).default;
+    const Backend = (await import("i18next-fs-backend/cjs")).default;
     const locale = getCurrentLanguage();
 
     // Initialize translations

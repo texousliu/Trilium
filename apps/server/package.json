@@ -114,21 +114,12 @@
     "targets": {
       "serve": {
         "executor": "@nx/js:node",
-        "defaultConfiguration": "development",
         "dependsOn": [
           "build-without-client"
         ],
         "options": {
-          "buildTarget": "server:build",
+          "buildTarget": "server:build-without-client:development",
           "runBuildTargetDependencies": false
-        },
-        "configurations": {
-          "development": {
-            "buildTarget": "server:build-without-client"
-          },
-          "production": {
-            "buildTarget": "server:build:production"
-          }
         }
       },
       "package": {
@@ -141,7 +132,7 @@
         "dependsOn": [
           "build"
         ],
-        "command": "node apps/server/dist/main.js"
+        "command": "node apps/server/dist/main.cjs"
       },
       "docker-build": {
         "dependsOn": [
@@ -190,10 +181,12 @@
           "platform": "node",
           "external": [
             "electron",
-            "@electron/remote"
+            "@electron/remote",
+            "better-sqlite3",
+            "jsdom"
           ],
           "format": [
-            "esm"
+            "cjs"
           ],
           "declarationRootDir": "apps/server/src"
         },
@@ -264,6 +257,5 @@
   },
   "types": "./dist/main.d.ts",
   "module": "./dist/main.js",
-  "type": "module",
   "main": "./dist/main.js"
 }
