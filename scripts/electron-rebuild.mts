@@ -8,23 +8,47 @@
 
 import { join, resolve } from "path";
 import { rebuild } from "@electron/rebuild"
-import { readFileSync } from "fs";
+import { readFileSync, rmSync, writeFileSync } from "fs";
 
-function getElectronVersion(distDir: string) {
-    if (process.argv[3]) {
-        return process.argv[3];
-    }
+const nativeDependencies = [
+    "better-sqlite3"
+];
 
-    const packageJsonPath = join(distDir, "package.json");
+function parsePackageJson(distDir: string) {
+    const packageJsonPath = join(distDir, "../package.json");
     const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
+    let electronVersion: string;
 
-    const electronVersion = packageJson?.devDependencies?.electron ?? packageJson?.dependencies?.electron;
-    if (!electronVersion) {
-        console.error(`Unable to retrieve Electron version in '${resolve(packageJsonPath)}'.`);
-        process.exit(3);
+    if (process.argv[3]) {
+        electronVersion = process.argv[3];
+    } else {
+        electronVersion = packageJson?.devDependencies?.electron ?? packageJson?.dependencies?.electron;
+        if (!electronVersion) {
+            console.error(`Unable to retrieve Electron version in '${resolve(packageJsonPath)}'.`);
+            process.exit(3);
+        }
+    }
+    
+    return {
+        electronVersion,
+        dependencies: packageJson?.dependencies ?? []
+    };
+}
+
+function createFakePackageJson(distPath: string, dependencies: Record<string, string>) {
+    const finalDependencies = {};
+    for (const dep of nativeDependencies) {
+        finalDependencies[dep] = dependencies[dep];
     }
 
-    return electronVersion;
+    const fakePackageJson = {
+        name: "trilium",
+        version: "1.0.0",
+        main: "index.js",
+        dependencies: finalDependencies,
+        devDependencies: {},
+    };
+    writeFileSync(distPath, JSON.stringify(fakePackageJson, null, 2), "utf-8");
 }
 
 function main() {
@@ -34,16 +58,23 @@ function main() {
         process.exit(1);
     }
 
-    const electronVersion = getElectronVersion(distDir);
+    const { electronVersion, dependencies } = parsePackageJson(distDir);
+    const packageJsonPath = join(distDir, "package.json");
+    createFakePackageJson(packageJsonPath, dependencies);
+
     console.log(`Rebuilding ${distDir} with version ${electronVersion}...`);
 
-    rebuild({
-        // We force the project root path to avoid electron-rebuild from rebuilding the monorepo-level dependency and breaking the server.
-        projectRootPath: distDir,
-        buildPath: distDir,
-        force: true,
-        electronVersion,
-    });
+    try {
+        rebuild({
+            // We force the project root path to avoid electron-rebuild from rebuilding the monorepo-level dependency and breaking the server.
+            projectRootPath: distDir,
+            buildPath: distDir,
+            force: true,
+            electronVersion,
+        });
+    } finally {
+        rmSync(packageJsonPath);
+    }
 }
 
 main();
