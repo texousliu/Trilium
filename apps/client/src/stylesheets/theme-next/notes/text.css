@@ -22,6 +22,8 @@
     --ck-color-button-on-hover-background: var(--hover-item-background-color);
     --ck-color-button-default-active-background: var(--hover-item-background-color);
     
+    --ck-color-split-button-hover-background: var(--ck-editor-toolbar-dropdown-button-open-background);
+
     --ck-focus-ring: 1px solid transparent;
     --ck-color-focus-border: var(--input-focus-outline-color);
     --ck-focus-outer-shadow: none;
@@ -67,6 +69,11 @@
 /* Focus visible */
 .ck.ck-toolbar .ck-button:focus-visible {
     --ck-focus-ring: 1px solid var(--input-focus-outline-color);
+}
+
+/* Remove the border from hovered split arrow button */
+.ck.ck-splitbutton:hover > .ck-splitbutton__arrow:not(.ck-disabled)::after {
+    visibility: collapse;
 }
 
 /* 
