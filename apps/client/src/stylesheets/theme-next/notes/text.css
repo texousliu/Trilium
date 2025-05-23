@@ -315,6 +315,7 @@
     --ck-color-focus-border: var(--hover-item-text-color); /* Selected cell box border color */
     --ck-color-focus-outer-shadow: var(--hover-item-background-color); /* Selected cell box background color */
     --ck-border-radius: 0;
+    --ck-editor-toolbar-button-on-shadow: 1px 1px 1px rgba(0, 0, 0, .35);
 }
 
 /* Selected rows / column counter */
