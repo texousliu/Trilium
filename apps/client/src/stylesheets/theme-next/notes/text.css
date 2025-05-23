@@ -86,8 +86,35 @@
     border: 1px solid var(--ck-editor-popup-border-color) !important;
     border-radius: var(--dropdown-border-radius) !important;
     background: var(--menu-background-color) !important;
-    backdrop-filter: var(--dropdown-backdrop-filter);
     padding: var(--ck-editor-popup-padding);
+}
+
+/*
+ * Backdrop blur pseudo-element
+ *
+ * Since .ck-balloon-panel already uses the :after and :before pseudo-elements, there is no other
+ * option than using a :before on the children element to apply the backdrop blur.
+ * This pseudoelement will overflow and cover the entire surface of .ck-balloon-panel.
+*/
+
+:root .ck-balloon-panel > .ck-toolbar,
+:root .ck-balloon-panel > .ck-balloon-rotator {
+    position: relative;
+}
+
+:root .ck-balloon-panel > .ck-toolbar::before,
+:root .ck-balloon-panel > .ck-balloon-rotator::before  {
+    --negative-padding: calc(0px - var(--ck-editor-popup-padding)); /* Compensate the parent's padding */
+
+    content: "";
+    position: absolute;
+    top: var(--negative-padding);
+    right: var(--negative-padding);
+    bottom: var(--negative-padding);
+    left: var(--negative-padding);
+    border-radius: var(--dropdown-border-radius);
+    backdrop-filter: var(--dropdown-backdrop-filter);
+    z-index: -1;
 }
 
 :root .ck.ck-dropdown__panel {
