@@ -44,6 +44,46 @@
   "nx": {
     "name": "desktop",
     "targets": {
+      "build": {
+        "executor": "@nx/esbuild:esbuild",
+        "outputs": [
+          "{options.outputPath}"
+        ],
+        "options": {
+          "main": "apps/desktop/src/electron-main.ts",
+          "outputPath": "apps/desktop/dist",
+          "outputFileName": "main.js",
+          "tsConfig": "apps/desktop/tsconfig.app.json",
+          "platform": "node",
+          "external": [
+            "electron",
+            "@electron/remote",
+            "better-sqlite3",
+            "./xhr-sync-worker.js"
+          ],
+          "format": [
+            "cjs"
+          ],
+          "assets": [
+            {
+              "glob": "**/*",
+              "input": "apps/server/dist/node_modules",
+              "output": "node_modules"
+            },
+            {
+              "glob": "**/*",
+              "input": "apps/server/dist/assets",
+              "output": "."
+            },
+            {
+              "glob": "xhr-sync-worker.js",
+              "input": "apps/server/node_modules/jsdom/lib/jsdom/living/xhr",
+              "output": ""
+            }
+          ],
+          "declarationRootDir": "apps/desktop/src"
+        }
+      },
       "rebuild-deps": {
         "executor": "nx:run-commands",
         "dependsOn": [
