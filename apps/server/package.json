@@ -172,19 +172,12 @@
         "outputs": [
           "{options.outputPath}"
         ],
-        "defaultConfiguration": "production",
         "options": {
           "main": "apps/server/src/main.ts",
           "outputPath": "apps/server/dist",
           "outputFileName": "main.js",
           "tsConfig": "apps/server/tsconfig.app.json",
           "platform": "node",
-          "external": [
-            "electron",
-            "@electron/remote",
-            "better-sqlite3",
-            "./xhr-sync-worker.js"
-          ],
           "format": [
             "cjs"
           ],
@@ -200,53 +193,71 @@
                 "output": "assets"
               }
             ]
-          },
-          "production": {
-            "minify": true,
-            "thirdParty": true,
-            "esbuildOptions": {
-              "splitting": false
-            },
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "apps/server/src/assets",
-                "output": "assets"
-              },
-              {
-                "glob": "**/*",
-                "input": "apps/client/dist",
-                "output": "public"
-              },
-              {
-                "glob": "**/*",
-                "input": "apps/server/node_modules/better-sqlite3",
-                "output": "node_modules/better-sqlite3"
-              },
-              {
-                "glob": "**/*",
-                "input": "apps/server/node_modules/bindings",
-                "output": "node_modules/bindings"
-              },
-              {
-                "glob": "**/*",
-                "input": "apps/server/node_modules/file-uri-to-path",
-                "output": "node_modules/file-uri-to-path"
-              },
-              {
-                "glob": "xhr-sync-worker.js",
-                "input": "apps/server/node_modules/jsdom/lib/jsdom/living/xhr",
-                "output": ""
-              }
-            ]
           }
         }
       },
       "build": {
+        "executor": "@nx/esbuild:esbuild",
+        "outputs": [
+          "{options.outputPath}"
+        ],
         "dependsOn": [
-          "client:build",
-          "build-without-client"
-        ]
+          "client:build"
+        ],
+        "options": {
+          "main": "apps/server/src/main.ts",
+          "outputPath": "apps/server/dist",
+          "outputFileName": "main.js",
+          "tsConfig": "apps/server/tsconfig.app.json",
+          "platform": "node",
+          "external": [
+            "electron",
+            "@electron/remote",
+            "better-sqlite3",
+            "./xhr-sync-worker.js"
+          ],
+          "format": [
+            "cjs"
+          ],
+          "declarationRootDir": "apps/server/src",
+          "minify": true,
+          "thirdParty": true,
+          "esbuildOptions": {
+            "splitting": false
+          },
+          "assets": [
+            {
+              "glob": "**/*",
+              "input": "apps/server/src/assets",
+              "output": "assets"
+            },
+            {
+              "glob": "**/*",
+              "input": "apps/client/dist",
+              "output": "public"
+            },
+            {
+              "glob": "**/*",
+              "input": "apps/server/node_modules/better-sqlite3",
+              "output": "node_modules/better-sqlite3"
+            },
+            {
+              "glob": "**/*",
+              "input": "apps/server/node_modules/bindings",
+              "output": "node_modules/bindings"
+            },
+            {
+              "glob": "**/*",
+              "input": "apps/server/node_modules/file-uri-to-path",
+              "output": "node_modules/file-uri-to-path"
+            },
+            {
+              "glob": "xhr-sync-worker.js",
+              "input": "apps/server/node_modules/jsdom/lib/jsdom/living/xhr",
+              "output": ""
+            }
+          ]
+        }
       }
     }
   },
