@@ -10,10 +10,8 @@ import keyboardActionsService from "./keyboard_actions.js";
 import electron from "electron";
 import type { App, BrowserWindowConstructorOptions, BrowserWindow, WebContents } from "electron";
 import { formatDownloadTitle, isDev, isMac, isWindows } from "./utils.js";
-
-import { fileURLToPath } from "url";
-import { dirname } from "path";
 import { t } from "i18next";
+import { RESOURCE_DIR } from "./resource_dir.js";
 
 // Prevent the window being garbage collected
 let mainWindow: BrowserWindow | null;
@@ -259,7 +257,7 @@ async function configureWebContents(webContents: WebContents, spellcheckEnabled:
 }
 
 function getIcon() {
-    return path.join(dirname(fileURLToPath(import.meta.url)), "../../images/app-icons/png/256x256" + (isDev ? "-dev" : "") + ".png");
+    return path.join(RESOURCE_DIR, "images/app-icons/png/256x256" + (isDev ? "-dev" : "") + ".png");
 }
 
 async function createSetupWindow() {
