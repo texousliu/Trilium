@@ -346,8 +346,8 @@ importers:
         specifier: 1.4.0
         version: 1.4.0
       diff:
-        specifier: 8.0.1
-        version: 8.0.1
+        specifier: 8.0.2
+        version: 8.0.2
       sqlite:
         specifier: 5.1.1
         version: 5.1.1
@@ -7391,8 +7391,8 @@ packages:
     resolution: {integrity: sha512-uIFDxqpRZGZ6ThOk84hEfqWoHx2devRFvpTZcTHur85vImfaxUbTW9Ryh4CpCuDnToOP1CEtXKIgytHBPVff5A==}
     engines: {node: '>=0.3.1'}
 
-  diff@8.0.1:
-    resolution: {integrity: sha512-rEaM3KmVm78zE3dFZaop3aCQa2MTm+T4kcigUFLVU/KbOYdiY6JnL2g2puOYnct3QFw9pjZadaCbCZ1O8ArMlQ==}
+  diff@8.0.2:
+    resolution: {integrity: sha512-sSuxWU5j5SR9QQji/o2qMvqRNYRDOcBTgsJ/DeCf4iSN4gW+gNMXM7wFIP+fdXZxoNiAnHUTGjCr+TSWXdRDKg==}
     engines: {node: '>=0.3.1'}
 
   dir-compare@4.2.0:
@@ -21785,7 +21785,7 @@ snapshots:
 
   diff@5.2.0: {}
 
-  diff@8.0.1: {}
+  diff@8.0.2: {}
 
   dir-compare@4.2.0:
     dependencies:
