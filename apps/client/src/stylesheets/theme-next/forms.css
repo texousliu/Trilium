@@ -79,7 +79,7 @@ button.btn.btn-success kbd {
  */
 
 :root .icon-action:not(.global-menu-button),
-:root .tn-tool-button,
+:root .btn.tn-tool-button,
 :root .btn-group .tn-tool-button:not(:last-child),
 :root .btn-group .tn-tool-button:last-child {
     width: var(--icon-button-size);
