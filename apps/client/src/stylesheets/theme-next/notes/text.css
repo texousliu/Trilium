@@ -373,6 +373,14 @@
     background: var(--hover-item-background-color);
 }
 
+/* Mention list (the autocompletion list for emojis, labels and relations)  */
+
+:root .ck-mentions {
+    --ck-color-list-button-on-background: var(--hover-item-background-color);
+    --ck-color-list-button-on-text: var(--hover-item-text-color);
+    --ck-color-list-button-hover-background: var(--ck-editor-toolbar-dropdown-button-open-background);
+}
+
 /* "Keep on typing to see the emoji" placeholder */
 #mention-list-item-id\:__EMOJI_HINT {
     background: transparent;
