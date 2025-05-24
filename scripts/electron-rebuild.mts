@@ -46,7 +46,9 @@ function createFakePackageJson(distPath: string, packageJson: any) {
         version: packageJson.version,
         main: packageJson.main,
         dependencies: finalDependencies,
-        devDependencies: {}
+        devDependencies: {
+            "electron": packageJson.devDependencies?.electron || packageJson.dependencies?.electron,
+        }
     };
     if (packageJson?.config?.forge) {
         fakePackageJson.config = {
