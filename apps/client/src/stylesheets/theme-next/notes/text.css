@@ -373,6 +373,11 @@
     background: var(--hover-item-background-color);
 }
 
+/* "Keep on typing to see the emoji" placeholder */
+#mention-list-item-id\:__EMOJI_HINT {
+    background: transparent;
+}
+
 /*
  * EDITOR'S CONTENT
  */
