@@ -31,23 +31,28 @@ function parsePackageJson(distDir: string) {
     
     return {
         electronVersion,
-        dependencies: packageJson?.dependencies ?? []
+        packageJson
     };
 }
 
-function createFakePackageJson(distPath: string, dependencies: Record<string, string>) {
+function createFakePackageJson(distPath: string, packageJson: any) {
     const finalDependencies = {};
     for (const dep of nativeDependencies) {
-        finalDependencies[dep] = dependencies[dep];
+        finalDependencies[dep] = packageJson.dependencies[dep];
     }
 
-    const fakePackageJson = {
+    const fakePackageJson: any = {
         name: "trilium",
-        version: "1.0.0",
-        main: "index.js",
+        version: packageJson.version,
+        main: packageJson.main,
         dependencies: finalDependencies,
-        devDependencies: {},
+        devDependencies: {}
     };
+    if (packageJson?.config?.forge) {
+        fakePackageJson.config = {
+            forge: join("..", packageJson.config.forge)
+        };
+    }
     writeFileSync(distPath, JSON.stringify(fakePackageJson, null, 2), "utf-8");
 }
 
@@ -58,23 +63,19 @@ function main() {
         process.exit(1);
     }
 
-    const { electronVersion, dependencies } = parsePackageJson(distDir);
+    const { electronVersion, packageJson } = parsePackageJson(distDir);
     const packageJsonPath = join(distDir, "package.json");
-    createFakePackageJson(packageJsonPath, dependencies);
+    createFakePackageJson(packageJsonPath, packageJson);
 
     console.log(`Rebuilding ${distDir} with version ${electronVersion}...`);
 
-    try {
-        rebuild({
-            // We force the project root path to avoid electron-rebuild from rebuilding the monorepo-level dependency and breaking the server.
-            projectRootPath: distDir,
-            buildPath: distDir,
-            force: true,
-            electronVersion,
-        });
-    } finally {
-        rmSync(packageJsonPath);
-    }
+    rebuild({
+        // We force the project root path to avoid electron-rebuild from rebuilding the monorepo-level dependency and breaking the server.
+        projectRootPath: distDir,
+        buildPath: distDir,
+        force: true,
+        electronVersion,
+    });
 }
 
 main();

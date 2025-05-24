@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Build your personal knowledge base with TriliumNext Notes",
   "private": true,
-  "main": "dist/main.cjs",
+  "main": "main.cjs",
   "dependencies": {
     "@electron/remote": "2.1.2",
     "better-sqlite3": "^11.9.1",
