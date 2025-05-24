@@ -5,6 +5,12 @@
  * Color scheme
  */
 :root {
+
+    /* 
+     * ⚠️ NOTICE: This theme is currently in the beta stage of development.
+     * The names and purposes of these CSS variables are subject to frequent changes.
+     */
+
     --theme-style: light;
     --native-titlebar-background: #ffffff00;
 
