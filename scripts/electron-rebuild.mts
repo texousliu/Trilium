@@ -4,6 +4,9 @@
  * This script is used internally by the `rebuild-deps` target of the `desktop`. Normally we could use
  * `electron-rebuild` CLI directly, but it would rebuild the monorepo-level dependencies and breaks
  * the server build (and it doesn't expose a CLI option to override this).
+ * 
+ * A side purpose is to generate a fake `package.json` file in the `dist` directory
+ * that contains only the native dependencies. This is used by `electron-forge`.
  */
 
 import { join, resolve } from "path";
@@ -45,6 +48,9 @@ function createFakePackageJson(distPath: string, packageJson: any) {
         name: "trilium",
         version: packageJson.version,
         main: packageJson.main,
+        author: packageJson.author,
+        license: packageJson.license,
+        description: packageJson.description,
         dependencies: finalDependencies,
         devDependencies: {
             "electron": packageJson.devDependencies?.electron || packageJson.dependencies?.electron,
