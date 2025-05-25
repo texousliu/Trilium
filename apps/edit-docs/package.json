@@ -17,6 +17,51 @@
       "server"
     ],
     "targets": {
+      "build": {
+        "executor": "@nx/esbuild:esbuild",
+        "outputs": [
+          "{options.outputPath}"
+        ],
+        "options": {
+          "main": "apps/edit-docs/src/electron-edit-demo.ts",
+          "outputPath": "apps/edit-docs/dist",
+          "outputFileName": "main.js",
+          "tsConfig": "apps/edit-docs/tsconfig.app.json",
+          "platform": "node",
+          "external": [
+            "electron",
+            "@electron/remote",
+            "better-sqlite3",
+            "./xhr-sync-worker.js"
+          ],
+          "format": [
+            "cjs"
+          ],
+          "assets": [
+            {
+              "glob": "**/*",
+              "input": "apps/server/dist/node_modules",
+              "output": "node_modules"
+            },
+            {
+              "glob": "**/*",
+              "input": "apps/server/dist/assets",
+              "output": "assets"
+            },
+            {
+              "glob": "**/*",
+              "input": "apps/server/dist/public",
+              "output": "public"
+            },
+            {
+              "glob": "xhr-sync-worker.js",
+              "input": "apps/server/node_modules/jsdom/lib/jsdom/living/xhr",
+              "output": ""
+            }
+          ],
+          "declarationRootDir": "apps/edit-docs/src"
+        }
+      },
       "rebuild-deps": {
         "executor": "nx:run-commands",
         "dependsOn": [
@@ -41,13 +86,31 @@
         "defaultConfiguration": "default",
         "configurations": {
           "default": {
-            "command": "electron .",
-            "cwd": "./apps/edit-docs/dist"
+            "command": "electron main.cjs",
+            "cwd": "{projectRoot}/dist"
           },
           "nixos": {
-            "command": "nix-shell -p electron_35 --run \"electron .\"",
-            "forwardAllArgs": false,
-            "cwd": "./apps/edit-docs/dist"
+            "command": "nix-shell -p electron_35 --run \"electron {projectRoot}/dist/main.cjs\"",
+            "cwd": ".",
+            "forwardAllArgs": false
+          }
+        }
+      },
+      "serve-nodir": {
+        "executor": "nx:run-commands",
+        "dependsOn": [
+          "rebuild-deps"
+        ],
+        "defaultConfiguration": "default",
+        "configurations": {
+          "default": {
+            "command": "electron main.cjs",
+            "cwd": "{projectRoot}/dist"
+          },
+          "nixos": {
+            "command": "nix-shell -p electron_35 --run \"electron {projectRoot}/dist/main.cjs\"",
+            "cwd": ".",
+            "forwardAllArgs": false
           }
         }
       }

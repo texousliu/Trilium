@@ -15,6 +15,7 @@ import { parseNoteMetaFile } from "@triliumnext/server/src/services/in_app_help.
 import { resolve } from "path";
 import electron from "electron";
 import { onReady } from "@triliumnext/desktop/src/electron-main.js";
+import type NoteMeta from "@triliumnext/server/src/services/meta/note_meta.js";
 
 interface NoteMapping {
     rootNoteId: string;
