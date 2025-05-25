@@ -13,6 +13,7 @@ import openID from '../services/open_id.js';
 import openIDEncryption from '../services/encryption/open_id_encryption.js';
 
 function loginPage(req: Request, res: Response) {
+    // Login page is triggered twice. Once here, and another time if the password is failed.
     res.render('login', {
         wrongPassword: false,
         wrongTotp: false,
@@ -170,6 +171,7 @@ function sendLoginError(req: Request, res: Response, errorType: 'password' | 'to
         totpEnabled: totp.isTotpEnabled(),
         ssoEnabled: openID.isOpenIDEnabled(),
         assetPath: assetPath,
+        assetPathFragment: assetUrlFragment,
         appPath: appPath,
     });
 }
