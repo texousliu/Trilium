@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "description": "Desktop version of Trilium which imports the demo database (presented to new users at start-up) or the user guide and other documentation and saves the modifications for committing.",
+  "dependencies": {
+    "archiver": "7.0.1",
+    "better-sqlite3": "^11.9.1"
+  },
   "devDependencies": {
     "@triliumnext/client": "workspace:*",
     "@triliumnext/desktop": "workspace:*",
@@ -23,7 +27,7 @@
           "{options.outputPath}"
         ],
         "options": {
-          "main": "apps/edit-docs/src/electron-edit-demo.ts",
+          "main": "apps/edit-docs/src/electron-docs-main.ts",
           "outputPath": "apps/edit-docs/dist",
           "outputFileName": "main.js",
           "tsConfig": "apps/edit-docs/tsconfig.app.json",
@@ -115,8 +119,5 @@
         }
       }
     }
-  },
-  "dependencies": {
-    "archiver": "7.0.1"
-  }
+  }  
 }
