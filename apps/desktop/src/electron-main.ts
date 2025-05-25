@@ -44,7 +44,7 @@ async function main() {
     await import("@triliumnext/server/src/main.js");
 }
 
-export async function onReady() {
+async function onReady() {
     //    electron.app.setAppUserModelId('com.github.zadam.trilium');
 
     // if db is not initialized -> setup process
