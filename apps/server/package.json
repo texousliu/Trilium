@@ -149,6 +149,12 @@
           },
           "alpine": {
             "command": "docker build . -t triliumnext-alpine -f Dockerfile.alpine"
+          },
+          "rootless-debian": {
+            "command": "docker build . -t triliumnext-rootless-debian -f Dockerfile.rootless"
+          },
+          "rootless-alpine": {
+            "command": "docker build . -t triliumnext-rootless-alpine -f Dockerfile.alpine.rootless"
           }
         }
       },
@@ -164,6 +170,12 @@
           },
           "alpine": {
             "command": "docker run -p 8081:8080 triliumnext-alpine"
+          },
+          "rootless-debian": {
+            "command": "docker run -p 8081:8080 triliumnext-rootless-debian"
+          },
+          "rootless-alpine": {
+            "command": "docker run -p 8081:8080 triliumnext-rootless-alpine"
           }
         }
       },
