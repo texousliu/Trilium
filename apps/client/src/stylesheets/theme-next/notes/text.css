@@ -22,6 +22,8 @@
     --ck-color-button-on-hover-background: var(--hover-item-background-color);
     --ck-color-button-default-active-background: var(--hover-item-background-color);
     
+    --ck-color-split-button-hover-background: var(--ck-editor-toolbar-dropdown-button-open-background);
+
     --ck-focus-ring: 1px solid transparent;
     --ck-color-focus-border: var(--input-focus-outline-color);
     --ck-focus-outer-shadow: none;
@@ -69,6 +71,11 @@
     --ck-focus-ring: 1px solid var(--input-focus-outline-color);
 }
 
+/* Remove the border from hovered split arrow button */
+.ck.ck-splitbutton:hover > .ck-splitbutton__arrow:not(.ck-disabled)::after {
+    visibility: collapse;
+}
+
 /* 
  * Dropdowns
  */
@@ -86,8 +93,35 @@
     border: 1px solid var(--ck-editor-popup-border-color) !important;
     border-radius: var(--dropdown-border-radius) !important;
     background: var(--menu-background-color) !important;
-    backdrop-filter: var(--dropdown-backdrop-filter);
     padding: var(--ck-editor-popup-padding);
+}
+
+/*
+ * Backdrop blur pseudo-element
+ *
+ * Since .ck-balloon-panel already uses the :after and :before pseudo-elements, there is no other
+ * option than using a :before on the children element to apply the backdrop blur.
+ * This pseudoelement will overflow and cover the entire surface of .ck-balloon-panel.
+*/
+
+:root .ck-balloon-panel > .ck-toolbar,
+:root .ck-balloon-panel > .ck-balloon-rotator {
+    position: relative;
+}
+
+:root .ck-balloon-panel > .ck-toolbar::before,
+:root .ck-balloon-panel > .ck-balloon-rotator::before  {
+    --negative-padding: calc(0px - var(--ck-editor-popup-padding)); /* Compensate the parent's padding */
+
+    content: "";
+    position: absolute;
+    top: var(--negative-padding);
+    right: var(--negative-padding);
+    bottom: var(--negative-padding);
+    left: var(--negative-padding);
+    border-radius: var(--dropdown-border-radius);
+    backdrop-filter: var(--dropdown-backdrop-filter);
+    z-index: -1;
 }
 
 :root .ck.ck-dropdown__panel {
@@ -288,6 +322,7 @@
     --ck-color-focus-border: var(--hover-item-text-color); /* Selected cell box border color */
     --ck-color-focus-outer-shadow: var(--hover-item-background-color); /* Selected cell box background color */
     --ck-border-radius: 0;
+    --ck-editor-toolbar-button-on-shadow: 1px 1px 1px rgba(0, 0, 0, .35);
 }
 
 /* Selected rows / column counter */
@@ -336,6 +371,20 @@
 :root .ck-link-actions button.ck-button:hover,
 :root .ck-link-form button.ck-button:hover {
     background: var(--hover-item-background-color);
+}
+
+/* Mention list (the autocompletion list for emojis, labels and relations)  */
+
+:root .ck-mentions {
+    --ck-color-list-button-on-background: var(--hover-item-background-color);
+    --ck-color-list-button-on-text: var(--hover-item-text-color);
+    --ck-color-list-button-hover-background: var(--ck-editor-toolbar-dropdown-button-open-background);
+    --ck-focus-ring: 1px solid transparent;
+}
+
+/* "Keep on typing to see the emoji" placeholder */
+#mention-list-item-id\:__EMOJI_HINT {
+    background: transparent;
 }
 
 /*

@@ -116,7 +116,7 @@ function getLinkMap(req: Request) {
         }).notes;
     }
 
-    const noteIds = new Set(unfilteredNotes.filter((note) => ignoreExcludeFromNoteMap || !note.isLabelTruthy("excludeFromNoteMap")).map((note) => note.noteId));
+    const noteIds = new Set<string>(unfilteredNotes.filter((note) => ignoreExcludeFromNoteMap || !note.isLabelTruthy("excludeFromNoteMap")).map((note) => note.noteId));
 
     if (mapRootNote.type === "search") {
         noteIds.delete(mapRootNote.noteId);

@@ -195,9 +195,11 @@ function register(router: Router) {
                 try {
                     const content = templateNote.getContent();
                     if (typeof content === "string") {
-                        const ejsResult = ejs.render(content, opts, { includer });
-                        res.send(ejsResult);
-                        useDefaultView = false; // Rendering went okay, don't use default view
+                        import("ejs").then((ejs) => {
+                            const ejsResult = ejs.render(content, opts, { includer });
+                            res.send(ejsResult);
+                            useDefaultView = false; // Rendering went okay, don't use default view
+                        });
                     }
                 } catch (e: unknown) {
                     const [errMessage, errStack] = safeExtractMessageAndStackFromError(e);

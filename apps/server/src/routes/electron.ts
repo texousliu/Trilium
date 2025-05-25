@@ -1,4 +1,4 @@
-import { ipcMain } from "electron";
+import electron from "electron";
 
 interface Response {
     statusCode: number;
@@ -10,7 +10,7 @@ interface Response {
 }
 
 function init(app: Express.Application) {
-    ipcMain.on("server-request", (event, arg) => {
+    electron.ipcMain.on("server-request", (event, arg) => {
         const req = {
             url: arg.url,
             method: arg.method,
@@ -50,7 +50,7 @@ function init(app: Express.Application) {
             }
         };
 
-        return app._router.handle(req, res, () => {});
+        return (app as any)._router.handle(req, res, () => {});
     });
 }
 

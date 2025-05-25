@@ -5,7 +5,7 @@ import becca from "../becca/becca.js";
 import type BNote from "../becca/entities/bnote.js";
 import type { ApiParams } from "./backend_script_api_interface.js";
 
-interface Bundle {
+export interface Bundle {
     note?: BNote;
     noteId?: string;
     script: string;

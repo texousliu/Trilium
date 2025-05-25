@@ -68,8 +68,8 @@ module.exports = {
         ]
     },
     rebuildConfig: {
-        force: true,
-        extraModules: [ "better-sqlite3" ]
+        force: false,
+        onlyModules: []
     },
     makers: [
         {

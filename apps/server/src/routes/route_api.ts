@@ -1,4 +1,4 @@
-import express from "express";
+import express, { type RequestHandler } from "express";
 import multer from "multer";
 import log from "../services/log.js";
 import cls from "../services/cls.js";
@@ -166,7 +166,7 @@ function handleException(e: unknown | Error, method: HttpMethod, path: string, r
 
 }
 
-export function createUploadMiddleware() {
+export function createUploadMiddleware(): RequestHandler {
     const multerOptions: multer.Options = {
         fileFilter: (req: express.Request, file, cb) => {
             // UTF-8 file names are not well decoded by multer/busboy, so we handle the conversion on our side.
