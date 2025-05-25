@@ -3,7 +3,7 @@ import optionService from "../services/options.js";
 import myScryptService from "../services/encryption/my_scrypt.js";
 import log from "../services/log.js";
 import passwordService from "../services/encryption/password.js";
-import assetPath from "../services/asset_path.js";
+import assetPath, { assetUrlFragment } from "../services/asset_path.js";
 import appPath from "../services/app_path.js";
 import ValidationError from "../errors/validation_error.js";
 import type { Request, Response } from 'express';
@@ -19,6 +19,7 @@ function loginPage(req: Request, res: Response) {
         totpEnabled: totp.isTotpEnabled(),
         ssoEnabled: openID.isOpenIDEnabled(),
         assetPath: assetPath,
+        assetPathFragment: assetUrlFragment,
         appPath: appPath,
     });
 }

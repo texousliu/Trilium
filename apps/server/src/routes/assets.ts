@@ -39,9 +39,9 @@ async function register(app: express.Application) {
         app.use(`/${assetUrlFragment}/libraries`, persistentCacheStatic(path.join(publicDir, "libraries")));
         app.use(`/${assetUrlFragment}/fonts`, persistentCacheStatic(path.join(publicDir, "fonts")));
         app.use(`/${assetUrlFragment}/translations/`, persistentCacheStatic(path.join(publicDir, "translations")));
-        app.use(`/${assetUrlFragment}/images`, persistentCacheStatic(path.join(resourceDir, "assets", "images")));
         app.use(`/node_modules/`, persistentCacheStatic(path.join(publicDir, "node_modules")));
     }
+    app.use(`/${assetUrlFragment}/images`, persistentCacheStatic(path.join(resourceDir, "assets", "images")));
     app.use(`/${assetUrlFragment}/doc_notes`, persistentCacheStatic(path.join(resourceDir, "assets", "doc_notes")));
     app.use(`/assets/vX/fonts`, express.static(path.join(srcRoot, "public/fonts")));
     app.use(`/assets/vX/images`, express.static(path.join(srcRoot, "..", "images")));
