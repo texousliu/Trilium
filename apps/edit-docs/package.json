@@ -41,6 +41,14 @@
           "format": [
             "cjs"
           ],
+          "minify": true,
+          "thirdParty": true,
+          "esbuildOptions": {
+            "splitting": false,
+            "loader": {
+              ".css": "text"
+            }
+          },
           "assets": [
             {
               "glob": "**/*",
