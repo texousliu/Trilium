@@ -1010,9 +1010,10 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
     font-size: var(--detail-font-size) !important;
 }
 
-.ck-mentions .ck-button.ck-on {
-    background-color: var(--active-item-background-color) !important;
-    color: var(--active-item-text-color) !important;
+.ck-mentions {
+    --ck-color-list-button-on-background: var(--active-item-background-color);
+    --ck-color-list-button-on-background-focus: var(--ck-color-list-button-on-background);
+    --ck-color-list-button-on-text: var(--active-item-text-color);
 }
 
 .ck-mentions .ck-button b {
