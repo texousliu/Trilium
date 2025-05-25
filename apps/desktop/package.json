@@ -64,6 +64,11 @@
           "format": [
             "cjs"
           ],
+          "minify": true,
+          "thirdParty": true,
+          "esbuildOptions": {
+            "splitting": false
+          },
           "assets": [
             {
               "glob": "**/*",
