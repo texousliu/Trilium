@@ -18,7 +18,7 @@ const DAYJS_LOADER: Record<LOCALE_IDS, () => Promise<typeof import("dayjs/locale
     "he": () => import("dayjs/locale/he.js"),
     "ku": () => import("dayjs/locale/ku.js"),
     "ro": () => import("dayjs/locale/ro.js"),
-    "tw": () => import("dayjs/locale/tw.js")
+    "tw": () => import("dayjs/locale/zh-tw.js")
 }
 
 export async function initializeTranslations() {
