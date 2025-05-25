@@ -164,6 +164,13 @@
           "rebuild-deps"
         ],
         "command": "pnpm -C apps/desktop exec cross-env NODE_INSTALLER=npm electron-forge package dist"
+      },
+      "electron-forge:start": {
+        "dependsOn": [
+          "build",
+          "rebuild-deps"
+        ],
+        "command": "pnpm -C apps/desktop exec cross-env NODE_INSTALLER=npm TRILIUM_DATA_DIR=./data electron-forge start dist"
       }
     }
   }
