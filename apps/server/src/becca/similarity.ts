@@ -36,7 +36,7 @@ interface DateLimits {
     maxDate: string;
 }
 
-interface SimilarNote {
+export interface SimilarNote {
     score: number;
     notePath: string[];
     noteId: string;

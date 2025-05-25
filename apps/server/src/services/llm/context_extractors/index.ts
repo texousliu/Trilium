@@ -26,7 +26,7 @@ import type {
  *
  * Manages and provides access to all available agent tools.
  */
-class AgentToolsManager {
+export class AgentToolsManager {
   private vectorSearchTool: VectorSearchTool | null = null;
   private noteNavigatorTool: NoteNavigatorTool | null = null;
   private queryDecompositionTool: QueryDecompositionTool | null = null;
