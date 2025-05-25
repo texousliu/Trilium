@@ -87,6 +87,11 @@
             },
             {
               "glob": "**/*",
+              "input": "apps/desktop/src/assets",
+              "output": "assets"
+            },
+            {
+              "glob": "**/*",
               "input": "apps/server/dist/public",
               "output": "public"
             },
