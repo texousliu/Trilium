@@ -115,8 +115,13 @@
       "serve": {
         "executor": "@nx/js:node",
         "dependsOn": [
+          {
+            "projects": [ "client" ],
+            "target": "serve"
+          },
           "build-without-client"
         ],
+        "continuous": true,
         "options": {
           "buildTarget": "server:build-without-client:development",
           "runBuildTargetDependencies": false
