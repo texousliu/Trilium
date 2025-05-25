@@ -77,6 +77,11 @@
             },
             {
               "glob": "**/*",
+              "input": "apps/desktop/node_modules/@electron/remote",
+              "output": "node_modules/@electron/remote"
+            },
+            {
+              "glob": "**/*",
               "input": "apps/server/dist/assets",
               "output": "assets"
             },
