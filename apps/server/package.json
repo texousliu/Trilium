@@ -223,7 +223,10 @@
           "minify": true,
           "thirdParty": true,
           "esbuildOptions": {
-            "splitting": false
+            "splitting": false,
+            "loader": {
+              ".css": "text"
+            }
           },
           "additionalEntryPoints": [
             "apps/server/src/docker_healthcheck.ts"
