@@ -8,7 +8,7 @@ import log from "./log.js";
 import type { Statement, Database as DatabaseType, RunResult } from "better-sqlite3";
 import dataDir from "./data_dir.js";
 import cls from "./cls.js";
-import fs from "fs-extra";
+import fs from "fs";
 import Database from "better-sqlite3";
 import ws from "./ws.js";
 import becca_loader from "../becca/becca_loader.js";
@@ -352,7 +352,6 @@ function disableSlowQueryLogging<T>(cb: () => T) {
 }
 
 export default {
-    dbConnection,
     insert,
     replace,
 

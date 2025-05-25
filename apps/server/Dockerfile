@@ -3,7 +3,7 @@ FROM node:22.16.0-bullseye-slim AS builder
 
     # Install native dependencies since we might be building cross-platform.
     WORKDIR /usr/src/app/build
-    COPY ./dist/package.json ./dist/pnpm-lock.yaml ./docker/pnpm-workspace.yaml /usr/src/app/
+    COPY ./docker/package.json ./docker/pnpm-workspace.yaml /usr/src/app/
     # We have to use --no-frozen-lockfile due to CKEditor patches
     RUN pnpm install --no-frozen-lockfile --prod && pnpm rebuild
 
@@ -25,4 +25,4 @@ FROM node:22.16.0-bullseye-slim
     # Configure container
     EXPOSE 8080
     CMD [ "sh", "./start-docker.sh" ]
-    HEALTHCHECK --start-period=10s CMD exec gosu node node /usr/src/app/docker_healthcheck.js
+    HEALTHCHECK --start-period=10s CMD exec gosu node node /usr/src/app/docker_healthcheck.cjs

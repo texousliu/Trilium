@@ -3,6 +3,7 @@ import session, { Store } from "express-session";
 import sessionSecret from "../services/session_secret.js";
 import config from "../services/config.js";
 import log from "../services/log.js";
+import type express from "express";
 
 class SQLiteSessionStore extends Store {
 
@@ -51,7 +52,7 @@ class SQLiteSessionStore extends Store {
 
 }
 
-const sessionParser = session({
+const sessionParser: express.RequestHandler = session({
     secret: sessionSecret,
     resave: false, // true forces the session to be saved back to the session store, even if the session was never modified during the request.
     saveUninitialized: false, // true forces a session that is "uninitialized" to be saved to the store. A session is uninitialized when it is new but not modified.

@@ -40,4 +40,4 @@ async function exportData() {
     await exportToZipFile("root", "html", DEMO_ZIP_PATH);
 }
 
-await main();
+main();

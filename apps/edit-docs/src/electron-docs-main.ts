@@ -13,8 +13,9 @@ import TaskContext from "@triliumnext/server/src/services/task_context.js";
 import { deferred } from "@triliumnext/server/src/services/utils.js";
 import { parseNoteMetaFile } from "@triliumnext/server/src/services/in_app_help.js";
 import { resolve } from "path";
+import type NoteMeta from "@triliumnext/server/src/services/meta/note_meta.js";
 import electron from "electron";
-import { onReady } from "@triliumnext/desktop/src/electron-main.js";
+import windowService from "@triliumnext/server/src/services/window.js";
 
 interface NoteMapping {
     rootNoteId: string;
@@ -55,12 +56,25 @@ const NOTE_MAPPINGS: NoteMapping[] = [
 ];
 
 async function main() {
-    electron.app.on("ready", onReady);
+    const initializedPromise = deferred<void>();
+    electron.app.on("ready", async () => {
+        await initializedPromise;
+
+        console.log("Electron is ready!");
+
+        // Start the server.
+        await import("@triliumnext/server/src/main.js");
+
+        // Create the main window.
+        await windowService.createMainWindow(electron.app);
+
+        // Wait for the import to be finished and the application to be loaded before we listen to changes.
+        setTimeout(() => registerHandlers(), 10_000);
+    });
 
     await initializeTranslations();
     await initializeDatabase(true);
 
-    const initializedPromise = deferred<void>();
     cls.init(async () => {
         for (const mapping of NOTE_MAPPINGS) {
             if (!mapping.exportOnly) {
@@ -70,11 +84,6 @@ async function main() {
         setOptions();
         initializedPromise.resolve();
     });
-
-    await initializedPromise;
-
-    // Wait for the import to be finished and the application to be loaded before we listen to changes.
-    setTimeout(() => registerHandlers(), 10_000);
 }
 
 async function setOptions() {
