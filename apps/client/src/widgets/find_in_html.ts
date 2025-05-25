@@ -1,6 +1,7 @@
 // ck-find-result and ck-find-result_selected are the styles ck-editor
 // uses for highlighting matches, use the same one on CodeMirror
 // for consistency
+import type Mark from "mark.js";
 import utils from "../services/utils.js";
 import type FindWidget from "./find.js";
 import type { FindResult } from "./find.js";
@@ -13,6 +14,7 @@ export default class FindInHtml {
     private parent: FindWidget;
     private currentIndex: number;
     private $results: JQuery<HTMLElement> | null;
+    private mark?: Mark;
 
     constructor(parent: FindWidget) {
         this.parent = parent;
@@ -21,21 +23,24 @@ export default class FindInHtml {
     }
 
     async performFind(searchTerm: string, matchCase: boolean, wholeWord: boolean) {
-        await import("mark.js");
-
         const $content = await this.parent?.noteContext?.getContentElement();
+        if (!$content || !$content.length) {
+            return Promise.resolve({ totalFound: 0, currentFound: 0 });
+        }
+
+        if (!this.mark) {
+            this.mark = new (await import("mark.js")).default($content[0]);
+        }
 
         const wholeWordChar = wholeWord ? "\\b" : "";
         const regExp = new RegExp(wholeWordChar + utils.escapeRegExp(searchTerm) + wholeWordChar, matchCase ? "g" : "gi");
 
         return new Promise<FindResult>((res) => {
-            $content?.unmark({
+            this.mark!.unmark({
                 done: () => {
-                    $content.markRegExp(regExp, {
+                    this.mark!.markRegExp(regExp, {
                         element: "span",
                         className: FIND_RESULT_CSS_CLASSNAME,
-                        separateWordSearch: false,
-                        caseSensitive: matchCase,
                         done: async () => {
                             this.$results = $content.find(`.${FIND_RESULT_CSS_CLASSNAME}`);
                             const scrollingContainer = $content[0].closest('.scrolling-container');
@@ -73,10 +78,7 @@ export default class FindInHtml {
     }
 
     async findBoxClosed(totalFound: number, currentFound: number) {
-        const $content = await this.parent?.noteContext?.getContentElement();
-        if (typeof $content?.unmark === 'function') {
-            $content.unmark();
-        }
+        this.mark?.unmark();
     }
 
     async jumpTo() {
