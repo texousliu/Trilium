@@ -1,10 +1,11 @@
 import { CodeBlock, Plugin, ViewDocumentFragment, WidgetToolbarRepository, type ViewNode } from "ckeditor5";
 import CodeBlockLanguageDropdown from "./code_block_language_dropdown";
+import CopyToClipboardButton from "./copy_to_clipboard_button";
 
 export default class CodeBlockToolbar extends Plugin {
 
     static get requires() {
-        return [ WidgetToolbarRepository, CodeBlock, CodeBlockLanguageDropdown ] as const;
+        return [ WidgetToolbarRepository, CodeBlock, CodeBlockLanguageDropdown, CopyToClipboardButton ] as const;
     }
 
     afterInit() {
@@ -13,7 +14,9 @@ export default class CodeBlockToolbar extends Plugin {
 
         widgetToolbarRepository.register("codeblock", {
             items: [
-                "codeBlockDropdown"
+                "codeBlockDropdown",
+                "|",
+                "copyToClipboard"
             ],
             getRelatedElement(selection) {
                 const selectionPosition = selection.getFirstPosition();
