@@ -2,6 +2,7 @@ import { ensureMimeTypes, highlight, highlightAuto, loadTheme, Themes } from "@t
 import mime_types from "./mime_types.js";
 import options from "./options.js";
 import toast from "./toast.js";
+import { t } from "./i18n.js";
 
 let highlightingLoaded = false;
 
@@ -40,9 +41,9 @@ export function applyCopyToClipboardButton($codeBlock: JQuery<HTMLElement>) {
 
             try {
                 navigator.clipboard.writeText(text);
-                toast.showMessage("The code block was copied to clipboard.");
+                toast.showMessage(t("code_block.copy_success"));
             } catch (e) {
-                toast.showError("The code block could not be copied to the clipboard due to lack of permissions.");
+                toast.showError(t("code_block.copy_failed"));
             }
         });
     $codeBlock.parent().append($copyButton);
