@@ -120,8 +120,18 @@ export function copyText(text: string) {
         if (navigator.clipboard) {
             navigator.clipboard.writeText(text);
             succeeded = true;
+        } else {
+            // Fallback method: https://stackoverflow.com/a/72239825
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            succeeded = document.execCommand('copy');
+            document.body.removeChild(textArea);
         }
     } catch (e) {
+        console.warn(e);
         succeeded = false;
     }
 
