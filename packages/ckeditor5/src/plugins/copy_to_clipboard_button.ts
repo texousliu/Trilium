@@ -1,7 +1,15 @@
-import { ButtonView, Plugin } from "ckeditor5";
+import { ButtonView, Command, Plugin } from "ckeditor5";
 import copyIcon from "../icons/copy.svg?raw";
 
 export default class CopyToClipboardButton extends Plugin {
+
+    static get requires() {
+        return [ CopyToClipboardEditing, CopyToClipboardUI ];
+    }
+
+}
+
+export class CopyToClipboardUI extends Plugin {
 
     public init() {
         const editor = this.editor;
@@ -14,8 +22,28 @@ export default class CopyToClipboardButton extends Plugin {
                 icon: copyIcon
             });
 
+            this.listenTo(button, "execute", () => {
+                editor.execute("copyToClipboard");
+            });
+
             return button;
         });
+    }
+
+}
+
+export class CopyToClipboardEditing extends Plugin {
+
+    public init() {
+        this.editor.commands.add("copyToClipboard", new CopyToClipboardCommand(this.editor));
+    }
+
+}
+
+export class CopyToClipboardCommand extends Command {
+
+    execute(...args: Array<unknown>) {
+        console.log("Copy to clipboard!");
     }
 
 }
