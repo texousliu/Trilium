@@ -3,6 +3,7 @@ import { normalizeMimeTypeForCKEditor, type MimeType } from "@triliumnext/common
 import syntaxDefinitions from "./syntax_highlighting.js";
 import { type Theme } from "./themes.js";
 import { type HighlightOptions } from "highlight.js";
+export type { HighlightResult, AutoHighlightResult } from "highlight.js";
 
 export { default as Themes, type Theme } from "./themes.js";
 
