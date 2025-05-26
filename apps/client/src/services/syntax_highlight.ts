@@ -1,6 +1,7 @@
 import { ensureMimeTypes, highlight, highlightAuto, loadTheme, Themes } from "@triliumnext/highlightjs";
 import mime_types from "./mime_types.js";
 import options from "./options.js";
+import toast from "./toast.js";
 
 let highlightingLoaded = false;
 
@@ -33,7 +34,17 @@ export async function formatCodeBlocks($container: JQuery<HTMLElement>) {
 
 export function applyCopyToClipboardButton($codeBlock: JQuery<HTMLElement>) {
     const $copyButton = $("<button>")
-        .addClass("bx component btn tn-tool-button bx-copy copy-button");
+        .addClass("bx component btn tn-tool-button bx-copy copy-button")
+        .on("click", () => {
+            const text = $codeBlock.text();
+
+            try {
+                navigator.clipboard.writeText(text);
+                toast.showMessage("The code block was copied to clipboard.");
+            } catch (e) {
+                toast.showError("The code block could not be copied to the clipboard due to lack of permissions.");
+            }
+        });
     $codeBlock.parent().append($copyButton);
 }
 
