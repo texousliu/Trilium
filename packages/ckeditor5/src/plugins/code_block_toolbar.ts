@@ -18,6 +18,7 @@ export default class CodeBlockToolbar extends Plugin {
                 "|",
                 "copyToClipboard"
             ],
+            balloonClassName: "ck-toolbar-container codeblock-language-list",
             getRelatedElement(selection) {
                 const selectionPosition = selection.getFirstPosition();
                 if (!selectionPosition) {
