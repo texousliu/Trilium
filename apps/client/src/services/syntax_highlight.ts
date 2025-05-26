@@ -1,4 +1,4 @@
-import { ensureMimeTypes, highlight, highlightAuto, loadTheme, Themes } from "@triliumnext/highlightjs";
+import { ensureMimeTypes, highlight, highlightAuto, loadTheme, Themes, type AutoHighlightResult, type HighlightResult, type Theme } from "@triliumnext/highlightjs";
 import mime_types from "./mime_types.js";
 import options from "./options.js";
 import toast from "./toast.js";
@@ -57,7 +57,7 @@ export async function applySingleBlockSyntaxHighlight($codeBlock: JQuery<HTMLEle
     $codeBlock.parent().toggleClass("hljs");
     const text = $codeBlock.text();
 
-    let highlightedText = null;
+    let highlightedText: HighlightResult | AutoHighlightResult | null = null;
     if (normalizedMimeType === mime_types.MIME_TYPE_AUTO) {
         await ensureMimeTypesForHighlighting();
         highlightedText = highlightAuto(text);
@@ -89,7 +89,7 @@ export async function ensureMimeTypesForHighlighting() {
 
 export function loadHighlightingTheme(themeName: string) {
     const themePrefix = "default:";
-    let theme = null;
+    let theme: Theme | null = null;
     if (themeName.includes(themePrefix)) {
         theme = Themes[themeName.substring(themePrefix.length)];
     }
