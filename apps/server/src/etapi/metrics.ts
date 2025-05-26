@@ -1,4 +1,4 @@
-import type { Router } from "express";
+import type { Router, Request, Response, NextFunction } from "express";
 import eu from "./etapi_utils.js";
 import sql from "../services/sql.js";
 import appInfo from "../services/app_info.js";
@@ -238,8 +238,8 @@ function collectMetrics(): MetricsData {
     };
 }
 
-function register(router: Router) {
-    eu.route(router, "get", "/etapi/metrics", (req, res, next) => {
+function register(router: Router): void {
+    eu.route(router, "get", "/etapi/metrics", (req: Request, res: Response, next: NextFunction) => {
         try {
             const metrics = collectMetrics();
             const format = (req.query.format as string)?.toLowerCase() || 'prometheus';
@@ -254,8 +254,9 @@ function register(router: Router) {
             } else {
                 throw new eu.EtapiError(400, "INVALID_FORMAT", "Supported formats: 'prometheus' (default), 'json'");
             }
-        } catch (error: any) {
-            throw new eu.EtapiError(500, "METRICS_ERROR", `Failed to collect metrics: ${error.message}`);
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            throw new eu.EtapiError(500, "METRICS_ERROR", `Failed to collect metrics: ${errorMessage}`);
         }
     });
 }

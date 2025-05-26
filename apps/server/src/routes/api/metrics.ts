@@ -1,4 +1,7 @@
+import type { Request, Response } from "express";
 import etapiMetrics from "../../etapi/metrics.js";
+
+type MetricsData = ReturnType<typeof etapiMetrics.collectMetrics>;
 
 /**
  * @swagger
@@ -148,7 +151,7 @@ import etapiMetrics from "../../etapi/metrics.js";
  *     security:
  *       - session: []
  */
-function getMetrics(req: any, res: any): any {
+function getMetrics(req: Request, res: Response): string | MetricsData {
     const format = (req.query?.format as string)?.toLowerCase() || 'prometheus';
 
     if (format === 'json') {
