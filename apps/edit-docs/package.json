@@ -43,6 +43,7 @@
           ],
           "minify": true,
           "thirdParty": true,
+          "declaration": false,
           "esbuildOptions": {
             "splitting": false,
             "loader": {
