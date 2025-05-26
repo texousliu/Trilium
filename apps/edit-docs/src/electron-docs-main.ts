@@ -33,24 +33,24 @@ if (!DOCS_ROOT || !USER_GUIDE_ROOT) {
 const NOTE_MAPPINGS: NoteMapping[] = [
     {
         rootNoteId: "pOsGYCXsbNQG",
-        path: path.join(DOCS_ROOT, "User Guide"),
+        path: path.join(__dirname, DOCS_ROOT, "User Guide"),
         format: "markdown"
     },
     {
         rootNoteId: "pOsGYCXsbNQG",
-        path: USER_GUIDE_ROOT,
+        path: path.join(__dirname, USER_GUIDE_ROOT),
         format: "html",
         ignoredFiles: ["index.html", "navigation.html", "style.css", "User Guide.html"],
         exportOnly: true
     },
     {
         rootNoteId: "jdjRLhLV3TtI",
-        path: path.join(DOCS_ROOT, "Developer Guide"),
+        path: path.join(__dirname, DOCS_ROOT, "Developer Guide"),
         format: "markdown"
     },
     {
         rootNoteId: "hD3V4hiu2VW4",
-        path: path.join(DOCS_ROOT, "Release Notes"),
+        path: path.join(__dirname, DOCS_ROOT, "Release Notes"),
         format: "markdown"
     }
 ];

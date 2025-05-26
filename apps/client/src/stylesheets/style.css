@@ -529,6 +529,26 @@ pre:not(.hljs) {
     font-size: 100%;
 }
 
+pre {
+    position: relative;
+}
+
+pre > button.copy-button {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    opacity: 0.8;    
+}
+
+pre > button.copy-button:hover {
+    color: inherit !important;
+    opacity: 1;
+}
+
+pre > button.copy-button:active {
+    background-color: unset !important;
+}
+
 .pointer {
     cursor: pointer;
 }

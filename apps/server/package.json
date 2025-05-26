@@ -59,7 +59,7 @@
     "debounce": "2.2.0",
     "debug": "4.4.1",
     "ejs": "3.1.10",
-    "electron": "36.2.1",
+    "electron": "36.3.1",
     "electron-debug": "4.1.0",
     "electron-window-state": "5.0.3",
     "escape-html": "1.0.3",
@@ -115,8 +115,13 @@
       "serve": {
         "executor": "@nx/js:node",
         "dependsOn": [
+          {
+            "projects": [ "client" ],
+            "target": "serve"
+          },
           "build-without-client"
         ],
+        "continuous": true,
         "options": {
           "buildTarget": "server:build-without-client:development",
           "runBuildTargetDependencies": false

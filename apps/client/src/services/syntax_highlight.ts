@@ -1,20 +1,22 @@
-import { ensureMimeTypes, highlight, highlightAuto, loadTheme, Themes } from "@triliumnext/highlightjs";
+import { ensureMimeTypes, highlight, highlightAuto, loadTheme, Themes, type AutoHighlightResult, type HighlightResult, type Theme } from "@triliumnext/highlightjs";
 import mime_types from "./mime_types.js";
 import options from "./options.js";
+import toast from "./toast.js";
+import { t } from "./i18n.js";
 
 let highlightingLoaded = false;
 
 /**
  * Identifies all the code blocks (as `pre code`) under the specified hierarchy and uses the highlight.js library to obtain the highlighted text which is then applied on to the code blocks.
+ * Additionally, adds a "Copy to clipboard" button.
  *
  * @param $container the container under which to look for code blocks and to apply syntax highlighting to them.
  */
-export async function applySyntaxHighlight($container: JQuery<HTMLElement>) {
-    if (!isSyntaxHighlightEnabled()) {
-        return;
+export async function formatCodeBlocks($container: JQuery<HTMLElement>) {
+    const syntaxHighlightingEnabled = isSyntaxHighlightEnabled();
+    if (syntaxHighlightingEnabled) {
+        await ensureMimeTypesForHighlighting();
     }
-
-    await ensureMimeTypesForHighlighting();
 
     const codeBlocks = $container.find("pre code");
     for (const codeBlock of codeBlocks) {
@@ -23,8 +25,29 @@ export async function applySyntaxHighlight($container: JQuery<HTMLElement>) {
             continue;
         }
 
-        applySingleBlockSyntaxHighlight($(codeBlock), normalizedMimeType);
+        applyCopyToClipboardButton($(codeBlock));
+
+        if (syntaxHighlightingEnabled) {
+            applySingleBlockSyntaxHighlight($(codeBlock), normalizedMimeType);
+        }
     }
+}
+
+export function applyCopyToClipboardButton($codeBlock: JQuery<HTMLElement>) {
+    const $copyButton = $("<button>")
+        .addClass("bx component btn tn-tool-button bx-copy copy-button")
+        .attr("title", t("code_block.copy_title"))
+        .on("click", () => {
+            const text = $codeBlock.text();
+
+            try {
+                navigator.clipboard.writeText(text);
+                toast.showMessage(t("code_block.copy_success"));
+            } catch (e) {
+                toast.showError(t("code_block.copy_failed"));
+            }
+        });
+    $codeBlock.parent().append($copyButton);
 }
 
 /**
@@ -34,7 +57,7 @@ export async function applySingleBlockSyntaxHighlight($codeBlock: JQuery<HTMLEle
     $codeBlock.parent().toggleClass("hljs");
     const text = $codeBlock.text();
 
-    let highlightedText = null;
+    let highlightedText: HighlightResult | AutoHighlightResult | null = null;
     if (normalizedMimeType === mime_types.MIME_TYPE_AUTO) {
         await ensureMimeTypesForHighlighting();
         highlightedText = highlightAuto(text);
@@ -66,7 +89,7 @@ export async function ensureMimeTypesForHighlighting() {
 
 export function loadHighlightingTheme(themeName: string) {
     const themePrefix = "default:";
-    let theme = null;
+    let theme: Theme | null = null;
     if (themeName.includes(themePrefix)) {
         theme = Themes[themeName.substring(themePrefix.length)];
     }
