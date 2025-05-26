@@ -227,6 +227,7 @@
           "declarationRootDir": "apps/server/src",
           "minify": true,
           "thirdParty": true,
+          "declaration": false,
           "esbuildOptions": {
             "splitting": false,
             "loader": {
