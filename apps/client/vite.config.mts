@@ -21,7 +21,7 @@ export default defineConfig(() => ({
     plugins: [
         viteStaticCopy({
             targets: assets.map((asset) => ({
-                src: `src/${asset}/**/*`,
+                src: `src/${asset}/*`,
                 dest: asset
             }))
         }),
