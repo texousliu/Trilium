@@ -36,6 +36,7 @@ export async function formatCodeBlocks($container: JQuery<HTMLElement>) {
 export function applyCopyToClipboardButton($codeBlock: JQuery<HTMLElement>) {
     const $copyButton = $("<button>")
         .addClass("bx component btn tn-tool-button bx-copy copy-button")
+        .attr("title", t("code_block.copy_title"))
         .on("click", () => {
             const text = $codeBlock.text();
 
