@@ -114,12 +114,20 @@ export function copyText(text: string) {
         return;
     }
 
+    let succeeded = false;
+
     try {
         if (navigator.clipboard) {
             navigator.clipboard.writeText(text);
-            toast.showMessage(t("code_block.copy_success"));
+            succeeded = true;
         }
     } catch (e) {
+        succeeded = false;
+    }
+
+    if (succeeded) {
+        toast.showMessage(t("code_block.copy_success"));
+    } else {
         toast.showError(t("code_block.copy_failed"));
     }
 }
