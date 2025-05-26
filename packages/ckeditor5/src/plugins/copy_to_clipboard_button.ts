@@ -27,10 +27,16 @@ export default class CopyToClipboardButton extends Plugin {
 
 export class CopyToClipboardCommand extends Command {
 
+    private executeCallback?: (text: string) => void;
+
     execute(...args: Array<unknown>) {
         const editor = this.editor;
         const model = editor.model;
         const selection = model.document.selection;
+
+        if (!this.executeCallback) {
+            this.executeCallback = this.editor.config.get("clipboard")?.copy;
+        }
 
         const codeBlockEl = selection.getFirstPosition()?.findAncestor("codeBlock");
         if (!codeBlockEl) {
@@ -43,11 +49,15 @@ export class CopyToClipboardCommand extends Command {
             .join("");
 
         if (codeText) {
-            navigator.clipboard.writeText(codeText).then(() => {
-                console.log('Code block copied to clipboard');
-            }).catch(err => {
-                console.error('Failed to copy code block', err);
-            });
+            if (!this.executeCallback) {
+                navigator.clipboard.writeText(codeText).then(() => {
+                    console.log('Code block copied to clipboard');
+                }).catch(err => {
+                    console.error('Failed to copy code block', err);
+                });
+            } else {
+                this.executeCallback(codeText);
+            }
         } else {
             console.warn('No code block selected or found.');
         }

@@ -4,6 +4,7 @@ import froca from "./froca.js";
 import linkService from "./link.js";
 import utils from "./utils.js";
 import { t } from "./i18n.js";
+import toast from "./toast.js";
 
 let clipboardBranchIds: string[] = [];
 let clipboardMode: string | null = null;
@@ -106,6 +107,21 @@ function isClipboardEmpty() {
     clipboardBranchIds = clipboardBranchIds.filter((branchId) => !!froca.getBranch(branchId));
 
     return clipboardBranchIds.length === 0;
+}
+
+export function copyText(text: string) {
+    if (!text) {
+        return;
+    }
+
+    try {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text);
+            toast.showMessage(t("code_block.copy_success"));
+        }
+    } catch (e) {
+        toast.showError(t("code_block.copy_failed"));
+    }
 }
 
 export default {

@@ -1,8 +1,8 @@
 import { ensureMimeTypes, highlight, highlightAuto, loadTheme, Themes, type AutoHighlightResult, type HighlightResult, type Theme } from "@triliumnext/highlightjs";
 import mime_types from "./mime_types.js";
 import options from "./options.js";
-import toast from "./toast.js";
 import { t } from "./i18n.js";
+import { copyText } from "./clipboard.js";
 
 let highlightingLoaded = false;
 
@@ -37,16 +37,7 @@ export function applyCopyToClipboardButton($codeBlock: JQuery<HTMLElement>) {
     const $copyButton = $("<button>")
         .addClass("bx component btn tn-tool-button bx-copy copy-button")
         .attr("title", t("code_block.copy_title"))
-        .on("click", () => {
-            const text = $codeBlock.text();
-
-            try {
-                navigator.clipboard.writeText(text);
-                toast.showMessage(t("code_block.copy_success"));
-            } catch (e) {
-                toast.showError(t("code_block.copy_failed"));
-            }
-        });
+        .on("click", () => copyText($codeBlock.text()));
     $codeBlock.parent().append($copyButton);
 }
 
