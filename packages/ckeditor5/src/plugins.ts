@@ -24,6 +24,7 @@ import "@triliumnext/ckeditor5-admonition/index.css";
 import "@triliumnext/ckeditor5-footnotes/index.css";
 import "@triliumnext/ckeditor5-math/index.css";
 import CodeBlockToolbar from "./plugins/code_block_toolbar.js";
+import CodeBlockLanguageDropdown from "./plugins/code_block_language_dropdown.js";
 
 /**
  * Plugins that are specific to Trilium and not part of the CKEditor 5 core, included in both text editors but not in the attribute editor.
@@ -40,6 +41,7 @@ const TRILIUM_PLUGINS: typeof Plugin[] = [
     IncludeNote,
     Uploadfileplugin,
     SyntaxHighlighting,
+    CodeBlockLanguageDropdown,
     CodeBlockToolbar
 ];
 
