@@ -43,7 +43,29 @@ export class CopyToClipboardEditing extends Plugin {
 export class CopyToClipboardCommand extends Command {
 
     execute(...args: Array<unknown>) {
-        console.log("Copy to clipboard!");
+        const editor = this.editor;
+        const model = editor.model;
+        const selection = model.document.selection;
+
+        const codeBlockEl = selection.getFirstPosition()?.findAncestor("codeBlock");
+        if (!codeBlockEl) {
+            console.warn("Unable to find code block element to copy from.");
+            return;
+        }
+
+        const codeText = Array.from(codeBlockEl.getChildren())
+            .map(child => "data" in child ? child.data : "\n")
+            .join("");
+
+        if (codeText) {
+            navigator.clipboard.writeText(codeText).then(() => {
+                console.log('Code block copied to clipboard');
+            }).catch(err => {
+                console.error('Failed to copy code block', err);
+            });
+        } else {
+            console.warn('No code block selected or found.');
+        }
     }
 
 }
