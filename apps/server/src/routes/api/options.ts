@@ -7,6 +7,7 @@ import ValidationError from "../../errors/validation_error.js";
 import type { Request } from "express";
 import { changeLanguage, getLocales } from "../../services/i18n.js";
 import type { OptionNames } from "@triliumnext/commons";
+import config from "../../services/config.js";
 
 // options allowed to be updated directly in the Options dialog
 const ALLOWED_OPTIONS = new Set<OptionNames>([
@@ -127,6 +128,12 @@ function getOptions() {
     }
 
     resultMap["isPasswordSet"] = optionMap["passwordVerificationHash"] ? "true" : "false";
+    // if database is read-only, disable editing in UI by setting 0 here
+    if (config.General.readOnly) {
+        resultMap["autoReadonlySizeText"] = "0";
+        resultMap["autoReadonlySizeCode"] = "0";
+        resultMap["databaseReadonly"] = "true";
+    }
 
     return resultMap;
 }

@@ -159,6 +159,9 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
     }
 
     saveToRecentNotes(resolvedNotePath: string) {
+        if (options.is("databaseReadonly")) {
+            return;
+        }
         setTimeout(async () => {
             // we include the note in the recent list only if the user stayed on the note at least 5 seconds
             if (resolvedNotePath && resolvedNotePath === this.notePath) {
@@ -252,6 +255,10 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
         // "readOnly" is a state valid only for text/code notes
         if (!this.note || (this.note.type !== "text" && this.note.type !== "code")) {
             return false;
+        }
+
+        if (options.is("databaseReadonly")) {
+            return true;
         }
 
         if (this.note.isLabelTruthy("readOnly")) {

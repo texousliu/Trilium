@@ -1172,16 +1172,19 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
 
             let noneCollapsedYet = true;
 
-            this.tree.getRootNode().visit((node) => {
-                if (node.isExpanded() && !noteIdsToKeepExpanded.has(node.data.noteId)) {
-                    node.setExpanded(false);
+            if (!options.is("databaseReadonly")) {
+                // can't change expanded notes when database is readonly
+                this.tree.getRootNode().visit((node) => {
+                    if (node.isExpanded() && !noteIdsToKeepExpanded.has(node.data.noteId)) {
+                        node.setExpanded(false);
 
-                    if (noneCollapsedYet) {
-                        toastService.showMessage(t("note_tree.auto-collapsing-notes-after-inactivity"));
-                        noneCollapsedYet = false;
+                        if (noneCollapsedYet) {
+                            toastService.showMessage(t("note_tree.auto-collapsing-notes-after-inactivity"));
+                            noneCollapsedYet = false;
+                        }
                     }
-                }
-            }, false);
+                }, false);
+            }
 
             this.filterHoistedBranch(true);
         }, 600 * 1000);

@@ -21,6 +21,7 @@ export interface TriliumConfig {
         noAuthentication: boolean;
         noBackup: boolean;
         noDesktopIcon: boolean;
+        readOnly: boolean;
     };
     Network: {
         host: string;
@@ -62,7 +63,10 @@ const config: TriliumConfig = {
             envToBoolean(process.env.TRILIUM_GENERAL_NOBACKUP) || iniConfig.General.noBackup || false,
 
         noDesktopIcon:
-            envToBoolean(process.env.TRILIUM_GENERAL_NODESKTOPICON) || iniConfig.General.noDesktopIcon || false
+            envToBoolean(process.env.TRILIUM_GENERAL_NODESKTOPICON) || iniConfig.General.noDesktopIcon || false,
+
+        readOnly:
+            envToBoolean(process.env.TRILIUM_GENERAL_READONLY) || iniConfig.General.readOnly || false
     },
 
     Network: {
