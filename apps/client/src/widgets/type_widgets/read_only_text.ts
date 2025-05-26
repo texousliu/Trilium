@@ -1,5 +1,5 @@
 import AbstractTextTypeWidget from "./abstract_text_type_widget.js";
-import { applySyntaxHighlight } from "../../services/syntax_highlight.js";
+import { formatCodeBlocks } from "../../services/syntax_highlight.js";
 import type FNote from "../../entities/fnote.js";
 import type { CommandListenerData, EventData } from "../../components/app_context.js";
 import { getLocaleById } from "../../services/i18n.js";
@@ -125,7 +125,7 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
         }
 
         await this.#applyInlineMermaid();
-        await applySyntaxHighlight(this.$content);
+        await formatCodeBlocks(this.$content);
     }
 
     async #applyInlineMermaid() {

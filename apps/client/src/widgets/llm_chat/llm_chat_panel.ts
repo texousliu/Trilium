@@ -12,7 +12,7 @@ import { createChatSession, checkSessionExists, setupStreamingResponse, getDirec
 import { extractInChatToolSteps } from "./message_processor.js";
 import { validateEmbeddingProviders } from "./validation.js";
 import type { MessageData, ToolExecutionStep, ChatData } from "./types.js";
-import { applySyntaxHighlight } from "../../services/syntax_highlight.js";
+import { formatCodeBlocks } from "../../services/syntax_highlight.js";
 
 import "../../stylesheets/llm_chat.css";
 
@@ -925,7 +925,7 @@ export default class LlmChatPanel extends BasicWidget {
 
         // Apply syntax highlighting if this is the final update
         if (isDone) {
-            applySyntaxHighlight($(assistantMessageEl as HTMLElement));
+            formatCodeBlocks($(assistantMessageEl as HTMLElement));
 
             // Update message in the data model for storage
             // Find the last assistant message to update, or add a new one if none exists

@@ -6,15 +6,15 @@ let highlightingLoaded = false;
 
 /**
  * Identifies all the code blocks (as `pre code`) under the specified hierarchy and uses the highlight.js library to obtain the highlighted text which is then applied on to the code blocks.
+ * Additionally, adds a "Copy to clipboard" button.
  *
  * @param $container the container under which to look for code blocks and to apply syntax highlighting to them.
  */
-export async function applySyntaxHighlight($container: JQuery<HTMLElement>) {
-    if (!isSyntaxHighlightEnabled()) {
-        return;
+export async function formatCodeBlocks($container: JQuery<HTMLElement>) {
+    const syntaxHighlightingEnabled = isSyntaxHighlightEnabled();
+    if (syntaxHighlightingEnabled) {
+        await ensureMimeTypesForHighlighting();
     }
-
-    await ensureMimeTypesForHighlighting();
 
     const codeBlocks = $container.find("pre code");
     for (const codeBlock of codeBlocks) {
@@ -23,8 +23,18 @@ export async function applySyntaxHighlight($container: JQuery<HTMLElement>) {
             continue;
         }
 
-        applySingleBlockSyntaxHighlight($(codeBlock), normalizedMimeType);
+        applyCopyToClipboardButton($(codeBlock));
+
+        if (syntaxHighlightingEnabled) {
+            applySingleBlockSyntaxHighlight($(codeBlock), normalizedMimeType);
+        }
     }
+}
+
+export function applyCopyToClipboardButton($codeBlock: JQuery<HTMLElement>) {
+    const $copyButton = $("<button>")
+        .addClass("bx component btn tn-tool-button bx-copy copy-button");
+    $codeBlock.parent().append($copyButton);
 }
 
 /**

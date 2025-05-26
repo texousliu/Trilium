@@ -9,7 +9,7 @@ import treeService from "./tree.js";
 import FNote from "../entities/fnote.js";
 import FAttachment from "../entities/fattachment.js";
 import imageContextMenuService from "../menus/image_context_menu.js";
-import { applySingleBlockSyntaxHighlight, applySyntaxHighlight } from "./syntax_highlight.js";
+import { applySingleBlockSyntaxHighlight, formatCodeBlocks } from "./syntax_highlight.js";
 import { loadElkIfNeeded, postprocessMermaidSvg } from "./mermaid.js";
 import renderDoc from "./doc_renderer.js";
 import { t } from "../services/i18n.js";
@@ -106,7 +106,7 @@ async function renderText(note: FNote | FAttachment, $renderedContent: JQuery<HT
             await linkService.loadReferenceLinkTitle($(el));
         }
 
-        await applySyntaxHighlight($renderedContent);
+        await formatCodeBlocks($renderedContent);
     } else if (note instanceof FNote) {
         await renderChildrenList($renderedContent, note);
     }
