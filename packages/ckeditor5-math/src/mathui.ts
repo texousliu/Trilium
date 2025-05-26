@@ -126,6 +126,7 @@ export default class MathUI extends Plugin {
 			Object.assign(textarea.style, {
 				resize: 'both',
 				height: '100px',
+				width: '400px',
 				minWidth: '100%',
 			});
 		});
