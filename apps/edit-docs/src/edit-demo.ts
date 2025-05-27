@@ -2,8 +2,9 @@ import { extractZip, initializeDatabase, startElectron } from "./utils.js";
 import { initializeTranslations } from "@triliumnext/server/src/services/i18n.js";
 import debounce from "@triliumnext/client/src/services/debounce.js";
 import fs from "fs/promises";
+import { join } from "path";
 
-const DEMO_ZIP_PATH = "db/demo.zip";
+const DEMO_ZIP_PATH = join(__dirname, "../../server/src/assets/db/demo.zip");
 
 async function main() {
     await initializeTranslations();
