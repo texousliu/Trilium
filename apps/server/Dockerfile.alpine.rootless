@@ -18,6 +18,7 @@ ENV GID=${GID}
 
 # Install runtime dependencies and create user with specific UID/GID
 RUN apk add --no-cache dumb-init && \
+    apk add --no-cache bash && \
     # Alpine uses addgroup/adduser (from busybox) instead of groupadd/useradd
     addgroup -g ${GID} ${USER} && \
     adduser -u ${UID} -G ${USER} -s /bin/sh -D -h /home/${USER} ${USER}
