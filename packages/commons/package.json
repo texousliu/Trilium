@@ -27,21 +27,31 @@
     "sourceRoot": "packages/commons/src",
     "targets": {
       "build": {
-        "executor": "@nx/js:swc",
+        "executor": "@nx/esbuild:esbuild",
         "outputs": [
           "{options.outputPath}"
         ],
+        "defaultConfiguration": "production",
         "options": {
-          "outputPath": "packages/commons/dist",
           "main": "packages/commons/src/index.ts",
+          "outputPath": "packages/commons/dist",
+          "outputFileName": "main.js",
           "tsConfig": "packages/commons/tsconfig.lib.json",
-          "skipTypeCheck": true,
-          "stripLeadingPaths": true
+          "platform": "node",
+          "format": [
+            "esm"
+          ],
+          "declarationRootDir": "packages/commons/src"
+        },
+        "configurations": {
+          "development": {
+            "minify": false
+          },
+          "production": {
+            "minify": true
+          }
         }
       }
     }
-  },
-  "dependencies": {
-    "@swc/helpers": "~0.5.11"
   }
 }
