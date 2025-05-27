@@ -1,6 +1,5 @@
-# **Trilium Metrics API**
-
-The Trilium metrics API provides comprehensive monitoring data about your Trilium instance, designed for external monitoring systems like Prometheus.
+# Metrics
+The Trilium Metrics API provides comprehensive monitoring data about your Trilium instance, designed for external monitoring systems like Prometheus.
 
 ## **Endpoint**
 
