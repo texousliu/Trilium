@@ -20,9 +20,5 @@ onlyBuiltDependencies:
 - fs-xattr
 - macos-alias
 
-overrides:
-  "node-abi": 4.8.0
-  "@types/express-serve-static-core": 5.0.6
-
 shamefullyHoist: true
 nodeLinker: isolated
