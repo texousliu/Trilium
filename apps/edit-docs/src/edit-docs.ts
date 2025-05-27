@@ -6,7 +6,7 @@ import { initializeTranslations } from "@triliumnext/server/src/services/i18n.js
 import archiver, { type Archiver } from "archiver";
 import type { WriteStream } from "fs";
 import debounce from "@triliumnext/client/src/services/debounce.js";
-import { extractZip, initializeDatabase, startElectron } from "./electron-utils.js";
+import { extractZip, initializeDatabase } from "./utils.js";
 import cls from "@triliumnext/server/src/services/cls.js";
 import type { AdvancedExportOptions } from "@triliumnext/server/src/services/export/zip.js";
 import TaskContext from "@triliumnext/server/src/services/task_context.js";

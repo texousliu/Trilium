@@ -1,4 +1,4 @@
-import { extractZip, initializeDatabase, startElectron } from "./electron-utils.js";
+import { extractZip, initializeDatabase, startElectron } from "./utils.js";
 import { initializeTranslations } from "@triliumnext/server/src/services/i18n.js";
 import debounce from "@triliumnext/client/src/services/debounce.js";
 import fs from "fs/promises";

@@ -27,11 +27,13 @@
           "{options.outputPath}"
         ],
         "options": {
-          "main": "apps/edit-docs/src/electron-docs-main.ts",
+          "main": "apps/edit-docs/src/edit-docs.ts",
           "outputPath": "apps/edit-docs/dist",
-          "outputFileName": "main.js",
           "tsConfig": "apps/edit-docs/tsconfig.app.json",
           "platform": "node",
+          "additionalEntryPoints": [
+            "apps/edit-docs/src/edit-demo.ts"
+          ],
           "external": [
             "electron",
             "@electron/remote",
@@ -41,7 +43,7 @@
           "format": [
             "cjs"
           ],
-          "minify": true,
+          "minify": false,
           "thirdParty": true,
           "declaration": false,
           "esbuildOptions": {
@@ -91,7 +93,7 @@
           }
         }
       },
-      "serve": {
+      "edit-docs": {
         "executor": "nx:run-commands",
         "dependsOn": [
           "rebuild-deps"
@@ -99,11 +101,29 @@
         "defaultConfiguration": "default",
         "configurations": {
           "default": {
-            "command": "electron main.cjs",
+            "command": "electron edit-docs.cjs",
             "cwd": "{projectRoot}/dist"
           },
           "nixos": {
-            "command": "nix-shell -p electron_35 --run \"electron {projectRoot}/dist/main.cjs\"",
+            "command": "nix-shell -p electron_35 --run \"electron {projectRoot}/dist/edit-docs.cjs\"",
+            "cwd": ".",
+            "forwardAllArgs": false
+          }
+        }
+      },
+      "edit-demo": {
+        "executor": "nx:run-commands",
+        "dependsOn": [
+          "rebuild-deps"
+        ],
+        "defaultConfiguration": "default",
+        "configurations": {
+          "default": {
+            "command": "electron edit-demo.cjs",
+            "cwd": "{projectRoot}/dist"
+          },
+          "nixos": {
+            "command": "nix-shell -p electron_35 --run \"electron {projectRoot}/dist/edit-demo.cjs\"",
             "cwd": ".",
             "forwardAllArgs": false
           }
