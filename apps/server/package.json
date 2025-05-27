@@ -116,7 +116,9 @@
         "executor": "@nx/js:node",
         "dependsOn": [
           {
-            "projects": [ "client" ],
+            "projects": [
+              "client"
+            ],
             "target": "serve"
           },
           "build-without-client"
