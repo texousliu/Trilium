@@ -97,8 +97,7 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:8080']
     metrics_path: '/etapi/metrics'
-    headers:
-      Authorization: 'YOUR_ETAPI_TOKEN'
+    bearer_token: 'YOUR_ETAPI_TOKEN'
     scrape_interval: 30s
 
 ```
