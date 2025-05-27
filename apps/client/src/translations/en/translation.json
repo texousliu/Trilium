@@ -1779,7 +1779,9 @@
   },
   "clipboard": {
     "cut": "Note(s) have been cut into clipboard.",
-    "copied": "Note(s) have been copied into clipboard."
+    "copied": "Note(s) have been copied into clipboard.",
+    "copy_failed": "Cannot copy to clipboard due to permission issues.",
+    "copy_success": "Copied to clipboard."
   },
   "entrypoints": {
     "note-revision-created": "Note revision has been created.",
@@ -1831,8 +1833,6 @@
     "theme_none": "No syntax highlighting",
     "theme_group_light": "Light themes",
     "theme_group_dark": "Dark themes",
-    "copy_success": "The code block was copied to clipboard.",
-    "copy_failed": "The code block could not be copied to the clipboard due to lack of permissions.",
     "copy_title": "Copy to clipboard"
   },
   "classic_editor_toolbar": {

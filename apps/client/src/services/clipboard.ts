@@ -136,9 +136,9 @@ export function copyText(text: string) {
     }
 
     if (succeeded) {
-        toast.showMessage(t("code_block.copy_success"));
+        toast.showMessage(t("clipboard.copy_success"));
     } else {
-        toast.showError(t("code_block.copy_failed"));
+        toast.showError(t("clipboard.copy_failed"));
     }
 }
 
