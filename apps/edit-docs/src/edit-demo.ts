@@ -7,11 +7,14 @@ import { join } from "path";
 const DEMO_ZIP_PATH = join(__dirname, "../../server/src/assets/db/demo.zip");
 
 async function main() {
+    const initializedPromise = startElectron(() => {
+        // Wait for the import to be finished and the application to be loaded before we listen to changes.
+        setTimeout(() => registerHandlers(), 10_000);
+    });
+
     await initializeTranslations();
     await initializeDatabase(false);
-
-    await startElectron();
-    await registerHandlers();
+    initializedPromise.resolve();
 }
 
 async function registerHandlers() {

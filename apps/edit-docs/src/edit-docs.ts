@@ -6,16 +6,13 @@ import { initializeTranslations } from "@triliumnext/server/src/services/i18n.js
 import archiver, { type Archiver } from "archiver";
 import type { WriteStream } from "fs";
 import debounce from "@triliumnext/client/src/services/debounce.js";
-import { extractZip, initializeDatabase } from "./utils.js";
+import { extractZip, initializeDatabase, startElectron } from "./utils.js";
 import cls from "@triliumnext/server/src/services/cls.js";
 import type { AdvancedExportOptions } from "@triliumnext/server/src/services/export/zip.js";
 import TaskContext from "@triliumnext/server/src/services/task_context.js";
-import { deferred } from "@triliumnext/server/src/services/utils.js";
 import { parseNoteMetaFile } from "@triliumnext/server/src/services/in_app_help.js";
 import { resolve } from "path";
 import type NoteMeta from "@triliumnext/server/src/services/meta/note_meta.js";
-import electron from "electron";
-import windowService from "@triliumnext/server/src/services/window.js";
 
 interface NoteMapping {
     rootNoteId: string;
@@ -56,18 +53,7 @@ const NOTE_MAPPINGS: NoteMapping[] = [
 ];
 
 async function main() {
-    const initializedPromise = deferred<void>();
-    electron.app.on("ready", async () => {
-        await initializedPromise;
-
-        console.log("Electron is ready!");
-
-        // Start the server.
-        await import("@triliumnext/server/src/main.js");
-
-        // Create the main window.
-        await windowService.createMainWindow(electron.app);
-
+    const initializedPromise = startElectron(() => {
         // Wait for the import to be finished and the application to be loaded before we listen to changes.
         setTimeout(() => registerHandlers(), 10_000);
     });
