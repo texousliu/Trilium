@@ -4,7 +4,9 @@ import debounce from "@triliumnext/client/src/services/debounce.js";
 import fs from "fs/promises";
 import { join } from "path";
 
+// Paths are relative to apps/edit-docs/dist.
 const DEMO_ZIP_PATH = join(__dirname, "../../server/src/assets/db/demo.zip");
+const OUTPUT_DIR = join(__dirname, "../demo");
 
 async function main() {
     const initializedPromise = startElectron(() => {
@@ -25,9 +27,8 @@ async function registerHandlers() {
         eraseService.eraseUnusedAttachmentsNow();
         await exportData();
 
-        const outputDir = "demo";
-        await fs.rmdir(outputDir, { recursive: true }).catch(() => {});
-        await extractZip(DEMO_ZIP_PATH, outputDir);
+        await fs.rmdir(OUTPUT_DIR, { recursive: true }).catch(() => {});
+        await extractZip(DEMO_ZIP_PATH, OUTPUT_DIR);
     }, 10_000);
     events.subscribe(events.ENTITY_CHANGED, async (e) => {
         if (e.entityName === "options") {
