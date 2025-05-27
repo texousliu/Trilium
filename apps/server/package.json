@@ -198,6 +198,11 @@
           "format": [
             "cjs"
           ],
+          "esbuildOptions": {
+            "loader": {
+              ".css": "text"
+            }
+          },
           "declarationRootDir": "apps/server/src"
         },
         "configurations": {
