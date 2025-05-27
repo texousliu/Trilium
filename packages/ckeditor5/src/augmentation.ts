@@ -23,8 +23,6 @@ declare global {
     }
 }
 
-type Keystroke = string | string[];
-
 declare module "ckeditor5" {
     interface Editor {
         getSelectedHtml(): string;
@@ -39,10 +37,10 @@ declare module "ckeditor5" {
             enabled: boolean;
         },
         moveBlockUp?: {
-            keystroke: Keystroke;
+            keystroke: string[];
         },
         moveBlockDown?: {
-            keystroke: Keystroke;
+            keystroke: string[];
         },
         clipboard?: {
             copy(text: string): void;
