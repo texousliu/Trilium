@@ -3,15 +3,11 @@ import fsExtra from "fs-extra";
 import path from "path";
 import type { NoteMetaFile } from "@triliumnext/server/src/services/meta/note_meta.js";
 import { initializeTranslations } from "@triliumnext/server/src/services/i18n.js";
-import archiver, { type Archiver } from "archiver";
-import type { WriteStream } from "fs";
 import debounce from "@triliumnext/client/src/services/debounce.js";
-import { extractZip, initializeDatabase, startElectron } from "./utils.js";
+import { extractZip, importData, initializeDatabase, startElectron } from "./utils.js";
 import cls from "@triliumnext/server/src/services/cls.js";
 import type { AdvancedExportOptions } from "@triliumnext/server/src/services/export/zip.js";
-import TaskContext from "@triliumnext/server/src/services/task_context.js";
 import { parseNoteMetaFile } from "@triliumnext/server/src/services/in_app_help.js";
-import { resolve } from "path";
 import type NoteMeta from "@triliumnext/server/src/services/meta/note_meta.js";
 
 interface NoteMapping {
@@ -77,49 +73,6 @@ async function setOptions() {
     optionsService.setOption("eraseUnusedAttachmentsAfterSeconds", 10);
     optionsService.setOption("eraseUnusedAttachmentsAfterTimeScale", 60);
     optionsService.setOption("compressImages", "false");
-}
-
-async function importData(path: string) {
-    const buffer = await createImportZip(path);
-    const importService = (await import("@triliumnext/server/src/services/import/zip.js")).default;
-    const context = new TaskContext("no-progress-reporting", "import", false);
-    const becca = (await import("@triliumnext/server/src/becca/becca.js")).default;
-
-    const rootNote = becca.getRoot();
-    if (!rootNote) {
-        throw new Error("Missing root note for import.");
-    }
-    await importService.importZip(context, buffer, rootNote, {
-        preserveIds: true
-    });
-}
-
-async function createImportZip(path: string) {
-    const inputFile = "input.zip";
-    const archive = archiver("zip", {
-        zlib: { level: 0 }
-    });
-
-    console.log("Archive path is ", resolve(path))
-    archive.directory(path, "/");
-
-    const outputStream = fsExtra.createWriteStream(inputFile);
-    archive.pipe(outputStream);
-    await waitForEnd(archive, outputStream);
-
-    try {
-        return await fsExtra.readFile(inputFile);
-    } finally {
-        await fsExtra.rm(inputFile);
-    }
-}
-
-function waitForEnd(archive: Archiver, stream: WriteStream) {
-    return new Promise<void>(async (res, rej) => {
-        stream.on("finish", () => res());
-        await archive.finalize();
-    });
-
 }
 
 async function exportData(noteId: string, format: "html" | "markdown", outputPath: string, ignoredFiles?: Set<string>) {
