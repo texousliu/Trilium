@@ -9,20 +9,21 @@ export default class MoveBlockUpDownPlugin extends Plugin {
     init() {
         const editor = this.editor;
         editor.config.define('moveBlockUp', {
-            keystroke: 'ctrl+arrowup',
+            keystroke: ['ctrl+arrowup', 'alt+arrowup'],
         });
         editor.config.define('moveBlockDown', {
-            keystroke: 'ctrl+arrowdown',
+            keystroke: ['ctrl+arrowdown', 'alt+arrowdown'],
         });
-
-        const keystrokeUp = editor.config.get('moveBlockUp.keystroke')!;
-        const keystrokeDown = editor.config.get('moveBlockDown.keystroke')!;
 
         editor.commands.add('moveBlockUp', new MoveBlockUpCommand(editor));
         editor.commands.add('moveBlockDown', new MoveBlockDownCommand(editor));
 
-        editor.keystrokes.set(keystrokeUp, 'moveBlockUp');
-        editor.keystrokes.set(keystrokeDown, 'moveBlockDown');
+        for (const keystroke of editor.config.get('moveBlockUp.keystroke') ?? []) {
+            editor.keystrokes.set(keystroke, 'moveBlockUp');
+        }
+        for (const keystroke of editor.config.get('moveBlockDown.keystroke') ?? []) {
+            editor.keystrokes.set(keystroke, 'moveBlockDown');
+        }
     }
 
 }
