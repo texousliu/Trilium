@@ -14,4 +14,6 @@ demo/**/*.txt eol=lf
 demo/**/*.js eol=lf
 demo/**/*.css eol=lf
 
+*.sh eol=lf
+
 apps/client/src/libraries/** linguist-vendored
