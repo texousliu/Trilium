@@ -18,7 +18,7 @@
     "strict": true,
     "target": "es2022",
     "customConditions": ["development"],
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false,  // TODO: Re-enable it when migrating back to ESM.
     "resolveJsonModule": true,
     "downlevelIteration": true,
     "esModuleInterop": true,
