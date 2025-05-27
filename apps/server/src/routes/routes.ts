@@ -52,6 +52,7 @@ import fontsRoute from "./api/fonts.js";
 import etapiTokensApiRoutes from "./api/etapi_tokens.js";
 import relationMapApiRoute from "./api/relation-map.js";
 import otherRoute from "./api/other.js";
+import metricsRoute from "./api/metrics.js";
 import shareRoutes from "../share/routes.js";
 import embeddingsRoute from "./api/embeddings.js";
 import ollamaRoute from "./api/ollama.js";
@@ -68,6 +69,7 @@ import etapiNoteRoutes from "../etapi/notes.js";
 import etapiSpecialNoteRoutes from "../etapi/special_notes.js";
 import etapiSpecRoute from "../etapi/spec.js";
 import etapiBackupRoute from "../etapi/backup.js";
+import etapiMetricsRoute from "../etapi/metrics.js";
 import apiDocsRoute from "./api_docs.js";
 import { apiResultHandler, apiRoute, asyncApiRoute, asyncRoute, route, router, uploadMiddlewareWithErrorHandling } from "./route_api.js";
 
@@ -236,6 +238,7 @@ function register(app: express.Application) {
 
     apiRoute(PST, "/api/recent-notes", recentNotesRoute.addRecentNote);
     apiRoute(GET, "/api/app-info", appInfoRoute.getAppInfo);
+    apiRoute(GET, "/api/metrics", metricsRoute.getMetrics);
 
     // docker health check
     route(GET, "/api/health-check", [], () => ({ status: "ok" }), apiResultHandler);
@@ -363,6 +366,7 @@ function register(app: express.Application) {
     etapiSpecialNoteRoutes.register(router);
     etapiSpecRoute.register(router);
     etapiBackupRoute.register(router);
+    etapiMetricsRoute.register(router);
 
     // LLM Chat API
     asyncApiRoute(PST, "/api/llm/chat", llmRoute.createSession);

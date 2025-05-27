@@ -1,17 +1,19 @@
 import { ALLOWED_PROTOCOLS } from "../../../services/link.js";
 import { MIME_TYPE_AUTO } from "@triliumnext/commons";
+import type { EditorConfig } from "@triliumnext/ckeditor5";
 import { getHighlightJsNameForMime } from "../../../services/mime_types.js";
 import options from "../../../services/options.js";
 import { ensureMimeTypesForHighlighting, isSyntaxHighlightEnabled } from "../../../services/syntax_highlight.js";
 import utils from "../../../services/utils.js";
 import emojiDefinitionsUrl from "@triliumnext/ckeditor5/emoji_definitions/en.json?url";
+import { copyText } from "../../../services/clipboard.js";
 
 const TEXT_FORMATTING_GROUP = {
     label: "Text formatting",
     icon: "text"
 };
 
-export function buildConfig() {
+export function buildConfig(): EditorConfig {
     return {
         image: {
             styles: {
@@ -110,6 +112,9 @@ export function buildConfig() {
             mapLanguageName: getHighlightJsNameForMime,
             defaultMimeType: MIME_TYPE_AUTO,
             enabled: isSyntaxHighlightEnabled
+        },
+        clipboard: {
+            copy: copyText
         },
         // This value must be kept in sync with the language defined in webpack.config.js.
         language: "en"

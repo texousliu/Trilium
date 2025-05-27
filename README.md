@@ -84,7 +84,7 @@ Download the binary release for your platform from the [latest release page](htt
 
 If your distribution is listed in the table below, use your distribution's package.
 
-[![Packaging status](https://repology.org/badge/vertical-allrepos/trilium-next-desktop.svg)](https://repology.org/project/trilium-next-desktop/versions)
+[![Packaging status](https://repology.org/badge/vertical-allrepos/triliumnext.svg)](https://repology.org/project/triliumnext/versions)
 
 You may also download the binary release for your platform from the [latest release page](https://github.com/TriliumNext/Notes/releases/latest), unzip the package and run the `trilium` executable.
 

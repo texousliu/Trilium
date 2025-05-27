@@ -529,6 +529,31 @@ pre:not(.hljs) {
     font-size: 100%;
 }
 
+pre {
+    --copy-button-margin-size: .35em;
+
+    position: relative;
+}
+
+pre > button.copy-button {
+    position: absolute;
+    top: var(--copy-button-margin-size);
+    right: var(--copy-button-margin-size);
+}
+
+:root pre:has(> button.copy-button) > code {
+    margin-right: calc(var(--icon-button-size) + (var(--copy-button-margin-size) * 2));
+}
+
+pre > button.copy-button:hover {
+    color: inherit !important;
+    opacity: 1;
+}
+
+pre > button.copy-button:active {
+    background-color: unset !important;
+}
+
 .pointer {
     cursor: pointer;
 }

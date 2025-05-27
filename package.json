@@ -12,7 +12,7 @@
     "server:test": "nx test server",
     "server:build": "nx build server",
     "server:coverage": "nx test server --coverage",
-    "server:start": "nx run-many --target=serve --projects=client,server --parallel",
+    "server:start": "nx run server:serve",
     "server:start-prod": "nx run server:start-prod",
     "electron:build": "nx build desktop",
     "chore:ci-update-nightly-version": "tsx ./scripts/update-nightly-version.ts",

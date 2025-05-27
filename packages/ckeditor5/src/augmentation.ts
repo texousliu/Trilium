@@ -28,4 +28,17 @@ declare module "ckeditor5" {
         getSelectedHtml(): string;
         removeSelection(): Promise<void>;
     }
+
+    interface EditorConfig {
+        syntaxHighlighting: {
+            loadHighlightJs: () => Promise<any>;
+            mapLanguageName(mimeType: string): string;
+            defaultMimeType: string;
+            enabled: boolean;
+        },
+
+        clipboard?: {
+            copy(text: string): void;
+        }
+    }
 }

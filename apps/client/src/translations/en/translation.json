@@ -1830,7 +1830,10 @@
     "word_wrapping": "Word wrapping",
     "theme_none": "No syntax highlighting",
     "theme_group_light": "Light themes",
-    "theme_group_dark": "Dark themes"
+    "theme_group_dark": "Dark themes",
+    "copy_success": "The code block was copied to clipboard.",
+    "copy_failed": "The code block could not be copied to the clipboard due to lack of permissions.",
+    "copy_title": "Copy to clipboard"
   },
   "classic_editor_toolbar": {
     "title": "Formatting"

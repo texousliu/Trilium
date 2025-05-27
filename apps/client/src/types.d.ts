@@ -93,16 +93,6 @@ declare global {
         getSelectedExternalLink(): string | undefined;
         setSelectedExternalLink(externalLink: string | null | undefined);
         setNote(noteId: string);
-        markRegExp(regex: RegExp, opts: {
-            element: string;
-            className: string;
-            separateWordSearch: boolean;
-            caseSensitive: boolean;
-            done?: () => void;
-        });
-        unmark(opts?: {
-            done: () => void;
-        });
     }
 
     interface JQueryStatic {

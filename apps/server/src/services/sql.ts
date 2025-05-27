@@ -13,18 +13,20 @@ import Database from "better-sqlite3";
 import ws from "./ws.js";
 import becca_loader from "../becca/becca_loader.js";
 import entity_changes from "./entity_changes.js";
+import config from "./config.js";
 
 let dbConnection: DatabaseType = buildDatabase();
 let statementCache: Record<string, Statement> = {};
 
 function buildDatabase() {
+    // for integration tests, ignore the config's readOnly setting
     if (process.env.TRILIUM_INTEGRATION_TEST === "memory") {
         return buildIntegrationTestDatabase();
     } else if (process.env.TRILIUM_INTEGRATION_TEST === "memory-no-store") {
         return new Database(":memory:");
     }
 
-    return new Database(dataDir.DOCUMENT_PATH);
+    return new Database(dataDir.DOCUMENT_PATH, { readonly: config.General.readOnly });
 }
 
 function buildIntegrationTestDatabase(dbPath?: string) {
@@ -208,6 +210,13 @@ function getColumn<T>(query: string, params: Params = []): T[] {
 }
 
 function execute(query: string, params: Params = []): RunResult {
+    if (config.General.readOnly && (query.startsWith("UPDATE") || query.startsWith("INSERT") || query.startsWith("DELETE"))) {
+        log.error(`read-only DB ignored: ${query} with parameters ${JSON.stringify(params)}`);
+        return {
+            changes: 0,
+            lastInsertRowid: 0
+        };
+    }
     return wrap(query, (s) => s.run(params)) as RunResult;
 }
 

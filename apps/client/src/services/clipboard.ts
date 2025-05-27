@@ -4,6 +4,7 @@ import froca from "./froca.js";
 import linkService from "./link.js";
 import utils from "./utils.js";
 import { t } from "./i18n.js";
+import toast from "./toast.js";
 
 let clipboardBranchIds: string[] = [];
 let clipboardMode: string | null = null;
@@ -106,6 +107,39 @@ function isClipboardEmpty() {
     clipboardBranchIds = clipboardBranchIds.filter((branchId) => !!froca.getBranch(branchId));
 
     return clipboardBranchIds.length === 0;
+}
+
+export function copyText(text: string) {
+    if (!text) {
+        return;
+    }
+
+    let succeeded = false;
+
+    try {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text);
+            succeeded = true;
+        } else {
+            // Fallback method: https://stackoverflow.com/a/72239825
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            succeeded = document.execCommand('copy');
+            document.body.removeChild(textArea);
+        }
+    } catch (e) {
+        console.warn(e);
+        succeeded = false;
+    }
+
+    if (succeeded) {
+        toast.showMessage(t("code_block.copy_success"));
+    } else {
+        toast.showError(t("code_block.copy_failed"));
+    }
 }
 
 export default {

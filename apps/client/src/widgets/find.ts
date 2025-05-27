@@ -248,10 +248,10 @@ export default class FindWidget extends NoteContextAwareWidget {
             case "code":
                 return this.codeHandler;
             case "text":
-                return this.textHandler;
-            default:
                 const readOnly = await this.noteContext?.isReadOnly();
                 return readOnly ? this.htmlHandler : this.textHandler;
+            default:
+                console.warn("FindWidget: Unsupported note type for find widget", this.note?.type);
         }
     }
 
