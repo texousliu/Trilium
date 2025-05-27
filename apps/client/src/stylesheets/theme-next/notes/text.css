@@ -396,12 +396,12 @@
  */
 
 .attachment-content-wrapper pre,
-.ck-content pre,
+:root .ck-content pre,
 .ck-mermaid__editing-view {
     border: 0;
     border-radius: 6px;
     box-shadow: var(--code-block-box-shadow);
-    padding: 0 !important;
+    padding: 0;
     margin-top: 2px !important;
 }
 
@@ -426,7 +426,7 @@ pre button.copy-button.icon-action {
 }
 
 :root pre:has(> button.copy-button) {
-    padding-right: calc(var(--icon-button-size) + (var(--copy-button-margin-size) * 2)) !important;
+    padding-right: calc(var(--icon-button-size) + (var(--copy-button-margin-size) * 2));
 }
 
 html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
@@ -444,10 +444,10 @@ html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
 }
 
 .attachment-content-wrapper pre code,
-.ck-content pre code,
+:root .ck-content pre code,
 .ck-mermaid__editing-view {
     display: block;
-    padding: var(--padding-size, 1em) !important;
+    padding: var(--padding-size, 1em);
     overflow: auto;
 }
 
