@@ -226,13 +226,6 @@
 											"value": "_help_nBAXQFj20hS1",
 											"isInheritable": false,
 											"position": 10
-										},
-										{
-											"type": "relation",
-											"name": "includeNoteLink",
-											"value": "VsFbpoySMCE3",
-											"isInheritable": false,
-											"position": 20
 										}
 									],
 									"format": "html",
@@ -1666,43 +1659,7 @@
 															"isExpanded": false,
 															"type": "text",
 															"mime": "text/html",
-															"attributes": [
-																{
-																	"type": "relation",
-																	"name": "template",
-																	"value": "O9xYjAzeyT9O",
-																	"isInheritable": false,
-																	"position": 10
-																},
-																{
-																	"type": "label",
-																	"name": "link",
-																	"value": "https://www.amazon.com/Mechanical-Alchemy-Wars-Ian-Tregillis/dp/0316248002",
-																	"isInheritable": false,
-																	"position": 20
-																},
-																{
-																	"type": "label",
-																	"name": "author",
-																	"value": "Ian Tregillis",
-																	"isInheritable": false,
-																	"position": 30
-																},
-																{
-																	"type": "label",
-																	"name": "readingStart",
-																	"value": "2018-05-05",
-																	"isInheritable": false,
-																	"position": 40
-																},
-																{
-																	"type": "label",
-																	"name": "readingEnd",
-																	"value": "2018-05-23",
-																	"isInheritable": false,
-																	"position": 50
-																}
-															],
+															"attributes": [],
 															"format": "html",
 															"dataFileName": "The Mechanical.html",
 															"attachments": [],
@@ -4676,23 +4633,6 @@
 											"children": [
 												{
 													"isClone": true,
-													"noteId": "1yhbjW4nlr4l",
-													"notePath": [
-														"root",
-														"rvaX6hEaQlmk",
-														"KZVWidxicAfn",
-														"JwXAb88VP2wn",
-														"pQFBLIQkRk7e",
-														"1yhbjW4nlr4l"
-													],
-													"title": "Send invites for christmas party",
-													"prefix": null,
-													"dataFileName": "Send invites for christmas party.clone.html",
-													"type": "text",
-													"format": "html"
-												},
-												{
-													"isClone": true,
 													"noteId": "jjeJHzHpi6ur",
 													"notePath": [
 														"root",
@@ -4722,6 +4662,23 @@
 													"title": "Buy some book for Bob",
 													"prefix": null,
 													"dataFileName": "Buy some book for Bob.clone.html",
+													"type": "text",
+													"format": "html"
+												},
+												{
+													"isClone": true,
+													"noteId": "1yhbjW4nlr4l",
+													"notePath": [
+														"root",
+														"rvaX6hEaQlmk",
+														"KZVWidxicAfn",
+														"JwXAb88VP2wn",
+														"pQFBLIQkRk7e",
+														"1yhbjW4nlr4l"
+													],
+													"title": "Send invites for christmas party",
+													"prefix": null,
+													"dataFileName": "Send invites for christmas party.clone.html",
 													"type": "text",
 													"format": "html"
 												}
@@ -5031,24 +4988,6 @@
 													"children": [
 														{
 															"isClone": true,
-															"noteId": "Se4NJBgDXgDP",
-															"notePath": [
-																"root",
-																"rvaX6hEaQlmk",
-																"KZVWidxicAfn",
-																"JwXAb88VP2wn",
-																"6wvo0XkUPMIC",
-																"Zz5qaexattwb",
-																"Se4NJBgDXgDP"
-															],
-															"title": "Buy some book for Bob",
-															"prefix": null,
-															"dataFileName": "Buy some book for Bob.clone.html",
-															"type": "text",
-															"format": "html"
-														},
-														{
-															"isClone": true,
 															"noteId": "jjeJHzHpi6ur",
 															"notePath": [
 																"root",
@@ -5062,6 +5001,24 @@
 															"title": "Buy milk",
 															"prefix": null,
 															"dataFileName": "Buy milk.clone.html",
+															"type": "text",
+															"format": "html"
+														},
+														{
+															"isClone": true,
+															"noteId": "Se4NJBgDXgDP",
+															"notePath": [
+																"root",
+																"rvaX6hEaQlmk",
+																"KZVWidxicAfn",
+																"JwXAb88VP2wn",
+																"6wvo0XkUPMIC",
+																"Zz5qaexattwb",
+																"Se4NJBgDXgDP"
+															],
+															"title": "Buy some book for Bob",
+															"prefix": null,
+															"dataFileName": "Buy some book for Bob.clone.html",
 															"type": "text",
 															"format": "html"
 														}
@@ -5356,15 +5313,7 @@
 															"isExpanded": false,
 															"type": "file",
 															"mime": "text/javascript",
-															"attributes": [
-																{
-																	"type": "label",
-																	"name": "originalFileName",
-																	"value": "chart.min.js",
-																	"isInheritable": false,
-																	"position": 1
-																}
-															],
+															"attributes": [],
 															"dataFileName": "chart.js",
 															"attachments": []
 														}
