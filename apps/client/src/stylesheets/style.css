@@ -529,10 +529,13 @@ pre:not(.hljs) {
     font-size: 100%;
 }
 
-pre {
+:root pre {
+    --padding-size: 1em;
     --copy-button-margin-size: .35em;
+    --copy-button-width: 37px;
 
     position: relative;
+    padding: var(--padding-size);
 }
 
 pre > button.copy-button {
@@ -541,8 +544,8 @@ pre > button.copy-button {
     right: var(--copy-button-margin-size);
 }
 
-:root pre:has(> button.copy-button) > code {
-    margin-right: calc(var(--icon-button-size) + (var(--copy-button-margin-size) * 2));
+:root pre:has(> button.copy-button) {
+    padding-right: calc(var(--copy-button-width) + (var(--copy-button-margin-size) * 2));
 }
 
 pre > button.copy-button:hover {
