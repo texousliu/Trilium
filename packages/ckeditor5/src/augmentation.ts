@@ -23,6 +23,8 @@ declare global {
     }
 }
 
+type Keystroke = string | string[];
+
 declare module "ckeditor5" {
     interface Editor {
         getSelectedHtml(): string;
@@ -30,13 +32,18 @@ declare module "ckeditor5" {
     }
 
     interface EditorConfig {
-        syntaxHighlighting: {
+        syntaxHighlighting?: {
             loadHighlightJs: () => Promise<any>;
             mapLanguageName(mimeType: string): string;
             defaultMimeType: string;
             enabled: boolean;
         },
-
+        moveBlockUp?: {
+            keystroke: Keystroke;
+        },
+        moveBlockDown?: {
+            keystroke: Keystroke;
+        },
         clipboard?: {
             copy(text: string): void;
         }
