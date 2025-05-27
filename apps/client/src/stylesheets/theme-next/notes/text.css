@@ -405,8 +405,28 @@
     margin-top: 2px !important;
 }
 
-.ck-content pre {
+:root .ck-content pre {
+    --icon-button-size: 1.8em;
+    --copy-button-width: var(--icon-button-size);
+
+    /* The margin of the copy button is computed so the button will appear vertically centered
+     * for single-line code blocks */
+
+    --copy-button-margin-size: calc((1em    * 1.5   + var(--padding-size) * 2 - var(--icon-button-size)) / 2);
+    
+    /* Where:                        │        └ Line height
+     *                               └───────── Font size
+     */
+
     overflow: unset;
+}
+
+pre button.copy-button.icon-action {
+    font-size: 1em; /* Workaround: --icon-button-size does not work properly with em units */
+}
+
+:root pre:has(> button.copy-button) {
+    padding-right: calc(var(--icon-button-size) + (var(--copy-button-margin-size) * 2)) !important;
 }
 
 html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
@@ -427,7 +447,7 @@ html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
 .ck-content pre code,
 .ck-mermaid__editing-view {
     display: block;
-    padding: 1em !important;
+    padding: var(--padding-size, 1em) !important;
     overflow: auto;
 }
 
@@ -499,7 +519,6 @@ html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
 
 .note-detail-printable:not(.word-wrap) pre code {
     white-space: pre;
-    margin-right: 1em;
 }
 
 .code-sample-wrapper .hljs {

@@ -110,7 +110,7 @@ button.btn.btn-success kbd {
 :root .icon-action:not(.global-menu-button)::before,
 :root .tn-tool-button::before {
     display: block;
-    line-height: var(--icon-button-size);
+    line-height: 1;
     font-size: calc(var(--icon-button-size) * var(--icon-button-icon-ratio));
 }
 
