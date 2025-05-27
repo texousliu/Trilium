@@ -108,24 +108,6 @@
             "forwardAllArgs": false
           }
         }
-      },
-      "serve-nodir": {
-        "executor": "nx:run-commands",
-        "dependsOn": [
-          "rebuild-deps"
-        ],
-        "defaultConfiguration": "default",
-        "configurations": {
-          "default": {
-            "command": "electron main.cjs",
-            "cwd": "{projectRoot}/dist"
-          },
-          "nixos": {
-            "command": "nix-shell -p electron_35 --run \"electron {projectRoot}/dist/main.cjs\"",
-            "cwd": ".",
-            "forwardAllArgs": false
-          }
-        }
       }
     }
   }  
