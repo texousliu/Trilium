@@ -94,5 +94,8 @@
       "@ckeditor/ckeditor5-code-block": "patches/@ckeditor__ckeditor5-code-block.patch",
       "ckeditor5": "patches/ckeditor5.patch"
     }
+  },
+  "nx": {
+    "name": "triliumnext"
   }
 }
