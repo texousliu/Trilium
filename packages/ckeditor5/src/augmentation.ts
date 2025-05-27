@@ -30,13 +30,18 @@ declare module "ckeditor5" {
     }
 
     interface EditorConfig {
-        syntaxHighlighting: {
+        syntaxHighlighting?: {
             loadHighlightJs: () => Promise<any>;
             mapLanguageName(mimeType: string): string;
             defaultMimeType: string;
             enabled: boolean;
         },
-
+        moveBlockUp?: {
+            keystroke: string;
+        },
+        moveBlockDown?: {
+            keystroke: string;
+        },
         clipboard?: {
             copy(text: string): void;
         }
