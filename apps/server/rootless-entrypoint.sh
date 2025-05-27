@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Rootless entrypoint script for Trilium Notes
 # Works with both Debian and Alpine-based images
 
