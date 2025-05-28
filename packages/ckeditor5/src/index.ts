@@ -43,3 +43,28 @@ export class PopupEditor extends BalloonEditor {
         return POPUP_EDITOR_PLUGINS;
     }
 }
+
+declare module "ckeditor5" {
+    interface Editor {
+        getSelectedHtml(): string;
+        removeSelection(): Promise<void>;
+    }
+
+    interface EditorConfig {
+        syntaxHighlighting?: {
+            loadHighlightJs: () => Promise<any>;
+            mapLanguageName(mimeType: string): string;
+            defaultMimeType: string;
+            enabled: boolean;
+        },
+        moveBlockUp?: {
+            keystroke: string[];
+        },
+        moveBlockDown?: {
+            keystroke: string[];
+        },
+        clipboard?: {
+            copy(text: string): void;
+        }
+    }
+}

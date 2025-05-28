@@ -97,7 +97,7 @@ export function loadHighlightingTheme(themeName: string) {
  */
 export function isSyntaxHighlightEnabled() {
     const theme = options.get("codeBlockTheme");
-    return theme && theme !== "none";
+    return !!theme && theme !== "none";
 }
 
 /**

@@ -111,7 +111,7 @@ export function buildConfig(): EditorConfig {
             },
             mapLanguageName: getHighlightJsNameForMime,
             defaultMimeType: MIME_TYPE_AUTO,
-            enabled: isSyntaxHighlightEnabled
+            enabled: isSyntaxHighlightEnabled()
         },
         clipboard: {
             copy: copyText
