@@ -54,6 +54,10 @@ export default class MathUI extends Plugin {
 		this._addFormView();
 
 		this._balloon.showStack( 'main' );
+		
+		requestAnimationFrame(() => {
+			this.formView?.mathInputView.fieldView.element?.focus();
+		}); 
 	}
 
 	private _createFormView() {
@@ -122,7 +126,6 @@ export default class MathUI extends Plugin {
 		formView.mathInputView.fieldView.once('render', () => {
 			const textarea = formView.mathInputView.fieldView.element;
 			if (!textarea) return;
-			textarea.focus();
 			Object.assign(textarea.style, {
 				resize: 'both',
 				height: '100px',
