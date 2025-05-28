@@ -134,7 +134,7 @@ export function buildToolbarConfig(isClassicToolbar: boolean) {
 
 export function buildMobileToolbar() {
     const classicConfig = buildClassicToolbar(false);
-    const items = [];
+    const items: string[] = [];
 
     for (const item of classicConfig.toolbar.items) {
         if (typeof item === "object" && "items" in item) {

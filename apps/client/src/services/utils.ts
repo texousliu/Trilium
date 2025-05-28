@@ -51,7 +51,7 @@ function getMonthsInDateRange(startDate: string, endDate: string) {
     const end = endDate.split("-");
     const startYear = parseInt(start[0]);
     const endYear = parseInt(end[0]);
-    const dates = [];
+    const dates: string[] = [];
 
     for (let i = startYear; i <= endYear; i++) {
         const endMonth = i != endYear ? 11 : parseInt(end[1]) - 1;
@@ -84,7 +84,7 @@ function formatTimeInterval(ms: number) {
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
     const plural = (count: number, name: string) => `${count} ${name}${count > 1 ? "s" : ""}`;
-    const segments = [];
+    const segments: string[] = [];
 
     if (days > 0) {
         segments.push(plural(days, "day"));
@@ -149,7 +149,7 @@ function isMac() {
 
 export const hasTouchBar = (isMac() && isElectron());
 
-function isCtrlKey(evt: KeyboardEvent | MouseEvent | JQuery.ClickEvent | JQuery.ContextMenuEvent | JQuery.TriggeredEvent | React.PointerEvent<HTMLCanvasElement>) {
+function isCtrlKey(evt: KeyboardEvent | MouseEvent | JQuery.ClickEvent | JQuery.ContextMenuEvent | JQuery.TriggeredEvent | React.PointerEvent<HTMLCanvasElement> | JQueryEventObject) {
     return (!isMac() && evt.ctrlKey) || (isMac() && evt.metaKey);
 }
 

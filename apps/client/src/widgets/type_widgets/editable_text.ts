@@ -589,7 +589,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             backgroundColor: buildSelectedBackgroundColor(editor.commands.get(command)?.value as boolean)
         });
 
-        let headingSelectedIndex = undefined;
+        let headingSelectedIndex: number | undefined = undefined;
         const headingCommand = editor.commands.get("heading");
         const paragraphCommand = editor.commands.get("paragraph");
         if (paragraphCommand?.value) {

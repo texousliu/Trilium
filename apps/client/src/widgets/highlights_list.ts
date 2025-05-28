@@ -243,7 +243,7 @@ export default class HighlightsListWidget extends RightPanelWidget {
         // Used to determine if a string is only a formula
         const onlyMathRegex = /^<span class="math-tex">\\\([^\)]*?\)<\/span>(?:<span class="math-tex">\\\([^\)]*?\)<\/span>)*$/;
 
-        for (let match = null, hltIndex = 0; (match = combinedRegex.exec(content)) !== null; hltIndex++) {
+        for (let match: RegExpMatchArray | null = null, hltIndex = 0; (match = combinedRegex.exec(content)) !== null; hltIndex++) {
             const subHtml = match[0];
             const startIndex = match.index;
             const endIndex = combinedRegex.lastIndex;
@@ -324,8 +324,9 @@ export default class HighlightsListWidget extends RightPanelWidget {
                 });
         } else {
             const textEditor = await this.noteContext.getTextEditor();
-            if (textEditor) {
-                targetElement = $(textEditor.editing.view.domRoots.values().next().value)
+            const el = textEditor?.editing.view.domRoots.values().next().value;
+            if (el) {
+                targetElement = $(el)
                     .find(findSubStr)
                     .filter(function () {
                         // When finding span[style*="color"] but not looking for span[style*="background-color"],

@@ -208,7 +208,7 @@ const TAB_ROW_TPL = `
         color: var(--active-tab-text-color);
         box-shadow: inset -1px 0 0 0 var(--main-border-color);
     }
-    
+
     .tab-scroll-button-right {
         color: var(--active-tab-text-color);
         box-shadow: inset 1px 0 0 0 var(--main-border-color);
@@ -279,7 +279,7 @@ const TAB_ROW_TPL = `
         width: 100%;
         height: 100%;
     }
-        
+
     .tab-row-widget-scrolling-container {
         overflow-x: auto;
         overflow-y: hidden;
@@ -287,9 +287,9 @@ const TAB_ROW_TPL = `
     }
     /* Chrome/Safari */
     .tab-row-widget-scrolling-container::-webkit-scrollbar {
-        display: none;  
+        display: none;
     }
-    
+
     </style>
     <div class="tab-scroll-button-left bx bx-chevron-left"></div>
     <div class="tab-row-widget-scrolling-container">
@@ -480,7 +480,7 @@ export default class TabRowWidget extends BasicWidget {
         const totalTabsWidthUsingTarget = flooredClampedTargetWidth * numberOfTabs + marginWidth;
         const totalExtraWidthDueToFlooring = tabsContainerWidth - totalTabsWidthUsingTarget;
 
-        const widths = [];
+        const widths: number[] = [];
         let extraWidthRemaining = totalExtraWidthDueToFlooring;
 
         for (let i = 0; i < numberOfTabs; i += 1) {

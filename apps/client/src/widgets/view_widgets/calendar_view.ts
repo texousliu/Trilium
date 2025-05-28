@@ -83,6 +83,13 @@ interface CreateChildResponse {
     };
 }
 
+interface Event {
+    startDate: string,
+    endDate?: string | null,
+    startTime?: string | null,
+    endTime?: string | null
+}
+
 const CALENDAR_VIEWS = [
     "timeGridWeek",
     "dayGridMonth",
@@ -325,8 +332,8 @@ export default class CalendarView extends ViewMode {
     }
 
     #parseStartEndTimeFromEvent(e: DateSelectArg | EventImpl) {
-        let startTime = null;
-        let endTime = null;
+        let startTime: string | undefined | null = null;
+        let endTime: string | undefined | null = null;
         if (!e.allDay) {
             startTime = CalendarView.#formatTimeToLocalISO(e.start);
             endTime = CalendarView.#formatTimeToLocalISO(e.end);
@@ -391,7 +398,7 @@ export default class CalendarView extends ViewMode {
     }
 
     async #buildEventsForCalendar(e: EventSourceFuncArg) {
-        const events = [];
+        const events: EventInput[] = [];
 
         // Gather all the required date note IDs.
         const dateRange = utils.getMonthsInDateRange(e.startStr, e.endStr);
@@ -483,12 +490,7 @@ export default class CalendarView extends ViewMode {
         return note.getLabelValue(defaultLabelName);
     }
 
-    static async buildEvent(note: FNote, { startDate, endDate, startTime, endTime }: {
-            startDate: string,
-            endDate?: string | null,
-            startTime?: string | null,
-            endTime?: string | null
-        }) {
+    static async buildEvent(note: FNote, { startDate, endDate, startTime, endTime }: Event) {
         const customTitleAttributeName = note.getLabelValue("calendar:title");
         const titles = await CalendarView.#parseCustomTitle(customTitleAttributeName, note);
         const color = note.getLabelValue("calendar:color") ?? note.getLabelValue("color");
@@ -553,7 +555,7 @@ export default class CalendarView extends ViewMode {
                 if (relations.length > 0) {
                     const noteIds = relations.map((r) => r.targetNoteId);
                     const notesFromRelation = await froca.getNotes(noteIds);
-                    const titles = [];
+                    const titles: string[][] = [];
 
                     for (const targetNote of notesFromRelation) {
                         const targetCustomTitleValue = targetNote.getAttributeValue("label", "calendar:title");
@@ -631,7 +633,7 @@ export default class CalendarView extends ViewMode {
 
                     // Icon button.
                     const iconEl = subItem.querySelector("span.fc-icon");
-                    let icon = null;
+                    let icon: string | null = null;
                     if (iconEl?.classList.contains("fc-icon-chevron-left")) {
                         icon = "NSImageNameTouchBarGoBackTemplate";
                         mode = "buttons";
