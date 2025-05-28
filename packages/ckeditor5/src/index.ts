@@ -5,6 +5,10 @@ import { BalloonEditor, DecoupledEditor, FindAndReplaceEditing, FindCommand } fr
 export { EditorWatchdog } from "ckeditor5";
 export type { EditorConfig, MentionFeed, MentionFeedObjectItem, Node, Position, Element, WatchdogConfig } from "ckeditor5";
 
+// Import with sideffects to ensure that type augmentations are present.
+import "@triliumnext/ckeditor5-math";
+import "@triliumnext/ckeditor5-mermaid";
+
 /**
  * Short-hand for the CKEditor classes supported by Trilium for text editing.
  * Specialized editors such as the {@link AttributeEditor} are not included.
