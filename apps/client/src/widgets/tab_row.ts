@@ -386,15 +386,8 @@ export default class TabRowWidget extends BasicWidget {
     };
 
     setupScrollEvents() {
-        let isScrolling = false;
         this.$tabScrollingContainer[0].addEventListener('wheel', (event) => {
-            if (!isScrolling) {
-                isScrolling = true;
-                requestAnimationFrame(() => {
-                    this.scrollTabContainer(event.deltaY * 1.5, 'instant');
-                    isScrolling = false;
-                });
-            }
+            this.scrollTabContainer(event.deltaY * 1.5);
         });
 
         this.$scrollButtonLeft[0].addEventListener('click', () => this.scrollTabContainer(-200));
@@ -480,7 +473,7 @@ export default class TabRowWidget extends BasicWidget {
         const totalTabsWidthUsingTarget = flooredClampedTargetWidth * numberOfTabs + marginWidth;
         const totalExtraWidthDueToFlooring = tabsContainerWidth - totalTabsWidthUsingTarget;
 
-        const widths = [];
+        const widths: number[] = [];
         let extraWidthRemaining = totalExtraWidthDueToFlooring;
 
         for (let i = 0; i < numberOfTabs; i += 1) {
