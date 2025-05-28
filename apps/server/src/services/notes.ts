@@ -755,7 +755,7 @@ function updateNoteData(noteId: string, content: string, attachments: Attachment
 function undeleteNote(noteId: string, taskContext: TaskContext) {
     const noteRow = sql.getRow<NoteRow>("SELECT * FROM notes WHERE noteId = ?", [noteId]);
 
-    if (!noteRow.isDeleted) {
+    if (!noteRow.isDeleted || !noteRow.deleteId) {
         log.error(`Note '${noteId}' is not deleted and thus cannot be undeleted.`);
         return;
     }

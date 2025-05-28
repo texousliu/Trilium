@@ -51,7 +51,7 @@ export function getLocales(): Locale[] {
 }
 
 function getCurrentLanguage(): LOCALE_IDS {
-    let language: string;
+    let language: string | null = null;
     if (sql_init.isDbInitialized()) {
         language = options.getOptionOrNull("locale");
     }
