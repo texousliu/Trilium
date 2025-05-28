@@ -13,6 +13,21 @@ import indexService from '../index_service.js';
 // Track which notes are currently being processed
 const notesInProcess = new Set<string>();
 
+interface FailedItemRow {
+    noteId: string;
+    operation: string;
+    attempts: number;
+    lastAttempt: string;
+    error: string | null;
+    failed: number;
+}
+
+interface FailedItemWithTitle extends FailedItemRow {
+    title?: string;
+    failureType: 'chunks' | 'full';
+    isPermanent: boolean;
+}
+
 /**
  * Queues a note for embedding update
  */
@@ -77,17 +92,17 @@ export async function queueNoteForEmbedding(noteId: string, operation = 'UPDATE'
  */
 export async function getFailedEmbeddingNotes(limit: number = 100): Promise<any[]> {
     // Get notes with failed embedding attempts or permanently failed flag
-    const failedQueueItems = await sql.getRows(`
+    const failedQueueItems = sql.getRows<FailedItemRow>(`
         SELECT noteId, operation, attempts, lastAttempt, error, failed
         FROM embedding_queue
         WHERE attempts > 0 OR failed = 1
         ORDER BY failed DESC, attempts DESC, lastAttempt DESC
         LIMIT ?`,
         [limit]
-    ) as {noteId: string, operation: string, attempts: number, lastAttempt: string, error: string, failed: number}[];
+    );
 
     // Add titles to the failed notes
-    const failedNotesWithTitles = [];
+    const failedNotesWithTitles: FailedItemWithTitle[] = [];
     for (const item of failedQueueItems) {
         const note = becca.getNote(item.noteId);
         if (note) {

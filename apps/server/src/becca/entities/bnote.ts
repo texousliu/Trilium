@@ -388,7 +388,7 @@ class BNote extends AbstractBeccaEntity<BNote> {
                 }
             }
 
-            const templateAttributes = [];
+            const templateAttributes: BAttribute[] = [];
 
             for (const ownedAttr of parentAttributes) {
                 // parentAttributes so we process also inherited templates
