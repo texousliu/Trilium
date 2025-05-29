@@ -1,4 +1,4 @@
-import type { HLJSApi, Language, Mode } from "highlight.js";
+import type { HLJSApi, Language } from "highlight.js";
 
 /**
   * highlight.js RPM spec file syntax highlighting definition

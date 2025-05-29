@@ -1,4 +1,4 @@
-import type { HLJSApi, Language, Mode } from "highlight.js";
+import type { HLJSApi, Language } from "highlight.js";
 
 /* vim:set ts=2 sw=2 et: */
 
