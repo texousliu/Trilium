@@ -59,6 +59,10 @@ const TPL = /*html*/`
         padding-right: 5em;
     }
 
+    .search-result-widget-content .calendar-view .fc-toolbar.fc-header-toolbar {
+        padding-right: unset !important;
+    }
+
     .calendar-container .fc-toolbar-title {
         font-size: 1.3rem;
         font-weight: normal;
