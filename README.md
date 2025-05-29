@@ -128,7 +128,7 @@ Download the repository, install dependencies using `pnpm` and then run the envi
 git clone https://github.com/TriliumNext/Notes.git
 cd Notes
 pnpm install
-pnpm nx run edit-docs:serve
+pnpm nx run edit-docs:edit-docs
 ```
 
 ### Building the Executable
