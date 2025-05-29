@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  node-abi: 4.8.0
+  node-abi: 4.9.0
   '@types/express-serve-static-core': 5.0.6
   flat@<5.0.1: '>=5.0.1'
   minimatch@<3.0.5: '>=3.0.5'
@@ -9608,8 +9608,8 @@ packages:
   nice-try@1.0.5:
     resolution: {integrity: sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==}
 
-  node-abi@4.8.0:
-    resolution: {integrity: sha512-+P1Mf1XNURT+wN9UK8cjtHSwmmG02iAsX0JaYDDdXgMUe5eybde3AKpGGxOrkDmPkuonYJ6WjIRrNVQe0kjmFg==}
+  node-abi@4.9.0:
+    resolution: {integrity: sha512-0isb3h+AXUblx5Iv0mnYy2WsErH+dk2e9iXJXdKAtS076Q5hP+scQhp6P4tvDeVlOBlG3ROKvkpQHtbORllq2A==}
     engines: {node: '>=22.12.0'}
 
   node-addon-api@7.1.1:
@@ -15318,7 +15318,7 @@ snapshots:
       detect-libc: 2.0.4
       fs-extra: 10.1.0
       got: 11.8.6
-      node-abi: 4.8.0
+      node-abi: 4.9.0
       node-api-version: 0.2.1
       ora: 5.4.1
       read-binary-file-arch: 1.0.6
@@ -15337,7 +15337,7 @@ snapshots:
       detect-libc: 2.0.4
       got: 11.8.6
       graceful-fs: 4.2.11
-      node-abi: 4.8.0
+      node-abi: 4.9.0
       node-api-version: 0.2.1
       node-gyp: 11.2.0
       ora: 5.4.1
@@ -24067,7 +24067,7 @@ snapshots:
 
   nice-try@1.0.5: {}
 
-  node-abi@4.8.0:
+  node-abi@4.9.0:
     dependencies:
       semver: 7.7.2
 
@@ -25309,7 +25309,7 @@ snapshots:
       minimist: 1.2.8
       mkdirp-classic: 0.5.3
       napi-build-utils: 2.0.0
-      node-abi: 4.8.0
+      node-abi: 4.9.0
       pump: 3.0.2
       rc: 1.2.8
       simple-get: 4.0.1
