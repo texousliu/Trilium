@@ -31,6 +31,14 @@ const TPL = /*html*/`
         color: unset;
     }
 
+    .search-result-widget-content .calendar-view {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
     .calendar-container {
         height: 100%;
         --fc-page-bg-color: var(--main-background-color);
