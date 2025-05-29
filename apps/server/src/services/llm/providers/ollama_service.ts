@@ -6,7 +6,7 @@ import type { ToolCall, Tool } from '../tools/tool_interfaces.js';
 import toolRegistry from '../tools/tool_registry.js';
 import type { OllamaOptions } from './provider_options.js';
 import { getOllamaOptions } from './providers.js';
-import { Ollama, type ChatRequest, type ChatResponse as OllamaChatResponse } from 'ollama';
+import { Ollama, type ChatRequest } from 'ollama';
 import options from '../../options.js';
 import {
     StreamProcessor,
@@ -366,8 +366,16 @@ export class OllamaService extends BaseAIService {
                 },
                 async (callback) => {
                     let completeText = '';
-                    let responseToolCalls: any[] = [];
+                    let responseToolCalls: ToolCall[] = [];
                     let chunkCount = 0;
+                    
+                    // Create a response object that will be updated during streaming
+                    const response: ChatResponse = {
+                        text: '',
+                        model: providerOptions.model,
+                        provider: this.getName(),
+                        tool_calls: []
+                    };
 
                     try {
                         // Perform health check
@@ -400,8 +408,12 @@ export class OllamaService extends BaseAIService {
 
                             // Extract any tool calls
                             const toolCalls = StreamProcessor.extractToolCalls(chunk);
+                            // Update response tool calls if any are found
                             if (toolCalls.length > 0) {
+                                // Update tool calls in the overall response
                                 responseToolCalls = toolCalls;
+                                // Also update the response object's tool_calls for final return
+                                response.tool_calls = toolCalls;
                             }
 
                             // Send to callback - directly pass the content without accumulating
@@ -438,35 +450,38 @@ export class OllamaService extends BaseAIService {
 
     /**
      * Transform Ollama tool calls to the standard format expected by the pipeline
+     * @param toolCalls Array of tool calls from Ollama response or undefined
+     * @returns Standardized ToolCall array for consistent handling in the pipeline
      */
-    private transformToolCalls(toolCalls: any[] | undefined): ToolCall[] {
+    private transformToolCalls(toolCalls: unknown[] | undefined): ToolCall[] {
         if (!toolCalls || !Array.isArray(toolCalls) || toolCalls.length === 0) {
             return [];
         }
 
         return toolCalls.map((toolCall, index) => {
+            // Use type guards to safely access properties
+            const toolCallObj = toolCall as { id?: string; function?: { name?: string; arguments?: string } };
+            
             // Generate a unique ID if none is provided
-            const id = toolCall.id || `tool-call-${Date.now()}-${index}`;
+            const id = typeof toolCallObj.id === 'string' ? toolCallObj.id : `tool-call-${Date.now()}-${index}`;
+            
+            // Safely extract function name and arguments with defaults
+            const functionName = toolCallObj.function && typeof toolCallObj.function.name === 'string' 
+                ? toolCallObj.function.name 
+                : 'unknown_function';
+                
+            const functionArgs = toolCallObj.function && typeof toolCallObj.function.arguments === 'string'
+                ? toolCallObj.function.arguments
+                : '{}';
 
-            // Handle arguments based on their type
-            let processedArguments: Record<string, any> | string = toolCall.function?.arguments || {};
-
-            if (typeof processedArguments === 'string') {
-                try {
-                    processedArguments = JSON.parse(processedArguments);
-                } catch (error) {
-                    // If we can't parse as JSON, create a simple object
-                    log.info(`Could not parse tool arguments as JSON in transformToolCalls: ${error}`);
-                    processedArguments = { raw: processedArguments };
-                }
-            }
+            // Return a properly typed ToolCall object
 
             return {
                 id,
                 type: 'function',
                 function: {
-                    name: toolCall.function?.name || '',
-                    arguments: processedArguments
+                    name: functionName,
+                    arguments: functionArgs
                 }
             };
         });
