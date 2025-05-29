@@ -366,7 +366,6 @@ export class OllamaService extends BaseAIService {
                 },
                 async (callback) => {
                     let completeText = '';
-                    let responseToolCalls: ToolCall[] = [];
                     let chunkCount = 0;
                     
                     // Create a response object that will be updated during streaming
@@ -410,9 +409,7 @@ export class OllamaService extends BaseAIService {
                             const toolCalls = StreamProcessor.extractToolCalls(chunk);
                             // Update response tool calls if any are found
                             if (toolCalls.length > 0) {
-                                // Update tool calls in the overall response
-                                responseToolCalls = toolCalls;
-                                // Also update the response object's tool_calls for final return
+                                // Update the response object's tool_calls for final return
                                 response.tool_calls = toolCalls;
                             }
 

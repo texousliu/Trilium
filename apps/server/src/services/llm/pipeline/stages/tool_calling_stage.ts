@@ -69,9 +69,19 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
         }
 
         // Check if the registry has any tools
-        // Convert from ToolHandler[] to ToolInterface[] with proper type conversion
         const registryTools = toolRegistry.getAllTools();
-        const availableTools: ToolInterface[] = registryTools.map(tool => tool as unknown as ToolInterface);
+        
+        // Convert ToolHandler[] to ToolInterface[] with proper type safety
+        const availableTools: ToolInterface[] = registryTools.map(tool => {
+            // Create a proper ToolInterface from the ToolHandler
+            const toolInterface: ToolInterface = {
+                // Pass through the execute method
+                execute: (args: Record<string, unknown>) => tool.execute(args),
+                // Include other properties from the tool definition
+                ...tool.definition
+            };
+            return toolInterface;
+        });
         log.info(`Available tools in registry: ${availableTools.length}`);
 
         // Log available tools for debugging
