@@ -207,8 +207,8 @@ export default class MindMapWidget extends TypeWidget {
             await this.#initLibrary(content?.direction);
         }
 
-        this.mind.refresh(content ?? this.MindElixir.new(NEW_TOPIC_NAME));
-        this.mind.toCenter();
+        this.mind!.refresh(content ?? this.MindElixir.new(NEW_TOPIC_NAME));
+        this.mind!.toCenter();
     }
 
     async #initLibrary(direction?: number) {
@@ -259,7 +259,7 @@ export default class MindMapWidget extends TypeWidget {
     }
 
     async renderSvg() {
-        return await this.mind.exportSvg().text();
+        return await this.mind!.exportSvg().text();
     }
 
     async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {

@@ -5,6 +5,10 @@ import { BalloonEditor, DecoupledEditor, FindAndReplaceEditing, FindCommand } fr
 export { EditorWatchdog } from "ckeditor5";
 export type { EditorConfig, MentionFeed, MentionFeedObjectItem, Node, Position, Element, WatchdogConfig } from "ckeditor5";
 
+// Import with sideffects to ensure that type augmentations are present.
+import "@triliumnext/ckeditor5-math";
+import "@triliumnext/ckeditor5-mermaid";
+
 /**
  * Short-hand for the CKEditor classes supported by Trilium for text editing.
  * Specialized editors such as the {@link AttributeEditor} are not included.
@@ -41,5 +45,30 @@ export class ClassicEditor extends DecoupledEditor {
 export class PopupEditor extends BalloonEditor {
     static override get builtinPlugins() {
         return POPUP_EDITOR_PLUGINS;
+    }
+}
+
+declare module "ckeditor5" {
+    interface Editor {
+        getSelectedHtml(): string;
+        removeSelection(): Promise<void>;
+    }
+
+    interface EditorConfig {
+        syntaxHighlighting?: {
+            loadHighlightJs: () => Promise<any>;
+            mapLanguageName(mimeType: string): string;
+            defaultMimeType: string;
+            enabled: boolean;
+        },
+        moveBlockUp?: {
+            keystroke: string[];
+        },
+        moveBlockDown?: {
+            keystroke: string[];
+        },
+        clipboard?: {
+            copy(text: string): void;
+        }
     }
 }

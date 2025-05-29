@@ -1,5 +1,5 @@
 import { indentLess, indentMore } from "@codemirror/commands";
-import { EditorSelection, EditorState, type ChangeSpec } from "@codemirror/state";
+import { EditorSelection, EditorState, SelectionRange, type ChangeSpec } from "@codemirror/state";
 import type { KeyBinding } from "@codemirror/view";
 
 /**
@@ -19,8 +19,8 @@ const smartIndentWithTab: KeyBinding[] = [
             }
 
             const { selection } = state;
-            const changes = [];
-            const newSelections = [];
+            const changes: ChangeSpec[] = [];
+            const newSelections: SelectionRange[] = [];
 
             // Step 1: Handle non-empty selections → replace with tab
             if (selection.ranges.some(range => !range.empty)) {

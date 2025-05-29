@@ -10,6 +10,14 @@ import becca from '../../../becca/becca.js';
 import attributes from '../../attributes.js';
 import aiServiceManager from '../ai_service_manager.js';
 import { SEARCH_CONSTANTS } from '../constants/search_constants.js';
+import type { Backlink, RelatedNote } from '../embeddings/embeddings_interface.js';
+
+interface Suggestion {
+    targetNoteId: string;
+    targetTitle: string;
+    similarity: number;
+    suggestedRelation: string;
+}
 
 /**
  * Definition of the relationship tool
@@ -180,7 +188,7 @@ export class RelationshipTool implements ToolHandler {
                 .filter((attr: any) => attr.type === 'relation')
                 .slice(0, limit);
 
-            const outgoingRelations = [];
+            const outgoingRelations: RelatedNote[] = [];
 
             for (const attr of outgoingAttributes) {
                 const targetNote = becca.notes[attr.value];
@@ -196,7 +204,7 @@ export class RelationshipTool implements ToolHandler {
 
             // Get incoming relationships (where this note is the target)
             // Since becca.findNotesWithRelation doesn't exist, use attributes to find notes with relation
-            const incomingRelations = [];
+            const incomingRelations: Backlink[] = [];
 
             // Find all attributes of type relation that point to this note
             const relationAttributes = sourceNote.getTargetRelations();
@@ -321,7 +329,7 @@ export class RelationshipTool implements ToolHandler {
             const sourceContent = await sourceNote.getContent();
 
             // Prepare suggestions
-            const suggestions = [];
+            const suggestions: Suggestion[] = [];
 
             for (const relatedNote of relatedResult.relatedNotes) {
                 try {

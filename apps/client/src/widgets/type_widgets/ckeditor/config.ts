@@ -111,7 +111,7 @@ export function buildConfig(): EditorConfig {
             },
             mapLanguageName: getHighlightJsNameForMime,
             defaultMimeType: MIME_TYPE_AUTO,
-            enabled: isSyntaxHighlightEnabled
+            enabled: isSyntaxHighlightEnabled()
         },
         clipboard: {
             copy: copyText
@@ -134,7 +134,7 @@ export function buildToolbarConfig(isClassicToolbar: boolean) {
 
 export function buildMobileToolbar() {
     const classicConfig = buildClassicToolbar(false);
-    const items = [];
+    const items: string[] = [];
 
     for (const item of classicConfig.toolbar.items) {
         if (typeof item === "object" && "items" in item) {

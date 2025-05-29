@@ -350,7 +350,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
             },
             scrollParent: this.$tree,
             minExpandLevel: 2, // root can't be collapsed
-            click: (event: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent | React.PointerEvent<HTMLCanvasElement>, data): boolean => {
+            click: (event, data): boolean => {
                 this.activityDetected();
 
                 const targetType = data.targetType;
@@ -745,7 +745,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
     prepareChildren(parentNote: FNote) {
         utils.assertArguments(parentNote);
 
-        const noteList = [];
+        const noteList: Node[] = [];
 
         const hideArchivedNotes = this.hideArchivedNotes;
 
@@ -839,7 +839,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
     getExtraClasses(note: FNote) {
         utils.assertArguments(note);
 
-        const extraClasses = [];
+        const extraClasses: string[] = [];
 
         if (note.isProtected) {
             extraClasses.push("protected");
@@ -1265,8 +1265,8 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         const allBranchesDeleted = branchRows.every((branchRow) => !!branchRow.isDeleted);
 
         // activeNode is supposed to be moved when we find out activeNode is deleted but not all branches are deleted. save it for fixing activeNodePath after all nodes loaded.
-        let movedActiveNode = null;
-        let parentsOfAddedNodes = [];
+        let movedActiveNode: Fancytree.FancytreeNode | null = null;
+        let parentsOfAddedNodes: Fancytree.FancytreeNode[] = [];
 
         for (const branchRow of branchRows) {
             if (branchRow.noteId) {

@@ -215,9 +215,9 @@ export function parseNavigationStateFromUrl(url: string | undefined) {
     const viewScope: ViewScope = {
         viewMode: "default"
     };
-    let ntxId = null;
-    let hoistedNoteId = null;
-    let searchString = null;
+    let ntxId: string | null = null;
+    let hoistedNoteId: string | null = null;
+    let searchString: string | null = null;
 
     if (paramString) {
         for (const pair of paramString.split("&")) {

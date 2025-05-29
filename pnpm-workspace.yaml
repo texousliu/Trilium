@@ -8,7 +8,6 @@ ignoredBuiltDependencies:
 onlyBuiltDependencies:
 - '@parcel/watcher'
 - '@scarf/scarf'
-- '@swc/core'
 - bufferutil
 - core-js-pure
 - esbuild

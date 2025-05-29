@@ -64,7 +64,7 @@ const TPL = /*html*/`<div class="toc-widget">
         }
 
         .toc > ol {
-            --toc-depth-level: 1; 
+            --toc-depth-level: 1;
         }
         .toc > ol > ol {
             --toc-depth-level: 2;
@@ -84,7 +84,7 @@ const TPL = /*html*/`<div class="toc-widget">
         }
 
         .toc li {
-            padding-left: calc((var(--toc-depth-level) - 1) * 20px + 4px); 
+            padding-left: calc((var(--toc-depth-level) - 1) * 20px + 4px);
         }
 
         .toc li .collapse-button {
@@ -304,7 +304,7 @@ export default class TocWidget extends RightPanelWidget {
         const validHeadingKeys = new Set<string>(); // Used to clean up obsolete entries in tocCollapsedHeadings
 
         let headingCount = 0;
-        for (let m = null, headingIndex = 0; (m = headingTagsRegex.exec(html)) !== null; headingIndex++) {
+        for (let m: RegExpMatchArray | null = null, headingIndex = 0; (m = headingTagsRegex.exec(html)) !== null; headingIndex++) {
             //
             // Nest/unnest whatever necessary number of ordered lists
             //
@@ -394,12 +394,14 @@ export default class TocWidget extends RightPanelWidget {
         const isDocNote = this.note.type === "doc";
         const isReadOnly = await this.noteContext.isReadOnly();
 
-        let $container;
+        let $container: JQuery<HTMLElement> | null = null;
         if (isReadOnly || isDocNote) {
             $container = await this.noteContext.getContentElement();
         } else {
             const textEditor = await this.noteContext.getTextEditor();
-            $container = $(textEditor.sourceElement);
+            if (textEditor?.sourceElement) {
+                $container = $(textEditor.sourceElement);
+            }
         }
 
         const headingElement = $container?.find(":header:not(section.include-note :header)")?.[headingIndex];

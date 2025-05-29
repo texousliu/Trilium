@@ -9,6 +9,12 @@ import { changeLanguage, getLocales } from "../../services/i18n.js";
 import type { OptionNames } from "@triliumnext/commons";
 import config from "../../services/config.js";
 
+interface UserTheme {
+    val: string; // value of the theme, used in the URL
+    title: string; // title of the theme, displayed in the UI
+    noteId: string; // ID of the note containing the theme
+}
+
 // options allowed to be updated directly in the Options dialog
 const ALLOWED_OPTIONS = new Set<OptionNames>([
     "eraseEntitiesAfterTimeInSeconds",
@@ -177,7 +183,7 @@ function update(name: string, value: string) {
 
 function getUserThemes() {
     const notes = searchService.searchNotes("#appTheme", { ignoreHoistedNote: true });
-    const ret = [];
+    const ret: UserTheme[] = [];
 
     for (const note of notes) {
         let value = note.getOwnedLabelValue("appTheme");

@@ -8,6 +8,14 @@ import entityChangesService from "../../../services/entity_changes.js";
 import type { EntityChange } from "../../../services/entity_changes_interface.js";
 import { EMBEDDING_CONSTANTS } from "../constants/embedding_constants.js";
 import { SEARCH_CONSTANTS } from '../constants/search_constants.js';
+
+interface Similarity {
+    noteId: string;
+    similarity: number;
+    contentType: string;
+    bonuses?: Record<string, number>; // Optional for debugging
+}
+
 /**
  * Creates or updates an embedding for a note
  */
@@ -434,7 +442,7 @@ async function processEmbeddings(queryEmbedding: Float32Array, embeddings: any[]
         return { bonuses, totalBonus };
     }
 
-    const similarities = [];
+    const similarities: Similarity[] = [];
 
     try {
         // Try to extract the original query text if it was added to the metadata

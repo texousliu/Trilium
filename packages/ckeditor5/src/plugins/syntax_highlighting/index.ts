@@ -1,6 +1,11 @@
-import type { Element, Writer } from "ckeditor5";
+import type { Element, Position, Writer } from "ckeditor5";
 import type { Node, Editor } from "ckeditor5";
 import { Plugin } from "ckeditor5";
+
+interface SpanStackEntry {
+    className: string;
+    posStart: Position;
+}
 
 /*
  * This code is an adaptation of https://github.com/antoniotejada/Trilium-SyntaxHighlightWidget with additional improvements, such as:
@@ -234,10 +239,10 @@ export default class SyntaxHighlighting extends Plugin {
 
         let iHtml = 0;
         let html = highlightRes.value;
-        let spanStack = [];
+        let spanStack: SpanStackEntry[] = [];
         let iChild = -1;
         let childText = "";
-        let child = null;
+        let child: Node | null = null;
         let iChildText = 0;
 
         while (iHtml < html.length) {

@@ -118,7 +118,7 @@ function getParams(params?: ScriptParams) {
 }
 
 function getScriptBundleForFrontend(note: BNote, script?: string, params?: ScriptParams) {
-    let overrideContent = null;
+    let overrideContent: string | null = null;
 
     if (script) {
         overrideContent = `return (${script}\r\n)(${getParams(params)})`;
@@ -170,7 +170,7 @@ function getScriptBundle(note: BNote, root: boolean = true, scriptEnv: string | 
 
     includedNoteIds.push(note.noteId);
 
-    const modules = [];
+    const modules: BNote[] = [];
 
     for (const child of note.getChildNotes()) {
         const childBundle = getScriptBundle(child, false, scriptEnv, includedNoteIds);
