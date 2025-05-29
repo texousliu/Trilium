@@ -67,8 +67,9 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 // Tools are already initialized in the AIServiceManager constructor
                 // No need to initialize them again
                 log.info(`After recovery initialization: ${toolRegistry.getAllTools().length} tools available`);
-            } catch (error: any) {
-                log.error(`Failed to initialize tools in recovery step: ${error.message}`);
+            } catch (error: unknown) {
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                log.error(`Failed to initialize tools in recovery step: ${errorMessage}`);
             }
         }
 
@@ -263,9 +264,10 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                             callbackResult.catch((e: Error) => log.error(`Error sending tool execution complete event: ${e.message}`));
                         }
                     }
-                } catch (execError: any) {
+                } catch (execError: unknown) {
                     const executionTime = Date.now() - executionStart;
-                    log.error(`================ TOOL EXECUTION FAILED in ${executionTime}ms: ${execError.message} ================`);
+                    const errorMessage = execError instanceof Error ? execError.message : String(execError);
+                    log.error(`================ TOOL EXECUTION FAILED in ${executionTime}ms: ${errorMessage} ================`);
 
                     // Record this failed tool execution if there's a sessionId available
                     if (input.options?.sessionId) {
@@ -276,7 +278,7 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                                 toolCall.id || `tool-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
                                 args,
                                 "", // No result for failed execution
-                                execError.message || String(execError)
+                                errorMessage
                             );
                         } catch (storageError) {
                             log.error(`Failed to record tool execution error in chat storage: ${storageError}`);
@@ -291,7 +293,7 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                                 name: toolCall.function.name,
                                 arguments: {} as Record<string, unknown>
                             },
-                            error: execError.message || String(execError),
+                            error: errorMessage,
                             type: 'error' as const
                         };
 
@@ -322,19 +324,24 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                     name: toolCall.function.name,
                     result
                 };
-            } catch (error: any) {
-                log.error(`Error executing tool ${toolCall.function.name}: ${error.message || String(error)}`);
+            } catch (error: unknown) {
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                log.error(`Error executing tool ${toolCall.function.name}: ${errorMessage}`);
 
                 // Emit tool error event if not already handled in the try/catch above
                 // and if streaming is enabled
-                if (streamCallback && error.name !== "ExecutionError") {
+                // Need to check if error is an object with a name property of type string
+                const isExecutionError = typeof error === 'object' && error !== null && 
+                    'name' in error && (error as { name: unknown }).name === "ExecutionError";
+                    
+                if (streamCallback && !isExecutionError) {
                     const toolExecutionData = {
                         action: 'error',
                         tool: {
                             name: toolCall.function.name,
                             arguments: {} as Record<string, unknown>
                         },
-                        error: error.message || String(error),
+                        error: errorMessage,
                         type: 'error' as const
                     };
 
@@ -353,7 +360,7 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 return {
                     toolCallId: toolCall.id,
                     name: toolCall.function.name,
-                    result: `Error: ${error.message || String(error)}`
+                    result: `Error: ${errorMessage}`
                 };
             }
         }));
@@ -498,8 +505,9 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
             // Unknown dependency type
             log.error(`Unknown dependency type: ${dependencyType}`);
             return null;
-        } catch (error: any) {
-            log.error(`Error getting or creating dependency '${dependencyType}': ${error.message}`);
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            log.error(`Error getting or creating dependency '${dependencyType}': ${errorMessage}`);
             return null;
         }
     }
@@ -549,8 +557,9 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                                 return false;
                             }
                             log.info('Successfully initialized vectorSearchTool');
-                        } catch (initError: any) {
-                            log.error(`Failed to initialize agent tools: ${initError.message}`);
+                        } catch (initError: unknown) {
+                            const errorMessage = initError instanceof Error ? initError.message : String(initError);
+                            log.error(`Failed to initialize agent tools: ${errorMessage}`);
                             return false;
                         }
                     }
@@ -559,8 +568,9 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                         log.error(`Tool '${toolName}' dependency vectorSearchTool is missing searchNotes method`);
                         return false;
                     }
-                } catch (error: any) {
-                    log.error(`Error validating dependencies for tool '${toolName}': ${error.message}`);
+                } catch (error: unknown) {
+                    const errorMessage = error instanceof Error ? error.message : String(error);
+                    log.error(`Error validating dependencies for tool '${toolName}': ${errorMessage}`);
                     return false;
                 }
             }
@@ -568,8 +578,9 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
             // Add additional tool-specific validations here
 
             return true;
-        } catch (error: any) {
-            log.error(`Error validating tool before execution: ${error.message}`);
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            log.error(`Error validating tool before execution: ${errorMessage}`);
             return false;
         }
     }
@@ -666,8 +677,9 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
             } else {
                 log.error(`Vector search tool not available after initialization`);
             }
-        } catch (error: any) {
-            log.error(`Failed to preload vector search tool: ${error.message}`);
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            log.error(`Failed to preload vector search tool: ${errorMessage}`);
         }
     }
 }
