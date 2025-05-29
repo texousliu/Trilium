@@ -144,14 +144,19 @@ export class OllamaService extends BaseAIService {
                 messagesToSend = [...messages];
                 log.info(`Bypassing formatter for Ollama request with ${messages.length} messages`);
             } else {
+                // Determine if tools will be used in this request
+                const willUseTools = providerOptions.enableTools !== false;
+                
                 // Use the formatter to prepare messages
                 messagesToSend = this.formatter.formatMessages(
                     messages,
                     systemPrompt,
                     undefined, // context
-                    providerOptions.preserveSystemPrompt
+                    providerOptions.preserveSystemPrompt,
+                    willUseTools // Pass flag indicating if tools will be used
                 );
-                log.info(`Sending to Ollama with formatted messages: ${messagesToSend.length}`);
+                
+                log.info(`Sending to Ollama with formatted messages: ${messagesToSend.length}${willUseTools ? ' (with tool instructions)' : ''}`);
             }
 
             // Get tools if enabled
