@@ -129,6 +129,11 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
     }
 
     updateBackgroundColor(color?: string) {
+        if (this.note?.mime === "text/x-sqlite;schema=trilium") {
+            // Don't apply a background color for SQL console notes.
+            return;
+        }
+
         const $editorEl = $(this.codeEditor.dom);
         this.$widget.closest(".scrolling-container").css("background-color", color ?? $editorEl.css("background-color"));
     }
