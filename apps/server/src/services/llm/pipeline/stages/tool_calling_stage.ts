@@ -364,6 +364,7 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
 
         // Add each tool result to the messages array
         const toolResultMessages: Message[] = [];
+        let hasEmptyResults = false;
 
         for (const result of toolResults) {
             const { toolCallId, name, result: toolResult } = result;
@@ -373,10 +374,23 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 ? toolResult
                 : JSON.stringify(toolResult, null, 2);
 
+            // Check if result is empty or unhelpful
+            const isEmptyResult = this.isEmptyToolResult(toolResult, name);
+            if (isEmptyResult && !resultContent.startsWith('Error:')) {
+                hasEmptyResults = true;
+                log.info(`Empty result detected for tool ${name}. Will add suggestion to try different parameters.`);
+            }
+            
+            // Add enhancement for empty results
+            let enhancedContent = resultContent;
+            if (isEmptyResult && !resultContent.startsWith('Error:')) {
+                enhancedContent = `${resultContent}\n\nNOTE: This tool returned no useful results with the provided parameters. Consider trying again with different parameters such as broader search terms, different filters, or alternative approaches.`;
+            }
+
             // Add a new message for the tool result
             const toolMessage: Message = {
                 role: 'tool',
-                content: resultContent,
+                content: enhancedContent,
                 name: name,
                 tool_call_id: toolCallId
             };
@@ -385,7 +399,7 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
             log.info(`-------- Tool Result for ${name} (ID: ${toolCallId}) --------`);
             log.info(`Result type: ${typeof toolResult}`);
             log.info(`Result preview: ${resultContent.substring(0, 150)}${resultContent.length > 150 ? '...' : ''}`);
-            log.info(`Tool result status: ${resultContent.startsWith('Error:') ? 'ERROR' : 'SUCCESS'}`);
+            log.info(`Tool result status: ${resultContent.startsWith('Error:') ? 'ERROR' : isEmptyResult ? 'EMPTY' : 'SUCCESS'}`);
 
             updatedMessages.push(toolMessage);
             toolResultMessages.push(toolMessage);
@@ -398,7 +412,17 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
         const needsFollowUp = hasToolResults;
 
         log.info(`Follow-up needed: ${needsFollowUp}`);
-        log.info(`Reasoning: ${hasToolResults ? 'Has tool results to process' : 'No tool results'} ${hasErrors ? ', contains errors' : ''}`);
+        log.info(`Reasoning: ${hasToolResults ? 'Has tool results to process' : 'No tool results'} ${hasErrors ? ', contains errors' : ''} ${hasEmptyResults ? ', contains empty results' : ''}`);
+        
+        // Add a system message with hints for empty results
+        if (hasEmptyResults && needsFollowUp) {
+            log.info('Adding system hint for empty tool results to encourage parameter adjustment');
+            updatedMessages.push({
+                role: 'system',
+                content: `The previous tool execution(s) completed but returned no useful results. Consider trying different parameters for better results. For search tools, try broader search terms, fewer filters, or synonyms. For navigation tools, try exploring parent or sibling notes.`
+            });
+        }
+        
         log.info(`Total messages to return to pipeline: ${updatedMessages.length}`);
         log.info(`Last 3 messages in conversation:`);
         const lastMessages = updatedMessages.slice(-3);
@@ -421,7 +445,7 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
      * @param toolName The name of the tool requiring this dependency
      * @returns The requested dependency or null if it couldn't be created
      */
-    private async getOrCreateDependency(dependencyType: string, toolName: string): Promise<any> {
+    private async getOrCreateDependency(dependencyType: string, toolName: string): Promise<unknown | null> {
         const aiServiceManager = (await import('../../ai_service_manager.js')).default;
 
         try {
@@ -485,7 +509,7 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
      * @param tool The tool to validate
      * @param toolName The name of the tool
      */
-    private async validateToolBeforeExecution(tool: any, toolName: string): Promise<boolean> {
+    private async validateToolBeforeExecution(tool: { execute: (args: Record<string, unknown>) => Promise<unknown> }, toolName: string): Promise<boolean> {
         try {
             if (!tool) {
                 log.error(`Tool '${toolName}' not found or failed validation`);
@@ -548,6 +572,77 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
             log.error(`Error validating tool before execution: ${error.message}`);
             return false;
         }
+    }
+
+    /**
+     * Determines if a tool result is effectively empty or unhelpful
+     * @param result The result from the tool execution
+     * @param toolName The name of the tool that was executed
+     * @returns true if the result is considered empty or unhelpful
+     */
+    private isEmptyToolResult(result: unknown, toolName: string): boolean {
+        // Handle string results
+        if (typeof result === 'string') {
+            const trimmed = result.trim();
+            if (trimmed === '' || trimmed === '[]' || trimmed === '{}') {
+                return true;
+            }
+            
+            // Tool-specific empty results (for string responses)
+            if (toolName === 'search_notes' && 
+                (trimmed === 'No matching notes found.' || 
+                 trimmed.includes('No results found') || 
+                 trimmed.includes('No matches found') ||
+                 trimmed.includes('No notes found'))) {
+                return true;
+            }
+            
+            if (toolName === 'vector_search' && 
+                (trimmed.includes('No results found') ||
+                 trimmed.includes('No matching documents'))) {
+                return true;
+            }
+            
+            if (toolName === 'keyword_search' && 
+                (trimmed.includes('No matches found') ||
+                 trimmed.includes('No results for'))) {
+                return true;
+            }
+        } 
+        // Handle object/array results
+        else if (result !== null && typeof result === 'object') {
+            // Check if it's an empty array
+            if (Array.isArray(result) && result.length === 0) {
+                return true;
+            }
+            
+            // Check if it's an object with no meaningful properties
+            // or with properties indicating empty results
+            if (!Array.isArray(result)) {
+                if (Object.keys(result).length === 0) {
+                    return true;
+                }
+                
+                // Tool-specific object empty checks
+                const resultObj = result as Record<string, unknown>;
+                
+                if (toolName === 'search_notes' && 
+                    'results' in resultObj && 
+                    Array.isArray(resultObj.results) && 
+                    resultObj.results.length === 0) {
+                    return true;
+                }
+                
+                if (toolName === 'vector_search' && 
+                    'matches' in resultObj && 
+                    Array.isArray(resultObj.matches) && 
+                    resultObj.matches.length === 0) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
 
     /**
