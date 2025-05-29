@@ -10,7 +10,7 @@ import { Ollama } from "ollama";
  * Ollama embedding provider implementation using the official Ollama client
  */
 export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
-    name = "ollama";
+    override name = "ollama";
     private client: Ollama | null = null;
 
     constructor(config: EmbeddingConfig) {
@@ -30,7 +30,7 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
     /**
      * Initialize the provider by detecting model capabilities
      */
-    async initialize(): Promise<void> {
+    override async initialize(): Promise<void> {
         const modelName = this.config.model || "llama3";
         try {
             // Detect model capabilities
@@ -52,7 +52,7 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
     private async fetchModelCapabilities(modelName: string): Promise<EmbeddingModelInfo | null> {
         try {
             const client = this.getClient();
-            
+
             // Get model info using the client's show method
             const modelData = await client.show({ model: modelName });
 
@@ -169,7 +169,7 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
                 model: modelName,
                 prompt: "Test"
             });
-            
+
             if (embedResponse && Array.isArray(embedResponse.embedding)) {
                 return embedResponse.embedding.length;
             } else {
@@ -183,7 +183,7 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
     /**
      * Get the current embedding dimension
      */
-    getDimension(): number {
+    override getDimension(): number {
         return this.config.dimension;
     }
 
@@ -260,7 +260,7 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
     /**
      * More specific implementation of batch size error detection for Ollama
      */
-    protected isBatchSizeError(error: any): boolean {
+    protected override isBatchSizeError(error: any): boolean {
         const errorMessage = error?.message || '';
         const ollamaBatchSizeErrorPatterns = [
             'context length', 'token limit', 'out of memory',
@@ -279,7 +279,7 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
      * Note: Ollama API doesn't support batch embedding, so we process them sequentially
      * but using the adaptive batch processor to handle rate limits and retries
      */
-    async generateBatchEmbeddings(texts: string[]): Promise<Float32Array[]> {
+    override async generateBatchEmbeddings(texts: string[]): Promise<Float32Array[]> {
         if (texts.length === 0) {
             return [];
         }
@@ -318,7 +318,7 @@ export class OllamaEmbeddingProvider extends BaseEmbeddingProvider {
      * Returns the normalization status for Ollama embeddings
      * Ollama embeddings are not guaranteed to be normalized
      */
-    getNormalizationStatus(): NormalizationStatus {
+    override getNormalizationStatus(): NormalizationStatus {
         return NormalizationStatus.NEVER; // Be conservative and always normalize
     }
 }

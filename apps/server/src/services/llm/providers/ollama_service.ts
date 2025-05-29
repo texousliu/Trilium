@@ -63,7 +63,7 @@ export class OllamaService extends BaseAIService {
         this.formatter = new OllamaMessageFormatter();
     }
 
-    isAvailable(): boolean {
+    override isAvailable(): boolean {
         return super.isAvailable() && !!options.getOption('ollamaBaseUrl');
     }
 

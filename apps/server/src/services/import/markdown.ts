@@ -13,7 +13,7 @@ import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
  */
 class CustomMarkdownRenderer extends Renderer {
 
-    heading(data: Tokens.Heading): string {
+    override heading(data: Tokens.Heading): string {
         // Treat h1 as raw text.
         if (data.depth === 1) {
             return `<h1>${data.text}</h1>`;
@@ -22,11 +22,11 @@ class CustomMarkdownRenderer extends Renderer {
         return super.heading(data).trimEnd();
     }
 
-    paragraph(data: Tokens.Paragraph): string {
+    override paragraph(data: Tokens.Paragraph): string {
         return super.paragraph(data).trimEnd();
     }
 
-    code({ text, lang }: Tokens.Code): string {
+    override code({ text, lang }: Tokens.Code): string {
         if (!text) {
             return "";
         }
@@ -41,7 +41,7 @@ class CustomMarkdownRenderer extends Renderer {
         return `<pre><code class="language-${ckEditorLanguage}">${text}</code></pre>`;
     }
 
-    list(token: Tokens.List): string {
+    override list(token: Tokens.List): string {
         let result = super.list(token)
             .replace("\n", "")  // we replace the first one only.
             .trimEnd();
@@ -54,13 +54,13 @@ class CustomMarkdownRenderer extends Renderer {
         return result;
     }
 
-    checkbox({ checked }: Tokens.Checkbox): string {
+    override checkbox({ checked }: Tokens.Checkbox): string {
         return '<input type="checkbox"'
             + (checked ? 'checked="checked" ' : '')
             + 'disabled="disabled">';
     }
 
-    listitem(item: Tokens.ListItem): string {
+    override listitem(item: Tokens.ListItem): string {
         // Handle todo-list in the CKEditor format.
         if (item.task) {
             let itemBody = '';
@@ -91,12 +91,12 @@ class CustomMarkdownRenderer extends Renderer {
         return super.listitem(item).trimEnd();
     }
 
-    image(token: Tokens.Image): string {
+    override image(token: Tokens.Image): string {
         return super.image(token)
             .replace(` alt=""`, "");
     }
 
-    blockquote({ tokens }: Tokens.Blockquote): string {
+    override blockquote({ tokens }: Tokens.Blockquote): string {
         const body = renderer.parser.parse(tokens);
 
         const admonitionMatch = /^<p>\[\!([A-Z]+)\]/.exec(body);

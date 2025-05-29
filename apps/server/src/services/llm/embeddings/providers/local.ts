@@ -10,7 +10,7 @@ import crypto from "crypto";
  * for exact matches when no other providers are available.
  */
 export class LocalEmbeddingProvider extends BaseEmbeddingProvider {
-    name = "local";
+    override name = "local";
 
     constructor(config: EmbeddingConfig) {
         super(config);
@@ -60,7 +60,7 @@ export class LocalEmbeddingProvider extends BaseEmbeddingProvider {
     /**
      * Generate embeddings for multiple texts
      */
-    async generateBatchEmbeddings(texts: string[]): Promise<Float32Array[]> {
+    override async generateBatchEmbeddings(texts: string[]): Promise<Float32Array[]> {
         const results: Float32Array[] = [];
 
         for (const text of texts) {

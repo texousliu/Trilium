@@ -17,7 +17,7 @@ const VOYAGE_MODEL_DIMENSIONS = Object.entries(PROVIDER_EMBEDDING_CAPABILITIES.V
  * Voyage AI embedding provider implementation
  */
 export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
-    name = "voyage";
+    override name = "voyage";
 
     constructor(config: EmbeddingConfig) {
         super(config);
@@ -31,7 +31,7 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
     /**
      * Initialize the provider by detecting model capabilities
      */
-    async initialize(): Promise<void> {
+    override async initialize(): Promise<void> {
         const modelName = this.config.model || "voyage-2";
         try {
             // Detect model capabilities
@@ -201,7 +201,7 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
     /**
      * More specific implementation of batch size error detection for Voyage AI
      */
-    protected isBatchSizeError(error: any): boolean {
+    protected override isBatchSizeError(error: any): boolean {
         const errorMessage = error?.message || '';
         const voyageBatchSizeErrorPatterns = [
             'batch size', 'too many inputs', 'context length exceeded',
@@ -217,7 +217,7 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
     /**
      * Generate embeddings for multiple texts in a single batch
      */
-    async generateBatchEmbeddings(texts: string[]): Promise<Float32Array[]> {
+    override async generateBatchEmbeddings(texts: string[]): Promise<Float32Array[]> {
         if (texts.length === 0) {
             return [];
         }
@@ -279,7 +279,7 @@ export class VoyageEmbeddingProvider extends BaseEmbeddingProvider {
      * Returns the normalization status for Voyage embeddings
      * Voyage embeddings are generally normalized by the API
      */
-    getNormalizationStatus(): NormalizationStatus {
+    override getNormalizationStatus(): NormalizationStatus {
         return NormalizationStatus.GUARANTEED;
     }
 }

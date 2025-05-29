@@ -11,7 +11,7 @@ export class OpenAIService extends BaseAIService {
         super('OpenAI');
     }
 
-    isAvailable(): boolean {
+    override isAvailable(): boolean {
         return super.isAvailable() && !!options.getOption('openaiApiKey');
     }
 

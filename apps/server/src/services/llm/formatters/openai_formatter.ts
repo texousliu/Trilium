@@ -87,7 +87,7 @@ export class OpenAIMessageFormatter extends BaseMessageFormatter {
      * Clean context content for OpenAI
      * OpenAI handles HTML better than Ollama but still benefits from some cleaning
      */
-    cleanContextContent(content: string): string {
+    override cleanContextContent(content: string): string {
         if (!content) return '';
 
         try {

@@ -46,7 +46,7 @@ class BNoteEmbedding extends AbstractBeccaEntity<BNoteEmbedding> {
         this.utcDateModified = row.utcDateModified;
     }
 
-    beforeSaving() {
+    override beforeSaving() {
         super.beforeSaving();
 
         this.dateModified = dateUtils.localNowDateTime();
