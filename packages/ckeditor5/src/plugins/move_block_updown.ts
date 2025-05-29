@@ -2,7 +2,7 @@
  * https://github.com/TriliumNext/Notes/issues/1002
  */
 
-import { Command, DocumentSelection, Element, Plugin } from 'ckeditor5';
+import { Command, DocumentSelection, Element, Node, Plugin } from 'ckeditor5';
 
 export default class MoveBlockUpDownPlugin extends Plugin {
 
@@ -30,8 +30,8 @@ export default class MoveBlockUpDownPlugin extends Plugin {
 
 abstract class MoveBlockUpDownCommand extends Command {
 
-	abstract getSelectedBlocks(selection: DocumentSelection);
-	abstract getSibling(selectedBlock: Element);
+	abstract getSelectedBlocks(selection: DocumentSelection): Element[];
+	abstract getSibling(selectedBlock: Element): Node | null;
     abstract get offset(): "before" | "after";
 
     override refresh() {
