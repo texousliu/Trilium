@@ -1,4 +1,4 @@
-import { Command, Element, Plugin, toWidget, viewToModelPositionOutsideModelElement, Widget } from "ckeditor5";
+import { Command, Element, LinkEditing, Plugin, toWidget, viewToModelPositionOutsideModelElement, Widget } from "ckeditor5";
 
 export default class ReferenceLink extends Plugin {
 	static get requires() {
@@ -38,7 +38,7 @@ class ReferenceLinkCommand extends Command {
 
 class ReferenceLinkEditing extends Plugin {
 	static get requires() {
-		return [ Widget ];
+		return [ Widget, LinkEditing ];
 	}
 
 	init() {
@@ -52,6 +52,12 @@ class ReferenceLinkEditing extends Plugin {
 			viewToModelPositionOutsideModelElement( this.editor.model,
 					viewElement => viewElement.hasClass( 'reference-link' ) )
 		);
+
+        this.editor.plugins.get("LinkEditing")._registerLinkOpener(() => {
+            // Prevent reference links from being opened in a new browser tab.
+            // This works even if the link is not a reference link, since it is handled by Trilium.
+            return true;
+        });
 	}
 
 	_defineSchema() {
