@@ -3,6 +3,8 @@ import { BaseAIService } from '../base_ai_service.js';
 import type { ChatCompletionOptions, ChatResponse, Message, StreamChunk } from '../ai_interface.js';
 import { getOpenAIOptions } from './providers.js';
 import OpenAI from 'openai';
+import { PROVIDER_PROMPTS } from '../constants/llm_prompt_constants.js';
+import log from '../../log.js';
 
 export class OpenAIService extends BaseAIService {
     private openai: OpenAI | null = null;
@@ -36,7 +38,17 @@ export class OpenAIService extends BaseAIService {
         // Initialize the OpenAI client
         const client = this.getClient(providerOptions.apiKey, providerOptions.baseUrl);
 
-        const systemPrompt = this.getSystemPrompt(providerOptions.systemPrompt || options.getOption('aiSystemPrompt'));
+        // Get base system prompt
+        let systemPrompt = this.getSystemPrompt(providerOptions.systemPrompt || options.getOption('aiSystemPrompt'));
+        
+        // Check if tools are enabled for this request
+        const willUseTools = providerOptions.enableTools && providerOptions.tools && providerOptions.tools.length > 0;
+        
+        // Add tool instructions to system prompt if tools are enabled
+        if (willUseTools && PROVIDER_PROMPTS.OPENAI.TOOL_INSTRUCTIONS) {
+            log.info('Adding tool instructions to system prompt for OpenAI');
+            systemPrompt = `${systemPrompt}\n\n${PROVIDER_PROMPTS.OPENAI.TOOL_INSTRUCTIONS}`;
+        }
 
         // Ensure we have a system message
         const systemMessageExists = messages.some(m => m.role === 'system');
@@ -67,7 +79,7 @@ export class OpenAIService extends BaseAIService {
             }
 
             // Log the request parameters
-            console.log('OpenAI API Request:', JSON.stringify({
+            log.info(`OpenAI API Request: ${JSON.stringify({
                 endpoint: 'chat.completions.create',
                 model: params.model,
                 messages: params.messages,
@@ -76,7 +88,7 @@ export class OpenAIService extends BaseAIService {
                 stream: params.stream,
                 tools: params.tools,
                 tool_choice: params.tool_choice
-            }, null, 2));
+            }, null, 2)}`);
 
             // If streaming is requested
             if (providerOptions.stream) {
@@ -84,10 +96,10 @@ export class OpenAIService extends BaseAIService {
 
                 // Get stream from OpenAI SDK
                 const stream = await client.chat.completions.create(params);
-                console.log('OpenAI API Stream Started');
+                log.info('OpenAI API Stream Started');
 
                 // Create a closure to hold accumulated tool calls
-                let accumulatedToolCalls: any[] = [];
+                const accumulatedToolCalls: OpenAI.Chat.ChatCompletionMessageToolCall[] = [];
 
                 // Return a response with the stream handler
                 const response: ChatResponse = {
@@ -104,7 +116,8 @@ export class OpenAIService extends BaseAIService {
                             if (Symbol.asyncIterator in stream) {
                                 for await (const chunk of stream as AsyncIterable<OpenAI.Chat.ChatCompletionChunk>) {
                                     // Log each chunk received from OpenAI
-                                    console.log('OpenAI API Stream Chunk:', JSON.stringify(chunk, null, 2));
+                                    // Use info level as debug is not available
+                                    log.info(`OpenAI API Stream Chunk: ${JSON.stringify(chunk, null, 2)}`);
 
                                     const content = chunk.choices[0]?.delta?.content || '';
                                     const isDone = !!chunk.choices[0]?.finish_reason;

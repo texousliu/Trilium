@@ -184,6 +184,22 @@ When responding:
 
         INSTRUCTIONS_WRAPPER: (instructions: string) =>
             `<instructions>\n${instructions}\n</instructions>`,
+            
+        // Tool instructions for Anthropic Claude
+        TOOL_INSTRUCTIONS: `<instructions>
+When using tools to search for information, follow these requirements:
+
+1. ALWAYS TRY MULTIPLE SEARCH APPROACHES before concluding information isn't available
+2. YOU MUST PERFORM AT LEAST 3 DIFFERENT SEARCHES with varied parameters before giving up
+3. If a search returns no results:
+   - Try broader terms (e.g., "Kubernetes" instead of "Kubernetes deployment")
+   - Use synonyms (e.g., "meeting" instead of "conference")
+   - Remove specific qualifiers (e.g., "report" instead of "Q3 financial report")
+   - Try different search tools (vector_search for conceptual matches, keyword_search for exact matches)
+4. NEVER tell the user "there are no notes about X" until you've tried multiple search variations
+5. EXPLAIN your search strategy when adjusting parameters (e.g., "I'll try a broader search for...")
+6. When searches fail, AUTOMATICALLY try different approaches rather than asking the user what to do
+</instructions>`,
 
         ACKNOWLEDGMENT: "I understand. I'll follow those instructions.",
         CONTEXT_ACKNOWLEDGMENT: "I'll help you with your notes based on the context provided.",
@@ -203,7 +219,21 @@ ${context}
 
 Focus on relevant information from these notes when answering.
 Be concise and informative in your responses.
-</system_prompt>`
+</system_prompt>`,
+        
+        // Tool instructions for OpenAI models
+        TOOL_INSTRUCTIONS: `When using tools to search for information, you must follow these requirements:
+
+1. ALWAYS TRY MULTIPLE SEARCH APPROACHES before concluding information isn't available
+2. YOU MUST PERFORM AT LEAST 3 DIFFERENT SEARCHES with varied parameters before giving up
+3. If a search returns no results:
+   - Try broader terms (e.g., "Kubernetes" instead of "Kubernetes deployment")
+   - Use synonyms (e.g., "meeting" instead of "conference")
+   - Remove specific qualifiers (e.g., "report" instead of "Q3 financial report")
+   - Try different search tools (vector_search for conceptual matches, keyword_search for exact matches)
+4. NEVER tell the user "there are no notes about X" until you've tried multiple search variations
+5. EXPLAIN your search strategy when adjusting parameters (e.g., "I'll try a broader search for...")
+6. When searches fail, AUTOMATICALLY try different approaches rather than asking the user what to do`
     },
 
     OLLAMA: {
