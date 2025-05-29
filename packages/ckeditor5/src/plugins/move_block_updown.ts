@@ -34,7 +34,7 @@ abstract class MoveBlockUpDownCommand extends Command {
 	abstract getSibling(selectedBlock: Element);
     abstract get offset(): "before" | "after";
 
-    refresh() {
+    override refresh() {
 		const selection = this.editor.model.document.selection;
 		const selectedBlocks = this.getSelectedBlocks(selection);
 
@@ -44,7 +44,7 @@ abstract class MoveBlockUpDownCommand extends Command {
 		}
 	}
 
-	execute() {
+	override execute() {
 		const model = this.editor.model;
 		const selection = model.document.selection;
 		const selectedBlocks = this.getSelectedBlocks(selection);

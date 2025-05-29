@@ -8,7 +8,7 @@ export default class ReferenceLink extends Plugin {
 
 class ReferenceLinkCommand extends Command {
 
-	execute({ href }: { href: string }) {
+	override execute({ href }: { href: string }) {
 		if (!href?.trim()) {
 			return;
 		}
@@ -29,7 +29,7 @@ class ReferenceLinkCommand extends Command {
 		});
 	}
 
-	refresh() {
+	override refresh() {
 		const model = this.editor.model;
 		const selection = model.document.selection;
         this.isEnabled = selection.focus !== null && model.schema.checkChild(selection.focus.parent as Element, 'reference');

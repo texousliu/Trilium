@@ -29,7 +29,7 @@ export class CopyToClipboardCommand extends Command {
 
     private executeCallback?: (text: string) => void;
 
-    execute(...args: Array<unknown>) {
+    override execute(...args: Array<unknown>) {
         const editor = this.editor;
         const model = editor.model;
         const selection = model.document.selection;
