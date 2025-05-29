@@ -165,6 +165,7 @@ export default class CalendarView extends ViewMode {
             locale: await CalendarView.#getLocale(),
             height: "100%",
             nowIndicator: true,
+            handleWindowResize: false,
             eventDidMount: (e) => {
                 const { iconClass, promotedAttributes } = e.event.extendedProps;
 
@@ -232,6 +233,9 @@ export default class CalendarView extends ViewMode {
         });
         calendar.render();
         this.calendar = calendar;
+
+        new ResizeObserver(() => calendar.updateSize())
+            .observe(this.$calendarContainer[0]);
 
         return this.$root;
     }
