@@ -174,6 +174,7 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 
     cleanup(): void {
         this.#destroyResizer();
+        this.editorTypeWidget.cleanup();
     }
 
     async doRefresh(note: FNote) {
