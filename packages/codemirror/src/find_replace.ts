@@ -136,8 +136,7 @@ export function createSearchHighlighter() {
             } else {
                 return v.matches;
             }
-        },
-        provide: (plugin) => plugin
+        }
     });
 }
 
