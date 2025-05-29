@@ -34,6 +34,7 @@ const TPL = /*html*/`\
 
         .note-detail-split-preview-col {
             position: relative;
+            background: var(--main-background-color);
         }
 
         .note-detail-split .note-detail-split-editor {
