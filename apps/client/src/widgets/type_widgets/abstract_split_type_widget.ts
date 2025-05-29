@@ -34,7 +34,6 @@ const TPL = /*html*/`\
 
         .note-detail-split-preview-col {
             position: relative;
-            background: var(--main-background-color);
         }
 
         .note-detail-split .note-detail-split-editor {
@@ -132,6 +131,7 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
     constructor() {
         super();
         this.editorTypeWidget = new EditableCodeTypeWidget();
+        this.editorTypeWidget.updateBackgroundColor = () => {};
         this.editorTypeWidget.isEnabled = () => true;
 
         const defaultOptions = this.editorTypeWidget.getExtraOpts();
