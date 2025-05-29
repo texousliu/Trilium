@@ -359,11 +359,6 @@ if (debugLevel >= debugLevels.indexOf("warn")) {
     warn = console.warn.bind(console, tag + ": ");
 }
 
-let info = function (...args: unknown[]) {};
-if (debugLevel >= debugLevels.indexOf("info")) {
-    info = console.info.bind(console, tag + ": ");
-}
-
 let log = function (...args: unknown[]) {};
 if (debugLevel >= debugLevels.indexOf("log")) {
     log = console.log.bind(console, tag + ": ");
