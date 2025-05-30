@@ -399,8 +399,8 @@ export default class TabRowWidget extends BasicWidget {
                 isScrolling = false;
             }
         };
-        this.$tabScrollingContainer[0].addEventListener('wheel', (event) => {
-            if (!event.shiftKey || event.deltaX === 0) {
+        this.$tabScrollingContainer[0].addEventListener('wheel', async (event) => {
+            if (!event.shiftKey && event.deltaX === 0) {
                 event.preventDefault();
                 // Clamp deltaX between TAB_CONTAINER_MIN_WIDTH and TAB_CONTAINER_MIN_WIDTH * 3
                 deltaX += Math.sign(event.deltaY) * Math.max(Math.min(Math.abs(event.deltaY), TAB_CONTAINER_MIN_WIDTH * 3), TAB_CONTAINER_MIN_WIDTH);
@@ -408,6 +408,14 @@ export default class TabRowWidget extends BasicWidget {
                     isScrolling = true;
                     stepScroll();
                 }
+            } else if (event.shiftKey) {
+                event.preventDefault();
+                if (event.deltaY > 0) {
+                    await appContext.tabManager.activateNextTabCommand();
+                } else {
+                    await appContext.tabManager.activatePreviousTabCommand();
+                }
+                this.activeTabEl.scrollIntoView();
             }
         });
 
