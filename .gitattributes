@@ -1,8 +1,9 @@
 package-lock.json linguist-generated=true
 **/package-lock.json linguist-generated=true
 
-apps/server/src/assets/doc_notes/en/User[[:space:]]Guide/** linguist-generated=true 
+apps/server/src/assets/doc_notes/en/User[[:space:]]Guide/** linguist-generated=true linguist-vendored
 apps/server/src/assets/doc_notes/en/User[[:space:]]Guide/**/*.html eol=lf
+apps/edit-docs/demo/** linguist-vendored
 
 docs/**/*.md eol=lf
 docs/**/*.json eol=lf
@@ -15,5 +16,3 @@ demo/**/*.js eol=lf
 demo/**/*.css eol=lf
 
 *.sh eol=lf
-
-apps/client/src/libraries/** linguist-vendored
