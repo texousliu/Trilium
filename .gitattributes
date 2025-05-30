@@ -3,7 +3,9 @@ package-lock.json linguist-generated=true
 
 apps/server/src/assets/doc_notes/en/User[[:space:]]Guide/** linguist-generated=true linguist-vendored
 apps/server/src/assets/doc_notes/en/User[[:space:]]Guide/**/*.html eol=lf
+apps/server/src/assets/doc_notes/** linguist-documentation
 apps/edit-docs/demo/** -linguist-detectable
+docs/** linguist-documentation
 
 docs/**/*.md eol=lf
 docs/**/*.json eol=lf
