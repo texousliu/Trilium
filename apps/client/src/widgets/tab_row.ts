@@ -378,16 +378,37 @@ export default class TabRowWidget extends BasicWidget {
     }
 
     scrollTabContainer(direction: number, behavior: ScrollBehavior = "smooth") {
-        const currentScrollLeft = this.$tabScrollingContainer[0]?.scrollLeft;
-        this.$tabScrollingContainer[0].scrollTo({
-            left: currentScrollLeft + direction,
+        this.$tabScrollingContainer[0].scrollBy({
+            left: direction,
             behavior
         });
     };
 
     setupScrollEvents() {
+        let deltaX = 0;
+        let isScrolling = false;
+        const stepScroll = () => {
+            if (Math.abs(deltaX) > 5) {
+                const step = Math.round(deltaX * 0.2);
+                deltaX -= step;
+                this.scrollTabContainer(step, "instant");
+                requestAnimationFrame(stepScroll);
+            } else {
+                this.scrollTabContainer(deltaX, "instant");
+                deltaX = 0;
+                isScrolling = false;
+            }
+        };
         this.$tabScrollingContainer[0].addEventListener('wheel', (event) => {
-            this.scrollTabContainer(event.deltaY * 1.5);
+            if (!event.shiftKey || event.deltaX === 0) {
+                event.preventDefault();
+                // Clamp deltaX between TAB_CONTAINER_MIN_WIDTH and TAB_CONTAINER_MIN_WIDTH * 3
+                deltaX += Math.sign(event.deltaY) * Math.max(Math.min(Math.abs(event.deltaY), TAB_CONTAINER_MIN_WIDTH * 3), TAB_CONTAINER_MIN_WIDTH);
+                if (!isScrolling) {
+                    isScrolling = true;
+                    stepScroll();
+                }
+            }
         });
 
         this.$scrollButtonLeft[0].addEventListener('click', () => this.scrollTabContainer(-200));
