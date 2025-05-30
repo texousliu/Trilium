@@ -21,7 +21,7 @@ fi
 echo "Selected Arch: $ARCH"
 
 # Set Node.js version and architecture-specific filename
-NODE_VERSION=22.14.0
+NODE_VERSION=22.16.0
 
 script_dir=$(realpath $(dirname $0))
 BUILD_DIR="$script_dir/../dist"
