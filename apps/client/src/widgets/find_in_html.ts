@@ -85,7 +85,7 @@ export default class FindInHtml {
         if (this.$results?.length) {
             const $current = this.$results.eq(this.currentIndex);
             this.$results.removeClass(FIND_RESULT_SELECTED_CSS_CLASSNAME);
-            $current[0].scrollIntoView();
+            $current[0].scrollIntoView({ block: 'center', inline: 'center'});
             $current.addClass(FIND_RESULT_SELECTED_CSS_CLASSNAME);
         }
     }
