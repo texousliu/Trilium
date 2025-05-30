@@ -23,6 +23,7 @@ interface ToolValidationResult {
     valid: boolean;
     tool: ToolInterface | null;
     error: string | null;
+    guidance?: string; // Guidance to help the LLM select better tools/parameters
 }
 
 /**
@@ -70,7 +71,7 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
 
         // Check if the registry has any tools
         const registryTools = toolRegistry.getAllTools();
-        
+
         // Convert ToolHandler[] to ToolInterface[] with proper type safety
         const availableTools: ToolInterface[] = registryTools.map(tool => {
             // Create a proper ToolInterface from the ToolHandler
@@ -88,11 +89,11 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
         if (availableTools.length > 0) {
             const availableToolNames = availableTools.map(t => {
                 // Safely access the name property using type narrowing
-                if (t && typeof t === 'object' && 'definition' in t && 
-                    t.definition && typeof t.definition === 'object' && 
-                    'function' in t.definition && t.definition.function && 
-                    typeof t.definition.function === 'object' && 
-                    'name' in t.definition.function && 
+                if (t && typeof t === 'object' && 'definition' in t &&
+                    t.definition && typeof t.definition === 'object' &&
+                    'function' in t.definition && t.definition.function &&
+                    typeof t.definition.function === 'object' &&
+                    'name' in t.definition.function &&
                     typeof t.definition.function.name === 'string') {
                     return t.definition.function.name;
                 }
@@ -141,11 +142,14 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
 
                 if (!tool) {
                     log.error(`Tool not found in registry: ${toolCall.function.name}`);
+                    // Generate guidance for the LLM when a tool is not found
+                    const guidance = this.generateToolGuidance(toolCall.function.name, `Tool not found: ${toolCall.function.name}`);
                     return {
                         toolCall,
                         valid: false,
                         tool: null,
-                        error: `Tool not found: ${toolCall.function.name}`
+                        error: `Tool not found: ${toolCall.function.name}`,
+                        guidance // Add guidance for the LLM
                     };
                 }
 
@@ -187,9 +191,15 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                     : JSON.stringify(toolCall.function.arguments);
                 log.info(`Tool parameters: ${argsStr}`);
 
-                // If validation failed, throw the error
+                // If validation failed, generate guidance and throw the error
                 if (!valid || !tool) {
-                    throw new Error(error || `Unknown validation error for tool '${toolCall.function.name}'`);
+                    // If we already have guidance from validation, use it, otherwise generate it
+                    const toolGuidance = validation.guidance ||
+                        this.generateToolGuidance(toolCall.function.name,
+                            error || `Unknown validation error for tool '${toolCall.function.name}'`);
+
+                    // Include the guidance in the error message
+                    throw new Error(`${error || `Unknown validation error for tool '${toolCall.function.name}'`}\n${toolGuidance}`);
                 }
 
                 log.info(`Tool validated successfully: ${toolCall.function.name}`);
@@ -315,6 +325,12 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                     const errorMessage = execError instanceof Error ? execError.message : String(execError);
                     log.error(`================ TOOL EXECUTION FAILED in ${executionTime}ms: ${errorMessage} ================`);
 
+                    // Generate guidance for the failed tool execution
+                    const toolGuidance = this.generateToolGuidance(toolCall.function.name, errorMessage);
+
+                    // Add the guidance to the error message for the LLM
+                    const enhancedErrorMessage = `${errorMessage}\n${toolGuidance}`;
+
                     // Record this failed tool execution if there's a sessionId available
                     if (input.options?.sessionId) {
                         try {
@@ -324,7 +340,7 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                                 toolCall.id || `tool-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
                                 args,
                                 "", // No result for failed execution
-                                errorMessage
+                                enhancedErrorMessage // Use enhanced error message with guidance
                             );
                         } catch (storageError) {
                             log.error(`Failed to record tool execution error in chat storage: ${storageError}`);
@@ -339,7 +355,7 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                                 name: toolCall.function.name,
                                 arguments: {} as Record<string, unknown>
                             },
-                            error: errorMessage,
+                            error: enhancedErrorMessage, // Include guidance in the error message
                             type: 'error' as const
                         };
 
@@ -354,6 +370,10 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                         }
                     }
 
+                    // Modify the error to include our guidance
+                    if (execError instanceof Error) {
+                        execError.message = enhancedErrorMessage;
+                    }
                     throw execError;
                 }
 
@@ -377,9 +397,9 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 // Emit tool error event if not already handled in the try/catch above
                 // and if streaming is enabled
                 // Need to check if error is an object with a name property of type string
-                const isExecutionError = typeof error === 'object' && error !== null && 
+                const isExecutionError = typeof error === 'object' && error !== null &&
                     'name' in error && (error as { name: unknown }).name === "ExecutionError";
-                    
+
                 if (streamCallback && !isExecutionError) {
                     const toolExecutionData = {
                         action: 'error',
@@ -433,7 +453,7 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 hasEmptyResults = true;
                 log.info(`Empty result detected for tool ${name}. Will add suggestion to try different parameters.`);
             }
-            
+
             // Add enhancement for empty results
             let enhancedContent = resultContent;
             if (isEmptyResult && !resultContent.startsWith('Error:')) {
@@ -466,35 +486,35 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
 
         log.info(`Follow-up needed: ${needsFollowUp}`);
         log.info(`Reasoning: ${hasToolResults ? 'Has tool results to process' : 'No tool results'} ${hasErrors ? ', contains errors' : ''} ${hasEmptyResults ? ', contains empty results' : ''}`);
-        
+
         // Add a system message with hints for empty results
         if (hasEmptyResults && needsFollowUp) {
             log.info('Adding system message requiring the LLM to run additional tools with different parameters');
-            
+
             // Build a more directive message based on which tools were empty
             const emptyToolNames = toolResultMessages
                 .filter(msg => this.isEmptyToolResult(msg.content, msg.name || ''))
                 .map(msg => msg.name);
-                
+
             let directiveMessage = `YOU MUST NOT GIVE UP AFTER A SINGLE EMPTY SEARCH RESULT. `;
-            
+
             if (emptyToolNames.includes('search_notes') || emptyToolNames.includes('vector_search')) {
                 directiveMessage += `IMMEDIATELY RUN ANOTHER SEARCH TOOL with broader search terms, alternative keywords, or related concepts. `;
                 directiveMessage += `Try synonyms, more general terms, or related topics. `;
             }
-            
+
             if (emptyToolNames.includes('keyword_search')) {
                 directiveMessage += `IMMEDIATELY TRY VECTOR_SEARCH INSTEAD as it might find semantic matches where keyword search failed. `;
             }
-            
+
             directiveMessage += `DO NOT ask the user what to do next or if they want general information. CONTINUE SEARCHING with different parameters.`;
-            
+
             updatedMessages.push({
                 role: 'system',
                 content: directiveMessage
             });
         }
-        
+
         log.info(`Total messages to return to pipeline: ${updatedMessages.length}`);
         log.info(`Last 3 messages in conversation:`);
         const lastMessages = updatedMessages.slice(-3);
@@ -544,8 +564,9 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                         // Force initialization to ensure it runs even if previously marked as initialized
                         await agentTools.initialize(true);
                         log.info('Agent tools initialized successfully');
-                    } catch (initError: any) {
-                        log.error(`Failed to initialize agent tools: ${initError.message}`);
+                    } catch (initError: unknown) {
+                        const errorMessage = initError instanceof Error ? initError.message : String(initError);
+                        log.error(`Failed to initialize agent tools: ${errorMessage}`);
                         return null;
                     }
                 } else {
@@ -629,6 +650,7 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                         }
                     }
 
+                    // Verify the vectorSearchTool has the required methods
                     if (!vectorSearchTool.searchNotes || typeof vectorSearchTool.searchNotes !== 'function') {
                         log.error(`Tool '${toolName}' dependency vectorSearchTool is missing searchNotes method`);
                         return false;
@@ -641,13 +663,69 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
             }
 
             // Add additional tool-specific validations here
-
             return true;
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : String(error);
             log.error(`Error validating tool before execution: ${errorMessage}`);
             return false;
         }
+    }
+
+    /**
+     * Generate guidance for the LLM when a tool fails or is not found
+     * @param toolName The name of the tool that failed
+     * @param errorMessage The error message from the failed tool
+     * @returns A guidance message for the LLM with suggestions of what to try next
+     */
+    private generateToolGuidance(toolName: string, errorMessage: string): string {
+        // Get all available tool names for recommendations
+        const availableTools = toolRegistry.getAllTools();
+        const availableToolNames = availableTools
+            .map(t => {
+                if (t && typeof t === 'object' && 'definition' in t &&
+                    t.definition && typeof t.definition === 'object' &&
+                    'function' in t.definition && t.definition.function &&
+                    typeof t.definition.function === 'object' &&
+                    'name' in t.definition.function &&
+                    typeof t.definition.function.name === 'string') {
+                    return t.definition.function.name;
+                }
+                return '';
+            })
+            .filter(name => name !== '');
+
+        // Create specific guidance based on the error and tool
+        let guidance = `TOOL GUIDANCE: The tool '${toolName}' failed with error: ${errorMessage}.\n`;
+
+        // Add suggestions based on the specific tool and error
+        if (toolName === 'attribute_search' && errorMessage.includes('Invalid attribute type')) {
+            guidance += "CORRECT USAGE: The 'attribute_search' tool requires a valid 'attributeType' parameter that must be either 'label' or 'relation'.\n";
+            guidance += "EXAMPLE: { \"attributeType\": \"label\", \"attributeValue\": \"important\" }\n";
+        }
+        else if (errorMessage.includes('Tool not found')) {
+            // Provide guidance on available search tools if a tool wasn't found
+            const searchTools = availableToolNames.filter(name => name.includes('search'));
+            guidance += `AVAILABLE SEARCH TOOLS: ${searchTools.join(', ')}\n`;
+            guidance += "TRY VECTOR SEARCH: For conceptual matches, use 'vector_search' with a query parameter.\n";
+            guidance += "EXAMPLE: { \"query\": \"your search terms here\" }\n";
+        }
+        else if (errorMessage.includes('missing required parameter')) {
+            // Provide parameter guidance based on the tool name
+            if (toolName === 'vector_search') {
+                guidance += "REQUIRED PARAMETERS: The 'vector_search' tool requires a 'query' parameter.\n";
+                guidance += "EXAMPLE: { \"query\": \"your search terms here\" }\n";
+            } else if (toolName === 'keyword_search') {
+                guidance += "REQUIRED PARAMETERS: The 'keyword_search' tool requires a 'query' parameter.\n";
+                guidance += "EXAMPLE: { \"query\": \"your search terms here\" }\n";
+            }
+        }
+
+        // Add a general suggestion to try vector_search as a fallback
+        if (!toolName.includes('vector_search')) {
+            guidance += "RECOMMENDATION: If specific searches fail, try the 'vector_search' tool which performs semantic searches.\n";
+        }
+
+        return guidance;
     }
 
     /**
@@ -663,61 +741,61 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
             if (trimmed === '' || trimmed === '[]' || trimmed === '{}') {
                 return true;
             }
-            
+
             // Tool-specific empty results (for string responses)
-            if (toolName === 'search_notes' && 
-                (trimmed === 'No matching notes found.' || 
-                 trimmed.includes('No results found') || 
+            if (toolName === 'search_notes' &&
+                (trimmed === 'No matching notes found.' ||
+                 trimmed.includes('No results found') ||
                  trimmed.includes('No matches found') ||
                  trimmed.includes('No notes found'))) {
                 return true;
             }
-            
-            if (toolName === 'vector_search' && 
+
+            if (toolName === 'vector_search' &&
                 (trimmed.includes('No results found') ||
                  trimmed.includes('No matching documents'))) {
                 return true;
             }
-            
-            if (toolName === 'keyword_search' && 
+
+            if (toolName === 'keyword_search' &&
                 (trimmed.includes('No matches found') ||
                  trimmed.includes('No results for'))) {
                 return true;
             }
-        } 
+        }
         // Handle object/array results
         else if (result !== null && typeof result === 'object') {
             // Check if it's an empty array
             if (Array.isArray(result) && result.length === 0) {
                 return true;
             }
-            
+
             // Check if it's an object with no meaningful properties
             // or with properties indicating empty results
             if (!Array.isArray(result)) {
                 if (Object.keys(result).length === 0) {
                     return true;
                 }
-                
+
                 // Tool-specific object empty checks
                 const resultObj = result as Record<string, unknown>;
-                
-                if (toolName === 'search_notes' && 
-                    'results' in resultObj && 
-                    Array.isArray(resultObj.results) && 
+
+                if (toolName === 'search_notes' &&
+                    'results' in resultObj &&
+                    Array.isArray(resultObj.results) &&
                     resultObj.results.length === 0) {
                     return true;
                 }
-                
-                if (toolName === 'vector_search' && 
-                    'matches' in resultObj && 
-                    Array.isArray(resultObj.matches) && 
+
+                if (toolName === 'vector_search' &&
+                    'matches' in resultObj &&
+                    Array.isArray(resultObj.matches) &&
                     resultObj.matches.length === 0) {
                     return true;
                 }
             }
         }
-        
+
         return false;
     }
 
