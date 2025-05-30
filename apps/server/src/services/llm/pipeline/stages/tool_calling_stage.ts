@@ -699,8 +699,9 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
 
         // Add suggestions based on the specific tool and error
         if (toolName === 'attribute_search' && errorMessage.includes('Invalid attribute type')) {
-            guidance += "CORRECT USAGE: The 'attribute_search' tool requires a valid 'attributeType' parameter that must be either 'label' or 'relation'.\n";
-            guidance += "EXAMPLE: { \"attributeType\": \"label\", \"attributeValue\": \"important\" }\n";
+            guidance += "CRITICAL REQUIREMENT: The 'attribute_search' tool requires 'attributeType' parameter that must be EXACTLY 'label' or 'relation' (lowercase, no other values).\n";
+            guidance += "CORRECT EXAMPLE: { \"attributeType\": \"label\", \"attributeName\": \"important\", \"attributeValue\": \"yes\" }\n";
+            guidance += "INCORRECT EXAMPLE: { \"attributeType\": \"Label\", ... } - Case matters! Must be lowercase.\n";
         }
         else if (errorMessage.includes('Tool not found')) {
             // Provide guidance on available search tools if a tool wasn't found
@@ -748,7 +749,8 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                  trimmed.includes('No results found') ||
                  trimmed.includes('No matches found') ||
                  trimmed.includes('No notes found'))) {
-                return true;
+                // This is a valid result (empty, but valid), don't mark as empty so LLM can see feedback
+                return false;
             }
 
             if (toolName === 'vector_search' &&
