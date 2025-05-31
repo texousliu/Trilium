@@ -10,19 +10,22 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
+        electron = pkgs.electron_35;
         build = pkgs.stdenv.mkDerivation (finalAttrs: {
           pname = "triliumnext-desktop";
           version = "0.94.0";
           src = pkgs.lib.cleanSource ./.;
 
-          nativeBuildInputs = [
-            pkgs.pnpm.configHook
-            pkgs.nodejs
+          nativeBuildInputs = with pkgs; [
+            pnpm.configHook
+            nodejs
+            nodejs.python
           ];
 
           buildPhase = ''
             patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) node_modules/.pnpm/sass-embedded-linux-x64@1.87.0/node_modules/sass-embedded-linux-x64/dart-sass/src/dart
-            NX_TUI=false NX_DAEMON=false pnpm nx run desktop:build --outputStyle stream
+            NX_TUI=false NX_DAEMON=false pnpm nx run desktop:build --outputStyle stream --verbose
+            NX_TUI=false NX_DAEMON=false npm_config_nodedir=${electron.headers} pnpm nx run desktop:rebuild-deps --outputStyle stream --verbose
           '';
 
           installPhase = ''
