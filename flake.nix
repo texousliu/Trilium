@@ -65,8 +65,9 @@
           installPhase = ''
             runHook preInstall
 
-            mkdir -p $out/{bin,opt/trilium}
+            mkdir -p $out/{bin,share/icons/hicolor/512x512/apps,opt/trilium}
             cp --archive apps/desktop/dist/* $out/opt/trilium
+            cp apps/client/src/assets/icon.png $out/share/icons/hicolor/512x512/apps/trilium.png
             makeWrapper ${lib.getExe electron} $out/bin/trilium \
               "''${gappsWrapperArgs[@]}" \
               --set-default ELECTRON_IS_DEV 0 \
