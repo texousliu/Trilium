@@ -1,8 +1,8 @@
-import becca from "../../../becca/becca.js";
-import becca_loader from "../../../becca/becca_loader.js";
-import cls from "../../../services/cls.js";
-import log from "../../../services/log.js";
-import sql from "../../../services/sql.js";
+import becca from "../becca/becca.js";
+import becca_loader from "../becca/becca_loader.js";
+import cls from "../services/cls.js";
+import log from "../services/log.js";
+import sql from "../services/sql.js";
 
 export default () => {
     cls.init(() => {

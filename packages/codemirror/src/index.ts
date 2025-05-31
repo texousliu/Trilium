@@ -1,6 +1,6 @@
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
 import { EditorView, highlightActiveLine, keymap, lineNumbers, placeholder, ViewPlugin, ViewUpdate, type EditorViewConfig } from "@codemirror/view";
-import { defaultHighlightStyle, StreamLanguage, syntaxHighlighting, indentUnit, bracketMatching, foldGutter } from "@codemirror/language";
+import { defaultHighlightStyle, StreamLanguage, syntaxHighlighting, indentUnit, bracketMatching, foldGutter, codeFolding } from "@codemirror/language";
 import { Compartment, EditorSelection, EditorState, type Extension } from "@codemirror/state";
 import { highlightSelectionMatches } from "@codemirror/search";
 import { vim } from "@replit/codemirror-vim";
@@ -73,6 +73,7 @@ export default class CodeMirror extends EditorView {
                 ]),
                 highlightSelectionMatches(),
                 bracketMatching(),
+                codeFolding(),
                 foldGutter(),
                 indentationMarkers(),
             ];

@@ -1,5 +1,5 @@
-import sql from "../../../services/sql.js";
-import utils from "../../../services/utils.js";
+import sql from "../services/sql.js";
+import utils from "../services/utils.js";
 
 interface NoteContentsRow {
     noteId: string;

@@ -286,4 +286,13 @@ export default class MindMapWidget extends TypeWidget {
         utils.downloadSvgAsPng(this.note.title, svg);
     }
 
+    async executeWithContentElementEvent({ resolve, ntxId }: EventData<"executeWithContentElement">) {
+        if (!this.isNoteContext(ntxId)) {
+            return;
+        }
+
+        await this.initialized;
+
+        resolve(this.$content.find('.main-node-container'));
+    }
 }
