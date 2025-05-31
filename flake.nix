@@ -3,13 +3,38 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs }: {
+  outputs = { self, nixpkgs, flake-utils }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = import nixpkgs { inherit system; };
+        build = pkgs.stdenv.mkDerivation (finalAttrs: {
+          pname = "triliumnext-desktop";
+          version = "0.94.0";
+          src = pkgs.lib.cleanSource ./.;
 
-    packages.x86_64-linux.hello = nixpkgs.legacyPackages.x86_64-linux.hello;
+          nativeBuildInputs = [
+            pkgs.pnpm.configHook
+            pkgs.nodejs
+          ];
 
-    packages.x86_64-linux.default = self.packages.x86_64-linux.hello;
+          buildPhase = ''
+            pnpm nx run desktop:build
+          '';
 
-  };
+          installPhase = ''
+            mkdir -p $out            
+          '';
+
+          pnpmDeps = pkgs.pnpm.fetchDeps {
+            inherit (finalAttrs) pname version src;
+            hash = "sha256-xC0u1h92wtthylOAw+IF9mpFi0c4xajJhUcA9pqzcAw=";
+          };
+        });
+      in {
+        packages.default = build;
+      }
+    );
 }
