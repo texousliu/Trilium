@@ -16,6 +16,7 @@ export class SearchHighlighter {
     currentFound: number;
     totalFound: number;
     matcher?: MatchDecorator;
+    searchRegexp?: RegExp;
     private parsedMatches: Match[];
 
     constructor(public view: EditorView) {
@@ -42,6 +43,7 @@ export class SearchHighlighter {
             regexp: regex,
             decoration: searchMatchDecoration,
         });
+        this.searchRegexp = regex;
         this.#updateSearchData(this.view);
         this.#scrollToMatchNearestSelection();
     }
@@ -98,17 +100,21 @@ export class SearchHighlighter {
             return;
         }
 
-        const matches = this.matcher.createDeco(view);
-        const cursor = matches.iter();
-        while (cursor.value) {
-            this.parsedMatches.push({
-                from: cursor.from,
-                to: cursor.to
-            });
-            cursor.next();
+        // Create the match decorator which will automatically highlight matches in the document.
+        this.matches = this.matcher.createDeco(view);
+
+        // Manually search for matches in the current document in order to get the total number of matches.
+        const parsedMatches: Match[] = [];
+        const text = view.state.doc.toString();
+        let match: RegExpExecArray | null | undefined;
+        while ((match = this.searchRegexp?.exec(text))) {
+            const from = match.index ?? 0;
+            const to = from + match[0].length;
+
+            parsedMatches.push({ from, to });
         }
 
-        this.matches = matches;
+        this.parsedMatches = parsedMatches;
         this.totalFound = this.parsedMatches.length;
     }
 
