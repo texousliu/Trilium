@@ -21,7 +21,7 @@
           ];
 
           buildPhase = ''
-            pnpm nx run desktop:build
+            NX_TUI=false NX_DAEMON=false pnpm nx run desktop:build
           '';
 
           installPhase = ''
