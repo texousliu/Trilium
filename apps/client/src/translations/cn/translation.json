@@ -1627,21 +1627,21 @@
     "theme_group_dark": "深色主题"
   },
   "classic_editor_toolbar": {
-    "title": "格式化"
+    "title": "格式"
   },
   "editor": {
     "title": "编辑器"
   },
   "editing": {
     "editor_type": {
-      "label": "格式化工具栏",
+      "label": "格式工具栏",
       "floating": {
         "title": "浮动",
         "description": "编辑工具出现在光标附近;"
       },
       "fixed": {
         "title": "固定",
-        "description": "编辑工具出现在 \"格式化\" 功能区标签中。"
+        "description": "编辑工具出现在 \"格式\" 功能区标签中。"
       },
       "multiline-toolbar": "如果工具栏无法完全显示，则分多行显示。"
     }
