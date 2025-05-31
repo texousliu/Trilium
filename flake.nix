@@ -49,7 +49,8 @@
             export NX_TUI=false
             export NX_DAEMON=false
 
-            patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) node_modules/.pnpm/sass-embedded-linux-x64@1.87.0/node_modules/sass-embedded-linux-x64/dart-sass/src/dart
+            patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+              node_modules/.pnpm/sass-embedded-linux-x64@*/node_modules/sass-embedded-linux-x64/dart-sass/src/dart
             pnpm nx run desktop:build --outputStyle stream --verbose
 
             # Rebuild dependencies
