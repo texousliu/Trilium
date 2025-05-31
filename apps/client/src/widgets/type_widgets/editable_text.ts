@@ -266,7 +266,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                         }
 
                         item.on("change:isOpen", () => {
-                            if (!("isOpen" in item) || !item.isOpen ) {
+                            if (!("isOpen" in item) || !item.isOpen) {
                                 return;
                             }
 
@@ -375,9 +375,24 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         }
     }
 
-    insertDateTimeToTextCommand() {
+    async insertDateTimeToTextCommand() { 
         const date = new Date();
-        const dateString = utils.formatDateTime(date);
+        let userPreferredFormat = "";
+
+        try {
+
+            await options.initializedPromise;
+
+            const customFormatFromSettings = options.get("customDateTimeFormatString");
+
+            if (typeof customFormatFromSettings === 'string') { 
+                userPreferredFormat = customFormatFromSettings;
+            }
+        } catch (e: any) {
+            console.error("TriliumNext: Error during options initialization or getting custom date/time format. Using default.", e);
+        }
+
+        const dateString = utils.formatDateTime(date, userPreferredFormat);
 
         this.addTextToEditor(dateString);
     }
