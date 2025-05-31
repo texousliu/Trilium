@@ -42,6 +42,8 @@
             wrapGAppsHook3
           ];
 
+          dontWrapGApps = true;
+
           buildPhase = ''
             runHook preBuild
 
