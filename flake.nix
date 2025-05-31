@@ -1,28 +1,50 @@
 {
-  description = "A very basic flake";
+  description = "TriliumNext Notes (experimental flake)";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
       let
+        packageJSON = builtins.fromJSON (builtins.readFile ./package.json);
         pkgs = import nixpkgs { inherit system; };
         electron = pkgs.electron_35;
-        build = pkgs.stdenv.mkDerivation (finalAttrs: {
+        inherit (pkgs)
+          copyDesktopItems
+          lib
+          makeBinaryWrapper
+          makeDesktopItem
+          nodejs
+          pnpm
+          stdenv
+          wrapGAppsHook3
+          ;
+        desktop = stdenv.mkDerivation (finalAttrs: {
           pname = "triliumnext-desktop";
-          version = "0.94.0";
-          src = pkgs.lib.cleanSource ./.;
+          version = packageJSON.version;
+          src = lib.cleanSource ./.;
 
-          nativeBuildInputs = with pkgs; [
+          nativeBuildInputs = [
             pnpm.configHook
             nodejs
             nodejs.python
+            copyDesktopItems
+            makeBinaryWrapper
+            wrapGAppsHook3
           ];
 
           buildPhase = ''
+            runHook preBuild
+
             # Disable NX interaction
             export NX_TUI=false
             export NX_DAEMON=false
@@ -33,20 +55,48 @@
             # Rebuild dependencies
             export npm_config_nodedir=${electron.headers}
             pnpm nx run desktop:rebuild-deps --outputStyle stream --verbose
+
+            runHook postBuild
           '';
 
           installPhase = ''
-            mkdir -p $out            
-            cp -r apps/desktop/dist $out
+            runHook preInstall
+
+            mkdir -p $out/{bin,opt/trilium}
+            cp --archive apps/desktop/dist/* $out/opt/trilium
+            makeWrapper ${lib.getExe electron} $out/bin/trilium \
+              "''${gappsWrapperArgs[@]}" \
+              --set-default ELECTRON_IS_DEV 0 \
+              --add-flags $out/opt/trilium/main.cjs
+
+            runHook postInstall
           '';
 
-          pnpmDeps = pkgs.pnpm.fetchDeps {
+          desktopItems = [
+            (makeDesktopItem {
+              name = "TriliumNext Notes";
+              exec = finalAttrs.meta.mainProgram;
+              icon = "trilium";
+              comment = finalAttrs.meta.description;
+              desktopName = "TriliumNext Notes";
+              categories = [ "Office" ];
+              startupWMClass = "Trilium Notes Next";
+            })
+          ];
+
+          pnpmDeps = pnpm.fetchDeps {
             inherit (finalAttrs) pname version src;
             hash = "sha256-xC0u1h92wtthylOAw+IF9mpFi0c4xajJhUcA9pqzcAw=";
           };
+
+          meta = {
+            description = "Free and open-source, cross-platform hierarchical note taking application with focus on building large personal knowledge bases";
+            mainProgram = "trilium";
+          };
         });
-      in {
-        packages.default = build;
+      in
+      {
+        packages.default = desktop;
       }
     );
 }
