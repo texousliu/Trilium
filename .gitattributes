@@ -5,9 +5,9 @@ apps/server/src/assets/doc_notes/en/User[[:space:]]Guide/** linguist-generated
 
 # Ignore from GitHub language stats.
 apps/server/src/assets/doc_notes/en/User[[:space:]]Guide/**/*.html eol=lf
-apps/server/src/assets/doc_notes/** linguist-vendored
-apps/edit-docs/demo/** linguist-vendored
-docs/** linguist-vendored
+apps/server/src/assets/doc_notes/** linguist-vendored=true
+apps/edit-docs/demo/** linguist-vendored=true
+docs/** linguist-vendored=true
 
 # Normalize line endings.
 docs/**/*.md eol=lf
