@@ -23,9 +23,16 @@
           ];
 
           buildPhase = ''
+            # Disable NX interaction
+            export NX_TUI=false
+            export NX_DAEMON=false
+
             patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) node_modules/.pnpm/sass-embedded-linux-x64@1.87.0/node_modules/sass-embedded-linux-x64/dart-sass/src/dart
-            NX_TUI=false NX_DAEMON=false pnpm nx run desktop:build --outputStyle stream --verbose
-            NX_TUI=false NX_DAEMON=false npm_config_nodedir=${electron.headers} pnpm nx run desktop:rebuild-deps --outputStyle stream --verbose
+            pnpm nx run desktop:build --outputStyle stream --verbose
+
+            # Rebuild dependencies
+            export npm_config_nodedir=${electron.headers}
+            pnpm nx run desktop:rebuild-deps --outputStyle stream --verbose
           '';
 
           installPhase = ''
