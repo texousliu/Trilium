@@ -1,5 +1,6 @@
 import { EditorView, Decoration, MatchDecorator, ViewPlugin, ViewUpdate } from "@codemirror/view";
-import { Range, RangeSet } from "@codemirror/state";
+import { foldState, unfoldEffect } from "@codemirror/language";
+import { Range, RangeSet, StateEffect } from "@codemirror/state";
 
 const searchMatchDecoration = Decoration.mark({ class: "cm-searchMatch" });
 const activeMatchDecoration = Decoration.mark({ class: "cm-activeMatch" });
@@ -79,8 +80,23 @@ export class SearchHighlighter {
         const match = this.parsedMatches[matchIndex];
         this.currentFound = matchIndex + 1;
         this.activeMatch = activeMatchDecoration.range(match.from, match.to);
+
+        // Check if the match is inside a folded region.
+        const unfoldEffects: StateEffect<unknown>[] = [];
+        const folded = this.view.state.field(foldState);
+        const iter = folded.iter();
+        while (iter.value) {
+            if (match.from >= iter.from && match.to <= iter.to) {
+                unfoldEffects.push(unfoldEffect.of({ from: iter.from, to: iter.to }));
+            }
+            iter.next();
+        }
+
         this.view.dispatch({
-            effects: EditorView.scrollIntoView(match.from, { y: "center" }),
+            effects: [
+                ...unfoldEffects,
+                EditorView.scrollIntoView(match.from, { y: "center" })
+            ],
             scrollIntoView: true
         });
     }
