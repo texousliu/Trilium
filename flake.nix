@@ -27,6 +27,7 @@
 
           installPhase = ''
             mkdir -p $out            
+            cp -r apps/desktop/dist $out
           '';
 
           pnpmDeps = pkgs.pnpm.fetchDeps {
