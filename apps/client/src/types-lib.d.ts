@@ -31,3 +31,23 @@ declare module "katex/contrib/auto-render" {
     }) => void;
     export default renderMathInElement;
 }
+
+import * as L from "leaflet";
+
+declare module "leaflet" {
+    interface GPXMarker {
+        startIcon?: DivIcon | Icon | string | undefined;
+        endIcon?: DivIcon | Icon | string | undefined;
+        wptIcons?: {
+            [key: string]: Icon | string;
+        };
+        wptTypeIcons?: {
+            [key: string]: Icon | string;
+        };
+        pointMatchers?: Array<{ regex: RegExp; icon: Icon | string}>;
+    }
+
+    interface GPXOptions {
+        markers?: GPXMarker | undefined;
+    }
+}
