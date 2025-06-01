@@ -1434,8 +1434,8 @@
   "custom_date_time_format": {
     "title": "Custom Date/Time Format",
     "description": "Customize the format of the date and time inserted via <kbd></kbd> or the toolbar. See <a href=\"https://day.js.org/docs/en/display/format\" target=\"_blank\" rel=\"noopener noreferrer\">Day.js docs</a> for available format tokens.",
-    "format_string": "Format String:",
-    "formatted_time": "Formatted Time:"
+    "format_string": "Format string:",
+    "formatted_time": "Formatted date/time:"
   },
   "i18n": {
     "title": "Localization",
