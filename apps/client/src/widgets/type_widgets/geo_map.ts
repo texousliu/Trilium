@@ -232,7 +232,12 @@ export default class GeoMapTypeWidget extends TypeWidget {
             stringResponse = xmlResponse;
         }
 
-        const track = new this.L.GPX(stringResponse, {});
+        const track = new this.L.GPX(stringResponse, {
+            markers: {
+                startIcon: this.#buildIcon(note.getIcon(), note.getColorClass(), note.title),
+                endIcon: this.#buildIcon("bxs-flag-checkered")
+            }
+        });
         track.addTo(this.geoMapWidget.map);
         this.currentTrackData[note.noteId] = track;
     }
@@ -280,13 +285,13 @@ export default class GeoMapTypeWidget extends TypeWidget {
         this.currentMarkerData[note.noteId] = marker;
     }
 
-    #buildIcon(bxIconClass: string, colorClass: string, title: string) {
+    #buildIcon(bxIconClass: string, colorClass?: string, title?: string) {
         return this.L.divIcon({
             html: /*html*/`\
                 <img class="icon" src="${markerIcon}" />
                 <img class="icon-shadow" src="${markerIconShadow}" />
-                <span class="bx ${bxIconClass} ${colorClass}"></span>
-                <span class="title-label">${title}</span>`,
+                <span class="bx ${bxIconClass} ${colorClass ?? ""}"></span>
+                <span class="title-label">${title ?? ""}</span>`,
             iconSize: [25, 41],
             iconAnchor: [12, 41]
         });
