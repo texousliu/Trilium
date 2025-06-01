@@ -13,6 +13,27 @@ export const TPL = `
 
     <div class="note-context-chat-container flex-grow-1 overflow-auto p-3">
         <div class="note-context-chat-messages"></div>
+
+        <!-- Thinking display area -->
+        <div class="llm-thinking-container" style="display: none;">
+            <div class="thinking-bubble">
+                <div class="thinking-header d-flex align-items-center">
+                    <div class="thinking-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <span class="thinking-label ms-2 text-muted small">AI is thinking...</span>
+                    <button type="button" class="btn btn-sm btn-link p-0 ms-auto thinking-toggle" title="Toggle thinking details">
+                        <i class="bx bx-chevron-down"></i>
+                    </button>
+                </div>
+                <div class="thinking-content" style="display: none;">
+                    <div class="thinking-text"></div>
+                </div>
+            </div>
+        </div>
+
         <div class="loading-indicator" style="display: none;">
             <div class="spinner-border spinner-border-sm text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>

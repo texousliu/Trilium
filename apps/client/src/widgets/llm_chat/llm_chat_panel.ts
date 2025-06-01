@@ -33,6 +33,10 @@ export default class LlmChatPanel extends BasicWidget {
     private useAdvancedContextCheckbox!: HTMLInputElement;
     private showThinkingCheckbox!: HTMLInputElement;
     private validationWarning!: HTMLElement;
+    private thinkingContainer!: HTMLElement;
+    private thinkingBubble!: HTMLElement;
+    private thinkingText!: HTMLElement;
+    private thinkingToggle!: HTMLElement;
     private chatNoteId: string | null = null;
     private noteId: string | null = null; // The actual noteId for the Chat Note
     private currentNoteId: string | null = null;
@@ -118,6 +122,10 @@ export default class LlmChatPanel extends BasicWidget {
         this.useAdvancedContextCheckbox = element.querySelector('.use-advanced-context-checkbox') as HTMLInputElement;
         this.showThinkingCheckbox = element.querySelector('.show-thinking-checkbox') as HTMLInputElement;
         this.validationWarning = element.querySelector('.provider-validation-warning') as HTMLElement;
+        this.thinkingContainer = element.querySelector('.llm-thinking-container') as HTMLElement;
+        this.thinkingBubble = element.querySelector('.thinking-bubble') as HTMLElement;
+        this.thinkingText = element.querySelector('.thinking-text') as HTMLElement;
+        this.thinkingToggle = element.querySelector('.thinking-toggle') as HTMLElement;
 
         // Set up event delegation for the settings link
         this.validationWarning.addEventListener('click', (e) => {
@@ -127,6 +135,9 @@ export default class LlmChatPanel extends BasicWidget {
                 window.location.href = '#root/_hidden/_options/_optionsAi';
             }
         });
+
+        // Set up thinking toggle functionality
+        this.setupThinkingToggle();
 
         // Initialize CKEditor with mention support (async)
         this.initializeCKEditor().then(() => {
@@ -984,6 +995,16 @@ export default class LlmChatPanel extends BasicWidget {
      * Update the UI with streaming content
      */
     private updateStreamingUI(assistantResponse: string, isDone: boolean = false) {
+        // Parse and handle thinking content if present
+        if (!isDone) {
+            const thinkingContent = this.parseThinkingContent(assistantResponse);
+            if (thinkingContent) {
+                this.updateThinkingText(thinkingContent);
+                // Don't display the raw response with think tags in the chat
+                return;
+            }
+        }
+
         // Get the existing assistant message or create a new one
         let assistantMessageEl = this.noteContextChatMessages.querySelector('.assistant-message:last-child');
 
@@ -1005,13 +1026,19 @@ export default class LlmChatPanel extends BasicWidget {
             assistantMessageEl.appendChild(messageContent);
         }
 
+        // Clean the response to remove thinking tags before displaying
+        const cleanedResponse = this.removeThinkingTags(assistantResponse);
+
         // Update the content
         const messageContent = assistantMessageEl.querySelector('.message-content') as HTMLElement;
-        messageContent.innerHTML = formatMarkdown(assistantResponse);
+        messageContent.innerHTML = formatMarkdown(cleanedResponse);
 
         // Apply syntax highlighting if this is the final update
         if (isDone) {
             formatCodeBlocks($(assistantMessageEl as HTMLElement));
+
+            // Hide the thinking display when response is complete
+            this.hideThinkingDisplay();
 
             // Update message in the data model for storage
             // Find the last assistant message to update, or add a new one if none exists
@@ -1020,13 +1047,13 @@ export default class LlmChatPanel extends BasicWidget {
                 this.messages.lastIndexOf(assistantMessages[assistantMessages.length - 1]) : -1;
 
             if (lastAssistantMsgIndex >= 0) {
-                // Update existing message
-                this.messages[lastAssistantMsgIndex].content = assistantResponse;
+                // Update existing message with cleaned content
+                this.messages[lastAssistantMsgIndex].content = cleanedResponse;
             } else {
-                // Add new message
+                // Add new message with cleaned content
                 this.messages.push({
                     role: 'assistant',
-                    content: assistantResponse
+                    content: cleanedResponse
                 });
             }
 
@@ -1041,6 +1068,16 @@ export default class LlmChatPanel extends BasicWidget {
 
         // Scroll to bottom
         this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
+    }
+
+    /**
+     * Remove thinking tags from response content
+     */
+    private removeThinkingTags(content: string): string {
+        if (!content) return content;
+
+        // Remove <think>...</think> blocks from the content
+        return content.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
     }
 
     /**
@@ -1289,11 +1326,59 @@ export default class LlmChatPanel extends BasicWidget {
      * Show thinking state in the UI
      */
     private showThinkingState(thinkingData: string) {
-        // Thinking state is now updated via the in-chat UI in updateStreamingUI
-        // This method is now just a hook for the WebSocket handlers
+        // Parse the thinking content to extract text between <think> tags
+        const thinkingContent = this.parseThinkingContent(thinkingData);
 
-        // Show the loading indicator
+        if (thinkingContent) {
+            this.showThinkingDisplay(thinkingContent);
+        } else {
+            // Fallback: show raw thinking data
+            this.showThinkingDisplay(thinkingData);
+        }
+
+        // Show the loading indicator as well
         this.loadingIndicator.style.display = 'flex';
+    }
+
+    /**
+     * Parse thinking content from LLM response
+     */
+    private parseThinkingContent(content: string): string | null {
+        if (!content) return null;
+
+        // Look for content between <think> and </think> tags
+        const thinkRegex = /<think>([\s\S]*?)<\/think>/gi;
+        const matches: string[] = [];
+        let match: RegExpExecArray | null;
+
+        while ((match = thinkRegex.exec(content)) !== null) {
+            matches.push(match[1].trim());
+        }
+
+        if (matches.length > 0) {
+            return matches.join('\n\n--- Next thought ---\n\n');
+        }
+
+        // Check for incomplete thinking blocks (streaming in progress)
+        const incompleteThinkRegex = /<think>([\s\S]*?)$/i;
+        const incompleteMatch = content.match(incompleteThinkRegex);
+
+        if (incompleteMatch && incompleteMatch[1]) {
+            return incompleteMatch[1].trim() + '\n\n[Thinking in progress...]';
+        }
+
+        // If no think tags found, check if the entire content might be thinking
+        if (content.toLowerCase().includes('thinking') ||
+            content.toLowerCase().includes('reasoning') ||
+            content.toLowerCase().includes('let me think') ||
+            content.toLowerCase().includes('i need to') ||
+            content.toLowerCase().includes('first, ') ||
+            content.toLowerCase().includes('step 1') ||
+            content.toLowerCase().includes('analysis:')) {
+            return content;
+        }
+
+        return null;
     }
 
     private initializeEventListeners() {
@@ -1416,5 +1501,133 @@ export default class LlmChatPanel extends BasicWidget {
 
         console.log(`Extracted ${mentions.length} mentions from editor content`);
         return { content, mentions };
+    }
+
+    private setupThinkingToggle() {
+        if (this.thinkingToggle) {
+            this.thinkingToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.toggleThinkingDetails();
+            });
+        }
+
+        // Also make the entire header clickable
+        const thinkingHeader = this.thinkingBubble?.querySelector('.thinking-header');
+        if (thinkingHeader) {
+            thinkingHeader.addEventListener('click', (e) => {
+                const target = e.target as HTMLElement;
+                if (!target.closest('.thinking-toggle')) {
+                    this.toggleThinkingDetails();
+                }
+            });
+        }
+    }
+
+    private toggleThinkingDetails() {
+        const content = this.thinkingBubble?.querySelector('.thinking-content') as HTMLElement;
+        const toggle = this.thinkingToggle?.querySelector('i');
+
+        if (content && toggle) {
+            const isVisible = content.style.display !== 'none';
+
+            if (isVisible) {
+                content.style.display = 'none';
+                toggle.className = 'bx bx-chevron-down';
+                this.thinkingToggle.classList.remove('expanded');
+            } else {
+                content.style.display = 'block';
+                toggle.className = 'bx bx-chevron-up';
+                this.thinkingToggle.classList.add('expanded');
+            }
+        }
+    }
+
+    /**
+     * Show the thinking display with optional initial content
+     */
+    private showThinkingDisplay(initialText: string = '') {
+        if (this.thinkingContainer) {
+            this.thinkingContainer.style.display = 'block';
+
+            if (initialText && this.thinkingText) {
+                this.updateThinkingText(initialText);
+            }
+
+            // Scroll to show the thinking display
+            this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
+        }
+    }
+
+    /**
+     * Update the thinking text content
+     */
+    private updateThinkingText(text: string) {
+        if (this.thinkingText) {
+            // Format the thinking text for better readability
+            const formattedText = this.formatThinkingText(text);
+            this.thinkingText.textContent = formattedText;
+
+            // Auto-scroll if content is expanded
+            const content = this.thinkingBubble?.querySelector('.thinking-content') as HTMLElement;
+            if (content && content.style.display !== 'none') {
+                this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
+            }
+        }
+    }
+
+    /**
+     * Format thinking text for better presentation
+     */
+    private formatThinkingText(text: string): string {
+        if (!text) return text;
+
+        // Clean up the text
+        let formatted = text.trim();
+
+        // Add some basic formatting
+        formatted = formatted
+            // Add spacing around section markers
+            .replace(/(\d+\.\s)/g, '\n$1')
+            // Clean up excessive whitespace
+            .replace(/\n\s*\n\s*\n/g, '\n\n')
+            // Trim again
+            .trim();
+
+        return formatted;
+    }
+
+    /**
+     * Hide the thinking display
+     */
+    private hideThinkingDisplay() {
+        if (this.thinkingContainer) {
+            this.thinkingContainer.style.display = 'none';
+
+            // Reset the toggle state
+            const content = this.thinkingBubble?.querySelector('.thinking-content') as HTMLElement;
+            const toggle = this.thinkingToggle?.querySelector('i');
+
+            if (content && toggle) {
+                content.style.display = 'none';
+                toggle.className = 'bx bx-chevron-down';
+                this.thinkingToggle?.classList.remove('expanded');
+            }
+
+            // Clear the text content
+            if (this.thinkingText) {
+                this.thinkingText.textContent = '';
+            }
+        }
+    }
+
+    /**
+     * Append to existing thinking content (for streaming updates)
+     */
+    private appendThinkingText(additionalText: string) {
+        if (this.thinkingText && additionalText) {
+            const currentText = this.thinkingText.textContent || '';
+            const newText = currentText + additionalText;
+            this.updateThinkingText(newText);
+        }
     }
 }
