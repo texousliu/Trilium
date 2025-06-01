@@ -9,6 +9,7 @@ import { deleteNoteEmbeddings } from "./storage.js";
 import type { QueueItem } from "./types.js";
 import { getChunkingOperations } from "./chunking/chunking_interface.js";
 import indexService from '../index_service.js';
+import { isNoteExcludedFromAIById } from "../utils/ai_exclusion_utils.js";
 
 // Track which notes are currently being processed
 const notesInProcess = new Set<string>();
@@ -258,6 +259,17 @@ export async function processEmbeddingQueue() {
                     [noteId]
                 );
                 await deleteNoteEmbeddings(noteId);
+                continue;
+            }
+
+            // Check if this note is excluded from AI features
+            if (isNoteExcludedFromAIById(noteId)) {
+                log.info(`Note ${noteId} excluded from AI features, removing from embedding queue`);
+                await sql.execute(
+                    "DELETE FROM embedding_queue WHERE noteId = ?",
+                    [noteId]
+                );
+                await deleteNoteEmbeddings(noteId); // Also remove any existing embeddings
                 continue;
             }
 
