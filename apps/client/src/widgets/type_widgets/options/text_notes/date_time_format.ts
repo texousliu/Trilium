@@ -7,34 +7,22 @@ import linkService from "../../../.././services/link.js";
 
 const TPL = /*html*/`
 <div class="options-section">
-  <h4>${t("custom_date_time_format.title")}</h4>
+    <h4>${t("custom_date_time_format.title")}</h4>
 
-  <p class="description">
-    ${t("custom_date_time_format.description")}
-  </p>
+    <p class="description">
+        ${t("custom_date_time_format.description")}
+    </p>
 
-  <table class="table table-borderless">
-    <tr>
-      <td>
-        ${t("custom_date_time_format.format_string")}
-      </td>
-      <td>
-        <input type="text" id="custom-date-time-format" class="form-control custom-date-time-format"
-          placeholder="YYYY-MM-DD HH:mm">
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        ${t("custom_date_time_format.formatted_time")}
-      </td>
-      <td>
-        <div class="formatted-date" style="padding-left: 0.5rem;">
+    <div class="form-group row align-items-center">
+        <div class="col-6">
+            <label for="custom-date-time-format">${t("custom_date_time_format.format_string")}</label>
+            <input type="text" id="custom-date-time-format" class="form-control custom-date-time-format" placeholder="YYYY-MM-DD HH:mm">
         </div>
-      </td>
-    </tr>
-  </table>
-
+        <div class="col-6">
+            <label>${t("custom_date_time_format.formatted_time")}</label>
+            <div class="formatted-date"></div>
+        </div>
+    </div>
 </div>
 `;
 
