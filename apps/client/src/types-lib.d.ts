@@ -39,12 +39,12 @@ declare module "leaflet" {
         startIcon?: DivIcon | Icon | string | undefined;
         endIcon?: DivIcon | Icon | string | undefined;
         wptIcons?: {
-            [key: string]: Icon | string;
+            [key: string]: DivIcon | Icon | string;
         };
         wptTypeIcons?: {
-            [key: string]: Icon | string;
+            [key: string]: DivIcon | Icon | string;
         };
-        pointMatchers?: Array<{ regex: RegExp; icon: Icon | string}>;
+        pointMatchers?: Array<{ regex: RegExp; icon: DivIcon | Icon | string}>;
     }
 
     interface GPXOptions {

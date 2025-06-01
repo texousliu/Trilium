@@ -235,7 +235,10 @@ export default class GeoMapTypeWidget extends TypeWidget {
         const track = new this.L.GPX(stringResponse, {
             markers: {
                 startIcon: this.#buildIcon(note.getIcon(), note.getColorClass(), note.title),
-                endIcon: this.#buildIcon("bxs-flag-checkered")
+                endIcon: this.#buildIcon("bxs-flag-checkered"),
+                wptIcons: {
+                    "": this.#buildIcon("bx bx-pin")
+                }
             }
         });
         track.addTo(this.geoMapWidget.map);
