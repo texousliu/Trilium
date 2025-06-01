@@ -8,6 +8,7 @@ import HeadingStyleOptions from "./options/text_notes/heading_style.js";
 import TableOfContentsOptions from "./options/text_notes/table_of_contents.js";
 import HighlightsListOptions from "./options/text_notes/highlights_list.js";
 import TextAutoReadOnlySizeOptions from "./options/text_notes/text_auto_read_only_size.js";
+import DateTimeFormatOptions from "./options/text_notes/date_time_format.js";
 import CodeEditorOptions from "./options/code_notes/code_editor.js";
 import CodeAutoReadOnlySizeOptions from "./options/code_notes/code_auto_read_only_size.js";
 import CodeMimeTypesOptions from "./options/code_notes/code_mime_types.js";
@@ -45,7 +46,6 @@ import LanguageOptions from "./options/i18n/language.js";
 import type BasicWidget from "../basic_widget.js";
 import CodeTheme from "./options/code_notes/code_theme.js";
 import RelatedSettings from "./options/related_settings.js";
-import DateTimeFormatOptions from "./options/text_notes/date_time_format.js";
 
 const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -84,13 +84,13 @@ const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", (typeof NoteContextAw
         KeyboardShortcutsOptions
     ],
     _optionsTextNotes: [
-        DateTimeFormatOptions,
         EditorOptions,
         HeadingStyleOptions,
         CodeBlockOptions,
         TableOfContentsOptions,
         HighlightsListOptions,
-        TextAutoReadOnlySizeOptions
+        TextAutoReadOnlySizeOptions,
+        DateTimeFormatOptions
     ],
     _optionsCodeNotes: [
         CodeEditorOptions,

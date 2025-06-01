@@ -1,79 +1,79 @@
-import OptionsWidget from "../options_widget.js"; 
+import OptionsWidget from "../options_widget.js";
 import { t } from "../../../../services/i18n.js";
-import type { OptionMap } from "@triliumnext/commons"; 
-
+import type { OptionMap } from "@triliumnext/commons";
+import utils from "../../../../services/utils.js";
+import keyboardActionsService from "../../../../services/keyboard_actions.js";
+import linkService from "../../../.././services/link.js";
 
 const TPL = /*html*/`
 <div class="options-section">
-    <h4>${t("custom_date_time_format.title")}</h4>
+  <h4>${t("custom_date_time_format.title")}</h4>
 
-    <p>
-        ${t("custom_date_time_format.desc1")}
-        ${t("custom_date_time_format.desc2")}
-    </p>
-    <p>
-        <strong>${t("custom_date_time_format.important_label")}</strong>
-        ${t("custom_date_time_format.desc3")}
-    </p>
+  <p class="description">
+    ${t("custom_date_time_format.description")}
+  </p>
 
-    <div class="form-group">
-        <label for="customDateTimeFormatInput" style="margin-right: 10px;">
-            ${t("custom_date_time_format.format_string_label")}
-        </label>
-        <input type="text" id="customDateTimeFormatInput" class="form-control custom-datetime-format-input" 
-               placeholder="${t("custom_date_time_format.placeholder")}" 
-               style="width: 300px; display: inline-block;">
-    </div>
-    <p style="margin-top: 5px;">
-        <em>${t("custom_date_time_format.examples_label")}</em>
-        <code>YYYY-MM-DD HH:mm</code> (${t("custom_date_time_format.example_default")}),
-        <code>DD.MM.YYYY</code>,
-        <code>MMMM D, YYYY h:mm A</code>,
-        <code>[Today is] dddd</code>
-    </p>
+  <table class="table table-borderless">
+    <tr>
+      <td>
+        ${t("custom_date_time_format.format_string")}
+      </td>
+      <td>
+        <input type="text" id="custom-date-time-format" class="form-control custom-date-time-format"
+          placeholder="YYYY-MM-DD HH:mm">
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        ${t("custom_date_time_format.formatted_time")}
+      </td>
+      <td>
+        <div class="formatted-date" style="padding-left: 0.5rem;">
+        </div>
+      </td>
+    </tr>
+  </table>
+
 </div>
 `;
 
 export default class DateTimeFormatOptions extends OptionsWidget {
-    
+
     private $formatInput!: JQuery<HTMLInputElement>;
+    private $formattedDate!: JQuery<HTMLInputElement>;
 
     doRender() {
-        this.$widget = $(TPL); 
-        this.$formatInput = this.$widget.find(
-            "input.custom-datetime-format-input"
-        ) as JQuery<HTMLInputElement>; 
+        this.$widget = $(TPL);
+
+        this.$formatInput = this.$widget.find("input.custom-date-time-format");
+        this.$formattedDate = this.$widget.find(".formatted-date");
 
         this.$formatInput.on("input", () => {
-            const formatString = this.$formatInput.val() as string; 
-            this.updateOption("customDateTimeFormatString", formatString);
+            const dateString = utils.formatDateTime(new Date(), this.$formatInput.val());
+            this.$formattedDate.text(dateString);
+        });
+
+        this.$formatInput.on('blur keydown', (e) => {
+            if (e.type === 'blur' || (e.type === 'keydown' && e.key === 'Enter')) {
+                this.updateOption("customDateTimeFormat", this.$formatInput.val());
+            }
         });
 
         return this.$widget;
     }
 
     async optionsLoaded(options: OptionMap) {
-        const currentFormat = options.customDateTimeFormatString || "";
+        const shortcutKey = (await keyboardActionsService.getAction("insertDateTimeToText")).effectiveShortcuts.join(", ");
+        const $link = await linkService.createLink("_hidden/_options/_optionsShortcuts", {
+            "title": shortcutKey,
+            "showTooltip": false
+        });
+        this.$widget.find(".description").find("kbd").replaceWith($link);
 
-        if (this.$formatInput) {
-            this.$formatInput.val(currentFormat);
-        } else {
-
-            console.warn(
-                "TriliumNext DateTimeFormatOptions: $formatInput not initialized when optionsLoaded was called. Attempting to find again."
-            );
-            const inputField = this.$widget?.find( 
-                "input.custom-datetime-format-input"
-            ) as JQuery<HTMLInputElement> | undefined; 
-
-            if (inputField?.length) { 
-                this.$formatInput = inputField;
-                this.$formatInput.val(currentFormat);
-            } else {
-                console.error(
-                    "TriliumNext DateTimeFormatOptions: Could not find format input field in optionsLoaded."
-                );
-            }
-        }
+        const customDateTimeFormat = options.customDateTimeFormat || "YYYY-MM-DD HH:mm";
+        this.$formatInput.val(customDateTimeFormat);
+        const dateString = utils.formatDateTime(new Date(), customDateTimeFormat);
+        this.$formattedDate.text(dateString);
     }
 }

@@ -124,22 +124,11 @@ function formatDateISO(date: Date) {
     return `${date.getFullYear()}-${padNum(date.getMonth() + 1)}-${padNum(date.getDate())}`;
 }
 
-
-export function formatDateTime(date: Date, userSuppliedFormat?: string): string {
-    const DEFAULT_FORMAT = 'YYYY-MM-DD HH:mm';
-    const formatToUse = (typeof userSuppliedFormat === 'string' && userSuppliedFormat.trim() !== "")
-        ? userSuppliedFormat.trim()
-        : DEFAULT_FORMAT;
-
-    if (!date) {
-        date = new Date();
-    }
-
-    try {
-        return dayjs(date).format(formatToUse);
-    } catch (e: any) {
-        console.warn(`TriliumNext: Day.js encountered an error with format string "${formatToUse}". Falling back to default. Error: ${e.message}`);
-        return dayjs(date).format(DEFAULT_FORMAT);
+function formatDateTime(date: Date, userSuppliedFormat?: string): string {
+    if (userSuppliedFormat?.trim()) {
+        return dayjs(date).format(userSuppliedFormat);
+    } else {
+        return `${formatDate(date)} ${formatTime(date)}`;
     }
 }
 

@@ -1431,6 +1431,12 @@
     "label": "Automatic read-only size (text notes)",
     "unit": "characters"
   },
+  "custom_date_time_format": {
+    "title": "Custom Date/Time Format",
+    "description": "Customize the format of the date and time inserted using the <kbd> </kbd> shortcut. See <a href=\"https://day.js.org/docs/en/display/format\" target=\"_blank\" rel=\"noopener noreferrer\">Day.js docs</a> for available format tokens.",
+    "format_string": "Format String:",
+    "formatted_time": "Formatted Time:"
+  },
   "i18n": {
     "title": "Localization",
     "language": "Language",
@@ -1962,16 +1968,5 @@
     "title": "Appearance",
     "word_wrapping": "Word wrapping",
     "color-scheme": "Color scheme"
-  },
-  "custom_date_time_format": {
-    "title": "Custom Date/Time Format (Alt+T)",
-    "desc1": "Define a custom format for the date and time inserted using the Alt+T shortcut.",
-    "desc2": "Uses <a href=\"https://day.js.org/docs/en/display/format\" target=\"_blank\" rel=\"noopener noreferrer\">Day.js format tokens</a>. Refer to the Day.js documentation for valid tokens.",
-    "important_label": "Important:",
-    "desc3": "If you provide a format string that Day.js does not recognize (e.g., mostly plain text without valid Day.js tokens), the text you typed might be inserted literally. If the format string is left empty, or if Day.js encounters a critical internal error with your format, a default format (e.g., YYYY-MM-DD HH:mm) will be used.",
-    "format_string_label": "Format String:",
-    "placeholder": "e.g., DD/MM/YYYY HH:mm:ss or dddd, MMMM D",
-    "examples_label": "Examples of valid Day.js formats:",
-    "example_default": "Default-like"
   }
 }

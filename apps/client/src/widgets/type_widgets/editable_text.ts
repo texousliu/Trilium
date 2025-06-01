@@ -377,22 +377,8 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     async insertDateTimeToTextCommand() { 
         const date = new Date();
-        let userPreferredFormat = "";
-
-        try {
-
-            await options.initializedPromise;
-
-            const customFormatFromSettings = options.get("customDateTimeFormatString");
-
-            if (typeof customFormatFromSettings === 'string') { 
-                userPreferredFormat = customFormatFromSettings;
-            }
-        } catch (e: any) {
-            console.error("TriliumNext: Error during options initialization or getting custom date/time format. Using default.", e);
-        }
-
-        const dateString = utils.formatDateTime(date, userPreferredFormat);
+        const customDateTimeFormat = options.get("customDateTimeFormat");
+        const dateString = utils.formatDateTime(date, customDateTimeFormat);
 
         this.addTextToEditor(dateString);
     }
