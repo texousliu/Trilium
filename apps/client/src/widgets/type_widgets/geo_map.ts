@@ -224,13 +224,12 @@ export default class GeoMapTypeWidget extends TypeWidget {
             this.gpxLoaded = true;
         }
 
-        const xmlResponse = await server.get<XMLDocument | Uint8Array>(`notes/${note.noteId}/open`);
+        const xmlResponse = await server.get<string | Uint8Array>(`notes/${note.noteId}/open`, undefined, true);
         let stringResponse: string;
         if (xmlResponse instanceof Uint8Array) {
             stringResponse = new TextDecoder().decode(xmlResponse);
         } else {
-            // TODO: This is not very efficient as it's probably a string response that is parsed and then converted back to string and parsed again.
-            stringResponse = new XMLSerializer().serializeToString(xmlResponse)
+            stringResponse = xmlResponse;
         }
 
         const track = new this.L.GPX(stringResponse, {});
