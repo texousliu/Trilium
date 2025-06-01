@@ -152,45 +152,66 @@ export class AIServiceManager implements IAIServiceManager {
                 return null;
             }
 
-            // Parse provider precedence list (similar to updateProviderOrder)
-            let precedenceList: string[] = [];
+            // Get precedence list from options
+            let precedenceList: string[] = ['openai']; // Default to openai if not set
             const precedenceOption = await options.getOption('aiProviderPrecedence');
-
+            
             if (precedenceOption) {
-                if (precedenceOption.startsWith('[') && precedenceOption.endsWith(']')) {
-                    precedenceList = JSON.parse(precedenceOption);
-                } else if (typeof precedenceOption === 'string') {
-                    if (precedenceOption.includes(',')) {
-                        precedenceList = precedenceOption.split(',').map(p => p.trim());
-                    } else {
-                        precedenceList = [precedenceOption];
+                try {
+                    if (precedenceOption.startsWith('[') && precedenceOption.endsWith(']')) {
+                        precedenceList = JSON.parse(precedenceOption);
+                    } else if (typeof precedenceOption === 'string') {
+                        if (precedenceOption.includes(',')) {
+                            precedenceList = precedenceOption.split(',').map(p => p.trim());
+                        } else {
+                            precedenceList = [precedenceOption];
+                        }
                     }
+                } catch (e) {
+                    log.error(`Error parsing precedence list: ${e}`);
                 }
             }
-
-            // Get enabled providers
-            const enabledProviders = await getEnabledEmbeddingProviders();
-            const enabledProviderNames = enabledProviders.map(p => p.name);
-
-            // Check if all providers in precedence list are enabled
-            const allPrecedenceEnabled = precedenceList.every(p =>
-                enabledProviderNames.includes(p) || p === 'local');
-
-            // Return warning message if there are issues
-            if (!allPrecedenceEnabled) {
-                let message = 'There are issues with your AI provider configuration:';
-
-                if (!allPrecedenceEnabled) {
-                    const disabledProviders = precedenceList.filter(p =>
-                        !enabledProviderNames.includes(p) && p !== 'local');
-                    message += `\n• The following providers in your precedence list are not enabled: ${disabledProviders.join(', ')}.`;
+            
+            // Check for configuration issues with providers in the precedence list
+            const configIssues: string[] = [];
+            
+            // Check each provider in the precedence list for proper configuration
+            for (const provider of precedenceList) {
+                if (provider === 'openai') {
+                    // Check OpenAI configuration
+                    const apiKey = await options.getOption('openaiApiKey');
+                    if (!apiKey) {
+                        configIssues.push(`OpenAI API key is missing`);
+                    }
+                } else if (provider === 'anthropic') {
+                    // Check Anthropic configuration
+                    const apiKey = await options.getOption('anthropicApiKey');
+                    if (!apiKey) {
+                        configIssues.push(`Anthropic API key is missing`);
+                    }
+                } else if (provider === 'ollama') {
+                    // Check Ollama configuration
+                    const baseUrl = await options.getOption('ollamaBaseUrl');
+                    if (!baseUrl) {
+                        configIssues.push(`Ollama Base URL is missing`);
+                    }
                 }
-
+                // Add checks for other providers as needed
+            }
+            
+            // Return warning message if there are configuration issues
+            if (configIssues.length > 0) {
+                let message = 'There are issues with your AI provider configuration:';
+                
+                for (const issue of configIssues) {
+                    message += `\n• ${issue}`;
+                }
+                
                 message += '\n\nPlease check your AI settings.';
-
+                
                 // Log warning to console
                 log.error('AI Provider Configuration Warning: ' + message);
-
+                
                 return message;
             }
 

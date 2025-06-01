@@ -20,6 +20,7 @@ import sql from "../sql.js";
 import sqlInit from "../sql_init.js";
 import { CONTEXT_PROMPTS } from './constants/llm_prompt_constants.js';
 import { SEARCH_CONSTANTS } from './constants/search_constants.js';
+import { isNoteExcludedFromAI } from "./utils/ai_exclusion_utils.js";
 
 export class IndexService {
     private initialized = false;
@@ -801,6 +802,12 @@ export class IndexService {
             const note = becca.getNote(noteId);
             if (!note) {
                 throw new Error(`Note ${noteId} not found`);
+            }
+
+            // Check if this note is excluded from AI features
+            if (isNoteExcludedFromAI(note)) {
+                log.info(`Note ${noteId} (${note.title}) excluded from AI indexing due to exclusion label`);
+                return true; // Return true to indicate successful handling (exclusion is intentional)
             }
 
             // Check where embedding generation should happen
