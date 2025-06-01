@@ -22,6 +22,7 @@ export default class InsertDateTimePlugin extends Plugin {
                 const component = glob.getComponentByEl(editorEl);
 
                 component.triggerCommand('insertDateTimeToText');
+                editor.editing.view.focus();
             } );
 
             return view;
