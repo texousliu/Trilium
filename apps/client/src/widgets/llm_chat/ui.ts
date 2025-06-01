@@ -31,11 +31,11 @@ export const TPL = `
 
     <form class="note-context-chat-form d-flex flex-column border-top p-2">
         <div class="d-flex chat-input-container mb-2">
-            <textarea
-                class="form-control note-context-chat-input"
-                placeholder="${t('ai_llm.enter_message')}"
-                rows="2"
-            ></textarea>
+            <div
+                class="form-control note-context-chat-input flex-grow-1"
+                style="min-height: 60px; max-height: 200px; overflow-y: auto;"
+                data-placeholder="${t('ai_llm.enter_message')}"
+            ></div>
             <button type="submit" class="btn btn-primary note-context-chat-send-button ms-2 d-flex align-items-center justify-content-center">
                 <i class="bx bx-send"></i>
             </button>

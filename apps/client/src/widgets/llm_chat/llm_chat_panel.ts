@@ -5,6 +5,7 @@ import BasicWidget from "../basic_widget.js";
 import toastService from "../../services/toast.js";
 import appContext from "../../components/app_context.js";
 import server from "../../services/server.js";
+import noteAutocompleteService from "../../services/note_autocomplete.js";
 
 import { TPL, addMessageToChat, showSources, hideSources, showLoadingIndicator, hideLoadingIndicator } from "./ui.js";
 import { formatMarkdown } from "./utils.js";
@@ -13,13 +14,16 @@ import { extractInChatToolSteps } from "./message_processor.js";
 import { validateEmbeddingProviders } from "./validation.js";
 import type { MessageData, ToolExecutionStep, ChatData } from "./types.js";
 import { formatCodeBlocks } from "../../services/syntax_highlight.js";
+import { ClassicEditor, type CKTextEditor, type MentionFeed } from "@triliumnext/ckeditor5";
+import type { Suggestion } from "../../services/note_autocomplete.js";
 
 import "../../stylesheets/llm_chat.css";
 
 export default class LlmChatPanel extends BasicWidget {
     private noteContextChatMessages!: HTMLElement;
     private noteContextChatForm!: HTMLFormElement;
-    private noteContextChatInput!: HTMLTextAreaElement;
+    private noteContextChatInput!: HTMLElement;
+    private noteContextChatInputEditor!: CKTextEditor;
     private noteContextChatSendButton!: HTMLButtonElement;
     private chatContainer!: HTMLElement;
     private loadingIndicator!: HTMLElement;
@@ -104,7 +108,7 @@ export default class LlmChatPanel extends BasicWidget {
         const element = this.$widget[0];
         this.noteContextChatMessages = element.querySelector('.note-context-chat-messages') as HTMLElement;
         this.noteContextChatForm = element.querySelector('.note-context-chat-form') as HTMLFormElement;
-        this.noteContextChatInput = element.querySelector('.note-context-chat-input') as HTMLTextAreaElement;
+        this.noteContextChatInput = element.querySelector('.note-context-chat-input') as HTMLElement;
         this.noteContextChatSendButton = element.querySelector('.note-context-chat-send-button') as HTMLButtonElement;
         this.chatContainer = element.querySelector('.note-context-chat-container') as HTMLElement;
         this.loadingIndicator = element.querySelector('.loading-indicator') as HTMLElement;
@@ -124,15 +128,81 @@ export default class LlmChatPanel extends BasicWidget {
             }
         });
 
-        this.initializeEventListeners();
+        // Initialize CKEditor with mention support (async)
+        this.initializeCKEditor().then(() => {
+            this.initializeEventListeners();
+        }).catch(error => {
+            console.error('Failed to initialize CKEditor, falling back to basic event listeners:', error);
+            this.initializeBasicEventListeners();
+        });
 
         return this.$widget;
+    }
+
+    private async initializeCKEditor() {
+        const mentionSetup: MentionFeed[] = [
+            {
+                marker: "@",
+                feed: (queryText: string) => noteAutocompleteService.autocompleteSourceForCKEditor(queryText),
+                itemRenderer: (item) => {
+                    const suggestion = item as Suggestion;
+                    const itemElement = document.createElement("button");
+                    itemElement.innerHTML = `${suggestion.highlightedNotePathTitle} `;
+                    return itemElement;
+                },
+                minimumCharacters: 0
+            }
+        ];
+
+        this.noteContextChatInputEditor = await ClassicEditor.create(this.noteContextChatInput, {
+            toolbar: {
+                items: [] // No toolbar for chat input
+            },
+            placeholder: this.noteContextChatInput.getAttribute('data-placeholder') || 'Enter your message...',
+            mention: {
+                feeds: mentionSetup
+            },
+            licenseKey: "GPL"
+        });
+
+        // Set minimal height
+        const editorElement = this.noteContextChatInputEditor.ui.getEditableElement();
+        if (editorElement) {
+            editorElement.style.minHeight = '60px';
+            editorElement.style.maxHeight = '200px';
+            editorElement.style.overflowY = 'auto';
+        }
+
+        // Set up keybindings after editor is ready
+        this.setupEditorKeyBindings();
+
+        console.log('CKEditor initialized successfully for LLM chat input');
+    }
+
+    private initializeBasicEventListeners() {
+        // Fallback event listeners for when CKEditor fails to initialize
+        this.noteContextChatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // In fallback mode, the noteContextChatInput should contain a textarea
+            const textarea = this.noteContextChatInput.querySelector('textarea');
+            if (textarea) {
+                const content = textarea.value;
+                this.sendMessage(content);
+            }
+        });
     }
 
     cleanup() {
         console.log(`LlmChatPanel cleanup called, removing any active WebSocket subscriptions`);
         this._messageHandler = null;
         this._messageHandlerId = null;
+
+        // Clean up CKEditor instance
+        if (this.noteContextChatInputEditor) {
+            this.noteContextChatInputEditor.destroy().catch(error => {
+                console.error('Error destroying CKEditor:', error);
+            });
+        }
     }
 
     /**
@@ -531,18 +601,31 @@ export default class LlmChatPanel extends BasicWidget {
     private async sendMessage(content: string) {
         if (!content.trim()) return;
 
+        // Extract mentions from the content if using CKEditor
+        let mentions: Array<{noteId: string; title: string; notePath: string}> = [];
+        let plainTextContent = content;
+
+        if (this.noteContextChatInputEditor) {
+            const extracted = this.extractMentionsAndContent(content);
+            mentions = extracted.mentions;
+            plainTextContent = extracted.content;
+        }
+
         // Add the user message to the UI and data model
-        this.addMessageToChat('user', content);
+        this.addMessageToChat('user', plainTextContent);
         this.messages.push({
             role: 'user',
-            content: content
+            content: plainTextContent,
+            mentions: mentions.length > 0 ? mentions : undefined
         });
 
         // Save the data immediately after a user message
         await this.saveCurrentData();
 
         // Clear input and show loading state
-        this.noteContextChatInput.value = '';
+        if (this.noteContextChatInputEditor) {
+            this.noteContextChatInputEditor.setData('');
+        }
         showLoadingIndicator(this.loadingIndicator);
         this.hideSources();
 
@@ -555,9 +638,10 @@ export default class LlmChatPanel extends BasicWidget {
 
             // Create the message parameters
             const messageParams = {
-                content,
+                content: plainTextContent,
                 useAdvancedContext,
-                showThinking
+                showThinking,
+                mentions: mentions.length > 0 ? mentions : undefined
             };
 
             // Try websocket streaming (preferred method)
@@ -621,7 +705,9 @@ export default class LlmChatPanel extends BasicWidget {
         }
 
         // Clear input and show loading state
-        this.noteContextChatInput.value = '';
+        if (this.noteContextChatInputEditor) {
+            this.noteContextChatInputEditor.setData('');
+        }
         showLoadingIndicator(this.loadingIndicator);
         this.hideSources();
 
@@ -1213,22 +1299,122 @@ export default class LlmChatPanel extends BasicWidget {
     private initializeEventListeners() {
         this.noteContextChatForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const content = this.noteContextChatInput.value;
-            this.sendMessage(content);
-        });
 
-        // Add auto-resize functionality to the textarea
-        this.noteContextChatInput.addEventListener('input', () => {
-            this.noteContextChatInput.style.height = 'auto';
-            this.noteContextChatInput.style.height = `${this.noteContextChatInput.scrollHeight}px`;
-        });
+            let content = '';
 
-        // Handle Enter key (send on Enter, new line on Shift+Enter)
-        this.noteContextChatInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                this.noteContextChatForm.dispatchEvent(new Event('submit'));
+            if (this.noteContextChatInputEditor && this.noteContextChatInputEditor.getData) {
+                // Use CKEditor content
+                content = this.noteContextChatInputEditor.getData();
+            } else {
+                // Fallback: check if there's a textarea (fallback mode)
+                const textarea = this.noteContextChatInput.querySelector('textarea');
+                if (textarea) {
+                    content = textarea.value;
+                } else {
+                    // Last resort: try to get text content from the div
+                    content = this.noteContextChatInput.textContent || this.noteContextChatInput.innerText || '';
+                }
+            }
+
+            if (content.trim()) {
+                this.sendMessage(content);
             }
         });
+
+        // Handle Enter key (send on Enter, new line on Shift+Enter) via CKEditor
+        // We'll set this up after CKEditor is initialized
+        this.setupEditorKeyBindings();
+    }
+
+    private setupEditorKeyBindings() {
+        if (this.noteContextChatInputEditor && this.noteContextChatInputEditor.keystrokes) {
+            try {
+                this.noteContextChatInputEditor.keystrokes.set('Enter', (key, stop) => {
+                    if (!key.shiftKey) {
+                        stop();
+                        this.noteContextChatForm.dispatchEvent(new Event('submit'));
+                    }
+                });
+                console.log('CKEditor keybindings set up successfully');
+            } catch (error) {
+                console.warn('Failed to set up CKEditor keybindings:', error);
+            }
+        }
+    }
+
+    /**
+     * Extract note mentions and content from CKEditor
+     */
+    private extractMentionsAndContent(editorData: string): { content: string; mentions: Array<{noteId: string; title: string; notePath: string}> } {
+        const mentions: Array<{noteId: string; title: string; notePath: string}> = [];
+
+        // Parse the HTML content to extract mentions
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = editorData;
+
+        // Find all mention elements - CKEditor uses specific patterns for mentions
+        // Look for elements with data-mention attribute or specific mention classes
+        const mentionElements = tempDiv.querySelectorAll('[data-mention], .mention, span[data-id]');
+
+        mentionElements.forEach(mentionEl => {
+            try {
+                // Try different ways to extract mention data based on CKEditor's format
+                let mentionData: any = null;
+
+                // Method 1: data-mention attribute (JSON format)
+                if (mentionEl.hasAttribute('data-mention')) {
+                    mentionData = JSON.parse(mentionEl.getAttribute('data-mention') || '{}');
+                }
+                // Method 2: data-id attribute (simple format)
+                else if (mentionEl.hasAttribute('data-id')) {
+                    const dataId = mentionEl.getAttribute('data-id');
+                    const textContent = mentionEl.textContent || '';
+
+                    // Parse the dataId to extract note information
+                    if (dataId && dataId.startsWith('@')) {
+                        const cleanId = dataId.substring(1); // Remove the @
+                        mentionData = {
+                            id: cleanId,
+                            name: textContent,
+                            notePath: cleanId // Assume the ID contains the path
+                        };
+                    }
+                }
+                // Method 3: Check if this is a reference link (href=#notePath)
+                else if (mentionEl.tagName === 'A' && mentionEl.hasAttribute('href')) {
+                    const href = mentionEl.getAttribute('href');
+                    if (href && href.startsWith('#')) {
+                        const notePath = href.substring(1);
+                        mentionData = {
+                            notePath: notePath,
+                            noteTitle: mentionEl.textContent || 'Unknown Note'
+                        };
+                    }
+                }
+
+                if (mentionData && (mentionData.notePath || mentionData.link)) {
+                    const notePath = mentionData.notePath || mentionData.link?.substring(1); // Remove # from link
+                    const noteId = notePath ? notePath.split('/').pop() : null;
+                    const title = mentionData.noteTitle || mentionData.name || mentionEl.textContent || 'Unknown Note';
+
+                    if (noteId) {
+                        mentions.push({
+                            noteId: noteId,
+                            title: title,
+                            notePath: notePath
+                        });
+                        console.log(`Extracted mention: noteId=${noteId}, title=${title}, notePath=${notePath}`);
+                    }
+                }
+            } catch (e) {
+                console.warn('Failed to parse mention data:', e, mentionEl);
+            }
+        });
+
+        // Convert to plain text for the LLM, but preserve the structure
+        const content = tempDiv.textContent || tempDiv.innerText || '';
+
+        console.log(`Extracted ${mentions.length} mentions from editor content`);
+        return { content, mentions };
     }
 }
