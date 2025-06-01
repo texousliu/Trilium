@@ -1402,6 +1402,7 @@ div.floating-buttons .show-floating-buttons-button:active {
 div.floating-buttons-children .close-floating-buttons-button::before,
 div.floating-buttons .show-floating-buttons-button::before {
     display: block;
+    line-height: 1;
 }
 
 /* "Show buttons" button */
