@@ -3,9 +3,22 @@ import type { ModelSelectionInput } from '../interfaces.js';
 import type { ChatCompletionOptions } from '../../ai_interface.js';
 import type { ModelMetadata } from '../../providers/provider_options.js';
 import log from '../../../log.js';
-import options from '../../../options.js';
 import aiServiceManager from '../../ai_service_manager.js';
 import { SEARCH_CONSTANTS, MODEL_CAPABILITIES } from "../../constants/search_constants.js";
+
+// Import types
+import type { ServiceProviders } from '../../interfaces/ai_service_interfaces.js';
+
+// Import new configuration system
+import {
+    getProviderPrecedence,
+    getPreferredProvider,
+    parseModelIdentifier,
+    getDefaultModelForProvider,
+    createModelConfig
+} from '../../config/configuration_helpers.js';
+import type { ProviderType } from '../../interfaces/configuration_interfaces.js';
+
 /**
  * Pipeline stage for selecting the appropriate LLM model
  */
@@ -36,15 +49,15 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
 
         // If model already specified, don't override it
         if (updatedOptions.model) {
-            // Check if the model has a provider prefix, which indicates legacy format
-            const modelParts = this.parseModelIdentifier(updatedOptions.model);
+            // Use the new configuration system to parse model identifier
+            const modelIdentifier = parseModelIdentifier(updatedOptions.model);
 
-            if (modelParts.provider) {
+            if (modelIdentifier.provider) {
                 // Add provider metadata for backward compatibility
-                this.addProviderMetadata(updatedOptions, modelParts.provider, modelParts.model);
+                this.addProviderMetadata(updatedOptions, modelIdentifier.provider as ServiceProviders, modelIdentifier.modelId);
                 // Update the model to be just the model name without provider prefix
-                updatedOptions.model = modelParts.model;
-                log.info(`Using explicitly specified model: ${modelParts.model} from provider: ${modelParts.provider}`);
+                updatedOptions.model = modelIdentifier.modelId;
+                log.info(`Using explicitly specified model: ${modelIdentifier.modelId} from provider: ${modelIdentifier.provider}`);
             } else {
                 log.info(`Using explicitly specified model: ${updatedOptions.model}`);
             }
@@ -86,52 +99,21 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
             }
         }
 
-        // Get default provider and model based on precedence
-        let defaultProvider = 'openai';
+        // Get default provider and model using the new configuration system
+        let defaultProvider: ProviderType = 'openai';
         let defaultModelName = 'gpt-3.5-turbo';
 
         try {
-            // Get provider precedence list
-            const providerPrecedence = await options.getOption('aiProviderPrecedence');
-            if (providerPrecedence) {
-                // Parse provider precedence list
-                let providers: string[] = [];
-                if (providerPrecedence.includes(',')) {
-                    providers = providerPrecedence.split(',').map(p => p.trim());
-                } else if (providerPrecedence.startsWith('[') && providerPrecedence.endsWith(']')) {
-                    providers = JSON.parse(providerPrecedence);
-                } else {
-                    providers = [providerPrecedence];
-                }
+            // Use the new configuration helpers - no string parsing!
+            defaultProvider = await getPreferredProvider();
+            defaultModelName = await getDefaultModelForProvider(defaultProvider);
 
-                // Check for first available provider
-                if (providers.length > 0) {
-                    const firstProvider = providers[0];
-                    defaultProvider = firstProvider;
-
-                    // Get provider-specific default model
-                    if (firstProvider === 'openai') {
-                        const model = await options.getOption('openaiDefaultModel');
-                        if (model) defaultModelName = model;
-                    } else if (firstProvider === 'anthropic') {
-                        const model = await options.getOption('anthropicDefaultModel');
-                        if (model) defaultModelName = model;
-                    } else if (firstProvider === 'ollama') {
-                        const model = await options.getOption('ollamaDefaultModel');
-                        if (model) {
-                            defaultModelName = model;
-
-                            // Enable tools for all Ollama models
-                            // The Ollama API will handle models that don't support tool calling
-                            log.info(`Using Ollama model ${model} with tool calling enabled`);
-                            updatedOptions.enableTools = true;
-                        }
-                    }
-                }
-            }
+            log.info(`Selected provider: ${defaultProvider}, model: ${defaultModelName}`);
         } catch (error) {
             // If any error occurs, use the fallback default
             log.error(`Error determining default model: ${error}`);
+            defaultProvider = 'openai';
+            defaultModelName = 'gpt-3.5-turbo';
         }
 
         // Determine query complexity
@@ -162,7 +144,7 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
 
         // Set the model and add provider metadata
         updatedOptions.model = defaultModelName;
-        this.addProviderMetadata(updatedOptions, defaultProvider, defaultModelName);
+        this.addProviderMetadata(updatedOptions, defaultProvider as ServiceProviders, defaultModelName);
 
         log.info(`Selected model: ${defaultModelName} from provider: ${defaultProvider} for query complexity: ${queryComplexity}`);
         log.info(`[ModelSelectionStage] Final options: ${JSON.stringify({
@@ -176,28 +158,9 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
     }
 
     /**
-     * Helper to parse model identifier with provider prefix
-     * Handles legacy format "provider:model"
-     */
-    private parseModelIdentifier(modelId: string): { provider?: string, model: string } {
-        if (!modelId) return { model: '' };
-
-        const parts = modelId.split(':');
-        if (parts.length === 1) {
-            // No provider prefix
-            return { model: modelId };
-        } else {
-            // Extract provider and model
-            const provider = parts[0];
-            const model = parts.slice(1).join(':'); // Handle model names that might include :
-            return { provider, model };
-        }
-    }
-
-    /**
      * Add provider metadata to the options based on model name
      */
-    private addProviderMetadata(options: ChatCompletionOptions, provider: string, modelName: string): void {
+    private addProviderMetadata(options: ChatCompletionOptions, provider: ServiceProviders, modelName: string): void {
         // Check if we already have providerMetadata
         if (options.providerMetadata) {
             // If providerMetadata exists but not modelId, add the model name
@@ -216,7 +179,7 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
             // Find the first available provider
             for (const p of providerPrecedence) {
                 if (aiServiceManager.isProviderAvailable(p)) {
-                    selectedProvider = p;
+                    selectedProvider = p as ServiceProviders;
                     break;
                 }
             }
@@ -234,8 +197,8 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
 
             // For backward compatibility, ensure model name is set without prefix
             if (options.model && options.model.includes(':')) {
-                const parsed = this.parseModelIdentifier(options.model);
-                options.model = modelName || parsed.model;
+                const parsed = parseModelIdentifier(options.model);
+                options.model = modelName || parsed.modelId;
             }
 
             log.info(`Set provider metadata: provider=${selectedProvider}, model=${modelName}`);
@@ -243,33 +206,40 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
     }
 
     /**
-     * Determine model based on provider precedence
+     * Determine model based on provider precedence using the new configuration system
      */
-    private determineDefaultModel(input: ModelSelectionInput): string {
-        const providerPrecedence = ['anthropic', 'openai', 'ollama'];
+    private async determineDefaultModel(input: ModelSelectionInput): Promise<string> {
+        try {
+            // Use the new configuration system
+            const providers = await getProviderPrecedence();
 
-        // Use only providers that are available
-        const availableProviders = providerPrecedence.filter(provider =>
-            aiServiceManager.isProviderAvailable(provider));
+            // Use only providers that are available
+            const availableProviders = providers.filter(provider =>
+                aiServiceManager.isProviderAvailable(provider));
 
-        if (availableProviders.length === 0) {
-            throw new Error('No AI providers are available');
+            if (availableProviders.length === 0) {
+                throw new Error('No AI providers are available');
+            }
+
+            // Get the first available provider and its default model
+            const defaultProvider = availableProviders[0];
+            const defaultModel = await getDefaultModelForProvider(defaultProvider);
+
+            // Set provider metadata
+            if (!input.options.providerMetadata) {
+                input.options.providerMetadata = {
+                    provider: defaultProvider as 'openai' | 'anthropic' | 'ollama' | 'local',
+                    modelId: defaultModel
+                };
+            }
+
+            log.info(`Selected default model ${defaultModel} from provider ${defaultProvider}`);
+            return defaultModel;
+        } catch (error) {
+            log.error(`Error determining default model: ${error}`);
+            // Fallback to hardcoded default
+            return 'gpt-3.5-turbo';
         }
-
-        // Get the first available provider and its default model
-        const defaultProvider = availableProviders[0] as 'openai' | 'anthropic' | 'ollama' | 'local';
-        let defaultModel = 'gpt-3.5-turbo'; // Use model from our constants
-
-        // Set provider metadata
-        if (!input.options.providerMetadata) {
-            input.options.providerMetadata = {
-                provider: defaultProvider,
-                modelId: defaultModel
-            };
-        }
-
-        log.info(`Selected default model ${defaultModel} from provider ${defaultProvider}`);
-        return defaultModel;
     }
 
     /**

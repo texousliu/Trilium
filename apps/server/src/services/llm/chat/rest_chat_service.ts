@@ -510,8 +510,8 @@ class RestChatService {
                 }
 
                 if (!noteId) {
-                    log.info(`Creating new chat note from context of note ${options.currentNoteId}`);
-                    // Don't use the currentNoteId as the chat note ID - create a new one
+                log.info(`Creating new chat note from context of note ${options.currentNoteId}`);
+                // Don't use the currentNoteId as the chat note ID - create a new one
                 }
             }
 
