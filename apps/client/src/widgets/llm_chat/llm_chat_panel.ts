@@ -362,16 +362,52 @@ export default class LlmChatPanel extends BasicWidget {
             const savedData = await this.onGetData() as ChatData;
 
             if (savedData?.messages?.length > 0) {
+                // Check if we actually have new content to avoid unnecessary UI rebuilds
+                const currentMessageCount = this.messages.length;
+                const savedMessageCount = savedData.messages.length;
+
+                // If message counts are the same, check if content is different
+                const hasNewContent = savedMessageCount > currentMessageCount ||
+                    JSON.stringify(this.messages) !== JSON.stringify(savedData.messages);
+
+                if (!hasNewContent) {
+                    console.log("No new content detected, skipping UI rebuild");
+                    return true;
+                }
+
+                console.log(`Loading saved data: ${currentMessageCount} -> ${savedMessageCount} messages`);
+
+                // Store current scroll position if we need to preserve it
+                const shouldPreserveScroll = savedMessageCount > currentMessageCount && currentMessageCount > 0;
+                const currentScrollTop = shouldPreserveScroll ? this.chatContainer.scrollTop : 0;
+                const currentScrollHeight = shouldPreserveScroll ? this.chatContainer.scrollHeight : 0;
+
                 // Load messages
+                const oldMessages = [...this.messages];
                 this.messages = savedData.messages;
 
-                // Clear and rebuild the chat UI
-                this.noteContextChatMessages.innerHTML = '';
+                // Only rebuild UI if we have significantly different content
+                if (savedMessageCount > currentMessageCount) {
+                    // We have new messages - just add the new ones instead of rebuilding everything
+                    const newMessages = savedData.messages.slice(currentMessageCount);
+                    console.log(`Adding ${newMessages.length} new messages to UI`);
 
-                this.messages.forEach(message => {
-                    const role = message.role as 'user' | 'assistant';
-                    this.addMessageToChat(role, message.content);
-                });
+                    newMessages.forEach(message => {
+                        const role = message.role as 'user' | 'assistant';
+                        this.addMessageToChat(role, message.content);
+                    });
+                } else {
+                    // Content changed but count is same - need to rebuild
+                    console.log("Message content changed, rebuilding UI");
+
+                    // Clear and rebuild the chat UI
+                    this.noteContextChatMessages.innerHTML = '';
+
+                    this.messages.forEach(message => {
+                        const role = message.role as 'user' | 'assistant';
+                        this.addMessageToChat(role, message.content);
+                    });
+                }
 
                 // Restore tool execution steps if they exist
                 if (savedData.toolSteps && Array.isArray(savedData.toolSteps) && savedData.toolSteps.length > 0) {
@@ -419,6 +455,27 @@ export default class LlmChatPanel extends BasicWidget {
                 } else {
                     console.log(`No noteId found in saved data, cannot load chat session`);
                     return false;
+                }
+
+                // Restore scroll position if we were preserving it
+                if (shouldPreserveScroll) {
+                    // Calculate the new scroll position to maintain relative position
+                    const newScrollHeight = this.chatContainer.scrollHeight;
+                    const scrollDifference = newScrollHeight - currentScrollHeight;
+                    const newScrollTop = currentScrollTop + scrollDifference;
+
+                    // Only scroll down if we're near the bottom, otherwise preserve exact position
+                    const wasNearBottom = (currentScrollTop + this.chatContainer.clientHeight) >= (currentScrollHeight - 50);
+
+                    if (wasNearBottom) {
+                        // User was at bottom, scroll to new bottom
+                        this.chatContainer.scrollTop = newScrollHeight;
+                        console.log("User was at bottom, scrolling to new bottom");
+                    } else {
+                        // User was not at bottom, try to preserve their position
+                        this.chatContainer.scrollTop = newScrollTop;
+                        console.log(`Preserving scroll position: ${currentScrollTop} -> ${newScrollTop}`);
+                    }
                 }
 
                 return true;
@@ -1105,7 +1162,7 @@ export default class LlmChatPanel extends BasicWidget {
                         console.error("Failed to save assistant response to note:", err);
                     });
                 }
-            }, 3000); // Wait 3 seconds for server to complete its save
+            }, 1500); // Wait 1.5 seconds for server to complete its save
         }
 
         // Scroll to bottom
