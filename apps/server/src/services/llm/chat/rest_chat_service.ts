@@ -480,27 +480,56 @@ class RestChatService {
             const options: any = req.body || {};
             const title = options.title || 'Chat Session';
 
-            // Use the currentNoteId as the chatNoteId if provided
-            let chatNoteId = options.chatNoteId;
+            // Determine the note ID for the chat
+            let noteId = options.noteId || options.chatNoteId; // Accept either name for backward compatibility
 
-            // If currentNoteId is provided but chatNoteId is not, use currentNoteId
-            if (!chatNoteId && options.currentNoteId) {
-                chatNoteId = options.currentNoteId;
-                log.info(`Using provided currentNoteId ${chatNoteId} as chatNoteId`);
+            // If currentNoteId is provided, check if it's already an AI Chat note
+            if (!noteId && options.currentNoteId) {
+                // Import becca to check note type
+                const becca = (await import('../../../becca/becca.js')).default;
+                const note = becca.notes[options.currentNoteId];
+
+                // Check if this is an AI Chat note by looking at its content structure
+                if (note) {
+                    try {
+                        const content = note.getContent();
+                        if (content) {
+                            const contentStr = typeof content === 'string' ? content : content.toString();
+                            const parsedContent = JSON.parse(contentStr);
+                            // AI Chat notes have a messages array and noteId in their content
+                            if (parsedContent.messages && Array.isArray(parsedContent.messages) && parsedContent.noteId) {
+                                // This looks like an AI Chat note - use it directly
+                                noteId = options.currentNoteId;
+                                log.info(`Using existing AI Chat note ${noteId} as session`);
+                            }
+                        }
+                    } catch (e) {
+                        // Not JSON content, so not an AI Chat note
+                    }
+                }
+
+                if (!noteId) {
+                    log.info(`Creating new chat note from context of note ${options.currentNoteId}`);
+                    // Don't use the currentNoteId as the chat note ID - create a new one
+                }
             }
 
-            // If we still don't have a chatNoteId, create a new Chat Note
-            if (!chatNoteId) {
+            // If we don't have a noteId, create a new Chat Note
+            if (!noteId) {
                 // Create a new Chat Note via the storage service
                 const chatStorageService = (await import('../../llm/chat_storage_service.js')).default;
                 const newChat = await chatStorageService.createChat(title);
-                chatNoteId = newChat.id;
-                log.info(`Created new Chat Note with ID: ${chatNoteId}`);
+                noteId = newChat.id;
+                log.info(`Created new Chat Note with ID: ${noteId}`);
+            } else {
+                // We have a noteId - this means we're working with an existing aiChat note
+                // Don't create another note, just use the existing one
+                log.info(`Using existing Chat Note with ID: ${noteId}`);
             }
 
-            // Create a new session through our session store
+            // Create a new session through our session store using the note ID
             const session = SessionsStore.createSession({
-                chatNoteId,
+                chatNoteId: noteId, // This is really the noteId of the chat note
                 title,
                 systemPrompt: options.systemPrompt,
                 contextNoteId: options.contextNoteId,
@@ -511,10 +540,10 @@ class RestChatService {
             });
 
             return {
-                id: session.id,
+                id: session.id, // This will be the same as noteId
                 title: session.title,
                 createdAt: session.createdAt,
-                noteId: chatNoteId // Return the note ID explicitly
+                noteId: noteId // Return the note ID for clarity
             };
         } catch (error: any) {
             log.error(`Error creating LLM session: ${error.message || 'Unknown error'}`);

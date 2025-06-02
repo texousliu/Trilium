@@ -814,10 +814,11 @@ async function streamMessage(req: Request, res: Response) {
             throw new Error('Content cannot be empty');
         }
 
-        // Check if session exists
-        const session = restChatService.getSessions().get(chatNoteId);
+        // Get or create session from Chat Note
+        // This will check the sessions store first, and if not found, create from the Chat Note
+        const session = await restChatService.getOrCreateSessionFromChatNote(chatNoteId, true);
         if (!session) {
-            throw new Error('Chat not found');
+            throw new Error('Chat not found and could not be created from note');
         }
 
         // Update last active timestamp

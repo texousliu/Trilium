@@ -37,9 +37,10 @@ export default class LlmChatPanel extends BasicWidget {
     private thinkingBubble!: HTMLElement;
     private thinkingText!: HTMLElement;
     private thinkingToggle!: HTMLElement;
-    private chatNoteId: string | null = null;
-    private noteId: string | null = null; // The actual noteId for the Chat Note
-    private currentNoteId: string | null = null;
+
+    // Simplified to just use noteId - this represents the AI Chat note we're working with
+    private noteId: string | null = null;
+    private currentNoteId: string | null = null; // The note providing context (for regular notes)
     private _messageHandlerId: number | null = null;
     private _messageHandler: any = null;
 
@@ -90,12 +91,21 @@ export default class LlmChatPanel extends BasicWidget {
         this.messages = messages;
     }
 
-    public getChatNoteId(): string | null {
-        return this.chatNoteId;
+    public getNoteId(): string | null {
+        return this.noteId;
     }
 
-    public setChatNoteId(chatNoteId: string | null): void {
-        this.chatNoteId = chatNoteId;
+    public setNoteId(noteId: string | null): void {
+        this.noteId = noteId;
+    }
+
+    // Deprecated - keeping for backward compatibility but mapping to noteId
+    public getChatNoteId(): string | null {
+        return this.noteId;
+    }
+
+    public setChatNoteId(noteId: string | null): void {
+        this.noteId = noteId;
     }
 
     public getNoteContextChatMessages(): HTMLElement {
@@ -307,10 +317,16 @@ export default class LlmChatPanel extends BasicWidget {
                 }
             }
 
-            const dataToSave: ChatData = {
+            // Only save if we have a valid note ID
+            if (!this.noteId) {
+                console.warn('Cannot save chat data: no noteId available');
+                return;
+            }
+
+            const dataToSave = {
                 messages: this.messages,
-                chatNoteId: this.chatNoteId,
                 noteId: this.noteId,
+                chatNoteId: this.noteId, // For backward compatibility
                 toolSteps: toolSteps,
                 // Add sources if we have them
                 sources: this.sources || [],
@@ -325,7 +341,7 @@ export default class LlmChatPanel extends BasicWidget {
                 }
             };
 
-            console.log(`Saving chat data with chatNoteId: ${this.chatNoteId}, noteId: ${this.noteId}, ${toolSteps.length} tool steps, ${this.sources?.length || 0} sources, ${toolExecutions.length} tool executions`);
+            console.log(`Saving chat data with noteId: ${this.noteId}, ${toolSteps.length} tool steps, ${this.sources?.length || 0} sources, ${toolExecutions.length} tool executions`);
 
             // Save the data to the note attribute via the callback
             // This is the ONLY place we should save data, letting the container widget handle persistence
@@ -400,7 +416,6 @@ export default class LlmChatPanel extends BasicWidget {
                 // Load Chat Note ID if available
                 if (savedData.noteId) {
                     console.log(`Using noteId as Chat Note ID: ${savedData.noteId}`);
-                    this.chatNoteId = savedData.noteId;
                     this.noteId = savedData.noteId;
                 } else {
                     console.log(`No noteId found in saved data, cannot load chat session`);
@@ -550,6 +565,15 @@ export default class LlmChatPanel extends BasicWidget {
         // Get current note context if needed
         const currentActiveNoteId = appContext.tabManager.getActiveContext()?.note?.noteId || null;
 
+        // For AI Chat notes, the note itself IS the chat session
+        // So currentNoteId and noteId should be the same
+        if (this.noteId && currentActiveNoteId === this.noteId) {
+            // We're in an AI Chat note - don't reset, just load saved data
+            console.log(`Refreshing AI Chat note ${this.noteId} - loading saved data`);
+            await this.loadSavedData();
+            return;
+        }
+
         // If we're switching to a different note, we need to reset
         if (this.currentNoteId !== currentActiveNoteId) {
             console.log(`Note ID changed from ${this.currentNoteId} to ${currentActiveNoteId}, resetting chat panel`);
@@ -557,7 +581,6 @@ export default class LlmChatPanel extends BasicWidget {
             // Reset the UI and data
             this.noteContextChatMessages.innerHTML = '';
             this.messages = [];
-            this.chatNoteId = null;
             this.noteId = null; // Also reset the chat note ID
             this.hideSources(); // Hide any sources from previous note
 
@@ -569,7 +592,7 @@ export default class LlmChatPanel extends BasicWidget {
         const hasSavedData = await this.loadSavedData();
 
         // Only create a new session if we don't have a session or saved data
-        if (!this.chatNoteId || !this.noteId || !hasSavedData) {
+        if (!this.noteId || !hasSavedData) {
             // Create a new chat session
             await this.createChatSession();
         }
@@ -580,19 +603,15 @@ export default class LlmChatPanel extends BasicWidget {
      */
     private async createChatSession() {
         try {
-            // Create a new chat session, passing the current note ID if it exists
-            const { chatNoteId, noteId } = await createChatSession(
-                this.currentNoteId ? this.currentNoteId : undefined
-            );
+            // If we already have a noteId (for AI Chat notes), use it
+            const contextNoteId = this.noteId || this.currentNoteId;
 
-            if (chatNoteId) {
-                // If we got back an ID from the API, use it
-                this.chatNoteId = chatNoteId;
+            // Create a new chat session, passing the context note ID
+            const noteId = await createChatSession(contextNoteId ? contextNoteId : undefined);
 
-                // For new sessions, the noteId should equal the chatNoteId
-                // This ensures we're using the note ID consistently
-                this.noteId = noteId || chatNoteId;
-
+            if (noteId) {
+                // Set the note ID for this chat
+                this.noteId = noteId;
                 console.log(`Created new chat session with noteId: ${this.noteId}`);
             } else {
                 throw new Error("Failed to create chat session - no ID returned");
@@ -645,7 +664,7 @@ export default class LlmChatPanel extends BasicWidget {
             const showThinking = this.showThinkingCheckbox.checked;
 
             // Add logging to verify parameters
-            console.log(`Sending message with: useAdvancedContext=${useAdvancedContext}, showThinking=${showThinking}, noteId=${this.currentNoteId}, sessionId=${this.chatNoteId}`);
+            console.log(`Sending message with: useAdvancedContext=${useAdvancedContext}, showThinking=${showThinking}, noteId=${this.currentNoteId}, sessionId=${this.noteId}`);
 
             // Create the message parameters
             const messageParams = {
@@ -695,11 +714,11 @@ export default class LlmChatPanel extends BasicWidget {
         await validateEmbeddingProviders(this.validationWarning);
 
         // Make sure we have a valid session
-        if (!this.chatNoteId) {
+        if (!this.noteId) {
             // If no session ID, create a new session
             await this.createChatSession();
 
-            if (!this.chatNoteId) {
+            if (!this.noteId) {
                 // If still no session ID, show error and return
                 console.error("Failed to create chat session");
                 toastService.showError("Failed to create chat session");
@@ -730,7 +749,7 @@ export default class LlmChatPanel extends BasicWidget {
             await this.saveCurrentData();
 
             // Add logging to verify parameters
-            console.log(`Sending message with: useAdvancedContext=${useAdvancedContext}, showThinking=${showThinking}, noteId=${this.currentNoteId}, sessionId=${this.chatNoteId}`);
+            console.log(`Sending message with: useAdvancedContext=${useAdvancedContext}, showThinking=${showThinking}, noteId=${this.currentNoteId}, sessionId=${this.noteId}`);
 
             // Create the message parameters
             const messageParams = {
@@ -767,12 +786,12 @@ export default class LlmChatPanel extends BasicWidget {
      */
     private async handleDirectResponse(messageParams: any): Promise<boolean> {
         try {
-            if (!this.chatNoteId) return false;
+            if (!this.noteId) return false;
 
-            console.log(`Getting direct response using sessionId: ${this.chatNoteId} (noteId: ${this.noteId})`);
+            console.log(`Getting direct response using sessionId: ${this.noteId} (noteId: ${this.noteId})`);
 
             // Get a direct response from the server
-            const postResponse = await getDirectResponse(this.chatNoteId, messageParams);
+            const postResponse = await getDirectResponse(this.noteId, messageParams);
 
             // If the POST request returned content directly, display it
             if (postResponse && postResponse.content) {
@@ -845,11 +864,11 @@ export default class LlmChatPanel extends BasicWidget {
      * Set up streaming response via WebSocket
      */
     private async setupStreamingResponse(messageParams: any): Promise<void> {
-        if (!this.chatNoteId) {
+        if (!this.noteId) {
             throw new Error("No session ID available");
         }
 
-        console.log(`Setting up streaming response using sessionId: ${this.chatNoteId} (noteId: ${this.noteId})`);
+        console.log(`Setting up streaming response using sessionId: ${this.noteId} (noteId: ${this.noteId})`);
 
         // Store tool executions captured during streaming
         const toolExecutionsCache: Array<{
@@ -862,7 +881,7 @@ export default class LlmChatPanel extends BasicWidget {
         }> = [];
 
         return setupStreamingResponse(
-            this.chatNoteId,
+            this.noteId,
             messageParams,
             // Content update handler
             (content: string, isDone: boolean = false) => {
@@ -898,7 +917,7 @@ export default class LlmChatPanel extends BasicWidget {
                             similarity?: number;
                             content?: string;
                         }>;
-                    }>(`llm/chat/${this.chatNoteId}`)
+                    }>(`llm/chat/${this.noteId}`)
                         .then((sessionData) => {
                             console.log("Got updated session data:", sessionData);
 
