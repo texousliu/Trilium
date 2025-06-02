@@ -23,8 +23,11 @@ export async function getProviderPrecedence(): Promise<ProviderType[]> {
 /**
  * Get the default/preferred AI provider
  */
-export async function getPreferredProvider(): Promise<ProviderType> {
+export async function getPreferredProvider(): Promise<ProviderType | null> {
     const config = await configurationManager.getProviderPrecedence();
+    if (config.providers.length === 0) {
+        return null; // No providers configured
+    }
     return config.defaultProvider || config.providers[0];
 }
 
@@ -39,8 +42,11 @@ export async function getEmbeddingProviderPrecedence(): Promise<string[]> {
 /**
  * Get the default embedding provider
  */
-export async function getPreferredEmbeddingProvider(): Promise<string> {
+export async function getPreferredEmbeddingProvider(): Promise<string | null> {
     const config = await configurationManager.getEmbeddingProviderPrecedence();
+    if (config.providers.length === 0) {
+        return null; // No providers configured
+    }
     return config.defaultProvider || config.providers[0];
 }
 
@@ -61,9 +67,9 @@ export function createModelConfig(modelString: string, defaultProvider?: Provide
 /**
  * Get the default model for a specific provider
  */
-export async function getDefaultModelForProvider(provider: ProviderType): Promise<string> {
+export async function getDefaultModelForProvider(provider: ProviderType): Promise<string | undefined> {
     const config = await configurationManager.getAIConfig();
-    return config.defaultModels[provider];
+    return config.defaultModels[provider]; // This can now be undefined
 }
 
 /**
@@ -106,13 +112,17 @@ export async function isProviderConfigured(provider: ProviderType): Promise<bool
 export async function getFirstAvailableProvider(): Promise<ProviderType | null> {
     const providers = await getProviderPrecedence();
 
+    if (providers.length === 0) {
+        return null; // No providers configured
+    }
+
     for (const provider of providers) {
         if (await isProviderConfigured(provider)) {
             return provider;
         }
     }
 
-    return null;
+    return null; // No providers are properly configured
 }
 
 /**
@@ -127,4 +137,43 @@ export async function validateConfiguration() {
  */
 export function clearConfigurationCache(): void {
     configurationManager.clearCache();
+}
+
+/**
+ * Get a model configuration with validation that no defaults are assumed
+ */
+export async function getValidModelConfig(provider: ProviderType): Promise<{ model: string; provider: ProviderType } | null> {
+    const defaultModel = await getDefaultModelForProvider(provider);
+
+    if (!defaultModel) {
+        // No default model configured for this provider
+        return null;
+    }
+
+    const isConfigured = await isProviderConfigured(provider);
+    if (!isConfigured) {
+        // Provider is not properly configured
+        return null;
+    }
+
+    return {
+        model: defaultModel,
+        provider
+    };
+}
+
+/**
+ * Get the first valid model configuration from the provider precedence list
+ */
+export async function getFirstValidModelConfig(): Promise<{ model: string; provider: ProviderType } | null> {
+    const providers = await getProviderPrecedence();
+
+    for (const provider of providers) {
+        const config = await getValidModelConfig(provider);
+        if (config) {
+            return config;
+        }
+    }
+
+    return null; // No valid model configuration found
 }

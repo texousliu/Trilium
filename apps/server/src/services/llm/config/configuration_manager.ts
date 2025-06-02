@@ -75,13 +75,14 @@ export class ConfigurationManager {
 
             return {
                 providers: providers as ProviderType[],
-                defaultProvider: providers[0] as ProviderType
+                defaultProvider: providers.length > 0 ? providers[0] as ProviderType : undefined
             };
         } catch (error) {
             log.error(`Error parsing provider precedence: ${error}`);
+            // Only return known providers if they exist, don't assume defaults
             return {
-                providers: ['openai', 'anthropic', 'ollama'],
-                defaultProvider: 'openai'
+                providers: [],
+                defaultProvider: undefined
             };
         }
     }
@@ -96,13 +97,14 @@ export class ConfigurationManager {
 
             return {
                 providers: providers as EmbeddingProviderType[],
-                defaultProvider: providers[0] as EmbeddingProviderType
+                defaultProvider: providers.length > 0 ? providers[0] as EmbeddingProviderType : undefined
             };
         } catch (error) {
             log.error(`Error parsing embedding provider precedence: ${error}`);
+            // Don't assume defaults, return empty configuration
             return {
-                providers: ['openai', 'ollama'],
-                defaultProvider: 'openai'
+                providers: [],
+                defaultProvider: undefined
             };
         }
     }
@@ -167,9 +169,9 @@ export class ConfigurationManager {
     }
 
     /**
-     * Get default models for each provider
+     * Get default models for each provider - ONLY from user configuration
      */
-    public async getDefaultModels(): Promise<Record<ProviderType, string>> {
+    public async getDefaultModels(): Promise<Record<ProviderType, string | undefined>> {
         try {
             const [openaiModel, anthropicModel, ollamaModel] = await Promise.all([
                 options.getOption('openaiDefaultModel'),
@@ -178,16 +180,17 @@ export class ConfigurationManager {
             ]);
 
             return {
-                openai: openaiModel || 'gpt-3.5-turbo',
-                anthropic: anthropicModel || 'claude-3-sonnet-20240229',
-                ollama: ollamaModel || 'llama2'
+                openai: openaiModel || undefined,
+                anthropic: anthropicModel || undefined,
+                ollama: ollamaModel || undefined
             };
         } catch (error) {
             log.error(`Error loading default models: ${error}`);
+            // Return undefined for all providers if we can't load config
             return {
-                openai: 'gpt-3.5-turbo',
-                anthropic: 'claude-3-sonnet-20240229',
-                ollama: 'llama2'
+                openai: undefined,
+                anthropic: undefined,
+                ollama: undefined
             };
         }
     }
@@ -322,7 +325,8 @@ export class ConfigurationManager {
 
     private parseProviderList(precedenceOption: string | null): string[] {
         if (!precedenceOption) {
-            return ['openai', 'anthropic', 'ollama'];
+            // Don't assume any defaults - return empty array
+            return [];
         }
 
         try {
@@ -344,7 +348,8 @@ export class ConfigurationManager {
 
         } catch (error) {
             log.error(`Error parsing provider list "${precedenceOption}": ${error}`);
-            return ['openai', 'anthropic', 'ollama'];
+            // Don't assume defaults on parse error
+            return [];
         }
     }
 
@@ -352,17 +357,17 @@ export class ConfigurationManager {
         return {
             enabled: false,
             providerPrecedence: {
-                providers: ['openai', 'anthropic', 'ollama'],
-                defaultProvider: 'openai'
+                providers: [],
+                defaultProvider: undefined
             },
             embeddingProviderPrecedence: {
-                providers: ['openai', 'ollama'],
-                defaultProvider: 'openai'
+                providers: [],
+                defaultProvider: undefined
             },
             defaultModels: {
-                openai: 'gpt-3.5-turbo',
-                anthropic: 'claude-3-sonnet-20240229',
-                ollama: 'llama2'
+                openai: undefined,
+                anthropic: undefined,
+                ollama: undefined
             },
             providerSettings: {}
         };

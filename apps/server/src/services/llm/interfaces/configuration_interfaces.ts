@@ -48,7 +48,7 @@ export interface AIConfig {
     enabled: boolean;
     providerPrecedence: ProviderPrecedenceConfig;
     embeddingProviderPrecedence: EmbeddingProviderPrecedenceConfig;
-    defaultModels: Record<ProviderType, string>;
+    defaultModels: Record<ProviderType, string | undefined>;
     providerSettings: ProviderSettings;
 }
 

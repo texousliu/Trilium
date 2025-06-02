@@ -532,7 +532,13 @@ export class AIServiceManager implements IAIServiceManager {
      */
     async getPreferredProviderAsync(): Promise<string> {
         try {
-            return await getPreferredProvider();
+            const preferredProvider = await getPreferredProvider();
+            if (preferredProvider === null) {
+                // No providers configured, fallback to first available
+                log.info('No providers configured in precedence, using first available provider');
+                return this.providerOrder[0];
+            }
+            return preferredProvider;
         } catch (error) {
             log.error(`Error getting preferred provider: ${error}`);
             return this.providerOrder[0];

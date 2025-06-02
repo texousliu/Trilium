@@ -100,61 +100,65 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
         }
 
         // Get default provider and model using the new configuration system
-        let defaultProvider: ProviderType = 'openai';
-        let defaultModelName = 'gpt-3.5-turbo';
-
         try {
             // Use the new configuration helpers - no string parsing!
-            defaultProvider = await getPreferredProvider();
-            defaultModelName = await getDefaultModelForProvider(defaultProvider);
+            const preferredProvider = await getPreferredProvider();
 
-            log.info(`Selected provider: ${defaultProvider}, model: ${defaultModelName}`);
-        } catch (error) {
-            // If any error occurs, use the fallback default
-            log.error(`Error determining default model: ${error}`);
-            defaultProvider = 'openai';
-            defaultModelName = 'gpt-3.5-turbo';
-        }
-
-        // Determine query complexity
-        let queryComplexity = 'low';
-        if (query) {
-            // Simple heuristic: longer queries or those with complex terms indicate higher complexity
-            const complexityIndicators = [
-                'explain', 'analyze', 'compare', 'evaluate', 'synthesize',
-                'summarize', 'elaborate', 'investigate', 'research', 'debate'
-            ];
-
-            const hasComplexTerms = complexityIndicators.some(term => query.toLowerCase().includes(term));
-            const isLongQuery = query.length > 100;
-            const hasMultipleQuestions = (query.match(/\?/g) || []).length > 1;
-
-            if ((hasComplexTerms && isLongQuery) || hasMultipleQuestions) {
-                queryComplexity = 'high';
-            } else if (hasComplexTerms || isLongQuery) {
-                queryComplexity = 'medium';
+            if (!preferredProvider) {
+                throw new Error('No AI providers are configured. Please check your AI settings.');
             }
+
+            const modelName = await getDefaultModelForProvider(preferredProvider);
+
+            if (!modelName) {
+                throw new Error(`No default model configured for provider ${preferredProvider}. Please set a default model in your AI settings.`);
+            }
+
+            log.info(`Selected provider: ${preferredProvider}, model: ${modelName}`);
+
+            // Determine query complexity
+            let queryComplexity = 'low';
+            if (query) {
+                // Simple heuristic: longer queries or those with complex terms indicate higher complexity
+                const complexityIndicators = [
+                    'explain', 'analyze', 'compare', 'evaluate', 'synthesize',
+                    'summarize', 'elaborate', 'investigate', 'research', 'debate'
+                ];
+
+                const hasComplexTerms = complexityIndicators.some(term => query.toLowerCase().includes(term));
+                const isLongQuery = query.length > 100;
+                const hasMultipleQuestions = (query.match(/\?/g) || []).length > 1;
+
+                if ((hasComplexTerms && isLongQuery) || hasMultipleQuestions) {
+                    queryComplexity = 'high';
+                } else if (hasComplexTerms || isLongQuery) {
+                    queryComplexity = 'medium';
+                }
+            }
+
+            // Check content length if provided
+            if (contentLength && contentLength > SEARCH_CONSTANTS.CONTEXT.CONTENT_LENGTH.MEDIUM_THRESHOLD) {
+                // For large content, favor more powerful models
+                queryComplexity = contentLength > SEARCH_CONSTANTS.CONTEXT.CONTENT_LENGTH.HIGH_THRESHOLD ? 'high' : 'medium';
+            }
+
+            // Set the model and add provider metadata
+            updatedOptions.model = modelName;
+            this.addProviderMetadata(updatedOptions, preferredProvider as ServiceProviders, modelName);
+
+            log.info(`Selected model: ${modelName} from provider: ${preferredProvider} for query complexity: ${queryComplexity}`);
+            log.info(`[ModelSelectionStage] Final options: ${JSON.stringify({
+                model: updatedOptions.model,
+                stream: updatedOptions.stream,
+                provider: preferredProvider,
+                enableTools: updatedOptions.enableTools
+            })}`);
+
+            return { options: updatedOptions };
+        } catch (error) {
+            log.error(`Error determining default model: ${error}`);
+            throw new Error(`Failed to determine AI model configuration: ${error}`);
         }
-
-        // Check content length if provided
-        if (contentLength && contentLength > SEARCH_CONSTANTS.CONTEXT.CONTENT_LENGTH.MEDIUM_THRESHOLD) {
-            // For large content, favor more powerful models
-            queryComplexity = contentLength > SEARCH_CONSTANTS.CONTEXT.CONTENT_LENGTH.HIGH_THRESHOLD ? 'high' : 'medium';
-        }
-
-        // Set the model and add provider metadata
-        updatedOptions.model = defaultModelName;
-        this.addProviderMetadata(updatedOptions, defaultProvider as ServiceProviders, defaultModelName);
-
-        log.info(`Selected model: ${defaultModelName} from provider: ${defaultProvider} for query complexity: ${queryComplexity}`);
-        log.info(`[ModelSelectionStage] Final options: ${JSON.stringify({
-            model: updatedOptions.model,
-            stream: updatedOptions.stream,
-            provider: defaultProvider,
-            enableTools: updatedOptions.enableTools
-        })}`);
-
-        return { options: updatedOptions };
     }
 
     /**
@@ -225,6 +229,10 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
             const defaultProvider = availableProviders[0];
             const defaultModel = await getDefaultModelForProvider(defaultProvider);
 
+            if (!defaultModel) {
+                throw new Error(`No default model configured for provider ${defaultProvider}. Please configure a default model in your AI settings.`);
+            }
+
             // Set provider metadata
             if (!input.options.providerMetadata) {
                 input.options.providerMetadata = {
@@ -237,8 +245,7 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
             return defaultModel;
         } catch (error) {
             log.error(`Error determining default model: ${error}`);
-            // Fallback to hardcoded default
-            return 'gpt-3.5-turbo';
+            throw error; // Don't provide fallback defaults, let the error propagate
         }
     }
 
