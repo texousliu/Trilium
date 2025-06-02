@@ -38,4 +38,17 @@ describe("basic-auth", () => {
             .auth("wrong", token, { "type": "basic"})
             .expect(401);
     });
+
+    it("logs out", async () => {
+        await supertest(app)
+            .post("/etapi/auth/logout")
+            .auth(USER, token, { "type": "basic"})
+            .expect(204);
+
+        // Ensure we can't access it anymore
+        await supertest(app)
+            .get("/etapi/notes/root")
+            .auth(USER, token, { "type": "basic"})
+            .expect(401);
+    });
 });
