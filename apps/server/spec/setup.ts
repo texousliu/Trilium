@@ -7,6 +7,8 @@ import dayjs from "dayjs";
 process.env.TRILIUM_DATA_DIR = join(__dirname, "db");
 process.env.TRILIUM_RESOURCE_DIR = join(__dirname, "../src");
 process.env.TRILIUM_INTEGRATION_TEST = "memory";
+process.env.TRILIUM_ENV = "dev";
+process.env.TRILIUM_PUBLIC_SERVER = "http://localhost:4200";
 
 beforeAll(async () => {
     // Initialize the translations manually to avoid any side effects.
