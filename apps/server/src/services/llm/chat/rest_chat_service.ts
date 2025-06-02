@@ -150,7 +150,7 @@ class RestChatService {
 
             // Import WebSocket service for streaming
             const wsService = await import('../../ws.js');
-            let accumulatedContent = '';
+            const accumulatedContentRef = { value: '' };
 
             const pipelineInput: ChatPipelineInput = {
                 messages: chat.messages.map(msg => ({
@@ -162,8 +162,7 @@ class RestChatService {
                 showThinking: showThinking,
                 options: pipelineOptions,
                 streamCallback: req.method === 'GET' ? (data, done, rawChunk) => {
-                    this.handleStreamCallback(data, done, rawChunk, wsService.default, chatNoteId, res);
-                    if (data) accumulatedContent += data;
+                    this.handleStreamCallback(data, done, rawChunk, wsService.default, chatNoteId, res, accumulatedContentRef);
                 } : undefined
             };
 
@@ -194,13 +193,15 @@ class RestChatService {
                 };
             } else {
                 // For streaming, response is already sent via WebSocket/SSE
-                // Save the accumulated content
-                if (accumulatedContent) {
+                // Save the accumulated content - prefer accumulated content over response.text
+                const finalContent = accumulatedContentRef.value || response.text || '';
+                if (finalContent) {
                     chat.messages.push({
                         role: 'assistant',
-                        content: accumulatedContent
+                        content: finalContent
                     });
                     await chatStorageService.updateChat(chat.id, chat.messages, chat.title);
+                    log.info(`Saved accumulated streaming content: ${finalContent.length} characters`);
                 }
                 return null;
             }
@@ -219,7 +220,8 @@ class RestChatService {
         rawChunk: any,
         wsService: any,
         chatNoteId: string,
-        res: Response
+        res: Response,
+        accumulatedContentRef: { value: string }
     ) {
         const message: LLMStreamMessage = {
             type: 'llm-stream',
@@ -229,6 +231,15 @@ class RestChatService {
 
         if (data) {
             message.content = data;
+            // Handle accumulation carefully - if this appears to be a complete response
+            // (done=true and data is much longer than current accumulated), replace rather than append
+            if (done && data.length > accumulatedContentRef.value.length && data.includes(accumulatedContentRef.value)) {
+                // This looks like a complete final response that includes what we've accumulated
+                accumulatedContentRef.value = data;
+            } else {
+                // Normal incremental accumulation
+                accumulatedContentRef.value += data;
+            }
         }
 
         if (rawChunk && 'thinking' in rawChunk && rawChunk.thinking) {

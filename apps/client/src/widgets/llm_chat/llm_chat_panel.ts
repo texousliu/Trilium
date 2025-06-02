@@ -951,9 +951,9 @@ export default class LlmChatPanel extends BasicWidget {
                                 }
                             }
 
-                            // Save the updated data to the note
-                            this.saveCurrentData()
-                                .catch(err => console.error("Failed to save data after streaming completed:", err));
+                            // DON'T save here - let the server handle saving the complete conversation
+                            // to avoid race conditions between client and server saves
+                            console.log("Updated metadata after streaming completion, server should save");
                         })
                         .catch(err => console.error("Error fetching session data after streaming:", err));
                 }
@@ -991,11 +991,9 @@ export default class LlmChatPanel extends BasicWidget {
 
                     console.log(`Cached tool execution for ${toolData.tool} to be saved later`);
 
-                    // Save immediately after receiving a tool execution
-                    // This ensures we don't lose tool execution data if streaming fails
-                    this.saveCurrentData().catch(err => {
-                        console.error("Failed to save tool execution data:", err);
-                    });
+                    // DON'T save immediately during streaming - let the server handle saving
+                    // to avoid race conditions between client and server saves
+                    console.log(`Tool execution cached, will be saved by server`);
                 }
             },
             // Complete handler
@@ -1078,10 +1076,36 @@ export default class LlmChatPanel extends BasicWidget {
             // Hide loading indicator
             hideLoadingIndicator(this.loadingIndicator);
 
-            // Save the final state to the Chat Note
-            this.saveCurrentData().catch(err => {
-                console.error("Failed to save assistant response to note:", err);
-            });
+            // DON'T save here immediately - let the server save the accumulated response first
+            // to avoid race conditions. We'll reload the data from the server after a short delay.
+            console.log("Stream completed, waiting for server to save then reloading data...");
+            setTimeout(async () => {
+                try {
+                    console.log("About to reload data from server...");
+                    const currentMessageCount = this.messages.length;
+                    console.log(`Current client message count before reload: ${currentMessageCount}`);
+
+                    // Reload the data from the server which should have the complete conversation
+                    const reloadSuccess = await this.loadSavedData();
+
+                    const newMessageCount = this.messages.length;
+                    console.log(`Reload success: ${reloadSuccess}, message count after reload: ${newMessageCount}`);
+
+                    if (reloadSuccess && newMessageCount > currentMessageCount) {
+                        console.log("Successfully reloaded data with more complete conversation");
+                    } else if (!reloadSuccess) {
+                        console.warn("Reload failed, keeping current client state");
+                    } else {
+                        console.warn("Reload succeeded but message count didn't increase");
+                    }
+                } catch (error) {
+                    console.error("Failed to reload data after stream completion:", error);
+                    // Fallback: save our current state if reload fails
+                    this.saveCurrentData().catch(err => {
+                        console.error("Failed to save assistant response to note:", err);
+                    });
+                }
+            }, 3000); // Wait 3 seconds for server to complete its save
         }
 
         // Scroll to bottom
