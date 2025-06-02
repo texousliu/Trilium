@@ -5,7 +5,6 @@ import options from "../../services/options.js";
 // Import the index service for knowledge base management
 import indexService from "../../services/llm/index_service.js";
 import restChatService from "../../services/llm/rest_chat_service.js";
-import chatService from '../../services/llm/chat_service.js';
 import chatStorageService from '../../services/llm/chat_storage_service.js';
 
 // Define basic interfaces
@@ -190,23 +189,26 @@ async function getSession(req: Request, res: Response) {
  *     tags: ["llm"]
  */
 async function updateSession(req: Request, res: Response) {
-    // Get the chat using ChatService
+    // Get the chat using chatStorageService directly
     const chatNoteId = req.params.chatNoteId;
     const updates = req.body;
 
     try {
         // Get the chat
-        const session = await chatService.getOrCreateSession(chatNoteId);
+        const chat = await chatStorageService.getChat(chatNoteId);
+        if (!chat) {
+            throw new Error(`Chat with ID ${chatNoteId} not found`);
+        }
 
         // Update title if provided
         if (updates.title) {
-            await chatStorageService.updateChat(chatNoteId, session.messages, updates.title);
+            await chatStorageService.updateChat(chatNoteId, chat.messages, updates.title);
         }
 
         // Return the updated chat
         return {
             id: chatNoteId,
-            title: updates.title || session.title,
+            title: updates.title || chat.title,
             updatedAt: new Date()
         };
     } catch (error) {
@@ -248,18 +250,18 @@ async function updateSession(req: Request, res: Response) {
  *     tags: ["llm"]
  */
 async function listSessions(req: Request, res: Response) {
-    // Get all sessions using ChatService
+    // Get all sessions using chatStorageService directly
     try {
-        const sessions = await chatService.getAllSessions();
+        const chats = await chatStorageService.getAllChats();
 
         // Format the response
         return {
-            sessions: sessions.map(session => ({
-                id: session.id,
-                title: session.title,
-                createdAt: new Date(), // Since we don't have this in chat sessions
-                lastActive: new Date(), // Since we don't have this in chat sessions
-                messageCount: session.messages.length
+            sessions: chats.map(chat => ({
+                id: chat.id,
+                title: chat.title,
+                createdAt: chat.createdAt || new Date(),
+                lastActive: chat.updatedAt || new Date(),
+                messageCount: chat.messages.length
             }))
         };
     } catch (error) {
@@ -814,15 +816,13 @@ async function streamMessage(req: Request, res: Response) {
             throw new Error('Content cannot be empty');
         }
 
-        // Get or create session from Chat Note
-        // This will check the sessions store first, and if not found, create from the Chat Note
-        const session = await restChatService.getOrCreateSessionFromChatNote(chatNoteId, true);
-        if (!session) {
-            throw new Error('Chat not found and could not be created from note');
+        // Get or create chat directly from storage (simplified approach)
+        let chat = await chatStorageService.getChat(chatNoteId);
+        if (!chat) {
+            // Create a new chat if it doesn't exist
+            chat = await chatStorageService.createChat('New Chat');
+            log.info(`Created new chat with ID: ${chat.id} for stream request`);
         }
-
-        // Update last active timestamp
-        session.lastActive = new Date();
 
         // Process mentions if provided
         let enhancedContent = content;
@@ -858,12 +858,14 @@ async function streamMessage(req: Request, res: Response) {
             }
         }
 
-        // Add user message to the session (with enhanced content for processing)
-        session.messages.push({
+        // Add user message to the chat (without timestamp since Message interface doesn't support it)
+        chat.messages.push({
             role: 'user',
-            content: enhancedContent,
-            timestamp: new Date()
+            content: enhancedContent
         });
+
+        // Save the updated chat
+        await chatStorageService.updateChat(chat.id, chat.messages, chat.title);
 
         // Create request parameters for the pipeline
         const requestParams = {
