@@ -69,7 +69,6 @@ export default class LlmChatPanel extends BasicWidget {
             totalTokens?: number;
         };
     } = {
-        model: 'default',
         temperature: 0.7,
         toolExecutions: []
     };
@@ -332,7 +331,7 @@ export default class LlmChatPanel extends BasicWidget {
                 sources: this.sources || [],
                 // Add metadata
                 metadata: {
-                    model: this.metadata?.model || 'default',
+                    model: this.metadata?.model || undefined,
                     provider: this.metadata?.provider || undefined,
                     temperature: this.metadata?.temperature || 0.7,
                     lastUpdated: new Date().toISOString(),

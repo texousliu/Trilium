@@ -267,7 +267,8 @@ class RestChatService {
                 systemPrompt: session?.messages.find(m => m.role === 'system')?.content,
                 temperature: session?.metadata.temperature,
                 maxTokens: session?.metadata.maxTokens,
-                model: session?.metadata.model,
+                // Get the user's preferred model if session model is 'default' or not set
+                model: await this.getPreferredModel(session?.metadata.model),
                 // Set stream based on request type, but ensure it's explicitly a boolean value
                 // GET requests or format=stream parameter indicates streaming should be used
                 stream: !!(req.method === 'GET' || req.query.format === 'stream' || req.query.stream === 'true'),
@@ -701,6 +702,59 @@ class RestChatService {
 
         // Create from Chat Note
         return await this.createSessionFromChatNote(noteId);
+    }
+
+    /**
+     * Get the user's preferred model
+     */
+    async getPreferredModel(sessionModel?: string): Promise<string | undefined> {
+        // If the session already has a valid model (not 'default'), use it
+        if (sessionModel && sessionModel !== 'default') {
+            return sessionModel;
+        }
+
+        try {
+            // Get provider precedence list (same logic as model selection stage)
+            const providerPrecedence = await options.getOption('aiProviderPrecedence');
+            let defaultProvider = 'openai';
+            let defaultModelName = 'gpt-3.5-turbo';
+
+            if (providerPrecedence) {
+                // Parse provider precedence list
+                let providers: string[] = [];
+                if (providerPrecedence.includes(',')) {
+                    providers = providerPrecedence.split(',').map(p => p.trim());
+                } else if (providerPrecedence.startsWith('[') && providerPrecedence.endsWith(']')) {
+                    providers = JSON.parse(providerPrecedence);
+                } else {
+                    providers = [providerPrecedence];
+                }
+
+                // Get first available provider
+                if (providers.length > 0) {
+                    const firstProvider = providers[0];
+                    defaultProvider = firstProvider;
+
+                    // Get provider-specific default model
+                    if (firstProvider === 'openai') {
+                        const model = await options.getOption('openaiDefaultModel');
+                        if (model) defaultModelName = model;
+                    } else if (firstProvider === 'anthropic') {
+                        const model = await options.getOption('anthropicDefaultModel');
+                        if (model) defaultModelName = model;
+                    } else if (firstProvider === 'ollama') {
+                        const model = await options.getOption('ollamaDefaultModel');
+                        if (model) defaultModelName = model;
+                    }
+                }
+            }
+
+            log.info(`Selected user's preferred model: ${defaultModelName} from provider: ${defaultProvider}`);
+            return defaultModelName;
+        } catch (error) {
+            log.error(`Error getting user's preferred model: ${error}`);
+            return 'gpt-3.5-turbo'; // Fallback
+        }
     }
 }
 
