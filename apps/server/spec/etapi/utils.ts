@@ -12,4 +12,5 @@ export async function login(app: Application) {
         .expect(201);
     const token = response.body.authToken;
     expect(token).toBeTruthy();
+    return token;
 }
