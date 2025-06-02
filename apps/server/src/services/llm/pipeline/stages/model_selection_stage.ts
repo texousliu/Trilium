@@ -234,7 +234,8 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
 
             // For backward compatibility, ensure model name is set without prefix
             if (options.model && options.model.includes(':')) {
-                options.model = modelName || options.model.split(':')[1];
+                const parsed = this.parseModelIdentifier(options.model);
+                options.model = modelName || parsed.model;
             }
 
             log.info(`Set provider metadata: provider=${selectedProvider}, model=${modelName}`);

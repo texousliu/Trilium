@@ -155,7 +155,7 @@ export class AIServiceManager implements IAIServiceManager {
             // Get precedence list from options
             let precedenceList: string[] = ['openai']; // Default to openai if not set
             const precedenceOption = await options.getOption('aiProviderPrecedence');
-            
+
             if (precedenceOption) {
                 try {
                     if (precedenceOption.startsWith('[') && precedenceOption.endsWith(']')) {
@@ -171,10 +171,10 @@ export class AIServiceManager implements IAIServiceManager {
                     log.error(`Error parsing precedence list: ${e}`);
                 }
             }
-            
+
             // Check for configuration issues with providers in the precedence list
             const configIssues: string[] = [];
-            
+
             // Check each provider in the precedence list for proper configuration
             for (const provider of precedenceList) {
                 if (provider === 'openai') {
@@ -198,20 +198,20 @@ export class AIServiceManager implements IAIServiceManager {
                 }
                 // Add checks for other providers as needed
             }
-            
+
             // Return warning message if there are configuration issues
             if (configIssues.length > 0) {
                 let message = 'There are issues with your AI provider configuration:';
-                
+
                 for (const issue of configIssues) {
                     message += `\n• ${issue}`;
                 }
-                
+
                 message += '\n\nPlease check your AI settings.';
-                
+
                 // Log warning to console
                 log.error('AI Provider Configuration Warning: ' + message);
-                
+
                 return message;
             }
 
@@ -279,9 +279,19 @@ export class AIServiceManager implements IAIServiceManager {
 
         // If a specific provider is requested and available, use it
         if (options.model && options.model.includes(':')) {
-            const [providerName, modelName] = options.model.split(':');
+            // Check if this is a provider prefix (e.g., "ollama:qwen3:30b")
+            // vs a model name with version (e.g., "qwen3:30b")
+            const parts = options.model.split(':');
 
-            if (availableProviders.includes(providerName as ServiceProviders)) {
+            // Only treat as provider:model if the first part is a known provider
+            const knownProviders = ['openai', 'anthropic', 'ollama', 'local'];
+            const potentialProvider = parts[0];
+
+            if (knownProviders.includes(potentialProvider) && availableProviders.includes(potentialProvider as ServiceProviders)) {
+                // This is a provider:model format
+                const providerName = potentialProvider;
+                const modelName = parts.slice(1).join(':'); // Rejoin the rest as model name
+
                 try {
                     const modifiedOptions = { ...options, model: modelName };
                     log.info(`[AIServiceManager] Using provider ${providerName} from model prefix with modifiedOptions.stream: ${modifiedOptions.stream}`);
@@ -291,6 +301,7 @@ export class AIServiceManager implements IAIServiceManager {
                     // If the specified provider fails, continue with the fallback providers
                 }
             }
+            // If not a provider prefix, treat the entire string as a model name and continue with normal provider selection
         }
 
         // Try each provider in order until one succeeds
