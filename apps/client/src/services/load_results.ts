@@ -44,11 +44,18 @@ interface OptionRow {}
 
 interface NoteReorderingRow {}
 
-interface ContentNoteIdToComponentIdRow {
+interface NoteEmbeddingRow {
+    embedId: string;
     noteId: string;
-    componentId: string;
+    providerId: string;
+    modelId: string;
+    dimension: number;
+    version: number;
+    dateCreated: string;
+    utcDateCreated: string;
+    dateModified: string;
+    utcDateModified: string;
 }
-interface NoteEmbeddingRow {}
 
 type EntityRowMappings = {
     notes: NoteRow;
@@ -73,6 +80,7 @@ export default class LoadResults {
     private contentNoteIdToComponentId: ContentNoteIdToComponentIdRow[];
     private optionNames: string[];
     private attachmentRows: AttachmentRow[];
+    private noteEmbeddingRows: NoteEmbeddingRow[];
 
     constructor(entityChanges: EntityChange[]) {
         const entities: Record<string, Record<string, any>> = {};
@@ -101,6 +109,8 @@ export default class LoadResults {
         this.optionNames = [];
 
         this.attachmentRows = [];
+
+        this.noteEmbeddingRows = [];
     }
 
     getEntityRow<T extends EntityRowNames>(entityName: T, entityId: string): EntityRowMappings[T] {
@@ -203,6 +213,14 @@ export default class LoadResults {
         return this.attachmentRows;
     }
 
+    addNoteEmbedding(embedding: NoteEmbeddingRow) {
+        this.noteEmbeddingRows.push(embedding);
+    }
+
+    getNoteEmbeddingRows() {
+        return this.noteEmbeddingRows;
+    }
+
     /**
      * @returns {boolean} true if there are changes which could affect the attributes (including inherited ones)
      *          notably changes in note itself should not have any effect on attributes
@@ -220,7 +238,8 @@ export default class LoadResults {
             this.revisionRows.length === 0 &&
             this.contentNoteIdToComponentId.length === 0 &&
             this.optionNames.length === 0 &&
-            this.attachmentRows.length === 0
+            this.attachmentRows.length === 0 &&
+            this.noteEmbeddingRows.length === 0
         );
     }
 

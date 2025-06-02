@@ -36,7 +36,7 @@ async function processEntityChanges(entityChanges: EntityChange[]) {
             } else if (ec.entityName === "attachments") {
                 processAttachment(loadResults, ec);
             } else if (ec.entityName === "blobs" || ec.entityName === "etapi_tokens" || ec.entityName === "note_embeddings") {
-                // NOOP
+                // NOOP - these entities don't require frontend processing
             } else {
                 throw new Error(`Unknown entityName '${ec.entityName}'`);
             }
