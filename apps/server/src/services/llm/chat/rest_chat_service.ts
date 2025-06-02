@@ -20,6 +20,12 @@ import type { NoteSource } from "../interfaces/chat_session.js";
 import type { LLMStreamMessage } from "../interfaces/chat_ws_messages.js";
 import type { ChatMessage } from '../interfaces/chat_session.js';
 import type { ChatSession } from '../interfaces/chat_session.js';
+import {
+    isAIEnabled,
+    getFirstValidModelConfig,
+    getDefaultModelForProvider,
+    getPreferredProvider
+} from '../config/configuration_helpers.js';
 
 /**
  * Service to handle chat API interactions
@@ -705,7 +711,7 @@ class RestChatService {
     }
 
     /**
-     * Get the user's preferred model
+     * Get the user's preferred model using the new configuration system
      */
     async getPreferredModel(sessionModel?: string): Promise<string | undefined> {
         // If the session already has a valid model (not 'default'), use it
@@ -714,46 +720,19 @@ class RestChatService {
         }
 
         try {
-            // Get provider precedence list (same logic as model selection stage)
-            const providerPrecedence = await options.getOption('aiProviderPrecedence');
-            let defaultProvider = 'openai';
-            let defaultModelName = 'gpt-3.5-turbo';
+            // Use the new configuration system - no string parsing!
+            const validConfig = await getFirstValidModelConfig();
 
-            if (providerPrecedence) {
-                // Parse provider precedence list
-                let providers: string[] = [];
-                if (providerPrecedence.includes(',')) {
-                    providers = providerPrecedence.split(',').map(p => p.trim());
-                } else if (providerPrecedence.startsWith('[') && providerPrecedence.endsWith(']')) {
-                    providers = JSON.parse(providerPrecedence);
-                } else {
-                    providers = [providerPrecedence];
-                }
-
-                // Get first available provider
-                if (providers.length > 0) {
-                    const firstProvider = providers[0];
-                    defaultProvider = firstProvider;
-
-                    // Get provider-specific default model
-                    if (firstProvider === 'openai') {
-                        const model = await options.getOption('openaiDefaultModel');
-                        if (model) defaultModelName = model;
-                    } else if (firstProvider === 'anthropic') {
-                        const model = await options.getOption('anthropicDefaultModel');
-                        if (model) defaultModelName = model;
-                    } else if (firstProvider === 'ollama') {
-                        const model = await options.getOption('ollamaDefaultModel');
-                        if (model) defaultModelName = model;
-                    }
-                }
+            if (!validConfig) {
+                log.error('No valid AI model configuration found. Please configure your AI settings.');
+                return undefined; // Don't provide fallback defaults
             }
 
-            log.info(`Selected user's preferred model: ${defaultModelName} from provider: ${defaultProvider}`);
-            return defaultModelName;
+            log.info(`Selected user's preferred model: ${validConfig.model} from provider: ${validConfig.provider}`);
+            return validConfig.model;
         } catch (error) {
             log.error(`Error getting user's preferred model: ${error}`);
-            return 'gpt-3.5-turbo'; // Fallback
+            return undefined; // Don't provide fallback defaults, let the caller handle it
         }
     }
 }
