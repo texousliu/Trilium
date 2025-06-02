@@ -858,15 +858,6 @@ async function streamMessage(req: Request, res: Response) {
             }
         }
 
-        // Add user message to the chat (without timestamp since Message interface doesn't support it)
-        chat.messages.push({
-            role: 'user',
-            content: enhancedContent
-        });
-
-        // Save the updated chat
-        await chatStorageService.updateChat(chat.id, chat.messages, chat.title);
-
         // Create request parameters for the pipeline
         const requestParams = {
             chatNoteId: chatNoteId,
