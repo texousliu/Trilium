@@ -62,15 +62,11 @@ export async function setupStreamingResponse(
 ): Promise<void> {
     return new Promise((resolve, reject) => {
         let assistantResponse = '';
-        let postToolResponse = ''; // Separate accumulator for post-tool execution content
         let receivedAnyContent = false;
-        let receivedPostToolContent = false; // Track if we've started receiving post-tool content
         let timeoutId: number | null = null;
         let initialTimeoutId: number | null = null;
         let cleanupTimeoutId: number | null = null;
         let receivedAnyMessage = false;
-        let toolsExecuted = false; // Flag to track if tools were executed in this session
-        let toolExecutionCompleted = false; // Flag to track if tool execution is completed
         let eventListener: ((event: Event) => void) | null = null;
         let lastMessageTimestamp = 0;
 
@@ -118,28 +114,14 @@ export async function setupStreamingResponse(
             resolve();
         };
 
-        // Function to schedule cleanup with ability to cancel
-        const scheduleCleanup = (delay: number) => {
-            // Clear any existing cleanup timeout
-            if (cleanupTimeoutId) {
-                window.clearTimeout(cleanupTimeoutId);
+        // Set initial timeout to catch cases where no message is received at all
+        initialTimeoutId = window.setTimeout(() => {
+            if (!receivedAnyMessage) {
+                console.error(`[${responseId}] No initial message received within timeout`);
+                performCleanup();
+                reject(new Error('No response received from server'));
             }
-
-            console.log(`[${responseId}] Scheduling listener cleanup in ${delay}ms`);
-
-            // Set new cleanup timeout
-            cleanupTimeoutId = window.setTimeout(() => {
-                // Only clean up if no messages received recently (in last 2 seconds)
-                const timeSinceLastMessage = Date.now() - lastMessageTimestamp;
-                if (timeSinceLastMessage > 2000) {
-                    performCleanup();
-                } else {
-                    console.log(`[${responseId}] Received message recently, delaying cleanup`);
-                    // Reschedule cleanup
-                    scheduleCleanup(2000);
-                }
-            }, delay);
-        };
+        }, 10000);
 
         // Create a message handler for CustomEvents
         eventListener = (event: Event) => {
@@ -161,7 +143,7 @@ export async function setupStreamingResponse(
                 cleanupTimeoutId = null;
             }
 
-            console.log(`[${responseId}] LLM Stream message received via CustomEvent: chatNoteId=${noteId}, content=${!!message.content}, contentLength=${message.content?.length || 0}, thinking=${!!message.thinking}, toolExecution=${!!message.toolExecution}, done=${!!message.done}, type=${message.type || 'llm-stream'}`);
+            console.log(`[${responseId}] LLM Stream message received: content=${!!message.content}, contentLength=${message.content?.length || 0}, thinking=${!!message.thinking}, toolExecution=${!!message.toolExecution}, done=${!!message.done}`);
 
             // Mark first message received
             if (!receivedAnyMessage) {
@@ -175,109 +157,33 @@ export async function setupStreamingResponse(
                 }
             }
 
-            // Handle specific message types
-            if (message.type === 'tool_execution_start') {
-                toolsExecuted = true; // Mark that tools were executed
-                onThinkingUpdate('Executing tools...');
-                // Also trigger tool execution UI with a specific format
-                onToolExecution({
-                    action: 'start',
-                    tool: 'tools',
-                    result: 'Executing tools...'
-                });
-                return; // Skip accumulating content from this message
+            // Handle error
+            if (message.error) {
+                console.error(`[${responseId}] Stream error: ${message.error}`);
+                performCleanup();
+                reject(new Error(message.error));
+                return;
             }
 
-            if (message.type === 'tool_result' && message.toolExecution) {
-                toolsExecuted = true; // Mark that tools were executed
-                console.log(`[${responseId}] Processing tool result: ${JSON.stringify(message.toolExecution)}`);
+            // Handle thinking updates - only show if showThinking is enabled
+            if (message.thinking && messageParams.showThinking) {
+                console.log(`[${responseId}] Received thinking: ${message.thinking.substring(0, 100)}...`);
+                onThinkingUpdate(message.thinking);
+            }
 
-                // If tool execution doesn't have an action, add 'result' as the default
-                if (!message.toolExecution.action) {
-                    message.toolExecution.action = 'result';
-                }
-
-                // First send a 'start' action to ensure the container is created
-                onToolExecution({
-                    action: 'start',
-                    tool: 'tools',
-                    result: 'Tool execution initialized'
-                });
-
-                // Then send the actual tool execution data
+            // Handle tool execution updates
+            if (message.toolExecution) {
+                console.log(`[${responseId}] Tool execution update:`, message.toolExecution);
                 onToolExecution(message.toolExecution);
-
-                // Mark tool execution as completed if this is a result or error
-                if (message.toolExecution.action === 'result' || message.toolExecution.action === 'complete' || message.toolExecution.action === 'error') {
-                    toolExecutionCompleted = true;
-                    console.log(`[${responseId}] Tool execution completed`);
-                }
-
-                return; // Skip accumulating content from this message
-            }
-
-            if (message.type === 'tool_execution_error' && message.toolExecution) {
-                toolsExecuted = true; // Mark that tools were executed
-                toolExecutionCompleted = true; // Mark tool execution as completed
-                onToolExecution({
-                    ...message.toolExecution,
-                    action: 'error',
-                    error: message.toolExecution.error || 'Unknown error during tool execution'
-                });
-                return; // Skip accumulating content from this message
-            }
-
-            if (message.type === 'tool_completion_processing') {
-                toolsExecuted = true; // Mark that tools were executed
-                toolExecutionCompleted = true; // Tools are done, now processing the result
-                onThinkingUpdate('Generating response with tool results...');
-                // Also trigger tool execution UI with a specific format
-                onToolExecution({
-                    action: 'generating',
-                    tool: 'tools',
-                    result: 'Generating response with tool results...'
-                });
-                return; // Skip accumulating content from this message
             }
 
             // Handle content updates
             if (message.content) {
-                console.log(`[${responseId}] Received content chunk of length ${message.content.length}, preview: "${message.content.substring(0, 50)}${message.content.length > 50 ? '...' : ''}"`);
+                // Simply append the new content - no complex deduplication
+                assistantResponse += message.content;
 
-                // If tools were executed and completed, and we're now getting new content,
-                // this is likely the final response after tool execution from Anthropic
-                if (toolsExecuted && toolExecutionCompleted && message.content) {
-                    console.log(`[${responseId}] Post-tool execution content detected`);
-
-                    // If this is the first post-tool chunk, indicate we're starting a new response
-                    if (!receivedPostToolContent) {
-                        receivedPostToolContent = true;
-                        postToolResponse = ''; // Clear any previous post-tool response
-                        console.log(`[${responseId}] First post-tool content chunk, starting fresh accumulation`);
-                    }
-
-                    // Accumulate post-tool execution content
-                    postToolResponse += message.content;
-                    console.log(`[${responseId}] Accumulated post-tool content, now ${postToolResponse.length} chars`);
-
-                    // Update the UI with the accumulated post-tool content
-                    // This replaces the pre-tool content with our accumulated post-tool content
-                    onContentUpdate(postToolResponse, message.done || false);
-                } else {
-                    // Standard content handling for non-tool cases or initial tool response
-
-                    // Check if this is a duplicated message containing the same content we already have
-                    if (message.done && assistantResponse.includes(message.content)) {
-                        console.log(`[${responseId}] Ignoring duplicated content in done message`);
-                    } else {
-                        // Add to our accumulated response
-                        assistantResponse += message.content;
-                    }
-
-                    // Update the UI immediately with each chunk
-                    onContentUpdate(assistantResponse, message.done || false);
-                }
-
+                // Update the UI immediately with each chunk
+                onContentUpdate(assistantResponse, message.done || false);
                 receivedAnyContent = true;
 
                 // Reset timeout since we got content
@@ -288,150 +194,32 @@ export async function setupStreamingResponse(
                 // Set new timeout
                 timeoutId = window.setTimeout(() => {
                     console.warn(`[${responseId}] Stream timeout for chat note ${noteId}`);
-
-                    // Clean up
                     performCleanup();
                     reject(new Error('Stream timeout'));
                 }, 30000);
             }
 
-            // Handle tool execution updates (legacy format and standard format with llm-stream type)
-            if (message.toolExecution) {
-                // Only process if we haven't already handled this message via specific message types
-                if (message.type === 'llm-stream' || !message.type) {
-                    console.log(`[${responseId}] Received tool execution update: action=${message.toolExecution.action || 'unknown'}`);
-                    toolsExecuted = true; // Mark that tools were executed
-
-                    // Mark tool execution as completed if this is a result or error
-                    if (message.toolExecution.action === 'result' ||
-                        message.toolExecution.action === 'complete' ||
-                        message.toolExecution.action === 'error') {
-                        toolExecutionCompleted = true;
-                        console.log(`[${responseId}] Tool execution completed via toolExecution message`);
-                    }
-
-                    onToolExecution(message.toolExecution);
-                }
-            }
-
-            // Handle tool calls from the raw data or direct in message (OpenAI format)
-            const toolCalls = message.tool_calls || (message.raw && message.raw.tool_calls);
-            if (toolCalls && Array.isArray(toolCalls)) {
-                console.log(`[${responseId}] Received tool calls: ${toolCalls.length} tools`);
-                toolsExecuted = true; // Mark that tools were executed
-
-                // First send a 'start' action to ensure the container is created
-                onToolExecution({
-                    action: 'start',
-                    tool: 'tools',
-                    result: 'Tool execution initialized'
-                });
-
-                // Then process each tool call
-                for (const toolCall of toolCalls) {
-                    let args = toolCall.function?.arguments || {};
-
-                    // Try to parse arguments if they're a string
-                    if (typeof args === 'string') {
-                        try {
-                            args = JSON.parse(args);
-                        } catch (e) {
-                            console.log(`[${responseId}] Could not parse tool arguments as JSON: ${e}`);
-                            args = { raw: args };
-                        }
-                    }
-
-                    onToolExecution({
-                        action: 'executing',
-                        tool: toolCall.function?.name || 'unknown',
-                        toolCallId: toolCall.id,
-                        args: args
-                    });
-                }
-            }
-
-            // Handle thinking state updates
-            if (message.thinking) {
-                console.log(`[${responseId}] Received thinking update: ${message.thinking.substring(0, 50)}...`);
-                onThinkingUpdate(message.thinking);
-            }
-
             // Handle completion
             if (message.done) {
-                console.log(`[${responseId}] Stream completed for chat note ${noteId}, has content: ${!!message.content}, content length: ${message.content?.length || 0}, current response: ${assistantResponse.length} chars`);
+                console.log(`[${responseId}] Stream completed for chat note ${noteId}, final response: ${assistantResponse.length} chars`);
 
-                // Dump message content to console for debugging
-                if (message.content) {
-                    console.log(`[${responseId}] CONTENT IN DONE MESSAGE (first 200 chars): "${message.content.substring(0, 200)}..."`);
-
-                    // Check if the done message contains the exact same content as our accumulated response
-                    // We normalize by removing whitespace to avoid false negatives due to spacing differences
-                    const normalizedMessage = message.content.trim();
-                    const normalizedResponse = assistantResponse.trim();
-
-                    if (normalizedMessage === normalizedResponse) {
-                        console.log(`[${responseId}] Final message is identical to accumulated response, no need to update`);
-                    }
-                    // If the done message is longer but contains our accumulated response, use the done message
-                    else if (normalizedMessage.includes(normalizedResponse) && normalizedMessage.length > normalizedResponse.length) {
-                        console.log(`[${responseId}] Final message is more complete than accumulated response, using it`);
-                        assistantResponse = message.content;
-                    }
-                    // If the done message is different and not already included, append it to avoid duplication
-                    else if (!normalizedResponse.includes(normalizedMessage) && normalizedMessage.length > 0) {
-                        console.log(`[${responseId}] Final message has unique content, using it`);
-                        assistantResponse = message.content;
-                    }
-                    // Otherwise, we already have the content accumulated, so no need to update
-                    else {
-                        console.log(`[${responseId}] Already have this content accumulated, not updating`);
-                    }
-                }
-
-                // Clear timeout if set
+                // Clear all timeouts
                 if (timeoutId !== null) {
                     window.clearTimeout(timeoutId);
                     timeoutId = null;
                 }
 
-                // Always mark as done when we receive the done flag
-                onContentUpdate(assistantResponse, true);
-
-                // Set a longer delay before cleanup to allow for post-tool execution messages
-                // Especially important for Anthropic which may send final message after tool execution
-                const cleanupDelay = toolsExecuted ? 15000 : 1000; // 15 seconds if tools were used, otherwise 1 second
-                console.log(`[${responseId}] Setting cleanup delay of ${cleanupDelay}ms since toolsExecuted=${toolsExecuted}`);
-                scheduleCleanup(cleanupDelay);
+                // Schedule cleanup after a brief delay to ensure all processing is complete
+                cleanupTimeoutId = window.setTimeout(() => {
+                    performCleanup();
+                }, 100);
             }
         };
 
-        // Register event listener for the custom event
-        try {
-            window.addEventListener('llm-stream-message', eventListener);
-            console.log(`[${responseId}] Event listener added for llm-stream-message events`);
-        } catch (err) {
-            console.error(`[${responseId}] Error setting up event listener:`, err);
-            reject(err);
-            return;
-        }
+        // Register the event listener for WebSocket messages
+        window.addEventListener('llm-stream-message', eventListener);
 
-        // Set initial timeout for receiving any message
-        initialTimeoutId = window.setTimeout(() => {
-            console.warn(`[${responseId}] No messages received for initial period in chat note ${noteId}`);
-            if (!receivedAnyMessage) {
-                console.error(`[${responseId}] WebSocket connection not established for chat note ${noteId}`);
-
-                if (timeoutId !== null) {
-                    window.clearTimeout(timeoutId);
-                }
-
-                // Clean up
-                cleanupEventListener(eventListener);
-
-                // Show error message to user
-                reject(new Error('WebSocket connection not established'));
-            }
-        }, 10000);
+        console.log(`[${responseId}] Event listener registered, waiting for messages...`);
     });
 }
 

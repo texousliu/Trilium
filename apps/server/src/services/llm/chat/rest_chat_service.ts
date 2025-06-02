@@ -231,21 +231,16 @@ class RestChatService {
 
         if (data) {
             message.content = data;
-            // Handle accumulation carefully - if this appears to be a complete response
-            // (done=true and data is much longer than current accumulated), replace rather than append
-            if (done && data.length > accumulatedContentRef.value.length && data.includes(accumulatedContentRef.value)) {
-                // This looks like a complete final response that includes what we've accumulated
-                accumulatedContentRef.value = data;
-            } else {
-                // Normal incremental accumulation
-                accumulatedContentRef.value += data;
-            }
+            // Simple accumulation - just append the new data
+            accumulatedContentRef.value += data;
         }
 
+        // Only include thinking if explicitly present in rawChunk
         if (rawChunk && 'thinking' in rawChunk && rawChunk.thinking) {
             message.thinking = rawChunk.thinking as string;
         }
 
+        // Only include tool execution if explicitly present in rawChunk
         if (rawChunk && 'toolExecution' in rawChunk && rawChunk.toolExecution) {
             const toolExec = rawChunk.toolExecution;
             message.toolExecution = {
@@ -262,7 +257,7 @@ class RestChatService {
         // Send WebSocket message
         wsService.sendMessageToAllClients(message);
 
-        // Send SSE response
+        // Send SSE response for compatibility
         const responseData: any = { content: data, done };
         if (rawChunk?.toolExecution) {
             responseData.toolExecution = rawChunk.toolExecution;

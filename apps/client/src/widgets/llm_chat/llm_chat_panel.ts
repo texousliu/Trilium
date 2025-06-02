@@ -1068,16 +1068,6 @@ export default class LlmChatPanel extends BasicWidget {
      * Update the UI with streaming content
      */
     private updateStreamingUI(assistantResponse: string, isDone: boolean = false) {
-        // Parse and handle thinking content if present
-        if (!isDone) {
-            const thinkingContent = this.parseThinkingContent(assistantResponse);
-            if (thinkingContent) {
-                this.updateThinkingText(thinkingContent);
-                // Don't display the raw response with think tags in the chat
-                return;
-            }
-        }
-
         // Get the existing assistant message or create a new one
         let assistantMessageEl = this.noteContextChatMessages.querySelector('.assistant-message:last-child');
 
@@ -1099,12 +1089,9 @@ export default class LlmChatPanel extends BasicWidget {
             assistantMessageEl.appendChild(messageContent);
         }
 
-        // Clean the response to remove thinking tags before displaying
-        const cleanedResponse = this.removeThinkingTags(assistantResponse);
-
-        // Update the content
+        // Update the content with the current response (no thinking content removal)
         const messageContent = assistantMessageEl.querySelector('.message-content') as HTMLElement;
-        messageContent.innerHTML = formatMarkdown(cleanedResponse);
+        messageContent.innerHTML = formatMarkdown(assistantResponse);
 
         // Apply syntax highlighting if this is the final update
         if (isDone) {
@@ -1120,63 +1107,22 @@ export default class LlmChatPanel extends BasicWidget {
                 this.messages.lastIndexOf(assistantMessages[assistantMessages.length - 1]) : -1;
 
             if (lastAssistantMsgIndex >= 0) {
-                // Update existing message with cleaned content
-                this.messages[lastAssistantMsgIndex].content = cleanedResponse;
+                // Update existing message
+                this.messages[lastAssistantMsgIndex].content = assistantResponse;
             } else {
-                // Add new message with cleaned content
+                // Add new message
                 this.messages.push({
                     role: 'assistant',
-                    content: cleanedResponse
+                    content: assistantResponse
                 });
             }
 
-            // Hide loading indicator
-            hideLoadingIndicator(this.loadingIndicator);
-
-            // DON'T save here immediately - let the server save the accumulated response first
-            // to avoid race conditions. We'll reload the data from the server after a short delay.
-            console.log("Stream completed, waiting for server to save then reloading data...");
-            setTimeout(async () => {
-                try {
-                    console.log("About to reload data from server...");
-                    const currentMessageCount = this.messages.length;
-                    console.log(`Current client message count before reload: ${currentMessageCount}`);
-
-                    // Reload the data from the server which should have the complete conversation
-                    const reloadSuccess = await this.loadSavedData();
-
-                    const newMessageCount = this.messages.length;
-                    console.log(`Reload success: ${reloadSuccess}, message count after reload: ${newMessageCount}`);
-
-                    if (reloadSuccess && newMessageCount > currentMessageCount) {
-                        console.log("Successfully reloaded data with more complete conversation");
-                    } else if (!reloadSuccess) {
-                        console.warn("Reload failed, keeping current client state");
-                    } else {
-                        console.warn("Reload succeeded but message count didn't increase");
-                    }
-                } catch (error) {
-                    console.error("Failed to reload data after stream completion:", error);
-                    // Fallback: save our current state if reload fails
-                    this.saveCurrentData().catch(err => {
-                        console.error("Failed to save assistant response to note:", err);
-                    });
-                }
-            }, 1500); // Wait 1.5 seconds for server to complete its save
+            // Save the data
+            this.saveCurrentData();
         }
 
         // Scroll to bottom
         this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
-    }
-
-    /**
-     * Remove thinking tags from response content
-     */
-    private removeThinkingTags(content: string): string {
-        if (!content) return content;
-
-        // Remove <think>...</think> blocks from the content
-        return content.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
     }
 
     /**
