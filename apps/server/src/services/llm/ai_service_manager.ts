@@ -155,14 +155,6 @@ export class AIServiceManager implements IAIServiceManager {
     }
 
     /**
-     * @deprecated Use validateConfiguration() instead
-     */
-    async validateEmbeddingProviders(): Promise<string | null> {
-        log.info('validateEmbeddingProviders is deprecated, use validateConfiguration instead');
-        return this.validateConfiguration();
-    }
-
-    /**
      * Ensure manager is initialized before using
      */
     private ensureInitialized() {
@@ -626,7 +618,7 @@ export default {
     },
     // Add validateEmbeddingProviders method
     async validateEmbeddingProviders(): Promise<string | null> {
-        return getInstance().validateEmbeddingProviders();
+        return getInstance().validateConfiguration();
     },
     // Context and index related methods
     getContextExtractor() {

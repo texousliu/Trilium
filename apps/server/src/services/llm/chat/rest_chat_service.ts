@@ -139,13 +139,8 @@ class RestChatService {
             if (!session && req.method === 'POST') {
                 log.info(`No Chat Note found for ${chatNoteId}, creating a new Chat Note and session`);
 
-                // Create a new Chat Note via the storage service
-                //const chatStorageService = (await import('../../llm/chat_storage_service.js')).default;
-                //const newChat = await chatStorageService.createChat('New Chat');
-
                 // Use the new Chat Note's ID for the session
                 session = SessionsStore.createSession({
-                    //title: newChat.title,
                     chatNoteId: chatNoteId
                 });
 
