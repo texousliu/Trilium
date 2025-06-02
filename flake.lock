@@ -60,11 +60,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1748881470,
-        "narHash": "sha256-Uk4J9StEEH/JaJQ+cw7wVvgLPMLZNoOGDGxKSbSDXyc=",
+        "lastModified": 1748901165,
+        "narHash": "sha256-SctrxW5rVrROBLfh8p4kXfbF7NbJQDkse/Penu4PlEs=",
         "owner": "FliegendeWurst",
         "repo": "pnpm2nix-nzbr",
-        "rev": "85497400540854c2895b9f59b5cc741a1f838da2",
+        "rev": "cda68d63418896a58542f3310c1c757ae92b1f22",
         "type": "github"
       },
       "original": {
