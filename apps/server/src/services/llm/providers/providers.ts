@@ -181,7 +181,7 @@ export async function updateEmbeddingProviderConfig(
     }
 
     // Build update query parts
-    const updates = [];
+    const updates: string[] = [];
     const params: any[] = [];
 
     if (priority !== undefined) {

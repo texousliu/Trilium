@@ -1,11 +1,9 @@
 import utils from "./utils.js";
 import appContext from "../components/app_context.js";
 import server from "./server.js";
-import libraryLoader from "./library_loader.js";
 import ws from "./ws.js";
 import froca from "./froca.js";
 import linkService from "./link.js";
-import { lint } from "./eslint.js";
 
 function setupGlobs() {
     window.glob.isDesktop = utils.isDesktop;
@@ -18,8 +16,6 @@ function setupGlobs() {
 
     // required for ESLint plugin and CKEditor
     window.glob.getActiveContextNote = () => appContext.tabManager.getActiveContextNote();
-    window.glob.requireLibrary = libraryLoader.requireLibrary;
-    window.glob.linter = lint;
     window.glob.appContext = appContext; // for debugging
     window.glob.froca = froca;
     window.glob.treeCache = froca; // compatibility for CKEditor builds for a while
@@ -66,7 +62,7 @@ function setupGlobs() {
     });
 
     for (const appCssNoteId of glob.appCssNoteIds || []) {
-        libraryLoader.requireCss(`api/notes/download/${appCssNoteId}`, false);
+        requireCss(`api/notes/download/${appCssNoteId}`, false);
     }
 
     utils.initHelpButtons($(window));
@@ -76,6 +72,18 @@ function setupGlobs() {
 
         return false;
     });
+}
+
+async function requireCss(url: string, prependAssetPath = true) {
+    const cssLinks = Array.from(document.querySelectorAll("link")).map((el) => el.href);
+
+    if (!cssLinks.some((l) => l.endsWith(url))) {
+        if (prependAssetPath) {
+            url = `${window.glob.assetPath}/${url}`;
+        }
+
+        $("head").append($('<link rel="stylesheet" type="text/css" />').attr("href", url));
+    }
 }
 
 export default {

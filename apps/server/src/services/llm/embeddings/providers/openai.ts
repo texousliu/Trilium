@@ -11,7 +11,7 @@ import { PROVIDER_EMBEDDING_CAPABILITIES } from '../../constants/search_constant
  * OpenAI embedding provider implementation using the official SDK
  */
 export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
-    name = "openai";
+    override name = "openai";
     private client: OpenAI | null = null;
 
     constructor(config: EmbeddingConfig) {
@@ -34,7 +34,7 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
     /**
      * Initialize the provider by detecting model capabilities
      */
-    async initialize(): Promise<void> {
+    override async initialize(): Promise<void> {
         const modelName = this.config.model || "text-embedding-3-small";
         try {
             // Initialize client if needed
@@ -222,7 +222,7 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
     /**
      * More specific implementation of batch size error detection for OpenAI
      */
-    protected isBatchSizeError(error: any): boolean {
+    protected override isBatchSizeError(error: any): boolean {
         const errorMessage = error?.message || '';
         const openAIBatchSizeErrorPatterns = [
             'batch size', 'too many inputs', 'context length exceeded',
@@ -272,7 +272,7 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
      * Generate embeddings for multiple texts in a single batch
      * OpenAI API supports batch embedding, so we implement a custom version
      */
-    async generateBatchEmbeddings(texts: string[]): Promise<Float32Array[]> {
+    override async generateBatchEmbeddings(texts: string[]): Promise<Float32Array[]> {
         if (texts.length === 0) {
             return [];
         }
@@ -312,7 +312,7 @@ export class OpenAIEmbeddingProvider extends BaseEmbeddingProvider {
      * Returns the normalization status for OpenAI embeddings
      * OpenAI embeddings are guaranteed to be normalized to unit length
      */
-    getNormalizationStatus(): NormalizationStatus {
+    override getNormalizationStatus(): NormalizationStatus {
         return NormalizationStatus.GUARANTEED;
     }
 }

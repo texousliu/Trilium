@@ -8,6 +8,17 @@ import entityChangesService from "../../../services/entity_changes.js";
 import type { EntityChange } from "../../../services/entity_changes_interface.js";
 import { EMBEDDING_CONSTANTS } from "../constants/embedding_constants.js";
 import { SEARCH_CONSTANTS } from '../constants/search_constants.js';
+import type { NoteEmbeddingContext } from "./embeddings_interface.js";
+import becca from "../../../becca/becca.js";
+import { isNoteExcludedFromAIById } from "../utils/ai_exclusion_utils.js";
+
+interface Similarity {
+    noteId: string;
+    similarity: number;
+    contentType: string;
+    bonuses?: Record<string, number>; // Optional for debugging
+}
+
 /**
  * Creates or updates an embedding for a note
  */
@@ -434,7 +445,7 @@ async function processEmbeddings(queryEmbedding: Float32Array, embeddings: any[]
         return { bonuses, totalBonus };
     }
 
-    const similarities = [];
+    const similarities: Similarity[] = [];
 
     try {
         // Try to extract the original query text if it was added to the metadata
@@ -444,6 +455,11 @@ async function processEmbeddings(queryEmbedding: Float32Array, embeddings: any[]
             : '';
 
         for (const e of embeddings) {
+            // Check if this note is excluded from AI features
+            if (isNoteExcludedFromAIById(e.noteId)) {
+                continue; // Skip this note if it has the AI exclusion label
+            }
+
             const embVector = bufferToEmbedding(e.embedding, e.dimension);
 
             // Detect content type from mime type if available

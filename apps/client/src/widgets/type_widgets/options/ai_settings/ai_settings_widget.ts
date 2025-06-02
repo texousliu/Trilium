@@ -198,7 +198,7 @@ export default class AiSettingsWidget extends OptionsWidget {
         const providerPrecedence = (this.$widget.find('.ai-provider-precedence').val() as string || '').split(',');
 
         // Check for OpenAI configuration if it's in the precedence list
-        const openaiWarnings = [];
+        const openaiWarnings: string[] = [];
         if (providerPrecedence.includes('openai')) {
             const openaiApiKey = this.$widget.find('.openai-api-key').val();
             if (!openaiApiKey) {
@@ -207,7 +207,7 @@ export default class AiSettingsWidget extends OptionsWidget {
         }
 
         // Check for Anthropic configuration if it's in the precedence list
-        const anthropicWarnings = [];
+        const anthropicWarnings: string[] = [];
         if (providerPrecedence.includes('anthropic')) {
             const anthropicApiKey = this.$widget.find('.anthropic-api-key').val();
             if (!anthropicApiKey) {
@@ -216,7 +216,7 @@ export default class AiSettingsWidget extends OptionsWidget {
         }
 
         // Check for Voyage configuration if it's in the precedence list
-        const voyageWarnings = [];
+        const voyageWarnings: string[] = [];
         if (providerPrecedence.includes('voyage')) {
             const voyageApiKey = this.$widget.find('.voyage-api-key').val();
             if (!voyageApiKey) {
@@ -225,7 +225,7 @@ export default class AiSettingsWidget extends OptionsWidget {
         }
 
         // Check for Ollama configuration if it's in the precedence list
-        const ollamaWarnings = [];
+        const ollamaWarnings: string[] = [];
         if (providerPrecedence.includes('ollama')) {
             const ollamaBaseUrl = this.$widget.find('.ollama-base-url').val();
             if (!ollamaBaseUrl) {
@@ -234,7 +234,7 @@ export default class AiSettingsWidget extends OptionsWidget {
         }
 
         // Similar checks for embeddings
-        const embeddingWarnings = [];
+        const embeddingWarnings: string[] = [];
         const embeddingsEnabled = this.$widget.find('.enable-automatic-indexing').prop('checked');
 
         if (embeddingsEnabled) {

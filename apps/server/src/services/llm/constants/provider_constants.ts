@@ -211,5 +211,10 @@ export const LLM_CONSTANTS = {
     CONTENT: {
         MAX_NOTE_CONTENT_LENGTH: 1500,
         MAX_TOTAL_CONTENT_LENGTH: 10000
+    },
+
+    // AI Feature Exclusion
+    AI_EXCLUSION: {
+        LABEL_NAME: 'aiExclude'  // Label used to exclude notes from all AI/LLM features
     }
 };

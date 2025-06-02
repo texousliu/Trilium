@@ -39,7 +39,7 @@ jobs:
 
       - uses: nrwl/nx-set-shas@v4
       - name: Check affected
-        run: pnpm nx affected -t build rebuild-deps
+        run: pnpm nx affected --verbose -t typecheck build rebuild-deps
 
   report-electron-size:
     name: Report Electron size
@@ -128,7 +128,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: Run the unit tests
-        run: pnpm run test
+        run: pnpm run test:all
 
   build_docker:
     name: Build Docker image

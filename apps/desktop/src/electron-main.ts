@@ -22,6 +22,12 @@ async function main() {
     electron.app.commandLine.appendSwitch("enable-experimental-web-platform-features");
     electron.app.commandLine.appendSwitch("lang", options.getOptionOrNull("formattingLocale") ?? "en");
 
+    // Electron 36 crashes with "Using GTK 2/3 and GTK 4 in the same process is not supported" on some distributions.
+    // See https://github.com/electron/electron/issues/46538 for more info.
+    if (process.platform === "linux") {
+        electron.app.commandLine.appendSwitch("gtk-version", "3");
+    }
+
     // Quit when all windows are closed, except on macOS. There, it's common
     // for applications and their menu bar to stay active until the user quits
     // explicitly with Cmd + Q.
@@ -44,7 +50,7 @@ async function main() {
     await import("@triliumnext/server/src/main.js");
 }
 
-export async function onReady() {
+async function onReady() {
     //    electron.app.setAppUserModelId('com.github.zadam.trilium');
 
     // if db is not initialized -> setup process

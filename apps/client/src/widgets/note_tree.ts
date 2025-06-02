@@ -27,6 +27,11 @@ import type { AttributeRow, BranchRow } from "../services/load_results.js";
 import type { SetNoteOpts } from "../components/note_context.js";
 import type { TouchBarItem } from "../components/touch_bar.js";
 import type { TreeCommandNames } from "../menus/tree_context_menu.js";
+import "jquery.fancytree";
+import "jquery.fancytree/dist/modules/jquery.fancytree.dnd5.js";
+import "jquery.fancytree/dist/modules/jquery.fancytree.clones.js";
+import "jquery.fancytree/dist/modules/jquery.fancytree.filter.js";
+import "../stylesheets/tree.css";
 
 const TPL = /*html*/`
 <div class="tree-wrapper">
@@ -345,7 +350,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
             },
             scrollParent: this.$tree,
             minExpandLevel: 2, // root can't be collapsed
-            click: (event: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent | React.PointerEvent<HTMLCanvasElement>, data): boolean => {
+            click: (event, data): boolean => {
                 this.activityDetected();
 
                 const targetType = data.targetType;
@@ -740,7 +745,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
     prepareChildren(parentNote: FNote) {
         utils.assertArguments(parentNote);
 
-        const noteList = [];
+        const noteList: Node[] = [];
 
         const hideArchivedNotes = this.hideArchivedNotes;
 
@@ -834,7 +839,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
     getExtraClasses(note: FNote) {
         utils.assertArguments(note);
 
-        const extraClasses = [];
+        const extraClasses: string[] = [];
 
         if (note.isProtected) {
             extraClasses.push("protected");
@@ -1167,16 +1172,19 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
 
             let noneCollapsedYet = true;
 
-            this.tree.getRootNode().visit((node) => {
-                if (node.isExpanded() && !noteIdsToKeepExpanded.has(node.data.noteId)) {
-                    node.setExpanded(false);
+            if (!options.is("databaseReadonly")) {
+                // can't change expanded notes when database is readonly
+                this.tree.getRootNode().visit((node) => {
+                    if (node.isExpanded() && !noteIdsToKeepExpanded.has(node.data.noteId)) {
+                        node.setExpanded(false);
 
-                    if (noneCollapsedYet) {
-                        toastService.showMessage(t("note_tree.auto-collapsing-notes-after-inactivity"));
-                        noneCollapsedYet = false;
+                        if (noneCollapsedYet) {
+                            toastService.showMessage(t("note_tree.auto-collapsing-notes-after-inactivity"));
+                            noneCollapsedYet = false;
+                        }
                     }
-                }
-            }, false);
+                }, false);
+            }
 
             this.filterHoistedBranch(true);
         }, 600 * 1000);
@@ -1257,8 +1265,8 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         const allBranchesDeleted = branchRows.every((branchRow) => !!branchRow.isDeleted);
 
         // activeNode is supposed to be moved when we find out activeNode is deleted but not all branches are deleted. save it for fixing activeNodePath after all nodes loaded.
-        let movedActiveNode = null;
-        let parentsOfAddedNodes = [];
+        let movedActiveNode: Fancytree.FancytreeNode | null = null;
+        let parentsOfAddedNodes: Fancytree.FancytreeNode[] = [];
 
         for (const branchRow of branchRows) {
             if (branchRow.noteId) {

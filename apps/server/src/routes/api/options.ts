@@ -6,8 +6,14 @@ import searchService from "../../services/search/services/search.js";
 import ValidationError from "../../errors/validation_error.js";
 import type { Request } from "express";
 import { changeLanguage, getLocales } from "../../services/i18n.js";
-import { listSyntaxHighlightingThemes } from "../../services/code_block_theme.js";
 import type { OptionNames } from "@triliumnext/commons";
+import config from "../../services/config.js";
+
+interface UserTheme {
+    val: string; // value of the theme, used in the URL
+    title: string; // title of the theme, displayed in the UI
+    noteId: string; // ID of the note containing the theme
+}
 
 // options allowed to be updated directly in the Options dialog
 const ALLOWED_OPTIONS = new Set<OptionNames>([
@@ -22,6 +28,7 @@ const ALLOWED_OPTIONS = new Set<OptionNames>([
     "theme",
     "codeBlockTheme",
     "codeBlockWordWrap",
+    "codeNoteTheme",
     "syncServerHost",
     "syncServerTimeout",
     "syncProxy",
@@ -127,6 +134,12 @@ function getOptions() {
     }
 
     resultMap["isPasswordSet"] = optionMap["passwordVerificationHash"] ? "true" : "false";
+    // if database is read-only, disable editing in UI by setting 0 here
+    if (config.General.readOnly) {
+        resultMap["autoReadonlySizeText"] = "0";
+        resultMap["autoReadonlySizeCode"] = "0";
+        resultMap["databaseReadonly"] = "true";
+    }
 
     return resultMap;
 }
@@ -170,7 +183,7 @@ function update(name: string, value: string) {
 
 function getUserThemes() {
     const notes = searchService.searchNotes("#appTheme", { ignoreHoistedNote: true });
-    const ret = [];
+    const ret: UserTheme[] = [];
 
     for (const note of notes) {
         let value = note.getOwnedLabelValue("appTheme");
@@ -189,10 +202,6 @@ function getUserThemes() {
     return ret;
 }
 
-function getSyntaxHighlightingThemes() {
-    return listSyntaxHighlightingThemes();
-}
-
 function getSupportedLocales() {
     return getLocales();
 }
@@ -209,6 +218,5 @@ export default {
     updateOption,
     updateOptions,
     getUserThemes,
-    getSyntaxHighlightingThemes,
     getSupportedLocales
 };

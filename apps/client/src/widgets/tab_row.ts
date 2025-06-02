@@ -208,7 +208,7 @@ const TAB_ROW_TPL = `
         color: var(--active-tab-text-color);
         box-shadow: inset -1px 0 0 0 var(--main-border-color);
     }
-    
+
     .tab-scroll-button-right {
         color: var(--active-tab-text-color);
         box-shadow: inset 1px 0 0 0 var(--main-border-color);
@@ -279,7 +279,7 @@ const TAB_ROW_TPL = `
         width: 100%;
         height: 100%;
     }
-        
+
     .tab-row-widget-scrolling-container {
         overflow-x: auto;
         overflow-y: hidden;
@@ -287,9 +287,9 @@ const TAB_ROW_TPL = `
     }
     /* Chrome/Safari */
     .tab-row-widget-scrolling-container::-webkit-scrollbar {
-        display: none;  
+        display: none;
     }
-    
+
     </style>
     <div class="tab-scroll-button-left bx bx-chevron-left"></div>
     <div class="tab-row-widget-scrolling-container">
@@ -378,22 +378,44 @@ export default class TabRowWidget extends BasicWidget {
     }
 
     scrollTabContainer(direction: number, behavior: ScrollBehavior = "smooth") {
-        const currentScrollLeft = this.$tabScrollingContainer[0]?.scrollLeft;
-        this.$tabScrollingContainer[0].scrollTo({
-            left: currentScrollLeft + direction,
+        this.$tabScrollingContainer[0].scrollBy({
+            left: direction,
             behavior
         });
     };
 
     setupScrollEvents() {
+        let deltaX = 0;
         let isScrolling = false;
-        this.$tabScrollingContainer[0].addEventListener('wheel', (event) => {
-            if (!isScrolling) {
-                isScrolling = true;
-                requestAnimationFrame(() => {
-                    this.scrollTabContainer(event.deltaY * 1.5, 'instant');
-                    isScrolling = false;
-                });
+        const stepScroll = () => {
+            if (Math.abs(deltaX) > 5) {
+                const step = Math.round(deltaX * 0.2);
+                deltaX -= step;
+                this.scrollTabContainer(step, "instant");
+                requestAnimationFrame(stepScroll);
+            } else {
+                this.scrollTabContainer(deltaX, "instant");
+                deltaX = 0;
+                isScrolling = false;
+            }
+        };
+        this.$tabScrollingContainer[0].addEventListener('wheel', async (event) => {
+            if (!event.shiftKey && event.deltaX === 0) {
+                event.preventDefault();
+                // Clamp deltaX between TAB_CONTAINER_MIN_WIDTH and TAB_CONTAINER_MIN_WIDTH * 3
+                deltaX += Math.sign(event.deltaY) * Math.max(Math.min(Math.abs(event.deltaY), TAB_CONTAINER_MIN_WIDTH * 3), TAB_CONTAINER_MIN_WIDTH);
+                if (!isScrolling) {
+                    isScrolling = true;
+                    stepScroll();
+                }
+            } else if (event.shiftKey) {
+                event.preventDefault();
+                if (event.deltaY > 0) {
+                    await appContext.tabManager.activateNextTabCommand();
+                } else {
+                    await appContext.tabManager.activatePreviousTabCommand();
+                }
+                this.activeTabEl.scrollIntoView();
             }
         });
 
@@ -480,7 +502,7 @@ export default class TabRowWidget extends BasicWidget {
         const totalTabsWidthUsingTarget = flooredClampedTargetWidth * numberOfTabs + marginWidth;
         const totalExtraWidthDueToFlooring = tabsContainerWidth - totalTabsWidthUsingTarget;
 
-        const widths = [];
+        const widths: number[] = [];
         let extraWidthRemaining = totalExtraWidthDueToFlooring;
 
         for (let i = 0; i < numberOfTabs; i += 1) {

@@ -246,7 +246,7 @@ export abstract class BaseEmbeddingProvider {
      */
     protected generateNoteContextText(context: NoteEmbeddingContext): string {
         // Build a relationship-focused summary first
-        const relationshipSummary = [];
+        const relationshipSummary: string[] = [];
 
         // Summarize the note's place in the hierarchy
         if (context.parentTitles.length > 0) {

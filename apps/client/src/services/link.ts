@@ -59,6 +59,7 @@ export interface ViewScope {
      * toc will appear and then close immediately, because getToc(html) function will consume time
      */
     tocPreviousVisible?: boolean;
+    tocCollapsedHeadings?:  Set<string>;
 }
 
 interface CreateLinkOptions {
@@ -215,9 +216,9 @@ export function parseNavigationStateFromUrl(url: string | undefined) {
     const viewScope: ViewScope = {
         viewMode: "default"
     };
-    let ntxId = null;
-    let hoistedNoteId = null;
-    let searchString = null;
+    let ntxId: string | null = null;
+    let hoistedNoteId: string | null = null;
+    let searchString: string | null = null;
 
     if (paramString) {
         for (const pair of paramString.split("&")) {

@@ -24,6 +24,11 @@ export interface MessageData {
     role: string;
     content: string;
     timestamp?: Date;
+    mentions?: Array<{
+        noteId: string;
+        title: string;
+        notePath: string;
+    }>;
 }
 
 export interface ChatData {

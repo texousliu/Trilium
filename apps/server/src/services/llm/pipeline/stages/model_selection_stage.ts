@@ -95,7 +95,7 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
             const providerPrecedence = await options.getOption('aiProviderPrecedence');
             if (providerPrecedence) {
                 // Parse provider precedence list
-                let providers = [];
+                let providers: string[] = [];
                 if (providerPrecedence.includes(',')) {
                     providers = providerPrecedence.split(',').map(p => p.trim());
                 } else if (providerPrecedence.startsWith('[') && providerPrecedence.endsWith(']')) {

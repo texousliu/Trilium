@@ -18,6 +18,7 @@ import cacheManager from '../modules/cache_manager.js';
 import type { NoteSearchResult } from '../../interfaces/context_interfaces.js';
 import type { LLMServiceInterface } from '../../interfaces/agent_tool_interfaces.js';
 import { SEARCH_CONSTANTS } from '../../constants/search_constants.js';
+import { isNoteExcludedFromAI } from '../../utils/ai_exclusion_utils.js';
 
 export interface VectorSearchOptions {
     maxResults?: number;
@@ -116,6 +117,11 @@ export class VectorSearchService {
                     const note = becca.getNote(result.noteId);
                     if (!note) {
                         return null;
+                    }
+
+                    // Check if this note is excluded from AI features
+                    if (isNoteExcludedFromAI(note)) {
+                        return null; // Skip this note if it has the AI exclusion label
                     }
 
                     // Get note content - full or summarized based on option
@@ -289,6 +295,12 @@ export class VectorSearchService {
 
             for (const noteId of noteIds) {
                 try {
+                    // Check if this note is excluded from AI features
+                    const note = becca.getNote(noteId);
+                    if (!note || isNoteExcludedFromAI(note)) {
+                        continue; // Skip this note if it doesn't exist or has the AI exclusion label
+                    }
+
                     // Get note embedding
                     const embeddingResult = await vectorStore.getEmbeddingForNote(
                         noteId,

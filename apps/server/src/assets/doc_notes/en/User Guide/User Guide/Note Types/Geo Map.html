@@ -19,7 +19,7 @@
       <tr>
         <td>1</td>
         <td>
-          <figure class="image image_resized image-style-align-center" style="width:51.25%;">
+          <figure class="image image-style-align-center image_resized" style="width:51.25%;">
             <img style="aspect-ratio:1256/1044;" src="7_Geo Map_image.png" width="1256"
             height="1044">
           </figure>
@@ -29,7 +29,7 @@
       <tr>
         <td>2</td>
         <td>
-          <figure class="image image_resized image-style-align-center" style="width:53.44%;">
+          <figure class="image image-style-align-center image_resized" style="width:53.44%;">
             <img style="aspect-ratio:1720/1396;" src="9_Geo Map_image.png" width="1720"
             height="1396">
           </figure>
@@ -39,7 +39,6 @@
     </tbody>
   </table>
 </figure>
-
 <h2>Repositioning the map</h2>
 <ul>
   <li>Click and drag the map in order to move across the map.</li>
@@ -103,11 +102,12 @@
     </tbody>
   </table>
 </figure>
-
 <h2>How the location of the markers is stored</h2>
 <p>The location of a marker is stored in the <code>#geolocation</code> attribute
   of the child notes:</p>
-<img src="18_Geo Map_image.png" width="1288" height="278">
+<p>
+  <img src="18_Geo Map_image.png" width="1288" height="278">
+</p>
 <p>This value can be added manually if needed. The value of the attribute
   is made up of the latitude and longitude separated by a comma.</p>
 <h2>Repositioning markers</h2>
@@ -170,7 +170,7 @@
       <tr>
         <td>1</td>
         <td>
-          <figure class="image image_resized image-style-align-center" style="width:56.84%;">
+          <figure class="image image-style-align-center image_resized" style="width:56.84%;">
             <img style="aspect-ratio:732/918;" src="13_Geo Map_image.png" width="732"
             height="918">
           </figure>
@@ -187,7 +187,7 @@
       <tr>
         <td>2</td>
         <td>
-          <figure class="image image_resized image-style-align-center" style="width:100%;">
+          <figure class="image image-style-align-center image_resized" style="width:100%;">
             <img style="aspect-ratio:518/84;" src="4_Geo Map_image.png" width="518"
             height="84">
           </figure>
@@ -197,7 +197,7 @@
       <tr>
         <td>3</td>
         <td>
-          <figure class="image image_resized image-style-align-center" style="width:100%;">
+          <figure class="image image-style-align-center image_resized" style="width:100%;">
             <img style="aspect-ratio:1074/276;" src="12_Geo Map_image.png" width="1074"
             height="276">
           </figure>
@@ -210,7 +210,6 @@
     </tbody>
   </table>
 </figure>
-
 <h3>Adding from OpenStreetMap</h3>
 <p>Similarly to the Google Maps approach:</p>
 <figure class="table" style="width:100%;">
@@ -260,7 +259,6 @@
     </tbody>
   </table>
 </figure>
-
 <h2>Adding GPS tracks (.gpx)</h2>
 <p>Trilium has basic support for displaying GPS tracks on the geo map.</p>
 <figure
@@ -316,14 +314,20 @@ class="table" style="width:100%;">
     </tbody>
   </table>
   </figure>
-  
-<h2>Troubleshooting</h2>
+  <aside class="admonition note">
+    <p>The starting point of the track will be displayed as a marker, with the
+      name of the note underneath. The start marker will also respect the icon
+      and the <code>color</code> of the note. The end marker is displayed with
+      a distinct icon.</p>
+    <p>If the GPX contains waypoints, they will also be displayed. If they have
+      a name, it is displayed when hovering over it with the mouse.</p>
+  </aside>
+  <h2>Troubleshooting</h2>
   <figure class="image image-style-align-right image_resized" style="width:34.06%;">
     <img style="aspect-ratio:678/499;" src="14_Geo Map_image.png" width="678"
     height="499">
   </figure>
-  
-<h3>Grid-like artifacts on the map</h3>
+  <h3>Grid-like artifacts on the map</h3>
   <p>This occurs if the application is not at 100% zoom which causes the pixels
     of the map to not render correctly due to fractional scaling. The only
     possible solution is to set the UI zoom at 100% (default keyboard shortcut

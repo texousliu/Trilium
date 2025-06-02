@@ -808,7 +808,7 @@ async function streamMessage(req: Request, res: Response) {
     log.info("=== Starting streamMessage ===");
     try {
         const chatNoteId = req.params.chatNoteId;
-        const { content, useAdvancedContext, showThinking } = req.body;
+        const { content, useAdvancedContext, showThinking, mentions } = req.body;
 
         if (!content || typeof content !== 'string' || content.trim().length === 0) {
             throw new Error('Content cannot be empty');
@@ -823,17 +823,51 @@ async function streamMessage(req: Request, res: Response) {
         // Update last active timestamp
         session.lastActive = new Date();
 
-        // Add user message to the session
+        // Process mentions if provided
+        let enhancedContent = content;
+        if (mentions && Array.isArray(mentions) && mentions.length > 0) {
+            log.info(`Processing ${mentions.length} note mentions`);
+
+            // Import note service to get note content
+            const becca = (await import('../../becca/becca.js')).default;
+
+            const mentionContexts: string[] = [];
+
+            for (const mention of mentions) {
+                try {
+                    const note = becca.getNote(mention.noteId);
+                    if (note && !note.isDeleted) {
+                        const noteContent = note.getContent();
+                        if (noteContent && typeof noteContent === 'string' && noteContent.trim()) {
+                            mentionContexts.push(`\n\n--- Content from "${mention.title}" (${mention.noteId}) ---\n${noteContent}\n--- End of "${mention.title}" ---`);
+                            log.info(`Added content from note "${mention.title}" (${mention.noteId})`);
+                        }
+                    } else {
+                        log.info(`Referenced note not found or deleted: ${mention.noteId}`);
+                    }
+                } catch (error) {
+                    log.error(`Error retrieving content for note ${mention.noteId}: ${error}`);
+                }
+            }
+
+            // Enhance the content with note references
+            if (mentionContexts.length > 0) {
+                enhancedContent = `${content}\n\n=== Referenced Notes ===\n${mentionContexts.join('\n')}`;
+                log.info(`Enhanced content with ${mentionContexts.length} note references`);
+            }
+        }
+
+        // Add user message to the session (with enhanced content for processing)
         session.messages.push({
             role: 'user',
-            content,
+            content: enhancedContent,
             timestamp: new Date()
         });
 
         // Create request parameters for the pipeline
         const requestParams = {
             chatNoteId: chatNoteId,
-            content,
+            content: enhancedContent,
             useAdvancedContext: useAdvancedContext === true,
             showThinking: showThinking === true,
             stream: true // Always stream for this endpoint
@@ -851,9 +885,9 @@ async function streamMessage(req: Request, res: Response) {
             params: {
                 chatNoteId: chatNoteId
             },
-            // Make sure the original content is available to the handler
+            // Make sure the enhanced content is available to the handler
             body: {
-                content,
+                content: enhancedContent,
                 useAdvancedContext: useAdvancedContext === true,
                 showThinking: showThinking === true
             }

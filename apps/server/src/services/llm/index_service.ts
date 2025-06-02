@@ -16,14 +16,13 @@ import vectorStore from "./embeddings/index.js";
 import providerManager from "./providers/providers.js";
 import { ContextExtractor } from "./context/index.js";
 import eventService from "../events.js";
-import type { NoteEmbeddingContext } from "./embeddings/embeddings_interface.js";
-import type { OptionDefinitions } from "@triliumnext/commons";
 import sql from "../sql.js";
 import sqlInit from "../sql_init.js";
 import { CONTEXT_PROMPTS } from './constants/llm_prompt_constants.js';
 import { SEARCH_CONSTANTS } from './constants/search_constants.js';
+import { isNoteExcludedFromAI } from "./utils/ai_exclusion_utils.js";
 
-class IndexService {
+export class IndexService {
     private initialized = false;
     private indexingInProgress = false;
     private contextExtractor = new ContextExtractor();
@@ -803,6 +802,12 @@ class IndexService {
             const note = becca.getNote(noteId);
             if (!note) {
                 throw new Error(`Note ${noteId} not found`);
+            }
+
+            // Check if this note is excluded from AI features
+            if (isNoteExcludedFromAI(note)) {
+                log.info(`Note ${noteId} (${note.title}) excluded from AI indexing due to exclusion label`);
+                return true; // Return true to indicate successful handling (exclusion is intentional)
             }
 
             // Check where embedding generation should happen

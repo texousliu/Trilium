@@ -44,6 +44,9 @@ export default class TabManager extends Component {
             if (!appContext.isMainWindow) {
                 return;
             }
+            if (options.is("databaseReadonly")) {
+                return;
+            }
 
             const openNoteContexts = this.noteContexts
                 .map((nc) => nc.getPojoState())

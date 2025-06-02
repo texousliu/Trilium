@@ -137,6 +137,21 @@ const defaultOptions: DefaultOption[] = [
 
     // Appearance
     { name: "splitEditorOrientation", value: "horizontal", isSynced: true },
+    {
+        name: "codeNoteTheme",
+        value: (optionsMap) => {
+            switch (optionsMap.theme) {
+                case "light":
+                case "next-light":
+                    return "default:vs-code-light";
+                case "dark":
+                case "next-dark":
+                default:
+                    return "default:vs-code-dark";
+            }
+        },
+        isSynced: false
+    },
 
     // Internationalization
     { name: "locale", value: "en", isSynced: true },
@@ -190,7 +205,7 @@ const defaultOptions: DefaultOption[] = [
     { name: "anthropicBaseUrl", value: "https://api.anthropic.com/v1", isSynced: true },
     { name: "ollamaEnabled", value: "false", isSynced: true },
     { name: "ollamaDefaultModel", value: "llama3", isSynced: true },
-    { name: "ollamaBaseUrl", value: "", isSynced: true },
+    { name: "ollamaBaseUrl", value: "http://localhost:11434", isSynced: true },
     { name: "ollamaEmbeddingModel", value: "nomic-embed-text", isSynced: true },
     { name: "embeddingAutoUpdateEnabled", value: "true", isSynced: true },
 
