@@ -116,13 +116,16 @@ class RestChatService {
                 throw new Error('Failed to create or retrieve chat');
             }
 
-            // For POST requests, add the user message
+            // For POST requests, add the user message to the chat immediately
+            // This ensures user messages are always saved
             if (req.method === 'POST' && content) {
                 chat.messages.push({
                     role: 'user',
                     content
                 });
-                log.info(`Processing LLM message: "${content.substring(0, 50)}${content.length > 50 ? '...' : ''}"`);
+                // Save immediately to ensure user message is saved
+                await chatStorageService.updateChat(chat.id, chat.messages, chat.title);
+                log.info(`Added and saved user message: "${content.substring(0, 50)}${content.length > 50 ? '...' : ''}"`);
             }
 
             // Initialize tools
@@ -162,7 +165,7 @@ class RestChatService {
                 showThinking: showThinking,
                 options: pipelineOptions,
                 streamCallback: req.method === 'GET' ? (data, done, rawChunk) => {
-                    this.handleStreamCallback(data, done, rawChunk, wsService.default, chatNoteId, res, accumulatedContentRef);
+                    this.handleStreamCallback(data, done, rawChunk, wsService.default, chatNoteId, res, accumulatedContentRef, chat);
                 } : undefined
             };
 
@@ -178,6 +181,7 @@ class RestChatService {
 
                 // Save the updated chat back to storage (single source of truth)
                 await chatStorageService.updateChat(chat.id, chat.messages, chat.title);
+                log.info(`Saved non-streaming assistant response: ${(response.text || '').length} characters`);
 
                 // Extract sources if available
                 const sources = (response as any).sources || [];
@@ -193,16 +197,7 @@ class RestChatService {
                 };
             } else {
                 // For streaming, response is already sent via WebSocket/SSE
-                // Save the accumulated content - prefer accumulated content over response.text
-                const finalContent = accumulatedContentRef.value || response.text || '';
-                if (finalContent) {
-                    chat.messages.push({
-                        role: 'assistant',
-                        content: finalContent
-                    });
-                    await chatStorageService.updateChat(chat.id, chat.messages, chat.title);
-                    log.info(`Saved accumulated streaming content: ${finalContent.length} characters`);
-                }
+                // The accumulatedContentRef will have been saved in handleStreamCallback when done=true
                 return null;
             }
         } catch (error: any) {
@@ -214,14 +209,15 @@ class RestChatService {
     /**
      * Simplified stream callback handler
      */
-    private handleStreamCallback(
+    private async handleStreamCallback(
         data: string | null,
         done: boolean,
         rawChunk: any,
         wsService: any,
         chatNoteId: string,
         res: Response,
-        accumulatedContentRef: { value: string }
+        accumulatedContentRef: { value: string },
+        chat: { id: string; messages: Message[]; title: string }
     ) {
         const message: LLMStreamMessage = {
             type: 'llm-stream',
@@ -264,7 +260,28 @@ class RestChatService {
         }
 
         res.write(`data: ${JSON.stringify(responseData)}\n\n`);
+        
+        // When streaming is complete, save the accumulated content to the chat note
         if (done) {
+            try {
+                // Only save if we have accumulated content
+                if (accumulatedContentRef.value) {
+                    // Add assistant response to chat
+                    chat.messages.push({
+                        role: 'assistant',
+                        content: accumulatedContentRef.value
+                    });
+                    
+                    // Save the updated chat back to storage
+                    await chatStorageService.updateChat(chat.id, chat.messages, chat.title);
+                    log.info(`Saved streaming assistant response: ${accumulatedContentRef.value.length} characters`);
+                }
+            } catch (error) {
+                // Log error but don't break the response flow
+                log.error(`Error saving streaming response: ${error}`);
+            }
+            
+            // End the response
             res.end();
         }
     }
@@ -295,7 +312,7 @@ class RestChatService {
                                 log.info(`Using existing AI Chat note ${noteId} as session`);
                             }
                         }
-                    } catch (e) {
+                    } catch (_) {
                         // Not JSON content, so not an AI Chat note
                     }
                 }

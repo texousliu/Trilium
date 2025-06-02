@@ -809,11 +809,19 @@ async function indexNote(req: Request, res: Response) {
 async function streamMessage(req: Request, res: Response) {
     log.info("=== Starting streamMessage ===");
     try {
+        // Set up the response headers for streaming first, before any data is sent
+        res.setHeader('Content-Type', 'text/event-stream');
+        res.setHeader('Cache-Control', 'no-cache');
+        res.setHeader('Connection', 'keep-alive');
+        
         const chatNoteId = req.params.chatNoteId;
         const { content, useAdvancedContext, showThinking, mentions } = req.body;
 
         if (!content || typeof content !== 'string' || content.trim().length === 0) {
-            throw new Error('Content cannot be empty');
+            // Early return with error
+            res.write(`data: ${JSON.stringify({ error: 'Content cannot be empty', done: true })}\n\n`);
+            res.end();
+            return;
         }
 
         // Get or create chat directly from storage (simplified approach)
@@ -823,6 +831,14 @@ async function streamMessage(req: Request, res: Response) {
             chat = await chatStorageService.createChat('New Chat');
             log.info(`Created new chat with ID: ${chat.id} for stream request`);
         }
+        
+        // Add the user message to the chat immediately
+        chat.messages.push({
+            role: 'user',
+            content
+        });
+        // Save the chat to ensure the user message is recorded
+        await chatStorageService.updateChat(chat.id, chat.messages, chat.title);
 
         // Process mentions if provided
         let enhancedContent = content;
@@ -831,7 +847,6 @@ async function streamMessage(req: Request, res: Response) {
 
             // Import note service to get note content
             const becca = (await import('../../becca/becca.js')).default;
-
             const mentionContexts: string[] = [];
 
             for (const mention of mentions) {
@@ -870,7 +885,10 @@ async function streamMessage(req: Request, res: Response) {
 
         // Process the streaming request directly
         try {
-            const result = await restChatService.handleSendMessage({
+            // Call the streaming handler - it will handle the response streaming
+            // IMPORTANT: We do not await this because we don't want to try sending a response
+            // after the streaming has completed - the stream handler takes care of ending the response
+            restChatService.handleSendMessage({
                 ...req,
                 method: 'GET', // Indicate streaming mode
                 query: {
@@ -884,13 +902,9 @@ async function streamMessage(req: Request, res: Response) {
                 },
                 params: { chatNoteId }
             } as unknown as Request, res);
-
-            // Since we're streaming, the result will be null
-            return {
-                success: true,
-                message: 'Streaming started',
-                chatNoteId: chatNoteId
-            };
+            
+            // Don't return or send any additional response here
+            // handleSendMessage handles the full streaming response cycle and will end the response
         } catch (error) {
             log.error(`Error during streaming: ${error}`);
 
@@ -901,12 +915,21 @@ async function streamMessage(req: Request, res: Response) {
                 error: `Error processing message: ${error}`,
                 done: true
             });
-
-            throw error;
+            
+            // Only write to the response if it hasn't been ended yet
+            if (!res.writableEnded) {
+                res.write(`data: ${JSON.stringify({ error: `Error processing message: ${error}`, done: true })}\n\n`);
+                res.end();
+            }
         }
     } catch (error: any) {
         log.error(`Error starting message stream: ${error.message}`);
-        throw error;
+        
+        // Only write to the response if it hasn't been ended yet
+        if (!res.writableEnded) {
+            res.write(`data: ${JSON.stringify({ error: `Error starting message stream: ${error.message}`, done: true })}\n\n`);
+            res.end();
+        }
     }
 }
 
