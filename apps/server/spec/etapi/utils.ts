@@ -14,3 +14,20 @@ export async function login(app: Application) {
     expect(token).toBeTruthy();
     return token;
 }
+
+export async function createNote(app: Application, token: string, content?: string) {
+    const response = await supertest(app)
+        .post("/etapi/create-note")
+        .auth("etapi", token, { "type": "basic"})
+        .send({
+            "parentNoteId": "root",
+            "title": "Hello",
+            "type": "text",
+            "content": content ?? "Hi there!",
+        })
+        .expect(201);
+
+    const noteId = response.body.note.noteId;
+    expect(noteId).toStrictEqual(noteId);
+    return noteId;
+}
