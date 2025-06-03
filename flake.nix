@@ -27,22 +27,34 @@
           pnpm
           stdenv
           wrapGAppsHook3
+          xcodebuild
+          darwin
           ;
         desktop = stdenv.mkDerivation (finalAttrs: {
           pname = "triliumnext-desktop";
           version = packageJSON.version;
           src = lib.cleanSource ./.;
 
-          nativeBuildInputs = [
-            pnpm.configHook
-            nodejs
-            nodejs.python
-            copyDesktopItems
-            makeBinaryWrapper
-            wrapGAppsHook3
-          ];
+          nativeBuildInputs =
+            [
+              pnpm.configHook
+              nodejs
+              nodejs.python
+              copyDesktopItems
+              makeBinaryWrapper
+              wrapGAppsHook3
+            ]
+            ++ lib.optionals stdenv.hostPlatform.isDarwin [
+              xcodebuild
+              darwin.cctools
+            ];
 
           dontWrapGApps = true;
+
+          preBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
+            patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+              node_modules/.pnpm/sass-embedded-linux-x64@*/node_modules/sass-embedded-linux-x64/dart-sass/src/dart
+          '';
 
           buildPhase = ''
             runHook preBuild
@@ -51,8 +63,6 @@
             export NX_TUI=false
             export NX_DAEMON=false
 
-            patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-              node_modules/.pnpm/sass-embedded-linux-x64@*/node_modules/sass-embedded-linux-x64/dart-sass/src/dart
             pnpm nx run desktop:build --outputStyle stream --verbose
 
             # Rebuild dependencies
