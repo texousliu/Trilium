@@ -963,21 +963,10 @@ async function streamMessage(req: Request, res: Response) {
                 error: `Error processing message: ${error}`,
                 done: true
             });
-            
-            // Only write to the response if it hasn't been ended yet
-            if (!res.writableEnded) {
-                res.write(`data: ${JSON.stringify({ error: `Error processing message: ${error}`, done: true })}\n\n`);
-                res.end();
-            }
         }
     } catch (error: any) {
         log.error(`Error starting message stream: ${error.message}`);
-        
-        // Only write to the response if it hasn't been ended yet
-        if (!res.writableEnded) {
-            res.write(`data: ${JSON.stringify({ error: `Error starting message stream: ${error.message}`, done: true })}\n\n`);
-            res.end();
-        }
+        log.error(`Error starting message stream, can't communicate via WebSocket: ${error.message}`);
     }
 }
 

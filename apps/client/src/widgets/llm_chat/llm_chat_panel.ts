@@ -1068,13 +1068,19 @@ export default class LlmChatPanel extends BasicWidget {
      * Update the UI with streaming content
      */
     private updateStreamingUI(assistantResponse: string, isDone: boolean = false) {
-        // Get the existing assistant message or create a new one
-        let assistantMessageEl = this.noteContextChatMessages.querySelector('.assistant-message:last-child');
-
-        if (!assistantMessageEl) {
-            // If no assistant message yet, create one
+        // Track if we have a streaming message in progress
+        const hasStreamingMessage = !!this.noteContextChatMessages.querySelector('.assistant-message.streaming');
+        
+        // Create a new message element or use the existing streaming one
+        let assistantMessageEl: HTMLElement;
+        
+        if (hasStreamingMessage) {
+            // Use the existing streaming message
+            assistantMessageEl = this.noteContextChatMessages.querySelector('.assistant-message.streaming')!;
+        } else {
+            // Create a new message element
             assistantMessageEl = document.createElement('div');
-            assistantMessageEl.className = 'assistant-message message mb-3';
+            assistantMessageEl.className = 'assistant-message message mb-3 streaming';
             this.noteContextChatMessages.appendChild(assistantMessageEl);
 
             // Add assistant profile icon
@@ -1089,35 +1095,30 @@ export default class LlmChatPanel extends BasicWidget {
             assistantMessageEl.appendChild(messageContent);
         }
 
-        // Update the content with the current response (no thinking content removal)
+        // Update the content with the current response
         const messageContent = assistantMessageEl.querySelector('.message-content') as HTMLElement;
         messageContent.innerHTML = formatMarkdown(assistantResponse);
 
-        // Apply syntax highlighting if this is the final update
+        // When the response is complete
         if (isDone) {
+            // Remove the streaming class to mark this message as complete
+            assistantMessageEl.classList.remove('streaming');
+            
+            // Apply syntax highlighting
             formatCodeBlocks($(assistantMessageEl as HTMLElement));
 
             // Hide the thinking display when response is complete
             this.hideThinkingDisplay();
 
-            // Update message in the data model for storage
-            // Find the last assistant message to update, or add a new one if none exists
-            const assistantMessages = this.messages.filter(msg => msg.role === 'assistant');
-            const lastAssistantMsgIndex = assistantMessages.length > 0 ?
-                this.messages.lastIndexOf(assistantMessages[assistantMessages.length - 1]) : -1;
+            // Always add a new message to the data model
+            // This ensures we preserve all distinct assistant messages
+            this.messages.push({
+                role: 'assistant',
+                content: assistantResponse,
+                timestamp: new Date()
+            });
 
-            if (lastAssistantMsgIndex >= 0) {
-                // Update existing message
-                this.messages[lastAssistantMsgIndex].content = assistantResponse;
-            } else {
-                // Add new message
-                this.messages.push({
-                    role: 'assistant',
-                    content: assistantResponse
-                });
-            }
-
-            // Save the data
+            // Save the updated message list
             this.saveCurrentData();
         }
 
