@@ -39,14 +39,8 @@ describe("etapi/delete-entities", () => {
     });
 
     it("deletes cloned branch", async () => {
-        const response = await supertest(app)
-            .post("/etapi/branches")
-            .auth(USER, token, { "type": "basic"})
-            .send({
-                noteId: createdNoteId,
-                parentNoteId: "_hidden"
-            });
-        const clonedBranchId = response.body.branchId;
+        const clonedBranchId = await createClone();
+
         await expectFound("branches", createdBranchId);
         await expectFound("branches", clonedBranchId);
 
@@ -60,14 +54,7 @@ describe("etapi/delete-entities", () => {
     it("deletes note with all branches", async () => {
         const attributeId = await createAttribute();
 
-        const response = await supertest(app)
-            .post("/etapi/branches")
-            .auth(USER, token, { "type": "basic"})
-            .send({
-                noteId: createdNoteId,
-                parentNoteId: "_hidden"
-            });
-        const clonedBranchId = response.body.branchId;
+        const clonedBranchId = await createClone();
 
         await expectFound("notes", createdNoteId);
         await expectFound("branches", createdBranchId);
