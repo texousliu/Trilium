@@ -9,8 +9,9 @@ let token: string;
 
 const USER = "etapi";
 let createdNoteId: string;
+let createdAttachmentId: string;
 
-describe("etapi/note-content", () => {
+describe("etapi/attachment-content", () => {
     beforeAll(async () => {
         config.General.noAuthentication = false;
         const buildApp = (await (import("../../src/app.js"))).default;
@@ -18,44 +19,41 @@ describe("etapi/note-content", () => {
         token = await login(app);
 
         createdNoteId = await createNote(app, token);
+
+        // Create an attachment
+        const response = await supertest(app)
+            .post(`/etapi/attachments`)
+            .auth(USER, token, { "type": "basic"})
+            .send({
+                "ownerId": createdNoteId,
+                "role": "file",
+                "mime": "text/plain",
+                "title": "my attachment",
+                "content": "text"
+            });
+        createdAttachmentId = response.body.attachmentId;
+        expect(createdAttachmentId).toBeTruthy();
     });
 
-    it("get content", async () => {
-        const response = await getContentResponse();
-        expect(response.text).toStrictEqual("Hi there!");
-    });
-
-    it("put note content", async () => {
+    it("changes attachment content", async () => {
         const text = "Changed content";
         await supertest(app)
-            .put(`/etapi/notes/${createdNoteId}/content`)
+            .put(`/etapi/attachments/${createdAttachmentId}/content`)
             .auth(USER, token, { "type": "basic"})
             .set("Content-Type", "text/plain")
             .send(text)
             .expect(204);
 
-        const response = await getContentResponse();
+        // Ensure it got changed.
+        const response = await supertest(app)
+            .get(`/etapi/attachments/${createdAttachmentId}/content`)
+            .auth(USER, token, { "type": "basic"});
         expect(response.text).toStrictEqual(text);
     });
 
-    it("put note content binary", async () => {
-        // First, create a binary note
-        const response = await supertest(app)
-            .post("/etapi/create-note")
-            .auth("etapi", token, { "type": "basic"})
-            .send({
-                "parentNoteId": "root",
-                "title": "Hello",
-                "mime": "image/png",
-                "type": "image",
-                "content": ""
-            })
-            .expect(201);
-        const createdNoteId = response.body.note.noteId;
-
-        // Put binary content
+    it("supports binary content", async() => {
         await supertest(app)
-            .put(`/etapi/notes/${createdNoteId}/content`)
+            .put(`/etapi/attachments/${createdAttachmentId}/content`)
             .auth(USER, token, { "type": "basic"})
             .set("Content-Type", "application/octet-stream")
             .set("Content-Transfer-Encoding", "binary")
@@ -63,10 +61,4 @@ describe("etapi/note-content", () => {
             .expect(204);
     });
 
-    function getContentResponse() {
-        return supertest(app)
-            .get(`/etapi/notes/${createdNoteId}/content`)
-            .auth(USER, token, { "type": "basic"})
-            .expect(200);
-    }
 });

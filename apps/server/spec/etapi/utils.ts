@@ -27,7 +27,7 @@ export async function createNote(app: Application, token: string, content?: stri
         })
         .expect(201);
 
-    const noteId = response.body.note.noteId;
+    const noteId = response.body.note.noteId as string;
     expect(noteId).toStrictEqual(noteId);
     return noteId;
 }
