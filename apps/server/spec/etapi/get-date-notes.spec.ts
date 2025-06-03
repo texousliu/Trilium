@@ -3,6 +3,8 @@ import config from "../../src/services/config.js";
 import { login } from "./utils.js";
 import { Application } from "express";
 import supertest from "supertest";
+import date_notes from "../../src/services/date_notes.js";
+import cls from "../../src/services/cls.js";
 
 let app: Application;
 let token: string;
@@ -42,9 +44,16 @@ describe("etapi/get-date-notes", () => {
     });
 
     describe("weeks", () => {
+        beforeAll(() => {
+            cls.init(() => {
+                const rootCalendarNote = date_notes.getRootCalendarNote();
+                rootCalendarNote.setLabel("enableWeekNote");
+            });
+        });
+
         it("obtains week calendar", async () => {
             await supertest(app)
-                .get("/etapi/calendar/weeks/2022-01-01")
+                .get("/etapi/calendar/weeks/2022-W01")
                 .auth(USER, token, { "type": "basic"})
                 .expect(200);
         });
@@ -54,14 +63,14 @@ describe("etapi/get-date-notes", () => {
                 .get("/etapi/calendar/weeks/2022-1")
                 .auth(USER, token, { "type": "basic"})
                 .expect(400);
-            expect(response.body.code).toStrictEqual("DATE_INVALID");
+            expect(response.body.code).toStrictEqual("WEEK_INVALID");
         });
     });
 
     describe("months", () => {
         it("obtains month calendar", async () => {
             await supertest(app)
-                .get("/etapi/calendar/weeks/2022-01")
+                .get("/etapi/calendar/months/2022-01")
                 .auth(USER, token, { "type": "basic"})
                 .expect(200);
         });
