@@ -30,6 +30,7 @@
           lib
           makeBinaryWrapper
           makeDesktopItem
+          moreutils
           removeReferencesTo
           stdenv
           wrapGAppsHook3
@@ -83,6 +84,11 @@
               }
             ];
 
+            # remove pnpm version override
+            preConfigure = ''
+              cat package.json | grep -v 'packageManager' | sponge package.json
+            '';
+
             postConfigure =
               ''
                 chmod +x node_modules/.pnpm/electron@*/node_modules/electron/install.js
@@ -96,6 +102,7 @@
             extraNativeBuildInputs =
               [
                 makeBinaryWrapper
+                moreutils # sponge
                 nodejs.python
                 removeReferencesTo
               ]
