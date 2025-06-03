@@ -28,14 +28,14 @@ describe("etapi/delete-entities", () => {
 
     it("deletes attachment", async () => {
         const attachmentId = await createAttachment();
-        deleteEntity("attachments", attachmentId);
-        expectNotFound("attachments", attachmentId);
+        await deleteEntity("attachments", attachmentId);
+        await expectNotFound("attachments", attachmentId);
     });
 
     it("deletes attribute", async () => {
         const attributeId = await createAttribute();
-        deleteEntity("attributes", attributeId);
-        expectNotFound("attributes", attributeId);
+        await deleteEntity("attributes", attributeId);
+        await expectNotFound("attributes", attributeId);
     });
 
     it("deletes cloned branch", async () => {
@@ -47,14 +47,14 @@ describe("etapi/delete-entities", () => {
                 parentNoteId: "_hidden"
             });
         const clonedBranchId = response.body.branchId;
-        expectFound("branches", createdBranchId);
-        expectFound("branches", clonedBranchId);
+        await expectFound("branches", createdBranchId);
+        await expectFound("branches", clonedBranchId);
 
-        deleteEntity("branches", createdBranchId);
-        expectNotFound("branches", createdBranchId);
+        await deleteEntity("branches", createdBranchId);
+        await expectNotFound("branches", createdBranchId);
 
-        expectFound("branches", clonedBranchId);
-        expectFound("notes", createdNoteId);
+        await expectFound("branches", clonedBranchId);
+        await expectFound("notes", createdNoteId);
     });
 
     it("deletes note with all branches", async () => {
@@ -69,16 +69,16 @@ describe("etapi/delete-entities", () => {
             });
         const clonedBranchId = response.body.branchId;
 
-        expectFound("notes", createdNoteId);
-        expectFound("branches", createdBranchId);
-        expectFound("branches", clonedBranchId);
-        expectFound("attributes", attributeId);
-        deleteEntity("notes", createdNoteId);
+        await expectFound("notes", createdNoteId);
+        await expectFound("branches", createdBranchId);
+        await expectFound("branches", clonedBranchId);
+        await expectFound("attributes", attributeId);
+        await deleteEntity("notes", createdNoteId);
 
-        expectNotFound("branches", createdBranchId);
-        expectNotFound("branches", clonedBranchId);
-        expectNotFound("notes", createdNoteId);
-        expectNotFound("attributes", attributeId);
+        await expectNotFound("branches", createdBranchId);
+        await expectNotFound("branches", clonedBranchId);
+        await expectNotFound("notes", createdNoteId);
+        await expectNotFound("attributes", attributeId);
     });
 });
 
@@ -161,12 +161,20 @@ async function deleteEntity(entity: EntityType, id: string) {
     }
 }
 
+const MISSING_ENTITY_ERROR_CODES: Record<EntityType, string> = {
+    attachments: "ATTACHMENT_NOT_FOUND",
+    attributes: "ATTRIBUTE_NOT_FOUND",
+    branches: "BRANCH_NOT_FOUND",
+    notes: "NOTE_NOT_FOUND"
+}
+
 async function expectNotFound(entity: EntityType, id: string) {
     const response = await supertest(app)
             .get(`/etapi/${entity}/${id}`)
             .auth(USER, token, { "type": "basic"})
             .expect(404);
-    expect(response.body.code).toStrictEqual("ATTACHMENT_NOT_FOUND");
+
+    expect(response.body.code).toStrictEqual(MISSING_ENTITY_ERROR_CODES[entity]);
 }
 
 async function expectFound(entity: EntityType, id: string) {
