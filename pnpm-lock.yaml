@@ -106,8 +106,8 @@ importers:
         specifier: ^2.0.0
         version: 2.2.0(eslint@9.28.0(jiti@2.4.2))
       happy-dom:
-        specifier: ~17.5.0
-        version: 17.5.9
+        specifier: ~17.6.0
+        version: 17.6.1
       jiti:
         specifier: 2.4.2
         version: 2.4.2
@@ -146,7 +146,7 @@ importers:
         version: 4.5.4(@types/node@22.15.29)(rollup@4.40.0)(typescript@5.8.3)(vite@6.3.5(@types/node@22.15.29)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0))
       vitest:
         specifier: ^3.0.0
-        version: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.5.9)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
+        version: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.6.1)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
 
   apps/client:
     dependencies:
@@ -314,8 +314,8 @@ importers:
         specifier: 13.0.0
         version: 13.0.0(webpack@5.99.9(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.25.5))
       happy-dom:
-        specifier: 17.5.6
-        version: 17.5.6
+        specifier: 17.6.1
+        version: 17.6.1
       script-loader:
         specifier: 0.7.2
         version: 0.7.2
@@ -854,7 +854,7 @@ importers:
         version: 2.0.0(typescript@5.8.3)(vite@6.3.5(@types/node@22.15.29)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0))
       vitest:
         specifier: ^3.0.5
-        version: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.5.9)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
+        version: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.6.1)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
       webdriverio:
         specifier: ^9.0.7
         version: 9.15.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -914,7 +914,7 @@ importers:
         version: 2.0.0(typescript@5.8.3)(vite@6.3.5(@types/node@22.15.29)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0))
       vitest:
         specifier: ^3.0.5
-        version: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.5.9)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
+        version: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.6.1)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
       webdriverio:
         specifier: ^9.0.7
         version: 9.15.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -974,7 +974,7 @@ importers:
         version: 2.0.0(typescript@5.8.3)(vite@6.3.5(@types/node@22.15.29)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0))
       vitest:
         specifier: ^3.0.5
-        version: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.5.9)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
+        version: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.6.1)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
       webdriverio:
         specifier: ^9.0.7
         version: 9.15.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -1041,7 +1041,7 @@ importers:
         version: 2.0.0(typescript@5.8.3)(vite@6.3.5(@types/node@22.15.29)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0))
       vitest:
         specifier: ^3.0.5
-        version: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.5.9)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
+        version: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.6.1)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
       webdriverio:
         specifier: ^9.0.7
         version: 9.15.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -1108,7 +1108,7 @@ importers:
         version: 2.0.0(typescript@5.8.3)(vite@6.3.5(@types/node@22.15.29)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0))
       vitest:
         specifier: ^3.0.5
-        version: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.5.9)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
+        version: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.6.1)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
       webdriverio:
         specifier: ^9.0.7
         version: 9.15.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -7685,12 +7685,8 @@ packages:
   handle-thing@2.0.1:
     resolution: {integrity: sha512-9Qn4yBxelxoh2Ow62nP+Ka/kMnOXRi8BXnRaUwezLNhqelnN49xKz4F/dPP8OYLxLxq6JDtZb2i9XznUQbNPTg==}
 
-  happy-dom@17.5.6:
-    resolution: {integrity: sha512-B4U6jKuiizwCJ2WP0YreQmRdeBrHKOXhpz7YUbbwdSAKfWEhdG4UfWZOZTZ5Oejs/9yJtk7xmbfp8YdVL9LVFA==}
-    engines: {node: '>=18.0.0'}
-
-  happy-dom@17.5.9:
-    resolution: {integrity: sha512-0zMBuT0SxGV+wf9QNFfmD79+h6vCkOUchun+8EwP94teHXDFNq4mULnL1T+yGhUY+U4IdtxpF8OcTnX/a/FsVw==}
+  happy-dom@17.6.1:
+    resolution: {integrity: sha512-x2Iie2VWObB283X/KXwJ7g5f+4acfm8Pmf9KWUn6gujFUvFlSWytZYTv74bdFH40fPDedbI6/V6U3dYYMtW4SQ==}
     engines: {node: '>=18.0.0'}
 
   harmony-reflect@1.6.2:
@@ -16393,7 +16389,7 @@ snapshots:
       semver: 7.7.2
       tsconfig-paths: 4.2.0
       vite: 6.3.5(@types/node@22.15.29)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
-      vitest: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.5.9)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
+      vitest: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.6.1)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
     transitivePeerDependencies:
       - '@babel/traverse'
       - '@swc-node/register'
@@ -17898,7 +17894,7 @@ snapshots:
       magic-string: 0.30.17
       sirv: 3.0.1
       tinyrainbow: 2.0.0
-      vitest: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.5.9)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
+      vitest: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.6.1)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
       ws: 8.18.2(bufferutil@4.0.9)(utf-8-validate@6.0.5)
     optionalDependencies:
       playwright: 1.52.0
@@ -17921,7 +17917,7 @@ snapshots:
       magicast: 0.3.5
       test-exclude: 7.0.1
       tinyrainbow: 2.0.0
-      vitest: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.5.9)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
+      vitest: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.6.1)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -17940,7 +17936,7 @@ snapshots:
       std-env: 3.9.0
       test-exclude: 7.0.1
       tinyrainbow: 2.0.0
-      vitest: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.5.9)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
+      vitest: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.6.1)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
     optionalDependencies:
       '@vitest/browser': 3.2.0(bufferutil@4.0.9)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(playwright@1.52.0)(utf-8-validate@6.0.5)(vite@6.3.5(@types/node@22.15.29)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0))(vitest@3.2.0)(webdriverio@9.15.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))
     transitivePeerDependencies:
@@ -17991,7 +17987,7 @@ snapshots:
       sirv: 3.0.1
       tinyglobby: 0.2.14
       tinyrainbow: 2.0.0
-      vitest: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.5.9)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
+      vitest: 3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.6.1)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
 
   '@vitest/utils@3.2.0':
     dependencies:
@@ -21422,12 +21418,7 @@ snapshots:
 
   handle-thing@2.0.1: {}
 
-  happy-dom@17.5.6:
-    dependencies:
-      webidl-conversions: 7.0.0
-      whatwg-mimetype: 3.0.0
-
-  happy-dom@17.5.9:
+  happy-dom@17.6.1:
     dependencies:
       webidl-conversions: 7.0.0
       whatwg-mimetype: 3.0.0
@@ -26932,7 +26923,7 @@ snapshots:
       tsx: 4.19.4
       yaml: 2.8.0
 
-  vitest@3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.5.9)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0):
+  vitest@3.2.0(@types/debug@4.1.12)(@types/node@22.15.29)(@vitest/browser@3.2.0)(@vitest/ui@3.2.0)(happy-dom@17.6.1)(jiti@2.4.2)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0):
     dependencies:
       '@types/chai': 5.2.2
       '@vitest/expect': 3.2.0
@@ -26962,7 +26953,7 @@ snapshots:
       '@types/node': 22.15.29
       '@vitest/browser': 3.2.0(bufferutil@4.0.9)(msw@2.7.5(@types/node@22.15.29)(typescript@5.8.3))(playwright@1.52.0)(utf-8-validate@6.0.5)(vite@6.3.5(@types/node@22.15.29)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0))(vitest@3.2.0)(webdriverio@9.15.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))
       '@vitest/ui': 3.2.0(vitest@3.2.0)
-      happy-dom: 17.5.9
+      happy-dom: 17.6.1
       jsdom: 26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
     transitivePeerDependencies:
       - jiti
