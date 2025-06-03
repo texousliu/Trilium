@@ -12,7 +12,9 @@ let createdBranchId: string;
 
 const USER = "etapi";
 
-describe("etapi/create-entities", () => {
+type EntityType = "attachments" | "attributes";
+
+describe("etapi/delete-entities", () => {
     beforeAll(async () => {
         config.General.noAuthentication = false;
         const buildApp = (await (import("../../src/app.js"))).default;
@@ -22,18 +24,16 @@ describe("etapi/create-entities", () => {
         ({ createdNoteId, createdBranchId } = await createNote());
     });
 
-    it("deletes attachemnt", async () => {
+    it("deletes attachment", async () => {
         const attachmentId = await createAttachment();
-
-        // Delete the attachment
         deleteEntity("attachments", attachmentId);
+        expectNotFound("attachments", attachmentId);
+    });
 
-        // Ensure the attachment can no longer be found.
-        const response = await supertest(app)
-            .get(`/etapi/attachments/${attachmentId}`)
-            .auth(USER, token, { "type": "basic"})
-            .expect(404);
-        expect(response.body.code).toStrictEqual("ATTACHMENT_NOT_FOUND");
+    it("deletes attribute", async () => {
+        const attributeId = await createAttribute();
+        deleteEntity("attributes", attributeId);
+        expectNotFound("attributes", attributeId);
     });
 });
 
@@ -106,7 +106,7 @@ async function createAttachment() {
     return response.body.attachmentId;
 }
 
-async function deleteEntity(entity: "attachments", id: string) {
+async function deleteEntity(entity: EntityType, id: string) {
     // Delete twice to test idempotency.
     for (let i=0; i < 2; i++) {
         await supertest(app)
@@ -114,4 +114,12 @@ async function deleteEntity(entity: "attachments", id: string) {
             .auth(USER, token, { "type": "basic"})
             .expect(204);
     }
+}
+
+async function expectNotFound(entity: EntityType, id: string) {
+    const response = await supertest(app)
+            .get(`/etapi/${entity}/${id}`)
+            .auth(USER, token, { "type": "basic"})
+            .expect(404);
+    expect(response.body.code).toStrictEqual("ATTACHMENT_NOT_FOUND");
 }
