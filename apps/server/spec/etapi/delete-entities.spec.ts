@@ -1,5 +1,5 @@
 import { Application } from "express";
-import { beforeAll, describe, expect, it } from "vitest";
+import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import supertest from "supertest";
 import { login } from "./utils.js";
 import config from "../../src/services/config.js";
@@ -12,7 +12,7 @@ let createdBranchId: string;
 
 const USER = "etapi";
 
-type EntityType = "attachments" | "attributes";
+type EntityType = "attachments" | "attributes" | "branches" | "notes";
 
 describe("etapi/delete-entities", () => {
     beforeAll(async () => {
@@ -20,7 +20,9 @@ describe("etapi/delete-entities", () => {
         const buildApp = (await (import("../../src/app.js"))).default;
         app = await buildApp();
         token = await login(app);
+    });
 
+    beforeEach(async () => {
         ({ createdNoteId, createdBranchId } = await createNote());
     });
 
@@ -34,6 +36,25 @@ describe("etapi/delete-entities", () => {
         const attributeId = await createAttribute();
         deleteEntity("attributes", attributeId);
         expectNotFound("attributes", attributeId);
+    });
+
+    it("deletes cloned branch", async () => {
+        const response = await supertest(app)
+            .post("/etapi/branches")
+            .auth(USER, token, { "type": "basic"})
+            .send({
+                noteId: createdNoteId,
+                parentNoteId: "_hidden"
+            });
+        const clonedBranchId = response.body.branchId;
+        expectFound("branches", createdBranchId);
+        expectFound("branches", clonedBranchId);
+
+        deleteEntity("branches", createdBranchId);
+        expectNotFound("branches", createdBranchId);
+
+        expectFound("branches", clonedBranchId);
+        expectFound("notes", createdNoteId);
     });
 });
 
@@ -122,4 +143,11 @@ async function expectNotFound(entity: EntityType, id: string) {
             .auth(USER, token, { "type": "basic"})
             .expect(404);
     expect(response.body.code).toStrictEqual("ATTACHMENT_NOT_FOUND");
+}
+
+async function expectFound(entity: EntityType, id: string) {
+    await supertest(app)
+            .get(`/etapi/${entity}/${id}`)
+            .auth(USER, token, { "type": "basic"})
+            .expect(200);
 }
