@@ -7,10 +7,9 @@ import config from "../../src/services/config.js";
 let app: Application;
 let token: string;
 
-const USER = "etapi";
 let parentNoteId: string;
 
-describe("etapi/patch-note", () => {
+describe("etapi/get-inherited-attribute", () => {
     beforeAll(async () => {
         config.General.noAuthentication = false;
         const buildApp = (await (import("../../src/app.js"))).default;
