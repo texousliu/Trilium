@@ -559,11 +559,9 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 // Get agent tools manager and initialize it
                 const agentTools = aiServiceManager.getAgentTools();
                 if (agentTools && typeof agentTools.initialize === 'function') {
-                    log.info('Initializing agent tools to create vectorSearchTool');
                     try {
                         // Force initialization to ensure it runs even if previously marked as initialized
                         await agentTools.initialize(true);
-                        log.info('Agent tools initialized successfully');
                     } catch (initError: unknown) {
                         const errorMessage = initError instanceof Error ? initError.message : String(initError);
                         log.error(`Failed to initialize agent tools: ${errorMessage}`);
@@ -812,14 +810,11 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
             const agentTools = aiServiceManager.getAgentTools();
             if (agentTools && typeof agentTools.initialize === 'function') {
                 await agentTools.initialize(true);
-                log.info(`Agent tools initialized during preloading`);
             }
 
             // Check if the vector search tool is available
             const vectorSearchTool = aiServiceManager.getVectorSearchTool();
-            if (vectorSearchTool && typeof vectorSearchTool.searchNotes === 'function') {
-                log.info(`Vector search tool successfully preloaded`);
-            } else {
+            if (!(vectorSearchTool && typeof vectorSearchTool.searchNotes === 'function')) {
                 log.error(`Vector search tool not available after initialization`);
             }
         } catch (error: unknown) {
