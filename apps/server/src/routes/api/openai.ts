@@ -81,13 +81,13 @@ async function listModels(req: Request, res: Response) {
         // Filter and categorize models
         const allModels = response.data || [];
 
-        // Separate models into chat models and embedding models
+        // Include all models as chat models, without filtering by specific model names
+        // This allows models from providers like OpenRouter to be displayed
         const chatModels = allModels
-            .filter((model) =>
-                // Include GPT models for chat
-                model.id.includes('gpt') ||
-                // Include Claude models via Azure OpenAI
-                model.id.includes('claude')
+            .filter((model) => 
+                // Exclude models that are explicitly for embeddings
+                !model.id.includes('embedding') && 
+                !model.id.includes('embed')
             )
             .map((model) => ({
                 id: model.id,
