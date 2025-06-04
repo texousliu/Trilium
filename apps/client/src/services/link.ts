@@ -211,7 +211,7 @@ export function parseNavigationStateFromUrl(url: string | undefined) {
     }
 
     // Exclude external links that contain #
-    if (hashIdx !== 0 && !url.includes("/#root")) { 
+    if (hashIdx !== 0 && !url.includes("/#root") && !url.includes("/#?searchString")) { 
         return {};
     }
     
