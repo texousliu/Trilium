@@ -204,11 +204,17 @@ export function parseNavigationStateFromUrl(url: string | undefined) {
         return {};
     }
 
+    url = url.trim();
     const hashIdx = url.indexOf("#");
     if (hashIdx === -1) {
         return {};
     }
 
+    // Exclude external links that contain #
+    if (hashIdx !== 0 && !url.includes("/#root") && !url.includes("/#?searchString")) { 
+        return {};
+    }
+    
     const hash = url.substr(hashIdx + 1); // strip also the initial '#'
     let [notePath, paramString] = hash.split("?");
 
