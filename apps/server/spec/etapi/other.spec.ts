@@ -21,6 +21,6 @@ describe("etapi/refresh-note-ordering/root", () => {
         await supertest(app)
             .post("/etapi/refresh-note-ordering/root")
             .auth(USER, token, { "type": "basic"})
-            .expect(200);
+            .expect(204);
     });
 });

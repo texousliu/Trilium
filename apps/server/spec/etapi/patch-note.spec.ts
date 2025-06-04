@@ -34,7 +34,7 @@ describe("etapi/patch-note", () => {
     });
 
     it("obtains correct note information", async () => {
-        expectNoteToMatch({
+        await expectNoteToMatch({
             title: "Hello",
             type: "code",
             mime: "application/json"

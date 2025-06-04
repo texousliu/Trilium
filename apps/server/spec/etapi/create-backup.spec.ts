@@ -21,6 +21,6 @@ describe("etapi/backup", () => {
         const response = await supertest(app)
             .put("/etapi/backup/etapi_test")
             .auth(USER, token, { "type": "basic"})
-            .expect(201);
+            .expect(204);
     });
 });
