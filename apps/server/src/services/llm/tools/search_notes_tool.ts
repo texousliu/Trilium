@@ -63,11 +63,9 @@ async function getOrCreateVectorSearchTool(): Promise<any> {
         // Get agent tools manager and initialize it
         const agentTools = aiServiceManager.getAgentTools();
         if (agentTools && typeof agentTools.initialize === 'function') {
-            log.info('Initializing agent tools to create vectorSearchTool');
             try {
                 // Force initialization to ensure it runs even if previously marked as initialized
                 await agentTools.initialize(true);
-                log.info('Agent tools initialized successfully');
             } catch (initError: any) {
                 log.error(`Failed to initialize agent tools: ${initError.message}`);
                 return null;
@@ -143,7 +141,7 @@ export class SearchNotesTool implements ToolHandler {
                             temperature: 0.3,
                             maxTokens: 200,
                             // Type assertion to bypass type checking for special internal parameters
-                            ...(({ 
+                            ...(({
                                 bypassFormatter: true,
                                 bypassContextProcessing: true
                             } as Record<string, boolean>))

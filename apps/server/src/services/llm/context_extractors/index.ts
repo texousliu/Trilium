@@ -42,7 +42,6 @@ export class AgentToolsManager {
     }
 
     try {
-      log.info("Initializing agent tools");
 
       // Initialize the context service first
       try {
