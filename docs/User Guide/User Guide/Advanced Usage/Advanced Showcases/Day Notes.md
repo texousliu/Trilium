@@ -35,6 +35,15 @@ You can define one of the following relations on the root of the journal (identi
 
 All of these are relations. When Trilium creates a new note for year or month or date, it will take a look at the root and attach a corresponding `~template` relation to the newly created role. Using this, you can e.g. create your daily template with e.g. checkboxes for daily routine etc.
 
+### Migrate from old template usage
+
+If you have been using Journal prior to version v0.93.0, the previous template pattern likely used was `~child:template=`.  
+To transition to the new system:
+
+1.  Set up the new template pattern in the Calendar root note.
+2.  Use [Bulk Actions](../Bulk%20Actions.md) to remove `child:template` and `child:child:template` from all notes under the Journal (calendar root).
+3.  Ensure that all old template patterns are fully removed to prevent conflicts with the new setup.
+
 ## Naming pattern
 
 You can customize the title of generated journal notes by defining a `#datePattern`, `#weekPattern`, `#monthPattern`, `#quarterPattern` and `#yearPattern` attribute on a root calendar note (identified by `#calendarRoot` label). The naming pattern replacements follow a level-up compatibility - each level can use replacements from itself and all levels above it. For example, `#monthPattern` can use month, quarter and year replacements, while `#weekPattern` can use week, month, quarter and year replacements. But it is not possible to use week replacements in `#monthPattern`.

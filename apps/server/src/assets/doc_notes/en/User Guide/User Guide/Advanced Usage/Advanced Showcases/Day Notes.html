@@ -49,6 +49,18 @@
   month or date, it will take a look at the root and attach a corresponding <code>~template</code> relation
   to the newly created role. Using this, you can e.g. create your daily template
   with e.g. checkboxes for daily routine etc.</p>
+<h3>Migrate from old template usage</h3>
+<p>If you have been using Journal prior to version v0.93.0, the previous
+  template pattern likely used was <code>~child:template=</code>.
+  <br>To transition to the new system:</p>
+<ol>
+  <li>Set up the new template pattern in the Calendar root note.</li>
+  <li>Use <a href="#root/pOsGYCXsbNQG/tC7s2alapj8V/_help_ivYnonVFBxbQ">Bulk Actions</a> to
+    remove <code>child:template</code> and <code>child:child:template</code> from
+    all notes under the Journal (calendar root).</li>
+  <li>Ensure that all old template patterns are fully removed to prevent conflicts
+    with the new setup.</li>
+</ol>
 <h2>Naming pattern</h2>
 <p>You can customize the title of generated journal notes by defining a <code>#datePattern</code>, <code>#weekPattern</code>, <code>#monthPattern</code>, <code>#quarterPattern</code> and <code>#yearPattern</code> attribute
   on a root calendar note (identified by <code>#calendarRoot</code> label).
