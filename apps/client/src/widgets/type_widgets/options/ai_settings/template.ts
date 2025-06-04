@@ -211,13 +211,24 @@ export const TPL = `
             </div>
             <div class="card-body">
                 <div class="form-group">
+                    <label>${t("ai_llm.api_key")}</label>
+                    <input type="password" class="openai-embedding-api-key form-control" autocomplete="off" />
+                    <div class="form-text">${t("ai_llm.openai_embedding_api_key_description")}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>${t("ai_llm.url")}</label>
+                    <input type="text" class="openai-embedding-base-url form-control" />
+                    <div class="form-text">${t("ai_llm.openai_embedding_url_description")}</div>
+                </div>
+
+                <div class="form-group">
                     <label>${t("ai_llm.embedding_model")}</label>
                     <select class="openai-embedding-model form-control">
                         <option value="">${t("ai_llm.select_model")}</option>
                     </select>
                     <div class="form-text">${t("ai_llm.openai_embedding_model_description")}</div>
                 </div>
-                <div class="form-text text-muted">${t("ai_llm.openai_embedding_shared_settings")}</div>
             </div>
         </div>
     </div>
@@ -233,6 +244,12 @@ export const TPL = `
                     <label>${t("ai_llm.api_key")}</label>
                     <input type="password" class="voyage-api-key form-control" autocomplete="off" />
                     <div class="form-text">${t("ai_llm.voyage_api_key_description")}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>${t("ai_llm.url")}</label>
+                    <input type="text" class="voyage-embedding-base-url form-control" />
+                    <div class="form-text">${t("ai_llm.voyage_embedding_url_description")}</div>
                 </div>
 
                 <div class="form-group">
@@ -254,13 +271,18 @@ export const TPL = `
             </div>
             <div class="card-body">
                 <div class="form-group">
+                    <label>${t("ai_llm.url")}</label>
+                    <input type="text" class="ollama-embedding-base-url form-control" />
+                    <div class="form-text">${t("ai_llm.ollama_embedding_url_description")}</div>
+                </div>
+
+                <div class="form-group">
                     <label>${t("ai_llm.embedding_model")}</label>
                     <select class="ollama-embedding-model form-control">
                         <option value="">${t("ai_llm.select_model")}</option>
                     </select>
                     <div class="form-text">${t("ai_llm.ollama_embedding_model_description")}</div>
                 </div>
-                <div class="form-text text-muted">${t("ai_llm.ollama_embedding_shared_settings")}</div>
             </div>
         </div>
     </div>

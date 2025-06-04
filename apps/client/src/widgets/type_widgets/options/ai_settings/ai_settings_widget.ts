@@ -83,11 +83,17 @@ export default class AiSettingsWidget extends OptionsWidget {
         // Voyage options
         this.setupChangeHandler('.voyage-api-key', 'voyageApiKey');
         this.setupChangeHandler('.voyage-embedding-model', 'voyageEmbeddingModel');
+        this.setupChangeHandler('.voyage-embedding-base-url', 'voyageEmbeddingBaseUrl');
 
         // Ollama options
         this.setupChangeHandler('.ollama-base-url', 'ollamaBaseUrl');
         this.setupChangeHandler('.ollama-default-model', 'ollamaDefaultModel');
         this.setupChangeHandler('.ollama-embedding-model', 'ollamaEmbeddingModel');
+        this.setupChangeHandler('.ollama-embedding-base-url', 'ollamaEmbeddingBaseUrl');
+
+        // Embedding-specific provider options
+        this.setupChangeHandler('.openai-embedding-api-key', 'openaiEmbeddingApiKey', true);
+        this.setupChangeHandler('.openai-embedding-base-url', 'openaiEmbeddingBaseUrl', true);
 
         const $refreshModels = this.$widget.find('.refresh-models');
         $refreshModels.on('click', async () => {
@@ -212,6 +218,37 @@ export default class AiSettingsWidget extends OptionsWidget {
             if (selectedEmbeddingProvider === 'voyage') {
                 // Voyage doesn't have dynamic model fetching yet, but we can add it here when implemented
                 console.log('Voyage API key changed - model fetching not yet implemented');
+            }
+        });
+
+        // Add embedding base URL change handlers to trigger model fetching
+        this.$widget.find('.openai-embedding-base-url').on('change', async () => {
+            const selectedEmbeddingProvider = this.$widget.find('.embedding-selected-provider').val() as string;
+            if (selectedEmbeddingProvider === 'openai') {
+                await this.fetchModelsForProvider('openai', 'embedding');
+            }
+        });
+
+        this.$widget.find('.voyage-embedding-base-url').on('change', async () => {
+            const selectedEmbeddingProvider = this.$widget.find('.embedding-selected-provider').val() as string;
+            if (selectedEmbeddingProvider === 'voyage') {
+                // Voyage doesn't have dynamic model fetching yet, but we can add it here when implemented
+                console.log('Voyage embedding base URL changed - model fetching not yet implemented');
+            }
+        });
+
+        this.$widget.find('.ollama-embedding-base-url').on('change', async () => {
+            const selectedEmbeddingProvider = this.$widget.find('.embedding-selected-provider').val() as string;
+            if (selectedEmbeddingProvider === 'ollama') {
+                await this.fetchModelsForProvider('ollama', 'embedding');
+            }
+        });
+
+        // Add embedding API key change handlers to trigger model fetching
+        this.$widget.find('.openai-embedding-api-key').on('change', async () => {
+            const selectedEmbeddingProvider = this.$widget.find('.embedding-selected-provider').val() as string;
+            if (selectedEmbeddingProvider === 'openai') {
+                await this.fetchModelsForProvider('openai', 'embedding');
             }
         });
 
@@ -514,13 +551,13 @@ export default class AiSettingsWidget extends OptionsWidget {
         if (!this.$widget || !value) return;
 
         const $dropdown = this.$widget.find(selector);
-        
+
         // Check if the value already exists as an option
         if ($dropdown.find(`option[value="${value}"]`).length === 0) {
             // Add the custom value as an option
             $dropdown.append(`<option value="${value}">${value} (current)</option>`);
         }
-        
+
         // Set the value
         $dropdown.val(value);
     }
@@ -596,12 +633,18 @@ export default class AiSettingsWidget extends OptionsWidget {
 
         // Voyage Section
         this.$widget.find('.voyage-api-key').val(options.voyageApiKey || '');
+        this.$widget.find('.voyage-embedding-base-url').val(options.voyageEmbeddingBaseUrl || 'https://api.voyageai.com/v1');
         this.setModelDropdownValue('.voyage-embedding-model', options.voyageEmbeddingModel);
 
         // Ollama Section
         this.$widget.find('.ollama-base-url').val(options.ollamaBaseUrl || 'http://localhost:11434');
+        this.$widget.find('.ollama-embedding-base-url').val(options.ollamaEmbeddingBaseUrl || 'http://localhost:11434');
         this.setModelDropdownValue('.ollama-default-model', options.ollamaDefaultModel);
         this.setModelDropdownValue('.ollama-embedding-model', options.ollamaEmbeddingModel);
+
+        // Embedding-specific provider options
+        this.$widget.find('.openai-embedding-api-key').val(options.openaiEmbeddingApiKey || '');
+        this.$widget.find('.openai-embedding-base-url').val(options.openaiEmbeddingBaseUrl || 'https://api.openai.com/v1');
 
         // Embedding Options
         this.$widget.find('.embedding-selected-provider').val(options.embeddingSelectedProvider || 'openai');
@@ -619,11 +662,11 @@ export default class AiSettingsWidget extends OptionsWidget {
         // Automatically fetch models for currently selected providers
         const selectedAiProvider = this.$widget.find('.ai-selected-provider').val() as string;
         const selectedEmbeddingProvider = this.$widget.find('.embedding-selected-provider').val() as string;
-        
+
         if (selectedAiProvider) {
             await this.fetchModelsForProvider(selectedAiProvider, 'chat');
         }
-        
+
         if (selectedEmbeddingProvider) {
             await this.fetchModelsForProvider(selectedEmbeddingProvider, 'embedding');
         }

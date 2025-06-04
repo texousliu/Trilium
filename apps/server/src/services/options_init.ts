@@ -209,6 +209,12 @@ const defaultOptions: DefaultOption[] = [
     { name: "ollamaEmbeddingModel", value: "", isSynced: true },
     { name: "embeddingAutoUpdateEnabled", value: "true", isSynced: true },
 
+    // Embedding-specific provider options
+    { name: "openaiEmbeddingApiKey", value: "", isSynced: false },
+    { name: "openaiEmbeddingBaseUrl", value: "https://api.openai.com/v1", isSynced: true },
+    { name: "voyageEmbeddingBaseUrl", value: "https://api.voyageai.com/v1", isSynced: true },
+    { name: "ollamaEmbeddingBaseUrl", value: "http://localhost:11434", isSynced: true },
+
     // Adding missing AI options
     { name: "aiTemperature", value: "0.7", isSynced: true },
     { name: "aiSystemPrompt", value: "", isSynced: true },
