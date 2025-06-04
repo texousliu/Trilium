@@ -266,7 +266,7 @@ function getMonthNote(dateStr: string, _rootNote: BNote | null = null): BNote {
         return monthNote;
     }
 
-    let monthParentNote;
+    let monthParentNote: BNote | null;
 
     if (rootNote.hasLabel("enableQuarterNote")) {
         monthParentNote = getQuarterNote(getQuarterNumberStr(dayjs(dateStr)), rootNote);
@@ -296,7 +296,7 @@ function getMonthNote(dateStr: string, _rootNote: BNote | null = null): BNote {
 
 function getWeekStartDate(date: Dayjs): Dayjs {
     const day = date.day();
-    let diff;
+    let diff: number;
 
     if (optionService.getOption("firstDayOfWeek") === "0") { // Sunday
         diff = date.date() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
@@ -456,7 +456,7 @@ function getDayNote(dateStr: string, _rootNote: BNote | null = null): BNote {
         return dateNote;
     }
 
-    let dateParentNote;
+    let dateParentNote: BNote | null;
 
     if (rootNote.hasLabel("enableWeekNote")) {
         dateParentNote = getWeekNote(getWeekNumberStr(dayjs(dateStr)), rootNote);
