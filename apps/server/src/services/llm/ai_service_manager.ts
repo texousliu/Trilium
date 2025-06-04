@@ -18,6 +18,19 @@ import type {
 } from './interfaces/ai_service_interfaces.js';
 import type { NoteSearchResult } from './interfaces/context_interfaces.js';
 
+// Import new configuration system
+import {
+    getProviderPrecedence,
+    getPreferredProvider,
+    getEmbeddingProviderPrecedence,
+    parseModelIdentifier,
+    isAIEnabled,
+    getDefaultModelForProvider,
+    clearConfigurationCache,
+    validateConfiguration
+} from './config/configuration_helpers.js';
+import type { ProviderType } from './interfaces/configuration_interfaces.js';
+
 /**
  * Interface representing relevant note context
  */
@@ -36,7 +49,7 @@ export class AIServiceManager implements IAIServiceManager {
         ollama: new OllamaService()
     };
 
-    private providerOrder: ServiceProviders[] = ['openai', 'anthropic', 'ollama']; // Default order
+    private providerOrder: ServiceProviders[] = []; // Will be populated from configuration
     private initialized = false;
 
     constructor() {
@@ -71,7 +84,24 @@ export class AIServiceManager implements IAIServiceManager {
     }
 
     /**
-     * Update the provider precedence order from saved options
+     * Update the provider precedence order using the new configuration system
+     */
+    async updateProviderOrderAsync(): Promise<void> {
+        try {
+            const providers = await getProviderPrecedence();
+            this.providerOrder = providers as ServiceProviders[];
+            this.initialized = true;
+            log.info(`Updated provider order: ${providers.join(', ')}`);
+        } catch (error) {
+            log.error(`Failed to get provider precedence: ${error}`);
+            // Keep empty order, will be handled gracefully by other methods
+            this.providerOrder = [];
+            this.initialized = true;
+        }
+    }
+
+    /**
+     * Update the provider precedence order (legacy sync version)
      * Returns true if successful, false if options not available yet
      */
     updateProviderOrder(): boolean {
@@ -79,146 +109,48 @@ export class AIServiceManager implements IAIServiceManager {
             return true;
         }
 
-        try {
-            // Default precedence: openai, anthropic, ollama
-            const defaultOrder: ServiceProviders[] = ['openai', 'anthropic', 'ollama'];
+        // Use async version but don't wait
+        this.updateProviderOrderAsync().catch(error => {
+            log.error(`Error in async provider order update: ${error}`);
+        });
 
-            // Get custom order from options
-            const customOrder = options.getOption('aiProviderPrecedence');
-
-            if (customOrder) {
-                try {
-                    // Try to parse as JSON first
-                    let parsed;
-
-                    // Handle both array in JSON format and simple string format
-                    if (customOrder.startsWith('[') && customOrder.endsWith(']')) {
-                        parsed = JSON.parse(customOrder);
-                    } else if (typeof customOrder === 'string') {
-                        // If it's a string with commas, split it
-                        if (customOrder.includes(',')) {
-                            parsed = customOrder.split(',').map(p => p.trim());
-                        } else {
-                            // If it's a simple string (like "ollama"), convert to single-item array
-                            parsed = [customOrder];
-                        }
-                    } else {
-                        // Fallback to default
-                        parsed = defaultOrder;
-                    }
-
-                    // Validate that all providers are valid
-                    if (Array.isArray(parsed) &&
-                        parsed.every(p => Object.keys(this.services).includes(p))) {
-                        this.providerOrder = parsed as ServiceProviders[];
-                    } else {
-                        log.info('Invalid AI provider precedence format, using defaults');
-                        this.providerOrder = defaultOrder;
-                    }
-                } catch (e) {
-                    log.error(`Failed to parse AI provider precedence: ${e}`);
-                    this.providerOrder = defaultOrder;
-                }
-            } else {
-                this.providerOrder = defaultOrder;
-            }
-
-            this.initialized = true;
-
-            // Remove the validateEmbeddingProviders call since we now do validation on the client
-            // this.validateEmbeddingProviders();
-
-            return true;
-        } catch (error) {
-            // If options table doesn't exist yet, use defaults
-            // This happens during initial database creation
-            this.providerOrder = ['openai', 'anthropic', 'ollama'];
-            return false;
-        }
+        return true;
     }
 
     /**
-     * Validate embedding providers configuration
-     * - Check if embedding default provider is in provider precedence list
-     * - Check if all providers in precedence list and default provider are enabled
-     *
-     * @returns A warning message if there are issues, or null if everything is fine
+     * Validate AI configuration using the new configuration system
      */
-    async validateEmbeddingProviders(): Promise<string | null> {
+    async validateConfiguration(): Promise<string | null> {
         try {
-            // Check if AI is enabled, if not, skip validation
-            const aiEnabled = await options.getOptionBool('aiEnabled');
-            if (!aiEnabled) {
-                return null;
+            const result = await validateConfiguration();
+
+            if (!result.isValid) {
+                let message = 'There are issues with your AI configuration:';
+                for (const error of result.errors) {
+                    message += `\n• ${error}`;
+                }
+                if (result.warnings.length > 0) {
+                    message += '\n\nWarnings:';
+                    for (const warning of result.warnings) {
+                        message += `\n• ${warning}`;
+                    }
+                }
+                message += '\n\nPlease check your AI settings.';
+                return message;
             }
 
-            // Get precedence list from options
-            let precedenceList: string[] = ['openai']; // Default to openai if not set
-            const precedenceOption = await options.getOption('aiProviderPrecedence');
-            
-            if (precedenceOption) {
-                try {
-                    if (precedenceOption.startsWith('[') && precedenceOption.endsWith(']')) {
-                        precedenceList = JSON.parse(precedenceOption);
-                    } else if (typeof precedenceOption === 'string') {
-                        if (precedenceOption.includes(',')) {
-                            precedenceList = precedenceOption.split(',').map(p => p.trim());
-                        } else {
-                            precedenceList = [precedenceOption];
-                        }
-                    }
-                } catch (e) {
-                    log.error(`Error parsing precedence list: ${e}`);
+            if (result.warnings.length > 0) {
+                let message = 'AI configuration warnings:';
+                for (const warning of result.warnings) {
+                    message += `\n• ${warning}`;
                 }
-            }
-            
-            // Check for configuration issues with providers in the precedence list
-            const configIssues: string[] = [];
-            
-            // Check each provider in the precedence list for proper configuration
-            for (const provider of precedenceList) {
-                if (provider === 'openai') {
-                    // Check OpenAI configuration
-                    const apiKey = await options.getOption('openaiApiKey');
-                    if (!apiKey) {
-                        configIssues.push(`OpenAI API key is missing`);
-                    }
-                } else if (provider === 'anthropic') {
-                    // Check Anthropic configuration
-                    const apiKey = await options.getOption('anthropicApiKey');
-                    if (!apiKey) {
-                        configIssues.push(`Anthropic API key is missing`);
-                    }
-                } else if (provider === 'ollama') {
-                    // Check Ollama configuration
-                    const baseUrl = await options.getOption('ollamaBaseUrl');
-                    if (!baseUrl) {
-                        configIssues.push(`Ollama Base URL is missing`);
-                    }
-                }
-                // Add checks for other providers as needed
-            }
-            
-            // Return warning message if there are configuration issues
-            if (configIssues.length > 0) {
-                let message = 'There are issues with your AI provider configuration:';
-                
-                for (const issue of configIssues) {
-                    message += `\n• ${issue}`;
-                }
-                
-                message += '\n\nPlease check your AI settings.';
-                
-                // Log warning to console
-                log.error('AI Provider Configuration Warning: ' + message);
-                
-                return message;
+                log.info(message);
             }
 
             return null;
         } catch (error) {
-            log.error(`Error validating embedding providers: ${error}`);
-            return null;
+            log.error(`Error validating AI configuration: ${error}`);
+            return `Configuration validation failed: ${error}`;
         }
     }
 
@@ -279,18 +211,20 @@ export class AIServiceManager implements IAIServiceManager {
 
         // If a specific provider is requested and available, use it
         if (options.model && options.model.includes(':')) {
-            const [providerName, modelName] = options.model.split(':');
+            // Use the new configuration system to parse model identifier
+            const modelIdentifier = parseModelIdentifier(options.model);
 
-            if (availableProviders.includes(providerName as ServiceProviders)) {
+            if (modelIdentifier.provider && availableProviders.includes(modelIdentifier.provider as ServiceProviders)) {
                 try {
-                    const modifiedOptions = { ...options, model: modelName };
-                    log.info(`[AIServiceManager] Using provider ${providerName} from model prefix with modifiedOptions.stream: ${modifiedOptions.stream}`);
-                    return await this.services[providerName as ServiceProviders].generateChatCompletion(messages, modifiedOptions);
+                    const modifiedOptions = { ...options, model: modelIdentifier.modelId };
+                    log.info(`[AIServiceManager] Using provider ${modelIdentifier.provider} from model prefix with modifiedOptions.stream: ${modifiedOptions.stream}`);
+                    return await this.services[modelIdentifier.provider as ServiceProviders].generateChatCompletion(messages, modifiedOptions);
                 } catch (error) {
-                    log.error(`Error with specified provider ${providerName}: ${error}`);
+                    log.error(`Error with specified provider ${modelIdentifier.provider}: ${error}`);
                     // If the specified provider fails, continue with the fallback providers
                 }
             }
+            // If not a provider prefix, treat the entire string as a model name and continue with normal provider selection
         }
 
         // Try each provider in order until one succeeds
@@ -390,39 +324,33 @@ export class AIServiceManager implements IAIServiceManager {
     }
 
     /**
-     * Get whether AI features are enabled from options
+     * Get whether AI features are enabled using the new configuration system
+     */
+    async getAIEnabledAsync(): Promise<boolean> {
+        return isAIEnabled();
+    }
+
+    /**
+     * Get whether AI features are enabled (sync version for compatibility)
      */
     getAIEnabled(): boolean {
+        // For synchronous compatibility, use the old method
+        // In a full refactor, this should be async
         return options.getOptionBool('aiEnabled');
     }
 
     /**
-     * Set up embeddings provider for AI features
+     * Set up embeddings provider using the new configuration system
      */
     async setupEmbeddingsProvider(): Promise<void> {
         try {
-            if (!this.getAIEnabled()) {
+            const aiEnabled = await isAIEnabled();
+            if (!aiEnabled) {
                 log.info('AI features are disabled');
                 return;
             }
 
-            // Get provider precedence list
-            const precedenceOption = await options.getOption('embeddingProviderPrecedence');
-            let precedenceList: string[] = [];
-
-            if (precedenceOption) {
-                if (precedenceOption.startsWith('[') && precedenceOption.endsWith(']')) {
-                    precedenceList = JSON.parse(precedenceOption);
-                } else if (typeof precedenceOption === 'string') {
-                    if (precedenceOption.includes(',')) {
-                        precedenceList = precedenceOption.split(',').map(p => p.trim());
-                    } else {
-                        precedenceList = [precedenceOption];
-                    }
-                }
-            }
-
-            // Check if we have enabled providers
+            // Use the new configuration system - no string parsing!
             const enabledProviders = await getEnabledEmbeddingProviders();
 
             if (enabledProviders.length === 0) {
@@ -439,19 +367,22 @@ export class AIServiceManager implements IAIServiceManager {
     }
 
     /**
-     * Initialize the AI Service
+     * Initialize the AI Service using the new configuration system
      */
     async initialize(): Promise<void> {
         try {
             log.info("Initializing AI service...");
 
-            // Check if AI is enabled in options
-            const isAIEnabled = this.getAIEnabled();
+            // Check if AI is enabled using the new helper
+            const aiEnabled = await isAIEnabled();
 
-            if (!isAIEnabled) {
+            if (!aiEnabled) {
                 log.info("AI features are disabled in options");
                 return;
             }
+
+            // Update provider order from configuration
+            await this.updateProviderOrderAsync();
 
             // Set up embeddings provider if AI is enabled
             await this.setupEmbeddingsProvider();
@@ -586,7 +517,25 @@ export class AIServiceManager implements IAIServiceManager {
     }
 
     /**
-     * Get the preferred provider based on configuration
+     * Get the preferred provider based on configuration using the new system
+     */
+    async getPreferredProviderAsync(): Promise<string> {
+        try {
+            const preferredProvider = await getPreferredProvider();
+            if (preferredProvider === null) {
+                // No providers configured, fallback to first available
+                log.info('No providers configured in precedence, using first available provider');
+                return this.providerOrder[0];
+            }
+            return preferredProvider;
+        } catch (error) {
+            log.error(`Error getting preferred provider: ${error}`);
+            return this.providerOrder[0];
+        }
+    }
+
+    /**
+     * Get the preferred provider based on configuration (sync version for compatibility)
      */
     getPreferredProvider(): string {
         this.ensureInitialized();
@@ -669,7 +618,7 @@ export default {
     },
     // Add validateEmbeddingProviders method
     async validateEmbeddingProviders(): Promise<string | null> {
-        return getInstance().validateEmbeddingProviders();
+        return getInstance().validateConfiguration();
     },
     // Context and index related methods
     getContextExtractor() {

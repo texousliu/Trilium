@@ -11,7 +11,7 @@ export interface ChatResponse {
 export interface SessionResponse {
     id: string;
     title: string;
-    noteId?: string;
+    noteId: string; // The ID of the chat note
 }
 
 export interface ToolExecutionStep {
@@ -33,8 +33,8 @@ export interface MessageData {
 
 export interface ChatData {
     messages: MessageData[];
-    chatNoteId: string | null;
-    noteId?: string | null;
+    noteId: string; // The ID of the chat note
+    chatNoteId?: string; // Deprecated - kept for backward compatibility, should equal noteId
     toolSteps: ToolExecutionStep[];
     sources?: Array<{
         noteId: string;

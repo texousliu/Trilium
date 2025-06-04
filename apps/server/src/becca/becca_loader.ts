@@ -9,9 +9,10 @@ import BBranch from "./entities/bbranch.js";
 import BAttribute from "./entities/battribute.js";
 import BOption from "./entities/boption.js";
 import BEtapiToken from "./entities/betapi_token.js";
+import BNoteEmbedding from "./entities/bnote_embedding.js";
 import cls from "../services/cls.js";
 import entityConstructor from "../becca/entity_constructor.js";
-import type { AttributeRow, BranchRow, EtapiTokenRow, NoteRow, OptionRow } from "@triliumnext/commons";
+import type { AttributeRow, BranchRow, EtapiTokenRow, NoteRow, OptionRow, NoteEmbeddingRow } from "@triliumnext/commons";
 import type AbstractBeccaEntity from "./entities/abstract_becca_entity.js";
 import ws from "../services/ws.js";
 
@@ -63,6 +64,18 @@ function load() {
         for (const row of sql.getRows<EtapiTokenRow>(/*sql*/`SELECT etapiTokenId, name, tokenHash, utcDateCreated, utcDateModified FROM etapi_tokens WHERE isDeleted = 0`)) {
             new BEtapiToken(row);
         }
+
+        try {
+            for (const row of sql.getRows<NoteEmbeddingRow>(/*sql*/`SELECT embedId, noteId, providerId, modelId, dimension, embedding, version, dateCreated, dateModified, utcDateCreated, utcDateModified FROM note_embeddings`)) {
+                new BNoteEmbedding(row).init();
+            }
+        } catch (e: unknown) {
+            if (e && typeof e === "object" && "message" in e && typeof e.message === "string" && e.message.includes("no such table")) {
+                // Can be ignored.
+            } else {
+                throw e;
+            }
+        }
     });
 
     for (const noteId in becca.notes) {
@@ -85,7 +98,7 @@ eventService.subscribeBeccaLoader([eventService.ENTITY_CHANGE_SYNCED], ({ entity
         return;
     }
 
-    if (["notes", "branches", "attributes", "etapi_tokens", "options"].includes(entityName)) {
+    if (["notes", "branches", "attributes", "etapi_tokens", "options", "note_embeddings"].includes(entityName)) {
         const EntityClass = entityConstructor.getEntityFromEntityName(entityName);
         const primaryKeyName = EntityClass.primaryKeyName;
 
@@ -143,6 +156,8 @@ eventService.subscribeBeccaLoader([eventService.ENTITY_DELETED, eventService.ENT
         attributeDeleted(entityId);
     } else if (entityName === "etapi_tokens") {
         etapiTokenDeleted(entityId);
+    } else if (entityName === "note_embeddings") {
+        noteEmbeddingDeleted(entityId);
     }
 });
 
@@ -276,6 +291,10 @@ function noteReorderingUpdated(branchIdList: number[]) {
 
 function etapiTokenDeleted(etapiTokenId: string) {
     delete becca.etapiTokens[etapiTokenId];
+}
+
+function noteEmbeddingDeleted(embedId: string) {
+    delete becca.noteEmbeddings[embedId];
 }
 
 eventService.subscribeBeccaLoader(eventService.ENTER_PROTECTED_SESSION, () => {

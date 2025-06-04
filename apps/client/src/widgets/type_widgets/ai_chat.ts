@@ -94,6 +94,11 @@ export default class AiChatTypeWidget extends TypeWidget {
                         this.llmChatPanel.clearNoteContextChatMessages();
                         this.llmChatPanel.setMessages([]);
 
+                        // Set the note ID for the chat panel
+                        if (note) {
+                            this.llmChatPanel.setNoteId(note.noteId);
+                        }
+
                         // This will load saved data via the getData callback
                         await this.llmChatPanel.refresh();
                         this.isInitialized = true;
@@ -130,7 +135,7 @@ export default class AiChatTypeWidget extends TypeWidget {
             // Reset the chat panel UI
             this.llmChatPanel.clearNoteContextChatMessages();
             this.llmChatPanel.setMessages([]);
-            this.llmChatPanel.setChatNoteId(null);
+            this.llmChatPanel.setNoteId(this.note.noteId);
         }
 
         // Call the parent method to refresh
@@ -152,6 +157,7 @@ export default class AiChatTypeWidget extends TypeWidget {
             // Make sure the chat panel has the current note ID
             if (this.note) {
                 this.llmChatPanel.setCurrentNoteId(this.note.noteId);
+                this.llmChatPanel.setNoteId(this.note.noteId);
             }
 
             this.initPromise = (async () => {
@@ -186,7 +192,7 @@ export default class AiChatTypeWidget extends TypeWidget {
             // Format the data properly - this is the canonical format of the data
             const formattedData = {
                 messages: data.messages || [],
-                chatNoteId: data.chatNoteId || this.note.noteId,
+                noteId: this.note.noteId, // Always use the note's own ID
                 toolSteps: data.toolSteps || [],
                 sources: data.sources || [],
                 metadata: {

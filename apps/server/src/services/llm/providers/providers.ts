@@ -300,7 +300,7 @@ export async function initializeDefaultProviders() {
         const ollamaBaseUrl = await options.getOption('ollamaBaseUrl');
         if (ollamaBaseUrl) {
             // Use specific embedding models if available
-            const embeddingModel = await options.getOption('ollamaEmbeddingModel') || 'nomic-embed-text';
+            const embeddingModel = await options.getOption('ollamaEmbeddingModel');
 
             try {
                 // Create provider with initial dimension to be updated during initialization

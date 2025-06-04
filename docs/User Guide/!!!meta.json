@@ -10734,11 +10734,65 @@
                                     "value": "bx bxs-data",
                                     "isInheritable": false,
                                     "position": 10
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "bOP3TB56fL1V",
+                                    "isInheritable": false,
+                                    "position": 20
                                 }
                             ],
                             "format": "markdown",
                             "dataFileName": "Metrics.md",
-                            "attachments": []
+                            "attachments": [
+                                {
+                                    "attachmentId": "6FcnvEg39b88",
+                                    "title": "image.png",
+                                    "role": "image",
+                                    "mime": "image/png",
+                                    "position": 10,
+                                    "dataFileName": "Metrics_image.png"
+                                },
+                                {
+                                    "attachmentId": "amOIi8fzVhSM",
+                                    "title": "image.png",
+                                    "role": "image",
+                                    "mime": "image/png",
+                                    "position": 10,
+                                    "dataFileName": "1_Metrics_image.png"
+                                },
+                                {
+                                    "attachmentId": "Ojj9cAXPbxJO",
+                                    "title": "image.png",
+                                    "role": "image",
+                                    "mime": "image/png",
+                                    "position": 10,
+                                    "dataFileName": "2_Metrics_image.png"
+                                }
+                            ],
+                            "dirFileName": "Metrics",
+                            "children": [
+                                {
+                                    "isClone": false,
+                                    "noteId": "bOP3TB56fL1V",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "tC7s2alapj8V",
+                                        "uYF7pmepw27K",
+                                        "bOP3TB56fL1V"
+                                    ],
+                                    "title": "grafana-dashboard.json",
+                                    "notePosition": 10,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "code",
+                                    "mime": "application/json",
+                                    "attributes": [],
+                                    "dataFileName": "grafana-dashboard.json",
+                                    "attachments": []
+                                }
+                            ]
                         }
                     ]
                 },

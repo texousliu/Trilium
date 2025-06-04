@@ -1,4 +1,4 @@
-import sql from "../../sql.js";
+import sql from '../../sql.js'
 import { randomString } from "../../../services/utils.js";
 import dateUtils from "../../../services/date_utils.js";
 import log from "../../log.js";
@@ -11,6 +11,7 @@ import { SEARCH_CONSTANTS } from '../constants/search_constants.js';
 import type { NoteEmbeddingContext } from "./embeddings_interface.js";
 import becca from "../../../becca/becca.js";
 import { isNoteExcludedFromAIById } from "../utils/ai_exclusion_utils.js";
+import { getEmbeddingProviderPrecedence } from '../config/configuration_helpers.js';
 
 interface Similarity {
     noteId: string;
@@ -271,43 +272,27 @@ export async function findSimilarNotes(
                         }
                     }
                 } else {
-                    // Use dedicated embedding provider precedence from options for other strategies
-                    let preferredProviders: string[] = [];
-                    const embeddingPrecedence = await options.getOption('embeddingProviderPrecedence');
+                    // Try providers using the new configuration system
+                    if (useFallback) {
+                        log.info('No embeddings found for specified provider, trying fallback providers...');
 
-                    if (embeddingPrecedence) {
-                        // For "comma,separated,values"
-                        if (embeddingPrecedence.includes(',')) {
-                            preferredProviders = embeddingPrecedence.split(',').map(p => p.trim());
-                        }
-                        // For JSON array ["value1", "value2"]
-                        else if (embeddingPrecedence.startsWith('[') && embeddingPrecedence.endsWith(']')) {
-                            try {
-                                preferredProviders = JSON.parse(embeddingPrecedence);
-                            } catch (e) {
-                                log.error(`Error parsing embedding precedence: ${e}`);
-                                preferredProviders = [embeddingPrecedence]; // Fallback to using as single value
+                        // Use the new configuration system - no string parsing!
+                        const preferredProviders = await getEmbeddingProviderPrecedence();
+
+                        log.info(`Using provider precedence: ${preferredProviders.join(', ')}`);
+
+                        // Try providers in precedence order
+                        for (const provider of preferredProviders) {
+                            const providerEmbeddings = availableEmbeddings.filter(e => e.providerId === provider);
+
+                            if (providerEmbeddings.length > 0) {
+                                // Choose the model with the most embeddings
+                                const bestModel = providerEmbeddings.sort((a, b) => b.count - a.count)[0];
+                                log.info(`Found fallback provider: ${provider}, model: ${bestModel.modelId}, dimension: ${bestModel.dimension}`);
+
+                                // The 'regenerate' strategy would go here if needed
+                                // We're no longer supporting the 'adapt' strategy
                             }
-                        }
-                        // For a single value
-                        else {
-                            preferredProviders = [embeddingPrecedence];
-                        }
-                    }
-
-                    log.info(`Using provider precedence: ${preferredProviders.join(', ')}`);
-
-                    // Try providers in precedence order
-                    for (const provider of preferredProviders) {
-                        const providerEmbeddings = availableEmbeddings.filter(e => e.providerId === provider);
-
-                        if (providerEmbeddings.length > 0) {
-                            // Choose the model with the most embeddings
-                            const bestModel = providerEmbeddings.sort((a, b) => b.count - a.count)[0];
-                            log.info(`Found fallback provider: ${provider}, model: ${bestModel.modelId}, dimension: ${bestModel.dimension}`);
-
-                            // The 'regenerate' strategy would go here if needed
-                            // We're no longer supporting the 'adapt' strategy
                         }
                     }
                 }

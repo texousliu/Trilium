@@ -7,8 +7,11 @@ import tray from "@triliumnext/server/src/services/tray.js";
 import options from "@triliumnext/server/src/services/options.js";
 import electronDebug from "electron-debug";
 import electronDl from "electron-dl";
+import { deferred } from "@triliumnext/server/src/services/utils.js";
 
 async function main() {
+    const serverInitializedPromise = deferred<void>();
+
     // Prevent Trilium starting twice on first install and on uninstall for the Windows installer.
     if ((require("electron-squirrel-startup")).default) {
         process.exit(0);
@@ -37,7 +40,11 @@ async function main() {
         }
     });
 
-    electron.app.on("ready", onReady);
+    electron.app.on("ready", async () => {
+        await serverInitializedPromise;
+        console.log("Starting Electron...");
+        await onReady();
+    });
 
     electron.app.on("will-quit", () => {
         electron.globalShortcut.unregisterAll();
@@ -47,7 +54,10 @@ async function main() {
     process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
     await initializeTranslations();
-    await import("@triliumnext/server/src/main.js");
+    const startTriliumServer = (await import("@triliumnext/server/src/www.js")).default;
+    await startTriliumServer();
+    console.log("Server loaded");
+    serverInitializedPromise.resolve();
 }
 
 async function onReady() {
