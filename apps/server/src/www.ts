@@ -14,37 +14,35 @@ import type { Express } from "express";
 
 const MINIMUM_NODE_VERSION = "20.0.0";
 
-// setup basic error handling even before requiring dependencies, since those can produce errors as well
+export default async function startTriliumServer() {
+    // setup basic error handling even before requiring dependencies, since those can produce errors as well
+    process.on("unhandledRejection", (error: Error) => {
+        // this makes sure that stacktrace of failed promise is printed out
+        console.log(error);
 
-process.on("unhandledRejection", (error: Error) => {
-    // this makes sure that stacktrace of failed promise is printed out
-    console.log(error);
+        // but also try to log it into file
+        log.info(error);
+    });
 
-    // but also try to log it into file
-    log.info(error);
-});
+    function exit() {
+        console.log("Caught interrupt/termination signal. Exiting.");
+        process.exit(0);
+    }
 
-function exit() {
-    console.log("Caught interrupt/termination signal. Exiting.");
-    process.exit(0);
-}
+    process.on("SIGINT", exit);
+    process.on("SIGTERM", exit);
 
-process.on("SIGINT", exit);
-process.on("SIGTERM", exit);
+    if (utils.compareVersions(process.versions.node, MINIMUM_NODE_VERSION) < 0) {
+        console.error();
+        console.error(`The Trilium server requires Node.js ${MINIMUM_NODE_VERSION} and later in order to start.\n`);
+        console.error(`\tCurrent version:\t${process.versions.node}`);
+        console.error(`\tExpected version:\t${MINIMUM_NODE_VERSION}`);
+        console.error();
+        process.exit(1);
+    }
 
-if (utils.compareVersions(process.versions.node, MINIMUM_NODE_VERSION) < 0) {
-    console.error();
-    console.error(`The Trilium server requires Node.js ${MINIMUM_NODE_VERSION} and later in order to start.\n`);
-    console.error(`\tCurrent version:\t${process.versions.node}`);
-    console.error(`\tExpected version:\t${MINIMUM_NODE_VERSION}`);
-    console.error();
-    process.exit(1);
-}
+    tmp.setGracefulCleanup();
 
-tmp.setGracefulCleanup();
-startTrilium();
-
-async function startTrilium() {
     const app = await buildApp();
 
     /**
@@ -98,7 +96,7 @@ function startHttpServer(app: Express) {
 
     log.info(`Trusted reverse proxy: ${app.get("trust proxy")}`);
 
-    let httpServer;
+    let httpServer: http.Server | https.Server;
 
     if (config["Network"]["https"]) {
         if (!config["Network"]["keyPath"] || !config["Network"]["keyPath"].trim().length) {
