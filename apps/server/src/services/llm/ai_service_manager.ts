@@ -1,4 +1,5 @@
 import options from '../options.js';
+import eventService from '../events.js';
 import type { AIService, ChatCompletionOptions, ChatResponse, Message } from './ai_interface.js';
 import { AnthropicService } from './providers/anthropic_service.js';
 import { ContextExtractor } from './context/index.js';
@@ -20,9 +21,8 @@ import type { NoteSearchResult } from './interfaces/context_interfaces.js';
 
 // Import new configuration system
 import {
-    getProviderPrecedence,
-    getPreferredProvider,
-    getEmbeddingProviderPrecedence,
+    getSelectedProvider,
+    getSelectedEmbeddingProvider,
     parseModelIdentifier,
     isAIEnabled,
     getDefaultModelForProvider,
@@ -60,6 +60,9 @@ export class AIServiceManager implements IAIServiceManager {
         this.initializeTools().catch(error => {
             log.error(`Error initializing LLM tools during AIServiceManager construction: ${error.message || String(error)}`);
         });
+
+        // Set up event listener for provider changes
+        this.setupProviderChangeListener();
     }
 
     /**
@@ -84,16 +87,21 @@ export class AIServiceManager implements IAIServiceManager {
     }
 
     /**
-     * Update the provider precedence order using the new configuration system
+     * Update the provider order using the new configuration system (single provider)
      */
     async updateProviderOrderAsync(): Promise<void> {
         try {
-            const providers = await getProviderPrecedence();
-            this.providerOrder = providers as ServiceProviders[];
+            const selectedProvider = await getSelectedProvider();
+            if (selectedProvider) {
+                this.providerOrder = [selectedProvider as ServiceProviders];
+                log.info(`Updated provider order: ${selectedProvider}`);
+            } else {
+                this.providerOrder = [];
+                log.info('No provider selected');
+            }
             this.initialized = true;
-            log.info(`Updated provider order: ${providers.join(', ')}`);
         } catch (error) {
-            log.error(`Failed to get provider precedence: ${error}`);
+            log.error(`Failed to get selected provider: ${error}`);
             // Keep empty order, will be handled gracefully by other methods
             this.providerOrder = [];
             this.initialized = true;
@@ -521,13 +529,13 @@ export class AIServiceManager implements IAIServiceManager {
      */
     async getPreferredProviderAsync(): Promise<string> {
         try {
-            const preferredProvider = await getPreferredProvider();
-            if (preferredProvider === null) {
-                // No providers configured, fallback to first available
-                log.info('No providers configured in precedence, using first available provider');
+            const selectedProvider = await getSelectedProvider();
+            if (selectedProvider === null) {
+                // No provider selected, fallback to first available
+                log.info('No provider selected, using first available provider');
                 return this.providerOrder[0];
             }
-            return preferredProvider;
+            return selectedProvider;
         } catch (error) {
             log.error(`Error getting preferred provider: ${error}`);
             return this.providerOrder[0];
@@ -580,6 +588,7 @@ export class AIServiceManager implements IAIServiceManager {
         };
     }
 
+
     /**
      * Error handler that properly types the error object
      */
@@ -588,6 +597,75 @@ export class AIServiceManager implements IAIServiceManager {
             return error.message || String(error);
         }
         return String(error);
+    }
+
+    /**
+     * Set up event listener for provider changes
+     */
+    private setupProviderChangeListener(): void {
+        // List of AI-related options that should trigger service recreation
+        const aiRelatedOptions = [
+            'aiSelectedProvider',
+            'embeddingSelectedProvider',
+            'openaiApiKey',
+            'openaiBaseUrl', 
+            'openaiDefaultModel',
+            'anthropicApiKey',
+            'anthropicBaseUrl',
+            'anthropicDefaultModel',
+            'ollamaBaseUrl',
+            'ollamaDefaultModel',
+            'voyageApiKey'
+        ];
+
+        eventService.subscribe(['entityChanged'], ({ entityName, entity }) => {
+            if (entityName === 'options' && entity && aiRelatedOptions.includes(entity.name)) {
+                log.info(`AI-related option '${entity.name}' changed, recreating LLM services`);
+                this.recreateServices();
+            }
+        });
+    }
+
+    /**
+     * Recreate LLM services when provider settings change
+     */
+    private async recreateServices(): Promise<void> {
+        try {
+            log.info('Recreating LLM services due to configuration change');
+
+            // Clear configuration cache first
+            clearConfigurationCache();
+
+            // Recreate all service instances to pick up new configuration
+            this.recreateServiceInstances();
+
+            // Update provider order with new configuration
+            await this.updateProviderOrderAsync();
+
+            log.info('LLM services recreated successfully');
+        } catch (error) {
+            log.error(`Error recreating LLM services: ${this.handleError(error)}`);
+        }
+    }
+
+    /**
+     * Recreate service instances to pick up new configuration
+     */
+    private recreateServiceInstances(): void {
+        try {
+            log.info('Recreating service instances');
+
+            // Recreate service instances
+            this.services = {
+                openai: new OpenAIService(),
+                anthropic: new AnthropicService(),
+                ollama: new OllamaService()
+            };
+
+            log.info('Service instances recreated successfully');
+        } catch (error) {
+            log.error(`Error recreating service instances: ${this.handleError(error)}`);
+        }
     }
 }
 

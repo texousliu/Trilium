@@ -11,8 +11,7 @@ import type { ServiceProviders } from '../../interfaces/ai_service_interfaces.js
 
 // Import new configuration system
 import {
-    getProviderPrecedence,
-    getPreferredProvider,
+    getSelectedProvider,
     parseModelIdentifier,
     getDefaultModelForProvider,
     createModelConfig
@@ -99,22 +98,30 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
             }
         }
 
-        // Get default provider and model using the new configuration system
+        // Get selected provider and model using the new configuration system
         try {
             // Use the new configuration helpers - no string parsing!
-            const preferredProvider = await getPreferredProvider();
+            const selectedProvider = await getSelectedProvider();
 
-            if (!preferredProvider) {
-                throw new Error('No AI providers are configured. Please check your AI settings.');
+            if (!selectedProvider) {
+                throw new Error('No AI provider is selected. Please select a provider in your AI settings.');
             }
 
-            const modelName = await getDefaultModelForProvider(preferredProvider);
+            const modelName = await getDefaultModelForProvider(selectedProvider);
 
             if (!modelName) {
-                throw new Error(`No default model configured for provider ${preferredProvider}. Please set a default model in your AI settings.`);
+                // Try to fetch and set a default model from the provider
+                const fetchedModel = await this.fetchAndSetDefaultModel(selectedProvider);
+                if (!fetchedModel) {
+                    throw new Error(`No default model configured for provider ${selectedProvider}. Please set a default model in your AI settings.`);
+                }
+                // Use the fetched model
+                updatedOptions.model = fetchedModel;
+            } else {
+                updatedOptions.model = modelName;
             }
 
-            log.info(`Selected provider: ${preferredProvider}, model: ${modelName}`);
+            log.info(`Selected provider: ${selectedProvider}, model: ${updatedOptions.model}`);
 
             // Determine query complexity
             let queryComplexity = 'low';
@@ -142,15 +149,14 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
                 queryComplexity = contentLength > SEARCH_CONSTANTS.CONTEXT.CONTENT_LENGTH.HIGH_THRESHOLD ? 'high' : 'medium';
             }
 
-            // Set the model and add provider metadata
-            updatedOptions.model = modelName;
-            this.addProviderMetadata(updatedOptions, preferredProvider as ServiceProviders, modelName);
+            // Add provider metadata (model is already set above)
+            this.addProviderMetadata(updatedOptions, selectedProvider as ServiceProviders, updatedOptions.model);
 
-            log.info(`Selected model: ${modelName} from provider: ${preferredProvider} for query complexity: ${queryComplexity}`);
+            log.info(`Selected model: ${updatedOptions.model} from provider: ${selectedProvider} for query complexity: ${queryComplexity}`);
             log.info(`[ModelSelectionStage] Final options: ${JSON.stringify({
                 model: updatedOptions.model,
                 stream: updatedOptions.stream,
-                provider: preferredProvider,
+                provider: selectedProvider,
                 enableTools: updatedOptions.enableTools
             })}`);
 
@@ -210,38 +216,38 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
     }
 
     /**
-     * Determine model based on provider precedence using the new configuration system
+     * Determine model based on selected provider using the new configuration system
      */
     private async determineDefaultModel(input: ModelSelectionInput): Promise<string> {
         try {
-            // Use the new configuration system
-            const providers = await getProviderPrecedence();
+            // Use the new single provider configuration system
+            const selectedProvider = await getSelectedProvider();
 
-            // Use only providers that are available
-            const availableProviders = providers.filter(provider =>
-                aiServiceManager.isProviderAvailable(provider));
-
-            if (availableProviders.length === 0) {
-                throw new Error('No AI providers are available');
+            if (!selectedProvider) {
+                throw new Error('No AI provider is selected. Please select a provider in your AI settings.');
             }
 
-            // Get the first available provider and its default model
-            const defaultProvider = availableProviders[0];
-            const defaultModel = await getDefaultModelForProvider(defaultProvider);
+            // Check if the provider is available
+            if (!aiServiceManager.isProviderAvailable(selectedProvider)) {
+                throw new Error(`Selected provider ${selectedProvider} is not available`);
+            }
+
+            // Get the default model for the selected provider
+            const defaultModel = await getDefaultModelForProvider(selectedProvider);
 
             if (!defaultModel) {
-                throw new Error(`No default model configured for provider ${defaultProvider}. Please configure a default model in your AI settings.`);
+                throw new Error(`No default model configured for provider ${selectedProvider}. Please configure a default model in your AI settings.`);
             }
 
             // Set provider metadata
             if (!input.options.providerMetadata) {
                 input.options.providerMetadata = {
-                    provider: defaultProvider as 'openai' | 'anthropic' | 'ollama' | 'local',
+                    provider: selectedProvider as 'openai' | 'anthropic' | 'ollama' | 'local',
                     modelId: defaultModel
                 };
             }
 
-            log.info(`Selected default model ${defaultModel} from provider ${defaultProvider}`);
+            log.info(`Selected default model ${defaultModel} from provider ${selectedProvider}`);
             return defaultModel;
         } catch (error) {
             log.error(`Error determining default model: ${error}`);
@@ -269,6 +275,128 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
             return MODEL_CAPABILITIES['gpt-4'].contextWindowTokens;
         } else {
             return MODEL_CAPABILITIES['default'].contextWindowTokens;
+        }
+    }
+
+    /**
+     * Fetch available models from provider and set a default model
+     */
+    private async fetchAndSetDefaultModel(provider: ProviderType): Promise<string | null> {
+        try {
+            log.info(`Fetching available models for provider ${provider}`);
+            
+            // Import server-side options to update the default model
+            const optionService = (await import('../../../options.js')).default;
+            
+            switch (provider) {
+                case 'openai':
+                    const openaiModels = await this.fetchOpenAIModels();
+                    if (openaiModels.length > 0) {
+                        // Use the first available model without any preferences
+                        const selectedModel = openaiModels[0];
+                        
+                        await optionService.setOption('openaiDefaultModel', selectedModel);
+                        log.info(`Set default OpenAI model to: ${selectedModel}`);
+                        return selectedModel;
+                    }
+                    break;
+                    
+                case 'anthropic':
+                    const anthropicModels = await this.fetchAnthropicModels();
+                    if (anthropicModels.length > 0) {
+                        // Use the first available model without any preferences
+                        const selectedModel = anthropicModels[0];
+                        
+                        await optionService.setOption('anthropicDefaultModel', selectedModel);
+                        log.info(`Set default Anthropic model to: ${selectedModel}`);
+                        return selectedModel;
+                    }
+                    break;
+                    
+                case 'ollama':
+                    const ollamaModels = await this.fetchOllamaModels();
+                    if (ollamaModels.length > 0) {
+                        // Use the first available model without any preferences
+                        const selectedModel = ollamaModels[0];
+                        
+                        await optionService.setOption('ollamaDefaultModel', selectedModel);
+                        log.info(`Set default Ollama model to: ${selectedModel}`);
+                        return selectedModel;
+                    }
+                    break;
+            }
+            
+            log.info(`No models available for provider ${provider}`);
+            return null;
+        } catch (error) {
+            log.error(`Error fetching models for provider ${provider}: ${error}`);
+            return null;
+        }
+    }
+
+    /**
+     * Fetch available OpenAI models
+     */
+    private async fetchOpenAIModels(): Promise<string[]> {
+        try {
+            // Use the provider service to get available models
+            const aiServiceManager = (await import('../../ai_service_manager.js')).default;
+            const service = aiServiceManager.getInstance().getService('openai');
+            
+            if (service && typeof (service as any).getAvailableModels === 'function') {
+                return await (service as any).getAvailableModels();
+            }
+            
+            // No fallback - return empty array if models can't be fetched
+            log.info('OpenAI service does not support getAvailableModels method');
+            return [];
+        } catch (error) {
+            log.error(`Error fetching OpenAI models: ${error}`);
+            return [];
+        }
+    }
+
+    /**
+     * Fetch available Anthropic models
+     */
+    private async fetchAnthropicModels(): Promise<string[]> {
+        try {
+            // Use the provider service to get available models
+            const aiServiceManager = (await import('../../ai_service_manager.js')).default;
+            const service = aiServiceManager.getInstance().getService('anthropic');
+            
+            if (service && typeof (service as any).getAvailableModels === 'function') {
+                return await (service as any).getAvailableModels();
+            }
+            
+            // No fallback - return empty array if models can't be fetched
+            log.info('Anthropic service does not support getAvailableModels method');
+            return [];
+        } catch (error) {
+            log.error(`Error fetching Anthropic models: ${error}`);
+            return [];
+        }
+    }
+
+    /**
+     * Fetch available Ollama models
+     */
+    private async fetchOllamaModels(): Promise<string[]> {
+        try {
+            // Use the provider service to get available models
+            const aiServiceManager = (await import('../../ai_service_manager.js')).default;
+            const service = aiServiceManager.getInstance().getService('ollama');
+            
+            if (service && typeof (service as any).getAvailableModels === 'function') {
+                return await (service as any).getAvailableModels();
+            }
+            
+            // No fallback - return empty array if models can't be fetched
+            log.info('Ollama service does not support getAvailableModels method');
+            return [];
+        } catch (error) {
+            log.error(`Error fetching Ollama models: ${error}`);
+            return [];
         }
     }
 }

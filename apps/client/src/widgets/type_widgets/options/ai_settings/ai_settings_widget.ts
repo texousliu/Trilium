@@ -65,7 +65,7 @@ export default class AiSettingsWidget extends OptionsWidget {
 
         // Core AI options
         this.setupChangeHandler('.ai-enabled', 'aiEnabled', true, true);
-        this.setupChangeHandler('.ai-provider-precedence', 'aiProviderPrecedence', true);
+        this.setupChangeHandler('.ai-selected-provider', 'aiSelectedProvider', true);
         this.setupChangeHandler('.ai-temperature', 'aiTemperature');
         this.setupChangeHandler('.ai-system-prompt', 'aiSystemPrompt');
 
@@ -132,10 +132,27 @@ export default class AiSettingsWidget extends OptionsWidget {
         this.setupChangeHandler('.enable-automatic-indexing', 'enableAutomaticIndexing', false, true);
         this.setupChangeHandler('.embedding-similarity-threshold', 'embeddingSimilarityThreshold');
         this.setupChangeHandler('.max-notes-per-llm-query', 'maxNotesPerLlmQuery');
-        this.setupChangeHandler('.embedding-provider-precedence', 'embeddingProviderPrecedence', true);
+        this.setupChangeHandler('.embedding-selected-provider', 'embeddingSelectedProvider', true);
         this.setupChangeHandler('.embedding-dimension-strategy', 'embeddingDimensionStrategy');
         this.setupChangeHandler('.embedding-batch-size', 'embeddingBatchSize');
         this.setupChangeHandler('.embedding-update-interval', 'embeddingUpdateInterval');
+
+        // Add provider selection change handlers for dynamic settings visibility
+        this.$widget.find('.ai-selected-provider').on('change', () => {
+            const selectedProvider = this.$widget.find('.ai-selected-provider').val() as string;
+            this.$widget.find('.provider-settings').hide();
+            if (selectedProvider) {
+                this.$widget.find(`.${selectedProvider}-provider-settings`).show();
+            }
+        });
+
+        this.$widget.find('.embedding-selected-provider').on('change', () => {
+            const selectedProvider = this.$widget.find('.embedding-selected-provider').val() as string;
+            this.$widget.find('.embedding-provider-settings').hide();
+            if (selectedProvider) {
+                this.$widget.find(`.${selectedProvider}-embedding-provider-settings`).show();
+            }
+        });
 
         // No sortable behavior needed anymore
 
@@ -194,42 +211,25 @@ export default class AiSettingsWidget extends OptionsWidget {
             return;
         }
 
-        // Get provider precedence
-        const providerPrecedence = (this.$widget.find('.ai-provider-precedence').val() as string || '').split(',');
+        // Get selected provider
+        const selectedProvider = this.$widget.find('.ai-selected-provider').val() as string;
 
-        // Check for OpenAI configuration if it's in the precedence list
-        const openaiWarnings: string[] = [];
-        if (providerPrecedence.includes('openai')) {
+        // Check for selected provider configuration
+        const providerWarnings: string[] = [];
+        if (selectedProvider === 'openai') {
             const openaiApiKey = this.$widget.find('.openai-api-key').val();
             if (!openaiApiKey) {
-                openaiWarnings.push(t("ai_llm.empty_key_warning.openai"));
+                providerWarnings.push(t("ai_llm.empty_key_warning.openai"));
             }
-        }
-
-        // Check for Anthropic configuration if it's in the precedence list
-        const anthropicWarnings: string[] = [];
-        if (providerPrecedence.includes('anthropic')) {
+        } else if (selectedProvider === 'anthropic') {
             const anthropicApiKey = this.$widget.find('.anthropic-api-key').val();
             if (!anthropicApiKey) {
-                anthropicWarnings.push(t("ai_llm.empty_key_warning.anthropic"));
+                providerWarnings.push(t("ai_llm.empty_key_warning.anthropic"));
             }
-        }
-
-        // Check for Voyage configuration if it's in the precedence list
-        const voyageWarnings: string[] = [];
-        if (providerPrecedence.includes('voyage')) {
-            const voyageApiKey = this.$widget.find('.voyage-api-key').val();
-            if (!voyageApiKey) {
-                voyageWarnings.push(t("ai_llm.empty_key_warning.voyage"));
-            }
-        }
-
-        // Check for Ollama configuration if it's in the precedence list
-        const ollamaWarnings: string[] = [];
-        if (providerPrecedence.includes('ollama')) {
+        } else if (selectedProvider === 'ollama') {
             const ollamaBaseUrl = this.$widget.find('.ollama-base-url').val();
             if (!ollamaBaseUrl) {
-                ollamaWarnings.push(t("ai_llm.ollama_no_url"));
+                providerWarnings.push(t("ai_llm.ollama_no_url"));
             }
         }
 
@@ -238,27 +238,24 @@ export default class AiSettingsWidget extends OptionsWidget {
         const embeddingsEnabled = this.$widget.find('.enable-automatic-indexing').prop('checked');
 
         if (embeddingsEnabled) {
-            const embeddingProviderPrecedence = (this.$widget.find('.embedding-provider-precedence').val() as string || '').split(',');
+            const selectedEmbeddingProvider = this.$widget.find('.embedding-selected-provider').val() as string;
 
-            if (embeddingProviderPrecedence.includes('openai') && !this.$widget.find('.openai-api-key').val()) {
+            if (selectedEmbeddingProvider === 'openai' && !this.$widget.find('.openai-api-key').val()) {
                 embeddingWarnings.push(t("ai_llm.empty_key_warning.openai"));
             }
 
-            if (embeddingProviderPrecedence.includes('voyage') && !this.$widget.find('.voyage-api-key').val()) {
+            if (selectedEmbeddingProvider === 'voyage' && !this.$widget.find('.voyage-api-key').val()) {
                 embeddingWarnings.push(t("ai_llm.empty_key_warning.voyage"));
             }
 
-            if (embeddingProviderPrecedence.includes('ollama') && !this.$widget.find('.ollama-base-url').val()) {
+            if (selectedEmbeddingProvider === 'ollama' && !this.$widget.find('.ollama-base-url').val()) {
                 embeddingWarnings.push(t("ai_llm.empty_key_warning.ollama"));
             }
         }
 
         // Combine all warnings
         const allWarnings = [
-            ...openaiWarnings,
-            ...anthropicWarnings,
-            ...voyageWarnings,
-            ...ollamaWarnings,
+            ...providerWarnings,
             ...embeddingWarnings
         ];
 
@@ -450,6 +447,27 @@ export default class AiSettingsWidget extends OptionsWidget {
     }
 
     /**
+     * Update provider settings visibility based on selected providers
+     */
+    updateProviderSettingsVisibility() {
+        if (!this.$widget) return;
+
+        // Update AI provider settings visibility
+        const selectedAiProvider = this.$widget.find('.ai-selected-provider').val() as string;
+        this.$widget.find('.provider-settings').hide();
+        if (selectedAiProvider) {
+            this.$widget.find(`.${selectedAiProvider}-provider-settings`).show();
+        }
+
+        // Update embedding provider settings visibility
+        const selectedEmbeddingProvider = this.$widget.find('.embedding-selected-provider').val() as string;
+        this.$widget.find('.embedding-provider-settings').hide();
+        if (selectedEmbeddingProvider) {
+            this.$widget.find(`.${selectedEmbeddingProvider}-embedding-provider-settings`).show();
+        }
+    }
+
+    /**
      * Called when the options have been loaded from the server
      */
     optionsLoaded(options: OptionMap) {
@@ -459,30 +477,30 @@ export default class AiSettingsWidget extends OptionsWidget {
         this.$widget.find('.ai-enabled').prop('checked', options.aiEnabled !== 'false');
         this.$widget.find('.ai-temperature').val(options.aiTemperature || '0.7');
         this.$widget.find('.ai-system-prompt').val(options.aiSystemPrompt || '');
-        this.$widget.find('.ai-provider-precedence').val(options.aiProviderPrecedence || 'openai,anthropic,ollama');
+        this.$widget.find('.ai-selected-provider').val(options.aiSelectedProvider || 'openai');
 
         // OpenAI Section
         this.$widget.find('.openai-api-key').val(options.openaiApiKey || '');
-        this.$widget.find('.openai-base-url').val(options.openaiBaseUrl || 'https://api.openai_llm.com/v1');
-        this.$widget.find('.openai-default-model').val(options.openaiDefaultModel || 'gpt-4o');
-        this.$widget.find('.openai-embedding-model').val(options.openaiEmbeddingModel || 'text-embedding-3-small');
+        this.$widget.find('.openai-base-url').val(options.openaiBaseUrl || 'https://api.openai.com/v1');
+        this.$widget.find('.openai-default-model').val(options.openaiDefaultModel || '');
+        this.$widget.find('.openai-embedding-model').val(options.openaiEmbeddingModel || '');
 
         // Anthropic Section
         this.$widget.find('.anthropic-api-key').val(options.anthropicApiKey || '');
         this.$widget.find('.anthropic-base-url').val(options.anthropicBaseUrl || 'https://api.anthropic.com');
-        this.$widget.find('.anthropic-default-model').val(options.anthropicDefaultModel || 'claude-3-opus-20240229');
+        this.$widget.find('.anthropic-default-model').val(options.anthropicDefaultModel || '');
 
         // Voyage Section
         this.$widget.find('.voyage-api-key').val(options.voyageApiKey || '');
-        this.$widget.find('.voyage-embedding-model').val(options.voyageEmbeddingModel || 'voyage-2');
+        this.$widget.find('.voyage-embedding-model').val(options.voyageEmbeddingModel || '');
 
         // Ollama Section
         this.$widget.find('.ollama-base-url').val(options.ollamaBaseUrl || 'http://localhost:11434');
-        this.$widget.find('.ollama-default-model').val(options.ollamaDefaultModel || 'llama3');
-        this.$widget.find('.ollama-embedding-model').val(options.ollamaEmbeddingModel || 'nomic-embed-text');
+        this.$widget.find('.ollama-default-model').val(options.ollamaDefaultModel || '');
+        this.$widget.find('.ollama-embedding-model').val(options.ollamaEmbeddingModel || '');
 
         // Embedding Options
-        this.$widget.find('.embedding-provider-precedence').val(options.embeddingProviderPrecedence || 'openai,voyage,ollama,local');
+        this.$widget.find('.embedding-selected-provider').val(options.embeddingSelectedProvider || 'openai');
         this.$widget.find('.embedding-auto-update-enabled').prop('checked', options.embeddingAutoUpdateEnabled !== 'false');
         this.$widget.find('.enable-automatic-indexing').prop('checked', options.enableAutomaticIndexing !== 'false');
         this.$widget.find('.embedding-similarity-threshold').val(options.embeddingSimilarityThreshold || '0.75');
@@ -490,6 +508,9 @@ export default class AiSettingsWidget extends OptionsWidget {
         this.$widget.find('.embedding-dimension-strategy').val(options.embeddingDimensionStrategy || 'auto');
         this.$widget.find('.embedding-batch-size').val(options.embeddingBatchSize || '10');
         this.$widget.find('.embedding-update-interval').val(options.embeddingUpdateInterval || '5000');
+
+        // Show/hide provider settings based on selected providers
+        this.updateProviderSettingsVisibility();
 
         // Display validation warnings
         this.displayValidationWarnings();

@@ -1,51 +1,32 @@
-import options from '../../../options.js';
 import log from '../../../log.js';
 import { getEmbeddingProvider, getEnabledEmbeddingProviders } from '../../providers/providers.js';
+import { getSelectedEmbeddingProvider } from '../../config/configuration_helpers.js';
 
 /**
  * Manages embedding providers for context services
  */
 export class ProviderManager {
     /**
-     * Get the preferred embedding provider based on user settings
-     * Tries to use the most appropriate provider in this order:
-     * 1. User's configured default provider
-     * 2. OpenAI if API key is set
-     * 3. Anthropic if API key is set
-     * 4. Ollama if configured
-     * 5. Any available provider
-     * 6. Local provider as fallback
+     * Get the selected embedding provider based on user settings
+     * Uses the single provider selection approach
      *
-     * @returns The preferred embedding provider or null if none available
+     * @returns The selected embedding provider or null if none available
      */
     async getPreferredEmbeddingProvider(): Promise<any> {
         try {
-            // Try to get providers based on precedence list
-            const precedenceOption = await options.getOption('embeddingProviderPrecedence');
-            let precedenceList: string[] = [];
-
-            if (precedenceOption) {
-                if (precedenceOption.startsWith('[') && precedenceOption.endsWith(']')) {
-                    precedenceList = JSON.parse(precedenceOption);
-                } else if (typeof precedenceOption === 'string') {
-                    if (precedenceOption.includes(',')) {
-                        precedenceList = precedenceOption.split(',').map(p => p.trim());
-                    } else {
-                        precedenceList = [precedenceOption];
-                    }
-                }
-            }
-
-            // Try each provider in the precedence list
-            for (const providerId of precedenceList) {
-                const provider = await getEmbeddingProvider(providerId);
+            // Get the selected embedding provider
+            const selectedProvider = await getSelectedEmbeddingProvider();
+            
+            if (selectedProvider) {
+                const provider = await getEmbeddingProvider(selectedProvider);
                 if (provider) {
-                    log.info(`Using embedding provider from precedence list: ${providerId}`);
+                    log.info(`Using selected embedding provider: ${selectedProvider}`);
                     return provider;
                 }
+                log.info(`Selected embedding provider ${selectedProvider} is not available`);
             }
 
-            // If no provider from precedence list is available, try any enabled provider
+            // If no provider is selected or available, try any enabled provider
             const providers = await getEnabledEmbeddingProviders();
             if (providers.length > 0) {
                 log.info(`Using available embedding provider: ${providers[0].name}`);

@@ -257,4 +257,12 @@ export class OpenAIService extends BaseAIService {
             throw error;
         }
     }
+
+    /**
+     * Clear cached OpenAI client to force recreation with new settings
+     */
+    clearCache(): void {
+        this.openai = null;
+        log.info('OpenAI client cache cleared');
+    }
 }

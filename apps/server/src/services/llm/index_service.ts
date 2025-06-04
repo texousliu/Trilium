@@ -497,40 +497,24 @@ export class IndexService {
                 throw new Error("No embedding providers available");
             }
 
-            // Get the embedding provider precedence
+            // Get the selected embedding provider
             const options = (await import('../options.js')).default;
-            let preferredProviders: string[] = [];
-
-            const embeddingPrecedence = await options.getOption('embeddingProviderPrecedence');
+            const selectedEmbeddingProvider = await options.getOption('embeddingSelectedProvider');
             let provider;
 
-            if (embeddingPrecedence) {
-                // Parse the precedence string
-                if (embeddingPrecedence.startsWith('[') && embeddingPrecedence.endsWith(']')) {
-                    preferredProviders = JSON.parse(embeddingPrecedence);
-                } else if (typeof embeddingPrecedence === 'string') {
-                    if (embeddingPrecedence.includes(',')) {
-                        preferredProviders = embeddingPrecedence.split(',').map(p => p.trim());
-                    } else {
-                        preferredProviders = [embeddingPrecedence];
-                    }
-                }
-
-                // Find first enabled provider by precedence order
-                for (const providerName of preferredProviders) {
-                    const matchedProvider = providers.find(p => p.name === providerName);
-                    if (matchedProvider) {
-                        provider = matchedProvider;
-                        break;
-                    }
-                }
-
-                // If no match found, use first available
-                if (!provider && providers.length > 0) {
+            if (selectedEmbeddingProvider) {
+                // Try to use the selected provider
+                const enabledProviders = await providerManager.getEnabledEmbeddingProviders();
+                provider = enabledProviders.find(p => p.name === selectedEmbeddingProvider);
+                
+                if (!provider) {
+                    log.info(`Selected embedding provider ${selectedEmbeddingProvider} is not available, using first enabled provider`);
+                    // Fall back to first enabled provider
                     provider = providers[0];
                 }
             } else {
-                // Default to first available provider
+                // No provider selected, use first available provider
+                log.info('No embedding provider selected, using first available provider');
                 provider = providers[0];
             }
 

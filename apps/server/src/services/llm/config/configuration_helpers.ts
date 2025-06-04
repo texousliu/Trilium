@@ -1,10 +1,9 @@
 import configurationManager from './configuration_manager.js';
+import optionService from '../../options.js';
 import type {
     ProviderType,
     ModelIdentifier,
     ModelConfig,
-    ProviderPrecedenceConfig,
-    EmbeddingProviderPrecedenceConfig
 } from '../interfaces/configuration_interfaces.js';
 
 /**
@@ -13,41 +12,19 @@ import type {
  */
 
 /**
- * Get the ordered list of AI providers
+ * Get the selected AI provider
  */
-export async function getProviderPrecedence(): Promise<ProviderType[]> {
-    const config = await configurationManager.getProviderPrecedence();
-    return config.providers;
+export async function getSelectedProvider(): Promise<ProviderType | null> {
+    const providerOption = optionService.getOption('aiSelectedProvider');
+    return providerOption as ProviderType || null;
 }
 
 /**
- * Get the default/preferred AI provider
+ * Get the selected embedding provider
  */
-export async function getPreferredProvider(): Promise<ProviderType | null> {
-    const config = await configurationManager.getProviderPrecedence();
-    if (config.providers.length === 0) {
-        return null; // No providers configured
-    }
-    return config.defaultProvider || config.providers[0];
-}
-
-/**
- * Get the ordered list of embedding providers
- */
-export async function getEmbeddingProviderPrecedence(): Promise<string[]> {
-    const config = await configurationManager.getEmbeddingProviderPrecedence();
-    return config.providers;
-}
-
-/**
- * Get the default embedding provider
- */
-export async function getPreferredEmbeddingProvider(): Promise<string | null> {
-    const config = await configurationManager.getEmbeddingProviderPrecedence();
-    if (config.providers.length === 0) {
-        return null; // No providers configured
-    }
-    return config.defaultProvider || config.providers[0];
+export async function getSelectedEmbeddingProvider(): Promise<string | null> {
+    const providerOption = optionService.getOption('embeddingSelectedProvider');
+    return providerOption || null;
 }
 
 /**
@@ -107,22 +84,20 @@ export async function isProviderConfigured(provider: ProviderType): Promise<bool
 }
 
 /**
- * Get the first available (configured) provider from the precedence list
+ * Get the currently selected provider if it's available and configured
  */
-export async function getFirstAvailableProvider(): Promise<ProviderType | null> {
-    const providers = await getProviderPrecedence();
-
-    if (providers.length === 0) {
-        return null; // No providers configured
+export async function getAvailableSelectedProvider(): Promise<ProviderType | null> {
+    const selectedProvider = await getSelectedProvider();
+    
+    if (!selectedProvider) {
+        return null; // No provider selected
     }
 
-    for (const provider of providers) {
-        if (await isProviderConfigured(provider)) {
-            return provider;
-        }
+    if (await isProviderConfigured(selectedProvider)) {
+        return selectedProvider;
     }
 
-    return null; // No providers are properly configured
+    return null; // Selected provider is not properly configured
 }
 
 /**
@@ -163,17 +138,59 @@ export async function getValidModelConfig(provider: ProviderType): Promise<{ mod
 }
 
 /**
- * Get the first valid model configuration from the provider precedence list
+ * Get the model configuration for the currently selected provider
  */
-export async function getFirstValidModelConfig(): Promise<{ model: string; provider: ProviderType } | null> {
-    const providers = await getProviderPrecedence();
-
-    for (const provider of providers) {
-        const config = await getValidModelConfig(provider);
-        if (config) {
-            return config;
-        }
+export async function getSelectedModelConfig(): Promise<{ model: string; provider: ProviderType } | null> {
+    const selectedProvider = await getSelectedProvider();
+    
+    if (!selectedProvider) {
+        return null; // No provider selected
     }
 
-    return null; // No valid model configuration found
+    return await getValidModelConfig(selectedProvider);
+}
+
+// Legacy support functions - these maintain backwards compatibility but now use single provider logic
+/**
+ * @deprecated Use getSelectedProvider() instead
+ */
+export async function getProviderPrecedence(): Promise<ProviderType[]> {
+    const selected = await getSelectedProvider();
+    return selected ? [selected] : [];
+}
+
+/**
+ * @deprecated Use getSelectedProvider() instead  
+ */
+export async function getPreferredProvider(): Promise<ProviderType | null> {
+    return await getSelectedProvider();
+}
+
+/**
+ * @deprecated Use getSelectedEmbeddingProvider() instead
+ */
+export async function getEmbeddingProviderPrecedence(): Promise<string[]> {
+    const selected = await getSelectedEmbeddingProvider();
+    return selected ? [selected] : [];
+}
+
+/**
+ * @deprecated Use getSelectedEmbeddingProvider() instead
+ */
+export async function getPreferredEmbeddingProvider(): Promise<string | null> {
+    return await getSelectedEmbeddingProvider();
+}
+
+/**
+ * @deprecated Use getAvailableSelectedProvider() instead
+ */
+export async function getFirstAvailableProvider(): Promise<ProviderType | null> {
+    return await getAvailableSelectedProvider();
+}
+
+/**
+ * @deprecated Use getSelectedModelConfig() instead
+ */
+export async function getFirstValidModelConfig(): Promise<{ model: string; provider: ProviderType } | null> {
+    return await getSelectedModelConfig();
 }

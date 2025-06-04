@@ -50,8 +50,8 @@ export class ConfigurationManager {
         try {
             const config: AIConfig = {
                 enabled: await this.getAIEnabled(),
-                providerPrecedence: await this.getProviderPrecedence(),
-                embeddingProviderPrecedence: await this.getEmbeddingProviderPrecedence(),
+                selectedProvider: await this.getSelectedProvider(),
+                selectedEmbeddingProvider: await this.getSelectedEmbeddingProvider(),
                 defaultModels: await this.getDefaultModels(),
                 providerSettings: await this.getProviderSettings()
             };
@@ -66,46 +66,28 @@ export class ConfigurationManager {
     }
 
     /**
-     * Parse provider precedence from string option
+     * Get the selected AI provider
      */
-    public async getProviderPrecedence(): Promise<ProviderPrecedenceConfig> {
+    public async getSelectedProvider(): Promise<ProviderType | null> {
         try {
-            const precedenceOption = await options.getOption('aiProviderPrecedence');
-            const providers = this.parseProviderList(precedenceOption);
-
-            return {
-                providers: providers as ProviderType[],
-                defaultProvider: providers.length > 0 ? providers[0] as ProviderType : undefined
-            };
+            const selectedProvider = await options.getOption('aiSelectedProvider');
+            return selectedProvider as ProviderType || null;
         } catch (error) {
-            log.error(`Error parsing provider precedence: ${error}`);
-            // Only return known providers if they exist, don't assume defaults
-            return {
-                providers: [],
-                defaultProvider: undefined
-            };
+            log.error(`Error getting selected provider: ${error}`);
+            return null;
         }
     }
 
     /**
-     * Parse embedding provider precedence from string option
+     * Get the selected embedding provider
      */
-    public async getEmbeddingProviderPrecedence(): Promise<EmbeddingProviderPrecedenceConfig> {
+    public async getSelectedEmbeddingProvider(): Promise<EmbeddingProviderType | null> {
         try {
-            const precedenceOption = await options.getOption('embeddingProviderPrecedence');
-            const providers = this.parseProviderList(precedenceOption);
-
-            return {
-                providers: providers as EmbeddingProviderType[],
-                defaultProvider: providers.length > 0 ? providers[0] as EmbeddingProviderType : undefined
-            };
+            const selectedProvider = await options.getOption('embeddingSelectedProvider');
+            return selectedProvider as EmbeddingProviderType || null;
         } catch (error) {
-            log.error(`Error parsing embedding provider precedence: ${error}`);
-            // Don't assume defaults, return empty configuration
-            return {
-                providers: [],
-                defaultProvider: undefined
-            };
+            log.error(`Error getting selected embedding provider: ${error}`);
+            return null;
         }
     }
 
@@ -265,36 +247,39 @@ export class ConfigurationManager {
                 return result;
             }
 
-            // Validate provider precedence
-            if (config.providerPrecedence.providers.length === 0) {
-                result.errors.push('No providers configured in precedence list');
+            // Validate selected provider
+            if (!config.selectedProvider) {
+                result.errors.push('No AI provider selected');
                 result.isValid = false;
-            }
+            } else {
+                // Validate selected provider settings
+                const providerConfig = config.providerSettings[config.selectedProvider];
 
-            // Validate provider settings
-            for (const provider of config.providerPrecedence.providers) {
-                const providerConfig = config.providerSettings[provider];
-
-                if (provider === 'openai') {
+                if (config.selectedProvider === 'openai') {
                     const openaiConfig = providerConfig as OpenAISettings | undefined;
                     if (!openaiConfig?.apiKey) {
                         result.warnings.push('OpenAI API key is not configured');
                     }
                 }
 
-                if (provider === 'anthropic') {
+                if (config.selectedProvider === 'anthropic') {
                     const anthropicConfig = providerConfig as AnthropicSettings | undefined;
                     if (!anthropicConfig?.apiKey) {
                         result.warnings.push('Anthropic API key is not configured');
                     }
                 }
 
-                if (provider === 'ollama') {
+                if (config.selectedProvider === 'ollama') {
                     const ollamaConfig = providerConfig as OllamaSettings | undefined;
                     if (!ollamaConfig?.baseUrl) {
                         result.warnings.push('Ollama base URL is not configured');
                     }
                 }
+            }
+
+            // Validate selected embedding provider
+            if (!config.selectedEmbeddingProvider) {
+                result.warnings.push('No embedding provider selected');
             }
 
         } catch (error) {
@@ -356,14 +341,8 @@ export class ConfigurationManager {
     private getDefaultConfig(): AIConfig {
         return {
             enabled: false,
-            providerPrecedence: {
-                providers: [],
-                defaultProvider: undefined
-            },
-            embeddingProviderPrecedence: {
-                providers: [],
-                defaultProvider: undefined
-            },
+            selectedProvider: null,
+            selectedEmbeddingProvider: null,
             defaultModels: {
                 openai: undefined,
                 anthropic: undefined,
