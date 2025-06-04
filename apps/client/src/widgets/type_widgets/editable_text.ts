@@ -375,7 +375,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         }
     }
 
-    async insertDateTimeToTextCommand() { 
+    insertDateTimeToTextCommand() { 
         const date = new Date();
         const customDateTimeFormat = options.get("customDateTimeFormat");
         const dateString = utils.formatDateTime(date, customDateTimeFormat);
