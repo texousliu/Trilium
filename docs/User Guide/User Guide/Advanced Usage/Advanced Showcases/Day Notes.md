@@ -19,7 +19,7 @@ You can also notice how this day note has [promoted attribute](../Attributes/Pro
 
 ## Week Note and Quarter Note
 
-Week and quarter notes are disabled by default, since it might be too much for some people. To enable them, you need to set `#enableWeekNotes` and `#enableQuarterNotes` attributes on the root calendar note, which is identified by `#calendarRoot` label. Week note is affected by the first week of year option. Be careful when you already have some week notes created, it will not automatically change the existing week notes and might lead to some duplicates.
+Week and quarter notes are disabled by default, since it might be too much for some people. To enable them, you need to set `#enableWeekNote` and `#enableQuarterNote` attributes on the root calendar note, which is identified by `#calendarRoot` label. Week note is affected by the first week of year option. Be careful when you already have some week notes created, it will not automatically change the existing week notes and might lead to some duplicates.
 
 ## Templates
 
@@ -28,9 +28,9 @@ Trilium provides [template](../Templates.md) functionality, and it could be used
 You can define one of the following relations on the root of the journal (identified by `#calendarRoot` label):
 
 *   yearTemplate
-*   quarterTemplate (if `#enableQuarterNotes` is set)
+*   quarterTemplate (if `#enableQuarterNote` is set)
 *   monthTemplate
-*   weekTemplate (if `#enableWeekNotes` is set)
+*   weekTemplate (if `#enableWeekNote` is set)
 *   dateTemplate
 
 All of these are relations. When Trilium creates a new note for year or month or date, it will take a look at the root and attach a corresponding `~template` relation to the newly created role. Using this, you can e.g. create your daily template with e.g. checkboxes for daily routine etc.
