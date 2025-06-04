@@ -89,6 +89,7 @@ export default class AiSettingsWidget extends OptionsWidget {
         this.setupChangeHandler('.ollama-base-url', 'ollamaBaseUrl');
         this.setupChangeHandler('.ollama-default-model', 'ollamaDefaultModel');
         this.setupChangeHandler('.ollama-embedding-model', 'ollamaEmbeddingModel');
+        this.setupChangeHandler('.ollama-chat-embedding-model', 'ollamaEmbeddingModel');
         this.setupChangeHandler('.ollama-embedding-base-url', 'ollamaEmbeddingBaseUrl');
 
         // Embedding-specific provider options
@@ -641,6 +642,7 @@ export default class AiSettingsWidget extends OptionsWidget {
         this.$widget.find('.ollama-embedding-base-url').val(options.ollamaEmbeddingBaseUrl || 'http://localhost:11434');
         this.setModelDropdownValue('.ollama-default-model', options.ollamaDefaultModel);
         this.setModelDropdownValue('.ollama-embedding-model', options.ollamaEmbeddingModel);
+        this.setModelDropdownValue('.ollama-chat-embedding-model', options.ollamaEmbeddingModel);
 
         // Embedding-specific provider options
         this.$widget.find('.openai-embedding-api-key').val(options.openaiEmbeddingApiKey || '');

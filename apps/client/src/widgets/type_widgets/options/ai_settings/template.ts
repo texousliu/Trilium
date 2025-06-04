@@ -165,7 +165,7 @@ export const TPL = `
 
                 <div class="form-group">
                     <label>${t("ai_llm.embedding_model")}</label>
-                    <select class="ollama-embedding-model form-control">
+                    <select class="ollama-chat-embedding-model form-control">
                         <option value="">${t("ai_llm.select_model")}</option>
                     </select>
                     <div class="form-text">${t("ai_llm.ollama_embedding_model_description")}</div>
