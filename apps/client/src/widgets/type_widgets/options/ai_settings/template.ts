@@ -93,9 +93,7 @@ export const TPL = `
                 <div class="form-group">
                     <label>${t("ai_llm.model")}</label>
                     <select class="openai-default-model form-control">
-                        <option value="gpt-4o">GPT-4o (recommended)</option>
-                        <option value="gpt-4">GPT-4</option>
-                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                        <option value="">${t("ai_llm.select_model")}</option>
                     </select>
                     <div class="form-text">${t("ai_llm.openai_model_description")}</div>
                     <button class="btn btn-sm btn-outline-secondary refresh-openai-models">${t("ai_llm.refresh_models")}</button>
@@ -104,8 +102,7 @@ export const TPL = `
                 <div class="form-group">
                     <label>${t("ai_llm.embedding_model")}</label>
                     <select class="openai-embedding-model form-control">
-                        <option value="text-embedding-3-small">text-embedding-3-small (recommended)</option>
-                        <option value="text-embedding-3-large">text-embedding-3-large</option>
+                        <option value="">${t("ai_llm.select_model")}</option>
                     </select>
                     <div class="form-text">${t("ai_llm.openai_embedding_model_description")}</div>
                 </div>
@@ -135,9 +132,7 @@ export const TPL = `
                 <div class="form-group">
                     <label>${t("ai_llm.model")}</label>
                     <select class="anthropic-default-model form-control">
-                        <option value="claude-3-opus-20240229">Claude 3 Opus (recommended)</option>
-                        <option value="claude-3-sonnet-20240229">Claude 3 Sonnet</option>
-                        <option value="claude-3-haiku-20240307">Claude 3 Haiku</option>
+                        <option value="">${t("ai_llm.select_model")}</option>
                     </select>
                     <div class="form-text">${t("ai_llm.anthropic_model_description")}</div>
                     <button class="btn btn-sm btn-outline-secondary refresh-anthropic-models">${t("ai_llm.refresh_models")}</button>
@@ -162,9 +157,7 @@ export const TPL = `
                 <div class="form-group">
                     <label>${t("ai_llm.model")}</label>
                     <select class="ollama-default-model form-control">
-                        <option value="llama3">llama3 (recommended)</option>
-                        <option value="mistral">mistral</option>
-                        <option value="phi3">phi3</option>
+                        <option value="">${t("ai_llm.select_model")}</option>
                     </select>
                     <div class="form-text">${t("ai_llm.ollama_model_description")}</div>
                     <button class="btn btn-sm btn-outline-secondary refresh-models"><span class="bx bx-refresh"></span></button>
@@ -173,8 +166,7 @@ export const TPL = `
                 <div class="form-group">
                     <label>${t("ai_llm.embedding_model")}</label>
                     <select class="ollama-embedding-model form-control">
-                        <option value="nomic-embed-text">nomic-embed-text (recommended)</option>
-                        <option value="all-MiniLM-L6-v2">all-MiniLM-L6-v2</option>
+                        <option value="">${t("ai_llm.select_model")}</option>
                     </select>
                     <div class="form-text">${t("ai_llm.ollama_embedding_model_description")}</div>
                 </div>
@@ -221,8 +213,7 @@ export const TPL = `
                 <div class="form-group">
                     <label>${t("ai_llm.embedding_model")}</label>
                     <select class="openai-embedding-model form-control">
-                        <option value="text-embedding-3-small">text-embedding-3-small (recommended)</option>
-                        <option value="text-embedding-3-large">text-embedding-3-large</option>
+                        <option value="">${t("ai_llm.select_model")}</option>
                     </select>
                     <div class="form-text">${t("ai_llm.openai_embedding_model_description")}</div>
                 </div>
@@ -247,9 +238,7 @@ export const TPL = `
                 <div class="form-group">
                     <label>${t("ai_llm.embedding_model")}</label>
                     <select class="voyage-embedding-model form-control">
-                        <option value="voyage-2">Voyage-2 (recommended)</option>
-                        <option value="voyage-2-code">Voyage-2-Code</option>
-                        <option value="voyage-large-2">Voyage-Large-2</option>
+                        <option value="">${t("ai_llm.select_model")}</option>
                     </select>
                     <div class="form-text">${t("ai_llm.voyage_embedding_model_description")}</div>
                 </div>
@@ -267,8 +256,7 @@ export const TPL = `
                 <div class="form-group">
                     <label>${t("ai_llm.embedding_model")}</label>
                     <select class="ollama-embedding-model form-control">
-                        <option value="nomic-embed-text">nomic-embed-text (recommended)</option>
-                        <option value="all-MiniLM-L6-v2">all-MiniLM-L6-v2</option>
+                        <option value="">${t("ai_llm.select_model")}</option>
                     </select>
                     <div class="form-text">${t("ai_llm.ollama_embedding_model_description")}</div>
                 </div>

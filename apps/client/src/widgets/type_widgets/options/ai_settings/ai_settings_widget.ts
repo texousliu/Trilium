@@ -138,19 +138,80 @@ export default class AiSettingsWidget extends OptionsWidget {
         this.setupChangeHandler('.embedding-update-interval', 'embeddingUpdateInterval');
 
         // Add provider selection change handlers for dynamic settings visibility
-        this.$widget.find('.ai-selected-provider').on('change', () => {
+        this.$widget.find('.ai-selected-provider').on('change', async () => {
             const selectedProvider = this.$widget.find('.ai-selected-provider').val() as string;
             this.$widget.find('.provider-settings').hide();
             if (selectedProvider) {
                 this.$widget.find(`.${selectedProvider}-provider-settings`).show();
+                // Automatically fetch models for the newly selected provider
+                await this.fetchModelsForProvider(selectedProvider, 'chat');
             }
         });
 
-        this.$widget.find('.embedding-selected-provider').on('change', () => {
+        this.$widget.find('.embedding-selected-provider').on('change', async () => {
             const selectedProvider = this.$widget.find('.embedding-selected-provider').val() as string;
             this.$widget.find('.embedding-provider-settings').hide();
             if (selectedProvider) {
                 this.$widget.find(`.${selectedProvider}-embedding-provider-settings`).show();
+                // Automatically fetch embedding models for the newly selected provider
+                await this.fetchModelsForProvider(selectedProvider, 'embedding');
+            }
+        });
+
+        // Add base URL change handlers to trigger model fetching
+        this.$widget.find('.openai-base-url').on('change', async () => {
+            const selectedProvider = this.$widget.find('.ai-selected-provider').val() as string;
+            const selectedEmbeddingProvider = this.$widget.find('.embedding-selected-provider').val() as string;
+            if (selectedProvider === 'openai') {
+                await this.fetchModelsForProvider('openai', 'chat');
+            }
+            if (selectedEmbeddingProvider === 'openai') {
+                await this.fetchModelsForProvider('openai', 'embedding');
+            }
+        });
+
+        this.$widget.find('.anthropic-base-url').on('change', async () => {
+            const selectedProvider = this.$widget.find('.ai-selected-provider').val() as string;
+            if (selectedProvider === 'anthropic') {
+                await this.fetchModelsForProvider('anthropic', 'chat');
+            }
+        });
+
+        this.$widget.find('.ollama-base-url').on('change', async () => {
+            const selectedProvider = this.$widget.find('.ai-selected-provider').val() as string;
+            const selectedEmbeddingProvider = this.$widget.find('.embedding-selected-provider').val() as string;
+            if (selectedProvider === 'ollama') {
+                await this.fetchModelsForProvider('ollama', 'chat');
+            }
+            if (selectedEmbeddingProvider === 'ollama') {
+                await this.fetchModelsForProvider('ollama', 'embedding');
+            }
+        });
+
+        // Add API key change handlers to trigger model fetching
+        this.$widget.find('.openai-api-key').on('change', async () => {
+            const selectedProvider = this.$widget.find('.ai-selected-provider').val() as string;
+            const selectedEmbeddingProvider = this.$widget.find('.embedding-selected-provider').val() as string;
+            if (selectedProvider === 'openai') {
+                await this.fetchModelsForProvider('openai', 'chat');
+            }
+            if (selectedEmbeddingProvider === 'openai') {
+                await this.fetchModelsForProvider('openai', 'embedding');
+            }
+        });
+
+        this.$widget.find('.anthropic-api-key').on('change', async () => {
+            const selectedProvider = this.$widget.find('.ai-selected-provider').val() as string;
+            if (selectedProvider === 'anthropic') {
+                await this.fetchModelsForProvider('anthropic', 'chat');
+            }
+        });
+
+        this.$widget.find('.voyage-api-key').on('change', async () => {
+            const selectedEmbeddingProvider = this.$widget.find('.embedding-selected-provider').val() as string;
+            if (selectedEmbeddingProvider === 'voyage') {
+                // Voyage doesn't have dynamic model fetching yet, but we can add it here when implemented
+                console.log('Voyage API key changed - model fetching not yet implemented');
             }
         });
 
@@ -447,6 +508,49 @@ export default class AiSettingsWidget extends OptionsWidget {
     }
 
     /**
+     * Set model dropdown value, adding the option if it doesn't exist
+     */
+    setModelDropdownValue(selector: string, value: string | undefined) {
+        if (!this.$widget || !value) return;
+
+        const $dropdown = this.$widget.find(selector);
+        
+        // Check if the value already exists as an option
+        if ($dropdown.find(`option[value="${value}"]`).length === 0) {
+            // Add the custom value as an option
+            $dropdown.append(`<option value="${value}">${value} (current)</option>`);
+        }
+        
+        // Set the value
+        $dropdown.val(value);
+    }
+
+    /**
+     * Fetch models for a specific provider and model type
+     */
+    async fetchModelsForProvider(provider: string, modelType: 'chat' | 'embedding') {
+        if (!this.providerService) return;
+
+        try {
+            switch (provider) {
+                case 'openai':
+                    this.openaiModelsRefreshed = await this.providerService.refreshOpenAIModels(false, this.openaiModelsRefreshed);
+                    break;
+                case 'anthropic':
+                    this.anthropicModelsRefreshed = await this.providerService.refreshAnthropicModels(false, this.anthropicModelsRefreshed);
+                    break;
+                case 'ollama':
+                    this.ollamaModelsRefreshed = await this.providerService.refreshOllamaModels(false, this.ollamaModelsRefreshed);
+                    break;
+                default:
+                    console.log(`Model fetching not implemented for provider: ${provider}`);
+            }
+        } catch (error) {
+            console.error(`Error fetching models for ${provider}:`, error);
+        }
+    }
+
+    /**
      * Update provider settings visibility based on selected providers
      */
     updateProviderSettingsVisibility() {
@@ -470,7 +574,7 @@ export default class AiSettingsWidget extends OptionsWidget {
     /**
      * Called when the options have been loaded from the server
      */
-    optionsLoaded(options: OptionMap) {
+    async optionsLoaded(options: OptionMap) {
         if (!this.$widget) return;
 
         // AI Options
@@ -482,22 +586,22 @@ export default class AiSettingsWidget extends OptionsWidget {
         // OpenAI Section
         this.$widget.find('.openai-api-key').val(options.openaiApiKey || '');
         this.$widget.find('.openai-base-url').val(options.openaiBaseUrl || 'https://api.openai.com/v1');
-        this.$widget.find('.openai-default-model').val(options.openaiDefaultModel || '');
-        this.$widget.find('.openai-embedding-model').val(options.openaiEmbeddingModel || '');
+        this.setModelDropdownValue('.openai-default-model', options.openaiDefaultModel);
+        this.setModelDropdownValue('.openai-embedding-model', options.openaiEmbeddingModel);
 
         // Anthropic Section
         this.$widget.find('.anthropic-api-key').val(options.anthropicApiKey || '');
         this.$widget.find('.anthropic-base-url').val(options.anthropicBaseUrl || 'https://api.anthropic.com');
-        this.$widget.find('.anthropic-default-model').val(options.anthropicDefaultModel || '');
+        this.setModelDropdownValue('.anthropic-default-model', options.anthropicDefaultModel);
 
         // Voyage Section
         this.$widget.find('.voyage-api-key').val(options.voyageApiKey || '');
-        this.$widget.find('.voyage-embedding-model').val(options.voyageEmbeddingModel || '');
+        this.setModelDropdownValue('.voyage-embedding-model', options.voyageEmbeddingModel);
 
         // Ollama Section
         this.$widget.find('.ollama-base-url').val(options.ollamaBaseUrl || 'http://localhost:11434');
-        this.$widget.find('.ollama-default-model').val(options.ollamaDefaultModel || '');
-        this.$widget.find('.ollama-embedding-model').val(options.ollamaEmbeddingModel || '');
+        this.setModelDropdownValue('.ollama-default-model', options.ollamaDefaultModel);
+        this.setModelDropdownValue('.ollama-embedding-model', options.ollamaEmbeddingModel);
 
         // Embedding Options
         this.$widget.find('.embedding-selected-provider').val(options.embeddingSelectedProvider || 'openai');
@@ -511,6 +615,18 @@ export default class AiSettingsWidget extends OptionsWidget {
 
         // Show/hide provider settings based on selected providers
         this.updateProviderSettingsVisibility();
+
+        // Automatically fetch models for currently selected providers
+        const selectedAiProvider = this.$widget.find('.ai-selected-provider').val() as string;
+        const selectedEmbeddingProvider = this.$widget.find('.embedding-selected-provider').val() as string;
+        
+        if (selectedAiProvider) {
+            await this.fetchModelsForProvider(selectedAiProvider, 'chat');
+        }
+        
+        if (selectedEmbeddingProvider) {
+            await this.fetchModelsForProvider(selectedEmbeddingProvider, 'embedding');
+        }
 
         // Display validation warnings
         this.displayValidationWarnings();
