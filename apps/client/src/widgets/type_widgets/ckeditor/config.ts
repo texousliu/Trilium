@@ -244,7 +244,11 @@ export function buildFloatingToolbar() {
             {
                 label: "Insert",
                 icon: "plus",
-                items: ["internallink", "includeNote", "|", "math", "mermaid", "horizontalLine", "pageBreak", "dateTime"]
+<<<<<<< HEAD
+                items: ["bookmark", "internallink", "includeNote", "|", "math", "mermaid", "horizontalLine", "pageBreak", "dateTime"]
+=======
+                items: ["bookmark", "internallink", "includeNote", "|", "math", "mermaid", "horizontalLine", "pageBreak"]
+>>>>>>> develop
             },
             "|",
             "outdent",
