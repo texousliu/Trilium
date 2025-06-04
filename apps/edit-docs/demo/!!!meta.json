@@ -21,52 +21,6 @@
 			"children": [
 				{
 					"isClone": false,
-					"noteId": "uXI8DRRYXWKs",
-					"notePath": [
-						"root",
-						"uXI8DRRYXWKs"
-					],
-					"title": "Journal",
-					"notePosition": 10,
-					"prefix": null,
-					"isExpanded": true,
-					"type": "book",
-					"mime": "",
-					"attributes": [
-						{
-							"type": "label",
-							"name": "calendarRoot",
-							"value": "",
-							"isInheritable": false,
-							"position": 10
-						},
-						{
-							"type": "label",
-							"name": "iconClass",
-							"value": "bx bx-calendar",
-							"isInheritable": false,
-							"position": 20
-						},
-						{
-							"type": "label",
-							"name": "viewType",
-							"value": "calendar",
-							"isInheritable": false,
-							"position": 30
-						},
-						{
-							"type": "label",
-							"name": "calendar:view",
-							"value": "dayGridMonth",
-							"isInheritable": false,
-							"position": 40
-						}
-					],
-					"dataFileName": "Journal.dat",
-					"attachments": []
-				},
-				{
-					"isClone": false,
 					"noteId": "rvaX6hEaQlmk",
 					"notePath": [
 						"root",
@@ -434,43 +388,55 @@
 						},
 						{
 							"isClone": false,
-							"noteId": "zoH8XiuiEJSV",
+							"noteId": "uXI8DRRYXWKs",
 							"notePath": [
 								"root",
 								"rvaX6hEaQlmk",
-								"zoH8XiuiEJSV"
+								"uXI8DRRYXWKs"
 							],
 							"title": "Journal",
 							"notePosition": 30,
 							"prefix": null,
 							"isExpanded": false,
-							"type": "text",
-							"mime": "text/html",
+							"type": "book",
+							"mime": "",
 							"attributes": [
 								{
 									"type": "label",
-									"name": "sorted",
+									"name": "calendarRoot",
 									"value": "",
 									"isInheritable": false,
 									"position": 10
-								},
-								{
-									"type": "relation",
-									"name": "child:child:child:template",
-									"value": "kr6HIBBuXRwm",
-									"isInheritable": false,
-									"position": 20
 								},
 								{
 									"type": "label",
 									"name": "iconClass",
 									"value": "bx bx-calendar",
 									"isInheritable": false,
+									"position": 20
+								},
+								{
+									"type": "label",
+									"name": "viewType",
+									"value": "calendar",
+									"isInheritable": false,
 									"position": 30
+								},
+								{
+									"type": "label",
+									"name": "calendar:view",
+									"value": "dayGridMonth",
+									"isInheritable": false,
+									"position": 40
+								},
+								{
+									"type": "relation",
+									"name": "dateTemplate",
+									"value": "kr6HIBBuXRwm",
+									"isInheritable": false,
+									"position": 50
 								}
 							],
-							"format": "html",
-							"dataFileName": "Journal.html",
 							"attachments": [],
 							"dirFileName": "Journal",
 							"children": [
@@ -480,13 +446,13 @@
 									"notePath": [
 										"root",
 										"rvaX6hEaQlmk",
-										"zoH8XiuiEJSV",
+										"uXI8DRRYXWKs",
 										"b3kSYO90QeET"
 									],
 									"title": "2021",
 									"notePosition": 10,
 									"prefix": null,
-									"isExpanded": false,
+									"isExpanded": true,
 									"type": "text",
 									"mime": "text/html",
 									"attributes": [
@@ -522,7 +488,7 @@
 											"notePath": [
 												"root",
 												"rvaX6hEaQlmk",
-												"zoH8XiuiEJSV",
+												"uXI8DRRYXWKs",
 												"b3kSYO90QeET",
 												"iYU0SglOv14g"
 											],
@@ -565,7 +531,7 @@
 													"notePath": [
 														"root",
 														"rvaX6hEaQlmk",
-														"zoH8XiuiEJSV",
+														"uXI8DRRYXWKs",
 														"b3kSYO90QeET",
 														"iYU0SglOv14g",
 														"snHll0LeHI7G"
@@ -603,7 +569,7 @@
 															"notePath": [
 																"root",
 																"rvaX6hEaQlmk",
-																"zoH8XiuiEJSV",
+																"uXI8DRRYXWKs",
 																"b3kSYO90QeET",
 																"iYU0SglOv14g",
 																"snHll0LeHI7G",
@@ -626,7 +592,7 @@
 															"notePath": [
 																"root",
 																"rvaX6hEaQlmk",
-																"zoH8XiuiEJSV",
+																"uXI8DRRYXWKs",
 																"b3kSYO90QeET",
 																"iYU0SglOv14g",
 																"snHll0LeHI7G",
@@ -649,7 +615,7 @@
 															"notePath": [
 																"root",
 																"rvaX6hEaQlmk",
-																"zoH8XiuiEJSV",
+																"uXI8DRRYXWKs",
 																"b3kSYO90QeET",
 																"iYU0SglOv14g",
 																"snHll0LeHI7G",
@@ -676,7 +642,7 @@
 											"notePath": [
 												"root",
 												"rvaX6hEaQlmk",
-												"zoH8XiuiEJSV",
+												"uXI8DRRYXWKs",
 												"b3kSYO90QeET",
 												"SbaYih0D3uUk"
 											],
@@ -719,7 +685,7 @@
 													"notePath": [
 														"root",
 														"rvaX6hEaQlmk",
-														"zoH8XiuiEJSV",
+														"uXI8DRRYXWKs",
 														"b3kSYO90QeET",
 														"SbaYih0D3uUk",
 														"BL4b1a0UF8Lx"
@@ -764,7 +730,7 @@
 															"notePath": [
 																"root",
 																"rvaX6hEaQlmk",
-																"zoH8XiuiEJSV",
+																"uXI8DRRYXWKs",
 																"b3kSYO90QeET",
 																"SbaYih0D3uUk",
 																"BL4b1a0UF8Lx",
@@ -787,7 +753,7 @@
 															"notePath": [
 																"root",
 																"rvaX6hEaQlmk",
-																"zoH8XiuiEJSV",
+																"uXI8DRRYXWKs",
 																"b3kSYO90QeET",
 																"SbaYih0D3uUk",
 																"BL4b1a0UF8Lx",
@@ -817,7 +783,7 @@
 																	"notePath": [
 																		"root",
 																		"rvaX6hEaQlmk",
-																		"zoH8XiuiEJSV",
+																		"uXI8DRRYXWKs",
 																		"b3kSYO90QeET",
 																		"SbaYih0D3uUk",
 																		"BL4b1a0UF8Lx",
@@ -855,7 +821,7 @@
 																	"notePath": [
 																		"root",
 																		"rvaX6hEaQlmk",
-																		"zoH8XiuiEJSV",
+																		"uXI8DRRYXWKs",
 																		"b3kSYO90QeET",
 																		"SbaYih0D3uUk",
 																		"BL4b1a0UF8Lx",
@@ -893,7 +859,7 @@
 																	"notePath": [
 																		"root",
 																		"rvaX6hEaQlmk",
-																		"zoH8XiuiEJSV",
+																		"uXI8DRRYXWKs",
 																		"b3kSYO90QeET",
 																		"SbaYih0D3uUk",
 																		"BL4b1a0UF8Lx",
@@ -931,7 +897,7 @@
 																	"notePath": [
 																		"root",
 																		"rvaX6hEaQlmk",
-																		"zoH8XiuiEJSV",
+																		"uXI8DRRYXWKs",
 																		"b3kSYO90QeET",
 																		"SbaYih0D3uUk",
 																		"BL4b1a0UF8Lx",
@@ -969,7 +935,7 @@
 																	"notePath": [
 																		"root",
 																		"rvaX6hEaQlmk",
-																		"zoH8XiuiEJSV",
+																		"uXI8DRRYXWKs",
 																		"b3kSYO90QeET",
 																		"SbaYih0D3uUk",
 																		"BL4b1a0UF8Lx",
@@ -1007,7 +973,7 @@
 																	"notePath": [
 																		"root",
 																		"rvaX6hEaQlmk",
-																		"zoH8XiuiEJSV",
+																		"uXI8DRRYXWKs",
 																		"b3kSYO90QeET",
 																		"SbaYih0D3uUk",
 																		"BL4b1a0UF8Lx",
@@ -1045,7 +1011,7 @@
 																	"notePath": [
 																		"root",
 																		"rvaX6hEaQlmk",
-																		"zoH8XiuiEJSV",
+																		"uXI8DRRYXWKs",
 																		"b3kSYO90QeET",
 																		"SbaYih0D3uUk",
 																		"BL4b1a0UF8Lx",
@@ -1083,7 +1049,7 @@
 																	"notePath": [
 																		"root",
 																		"rvaX6hEaQlmk",
-																		"zoH8XiuiEJSV",
+																		"uXI8DRRYXWKs",
 																		"b3kSYO90QeET",
 																		"SbaYih0D3uUk",
 																		"BL4b1a0UF8Lx",
@@ -1121,7 +1087,7 @@
 																	"notePath": [
 																		"root",
 																		"rvaX6hEaQlmk",
-																		"zoH8XiuiEJSV",
+																		"uXI8DRRYXWKs",
 																		"b3kSYO90QeET",
 																		"SbaYih0D3uUk",
 																		"BL4b1a0UF8Lx",
@@ -1159,7 +1125,7 @@
 																	"notePath": [
 																		"root",
 																		"rvaX6hEaQlmk",
-																		"zoH8XiuiEJSV",
+																		"uXI8DRRYXWKs",
 																		"b3kSYO90QeET",
 																		"SbaYih0D3uUk",
 																		"BL4b1a0UF8Lx",
@@ -1197,7 +1163,7 @@
 																	"notePath": [
 																		"root",
 																		"rvaX6hEaQlmk",
-																		"zoH8XiuiEJSV",
+																		"uXI8DRRYXWKs",
 																		"b3kSYO90QeET",
 																		"SbaYih0D3uUk",
 																		"BL4b1a0UF8Lx",
@@ -1235,7 +1201,7 @@
 																	"notePath": [
 																		"root",
 																		"rvaX6hEaQlmk",
-																		"zoH8XiuiEJSV",
+																		"uXI8DRRYXWKs",
 																		"b3kSYO90QeET",
 																		"SbaYih0D3uUk",
 																		"BL4b1a0UF8Lx",
@@ -1275,7 +1241,7 @@
 															"notePath": [
 																"root",
 																"rvaX6hEaQlmk",
-																"zoH8XiuiEJSV",
+																"uXI8DRRYXWKs",
 																"b3kSYO90QeET",
 																"SbaYih0D3uUk",
 																"BL4b1a0UF8Lx",
@@ -1336,7 +1302,7 @@
 													"notePath": [
 														"root",
 														"rvaX6hEaQlmk",
-														"zoH8XiuiEJSV",
+														"uXI8DRRYXWKs",
 														"b3kSYO90QeET",
 														"SbaYih0D3uUk",
 														"E5ZFA3tndbcj"
@@ -1381,7 +1347,7 @@
 															"notePath": [
 																"root",
 																"rvaX6hEaQlmk",
-																"zoH8XiuiEJSV",
+																"uXI8DRRYXWKs",
 																"b3kSYO90QeET",
 																"SbaYih0D3uUk",
 																"E5ZFA3tndbcj",
@@ -1442,7 +1408,7 @@
 													"notePath": [
 														"root",
 														"rvaX6hEaQlmk",
-														"zoH8XiuiEJSV",
+														"uXI8DRRYXWKs",
 														"b3kSYO90QeET",
 														"SbaYih0D3uUk",
 														"YQxQ5rcWiFvQ"
@@ -1486,7 +1452,7 @@
 													"notePath": [
 														"root",
 														"rvaX6hEaQlmk",
-														"zoH8XiuiEJSV",
+														"uXI8DRRYXWKs",
 														"b3kSYO90QeET",
 														"SbaYih0D3uUk",
 														"Vf0GuwMAsitj"
@@ -1531,7 +1497,7 @@
 															"notePath": [
 																"root",
 																"rvaX6hEaQlmk",
-																"zoH8XiuiEJSV",
+																"uXI8DRRYXWKs",
 																"b3kSYO90QeET",
 																"SbaYih0D3uUk",
 																"Vf0GuwMAsitj",
@@ -1554,7 +1520,7 @@
 															"notePath": [
 																"root",
 																"rvaX6hEaQlmk",
-																"zoH8XiuiEJSV",
+																"uXI8DRRYXWKs",
 																"b3kSYO90QeET",
 																"SbaYih0D3uUk",
 																"Vf0GuwMAsitj",
@@ -1579,7 +1545,7 @@
 													"notePath": [
 														"root",
 														"rvaX6hEaQlmk",
-														"zoH8XiuiEJSV",
+														"uXI8DRRYXWKs",
 														"b3kSYO90QeET",
 														"SbaYih0D3uUk",
 														"ilB1T75UG19p"
@@ -1624,7 +1590,7 @@
 															"notePath": [
 																"root",
 																"rvaX6hEaQlmk",
-																"zoH8XiuiEJSV",
+																"uXI8DRRYXWKs",
 																"b3kSYO90QeET",
 																"SbaYih0D3uUk",
 																"ilB1T75UG19p",
@@ -1647,7 +1613,7 @@
 															"notePath": [
 																"root",
 																"rvaX6hEaQlmk",
-																"zoH8XiuiEJSV",
+																"uXI8DRRYXWKs",
 																"b3kSYO90QeET",
 																"SbaYih0D3uUk",
 																"ilB1T75UG19p",
@@ -1671,7 +1637,7 @@
 																	"notePath": [
 																		"root",
 																		"rvaX6hEaQlmk",
-																		"zoH8XiuiEJSV",
+																		"uXI8DRRYXWKs",
 																		"b3kSYO90QeET",
 																		"SbaYih0D3uUk",
 																		"ilB1T75UG19p",
@@ -1699,7 +1665,7 @@
 													"notePath": [
 														"root",
 														"rvaX6hEaQlmk",
-														"zoH8XiuiEJSV",
+														"uXI8DRRYXWKs",
 														"b3kSYO90QeET",
 														"SbaYih0D3uUk",
 														"Zjezi8WBQ1Mu"
@@ -1743,7 +1709,7 @@
 													"notePath": [
 														"root",
 														"rvaX6hEaQlmk",
-														"zoH8XiuiEJSV",
+														"uXI8DRRYXWKs",
 														"b3kSYO90QeET",
 														"SbaYih0D3uUk",
 														"gW1WbDNQRMUC"
@@ -1788,7 +1754,7 @@
 															"notePath": [
 																"root",
 																"rvaX6hEaQlmk",
-																"zoH8XiuiEJSV",
+																"uXI8DRRYXWKs",
 																"b3kSYO90QeET",
 																"SbaYih0D3uUk",
 																"gW1WbDNQRMUC",
@@ -1870,7 +1836,7 @@
 															"notePath": [
 																"root",
 																"rvaX6hEaQlmk",
-																"zoH8XiuiEJSV",
+																"uXI8DRRYXWKs",
 																"b3kSYO90QeET",
 																"SbaYih0D3uUk",
 																"gW1WbDNQRMUC",
@@ -1945,7 +1911,7 @@
 													"notePath": [
 														"root",
 														"rvaX6hEaQlmk",
-														"zoH8XiuiEJSV",
+														"uXI8DRRYXWKs",
 														"b3kSYO90QeET",
 														"SbaYih0D3uUk",
 														"c5sYRApFBW5v"
@@ -1984,7 +1950,7 @@
 											"notePath": [
 												"root",
 												"rvaX6hEaQlmk",
-												"zoH8XiuiEJSV",
+												"uXI8DRRYXWKs",
 												"b3kSYO90QeET",
 												"AD8gDaZaJekk"
 											],
@@ -2006,7 +1972,7 @@
 													"notePath": [
 														"root",
 														"rvaX6hEaQlmk",
-														"zoH8XiuiEJSV",
+														"uXI8DRRYXWKs",
 														"b3kSYO90QeET",
 														"AD8gDaZaJekk",
 														"c3NaitsUCQck"
@@ -2029,7 +1995,7 @@
 															"notePath": [
 																"root",
 																"rvaX6hEaQlmk",
-																"zoH8XiuiEJSV",
+																"uXI8DRRYXWKs",
 																"b3kSYO90QeET",
 																"AD8gDaZaJekk",
 																"c3NaitsUCQck",
@@ -2052,7 +2018,7 @@
 															"notePath": [
 																"root",
 																"rvaX6hEaQlmk",
-																"zoH8XiuiEJSV",
+																"uXI8DRRYXWKs",
 																"b3kSYO90QeET",
 																"AD8gDaZaJekk",
 																"c3NaitsUCQck",
@@ -2075,7 +2041,7 @@
 															"notePath": [
 																"root",
 																"rvaX6hEaQlmk",
-																"zoH8XiuiEJSV",
+																"uXI8DRRYXWKs",
 																"b3kSYO90QeET",
 																"AD8gDaZaJekk",
 																"c3NaitsUCQck",
@@ -2098,7 +2064,7 @@
 																	"notePath": [
 																		"root",
 																		"rvaX6hEaQlmk",
-																		"zoH8XiuiEJSV",
+																		"uXI8DRRYXWKs",
 																		"b3kSYO90QeET",
 																		"AD8gDaZaJekk",
 																		"c3NaitsUCQck",
@@ -2121,7 +2087,7 @@
 													"notePath": [
 														"root",
 														"rvaX6hEaQlmk",
-														"zoH8XiuiEJSV",
+														"uXI8DRRYXWKs",
 														"b3kSYO90QeET",
 														"AD8gDaZaJekk",
 														"cO1ZpqA44IcF"
@@ -2147,7 +2113,7 @@
 									"notePath": [
 										"root",
 										"rvaX6hEaQlmk",
-										"zoH8XiuiEJSV",
+										"uXI8DRRYXWKs",
 										"kr6HIBBuXRwm"
 									],
 									"title": "Day template",
@@ -2194,7 +2160,7 @@
 								"bZBkjm466gSM"
 							],
 							"title": "Tech",
-							"notePosition": 40,
+							"notePosition": 50,
 							"prefix": null,
 							"isExpanded": false,
 							"type": "text",
@@ -2671,7 +2637,7 @@
 								"dvgVuMNvit5M"
 							],
 							"title": "Note Types",
-							"notePosition": 60,
+							"notePosition": 70,
 							"prefix": null,
 							"isExpanded": false,
 							"type": "text",
@@ -3451,7 +3417,7 @@
 								"XpCKD6IODUj2"
 							],
 							"title": "Books",
-							"notePosition": 130,
+							"notePosition": 140,
 							"prefix": null,
 							"isExpanded": false,
 							"type": "text",
@@ -3647,7 +3613,7 @@
 								"B2ao3EopB5yW"
 							],
 							"title": "Work",
-							"notePosition": 150,
+							"notePosition": 160,
 							"prefix": null,
 							"isExpanded": false,
 							"type": "text",
@@ -3736,7 +3702,7 @@
 								"Zl2So0VN2bPq"
 							],
 							"title": "Steel Blue",
-							"notePosition": 160,
+							"notePosition": 170,
 							"prefix": null,
 							"isExpanded": false,
 							"type": "code",
@@ -3847,7 +3813,7 @@
 								"KZVWidxicAfn"
 							],
 							"title": "Scripting examples",
-							"notePosition": 350,
+							"notePosition": 360,
 							"prefix": null,
 							"isExpanded": false,
 							"type": "text",
