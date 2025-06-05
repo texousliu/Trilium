@@ -388,7 +388,7 @@ export default class TabRowWidget extends BasicWidget {
         let pendingScroll = 0;
         let isScrolling = false;
         const stepScroll = () => {
-            if (Math.abs(pendingScroll) > 10) {
+            if (Math.abs(pendingScroll) > 5) {
                 const step = Math.round(pendingScroll * 0.2);
                 pendingScroll -= step;
                 this.scrollTabContainer(step, "instant");
