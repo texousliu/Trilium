@@ -1,8 +1,11 @@
+> [!IMPORTANT]
+> The TriliumNext team has received the original Trilium Notes repository (`zadam/trilium`). We will soon enter the process in which TriliumNext will become the original Trilium Notes again.
+> 
+> For now, we invite you to have a look at the [TriliumNext](https://github.com/TriliumNext/Notes) repo. You should be able to migrate to TriliumNext without any problems from the original Trilium.
+> 
+> Thanks to @zadam for his original work and for allowing us to continue using the Trilium Notes name once again.
+
 # Trilium Notes
-
-## Trilium is in maintenance mode - see details in https://github.com/zadam/trilium/issues/4620
-
-Preliminary disccusions on the successor organization are taking place in [Trilium Next discussions](https://github.com/orgs/TriliumNext/discussions). 
 
 [![Join the chat at https://gitter.im/trilium-notes/Lobby](https://badges.gitter.im/trilium-notes/Lobby.svg)](https://gitter.im/trilium-notes/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [English](https://github.com/zadam/trilium/blob/master/README.md) | [Chinese](https://github.com/zadam/trilium/blob/master/README-ZH_CN.md) | [Russian](https://github.com/zadam/trilium/blob/master/README.ru.md) | [Japanese](https://github.com/zadam/trilium/blob/master/README.ja.md) | [Italian](https://github.com/zadam/trilium/blob/master/README.it.md)
 
