@@ -266,7 +266,7 @@ export class IndexService {
                 this.indexRebuildTotal = totalNotes;
 
                 log.info("No embeddings found, starting full embedding generation first");
-                await vectorStore.reprocessAllNotes();
+                await this.reprocessAllNotes();
                 log.info("Full embedding generation initiated");
             } else {
                 // For index rebuild, use the number of embeddings as the total
@@ -293,7 +293,7 @@ export class IndexService {
                     // Only start indexing if we're below 90% completion or if embeddings exist but need optimization
                     if (stats.percentComplete < 90) {
                         log.info("Embedding coverage below 90%, starting full embedding generation");
-                        await vectorStore.reprocessAllNotes();
+                        await this.reprocessAllNotes();
                         log.info("Full embedding generation initiated");
                     } else {
                         log.info(`Embedding coverage at ${stats.percentComplete}%, starting index optimization`);

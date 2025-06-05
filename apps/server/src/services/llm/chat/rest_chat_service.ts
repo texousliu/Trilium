@@ -14,7 +14,7 @@ import type { LLMStreamMessage } from "../interfaces/chat_ws_messages.js";
 import chatStorageService from '../chat_storage_service.js';
 import {
     isAIEnabled,
-    getFirstValidModelConfig,
+    getSelectedModelConfig,
 } from '../config/configuration_helpers.js';
 
 /**
@@ -419,7 +419,7 @@ class RestChatService {
      */
     async getPreferredModel(): Promise<string | undefined> {
         try {
-            const validConfig = await getFirstValidModelConfig();
+            const validConfig = await getSelectedModelConfig();
             if (!validConfig) {
                 log.error('No valid AI model configuration found');
                 return undefined;

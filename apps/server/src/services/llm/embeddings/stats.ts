@@ -1,14 +1,5 @@
 import sql from "../../../services/sql.js";
 import log from "../../../services/log.js";
-import indexService from '../index_service.js';
-
-/**
- * Reprocess all notes to update embeddings
- * @deprecated Use indexService.reprocessAllNotes() directly instead
- */
-export async function reprocessAllNotes() {
-    return indexService.reprocessAllNotes();
-}
 
 /**
  * Get current embedding statistics
@@ -62,14 +53,6 @@ export async function getEmbeddingStats() {
         lastProcessedDate,
         percentComplete: Math.max(0, Math.min(100, percentComplete)) // Ensure between 0-100
     };
-}
-
-/**
- * Queue notes that don't have embeddings for current provider settings
- * @deprecated Use indexService.queueNotesForMissingEmbeddings() directly instead
- */
-export async function queueNotesForMissingEmbeddings() {
-    return indexService.queueNotesForMissingEmbeddings();
 }
 
 /**

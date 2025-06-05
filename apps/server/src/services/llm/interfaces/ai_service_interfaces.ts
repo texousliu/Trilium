@@ -30,7 +30,7 @@ export interface AIServiceManagerConfig {
 export interface IAIServiceManager {
   getService(provider?: string): Promise<AIService>;
   getAvailableProviders(): string[];
-  getPreferredProvider(): string;
+  getSelectedProvider(): string;
   isProviderAvailable(provider: string): boolean;
   getProviderMetadata(provider: string): ProviderMetadata | null;
   getAIEnabled(): boolean;

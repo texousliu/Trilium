@@ -11,7 +11,7 @@ import { SEARCH_CONSTANTS } from '../constants/search_constants.js';
 import type { NoteEmbeddingContext } from "./embeddings_interface.js";
 import becca from "../../../becca/becca.js";
 import { isNoteExcludedFromAIById } from "../utils/ai_exclusion_utils.js";
-import { getEmbeddingProviderPrecedence } from '../config/configuration_helpers.js';
+import { getSelectedEmbeddingProvider } from '../config/configuration_helpers.js';
 
 interface Similarity {
     noteId: string;
@@ -277,9 +277,10 @@ export async function findSimilarNotes(
                         log.info('No embeddings found for specified provider, trying fallback providers...');
 
                         // Use the new configuration system - no string parsing!
-                        const preferredProviders = await getEmbeddingProviderPrecedence();
+                        const selectedProvider = await getSelectedEmbeddingProvider();
+                        const preferredProviders = selectedProvider ? [selectedProvider] : [];
 
-                        log.info(`Using provider precedence: ${preferredProviders.join(', ')}`);
+                        log.info(`Using selected provider: ${selectedProvider || 'none'}`);
 
                         // Try providers in precedence order
                         for (const provider of preferredProviders) {

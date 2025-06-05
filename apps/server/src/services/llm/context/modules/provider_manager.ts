@@ -1,6 +1,6 @@
 import log from '../../../log.js';
 import { getEmbeddingProvider, getEnabledEmbeddingProviders } from '../../providers/providers.js';
-import { getSelectedEmbeddingProvider } from '../../config/configuration_helpers.js';
+import { getSelectedEmbeddingProvider as getSelectedEmbeddingProviderName } from '../../config/configuration_helpers.js';
 
 /**
  * Manages embedding providers for context services
@@ -12,10 +12,10 @@ export class ProviderManager {
      *
      * @returns The selected embedding provider or null if none available
      */
-    async getPreferredEmbeddingProvider(): Promise<any> {
+    async getSelectedEmbeddingProvider(): Promise<any> {
         try {
             // Get the selected embedding provider
-            const selectedProvider = await getSelectedEmbeddingProvider();
+            const selectedProvider = await getSelectedEmbeddingProviderName();
             
             if (selectedProvider) {
                 const provider = await getEmbeddingProvider(selectedProvider);
@@ -51,7 +51,7 @@ export class ProviderManager {
     async generateQueryEmbedding(query: string): Promise<Float32Array | null> {
         try {
             // Get the preferred embedding provider
-            const provider = await this.getPreferredEmbeddingProvider();
+            const provider = await this.getSelectedEmbeddingProvider();
             if (!provider) {
                 log.error('No embedding provider available');
                 return null;

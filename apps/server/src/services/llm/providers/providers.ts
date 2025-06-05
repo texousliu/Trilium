@@ -328,17 +328,6 @@ export async function getEmbeddingProviderConfigs() {
     return await sql.getRows("SELECT * FROM embedding_providers ORDER BY priority DESC");
 }
 
-/**
- * Initialize the default embedding providers
- * @deprecated - Use on-demand provider creation instead
- */
-export async function initializeDefaultProviders() {
-    // This function is now deprecated in favor of on-demand provider creation
-    // The createProvidersFromCurrentOptions() function should be used instead
-    log.info('initializeDefaultProviders called - using on-demand provider creation instead');
-    return await createProvidersFromCurrentOptions();
-}
-
 export default {
     registerEmbeddingProvider,
     unregisterEmbeddingProvider,
@@ -350,8 +339,7 @@ export default {
     createEmbeddingProviderConfig,
     updateEmbeddingProviderConfig,
     deleteEmbeddingProviderConfig,
-    getEmbeddingProviderConfigs,
-    initializeDefaultProviders
+    getEmbeddingProviderConfigs
 };
 
 /**

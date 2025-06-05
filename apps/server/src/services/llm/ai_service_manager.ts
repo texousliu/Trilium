@@ -512,7 +512,7 @@ export class AIServiceManager implements IAIServiceManager {
             if (!contextNotes || contextNotes.length === 0) {
                 try {
                     // Get the default LLM service for context enhancement
-                    const provider = this.getPreferredProvider();
+                    const provider = this.getSelectedProvider();
                     const llmService = await this.getService(provider);
 
                     // Find relevant notes
@@ -596,9 +596,9 @@ export class AIServiceManager implements IAIServiceManager {
     }
 
     /**
-     * Get the preferred provider based on configuration (sync version for compatibility)
+     * Get the selected provider based on configuration (sync version for compatibility)
      */
-    getPreferredProvider(): string {
+    getSelectedProvider(): string {
         this.ensureInitialized();
 
         // Return the first available provider in the order
@@ -803,8 +803,8 @@ export default {
     async getService(provider?: string): Promise<AIService> {
         return getInstance().getService(provider);
     },
-    getPreferredProvider(): string {
-        return getInstance().getPreferredProvider();
+    getSelectedProvider(): string {
+        return getInstance().getSelectedProvider();
     },
     isProviderAvailable(provider: string): boolean {
         return getInstance().isProviderAvailable(provider);

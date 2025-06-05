@@ -408,7 +408,7 @@ async function reprocessAllNotes(req: Request, res: Response) {
         try {
             // Wrap the operation in cls.init to ensure proper context
             cls.init(async () => {
-                await vectorStore.reprocessAllNotes();
+                await indexService.reprocessAllNotes();
                 log.info("Embedding reprocessing completed successfully");
             });
         } catch (error: any) {

@@ -64,8 +64,6 @@ export const {
 
 export const {
     getEmbeddingStats,
-    reprocessAllNotes,
-    queueNotesForMissingEmbeddings,
     cleanupEmbeddings
 } = stats;
 
@@ -107,8 +105,6 @@ export default {
 
     // Stats and maintenance
     getEmbeddingStats: stats.getEmbeddingStats,
-    reprocessAllNotes: stats.reprocessAllNotes,
-    queueNotesForMissingEmbeddings: stats.queueNotesForMissingEmbeddings,
     cleanupEmbeddings: stats.cleanupEmbeddings,
 
     // Index operations
