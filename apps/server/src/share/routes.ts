@@ -167,7 +167,8 @@ function register(router: Router) {
             subRoot,
             assetPath: isDev ? assetPath : `../${assetPath}`,
             appPath: isDev ? appPath : `../${appPath}`,
-            showLoginInShareTheme
+            showLoginInShareTheme,
+            t
         };
         let useDefaultView = true;
 
