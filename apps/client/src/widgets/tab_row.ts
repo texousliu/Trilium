@@ -385,31 +385,42 @@ export default class TabRowWidget extends BasicWidget {
     };
 
     setupScrollEvents() {
-        let deltaX = 0;
+        let pendingScroll = 0;
         let isScrolling = false;
         const stepScroll = () => {
-            if (Math.abs(deltaX) > 5) {
-                const step = Math.round(deltaX * 0.2);
-                deltaX -= step;
+            if (Math.abs(pendingScroll) > 10) {
+                const step = Math.round(pendingScroll * 0.2);
+                pendingScroll -= step;
                 this.scrollTabContainer(step, "instant");
                 requestAnimationFrame(stepScroll);
             } else {
-                this.scrollTabContainer(deltaX, "instant");
-                deltaX = 0;
+                this.scrollTabContainer(pendingScroll, "instant");
+                pendingScroll = 0;
                 isScrolling = false;
             }
         };
         this.$tabScrollingContainer[0].addEventListener('wheel', async (event) => {
-            if (!event.shiftKey && event.deltaX === 0) {
-                event.preventDefault();
-                // Clamp deltaX between TAB_CONTAINER_MIN_WIDTH and TAB_CONTAINER_MIN_WIDTH * 3
-                deltaX += Math.sign(event.deltaY) * Math.max(Math.min(Math.abs(event.deltaY), TAB_CONTAINER_MIN_WIDTH * 3), TAB_CONTAINER_MIN_WIDTH);
-                if (!isScrolling) {
-                    isScrolling = true;
-                    stepScroll();
+            if (utils.isCtrlKey(event) || event.altKey) {
+                return;
+            }
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            if (!event.shiftKey) {                 
+                // Set an upper limit to avoid scrolling too fast
+                // no lower limit is set because touchpad deltas are usually small
+                const delta = Math.sign( event.deltaX + event.deltaY ) * Math.min(Math.abs(event.deltaX + event.deltaY), TAB_CONTAINER_MIN_WIDTH * 3);
+                
+                // Check if the device has reduced motion enabled
+                if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                    this.scrollTabContainer(delta, "instant");
+                } else {
+                    pendingScroll += delta
+                    if (!isScrolling) {
+                        isScrolling = true;
+                        stepScroll();
+                    }
                 }
             } else if (event.shiftKey) {
-                event.preventDefault();
                 if (event.deltaY > 0) {
                     await appContext.tabManager.activateNextTabCommand();
                 } else {
