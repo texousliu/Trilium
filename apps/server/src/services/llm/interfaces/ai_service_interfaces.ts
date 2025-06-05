@@ -28,7 +28,7 @@ export interface AIServiceManagerConfig {
  * Interface for managing AI service providers
  */
 export interface IAIServiceManager {
-  getService(provider?: string): AIService;
+  getService(provider?: string): Promise<AIService>;
   getAvailableProviders(): string[];
   getPreferredProvider(): string;
   isProviderAvailable(provider: string): boolean;

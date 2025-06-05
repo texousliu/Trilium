@@ -45,8 +45,7 @@ export async function initializeEmbeddings() {
 
         // Start the embedding system if AI is enabled
         if (await options.getOptionBool('aiEnabled')) {
-            // Initialize default embedding providers when AI is enabled
-            await providerManager.initializeDefaultProviders();
+            // Embedding providers will be created on-demand when needed
             await initEmbeddings();
             log.info("Embedding system initialized successfully.");
         } else {

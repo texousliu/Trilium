@@ -851,10 +851,6 @@ export class IndexService {
                 throw new Error("AI features must be enabled first");
             }
 
-            // Re-initialize providers first in case they weren't available when server started
-            log.info("Re-initializing embedding providers");
-            await providerManager.initializeDefaultProviders();
-
             // Re-initialize if needed
             if (!this.initialized) {
                 await this.initialize();
@@ -869,6 +865,13 @@ export class IndexService {
                 log.info("This instance is not configured to process embeddings");
                 return;
             }
+
+            // Verify providers are available (this will create them on-demand if needed)
+            const providers = await providerManager.getEnabledEmbeddingProviders();
+            if (providers.length === 0) {
+                throw new Error("No embedding providers available");
+            }
+            log.info(`Found ${providers.length} embedding providers: ${providers.map(p => p.name).join(', ')}`);
 
             // Setup automatic indexing if enabled
             if (await options.getOptionBool('embeddingAutoUpdateEnabled')) {

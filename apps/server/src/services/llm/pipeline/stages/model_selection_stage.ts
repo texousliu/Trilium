@@ -292,7 +292,7 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
             log.info(`Getting default model for provider ${provider} using AI service manager`);
             
             // Use the existing AI service manager instead of duplicating API calls
-            const service = aiServiceManager.getInstance().getService(provider);
+            const service = await aiServiceManager.getInstance().getService(provider);
             
             if (!service || !service.isAvailable()) {
                 log.info(`Provider ${provider} service is not available`);
