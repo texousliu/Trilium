@@ -16,6 +16,7 @@ import type SBranch from "./shaca/entities/sbranch.js";
 import type SAttachment from "./shaca/entities/sattachment.js";
 import utils, { isDev, safeExtractMessageAndStackFromError } from "../services/utils.js";
 import options from "../services/options.js";
+import { t } from "i18next";
 
 function getSharedSubTreeRoot(note: SNote): { note?: SNote; branch?: SBranch } {
     if (note.noteId === shareRoot.SHARE_ROOT_NOTE_ID) {
@@ -183,7 +184,7 @@ function register(router: Router) {
                 // EJS caches the result of this so we don't need to pre-cache
                 const includer = (path: string) => {
                     const childNote = templateNote.children.find((n) => path === n.title);
-                    if (!childNote) throw new Error("Unable to find child note.");
+                    if (!childNote) throw new Error(`Unable to find child note: ${path}.`);
                     if (childNote.type !== "code" || childNote.mime !== "application/x-ejs") throw new Error("Incorrect child note type.");
 
                     const template = childNote.getContent();
