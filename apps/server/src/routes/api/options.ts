@@ -57,6 +57,7 @@ const ALLOWED_OPTIONS = new Set<OptionNames>([
     "headingStyle",
     "autoCollapseNoteTree",
     "autoReadonlySizeText",
+    "customDateTimeFormat",
     "autoReadonlySizeCode",
     "overrideThemeFonts",
     "dailyBackupEnabled",
