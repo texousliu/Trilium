@@ -51,6 +51,35 @@ export default class AiSettingsWidget extends OptionsWidget {
 
             await this.updateOption(optionName, value);
 
+            // Special handling for aiEnabled option
+            if (optionName === 'aiEnabled') {
+                try {
+                    const isEnabled = value === 'true';
+                    
+                    if (isEnabled) {
+                        // Start embedding generation
+                        await server.post('llm/embeddings/start');
+                        toastService.showMessage(t("ai_llm.embeddings_started") || "Embedding generation started");
+                        
+                        // Start polling for stats updates
+                        this.refreshEmbeddingStats();
+                    } else {
+                        // Stop embedding generation
+                        await server.post('llm/embeddings/stop');
+                        toastService.showMessage(t("ai_llm.embeddings_stopped") || "Embedding generation stopped");
+                        
+                        // Clear any active polling intervals
+                        if (this.indexRebuildRefreshInterval) {
+                            clearInterval(this.indexRebuildRefreshInterval);
+                            this.indexRebuildRefreshInterval = null;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error toggling embeddings:', error);
+                    toastService.showError(t("ai_llm.embeddings_toggle_error") || "Error toggling embeddings");
+                }
+            }
+
             if (validateAfter) {
                 await this.displayValidationWarnings();
             }

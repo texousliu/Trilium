@@ -58,6 +58,7 @@ export const processNoteWithChunking = async (
 export const {
     setupEmbeddingEventListeners,
     setupEmbeddingBackgroundProcessing,
+    stopEmbeddingBackgroundProcessing,
     initEmbeddings
 } = events;
 
@@ -100,6 +101,7 @@ export default {
     // Event handling
     setupEmbeddingEventListeners: events.setupEmbeddingEventListeners,
     setupEmbeddingBackgroundProcessing: events.setupEmbeddingBackgroundProcessing,
+    stopEmbeddingBackgroundProcessing: events.stopEmbeddingBackgroundProcessing,
     initEmbeddings: events.initEmbeddings,
 
     // Stats and maintenance

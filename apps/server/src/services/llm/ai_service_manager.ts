@@ -605,6 +605,7 @@ export class AIServiceManager implements IAIServiceManager {
     private setupProviderChangeListener(): void {
         // List of AI-related options that should trigger service recreation
         const aiRelatedOptions = [
+            'aiEnabled',
             'aiSelectedProvider',
             'embeddingSelectedProvider',
             'openaiApiKey',
@@ -618,10 +619,29 @@ export class AIServiceManager implements IAIServiceManager {
             'voyageApiKey'
         ];
 
-        eventService.subscribe(['entityChanged'], ({ entityName, entity }) => {
+        eventService.subscribe(['entityChanged'], async ({ entityName, entity }) => {
             if (entityName === 'options' && entity && aiRelatedOptions.includes(entity.name)) {
                 log.info(`AI-related option '${entity.name}' changed, recreating LLM services`);
-                this.recreateServices();
+                
+                // Special handling for aiEnabled toggle
+                if (entity.name === 'aiEnabled') {
+                    const isEnabled = entity.value === 'true';
+                    
+                    if (isEnabled) {
+                        log.info('AI features enabled, initializing AI service and embeddings');
+                        // Initialize the AI service
+                        await this.initialize();
+                        // Initialize embeddings through index service
+                        await indexService.startEmbeddingGeneration();
+                    } else {
+                        log.info('AI features disabled, stopping embeddings');
+                        // Stop embeddings through index service
+                        await indexService.stopEmbeddingGeneration();
+                    }
+                } else {
+                    // For other AI-related options, just recreate services
+                    this.recreateServices();
+                }
             }
         });
     }

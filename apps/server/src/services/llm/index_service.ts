@@ -837,6 +837,81 @@ export class IndexService {
             return false;
         }
     }
+
+    /**
+     * Start embedding generation (called when AI is enabled)
+     */
+    async startEmbeddingGeneration() {
+        try {
+            log.info("Starting embedding generation system");
+            
+            // Re-initialize if needed
+            if (!this.initialized) {
+                await this.initialize();
+            }
+            
+            const aiEnabled = options.getOptionOrNull('aiEnabled') === "true";
+            if (!aiEnabled) {
+                log.error("Cannot start embedding generation - AI features are disabled");
+                throw new Error("AI features must be enabled first");
+            }
+
+            // Check if this instance should process embeddings
+            const embeddingLocation = await options.getOption('embeddingGenerationLocation') || 'client';
+            const isSyncServer = await this.isSyncServerForEmbeddings();
+            const shouldProcessEmbeddings = embeddingLocation === 'client' || isSyncServer;
+
+            if (!shouldProcessEmbeddings) {
+                log.info("This instance is not configured to process embeddings");
+                return;
+            }
+
+            // Setup automatic indexing if enabled
+            if (await options.getOptionBool('embeddingAutoUpdateEnabled')) {
+                this.setupAutomaticIndexing();
+                log.info(`Automatic embedding indexing started ${isSyncServer ? 'as sync server' : 'as client'}`);
+            }
+
+            // Re-initialize event listeners
+            this.setupEventListeners();
+
+            // Start processing the queue immediately
+            await this.runBatchIndexing(20);
+            
+            log.info("Embedding generation started successfully");
+        } catch (error: any) {
+            log.error(`Error starting embedding generation: ${error.message || "Unknown error"}`);
+            throw error;
+        }
+    }
+
+    /**
+     * Stop embedding generation (called when AI is disabled)
+     */
+    async stopEmbeddingGeneration() {
+        try {
+            log.info("Stopping embedding generation system");
+            
+            // Clear automatic indexing interval
+            if (this.automaticIndexingInterval) {
+                clearInterval(this.automaticIndexingInterval);
+                this.automaticIndexingInterval = undefined;
+                log.info("Automatic indexing stopped");
+            }
+
+            // Stop the background processing from embeddings/events.ts
+            vectorStore.stopEmbeddingBackgroundProcessing();
+
+            // Mark as not indexing
+            this.indexingInProgress = false;
+            this.indexRebuildInProgress = false;
+            
+            log.info("Embedding generation stopped successfully");
+        } catch (error: any) {
+            log.error(`Error stopping embedding generation: ${error.message || "Unknown error"}`);
+            throw error;
+        }
+    }
 }
 
 // Create singleton instance
