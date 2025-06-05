@@ -43,11 +43,10 @@ export async function initializeEmbeddings() {
         // Reset any stuck embedding queue items from previous server shutdown
         await resetStuckEmbeddingQueue();
 
-        // Initialize default embedding providers
-        await providerManager.initializeDefaultProviders();
-
         // Start the embedding system if AI is enabled
         if (await options.getOptionBool('aiEnabled')) {
+            // Initialize default embedding providers when AI is enabled
+            await providerManager.initializeDefaultProviders();
             await initEmbeddings();
             log.info("Embedding system initialized successfully.");
         } else {

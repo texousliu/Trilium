@@ -87,6 +87,29 @@ export function registerEmbeddingProvider(provider: EmbeddingProvider) {
 }
 
 /**
+ * Unregister an embedding provider
+ */
+export function unregisterEmbeddingProvider(name: string): boolean {
+    const existed = providers.has(name);
+    if (existed) {
+        providers.delete(name);
+        log.info(`Unregistered embedding provider: ${name}`);
+    }
+    return existed;
+}
+
+/**
+ * Clear all embedding providers
+ */
+export function clearAllEmbeddingProviders(): void {
+    const providerNames = Array.from(providers.keys());
+    providers.clear();
+    if (providerNames.length > 0) {
+        log.info(`Cleared all embedding providers: ${providerNames.join(', ')}`);
+    }
+}
+
+/**
  * Get all registered embedding providers
  */
 export function getEmbeddingProviders(): EmbeddingProvider[] {
@@ -296,9 +319,9 @@ export async function initializeDefaultProviders() {
             }
         }
 
-        // Register Ollama provider if base URL is configured
-        const ollamaBaseUrl = await options.getOption('ollamaBaseUrl');
-        if (ollamaBaseUrl) {
+        // Register Ollama embedding provider if embedding base URL is configured
+        const ollamaEmbeddingBaseUrl = await options.getOption('ollamaEmbeddingBaseUrl');
+        if (ollamaEmbeddingBaseUrl) {
             // Use specific embedding models if available
             const embeddingModel = await options.getOption('ollamaEmbeddingModel');
 
@@ -308,7 +331,7 @@ export async function initializeDefaultProviders() {
                     model: embeddingModel,
                     dimension: 768, // Initial value, will be updated during initialization
                     type: 'float32',
-                    baseUrl: ollamaBaseUrl
+                    baseUrl: ollamaEmbeddingBaseUrl
                 });
 
                 // Register the provider
@@ -362,6 +385,8 @@ export async function initializeDefaultProviders() {
 
 export default {
     registerEmbeddingProvider,
+    unregisterEmbeddingProvider,
+    clearAllEmbeddingProviders,
     getEmbeddingProviders,
     getEmbeddingProvider,
     getEnabledEmbeddingProviders,

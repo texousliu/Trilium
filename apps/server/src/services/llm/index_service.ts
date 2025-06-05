@@ -845,15 +845,19 @@ export class IndexService {
         try {
             log.info("Starting embedding generation system");
             
-            // Re-initialize if needed
-            if (!this.initialized) {
-                await this.initialize();
-            }
-            
             const aiEnabled = options.getOptionOrNull('aiEnabled') === "true";
             if (!aiEnabled) {
                 log.error("Cannot start embedding generation - AI features are disabled");
                 throw new Error("AI features must be enabled first");
+            }
+
+            // Re-initialize providers first in case they weren't available when server started
+            log.info("Re-initializing embedding providers");
+            await providerManager.initializeDefaultProviders();
+
+            // Re-initialize if needed
+            if (!this.initialized) {
+                await this.initialize();
             }
 
             // Check if this instance should process embeddings
@@ -901,6 +905,9 @@ export class IndexService {
 
             // Stop the background processing from embeddings/events.ts
             vectorStore.stopEmbeddingBackgroundProcessing();
+
+            // Clear all embedding providers to clean up resources
+            providerManager.clearAllEmbeddingProviders();
 
             // Mark as not indexing
             this.indexingInProgress = false;
