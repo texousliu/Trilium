@@ -405,11 +405,12 @@ export default class TabRowWidget extends BasicWidget {
             }
             event.preventDefault();
             event.stopImmediatePropagation();
-            if (!event.shiftKey) {                 
-                // Set an upper limit to avoid scrolling too fast
-                // no lower limit is set because touchpad deltas are usually small
-                const delta = Math.sign( event.deltaX + event.deltaY ) * Math.min(Math.abs(event.deltaX + event.deltaY), TAB_CONTAINER_MIN_WIDTH * 3);
-                
+
+            // Set an upper limit to avoid scrolling too fast
+            // no lower limit is set because touchpad deltas are usually small
+            const delta = Math.sign(event.deltaX + event.deltaY) * Math.min(Math.abs(event.deltaX + event.deltaY), TAB_CONTAINER_MIN_WIDTH * 3);
+            
+            if (!event.shiftKey) {                                 
                 // Check if the device has reduced motion enabled
                 if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
                     this.scrollTabContainer(delta, "instant");
@@ -421,7 +422,7 @@ export default class TabRowWidget extends BasicWidget {
                     }
                 }
             } else if (event.shiftKey) {
-                if (event.deltaY > 0) {
+                if (delta > 0) {
                     await appContext.tabManager.activateNextTabCommand();
                 } else {
                     await appContext.tabManager.activatePreviousTabCommand();
