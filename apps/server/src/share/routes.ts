@@ -136,7 +136,7 @@ function renderImageAttachment(image: SNote, res: Response, attachmentName: stri
 }
 
 function register(router: Router) {
-    function renderNote(note: SNote, req: Request, res: Response) {
+    async function renderNote(note: SNote, req: Request, res: Response) {
         if (!note) {
             console.log("Unable to find note ", note);
             res.status(404).render("share/404");
@@ -197,11 +197,10 @@ function register(router: Router) {
                 try {
                     const content = templateNote.getContent();
                     if (typeof content === "string") {
-                        import("ejs").then((ejs) => {
-                            const ejsResult = ejs.render(content, opts, { includer });
-                            res.send(ejsResult);
-                            useDefaultView = false; // Rendering went okay, don't use default view
-                        });
+                        const ejs = await import("ejs");
+                        const ejsResult = ejs.render(content, opts, { includer });
+                        res.send(ejsResult);
+                        useDefaultView = false; // Rendering went okay, don't use default view
                     }
                 } catch (e: unknown) {
                     const [errMessage, errStack] = safeExtractMessageAndStackFromError(e);
