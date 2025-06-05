@@ -400,7 +400,7 @@ export default class TabRowWidget extends BasicWidget {
             }
         };
         this.$tabScrollingContainer[0].addEventListener('wheel', async (event) => {
-            if (utils.isCtrlKey(event) || event.altKey) {
+            if (utils.isCtrlKey(event) || event.altKey || event.shiftKey) {
                 return;
             }
             event.preventDefault();
@@ -409,25 +409,16 @@ export default class TabRowWidget extends BasicWidget {
             // Set an upper limit to avoid scrolling too fast
             // no lower limit is set because touchpad deltas are usually small
             const delta = Math.sign(event.deltaX + event.deltaY) * Math.min(Math.abs(event.deltaX + event.deltaY), TAB_CONTAINER_MIN_WIDTH * 3);
-            
-            if (!event.shiftKey) {                                 
-                // Check if the device has reduced motion enabled
-                if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                    this.scrollTabContainer(delta, "instant");
-                } else {
-                    pendingScroll += delta
-                    if (!isScrolling) {
-                        isScrolling = true;
-                        stepScroll();
-                    }
+
+            // Check if the device has reduced motion enabled
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                this.scrollTabContainer(delta, "instant");
+            } else {
+                pendingScroll += delta
+                if (!isScrolling) {
+                    isScrolling = true;
+                    stepScroll();
                 }
-            } else if (event.shiftKey) {
-                if (delta > 0) {
-                    await appContext.tabManager.activateNextTabCommand();
-                } else {
-                    await appContext.tabManager.activatePreviousTabCommand();
-                }
-                this.activeTabEl.scrollIntoView();
             }
         });
 
