@@ -808,8 +808,8 @@ importers:
         specifier: '>=4.1.0'
         version: 4.1.0
       '@ckeditor/ckeditor5-package-tools':
-        specifier: ^3.0.1
-        version: 3.0.1(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@22.15.29)(bufferutil@4.0.9)(esbuild@0.25.5)(utf-8-validate@6.0.5)
+        specifier: ^4.0.0
+        version: 4.0.0(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@22.15.29)(bufferutil@4.0.9)(esbuild@0.25.5)(utf-8-validate@6.0.5)
       '@typescript-eslint/eslint-plugin':
         specifier: ~8.33.0
         version: 8.33.1(@typescript-eslint/parser@8.33.1(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
@@ -868,8 +868,8 @@ importers:
         specifier: '>=4.1.0'
         version: 4.1.0
       '@ckeditor/ckeditor5-package-tools':
-        specifier: ^3.0.1
-        version: 3.0.1(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@22.15.29)(bufferutil@4.0.9)(esbuild@0.25.5)(utf-8-validate@6.0.5)
+        specifier: ^4.0.0
+        version: 4.0.0(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@22.15.29)(bufferutil@4.0.9)(esbuild@0.25.5)(utf-8-validate@6.0.5)
       '@typescript-eslint/eslint-plugin':
         specifier: ~8.33.0
         version: 8.33.1(@typescript-eslint/parser@8.33.1(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
@@ -928,8 +928,8 @@ importers:
         specifier: '>=4.1.0'
         version: 4.1.0
       '@ckeditor/ckeditor5-package-tools':
-        specifier: ^3.0.1
-        version: 3.0.1(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@22.15.29)(bufferutil@4.0.9)(esbuild@0.25.5)(utf-8-validate@6.0.5)
+        specifier: ^4.0.0
+        version: 4.0.0(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@22.15.29)(bufferutil@4.0.9)(esbuild@0.25.5)(utf-8-validate@6.0.5)
       '@typescript-eslint/eslint-plugin':
         specifier: ~8.33.0
         version: 8.33.1(@typescript-eslint/parser@8.33.1(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
@@ -995,8 +995,8 @@ importers:
         specifier: '>=4.1.0'
         version: 4.1.0
       '@ckeditor/ckeditor5-package-tools':
-        specifier: ^3.0.1
-        version: 3.0.1(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@22.15.29)(bufferutil@4.0.9)(esbuild@0.25.5)(utf-8-validate@6.0.5)
+        specifier: ^4.0.0
+        version: 4.0.0(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@22.15.29)(bufferutil@4.0.9)(esbuild@0.25.5)(utf-8-validate@6.0.5)
       '@typescript-eslint/eslint-plugin':
         specifier: ~8.33.0
         version: 8.33.1(@typescript-eslint/parser@8.33.1(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
@@ -1062,8 +1062,8 @@ importers:
         specifier: '>=4.1.0'
         version: 4.1.0
       '@ckeditor/ckeditor5-package-tools':
-        specifier: ^3.0.1
-        version: 3.0.1(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@22.15.29)(bufferutil@4.0.9)(esbuild@0.25.5)(utf-8-validate@6.0.5)
+        specifier: ^4.0.0
+        version: 4.0.0(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@22.15.29)(bufferutil@4.0.9)(esbuild@0.25.5)(utf-8-validate@6.0.5)
       '@typescript-eslint/eslint-plugin':
         specifier: ~8.33.0
         version: 8.33.1(@typescript-eslint/parser@8.33.1(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
@@ -2119,8 +2119,8 @@ packages:
   '@ckeditor/ckeditor5-minimap@45.1.0':
     resolution: {integrity: sha512-mBkfs65+3tJUsJQjduW2zPuIsg4Q72Y2JSPr0Gw1+XYaEekZfCbhj1x6LvWQFy1waZQk7TvlBxGNTCQjo4DFBg==}
 
-  '@ckeditor/ckeditor5-package-tools@3.0.1':
-    resolution: {integrity: sha512-nLxyUxuEIObypWu0JMs+7lpGvdhQcLnyZxyi2ZAHHnRqr+FjsUwoVyUa+uisY+yQsFyj4mMeTurPEdBYmn6JNQ==}
+  '@ckeditor/ckeditor5-package-tools@4.0.0':
+    resolution: {integrity: sha512-LSNB5Q51A7nZL2N/o7EuV3TcHn2rncpc1qucP3GgJstYSXELY37NEGgprGKWJPH20tQqs1vJIFO7L4Jq6h1h1A==}
     hasBin: true
 
   '@ckeditor/ckeditor5-page-break@45.1.0':
@@ -14022,7 +14022,7 @@ snapshots:
 
   '@ckeditor/ckeditor5-dev-translations@45.0.10(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.25.5)(typescript@5.0.4)(webpack@5.99.9(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.25.5))':
     dependencies:
-      '@babel/parser': 7.27.0
+      '@babel/parser': 7.27.5
       '@babel/traverse': 7.27.0
       '@ckeditor/ckeditor5-dev-utils': 45.0.10(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.25.5)(typescript@5.0.4)(webpack@5.99.9(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.25.5))
       chalk: 5.4.1
@@ -14374,7 +14374,7 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 45.1.0
       ckeditor5: 45.1.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
 
-  '@ckeditor/ckeditor5-package-tools@3.0.1(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@22.15.29)(bufferutil@4.0.9)(esbuild@0.25.5)(utf-8-validate@6.0.5)':
+  '@ckeditor/ckeditor5-package-tools@4.0.0(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@22.15.29)(bufferutil@4.0.9)(esbuild@0.25.5)(utf-8-validate@6.0.5)':
     dependencies:
       '@ckeditor/ckeditor5-dev-translations': 45.0.10(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.25.5)(typescript@5.0.4)(webpack@5.99.9(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.25.5))
       '@ckeditor/ckeditor5-dev-utils': 45.0.10(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.25.5)(typescript@5.0.4)(webpack@5.99.9(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.25.5))
