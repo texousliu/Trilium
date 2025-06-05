@@ -488,8 +488,9 @@ export default class TabRowWidget extends BasicWidget {
         // this.$newTab may include margin, and using NEW_TAB_WIDTH could cause tabsContainerWidth to be slightly larger,
         // resulting in misaligned scrollbars/buttons. Therefore, use outerwidth.
         this.updateOuterWidth();
-        let tabsContainerWidth = Math.floor(this.$widget.width() ?? 0);
-        tabsContainerWidth -= this.newTabOuterWidth + MIN_FILLER_WIDTH;
+        let tabsContainerWidth = Math.floor(
+            (this.$widget.width() ?? 0) - this.newTabOuterWidth - MIN_FILLER_WIDTH
+        );
         // Check whether the scroll buttons need to be displayed.
         if ((TAB_CONTAINER_MIN_WIDTH + MARGIN_WIDTH) * numberOfTabs > tabsContainerWidth) {
             tabsContainerWidth -= this.scrollButtonsOuterWidth;
