@@ -1,28 +1,13 @@
 import sql from "../../../services/sql.js";
 import log from "../../../services/log.js";
-import cls from "../../../services/cls.js";
-import { queueNoteForEmbedding } from "./queue.js";
+import indexService from '../index_service.js';
 
 /**
  * Reprocess all notes to update embeddings
+ * @deprecated Use indexService.reprocessAllNotes() directly instead
  */
 export async function reprocessAllNotes() {
-    log.info("Queueing all notes for embedding updates");
-
-    // Get all non-deleted note IDs
-    const noteIds = await sql.getColumn(
-        "SELECT noteId FROM notes WHERE isDeleted = 0"
-    );
-
-    log.info(`Adding ${noteIds.length} notes to embedding queue`);
-
-    // Process each note ID within a cls context
-    for (const noteId of noteIds) {
-        // Use cls.init to ensure proper context for each operation
-        await cls.init(async () => {
-            await queueNoteForEmbedding(noteId as string, 'UPDATE');
-        });
-    }
+    return indexService.reprocessAllNotes();
 }
 
 /**
@@ -77,6 +62,14 @@ export async function getEmbeddingStats() {
         lastProcessedDate,
         percentComplete: Math.max(0, Math.min(100, percentComplete)) // Ensure between 0-100
     };
+}
+
+/**
+ * Queue notes that don't have embeddings for current provider settings
+ * @deprecated Use indexService.queueNotesForMissingEmbeddings() directly instead
+ */
+export async function queueNotesForMissingEmbeddings() {
+    return indexService.queueNotesForMissingEmbeddings();
 }
 
 /**

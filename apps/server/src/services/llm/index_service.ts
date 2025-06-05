@@ -12,6 +12,7 @@
 import log from "../log.js";
 import options from "../options.js";
 import becca from "../../becca/becca.js";
+import beccaLoader from "../../becca/becca_loader.js";
 import vectorStore from "./embeddings/index.js";
 import providerManager from "./providers/providers.js";
 import { ContextExtractor } from "./context/index.js";
@@ -378,11 +379,10 @@ export class IndexService {
 
             if (!shouldProcessEmbeddings) {
                 // This instance is not configured to process embeddings
-                log.info("Skipping batch indexing as this instance is not configured to process embeddings");
                 return false;
             }
 
-            // Process the embedding queue
+            // Process the embedding queue (batch size is controlled by embeddingBatchSize option)
             await vectorStore.processEmbeddingQueue();
 
             return true;
@@ -879,15 +879,111 @@ export class IndexService {
                 log.info(`Automatic embedding indexing started ${isSyncServer ? 'as sync server' : 'as client'}`);
             }
 
+            // Start background processing of the embedding queue
+            const { setupEmbeddingBackgroundProcessing } = await import('./embeddings/events.js');
+            await setupEmbeddingBackgroundProcessing();
+
             // Re-initialize event listeners
             this.setupEventListeners();
 
+            // Queue notes that don't have embeddings for current providers
+            await this.queueNotesForMissingEmbeddings();
+            
             // Start processing the queue immediately
             await this.runBatchIndexing(20);
             
             log.info("Embedding generation started successfully");
         } catch (error: any) {
             log.error(`Error starting embedding generation: ${error.message || "Unknown error"}`);
+            throw error;
+        }
+    }
+
+
+
+    /**
+     * Queue notes that don't have embeddings for current provider settings
+     */
+    async queueNotesForMissingEmbeddings() {
+        try {
+            // Wait for becca to be fully loaded before accessing notes
+            await beccaLoader.beccaLoaded;
+            
+            // Get all non-deleted notes
+            const allNotes = Object.values(becca.notes).filter(note => !note.isDeleted);
+            
+            // Get enabled providers
+            const providers = await providerManager.getEnabledEmbeddingProviders();
+            if (providers.length === 0) {
+                return;
+            }
+            
+            let queuedCount = 0;
+            let excludedCount = 0;
+            
+            // Process notes in batches to avoid overwhelming the system
+            const batchSize = 100;
+            for (let i = 0; i < allNotes.length; i += batchSize) {
+                const batch = allNotes.slice(i, i + batchSize);
+                
+                for (const note of batch) {
+                    try {
+                        // Skip notes excluded from AI
+                        if (isNoteExcludedFromAI(note)) {
+                            excludedCount++;
+                            continue;
+                        }
+                        
+                        // Check if note needs embeddings for any enabled provider
+                        let needsEmbedding = false;
+                        
+                        for (const provider of providers) {
+                            const config = provider.getConfig();
+                            const existingEmbedding = await vectorStore.getEmbeddingForNote(
+                                note.noteId,
+                                provider.name,
+                                config.model
+                            );
+                            
+                            if (!existingEmbedding) {
+                                needsEmbedding = true;
+                                break;
+                            }
+                        }
+                        
+                        if (needsEmbedding) {
+                            await vectorStore.queueNoteForEmbedding(note.noteId, 'UPDATE');
+                            queuedCount++;
+                        }
+                    } catch (error: any) {
+                        log.error(`Error checking embeddings for note ${note.noteId}: ${error.message || 'Unknown error'}`);
+                    }
+                }
+                
+            }
+        } catch (error: any) {
+            log.error(`Error queuing notes for missing embeddings: ${error.message || 'Unknown error'}`);
+        }
+    }
+
+    /**
+     * Reprocess all notes to update embeddings
+     */
+    async reprocessAllNotes() {
+        if (!this.initialized) {
+            await this.initialize();
+        }
+
+        try {
+            // Get all non-deleted note IDs
+            const noteIds = await sql.getColumn("SELECT noteId FROM notes WHERE isDeleted = 0");
+
+            // Process each note ID
+            for (const noteId of noteIds) {
+                await vectorStore.queueNoteForEmbedding(noteId as string, 'UPDATE');
+            }
+        } catch (error: any) {
+            log.error(`Error reprocessing all notes: ${error.message || 'Unknown error'}`);
             throw error;
         }
     }
@@ -907,7 +1003,8 @@ export class IndexService {
             }
 
             // Stop the background processing from embeddings/events.ts
-            vectorStore.stopEmbeddingBackgroundProcessing();
+            const { stopEmbeddingBackgroundProcessing } = await import('./embeddings/events.js');
+            stopEmbeddingBackgroundProcessing();
 
             // Clear all embedding providers to clean up resources
             providerManager.clearAllEmbeddingProviders();
