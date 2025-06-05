@@ -16,6 +16,7 @@ import type SBranch from "./shaca/entities/sbranch.js";
 import type SAttachment from "./shaca/entities/sattachment.js";
 import utils, { isDev, safeExtractMessageAndStackFromError } from "../services/utils.js";
 import options from "../services/options.js";
+import { t } from "i18next";
 
 function getSharedSubTreeRoot(note: SNote): { note?: SNote; branch?: SBranch } {
     if (note.noteId === shareRoot.SHARE_ROOT_NOTE_ID) {
@@ -135,7 +136,7 @@ function renderImageAttachment(image: SNote, res: Response, attachmentName: stri
 }
 
 function register(router: Router) {
-    function renderNote(note: SNote, req: Request, res: Response) {
+    async function renderNote(note: SNote, req: Request, res: Response) {
         if (!note) {
             console.log("Unable to find note ", note);
             res.status(404).render("share/404");
@@ -167,7 +168,8 @@ function register(router: Router) {
             subRoot,
             assetPath: isDev ? assetPath : `../${assetPath}`,
             appPath: isDev ? appPath : `../${appPath}`,
-            showLoginInShareTheme
+            showLoginInShareTheme,
+            t
         };
         let useDefaultView = true;
 
@@ -182,7 +184,7 @@ function register(router: Router) {
                 // EJS caches the result of this so we don't need to pre-cache
                 const includer = (path: string) => {
                     const childNote = templateNote.children.find((n) => path === n.title);
-                    if (!childNote) throw new Error("Unable to find child note.");
+                    if (!childNote) throw new Error(`Unable to find child note: ${path}.`);
                     if (childNote.type !== "code" || childNote.mime !== "application/x-ejs") throw new Error("Incorrect child note type.");
 
                     const template = childNote.getContent();
@@ -195,11 +197,10 @@ function register(router: Router) {
                 try {
                     const content = templateNote.getContent();
                     if (typeof content === "string") {
-                        import("ejs").then((ejs) => {
-                            const ejsResult = ejs.render(content, opts, { includer });
-                            res.send(ejsResult);
-                            useDefaultView = false; // Rendering went okay, don't use default view
-                        });
+                        const ejs = await import("ejs");
+                        const ejsResult = ejs.render(content, opts, { includer });
+                        res.send(ejsResult);
+                        useDefaultView = false; // Rendering went okay, don't use default view
                     }
                 } catch (e: unknown) {
                     const [errMessage, errStack] = safeExtractMessageAndStackFromError(e);
