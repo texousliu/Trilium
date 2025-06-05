@@ -65,8 +65,16 @@ function load() {
             new BEtapiToken(row);
         }
 
-        for (const row of sql.getRows<NoteEmbeddingRow>(/*sql*/`SELECT embedId, noteId, providerId, modelId, dimension, embedding, version, dateCreated, dateModified, utcDateCreated, utcDateModified FROM note_embeddings`)) {
-            new BNoteEmbedding(row).init();
+        try {
+            for (const row of sql.getRows<NoteEmbeddingRow>(/*sql*/`SELECT embedId, noteId, providerId, modelId, dimension, embedding, version, dateCreated, dateModified, utcDateCreated, utcDateModified FROM note_embeddings`)) {
+                new BNoteEmbedding(row).init();
+            }
+        } catch (e: unknown) {
+            if (e && typeof e === "object" && "message" in e && typeof e.message === "string" && e.message.includes("no such table")) {
+                // Can be ignored.
+            } else {
+                throw e;
+            }
         }
     });
 

@@ -9342,6 +9342,13 @@
                                             "position": 50
                                         },
                                         {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "ivYnonVFBxbQ",
+                                            "isInheritable": false,
+                                            "position": 60
+                                        },
+                                        {
                                             "type": "label",
                                             "name": "shareAlias",
                                             "value": "day-notes",
