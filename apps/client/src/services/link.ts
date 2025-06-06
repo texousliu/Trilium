@@ -48,7 +48,13 @@ export interface ViewScope {
     viewMode?: ViewMode;
     attachmentId?: string;
     readOnlyTemporarilyDisabled?: boolean;
-    readOnlyDecision?: boolean;
+    /**
+     * If true, it indicates that the note in the view should be opened in read-only mode (for supported note types such as text or code).
+     *
+     * The reason why we store this information here is that a note can become read-only as the user types content in it, and we wouldn't want
+     * to immediately enter read-only mode.
+     */
+    isReadOnly?: boolean;
     highlightsListPreviousVisible?: boolean;
     highlightsListTemporarilyHidden?: boolean;
     tocTemporarilyHidden?: boolean;
