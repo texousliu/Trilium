@@ -19,6 +19,8 @@ function loginPage(req: Request, res: Response) {
         wrongTotp: false,
         totpEnabled: totp.isTotpEnabled(),
         ssoEnabled: openID.isOpenIDEnabled(),
+        ssoIssuerName: openID.getSSOIssuerName(),
+        ssoIssuerIcon: openID.getSSOIssuerIcon(),
         assetPath: assetPath,
         assetPathFragment: assetUrlFragment,
         appPath: appPath,
