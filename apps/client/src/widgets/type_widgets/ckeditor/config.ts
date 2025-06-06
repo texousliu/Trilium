@@ -102,7 +102,7 @@ export function buildConfig(): EditorConfig {
             allowedProtocols: ALLOWED_PROTOCOLS
         },
         emoji: {
-            definitionsUrl: new URL(import.meta.url).origin + emojiDefinitionsUrl
+            definitionsUrl: emojiDefinitionsUrl
         },
         syntaxHighlighting: {
             loadHighlightJs: async () => {

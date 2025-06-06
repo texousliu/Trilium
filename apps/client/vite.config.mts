@@ -9,7 +9,7 @@ const assets = [ "assets", "stylesheets", "libraries", "fonts", "translations" ]
 export default defineConfig(() => ({
     root: __dirname,
     cacheDir: '../../node_modules/.vite/apps/client',
-    base: "/" + asset_path,
+    base: process.env.NODE_ENV === "production" ? "" : asset_path,
     server: {
         port: 4200,
         host: 'localhost',

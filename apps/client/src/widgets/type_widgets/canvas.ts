@@ -133,7 +133,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
 
         // currently required by excalidraw, in order to allows self-hosting fonts locally.
         // this avoids making excalidraw load the fonts from an external CDN.
-        (window as any).EXCALIDRAW_ASSET_PATH = `${new URL(import.meta.url).origin}/node_modules/@excalidraw/excalidraw/dist/prod`;
+        (window as any).EXCALIDRAW_ASSET_PATH = `${window.location.pathname}/node_modules/@excalidraw/excalidraw/dist/prod`;
 
         // temporary vars
         this.currentNoteId = "";
