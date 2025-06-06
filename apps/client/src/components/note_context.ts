@@ -269,14 +269,32 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
             return true;
         }
 
-        const blob = await this.note.getBlob();
-        if (!blob) {
-            return false;
+        // Store the initial decision about read-only status in the viewScope
+        // This will be "remembered" until the viewScope is refreshed
+        if (!this.viewScope) {
+            this.resetViewScope();
         }
 
-        const sizeLimit = this.note.type === "text" ? options.getInt("autoReadonlySizeText") : options.getInt("autoReadonlySizeCode");
+        const viewScope = this.viewScope!;
 
-        return sizeLimit && blob.contentLength > sizeLimit && !this.note.isLabelTruthy("autoReadOnlyDisabled");
+        if (viewScope.isReadOnly === undefined) {
+            const blob = await this.note.getBlob();
+            if (!blob) {
+                viewScope.isReadOnly = false;
+                return false;
+            }
+
+            const sizeLimit = this.note.type === "text"
+                ? options.getInt("autoReadonlySizeText")
+                : options.getInt("autoReadonlySizeCode");
+
+            viewScope.isReadOnly = Boolean(sizeLimit &&
+                blob.contentLength > sizeLimit &&
+                !this.note.isLabelTruthy("autoReadOnlyDisabled"));
+        }
+
+        // Return the cached decision, which won't change until viewScope is reset
+        return viewScope.isReadOnly || false;
     }
 
     async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {

@@ -5,7 +5,6 @@ import options from "../../services/options.js";
 // Import the index service for knowledge base management
 import indexService from "../../services/llm/index_service.js";
 import restChatService from "../../services/llm/rest_chat_service.js";
-import chatService from '../../services/llm/chat_service.js';
 import chatStorageService from '../../services/llm/chat_storage_service.js';
 
 // Define basic interfaces
@@ -190,23 +189,26 @@ async function getSession(req: Request, res: Response) {
  *     tags: ["llm"]
  */
 async function updateSession(req: Request, res: Response) {
-    // Get the chat using ChatService
+    // Get the chat using chatStorageService directly
     const chatNoteId = req.params.chatNoteId;
     const updates = req.body;
 
     try {
         // Get the chat
-        const session = await chatService.getOrCreateSession(chatNoteId);
+        const chat = await chatStorageService.getChat(chatNoteId);
+        if (!chat) {
+            throw new Error(`Chat with ID ${chatNoteId} not found`);
+        }
 
         // Update title if provided
         if (updates.title) {
-            await chatStorageService.updateChat(chatNoteId, session.messages, updates.title);
+            await chatStorageService.updateChat(chatNoteId, chat.messages, updates.title);
         }
 
         // Return the updated chat
         return {
             id: chatNoteId,
-            title: updates.title || session.title,
+            title: updates.title || chat.title,
             updatedAt: new Date()
         };
     } catch (error) {
@@ -248,18 +250,18 @@ async function updateSession(req: Request, res: Response) {
  *     tags: ["llm"]
  */
 async function listSessions(req: Request, res: Response) {
-    // Get all sessions using ChatService
+    // Get all sessions using chatStorageService directly
     try {
-        const sessions = await chatService.getAllSessions();
+        const chats = await chatStorageService.getAllChats();
 
         // Format the response
         return {
-            sessions: sessions.map(session => ({
-                id: session.id,
-                title: session.title,
-                createdAt: new Date(), // Since we don't have this in chat sessions
-                lastActive: new Date(), // Since we don't have this in chat sessions
-                messageCount: session.messages.length
+            sessions: chats.map(chat => ({
+                id: chat.id,
+                title: chat.title,
+                createdAt: chat.createdAt || new Date(),
+                lastActive: chat.updatedAt || new Date(),
+                messageCount: chat.messages.length
             }))
         };
     } catch (error) {
@@ -811,17 +813,38 @@ async function streamMessage(req: Request, res: Response) {
         const { content, useAdvancedContext, showThinking, mentions } = req.body;
 
         if (!content || typeof content !== 'string' || content.trim().length === 0) {
-            throw new Error('Content cannot be empty');
+            return res.status(400).json({
+                success: false,
+                error: 'Content cannot be empty'
+            });
         }
+        
+        // IMPORTANT: Immediately send a success response to the initial POST request
+        // The client is waiting for this to confirm streaming has been initiated
+        res.status(200).json({
+            success: true,
+            message: 'Streaming initiated successfully'
+        });
+        log.info(`Sent immediate success response for streaming setup`);
+        
+        // Create a new response object for streaming through WebSocket only
+        // We won't use HTTP streaming since we've already sent the HTTP response
 
-        // Check if session exists
-        const session = restChatService.getSessions().get(chatNoteId);
-        if (!session) {
-            throw new Error('Chat not found');
+        // Get or create chat directly from storage (simplified approach)
+        let chat = await chatStorageService.getChat(chatNoteId);
+        if (!chat) {
+            // Create a new chat if it doesn't exist
+            chat = await chatStorageService.createChat('New Chat');
+            log.info(`Created new chat with ID: ${chat.id} for stream request`);
         }
-
-        // Update last active timestamp
-        session.lastActive = new Date();
+        
+        // Add the user message to the chat immediately
+        chat.messages.push({
+            role: 'user',
+            content
+        });
+        // Save the chat to ensure the user message is recorded
+        await chatStorageService.updateChat(chat.id, chat.messages, chat.title);
 
         // Process mentions if provided
         let enhancedContent = content;
@@ -830,7 +853,6 @@ async function streamMessage(req: Request, res: Response) {
 
             // Import note service to get note content
             const becca = (await import('../../becca/becca.js')).default;
-
             const mentionContexts: string[] = [];
 
             for (const mention of mentions) {
@@ -857,102 +879,94 @@ async function streamMessage(req: Request, res: Response) {
             }
         }
 
-        // Add user message to the session (with enhanced content for processing)
-        session.messages.push({
-            role: 'user',
-            content: enhancedContent,
-            timestamp: new Date()
-        });
-
-        // Create request parameters for the pipeline
-        const requestParams = {
-            chatNoteId: chatNoteId,
-            content: enhancedContent,
-            useAdvancedContext: useAdvancedContext === true,
-            showThinking: showThinking === true,
-            stream: true // Always stream for this endpoint
-        };
-
-        // Create a fake request/response pair to pass to the handler
-        const fakeReq = {
-            ...req,
-            method: 'GET', // Set to GET to indicate streaming
-            query: {
-                stream: 'true', // Set stream param - don't use format: 'stream' to avoid confusion
-                useAdvancedContext: String(useAdvancedContext === true),
-                showThinking: String(showThinking === true)
-            },
-            params: {
-                chatNoteId: chatNoteId
-            },
-            // Make sure the enhanced content is available to the handler
-            body: {
-                content: enhancedContent,
-                useAdvancedContext: useAdvancedContext === true,
-                showThinking: showThinking === true
-            }
-        } as unknown as Request;
-
-        // Log to verify correct parameters
-        log.info(`WebSocket stream settings - useAdvancedContext=${useAdvancedContext === true}, in query=${fakeReq.query.useAdvancedContext}, in body=${fakeReq.body.useAdvancedContext}`);
-        // Extra safety to ensure the parameters are passed correctly
-        if (useAdvancedContext === true) {
-            log.info(`Enhanced context IS enabled for this request`);
-        } else {
-            log.info(`Enhanced context is NOT enabled for this request`);
-        }
-
-        // Process the request in the background
-        Promise.resolve().then(async () => {
-            try {
-                await restChatService.handleSendMessage(fakeReq, res);
-            } catch (error) {
-                log.error(`Background message processing error: ${error}`);
-
-                // Import the WebSocket service
-                const wsService = (await import('../../services/ws.js')).default;
-
-                // Define LLMStreamMessage interface
-                interface LLMStreamMessage {
-                    type: 'llm-stream';
-                    chatNoteId: string;
-                    content?: string;
-                    thinking?: string;
-                    toolExecution?: any;
-                    done?: boolean;
-                    error?: string;
-                    raw?: unknown;
-                }
-
-                // Send error to client via WebSocket
-                wsService.sendMessageToAllClients({
-                    type: 'llm-stream',
-                    chatNoteId: chatNoteId,
-                    error: `Error processing message: ${error}`,
-                    done: true
-                } as LLMStreamMessage);
-            }
-        });
-
-        // Import the WebSocket service
+        // Import the WebSocket service to send immediate feedback
         const wsService = (await import('../../services/ws.js')).default;
 
-        // Let the client know streaming has started via WebSocket (helps client confirm connection is working)
+        // Let the client know streaming has started
         wsService.sendMessageToAllClients({
             type: 'llm-stream',
             chatNoteId: chatNoteId,
-            thinking: 'Initializing streaming LLM response...'
+            thinking: showThinking ? 'Initializing streaming LLM response...' : undefined
         });
 
-        // Let the client know streaming has started via HTTP response
-        return {
-            success: true,
-            message: 'Streaming started',
-            chatNoteId: chatNoteId
-        };
+        // Instead of trying to reimplement the streaming logic ourselves,
+        // delegate to restChatService but set up the correct protocol:
+        // 1. We've already sent a success response to the initial POST
+        // 2. Now we'll have restChatService process the actual streaming through WebSocket
+        try {
+            // Import the WebSocket service for sending messages
+            const wsService = (await import('../../services/ws.js')).default;
+            
+            // Create a simple pass-through response object that won't write to the HTTP response
+            // but will allow restChatService to send WebSocket messages
+            const dummyResponse = {
+                writableEnded: false,
+                // Implement methods that would normally be used by restChatService
+                write: (_chunk: string) => {
+                    // Silent no-op - we're only using WebSocket
+                    return true;
+                },
+                end: (_chunk?: string) => {
+                    // Log when streaming is complete via WebSocket
+                    log.info(`[${chatNoteId}] Completed HTTP response handling during WebSocket streaming`);
+                    return dummyResponse;
+                },
+                setHeader: (name: string, _value: string) => {
+                    // Only log for content-type to reduce noise
+                    if (name.toLowerCase() === 'content-type') {
+                        log.info(`[${chatNoteId}] Setting up streaming for WebSocket only`);
+                    }
+                    return dummyResponse;
+                }
+            };
+            
+            // Process the streaming now through WebSocket only
+            try {
+                log.info(`[${chatNoteId}] Processing LLM streaming through WebSocket after successful initiation at ${new Date().toISOString()}`);
+                
+                // Call restChatService with our enhanced request and dummy response
+                // The important part is setting method to GET to indicate streaming mode
+                await restChatService.handleSendMessage({
+                    ...req,
+                    method: 'GET', // Indicate streaming mode
+                    query: {
+                        ...req.query,
+                        stream: 'true' // Add the required stream parameter
+                    },
+                    body: {
+                        content: enhancedContent,
+                        useAdvancedContext: useAdvancedContext === true,
+                        showThinking: showThinking === true
+                    },
+                    params: { chatNoteId }
+                } as unknown as Request, dummyResponse as unknown as Response);
+                
+                log.info(`[${chatNoteId}] WebSocket streaming completed at ${new Date().toISOString()}`);
+            } catch (streamError) {
+                log.error(`[${chatNoteId}] Error during WebSocket streaming: ${streamError}`);
+                
+                // Send error message through WebSocket
+                wsService.sendMessageToAllClients({
+                    type: 'llm-stream',
+                    chatNoteId: chatNoteId,
+                    error: `Error during streaming: ${streamError}`,
+                    done: true
+                });
+            }
+        } catch (error) {
+            log.error(`Error during streaming: ${error}`);
+
+            // Send error to client via WebSocket
+            wsService.sendMessageToAllClients({
+                type: 'llm-stream',
+                chatNoteId: chatNoteId,
+                error: `Error processing message: ${error}`,
+                done: true
+            });
+        }
     } catch (error: any) {
         log.error(`Error starting message stream: ${error.message}`);
-        throw error;
+        log.error(`Error starting message stream, can't communicate via WebSocket: ${error.message}`);
     }
 }
 

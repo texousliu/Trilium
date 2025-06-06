@@ -48,6 +48,13 @@ export interface ViewScope {
     viewMode?: ViewMode;
     attachmentId?: string;
     readOnlyTemporarilyDisabled?: boolean;
+    /**
+     * If true, it indicates that the note in the view should be opened in read-only mode (for supported note types such as text or code).
+     *
+     * The reason why we store this information here is that a note can become read-only as the user types content in it, and we wouldn't want
+     * to immediately enter read-only mode.
+     */
+    isReadOnly?: boolean;
     highlightsListPreviousVisible?: boolean;
     highlightsListTemporarilyHidden?: boolean;
     tocTemporarilyHidden?: boolean;
@@ -204,11 +211,17 @@ export function parseNavigationStateFromUrl(url: string | undefined) {
         return {};
     }
 
+    url = url.trim();
     const hashIdx = url.indexOf("#");
     if (hashIdx === -1) {
         return {};
     }
 
+    // Exclude external links that contain #
+    if (hashIdx !== 0 && !url.includes("/#root") && !url.includes("/#?searchString")) { 
+        return {};
+    }
+    
     const hash = url.substr(hashIdx + 1); // strip also the initial '#'
     let [notePath, paramString] = hash.split("?");
 

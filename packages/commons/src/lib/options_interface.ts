@@ -47,6 +47,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     passwordDerivedKeySalt: string;
     encryptedDataKey: string;
     hoistedNoteId: string;
+    customDateTimeFormat: string;
 
     // Multi-Factor Authentication
     mfaEnabled: boolean;

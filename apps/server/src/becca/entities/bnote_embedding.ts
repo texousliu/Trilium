@@ -32,6 +32,12 @@ class BNoteEmbedding extends AbstractBeccaEntity<BNoteEmbedding> {
         }
     }
 
+    init() {
+        if (this.embedId) {
+            this.becca.noteEmbeddings[this.embedId] = this;
+        }
+    }
+
     updateFromRow(row: NoteEmbeddingRow): void {
         this.embedId = row.embedId;
         this.noteId = row.noteId;
@@ -44,6 +50,10 @@ class BNoteEmbedding extends AbstractBeccaEntity<BNoteEmbedding> {
         this.dateModified = row.dateModified;
         this.utcDateCreated = row.utcDateCreated;
         this.utcDateModified = row.utcDateModified;
+
+        if (this.embedId) {
+            this.becca.noteEmbeddings[this.embedId] = this;
+        }
     }
 
     override beforeSaving() {

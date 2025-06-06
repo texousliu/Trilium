@@ -37,9 +37,10 @@ export default class LlmChatPanel extends BasicWidget {
     private thinkingBubble!: HTMLElement;
     private thinkingText!: HTMLElement;
     private thinkingToggle!: HTMLElement;
-    private chatNoteId: string | null = null;
-    private noteId: string | null = null; // The actual noteId for the Chat Note
-    private currentNoteId: string | null = null;
+
+    // Simplified to just use noteId - this represents the AI Chat note we're working with
+    private noteId: string | null = null;
+    private currentNoteId: string | null = null; // The note providing context (for regular notes)
     private _messageHandlerId: number | null = null;
     private _messageHandler: any = null;
 
@@ -68,7 +69,6 @@ export default class LlmChatPanel extends BasicWidget {
             totalTokens?: number;
         };
     } = {
-        model: 'default',
         temperature: 0.7,
         toolExecutions: []
     };
@@ -90,12 +90,21 @@ export default class LlmChatPanel extends BasicWidget {
         this.messages = messages;
     }
 
-    public getChatNoteId(): string | null {
-        return this.chatNoteId;
+    public getNoteId(): string | null {
+        return this.noteId;
     }
 
-    public setChatNoteId(chatNoteId: string | null): void {
-        this.chatNoteId = chatNoteId;
+    public setNoteId(noteId: string | null): void {
+        this.noteId = noteId;
+    }
+
+    // Deprecated - keeping for backward compatibility but mapping to noteId
+    public getChatNoteId(): string | null {
+        return this.noteId;
+    }
+
+    public setChatNoteId(noteId: string | null): void {
+        this.noteId = noteId;
     }
 
     public getNoteContextChatMessages(): HTMLElement {
@@ -307,16 +316,22 @@ export default class LlmChatPanel extends BasicWidget {
                 }
             }
 
-            const dataToSave: ChatData = {
+            // Only save if we have a valid note ID
+            if (!this.noteId) {
+                console.warn('Cannot save chat data: no noteId available');
+                return;
+            }
+
+            const dataToSave = {
                 messages: this.messages,
-                chatNoteId: this.chatNoteId,
                 noteId: this.noteId,
+                chatNoteId: this.noteId, // For backward compatibility
                 toolSteps: toolSteps,
                 // Add sources if we have them
                 sources: this.sources || [],
                 // Add metadata
                 metadata: {
-                    model: this.metadata?.model || 'default',
+                    model: this.metadata?.model || undefined,
                     provider: this.metadata?.provider || undefined,
                     temperature: this.metadata?.temperature || 0.7,
                     lastUpdated: new Date().toISOString(),
@@ -325,7 +340,7 @@ export default class LlmChatPanel extends BasicWidget {
                 }
             };
 
-            console.log(`Saving chat data with chatNoteId: ${this.chatNoteId}, noteId: ${this.noteId}, ${toolSteps.length} tool steps, ${this.sources?.length || 0} sources, ${toolExecutions.length} tool executions`);
+            console.log(`Saving chat data with noteId: ${this.noteId}, ${toolSteps.length} tool steps, ${this.sources?.length || 0} sources, ${toolExecutions.length} tool executions`);
 
             // Save the data to the note attribute via the callback
             // This is the ONLY place we should save data, letting the container widget handle persistence
@@ -347,16 +362,52 @@ export default class LlmChatPanel extends BasicWidget {
             const savedData = await this.onGetData() as ChatData;
 
             if (savedData?.messages?.length > 0) {
+                // Check if we actually have new content to avoid unnecessary UI rebuilds
+                const currentMessageCount = this.messages.length;
+                const savedMessageCount = savedData.messages.length;
+
+                // If message counts are the same, check if content is different
+                const hasNewContent = savedMessageCount > currentMessageCount ||
+                    JSON.stringify(this.messages) !== JSON.stringify(savedData.messages);
+
+                if (!hasNewContent) {
+                    console.log("No new content detected, skipping UI rebuild");
+                    return true;
+                }
+
+                console.log(`Loading saved data: ${currentMessageCount} -> ${savedMessageCount} messages`);
+
+                // Store current scroll position if we need to preserve it
+                const shouldPreserveScroll = savedMessageCount > currentMessageCount && currentMessageCount > 0;
+                const currentScrollTop = shouldPreserveScroll ? this.chatContainer.scrollTop : 0;
+                const currentScrollHeight = shouldPreserveScroll ? this.chatContainer.scrollHeight : 0;
+
                 // Load messages
+                const oldMessages = [...this.messages];
                 this.messages = savedData.messages;
 
-                // Clear and rebuild the chat UI
-                this.noteContextChatMessages.innerHTML = '';
+                // Only rebuild UI if we have significantly different content
+                if (savedMessageCount > currentMessageCount) {
+                    // We have new messages - just add the new ones instead of rebuilding everything
+                    const newMessages = savedData.messages.slice(currentMessageCount);
+                    console.log(`Adding ${newMessages.length} new messages to UI`);
 
-                this.messages.forEach(message => {
-                    const role = message.role as 'user' | 'assistant';
-                    this.addMessageToChat(role, message.content);
-                });
+                    newMessages.forEach(message => {
+                        const role = message.role as 'user' | 'assistant';
+                        this.addMessageToChat(role, message.content);
+                    });
+                } else {
+                    // Content changed but count is same - need to rebuild
+                    console.log("Message content changed, rebuilding UI");
+
+                    // Clear and rebuild the chat UI
+                    this.noteContextChatMessages.innerHTML = '';
+
+                    this.messages.forEach(message => {
+                        const role = message.role as 'user' | 'assistant';
+                        this.addMessageToChat(role, message.content);
+                    });
+                }
 
                 // Restore tool execution steps if they exist
                 if (savedData.toolSteps && Array.isArray(savedData.toolSteps) && savedData.toolSteps.length > 0) {
@@ -400,11 +451,31 @@ export default class LlmChatPanel extends BasicWidget {
                 // Load Chat Note ID if available
                 if (savedData.noteId) {
                     console.log(`Using noteId as Chat Note ID: ${savedData.noteId}`);
-                    this.chatNoteId = savedData.noteId;
                     this.noteId = savedData.noteId;
                 } else {
                     console.log(`No noteId found in saved data, cannot load chat session`);
                     return false;
+                }
+
+                // Restore scroll position if we were preserving it
+                if (shouldPreserveScroll) {
+                    // Calculate the new scroll position to maintain relative position
+                    const newScrollHeight = this.chatContainer.scrollHeight;
+                    const scrollDifference = newScrollHeight - currentScrollHeight;
+                    const newScrollTop = currentScrollTop + scrollDifference;
+
+                    // Only scroll down if we're near the bottom, otherwise preserve exact position
+                    const wasNearBottom = (currentScrollTop + this.chatContainer.clientHeight) >= (currentScrollHeight - 50);
+
+                    if (wasNearBottom) {
+                        // User was at bottom, scroll to new bottom
+                        this.chatContainer.scrollTop = newScrollHeight;
+                        console.log("User was at bottom, scrolling to new bottom");
+                    } else {
+                        // User was not at bottom, try to preserve their position
+                        this.chatContainer.scrollTop = newScrollTop;
+                        console.log(`Preserving scroll position: ${currentScrollTop} -> ${newScrollTop}`);
+                    }
                 }
 
                 return true;
@@ -550,6 +621,15 @@ export default class LlmChatPanel extends BasicWidget {
         // Get current note context if needed
         const currentActiveNoteId = appContext.tabManager.getActiveContext()?.note?.noteId || null;
 
+        // For AI Chat notes, the note itself IS the chat session
+        // So currentNoteId and noteId should be the same
+        if (this.noteId && currentActiveNoteId === this.noteId) {
+            // We're in an AI Chat note - don't reset, just load saved data
+            console.log(`Refreshing AI Chat note ${this.noteId} - loading saved data`);
+            await this.loadSavedData();
+            return;
+        }
+
         // If we're switching to a different note, we need to reset
         if (this.currentNoteId !== currentActiveNoteId) {
             console.log(`Note ID changed from ${this.currentNoteId} to ${currentActiveNoteId}, resetting chat panel`);
@@ -557,7 +637,6 @@ export default class LlmChatPanel extends BasicWidget {
             // Reset the UI and data
             this.noteContextChatMessages.innerHTML = '';
             this.messages = [];
-            this.chatNoteId = null;
             this.noteId = null; // Also reset the chat note ID
             this.hideSources(); // Hide any sources from previous note
 
@@ -569,7 +648,7 @@ export default class LlmChatPanel extends BasicWidget {
         const hasSavedData = await this.loadSavedData();
 
         // Only create a new session if we don't have a session or saved data
-        if (!this.chatNoteId || !this.noteId || !hasSavedData) {
+        if (!this.noteId || !hasSavedData) {
             // Create a new chat session
             await this.createChatSession();
         }
@@ -580,19 +659,15 @@ export default class LlmChatPanel extends BasicWidget {
      */
     private async createChatSession() {
         try {
-            // Create a new chat session, passing the current note ID if it exists
-            const { chatNoteId, noteId } = await createChatSession(
-                this.currentNoteId ? this.currentNoteId : undefined
-            );
+            // If we already have a noteId (for AI Chat notes), use it
+            const contextNoteId = this.noteId || this.currentNoteId;
 
-            if (chatNoteId) {
-                // If we got back an ID from the API, use it
-                this.chatNoteId = chatNoteId;
+            // Create a new chat session, passing the context note ID
+            const noteId = await createChatSession(contextNoteId ? contextNoteId : undefined);
 
-                // For new sessions, the noteId should equal the chatNoteId
-                // This ensures we're using the note ID consistently
-                this.noteId = noteId || chatNoteId;
-
+            if (noteId) {
+                // Set the note ID for this chat
+                this.noteId = noteId;
                 console.log(`Created new chat session with noteId: ${this.noteId}`);
             } else {
                 throw new Error("Failed to create chat session - no ID returned");
@@ -645,7 +720,7 @@ export default class LlmChatPanel extends BasicWidget {
             const showThinking = this.showThinkingCheckbox.checked;
 
             // Add logging to verify parameters
-            console.log(`Sending message with: useAdvancedContext=${useAdvancedContext}, showThinking=${showThinking}, noteId=${this.currentNoteId}, sessionId=${this.chatNoteId}`);
+            console.log(`Sending message with: useAdvancedContext=${useAdvancedContext}, showThinking=${showThinking}, noteId=${this.currentNoteId}, sessionId=${this.noteId}`);
 
             // Create the message parameters
             const messageParams = {
@@ -695,11 +770,11 @@ export default class LlmChatPanel extends BasicWidget {
         await validateEmbeddingProviders(this.validationWarning);
 
         // Make sure we have a valid session
-        if (!this.chatNoteId) {
+        if (!this.noteId) {
             // If no session ID, create a new session
             await this.createChatSession();
 
-            if (!this.chatNoteId) {
+            if (!this.noteId) {
                 // If still no session ID, show error and return
                 console.error("Failed to create chat session");
                 toastService.showError("Failed to create chat session");
@@ -730,7 +805,7 @@ export default class LlmChatPanel extends BasicWidget {
             await this.saveCurrentData();
 
             // Add logging to verify parameters
-            console.log(`Sending message with: useAdvancedContext=${useAdvancedContext}, showThinking=${showThinking}, noteId=${this.currentNoteId}, sessionId=${this.chatNoteId}`);
+            console.log(`Sending message with: useAdvancedContext=${useAdvancedContext}, showThinking=${showThinking}, noteId=${this.currentNoteId}, sessionId=${this.noteId}`);
 
             // Create the message parameters
             const messageParams = {
@@ -767,12 +842,12 @@ export default class LlmChatPanel extends BasicWidget {
      */
     private async handleDirectResponse(messageParams: any): Promise<boolean> {
         try {
-            if (!this.chatNoteId) return false;
+            if (!this.noteId) return false;
 
-            console.log(`Getting direct response using sessionId: ${this.chatNoteId} (noteId: ${this.noteId})`);
+            console.log(`Getting direct response using sessionId: ${this.noteId} (noteId: ${this.noteId})`);
 
             // Get a direct response from the server
-            const postResponse = await getDirectResponse(this.chatNoteId, messageParams);
+            const postResponse = await getDirectResponse(this.noteId, messageParams);
 
             // If the POST request returned content directly, display it
             if (postResponse && postResponse.content) {
@@ -845,11 +920,11 @@ export default class LlmChatPanel extends BasicWidget {
      * Set up streaming response via WebSocket
      */
     private async setupStreamingResponse(messageParams: any): Promise<void> {
-        if (!this.chatNoteId) {
+        if (!this.noteId) {
             throw new Error("No session ID available");
         }
 
-        console.log(`Setting up streaming response using sessionId: ${this.chatNoteId} (noteId: ${this.noteId})`);
+        console.log(`Setting up streaming response using sessionId: ${this.noteId} (noteId: ${this.noteId})`);
 
         // Store tool executions captured during streaming
         const toolExecutionsCache: Array<{
@@ -862,7 +937,7 @@ export default class LlmChatPanel extends BasicWidget {
         }> = [];
 
         return setupStreamingResponse(
-            this.chatNoteId,
+            this.noteId,
             messageParams,
             // Content update handler
             (content: string, isDone: boolean = false) => {
@@ -898,7 +973,7 @@ export default class LlmChatPanel extends BasicWidget {
                             similarity?: number;
                             content?: string;
                         }>;
-                    }>(`llm/chat/${this.chatNoteId}`)
+                    }>(`llm/chat/${this.noteId}`)
                         .then((sessionData) => {
                             console.log("Got updated session data:", sessionData);
 
@@ -933,9 +1008,9 @@ export default class LlmChatPanel extends BasicWidget {
                                 }
                             }
 
-                            // Save the updated data to the note
-                            this.saveCurrentData()
-                                .catch(err => console.error("Failed to save data after streaming completed:", err));
+                            // DON'T save here - let the server handle saving the complete conversation
+                            // to avoid race conditions between client and server saves
+                            console.log("Updated metadata after streaming completion, server should save");
                         })
                         .catch(err => console.error("Error fetching session data after streaming:", err));
                 }
@@ -973,11 +1048,9 @@ export default class LlmChatPanel extends BasicWidget {
 
                     console.log(`Cached tool execution for ${toolData.tool} to be saved later`);
 
-                    // Save immediately after receiving a tool execution
-                    // This ensures we don't lose tool execution data if streaming fails
-                    this.saveCurrentData().catch(err => {
-                        console.error("Failed to save tool execution data:", err);
-                    });
+                    // DON'T save immediately during streaming - let the server handle saving
+                    // to avoid race conditions between client and server saves
+                    console.log(`Tool execution cached, will be saved by server`);
                 }
             },
             // Complete handler
@@ -995,23 +1068,19 @@ export default class LlmChatPanel extends BasicWidget {
      * Update the UI with streaming content
      */
     private updateStreamingUI(assistantResponse: string, isDone: boolean = false) {
-        // Parse and handle thinking content if present
-        if (!isDone) {
-            const thinkingContent = this.parseThinkingContent(assistantResponse);
-            if (thinkingContent) {
-                this.updateThinkingText(thinkingContent);
-                // Don't display the raw response with think tags in the chat
-                return;
-            }
-        }
-
-        // Get the existing assistant message or create a new one
-        let assistantMessageEl = this.noteContextChatMessages.querySelector('.assistant-message:last-child');
-
-        if (!assistantMessageEl) {
-            // If no assistant message yet, create one
+        // Track if we have a streaming message in progress
+        const hasStreamingMessage = !!this.noteContextChatMessages.querySelector('.assistant-message.streaming');
+        
+        // Create a new message element or use the existing streaming one
+        let assistantMessageEl: HTMLElement;
+        
+        if (hasStreamingMessage) {
+            // Use the existing streaming message
+            assistantMessageEl = this.noteContextChatMessages.querySelector('.assistant-message.streaming')!;
+        } else {
+            // Create a new message element
             assistantMessageEl = document.createElement('div');
-            assistantMessageEl.className = 'assistant-message message mb-3';
+            assistantMessageEl.className = 'assistant-message message mb-3 streaming';
             this.noteContextChatMessages.appendChild(assistantMessageEl);
 
             // Add assistant profile icon
@@ -1026,58 +1095,35 @@ export default class LlmChatPanel extends BasicWidget {
             assistantMessageEl.appendChild(messageContent);
         }
 
-        // Clean the response to remove thinking tags before displaying
-        const cleanedResponse = this.removeThinkingTags(assistantResponse);
-
-        // Update the content
+        // Update the content with the current response
         const messageContent = assistantMessageEl.querySelector('.message-content') as HTMLElement;
-        messageContent.innerHTML = formatMarkdown(cleanedResponse);
+        messageContent.innerHTML = formatMarkdown(assistantResponse);
 
-        // Apply syntax highlighting if this is the final update
+        // When the response is complete
         if (isDone) {
+            // Remove the streaming class to mark this message as complete
+            assistantMessageEl.classList.remove('streaming');
+            
+            // Apply syntax highlighting
             formatCodeBlocks($(assistantMessageEl as HTMLElement));
 
             // Hide the thinking display when response is complete
             this.hideThinkingDisplay();
 
-            // Update message in the data model for storage
-            // Find the last assistant message to update, or add a new one if none exists
-            const assistantMessages = this.messages.filter(msg => msg.role === 'assistant');
-            const lastAssistantMsgIndex = assistantMessages.length > 0 ?
-                this.messages.lastIndexOf(assistantMessages[assistantMessages.length - 1]) : -1;
-
-            if (lastAssistantMsgIndex >= 0) {
-                // Update existing message with cleaned content
-                this.messages[lastAssistantMsgIndex].content = cleanedResponse;
-            } else {
-                // Add new message with cleaned content
-                this.messages.push({
-                    role: 'assistant',
-                    content: cleanedResponse
-                });
-            }
-
-            // Hide loading indicator
-            hideLoadingIndicator(this.loadingIndicator);
-
-            // Save the final state to the Chat Note
-            this.saveCurrentData().catch(err => {
-                console.error("Failed to save assistant response to note:", err);
+            // Always add a new message to the data model
+            // This ensures we preserve all distinct assistant messages
+            this.messages.push({
+                role: 'assistant',
+                content: assistantResponse,
+                timestamp: new Date()
             });
+
+            // Save the updated message list
+            this.saveCurrentData();
         }
 
         // Scroll to bottom
         this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
-    }
-
-    /**
-     * Remove thinking tags from response content
-     */
-    private removeThinkingTags(content: string): string {
-        if (!content) return content;
-
-        // Remove <think>...</think> blocks from the content
-        return content.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
     }
 
     /**

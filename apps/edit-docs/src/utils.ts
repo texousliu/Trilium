@@ -38,7 +38,8 @@ export function startElectron(callback: () => void): DeferredPromise<void> {
         console.log("Electron is ready!");
 
         // Start the server.
-        await import("@triliumnext/server/src/main.js");
+        const startTriliumServer = (await import("@triliumnext/server/src/www.js")).default;
+        await startTriliumServer();
 
         // Create the main window.
         await windowService.createMainWindow(electron.app);
