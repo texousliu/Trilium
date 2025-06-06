@@ -134,7 +134,7 @@ export async function createProvidersFromCurrentOptions(): Promise<EmbeddingProv
         const ollamaEmbeddingBaseUrl = await options.getOption('ollamaEmbeddingBaseUrl');
         if (ollamaEmbeddingBaseUrl) {
             const embeddingModel = await options.getOption('ollamaEmbeddingModel');
-            
+
             try {
                 const ollamaProvider = new OllamaEmbeddingProvider({
                     model: embeddingModel,
@@ -152,23 +152,30 @@ export async function createProvidersFromCurrentOptions(): Promise<EmbeddingProv
             }
         }
 
-        // Create OpenAI provider if API key is configured
+        // Create OpenAI provider even without API key (for OpenAI-compatible endpoints)
         const openaiApiKey = await options.getOption('openaiApiKey');
-        if (openaiApiKey) {
-            const openaiModel = await options.getOption('openaiEmbeddingModel') || 'text-embedding-3-small';
-            const openaiBaseUrl = await options.getOption('openaiBaseUrl') || 'https://api.openai.com/v1';
+        const openaiBaseUrl = await options.getOption('openaiBaseUrl');
+
+        // Only create OpenAI provider if base URL is set or API key is provided
+        if (openaiApiKey || openaiBaseUrl) {
+            const openaiModel = await options.getOption('openaiEmbeddingModel')
+            const finalBaseUrl = openaiBaseUrl || 'https://api.openai.com/v1';
+
+            if (!openaiApiKey) {
+                log.info('Creating OpenAI embedding provider without API key. This may cause issues with official OpenAI endpoints.');
+            }
 
             const openaiProvider = new OpenAIEmbeddingProvider({
                 model: openaiModel,
                 dimension: 1536,
                 type: 'float32',
-                apiKey: openaiApiKey,
-                baseUrl: openaiBaseUrl
+                apiKey: openaiApiKey || '', // Default to empty string
+                baseUrl: finalBaseUrl
             });
 
             registerEmbeddingProvider(openaiProvider);
             result.push(openaiProvider);
-            log.info(`Created OpenAI provider on-demand: ${openaiModel}`);
+            log.info(`Created OpenAI provider on-demand: ${openaiModel} at ${finalBaseUrl}`);
         }
 
         // Create Voyage provider if API key is configured
@@ -221,7 +228,7 @@ export async function getEnabledEmbeddingProviders(): Promise<EmbeddingProvider[
 
     // First try to get existing registered providers
     const existingProviders = Array.from(providers.values());
-    
+
     // If no providers are registered, create them on-demand from current options
     if (existingProviders.length === 0) {
         log.info('No providers registered, creating from current options');
@@ -352,7 +359,8 @@ export function getOpenAIOptions(
     try {
         const apiKey = options.getOption('openaiApiKey');
         if (!apiKey) {
-            throw new Error('OpenAI API key is not configured');
+            // Log warning but don't throw - some OpenAI-compatible endpoints don't require API keys
+            log.info('OpenAI API key is not configured. This may cause issues with official OpenAI endpoints.');
         }
 
         const baseUrl = options.getOption('openaiBaseUrl') || PROVIDER_CONSTANTS.OPENAI.BASE_URL;
@@ -377,7 +385,7 @@ export function getOpenAIOptions(
 
         return {
             // Connection settings
-            apiKey,
+            apiKey: apiKey || '', // Default to empty string if no API key
             baseUrl,
 
             // Provider metadata
