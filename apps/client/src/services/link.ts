@@ -286,7 +286,9 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
     evt.stopPropagation();
 
     if (hrefLink && hrefLink.startsWith("#") && !hrefLink.startsWith("#root/") && $link) {
-        return handleAnchor(hrefLink, $link);
+        if (handleAnchor(hrefLink, $link)) {
+            return true;
+        }
     }
 
     const { notePath, viewScope } = parseNavigationStateFromUrl(hrefLink);
@@ -353,14 +355,14 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
  *
  * @param hrefLink the URL of the link that was clicked (it should be in the form of `#fn` or `#fnref`).
  * @param $link the element of the link that was clicked.
- * @returns whether the event should be consumed or not.
+ * @returns `true` if the link was handled (i.e., the element was found and scrolled to), `false` otherwise.
  */
 function handleAnchor(hrefLink: string, $link: JQuery<HTMLElement>) {
     const el = $link.closest(".ck-content").find(hrefLink)[0];
     if (el) {
         el.scrollIntoView({ behavior: "smooth", block: "center" });
     }
-    return true;
+    return !!el;
 }
 
 function linkContextMenu(e: PointerEvent) {
