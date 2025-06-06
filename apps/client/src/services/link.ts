@@ -218,10 +218,10 @@ export function parseNavigationStateFromUrl(url: string | undefined) {
     }
 
     // Exclude external links that contain #
-    if (hashIdx !== 0 && !url.includes("/#root") && !url.includes("/#?searchString")) { 
+    if (hashIdx !== 0 && !url.includes("/#root") && !url.includes("/#?searchString")) {
         return {};
     }
-    
+
     const hash = url.substr(hashIdx + 1); // strip also the initial '#'
     let [notePath, paramString] = hash.split("?");
 
@@ -285,8 +285,8 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
     evt.preventDefault();
     evt.stopPropagation();
 
-    if (hrefLink?.startsWith("#fn") && $link) {
-        return handleFootnote(hrefLink, $link);
+    if (hrefLink && hrefLink.startsWith("#") && !hrefLink.startsWith("#root/") && $link) {
+        return handleAnchor(hrefLink, $link);
     }
 
     const { notePath, viewScope } = parseNavigationStateFromUrl(hrefLink);
@@ -348,13 +348,14 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
 }
 
 /**
- * Scrolls to either the footnote (if clicking on a reference such as `[1]`), or to the reference of a footnote (if clicking on the footnote `^` arrow).
+ * Scrolls to either the footnote (if clicking on a reference such as `[1]`), or to the reference of a footnote (if clicking on the footnote `^` arrow),
+ * or CKEditor bookmarks.
  *
  * @param hrefLink the URL of the link that was clicked (it should be in the form of `#fn` or `#fnref`).
  * @param $link the element of the link that was clicked.
  * @returns whether the event should be consumed or not.
  */
-function handleFootnote(hrefLink: string, $link: JQuery<HTMLElement>) {
+function handleAnchor(hrefLink: string, $link: JQuery<HTMLElement>) {
     const el = $link.closest(".ck-content").find(hrefLink)[0];
     if (el) {
         el.scrollIntoView({ behavior: "smooth", block: "center" });
