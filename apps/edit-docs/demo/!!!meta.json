@@ -455,18 +455,18 @@
 									"position": 10
 								},
 								{
-									"type": "relation",
-									"name": "child:child:child:template",
-									"value": "kr6HIBBuXRwm",
-									"isInheritable": false,
-									"position": 20
-								},
-								{
 									"type": "label",
 									"name": "iconClass",
 									"value": "bx bx-calendar",
 									"isInheritable": false,
 									"position": 30
+								},
+								{
+									"type": "relation",
+									"name": "dateTemplate",
+									"value": "kr6HIBBuXRwm",
+									"isInheritable": false,
+									"position": 20
 								}
 							],
 							"format": "html",

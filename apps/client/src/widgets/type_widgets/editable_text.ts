@@ -266,7 +266,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                         }
 
                         item.on("change:isOpen", () => {
-                            if (!("isOpen" in item) || !item.isOpen ) {
+                            if (!("isOpen" in item) || !item.isOpen) {
                                 return;
                             }
 
@@ -375,9 +375,10 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         }
     }
 
-    insertDateTimeToTextCommand() {
+    insertDateTimeToTextCommand() { 
         const date = new Date();
-        const dateString = utils.formatDateTime(date);
+        const customDateTimeFormat = options.get("customDateTimeFormat");
+        const dateString = utils.formatDateTime(date, customDateTimeFormat);
 
         this.addTextToEditor(dateString);
     }
