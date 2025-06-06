@@ -73,8 +73,8 @@ async function mouseEnterHandler(this: HTMLElement) {
     }
 
     let renderPromise;
-    if (url?.startsWith("#fn")) {
-        renderPromise = renderFootnote($link, url);
+    if (url && url.startsWith("#") && !url.startsWith("#root/")) {
+        renderPromise = renderFootnoteOrAnchor($link, url);
     } else {
         renderPromise = renderTooltip(await froca.getNote(noteId));
     }
@@ -178,33 +178,47 @@ async function renderTooltip(note: FNote | null) {
     return content;
 }
 
-function renderFootnote($link: JQuery<HTMLElement>, url: string) {
+function renderFootnoteOrAnchor($link: JQuery<HTMLElement>, url: string) {
     // A footnote text reference
     const footnoteRef = url.substring(3);
-    const $footnoteContent = $link
-        .closest(".ck-content") // find the parent CK content
-        .find("> .footnote-section") // find the footnote section
-        .find(`a[href="#fnref${footnoteRef}"]`) // find the footnote link
-        .closest(".footnote-item") // find the parent container of the footnote
-        .find(".footnote-content"); // find the actual text content of the footnote
+    let $targetContent: JQuery<HTMLElement>;
+
+    if (url.startsWith("#fn")) {
+        $targetContent = $link
+            .closest(".ck-content") // find the parent CK content
+            .find("> .footnote-section") // find the footnote section
+            .find(`a[href="#fnref${footnoteRef}"]`) // find the footnote link
+            .closest(".footnote-item") // find the parent container of the footnote
+            .find(".footnote-content"); // find the actual text content of the footnote
+    } else {
+        $targetContent = $link
+            .closest(".ck-content")
+            .find(url)
+            .closest("p");
+    }
+
+    if (!$targetContent.length) {
+        // If the target content is not found, return an empty string
+        return "";
+    }
 
     const isEditable = $link.closest(".ck-content").hasClass("note-detail-editable-text-editor");
     if (isEditable) {
         /* Remove widget buttons for tables, formulas, and images in editable notes. */
-        $footnoteContent.find('.ck-widget__selection-handle').remove();
-        $footnoteContent.find('.ck-widget__type-around').remove();
-        $footnoteContent.find('.ck-widget__resizer').remove();
+        $targetContent.find('.ck-widget__selection-handle').remove();
+        $targetContent.find('.ck-widget__type-around').remove();
+        $targetContent.find('.ck-widget__resizer').remove();
 
         /* Handling in-line math formulas */
-        $footnoteContent.find('.ck-math-tex.ck-math-tex-inline.ck-widget').each(function () {
+        $targetContent.find('.ck-math-tex.ck-math-tex-inline.ck-widget').each(function () {
             const $katex = $(this).find('.katex').first();
             if ($katex.length) {
                 $(this).replaceWith($('<span class="math-tex"></span>').append($('<span></span>').append($katex.clone())));
             }
         });
     }
-    
-    let footnoteContent = $footnoteContent.html();
+
+    let footnoteContent = $targetContent.html();
     footnoteContent = `<div class="ck-content">${footnoteContent}</div>`
     return footnoteContent || "";
 }
