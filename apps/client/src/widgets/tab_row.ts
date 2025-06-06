@@ -510,11 +510,11 @@ export default class TabRowWidget extends BasicWidget {
         let extraWidthRemaining = totalExtraWidthDueToFlooring;
 
         for (let i = 0; i < numberOfTabs; i += 1) {
-            const extraWidth = flooredClampedTargetWidth < TAB_CONTAINER_MAX_WIDTH && extraWidthRemaining > 0 ? 1 : 0;
+            const extraWidth = flooredClampedTargetWidth < TAB_CONTAINER_MAX_WIDTH && extraWidthRemaining >= 1 ? 1 : 0;
 
             widths.push(flooredClampedTargetWidth + extraWidth);
 
-            if (extraWidthRemaining > 0) {
+            if (extraWidthRemaining >= 1) {
                 extraWidthRemaining -= 1;
             }
         }
