@@ -385,41 +385,17 @@ export default class TabRowWidget extends BasicWidget {
     };
 
     setupScrollEvents() {
-        let pendingScroll = 0;
-        let isScrolling = false;
-        const stepScroll = () => {
-            if (Math.abs(pendingScroll) > 20) {
-                const step = Math.round(pendingScroll * 0.2);
-                pendingScroll -= step;
-                this.scrollTabContainer(step, "instant");
-                requestAnimationFrame(stepScroll);
-            } else {
-                this.scrollTabContainer(pendingScroll, "instant");
-                pendingScroll = 0;
-                isScrolling = false;
-            }
-        };
-        this.$tabScrollingContainer[0].addEventListener('wheel', async (event) => {
+        this.$tabScrollingContainer.on('wheel', (event) => {
+            const wheelEvent = event.originalEvent as WheelEvent;
             if (utils.isCtrlKey(event) || event.altKey || event.shiftKey) {
                 return;
             }
             event.preventDefault();
-            event.stopImmediatePropagation();
 
-            // Set an upper limit to avoid scrolling too fast
-            // no lower limit is set because touchpad deltas are usually small
-            const delta = Math.sign(event.deltaX + event.deltaY) * Math.min(Math.abs(event.deltaX + event.deltaY), TAB_CONTAINER_MIN_WIDTH * 3);
+            const delta = Math.sign(wheelEvent.deltaX + wheelEvent.deltaY) *
+                Math.min(Math.abs(wheelEvent.deltaX + wheelEvent.deltaY), TAB_CONTAINER_MIN_WIDTH * 2);
 
-            // Check if the device has reduced motion enabled
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                this.scrollTabContainer(delta, "instant");
-            } else {
-                pendingScroll += delta
-                if (!isScrolling) {
-                    isScrolling = true;
-                    stepScroll();
-                }
-            }
+            this.scrollTabContainer(delta, "instant");
         });
 
         this.$scrollButtonLeft[0].addEventListener('click', () => this.scrollTabContainer(-200));
