@@ -64,6 +64,7 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
 //  currently, we're doing that for file upload because handling form data seems to be difficult
 function checkApiAuthOrElectron(req: Request, res: Response, next: NextFunction) {
     if (!req.session.loggedIn && !isElectron && !noAuthentication) {
+        console.warn(`Missing session with ID '${req.sessionID}'.`);
         reject(req, res, "Logged in session not found");
     } else {
         next();
@@ -72,6 +73,7 @@ function checkApiAuthOrElectron(req: Request, res: Response, next: NextFunction)
 
 function checkApiAuth(req: Request, res: Response, next: NextFunction) {
     if (!req.session.loggedIn && !noAuthentication) {
+        console.warn(`Missing session with ID '${req.sessionID}'.`);
         reject(req, res, "Logged in session not found");
     } else {
         next();
