@@ -11,7 +11,8 @@ import options from "./options.js";
 import attributes from "./attributes.js";
 import type { NextFunction, Request, Response } from "express";
 
-const noAuthentication = config.General && config.General.noAuthentication === true;
+let noAuthentication = false;
+refreshAuth();
 
 function checkAuth(req: Request, res: Response, next: NextFunction) {
     if (!sqlInit.isDbInitialized()) {
@@ -22,7 +23,7 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
     const currentSsoStatus = openID.isOpenIDEnabled();
     const lastAuthState = req.session.lastAuthState || { totpEnabled: false, ssoEnabled: false };
 
-    if (isElectron) {
+    if (isElectron || noAuthentication) {
         next();
         return;
     } else if (currentTotpStatus !== lastAuthState.totpEnabled || currentSsoStatus !== lastAuthState.ssoEnabled) {
@@ -58,7 +59,15 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
     }
 }
 
-
+/**
+ * Rechecks whether authentication is needed or not by re-reading the config.
+ * The value is cached to avoid reading at every request.
+ *
+ * Generally this method should only be called during tests.
+ */
+export function refreshAuth() {
+    noAuthentication = (config.General && config.General.noAuthentication === true);
+}
 
 // for electron things which need network stuff
 //  currently, we're doing that for file upload because handling form data seems to be difficult
