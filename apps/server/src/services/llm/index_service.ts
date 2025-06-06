@@ -22,6 +22,7 @@ import sqlInit from "../sql_init.js";
 import { CONTEXT_PROMPTS } from './constants/llm_prompt_constants.js';
 import { SEARCH_CONSTANTS } from './constants/search_constants.js';
 import { isNoteExcludedFromAI } from "./utils/ai_exclusion_utils.js";
+import { hasWorkingEmbeddingProviders } from "./provider_validation.js";
 
 export class IndexService {
     private initialized = false;
@@ -61,9 +62,15 @@ export class IndexService {
             }
 
             // Check if embedding system is ready
+            if (!(await hasWorkingEmbeddingProviders())) {
+                log.info("Index service: No working embedding providers available, skipping initialization");
+                return;
+            }
+            
             const providers = await providerManager.getEnabledEmbeddingProviders();
             if (!providers || providers.length === 0) {
-                throw new Error("No embedding providers available");
+                log.info("Index service: No enabled embedding providers, skipping initialization");
+                return;
             }
 
             // Check if this instance should process embeddings
@@ -866,7 +873,11 @@ export class IndexService {
                 return;
             }
 
-            // Verify providers are available (this will create them on-demand if needed)
+            // Verify providers are available
+            if (!(await hasWorkingEmbeddingProviders())) {
+                throw new Error("No working embedding providers available");
+            }
+            
             const providers = await providerManager.getEnabledEmbeddingProviders();
             if (providers.length === 0) {
                 throw new Error("No embedding providers available");
