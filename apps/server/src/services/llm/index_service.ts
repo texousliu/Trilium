@@ -48,53 +48,16 @@ export class IndexService {
     async initialize() {
         if (this.initialized) return;
 
-        try {
-            // Check if database is initialized before proceeding
-            if (!sqlInit.isDbInitialized()) {
-                log.info("Index service: Database not initialized yet, skipping initialization");
-                return;
-            }
+        // Setup event listeners for note changes
+        this.setupEventListeners();
 
-            const aiEnabled = options.getOptionOrNull('aiEnabled') === "true";
-            if (!aiEnabled) {
-                log.info("Index service: AI features disabled, skipping initialization");
-                return;
-            }
-
-            // Check if embedding system is ready
-            if (!(await hasWorkingEmbeddingProviders())) {
-                log.info("Index service: No working embedding providers available, skipping initialization");
-                return;
-            }
-            
-            const providers = await providerManager.getEnabledEmbeddingProviders();
-            if (!providers || providers.length === 0) {
-                log.info("Index service: No enabled embedding providers, skipping initialization");
-                return;
-            }
-
-            // Check if this instance should process embeddings
-            const embeddingLocation = await options.getOption('embeddingGenerationLocation') || 'client';
-            const isSyncServer = await this.isSyncServerForEmbeddings();
-            const shouldProcessEmbeddings = embeddingLocation === 'client' || isSyncServer;
-
-            // Setup automatic indexing if enabled and this instance should process embeddings
-            if (await options.getOptionBool('embeddingAutoUpdateEnabled') && shouldProcessEmbeddings) {
-                this.setupAutomaticIndexing();
-                log.info(`Index service: Automatic indexing enabled, processing embeddings ${isSyncServer ? 'as sync server' : 'as client'}`);
-            } else if (await options.getOptionBool('embeddingAutoUpdateEnabled')) {
-                log.info("Index service: Automatic indexing enabled, but this instance is not configured to process embeddings");
-            }
-
-            // Listen for note changes to update index
-            this.setupEventListeners();
-
-            this.initialized = true;
-            log.info("Index service initialized successfully");
-        } catch (error: any) {
-            log.error(`Error initializing index service: ${error.message || "Unknown error"}`);
-            throw error;
+        // Setup automatic indexing if enabled
+        if (await options.getOptionBool('embeddingAutoUpdateEnabled')) {
+            this.setupAutomaticIndexing();
         }
+
+        this.initialized = true;
+        log.info("Index service initialized");
     }
 
     /**
@@ -147,23 +110,7 @@ export class IndexService {
         this.automaticIndexingInterval = setInterval(async () => {
             try {
                 if (!this.indexingInProgress) {
-                    // Check if this instance should process embeddings
-                    const embeddingLocation = await options.getOption('embeddingGenerationLocation') || 'client';
-                    const isSyncServer = await this.isSyncServerForEmbeddings();
-                    const shouldProcessEmbeddings = embeddingLocation === 'client' || isSyncServer;
-
-                    if (!shouldProcessEmbeddings) {
-                        // This instance is not configured to process embeddings
-                        return;
-                    }
-
-                    const stats = await vectorStore.getEmbeddingStats();
-
-                    // Only run automatic indexing if we're below 95% completion
-                    if (stats.percentComplete < 95) {
-                        log.info(`Starting automatic indexing (current completion: ${stats.percentComplete}%)`);
-                        await this.runBatchIndexing(50); // Process 50 notes at a time
-                    }
+                    await this.runBatchIndexing(50); // Processing logic handles sync server checks
                 }
             } catch (error: any) {
                 log.error(`Error in automatic indexing: ${error.message || "Unknown error"}`);
@@ -498,35 +445,14 @@ export class IndexService {
         }
 
         try {
-            // Get all enabled embedding providers
-            const providers = await providerManager.getEnabledEmbeddingProviders();
-            if (!providers || providers.length === 0) {
-                throw new Error("No embedding providers available");
-            }
-
-            // Get the selected embedding provider
-            const options = (await import('../options.js')).default;
+            // Get the selected embedding provider on-demand
             const selectedEmbeddingProvider = await options.getOption('embeddingSelectedProvider');
-            let provider;
-
-            if (selectedEmbeddingProvider) {
-                // Try to use the selected provider
-                const enabledProviders = await providerManager.getEnabledEmbeddingProviders();
-                provider = enabledProviders.find(p => p.name === selectedEmbeddingProvider);
-                
-                if (!provider) {
-                    log.info(`Selected embedding provider ${selectedEmbeddingProvider} is not available, using first enabled provider`);
-                    // Fall back to first enabled provider
-                    provider = providers[0];
-                }
-            } else {
-                // No provider selected, use first available provider
-                log.info('No embedding provider selected, using first available provider');
-                provider = providers[0];
-            }
+            const provider = selectedEmbeddingProvider
+                ? await providerManager.getOrCreateEmbeddingProvider(selectedEmbeddingProvider)
+                : (await providerManager.getEnabledEmbeddingProviders())[0];
 
             if (!provider) {
-                throw new Error("No suitable embedding provider found");
+                throw new Error("No embedding provider available");
             }
 
             log.info(`Searching with embedding provider: ${provider.name}, model: ${provider.getConfig().model}`);
@@ -684,6 +610,12 @@ export class IndexService {
         }
 
         try {
+            // Get embedding providers on-demand
+            const providers = await providerManager.getEnabledEmbeddingProviders();
+            if (providers.length === 0) {
+                return "I don't have access to your note embeddings. Please configure an embedding provider in your AI settings.";
+            }
+
             // Find similar notes to the query
             const similarNotes = await this.findSimilarNotes(
                 query,
@@ -819,9 +751,13 @@ export class IndexService {
             // Get complete note context for indexing
             const context = await vectorStore.getNoteEmbeddingContext(noteId);
 
-            // Queue note for embedding with all available providers
-            const providers = await providerManager.getEnabledEmbeddingProviders();
-            for (const provider of providers) {
+            // Generate embedding with the selected provider
+            const selectedEmbeddingProvider = await options.getOption('embeddingSelectedProvider');
+            const provider = selectedEmbeddingProvider
+                ? await providerManager.getOrCreateEmbeddingProvider(selectedEmbeddingProvider)
+                : (await providerManager.getEnabledEmbeddingProviders())[0];
+
+            if (provider) {
                 try {
                     const embedding = await provider.generateNoteEmbeddings(context);
                     if (embedding) {
@@ -851,7 +787,7 @@ export class IndexService {
     async startEmbeddingGeneration() {
         try {
             log.info("Starting embedding generation system");
-            
+
             const aiEnabled = options.getOptionOrNull('aiEnabled') === "true";
             if (!aiEnabled) {
                 log.error("Cannot start embedding generation - AI features are disabled");
@@ -873,16 +809,13 @@ export class IndexService {
                 return;
             }
 
-            // Verify providers are available
-            if (!(await hasWorkingEmbeddingProviders())) {
-                throw new Error("No working embedding providers available");
-            }
-            
+            // Get embedding providers (will be created on-demand when needed)
             const providers = await providerManager.getEnabledEmbeddingProviders();
             if (providers.length === 0) {
-                throw new Error("No embedding providers available");
+                log.info("No embedding providers configured, but continuing initialization");
+            } else {
+                log.info(`Found ${providers.length} embedding providers: ${providers.map(p => p.name).join(', ')}`);
             }
-            log.info(`Found ${providers.length} embedding providers: ${providers.map(p => p.name).join(', ')}`);
 
             // Setup automatic indexing if enabled
             if (await options.getOptionBool('embeddingAutoUpdateEnabled')) {
@@ -899,10 +832,10 @@ export class IndexService {
 
             // Queue notes that don't have embeddings for current providers
             await this.queueNotesForMissingEmbeddings();
-            
+
             // Start processing the queue immediately
             await this.runBatchIndexing(20);
-            
+
             log.info("Embedding generation started successfully");
         } catch (error: any) {
             log.error(`Error starting embedding generation: ${error.message || "Unknown error"}`);
@@ -919,24 +852,24 @@ export class IndexService {
         try {
             // Wait for becca to be fully loaded before accessing notes
             await beccaLoader.beccaLoaded;
-            
+
             // Get all non-deleted notes
             const allNotes = Object.values(becca.notes).filter(note => !note.isDeleted);
-            
+
             // Get enabled providers
             const providers = await providerManager.getEnabledEmbeddingProviders();
             if (providers.length === 0) {
                 return;
             }
-            
+
             let queuedCount = 0;
             let excludedCount = 0;
-            
+
             // Process notes in batches to avoid overwhelming the system
             const batchSize = 100;
             for (let i = 0; i < allNotes.length; i += batchSize) {
                 const batch = allNotes.slice(i, i + batchSize);
-                
+
                 for (const note of batch) {
                     try {
                         // Skip notes excluded from AI
@@ -944,10 +877,10 @@ export class IndexService {
                             excludedCount++;
                             continue;
                         }
-                        
+
                         // Check if note needs embeddings for any enabled provider
                         let needsEmbedding = false;
-                        
+
                         for (const provider of providers) {
                             const config = provider.getConfig();
                             const existingEmbedding = await vectorStore.getEmbeddingForNote(
@@ -955,13 +888,13 @@ export class IndexService {
                                 provider.name,
                                 config.model
                             );
-                            
+
                             if (!existingEmbedding) {
                                 needsEmbedding = true;
                                 break;
                             }
                         }
-                        
+
                         if (needsEmbedding) {
                             await vectorStore.queueNoteForEmbedding(note.noteId, 'UPDATE');
                             queuedCount++;
@@ -970,7 +903,7 @@ export class IndexService {
                         log.error(`Error checking embeddings for note ${note.noteId}: ${error.message || 'Unknown error'}`);
                     }
                 }
-                
+
             }
         } catch (error: any) {
             log.error(`Error queuing notes for missing embeddings: ${error.message || 'Unknown error'}`);
@@ -1005,7 +938,7 @@ export class IndexService {
     async stopEmbeddingGeneration() {
         try {
             log.info("Stopping embedding generation system");
-            
+
             // Clear automatic indexing interval
             if (this.automaticIndexingInterval) {
                 clearInterval(this.automaticIndexingInterval);
@@ -1023,7 +956,7 @@ export class IndexService {
             // Mark as not indexing
             this.indexingInProgress = false;
             this.indexRebuildInProgress = false;
-            
+
             log.info("Embedding generation stopped successfully");
         } catch (error: any) {
             log.error(`Error stopping embedding generation: ${error.message || "Unknown error"}`);

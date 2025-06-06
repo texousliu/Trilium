@@ -267,12 +267,23 @@ export class AIServiceManager implements IAIServiceManager {
             // If not a provider prefix, treat the entire string as a model name and continue with normal provider selection
         }
 
-        // Try each provider in order until one succeeds
+        // If user has a specific provider selected, try only that one and fail fast
+        if (this.providerOrder.length === 1 && sortedProviders.length === 1) {
+            const selectedProvider = sortedProviders[0];
+            const service = await this.getOrCreateChatProvider(selectedProvider);
+            if (!service) {
+                throw new Error(`Failed to create selected chat provider: ${selectedProvider}. Please check your configuration.`);
+            }
+            log.info(`[AIServiceManager] Using selected provider ${selectedProvider} with options.stream: ${options.stream}`);
+            return await service.generateChatCompletion(messages, options);
+        }
+
+        // If no specific provider selected, try each provider in order until one succeeds
         let lastError: Error | null = null;
 
         for (const provider of sortedProviders) {
             try {
-                const service = this.services[provider];
+                const service = await this.getOrCreateChatProvider(provider);
                 if (service) {
                     log.info(`[AIServiceManager] Trying provider ${provider} with options.stream: ${options.stream}`);
                     return await service.generateChatCompletion(messages, options);
@@ -383,7 +394,7 @@ export class AIServiceManager implements IAIServiceManager {
     }
 
     /**
-     * Get or create a chat provider on-demand
+     * Get or create a chat provider on-demand with inline validation
      */
     private async getOrCreateChatProvider(providerName: ServiceProviders): Promise<AIService | null> {
         // Return existing provider if already created
@@ -391,38 +402,54 @@ export class AIServiceManager implements IAIServiceManager {
             return this.services[providerName];
         }
 
-        // Create provider on-demand based on configuration
+        // Create and validate provider on-demand
         try {
+            let service: AIService | null = null;
+            
             switch (providerName) {
-                case 'openai':
-                    const openaiApiKey = await options.getOption('openaiApiKey');
-                    if (openaiApiKey) {
-                        this.services.openai = new OpenAIService();
-                        log.info('Created OpenAI chat provider on-demand');
-                        return this.services.openai;
+                case 'openai': {
+                    const apiKey = await options.getOption('openaiApiKey');
+                    const baseUrl = await options.getOption('openaiBaseUrl');
+                    if (!apiKey && !baseUrl) return null;
+                    
+                    service = new OpenAIService();
+                    // Validate by checking if it's available
+                    if (!service.isAvailable()) {
+                        throw new Error('OpenAI service not available');
                     }
                     break;
+                }
                 
-                case 'anthropic':
-                    const anthropicApiKey = await options.getOption('anthropicApiKey');
-                    if (anthropicApiKey) {
-                        this.services.anthropic = new AnthropicService();
-                        log.info('Created Anthropic chat provider on-demand');
-                        return this.services.anthropic;
+                case 'anthropic': {
+                    const apiKey = await options.getOption('anthropicApiKey');
+                    if (!apiKey) return null;
+                    
+                    service = new AnthropicService();
+                    if (!service.isAvailable()) {
+                        throw new Error('Anthropic service not available');
                     }
                     break;
+                }
                 
-                case 'ollama':
-                    const ollamaBaseUrl = await options.getOption('ollamaBaseUrl');
-                    if (ollamaBaseUrl) {
-                        this.services.ollama = new OllamaService();
-                        log.info('Created Ollama chat provider on-demand');
-                        return this.services.ollama;
+                case 'ollama': {
+                    const baseUrl = await options.getOption('ollamaBaseUrl');
+                    if (!baseUrl) return null;
+                    
+                    service = new OllamaService();
+                    if (!service.isAvailable()) {
+                        throw new Error('Ollama service not available');
                     }
                     break;
+                }
+            }
+            
+            if (service) {
+                this.services[providerName] = service;
+                log.info(`Created and validated ${providerName} chat provider`);
+                return service;
             }
         } catch (error: any) {
-            log.error(`Error creating ${providerName} provider on-demand: ${error.message || 'Unknown error'}`);
+            log.error(`Failed to create ${providerName} chat provider: ${error.message || 'Unknown error'}`);
         }
 
         return null;
