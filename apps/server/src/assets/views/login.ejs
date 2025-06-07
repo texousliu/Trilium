@@ -26,7 +26,7 @@
 
         <% if (ssoEnabled) { %>
             <a href="/authenticate" class="google-login-btn">
-                <img src="<%= ssoIssuerIcon.length === 0 ? assetPath + '/images/google-logo.svg' : ssoIssuerIcon %>" alt="<%= ssoIssuerName %>">
+                <img src="<%= ssoIssuerIcon.length === 0 ? assetPathFragment + '/images/google-logo.svg' : ssoIssuerIcon %>" alt="<%= ssoIssuerName %>">
                 <%= t("login.sign_in_with_sso", { ssoIssuerName: ssoIssuerName }) %>
             </a>
         <% } else { %>
