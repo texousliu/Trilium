@@ -1,6 +1,6 @@
 /**
  * Provider Validation Service
- * 
+ *
  * Validates AI provider configurations before initializing the chat system.
  * This prevents startup errors when AI is enabled but providers are misconfigured.
  */
@@ -58,7 +58,7 @@ async function checkChatProviderConfigs(result: ProviderValidationResult): Promi
         // Check OpenAI chat provider
         const openaiApiKey = await options.getOption('openaiApiKey');
         const openaiBaseUrl = await options.getOption('openaiBaseUrl');
-        
+
         if (openaiApiKey || openaiBaseUrl) {
             result.validChatProviders.push('openai');
             log.info("OpenAI chat provider configuration available");
@@ -83,16 +83,6 @@ async function checkChatProviderConfigs(result: ProviderValidationResult): Promi
     }
 }
 
-/**
- * Check if we have at least one valid embedding provider available
- * Returns false since embeddings have been removed
- */
-export async function getEmbeddingProviderAvailability(): Promise<boolean> {
-    log.info("Embedding providers have been removed, returning false");
-    return false;
-}
-
 export default {
-    validateProviders,
-    getEmbeddingProviderAvailability
+    validateProviders
 };

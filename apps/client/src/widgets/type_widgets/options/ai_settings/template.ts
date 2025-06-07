@@ -16,7 +16,7 @@ export const TPL = `
     </div>
 </div>
 
-<!-- Embedding statistics section removed -->
+<!-- AI settings template -->
 
 <div class="ai-providers-section options-section">
     <h4>${t("ai_llm.provider_configuration")}</h4>

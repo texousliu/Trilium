@@ -6,7 +6,7 @@ import type { OpenAIModelResponse, AnthropicModelResponse, OllamaModelResponse }
 
 export class ProviderService {
     constructor(private $widget: JQuery<HTMLElement>) {
-        // Embedding functionality removed
+        // AI provider settings
     }
 
     /**
@@ -204,7 +204,7 @@ export class ProviderService {
         try {
             // Use the general Ollama base URL
             const ollamaBaseUrl = this.$widget.find('.ollama-base-url').val() as string;
-            
+
             const response = await server.get<OllamaModelResponse>(`llm/providers/ollama/models?baseUrl=${encodeURIComponent(ollamaBaseUrl)}`);
 
             if (response && response.success && response.models && response.models.length > 0) {

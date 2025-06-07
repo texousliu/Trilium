@@ -11,7 +11,6 @@
  */
 
 import log from '../../../log.js';
-import providerManager from '../modules/provider_manager.js';
 import cacheManager from '../modules/cache_manager.js';
 import queryProcessor from './query_processor.js';
 import contextFormatter from '../modules/context_formatter.js';
@@ -56,17 +55,11 @@ export class ContextService {
 
         this.initPromise = (async () => {
             try {
-                // Initialize provider
-                const provider = await providerManager.getSelectedEmbeddingProvider();
-                if (!provider) {
-                    throw new Error(`No embedding provider available. Could not initialize context service.`);
-                }
-
                 // Agent tools are already initialized in the AIServiceManager constructor
                 // No need to initialize them again
 
                 this.initialized = true;
-                log.info(`Context service initialized - embeddings disabled`);
+                log.info(`Context service initialized`);
             } catch (error: unknown) {
                 const errorMessage = error instanceof Error ? error.message : String(error);
                 log.error(`Failed to initialize context service: ${errorMessage}`);
@@ -177,10 +170,9 @@ export class ContextService {
                 }
             }
 
-            // Step 3: Find relevant notes using basic text search (since embeddings are removed)
-            // This will use traditional note search instead of vector similarity
-            log.info("Using traditional search instead of embedding-based search");
-            
+            // Step 3: Find relevant notes using traditional search
+            log.info("Using traditional search for note discovery");
+
             // Use fallback context based on the context note if provided
             if (contextNoteId) {
                 try {
@@ -194,7 +186,7 @@ export class ContextService {
                             similarity: 1.0,
                             content: content || ""
                         }];
-                        
+
                         // Add child notes as additional context
                         const childNotes = contextNote.getChildNotes().slice(0, maxResults - 1);
                         for (const child of childNotes) {
@@ -215,13 +207,10 @@ export class ContextService {
             log.info(`Final combined results: ${relevantNotes.length} relevant notes`);
 
             // Step 4: Build context from the notes
-            const provider = await providerManager.getSelectedEmbeddingProvider();
-            const providerId = 'default'; // Provider is always null since embeddings removed
-
             const context = await contextFormatter.buildContextFromNotes(
                 relevantNotes,
                 userQuestion,
-                providerId
+                'default'
             );
 
             // Step 5: Add agent tools context if requested

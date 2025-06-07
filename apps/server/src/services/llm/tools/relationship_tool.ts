@@ -11,7 +11,7 @@ import attributes from '../../attributes.js';
 import aiServiceManager from '../ai_service_manager.js';
 import { SEARCH_CONSTANTS } from '../constants/search_constants.js';
 import searchService from '../../search/services/search.js';
-// Define types locally since embeddings are no longer available
+// Define types locally for relationship tool
 interface Backlink {
     noteId: string;
     title: string;
@@ -278,7 +278,7 @@ export class RelationshipTool implements ToolHandler {
 
             // Create search queries from the note title and content
             const searchQueries = [title];
-            
+
             // Extract key terms from content if available
             if (content && typeof content === 'string') {
                 // Extract meaningful words from content (filter out common words)
@@ -288,7 +288,7 @@ export class RelationshipTool implements ToolHandler {
                     .filter(word => word.length > 3)
                     .filter(word => !/^(the|and|but|for|are|from|they|been|have|this|that|with|will|when|where|what|how)$/.test(word))
                     .slice(0, 10); // Take first 10 meaningful words
-                
+
                 if (contentWords.length > 0) {
                     searchQueries.push(contentWords.join(' '));
                 }
@@ -301,11 +301,11 @@ export class RelationshipTool implements ToolHandler {
 
             for (const query of searchQueries) {
                 try {
-                    const results = searchService.searchNotes(query, { 
+                    const results = searchService.searchNotes(query, {
                         includeArchivedNotes: false,
                         fastSearch: false // Use full search for better results
                     });
-                    
+
                     // Add results to our map (avoiding duplicates)
                     for (const note of results.slice(0, limit * 2)) { // Get more to account for duplicates
                         if (note.noteId !== sourceNote.noteId && !note.isDeleted) {

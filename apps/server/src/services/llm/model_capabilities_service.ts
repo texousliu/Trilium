@@ -6,7 +6,7 @@ import aiServiceManager from './ai_service_manager.js';
 
 /**
  * Service for fetching and caching model capabilities
- * Simplified to only handle chat models since embeddings have been removed
+ * Handles chat model capabilities
  */
 export class ModelCapabilitiesService {
     // Cache model capabilities
@@ -24,10 +24,10 @@ export class ModelCapabilitiesService {
 
         // Get from static definitions or service
         const capabilities = await this.fetchChatModelCapabilities(modelName);
-        
+
         // Cache the result
         this.capabilitiesCache.set(`chat:${modelName}`, capabilities);
-        
+
         return capabilities;
     }
 

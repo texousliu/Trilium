@@ -8,7 +8,7 @@ import { ModelSelectionStage } from './stages/model_selection_stage.js';
 import { LLMCompletionStage } from './stages/llm_completion_stage.js';
 import { ResponseProcessingStage } from './stages/response_processing_stage.js';
 import { ToolCallingStage } from './stages/tool_calling_stage.js';
-// VectorSearchStage removed along with embedding functionality
+// Traditional search is used instead of vector search
 import toolRegistry from '../tools/tool_registry.js';
 import toolInitializer from '../tools/tool_initializer.js';
 import log from '../../log.js';
@@ -29,7 +29,7 @@ export class ChatPipeline {
         llmCompletion: LLMCompletionStage;
         responseProcessing: ResponseProcessingStage;
         toolCalling: ToolCallingStage;
-        // vectorSearch removed with embedding functionality
+        // traditional search is used instead of vector search
     };
 
     config: ChatPipelineConfig;
@@ -50,7 +50,7 @@ export class ChatPipeline {
             llmCompletion: new LLMCompletionStage(),
             responseProcessing: new ResponseProcessingStage(),
             toolCalling: new ToolCallingStage(),
-            // vectorSearch removed with embedding functionality
+            // traditional search is used instead of vector search
         };
 
         // Set default configuration values
@@ -307,7 +307,7 @@ export class ChatPipeline {
 
                     // Forward to callback with original chunk data in case it contains additional information
                     streamCallback(processedChunk.text, processedChunk.done, chunk);
-                    
+
                     // Mark that we have streamed content to prevent duplication
                     hasStreamedContent = true;
                 });

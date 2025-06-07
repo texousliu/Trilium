@@ -92,7 +92,7 @@ const ALLOWED_OPTIONS = new Set<OptionNames>([
     "showLoginInShareTheme",
     "splitEditorOrientation",
 
-    // AI/LLM integration options (embedding options removed)
+    // AI/LLM integration options
     "aiEnabled",
     "aiTemperature",
     "aiSystemPrompt",
