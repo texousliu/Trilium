@@ -210,7 +210,7 @@ export class ChatPipeline {
                 executionTime: Date.now() - vectorSearchStartTime
             };
 
-            this.updateStageMetrics('vectorSearch', vectorSearchStartTime);
+            // Skip metrics update for disabled vector search functionality
             log.info(`Vector search disabled - using tool-based context extraction instead`);
 
             // Extract context from search results
@@ -898,6 +898,12 @@ export class ChatPipeline {
 
         const executionTime = Date.now() - startTime;
         const metrics = this.metrics.stageMetrics[stageName];
+
+        // Guard against undefined metrics (e.g., for removed stages)
+        if (!metrics) {
+            log.info(`WARNING: Attempted to update metrics for unknown stage: ${stageName}`);
+            return;
+        }
 
         metrics.totalExecutions++;
         metrics.averageExecutionTime =
