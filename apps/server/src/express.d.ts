@@ -2,7 +2,6 @@ import type { SessionData } from "express-session";
 
 export declare module "express-serve-static-core" {
     interface Request {
-        session: SessionData;
         headers: {
             "x-local-date"?: string;
             "x-labels"?: string;
