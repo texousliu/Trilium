@@ -46,12 +46,7 @@ export MAX_ALLOWED_FILE_SIZE_MB=450
 
 ### Disabling Authentication
 
-If you are running Trilium on localhost only or if authentication is handled by another component, you can disable Trilium’s authentication by adding the following to `config.ini`:
-
-```
-[General]
-noAuthentication=true
-```
+See <a class="reference-link" href="Server%20Installation/Authentication.md">Authentication</a>.
 
 ## Reverse Proxy Setup
 

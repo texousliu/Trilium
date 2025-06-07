@@ -199,6 +199,13 @@
                                     "value": "server-installation",
                                     "isInheritable": false,
                                     "position": 30
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "0hzsNCP31IAB",
+                                    "isInheritable": false,
+                                    "position": 130
                                 }
                             ],
                             "format": "markdown",
@@ -652,6 +659,55 @@
                                 },
                                 {
                                     "isClone": false,
+                                    "noteId": "0hzsNCP31IAB",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "Otzi9La2YAUX",
+                                        "WOcw2SLH6tbX",
+                                        "0hzsNCP31IAB"
+                                    ],
+                                    "title": "Authentication",
+                                    "notePosition": 110,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-lock-alt",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "7DAiwaf8Z7Rz",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "wX4HbRucYSDD",
+                                            "isInheritable": false,
+                                            "position": 30
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "YKWqdJhzi2VY",
+                                            "isInheritable": false,
+                                            "position": 40
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "Authentication.md",
+                                    "attachments": []
+                                },
+                                {
+                                    "isClone": false,
                                     "noteId": "7DAiwaf8Z7Rz",
                                     "notePath": [
                                         "pOsGYCXsbNQG",
@@ -660,7 +716,7 @@
                                         "7DAiwaf8Z7Rz"
                                     ],
                                     "title": "Multi-Factor Authentication",
-                                    "notePosition": 110,
+                                    "notePosition": 120,
                                     "prefix": null,
                                     "isExpanded": false,
                                     "type": "text",
@@ -686,6 +742,13 @@
                                             "value": "",
                                             "isInheritable": false,
                                             "position": 20
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-stopwatch",
+                                            "isInheritable": false,
+                                            "position": 30
                                         }
                                     ],
                                     "format": "markdown",
@@ -10729,18 +10792,18 @@
                             "mime": "text/html",
                             "attributes": [
                                 {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "bOP3TB56fL1V",
+                                    "isInheritable": false,
+                                    "position": 10
+                                },
+                                {
                                     "type": "label",
                                     "name": "iconClass",
                                     "value": "bx bxs-data",
                                     "isInheritable": false,
                                     "position": 10
-                                },
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "bOP3TB56fL1V",
-                                    "isInheritable": false,
-                                    "position": 20
                                 }
                             ],
                             "format": "markdown",
