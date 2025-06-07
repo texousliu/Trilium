@@ -50,7 +50,7 @@ export class SemanticContextExtractionStage extends BasePipelineStage<SemanticCo
             }
 
             // Step 2: Format search results into a context string
-            const provider = await providerManager.getPreferredEmbeddingProvider();
+            const provider = await providerManager.getSelectedEmbeddingProvider();
             const providerId = provider?.name || 'default';
 
             const context = await contextFormatter.buildContextFromNotes(

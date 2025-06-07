@@ -66,12 +66,13 @@ async function listModels(req: Request, res: Response) {
         const apiKey = await options.getOption('openaiApiKey');
 
         if (!apiKey) {
-            throw new Error('OpenAI API key is not configured');
+            // Log warning but don't throw - some OpenAI-compatible endpoints don't require API keys
+            log.info('OpenAI API key is not configured when listing models. This may cause issues with official OpenAI endpoints.');
         }
 
-        // Initialize OpenAI client with the API key and base URL
+        // Initialize OpenAI client with the API key (or empty string) and base URL
         const openai = new OpenAI({
-            apiKey,
+            apiKey: apiKey || '', // Default to empty string if no API key
             baseURL: openaiBaseUrl
         });
 
@@ -84,9 +85,9 @@ async function listModels(req: Request, res: Response) {
         // Include all models as chat models, without filtering by specific model names
         // This allows models from providers like OpenRouter to be displayed
         const chatModels = allModels
-            .filter((model) => 
+            .filter((model) =>
                 // Exclude models that are explicitly for embeddings
-                !model.id.includes('embedding') && 
+                !model.id.includes('embedding') &&
                 !model.id.includes('embed')
             )
             .map((model) => ({

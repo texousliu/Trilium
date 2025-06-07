@@ -14,7 +14,9 @@ export class OpenAIService extends BaseAIService {
     }
 
     override isAvailable(): boolean {
-        return super.isAvailable() && !!options.getOption('openaiApiKey');
+        // Make API key optional to support OpenAI-compatible endpoints that don't require authentication
+        // The provider is considered available as long as the parent checks pass
+        return super.isAvailable();
     }
 
     private getClient(apiKey: string, baseUrl?: string): OpenAI {
@@ -29,7 +31,7 @@ export class OpenAIService extends BaseAIService {
 
     async generateChatCompletion(messages: Message[], opts: ChatCompletionOptions = {}): Promise<ChatResponse> {
         if (!this.isAvailable()) {
-            throw new Error('OpenAI service is not available. Check API key and AI settings.');
+            throw new Error('OpenAI service is not available. Check AI settings.');
         }
 
         // Get provider-specific options from the central provider manager
@@ -256,5 +258,13 @@ export class OpenAIService extends BaseAIService {
             console.error('OpenAI service error:', error);
             throw error;
         }
+    }
+
+    /**
+     * Clear cached OpenAI client to force recreation with new settings
+     */
+    clearCache(): void {
+        this.openai = null;
+        log.info('OpenAI client cache cleared');
     }
 }

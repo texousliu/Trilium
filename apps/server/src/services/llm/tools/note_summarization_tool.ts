@@ -102,12 +102,7 @@ export class NoteSummarizationTool implements ToolHandler {
             const cleanContent = this.cleanHtml(content);
 
             // Generate the summary using the AI service
-            const aiService = aiServiceManager.getService();
-
-            if (!aiService) {
-                log.error('No AI service available for summarization');
-                return `Error: No AI service is available for summarization`;
-            }
+            const aiService = await aiServiceManager.getService();
 
             log.info(`Using ${aiService.getName()} to generate summary`);
 

@@ -87,6 +87,29 @@ export function registerEmbeddingProvider(provider: EmbeddingProvider) {
 }
 
 /**
+ * Unregister an embedding provider
+ */
+export function unregisterEmbeddingProvider(name: string): boolean {
+    const existed = providers.has(name);
+    if (existed) {
+        providers.delete(name);
+        log.info(`Unregistered embedding provider: ${name}`);
+    }
+    return existed;
+}
+
+/**
+ * Clear all embedding providers
+ */
+export function clearAllEmbeddingProviders(): void {
+    const providerNames = Array.from(providers.keys());
+    providers.clear();
+    if (providerNames.length > 0) {
+        log.info(`Cleared all embedding providers: ${providerNames.join(', ')}`);
+    }
+}
+
+/**
  * Get all registered embedding providers
  */
 export function getEmbeddingProviders(): EmbeddingProvider[] {
@@ -101,35 +124,126 @@ export function getEmbeddingProvider(name: string): EmbeddingProvider | undefine
 }
 
 /**
- * Get all enabled embedding providers
+ * Get or create a specific embedding provider with inline validation
  */
-export async function getEnabledEmbeddingProviders(): Promise<EmbeddingProvider[]> {
+export async function getOrCreateEmbeddingProvider(providerName: string): Promise<EmbeddingProvider | null> {
+    // Return existing provider if already created and valid
+    const existing = providers.get(providerName);
+    if (existing) {
+        return existing;
+    }
+
+    // Create and validate provider on-demand
+    try {
+        let provider: EmbeddingProvider | null = null;
+
+        switch (providerName) {
+            case 'ollama': {
+                const baseUrl = await options.getOption('ollamaEmbeddingBaseUrl');
+                if (!baseUrl) return null;
+
+                const model = await options.getOption('ollamaEmbeddingModel');
+                provider = new OllamaEmbeddingProvider({
+                    model,
+                    dimension: 768,
+                    type: 'float32',
+                    baseUrl
+                });
+
+                // Validate by initializing (if provider supports it)
+                if ('initialize' in provider && typeof provider.initialize === 'function') {
+                    await provider.initialize();
+                }
+                break;
+            }
+
+            case 'openai': {
+                const apiKey = await options.getOption('openaiApiKey');
+                const baseUrl = await options.getOption('openaiBaseUrl');
+                if (!apiKey && !baseUrl) return null;
+
+                const model = await options.getOption('openaiEmbeddingModel');
+                provider = new OpenAIEmbeddingProvider({
+                    model,
+                    dimension: 1536,
+                    type: 'float32',
+                    apiKey: apiKey || '',
+                    baseUrl: baseUrl || 'https://api.openai.com/v1'
+                });
+
+                if (!apiKey) {
+                    log.info('OpenAI embedding provider created without API key for compatible endpoints');
+                }
+                break;
+            }
+
+            case 'voyage': {
+                const apiKey = await options.getOption('voyageApiKey' as any);
+                if (!apiKey) return null;
+
+                const model = await options.getOption('voyageEmbeddingModel') || 'voyage-2';
+                provider = new VoyageEmbeddingProvider({
+                    model,
+                    dimension: 1024,
+                    type: 'float32',
+                    apiKey,
+                    baseUrl: 'https://api.voyageai.com/v1'
+                });
+                break;
+            }
+
+            case 'local': {
+                provider = new SimpleLocalEmbeddingProvider({
+                    model: 'local',
+                    dimension: 384,
+                    type: 'float32'
+                });
+                break;
+            }
+
+            default:
+                return null;
+        }
+
+        if (provider) {
+            registerEmbeddingProvider(provider);
+            log.info(`Created and validated ${providerName} embedding provider`);
+            return provider;
+        }
+    } catch (error: any) {
+        log.error(`Failed to create ${providerName} embedding provider: ${error.message || 'Unknown error'}`);
+    }
+
+    return null;
+}
+
+/**
+ * Get all enabled embedding providers for the specified feature
+ */
+export async function getEnabledEmbeddingProviders(feature: 'embeddings' | 'chat' = 'embeddings'): Promise<EmbeddingProvider[]> {
     if (!(await options.getOptionBool('aiEnabled'))) {
         return [];
     }
 
-    // Get providers from database ordered by priority
-    const dbProviders = await sql.getRows(`
-        SELECT providerId, name, config
-        FROM embedding_providers
-        ORDER BY priority DESC`
-    );
-
     const result: EmbeddingProvider[] = [];
 
-    for (const row of dbProviders) {
-        const rowData = row as any;
-        const provider = providers.get(rowData.name);
+    // Get the selected provider for the feature
+    const selectedProvider = feature === 'embeddings'
+        ? await options.getOption('embeddingSelectedProvider')
+        : await options.getOption('aiSelectedProvider');
 
-        if (provider) {
-            result.push(provider);
-        } else {
-            // Only log error if we haven't logged it before for this provider
-            if (!loggedProviderErrors.has(rowData.name)) {
-                log.error(`Enabled embedding provider ${rowData.name} not found in registered providers`);
-                loggedProviderErrors.add(rowData.name);
-            }
+        // Try to get or create the specific selected provider
+        const provider = await getOrCreateEmbeddingProvider(selectedProvider);
+        if (!provider) {
+            throw new Error(`Failed to create selected embedding provider: ${selectedProvider}. Please check your configuration.`);
         }
+        result.push(provider);
+
+
+    // Always ensure local provider as fallback
+    const localProvider = await getOrCreateEmbeddingProvider('local');
+    if (localProvider && !result.some(p => p.name === 'local')) {
+        result.push(localProvider);
     }
 
     return result;
@@ -232,144 +346,18 @@ export async function getEmbeddingProviderConfigs() {
     return await sql.getRows("SELECT * FROM embedding_providers ORDER BY priority DESC");
 }
 
-/**
- * Initialize the default embedding providers
- */
-export async function initializeDefaultProviders() {
-    // Register built-in providers
-    try {
-        // Register OpenAI provider if API key is configured
-        const openaiApiKey = await options.getOption('openaiApiKey');
-        if (openaiApiKey) {
-            const openaiModel = await options.getOption('openaiEmbeddingModel') || 'text-embedding-3-small';
-            const openaiBaseUrl = await options.getOption('openaiBaseUrl') || 'https://api.openai.com/v1';
-
-            registerEmbeddingProvider(new OpenAIEmbeddingProvider({
-                model: openaiModel,
-                dimension: 1536, // OpenAI's typical dimension
-                type: 'float32',
-                apiKey: openaiApiKey,
-                baseUrl: openaiBaseUrl
-            }));
-
-            // Create OpenAI provider config if it doesn't exist
-            const existingOpenAI = await sql.getRow(
-                "SELECT * FROM embedding_providers WHERE name = ?",
-                ['openai']
-            );
-
-            if (!existingOpenAI) {
-                await createEmbeddingProviderConfig('openai', {
-                    model: openaiModel,
-                    dimension: 1536,
-                    type: 'float32'
-                }, 100);
-            }
-        }
-
-        // Register Voyage provider if API key is configured
-        const voyageApiKey = await options.getOption('voyageApiKey' as any);
-        if (voyageApiKey) {
-            const voyageModel = await options.getOption('voyageEmbeddingModel') || 'voyage-2';
-            const voyageBaseUrl = 'https://api.voyageai.com/v1';
-
-            registerEmbeddingProvider(new VoyageEmbeddingProvider({
-                model: voyageModel,
-                dimension: 1024, // Voyage's embedding dimension
-                type: 'float32',
-                apiKey: voyageApiKey,
-                baseUrl: voyageBaseUrl
-            }));
-
-            // Create Voyage provider config if it doesn't exist
-            const existingVoyage = await sql.getRow(
-                "SELECT * FROM embedding_providers WHERE name = ?",
-                ['voyage']
-            );
-
-            if (!existingVoyage) {
-                await createEmbeddingProviderConfig('voyage', {
-                    model: voyageModel,
-                    dimension: 1024,
-                    type: 'float32'
-                }, 75);
-            }
-        }
-
-        // Register Ollama provider if base URL is configured
-        const ollamaBaseUrl = await options.getOption('ollamaBaseUrl');
-        if (ollamaBaseUrl) {
-            // Use specific embedding models if available
-            const embeddingModel = await options.getOption('ollamaEmbeddingModel');
-
-            try {
-                // Create provider with initial dimension to be updated during initialization
-                const ollamaProvider = new OllamaEmbeddingProvider({
-                    model: embeddingModel,
-                    dimension: 768, // Initial value, will be updated during initialization
-                    type: 'float32',
-                    baseUrl: ollamaBaseUrl
-                });
-
-                // Register the provider
-                registerEmbeddingProvider(ollamaProvider);
-
-                // Initialize the provider to detect model capabilities
-                await ollamaProvider.initialize();
-
-                // Create Ollama provider config if it doesn't exist
-                const existingOllama = await sql.getRow(
-                    "SELECT * FROM embedding_providers WHERE name = ?",
-                    ['ollama']
-                );
-
-                if (!existingOllama) {
-                    await createEmbeddingProviderConfig('ollama', {
-                        model: embeddingModel,
-                        dimension: ollamaProvider.getDimension(),
-                        type: 'float32'
-                    }, 50);
-                }
-            } catch (error: any) {
-                log.error(`Error initializing Ollama embedding provider: ${error.message || 'Unknown error'}`);
-            }
-        }
-
-        // Always register local provider as fallback
-        registerEmbeddingProvider(new SimpleLocalEmbeddingProvider({
-            model: 'local',
-            dimension: 384,
-            type: 'float32'
-        }));
-
-        // Create local provider config if it doesn't exist
-        const existingLocal = await sql.getRow(
-            "SELECT * FROM embedding_providers WHERE name = ?",
-            ['local']
-        );
-
-        if (!existingLocal) {
-            await createEmbeddingProviderConfig('local', {
-                model: 'local',
-                dimension: 384,
-                type: 'float32'
-            }, 10);
-        }
-    } catch (error: any) {
-        log.error(`Error initializing default embedding providers: ${error.message || 'Unknown error'}`);
-    }
-}
-
 export default {
     registerEmbeddingProvider,
+    unregisterEmbeddingProvider,
+    clearAllEmbeddingProviders,
     getEmbeddingProviders,
     getEmbeddingProvider,
     getEnabledEmbeddingProviders,
+    getOrCreateEmbeddingProvider,
     createEmbeddingProviderConfig,
     updateEmbeddingProviderConfig,
     deleteEmbeddingProviderConfig,
-    getEmbeddingProviderConfigs,
-    initializeDefaultProviders
+    getEmbeddingProviderConfigs
 };
 
 /**
@@ -382,7 +370,8 @@ export function getOpenAIOptions(
     try {
         const apiKey = options.getOption('openaiApiKey');
         if (!apiKey) {
-            throw new Error('OpenAI API key is not configured');
+            // Log warning but don't throw - some OpenAI-compatible endpoints don't require API keys
+            log.info('OpenAI API key is not configured. This may cause issues with official OpenAI endpoints.');
         }
 
         const baseUrl = options.getOption('openaiBaseUrl') || PROVIDER_CONSTANTS.OPENAI.BASE_URL;
@@ -407,7 +396,7 @@ export function getOpenAIOptions(
 
         return {
             // Connection settings
-            apiKey,
+            apiKey: apiKey || '', // Default to empty string if no API key
             baseUrl,
 
             // Provider metadata

@@ -12,6 +12,7 @@
 import log from "../log.js";
 import options from "../options.js";
 import becca from "../../becca/becca.js";
+import beccaLoader from "../../becca/becca_loader.js";
 import vectorStore from "./embeddings/index.js";
 import providerManager from "./providers/providers.js";
 import { ContextExtractor } from "./context/index.js";
@@ -21,6 +22,7 @@ import sqlInit from "../sql_init.js";
 import { CONTEXT_PROMPTS } from './constants/llm_prompt_constants.js';
 import { SEARCH_CONSTANTS } from './constants/search_constants.js';
 import { isNoteExcludedFromAI } from "./utils/ai_exclusion_utils.js";
+import { hasWorkingEmbeddingProviders } from "./provider_validation.js";
 
 export class IndexService {
     private initialized = false;
@@ -46,47 +48,16 @@ export class IndexService {
     async initialize() {
         if (this.initialized) return;
 
-        try {
-            // Check if database is initialized before proceeding
-            if (!sqlInit.isDbInitialized()) {
-                log.info("Index service: Database not initialized yet, skipping initialization");
-                return;
-            }
+        // Setup event listeners for note changes
+        this.setupEventListeners();
 
-            const aiEnabled = options.getOptionOrNull('aiEnabled') === "true";
-            if (!aiEnabled) {
-                log.info("Index service: AI features disabled, skipping initialization");
-                return;
-            }
-
-            // Check if embedding system is ready
-            const providers = await providerManager.getEnabledEmbeddingProviders();
-            if (!providers || providers.length === 0) {
-                throw new Error("No embedding providers available");
-            }
-
-            // Check if this instance should process embeddings
-            const embeddingLocation = await options.getOption('embeddingGenerationLocation') || 'client';
-            const isSyncServer = await this.isSyncServerForEmbeddings();
-            const shouldProcessEmbeddings = embeddingLocation === 'client' || isSyncServer;
-
-            // Setup automatic indexing if enabled and this instance should process embeddings
-            if (await options.getOptionBool('embeddingAutoUpdateEnabled') && shouldProcessEmbeddings) {
-                this.setupAutomaticIndexing();
-                log.info(`Index service: Automatic indexing enabled, processing embeddings ${isSyncServer ? 'as sync server' : 'as client'}`);
-            } else if (await options.getOptionBool('embeddingAutoUpdateEnabled')) {
-                log.info("Index service: Automatic indexing enabled, but this instance is not configured to process embeddings");
-            }
-
-            // Listen for note changes to update index
-            this.setupEventListeners();
-
-            this.initialized = true;
-            log.info("Index service initialized successfully");
-        } catch (error: any) {
-            log.error(`Error initializing index service: ${error.message || "Unknown error"}`);
-            throw error;
+        // Setup automatic indexing if enabled
+        if (await options.getOptionBool('embeddingAutoUpdateEnabled')) {
+            this.setupAutomaticIndexing();
         }
+
+        this.initialized = true;
+        log.info("Index service initialized");
     }
 
     /**
@@ -139,23 +110,7 @@ export class IndexService {
         this.automaticIndexingInterval = setInterval(async () => {
             try {
                 if (!this.indexingInProgress) {
-                    // Check if this instance should process embeddings
-                    const embeddingLocation = await options.getOption('embeddingGenerationLocation') || 'client';
-                    const isSyncServer = await this.isSyncServerForEmbeddings();
-                    const shouldProcessEmbeddings = embeddingLocation === 'client' || isSyncServer;
-
-                    if (!shouldProcessEmbeddings) {
-                        // This instance is not configured to process embeddings
-                        return;
-                    }
-
-                    const stats = await vectorStore.getEmbeddingStats();
-
-                    // Only run automatic indexing if we're below 95% completion
-                    if (stats.percentComplete < 95) {
-                        log.info(`Starting automatic indexing (current completion: ${stats.percentComplete}%)`);
-                        await this.runBatchIndexing(50); // Process 50 notes at a time
-                    }
+                    await this.runBatchIndexing(50); // Processing logic handles sync server checks
                 }
             } catch (error: any) {
                 log.error(`Error in automatic indexing: ${error.message || "Unknown error"}`);
@@ -265,7 +220,7 @@ export class IndexService {
                 this.indexRebuildTotal = totalNotes;
 
                 log.info("No embeddings found, starting full embedding generation first");
-                await vectorStore.reprocessAllNotes();
+                await this.reprocessAllNotes();
                 log.info("Full embedding generation initiated");
             } else {
                 // For index rebuild, use the number of embeddings as the total
@@ -292,7 +247,7 @@ export class IndexService {
                     // Only start indexing if we're below 90% completion or if embeddings exist but need optimization
                     if (stats.percentComplete < 90) {
                         log.info("Embedding coverage below 90%, starting full embedding generation");
-                        await vectorStore.reprocessAllNotes();
+                        await this.reprocessAllNotes();
                         log.info("Full embedding generation initiated");
                     } else {
                         log.info(`Embedding coverage at ${stats.percentComplete}%, starting index optimization`);
@@ -378,11 +333,10 @@ export class IndexService {
 
             if (!shouldProcessEmbeddings) {
                 // This instance is not configured to process embeddings
-                log.info("Skipping batch indexing as this instance is not configured to process embeddings");
                 return false;
             }
 
-            // Process the embedding queue
+            // Process the embedding queue (batch size is controlled by embeddingBatchSize option)
             await vectorStore.processEmbeddingQueue();
 
             return true;
@@ -491,51 +445,14 @@ export class IndexService {
         }
 
         try {
-            // Get all enabled embedding providers
-            const providers = await providerManager.getEnabledEmbeddingProviders();
-            if (!providers || providers.length === 0) {
-                throw new Error("No embedding providers available");
-            }
-
-            // Get the embedding provider precedence
-            const options = (await import('../options.js')).default;
-            let preferredProviders: string[] = [];
-
-            const embeddingPrecedence = await options.getOption('embeddingProviderPrecedence');
-            let provider;
-
-            if (embeddingPrecedence) {
-                // Parse the precedence string
-                if (embeddingPrecedence.startsWith('[') && embeddingPrecedence.endsWith(']')) {
-                    preferredProviders = JSON.parse(embeddingPrecedence);
-                } else if (typeof embeddingPrecedence === 'string') {
-                    if (embeddingPrecedence.includes(',')) {
-                        preferredProviders = embeddingPrecedence.split(',').map(p => p.trim());
-                    } else {
-                        preferredProviders = [embeddingPrecedence];
-                    }
-                }
-
-                // Find first enabled provider by precedence order
-                for (const providerName of preferredProviders) {
-                    const matchedProvider = providers.find(p => p.name === providerName);
-                    if (matchedProvider) {
-                        provider = matchedProvider;
-                        break;
-                    }
-                }
-
-                // If no match found, use first available
-                if (!provider && providers.length > 0) {
-                    provider = providers[0];
-                }
-            } else {
-                // Default to first available provider
-                provider = providers[0];
-            }
+            // Get the selected embedding provider on-demand
+            const selectedEmbeddingProvider = await options.getOption('embeddingSelectedProvider');
+            const provider = selectedEmbeddingProvider
+                ? await providerManager.getOrCreateEmbeddingProvider(selectedEmbeddingProvider)
+                : (await providerManager.getEnabledEmbeddingProviders())[0];
 
             if (!provider) {
-                throw new Error("No suitable embedding provider found");
+                throw new Error("No embedding provider available");
             }
 
             log.info(`Searching with embedding provider: ${provider.name}, model: ${provider.getConfig().model}`);
@@ -693,6 +610,12 @@ export class IndexService {
         }
 
         try {
+            // Get embedding providers on-demand
+            const providers = await providerManager.getEnabledEmbeddingProviders();
+            if (providers.length === 0) {
+                return "I don't have access to your note embeddings. Please configure an embedding provider in your AI settings.";
+            }
+
             // Find similar notes to the query
             const similarNotes = await this.findSimilarNotes(
                 query,
@@ -828,9 +751,13 @@ export class IndexService {
             // Get complete note context for indexing
             const context = await vectorStore.getNoteEmbeddingContext(noteId);
 
-            // Queue note for embedding with all available providers
-            const providers = await providerManager.getEnabledEmbeddingProviders();
-            for (const provider of providers) {
+            // Generate embedding with the selected provider
+            const selectedEmbeddingProvider = await options.getOption('embeddingSelectedProvider');
+            const provider = selectedEmbeddingProvider
+                ? await providerManager.getOrCreateEmbeddingProvider(selectedEmbeddingProvider)
+                : (await providerManager.getEnabledEmbeddingProviders())[0];
+
+            if (provider) {
                 try {
                     const embedding = await provider.generateNoteEmbeddings(context);
                     if (embedding) {
@@ -851,6 +778,189 @@ export class IndexService {
         } catch (error: any) {
             log.error(`Error generating note index for ${noteId}: ${error.message || "Unknown error"}`);
             return false;
+        }
+    }
+
+    /**
+     * Start embedding generation (called when AI is enabled)
+     */
+    async startEmbeddingGeneration() {
+        try {
+            log.info("Starting embedding generation system");
+
+            const aiEnabled = options.getOptionOrNull('aiEnabled') === "true";
+            if (!aiEnabled) {
+                log.error("Cannot start embedding generation - AI features are disabled");
+                throw new Error("AI features must be enabled first");
+            }
+
+            // Re-initialize if needed
+            if (!this.initialized) {
+                await this.initialize();
+            }
+
+            // Check if this instance should process embeddings
+            const embeddingLocation = await options.getOption('embeddingGenerationLocation') || 'client';
+            const isSyncServer = await this.isSyncServerForEmbeddings();
+            const shouldProcessEmbeddings = embeddingLocation === 'client' || isSyncServer;
+
+            if (!shouldProcessEmbeddings) {
+                log.info("This instance is not configured to process embeddings");
+                return;
+            }
+
+            // Get embedding providers (will be created on-demand when needed)
+            const providers = await providerManager.getEnabledEmbeddingProviders();
+            if (providers.length === 0) {
+                log.info("No embedding providers configured, but continuing initialization");
+            } else {
+                log.info(`Found ${providers.length} embedding providers: ${providers.map(p => p.name).join(', ')}`);
+            }
+
+            // Setup automatic indexing if enabled
+            if (await options.getOptionBool('embeddingAutoUpdateEnabled')) {
+                this.setupAutomaticIndexing();
+                log.info(`Automatic embedding indexing started ${isSyncServer ? 'as sync server' : 'as client'}`);
+            }
+
+            // Start background processing of the embedding queue
+            const { setupEmbeddingBackgroundProcessing } = await import('./embeddings/events.js');
+            await setupEmbeddingBackgroundProcessing();
+
+            // Re-initialize event listeners
+            this.setupEventListeners();
+
+            // Queue notes that don't have embeddings for current providers
+            await this.queueNotesForMissingEmbeddings();
+
+            // Start processing the queue immediately
+            await this.runBatchIndexing(20);
+
+            log.info("Embedding generation started successfully");
+        } catch (error: any) {
+            log.error(`Error starting embedding generation: ${error.message || "Unknown error"}`);
+            throw error;
+        }
+    }
+
+
+
+    /**
+     * Queue notes that don't have embeddings for current provider settings
+     */
+    async queueNotesForMissingEmbeddings() {
+        try {
+            // Wait for becca to be fully loaded before accessing notes
+            await beccaLoader.beccaLoaded;
+
+            // Get all non-deleted notes
+            const allNotes = Object.values(becca.notes).filter(note => !note.isDeleted);
+
+            // Get enabled providers
+            const providers = await providerManager.getEnabledEmbeddingProviders();
+            if (providers.length === 0) {
+                return;
+            }
+
+            let queuedCount = 0;
+            let excludedCount = 0;
+
+            // Process notes in batches to avoid overwhelming the system
+            const batchSize = 100;
+            for (let i = 0; i < allNotes.length; i += batchSize) {
+                const batch = allNotes.slice(i, i + batchSize);
+
+                for (const note of batch) {
+                    try {
+                        // Skip notes excluded from AI
+                        if (isNoteExcludedFromAI(note)) {
+                            excludedCount++;
+                            continue;
+                        }
+
+                        // Check if note needs embeddings for any enabled provider
+                        let needsEmbedding = false;
+
+                        for (const provider of providers) {
+                            const config = provider.getConfig();
+                            const existingEmbedding = await vectorStore.getEmbeddingForNote(
+                                note.noteId,
+                                provider.name,
+                                config.model
+                            );
+
+                            if (!existingEmbedding) {
+                                needsEmbedding = true;
+                                break;
+                            }
+                        }
+
+                        if (needsEmbedding) {
+                            await vectorStore.queueNoteForEmbedding(note.noteId, 'UPDATE');
+                            queuedCount++;
+                        }
+                    } catch (error: any) {
+                        log.error(`Error checking embeddings for note ${note.noteId}: ${error.message || 'Unknown error'}`);
+                    }
+                }
+
+            }
+        } catch (error: any) {
+            log.error(`Error queuing notes for missing embeddings: ${error.message || 'Unknown error'}`);
+        }
+    }
+
+    /**
+     * Reprocess all notes to update embeddings
+     */
+    async reprocessAllNotes() {
+        if (!this.initialized) {
+            await this.initialize();
+        }
+
+        try {
+            // Get all non-deleted note IDs
+            const noteIds = await sql.getColumn("SELECT noteId FROM notes WHERE isDeleted = 0");
+
+            // Process each note ID
+            for (const noteId of noteIds) {
+                await vectorStore.queueNoteForEmbedding(noteId as string, 'UPDATE');
+            }
+        } catch (error: any) {
+            log.error(`Error reprocessing all notes: ${error.message || 'Unknown error'}`);
+            throw error;
+        }
+    }
+
+    /**
+     * Stop embedding generation (called when AI is disabled)
+     */
+    async stopEmbeddingGeneration() {
+        try {
+            log.info("Stopping embedding generation system");
+
+            // Clear automatic indexing interval
+            if (this.automaticIndexingInterval) {
+                clearInterval(this.automaticIndexingInterval);
+                this.automaticIndexingInterval = undefined;
+                log.info("Automatic indexing stopped");
+            }
+
+            // Stop the background processing from embeddings/events.ts
+            const { stopEmbeddingBackgroundProcessing } = await import('./embeddings/events.js');
+            stopEmbeddingBackgroundProcessing();
+
+            // Clear all embedding providers to clean up resources
+            providerManager.clearAllEmbeddingProviders();
+
+            // Mark as not indexing
+            this.indexingInProgress = false;
+            this.indexRebuildInProgress = false;
+
+            log.info("Embedding generation stopped successfully");
+        } catch (error: any) {
+            log.error(`Error stopping embedding generation: ${error.message || "Unknown error"}`);
+            throw error;
         }
     }
 }

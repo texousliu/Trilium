@@ -408,7 +408,7 @@ async function reprocessAllNotes(req: Request, res: Response) {
         try {
             // Wrap the operation in cls.init to ensure proper context
             cls.init(async () => {
-                await vectorStore.reprocessAllNotes();
+                await indexService.reprocessAllNotes();
                 log.info("Embedding reprocessing completed successfully");
             });
         } catch (error: any) {
@@ -782,6 +782,49 @@ async function getIndexRebuildStatus(req: Request, res: Response) {
     };
 }
 
+/**
+ * Start embedding generation when AI is enabled
+ */
+async function startEmbeddings(req: Request, res: Response) {
+    try {
+        log.info("Starting embedding generation system");
+        
+        // Initialize the index service if not already initialized
+        await indexService.initialize();
+        
+        // Start automatic indexing
+        await indexService.startEmbeddingGeneration();
+        
+        return {
+            success: true,
+            message: "Embedding generation started"
+        };
+    } catch (error: any) {
+        log.error(`Error starting embeddings: ${error.message || 'Unknown error'}`);
+        throw new Error(`Failed to start embeddings: ${error.message || 'Unknown error'}`);
+    }
+}
+
+/**
+ * Stop embedding generation when AI is disabled
+ */
+async function stopEmbeddings(req: Request, res: Response) {
+    try {
+        log.info("Stopping embedding generation system");
+        
+        // Stop automatic indexing
+        await indexService.stopEmbeddingGeneration();
+        
+        return {
+            success: true,
+            message: "Embedding generation stopped"
+        };
+    } catch (error: any) {
+        log.error(`Error stopping embeddings: ${error.message || 'Unknown error'}`);
+        throw new Error(`Failed to stop embeddings: ${error.message || 'Unknown error'}`);
+    }
+}
+
 export default {
     findSimilarNotes,
     searchByText,
@@ -794,5 +837,7 @@ export default {
     retryFailedNote,
     retryAllFailedNotes,
     rebuildIndex,
-    getIndexRebuildStatus
+    getIndexRebuildStatus,
+    startEmbeddings,
+    stopEmbeddings
 };

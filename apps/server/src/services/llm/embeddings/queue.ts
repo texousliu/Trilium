@@ -282,8 +282,6 @@ export async function processEmbeddingQueue() {
                 continue;
             }
 
-            // Log that we're starting to process this note
-            log.info(`Starting embedding generation for note ${noteId}`);
 
             // Get note context for embedding
             const context = await getNoteEmbeddingContext(noteId);
@@ -334,7 +332,6 @@ export async function processEmbeddingQueue() {
                     "DELETE FROM embedding_queue WHERE noteId = ?",
                     [noteId]
                 );
-                log.info(`Successfully completed embedding processing for note ${noteId}`);
 
                 // Count as successfully processed
                 processedCount++;

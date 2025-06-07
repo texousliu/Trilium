@@ -9,6 +9,9 @@ import becca from "../../../becca/becca.js";
 // Add mutex to prevent concurrent processing
 let isProcessingEmbeddings = false;
 
+// Store interval reference for cleanup
+let backgroundProcessingInterval: NodeJS.Timeout | null = null;
+
 /**
  * Setup event listeners for embedding-related events
  */
@@ -53,9 +56,15 @@ export function setupEmbeddingEventListeners() {
  * Setup background processing of the embedding queue
  */
 export async function setupEmbeddingBackgroundProcessing() {
+    // Clear any existing interval
+    if (backgroundProcessingInterval) {
+        clearInterval(backgroundProcessingInterval);
+        backgroundProcessingInterval = null;
+    }
+
     const interval = parseInt(await options.getOption('embeddingUpdateInterval') || '200', 10);
 
-    setInterval(async () => {
+    backgroundProcessingInterval = setInterval(async () => {
         try {
             // Skip if already processing
             if (isProcessingEmbeddings) {
@@ -76,6 +85,17 @@ export async function setupEmbeddingBackgroundProcessing() {
             isProcessingEmbeddings = false;
         }
     }, interval);
+}
+
+/**
+ * Stop background processing of the embedding queue
+ */
+export function stopEmbeddingBackgroundProcessing() {
+    if (backgroundProcessingInterval) {
+        clearInterval(backgroundProcessingInterval);
+        backgroundProcessingInterval = null;
+        log.info("Embedding background processing stopped");
+    }
 }
 
 /**
