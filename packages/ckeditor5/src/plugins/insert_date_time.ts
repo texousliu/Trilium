@@ -14,7 +14,7 @@ export default class InsertDateTimePlugin extends Plugin {
                 tooltip: true
             } );
 
-            // enable internal link only if the editor is not read only
+            // enable only if the editor is not read only
             view.bind('isEnabled').to(editor, 'isReadOnly', isReadOnly => !isReadOnly);
 
             view.on('execute', () => {
