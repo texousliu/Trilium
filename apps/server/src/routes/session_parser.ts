@@ -5,7 +5,7 @@ import config from "../services/config.js";
 import log from "../services/log.js";
 import type express from "express";
 
-class SQLiteSessionStore extends Store {
+export class SQLiteSessionStore extends Store {
 
     get(sid: string, callback: (err: any, session?: session.SessionData | null) => void): void {
         try {
@@ -52,6 +52,8 @@ class SQLiteSessionStore extends Store {
 
 }
 
+export const sessionStore = new SQLiteSessionStore();
+
 const sessionParser: express.RequestHandler = session({
     secret: sessionSecret,
     resave: false, // true forces the session to be saved back to the session store, even if the session was never modified during the request.
@@ -62,7 +64,7 @@ const sessionParser: express.RequestHandler = session({
         maxAge: config.Session.cookieMaxAge * 1000 // needs value in milliseconds
     },
     name: "trilium.sid",
-    store: new SQLiteSessionStore()
+    store: sessionStore
 });
 
 setInterval(() => {
