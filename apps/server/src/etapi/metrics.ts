@@ -26,8 +26,6 @@ interface MetricsData {
         totalBlobs: number;
         totalEtapiTokens: number;
         totalRecentNotes: number;
-        totalEmbeddings: number;
-        totalEmbeddingProviders: number;
     };
     noteTypes: Record<string, number>;
     attachmentTypes: Record<string, number>;
@@ -88,8 +86,6 @@ function formatPrometheusMetrics(data: MetricsData): string {
     addMetric('trilium_blobs_total', data.database.totalBlobs, 'Total number of blob records');
     addMetric('trilium_etapi_tokens_total', data.database.totalEtapiTokens, 'Number of active ETAPI tokens');
     addMetric('trilium_recent_notes_total', data.database.totalRecentNotes, 'Number of recent notes tracked');
-    addMetric('trilium_embeddings_total', data.database.totalEmbeddings, 'Number of note embeddings');
-    addMetric('trilium_embedding_providers_total', data.database.totalEmbeddingProviders, 'Number of embedding providers');
 
     // Note types
     for (const [type, count] of Object.entries(data.noteTypes)) {
@@ -155,15 +151,6 @@ function collectMetrics(): MetricsData {
     const totalEtapiTokens = sql.getValue<number>("SELECT COUNT(*) FROM etapi_tokens WHERE isDeleted = 0");
     const totalRecentNotes = sql.getValue<number>("SELECT COUNT(*) FROM recent_notes");
 
-    // Embedding-related metrics (these tables might not exist in older versions)
-    let totalEmbeddings = 0;
-    let totalEmbeddingProviders = 0;
-    try {
-        totalEmbeddings = sql.getValue<number>("SELECT COUNT(*) FROM note_embeddings");
-        totalEmbeddingProviders = sql.getValue<number>("SELECT COUNT(*) FROM embedding_providers");
-    } catch (e) {
-        // Tables don't exist, keep defaults
-    }
 
     const database = {
         totalNotes,
@@ -179,8 +166,6 @@ function collectMetrics(): MetricsData {
         totalBlobs,
         totalEtapiTokens,
         totalRecentNotes,
-        totalEmbeddings,
-        totalEmbeddingProviders
     };
 
     // Note types breakdown

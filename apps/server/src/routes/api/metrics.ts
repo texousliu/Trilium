@@ -99,12 +99,6 @@ type MetricsData = ReturnType<typeof etapiMetrics.collectMetrics>;
  *                     totalRecentNotes:
  *                       type: integer
  *                       example: 50
- *                     totalEmbeddings:
- *                       type: integer
- *                       example: 123
- *                     totalEmbeddingProviders:
- *                       type: integer
- *                       example: 2
  *                 noteTypes:
  *                   type: object
  *                   additionalProperties:

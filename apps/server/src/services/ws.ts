@@ -203,13 +203,6 @@ function fillInAdditionalProperties(entityChange: EntityChange) {
                                                 WHERE attachmentId = ?`,
             [entityChange.entityId]
         );
-    } else if (entityChange.entityName === "note_embeddings") {
-        // Note embeddings are backend-only entities for AI/vector search
-        // Frontend doesn't need the full embedding data (which is large binary data)
-        // Just ensure entity is marked as handled - actual sync happens at database level
-        if (!entityChange.isErased) {
-            entityChange.entity = { embedId: entityChange.entityId };
-        }
     }
 
     if (entityChange.entity instanceof AbstractBeccaEntity) {
@@ -228,7 +221,6 @@ const ORDERING: Record<string, number> = {
     attachments: 3,
     notes: 1,
     options: 0,
-    note_embeddings: 3
 };
 
 function sendPing(client: WebSocket, entityChangeIds = []) {
