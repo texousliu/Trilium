@@ -49,12 +49,13 @@ interface Arg {
     headers: Record<string, string>
 }
 
-class FakeRequest extends EventEmitter implements Pick<Request<ParamsDictionary, any, any, QueryString.ParsedQs, Record<string, any>>, "url" | "method" | "body" | "headers" | "session"> {
+class FakeRequest extends EventEmitter implements Pick<Request<ParamsDictionary, any, any, QueryString.ParsedQs, Record<string, any>>, "url" | "method" | "body" | "headers" | "session" | "query"> {
     url: string;
     method: string;
     body: any;
     headers: Record<string, string>;
     session: Session & Partial<SessionData>;
+    query: Record<string, any> = {};
 
     constructor(arg: Arg) {
         super();
