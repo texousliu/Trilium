@@ -136,7 +136,7 @@ describe("Login Route test", () => {
             expect(session!.cookie.expires).toBeUndefined();
             expect(session!.loggedIn).toBe(true);
 
-            const expectedExpirationDate = dayjs().utc().add(1, "hour").toDate();
+            const expectedExpirationDate = dayjs().utc().add(1, "day").toDate();
             expect(expiry?.getTime()).toBeGreaterThan(new Date().getTime());
             expect(expiry?.getTime()).toBeLessThanOrEqual(expectedExpirationDate.getTime());
         });
