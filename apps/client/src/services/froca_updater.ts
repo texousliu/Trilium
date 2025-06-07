@@ -35,7 +35,7 @@ async function processEntityChanges(entityChanges: EntityChange[]) {
                 loadResults.addOption(attributeEntity.name);
             } else if (ec.entityName === "attachments") {
                 processAttachment(loadResults, ec);
-            } else if (ec.entityName === "blobs" || ec.entityName === "etapi_tokens" || ec.entityName === "note_embeddings") {
+            } else if (ec.entityName === "blobs" || ec.entityName === "etapi_tokens") {
                 // NOOP - these entities are handled at the backend level and don't require frontend processing
             } else {
                 throw new Error(`Unknown entityName '${ec.entityName}'`);

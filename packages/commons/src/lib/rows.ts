@@ -140,16 +140,3 @@ export interface NoteRow {
     content?: string | Buffer;
 }
 
-export interface NoteEmbeddingRow {
-    embedId: string;
-    noteId: string;
-    providerId: string;
-    modelId: string;
-    dimension: number;
-    embedding: Buffer;
-    version: number;
-    dateCreated: string;
-    utcDateCreated: string;
-    dateModified: string;
-    utcDateModified: string;
-}

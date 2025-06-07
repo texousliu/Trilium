@@ -30,17 +30,8 @@ export default async function buildApp() {
     // Listen for database initialization event
     eventService.subscribe(eventService.DB_INITIALIZED, async () => {
         try {
-            log.info("Database initialized, setting up LLM features");
-
-            // Initialize embedding providers
-            const { initializeEmbeddings } = await import("./services/llm/embeddings/init.js");
-            await initializeEmbeddings();
-
-            // Initialize the index service for LLM functionality
-            const { default: indexService } = await import("./services/llm/index_service.js");
-            await indexService.initialize().catch(e => console.error("Failed to initialize index service:", e));
-
-            log.info("LLM features initialized successfully");
+            log.info("Database initialized, LLM features available");
+            log.info("LLM features ready");
         } catch (error) {
             console.error("Error initializing LLM features:", error);
         }
@@ -49,13 +40,7 @@ export default async function buildApp() {
     // Initialize LLM features only if database is already initialized
     if (sql_init.isDbInitialized()) {
         try {
-            // Initialize embedding providers
-            const { initializeEmbeddings } = await import("./services/llm/embeddings/init.js");
-            await initializeEmbeddings();
-
-            // Initialize the index service for LLM functionality
-            const { default: indexService } = await import("./services/llm/index_service.js");
-            await indexService.initialize().catch(e => console.error("Failed to initialize index service:", e));
+            log.info("LLM features ready");
         } catch (error) {
             console.error("Error initializing LLM features:", error);
         }

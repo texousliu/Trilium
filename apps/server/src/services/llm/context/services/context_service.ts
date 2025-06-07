@@ -13,7 +13,6 @@
 import log from '../../../log.js';
 import providerManager from '../modules/provider_manager.js';
 import cacheManager from '../modules/cache_manager.js';
-import vectorSearchService from './vector_search_service.js';
 import queryProcessor from './query_processor.js';
 import contextFormatter from '../modules/context_formatter.js';
 import aiServiceManager from '../../ai_service_manager.js';
@@ -67,7 +66,7 @@ export class ContextService {
                 // No need to initialize them again
 
                 this.initialized = true;
-                log.info(`Context service initialized with provider: ${provider.name}`);
+                log.info(`Context service initialized - embeddings disabled`);
             } catch (error: unknown) {
                 const errorMessage = error instanceof Error ? error.message : String(error);
                 log.error(`Failed to initialize context service: ${errorMessage}`);
@@ -178,54 +177,46 @@ export class ContextService {
                 }
             }
 
-            // Step 3: Find relevant notes using vector search
-            const allResults = new Map<string, NoteSearchResult>();
-
-            for (const query of searchQueries) {
+            // Step 3: Find relevant notes using basic text search (since embeddings are removed)
+            // This will use traditional note search instead of vector similarity
+            log.info("Using traditional search instead of embedding-based search");
+            
+            // Use fallback context based on the context note if provided
+            if (contextNoteId) {
                 try {
-                    log.info(`Searching for: "${query.substring(0, 50)}..."`);
-
-                    // Use the unified vector search service
-                    const results = await vectorSearchService.findRelevantNotes(
-                        query,
-                        contextNoteId,
-                        {
-                            maxResults: maxResults,
-                            summarizeContent: summarizeContent,
-                            llmService: summarizeContent ? llmService : null
-                        }
-                    );
-
-                    log.info(`Found ${results.length} results for query "${query.substring(0, 30)}..."`);
-
-                    // Combine results, avoiding duplicates
-                    for (const result of results) {
-                        if (!allResults.has(result.noteId)) {
-                            allResults.set(result.noteId, result);
-                        } else {
-                            // If note already exists, update similarity to max of both values
-                            const existing = allResults.get(result.noteId);
-                            if (existing && result.similarity > existing.similarity) {
-                                existing.similarity = result.similarity;
-                                allResults.set(result.noteId, existing);
-                            }
+                    const becca = (await import('../../../../becca/becca.js')).default;
+                    const contextNote = becca.getNote(contextNoteId);
+                    if (contextNote) {
+                        const content = await this.contextExtractor.getNoteContent(contextNoteId);
+                        relevantNotes = [{
+                            noteId: contextNoteId,
+                            title: contextNote.title,
+                            similarity: 1.0,
+                            content: content || ""
+                        }];
+                        
+                        // Add child notes as additional context
+                        const childNotes = contextNote.getChildNotes().slice(0, maxResults - 1);
+                        for (const child of childNotes) {
+                            const childContent = await this.contextExtractor.getNoteContent(child.noteId);
+                            relevantNotes.push({
+                                noteId: child.noteId,
+                                title: child.title,
+                                similarity: 0.8,
+                                content: childContent || ""
+                            });
                         }
                     }
                 } catch (error) {
-                    log.error(`Error searching for query "${query}": ${error}`);
+                    log.error(`Error accessing context note: ${error}`);
                 }
             }
-
-            // Convert to array and sort by similarity
-            relevantNotes = Array.from(allResults.values())
-                .sort((a, b) => b.similarity - a.similarity)
-                .slice(0, maxResults);
 
             log.info(`Final combined results: ${relevantNotes.length} relevant notes`);
 
             // Step 4: Build context from the notes
             const provider = await providerManager.getSelectedEmbeddingProvider();
-            const providerId = provider?.name || 'default';
+            const providerId = 'default'; // Provider is always null since embeddings removed
 
             const context = await contextFormatter.buildContextFromNotes(
                 relevantNotes,
@@ -332,15 +323,10 @@ export class ContextService {
             llmService?: LLMServiceInterface | null
         } = {}
     ): Promise<NoteSearchResult[]> {
-        return vectorSearchService.findRelevantNotes(
-            query,
-            contextNoteId,
-            {
-                maxResults: options.maxResults,
-                summarizeContent: options.summarize,
-                llmService: options.llmService
-            }
-        );
+        // Vector search has been removed - return empty results
+        // The LLM will rely on tool calls for context gathering
+        log.info(`Vector search disabled - findRelevantNotes returning empty results for query: ${query}`);
+        return [];
     }
 }
 

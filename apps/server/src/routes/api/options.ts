@@ -92,7 +92,7 @@ const ALLOWED_OPTIONS = new Set<OptionNames>([
     "showLoginInShareTheme",
     "splitEditorOrientation",
 
-    // AI/LLM integration options
+    // AI/LLM integration options (embedding options removed)
     "aiEnabled",
     "aiTemperature",
     "aiSystemPrompt",
@@ -100,30 +100,11 @@ const ALLOWED_OPTIONS = new Set<OptionNames>([
     "openaiApiKey",
     "openaiBaseUrl",
     "openaiDefaultModel",
-    "openaiEmbeddingModel",
-    "openaiEmbeddingApiKey",
-    "openaiEmbeddingBaseUrl",
     "anthropicApiKey",
     "anthropicBaseUrl",
     "anthropicDefaultModel",
-    "voyageApiKey",
-    "voyageEmbeddingModel",
-    "voyageEmbeddingBaseUrl",
     "ollamaBaseUrl",
     "ollamaDefaultModel",
-    "ollamaEmbeddingModel",
-    "ollamaEmbeddingBaseUrl",
-    "embeddingAutoUpdateEnabled",
-    "embeddingDimensionStrategy",
-    "embeddingSelectedProvider",
-    "embeddingSimilarityThreshold",
-    "embeddingBatchSize",
-    "embeddingUpdateInterval",
-    "enableAutomaticIndexing",
-    "maxNotesPerLlmQuery",
-
-    // Embedding options
-    "embeddingDefaultDimension",
     "mfaEnabled",
     "mfaMethod"
 ]);

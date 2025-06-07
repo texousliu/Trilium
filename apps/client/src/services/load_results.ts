@@ -64,7 +64,6 @@ type EntityRowMappings = {
     options: OptionRow;
     revisions: RevisionRow;
     note_reordering: NoteReorderingRow;
-    note_embeddings: NoteEmbeddingRow;
 };
 
 export type EntityRowNames = keyof EntityRowMappings;

@@ -7,7 +7,6 @@
 import { ContextualThinkingTool } from './contextual_thinking_tool.js';
 import { NoteNavigatorTool } from './note_navigator_tool.js';
 import { QueryDecompositionTool } from './query_decomposition_tool.js';
-import { VectorSearchTool } from './vector_search_tool.js';
 
 // Import services needed for initialization
 import contextService from '../context/services/context_service.js';
@@ -17,8 +16,7 @@ import log from '../../log.js';
 import type {
   IContextualThinkingTool,
   INoteNavigatorTool,
-  IQueryDecompositionTool,
-  IVectorSearchTool
+  IQueryDecompositionTool
 } from '../interfaces/agent_tool_interfaces.js';
 
 /**
@@ -27,7 +25,6 @@ import type {
  * Manages and provides access to all available agent tools.
  */
 export class AgentToolsManager {
-  private vectorSearchTool: VectorSearchTool | null = null;
   private noteNavigatorTool: NoteNavigatorTool | null = null;
   private queryDecompositionTool: QueryDecompositionTool | null = null;
   private contextualThinkingTool: ContextualThinkingTool | null = null;
@@ -52,15 +49,9 @@ export class AgentToolsManager {
       }
 
       // Create tool instances
-      this.vectorSearchTool = new VectorSearchTool();
       this.noteNavigatorTool = new NoteNavigatorTool();
       this.queryDecompositionTool = new QueryDecompositionTool();
       this.contextualThinkingTool = new ContextualThinkingTool();
-
-      // Set context service in the vector search tool
-      if (this.vectorSearchTool) {
-        this.vectorSearchTool.setContextService(contextService);
-      }
 
       this.initialized = true;
       log.info("Agent tools initialized successfully");
@@ -75,11 +66,6 @@ export class AgentToolsManager {
    */
   getAllTools() {
     return [
-      {
-        name: "vector_search",
-        description: "Searches your notes for semantically similar content",
-        function: this.vectorSearchTool?.search.bind(this.vectorSearchTool)
-      },
       {
         name: "navigate_to_note",
         description: "Navigates to a specific note",
@@ -103,7 +89,6 @@ export class AgentToolsManager {
    */
   getTools() {
     return {
-      vectorSearch: this.vectorSearchTool as IVectorSearchTool,
       noteNavigator: this.noteNavigatorTool as INoteNavigatorTool,
       queryDecomposition: this.queryDecompositionTool as IQueryDecompositionTool,
       contextualThinking: this.contextualThinkingTool as IContextualThinkingTool
@@ -117,7 +102,6 @@ export default agentTools;
 
 // Export all tools for direct import if needed
 export {
-  VectorSearchTool,
   NoteNavigatorTool,
   QueryDecompositionTool,
   ContextualThinkingTool

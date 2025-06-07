@@ -1,5 +1,6 @@
 import configurationManager from './configuration_manager.js';
 import optionService from '../../options.js';
+import log from '../../log.js';
 import type {
     ProviderType,
     ModelIdentifier,
@@ -19,13 +20,6 @@ export async function getSelectedProvider(): Promise<ProviderType | null> {
     return providerOption as ProviderType || null;
 }
 
-/**
- * Get the selected embedding provider
- */
-export async function getSelectedEmbeddingProvider(): Promise<string | null> {
-    const providerOption = optionService.getOption('embeddingSelectedProvider');
-    return providerOption || null;
-}
 
 /**
  * Parse a model identifier (handles "provider:model" format)

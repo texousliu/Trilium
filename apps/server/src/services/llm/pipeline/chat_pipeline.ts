@@ -8,7 +8,7 @@ import { ModelSelectionStage } from './stages/model_selection_stage.js';
 import { LLMCompletionStage } from './stages/llm_completion_stage.js';
 import { ResponseProcessingStage } from './stages/response_processing_stage.js';
 import { ToolCallingStage } from './stages/tool_calling_stage.js';
-import { VectorSearchStage } from './stages/vector_search_stage.js';
+// VectorSearchStage removed along with embedding functionality
 import toolRegistry from '../tools/tool_registry.js';
 import toolInitializer from '../tools/tool_initializer.js';
 import log from '../../log.js';
@@ -29,7 +29,7 @@ export class ChatPipeline {
         llmCompletion: LLMCompletionStage;
         responseProcessing: ResponseProcessingStage;
         toolCalling: ToolCallingStage;
-        vectorSearch: VectorSearchStage;
+        // vectorSearch removed with embedding functionality
     };
 
     config: ChatPipelineConfig;
@@ -50,7 +50,7 @@ export class ChatPipeline {
             llmCompletion: new LLMCompletionStage(),
             responseProcessing: new ResponseProcessingStage(),
             toolCalling: new ToolCallingStage(),
-            vectorSearch: new VectorSearchStage()
+            // vectorSearch removed with embedding functionality
         };
 
         // Set default configuration values
@@ -198,27 +198,20 @@ export class ChatPipeline {
                 log.info('No LLM service available for query decomposition, using original query');
             }
 
-            // STAGE 3: Execute vector similarity search with decomposed queries
+            // STAGE 3: Vector search has been removed - skip semantic search
             const vectorSearchStartTime = Date.now();
-            log.info(`========== STAGE 3: VECTOR SEARCH ==========`);
-            log.info('Using VectorSearchStage pipeline component to find relevant notes');
-            log.info(`Searching with ${searchQueries.length} queries from decomposition`);
+            log.info(`========== STAGE 3: VECTOR SEARCH (DISABLED) ==========`);
+            log.info('Vector search has been removed - LLM will rely on tool calls for context');
 
-            // Use the vectorSearchStage with multiple queries
-            const vectorSearchResult = await this.stages.vectorSearch.execute({
-                query: userQuery, // Original query as fallback
-                queries: searchQueries, // All decomposed queries
-                noteId: input.noteId || 'global',
-                options: {
-                    maxResults: SEARCH_CONSTANTS.CONTEXT.MAX_SIMILAR_NOTES,
-                    useEnhancedQueries: false, // We're already using enhanced queries from decomposition
-                    threshold: SEARCH_CONSTANTS.VECTOR_SEARCH.DEFAULT_THRESHOLD,
-                    llmService: llmService || undefined
-                }
-            });
+            // Create empty vector search result since vector search is disabled
+            const vectorSearchResult = {
+                searchResults: [],
+                totalResults: 0,
+                executionTime: Date.now() - vectorSearchStartTime
+            };
 
             this.updateStageMetrics('vectorSearch', vectorSearchStartTime);
-            log.info(`Vector search found ${vectorSearchResult.searchResults.length} relevant notes across ${searchQueries.length} queries`);
+            log.info(`Vector search disabled - using tool-based context extraction instead`);
 
             // Extract context from search results
             log.info(`========== SEMANTIC CONTEXT EXTRACTION ==========`);

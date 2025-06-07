@@ -1,83 +1,37 @@
 import log from '../../../log.js';
-import { getEmbeddingProvider, getEnabledEmbeddingProviders } from '../../providers/providers.js';
-import { getSelectedEmbeddingProvider as getSelectedEmbeddingProviderName } from '../../config/configuration_helpers.js';
 
 /**
  * Manages embedding providers for context services
+ * Simplified since embedding functionality has been removed
  */
 export class ProviderManager {
     /**
      * Get the selected embedding provider based on user settings
-     * Uses the single provider selection approach
-     *
-     * @returns The selected embedding provider or null if none available
+     * Returns null since embeddings have been removed
      */
-    async getSelectedEmbeddingProvider(): Promise<any> {
-        try {
-            // Get the selected embedding provider
-            const selectedProvider = await getSelectedEmbeddingProviderName();
-            
-            if (selectedProvider) {
-                const provider = await getEmbeddingProvider(selectedProvider);
-                if (provider) {
-                    log.info(`Using selected embedding provider: ${selectedProvider}`);
-                    return provider;
-                }
-                log.info(`Selected embedding provider ${selectedProvider} is not available`);
-            }
-
-            // If no provider is selected or available, try any enabled provider
-            const providers = await getEnabledEmbeddingProviders();
-            if (providers.length > 0) {
-                log.info(`Using available embedding provider: ${providers[0].name}`);
-                return providers[0];
-            }
-
-            // Last resort is local provider
-            log.info('Using local embedding provider as fallback');
-            return await getEmbeddingProvider('local');
-        } catch (error) {
-            log.error(`Error getting preferred embedding provider: ${error}`);
-            return null;
-        }
+    async getSelectedEmbeddingProvider(): Promise<null> {
+        log.info('Embedding providers have been removed - returning null');
+        return null;
     }
 
     /**
-     * Generate embeddings for a text query
-     *
-     * @param query - The text query to embed
-     * @returns The generated embedding or null if failed
+     * Get all enabled embedding providers
+     * Returns empty array since embeddings have been removed
      */
-    async generateQueryEmbedding(query: string): Promise<Float32Array | null> {
-        try {
-            // Get the preferred embedding provider
-            const provider = await this.getSelectedEmbeddingProvider();
-            if (!provider) {
-                log.error('No embedding provider available');
-                return null;
-            }
+    async getEnabledEmbeddingProviders(): Promise<never[]> {
+        log.info('Embedding providers have been removed - returning empty array');
+        return [];
+    }
 
-            // Generate the embedding
-            const embedding = await provider.generateEmbeddings(query);
-
-            if (embedding) {
-                // Add the original query as a property to the embedding
-                // This is used for title matching in the vector search
-                Object.defineProperty(embedding, 'originalQuery', {
-                    value: query,
-                    writable: false,
-                    enumerable: true,
-                    configurable: false
-                });
-            }
-
-            return embedding;
-        } catch (error) {
-            log.error(`Error generating query embedding: ${error}`);
-            return null;
-        }
+    /**
+     * Check if embedding providers are available
+     * Returns false since embeddings have been removed
+     */
+    isEmbeddingAvailable(): boolean {
+        return false;
     }
 }
 
 // Export singleton instance
-export default new ProviderManager();
+export const providerManager = new ProviderManager();
+export default providerManager;

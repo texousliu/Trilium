@@ -130,8 +130,8 @@ export class NoteSummarizationTool implements ToolHandler {
                 { role: 'system', content: 'You are a skilled summarizer. Create concise, accurate summaries while preserving the key information.' },
                 { role: 'user', content: prompt }
             ], {
-                temperature: SEARCH_CONSTANTS.TEMPERATURE.VECTOR_SEARCH, // Lower temperature for more focused summaries
-                maxTokens: SEARCH_CONSTANTS.LIMITS.VECTOR_SEARCH_MAX_TOKENS // Enough tokens for the summary
+                temperature: SEARCH_CONSTANTS.TEMPERATURE.QUERY_PROCESSOR, // Lower temperature for more focused summaries
+                maxTokens: SEARCH_CONSTANTS.LIMITS.DEFAULT_MAX_TOKENS // Enough tokens for the summary
             });
 
             const summaryDuration = Date.now() - summaryStartTime;

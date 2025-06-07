@@ -258,9 +258,3 @@ export async function getDirectResponse(noteId: string, messageParams: any): Pro
     }
 }
 
-/**
- * Get embedding statistics
- */
-export async function getEmbeddingStats(): Promise<any> {
-    return server.get('llm/embeddings/stats');
-}

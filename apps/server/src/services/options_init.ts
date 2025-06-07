@@ -196,38 +196,19 @@ const defaultOptions: DefaultOption[] = [
     { name: "aiEnabled", value: "false", isSynced: true },
     { name: "openaiApiKey", value: "", isSynced: false },
     { name: "openaiDefaultModel", value: "", isSynced: true },
-    { name: "openaiEmbeddingModel", value: "", isSynced: true },
     { name: "openaiBaseUrl", value: "https://api.openai.com/v1", isSynced: true },
     { name: "anthropicApiKey", value: "", isSynced: false },
     { name: "anthropicDefaultModel", value: "", isSynced: true },
-    { name: "voyageEmbeddingModel", value: "", isSynced: true },
     { name: "voyageApiKey", value: "", isSynced: false },
     { name: "anthropicBaseUrl", value: "https://api.anthropic.com/v1", isSynced: true },
     { name: "ollamaEnabled", value: "false", isSynced: true },
     { name: "ollamaDefaultModel", value: "", isSynced: true },
     { name: "ollamaBaseUrl", value: "http://localhost:11434", isSynced: true },
-    { name: "ollamaEmbeddingModel", value: "", isSynced: true },
-    { name: "embeddingAutoUpdateEnabled", value: "true", isSynced: true },
-
-    // Embedding-specific provider options
-    { name: "openaiEmbeddingApiKey", value: "", isSynced: false },
-    { name: "openaiEmbeddingBaseUrl", value: "https://api.openai.com/v1", isSynced: true },
-    { name: "voyageEmbeddingBaseUrl", value: "https://api.voyageai.com/v1", isSynced: true },
-    { name: "ollamaEmbeddingBaseUrl", value: "http://localhost:11434", isSynced: true },
 
     // Adding missing AI options
     { name: "aiTemperature", value: "0.7", isSynced: true },
     { name: "aiSystemPrompt", value: "", isSynced: true },
     { name: "aiSelectedProvider", value: "openai", isSynced: true },
-    { name: "embeddingDimensionStrategy", value: "auto", isSynced: true },
-    { name: "embeddingSelectedProvider", value: "openai", isSynced: true },
-    { name: "embeddingSimilarityThreshold", value: "0.75", isSynced: true },
-    { name: "enableAutomaticIndexing", value: "true", isSynced: true },
-    { name: "maxNotesPerLlmQuery", value: "3", isSynced: true },
-    { name: "embeddingBatchSize", value: "10", isSynced: true },
-    { name: "embeddingUpdateInterval", value: "5000", isSynced: true },
-    { name: "embeddingDefaultDimension", value: "1536", isSynced: true },
-    { name: "embeddingGenerationLocation", value: "client", isSynced: true },
 ];
 
 /**

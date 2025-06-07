@@ -5,8 +5,6 @@ import { AnthropicService } from './providers/anthropic_service.js';
 import { ContextExtractor } from './context/index.js';
 import agentTools from './context_extractors/index.js';
 import contextService from './context/services/context_service.js';
-import { getEmbeddingProvider, getEnabledEmbeddingProviders } from './providers/providers.js';
-import indexService from './index_service.js';
 import log from '../log.js';
 import { OllamaService } from './providers/ollama_service.js';
 import { OpenAIService } from './providers/openai_service.js';
@@ -22,7 +20,6 @@ import type { NoteSearchResult } from './interfaces/context_interfaces.js';
 // Import new configuration system
 import {
     getSelectedProvider,
-    getSelectedEmbeddingProvider,
     parseModelIdentifier,
     isAIEnabled,
     getDefaultModelForProvider,
@@ -307,10 +304,11 @@ export class AIServiceManager implements IAIServiceManager {
 
     /**
      * Get the index service for managing knowledge base indexing
-     * @returns The index service instance
+     * @returns null since index service has been removed
      */
     getIndexService() {
-        return indexService;
+        log.info('Index service has been removed - returning null');
+        return null;
     }
 
     /**
@@ -333,10 +331,11 @@ export class AIServiceManager implements IAIServiceManager {
 
     /**
      * Get the vector search tool for semantic similarity search
+     * Returns null since vector search has been removed
      */
     getVectorSearchTool() {
-        const tools = agentTools.getTools();
-        return tools.vectorSearch;
+        log.info('Vector search has been removed - getVectorSearchTool returning null');
+        return null;
     }
 
     /**
@@ -455,8 +454,7 @@ export class AIServiceManager implements IAIServiceManager {
                 return;
             }
 
-            // Initialize index service
-            await this.getIndexService().initialize();
+            // Index service has been removed - no initialization needed
 
             // Tools are already initialized in the constructor
             // No need to initialize them again
@@ -648,7 +646,6 @@ export class AIServiceManager implements IAIServiceManager {
             name: provider,
             capabilities: {
                 chat: true,
-                embeddings: provider !== 'anthropic', // Anthropic doesn't have embeddings
                 streaming: true,
                 functionCalling: provider === 'openai' // Only OpenAI has function calling
             },
@@ -676,7 +673,6 @@ export class AIServiceManager implements IAIServiceManager {
         const aiRelatedOptions = [
             'aiEnabled',
             'aiSelectedProvider',
-            'embeddingSelectedProvider',
             'openaiApiKey',
             'openaiBaseUrl', 
             'openaiDefaultModel',
@@ -684,8 +680,7 @@ export class AIServiceManager implements IAIServiceManager {
             'anthropicBaseUrl',
             'anthropicDefaultModel',
             'ollamaBaseUrl',
-            'ollamaDefaultModel',
-            'voyageApiKey'
+            'ollamaDefaultModel'
         ];
 
         eventService.subscribe(['entityChanged'], async ({ entityName, entity }) => {
@@ -697,15 +692,11 @@ export class AIServiceManager implements IAIServiceManager {
                     const isEnabled = entity.value === 'true';
                     
                     if (isEnabled) {
-                        log.info('AI features enabled, initializing AI service and embeddings');
+                        log.info('AI features enabled, initializing AI service');
                         // Initialize the AI service
                         await this.initialize();
-                        // Initialize embeddings through index service
-                        await indexService.startEmbeddingGeneration();
                     } else {
-                        log.info('AI features disabled, stopping embeddings and clearing providers');
-                        // Stop embeddings through index service
-                        await indexService.stopEmbeddingGeneration();
+                        log.info('AI features disabled, clearing providers');
                         // Clear chat providers
                         this.services = {};
                     }
@@ -729,10 +720,6 @@ export class AIServiceManager implements IAIServiceManager {
 
             // Clear existing chat providers (they will be recreated on-demand)
             this.services = {};
-
-            // Clear embedding providers (they will be recreated on-demand when needed)
-            const providerManager = await import('./providers/providers.js');
-            providerManager.clearAllEmbeddingProviders();
 
             log.info('LLM services recreated successfully');
         } catch (error) {
@@ -769,10 +756,6 @@ export default {
     },
     async generateChatCompletion(messages: Message[], options: ChatCompletionOptions = {}): Promise<ChatResponse> {
         return getInstance().generateChatCompletion(messages, options);
-    },
-    // Add validateEmbeddingProviders method
-    async validateEmbeddingProviders(): Promise<string | null> {
-        return getInstance().validateConfiguration();
     },
     // Context and index related methods
     getContextExtractor() {

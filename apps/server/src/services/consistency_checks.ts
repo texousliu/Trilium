@@ -799,7 +799,6 @@ class ConsistencyChecks {
         this.runEntityChangeChecks("attributes", "attributeId");
         this.runEntityChangeChecks("etapi_tokens", "etapiTokenId");
         this.runEntityChangeChecks("options", "name");
-        this.runEntityChangeChecks("note_embeddings", "embedId");
     }
 
     findWronglyNamedAttributes() {
