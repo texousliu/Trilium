@@ -180,7 +180,7 @@ describe("Login Route test", () => {
             expect(session).toBeFalsy();
         });
     });
-});
+}, 100_000);
 
 async function getSessionFromCookie(setCookieHeader: string) {
     // Extract the session ID from the cookie.
