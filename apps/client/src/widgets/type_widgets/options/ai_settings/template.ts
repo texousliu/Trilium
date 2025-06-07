@@ -98,14 +98,6 @@ export const TPL = `
                     <div class="form-text">${t("ai_llm.openai_model_description")}</div>
                     <button class="btn btn-sm btn-outline-secondary refresh-openai-models">${t("ai_llm.refresh_models")}</button>
                 </div>
-
-                <div class="form-group">
-                    <label>${t("ai_llm.embedding_model")}</label>
-                    <select class="openai-embedding-model form-control">
-                        <option value="">${t("ai_llm.select_model")}</option>
-                    </select>
-                    <div class="form-text">${t("ai_llm.openai_embedding_model_description")}</div>
-                </div>
             </div>
         </div>
     </div>
@@ -161,14 +153,6 @@ export const TPL = `
                     </select>
                     <div class="form-text">${t("ai_llm.ollama_model_description")}</div>
                     <button class="btn btn-sm btn-outline-secondary refresh-models"><span class="bx bx-refresh"></span></button>
-                </div>
-
-                <div class="form-group">
-                    <label>${t("ai_llm.embedding_model")}</label>
-                    <select class="ollama-chat-embedding-model form-control">
-                        <option value="">${t("ai_llm.select_model")}</option>
-                    </select>
-                    <div class="form-text">${t("ai_llm.ollama_embedding_model_description")}</div>
                 </div>
             </div>
         </div>
