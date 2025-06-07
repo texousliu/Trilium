@@ -3,82 +3,118 @@ import type { Application } from "express";
 import type { ParamsDictionary, Request, Response } from "express-serve-static-core";
 import type QueryString from "qs";
 import { Session, SessionData } from "express-session";
+import EventEmitter from "events";
 
 type MockedResponse = Response<any, Record<string, any>, number>;
 
 function init(app: Application) {
-    const fakeSession: Session & Partial<SessionData> = {
-        id: "session-id", // Placeholder for session ID
-        cookie: {
-            originalMaxAge: 3600000, // 1 hour
-        },
-        loggedIn: true,
-        regenerate(callback) {
-            callback?.(null);
-            return fakeSession;
-        },
-        destroy(callback) {
-            callback?.(null);
-            return fakeSession;
-        },
-        reload(callback) {
-            callback?.(null);
-            return fakeSession;
-        },
-        save(callback) {
-            callback?.(null);
-            return fakeSession;
-        },
-        resetMaxAge: () => fakeSession,
-        touch: () => fakeSession
-    };
-
     electron.ipcMain.on("server-request", (event, arg) => {
-        const req: Pick<Request<ParamsDictionary, any, any, QueryString.ParsedQs, Record<string, any>>, "url" | "method" | "body" | "headers" | "session"> = {
-            url: arg.url,
-            method: arg.method,
-            body: arg.data,
-            headers: arg.headers,
-            session: fakeSession
-        };
-
-        const respHeaders: Record<string, string | string[]> = {};
-
-        const res: Pick<Response<any, Record<string, any>, number>, "statusCode" | "getHeader" | "setHeader" | "header" | "status" | "send" | "locals" | "json"> = {
-            statusCode: 200,
-            getHeader: (name) => respHeaders[name],
-            setHeader: (name, value) => {
-                respHeaders[name] = value.toString();
-                return res as MockedResponse;
-            },
-            header(name: string, value?: string | string[]) {
-                respHeaders[name] = value ?? "";
-                return res as MockedResponse;
-            },
-            status: (statusCode) => {
-                res.statusCode = statusCode;
-                return res as MockedResponse;
-            },
-            send: (obj) => {
-                event.sender.send("server-response", {
-                    url: arg.url,
-                    method: arg.method,
-                    requestId: arg.requestId,
-                    statusCode: res.statusCode,
-                    headers: respHeaders,
-                    body: obj
-                });
-                return res as MockedResponse;
-            },
-            locals: {},
-            json: (obj) => {
-                res.send(JSON.stringify(obj));
-                return res as MockedResponse;
-            }
-        };
+        const req = new FakeRequest(arg);
+        const res = new FakeResponse(event, arg);
 
         return app.router(req as any, res as any, () => {});
     });
+}
+
+const fakeSession: Session & Partial<SessionData> = {
+    id: "session-id", // Placeholder for session ID
+    cookie: {
+        originalMaxAge: 3600000, // 1 hour
+    },
+    loggedIn: true,
+    regenerate(callback) {
+        callback?.(null);
+        return fakeSession;
+    },
+    destroy(callback) {
+        callback?.(null);
+        return fakeSession;
+    },
+    reload(callback) {
+        callback?.(null);
+        return fakeSession;
+    },
+    save(callback) {
+        callback?.(null);
+        return fakeSession;
+    },
+    resetMaxAge: () => fakeSession,
+    touch: () => fakeSession
+};
+
+interface Arg {
+    url: string;
+    method: string;
+    data: any;
+    headers: Record<string, string>
+}
+
+class FakeRequest extends EventEmitter implements Pick<Request<ParamsDictionary, any, any, QueryString.ParsedQs, Record<string, any>>, "url" | "method" | "body" | "headers" | "session"> {
+    url: string;
+    method: string;
+    body: any;
+    headers: Record<string, string>;
+    session: Session & Partial<SessionData>;
+
+    constructor(arg: Arg) {
+        super();
+        this.url = arg.url;
+        this.method = arg.method;
+        this.body = arg.data;
+        this.headers = arg.headers;
+        this.session = fakeSession;
+    }
+}
+
+class FakeResponse extends EventEmitter implements Pick<Response<any, Record<string, any>, number>, "status" | "send" | "json" | "setHeader"> {
+    private respHeaders: Record<string, string | string[]> = {};
+    private event: Electron.IpcMainEvent;
+    private arg: Arg & { requestId: string; };
+    statusCode: number = 200;
+    headers: Record<string, string> = {};
+    locals: Record<string, any> = {};
+
+    constructor(event: Electron.IpcMainEvent, arg: Arg & { requestId: string; }) {
+        super();
+        this.event = event;
+        this.arg = arg;
+    }
+
+    getHeader(name) {
+        return this.respHeaders[name];
+    }
+
+    setHeader(name, value) {
+        this.respHeaders[name] = value.toString();
+        return this as unknown as MockedResponse;
+    }
+
+    header(name: string, value?: string | string[]) {
+        this.respHeaders[name] = value ?? "";
+        return this as unknown as MockedResponse;
+    }
+
+    status(statusCode) {
+        this.statusCode = statusCode;
+        return this as unknown as MockedResponse;
+    }
+
+    send(obj) {
+        this.event.sender.send("server-response", {
+            url: this.arg.url,
+            method: this.arg.method,
+            requestId: this.arg.requestId,
+            statusCode: this.statusCode,
+            headers: this.respHeaders,
+            body: obj
+        });
+        return this as unknown as MockedResponse;
+    }
+
+    json(obj) {
+        this.send(JSON.stringify(obj));
+        return this as unknown as MockedResponse;
+    }
 }
 
 export default init;
