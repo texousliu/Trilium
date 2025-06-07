@@ -10,6 +10,13 @@ import type express from "express";
  */
 export const CLEAN_UP_INTERVAL = 60 * 60 * 1000; // 1 hour
 
+/**
+ * The amount of time in milliseconds after which a session cookie expires if "Remember me" is not checked.
+ *
+ * Note that the session is renewed on each request, so the session will last up to this time from the last request.
+ */
+export const SESSION_COOKIE_EXPIRY = 24 * 60 * 60 * 1000; // 24 hours
+
 export class SQLiteSessionStore extends Store {
 
     get(sid: string, callback: (err: any, session?: session.SessionData | null) => void): void {
@@ -30,7 +37,7 @@ export class SQLiteSessionStore extends Store {
         try {
             const expires = session.cookie?.expires
                 ? new Date(session.cookie.expires).getTime()
-                : Date.now() + 3600000; // fallback to 1 hour
+                : Date.now() + SESSION_COOKIE_EXPIRY;
             const data = JSON.stringify(session);
 
             sql.upsert("sessions", "id", {
@@ -63,7 +70,7 @@ export class SQLiteSessionStore extends Store {
         }
 
         try {
-            const expires = Date.now() + 3600000; // fallback to 1 hour
+            const expires = Date.now() + SESSION_COOKIE_EXPIRY;
             sql.execute(/*sql*/`UPDATE sessions SET expires = ? WHERE id = ?`, [expires, sid]);
             callback?.();
         } catch (e) {

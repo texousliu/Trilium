@@ -159,6 +159,16 @@ describe("Login Route test", () => {
             expect(expiry!.getTime()).toBeGreaterThan(originalExpiry!.getTime());
         });
 
+        it("keeps session up to 24 hours", async () => {
+            // Simulate user waiting 23 hours.
+            vi.setSystemTime(dayjs().add(23, "hours").toDate());
+            vi.advanceTimersByTime(CLEAN_UP_INTERVAL);
+
+            // Check the session is still valid.
+            const { session } = await getSessionFromCookie(setCookieHeader);
+            expect(session).toBeTruthy();
+        });
+
         it("cleans up expired sessions", async () => {
             let { session, expiry } = await getSessionFromCookie(setCookieHeader);
             expect(session).toBeTruthy();
