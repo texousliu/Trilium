@@ -40,8 +40,8 @@ interface NoteContext {
 }
 
 export class AIServiceManager implements IAIServiceManager {
-    private services: Partial<Record<ServiceProviders, AIService>> = {};
-
+    private currentService: AIService | null = null;
+    private currentProvider: ServiceProviders | null = null;
     private initialized = false;
 
     constructor() {
@@ -50,9 +50,8 @@ export class AIServiceManager implements IAIServiceManager {
             log.error(`Error initializing LLM tools during AIServiceManager construction: ${error.message || String(error)}`);
         });
 
-        // Set up event listener for provider changes
-        this.setupProviderChangeListener();
-        
+        // Removed complex provider change listener - we'll read options fresh each time
+
         this.initialized = true;
     }
 
@@ -140,15 +139,15 @@ export class AIServiceManager implements IAIServiceManager {
      */
     async getOrCreateAnyService(): Promise<AIService> {
         this.ensureInitialized();
-        
+
         // Get the selected provider using the new configuration system
         const selectedProvider = await this.getSelectedProviderAsync();
-        
-        
+
+
         if (!selectedProvider) {
             throw new Error('No AI provider is selected. Please select a provider (OpenAI, Anthropic, or Ollama) in your AI settings.');
         }
-        
+
         try {
             const service = await this.getOrCreateChatProvider(selectedProvider);
             if (service) {
@@ -166,7 +165,7 @@ export class AIServiceManager implements IAIServiceManager {
      */
     isAnyServiceAvailable(): boolean {
         this.ensureInitialized();
-        
+
         // Check if we have the selected provider available
         return this.getAvailableProviders().length > 0;
     }
@@ -174,43 +173,37 @@ export class AIServiceManager implements IAIServiceManager {
     /**
      * Get list of available providers
      */
-    getAvailableProviders(): ServiceProviders[] {
+        getAvailableProviders(): ServiceProviders[] {
         this.ensureInitialized();
-        
+
         const allProviders: ServiceProviders[] = ['openai', 'anthropic', 'ollama'];
         const availableProviders: ServiceProviders[] = [];
-        
+
         for (const providerName of allProviders) {
-            // Use a sync approach - check if we can create the provider
-            const service = this.services[providerName];
-            if (service && service.isAvailable()) {
-                availableProviders.push(providerName);
-            } else {
-                // For providers not yet created, check configuration to see if they would be available
-                try {
-                    switch (providerName) {
-                        case 'openai':
-                            if (options.getOption('openaiApiKey')) {
-                                availableProviders.push(providerName);
-                            }
-                            break;
-                        case 'anthropic':
-                            if (options.getOption('anthropicApiKey')) {
-                                availableProviders.push(providerName);
-                            }
-                            break;
-                        case 'ollama':
-                            if (options.getOption('ollamaBaseUrl')) {
-                                availableProviders.push(providerName);
-                            }
-                            break;
-                    }
-                } catch (error) {
-                    // Ignore configuration errors, provider just won't be available
+            // Check configuration to see if provider would be available
+            try {
+                switch (providerName) {
+                    case 'openai':
+                        if (options.getOption('openaiApiKey') || options.getOption('openaiBaseUrl')) {
+                            availableProviders.push(providerName);
+                        }
+                        break;
+                    case 'anthropic':
+                        if (options.getOption('anthropicApiKey')) {
+                            availableProviders.push(providerName);
+                        }
+                        break;
+                    case 'ollama':
+                        if (options.getOption('ollamaBaseUrl')) {
+                            availableProviders.push(providerName);
+                        }
+                        break;
                 }
+            } catch (error) {
+                // Ignore configuration errors, provider just won't be available
             }
         }
-        
+
         return availableProviders;
     }
 
@@ -234,11 +227,11 @@ export class AIServiceManager implements IAIServiceManager {
 
         // Get the selected provider
         const selectedProvider = await this.getSelectedProviderAsync();
-        
+
         if (!selectedProvider) {
             throw new Error('No AI provider is selected. Please select a provider in your AI settings.');
         }
-        
+
         // Check if the selected provider is available
         const availableProviders = this.getAvailableProviders();
         if (!availableProviders.includes(selectedProvider)) {
@@ -379,47 +372,68 @@ export class AIServiceManager implements IAIServiceManager {
     }
 
     /**
-     * Get or create a chat provider on-demand with inline validation
+     * Clear the current provider (forces recreation on next access)
+     */
+    public clearCurrentProvider(): void {
+        this.currentService = null;
+        this.currentProvider = null;
+        log.info('Cleared current provider - will be recreated on next access');
+    }
+
+    /**
+     * Get or create the current provider instance - only one instance total
      */
     private async getOrCreateChatProvider(providerName: ServiceProviders): Promise<AIService | null> {
-        // Return existing provider if already created
-        if (this.services[providerName]) {
-            return this.services[providerName];
+        // If provider type changed, clear the old one
+        if (this.currentProvider && this.currentProvider !== providerName) {
+            log.info(`Provider changed from ${this.currentProvider} to ${providerName}, clearing old service`);
+            this.currentService = null;
+            this.currentProvider = null;
         }
 
-        // Create and validate provider on-demand
+        // Return existing service if it matches and is available
+        if (this.currentService && this.currentProvider === providerName && this.currentService.isAvailable()) {
+            return this.currentService;
+        }
+
+        // Clear invalid service
+        if (this.currentService) {
+            this.currentService = null;
+            this.currentProvider = null;
+        }
+
+        // Create new service for the requested provider
         try {
             let service: AIService | null = null;
-            
+
             switch (providerName) {
                 case 'openai': {
                     const apiKey = options.getOption('openaiApiKey');
                     const baseUrl = options.getOption('openaiBaseUrl');
                     if (!apiKey && !baseUrl) return null;
-                    
+
                     service = new OpenAIService();
-                    // Validate by checking if it's available
                     if (!service.isAvailable()) {
                         throw new Error('OpenAI service not available');
                     }
                     break;
                 }
-                
+
                 case 'anthropic': {
                     const apiKey = options.getOption('anthropicApiKey');
                     if (!apiKey) return null;
-                    
+
                     service = new AnthropicService();
                     if (!service.isAvailable()) {
                         throw new Error('Anthropic service not available');
                     }
                     break;
                 }
-                
+
                 case 'ollama': {
                     const baseUrl = options.getOption('ollamaBaseUrl');
                     if (!baseUrl) return null;
-                    
+
                     service = new OllamaService();
                     if (!service.isAvailable()) {
                         throw new Error('Ollama service not available');
@@ -427,9 +441,12 @@ export class AIServiceManager implements IAIServiceManager {
                     break;
                 }
             }
-            
+
             if (service) {
-                this.services[providerName] = service;
+                // Cache the new service
+                this.currentService = service;
+                this.currentProvider = providerName;
+                log.info(`Created and cached new ${providerName} service`);
                 return service;
             }
         } catch (error: any) {
@@ -630,28 +647,47 @@ export class AIServiceManager implements IAIServiceManager {
      * Check if a specific provider is available
      */
     isProviderAvailable(provider: string): boolean {
-        return this.services[provider as ServiceProviders]?.isAvailable() ?? false;
+        // Check if this is the current provider and if it's available
+        if (this.currentProvider === provider && this.currentService) {
+            return this.currentService.isAvailable();
+        }
+
+        // For other providers, check configuration
+        try {
+            switch (provider) {
+                case 'openai':
+                    return !!(options.getOption('openaiApiKey') || options.getOption('openaiBaseUrl'));
+                case 'anthropic':
+                    return !!options.getOption('anthropicApiKey');
+                case 'ollama':
+                    return !!options.getOption('ollamaBaseUrl');
+                default:
+                    return false;
+            }
+        } catch {
+            return false;
+        }
     }
 
     /**
      * Get metadata about a provider
      */
     getProviderMetadata(provider: string): ProviderMetadata | null {
-        const service = this.services[provider as ServiceProviders];
-        if (!service) {
-            return null;
+        // Only return metadata if this is the current active provider
+        if (this.currentProvider === provider && this.currentService) {
+            return {
+                name: provider,
+                capabilities: {
+                    chat: true,
+                    streaming: true,
+                    functionCalling: provider === 'openai' // Only OpenAI has function calling
+                },
+                models: ['default'], // Placeholder, could be populated from the service
+                defaultModel: 'default'
+            };
         }
 
-        return {
-            name: provider,
-            capabilities: {
-                chat: true,
-                streaming: true,
-                functionCalling: provider === 'openai' // Only OpenAI has function calling
-            },
-            models: ['default'], // Placeholder, could be populated from the service
-            defaultModel: 'default'
-        };
+        return null;
     }
 
 
@@ -665,67 +701,8 @@ export class AIServiceManager implements IAIServiceManager {
         return String(error);
     }
 
-    /**
-     * Set up event listener for provider changes
-     */
-    private setupProviderChangeListener(): void {
-        // List of AI-related options that should trigger service recreation
-        const aiRelatedOptions = [
-            'aiEnabled',
-            'aiSelectedProvider',
-            'openaiApiKey',
-            'openaiBaseUrl', 
-            'openaiDefaultModel',
-            'anthropicApiKey',
-            'anthropicBaseUrl',
-            'anthropicDefaultModel',
-            'ollamaBaseUrl',
-            'ollamaDefaultModel'
-        ];
-
-        eventService.subscribe(['entityChanged'], async ({ entityName, entity }) => {
-            if (entityName === 'options' && entity && aiRelatedOptions.includes(entity.name)) {
-                log.info(`AI-related option '${entity.name}' changed, recreating LLM services`);
-                
-                // Special handling for aiEnabled toggle
-                if (entity.name === 'aiEnabled') {
-                    const isEnabled = entity.value === 'true';
-                    
-                    if (isEnabled) {
-                        log.info('AI features enabled, initializing AI service');
-                        // Initialize the AI service
-                        await this.initialize();
-                    } else {
-                        log.info('AI features disabled, clearing providers');
-                        // Clear chat providers
-                        this.services = {};
-                    }
-                } else {
-                    // For other AI-related options, recreate services on-demand
-                    await this.recreateServices();
-                }
-            }
-        });
-    }
-
-    /**
-     * Recreate LLM services when provider settings change
-     */
-    private async recreateServices(): Promise<void> {
-        try {
-            log.info('Recreating LLM services due to configuration change');
-
-            // Clear configuration cache first
-            clearConfigurationCache();
-
-            // Clear existing chat providers (they will be recreated on-demand)
-            this.services = {};
-
-            log.info('LLM services recreated successfully');
-        } catch (error) {
-            log.error(`Error recreating LLM services: ${this.handleError(error)}`);
-        }
-    }
+    // Removed complex event listener and cache invalidation logic
+    // Services will be created fresh when needed by reading current options
 
 }
 

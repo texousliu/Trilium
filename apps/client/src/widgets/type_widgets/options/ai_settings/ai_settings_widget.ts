@@ -48,7 +48,7 @@ export default class AiSettingsWidget extends OptionsWidget {
             if (optionName === 'aiEnabled') {
                 try {
                     const isEnabled = value === 'true';
-                    
+
                     if (isEnabled) {
                         toastService.showMessage(t("ai_llm.ai_enabled") || "AI features enabled");
                     } else {

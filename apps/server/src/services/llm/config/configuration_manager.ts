@@ -21,11 +21,6 @@ import type {
  */
 export class ConfigurationManager {
     private static instance: ConfigurationManager | null = null;
-    private cachedConfig: AIConfig | null = null;
-    private lastConfigUpdate: number = 0;
-
-    // Cache for 5 minutes to avoid excessive option reads
-    private static readonly CACHE_DURATION = 5 * 60 * 1000;
 
     private constructor() {}
 
@@ -37,14 +32,9 @@ export class ConfigurationManager {
     }
 
     /**
-     * Get the complete AI configuration
+     * Get the complete AI configuration - always fresh, no caching
      */
     public async getAIConfig(): Promise<AIConfig> {
-        const now = Date.now();
-        if (this.cachedConfig && (now - this.lastConfigUpdate) < ConfigurationManager.CACHE_DURATION) {
-            return this.cachedConfig;
-        }
-
         try {
             const config: AIConfig = {
                 enabled: await this.getAIEnabled(),
@@ -53,8 +43,6 @@ export class ConfigurationManager {
                 providerSettings: await this.getProviderSettings()
             };
 
-            this.cachedConfig = config;
-            this.lastConfigUpdate = now;
             return config;
         } catch (error) {
             log.error(`Error loading AI configuration: ${error}`);
@@ -261,14 +249,6 @@ export class ConfigurationManager {
         }
 
         return result;
-    }
-
-    /**
-     * Clear cached configuration (force reload on next access)
-     */
-    public clearCache(): void {
-        this.cachedConfig = null;
-        this.lastConfigUpdate = 0;
     }
 
     // Private helper methods
