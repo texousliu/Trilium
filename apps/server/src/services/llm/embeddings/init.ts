@@ -4,6 +4,7 @@ import { initEmbeddings } from "./index.js";
 import providerManager from "../providers/providers.js";
 import sqlInit from "../../sql_init.js";
 import sql from "../../sql.js";
+import { validateProviders, logValidationResults, hasWorkingEmbeddingProviders } from "../provider_validation.js";
 
 /**
  * Reset any stuck embedding queue items that were left in processing state
@@ -43,13 +44,20 @@ export async function initializeEmbeddings() {
         // Reset any stuck embedding queue items from previous server shutdown
         await resetStuckEmbeddingQueue();
 
-        // Initialize default embedding providers
-        await providerManager.initializeDefaultProviders();
-
         // Start the embedding system if AI is enabled
         if (await options.getOptionBool('aiEnabled')) {
-            await initEmbeddings();
-            log.info("Embedding system initialized successfully.");
+            // Validate providers before starting the embedding system
+            log.info("Validating AI providers before starting embedding system...");
+            const validation = await validateProviders();
+            logValidationResults(validation);
+            
+            if (await hasWorkingEmbeddingProviders()) {
+                // Embedding providers will be created on-demand when needed
+                await initEmbeddings();
+                log.info("Embedding system initialized successfully.");
+            } else {
+                log.info("Embedding system not started: No working embedding providers found. Please configure at least one AI provider (OpenAI, Ollama, or Voyage) to use embedding features.");
+            }
         } else {
             log.info("Embedding system disabled (AI features are turned off).");
         }

@@ -606,4 +606,12 @@ export class AnthropicService extends BaseAIService {
 
         return convertedTools;
     }
+
+    /**
+     * Clear cached Anthropic client to force recreation with new settings
+     */
+    clearCache(): void {
+        this.client = null;
+        log.info('Anthropic client cache cleared');
+    }
 }

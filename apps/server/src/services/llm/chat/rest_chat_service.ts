@@ -5,7 +5,7 @@
 import log from "../../log.js";
 import type { Request, Response } from "express";
 import type { Message, ChatCompletionOptions } from "../ai_interface.js";
-import { AIServiceManager } from "../ai_service_manager.js";
+import aiServiceManager from "../ai_service_manager.js";
 import { ChatPipeline } from "../pipeline/chat_pipeline.js";
 import type { ChatPipelineInput } from "../pipeline/interfaces.js";
 import options from "../../options.js";
@@ -14,7 +14,7 @@ import type { LLMStreamMessage } from "../interfaces/chat_ws_messages.js";
 import chatStorageService from '../chat_storage_service.js';
 import {
     isAIEnabled,
-    getFirstValidModelConfig,
+    getSelectedModelConfig,
 } from '../config/configuration_helpers.js';
 
 /**
@@ -33,25 +33,6 @@ class RestChatService {
         }
     }
 
-    /**
-     * Check if AI services are available
-     */
-    safelyUseAIManager(): boolean {
-        if (!this.isDatabaseInitialized()) {
-            log.info("AI check failed: Database is not initialized");
-            return false;
-        }
-
-        try {
-            const aiManager = new AIServiceManager();
-            const isAvailable = aiManager.isAnyServiceAvailable();
-            log.info(`AI service availability check result: ${isAvailable}`);
-            return isAvailable;
-        } catch (error) {
-            log.error(`Error accessing AI service manager: ${error}`);
-            return false;
-        }
-    }
 
     /**
      * Handle a message sent to an LLM and get a response
@@ -93,9 +74,13 @@ class RestChatService {
                 return { error: "AI features are disabled. Please enable them in the settings." };
             }
 
-            if (!this.safelyUseAIManager()) {
-                return { error: "AI services are currently unavailable. Please check your configuration." };
+            // Check database initialization first
+            if (!this.isDatabaseInitialized()) {
+                throw new Error("Database is not initialized");
             }
+
+            // Get or create AI service - will throw meaningful error if not possible  
+            await aiServiceManager.getOrCreateAnyService();
 
             // Load or create chat directly from storage
             let chat = await chatStorageService.getChat(chatNoteId);
@@ -252,14 +237,6 @@ class RestChatService {
 
         // Send WebSocket message
         wsService.sendMessageToAllClients(message);
-
-        // Send SSE response for compatibility
-        const responseData: any = { content: data, done };
-        if (rawChunk?.toolExecution) {
-            responseData.toolExecution = rawChunk.toolExecution;
-        }
-
-        res.write(`data: ${JSON.stringify(responseData)}\n\n`);
         
         // When streaming is complete, save the accumulated content to the chat note
         if (done) {
@@ -281,8 +258,8 @@ class RestChatService {
                 log.error(`Error saving streaming response: ${error}`);
             }
             
-            // End the response
-            res.end();
+            // Note: For WebSocket-only streaming, we don't end the HTTP response here
+            // since it was already handled by the calling endpoint
         }
     }
 
@@ -419,7 +396,7 @@ class RestChatService {
      */
     async getPreferredModel(): Promise<string | undefined> {
         try {
-            const validConfig = await getFirstValidModelConfig();
+            const validConfig = await getSelectedModelConfig();
             if (!validConfig) {
                 log.error('No valid AI model configuration found');
                 return undefined;

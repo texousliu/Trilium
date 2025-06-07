@@ -79,7 +79,7 @@ export class VectorSearchService {
             }
 
             // Get provider information
-            const provider = await providerManager.getPreferredEmbeddingProvider();
+            const provider = await providerManager.getSelectedEmbeddingProvider();
             if (!provider) {
                 log.error('No embedding provider available');
                 return [];
@@ -280,7 +280,7 @@ export class VectorSearchService {
             }
 
             // Get provider information
-            const provider = await providerManager.getPreferredEmbeddingProvider();
+            const provider = await providerManager.getSelectedEmbeddingProvider();
             if (!provider) {
                 log.error('No embedding provider available');
                 return [];

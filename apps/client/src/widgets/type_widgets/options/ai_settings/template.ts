@@ -61,9 +61,101 @@ export const TPL = `
     <h4>${t("ai_llm.provider_configuration")}</h4>
 
     <div class="form-group">
-        <label>${t("ai_llm.provider_precedence")}</label>
-        <input type="text" class="ai-provider-precedence form-control" placeholder="openai,anthropic,ollama">
-        <div class="form-text">${t("ai_llm.provider_precedence_description")}</div>
+        <label>${t("ai_llm.selected_provider")}</label>
+        <select class="ai-selected-provider form-control">
+            <option value="">${t("ai_llm.select_provider")}</option>
+            <option value="openai">OpenAI</option>
+            <option value="anthropic">Anthropic</option>
+            <option value="ollama">Ollama</option>
+        </select>
+        <div class="form-text">${t("ai_llm.selected_provider_description")}</div>
+    </div>
+
+    <!-- OpenAI Provider Settings -->
+    <div class="provider-settings openai-provider-settings" style="display: none;">
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5>${t("ai_llm.openai_settings")}</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>${t("ai_llm.api_key")}</label>
+                    <input type="password" class="openai-api-key form-control" autocomplete="off" />
+                    <div class="form-text">${t("ai_llm.openai_api_key_description")}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>${t("ai_llm.url")}</label>
+                    <input type="text" class="openai-base-url form-control" />
+                    <div class="form-text">${t("ai_llm.openai_url_description")}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>${t("ai_llm.model")}</label>
+                    <select class="openai-default-model form-control">
+                        <option value="">${t("ai_llm.select_model")}</option>
+                    </select>
+                    <div class="form-text">${t("ai_llm.openai_model_description")}</div>
+                    <button class="btn btn-sm btn-outline-secondary refresh-openai-models">${t("ai_llm.refresh_models")}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Anthropic Provider Settings -->
+    <div class="provider-settings anthropic-provider-settings" style="display: none;">
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5>${t("ai_llm.anthropic_settings")}</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>${t("ai_llm.api_key")}</label>
+                    <input type="password" class="anthropic-api-key form-control" autocomplete="off" />
+                    <div class="form-text">${t("ai_llm.anthropic_api_key_description")}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>${t("ai_llm.url")}</label>
+                    <input type="text" class="anthropic-base-url form-control" />
+                    <div class="form-text">${t("ai_llm.anthropic_url_description")}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>${t("ai_llm.model")}</label>
+                    <select class="anthropic-default-model form-control">
+                        <option value="">${t("ai_llm.select_model")}</option>
+                    </select>
+                    <div class="form-text">${t("ai_llm.anthropic_model_description")}</div>
+                    <button class="btn btn-sm btn-outline-secondary refresh-anthropic-models">${t("ai_llm.refresh_models")}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ollama Provider Settings -->
+    <div class="provider-settings ollama-provider-settings" style="display: none;">
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5>${t("ai_llm.ollama_settings")}</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>${t("ai_llm.url")}</label>
+                    <input type="text" class="ollama-base-url form-control" />
+                    <div class="form-text">${t("ai_llm.ollama_url_description")}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>${t("ai_llm.model")}</label>
+                    <select class="ollama-default-model form-control">
+                        <option value="">${t("ai_llm.select_model")}</option>
+                    </select>
+                    <div class="form-text">${t("ai_llm.ollama_model_description")}</div>
+                    <button class="btn btn-sm btn-outline-secondary refresh-models"><span class="bx bx-refresh"></span></button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="form-group">
@@ -79,155 +171,116 @@ export const TPL = `
     </div>
 </div>
 
-<nav class="options-section-tabs">
-    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-        <button class="nav-link active" id="nav-openai-tab" data-bs-toggle="tab" data-bs-target="#nav-openai" type="button" role="tab" aria-controls="nav-openai" aria-selected="true">${t("ai_llm.openai_tab")}</button>
-        <button class="nav-link" id="nav-anthropic-tab" data-bs-toggle="tab" data-bs-target="#nav-anthropic" type="button" role="tab" aria-controls="nav-anthropic" aria-selected="false">${t("ai_llm.anthropic_tab")}</button>
-        <button class="nav-link" id="nav-voyage-tab" data-bs-toggle="tab" data-bs-target="#nav-voyage" type="button" role="tab" aria-controls="nav-voyage" aria-selected="false">${t("ai_llm.voyage_tab")}</button>
-        <button class="nav-link" id="nav-ollama-tab" data-bs-toggle="tab" data-bs-target="#nav-ollama" type="button" role="tab" aria-controls="nav-ollama" aria-selected="false">${t("ai_llm.ollama_tab")}</button>
-    </div>
-</nav>
-<div class="options-section">
-    <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade show active" id="nav-openai" role="tabpanel" aria-labelledby="nav-openai-tab">
-            <div class="card">
-                <div class="card-header">
-                    <h5>${t("ai_llm.openai_settings")}</h5>
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <label>${t("ai_llm.api_key")}</label>
-                        <input type="password" class="openai-api-key form-control" autocomplete="off" />
-                        <div class="form-text">${t("ai_llm.openai_api_key_description")}</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>${t("ai_llm.url")}</label>
-                        <input type="text" class="openai-base-url form-control" />
-                        <div class="form-text">${t("ai_llm.openai_url_description")}</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>${t("ai_llm.model")}</label>
-                        <select class="openai-default-model form-control">
-                            <option value="gpt-4o">GPT-4o (recommended)</option>
-                            <option value="gpt-4">GPT-4</option>
-                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                        </select>
-                        <div class="form-text">${t("ai_llm.openai_model_description")}</div>
-                        <button class="btn btn-sm btn-outline-secondary refresh-openai-models">${t("ai_llm.refresh_models")}</button>
-                    </div>
-
-                    <div class="form-group">
-                        <label>${t("ai_llm.embedding_model")}</label>
-                        <select class="openai-embedding-model form-control">
-                            <option value="text-embedding-3-small">text-embedding-3-small (recommended)</option>
-                            <option value="text-embedding-3-large">text-embedding-3-large</option>
-                        </select>
-                        <div class="form-text">${t("ai_llm.openai_embedding_model_description")}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="nav-anthropic" role="tabpanel" aria-labelledby="nav-anthropic-tab">
-            <div class="card">
-                <div class="card-header">
-                    <h5>${t("ai_llm.anthropic_settings")}</h5>
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <label>${t("ai_llm.api_key")}</label>
-                        <input type="password" class="anthropic-api-key form-control" autocomplete="off" />
-                        <div class="form-text">${t("ai_llm.anthropic_api_key_description")}</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>${t("ai_llm.url")}</label>
-                        <input type="text" class="anthropic-base-url form-control" />
-                        <div class="form-text">${t("ai_llm.anthropic_url_description")}</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>${t("ai_llm.model")}</label>
-                        <select class="anthropic-default-model form-control">
-                            <option value="claude-3-opus-20240229">Claude 3 Opus (recommended)</option>
-                            <option value="claude-3-sonnet-20240229">Claude 3 Sonnet</option>
-                            <option value="claude-3-haiku-20240307">Claude 3 Haiku</option>
-                        </select>
-                        <div class="form-text">${t("ai_llm.anthropic_model_description")}</div>
-                        <button class="btn btn-sm btn-outline-secondary refresh-anthropic-models">${t("ai_llm.refresh_models")}</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="nav-voyage" role="tabpanel" aria-labelledby="nav-voyage-tab">
-            <div class="card">
-                <div class="card-header">
-                    <h5>${t("ai_llm.voyage_settings")}</h5>
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <label>${t("ai_llm.api_key")}</label>
-                        <input type="password" class="voyage-api-key form-control" autocomplete="off" />
-                        <div class="form-text">${t("ai_llm.voyage_api_key_description")}</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>${t("ai_llm.embedding_model")}</label>
-                        <select class="voyage-embedding-model form-control">
-                            <option value="voyage-2">Voyage-2 (recommended)</option>
-                            <option value="voyage-2-code">Voyage-2-Code</option>
-                            <option value="voyage-large-2">Voyage-Large-2</option>
-                        </select>
-                        <div class="form-text">${t("ai_llm.voyage_embedding_model_description")}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="nav-ollama" role="tabpanel" aria-labelledby="nav-ollama-tab">
-            <div class="card">
-                <div class="card-header">
-                    <h5>${t("ai_llm.ollama_settings")}</h5>
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <label>${t("ai_llm.url")}</label>
-                        <input type="text" class="ollama-base-url form-control" />
-                        <div class="form-text">${t("ai_llm.ollama_url_description")}</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>${t("ai_llm.model")}</label>
-                        <select class="ollama-default-model form-control">
-                            <option value="llama3">llama3 (recommended)</option>
-                            <option value="mistral">mistral</option>
-                            <option value="phi3">phi3</option>
-                        </select>
-                        <div class="form-text">${t("ai_llm.ollama_model_description")}</div>
-                        <button class="btn btn-sm btn-outline-secondary refresh-models"><span class="bx bx-refresh"></span></button>
-                    </div>
-
-                    <div class="form-group">
-                        <label>${t("ai_llm.embedding_model")}</label>
-                        <select class="ollama-embedding-model form-control">
-                            <option value="nomic-embed-text">nomic-embed-text (recommended)</option>
-                            <option value="all-MiniLM-L6-v2">all-MiniLM-L6-v2</option>
-                        </select>
-                        <div class="form-text">${t("ai_llm.ollama_embedding_model_description")}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="options-section">
     <h4>${t("ai_llm.embeddings_configuration")}</h4>
 
     <div class="form-group">
-        <label class="embedding-provider-label">${t("ai_llm.embedding_provider_precedence")}</label>
-        <input type="text" class="embedding-provider-precedence form-control" placeholder="openai,voyage,ollama,local">
-        <div class="form-text">${t("ai_llm.embedding_provider_precedence_description")}</div>
+        <label class="embedding-provider-label">${t("ai_llm.selected_embedding_provider")}</label>
+        <select class="embedding-selected-provider form-control">
+            <option value="">${t("ai_llm.select_embedding_provider")}</option>
+            <option value="openai">OpenAI</option>
+            <option value="voyage">Voyage AI</option>
+            <option value="ollama">Ollama</option>
+            <option value="local">Local</option>
+        </select>
+        <div class="form-text">${t("ai_llm.selected_embedding_provider_description")}</div>
+    </div>
+
+    <!-- OpenAI Embedding Provider Settings -->
+    <div class="embedding-provider-settings openai-embedding-provider-settings" style="display: none;">
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5>${t("ai_llm.openai_embedding_settings")}</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>${t("ai_llm.api_key")}</label>
+                    <input type="password" class="openai-embedding-api-key form-control" autocomplete="off" />
+                    <div class="form-text">${t("ai_llm.openai_embedding_api_key_description")}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>${t("ai_llm.url")}</label>
+                    <input type="text" class="openai-embedding-base-url form-control" />
+                    <div class="form-text">${t("ai_llm.openai_embedding_url_description")}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>${t("ai_llm.embedding_model")}</label>
+                    <select class="openai-embedding-model form-control">
+                        <option value="">${t("ai_llm.select_model")}</option>
+                    </select>
+                    <div class="form-text">${t("ai_llm.openai_embedding_model_description")}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Voyage Embedding Provider Settings -->
+    <div class="embedding-provider-settings voyage-embedding-provider-settings" style="display: none;">
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5>${t("ai_llm.voyage_settings")}</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>${t("ai_llm.api_key")}</label>
+                    <input type="password" class="voyage-api-key form-control" autocomplete="off" />
+                    <div class="form-text">${t("ai_llm.voyage_api_key_description")}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>${t("ai_llm.url")}</label>
+                    <input type="text" class="voyage-embedding-base-url form-control" />
+                    <div class="form-text">${t("ai_llm.voyage_embedding_url_description")}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>${t("ai_llm.embedding_model")}</label>
+                    <select class="voyage-embedding-model form-control">
+                        <option value="">${t("ai_llm.select_model")}</option>
+                    </select>
+                    <div class="form-text">${t("ai_llm.voyage_embedding_model_description")}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ollama Embedding Provider Settings -->
+    <div class="embedding-provider-settings ollama-embedding-provider-settings" style="display: none;">
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5>${t("ai_llm.ollama_embedding_settings")}</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>${t("ai_llm.url")}</label>
+                    <input type="text" class="ollama-embedding-base-url form-control" />
+                    <div class="form-text">${t("ai_llm.ollama_embedding_url_description")}</div>
+                </div>
+
+                <div class="form-group">
+                    <label>${t("ai_llm.embedding_model")}</label>
+                    <select class="ollama-embedding-model form-control">
+                        <option value="">${t("ai_llm.select_model")}</option>
+                    </select>
+                    <div class="form-text">${t("ai_llm.ollama_embedding_model_description")}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Local Embedding Provider Settings -->
+    <div class="embedding-provider-settings local-embedding-provider-settings" style="display: none;">
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5>${t("ai_llm.local_embedding_settings")}</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-text">${t("ai_llm.local_embedding_description")}</div>
+            </div>
+        </div>
     </div>
 
     <div class="form-group">

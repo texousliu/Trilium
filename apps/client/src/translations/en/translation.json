@@ -1314,7 +1314,25 @@
       "create_new_ai_chat": "Create new AI Chat"
     },
     "create_new_ai_chat": "Create new AI Chat",
-    "configuration_warnings": "There are some issues with your AI configuration. Please check your settings."
+    "configuration_warnings": "There are some issues with your AI configuration. Please check your settings.",
+    "embeddings_started": "Embedding generation started",
+    "embeddings_stopped": "Embedding generation stopped",
+    "embeddings_toggle_error": "Error toggling embeddings",
+    "local_embedding_description": "Uses local embedding models for offline text embedding generation",
+    "local_embedding_settings": "Local Embedding Settings",
+    "ollama_embedding_settings": "Ollama Embedding Settings",
+    "ollama_embedding_url_description": "URL for the Ollama API for embedding generation (default: http://localhost:11434)",
+    "openai_embedding_api_key_description": "Your OpenAI API key for embedding generation (can be different from chat API key)",
+    "openai_embedding_settings": "OpenAI Embedding Settings",
+    "openai_embedding_url_description": "Base URL for OpenAI embedding API (default: https://api.openai.com/v1)",
+    "selected_embedding_provider": "Selected Embedding Provider",
+    "selected_embedding_provider_description": "Choose the provider for generating note embeddings",
+    "selected_provider": "Selected Provider",
+    "selected_provider_description": "Choose the AI provider for chat and completion features",
+    "select_embedding_provider": "Select embedding provider...",
+    "select_model": "Select model...",
+    "select_provider": "Select provider...",
+    "voyage_embedding_url_description": "Base URL for the Voyage AI embedding API (default: https://api.voyageai.com/v1)"
   },
   "zoom_factor": {
     "title": "Zoom Factor (desktop build only)",
