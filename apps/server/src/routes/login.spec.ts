@@ -1,9 +1,8 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import supertest from "supertest";
+import supertest, { type Response } from "supertest";
 import type { Application } from "express";
 import dayjs from "dayjs";
 import type { SQLiteSessionStore } from "./session_parser.js";
-import { promisify } from "util";
 import { SessionData } from "express-session";
 
 let app: Application;
@@ -37,73 +36,80 @@ describe("Login Route test", () => {
 
     });
 
-
-    it("sets correct Expires, when 'Remember Me' is ticked", async () => {
-
+    describe("Login when 'Remember Me' is ticked", async () => {
         // TriliumNextTODO: make setting cookieMaxAge via env variable work
         // => process.env.TRILIUM_SESSION_COOKIEMAXAGE
         // the custom cookieMaxAge is currently hardocded in the test data dir's config.ini
 
-        const CUSTOM_MAX_AGE_SECONDS = 86400;
-        const expectedExpiresDate = dayjs().utc().add(CUSTOM_MAX_AGE_SECONDS, "seconds").toDate().toUTCString();
+        let res: Response;
+        let setCookieHeader: string;
+        let expectedExpiresDate: string;
 
-        const res = await supertest(app)
-            .post("/login")
-            .send({ password: "demo1234", rememberMe: 1 })
-            .expect(302)
+        beforeAll(async () => {
+            const CUSTOM_MAX_AGE_SECONDS = 86400;
 
-        const setCookieHeader = res.headers["set-cookie"][0];
+            expectedExpiresDate = dayjs().utc().add(CUSTOM_MAX_AGE_SECONDS, "seconds").toDate().toUTCString();
+            res = await supertest(app)
+                .post("/login")
+                .send({ password: "demo1234", rememberMe: 1 })
+                .expect(302);
+            setCookieHeader = res.headers["set-cookie"][0];
+        });
 
-        // match for e.g. "Expires=Wed, 07 May 2025 07:02:59 GMT;"
-        const expiresCookieRegExp = /Expires=(?<date>[\w\s,:]+)/;
-        const expiresCookieMatch = setCookieHeader.match(expiresCookieRegExp);
-        const actualExpiresDate = new Date(expiresCookieMatch?.groups?.date || "").toUTCString();
+        it("sets correct Expires for the cookie", async () => {
+            // match for e.g. "Expires=Wed, 07 May 2025 07:02:59 GMT;"
+            const expiresCookieRegExp = /Expires=(?<date>[\w\s,:]+)/;
+            const expiresCookieMatch = setCookieHeader.match(expiresCookieRegExp);
+            const actualExpiresDate = new Date(expiresCookieMatch?.groups?.date || "").toUTCString();
 
-        expect(actualExpiresDate).to.not.eql("Invalid Date");
+            expect(actualExpiresDate).to.not.eql("Invalid Date");
 
-        // ignore the seconds in the comparison, just to avoid flakiness in tests,
-        // if for some reason execution is slow between calculation of expected and actual
-        expect(actualExpiresDate.slice(0,23)).toBe(expectedExpiresDate.slice(0,23))
+            // ignore the seconds in the comparison, just to avoid flakiness in tests,
+            // if for some reason execution is slow between calculation of expected and actual
+            expect(actualExpiresDate.slice(0,23)).toBe(expectedExpiresDate.slice(0,23))
+        });
 
-        // Check the session is stored in the database.
-        const { session, expiry } = await getSessionFromCookie(setCookieHeader);
-        expect(session!).toBeTruthy();
-        expect(session!.cookie.expires).toBeTruthy();
-        expect(new Date(session!.cookie.expires!).toUTCString().substring(0, 23))
-            .toBe(expectedExpiresDate.substring(0, 23));
-        expect(session!.loggedIn).toBe(true);
-        expect(expiry).toStrictEqual(new Date(session!.cookie.expires!));
-    }, 10_000);
-    // use 10 sec (10_000 ms) timeout for now, instead of default 5 sec to work around
-    // failing CI, because for some reason it currently takes approx. 6 secs to run
-    // TODO: actually identify what is causing this and fix the flakiness
+        it("sets the correct sesssion data", async () => {
+            // Check the session is stored in the database.
+            const { session, expiry } = await getSessionFromCookie(setCookieHeader);
+            expect(session!).toBeTruthy();
+            expect(session!.cookie.expires).toBeTruthy();
+            expect(new Date(session!.cookie.expires!).toUTCString().substring(0, 23))
+                .toBe(expectedExpiresDate.substring(0, 23));
+            expect(session!.loggedIn).toBe(true);
+            expect(expiry).toStrictEqual(new Date(session!.cookie.expires!));
+        });
+    });
 
+    describe("Login when 'Remember Me' is not ticked", async () => {
+        let res: Response;
+        let setCookieHeader: string;
 
-    it("does not set Expires, when 'Remember Me' is not ticked", async () => {
-        const res = await supertest(app)
-            .post("/login")
-            .send({ password: "demo1234" })
-            .expect(302)
+        beforeAll(async () => {
+            res = await supertest(app)
+                .post("/login")
+                .send({ password: "demo1234" })
+                .expect(302)
 
-        const setCookieHeader = res.headers["set-cookie"][0];
+            setCookieHeader = res.headers["set-cookie"][0];
+        });
 
-        // match for e.g. "Expires=Wed, 07 May 2025 07:02:59 GMT;"
-        expect(setCookieHeader).not.toMatch(/Expires=(?<date>[\w\s,:]+)/)
+        it("does not set Expires", async () => {
+            // match for e.g. "Expires=Wed, 07 May 2025 07:02:59 GMT;"
+            expect(setCookieHeader).not.toMatch(/Expires=(?<date>[\w\s,:]+)/)
+        });
 
-        // Check the session is stored in the database.
-        const { session, expiry } = await getSessionFromCookie(setCookieHeader);
-        expect(session!).toBeTruthy();
-        expect(session!.cookie.expires).toBeUndefined();
-        expect(session!.loggedIn).toBe(true);
+        it("stores the session in the database", async () => {
+            const { session, expiry } = await getSessionFromCookie(setCookieHeader);
+            expect(session!).toBeTruthy();
+            expect(session!.cookie.expires).toBeUndefined();
+            expect(session!.loggedIn).toBe(true);
 
-        const expectedExpirationDate = dayjs().utc().add(1, "hour").toDate();
-        expect(expiry?.getTime()).toBeGreaterThan(new Date().getTime());
-        expect(expiry?.getTime()).toBeLessThan(expectedExpirationDate.getTime());
-    }, 10_000);
-    // use 10 sec (10_000 ms) timeout for now, instead of default 5 sec to work around
-    // failing CI, because for some reason it currently takes approx. 6 secs to run
-    // TODO: actually identify what is causing this and fix the flakiness
-
+            const expectedExpirationDate = dayjs().utc().add(1, "hour").toDate();
+            expect(expiry?.getTime()).toBeGreaterThan(new Date().getTime());
+            expect(expiry?.getTime()).toBeLessThan(expectedExpirationDate.getTime());
+        });
+    });
 });
 
 async function getSessionFromCookie(setCookieHeader: string) {
