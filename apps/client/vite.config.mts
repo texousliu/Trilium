@@ -55,6 +55,7 @@ export default defineConfig(() => ({
         outDir: './dist',
         emptyOutDir: true,
         reportCompressedSize: true,
+        sourcemap: process.env.NODE_ENV === "production",
         rollupOptions: {
             input: {
                 desktop: join(__dirname, "src", "desktop.ts"),

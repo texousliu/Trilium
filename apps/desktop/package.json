@@ -66,6 +66,7 @@
           "minify": true,
           "thirdParty": true,
           "declaration": false,
+          "sourcemap": true,
           "esbuildOptions": {
             "splitting": false,
             "loader": {
