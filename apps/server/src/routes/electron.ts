@@ -3,6 +3,7 @@ import type { Application } from "express";
 import type { ParamsDictionary, Request, Response } from "express-serve-static-core";
 import type QueryString from "qs";
 import { Session, SessionData } from "express-session";
+import { parse as parseQuery } from "qs";
 import EventEmitter from "events";
 
 type MockedResponse = Response<any, Record<string, any>, number>;
@@ -55,7 +56,7 @@ class FakeRequest extends EventEmitter implements Pick<Request<ParamsDictionary,
     body: any;
     headers: Record<string, string>;
     session: Session & Partial<SessionData>;
-    query: Record<string, any> = {};
+    query: Record<string, any>;
 
     constructor(arg: Arg) {
         super();
@@ -64,6 +65,7 @@ class FakeRequest extends EventEmitter implements Pick<Request<ParamsDictionary,
         this.body = arg.data;
         this.headers = arg.headers;
         this.session = fakeSession;
+        this.query = parseQuery(arg.url.split("?")[1] || "", { ignoreQueryPrefix: true });
     }
 }
 
