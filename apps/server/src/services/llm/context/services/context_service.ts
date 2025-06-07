@@ -58,7 +58,7 @@ export class ContextService {
         this.initPromise = (async () => {
             try {
                 // Initialize provider
-                const provider = await providerManager.getPreferredEmbeddingProvider();
+                const provider = await providerManager.getSelectedEmbeddingProvider();
                 if (!provider) {
                     throw new Error(`No embedding provider available. Could not initialize context service.`);
                 }
@@ -224,7 +224,7 @@ export class ContextService {
             log.info(`Final combined results: ${relevantNotes.length} relevant notes`);
 
             // Step 4: Build context from the notes
-            const provider = await providerManager.getPreferredEmbeddingProvider();
+            const provider = await providerManager.getSelectedEmbeddingProvider();
             const providerId = provider?.name || 'default';
 
             const context = await contextFormatter.buildContextFromNotes(

@@ -122,10 +122,10 @@ export class SearchNotesTool implements ToolHandler {
             // If summarization is requested
             if (summarize) {
                 // Try to get an LLM service for summarization
-                const llmService = aiServiceManager.getService();
-                if (llmService) {
-                    try {
-                        const messages = [
+                try {
+                    const llmService = await aiServiceManager.getService();
+                    
+                    const messages = [
                             {
                                 role: "system" as const,
                                 content: "Summarize the following note content concisely while preserving key information. Keep your summary to about 3-4 sentences."
@@ -147,13 +147,12 @@ export class SearchNotesTool implements ToolHandler {
                             } as Record<string, boolean>))
                         });
 
-                        if (result && result.text) {
-                            return result.text;
-                        }
-                    } catch (error) {
-                        log.error(`Error summarizing content: ${error}`);
-                        // Fall through to smart truncation if summarization fails
+                    if (result && result.text) {
+                        return result.text;
                     }
+                } catch (error) {
+                    log.error(`Error summarizing content: ${error}`);
+                    // Fall through to smart truncation if summarization fails
                 }
             }
 

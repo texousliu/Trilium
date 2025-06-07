@@ -526,4 +526,13 @@ export class OllamaService extends BaseAIService {
         log.info(`Added tool execution feedback: ${toolExecutionStatus.length} statuses`);
         return updatedMessages;
     }
+
+    /**
+     * Clear cached Ollama client to force recreation with new settings
+     */
+    clearCache(): void {
+        // Ollama service doesn't maintain a persistent client like OpenAI/Anthropic
+        // but we can clear any future cached state here if needed
+        log.info('Ollama client cache cleared (no persistent client to clear)');
+    }
 }

@@ -400,6 +400,8 @@ function register(app: express.Application) {
     asyncApiRoute(PST, "/api/llm/embeddings/retry-all-failed", embeddingsRoute.retryAllFailedNotes);
     asyncApiRoute(PST, "/api/llm/embeddings/rebuild-index", embeddingsRoute.rebuildIndex);
     asyncApiRoute(GET, "/api/llm/embeddings/index-rebuild-status", embeddingsRoute.getIndexRebuildStatus);
+    asyncApiRoute(PST, "/api/llm/embeddings/start", embeddingsRoute.startEmbeddings);
+    asyncApiRoute(PST, "/api/llm/embeddings/stop", embeddingsRoute.stopEmbeddings);
 
     // LLM provider endpoints - moved under /api/llm/providers hierarchy
     asyncApiRoute(GET, "/api/llm/providers/ollama/models", ollamaRoute.listModels);

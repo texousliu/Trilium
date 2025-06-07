@@ -132,26 +132,29 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     openaiApiKey: string;
     openaiDefaultModel: string;
     openaiEmbeddingModel: string;
+    openaiEmbeddingApiKey: string;
+    openaiEmbeddingBaseUrl: string;
     openaiBaseUrl: string;
     anthropicApiKey: string;
     anthropicDefaultModel: string;
     voyageEmbeddingModel: string;
     voyageApiKey: string;
+    voyageEmbeddingBaseUrl: string;
     anthropicBaseUrl: string;
     ollamaEnabled: boolean;
     ollamaBaseUrl: string;
     ollamaDefaultModel: string;
     ollamaEmbeddingModel: string;
+    ollamaEmbeddingBaseUrl: string;
     codeOpenAiModel: string;
-    aiProviderPrecedence: string;
+    aiSelectedProvider: string;
 
     // Embedding-related options
     embeddingAutoUpdateEnabled: boolean;
     embeddingUpdateInterval: number;
     embeddingBatchSize: number;
     embeddingDefaultDimension: number;
-    embeddingsDefaultProvider: string;
-    embeddingProviderPrecedence: string;
+    embeddingSelectedProvider: string;
     enableAutomaticIndexing: boolean;
     embeddingGenerationLocation: string;
     embeddingDimensionStrategy: string;

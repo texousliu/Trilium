@@ -1,4 +1,5 @@
 import options from '../options.js';
+import eventService from '../events.js';
 import type { AIService, ChatCompletionOptions, ChatResponse, Message } from './ai_interface.js';
 import { AnthropicService } from './providers/anthropic_service.js';
 import { ContextExtractor } from './context/index.js';
@@ -20,9 +21,8 @@ import type { NoteSearchResult } from './interfaces/context_interfaces.js';
 
 // Import new configuration system
 import {
-    getProviderPrecedence,
-    getPreferredProvider,
-    getEmbeddingProviderPrecedence,
+    getSelectedProvider,
+    getSelectedEmbeddingProvider,
     parseModelIdentifier,
     isAIEnabled,
     getDefaultModelForProvider,
@@ -43,23 +43,20 @@ interface NoteContext {
 }
 
 export class AIServiceManager implements IAIServiceManager {
-    private services: Record<ServiceProviders, AIService> = {
-        openai: new OpenAIService(),
-        anthropic: new AnthropicService(),
-        ollama: new OllamaService()
-    };
+    private services: Partial<Record<ServiceProviders, AIService>> = {};
 
-    private providerOrder: ServiceProviders[] = []; // Will be populated from configuration
     private initialized = false;
 
     constructor() {
-        // Initialize provider order immediately
-        this.updateProviderOrder();
-
         // Initialize tools immediately
         this.initializeTools().catch(error => {
             log.error(`Error initializing LLM tools during AIServiceManager construction: ${error.message || String(error)}`);
         });
+
+        // Set up event listener for provider changes
+        this.setupProviderChangeListener();
+        
+        this.initialized = true;
     }
 
     /**
@@ -84,37 +81,16 @@ export class AIServiceManager implements IAIServiceManager {
     }
 
     /**
-     * Update the provider precedence order using the new configuration system
+     * Get the currently selected provider using the new configuration system
      */
-    async updateProviderOrderAsync(): Promise<void> {
+    async getSelectedProviderAsync(): Promise<ServiceProviders | null> {
         try {
-            const providers = await getProviderPrecedence();
-            this.providerOrder = providers as ServiceProviders[];
-            this.initialized = true;
-            log.info(`Updated provider order: ${providers.join(', ')}`);
+            const selectedProvider = await getSelectedProvider();
+            return selectedProvider as ServiceProviders || null;
         } catch (error) {
-            log.error(`Failed to get provider precedence: ${error}`);
-            // Keep empty order, will be handled gracefully by other methods
-            this.providerOrder = [];
-            this.initialized = true;
+            log.error(`Failed to get selected provider: ${error}`);
+            return null;
         }
-    }
-
-    /**
-     * Update the provider precedence order (legacy sync version)
-     * Returns true if successful, false if options not available yet
-     */
-    updateProviderOrder(): boolean {
-        if (this.initialized) {
-            return true;
-        }
-
-        // Use async version but don't wait
-        this.updateProviderOrderAsync().catch(error => {
-            log.error(`Error in async provider order update: ${error}`);
-        });
-
-        return true;
     }
 
     /**
@@ -158,16 +134,44 @@ export class AIServiceManager implements IAIServiceManager {
      * Ensure manager is initialized before using
      */
     private ensureInitialized() {
-        if (!this.initialized) {
-            this.updateProviderOrder();
+        // No longer needed with simplified approach
+    }
+
+    /**
+     * Get or create any available AI service following the simplified pattern
+     * Returns a service or throws a meaningful error
+     */
+    async getOrCreateAnyService(): Promise<AIService> {
+        this.ensureInitialized();
+        
+        // Get the selected provider using the new configuration system
+        const selectedProvider = await this.getSelectedProviderAsync();
+        
+        
+        if (!selectedProvider) {
+            throw new Error('No AI provider is selected. Please select a provider (OpenAI, Anthropic, or Ollama) in your AI settings.');
+        }
+        
+        try {
+            const service = await this.getOrCreateChatProvider(selectedProvider);
+            if (service) {
+                return service;
+            }
+            throw new Error(`Failed to create ${selectedProvider} service`);
+        } catch (error) {
+            log.error(`Provider ${selectedProvider} not available: ${error}`);
+            throw new Error(`Selected AI provider (${selectedProvider}) is not available. Please check your configuration: ${error}`);
         }
     }
 
     /**
-     * Check if any AI service is available
+     * Check if any AI service is available (legacy method for backward compatibility)
      */
     isAnyServiceAvailable(): boolean {
-        return Object.values(this.services).some(service => service.isAvailable());
+        this.ensureInitialized();
+        
+        // Check if we have the selected provider available
+        return this.getAvailableProviders().length > 0;
     }
 
     /**
@@ -175,9 +179,42 @@ export class AIServiceManager implements IAIServiceManager {
      */
     getAvailableProviders(): ServiceProviders[] {
         this.ensureInitialized();
-        return Object.entries(this.services)
-            .filter(([_, service]) => service.isAvailable())
-            .map(([key, _]) => key as ServiceProviders);
+        
+        const allProviders: ServiceProviders[] = ['openai', 'anthropic', 'ollama'];
+        const availableProviders: ServiceProviders[] = [];
+        
+        for (const providerName of allProviders) {
+            // Use a sync approach - check if we can create the provider
+            const service = this.services[providerName];
+            if (service && service.isAvailable()) {
+                availableProviders.push(providerName);
+            } else {
+                // For providers not yet created, check configuration to see if they would be available
+                try {
+                    switch (providerName) {
+                        case 'openai':
+                            if (options.getOption('openaiApiKey')) {
+                                availableProviders.push(providerName);
+                            }
+                            break;
+                        case 'anthropic':
+                            if (options.getOption('anthropicApiKey')) {
+                                availableProviders.push(providerName);
+                            }
+                            break;
+                        case 'ollama':
+                            if (options.getOption('ollamaBaseUrl')) {
+                                availableProviders.push(providerName);
+                            }
+                            break;
+                    }
+                } catch (error) {
+                    // Ignore configuration errors, provider just won't be available
+                }
+            }
+        }
+        
+        return availableProviders;
     }
 
     /**
@@ -198,51 +235,54 @@ export class AIServiceManager implements IAIServiceManager {
             throw new Error('No messages provided for chat completion');
         }
 
-        // Try providers in order of preference
-        const availableProviders = this.getAvailableProviders();
-
-        if (availableProviders.length === 0) {
-            throw new Error('No AI providers are available. Please check your AI settings.');
+        // Get the selected provider
+        const selectedProvider = await this.getSelectedProviderAsync();
+        
+        if (!selectedProvider) {
+            throw new Error('No AI provider is selected. Please select a provider in your AI settings.');
         }
-
-        // Sort available providers by precedence
-        const sortedProviders = this.providerOrder
-            .filter(provider => availableProviders.includes(provider));
+        
+        // Check if the selected provider is available
+        const availableProviders = this.getAvailableProviders();
+        if (!availableProviders.includes(selectedProvider)) {
+            throw new Error(`Selected AI provider (${selectedProvider}) is not available. Please check your configuration.`);
+        }
 
         // If a specific provider is requested and available, use it
         if (options.model && options.model.includes(':')) {
             // Use the new configuration system to parse model identifier
             const modelIdentifier = parseModelIdentifier(options.model);
 
-            if (modelIdentifier.provider && availableProviders.includes(modelIdentifier.provider as ServiceProviders)) {
+            if (modelIdentifier.provider && modelIdentifier.provider === selectedProvider) {
                 try {
-                    const modifiedOptions = { ...options, model: modelIdentifier.modelId };
-                    log.info(`[AIServiceManager] Using provider ${modelIdentifier.provider} from model prefix with modifiedOptions.stream: ${modifiedOptions.stream}`);
-                    return await this.services[modelIdentifier.provider as ServiceProviders].generateChatCompletion(messages, modifiedOptions);
+                    const service = await this.getOrCreateChatProvider(modelIdentifier.provider as ServiceProviders);
+                    if (service) {
+                        const modifiedOptions = { ...options, model: modelIdentifier.modelId };
+                        log.info(`[AIServiceManager] Using provider ${modelIdentifier.provider} from model prefix with modifiedOptions.stream: ${modifiedOptions.stream}`);
+                        return await service.generateChatCompletion(messages, modifiedOptions);
+                    }
                 } catch (error) {
                     log.error(`Error with specified provider ${modelIdentifier.provider}: ${error}`);
-                    // If the specified provider fails, continue with the fallback providers
+                    throw new Error(`Failed to use specified provider ${modelIdentifier.provider}: ${error}`);
                 }
+            } else if (modelIdentifier.provider && modelIdentifier.provider !== selectedProvider) {
+                throw new Error(`Model specifies provider '${modelIdentifier.provider}' but selected provider is '${selectedProvider}'. Please select the correct provider or use a model without provider prefix.`);
             }
             // If not a provider prefix, treat the entire string as a model name and continue with normal provider selection
         }
 
-        // Try each provider in order until one succeeds
-        let lastError: Error | null = null;
-
-        for (const provider of sortedProviders) {
-            try {
-                log.info(`[AIServiceManager] Trying provider ${provider} with options.stream: ${options.stream}`);
-                return await this.services[provider].generateChatCompletion(messages, options);
-            } catch (error) {
-                log.error(`Error with provider ${provider}: ${error}`);
-                lastError = error as Error;
-                // Continue to the next provider
+        // Use the selected provider
+        try {
+            const service = await this.getOrCreateChatProvider(selectedProvider);
+            if (!service) {
+                throw new Error(`Failed to create selected chat provider: ${selectedProvider}. Please check your configuration.`);
             }
+            log.info(`[AIServiceManager] Using selected provider ${selectedProvider} with options.stream: ${options.stream}`);
+            return await service.generateChatCompletion(messages, options);
+        } catch (error) {
+            log.error(`Error with selected provider ${selectedProvider}: ${error}`);
+            throw new Error(`Selected AI provider (${selectedProvider}) failed: ${error}`);
         }
-
-        // If we get here, all providers failed
-        throw new Error(`All AI providers failed: ${lastError?.message || 'Unknown error'}`);
     }
 
     setupEventListeners() {
@@ -340,30 +380,64 @@ export class AIServiceManager implements IAIServiceManager {
     }
 
     /**
-     * Set up embeddings provider using the new configuration system
+     * Get or create a chat provider on-demand with inline validation
      */
-    async setupEmbeddingsProvider(): Promise<void> {
-        try {
-            const aiEnabled = await isAIEnabled();
-            if (!aiEnabled) {
-                log.info('AI features are disabled');
-                return;
-            }
-
-            // Use the new configuration system - no string parsing!
-            const enabledProviders = await getEnabledEmbeddingProviders();
-
-            if (enabledProviders.length === 0) {
-                log.info('No embedding providers are enabled');
-                return;
-            }
-
-            // Initialize embedding providers
-            log.info('Embedding providers initialized successfully');
-        } catch (error: any) {
-            log.error(`Error setting up embedding providers: ${error.message}`);
-            throw error;
+    private async getOrCreateChatProvider(providerName: ServiceProviders): Promise<AIService | null> {
+        // Return existing provider if already created
+        if (this.services[providerName]) {
+            return this.services[providerName];
         }
+
+        // Create and validate provider on-demand
+        try {
+            let service: AIService | null = null;
+            
+            switch (providerName) {
+                case 'openai': {
+                    const apiKey = options.getOption('openaiApiKey');
+                    const baseUrl = options.getOption('openaiBaseUrl');
+                    if (!apiKey && !baseUrl) return null;
+                    
+                    service = new OpenAIService();
+                    // Validate by checking if it's available
+                    if (!service.isAvailable()) {
+                        throw new Error('OpenAI service not available');
+                    }
+                    break;
+                }
+                
+                case 'anthropic': {
+                    const apiKey = options.getOption('anthropicApiKey');
+                    if (!apiKey) return null;
+                    
+                    service = new AnthropicService();
+                    if (!service.isAvailable()) {
+                        throw new Error('Anthropic service not available');
+                    }
+                    break;
+                }
+                
+                case 'ollama': {
+                    const baseUrl = options.getOption('ollamaBaseUrl');
+                    if (!baseUrl) return null;
+                    
+                    service = new OllamaService();
+                    if (!service.isAvailable()) {
+                        throw new Error('Ollama service not available');
+                    }
+                    break;
+                }
+            }
+            
+            if (service) {
+                this.services[providerName] = service;
+                return service;
+            }
+        } catch (error: any) {
+            log.error(`Failed to create ${providerName} chat provider: ${error.message || 'Unknown error'}`);
+        }
+
+        return null;
     }
 
     /**
@@ -380,12 +454,6 @@ export class AIServiceManager implements IAIServiceManager {
                 log.info("AI features are disabled in options");
                 return;
             }
-
-            // Update provider order from configuration
-            await this.updateProviderOrderAsync();
-
-            // Set up embeddings provider if AI is enabled
-            await this.setupEmbeddingsProvider();
 
             // Initialize index service
             await this.getIndexService().initialize();
@@ -453,8 +521,8 @@ export class AIServiceManager implements IAIServiceManager {
             if (!contextNotes || contextNotes.length === 0) {
                 try {
                     // Get the default LLM service for context enhancement
-                    const provider = this.getPreferredProvider();
-                    const llmService = this.getService(provider);
+                    const provider = this.getSelectedProvider();
+                    const llmService = await this.getService(provider);
 
                     // Find relevant notes
                     contextNotes = await contextService.findRelevantNotes(
@@ -495,25 +563,31 @@ export class AIServiceManager implements IAIServiceManager {
     /**
      * Get AI service for the given provider
      */
-    getService(provider?: string): AIService {
+    async getService(provider?: string): Promise<AIService> {
         this.ensureInitialized();
 
-        // If provider is specified, try to use it
-        if (provider && this.services[provider as ServiceProviders]?.isAvailable()) {
-            return this.services[provider as ServiceProviders];
-        }
-
-        // Otherwise, use the first available provider in the configured order
-        for (const providerName of this.providerOrder) {
-            const service = this.services[providerName];
-            if (service.isAvailable()) {
+        // If provider is specified, try to get or create it
+        if (provider) {
+            const service = await this.getOrCreateChatProvider(provider as ServiceProviders);
+            if (service && service.isAvailable()) {
                 return service;
             }
+            throw new Error(`Specified provider ${provider} is not available`);
         }
 
-        // If no provider is available, use first one anyway (it will throw an error)
-        // This allows us to show a proper error message rather than "provider not found"
-        return this.services[this.providerOrder[0]];
+        // Otherwise, use the selected provider
+        const selectedProvider = await this.getSelectedProviderAsync();
+        if (!selectedProvider) {
+            throw new Error('No AI provider is selected. Please select a provider in your AI settings.');
+        }
+
+        const service = await this.getOrCreateChatProvider(selectedProvider);
+        if (service && service.isAvailable()) {
+            return service;
+        }
+
+        // If no provider is available, throw a clear error
+        throw new Error(`Selected AI provider (${selectedProvider}) is not available. Please check your AI settings.`);
     }
 
     /**
@@ -521,34 +595,37 @@ export class AIServiceManager implements IAIServiceManager {
      */
     async getPreferredProviderAsync(): Promise<string> {
         try {
-            const preferredProvider = await getPreferredProvider();
-            if (preferredProvider === null) {
-                // No providers configured, fallback to first available
-                log.info('No providers configured in precedence, using first available provider');
-                return this.providerOrder[0];
+            const selectedProvider = await getSelectedProvider();
+            if (selectedProvider === null) {
+                // No provider selected, fallback to default
+                log.info('No provider selected, using default provider');
+                return 'openai';
             }
-            return preferredProvider;
+            return selectedProvider;
         } catch (error) {
             log.error(`Error getting preferred provider: ${error}`);
-            return this.providerOrder[0];
+            return 'openai';
         }
     }
 
     /**
-     * Get the preferred provider based on configuration (sync version for compatibility)
+     * Get the selected provider based on configuration (sync version for compatibility)
      */
-    getPreferredProvider(): string {
+    getSelectedProvider(): string {
         this.ensureInitialized();
 
-        // Return the first available provider in the order
-        for (const providerName of this.providerOrder) {
-            if (this.services[providerName].isAvailable()) {
-                return providerName;
+        // Try to get the selected provider synchronously
+        try {
+            const selectedProvider = options.getOption('aiSelectedProvider');
+            if (selectedProvider) {
+                return selectedProvider;
             }
+        } catch (error) {
+            log.error(`Error getting selected provider: ${error}`);
         }
 
-        // Return the first provider as fallback
-        return this.providerOrder[0];
+        // Return a default if nothing is selected (for backward compatibility)
+        return 'openai';
     }
 
     /**
@@ -580,6 +657,7 @@ export class AIServiceManager implements IAIServiceManager {
         };
     }
 
+
     /**
      * Error handler that properly types the error object
      */
@@ -589,6 +667,79 @@ export class AIServiceManager implements IAIServiceManager {
         }
         return String(error);
     }
+
+    /**
+     * Set up event listener for provider changes
+     */
+    private setupProviderChangeListener(): void {
+        // List of AI-related options that should trigger service recreation
+        const aiRelatedOptions = [
+            'aiEnabled',
+            'aiSelectedProvider',
+            'embeddingSelectedProvider',
+            'openaiApiKey',
+            'openaiBaseUrl', 
+            'openaiDefaultModel',
+            'anthropicApiKey',
+            'anthropicBaseUrl',
+            'anthropicDefaultModel',
+            'ollamaBaseUrl',
+            'ollamaDefaultModel',
+            'voyageApiKey'
+        ];
+
+        eventService.subscribe(['entityChanged'], async ({ entityName, entity }) => {
+            if (entityName === 'options' && entity && aiRelatedOptions.includes(entity.name)) {
+                log.info(`AI-related option '${entity.name}' changed, recreating LLM services`);
+                
+                // Special handling for aiEnabled toggle
+                if (entity.name === 'aiEnabled') {
+                    const isEnabled = entity.value === 'true';
+                    
+                    if (isEnabled) {
+                        log.info('AI features enabled, initializing AI service and embeddings');
+                        // Initialize the AI service
+                        await this.initialize();
+                        // Initialize embeddings through index service
+                        await indexService.startEmbeddingGeneration();
+                    } else {
+                        log.info('AI features disabled, stopping embeddings and clearing providers');
+                        // Stop embeddings through index service
+                        await indexService.stopEmbeddingGeneration();
+                        // Clear chat providers
+                        this.services = {};
+                    }
+                } else {
+                    // For other AI-related options, recreate services on-demand
+                    await this.recreateServices();
+                }
+            }
+        });
+    }
+
+    /**
+     * Recreate LLM services when provider settings change
+     */
+    private async recreateServices(): Promise<void> {
+        try {
+            log.info('Recreating LLM services due to configuration change');
+
+            // Clear configuration cache first
+            clearConfigurationCache();
+
+            // Clear existing chat providers (they will be recreated on-demand)
+            this.services = {};
+
+            // Clear embedding providers (they will be recreated on-demand when needed)
+            const providerManager = await import('./providers/providers.js');
+            providerManager.clearAllEmbeddingProviders();
+
+            log.info('LLM services recreated successfully');
+        } catch (error) {
+            log.error(`Error recreating LLM services: ${this.handleError(error)}`);
+        }
+    }
+
 }
 
 // Don't create singleton immediately, use a lazy-loading pattern
@@ -609,6 +760,9 @@ export default {
     // Also export methods directly for convenience
     isAnyServiceAvailable(): boolean {
         return getInstance().isAnyServiceAvailable();
+    },
+    async getOrCreateAnyService(): Promise<AIService> {
+        return getInstance().getOrCreateAnyService();
     },
     getAvailableProviders() {
         return getInstance().getAvailableProviders();
@@ -661,11 +815,11 @@ export default {
         );
     },
     // New methods
-    getService(provider?: string): AIService {
+    async getService(provider?: string): Promise<AIService> {
         return getInstance().getService(provider);
     },
-    getPreferredProvider(): string {
-        return getInstance().getPreferredProvider();
+    getSelectedProvider(): string {
+        return getInstance().getSelectedProvider();
     },
     isProviderAvailable(provider: string): boolean {
         return getInstance().isProviderAvailable(provider);

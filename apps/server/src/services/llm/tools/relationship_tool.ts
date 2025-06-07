@@ -312,16 +312,7 @@ export class RelationshipTool implements ToolHandler {
             }
 
             // Get the AI service for relationship suggestion
-            const aiService = aiServiceManager.getService();
-
-            if (!aiService) {
-                log.error('No AI service available for relationship suggestions');
-                return {
-                    success: false,
-                    message: 'AI service not available for relationship suggestions',
-                    relatedNotes: relatedResult.relatedNotes
-                };
-            }
+            const aiService = await aiServiceManager.getService();
 
             log.info(`Using ${aiService.getName()} to suggest relationships for ${relatedResult.relatedNotes.length} related notes`);
 

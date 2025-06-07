@@ -44,7 +44,7 @@ export async function validateEmbeddingProviders(validationWarning: HTMLElement)
                 // Check OpenAI configuration
                 const apiKey = options.get('openaiApiKey');
                 if (!apiKey) {
-                    configIssues.push(`OpenAI API key is missing`);
+                    configIssues.push(`OpenAI API key is missing (optional for OpenAI-compatible endpoints)`);
                 }
             } else if (provider === 'anthropic') {
                 // Check Anthropic configuration
