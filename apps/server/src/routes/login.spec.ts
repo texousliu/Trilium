@@ -2,18 +2,20 @@ import { beforeAll, describe, expect, it } from "vitest";
 import supertest, { type Response } from "supertest";
 import type { Application } from "express";
 import dayjs from "dayjs";
-import type { SQLiteSessionStore } from "./session_parser.js";
+import { type SQLiteSessionStore } from "./session_parser.js";
 import { SessionData } from "express-session";
 
 let app: Application;
 let sessionStore: SQLiteSessionStore;
+let CLEAN_UP_INTERVAL: number;
 
 describe("Login Route test", () => {
 
     beforeAll(async () => {
+        vi.useFakeTimers();
         const buildApp = (await import("../app.js")).default;
         app = await buildApp();
-        sessionStore = (await import("./session_parser.js")).sessionStore;
+        ({ sessionStore, CLEAN_UP_INTERVAL } = (await import("./session_parser.js")));
     });
 
     it("should return the login page, when using a GET request", async () => {
@@ -79,6 +81,17 @@ describe("Login Route test", () => {
             expect(session!.loggedIn).toBe(true);
             expect(expiry).toStrictEqual(new Date(session!.cookie.expires!));
         });
+
+        it("cleans up expired sessions", async () => {
+            let { session, expiry } = await getSessionFromCookie(setCookieHeader);
+            expect(session).toBeTruthy();
+            expect(expiry).toBeTruthy();
+
+            vi.setSystemTime(expiry!);
+            vi.advanceTimersByTime(CLEAN_UP_INTERVAL);
+            ({ session } = await getSessionFromCookie(setCookieHeader));
+            expect(session).toBeFalsy();
+        });
     });
 
     describe("Login when 'Remember Me' is not ticked", async () => {
@@ -107,7 +120,18 @@ describe("Login Route test", () => {
 
             const expectedExpirationDate = dayjs().utc().add(1, "hour").toDate();
             expect(expiry?.getTime()).toBeGreaterThan(new Date().getTime());
-            expect(expiry?.getTime()).toBeLessThan(expectedExpirationDate.getTime());
+            expect(expiry?.getTime()).toBeLessThanOrEqual(expectedExpirationDate.getTime());
+        });
+
+        it("cleans up expired sessions", async () => {
+            let { session, expiry } = await getSessionFromCookie(setCookieHeader);
+            expect(session).toBeTruthy();
+            expect(expiry).toBeTruthy();
+
+            vi.setSystemTime(expiry!);
+            vi.advanceTimersByTime(CLEAN_UP_INTERVAL);
+            ({ session } = await getSessionFromCookie(setCookieHeader));
+            expect(session).toBeFalsy();
         });
     });
 });

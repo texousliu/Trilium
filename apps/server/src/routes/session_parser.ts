@@ -5,6 +5,11 @@ import config from "../services/config.js";
 import log from "../services/log.js";
 import type express from "express";
 
+/**
+ * The amount of time in milliseconds after which expired sessions are cleaned up.
+ */
+export const CLEAN_UP_INTERVAL = 60 * 60 * 1000; // 1 hour
+
 export class SQLiteSessionStore extends Store {
 
     get(sid: string, callback: (err: any, session?: session.SessionData | null) => void): void {
@@ -88,6 +93,6 @@ setInterval(() => {
     const now = Date.now();
     const result = sql.execute(/*sql*/`DELETE FROM sessions WHERE expires < ?`, now);
     console.log("Cleaning up expired sessions: ", result.changes);
-}, 60 * 60 * 1000);
+}, CLEAN_UP_INTERVAL);
 
 export default sessionParser;
