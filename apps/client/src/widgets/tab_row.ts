@@ -385,38 +385,17 @@ export default class TabRowWidget extends BasicWidget {
     };
 
     setupScrollEvents() {
-        let deltaX = 0;
-        let isScrolling = false;
-        const stepScroll = () => {
-            if (Math.abs(deltaX) > 5) {
-                const step = Math.round(deltaX * 0.2);
-                deltaX -= step;
-                this.scrollTabContainer(step, "instant");
-                requestAnimationFrame(stepScroll);
-            } else {
-                this.scrollTabContainer(deltaX, "instant");
-                deltaX = 0;
-                isScrolling = false;
+        this.$tabScrollingContainer.on('wheel', (event) => {
+            const wheelEvent = event.originalEvent as WheelEvent;
+            if (utils.isCtrlKey(event) || event.altKey || event.shiftKey) {
+                return;
             }
-        };
-        this.$tabScrollingContainer[0].addEventListener('wheel', async (event) => {
-            if (!event.shiftKey && event.deltaX === 0) {
-                event.preventDefault();
-                // Clamp deltaX between TAB_CONTAINER_MIN_WIDTH and TAB_CONTAINER_MIN_WIDTH * 3
-                deltaX += Math.sign(event.deltaY) * Math.max(Math.min(Math.abs(event.deltaY), TAB_CONTAINER_MIN_WIDTH * 3), TAB_CONTAINER_MIN_WIDTH);
-                if (!isScrolling) {
-                    isScrolling = true;
-                    stepScroll();
-                }
-            } else if (event.shiftKey) {
-                event.preventDefault();
-                if (event.deltaY > 0) {
-                    await appContext.tabManager.activateNextTabCommand();
-                } else {
-                    await appContext.tabManager.activatePreviousTabCommand();
-                }
-                this.activeTabEl.scrollIntoView();
-            }
+            event.preventDefault();
+
+            const delta = Math.sign(wheelEvent.deltaX + wheelEvent.deltaY) *
+                Math.min(Math.abs(wheelEvent.deltaX + wheelEvent.deltaY), TAB_CONTAINER_MIN_WIDTH * 2);
+
+            this.scrollTabContainer(delta, "instant");
         });
 
         this.$scrollButtonLeft[0].addEventListener('click', () => this.scrollTabContainer(-200));
@@ -485,8 +464,9 @@ export default class TabRowWidget extends BasicWidget {
         // this.$newTab may include margin, and using NEW_TAB_WIDTH could cause tabsContainerWidth to be slightly larger,
         // resulting in misaligned scrollbars/buttons. Therefore, use outerwidth.
         this.updateOuterWidth();
-        let tabsContainerWidth = Math.floor(this.$widget.width() ?? 0);
-        tabsContainerWidth -= this.newTabOuterWidth + MIN_FILLER_WIDTH;
+        let tabsContainerWidth = Math.floor(
+            (this.$widget.width() ?? 0) - this.newTabOuterWidth - MIN_FILLER_WIDTH
+        );
         // Check whether the scroll buttons need to be displayed.
         if ((TAB_CONTAINER_MIN_WIDTH + MARGIN_WIDTH) * numberOfTabs > tabsContainerWidth) {
             tabsContainerWidth -= this.scrollButtonsOuterWidth;
@@ -506,11 +486,11 @@ export default class TabRowWidget extends BasicWidget {
         let extraWidthRemaining = totalExtraWidthDueToFlooring;
 
         for (let i = 0; i < numberOfTabs; i += 1) {
-            const extraWidth = flooredClampedTargetWidth < TAB_CONTAINER_MAX_WIDTH && extraWidthRemaining > 0 ? 1 : 0;
+            const extraWidth = flooredClampedTargetWidth < TAB_CONTAINER_MAX_WIDTH && extraWidthRemaining >= 1 ? 1 : 0;
 
             widths.push(flooredClampedTargetWidth + extraWidth);
 
-            if (extraWidthRemaining > 0) {
+            if (extraWidthRemaining >= 1) {
                 extraWidthRemaining -= 1;
             }
         }
