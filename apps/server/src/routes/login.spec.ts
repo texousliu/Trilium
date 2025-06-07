@@ -66,12 +66,13 @@ describe("Login Route test", () => {
         expect(actualExpiresDate.slice(0,23)).toBe(expectedExpiresDate.slice(0,23))
 
         // Check the session is stored in the database.
-        const session = await getSessionFromCookie(setCookieHeader);
+        const { session, expiry } = await getSessionFromCookie(setCookieHeader);
         expect(session!).toBeTruthy();
         expect(session!.cookie.expires).toBeTruthy();
         expect(new Date(session!.cookie.expires!).toUTCString().substring(0, 23))
             .toBe(expectedExpiresDate.substring(0, 23));
         expect(session!.loggedIn).toBe(true);
+        expect(expiry).toStrictEqual(new Date(session!.cookie.expires!));
     }, 10_000);
     // use 10 sec (10_000 ms) timeout for now, instead of default 5 sec to work around
     // failing CI, because for some reason it currently takes approx. 6 secs to run
@@ -90,10 +91,14 @@ describe("Login Route test", () => {
         expect(setCookieHeader).not.toMatch(/Expires=(?<date>[\w\s,:]+)/)
 
         // Check the session is stored in the database.
-        const session = await getSessionFromCookie(setCookieHeader);
+        const { session, expiry } = await getSessionFromCookie(setCookieHeader);
         expect(session!).toBeTruthy();
         expect(session!.cookie.expires).toBeUndefined();
         expect(session!.loggedIn).toBe(true);
+
+        const expectedExpirationDate = dayjs().utc().add(1, "hour").toDate();
+        expect(expiry?.getTime()).toBeGreaterThan(new Date().getTime());
+        expect(expiry?.getTime()).toBeLessThan(expectedExpirationDate.getTime());
     }, 10_000);
     // use 10 sec (10_000 ms) timeout for now, instead of default 5 sec to work around
     // failing CI, because for some reason it currently takes approx. 6 secs to run
@@ -108,7 +113,10 @@ async function getSessionFromCookie(setCookieHeader: string) {
 
     // Check the session is stored in the database.
     const sessionId = decodeURIComponent(sessionIdMatch!).slice(2).split(".")[0];
-    return await getSessionFromStore(sessionId);
+    return {
+        session: await getSessionFromStore(sessionId),
+        expiry: sessionStore.getSessionExpiry(sessionId)
+    };
 }
 
 function getSessionFromStore(sessionId: string) {

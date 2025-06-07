@@ -50,6 +50,22 @@ export class SQLiteSessionStore extends Store {
         }
     }
 
+    /**
+     * Given a session ID, returns the expiry date of the session.
+     *
+     * @param sid the session ID to check.
+     * @returns the expiry date of the session or null if the session does not exist.
+     */
+    getSessionExpiry(sid: string): Date | null {
+        try {
+            const expires = sql.getValue<number>(/*sql*/`SELECT expires FROM sessions WHERE id = ?`, sid);
+            return expires !== undefined ? new Date(expires) : null;
+        } catch (e) {
+            log.error(e);
+            return null;
+        }
+    }
+
 }
 
 export const sessionStore = new SQLiteSessionStore();
