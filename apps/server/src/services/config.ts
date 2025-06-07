@@ -46,6 +46,9 @@ export interface TriliumConfig {
         oauthBaseUrl: string;
         oauthClientId: string;
         oauthClientSecret: string;
+        oauthIssuerBaseUrl: string;
+        oauthIssuerName: string;
+        oauthIssuerIcon: string;
     };
 }
 
@@ -123,7 +126,16 @@ const config: TriliumConfig = {
             process.env.TRILIUM_OAUTH_CLIENT_ID || iniConfig?.MultiFactorAuthentication?.oauthClientId || "",
 
         oauthClientSecret:
-            process.env.TRILIUM_OAUTH_CLIENT_SECRET || iniConfig?.MultiFactorAuthentication?.oauthClientSecret || ""
+            process.env.TRILIUM_OAUTH_CLIENT_SECRET || iniConfig?.MultiFactorAuthentication?.oauthClientSecret || "",
+
+        oauthIssuerBaseUrl:
+            process.env.TRILIUM_OAUTH_ISSUER_BASE_URL || iniConfig?.MultiFactorAuthentication?.oauthIssuerBaseUrl || "https://accounts.google.com",
+
+        oauthIssuerName:
+            process.env.TRILIUM_OAUTH_ISSUER_NAME || iniConfig?.MultiFactorAuthentication?.oauthIssuerName || "Google",
+
+        oauthIssuerIcon:
+            process.env.TRILIUM_OAUTH_ISSUER_ICON || iniConfig?.MultiFactorAuthentication?.oauthIssuerIcon || ""
     }
 };
 

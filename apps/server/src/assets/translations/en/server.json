@@ -112,7 +112,7 @@
     "password": "Password",
     "remember-me": "Remember me",
     "button": "Login",
-    "sign_in_with_google": "Sign in with Google"
+    "sign_in_with_sso": "Sign in with {{ ssoIssuerName }}"
   },
   "set_password": {
     "title": "Set Password",
