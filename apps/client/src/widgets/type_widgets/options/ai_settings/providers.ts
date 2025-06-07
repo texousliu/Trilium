@@ -240,39 +240,64 @@ export class ProviderService {
         }
 
         try {
-            const ollamaBaseUrl = this.$widget.find('.ollama-base-url').val() as string;
+            // Determine which URL to use based on the current context
+            // If we're in the embedding provider context, use the embedding base URL
+            // Otherwise, use the general base URL
+            const selectedAiProvider = this.$widget.find('.ai-selected-provider').val() as string;
+            const selectedEmbeddingProvider = this.$widget.find('.embedding-selected-provider').val() as string;
+            
+            let ollamaBaseUrl: string;
+            
+            // If embedding provider is Ollama and it's visible, use embedding URL
+            const $embeddingOllamaSettings = this.$widget.find('.ollama-embedding-provider-settings');
+            if (selectedEmbeddingProvider === 'ollama' && $embeddingOllamaSettings.is(':visible')) {
+                ollamaBaseUrl = this.$widget.find('.ollama-embedding-base-url').val() as string;
+            } else {
+                ollamaBaseUrl = this.$widget.find('.ollama-base-url').val() as string;
+            }
+            
             const response = await server.get<OllamaModelResponse>(`llm/providers/ollama/models?baseUrl=${encodeURIComponent(ollamaBaseUrl)}`);
 
             if (response && response.success && response.models && response.models.length > 0) {
+                // Update both embedding model dropdowns
                 const $embedModelSelect = this.$widget.find('.ollama-embedding-model');
+                const $chatEmbedModelSelect = this.$widget.find('.ollama-chat-embedding-model');
+                
                 const currentValue = $embedModelSelect.val();
+                const currentChatEmbedValue = $chatEmbedModelSelect.val();
 
-                // Clear existing options
-                $embedModelSelect.empty();
-
-                // Add embedding-specific models first
+                // Prepare embedding models
                 const embeddingModels = response.models.filter(model =>
                     model.name.includes('embed') || model.name.includes('bert'));
-
-                embeddingModels.forEach(model => {
-                    $embedModelSelect.append(`<option value="${model.name}">${model.name}</option>`);
-                });
-
-                if (embeddingModels.length > 0) {
-                    // Add separator if we have embedding models
-                    $embedModelSelect.append(`<option disabled>─────────────</option>`);
-                }
-
-                // Then add general models which can be used for embeddings too
+                
                 const generalModels = response.models.filter(model =>
                     !model.name.includes('embed') && !model.name.includes('bert'));
 
+                // Update .ollama-embedding-model dropdown (embedding provider settings)
+                $embedModelSelect.empty();
+                embeddingModels.forEach(model => {
+                    $embedModelSelect.append(`<option value="${model.name}">${model.name}</option>`);
+                });
+                if (embeddingModels.length > 0) {
+                    $embedModelSelect.append(`<option disabled>─────────────</option>`);
+                }
                 generalModels.forEach(model => {
                     $embedModelSelect.append(`<option value="${model.name}">${model.name}</option>`);
                 });
-
-                // Try to restore the previously selected value
                 this.ensureSelectedValue($embedModelSelect, currentValue, 'ollamaEmbeddingModel');
+
+                // Update .ollama-chat-embedding-model dropdown (general Ollama provider settings)
+                $chatEmbedModelSelect.empty();
+                embeddingModels.forEach(model => {
+                    $chatEmbedModelSelect.append(`<option value="${model.name}">${model.name}</option>`);
+                });
+                if (embeddingModels.length > 0) {
+                    $chatEmbedModelSelect.append(`<option disabled>─────────────</option>`);
+                }
+                generalModels.forEach(model => {
+                    $chatEmbedModelSelect.append(`<option value="${model.name}">${model.name}</option>`);
+                });
+                this.ensureSelectedValue($chatEmbedModelSelect, currentChatEmbedValue, 'ollamaEmbeddingModel');
 
                 // Also update the LLM model dropdown
                 const $modelSelect = this.$widget.find('.ollama-default-model');

@@ -376,7 +376,7 @@ export default class AiSettingsWidget extends OptionsWidget {
                 embeddingWarnings.push(t("ai_llm.empty_key_warning.voyage"));
             }
 
-            if (selectedEmbeddingProvider === 'ollama' && !this.$widget.find('.ollama-base-url').val()) {
+            if (selectedEmbeddingProvider === 'ollama' && !this.$widget.find('.ollama-embedding-base-url').val()) {
                 embeddingWarnings.push(t("ai_llm.empty_key_warning.ollama"));
             }
         }

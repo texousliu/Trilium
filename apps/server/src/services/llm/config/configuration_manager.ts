@@ -70,7 +70,7 @@ export class ConfigurationManager {
      */
     public async getSelectedProvider(): Promise<ProviderType | null> {
         try {
-            const selectedProvider = await options.getOption('aiSelectedProvider');
+            const selectedProvider = options.getOption('aiSelectedProvider');
             return selectedProvider as ProviderType || null;
         } catch (error) {
             log.error(`Error getting selected provider: ${error}`);
@@ -83,7 +83,7 @@ export class ConfigurationManager {
      */
     public async getSelectedEmbeddingProvider(): Promise<EmbeddingProviderType | null> {
         try {
-            const selectedProvider = await options.getOption('embeddingSelectedProvider');
+            const selectedProvider = options.getOption('embeddingSelectedProvider');
             return selectedProvider as EmbeddingProviderType || null;
         } catch (error) {
             log.error(`Error getting selected embedding provider: ${error}`);
@@ -155,11 +155,9 @@ export class ConfigurationManager {
      */
     public async getDefaultModels(): Promise<Record<ProviderType, string | undefined>> {
         try {
-            const [openaiModel, anthropicModel, ollamaModel] = await Promise.all([
-                options.getOption('openaiDefaultModel'),
-                options.getOption('anthropicDefaultModel'),
-                options.getOption('ollamaDefaultModel')
-            ]);
+            const openaiModel = options.getOption('openaiDefaultModel');
+            const anthropicModel = options.getOption('anthropicDefaultModel');
+            const ollamaModel = options.getOption('ollamaDefaultModel');
 
             return {
                 openai: openaiModel || undefined,
@@ -182,20 +180,14 @@ export class ConfigurationManager {
      */
     public async getProviderSettings(): Promise<ProviderSettings> {
         try {
-            const [
-                openaiApiKey, openaiBaseUrl, openaiDefaultModel,
-                anthropicApiKey, anthropicBaseUrl, anthropicDefaultModel,
-                ollamaBaseUrl, ollamaDefaultModel
-            ] = await Promise.all([
-                options.getOption('openaiApiKey'),
-                options.getOption('openaiBaseUrl'),
-                options.getOption('openaiDefaultModel'),
-                options.getOption('anthropicApiKey'),
-                options.getOption('anthropicBaseUrl'),
-                options.getOption('anthropicDefaultModel'),
-                options.getOption('ollamaBaseUrl'),
-                options.getOption('ollamaDefaultModel')
-            ]);
+            const openaiApiKey = options.getOption('openaiApiKey');
+            const openaiBaseUrl = options.getOption('openaiBaseUrl');
+            const openaiDefaultModel = options.getOption('openaiDefaultModel');
+            const anthropicApiKey = options.getOption('anthropicApiKey');
+            const anthropicBaseUrl = options.getOption('anthropicBaseUrl');
+            const anthropicDefaultModel = options.getOption('anthropicDefaultModel');
+            const ollamaBaseUrl = options.getOption('ollamaBaseUrl');
+            const ollamaDefaultModel = options.getOption('ollamaDefaultModel');
 
             const settings: ProviderSettings = {};
 
@@ -302,7 +294,7 @@ export class ConfigurationManager {
 
     private async getAIEnabled(): Promise<boolean> {
         try {
-            return await options.getOptionBool('aiEnabled');
+            return options.getOptionBool('aiEnabled');
         } catch {
             return false;
         }
