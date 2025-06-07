@@ -237,14 +237,6 @@ class RestChatService {
 
         // Send WebSocket message
         wsService.sendMessageToAllClients(message);
-
-        // Send SSE response for compatibility
-        const responseData: any = { content: data, done };
-        if (rawChunk?.toolExecution) {
-            responseData.toolExecution = rawChunk.toolExecution;
-        }
-
-        res.write(`data: ${JSON.stringify(responseData)}\n\n`);
         
         // When streaming is complete, save the accumulated content to the chat note
         if (done) {
@@ -266,8 +258,8 @@ class RestChatService {
                 log.error(`Error saving streaming response: ${error}`);
             }
             
-            // End the response
-            res.end();
+            // Note: For WebSocket-only streaming, we don't end the HTTP response here
+            // since it was already handled by the calling endpoint
         }
     }
 
