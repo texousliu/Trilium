@@ -37,11 +37,7 @@ interface ToolValidationResult {
 export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { response: ChatResponse, needsFollowUp: boolean, messages: Message[] }> {
     constructor() {
         super('ToolCalling');
-
-        // Preload the vectorSearchTool to ensure it's available when needed
-        this.preloadVectorSearchTool().catch(error => {
-            log.error(`Error preloading vector search tool: ${error.message}`);
-        });
+        // Vector search tool has been removed - no preloading needed
     }
 
     /**
@@ -498,13 +494,13 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
 
             let directiveMessage = `YOU MUST NOT GIVE UP AFTER A SINGLE EMPTY SEARCH RESULT. `;
 
-            if (emptyToolNames.includes('search_notes') || emptyToolNames.includes('vector_search')) {
+            if (emptyToolNames.includes('search_notes') || emptyToolNames.includes('keyword_search')) {
                 directiveMessage += `IMMEDIATELY RUN ANOTHER SEARCH TOOL with broader search terms, alternative keywords, or related concepts. `;
                 directiveMessage += `Try synonyms, more general terms, or related topics. `;
             }
 
             if (emptyToolNames.includes('keyword_search')) {
-                directiveMessage += `IMMEDIATELY TRY VECTOR_SEARCH INSTEAD as it might find semantic matches where keyword search failed. `;
+                directiveMessage += `IMMEDIATELY TRY SEARCH_NOTES INSTEAD as it might find matches where keyword search failed. `;
             }
 
             directiveMessage += `DO NOT ask the user what to do next or if they want general information. CONTINUE SEARCHING with different parameters.`;
@@ -530,71 +526,6 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
         };
     }
 
-    /**
-     * Get or create a dependency required by tools
-     *
-     * @param dependencyType The type of dependency to get or create
-     * @param toolName The name of the tool requiring this dependency
-     * @returns The requested dependency or null if it couldn't be created
-     */
-    private async getOrCreateDependency(dependencyType: string, toolName: string): Promise<unknown | null> {
-        const aiServiceManager = (await import('../../ai_service_manager.js')).default;
-
-        try {
-            log.info(`Getting dependency '${dependencyType}' for tool '${toolName}'`);
-
-            // Check for specific dependency types
-            if (dependencyType === 'vectorSearchTool') {
-                // Try to get the existing vector search tool
-                let vectorSearchTool = aiServiceManager.getVectorSearchTool();
-
-                if (vectorSearchTool) {
-                    log.info(`Found existing vectorSearchTool dependency`);
-                    return vectorSearchTool;
-                }
-
-                // No existing tool, try to initialize it
-                log.info(`Dependency '${dependencyType}' not found, attempting initialization`);
-
-                // Get agent tools manager and initialize it
-                const agentTools = aiServiceManager.getAgentTools();
-                if (agentTools && typeof agentTools.initialize === 'function') {
-                    try {
-                        // Force initialization to ensure it runs even if previously marked as initialized
-                        await agentTools.initialize(true);
-                    } catch (initError: unknown) {
-                        const errorMessage = initError instanceof Error ? initError.message : String(initError);
-                        log.error(`Failed to initialize agent tools: ${errorMessage}`);
-                        return null;
-                    }
-                } else {
-                    log.error('Agent tools manager not available');
-                    return null;
-                }
-
-                // Try getting the vector search tool again after initialization
-                vectorSearchTool = aiServiceManager.getVectorSearchTool();
-
-                if (vectorSearchTool) {
-                    log.info('Successfully created vectorSearchTool dependency');
-                    return vectorSearchTool;
-                } else {
-                    log.error('Failed to create vectorSearchTool dependency after initialization');
-                    return null;
-                }
-            }
-
-            // Add more dependency types as needed
-
-            // Unknown dependency type
-            log.error(`Unknown dependency type: ${dependencyType}`);
-            return null;
-        } catch (error: unknown) {
-            const errorMessage = error instanceof Error ? error.message : String(error);
-            log.error(`Error getting or creating dependency '${dependencyType}': ${errorMessage}`);
-            return null;
-        }
-    }
 
     /**
      * Validate a tool before execution
@@ -614,50 +545,9 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 return false;
             }
 
-            // For the search_notes tool specifically, check if vectorSearchTool is available
+            // search_notes tool now uses context handler instead of vector search
             if (toolName === 'search_notes') {
-                try {
-                    // Use the imported aiServiceManager instead of dynamic import
-                    let vectorSearchTool = aiServiceManager.getVectorSearchTool();
-
-                    if (!vectorSearchTool) {
-                        log.error(`Tool '${toolName}' is missing dependency: vectorSearchTool - attempting to initialize`);
-
-                        // Try to initialize the agent tools
-                        try {
-                            // Get agent tools manager and initialize it if needed
-                            const agentTools = aiServiceManager.getAgentTools();
-                            if (agentTools && typeof agentTools.initialize === 'function') {
-                                log.info('Attempting to initialize agent tools');
-                                // Force initialization to ensure it runs even if previously initialized
-                                await agentTools.initialize(true);
-                            }
-
-                            // Try getting the vector search tool again
-                            vectorSearchTool = aiServiceManager.getVectorSearchTool();
-
-                            if (!vectorSearchTool) {
-                                log.error('Unable to initialize vectorSearchTool after initialization attempt');
-                                return false;
-                            }
-                            log.info('Successfully initialized vectorSearchTool');
-                        } catch (initError: unknown) {
-                            const errorMessage = initError instanceof Error ? initError.message : String(initError);
-                            log.error(`Failed to initialize agent tools: ${errorMessage}`);
-                            return false;
-                        }
-                    }
-
-                    // Verify the vectorSearchTool has the required methods
-                    if (!vectorSearchTool.searchNotes || typeof vectorSearchTool.searchNotes !== 'function') {
-                        log.error(`Tool '${toolName}' dependency vectorSearchTool is missing searchNotes method`);
-                        return false;
-                    }
-                } catch (error: unknown) {
-                    const errorMessage = error instanceof Error ? error.message : String(error);
-                    log.error(`Error validating dependencies for tool '${toolName}': ${errorMessage}`);
-                    return false;
-                }
+                log.info(`Tool '${toolName}' validated - uses context handler instead of vector search`);
             }
 
             // Add additional tool-specific validations here
@@ -705,13 +595,13 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
             // Provide guidance on available search tools if a tool wasn't found
             const searchTools = availableToolNames.filter(name => name.includes('search'));
             guidance += `AVAILABLE SEARCH TOOLS: ${searchTools.join(', ')}\n`;
-            guidance += "TRY VECTOR SEARCH: For conceptual matches, use 'vector_search' with a query parameter.\n";
+            guidance += "TRY SEARCH NOTES: For semantic matches, use 'search_notes' with a query parameter.\n";
             guidance += "EXAMPLE: { \"query\": \"your search terms here\" }\n";
         }
         else if (errorMessage.includes('missing required parameter')) {
             // Provide parameter guidance based on the tool name
-            if (toolName === 'vector_search') {
-                guidance += "REQUIRED PARAMETERS: The 'vector_search' tool requires a 'query' parameter.\n";
+            if (toolName === 'search_notes') {
+                guidance += "REQUIRED PARAMETERS: The 'search_notes' tool requires a 'query' parameter.\n";
                 guidance += "EXAMPLE: { \"query\": \"your search terms here\" }\n";
             } else if (toolName === 'keyword_search') {
                 guidance += "REQUIRED PARAMETERS: The 'keyword_search' tool requires a 'query' parameter.\n";
@@ -719,9 +609,9 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
             }
         }
 
-        // Add a general suggestion to try vector_search as a fallback
-        if (!toolName.includes('vector_search')) {
-            guidance += "RECOMMENDATION: If specific searches fail, try the 'vector_search' tool which performs semantic searches.\n";
+        // Add a general suggestion to try search_notes as a fallback
+        if (!toolName.includes('search_notes')) {
+            guidance += "RECOMMENDATION: If specific searches fail, try the 'search_notes' tool which performs semantic searches.\n";
         }
 
         return guidance;
@@ -751,11 +641,6 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 return false;
             }
 
-            if (toolName === 'vector_search' &&
-                (trimmed.includes('No results found') ||
-                 trimmed.includes('No matching documents'))) {
-                return true;
-            }
 
             if (toolName === 'keyword_search' &&
                 (trimmed.includes('No matches found') ||
@@ -787,39 +672,10 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                     return true;
                 }
 
-                if (toolName === 'vector_search' &&
-                    'matches' in resultObj &&
-                    Array.isArray(resultObj.matches) &&
-                    resultObj.matches.length === 0) {
-                    return true;
-                }
             }
         }
 
         return false;
     }
 
-    /**
-     * Preload the vector search tool to ensure it's available before tool execution
-     */
-    private async preloadVectorSearchTool(): Promise<void> {
-        try {
-            log.info(`Preloading vector search tool...`);
-
-            // Get the agent tools and initialize them if needed
-            const agentTools = aiServiceManager.getAgentTools();
-            if (agentTools && typeof agentTools.initialize === 'function') {
-                await agentTools.initialize(true);
-            }
-
-            // Check if the vector search tool is available
-            const vectorSearchTool = aiServiceManager.getVectorSearchTool();
-            if (!(vectorSearchTool && typeof vectorSearchTool.searchNotes === 'function')) {
-                log.error(`Vector search tool not available after initialization`);
-            }
-        } catch (error: unknown) {
-            const errorMessage = error instanceof Error ? error.message : String(error);
-            log.error(`Failed to preload vector search tool: ${errorMessage}`);
-        }
-    }
 }

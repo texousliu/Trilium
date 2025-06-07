@@ -3,11 +3,9 @@ import log from '../../log.js';
 import type {
     AIConfig,
     ProviderPrecedenceConfig,
-    EmbeddingProviderPrecedenceConfig,
     ModelIdentifier,
     ModelConfig,
     ProviderType,
-    EmbeddingProviderType,
     ConfigValidationResult,
     ProviderSettings,
     OpenAISettings,
@@ -51,7 +49,6 @@ export class ConfigurationManager {
             const config: AIConfig = {
                 enabled: await this.getAIEnabled(),
                 selectedProvider: await this.getSelectedProvider(),
-                selectedEmbeddingProvider: await this.getSelectedEmbeddingProvider(),
                 defaultModels: await this.getDefaultModels(),
                 providerSettings: await this.getProviderSettings()
             };
@@ -78,18 +75,6 @@ export class ConfigurationManager {
         }
     }
 
-    /**
-     * Get the selected embedding provider
-     */
-    public async getSelectedEmbeddingProvider(): Promise<EmbeddingProviderType | null> {
-        try {
-            const selectedProvider = options.getOption('embeddingSelectedProvider');
-            return selectedProvider as EmbeddingProviderType || null;
-        } catch (error) {
-            log.error(`Error getting selected embedding provider: ${error}`);
-            return null;
-        }
-    }
 
     /**
      * Parse model identifier with optional provider prefix
@@ -269,10 +254,6 @@ export class ConfigurationManager {
                 }
             }
 
-            // Validate selected embedding provider
-            if (!config.selectedEmbeddingProvider) {
-                result.warnings.push('No embedding provider selected');
-            }
 
         } catch (error) {
             result.errors.push(`Configuration validation error: ${error}`);
@@ -334,7 +315,6 @@ export class ConfigurationManager {
         return {
             enabled: false,
             selectedProvider: null,
-            selectedEmbeddingProvider: null,
             defaultModels: {
                 openai: undefined,
                 anthropic: undefined,

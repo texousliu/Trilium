@@ -7,7 +7,6 @@ export interface ProviderMetadata {
   name: string;
   capabilities: {
     chat: boolean;
-    embeddings: boolean;
     streaming: boolean;
     functionCalling?: boolean;
   };

@@ -44,18 +44,7 @@ interface OptionRow {}
 
 interface NoteReorderingRow {}
 
-interface NoteEmbeddingRow {
-    embedId: string;
-    noteId: string;
-    providerId: string;
-    modelId: string;
-    dimension: number;
-    version: number;
-    dateCreated: string;
-    utcDateCreated: string;
-    dateModified: string;
-    utcDateModified: string;
-}
+
 
 type EntityRowMappings = {
     notes: NoteRow;
@@ -64,7 +53,6 @@ type EntityRowMappings = {
     options: OptionRow;
     revisions: RevisionRow;
     note_reordering: NoteReorderingRow;
-    note_embeddings: NoteEmbeddingRow;
 };
 
 export type EntityRowNames = keyof EntityRowMappings;

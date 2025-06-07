@@ -6,6 +6,19 @@
 
 // Migrations should be kept in descending order, so the latest migration is first.
 const MIGRATIONS: (SqlMigration | JsMigration)[] = [
+    // Remove embedding tables since LLM embedding functionality has been removed
+    {
+        version: 232,
+        sql: /*sql*/`
+            -- Remove LLM embedding tables and data
+            DROP TABLE IF EXISTS "note_embeddings";
+            DROP TABLE IF EXISTS "embedding_queue";
+            DROP TABLE IF EXISTS "embedding_providers";
+
+            -- Remove embedding-related entity changes
+            DELETE FROM entity_changes WHERE entityName IN ('note_embeddings', 'embedding_queue', 'embedding_providers');
+        `
+    },
     // Session store
     {
         version: 231,

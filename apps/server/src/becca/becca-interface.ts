@@ -12,7 +12,6 @@ import type { AttachmentRow, BlobRow, RevisionRow } from "@triliumnext/commons";
 import BBlob from "./entities/bblob.js";
 import BRecentNote from "./entities/brecent_note.js";
 import type AbstractBeccaEntity from "./entities/abstract_becca_entity.js";
-import type BNoteEmbedding from "./entities/bnote_embedding.js";
 
 interface AttachmentOpts {
     includeContentLength?: boolean;
@@ -33,7 +32,6 @@ export default class Becca {
     attributeIndex!: Record<string, BAttribute[]>;
     options!: Record<string, BOption>;
     etapiTokens!: Record<string, BEtapiToken>;
-    noteEmbeddings!: Record<string, BNoteEmbedding>;
 
     allNoteSetCache: NoteSet | null;
 
@@ -50,7 +48,6 @@ export default class Becca {
         this.attributeIndex = {};
         this.options = {};
         this.etapiTokens = {};
-        this.noteEmbeddings = {};
 
         this.dirtyNoteSetCache();
 

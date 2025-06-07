@@ -11,7 +11,7 @@ import { TPL, addMessageToChat, showSources, hideSources, showLoadingIndicator, 
 import { formatMarkdown } from "./utils.js";
 import { createChatSession, checkSessionExists, setupStreamingResponse, getDirectResponse } from "./communication.js";
 import { extractInChatToolSteps } from "./message_processor.js";
-import { validateEmbeddingProviders } from "./validation.js";
+import { validateProviders } from "./validation.js";
 import type { MessageData, ToolExecutionStep, ChatData } from "./types.js";
 import { formatCodeBlocks } from "../../services/syntax_highlight.js";
 import { ClassicEditor, type CKTextEditor, type MentionFeed } from "@triliumnext/ckeditor5";
@@ -616,7 +616,7 @@ export default class LlmChatPanel extends BasicWidget {
         }
 
         // Check for any provider validation issues when refreshing
-        await validateEmbeddingProviders(this.validationWarning);
+        await validateProviders(this.validationWarning);
 
         // Get current note context if needed
         const currentActiveNoteId = appContext.tabManager.getActiveContext()?.note?.noteId || null;
@@ -767,7 +767,7 @@ export default class LlmChatPanel extends BasicWidget {
      */
     private async processUserMessage(content: string) {
         // Check for validation issues first
-        await validateEmbeddingProviders(this.validationWarning);
+        await validateProviders(this.validationWarning);
 
         // Make sure we have a valid session
         if (!this.noteId) {

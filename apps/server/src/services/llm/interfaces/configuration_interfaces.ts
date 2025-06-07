@@ -21,13 +21,6 @@ export interface ModelConfig {
     capabilities?: ModelCapabilities;
 }
 
-/**
- * Embedding provider precedence configuration
- */
-export interface EmbeddingProviderPrecedenceConfig {
-    providers: EmbeddingProviderType[];
-    defaultProvider?: EmbeddingProviderType;
-}
 
 /**
  * Model capabilities
@@ -47,7 +40,6 @@ export interface ModelCapabilities {
 export interface AIConfig {
     enabled: boolean;
     selectedProvider: ProviderType | null;
-    selectedEmbeddingProvider: EmbeddingProviderType | null;
     defaultModels: Record<ProviderType, string | undefined>;
     providerSettings: ProviderSettings;
 }
@@ -84,10 +76,6 @@ export interface OllamaSettings {
  */
 export type ProviderType = 'openai' | 'anthropic' | 'ollama';
 
-/**
- * Valid embedding provider types
- */
-export type EmbeddingProviderType = 'openai' | 'voyage' | 'ollama' | 'local';
 
 /**
  * Model identifier with provider prefix (e.g., "openai:gpt-4" or "ollama:llama2")

@@ -40,17 +40,6 @@ import OpenAI from "openai";
  *                         type: string
  *                       type:
  *                         type: string
- *                 embeddingModels:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: string
- *                       name:
- *                         type: string
- *                       type:
- *                         type: string
  *       '500':
  *         description: Error listing models
  *     security:
@@ -82,8 +71,7 @@ async function listModels(req: Request, res: Response) {
         // Filter and categorize models
         const allModels = response.data || [];
 
-        // Include all models as chat models, without filtering by specific model names
-        // This allows models from providers like OpenRouter to be displayed
+        // Include all models as chat models, excluding embedding models
         const chatModels = allModels
             .filter((model) =>
                 // Exclude models that are explicitly for embeddings
@@ -96,23 +84,10 @@ async function listModels(req: Request, res: Response) {
                 type: 'chat'
             }));
 
-        const embeddingModels = allModels
-            .filter((model) =>
-                // Only include embedding-specific models
-                model.id.includes('embedding') ||
-                model.id.includes('embed')
-            )
-            .map((model) => ({
-                id: model.id,
-                name: model.id,
-                type: 'embedding'
-            }));
-
         // Return the models list
         return {
             success: true,
-            chatModels,
-            embeddingModels
+            chatModels
         };
     } catch (error: any) {
         log.error(`Error listing OpenAI models: ${error.message || 'Unknown error'}`);
