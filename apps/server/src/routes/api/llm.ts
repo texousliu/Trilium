@@ -188,7 +188,7 @@ async function getSession(req: Request, res: Response) {
  */
 async function updateSession(req: Request, res: Response) {
     // Get the chat using chatStorageService directly
-    const chatNoteId = req.params.chatNoteId;
+    const chatNoteId = req.params.sessionId;
     const updates = req.body;
 
     try {
