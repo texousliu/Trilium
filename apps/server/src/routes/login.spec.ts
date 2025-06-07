@@ -82,6 +82,24 @@ describe("Login Route test", () => {
             expect(expiry).toStrictEqual(new Date(session!.cookie.expires!));
         });
 
+        it("doesn't renew the session on subsequent requests", async () => {
+            const { expiry: originalExpiry } = await getSessionFromCookie(setCookieHeader);
+
+            // Simulate user waiting half the period before the session expires.
+            vi.setSystemTime(originalExpiry!.getTime() - (originalExpiry!.getTime() - Date.now()) / 2);
+
+            // Make a request to renew the session.
+            await supertest(app)
+                .get("/")
+                .set("Cookie", setCookieHeader)
+                .expect(200);
+
+            // Check the session is still valid and has not been renewed.
+            const { session, expiry } = await getSessionFromCookie(setCookieHeader);
+            expect(session).toBeTruthy();
+            expect(expiry!.getTime()).toStrictEqual(originalExpiry!.getTime());
+        });
+
         it("cleans up expired sessions", async () => {
             let { session, expiry } = await getSessionFromCookie(setCookieHeader);
             expect(session).toBeTruthy();
@@ -121,6 +139,24 @@ describe("Login Route test", () => {
             const expectedExpirationDate = dayjs().utc().add(1, "hour").toDate();
             expect(expiry?.getTime()).toBeGreaterThan(new Date().getTime());
             expect(expiry?.getTime()).toBeLessThanOrEqual(expectedExpirationDate.getTime());
+        });
+
+        it("renews the session on subsequent requests", async () => {
+            const { expiry: originalExpiry } = await getSessionFromCookie(setCookieHeader);
+
+            // Simulate user waiting half the period before the session expires.
+            vi.setSystemTime(originalExpiry!.getTime() - (originalExpiry!.getTime() - Date.now()) / 2);
+
+            // Make a request to renew the session.
+            await supertest(app)
+                .get("/")
+                .set("Cookie", setCookieHeader)
+                .expect(200);
+
+            // Check the session is still valid and has been renewed.
+            const { session, expiry } = await getSessionFromCookie(setCookieHeader);
+            expect(session).toBeTruthy();
+            expect(expiry!.getTime()).toBeGreaterThan(originalExpiry!.getTime());
         });
 
         it("cleans up expired sessions", async () => {

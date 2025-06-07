@@ -55,6 +55,23 @@ export class SQLiteSessionStore extends Store {
         }
     }
 
+    touch(sid: string, session: session.SessionData, callback?: (err?: any) => void): void {
+        // For now it's only for session cookies ("Remember me" unchecked).
+        if (session.cookie?.expires) {
+            callback?.();
+            return;
+        }
+
+        try {
+            const expires = Date.now() + 3600000; // fallback to 1 hour
+            sql.execute(/*sql*/`UPDATE sessions SET expires = ? WHERE id = ?`, [expires, sid]);
+            callback?.();
+        } catch (e) {
+            log.error(e);
+            callback?.(e);
+        }
+    }
+
     /**
      * Given a session ID, returns the expiry date of the session.
      *
@@ -79,6 +96,7 @@ const sessionParser: express.RequestHandler = session({
     secret: sessionSecret,
     resave: false, // true forces the session to be saved back to the session store, even if the session was never modified during the request.
     saveUninitialized: false, // true forces a session that is "uninitialized" to be saved to the store. A session is uninitialized when it is new but not modified.
+    rolling: true, // forces the session to be saved back to the session store, resetting the expiration date.
     cookie: {
         path: "/",
         httpOnly: true,
