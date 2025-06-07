@@ -3,6 +3,7 @@ import { join, resolve } from 'path';
 import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 import asset_path from './src/asset_path';
+import webpackStatsPlugin from 'rollup-plugin-webpack-stats';
 
 const assets = [ "assets", "stylesheets", "libraries", "fonts", "translations" ];
 
@@ -33,7 +34,8 @@ export default defineConfig(() => ({
                     dest: "",
                 }
             ]
-        })
+        }),
+        webpackStatsPlugin()
     ],
     resolve: {
         alias: [

@@ -282,7 +282,10 @@
             {
               "glob": "**/*",
               "input": "apps/client/dist",
-              "output": "public"
+              "output": "public",
+              "ignore": [
+                "webpack-stats.json"
+              ]
             },
             {
               "glob": "**/*",

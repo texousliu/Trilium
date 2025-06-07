@@ -123,6 +123,9 @@ importers:
       react-refresh:
         specifier: ^0.17.0
         version: 0.17.0
+      rollup-plugin-webpack-stats:
+        specifier: 2.0.7
+        version: 2.0.7(rollup@4.40.0)(vite@6.3.5(@types/node@22.15.30)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0))
       tslib:
         specifier: ^2.3.0
         version: 2.8.1
@@ -10957,6 +10960,18 @@ packages:
   robust-predicates@3.0.2:
     resolution: {integrity: sha512-IXgzBWvWQwE6PrDI05OvmXUIruQTcoMDzRsOd5CDvHCVLcLHMTSYvOK5Cm46kWqlV3yAbuSpBZdJ5oP5OUoStg==}
 
+  rollup-plugin-stats@1.3.9:
+    resolution: {integrity: sha512-rpz+EIdA9rQfkK/RiiMde0H8r/yCU4ilQJVZNFO6o1pU1H+pTMhu5Nlkm4+7J95+J98n0T5gxQPwyi/sxCRQXw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      rollup: ^3.0.0 || ^4.0.0
+      vite: ^5.0.0 || ^6.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+      vite:
+        optional: true
+
   rollup-plugin-styles@4.0.0:
     resolution: {integrity: sha512-A2K2sao84OsTmDxXG83JTCdXWrmgvQkkI38XDat46rdtpGMRm9tSYqeCdlwwGDJF4kKIafhV1mUidqu8MxUGig==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
@@ -10968,6 +10983,18 @@ packages:
     engines: {node: '>=18.0.0'}
     peerDependencies:
       rollup: ^3.0.0||^4.0.0
+
+  rollup-plugin-webpack-stats@2.0.7:
+    resolution: {integrity: sha512-aAd/4GrnsDuwFIlPJpIJ/wcu6msiza5lNZIrfWXmskwLSEx9GhJlKFYU3HHgl5XHLgdF45ajCrV8X0k3EV4ztw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      rollup: ^3.0.0 || ^4.0.0
+      vite: ^5.0.0 || ^6.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+      vite:
+        optional: true
 
   rollup@4.40.0:
     resolution: {integrity: sha512-Noe455xmA96nnqH5piFtLobsGbCij7Tu+tb3c1vYjNbTkfzGqXqQXG3wJaYXkRZuQ0vEYN4bhwg7QnIrqB5B+w==}
@@ -25217,6 +25244,11 @@ snapshots:
 
   robust-predicates@3.0.2: {}
 
+  rollup-plugin-stats@1.3.9(rollup@4.40.0)(vite@6.3.5(@types/node@22.15.30)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)):
+    optionalDependencies:
+      rollup: 4.40.0
+      vite: 6.3.5(@types/node@22.15.30)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
+
   rollup-plugin-styles@4.0.0(rollup@4.40.0):
     dependencies:
       '@rollup/pluginutils': 4.2.1
@@ -25243,6 +25275,13 @@ snapshots:
     dependencies:
       '@rollup/pluginutils': 5.1.4(rollup@4.40.0)
       rollup: 4.40.0
+
+  rollup-plugin-webpack-stats@2.0.7(rollup@4.40.0)(vite@6.3.5(@types/node@22.15.30)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)):
+    dependencies:
+      rollup-plugin-stats: 1.3.9(rollup@4.40.0)(vite@6.3.5(@types/node@22.15.30)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0))
+    optionalDependencies:
+      rollup: 4.40.0
+      vite: 6.3.5(@types/node@22.15.30)(jiti@2.4.2)(less@4.1.3)(sass-embedded@1.87.0)(sass@1.87.0)(stylus@0.64.0)(sugarss@4.0.1(postcss@8.5.3))(terser@5.39.0)(tsx@4.19.4)(yaml@2.8.0)
 
   rollup@4.40.0:
     dependencies:
