@@ -111,18 +111,12 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
             const { getValidModelConfig } = await import('../../config/configuration_helpers.js');
             const modelConfig = await getValidModelConfig(selectedProvider);
 
-            if (modelConfig) {
-                // We have a valid configured model
-                updatedOptions.model = modelConfig.model;
-            } else {
-                // No model configured, try to fetch and set a default from the service
-                const fetchedModel = await this.fetchAndSetDefaultModel(selectedProvider);
-                if (!fetchedModel) {
-                    throw new Error(`No default model configured for provider ${selectedProvider}. Please set a default model in your AI settings or ensure the provider service is available.`);
-                }
-                // Use the fetched model
-                updatedOptions.model = fetchedModel;
+            if (!modelConfig) {
+                throw new Error(`No default model configured for provider ${selectedProvider}. Please set a default model in your AI settings.`);
             }
+
+            // Use the configured model
+            updatedOptions.model = modelConfig.model;
 
             log.info(`Selected provider: ${selectedProvider}, model: ${updatedOptions.model}`);
 
@@ -183,20 +177,8 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
             return;
         }
 
-        // If no provider could be determined, try to use precedence
+        // Use the explicitly provided provider - no automatic fallbacks
         let selectedProvider = provider;
-        if (!selectedProvider) {
-            // List of providers in precedence order
-            const providerPrecedence = ['anthropic', 'openai', 'ollama'];
-
-            // Find the first available provider
-            for (const p of providerPrecedence) {
-                if (aiServiceManager.isProviderAvailable(p)) {
-                    selectedProvider = p as ServiceProviders;
-                    break;
-                }
-            }
-        }
 
         // Set the provider metadata in the options
         if (selectedProvider) {
@@ -218,47 +200,7 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
         }
     }
 
-    /**
-     * Determine model based on selected provider using the new configuration system
-     * This method is now simplified and delegates to the main model selection logic
-     */
-    private async determineDefaultModel(input: ModelSelectionInput): Promise<string> {
-        try {
-            // Use the same logic as the main process method
-            const { getValidModelConfig, getSelectedProvider } = await import('../../config/configuration_helpers.js');
-            const selectedProvider = await getSelectedProvider();
 
-            if (!selectedProvider) {
-                throw new Error('No AI provider is selected. Please select a provider in your AI settings.');
-            }
-
-            // Check if the provider is available through the service manager
-            if (!aiServiceManager.isProviderAvailable(selectedProvider)) {
-                throw new Error(`Selected provider ${selectedProvider} is not available`);
-            }
-
-            // Try to get a valid model config
-            const modelConfig = await getValidModelConfig(selectedProvider);
-            
-            if (!modelConfig) {
-                throw new Error(`No default model configured for provider ${selectedProvider}. Please configure a default model in your AI settings.`);
-            }
-
-            // Set provider metadata
-            if (!input.options.providerMetadata) {
-                input.options.providerMetadata = {
-                    provider: selectedProvider as 'openai' | 'anthropic' | 'ollama' | 'local',
-                    modelId: modelConfig.model
-                };
-            }
-
-            log.info(`Selected default model ${modelConfig.model} from provider ${selectedProvider}`);
-            return modelConfig.model;
-        } catch (error) {
-            log.error(`Error determining default model: ${error}`);
-            throw error; // Don't provide fallback defaults, let the error propagate
-        }
-    }
 
     /**
      * Get estimated context window for Ollama models
@@ -283,48 +225,5 @@ export class ModelSelectionStage extends BasePipelineStage<ModelSelectionInput, 
         }
     }
 
-    /**
-     * Use AI service manager to get a configured model for the provider
-     * This eliminates duplication and uses the existing service layer
-     */
-    private async fetchAndSetDefaultModel(provider: ProviderType): Promise<string | null> {
-        try {
-            log.info(`Getting default model for provider ${provider} using AI service manager`);
-            
-            // Use the existing AI service manager instead of duplicating API calls
-            const service = await aiServiceManager.getInstance().getService(provider);
-            
-            if (!service || !service.isAvailable()) {
-                log.info(`Provider ${provider} service is not available`);
-                return null;
-            }
 
-            // Check if the service has a method to get available models
-            if (typeof (service as any).getAvailableModels === 'function') {
-                try {
-                    const models = await (service as any).getAvailableModels();
-                    if (models && models.length > 0) {
-                        // Use the first available model - no hardcoded preferences
-                        const selectedModel = models[0];
-                        
-                        // Import server-side options to update the default model
-                        const optionService = (await import('../../../options.js')).default;
-                        const optionKey = `${provider}DefaultModel` as const;
-                        
-                        await optionService.setOption(optionKey, selectedModel);
-                        log.info(`Set default ${provider} model to: ${selectedModel}`);
-                        return selectedModel;
-                    }
-                } catch (modelError) {
-                    log.error(`Error fetching models from ${provider} service: ${modelError}`);
-                }
-            }
-            
-            log.info(`Provider ${provider} does not support dynamic model fetching`);
-            return null;
-        } catch (error) {
-            log.error(`Error getting default model for provider ${provider}: ${error}`);
-            return null;
-        }
-    }
 }

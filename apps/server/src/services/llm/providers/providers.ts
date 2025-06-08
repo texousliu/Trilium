@@ -26,7 +26,11 @@ export function getOpenAIOptions(
         }
 
         const baseUrl = options.getOption('openaiBaseUrl') || PROVIDER_CONSTANTS.OPENAI.BASE_URL;
-        const modelName = opts.model || options.getOption('openaiDefaultModel') || PROVIDER_CONSTANTS.OPENAI.DEFAULT_MODEL;
+        const modelName = opts.model || options.getOption('openaiDefaultModel');
+
+        if (!modelName) {
+            throw new Error('No OpenAI model configured. Please set a default model in your AI settings.');
+        }
 
         // Create provider metadata
         const providerMetadata: ModelMetadata = {
@@ -87,7 +91,11 @@ export function getAnthropicOptions(
         }
 
         const baseUrl = options.getOption('anthropicBaseUrl') || PROVIDER_CONSTANTS.ANTHROPIC.BASE_URL;
-        const modelName = opts.model || options.getOption('anthropicDefaultModel') || PROVIDER_CONSTANTS.ANTHROPIC.DEFAULT_MODEL;
+        const modelName = opts.model || options.getOption('anthropicDefaultModel');
+
+        if (!modelName) {
+            throw new Error('No Anthropic model configured. Please set a default model in your AI settings.');
+        }
 
         // Create provider metadata
         const providerMetadata: ModelMetadata = {
@@ -150,8 +158,12 @@ export async function getOllamaOptions(
             throw new Error('Ollama API URL is not configured');
         }
 
-        // Get the model name - no prefix handling needed now
-        let modelName = opts.model || options.getOption('ollamaDefaultModel') || 'llama3';
+        // Get the model name - no defaults, must be configured by user
+        let modelName = opts.model || options.getOption('ollamaDefaultModel');
+
+        if (!modelName) {
+            throw new Error('No Ollama model configured. Please set a default model in your AI settings.');
+        }
 
         // Create provider metadata
         const providerMetadata: ModelMetadata = {
