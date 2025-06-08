@@ -57,7 +57,7 @@ vi.mock('../config/configuration_helpers.js', () => ({
 }));
 
 describe('RestChatService', () => {
-    let restChatService: RestChatService;
+    let restChatService: typeof RestChatService;
     let mockOptions: any;
     let mockAiServiceManager: any;
     let mockChatStorageService: any;

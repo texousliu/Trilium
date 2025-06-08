@@ -161,7 +161,7 @@ describe('OllamaService', () => {
 
         it('should return false when no base URL', () => {
             vi.mocked(options.getOptionBool).mockReturnValueOnce(true); // AI enabled
-            vi.mocked(options.getOption).mockReturnValueOnce(null); // No base URL
+            vi.mocked(options.getOption).mockReturnValueOnce(''); // No base URL
             
             const result = service.isAvailable();
             
@@ -188,7 +188,7 @@ describe('OllamaService', () => {
                 temperature: 0.7,
                 stream: false
             };
-            vi.mocked(providers.getOllamaOptions).mockReturnValueOnce(mockOptions);
+            vi.mocked(providers.getOllamaOptions).mockResolvedValueOnce(mockOptions);
             
             const result = await service.generateChatCompletion(messages);
             
@@ -207,7 +207,7 @@ describe('OllamaService', () => {
                 stream: true,
                 onChunk: vi.fn()
             };
-            vi.mocked(providers.getOllamaOptions).mockReturnValueOnce(mockOptions);
+            vi.mocked(providers.getOllamaOptions).mockResolvedValueOnce(mockOptions);
             
             const result = await service.generateChatCompletion(messages);
             
@@ -240,13 +240,13 @@ describe('OllamaService', () => {
                 enableTools: true,
                 tools: mockTools
             };
-            vi.mocked(providers.getOllamaOptions).mockReturnValueOnce(mockOptions);
+            vi.mocked(providers.getOllamaOptions).mockResolvedValueOnce(mockOptions);
             
             const chatSpy = vi.spyOn(mockOllamaInstance, 'chat');
             
             await service.generateChatCompletion(messages);
             
-            const calledParams = chatSpy.mock.calls[0][0];
+            const calledParams = chatSpy.mock.calls[0][0] as any;
             expect(calledParams.tools).toEqual(mockTools);
         });
 
@@ -259,7 +259,7 @@ describe('OllamaService', () => {
         });
 
         it('should throw error if no base URL configured', async () => {
-            vi.mocked(options.getOption).mockReturnValueOnce(null); // No base URL
+            vi.mocked(options.getOption).mockReturnValueOnce(''); // No base URL
             
             await expect(service.generateChatCompletion(messages)).rejects.toThrow(
                 'Ollama base URL is not configured'
@@ -272,7 +272,7 @@ describe('OllamaService', () => {
                 model: 'llama2',
                 stream: false
             };
-            vi.mocked(providers.getOllamaOptions).mockReturnValueOnce(mockOptions);
+            vi.mocked(providers.getOllamaOptions).mockResolvedValueOnce(mockOptions);
             
             // Mock API error
             mockOllamaInstance.chat.mockRejectedValueOnce(
@@ -290,7 +290,7 @@ describe('OllamaService', () => {
                 model: 'llama2',
                 stream: false
             };
-            vi.mocked(providers.getOllamaOptions).mockReturnValueOnce(mockOptions);
+            vi.mocked(providers.getOllamaOptions).mockResolvedValueOnce(mockOptions);
             
             // Spy on Ollama constructor
             const OllamaMock = vi.mocked(Ollama);
@@ -314,7 +314,7 @@ describe('OllamaService', () => {
                 enableTools: true,
                 tools: [{ name: 'test_tool', description: 'Test', parameters: {} }]
             };
-            vi.mocked(providers.getOllamaOptions).mockReturnValueOnce(mockOptions);
+            vi.mocked(providers.getOllamaOptions).mockResolvedValueOnce(mockOptions);
             
             // Mock response with tool call
             mockOllamaInstance.chat.mockResolvedValueOnce({
@@ -350,7 +350,7 @@ describe('OllamaService', () => {
                 model: 'llama2',
                 stream: false
             };
-            vi.mocked(providers.getOllamaOptions).mockReturnValueOnce(mockOptions);
+            vi.mocked(providers.getOllamaOptions).mockResolvedValueOnce(mockOptions);
             
             // Mock response with both text and tool calls
             mockOllamaInstance.chat.mockResolvedValueOnce({
@@ -370,7 +370,7 @@ describe('OllamaService', () => {
             
             const result = await service.generateChatCompletion(messages);
             
-            expect(result.content).toBe('Let me help you with that.');
+            expect(result.text).toBe('Let me help you with that.');
             expect(result.tool_calls).toHaveLength(1);
         });
 
@@ -380,7 +380,7 @@ describe('OllamaService', () => {
                 model: 'llama2',
                 stream: false
             };
-            vi.mocked(providers.getOllamaOptions).mockReturnValueOnce(mockOptions);
+            vi.mocked(providers.getOllamaOptions).mockResolvedValueOnce(mockOptions);
             
             const formattedMessages = [{ role: 'user', content: 'Hello' }];
             (service as any).formatter.formatMessages.mockReturnValueOnce(formattedMessages);
@@ -406,7 +406,7 @@ describe('OllamaService', () => {
                 model: 'llama2',
                 stream: false
             };
-            vi.mocked(providers.getOllamaOptions).mockReturnValueOnce(mockOptions);
+            vi.mocked(providers.getOllamaOptions).mockResolvedValueOnce(mockOptions);
             
             // Mock network error
             global.fetch = vi.fn().mockRejectedValueOnce(
@@ -428,7 +428,7 @@ describe('OllamaService', () => {
                 model: 'nonexistent-model',
                 stream: false
             };
-            vi.mocked(providers.getOllamaOptions).mockReturnValueOnce(mockOptions);
+            vi.mocked(providers.getOllamaOptions).mockResolvedValueOnce(mockOptions);
             
             // Mock model not found error
             mockOllamaInstance.chat.mockRejectedValueOnce(
@@ -451,7 +451,7 @@ describe('OllamaService', () => {
                 model: 'llama2',
                 stream: false
             };
-            vi.mocked(providers.getOllamaOptions).mockReturnValue(mockOptions);
+            vi.mocked(providers.getOllamaOptions).mockResolvedValue(mockOptions);
             
             const OllamaMock = vi.mocked(Ollama);
             OllamaMock.mockClear();

@@ -81,6 +81,7 @@ describe('OpenAIService', () => {
         it('should generate non-streaming completion', async () => {
             const mockOptions = {
                 apiKey: 'test-key',
+                baseUrl: 'https://api.openai.com/v1',
                 model: 'gpt-3.5-turbo',
                 temperature: 0.7,
                 max_tokens: 1000,
@@ -138,6 +139,7 @@ describe('OpenAIService', () => {
         it('should handle streaming completion', async () => {
             const mockOptions = {
                 apiKey: 'test-key',
+                baseUrl: 'https://api.openai.com/v1',
                 model: 'gpt-3.5-turbo',
                 stream: true
             };
@@ -190,6 +192,7 @@ describe('OpenAIService', () => {
         it('should handle API errors', async () => {
             const mockOptions = {
                 apiKey: 'test-key',
+                baseUrl: 'https://api.openai.com/v1',
                 model: 'gpt-3.5-turbo',
                 stream: false
             };
@@ -222,6 +225,7 @@ describe('OpenAIService', () => {
             
             const mockOptions = {
                 apiKey: 'test-key',
+                baseUrl: 'https://api.openai.com/v1',
                 model: 'gpt-3.5-turbo',
                 stream: false,
                 enableTools: true,
@@ -270,6 +274,7 @@ describe('OpenAIService', () => {
         it('should handle tool calls in response', async () => {
             const mockOptions = {
                 apiKey: 'test-key',
+                baseUrl: 'https://api.openai.com/v1',
                 model: 'gpt-3.5-turbo',
                 stream: false,
                 enableTools: true,

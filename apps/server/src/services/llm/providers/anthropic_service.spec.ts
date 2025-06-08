@@ -117,7 +117,7 @@ describe('AnthropicService', () => {
 
         it('should return false when no API key', () => {
             vi.mocked(options.getOptionBool).mockReturnValueOnce(true); // AI enabled
-            vi.mocked(options.getOption).mockReturnValueOnce(null); // No API key
+            vi.mocked(options.getOption).mockReturnValueOnce(''); // No API key
             
             const result = service.isAvailable();
             
@@ -170,7 +170,7 @@ describe('AnthropicService', () => {
             
             await service.generateChatCompletion(messages);
             
-            const calledParams = createSpy.mock.calls[0][0];
+            const calledParams = createSpy.mock.calls[0][0] as any;
             expect(calledParams.messages).toEqual([
                 { role: 'user', content: 'Hello' }
             ]);
@@ -382,7 +382,7 @@ describe('AnthropicService', () => {
             
             const result = await service.generateChatCompletion(messages);
             
-            expect(result.content).toBe('Here is the result:  The calculation is complete.');
+            expect(result.text).toBe('Here is the result:  The calculation is complete.');
             expect(result.tool_calls).toHaveLength(1);
             expect(result.tool_calls![0].function.name).toBe('calculate');
         });
@@ -418,7 +418,7 @@ describe('AnthropicService', () => {
             
             await service.generateChatCompletion(messagesWithToolResult);
             
-            const formattedMessages = createSpy.mock.calls[0][0].messages;
+            const formattedMessages = (createSpy.mock.calls[0][0] as any).messages;
             expect(formattedMessages).toHaveLength(3);
             expect(formattedMessages[2]).toEqual({
                 role: 'user',

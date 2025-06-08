@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { ChatStorageService } from './chat_storage_service.js';
+import { ChatStorageService, type StoredChat } from './chat_storage_service.js';
 import type { Message } from './ai_interface.js';
 
 // Mock dependencies
@@ -307,10 +307,10 @@ describe('ChatStorageService', () => {
 
     describe('updateChat', () => {
         it('should update chat messages and metadata', async () => {
-            const existingChat = {
+            const existingChat: StoredChat = {
                 id: 'chat-123',
                 title: 'Test Chat',
-                messages: [{ role: 'user', content: 'Hello' }],
+                messages: [{ role: 'user' as const, content: 'Hello' }],
                 noteId: 'chat-123',
                 createdAt: new Date('2024-01-01T00:00:00Z'),
                 updatedAt: new Date('2024-01-01T01:00:00Z'),

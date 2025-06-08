@@ -23,7 +23,7 @@ vi.mock('../modules/cache_manager.js', () => ({
 
 vi.mock('./query_processor.js', () => ({
     default: {
-        enhanceQuery: vi.fn().mockResolvedValue('enhanced query'),
+        generateSearchQueries: vi.fn().mockResolvedValue(['search query 1', 'search query 2']),
         decomposeQuery: vi.fn().mockResolvedValue({
             subQueries: ['sub query 1', 'sub query 2'],
             thinking: 'decomposition thinking'
@@ -33,8 +33,8 @@ vi.mock('./query_processor.js', () => ({
 
 vi.mock('../modules/context_formatter.js', () => ({
     default: {
-        formatNotes: vi.fn().mockReturnValue('formatted context'),
-        formatResponse: vi.fn().mockReturnValue('formatted response')
+        buildContextFromNotes: vi.fn().mockResolvedValue('formatted context'),
+        sanitizeNoteContent: vi.fn().mockReturnValue('sanitized content')
     }
 }));
 
@@ -64,8 +64,7 @@ describe('ContextService', () => {
             generateChatCompletion: vi.fn().mockResolvedValue({
                 content: 'Mock LLM response',
                 role: 'assistant'
-            }),
-            isAvailable: vi.fn().mockReturnValue(true)
+            })
         };
     });
 
@@ -134,8 +133,7 @@ describe('ContextService', () => {
                     noteId: 'note1',
                     title: 'Features Overview',
                     content: 'The app has many features...',
-                    relevanceScore: 0.9,
-                    searchType: 'content'
+                    similarity: 0.9
                 }
             ];
 
@@ -162,8 +160,7 @@ describe('ContextService', () => {
                     noteId: 'note1',
                     title: 'Long Content',
                     content: 'This is a very long piece of content that should be summarized...',
-                    relevanceScore: 0.8,
-                    searchType: 'content'
+                    similarity: 0.8
                 }
             ];
 
@@ -183,7 +180,7 @@ describe('ContextService', () => {
             );
         });
 
-        it('should handle query enhancement option', async () => {
+        it('should handle query generation option', async () => {
             const options: ContextOptions = {
                 useQueryEnhancement: true
             };
@@ -192,7 +189,7 @@ describe('ContextService', () => {
             
             await service.processQuery(userQuestion, mockLLMService, options);
 
-            expect(queryProcessor.enhanceQuery).toHaveBeenCalledWith(
+            expect(queryProcessor.generateSearchQueries).toHaveBeenCalledWith(
                 userQuestion,
                 mockLLMService
             );
@@ -262,13 +259,13 @@ describe('ContextService', () => {
             };
 
             const queryProcessor = (await import('./query_processor.js')).default;
-            queryProcessor.enhanceQuery.mockRejectedValueOnce(
-                new Error('Query enhancement failed')
+            vi.mocked(queryProcessor.generateSearchQueries).mockRejectedValueOnce(
+                new Error('Query generation failed')
             );
 
             await expect(
                 service.processQuery(userQuestion, mockLLMService, options)
-            ).rejects.toThrow('Query enhancement failed');
+            ).rejects.toThrow('Query generation failed');
         });
 
         it('should handle errors in query decomposition', async () => {
@@ -277,7 +274,7 @@ describe('ContextService', () => {
             };
 
             const queryProcessor = (await import('./query_processor.js')).default;
-            queryProcessor.decomposeQuery.mockRejectedValueOnce(
+            vi.mocked(queryProcessor.decomposeQuery).mockRejectedValueOnce(
                 new Error('Query decomposition failed')
             );
 
@@ -298,8 +295,7 @@ describe('ContextService', () => {
                     noteId: 'note1',
                     title: 'Relevant Note',
                     content: 'This note is relevant to the query',
-                    relevanceScore: 0.85,
-                    searchType: 'content'
+                    similarity: 0.85
                 }
             ];
 
@@ -377,9 +373,9 @@ describe('ContextService', () => {
             await service.initialize();
             
             const contextFormatter = (await import('../modules/context_formatter.js')).default;
-            contextFormatter.formatNotes.mockImplementationOnce(() => {
-                throw new Error('Formatting error');
-            });
+            vi.mocked(contextFormatter.buildContextFromNotes).mockRejectedValueOnce(
+                new Error('Formatting error')
+            );
 
             await expect(
                 service.processQuery('test', mockLLMService)
@@ -397,8 +393,7 @@ describe('ContextService', () => {
                 noteId: `note${i}`,
                 title: `Note ${i}`,
                 content: `Content for note ${i}`,
-                relevanceScore: Math.random(),
-                searchType: 'content' as const
+                similarity: Math.random()
             }));
 
             (service as any).contextExtractor.findRelevantNotes.mockResolvedValueOnce(largeResultSet);

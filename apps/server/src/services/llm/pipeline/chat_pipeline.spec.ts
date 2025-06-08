@@ -188,8 +188,8 @@ describe('ChatPipeline', () => {
 
         const input: ChatPipelineInput = {
             messages,
-            noteId: 'note-123',
-            userId: 'user-456'
+            options: {},
+            noteId: 'note-123'
         };
 
         it('should execute all pipeline stages in order', async () => {
@@ -235,13 +235,16 @@ describe('ChatPipeline', () => {
         it('should handle tool calling iterations', async () => {
             // Mock tool calling stage to require a tool call
             const mockToolCallingStage = pipeline.stages.toolCalling;
-            mockToolCallingStage.execute
+            vi.mocked(mockToolCallingStage.execute)
                 .mockResolvedValueOnce({
-                    toolCallRequired: true,
-                    toolCallMessages: [{ role: 'assistant', content: 'Using tool...' }]
+                    response: { text: 'Using tool...', model: 'test', provider: 'test' },
+                    needsFollowUp: true,
+                    messages: [{ role: 'assistant', content: 'Using tool...' }]
                 })
                 .mockResolvedValueOnce({
-                    toolCallRequired: false
+                    response: { text: 'Done', model: 'test', provider: 'test' },
+                    needsFollowUp: false,
+                    messages: []
                 });
             
             await pipeline.execute(input);
@@ -256,9 +259,10 @@ describe('ChatPipeline', () => {
             
             // Mock tool calling stage to always require tool calls
             const mockToolCallingStage = pipeline.stages.toolCalling;
-            mockToolCallingStage.execute.mockResolvedValue({
-                toolCallRequired: true,
-                toolCallMessages: [{ role: 'assistant', content: 'Using tool...' }]
+            vi.mocked(mockToolCallingStage.execute).mockResolvedValue({
+                response: { text: 'Using tool...', model: 'test', provider: 'test' },
+                needsFollowUp: true,
+                messages: [{ role: 'assistant', content: 'Using tool...' }]
             });
             
             await pipeline.execute(input);
@@ -269,7 +273,7 @@ describe('ChatPipeline', () => {
 
         it('should handle stage errors gracefully', async () => {
             // Mock a stage to throw an error
-            pipeline.stages.contextExtraction.execute.mockRejectedValueOnce(
+            vi.mocked(pipeline.stages.contextExtraction.execute).mockRejectedValueOnce(
                 new Error('Context extraction failed')
             );
             
@@ -279,8 +283,8 @@ describe('ChatPipeline', () => {
         });
 
         it('should pass context between stages', async () => {
-            const contextData = { relevantNotes: ['note1', 'note2'] };
-            pipeline.stages.contextExtraction.execute.mockResolvedValueOnce(contextData);
+            const contextData = { context: 'Note context', noteId: 'note-123', query: 'test query' };
+            vi.mocked(pipeline.stages.contextExtraction.execute).mockResolvedValueOnce(contextData);
             
             await pipeline.execute(input);
             
@@ -292,8 +296,8 @@ describe('ChatPipeline', () => {
         it('should handle empty messages', async () => {
             const emptyInput: ChatPipelineInput = {
                 messages: [],
-                noteId: 'note-123',
-                userId: 'user-456'
+                options: {},
+                noteId: 'note-123'
             };
             
             const result = await pipeline.execute(emptyInput);
@@ -365,8 +369,8 @@ describe('ChatPipeline', () => {
             
             const input: ChatPipelineInput = {
                 messages: [{ role: 'user', content: 'Hello' }],
-                noteId: 'note-123',
-                userId: 'user-456'
+                options: {},
+                noteId: 'note-123'
             };
             
             await pipeline.execute(input);
@@ -381,8 +385,8 @@ describe('ChatPipeline', () => {
             
             const input: ChatPipelineInput = {
                 messages: [{ role: 'user', content: 'Hello' }],
-                noteId: 'note-123',
-                userId: 'user-456'
+                options: {},
+                noteId: 'note-123'
             };
             
             await pipeline.execute(input);
@@ -395,12 +399,12 @@ describe('ChatPipeline', () => {
     describe('error handling', () => {
         it('should propagate errors from stages', async () => {
             const error = new Error('Stage execution failed');
-            pipeline.stages.messagePreparation.execute.mockRejectedValueOnce(error);
+            vi.mocked(pipeline.stages.messagePreparation.execute).mockRejectedValueOnce(error);
             
             const input: ChatPipelineInput = {
                 messages: [{ role: 'user', content: 'Hello' }],
-                noteId: 'note-123',
-                userId: 'user-456'
+                options: {},
+                noteId: 'note-123'
             };
             
             await expect(pipeline.execute(input)).rejects.toThrow('Stage execution failed');

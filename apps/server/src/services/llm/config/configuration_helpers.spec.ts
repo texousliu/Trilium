@@ -10,7 +10,8 @@ vi.mock('./configuration_manager.js', () => ({
         parseModelIdentifier: vi.fn(),
         createModelConfig: vi.fn(),
         getAIConfig: vi.fn(),
-        validateConfiguration: vi.fn()
+        validateConfig: vi.fn(),
+        clearCache: vi.fn()
     }
 }));
 
@@ -48,7 +49,7 @@ describe('configuration_helpers', () => {
         });
 
         it('should return null if no provider is selected', async () => {
-            vi.mocked(optionService.getOption).mockReturnValueOnce(null);
+            vi.mocked(optionService.getOption).mockReturnValueOnce('');
             
             const result = await configHelpers.getSelectedProvider();
             
@@ -68,7 +69,8 @@ describe('configuration_helpers', () => {
         it('should delegate to configuration manager', () => {
             const mockIdentifier: ModelIdentifier = {
                 provider: 'openai',
-                modelId: 'gpt-4'
+                modelId: 'gpt-4',
+                fullIdentifier: 'openai:gpt-4'
             };
             vi.mocked(configurationManager.parseModelIdentifier).mockReturnValueOnce(mockIdentifier);
             
@@ -83,10 +85,10 @@ describe('configuration_helpers', () => {
         it('should delegate to configuration manager', () => {
             const mockConfig: ModelConfig = {
                 provider: 'openai',
-                model: 'gpt-4',
+                modelId: 'gpt-4',
                 temperature: 0.7,
                 maxTokens: 1000
-            };
+            } as any;
             vi.mocked(configurationManager.createModelConfig).mockReturnValueOnce(mockConfig);
             
             const result = configHelpers.createModelConfig('gpt-4', 'openai');
@@ -291,7 +293,7 @@ describe('configuration_helpers', () => {
         });
 
         it('should return null if no provider selected', async () => {
-            vi.mocked(optionService.getOption).mockReturnValueOnce(null);
+            vi.mocked(optionService.getOption).mockReturnValueOnce('');
             
             const result = await configHelpers.getAvailableSelectedProvider();
             
@@ -322,20 +324,19 @@ describe('configuration_helpers', () => {
                 errors: [],
                 warnings: []
             };
-            vi.mocked(configurationManager.validateConfiguration).mockResolvedValueOnce(mockValidation);
+            vi.mocked(configurationManager.validateConfig).mockResolvedValueOnce(mockValidation);
             
             const result = await configHelpers.validateConfiguration();
             
             expect(result).toBe(mockValidation);
-            expect(configurationManager.validateConfiguration).toHaveBeenCalled();
+            expect(configurationManager.validateConfig).toHaveBeenCalled();
         });
     });
 
     describe('clearConfigurationCache', () => {
-        it('should delegate to configuration manager', () => {
-            configHelpers.clearConfigurationCache();
-            
-            expect(configurationManager.clearConfigurationCache).toHaveBeenCalled();
+        it('should clear configuration cache (no-op)', () => {
+            // The function is now a no-op since caching was removed
+            expect(() => configHelpers.clearConfigurationCache()).not.toThrow();
         });
     });
 });

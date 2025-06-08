@@ -13,32 +13,32 @@ vi.mock('../log.js', () => ({
 
 vi.mock('./interfaces/model_capabilities.js', () => ({
     DEFAULT_MODEL_CAPABILITIES: {
-        contextLength: 4096,
-        supportedMessageTypes: ['text'],
-        supportsToolCalls: false,
-        supportsStreaming: true,
-        maxOutputTokens: 2048,
-        temperature: { min: 0, max: 2, default: 0.7 },
-        topP: { min: 0, max: 1, default: 0.9 }
+        contextWindowTokens: 8192,
+        contextWindowChars: 16000,
+        maxCompletionTokens: 1024,
+        hasFunctionCalling: false,
+        hasVision: false,
+        costPerInputToken: 0,
+        costPerOutputToken: 0
     }
 }));
 
 vi.mock('./constants/search_constants.js', () => ({
     MODEL_CAPABILITIES: {
         'gpt-4': {
-            contextLength: 8192,
-            supportsToolCalls: true,
-            maxOutputTokens: 4096
+            contextWindowTokens: 8192,
+            contextWindowChars: 32000,
+            hasFunctionCalling: true
         },
         'gpt-3.5-turbo': {
-            contextLength: 4096,
-            supportsToolCalls: true,
-            maxOutputTokens: 2048
+            contextWindowTokens: 8192,
+            contextWindowChars: 16000,
+            hasFunctionCalling: true
         },
         'claude-3-opus': {
-            contextLength: 200000,
-            supportsToolCalls: true,
-            maxOutputTokens: 4096
+            contextWindowTokens: 200000,
+            contextWindowChars: 800000,
+            hasVision: true
         }
     }
 }));
@@ -69,13 +69,13 @@ describe('ModelCapabilitiesService', () => {
     describe('getChatModelCapabilities', () => {
         it('should return cached capabilities if available', async () => {
             const mockCapabilities: ModelCapabilities = {
-                contextLength: 8192,
-                supportedMessageTypes: ['text'],
-                supportsToolCalls: true,
-                supportsStreaming: true,
-                maxOutputTokens: 4096,
-                temperature: { min: 0, max: 2, default: 0.7 },
-                topP: { min: 0, max: 1, default: 0.9 }
+                contextWindowTokens: 8192,
+                contextWindowChars: 32000,
+                maxCompletionTokens: 4096,
+                hasFunctionCalling: true,
+                hasVision: false,
+                costPerInputToken: 0,
+                costPerOutputToken: 0
             };
 
             // Pre-populate cache
@@ -91,13 +91,13 @@ describe('ModelCapabilitiesService', () => {
             const result = await service.getChatModelCapabilities('gpt-4');
 
             expect(result).toEqual({
-                contextLength: 8192,
-                supportedMessageTypes: ['text'],
-                supportsToolCalls: true,
-                supportsStreaming: true,
-                maxOutputTokens: 4096,
-                temperature: { min: 0, max: 2, default: 0.7 },
-                topP: { min: 0, max: 1, default: 0.9 }
+                contextWindowTokens: 8192,
+                contextWindowChars: 32000,
+                maxCompletionTokens: 1024,
+                hasFunctionCalling: true,
+                hasVision: false,
+                costPerInputToken: 0,
+                costPerOutputToken: 0
             });
 
             expect(mockLog.info).toHaveBeenCalledWith('Using static capabilities for chat model: gpt-4');
@@ -110,8 +110,8 @@ describe('ModelCapabilitiesService', () => {
         it('should handle case-insensitive model names', async () => {
             const result = await service.getChatModelCapabilities('GPT-4');
 
-            expect(result.contextLength).toBe(8192);
-            expect(result.supportsToolCalls).toBe(true);
+            expect(result.contextWindowTokens).toBe(8192);
+            expect(result.hasFunctionCalling).toBe(true);
             expect(mockLog.info).toHaveBeenCalledWith('Using static capabilities for chat model: GPT-4');
         });
 
@@ -119,9 +119,9 @@ describe('ModelCapabilitiesService', () => {
             const result = await service.getChatModelCapabilities('unknown-model');
 
             expect(result).toEqual({
-                contextLength: 4096,
+                contextWindow: 4096,
                 supportedMessageTypes: ['text'],
-                supportsToolCalls: false,
+                supportsTools: false,
                 supportsStreaming: true,
                 maxOutputTokens: 2048,
                 temperature: { min: 0, max: 2, default: 0.7 },
@@ -135,9 +135,9 @@ describe('ModelCapabilitiesService', () => {
             const result = await service.getChatModelCapabilities('gpt-3.5-turbo');
 
             expect(result).toEqual({
-                contextLength: 4096,
+                contextWindow: 4096,
                 supportedMessageTypes: ['text'],
-                supportsToolCalls: true,
+                supportsTools: true,
                 supportsStreaming: true,
                 maxOutputTokens: 2048,
                 temperature: { min: 0, max: 2, default: 0.7 },
@@ -150,13 +150,13 @@ describe('ModelCapabilitiesService', () => {
     describe('clearCache', () => {
         it('should clear all cached capabilities', () => {
             const mockCapabilities: ModelCapabilities = {
-                contextLength: 8192,
-                supportedMessageTypes: ['text'],
-                supportsToolCalls: true,
-                supportsStreaming: true,
-                maxOutputTokens: 4096,
-                temperature: { min: 0, max: 2, default: 0.7 },
-                topP: { min: 0, max: 1, default: 0.9 }
+                contextWindowTokens: 8192,
+                contextWindowChars: 32000,
+                maxCompletionTokens: 4096,
+                hasFunctionCalling: true,
+                hasVision: false,
+                costPerInputToken: 0,
+                costPerOutputToken: 0
             };
 
             // Pre-populate cache
@@ -175,23 +175,23 @@ describe('ModelCapabilitiesService', () => {
     describe('getCachedCapabilities', () => {
         it('should return all cached capabilities as a record', () => {
             const mockCapabilities1: ModelCapabilities = {
-                contextLength: 8192,
-                supportedMessageTypes: ['text'],
-                supportsToolCalls: true,
-                supportsStreaming: true,
-                maxOutputTokens: 4096,
-                temperature: { min: 0, max: 2, default: 0.7 },
-                topP: { min: 0, max: 1, default: 0.9 }
+                contextWindowTokens: 8192,
+                contextWindowChars: 32000,
+                maxCompletionTokens: 4096,
+                hasFunctionCalling: true,
+                hasVision: false,
+                costPerInputToken: 0,
+                costPerOutputToken: 0
             };
 
             const mockCapabilities2: ModelCapabilities = {
-                contextLength: 4096,
-                supportedMessageTypes: ['text'],
-                supportsToolCalls: false,
-                supportsStreaming: true,
-                maxOutputTokens: 2048,
-                temperature: { min: 0, max: 2, default: 0.7 },
-                topP: { min: 0, max: 1, default: 0.9 }
+                contextWindowTokens: 8192,
+                contextWindowChars: 16000,
+                maxCompletionTokens: 1024,
+                hasFunctionCalling: false,
+                hasVision: false,
+                costPerInputToken: 0,
+                costPerOutputToken: 0
             };
 
             // Pre-populate cache
@@ -220,9 +220,9 @@ describe('ModelCapabilitiesService', () => {
             const result = await fetchMethod('claude-3-opus');
 
             expect(result).toEqual({
-                contextLength: 200000,
+                contextWindow: 200000,
                 supportedMessageTypes: ['text'],
-                supportsToolCalls: true,
+                supportsTools: true,
                 supportsStreaming: true,
                 maxOutputTokens: 4096,
                 temperature: { min: 0, max: 2, default: 0.7 },
@@ -237,9 +237,9 @@ describe('ModelCapabilitiesService', () => {
             const result = await fetchMethod('unknown-model');
 
             expect(result).toEqual({
-                contextLength: 4096,
+                contextWindow: 4096,
                 supportedMessageTypes: ['text'],
-                supportsToolCalls: false,
+                supportsTools: false,
                 supportsStreaming: true,
                 maxOutputTokens: 2048,
                 temperature: { min: 0, max: 2, default: 0.7 },
@@ -260,9 +260,9 @@ describe('ModelCapabilitiesService', () => {
             const result = await fetchMethod('test-model');
 
             expect(result).toEqual({
-                contextLength: 4096,
+                contextWindow: 4096,
                 supportedMessageTypes: ['text'],
-                supportsToolCalls: false,
+                supportsTools: false,
                 supportsStreaming: true,
                 maxOutputTokens: 2048,
                 temperature: { min: 0, max: 2, default: 0.7 },
