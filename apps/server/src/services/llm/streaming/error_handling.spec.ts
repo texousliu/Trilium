@@ -3,7 +3,7 @@ import { processProviderStream, StreamProcessor } from '../providers/stream_hand
 import type { ProviderStreamOptions } from '../providers/stream_handler.js';
 
 // Mock log service
-vi.mock('../log.js', () => ({
+vi.mock('../../log.js', () => ({
     default: {
         info: vi.fn(),
         error: vi.fn(),
@@ -17,7 +17,7 @@ describe('Streaming Error Handling Tests', () => {
 
     beforeEach(async () => {
         vi.clearAllMocks();
-        log = (await import('../log.js')).default;
+        log = (await import('../../log.js')).default;
         mockOptions = {
             providerName: 'ErrorTestProvider',
             modelName: 'error-test-model'
@@ -147,7 +147,7 @@ describe('Streaming Error Handling Tests', () => {
                 }
             };
 
-            const hangingCallback = vi.fn(async () => {
+            const hangingCallback = vi.fn(async (): Promise<void> => {
                 // Never resolves
                 return new Promise(() => {});
             });

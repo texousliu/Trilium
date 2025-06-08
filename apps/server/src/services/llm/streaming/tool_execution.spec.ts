@@ -3,7 +3,7 @@ import { processProviderStream, StreamProcessor } from '../providers/stream_hand
 import type { ProviderStreamOptions } from '../providers/stream_handler.js';
 
 // Mock log service
-vi.mock('../log.js', () => ({
+vi.mock('../../log.js', () => ({
     default: {
         info: vi.fn(),
         error: vi.fn(),
@@ -623,7 +623,7 @@ describe('Tool Execution During Streaming Tests', () => {
 
     describe('Tool Call Logging and Debugging', () => {
         it('should log tool call detection', async () => {
-            const log = (await import('../log.js')).default;
+            const log = (await import('../../log.js')).default;
             
             const toolChunk = {
                 message: {

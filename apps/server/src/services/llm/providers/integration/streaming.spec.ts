@@ -255,7 +255,7 @@ describe('Provider Streaming Integration Tests', () => {
                         // Anthropic format needs conversion to our standard format
                         if (chunk.type === 'content_block_delta') {
                             yield {
-                                message: { content: chunk.delta.text },
+                                message: { content: chunk.delta?.text || '' },
                                 done: false
                             };
                         } else if (chunk.type === 'message_stop') {

@@ -269,7 +269,7 @@ describe('ChatPipeline', () => {
 
         it('should handle tool calling iterations', async () => {
             // Mock LLM response to include tool calls
-            pipeline.stages.llmCompletion.execute.mockResolvedValue({
+            (pipeline.stages.llmCompletion.execute as any).mockResolvedValue({
                 response: {
                     text: 'Hello! How can I help you?',
                     role: 'assistant',
@@ -279,7 +279,7 @@ describe('ChatPipeline', () => {
             });
             
             // Mock tool calling to require iteration then stop
-            pipeline.stages.toolCalling.execute
+            (pipeline.stages.toolCalling.execute as any)
                 .mockResolvedValueOnce({ needsFollowUp: true, messages: [] })
                 .mockResolvedValueOnce({ needsFollowUp: false, messages: [] });
             
@@ -290,7 +290,7 @@ describe('ChatPipeline', () => {
 
         it('should respect max tool call iterations', async () => {
             // Mock LLM response to include tool calls
-            pipeline.stages.llmCompletion.execute.mockResolvedValue({
+            (pipeline.stages.llmCompletion.execute as any).mockResolvedValue({
                 response: {
                     text: 'Hello! How can I help you?',
                     role: 'assistant',
@@ -300,7 +300,7 @@ describe('ChatPipeline', () => {
             });
             
             // Mock tool calling to always require iteration
-            pipeline.stages.toolCalling.execute.mockResolvedValue({ needsFollowUp: true, messages: [] });
+            (pipeline.stages.toolCalling.execute as any).mockResolvedValue({ needsFollowUp: true, messages: [] });
             
             await pipeline.execute(input);
             
@@ -309,7 +309,7 @@ describe('ChatPipeline', () => {
         });
 
         it('should handle stage errors gracefully', async () => {
-            pipeline.stages.modelSelection.execute.mockRejectedValueOnce(new Error('Model selection failed'));
+            (pipeline.stages.modelSelection.execute as any).mockRejectedValueOnce(new Error('Model selection failed'));
             
             await expect(pipeline.execute(input)).rejects.toThrow('Model selection failed');
         });
@@ -408,7 +408,7 @@ describe('ChatPipeline', () => {
         };
 
         it('should propagate errors from stages', async () => {
-            pipeline.stages.modelSelection.execute.mockRejectedValueOnce(new Error('Model selection failed'));
+            (pipeline.stages.modelSelection.execute as any).mockRejectedValueOnce(new Error('Model selection failed'));
             
             await expect(pipeline.execute(input)).rejects.toThrow('Model selection failed');
         });

@@ -323,7 +323,7 @@ describe("LLM API Tests", () => {
             const options = (await import("../../services/options.js")).default;
             
             // Setup default mock behaviors
-            options.getOptionBool.mockReturnValue(true); // AI enabled
+            (options.getOptionBool as any).mockReturnValue(true); // AI enabled
             mockAiServiceManager.getOrCreateAnyService.mockResolvedValue({});
             mockGetSelectedModelConfig.mockResolvedValue({
                 model: 'test-model',
@@ -466,8 +466,8 @@ describe("LLM API Tests", () => {
                         getContent: () => 'Root note content for testing'
                     })
                 })
-            };
-            vi.mocked(await import('../../becca/becca.js')).default = mockBecca;
+            } as any;
+            (await import('../../becca/becca.js') as any).default = mockBecca;
 
             // Setup streaming with mention context
             mockChatPipelineExecute.mockImplementation(async (input) => {
@@ -628,7 +628,7 @@ describe("LLM API Tests", () => {
         it("should handle AI disabled state", async () => {
             // Import options service to access mock
             const options = (await import("../../services/options.js")).default;
-            options.getOptionBool.mockReturnValue(false); // AI disabled
+            (options.getOptionBool as any).mockReturnValue(false); // AI disabled
 
             const response = await supertest(app)
                 .post(`/api/llm/chat/${testChatId}/messages/stream`)
@@ -740,7 +740,7 @@ describe("LLM API Tests", () => {
             const ws = (await import("../../services/ws.js")).default;
             
             // Verify multiple chunks were sent
-            const streamCalls = ws.sendMessageToAllClients.mock.calls.filter(
+            const streamCalls = (ws.sendMessageToAllClients as any).mock.calls.filter(
                 call => call[0].type === 'llm-stream' && call[0].content
             );
             expect(streamCalls.length).toBeGreaterThan(5);
