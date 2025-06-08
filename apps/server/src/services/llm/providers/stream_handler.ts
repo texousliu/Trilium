@@ -383,12 +383,14 @@ export function extractStreamStats(finalChunk: any | null, providerName: string)
         return { promptTokens: 0, completionTokens: 0, totalTokens: 0 };
     }
 
-    // Ollama format
-    if (finalChunk.prompt_eval_count !== undefined && finalChunk.eval_count !== undefined) {
+    // Ollama format - handle partial stats where some fields might be missing
+    if (finalChunk.prompt_eval_count !== undefined || finalChunk.eval_count !== undefined) {
+        const promptTokens = finalChunk.prompt_eval_count || 0;
+        const completionTokens = finalChunk.eval_count || 0;
         return {
-            promptTokens: finalChunk.prompt_eval_count || 0,
-            completionTokens: finalChunk.eval_count || 0,
-            totalTokens: (finalChunk.prompt_eval_count || 0) + (finalChunk.eval_count || 0)
+            promptTokens,
+            completionTokens,
+            totalTokens: promptTokens + completionTokens
         };
     }
 
