@@ -70,12 +70,21 @@ abstract class MoveBlockUpDownCommand extends Command {
 				writer.createPositionAt(
 					selectedBlocks[selectedBlocks.length - 1], offsets[1]));
 			writer.setSelection(range);
+
+			this.scrollToSelection();
         });
     }
 	
     getSelectedBlocks(selection: DocumentSelection) {
         return [...selection.getSelectedBlocks()];
     }
+	
+	scrollToSelection() {
+		// Ensure scroll happens in sync with DOM updates
+		requestAnimationFrame(() => {
+			this.editor.editing.view.scrollToTheSelection();
+		});
+	};
 }
 
 class MoveBlockUpCommand extends MoveBlockUpDownCommand {
