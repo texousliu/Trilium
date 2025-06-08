@@ -1,0 +1,29 @@
+{
+  "name": "trilium.rocks",
+  "version": "1.0.3",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "esrun scripts/build.ts",
+    "build-all": "esrun scripts/build.ts -- --templates",
+    "build-scripts": "esrun scripts/build.ts -- --module=scripts",
+    "build-styles": "esrun scripts/build.ts -- --module=styles",
+    "templates": "esrun scripts/build.ts -- --only-templates",
+    "dist": "esrun scripts/build.ts -- --minify",
+    "test": "esrun src/scripts/test.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@digitak/esrun": "^3.2.24",
+    "@types/swagger-ui": "^3.52.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.2",
+    "@typescript-eslint/parser": "^6.7.2",
+    "dotenv": "^16.3.1",
+    "esbuild": "^0.19.3",
+    "eslint": "^8.49.0",
+    "highlight.js": "^11.8.0",
+    "trilium-etapi": "^0.1.2",
+    "typescript": "^5.2.2"
+  }
+}
