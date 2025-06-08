@@ -14,7 +14,9 @@ vi.mock("../csrf_protection.js", () => ({
 // Mock WebSocket service
 vi.mock("../../services/ws.js", () => ({
     default: {
-        sendMessageToAllClients: vi.fn()
+        sendMessageToAllClients: vi.fn(),
+        sendTransactionEntityChangesToAllClients: vi.fn(),
+        setLastSyncedPush: vi.fn()
     }
 }));
 
@@ -65,7 +67,11 @@ vi.mock("../../services/llm/config/configuration_helpers.js", () => ({
 // Mock options service
 vi.mock("../../services/options.js", () => ({
     default: {
-        getOptionBool: vi.fn()
+        getOptionBool: vi.fn(() => false),
+        getOptionMap: vi.fn(() => new Map()),
+        createOption: vi.fn(),
+        getOption: vi.fn(() => '0'),
+        getOptionOrNull: vi.fn(() => null)
     }
 }));
 

@@ -79,7 +79,8 @@ describe('Provider Streaming Integration Tests', () => {
         it('should handle OpenAI tool calls', async () => {
             const openAIWithTools = [
                 {
-                    choices: [{ delta: { content: 'Let me calculate that' } }]
+                    choices: [{ delta: { content: 'Let me calculate that' } }],
+                    model: 'gpt-3.5-turbo'
                 },
                 {
                     choices: [{
@@ -93,12 +94,18 @@ describe('Provider Streaming Integration Tests', () => {
                                 }
                             }]
                         }
-                    }]
+                    }],
+                    model: 'gpt-3.5-turbo'
                 },
                 {
-                    choices: [{ delta: { content: 'The answer is 4' } }]
+                    choices: [{ delta: { content: 'The answer is 4' } }],
+                    model: 'gpt-3.5-turbo'
                 },
-                { done: true }
+                { 
+                    choices: [{ finish_reason: 'stop' }],
+                    model: 'gpt-3.5-turbo',
+                    done: true 
+                }
             ];
 
             const mockIterator = {
@@ -314,7 +321,7 @@ describe('Provider Streaming Integration Tests', () => {
             expect(result.completeText).toBe('Based on my analysis, the answer is 42.');
             
             // Verify thinking states were captured
-            const thinkingChunks = receivedChunks.filter(c => c.chunk?.thinking);
+            const thinkingChunks = receivedChunks.filter(c => c.chunk?.message?.thinking);
             expect(thinkingChunks.length).toBe(2);
         });
     });
