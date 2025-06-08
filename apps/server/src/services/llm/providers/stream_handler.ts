@@ -326,6 +326,15 @@ export async function processProviderStream(
                         chunk,
                         chunkCount
                     );
+                } else if (toolCalls.length > 0) {
+                    // Send callback for tool-only chunks (no content but has tool calls)
+                    await StreamProcessor.sendChunkToCallback(
+                        streamCallback,
+                        '',
+                        !!chunk.done,
+                        chunk,
+                        chunkCount
+                    );
                 }
             }
 
