@@ -4,7 +4,7 @@ import configurationManager from './configuration_manager.js';
 import optionService from '../../options.js';
 import type { ProviderType, ModelIdentifier, ModelConfig } from '../interfaces/configuration_interfaces.js';
 
-// Mock dependencies
+// Mock dependencies - configuration manager is no longer used
 vi.mock('./configuration_manager.js', () => ({
     default: {
         parseModelIdentifier: vi.fn(),
@@ -17,7 +17,8 @@ vi.mock('./configuration_manager.js', () => ({
 
 vi.mock('../../options.js', () => ({
     default: {
-        getOption: vi.fn()
+        getOption: vi.fn(),
+        getOptionBool: vi.fn()
     }
 }));
 
@@ -66,144 +67,173 @@ describe('configuration_helpers', () => {
     });
 
     describe('parseModelIdentifier', () => {
-        it('should delegate to configuration manager', () => {
-            const mockIdentifier: ModelIdentifier = {
+        it('should parse model identifier directly', () => {
+            const result = configHelpers.parseModelIdentifier('openai:gpt-4');
+            
+            expect(result).toStrictEqual({
                 provider: 'openai',
                 modelId: 'gpt-4',
                 fullIdentifier: 'openai:gpt-4'
-            };
-            vi.mocked(configurationManager.parseModelIdentifier).mockReturnValueOnce(mockIdentifier);
+            });
+        });
+
+        it('should handle model without provider', () => {
+            const result = configHelpers.parseModelIdentifier('gpt-4');
             
-            const result = configHelpers.parseModelIdentifier('openai:gpt-4');
+            expect(result).toStrictEqual({
+                modelId: 'gpt-4',
+                fullIdentifier: 'gpt-4'
+            });
+        });
+
+        it('should handle empty model string', () => {
+            const result = configHelpers.parseModelIdentifier('');
             
-            expect(result).toBe(mockIdentifier);
-            expect(configurationManager.parseModelIdentifier).toHaveBeenCalledWith('openai:gpt-4');
+            expect(result).toStrictEqual({
+                modelId: '',
+                fullIdentifier: ''
+            });
         });
     });
 
     describe('createModelConfig', () => {
-        it('should delegate to configuration manager', () => {
-            const mockConfig: ModelConfig = {
-                provider: 'openai',
-                modelId: 'gpt-4',
-                temperature: 0.7,
-                maxTokens: 1000
-            } as any;
-            vi.mocked(configurationManager.createModelConfig).mockReturnValueOnce(mockConfig);
-            
+        it('should create model config directly', () => {
             const result = configHelpers.createModelConfig('gpt-4', 'openai');
             
-            expect(result).toBe(mockConfig);
-            expect(configurationManager.createModelConfig).toHaveBeenCalledWith('gpt-4', 'openai');
+            expect(result).toStrictEqual({
+                provider: 'openai',
+                modelId: 'gpt-4',
+                displayName: 'gpt-4'
+            });
+        });
+
+        it('should handle model with provider prefix', () => {
+            const result = configHelpers.createModelConfig('openai:gpt-4');
+            
+            expect(result).toStrictEqual({
+                provider: 'openai',
+                modelId: 'gpt-4',
+                displayName: 'openai:gpt-4'
+            });
+        });
+
+        it('should fallback to openai provider when none specified', () => {
+            const result = configHelpers.createModelConfig('gpt-4');
+            
+            expect(result).toStrictEqual({
+                provider: 'openai',
+                modelId: 'gpt-4',
+                displayName: 'gpt-4'
+            });
         });
     });
 
     describe('getDefaultModelForProvider', () => {
         it('should return default model for provider', async () => {
-            vi.mocked(configurationManager.getAIConfig).mockResolvedValueOnce({
-                enabled: true,
-                selectedProvider: 'openai',
-                defaultModels: {
-                    openai: 'gpt-4',
-                    anthropic: 'claude-3',
-                    ollama: 'llama2'
-                },
-                providerSettings: {}
-            } as any);
+            vi.mocked(optionService.getOption).mockReturnValue('gpt-4');
             
             const result = await configHelpers.getDefaultModelForProvider('openai');
             
             expect(result).toBe('gpt-4');
+            expect(optionService.getOption).toHaveBeenCalledWith('openaiDefaultModel');
         });
 
         it('should return undefined if no default model', async () => {
-            vi.mocked(configurationManager.getAIConfig).mockResolvedValueOnce({
-                enabled: true,
-                selectedProvider: 'openai',
-                defaultModels: {},
-                providerSettings: {}
-            } as any);
+            vi.mocked(optionService.getOption).mockReturnValue('');
             
-            const result = await configHelpers.getDefaultModelForProvider('openai');
+            const result = await configHelpers.getDefaultModelForProvider('anthropic');
             
             expect(result).toBeUndefined();
+            expect(optionService.getOption).toHaveBeenCalledWith('anthropicDefaultModel');
+        });
+
+        it('should handle ollama provider', async () => {
+            vi.mocked(optionService.getOption).mockReturnValue('llama2');
+            
+            const result = await configHelpers.getDefaultModelForProvider('ollama');
+            
+            expect(result).toBe('llama2');
+            expect(optionService.getOption).toHaveBeenCalledWith('ollamaDefaultModel');
         });
     });
 
     describe('getProviderSettings', () => {
-        it('should return provider settings', async () => {
-            const mockSettings = {
-                apiKey: 'test-key',
-                baseUrl: 'https://api.openai.com'
-            };
-            vi.mocked(configurationManager.getAIConfig).mockResolvedValueOnce({
-                enabled: true,
-                selectedProvider: 'openai',
-                defaultModels: {},
-                providerSettings: {
-                    openai: mockSettings
-                }
-            } as any);
+        it('should return OpenAI provider settings', async () => {
+            vi.mocked(optionService.getOption)
+                .mockReturnValueOnce('test-key')  // openaiApiKey
+                .mockReturnValueOnce('https://api.openai.com')  // openaiBaseUrl
+                .mockReturnValueOnce('gpt-4');  // openaiDefaultModel
             
             const result = await configHelpers.getProviderSettings('openai');
             
-            expect(result).toBe(mockSettings);
+            expect(result).toStrictEqual({
+                apiKey: 'test-key',
+                baseUrl: 'https://api.openai.com',
+                defaultModel: 'gpt-4'
+            });
         });
 
-        it('should return undefined if no settings', async () => {
-            vi.mocked(configurationManager.getAIConfig).mockResolvedValueOnce({
-                enabled: true,
-                selectedProvider: 'openai',
-                defaultModels: {},
-                providerSettings: {}
-            } as any);
+        it('should return Anthropic provider settings', async () => {
+            vi.mocked(optionService.getOption)
+                .mockReturnValueOnce('anthropic-key')  // anthropicApiKey
+                .mockReturnValueOnce('https://api.anthropic.com')  // anthropicBaseUrl
+                .mockReturnValueOnce('claude-3');  // anthropicDefaultModel
             
-            const result = await configHelpers.getProviderSettings('openai');
+            const result = await configHelpers.getProviderSettings('anthropic');
             
-            expect(result).toBeUndefined();
+            expect(result).toStrictEqual({
+                apiKey: 'anthropic-key',
+                baseUrl: 'https://api.anthropic.com',
+                defaultModel: 'claude-3'
+            });
+        });
+
+        it('should return Ollama provider settings', async () => {
+            vi.mocked(optionService.getOption)
+                .mockReturnValueOnce('http://localhost:11434')  // ollamaBaseUrl
+                .mockReturnValueOnce('llama2');  // ollamaDefaultModel
+            
+            const result = await configHelpers.getProviderSettings('ollama');
+            
+            expect(result).toStrictEqual({
+                baseUrl: 'http://localhost:11434',
+                defaultModel: 'llama2'
+            });
+        });
+
+        it('should return empty object for unknown provider', async () => {
+            const result = await configHelpers.getProviderSettings('unknown' as ProviderType);
+            
+            expect(result).toStrictEqual({});
         });
     });
 
     describe('isAIEnabled', () => {
         it('should return true if AI is enabled', async () => {
-            vi.mocked(configurationManager.getAIConfig).mockResolvedValueOnce({
-                enabled: true,
-                selectedProvider: 'openai',
-                defaultModels: {},
-                providerSettings: {}
-            } as any);
+            vi.mocked(optionService.getOptionBool).mockReturnValue(true);
             
             const result = await configHelpers.isAIEnabled();
             
             expect(result).toBe(true);
+            expect(optionService.getOptionBool).toHaveBeenCalledWith('aiEnabled');
         });
 
         it('should return false if AI is disabled', async () => {
-            vi.mocked(configurationManager.getAIConfig).mockResolvedValueOnce({
-                enabled: false,
-                selectedProvider: null,
-                defaultModels: {},
-                providerSettings: {}
-            } as any);
+            vi.mocked(optionService.getOptionBool).mockReturnValue(false);
             
             const result = await configHelpers.isAIEnabled();
             
             expect(result).toBe(false);
+            expect(optionService.getOptionBool).toHaveBeenCalledWith('aiEnabled');
         });
     });
 
     describe('isProviderConfigured', () => {
         it('should return true for configured OpenAI', async () => {
-            vi.mocked(configurationManager.getAIConfig).mockResolvedValueOnce({
-                enabled: true,
-                selectedProvider: 'openai',
-                defaultModels: {},
-                providerSettings: {
-                    openai: {
-                        apiKey: 'test-key'
-                    }
-                }
-            } as any);
+            vi.mocked(optionService.getOption)
+                .mockReturnValueOnce('test-key')  // openaiApiKey
+                .mockReturnValueOnce('')  // openaiBaseUrl
+                .mockReturnValueOnce('');  // openaiDefaultModel
             
             const result = await configHelpers.isProviderConfigured('openai');
             
@@ -211,14 +241,10 @@ describe('configuration_helpers', () => {
         });
 
         it('should return false for unconfigured OpenAI', async () => {
-            vi.mocked(configurationManager.getAIConfig).mockResolvedValueOnce({
-                enabled: true,
-                selectedProvider: 'openai',
-                defaultModels: {},
-                providerSettings: {
-                    openai: {}
-                }
-            } as any);
+            vi.mocked(optionService.getOption)
+                .mockReturnValueOnce('')  // openaiApiKey (empty)
+                .mockReturnValueOnce('')  // openaiBaseUrl
+                .mockReturnValueOnce('');  // openaiDefaultModel
             
             const result = await configHelpers.isProviderConfigured('openai');
             
@@ -226,16 +252,10 @@ describe('configuration_helpers', () => {
         });
 
         it('should return true for configured Anthropic', async () => {
-            vi.mocked(configurationManager.getAIConfig).mockResolvedValueOnce({
-                enabled: true,
-                selectedProvider: 'anthropic',
-                defaultModels: {},
-                providerSettings: {
-                    anthropic: {
-                        apiKey: 'test-key'
-                    }
-                }
-            } as any);
+            vi.mocked(optionService.getOption)
+                .mockReturnValueOnce('anthropic-key')  // anthropicApiKey
+                .mockReturnValueOnce('')  // anthropicBaseUrl
+                .mockReturnValueOnce('');  // anthropicDefaultModel
             
             const result = await configHelpers.isProviderConfigured('anthropic');
             
@@ -243,16 +263,9 @@ describe('configuration_helpers', () => {
         });
 
         it('should return true for configured Ollama', async () => {
-            vi.mocked(configurationManager.getAIConfig).mockResolvedValueOnce({
-                enabled: true,
-                selectedProvider: 'ollama',
-                defaultModels: {},
-                providerSettings: {
-                    ollama: {
-                        baseUrl: 'http://localhost:11434'
-                    }
-                }
-            } as any);
+            vi.mocked(optionService.getOption)
+                .mockReturnValueOnce('http://localhost:11434')  // ollamaBaseUrl
+                .mockReturnValueOnce('');  // ollamaDefaultModel
             
             const result = await configHelpers.isProviderConfigured('ollama');
             
@@ -260,13 +273,6 @@ describe('configuration_helpers', () => {
         });
 
         it('should return false for unknown provider', async () => {
-            vi.mocked(configurationManager.getAIConfig).mockResolvedValueOnce({
-                enabled: true,
-                selectedProvider: null,
-                defaultModels: {},
-                providerSettings: {}
-            } as any);
-            
             const result = await configHelpers.isProviderConfigured('unknown' as ProviderType);
             
             expect(result).toBe(false);
@@ -275,17 +281,11 @@ describe('configuration_helpers', () => {
 
     describe('getAvailableSelectedProvider', () => {
         it('should return selected provider if configured', async () => {
-            vi.mocked(optionService.getOption).mockReturnValueOnce('openai');
-            vi.mocked(configurationManager.getAIConfig).mockResolvedValueOnce({
-                enabled: true,
-                selectedProvider: 'openai',
-                defaultModels: {},
-                providerSettings: {
-                    openai: {
-                        apiKey: 'test-key'
-                    }
-                }
-            } as any);
+            vi.mocked(optionService.getOption)
+                .mockReturnValueOnce('openai')  // aiSelectedProvider
+                .mockReturnValueOnce('test-key')  // openaiApiKey
+                .mockReturnValueOnce('')  // openaiBaseUrl
+                .mockReturnValueOnce('');  // openaiDefaultModel
             
             const result = await configHelpers.getAvailableSelectedProvider();
             
@@ -301,15 +301,11 @@ describe('configuration_helpers', () => {
         });
 
         it('should return null if selected provider not configured', async () => {
-            vi.mocked(optionService.getOption).mockReturnValueOnce('openai');
-            vi.mocked(configurationManager.getAIConfig).mockResolvedValueOnce({
-                enabled: true,
-                selectedProvider: 'openai',
-                defaultModels: {},
-                providerSettings: {
-                    openai: {} // No API key
-                }
-            } as any);
+            vi.mocked(optionService.getOption)
+                .mockReturnValueOnce('openai')  // aiSelectedProvider
+                .mockReturnValueOnce('')  // openaiApiKey (empty)
+                .mockReturnValueOnce('')  // openaiBaseUrl
+                .mockReturnValueOnce('');  // openaiDefaultModel
             
             const result = await configHelpers.getAvailableSelectedProvider();
             
@@ -318,18 +314,64 @@ describe('configuration_helpers', () => {
     });
 
     describe('validateConfiguration', () => {
-        it('should delegate to configuration manager', async () => {
-            const mockValidation = {
-                isValid: true,
-                errors: [],
-                warnings: []
-            };
-            vi.mocked(configurationManager.validateConfig).mockResolvedValueOnce(mockValidation);
+        it('should validate AI configuration directly', async () => {
+            // Mock AI enabled = true, with selected provider and configured settings
+            vi.mocked(optionService.getOptionBool).mockReturnValue(true);
+            vi.mocked(optionService.getOption)
+                .mockReturnValueOnce('openai')  // aiSelectedProvider
+                .mockReturnValueOnce('test-key')  // openaiApiKey
+                .mockReturnValueOnce('')  // openaiBaseUrl
+                .mockReturnValueOnce('gpt-4');  // openaiDefaultModel
             
             const result = await configHelpers.validateConfiguration();
             
-            expect(result).toBe(mockValidation);
-            expect(configurationManager.validateConfig).toHaveBeenCalled();
+            expect(result).toStrictEqual({
+                isValid: true,
+                errors: [],
+                warnings: []
+            });
+        });
+
+        it('should return warning when AI is disabled', async () => {
+            vi.mocked(optionService.getOptionBool).mockReturnValue(false);
+            
+            const result = await configHelpers.validateConfiguration();
+            
+            expect(result).toStrictEqual({
+                isValid: true,
+                errors: [],
+                warnings: ['AI features are disabled']
+            });
+        });
+
+        it('should return error when no provider selected', async () => {
+            vi.mocked(optionService.getOptionBool).mockReturnValue(true);
+            vi.mocked(optionService.getOption).mockReturnValue('');  // no aiSelectedProvider
+            
+            const result = await configHelpers.validateConfiguration();
+            
+            expect(result).toStrictEqual({
+                isValid: false,
+                errors: ['No AI provider selected'],
+                warnings: []
+            });
+        });
+
+        it('should return warning when provider not configured', async () => {
+            vi.mocked(optionService.getOptionBool).mockReturnValue(true);
+            vi.mocked(optionService.getOption)
+                .mockReturnValueOnce('openai')  // aiSelectedProvider
+                .mockReturnValueOnce('')  // openaiApiKey (empty)
+                .mockReturnValueOnce('')  // openaiBaseUrl
+                .mockReturnValueOnce('');  // openaiDefaultModel
+            
+            const result = await configHelpers.validateConfiguration();
+            
+            expect(result).toStrictEqual({
+                isValid: true,
+                errors: [],
+                warnings: ['OpenAI API key is not configured']
+            });
         });
     });
 
