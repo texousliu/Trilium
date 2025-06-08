@@ -30,42 +30,55 @@ export default class MoveBlockUpDownPlugin extends Plugin {
 
 abstract class MoveBlockUpDownCommand extends Command {
 
-	abstract getSelectedBlocks(selection: DocumentSelection): Element[];
 	abstract getSibling(selectedBlock: Element): Node | null;
     abstract get offset(): "before" | "after";
-
-    override refresh() {
-		const selection = this.editor.model.document.selection;
-		const selectedBlocks = this.getSelectedBlocks(selection);
-
-		this.isEnabled = true;
-		for (const selectedBlock of selectedBlocks) {
-			if (!this.getSibling(selectedBlock)) this.isEnabled = false;
-		}
-	}
 
 	override execute() {
 		const model = this.editor.model;
 		const selection = model.document.selection;
 		const selectedBlocks = this.getSelectedBlocks(selection);
+		const isEnabled = selectedBlocks.length > 0
+			&& selectedBlocks.every(block => !!this.getSibling(block));
+
+		if (!isEnabled) {
+			return;
+		}
+		
+		const movingBlocks = this.offset === 'before'
+            ? selectedBlocks
+            : [...selectedBlocks].reverse();
+
+        // Store selection offsets
+		const offsets = [
+			model.document.selection.getFirstPosition()?.offset,
+			model.document.selection.getLastPosition()?.offset
+		];
 
 		model.change((writer) => {
-			for (const selectedBlock of selectedBlocks) {
-				const sibling = this.getSibling(selectedBlock);
+			// Move blocks
+			for (const block of movingBlocks) {
+				const sibling = this.getSibling(block);
 				if (sibling) {
-					const range = model.createRangeOn(selectedBlock);
+					const range = model.createRangeOn(block);
 					writer.move(range, sibling, this.offset);
 				}
 			}
-		});
-	}
-}
 
-class MoveBlockUpCommand extends MoveBlockUpDownCommand {
-
+			// Restore selection to all items if many have been moved
+			const range = writer.createRange(
+				writer.createPositionAt(selectedBlocks[0], offsets[0]),
+				writer.createPositionAt(
+					selectedBlocks[selectedBlocks.length - 1], offsets[1]));
+			writer.setSelection(range);
+        });
+    }
+	
     getSelectedBlocks(selection: DocumentSelection) {
         return [...selection.getSelectedBlocks()];
     }
+}
+
+class MoveBlockUpCommand extends MoveBlockUpDownCommand {
 
     getSibling(selectedBlock: Element) {
         return selectedBlock.previousSibling;
@@ -78,11 +91,6 @@ class MoveBlockUpCommand extends MoveBlockUpDownCommand {
 }
 
 class MoveBlockDownCommand extends MoveBlockUpDownCommand {
-
-	/** @override */
-	getSelectedBlocks(selection: DocumentSelection) {
-		return [...selection.getSelectedBlocks()].reverse();
-	}
 
 	/** @override */
 	getSibling(selectedBlock: Element) {
