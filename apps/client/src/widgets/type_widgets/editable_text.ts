@@ -336,6 +336,11 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     }
 
     getData() {
+        if (!this.watchdog.editor) {
+            // There is nothing to save, most likely a result of the editor crashing and reinitializing.
+            return;
+        }
+
         const content = this.watchdog.editor?.getData() ?? "";
 
         // if content is only tags/whitespace (typically <p>&nbsp;</p>), then just make it empty,
