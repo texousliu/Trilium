@@ -1,5 +1,5 @@
 {
-  "name": "trilium.rocks",
+  "name": "@triliumnext/share-theme",
   "version": "1.0.3",
   "description": "",
   "main": "index.js",
@@ -11,6 +11,9 @@
     "templates": "esrun scripts/build.ts -- --only-templates",
     "dist": "esrun scripts/build.ts -- --minify",
     "test": "esrun src/scripts/test.ts"
+  },
+  "exports": {
+    "./*": "./src/*"
   },
   "author": "",
   "license": "ISC",

@@ -17,6 +17,8 @@ import type SAttachment from "./shaca/entities/sattachment.js";
 import utils, { isDev, safeExtractMessageAndStackFromError } from "../services/utils.js";
 import options from "../services/options.js";
 import { t } from "i18next";
+import shareThemeRoot from "@triliumnext/share-theme/templates/page.ejs";
+import ejs from "ejs";
 
 function getSharedSubTreeRoot(note: SNote): { note?: SNote; branch?: SBranch } {
     if (note.noteId === shareRoot.SHARE_ROOT_NOTE_ID) {
@@ -136,7 +138,7 @@ function renderImageAttachment(image: SNote, res: Response, attachmentName: stri
 }
 
 function register(router: Router) {
-    async function renderNote(note: SNote, req: Request, res: Response) {
+    function renderNote(note: SNote, req: Request, res: Response) {
         if (!note) {
             console.log("Unable to find note ", note);
             res.status(404).render("share/404");
@@ -197,7 +199,6 @@ function register(router: Router) {
                 try {
                     const content = templateNote.getContent();
                     if (typeof content === "string") {
-                        const ejs = await import("ejs");
                         const ejsResult = ejs.render(content, opts, { includer });
                         res.send(ejsResult);
                         useDefaultView = false; // Rendering went okay, don't use default view
@@ -210,7 +211,14 @@ function register(router: Router) {
         }
 
         if (useDefaultView) {
-            res.render("share/page", opts);
+            console.log("Got share theme path", shareThemeRoot);
+            const ejsResult = ejs.render(shareThemeRoot, opts, {
+                includer(originalPath, parsedPath: string) {
+                    console.log("Path ", originalPath, parsedPath);
+                    throw new Error("Hi");
+                }
+            })
+            res.send(ejsResult);
         }
     }
 

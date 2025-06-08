@@ -236,7 +236,8 @@
           ],
           "esbuildOptions": {
             "loader": {
-              ".css": "text"
+              ".css": "text",
+              ".ejs": "text"
             }
           },
           "declarationRootDir": "apps/server/src"
@@ -285,7 +286,8 @@
           "esbuildOptions": {
             "splitting": false,
             "loader": {
-              ".css": "text"
+              ".css": "text",
+              ".ejs": "text"
             }
           },
           "additionalEntryPoints": [
