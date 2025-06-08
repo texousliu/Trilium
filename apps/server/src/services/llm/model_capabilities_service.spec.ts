@@ -119,13 +119,13 @@ describe('ModelCapabilitiesService', () => {
             const result = await service.getChatModelCapabilities('unknown-model');
 
             expect(result).toEqual({
-                contextWindow: 4096,
-                supportedMessageTypes: ['text'],
-                supportsTools: false,
-                supportsStreaming: true,
-                maxOutputTokens: 2048,
-                temperature: { min: 0, max: 2, default: 0.7 },
-                topP: { min: 0, max: 1, default: 0.9 }
+                contextWindowTokens: 8192,
+                contextWindowChars: 16000,
+                maxCompletionTokens: 1024,
+                hasFunctionCalling: false,
+                hasVision: false,
+                costPerInputToken: 0,
+                costPerOutputToken: 0
             });
 
             expect(mockLog.info).toHaveBeenCalledWith('AI service doesn\'t support model capabilities - using defaults for model: unknown-model');
@@ -135,13 +135,13 @@ describe('ModelCapabilitiesService', () => {
             const result = await service.getChatModelCapabilities('gpt-3.5-turbo');
 
             expect(result).toEqual({
-                contextWindow: 4096,
-                supportedMessageTypes: ['text'],
-                supportsTools: true,
-                supportsStreaming: true,
-                maxOutputTokens: 2048,
-                temperature: { min: 0, max: 2, default: 0.7 },
-                topP: { min: 0, max: 1, default: 0.9 }
+                contextWindowTokens: 8192,
+                contextWindowChars: 16000,
+                maxCompletionTokens: 1024,
+                hasFunctionCalling: true,
+                hasVision: false,
+                costPerInputToken: 0,
+                costPerOutputToken: 0
             });
         });
 
@@ -220,13 +220,13 @@ describe('ModelCapabilitiesService', () => {
             const result = await fetchMethod('claude-3-opus');
 
             expect(result).toEqual({
-                contextWindow: 200000,
-                supportedMessageTypes: ['text'],
-                supportsTools: true,
-                supportsStreaming: true,
-                maxOutputTokens: 4096,
-                temperature: { min: 0, max: 2, default: 0.7 },
-                topP: { min: 0, max: 1, default: 0.9 }
+                contextWindowTokens: 200000,
+                contextWindowChars: 800000,
+                maxCompletionTokens: 1024,
+                hasFunctionCalling: false,
+                hasVision: true,
+                costPerInputToken: 0,
+                costPerOutputToken: 0
             });
 
             expect(mockLog.info).toHaveBeenCalledWith('Using static capabilities for chat model: claude-3-opus');
@@ -237,13 +237,13 @@ describe('ModelCapabilitiesService', () => {
             const result = await fetchMethod('unknown-model');
 
             expect(result).toEqual({
-                contextWindow: 4096,
-                supportedMessageTypes: ['text'],
-                supportsTools: false,
-                supportsStreaming: true,
-                maxOutputTokens: 2048,
-                temperature: { min: 0, max: 2, default: 0.7 },
-                topP: { min: 0, max: 1, default: 0.9 }
+                contextWindowTokens: 8192,
+                contextWindowChars: 16000,
+                maxCompletionTokens: 1024,
+                hasFunctionCalling: false,
+                hasVision: false,
+                costPerInputToken: 0,
+                costPerOutputToken: 0
             });
 
             expect(mockLog.info).toHaveBeenCalledWith('AI service doesn\'t support model capabilities - using defaults for model: unknown-model');
@@ -260,13 +260,13 @@ describe('ModelCapabilitiesService', () => {
             const result = await fetchMethod('test-model');
 
             expect(result).toEqual({
-                contextWindow: 4096,
-                supportedMessageTypes: ['text'],
-                supportsTools: false,
-                supportsStreaming: true,
-                maxOutputTokens: 2048,
-                temperature: { min: 0, max: 2, default: 0.7 },
-                topP: { min: 0, max: 1, default: 0.9 }
+                contextWindowTokens: 8192,
+                contextWindowChars: 16000,
+                maxCompletionTokens: 1024,
+                hasFunctionCalling: false,
+                hasVision: false,
+                costPerInputToken: 0,
+                costPerOutputToken: 0
             });
         });
     });
