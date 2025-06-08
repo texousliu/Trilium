@@ -56,6 +56,9 @@ const customServerYml = `- url: "{protocol}://{domain}:{port}/etapi"
     <% if (note.hasLabel("shareDisallowRobotIndexing")) { %>
         <meta name="robots" content="noindex,follow" />
     <% } %>
+    <style>
+        <%= shareThemeCss %>
+    </style>
     
     <%
         const pageTitle = `${note.title}${note.noteId !== subRoot.note.noteId ? ` - ${subRoot.note.title}` : ""}`;

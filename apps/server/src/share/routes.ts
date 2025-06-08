@@ -18,6 +18,7 @@ import utils, { isDev, safeExtractMessageAndStackFromError } from "../services/u
 import options from "../services/options.js";
 import { t } from "i18next";
 import shareThemeRoot from "@triliumnext/share-theme/templates/page.ejs";
+import shareThemeCss from "@triliumnext/share-theme/styles.css";
 import ejs from "ejs";
 
 function getSharedSubTreeRoot(note: SNote): { note?: SNote; branch?: SBranch } {
@@ -212,7 +213,10 @@ function register(router: Router) {
 
         if (useDefaultView) {
             console.log("Got share theme path", shareThemeRoot);
-            const ejsResult = ejs.render(shareThemeRoot, opts, {
+            const ejsResult = ejs.render(shareThemeRoot, {
+                shareThemeCss,
+                ...opts
+            }, {
                 includer(originalPath, parsedPath: string) {
                     console.log("Path ", originalPath, parsedPath);
                     throw new Error("Hi");

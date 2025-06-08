@@ -33,3 +33,8 @@ declare module "@triliumnext/share-theme/*.ejs" {
     const content: string;
     export default content;
 }
+
+declare module "@triliumnext/share-theme/styles.css" {
+    const content: string;
+    export default content;
+}

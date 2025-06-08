@@ -13,7 +13,8 @@
     "test": "esrun src/scripts/test.ts"
   },
   "exports": {
-    "./*": "./src/*"
+    "./templates/*": "./src/templates/*",
+    "./*": "./dist/*"
   },
   "author": "",
   "license": "ISC",
