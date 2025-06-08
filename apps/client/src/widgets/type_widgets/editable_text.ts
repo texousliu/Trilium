@@ -166,7 +166,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             // is shorter than minimumNonErrorTimePeriod, the watchdog changes
             // its state to crashedPermanently, and it stops restarting the editor.
             // This prevents an infinite restart loop.
-            crashNumberLimit: 3,
+            crashNumberLimit: 10,
             // A minimum number of milliseconds between saving the editor data internally (defaults to 5000).
             // Note that for large documents, this might impact the editor performance.
             saveInterval: 5000
@@ -190,7 +190,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             }
         });
 
-        this.watchdog.setCreator(async (elementOrData, editorConfig) => {
+        this.watchdog.setCreator(async (_, editorConfig) => {
             logInfo("Creating new CKEditor");
 
             const finalConfig = {
@@ -220,7 +220,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             }
 
             //@ts-ignore
-            const editor = await editorClass.create(elementOrData, finalConfig);
+            const editor = await editorClass.create(this.$editor[0], finalConfig);
 
             const notificationsPlugin = editor.plugins.get("Notification");
             notificationsPlugin.on("show:warning", (evt, data) => {
