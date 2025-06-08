@@ -181,8 +181,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 return;
             }
 
-            logInfo(`CKEditor crash logs: ${JSON.stringify(this.watchdog.crashes)}`);
-            this.watchdog.crashes.forEach((crashInfo) => console.log(crashInfo));
+            logError(`CKEditor crash logs: ${JSON.stringify(this.watchdog.crashes, null, 4)}`);
 
             if (currentState === "crashedPermanently") {
                 dialogService.info(`Editing component keeps crashing. Please try restarting Trilium. If problem persists, consider creating a bug report.`);
@@ -375,7 +374,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         }
     }
 
-    insertDateTimeToTextCommand() { 
+    insertDateTimeToTextCommand() {
         const date = new Date();
         const customDateTimeFormat = options.get("customDateTimeFormat");
         const dateString = utils.formatDateTime(date, customDateTimeFormat);
