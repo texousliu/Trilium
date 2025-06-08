@@ -5,6 +5,7 @@ import UploadimagePlugin from "./plugins/uploadimage.js";
 import ItalicAsEmPlugin from "./plugins/italic_as_em.js";
 import StrikethroughAsDel from "./plugins/strikethrough_as_del.js";
 import InternalLinkPlugin from "./plugins/internallink.js";
+import InsertDateTimePlugin from "./plugins/insert_date_time.js";
 import ReferenceLink from "./plugins/referencelink.js";
 import RemoveFormatLinksPlugin from "./plugins/remove_format_links.js";
 import IndentBlockShortcutPlugin from "./plugins/indent_block_shortcut.js";
@@ -23,6 +24,10 @@ import "@triliumnext/ckeditor5-mermaid/index.css";
 import "@triliumnext/ckeditor5-admonition/index.css";
 import "@triliumnext/ckeditor5-footnotes/index.css";
 import "@triliumnext/ckeditor5-math/index.css";
+import CodeBlockToolbar from "./plugins/code_block_toolbar.js";
+import CodeBlockLanguageDropdown from "./plugins/code_block_language_dropdown.js";
+import MoveBlockUpDownPlugin from "./plugins/move_block_updown.js";
+import ScrollOnUndoRedoPlugin from "./plugins/scroll_on_undo_redo.js"
 
 /**
  * Plugins that are specific to Trilium and not part of the CKEditor 5 core, included in both text editors but not in the attribute editor.
@@ -33,12 +38,17 @@ const TRILIUM_PLUGINS: typeof Plugin[] = [
     ItalicAsEmPlugin,
 	StrikethroughAsDel,
     InternalLinkPlugin,
+	InsertDateTimePlugin,
     RemoveFormatLinksPlugin,
     IndentBlockShortcutPlugin,
     MarkdownImportPlugin,
     IncludeNote,
     Uploadfileplugin,
-    SyntaxHighlighting
+    SyntaxHighlighting,
+    CodeBlockLanguageDropdown,
+    CodeBlockToolbar,
+    MoveBlockUpDownPlugin,
+	ScrollOnUndoRedoPlugin
 ];
 
 /**

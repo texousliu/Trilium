@@ -131,6 +131,7 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
     constructor() {
         super();
         this.editorTypeWidget = new EditableCodeTypeWidget();
+        this.editorTypeWidget.updateBackgroundColor = () => {};
         this.editorTypeWidget.isEnabled = () => true;
 
         const defaultOptions = this.editorTypeWidget.getExtraOpts();
@@ -174,6 +175,7 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 
     cleanup(): void {
         this.#destroyResizer();
+        this.editorTypeWidget.cleanup();
     }
 
     async doRefresh(note: FNote) {

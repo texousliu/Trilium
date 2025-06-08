@@ -1519,7 +1519,10 @@
     "color-scheme": "顏色方案"
   },
   "code_block": {
-    "word_wrapping": "自動換行"
+    "word_wrapping": "自動換行",
+    "theme_none": "無格式高亮",
+    "theme_group_light": "淺色主題",
+    "theme_group_dark": "深色主題"
   },
   "classic_editor_toolbar": {
     "title": "格式化"

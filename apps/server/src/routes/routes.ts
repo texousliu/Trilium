@@ -52,8 +52,8 @@ import fontsRoute from "./api/fonts.js";
 import etapiTokensApiRoutes from "./api/etapi_tokens.js";
 import relationMapApiRoute from "./api/relation-map.js";
 import otherRoute from "./api/other.js";
+import metricsRoute from "./api/metrics.js";
 import shareRoutes from "../share/routes.js";
-import embeddingsRoute from "./api/embeddings.js";
 import ollamaRoute from "./api/ollama.js";
 import openaiRoute from "./api/openai.js";
 import anthropicRoute from "./api/anthropic.js";
@@ -68,6 +68,7 @@ import etapiNoteRoutes from "../etapi/notes.js";
 import etapiSpecialNoteRoutes from "../etapi/special_notes.js";
 import etapiSpecRoute from "../etapi/spec.js";
 import etapiBackupRoute from "../etapi/backup.js";
+import etapiMetricsRoute from "../etapi/metrics.js";
 import apiDocsRoute from "./api_docs.js";
 import { apiResultHandler, apiRoute, asyncApiRoute, asyncRoute, route, router, uploadMiddlewareWithErrorHandling } from "./route_api.js";
 
@@ -214,10 +215,9 @@ function register(app: express.Application) {
 
     apiRoute(GET, "/api/options", optionsApiRoute.getOptions);
     // FIXME: possibly change to sending value in the body to avoid host of HTTP server issues with slashes
-    apiRoute(PUT, "/api/options/:name/:value*", optionsApiRoute.updateOption);
+    apiRoute(PUT, "/api/options/:name/:value", optionsApiRoute.updateOption);
     apiRoute(PUT, "/api/options", optionsApiRoute.updateOptions);
     apiRoute(GET, "/api/options/user-themes", optionsApiRoute.getUserThemes);
-    apiRoute(GET, "/api/options/codeblock-themes", optionsApiRoute.getSyntaxHighlightingThemes);
     apiRoute(GET, "/api/options/locales", optionsApiRoute.getSupportedLocales);
 
     apiRoute(PST, "/api/password/change", passwordApiRoute.changePassword);
@@ -237,6 +237,7 @@ function register(app: express.Application) {
 
     apiRoute(PST, "/api/recent-notes", recentNotesRoute.addRecentNote);
     apiRoute(GET, "/api/app-info", appInfoRoute.getAppInfo);
+    apiRoute(GET, "/api/metrics", metricsRoute.getMetrics);
 
     // docker health check
     route(GET, "/api/health-check", [], () => ({ status: "ok" }), apiResultHandler);
@@ -364,6 +365,7 @@ function register(app: express.Application) {
     etapiSpecialNoteRoutes.register(router);
     etapiSpecRoute.register(router);
     etapiBackupRoute.register(router);
+    etapiMetricsRoute.register(router);
 
     // LLM Chat API
     asyncApiRoute(PST, "/api/llm/chat", llmRoute.createSession);
@@ -374,29 +376,7 @@ function register(app: express.Application) {
     asyncApiRoute(PST, "/api/llm/chat/:chatNoteId/messages", llmRoute.sendMessage);
     asyncApiRoute(PST, "/api/llm/chat/:chatNoteId/messages/stream", llmRoute.streamMessage);
 
-    // LLM index management endpoints - reorganized for REST principles
-    asyncApiRoute(GET, "/api/llm/indexes/stats", llmRoute.getIndexStats);
-    asyncApiRoute(PST, "/api/llm/indexes", llmRoute.startIndexing); // Create index process
-    asyncApiRoute(GET, "/api/llm/indexes/failed", llmRoute.getFailedIndexes);
-    asyncApiRoute(PUT, "/api/llm/indexes/notes/:noteId", llmRoute.retryFailedIndex); // Update index for note
-    asyncApiRoute(PUT, "/api/llm/indexes/failed", llmRoute.retryAllFailedIndexes); // Update all failed indexes
-    asyncApiRoute(GET, "/api/llm/indexes/notes/similar", llmRoute.findSimilarNotes); // Get similar notes
-    asyncApiRoute(GET, "/api/llm/indexes/context", llmRoute.generateQueryContext); // Get context
-    asyncApiRoute(PST, "/api/llm/indexes/notes/:noteId", llmRoute.indexNote); // Create index for specific note
 
-    // LLM embeddings endpoints
-    asyncApiRoute(GET, "/api/llm/embeddings/similar/:noteId", embeddingsRoute.findSimilarNotes);
-    asyncApiRoute(PST, "/api/llm/embeddings/search", embeddingsRoute.searchByText);
-    asyncApiRoute(GET, "/api/llm/embeddings/providers", embeddingsRoute.getProviders);
-    asyncApiRoute(PATCH, "/api/llm/embeddings/providers/:providerId", embeddingsRoute.updateProvider);
-    asyncApiRoute(PST, "/api/llm/embeddings/reprocess", embeddingsRoute.reprocessAllNotes);
-    asyncApiRoute(GET, "/api/llm/embeddings/queue-status", embeddingsRoute.getQueueStatus);
-    asyncApiRoute(GET, "/api/llm/embeddings/stats", embeddingsRoute.getEmbeddingStats);
-    asyncApiRoute(GET, "/api/llm/embeddings/failed", embeddingsRoute.getFailedNotes);
-    asyncApiRoute(PST, "/api/llm/embeddings/retry/:noteId", embeddingsRoute.retryFailedNote);
-    asyncApiRoute(PST, "/api/llm/embeddings/retry-all-failed", embeddingsRoute.retryAllFailedNotes);
-    asyncApiRoute(PST, "/api/llm/embeddings/rebuild-index", embeddingsRoute.rebuildIndex);
-    asyncApiRoute(GET, "/api/llm/embeddings/index-rebuild-status", embeddingsRoute.getIndexRebuildStatus);
 
     // LLM provider endpoints - moved under /api/llm/providers hierarchy
     asyncApiRoute(GET, "/api/llm/providers/ollama/models", ollamaRoute.listModels);

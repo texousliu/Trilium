@@ -188,7 +188,7 @@ export default class FindWidget extends NoteContextAwareWidget {
             return;
         }
 
-        if (!["text", "code", "render"].includes(this.note?.type ?? "")) {
+        if (!["text", "code", "render", "mindMap"].includes(this.note?.type ?? "")) {
             return;
         }
 
@@ -248,10 +248,12 @@ export default class FindWidget extends NoteContextAwareWidget {
             case "code":
                 return this.codeHandler;
             case "text":
-                return this.textHandler;
-            default:
                 const readOnly = await this.noteContext?.isReadOnly();
                 return readOnly ? this.htmlHandler : this.textHandler;
+            case "mindMap":
+                return this.htmlHandler;
+            default:
+                console.warn("FindWidget: Unsupported note type for find widget", this.note?.type);
         }
     }
 
@@ -352,7 +354,7 @@ export default class FindWidget extends NoteContextAwareWidget {
     }
 
     isEnabled() {
-        return super.isEnabled() && ["text", "code", "render"].includes(this.note?.type ?? "");
+        return super.isEnabled() && ["text", "code", "render", "mindMap"].includes(this.note?.type ?? "");
     }
 
     async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {

@@ -80,7 +80,7 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
 
     show() {
         this.$widget.show();
-        this.#updateBackgroundColor();
+        this.updateBackgroundColor();
     }
 
     focus() {
@@ -98,7 +98,7 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
                 this.codeEditor.setText("");
             });
         }
-        this.#updateBackgroundColor("unset");
+        this.updateBackgroundColor("unset");
     }
 
     async executeWithCodeEditorEvent({ resolve, ntxId }: EventData<"executeWithCodeEditor">) {
@@ -119,7 +119,7 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
                 if (theme) {
                     await this.codeEditor.setTheme(theme);
                 }
-                this.#updateBackgroundColor();
+                this.updateBackgroundColor();
             }
         }
 
@@ -128,7 +128,12 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
         }
     }
 
-    #updateBackgroundColor(color?: string) {
+    updateBackgroundColor(color?: string) {
+        if (this.note?.mime === "text/x-sqlite;schema=trilium") {
+            // Don't apply a background color for SQL console notes.
+            return;
+        }
+
         const $editorEl = $(this.codeEditor.dom);
         this.$widget.closest(".scrolling-container").css("background-color", color ?? $editorEl.css("background-color"));
     }
