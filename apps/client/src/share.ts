@@ -14,9 +14,19 @@ async function ensureJQuery() {
     (window as any).$ = $;
 }
 
+async function applyMath() {
+    const anyMathBlock = document.querySelector("#content .math-tex");
+    if (!anyMathBlock) {
+        return;
+    }
+
+    const renderMathInElement = (await import("./services/math.js")).renderMathInElement;
+    renderMathInElement(document.getElementById("content"));
+}
+
 async function formatCodeBlocks() {
-    const codeBlocks = document.querySelectorAll("#content pre");
-    if (codeBlocks.length === 0) {
+    const anyCodeBlock = document.querySelector("#content pre");
+    if (!anyCodeBlock) {
         return;
     }
     await ensureJQuery();
@@ -44,6 +54,7 @@ document.addEventListener(
     () => {
         formatCodeBlocks();
         loadIcons();
+        applyMath();
 
         const toggleMenuButton = document.getElementById("toggleMenuButton");
         const layout = document.getElementById("layout");
