@@ -97,6 +97,9 @@ export function buildConfig(): EditorConfig {
                 reversed: true
             }
         },
+        alignment: {
+            options: [ "left", "right", "center", "justify"]
+        },
         link: {
             defaultProtocol: "https://",
             allowedProtocols: ALLOWED_PROTOCOLS
@@ -194,6 +197,7 @@ export function buildClassicToolbar(multilineToolbar: boolean) {
                     items: ["imageUpload", "|", "link", "bookmark", "internallink", "includeNote", "|", "specialCharacters", "emoji", "math", "mermaid", "horizontalLine", "pageBreak", "dateTime"]
                 },
                 "|",
+                "alignment",
                 "outdent",
                 "indent",
                 "|",
@@ -249,6 +253,7 @@ export function buildFloatingToolbar() {
                 items: ["bookmark", "internallink", "includeNote", "|", "math", "mermaid", "horizontalLine", "pageBreak", "dateTime"]
             },
             "|",
+            "alignment",
             "outdent",
             "indent",
             "|",
