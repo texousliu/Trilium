@@ -1,8 +1,13 @@
 import "normalize.css";
 import "@triliumnext/ckeditor5/content.css";
-import "boxicons/css/boxicons.min.css";
 import "@triliumnext/share-theme/styles/index.css";
 import "@triliumnext/share-theme/scripts/index.js";
+
+async function loadIcons() {
+    if (document.getElementById("menu")) {
+        await import("boxicons/css/boxicons.min.css");
+    }
+}
 
 async function ensureJQuery() {
     const $ = (await import("jquery")).default;
@@ -38,6 +43,7 @@ document.addEventListener(
     "DOMContentLoaded",
     () => {
         formatCodeBlocks();
+        loadIcons();
 
         const toggleMenuButton = document.getElementById("toggleMenuButton");
         const layout = document.getElementById("layout");
