@@ -12,7 +12,11 @@
     <% } else { %>
     <link rel="shortcut icon" href="../favicon.ico">
     <% } %>
-    <link href="assets/styles.css" rel="stylesheet">
+    <script src="<%= appPath %>/share.js" type="module"></script>
+    <link href="<%= assetPath %>/src/share.css" rel="stylesheet">
+    <% if (!note.isLabelTruthy("shareOmitDefaultCss")) { %>
+        <link href="<%= assetPath %>/stylesheets/share.css" rel="stylesheet">
+    <% } %>
     <% for (const cssRelation of note.getRelations("shareCss")) { %>
         <link href="api/notes/<%= cssRelation.value %>/download" rel="stylesheet">
     <% } %>

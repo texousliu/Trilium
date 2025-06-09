@@ -25,6 +25,7 @@
     "@triliumnext/codemirror": "workspace:*",
     "@triliumnext/commons": "workspace:*",
     "@triliumnext/highlightjs": "workspace:*",
+    "@triliumnext/share-theme": "workspace:*",
     "autocomplete.js": "0.38.1",
     "bootstrap": "5.3.6",
     "boxicons": "2.1.4",

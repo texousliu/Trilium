@@ -12,6 +12,7 @@
   },
   "exports": {
     "./templates/*": "./src/templates/*",
+    "./styles/*": "./src/styles/*",
     "./*": "./dist/*"
   },
   "author": "",
