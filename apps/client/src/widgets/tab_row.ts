@@ -392,6 +392,7 @@ export default class TabRowWidget extends BasicWidget {
                 return;
             }
             event.preventDefault();
+            event.stopImmediatePropagation();
             event.currentTarget.scrollLeft += wheelEvent.deltaY + wheelEvent.deltaX;
         });
 
