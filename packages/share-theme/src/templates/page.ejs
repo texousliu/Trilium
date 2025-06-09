@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="shortcut icon" href="<% if (note.hasRelation("shareFavicon")) { %>api/notes/<%= note.getRelation("shareFavicon").value %>/download<% } else { %>../favicon.ico<% } %>">
-    <script src="../<%= appPath %>/share.js"></script>
+    <script src="<%= appPath %>/share.js" type="module"></script>
     <link href="../<%= assetPath %>/libraries/normalize.min.css" rel="stylesheet">
 
     <% if (note.hasLabel("shareSwagger")) { %>
