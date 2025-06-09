@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import ejsPlugin from "@digitalmaas/esbuild-plugin-ejs";
+import ejsPlugin from "./esbuild-ejs-plugin.js";
 // import {fileURLToPath} from "node:url";
 
 import dotenv from "dotenv";
