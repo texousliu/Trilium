@@ -198,6 +198,9 @@ importers:
       '@triliumnext/highlightjs':
         specifier: workspace:*
         version: link:../../packages/highlightjs
+      '@triliumnext/share-theme':
+        specifier: workspace:*
+        version: link:../../packages/share-theme
       autocomplete.js:
         specifier: 0.38.1
         version: 0.38.1
@@ -1279,9 +1282,6 @@ importers:
       '@digitak/esrun':
         specifier: ^3.2.24
         version: 3.2.26
-      '@digitalmaas/esbuild-plugin-ejs':
-        specifier: 1.0.0
-        version: 1.0.0(esbuild@0.25.5)
       '@types/swagger-ui':
         specifier: ^3.52.0
         version: 3.52.4
@@ -2325,12 +2325,6 @@ packages:
 
   '@digitak/grubber@3.1.4':
     resolution: {integrity: sha512-pqsnp2BUYlDoTXWG34HWgEJse/Eo1okRgNex8IG84wHrJp8h3SakeR5WhB4VxSA2+/D+frNYJ0ch3yXzsfNDoA==}
-
-  '@digitalmaas/esbuild-plugin-ejs@1.0.0':
-    resolution: {integrity: sha512-R6FHotduWyXExphqMJuv0CK42ZCt5Z+gZATFOXvL/lVHLyRVRdTlZqvKyP6DRCQVGz9ecYpk++AWhRzkNODKwQ==}
-    engines: {node: '>=14'}
-    peerDependencies:
-      esbuild: '>=0.25.0'
 
   '@dual-bundle/import-meta-resolve@4.1.0':
     resolution: {integrity: sha512-+nxncfwHM5SgAtrVzgpzJOI1ol0PkumhVo469KCf9lUi21IGcY90G98VuHm9VRrUypmAzawAHO9bs6hqeADaVg==}
@@ -14967,11 +14961,6 @@ snapshots:
       esbuild: 0.25.5
 
   '@digitak/grubber@3.1.4': {}
-
-  '@digitalmaas/esbuild-plugin-ejs@1.0.0(esbuild@0.25.5)':
-    dependencies:
-      ejs: 3.1.10
-      esbuild: 0.25.5
 
   '@dual-bundle/import-meta-resolve@4.1.0': {}
 

@@ -106,19 +106,6 @@ content = content.replaceAll(headingRe, (...match) => {
 });
 %>
 <body data-note-id="<%= note.noteId %>" class="type-<%= note.type %><%= themeClass %>" data-ancestor-note-id="<%= subRoot.note.noteId %>">
-    <script>
-    const preference = localStorage.getItem("theme");
-    if (preference) {
-        if (preference === "dark") {
-            document.body.classList.add("theme-dark");
-            document.body.classList.remove("theme-light");
-        }
-        else {
-            document.body.classList.remove("theme-dark");
-            document.body.classList.add("theme-light");
-        }
-    }
-    </script>
 <div id="mobile-header">
     <a href="<%= shareRootLink %>">
             <img src="<%= logoUrl %>" width="32" height="<%= mobileLogoHeight %>" alt="Logo" />
