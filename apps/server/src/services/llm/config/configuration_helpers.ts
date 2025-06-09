@@ -1,4 +1,3 @@
-import configurationManager from './configuration_manager.js';
 import optionService from '../../options.js';
 import log from '../../log.js';
 import type {
@@ -13,7 +12,7 @@ import type {
  */
 
 /**
- * Get the selected AI provider
+ * Get the selected AI provider - always fresh from options
  */
 export async function getSelectedProvider(): Promise<ProviderType | null> {
     const providerOption = optionService.getOption('aiSelectedProvider');
@@ -25,38 +24,100 @@ export async function getSelectedProvider(): Promise<ProviderType | null> {
  * Parse a model identifier (handles "provider:model" format)
  */
 export function parseModelIdentifier(modelString: string): ModelIdentifier {
-    return configurationManager.parseModelIdentifier(modelString);
+    if (!modelString) {
+        return {
+            modelId: '',
+            fullIdentifier: ''
+        };
+    }
+
+    const parts = modelString.split(':');
+
+    if (parts.length === 1) {
+        // No provider prefix, just model name
+        return {
+            modelId: modelString,
+            fullIdentifier: modelString
+        };
+    }
+
+    // Check if first part is a known provider
+    const potentialProvider = parts[0].toLowerCase();
+    const knownProviders: ProviderType[] = ['openai', 'anthropic', 'ollama'];
+
+    if (knownProviders.includes(potentialProvider as ProviderType)) {
+        // Provider prefix format
+        const provider = potentialProvider as ProviderType;
+        const modelId = parts.slice(1).join(':'); // Rejoin in case model has colons
+
+        return {
+            provider,
+            modelId,
+            fullIdentifier: modelString
+        };
+    }
+
+    // Not a provider prefix, treat whole string as model name
+    return {
+        modelId: modelString,
+        fullIdentifier: modelString
+    };
 }
 
 /**
  * Create a model configuration from a model string
  */
 export function createModelConfig(modelString: string, defaultProvider?: ProviderType): ModelConfig {
-    return configurationManager.createModelConfig(modelString, defaultProvider);
+    const identifier = parseModelIdentifier(modelString);
+    const provider = identifier.provider || defaultProvider || 'openai'; // fallback to openai if no provider specified
+
+    return {
+        provider,
+        modelId: identifier.modelId,
+        displayName: identifier.fullIdentifier
+    };
 }
 
 /**
- * Get the default model for a specific provider
+ * Get the default model for a specific provider - always fresh from options
  */
 export async function getDefaultModelForProvider(provider: ProviderType): Promise<string | undefined> {
-    const config = await configurationManager.getAIConfig();
-    return config.defaultModels[provider]; // This can now be undefined
+    const optionKey = `${provider}DefaultModel` as const;
+    return optionService.getOption(optionKey) || undefined;
 }
 
 /**
- * Get provider settings for a specific provider
+ * Get provider settings for a specific provider - always fresh from options
  */
 export async function getProviderSettings(provider: ProviderType) {
-    const config = await configurationManager.getAIConfig();
-    return config.providerSettings[provider];
+    switch (provider) {
+        case 'openai':
+            return {
+                apiKey: optionService.getOption('openaiApiKey'),
+                baseUrl: optionService.getOption('openaiBaseUrl'),
+                defaultModel: optionService.getOption('openaiDefaultModel')
+            };
+        case 'anthropic':
+            return {
+                apiKey: optionService.getOption('anthropicApiKey'),
+                baseUrl: optionService.getOption('anthropicBaseUrl'),
+                defaultModel: optionService.getOption('anthropicDefaultModel')
+            };
+        case 'ollama':
+            return {
+                baseUrl: optionService.getOption('ollamaBaseUrl'),
+                defaultModel: optionService.getOption('ollamaDefaultModel')
+            };
+        default:
+            return {};
+    }
 }
 
 /**
- * Check if AI is enabled
+ * Check if AI is enabled - always fresh from options
  */
 export async function isAIEnabled(): Promise<boolean> {
-    const config = await configurationManager.getAIConfig();
-    return config.enabled;
+    return optionService.getOptionBool('aiEnabled');
 }
 
 /**
@@ -82,7 +143,7 @@ export async function isProviderConfigured(provider: ProviderType): Promise<bool
  */
 export async function getAvailableSelectedProvider(): Promise<ProviderType | null> {
     const selectedProvider = await getSelectedProvider();
-    
+
     if (!selectedProvider) {
         return null; // No provider selected
     }
@@ -95,17 +156,51 @@ export async function getAvailableSelectedProvider(): Promise<ProviderType | nul
 }
 
 /**
- * Validate the current AI configuration
+ * Validate the current AI configuration - simplified validation
  */
 export async function validateConfiguration() {
-    return configurationManager.validateConfig();
+    const result = {
+        isValid: true,
+        errors: [] as string[],
+        warnings: [] as string[]
+    };
+
+    const aiEnabled = await isAIEnabled();
+    if (!aiEnabled) {
+        result.warnings.push('AI features are disabled');
+        return result;
+    }
+
+    const selectedProvider = await getSelectedProvider();
+    if (!selectedProvider) {
+        result.errors.push('No AI provider selected');
+        result.isValid = false;
+        return result;
+    }
+
+    // Validate provider-specific settings
+    const settings = await getProviderSettings(selectedProvider);
+
+    if (selectedProvider === 'openai' && !(settings as any)?.apiKey) {
+        result.warnings.push('OpenAI API key is not configured');
+    }
+
+    if (selectedProvider === 'anthropic' && !(settings as any)?.apiKey) {
+        result.warnings.push('Anthropic API key is not configured');
+    }
+
+    if (selectedProvider === 'ollama' && !(settings as any)?.baseUrl) {
+        result.warnings.push('Ollama base URL is not configured');
+    }
+
+    return result;
 }
 
 /**
- * Clear cached configuration (use when settings change)
+ * Clear cached configuration (no-op since we removed caching)
  */
 export function clearConfigurationCache(): void {
-    configurationManager.clearCache();
+    // No caching anymore, so nothing to clear
 }
 
 /**
@@ -136,7 +231,7 @@ export async function getValidModelConfig(provider: ProviderType): Promise<{ mod
  */
 export async function getSelectedModelConfig(): Promise<{ model: string; provider: ProviderType } | null> {
     const selectedProvider = await getSelectedProvider();
-    
+
     if (!selectedProvider) {
         return null; // No provider selected
     }

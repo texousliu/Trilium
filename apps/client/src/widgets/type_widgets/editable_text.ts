@@ -166,7 +166,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             // is shorter than minimumNonErrorTimePeriod, the watchdog changes
             // its state to crashedPermanently, and it stops restarting the editor.
             // This prevents an infinite restart loop.
-            crashNumberLimit: 3,
+            crashNumberLimit: 10,
             // A minimum number of milliseconds between saving the editor data internally (defaults to 5000).
             // Note that for large documents, this might impact the editor performance.
             saveInterval: 5000
@@ -181,8 +181,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 return;
             }
 
-            logInfo(`CKEditor crash logs: ${JSON.stringify(this.watchdog.crashes)}`);
-            this.watchdog.crashes.forEach((crashInfo) => console.log(crashInfo));
+            logError(`CKEditor crash logs: ${JSON.stringify(this.watchdog.crashes, null, 4)}`);
 
             if (currentState === "crashedPermanently") {
                 dialogService.info(`Editing component keeps crashing. Please try restarting Trilium. If problem persists, consider creating a bug report.`);
@@ -191,7 +190,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             }
         });
 
-        this.watchdog.setCreator(async (elementOrData, editorConfig) => {
+        this.watchdog.setCreator(async (_, editorConfig) => {
             logInfo("Creating new CKEditor");
 
             const finalConfig = {
@@ -221,7 +220,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             }
 
             //@ts-ignore
-            const editor = await editorClass.create(elementOrData, finalConfig);
+            const editor = await editorClass.create(this.$editor[0], finalConfig);
 
             const notificationsPlugin = editor.plugins.get("Notification");
             notificationsPlugin.on("show:warning", (evt, data) => {
@@ -337,6 +336,11 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     }
 
     getData() {
+        if (!this.watchdog.editor) {
+            // There is nothing to save, most likely a result of the editor crashing and reinitializing.
+            return;
+        }
+
         const content = this.watchdog.editor?.getData() ?? "";
 
         // if content is only tags/whitespace (typically <p>&nbsp;</p>), then just make it empty,
@@ -375,7 +379,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         }
     }
 
-    insertDateTimeToTextCommand() { 
+    insertDateTimeToTextCommand() {
         const date = new Date();
         const customDateTimeFormat = options.get("customDateTimeFormat");
         const dateString = utils.formatDateTime(date, customDateTimeFormat);
