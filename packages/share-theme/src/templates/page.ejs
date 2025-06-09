@@ -10,42 +10,6 @@
         <link href="<%= assetPath %>/stylesheets/share.css" rel="stylesheet">
     <% } %>
 
-    <% if (note.hasLabel("shareSwagger")) { %>
-        <!-- TODO: make these note IDs customizable -->
-        <link href="api/notes/woA8jsLWd4QR/download" rel="stylesheet">
-        <script src="api/notes/RYOdL9flwQfP/download"></script>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-const customServerYml = `- url: "{protocol}://{domain}:{port}/etapi"
-    variables:
-      protocol:
-        enum:
-          - http
-          - https
-        default: http
-        description: Protocol your server is being hosted with
-      domain:
-        default: localhost
-        description: Domain name or localhost or ip
-      port:
-        default: 37840
-        description: Port the app is served over`;
-
-                SwaggerUIBundle({
-                    // url: `api/notes/<%= note.noteId %>/download`,
-                    url: `<%= note.getLabelValue("shareSwagger") %>`,
-                    dom_id: "#content",
-                    responseInterceptor: resp => {
-                        if (resp.url !== `<%= note.getLabelValue("shareSwagger") %>`) return resp;
-                        resp.text = resp.text.replace("- url: http://localhost:37740/etapi", "- url: http://localhost:37840/etapi");
-                        resp.text = resp.text.replace(`- url: http://localhost:8080/etapi`, customServerYml);
-                        return resp;
-                    }
-                });
-            });
-        </script>
-    <% } %>
-
     <% for (const cssRelation of note.getRelations("shareCss")) { %>
         <link href="api/notes/<%= cssRelation.value %>/download" rel="stylesheet">
     <% } %>
