@@ -187,6 +187,10 @@ content = content.replaceAll(headingRe, (...match) => {
                     </ul>
                 </nav>
             <% } %>
+
+            <footer id="content-footer">
+                <%- include("prev_next", { note: note, subRoot: subRoot }) %>
+            </footer>
         </div>
         <%
         if (headingMatches.length > 1) {
