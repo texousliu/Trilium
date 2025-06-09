@@ -285,6 +285,7 @@ const TAB_ROW_TPL = `
         overflow-y: hidden;
         scrollbar-width: none; /* Firefox */
     }
+
     /* Chrome/Safari */
     .tab-row-widget-scrolling-container::-webkit-scrollbar {
         display: none;
@@ -391,11 +392,7 @@ export default class TabRowWidget extends BasicWidget {
                 return;
             }
             event.preventDefault();
-
-            const delta = Math.sign(wheelEvent.deltaX + wheelEvent.deltaY) *
-                Math.min(Math.abs(wheelEvent.deltaX + wheelEvent.deltaY), TAB_CONTAINER_MIN_WIDTH * 2);
-
-            this.scrollTabContainer(delta, "instant");
+            event.currentTarget.scrollLeft += wheelEvent.deltaY + wheelEvent.deltaX;
         });
 
         this.$scrollButtonLeft[0].addEventListener('click', () => this.scrollTabContainer(-200));
