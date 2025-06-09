@@ -305,6 +305,11 @@
             },
             {
               "glob": "**/*",
+              "input": "packages/share-theme/src/templates",
+              "output": "share-theme/templates"
+            },
+            {
+              "glob": "**/*",
               "input": "apps/client/dist",
               "output": "public",
               "ignore": [
