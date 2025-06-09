@@ -351,6 +351,115 @@ export default class LlmChatPanel extends BasicWidget {
     }
 
     /**
+     * Save current chat data to a specific note ID
+     */
+    async saveCurrentDataToSpecificNote(targetNoteId: string | null) {
+        if (!this.onSaveData || !targetNoteId) {
+            console.warn('Cannot save chat data: no saveData callback or no targetNoteId available');
+            return;
+        }
+
+        try {
+            // Extract current tool execution steps if any exist
+            const toolSteps = extractInChatToolSteps(this.noteContextChatMessages);
+
+            // Get tool executions from both UI and any cached executions in metadata
+            let toolExecutions: Array<{
+                id: string;
+                name: string;
+                arguments: any;
+                result: any;
+                error?: string;
+                timestamp: string;
+            }> = [];
+
+            // First include any tool executions already in metadata (from streaming events)
+            if (this.metadata?.toolExecutions && Array.isArray(this.metadata.toolExecutions)) {
+                toolExecutions = [...this.metadata.toolExecutions];
+                console.log(`Including ${toolExecutions.length} tool executions from metadata`);
+            }
+
+            // Also extract any visible tool steps from the UI
+            const extractedExecutions = toolSteps.map(step => {
+                // Parse tool execution information
+                if (step.type === 'tool-execution') {
+                    try {
+                        const content = JSON.parse(step.content);
+                        return {
+                            id: content.toolCallId || `tool-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+                            name: content.tool || 'unknown',
+                            arguments: content.args || {},
+                            result: content.result || {},
+                            error: content.error,
+                            timestamp: new Date().toISOString()
+                        };
+                    } catch (e) {
+                        // If we can't parse it, create a basic record
+                        return {
+                            id: `tool-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+                            name: 'unknown',
+                            arguments: {},
+                            result: step.content,
+                            timestamp: new Date().toISOString()
+                        };
+                    }
+                } else if (step.type === 'result' && step.name) {
+                    // Handle result steps with a name
+                    return {
+                        id: `tool-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+                        name: step.name,
+                        arguments: {},
+                        result: step.content,
+                        timestamp: new Date().toISOString()
+                    };
+                }
+                return {
+                    id: `tool-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+                    name: 'unknown',
+                    arguments: {},
+                    result: 'Unrecognized tool step',
+                    timestamp: new Date().toISOString()
+                };
+            });
+
+            // Merge the tool executions, keeping only unique IDs
+            const existingIds = new Set(toolExecutions.map((t: {id: string}) => t.id));
+            for (const exec of extractedExecutions) {
+                if (!existingIds.has(exec.id)) {
+                    toolExecutions.push(exec);
+                    existingIds.add(exec.id);
+                }
+            }
+
+            const dataToSave = {
+                messages: this.messages,
+                noteId: targetNoteId,
+                chatNoteId: targetNoteId, // For backward compatibility
+                toolSteps: toolSteps,
+                // Add sources if we have them
+                sources: this.sources || [],
+                // Add metadata
+                metadata: {
+                    model: this.metadata?.model || undefined,
+                    provider: this.metadata?.provider || undefined,
+                    temperature: this.metadata?.temperature || 0.7,
+                    lastUpdated: new Date().toISOString(),
+                    // Add tool executions
+                    toolExecutions: toolExecutions
+                }
+            };
+
+            console.log(`Saving chat data to specific note ${targetNoteId}, ${toolSteps.length} tool steps, ${this.sources?.length || 0} sources, ${toolExecutions.length} tool executions`);
+
+            // Save the data to the note attribute via the callback
+            // This is the ONLY place we should save data, letting the container widget handle persistence
+            await this.onSaveData(dataToSave);
+        } catch (error) {
+            console.error('Error saving chat data to specific note:', error);
+        }
+    }
+
+    /**
      * Load saved chat data from the note attribute
      */
     async loadSavedData(): Promise<boolean> {
@@ -867,8 +976,8 @@ export default class LlmChatPanel extends BasicWidget {
                     this.showSources(postResponse.sources);
                 }
 
-                // Process the assistant response
-                this.processAssistantResponse(postResponse.content, postResponse);
+                // Process the assistant response with original chat note ID
+                this.processAssistantResponse(postResponse.content, postResponse, this.noteId);
 
                 hideLoadingIndicator(this.loadingIndicator);
                 return true;
@@ -884,7 +993,7 @@ export default class LlmChatPanel extends BasicWidget {
     /**
      * Process an assistant response - add to UI and save
      */
-    private async processAssistantResponse(content: string, fullResponse?: any) {
+    private async processAssistantResponse(content: string, fullResponse?: any, originalChatNoteId?: string | null) {
         // Add the response to the chat UI
         this.addMessageToChat('assistant', content);
 
@@ -910,8 +1019,8 @@ export default class LlmChatPanel extends BasicWidget {
             ];
         }
 
-        // Save to note
-        this.saveCurrentData().catch(err => {
+        // Save to note - use original chat note ID if provided
+        this.saveCurrentDataToSpecificNote(originalChatNoteId || this.noteId).catch(err => {
             console.error("Failed to save assistant response to note:", err);
         });
     }
@@ -936,12 +1045,15 @@ export default class LlmChatPanel extends BasicWidget {
             timestamp: string;
         }> = [];
 
+        // Store the original chat note ID to ensure we save to the correct note even if user switches
+        const originalChatNoteId = this.noteId;
+
         return setupStreamingResponse(
             this.noteId,
             messageParams,
             // Content update handler
             (content: string, isDone: boolean = false) => {
-                this.updateStreamingUI(content, isDone);
+                this.updateStreamingUI(content, isDone, originalChatNoteId);
 
                 // Update session data with additional metadata when streaming is complete
                 if (isDone) {
@@ -1067,13 +1179,13 @@ export default class LlmChatPanel extends BasicWidget {
     /**
      * Update the UI with streaming content
      */
-    private updateStreamingUI(assistantResponse: string, isDone: boolean = false) {
+    private updateStreamingUI(assistantResponse: string, isDone: boolean = false, originalChatNoteId?: string | null) {
         // Track if we have a streaming message in progress
         const hasStreamingMessage = !!this.noteContextChatMessages.querySelector('.assistant-message.streaming');
-        
+
         // Create a new message element or use the existing streaming one
         let assistantMessageEl: HTMLElement;
-        
+
         if (hasStreamingMessage) {
             // Use the existing streaming message
             assistantMessageEl = this.noteContextChatMessages.querySelector('.assistant-message.streaming')!;
@@ -1103,7 +1215,7 @@ export default class LlmChatPanel extends BasicWidget {
         if (isDone) {
             // Remove the streaming class to mark this message as complete
             assistantMessageEl.classList.remove('streaming');
-            
+
             // Apply syntax highlighting
             formatCodeBlocks($(assistantMessageEl as HTMLElement));
 
@@ -1118,8 +1230,8 @@ export default class LlmChatPanel extends BasicWidget {
                 timestamp: new Date()
             });
 
-            // Save the updated message list
-            this.saveCurrentData();
+            // Save the updated message list to the original chat note
+            this.saveCurrentDataToSpecificNote(originalChatNoteId || this.noteId);
         }
 
         // Scroll to bottom

@@ -26,12 +26,18 @@ function setupGlobs() {
     window.onerror = function (msg, url, lineNo, columnNo, error) {
         const string = String(msg).toLowerCase();
 
+        let errorObjectString = "";
+        try {
+            errorObjectString = JSON.stringify(error);
+        } catch (e: any) {
+            errorObjectString = e.toString();
+        }
         let message = "Uncaught error: ";
 
         if (string.includes("script error")) {
             message += "No details available";
         } else {
-            message += [`Message: ${msg}`, `URL: ${url}`, `Line: ${lineNo}`, `Column: ${columnNo}`, `Error object: ${JSON.stringify(error)}`, `Stack: ${error && error.stack}`].join(", ");
+            message += [`Message: ${msg}`, `URL: ${url}`, `Line: ${lineNo}`, `Column: ${columnNo}`, `Error object: ${errorObjectString}`, `Stack: ${error && error.stack}`].join(", ");
         }
 
         ws.logError(message);
