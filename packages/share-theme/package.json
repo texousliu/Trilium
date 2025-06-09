@@ -5,10 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "esrun scripts/build.ts",
-    "build-all": "esrun scripts/build.ts -- --templates",
     "build-scripts": "esrun scripts/build.ts -- --module=scripts",
     "build-styles": "esrun scripts/build.ts -- --module=styles",
-    "templates": "esrun scripts/build.ts -- --only-templates",
     "dist": "esrun scripts/build.ts -- --minify",
     "test": "esrun src/scripts/test.ts"
   },
@@ -27,7 +25,6 @@
     "esbuild": "^0.19.3",
     "eslint": "^8.49.0",
     "highlight.js": "^11.8.0",
-    "trilium-etapi": "^0.1.2",
     "typescript": "^5.2.2"
   },
   "nx": {

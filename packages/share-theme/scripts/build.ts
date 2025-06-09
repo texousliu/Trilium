@@ -3,7 +3,6 @@ import path from "node:path";
 // import {fileURLToPath} from "node:url";
 
 import dotenv from "dotenv";
-import tepi from "trilium-etapi";
 import * as esbuild from "esbuild";
 
 
@@ -14,64 +13,7 @@ import * as esbuild from "esbuild";
 // console.log(process.env.npm_package_json);
 const rootDir = path.dirname(process.env.npm_package_json!);
 
-
 dotenv.config();
-if (process.env.TRILIUM_ETAPI_TOKEN) tepi.token(process.env.TRILIUM_ETAPI_TOKEN);
-
-
-const templateMap: Record<string, string> = {
-    page: process.env.PAGE_TEMPLATE_ID!,
-    tree_item: process.env.ITEM_TEMPLATE_ID!,
-    toc_item: process.env.TOC_TEMPLATE_ID!,
-};
-
-async function sendTemplates() {
-    for (const template in templateMap) {
-        const templatePath = path.join(rootDir, "src", "templates", `${template}.ejs`);
-        const contents = fs.readFileSync(templatePath).toString();
-        await tepi.putNoteContentById(templateMap[template], contents);
-    }
-}
-
-if (process.argv.includes("--only-templates")) {
-    await sendTemplates();
-    process.exit(0);
-}
-
-const bundleMap = {
-    "scripts.js": process.env.JS_NOTE_ID,
-    "styles.css": process.env.CSS_NOTE_ID
-};
-
-const triliumPlugin: esbuild.Plugin = {
-    name: "Trilium",
-    setup(build) {
-        build.onEnd(async result => {
-            if (!result.metafile) return;
-
-            const bundles = Object.keys(result.metafile.outputs);
-            for (const bundle of bundles) {
-                const filename = path.basename(bundle);
-                const noteId = bundleMap[filename as keyof typeof bundleMap];
-                if (!noteId) {
-                    console.info(`No note id found for bundle ${bundle}`);
-                    continue;
-                }
-
-                const bundlePath = path.join(rootDir, bundle);
-                if (!fs.existsSync(bundlePath)) {
-                    console.error(`Could not find bundle ${bundle}`);
-                    continue;
-                }
-
-                const contents = fs.readFileSync(bundlePath).toString();
-                await tepi.putNoteContentById(noteId, contents);
-            }
-            
-        });
-    }
-};
-
 
 const modules = ["scripts", "styles"];
 const entryPoints: {in: string, out: string}[] = [];
@@ -103,13 +45,11 @@ async function runBuild() {
             ".html": "text",
             ".css": "css"
         },
-        plugins: [triliumPlugin],
         logLevel: "info",
         metafile: true,
         minify: process.argv.includes("--minify")
     });
     const after = performance.now();
-    if (process.argv.includes("--templates")) await sendTemplates();
     console.log(`Build actually took ${(after - before).toFixed(2)}ms`);
 }
 
