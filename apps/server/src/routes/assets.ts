@@ -48,6 +48,7 @@ async function register(app: express.Application) {
     app.use(`/assets/vX/stylesheets`, express.static(path.join(srcRoot, "public/stylesheets")));
     app.use(`/${assetUrlFragment}/libraries`, persistentCacheStatic(path.join(srcRoot, "public/libraries")));
     app.use(`/assets/vX/libraries`, express.static(path.join(srcRoot, "..", "libraries")));
+    app.use(`/share/assets`, express.static(path.join(resourceDir, "share-theme", "public")));
 }
 
 export default {

@@ -252,6 +252,11 @@
                 "glob": "**/*",
                 "input": "packages/share-theme/src/templates",
                 "output": "share-theme/templates"
+              },
+              {
+                "glob": "**/*",
+                "input": "packages/share-theme/dist",
+                "output": "share-theme/public"
               }
             ]
         }
