@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <% const hasTree = subRoot.note.hasVisibleChildren(); %>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -8,6 +9,7 @@
     <script src="<%= appPath %>/share.js" type="module"></script>
     <% if (!isDev && !note.isLabelTruthy("shareOmitDefaultCss")) { %>
         <link href="<%= assetPath %>/src/share.css" rel="stylesheet">
+        <link href="<%= assetPath %>/src/boxicons.css" rel="stylesheet">
     <% } %>
 
     <% for (const cssRelation of note.getRelations("shareCss")) { %>
@@ -64,7 +66,6 @@ const themeClass = currentTheme === "light" ? " theme-light" : " theme-dark";
 const headingRe = /(<h[1-6]>)(.+?)(<\/h[1-6]>)/g;
 const headingMatches = [...content.matchAll(headingRe)];
 const slugify = (text) => text.toLowerCase().replace(/[^\w]/g, "-");
-const hasTree = subRoot.note.hasVisibleChildren();
 content = content.replaceAll(headingRe, (...match) => {
     match[0] = match[0].replace(match[3], `<a id="${slugify(match[2])}" class="toc-anchor" name="${slugify(match[2])}" href="#${slugify(match[2])}">#</a>${match[3]}`);
     return match[0];
