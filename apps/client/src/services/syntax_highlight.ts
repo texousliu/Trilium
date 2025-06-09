@@ -2,7 +2,7 @@ import { ensureMimeTypes, highlight, highlightAuto, loadTheme, Themes, type Auto
 import mime_types from "./mime_types.js";
 import options from "./options.js";
 import { t } from "./i18n.js";
-import { copyText } from "./clipboard_ext.js";
+import { copyText, copyTextWithToast } from "./clipboard_ext.js";
 import { isShare } from "./utils.js";
 import { MimeType } from "@triliumnext/commons";
 
@@ -36,7 +36,13 @@ export function applyCopyToClipboardButton($codeBlock: JQuery<HTMLElement>) {
     const $copyButton = $("<button>")
         .addClass("bx component icon-action tn-tool-button bx-copy copy-button")
         .attr("title", t("code_block.copy_title"))
-        .on("click", () => copyText($codeBlock.text()));
+        .on("click", () => {
+            if (!isShare) {
+                copyTextWithToast($codeBlock.text());
+            } else {
+                copyText($codeBlock.text());
+            }
+        });
     $codeBlock.parent().append($copyButton);
 }
 
