@@ -57,6 +57,9 @@ const customServerYml = `- url: "{protocol}://{domain}:{port}/etapi"
     <% for (const cssRelation of note.getRelations("shareCss")) { %>
         <link href="api/notes/<%= cssRelation.value %>/download" rel="stylesheet">
     <% } %>
+    <% if (!note.isLabelTruthy("shareOmitDefaultCss")) { %>
+        <script type="module" src="assets/scripts.js"></script>
+    <% } %>
     <% for (const jsRelation of note.getRelations("shareJs")) { %>
         <script type="module" src="api/notes/<%= jsRelation.value %>/download"></script>
     <% } %>
