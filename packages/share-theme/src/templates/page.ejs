@@ -10,7 +10,7 @@
 
     <link rel="shortcut icon" href="<% if (note.hasRelation("shareFavicon")) { %>api/notes/<%= note.getRelation("shareFavicon").value %>/download<% } else { %>../favicon.ico<% } %>">
     <script src="<%= appPath %>/share.js" type="module"></script>
-    <% if (!note.isLabelTruthy("shareOmitDefaultCss")) { %>
+    <% if (!isDev && !note.isLabelTruthy("shareOmitDefaultCss")) { %>
         <link href="<%= assetPath %>/stylesheets/share.css" rel="stylesheet">
     <% } %>
 

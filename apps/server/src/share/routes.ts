@@ -170,7 +170,8 @@ function register(router: Router) {
             assetPath: isDev ? assetPath : `../${assetPath}`,
             appPath: isDev ? appPath : `../${appPath}`,
             showLoginInShareTheme,
-            t
+            t,
+            isDev
         };
         let useDefaultView = true;
 
