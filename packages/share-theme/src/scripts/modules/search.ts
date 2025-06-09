@@ -23,7 +23,10 @@ function buildResultItem(result: SearchResult) {
 
 
 export default function setupSearch() {
-    const searchInput: HTMLInputElement = document.querySelector(".search-input")!;
+    const searchInput: HTMLInputElement | null = document.querySelector(".search-input");
+    if (!searchInput) {
+        return;
+    }
 
     searchInput.addEventListener("keyup", debounce(async () => {
         // console.log("CHANGE EVENT");
@@ -38,14 +41,14 @@ export default function setupSearch() {
             lines.push(buildResultItem(result));
         }
         lines.push("</div>");
-        
+
         const container = parseHTML(lines.join("")) as HTMLDivElement;
         // console.log(container, lines);
         const rect = searchInput.getBoundingClientRect();
         container.style.top = `${rect.bottom}px`;
         container.style.left = `${rect.left}px`;
         container.style.minWidth = `${rect.width}px`;
-        
+
         const existing = document.querySelector(".search-results");
         if (existing) existing.replaceWith(container);
         else document.body.append(container);
