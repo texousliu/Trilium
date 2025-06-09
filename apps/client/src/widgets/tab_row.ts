@@ -396,8 +396,8 @@ export default class TabRowWidget extends BasicWidget {
             event.currentTarget.scrollLeft += wheelEvent.deltaY + wheelEvent.deltaX;
         });
 
-        this.$scrollButtonLeft[0].addEventListener('click', () => this.scrollTabContainer(-200));
-        this.$scrollButtonRight[0].addEventListener('click', () => this.scrollTabContainer(200));
+        this.$scrollButtonLeft[0].addEventListener('click', () => this.scrollTabContainer(-210));
+        this.$scrollButtonRight[0].addEventListener('click', () => this.scrollTabContainer(210));
 
         this.$tabScrollingContainer[0].addEventListener('scroll', () => {
             clearTimeout(this.updateScrollTimeout);
@@ -729,7 +729,7 @@ export default class TabRowWidget extends BasicWidget {
 
                 const scorllContainerBounds = this.$tabScrollingContainer[0]?.getBoundingClientRect();
                 const pointerX = pointer.pageX;
-                const scrollSpeed = 100; // The increment of each scroll.
+                const scrollSpeed = 105; // The increment of each scroll.
                 // Check if the mouse is near the edge of the container and trigger scrolling.
                 if (pointerX < scorllContainerBounds.left) {
                     this.scrollTabContainer(- scrollSpeed);
