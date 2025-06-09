@@ -19,7 +19,7 @@ const target = isExternalLink ? ` target="_blank" rel="noopener noreferrer"` : "
     <%
         const hasChildren = childNote.hasVisibleChildren();
         const isAncestorOfActive = ancestors.some(p => p === childNote.noteId);
-        const expandedClass = isAncestorOfActive ? " expanded" : "";
+        const expandedClass = childNote.noteId === activeNote.noteId || isAncestorOfActive ? " expanded" : "";
     %>
         <li class="<% if (hasChildren) { %>submenu-<% } %>item<%= expandedClass %>">
             <%- include('tree_item', {note: childNote, subRoot: subRoot}) %>
