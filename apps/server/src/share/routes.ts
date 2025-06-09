@@ -108,7 +108,8 @@ function renderImageAttachment(image: SNote, res: Response, attachmentName: stri
     let svgString = "<svg/>";
     const attachment = image.getAttachmentByTitle(attachmentName);
     if (!attachment) {
-        res.status(404).render("share/404");
+        res.status(404);
+        renderDefault(res, "404");
         return;
     }
     const content = attachment.getContent();
@@ -140,7 +141,8 @@ function register(router: Router) {
     function renderNote(note: SNote, req: Request, res: Response) {
         if (!note) {
             console.log("Unable to find note ", note);
-            res.status(404).render("share/404");
+            res.status(404);
+            renderDefault(res, "404");
             return;
         }
 
@@ -212,9 +214,7 @@ function register(router: Router) {
         }
 
         if (useDefaultView) {
-            // Path is relative to apps/server/dist/assets/views
-            const shareThemePath = "../../share-theme/templates/page.ejs";
-            res.render(shareThemePath, opts);
+            renderDefault(res, "page", opts);
         }
     }
 
@@ -397,6 +397,12 @@ function register(router: Router) {
 
         res.json({ results: filteredResults });
     });
+}
+
+function renderDefault(res: Response<any, Record<string, any>>, template: "page" | "404", opts: any = {}) {
+    // Path is relative to apps/server/dist/assets/views
+    const shareThemePath = `../../share-theme/templates/${template}.ejs`;
+    res.render(shareThemePath, opts);
 }
 
 export default {
