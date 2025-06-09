@@ -29,5 +29,8 @@
     "highlight.js": "^11.8.0",
     "trilium-etapi": "^0.1.2",
     "typescript": "^5.2.2"
+  },
+  "nx": {
+    "name": "share-theme"
   }
 }
