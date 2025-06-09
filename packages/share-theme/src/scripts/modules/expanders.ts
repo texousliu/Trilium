@@ -12,15 +12,20 @@
 // }
 
 export default function setupExpanders() {
-    const expanders = Array.from(document.querySelectorAll("#menu .submenu-item"));
-    for (const ex of expanders) {
-        ex.addEventListener("click", e => {
-            if ((e.target as Element).closest(".submenu-item,.item") !== ex) return;
+    const expanders = Array.from(document.querySelectorAll("#menu .submenu-item .collapse-button"));
+    for (const expander of expanders) {
+        const li = expander.parentElement?.parentElement;
+        if (!li) {
+            continue;
+        }
+
+        expander.addEventListener("click", e => {
+            if ((e.target as Element).closest(".submenu-item,.item") !== li) return;
             e.preventDefault();
             e.stopPropagation();
-            const ul = ex.querySelector("ul")!;
+            const ul = li.querySelector("ul")!;
             ul.style.height = `${ul.scrollHeight}px`;
-            setTimeout(() => ex.classList.toggle("expanded"), 1);
+            setTimeout(() => li.classList.toggle("expanded"), 1);
             setTimeout(() => ul.style.height = ``, 200);
         });
     }
