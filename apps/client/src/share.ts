@@ -4,17 +4,19 @@ import "boxicons/css/boxicons.min.css";
 import "@triliumnext/share-theme/styles/index.css";
 import "@triliumnext/share-theme/scripts/index.js";
 
-import $ from "jquery";
+async function ensureJQuery() {
+    const $ = (await import("jquery")).default;
+    (window as any).$ = $;
+}
 
-window.$ = $;
-
-async function formatCodeBlocks($container: JQuery<HTMLElement>) {
-    const codeBlocks = $container.find("pre code");
+async function formatCodeBlocks() {
+    const codeBlocks = document.querySelectorAll("#content pre");
     if (codeBlocks.length === 0) {
         return;
     }
+    await ensureJQuery();
     const { formatCodeBlocks } = await import("./services/syntax_highlight.js");
-    await formatCodeBlocks($container);
+    await formatCodeBlocks($("#content"));
 }
 
 /**
@@ -35,7 +37,7 @@ async function fetchNote(noteId: string | null = null) {
 document.addEventListener(
     "DOMContentLoaded",
     () => {
-        formatCodeBlocks($("#content"));
+        formatCodeBlocks();
 
         const toggleMenuButton = document.getElementById("toggleMenuButton");
         const layout = document.getElementById("layout");
