@@ -189,6 +189,16 @@ content = content.replaceAll(headingRe, (...match) => {
             <% } %>
 
             <footer id="content-footer">
+                <% if (!isEmpty) { %>
+                    <div class="updated">
+                        <% 
+                            const lastUpdated = new Date(note.utcDateModified);
+                            const dateString = lastUpdated.toDateString();
+                        %>
+                        Last updated on <time datetime="<%- lastUpdated.toISOString() %>"><%- dateString.substring(4) %></time>
+                    </div>
+                <% } %>
+
                 <%- include("prev_next", { note: note, subRoot: subRoot }) %>
             </footer>
         </div>
