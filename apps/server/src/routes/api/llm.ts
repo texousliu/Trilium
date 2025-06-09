@@ -420,41 +420,60 @@ async function sendMessage(req: Request, res: Response) {
 async function streamMessage(req: Request, res: Response) {
     log.info("=== Starting streamMessage ===");
     
-    const chatNoteId = req.params.chatNoteId;
-    const { content, useAdvancedContext, showThinking, mentions } = req.body;
+    try {
+        const chatNoteId = req.params.chatNoteId;
+        const { content, useAdvancedContext, showThinking, mentions } = req.body;
 
-    // Input validation
-    if (!content || typeof content !== 'string' || content.trim().length === 0) {
-        return [400, {
-            success: false,
-            error: 'Content cannot be empty'
-        }];
-    }
-    
-    // Start background streaming process immediately (before sending response)
-    const backgroundPromise = handleStreamingProcess(chatNoteId, content, useAdvancedContext, showThinking, mentions)
-        .catch(error => {
-            log.error(`Background streaming error: ${error.message}`);
-            
-            // Send error via WebSocket since HTTP response was already sent
-            import('../../services/ws.js').then(wsModule => {
-                wsModule.default.sendMessageToAllClients({
-                    type: 'llm-stream',
-                    chatNoteId: chatNoteId,
-                    error: `Error during streaming: ${error.message}`,
-                    done: true
-                });
-            }).catch(wsError => {
-                log.error(`Could not send WebSocket error: ${wsError}`);
+        // Input validation
+        if (!content || typeof content !== 'string' || content.trim().length === 0) {
+            res.status(400).json({
+                success: false,
+                error: 'Content cannot be empty'
             });
+            // Mark response as handled to prevent further processing
+            (res as any).triliumResponseHandled = true;
+            return;
+        }
+        
+        // Send immediate success response
+        res.status(200).json({
+            success: true,
+            message: 'Streaming initiated successfully'
         });
-    
-    // Return immediate acknowledgment that streaming has been initiated
-    // The background process will handle the actual streaming
-    return {
-        success: true,
-        message: 'Streaming initiated successfully'
-    };
+        // Mark response as handled to prevent further processing
+        (res as any).triliumResponseHandled = true;
+        
+        // Start background streaming process after sending response
+        handleStreamingProcess(chatNoteId, content, useAdvancedContext, showThinking, mentions)
+            .catch(error => {
+                log.error(`Background streaming error: ${error.message}`);
+                
+                // Send error via WebSocket since HTTP response was already sent
+                import('../../services/ws.js').then(wsModule => {
+                    wsModule.default.sendMessageToAllClients({
+                        type: 'llm-stream',
+                        chatNoteId: chatNoteId,
+                        error: `Error during streaming: ${error.message}`,
+                        done: true
+                    });
+                }).catch(wsError => {
+                    log.error(`Could not send WebSocket error: ${wsError}`);
+                });
+            });
+            
+    } catch (error) {
+        // Handle any synchronous errors
+        log.error(`Synchronous error in streamMessage: ${error}`);
+        
+        if (!res.headersSent) {
+            res.status(500).json({
+                success: false,
+                error: 'Internal server error'
+            });
+        }
+        // Mark response as handled to prevent further processing
+        (res as any).triliumResponseHandled = true;
+    }
 }
 
 /**
