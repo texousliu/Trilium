@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import ejsPlugin from "@digitalmaas/esbuild-plugin-ejs";
 // import {fileURLToPath} from "node:url";
 
 import dotenv from "dotenv";
@@ -15,9 +16,30 @@ const rootDir = path.dirname(process.env.npm_package_json!);
 
 dotenv.config();
 
-const modules = ["scripts", "styles"];
+const modules = ["scripts", "styles", "templates"];
 const entryPoints: {in: string, out: string}[] = [];
-const makeEntry = (mod: string) => ({"in": path.join(rootDir, "src", mod, mod === "styles" ? "index.css" : "index.ts"), "out": mod});
+
+function makeEntry(mod: string) {
+    let entrypoint: string;
+    switch (mod) {
+        case "styles":
+            entrypoint = "index.css";
+            break;
+        case "scripts":
+            entrypoint = "index.ts";
+            break;
+        case "templates":
+            entrypoint = "page.ejs";
+            break;
+        default:
+            throw new Error(`Unknown module type ${mod}.`);
+    }
+
+    return {
+        "in": path.join(rootDir, "src", mod, entrypoint),
+        "out": mod
+    };
+}
 
 const modulesRequested = process.argv.filter(a => a.startsWith("--module="));
 for (const mod of modulesRequested) {
@@ -36,6 +58,9 @@ async function runBuild() {
         outdir: path.join(rootDir, "dist"),
         format: "cjs",
         target: ["chrome96"],
+        plugins: [
+            ejsPlugin()
+        ],
         loader: {
             ".png": "dataurl",
             ".gif": "dataurl",
