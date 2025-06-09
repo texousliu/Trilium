@@ -100,6 +100,7 @@ const themeClass = currentTheme === "light" ? " theme-light" : " theme-dark";
 const headingRe = /(<h[1-6]>)(.+?)(<\/h[1-6]>)/g;
 const headingMatches = [...content.matchAll(headingRe)];
 const slugify = (text) => text.toLowerCase().replace(/[^\w]/g, "-");
+const hasTree = subRoot.note.hasVisibleChildren();
 content = content.replaceAll(headingRe, (...match) => {
     match[0] = match[0].replace(match[3], `<a id="${slugify(match[2])}" class="toc-anchor" name="${slugify(match[2])}" href="#${slugify(match[2])}">#</a>${match[3]}`);
     return match[0];
@@ -135,7 +136,7 @@ content = content.replaceAll(headingRe, (...match) => {
                     <input type="text" class="search-input" placeholder="Search...">
                 </div>
             </div>
-        <% if (subRoot.note.hasVisibleChildren()) { %>
+        <% if (hasTree) { %>
             <nav id="menu">
                 <%
                 const ancestors = [];
@@ -198,7 +199,9 @@ content = content.replaceAll(headingRe, (...match) => {
                     </div>
                 <% } %>
 
-                <%- include("prev_next", { note: note, subRoot: subRoot }) %>
+                <% if (hasTree) { %>                
+                    <%- include("prev_next", { note: note, subRoot: subRoot }) %>
+                <% } %>
             </footer>
         </div>
         <%
