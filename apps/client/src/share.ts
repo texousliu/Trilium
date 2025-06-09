@@ -4,11 +4,18 @@ import "boxicons/css/boxicons.min.css";
 import "@triliumnext/share-theme/styles/index.css";
 import "@triliumnext/share-theme/scripts/index.js";
 
-import { formatCodeBlocks } from "./services/syntax_highlight.js";
 import $ from "jquery";
 
 window.$ = $;
-formatCodeBlocks($("#content"));
+
+async function formatCodeBlocks($container: JQuery<HTMLElement>) {
+    const codeBlocks = $container.find("pre code");
+    if (codeBlocks.length === 0) {
+        return;
+    }
+    const { formatCodeBlocks } = await import("./services/syntax_highlight.js");
+    await formatCodeBlocks($container);
+}
 
 /**
  * Fetch note with given ID from backend
@@ -28,6 +35,8 @@ async function fetchNote(noteId: string | null = null) {
 document.addEventListener(
     "DOMContentLoaded",
     () => {
+        formatCodeBlocks($("#content"));
+
         const toggleMenuButton = document.getElementById("toggleMenuButton");
         const layout = document.getElementById("layout");
 
