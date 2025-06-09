@@ -1,5 +1,6 @@
 import "normalize.css";
 import "@triliumnext/ckeditor5/content.css";
+import "boxicons/css/boxicons.min.css";
 import "@triliumnext/share-theme/styles/index.css";
 import "@triliumnext/share-theme/scripts/index.js";
 

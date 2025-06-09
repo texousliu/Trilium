@@ -17,6 +17,13 @@
 
 .ck-content pre {
     overflow: auto;
+    position: relative;
+}
+
+.ck-content pre .copy-button {
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
 }
 
 #content h1,
