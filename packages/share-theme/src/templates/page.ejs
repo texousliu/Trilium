@@ -193,9 +193,8 @@ content = content.replaceAll(headingRe, (...match) => {
                     <div class="updated">
                         <% 
                             const lastUpdated = new Date(note.utcDateModified);
-                            const dateString = lastUpdated.toDateString();
                         %>
-                        Last updated on <time datetime="<%- lastUpdated.toISOString() %>"><%- dateString.substring(4) %></time>
+                        Last updated on <time datetime="<%- lastUpdated.toISOString() %>"><%- lastUpdated.toLocaleDateString() %></time>
                     </div>
                 <% } %>
 
