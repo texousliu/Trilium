@@ -6,7 +6,7 @@ import shaca from "./shaca/shaca.js";
 import shacaLoader from "./shaca/shaca_loader.js";
 import shareRoot from "./share_root.js";
 import contentRenderer from "./content_renderer.js";
-import assetPath from "../services/asset_path.js";
+import assetPath, { assetUrlFragment } from "../services/asset_path.js";
 import appPath from "../services/app_path.js";
 import searchService from "../services/search/services/search.js";
 import SearchContext from "../services/search/search_context.js";
@@ -168,6 +168,7 @@ function register(router: Router) {
             isEmpty,
             subRoot,
             assetPath: isDev ? assetPath : `../${assetPath}`,
+            assetUrlFragment,
             appPath: isDev ? appPath : `../${appPath}`,
             showLoginInShareTheme,
             t,

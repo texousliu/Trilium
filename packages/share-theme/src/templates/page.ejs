@@ -93,8 +93,10 @@ const customServerYml = `- url: "{protocol}://{domain}:{port}/etapi"
     <meta name="theme-color" content="<%= openGraphColor %>">
 </head>
 <%
-const logoWidth = subRoot.note.getLabelValue("shareLogoWidth");
-const logoHeight = subRoot.note.getLabelValue("shareLogoHeight");
+const customLogoId = subRoot.note.getRelation("shareLogo")?.value;
+const logoUrl = customLogoId ? `api/images/${customLogoId}/image.png` : `../${assetUrlFragment}/images/icon-color.svg`;
+const logoWidth = subRoot.note.getLabelValue("shareLogoWidth") ?? 53;
+const logoHeight = subRoot.note.getLabelValue("shareLogoHeight") ?? 40;
 const mobileLogoHeight = logoHeight && logoWidth ? 32 / (logoWidth / logoHeight) : "";
 const shareRootLink = subRoot.note.hasLabel("shareRootLink") ? subRoot.note.getLabelValue("shareRootLink") : `./${subRoot.note.noteId}`;
 const currentTheme = note.getLabel("shareTheme") === "light" ? "light" : "dark";
@@ -123,9 +125,7 @@ content = content.replaceAll(headingRe, (...match) => {
     </script>
 <div id="mobile-header">
     <a href="<%= shareRootLink %>">
-        <% if (subRoot.note.hasRelation("shareLogo")) { %>
-            <img src="api/images/<%= subRoot.note.getRelation("shareLogo").value %>/image.png" width="32" height="<%= mobileLogoHeight %>" alt="Logo" />
-        <% } %>
+            <img src="<%= logoUrl %>" width="32" height="<%= mobileLogoHeight %>" alt="Logo" />
         <%= subRoot.note.title %>
     </a>
     <button aria-label="Show Mobile Menu" id="show-menu-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path></svg></button>
@@ -135,9 +135,7 @@ content = content.replaceAll(headingRe, (...match) => {
         <div id="navigation">
             <div id="site-header">
                 <a href="<%= shareRootLink %>">
-                    <% if (subRoot.note.hasRelation("shareLogo")) { %>
-                        <img src="api/images/<%= subRoot.note.getRelation("shareLogo").value %>/image.png" width="<%= logoWidth %>" height="<%= logoHeight %>" alt="Logo" />
-                    <% } %>
+                    <img src="<%= logoUrl %>" width="<%= logoWidth %>" height="<%= logoHeight %>" alt="Logo" />
                     <%= subRoot.note.title %>
                 </a>
                 <div class="theme-selection">
