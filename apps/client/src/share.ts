@@ -3,6 +3,12 @@ import "@triliumnext/ckeditor5/content.css";
 import "@triliumnext/share-theme/styles/index.css";
 import "@triliumnext/share-theme/scripts/index.js";
 
+import { formatCodeBlocks } from "./services/syntax_highlight.js";
+import $ from "jquery";
+
+window.$ = $;
+formatCodeBlocks($("#content"));
+
 /**
  * Fetch note with given ID from backend
  *

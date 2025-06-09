@@ -1,4 +1,5 @@
 import server from "./server.js";
+import { isShare } from "./utils.js";
 
 type OptionValue = number | string;
 
@@ -7,7 +8,9 @@ class Options {
     private arr!: Record<string, OptionValue>;
 
     constructor() {
-        this.initializedPromise = server.get<Record<string, OptionValue>>("options").then((data) => this.load(data));
+        if (!isShare) {
+            this.initializedPromise = server.get<Record<string, OptionValue>>("options").then((data) => this.load(data));
+        }
     }
 
     load(arr: Record<string, OptionValue>) {
