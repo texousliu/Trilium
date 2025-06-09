@@ -335,7 +335,7 @@ export async function processProviderStream(
                 chunkCount++;
                 continue;
             }
-            
+
             chunkCount++;
             finalChunk = chunk;
 
@@ -365,7 +365,7 @@ export async function processProviderStream(
                 // For chunks with content, send the content directly
                 const contentProperty = getChunkContentProperty(chunk);
                 const hasRealContent = contentProperty && contentProperty.trim().length > 0;
-                
+
                 if (hasRealContent) {
                     await StreamProcessor.sendChunkToCallback(
                         streamCallback,
@@ -429,7 +429,7 @@ export async function processProviderStream(
         };
     } catch (error) {
         // Improved error handling to preserve original error even if logging fails
-        let logError = null;
+        let logError: unknown | null = null;
         try {
             log.error(`Error in ${options.providerName} stream processing: ${error instanceof Error ? error.message : String(error)}`);
             log.error(`Error details: ${error instanceof Error ? error.stack : 'No stack trace available'}`);
@@ -437,7 +437,7 @@ export async function processProviderStream(
             // Store logging error but don't let it override the original error
             logError = loggingError;
         }
-        
+
         // Always throw the original error, not the logging error
         throw error;
     }
