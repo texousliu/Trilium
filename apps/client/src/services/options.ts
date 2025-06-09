@@ -10,6 +10,8 @@ class Options {
     constructor() {
         if (!isShare) {
             this.initializedPromise = server.get<Record<string, OptionValue>>("options").then((data) => this.load(data));
+        } else {
+            this.initializedPromise = Promise.resolve();
         }
     }
 
