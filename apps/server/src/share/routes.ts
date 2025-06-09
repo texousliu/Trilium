@@ -17,10 +17,7 @@ import type SAttachment from "./shaca/entities/sattachment.js";
 import utils, { isDev, safeExtractMessageAndStackFromError } from "../services/utils.js";
 import options from "../services/options.js";
 import { t } from "i18next";
-import shareThemeRoot from "@triliumnext/share-theme/templates/page.ejs";
-import shareThemeTreeItem from "@triliumnext/share-theme/templates/tree_item.ejs";
-import shareThemeTocItem from "@triliumnext/share-theme/templates/toc_item.ejs";
-import shareThemeCss from "@triliumnext/share-theme/styles.css";
+import shareTheme from "@triliumnext/share-theme/templates.js";
 import ejs from "ejs";
 
 function getSharedSubTreeRoot(note: SNote): { note?: SNote; branch?: SBranch } {
@@ -214,22 +211,8 @@ function register(router: Router) {
         }
 
         if (useDefaultView) {
-            const ejsResult = ejs.render(shareThemeRoot, {
-                shareThemeCss,
-                ...opts
-            }, {
-                includer(originalPath, parsedPath: string) {
-                    switch (originalPath) {
-                        case "tree_item":
-                            return { template: shareThemeTreeItem };
-                        case "toc_item":
-                            return { template: shareThemeTocItem };
-                        default:
-                            throw new Error(`Unable to find template for ${originalPath}`);
-                    }
-                }
-            })
-            res.send(ejsResult);
+            const result = shareTheme(opts);
+            res.send(result);
         }
     }
 
