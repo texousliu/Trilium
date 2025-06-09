@@ -1,6 +1,5 @@
 import fs from "node:fs";
 import path from "node:path";
-import ejsPlugin from "./esbuild-ejs-plugin.js";
 // import {fileURLToPath} from "node:url";
 
 import dotenv from "dotenv";
@@ -58,9 +57,6 @@ async function runBuild() {
         outdir: path.join(rootDir, "dist"),
         format: "cjs",
         target: ["chrome96"],
-        plugins: [
-            ejsPlugin()
-        ],
         loader: {
             ".png": "dataurl",
             ".gif": "dataurl",
