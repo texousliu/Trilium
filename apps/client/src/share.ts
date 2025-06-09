@@ -1,6 +1,7 @@
 import "normalize.css";
 import "@triliumnext/ckeditor5/content.css";
 import "@triliumnext/share-theme/styles/index.css";
+import "@triliumnext/share-theme/scripts/index.js";
 
 /**
  * Fetch note with given ID from backend
