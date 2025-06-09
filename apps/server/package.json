@@ -111,6 +111,9 @@
   },
   "nx": {
     "name": "server",
+    "implicitDependencies": [
+      "share-theme"
+    ],
     "targets": {
       "serve": {
         "executor": "@nx/js:node",
