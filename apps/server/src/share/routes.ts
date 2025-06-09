@@ -17,7 +17,6 @@ import type SAttachment from "./shaca/entities/sattachment.js";
 import utils, { isDev, safeExtractMessageAndStackFromError } from "../services/utils.js";
 import options from "../services/options.js";
 import { t } from "i18next";
-import shareTheme from "@triliumnext/share-theme/templates.js";
 import ejs from "ejs";
 
 function getSharedSubTreeRoot(note: SNote): { note?: SNote; branch?: SBranch } {
@@ -211,8 +210,9 @@ function register(router: Router) {
         }
 
         if (useDefaultView) {
-            const result = shareTheme(opts);
-            res.send(result);
+            // Path is relative to apps/server/dist/assets/views
+            const shareThemePath = "../../share-theme/templates/page.ejs";
+            res.render(shareThemePath, opts);
         }
     }
 

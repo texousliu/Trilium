@@ -240,19 +240,20 @@
               ".ejs": "text"
             }
           },
-          "declarationRootDir": "apps/server/src"
-        },
-        "configurations": {
-          "development": {
-            "minify": false,
+          "declarationRootDir": "apps/server/src",
+          "minify": false,
             "assets": [
               {
                 "glob": "**/*",
                 "input": "apps/server/src/assets",
                 "output": "assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "packages/share-theme/src/templates",
+                "output": "share-theme/templates"
               }
             ]
-          }
         }
       },
       "build": {
