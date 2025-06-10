@@ -183,6 +183,23 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
             theme: this.themeStyle,
             onChange: () => this.onChangeHandler(),
             viewModeEnabled: options.is("databaseReadonly"),
+            zenModeEnabled: false,
+            gridModeEnabled: false,
+            isCollaborating: false,
+            detectScroll: false,
+            handleKeyboardGlobally: false,
+            autoFocus: false,
+            UIOptions: {
+                canvasActions: {
+                    saveToActiveFile: false,
+                    export: false
+                }
+            },
+            onLibraryChange: () => {
+                this.libraryChanged = true;
+
+                this.saveData();
+            },
         });
         this.canvasInstance.renderCanvas(renderElement);
     }
