@@ -44,6 +44,10 @@ export default defineConfig(() => ({
                 find: "@triliumnext/highlightjs",
                 replacement: resolve(__dirname, "node_modules/@triliumnext/highlightjs/dist")
             }
+        ],
+        dedupe: [
+            "react",
+            "react-dom"
         ]
     },
     // Uncomment this if you are using workers.
