@@ -2,8 +2,7 @@
  * https://github.com/TriliumNext/Notes/issues/1002
  */
 
-import { Command, DocumentSelection, Element, Node, Plugin } from 'ckeditor5';
-
+import { Command, DocumentSelection, Element, Node, Plugin, Range } from 'ckeditor5';
 export default class MoveBlockUpDownPlugin extends Plugin {
 
     init() {
@@ -81,36 +80,54 @@ abstract class MoveBlockUpDownCommand extends Command {
 				}
 			}
 
-			// Restore selection to all items if many have been moved
-			if (
-				startOffset <= (firstBlock.maxOffset ?? Infinity) &&
-				endOffset <= (lastBlock.maxOffset ?? Infinity)
-			) {
-				writer.setSelection(
-					writer.createRange(
-						writer.createPositionAt(firstBlock, startOffset),
-						writer.createPositionAt(lastBlock, endOffset)
-					)
+			// Restore selection
+			let range: Range;
+			const maxStart = firstBlock.maxOffset ?? startOffset;
+			const maxEnd = lastBlock.maxOffset ?? endOffset;
+			// If original offsets valid within bounds, restore partial selection
+			if (startOffset <= maxStart && endOffset <= maxEnd) {
+				const clampedStart = Math.min(startOffset, maxStart);
+				const clampedEnd = Math.min(endOffset, maxEnd);
+				range = writer.createRange(
+					writer.createPositionAt(firstBlock, clampedStart),
+					writer.createPositionAt(lastBlock, clampedEnd)
+				);
+			} else { // Fallback: select entire moved blocks (handles tables)
+				range = writer.createRange(
+					writer.createPositionBefore(firstBlock),
+					writer.createPositionAfter(lastBlock)
 				);
 			}
+			writer.setSelection(range);
+			this.editor.editing.view.focus();
 
 			this.scrollToSelection();
-        });
+		});
     }
 	
 	getSelectedBlocks(selection: DocumentSelection) {
 		const blocks = [...selection.getSelectedBlocks()];
+		const resolved: Element[] = [];
 
-		// If the selected block is an object, such as a block quote or admonition, return the entire block.
-		if (blocks.length === 1) {
-			const block = blocks[0];
-			const parent = block.parent;
-			if (!parent?.name?.startsWith('$')) {
-				return [parent as Element];
+		// Selects elements (such as Mermaid) when there are no blocks
+		if (!blocks.length) {
+			const selectedObj = selection.getSelectedElement();
+			if (selectedObj) {
+				return [selectedObj];
 			}
 		}
 
-		return blocks;
+		for (const block of blocks) {
+			let el: Element = block;
+			// Traverse up until the parent is the root ($root) or there is no parent
+			while (el.parent && el.parent.name !== '$root') {
+				el = el.parent as Element;
+			}
+			resolved.push(el);
+		}
+
+		// Deduplicate adjacent duplicates (e.g., nested selections resolving to same block)
+		return resolved.filter((blk, idx) => idx === 0 || blk !== resolved[idx - 1]);
 	}
 	
 	scrollToSelection() {
