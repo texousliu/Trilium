@@ -3,6 +3,7 @@ import utils from "../../services/utils.js";
 import server from "../../services/server.js";
 import type FNote from "../../entities/fnote.js";
 import options from "../../services/options.js";
+import { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
 
 const TPL = /*html*/`
     <div class="canvas-widget note-detail-canvas note-detail-printable note-detail">
@@ -184,7 +185,11 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         (window.process.env as any).PREACT = false;
 
         const renderCanvas = (await import("./canvas_el.js")).default;
-        renderCanvas(renderElement);
+        renderCanvas(renderElement, {
+            excalidrawAPI: (api: ExcalidrawImperativeAPI) => {
+                this.excalidrawApi = api;
+            },
+        });
     }
 
     /**
