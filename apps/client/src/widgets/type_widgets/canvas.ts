@@ -4,6 +4,7 @@ import server from "../../services/server.js";
 import type FNote from "../../entities/fnote.js";
 import options from "../../services/options.js";
 import { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
+import type Canvas from "./canvas_el.js";
 
 const TPL = /*html*/`
     <div class="canvas-widget note-detail-canvas note-detail-printable note-detail">
@@ -101,11 +102,8 @@ interface AttachmentMetadata {
  */
 export default class ExcalidrawTypeWidget extends TypeWidget {
 
-    private readonly SCENE_VERSION_INITIAL: number;
-    private readonly SCENE_VERSION_ERROR: number;
-
     private currentNoteId: string;
-    private currentSceneVersion: number;
+
     private libraryChanged: boolean;
     private librarycache: LibraryItem[];
     private attachmentMetadata: AttachmentMetadata[];
@@ -116,13 +114,10 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
 
     private $render!: JQuery<HTMLElement>;
     private reactHandlers!: JQuery<HTMLElement>;
+    private canvasInstance!: Canvas;
 
     constructor() {
         super();
-
-        // constants
-        this.SCENE_VERSION_INITIAL = -1; // -1 indicates that it is fresh. excalidraw scene version is always >0
-        this.SCENE_VERSION_ERROR = -2; // -2 indicates error
 
         // currently required by excalidraw, in order to allows self-hosting fonts locally.
         // this avoids making excalidraw load the fonts from an external CDN.
@@ -130,7 +125,6 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
 
         // temporary vars
         this.currentNoteId = "";
-        this.currentSceneVersion = this.SCENE_VERSION_INITIAL;
 
         // will be overwritten
         this.$render;
@@ -184,12 +178,11 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         }
         (window.process.env as any).PREACT = false;
 
-        const renderCanvas = (await import("./canvas_el.js")).default;
-        renderCanvas(renderElement, {
-            excalidrawAPI: (api: ExcalidrawImperativeAPI) => {
-                this.excalidrawApi = api;
-            },
+        const Canvas = (await import("./canvas_el.js")).default;
+        this.canvasInstance = new Canvas({
+
         });
+        this.canvasInstance.renderCanvas(renderElement);
     }
 
     /**
@@ -200,7 +193,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         const noteChanged = this.currentNoteId !== note.noteId;
         if (noteChanged) {
             // reset the scene to omit unnecessary onchange handler
-            this.currentSceneVersion = this.SCENE_VERSION_INITIAL;
+            this.canvasInstance?.resetSceneVersion();
         }
         this.currentNoteId = note.noteId;
 
@@ -208,7 +201,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         const blob = await note.getBlob();
 
         // before we load content into excalidraw, make sure excalidraw has loaded
-        while (!this.excalidrawApi) {
+        while (!this.canvasInstance?.excalidrawApi) {
             console.log("excalidrawApi not yet loaded, sleep 200ms...");
             await utils.sleep(200);
         }
@@ -228,7 +221,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
             };
 
             // TODO: Props mismatch.
-            this.excalidrawApi.updateScene(sceneData as any);
+            this.canvasInstance.excalidrawApi.updateScene(sceneData as any);
         } else if (blob.content) {
             let content: CanvasContent;
 
@@ -301,7 +294,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
                 const metadata = results.map((result) => result.metadata);
 
                 // Update the library and save to independent variables
-                this.excalidrawApi.updateLibrary({ libraryItems, merge: false });
+                this.canvasInstance.excalidrawApi.updateLibrary({ libraryItems, merge: false });
 
                 // save state of library to compare it to the new state later.
                 this.librarycache = libraryItems;
@@ -310,14 +303,14 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
 
             // Update the scene
             // TODO: Fix type of sceneData
-            this.excalidrawApi.updateScene(sceneData as any);
-            this.excalidrawApi.addFiles(fileArray);
-            this.excalidrawApi.history.clear();
+            this.canvasInstance.excalidrawApi.updateScene(sceneData as any);
+            this.canvasInstance.excalidrawApi.addFiles(fileArray);
+            this.canvasInstance.excalidrawApi.history.clear();
         }
 
         // set initial scene version
-        if (this.currentSceneVersion === this.SCENE_VERSION_INITIAL) {
-            this.currentSceneVersion = this.getSceneVersion();
+        if (this.canvasInstance.isInitialScene()) {
+            this.canvasInstance.updateSceneVersion();
         }
     }
 
@@ -326,14 +319,14 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
      * this is automatically called after this.saveData();
      */
     async getData() {
-        const elements = this.excalidrawApi.getSceneElements();
-        const appState = this.excalidrawApi.getAppState();
+        const elements = this.canvasInstance.excalidrawApi.getSceneElements();
+        const appState = this.canvasInstance.excalidrawApi.getAppState();
 
         /**
          * A file is not deleted, even though removed from canvas. Therefore, we only keep
          * files that are referenced by an element. Maybe this will change with a new excalidraw version?
          */
-        const files = this.excalidrawApi.getFiles();
+        const files = this.canvasInstance.excalidrawApi.getFiles();
 
         // parallel svg export to combat bitrot and enable rendering image for note inclusion, preview, and share
         const svg = await this.excalidrawLib.exportToSvg({
@@ -370,7 +363,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
             // this.libraryChanged is unset in dataSaved()
 
             // there's no separate method to get library items, so have to abuse this one
-            const libraryItems = await this.excalidrawApi.updateLibrary({
+            const libraryItems = await this.canvasInstance.excalidrawApi.updateLibrary({
                 libraryItems() {
                     return [];
                 },
@@ -444,53 +437,20 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         }
         // changeHandler is called upon any tiny change in excalidraw. button clicked, hover, etc.
         // make sure only when a new element is added, we actually save something.
-        const isNewSceneVersion = this.isNewSceneVersion();
+        const isNewSceneVersion = this.canvasInstance.isNewSceneVersion();
         /**
          * FIXME: however, we might want to make an exception, if viewport changed, since viewport
          *        is desired to save? (add) and appState background, and some things
          */
 
         // upon updateScene, onchange is called, even though "nothing really changed" that is worth saving
-        const isNotInitialScene = this.currentSceneVersion !== this.SCENE_VERSION_INITIAL;
-
+        const isNotInitialScene = !this.canvasInstance.isInitialScene();
         const shouldSave = isNewSceneVersion && isNotInitialScene;
 
         if (shouldSave) {
-            this.updateSceneVersion();
+            this.canvasInstance.updateSceneVersion();
             this.saveData();
         }
     }
 
-    /**
-     * needed to ensure, that multipleOnChangeHandler calls do not trigger a save.
-     * we compare the scene version as suggested in:
-     * https://github.com/excalidraw/excalidraw/issues/3014#issuecomment-778115329
-     *
-     * info: sceneVersions are not incrementing. it seems to be a pseudo-random number
-     */
-    isNewSceneVersion() {
-        if (options.is("databaseReadonly")) {
-            return false;
-        }
-
-        const sceneVersion = this.getSceneVersion();
-
-        return (
-            this.currentSceneVersion === this.SCENE_VERSION_INITIAL || // initial scene version update
-            this.currentSceneVersion !== sceneVersion
-        ); // ensure scene changed
-    }
-
-    getSceneVersion() {
-        if (this.excalidrawApi) {
-            const elements = this.excalidrawApi.getSceneElements();
-            return this.excalidrawLib.getSceneVersion(elements);
-        } else {
-            return this.SCENE_VERSION_ERROR;
-        }
-    }
-
-    updateSceneVersion() {
-        this.currentSceneVersion = this.getSceneVersion();
-    }
 }
