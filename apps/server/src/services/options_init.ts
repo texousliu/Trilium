@@ -214,7 +214,7 @@ const defaultOptions: DefaultOption[] = [
     { name: "ocrEnabled", value: "false", isSynced: true },
     { name: "ocrLanguage", value: "eng", isSynced: true },
     { name: "ocrAutoProcessImages", value: "true", isSynced: true },
-    { name: "ocrMinConfidence", value: "0.6", isSynced: true },
+    { name: "ocrMinConfidence", value: "0.2", isSynced: true },
 ];
 
 /**
