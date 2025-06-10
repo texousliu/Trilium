@@ -62,7 +62,7 @@ beforeEach(async () => {
     // Reset mock implementations
     mockOptions.getOptionBool.mockReturnValue(true);
     mockOptions.getOption.mockReturnValue('eng');
-    mockSql.execute.mockImplementation(() => Promise.resolve({ lastInsertRowid: 1 }));
+    mockSql.execute.mockImplementation(() => ({ lastInsertRowid: 1 }));
     mockSql.getRow.mockReturnValue(null);
     mockSql.getRows.mockReturnValue([]);
     
@@ -258,7 +258,9 @@ describe('OCRService', () => {
 
         it('should handle database insertion errors', async () => {
             const error = new Error('Database error');
-            mockSql.execute.mockRejectedValue(error);
+            mockSql.execute.mockImplementation(() => {
+                throw error;
+            });
 
             const ocrResult = {
                 text: 'Sample text',
@@ -277,12 +279,12 @@ describe('OCRService', () => {
             noteId: 'note123',
             type: 'image',
             mime: 'image/jpeg',
-            getBlob: vi.fn()
+            getContent: vi.fn()
         };
 
         beforeEach(() => {
             mockBecca.getNote.mockReturnValue(mockNote);
-            mockNote.getBlob.mockResolvedValue(Buffer.from('fake-image-data'));
+            mockNote.getContent.mockReturnValue(Buffer.from('fake-image-data'));
         });
 
         it('should process note OCR successfully', async () => {
@@ -309,7 +311,7 @@ describe('OCRService', () => {
                 language: 'eng'
             });
             expect(mockBecca.getNote).toHaveBeenCalledWith('note123');
-            expect(mockNote.getBlob).toHaveBeenCalled();
+            expect(mockNote.getContent).toHaveBeenCalled();
         });
 
         it('should return existing OCR result if forceReprocess is false', async () => {
@@ -329,7 +331,7 @@ describe('OCRService', () => {
                 language: 'eng',
                 extractedAt: '2025-06-10T09:00:00.000Z'
             });
-            expect(mockNote.getBlob).not.toHaveBeenCalled();
+            expect(mockNote.getContent).not.toHaveBeenCalled();
         });
 
         it('should reprocess if forceReprocess is true', async () => {
@@ -356,7 +358,7 @@ describe('OCRService', () => {
             const result = await ocrService.processNoteOCR('note123', { forceReprocess: true });
 
             expect(result?.text).toBe('New processed text');
-            expect(mockNote.getBlob).toHaveBeenCalled();
+            expect(mockNote.getContent).toHaveBeenCalled();
         });
 
         it('should return null for non-existent note', async () => {
@@ -383,12 +385,12 @@ describe('OCRService', () => {
             attachmentId: 'attach123',
             role: 'image',
             mime: 'image/png',
-            getBlob: vi.fn()
+            getContent: vi.fn()
         };
 
         beforeEach(() => {
             mockBecca.getAttachment.mockReturnValue(mockAttachment);
-            mockAttachment.getBlob.mockResolvedValue(Buffer.from('fake-image-data'));
+            mockAttachment.getContent.mockReturnValue(Buffer.from('fake-image-data'));
         });
 
         it('should process attachment OCR successfully', async () => {
@@ -714,13 +716,13 @@ describe('OCRService', () => {
                     noteId: 'note1',
                     type: 'image',
                     mime: 'image/jpeg',
-                    getContent: vi.fn().mockResolvedValue(Buffer.from('fake-image-data'))
+                    getContent: vi.fn().mockReturnValue(Buffer.from('fake-image-data'))
                 };
                 const mockAttachment = {
                     attachmentId: 'attach1',
                     role: 'image',
                     mime: 'image/gif',
-                    getContent: vi.fn().mockResolvedValue(Buffer.from('fake-image-data'))
+                    getContent: vi.fn().mockReturnValue(Buffer.from('fake-image-data'))
                 };
 
                 mockBecca.getNote.mockReturnValue(mockNote);
@@ -757,7 +759,7 @@ describe('OCRService', () => {
                     noteId: 'note1',
                     type: 'image',
                     mime: 'image/jpeg',
-                    getContent: vi.fn().mockRejectedValue(new Error('Failed to get content'))
+                    getContent: vi.fn().mockImplementation(() => { throw new Error('Failed to get content'); })
                 };
                 mockBecca.getNote.mockReturnValue(mockNote);
                 mockSql.getRow.mockReturnValue(null);
@@ -815,7 +817,7 @@ describe('OCRService', () => {
                     noteId: 'note2',
                     type: 'image',
                     mime: 'image/jpeg',
-                    getContent: vi.fn().mockResolvedValue(Buffer.from('fake-image-data'))
+                    getContent: vi.fn().mockReturnValue(Buffer.from('fake-image-data'))
                 };
                 mockBecca.getNote.mockReturnValue(mockNote);
                 mockSql.getRow.mockReturnValue(null);
@@ -866,7 +868,7 @@ describe('OCRService', () => {
             mockBecca.getNote.mockReturnValue({
                 noteId: 'note123',
                 mime: 'image/jpeg',
-                getBlob: vi.fn().mockResolvedValue(Buffer.from('fake-image-data'))
+                getContent: vi.fn().mockReturnValue(Buffer.from('fake-image-data'))
             });
             mockSql.getRow.mockResolvedValue(null);
             

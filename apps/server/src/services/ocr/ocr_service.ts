@@ -184,7 +184,7 @@ class OCRService {
         }
 
         try {
-            const content = await note.getBlob();
+            const content = note.getContent();
             if (!content || !(content instanceof Buffer)) {
                 throw new Error(`Cannot get image content for note ${noteId}`);
             }
@@ -234,7 +234,7 @@ class OCRService {
         }
 
         try {
-            const content = await attachment.getBlob();
+            const content = attachment.getContent();
             if (!content || !(content instanceof Buffer)) {
                 throw new Error(`Cannot get image content for attachment ${attachmentId}`);
             }
