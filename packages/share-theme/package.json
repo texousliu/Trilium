@@ -1,7 +1,7 @@
 {
   "name": "@triliumnext/share-theme",
   "version": "1.0.3",
-  "description": "",
+  "description": "Adaptation of the trilium.rocks share theme",
   "main": "index.js",
   "scripts": {
     "build": "esrun scripts/build.ts",
@@ -16,8 +16,11 @@
     "./scripts/*": "./src/scripts/*",
     "./*": "./dist/*"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Elian Doran <contact@eliandoran.me>",
+  "contributors": [
+    "Zerebos <me@zerebos.com>"
+  ],
+  "license": "Apache-2.0",
   "devDependencies": {
     "@digitak/esrun": "^3.2.24",
     "@types/swagger-ui": "^3.52.0",
