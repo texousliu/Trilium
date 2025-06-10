@@ -205,7 +205,7 @@
                                     "name": "shareAlias",
                                     "value": "server-installation",
                                     "isInheritable": false,
-                                    "position": 30
+                                    "position": 10
                                 }
                             ],
                             "format": "markdown",
@@ -269,14 +269,14 @@
                                                     "name": "shareAlias",
                                                     "value": "packaged-server-installation",
                                                     "isInheritable": false,
-                                                    "position": 20
+                                                    "position": 10
                                                 },
                                                 {
                                                     "type": "label",
                                                     "name": "iconClass",
                                                     "value": "bx bxl-tux",
                                                     "isInheritable": false,
-                                                    "position": 30
+                                                    "position": 20
                                                 }
                                             ],
                                             "format": "markdown",
@@ -738,17 +738,10 @@
                                         },
                                         {
                                             "type": "label",
-                                            "name": "shareHiddenFromTree",
-                                            "value": "",
-                                            "isInheritable": false,
-                                            "position": 20
-                                        },
-                                        {
-                                            "type": "label",
                                             "name": "iconClass",
                                             "value": "bx bx-stopwatch",
                                             "isInheritable": false,
-                                            "position": 30
+                                            "position": 20
                                         }
                                     ],
                                     "format": "markdown",
