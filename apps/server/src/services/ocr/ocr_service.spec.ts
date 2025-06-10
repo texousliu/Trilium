@@ -689,6 +689,13 @@ describe('OCRService', () => {
             });
 
             it('should process image notes and attachments in sequence', async () => {
+                // Clear all mocks at the start of this test to ensure clean state
+                vi.clearAllMocks();
+                
+                // Reinitialize OCR service after clearing mocks
+                await ocrService.initialize();
+                (ocrService as any).worker = mockWorker;
+                
                 // Mock data for batch processing
                 const imageNotes = [
                     { noteId: 'note1', mime: 'image/jpeg' },
@@ -712,10 +719,16 @@ describe('OCRService', () => {
                 });
 
                 // Mock notes and attachments
-                const mockNote = {
+                const mockNote1 = {
                     noteId: 'note1',
                     type: 'image',
                     mime: 'image/jpeg',
+                    getContent: vi.fn().mockReturnValue(Buffer.from('fake-image-data'))
+                };
+                const mockNote2 = {
+                    noteId: 'note2',
+                    type: 'image',
+                    mime: 'image/png',
                     getContent: vi.fn().mockReturnValue(Buffer.from('fake-image-data'))
                 };
                 const mockAttachment = {
@@ -725,7 +738,11 @@ describe('OCRService', () => {
                     getContent: vi.fn().mockReturnValue(Buffer.from('fake-image-data'))
                 };
 
-                mockBecca.getNote.mockReturnValue(mockNote);
+                mockBecca.getNote.mockImplementation((noteId) => {
+                    if (noteId === 'note1') return mockNote1;
+                    if (noteId === 'note2') return mockNote2;
+                    return null;
+                });
                 mockBecca.getAttachment.mockReturnValue(mockAttachment);
                 mockSql.getRow.mockReturnValue(null); // No existing OCR results
 
@@ -733,7 +750,8 @@ describe('OCRService', () => {
                 await ocrService.startBatchProcessing();
 
                 // Wait for background processing to complete
-                await new Promise(resolve => setTimeout(resolve, 100));
+                // Need to wait longer since there's a 500ms delay between each item in batch processing
+                await new Promise(resolve => setTimeout(resolve, 2000));
 
                 // Verify notes and attachments were processed
                 expect(mockBecca.getNote).toHaveBeenCalledWith('note1');
