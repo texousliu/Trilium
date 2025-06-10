@@ -72,6 +72,11 @@
     "vite-plugin-static-copy": "3.0.0"
   },
   "nx": {
-    "name": "client"
+    "name": "client",
+    "targets": {
+      "serve": {
+        "dependsOn": ["^build"]
+      }
+    }
   }
 }
