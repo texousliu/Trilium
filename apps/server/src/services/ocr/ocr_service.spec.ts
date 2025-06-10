@@ -229,7 +229,7 @@ describe('OCRService', () => {
                 language: 'eng'
             };
 
-            await ocrService.storeOCRResult('note123', 'note', ocrResult);
+            await ocrService.storeOCRResult('note123', ocrResult, 'note');
 
             expect(mockSql.execute).toHaveBeenCalledWith(
                 expect.stringContaining('INSERT OR REPLACE INTO ocr_results'),
@@ -248,7 +248,7 @@ describe('OCRService', () => {
                 language: 'eng'
             };
 
-            await expect(ocrService.storeOCRResult('note123', 'note', ocrResult)).rejects.toThrow('Database error');
+            await expect(ocrService.storeOCRResult('note123', ocrResult, 'note')).rejects.toThrow('Database error');
             expect(mockLog.error).toHaveBeenCalledWith('Failed to store OCR result: Error: Database error');
         });
     });
@@ -329,7 +329,7 @@ describe('OCRService', () => {
 
             const result = await ocrService.processNoteOCR('note123', { forceReprocess: true });
 
-            expect(result.text).toBe('New processed text');
+            expect(result?.text).toBe('New processed text');
             expect(mockNote.getBlob).toHaveBeenCalled();
         });
 
