@@ -1,16 +1,8 @@
 import TypeWidget from "./type_widget.js";
 import utils from "../../services/utils.js";
-import linkService from "../../services/link.js";
 import server from "../../services/server.js";
 import type FNote from "../../entities/fnote.js";
 import options from "../../services/options.js";
-import type { ExcalidrawElement, Theme } from "@excalidraw/excalidraw/element/types";
-import type { AppState, BinaryFileData, ExcalidrawImperativeAPI, ExcalidrawProps, LibraryItem, SceneData } from "@excalidraw/excalidraw/types";
-import type { JSX } from "react";
-import type React from "react";
-import type { Root } from "react-dom/client";
-import "@excalidraw/excalidraw/index.css";
-import asset_path from "../../asset_path.js";
 
 const TPL = /*html*/`
     <div class="canvas-widget note-detail-canvas note-detail-printable note-detail">
@@ -121,7 +113,6 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
     private excalidrawWrapperRef!: React.RefObject<HTMLElement | null>;
 
     private $render!: JQuery<HTMLElement>;
-    private root?: Root;
     private reactHandlers!: JQuery<HTMLElement>;
 
     constructor() {
@@ -191,14 +182,8 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         }
         (window.process.env as any).PREACT = false;
 
-        const excalidraw = await import("@excalidraw/excalidraw");
-        this.excalidrawLib = excalidraw;
-
-        const { createRoot } = await import("react-dom/client");
-        const React = (await import("react")).default;
-        this.root?.unmount();
-        this.root = createRoot(renderElement);
-        this.root.render(React.createElement(() => this.createExcalidrawReactApp(React, excalidraw.Excalidraw)));
+        const renderCanvas = (await import("./canvas_el.js")).default;
+        renderCanvas(renderElement);
     }
 
     /**
@@ -468,99 +453,6 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
             this.updateSceneVersion();
             this.saveData();
         }
-    }
-
-    createExcalidrawReactApp(react: typeof React, excalidrawComponent: React.MemoExoticComponent<(props: ExcalidrawProps) => JSX.Element>) {
-        const excalidrawWrapperRef = react.useRef<HTMLElement>(null);
-        this.excalidrawWrapperRef = excalidrawWrapperRef;
-        const [dimensions, setDimensions] = react.useState<{ width?: number; height?: number }>({
-            width: undefined,
-            height: undefined
-        });
-
-        react.useEffect(() => {
-            if (excalidrawWrapperRef.current) {
-                const dimensions = {
-                    width: excalidrawWrapperRef.current.getBoundingClientRect().width,
-                    height: excalidrawWrapperRef.current.getBoundingClientRect().height
-                };
-                setDimensions(dimensions);
-            }
-
-            const onResize = () => {
-                if (this.note?.type !== "canvas") {
-                    return;
-                }
-
-                if (excalidrawWrapperRef.current) {
-                    const dimensions = {
-                        width: excalidrawWrapperRef.current.getBoundingClientRect().width,
-                        height: excalidrawWrapperRef.current.getBoundingClientRect().height
-                    };
-                    setDimensions(dimensions);
-                }
-            };
-
-            window.addEventListener("resize", onResize);
-
-            return () => window.removeEventListener("resize", onResize);
-        }, [excalidrawWrapperRef]);
-
-        const onLinkOpen = react.useCallback<NonNullable<ExcalidrawProps["onLinkOpen"]>>((element, event) => {
-            let link = element.link;
-            if (!link) {
-                return false;
-            }
-
-            if (link.startsWith("root/")) {
-                link = "#" + link;
-            }
-
-            const { nativeEvent } = event.detail;
-
-            event.preventDefault();
-
-            return linkService.goToLinkExt(nativeEvent, link, null);
-        }, []);
-
-        return react.createElement(
-            react.Fragment,
-            null,
-            react.createElement(
-                "div",
-                {
-                    className: "excalidraw-wrapper",
-                    ref: excalidrawWrapperRef
-                },
-                react.createElement(excalidrawComponent, {
-                    // this makes sure that 1) manual theme switch button is hidden 2) theme stays as it should after opening menu
-                    theme: this.themeStyle,
-                    excalidrawAPI: (api: ExcalidrawImperativeAPI) => {
-                        this.excalidrawApi = api;
-                    },
-                    onLibraryChange: () => {
-                        this.libraryChanged = true;
-
-                        this.saveData();
-                    },
-                    onChange: () => this.onChangeHandler(),
-                    viewModeEnabled: options.is("databaseReadonly"),
-                    zenModeEnabled: false,
-                    gridModeEnabled: false,
-                    isCollaborating: false,
-                    detectScroll: false,
-                    handleKeyboardGlobally: false,
-                    autoFocus: false,
-                    onLinkOpen,
-                    UIOptions: {
-                        canvasActions: {
-                            saveToActiveFile: false,
-                            export: false
-                        }
-                    }
-                })
-            )
-        );
     }
 
     /**
