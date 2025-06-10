@@ -135,7 +135,7 @@ class OCRService {
             
             const ocrResult: OCRResult = {
                 text: result.data.text.trim(),
-                confidence: result.data.confidence,
+                confidence: result.data.confidence / 100,  // Convert percentage to decimal
                 extractedAt: new Date().toISOString(),
                 language: options.language || 'eng'
             };
@@ -184,7 +184,7 @@ class OCRService {
         }
 
         try {
-            const content = note.getContent();
+            const content = await note.getBlob();
             if (!content || !(content instanceof Buffer)) {
                 throw new Error(`Cannot get image content for note ${noteId}`);
             }
@@ -192,7 +192,7 @@ class OCRService {
             const ocrResult = await this.extractTextFromImage(content, options);
             
             // Store OCR result
-            this.storeOCRResult(noteId, ocrResult);
+            await this.storeOCRResult(noteId, ocrResult);
             
             return ocrResult;
         } catch (error) {
@@ -234,7 +234,7 @@ class OCRService {
         }
 
         try {
-            const content = attachment.getContent();
+            const content = await attachment.getBlob();
             if (!content || !(content instanceof Buffer)) {
                 throw new Error(`Cannot get image content for attachment ${attachmentId}`);
             }
@@ -242,7 +242,7 @@ class OCRService {
             const ocrResult = await this.extractTextFromImage(content, options);
             
             // Store OCR result
-            this.storeOCRResult(attachmentId, ocrResult, 'attachment');
+            await this.storeOCRResult(attachmentId, ocrResult, 'attachment');
             
             return ocrResult;
         } catch (error) {
@@ -254,7 +254,7 @@ class OCRService {
     /**
      * Store OCR result in database
      */
-    storeOCRResult(entityId: string, ocrResult: OCRResult, entityType: 'note' | 'attachment' = 'note'): void {
+    async storeOCRResult(entityId: string, ocrResult: OCRResult, entityType: 'note' | 'attachment' = 'note'): Promise<void> {
         try {
             sql.execute(`
                 INSERT OR REPLACE INTO ocr_results (entity_id, entity_type, extracted_text, confidence, language, extracted_at)
