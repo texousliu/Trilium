@@ -108,7 +108,6 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
     private librarycache: LibraryItem[];
     private attachmentMetadata: AttachmentMetadata[];
     private themeStyle!: Theme;
-    private excalidrawLib!: typeof import("@excalidraw/excalidraw");
     private excalidrawApi!: ExcalidrawImperativeAPI;
     private excalidrawWrapperRef!: React.RefObject<HTMLElement | null>;
 
@@ -180,7 +179,10 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
 
         const Canvas = (await import("./canvas_el.js")).default;
         this.canvasInstance = new Canvas({
-
+            // this makes sure that 1) manual theme switch button is hidden 2) theme stays as it should after opening menu
+            theme: this.themeStyle,
+            onChange: () => this.onChangeHandler(),
+            viewModeEnabled: options.is("databaseReadonly"),
         });
         this.canvasInstance.renderCanvas(renderElement);
     }
@@ -238,36 +240,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
                 };
             }
 
-            const { elements, files } = content;
-            const appState: Partial<AppState> = content.appState ?? {};
-
-            appState.theme = this.themeStyle;
-
-            if (this.excalidrawWrapperRef.current) {
-                const boundingClientRect = this.excalidrawWrapperRef.current.getBoundingClientRect();
-                appState.width = boundingClientRect.width;
-                appState.height = boundingClientRect.height;
-                appState.offsetLeft = boundingClientRect.left;
-                appState.offsetTop = boundingClientRect.top;
-            }
-
-            const sceneData: SceneData = {
-                elements,
-                appState
-            };
-
-            // files are expected in an array when loading. they are stored as a key-index object
-            // see example for loading here:
-            // https://github.com/excalidraw/excalidraw/blob/c5a7723185f6ca05e0ceb0b0d45c4e3fbcb81b2a/src/packages/excalidraw/example/App.js#L68
-            const fileArray: BinaryFileData[] = [];
-            for (const fileId in files) {
-                const file = files[fileId];
-                // TODO: dataURL is replaceable with a trilium image url
-                //       maybe we can save normal images (pasted) with base64 data url, and trilium images
-                //       with their respective url! nice
-                // file.dataURL = "http://localhost:8080/api/images/ltjOiU8nwoZx/start.png";
-                fileArray.push(file);
-            }
+            this.canvasInstance.loadData(content, this.themeStyle);
 
             Promise.all(
                 (await note.getAttachmentsByRole("canvasLibraryItem")).map(async (attachment) => {
@@ -301,11 +274,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
                 this.attachmentMetadata = metadata;
             });
 
-            // Update the scene
-            // TODO: Fix type of sceneData
-            this.canvasInstance.excalidrawApi.updateScene(sceneData as any);
-            this.canvasInstance.excalidrawApi.addFiles(fileArray);
-            this.canvasInstance.excalidrawApi.history.clear();
+
         }
 
         // set initial scene version
@@ -319,45 +288,8 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
      * this is automatically called after this.saveData();
      */
     async getData() {
-        const elements = this.canvasInstance.excalidrawApi.getSceneElements();
-        const appState = this.canvasInstance.excalidrawApi.getAppState();
-
-        /**
-         * A file is not deleted, even though removed from canvas. Therefore, we only keep
-         * files that are referenced by an element. Maybe this will change with a new excalidraw version?
-         */
-        const files = this.canvasInstance.excalidrawApi.getFiles();
-
-        // parallel svg export to combat bitrot and enable rendering image for note inclusion, preview, and share
-        const svg = await this.excalidrawLib.exportToSvg({
-            elements,
-            appState,
-            exportPadding: 5, // 5 px padding
-            files
-        });
-        const svgString = svg.outerHTML;
-
-        const activeFiles: Record<string, BinaryFileData> = {};
-        // TODO: Used any where upstream typings appear to be broken.
-        elements.forEach((element: any) => {
-            if ("fileId" in element && element.fileId) {
-                activeFiles[element.fileId] = files[element.fileId];
-            }
-        });
-
-        const content = {
-            type: "excalidraw",
-            version: 2,
-            elements,
-            files: activeFiles,
-            appState: {
-                scrollX: appState.scrollX,
-                scrollY: appState.scrollY,
-                zoom: appState.zoom
-            }
-        };
-
-        const attachments = [{ role: "image", title: "canvas-export.svg", mime: "image/svg+xml", content: svgString, position: 0 }];
+        const { content, svg } = await this.canvasInstance.getData();
+        const attachments = [{ role: "image", title: "canvas-export.svg", mime: "image/svg+xml", content: svg, position: 0 }];
 
         if (this.libraryChanged) {
             // this.libraryChanged is unset in dataSaved()
