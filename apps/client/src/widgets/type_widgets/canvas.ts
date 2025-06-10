@@ -3,7 +3,8 @@ import utils from "../../services/utils.js";
 import server from "../../services/server.js";
 import type FNote from "../../entities/fnote.js";
 import options from "../../services/options.js";
-import { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
+import type { AppState, BinaryFileData, ExcalidrawImperativeAPI, LibraryItem, SceneData } from "@excalidraw/excalidraw/types";
+import type { ExcalidrawElement, Theme } from "@excalidraw/excalidraw/element/types";
 import type Canvas from "./canvas_el.js";
 
 const TPL = /*html*/`
