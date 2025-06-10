@@ -20,6 +20,7 @@ const TPL = /*html*/`
 
         .excalidraw-wrapper {
             height: 100%;
+        }
 
         :root[dir="ltr"]
         .excalidraw
