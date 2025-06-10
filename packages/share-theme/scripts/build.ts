@@ -15,7 +15,7 @@ const rootDir = path.dirname(process.env.npm_package_json!);
 
 dotenv.config();
 
-const modules = ["scripts", "styles", "templates"];
+const modules = ["scripts", "styles"];
 const entryPoints: {in: string, out: string}[] = [];
 
 function makeEntry(mod: string) {
@@ -26,9 +26,6 @@ function makeEntry(mod: string) {
             break;
         case "scripts":
             entrypoint = "index.ts";
-            break;
-        case "templates":
-            entrypoint = "page.ejs";
             break;
         default:
             throw new Error(`Unknown module type ${mod}.`);
