@@ -23,12 +23,12 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@digitak/esrun": "^3.2.24",
-    "@types/swagger-ui": "^3.52.0",
+    "@types/swagger-ui": "^5.0.0",
     "@typescript-eslint/eslint-plugin": "^6.7.2",
     "@typescript-eslint/parser": "^6.7.2",
     "dotenv": "^16.3.1",
     "esbuild": "^0.25.0",
-    "eslint": "^8.49.0",
+    "eslint": "^9.0.0",
     "highlight.js": "^11.8.0",
     "typescript": "^5.2.2"
   },
