@@ -48,6 +48,17 @@
         "outputs": [
           "{options.outputPath}"
         ],
+        "defaultConfiguration": "production",
+        "configurations": {
+          "production": {
+            "minify": true,
+            "sourcemap": false
+          },
+          "development": {
+            "minify": false,
+            "sourcemap": true
+          }
+        },
         "options": {
           "main": "apps/desktop/src/electron-main.ts",
           "outputPath": "apps/desktop/dist",
@@ -63,10 +74,8 @@
           "format": [
             "cjs"
           ],
-          "minify": true,
           "thirdParty": true,
-          "declaration": false,
-          "sourcemap": true,
+          "declaration": false,          
           "esbuildOptions": {
             "splitting": false,
             "loader": {
