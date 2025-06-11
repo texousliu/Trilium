@@ -8,6 +8,7 @@ overrides:
   node-abi: 4.9.0
   mermaid: 11.6.0
   preact: 10.26.8
+  roughjs: 4.6.6
   '@types/express-serve-static-core': 5.0.6
   flat@<5.0.1: '>=5.0.1'
   debug@>=3.2.0 <3.2.7: '>=3.2.7'
@@ -11104,9 +11105,6 @@ packages:
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
 
-  roughjs@4.6.4:
-    resolution: {integrity: sha512-s6EZ0BntezkFYMf/9mGn7M8XGIoaav9QQBCnJROWB3brUWQ683Q2LbRD/hq0Z3bAJ/9NVpU/5LpiTWvQMyLDhw==}
-
   roughjs@4.6.6:
     resolution: {integrity: sha512-ZUz/69+SYpFN/g/lUlo2FXcIjRkSu3nDarreVdGGndHEBJ6cXPdKguS8JGxwj5HA5xIbVKSmLgr5b3AWxtRfvQ==}
 
@@ -15412,7 +15410,7 @@ snapshots:
       pwacompat: 2.0.17
       react: 16.14.0
       react-dom: 19.1.0(react@16.14.0)
-      roughjs: 4.6.4
+      roughjs: 4.6.6
       sass: 1.51.0
       tunnel-rat: 0.1.2(@types/react@19.1.7)(react@16.14.0)
     transitivePeerDependencies:
@@ -25511,13 +25509,6 @@ snapshots:
       '@rollup/rollup-win32-ia32-msvc': 4.40.0
       '@rollup/rollup-win32-x64-msvc': 4.40.0
       fsevents: 2.3.3
-
-  roughjs@4.6.4:
-    dependencies:
-      hachure-fill: 0.5.2
-      path-data-parser: 0.1.0
-      points-on-curve: 0.2.0
-      points-on-path: 0.2.1
 
   roughjs@4.6.6:
     dependencies:
