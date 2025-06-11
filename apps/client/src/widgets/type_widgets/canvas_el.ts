@@ -3,7 +3,6 @@ import { Excalidraw, getSceneVersion, exportToSvg } from "@excalidraw/excalidraw
 import { createElement, render } from "preact/compat";
 import { AppState, BinaryFileData, ExcalidrawImperativeAPI, ExcalidrawProps, LibraryItem, SceneData } from "@excalidraw/excalidraw/types";
 import type { ComponentType } from "preact";
-import utils from "../../services/utils";
 import { Theme } from "@excalidraw/excalidraw/element/types";
 
 /** Indicates that it is fresh. excalidraw scene version is always >0 */
@@ -14,10 +13,12 @@ export default class Canvas {
     private currentSceneVersion: number;
     private opts: ExcalidrawProps;
     private excalidrawApi!: ExcalidrawImperativeAPI;
+    private initializedPromise: JQuery.Deferred<void>;
 
     constructor(opts: ExcalidrawProps) {
         this.opts = opts;
         this.currentSceneVersion = SCENE_VERSION_INITIAL;
+        this.initializedPromise = $.Deferred();
     }
 
     renderCanvas(targetEl: HTMLElement) {
@@ -25,14 +26,14 @@ export default class Canvas {
             ...this.opts,
             excalidrawAPI: (api: ExcalidrawImperativeAPI) => {
                 this.excalidrawApi = api;
+                this.initializedPromise.resolve();
             },
         }), targetEl);
     }
 
     async waitForApiToBecomeAvailable() {
         while (!this.excalidrawApi) {
-            console.log("excalidrawApi not yet loaded, sleep 200ms...");
-            await utils.sleep(200);
+            await this.initializedPromise;
         }
     }
 
