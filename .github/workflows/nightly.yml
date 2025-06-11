@@ -11,6 +11,7 @@ on:
   pull_request:
     paths:
       - .github/actions/build-electron/*
+      - .github/workflows/nightly.yml
       - forge.config.cjs
 
 concurrency:
