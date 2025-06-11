@@ -1,9 +1,15 @@
 import "@excalidraw/excalidraw/index.css";
 import { Excalidraw, getSceneVersion, exportToSvg } from "@excalidraw/excalidraw";
 import { createElement, render } from "preact/compat";
-import { AppState, BinaryFileData, ExcalidrawImperativeAPI, ExcalidrawProps, LibraryItem, SceneData } from "@excalidraw/excalidraw/types";
+import { AppState, BinaryFileData, ExcalidrawImperativeAPI, ExcalidrawProps, LibraryItem } from "@excalidraw/excalidraw/types";
 import type { ComponentType } from "preact";
-import { Theme } from "@excalidraw/excalidraw/element/types";
+import { ExcalidrawElement, NonDeletedExcalidrawElement, Theme } from "@excalidraw/excalidraw/element/types";
+
+export interface CanvasContent {
+    elements: ExcalidrawElement[];
+    files: BinaryFileData[];
+    appState: Partial<AppState>;
+}
 
 /** Indicates that it is fresh. excalidraw scene version is always >0 */
 const SCENE_VERSION_INITIAL = -1;
@@ -85,16 +91,10 @@ export default class Canvas {
         });
     }
 
-    loadData(content: any, theme: any) {
+    loadData(content: CanvasContent, theme: Theme) {
         const { elements, files } = content;
         const appState: Partial<AppState> = content.appState ?? {};
-
         appState.theme = theme;
-
-        const sceneData: SceneData = {
-            elements,
-            appState
-        };
 
         // files are expected in an array when loading. they are stored as a key-index object
         // see example for loading here:
@@ -111,7 +111,10 @@ export default class Canvas {
 
         // Update the scene
         // TODO: Fix type of sceneData
-        this.excalidrawApi.updateScene(sceneData as any);
+        this.excalidrawApi.updateScene({
+            elements,
+            appState: appState as AppState
+        });
         this.excalidrawApi.addFiles(fileArray);
         this.excalidrawApi.history.clear();
     }
@@ -135,8 +138,7 @@ export default class Canvas {
         const svgString = svg.outerHTML;
 
         const activeFiles: Record<string, BinaryFileData> = {};
-        // TODO: Used any where upstream typings appear to be broken.
-        elements.forEach((element: any) => {
+        elements.forEach((element: NonDeletedExcalidrawElement) => {
             if ("fileId" in element && element.fileId) {
                 activeFiles[element.fileId] = files[element.fileId];
             }

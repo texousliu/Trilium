@@ -2,9 +2,10 @@ import TypeWidget from "./type_widget.js";
 import server from "../../services/server.js";
 import type FNote from "../../entities/fnote.js";
 import options from "../../services/options.js";
-import type { AppState, BinaryFileData, LibraryItem } from "@excalidraw/excalidraw/types";
-import type { ExcalidrawElement, Theme } from "@excalidraw/excalidraw/element/types";
+import type { LibraryItem } from "@excalidraw/excalidraw/types";
+import type { Theme } from "@excalidraw/excalidraw/element/types";
 import type Canvas from "./canvas_el.js";
+import { CanvasContent } from "./canvas_el.js";
 
 const TPL = /*html*/`
     <div class="canvas-widget note-detail-canvas note-detail-printable note-detail">
@@ -46,11 +47,7 @@ const TPL = /*html*/`
     </div>
 `;
 
-interface CanvasContent {
-    elements: ExcalidrawElement[];
-    files: BinaryFileData[];
-    appState: Partial<AppState>;
-}
+
 
 interface AttachmentMetadata {
     title: string;
