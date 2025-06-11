@@ -2,6 +2,7 @@ import "@excalidraw/excalidraw/index.css";
 import { Excalidraw, getSceneVersion, exportToSvg } from "@excalidraw/excalidraw";
 import { createElement, createRef, Fragment, RefObject, render, useEffect, useState } from "preact/compat";
 import { AppState, BinaryFileData, ExcalidrawImperativeAPI, ExcalidrawProps, SceneData } from "@excalidraw/excalidraw/types";
+import type { ComponentType, VNode } from "preact";
 
 /** -1 indicates that it is fresh. excalidraw scene version is always >0 */
 const SCENE_VERSION_INITIAL = -1;
@@ -29,14 +30,9 @@ export default class Canvas {
     }
 
     private createCanvasElement(opts: ExcalidrawProps) {
-        return createElement(Fragment, null,
-            createElement(
-                "div",
-                {
-                    className: "excalidraw-wrapper",
-                },
-                createElement(Excalidraw, opts)
-            ));
+        return createElement("div", { className: "excalidraw-wrapper", },
+            createElement(Excalidraw as ComponentType<ExcalidrawProps>, opts)
+        );
     }
 
     /**
