@@ -8,7 +8,7 @@ import electronContextMenu from "./menus/electron_context_menu.js";
 import glob from "./services/glob.js";
 import { t } from "./services/i18n.js";
 import options from "./services/options.js";
-import server from "./services/server.js";
+import { isRunningUnderRosetta2 } from "./services/rosetta_detection.js";
 import type ElectronRemote from "@electron/remote";
 import type Electron from "electron";
 import "./stylesheets/bootstrap.scss";
@@ -119,13 +119,12 @@ function initDarkOrLightMode(style: CSSStyleDeclaration) {
     nativeTheme.themeSource = themeSource;
 }
 
-async function checkRosetta2Warning() {
+function checkRosetta2Warning() {
     if (!utils.isElectron()) return;
 
     try {
-        // Check if running under Rosetta 2 by calling the server
-        const response = await server.get("api/system-info/rosetta-check") as { isRunningUnderRosetta2: boolean };
-        if (response.isRunningUnderRosetta2) {
+        // Check if running under Rosetta 2 directly on client
+        if (isRunningUnderRosetta2()) {
             // Trigger the Rosetta 2 warning dialog
             appContext.triggerCommand("showRosettaWarning", {});
         }
