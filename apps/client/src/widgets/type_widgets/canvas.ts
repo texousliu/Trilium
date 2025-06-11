@@ -113,10 +113,6 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
     constructor() {
         super();
 
-        // currently required by excalidraw, in order to allows self-hosting fonts locally.
-        // this avoids making excalidraw load the fonts from an external CDN.
-        (window as any).EXCALIDRAW_ASSET_PATH = `${window.location.pathname}/node_modules/@excalidraw/excalidraw/dist/prod`;
-
         // temporary vars
         this.currentNoteId = "";
 
@@ -187,6 +183,8 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
                 this.saveData();
             },
         });
+
+        await setupFonts();
         this.canvasInstance.renderCanvas(renderElement);
     }
 
@@ -376,4 +374,23 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         }
     }
 
+}
+
+async function setupFonts() {
+    if (window.EXCALIDRAW_ASSET_PATH) {
+        return;
+    }
+
+    // currently required by excalidraw, in order to allows self-hosting fonts locally.
+    // this avoids making excalidraw load the fonts from an external CDN.
+    let path: string;
+    if (!glob.isDev) {
+        path = `${window.location.pathname}/node_modules/@excalidraw/excalidraw/dist/prod`;
+    } else {
+        path = (await import("../../../node_modules/@excalidraw/excalidraw/dist/prod/fonts/Excalifont/Excalifont-Regular-a88b72a24fb54c9f94e3b5fdaa7481c9.woff2?url")).default;
+        let pathComponents = path.split("/");
+        path = pathComponents.slice(0, pathComponents.length - 2).join("/");
+    }
+
+    window.EXCALIDRAW_ASSET_PATH = path;
 }
