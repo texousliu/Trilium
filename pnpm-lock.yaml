@@ -1283,8 +1283,8 @@ importers:
         specifier: ^3.2.24
         version: 3.2.26
       '@types/swagger-ui':
-        specifier: ^3.52.0
-        version: 3.52.4
+        specifier: ^5.0.0
+        version: 5.21.1
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.2
         version: 6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3)
@@ -4796,8 +4796,8 @@ packages:
   '@types/swagger-ui-express@4.1.8':
     resolution: {integrity: sha512-AhZV8/EIreHFmBV5wAs0gzJUNq9JbbSXgJLQubCC0jtIo6prnI9MIRRxnU4MZX9RB9yXxF1V4R7jtLl/Wcj31g==}
 
-  '@types/swagger-ui@3.52.4':
-    resolution: {integrity: sha512-7NV7q8BfupqdQxr26OkM0g0YEPB9uXnKGzXadgcearvI9MoCHt3F72lPTX3fZZIlrr21DC0IK26wcDMZ37oFDA==}
+  '@types/swagger-ui@5.21.1':
+    resolution: {integrity: sha512-DUmUH59eeOtvAqcWwBduH2ws0cc5i95KHsXCS4FsOfbUq/clW8TN+HqRBj7q5p9MSsSNK43RziIGItNbrAGLxg==}
 
   '@types/tmp@0.2.6':
     resolution: {integrity: sha512-chhaNf2oKHlRkDGt+tiKE2Z5aJ6qalm7Z9rlLdBwmOiAAf09YQvvoLXjWK4HWPF1xU/fqvMgfNfpVoBscA/tKA==}
@@ -18116,7 +18116,7 @@ snapshots:
       '@types/express': 5.0.3
       '@types/serve-static': 1.15.8
 
-  '@types/swagger-ui@3.52.4': {}
+  '@types/swagger-ui@5.21.1': {}
 
   '@types/tmp@0.2.6': {}
 
