@@ -1,19 +1,19 @@
 import "@excalidraw/excalidraw/index.css";
 import { Excalidraw, getSceneVersion, exportToSvg } from "@excalidraw/excalidraw";
-import { createElement, createRef, Fragment, RefObject, render, useEffect, useState } from "preact/compat";
-import { AppState, BinaryFileData, ExcalidrawImperativeAPI, ExcalidrawProps, SceneData } from "@excalidraw/excalidraw/types";
-import type { ComponentType, VNode } from "preact";
+import { createElement, render } from "preact/compat";
+import { AppState, BinaryFileData, ExcalidrawImperativeAPI, ExcalidrawProps, LibraryItem, SceneData } from "@excalidraw/excalidraw/types";
+import type { ComponentType } from "preact";
+import utils from "../../services/utils";
+import { Theme } from "@excalidraw/excalidraw/element/types";
 
-/** -1 indicates that it is fresh. excalidraw scene version is always >0 */
+/** Indicates that it is fresh. excalidraw scene version is always >0 */
 const SCENE_VERSION_INITIAL = -1;
-/** -2 indicates error */
-const SCENE_VERSION_ERROR = -2;
 
 export default class Canvas {
 
     private currentSceneVersion: number;
     private opts: ExcalidrawProps;
-    excalidrawApi!: ExcalidrawImperativeAPI;
+    private excalidrawApi!: ExcalidrawImperativeAPI;
 
     constructor(opts: ExcalidrawProps) {
         this.opts = opts;
@@ -27,6 +27,13 @@ export default class Canvas {
                 this.excalidrawApi = api;
             },
         }), targetEl);
+    }
+
+    async waitForApiToBecomeAvailable() {
+        while (!this.excalidrawApi) {
+            console.log("excalidrawApi not yet loaded, sleep 200ms...");
+            await utils.sleep(200);
+        }
     }
 
     private createCanvasElement(opts: ExcalidrawProps) {
@@ -66,6 +73,15 @@ export default class Canvas {
 
     isInitialScene() {
         return this.currentSceneVersion === SCENE_VERSION_INITIAL;
+    }
+
+    resetScene(theme: Theme) {
+        this.excalidrawApi.updateScene({
+            elements: [],
+            appState: {
+                theme
+            }
+        });
     }
 
     loadData(content: any, theme: any) {
@@ -141,6 +157,19 @@ export default class Canvas {
             content,
             svg: svgString
         }
+    }
+
+    async getLibraryItems() {
+        return this.excalidrawApi.updateLibrary({
+            libraryItems() {
+                return [];
+            },
+            merge: true
+        });
+    }
+
+    async updateLibrary(libraryItems: LibraryItem[]) {
+        this.excalidrawApi.updateLibrary({ libraryItems, merge: false });
     }
 
 }

@@ -1,9 +1,8 @@
 import TypeWidget from "./type_widget.js";
-import utils from "../../services/utils.js";
 import server from "../../services/server.js";
 import type FNote from "../../entities/fnote.js";
 import options from "../../services/options.js";
-import type { AppState, BinaryFileData, ExcalidrawImperativeAPI, LibraryItem, SceneData } from "@excalidraw/excalidraw/types";
+import type { AppState, BinaryFileData, LibraryItem } from "@excalidraw/excalidraw/types";
 import type { ExcalidrawElement, Theme } from "@excalidraw/excalidraw/element/types";
 import type Canvas from "./canvas_el.js";
 
@@ -109,8 +108,6 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
     private librarycache: LibraryItem[];
     private attachmentMetadata: AttachmentMetadata[];
     private themeStyle!: Theme;
-    private excalidrawApi!: ExcalidrawImperativeAPI;
-    private excalidrawWrapperRef!: React.RefObject<HTMLElement | null>;
 
     private $render!: JQuery<HTMLElement>;
     private reactHandlers!: JQuery<HTMLElement>;
@@ -209,11 +206,15 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
      * called to populate the widget container with the note content
      */
     async doRefresh(note: FNote) {
+        if (!this.canvasInstance) {
+            await this.#init();
+        }
+
         // see if the note changed, since we do not get a new class for a new note
         const noteChanged = this.currentNoteId !== note.noteId;
         if (noteChanged) {
             // reset the scene to omit unnecessary onchange handler
-            this.canvasInstance?.resetSceneVersion();
+            this.canvasInstance.resetSceneVersion();
         }
         this.currentNoteId = note.noteId;
 
@@ -221,10 +222,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         const blob = await note.getBlob();
 
         // before we load content into excalidraw, make sure excalidraw has loaded
-        while (!this.canvasInstance?.excalidrawApi) {
-            console.log("excalidrawApi not yet loaded, sleep 200ms...");
-            await utils.sleep(200);
-        }
+        await this.canvasInstance.waitForApiToBecomeAvailable();
 
         /**
          * new and empty note - make sure that canvas is empty.
@@ -233,15 +231,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
          * newly instantiated?
          */
         if (!blob?.content?.trim()) {
-            const sceneData: SceneData = {
-                elements: [],
-                appState: {
-                    theme: this.themeStyle
-                }
-            };
-
-            // TODO: Props mismatch.
-            this.canvasInstance.excalidrawApi.updateScene(sceneData as any);
+            this.canvasInstance.resetScene(this.themeStyle);
         } else if (blob.content) {
             let content: CanvasContent;
 
@@ -285,7 +275,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
                 const metadata = results.map((result) => result.metadata);
 
                 // Update the library and save to independent variables
-                this.canvasInstance.excalidrawApi.updateLibrary({ libraryItems, merge: false });
+                this.canvasInstance.updateLibrary(libraryItems);
 
                 // save state of library to compare it to the new state later.
                 this.librarycache = libraryItems;
@@ -313,12 +303,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
             // this.libraryChanged is unset in dataSaved()
 
             // there's no separate method to get library items, so have to abuse this one
-            const libraryItems = await this.canvasInstance.excalidrawApi.updateLibrary({
-                libraryItems() {
-                    return [];
-                },
-                merge: true
-            });
+            const libraryItems = await this.canvasInstance.getLibraryItems();
 
             // excalidraw saves the library as a own state. the items are saved to libraryItems. then we compare the library right now with a libraryitemcache. The cache is filled when we first load the Library into the note.
             //We need the cache to delete old attachments later in the server.
