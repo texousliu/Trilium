@@ -12,7 +12,6 @@ export default class Canvas {
 
     private currentSceneVersion: number;
     private opts: ExcalidrawProps;
-    private excalidrawWrapperRef?: RefObject<HTMLElement>;
     excalidrawApi!: ExcalidrawImperativeAPI;
 
     constructor(opts: ExcalidrawProps) {
@@ -30,13 +29,11 @@ export default class Canvas {
     }
 
     private createCanvasElement(opts: ExcalidrawProps) {
-        this.excalidrawWrapperRef = createRef<HTMLElement>();
         return createElement(Fragment, null,
             createElement(
                 "div",
                 {
                     className: "excalidraw-wrapper",
-                    ref: this.excalidrawWrapperRef
                 },
                 createElement(Excalidraw, opts)
             ));
@@ -80,14 +77,6 @@ export default class Canvas {
         const appState: Partial<AppState> = content.appState ?? {};
 
         appState.theme = theme;
-
-        if (this.excalidrawWrapperRef?.current) {
-            const boundingClientRect = this.excalidrawWrapperRef.current.getBoundingClientRect();
-            appState.width = boundingClientRect.width;
-            appState.height = boundingClientRect.height;
-            appState.offsetLeft = boundingClientRect.left;
-            appState.offsetTop = boundingClientRect.top;
-        }
 
         const sceneData: SceneData = {
             elements,
