@@ -1,6 +1,6 @@
 import "@excalidraw/excalidraw/index.css";
 import { Excalidraw, getSceneVersion, exportToSvg } from "@excalidraw/excalidraw";
-import { createElement, render } from "preact/compat";
+import { createElement, render, unmountComponentAtNode } from "preact/compat";
 import { AppState, BinaryFileData, ExcalidrawImperativeAPI, ExcalidrawProps, LibraryItem } from "@excalidraw/excalidraw/types";
 import type { ComponentType } from "preact";
 import { ExcalidrawElement, NonDeletedExcalidrawElement, Theme } from "@excalidraw/excalidraw/element/types";
@@ -28,6 +28,7 @@ export default class Canvas {
     }
 
     renderCanvas(targetEl: HTMLElement) {
+        unmountComponentAtNode(targetEl);
         render(this.createCanvasElement({
             ...this.opts,
             excalidrawAPI: (api: ExcalidrawImperativeAPI) => {
