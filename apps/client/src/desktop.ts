@@ -8,6 +8,7 @@ import electronContextMenu from "./menus/electron_context_menu.js";
 import glob from "./services/glob.js";
 import { t } from "./services/i18n.js";
 import options from "./services/options.js";
+import server from "./services/server.js";
 import type ElectronRemote from "@electron/remote";
 import type Electron from "electron";
 import "./stylesheets/bootstrap.scss";
@@ -22,7 +23,10 @@ bundleService.getWidgetBundlesByParent().then(async (widgetBundles) => {
     const DesktopLayout = (await import("./layouts/desktop_layout.js")).default;
 
     appContext.setLayout(new DesktopLayout(widgetBundles));
-    appContext.start().catch((e) => {
+    appContext.start().then(() => {
+        // Check for Rosetta 2 after the app has fully started
+        checkRosetta2Warning();
+    }).catch((e) => {
         toastService.showPersistent({
             title: t("toast.critical-error.title"),
             icon: "alert",
@@ -113,4 +117,19 @@ function initDarkOrLightMode(style: CSSStyleDeclaration) {
 
     const { nativeTheme } = utils.dynamicRequire("@electron/remote") as typeof ElectronRemote;
     nativeTheme.themeSource = themeSource;
+}
+
+async function checkRosetta2Warning() {
+    if (!utils.isElectron()) return;
+
+    try {
+        // Check if running under Rosetta 2 by calling the server
+        const response = await server.get("api/system-info/rosetta-check") as { isRunningUnderRosetta2: boolean };
+        if (response.isRunningUnderRosetta2) {
+            // Trigger the Rosetta 2 warning dialog
+            appContext.triggerCommand("showRosettaWarning", {});
+        }
+    } catch (error) {
+        console.warn("Could not check Rosetta 2 status:", error);
+    }
 }
