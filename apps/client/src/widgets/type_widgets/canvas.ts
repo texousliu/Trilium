@@ -163,15 +163,6 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
             throw new Error("Unable to find element to render.");
         }
 
-        // See https://github.com/excalidraw/excalidraw/issues/7899.
-        if (!window.process) {
-            (window.process as any) = {};
-        }
-        if (!window.process.env) {
-            window.process.env = {};
-        }
-        (window.process.env as any).PREACT = false;
-
         const Canvas = (await import("./canvas_el.js")).default;
         this.canvasInstance = new Canvas({
             // this makes sure that 1) manual theme switch button is hidden 2) theme stays as it should after opening menu
