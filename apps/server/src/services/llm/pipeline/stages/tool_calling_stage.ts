@@ -483,27 +483,51 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
         log.info(`Follow-up needed: ${needsFollowUp}`);
         log.info(`Reasoning: ${hasToolResults ? 'Has tool results to process' : 'No tool results'} ${hasErrors ? ', contains errors' : ''} ${hasEmptyResults ? ', contains empty results' : ''}`);
 
-        // Add a system message with hints for empty results
-        if (hasEmptyResults && needsFollowUp) {
-            log.info('Adding system message requiring the LLM to run additional tools with different parameters');
+        // Add aggressive system message for continued tool usage
+        if (needsFollowUp) {
+            log.info('Adding enhanced system message to encourage continued tool usage');
 
-            // Build a more directive message based on which tools were empty
-            const emptyToolNames = toolResultMessages
-                .filter(msg => this.isEmptyToolResult(msg.content, msg.name || ''))
-                .map(msg => msg.name);
+            let directiveMessage = '';
 
-            let directiveMessage = `YOU MUST NOT GIVE UP AFTER A SINGLE EMPTY SEARCH RESULT. `;
+            if (hasEmptyResults) {
+                // Empty results - be very directive about trying alternatives
+                const emptyToolNames = toolResultMessages
+                    .filter(msg => this.isEmptyToolResult(msg.content, msg.name || ''))
+                    .map(msg => msg.name);
 
-            if (emptyToolNames.includes('search_notes') || emptyToolNames.includes('keyword_search')) {
-                directiveMessage += `IMMEDIATELY RUN ANOTHER SEARCH TOOL with broader search terms, alternative keywords, or related concepts. `;
-                directiveMessage += `Try synonyms, more general terms, or related topics. `;
+                directiveMessage = `CRITICAL INSTRUCTION: YOU MUST NOT STOP AFTER EMPTY RESULTS!\n\n`;
+                directiveMessage += `REQUIRED ACTIONS:\n`;
+                
+                if (emptyToolNames.includes('search_notes')) {
+                    directiveMessage += `1. IMMEDIATELY use keyword_search_notes with specific terms\n`;
+                    directiveMessage += `2. Try attribute_search if content might be tagged/categorized\n`;
+                    directiveMessage += `3. Use discover_tools to find alternative approaches\n`;
+                }
+                
+                if (emptyToolNames.includes('keyword_search_notes')) {
+                    directiveMessage += `1. IMMEDIATELY use search_notes for semantic matching\n`;
+                    directiveMessage += `2. Try broader or alternative keyword terms\n`;
+                    directiveMessage += `3. Use workflow_helper for guidance on next steps\n`;
+                }
+                
+                if (emptyToolNames.includes('attribute_search')) {
+                    directiveMessage += `1. Use search_notes to find content about the attribute topic\n`;
+                    directiveMessage += `2. Try different attribute names or types\n`;
+                    directiveMessage += `3. Use search_suggestion to see available attributes\n`;
+                }
+                
+                directiveMessage += `\nFORBIDDEN: Do NOT ask user for clarification or offer general information!\n`;
+                directiveMessage += `REQUIRED: CONTINUE with alternative tools and approaches immediately!`;
+            } else {
+                // Has results - encourage follow-up actions
+                directiveMessage = `EXCELLENT! You found results. Now CONTINUE the workflow:\n\n`;
+                directiveMessage += `NEXT REQUIRED ACTIONS:\n`;
+                directiveMessage += `1. Use read_note to examine the most relevant results\n`;
+                directiveMessage += `2. Use workflow_helper to plan next steps based on your findings\n`;
+                directiveMessage += `3. Consider using related tools for deeper analysis\n\n`;
+                directiveMessage += `GOAL: Provide comprehensive information by using multiple tools in sequence.\n`;
+                directiveMessage += `CONTINUE with tool usage - don't stop at just search results!`;
             }
-
-            if (emptyToolNames.includes('keyword_search')) {
-                directiveMessage += `IMMEDIATELY TRY SEARCH_NOTES INSTEAD as it might find matches where keyword search failed. `;
-            }
-
-            directiveMessage += `DO NOT ask the user what to do next or if they want general information. CONTINUE SEARCHING with different parameters.`;
 
             updatedMessages.push({
                 role: 'system',
@@ -609,10 +633,19 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
             }
         }
 
-        // Add a general suggestion to try search_notes as a fallback
+        // Add general recommendations including new helper tools
         if (!toolName.includes('search_notes')) {
             guidance += "RECOMMENDATION: If specific searches fail, try the 'search_notes' tool which performs semantic searches.\n";
         }
+        
+        // Always suggest helper tools for guidance
+        guidance += "HELPER TOOLS AVAILABLE:\n";
+        guidance += "• Use 'discover_tools' to find the right tool for your task\n";
+        guidance += "• Use 'workflow_helper' to get guidance on next steps\n";
+        guidance += "• Use 'search_suggestion' for search syntax help\n";
+        
+        // Encourage continued tool usage
+        guidance += "\nIMPORTANT: Don't stop after one failed tool - try alternatives immediately!";
 
         return guidance;
     }

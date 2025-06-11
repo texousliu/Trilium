@@ -19,26 +19,61 @@ export const attributeSearchToolDefinition: Tool = {
     type: 'function',
     function: {
         name: 'attribute_search',
-        description: 'Search for notes with specific attributes (labels or relations). Use this when you need to find notes based on their metadata rather than content. IMPORTANT: attributeType must be exactly "label" or "relation" (lowercase).',
+        description: `ATTRIBUTE-BASED search for notes. Find notes by their labels or relations (metadata/tags).
+        
+        BEST FOR: Finding notes by categories, tags, status, relationships, or other metadata
+        USE WHEN: You need notes with specific labels, relations, or organizational attributes
+        DIFFERENT FROM: search_notes (content) and keyword_search_notes (text)
+        
+        CRITICAL: attributeType MUST be exactly "label" or "relation" (lowercase only!)
+        
+        COMMON ATTRIBUTES:
+        • Labels: #important, #todo, #project, #status, #priority
+        • Relations: ~relatedTo, ~childOf, ~contains, ~references
+        
+        NEXT STEPS: Use read_note with returned noteId values for full content`,
         parameters: {
             type: 'object',
             properties: {
                 attributeType: {
                     type: 'string',
-                    description: 'MUST be exactly "label" or "relation" (lowercase, no other values are valid)',
+                    description: `MUST be exactly "label" or "relation" (lowercase only!)
+                    
+                    CORRECT: "label", "relation"
+                    WRONG: "Label", "LABEL", "labels", "relations"
+                    
+                    • "label" = tags/categories like #important, #todo
+                    • "relation" = connections like ~relatedTo, ~childOf`,
                     enum: ['label', 'relation']
                 },
                 attributeName: {
                     type: 'string',
-                    description: 'Name of the attribute to search for (e.g., "important", "todo", "related-to")'
+                    description: `Name of the attribute to search for.
+                    
+                    LABEL EXAMPLES:
+                    - "important" (finds notes with #important)
+                    - "status" (finds notes with #status label)
+                    - "project" (finds notes tagged #project)
+                    
+                    RELATION EXAMPLES:
+                    - "relatedTo" (finds notes with ~relatedTo relation)
+                    - "childOf" (finds notes with ~childOf relation)
+                    - "contains" (finds notes with ~contains relation)`
                 },
                 attributeValue: {
                     type: 'string',
-                    description: 'Optional value of the attribute. If not provided, will find all notes with the given attribute name.'
+                    description: `OPTIONAL: Specific value of the attribute.
+                    
+                    • Leave empty to find ALL notes with this attribute
+                    • Specify value to find notes where attribute = specific value
+                    
+                    EXAMPLES:
+                    - attributeName: "status", attributeValue: "completed"
+                    - attributeName: "priority", attributeValue: "high"`
                 },
                 maxResults: {
                     type: 'number',
-                    description: 'Maximum number of results to return (default: 20)'
+                    description: 'Number of results (1-50, default: 20). Use higher values for comprehensive searches.'
                 }
             },
             required: ['attributeType', 'attributeName']
@@ -61,9 +96,33 @@ export class AttributeSearchTool implements ToolHandler {
 
             log.info(`Executing attribute_search tool - Type: "${attributeType}", Name: "${attributeName}", Value: "${attributeValue || 'any'}", MaxResults: ${maxResults}`);
 
-            // Validate attribute type
+            // Enhanced validation with helpful guidance
             if (attributeType !== 'label' && attributeType !== 'relation') {
-                return `Error: Invalid attribute type. Must be exactly "label" or "relation" (lowercase). You provided: "${attributeType}".`;
+                const suggestions: string[] = [];
+                
+                if (attributeType.toLowerCase() === 'label' || attributeType.toLowerCase() === 'relation') {
+                    suggestions.push(`CASE SENSITIVE: Use "${attributeType.toLowerCase()}" (lowercase)`);
+                }
+                
+                if (attributeType.includes('label') || attributeType.includes('Label')) {
+                    suggestions.push('CORRECT: Use "label" for tags and categories');
+                }
+                
+                if (attributeType.includes('relation') || attributeType.includes('Relation')) {
+                    suggestions.push('CORRECT: Use "relation" for connections and relationships');
+                }
+                
+                const errorMessage = `Invalid attributeType: "${attributeType}"
+
+REQUIRED: Must be exactly "label" or "relation" (lowercase only!)
+
+${suggestions.length > 0 ? suggestions.join('\n') : ''}
+
+EXAMPLES:
+• Find notes with #important tag: { "attributeType": "label", "attributeName": "important" }
+• Find notes with ~relatedTo relation: { "attributeType": "relation", "attributeName": "relatedTo" }`;
+                
+                return errorMessage;
             }
 
             // Execute the search

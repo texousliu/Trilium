@@ -17,25 +17,50 @@ export const searchNotesToolDefinition: Tool = {
     type: 'function',
     function: {
         name: 'search_notes',
-        description: 'Search for notes in the database using semantic search. Returns notes most semantically related to the query. Use specific, descriptive queries for best results.',
+        description: `SEMANTIC/CONCEPTUAL search for notes. Finds notes related to concepts, topics, or themes even without exact keyword matches.
+        
+        BEST FOR: Finding notes about ideas, concepts, or topics described in various ways
+        USE WHEN: Looking for conceptual relationships, thematic content, or related ideas
+        DIFFERENT FROM: keyword_search (which finds exact text matches)
+        
+        TIPS: 
+        - Use descriptive phrases like "project management methodologies" rather than single words
+        - Think conceptually: "machine learning classification" vs just "ML"
+        - Results include noteId values - ALWAYS use these IDs (not titles) with other tools
+        
+        NEXT STEPS: Use read_note with returned noteId values to get full content`,
         parameters: {
             type: 'object',
             properties: {
                 query: {
                     type: 'string',
-                    description: 'The search query to find semantically related notes. Be specific and descriptive for best results.'
+                    description: `Descriptive search query for semantic matching.
+                    
+                    GOOD EXAMPLES:
+                    - "machine learning algorithms for classification"
+                    - "personal productivity and time management techniques"
+                    - "software development best practices"
+                    
+                    AVOID:
+                    - Single words: "ML", "productivity"
+                    - Overly broad: "work", "notes"
+                    - Overly specific: exact phrases that might not exist`
                 },
                 parentNoteId: {
                     type: 'string',
-                    description: 'Optional system ID of the parent note to restrict search to a specific branch (not the title). This is a unique identifier like "abc123def456". Do not use note titles here.'
+                    description: `SCOPE LIMITER: Search only within children of this note.
+                    
+                    IMPORTANT: Must be a noteId (like "abc123def456") from previous search results - NOT a note title.
+                    
+                    USE FOR: Searching within specific projects, categories, or sections.`
                 },
                 maxResults: {
                     type: 'number',
-                    description: 'Maximum number of results to return (default: 5)'
+                    description: 'Number of results (1-20, default: 5). Use 10-15 for comprehensive exploration, 3-5 for quick lookup.'
                 },
                 summarize: {
                     type: 'boolean',
-                    description: 'Whether to provide summarized content previews instead of truncated ones (default: false)'
+                    description: 'AI SUMMARIES: Get intelligent summaries instead of truncated text (default: false). Use true for cleaner result overview.'
                 }
             },
             required: ['query']
@@ -190,6 +215,39 @@ export class SearchNotesTool implements ToolHandler {
     }
 
     /**
+     * Extract keywords from a semantic query for alternative search suggestions
+     */
+    private extractKeywords(query: string): string {
+        return query.split(' ')
+            .filter(word => word.length > 3 && !['using', 'with', 'for', 'and', 'the', 'that', 'this'].includes(word.toLowerCase()))
+            .slice(0, 3)
+            .join(' ');
+    }
+
+    /**
+     * Suggest broader search terms when specific searches fail
+     */
+    private suggestBroaderTerms(query: string): string {
+        const broaderTermsMap: Record<string, string> = {
+            'machine learning': 'AI technology',
+            'productivity': 'work methods',
+            'development': 'programming',
+            'management': 'organization',
+            'planning': 'strategy'
+        };
+        
+        for (const [specific, broader] of Object.entries(broaderTermsMap)) {
+            if (query.toLowerCase().includes(specific)) {
+                return broader;
+            }
+        }
+        
+        // Default: take first significant word and make it broader
+        const firstWord = query.split(' ').find(word => word.length > 3);
+        return firstWord ? `${firstWord} concepts` : 'general topics';
+    }
+
+    /**
      * Execute the search notes tool
      */
     public async execute(args: {
@@ -260,19 +318,39 @@ export class SearchNotesTool implements ToolHandler {
                 })
             );
 
-            // Format the results
+            // Format the results with enhanced guidance
             if (results.length === 0) {
                 return {
                     count: 0,
                     results: [],
                     query: query,
-                    message: 'No notes found matching your query. Try using more general terms or try the keyword_search_notes tool with a different query. Note: Use the noteId (not the title) when performing operations on specific notes with other tools.'
+                    searchType: 'semantic',
+                    message: 'No semantic matches found for your query.',
+                    nextSteps: {
+                        immediate: [
+                            `Try keyword_search with specific terms: "${this.extractKeywords(query)}"`,
+                            `Use attribute_search if looking for labeled/categorized notes`,
+                            `Try broader search terms like "${this.suggestBroaderTerms(query)}"`
+                        ],
+                        tips: [
+                            'Semantic search finds conceptual matches - try describing the topic differently',
+                            'If you know specific words that appear in the notes, use keyword_search instead',
+                            'Check if the content might be tagged with labels using attribute_search'
+                        ]
+                    }
                 };
             } else {
                 return {
                     count: enhancedResults.length,
                     results: enhancedResults,
-                    message: "Note: Use the noteId (not the title) when performing operations on specific notes with other tools."
+                    query: query,
+                    searchType: 'semantic',
+                    message: 'Found semantic matches. Use noteId values with other tools.',
+                    nextSteps: {
+                        examine: `Use read_note with any noteId (e.g., "${enhancedResults[0].noteId}") to get full content`,
+                        refine: parentNoteId ? 'Remove parentNoteId to search all notes' : `Add parentNoteId: "${enhancedResults[0].noteId}" to search within the first result's children`,
+                        related: 'Search for related concepts or use different descriptive terms'
+                    }
                 };
             }
         } catch (error: unknown) {

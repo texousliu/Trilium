@@ -34,17 +34,37 @@ export const readNoteToolDefinition: Tool = {
     type: 'function',
     function: {
         name: 'read_note',
-        description: 'Read the content of a specific note by its ID',
+        description: `READ FULL CONTENT of a specific note by its ID. Get complete note content and metadata.
+        
+        BEST FOR: Getting complete content after finding notes through search tools
+        USE WHEN: You have a noteId from search results and need the full content
+        IMPORTANT: Must use noteId (like "abc123def456") from search results - NOT note titles
+        
+        TIP: This is typically used after search_notes, keyword_search_notes, or attribute_search
+        
+        NEXT STEPS: Use note_update or attribute_manager tools to modify the note if needed`,
         parameters: {
             type: 'object',
             properties: {
                 noteId: {
                     type: 'string',
-                    description: 'The system ID of the note to read (not the title). This is a unique identifier like "abc123def456" that must be used to access a specific note.'
+                    description: `SYSTEM ID of the note to read.
+                    
+                    CRITICAL: Must be a noteId (like "abc123def456") - NOT a note title!
+                    
+                    CORRECT: "abc123def456" (from search results)
+                    WRONG: "My Note Title" (this will fail)
+                    
+                    WHERE TO GET: From noteId field in search tool results`
                 },
                 includeAttributes: {
                     type: 'boolean',
-                    description: 'Whether to include note attributes in the response (default: false)'
+                    description: `INCLUDE METADATA: Get note attributes (labels, relations) in response.
+                    
+                    • true = Get full note with all attributes/metadata
+                    • false = Get just note content (default)
+                    
+                    Use true when you need to see tags, labels, relations, or other metadata`
                 }
             },
             required: ['noteId']
@@ -71,8 +91,23 @@ export class ReadNoteTool implements ToolHandler {
             const note = becca.notes[noteId];
 
             if (!note) {
-                log.info(`Note with ID ${noteId} not found - returning error`);
-                return `Error: Note with ID ${noteId} not found`;
+                log.info(`Note with ID ${noteId} not found - returning helpful error`);
+                return {
+                    error: `Note not found: "${noteId}"`,
+                    troubleshooting: {
+                        possibleCauses: [
+                            'Invalid noteId format (should be like "abc123def456")',
+                            'Note may have been deleted or moved',
+                            'Using note title instead of noteId'
+                        ],
+                        solutions: [
+                            'Use search_notes to find the note by content or title',
+                            'Use keyword_search_notes to find notes with specific text',
+                            'Use attribute_search if you know the note has specific attributes',
+                            'Ensure you\'re using noteId from search results, not the note title'
+                        ]
+                    }
+                };
             }
 
             log.info(`Found note: "${note.title}" (Type: ${note.type})`);
@@ -84,12 +119,31 @@ export class ReadNoteTool implements ToolHandler {
 
             log.info(`Retrieved note content in ${duration}ms, content length: ${content?.length || 0} chars`);
 
-            // Prepare the response
-            const response: NoteResponse = {
+            // Prepare enhanced response with next steps
+            const response: NoteResponse & {
+                nextSteps?: {
+                    modify?: string;
+                    related?: string;
+                    organize?: string;
+                };
+                metadata?: {
+                    wordCount?: number;
+                    hasAttributes?: boolean;
+                    lastModified?: string;
+                };
+            } = {
                 noteId: note.noteId,
                 title: note.title,
                 type: note.type,
                 content: content || ''
+            };
+
+            // Add helpful metadata
+            const contentStr = typeof content === 'string' ? content : String(content || '');
+            response.metadata = {
+                wordCount: contentStr.split(/\s+/).filter(word => word.length > 0).length,
+                hasAttributes: note.getOwnedAttributes().length > 0,
+                lastModified: note.dateModified
             };
 
             // Include attributes if requested
@@ -110,6 +164,15 @@ export class ReadNoteTool implements ToolHandler {
                     });
                 }
             }
+
+            // Add next steps guidance
+            response.nextSteps = {
+                modify: `Use note_update with noteId: "${noteId}" to edit this note's content`,
+                related: `Use search_notes with related concepts to find similar notes`,
+                organize: response.metadata.hasAttributes 
+                    ? `Use attribute_manager with noteId: "${noteId}" to modify attributes`
+                    : `Use attribute_manager with noteId: "${noteId}" to add labels or relations`
+            };
 
             return response;
         } catch (error: unknown) {
