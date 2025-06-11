@@ -7,6 +7,7 @@ settings:
 overrides:
   node-abi: 4.9.0
   mermaid: 11.6.0
+  preact: 10.26.8
   '@types/express-serve-static-core': 5.0.6
   flat@<5.0.1: '>=5.0.1'
   debug@>=3.2.0 <3.2.7: '>=3.2.7'
@@ -10640,9 +10641,6 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
-  preact@10.12.1:
-    resolution: {integrity: sha512-l8386ixSsBdbreOAkqtrwqHwdvR35ID8c3rKPa8lCWuO86dBi32QWHV4vfsZK1utLLFMvw+Z5Ad4XLkZzchscg==}
-
   preact@10.26.8:
     resolution: {integrity: sha512-1nMfdFjucm5hKvq0IClqZwK4FJkGXhRrQstOQ3P4vp8HxKrJEMFcY6RdBRVTdfQS/UlnX6gfbPuTvaqx/bDoeQ==}
 
@@ -15624,7 +15622,7 @@ snapshots:
 
   '@fullcalendar/core@6.1.17':
     dependencies:
-      preact: 10.12.1
+      preact: 10.26.8
 
   '@fullcalendar/daygrid@6.1.17(@fullcalendar/core@6.1.17)':
     dependencies:
@@ -24984,8 +24982,6 @@ snapshots:
   postject@1.0.0-alpha.6:
     dependencies:
       commander: 9.5.0
-
-  preact@10.12.1: {}
 
   preact@10.26.8: {}
 
