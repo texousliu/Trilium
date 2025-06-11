@@ -34,37 +34,17 @@ export const readNoteToolDefinition: Tool = {
     type: 'function',
     function: {
         name: 'read_note',
-        description: `READ FULL CONTENT of a specific note by its ID. Get complete note content and metadata.
-        
-        BEST FOR: Getting complete content after finding notes through search tools
-        USE WHEN: You have a noteId from search results and need the full content
-        IMPORTANT: Must use noteId (like "abc123def456") from search results - NOT note titles
-        
-        TIP: This is typically used after search_notes, keyword_search_notes, or attribute_search
-        
-        NEXT STEPS: Use note_update or attribute_manager tools to modify the note if needed`,
+        description: 'Read the full content of a note by its ID. Use noteId from search results, not note titles.',
         parameters: {
             type: 'object',
             properties: {
                 noteId: {
                     type: 'string',
-                    description: `SYSTEM ID of the note to read.
-                    
-                    CRITICAL: Must be a noteId (like "abc123def456") - NOT a note title!
-                    
-                    CORRECT: "abc123def456" (from search results)
-                    WRONG: "My Note Title" (this will fail)
-                    
-                    WHERE TO GET: From noteId field in search tool results`
+                    description: 'The noteId of the note to read (e.g., "abc123def456"). Get this from search results, not note titles.'
                 },
                 includeAttributes: {
                     type: 'boolean',
-                    description: `INCLUDE METADATA: Get note attributes (labels, relations) in response.
-                    
-                    • true = Get full note with all attributes/metadata
-                    • false = Get just note content (default)
-                    
-                    Use true when you need to see tags, labels, relations, or other metadata`
+                    description: 'Include note attributes/metadata in response (default: false).'
                 }
             },
             required: ['noteId']

@@ -16,37 +16,21 @@ export const toolDiscoveryHelperDefinition: Tool = {
     type: 'function',
     function: {
         name: 'discover_tools',
-        description: `DISCOVER AVAILABLE TOOLS and get guidance on which tools to use for your task.
-        
-        BEST FOR: Understanding what tools are available and getting usage recommendations
-        USE WHEN: You're unsure which tool to use, want to see all options, or need workflow guidance
-        HELPS WITH: Tool selection, parameter guidance, workflow planning
-        
-        TIP: Use this when you have a task but aren't sure which tools can help accomplish it
-        
-        NEXT STEPS: Use the recommended tools based on the guidance provided`,
+        description: 'Get recommendations for which tools to use for your task. Helps when you\'re unsure which tool is best.',
         parameters: {
             type: 'object',
             properties: {
                 taskDescription: {
                     type: 'string',
-                    description: `📝 DESCRIBE YOUR TASK: What are you trying to accomplish?
-                    
-                    ✅ GOOD EXAMPLES:
-                    - "Find notes about machine learning"
-                    - "Create a new project planning note"
-                    - "Find all notes tagged as important"
-                    - "Read the content of a specific note"
-                    
-                    💡 Be specific about your goal for better tool recommendations`
+                    description: 'Describe what you want to accomplish (e.g., "find notes about machine learning", "read a specific note").'
                 },
                 includeExamples: {
                     type: 'boolean',
-                    description: 'INCLUDE EXAMPLES: Get specific usage examples for recommended tools (default: true)'
+                    description: 'Include usage examples for recommended tools (default: true).'
                 },
                 showAllTools: {
                     type: 'boolean',
-                    description: 'SHOW ALL TOOLS: List all available tools, not just recommended ones (default: false)'
+                    description: 'Show all available tools instead of just recommendations (default: false).'
                 }
             },
             required: ['taskDescription']

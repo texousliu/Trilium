@@ -17,41 +17,13 @@ export const keywordSearchToolDefinition: Tool = {
     type: 'function',
     function: {
         name: 'keyword_search_notes',
-        description: `EXACT KEYWORD search for notes. Finds notes containing specific words, phrases, or attribute filters.
-        
-        BEST FOR: Finding notes with specific words/phrases you know exist
-        USE WHEN: You need exact text matches, specific terms, or attribute-based filtering
-        DIFFERENT FROM: search_notes (which finds conceptual/semantic matches)
-        
-        SEARCH TYPES:
-        • Simple: "machine learning" (finds notes containing both words)
-        • Phrase: "\"exact phrase\"" (finds this exact phrase)
-        • Attributes: "#label" or "~relation" (notes with specific labels/relations)
-        • Complex: "AI #project ~relatedTo" (combines keywords with attributes)
-        
-        NEXT STEPS: Use read_note with returned noteId values for full content`,
+        description: 'Keyword search for exact text matches. Supports phrases in quotes, #labels, ~relations, and search operators like OR.',
         parameters: {
             type: 'object',
             properties: {
                 query: {
                     type: 'string',
-                    description: `Keyword search query using Trilium search syntax.
-                    
-                    SIMPLE EXAMPLES:
-                    - "machine learning" (both words anywhere)
-                    - "\"project management\"" (exact phrase)
-                    - "python OR javascript" (either word)
-                    
-                    ATTRIBUTE EXAMPLES:
-                    - "#important" (notes with 'important' label)
-                    - "~project" (notes with 'project' relation)
-                    - "#status = completed" (specific label value)
-                    
-                    COMBINED EXAMPLES:
-                    - "AI #project #status = active" (AI content with project label and active status)
-                    - "note.title *= \"weekly\"" (titles containing 'weekly')
-                    
-                    AVOID: Conceptual queries better suited for search_notes`
+                    description: 'Search query. Examples: "machine learning", "#important", "python OR javascript", "note.title *= weekly"'
                 },
                 maxResults: {
                     type: 'number',
@@ -59,7 +31,7 @@ export const keywordSearchToolDefinition: Tool = {
                 },
                 includeArchived: {
                     type: 'boolean',
-                    description: 'INCLUDE ARCHIVED: Search archived notes too (default: false). Use true for complete historical search.'
+                    description: 'Include archived notes in search (default: false).'
                 }
             },
             required: ['query']
@@ -130,21 +102,7 @@ export class KeywordSearchTool implements ToolHandler {
                     count: 0,
                     results: [],
                     query: query,
-                    searchType: 'keyword',
-                    message: 'No exact keyword matches found.',
-                    nextSteps: {
-                        immediate: [
-                            `Try search_notes for semantic/conceptual search: "${this.convertToSemanticQuery(query)}"`,
-                            `Use attribute_search if looking for specific labels or relations`,
-                            `Try simpler keywords or check spelling`
-                        ],
-                        queryHelp: [
-                            'Remove quotes for broader matching',
-                            'Try individual words instead of phrases',
-                            'Use OR operator: "word1 OR word2"',
-                            'Check if content might be in archived notes (set includeArchived: true)'
-                        ]
-                    }
+                    message: `No keyword matches. Try: search_notes with "${this.convertToSemanticQuery(query)}" or check spelling/try simpler terms.`
                 };
             }
             
@@ -153,12 +111,7 @@ export class KeywordSearchTool implements ToolHandler {
                 totalFound: searchResults.length,
                 query: query,
                 searchType: 'keyword',
-                message: 'Found exact keyword matches. Use noteId values with other tools.',
-                nextSteps: {
-                    examine: `Use read_note with any noteId (e.g., "${limitedResults[0].noteId}") to get full content`,
-                    refine: limitedResults.length < searchResults.length ? `Found ${searchResults.length} total matches (showing ${limitedResults.length}). Increase maxResults for more.` : null,
-                    related: 'Use search_notes for conceptually related content beyond exact keywords'
-                },
+                message: `Found ${limitedResults.length} keyword matches. Use read_note with noteId for full content.`,
                 results: limitedResults.map(note => {
                     // Get a preview of the note content with highlighted search terms
                     let contentPreview = '';

@@ -18,7 +18,6 @@ import { AttributeManagerTool } from './attribute_manager_tool.js';
 import { CalendarIntegrationTool } from './calendar_integration_tool.js';
 import { NoteSummarizationTool } from './note_summarization_tool.js';
 import { ToolDiscoveryHelper } from './tool_discovery_helper.js';
-import { WorkflowHelper } from './workflow_helper.js';
 import log from '../../log.js';
 
 // Error type guard
@@ -54,9 +53,8 @@ export async function initializeTools(): Promise<void> {
         toolRegistry.registerTool(new ContentExtractionTool());  // Extract info from note content
         toolRegistry.registerTool(new CalendarIntegrationTool()); // Calendar-related operations
 
-        // Register helper and guidance tools
+        // Register helper tools (simplified)
         toolRegistry.registerTool(new ToolDiscoveryHelper());    // Tool discovery and usage guidance
-        toolRegistry.registerTool(new WorkflowHelper());         // Multi-step workflow guidance
 
         // Log registered tools
         const toolCount = toolRegistry.getAllTools().length;

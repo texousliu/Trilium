@@ -490,43 +490,9 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
             let directiveMessage = '';
 
             if (hasEmptyResults) {
-                // Empty results - be very directive about trying alternatives
-                const emptyToolNames = toolResultMessages
-                    .filter(msg => this.isEmptyToolResult(msg.content, msg.name || ''))
-                    .map(msg => msg.name);
-
-                directiveMessage = `CRITICAL INSTRUCTION: YOU MUST NOT STOP AFTER EMPTY RESULTS!\n\n`;
-                directiveMessage += `REQUIRED ACTIONS:\n`;
-                
-                if (emptyToolNames.includes('search_notes')) {
-                    directiveMessage += `1. IMMEDIATELY use keyword_search_notes with specific terms\n`;
-                    directiveMessage += `2. Try attribute_search if content might be tagged/categorized\n`;
-                    directiveMessage += `3. Use discover_tools to find alternative approaches\n`;
-                }
-                
-                if (emptyToolNames.includes('keyword_search_notes')) {
-                    directiveMessage += `1. IMMEDIATELY use search_notes for semantic matching\n`;
-                    directiveMessage += `2. Try broader or alternative keyword terms\n`;
-                    directiveMessage += `3. Use workflow_helper for guidance on next steps\n`;
-                }
-                
-                if (emptyToolNames.includes('attribute_search')) {
-                    directiveMessage += `1. Use search_notes to find content about the attribute topic\n`;
-                    directiveMessage += `2. Try different attribute names or types\n`;
-                    directiveMessage += `3. Use search_suggestion to see available attributes\n`;
-                }
-                
-                directiveMessage += `\nFORBIDDEN: Do NOT ask user for clarification or offer general information!\n`;
-                directiveMessage += `REQUIRED: CONTINUE with alternative tools and approaches immediately!`;
+                directiveMessage = `No results found. Try alternative search approaches: use different search tools, broader terms, or alternative keywords. Continue searching - don't ask the user for guidance.`;
             } else {
-                // Has results - encourage follow-up actions
-                directiveMessage = `EXCELLENT! You found results. Now CONTINUE the workflow:\n\n`;
-                directiveMessage += `NEXT REQUIRED ACTIONS:\n`;
-                directiveMessage += `1. Use read_note to examine the most relevant results\n`;
-                directiveMessage += `2. Use workflow_helper to plan next steps based on your findings\n`;
-                directiveMessage += `3. Consider using related tools for deeper analysis\n\n`;
-                directiveMessage += `GOAL: Provide comprehensive information by using multiple tools in sequence.\n`;
-                directiveMessage += `CONTINUE with tool usage - don't stop at just search results!`;
+                directiveMessage = `You found results! Use read_note with the noteId values to get full content and continue your analysis.`;
             }
 
             updatedMessages.push({
@@ -638,14 +604,8 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
             guidance += "RECOMMENDATION: If specific searches fail, try the 'search_notes' tool which performs semantic searches.\n";
         }
         
-        // Always suggest helper tools for guidance
-        guidance += "HELPER TOOLS AVAILABLE:\n";
-        guidance += "• Use 'discover_tools' to find the right tool for your task\n";
-        guidance += "• Use 'workflow_helper' to get guidance on next steps\n";
-        guidance += "• Use 'search_suggestion' for search syntax help\n";
-        
         // Encourage continued tool usage
-        guidance += "\nIMPORTANT: Don't stop after one failed tool - try alternatives immediately!";
+        guidance += "\nTry alternative tools immediately. Use discover_tools if unsure which tool to use next.";
 
         return guidance;
     }
