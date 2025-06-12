@@ -23,19 +23,21 @@ const TPL = /*html*/`
                 <p class="mb-3">
                     <strong>Recommendation:</strong> ${t("cpu_arch_warning.recommendation")}
                 </p>
+            </div>
+            <div class="modal-footer d-flex justify-content-between align-items-center">
+                <div>
+                    <button class="download-correct-version-button btn btn-primary btn-lg me-2">
+                        <i class="bx bx-download"></i>
+                        <span>${t("cpu_arch_warning.download_link")}</span>
+                    </button>
 
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <button class="download-correct-version-button btn btn-primary btn-lg me-2">
-                            <i class="bx bx-download"></i>
-                            <span>${t("cpu_arch_warning.download_link")}</span>
-                        </button>
-                        <button class="continue-anyway-button btn btn-secondary" data-bs-dismiss="modal">${t("cpu_arch_warning.continue_anyway")}</button>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="dontShowAgain">
-                        <label class="form-check-label" for="dontShowAgain">${t("cpu_arch_warning.dont_show_again")}</label>
-                    </div>
+                    &nbsp;
+
+                    <button class="continue-anyway-button btn btn-secondary" data-bs-dismiss="modal">${t("cpu_arch_warning.continue_anyway")}</button>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="dontShowAgain">
+                    <label class="form-check-label" for="dontShowAgain">${t("cpu_arch_warning.dont_show_again")}</label>
                 </div>
             </div>
         </div>
