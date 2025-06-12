@@ -4,7 +4,7 @@ import utils from "../../services/utils.js";
 import { t } from "../../services/i18n.js";
 
 const TPL = /*html*/`
-<div class="rosetta-warning-dialog modal mx-auto" tabindex="-1" role="dialog" style="z-index: 2000;">
+<div class="cpu-arch-dialog modal mx-auto" tabindex="-1" role="dialog" style="z-index: 2000;">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
