@@ -7,33 +7,22 @@ const TPL = /*html*/`
 <div class="rosetta-warning-dialog modal mx-auto" tabindex="-1" role="dialog" style="z-index: 2000;">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header text-white">
-                <h4 class="modal-title">
-                    <i class="bx bx-error-circle"></i>
-                    <span>${t("cpu_arch_warning.title")}</span>
-                </h4>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header">
+                <h5 class="modal-title">${t("cpu_arch_warning.title")}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>${t("cpu_arch_warning.message")}</p>
+                <p>${utils.isMac() ? t("cpu_arch_warning.message_macos") : t("cpu_arch_warning.message_windows")}</p>
 
                 <p>${t("cpu_arch_warning.recommendation")}</p>
             </div>
             <div class="modal-footer d-flex justify-content-between align-items-center">
-                <div>
-                    <button class="download-correct-version-button btn btn-primary btn-lg me-2">
-                        <i class="bx bx-download"></i>
-                        <span>${t("cpu_arch_warning.download_link")}</span>
-                    </button>
+                <button class="download-correct-version-button btn btn-primary btn-lg me-2">
+                    <span class="bx bx-download"></span>
+                    ${t("cpu_arch_warning.download_link")}
+                </button>
 
-                    &nbsp;
-
-                    <button class="continue-anyway-button btn btn-secondary" data-bs-dismiss="modal">${t("cpu_arch_warning.continue_anyway")}</button>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="dontShowAgain">
-                    <label class="form-check-label" for="dontShowAgain">${t("cpu_arch_warning.dont_show_again")}</label>
-                </div>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">${t("cpu_arch_warning.continue_anyway")}</button>
             </div>
         </div>
     </div>
