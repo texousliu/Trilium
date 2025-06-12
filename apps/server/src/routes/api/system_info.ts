@@ -9,10 +9,9 @@ function systemChecks() {
 }
 
 /**
- * Detects if the application is running under Rosetta 2 translation on Apple Silicon.
- * This happens when an x64 version of the app is run on an M1/M2/M3 Mac.
- * Uses the macOS sysctl.proc_translated to properly detect translation.
- * @returns true if running under Rosetta 2, false otherwise
+ * Detects if the application is running under emulation on Apple Silicon or Windows on ARM.
+ * This happens when an x64 version of the app is run on an M1/M2/M3 Mac or on a Windows Snapdragon chip.
+ * @returns true if running on x86 emulation on ARM, false otherwise.
  */
 export const isCpuArchMismatch = () => {
     if (isMac) {

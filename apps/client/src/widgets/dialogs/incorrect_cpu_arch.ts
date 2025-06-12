@@ -28,7 +28,7 @@ const TPL = /*html*/`
     </div>
 </div>`;
 
-export default class RosettaWarningDialog extends BasicWidget {
+export default class IncorrectCpuArchDialog extends BasicWidget {
     private modal!: Modal;
     private $downloadButton!: JQuery<HTMLElement>;
 
