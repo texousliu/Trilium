@@ -10,31 +10,31 @@ const TPL = /*html*/`
             <div class="modal-header text-white">
                 <h4 class="modal-title">
                     <i class="bx bx-error-circle"></i>
-                    <span>${t("rosetta_warning.title")}</span>
+                    <span>${t("cpu_arch_warning.title")}</span>
                 </h4>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="alert alert-warning mb-3">
-                    <strong>⚠️ ${t("rosetta_warning.performance_impact")}</strong><br>
-                    ${t("rosetta_warning.message")}
+                    <strong>⚠️ ${t("cpu_arch_warning.performance_impact")}</strong><br>
+                    ${t("cpu_arch_warning.message")}
                 </div>
 
                 <p class="mb-3">
-                    <strong>Recommendation:</strong> ${t("rosetta_warning.recommendation")}
+                    <strong>Recommendation:</strong> ${t("cpu_arch_warning.recommendation")}
                 </p>
 
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <button class="download-correct-version-button btn btn-primary btn-lg me-2">
                             <i class="bx bx-download"></i>
-                            <span>${t("rosetta_warning.download_link")}</span>
+                            <span>${t("cpu_arch_warning.download_link")}</span>
                         </button>
-                        <button class="continue-anyway-button btn btn-secondary" data-bs-dismiss="modal">${t("rosetta_warning.continue_anyway")}</button>
+                        <button class="continue-anyway-button btn btn-secondary" data-bs-dismiss="modal">${t("cpu_arch_warning.continue_anyway")}</button>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="dontShowAgain">
-                        <label class="form-check-label" for="dontShowAgain">${t("rosetta_warning.dont_show_again")}</label>
+                        <label class="form-check-label" for="dontShowAgain">${t("cpu_arch_warning.dont_show_again")}</label>
                     </div>
                 </div>
             </div>
@@ -45,13 +45,11 @@ const TPL = /*html*/`
 export default class RosettaWarningDialog extends BasicWidget {
     private modal!: Modal;
     private $downloadButton!: JQuery<HTMLElement>;
-    private $continueButton!: JQuery<HTMLElement>;
 
     doRender() {
         this.$widget = $(TPL);
         this.modal = Modal.getOrCreateInstance(this.$widget[0]);
         this.$downloadButton = this.$widget.find(".download-correct-version-button");
-        this.$continueButton = this.$widget.find(".continue-anyway-button");
 
         this.$downloadButton.on("click", () => {
             // Open the releases page where users can download the correct version
@@ -69,7 +67,7 @@ export default class RosettaWarningDialog extends BasicWidget {
         });
     }
 
-    showRosettaWarningEvent() {
+    showCpuArchWarningEvent() {
         this.modal.show();
     }
 }

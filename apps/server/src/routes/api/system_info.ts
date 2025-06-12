@@ -1,12 +1,39 @@
-import { isRunningUnderRosetta2 } from "../../services/utils.js";
-import type { Request, Response } from "express";
+import { execSync } from "child_process";
+import { isMac } from "../../services/utils";
 
-function rosettaCheck(req: Request, res: Response) {
+function systemChecks() {
     return {
-        isRunningUnderRosetta2: isRunningUnderRosetta2()
+        isCpuArchMismatch: isRunningUnderRosetta2()
     }
 }
 
+/**
+ * Detects if the application is running under Rosetta 2 translation on Apple Silicon.
+ * This happens when an x64 version of the app is run on an M1/M2/M3 Mac.
+ * Uses the macOS sysctl.proc_translated to properly detect translation.
+ * @returns true if running under Rosetta 2, false otherwise
+ */
+export const isRunningUnderRosetta2 = () => {
+    if (!isMac) return false;
+
+    try {
+        // Use child_process to check sysctl.proc_translated
+        // This is the proper way to detect Rosetta 2 translation
+        const result = execSync("sysctl -n sysctl.proc_translated 2>/dev/null", {
+            encoding: "utf8",
+            timeout: 1000
+        }).trim();
+
+        // 1 means the process is being translated by Rosetta 2
+        // 0 means native execution
+        // If the sysctl doesn't exist (on Intel Macs), this will return empty/error
+        return result === "1";
+    } catch (error) {
+        // If sysctl fails or doesn't exist (Intel Macs), not running under Rosetta 2
+        return false;
+    }
+};
+
 export default {
-    rosettaCheck
+    systemChecks
 };

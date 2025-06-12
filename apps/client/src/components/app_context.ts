@@ -129,7 +129,7 @@ export type CommandMappings = {
     openAboutDialog: CommandData;
     hideFloatingButtons: {};
     hideLeftPane: CommandData;
-    showRosettaWarning: CommandData;
+    showCpuArchWarning: CommandData;
     showLeftPane: CommandData;
     hoistNote: CommandData & { noteId: string };
     leaveProtectedSession: CommandData;

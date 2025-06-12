@@ -239,7 +239,7 @@ function register(app: express.Application) {
     apiRoute(PST, "/api/recent-notes", recentNotesRoute.addRecentNote);
     apiRoute(GET, "/api/app-info", appInfoRoute.getAppInfo);
     apiRoute(GET, "/api/metrics", metricsRoute.getMetrics);
-    apiRoute(GET, "/api/system-info/rosetta-check", systemInfoRoute.rosettaCheck);
+    apiRoute(GET, "/api/system-checks", systemInfoRoute.systemChecks);
 
     // docker health check
     route(GET, "/api/health-check", [], () => ({ status: "ok" }), apiResultHandler);
