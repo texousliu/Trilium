@@ -15,14 +15,9 @@ const TPL = /*html*/`
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="alert alert-warning mb-3">
-                    <strong>⚠️ ${t("cpu_arch_warning.performance_impact")}</strong><br>
-                    ${t("cpu_arch_warning.message")}
-                </div>
+                <p>${t("cpu_arch_warning.message")}</p>
 
-                <p class="mb-3">
-                    <strong>Recommendation:</strong> ${t("cpu_arch_warning.recommendation")}
-                </p>
+                <p>${t("cpu_arch_warning.recommendation")}</p>
             </div>
             <div class="modal-footer d-flex justify-content-between align-items-center">
                 <div>
