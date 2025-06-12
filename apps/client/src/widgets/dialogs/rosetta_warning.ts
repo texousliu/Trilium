@@ -7,7 +7,7 @@ const TPL = /*html*/`
 <div class="rosetta-warning-dialog modal mx-auto" tabindex="-1" role="dialog" style="z-index: 2000;">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
+            <div class="modal-header text-white">
                 <h4 class="modal-title">
                     <i class="bx bx-error-circle"></i>
                     <span class="rosetta-warning-title"></span>
