@@ -517,13 +517,15 @@ ${markdownContent}`;
         archive.append(fullHtml, { name: indexMeta.dataFileName });
     }
 
-    function saveCss(rootMeta: NoteMeta, cssMeta: NoteMeta) {
-        if (!cssMeta.dataFileName) {
-            return;
-        }
+    function saveAssets(rootMeta: NoteMeta, assetsMeta: NoteMeta[]) {
+        for (const assetMeta of assetsMeta) {
+            if (!assetMeta.dataFileName) {
+                continue;
+            }
 
-        let cssContent = getShareThemeAssets("css");
-        archive.append(cssContent, { name: cssMeta.dataFileName });
+            let cssContent = getShareThemeAssets(assetMeta.dataFileName);
+            archive.append(cssContent, { name: assetMeta.dataFileName });
+        }
     }
 
     const existingFileNames: Record<string, number> = format === "html" ? { navigation: 0, index: 1 } : {};
@@ -540,7 +542,7 @@ ${markdownContent}`;
 
     let navigationMeta: NoteMeta | null = null;
     let indexMeta: NoteMeta | null = null;
-    let cssMeta: NoteMeta | null = null;
+    let assetsMeta: NoteMeta[] = [];
 
     if (format === "html") {
         navigationMeta = {
@@ -557,12 +559,24 @@ ${markdownContent}`;
 
         metaFile.files.push(indexMeta);
 
-        cssMeta = {
-            noImport: true,
-            dataFileName: "style.css"
-        };
+        const assets = [
+            "style.css",
+            "boxicons.css",
+            "boxicons.eot",
+            "boxicons.woff2",
+            "boxicons.woff",
+            "boxicons.ttf",
+            "boxicons.svg",
+        ];
 
-        metaFile.files.push(cssMeta);
+        for (const asset of assets) {
+            const assetMeta = {
+                noImport: true,
+                dataFileName: asset
+            };
+            assetsMeta.push(assetMeta);
+            metaFile.files.push(assetMeta);
+        }
     }
 
     for (const noteMeta of Object.values(noteIdToMeta)) {
@@ -596,13 +610,13 @@ ${markdownContent}`;
     saveNote(rootMeta, "");
 
     if (format === "html") {
-        if (!navigationMeta || !indexMeta || !cssMeta) {
+        if (!navigationMeta || !indexMeta || !assetsMeta) {
             throw new Error("Missing meta.");
         }
 
         saveNavigation(rootMeta, navigationMeta);
         saveIndex(rootMeta, indexMeta);
-        saveCss(rootMeta, cssMeta);
+        saveAssets(rootMeta, assetsMeta);
     }
 
     const note = branch.getNote();
@@ -634,17 +648,22 @@ async function exportToZipFile(noteId: string, format: "markdown" | "html", zipF
     log.info(`Exported '${noteId}' with format '${format}' to '${zipFilePath}'`);
 }
 
-function getShareThemeAssets(extension: string) {
+function getShareThemeAssets(nameWithExtension: string) {
+    // Rename share.css to style.css.
+    if (nameWithExtension === "style.css") {
+        nameWithExtension = "share.css";
+    }
+
     let path: string | undefined;
     if (isDev) {
-        path = join(getResourceDir(), "..", "..", "client", "dist", "src", `share.${extension}`);
+        path = join(getResourceDir(), "..", "..", "client", "dist", "src", nameWithExtension);
     }
 
     if (!path) {
         throw new Error("Not yet defined.");
     }
 
-    return fs.readFileSync(path, "utf-8");
+    return fs.readFileSync(path);
 }
 
 export default {

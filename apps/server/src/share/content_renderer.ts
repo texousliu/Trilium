@@ -70,7 +70,8 @@ export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath
         subRoot,
         rootNoteId: note.getParentNotes()[0].noteId,
         cssToLoad: [
-            `${basePath}style.css`
+            `${basePath}style.css`,
+            `${basePath}boxicons.css`
         ]
     });
 }
