@@ -333,6 +333,9 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
 
                 if (note) {
                     content = renderNoteForExport(note, branch, basePath);
+
+                    // TODO: Fix double rewrite.
+                    content = rewriteFn(content, noteMeta);
                 } else {
                     const cssUrl = basePath + "style.css";
                     // <base> element will make sure external links are openable - https://github.com/zadam/trilium/issues/1289#issuecomment-704066809
