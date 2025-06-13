@@ -23,7 +23,7 @@ import type BNote from "../../becca/entities/bnote.js";
 import type { Response } from "express";
 import type { NoteMetaFile } from "../meta/note_meta.js";
 import cssContent from "@triliumnext/ckeditor5/content.css";
-import { renderNoteContent } from "../../share/content_renderer.js";
+import { renderNoteForExport } from "../../share/content_renderer.js";
 
 type RewriteLinksFn = (content: string, noteMeta: NoteMeta) => string;
 
@@ -332,7 +332,7 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
                 const htmlTitle = escapeHtml(title);
 
                 if (note) {
-                    content = renderNoteContent(note);
+                    content = renderNoteForExport(note, branch);
                 } else {
                     // <base> element will make sure external links are openable - https://github.com/zadam/trilium/issues/1289#issuecomment-704066809
                     content = `<html>

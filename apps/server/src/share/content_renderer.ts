@@ -26,7 +26,12 @@ export interface Result {
     isEmpty?: boolean;
 }
 
-function getSharedSubTreeRoot(note: SNote | BNote | undefined): { note?: SNote | BNote; branch?: SBranch | BBranch } {
+interface Subroot {
+    note?: SNote | BNote;
+    branch?: SBranch | BBranch
+}
+
+function getSharedSubTreeRoot(note: SNote | BNote | undefined): Subroot {
     if (!note || note.noteId === shareRoot.SHARE_ROOT_NOTE_ID) {
         // share root itself is not shared
         return {};
@@ -53,9 +58,21 @@ function getSharedSubTreeRoot(note: SNote | BNote | undefined): { note?: SNote |
     return getSharedSubTreeRoot(parentBranch.getParentNote());
 }
 
-export function renderNoteContent(note: SNote | BNote) {
-    const { header, content, isEmpty } = getContent(note);
+export function renderNoteForExport(note: BNote, parentBranch: BBranch) {
+    const subRoot: Subroot = {
+        branch: parentBranch,
+        note: parentBranch.getNote()
+    };
+    return renderNoteContentInternal(note, subRoot, note.getParentNotes()[0].noteId);
+}
+
+export function renderNoteContent(note: SNote) {
     const subRoot = getSharedSubTreeRoot(note);
+    return renderNoteContentInternal(note, subRoot, "_share");
+}
+
+function renderNoteContentInternal(note: SNote | BNote, subRoot: Subroot, rootNoteId: string) {
+    const { header, content, isEmpty } = getContent(note);
     const showLoginInShareTheme = options.getOption("showLoginInShareTheme");
     const opts = {
         note,
@@ -68,7 +85,8 @@ export function renderNoteContent(note: SNote | BNote) {
         appPath: isDev ? app_path : `../${app_path}`,
         showLoginInShareTheme,
         t,
-        isDev
+        isDev,
+        rootNoteId
     };
 
     // Check if the user has their own template.

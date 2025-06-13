@@ -108,7 +108,7 @@ content = content.replaceAll(headingRe, (...match) => {
                 <%
                 const ancestors = [];
                 let notePointer = note;
-                while (notePointer.parents[0].noteId !== "_share") {
+                while (notePointer.parents[0].noteId !== rootNoteId) {
                     const pointerParent = notePointer.parents[0];
                     ancestors.push(pointerParent.noteId);
                     notePointer = pointerParent;
