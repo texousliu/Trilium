@@ -72,7 +72,8 @@ export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath
         cssToLoad: [
             `${basePath}style.css`,
             `${basePath}boxicons.css`
-        ]
+        ],
+        logoUrl: `${basePath}icon-color.svg`
     });
 }
 
@@ -91,10 +92,14 @@ export function renderNoteContent(note: SNote) {
         cssToLoad.push(`api/notes/${cssRelation.value}/download`);
     }
 
+    const customLogoId = note.getRelation("shareLogo")?.value;
+    const logoUrl = customLogoId ? `api/images/${customLogoId}/image.png` : `../${assetUrlFragment}/images/icon-color.svg`;
+
     return renderNoteContentInternal(note, {
         subRoot,
         rootNoteId: "_share",
-        cssToLoad
+        cssToLoad,
+        logoUrl
     });
 }
 
@@ -102,6 +107,7 @@ interface RenderArgs {
     subRoot: Subroot;
     rootNoteId: string;
     cssToLoad: string[];
+    logoUrl: string;
 }
 
 function renderNoteContentInternal(note: SNote | BNote, renderArgs: RenderArgs) {

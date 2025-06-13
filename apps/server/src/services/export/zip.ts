@@ -24,6 +24,7 @@ import type { Response } from "express";
 import type { NoteMetaFile } from "../meta/note_meta.js";
 //import cssContent from "@triliumnext/ckeditor5/content.css";
 import { renderNoteForExport } from "../../share/content_renderer.js";
+import { RESOURCE_DIR } from "../resource_dir.js";
 
 type RewriteLinksFn = (content: string, noteMeta: NoteMeta) => string;
 
@@ -567,6 +568,7 @@ ${markdownContent}`;
             "boxicons.woff",
             "boxicons.ttf",
             "boxicons.svg",
+            "icon-color.svg"
         ];
 
         for (const asset of assets) {
@@ -655,7 +657,9 @@ function getShareThemeAssets(nameWithExtension: string) {
     }
 
     let path: string | undefined;
-    if (isDev) {
+    if (nameWithExtension === "icon-color.svg") {
+        path = join(RESOURCE_DIR, "images", nameWithExtension);
+    } else if (isDev) {
         path = join(getResourceDir(), "..", "..", "client", "dist", "src", nameWithExtension);
     }
 
