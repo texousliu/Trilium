@@ -2,11 +2,11 @@
 
 import html from "html";
 import dateUtils from "../date_utils.js";
-import path from "path";
+import path, { join } from "path";
 import mimeTypes from "mime-types";
 import mdService from "./markdown.js";
 import packageInfo from "../../../package.json" with { type: "json" };
-import { getContentDisposition, escapeHtml, getResourceDir } from "../utils.js";
+import { getContentDisposition, escapeHtml, getResourceDir, isDev } from "../utils.js";
 import protectedSessionService from "../protected_session.js";
 import sanitize from "sanitize-filename";
 import fs from "fs";
@@ -22,7 +22,7 @@ import type BBranch from "../../becca/entities/bbranch.js";
 import type BNote from "../../becca/entities/bnote.js";
 import type { Response } from "express";
 import type { NoteMetaFile } from "../meta/note_meta.js";
-import cssContent from "@triliumnext/ckeditor5/content.css";
+//import cssContent from "@triliumnext/ckeditor5/content.css";
 import { renderNoteForExport } from "../../share/content_renderer.js";
 
 type RewriteLinksFn = (content: string, noteMeta: NoteMeta) => string;
@@ -328,12 +328,13 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
                     throw new Error("Missing note path.");
                 }
 
-                const cssUrl = `${"../".repeat(noteMeta.notePath.length - 1)}style.css`;
+                const basePath = "../".repeat(noteMeta.notePath.length - 1);
                 const htmlTitle = escapeHtml(title);
 
                 if (note) {
-                    content = renderNoteForExport(note, branch);
+                    content = renderNoteForExport(note, branch, basePath);
                 } else {
+                    const cssUrl = basePath + "style.css";
                     // <base> element will make sure external links are openable - https://github.com/zadam/trilium/issues/1289#issuecomment-704066809
                     content = `<html>
 <head>
@@ -518,6 +519,7 @@ ${markdownContent}`;
             return;
         }
 
+        let cssContent = getShareThemeAssets("css");
         archive.append(cssContent, { name: cssMeta.dataFileName });
     }
 
@@ -627,6 +629,19 @@ async function exportToZipFile(noteId: string, format: "markdown" | "html", zipF
     await exportToZip(taskContext, note.getParentBranches()[0], format, fileOutputStream, false, zipExportOptions);
 
     log.info(`Exported '${noteId}' with format '${format}' to '${zipFilePath}'`);
+}
+
+function getShareThemeAssets(extension: string) {
+    let path: string | undefined;
+    if (isDev) {
+        path = join(getResourceDir(), "..", "..", "client", "dist", "src", `share.${extension}`);
+    }
+
+    if (!path) {
+        throw new Error("Not yet defined.");
+    }
+
+    return fs.readFileSync(path, "utf-8");
 }
 
 export default {

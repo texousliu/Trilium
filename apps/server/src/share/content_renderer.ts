@@ -16,6 +16,8 @@ import log from "../services/log.js";
 import { join } from "path";
 import { readFileSync } from "fs";
 
+const shareAdjustedAssetPath = isDev ? assetPath : `../${assetPath}`;
+
 /**
  * Represents the output of the content renderer.
  */
@@ -58,20 +60,50 @@ function getSharedSubTreeRoot(note: SNote | BNote | undefined): Subroot {
     return getSharedSubTreeRoot(parentBranch.getParentNote());
 }
 
-export function renderNoteForExport(note: BNote, parentBranch: BBranch) {
+export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath: string) {
     const subRoot: Subroot = {
         branch: parentBranch,
         note: parentBranch.getNote()
     };
-    return renderNoteContentInternal(note, subRoot, note.getParentNotes()[0].noteId);
+
+    return renderNoteContentInternal(note, {
+        subRoot,
+        rootNoteId: note.getParentNotes()[0].noteId,
+        cssToLoad: [
+            `${basePath}style.css`
+        ]
+    });
 }
 
 export function renderNoteContent(note: SNote) {
     const subRoot = getSharedSubTreeRoot(note);
-    return renderNoteContentInternal(note, subRoot, "_share");
+
+    // Determine CSS to load.
+    const cssToLoad: string[] = [];
+    if (!isDev && !note.isLabelTruthy("shareOmitDefaultCss")) {
+        cssToLoad.push(`${shareAdjustedAssetPath}/src/share.css`);
+        cssToLoad.push(`${shareAdjustedAssetPath}/src/boxicons.css`);
+    }
+
+    // Support custom CSS too.
+    for (const cssRelation of note.getRelations("shareCss")) {
+        cssToLoad.push(`api/notes/${cssRelation.value}/download`);
+    }
+
+    return renderNoteContentInternal(note, {
+        subRoot,
+        rootNoteId: "_share",
+        cssToLoad
+    });
 }
 
-function renderNoteContentInternal(note: SNote | BNote, subRoot: Subroot, rootNoteId: string) {
+interface RenderArgs {
+    subRoot: Subroot;
+    rootNoteId: string;
+    cssToLoad: string[];
+}
+
+function renderNoteContentInternal(note: SNote | BNote, renderArgs: RenderArgs) {
     const { header, content, isEmpty } = getContent(note);
     const showLoginInShareTheme = options.getOption("showLoginInShareTheme");
     const opts = {
@@ -79,14 +111,13 @@ function renderNoteContentInternal(note: SNote | BNote, subRoot: Subroot, rootNo
         header,
         content,
         isEmpty,
-        subRoot,
-        assetPath: isDev ? assetPath : `../${assetPath}`,
+        assetPath: shareAdjustedAssetPath,
         assetUrlFragment,
         appPath: isDev ? app_path : `../${app_path}`,
         showLoginInShareTheme,
         t,
         isDev,
-        rootNoteId
+        ...renderArgs
     };
 
     // Check if the user has their own template.
