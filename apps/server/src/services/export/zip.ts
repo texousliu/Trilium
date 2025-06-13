@@ -562,6 +562,7 @@ ${markdownContent}`;
 
         const assets = [
             "style.css",
+            "script.js",
             "boxicons.css",
             "boxicons.eot",
             "boxicons.woff2",
@@ -654,6 +655,8 @@ function getShareThemeAssets(nameWithExtension: string) {
     // Rename share.css to style.css.
     if (nameWithExtension === "style.css") {
         nameWithExtension = "share.css";
+    } else if (nameWithExtension === "script.js") {
+        nameWithExtension = "share.js";
     }
 
     let path: string | undefined;

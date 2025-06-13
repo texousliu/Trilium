@@ -9,8 +9,8 @@
     <% for (const url of cssToLoad) { %>
         <link href="<%= url %>" rel="stylesheet">
     <% } %>
-    <% for (const jsRelation of note.getRelations("shareJs")) { %>
-        <script type="module" src="api/notes/<%= jsRelation.value %>/download"></script>
+    <% for (const url of jsToLoad) { %>
+        <script type="module" src="<%= url %>"></script>
     <% } %>
     <% if (note.hasLabel("shareDisallowRobotIndexing")) { %>
         <meta name="robots" content="noindex,follow" />

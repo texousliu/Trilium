@@ -17,6 +17,7 @@ import { join } from "path";
 import { readFileSync } from "fs";
 
 const shareAdjustedAssetPath = isDev ? assetPath : `../${assetPath}`;
+const shareAdjustedAppPath = isDev ? app_path : `../${app_path}`;
 
 /**
  * Represents the output of the content renderer.
@@ -73,6 +74,9 @@ export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath
             `${basePath}style.css`,
             `${basePath}boxicons.css`
         ],
+        jsToLoad: [
+            `${basePath}script.js`
+        ],
         logoUrl: `${basePath}icon-color.svg`
     });
 }
@@ -86,10 +90,16 @@ export function renderNoteContent(note: SNote) {
         cssToLoad.push(`${shareAdjustedAssetPath}/src/share.css`);
         cssToLoad.push(`${shareAdjustedAssetPath}/src/boxicons.css`);
     }
-
-    // Support custom CSS too.
     for (const cssRelation of note.getRelations("shareCss")) {
         cssToLoad.push(`api/notes/${cssRelation.value}/download`);
+    }
+
+    // Determine JS to load.
+    const jsToLoad: string[] = [
+        `${shareAdjustedAppPath}/share.js`
+    ];
+    for (const jsRelation of note.getRelations("shareJs")) {
+        jsToLoad.push(`api/notes/${jsRelation.value}/download`);
     }
 
     const customLogoId = note.getRelation("shareLogo")?.value;
@@ -99,6 +109,7 @@ export function renderNoteContent(note: SNote) {
         subRoot,
         rootNoteId: "_share",
         cssToLoad,
+        jsToLoad,
         logoUrl
     });
 }
@@ -107,6 +118,7 @@ interface RenderArgs {
     subRoot: Subroot;
     rootNoteId: string;
     cssToLoad: string[];
+    jsToLoad: string[];
     logoUrl: string;
 }
 
@@ -120,7 +132,7 @@ function renderNoteContentInternal(note: SNote | BNote, renderArgs: RenderArgs) 
         isEmpty,
         assetPath: shareAdjustedAssetPath,
         assetUrlFragment,
-        appPath: isDev ? app_path : `../${app_path}`,
+        appPath: shareAdjustedAppPath,
         showLoginInShareTheme,
         t,
         isDev,
