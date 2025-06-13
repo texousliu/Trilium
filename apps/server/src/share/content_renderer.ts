@@ -4,6 +4,8 @@ import assetPath, { assetUrlFragment } from "../services/asset_path.js";
 import shareRoot from "./share_root.js";
 import escapeHtml from "escape-html";
 import type SNote from "./shaca/entities/snote.js";
+import BNote from "../becca/entities/bnote.js";
+import type BBranch from "../becca/entities/bbranch.js";
 import { t } from "i18next";
 import SBranch from "./shaca/entities/sbranch.js";
 import options from "../services/options.js";
@@ -24,8 +26,8 @@ export interface Result {
     isEmpty?: boolean;
 }
 
-function getSharedSubTreeRoot(note: SNote): { note?: SNote; branch?: SBranch } {
-    if (note.noteId === shareRoot.SHARE_ROOT_NOTE_ID) {
+function getSharedSubTreeRoot(note: SNote | BNote | undefined): { note?: SNote | BNote; branch?: SBranch | BBranch } {
+    if (!note || note.noteId === shareRoot.SHARE_ROOT_NOTE_ID) {
         // share root itself is not shared
         return {};
     }
@@ -33,6 +35,13 @@ function getSharedSubTreeRoot(note: SNote): { note?: SNote; branch?: SBranch } {
     // every path leads to share root, but which one to choose?
     // for the sake of simplicity, URLs are not note paths
     const parentBranch = note.getParentBranches()[0];
+
+    if (note instanceof BNote) {
+        return {
+            note,
+            branch: parentBranch
+        }
+    }
 
     if (parentBranch.parentNoteId === shareRoot.SHARE_ROOT_NOTE_ID) {
         return {
@@ -44,7 +53,7 @@ function getSharedSubTreeRoot(note: SNote): { note?: SNote; branch?: SBranch } {
     return getSharedSubTreeRoot(parentBranch.getParentNote());
 }
 
-export function renderNoteContent(note: SNote) {
+export function renderNoteContent(note: SNote | BNote) {
     const { header, content, isEmpty } = getContent(note);
     const subRoot = getSharedSubTreeRoot(note);
     const showLoginInShareTheme = options.getOption("showLoginInShareTheme");
@@ -105,7 +114,7 @@ export function renderNoteContent(note: SNote) {
     });
 }
 
-function getContent(note: SNote) {
+function getContent(note: SNote | BNote) {
     if (note.isProtected) {
         return {
             header: "",
@@ -154,7 +163,7 @@ function renderIndex(result: Result) {
     result.content += "</ul>";
 }
 
-function renderText(result: Result, note: SNote) {
+function renderText(result: Result, note: SNote | BNote) {
     const document = new JSDOM(result.content || "").window.document;
 
     result.isEmpty = document.body.textContent?.trim().length === 0 && document.querySelectorAll("img").length === 0;
@@ -247,7 +256,7 @@ export function renderCode(result: Result) {
     }
 }
 
-function renderMermaid(result: Result, note: SNote) {
+function renderMermaid(result: Result, note: SNote | BNote) {
     if (typeof result.content !== "string") {
         return;
     }
@@ -261,11 +270,11 @@ function renderMermaid(result: Result, note: SNote) {
 </details>`;
 }
 
-function renderImage(result: Result, note: SNote) {
+function renderImage(result: Result, note: SNote | BNote) {
     result.content = `<img src="api/images/${note.noteId}/${note.encodedTitle}?${note.utcDateModified}">`;
 }
 
-function renderFile(note: SNote, result: Result) {
+function renderFile(note: SNote | BNote, result: Result) {
     if (note.mime === "application/pdf") {
         result.content = `<iframe class="pdf-view" src="api/notes/${note.noteId}/view"></iframe>`;
     } else {

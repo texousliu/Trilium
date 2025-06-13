@@ -19,9 +19,11 @@ import type NoteMeta from "../meta/note_meta.js";
 import type AttachmentMeta from "../meta/attachment_meta.js";
 import type AttributeMeta from "../meta/attribute_meta.js";
 import type BBranch from "../../becca/entities/bbranch.js";
+import type BNote from "../../becca/entities/bnote.js";
 import type { Response } from "express";
 import type { NoteMetaFile } from "../meta/note_meta.js";
 import cssContent from "@triliumnext/ckeditor5/content.css";
+import { renderNoteContent } from "../../share/content_renderer.js";
 
 type RewriteLinksFn = (content: string, noteMeta: NoteMeta) => string;
 
@@ -314,7 +316,7 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
         }
     }
 
-    function prepareContent(title: string, content: string | Buffer, noteMeta: NoteMeta): string | Buffer {
+    function prepareContent(note: BNote | undefined, title: string, content: string | Buffer, noteMeta: NoteMeta): string | Buffer {
         if (["html", "markdown"].includes(noteMeta?.format || "")) {
             content = content.toString();
             content = rewriteFn(content, noteMeta);
@@ -329,8 +331,11 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
                 const cssUrl = `${"../".repeat(noteMeta.notePath.length - 1)}style.css`;
                 const htmlTitle = escapeHtml(title);
 
-                // <base> element will make sure external links are openable - https://github.com/zadam/trilium/issues/1289#issuecomment-704066809
-                content = `<html>
+                if (note) {
+                    content = renderNoteContent(note);
+                } else {
+                    // <base> element will make sure external links are openable - https://github.com/zadam/trilium/issues/1289#issuecomment-704066809
+                    content = `<html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -346,6 +351,7 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
   </div>
 </body>
 </html>`;
+                }
             }
 
             return content.length < 100_000 ? html.prettyPrint(content, { indent_size: 2 }) : content;
@@ -375,7 +381,7 @@ ${markdownContent}`;
 
             let content: string | Buffer = `<p>This is a clone of a note. Go to its <a href="${targetUrl}">primary location</a>.</p>`;
 
-            content = prepareContent(noteMeta.title, content, noteMeta);
+            content = prepareContent(undefined, noteMeta.title, content, noteMeta);
 
             archive.append(content, { name: filePathPrefix + noteMeta.dataFileName });
 
@@ -391,7 +397,7 @@ ${markdownContent}`;
         }
 
         if (noteMeta.dataFileName) {
-            const content = prepareContent(noteMeta.title, note.getContent(), noteMeta);
+            const content = prepareContent(note, noteMeta.title, note.getContent(), noteMeta);
 
             archive.append(content, {
                 name: filePathPrefix + noteMeta.dataFileName,
