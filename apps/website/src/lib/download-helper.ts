@@ -9,7 +9,7 @@ export type Platform = 'macos' | 'windows' | 'linux';
 let version = rootPackageJson.version;
 
 export function buildDesktopDownloadUrl(platform: Platform, format: string, architecture: Architecture): string {
-    return `https://github.com/TriliumNext/Notes/releases/download/${version}/TriliumNextNotes-${version}-${platform}-${architecture}.${format}`;
+    return `https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-${platform}-${architecture}.${format}`;
 }
 
 export interface DownloadInfo {
@@ -145,28 +145,18 @@ function getPlatform(): Platform {
     }
 }
 
-function getDownloadLink(platform: Platform, architecture: Architecture) {
-    const baseUrl = 'https://example.com/downloads';
-    let url;
-    if (platform === 'mac') {
-        url = `${baseUrl}/mac-${architecture}.dmg`;
-    } else if (platform === 'windows') {
-        url = `${baseUrl}/windows-${architecture}.exe`;
-    } else if (platform === 'linux') {
-        url = `${baseUrl}/linux-${architecture}.tar.gz`;
-    } else {
-        url = `${baseUrl}/other-${architecture}.zip`;
-    }
-
-    return {
-        url: url,
-        platform: platform,
-        architecture: architecture
-    };
-}
-
 export function getRecommendedDownload() {
     const architecture = getArchitecture();
     const platform = getPlatform();
-    return getDownloadLink(platform, architecture);
+
+    const downloadInfo = downloadMatrix.desktop[platform]?.downloads;
+    const recommendedDownload = Object.entries(downloadInfo || {}).find(d => d[1].recommended);
+    const format = recommendedDownload?.[0];
+    const url = buildDesktopDownloadUrl(platform, format || 'zip', architecture);
+
+    return {
+        architecture,
+        platform,
+        url
+    }
 }
