@@ -77,93 +77,55 @@
 <section class="mt-20 max-w-6xl mx-auto px-4">
     <h2 class="text-3xl font-bold text-center mb-12">Feature Highlights</h2>
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Flexible Tree Structure</h3>
-            <p class="text-gray-600">Organize notes in an arbitrarily deep tree. Notes can appear in multiple places via cloning.</p>
+    <div class="grid gap-12 md:grid-cols-2 max-w-4xl mx-auto text-gray-700">
+        <!-- Organization & Navigation -->
+        <div>
+            <h3 class="flex items-center text-xl font-semibold mb-6 text-violet-700">Organization & Navigation</h3>
+            <ul class="list-disc list-inside space-y-3">
+                <li>Arbitrarily deep note tree with cloning support.</li>
+                <li>Fast navigation, full-text search, and note hoisting.</li>
+                <li>Note attributes for organization, querying, and scripting.</li>
+                <li>Seamless note versioning.</li>
+            </ul>
         </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Note Attributes & Scripting</h3>
-            <p class="text-gray-600">Use note attributes to organize, query, and script advanced workflows.</p>
+
+        <!-- Editing & Content -->
+        <div>
+            <h3 class="flex items-center text-xl font-semibold mb-6 text-violet-700">Editing & Content</h3>
+            <ul class="list-disc list-inside space-y-3">
+                <li>Rich WYSIWYG editor with tables, images, math, and markdown autoformat.</li>
+                <li>Source code editing with syntax highlighting.</li>
+                <li>Evernote and Markdown import/export.</li>
+                <li>Web Clipper for easy saving of web content.</li>
+            </ul>
         </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Rich WYSIWYG Editor</h3>
-            <p class="text-gray-600">Create notes with tables, images, math, and auto-formatted Markdown.</p>
+
+        <!-- Security & Sync -->
+        <div>
+            <h3 class="flex items-center text-xl font-semibold mb-6 text-violet-700">Security & Sync</h3>
+            <ul class="list-disc list-inside space-y-3">
+                <li>Direct OpenID and TOTP integration for secure login.</li>
+                <li>Synchronization with self-hosted and third-party servers.</li>
+                <li>Strong note encryption with per-note granularity.</li>
+                <li>Sharing notes publicly on the internet.</li>
+            </ul>
         </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Source Code Friendly</h3>
-            <p class="text-gray-600">Edit source code notes with syntax highlighting and a smooth experience.</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Fast Navigation</h3>
-            <p class="text-gray-600">Quickly move between notes with full-text search, backlinks, and hoisting.</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Note Versioning</h3>
-            <p class="text-gray-600">Track changes over time with seamless version history.</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Strong Encryption</h3>
-            <p class="text-gray-600">Secure notes individually with per-note encryption support.</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Secure Authentication</h3>
-            <p class="text-gray-600">Login via OpenID and TOTP for enhanced security.</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Note Synchronization</h3>
-            <p class="text-gray-600">Sync with your own server or use a 3rd party Trilium hosting provider.</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Public Note Sharing</h3>
-            <p class="text-gray-600">Easily publish and share notes on the web.</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Visual Thinking Tools</h3>
-            <p class="text-gray-600">Create relation maps, mind maps, and canvas-based sketches.</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Geo Mapping</h3>
-            <p class="text-gray-600">Visualize notes with pins and GPX tracks on maps.</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Automation via REST API</h3>
-            <p class="text-gray-600">Automate tasks and integrate with external tools using the REST API.</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Advanced Scripting</h3>
-            <p class="text-gray-600">Build powerful automations and workflows with scriptable notes.</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Import & Export</h3>
-            <p class="text-gray-600">Easily bring in data from Evernote or Markdown. Export content with flexibility.</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Web Clipper</h3>
-            <p class="text-gray-600">Save content from the web with the built-in web clipper.</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Customizable UI</h3>
-            <p class="text-gray-600">Tailor the interface with custom buttons, themes, and widgets.</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Scales to 100k+ Notes</h3>
-            <p class="text-gray-600">Trilium is built to handle massive knowledge bases without slowing down.</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Mobile & Dark Mode</h3>
-            <p class="text-gray-600">Touch-friendly mobile UI and full dark mode support included.</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Multilingual Interface</h3>
-            <p class="text-gray-600">Available in English, German, Spanish, French, Romanian, and Chinese (simplified & traditional).</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-            <h3 class="text-xl font-semibold mb-2">Metrics Dashboard</h3>
-            <p class="text-gray-600">Track and visualize usage with built-in metrics and Grafana integration.</p>
+
+        <!-- Advanced & Customization -->
+        <div>
+            <h3 class="flex items-center text-xl font-semibold mb-6 text-violet-700">Advanced & Customization</h3>
+            <ul class="list-disc list-inside space-y-3">
+                <li>Relation maps and link maps to visualize notes.</li>
+                <li>Scripting support and REST API for automation.</li>
+                <li>Touch-optimized mobile frontend and dark/user themes.</li>
+                <li>Customizable UI with sidebar buttons and user widgets.</li>
+                <li>Metrics with Grafana dashboard integration.</li>
+                <li>Scales efficiently beyond 100,000 notes.</li>
+            </ul>
         </div>
     </div>
 </section>
+
 
 <section class="bg-violet-50 py-16 mt-24">
     <div class="container mx-auto text-center px-4">
