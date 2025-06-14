@@ -1,3 +1,7 @@
+<script>
+    import DownloadNow from "./download-now.svelte";
+
+</script>
 <header class="header bg-white sticky top-0 z-50">
     <div class="container mx-auto flex items-center py-5">
         <a href="/" class="flex items-center gap-x-2 w-100">
@@ -12,7 +16,8 @@
                     <li><a href="/about">About</a></li>
                     <li><a href="/services">Services</a></li>
                     <li><a href="/contact">Contact</a></li>
-                </ul>
+                    <li><DownloadNow /></li>
+                </ul>                
             </nav>
         </div>
     </div>

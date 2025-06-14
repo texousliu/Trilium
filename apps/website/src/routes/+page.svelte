@@ -1,3 +1,7 @@
+<script>
+    import DownloadNow from "./download-now.svelte";
+</script>
+
 <section class="relative overflow-hidden bg-gradient-to-br from-white to-violet-50">
     <!-- Bokeh background circles -->
     <div class="absolute inset-0 pointer-events-none z-0">
@@ -17,10 +21,8 @@
                     Its unique tree structure, rich editing tools, and powerful search features make managing your information intuitive and flexible.
                 </p>
                 <div class="flex items-center gap-6">
-                    <a href="#" class="py-2 px-5 bg-violet-600 text-white font-semibold rounded-full shadow-md hover:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-400 focus:ring-opacity-75">
-                        Download
-                    </a>
-                    <a href="#" class="font-medium text-violet-700 hover:underline">
+                    <DownloadNow />                    
+                    <a href="/download" class="font-medium text-violet-700 hover:underline">
                         More platforms
                     </a>
                 </div>
@@ -30,7 +32,6 @@
             <div class="md:w-1/2">
                 <img src="screenshots/desktop-win.png" alt="Screenshot of the app on desktop Windows" class="w-full rounded-xl shadow-lg">
             </div>
-
         </div>
     </div>
 </section>
