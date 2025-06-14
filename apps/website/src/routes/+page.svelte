@@ -1,16 +1,23 @@
-<section class="hero">
-    <div class="container pt-24 pb-24 mx-auto">
-        <h2 class="text-3xl font-bold mb-4">Trilium Notes</h2>
-        <p class="text-lg mb-6">Build your personal knowledge base with Trilium Notes</p>
-        
-        <div class="flex items-center gap-6">
-            <a href="#" class="download-button button py-2 px-5 bg-violet-500 text-white font-semibold rounded-full shadow-md hover:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-400 focus:ring-opacity-75">Download</a>
-            <a href="#" class="font-medium">More platforms</a>
-        </div>        
-    </div>
+<section class="hero bg-gray-50">
+    <div class="container mx-auto pt-24 pb-24 px-4">
+        <div class="flex flex-col md:flex-row items-center md:justify-between gap-12">
+            <!-- Left: Text Content -->
+            <div class="md:w-1/3">
+                <h2 class="text-4xl font-bold mb-4">Trilium Notes</h2>
+                <p class="text-lg mb-6 text-gray-700">Build your personal knowledge base with Trilium Notes</p>
+                <div class="flex items-center gap-6">
+                    <a href="#" class="download-button button py-2 px-5 bg-violet-500 text-white font-semibold rounded-full shadow-md hover:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-400 focus:ring-opacity-75">
+                        Download
+                    </a>
+                    <a href="#" class="font-medium text-violet-600 hover:underline">More platforms</a>
+                </div>
+            </div>
 
-    <div class="container mx-auto">
-        <img src="screenshots/desktop-win.png" alt="Screenshot of the app on desktop Windows" />
+            <!-- Right: Screenshot -->
+            <div class="md:w-2/3">
+                <img src="screenshots/desktop-win.png" alt="Screenshot of the app on desktop Windows" class="w-full rounded-m shadow-md">
+            </div>
+        </div>
     </div>
 </section>
 
