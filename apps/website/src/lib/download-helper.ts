@@ -1,8 +1,10 @@
+import rootPackageJson from '../../../../package.json';
+
 export type Architecture = 'x64' | 'arm64';
 
 export type Platform = 'mac' | 'windows' | 'linux';
 
-let version = "v0.94.1";
+let version = rootPackageJson.version;
 
 export function buildDesktopDownloadUrl(platform: Platform, format: string, architecture: Architecture): string {
     return `https://github.com/TriliumNext/Notes/releases/download/${version}/TriliumNextNotes-${version}-${platform}-${architecture}.${format}`;
