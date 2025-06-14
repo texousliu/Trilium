@@ -38,14 +38,14 @@
         </div>
     </section>
 
-    <section class="max-w-6xl mx-auto px-4 mt-10">
+    <section class="max-w-4xl mx-auto px-4 mt-10">
         <h2 class="text-3xl font-bold text-center text-gray-900 mb-8">Set up a server for access on multiple devices</h2>
 
-        <div class="grid md:grid-cols-3 gap-10">
+        <div class="grid md:grid-cols-2 gap-10">
             {#each Object.entries(downloadMatrix.server) as [platformId, platform]}
-                {@const textColor = "text-violet-600"}
-                {@const bgColor = "bg-violet-600"}
-                {@const hoverColor = "hover:bg-violet-700"}
+                {@const textColor = (platformId === "linux" ? "text-violet-600" : "text-gray-800")}
+                {@const bgColor = (platformId === "linux" ? "bg-violet-600" : "bg-gray-800")}
+                {@const hoverColor = (platformId === "linux" ? "hover:bg-violet-700" : "hover:bg-gray-900")}
                 <DownloadCard 
                     {textColor} {bgColor} {hoverColor}
                     {platform} {architecture} platformId={platformId as Platform} />

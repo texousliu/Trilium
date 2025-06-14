@@ -16,7 +16,7 @@
     <div class="space-y-2 mt-auto w-full">
         {#if recommended}
             <a href={buildDesktopDownloadUrl(platformId as Platform, recommended[0], architecture)} class="mt-auto block text-center {bgColor} {hoverColor} text-white font-medium py-2 px-5 rounded-full shadow transition">
-                Download {recommended[1].name}
+                {recommended[1].name}
             </a>
         {/if}
         <div class="flex justify-center gap-4 text-sm {textColor} mt-2">

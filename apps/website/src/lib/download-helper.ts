@@ -40,7 +40,7 @@ export const downloadMatrix: DownloadMatrix = {
             downloads: {
                 exe: {
                     recommended: true,
-                    name: "Installer (.exe)"
+                    name: "Download Installer (.exe)"
                 },
                 zip: {
                     name: "Portable (.zip)"
@@ -59,7 +59,7 @@ export const downloadMatrix: DownloadMatrix = {
             downloads: {
                 deb: {
                     recommended: true,
-                    name: ".deb"
+                    name: "Download .deb"
                 },
                 rpm: {
                     name: ".rpm"
@@ -84,7 +84,7 @@ export const downloadMatrix: DownloadMatrix = {
             downloads: {
                 dmg: {
                     recommended: true,
-                    name: "Installer (.dmg)"
+                    name: "Download Installer (.dmg)"
                 },
                 zip: {
                     name: "Portable (.zip)"
@@ -107,6 +107,19 @@ export const downloadMatrix: DownloadMatrix = {
                 tarArm64: {
                     name: "ARM (.tar.xz)"
                 },
+            }
+        },
+        pikapod: {
+            title: "Paid hosting",
+            description: "Trilium Notes hosted on PikaPods, a paid service for easy access and management.",
+            downloads: {
+                pikapod: {
+                    recommended: true,
+                    name: "Set up on PikaPods"
+                },
+                triliumcc: {
+                    name: "Alternatively see trilium.cc"
+                }
             }
         }
     }
