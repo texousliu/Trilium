@@ -21,7 +21,7 @@
                     Its unique tree structure, rich editing tools, and powerful search features make managing your information intuitive and flexible.
                 </p>
                 <div class="flex items-center gap-6">
-                    <DownloadNow />                    
+                    <DownloadNow big />                    
                     <a href="/download" class="font-medium text-violet-700 hover:underline">
                         More platforms
                     </a>
