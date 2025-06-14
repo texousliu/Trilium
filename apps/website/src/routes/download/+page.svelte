@@ -79,3 +79,39 @@
         </div>
     </div>
 </section>
+
+<section class="mt-20 max-w-5xl mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-12">Server</h2>
+    <div class="grid md:grid-cols-2 gap-10 justify-center">
+        <div class="bg-white rounded-xl shadow overflow-hidden">
+            <div class="p-6">
+                <h3 class="text-xl font-semibold mb-2">Docker (recommended)</h3>
+                <div class="flex flex-wrap gap-2">
+                    <a class="py-2 px-5 border-1 border-gray-500 text-gray-500 font-semibold rounded-full shadow-md grow" href="#">
+                        DockerHub
+                    </a>
+
+                    <a class="py-2 px-5 border-1 border-gray-500 text-gray-500 font-semibold rounded-full shadow-md grow" href="https://github.com/TriliumNext/Notes/pkgs/container/notes">
+                        ghcr.io
+                    </a>                    
+                </div>
+
+                <a href="#" class="block mt-4">See documentation</a>
+            </div>            
+        </div>
+
+        <div class="bg-white rounded-xl shadow overflow-hidden">
+            <div class="p-6">
+                <h3 class="text-xl font-semibold mb-2">Linux</h3>
+                <div class="flex flex-wrap gap-y-2">
+                    <a class="py-2 px-5 border-1 border-gray-500 text-gray-500 font-semibold rounded-full shadow-md grow" href="#">
+                        Portable for x86 devices (.tar.xz)
+                    </a>
+                    <a class="py-2 px-5 border-1 border-gray-500 text-gray-500 font-semibold rounded-full shadow-md grow" href="#">
+                        Portable for ARM devices (.tar.xz)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
