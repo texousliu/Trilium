@@ -1,8 +1,12 @@
 export type Architecture = 'x64' | 'arm64';
 
-type Platform = 'mac' | 'windows' | 'linux';
+export type Platform = 'mac' | 'windows' | 'linux';
 
-type Apps = 'desktop';
+let version = "v0.94.1";
+
+export function buildDesktopDownloadUrl(platform: Platform, format: string, architecture: Architecture): string {
+    return `https://github.com/TriliumNext/Notes/releases/download/${version}/TriliumNextNotes-${version}-${platform}-${architecture}.${format}`;
+}
 
 export const downloadMatrix = {
     desktop: {
@@ -11,14 +15,10 @@ export const downloadMatrix = {
             downloads: {
                 exe: {
                     recommended: true,
-                    name: "Installer (.exe)",
-                    x64: "https://github.com/TriliumNext/Notes/releases/download/nightly/TriliumNextNotes-develop-windows-x64.exe",
-                    arm64: "https://github.com/TriliumNext/Notes/releases/download/nightly/TriliumNextNotes-develop-windows-arm64.exe"
+                    name: "Installer (.exe)"
                 },
                 zip: {
-                    name: "Portable (.zip)",
-                    x64: "https://github.com/TriliumNext/Notes/releases/download/nightly/TriliumNextNotes-develop-windows-x64.zip",
-                    arm64: "https://github.com/TriliumNext/Notes/releases/download/nightly/TriliumNextNotes-develop-windows-arm64.zip"
+                    name: "Portable (.zip)"
                 }
             }
         },
@@ -26,40 +26,28 @@ export const downloadMatrix = {
             title: "Linux",
             downloads: {
                 deb: {
-                    name: "Debian/Ubuntu (.deb)",
-                    x64: "https://github.com/TriliumNext/Notes/releases/download/nightly/TriliumNextNotes-develop-linux-x64.deb",
-                    arm64: "https://github.com/TriliumNext/Notes/releases/download/nightly/TriliumNextNotes-develop-linux-arm64.deb"
+                    name: "Debian/Ubuntu (.deb)"
                 },
                 rpm: {
-                    name: "Red Hat-based distributions (.rpm)",
-                    x64: "https://github.com/TriliumNext/Notes/releases/download/nightly/TriliumNextNotes-develop-linux-x64.rpm",
-                    arm64: "https://github.com/TriliumNext/Notes/releases/download/nightly/TriliumNextNotes-develop-linux-arm64.rpm"
+                    name: "Red Hat-based distributions (.rpm)"
                 },
                 flatpak: {
-                    name: "Flatpak (.flatpak)",
-                    x64: "https://github.com/TriliumNext/Notes/releases/download/nightly/TriliumNextNotes-develop-linux-x64.flatpak",
-                    arm64: "https://github.com/TriliumNext/Notes/releases/download/nightly/TriliumNextNotes-develop-linux-arm64.flatpak"
+                    name: "Flatpak (.flatpak)"
                 },
                 zip: {
-                    name: "Portable (.zip)",
-                    x64: "https://github.com/TriliumNext/Notes/releases/download/nightly/TriliumNextNotes-develop-linux-x64.zip",
-                    arm64: "https://github.com/TriliumNext/Notes/releases/download/nightly/TriliumNextNotes-develop-linux-arm64.zip"
+                    name: "Portable (.zip)"
                 }
             }
         },
-        mac: {
+        macos: {
             title: "macOS",
             downloads: {
                 dmg: {
                     recommended: true,
-                    name: "Installer (.dmg)",
-                    x64: "https://github.com/TriliumNext/Notes/releases/download/nightly/TriliumNextNotes-develop-macos-x64.dmg",
-                    arm64: "https://github.com/TriliumNext/Notes/releases/download/nightly/TriliumNextNotes-develop-macos-arm64.dmg"
+                    name: "Installer (.dmg)"
                 },
                 zip: {
-                    name: "Portable (.zip)",
-                    x64: "https://github.com/TriliumNext/Notes/releases/download/nightly/TriliumNextNotes-develop-macos-x64.zip",
-                    arm64: "https://github.com/TriliumNext/Notes/releases/download/nightly/TriliumNextNotes-develop-macos-arm64.zip"
+                    name: "Portable (.zip)"
                 }
             }
         }

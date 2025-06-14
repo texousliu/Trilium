@@ -1,6 +1,8 @@
-<script>
-    import { downloadMatrix, getArchitecture } from "$lib/download-helper";
+<script lang="ts">
+    import type { Platform } from "$lib/download-helper";
+    import { buildDesktopDownloadUrl, downloadMatrix, getArchitecture } from "$lib/download-helper";
 
+    let architectures = ["x64", "arm64"];
     let architecture = getArchitecture();
 </script>
 
@@ -11,7 +13,7 @@
     <div class="col-span-3 flex justify-center items-center gap-3 mb-6">
         <span class="text-gray-600 font-medium mr-2">Architecture:</span>
         <div class="inline-flex bg-violet-100 rounded-full shadow p-1">
-            {#each ["x64", "arm64"] as arch}            
+            {#each architectures as arch}            
                 <button class="py-2 px-6 rounded-full font-semibold focus:outline-none transition
                     text-violet-700 border-violet-700
                     aria-pressed:bg-violet-700 aria-pressed:text-violet-100
@@ -23,13 +25,13 @@
     </div>
 
     <div class="grid md:grid-cols-3 gap-10">
-        {#each Object.values(downloadMatrix.desktop) as platform}
+        {#each Object.entries(downloadMatrix.desktop) as [platformId, platform]}
         <div class="bg-white rounded-xl shadow overflow-hidden">
             <div class="p-6">
                 <h3 class="text-xl font-semibold mb-2">{platform.title} ({architecture})</h3>
                 <div class="flex flex-wrap gap-y-2">
-                    {#each Object.values(platform.downloads) as download}
-                        <a href={download[architecture]} class={
+                    {#each Object.entries(platform.downloads) as [format, download]}                    
+                        <a href={buildDesktopDownloadUrl(platformId as Platform, format, architecture)} class={
                             download.recommended
                             ? "py-2 px-5 bg-violet-600 text-white font-semibold rounded-full shadow-md hover:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-400 focus:ring-opacity-75 grow"
                             : "py-2 px-5 border-1 border-gray-500 text-gray-500 font-semibold rounded-full shadow-md grow"
