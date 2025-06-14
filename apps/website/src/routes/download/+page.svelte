@@ -33,7 +33,7 @@
             {@const hoverColor = (platformId === "windows" ? "hover:bg-blue-700" : platformId === "linux" ? "hover:bg-violet-700" : "hover:bg-gray-900")}
             
             <div class="bg-white border border-gray-200 rounded-2xl shadow-lg p-8 flex flex-col items-start">
-                <h3 class="text-2xl font-semibold {textColor} mb-2">{platform.title} ({architecture})</h3>
+                <h3 class="text-2xl font-semibold {textColor} mb-2">{platform.title[architecture]}</h3>
                 <p class="text-gray-700 mb-12">{platform.description}</p>                
                 <div class="space-y-2 mt-auto w-full">
                     {#if recommended}

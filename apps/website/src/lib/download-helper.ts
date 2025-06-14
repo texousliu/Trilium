@@ -14,7 +14,10 @@ export function buildDesktopDownloadUrl(platform: Platform, format: string, arch
 export const downloadMatrix = {
     desktop: {
         windows: {
-            title: "Windows",
+            title: {
+                x64: "Windows 64-bit",
+                arm64: "Windows on ARM"
+            },
             description: "Compatible with Windows 10 and 11.",
             downloads: {
                 exe: {
@@ -27,7 +30,10 @@ export const downloadMatrix = {
             }
         },
         linux: {
-            title: "Linux",
+            title: {
+                x64: "Linux 64-bit",
+                arm64: "Linux on ARM"
+            },
             description: "Runs on most major distributions.",
             downloads: {
                 deb: {
@@ -46,7 +52,10 @@ export const downloadMatrix = {
             }
         },
         macos: {
-            title: "macOS",
+            title: {
+                x64: "macOS for Intel",
+                arm64: "macOS for Apple Silicon"
+            },
             description: "Works on macOS Big Sur and up.",
             downloads: {
                 dmg: {
