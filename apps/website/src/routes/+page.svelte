@@ -15,6 +15,48 @@
 </section>
 
 <section class="mt-20 max-w-6xl mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-12">Beyond Text: Smarter Note Types</h2>
+
+    <div class="grid md:grid-cols-2 gap-10">
+        <!-- Canvas Notes -->
+        <div class="bg-white rounded-xl shadow overflow-hidden">
+            <img src="/note-types/canvas.png" alt="Canvas Note Screenshot" class="w-full h-56 object-cover object-top">
+            <div class="p-6">
+                <h3 class="text-xl font-semibold mb-2">Canvas Notes</h3>
+                <p class="text-gray-600">Draw and arrange elements freely using an Excalidraw-powered canvas — ideal for diagrams, sketches, and visual planning.</p>
+            </div>
+        </div>
+
+        <!-- Mermaid Diagrams -->
+        <div class="bg-white rounded-xl shadow overflow-hidden">
+            <img src="/note-types/mermaid.png" alt="Mermaid Diagram Screenshot" class="w-full h-56 object-cover object-top">
+            <div class="p-6">
+                <h3 class="text-xl font-semibold mb-2">Mermaid Diagrams</h3>
+                <p class="text-gray-600">Render flowcharts, Gantt charts, and sequence diagrams with Mermaid markdown syntax directly in your notes.</p>
+            </div>
+        </div>
+
+        <!-- Geo Maps -->
+        <div class="bg-white rounded-xl shadow overflow-hidden">
+            <img src="/note-types/geo-map.png" alt="Geo Map Screenshot" class="w-full h-56 object-cover">
+            <div class="p-6">
+                <h3 class="text-xl font-semibold mb-2">Geo Maps</h3>
+                <p class="text-gray-600">Plot locations and GPX tracks to visualize geography-linked notes and movement patterns on interactive maps.</p>
+            </div>
+        </div>
+
+        <!-- Mind Maps -->
+        <div class="bg-white rounded-xl shadow overflow-hidden">
+            <img src="/note-types/mind-map.png" alt="Mind Map Screenshot" class="w-full h-56 object-cover">
+            <div class="p-6">
+                <h3 class="text-xl font-semibold mb-2">Mind Maps</h3>
+                <p class="text-gray-600">Organize ideas visually using a drag-and-drop mind map editor powered by Mind Elixir.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mt-20 max-w-6xl mx-auto px-4">
     <h2 class="text-3xl font-bold text-center mb-12">Feature Highlights</h2>
 
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
