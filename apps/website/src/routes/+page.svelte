@@ -11,8 +11,11 @@
 
             <!-- Left: Text Content -->
             <div class="md:w-1/2">
-                <h2 class="text-4xl font-bold mb-4 text-gray-900">Trilium Notes</h2>
-                <p class="text-lg mb-6 text-gray-700">Build your personal knowledge base with Trilium Notes</p>
+                <h2 class="text-4xl font-bold mb-4 text-gray-900">Organize Your Thoughts.<br/> Build Your Knowledge.</h2>
+                <p class="text-lg mb-6 text-gray-700">
+                    Trilium Notes helps you build and organize complex personal knowledge bases effortlessly.  
+                    Its unique tree structure, rich editing tools, and powerful search features make managing your information intuitive and flexible.
+                </p>
                 <div class="flex items-center gap-6">
                     <a href="#" class="py-2 px-5 bg-violet-600 text-white font-semibold rounded-full shadow-md hover:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-400 focus:ring-opacity-75">
                         Download
