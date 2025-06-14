@@ -4,9 +4,9 @@ export type App = "desktop" | "server";
 
 export type Architecture = 'x64' | 'arm64';
 
-export type Platform = 'macos' | 'windows' | 'linux';
+export type Platform = "macos" | "windows" | "linux" | "pikapod";
 
-let version = rootPackageJson.version;
+const version = rootPackageJson.version;
 
 export interface DownloadInfo {
     recommended?: boolean;
@@ -20,7 +20,7 @@ export interface DownloadMatrixEntry {
     downloads: Record<string, DownloadInfo>;
 }
 
-type DownloadMatrix = Record<App, Record<Platform, DownloadMatrixEntry>>;
+type DownloadMatrix = Record<App, { [ P in Platform ]?: DownloadMatrixEntry }>;
 
 // Keep compatibility info inline with https://github.com/electron/electron/blob/main/README.md#platform-support.
 export const downloadMatrix: DownloadMatrix = {
@@ -131,7 +131,7 @@ export function buildDownloadUrl(app: App, platform: Platform, format: string, a
     if (app === "desktop") {
         return `https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-${platform}-${architecture}.${format}`;
     } else if (app === "server") {
-        return downloadMatrix.server[platform].downloads[format].url ?? "#";
+        return downloadMatrix.server[platform]?.downloads[format].url ?? "#";
     } else {
         return "#";
     }
@@ -149,7 +149,7 @@ export function getArchitecture(): Architecture {
 function getPlatform(): Platform {
     const userAgent = navigator.userAgent.toLowerCase();
     if (userAgent.includes('macintosh') || userAgent.includes('mac os x')) {
-        return "mac";
+        return "macos";
     } else if (userAgent.includes('windows') || userAgent.includes('win32')) {
         return "windows";
     } else {
