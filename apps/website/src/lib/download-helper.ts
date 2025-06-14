@@ -10,10 +10,12 @@ export function buildDesktopDownloadUrl(platform: Platform, format: string, arch
     return `https://github.com/TriliumNext/Notes/releases/download/${version}/TriliumNextNotes-${version}-${platform}-${architecture}.${format}`;
 }
 
+// Keep compatibility info inline with https://github.com/electron/electron/blob/main/README.md#platform-support.
 export const downloadMatrix = {
     desktop: {
         windows: {
             title: "Windows",
+            description: "Compatible with Windows 10 and 11.",
             downloads: {
                 exe: {
                     recommended: true,
@@ -26,15 +28,17 @@ export const downloadMatrix = {
         },
         linux: {
             title: "Linux",
+            description: "Runs on most major distributions.",
             downloads: {
                 deb: {
-                    name: "Debian/Ubuntu (.deb)"
+                    recommended: true,
+                    name: ".deb"
                 },
                 rpm: {
-                    name: "Red Hat-based distributions (.rpm)"
+                    name: ".rpm"
                 },
                 flatpak: {
-                    name: "Flatpak (.flatpak)"
+                    name: ".flatpak"
                 },
                 zip: {
                     name: "Portable (.zip)"
@@ -43,6 +47,7 @@ export const downloadMatrix = {
         },
         macos: {
             title: "macOS",
+            description: "Works on macOS Big Sur and up.",
             downloads: {
                 dmg: {
                     recommended: true,
