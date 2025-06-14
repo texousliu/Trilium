@@ -13,3 +13,7 @@
         <img src="screenshots/desktop-win.png" alt="Screenshot of the app on desktop Windows" />
     </div>
 </section>
+
+<footer class="container bg-white mt-16 py-6 text-sm text-center text-gray-500">
+    &copy; 2024-2025 <a href="https://github.com/eliandoran" class="text-blue-500 hover:underline">Elian Doran</a> and the <a href="https://github.com/TriliumNext/Notes/graphs/contributors" class="text-blue-500 hover:underline">team</a>. <br/>    &copy; 2017-2024 <a href="https://github.com/zadam" class="text-blue-500 hover:underline">Adam Zivner</a>.
+</footer>
