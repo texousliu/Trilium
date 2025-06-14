@@ -2,7 +2,7 @@
     import type { Platform } from "$lib/download-helper";
     import { buildDesktopDownloadUrl, downloadMatrix, getArchitecture } from "$lib/download-helper";
 
-    let architectures = ["x64", "arm64"];
+    let architectures = ["x64", "arm64"] as const;
     let architecture = getArchitecture();
 </script>
 

@@ -1,5 +1,7 @@
 import rootPackageJson from '../../../../package.json';
 
+type App = "desktop";
+
 export type Architecture = 'x64' | 'arm64';
 
 export type Platform = 'mac' | 'windows' | 'linux';
@@ -10,8 +12,16 @@ export function buildDesktopDownloadUrl(platform: Platform, format: string, arch
     return `https://github.com/TriliumNext/Notes/releases/download/${version}/TriliumNextNotes-${version}-${platform}-${architecture}.${format}`;
 }
 
+interface DownloadMatrixEntry {
+    title: Record<Architecture, string>;
+    description: Record<Architecture, string>;
+    downloads: Record<string, { recommended?: boolean; name: string }>;
+}
+
+type DownloadMatrix = Record<App, Record<Platform, DownloadMatrixEntry>>;
+
 // Keep compatibility info inline with https://github.com/electron/electron/blob/main/README.md#platform-support.
-export const downloadMatrix = {
+export const downloadMatrix: DownloadMatrix = {
     desktop: {
         windows: {
             title: {
