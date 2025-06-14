@@ -154,6 +154,19 @@
     </div>
 </section>
 
-<footer class="container bg-white mt-16 py-6 text-sm text-center text-gray-500">
+<section class="bg-violet-50 py-16 mt-24">
+    <div class="container mx-auto text-center px-4">
+        <h2 class="text-3xl font-bold mb-4">Ready to get started with Trilium Notes?</h2>
+        <p class="text-lg text-gray-700 mb-8">Build your personal knowledge base with powerful features and full privacy.</p>
+
+        <div class="flex justify-center gap-6">
+            <a href="#" class="py-3 px-6 bg-violet-600 text-white font-semibold rounded-full shadow hover:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-400 focus:ring-opacity-75">
+                Download Now
+            </a>
+        </div>
+    </div>
+</section>
+
+<footer class="container bg-white mt-2 py-6 text-sm text-center text-gray-500">
     &copy; 2024-2025 <a href="https://github.com/eliandoran" class="text-blue-500 hover:underline">Elian Doran</a> and the <a href="https://github.com/TriliumNext/Notes/graphs/contributors" class="text-blue-500 hover:underline">team</a>. <br/>    &copy; 2017-2024 <a href="https://github.com/zadam" class="text-blue-500 hover:underline">Adam Zivner</a>.
 </footer>
