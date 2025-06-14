@@ -1,10 +1,10 @@
 import rootPackageJson from '../../../../package.json';
 
-type App = "desktop";
+type App = "desktop" | "server";
 
 export type Architecture = 'x64' | 'arm64';
 
-export type Platform = 'mac' | 'windows' | 'linux';
+export type Platform = 'macos' | 'windows' | 'linux';
 
 let version = rootPackageJson.version;
 
@@ -12,10 +12,15 @@ export function buildDesktopDownloadUrl(platform: Platform, format: string, arch
     return `https://github.com/TriliumNext/Notes/releases/download/${version}/TriliumNextNotes-${version}-${platform}-${architecture}.${format}`;
 }
 
-interface DownloadMatrixEntry {
-    title: Record<Architecture, string>;
-    description: Record<Architecture, string>;
-    downloads: Record<string, { recommended?: boolean; name: string }>;
+export interface DownloadInfo {
+    recommended?: boolean;
+    name: string;
+}
+
+export interface DownloadMatrixEntry {
+    title: Record<Architecture, string> | string;
+    description: Record<Architecture, string> | string;
+    downloads: Record<string, DownloadInfo>;
 }
 
 type DownloadMatrix = Record<App, Record<Platform, DownloadMatrixEntry>>;
@@ -84,6 +89,24 @@ export const downloadMatrix: DownloadMatrix = {
                 zip: {
                     name: "Portable (.zip)"
                 }
+            }
+        }
+    },
+    server: {
+        linux: {
+            title: "Self-hosted (Linux)",
+            description: "Deploy Trilium Notes on your own server or VPS, compatible with most Linux distributions.",
+            downloads: {
+                docker: {
+                    recommended: true,
+                    name: "View on Docker Hub"
+                },
+                tarX64: {
+                    name: "x86 (.tar.xz)"
+                },
+                tarArm64: {
+                    name: "ARM (.tar.xz)"
+                },
             }
         }
     }
