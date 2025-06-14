@@ -1,6 +1,6 @@
 import rootPackageJson from '../../../../package.json';
 
-type App = "desktop" | "server";
+export type App = "desktop" | "server";
 
 export type Architecture = 'x64' | 'arm64';
 
@@ -8,13 +8,10 @@ export type Platform = 'macos' | 'windows' | 'linux';
 
 let version = rootPackageJson.version;
 
-export function buildDesktopDownloadUrl(platform: Platform, format: string, architecture: Architecture): string {
-    return `https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-${platform}-${architecture}.${format}`;
-}
-
 export interface DownloadInfo {
     recommended?: boolean;
     name: string;
+    url?: string;
 }
 
 export interface DownloadMatrixEntry {
@@ -99,13 +96,16 @@ export const downloadMatrix: DownloadMatrix = {
             downloads: {
                 docker: {
                     recommended: true,
-                    name: "View on Docker Hub"
+                    name: "View on Docker Hub",
+                    url: "https://hub.docker.com/r/triliumnext/notes"
                 },
                 tarX64: {
-                    name: "x86 (.tar.xz)"
+                    name: "x86 (.tar.xz)",
+                    url: `https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-Server-v${version}-linux-x64.tar.xz`
                 },
                 tarArm64: {
-                    name: "ARM (.tar.xz)"
+                    name: "ARM (.tar.xz)",
+                    url: `https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-Server-v${version}-linux-arm64.tar.xz`
                 },
             }
         },
@@ -115,15 +115,27 @@ export const downloadMatrix: DownloadMatrix = {
             downloads: {
                 pikapod: {
                     recommended: true,
-                    name: "Set up on PikaPods"
+                    name: "Set up on PikaPods",
+                    url: "https://www.pikapods.com/pods?run=trilium-next"
                 },
                 triliumcc: {
-                    name: "Alternatively see trilium.cc"
+                    name: "Alternatively see trilium.cc",
+                    url: "https://trilium.cc/"
                 }
             }
         }
     }
 };
+
+export function buildDownloadUrl(app: App, platform: Platform, format: string, architecture: Architecture): string {
+    if (app === "desktop") {
+        return `https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-${platform}-${architecture}.${format}`;
+    } else if (app === "server") {
+        return downloadMatrix.server[platform].downloads[format].url ?? "#";
+    } else {
+        return "#";
+    }
+}
 
 export function getArchitecture(): Architecture {
     const userAgent = navigator.userAgent.toLowerCase();
@@ -152,7 +164,7 @@ export function getRecommendedDownload() {
     const downloadInfo = downloadMatrix.desktop[platform]?.downloads;
     const recommendedDownload = Object.entries(downloadInfo || {}).find(d => d[1].recommended);
     const format = recommendedDownload?.[0];
-    const url = buildDesktopDownloadUrl(platform, format || 'zip', architecture);
+    const url = buildDownloadUrl("desktop", platform, format || 'zip', architecture);
 
     return {
         architecture,

@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Platform } from "$lib/download-helper";
-    import { buildDesktopDownloadUrl, downloadMatrix, getArchitecture } from "$lib/download-helper";
+    import { downloadMatrix, getArchitecture } from "$lib/download-helper";
     import DownloadCard from "./download-card.svelte";
 
     let architectures = ["x64", "arm64"] as const;
@@ -31,7 +31,7 @@
                 {@const textColor = (platformId === "windows" ? "text-blue-600" : platformId === "linux" ? "text-violet-600" : "text-gray-800")}
                 {@const bgColor = (platformId === "windows" ? "bg-blue-600" : platformId === "linux" ? "bg-violet-600" : "bg-gray-800")}
                 {@const hoverColor = (platformId === "windows" ? "hover:bg-blue-700" : platformId === "linux" ? "hover:bg-violet-700" : "hover:bg-gray-900")}
-                <DownloadCard 
+                <DownloadCard app="desktop"
                     {textColor} {bgColor} {hoverColor}
                     {platform} {architecture} platformId={platformId as Platform} />
             {/each}
@@ -46,7 +46,7 @@
                 {@const textColor = (platformId === "linux" ? "text-violet-600" : "text-gray-800")}
                 {@const bgColor = (platformId === "linux" ? "bg-violet-600" : "bg-gray-800")}
                 {@const hoverColor = (platformId === "linux" ? "hover:bg-violet-700" : "hover:bg-gray-900")}
-                <DownloadCard 
+                <DownloadCard app="server"
                     {textColor} {bgColor} {hoverColor}
                     {platform} {architecture} platformId={platformId as Platform} />
             {/each}
