@@ -34,7 +34,7 @@
             
             <div class="bg-white border border-gray-200 rounded-2xl shadow-lg p-8 flex flex-col items-start">
                 <h3 class="text-2xl font-semibold {textColor} mb-2">{platform.title[architecture]}</h3>
-                <p class="text-gray-700 mb-12">{platform.description}</p>                
+                <p class="text-gray-700 mb-12">{platform.description[architecture]}</p>                
                 <div class="space-y-2 mt-auto w-full">
                     {#if recommended}
                         <a href={buildDesktopDownloadUrl(platformId as Platform, recommended[0], architecture)} class="mt-auto block text-center {bgColor} {hoverColor} text-white font-medium py-2 px-5 rounded-full shadow transition">

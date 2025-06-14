@@ -18,7 +18,10 @@ export const downloadMatrix = {
                 x64: "Windows 64-bit",
                 arm64: "Windows on ARM"
             },
-            description: "Compatible with Windows 10 and 11.",
+            description: {
+                x64: "Compatible with Intel or AMD devices running Windows 10 and 11.",
+                arm64: "Compatible with ARM devices (e.g. with Qualcomm Snapdragon).",
+            },
             downloads: {
                 exe: {
                     recommended: true,
@@ -34,7 +37,10 @@ export const downloadMatrix = {
                 x64: "Linux 64-bit",
                 arm64: "Linux on ARM"
             },
-            description: "Runs on most major distributions.",
+            description: {
+                x64: "For most Linux distributions, compatible with x86_64 architecture.",
+                arm64: "For ARM-based Linux distributions, compatible with aarch64 architecture.",
+            },
             downloads: {
                 deb: {
                     recommended: true,
@@ -56,7 +62,10 @@ export const downloadMatrix = {
                 x64: "macOS for Intel",
                 arm64: "macOS for Apple Silicon"
             },
-            description: "Works on macOS Big Sur and up.",
+            description: {
+                x64: "For Intel-based Macs running macOS Big Sur or later.",
+                arm64: "For Apple Silicon Macs such as those with M1 and M2 chips.",
+            },
             downloads: {
                 dmg: {
                     recommended: true,
