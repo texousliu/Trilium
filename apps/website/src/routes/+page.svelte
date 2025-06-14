@@ -14,7 +14,7 @@
         <div class="flex flex-col md:flex-row items-center md:justify-between gap-12">
 
             <!-- Left: Text Content -->
-            <div class="md:w-1/2">
+            <div class="md:w-1/3">
                 <h2 class="text-4xl font-bold mb-4 text-gray-900">Organize Your Thoughts.<br/> Build Your Knowledge.</h2>
                 <p class="text-lg mb-6 text-gray-700">
                     Trilium Notes helps you build and organize complex personal knowledge bases effortlessly.  
@@ -29,7 +29,7 @@
             </div>
 
             <!-- Right: Screenshot -->
-            <div class="md:w-1/2">
+            <div class="md:w-2/3">
                 <img src="screenshots/desktop-win.png" alt="Screenshot of the app on desktop Windows" class="w-full rounded-xl shadow-lg">
             </div>
         </div>
