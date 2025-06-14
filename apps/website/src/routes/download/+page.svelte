@@ -1,7 +1,7 @@
 <script>
-    import { downloadMatrix } from "$lib/download-helper";
+    import { downloadMatrix, getArchitecture } from "$lib/download-helper";
 
-    let architecture = 'x64';
+    let architecture = getArchitecture();
 </script>
 
 <section class="mt-20 max-w-6xl mx-auto px-4">
@@ -11,17 +11,14 @@
     <div class="col-span-3 flex justify-center items-center gap-3 mb-6">
         <span class="text-gray-600 font-medium mr-2">Architecture:</span>
         <div class="inline-flex bg-violet-100 rounded-full shadow p-1">
-            <button class="py-2 px-6 rounded-full font-semibold focus:outline-none transition
-                text-violet-100 bg-violet-700 shadow
-                aria-pressed:bg-violet-700 aria-pressed:text-violet-100
-                " aria-pressed="true">
-                x86
-            </button>
-            <button class="py-2 px-6 rounded-full font-semibold focus:outline-none transition
-                text-violet-700 bg-transparent hover:bg-violet-200
-                " aria-pressed="false">
-                ARM
-            </button>
+            {#each ["x64", "arm64"] as arch}            
+                <button class="py-2 px-6 rounded-full font-semibold focus:outline-none transition
+                    text-violet-700 border-violet-700
+                    aria-pressed:bg-violet-700 aria-pressed:text-violet-100
+                    " aria-pressed={architecture === arch} on:click={() => architecture = arch}>
+                    {arch}
+                </button>
+            {/each}
         </div>
     </div>
 
@@ -29,7 +26,7 @@
         {#each Object.values(downloadMatrix.desktop) as platform}
         <div class="bg-white rounded-xl shadow overflow-hidden">
             <div class="p-6">
-                <h3 class="text-xl font-semibold mb-2">{platform.title}</h3>
+                <h3 class="text-xl font-semibold mb-2">{platform.title} ({architecture})</h3>
                 <div class="flex flex-wrap gap-y-2">
                     {#each Object.values(platform.downloads) as download}
                         <a href={download[architecture]} class={

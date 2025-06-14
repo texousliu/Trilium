@@ -66,7 +66,7 @@ export const downloadMatrix = {
     }
 };
 
-function getArchitecture(): Architecture {
+export function getArchitecture(): Architecture {
     const userAgent = navigator.userAgent.toLowerCase();
     if (userAgent.includes('arm64') || userAgent.includes('aarch64')) {
         return 'arm64';
