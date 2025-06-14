@@ -1,22 +1,33 @@
-<section class="hero bg-gray-50">
-    <div class="container mx-auto pt-24 pb-24 px-4">
+<section class="relative overflow-hidden bg-gradient-to-br from-white to-violet-50">
+    <!-- Bokeh background circles -->
+    <div class="absolute inset-0 pointer-events-none z-0">
+        <div class="absolute w-72 h-72 bg-violet-300 opacity-30 rounded-full blur-3xl top-[-50px] left-[-80px]"></div>
+        <div class="absolute w-96 h-96 bg-pink-200 opacity-20 rounded-full blur-3xl bottom-[-100px] right-[-60px]"></div>
+        <div class="absolute w-64 h-64 bg-indigo-200 opacity-20 rounded-full blur-2xl top-[200px] left-[50%] transform -translate-x-1/2"></div>
+    </div>
+
+    <div class="relative z-10 container mx-auto pt-24 pb-24 px-4">
         <div class="flex flex-col md:flex-row items-center md:justify-between gap-12">
+
             <!-- Left: Text Content -->
-            <div class="md:w-1/3">
-                <h2 class="text-4xl font-bold mb-4">Trilium Notes</h2>
+            <div class="md:w-1/2">
+                <h2 class="text-4xl font-bold mb-4 text-gray-900">Trilium Notes</h2>
                 <p class="text-lg mb-6 text-gray-700">Build your personal knowledge base with Trilium Notes</p>
                 <div class="flex items-center gap-6">
-                    <a href="#" class="download-button button py-2 px-5 bg-violet-500 text-white font-semibold rounded-full shadow-md hover:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-400 focus:ring-opacity-75">
+                    <a href="#" class="py-2 px-5 bg-violet-600 text-white font-semibold rounded-full shadow-md hover:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-400 focus:ring-opacity-75">
                         Download
                     </a>
-                    <a href="#" class="font-medium text-violet-600 hover:underline">More platforms</a>
+                    <a href="#" class="font-medium text-violet-700 hover:underline">
+                        More platforms
+                    </a>
                 </div>
             </div>
 
             <!-- Right: Screenshot -->
-            <div class="md:w-2/3">
-                <img src="screenshots/desktop-win.png" alt="Screenshot of the app on desktop Windows" class="w-full rounded-m shadow-md">
+            <div class="md:w-1/2">
+                <img src="screenshots/desktop-win.png" alt="Screenshot of the app on desktop Windows" class="w-full rounded-xl shadow-lg">
             </div>
+
         </div>
     </div>
 </section>
