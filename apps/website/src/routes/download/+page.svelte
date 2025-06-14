@@ -2,6 +2,24 @@
     <h2 class="text-3xl font-bold text-center mb-12">Desktop application</h2>
 
     <div class="grid md:grid-cols-3 gap-10">
+        <!-- Architecture pill selector -->
+        <div class="col-span-3 flex justify-center items-center gap-3">
+            <span class="text-gray-600 font-medium mr-2">Architecture:</span>
+            <div class="inline-flex bg-violet-100 rounded-full shadow p-1">
+                <button class="py-2 px-6 rounded-full font-semibold focus:outline-none transition
+                    text-violet-100 bg-violet-700 shadow
+                    aria-pressed:bg-violet-700 aria-pressed:text-violet-100
+                    " aria-pressed="true">
+                    x86
+                </button>
+                <button class="py-2 px-6 rounded-full font-semibold focus:outline-none transition
+                    text-violet-700 bg-transparent hover:bg-violet-200
+                    " aria-pressed="false">
+                    ARM
+                </button>
+            </div>
+        </div>
+
         <div class="bg-white rounded-xl shadow overflow-hidden">
             <div class="p-6">
                 <h3 class="text-xl font-semibold mb-2">Windows</h3>
