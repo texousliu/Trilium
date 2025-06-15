@@ -19,7 +19,6 @@ export default defineConfig(() => ({
       provider: 'v8' as const,
       reporter: [ "text", "html" ]
     },
-    fileParallelism: false,
     pool: "threads"
   },
 }));
