@@ -148,6 +148,7 @@ module.exports = {
                 .filter(locale => !locale.contentOnly)
                 .map(locale => locale.electronLocale.replace("_", "-"));
             const keptLocales = new Set();
+            const removedLocales = [];
 
             for (const outputPath of packageResult.outputPaths) {
                 const localesDir = path.join(outputPath, 'locales');
@@ -166,11 +167,13 @@ module.exports = {
                         continue;
                     }
 
-                    console.log(`Removing unused locale file: ${file}`);                    
                     const filePath = path.join(localesDir, file);
                     fs.unlinkSync(filePath);
+                    removedLocales.push(file);
                 }
             }
+
+            console.log(`Removed unused locale files: ${removedLocales.join(", ")}`);                    
 
             // Ensure all locales that should be kept are actually present.
             for (const locale of localesToKeep) {
