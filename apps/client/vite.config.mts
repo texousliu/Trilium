@@ -84,7 +84,10 @@ export default defineConfig(() => ({
             output: {
                 entryFileNames: "src/[name].js",
                 chunkFileNames: "src/[name].js",
-                assetFileNames: "src/[name].[ext]"
+                assetFileNames: "src/[name].[ext]",
+                manualChunks: {
+                    "ckeditor5": [ "@triliumnext/ckeditor5" ]
+                },
             },
             onwarn(warning, rollupWarn) {
                 if (warning.code === "MODULE_LEVEL_DIRECTIVE") {
