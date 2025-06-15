@@ -9,8 +9,6 @@ export interface MimeTypeDefinition {
     mime: string;
     /** The name of the language/mime type as defined by highlight.js (or one of the aliases), in order to be used for syntax highlighting such as inside code blocks. */
     mdLanguageCode?: string;
-    /** If specified, will load the corresponding highlight file from the given path instead of `node_modules`. */
-    codeMirrorSource?: string;
 }
 
 export interface MimeType extends MimeTypeDefinition {
@@ -43,7 +41,7 @@ export const MIME_TYPES_DICT: readonly MimeTypeDefinition[] = Object.freeze([
     { title: "ASN.1", mime: "text/x-ttcn-asn" },
     { title: "ASP.NET", mime: "application/x-aspx" },
     { title: "Asterisk", mime: "text/x-asterisk" },
-    { title: "Batch file (DOS)", mime: "application/x-bat", highlightJs: "dos", codeMirrorSource: "libraries/codemirror/batch.js" },
+    { title: "Batch file (DOS)", mime: "application/x-bat", highlightJs: "dos" },
     { title: "Brainfuck", mime: "text/x-brainfuck", mdLanguageCode: "brainfuck" },
     { title: "C", mime: "text/x-csrc", mdLanguageCode: "c", default: true },
     { title: "C#", mime: "text/x-csharp", mdLanguageCode: "csharp", default: true },
@@ -174,7 +172,7 @@ export const MIME_TYPES_DICT: readonly MimeTypeDefinition[] = Object.freeze([
     { title: "Swift", mime: "text/x-swift", default: true },
     { title: "SystemVerilog", mime: "text/x-systemverilog" },
     { title: "Tcl", mime: "text/x-tcl", mdLanguageCode: "tcl" },
-    { title: "Terraform (HCL)", mime: "text/x-hcl", highlightJs: "terraform", highlightJsSource: "libraries", codeMirrorSource: "libraries/codemirror/hcl.js" },
+    { title: "Terraform (HCL)", mime: "text/x-hcl", highlightJs: "terraform" },
     { title: "Textile", mime: "text/x-textile" },
     { title: "TiddlyWiki ", mime: "text/x-tiddlywiki" },
     { title: "Tiki wiki", mime: "text/tiki" },
