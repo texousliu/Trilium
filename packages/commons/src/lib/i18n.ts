@@ -13,7 +13,7 @@ const UNSORTED_LOCALES = [
     {
         id: "en",
         name: "English",
-        electronLocale: "en_US" // by default there's no en.pak in the locales, so we end up with no English packs otherwise.
+        electronLocale: "en"
     },
     {
         id: "de",
