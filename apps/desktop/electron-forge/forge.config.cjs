@@ -178,7 +178,7 @@ module.exports = {
                         }
     
                         let localeName = path.basename(file, extension);
-                        if (localeName === "en-US" && process.platform === "win32") {
+                        if (localeName === "en-US" && !isMac) {
                             // If the locale is "en-US" on Windows, we treat it as "en".
                             // This is because the Windows version of Electron uses "en-US.pak" instead of "en.pak".
                             localeName = "en";
