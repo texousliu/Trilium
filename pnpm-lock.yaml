@@ -394,6 +394,9 @@ importers:
       electron:
         specifier: 36.4.0
         version: 36.4.0
+      electron-packager-languages:
+        specifier: 0.6.0
+        version: 0.6.0
       prebuild-install:
         specifier: ^7.1.1
         version: 7.1.3
@@ -7190,6 +7193,10 @@ packages:
 
   electron-localshortcut@3.2.1:
     resolution: {integrity: sha512-DWvhKv36GsdXKnaFFhEiK8kZZA+24/yFLgtTwJJHc7AFgDjNRIBJZ/jq62Y/dWv9E4ypYwrVWN2bVrCYw1uv7Q==}
+
+  electron-packager-languages@0.6.0:
+    resolution: {integrity: sha512-vdSTJ6nH93RFo2YnoFbQDb9IAgMTG8ixYOQZuunpFVIUhKpPrRhmbQOuTBk7zJt5eaKUhMZixMD87WQynnM5iQ==}
+    engines: {node: '>6.0.0'}
 
   electron-squirrel-startup@1.0.1:
     resolution: {integrity: sha512-sTfFIHGku+7PsHLJ7v0dRcZNkALrV+YEozINTW8X1nM//e5O3L+rfYuvSW00lmGHnYmUjARZulD8F2V8ISI9RA==}
@@ -21351,6 +21358,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  electron-packager-languages@0.6.0:
+    dependencies:
+      rimraf: 2.6.3
+
   electron-squirrel-startup@1.0.1:
     dependencies:
       debug: 2.6.9
@@ -26258,7 +26269,6 @@ snapshots:
   rimraf@2.6.3:
     dependencies:
       glob: 7.2.3
-    optional: true
 
   rimraf@3.0.2:
     dependencies:
