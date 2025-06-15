@@ -348,6 +348,12 @@
             }
           ]
         }
+      },
+      "test-build": {
+        "dependsOn": [
+          "build"
+        ],
+        "command": "vitest --config {projectRoot}/vitest.build.config.mts"
       }
     }
   },
