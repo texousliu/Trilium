@@ -147,6 +147,7 @@ module.exports = {
             const localesToKeep = LOCALES
                 .filter(locale => !locale.contentOnly)
                 .map(locale => locale.electronLocale.replace("_", "-"));
+            const keptLocales = new Set();
 
             for (const outputPath of packageResult.outputPaths) {
                 const localesDir = path.join(outputPath, 'locales');
@@ -161,12 +162,21 @@ module.exports = {
                 for (const file of files) {
                     const localeName = path.basename(file, ".pak");
                     if (localesToKeep.includes(localeName)) {
+                        keptLocales.add(localeName);
                         continue;
                     }
 
                     console.log(`Removing unused locale file: ${file}`);                    
                     const filePath = path.join(localesDir, file);
                     fs.unlinkSync(filePath);
+                }
+            }
+
+            // Ensure all locales that should be kept are actually present.
+            for (const locale of localesToKeep) {
+                if (!keptLocales.has(locale)) {
+                    console.error(`Locale ${locale} was not found in the packaged app.`);
+                    process.exit(1);
                 }
             }
         },
