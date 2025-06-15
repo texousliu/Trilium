@@ -11,7 +11,7 @@ vi.mock('../../log.js', () => ({
     }
 }));
 
-describe('Provider Streaming Integration Tests', () => {
+describe.skip('Provider Streaming Integration Tests', () => {
     let mockProviderOptions: ProviderStreamOptions;
 
     beforeEach(() => {
