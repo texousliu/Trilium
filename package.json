@@ -84,7 +84,8 @@
     "patchedDependencies": {
       "@ckeditor/ckeditor5-mention": "patches/@ckeditor__ckeditor5-mention.patch",
       "@ckeditor/ckeditor5-code-block": "patches/@ckeditor__ckeditor5-code-block.patch",
-      "ckeditor5": "patches/ckeditor5.patch"
+      "ckeditor5": "patches/ckeditor5.patch",
+      "@nx/js": "patches/@nx__js.patch"
     },
     "overrides": {
       "node-abi": "4.9.0",
@@ -99,8 +100,22 @@
       "dompurify@<3.2.4": ">=3.2.4",
       "esbuild@<=0.24.2": ">=0.25.0"
     },
+    "ignoredBuiltDependencies": [
+      "sqlite3"
+    ],
     "onlyBuiltDependencies": [
-      "esbuild"
+      "@parcel/watcher",
+      "@scarf/scarf",
+      "better-sqlite3",
+      "bufferutil",
+      "core-js-pure",
+      "electron",
+      "electron-winstaller",
+      "esbuild",
+      "fs-xattr",
+      "macos-alias",
+      "nx",
+      "utf-8-validate"
     ]
   },
   "nx": {

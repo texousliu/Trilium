@@ -10,18 +10,9 @@ export default defineConfig(() => ({
     globals: true,
     setupFiles: ["./spec/setup.ts"],
     environment: "node",
-    include: ['{src,spec}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-    exclude: [
-      "spec/build-checks/**",
-    ],
+    include: ['spec/build-checks/**'],
     reporters: [
       "verbose"
-    ],
-    coverage: {
-      reportsDirectory: './test-output/vitest/coverage',
-      provider: 'v8' as const,
-      reporter: [ "text", "html" ]
-    },
-    pool: "threads"
+    ]
   },
 }));
