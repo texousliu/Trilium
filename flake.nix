@@ -21,7 +21,7 @@
       system:
       let
         pkgs = import nixpkgs { inherit system; };
-        electron = pkgs.electron_35;
+        electron = pkgs."electron_${lib.versions.major packageJsonDesktop.devDependencies.electron}";
         nodejs = pkgs.nodejs_22;
         pnpm = pkgs.pnpm_10;
         inherit (pkgs)
@@ -40,13 +40,13 @@
         fullCleanSourceFilter =
           name: type:
           (lib.cleanSourceFilter name type)
-          || (
+          && (
             let
               baseName = baseNameOf (toString name);
             in
             # No need to copy the flake.
             # Don't copy local development instance of NX cache.
-            baseName == "flake.nix" || baseName == "flake.lock" || baseName == ".nx"
+            baseName != "flake.nix" && baseName != "flake.lock" && baseName != ".nx"
           );
         fullCleanSource =
           src:
@@ -55,6 +55,7 @@
             src = src;
           };
         packageJson = builtins.fromJSON (builtins.readFile ./package.json);
+        packageJsonDesktop = builtins.fromJSON (builtins.readFile ./apps/desktop/package.json);
 
         makeApp =
           {
