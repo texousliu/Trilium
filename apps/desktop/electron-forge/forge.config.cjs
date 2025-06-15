@@ -157,42 +157,47 @@ module.exports = {
             const extension = (isMac ? ".lproj" : ".pak");
 
             for (const outputPath of packageResult.outputPaths) {
-                const localesDir = isMac
-                    ? path.join(outputPath, "TriliumNext Notes.app/Contents/Resources")
-                    : path.join(outputPath, 'locales');
+                const localeDirs = isMac
+                    ? [
+                        path.join(outputPath, "TriliumNext Notes.app/Contents/Resources"),
+                        path.join(outputPath, "TriliumNext Notes.app/Contents/Frameworks/Electron Framework.framework/Resources")
+                    ]
+                    : [ path.join(outputPath, 'locales') ];
 
-                if (!fs.existsSync(localesDir)) {
-                    console.log(`No locales directory found in '${localesDir}'.`);
-                    process.exit(2);
-                }
-
-                const files = fs.readdirSync(localesDir);
-
-                for (const file of files) {
-                    if (!file.endsWith(extension)) {
-                        continue;
+                for (const localeDir of localeDirs) {
+                    if (!fs.existsSync(localeDir)) {
+                        console.log(`No locales directory found in '${localeDir}'.`);
+                        process.exit(2);
                     }
-
-                    let localeName = path.basename(file, extension);
-                    if (localeName === "en-US" && process.platform === "win32") {
-                        // If the locale is "en-US" on Windows, we treat it as "en".
-                        // This is because the Windows version of Electron uses "en-US.pak" instead of "en.pak".
-                        localeName = "en";
+    
+                    const files = fs.readdirSync(localeDir);
+    
+                    for (const file of files) {
+                        if (!file.endsWith(extension)) {
+                            continue;
+                        }
+    
+                        let localeName = path.basename(file, extension);
+                        if (localeName === "en-US" && process.platform === "win32") {
+                            // If the locale is "en-US" on Windows, we treat it as "en".
+                            // This is because the Windows version of Electron uses "en-US.pak" instead of "en.pak".
+                            localeName = "en";
+                        }
+    
+                        if (localesToKeep.includes(localeName)) {
+                            keptLocales.add(localeName);
+                            continue;
+                        }
+    
+                        const filePath = path.join(localeDir, file);
+                        if (isMac) {
+                            fs.rm(filePath, { recursive: true });
+                        } else {
+                            fs.unlinkSync(filePath);
+                        }
+    
+                        removedLocales.push(file);
                     }
-
-                    if (localesToKeep.includes(localeName)) {
-                        keptLocales.add(localeName);
-                        continue;
-                    }
-
-                    const filePath = path.join(localesDir, file);
-                    if (isMac) {
-                        fs.rm(filePath, { recursive: true });
-                    } else {
-                        fs.unlinkSync(filePath);
-                    }
-
-                    removedLocales.push(file);
                 }
             }
 
