@@ -161,7 +161,13 @@ module.exports = {
                 const files = fs.readdirSync(localesDir);
 
                 for (const file of files) {
-                    const localeName = path.basename(file, ".pak");
+                    let localeName = path.basename(file, ".pak");
+                    if (localeName === "en-US" && process.platform === "win32") {
+                        // If the locale is "en-US" on Windows, we treat it as "en".
+                        // This is because the Windows version of Electron uses "en-US.pak" instead of "en.pak".
+                        localeName = "en";
+                    }
+
                     if (localesToKeep.includes(localeName)) {
                         keptLocales.add(localeName);
                         continue;
