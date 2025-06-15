@@ -6,6 +6,15 @@
   "prHourlyLimit": 0,
   "prConcurrentLimit": 0,
   "branchConcurrentLimit": 0,
+  "ignorePaths": [
+    "**/node_modules/**",
+    "apps/edit-docs/demo/**",
+    "apps/server/src/assets/doc_notes/**",
+    "docs/**"
+  ],
+  "html": {
+    "enabled": false
+  },
   "packageRules": [
     {
       "matchPackageNames": "@fsegurai/codemirror-theme-**",
