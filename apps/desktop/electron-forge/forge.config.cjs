@@ -1,7 +1,6 @@
 const path = require("path");
 const fs = require("fs-extra");
 const { LOCALES } = require("@triliumnext/commons");
-const setLanguages = require('electron-packager-languages');
 
 const ELECTRON_FORGE_DIR = __dirname;
 
@@ -30,10 +29,6 @@ const macosSignConfiguration = process.env.APPLE_ID ? {
     }
 } : undefined;
 
-const localesToKeep = LOCALES
-    .filter(locale => !locale.contentOnly)
-    .map(locale => locale.electronLocale);
-
 module.exports = {
     outDir: "out",
     // Documentation of `packagerConfig` options: https://electron.github.io/packager/main/interfaces/Options.html
@@ -50,9 +45,6 @@ module.exports = {
             ...(process.platform === "darwin" ? [] : extraResourcesForPlatform)
         ],
         prune: false,
-        afterCopy: [
-            setLanguages(localesToKeep)
-        ],
         afterComplete: [
             (buildPath, _electronVersion, platform, _arch, callback) => {
                 // Only move resources on non-macOS platforms
@@ -150,6 +142,53 @@ module.exports = {
         }
     ],
     hooks: {
+        // Remove unused locales from the packaged app to save some space.
+        postPackage(_, packageResult) {
+            const localesToKeep = LOCALES
+                .filter(locale => !locale.contentOnly)
+                .map(locale => locale.electronLocale.replace("_", "-"));
+            const keptLocales = new Set();
+            const removedLocales = [];
+
+            for (const outputPath of packageResult.outputPaths) {
+                const localesDir = path.join(outputPath, 'locales');
+
+                if (!fs.existsSync(localesDir)) {
+                    console.log('No locales directory found. Skipping cleanup.');
+                    return;
+                }
+
+                const files = fs.readdirSync(localesDir);
+
+                for (const file of files) {
+                    let localeName = path.basename(file, ".pak");
+                    if (localeName === "en-US" && process.platform === "win32") {
+                        // If the locale is "en-US" on Windows, we treat it as "en".
+                        // This is because the Windows version of Electron uses "en-US.pak" instead of "en.pak".
+                        localeName = "en";
+                    }
+
+                    if (localesToKeep.includes(localeName)) {
+                        keptLocales.add(localeName);
+                        continue;
+                    }
+
+                    const filePath = path.join(localesDir, file);
+                    fs.unlinkSync(filePath);
+                    removedLocales.push(file);
+                }
+            }
+
+            console.log(`Removed unused locale files: ${removedLocales.join(", ")}`);                    
+
+            // Ensure all locales that should be kept are actually present.
+            for (const locale of localesToKeep) {
+                if (!keptLocales.has(locale)) {
+                    console.error(`Locale ${locale} was not found in the packaged app.`);
+                    process.exit(1);
+                }
+            }
+        },
         // Gather all the artifacts produced by the makers and copy them to a common upload directory.
         postMake(_, makeResults) {
             const outputDir = path.join(__dirname, "..", "upload");
