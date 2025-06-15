@@ -67,7 +67,7 @@ describe('LLM Model Selection with Special Characters', () => {
         vi.mocked(options.getOptionBool).mockReturnValue(true);
     });
 
-    describe.skip('OpenAI Model Names', () => {
+    describe('OpenAI Model Names', () => {
         it('should correctly handle model names with periods', async () => {
             const modelName = 'gpt-4.1-turbo-preview';
             vi.mocked(options.getOption).mockImplementation((key: string) => {
@@ -82,7 +82,7 @@ describe('LLM Model Selection with Special Characters', () => {
 
             // Spy on getOpenAIOptions to verify model name is passed correctly
             const getOpenAIOptionsSpy = vi.spyOn(providers, 'getOpenAIOptions');
-
+            
             try {
                 await service.generateChatCompletion([{ role: 'user', content: 'test' }], opts);
             } catch (error) {
@@ -108,7 +108,7 @@ describe('LLM Model Selection with Special Characters', () => {
             };
 
             const getOpenAIOptionsSpy = vi.spyOn(providers, 'getOpenAIOptions');
-
+            
             try {
                 await service.generateChatCompletion([{ role: 'user', content: 'test' }], opts);
             } catch (error) {
@@ -127,7 +127,7 @@ describe('LLM Model Selection with Special Characters', () => {
             };
 
             const getOpenAIOptionsSpy = vi.spyOn(providers, 'getOpenAIOptions');
-
+            
             const openaiOptions = providers.getOpenAIOptions(opts);
             expect(openaiOptions.model).toBe(modelName);
         });
@@ -153,7 +153,7 @@ describe('LLM Model Selection with Special Characters', () => {
             });
 
             const service = new OpenAIService();
-
+            
             // Access the private openai client through the service
             const client = (service as any).getClient('test-key');
             const createSpy = vi.spyOn(client.chat.completions, 'create');
@@ -213,7 +213,7 @@ describe('LLM Model Selection with Special Characters', () => {
             });
 
             const service = new AnthropicService();
-
+            
             // Access the private anthropic client
             const client = (service as any).getClient('test-key');
             const createSpy = vi.spyOn(client.messages, 'create');
@@ -278,7 +278,7 @@ describe('LLM Model Selection with Special Characters', () => {
 
             const ollamaOptions = await providers.getOllamaOptions(opts);
             expect(ollamaOptions.model).toBe(modelName);
-
+            
             // Also test with model specified in options
             const optsWithModel: ChatCompletionOptions = {
                 model: 'another/model:v2.0@beta',
@@ -370,7 +370,7 @@ describe('LLM Model Selection with Special Characters', () => {
     describe('Integration with REST API', () => {
         it('should pass model names correctly through REST chat service', async () => {
             const modelName = 'gpt-4.1-turbo-preview@latest';
-
+            
             // Mock the configuration helpers
             vi.doMock('../config/configuration_helpers.js', () => ({
                 getSelectedModelConfig: vi.fn().mockResolvedValue({
@@ -382,7 +382,7 @@ describe('LLM Model Selection with Special Characters', () => {
 
             const { getSelectedModelConfig } = await import('../config/configuration_helpers.js');
             const config = await getSelectedModelConfig();
-
+            
             expect(config?.model).toBe(modelName);
         });
     });
