@@ -10,6 +10,10 @@
     {
       "matchPackageNames": "@fsegurai/codemirror-theme-**",
       "groupName": "codemirror themes"
+    },
+    {
+      "matchPackageNames": "**-config-ckeditor5",
+      "groupName": "ckeditor5 config packages"
     }
   ]
 }
