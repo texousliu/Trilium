@@ -15,6 +15,9 @@
   "html": {
     "enabled": false
   },
+  "bun": {
+    "enabled": false
+  },
   "packageRules": [
     {
       "matchPackageNames": "@fsegurai/codemirror-theme-**",
