@@ -149,11 +149,11 @@ module.exports = {
                 .filter(locale => !locale.contentOnly)
                 .map(locale => locale.electronLocale);
             if (!isMac) {
-                localesToKeep.map(locale => locale.replace("_", "-"))
+                localesToKeep = localesToKeep.map(locale => locale.replace("_", "-"))
             }
 
             const keptLocales = new Set();
-            const removedLocales = [];
+            const removedLocales =  [];
             const extension = (isMac ? ".lproj" : ".pak");
 
             for (const outputPath of packageResult.outputPaths) {
