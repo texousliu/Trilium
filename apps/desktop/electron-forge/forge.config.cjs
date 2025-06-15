@@ -144,24 +144,36 @@ module.exports = {
     hooks: {
         // Remove unused locales from the packaged app to save some space.
         postPackage(_, packageResult) {
-            const localesToKeep = LOCALES
+            const isMac = (process.platform === "darwin");
+            let localesToKeep = LOCALES
                 .filter(locale => !locale.contentOnly)
-                .map(locale => locale.electronLocale.replace("_", "-"));
+                .map(locale => locale.electronLocale);
+            if (!isMac) {
+                localesToKeep.map(locale => locale.replace("_", "-"))
+            }
+
             const keptLocales = new Set();
             const removedLocales = [];
+            const extension = (isMac ? ".lproj" : ".pak");
 
             for (const outputPath of packageResult.outputPaths) {
-                const localesDir = path.join(outputPath, 'locales');
+                const localesDir = isMac
+                    ? path.join(outputPath, "TriliumNext Notes.app/Contents/Resources")
+                    : path.join(outputPath, 'locales');
 
                 if (!fs.existsSync(localesDir)) {
-                    console.log('No locales directory found. Skipping cleanup.');
-                    return;
+                    console.log(`No locales directory found in '${localesDir}'.`);
+                    process.exit(2);
                 }
 
                 const files = fs.readdirSync(localesDir);
 
                 for (const file of files) {
-                    let localeName = path.basename(file, ".pak");
+                    if (!file.endsWith(extension)) {
+                        continue;
+                    }
+
+                    let localeName = path.basename(file, extension);
                     if (localeName === "en-US" && process.platform === "win32") {
                         // If the locale is "en-US" on Windows, we treat it as "en".
                         // This is because the Windows version of Electron uses "en-US.pak" instead of "en.pak".
@@ -174,7 +186,12 @@ module.exports = {
                     }
 
                     const filePath = path.join(localesDir, file);
-                    fs.unlinkSync(filePath);
+                    if (isMac) {
+                        fs.rm(filePath, { recursive: true });
+                    } else {
+                        fs.unlinkSync(filePath);
+                    }
+
                     removedLocales.push(file);
                 }
             }
