@@ -1,6 +1,6 @@
 {
   "name": "@triliumnext/desktop",
-  "version": "0.94.1",
+  "version": "0.95.0",
   "description": "Build your personal knowledge base with TriliumNext Notes",
   "private": true,
   "main": "main.cjs",
@@ -75,7 +75,7 @@
             "cjs"
           ],
           "thirdParty": true,
-          "declaration": false,          
+          "declaration": false,
           "esbuildOptions": {
             "splitting": false,
             "loader": {
