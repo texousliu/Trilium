@@ -1,6 +1,6 @@
 {
   "name": "@triliumnext/server",
-  "version": "0.94.1",
+  "version": "0.95.0",
   "description": "The server-side component of TriliumNext, which exposes the client via the web, allows for sync and provides a REST API for both internal and external use.",
   "private": true,
   "dependencies": {
@@ -46,7 +46,7 @@
     "@triliumnext/turndown-plugin-gfm": "workspace:*",
     "archiver": "7.0.1",
     "async-mutex": "0.5.0",
-    "axios": "1.9.0",
+    "axios": "1.10.0",
     "bindings": "1.5.0",
     "chardet": "2.1.0",
     "cheerio": "1.1.0",
@@ -348,6 +348,12 @@
             }
           ]
         }
+      },
+      "test-build": {
+        "dependsOn": [
+          "build"
+        ],
+        "command": "vitest --config {projectRoot}/vitest.build.config.mts"
       }
     }
   },
