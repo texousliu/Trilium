@@ -2,11 +2,13 @@ import type { Editor } from 'ckeditor5';
 import type { SlashCommandEditorConfig  } from 'ckeditor5-premium-features';
 import { icons as admonitionIcons } from '@triliumnext/ckeditor5-admonition';
 import { icons as footnoteIcons } from '@triliumnext/ckeditor5-footnotes';
-import { COMMAND_NAME as INSERT_DATE_TIME_COMMAND } from './plugins/insert_date_time';
-import { COMMAND_NAME as INTERNAL_LINK_COMMAND } from './plugins/internallink';
+import { COMMAND_NAME as INSERT_DATE_TIME_COMMAND } from './plugins/insert_date_time.js';
+import { COMMAND_NAME as INTERNAL_LINK_COMMAND } from './plugins/internallink.js';
+import { COMMAND_NAME as INCLUDE_NOTE_COMMAND } from './plugins/includenote.js';
 import { ADMONITION_TYPES, type AdmonitionType } from '@triliumnext/ckeditor5-admonition';
 import dateTimeIcon from './icons/date-time.svg?raw';
 import internalLinkIcon from './icons/trilium.svg?raw';
+import noteIcon from './icons/note.svg?raw';
 import { icons as mathIcons, MathUI } from '@triliumnext/ckeditor5-math';
 
 type SlashCommandDefinition = SlashCommandEditorConfig["extraCommands"][number];
@@ -41,6 +43,13 @@ export default function buildExtraCommands(): SlashCommandDefinition[] {
             description: "Insert a math equation",
             icon: mathIcons.ckeditor,
             execute: (editor: Editor) => editor.plugins.get(MathUI)._showUI()
+        },
+        {
+            id: "include-note",
+            title: "Include note",
+            description: "Display the content of another note in this note",
+            icon: noteIcon,
+            commandName: INCLUDE_NOTE_COMMAND
         }
     ];
 }
