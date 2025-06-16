@@ -19,7 +19,7 @@ import { PopupEditor, ClassicEditor, EditorWatchdog, type CKTextEditor, type Men
 import "@triliumnext/ckeditor5/index.css";
 import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
 
-const ENABLE_INSPECTOR = false;
+const ENABLE_INSPECTOR = true;
 
 const mentionSetup: MentionFeed[] = [
     {
