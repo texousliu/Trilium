@@ -2,6 +2,7 @@ import type { Editor } from 'ckeditor5';
 import type { SlashCommandEditorConfig  } from 'ckeditor5-premium-features';
 import { icons as admonitionIcons } from '@triliumnext/ckeditor5-admonition';
 import { icons as footnoteIcons } from '@triliumnext/ckeditor5-footnotes';
+import IconPageBreak from "@ckeditor/ckeditor5-icons/theme/icons/page-break.svg?raw";
 import { COMMAND_NAME as INSERT_DATE_TIME_COMMAND } from './plugins/insert_date_time.js';
 import { COMMAND_NAME as INTERNAL_LINK_COMMAND } from './plugins/internallink.js';
 import { COMMAND_NAME as INCLUDE_NOTE_COMMAND } from './plugins/includenote.js';
@@ -50,6 +51,13 @@ export default function buildExtraCommands(): SlashCommandDefinition[] {
             description: "Display the content of another note in this note",
             icon: noteIcon,
             commandName: INCLUDE_NOTE_COMMAND
+        },
+        {
+            id: "page-break",
+            title: "Page break",
+            description: "Insert a page break (for printing)",
+            icon: IconPageBreak,
+            commandName: "pageBreak"
         }
     ];
 }
