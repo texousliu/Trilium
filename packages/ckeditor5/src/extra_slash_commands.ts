@@ -46,6 +46,7 @@ export default function buildExtraCommands(): SlashCommandDefinition[] {
             id: "internal-link",
             title: "Internal Trilium link",
             description: "Insert a link to another Trilium note",
+            aliases: [ "internal link", "trilium link", "reference link" ],
             icon: internalLinkIcon,
             commandName: INTERNAL_LINK_COMMAND
         },
@@ -129,7 +130,8 @@ function buildAdmonitionExtraCommands(): SlashCommandDefinition[] {
             title: definition.title,
             description: "Inserts a new admonition",
             icon: admonitionIcons[keyword as AdmonitionType],
-            execute: (editor: Editor) => editor.execute("admonition", { forceValue: keyword as AdmonitionType })
+            execute: (editor: Editor) => editor.execute("admonition", { forceValue: keyword as AdmonitionType }),
+            aliases: [ "box" ]
         });
     }
     return commands;
