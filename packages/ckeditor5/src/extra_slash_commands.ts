@@ -6,10 +6,12 @@ import IconPageBreak from "@ckeditor/ckeditor5-icons/theme/icons/page-break.svg?
 import { COMMAND_NAME as INSERT_DATE_TIME_COMMAND } from './plugins/insert_date_time.js';
 import { COMMAND_NAME as INTERNAL_LINK_COMMAND } from './plugins/internallink.js';
 import { COMMAND_NAME as INCLUDE_NOTE_COMMAND } from './plugins/includenote.js';
+import { COMMAND_NAME as MARKDOWN_IMPORT_COMMAND } from './plugins/markdownimport.js';
 import { ADMONITION_TYPES, type AdmonitionType } from '@triliumnext/ckeditor5-admonition';
 import dateTimeIcon from './icons/date-time.svg?raw';
 import internalLinkIcon from './icons/trilium.svg?raw';
 import noteIcon from './icons/note.svg?raw';
+import importMarkdownIcon from './icons/markdown-mark.svg?raw';
 import { icons as mathIcons, MathUI } from '@triliumnext/ckeditor5-math';
 
 type SlashCommandDefinition = SlashCommandEditorConfig["extraCommands"][number];
@@ -58,6 +60,13 @@ export default function buildExtraCommands(): SlashCommandDefinition[] {
             description: "Insert a page break (for printing)",
             icon: IconPageBreak,
             commandName: "pageBreak"
+        },
+        {
+            id: "markdown-import",
+            title: "Markdown import",
+            description: "Import a markdown file into this note",
+            icon: importMarkdownIcon,
+            commandName: MARKDOWN_IMPORT_COMMAND
         }
     ];
 }
