@@ -402,6 +402,10 @@ div.tn-tool-dialog {
  */
 
 .note-type-chooser-dialog div.note-type-dropdown {
+    /* Disable the active item highlighting since there is no use for it here */
+    --active-item-text-color: initial;
+    --active-item-background-color: initial;
+
     font-size: unset;
 }
 
