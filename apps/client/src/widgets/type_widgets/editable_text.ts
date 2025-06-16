@@ -19,8 +19,6 @@ import { PopupEditor, ClassicEditor, EditorWatchdog, type CKTextEditor, type Men
 import "@triliumnext/ckeditor5/index.css";
 import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
 
-const ENABLE_INSPECTOR = true;
-
 const mentionSetup: MentionFeed[] = [
     {
         marker: "@",
@@ -278,7 +276,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
             editor.model.document.on("change:data", () => this.spacedUpdate.scheduleUpdate());
 
-            if (glob.isDev && ENABLE_INSPECTOR) {
+            if (import.meta.env.VITE_CKEDITOR_ENABLE_INSPECTOR === "true") {
                 const CKEditorInspector = (await import("@ckeditor/ckeditor5-inspector")).default;
                 CKEditorInspector.attach(editor);
             }
