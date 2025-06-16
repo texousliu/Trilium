@@ -354,7 +354,7 @@ body.layout-horizontal > .horizontal {
 }
 
 .calendar-dropdown-widget .calendar-header .calendar-month-selector .select-button {
-    --select-arrow-svg: ""; /* Disable the dropdown arrow */
+    --select-arrow-svg: initial; /* Disable the dropdown arrow */
 }
 
 @media (max-width: 992px) {
