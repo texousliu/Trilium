@@ -1,7 +1,7 @@
 import { ButtonView, Command, Plugin } from 'ckeditor5';
 import dateTimeIcon from '../icons/date-time.svg?raw';
 
-const COMMAND_NAME = 'insertDateTimeToText';
+export const COMMAND_NAME = 'insertDateTimeToText';
 
 export default class InsertDateTimePlugin extends Plugin {
     init() {

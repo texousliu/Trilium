@@ -2,8 +2,11 @@ import type { Editor } from 'ckeditor5';
 import type { SlashCommandEditorConfig  } from 'ckeditor5-premium-features';
 import { icons as admonitionIcons } from '@triliumnext/ckeditor5-admonition';
 import { icons as footnoteIcons } from '@triliumnext/ckeditor5-footnotes';
+import { COMMAND_NAME as INSERT_DATE_TIME_COMMAND } from './plugins/insert_date_time';
+import { COMMAND_NAME as INTERNAL_LINK_COMMAND } from './plugins/internallink';
 import { ADMONITION_TYPES, type AdmonitionType } from '@triliumnext/ckeditor5-admonition';
 import dateTimeIcon from './icons/date-time.svg?raw';
+import internalLinkIcon from './icons/trilium.svg?raw';
 
 type SlashCommandDefinition = SlashCommandEditorConfig["extraCommands"][number];
 
@@ -22,7 +25,14 @@ export default function buildExtraCommands(): SlashCommandDefinition[] {
             title: "Insert Date/Time",
             description: "Insert the current date and time",
             icon: dateTimeIcon,
-            commandName: "insertDateTimeToText"
+            commandName: INSERT_DATE_TIME_COMMAND
+        },
+        {
+            id: "internal-link",
+            title: "Internal Trilium link",
+            description: "Insert a link to another Trilium note",
+            icon: internalLinkIcon,
+            commandName: INTERNAL_LINK_COMMAND
         }
     ];
 }
