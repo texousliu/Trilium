@@ -30,6 +30,7 @@
           lib
           makeBinaryWrapper
           makeDesktopItem
+          makeShellWrapper
           moreutils
           removeReferencesTo
           stdenv
@@ -102,14 +103,19 @@
 
             extraNativeBuildInputs =
               [
-                makeBinaryWrapper
                 moreutils # sponge
                 nodejs.python
                 removeReferencesTo
               ]
               ++ lib.optionals (app == "desktop") [
                 copyDesktopItems
+                # required for NIXOS_OZONE_WL expansion
+                # https://github.com/NixOS/nixpkgs/issues/172583
+                makeShellWrapper
                 wrapGAppsHook3
+              ]
+              ++ lib.optionals (app == "server") [
+                makeBinaryWrapper
               ]
               ++ lib.optionals stdenv.hostPlatform.isDarwin [
                 xcodebuild
@@ -187,8 +193,9 @@
             mkdir -p $out/{bin,share/icons/hicolor/512x512/apps,opt/trilium}
             cp --archive apps/desktop/dist/* $out/opt/trilium
             cp apps/client/src/assets/icon.png $out/share/icons/hicolor/512x512/apps/trilium.png
-            makeWrapper ${lib.getExe electron} $out/bin/trilium \
+            makeShellWrapper ${lib.getExe electron} $out/bin/trilium \
               "''${gappsWrapperArgs[@]}" \
+              --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
               --set-default ELECTRON_IS_DEV 0 \
               --add-flags $out/opt/trilium/main.cjs
           '';
