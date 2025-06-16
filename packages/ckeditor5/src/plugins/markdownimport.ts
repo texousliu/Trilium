@@ -7,7 +7,7 @@ export default class MarkdownImportPlugin extends Plugin {
 	init() {
 		const editor = this.editor;
 
-        editor.commands.add(COMMAND_NAME, new ImportMarkdownInline(editor));
+        editor.commands.add(COMMAND_NAME, new ImportMarkdownCommand(editor));
 
 		editor.ui.componentFactory.add( 'markdownImport', locale => {
 			const view = new ButtonView( locale );
@@ -28,7 +28,7 @@ export default class MarkdownImportPlugin extends Plugin {
 	}
 }
 
-class ImportMarkdownInline extends Command {
+class ImportMarkdownCommand extends Command {
 
     execute() {
         glob.importMarkdownInline();
