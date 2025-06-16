@@ -1,12 +1,16 @@
 import type { Editor } from 'ckeditor5';
 import type { SlashCommandEditorConfig  } from 'ckeditor5-premium-features';
-import { icons as admonitionIcons } from '@triliumnext/ckeditor5-admonition';
 import { icons as footnoteIcons } from '@triliumnext/ckeditor5-footnotes';
 import IconPageBreak from "@ckeditor/ckeditor5-icons/theme/icons/page-break.svg?raw";
 import IconAlignLeft from "@ckeditor/ckeditor5-icons/theme/icons/align-left.svg?raw";
 import IconAlignCenter from "@ckeditor/ckeditor5-icons/theme/icons/align-center.svg?raw";
 import IconAlignRight from "@ckeditor/ckeditor5-icons/theme/icons/align-right.svg?raw";
 import IconAlignJustify from "@ckeditor/ckeditor5-icons/theme/icons/align-justify.svg?raw";
+import bxInfoCircle from "boxicons/svg/regular/bx-info-circle.svg?raw";
+import bxBulb from "boxicons/svg/regular/bx-bulb.svg?raw";
+import bxCommentError from "boxicons/svg/regular/bx-comment-error.svg?raw";
+import bxErrorCircle from "boxicons/svg/regular/bx-error-circle.svg?raw";
+import bxError from "boxicons/svg/regular/bx-error.svg?raw";
 import { COMMAND_NAME as INSERT_DATE_TIME_COMMAND } from './plugins/insert_date_time.js';
 import { COMMAND_NAME as INTERNAL_LINK_COMMAND } from './plugins/internallink.js';
 import { COMMAND_NAME as INCLUDE_NOTE_COMMAND } from './plugins/includenote.js';
@@ -111,12 +115,20 @@ function buildAlignmentExtraCommands(): SlashCommandDefinition[] {
 
 function buildAdmonitionExtraCommands(): SlashCommandDefinition[] {
     const commands: SlashCommandDefinition[] = [];
+    const admonitionIcons: Record<AdmonitionType, string> = {
+        note: bxInfoCircle,
+        tip: bxBulb,
+        important: bxCommentError,
+        caution: bxErrorCircle,
+        warning: bxError,
+    };
+
     for (const [ keyword, definition ] of Object.entries(ADMONITION_TYPES)) {
         commands.push({
             id: keyword,
             title: definition.title,
             description: "Inserts a new admonition",
-            icon: admonitionIcons.admonitionIcon,
+            icon: admonitionIcons[keyword as AdmonitionType],
             execute: (editor: Editor) => editor.execute("admonition", { forceValue: keyword as AdmonitionType })
         });
     }
