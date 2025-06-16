@@ -7,6 +7,7 @@ import { COMMAND_NAME as INTERNAL_LINK_COMMAND } from './plugins/internallink';
 import { ADMONITION_TYPES, type AdmonitionType } from '@triliumnext/ckeditor5-admonition';
 import dateTimeIcon from './icons/date-time.svg?raw';
 import internalLinkIcon from './icons/trilium.svg?raw';
+import { icons as mathIcons, MathUI } from '@triliumnext/ckeditor5-math';
 
 type SlashCommandDefinition = SlashCommandEditorConfig["extraCommands"][number];
 
@@ -33,6 +34,13 @@ export default function buildExtraCommands(): SlashCommandDefinition[] {
             description: "Insert a link to another Trilium note",
             icon: internalLinkIcon,
             commandName: INTERNAL_LINK_COMMAND
+        },
+        {
+            id: "math",
+            title: "Math equation",
+            description: "Insert a math equation",
+            icon: mathIcons.ckeditor,
+            execute: (editor: Editor) => editor.plugins.get(MathUI)._showUI()
         }
     ];
 }
