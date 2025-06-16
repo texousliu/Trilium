@@ -18,7 +18,8 @@ function buildAdmonitionExtraCommands(): SlashCommandDefinition[] {
     for (const [ keyword, definition ] of Object.entries(ADMONITION_TYPES)) {
         commands.push({
             id: keyword,
-            title: `Admonition: ${definition.title}`,
+            title: definition.title,
+            description: "Inserts a new admonition",
             icon: admonitionIcons.admonitionIcon,
             execute: (editor: Editor) => editor.execute("admonition", { forceValue: keyword as AdmonitionType })
         });
