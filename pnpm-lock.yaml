@@ -1289,6 +1289,9 @@ importers:
       '@ssddanbrown/codemirror-lang-twig':
         specifier: 1.0.0
         version: 1.0.0
+      codemirror-lang-elixir:
+        specifier: 4.0.0
+        version: 4.0.0
       codemirror-lang-hcl:
         specifier: 0.1.0
         version: 0.1.0
@@ -6186,6 +6189,9 @@ packages:
     resolution: {integrity: sha512-QVb0dM5HvG+uaxitm8wONl7jltx8dqhfU33DcqtOZcLSVIKSDDLDi7+0LbAKiyI8hD9u42m2YxXSkMGWThaecQ==}
     engines: {iojs: '>= 1.0.0', node: '>= 0.12.0'}
 
+  codemirror-lang-elixir@4.0.0:
+    resolution: {integrity: sha512-mzFesxo/t6KOxwnkqVd34R/q7yk+sMtHh6vUKGAvjwHmpL7bERHB+vQAsmU/nqrndkwVeJEHWGw/z/ybfdiudA==}
+
   codemirror-lang-hcl@0.1.0:
     resolution: {integrity: sha512-duwKEaQDhkJWad4YQ9pv4282BS6hCdR+gS/qTAj3f9bypXNNZ42bIN43h9WK3DjyZRENtVlUQdrQM1sA44wHmA==}
 
@@ -9166,6 +9172,9 @@ packages:
   levn@0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
+
+  lezer-elixir@1.1.2:
+    resolution: {integrity: sha512-K3yPMJcNhqCL6ugr5NkgOC1g37rcOM38XZezO9lBXy0LwWFd8zdWXfmRbY829vZVk0OGCQoI02yDWp9FF2OWZA==}
 
   lie@3.3.0:
     resolution: {integrity: sha512-UaiMJzeWRlEujzAuw5LokY1L5ecNQYZKfmyZ9L7wDHb/p5etKaxXhohBcrw0EYby+G/NA52vRSN4N39dxHAIwQ==}
@@ -20215,6 +20224,11 @@ snapshots:
 
   co@4.6.0: {}
 
+  codemirror-lang-elixir@4.0.0:
+    dependencies:
+      '@codemirror/language': 6.11.0
+      lezer-elixir: 1.1.2
+
   codemirror-lang-hcl@0.1.0:
     dependencies:
       '@codemirror/language': 6.11.0
@@ -23864,6 +23878,11 @@ snapshots:
     dependencies:
       prelude-ls: 1.2.1
       type-check: 0.4.0
+
+  lezer-elixir@1.1.2:
+    dependencies:
+      '@lezer/highlight': 1.2.1
+      '@lezer/lr': 1.4.2
 
   lie@3.3.0:
     dependencies:
