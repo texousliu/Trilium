@@ -396,3 +396,15 @@ div.tn-tool-dialog {
     font-weight: normal;
     white-space: nowrap;
 }
+
+/*
+ * NOTE TYPE CHOOSER DIALOG
+ */
+
+.note-type-chooser-dialog div.note-type-dropdown {
+    font-size: unset;
+}
+
+.note-type-chooser-dialog div.note-type-dropdown .dropdown-item span.bx {
+    margin-right: .25em;
+}
