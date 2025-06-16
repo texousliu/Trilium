@@ -267,7 +267,7 @@ input::selection,
 }
 
 .input-group button:focus-visible,
-.input-group a:focus-visible {
+.input-group a:focus-visible:not(.dropdown-item) {
     box-shadow: unset;
     outline: transparent;
     border: transparent;
