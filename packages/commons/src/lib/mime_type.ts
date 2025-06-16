@@ -71,6 +71,7 @@ export const MIME_TYPES_DICT: readonly MimeTypeDefinition[] = Object.freeze([
     { title: "ECL", mime: "text/x-ecl" },
     { title: "edn", mime: "application/edn" },
     { title: "Eiffel", mime: "text/x-eiffel" },
+    { title: "Elixir", mime: "text/x-elixir", mdLanguageCode: "elixir" },
     { title: "Elm", mime: "text/x-elm", mdLanguageCode: "elm" },
     { title: "Embedded Javascript", mime: "application/x-ejs" },
     { title: "Embedded Ruby", mime: "application/x-erb", mdLanguageCode: "erb" },
