@@ -3,6 +3,10 @@ import type { SlashCommandEditorConfig  } from 'ckeditor5-premium-features';
 import { icons as admonitionIcons } from '@triliumnext/ckeditor5-admonition';
 import { icons as footnoteIcons } from '@triliumnext/ckeditor5-footnotes';
 import IconPageBreak from "@ckeditor/ckeditor5-icons/theme/icons/page-break.svg?raw";
+import IconAlignLeft from "@ckeditor/ckeditor5-icons/theme/icons/align-left.svg?raw";
+import IconAlignCenter from "@ckeditor/ckeditor5-icons/theme/icons/align-center.svg?raw";
+import IconAlignRight from "@ckeditor/ckeditor5-icons/theme/icons/align-right.svg?raw";
+import IconAlignJustify from "@ckeditor/ckeditor5-icons/theme/icons/align-justify.svg?raw";
 import { COMMAND_NAME as INSERT_DATE_TIME_COMMAND } from './plugins/insert_date_time.js';
 import { COMMAND_NAME as INTERNAL_LINK_COMMAND } from './plugins/internallink.js';
 import { COMMAND_NAME as INCLUDE_NOTE_COMMAND } from './plugins/includenote.js';
@@ -18,6 +22,7 @@ type SlashCommandDefinition = SlashCommandEditorConfig["extraCommands"][number];
 
 export default function buildExtraCommands(): SlashCommandDefinition[] {
     return [
+        ...buildAlignmentExtraCommands(),
         ...buildAdmonitionExtraCommands(),
         {
             id: 'footnote',
@@ -67,6 +72,39 @@ export default function buildExtraCommands(): SlashCommandDefinition[] {
             description: "Import a markdown file into this note",
             icon: importMarkdownIcon,
             commandName: MARKDOWN_IMPORT_COMMAND
+        }
+    ];
+}
+
+function buildAlignmentExtraCommands(): SlashCommandDefinition[] {
+    return [
+        {
+            id: "align-left",
+            title: "Align Left",
+            description: "Align text to the left",
+            icon: IconAlignLeft,
+            execute: (editor: Editor) => editor.execute("alignment", { value: "left" }),
+        },
+        {
+            id: "align-center",
+            title: "Align Center",
+            description: "Align text to the center",
+            icon: IconAlignCenter,
+            execute: (editor: Editor) => editor.execute("alignment", { value: "center" }),
+        },
+        {
+            id: "align-right",
+            title: "Align Right",
+            description: "Align text to the right",
+            icon: IconAlignRight,
+            execute: (editor: Editor) => editor.execute("alignment", { value: "right" }),
+        },
+        {
+            id: "align-justify",
+            title: "Justify",
+            description: "Justify text alignment",
+            icon: IconAlignJustify,
+            execute: (editor: Editor) => editor.execute("alignment", { value: "justify" }),
         }
     ];
 }
