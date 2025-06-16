@@ -25,6 +25,7 @@
     --bs-body-font-weight: var(--main-font-weight) !important;
     --bs-body-color: var(--main-text-color) !important;
     --bs-body-bg: var(--main-background-color) !important;    
+    --ck-mention-list-max-height: 500px;
 }
 
 .table {
