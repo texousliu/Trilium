@@ -18,6 +18,11 @@ export default function buildHiddenSubtreeTemplates() {
                     {
                         name: "textSnippet",
                         type: "label"
+                    },
+                    {
+                        name: "label:textSnippetDescription",
+                        type: "label",
+                        value: "promoted,alias=Description,single,text"
                     }
                 ]
             }
