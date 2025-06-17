@@ -1,9 +1,11 @@
+import debounce from "debounce";
 import froca from "../../../services/froca.js";
 import type LoadResults from "../../../services/load_results.js";
 import search from "../../../services/search.js";
 import type { TemplateDefinition } from "@triliumnext/ckeditor5";
 
 let templateCache: Map<string, string | undefined> = new Map();
+const debouncedHandleUpdate = debounce(handleUpdate, 1000);
 
 /**
  * Generates the list of snippets based on the user's notes to be passed down to the CKEditor configuration.
@@ -48,7 +50,7 @@ async function handleUpdate(affectedNoteIds: string[]) {
 export function updateTemplateCache(loadResults: LoadResults): boolean {
     const affectedNoteIds = loadResults.getNoteIds();
     if (affectedNoteIds.length > 0) {
-        handleUpdate(affectedNoteIds);
+        debouncedHandleUpdate(affectedNoteIds);
     }
 
 
