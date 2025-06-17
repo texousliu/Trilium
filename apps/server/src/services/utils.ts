@@ -394,13 +394,13 @@ export function normalizeUrl(url: string): string {
         return url;
     }
 
+    // Fix double slashes (except in protocol) first
+    url = url.replace(/([^:]\/)\/+/g, '$1');
+    
     // Remove trailing slash, but preserve protocol
     if (url.endsWith('/') && !url.match(/^https?:\/\/$/)) {
         url = url.slice(0, -1);
     }
-    
-    // Fix double slashes (except in protocol)
-    url = url.replace(/([^:]\/)\/+/g, '$1');
     
     return url;
 }
