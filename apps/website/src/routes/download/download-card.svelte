@@ -20,7 +20,7 @@
                 {recommended[1].name}
             </a>
         {/if}
-        <div class="flex justify-center gap-4 text-sm {textColor} mt-2">
+        <div class="flex flex-wrap justify-center gap-4 text-sm {textColor} mt-2">
             {#each Object.entries(platform.downloads).filter((e) => !e[1].recommended) as [format, download]}
                 <a href={buildDownloadUrl(app, platformId as Platform, format, architecture)} class="hover:underline block">
                     {download.name}
