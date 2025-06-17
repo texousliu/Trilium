@@ -18,6 +18,7 @@ import { getMermaidConfig } from "../../services/mermaid.js";
 import { PopupEditor, ClassicEditor, EditorWatchdog, type CKTextEditor, type MentionFeed, type WatchdogConfig } from "@triliumnext/ckeditor5";
 import "@triliumnext/ckeditor5/index.css";
 import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
+import { updateTemplateCache } from "./ckeditor/snippets.js";
 
 const mentionSetup: MentionFeed[] = [
     {
@@ -584,9 +585,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     async entitiesReloadedEvent(e: EventData<"entitiesReloaded">) {
         await super.entitiesReloadedEvent(e);
 
-        if (e.loadResults.getAttributeRows().find((attr) =>
-            attr.type === "label" &&
-            attr.name === "textSnippet")) {
+        if (updateTemplateCache(e.loadResults)) {
             await this.reinitialize();
         }
     }
