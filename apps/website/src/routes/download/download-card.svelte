@@ -11,9 +11,9 @@
     const recommended = Object.entries(platform.downloads).find((e) => e[1].recommended);
 </script>
 
-<div class="bg-white border border-gray-200 rounded-2xl shadow-lg p-8 flex flex-col items-start">
+<div class="bg-white dark:bg-gray-900 border border-gray-200 rounded-2xl shadow-lg p-8 flex flex-col items-start">
     <h3 class="text-2xl font-semibold {textColor} mb-2">{typeof platform.title === "object" ? platform.title[architecture] : platform.title}</h3>
-    <p class="text-gray-700 mb-12">{typeof platform.title === "object" ? platform.description[architecture] : platform.description}</p>                
+    <p class="text-gray-700 dark:text-gray-200 mb-12">{typeof platform.title === "object" ? platform.description[architecture] : platform.description}</p>                
     <div class="space-y-2 mt-auto w-full">
         {#if recommended}
             <a href={buildDownloadUrl(app, platformId as Platform, recommended[0], architecture)} class="mt-auto block text-center {bgColor} {hoverColor} text-white font-medium py-2 px-5 rounded-full shadow transition">

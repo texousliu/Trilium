@@ -10,7 +10,7 @@
     -->
 </svelte:head>
 
-<section class="relative overflow-hidden bg-gradient-to-br from-white to-violet-50">
+<section class="relative overflow-hidden bg-gradient-to-br from-white dark:from-black to-violet-50 dark:to-violet-900">
     <!-- Bokeh background circles -->
     <div class="absolute inset-0 pointer-events-none z-0">
         <div class="absolute w-72 h-72 bg-violet-300 opacity-30 rounded-full blur-3xl top-[-50px] left-[-80px]"></div>
@@ -23,10 +23,11 @@
 
             <!-- Left: Text Content -->
             <div class="md:w-1/3">
-                <h2 class="text-4xl font-bold mb-4 text-gray-900">Organize Your Thoughts.<br/> Build Your Knowledge.</h2>
-                <p class="text-lg mb-6 text-gray-700">
+                <h2 class="text-4xl font-bold mb-4 text-gray-900 dark:text-white">Organize Your Thoughts.<br/> Build Your Knowledge.</h2>
+                <p class="text-lg mb-6 text-gray-700 dark:text-gray-300">
                     Trilium Notes helps you build and organize complex personal knowledge bases effortlessly.  
                     Its unique tree structure, rich editing tools, and powerful search features make managing your information intuitive and flexible.
+                    <!-- TODO: dark mode screenshot -->
                 </p>
                 <div class="flex items-center gap-6">
                     <DownloadNow big />                    
@@ -113,7 +114,7 @@
 <section class="mt-20 max-w-6xl mx-auto px-4">
     <h2 class="text-3xl font-bold text-center mb-12">Feature Highlights</h2>
 
-    <div class="grid gap-12 md:grid-cols-2 max-w-4xl mx-auto text-gray-700">
+    <div class="grid gap-12 md:grid-cols-2 max-w-4xl mx-auto text-gray-700 dark:text-gray-300">
         <!-- Organization & Navigation -->
         <div>
             <h3 class="flex items-center text-xl font-semibold mb-6 text-violet-700">Organization & Navigation</h3>
@@ -160,13 +161,13 @@
 </section>
 
 
-<section class="bg-violet-50 py-16 mt-24">
+<section class="bg-violet-50 dark:bg-black py-16 mt-24">
     <div class="container mx-auto text-center px-4">
         <h2 class="text-3xl font-bold mb-4">Ready to get started with Trilium Notes?</h2>
-        <p class="text-lg text-gray-700 mb-8">Build your personal knowledge base with powerful features and full privacy.</p>
+        <p class="text-lg text-gray-700 dark:text-gray-200 mb-8">Build your personal knowledge base with powerful features and full privacy.</p>
 
         <div class="flex justify-center gap-6">
-            <a href="#" class="py-3 px-6 bg-violet-600 text-white font-semibold rounded-full shadow hover:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-400 focus:ring-opacity-75">
+            <a href="download" class="py-3 px-6 bg-violet-600 text-white font-semibold rounded-full shadow hover:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-400 focus:ring-opacity-75">
                 Download Now
             </a>
         </div>
