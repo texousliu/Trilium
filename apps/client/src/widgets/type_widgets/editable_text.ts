@@ -19,8 +19,6 @@ import { PopupEditor, ClassicEditor, EditorWatchdog, type CKTextEditor, type Men
 import "@triliumnext/ckeditor5/index.css";
 import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
 
-const ENABLE_INSPECTOR = false;
-
 const mentionSetup: MentionFeed[] = [
     {
         marker: "@",
@@ -203,7 +201,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                     classes: true,
                     attributes: true
                 },
-                licenseKey: "GPL"
+                licenseKey: getLicenseKey()
             };
 
             const contentLanguage = this.note?.getLabelValue("language");
@@ -278,7 +276,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
             editor.model.document.on("change:data", () => this.spacedUpdate.scheduleUpdate());
 
-            if (glob.isDev && ENABLE_INSPECTOR) {
+            if (import.meta.env.VITE_CKEDITOR_ENABLE_INSPECTOR === "true") {
                 const CKEditorInspector = (await import("@ckeditor/ckeditor5-inspector")).default;
                 CKEditorInspector.attach(editor);
             }
@@ -639,4 +637,14 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         ];
     }
 
+}
+
+function getLicenseKey() {
+    const premiumLicenseKey = import.meta.env.VITE_CKEDITOR_KEY;
+    if (!premiumLicenseKey) {
+        logError("CKEditor license key is not set, premium features will not be available.");
+        return "GPL";
+    }
+
+    return premiumLicenseKey;
 }

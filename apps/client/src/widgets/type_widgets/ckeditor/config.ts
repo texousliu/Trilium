@@ -1,6 +1,6 @@
 import { ALLOWED_PROTOCOLS } from "../../../services/link.js";
 import { MIME_TYPE_AUTO } from "@triliumnext/commons";
-import type { EditorConfig } from "@triliumnext/ckeditor5";
+import { buildExtraCommands, type EditorConfig } from "@triliumnext/ckeditor5";
 import { getHighlightJsNameForMime } from "../../../services/mime_types.js";
 import options from "../../../services/options.js";
 import { ensureMimeTypesForHighlighting, isSyntaxHighlightEnabled } from "../../../services/syntax_highlight.js";
@@ -120,6 +120,11 @@ export function buildConfig(): EditorConfig {
         },
         clipboard: {
             copy: copyTextWithToast
+        },
+        slashCommand: {
+            removeCommands: [],
+            dropdownLimit: Number.MAX_SAFE_INTEGER,
+            extraCommands: buildExtraCommands()
         },
         // This value must be kept in sync with the language defined in webpack.config.js.
         language: "en"
