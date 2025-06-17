@@ -18,6 +18,7 @@ import { getMermaidConfig } from "../../services/mermaid.js";
 import { PopupEditor, ClassicEditor, EditorWatchdog, type CKTextEditor, type MentionFeed, type WatchdogConfig } from "@triliumnext/ckeditor5";
 import "@triliumnext/ckeditor5/index.css";
 import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
+import { updateTemplateCache } from "./ckeditor/snippets.js";
 
 const mentionSetup: MentionFeed[] = [
     {
@@ -193,7 +194,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
             const finalConfig = {
                 ...editorConfig,
-                ...buildConfig(),
+                ...(await buildConfig()),
                 ...buildToolbarConfig(isClassicEditor),
                 htmlSupport: {
                     allow: JSON.parse(options.get("allowedHtmlTags")),
@@ -326,7 +327,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             const data = blob?.content || "";
             const newContentLanguage = this.note?.getLabelValue("language");
             if (this.contentLanguage !== newContentLanguage) {
-                await this.reinitialize(data);
+                await this.reinitializeWithData(data);
             } else {
                 this.watchdog.editor?.setData(data);
             }
@@ -562,7 +563,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.refreshIncludedNote(this.$editor, noteId);
     }
 
-    async reinitialize(data: string) {
+    async reinitializeWithData(data: string) {
         if (!this.watchdog) {
             return;
         }
@@ -572,9 +573,25 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.watchdog.editor?.setData(data);
     }
 
-    async onLanguageChanged() {
+    async reinitialize() {
         const data = this.watchdog.editor?.getData();
-        await this.reinitialize(data ?? "");
+        await this.reinitializeWithData(data ?? "");
+    }
+
+    async reloadTextEditorEvent() {
+        await this.reinitialize();
+    }
+
+    async onLanguageChanged() {
+        await this.reinitialize();
+    }
+
+    async entitiesReloadedEvent(e: EventData<"entitiesReloaded">) {
+        await super.entitiesReloadedEvent(e);
+
+        if (updateTemplateCache(e.loadResults)) {
+            await this.reinitialize();
+        }
     }
 
     buildTouchBarCommand(data: CommandListenerData<"buildTouchBar">) {

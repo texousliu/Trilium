@@ -12,7 +12,7 @@ enum Command {
 }
 
 export interface HiddenSubtreeAttribute {
-    type: AttributeType;
+    type: "label" | "relation";
     name: string;
     isInheritable?: boolean;
     value?: string;

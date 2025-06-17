@@ -7,13 +7,14 @@ import { ensureMimeTypesForHighlighting, isSyntaxHighlightEnabled } from "../../
 import utils from "../../../services/utils.js";
 import emojiDefinitionsUrl from "@triliumnext/ckeditor5/emoji_definitions/en.json?url";
 import { copyTextWithToast } from "../../../services/clipboard_ext.js";
+import getTemplates from "./snippets.js";
 
 const TEXT_FORMATTING_GROUP = {
     label: "Text formatting",
     icon: "text"
 };
 
-export function buildConfig(): EditorConfig {
+export async function buildConfig(): Promise<EditorConfig> {
     return {
         image: {
             styles: {
@@ -126,6 +127,9 @@ export function buildConfig(): EditorConfig {
             dropdownLimit: Number.MAX_SAFE_INTEGER,
             extraCommands: buildExtraCommands()
         },
+        template: {
+            definitions: await getTemplates()
+        },
         // This value must be kept in sync with the language defined in webpack.config.js.
         language: "en"
     };
@@ -206,6 +210,7 @@ export function buildClassicToolbar(multilineToolbar: boolean) {
                 "outdent",
                 "indent",
                 "|",
+                "insertTemplate",
                 "markdownImport",
                 "cuttonote",
                 "findAndReplace"
@@ -262,6 +267,7 @@ export function buildFloatingToolbar() {
             "outdent",
             "indent",
             "|",
+            "insertTemplate",
             "imageUpload",
             "markdownImport",
             "specialCharacters",
