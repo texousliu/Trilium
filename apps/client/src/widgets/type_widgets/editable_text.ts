@@ -326,7 +326,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             const data = blob?.content || "";
             const newContentLanguage = this.note?.getLabelValue("language");
             if (this.contentLanguage !== newContentLanguage) {
-                await this.reinitialize(data);
+                await this.reinitializeWithData(data);
             } else {
                 this.watchdog.editor?.setData(data);
             }
@@ -562,7 +562,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.refreshIncludedNote(this.$editor, noteId);
     }
 
-    async reinitialize(data: string) {
+    async reinitializeWithData(data: string) {
         if (!this.watchdog) {
             return;
         }
@@ -572,9 +572,23 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.watchdog.editor?.setData(data);
     }
 
-    async onLanguageChanged() {
+    async reinitialize() {
         const data = this.watchdog.editor?.getData();
-        await this.reinitialize(data ?? "");
+        await this.reinitializeWithData(data ?? "");
+    }
+
+    async onLanguageChanged() {
+        await this.reinitialize();
+    }
+
+    async entitiesReloadedEvent(e: EventData<"entitiesReloaded">) {
+        await super.entitiesReloadedEvent(e);
+
+        if (e.loadResults.getAttributeRows().find((attr) =>
+            attr.type === "label" &&
+            attr.name === "textSnippet")) {
+            await this.reinitialize();
+        }
     }
 
     buildTouchBarCommand(data: CommandListenerData<"buildTouchBar">) {
