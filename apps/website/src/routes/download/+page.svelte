@@ -60,4 +60,6 @@
         </div>
     </section>
 
+    <!-- TODO: mention mobile support here? (alpha Android app / mobile web view) -->
+
 </div>

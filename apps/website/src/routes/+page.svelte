@@ -27,6 +27,7 @@
                 <p class="text-lg mb-6 text-gray-700 dark:text-gray-300">
                     Trilium Notes helps you build and organize complex personal knowledge bases effortlessly.  
                     Its unique tree structure, rich editing tools, and powerful search features make managing your information intuitive and flexible.
+                    <!-- TODO: remove the squiggly autocorrect lines in the screenshot!! -->
                     <!-- TODO: dark mode screenshot -->
                 </p>
                 <div class="flex items-center gap-6">
@@ -82,31 +83,31 @@
 
     <div class="grid md:grid-cols-2 gap-10">
         <FeatureBlock
-            imgSrc="/note-types/canvas.png"
-            imgAlt="Canvas Note Screenshot"
+            imgSrc="/technical-features/sync-server.png"
+            imgAlt="TODO"
             title="Synchronization Server"
-            text="TODO"
+            text="Seamless mirroring of changes acroll all devices."
             />
 
         <FeatureBlock
-            imgSrc="/note-types/mermaid.png"
-            imgAlt="Mermaid Diagram Screenshot"
+            imgSrc="/technical-features/cross-platform.png"
+            imgAlt="TODO, maybe some icons"
             title="Cross-platform App + Web UI"
-            text="Use Trilium Notes as Electron application or in your browser."
+            text="Use as Electron application or in your browser."
             />
 
         <FeatureBlock
-            imgSrc="/note-types/geo-map.png"
-            imgAlt="Geo Map Screenshot"
+            imgSrc="/technical-features/scripting.png"
+            imgAlt="TODO"
             title="Scripting"
-            text="TODO and REST API for automation."
+            text="Custom UI widgets and a REST API for automation."
             />
 
         <FeatureBlock
-            imgSrc="/note-types/mind-map.png"
+            imgSrc="/technical-features/grafana-metrics.png"
             imgAlt="Mind Map Screenshot"
             title="Grafana Metrics"
-            text="TODO"
+            text="Measure database metrics over time."
             />
     </div>
 </section>
