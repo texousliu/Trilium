@@ -375,6 +375,85 @@ export function safeExtractMessageAndStackFromError(err: unknown): [errMessage: 
     return (err instanceof Error) ? [err.message, err.stack] as const : ["Unknown Error", undefined] as const;
 }
 
+/**
+ * Normalizes URL by removing trailing slashes and fixing double slashes.
+ * Preserves the protocol (http://, https://) but removes trailing slashes from the rest.
+ * 
+ * @param url The URL to normalize
+ * @returns The normalized URL without trailing slashes
+ */
+export function normalizeUrl(url: string): string {
+    if (!url || typeof url !== 'string') {
+        return url;
+    }
+
+    // Trim whitespace
+    url = url.trim();
+    
+    if (!url) {
+        return url;
+    }
+
+    // Remove trailing slash, but preserve protocol
+    if (url.endsWith('/') && !url.match(/^https?:\/\/$/)) {
+        url = url.slice(0, -1);
+    }
+    
+    // Fix double slashes (except in protocol)
+    url = url.replace(/([^:]\/)\/+/g, '$1');
+    
+    return url;
+}
+
+/**
+ * Normalizes a path pattern for custom request handlers.
+ * Ensures both trailing slash and non-trailing slash versions are handled.
+ * 
+ * @param pattern The original pattern from customRequestHandler attribute
+ * @returns An array of patterns to match both with and without trailing slash
+ */
+export function normalizeCustomHandlerPattern(pattern: string): string[] {
+    if (!pattern || typeof pattern !== 'string') {
+        return [pattern];
+    }
+
+    pattern = pattern.trim();
+    
+    if (!pattern) {
+        return [pattern];
+    }
+
+    // If pattern already ends with optional trailing slash, return as-is
+    if (pattern.endsWith('/?$') || pattern.endsWith('/?)')) {
+        return [pattern];
+    }
+
+    // If pattern ends with $, handle it specially
+    if (pattern.endsWith('$')) {
+        const basePattern = pattern.slice(0, -1);
+        
+        // If already ends with slash, create both versions
+        if (basePattern.endsWith('/')) {
+            const withoutSlash = basePattern.slice(0, -1) + '$';
+            const withSlash = pattern;
+            return [withoutSlash, withSlash];
+        } else {
+            // Add optional trailing slash
+            const withSlash = basePattern + '/?$';
+            return [withSlash];
+        }
+    }
+
+    // For patterns without $, add both versions
+    if (pattern.endsWith('/')) {
+        const withoutSlash = pattern.slice(0, -1);
+        return [withoutSlash, pattern];
+    } else {
+        const withSlash = pattern + '/';
+        return [pattern, withSlash];
+    }
+}
+
 
 export default {
     compareVersions,
@@ -400,6 +479,8 @@ export default {
     md5,
     newEntityId,
     normalize,
+    normalizeCustomHandlerPattern,
+    normalizeUrl,
     quoteRegex,
     randomSecureToken,
     randomString,

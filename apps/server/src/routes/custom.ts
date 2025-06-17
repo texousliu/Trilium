@@ -5,7 +5,7 @@ import cls from "../services/cls.js";
 import sql from "../services/sql.js";
 import becca from "../becca/becca.js";
 import type { Request, Response, Router } from "express";
-import { safeExtractMessageAndStackFromError } from "../services/utils.js";
+import { safeExtractMessageAndStackFromError, normalizeCustomHandlerPattern } from "../services/utils.js";
 
 function handleRequest(req: Request, res: Response) {
 
@@ -38,15 +38,23 @@ function handleRequest(req: Request, res: Response) {
             continue;
         }
 
-        const regex = new RegExp(`^${attr.value}$`);
-        let match;
+        // Get normalized patterns to handle both trailing slash cases
+        const patterns = normalizeCustomHandlerPattern(attr.value);
+        let match = null;
 
-        try {
-            match = path.match(regex);
-        } catch (e: unknown) {
-            const [errMessage, errStack] = safeExtractMessageAndStackFromError(e);
-            log.error(`Testing path for label '${attr.attributeId}', regex '${attr.value}' failed with error: ${errMessage}, stack: ${errStack}`);
-            continue;
+        // Try each pattern until we find a match
+        for (const pattern of patterns) {
+            try {
+                const regex = new RegExp(`^${pattern}$`);
+                match = path.match(regex);
+                if (match) {
+                    break; // Found a match, exit pattern loop
+                }
+            } catch (e: unknown) {
+                const [errMessage, errStack] = safeExtractMessageAndStackFromError(e);
+                log.error(`Testing path for label '${attr.attributeId}', regex '${pattern}' failed with error: ${errMessage}, stack: ${errStack}`);
+                continue;
+            }
         }
 
         if (!match) {
