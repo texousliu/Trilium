@@ -233,6 +233,8 @@
     "move_success_message": "Selected notes have been moved into "
   },
   "note_type_chooser": {
+    "select_path_prompt": "Select where to create the new note:",
+    "search_placeholder":"Search path by name (auto if empty)",
     "modal_title": "Choose note type",
     "close": "Close",
     "modal_body": "Choose note type / template of the new note:",
