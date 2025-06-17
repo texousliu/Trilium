@@ -23,6 +23,9 @@ export interface HiddenSubtreeItem {
     id: string;
     title: string;
     type: LauncherNoteType;
+    /**
+     * The icon to use for this item, in the format "bx-icon-name" (e.g., `bx-file-blank`), *without* the leading `bx `.
+     */
     icon?: string;
     attributes?: HiddenSubtreeAttribute[];
     children?: HiddenSubtreeItem[];

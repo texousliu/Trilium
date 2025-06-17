@@ -10,7 +10,7 @@ export default function buildHiddenSubtreeTemplates() {
                 id: "_template_text_snippet",
                 type: "text",
                 title: "Text Snippet",
-                icon: "bx bx-align-left",
+                icon: "bx-align-left",
                 attributes: [
                     {
                         name: "template",
