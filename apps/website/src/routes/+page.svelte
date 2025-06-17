@@ -1,5 +1,6 @@
 <script>
     import DownloadNow from "./download-now.svelte";
+    import FeatureBlock from "./feature-block.svelte";
 </script>
 
 <svelte:head>
@@ -47,41 +48,65 @@
     <h2 class="text-3xl font-bold text-center mb-12">Beyond Text: Smarter Note Types</h2>
 
     <div class="grid md:grid-cols-2 gap-10">
-        <!-- Canvas Notes -->
-        <div class="bg-white rounded-xl shadow overflow-hidden">
-            <img src="/note-types/canvas.png" alt="Canvas Note Screenshot" class="w-full h-56 object-cover object-top">
-            <div class="p-6">
-                <h3 class="text-xl font-semibold mb-2">Canvas Notes</h3>
-                <p class="text-gray-600">Draw and arrange elements freely using an Excalidraw-powered canvas — ideal for diagrams, sketches, and visual planning.</p>
-            </div>
-        </div>
+        <FeatureBlock
+            imgSrc="/note-types/canvas.png"
+            imgAlt="Canvas Note Screenshot"
+            title="Canvas Notes"
+            text="Draw and arrange elements freely using an Excalidraw-powered canvas — ideal for diagrams, sketches, and visual planning."
+            />
 
-        <!-- Mermaid Diagrams -->
-        <div class="bg-white rounded-xl shadow overflow-hidden">
-            <img src="/note-types/mermaid.png" alt="Mermaid Diagram Screenshot" class="w-full h-56 object-cover object-top">
-            <div class="p-6">
-                <h3 class="text-xl font-semibold mb-2">Mermaid Diagrams</h3>
-                <p class="text-gray-600">Render flowcharts, Gantt charts, and sequence diagrams with Mermaid markdown syntax directly in your notes.</p>
-            </div>
-        </div>
+        <FeatureBlock
+            imgSrc="/note-types/mermaid.png"
+            imgAlt="Mermaid Diagram Screenshot"
+            title="Mermaid Diagrams"
+            text="Render flowcharts, Gantt charts, and sequence diagrams with Mermaid markdown syntax directly in your notes."
+            />
 
-        <!-- Geo Maps -->
-        <div class="bg-white rounded-xl shadow overflow-hidden">
-            <img src="/note-types/geo-map.png" alt="Geo Map Screenshot" class="w-full h-56 object-cover">
-            <div class="p-6">
-                <h3 class="text-xl font-semibold mb-2">Geo Maps</h3>
-                <p class="text-gray-600">Plot locations and GPX tracks to visualize geography-linked notes and movement patterns on interactive maps.</p>
-            </div>
-        </div>
+        <FeatureBlock
+            imgSrc="/note-types/geo-map.png"
+            imgAlt="Geo Map Screenshot"
+            title="Geo Maps"
+            text="Plot locations and GPX tracks to visualize geography-linked notes and movement patterns on interactive maps."
+            />
 
-        <!-- Mind Maps -->
-        <div class="bg-white rounded-xl shadow overflow-hidden">
-            <img src="/note-types/mind-map.png" alt="Mind Map Screenshot" class="w-full h-56 object-cover">
-            <div class="p-6">
-                <h3 class="text-xl font-semibold mb-2">Mind Maps</h3>
-                <p class="text-gray-600">Organize ideas visually using a drag-and-drop mind map editor powered by Mind Elixir.</p>
-            </div>
-        </div>
+        <FeatureBlock
+            imgSrc="/note-types/mind-map.png"
+            imgAlt="Mind Map Screenshot"
+            title="Mind Maps"
+            text="Organize ideas visually using a drag-and-drop mind map editor powered by Mind Elixir."
+            />
+    </div>
+
+    <h2 class="text-3xl font-bold text-center mb-12">Technical Features</h2>
+
+    <div class="grid md:grid-cols-2 gap-10">
+        <FeatureBlock
+            imgSrc="/note-types/canvas.png"
+            imgAlt="Canvas Note Screenshot"
+            title="Synchronization Server"
+            text="TODO"
+            />
+
+        <FeatureBlock
+            imgSrc="/note-types/mermaid.png"
+            imgAlt="Mermaid Diagram Screenshot"
+            title="Cross-platform App + Web UI"
+            text="Use Trilium Notes as Electron application or in your browser."
+            />
+
+        <FeatureBlock
+            imgSrc="/note-types/geo-map.png"
+            imgAlt="Geo Map Screenshot"
+            title="Scripting"
+            text="TODO and REST API for automation."
+            />
+
+        <FeatureBlock
+            imgSrc="/note-types/mind-map.png"
+            imgAlt="Mind Map Screenshot"
+            title="Grafana Metrics"
+            text="TODO"
+            />
     </div>
 </section>
 
@@ -116,7 +141,6 @@
             <h3 class="flex items-center text-xl font-semibold mb-6 text-violet-700">Security & Sync</h3>
             <ul class="list-disc list-inside space-y-3">
                 <li>Direct OpenID and TOTP integration for secure login.</li>
-                <li>Synchronization with self-hosted and third-party servers.</li>
                 <li>Strong note encryption with per-note granularity.</li>
                 <li>Sharing notes publicly on the internet.</li>
             </ul>
@@ -127,10 +151,8 @@
             <h3 class="flex items-center text-xl font-semibold mb-6 text-violet-700">Advanced & Customization</h3>
             <ul class="list-disc list-inside space-y-3">
                 <li>Relation maps and link maps to visualize notes.</li>
-                <li>Scripting support and REST API for automation.</li>
                 <li>Touch-optimized mobile frontend and dark/user themes.</li>
                 <li>Customizable UI with sidebar buttons and user widgets.</li>
-                <li>Metrics with Grafana dashboard integration.</li>
                 <li>Scales efficiently beyond 100,000 notes.</li>
             </ul>
         </div>
