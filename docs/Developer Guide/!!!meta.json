@@ -1722,13 +1722,52 @@
                 },
                 {
                     "isClone": false,
+                    "noteId": "VHhyVRYK43gI",
+                    "notePath": [
+                        "jdjRLhLV3TtI",
+                        "VHhyVRYK43gI"
+                    ],
+                    "title": "Building and deployment",
+                    "notePosition": 230,
+                    "prefix": null,
+                    "isExpanded": false,
+                    "type": "text",
+                    "mime": "text/html",
+                    "attributes": [],
+                    "format": "markdown",
+                    "attachments": [],
+                    "dirFileName": "Building and deployment",
+                    "children": [
+                        {
+                            "isClone": false,
+                            "noteId": "Un4wj2Mak2Ky",
+                            "notePath": [
+                                "jdjRLhLV3TtI",
+                                "VHhyVRYK43gI",
+                                "Un4wj2Mak2Ky"
+                            ],
+                            "title": "Nix flake",
+                            "notePosition": 10,
+                            "prefix": null,
+                            "isExpanded": false,
+                            "type": "text",
+                            "mime": "text/html",
+                            "attributes": [],
+                            "format": "markdown",
+                            "dataFileName": "Nix flake.md",
+                            "attachments": []
+                        }
+                    ]
+                },
+                {
+                    "isClone": false,
                     "noteId": "ibAPHul7Efvr",
                     "notePath": [
                         "jdjRLhLV3TtI",
                         "ibAPHul7Efvr"
                     ],
                     "title": "Old documentation",
-                    "notePosition": 230,
+                    "notePosition": 260,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
