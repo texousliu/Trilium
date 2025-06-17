@@ -5,10 +5,12 @@ import search from "../../../services/search.js";
 import type { TemplateDefinition } from "@triliumnext/ckeditor5";
 import appContext from "../../../components/app_context.js";
 import TemplateIcon from "@ckeditor/ckeditor5-icons/theme/icons/template.svg?raw";
+import type FNote from "../../../entities/fnote.js";
 
 interface TemplateData {
     title: string;
-    content: string | undefined;
+    description?: string;
+    content?: string;
 }
 
 let templateCache: Map<string, TemplateData> = new Map();
@@ -24,18 +26,27 @@ export default async function getTemplates() {
     const snippets = await search.searchForNotes("#textSnippet");
     const definitions: TemplateDefinition[] = [];
     for (const snippet of snippets) {
-        templateCache.set(snippet.noteId, {
-            title: snippet.title,
-            content: await snippet.getContent()
-        });
+        const { description } = await invalidateCacheFor(snippet);
 
         definitions.push({
             title: snippet.title,
             data: () => templateCache.get(snippet.noteId)?.content ?? "",
-            icon: TemplateIcon
-        })
+            icon: TemplateIcon,
+            description
+        });
     }
     return definitions;
+}
+
+async function invalidateCacheFor(snippet: FNote) {
+    const description = snippet.getLabelValue("textSnippetDescription");
+    const data: TemplateData = {
+        title: snippet.title,
+        description: description ?? undefined,
+        content: await snippet.getContent()
+    };
+    templateCache.set(snippet.noteId, data);
+    return data;
 }
 
 function handleFullReload() {
@@ -65,10 +76,7 @@ async function handleContentUpdate(affectedNoteIds: string[]) {
                 break;
             }
 
-            templateCache.set(affectedTemplateNoteId, {
-                title: template.title,
-                content: await template.getContent()
-            });
+            await invalidateCacheFor(template);
         } catch (e) {
             // If a note was not found while updating the cache, it means we need to do a full reload.
             fullReloadNeeded = true;
@@ -86,7 +94,7 @@ export function updateTemplateCache(loadResults: LoadResults): boolean {
     // React to creation or deletion of text snippets.
     if (loadResults.getAttributeRows().find((attr) =>
             attr.type === "label" &&
-            attr.name === "textSnippet")) {
+            (attr.name === "textSnippet" || attr.name === "textSnippetDescription"))) {
         handleFullReload();
     } else if (affectedNoteIds.length > 0) {
         // Update content and titles if one of the template notes were updated.
