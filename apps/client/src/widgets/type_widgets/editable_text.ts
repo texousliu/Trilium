@@ -193,7 +193,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
             const finalConfig = {
                 ...editorConfig,
-                ...buildConfig(),
+                ...(await buildConfig()),
                 ...buildToolbarConfig(isClassicEditor),
                 htmlSupport: {
                     allow: JSON.parse(options.get("allowedHtmlTags")),
