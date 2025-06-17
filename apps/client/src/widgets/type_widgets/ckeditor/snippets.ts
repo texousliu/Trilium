@@ -4,6 +4,7 @@ import type LoadResults from "../../../services/load_results.js";
 import search from "../../../services/search.js";
 import type { TemplateDefinition } from "@triliumnext/ckeditor5";
 import appContext from "../../../components/app_context.js";
+import TemplateIcon from "@ckeditor/ckeditor5-icons/theme/icons/template.svg?raw";
 
 interface TemplateData {
     title: string;
@@ -30,7 +31,8 @@ export default async function getTemplates() {
 
         definitions.push({
             title: snippet.title,
-            data: () => templateCache.get(snippet.noteId)?.content ?? ""
+            data: () => templateCache.get(snippet.noteId)?.content ?? "",
+            icon: TemplateIcon
         })
     }
     return definitions;
