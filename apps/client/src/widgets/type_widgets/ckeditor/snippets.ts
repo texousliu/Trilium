@@ -36,6 +36,11 @@ export default async function getTemplates() {
     return definitions;
 }
 
+function handleFullReload() {
+    console.warn("Full text editor reload needed");
+    appContext.triggerCommand("reloadTextEditor");
+}
+
 async function handleContentUpdate(affectedNoteIds: string[]) {
     const updatedNoteIds = new Set(affectedNoteIds);
     const templateNoteIds = new Set(templateCache.keys());
@@ -66,8 +71,7 @@ async function handleContentUpdate(affectedNoteIds: string[]) {
     }
 
     if (fullReloadNeeded) {
-        console.warn("Full text editor reload needed");
-        appContext.triggerCommand("reloadTextEditor");
+        handleFullReload();
     }
 }
 
@@ -77,6 +81,11 @@ export function updateTemplateCache(loadResults: LoadResults): boolean {
         debouncedHandleContentUpdate(affectedNoteIds);
     }
 
+    if (loadResults.getAttributeRows().find((attr) =>
+            attr.type === "label" &&
+            attr.name === "textSnippet")) {
+        handleFullReload();
+    }
 
     return false;
 }
