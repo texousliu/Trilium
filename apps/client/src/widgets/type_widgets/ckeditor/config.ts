@@ -210,6 +210,7 @@ export function buildClassicToolbar(multilineToolbar: boolean) {
                 "outdent",
                 "indent",
                 "|",
+                "insertTemplate",
                 "markdownImport",
                 "cuttonote",
                 "findAndReplace"
@@ -266,6 +267,7 @@ export function buildFloatingToolbar() {
             "outdent",
             "indent",
             "|",
+            "insertTemplate",
             "imageUpload",
             "markdownImport",
             "specialCharacters",
