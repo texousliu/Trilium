@@ -46,28 +46,31 @@ async function handleContentUpdate(affectedNoteIds: string[]) {
     const templateNoteIds = new Set(templateCache.keys());
     const affectedTemplateNoteIds = templateNoteIds.intersection(updatedNoteIds);
 
-    console.log("Got ", affectedTemplateNoteIds);
-
     await froca.getNotes(affectedNoteIds);
 
     let fullReloadNeeded = false;
     for (const affectedTemplateNoteId of affectedTemplateNoteIds) {
-        const template = await froca.getNote(affectedTemplateNoteId);
-        if (!template) {
-            console.warn("Unable to obtain template with ID ", affectedTemplateNoteId);
-            continue;
-        }
+        try {
+            const template = await froca.getNote(affectedTemplateNoteId);
+            if (!template) {
+                console.warn("Unable to obtain template with ID ", affectedTemplateNoteId);
+                continue;
+            }
 
-        const newTitle = template.title;
-        if (templateCache.get(affectedTemplateNoteId)?.title !== newTitle) {
+            const newTitle = template.title;
+            if (templateCache.get(affectedTemplateNoteId)?.title !== newTitle) {
+                fullReloadNeeded = true;
+                break;
+            }
+
+            templateCache.set(affectedTemplateNoteId, {
+                title: template.title,
+                content: await template.getContent()
+            });
+        } catch (e) {
+            // If a note was not found while updating the cache, it means we need to do a full reload.
             fullReloadNeeded = true;
-            break;
         }
-
-        templateCache.set(affectedTemplateNoteId, {
-            title: template.title,
-            content: await template.getContent()
-        });
     }
 
     if (fullReloadNeeded) {
@@ -77,14 +80,15 @@ async function handleContentUpdate(affectedNoteIds: string[]) {
 
 export function updateTemplateCache(loadResults: LoadResults): boolean {
     const affectedNoteIds = loadResults.getNoteIds();
-    if (affectedNoteIds.length > 0) {
-        debouncedHandleContentUpdate(affectedNoteIds);
-    }
 
+    // React to creation or deletion of text snippets.
     if (loadResults.getAttributeRows().find((attr) =>
             attr.type === "label" &&
             attr.name === "textSnippet")) {
         handleFullReload();
+    } else if (affectedNoteIds.length > 0) {
+        // Update content and titles if one of the template notes were updated.
+        debouncedHandleContentUpdate(affectedNoteIds);
     }
 
     return false;
