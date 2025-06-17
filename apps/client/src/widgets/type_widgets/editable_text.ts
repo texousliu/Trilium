@@ -578,6 +578,10 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         await this.reinitializeWithData(data ?? "");
     }
 
+    async reloadTextEditorEvent() {
+        await this.reinitialize();
+    }
+
     async onLanguageChanged() {
         await this.reinitialize();
     }

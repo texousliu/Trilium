@@ -3,9 +3,15 @@ import froca from "../../../services/froca.js";
 import type LoadResults from "../../../services/load_results.js";
 import search from "../../../services/search.js";
 import type { TemplateDefinition } from "@triliumnext/ckeditor5";
+import appContext from "../../../components/app_context.js";
 
-let templateCache: Map<string, string | undefined> = new Map();
-const debouncedHandleUpdate = debounce(handleUpdate, 1000);
+interface TemplateData {
+    title: string;
+    content: string | undefined;
+}
+
+let templateCache: Map<string, TemplateData> = new Map();
+const debouncedHandleContentUpdate = debounce(handleContentUpdate, 1000);
 
 /**
  * Generates the list of snippets based on the user's notes to be passed down to the CKEditor configuration.
@@ -17,17 +23,20 @@ export default async function getTemplates() {
     const snippets = await search.searchForNotes("#textSnippet");
     const definitions: TemplateDefinition[] = [];
     for (const snippet of snippets) {
-        templateCache.set(snippet.noteId, await snippet.getContent());
+        templateCache.set(snippet.noteId, {
+            title: snippet.title,
+            content: await snippet.getContent()
+        });
 
         definitions.push({
             title: snippet.title,
-            data: () => templateCache.get(snippet.noteId) ?? ""
+            data: () => templateCache.get(snippet.noteId)?.content ?? ""
         })
     }
     return definitions;
 }
 
-async function handleUpdate(affectedNoteIds: string[]) {
+async function handleContentUpdate(affectedNoteIds: string[]) {
     const updatedNoteIds = new Set(affectedNoteIds);
     const templateNoteIds = new Set(templateCache.keys());
     const affectedTemplateNoteIds = templateNoteIds.intersection(updatedNoteIds);
@@ -36,6 +45,7 @@ async function handleUpdate(affectedNoteIds: string[]) {
 
     await froca.getNotes(affectedNoteIds);
 
+    let fullReloadNeeded = false;
     for (const affectedTemplateNoteId of affectedTemplateNoteIds) {
         const template = await froca.getNote(affectedTemplateNoteId);
         if (!template) {
@@ -43,14 +53,28 @@ async function handleUpdate(affectedNoteIds: string[]) {
             continue;
         }
 
-        templateCache.set(affectedTemplateNoteId, await template.getContent());
+        const newTitle = template.title;
+        if (templateCache.get(affectedTemplateNoteId)?.title !== newTitle) {
+            fullReloadNeeded = true;
+            break;
+        }
+
+        templateCache.set(affectedTemplateNoteId, {
+            title: template.title,
+            content: await template.getContent()
+        });
+    }
+
+    if (fullReloadNeeded) {
+        console.warn("Full text editor reload needed");
+        appContext.triggerCommand("reloadTextEditor");
     }
 }
 
 export function updateTemplateCache(loadResults: LoadResults): boolean {
     const affectedNoteIds = loadResults.getNoteIds();
     if (affectedNoteIds.length > 0) {
-        debouncedHandleUpdate(affectedNoteIds);
+        debouncedHandleContentUpdate(affectedNoteIds);
     }
 
 
