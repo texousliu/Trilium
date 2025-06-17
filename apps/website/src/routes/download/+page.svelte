@@ -7,6 +7,13 @@
     let architecture = getArchitecture();
 </script>
 
+<svelte:head>
+    <title>Trilium Notes: Download</title>
+    <!-- TODO: description?
+    	<meta name="description" content="This is where the description goes for search engines" />
+    -->
+</svelte:head>
+
 <div class="bg-gray-50 py-20">
     <section class="max-w-6xl mx-auto px-4">
         <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">Download the desktop application</h2>

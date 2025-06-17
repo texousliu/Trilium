@@ -2,6 +2,13 @@
     import DownloadNow from "./download-now.svelte";
 </script>
 
+<svelte:head>
+    <title>Trilium Notes</title>
+    <!-- TODO: description?
+    	<meta name="description" content="This is where the description goes for search engines" />
+    -->
+</svelte:head>
+
 <section class="relative overflow-hidden bg-gradient-to-br from-white to-violet-50">
     <!-- Bokeh background circles -->
     <div class="absolute inset-0 pointer-events-none z-0">
