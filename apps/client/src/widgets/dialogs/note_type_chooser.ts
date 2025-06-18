@@ -36,7 +36,7 @@ const TPL = /*html*/`
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t("note_type_chooser.close")}"></button>
             </div>
             <div class="modal-body">
-                ${t("note_type_chooser.select_path_prompt")}
+                ${t("note_type_chooser.change_path_prompt")}
 
                 <div class="input-group">
                     <input class="choose-note-path form-control" placeholder="${t("note_type_chooser.search_placeholder")}">
