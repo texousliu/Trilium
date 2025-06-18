@@ -52,9 +52,9 @@ export default class CodeButtonsWidget extends NoteContextAwareWidget {
             toastService.showMessage(t("code_buttons.opening_api_docs_message"));
 
             if (this.note?.mime.endsWith("frontend")) {
-                window.open("https://zadam.github.io/trilium/frontend_api/FrontendScriptApi.html", "_blank");
+                window.open("https://triliumnext.github.io/Notes/Script%20API/interfaces/Frontend_Script_API.Api.html", "_blank");
             } else {
-                window.open("https://zadam.github.io/trilium/backend_api/BackendScriptApi.html", "_blank");
+                window.open("https://triliumnext.github.io/Notes/Script%20API/interfaces/Backend_Script_API.Api.html", "_blank");
             }
         });
 
