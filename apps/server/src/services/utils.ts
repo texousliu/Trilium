@@ -382,7 +382,7 @@ export function safeExtractMessageAndStackFromError(err: unknown): [errMessage: 
  * @param url The URL to normalize
  * @returns The normalized URL without trailing slashes
  */
-export function normalizeUrl(url: string): string {
+export function normalizeUrl(url: string | null | undefined): string | null | undefined {
     if (!url || typeof url !== 'string') {
         return url;
     }
@@ -412,7 +412,7 @@ export function normalizeUrl(url: string): string {
  * @param pattern The original pattern from customRequestHandler attribute
  * @returns An array of patterns to match both with and without trailing slash
  */
-export function normalizeCustomHandlerPattern(pattern: string): string[] {
+export function normalizeCustomHandlerPattern(pattern: string | null | undefined): (string | null | undefined)[] {
     if (!pattern || typeof pattern !== 'string') {
         return [pattern];
     }
