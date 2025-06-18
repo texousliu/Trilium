@@ -181,7 +181,7 @@ importers:
         version: 0.1.7(mermaid@11.6.0)
       '@mind-elixir/node-menu':
         specifier: 1.0.5
-        version: 1.0.5(mind-elixir@4.6.0)
+        version: 1.0.5(mind-elixir@4.6.1)
       '@popperjs/core':
         specifier: 2.11.8
         version: 2.11.8
@@ -267,8 +267,8 @@ importers:
         specifier: 11.6.0
         version: 11.6.0
       mind-elixir:
-        specifier: 4.6.0
-        version: 4.6.0
+        specifier: 4.6.1
+        version: 4.6.1
       normalize.css:
         specifier: 8.0.1
         version: 8.0.1
@@ -10073,8 +10073,8 @@ packages:
     resolution: {integrity: sha512-z0yWI+4FDrrweS8Zmt4Ej5HdJmky15+L2e6Wgn3+iK5fWzb6T3fhNFq2+MeTRb064c6Wr4N/wv0DzQTjNzHNGQ==}
     engines: {node: '>=10'}
 
-  mind-elixir@4.6.0:
-    resolution: {integrity: sha512-svl/YkKaIR8vsKhdgA0YRmGCWlVUgyYfUrDIFfnmL599CJDkw5f1gygwbQN8uDyRIRXNl8LZLUqEZmwmxXAPsg==}
+  mind-elixir@4.6.1:
+    resolution: {integrity: sha512-hrQj5+tJPjYdF7gbVyP/wFEaG6M/hW3S/94WWG68lpD1c630IKuPfnsByjpgE84UotEQfm5U85pA8tdXJTggSA==}
 
   mini-css-extract-plugin@2.4.7:
     resolution: {integrity: sha512-euWmddf0sk9Nv1O0gfeeUAvAkoSlWncNLF77C0TP2+WoPvy8mAHKOzMajcCz2dzvyt3CNgxb1obIEVFIRxaipg==}
@@ -18017,9 +18017,9 @@ snapshots:
 
   '@microsoft/tsdoc@0.15.1': {}
 
-  '@mind-elixir/node-menu@1.0.5(mind-elixir@4.6.0)':
+  '@mind-elixir/node-menu@1.0.5(mind-elixir@4.6.1)':
     dependencies:
-      mind-elixir: 4.6.0
+      mind-elixir: 4.6.1
 
   '@mixmark-io/domino@2.2.0': {}
 
@@ -20220,23 +20220,6 @@ snapshots:
     dependencies:
       '@eslint-community/regexpp': 4.12.1
       '@typescript-eslint/parser': 8.34.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
-      '@typescript-eslint/scope-manager': 8.34.0
-      '@typescript-eslint/type-utils': 8.34.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
-      '@typescript-eslint/utils': 8.34.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
-      '@typescript-eslint/visitor-keys': 8.34.0
-      eslint: 9.28.0(jiti@2.4.2)
-      graphemer: 1.4.0
-      ignore: 7.0.4
-      natural-compare: 1.4.0
-      ts-api-utils: 2.1.0(typescript@5.8.3)
-      typescript: 5.8.3
-    transitivePeerDependencies:
-      - supports-color
-
-  '@typescript-eslint/eslint-plugin@8.34.0(@typescript-eslint/parser@8.34.0(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)':
-    dependencies:
-      '@eslint-community/regexpp': 4.12.1
-      '@typescript-eslint/parser': 8.34.0(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)
       '@typescript-eslint/scope-manager': 8.34.0
       '@typescript-eslint/type-utils': 8.34.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
       '@typescript-eslint/utils': 8.34.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
@@ -25989,7 +25972,7 @@ snapshots:
 
   mimic-response@3.1.0: {}
 
-  mind-elixir@4.6.0: {}
+  mind-elixir@4.6.1: {}
 
   mini-css-extract-plugin@2.4.7(webpack@5.99.9(@swc/core@1.11.29(@swc/helpers@0.5.17))(esbuild@0.25.5)):
     dependencies:
@@ -29585,7 +29568,7 @@ snapshots:
 
   typescript-eslint@8.34.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3):
     dependencies:
-      '@typescript-eslint/eslint-plugin': 8.34.0(@typescript-eslint/parser@8.34.0(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
+      '@typescript-eslint/eslint-plugin': 8.34.0(@typescript-eslint/parser@8.34.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
       '@typescript-eslint/parser': 8.34.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
       '@typescript-eslint/utils': 8.34.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
       eslint: 9.28.0(jiti@2.4.2)
