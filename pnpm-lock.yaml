@@ -704,8 +704,8 @@ importers:
         specifier: 0.5.16
         version: 0.5.16
       openai:
-        specifier: 5.3.0
-        version: 5.3.0(ws@8.18.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))(zod@3.24.4)
+        specifier: 5.5.1
+        version: 5.5.1(ws@8.18.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))(zod@3.24.4)
       rand-token:
         specifier: 1.0.1
         version: 1.0.1
@@ -10511,8 +10511,8 @@ packages:
     resolution: {integrity: sha512-7x81NCL719oNbsq/3mh+hVrAWmFuEYUqrq/Iw3kUzH8ReypT9QQ0BLoJS7/G9k6N81XjW4qHWtjWwe/9eLy1EQ==}
     engines: {node: '>=12'}
 
-  openai@5.3.0:
-    resolution: {integrity: sha512-VIKmoF7y4oJCDOwP/oHXGzM69+x0dpGFmN9QmYO+uPbLFOmmnwO+x1GbsgUtI+6oraxomGZ566Y421oYVu191w==}
+  openai@5.5.1:
+    resolution: {integrity: sha512-5i19097mGotHA1eFsM6Tjd/tJ8uo9sa5Ysv4Q6bKJ2vtN6rc0MzMrUefXnLXYAJcmMQrC1Efhj0AvfIkXrQamw==}
     hasBin: true
     peerDependencies:
       ws: ^8.18.0
@@ -20233,23 +20233,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/eslint-plugin@8.34.0(@typescript-eslint/parser@8.34.0(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)':
-    dependencies:
-      '@eslint-community/regexpp': 4.12.1
-      '@typescript-eslint/parser': 8.34.0(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)
-      '@typescript-eslint/scope-manager': 8.34.0
-      '@typescript-eslint/type-utils': 8.34.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
-      '@typescript-eslint/utils': 8.34.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
-      '@typescript-eslint/visitor-keys': 8.34.0
-      eslint: 9.28.0(jiti@2.4.2)
-      graphemer: 1.4.0
-      ignore: 7.0.4
-      natural-compare: 1.4.0
-      ts-api-utils: 2.1.0(typescript@5.8.3)
-      typescript: 5.8.3
-    transitivePeerDependencies:
-      - supports-color
-
   '@typescript-eslint/eslint-plugin@8.34.0(@typescript-eslint/parser@8.34.0(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)':
     dependencies:
       '@eslint-community/regexpp': 4.12.1
@@ -26537,7 +26520,7 @@ snapshots:
       is-docker: 2.2.1
       is-wsl: 2.2.0
 
-  openai@5.3.0(ws@8.18.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))(zod@3.24.4):
+  openai@5.5.1(ws@8.18.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))(zod@3.24.4):
     optionalDependencies:
       ws: 8.18.2(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       zod: 3.24.4
@@ -29585,7 +29568,7 @@ snapshots:
 
   typescript-eslint@8.34.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3):
     dependencies:
-      '@typescript-eslint/eslint-plugin': 8.34.0(@typescript-eslint/parser@8.34.0(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
+      '@typescript-eslint/eslint-plugin': 8.34.0(@typescript-eslint/parser@8.34.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
       '@typescript-eslint/parser': 8.34.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
       '@typescript-eslint/utils': 8.34.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
       eslint: 9.28.0(jiti@2.4.2)
