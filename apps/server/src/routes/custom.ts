@@ -40,21 +40,21 @@ function handleRequest(req: Request, res: Response) {
 
         // Get normalized patterns to handle both trailing slash cases
         const patterns = normalizeCustomHandlerPattern(attr.value);
-        let match = null;
+        let match: RegExpMatchArray | null = null;
 
-        // Try each pattern until we find a match
-        for (const pattern of patterns) {
-            try {
+        try {
+            // Try each pattern until we find a match
+            for (const pattern of patterns) {
                 const regex = new RegExp(`^${pattern}$`);
                 match = path.match(regex);
                 if (match) {
                     break; // Found a match, exit pattern loop
                 }
-            } catch (e: unknown) {
-                const [errMessage, errStack] = safeExtractMessageAndStackFromError(e);
-                log.error(`Testing path for label '${attr.attributeId}', regex '${pattern}' failed with error: ${errMessage}, stack: ${errStack}`);
-                continue;
             }
+        } catch (e: unknown) {
+            const [errMessage, errStack] = safeExtractMessageAndStackFromError(e);
+            log.error(`Testing path for label '${attr.attributeId}', regex '${attr.value}' failed with error: ${errMessage}, stack: ${errStack}`);
+            continue;
         }
 
         if (!match) {
