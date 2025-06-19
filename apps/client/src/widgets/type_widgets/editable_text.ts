@@ -201,8 +201,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                     styles: true,
                     classes: true,
                     attributes: true
-                },
-                licenseKey: getLicenseKey()
+                }
             };
 
             const contentLanguage = this.note?.getLabelValue("language");
@@ -656,12 +655,3 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
 }
 
-function getLicenseKey() {
-    const premiumLicenseKey = import.meta.env.VITE_CKEDITOR_KEY;
-    if (!premiumLicenseKey) {
-        logError("CKEditor license key is not set, premium features will not be available.");
-        return "GPL";
-    }
-
-    return premiumLicenseKey;
-}

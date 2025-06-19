@@ -16,6 +16,7 @@ const TEXT_FORMATTING_GROUP = {
 
 export async function buildConfig(): Promise<EditorConfig> {
     return {
+        licenseKey: getLicenseKey(),
         image: {
             styles: {
                 options: [
@@ -275,4 +276,14 @@ export function buildFloatingToolbar() {
             "findAndReplace"
         ]
     };
+}
+
+function getLicenseKey() {
+    const premiumLicenseKey = import.meta.env.VITE_CKEDITOR_KEY;
+    if (!premiumLicenseKey) {
+        logError("CKEditor license key is not set, premium features will not be available.");
+        return "GPL";
+    }
+
+    return premiumLicenseKey;
 }
