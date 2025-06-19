@@ -231,6 +231,11 @@
         packages.server = server;
 
         packages.default = desktop;
+
+        overlays.default = final: prev: {
+          triliumnext-desktop = self.packages.${final.system}.desktop;
+          triliumnext-server = self.packages.${final.system}.server;
+        };
       }
     );
 }
