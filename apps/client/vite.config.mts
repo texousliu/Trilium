@@ -98,7 +98,10 @@ export default defineConfig(() => ({
         }
     },
     test: {
-        environment: "happy-dom"
+        environment: "happy-dom",
+        setupFiles: [
+            "./src/test/setup.ts"
+        ]
     },
     optimizeDeps: {
         exclude: [
