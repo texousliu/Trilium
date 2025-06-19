@@ -169,8 +169,6 @@
                 comment = meta.description;
                 desktopName = "TriliumNext Notes";
                 categories = [ "Office" ];
-                # TODO: electron-forge build has this set to PRODUCT_NAME (forge.config.cjs)
-                # But the plain build doesn't set this (or the app icon).
                 startupWMClass = "TriliumNext Notes";
               })
             ];
