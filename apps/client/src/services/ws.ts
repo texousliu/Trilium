@@ -17,7 +17,7 @@ let lastProcessedEntityChangeId = window.glob.maxEntityChangeIdAtLoad;
 let lastPingTs: number;
 let frontendUpdateDataQueue: EntityChange[] = [];
 
-function logError(message: string) {
+export function logError(message: string) {
     console.error(utils.now(), message); // needs to be separate from .trace()
 
     if (ws && ws.readyState === 1) {
@@ -300,6 +300,12 @@ setTimeout(() => {
 
     setInterval(sendPing, 1000);
 }, 0);
+
+export function throwError(message: string) {
+    logError(message);
+
+    throw new Error(message);
+}
 
 export default {
     logError,

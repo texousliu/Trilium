@@ -1,5 +1,6 @@
 import utils, { isShare } from "./utils.js";
 import ValidationError from "./validation_error.js";
+import { throwError } from "./ws.js";
 
 type Headers = Record<string, string | null | undefined>;
 
@@ -276,7 +277,7 @@ async function reportError(method: string, url: string, statusCode: number, resp
     } else {
         const title = `${statusCode} ${method} ${url}`;
         toastService.showErrorTitleAndMessage(title, messageStr);
-        toastService.throwError(`${title} - ${message}`);
+        throwError(`${title} - ${message}`);
     }
 }
 

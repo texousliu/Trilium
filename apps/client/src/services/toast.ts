@@ -78,13 +78,7 @@ function showMessage(message: string, delay = 2000) {
     });
 }
 
-function showAndLogError(message: string, delay = 10000) {
-    showError(message, delay);
-
-    ws.logError(message);
-}
-
-function showError(message: string, delay = 10000) {
+export function showError(message: string, delay = 10000) {
     console.log(utils.now(), "error: ", message);
 
     toast({
@@ -108,18 +102,10 @@ function showErrorTitleAndMessage(title: string, message: string, delay = 10000)
     });
 }
 
-function throwError(message: string) {
-    ws.logError(message);
-
-    throw new Error(message);
-}
-
 export default {
     showMessage,
     showError,
     showErrorTitleAndMessage,
-    showAndLogError,
-    throwError,
     showPersistent,
     closePersistent
 };
