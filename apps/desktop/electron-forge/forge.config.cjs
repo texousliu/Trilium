@@ -5,7 +5,7 @@ const { LOCALES } = require("@triliumnext/commons");
 const ELECTRON_FORGE_DIR = __dirname;
 
 const EXECUTABLE_NAME = "trilium"; // keep in sync with server's package.json -> packagerConfig.executableName
-const PRODUCT_NAME = "TriliumNext Notes";
+const { PRODUCT_NAME } = require("../src/app-info.js");
 const APP_ICON_PATH = path.join(ELECTRON_FORGE_DIR, "app-icon");
 
 const extraResourcesForPlatform = getExtraResourcesForPlatform();
