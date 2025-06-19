@@ -92,6 +92,9 @@ importers:
       cross-env:
         specifier: 7.0.3
         version: 7.0.3
+      dpdm:
+        specifier: 3.14.0
+        version: 3.14.0
       esbuild:
         specifier: ^0.25.0
         version: 0.25.5
@@ -7648,6 +7651,10 @@ packages:
 
   dotignore@0.1.2:
     resolution: {integrity: sha512-UGGGWfSauusaVJC+8fgV+NVvBXkCTmVv7sk6nojDZZvuOUNGUy0Zk4UpHQD6EDjS0jpBwcACvH4eofvyzBcRDw==}
+    hasBin: true
+
+  dpdm@3.14.0:
+    resolution: {integrity: sha512-YJzsFSyEtj88q5eTELg3UWU7TVZkG1dpbF4JDQ3t1b07xuzXmdoGeSz9TKOke1mUuOpWlk4q+pBh+aHzD6GBTg==}
     hasBin: true
 
   draggabilly@3.0.0:
@@ -23056,6 +23063,16 @@ snapshots:
     dependencies:
       minimatch: 3.1.2
 
+  dpdm@3.14.0:
+    dependencies:
+      chalk: 4.1.2
+      fs-extra: 11.3.0
+      glob: 10.4.5
+      ora: 5.4.1
+      tslib: 2.8.1
+      typescript: 5.8.3
+      yargs: 17.7.2
+
   draggabilly@3.0.0:
     dependencies:
       get-size: 3.0.0
@@ -24332,7 +24349,7 @@ snapshots:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.0.4
+      minimatch: 3.1.2
       once: 1.4.0
       path-is-absolute: 1.0.1
 
