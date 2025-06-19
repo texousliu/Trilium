@@ -19,13 +19,13 @@ export const attributeSearchToolDefinition: Tool = {
     type: 'function',
     function: {
         name: 'attribute_search',
-        description: 'Search notes by attributes (labels/relations). attributeType must be exactly "label" or "relation" (lowercase).',
+        description: 'Search notes by attributes (labels/relations). Finds notes with specific tags, categories, or relationships.',
         parameters: {
             type: 'object',
             properties: {
                 attributeType: {
                     type: 'string',
-                    description: 'Must be exactly "label" or "relation" (lowercase only).',
+                    description: 'Type of attribute: "label" for tags/categories or "relation" for connections. Case-insensitive.',
                     enum: ['label', 'relation']
                 },
                 attributeName: {
@@ -57,7 +57,10 @@ export class AttributeSearchTool implements ToolHandler {
      */
     public async execute(args: { attributeType: string, attributeName: string, attributeValue?: string, maxResults?: number }): Promise<string | object> {
         try {
-            const { attributeType, attributeName, attributeValue, maxResults = 20 } = args;
+            let { attributeType, attributeName, attributeValue, maxResults = 20 } = args;
+
+            // Normalize attributeType to lowercase for case-insensitive handling
+            attributeType = attributeType?.toLowerCase();
 
             log.info(`Executing attribute_search tool - Type: "${attributeType}", Name: "${attributeName}", Value: "${attributeValue || 'any'}", MaxResults: ${maxResults}`);
 
@@ -65,19 +68,18 @@ export class AttributeSearchTool implements ToolHandler {
             if (attributeType !== 'label' && attributeType !== 'relation') {
                 const suggestions: string[] = [];
                 
-                if (attributeType.toLowerCase() === 'label' || attributeType.toLowerCase() === 'relation') {
-                    suggestions.push(`CASE SENSITIVE: Use "${attributeType.toLowerCase()}" (lowercase)`);
+                // Check for common variations and provide helpful guidance
+                if (attributeType?.includes('tag') || attributeType?.includes('category')) {
+                    suggestions.push('Use "label" for tags and categories');
                 }
                 
-                if (attributeType.includes('label') || attributeType.includes('Label')) {
-                    suggestions.push('CORRECT: Use "label" for tags and categories');
+                if (attributeType?.includes('link') || attributeType?.includes('connection')) {
+                    suggestions.push('Use "relation" for links and connections');
                 }
                 
-                if (attributeType.includes('relation') || attributeType.includes('Relation')) {
-                    suggestions.push('CORRECT: Use "relation" for connections and relationships');
-                }
-                
-                const errorMessage = `Invalid attributeType: "${attributeType}". Must be exactly "label" or "relation" (lowercase). Example: {"attributeType": "label", "attributeName": "important"}`;
+                const errorMessage = `Invalid attributeType: "${attributeType}". Use "label" for tags/categories or "relation" for connections. Examples: 
+- Find tagged notes: {"attributeType": "label", "attributeName": "important"}
+- Find related notes: {"attributeType": "relation", "attributeName": "relatedTo"}`;
                 
                 return errorMessage;
             }

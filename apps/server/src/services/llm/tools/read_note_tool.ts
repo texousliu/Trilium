@@ -33,8 +33,8 @@ function isError(error: unknown): error is Error {
 export const readNoteToolDefinition: Tool = {
     type: 'function',
     function: {
-        name: 'read_note',
-        description: 'Read the full content of a note by its ID. Use noteId from search results, not note titles.',
+        name: 'read',
+        description: 'Read note content. Example: read("noteId123") → returns full content. Use noteIds from search results.',
         parameters: {
             type: 'object',
             properties: {

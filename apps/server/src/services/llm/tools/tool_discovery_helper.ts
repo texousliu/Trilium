@@ -116,13 +116,18 @@ export class ToolDiscoveryHelper implements ToolHandler {
      */
     private getToolInfo(): Record<string, { description: string; bestFor: string; parameters: string[] }> {
         return {
+            'search': {
+                description: '🔍 Universal search - automatically uses semantic, keyword, or attribute search',
+                bestFor: 'ANY search need - it intelligently routes to the best search method',
+                parameters: ['query (required)', 'searchType', 'maxResults', 'filters']
+            },
             'search_notes': {
                 description: '🧠 Semantic/conceptual search for notes',
                 bestFor: 'Finding notes about ideas, concepts, or topics described in various ways',
                 parameters: ['query (required)', 'parentNoteId', 'maxResults', 'summarize']
             },
             'keyword_search_notes': {
-                description: '🔍 Exact keyword/phrase search for notes',
+                description: '🔎 Exact keyword/phrase search for notes',
                 bestFor: 'Finding notes with specific words, phrases, or using search operators',
                 parameters: ['query (required)', 'maxResults', 'includeArchived']
             },

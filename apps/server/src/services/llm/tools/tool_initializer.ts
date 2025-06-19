@@ -8,6 +8,9 @@ import toolRegistry from './tool_registry.js';
 import { SearchNotesTool } from './search_notes_tool.js';
 import { KeywordSearchTool } from './keyword_search_tool.js';
 import { AttributeSearchTool } from './attribute_search_tool.js';
+import { UnifiedSearchTool } from './unified_search_tool.js';
+import { ExecuteBatchTool } from './execute_batch_tool.js';
+import { SmartRetryTool } from './smart_retry_tool.js';
 import { SearchSuggestionTool } from './search_suggestion_tool.js';
 import { ReadNoteTool } from './read_note_tool.js';
 import { NoteCreationTool } from './note_creation_tool.js';
@@ -33,12 +36,19 @@ export async function initializeTools(): Promise<void> {
     try {
         log.info('Initializing LLM tools...');
 
-        // Register search and discovery tools
+        // Register core utility tools FIRST (highest priority)
+        toolRegistry.registerTool(new ExecuteBatchTool());       // Batch execution for parallel tools
+        toolRegistry.registerTool(new UnifiedSearchTool());      // Universal search interface
+        toolRegistry.registerTool(new SmartRetryTool());         // Automatic retry with variations
+        toolRegistry.registerTool(new ReadNoteTool());           // Read note content
+        
+        // Register individual search tools (kept for backwards compatibility but lower priority)
         toolRegistry.registerTool(new SearchNotesTool());        // Semantic search
         toolRegistry.registerTool(new KeywordSearchTool());      // Keyword-based search
         toolRegistry.registerTool(new AttributeSearchTool());    // Attribute-specific search
+        
+        // Register other discovery tools
         toolRegistry.registerTool(new SearchSuggestionTool());   // Search syntax helper
-        toolRegistry.registerTool(new ReadNoteTool());           // Read note content
 
         // Register note creation and manipulation tools
         toolRegistry.registerTool(new NoteCreationTool());       // Create new notes

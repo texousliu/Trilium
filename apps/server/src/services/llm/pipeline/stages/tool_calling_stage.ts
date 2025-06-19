@@ -490,9 +490,24 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
             let directiveMessage = '';
 
             if (hasEmptyResults) {
-                directiveMessage = `No results found. Try alternative search approaches: use different search tools, broader terms, or alternative keywords. Continue searching - don't ask the user for guidance.`;
+                directiveMessage = `IMPORTANT: No results found with your search. You MUST continue searching with different approaches:
+1. Use discover_tools to find alternative search methods
+2. Try broader search terms or synonyms
+3. Use different search tools (search_notes, keyword_search_notes, attribute_search)
+4. Search for related concepts instead of specific terms
+5. Use read_note on any noteIds you've found previously
+
+CRITICAL: Continue executing tools to find information. Do NOT ask the user for guidance yet - exhaust all search options first.`;
             } else {
-                directiveMessage = `You found results! Use read_note with the noteId values to get full content and continue your analysis.`;
+                directiveMessage = `EXCELLENT! You found ${toolResultMessages.length} results. Now you MUST continue with these actions:
+1. Use read_note with ALL noteId values to get full content
+2. After reading notes, use search_notes or keyword_search_notes to find related information
+3. Use attribute_search to find notes with similar tags/labels
+4. Use note_summarization on long notes
+5. Use content_extraction to pull specific information
+6. Use relationship tool to find connected notes
+
+REMEMBER: Execute multiple tools in sequence to gather comprehensive information. The user expects thorough analysis using 10-20+ tool calls. Continue executing tools!`;
             }
 
             updatedMessages.push({
