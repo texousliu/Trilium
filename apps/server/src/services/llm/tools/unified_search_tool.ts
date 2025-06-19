@@ -37,7 +37,7 @@ export const unifiedSearchToolDefinition: Tool = {
                 },
                 filters: {
                     type: 'object',
-                    description: 'Optional filters',
+                    description: 'Optional filters for search',
                     properties: {
                         parentNoteId: {
                             type: 'string',

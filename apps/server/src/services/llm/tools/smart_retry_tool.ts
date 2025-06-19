@@ -60,7 +60,7 @@ export class SmartRetryTool implements ToolHandler {
      */
     private generateBroaderTerms(query: string): string[] {
         const terms = query.toLowerCase().split(/\s+/);
-        const broader = [];
+        const broader: string[] = [];
 
         // Single words from multi-word queries
         if (terms.length > 1) {
@@ -103,7 +103,7 @@ export class SmartRetryTool implements ToolHandler {
             'report': ['summary', 'document', 'findings', 'results']
         };
 
-        const synonyms = [];
+        const synonyms: string[] = [];
         const queryLower = query.toLowerCase();
 
         for (const [word, syns] of Object.entries(synonymMap)) {
@@ -131,7 +131,7 @@ export class SmartRetryTool implements ToolHandler {
             'notes': ['meeting notes', 'research notes', 'project notes']
         };
 
-        const narrower = [];
+        const narrower: string[] = [];
         const queryLower = query.toLowerCase();
 
         for (const [broad, narrowTerms] of Object.entries(narrowerMap)) {
@@ -155,7 +155,7 @@ export class SmartRetryTool implements ToolHandler {
             'meeting': ['agenda', 'minutes', 'action items', 'participants']
         };
 
-        const related = [];
+        const related: string[] = [];
         const queryLower = query.toLowerCase();
 
         for (const [concept, relatedTerms] of Object.entries(relatedMap)) {
@@ -237,7 +237,14 @@ export class SmartRetryTool implements ToolHandler {
             }
 
             // Try each alternative
-            const results = [];
+            const results: Array<{
+                query: string;
+                success: boolean;
+                count?: number;
+                result?: any;
+                message?: string;
+                error?: string;
+            }> = [];
             let successfulSearches = 0;
             let totalResults = 0;
 
