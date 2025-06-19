@@ -2,11 +2,11 @@ import treeService from "../../services/tree.js";
 import server from "../../services/server.js";
 import froca from "../../services/froca.js";
 import toastService from "../../services/toast.js";
-import utils from "../../services/utils.js";
 import BasicWidget from "../basic_widget.js";
 import appContext from "../../components/app_context.js";
 import { t } from "../../services/i18n.js";
 import { Modal } from "bootstrap";
+import { openDialog } from "../../services/dialog.js";
 
 const TPL = /*html*/`<div class="branch-prefix-dialog modal fade mx-auto" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
@@ -93,7 +93,7 @@ export default class BranchPrefixDialog extends BasicWidget {
         }
 
         await this.refresh(notePath);
-        utils.openDialog(this.$widget);
+        openDialog(this.$widget);
     }
 
     async savePrefix() {

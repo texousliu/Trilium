@@ -11,6 +11,7 @@ import utils from "../../services/utils.js";
 import shortcutService from "../../services/shortcuts.js";
 import appContext from "../../components/app_context.js";
 import type { Attribute } from "../../services/attribute_parser.js";
+import { focusSavedElement, saveFocusedElement } from "../../services/focus.js";
 
 const TPL = /*html*/`
 <div class="attr-detail tn-tool-dialog">
@@ -483,7 +484,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
             return;
         }
 
-        utils.saveFocusedElement();
+        saveFocusedElement();
 
         this.attrType = this.getAttrType(attribute);
 
@@ -605,7 +606,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
 
         this.hide();
 
-        utils.focusSavedElement();
+        focusSavedElement();
     }
 
     async cancelAndClose() {
@@ -613,7 +614,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
 
         this.hide();
 
-        utils.focusSavedElement();
+        focusSavedElement();
     }
 
     userEditedAttribute() {

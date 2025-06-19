@@ -1,11 +1,11 @@
 import BasicWidget from "../basic_widget.js";
 import froca from "../../services/froca.js";
 import bulkActionService from "../../services/bulk_action.js";
-import utils from "../../services/utils.js";
 import server from "../../services/server.js";
 import toastService from "../../services/toast.js";
 import { t } from "../../services/i18n.js";
 import type { EventData } from "../../components/app_context.js";
+import { closeActiveDialog, openDialog } from "../../services/dialog.js";
 
 
 const TPL = /*html*/`
@@ -104,7 +104,7 @@ export default class BulkActionsDialog extends BasicWidget {
             });
 
             toastService.showMessage(t("bulk_actions.bulk_actions_executed"), 3000);
-            utils.closeActiveDialog();
+            closeActiveDialog();
         });
     }
 
@@ -170,6 +170,6 @@ export default class BulkActionsDialog extends BasicWidget {
         this.$includeDescendants.prop("checked", false);
 
         await this.refresh();
-        utils.openDialog(this.$widget);
+        openDialog(this.$widget);
     }
 }

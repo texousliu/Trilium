@@ -6,6 +6,7 @@ import BasicWidget from "../basic_widget.js";
 import shortcutService from "../../services/shortcuts.js";
 import server from "../../services/server.js";
 import { Modal } from "bootstrap";
+import { openDialog } from "../../services/dialog.js";
 
 const TPL = /*html*/`
 <div class="markdown-import-dialog modal fade mx-auto" tabindex="-1" role="dialog">
@@ -89,7 +90,7 @@ export default class MarkdownImportDialog extends BasicWidget {
 
             this.convertMarkdownToHtml(text);
         } else {
-            utils.openDialog(this.$widget);
+            openDialog(this.$widget);
         }
     }
 

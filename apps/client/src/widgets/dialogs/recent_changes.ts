@@ -2,13 +2,12 @@ import { formatDateTime } from "../../utils/formatters.js";
 import { t } from "../../services/i18n.js";
 import appContext, { type EventData } from "../../components/app_context.js";
 import BasicWidget from "../basic_widget.js";
-import dialogService from "../../services/dialog.js";
+import dialogService, { openDialog } from "../../services/dialog.js";
 import froca from "../../services/froca.js";
 import hoistedNoteService from "../../services/hoisted_note.js";
 import linkService from "../../services/link.js";
 import server from "../../services/server.js";
 import toastService from "../../services/toast.js";
-import utils from "../../services/utils.js";
 import ws from "../../services/ws.js";
 import { Modal } from "bootstrap";
 
@@ -62,7 +61,7 @@ export default class RecentChangesDialog extends BasicWidget {
 
         await this.refresh();
 
-        utils.openDialog(this.$widget);
+        openDialog(this.$widget);
     }
 
     async refresh() {
