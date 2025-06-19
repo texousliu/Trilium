@@ -8,6 +8,9 @@ import utils from "../../../services/utils.js";
 import emojiDefinitionsUrl from "@triliumnext/ckeditor5/emoji_definitions/en.json?url";
 import { copyTextWithToast } from "../../../services/clipboard_ext.js";
 import getTemplates from "./snippets.js";
+import { PREMIUM_PLUGINS } from "../../../../../../packages/ckeditor5/src/plugins.js";
+
+const OPEN_SOURCE_LICENSE_KEY = "GPL";
 
 const TEXT_FORMATTING_GROUP = {
     label: "Text formatting",
@@ -15,8 +18,11 @@ const TEXT_FORMATTING_GROUP = {
 };
 
 export async function buildConfig(): Promise<EditorConfig> {
-    return {
-        licenseKey: getLicenseKey(),
+    const licenseKey = getLicenseKey();
+    const hasPremiumLicense = (licenseKey !== OPEN_SOURCE_LICENSE_KEY);
+
+    const config: EditorConfig = {
+        licenseKey,
         image: {
             styles: {
                 options: [
@@ -134,6 +140,15 @@ export async function buildConfig(): Promise<EditorConfig> {
         // This value must be kept in sync with the language defined in webpack.config.js.
         language: "en"
     };
+
+    // Enable premium plugins.
+    if (hasPremiumLicense) {
+        config.extraPlugins = [
+            ...PREMIUM_PLUGINS
+        ];
+    }
+
+    return config;
 }
 
 export function buildToolbarConfig(isClassicToolbar: boolean) {
@@ -282,7 +297,7 @@ function getLicenseKey() {
     const premiumLicenseKey = import.meta.env.VITE_CKEDITOR_KEY;
     if (!premiumLicenseKey) {
         logError("CKEditor license key is not set, premium features will not be available.");
-        return "GPL";
+        return OPEN_SOURCE_LICENSE_KEY;
     }
 
     return premiumLicenseKey;
