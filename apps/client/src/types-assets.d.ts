@@ -3,9 +3,14 @@ declare module "*.png" {
     export default path;
 }
 
-declare module "@triliumnext/ckeditor5/emoji_definitions/en.json?url" {
+declare module "*?url" {
     var path: string;
     export default path;
+}
+
+declare module "*?raw" {
+    var content: string;
+    export default content;
 }
 
 declare module "boxicons/css/boxicons.min.css" { }
