@@ -1,6 +1,41 @@
+import { Modal } from "bootstrap";
 import appContext from "../components/app_context.js";
 import type { ConfirmDialogOptions, ConfirmDialogResult, ConfirmWithMessageOptions } from "../widgets/dialogs/confirm.js";
 import type { PromptDialogOptions } from "../widgets/dialogs/prompt.js";
+import { focusSavedElement, saveFocusedElement } from "./focus.js";
+
+export async function openDialog($dialog: JQuery<HTMLElement>, closeActDialog = true) {
+    if (closeActDialog) {
+        closeActiveDialog();
+        glob.activeDialog = $dialog;
+    }
+
+    saveFocusedElement();
+    Modal.getOrCreateInstance($dialog[0]).show();
+
+    $dialog.on("hidden.bs.modal", () => {
+        const $autocompleteEl = $(".aa-input");
+        if ("autocomplete" in $autocompleteEl) {
+            $autocompleteEl.autocomplete("close");
+        }
+
+        if (!glob.activeDialog || glob.activeDialog === $dialog) {
+            focusSavedElement();
+        }
+    });
+
+    const keyboardActionsService = (await import("./keyboard_actions.js")).default;
+    keyboardActionsService.updateDisplayedShortcuts($dialog);
+
+    return $dialog;
+}
+
+export function closeActiveDialog() {
+    if (glob.activeDialog) {
+        Modal.getOrCreateInstance(glob.activeDialog[0]).hide();
+        glob.activeDialog = null;
+    }
+}
 
 async function info(message: string) {
     return new Promise((res) => appContext.triggerCommand("showInfoDialog", { message, callback: res }));

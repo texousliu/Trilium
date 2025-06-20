@@ -1,7 +1,7 @@
 import type { EventData } from "../../components/app_context.js";
+import { closeActiveDialog, openDialog } from "../../services/dialog.js";
 import { t } from "../../services/i18n.js";
 import server from "../../services/server.js";
-import utils from "../../services/utils.js";
 import BasicWidget from "../basic_widget.js";
 
 const TPL = /*html*/`<div class="sort-child-notes-dialog modal mx-auto" tabindex="-1" role="dialog">
@@ -97,14 +97,14 @@ export default class SortChildNotesDialog extends BasicWidget {
 
             await server.put(`notes/${this.parentNoteId}/sort-children`, { sortBy, sortDirection, foldersFirst, sortNatural, sortLocale });
 
-            utils.closeActiveDialog();
+            closeActiveDialog();
         });
     }
 
     async sortChildNotesEvent({ node }: EventData<"sortChildNotes">) {
         this.parentNoteId = node.data.noteId;
 
-        utils.openDialog(this.$widget);
+        openDialog(this.$widget);
 
         this.$form.find("input:first").focus();
     }

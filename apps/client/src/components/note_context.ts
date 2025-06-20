@@ -12,6 +12,7 @@ import type FNote from "../entities/fnote.js";
 import type TypeWidget from "../widgets/type_widgets/type_widget.js";
 import type { CKTextEditor } from "@triliumnext/ckeditor5";
 import type CodeMirror from "@triliumnext/codemirror";
+import { closeActiveDialog } from "../services/dialog.js";
 
 export interface SetNoteOpts {
     triggerSwitchEvent?: unknown;
@@ -83,7 +84,7 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
 
         await this.triggerEvent("beforeNoteSwitch", { noteContext: this });
 
-        utils.closeActiveDialog();
+        closeActiveDialog();
 
         this.notePath = resolvedNotePath;
         this.viewScope = opts.viewScope;

@@ -1,5 +1,4 @@
 import noteAutocompleteService from "../../services/note_autocomplete.js";
-import utils from "../../services/utils.js";
 import treeService from "../../services/tree.js";
 import toastService from "../../services/toast.js";
 import froca from "../../services/froca.js";
@@ -8,6 +7,7 @@ import appContext from "../../components/app_context.js";
 import BasicWidget from "../basic_widget.js";
 import { t } from "../../services/i18n.js";
 import type { EventData } from "../../components/app_context.js";
+import { openDialog } from "../../services/dialog.js";
 
 
 const TPL = /*html*/`
@@ -94,7 +94,7 @@ export default class CloneToDialog extends BasicWidget {
             }
         }
 
-        utils.openDialog(this.$widget);
+        openDialog(this.$widget);
         this.$noteAutoComplete.val("").trigger("focus");
         this.$noteList.empty();
 

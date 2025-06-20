@@ -9,11 +9,11 @@
       "node",
       "express"
     ],
-    "rootDir": "electron-forge",
     "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo"
   },
   "include": [
-    "**/*.ts"
+    "**/*.ts",
+    "../server/src/*.d.ts"
   ],
   "exclude": [
     "eslint.config.js",

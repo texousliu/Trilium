@@ -1,4 +1,4 @@
-import FrontendScriptApi, { type Entity } from "./frontend_script_api.js";
+import type { Entity } from "./frontend_script_api.js";
 import utils from "./utils.js";
 import froca from "./froca.js";
 
@@ -13,6 +13,8 @@ async function ScriptContext(startNoteId: string, allNoteIds: string[], originEn
     if (!startNote) {
         throw new Error(`Could not find start note ${startNoteId}.`);
     }
+
+    const FrontendScriptApi = (await import("./frontend_script_api.js")).default;
 
     return {
         modules: modules,

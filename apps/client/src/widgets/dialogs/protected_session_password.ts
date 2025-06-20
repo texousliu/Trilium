@@ -1,6 +1,6 @@
+import { openDialog } from "../../services/dialog.js";
 import { t } from "../../services/i18n.js";
 import protectedSessionService from "../../services/protected_session.js";
-import utils from "../../services/utils.js";
 import BasicWidget from "../basic_widget.js";
 import { Modal } from "bootstrap";
 
@@ -49,7 +49,7 @@ export default class ProtectedSessionPasswordDialog extends BasicWidget {
     }
 
     showProtectedSessionPasswordDialogEvent() {
-        utils.openDialog(this.$widget);
+        openDialog(this.$widget);
 
         this.$passwordInput.trigger("focus");
     }
