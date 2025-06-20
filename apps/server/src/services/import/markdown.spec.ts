@@ -293,4 +293,10 @@ $$`;
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
+    it("supports wikilink with image (transclusion)", () => {
+        const input = `heres the handsome boy ![[assets/2025-06-20_14-05-20.jpeg]]`;
+        const expected = `<p>heres the handsome boy <img src="/assets/2025-06-20_14-05-20.jpeg"></p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
 });
