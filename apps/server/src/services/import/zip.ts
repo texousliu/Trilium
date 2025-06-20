@@ -262,13 +262,13 @@ async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRoo
     }
 
     function getEntityIdFromRelativeUrl(url: string, filePath: string) {
-        let absUrl;
+        let absUrl: string;
         if (!url.startsWith("/")) {
             while (url.startsWith("./")) {
                 url = url.substr(2);
             }
 
-            let absUrl = path.dirname(filePath);
+            absUrl = path.dirname(filePath);
 
             while (url.startsWith("../")) {
                 absUrl = path.dirname(absUrl);
@@ -284,6 +284,8 @@ async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRoo
         } else {
             absUrl = topLevelPath + url;
         }
+
+        console.log(url, "-->", absUrl);
 
         const { noteMeta, attachmentMeta } = getMeta(absUrl);
 
