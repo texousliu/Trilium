@@ -23,7 +23,9 @@ class CustomMarkdownRenderer extends Renderer {
     }
 
     override paragraph(data: Tokens.Paragraph): string {
-        return super.paragraph(data).trimEnd();
+        let text = super.paragraph(data).trimEnd();
+        text = processWikiLinks(text);
+        return text;
     }
 
     override code({ text, lang }: Tokens.Code): string {
@@ -210,6 +212,11 @@ function restoreFromMap(text: string, map: Map<string, string>): string {
         .map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
         .join('|');
     return text.replace(new RegExp(pattern, 'g'), match => map.get(match) ?? match);
+}
+
+function processWikiLinks(paragraph: string) {
+    paragraph = paragraph.replaceAll(/\[\[([^\[\]]+)\]\]/g, `<a class="reference-link" href="$1">$1</a>`);
+    return paragraph;
 }
 
 const renderer = new CustomMarkdownRenderer({ async: false });

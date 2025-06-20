@@ -281,4 +281,10 @@ $$`;
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
+    it("supports wikilink with root-relative path", () => {
+        const input = `oh no my banana I bought on [[journal/monday]] has gone off! I’m taking it back to the [[other/shop]] for a refund`;
+        const expected = `<p>oh no my banana I bought on <a class="reference-link" href="journal/monday">journal/monday</a> has gone off! I’m taking it back to the <a class="reference-link" href="other/shop">other/shop</a> for a refund</p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
 });
