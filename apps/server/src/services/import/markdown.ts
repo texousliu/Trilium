@@ -215,7 +215,7 @@ function restoreFromMap(text: string, map: Map<string, string>): string {
 }
 
 function processWikiLinks(paragraph: string) {
-    paragraph = paragraph.replaceAll(/\[\[([^\[\]]+)\]\]/g, `<a class="reference-link" href="$1">$1</a>`);
+    paragraph = paragraph.replaceAll(/\[\[([^\[\]]+)\]\]/g, `<a class="reference-link" href="/$1">$1</a>`);
     return paragraph;
 }
 
