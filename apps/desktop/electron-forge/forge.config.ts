@@ -1,11 +1,11 @@
-const path = require("path");
-const fs = require("fs-extra");
-const { LOCALES } = require("@triliumnext/commons");
+import path from "path";
+import fs from "fs-extra";
+import { LOCALES } from "@triliumnext/commons";
+import { PRODUCT_NAME } from "../src/app-info.js";
 
 const ELECTRON_FORGE_DIR = __dirname;
 
 const EXECUTABLE_NAME = "trilium"; // keep in sync with server's package.json -> packagerConfig.executableName
-const PRODUCT_NAME = "TriliumNext Notes";
 const APP_ICON_PATH = path.join(ELECTRON_FORGE_DIR, "app-icon");
 
 const extraResourcesForPlatform = getExtraResourcesForPlatform();
@@ -147,13 +147,13 @@ module.exports = {
             const isMac = (process.platform === "darwin");
             let localesToKeep = LOCALES
                 .filter(locale => !locale.contentOnly)
-                .map(locale => locale.electronLocale);
+                .map(locale => locale.electronLocale) as string[];
             if (!isMac) {
                 localesToKeep = localesToKeep.map(locale => locale.replace("_", "-"))
             }
 
             const keptLocales = new Set();
-            const removedLocales =  [];
+            const removedLocales: string[] =  [];
             const extension = (isMac ? ".lproj" : ".pak");
 
             for (const outputPath of packageResult.outputPaths) {
@@ -169,39 +169,39 @@ module.exports = {
                         console.log(`No locales directory found in '${localeDir}'.`);
                         process.exit(2);
                     }
-    
+
                     const files = fs.readdirSync(localeDir);
-    
+
                     for (const file of files) {
                         if (!file.endsWith(extension)) {
                             continue;
                         }
-    
+
                         let localeName = path.basename(file, extension);
                         if (localeName === "en-US" && !isMac) {
                             // If the locale is "en-US" on Windows, we treat it as "en".
                             // This is because the Windows version of Electron uses "en-US.pak" instead of "en.pak".
                             localeName = "en";
                         }
-    
+
                         if (localesToKeep.includes(localeName)) {
                             keptLocales.add(localeName);
                             continue;
                         }
-    
+
                         const filePath = path.join(localeDir, file);
                         if (isMac) {
                             fs.rm(filePath, { recursive: true });
                         } else {
                             fs.unlinkSync(filePath);
                         }
-    
+
                         removedLocales.push(file);
                     }
                 }
             }
 
-            console.log(`Removed unused locale files: ${removedLocales.join(", ")}`);                    
+            console.log(`Removed unused locale files: ${removedLocales.join(", ")}`);
 
             // Ensure all locales that should be kept are actually present.
             for (const locale of localesToKeep) {
@@ -229,7 +229,7 @@ module.exports = {
                     if (TRILIUM_ARTIFACT_NAME_HINT) {
                         fileName = TRILIUM_ARTIFACT_NAME_HINT.replaceAll("/", "-") + extension;
                     }
-        
+
                     const outputPath = path.join(outputDir, fileName);
                     console.log(`[Artifact] ${artifactPath} -> ${outputPath}`);
                     fs.copyFileSync(artifactPath, outputPath);
@@ -240,7 +240,7 @@ module.exports = {
 };
 
 function getExtraResourcesForPlatform() {
-    const resources = [];
+    const resources: string[] = [];
 
     const getScriptResources = () => {
         const scripts = ["trilium-portable", "trilium-safe-mode", "trilium-no-cert-check"];

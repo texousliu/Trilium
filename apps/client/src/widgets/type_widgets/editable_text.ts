@@ -1,6 +1,3 @@
-import { t } from "../../services/i18n.js";
-import noteAutocompleteService, { type Suggestion } from "../../services/note_autocomplete.js";
-import mimeTypesService from "../../services/mime_types.js";
 import utils, { hasTouchBar } from "../../services/utils.js";
 import keyboardActionService from "../../services/keyboard_actions.js";
 import froca from "../../services/froca.js";
@@ -12,28 +9,11 @@ import dialogService from "../../services/dialog.js";
 import options from "../../services/options.js";
 import toast from "../../services/toast.js";
 import { buildSelectedBackgroundColor } from "../../components/touch_bar.js";
-import { buildConfig, buildToolbarConfig } from "./ckeditor/config.js";
+import { buildConfig, BuildEditorOptions, OPEN_SOURCE_LICENSE_KEY } from "./ckeditor/config.js";
 import type FNote from "../../entities/fnote.js";
-import { getMermaidConfig } from "../../services/mermaid.js";
-import { PopupEditor, ClassicEditor, EditorWatchdog, type CKTextEditor, type MentionFeed, type WatchdogConfig } from "@triliumnext/ckeditor5";
+import { PopupEditor, ClassicEditor, EditorWatchdog, type CKTextEditor, type MentionFeed, type WatchdogConfig, EditorConfig } from "@triliumnext/ckeditor5";
 import "@triliumnext/ckeditor5/index.css";
-import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
 import { updateTemplateCache } from "./ckeditor/snippets.js";
-
-const mentionSetup: MentionFeed[] = [
-    {
-        marker: "@",
-        feed: (queryText: string) => noteAutocompleteService.autocompleteSourceForCKEditor(queryText),
-        itemRenderer: (item) => {
-            const itemElement = document.createElement("button");
-
-            itemElement.innerHTML = `${(item as Suggestion).highlightedNotePathTitle} `;
-
-            return itemElement;
-        },
-        minimumCharacters: 0
-    }
-];
 
 const TPL = /*html*/`
 <div class="note-detail-editable-text note-detail-printable">
@@ -97,24 +77,6 @@ const TPL = /*html*/`
 </div>
 `;
 
-function buildListOfLanguages() {
-    const userLanguages = mimeTypesService
-        .getMimeTypes()
-        .filter((mt) => mt.enabled)
-        .map((mt) => ({
-            language: normalizeMimeTypeForCKEditor(mt.mime),
-            label: mt.title
-        }));
-
-    return [
-        {
-            language: mimeTypesService.MIME_TYPE_AUTO,
-            label: t("editable-text.auto-detect-language")
-        },
-        ...userLanguages
-    ];
-}
-
 /**
  * The editor can operate into two distinct modes:
  *
@@ -147,7 +109,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     async initEditor() {
         const isClassicEditor = utils.isMobile() || options.get("textNoteEditorType") === "ckeditor-classic";
-        const editorClass = isClassicEditor ? ClassicEditor : PopupEditor;
 
         // CKEditor since version 12 needs the element to be visible before initialization. At the same time,
         // we want to avoid flicker - i.e., show editor only once everything is ready. That's why we have separate
@@ -192,34 +153,15 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.watchdog.setCreator(async (_, editorConfig) => {
             logInfo("Creating new CKEditor");
 
-            const finalConfig = {
-                ...editorConfig,
-                ...(await buildConfig()),
-                ...buildToolbarConfig(isClassicEditor),
-                htmlSupport: {
-                    allow: JSON.parse(options.get("allowedHtmlTags")),
-                    styles: true,
-                    classes: true,
-                    attributes: true
-                },
-                licenseKey: getLicenseKey()
-            };
-
             const contentLanguage = this.note?.getLabelValue("language");
-            if (contentLanguage) {
-                // TODO: Wrong type?
-                //@ts-ignore
-                finalConfig.language = {
-                    ui: (typeof finalConfig.language === "string" ? finalConfig.language : "en"),
-                    content: contentLanguage
-                }
-                this.contentLanguage = contentLanguage;
-            } else {
-                this.contentLanguage = null;
-            }
+            this.contentLanguage = contentLanguage ?? null;
 
-            //@ts-ignore
-            const editor = await editorClass.create(this.$editor[0], finalConfig);
+            const opts: BuildEditorOptions = {
+                contentLanguage: this.contentLanguage,
+                forceGplLicense: false,
+                isClassicEditor
+            };
+            const editor = await buildEditor(this.$editor[0], isClassicEditor, opts);
 
             const notificationsPlugin = editor.plugins.get("Notification");
             notificationsPlugin.on("show:warning", (evt, data) => {
@@ -296,28 +238,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     }
 
     async createEditor() {
-        await this.watchdog.create(this.$editor[0], {
-            placeholder: t("editable_text.placeholder"),
-            mention: {
-                feeds: mentionSetup,
-            },
-            codeBlock: {
-                languages: buildListOfLanguages()
-            },
-            math: {
-                engine: "katex",
-                outputType: "span", // or script
-                lazyLoad: async () => {
-                    (window as any).katex = (await import("../../services/math.js")).default
-                },
-                forceOutputType: false, // forces output to use outputType
-                enablePreview: true // Enable preview view
-            },
-            mermaid: {
-                lazyLoad: async () => (await import("mermaid")).default, // FIXME
-                config: getMermaidConfig()
-            }
-        });
+        await this.watchdog.create(this.$editor[0]);
     }
 
     async doRefresh(note: FNote) {
@@ -656,12 +577,18 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
 }
 
-function getLicenseKey() {
-    const premiumLicenseKey = import.meta.env.VITE_CKEDITOR_KEY;
-    if (!premiumLicenseKey) {
-        logError("CKEditor license key is not set, premium features will not be available.");
-        return "GPL";
-    }
+async function buildEditor(element: HTMLElement, isClassicEditor: boolean, opts: BuildEditorOptions) {
+    const editorClass = isClassicEditor ? ClassicEditor : PopupEditor;
+    let config = await buildConfig(opts);
+    let editor = await editorClass.create(element, config);
 
-    return premiumLicenseKey;
+    if (editor.isReadOnly) {
+        editor.destroy();
+
+        opts.forceGplLicense = true;
+        config = await buildConfig(opts);
+        editor = await editorClass.create(element, config);
+    }
+    return editor;
+
 }

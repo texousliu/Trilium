@@ -1,10 +1,10 @@
 import server from "../../services/server.js";
 import froca from "../../services/froca.js";
 import linkService from "../../services/link.js";
-import utils from "../../services/utils.js";
 import BasicWidget from "../basic_widget.js";
 import { t } from "../../services/i18n.js";
 import type { FAttributeRow } from "../../entities/fattribute.js";
+import { closeActiveDialog, openDialog } from "../../services/dialog.js";
 
 // TODO: Use common with server.
 interface Response {
@@ -119,13 +119,13 @@ export default class DeleteNotesDialog extends BasicWidget {
         this.$widget.on("shown.bs.modal", () => this.$okButton.trigger("focus"));
 
         this.$cancelButton.on("click", () => {
-            utils.closeActiveDialog();
+            closeActiveDialog();
 
             this.resolve({ proceed: false });
         });
 
         this.$okButton.on("click", () => {
-            utils.closeActiveDialog();
+            closeActiveDialog();
 
             this.resolve({
                 proceed: true,
@@ -179,7 +179,7 @@ export default class DeleteNotesDialog extends BasicWidget {
 
         await this.renderDeletePreview();
 
-        utils.openDialog(this.$widget);
+        openDialog(this.$widget);
 
         this.$deleteAllClones.prop("checked", !!forceDeleteAllClones).prop("disabled", !!forceDeleteAllClones);
 

@@ -12,7 +12,7 @@ on:
     paths:
       - .github/actions/build-electron/*
       - .github/workflows/nightly.yml
-      - forge.config.cjs
+      - forge.config.ts
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

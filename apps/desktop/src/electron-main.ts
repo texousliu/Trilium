@@ -8,6 +8,7 @@ import options from "@triliumnext/server/src/services/options.js";
 import electronDebug from "electron-debug";
 import electronDl from "electron-dl";
 import { deferred } from "@triliumnext/server/src/services/utils.js";
+import { PRODUCT_NAME } from "./app-info";
 
 async function main() {
     const serverInitializedPromise = deferred<void>();
@@ -28,6 +29,7 @@ async function main() {
     // Electron 36 crashes with "Using GTK 2/3 and GTK 4 in the same process is not supported" on some distributions.
     // See https://github.com/electron/electron/issues/46538 for more info.
     if (process.platform === "linux") {
+        electron.app.setName(PRODUCT_NAME);
         electron.app.commandLine.appendSwitch("gtk-version", "3");
     }
 

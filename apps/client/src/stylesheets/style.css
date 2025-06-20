@@ -440,10 +440,11 @@ body #context-menu-container .dropdown-item > span {
     border-radius: 6px;
     overflow: hidden;
     margin: 4px;
+    font-size: var(--monospace-font-size);
 }
 
-body .cm-editor {
-    font-size: var(--monospace-font-size);
+.cm-scroller {
+    font-family: var(--monospace-font-family) !important;
 }
 
 body .cm-editor .cm-gutters {

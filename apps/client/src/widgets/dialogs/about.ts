@@ -4,6 +4,7 @@ import BasicWidget from "../basic_widget.js";
 import openService from "../../services/open.js";
 import server from "../../services/server.js";
 import utils from "../../services/utils.js";
+import { openDialog } from "../../services/dialog.js";
 
 interface AppInfo {
     appVersion: string;
@@ -111,6 +112,6 @@ export default class AboutDialog extends BasicWidget {
 
     async openAboutDialogEvent() {
         await this.refresh();
-        utils.openDialog(this.$widget);
+        openDialog(this.$widget);
     }
 }

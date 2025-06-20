@@ -9,4 +9,6 @@ The license key is stored in the application and it enables the use of the previ
 
 ## Can I opt out of these features?
 
-At this moment there is no way to disable this features, apart from manually modifying the source code. If this is a problem, [let us know](../../Troubleshooting/Reporting%20issues.md).
+At this moment there is no way to disable these features, apart from manually modifying the source code. If this is a problem, [let us know](../../Troubleshooting/Reporting%20issues.md).
+
+If you have the possibility of rebuilding the source code (e.g. if a package maintainer), then modify `VITE_CKEDITOR_KEY` in `apps/client/.env` to be `GPL`.

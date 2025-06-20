@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildClassicToolbar, buildFloatingToolbar } from "./config.js";
+import { buildClassicToolbar, buildFloatingToolbar } from "./toolbar.js";
 
 type ToolbarConfig = string | "|" | { items: ToolbarConfig[] };
 
