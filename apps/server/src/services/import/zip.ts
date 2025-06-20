@@ -335,7 +335,7 @@ async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRoo
                 return `src="${url}"`;
             }
 
-            if (isUrlAbsolute(url) || url.startsWith("/")) {
+            if (isUrlAbsolute(url)) {
                 return match;
             }
 
