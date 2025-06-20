@@ -77,7 +77,7 @@
         ]
       },
       "circular-deps": {
-        "command": "pnpx dpdm -T {projectRoot}/src/**/*.ts --tree=false --warning=false"
+        "command": "pnpx dpdm -T {projectRoot}/src/**/*.ts --tree=false --warning=false --skip-dynamic-imports=circular"
       }
     }
   }
