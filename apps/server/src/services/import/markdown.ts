@@ -23,9 +23,7 @@ class CustomMarkdownRenderer extends Renderer {
     }
 
     override paragraph(data: Tokens.Paragraph): string {
-        let text = super.paragraph(data).trimEnd();
-        text = processWikiLinks(text);
-        return text;
+        return super.paragraph(data).trimEnd();
     }
 
     override code({ text, lang }: Tokens.Code): string {
@@ -115,6 +113,12 @@ class CustomMarkdownRenderer extends Renderer {
         }
 
         return `<blockquote>${body}</blockquote>`;
+    }
+
+    text(token: Tokens.Text | Tokens.Escape): string {
+        let text = super.text(token);
+        text = processWikiLinks(text);
+        return text;
     }
 
 }

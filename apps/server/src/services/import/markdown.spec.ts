@@ -287,4 +287,10 @@ $$`;
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
+    it("supports wikilink in lists", () => {
+        const input = `- oh no my banana I bought on [[journal/monday]] has gone off! I’m taking it back to the [[other/shop]] for a refund`;
+        const expected = `<ul><li>oh no my banana I bought on <a class="reference-link" href="/journal/monday">journal/monday</a> has gone off! I’m taking it back to the <a class="reference-link" href="/other/shop">other/shop</a> for a refund</li></ul>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
 });
