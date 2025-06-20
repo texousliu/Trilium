@@ -1,14 +1,15 @@
 /**
  * Search Notes Tool
  *
- * This tool allows the LLM to search for notes using semantic search.
+ * This tool allows the LLM to search for notes using keyword search.
  */
 
 import type { Tool, ToolHandler } from './tool_interfaces.js';
 import log from '../../log.js';
-import aiServiceManager from '../ai_service_manager.js';
+import searchService from '../../search/services/search.js';
 import becca from '../../../becca/becca.js';
 import { ContextExtractor } from '../context/index.js';
+import aiServiceManager from '../ai_service_manager.js';
 
 /**
  * Definition of the search notes tool
@@ -17,13 +18,13 @@ export const searchNotesToolDefinition: Tool = {
     type: 'function',
     function: {
         name: 'search_notes',
-        description: 'Semantic search for notes. Finds conceptually related content. Use descriptive phrases, not single words. Returns noteId values to use with other tools.',
+        description: 'Search for notes using keywords and phrases. Use descriptive terms and phrases for best results. Returns noteId values to use with other tools.',
         parameters: {
             type: 'object',
             properties: {
                 query: {
                     type: 'string',
-                    description: 'Search query for finding conceptually related notes. Use descriptive phrases like "machine learning classification" rather than single words.'
+                    description: 'Search query for finding notes. Use descriptive phrases like "machine learning classification" for better results.'
                 },
                 parentNoteId: {
                     type: 'string',
@@ -44,50 +45,46 @@ export const searchNotesToolDefinition: Tool = {
 };
 
 /**
- * Get or create the vector search tool dependency
- * @returns The vector search tool or null if it couldn't be created
+ * Perform keyword search for notes
  */
-async function getOrCreateVectorSearchTool(): Promise<any> {
+async function searchNotesWithKeywords(query: string, parentNoteId?: string, maxResults: number = 5): Promise<any[]> {
     try {
-        // Try to get the existing vector search tool
-        let vectorSearchTool = aiServiceManager.getVectorSearchTool();
-
-        if (vectorSearchTool) {
-            log.info(`Found existing vectorSearchTool`);
-            return vectorSearchTool;
+        log.info(`Performing keyword search for: "${query}"`);
+        
+        // Build search query with parent filter if specified
+        let searchQuery = query;
+        if (parentNoteId) {
+            // Add parent filter to the search query
+            searchQuery = `${query} note.parents.noteId = ${parentNoteId}`;
         }
 
-        // No existing tool, try to initialize it
-        log.info(`VectorSearchTool not found, attempting initialization`);
+        const searchContext = {
+            includeArchivedNotes: false,
+            fuzzyAttributeSearch: false
+        };
 
-        // Get agent tools manager and initialize it
-        const agentTools = aiServiceManager.getAgentTools();
-        if (agentTools && typeof agentTools.initialize === 'function') {
-            try {
-                // Force initialization to ensure it runs even if previously marked as initialized
-                await agentTools.initialize(true);
-            } catch (initError: any) {
-                log.error(`Failed to initialize agent tools: ${initError.message}`);
-                return null;
-            }
-        } else {
-            log.error('Agent tools manager not available');
-            return null;
-        }
+        const searchResults = searchService.searchNotes(searchQuery, searchContext);
+        const limitedResults = searchResults.slice(0, maxResults);
 
-        // Try getting the vector search tool again after initialization
-        vectorSearchTool = aiServiceManager.getVectorSearchTool();
-
-        if (vectorSearchTool) {
-            log.info('Successfully created vectorSearchTool');
-            return vectorSearchTool;
-        } else {
-            log.error('Failed to create vectorSearchTool after initialization');
-            return null;
-        }
+        // Convert search results to the expected format
+        return limitedResults.map(note => {
+            // Get the first parent (notes can have multiple parents)
+            const parentNotes = note.getParentNotes();
+            const firstParent = parentNotes.length > 0 ? parentNotes[0] : null;
+            
+            return {
+                noteId: note.noteId,
+                title: note.title,
+                dateCreated: note.dateCreated,
+                dateModified: note.dateModified,
+                parentId: firstParent?.noteId || null,
+                similarity: 1.0, // Keyword search doesn't provide similarity scores
+                score: 1.0
+            };
+        });
     } catch (error: any) {
-        log.error(`Error getting or creating vectorSearchTool: ${error.message}`);
-        return null;
+        log.error(`Error in keyword search: ${error.message}`);
+        return [];
     }
 }
 
@@ -241,26 +238,9 @@ export class SearchNotesTool implements ToolHandler {
 
             log.info(`Executing search_notes tool - Query: "${query}", ParentNoteId: ${parentNoteId || 'not specified'}, MaxResults: ${maxResults}, Summarize: ${summarize}`);
 
-            // Get the vector search tool from the AI service manager
-            const vectorSearchTool = await getOrCreateVectorSearchTool();
-
-            if (!vectorSearchTool) {
-                return `Error: Vector search tool is not available. The system may still be initializing or there could be a configuration issue.`;
-            }
-
-            log.info(`Retrieved vector search tool from AI service manager`);
-
-            // Check if searchNotes method exists
-            if (!vectorSearchTool.searchNotes || typeof vectorSearchTool.searchNotes !== 'function') {
-                log.error(`Vector search tool is missing searchNotes method`);
-                return `Error: Vector search tool is improperly configured (missing searchNotes method).`;
-            }
-
-            // Execute the search
-            log.info(`Performing semantic search for: "${query}"`);
+            // Execute the search using keyword search
             const searchStartTime = Date.now();
-            const response = await vectorSearchTool.searchNotes(query, parentNoteId, maxResults);
-            const results: Array<Record<string, unknown>> = response?.matches ?? [];
+            const results = await searchNotesWithKeywords(query, parentNoteId, maxResults);
             const searchDuration = Date.now() - searchStartTime;
 
             log.info(`Search completed in ${searchDuration}ms, found ${results.length} matching notes`);
@@ -299,7 +279,7 @@ export class SearchNotesTool implements ToolHandler {
                     count: 0,
                     results: [],
                     query: query,
-                    message: `No results found. Try: keyword_search_notes with "${this.extractKeywords(query)}" or attribute_search for tagged notes.`
+                    message: `No results found. Try rephrasing your query, using simpler terms, or check your spelling.`
                 };
             } else {
                 return {
