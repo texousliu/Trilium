@@ -6,7 +6,6 @@
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop&style=flat-square)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
 
 [English](./README.md) | [Chinese](./docs/README-ZH_CN.md) | [Russian](./docs/README.ru.md) | [Japanese](./docs/README.ja.md) | [Italian](./docs/README.it.md) | [Spanish](./docs/README.es.md)
->>>>>>> old/develop
 
 TriliumNext Notes is a free and open-source, cross-platform hierarchical note taking application with focus on building large personal knowledge bases.
 
