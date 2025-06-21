@@ -211,9 +211,6 @@ const config: ForgeConfig = {
                     process.exit(1);
                 }
             }
-
-            // Wait for a while to ensure the file system operations are completed.
-            await new Promise(resolve => setTimeout(resolve, 3000));
         },
         // Gather all the artifacts produced by the makers and copy them to a common upload directory.
         async postMake(_, makeResults) {
