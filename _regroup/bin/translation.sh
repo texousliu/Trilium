@@ -25,15 +25,16 @@ stats() {
 	# Print the number of existing strings on the JSON files for each locale
 	s=$(number_of_keys "${paths[0]}/en/server.json")
 	c=$(number_of_keys "${paths[1]}/en/translation.json")
-	echo "| locale |server strings |client strings |"
-	echo "|--------|---------------|---------------|"
-	echo "|   en   |      ${s}      |     ${c}      |"
+	echo "| locale | server strings | client strings |"
+	echo "|--------|----------------|----------------|"
+	echo "|   en   |       ${s}      |      ${c}      |"
+	echo "|--------|----------------|----------------|"
 	for locale in "${locales[@]}"; do
 		s=$(number_of_keys "${paths[0]}/${locale}/server.json")
 		c=$(number_of_keys "${paths[1]}/${locale}/translation.json")
 		n1=$(((8 - ${#locale}) / 2))
 		n2=$((n1 == 1 ? n1 + 1 : n1))
-		echo "|$(printf "%${n1}s")${locale}$(printf "%${n2}s")|      ${s}      |     ${c}      |"
+		echo "|$(printf "%${n1}s")${locale}$(printf "%${n2}s")|       ${s}      |      ${c}      |"
 	done
 }
 
@@ -78,7 +79,10 @@ file_path="$(
 	cd -- "$(dirname "${0}")" >/dev/null 2>&1 || exit
 	pwd -P
 )"
-paths=("${file_path}/../translations/" "${file_path}/../src/public/translations/")
+paths=(
+	"${file_path}/../../apps/server/src/assets/translations/"
+	"${file_path}/../../apps/client/src/translations/"
+)
 locales=(cn de es fr pt_br ro tw)
 
 if [ $# -eq 1 ]; then
