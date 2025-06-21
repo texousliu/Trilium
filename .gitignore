@@ -1,16 +1,49 @@
-.DS_Store
-node_modules/
-dist/
-src/public/app-dist/
+# See https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# compiled output
+dist
+tmp
+out-tsc
+
+# dependencies
+node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
 npm-debug.log
 yarn-error.log
-*.db
-config.ini
-cert.key
-cert.crt
-server-package.json
-.idea/httpRequests/
-data/
-data-test/
-tmp/
-.eslintcache
+testem.log
+/typings
+
+# System Files
+.DS_Store
+Thumbs.db
+
+.nx/cache
+.nx/workspace-data
+
+vite.config.*.timestamp*
+vitest.config.*.timestamp*
+test-output
+
+apps/*/data
+apps/*/out
+upload
+
+.rollup.cache
+*.tsbuildinfo
+
+/result
+.svelte-kit
