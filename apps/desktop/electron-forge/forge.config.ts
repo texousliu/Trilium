@@ -213,7 +213,6 @@ const config: ForgeConfig = {
             }
 
             // Wait for a while to ensure the file system operations are completed.
-            console.log("Waiting for file system operations to complete...");
             await new Promise(resolve => setTimeout(resolve, 3000));
         },
         // Gather all the artifacts produced by the makers and copy them to a common upload directory.
@@ -240,10 +239,6 @@ const config: ForgeConfig = {
                     fs.copyFileSync(artifactPath, outputPath);
                 }
             }
-        },
-        preMake: async () => {
-            console.log("Waiting for file system operations to complete...");
-            await new Promise(resolve => setTimeout(resolve, 3000));
         }
     }
 };
