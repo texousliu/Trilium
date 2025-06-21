@@ -1,5 +1,5 @@
 # Text Snippets
-<figure class="image image-style-align-right"><img style="aspect-ratio:265/108" src="Text Snippets_image.png" width="265" height="108"></figure>
+<figure class="image image-style-align-right"><img style="aspect-ratio:265/108;" src="Text Snippets_image.png" width="265" height="108"></figure>
 
 > [!NOTE]
 > This is a premium feature of the editor we are using (CKEditor) and we benefit from it thanks to an written agreement with the team. See  <a class="reference-link" href="../Premium%20features.md">Premium features</a> for more information.

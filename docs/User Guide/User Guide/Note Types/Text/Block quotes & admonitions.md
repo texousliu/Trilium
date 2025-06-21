@@ -52,20 +52,4 @@ These types were inspired by GitHub's support for this feature and there are cur
 
 ### Markdown support
 
-The Markdown syntax for admonitions as supported by Trilium is the one that GitHub uses, which is as follows:
-
-```
-> [!NOTE]
-> This is a note.
-
-> [!TIP]
-> This is a tip.
-
-> [!IMPORTANT]
-> This is a very important information.
-
-> [!CAUTION]
-> This is a caution.
-```
-
-There are currently no plans of supporting alternative admonition syntaxes such as `!!! note`.
+See <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/Import%20%26%20Export/Markdown/Supported%20syntax.md">Supported syntax</a>.
