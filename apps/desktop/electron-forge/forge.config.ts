@@ -214,9 +214,9 @@ const config: ForgeConfig = {
         },
         // Gather all the artifacts produced by the makers and copy them to a common upload directory.
         async postMake(_, makeResults) {
+            const outputDir = path.join(__dirname, "..", "upload");
+            fs.mkdirpSync(outputDir);
             for (const makeResult of makeResults) {
-                const outputDir = path.join(__dirname, "..", "upload", makeResult.arch);
-                fs.mkdirpSync(outputDir);
                 for (const artifactPath of makeResult.artifacts) {
                     // Ignore certain artifacts.
                     let fileName = path.basename(artifactPath);

@@ -41,6 +41,10 @@ jobs:
             image: ubuntu-22.04
             shell: bash
             forge_platform: linux
+          - name: windows
+            image: win-signing
+            shell: cmd
+            forge_platform: win32
     runs-on: ${{ matrix.os.image }}
     steps:
       - uses: actions/checkout@v4
@@ -80,7 +84,7 @@ jobs:
           prerelease: true
           draft: false
           fail_on_unmatched_files: true
-          files: apps/desktop/upload/${{ matrix.arch }}/*.*
+          files: apps/desktop/upload/*.*
           tag_name: nightly
           name: Nightly Build
 
@@ -89,66 +93,7 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         with:
           name: TriliumNextNotes ${{ matrix.os.name }} ${{ matrix.arch }}
-          path: apps/desktop/upload/${{ matrix.arch }}
-
-  nightly-electron-windows:
-    name: Deploy nightly Windows
-    runs-on: win-signing
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - name: Set up node & dependencies
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'pnpm'
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-      - uses: nrwl/nx-set-shas@v4
-      - name: Update nightly version
-        run: npm run chore:ci-update-nightly-version
-      - name: Run the build
-        uses: ./.github/actions/build-electron
-        with:
-          os: windows
-          arch: x64,arm64
-          shell: cmd
-          forge_platform: win32
-        env:
-          APPLE_APP_CERTIFICATE_BASE64: ${{ secrets.APPLE_APP_CERTIFICATE_BASE64 }}
-          APPLE_APP_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_APP_CERTIFICATE_PASSWORD }}
-          APPLE_INSTALLER_CERTIFICATE_BASE64: ${{ secrets.APPLE_INSTALLER_CERTIFICATE_BASE64 }}
-          APPLE_INSTALLER_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_INSTALLER_CERTIFICATE_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-          WINDOWS_SIGN_EXECUTABLE: ${{ vars.WINDOWS_SIGN_EXECUTABLE }}
-
-      - name: Publish release
-        uses: softprops/action-gh-release@v2.3.2
-        if: ${{ github.event_name != 'pull_request' }}
-        with:
-          make_latest: false
-          prerelease: true
-          draft: false
-          fail_on_unmatched_files: true
-          files: apps/desktop/upload/*/*.*
-          tag_name: nightly
-          name: Nightly Build
-
-      - name: Publish artifacts
-        uses: actions/upload-artifact@v4
-        if: ${{ github.event_name == 'pull_request' }}
-        with:
-          name: TriliumNextNotes windows x64
-          path: apps/desktop/upload/x64
-
-      - name: Publish artifacts
-        uses: actions/upload-artifact@v4
-        if: ${{ github.event_name == 'pull_request' }}
-        with:
-          name: TriliumNextNotes windows arm64
-          path: apps/desktop/upload/arm64
+          path: apps/desktop/upload
 
   nightly-server:
     name: Deploy server nightly
