@@ -401,6 +401,15 @@ importers:
         specifier: ^7.1.1
         version: 7.1.3
 
+  apps/desktop-e2e:
+    devDependencies:
+      dotenv:
+        specifier: 16.5.0
+        version: 16.5.0
+      electron:
+        specifier: 36.5.0
+        version: 36.5.0
+
   apps/dump-db:
     dependencies:
       better-sqlite3:
