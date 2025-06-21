@@ -28,10 +28,10 @@ sudo apt install libpng16-16 libpng-dev pkg-config autoconf libtool build-essent
 
 You can either download source code zip/tar from [https://github.com/TriliumNext/Notes/releases/latest](https://github.com/TriliumNext/Notes/releases/latest).
 
-For the latest version including betas, clone Git repository **from** `master` **branch** with:
+For the latest version including betas, clone Git repository **from** `main` **branch** with:
 
 ```
-git clone -b master https://github.com/triliumnext/notes.git
+git clone -b main https://github.com/triliumnext/notes.git
 ```
 
 ## Installation
