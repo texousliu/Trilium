@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - "develop"
+      - "main"
       - "feature/update**"
       - "feature/server_esm**"
     paths-ignore:
