@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> The issues section was relocated to https://github.com/TriliumNext/trilium.
+
 # TriliumNext Notes
 
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran?style=flat-square)
