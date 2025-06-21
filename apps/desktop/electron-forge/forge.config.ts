@@ -2,6 +2,7 @@ import path from "path";
 import fs from "fs-extra";
 import { LOCALES } from "@triliumnext/commons";
 import { PRODUCT_NAME } from "../src/app-info.js";
+import type { ForgeConfig } from "@electron-forge/shared-types";
 
 const ELECTRON_FORGE_DIR = __dirname;
 
@@ -23,13 +24,13 @@ const windowsSignConfiguration = process.env.WINDOWS_SIGN_EXECUTABLE ? {
 const macosSignConfiguration = process.env.APPLE_ID ? {
     osxSign: {},
     osxNotarize: {
-        appleId: process.env.APPLE_ID,
-        appleIdPassword: process.env.APPLE_ID_PASSWORD,
-        teamId: process.env.APPLE_TEAM_ID
+        appleId: process.env.APPLE_ID!,
+        appleIdPassword: process.env.APPLE_ID_PASSWORD!,
+        teamId: process.env.APPLE_TEAM_ID!
     }
 } : undefined;
 
-module.exports = {
+const config: ForgeConfig = {
     outDir: "out",
     // Documentation of `packagerConfig` options: https://electron.github.io/packager/main/interfaces/Options.html
     packagerConfig: {
@@ -143,7 +144,7 @@ module.exports = {
     ],
     hooks: {
         // Remove unused locales from the packaged app to save some space.
-        postPackage(_, packageResult) {
+        async postPackage(_, packageResult) {
             const isMac = (process.platform === "darwin");
             let localesToKeep = LOCALES
                 .filter(locale => !locale.contentOnly)
@@ -212,7 +213,7 @@ module.exports = {
             }
         },
         // Gather all the artifacts produced by the makers and copy them to a common upload directory.
-        postMake(_, makeResults) {
+        async postMake(_, makeResults) {
             const outputDir = path.join(__dirname, "..", "upload");
             fs.mkdirpSync(outputDir);
             for (const makeResult of makeResults) {
@@ -261,3 +262,5 @@ function getExtraResourcesForPlatform() {
 
     return resources;
 }
+
+export default config;
