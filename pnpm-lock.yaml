@@ -6,7 +6,7 @@ settings:
 
 overrides:
   node-abi: 4.9.0
-  mermaid: 11.6.0
+  mermaid: 11.7.0
   preact: 10.26.9
   roughjs: 4.6.6
   '@types/express-serve-static-core': 5.0.6
@@ -180,8 +180,8 @@ importers:
         specifier: 6.1.17
         version: 6.1.17(@fullcalendar/core@6.1.17)
       '@mermaid-js/layout-elk':
-        specifier: 0.1.7
-        version: 0.1.7(mermaid@11.6.0)
+        specifier: 0.1.8
+        version: 0.1.8(mermaid@11.7.0)
       '@mind-elixir/node-menu':
         specifier: 1.0.5
         version: 1.0.5(mind-elixir@4.6.1)
@@ -267,8 +267,8 @@ importers:
         specifier: 15.0.12
         version: 15.0.12
       mermaid:
-        specifier: 11.6.0
-        version: 11.6.0
+        specifier: 11.7.0
+        version: 11.7.0
       mind-elixir:
         specifier: 4.6.1
         version: 4.6.1
@@ -343,8 +343,8 @@ importers:
         specifier: 2.1.2
         version: 2.1.2(electron@36.5.0)
       better-sqlite3:
-        specifier: ^11.9.1
-        version: 11.10.0
+        specifier: ^12.0.0
+        version: 12.0.0
       electron-debug:
         specifier: 4.1.0
         version: 4.1.0
@@ -413,8 +413,8 @@ importers:
   apps/dump-db:
     dependencies:
       better-sqlite3:
-        specifier: ^11.1.2
-        version: 11.10.0
+        specifier: ^12.0.0
+        version: 12.0.0
       mime-types:
         specifier: ^3.0.0
         version: 3.0.1
@@ -444,8 +444,8 @@ importers:
         specifier: 7.0.1
         version: 7.0.1
       better-sqlite3:
-        specifier: ^11.9.1
-        version: 11.10.0
+        specifier: ^12.0.0
+        version: 12.0.0
     devDependencies:
       '@triliumnext/client':
         specifier: workspace:*
@@ -469,8 +469,8 @@ importers:
   apps/server:
     dependencies:
       better-sqlite3:
-        specifier: 11.10.0
-        version: 11.10.0
+        specifier: 12.0.0
+        version: 12.0.0
     devDependencies:
       '@anthropic-ai/sdk':
         specifier: 0.54.0
@@ -716,8 +716,8 @@ importers:
         specifier: 0.5.16
         version: 0.5.16
       openai:
-        specifier: 5.5.1
-        version: 5.5.1(ws@8.18.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))(zod@3.24.4)
+        specifier: 5.6.0
+        version: 5.6.0(ws@8.18.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))(zod@3.24.4)
       rand-token:
         specifier: 1.0.1
         version: 1.0.1
@@ -3599,13 +3599,13 @@ packages:
   '@marijn/find-cluster-break@1.0.2':
     resolution: {integrity: sha512-l0h88YhZFyKdXIFNfSWpyjStDjGHwZ/U7iobcK1cQQD8sejsONdQtTVU+1wVN1PBw40PiiHB1vA5S7VTfQiP9g==}
 
-  '@mermaid-js/layout-elk@0.1.7':
-    resolution: {integrity: sha512-G3AJ2jMaCAqky2CT3z/sf3pK5UuS3tne98GsXDl3PkKByCmPmOYmJPf+6oX5PUlV3HNWWHuSgtZ9NU/CZDSuHQ==}
+  '@mermaid-js/layout-elk@0.1.8':
+    resolution: {integrity: sha512-uU+Glm1tQZScphrFuzf6dzPpYTrET3sz6Q2SqpLj/nr+FpO6cfgJmYdJ+vWA8oGoeNQZLVey480qbKAFk8DBuQ==}
     peerDependencies:
-      mermaid: 11.6.0
+      mermaid: 11.7.0
 
-  '@mermaid-js/parser@0.4.0':
-    resolution: {integrity: sha512-wla8XOWvQAwuqy+gxiZqY+c7FokraOTHRWMsbB4AgRx9Sy7zKslNyejy7E+a77qHfey5GXw/ik3IXv/NHMJgaA==}
+  '@mermaid-js/parser@0.5.0':
+    resolution: {integrity: sha512-AiaN7+VjXC+3BYE+GwNezkpjIcCI2qIMB/K4S2/vMWe0q/XJCBbx5+K7iteuz7VyltX9iAK4FmVTvGc9kjOV4w==}
 
   '@microsoft/api-extractor-model@7.30.6':
     resolution: {integrity: sha512-znmFn69wf/AIrwHya3fxX6uB5etSIn6vg4Q4RB/tb5VDDs1rqREc+AvMC/p19MUN13CZ7+V/8pkYPTj7q8tftg==}
@@ -6324,8 +6324,9 @@ packages:
   batch@0.6.1:
     resolution: {integrity: sha512-x+VAiMRL6UPkx+kudNvxTl6hB2XNNCG2r+7wixVfIYwu/2HKRXimwQyaumLjMveWvT2Hkd/cAJw+QBMfJ/EKVw==}
 
-  better-sqlite3@11.10.0:
-    resolution: {integrity: sha512-EwhOpyXiOEL/lKzHz9AW1msWFNzGc/z+LzeB3/jnFJpxu+th2yqvzsSWas1v9jgs9+xiXJcD5A8CJxAG2TaghQ==}
+  better-sqlite3@12.0.0:
+    resolution: {integrity: sha512-ElLgwbEth4MHBrDXEqzkE7Hm2+ACw5+KKBhkLArcjJrVFJyOXvzcE/if2dx7/m5pXTc8vqJjsCQUt1AFQY+TTQ==}
+    engines: {node: 20.x || 22.x || 23.x || 24.x}
 
   bezier-easing@2.1.0:
     resolution: {integrity: sha512-gbIqZ/eslnUFC1tjEvtz0sgx+xTK20wDnYMIA27VA04R7w6xxXQPZDbibjA9DTWZRA2CXtwHykkVzlCaAJAZig==}
@@ -10091,8 +10092,8 @@ packages:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
 
-  mermaid@11.6.0:
-    resolution: {integrity: sha512-PE8hGUy1LDlWIHWBP05SFdqUHGmRcCcK4IzpOKPE35eOw+G9zZgcnMpyunJVUEOgb//KBORPjysKndw8bFLuRg==}
+  mermaid@11.7.0:
+    resolution: {integrity: sha512-/1/5R0rt0Z1Ak0CuznAnCF3HtQgayRXUz6SguzOwN4L+DuCobz0UxnQ+ZdTSZ3AugKVVh78tiVmsHpHWV25TCw==}
 
   methods@1.1.2:
     resolution: {integrity: sha512-iclAHeNqNm68zFtnZ0e+1L2yUIdvzNoauKU4WBA3VvH/vPFieF7qfRlwUZU+DA9P9bPXIS90ulxoUoCH23sV2w==}
@@ -10587,8 +10588,8 @@ packages:
     resolution: {integrity: sha512-7x81NCL719oNbsq/3mh+hVrAWmFuEYUqrq/Iw3kUzH8ReypT9QQ0BLoJS7/G9k6N81XjW4qHWtjWwe/9eLy1EQ==}
     engines: {node: '>=12'}
 
-  openai@5.5.1:
-    resolution: {integrity: sha512-5i19097mGotHA1eFsM6Tjd/tJ8uo9sa5Ysv4Q6bKJ2vtN6rc0MzMrUefXnLXYAJcmMQrC1Efhj0AvfIkXrQamw==}
+  openai@5.6.0:
+    resolution: {integrity: sha512-jNH5z+hYAdOMZXyEt0yZ7246s+UZjg2AwFQqkAhZIPPjxNtHHO5mykOefau6FkOqj16aC94MOdJl/rZBcKj/cQ==}
     hasBin: true
     peerDependencies:
       ws: ^8.18.0
@@ -17253,7 +17254,7 @@ snapshots:
   '@excalidraw/mermaid-to-excalidraw@1.1.2':
     dependencies:
       '@excalidraw/markdown-to-text': 0.1.2
-      mermaid: 11.6.0
+      mermaid: 11.7.0
       nanoid: 5.1.5
     transitivePeerDependencies:
       - supports-color
@@ -18059,13 +18060,13 @@ snapshots:
 
   '@marijn/find-cluster-break@1.0.2': {}
 
-  '@mermaid-js/layout-elk@0.1.7(mermaid@11.6.0)':
+  '@mermaid-js/layout-elk@0.1.8(mermaid@11.7.0)':
     dependencies:
       d3: 7.9.0
       elkjs: 0.9.3
-      mermaid: 11.6.0
+      mermaid: 11.7.0
 
-  '@mermaid-js/parser@0.4.0':
+  '@mermaid-js/parser@0.5.0':
     dependencies:
       langium: 3.3.1
 
@@ -21428,7 +21429,7 @@ snapshots:
 
   batch@0.6.1: {}
 
-  better-sqlite3@11.10.0:
+  better-sqlite3@12.0.0:
     dependencies:
       bindings: 1.5.0
       prebuild-install: 7.1.3
@@ -26099,11 +26100,11 @@ snapshots:
 
   merge2@1.4.1: {}
 
-  mermaid@11.6.0:
+  mermaid@11.7.0:
     dependencies:
       '@braintree/sanitize-url': 7.1.1
       '@iconify/utils': 2.3.0
-      '@mermaid-js/parser': 0.4.0
+      '@mermaid-js/parser': 0.5.0
       '@types/d3': 7.4.3
       cytoscape: 3.31.2
       cytoscape-cose-bilkent: 4.1.0(cytoscape@3.31.2)
@@ -26270,7 +26271,7 @@ snapshots:
 
   mlly@1.7.4:
     dependencies:
-      acorn: 8.14.1
+      acorn: 8.15.0
       pathe: 2.0.3
       pkg-types: 1.3.1
       ufo: 1.6.1
@@ -26705,7 +26706,7 @@ snapshots:
       is-docker: 2.2.1
       is-wsl: 2.2.0
 
-  openai@5.5.1(ws@8.18.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))(zod@3.24.4):
+  openai@5.6.0(ws@8.18.2(bufferutil@4.0.9)(utf-8-validate@6.0.5))(zod@3.24.4):
     optionalDependencies:
       ws: 8.18.2(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       zod: 3.24.4
