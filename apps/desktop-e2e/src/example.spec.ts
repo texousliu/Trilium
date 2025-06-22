@@ -5,30 +5,27 @@ let app: ElectronApplication;
 
 test.beforeAll(async () => {
     const distPath = join(__dirname, '../../desktop/dist/main.cjs');
-    app = await electron.launch({ args: [ distPath ] });
+    console.log("Dir", join(__dirname, 'traces'));
+    app = await electron.launch({
+        args: [ distPath ]
+    });
 });
 
 test.afterAll(async () => {
-    try {
-      const pid = app.process().pid;
-      await app.close();
-
-      if (pid) {
-          // Double-check process is dead
-          try {
-            process.kill(pid, 0); // throws if process doesn't exist
-            process.kill(pid, 'SIGKILL'); // force kill if still alive
-          } catch (e) {
-            // Process already dead
-          }
-      }
-    } catch (err) {
-      console.warn('Failed to close Electron app cleanly:', err);
-    }
+    await app.close();
 });
 
-test('Electron app should display correct title', async () => {
+test('First setup', async () => {
   // Get the main window
-  const window = await app.firstWindow();
-  await expect(window).toHaveTitle("Setup");
+  const setupWindow = await app.firstWindow();
+  await expect(setupWindow).toHaveTitle("Setup");
+  await expect(setupWindow.locator('h1')).toHaveText("Trilium Notes setup");
+  await setupWindow.locator(`input[type="radio"]`).first().click();
+
+  // Wait for the finish.
+  const newWindowPromise = app.waitForEvent('window');
+  await setupWindow.locator(`button[type="submit"]`, { hasText: "Next" }).click();
+
+  const mainWindow = await newWindowPromise;
+  await expect(mainWindow).toHaveTitle("Trilium Notes");
 });
