@@ -14,8 +14,8 @@ on:
 env:
   GHCR_REGISTRY: ghcr.io
   DOCKERHUB_REGISTRY: docker.io
-  IMAGE_NAME: ${{ github.repository_owner }}/notes
-  TEST_TAG: ${{ github.repository_owner }}/notes:test
+  IMAGE_NAME: ${{ github.repository}}
+  TEST_TAG: ${{ github.repository}}:test
 
 permissions:
   contents: read
