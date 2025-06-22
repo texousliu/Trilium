@@ -1,4 +1,4 @@
-# TriliumNext Notes
+# Trilium Notes
 
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran?style=flat-square)
 ![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/notes?style=flat-square)
@@ -7,7 +7,7 @@
 
 [English](./README.md) | [Chinese](./docs/README-ZH_CN.md) | [Russian](./docs/README.ru.md) | [Japanese](./docs/README.ja.md) | [Italian](./docs/README.it.md) | [Spanish](./docs/README.es.md)
 
-TriliumNext Notes is a free and open-source, cross-platform hierarchical note taking application with focus on building large personal knowledge bases.
+Trilium Notes is a free and open-source, cross-platform hierarchical note taking application with focus on building large personal knowledge bases.
 
 See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for quick overview:
 
@@ -153,7 +153,7 @@ Please view the [documentation guide](./docs/Developer%20Guide/Developer%20Guide
 ## 👏 Shoutouts
 
 * [CKEditor 5](https://github.com/ckeditor/ckeditor5) - best WYSIWYG editor on the market, very interactive and listening team
-* [FancyTree](https://github.com/mar10/fancytree) - very feature rich tree library without real competition. TriliumNext Notes would not be the same without it.
+* [FancyTree](https://github.com/mar10/fancytree) - very feature rich tree library without real competition. Trilium Notes would not be the same without it.
 * [CodeMirror](https://github.com/codemirror/CodeMirror) - code editor with support for huge amount of languages
 * [jsPlumb](https://github.com/jsplumb/jsplumb) - visual connectivity library without competition. Used in [relation maps](https://triliumnext.github.io/Docs/Wiki/relation-map.html) and [link maps](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)
 

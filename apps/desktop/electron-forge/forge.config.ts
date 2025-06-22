@@ -160,8 +160,8 @@ const config: ForgeConfig = {
             for (const outputPath of packageResult.outputPaths) {
                 const localeDirs = isMac
                     ? [
-                        path.join(outputPath, "TriliumNext Notes.app/Contents/Resources"),
-                        path.join(outputPath, "TriliumNext Notes.app/Contents/Frameworks/Electron Framework.framework/Resources")
+                        path.join(outputPath, `${PRODUCT_NAME}.app/Contents/Resources`),
+                        path.join(outputPath, `${PRODUCT_NAME}.app/Contents/Frameworks/Electron Framework.framework/Resources`)
                     ]
                     : [ path.join(outputPath, 'locales') ];
 

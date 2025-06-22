@@ -1,7 +1,7 @@
 {
   "name": "@triliumnext/source",
   "version": "0.95.0",
-  "description": "Build your personal knowledge base with TriliumNext Notes",
+  "description": "Build your personal knowledge base with Trilium Notes",
   "directories": {
     "doc": "docs"
   },
@@ -68,7 +68,7 @@
   },
   "license": "AGPL-3.0-only",
   "author": {
-    "name": "TriliumNext Notes Team",
+    "name": "Trilium Notes Team",
     "email": "contact@eliandoran.me",
     "url": "https://github.com/TriliumNext/Notes"
   },

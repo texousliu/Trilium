@@ -1,4 +1,4 @@
-# TriliumNext Notes
+# Trilium Notes
 
 [English](./README.md) | [Chinese](./README-ZH_CN.md) | [Russian](./README.ru.md) | [Japanese](./README.ja.md) | [Italian](./README.it.md) | [Spanish](./README.es.md)
 

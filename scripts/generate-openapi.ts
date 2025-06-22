@@ -23,7 +23,7 @@ const options = {
             title: "Trilium Notes - Sync server API",
             version: packageJson["version"],
             description:
-                "This is the internal sync server API used by Trilium Notes / TriliumNext Notes.\n\n_If you're looking for the officially supported External Trilium API, see [here](https://triliumnext.github.io/Docs/Wiki/etapi.html)._\n\nThis page does not yet list all routes. For a full list, see the [route controller](https://github.com/TriliumNext/Notes/blob/v0.91.6/src/routes/routes.ts).",
+                "This is the internal sync server API used by Trilium Notes.\n\n_If you're looking for the officially supported External Trilium API, see [here](https://triliumnext.github.io/Docs/Wiki/etapi.html)._\n\nThis page does not yet list all routes. For a full list, see the [route controller](https://github.com/TriliumNext/Notes/blob/v0.91.6/src/routes/routes.ts).",
             contact: {
                 name: "TriliumNext issue tracker",
                 url: "https://github.com/TriliumNext/Notes/issues"

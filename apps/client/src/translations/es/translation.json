@@ -1,6 +1,6 @@
 {
   "about": {
-    "title": "Acerca de TriliumNext Notes",
+    "title": "Acerca de Trilium Notes",
     "close": "Cerrar",
     "homepage": "Página principal:",
     "app_version": "Versión de la aplicación:",
@@ -643,7 +643,7 @@
     "reload_frontend": "Recargar interfaz",
     "show_hidden_subtree": "Mostrar subárbol oculto",
     "show_help": "Mostrar ayuda",
-    "about": "Acerca de TriliumNext Notes",
+    "about": "Acerca de Trilium Notes",
     "logout": "Cerrar sesión",
     "show-cheatsheet": "Mostrar hoja de trucos",
     "toggle-zen-mode": "Modo Zen"

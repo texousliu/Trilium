@@ -124,7 +124,7 @@
   },
   "javascript-required": "Trilium requiere que JavaScript esté habilitado.",
   "setup": {
-    "heading": "Configuración de TriliumNext Notes",
+    "heading": "Configuración de Trilium Notes",
     "new-document": "Soy un usuario nuevo y quiero crear un nuevo documento de Trilium para mis notas",
     "sync-from-desktop": "Ya tengo una instancia de escritorio y quiero configurar la sincronización con ella",
     "sync-from-server": "Ya tengo una instancia de servidor y quiero configurar la sincronización con ella",
@@ -136,7 +136,7 @@
   "setup_sync-from-desktop": {
     "heading": "Sincronizar desde el escritorio",
     "description": "Esta configuración debe iniciarse desde la instancia de escritorio:",
-    "step1": "Abra su instancia de escritorio de TriliumNext Notes.",
+    "step1": "Abra su instancia de escritorio de Trilium Notes.",
     "step2": "En el menú Trilium, dé clic en Opciones.",
     "step3": "Dé clic en la categoría Sincronizar.",
     "step4": "Cambie la dirección de la instancia del servidor a: {{- host}} y dé clic en Guardar.",
@@ -278,7 +278,7 @@
     "unable-to-save-message": "No se pudo escribir en el archivo seleccionado. Intente de nuevo o seleccione otro destino."
   },
   "tray": {
-    "tooltip": "TriliumNext Notes",
+    "tooltip": "Trilium Notes",
     "close": "Cerrar Trilium",
     "recents": "Notas recientes",
     "bookmarks": "Marcadores",

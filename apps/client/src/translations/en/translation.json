@@ -1,6 +1,6 @@
 {
   "about": {
-    "title": "About TriliumNext Notes",
+    "title": "About Trilium Notes",
     "close": "Close",
     "homepage": "Homepage:",
     "app_version": "App version:",
@@ -643,7 +643,7 @@
     "reload_frontend": "Reload Frontend",
     "show_hidden_subtree": "Show Hidden Subtree",
     "show_help": "Show Help",
-    "about": "About TriliumNext Notes",
+    "about": "About Trilium Notes",
     "logout": "Logout",
     "show-cheatsheet": "Show Cheatsheet",
     "toggle-zen-mode": "Zen Mode"
