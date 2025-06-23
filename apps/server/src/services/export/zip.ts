@@ -4,7 +4,7 @@ import dateUtils from "../date_utils.js";
 import path from "path";
 import mimeTypes from "mime-types";
 import packageInfo from "../../../package.json" with { type: "json" };
-import { getContentDisposition, escapeHtml } from "../utils.js";
+import { getContentDisposition } from "../utils.js";
 import protectedSessionService from "../protected_session.js";
 import sanitize from "sanitize-filename";
 import fs from "fs";
@@ -22,9 +22,11 @@ import type { NoteMetaFile } from "../meta/note_meta.js";
 import HtmlExportProvider from "./zip/html.js";
 import { AdvancedExportOptions, ZipExportProvider, ZipExportProviderData } from "./zip/abstract_provider.js";
 import MarkdownExportProvider from "./zip/markdown.js";
+import ShareThemeExportProvider from "./zip/share_theme.js";
+import type BNote from "../../becca/entities/bnote.js";
 
-async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "html" | "markdown", res: Response | fs.WriteStream, setHeaders = true, zipExportOptions?: AdvancedExportOptions) {
-    if (!["html", "markdown"].includes(format)) {
+async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "html" | "markdown" | "share", res: Response | fs.WriteStream, setHeaders = true, zipExportOptions?: AdvancedExportOptions) {
+    if (!["html", "markdown", "share"].includes(format)) {
         throw new ValidationError(`Only 'html' and 'markdown' allowed as export format, '${format}' given`);
     }
 
@@ -135,7 +137,7 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
                 prefix: branch.prefix,
                 dataFileName: fileName,
                 type: "text", // export will have text description
-                format: format
+                format: (format === "markdown" ? "markdown" : "html")
             };
             return meta;
         }
@@ -165,7 +167,7 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
         taskContext.increaseProgressCount();
 
         if (note.type === "text") {
-            meta.format = format;
+            meta.format = (format === "markdown" ? "markdown" : "html");
         }
 
         noteIdToMeta[note.noteId] = meta as NoteMeta;
@@ -296,13 +298,18 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
         }
     }
 
-    function prepareContent(title: string, content: string | Buffer, noteMeta: NoteMeta): string | Buffer {
-        if (["html", "markdown"].includes(noteMeta?.format || "")) {
+    function prepareContent(title: string, content: string | Buffer, noteMeta: NoteMeta, note?: BNote): string | Buffer {
+        const isText = ["html", "markdown"].includes(noteMeta?.format || "");
+        if (isText) {
             content = content.toString();
-            content = rewriteFn(content, noteMeta);
         }
 
-        return provider.prepareContent(title, content, noteMeta);
+        content = provider.prepareContent(title, content, noteMeta, note, branch);
+        if (isText) {
+            content = rewriteFn(content as string, noteMeta);
+        }
+
+        return content;
     }
 
     function saveNote(noteMeta: NoteMeta, filePathPrefix: string) {
@@ -317,7 +324,7 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
 
             let content: string | Buffer = `<p>This is a clone of a note. Go to its <a href="${targetUrl}">primary location</a>.</p>`;
 
-            content = prepareContent(noteMeta.title, content, noteMeta);
+            content = prepareContent(noteMeta.title, content, noteMeta, undefined);
 
             archive.append(content, { name: filePathPrefix + noteMeta.dataFileName });
 
@@ -333,7 +340,7 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
         }
 
         if (noteMeta.dataFileName) {
-            const content = prepareContent(noteMeta.title, note.getContent(), noteMeta);
+            const content = prepareContent(noteMeta.title, note.getContent(), noteMeta, note);
 
             archive.append(content, {
                 name: filePathPrefix + noteMeta.dataFileName,
@@ -394,6 +401,9 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
             break;
         case "markdown":
             provider = new MarkdownExportProvider(providerData);
+            break;
+        case "share":
+            provider = new ShareThemeExportProvider(providerData);
             break;
         default:
             throw new Error();

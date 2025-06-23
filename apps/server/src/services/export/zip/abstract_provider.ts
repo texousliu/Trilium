@@ -1,5 +1,7 @@
 import { Archiver } from "archiver";
 import type { default as NoteMeta, NoteMetaFile } from "../../meta/note_meta.js";
+import type BNote from "../../../becca/entities/bnote.js";
+import type BBranch from "../../../becca/entities/bbranch.js";
 
 type RewriteLinksFn = (content: string, noteMeta: NoteMeta) => string;
 
@@ -44,6 +46,6 @@ export abstract class ZipExportProvider {
     }
 
     abstract prepareMeta(): void;
-    abstract prepareContent(title: string, content: string | Buffer, noteMeta: NoteMeta): string | Buffer;
+    abstract prepareContent(title: string, content: string | Buffer, noteMeta: NoteMeta, note: BNote | undefined, branch: BBranch): string | Buffer;
     abstract afterDone(): void;
 }
