@@ -118,7 +118,10 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     editedNotesOpenInRibbon: boolean;
     codeBlockWordWrap: boolean;
     textNoteEditorMultilineToolbar: boolean;
+    /** Whether keyboard auto-completion for emojis is triggered when typing `:`. */
     textNoteEmojiCompletionEnabled: boolean;
+    /** Whether keyboard auto-completion for notes is triggered when typing `@` in text notes (attribute editing is not affected). */
+    textNoteCompletionEnabled: boolean;
     backgroundEffects: boolean;
 
     // Share settings

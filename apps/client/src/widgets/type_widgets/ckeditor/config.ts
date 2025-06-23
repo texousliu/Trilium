@@ -29,22 +29,6 @@ export async function buildConfig(opts: BuildEditorOptions): Promise<EditorConfi
     const config: EditorConfig = {
         licenseKey,
         placeholder: t("editable_text.placeholder"),
-        mention: {
-            feeds: [
-                {
-                    marker: "@",
-                    feed: (queryText: string) => noteAutocompleteService.autocompleteSourceForCKEditor(queryText),
-                    itemRenderer: (item) => {
-                        const itemElement = document.createElement("button");
-
-                        itemElement.innerHTML = `${(item as Suggestion).highlightedNotePathTitle} `;
-
-                        return itemElement;
-                    },
-                    minimumCharacters: 0
-                }
-            ],
-        },
         codeBlock: {
             languages: buildListOfLanguages()
         },
@@ -190,6 +174,26 @@ export async function buildConfig(opts: BuildEditorOptions): Promise<EditorConfi
             ui: (typeof config.language === "string" ? config.language : "en"),
             content: contentLanguage
         }
+    }
+
+    // Mention customisation.
+    if (options.get("textNoteCompletionEnabled") === "true") {
+        config.mention = {
+            feeds: [
+                {
+                    marker: "@",
+                    feed: (queryText: string) => noteAutocompleteService.autocompleteSourceForCKEditor(queryText),
+                    itemRenderer: (item) => {
+                        const itemElement = document.createElement("button");
+
+                        itemElement.innerHTML = `${(item as Suggestion).highlightedNotePathTitle} `;
+
+                        return itemElement;
+                    },
+                    minimumCharacters: 0
+                }
+            ],
+        };
     }
 
     // Enable premium plugins.
