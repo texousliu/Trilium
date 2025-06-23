@@ -89,7 +89,7 @@ const TPL = /*html*/`
                         <div class="form-check">
                             <label class="form-check-label tn-radio">
                                 <input class="form-check-input" type="radio" name="export-subtree-format" value="share">
-                                Share format
+                                ${t("export.share-format")}
                             </label>
                         </div>
                     </div>

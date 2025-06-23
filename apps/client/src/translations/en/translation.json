@@ -110,7 +110,8 @@
     "export_status": "Export status",
     "export_in_progress": "Export in progress: {{progressCount}}",
     "export_finished_successfully": "Export finished successfully.",
-    "format_pdf": "PDF - for printing or sharing purposes."
+    "format_pdf": "PDF - for printing or sharing purposes.",
+    "share-format": "HTML for web publishing - uses the same theme that is used shared notes, but can be published as a static website."
   },
   "help": {
     "fullDocumentation": "Help (full documentation is available <a class=\"external\" href=\"https://triliumnext.github.io/Docs/\">online</a>)",
@@ -1197,7 +1198,6 @@
     "restore_provider": "Restore provider to search",
     "similarity_threshold": "Similarity Threshold",
     "similarity_threshold_description": "Minimum similarity score (0-1) for notes to be included in context for LLM queries",
-
     "reprocess_index": "Rebuild Search Index",
     "reprocessing_index": "Rebuilding...",
     "reprocess_index_started": "Search index optimization started in the background",
