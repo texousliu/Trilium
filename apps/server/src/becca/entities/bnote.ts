@@ -1774,6 +1774,10 @@ class BNote extends AbstractBeccaEntity<BNote> {
         return this.getVisibleChildNotes().length > 0;
     }
 
+    get shareId() {
+        return this.noteId;
+    }
+
 }
 
 export default BNote;
