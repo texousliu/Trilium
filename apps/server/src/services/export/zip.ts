@@ -198,10 +198,13 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
         note.sortChildren();
         const childBranches = note.getChildBranches().filter((branch) => branch?.noteId !== "_hidden");
 
-        const available = !note.isProtected || protectedSessionService.isProtectedSessionAvailable();
+        let shouldIncludeFile = (!note.isProtected || protectedSessionService.isProtectedSessionAvailable());
+        if (format !== "share") {
+            shouldIncludeFile = shouldIncludeFile && (note.getContent().length > 0 || childBranches.length === 0);
+        }
 
         // if it's a leaf, then we'll export it even if it's empty
-        if (available && (note.getContent().length > 0 || childBranches.length === 0)) {
+        if (shouldIncludeFile) {
             meta.dataFileName = getDataFileName(note.type, note.mime, baseFileName, existingFileNames);
         }
 
