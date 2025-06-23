@@ -1,10 +1,8 @@
 "use strict";
 
-import html from "html";
 import dateUtils from "../date_utils.js";
 import path from "path";
 import mimeTypes from "mime-types";
-import mdService from "./markdown.js";
 import packageInfo from "../../../package.json" with { type: "json" };
 import { getContentDisposition, escapeHtml } from "../utils.js";
 import protectedSessionService from "../protected_session.js";
@@ -22,26 +20,8 @@ import type BBranch from "../../becca/entities/bbranch.js";
 import type { Response } from "express";
 import type { NoteMetaFile } from "../meta/note_meta.js";
 import HtmlExportProvider from "./zip/html.js";
-import { ZipExportProvider, ZipExportProviderData } from "./zip/abstract_provider.js";
+import { AdvancedExportOptions, ZipExportProvider, ZipExportProviderData } from "./zip/abstract_provider.js";
 import MarkdownExportProvider from "./zip/markdown.js";
-
-type RewriteLinksFn = (content: string, noteMeta: NoteMeta) => string;
-
-export interface AdvancedExportOptions {
-    /**
-     * If `true`, then only the note's content will be kept. If `false` (default), then each page will have its own <html> template.
-     */
-    skipHtmlTemplate?: boolean;
-
-    /**
-     * Provides a custom function to rewrite the links found in HTML or Markdown notes. This method is called for every note imported, if it's of the right type.
-     *
-     * @param originalRewriteLinks the original rewrite links function. Can be used to access the default behaviour without having to reimplement it.
-     * @param getNoteTargetUrl the method to obtain a note's target URL, used internally by `originalRewriteLinks` but can be used here as well.
-     * @returns a function to rewrite the links in HTML or Markdown notes.
-     */
-    customRewriteLinks?: (originalRewriteLinks: RewriteLinksFn, getNoteTargetUrl: (targetNoteId: string, sourceMeta: NoteMeta) => string | null) => RewriteLinksFn;
-}
 
 async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "html" | "markdown", res: Response | fs.WriteStream, setHeaders = true, zipExportOptions?: AdvancedExportOptions) {
     if (!["html", "markdown"].includes(format)) {
@@ -322,47 +302,7 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
             content = rewriteFn(content, noteMeta);
         }
 
-        if (noteMeta.format === "html" && typeof content === "string") {
-            if (!content.substr(0, 100).toLowerCase().includes("<html") && !zipExportOptions?.skipHtmlTemplate) {
-                if (!noteMeta?.notePath?.length) {
-                    throw new Error("Missing note path.");
-                }
-
-                const cssUrl = `${"../".repeat(noteMeta.notePath.length - 1)}style.css`;
-                const htmlTitle = escapeHtml(title);
-
-                // <base> element will make sure external links are openable - https://github.com/zadam/trilium/issues/1289#issuecomment-704066809
-                content = `<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="${cssUrl}">
-    <base target="_parent">
-    <title data-trilium-title>${htmlTitle}</title>
-</head>
-<body>
-  <div class="content">
-    <h1 data-trilium-h1>${htmlTitle}</h1>
-
-    <div class="ck-content">${content}</div>
-  </div>
-</body>
-</html>`;
-            }
-
-            return content.length < 100_000 ? html.prettyPrint(content, { indent_size: 2 }) : content;
-        } else if (noteMeta.format === "markdown" && typeof content === "string") {
-            let markdownContent = mdService.toMarkdown(content);
-
-            if (markdownContent.trim().length > 0 && !markdownContent.startsWith("# ")) {
-                markdownContent = `# ${title}\r
-${markdownContent}`;
-            }
-
-            return markdownContent;
-        } else {
-            return content;
-        }
+        return provider.prepareContent(title, content, noteMeta);
     }
 
     function saveNote(noteMeta: NoteMeta, filePathPrefix: string) {
