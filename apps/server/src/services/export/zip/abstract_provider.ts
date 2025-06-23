@@ -2,6 +2,7 @@ import { Archiver } from "archiver";
 import type { default as NoteMeta, NoteMetaFile } from "../../meta/note_meta.js";
 import type BNote from "../../../becca/entities/bnote.js";
 import type BBranch from "../../../becca/entities/bbranch.js";
+import mimeTypes from "mime-types";
 
 type RewriteLinksFn = (content: string, noteMeta: NoteMeta) => string;
 
@@ -24,8 +25,6 @@ export interface AdvancedExportOptions {
 export interface ZipExportProviderData {
     branch: BBranch;
     getNoteTargetUrl: (targetNoteId: string, sourceMeta: NoteMeta) => string | null;
-    metaFile: NoteMetaFile;
-    rootMeta: NoteMeta;
     archive: Archiver;
     zipExportOptions?: AdvancedExportOptions;
     rewriteFn: RewriteLinksFn;
@@ -33,24 +32,46 @@ export interface ZipExportProviderData {
 
 export abstract class ZipExportProvider {
     branch: BBranch;
-    metaFile: NoteMetaFile;
     getNoteTargetUrl: (targetNoteId: string, sourceMeta: NoteMeta) => string | null;
-    rootMeta: NoteMeta;
     archive: Archiver;
     zipExportOptions?: AdvancedExportOptions;
     rewriteFn: RewriteLinksFn;
 
     constructor(data: ZipExportProviderData) {
         this.branch = data.branch;
-        this.metaFile = data.metaFile;
         this.getNoteTargetUrl = data.getNoteTargetUrl;
-        this.rootMeta = data.rootMeta;
         this.archive = data.archive;
         this.zipExportOptions = data.zipExportOptions;
         this.rewriteFn = data.rewriteFn;
     }
 
-    abstract prepareMeta(): void;
+    abstract prepareMeta(metaFile: NoteMetaFile): void;
     abstract prepareContent(title: string, content: string | Buffer, noteMeta: NoteMeta, note: BNote | undefined, branch: BBranch): string | Buffer;
-    abstract afterDone(): void;
+    abstract afterDone(rootMeta: NoteMeta): void;
+
+    mapExtension(type: string | null, mime: string, existingExtension: string, format: string) {
+        // the following two are handled specifically since we always want to have these extensions no matter the automatic detection
+        // and/or existing detected extensions in the note name
+        if (type === "text" && format === "markdown") {
+            return "md";
+        } else if (type === "text" && format === "html") {
+            return "html";
+        } else if (mime === "application/x-javascript" || mime === "text/javascript") {
+            return "js";
+        } else if (type === "canvas" || mime === "application/json") {
+            return "json";
+        } else if (existingExtension.length > 0) {
+            // if the page already has an extension, then we'll just keep it
+            return null;
+        } else {
+            if (mime?.toLowerCase()?.trim() === "image/jpg") {
+                return "jpg";
+            } else if (mime?.toLowerCase()?.trim() === "text/mermaid") {
+                return "txt";
+            } else {
+                return mimeTypes.extension(mime) || "dat";
+            }
+        }
+    }
+
 }

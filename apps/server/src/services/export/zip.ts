@@ -2,7 +2,6 @@
 
 import dateUtils from "../date_utils.js";
 import path from "path";
-import mimeTypes from "mime-types";
 import packageInfo from "../../../package.json" with { type: "json" };
 import { getContentDisposition } from "../utils.js";
 import protectedSessionService from "../protected_session.js";
@@ -33,16 +32,15 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
     const archive = archiver("zip", {
         zlib: { level: 9 } // Sets the compression level.
     });
+    const rewriteFn = (zipExportOptions?.customRewriteLinks ? zipExportOptions?.customRewriteLinks(rewriteLinks, getNoteTargetUrl) : rewriteLinks);
+    const provider= buildProvider();
 
     const noteIdToMeta: Record<string, NoteMeta> = {};
-    const rewriteFn = (zipExportOptions?.customRewriteLinks ? zipExportOptions?.customRewriteLinks(rewriteLinks, getNoteTargetUrl) : rewriteLinks);
 
     function buildProvider() {
         const providerData: ZipExportProviderData = {
             getNoteTargetUrl,
-            metaFile,
             archive,
-            rootMeta: rootMeta!,
             branch,
             rewriteFn
         };
@@ -94,35 +92,13 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
         }
 
         let existingExtension = path.extname(fileName).toLowerCase();
-        let newExtension;
-
-        // the following two are handled specifically since we always want to have these extensions no matter the automatic detection
-        // and/or existing detected extensions in the note name
-        if (type === "text" && format === "markdown") {
-            newExtension = "md";
-        } else if (type === "text" && format === "html") {
-            newExtension = "html";
-        } else if (mime === "application/x-javascript" || mime === "text/javascript") {
-            newExtension = "js";
-        } else if (type === "canvas" || mime === "application/json") {
-            newExtension = "json";
-        } else if (existingExtension.length > 0) {
-            // if the page already has an extension, then we'll just keep it
-            newExtension = null;
-        } else {
-            if (mime?.toLowerCase()?.trim() === "image/jpg") {
-                newExtension = "jpg";
-            } else if (mime?.toLowerCase()?.trim() === "text/mermaid") {
-                newExtension = "txt";
-            } else {
-                newExtension = mimeTypes.extension(mime) || "dat";
-            }
-        }
+        const newExtension = provider.mapExtension(type, mime, existingExtension, format);
 
         // if the note is already named with the extension (e.g. "image.jpg"), then it's silly to append the exact same extension again
         if (newExtension && existingExtension !== `.${newExtension.toLowerCase()}`) {
             fileName += `.${newExtension}`;
         }
+
 
         return getUniqueFilename(existingFileNames, fileName);
     }
@@ -408,9 +384,7 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
         files: [rootMeta]
     };
 
-    const provider= buildProvider();
-
-    provider.prepareMeta();
+    provider.prepareMeta(metaFile);
 
     for (const noteMeta of Object.values(noteIdToMeta)) {
         // filter out relations which are not inside this export
@@ -442,7 +416,7 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
 
     saveNote(rootMeta, "");
 
-    provider.afterDone();
+    provider.afterDone(rootMeta);
 
     const note = branch.getNote();
     const zipFileName = `${branch.prefix ? `${branch.prefix} - ` : ""}${note.getTitleOrProtected()}.zip`;

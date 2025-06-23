@@ -10,27 +10,24 @@ export default class HtmlExportProvider extends ZipExportProvider {
     private indexMeta: NoteMeta | null = null;
     private cssMeta: NoteMeta | null = null;
 
-    prepareMeta() {
+    prepareMeta(metaFile) {
         this.navigationMeta = {
             noImport: true,
             dataFileName: "navigation.html"
         };
-
-        this.metaFile.files.push(this.navigationMeta);
+        metaFile.files.push(this.navigationMeta);
 
         this.indexMeta = {
             noImport: true,
             dataFileName: "index.html"
         };
-
-        this.metaFile.files.push(this.indexMeta);
+        metaFile.files.push(this.indexMeta);
 
         this.cssMeta = {
             noImport: true,
             dataFileName: "style.css"
         };
-
-        this.metaFile.files.push(this.cssMeta);
+        metaFile.files.push(this.cssMeta);
     }
 
     prepareContent(title: string, content: string | Buffer, noteMeta: NoteMeta): string | Buffer {
@@ -72,23 +69,23 @@ export default class HtmlExportProvider extends ZipExportProvider {
         }
     }
 
-    afterDone() {
+    afterDone(rootMeta: NoteMeta) {
         if (!this.navigationMeta || !this.indexMeta || !this.cssMeta) {
             throw new Error("Missing meta.");
         }
 
-        this.#saveNavigation(this.rootMeta, this.navigationMeta);
-        this.#saveIndex(this.rootMeta, this.indexMeta);
-        this.#saveCss(this.rootMeta, this.cssMeta);
+        this.#saveNavigation(rootMeta, this.navigationMeta);
+        this.#saveIndex(rootMeta, this.indexMeta);
+        this.#saveCss(rootMeta, this.cssMeta);
     }
 
-    #saveNavigationInner(meta: NoteMeta) {
+    #saveNavigationInner(rootMeta: NoteMeta, meta: NoteMeta) {
         let html = "<li>";
 
         const escapedTitle = escapeHtml(`${meta.prefix ? `${meta.prefix} - ` : ""}${meta.title}`);
 
         if (meta.dataFileName && meta.noteId) {
-            const targetUrl = this.getNoteTargetUrl(meta.noteId, this.rootMeta);
+            const targetUrl = this.getNoteTargetUrl(meta.noteId, rootMeta);
 
             html += `<a href="${targetUrl}" target="detail">${escapedTitle}</a>`;
         } else {
@@ -99,7 +96,7 @@ export default class HtmlExportProvider extends ZipExportProvider {
             html += "<ul>";
 
             for (const child of meta.children) {
-                html += this.#saveNavigationInner(child);
+                html += this.#saveNavigationInner(rootMeta, child);
             }
 
             html += "</ul>";
@@ -119,7 +116,7 @@ export default class HtmlExportProvider extends ZipExportProvider {
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <ul>${this.#saveNavigationInner(rootMeta)}</ul>
+        <ul>${this.#saveNavigationInner(rootMeta, rootMeta)}</ul>
     </body>
     </html>`;
         const prettyHtml = fullHtml.length < 100_000 ? html.prettyPrint(fullHtml, { indent_size: 2 }) : fullHtml;

@@ -1,5 +1,5 @@
 import { join } from "path";
-import NoteMeta from "../../meta/note_meta";
+import NoteMeta, { NoteMetaFile } from "../../meta/note_meta";
 import { ZipExportProvider } from "./abstract_provider";
 import { RESOURCE_DIR } from "../../resource_dir";
 import { getResourceDir, isDev } from "../../utils";
@@ -13,7 +13,7 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
     private assetsMeta: NoteMeta[] = [];
     private indexMeta: NoteMeta | null = null;
 
-    prepareMeta(): void {
+    prepareMeta(metaFile: NoteMetaFile): void {
         const assets = [
             "style.css",
             "script.js",
@@ -32,7 +32,7 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
                 dataFileName: asset
             };
             this.assetsMeta.push(assetMeta);
-            this.metaFile.files.push(assetMeta);
+            metaFile.files.push(assetMeta);
         }
 
         this.indexMeta = {
@@ -40,7 +40,7 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
             dataFileName: "index.html"
         };
 
-        this.metaFile.files.push(this.indexMeta);
+        metaFile.files.push(this.indexMeta);
     }
 
     prepareContent(title: string, content: string | Buffer, noteMeta: NoteMeta, note: BNote | undefined, branch: BBranch): string | Buffer {
@@ -58,18 +58,22 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
         return content;
     }
 
-    afterDone(): void {
-        this.#saveAssets(this.rootMeta, this.assetsMeta);
-        this.#saveIndex();
+    afterDone(rootMeta: NoteMeta): void {
+        this.#saveAssets(rootMeta, this.assetsMeta);
+        this.#saveIndex(rootMeta);
     }
 
-    #saveIndex() {
+    mapExtension(_type: string | null, _mime: string, _existingExtension: string, _format: string): string | null {
+        return "html";
+    }
+
+    #saveIndex(rootMeta: NoteMeta) {
         if (!this.indexMeta?.dataFileName) {
             return;
         }
 
         const note = this.branch.getNote();
-        const fullHtml = this.prepareContent(this.rootMeta.title ?? "", note.getContent(), this.rootMeta, note, this.branch);
+        const fullHtml = this.prepareContent(rootMeta.title ?? "", note.getContent(), rootMeta, note, this.branch);
         this.archive.append(fullHtml, { name: this.indexMeta.dataFileName });
     }
 
