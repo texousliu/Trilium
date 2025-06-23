@@ -85,6 +85,7 @@ const ALLOWED_OPTIONS = new Set<OptionNames>([
     "languages",
     "textNoteEditorType",
     "textNoteEditorMultilineToolbar",
+    "textNoteEmojiEnabled",
     "layoutOrientation",
     "backgroundEffects",
     "allowedHtmlTags",

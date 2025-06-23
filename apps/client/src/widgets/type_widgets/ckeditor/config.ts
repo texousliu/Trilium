@@ -179,7 +179,8 @@ export async function buildConfig(opts: BuildEditorOptions): Promise<EditorConfi
             allow: JSON.parse(options.get("allowedHtmlTags"))
         },
         // This value must be kept in sync with the language defined in webpack.config.js.
-        language: "en"
+        language: "en",
+        removePlugins: getDisabledPlugins()
     };
 
     // Set up content language.
@@ -230,4 +231,14 @@ function getLicenseKey() {
     }
 
     return premiumLicenseKey;
+}
+
+function getDisabledPlugins() {
+    let disabledPlugins: string[] = [];
+
+    if (options.get("textNoteEmojiEnabled") !== "true") {
+        disabledPlugins.push("Emoji");
+    }
+
+    return disabledPlugins;
 }
