@@ -1,21 +1,22 @@
 import { OptionMap } from "@triliumnext/commons";
 import OptionsWidget from "../options_widget";
+import { t } from "../../../../services/i18n";
 
 const TPL = /*html*/`
 <div class="options-section">
-    <h4>Features</h4>
+    <h4>${t("editorfeatures.title")}</h4>
 
     <div>
         <label class="tn-checkbox">
             <input type="checkbox" name="emoji-completion-enabled" />
-            Enable Emoji auto-completion
+            ${t("editorfeatures.emoji_completion_enabled")}
         </label>
     </div>
 
     <div>
         <label class="tn-checkbox">
             <input type="checkbox" name="note-completion-enabled" />
-            Enable note auto-completion
+            ${t("editorfeatures.note_completion_enabled")}
         </label>
     </div>
 </div>
