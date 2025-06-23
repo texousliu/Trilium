@@ -20,7 +20,7 @@ import type BBranch from "../../becca/entities/bbranch.js";
 import type { Response } from "express";
 import type { NoteMetaFile } from "../meta/note_meta.js";
 import HtmlExportProvider from "./zip/html.js";
-import { AdvancedExportOptions, ZipExportProvider, ZipExportProviderData } from "./zip/abstract_provider.js";
+import { AdvancedExportOptions, ZipExportProviderData } from "./zip/abstract_provider.js";
 import MarkdownExportProvider from "./zip/markdown.js";
 import ShareThemeExportProvider from "./zip/share_theme.js";
 import type BNote from "../../becca/entities/bnote.js";
@@ -35,6 +35,25 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
     });
 
     const noteIdToMeta: Record<string, NoteMeta> = {};
+
+    function buildProvider() {
+        const providerData: ZipExportProviderData = {
+            getNoteTargetUrl,
+            metaFile,
+            archive,
+            rootMeta: rootMeta!
+        };
+        switch (format) {
+            case "html":
+                return new HtmlExportProvider(providerData);
+            case "markdown":
+                return new MarkdownExportProvider(providerData);
+            case "share":
+                return new ShareThemeExportProvider(providerData);
+            default:
+                throw new Error();
+        }
+    }
 
     function getUniqueFilename(existingFileNames: Record<string, number>, fileName: string) {
         const lcFileName = fileName.toLowerCase();
@@ -388,26 +407,7 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
         files: [rootMeta]
     };
 
-    let provider: ZipExportProvider;
-    const providerData: ZipExportProviderData = {
-        getNoteTargetUrl,
-        metaFile,
-        archive,
-        rootMeta
-    };
-    switch (format) {
-        case "html":
-            provider = new HtmlExportProvider(providerData);
-            break;
-        case "markdown":
-            provider = new MarkdownExportProvider(providerData);
-            break;
-        case "share":
-            provider = new ShareThemeExportProvider(providerData);
-            break;
-        default:
-            throw new Error();
-    }
+    const provider= buildProvider();
 
     provider.prepareMeta();
 

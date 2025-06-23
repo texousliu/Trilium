@@ -35,13 +35,15 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
         }
     }
 
-    prepareContent(title: string, content: string | Buffer, noteMeta: NoteMeta, note: BNote, branch: BBranch): string | Buffer {
+    prepareContent(title: string, content: string | Buffer, noteMeta: NoteMeta, note: BNote | undefined, branch: BBranch): string | Buffer {
         if (!noteMeta?.notePath?.length) {
             throw new Error("Missing note path.");
         }
         const basePath = "../".repeat(noteMeta.notePath.length - 1);
 
-        content = renderNoteForExport(note, branch, basePath);
+        if (note) {
+            content = renderNoteForExport(note, branch, basePath);
+        }
 
         return content;
     }
