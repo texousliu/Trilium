@@ -1,7 +1,7 @@
 import { Archiver } from "archiver";
 import type { default as NoteMeta, NoteMetaFile } from "../../meta/note_meta.js";
 
-interface ZipExportProviderData {
+export interface ZipExportProviderData {
     getNoteTargetUrl: (targetNoteId: string, sourceMeta: NoteMeta) => string | null;
     metaFile: NoteMetaFile;
     rootMeta: NoteMeta;

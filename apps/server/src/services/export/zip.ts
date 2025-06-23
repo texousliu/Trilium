@@ -22,7 +22,8 @@ import type BBranch from "../../becca/entities/bbranch.js";
 import type { Response } from "express";
 import type { NoteMetaFile } from "../meta/note_meta.js";
 import HtmlExportProvider from "./zip/html.js";
-import { ZipExportProvider } from "./zip/abstract_provider.js";
+import { ZipExportProvider, ZipExportProviderData } from "./zip/abstract_provider.js";
+import MarkdownExportProvider from "./zip/markdown.js";
 
 type RewriteLinksFn = (content: string, noteMeta: NoteMeta) => string;
 
@@ -441,16 +442,19 @@ ${markdownContent}`;
     };
 
     let provider: ZipExportProvider;
+    const providerData: ZipExportProviderData = {
+        getNoteTargetUrl,
+        metaFile,
+        archive,
+        rootMeta
+    };
     switch (format) {
         case "html":
-            provider = new HtmlExportProvider({
-                getNoteTargetUrl,
-                metaFile,
-                archive,
-                rootMeta
-            });
+            provider = new HtmlExportProvider(providerData);
             break;
         case "markdown":
+            provider = new MarkdownExportProvider(providerData);
+            break;
         default:
             throw new Error();
     }
