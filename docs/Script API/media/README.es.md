@@ -1,8 +1,8 @@
-# TriliumNext Notes
+# Trilium Notes
 
 [English](./README.md) | [Chinese](./README-ZH_CN.md) | [Russian](./README.ru.md) | [Japanese](./README.ja.md) | [Italian](./README.it.md) | [Spanish](./README.es.md)
 
-TriliumNext Notes es una aplicación de toma de notas jerárquicas multi-plataforma y de código libre con un enfoque en la construcción de grandes bases de conocimiento personal.
+Trilium Notes es una aplicación de toma de notas jerárquicas multi-plataforma y de código libre con un enfoque en la construcción de grandes bases de conocimiento personal.
 
 Vea estas [capturas de pantalla](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) para un vistazo rápido:
 
@@ -92,7 +92,7 @@ npm run server:start
 ## 👏 Reconocimientos
 
 - [CKEditor 5](https://github.com/ckeditor/ckeditor5) - el mejor editor WYSIWYG en el mercado, equipo muy interactivo y atento
-- [FancyTree](https://github.com/mar10/fancytree) - biblioteca de árbol muy rica en funciones sin competencia real. TriliumNext Notes no sería lo mismo sin esta.
+- [FancyTree](https://github.com/mar10/fancytree) - biblioteca de árbol muy rica en funciones sin competencia real. Trilium Notes no sería lo mismo sin esta.
 - [CodeMirror](https://github.com/codemirror/CodeMirror) - editor de código con soporte para una gran cantidad de lenguajes
 - [jsPlumb](https://github.com/jsplumb/jsplumb) - biblioteca de conectividad visual sin competencia. Usado en [mapas de relación](https://triliumnext.github.io/Docs/Wiki/Relation-map) y [mapas de enlace](https://triliumnext.github.io/Docs/Wiki/Link-map)
 

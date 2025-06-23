@@ -1,5 +1,5 @@
+import { openDialog } from "../../services/dialog.js";
 import { t } from "../../services/i18n.js";
-import utils from "../../services/utils.js";
 import BasicWidget from "../basic_widget.js";
 import { Modal } from "bootstrap";
 
@@ -37,6 +37,6 @@ export default class PasswordNoteSetDialog extends BasicWidget {
     }
 
     showPasswordNotSetEvent() {
-        utils.openDialog(this.$widget);
+        openDialog(this.$widget);
     }
 }

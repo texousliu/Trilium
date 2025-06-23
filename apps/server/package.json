@@ -1,10 +1,10 @@
 {
   "name": "@triliumnext/server",
-  "version": "0.94.1",
+  "version": "0.95.0",
   "description": "The server-side component of TriliumNext, which exposes the client via the web, allows for sync and provides a REST API for both internal and external use.",
   "private": true,
   "dependencies": {
-    "better-sqlite3": "11.10.0"
+    "better-sqlite3": "12.0.0"
   },
   "devDependencies": {
     "@electron/remote": "2.1.2",
@@ -46,7 +46,7 @@
     "@triliumnext/turndown-plugin-gfm": "workspace:*",
     "archiver": "7.0.1",
     "async-mutex": "0.5.0",
-    "axios": "1.9.0",
+    "axios": "1.10.0",
     "bindings": "1.5.0",
     "chardet": "2.1.0",
     "cheerio": "1.1.0",
@@ -59,13 +59,13 @@
     "debounce": "2.2.0",
     "debug": "4.4.1",
     "ejs": "3.1.10",
-    "electron": "36.4.0",
+    "electron": "36.5.0",
     "electron-debug": "4.1.0",
     "electron-window-state": "5.0.3",
     "escape-html": "1.0.3",
     "express": "5.1.0",
     "express-openid-connect": "^2.17.1",
-    "express-rate-limit": "7.5.0",
+    "express-rate-limit": "7.5.1",
     "express-session": "1.18.1",
     "file-uri-to-path": "2.0.0",
     "fs-extra": "11.3.0",
@@ -88,7 +88,7 @@
     "multer": "2.0.1",
     "normalize-strings": "1.1.1",
     "ollama": "0.5.16",
-    "openai": "5.3.0",
+    "openai": "5.6.0",
     "rand-token": "1.0.1",
     "safe-compare": "1.1.4",
     "sanitize-filename": "1.6.3",
@@ -348,6 +348,12 @@
             }
           ]
         }
+      },
+      "test-build": {
+        "dependsOn": [
+          "build"
+        ],
+        "command": "vitest --config {projectRoot}/vitest.build.config.mts"
       }
     }
   },

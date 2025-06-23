@@ -23,7 +23,7 @@ jobs:
             shell: bash
             forge_platform: darwin
           - name: linux
-            image: ubuntu-latest
+            image: ubuntu-22.04
             shell: bash
             forge_platform: linux
           - name: windows

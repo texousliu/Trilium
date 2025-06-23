@@ -1,5 +1,4 @@
 import froca from "../services/froca.js";
-import bundleService from "../services/bundle.js";
 import RootCommandExecutor from "./root_command_executor.js";
 import Entrypoints, { type SqlExecuteResults } from "./entrypoints.js";
 import options from "../services/options.js";
@@ -281,6 +280,7 @@ export type CommandMappings = {
         buildIcon(name: string): NativeImage;
     };
     refreshTouchBar: CommandData;
+    reloadTextEditor: CommandData;
 };
 
 type EventMappings = {
@@ -469,6 +469,7 @@ export class AppContext extends Component {
 
         this.tabManager.loadTabs();
 
+        const bundleService = (await import("../services/bundle.js")).default;
         setTimeout(() => bundleService.executeStartupBundles(), 2000);
     }
 

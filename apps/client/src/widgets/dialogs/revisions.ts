@@ -6,7 +6,7 @@ import appContext from "../../components/app_context.js";
 import openService from "../../services/open.js";
 import protectedSessionHolder from "../../services/protected_session_holder.js";
 import BasicWidget from "../basic_widget.js";
-import dialogService from "../../services/dialog.js";
+import dialogService, { openDialog } from "../../services/dialog.js";
 import options from "../../services/options.js";
 import type FNote from "../../entities/fnote.js";
 import type { NoteType } from "../../entities/fnote.js";
@@ -182,7 +182,7 @@ export default class RevisionsDialog extends BasicWidget {
             return;
         }
 
-        utils.openDialog(this.$widget);
+        openDialog(this.$widget);
 
         await this.loadRevisions(noteId);
     }

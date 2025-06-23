@@ -1,8 +1,8 @@
-# TriliumNext Notes
+# Trilium Notes
 
 [English](./README.md) | [Chinese](./README-ZH_CN.md) | [Russian](./README.ru.md) | [Japanese](./README.ja.md) | [Italian](./README.it.md) | [Spanish](./README.es.md)
 
-TriliumNext Notes 是一个层次化的笔记应用程序，专注于建立大型个人知识库。请参阅[屏幕截图](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)以快速了解：
+Trilium Notes 是一个层次化的笔记应用程序，专注于建立大型个人知识库。请参阅[屏幕截图](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)以快速了解：
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="https://github.com/TriliumNext/Docs/blob/main/Wiki/images/screenshot.png?raw=true" alt="Trilium Screenshot" width="1000"></a>
 

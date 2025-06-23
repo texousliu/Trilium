@@ -1,20 +1,66 @@
 import { ALLOWED_PROTOCOLS } from "../../../services/link.js";
 import { MIME_TYPE_AUTO } from "@triliumnext/commons";
-import type { EditorConfig } from "@triliumnext/ckeditor5";
+import { buildExtraCommands, type EditorConfig, PREMIUM_PLUGINS } from "@triliumnext/ckeditor5";
 import { getHighlightJsNameForMime } from "../../../services/mime_types.js";
 import options from "../../../services/options.js";
 import { ensureMimeTypesForHighlighting, isSyntaxHighlightEnabled } from "../../../services/syntax_highlight.js";
-import utils from "../../../services/utils.js";
 import emojiDefinitionsUrl from "@triliumnext/ckeditor5/emoji_definitions/en.json?url";
 import { copyTextWithToast } from "../../../services/clipboard_ext.js";
+import getTemplates from "./snippets.js";
+import { t } from "../../../services/i18n.js";
+import { getMermaidConfig } from "../../../services/mermaid.js";
+import noteAutocompleteService, { type Suggestion } from "../../../services/note_autocomplete.js";
+import mimeTypesService from "../../../services/mime_types.js";
+import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
+import { buildToolbarConfig } from "./toolbar.js";
 
-const TEXT_FORMATTING_GROUP = {
-    label: "Text formatting",
-    icon: "text"
-};
+export const OPEN_SOURCE_LICENSE_KEY = "GPL";
 
-export function buildConfig(): EditorConfig {
-    return {
+export interface BuildEditorOptions {
+    forceGplLicense: boolean;
+    isClassicEditor: boolean;
+    contentLanguage: string | null;
+}
+
+export async function buildConfig(opts: BuildEditorOptions): Promise<EditorConfig> {
+    const licenseKey = (opts.forceGplLicense ? OPEN_SOURCE_LICENSE_KEY : getLicenseKey());
+    const hasPremiumLicense = (licenseKey !== OPEN_SOURCE_LICENSE_KEY);
+
+    const config: EditorConfig = {
+        licenseKey,
+        placeholder: t("editable_text.placeholder"),
+        mention: {
+            feeds: [
+                {
+                    marker: "@",
+                    feed: (queryText: string) => noteAutocompleteService.autocompleteSourceForCKEditor(queryText),
+                    itemRenderer: (item) => {
+                        const itemElement = document.createElement("button");
+
+                        itemElement.innerHTML = `${(item as Suggestion).highlightedNotePathTitle} `;
+
+                        return itemElement;
+                    },
+                    minimumCharacters: 0
+                }
+            ],
+        },
+        codeBlock: {
+            languages: buildListOfLanguages()
+        },
+        math: {
+            engine: "katex",
+            outputType: "span", // or script
+            lazyLoad: async () => {
+                (window as any).katex = (await import("../../../services/math.js")).default
+            },
+            forceOutputType: false, // forces output to use outputType
+            enablePreview: true // Enable preview view
+        },
+        mermaid: {
+            lazyLoad: async () => (await import("mermaid")).default, // FIXME
+            config: getMermaidConfig()
+        },
         image: {
             styles: {
                 options: [
@@ -121,147 +167,67 @@ export function buildConfig(): EditorConfig {
         clipboard: {
             copy: copyTextWithToast
         },
+        slashCommand: {
+            removeCommands: [],
+            dropdownLimit: Number.MAX_SAFE_INTEGER,
+            extraCommands: buildExtraCommands()
+        },
+        template: {
+            definitions: await getTemplates()
+        },
+        htmlSupport: {
+            allow: JSON.parse(options.get("allowedHtmlTags"))
+        },
         // This value must be kept in sync with the language defined in webpack.config.js.
         language: "en"
     };
-}
 
-export function buildToolbarConfig(isClassicToolbar: boolean) {
-    if (utils.isMobile()) {
-        return buildMobileToolbar();
-    } else if (isClassicToolbar) {
-        const multilineToolbar = utils.isDesktop() && options.get("textNoteEditorMultilineToolbar") === "true";
-        return buildClassicToolbar(multilineToolbar);
-    } else {
-        return buildFloatingToolbar();
-    }
-}
-
-export function buildMobileToolbar() {
-    const classicConfig = buildClassicToolbar(false);
-    const items: string[] = [];
-
-    for (const item of classicConfig.toolbar.items) {
-        if (typeof item === "object" && "items" in item) {
-            for (const subitem of item.items) {
-                items.push(subitem);
-            }
-        } else {
-            items.push(item);
+    // Set up content language.
+    const { contentLanguage } = opts;
+    if (contentLanguage) {
+        config.language = {
+            ui: (typeof config.language === "string" ? config.language : "en"),
+            content: contentLanguage
         }
     }
 
+    // Enable premium plugins.
+    if (hasPremiumLicense) {
+        config.extraPlugins = [
+            ...PREMIUM_PLUGINS
+        ];
+    }
+
     return {
-        ...classicConfig,
-        toolbar: {
-            ...classicConfig.toolbar,
-            items
-        }
+        ...config,
+        ...buildToolbarConfig(opts.isClassicEditor)
     };
 }
 
-export function buildClassicToolbar(multilineToolbar: boolean) {
-    // For nested toolbars, refer to https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/toolbar.html#grouping-toolbar-items-in-dropdowns-nested-toolbars.
-    return {
-        toolbar: {
-            items: [
-                "heading",
-                "fontSize",
-                "|",
-                "bold",
-                "italic",
-                {
-                    ...TEXT_FORMATTING_GROUP,
-                    items: ["underline", "strikethrough", "|", "superscript", "subscript", "|", "kbd"]
-                },
-                "|",
-                "fontColor",
-                "fontBackgroundColor",
-                "removeFormat",
-                "|",
-                "bulletedList",
-                "numberedList",
-                "todoList",
-                "|",
-                "blockQuote",
-                "admonition",
-                "insertTable",
-                "|",
-                "code",
-                "codeBlock",
-                "|",
-                "footnote",
-                {
-                    label: "Insert",
-                    icon: "plus",
-                    items: ["imageUpload", "|", "link", "bookmark", "internallink", "includeNote", "|", "specialCharacters", "emoji", "math", "mermaid", "horizontalLine", "pageBreak", "dateTime"]
-                },
-                "|",
-                "alignment",
-                "outdent",
-                "indent",
-                "|",
-                "markdownImport",
-                "cuttonote",
-                "findAndReplace"
-            ],
-            shouldNotGroupWhenFull: multilineToolbar
-        }
-    };
-}
+function buildListOfLanguages() {
+    const userLanguages = mimeTypesService
+        .getMimeTypes()
+        .filter((mt) => mt.enabled)
+        .map((mt) => ({
+            language: normalizeMimeTypeForCKEditor(mt.mime),
+            label: mt.title
+        }));
 
-export function buildFloatingToolbar() {
-    return {
-        toolbar: {
-            items: [
-                "fontSize",
-                "bold",
-                "italic",
-                "underline",
-                {
-                    ...TEXT_FORMATTING_GROUP,
-                    items: [ "strikethrough", "|", "superscript", "subscript", "|", "kbd" ]
-                },
-                "|",
-                "fontColor",
-                "fontBackgroundColor",
-                "|",
-                "code",
-                "link",
-                "bookmark",
-                "removeFormat",
-                "internallink",
-                "cuttonote"
-            ]
+    return [
+        {
+            language: mimeTypesService.MIME_TYPE_AUTO,
+            label: t("editable-text.auto-detect-language")
         },
+        ...userLanguages
+    ];
+}
 
-        blockToolbar: [
-            "heading",
-            "|",
-            "bulletedList",
-            "numberedList",
-            "todoList",
-            "|",
-            "blockQuote",
-            "admonition",
-            "codeBlock",
-            "insertTable",
-            "footnote",
-            {
-                label: "Insert",
-                icon: "plus",
-                items: ["link", "bookmark", "internallink", "includeNote", "|", "math", "mermaid", "horizontalLine", "pageBreak", "dateTime"]
-            },
-            "|",
-            "alignment",
-            "outdent",
-            "indent",
-            "|",
-            "imageUpload",
-            "markdownImport",
-            "specialCharacters",
-            "emoji",
-            "findAndReplace"
-        ]
-    };
+function getLicenseKey() {
+    const premiumLicenseKey = import.meta.env.VITE_CKEDITOR_KEY;
+    if (!premiumLicenseKey) {
+        logError("CKEditor license key is not set, premium features will not be available.");
+        return OPEN_SOURCE_LICENSE_KEY;
+    }
+
+    return premiumLicenseKey;
 }

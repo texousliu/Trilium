@@ -1,5 +1,4 @@
 import noteAutocompleteService from "../../services/note_autocomplete.js";
-import utils from "../../services/utils.js";
 import toastService from "../../services/toast.js";
 import froca from "../../services/froca.js";
 import branchService from "../../services/branches.js";
@@ -7,6 +6,7 @@ import treeService from "../../services/tree.js";
 import BasicWidget from "../basic_widget.js";
 import { t } from "../../services/i18n.js";
 import type { EventData } from "../../components/app_context.js";
+import { openDialog } from "../../services/dialog.js";
 
 const TPL = /*html*/`
 <div class="move-to-dialog modal mx-auto" tabindex="-1" role="dialog">
@@ -83,7 +83,7 @@ export default class MoveToDialog extends BasicWidget {
     async moveBranchIdsToEvent({ branchIds }: EventData<"moveBranchIdsTo">) {
         this.movedBranchIds = branchIds;
 
-        utils.openDialog(this.$widget);
+        openDialog(this.$widget);
 
         this.$noteAutoComplete.val("").trigger("focus");
 
