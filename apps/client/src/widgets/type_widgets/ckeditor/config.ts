@@ -236,8 +236,8 @@ function getLicenseKey() {
 function getDisabledPlugins() {
     let disabledPlugins: string[] = [];
 
-    if (options.get("textNoteEmojiEnabled") !== "true") {
-        disabledPlugins.push("Emoji");
+    if (options.get("textNoteEmojiCompletionEnabled") !== "true") {
+        disabledPlugins.push("EmojiMention");
     }
 
     return disabledPlugins;

@@ -118,7 +118,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     editedNotesOpenInRibbon: boolean;
     codeBlockWordWrap: boolean;
     textNoteEditorMultilineToolbar: boolean;
-    textNoteEmojiEnabled: boolean;
+    textNoteEmojiCompletionEnabled: boolean;
     backgroundEffects: boolean;
 
     // Share settings

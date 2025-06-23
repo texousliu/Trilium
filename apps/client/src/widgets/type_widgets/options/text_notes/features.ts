@@ -6,25 +6,25 @@ const TPL = /*html*/`
     <h4>Features</h4>
 
     <label class="tn-checkbox">
-        <input type="checkbox" name="emoji-enabled" />
-        Enable Emoji support and auto-completion
+        <input type="checkbox" name="emoji-completion-enabled" />
+        Enable Emoji auto-completion
     </label>
 </div>
 `;
 
 export default class EditorFeaturesOptions extends OptionsWidget {
 
-    private $emojiEnabledCheckbox!: JQuery<HTMLElement>;
+    private $emojiCompletionEnabledCheckbox!: JQuery<HTMLElement>;
 
     doRender() {
         this.$widget = $(TPL);
 
-        this.$emojiEnabledCheckbox = this.$widget.find(`input[name="emoji-enabled"]`);
-        this.$emojiEnabledCheckbox.on("change", () => this.updateCheckboxOption("textNoteEmojiEnabled", this.$emojiEnabledCheckbox))
+        this.$emojiCompletionEnabledCheckbox = this.$widget.find(`input[name="emoji-completion-enabled"]`);
+        this.$emojiCompletionEnabledCheckbox.on("change", () => this.updateCheckboxOption("textNoteEmojiCompletionEnabled", this.$emojiCompletionEnabledCheckbox))
     }
 
     optionsLoaded(options: OptionMap) {
-        this.setCheckboxState(this.$emojiEnabledCheckbox, options.textNoteEmojiEnabled);
+        this.setCheckboxState(this.$emojiCompletionEnabledCheckbox, options.textNoteEmojiCompletionEnabled);
     }
 
 }
