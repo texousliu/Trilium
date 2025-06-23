@@ -35,6 +35,9 @@
   ],
   "references": [
     {
+      "path": "../../packages/ckeditor5/tsconfig.lib.json"
+    },
+    {
       "path": "../../packages/turndown-plugin-gfm/tsconfig.lib.json"
     },
     {
