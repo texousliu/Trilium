@@ -6,7 +6,7 @@ import { initializeTranslations } from "@triliumnext/server/src/services/i18n.js
 import debounce from "@triliumnext/client/src/services/debounce.js";
 import { extractZip, importData, initializeDatabase, startElectron } from "./utils.js";
 import cls from "@triliumnext/server/src/services/cls.js";
-import type { AdvancedExportOptions } from "@triliumnext/server/src/services/export/zip.js";
+import type { AdvancedExportOptions } from "@triliumnext/server/src/services/export/zip/abstract_provider.js";
 import { parseNoteMetaFile } from "@triliumnext/server/src/services/in_app_help.js";
 import type NoteMeta from "@triliumnext/server/src/services/meta/note_meta.js";
 
