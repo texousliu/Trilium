@@ -35,6 +35,7 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
     });
 
     const noteIdToMeta: Record<string, NoteMeta> = {};
+    const rewriteFn = (zipExportOptions?.customRewriteLinks ? zipExportOptions?.customRewriteLinks(rewriteLinks, getNoteTargetUrl) : rewriteLinks);
 
     function buildProvider() {
         const providerData: ZipExportProviderData = {
@@ -42,7 +43,8 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
             metaFile,
             archive,
             rootMeta: rootMeta!,
-            branch
+            branch,
+            rewriteFn
         };
         switch (format) {
             case "html":
@@ -275,8 +277,6 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
         return url;
     }
 
-    const rewriteFn = (zipExportOptions?.customRewriteLinks ? zipExportOptions?.customRewriteLinks(rewriteLinks, getNoteTargetUrl) : rewriteLinks);
-
     function rewriteLinks(content: string, noteMeta: NoteMeta): string {
         content = content.replace(/src="[^"]*api\/images\/([a-zA-Z0-9_]+)\/[^"]*"/g, (match, targetNoteId) => {
             const url = getNoteTargetUrl(targetNoteId, noteMeta);
@@ -325,9 +325,6 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
         }
 
         content = provider.prepareContent(title, content, noteMeta, note, branch);
-        if (isText) {
-            content = rewriteFn(content as string, noteMeta);
-        }
 
         return content;
     }

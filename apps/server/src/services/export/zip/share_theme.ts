@@ -51,6 +51,7 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
 
         if (note) {
             content = renderNoteForExport(note, branch, basePath);
+            content = this.rewriteFn(content, noteMeta);
         }
 
         return content;

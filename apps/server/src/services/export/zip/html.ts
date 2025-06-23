@@ -62,7 +62,11 @@ export default class HtmlExportProvider extends ZipExportProvider {
 </html>`;
             }
 
-            return content.length < 100_000 ? html.prettyPrint(content, { indent_size: 2 }) : content;
+            if (content.length < 100_000) {
+                content = html.prettyPrint(content, { indent_size: 2 })
+            }
+            content = this.rewriteFn(content as string, noteMeta);
+            return content;
         } else {
             return content;
         }

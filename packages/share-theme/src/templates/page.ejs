@@ -137,7 +137,7 @@ content = content.replaceAll(headingRe, (...match) => {
                         const action = note.type === "book" ? "getChildNotes" : "getVisibleChildNotes";
                         for (const childNote of note[action]()) {
                             const isExternalLink = childNote.hasLabel("shareExternal") || childNote.hasLabel("shareExternalLink");
-                            const linkHref = isExternalLink ? childNote.getLabelValue("shareExternal") ?? childNote.getLabelValue("shareExternalLink") : `./${childNote.shareId}`;
+                            const linkHref = isExternalLink ? childNote.getLabelValue("shareExternal") ?? childNote.getLabelValue("shareExternalLink") : `./${childNote.shareId ?? "#root/" + childNote.noteId}`;
                             const target = isExternalLink ? ` target="_blank" rel="noopener noreferrer"` : "";
                         %>
                             <li>

@@ -28,6 +28,7 @@ export interface ZipExportProviderData {
     rootMeta: NoteMeta;
     archive: Archiver;
     zipExportOptions?: AdvancedExportOptions;
+    rewriteFn: RewriteLinksFn;
 }
 
 export abstract class ZipExportProvider {
@@ -37,6 +38,7 @@ export abstract class ZipExportProvider {
     rootMeta: NoteMeta;
     archive: Archiver;
     zipExportOptions?: AdvancedExportOptions;
+    rewriteFn: RewriteLinksFn;
 
     constructor(data: ZipExportProviderData) {
         this.branch = data.branch;
@@ -45,6 +47,7 @@ export abstract class ZipExportProvider {
         this.rootMeta = data.rootMeta;
         this.archive = data.archive;
         this.zipExportOptions = data.zipExportOptions;
+        this.rewriteFn = data.rewriteFn;
     }
 
     abstract prepareMeta(): void;

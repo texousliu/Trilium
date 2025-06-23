@@ -15,6 +15,7 @@ export default class MarkdownExportProvider extends ZipExportProvider {
 ${markdownContent}`;
             }
 
+            markdownContent = this.rewriteFn(markdownContent, noteMeta);
             return markdownContent;
         } else {
             return content;
