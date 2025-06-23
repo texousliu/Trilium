@@ -2,11 +2,11 @@
 
 import html from "html";
 import dateUtils from "../date_utils.js";
-import path, { join } from "path";
+import path from "path";
 import mimeTypes from "mime-types";
 import mdService from "./markdown.js";
 import packageInfo from "../../../package.json" with { type: "json" };
-import { getContentDisposition, escapeHtml, getResourceDir, isDev } from "../utils.js";
+import { getContentDisposition, escapeHtml } from "../utils.js";
 import protectedSessionService from "../protected_session.js";
 import sanitize from "sanitize-filename";
 import fs from "fs";
@@ -19,12 +19,10 @@ import type NoteMeta from "../meta/note_meta.js";
 import type AttachmentMeta from "../meta/attachment_meta.js";
 import type AttributeMeta from "../meta/attribute_meta.js";
 import type BBranch from "../../becca/entities/bbranch.js";
-import type BNote from "../../becca/entities/bnote.js";
 import type { Response } from "express";
 import type { NoteMetaFile } from "../meta/note_meta.js";
-//import cssContent from "@triliumnext/ckeditor5/content.css";
-import { renderNoteForExport } from "../../share/content_renderer.js";
-import { RESOURCE_DIR } from "../resource_dir.js";
+import HtmlExportProvider from "./zip/html.js";
+import { ZipExportProvider } from "./zip/abstract_provider.js";
 
 type RewriteLinksFn = (content: string, noteMeta: NoteMeta) => string;
 
@@ -317,7 +315,7 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
         }
     }
 
-    function prepareContent(note: BNote | undefined, title: string, content: string | Buffer, noteMeta: NoteMeta): string | Buffer {
+    function prepareContent(title: string, content: string | Buffer, noteMeta: NoteMeta): string | Buffer {
         if (["html", "markdown"].includes(noteMeta?.format || "")) {
             content = content.toString();
             content = rewriteFn(content, noteMeta);
@@ -329,18 +327,11 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
                     throw new Error("Missing note path.");
                 }
 
-                const basePath = "../".repeat(noteMeta.notePath.length - 1);
+                const cssUrl = `${"../".repeat(noteMeta.notePath.length - 1)}style.css`;
                 const htmlTitle = escapeHtml(title);
 
-                if (note) {
-                    content = renderNoteForExport(note, branch, basePath);
-
-                    // TODO: Fix double rewrite.
-                    content = rewriteFn(content, noteMeta);
-                } else {
-                    const cssUrl = basePath + "style.css";
-                    // <base> element will make sure external links are openable - https://github.com/zadam/trilium/issues/1289#issuecomment-704066809
-                    content = `<html>
+                // <base> element will make sure external links are openable - https://github.com/zadam/trilium/issues/1289#issuecomment-704066809
+                content = `<html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -356,7 +347,6 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
   </div>
 </body>
 </html>`;
-                }
             }
 
             return content.length < 100_000 ? html.prettyPrint(content, { indent_size: 2 }) : content;
@@ -386,7 +376,7 @@ ${markdownContent}`;
 
             let content: string | Buffer = `<p>This is a clone of a note. Go to its <a href="${targetUrl}">primary location</a>.</p>`;
 
-            content = prepareContent(undefined, noteMeta.title, content, noteMeta);
+            content = prepareContent(noteMeta.title, content, noteMeta);
 
             archive.append(content, { name: filePathPrefix + noteMeta.dataFileName });
 
@@ -402,7 +392,7 @@ ${markdownContent}`;
         }
 
         if (noteMeta.dataFileName) {
-            const content = prepareContent(note, noteMeta.title, note.getContent(), noteMeta);
+            const content = prepareContent(noteMeta.title, note.getContent(), noteMeta);
 
             archive.append(content, {
                 name: filePathPrefix + noteMeta.dataFileName,
@@ -438,97 +428,6 @@ ${markdownContent}`;
         }
     }
 
-    function saveNavigation(rootMeta: NoteMeta, navigationMeta: NoteMeta) {
-        if (!navigationMeta.dataFileName) {
-            return;
-        }
-
-        function saveNavigationInner(meta: NoteMeta) {
-            let html = "<li>";
-
-            const escapedTitle = escapeHtml(`${meta.prefix ? `${meta.prefix} - ` : ""}${meta.title}`);
-
-            if (meta.dataFileName && meta.noteId) {
-                const targetUrl = getNoteTargetUrl(meta.noteId, rootMeta);
-
-                html += `<a href="${targetUrl}" target="detail">${escapedTitle}</a>`;
-            } else {
-                html += escapedTitle;
-            }
-
-            if (meta.children && meta.children.length > 0) {
-                html += "<ul>";
-
-                for (const child of meta.children) {
-                    html += saveNavigationInner(child);
-                }
-
-                html += "</ul>";
-            }
-
-            return `${html}</li>`;
-        }
-
-        const fullHtml = `<html>
-<head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <ul>${saveNavigationInner(rootMeta)}</ul>
-</body>
-</html>`;
-        const prettyHtml = fullHtml.length < 100_000 ? html.prettyPrint(fullHtml, { indent_size: 2 }) : fullHtml;
-
-        archive.append(prettyHtml, { name: navigationMeta.dataFileName });
-    }
-
-    function saveIndex(rootMeta: NoteMeta, indexMeta: NoteMeta) {
-        let firstNonEmptyNote;
-        let curMeta = rootMeta;
-
-        if (!indexMeta.dataFileName) {
-            return;
-        }
-
-        while (!firstNonEmptyNote) {
-            if (curMeta.dataFileName && curMeta.noteId) {
-                firstNonEmptyNote = getNoteTargetUrl(curMeta.noteId, rootMeta);
-            }
-
-            if (curMeta.children && curMeta.children.length > 0) {
-                curMeta = curMeta.children[0];
-            } else {
-                break;
-            }
-        }
-
-        const fullHtml = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<frameset cols="25%,75%">
-    <frame name="navigation" src="navigation.html">
-    <frame name="detail" src="${firstNonEmptyNote}">
-</frameset>
-</html>`;
-
-        archive.append(fullHtml, { name: indexMeta.dataFileName });
-    }
-
-    function saveAssets(rootMeta: NoteMeta, assetsMeta: NoteMeta[]) {
-        for (const assetMeta of assetsMeta) {
-            if (!assetMeta.dataFileName) {
-                continue;
-            }
-
-            let cssContent = getShareThemeAssets(assetMeta.dataFileName);
-            archive.append(cssContent, { name: assetMeta.dataFileName });
-        }
-    }
-
     const existingFileNames: Record<string, number> = format === "html" ? { navigation: 0, index: 1 } : {};
     const rootMeta = createNoteMeta(branch, { notePath: [] }, existingFileNames);
     if (!rootMeta) {
@@ -541,46 +440,22 @@ ${markdownContent}`;
         files: [rootMeta]
     };
 
-    let navigationMeta: NoteMeta | null = null;
-    let indexMeta: NoteMeta | null = null;
-    let assetsMeta: NoteMeta[] = [];
-
-    if (format === "html") {
-        navigationMeta = {
-            noImport: true,
-            dataFileName: "navigation.html"
-        };
-
-        metaFile.files.push(navigationMeta);
-
-        indexMeta = {
-            noImport: true,
-            dataFileName: "index.html"
-        };
-
-        metaFile.files.push(indexMeta);
-
-        const assets = [
-            "style.css",
-            "script.js",
-            "boxicons.css",
-            "boxicons.eot",
-            "boxicons.woff2",
-            "boxicons.woff",
-            "boxicons.ttf",
-            "boxicons.svg",
-            "icon-color.svg"
-        ];
-
-        for (const asset of assets) {
-            const assetMeta = {
-                noImport: true,
-                dataFileName: asset
-            };
-            assetsMeta.push(assetMeta);
-            metaFile.files.push(assetMeta);
-        }
+    let provider: ZipExportProvider;
+    switch (format) {
+        case "html":
+            provider = new HtmlExportProvider({
+                getNoteTargetUrl,
+                metaFile,
+                archive,
+                rootMeta
+            });
+            break;
+        case "markdown":
+        default:
+            throw new Error();
     }
+
+    provider.prepareMeta();
 
     for (const noteMeta of Object.values(noteIdToMeta)) {
         // filter out relations which are not inside this export
@@ -612,15 +487,7 @@ ${markdownContent}`;
 
     saveNote(rootMeta, "");
 
-    if (format === "html") {
-        if (!navigationMeta || !indexMeta || !assetsMeta) {
-            throw new Error("Missing meta.");
-        }
-
-        saveNavigation(rootMeta, navigationMeta);
-        saveIndex(rootMeta, indexMeta);
-        saveAssets(rootMeta, assetsMeta);
-    }
+    provider.afterDone();
 
     const note = branch.getNote();
     const zipFileName = `${branch.prefix ? `${branch.prefix} - ` : ""}${note.getTitleOrProtected()}.zip`;
@@ -649,28 +516,6 @@ async function exportToZipFile(noteId: string, format: "markdown" | "html", zipF
     await exportToZip(taskContext, note.getParentBranches()[0], format, fileOutputStream, false, zipExportOptions);
 
     log.info(`Exported '${noteId}' with format '${format}' to '${zipFilePath}'`);
-}
-
-function getShareThemeAssets(nameWithExtension: string) {
-    // Rename share.css to style.css.
-    if (nameWithExtension === "style.css") {
-        nameWithExtension = "share.css";
-    } else if (nameWithExtension === "script.js") {
-        nameWithExtension = "share.js";
-    }
-
-    let path: string | undefined;
-    if (nameWithExtension === "icon-color.svg") {
-        path = join(RESOURCE_DIR, "images", nameWithExtension);
-    } else if (isDev) {
-        path = join(getResourceDir(), "..", "..", "client", "dist", "src", nameWithExtension);
-    }
-
-    if (!path) {
-        throw new Error("Not yet defined.");
-    }
-
-    return fs.readFileSync(path);
 }
 
 export default {
