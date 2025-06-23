@@ -16,7 +16,7 @@ import ValidationError from "../../errors/validation_error.js";
 import type NoteMeta from "../meta/note_meta.js";
 import type AttachmentMeta from "../meta/attachment_meta.js";
 import type AttributeMeta from "../meta/attribute_meta.js";
-import type BBranch from "../../becca/entities/bbranch.js";
+import BBranch from "../../becca/entities/bbranch.js";
 import type { Response } from "express";
 import type { NoteMetaFile } from "../meta/note_meta.js";
 import HtmlExportProvider from "./zip/html.js";
@@ -41,7 +41,8 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
             getNoteTargetUrl,
             metaFile,
             archive,
-            rootMeta: rootMeta!
+            rootMeta: rootMeta!,
+            branch
         };
         switch (format) {
             case "html":

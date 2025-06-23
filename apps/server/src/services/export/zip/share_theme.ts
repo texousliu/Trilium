@@ -11,6 +11,7 @@ import type BBranch from "../../../becca/entities/bbranch.js";
 export default class ShareThemeExportProvider extends ZipExportProvider {
 
     private assetsMeta: NoteMeta[] = [];
+    private indexMeta: NoteMeta | null = null;
 
     prepareMeta(): void {
         const assets = [
@@ -33,6 +34,13 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
             this.assetsMeta.push(assetMeta);
             this.metaFile.files.push(assetMeta);
         }
+
+        this.indexMeta = {
+            noImport: true,
+            dataFileName: "index.html"
+        };
+
+        this.metaFile.files.push(this.indexMeta);
     }
 
     prepareContent(title: string, content: string | Buffer, noteMeta: NoteMeta, note: BNote | undefined, branch: BBranch): string | Buffer {
@@ -50,6 +58,17 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
 
     afterDone(): void {
         this.#saveAssets(this.rootMeta, this.assetsMeta);
+        this.#saveIndex();
+    }
+
+    #saveIndex() {
+        if (!this.indexMeta?.dataFileName) {
+            return;
+        }
+
+        const note = this.branch.getNote();
+        const fullHtml = this.prepareContent(this.rootMeta.title ?? "", note.getContent(), this.rootMeta, note, this.branch);
+        this.archive.append(fullHtml, { name: this.indexMeta.dataFileName });
     }
 
     #saveAssets(rootMeta: NoteMeta, assetsMeta: NoteMeta[]) {

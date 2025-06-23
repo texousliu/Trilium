@@ -22,6 +22,7 @@ export interface AdvancedExportOptions {
 }
 
 export interface ZipExportProviderData {
+    branch: BBranch;
     getNoteTargetUrl: (targetNoteId: string, sourceMeta: NoteMeta) => string | null;
     metaFile: NoteMetaFile;
     rootMeta: NoteMeta;
@@ -30,7 +31,7 @@ export interface ZipExportProviderData {
 }
 
 export abstract class ZipExportProvider {
-
+    branch: BBranch;
     metaFile: NoteMetaFile;
     getNoteTargetUrl: (targetNoteId: string, sourceMeta: NoteMeta) => string | null;
     rootMeta: NoteMeta;
@@ -38,6 +39,7 @@ export abstract class ZipExportProvider {
     zipExportOptions?: AdvancedExportOptions;
 
     constructor(data: ZipExportProviderData) {
+        this.branch = data.branch;
         this.metaFile = data.metaFile;
         this.getNoteTargetUrl = data.getNoteTargetUrl;
         this.rootMeta = data.rootMeta;
