@@ -18,6 +18,7 @@ import { readFileSync } from "fs";
 
 const shareAdjustedAssetPath = isDev ? assetPath : `../${assetPath}`;
 const shareAdjustedAppPath = isDev ? app_path : `../${app_path}`;
+const templateCache: Map<string, string> = new Map();
 
 /**
  * Represents the output of the content renderer.
@@ -194,7 +195,14 @@ function renderNoteContentInternal(note: SNote | BNote, renderArgs: RenderArgs) 
 }
 
 function readTemplate(path: string) {
-    return readFileSync(path, "utf-8");
+    const cachedTemplate = templateCache.get(path);
+    if (cachedTemplate) {
+        return cachedTemplate;
+    }
+
+    const templateString = readFileSync(path, "utf-8");
+    templateCache.set(path, templateString);
+    return templateString;
 }
 
 function getContent(note: SNote | BNote) {
