@@ -65,10 +65,6 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
         this.#saveIndex(rootMeta);
     }
 
-    mapExtension(_type: string | null, _mime: string, _existingExtension: string, _format: string): string | null {
-        return "html";
-    }
-
     #saveIndex(rootMeta: NoteMeta) {
         if (!this.indexMeta?.dataFileName) {
             return;

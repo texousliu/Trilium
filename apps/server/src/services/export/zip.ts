@@ -19,12 +19,12 @@ import BBranch from "../../becca/entities/bbranch.js";
 import type { Response } from "express";
 import type { NoteMetaFile } from "../meta/note_meta.js";
 import HtmlExportProvider from "./zip/html.js";
-import { AdvancedExportOptions, ZipExportProviderData } from "./zip/abstract_provider.js";
+import { AdvancedExportOptions, type ExportFormat, ZipExportProviderData } from "./zip/abstract_provider.js";
 import MarkdownExportProvider from "./zip/markdown.js";
 import ShareThemeExportProvider from "./zip/share_theme.js";
 import type BNote from "../../becca/entities/bnote.js";
 
-async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "html" | "markdown" | "share", res: Response | fs.WriteStream, setHeaders = true, zipExportOptions?: AdvancedExportOptions) {
+async function exportToZip(taskContext: TaskContext, branch: BBranch, format: ExportFormat, res: Response | fs.WriteStream, setHeaders = true, zipExportOptions?: AdvancedExportOptions) {
     if (!["html", "markdown", "share"].includes(format)) {
         throw new ValidationError(`Only 'html' and 'markdown' allowed as export format, '${format}' given`);
     }
@@ -432,7 +432,7 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
     taskContext.taskSucceeded();
 }
 
-async function exportToZipFile(noteId: string, format: "markdown" | "html", zipFilePath: string, zipExportOptions?: AdvancedExportOptions) {
+async function exportToZipFile(noteId: string, format: ExportFormat, zipFilePath: string, zipExportOptions?: AdvancedExportOptions) {
     const fileOutputStream = fs.createWriteStream(zipFilePath);
     const taskContext = new TaskContext("no-progress-reporting");
 

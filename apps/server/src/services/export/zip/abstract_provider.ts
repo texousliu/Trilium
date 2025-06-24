@@ -6,6 +6,8 @@ import mimeTypes from "mime-types";
 
 type RewriteLinksFn = (content: string, noteMeta: NoteMeta) => string;
 
+export type ExportFormat = "html" | "markdown" | "share";
+
 export interface AdvancedExportOptions {
     /**
      * If `true`, then only the note's content will be kept. If `false` (default), then each page will have its own <html> template.
@@ -49,7 +51,7 @@ export abstract class ZipExportProvider {
     abstract prepareContent(title: string, content: string | Buffer, noteMeta: NoteMeta, note: BNote | undefined, branch: BBranch): string | Buffer;
     abstract afterDone(rootMeta: NoteMeta): void;
 
-    mapExtension(type: string | null, mime: string, existingExtension: string, format: string) {
+    mapExtension(type: string | null, mime: string, existingExtension: string, format: ExportFormat) {
         // the following two are handled specifically since we always want to have these extensions no matter the automatic detection
         // and/or existing detected extensions in the note name
         if (type === "text" && format === "markdown") {
