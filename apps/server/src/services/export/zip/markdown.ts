@@ -1,5 +1,5 @@
 import NoteMeta from "../../meta/note_meta"
-import { ZipExportProvider } from "./abstract_provider"
+import { ZipExportProvider } from "./abstract_provider.js"
 import mdService from "../markdown.js";
 
 export default class MarkdownExportProvider extends ZipExportProvider {
