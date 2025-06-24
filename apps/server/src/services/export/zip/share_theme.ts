@@ -1,6 +1,6 @@
 import { join } from "path";
 import NoteMeta, { NoteMetaFile } from "../../meta/note_meta";
-import { ZipExportProvider } from "./abstract_provider.js";
+import { ExportFormat, ZipExportProvider } from "./abstract_provider.js";
 import { RESOURCE_DIR } from "../../resource_dir";
 import { getResourceDir, isDev } from "../../utils";
 import fs from "fs";
@@ -63,6 +63,14 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
     afterDone(rootMeta: NoteMeta): void {
         this.#saveAssets(rootMeta, this.assetsMeta);
         this.#saveIndex(rootMeta);
+    }
+
+    mapExtension(type: string | null, mime: string, existingExtension: string, format: ExportFormat): string | null {
+        if (mime.startsWith("image/")) {
+            return null;
+        }
+
+        return "html";
     }
 
     #saveIndex(rootMeta: NoteMeta) {

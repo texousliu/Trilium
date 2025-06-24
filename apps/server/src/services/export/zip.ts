@@ -23,6 +23,7 @@ import { AdvancedExportOptions, type ExportFormat, ZipExportProviderData } from 
 import MarkdownExportProvider from "./zip/markdown.js";
 import ShareThemeExportProvider from "./zip/share_theme.js";
 import type BNote from "../../becca/entities/bnote.js";
+import { NoteType } from "@triliumnext/commons";
 
 async function exportToZip(taskContext: TaskContext, branch: BBranch, format: ExportFormat, res: Response | fs.WriteStream, setHeaders = true, zipExportOptions?: AdvancedExportOptions) {
     if (!["html", "markdown", "share"].includes(format)) {
@@ -77,7 +78,7 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: Ex
         }
     }
 
-    function getDataFileName(type: string | null, mime: string, baseFileName: string, existingFileNames: Record<string, number>): string {
+    function getDataFileName(type: NoteType | null, mime: string, baseFileName: string, existingFileNames: Record<string, number>): string {
         let fileName = baseFileName.trim();
 
         // Crop fileName to avoid its length exceeding 30 and prevent cutting into the extension.
