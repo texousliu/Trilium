@@ -126,7 +126,8 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: Ex
         const notePath = parentMeta.notePath.concat([note.noteId]);
 
         if (note.noteId in noteIdToMeta) {
-            const fileName = getUniqueFilename(existingFileNames, `${baseFileName}.clone.${format === "html" ? "html" : "md"}`);
+            const extension = provider.mapExtension("text", "text/html", "", format);
+            const fileName = getUniqueFilename(existingFileNames, `${baseFileName}.clone.${extension}`);
 
             const meta: NoteMeta = {
                 isClone: true,
