@@ -61,7 +61,7 @@ function getSharedSubTreeRoot(note: SNote | BNote | undefined): Subroot {
     return getSharedSubTreeRoot(parentBranch.getParentNote());
 }
 
-export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath: string) {
+export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath: string, ancestors: string[]) {
     const subRoot: Subroot = {
         branch: parentBranch,
         note: parentBranch.getNote()
@@ -69,7 +69,7 @@ export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath
 
     return renderNoteContentInternal(note, {
         subRoot,
-        rootNoteId: note.getParentNotes()[0].noteId,
+        rootNoteId: parentBranch.noteId,
         cssToLoad: [
             `${basePath}style.css`,
             `${basePath}boxicons.css`
@@ -77,12 +77,21 @@ export function renderNoteForExport(note: BNote, parentBranch: BBranch, basePath
         jsToLoad: [
             `${basePath}script.js`
         ],
-        logoUrl: `${basePath}icon-color.svg`
+        logoUrl: `${basePath}icon-color.svg`,
+        ancestors
     });
 }
 
 export function renderNoteContent(note: SNote) {
     const subRoot = getSharedSubTreeRoot(note);
+
+    const ancestors: string[] = [];
+    let notePointer = note;
+    while (notePointer.parents[0].noteId !== subRoot.note?.noteId) {
+        const pointerParent = notePointer.parents[0];
+        ancestors.push(pointerParent.noteId);
+        notePointer = pointerParent;
+    }
 
     // Determine CSS to load.
     const cssToLoad: string[] = [];
@@ -110,7 +119,8 @@ export function renderNoteContent(note: SNote) {
         rootNoteId: "_share",
         cssToLoad,
         jsToLoad,
-        logoUrl
+        logoUrl,
+        ancestors
     });
 }
 
@@ -120,6 +130,7 @@ interface RenderArgs {
     cssToLoad: string[];
     jsToLoad: string[];
     logoUrl: string;
+    ancestors: string[];
 }
 
 function renderNoteContentInternal(note: SNote | BNote, renderArgs: RenderArgs) {

@@ -137,6 +137,7 @@ function register(router: Router) {
 
             return;
         }
+
         res.send(renderNoteContent(note));
     }
 

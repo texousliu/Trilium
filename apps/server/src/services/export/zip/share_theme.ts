@@ -1,6 +1,6 @@
 import { join } from "path";
 import NoteMeta, { NoteMetaFile } from "../../meta/note_meta";
-import { ZipExportProvider } from "./abstract_provider";
+import { ZipExportProvider } from "./abstract_provider.js";
 import { RESOURCE_DIR } from "../../resource_dir";
 import { getResourceDir, isDev } from "../../utils";
 import fs from "fs";
@@ -50,7 +50,7 @@ export default class ShareThemeExportProvider extends ZipExportProvider {
         const basePath = "../".repeat(noteMeta.notePath.length - 1);
 
         if (note) {
-            content = renderNoteForExport(note, branch, basePath);
+            content = renderNoteForExport(note, branch, basePath, noteMeta.notePath.slice(0, -1));
             content = content.replace(/href="[^"]*\.\/([a-zA-Z0-9_\/]{12})[^"]*"/g, "href=\"#root/$1\"");
             content = this.rewriteFn(content, noteMeta);
         }

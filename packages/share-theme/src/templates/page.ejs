@@ -97,16 +97,7 @@ content = content.replaceAll(headingRe, (...match) => {
             </div>
         <% if (hasTree) { %>
             <nav id="menu">
-                <%
-                const ancestors = [];
-                let notePointer = note;
-                while (notePointer.parents[0].noteId !== rootNoteId) {
-                    const pointerParent = notePointer.parents[0];
-                    ancestors.push(pointerParent.noteId);
-                    notePointer = pointerParent;
-                }
-                %>
-                <%- include("tree_item", {note: subRoot.note, activeNote: note, subRoot: subRoot, ancestors: ancestors}) %>
+                <%- include("tree_item", {note: subRoot.note, activeNote: note, subRoot: subRoot, ancestors}) %>
             </nav>
         <% } %>   
         </div>
