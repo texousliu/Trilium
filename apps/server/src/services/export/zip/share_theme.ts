@@ -105,10 +105,8 @@ function getShareThemeAssets(nameWithExtension: string) {
         path = join(RESOURCE_DIR, "images", nameWithExtension);
     } else if (isDev) {
         path = join(getResourceDir(), "..", "..", "client", "dist", "src", nameWithExtension);
-    }
-
-    if (!path) {
-        throw new Error("Not yet defined.");
+    } else {
+        path = join(getResourceDir(), "public", "src", nameWithExtension);
     }
 
     return fs.readFileSync(path);
