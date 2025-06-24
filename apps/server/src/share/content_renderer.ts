@@ -88,8 +88,11 @@ export function renderNoteContent(note: SNote) {
 
     const ancestors: string[] = [];
     let notePointer = note;
-    while (notePointer.parents[0].noteId !== subRoot.note?.noteId) {
+    while (notePointer.parents[0]?.noteId !== subRoot.note?.noteId) {
         const pointerParent = notePointer.parents[0];
+        if (!pointerParent) {
+            break;
+        }
         ancestors.push(pointerParent.noteId);
         notePointer = pointerParent;
     }
