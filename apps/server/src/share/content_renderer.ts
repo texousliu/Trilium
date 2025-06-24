@@ -185,12 +185,16 @@ function renderNoteContentInternal(note: SNote | BNote, renderArgs: RenderArgs) 
 
     // Render with the default view otherwise.
     const templatePath = join(getResourceDir(), "share-theme", "templates", "page.ejs");
-    return ejs.render(readFileSync(templatePath, "utf-8"), opts, {
+    return ejs.render(readTemplate(templatePath), opts, {
         includer: (path) => {
             const templatePath = join(getResourceDir(), "share-theme", "templates", `${path}.ejs`);
-            return { filename: templatePath }
+            return { template: readTemplate(templatePath) };
         }
     });
+}
+
+function readTemplate(path: string) {
+    return readFileSync(path, "utf-8");
 }
 
 function getContent(note: SNote | BNote) {
