@@ -92,8 +92,12 @@ export function buildRowDefinitions(notes: FNote[], infos: PromotedAttributeInfo
             title: note.title
         };
 
-        for (const info of infos) {
-            data[info.name] = note.getLabelValue(info.name);
+        for (const { name, type } of infos) {
+            if (type === "boolean") {
+                data[name] = note.hasLabel(name);
+            } else {
+                data[name] = note.getLabelValue(name);
+            }
         }
 
         definitions.push(data);
