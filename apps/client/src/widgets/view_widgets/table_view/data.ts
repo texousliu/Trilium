@@ -1,9 +1,12 @@
 import { GridOptions } from "ag-grid-community";
 import FNote from "../../../entities/fnote";
+import type { LabelType } from "../../../services/promoted_attribute_definition_parser.js";
 
 type Data = {
     title: string;
 } & Record<string, string>;
+
+type GridLabelType = 'text' | 'number' | 'boolean' | 'date' | 'dateString' | 'object';
 
 export function buildData(parentNote: FNote, notes: FNote[]) {
     const { columnDefs, expectedLabels } = buildColumnDefinitions(parentNote);
@@ -42,12 +45,27 @@ export function buildColumnDefinitions(parentNote: FNote) {
 
         columnDefs.push({
             field: attributeName,
-            headerName: title
+            headerName: title,
+            cellDataType: mapDataType(def.labelType)
         });
         expectedLabels.push(attributeName);
     }
 
     return { columnDefs, expectedLabels };
+}
+
+function mapDataType(labelType: LabelType | undefined): GridLabelType {
+    if (!labelType) {
+        return "text";
+    }
+
+    switch (labelType) {
+        case "date":
+            return "dateString";
+        case "text":
+        default:
+            return "text"
+    }
 }
 
 export function buildRowDefinitions(notes: FNote[], expectedLabels: string[]): GridOptions<Data>["rowData"] {
