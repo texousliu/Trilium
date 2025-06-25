@@ -42,8 +42,11 @@ function setupEditing(): GridOptions<TableData> {
                 return;
             }
 
-            const { newValue } = event;
-            setLabel(noteId, name, newValue);
+            if (name.startsWith("labels.")) {
+                const { newValue } = event;
+                const labelName = name.split(".", 2)[1];
+                setLabel(noteId, labelName, newValue);
+            }
         }
     }
 }

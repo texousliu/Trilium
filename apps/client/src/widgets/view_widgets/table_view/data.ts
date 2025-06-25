@@ -6,7 +6,8 @@ import { default as getPromotedAttributeInformation, type PromotedAttributeInfor
 export type TableData = {
     noteId: string;
     title: string;
-} & Record<string, string>;
+    labels: Record<string, boolean | string | null>;
+};
 
 
 type GridLabelType = 'text' | 'number' | 'boolean' | 'date' | 'dateString' | 'object';
@@ -33,7 +34,7 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
 
     for (const { name, title, type } of info) {
         columnDefs.push({
-            field: name,
+            field: `labels.${name}`,
             headerName: title,
             cellDataType: mapDataType(type),
             editable: true
@@ -64,20 +65,19 @@ function mapDataType(labelType: LabelType | undefined): GridLabelType {
 export function buildRowDefinitions(notes: FNote[], infos: PromotedAttributeInformation[]) {
     const definitions: GridOptions<TableData>["rowData"] = [];
     for (const note of notes) {
-        const data = {
-            noteId: note.noteId,
-            title: note.title
-        };
-
+        const labels: typeof definitions[0]["labels"] = {};
         for (const { name, type } of infos) {
             if (type === "boolean") {
-                data[name] = note.hasLabel(name);
+                labels[name] = note.hasLabel(name);
             } else {
-                data[name] = note.getLabelValue(name);
+                labels[name] = note.getLabelValue(name);
             }
         }
-
-        definitions.push(data);
+        definitions.push({
+            noteId: note.noteId,
+            title: note.title,
+            labels
+        });
     }
 
     return definitions;
