@@ -28,14 +28,14 @@ export default class TableView extends ViewMode {
 
     private $root: JQuery<HTMLElement>;
     private $container: JQuery<HTMLElement>;
-    private noteIds: string[];
+    private args: ViewModeArgs;
 
     constructor(args: ViewModeArgs) {
         super(args);
 
         this.$root = $(TPL);
         this.$container = this.$root.find(".table-view-container");
-        this.noteIds = args.noteIds;
+        this.args = args;
         args.$parent.append(this.$root);
     }
 
@@ -44,10 +44,11 @@ export default class TableView extends ViewMode {
     }
 
     async renderList() {
-        const notes = await froca.getNotes(this.noteIds);
+        const { noteIds, parentNote } = this.args;
+        const notes = await froca.getNotes(noteIds);
 
         this.$container.empty();
-        renderTable(this.$container[0], notes);
+        renderTable(this.$container[0], parentNote, notes);
         return this.$root;
     }
 
