@@ -1,21 +1,17 @@
 import { GridOptions } from "ag-grid-community";
-import FNote from "../../../entities/fnote";
+import FNote from "../../../entities/fnote.js";
 import type { LabelType } from "../../../services/promoted_attribute_definition_parser.js";
+import { default as getPromotedAttributeInformation, type PromotedAttributeInformation } from "./parser.js";
 
-type Data = {
+export type TableData = {
+    noteId: string;
     title: string;
 } & Record<string, string>;
 
-interface PromotedAttributeInformation {
-    name: string;
-    title?: string;
-    type?: LabelType;
-}
 
 type GridLabelType = 'text' | 'number' | 'boolean' | 'date' | 'dateString' | 'object';
 
-export function buildData(parentNote: FNote, notes: FNote[]) {
-    const info = getPromotedAttributeInformation(parentNote);
+export function buildData(info: PromotedAttributeInformation[], notes: FNote[]) {
     const columnDefs = buildColumnDefinitions(info);
     const rowData = buildRowDefinitions(notes, info);
 
@@ -26,7 +22,10 @@ export function buildData(parentNote: FNote, notes: FNote[]) {
 }
 
 export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
-    const columnDefs: GridOptions<Data>["columnDefs"] = [
+    const columnDefs: GridOptions<TableData>["columnDefs"] = [
+        {
+            field: "noteId"
+        },
         {
             field: "title"
         }
@@ -36,34 +35,12 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
         columnDefs.push({
             field: name,
             headerName: title,
-            cellDataType: mapDataType(type)
+            cellDataType: mapDataType(type),
+            editable: true
         });
     }
 
     return columnDefs;
-}
-
-function getPromotedAttributeInformation(parentNote: FNote) {
-    const info: PromotedAttributeInformation[] = [];
-    for (const promotedAttribute of parentNote.getPromotedDefinitionAttributes()) {
-        if (promotedAttribute.type !== "label") {
-            console.warn("Relations are not supported for now");
-            continue;
-        }
-
-        const def = promotedAttribute.getDefinition();
-        if (def.multiplicity !== "single") {
-            console.warn("Multiple values are not supported for now");
-            continue;
-        }
-
-        info.push({
-            name: promotedAttribute.name.split(":", 2)[1],
-            title: def.promotedAlias,
-            type: def.labelType
-        })
-    }
-    return info;
 }
 
 function mapDataType(labelType: LabelType | undefined): GridLabelType {
@@ -84,10 +61,11 @@ function mapDataType(labelType: LabelType | undefined): GridLabelType {
     }
 }
 
-export function buildRowDefinitions(notes: FNote[], infos: PromotedAttributeInformation[]): GridOptions<Data>["rowData"] {
-    const definitions: GridOptions<Data>["rowData"] = [];
+export function buildRowDefinitions(notes: FNote[], infos: PromotedAttributeInformation[]) {
+    const definitions: GridOptions<TableData>["rowData"] = [];
     for (const note of notes) {
         const data = {
+            noteId: note.noteId,
             title: note.title
         };
 

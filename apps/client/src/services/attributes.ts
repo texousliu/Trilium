@@ -11,7 +11,7 @@ async function addLabel(noteId: string, name: string, value: string = "") {
     });
 }
 
-async function setLabel(noteId: string, name: string, value: string = "") {
+export async function setLabel(noteId: string, name: string, value: string = "") {
     await server.put(`notes/${noteId}/set-attribute`, {
         type: "label",
         name: name,
