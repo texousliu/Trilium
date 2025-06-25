@@ -10,7 +10,7 @@ export type ViewTypeOptions = "list" | "grid" | "calendar" | "table";
 export default class NoteListRenderer {
 
     private viewType: ViewTypeOptions;
-    public viewMode: ViewMode | null;
+    public viewMode: ViewMode<any> | null;
 
     constructor($parent: JQuery<HTMLElement>, parentNote: FNote, noteIds: string[], showNotePath: boolean = false) {
         this.viewType = this.#getViewType(parentNote);

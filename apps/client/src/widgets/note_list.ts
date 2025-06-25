@@ -36,7 +36,7 @@ export default class NoteListWidget extends NoteContextAwareWidget {
     private isIntersecting?: boolean;
     private noteIdRefreshed?: string;
     private shownNoteId?: string | null;
-    private viewMode?: ViewMode | null;
+    private viewMode?: ViewMode<any> | null;
 
     isEnabled() {
         return super.isEnabled() && this.noteContext?.hasNoteList();
