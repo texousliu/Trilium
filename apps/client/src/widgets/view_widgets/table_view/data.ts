@@ -16,7 +16,7 @@ type GridLabelType = 'text' | 'number' | 'boolean' | 'date' | 'dateString' | 'ob
 
 export function buildData(parentNote: FNote, notes: FNote[]) {
     const info = getPromotedAttributeInformation(parentNote);
-    const columnDefs = buildColumnDefinitions(parentNote, info);
+    const columnDefs = buildColumnDefinitions(info);
     const rowData = buildRowDefinitions(notes, info);
 
     return {
@@ -25,7 +25,7 @@ export function buildData(parentNote: FNote, notes: FNote[]) {
     }
 }
 
-export function buildColumnDefinitions(parentNote: FNote, info: PromotedAttributeInformation[]) {
+export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
     const columnDefs: GridOptions<Data>["columnDefs"] = [
         {
             field: "title"
@@ -46,7 +46,6 @@ export function buildColumnDefinitions(parentNote: FNote, info: PromotedAttribut
 function getPromotedAttributeInformation(parentNote: FNote) {
     const info: PromotedAttributeInformation[] = [];
     for (const promotedAttribute of parentNote.getPromotedDefinitionAttributes()) {
-        console.log(promotedAttribute);
         if (promotedAttribute.type !== "label") {
             console.warn("Relations are not supported for now");
             continue;
