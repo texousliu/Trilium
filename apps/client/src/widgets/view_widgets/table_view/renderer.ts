@@ -1,21 +1,16 @@
 import { createGrid, AllCommunityModule, ModuleRegistry } from "ag-grid-community";
+import { buildColumnDefinitions, buildRowDefinitions } from "./data.js";
+import FNote from "../../../entities/fnote.js";
 
 ModuleRegistry.registerModules([ AllCommunityModule ]);
 
-export default function renderTable(el: HTMLElement) {
+export default function renderTable(el: HTMLElement, notes: FNote[]) {
+    const rowData = buildRowDefinitions(notes);
+
     createGrid(el, {
         // Row Data: The data to be displayed.
-        rowData: [
-            { make: "Tesla", model: "Model Y", price: 64950, electric: true },
-            { make: "Ford", model: "F-Series", price: 33850, electric: false },
-            { make: "Toyota", model: "Corolla", price: 29600, electric: false },
-        ],
+        rowData: rowData,
         // Column Definitions: Defines the columns to be displayed.
-        columnDefs: [
-            { field: "make" },
-            { field: "model" },
-            { field: "price" },
-            { field: "electric" }
-        ]
+        columnDefs: buildColumnDefinitions()
     });
 }
