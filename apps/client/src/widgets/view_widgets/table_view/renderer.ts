@@ -3,6 +3,7 @@ import { buildData, type TableData } from "./data.js";
 import FNote from "../../../entities/fnote.js";
 import getPromotedAttributeInformation, { PromotedAttributeInformation } from "./parser.js";
 import { setLabel } from "../../../services/attributes.js";
+import applyHeaderCustomization from "./header-customization.js";
 
 ModuleRegistry.registerModules([ AllCommunityModule ]);
 
@@ -11,7 +12,10 @@ export default function renderTable(el: HTMLElement, parentNote: FNote, notes: F
 
     createGrid(el, {
         ...buildData(info, notes),
-        ...setupEditing(info)
+        ...setupEditing(info),
+        onGridReady(event) {
+            applyHeaderCustomization(el, event.api);
+        },
     });
 }
 
