@@ -6,11 +6,18 @@ type Data = {
     title: string;
 } & Record<string, string>;
 
+interface PromotedAttributeInformation {
+    name: string;
+    title?: string;
+    type?: LabelType;
+}
+
 type GridLabelType = 'text' | 'number' | 'boolean' | 'date' | 'dateString' | 'object';
 
 export function buildData(parentNote: FNote, notes: FNote[]) {
-    const { columnDefs, expectedLabels } = buildColumnDefinitions(parentNote);
-    const rowData = buildRowDefinitions(notes, expectedLabels);
+    const info = getPromotedAttributeInformation(parentNote);
+    const columnDefs = buildColumnDefinitions(parentNote, info);
+    const rowData = buildRowDefinitions(notes, info);
 
     return {
         rowData,
@@ -18,15 +25,26 @@ export function buildData(parentNote: FNote, notes: FNote[]) {
     }
 }
 
-export function buildColumnDefinitions(parentNote: FNote) {
+export function buildColumnDefinitions(parentNote: FNote, info: PromotedAttributeInformation[]) {
     const columnDefs: GridOptions<Data>["columnDefs"] = [
         {
             field: "title"
         }
     ];
 
-    const expectedLabels: string[] = [];
+    for (const { name, title, type } of info) {
+        columnDefs.push({
+            field: name,
+            headerName: title,
+            cellDataType: mapDataType(type)
+        });
+    }
 
+    return columnDefs;
+}
+
+function getPromotedAttributeInformation(parentNote: FNote) {
+    const info: PromotedAttributeInformation[] = [];
     for (const promotedAttribute of parentNote.getPromotedDefinitionAttributes()) {
         console.log(promotedAttribute);
         if (promotedAttribute.type !== "label") {
@@ -40,18 +58,13 @@ export function buildColumnDefinitions(parentNote: FNote) {
             continue;
         }
 
-        const attributeName = promotedAttribute.name.split(":", 2)[1];
-        const title = def.promotedAlias ?? attributeName;
-
-        columnDefs.push({
-            field: attributeName,
-            headerName: title,
-            cellDataType: mapDataType(def.labelType)
-        });
-        expectedLabels.push(attributeName);
+        info.push({
+            name: promotedAttribute.name.split(":", 2)[1],
+            title: def.promotedAlias,
+            type: def.labelType
+        })
     }
-
-    return { columnDefs, expectedLabels };
+    return info;
 }
 
 function mapDataType(labelType: LabelType | undefined): GridLabelType {
@@ -60,6 +73,10 @@ function mapDataType(labelType: LabelType | undefined): GridLabelType {
     }
 
     switch (labelType) {
+        case "number":
+            return "number";
+        case "boolean":
+            return "boolean";
         case "date":
             return "dateString";
         case "text":
@@ -68,15 +85,15 @@ function mapDataType(labelType: LabelType | undefined): GridLabelType {
     }
 }
 
-export function buildRowDefinitions(notes: FNote[], expectedLabels: string[]): GridOptions<Data>["rowData"] {
+export function buildRowDefinitions(notes: FNote[], infos: PromotedAttributeInformation[]): GridOptions<Data>["rowData"] {
     const definitions: GridOptions<Data>["rowData"] = [];
     for (const note of notes) {
         const data = {
             title: note.title
         };
 
-        for (const expectedLabel of expectedLabels) {
-            data[expectedLabel] = note.getLabelValue(expectedLabel);
+        for (const info of infos) {
+            data[info.name] = note.getLabelValue(info.name);
         }
 
         definitions.push(data);
