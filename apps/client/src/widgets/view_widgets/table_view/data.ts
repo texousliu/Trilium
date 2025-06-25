@@ -32,6 +32,11 @@ export function buildColumnDefinitions(parentNote: FNote) {
         }
 
         const def = promotedAttribute.getDefinition();
+        if (def.multiplicity !== "single") {
+            console.warn("Multiple values are not supported for now");
+            continue;
+        }
+
         const attributeName = promotedAttribute.name.split(":", 2)[1];
         const title = def.promotedAlias ?? attributeName;
 
