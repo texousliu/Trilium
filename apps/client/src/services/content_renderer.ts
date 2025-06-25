@@ -301,7 +301,7 @@ function getRenderingType(entity: FNote | FAttachment) {
 
     if (type === "file" && mime === "application/pdf") {
         type = "pdf";
-    } else if (type === "file" && mime && CODE_MIME_TYPES.has(mime)) {
+    } else if ((type === "file" || type === "viewConfig") && mime && CODE_MIME_TYPES.has(mime)) {
         type = "code";
     } else if (type === "file" && mime && mime.startsWith("audio/")) {
         type = "audio";
