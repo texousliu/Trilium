@@ -25,10 +25,12 @@ export function buildData(info: PromotedAttributeInformation[], notes: FNote[]) 
 export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
     const columnDefs: GridOptions<TableData>["columnDefs"] = [
         {
-            field: "noteId"
+            field: "noteId",
+            editable: false
         },
         {
-            field: "title"
+            field: "title",
+            editable: true
         }
     ];
 

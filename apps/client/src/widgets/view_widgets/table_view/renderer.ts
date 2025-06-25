@@ -6,6 +6,7 @@ import { setLabel } from "../../../services/attributes.js";
 import applyHeaderCustomization from "./header-customization.js";
 import ViewModeStorage from "../view_mode_storage.js";
 import { type StateInfo } from "./storage.js";
+import server from "../../../services/server.js";
 
 ModuleRegistry.registerModules([ AllCommunityModule ]);
 
@@ -42,8 +43,13 @@ function setupEditing(): GridOptions<TableData> {
                 return;
             }
 
+            const { newValue } = event;
+            if (name === "title") {
+                // TODO: Deduplicate with note_title.
+                server.put(`notes/${noteId}/title`, { title: newValue });
+            }
+
             if (name.startsWith("labels.")) {
-                const { newValue } = event;
                 const labelName = name.split(".", 2)[1];
                 setLabel(noteId, labelName, newValue);
             }
