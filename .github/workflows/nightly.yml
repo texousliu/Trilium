@@ -92,7 +92,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ github.event_name == 'pull_request' }}
         with:
-          name: TriliumNextNotes ${{ matrix.os.name }} ${{ matrix.arch }}
+          name: TriliumNotes ${{ matrix.os.name }} ${{ matrix.arch }}
           path: apps/desktop/upload
 
   nightly-server:
