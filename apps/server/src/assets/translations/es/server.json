@@ -1,12 +1,18 @@
 {
   "keyboard_actions": {
+    "back-in-note-history": "Navegar a la nota previa en el historial",
+    "forward-in-note-history": "Navegar a la nota siguiente en el historial",
     "open-jump-to-note-dialog": "Abrir cuadro de diálogo \"Saltar a nota\"",
+    "scroll-to-active-note": "Desplazarse a la nota activa en el árbol de notas",
+    "quick-search": "Activar barra de búisqueda rápida",
     "search-in-subtree": "Buscar notas en el subárbol de la nota activa",
     "expand-subtree": "Expandir el subárbol de la nota actual",
     "collapse-tree": "Colapsa el árbol de notas completo",
     "collapse-subtree": "Colapsa el subárbol de la nota actual",
     "sort-child-notes": "Ordenar subnotas",
     "creating-and-moving-notes": "Creando y moviendo notas",
+    "create-note-after": "Crear nota después de la nota activa",
+    "create-note-into": "Crear nota como subnota de la nota activa",
     "create-note-into-inbox": "Crear una nota en la bandeja de entrada (si está definida) o nota del día",
     "delete-note": "Eliminar nota",
     "move-note-up": "Mover nota hacia arriba",
@@ -15,6 +21,8 @@
     "move-note-down-in-hierarchy": "Mover nota hacia abajo en la jerarquía",
     "edit-note-title": "Saltar del árbol al detalle de la nota y editar el título",
     "edit-branch-prefix": "Mostrar cuadro de diálogo Editar prefijo de rama",
+    "cloneNotesTo": "Clonar notas seleccionadas",
+    "moveNotesTo": "Mover notas seleccionadas",
     "note-clipboard": "Portapapeles de notas",
     "copy-notes-to-clipboard": "Copiar las notas seleccionadas al portapapeles",
     "paste-notes-from-clipboard": "Pegar las notas del portapapeles en una nota activa",
@@ -48,6 +56,8 @@
     "show-recent-changes": "Muestra el cuadro de diálogo Cambios recientes",
     "show-sql-console": "Muestra el cuadro de diálogo Consola SQL",
     "show-backend-log": "Muestra el cuadro de diálogo Registro de backend",
+    "show-help": "Muestra ayuda/hoja de referencia integrada",
+    "show-cheatsheet": "Muestra un modal con operaciones de teclado comunes",
     "text-note-operations": "Operaciones de notas de texto",
     "add-link-to-text": "Abrir cuadro de diálogo para agregar un enlace al texto",
     "follow-link-under-cursor": "Seguir el enlace dentro del cual se coloca el cursor",
@@ -80,6 +90,7 @@
     "unhoist": "Bajar desde cualquier lugar",
     "reload-frontend-app": "Recargar frontend de la aplicación",
     "open-dev-tools": "Abrir herramientas de desarrollo",
+    "find-in-text": "Alternar panel de búsqueda",
     "toggle-left-note-tree-panel": "Alternar panel izquierdo (árbol de notas)",
     "toggle-full-screen": "Alternar pantalla completa",
     "zoom-out": "Alejar",
@@ -88,20 +99,20 @@
     "reset-zoom-level": "Restablecer nivel de zoom",
     "copy-without-formatting": "Copiar el texto seleccionado sin formatear",
     "force-save-revision": "Forzar la creación/guardado de una nueva revisión de nota de la nota activa",
-    "show-help": "Muestra ayuda/hoja de referencia integrada",
     "toggle-book-properties": "Alternar propiedades del libro",
     "toggle-classic-editor-toolbar": "Alternar la pestaña de formato por el editor con barra de herramientas fija",
     "export-as-pdf": "Exporta la nota actual como un PDF",
-    "show-cheatsheet": "Muestra un modal con operaciones de teclado comunes",
     "toggle-zen-mode": "Habilita/Deshabilita el modo Zen (IU mínima para edición sin distracciones)"
   },
   "login": {
     "title": "Iniciar sesión",
     "heading": "Iniciar sesión en Trilium",
+    "incorrect-totp": "El TOTP es incorrecto. Por favor, intente de nuevo.",
     "incorrect-password": "La contraseña es incorrecta. Por favor inténtalo de nuevo.",
     "password": "Contraseña",
     "remember-me": "Recordarme",
-    "button": "Iniciar sesión"
+    "button": "Iniciar sesión",
+    "sign_in_with_sso": "Iniciar sesión con {{ ssoIssuerName }}"
   },
   "set_password": {
     "title": "Establecer contraseña",
@@ -113,7 +124,7 @@
   },
   "javascript-required": "Trilium requiere que JavaScript esté habilitado.",
   "setup": {
-    "heading": "Configuración de TriliumNext Notes",
+    "heading": "Configuración de Trilium Notes",
     "new-document": "Soy un usuario nuevo y quiero crear un nuevo documento de Trilium para mis notas",
     "sync-from-desktop": "Ya tengo una instancia de escritorio y quiero configurar la sincronización con ella",
     "sync-from-server": "Ya tengo una instancia de servidor y quiero configurar la sincronización con ella",
@@ -125,7 +136,7 @@
   "setup_sync-from-desktop": {
     "heading": "Sincronizar desde el escritorio",
     "description": "Esta configuración debe iniciarse desde la instancia de escritorio:",
-    "step1": "Abra su instancia de escritorio de TriliumNext Notes.",
+    "step1": "Abra su instancia de escritorio de Trilium Notes.",
     "step2": "En el menú Trilium, dé clic en Opciones.",
     "step3": "Dé clic en la categoría Sincronizar.",
     "step4": "Cambie la dirección de la instancia del servidor a: {{- host}} y dé clic en Guardar.",
@@ -172,6 +183,7 @@
     "saturday": "Sábado",
     "sunday": "Domingo"
   },
+  "weekdayNumber": "Semana {weekNumber}",
   "months": {
     "january": "Enero",
     "february": "Febrero",
@@ -186,6 +198,7 @@
     "november": "Noviembre",
     "december": "Diciembre"
   },
+  "quarterNumber": "Cuarto {quarterNumber}",
   "special_notes": {
     "search_prefix": "Buscar:"
   },
@@ -225,6 +238,7 @@
     "protected-session-title": "Sesión protegida",
     "sync-status-title": "Sincronizar estado",
     "settings-title": "Ajustes",
+    "llm-chat-title": "Chat con notas",
     "options-title": "Opciones",
     "appearance-title": "Apariencia",
     "shortcuts-title": "Atajos",
@@ -233,14 +247,17 @@
     "images-title": "Imágenes",
     "spellcheck-title": "Corrección ortográfica",
     "password-title": "Contraseña",
+    "multi-factor-authentication-title": "MFA",
     "etapi-title": "ETAPI",
     "backup-title": "Respaldo",
     "sync-title": "Sincronizar",
+    "ai-llm-title": "IA/LLM",
     "other": "Otros",
     "advanced-title": "Avanzado",
     "visible-launchers-title": "Lanzadores visibles",
     "user-guide": "Guía de Usuario",
-    "localization": "Idioma y Región"
+    "localization": "Idioma y Región",
+    "inbox-title": "Bandeja"
   },
   "notes": {
     "new-note": "Nueva nota",
@@ -261,13 +278,14 @@
     "unable-to-save-message": "No se pudo escribir en el archivo seleccionado. Intente de nuevo o seleccione otro destino."
   },
   "tray": {
-    "tooltip": "TriliumNext Notes",
+    "tooltip": "Trilium Notes",
     "close": "Cerrar Trilium",
     "recents": "Notas recientes",
     "bookmarks": "Marcadores",
     "today": "Abrir nota del diario de hoy",
     "new-note": "Nueva nota",
-    "show-windows": "Mostrar ventanas"
+    "show-windows": "Mostrar ventanas",
+    "open_new_window": "Abrir nueva ventana"
   },
   "migration": {
     "old_version": "La migración directa desde tu versión actual no está soportada. Por favor actualice a v0.60.4 primero y solo después a esta versión.",
@@ -276,5 +294,14 @@
   },
   "modals": {
     "error_title": "Error"
+  },
+  "share_theme": {
+    "site-theme": "Tema de sitio",
+    "search_placeholder": "Búsqueda...",
+    "image_alt": "Imagen de artículo",
+    "last-updated": "Última actualización en {{-date}}",
+    "subpages": "Subpáginas:",
+    "on-this-page": "En esta página",
+    "expand": "Expandir"
   }
 }

@@ -1,5 +1,5 @@
 {
-  description = "TriliumNext Notes (experimental flake)";
+  description = "Trilium Notes (experimental flake)";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
@@ -163,18 +163,18 @@
 
             desktopItems = lib.optionals (app == "desktop") [
               (makeDesktopItem {
-                name = "TriliumNext Notes";
+                name = "Trilium Notes";
                 exec = meta.mainProgram;
                 icon = "trilium";
                 comment = meta.description;
-                desktopName = "TriliumNext Notes";
+                desktopName = "Trilium Notes";
                 categories = [ "Office" ];
-                startupWMClass = "TriliumNext Notes";
+                startupWMClass = "Trilium Notes";
               })
             ];
 
             meta = {
-              description = "TriliumNext: ${app}";
+              description = "Trilium: ${app}";
               inherit mainProgram;
             };
           };

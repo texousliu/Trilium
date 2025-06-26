@@ -4,8 +4,8 @@ This is essentially Trilium sources + node modules + node.js runtime packaged in
 ## Steps
 
 *   SSH into your server
-*   use `wget` (or `curl`) to download latest `TriliumNextNotes-Server-[VERSION]-linux-x64.tar.xz` (copy link from [release page](https://github.com/TriliumNext/Notes/releases), notice `-Server` suffix) on your server.
-*   unpack the archive, e.g. using `tar -xf -d TriliumNextNotes-Server-[VERSION]-linux-x64.tar.xz`
+*   use `wget` (or `curl`) to download latest `TriliumNotes-Server-[VERSION]-linux-x64.tar.xz` (copy link from [release page](https://github.com/TriliumNext/Notes/releases), notice `-Server` suffix) on your server.
+*   unpack the archive, e.g. using `tar -xf -d TriliumNotes-Server-[VERSION]-linux-x64.tar.xz`
 *   `cd trilium-linux-x64-server`
 *   `./trilium.sh`
 *   you can open the browser and open http://\[your-server-hostname\]:8080 and you should see Trilium initialization page
@@ -20,7 +20,7 @@ The problem with above steps is that once you close the SSH connection, the Tril
 *   After downloading, extract and move Trilium:
 
 ```
-tar -xvf TriliumNextNotes-Server-[VERSION]-linux-x64.tar.xz
+tar -xvf TriliumNotes-Server-[VERSION]-linux-x64.tar.xz
 sudo mv trilium-linux-x64-server /opt/trilium
 ```
 

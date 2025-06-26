@@ -1,6 +1,6 @@
 {
   "about": {
-    "title": "Despre TriliumNext Notes",
+    "title": "Despre Trilium Notes",
     "homepage": "Site web:",
     "app_version": "Versiune aplicație:",
     "db_version": "Versiune bază de date:",
@@ -572,7 +572,7 @@
     "system-default": "Fontul predefinit al sistemului"
   },
   "global_menu": {
-    "about": "Despre TriliumNext Notes",
+    "about": "Despre Trilium Notes",
     "advanced": "Opțiuni avansate",
     "configure_launchbar": "Configurează bara de lansare",
     "logout": "Deautentificare",

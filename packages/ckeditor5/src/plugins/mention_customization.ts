@@ -13,6 +13,10 @@ export default class MentionCustomization extends Plugin {
 		return [ Mention ];
 	}
 
+    public static get pluginName() {
+		return "MentionCustomization" as const;
+	}
+
 	afterInit() {
 		const editor = this.editor;
 		// override standard mention command (see https://github.com/ckeditor/ckeditor5/issues/6470)

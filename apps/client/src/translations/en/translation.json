@@ -1,6 +1,6 @@
 {
   "about": {
-    "title": "About TriliumNext Notes",
+    "title": "About Trilium Notes",
     "close": "Close",
     "homepage": "Homepage:",
     "app_version": "App version:",
@@ -643,7 +643,7 @@
     "reload_frontend": "Reload Frontend",
     "show_hidden_subtree": "Show Hidden Subtree",
     "show_help": "Show Help",
-    "about": "About TriliumNext Notes",
+    "about": "About Trilium Notes",
     "logout": "Logout",
     "show-cheatsheet": "Show Cheatsheet",
     "toggle-zen-mode": "Zen Mode"
@@ -1197,7 +1197,6 @@
     "restore_provider": "Restore provider to search",
     "similarity_threshold": "Similarity Threshold",
     "similarity_threshold_description": "Minimum similarity score (0-1) for notes to be included in context for LLM queries",
-
     "reprocess_index": "Rebuild Search Index",
     "reprocessing_index": "Rebuilding...",
     "reprocess_index_started": "Search index optimization started in the background",
@@ -1929,5 +1928,10 @@
     "download_link": "Download Native Version",
     "continue_anyway": "Continue Anyway",
     "dont_show_again": "Don't show this warning again"
+  },
+  "editorfeatures": {
+    "title": "Features",
+    "emoji_completion_enabled": "Enable Emoji auto-completion",
+    "note_completion_enabled": "Enable note auto-completion"
   }
 }

@@ -1,12 +1,12 @@
 {
   "name": "@triliumnext/desktop",
   "version": "0.95.0",
-  "description": "Build your personal knowledge base with TriliumNext Notes",
+  "description": "Build your personal knowledge base with Trilium Notes",
   "private": true,
   "main": "main.cjs",
   "dependencies": {
     "@electron/remote": "2.1.2",
-    "better-sqlite3": "^11.9.1",
+    "better-sqlite3": "^12.0.0",
     "electron-debug": "4.1.0",
     "electron-dl": "4.0.0",
     "electron-squirrel-startup": "1.0.1",
@@ -36,7 +36,7 @@
   },
   "license": "AGPL-3.0-only",
   "author": {
-    "name": "TriliumNext Notes Team",
+    "name": "Trilium Notes Team",
     "email": "contact@eliandoran.me",
     "url": "https://github.com/TriliumNext/Notes"
   },
@@ -97,6 +97,11 @@
               "glob": "**/*",
               "input": "apps/server/dist/assets",
               "output": "assets"
+            },
+            {
+              "glob": "**/*",
+              "input": "packages/share-theme/src/templates",
+              "output": "share-theme/templates"
             },
             {
               "glob": "**/*",

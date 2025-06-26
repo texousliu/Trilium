@@ -1,12 +1,14 @@
 "use strict";
 
-import { parse, Renderer, type Tokens } from "marked";
+import { parse, Renderer, use, type Tokens } from "marked";
 import htmlSanitizer from "../html_sanitizer.js";
 import importUtils from "./utils.js";
 import { getMimeTypeFromMarkdownName, MIME_TYPE_AUTO } from "@triliumnext/commons";
 import { ADMONITION_TYPE_MAPPINGS } from "../export/markdown.js";
 import utils from "../utils.js";
 import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
+import wikiLinkTransclusion from "./markdown/wikilink_transclusion.js";
+import wikiLinkInternalLink from "./markdown/wikilink_internal_link.js";
 
 /**
  * Keep renderer code up to date with https://github.com/markedjs/marked/blob/master/src/Renderer.ts.
@@ -23,9 +25,7 @@ class CustomMarkdownRenderer extends Renderer {
     }
 
     override paragraph(data: Tokens.Paragraph): string {
-        let text = super.paragraph(data).trimEnd();
-        text = processWikiLinks(text);
-        return text;
+        return super.paragraph(data).trimEnd();
     }
 
     override code({ text, lang }: Tokens.Code): string {
@@ -126,6 +126,14 @@ function renderToHtml(content: string, title: string) {
     // Extract formulas and replace them with placeholders to prevent interference from Markdown rendering
     const { processedText, placeholderMap: formulaMap } = extractFormulas(content);
 
+    use({
+        // Order is important, especially for wikilinks.
+        extensions: [
+            wikiLinkTransclusion,
+            wikiLinkInternalLink
+        ]
+    });
+
     let html = parse(processedText, {
         async: false,
         renderer: renderer
@@ -212,11 +220,6 @@ function restoreFromMap(text: string, map: Map<string, string>): string {
         .map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
         .join('|');
     return text.replace(new RegExp(pattern, 'g'), match => map.get(match) ?? match);
-}
-
-function processWikiLinks(paragraph: string) {
-    paragraph = paragraph.replaceAll(/\[\[([^\[\]]+)\]\]/g, `<a class="reference-link" href="$1">$1</a>`);
-    return paragraph;
 }
 
 const renderer = new CustomMarkdownRenderer({ async: false });

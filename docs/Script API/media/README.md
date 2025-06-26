@@ -1,10 +1,10 @@
-# TriliumNext Notes
+# Trilium Notes
 
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran) ![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/notes) ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/triliumnext/notes/total)
 
 [English](./README.md) | [Chinese](./README-ZH_CN.md) | [Russian](./README.ru.md) | [Japanese](./README.ja.md) | [Italian](./README.it.md) | [Spanish](./README.es.md)
 
-TriliumNext Notes is an open-source, cross-platform hierarchical note taking application with focus on building large personal knowledge bases.
+Trilium Notes is an open-source, cross-platform hierarchical note taking application with focus on building large personal knowledge bases.
 
 See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for quick overview:
 
@@ -70,7 +70,7 @@ To use TriliumNext on your desktop machine (Linux, MacOS, and Windows) you have 
 
 #### MacOS
 Currently when running TriliumNext/Notes on MacOS, you may get the following error:
-> Apple could not verify "TriliumNext Notes" is free of malware and may harm your Mac or compromise your privacy.
+> Apple could not verify "Trilium Notes" is free of malware and may harm your Mac or compromise your privacy.
 
 You will need to run the command on your shell to resolve the error (documented [here](https://github.com/TriliumNext/Notes/issues/329#issuecomment-2287164137)):
 
@@ -116,7 +116,7 @@ See the [documentation guide](https://github.com/TriliumNext/Notes/blob/develop/
 ## 👏 Shoutouts
 
 * [CKEditor 5](https://github.com/ckeditor/ckeditor5) - best WYSIWYG editor on the market, very interactive and listening team
-* [FancyTree](https://github.com/mar10/fancytree) - very feature rich tree library without real competition. TriliumNext Notes would not be the same without it.
+* [FancyTree](https://github.com/mar10/fancytree) - very feature rich tree library without real competition. Trilium Notes would not be the same without it.
 * [CodeMirror](https://github.com/codemirror/CodeMirror) - code editor with support for huge amount of languages
 * [jsPlumb](https://github.com/jsplumb/jsplumb) - visual connectivity library without competition. Used in [relation maps](https://triliumnext.github.io/Docs/Wiki/relation-map.html) and [link maps](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)
 

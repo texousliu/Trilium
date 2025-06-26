@@ -1,9 +1,9 @@
 name: Dev
 on:
   push:
-    branches: [ develop ]
+    branches: [ main ]
   pull_request:
-    branches: [ develop ]
+    branches: [ main ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -12,8 +12,8 @@ concurrency:
 env:
   GHCR_REGISTRY: ghcr.io
   DOCKERHUB_REGISTRY: docker.io
-  IMAGE_NAME: ${{ github.repository_owner }}/notes
-  TEST_TAG: ${{ github.repository_owner }}/notes:test
+  IMAGE_NAME: ${{ github.repository}}
+  TEST_TAG: ${{ github.repository}}:test
 
 permissions:
   pull-requests: write  # for PR comments
@@ -77,6 +77,7 @@ jobs:
       - name: Trigger client build
         run: pnpm nx run client:build
       - name: Send client bundle stats to RelativeCI
+        if: false
         uses: relative-ci/agent-action@v3
         with:
           webpackStatsFile: ./apps/client/dist/webpack-stats.json

@@ -124,7 +124,7 @@
   },
   "javascript-required": "Trilium requires JavaScript to be enabled.",
   "setup": {
-    "heading": "TriliumNext Notes setup",
+    "heading": "Trilium Notes setup",
     "new-document": "I'm a new user, and I want to create a new Trilium document for my notes",
     "sync-from-desktop": "I have a desktop instance already, and I want to set up sync with it",
     "sync-from-server": "I have a server instance already, and I want to set up sync with it",
@@ -136,7 +136,7 @@
   "setup_sync-from-desktop": {
     "heading": "Sync from Desktop",
     "description": "This setup needs to be initiated from the desktop instance:",
-    "step1": "Open your desktop instance of TriliumNext Notes.",
+    "step1": "Open your desktop instance of Trilium Notes.",
     "step2": "From the Trilium Menu, click Options.",
     "step3": "Click on Sync category.",
     "step4": "Change server instance address to: {{- host}} and click Save.",
@@ -278,7 +278,7 @@
     "unable-to-save-message": "The selected file could not be written to. Try again or select another destination."
   },
   "tray": {
-    "tooltip": "TriliumNext Notes",
+    "tooltip": "Trilium Notes",
     "close": "Quit Trilium",
     "recents": "Recent notes",
     "bookmarks": "Bookmarks",

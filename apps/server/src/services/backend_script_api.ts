@@ -36,6 +36,17 @@ import type Becca from "../becca/becca-interface.js";
 import type { NoteParams } from "./note-interface.js";
 import type { ApiParams } from "./backend_script_api_interface.js";
 
+// Dayjs plugins
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isBetween from "dayjs/plugin/isBetween";
+import advancedFormat from "dayjs/plugin/advancedFormat.js";
+
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isBetween);
+dayjs.extend(advancedFormat);
+
 /**
  * A whole number
  * @typedef {number} int

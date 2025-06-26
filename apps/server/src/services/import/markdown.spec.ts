@@ -283,7 +283,19 @@ $$`;
 
     it("supports wikilink with root-relative path", () => {
         const input = `oh no my banana I bought on [[journal/monday]] has gone off! I’m taking it back to the [[other/shop]] for a refund`;
-        const expected = `<p>oh no my banana I bought on <a class="reference-link" href="journal/monday">journal/monday</a> has gone off! I’m taking it back to the <a class="reference-link" href="other/shop">other/shop</a> for a refund</p>`;
+        const expected = `<p>oh no my banana I bought on <a class="reference-link" href="/journal/monday">journal/monday</a> has gone off! I’m taking it back to the <a class="reference-link" href="/other/shop">other/shop</a> for a refund</p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
+    it("supports wikilink in lists", () => {
+        const input = `- oh no my banana I bought on [[journal/monday]] has gone off! I’m taking it back to the [[other/shop]] for a refund`;
+        const expected = `<ul><li>oh no my banana I bought on <a class="reference-link" href="/journal/monday">journal/monday</a> has gone off! I’m taking it back to the <a class="reference-link" href="/other/shop">other/shop</a> for a refund</li></ul>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
+    it("supports wikilink with image (transclusion)", () => {
+        const input = `heres the handsome boy ![[assets/2025-06-20_14-05-20.jpeg]]`;
+        const expected = `<p>heres the handsome boy <img src="/assets/2025-06-20_14-05-20.jpeg"></p>`;
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 

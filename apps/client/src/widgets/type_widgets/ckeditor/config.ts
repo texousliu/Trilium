@@ -1,13 +1,12 @@
 import { ALLOWED_PROTOCOLS } from "../../../services/link.js";
 import { MIME_TYPE_AUTO } from "@triliumnext/commons";
-import { buildExtraCommands, type EditorConfig } from "@triliumnext/ckeditor5";
+import { buildExtraCommands, type EditorConfig, PREMIUM_PLUGINS } from "@triliumnext/ckeditor5";
 import { getHighlightJsNameForMime } from "../../../services/mime_types.js";
 import options from "../../../services/options.js";
 import { ensureMimeTypesForHighlighting, isSyntaxHighlightEnabled } from "../../../services/syntax_highlight.js";
 import emojiDefinitionsUrl from "@triliumnext/ckeditor5/emoji_definitions/en.json?url";
 import { copyTextWithToast } from "../../../services/clipboard_ext.js";
 import getTemplates from "./snippets.js";
-import { PREMIUM_PLUGINS } from "../../../../../../packages/ckeditor5/src/plugins.js";
 import { t } from "../../../services/i18n.js";
 import { getMermaidConfig } from "../../../services/mermaid.js";
 import noteAutocompleteService, { type Suggestion } from "../../../services/note_autocomplete.js";
@@ -30,22 +29,6 @@ export async function buildConfig(opts: BuildEditorOptions): Promise<EditorConfi
     const config: EditorConfig = {
         licenseKey,
         placeholder: t("editable_text.placeholder"),
-        mention: {
-            feeds: [
-                {
-                    marker: "@",
-                    feed: (queryText: string) => noteAutocompleteService.autocompleteSourceForCKEditor(queryText),
-                    itemRenderer: (item) => {
-                        const itemElement = document.createElement("button");
-
-                        itemElement.innerHTML = `${(item as Suggestion).highlightedNotePathTitle} `;
-
-                        return itemElement;
-                    },
-                    minimumCharacters: 0
-                }
-            ],
-        },
         codeBlock: {
             languages: buildListOfLanguages()
         },
@@ -180,7 +163,8 @@ export async function buildConfig(opts: BuildEditorOptions): Promise<EditorConfi
             allow: JSON.parse(options.get("allowedHtmlTags"))
         },
         // This value must be kept in sync with the language defined in webpack.config.js.
-        language: "en"
+        language: "en",
+        removePlugins: getDisabledPlugins()
     };
 
     // Set up content language.
@@ -190,6 +174,26 @@ export async function buildConfig(opts: BuildEditorOptions): Promise<EditorConfi
             ui: (typeof config.language === "string" ? config.language : "en"),
             content: contentLanguage
         }
+    }
+
+    // Mention customisation.
+    if (options.get("textNoteCompletionEnabled") === "true") {
+        config.mention = {
+            feeds: [
+                {
+                    marker: "@",
+                    feed: (queryText: string) => noteAutocompleteService.autocompleteSourceForCKEditor(queryText),
+                    itemRenderer: (item) => {
+                        const itemElement = document.createElement("button");
+
+                        itemElement.innerHTML = `${(item as Suggestion).highlightedNotePathTitle} `;
+
+                        return itemElement;
+                    },
+                    minimumCharacters: 0
+                }
+            ],
+        };
     }
 
     // Enable premium plugins.
@@ -231,4 +235,14 @@ function getLicenseKey() {
     }
 
     return premiumLicenseKey;
+}
+
+function getDisabledPlugins() {
+    let disabledPlugins: string[] = [];
+
+    if (options.get("textNoteEmojiCompletionEnabled") !== "true") {
+        disabledPlugins.push("EmojiMention");
+    }
+
+    return disabledPlugins;
 }

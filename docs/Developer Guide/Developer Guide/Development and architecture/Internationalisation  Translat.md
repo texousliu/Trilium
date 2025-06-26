@@ -18,7 +18,7 @@ The key-based approach allows a hierarchical structure. For example, a key of `a
 ```json
 {
 	"about": {
-		"title": "About TriliumNext Notes"
+		"title": "About Trilium Notes"
 	}
 } 
 ```
