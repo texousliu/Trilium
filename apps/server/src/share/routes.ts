@@ -138,17 +138,21 @@ function renderImageAttachment(image: SNote, res: Response, attachmentName: stri
 }
 
 function register(router: Router) {
-    function renderNote(note: SNote, req: Request, res: Response) {
+        function renderNote(note: SNote, req: Request, res: Response) {
+        // Calculate the correct relative path depth based on the current request path
+        // We need to go up one level for each path segment in the request URL
+        const pathSegments = req.path.split('/').filter(segment => segment.length > 0);
+        const relativePath = '../'.repeat(pathSegments.length);
+
         if (!note) {
             console.log("Unable to find note ", note);
             res.status(404);
-            renderDefault(res, "404");
+            renderDefault(res, "404", { relativePath, t });
             return;
         }
 
         if (!checkNoteAccess(note.noteId, req, res)) {
             requestCredentials(res);
-
             return;
         }
 
@@ -160,18 +164,20 @@ function register(router: Router) {
             return;
         }
 
-        const { header, content, isEmpty } = contentRenderer.getContent(note);
+        const { header, content, isEmpty } = contentRenderer.getContent(note, relativePath);
         const subRoot = getSharedSubTreeRoot(note);
         const showLoginInShareTheme = options.getOption("showLoginInShareTheme");
+
         const opts = {
             note,
             header,
             content,
             isEmpty,
             subRoot,
-            assetPath: isDev ? assetPath : `../${assetPath}`,
+            assetPath: isDev ? assetPath : `${relativePath}${assetPath}`,
             assetUrlFragment,
-            appPath: isDev ? appPath : `../${appPath}`,
+            appPath: isDev ? appPath : `${relativePath}${appPath}`,
+            relativePath,
             showLoginInShareTheme,
             t,
             isDev
