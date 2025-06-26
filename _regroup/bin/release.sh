@@ -47,11 +47,3 @@ echo "Tagging commit with $TAG"
 
 git tag $TAG
 git push origin $TAG
-
-echo "Updating master"
-
-git fetch
-git checkout master
-git reset --hard origin/master
-git merge origin/develop
-git push

@@ -192,13 +192,17 @@ class ContextMenu {
                         // it's important to stop the propagation especially for sub-menus, otherwise the event
                         // might be handled again by top-level menu
                         return false;
-                    })
-                    .on("mouseup", (e) =>{
+                    });
+
+                $item.on("mouseup", (e) => {
+                    // Prevent submenu from failing to expand on mobile
+                    if (!this.isMobile || !("items" in item && item.items)) {
                         e.stopPropagation();
                         // Hide the content menu on mouse up to prevent the mouse event from propagating to the elements below.
                         this.hide();
                         return false;
-                    });
+                    }
+                });
 
                 if ("enabled" in item && item.enabled !== undefined && !item.enabled) {
                     $item.addClass("disabled");

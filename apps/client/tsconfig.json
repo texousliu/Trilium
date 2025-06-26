@@ -4,10 +4,19 @@
   "include": [],
   "references": [
     {
-      "path": "../../packages/ckeditor5"
+      "path": "../../packages/share-theme"
+    },
+    {
+      "path": "../../packages/highlightjs"
     },
     {
       "path": "../../packages/commons"
+    },
+    {
+      "path": "../../packages/codemirror"
+    },
+    {
+      "path": "../../packages/ckeditor5"
     },
     {
       "path": "./tsconfig.app.json"

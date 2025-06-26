@@ -628,3 +628,56 @@ describe("#formatDownloadTitle", () => {
         });
     });
 });
+
+describe("#normalizeUrl", () => {
+    const testCases: TestCase<typeof utils.normalizeUrl>[] = [
+        [ "should remove trailing slash from simple URL", [ "https://example.com/" ], "https://example.com" ],
+        [ "should remove trailing slash from URL with path", [ "https://example.com/path/" ], "https://example.com/path" ],
+        [ "should preserve URL without trailing slash", [ "https://example.com" ], "https://example.com" ],
+        [ "should preserve URL without trailing slash with path", [ "https://example.com/path" ], "https://example.com/path" ],
+        [ "should preserve protocol-only URLs", [ "https://" ], "https://" ],
+        [ "should preserve protocol-only URLs", [ "http://" ], "http://" ],
+        [ "should fix double slashes in path", [ "https://example.com//api//test" ], "https://example.com/api/test" ],
+        [ "should handle multiple double slashes", [ "https://example.com///api///test" ], "https://example.com/api/test" ],
+        [ "should handle trailing slash with double slashes", [ "https://example.com//api//" ], "https://example.com/api" ],
+        [ "should preserve protocol double slash", [ "https://example.com/api" ], "https://example.com/api" ],
+        [ "should handle empty string", [ "" ], "" ],
+        [ "should handle whitespace-only string", [ "   " ], "" ],
+        [ "should trim whitespace", [ " https://example.com/ " ], "https://example.com" ],
+        [ "should handle null as empty", [ null as any ], null ],
+        [ "should handle undefined as empty", [ undefined as any ], undefined ]
+    ];
+
+    testCases.forEach((testCase) => {
+        const [ desc, fnParams, expected ] = testCase;
+        it(desc, () => {
+            const result = utils.normalizeUrl(...fnParams);
+            expect(result).toStrictEqual(expected);
+        });
+    });
+});
+
+describe("#normalizeCustomHandlerPattern", () => {
+    const testCases: TestCase<typeof utils.normalizeCustomHandlerPattern>[] = [
+        [ "should handle pattern without ending - add both versions", [ "foo" ], [ "foo", "foo/" ] ],
+        [ "should handle pattern with trailing slash - add both versions", [ "foo/" ], [ "foo", "foo/" ] ],
+        [ "should handle pattern ending with $ - add optional slash", [ "foo$" ], [ "foo/?$" ] ],
+        [ "should handle pattern with trailing slash and $ - add both versions", [ "foo/$" ], [ "foo$", "foo/$" ] ],
+        [ "should preserve existing optional slash pattern", [ "foo/?$" ], [ "foo/?$" ] ],
+        [ "should preserve existing optional slash pattern (alternative)", [ "foo/?)" ], [ "foo/?)" ] ],
+        [ "should handle regex pattern with special chars", [ "api/[a-z]+$" ], [ "api/[a-z]+/?$" ] ],
+        [ "should handle complex regex pattern", [ "user/([0-9]+)/profile$" ], [ "user/([0-9]+)/profile/?$" ] ],
+        [ "should handle empty string", [ "" ], [ "" ] ],
+        [ "should handle whitespace-only string", [ "   " ], [ "" ] ],
+        [ "should handle null", [ null as any ], [ null ] ],
+        [ "should handle undefined", [ undefined as any ], [ undefined ] ]
+    ];
+
+    testCases.forEach((testCase) => {
+        const [ desc, fnParams, expected ] = testCase;
+        it(desc, () => {
+            const result = utils.normalizeCustomHandlerPattern(...fnParams);
+            expect(result).toStrictEqual(expected);
+        });
+    });
+});

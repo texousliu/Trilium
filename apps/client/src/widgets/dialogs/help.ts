@@ -1,6 +1,6 @@
-import utils from "../../services/utils.js";
 import BasicWidget from "../basic_widget.js";
 import { t } from "../../services/i18n.js";
+import { openDialog } from "../../services/dialog.js";
 
 const TPL = /*html*/`
 <div class="help-dialog modal use-tn-links" tabindex="-1" role="dialog">
@@ -38,6 +38,7 @@ const TPL = /*html*/`
                             <p class="card-text">
                             <ul>
                                 <li>${t("help.newTabNoteLink")}</li>
+                                <li>${t("help.newTabWithActivationNoteLink")}</li>
                             </ul>
                             <h6>${t("help.onlyInDesktop")}:</h6>
                             <ul>
@@ -154,6 +155,6 @@ export default class HelpDialog extends BasicWidget {
     }
 
     showCheatsheetEvent() {
-        utils.openDialog(this.$widget);
+        openDialog(this.$widget);
     }
 }

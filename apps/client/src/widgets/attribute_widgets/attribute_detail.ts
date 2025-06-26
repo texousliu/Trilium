@@ -11,6 +11,7 @@ import utils from "../../services/utils.js";
 import shortcutService from "../../services/shortcuts.js";
 import appContext from "../../components/app_context.js";
 import type { Attribute } from "../../services/attribute_parser.js";
+import { focusSavedElement, saveFocusedElement } from "../../services/focus.js";
 
 const TPL = /*html*/`
 <div class="attr-detail tn-tool-dialog">
@@ -483,7 +484,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
             return;
         }
 
-        utils.saveFocusedElement();
+        saveFocusedElement();
 
         this.attrType = this.getAttrType(attribute);
 
@@ -605,7 +606,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
 
         this.hide();
 
-        utils.focusSavedElement();
+        focusSavedElement();
     }
 
     async cancelAndClose() {
@@ -613,7 +614,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
 
         this.hide();
 
-        utils.focusSavedElement();
+        focusSavedElement();
     }
 
     userEditedAttribute() {
@@ -718,7 +719,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
     }
 
     buildDefinitionValue() {
-        const props = [];
+        const props: string[] = [];
 
         if (this.$inputPromoted.is(":checked")) {
             props.push("promoted");
@@ -728,10 +729,10 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
             }
         }
 
-        props.push(this.$inputMultiplicity.val());
+        props.push(this.$inputMultiplicity.val() as string);
 
         if (this.attrType === "label-definition") {
-            props.push(this.$inputLabelType.val());
+            props.push(this.$inputLabelType.val() as string);
 
             if (this.$inputLabelType.val() === "number" && this.$inputNumberPrecision.val() !== "") {
                 props.push(`precision=${this.$inputNumberPrecision.val()}`);

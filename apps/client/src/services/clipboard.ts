@@ -4,6 +4,7 @@ import froca from "./froca.js";
 import linkService from "./link.js";
 import utils from "./utils.js";
 import { t } from "./i18n.js";
+import { throwError } from "./ws.js";
 
 let clipboardBranchIds: string[] = [];
 let clipboardMode: string | null = null;
@@ -36,7 +37,7 @@ async function pasteAfter(afterBranchId: string) {
 
         // copy will keep clipboardBranchIds and clipboardMode, so it's possible to paste into multiple places
     } else {
-        toastService.throwError(`Unrecognized clipboard mode=${clipboardMode}`);
+        throwError(`Unrecognized clipboard mode=${clipboardMode}`);
     }
 }
 
@@ -68,7 +69,7 @@ async function pasteInto(parentBranchId: string) {
 
         // copy will keep clipboardBranchIds and clipboardMode, so it's possible to paste into multiple places
     } else {
-        toastService.throwError(`Unrecognized clipboard mode=${clipboardMode}`);
+        throwError(`Unrecognized clipboard mode=${clipboardMode}`);
     }
 }
 
@@ -79,7 +80,7 @@ async function copy(branchIds: string[]) {
     if (utils.isElectron()) {
         // https://github.com/zadam/trilium/issues/2401
         const { clipboard } = require("electron");
-        const links = [];
+        const links: string[] = [];
 
         for (const branch of froca.getBranches(clipboardBranchIds)) {
             const $link = await linkService.createLink(`${branch.parentNoteId}/${branch.noteId}`, { referenceLink: true });

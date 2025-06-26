@@ -1,5 +1,5 @@
 import { t } from "./i18n.js";
-import toastService from "./toast.js";
+import toastService, { showError } from "./toast.js";
 
 function copyImageReferenceToClipboard($imageWrapper: JQuery<HTMLElement>) {
     try {
@@ -11,7 +11,9 @@ function copyImageReferenceToClipboard($imageWrapper: JQuery<HTMLElement>) {
         if (success) {
             toastService.showMessage(t("image.copied-to-clipboard"));
         } else {
-            toastService.showAndLogError(t("image.cannot-copy"));
+            const message = t("image.cannot-copy");
+            showError(message);
+            logError(message);
         }
     } finally {
         window.getSelection()?.removeAllRanges();

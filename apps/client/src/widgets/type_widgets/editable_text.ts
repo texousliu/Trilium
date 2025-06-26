@@ -1,7 +1,3 @@
-import { t } from "../../services/i18n.js";
-import libraryLoader from "../../services/library_loader.js";
-import noteAutocompleteService, { type Suggestion } from "../../services/note_autocomplete.js";
-import mimeTypesService from "../../services/mime_types.js";
 import utils, { hasTouchBar } from "../../services/utils.js";
 import keyboardActionService from "../../services/keyboard_actions.js";
 import froca from "../../services/froca.js";
@@ -12,30 +8,12 @@ import appContext, { type CommandListenerData, type EventData } from "../../comp
 import dialogService from "../../services/dialog.js";
 import options from "../../services/options.js";
 import toast from "../../services/toast.js";
-import { normalizeMimeTypeForCKEditor } from "../../services/mime_type_definitions.js";
 import { buildSelectedBackgroundColor } from "../../components/touch_bar.js";
-import { buildConfig, buildToolbarConfig } from "./ckeditor/config.js";
+import { buildConfig, BuildEditorOptions, OPEN_SOURCE_LICENSE_KEY } from "./ckeditor/config.js";
 import type FNote from "../../entities/fnote.js";
-import { getMermaidConfig } from "../../services/mermaid.js";
-import { PopupEditor, ClassicEditor, EditorWatchdog, type CKTextEditor, type MentionFeed, type WatchdogConfig } from "@triliumnext/ckeditor5";
+import { PopupEditor, ClassicEditor, EditorWatchdog, type CKTextEditor, type MentionFeed, type WatchdogConfig, EditorConfig } from "@triliumnext/ckeditor5";
 import "@triliumnext/ckeditor5/index.css";
-
-const ENABLE_INSPECTOR = false;
-
-const mentionSetup: MentionFeed[] = [
-    {
-        marker: "@",
-        feed: (queryText: string) => noteAutocompleteService.autocompleteSourceForCKEditor(queryText),
-        itemRenderer: (item) => {
-            const itemElement = document.createElement("button");
-
-            itemElement.innerHTML = `${(item as Suggestion).highlightedNotePathTitle} `;
-
-            return itemElement;
-        },
-        minimumCharacters: 0
-    }
-];
+import { updateTemplateCache } from "./ckeditor/snippets.js";
 
 const TPL = /*html*/`
 <div class="note-detail-editable-text note-detail-printable">
@@ -99,24 +77,6 @@ const TPL = /*html*/`
 </div>
 `;
 
-function buildListOfLanguages() {
-    const userLanguages = mimeTypesService
-        .getMimeTypes()
-        .filter((mt) => mt.enabled)
-        .map((mt) => ({
-            language: normalizeMimeTypeForCKEditor(mt.mime),
-            label: mt.title
-        }));
-
-    return [
-        {
-            language: mimeTypesService.MIME_TYPE_AUTO,
-            label: t("editable-text.auto-detect-language")
-        },
-        ...userLanguages
-    ];
-}
-
 /**
  * The editor can operate into two distinct modes:
  *
@@ -149,7 +109,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     async initEditor() {
         const isClassicEditor = utils.isMobile() || options.get("textNoteEditorType") === "ckeditor-classic";
-        const editorClass = isClassicEditor ? ClassicEditor : PopupEditor;
 
         // CKEditor since version 12 needs the element to be visible before initialization. At the same time,
         // we want to avoid flicker - i.e., show editor only once everything is ready. That's why we have separate
@@ -167,7 +126,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             // is shorter than minimumNonErrorTimePeriod, the watchdog changes
             // its state to crashedPermanently, and it stops restarting the editor.
             // This prevents an infinite restart loop.
-            crashNumberLimit: 3,
+            crashNumberLimit: 10,
             // A minimum number of milliseconds between saving the editor data internally (defaults to 5000).
             // Note that for large documents, this might impact the editor performance.
             saveInterval: 5000
@@ -182,8 +141,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 return;
             }
 
-            logInfo(`CKEditor crash logs: ${JSON.stringify(this.watchdog.crashes)}`);
-            this.watchdog.crashes.forEach((crashInfo) => console.log(crashInfo));
+            logError(`CKEditor crash logs: ${JSON.stringify(this.watchdog.crashes, null, 4)}`);
 
             if (currentState === "crashedPermanently") {
                 dialogService.info(`Editing component keeps crashing. Please try restarting Trilium. If problem persists, consider creating a bug report.`);
@@ -192,37 +150,18 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             }
         });
 
-        this.watchdog.setCreator(async (elementOrData, editorConfig) => {
+        this.watchdog.setCreator(async (_, editorConfig) => {
             logInfo("Creating new CKEditor");
 
-            const finalConfig = {
-                ...editorConfig,
-                ...buildConfig(),
-                ...buildToolbarConfig(isClassicEditor),
-                htmlSupport: {
-                    allow: JSON.parse(options.get("allowedHtmlTags")),
-                    styles: true,
-                    classes: true,
-                    attributes: true
-                },
-                licenseKey: "GPL"
-            };
-
             const contentLanguage = this.note?.getLabelValue("language");
-            if (contentLanguage) {
-                // TODO: Wrong type?
-                //@ts-ignore
-                finalConfig.language = {
-                    ui: (typeof finalConfig.language === "string" ? finalConfig.language : "en"),
-                    content: contentLanguage
-                }
-                this.contentLanguage = contentLanguage;
-            } else {
-                this.contentLanguage = null;
-            }
+            this.contentLanguage = contentLanguage ?? null;
 
-            //@ts-ignore
-            const editor = await editorClass.create(elementOrData, finalConfig);
+            const opts: BuildEditorOptions = {
+                contentLanguage: this.contentLanguage,
+                forceGplLicense: false,
+                isClassicEditor
+            };
+            const editor = await buildEditor(this.$editor[0], isClassicEditor, opts);
 
             const notificationsPlugin = editor.plugins.get("Notification");
             notificationsPlugin.on("show:warning", (evt, data) => {
@@ -267,7 +206,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                         }
 
                         item.on("change:isOpen", () => {
-                            if (!("isOpen" in item) || !item.isOpen ) {
+                            if (!("isOpen" in item) || !item.isOpen) {
                                 return;
                             }
 
@@ -280,7 +219,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
             editor.model.document.on("change:data", () => this.spacedUpdate.scheduleUpdate());
 
-            if (glob.isDev && ENABLE_INSPECTOR) {
+            if (import.meta.env.VITE_CKEDITOR_ENABLE_INSPECTOR === "true") {
                 const CKEditorInspector = (await import("@ckeditor/ckeditor5-inspector")).default;
                 CKEditorInspector.attach(editor);
             }
@@ -299,25 +238,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     }
 
     async createEditor() {
-        await this.watchdog.create(this.$editor[0], {
-            placeholder: t("editable_text.placeholder"),
-            //@ts-ignore TODO: FIX TYPES
-            mention: mentionSetup,
-            codeBlock: {
-                languages: buildListOfLanguages()
-            },
-            math: {
-                engine: "katex",
-                outputType: "span", // or script
-                lazyLoad: async () => await libraryLoader.requireLibrary(libraryLoader.KATEX),
-                forceOutputType: false, // forces output to use outputType
-                enablePreview: true // Enable preview view
-            },
-            mermaid: {
-                lazyLoad: async () => (await import("mermaid")).default, // FIXME
-                config: getMermaidConfig()
-            }
-        });
+        await this.watchdog.create(this.$editor[0]);
     }
 
     async doRefresh(note: FNote) {
@@ -327,7 +248,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             const data = blob?.content || "";
             const newContentLanguage = this.note?.getLabelValue("language");
             if (this.contentLanguage !== newContentLanguage) {
-                await this.reinitialize(data);
+                await this.reinitializeWithData(data);
             } else {
                 this.watchdog.editor?.setData(data);
             }
@@ -335,6 +256,11 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     }
 
     getData() {
+        if (!this.watchdog.editor) {
+            // There is nothing to save, most likely a result of the editor crashing and reinitializing.
+            return;
+        }
+
         const content = this.watchdog.editor?.getData() ?? "";
 
         // if content is only tags/whitespace (typically <p>&nbsp;</p>), then just make it empty,
@@ -375,7 +301,8 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     insertDateTimeToTextCommand() {
         const date = new Date();
-        const dateString = utils.formatDateTime(date);
+        const customDateTimeFormat = options.get("customDateTimeFormat");
+        const dateString = utils.formatDateTime(date, customDateTimeFormat);
 
         this.addTextToEditor(dateString);
     }
@@ -557,7 +484,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.refreshIncludedNote(this.$editor, noteId);
     }
 
-    async reinitialize(data: string) {
+    async reinitializeWithData(data: string) {
         if (!this.watchdog) {
             return;
         }
@@ -567,9 +494,25 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.watchdog.editor?.setData(data);
     }
 
-    async onLanguageChanged() {
+    async reinitialize() {
         const data = this.watchdog.editor?.getData();
-        await this.reinitialize(data ?? "");
+        await this.reinitializeWithData(data ?? "");
+    }
+
+    async reloadTextEditorEvent() {
+        await this.reinitialize();
+    }
+
+    async onLanguageChanged() {
+        await this.reinitialize();
+    }
+
+    async entitiesReloadedEvent(e: EventData<"entitiesReloaded">) {
+        await super.entitiesReloadedEvent(e);
+
+        if (updateTemplateCache(e.loadResults)) {
+            await this.reinitialize();
+        }
     }
 
     buildTouchBarCommand(data: CommandListenerData<"buildTouchBar">) {
@@ -587,7 +530,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             backgroundColor: buildSelectedBackgroundColor(editor.commands.get(command)?.value as boolean)
         });
 
-        let headingSelectedIndex = undefined;
+        let headingSelectedIndex: number | undefined = undefined;
         const headingCommand = editor.commands.get("heading");
         const paragraphCommand = editor.commands.get("paragraph");
         if (paragraphCommand?.value) {
@@ -631,5 +574,21 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             })
         ];
     }
+
+}
+
+async function buildEditor(element: HTMLElement, isClassicEditor: boolean, opts: BuildEditorOptions) {
+    const editorClass = isClassicEditor ? ClassicEditor : PopupEditor;
+    let config = await buildConfig(opts);
+    let editor = await editorClass.create(element, config);
+
+    if (editor.isReadOnly) {
+        editor.destroy();
+
+        opts.forceGplLicense = true;
+        config = await buildConfig(opts);
+        editor = await editorClass.create(element, config);
+    }
+    return editor;
 
 }

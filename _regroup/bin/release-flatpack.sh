@@ -24,7 +24,7 @@ if ! git diff-index --quiet HEAD --; then
     exit 1
 fi
 
-BASE_BRANCH=master
+BASE_BRANCH=main
 
 if [[ "$VERSION" == *"beta"* ]]; then
     BASE_BRANCH=beta

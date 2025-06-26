@@ -7,7 +7,13 @@
       "path": "../server"
     },
     {
+      "path": "../../packages/commons"
+    },
+    {
       "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.forge.json"
     }
   ]
 }

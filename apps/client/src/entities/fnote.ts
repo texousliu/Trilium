@@ -1,7 +1,6 @@
 import server from "../services/server.js";
 import noteAttributeCache from "../services/note_attribute_cache.js";
 import ws from "../services/ws.js";
-import froca from "../services/froca.js";
 import protectedSessionHolder from "../services/protected_session_holder.js";
 import cssClassManager from "../services/css_class_manager.js";
 import type { Froca } from "../services/froca-interface.js";
@@ -410,8 +409,8 @@ class FNote {
         const notePaths: NotePathRecord[] = this.getAllNotePaths().map((path) => ({
             notePath: path,
             isInHoistedSubTree: isHoistedRoot || path.includes(hoistedNoteId),
-            isArchived: path.some((noteId) => froca.notes[noteId].isArchived),
-            isSearch: path.some((noteId) => froca.notes[noteId].type === "search"),
+            isArchived: path.some((noteId) => this.froca.notes[noteId].isArchived),
+            isSearch: path.some((noteId) => this.froca.notes[noteId].type === "search"),
             isHidden: path.includes("_hidden")
         }));
 
@@ -789,7 +788,7 @@ class FNote {
      */
     async getRelationTargets(name: string) {
         const relations = this.getRelations(name);
-        const targets = [];
+        const targets: (FNote | null)[] = [];
 
         for (const relation of relations) {
             targets.push(await this.froca.getNote(relation.value));
@@ -982,7 +981,7 @@ class FNote {
                 continue;
             }
 
-            const parentNote = froca.notes[parentNoteId];
+            const parentNote = this.froca.notes[parentNoteId];
 
             if (!parentNote || parentNote.type === "search") {
                 continue;

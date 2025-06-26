@@ -113,7 +113,7 @@
   },
   "javascript-required": "Trilium necesită JavaScript să fie activat pentru a putea funcționa.",
   "setup": {
-    "heading": "Instalarea TriliumNext Notes",
+    "heading": "Instalarea Trilium Notes",
     "init-in-progress": "Se inițializează documentul",
     "new-document": "Sunt un utilizator nou și doresc să creez un document Trilium pentru notițele mele",
     "next": "Mai departe",
@@ -125,7 +125,7 @@
   "setup_sync-from-desktop": {
     "description": "Acești pași trebuie urmați de pe aplicația de desktop:",
     "heading": "Sincronizare cu aplicația desktop",
-    "step1": "Deschideți aplicația TriliumNext Notes pentru desktop.",
+    "step1": "Deschideți aplicația Trilium Notes pentru desktop.",
     "step2": "Din meniul Trilium, dați clic pe Opțiuni.",
     "step3": "Clic pe categoria „Sincronizare”.",
     "step4": "Schimbați adresa server-ului către: {{- host}} și apăsați „Salvează”.",
@@ -188,11 +188,6 @@
   },
   "special_notes": {
     "search_prefix": "Căutare:"
-  },
-  "code_block": {
-    "theme_none": "Fără evidențiere de sintaxă",
-    "theme_group_dark": "Teme întunecate",
-    "theme_group_light": "Teme luminoase"
   },
   "test_sync": {
     "not-configured": "Calea către serverul de sincronizare nu este configurată. Configurați sincronizarea înainte.",
@@ -271,7 +266,7 @@
     "new-note": "Notiță nouă",
     "recents": "Notițe recente",
     "today": "Mergi la notița de astăzi",
-    "tooltip": "TriliumNext Notes",
+    "tooltip": "Trilium Notes",
     "show-windows": "Afișează ferestrele"
   },
   "migration": {

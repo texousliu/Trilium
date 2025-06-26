@@ -1,6 +1,6 @@
 {
   "about": {
-    "title": "Über TriliumNext Notes",
+    "title": "Über Trilium Notes",
     "close": "Schließen",
     "homepage": "Startseite:",
     "app_version": "App-Version:",
@@ -639,7 +639,7 @@
     "reload_frontend": "Frontend neu laden",
     "show_hidden_subtree": "Versteckten Teilbaum anzeigen",
     "show_help": "Hilfe anzeigen",
-    "about": "Über TriliumNext Notes",
+    "about": "Über Trilium Notes",
     "logout": "Abmelden",
     "show-cheatsheet": "Cheatsheet anzeigen",
     "toggle-zen-mode": "Zen Modus"
@@ -1568,12 +1568,15 @@
     "auto-detect-language": "Automatisch erkannt"
   },
   "highlighting": {
-    "title": "Code-Syntax-Hervorhebung für Textnotizen",
+    "title": "",
     "description": "Steuert die Syntaxhervorhebung für Codeblöcke in Textnotizen, Code-Notizen sind nicht betroffen.",
     "color-scheme": "Farbschema"
   },
   "code_block": {
-    "word_wrapping": "Wortumbruch"
+    "word_wrapping": "Wortumbruch",
+    "theme_none": "Keine Syntax-Hervorhebung",
+    "theme_group_light": "Helle Themen",
+    "theme_group_dark": "Dunkle Themen"
   },
   "classic_editor_toolbar": {
     "title": "Format"

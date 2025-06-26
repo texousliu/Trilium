@@ -1,19 +1,50 @@
-import library_loader from "../../../services/library_loader.js";
 import { ALLOWED_PROTOCOLS } from "../../../services/link.js";
-import { MIME_TYPE_AUTO } from "../../../services/mime_type_definitions.js";
+import { MIME_TYPE_AUTO } from "@triliumnext/commons";
+import { buildExtraCommands, type EditorConfig, PREMIUM_PLUGINS } from "@triliumnext/ckeditor5";
 import { getHighlightJsNameForMime } from "../../../services/mime_types.js";
 import options from "../../../services/options.js";
-import { isSyntaxHighlightEnabled } from "../../../services/syntax_highlight.js";
-import utils from "../../../services/utils.js";
-import emojiDefinitionsUrl from "@triliumnext/ckeditor5/emoji_definitions/en.json?external";
+import { ensureMimeTypesForHighlighting, isSyntaxHighlightEnabled } from "../../../services/syntax_highlight.js";
+import emojiDefinitionsUrl from "@triliumnext/ckeditor5/emoji_definitions/en.json?url";
+import { copyTextWithToast } from "../../../services/clipboard_ext.js";
+import getTemplates from "./snippets.js";
+import { t } from "../../../services/i18n.js";
+import { getMermaidConfig } from "../../../services/mermaid.js";
+import noteAutocompleteService, { type Suggestion } from "../../../services/note_autocomplete.js";
+import mimeTypesService from "../../../services/mime_types.js";
+import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
+import { buildToolbarConfig } from "./toolbar.js";
 
-const TEXT_FORMATTING_GROUP = {
-    label: "Text formatting",
-    icon: "text"
-};
+export const OPEN_SOURCE_LICENSE_KEY = "GPL";
 
-export function buildConfig() {
-    return {
+export interface BuildEditorOptions {
+    forceGplLicense: boolean;
+    isClassicEditor: boolean;
+    contentLanguage: string | null;
+}
+
+export async function buildConfig(opts: BuildEditorOptions): Promise<EditorConfig> {
+    const licenseKey = (opts.forceGplLicense ? OPEN_SOURCE_LICENSE_KEY : getLicenseKey());
+    const hasPremiumLicense = (licenseKey !== OPEN_SOURCE_LICENSE_KEY);
+
+    const config: EditorConfig = {
+        licenseKey,
+        placeholder: t("editable_text.placeholder"),
+        codeBlock: {
+            languages: buildListOfLanguages()
+        },
+        math: {
+            engine: "katex",
+            outputType: "span", // or script
+            lazyLoad: async () => {
+                (window as any).katex = (await import("../../../services/math.js")).default
+            },
+            forceOutputType: false, // forces output to use outputType
+            enablePreview: true // Enable preview view
+        },
+        mermaid: {
+            lazyLoad: async () => (await import("mermaid")).default, // FIXME
+            config: getMermaidConfig()
+        },
         image: {
             styles: {
                 options: [
@@ -96,161 +127,122 @@ export function buildConfig() {
                 reversed: true
             }
         },
+        alignment: {
+            options: [ "left", "right", "center", "justify"]
+        },
         link: {
             defaultProtocol: "https://",
             allowedProtocols: ALLOWED_PROTOCOLS
         },
         emoji: {
-            definitionsUrl: emojiDefinitionsUrl
+            definitionsUrl: window.glob.isDev
+                ? new URL(import.meta.url).origin + emojiDefinitionsUrl
+                : emojiDefinitionsUrl
         },
         syntaxHighlighting: {
-            async loadHighlightJs() {
-                await library_loader.requireLibrary(library_loader.HIGHLIGHT_JS);
-                return hljs;
+            loadHighlightJs: async () => {
+                await ensureMimeTypesForHighlighting();
+                return await import("@triliumnext/highlightjs");
             },
             mapLanguageName: getHighlightJsNameForMime,
             defaultMimeType: MIME_TYPE_AUTO,
-            enabled: isSyntaxHighlightEnabled
+            enabled: isSyntaxHighlightEnabled()
+        },
+        clipboard: {
+            copy: copyTextWithToast
+        },
+        slashCommand: {
+            removeCommands: [],
+            dropdownLimit: Number.MAX_SAFE_INTEGER,
+            extraCommands: buildExtraCommands()
+        },
+        template: {
+            definitions: await getTemplates()
+        },
+        htmlSupport: {
+            allow: JSON.parse(options.get("allowedHtmlTags"))
         },
         // This value must be kept in sync with the language defined in webpack.config.js.
-        language: "en"
+        language: "en",
+        removePlugins: getDisabledPlugins()
     };
-}
 
-export function buildToolbarConfig(isClassicToolbar: boolean) {
-    if (utils.isMobile()) {
-        return buildMobileToolbar();
-    } else if (isClassicToolbar) {
-        const multilineToolbar = utils.isDesktop() && options.get("textNoteEditorMultilineToolbar") === "true";
-        return buildClassicToolbar(multilineToolbar);
-    } else {
-        return buildFloatingToolbar();
-    }
-}
-
-export function buildMobileToolbar() {
-    const classicConfig = buildClassicToolbar(false);
-    const items = [];
-
-    for (const item of classicConfig.toolbar.items) {
-        if (typeof item === "object" && "items" in item) {
-            for (const subitem of item.items) {
-                items.push(subitem);
-            }
-        } else {
-            items.push(item);
+    // Set up content language.
+    const { contentLanguage } = opts;
+    if (contentLanguage) {
+        config.language = {
+            ui: (typeof config.language === "string" ? config.language : "en"),
+            content: contentLanguage
         }
     }
 
-    return {
-        ...classicConfig,
-        toolbar: {
-            ...classicConfig.toolbar,
-            items
-        }
-    };
-}
+    // Mention customisation.
+    if (options.get("textNoteCompletionEnabled") === "true") {
+        config.mention = {
+            feeds: [
+                {
+                    marker: "@",
+                    feed: (queryText: string) => noteAutocompleteService.autocompleteSourceForCKEditor(queryText),
+                    itemRenderer: (item) => {
+                        const itemElement = document.createElement("button");
 
-export function buildClassicToolbar(multilineToolbar: boolean) {
-    // For nested toolbars, refer to https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/toolbar.html#grouping-toolbar-items-in-dropdowns-nested-toolbars.
-    return {
-        toolbar: {
-            items: [
-                "heading",
-                "fontSize",
-                "|",
-                "bold",
-                "italic",
-                {
-                    ...TEXT_FORMATTING_GROUP,
-                    items: ["underline", "strikethrough", "|", "superscript", "subscript", "|", "kbd"]
-                },
-                "|",
-                "fontColor",
-                "fontBackgroundColor",
-                "removeFormat",
-                "|",
-                "bulletedList",
-                "numberedList",
-                "todoList",
-                "|",
-                "blockQuote",
-                "admonition",
-                "insertTable",
-                "|",
-                "code",
-                "codeBlock",
-                "|",
-                "footnote",
-                {
-                    label: "Insert",
-                    icon: "plus",
-                    items: ["imageUpload", "|", "link", "bookmark", "internallink", "includeNote", "|", "specialCharacters", "emoji", "math", "mermaid", "horizontalLine", "pageBreak"]
-                },
-                "|",
-                "outdent",
-                "indent",
-                "|",
-                "markdownImport",
-                "cuttonote",
-                "findAndReplace"
+                        itemElement.innerHTML = `${(item as Suggestion).highlightedNotePathTitle} `;
+
+                        return itemElement;
+                    },
+                    minimumCharacters: 0
+                }
             ],
-            shouldNotGroupWhenFull: multilineToolbar
-        }
+        };
+    }
+
+    // Enable premium plugins.
+    if (hasPremiumLicense) {
+        config.extraPlugins = [
+            ...PREMIUM_PLUGINS
+        ];
+    }
+
+    return {
+        ...config,
+        ...buildToolbarConfig(opts.isClassicEditor)
     };
 }
 
-export function buildFloatingToolbar() {
-    return {
-        toolbar: {
-            items: [
-                "fontSize",
-                "bold",
-                "italic",
-                "underline",
-                {
-                    ...TEXT_FORMATTING_GROUP,
-                    items: [ "strikethrough", "|", "superscript", "subscript", "|", "kbd" ]
-                },
-                "|",
-                "fontColor",
-                "fontBackgroundColor",
-                "|",
-                "code",
-                "link",
-                "bookmark",
-                "removeFormat",
-                "internallink",
-                "cuttonote"
-            ]
-        },
+function buildListOfLanguages() {
+    const userLanguages = mimeTypesService
+        .getMimeTypes()
+        .filter((mt) => mt.enabled)
+        .map((mt) => ({
+            language: normalizeMimeTypeForCKEditor(mt.mime),
+            label: mt.title
+        }));
 
-        blockToolbar: [
-            "heading",
-            "|",
-            "bulletedList",
-            "numberedList",
-            "todoList",
-            "|",
-            "blockQuote",
-            "admonition",
-            "codeBlock",
-            "insertTable",
-            "footnote",
-            {
-                label: "Insert",
-                icon: "plus",
-                items: ["internallink", "includeNote", "|", "math", "mermaid", "horizontalLine", "pageBreak"]
-            },
-            "|",
-            "outdent",
-            "indent",
-            "|",
-            "imageUpload",
-            "markdownImport",
-            "specialCharacters",
-            "emoji",
-            "findAndReplace"
-        ]
-    };
+    return [
+        {
+            language: mimeTypesService.MIME_TYPE_AUTO,
+            label: t("editable-text.auto-detect-language")
+        },
+        ...userLanguages
+    ];
+}
+
+function getLicenseKey() {
+    const premiumLicenseKey = import.meta.env.VITE_CKEDITOR_KEY;
+    if (!premiumLicenseKey) {
+        logError("CKEditor license key is not set, premium features will not be available.");
+        return OPEN_SOURCE_LICENSE_KEY;
+    }
+
+    return premiumLicenseKey;
+}
+
+function getDisabledPlugins() {
+    let disabledPlugins: string[] = [];
+
+    if (options.get("textNoteEmojiCompletionEnabled") !== "true") {
+        disabledPlugins.push("EmojiMention");
+    }
+
+    return disabledPlugins;
 }

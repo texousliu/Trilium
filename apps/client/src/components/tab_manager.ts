@@ -44,6 +44,9 @@ export default class TabManager extends Component {
             if (!appContext.isMainWindow) {
                 return;
             }
+            if (options.is("databaseReadonly")) {
+                return;
+            }
 
             const openNoteContexts = this.noteContexts
                 .map((nc) => nc.getPojoState())
@@ -277,10 +280,18 @@ export default class TabManager extends Component {
         return noteContext;
     }
 
-    async openInNewTab(targetNoteId: string, hoistedNoteId: string | null = null) {
+    async openInNewTab(targetNoteId: string, hoistedNoteId: string | null = null, activate: boolean = false) {
         const noteContext = await this.openEmptyTab(null, hoistedNoteId || this.getActiveContext()?.hoistedNoteId);
 
         await noteContext.setNote(targetNoteId);
+
+        if (activate && noteContext.notePath) {
+            this.activateNoteContext(noteContext.ntxId, false);
+            await this.triggerEvent("noteSwitchedAndActivated", {
+                noteContext,
+                notePath: noteContext.notePath
+            });
+        }
     }
 
     async openInSameTab(targetNoteId: string, hoistedNoteId: string | null = null) {
@@ -677,7 +688,7 @@ export default class TabManager extends Component {
         const titleFragments = [
             // it helps to navigate in history if note title is included in the title
             await activeNoteContext.getNavigationTitle(),
-            "TriliumNext Notes"
+            "Trilium Notes"
         ].filter(Boolean);
 
         document.title = titleFragments.join(" - ");

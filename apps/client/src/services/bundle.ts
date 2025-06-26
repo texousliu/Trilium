@@ -1,6 +1,6 @@
 import ScriptContext from "./script_context.js";
 import server from "./server.js";
-import toastService from "./toast.js";
+import toastService, { showError } from "./toast.js";
 import froca from "./froca.js";
 import utils from "./utils.js";
 import { t } from "./i18n.js";
@@ -37,7 +37,9 @@ async function executeBundle(bundle: Bundle, originEntity?: Entity | null, $cont
     } catch (e: any) {
         const note = await froca.getNote(bundle.noteId);
 
-        toastService.showAndLogError(`Execution of JS note "${note?.title}" with ID ${bundle.noteId} failed with error: ${e?.message}`);
+        const message = `Execution of JS note "${note?.title}" with ID ${bundle.noteId} failed with error: ${e?.message}`;
+        showError(message);
+        logError(message);
     }
 }
 

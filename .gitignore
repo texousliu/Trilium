@@ -44,3 +44,6 @@ upload
 
 .rollup.cache
 *.tsbuildinfo
+
+/result
+.svelte-kit

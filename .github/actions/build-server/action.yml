@@ -30,4 +30,4 @@ runs:
       mkdir -p upload
       file=$(find ./apps/server/out -name '*.tar.xz' -print -quit)
       name=${{ github.ref_name }}
-      cp "$file" "upload/TriliumNextNotes-Server-${name//\//-}-${{ inputs.os }}-${{ inputs.arch }}.tar.xz"
+      cp "$file" "upload/TriliumNotes-Server-${name//\//-}-${{ inputs.os }}-${{ inputs.arch }}.tar.xz"

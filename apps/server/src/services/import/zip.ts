@@ -41,6 +41,7 @@ async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRoo
     const createdPaths: Record<string, string> = { "/": importRootNote.noteId, "\\": importRootNote.noteId };
     let metaFile: MetaFile | null = null;
     let firstNote: BNote | null = null;
+    let topLevelPath = "";
     const createdNoteIds = new Set<string>();
 
     function getNewNoteId(origNoteId: string) {
@@ -257,28 +258,34 @@ async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRoo
         saveAttributes(note, noteMeta);
 
         firstNote = firstNote || note;
-
         return noteId;
     }
 
     function getEntityIdFromRelativeUrl(url: string, filePath: string) {
-        while (url.startsWith("./")) {
-            url = url.substr(2);
+        let absUrl: string;
+        if (!url.startsWith("/")) {
+            while (url.startsWith("./")) {
+                url = url.substr(2);
+            }
+
+            absUrl = path.dirname(filePath);
+
+            while (url.startsWith("../")) {
+                absUrl = path.dirname(absUrl);
+
+                url = url.substr(3);
+            }
+
+            if (absUrl === ".") {
+                absUrl = "";
+            }
+
+            absUrl += `${absUrl.length > 0 ? "/" : ""}${url}`;
+        } else {
+            absUrl = topLevelPath + url;
         }
 
-        let absUrl = path.dirname(filePath);
-
-        while (url.startsWith("../")) {
-            absUrl = path.dirname(absUrl);
-
-            url = url.substr(3);
-        }
-
-        if (absUrl === ".") {
-            absUrl = "";
-        }
-
-        absUrl += `${absUrl.length > 0 ? "/" : ""}${url}`;
+        console.log(url, "-->", absUrl);
 
         const { noteMeta, attachmentMeta } = getMeta(absUrl);
 
@@ -330,7 +337,7 @@ async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRoo
                 return `src="${url}"`;
             }
 
-            if (isUrlAbsolute(url) || url.startsWith("/")) {
+            if (isUrlAbsolute(url)) {
                 return match;
             }
 
@@ -527,19 +534,27 @@ async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRoo
         }
     }
 
-    // we're running two passes to make sure that the meta file is loaded before the rest of the files is processed.
-
+    // we're running two passes in order to obtain critical information first (meta file and root)
+    const topLevelItems = new Set<string>();
     await readZipFile(fileBuffer, async (zipfile: yauzl.ZipFile, entry: yauzl.Entry) => {
         const filePath = normalizeFilePath(entry.fileName);
 
+        // make sure that the meta file is loaded before the rest of the files is processed.
         if (filePath === "!!!meta.json") {
             const content = await readContent(zipfile, entry);
 
             metaFile = JSON.parse(content.toString("utf-8"));
         }
 
+        // determine the root of the .zip (i.e. if it has only one top-level folder then the root is that folder, or the root of the archive if there are multiple top-level folders).
+        const firstSlash = filePath.indexOf("/");
+        const topLevelPath = (firstSlash !== -1 ? filePath.substring(0, firstSlash) : filePath);
+        topLevelItems.add(topLevelPath);
+
         zipfile.readEntry();
     });
+
+    topLevelPath = (topLevelItems.size > 1 ? "" : topLevelItems.values().next().value ?? "");
 
     await readZipFile(fileBuffer, async (zipfile: yauzl.ZipFile, entry: yauzl.Entry) => {
         const filePath = normalizeFilePath(entry.fileName);

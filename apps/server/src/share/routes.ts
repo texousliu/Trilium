@@ -6,7 +6,7 @@ import shaca from "./shaca/shaca.js";
 import shacaLoader from "./shaca/shaca_loader.js";
 import shareRoot from "./share_root.js";
 import contentRenderer from "./content_renderer.js";
-import assetPath from "../services/asset_path.js";
+import assetPath, { assetUrlFragment } from "../services/asset_path.js";
 import appPath from "../services/app_path.js";
 import searchService from "../services/search/services/search.js";
 import SearchContext from "../services/search/search_context.js";
@@ -14,8 +14,10 @@ import log from "../services/log.js";
 import type SNote from "./shaca/entities/snote.js";
 import type SBranch from "./shaca/entities/sbranch.js";
 import type SAttachment from "./shaca/entities/sattachment.js";
-import utils, { safeExtractMessageAndStackFromError } from "../services/utils.js";
+import utils, { isDev, safeExtractMessageAndStackFromError } from "../services/utils.js";
 import options from "../services/options.js";
+import { t } from "i18next";
+import ejs from "ejs";
 
 function getSharedSubTreeRoot(note: SNote): { note?: SNote; branch?: SBranch } {
     if (note.noteId === shareRoot.SHARE_ROOT_NOTE_ID) {
@@ -106,7 +108,8 @@ function renderImageAttachment(image: SNote, res: Response, attachmentName: stri
     let svgString = "<svg/>";
     const attachment = image.getAttachmentByTitle(attachmentName);
     if (!attachment) {
-        res.status(404).render("share/404");
+        res.status(404);
+        renderDefault(res, "404");
         return;
     }
     const content = attachment.getContent();
@@ -138,7 +141,8 @@ function register(router: Router) {
     function renderNote(note: SNote, req: Request, res: Response) {
         if (!note) {
             console.log("Unable to find note ", note);
-            res.status(404).render("share/404");
+            res.status(404);
+            renderDefault(res, "404");
             return;
         }
 
@@ -159,7 +163,19 @@ function register(router: Router) {
         const { header, content, isEmpty } = contentRenderer.getContent(note);
         const subRoot = getSharedSubTreeRoot(note);
         const showLoginInShareTheme = options.getOption("showLoginInShareTheme");
-        const opts = { note, header, content, isEmpty, subRoot, assetPath, appPath, showLoginInShareTheme };
+        const opts = {
+            note,
+            header,
+            content,
+            isEmpty,
+            subRoot,
+            assetPath: isDev ? assetPath : `../${assetPath}`,
+            assetUrlFragment,
+            appPath: isDev ? appPath : `../${appPath}`,
+            showLoginInShareTheme,
+            t,
+            isDev
+        };
         let useDefaultView = true;
 
         // Check if the user has their own template
@@ -173,7 +189,7 @@ function register(router: Router) {
                 // EJS caches the result of this so we don't need to pre-cache
                 const includer = (path: string) => {
                     const childNote = templateNote.children.find((n) => path === n.title);
-                    if (!childNote) throw new Error("Unable to find child note.");
+                    if (!childNote) throw new Error(`Unable to find child note: ${path}.`);
                     if (childNote.type !== "code" || childNote.mime !== "application/x-ejs") throw new Error("Incorrect child note type.");
 
                     const template = childNote.getContent();
@@ -198,7 +214,7 @@ function register(router: Router) {
         }
 
         if (useDefaultView) {
-            res.render("share/page", opts);
+            renderDefault(res, "page", opts);
         }
     }
 
@@ -362,6 +378,12 @@ function register(router: Router) {
         }
         next();
     });
+}
+
+function renderDefault(res: Response<any, Record<string, any>>, template: "page" | "404", opts: any = {}) {
+    // Path is relative to apps/server/dist/assets/views
+    const shareThemePath = `../../share-theme/templates/${template}.ejs`;
+    res.render(shareThemePath, opts);
 }
 
 export default {

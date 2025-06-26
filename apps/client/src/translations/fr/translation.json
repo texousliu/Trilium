@@ -1,6 +1,6 @@
 {
   "about": {
-    "title": "À propos de TriliumNext Notes",
+    "title": "À propos de Trilium Notes",
     "close": "Fermer",
     "homepage": "Page d'accueil :",
     "app_version": "Version de l'application :",
@@ -639,7 +639,7 @@
     "reload_frontend": "Recharger l'interface",
     "show_hidden_subtree": "Afficher le Sous-arbre caché",
     "show_help": "Afficher l'aide",
-    "about": "À propos de TriliumNext Notes",
+    "about": "À propos de Trilium Notes",
     "logout": "Déconnexion",
     "show-cheatsheet": "Afficher l'aide rapide",
     "toggle-zen-mode": "Zen Mode"
@@ -1574,12 +1574,15 @@
     "auto-detect-language": "Détecté automatiquement"
   },
   "highlighting": {
-    "title": "Coloration syntaxique du code pour les notes texte",
+    "title": "",
     "description": "Contrôle la coloration syntaxique des blocs de code à l'intérieur des notes texte, les notes de code ne seront pas affectées.",
     "color-scheme": "Jeu de couleurs"
   },
   "code_block": {
-    "word_wrapping": "Saut à la ligne automatique suivant la largeur"
+    "word_wrapping": "Saut à la ligne automatique suivant la largeur",
+    "theme_none": "Pas de coloration syntaxique",
+    "theme_group_light": "Thèmes clairs",
+    "theme_group_dark": "Thèmes sombres"
   },
   "classic_editor_toolbar": {
     "title": "Mise en forme"

@@ -1,5 +1,4 @@
 import froca from "../services/froca.js";
-import bundleService from "../services/bundle.js";
 import RootCommandExecutor from "./root_command_executor.js";
 import Entrypoints, { type SqlExecuteResults } from "./entrypoints.js";
 import options from "../services/options.js";
@@ -27,6 +26,8 @@ import type EditableTextTypeWidget from "../widgets/type_widgets/editable_text.j
 import type { NativeImage, TouchBar } from "electron";
 import TouchBarComponent from "./touch_bar.js";
 import type { CKTextEditor } from "@triliumnext/ckeditor5";
+import type CodeMirror from "@triliumnext/codemirror";
+import { StartupChecks } from "./startup_checks.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -127,6 +128,7 @@ export type CommandMappings = {
     openAboutDialog: CommandData;
     hideFloatingButtons: {};
     hideLeftPane: CommandData;
+    showCpuArchWarning: CommandData;
     showLeftPane: CommandData;
     hoistNote: CommandData & { noteId: string };
     leaveProtectedSession: CommandData;
@@ -191,7 +193,7 @@ export type CommandMappings = {
     ExecuteCommandData<CKTextEditor> & {
         callback?: GetTextEditorCallback;
     };
-    executeWithCodeEditor: CommandData & ExecuteCommandData<CodeMirrorInstance>;
+    executeWithCodeEditor: CommandData & ExecuteCommandData<CodeMirror>;
     /**
      * Called upon when attempting to retrieve the content element of a {@link NoteContext}.
      * Generally should not be invoked manually, as it is used by {@link NoteContext.getContentElement}.
@@ -278,11 +280,15 @@ export type CommandMappings = {
         buildIcon(name: string): NativeImage;
     };
     refreshTouchBar: CommandData;
+    reloadTextEditor: CommandData;
 };
 
 type EventMappings = {
     initialRenderComplete: {};
     frocaReloaded: {};
+    setLeftPaneVisibility: {
+        leftPaneVisible: boolean | null;
+    }
     protectedSessionStarted: {};
     notesReloaded: {
         noteIds: string[];
@@ -463,13 +469,21 @@ export class AppContext extends Component {
 
         this.tabManager.loadTabs();
 
+        const bundleService = (await import("../services/bundle.js")).default;
         setTimeout(() => bundleService.executeStartupBundles(), 2000);
     }
 
     initComponents() {
         this.tabManager = new TabManager();
 
-        this.components = [this.tabManager, new RootCommandExecutor(), new Entrypoints(), new MainTreeExecutors(), new ShortcutComponent()];
+        this.components = [
+            this.tabManager,
+            new RootCommandExecutor(),
+            new Entrypoints(),
+            new MainTreeExecutors(),
+            new ShortcutComponent(),
+            new StartupChecks()
+        ];
 
         if (utils.isMobile()) {
             this.components.push(new MobileScreenSwitcherExecutor());

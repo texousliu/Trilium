@@ -50,6 +50,21 @@
     },
     {
       "path": "./packages/ckeditor5-math"
+    },
+    {
+      "path": "./packages/codemirror"
+    },
+    {
+      "path": "./packages/highlightjs"
+    },
+    {
+      "path": "./packages/share-theme"
+    },
+    {
+      "path": "./apps/website"
+    },
+    {
+      "path": "./apps/desktop-e2e"
     }
   ]
 }

@@ -3,9 +3,14 @@ declare module "*.png" {
     export default path;
 }
 
-declare module "*.json?external" {
+declare module "*?url" {
     var path: string;
     export default path;
 }
 
-declare module "script-loader!mark.js/dist/jquery.mark.min.js";
+declare module "*?raw" {
+    var content: string;
+    export default content;
+}
+
+declare module "boxicons/css/boxicons.min.css" { }

@@ -1,12 +1,12 @@
 import { t } from "../../services/i18n.js";
 import treeService from "../../services/tree.js";
 import noteAutocompleteService from "../../services/note_autocomplete.js";
-import utils from "../../services/utils.js";
 import froca from "../../services/froca.js";
 import BasicWidget from "../basic_widget.js";
 import { Modal } from "bootstrap";
 import type { EventData } from "../../components/app_context.js";
 import type EditableTextTypeWidget from "../type_widgets/editable_text.js";
+import { openDialog } from "../../services/dialog.js";
 
 const TPL = /*html*/`
 <div class="include-note-dialog modal mx-auto" tabindex="-1" role="dialog">
@@ -83,7 +83,7 @@ export default class IncludeNoteDialog extends BasicWidget {
     async showIncludeNoteDialogEvent({ textTypeWidget }: EventData<"showIncludeDialog">) {
         this.textTypeWidget = textTypeWidget;
         await this.refresh();
-        utils.openDialog(this.$widget);
+        openDialog(this.$widget);
 
         this.$autoComplete.trigger("focus").trigger("select"); // to be able to quickly remove entered text
     }

@@ -11,6 +11,8 @@ import type { ViewScope } from "../services/link.js";
 import type FNote from "../entities/fnote.js";
 import type TypeWidget from "../widgets/type_widgets/type_widget.js";
 import type { CKTextEditor } from "@triliumnext/ckeditor5";
+import type CodeMirror from "@triliumnext/codemirror";
+import { closeActiveDialog } from "../services/dialog.js";
 
 export interface SetNoteOpts {
     triggerSwitchEvent?: unknown;
@@ -82,7 +84,7 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
 
         await this.triggerEvent("beforeNoteSwitch", { noteContext: this });
 
-        utils.closeActiveDialog();
+        closeActiveDialog();
 
         this.notePath = resolvedNotePath;
         this.viewScope = opts.viewScope;
@@ -158,6 +160,9 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
     }
 
     saveToRecentNotes(resolvedNotePath: string) {
+        if (options.is("databaseReadonly")) {
+            return;
+        }
         setTimeout(async () => {
             // we include the note in the recent list only if the user stayed on the note at least 5 seconds
             if (resolvedNotePath && resolvedNotePath === this.notePath) {
@@ -253,6 +258,10 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
             return false;
         }
 
+        if (options.is("databaseReadonly")) {
+            return true;
+        }
+
         if (this.note.isLabelTruthy("readOnly")) {
             return true;
         }
@@ -261,14 +270,32 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
             return true;
         }
 
-        const blob = await this.note.getBlob();
-        if (!blob) {
-            return false;
+        // Store the initial decision about read-only status in the viewScope
+        // This will be "remembered" until the viewScope is refreshed
+        if (!this.viewScope) {
+            this.resetViewScope();
         }
 
-        const sizeLimit = this.note.type === "text" ? options.getInt("autoReadonlySizeText") : options.getInt("autoReadonlySizeCode");
+        const viewScope = this.viewScope!;
 
-        return sizeLimit && blob.contentLength > sizeLimit && !this.note.isLabelTruthy("autoReadOnlyDisabled");
+        if (viewScope.isReadOnly === undefined) {
+            const blob = await this.note.getBlob();
+            if (!blob) {
+                viewScope.isReadOnly = false;
+                return false;
+            }
+
+            const sizeLimit = this.note.type === "text"
+                ? options.getInt("autoReadonlySizeText")
+                : options.getInt("autoReadonlySizeCode");
+
+            viewScope.isReadOnly = Boolean(sizeLimit &&
+                blob.contentLength > sizeLimit &&
+                !this.note.isLabelTruthy("autoReadOnlyDisabled"));
+        }
+
+        // Return the cached decision, which won't change until viewScope is reset
+        return viewScope.isReadOnly || false;
     }
 
     async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
@@ -312,7 +339,7 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
 
     async getCodeEditor() {
         return this.timeout(
-            new Promise<CodeMirrorInstance>((resolve) =>
+            new Promise<CodeMirror>((resolve) =>
                 appContext.triggerCommand("executeWithCodeEditor", {
                     resolve,
                     ntxId: this.ntxId

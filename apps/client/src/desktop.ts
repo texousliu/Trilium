@@ -8,9 +8,13 @@ import electronContextMenu from "./menus/electron_context_menu.js";
 import glob from "./services/glob.js";
 import { t } from "./services/i18n.js";
 import options from "./services/options.js";
+import server from "./services/server.js";
 import type ElectronRemote from "@electron/remote";
 import type Electron from "electron";
 import "./stylesheets/bootstrap.scss";
+import "boxicons/css/boxicons.min.css";
+import "jquery-hotkeys";
+import "autocomplete.js/index_jquery.js";
 
 await appContext.earlyInit();
 

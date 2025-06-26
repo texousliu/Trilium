@@ -3,9 +3,10 @@
 <h2>Steps</h2>
 <ul>
   <li>SSH into your server</li>
-  <li>use <code>wget</code> (or <code>curl</code>) to download latest <code>TriliumNextNotes-Server-[VERSION]-linux-x64.tar.xz</code> (notice <code>-Server</code> suffix)
-    on your server.</li>
-  <li>unpack the archive, e.g. using <code>tar -xf -d TriliumNextNotes-Server-[VERSION]-linux-x64.tar.xz</code>
+  <li>use <code>wget</code> (or <code>curl</code>) to download latest <code>TriliumNotes-Server-[VERSION]-linux-x64.tar.xz</code> (copy
+    link from <a href="https://github.com/TriliumNext/Notes/releases">release page</a>,
+    notice <code>-Server</code> suffix) on your server.</li>
+  <li>unpack the archive, e.g. using <code>tar -xf -d TriliumNotes-Server-[VERSION]-linux-x64.tar.xz</code>
   </li>
   <li><code>cd trilium-linux-x64-server</code>
   </li>
@@ -17,14 +18,16 @@
 <p>The problem with above steps is that once you close the SSH connection,
   the Trilium process is terminated. To avoid that, you have two options:</p>
 <ul>
-  <li>Kill it (with e.g. <kbd>Ctrl</kbd> + <kbd>C</kbd>) and run again like this: <code>nohup ./trilium &amp;</code>.</li>
+  <li>Kill it (with e.g. <kbd>Ctrl</kbd> + <kbd>C</kbd>) and run again like this: <code>nohup ./trilium.sh &amp;</code>.
+    (nohup keeps the process running in the background, <code>&amp;</code> runs
+    it in the background)</li>
   <li>Configure systemd to automatically run Trilium in the background on every
     boot</li>
 </ul>
 <h2>Configure Trilium to auto-run on boot with systemd</h2>
 <ul>
   <li>After downloading, extract and move Trilium:</li>
-</ul><pre><code class="language-text-x-trilium-auto">tar -xvf TriliumNextNotes-Server-[VERSION]-linux-x64.tar.xz
+</ul><pre><code class="language-text-x-trilium-auto">tar -xvf TriliumNotes-Server-[VERSION]-linux-x64.tar.xz
 sudo mv trilium-linux-x64-server /opt/trilium</code></pre>
 <ul>
   <li>Create the service:</li>

@@ -1,4 +1,4 @@
-import utils, { escapeQuotes } from "../../services/utils.js";
+import { escapeQuotes } from "../../services/utils.js";
 import treeService from "../../services/tree.js";
 import importService, { type UploadFilesOptions } from "../../services/import.js";
 import options from "../../services/options.js";
@@ -6,6 +6,7 @@ import BasicWidget from "../basic_widget.js";
 import { t } from "../../services/i18n.js";
 import { Modal, Tooltip } from "bootstrap";
 import type { EventData } from "../../components/app_context.js";
+import { openDialog } from "../../services/dialog.js";
 
 const TPL = /*html*/`
 <div class="import-dialog modal fade mx-auto" tabindex="-1" role="dialog">
@@ -155,7 +156,7 @@ export default class ImportDialog extends BasicWidget {
 
         this.$noteTitle.text(await treeService.getNoteTitle(this.parentNoteId));
 
-        utils.openDialog(this.$widget);
+        openDialog(this.$widget);
     }
 
     async importIntoNote(parentNoteId: string) {
