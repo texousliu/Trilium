@@ -2,7 +2,7 @@ import froca from "../../../services/froca.js";
 import ViewMode, { type ViewModeArgs } from "../view_mode.js";
 import { createGrid, AllCommunityModule, ModuleRegistry, GridOptions } from "ag-grid-community";
 import attributes, { setLabel } from "../../../services/attributes.js";
-import getPromotedAttributeInformation, { buildData, TableData } from "./data.js";
+import getPromotedAttributeInformation, { buildColumnDefinitions, buildData, TableData } from "./data.js";
 import applyHeaderCustomization from "./header-customization.js";
 import server from "../../../services/server.js";
 import type { GridApi, GridState } from "ag-grid-community";
@@ -79,15 +79,10 @@ export default class TableView extends ViewMode<StateInfo> {
     }
 
     private async renderTable(el: HTMLElement) {
-        const { noteIds, parentNote } = this.args;
-        const notes = await froca.getNotes(noteIds);
-
-        const info = getPromotedAttributeInformation(parentNote);
         const viewStorage = await this.viewStorage.restore();
         const initialState = viewStorage?.gridState;
 
-        this.api = createGrid(el, {
-            ...buildData(parentNote, info, notes),
+        const options: GridOptions<TableData> = {
             ...this.setupEditing(),
             ...this.setupDragging(),
             initialState,
@@ -95,6 +90,18 @@ export default class TableView extends ViewMode<StateInfo> {
                 applyHeaderCustomization(el, event.api);
             },
             onStateUpdated: () => this.spacedUpdate.scheduleUpdate()
+        }
+
+        this.api = createGrid(el, options);
+        this.loadData();
+    }
+
+    private async loadData() {
+        const notes = await froca.getNotes(this.args.noteIds);
+        const info = getPromotedAttributeInformation(this.parentNote);
+
+        this.api?.updateGridOptions({
+           ...buildData(this.parentNote, info, notes)
         });
     }
 
@@ -190,7 +197,11 @@ export default class TableView extends ViewMode<StateInfo> {
             attr.type === "label" &&
             attr.name?.startsWith("label:") &&
             attributes.isAffecting(attr, this.parentNote))) {
-            return true;
+            const info = getPromotedAttributeInformation(this.parentNote);
+            const columnDefs = buildColumnDefinitions(info);
+            this.api?.updateGridOptions({
+                columnDefs
+            })
         }
 
         return false;
