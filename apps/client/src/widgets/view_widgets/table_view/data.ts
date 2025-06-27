@@ -1,11 +1,14 @@
 import { GridOptions } from "ag-grid-community";
 import FNote from "../../../entities/fnote.js";
 import type { LabelType } from "../../../services/promoted_attribute_definition_parser.js";
+import froca from "../../../services/froca.js";
 
 export type TableData = {
     noteId: string;
     title: string;
     labels: Record<string, boolean | string | null>;
+    branchId: string;
+    position: number;
 };
 
 export interface PromotedAttributeInformation {
@@ -16,9 +19,9 @@ export interface PromotedAttributeInformation {
 
 type GridLabelType = 'text' | 'number' | 'boolean' | 'date' | 'dateString' | 'object';
 
-export function buildData(info: PromotedAttributeInformation[], notes: FNote[]) {
+export function buildData(parentNote: FNote, info: PromotedAttributeInformation[], notes: FNote[]) {
     const columnDefs = buildColumnDefinitions(info);
-    const rowData = buildRowDefinitions(notes, info);
+    const rowData = buildRowDefinitions(parentNote, notes, info);
 
     return {
         rowData,
@@ -34,7 +37,11 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
         },
         {
             field: "title",
-            editable: true
+            editable: true,
+            rowDrag: true,
+        },
+        {
+            field: "position"
         }
     ];
 
@@ -68,9 +75,10 @@ function mapDataType(labelType: LabelType | undefined): GridLabelType {
     }
 }
 
-export function buildRowDefinitions(notes: FNote[], infos: PromotedAttributeInformation[]) {
+export function buildRowDefinitions(parentNote: FNote, notes: FNote[], infos: PromotedAttributeInformation[]) {
     const definitions: GridOptions<TableData>["rowData"] = [];
-    for (const note of notes) {
+    for (const branch of parentNote.getChildBranches()) {
+        const note = branch.getNoteFromCache();
         const labels: typeof definitions[0]["labels"] = {};
         for (const { name, type } of infos) {
             if (type === "boolean") {
@@ -82,7 +90,9 @@ export function buildRowDefinitions(notes: FNote[], infos: PromotedAttributeInfo
         definitions.push({
             noteId: note.noteId,
             title: note.title,
-            labels
+            labels,
+            position: branch.notePosition,
+            branchId: branch.branchId
         });
     }
 

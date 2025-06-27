@@ -7,6 +7,7 @@ import applyHeaderCustomization from "./header-customization.js";
 import server from "../../../services/server.js";
 import type { GridApi, GridState } from "ag-grid-community";
 import SpacedUpdate from "../../../services/spaced_update.js";
+import branches from "../../../services/branches.js";
 
 const TPL = /*html*/`
 <div class="table-view">
@@ -79,8 +80,9 @@ export default class TableView extends ViewMode<StateInfo> {
         const initialState = viewStorage?.gridState;
 
         this.api = createGrid(el, {
-            ...buildData(info, notes),
+            ...buildData(parentNote, info, notes),
             ...setupEditing(),
+            ...setupDragging(),
             initialState,
             async onGridReady(event) {
                 applyHeaderCustomization(el, event.api);
@@ -126,4 +128,32 @@ function setupEditing(): GridOptions<TableData> {
             }
         }
     }
+}
+
+function setupDragging() {
+    return {
+        onRowDragEnd(e) {
+            const fromIndex = e.node.rowIndex;
+            const toIndex = e.overNode?.rowIndex;
+            console.log(fromIndex, toIndex);
+            if (fromIndex === null || toIndex === null || toIndex === undefined || fromIndex === toIndex) {
+                return;
+            }
+
+            const isBelow = (toIndex > fromIndex);
+            const fromBranchId = e.node.data?.branchId;
+            const toBranchId = e.overNode?.data?.branchId;
+            if (fromBranchId === undefined || toBranchId === undefined) {
+                return;
+            }
+
+            if (isBelow) {
+                console.log("Move below", fromIndex, toIndex);
+                branches.moveAfterBranch([ fromBranchId ], toBranchId);
+            } else {
+                console.log("Move above", fromIndex, toIndex);
+                branches.moveBeforeBranch([ fromBranchId ], toBranchId);
+            }
+        }
+    };
 }
