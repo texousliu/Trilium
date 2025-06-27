@@ -1,11 +1,11 @@
 import froca from "../../../services/froca.js";
 import ViewMode, { type ViewModeArgs } from "../view_mode.js";
-import { createGrid, AllCommunityModule, ModuleRegistry, GridOptions } from "ag-grid-community";
+import { createGrid, AllCommunityModule, ModuleRegistry, GridOptions, themeQuartz, colorSchemeDark } from "ag-grid-community";
 import attributes, { setLabel } from "../../../services/attributes.js";
 import getPromotedAttributeInformation, { buildColumnDefinitions, buildData, TableData } from "./data.js";
 import applyHeaderCustomization from "./header-customization.js";
 import server from "../../../services/server.js";
-import type { GridApi, GridState } from "ag-grid-community";
+import type { GridApi, GridState, Theme } from "ag-grid-community";
 import SpacedUpdate from "../../../services/spaced_update.js";
 import branches from "../../../services/branches.js";
 import type { CommandListenerData, EventData } from "../../../components/app_context.js";
@@ -86,6 +86,7 @@ export default class TableView extends ViewMode<StateInfo> {
             ...this.setupEditing(),
             ...this.setupDragging(),
             initialState,
+            theme: this.getTheme(),
             async onGridReady(event) {
                 applyHeaderCustomization(el, event.api);
             },
@@ -189,6 +190,14 @@ export default class TableView extends ViewMode<StateInfo> {
         const { name, value } = this.newAttribute;
         attributes.addLabel(this.parentNote.noteId, name, value, true);
         console.log("Save attributes", this.newAttribute);
+    }
+
+    private getTheme(): Theme {
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return themeQuartz.withPart(colorSchemeDark)
+        } else {
+            return themeQuartz;
+        }
     }
 
     onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">): boolean | void {
