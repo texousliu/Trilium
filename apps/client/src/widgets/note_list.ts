@@ -107,6 +107,7 @@ export default class NoteListWidget extends NoteContextAwareWidget {
         const noteListRenderer = new NoteListRenderer({
             $parent: this.$content,
             parentNote: note,
+            parentNotePath: this.notePath,
             noteIds: note.getChildNoteIds()
         });
         this.$widget.toggleClass("full-height", noteListRenderer.isFullHeight);

@@ -2,12 +2,12 @@ import type { EventData } from "../../components/app_context.js";
 import Component from "../../components/component.js";
 import type FNote from "../../entities/fnote.js";
 import type { ViewTypeOptions } from "../../services/note_list_renderer.js";
-import type NoteListWidget from "../note_list.js";
 import ViewModeStorage from "./view_mode_storage.js";
 
 export interface ViewModeArgs {
     $parent: JQuery<HTMLElement>;
     parentNote: FNote;
+    parentNotePath: string | null | undefined;
     noteIds: string[];
     showNotePath?: boolean;
 }
