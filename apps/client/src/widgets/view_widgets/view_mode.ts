@@ -1,6 +1,8 @@
 import type { EventData } from "../../components/app_context.js";
+import Component from "../../components/component.js";
 import type FNote from "../../entities/fnote.js";
 import type { ViewTypeOptions } from "../../services/note_list_renderer.js";
+import type NoteListWidget from "../note_list.js";
 import ViewModeStorage from "./view_mode_storage.js";
 
 export interface ViewModeArgs {
@@ -10,13 +12,14 @@ export interface ViewModeArgs {
     showNotePath?: boolean;
 }
 
-export default abstract class ViewMode<T extends object> {
+export default abstract class ViewMode<T extends object> extends Component {
 
     private _viewStorage: ViewModeStorage<T> | null;
     protected parentNote: FNote;
     protected viewType: ViewTypeOptions;
 
     constructor(args: ViewModeArgs, viewType: ViewTypeOptions) {
+        super();
         this.parentNote = args.parentNote;
         this._viewStorage = null;
         // note list must be added to the DOM immediately, otherwise some functionality scripting (canvas) won't work

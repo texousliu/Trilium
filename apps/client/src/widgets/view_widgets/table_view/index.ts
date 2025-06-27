@@ -8,6 +8,7 @@ import server from "../../../services/server.js";
 import type { GridApi, GridState } from "ag-grid-community";
 import SpacedUpdate from "../../../services/spaced_update.js";
 import branches from "../../../services/branches.js";
+import type { CommandListenerData } from "../../../components/app_context.js";
 
 const TPL = /*html*/`
 <div class="table-view">
@@ -32,6 +33,10 @@ const TPL = /*html*/`
         bottom: 0;
     }
     </style>
+
+    <div class="header">
+        <button data-trigger-command="addNoteListItem">Add new column</button>
+    </div>
 
     <div class="table-view-container"></div>
 </div>
@@ -157,6 +162,18 @@ export default class TableView extends ViewMode<StateInfo> {
             }
         };
         return config;
+    }
+
+    async saveAttributesCommand() {
+        console.log("Save attributes");
+    }
+
+    async reloadAttributesCommand() {
+        console.log("Reload attributes");
+    }
+
+    async updateAttributeListCommand({ attributes }: CommandListenerData<"updateAttributeList">) {
+        console.log("Update attributes", { attributes });
     }
 }
 

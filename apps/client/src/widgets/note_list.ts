@@ -1,8 +1,10 @@
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import NoteListRenderer from "../services/note_list_renderer.js";
 import type FNote from "../entities/fnote.js";
-import type { CommandListener, CommandListenerData, EventData } from "../components/app_context.js";
+import type { CommandListener, CommandListenerData, CommandMappings, CommandNames, EventData } from "../components/app_context.js";
 import type ViewMode from "./view_widgets/view_mode.js";
+import AttributeDetailWidget from "./attribute_widgets/attribute_detail.js";
+import { Attribute } from "../services/attribute_parser.js";
 
 const TPL = /*html*/`
 <div class="note-list-widget">
@@ -37,6 +39,14 @@ export default class NoteListWidget extends NoteContextAwareWidget {
     private noteIdRefreshed?: string;
     private shownNoteId?: string | null;
     private viewMode?: ViewMode<any> | null;
+    private attributeDetailWidget: AttributeDetailWidget;
+
+    constructor() {
+        super();
+        this.attributeDetailWidget = new AttributeDetailWidget()
+                .contentSized()
+                .setParent(this);
+    }
 
     isEnabled() {
         return super.isEnabled() && this.noteContext?.hasNoteList();
@@ -46,6 +56,7 @@ export default class NoteListWidget extends NoteContextAwareWidget {
         this.$widget = $(TPL);
         this.contentSized();
         this.$content = this.$widget.find(".note-list-widget-content");
+        this.$widget.append(this.attributeDetailWidget.render());
 
         const observer = new IntersectionObserver(
             (entries) => {
@@ -62,6 +73,23 @@ export default class NoteListWidget extends NoteContextAwareWidget {
         // there seems to be a race condition on Firefox which triggers the observer only before the widget is visible
         // (intersection is false). https://github.com/zadam/trilium/issues/4165
         setTimeout(() => observer.observe(this.$widget[0]), 10);
+    }
+
+    addNoteListItemEvent() {
+        const attr: Attribute = {
+            type: "label",
+            name: "label:myLabel",
+            value: "promoted,single,text"
+        };
+
+        this.attributeDetailWidget!.showAttributeDetail({
+            attribute: attr,
+            allAttributes: [ attr ],
+            isOwned: true,
+            x: 100,
+            y: 200,
+            focus: "name"
+        });
     }
 
     checkRenderStatus() {
