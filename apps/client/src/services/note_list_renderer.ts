@@ -12,14 +12,8 @@ export default class NoteListRenderer {
     private viewType: ViewTypeOptions;
     public viewMode: ViewMode<any> | null;
 
-    constructor($parent: JQuery<HTMLElement>, parentNote: FNote, noteIds: string[], showNotePath: boolean = false) {
-        this.viewType = this.#getViewType(parentNote);
-        const args: ViewModeArgs = {
-            $parent,
-            parentNote,
-            noteIds,
-            showNotePath
-        };
+    constructor(args: ViewModeArgs) {
+        this.viewType = this.#getViewType(args.parentNote);
 
         switch (this.viewType) {
             case "list":

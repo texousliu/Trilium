@@ -76,7 +76,11 @@ export default class NoteListWidget extends NoteContextAwareWidget {
     }
 
     async renderNoteList(note: FNote) {
-        const noteListRenderer = new NoteListRenderer(this.$content, note, note.getChildNoteIds());
+        const noteListRenderer = new NoteListRenderer({
+            $parent: this.$content,
+            parentNote: note,
+            noteIds: note.getChildNoteIds()
+        });
         this.$widget.toggleClass("full-height", noteListRenderer.isFullHeight);
         await noteListRenderer.renderList();
         this.viewMode = noteListRenderer.viewMode;
