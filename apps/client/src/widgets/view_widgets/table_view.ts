@@ -1,5 +1,4 @@
 import froca from "../../services/froca.js";
-import type { StateInfo } from "./table_view/storage.js";
 import ViewMode, { type ViewModeArgs } from "./view_mode.js";
 import { createGrid, AllCommunityModule, ModuleRegistry, GridOptions } from "ag-grid-community";
 import { setLabel } from "../../services/attributes.js";
@@ -7,6 +6,7 @@ import getPromotedAttributeInformation from "./table_view/parser.js";
 import { buildData, TableData } from "./table_view/data.js";
 import applyHeaderCustomization from "./table_view/header-customization.js";
 import server from "../../services/server.js";
+import type { GridState } from "ag-grid-community";
 
 const TPL = /*html*/`
 <div class="table-view">
@@ -35,6 +35,10 @@ const TPL = /*html*/`
     <div class="table-view-container"></div>
 </div>
 `;
+
+export interface StateInfo {
+    gridState: GridState;
+}
 
 export default class TableView extends ViewMode<StateInfo> {
 
