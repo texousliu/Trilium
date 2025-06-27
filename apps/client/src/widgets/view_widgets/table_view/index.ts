@@ -8,7 +8,7 @@ import server from "../../../services/server.js";
 import type { GridApi, GridState } from "ag-grid-community";
 import SpacedUpdate from "../../../services/spaced_update.js";
 import branches from "../../../services/branches.js";
-import type { CommandListenerData } from "../../../components/app_context.js";
+import type { CommandListenerData, EventData } from "../../../components/app_context.js";
 import type { Attribute } from "../../../services/attribute_parser.js";
 
 const TPL = /*html*/`
@@ -182,6 +182,18 @@ export default class TableView extends ViewMode<StateInfo> {
         const { name, value } = this.newAttribute;
         attributes.addLabel(this.parentNote.noteId, name, value, true);
         console.log("Save attributes", this.newAttribute);
+    }
+
+    onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">): boolean | void {
+        // Refresh if promoted attributes get changed.
+        if (loadResults.getAttributeRows().find(attr =>
+            attr.type === "label" &&
+            attr.name?.startsWith("label:") &&
+            attributes.isAffecting(attr, this.parentNote))) {
+            return true;
+        }
+
+        return false;
     }
 
 }
