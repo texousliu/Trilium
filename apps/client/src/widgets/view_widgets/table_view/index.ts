@@ -5,7 +5,8 @@ import { setLabel } from "../../../services/attributes.js";
 import getPromotedAttributeInformation, { buildData, TableData } from "./data.js";
 import applyHeaderCustomization from "./header-customization.js";
 import server from "../../../services/server.js";
-import type { GridState } from "ag-grid-community";
+import type { GridApi, GridState } from "ag-grid-community";
+import SpacedUpdate from "../../../services/spaced_update.js";
 
 const TPL = /*html*/`
 <div class="table-view">
@@ -44,6 +45,8 @@ export default class TableView extends ViewMode<StateInfo> {
     private $root: JQuery<HTMLElement>;
     private $container: JQuery<HTMLElement>;
     private args: ViewModeArgs;
+    private spacedUpdate: SpacedUpdate;
+    private api?: GridApi;
 
     constructor(args: ViewModeArgs) {
         super(args, "table");
@@ -51,6 +54,7 @@ export default class TableView extends ViewMode<StateInfo> {
         this.$root = $(TPL);
         this.$container = this.$root.find(".table-view-container");
         this.args = args;
+        this.spacedUpdate = new SpacedUpdate(() => this.onSave(), 5_000);
         args.$parent.append(this.$root);
 
         ModuleRegistry.registerModules([ AllCommunityModule ]);
@@ -74,16 +78,24 @@ export default class TableView extends ViewMode<StateInfo> {
         const viewStorage = await this.viewStorage.restore();
         const initialState = viewStorage?.gridState;
 
-        createGrid(el, {
+        this.api = createGrid(el, {
             ...buildData(info, notes),
             ...setupEditing(),
             initialState,
             async onGridReady(event) {
                 applyHeaderCustomization(el, event.api);
             },
-            onStateUpdated: (event) => this.viewStorage.store({
-                gridState: event.api.getState()
-            })
+            onStateUpdated: () => this.spacedUpdate.scheduleUpdate()
+        });
+    }
+
+    private onSave() {
+        if (!this.api) {
+            return;
+        }
+
+        this.viewStorage.store({
+            gridState: this.api.getState()
         });
     }
 
