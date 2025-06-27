@@ -27,9 +27,7 @@ const TPL = /*html*/`
     }
     </style>
 
-    <div class="table-view-container">
-        <p>Table view goes here.</p>
-    </div>
+    <div class="table-view-container"></div>
 </div>
 `;
 
