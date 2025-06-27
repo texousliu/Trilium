@@ -166,4 +166,13 @@ export default class NoteListWidget extends NoteContextAwareWidget {
         }
     }
 
+    triggerCommand<K extends CommandNames>(name: K, data?: CommandMappings[K]): Promise<unknown> | undefined | null {
+        // Pass the commands to the view mode, which is not actually attached to the hierarchy.
+        if (this.viewMode?.triggerCommand(name, data)) {
+            return;
+        }
+
+        return super.triggerCommand(name, data);
+    }
+
 }

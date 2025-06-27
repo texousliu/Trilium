@@ -1,7 +1,7 @@
 import froca from "../../../services/froca.js";
 import ViewMode, { type ViewModeArgs } from "../view_mode.js";
 import { createGrid, AllCommunityModule, ModuleRegistry, GridOptions } from "ag-grid-community";
-import { setLabel } from "../../../services/attributes.js";
+import attributes, { setLabel } from "../../../services/attributes.js";
 import getPromotedAttributeInformation, { buildData, TableData } from "./data.js";
 import applyHeaderCustomization from "./header-customization.js";
 import server from "../../../services/server.js";
@@ -9,6 +9,7 @@ import type { GridApi, GridState } from "ag-grid-community";
 import SpacedUpdate from "../../../services/spaced_update.js";
 import branches from "../../../services/branches.js";
 import type { CommandListenerData } from "../../../components/app_context.js";
+import type { Attribute } from "../../../services/attribute_parser.js";
 
 const TPL = /*html*/`
 <div class="table-view">
@@ -53,6 +54,7 @@ export default class TableView extends ViewMode<StateInfo> {
     private args: ViewModeArgs;
     private spacedUpdate: SpacedUpdate;
     private api?: GridApi;
+    private newAttribute?: Attribute;
 
     constructor(args: ViewModeArgs) {
         super(args, "table");
@@ -164,16 +166,23 @@ export default class TableView extends ViewMode<StateInfo> {
         return config;
     }
 
-    async saveAttributesCommand() {
-        console.log("Save attributes");
-    }
-
     async reloadAttributesCommand() {
         console.log("Reload attributes");
     }
 
     async updateAttributeListCommand({ attributes }: CommandListenerData<"updateAttributeList">) {
-        console.log("Update attributes", { attributes });
+        this.newAttribute = attributes[0];
     }
+
+    async saveAttributesCommand() {
+        if (!this.newAttribute) {
+            return;
+        }
+
+        const { name, value } = this.newAttribute;
+        attributes.addLabel(this.parentNote.noteId, name, value, true);
+        console.log("Save attributes", this.newAttribute);
+    }
+
 }
 
