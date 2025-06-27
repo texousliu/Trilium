@@ -17,6 +17,14 @@ const TPL = /*html*/`
     .table-view-container {
         height: 100%;
     }
+
+    .search-result-widget-content .table-view {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
     </style>
 
     <div class="table-view-container">
