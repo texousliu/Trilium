@@ -80,7 +80,7 @@
     "url": "https://github.com/TriliumNext/Notes/issues"
   },
   "homepage": "https://github.com/TriliumNext/Notes#readme",
-  "packageManager": "pnpm@10.12.3",
+  "packageManager": "pnpm@10.12.4",
   "pnpm": {
     "patchedDependencies": {
       "@ckeditor/ckeditor5-mention": "patches/@ckeditor__ckeditor5-mention.patch",
