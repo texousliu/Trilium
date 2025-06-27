@@ -1,7 +1,7 @@
 import type FNote from "../entities/fnote.js";
 import CalendarView from "../widgets/view_widgets/calendar_view.js";
 import ListOrGridView from "../widgets/view_widgets/list_or_grid_view.js";
-import TableView from "../widgets/view_widgets/table_view.js";
+import TableView from "../widgets/view_widgets/table_view/index.js";
 import type { ViewModeArgs } from "../widgets/view_widgets/view_mode.js";
 import type ViewMode from "../widgets/view_widgets/view_mode.js";
 

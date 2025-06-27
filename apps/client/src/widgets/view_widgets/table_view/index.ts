@@ -1,10 +1,10 @@
-import froca from "../../services/froca.js";
-import ViewMode, { type ViewModeArgs } from "./view_mode.js";
+import froca from "../../../services/froca.js";
+import ViewMode, { type ViewModeArgs } from "../view_mode.js";
 import { createGrid, AllCommunityModule, ModuleRegistry, GridOptions } from "ag-grid-community";
-import { setLabel } from "../../services/attributes.js";
-import getPromotedAttributeInformation, { buildData, TableData } from "./table_view/data.js";
-import applyHeaderCustomization from "./table_view/header-customization.js";
-import server from "../../services/server.js";
+import { setLabel } from "../../../services/attributes.js";
+import getPromotedAttributeInformation, { buildData, TableData } from "./data.js";
+import applyHeaderCustomization from "./header-customization.js";
+import server from "../../../services/server.js";
 import type { GridState } from "ag-grid-community";
 
 const TPL = /*html*/`
