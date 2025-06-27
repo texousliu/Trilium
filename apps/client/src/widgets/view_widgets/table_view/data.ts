@@ -37,8 +37,7 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
         },
         {
             field: "title",
-            editable: true,
-            rowDrag: true,
+            editable: true
         },
         {
             field: "position"

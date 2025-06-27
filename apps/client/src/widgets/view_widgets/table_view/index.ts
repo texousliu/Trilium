@@ -81,8 +81,8 @@ export default class TableView extends ViewMode<StateInfo> {
 
         this.api = createGrid(el, {
             ...buildData(parentNote, info, notes),
-            ...setupEditing(),
-            ...setupDragging(),
+            ...this.setupEditing(),
+            ...this.setupDragging(),
             initialState,
             async onGridReady(event) {
                 applyHeaderCustomization(el, event.api);
@@ -101,56 +101,62 @@ export default class TableView extends ViewMode<StateInfo> {
         });
     }
 
-}
+    private setupEditing(): GridOptions<TableData> {
+        return {
+            onCellValueChanged(event) {
+                if (event.type !== "cellValueChanged") {
+                    return;
+                }
 
-function setupEditing(): GridOptions<TableData> {
-    return {
-        onCellValueChanged(event) {
-            if (event.type !== "cellValueChanged") {
-                return;
-            }
+                const noteId = event.data.noteId;
+                const name = event.colDef.field;
+                if (!name) {
+                    return;
+                }
 
-            const noteId = event.data.noteId;
-            const name = event.colDef.field;
-            if (!name) {
-                return;
-            }
+                const { newValue } = event;
+                if (name === "title") {
+                    // TODO: Deduplicate with note_title.
+                    server.put(`notes/${noteId}/title`, { title: newValue });
+                }
 
-            const { newValue } = event;
-            if (name === "title") {
-                // TODO: Deduplicate with note_title.
-                server.put(`notes/${noteId}/title`, { title: newValue });
-            }
-
-            if (name.startsWith("labels.")) {
-                const labelName = name.split(".", 2)[1];
-                setLabel(noteId, labelName, newValue);
+                if (name.startsWith("labels.")) {
+                    const labelName = name.split(".", 2)[1];
+                    setLabel(noteId, labelName, newValue);
+                }
             }
         }
     }
-}
 
-function setupDragging() {
-    return {
-        onRowDragEnd(e) {
-            const fromIndex = e.node.rowIndex;
-            const toIndex = e.overNode?.rowIndex;
-            if (fromIndex === null || toIndex === null || toIndex === undefined || fromIndex === toIndex) {
-                return;
-            }
-
-            const isBelow = (toIndex > fromIndex);
-            const fromBranchId = e.node.data?.branchId;
-            const toBranchId = e.overNode?.data?.branchId;
-            if (fromBranchId === undefined || toBranchId === undefined) {
-                return;
-            }
-
-            if (isBelow) {
-                branches.moveAfterBranch([ fromBranchId ], toBranchId);
-            } else {
-                branches.moveBeforeBranch([ fromBranchId ], toBranchId);
-            }
+    private setupDragging() {
+        if (this.parentNote.hasLabel("sorted")) {
+            return {};
         }
-    };
+
+        const config: GridOptions<TableData> = {
+            rowDragEntireRow: true,
+            onRowDragEnd(e) {
+                const fromIndex = e.node.rowIndex;
+                const toIndex = e.overNode?.rowIndex;
+                if (fromIndex === null || toIndex === null || toIndex === undefined || fromIndex === toIndex) {
+                    return;
+                }
+
+                const isBelow = (toIndex > fromIndex);
+                const fromBranchId = e.node.data?.branchId;
+                const toBranchId = e.overNode?.data?.branchId;
+                if (fromBranchId === undefined || toBranchId === undefined) {
+                    return;
+                }
+
+                if (isBelow) {
+                    branches.moveAfterBranch([ fromBranchId ], toBranchId);
+                } else {
+                    branches.moveBeforeBranch([ fromBranchId ], toBranchId);
+                }
+            }
+        };
+        return config;
+    }
 }
+
