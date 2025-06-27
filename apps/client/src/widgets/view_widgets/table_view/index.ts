@@ -135,7 +135,6 @@ function setupDragging() {
         onRowDragEnd(e) {
             const fromIndex = e.node.rowIndex;
             const toIndex = e.overNode?.rowIndex;
-            console.log(fromIndex, toIndex);
             if (fromIndex === null || toIndex === null || toIndex === undefined || fromIndex === toIndex) {
                 return;
             }
@@ -148,10 +147,8 @@ function setupDragging() {
             }
 
             if (isBelow) {
-                console.log("Move below", fromIndex, toIndex);
                 branches.moveAfterBranch([ fromBranchId ], toBranchId);
             } else {
-                console.log("Move above", fromIndex, toIndex);
                 branches.moveBeforeBranch([ fromBranchId ], toBranchId);
             }
         }
