@@ -32,6 +32,14 @@ export async function buildData(parentNote: FNote, info: PromotedAttributeInform
 export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
     const columnDefs: ColumnDefinition[] = [
         {
+            title: "#",
+            formatter: "rownum",
+            headerSort: false,
+            hozAlign: "center",
+            resizable: false,
+            frozen: true
+        },
+        {
             field: "iconClass",
             title: "Icon",
             width: 40,
