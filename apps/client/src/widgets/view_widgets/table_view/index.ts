@@ -117,30 +117,16 @@ export default class TableView extends ViewMode<StateInfo> {
             const field = cell.getField();
             const newValue = cell.getValue();
 
-            console.log("Cell edited", field, newValue);
             if (field === "title") {
                 server.put(`notes/${noteId}/title`, { title: newValue });
+                return;
+            }
+
+            if (field.startsWith("labels.")) {
+                const labelName = field.split(".", 2)[1];
+                setLabel(noteId, labelName, newValue);
             }
         });
-
-        // return {
-        //     onCellValueChanged(event) {
-        //         if (event.type !== "cellValueChanged") {
-        //             return;
-        //         }
-
-        //         const noteId = event.data.noteId;
-        //         const name = event.colDef.field;
-        //         if (!name) {
-        //             return;
-        //         }
-
-        //         if (name.startsWith("labels.")) {
-        //             const labelName = name.split(".", 2)[1];
-        //             setLabel(noteId, labelName, newValue);
-        //         }
-        //     }
-        // }
     }
 
     private setupDragging() {

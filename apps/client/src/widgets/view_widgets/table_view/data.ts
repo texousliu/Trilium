@@ -69,7 +69,7 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
         columnDefs.push({
             field: `labels.${name}`,
             title: title ?? name,
-            editable: true
+            editor: "input"
             // cellDataType: mapDataType(type),
         });
     }
