@@ -94,6 +94,7 @@ export default class TableView extends ViewMode<StateInfo> {
         const info = getPromotedAttributeInformation(this.parentNote);
 
         this.api = new Tabulator(el, {
+            index: "noteId",
             columns: buildColumnDefinitions(info),
             data: await buildRowDefinitions(this.parentNote, notes, info)
         });
