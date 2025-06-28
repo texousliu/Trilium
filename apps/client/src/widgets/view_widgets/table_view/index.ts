@@ -201,7 +201,7 @@ export default class TableView extends ViewMode<StateInfo> {
         }
     }
 
-    async onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">): boolean | void {
+    onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">): boolean | void {
         if (!this.api) {
             return;
         }
@@ -211,18 +211,26 @@ export default class TableView extends ViewMode<StateInfo> {
             attr.type === "label" &&
             attr.name?.startsWith("label:") &&
             attributes.isAffecting(attr, this.parentNote))) {
-            const info = getPromotedAttributeInformation(this.parentNote);
-            const columnDefs = buildColumnDefinitions(info);
-            this.api.setColumns(columnDefs)
+            this.#manageColumnUpdate();
         }
 
         if (loadResults.getBranchRows().some(branch => branch.parentNoteId === this.parentNote.noteId)) {
-            const notes = await froca.getNotes(this.args.noteIds);
-            const info = getPromotedAttributeInformation(this.parentNote);
-            this.api.setData(await buildRowDefinitions(this.parentNote, notes, info));
+            this.#manageRowsUpdate();
         }
 
         return false;
+    }
+
+    #manageColumnUpdate() {
+        const info = getPromotedAttributeInformation(this.parentNote);
+        const columnDefs = buildColumnDefinitions(info);
+        this.api.setColumns(columnDefs);
+    }
+
+    async #manageRowsUpdate() {
+        const notes = await froca.getNotes(this.args.noteIds);
+        const info = getPromotedAttributeInformation(this.parentNote);
+        this.api.setData(await buildRowDefinitions(this.parentNote, notes, info));
     }
 
 }
