@@ -26,19 +26,16 @@ const labelTypeMappings: Record<LabelType, Partial<ColumnDefinition>> = {
         editor: "tickCross"
     },
     date: {
-        formatter: "datetime",
         editor: "date",
     },
     datetime: {
-        formatter: "datetime",
         editor: "datetime"
     },
     number: {
         editor: "number"
     },
     time: {
-        formatter: "datetime",
-        editor: "datetime"
+        editor: "input"
     },
     url: {
         formatter: "link",
