@@ -1,7 +1,8 @@
-import { GridOptions } from "ag-grid-community";
 import FNote from "../../../entities/fnote.js";
 import type { LabelType } from "../../../services/promoted_attribute_definition_parser.js";
 import froca from "../../../services/froca.js";
+import { title } from "process";
+import type { ColumnDefinition } from "tabulator-tables";
 
 export type TableData = {
     noteId: string;
@@ -30,26 +31,26 @@ export function buildData(parentNote: FNote, info: PromotedAttributeInformation[
 }
 
 export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
-    const columnDefs: GridOptions<TableData>["columnDefs"] = [
+    const columnDefs: ColumnDefinition[] = [
         {
             field: "noteId",
-            editable: false
+            title: "Note ID",
         },
         {
             field: "title",
-            editable: true
+            title: "Title"
         },
         {
-            field: "position"
+            field: "position",
+            title: "Position"
         }
     ];
 
     for (const { name, title, type } of info) {
         columnDefs.push({
             field: `labels.${name}`,
-            headerName: title,
-            cellDataType: mapDataType(type),
-            editable: true
+            title: title ?? name,
+            // cellDataType: mapDataType(type),
         });
     }
 

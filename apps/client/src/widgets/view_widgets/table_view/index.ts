@@ -81,16 +81,11 @@ export default class TableView extends ViewMode<StateInfo> {
         const viewStorage = await this.viewStorage.restore();
         const initialState = viewStorage?.gridState;
 
-        const table = new Tabulator(el, {
-        });
-    }
-
-    private async loadData() {
         const notes = await froca.getNotes(this.args.noteIds);
         const info = getPromotedAttributeInformation(this.parentNote);
 
-        this.api?.updateGridOptions({
-           ...buildData(this.parentNote, info, notes)
+        const table = new Tabulator(el, {
+            columns: buildColumnDefinitions(info)
         });
     }
 
