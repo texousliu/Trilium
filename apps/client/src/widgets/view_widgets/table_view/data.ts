@@ -17,6 +17,35 @@ export interface PromotedAttributeInformation {
     type?: LabelType;
 }
 
+const labelTypeMappings: Record<LabelType, Partial<ColumnDefinition>> = {
+    text: {
+        editor: "input"
+    },
+    boolean: {
+        formatter: "tickCross",
+        editor: "tickCross"
+    },
+    date: {
+        formatter: "datetime",
+        editor: "date",
+    },
+    datetime: {
+        formatter: "datetime",
+        editor: "datetime"
+    },
+    number: {
+        editor: "number"
+    },
+    time: {
+        formatter: "datetime",
+        editor: "datetime"
+    },
+    url: {
+        formatter: "link",
+        editor: "input"
+    }
+};
+
 type GridLabelType = 'text' | 'number' | 'boolean' | 'date' | 'dateString' | 'object';
 
 export async function buildData(parentNote: FNote, info: PromotedAttributeInformation[], notes: FNote[]) {
@@ -69,8 +98,8 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
         columnDefs.push({
             field: `labels.${name}`,
             title: title ?? name,
-            editor: "input"
-            // cellDataType: mapDataType(type),
+            editor: "input",
+            ...labelTypeMappings[type ?? "text"],
         });
     }
 
@@ -91,24 +120,6 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
     });
 
     return columnDefs;
-}
-
-function mapDataType(labelType: LabelType | undefined): GridLabelType {
-    if (!labelType) {
-        return "text";
-    }
-
-    switch (labelType) {
-        case "number":
-            return "number";
-        case "boolean":
-            return "boolean";
-        case "date":
-            return "dateString";
-        case "text":
-        default:
-            return "text"
-    }
 }
 
 export async function buildRowDefinitions(parentNote: FNote, notes: FNote[], infos: PromotedAttributeInformation[]) {
