@@ -33,6 +33,18 @@ export async function buildData(parentNote: FNote, info: PromotedAttributeInform
 export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
     const columnDefs: ColumnDefinition[] = [
         {
+            field: "iconClass",
+            title: "Icon",
+            width: 40,
+            headerSort: false,
+            hozAlign: "center",
+            formatter(cell) {
+                console.log(cell);
+                const iconClass = cell.getValue();
+                return `<span class="bx ${iconClass}"></span>`;
+            },
+        },
+        {
             field: "noteId",
             title: "Note ID",
         },
@@ -92,6 +104,7 @@ export async function buildRowDefinitions(parentNote: FNote, notes: FNote[], inf
             }
         }
         definitions.push({
+            iconClass: note.getIcon(),
             noteId: note.noteId,
             title: note.title,
             labels,
