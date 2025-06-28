@@ -8,8 +8,8 @@ import branches from "../../../services/branches.js";
 import type { CommandListenerData, EventData } from "../../../components/app_context.js";
 import type { Attribute } from "../../../services/attribute_parser.js";
 import note_create from "../../../services/note_create.js";
-import {Tabulator, SortModule, FormatModule, InteractionModule} from 'tabulator-tables';
-import "tabulator-tables/dist/css/tabulator_bootstrap5.min.css";
+import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule} from 'tabulator-tables';
+import "tabulator-tables/dist/css/tabulator_midnight.min.css";
 
 const TPL = /*html*/`
 <div class="table-view">
@@ -81,7 +81,7 @@ export default class TableView extends ViewMode<StateInfo> {
         const viewStorage = await this.viewStorage.restore();
         const initialState = viewStorage?.gridState;
 
-        const modules = [SortModule, FormatModule, InteractionModule];
+        const modules = [SortModule, FormatModule, InteractionModule, EditModule];
         for (const module of modules) {
             Tabulator.registerModule(module);
         }
@@ -98,6 +98,7 @@ export default class TableView extends ViewMode<StateInfo> {
             columns: buildColumnDefinitions(info),
             data: await buildRowDefinitions(this.parentNote, notes, info)
         });
+        this.setupEditing();
     }
 
     private onSave() {
@@ -110,31 +111,36 @@ export default class TableView extends ViewMode<StateInfo> {
         });
     }
 
-    private setupEditing(): GridOptions<TableData> {
-        return {
-            onCellValueChanged(event) {
-                if (event.type !== "cellValueChanged") {
-                    return;
-                }
+    private setupEditing() {
+        this.api!.on("cellEdited", (cell) => {
+            const noteId = cell.getRow().getData().noteId;
+            const field = cell.getField();
+            const newValue = cell.getValue();
 
-                const noteId = event.data.noteId;
-                const name = event.colDef.field;
-                if (!name) {
-                    return;
-                }
-
-                const { newValue } = event;
-                if (name === "title") {
-                    // TODO: Deduplicate with note_title.
-                    server.put(`notes/${noteId}/title`, { title: newValue });
-                }
-
-                if (name.startsWith("labels.")) {
-                    const labelName = name.split(".", 2)[1];
-                    setLabel(noteId, labelName, newValue);
-                }
+            console.log("Cell edited", field, newValue);
+            if (field === "title") {
+                server.put(`notes/${noteId}/title`, { title: newValue });
             }
-        }
+        });
+
+        // return {
+        //     onCellValueChanged(event) {
+        //         if (event.type !== "cellValueChanged") {
+        //             return;
+        //         }
+
+        //         const noteId = event.data.noteId;
+        //         const name = event.colDef.field;
+        //         if (!name) {
+        //             return;
+        //         }
+
+        //         if (name.startsWith("labels.")) {
+        //             const labelName = name.split(".", 2)[1];
+        //             setLabel(noteId, labelName, newValue);
+        //         }
+        //     }
+        // }
     }
 
     private setupDragging() {
