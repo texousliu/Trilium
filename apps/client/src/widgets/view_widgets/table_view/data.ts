@@ -1,8 +1,7 @@
 import FNote from "../../../entities/fnote.js";
 import type { LabelType } from "../../../services/promoted_attribute_definition_parser.js";
-import froca from "../../../services/froca.js";
-import { title } from "process";
 import type { ColumnDefinition } from "tabulator-tables";
+import link from "../../../services/link.js";
 
 export type TableData = {
     noteId: string;
@@ -39,7 +38,6 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
             headerSort: false,
             hozAlign: "center",
             formatter(cell) {
-                console.log(cell);
                 const iconClass = cell.getValue();
                 return `<span class="bx ${iconClass}"></span>`;
             },
@@ -65,6 +63,21 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
             // cellDataType: mapDataType(type),
         });
     }
+
+    // End actions
+    columnDefs.push({
+        title: "Open note",
+        width: 40,
+        hozAlign: "center",
+        formatter: () => `<span class="bx bx-window-open"></span>`,
+        cellClick: (e, cell) => {
+            const noteId = cell.getRow().getCell("noteId").getValue();
+            console.log("Got note ID", noteId);
+            if (noteId) {
+                link.goToLinkExt(e as MouseEvent, `#root/${noteId}`);
+            }
+        }
+    });
 
     return columnDefs;
 }

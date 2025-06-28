@@ -81,7 +81,7 @@ export default class TableView extends ViewMode<StateInfo> {
         const viewStorage = await this.viewStorage.restore();
         const initialState = viewStorage?.gridState;
 
-        const modules = [SortModule, FormatModule];
+        const modules = [SortModule, FormatModule, InteractionModule];
         for (const module of modules) {
             Tabulator.registerModule(module);
         }
