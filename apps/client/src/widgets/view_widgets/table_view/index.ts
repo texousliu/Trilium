@@ -1,7 +1,7 @@
 import froca from "../../../services/froca.js";
 import ViewMode, { type ViewModeArgs } from "../view_mode.js";
 import attributes, { setLabel } from "../../../services/attributes.js";
-import getPromotedAttributeInformation, { buildColumnDefinitions, buildData, TableData } from "./data.js";
+import getPromotedAttributeInformation, { buildColumnDefinitions, buildData, buildRowDefinitions, TableData } from "./data.js";
 import server from "../../../services/server.js";
 import SpacedUpdate from "../../../services/spaced_update.js";
 import branches from "../../../services/branches.js";
@@ -54,7 +54,7 @@ export default class TableView extends ViewMode<StateInfo> {
     private $container: JQuery<HTMLElement>;
     private args: ViewModeArgs;
     private spacedUpdate: SpacedUpdate;
-    private api?: GridApi;
+    private api?: Tabulator;
     private newAttribute?: Attribute;
 
     constructor(args: ViewModeArgs) {
@@ -81,12 +81,21 @@ export default class TableView extends ViewMode<StateInfo> {
         const viewStorage = await this.viewStorage.restore();
         const initialState = viewStorage?.gridState;
 
+        this.api = new Tabulator(el, {
+        });
+        this.loadData();
+    }
+
+    private async loadData() {
+        if (!this.api) {
+            return;
+        }
+
         const notes = await froca.getNotes(this.args.noteIds);
         const info = getPromotedAttributeInformation(this.parentNote);
 
-        const table = new Tabulator(el, {
-            columns: buildColumnDefinitions(info)
-        });
+        this.api.setColumns(buildColumnDefinitions(info));
+        this.api.setData(buildRowDefinitions(this.parentNote, notes, info));
     }
 
     private onSave() {
