@@ -69,6 +69,7 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
         title: "Open note",
         width: 40,
         hozAlign: "center",
+        headerSort: false,
         formatter: () => `<span class="bx bx-window-open"></span>`,
         cellClick: (e, cell) => {
             const noteId = cell.getRow().getCell("noteId").getValue();
