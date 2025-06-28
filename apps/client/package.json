@@ -26,7 +26,6 @@
     "@triliumnext/commons": "workspace:*",
     "@triliumnext/highlightjs": "workspace:*",
     "@triliumnext/share-theme": "workspace:*",
-    "ag-grid-community": "33.3.2",
     "autocomplete.js": "0.38.1",
     "bootstrap": "5.3.7",
     "boxicons": "2.1.4",
@@ -55,6 +54,7 @@
     "preact": "10.26.9",
     "split.js": "1.6.5",
     "svg-pan-zoom": "3.6.2",
+    "tabulator-tables": "6.3.1",
     "vanilla-js-wheel-zoom": "9.0.4"
   },
   "devDependencies": {

@@ -1,16 +1,15 @@
 import froca from "../../../services/froca.js";
 import ViewMode, { type ViewModeArgs } from "../view_mode.js";
-import { createGrid, AllCommunityModule, ModuleRegistry, GridOptions, themeQuartz, colorSchemeDark } from "ag-grid-community";
 import attributes, { setLabel } from "../../../services/attributes.js";
-import getPromotedAttributeInformation, { buildColumnDefinitions, buildData, buildRowDefinitions, TableData } from "./data.js";
-import applyHeaderCustomization from "./header-customization.js";
+import getPromotedAttributeInformation, { buildColumnDefinitions, buildData, TableData } from "./data.js";
 import server from "../../../services/server.js";
-import type { GridApi, GridState, Theme } from "ag-grid-community";
 import SpacedUpdate from "../../../services/spaced_update.js";
 import branches from "../../../services/branches.js";
 import type { CommandListenerData, EventData } from "../../../components/app_context.js";
 import type { Attribute } from "../../../services/attribute_parser.js";
 import note_create from "../../../services/note_create.js";
+import {Tabulator} from 'tabulator-tables';
+import "tabulator-tables/dist/css/tabulator.min.css";
 
 const TPL = /*html*/`
 <div class="table-view">
@@ -66,8 +65,6 @@ export default class TableView extends ViewMode<StateInfo> {
         this.args = args;
         this.spacedUpdate = new SpacedUpdate(() => this.onSave(), 5_000);
         args.$parent.append(this.$root);
-
-        ModuleRegistry.registerModules([ AllCommunityModule ]);
     }
 
     get isFullHeight(): boolean {
@@ -84,19 +81,8 @@ export default class TableView extends ViewMode<StateInfo> {
         const viewStorage = await this.viewStorage.restore();
         const initialState = viewStorage?.gridState;
 
-        const options: GridOptions<TableData> = {
-            ...this.setupEditing(),
-            ...this.setupDragging(),
-            initialState,
-            theme: this.getTheme(),
-            async onGridReady(event) {
-                applyHeaderCustomization(el, event.api);
-            },
-            onStateUpdated: () => this.spacedUpdate.scheduleUpdate()
-        }
-
-        this.api = createGrid(el, options);
-        this.loadData();
+        const table = new Tabulator(el, {
+        });
     }
 
     private async loadData() {

@@ -202,9 +202,6 @@ importers:
       '@triliumnext/share-theme':
         specifier: workspace:*
         version: link:../../packages/share-theme
-      ag-grid-community:
-        specifier: 33.3.2
-        version: 33.3.2
       autocomplete.js:
         specifier: 0.38.1
         version: 0.38.1
@@ -289,6 +286,9 @@ importers:
       svg-pan-zoom:
         specifier: 3.6.2
         version: 3.6.2
+      tabulator-tables:
+        specifier: 6.3.1
+        version: 6.3.1
       vanilla-js-wheel-zoom:
         specifier: 9.0.4
         version: 9.0.4
@@ -5988,12 +5988,6 @@ packages:
   address@1.2.2:
     resolution: {integrity: sha512-4B/qKCfeE/ODUaAUpSwfzazo5x29WD4r3vXiWsB7I2mSDAihwEqKO+g8GELZUQSSAo5e1XTYh3ZVfLyxBc12nA==}
     engines: {node: '>= 10.0.0'}
-
-  ag-charts-types@11.3.2:
-    resolution: {integrity: sha512-trPGqgGYiTeLgtf9nLuztDYOPOFOLbqHn1g2D99phf7QowcwdX0TPx0wfWG8Hm90LjB8IH+G2s3AZe2vrdAtMQ==}
-
-  ag-grid-community@33.3.2:
-    resolution: {integrity: sha512-9bx0e/+ykOyLvUxHqmdy0cRVANH6JAtv0yZdnBZEXYYqBAwN+G5a4NY+2I1KvoOCYzbk8SnStG7y4hCdVAAWOQ==}
 
   agent-base@6.0.2:
     resolution: {integrity: sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==}
@@ -13022,6 +13016,9 @@ packages:
   table@6.9.0:
     resolution: {integrity: sha512-9kY+CygyYM6j02t5YFHbNz2FN5QmYGv9zAjVp4lCDjlCw7amdckXlEt/bjMhUIfj4ThGRE4gCUH5+yGnNuPo5A==}
     engines: {node: '>=10.0.0'}
+
+  tabulator-tables@6.3.1:
+    resolution: {integrity: sha512-qFW7kfadtcaISQIibKAIy0f3eeIXUVi8242Vly1iJfMD79kfEGzfczNuPBN/80hDxHzQJXYbmJ8VipI40hQtfA==}
 
   tailwindcss@4.1.10:
     resolution: {integrity: sha512-P3nr6WkvKV/ONsTzj6Gb57sWPMX29EPNPopo7+FcpkQaNsrNpZ1pv8QmrYI2RqEKD7mlGqLnGovlcYnBK0IqUA==}
@@ -21136,12 +21133,6 @@ snapshots:
   acorn@8.15.0: {}
 
   address@1.2.2: {}
-
-  ag-charts-types@11.3.2: {}
-
-  ag-grid-community@33.3.2:
-    dependencies:
-      ag-charts-types: 11.3.2
 
   agent-base@6.0.2:
     dependencies:
@@ -29464,6 +29455,8 @@ snapshots:
       slice-ansi: 4.0.0
       string-width: 4.2.3
       strip-ansi: 6.0.1
+
+  tabulator-tables@6.3.1: {}
 
   tailwindcss@4.1.10: {}
 
