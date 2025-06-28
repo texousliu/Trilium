@@ -209,9 +209,7 @@ export default class TableView extends ViewMode<StateInfo> {
             attributes.isAffecting(attr, this.parentNote))) {
             const info = getPromotedAttributeInformation(this.parentNote);
             const columnDefs = buildColumnDefinitions(info);
-            this.api?.updateGridOptions({
-                columnDefs
-            })
+            this.api?.setColumns(columnDefs)
         }
 
         if (loadResults.getBranchRows().some(branch => branch.parentNoteId === this.parentNote.noteId)) {
