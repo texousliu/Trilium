@@ -8,7 +8,7 @@ import branches from "../../../services/branches.js";
 import type { CommandListenerData, EventData } from "../../../components/app_context.js";
 import type { Attribute } from "../../../services/attribute_parser.js";
 import note_create from "../../../services/note_create.js";
-import {Tabulator, SortModule, FormatModule} from 'tabulator-tables';
+import {Tabulator, SortModule, FormatModule, InteractionModule} from 'tabulator-tables';
 import "tabulator-tables/dist/css/tabulator_bootstrap5.min.css";
 
 const TPL = /*html*/`
@@ -86,20 +86,17 @@ export default class TableView extends ViewMode<StateInfo> {
             Tabulator.registerModule(module);
         }
 
-        this.api = new Tabulator(el, {});
-        this.loadData();
+        this.initialize(el);
     }
 
-    private async loadData() {
-        if (!this.api) {
-            return;
-        }
-
+    private async initialize(el: HTMLElement) {
         const notes = await froca.getNotes(this.args.noteIds);
         const info = getPromotedAttributeInformation(this.parentNote);
 
-        this.api.setColumns(buildColumnDefinitions(info));
-        this.api.setData(await buildRowDefinitions(this.parentNote, notes, info));
+        this.api = new Tabulator(el, {
+            columns: buildColumnDefinitions(info),
+            data: await buildRowDefinitions(this.parentNote, notes, info)
+        });
     }
 
     private onSave() {
