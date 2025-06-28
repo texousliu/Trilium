@@ -8,7 +8,7 @@ import branches from "../../../services/branches.js";
 import type { CommandListenerData, EventData } from "../../../components/app_context.js";
 import type { Attribute } from "../../../services/attribute_parser.js";
 import note_create from "../../../services/note_create.js";
-import {Tabulator} from 'tabulator-tables';
+import {Tabulator, SortModule} from 'tabulator-tables';
 import "tabulator-tables/dist/css/tabulator_bootstrap5.min.css";
 
 const TPL = /*html*/`
@@ -81,8 +81,8 @@ export default class TableView extends ViewMode<StateInfo> {
         const viewStorage = await this.viewStorage.restore();
         const initialState = viewStorage?.gridState;
 
-        this.api = new Tabulator(el, {
-        });
+        Tabulator.registerModule(SortModule);
+        this.api = new Tabulator(el, {});
         this.loadData();
     }
 
