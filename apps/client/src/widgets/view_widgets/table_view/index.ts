@@ -95,7 +95,7 @@ export default class TableView extends ViewMode<StateInfo> {
         const info = getPromotedAttributeInformation(this.parentNote);
 
         this.api.setColumns(buildColumnDefinitions(info));
-        this.api.setData(buildRowDefinitions(this.parentNote, notes, info));
+        this.api.setData(await buildRowDefinitions(this.parentNote, notes, info));
     }
 
     private onSave() {
@@ -201,7 +201,11 @@ export default class TableView extends ViewMode<StateInfo> {
         }
     }
 
-    onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">): boolean | void {
+    async onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">): boolean | void {
+        if (!this.api) {
+            return;
+        }
+
         // Refresh if promoted attributes get changed.
         if (loadResults.getAttributeRows().find(attr =>
             attr.type === "label" &&
@@ -209,11 +213,13 @@ export default class TableView extends ViewMode<StateInfo> {
             attributes.isAffecting(attr, this.parentNote))) {
             const info = getPromotedAttributeInformation(this.parentNote);
             const columnDefs = buildColumnDefinitions(info);
-            this.api?.setColumns(columnDefs)
+            this.api.setColumns(columnDefs)
         }
 
         if (loadResults.getBranchRows().some(branch => branch.parentNoteId === this.parentNote.noteId)) {
-            return true;
+            const notes = await froca.getNotes(this.args.noteIds);
+            const info = getPromotedAttributeInformation(this.parentNote);
+            this.api.setData(await buildRowDefinitions(this.parentNote, notes, info));
         }
 
         return false;

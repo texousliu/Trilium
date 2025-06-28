@@ -20,9 +20,9 @@ export interface PromotedAttributeInformation {
 
 type GridLabelType = 'text' | 'number' | 'boolean' | 'date' | 'dateString' | 'object';
 
-export function buildData(parentNote: FNote, info: PromotedAttributeInformation[], notes: FNote[]) {
+export async function buildData(parentNote: FNote, info: PromotedAttributeInformation[], notes: FNote[]) {
     const columnDefs = buildColumnDefinitions(info);
-    const rowData = buildRowDefinitions(parentNote, notes, info);
+    const rowData = await buildRowDefinitions(parentNote, notes, info);
 
     return {
         rowData,
@@ -75,10 +75,14 @@ function mapDataType(labelType: LabelType | undefined): GridLabelType {
     }
 }
 
-export function buildRowDefinitions(parentNote: FNote, notes: FNote[], infos: PromotedAttributeInformation[]) {
+export async function buildRowDefinitions(parentNote: FNote, notes: FNote[], infos: PromotedAttributeInformation[]) {
     const definitions: GridOptions<TableData>["rowData"] = [];
     for (const branch of parentNote.getChildBranches()) {
-        const note = branch.getNoteFromCache();
+        const note = await branch.getNote();
+        if (!note) {
+            continue; // Skip if the note is not found
+        }
+
         const labels: typeof definitions[0]["labels"] = {};
         for (const { name, type } of infos) {
             if (type === "boolean") {
