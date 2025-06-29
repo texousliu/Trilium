@@ -9,7 +9,7 @@ import type { CommandListenerData, EventData } from "../../../components/app_con
 import type { Attribute } from "../../../services/attribute_parser.js";
 import note_create from "../../../services/note_create.js";
 import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule} from 'tabulator-tables';
-import "tabulator-tables/dist/css/tabulator_midnight.min.css";
+import "tabulator-tables/dist/css/tabulator_bootstrap5.min.css";
 
 const TPL = /*html*/`
 <div class="table-view">
