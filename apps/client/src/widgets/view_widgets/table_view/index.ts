@@ -8,7 +8,7 @@ import branches from "../../../services/branches.js";
 import type { CommandListenerData, EventData } from "../../../components/app_context.js";
 import type { Attribute } from "../../../services/attribute_parser.js";
 import note_create from "../../../services/note_create.js";
-import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule} from 'tabulator-tables';
+import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule} from 'tabulator-tables';
 import "tabulator-tables/dist/css/tabulator_bootstrap5.min.css";
 
 const TPL = /*html*/`
@@ -80,7 +80,7 @@ export default class TableView extends ViewMode<StateInfo> {
     }
 
     private async renderTable(el: HTMLElement) {
-        const modules = [SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule];
+        const modules = [SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule];
         for (const module of modules) {
             Tabulator.registerModule(module);
         }
@@ -99,6 +99,7 @@ export default class TableView extends ViewMode<StateInfo> {
             columns: buildColumnDefinitions(info),
             data: await buildRowDefinitions(this.parentNote, notes, info),
             persistence: true,
+            movableColumns: true,
             persistenceWriterFunc: (_id, type: string, data: object) => {
                 this.persistentData[type] = data;
                 this.spacedUpdate.scheduleUpdate();
