@@ -8,8 +8,9 @@ import branches from "../../../services/branches.js";
 import type { CommandListenerData, EventData } from "../../../components/app_context.js";
 import type { Attribute } from "../../../services/attribute_parser.js";
 import note_create from "../../../services/note_create.js";
-import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule} from 'tabulator-tables';
+import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MenuModule} from 'tabulator-tables';
 import "tabulator-tables/dist/css/tabulator_bootstrap5.min.css";
+import { applyHeaderMenu } from "./header-menu.js";
 
 const TPL = /*html*/`
 <div class="table-view">
@@ -80,7 +81,7 @@ export default class TableView extends ViewMode<StateInfo> {
     }
 
     private async renderTable(el: HTMLElement) {
-        const modules = [SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule];
+        const modules = [SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MenuModule];
         for (const module of modules) {
             Tabulator.registerModule(module);
         }
@@ -92,11 +93,14 @@ export default class TableView extends ViewMode<StateInfo> {
         const notes = await froca.getNotes(this.args.noteIds);
         const info = getPromotedAttributeInformation(this.parentNote);
 
+        const columnDefs = buildColumnDefinitions(info);
+        applyHeaderMenu(columnDefs);
+
         const viewStorage = await this.viewStorage.restore();
         this.persistentData = viewStorage?.tableData || {};
         this.api = new Tabulator(el, {
             index: "noteId",
-            columns: buildColumnDefinitions(info),
+            columns: columnDefs,
             data: await buildRowDefinitions(this.parentNote, notes, info),
             persistence: true,
             movableColumns: true,
