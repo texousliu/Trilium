@@ -8,7 +8,7 @@ import branches from "../../../services/branches.js";
 import type { CommandListenerData, EventData } from "../../../components/app_context.js";
 import type { Attribute } from "../../../services/attribute_parser.js";
 import note_create from "../../../services/note_create.js";
-import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule} from 'tabulator-tables';
+import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule} from 'tabulator-tables';
 import "tabulator-tables/dist/css/tabulator_bootstrap5.min.css";
 
 const TPL = /*html*/`
@@ -45,7 +45,7 @@ const TPL = /*html*/`
 `;
 
 export interface StateInfo {
-    gridState: GridState;
+   tableData: Record<string, object>;
 }
 
 export default class TableView extends ViewMode<StateInfo> {
@@ -56,6 +56,7 @@ export default class TableView extends ViewMode<StateInfo> {
     private spacedUpdate: SpacedUpdate;
     private api?: Tabulator;
     private newAttribute?: Attribute;
+    private persistentData: Record<string, object>;
 
     constructor(args: ViewModeArgs) {
         super(args, "table");
@@ -64,6 +65,7 @@ export default class TableView extends ViewMode<StateInfo> {
         this.$container = this.$root.find(".table-view-container");
         this.args = args;
         this.spacedUpdate = new SpacedUpdate(() => this.onSave(), 5_000);
+        this.persistentData = {};
         args.$parent.append(this.$root);
     }
 
@@ -81,7 +83,7 @@ export default class TableView extends ViewMode<StateInfo> {
         const viewStorage = await this.viewStorage.restore();
         const initialState = viewStorage?.gridState;
 
-        const modules = [SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule];
+        const modules = [SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule];
         for (const module of modules) {
             Tabulator.registerModule(module);
         }
@@ -96,18 +98,19 @@ export default class TableView extends ViewMode<StateInfo> {
         this.api = new Tabulator(el, {
             index: "noteId",
             columns: buildColumnDefinitions(info),
-            data: await buildRowDefinitions(this.parentNote, notes, info)
+            data: await buildRowDefinitions(this.parentNote, notes, info),
+            persistence: true,
+            persistenceWriterFunc: (_id, type: string, data: object) => {
+                this.persistentData[type] = data;
+                this.spacedUpdate.scheduleUpdate();
+            }
         });
         this.setupEditing();
     }
 
     private onSave() {
-        if (!this.api) {
-            return;
-        }
-
         this.viewStorage.store({
-            gridState: this.api.getState()
+            tableData: this.persistentData,
         });
     }
 
