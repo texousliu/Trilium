@@ -80,9 +80,6 @@ export default class TableView extends ViewMode<StateInfo> {
     }
 
     private async renderTable(el: HTMLElement) {
-        const viewStorage = await this.viewStorage.restore();
-        const initialState = viewStorage?.gridState;
-
         const modules = [SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule];
         for (const module of modules) {
             Tabulator.registerModule(module);
@@ -95,6 +92,8 @@ export default class TableView extends ViewMode<StateInfo> {
         const notes = await froca.getNotes(this.args.noteIds);
         const info = getPromotedAttributeInformation(this.parentNote);
 
+        const viewStorage = await this.viewStorage.restore();
+        this.persistentData = viewStorage?.tableData || {};
         this.api = new Tabulator(el, {
             index: "noteId",
             columns: buildColumnDefinitions(info),
@@ -103,7 +102,8 @@ export default class TableView extends ViewMode<StateInfo> {
             persistenceWriterFunc: (_id, type: string, data: object) => {
                 this.persistentData[type] = data;
                 this.spacedUpdate.scheduleUpdate();
-            }
+            },
+            persistenceReaderFunc: (_id, type: string) => this.persistentData[type],
         });
         this.setupEditing();
     }
