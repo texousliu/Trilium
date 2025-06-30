@@ -84,7 +84,7 @@ export const DEFAULT_ALLOWED_TAGS = [
     "del",
     "ins",
     "en-media", // for ENEX import
-    // Additional tags (https://github.com/TriliumNext/Notes/issues/567)
+    // Additional tags (https://github.com/TriliumNext/Trilium/issues/567)
     "acronym",
     "article",
     "big",
