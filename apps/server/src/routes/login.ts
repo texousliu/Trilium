@@ -77,7 +77,7 @@ function setPassword(req: Request, res: Response) {
  *     operationId: login-normal
  *     externalDocs:
  *       description: HMAC calculation
- *       url: https://github.com/TriliumNext/Notes/blob/v0.91.6/src/services/utils.ts#L62-L66
+ *       url: https://github.com/TriliumNext/Trilium/blob/v0.91.6/src/services/utils.ts#L62-L66
  *     requestBody:
  *       content:
  *         application/x-www-form-urlencoded:

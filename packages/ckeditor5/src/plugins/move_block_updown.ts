@@ -1,5 +1,5 @@
 /**
- * https://github.com/TriliumNext/Notes/issues/1002
+ * https://github.com/TriliumNext/Trilium/issues/1002
  */
 
 import { Command, DocumentSelection, Element, Node, Plugin, Range } from 'ckeditor5';
@@ -11,11 +11,11 @@ export default class MoveBlockUpDownPlugin extends Plugin {
         editor.commands.add('moveBlockUp', new MoveBlockUpCommand(editor));
         editor.commands.add('moveBlockDown', new MoveBlockDownCommand(editor));
 
-		// Use native DOM capturing to intercept Ctrl/Alt + ↑/↓, 
+		// Use native DOM capturing to intercept Ctrl/Alt + ↑/↓,
 		// as plugin-level keystroke handling may fail when the selection is near an object.
         this.bindMoveBlockShortcuts(editor);
     }
-	
+
 	bindMoveBlockShortcuts(editor: any) {
 		editor.editing.view.once('render', () => {
 			const domRoot = editor.editing.view.getDomRoot();
@@ -59,7 +59,7 @@ abstract class MoveBlockUpDownCommand extends Command {
 		if (!isEnabled) {
 			return;
 		}
-		
+
 		const movingBlocks = this.offset === 'before'
             ? selectedBlocks
             : [...selectedBlocks].reverse();
@@ -104,7 +104,7 @@ abstract class MoveBlockUpDownCommand extends Command {
 			this.scrollToSelection();
 		});
     }
-	
+
 	getSelectedBlocks(selection: DocumentSelection) {
 		const blocks = [...selection.getSelectedBlocks()];
 		const resolved: Element[] = [];
@@ -129,7 +129,7 @@ abstract class MoveBlockUpDownCommand extends Command {
 		// Deduplicate adjacent duplicates (e.g., nested selections resolving to same block)
 		return resolved.filter((blk, idx) => idx === 0 || blk !== resolved[idx - 1]);
 	}
-	
+
 	scrollToSelection() {
 		// Ensure scroll happens in sync with DOM updates
 		requestAnimationFrame(() => {
