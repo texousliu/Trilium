@@ -4,6 +4,8 @@ import options from "../../services/options.js";
 
 import restChatService from "../../services/llm/rest_chat_service.js";
 import chatStorageService from '../../services/llm/chat_storage_service.js';
+import toolRegistry from '../../services/llm/tools/tool_registry.js';
+import aiServiceManager from '../../services/llm/ai_service_manager.js';
 
 // Define basic interfaces
 interface ChatMessage {
@@ -646,6 +648,96 @@ async function handleStreamingProcess(
     }
 }
 
+/**
+ * Debug endpoint to check tool recognition and registry status
+ */
+async function debugTools(req: Request, res: Response): Promise<void> {
+    try {
+        log.info("========== DEBUG TOOLS ENDPOINT CALLED ==========");
+        
+        // Get detailed tool registry info
+        const registryDebugInfo = toolRegistry.getDebugInfo();
+        
+        // Get AI service manager status
+        const availableProviders = aiServiceManager.getAvailableProviders();
+        const providerStatus: Record<string, any> = {};
+        
+        for (const provider of availableProviders) {
+            try {
+                const service = await aiServiceManager.getService(provider);
+                providerStatus[provider] = {
+                    available: true,
+                    type: service.constructor.name,
+                    supportsTools: 'generateChatCompletion' in service
+                };
+            } catch (error) {
+                providerStatus[provider] = {
+                    available: false,
+                    error: error instanceof Error ? error.message : String(error)
+                };
+            }
+        }
+        
+        // Get current tool definitions being sent to LLM
+        const currentToolDefinitions = toolRegistry.getAllToolDefinitions();
+        
+        // Format tool definitions for debugging
+        const toolDefinitionSummary = currentToolDefinitions.map(def => ({
+            name: def.function.name,
+            description: def.function.description || 'No description',
+            parameterCount: Object.keys(def.function.parameters?.properties || {}).length,
+            requiredParams: def.function.parameters?.required || [],
+            type: def.type || 'function'
+        }));
+        
+        const debugData = {
+            timestamp: new Date().toISOString(),
+            summary: {
+                registrySize: registryDebugInfo.registrySize,
+                validToolCount: registryDebugInfo.validToolCount,
+                definitionsForLLM: currentToolDefinitions.length,
+                availableProviders: availableProviders.length,
+                initializationAttempted: registryDebugInfo.initializationAttempted
+            },
+            toolRegistry: {
+                ...registryDebugInfo,
+                toolDefinitionSummary
+            },
+            aiServiceManager: {
+                availableProviders,
+                providerStatus
+            },
+            fullToolDefinitions: currentToolDefinitions,
+            troubleshooting: {
+                commonIssues: [
+                    "No tools in registry - check tool initialization in AIServiceManager",
+                    "Tools failing validation - check execute methods and definitions",
+                    "Provider not supporting function calling - verify model capabilities",
+                    "Tool definitions not being sent to LLM - check enableTools option"
+                ],
+                checkpoints: [
+                    `Tools registered: ${registryDebugInfo.registrySize > 0 ? '✓' : '✗'}`,
+                    `Tools valid: ${registryDebugInfo.validToolCount > 0 ? '✓' : '✗'}`,
+                    `Definitions available: ${currentToolDefinitions.length > 0 ? '✓' : '✗'}`,
+                    `Providers available: ${availableProviders.length > 0 ? '✓' : '✗'}`
+                ]
+            }
+        };
+        
+        log.info(`Debug tools response: ${JSON.stringify(debugData.summary, null, 2)}`);
+        
+        res.status(200).json(debugData);
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        log.error(`Error in debug tools endpoint: ${errorMessage}`);
+        res.status(500).json({
+            error: 'Failed to retrieve debug information',
+            message: errorMessage,
+            timestamp: new Date().toISOString()
+        });
+    }
+}
+
 export default {
     // Chat session management
     createSession,
@@ -654,5 +746,8 @@ export default {
     listSessions,
     deleteSession,
     sendMessage,
-    streamMessage
+    streamMessage,
+    
+    // Debug endpoints
+    debugTools
 };
