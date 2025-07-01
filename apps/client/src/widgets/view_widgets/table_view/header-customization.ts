@@ -8,9 +8,9 @@ export default function applyHeaderCustomization(baseEl: HTMLElement, api: GridA
         return;
     }
 
-    header.addEventListener("contextmenu", (e) => {
+    header.addEventListener("contextmenu", (_e) => {
+        const e = _e as MouseEvent;
         e.preventDefault();
-
 
         contextMenu.show({
             items: [

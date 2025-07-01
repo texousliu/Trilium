@@ -224,12 +224,20 @@ export default class TableView extends ViewMode<StateInfo> {
     }
 
     #manageColumnUpdate() {
+        if (!this.api) {
+            return;
+        }
+
         const info = getPromotedAttributeInformation(this.parentNote);
         const columnDefs = buildColumnDefinitions(info);
         this.api.setColumns(columnDefs);
     }
 
     async #manageRowsUpdate() {
+        if (!this.api) {
+            return;
+        }
+
         const notes = await froca.getNotes(this.args.noteIds);
         const info = getPromotedAttributeInformation(this.parentNote);
         this.api.setData(await buildRowDefinitions(this.parentNote, notes, info));

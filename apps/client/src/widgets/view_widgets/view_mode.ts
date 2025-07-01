@@ -7,7 +7,7 @@ import ViewModeStorage from "./view_mode_storage.js";
 export interface ViewModeArgs {
     $parent: JQuery<HTMLElement>;
     parentNote: FNote;
-    parentNotePath: string | null | undefined;
+    parentNotePath?: string | null;
     noteIds: string[];
     showNotePath?: boolean;
 }

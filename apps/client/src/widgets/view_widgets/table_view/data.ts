@@ -4,6 +4,7 @@ import type { ColumnDefinition } from "tabulator-tables";
 import link from "../../../services/link.js";
 
 export type TableData = {
+    iconClass: string;
     noteId: string;
     title: string;
     labels: Record<string, boolean | string | null>;
@@ -120,7 +121,7 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
 }
 
 export async function buildRowDefinitions(parentNote: FNote, notes: FNote[], infos: PromotedAttributeInformation[]) {
-    const definitions: GridOptions<TableData>["rowData"] = [];
+    const definitions: TableData[] = [];
     for (const branch of parentNote.getChildBranches()) {
         const note = await branch.getNote();
         if (!note) {

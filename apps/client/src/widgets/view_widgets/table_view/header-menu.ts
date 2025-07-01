@@ -1,16 +1,17 @@
+import type { CellComponent, MenuObject, Tabulator } from "tabulator-tables";
+
 export function applyHeaderMenu(columns) {
     //apply header menu to each column
-    for(let column of columns){
+    for (let column of columns) {
         column.headerMenu = headerMenu;
     }
 }
 
-function headerMenu(){
-    var menu = [];
-    var columns = this.getColumns();
+function headerMenu(this: Tabulator) {
+    const menu: MenuObject<CellComponent>[] = [];
+    const columns = this.getColumns();
 
-    for(let column of columns){
-
+    for (let column of columns) {
         //create checkbox element using font awesome icons
         let icon = document.createElement("i");
         icon.classList.add("bx");
@@ -27,8 +28,8 @@ function headerMenu(){
 
         //create menu item
         menu.push({
-            label:label,
-            action:function(e){
+            label: label,
+            action: function (e) {
                 //prevent menu closing
                 e.stopPropagation();
 
@@ -36,10 +37,10 @@ function headerMenu(){
                 column.toggle();
 
                 //change menu item icon
-                if(column.isVisible()){
+                if (column.isVisible()) {
                     icon.classList.remove("bx-empty");
                     icon.classList.add("bx-check");
-                }else{
+                } else {
                     icon.classList.remove("bx-check");
                     icon.classList.add("bx-empty");
                 }
@@ -47,5 +48,5 @@ function headerMenu(){
         });
     }
 
-   return menu;
+    return menu;
 };
