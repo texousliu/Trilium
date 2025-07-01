@@ -35,10 +35,12 @@
 		"@inlang/paraglide-js": "^2.0.0"
 	},
 	"nx": {
-		"typecheck": {
-			"dependsOn": [
-				"build"
-			]
+		"targets": {
+			"typecheck": {
+				"dependsOn": [
+					"build"
+				]
+			}
 		}
 	}
 }
