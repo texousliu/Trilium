@@ -95,7 +95,7 @@ function forceFullSync() {
  *     operationId: sync-changed
  *     externalDocs:
  *       description: Server implementation
- *       url: https://github.com/TriliumNext/Notes/blob/v0.91.6/src/routes/api/sync.ts
+ *       url: https://github.com/TriliumNext/Trilium/blob/v0.91.6/src/routes/api/sync.ts
  *     parameters:
  *       - in: query
  *         name: instanceId
@@ -214,7 +214,7 @@ const partialRequests: Record<
  *     operationId: sync-update
  *     externalDocs:
  *       description: Server implementation
- *       url: https://github.com/TriliumNext/Notes/blob/v0.91.6/src/routes/api/sync.ts
+ *       url: https://github.com/TriliumNext/Trilium/blob/v0.91.6/src/routes/api/sync.ts
  *     parameters:
  *       - in: header
  *         name: pageCount

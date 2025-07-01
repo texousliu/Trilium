@@ -41,9 +41,9 @@ export default class IncorrectCpuArchDialog extends BasicWidget {
             // Open the releases page where users can download the correct version
             if (utils.isElectron()) {
                 const { shell } = utils.dynamicRequire("electron");
-                shell.openExternal("https://github.com/TriliumNext/Notes/releases/latest");
+                shell.openExternal("https://github.com/TriliumNext/Trilium/releases/latest");
             } else {
-                window.open("https://github.com/TriliumNext/Notes/releases/latest", "_blank");
+                window.open("https://github.com/TriliumNext/Trilium/releases/latest", "_blank");
             }
         });
 

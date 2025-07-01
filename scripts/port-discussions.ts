@@ -10,7 +10,7 @@
 import { type BrowserContext, chromium } from 'playwright';
 import { createWriteStream, existsSync, readFileSync, writeFileSync } from 'fs';
 
-const SOURCE_URL = "https://github.com/TriliumNext/Notes";
+const SOURCE_URL = "https://github.com/TriliumNext/Trilium";
 const TARGET_REPOSITORY_ID = 92111509;
 
 const fsLog = createWriteStream('port-discussions.log', { flags: 'a' });

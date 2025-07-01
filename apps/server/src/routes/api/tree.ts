@@ -136,7 +136,7 @@ function getNotesAndBranchesAndAttributes(_noteIds: string[] | Set<string>) {
  *     operationId: tree
  *     externalDocs:
  *       description: Server implementation
- *       url: https://github.com/TriliumNext/Notes/blob/v0.91.6/src/routes/api/tree.ts
+ *       url: https://github.com/TriliumNext/Trilium/blob/v0.91.6/src/routes/api/tree.ts
  *     parameters:
  *       - in: query
  *         name: subTreeNoteId
