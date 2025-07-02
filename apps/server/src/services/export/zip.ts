@@ -515,97 +515,108 @@ ${markdownContent}`;
         archive.append(cssContent, { name: cssMeta.dataFileName });
     }
 
-    const existingFileNames: Record<string, number> = format === "html" ? { navigation: 0, index: 1 } : {};
-    const rootMeta = createNoteMeta(branch, { notePath: [] }, existingFileNames);
-    if (!rootMeta) {
-        throw new Error("Unable to create root meta.");
-    }
+    try {
+        const existingFileNames: Record<string, number> = format === "html" ? { navigation: 0, index: 1 } : {};
+        const rootMeta = createNoteMeta(branch, { notePath: [] }, existingFileNames);
+        if (!rootMeta) {
+            throw new Error("Unable to create root meta.");
+        }
 
-    const metaFile: NoteMetaFile = {
-        formatVersion: 2,
-        appVersion: packageInfo.version,
-        files: [rootMeta]
-    };
-
-    let navigationMeta: NoteMeta | null = null;
-    let indexMeta: NoteMeta | null = null;
-    let cssMeta: NoteMeta | null = null;
-
-    if (format === "html") {
-        navigationMeta = {
-            noImport: true,
-            dataFileName: "navigation.html"
+        const metaFile: NoteMetaFile = {
+            formatVersion: 2,
+            appVersion: packageInfo.version,
+            files: [rootMeta]
         };
 
-        metaFile.files.push(navigationMeta);
+        let navigationMeta: NoteMeta | null = null;
+        let indexMeta: NoteMeta | null = null;
+        let cssMeta: NoteMeta | null = null;
 
-        indexMeta = {
-            noImport: true,
-            dataFileName: "index.html"
-        };
+        if (format === "html") {
+            navigationMeta = {
+                noImport: true,
+                dataFileName: "navigation.html"
+            };
 
-        metaFile.files.push(indexMeta);
+            metaFile.files.push(navigationMeta);
 
-        cssMeta = {
-            noImport: true,
-            dataFileName: "style.css"
-        };
+            indexMeta = {
+                noImport: true,
+                dataFileName: "index.html"
+            };
 
-        metaFile.files.push(cssMeta);
-    }
+            metaFile.files.push(indexMeta);
 
-    for (const noteMeta of Object.values(noteIdToMeta)) {
-        // filter out relations which are not inside this export
-        noteMeta.attributes = (noteMeta.attributes || []).filter((attr) => {
-            if (attr.type !== "relation") {
-                return true;
-            } else if (attr.value in noteIdToMeta) {
-                return true;
-            } else if (attr.value === "root" || attr.value?.startsWith("_")) {
-                // relations to "named" noteIds can be preserved
-                return true;
-            } else {
-                return false;
+            cssMeta = {
+                noImport: true,
+                dataFileName: "style.css"
+            };
+
+            metaFile.files.push(cssMeta);
+        }
+
+        for (const noteMeta of Object.values(noteIdToMeta)) {
+            // filter out relations which are not inside this export
+            noteMeta.attributes = (noteMeta.attributes || []).filter((attr) => {
+                if (attr.type !== "relation") {
+                    return true;
+                } else if (attr.value in noteIdToMeta) {
+                    return true;
+                } else if (attr.value === "root" || attr.value?.startsWith("_")) {
+                    // relations to "named" noteIds can be preserved
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        }
+
+        if (!rootMeta) {
+            // corner case of disabled export for exported note
+            if ("sendStatus" in res) {
+                res.sendStatus(400);
             }
-        });
-    }
+            return;
+        }
 
-    if (!rootMeta) {
-        // corner case of disabled export for exported note
+        const metaFileJson = JSON.stringify(metaFile, null, "\t");
+
+        archive.append(metaFileJson, { name: "!!!meta.json" });
+
+        saveNote(rootMeta, "");
+
+        if (format === "html") {
+            if (!navigationMeta || !indexMeta || !cssMeta) {
+                throw new Error("Missing meta.");
+            }
+
+            saveNavigation(rootMeta, navigationMeta);
+            saveIndex(rootMeta, indexMeta);
+            saveCss(rootMeta, cssMeta);
+        }
+
+        const note = branch.getNote();
+        const zipFileName = `${branch.prefix ? `${branch.prefix} - ` : ""}${note.getTitleOrProtected()}.zip`;
+
+        if (setHeaders && "setHeader" in res) {
+            res.setHeader("Content-Disposition", getContentDisposition(zipFileName));
+            res.setHeader("Content-Type", "application/zip");
+        }
+
+        archive.pipe(res);
+        await archive.finalize();
+        taskContext.taskSucceeded();
+    } catch (e: unknown) {
+        const message = `Export failed with error: ${e instanceof Error ? e.message : String(e)}`;
+        log.error(message);
+        taskContext.reportError(message);
+
         if ("sendStatus" in res) {
-            res.sendStatus(400);
+            res.removeHeader("Content-Disposition");
+            res.removeHeader("Content-Type");
+            res.status(500).send(message);
         }
-        return;
     }
-
-    const metaFileJson = JSON.stringify(metaFile, null, "\t");
-
-    archive.append(metaFileJson, { name: "!!!meta.json" });
-
-    saveNote(rootMeta, "");
-
-    if (format === "html") {
-        if (!navigationMeta || !indexMeta || !cssMeta) {
-            throw new Error("Missing meta.");
-        }
-
-        saveNavigation(rootMeta, navigationMeta);
-        saveIndex(rootMeta, indexMeta);
-        saveCss(rootMeta, cssMeta);
-    }
-
-    const note = branch.getNote();
-    const zipFileName = `${branch.prefix ? `${branch.prefix} - ` : ""}${note.getTitleOrProtected()}.zip`;
-
-    if (setHeaders && "setHeader" in res) {
-        res.setHeader("Content-Disposition", getContentDisposition(zipFileName));
-        res.setHeader("Content-Type", "application/zip");
-    }
-
-    archive.pipe(res);
-    await archive.finalize();
-
-    taskContext.taskSucceeded();
 }
 
 async function exportToZipFile(noteId: string, format: "markdown" | "html", zipFilePath: string, zipExportOptions?: AdvancedExportOptions) {
