@@ -599,7 +599,7 @@ ${markdownContent}`;
         }
 
         const note = branch.getNote();
-        const zipFileName = `${branch.prefix ? `${branch.prefix} - ` : ""}${note.getTitleOrProtected()}.zip`;
+        const zipFileName = `${branch.prefix ? `${branch.prefix} - ` : ""}${note.getTitleOrProtected() || "note"}.zip`;
 
         if (setHeaders && "setHeader" in res) {
             res.setHeader("Content-Disposition", getContentDisposition(zipFileName));
