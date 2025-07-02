@@ -293,25 +293,25 @@ describe("Markdown export", () => {
         const html = trimIndentation`\
             <ul>
                 <li><a href="https://github.com/JYC333">@JYC333</a> made their first contribution
-                            in <a href="https://github.com/TriliumNext/Notes/pull/294">#294</a>
+                            in <a href="https://github.com/TriliumNext/Trilium/pull/294">#294</a>
 
                 </li>
                 <li>
-                <p><a href="https://github.com/TriliumNext/Notes/issues/375">Note Tooltip isn't removed when clicking on internal trilium link in read-only mode</a>
+                <p><a href="https://github.com/TriliumNext/Trilium/issues/375">Note Tooltip isn't removed when clicking on internal trilium link in read-only mode</a>
 
                 </p>
                 </li>
                 <li>
-                <p><a href="https://github.com/TriliumNext/Notes/issues/384">Calendar dropdown won't close if click/right-click other button that open notes from launcher bar</a>
+                <p><a href="https://github.com/TriliumNext/Trilium/issues/384">Calendar dropdown won't close if click/right-click other button that open notes from launcher bar</a>
 
                 </p>
                 </li>
             </ul>
         `;
         const expected = trimIndentation`\
-            *   [@JYC333](https://github.com/JYC333) made their first contribution in [#294](https://github.com/TriliumNext/Notes/pull/294)
-            *   [Note Tooltip isn't removed when clicking on internal trilium link in read-only mode](https://github.com/TriliumNext/Notes/issues/375)
-            *   [Calendar dropdown won't close if click/right-click other button that open notes from launcher bar](https://github.com/TriliumNext/Notes/issues/384)`;
+            *   [@JYC333](https://github.com/JYC333) made their first contribution in [#294](https://github.com/TriliumNext/Trilium/pull/294)
+            *   [Note Tooltip isn't removed when clicking on internal trilium link in read-only mode](https://github.com/TriliumNext/Trilium/issues/375)
+            *   [Calendar dropdown won't close if click/right-click other button that open notes from launcher bar](https://github.com/TriliumNext/Trilium/issues/384)`;
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
 
