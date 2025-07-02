@@ -75,6 +75,9 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
 
     function getDataFileName(type: string | null, mime: string, baseFileName: string, existingFileNames: Record<string, number>): string {
         let fileName = baseFileName.trim();
+        if (!fileName) {
+            fileName = "note";
+        }
 
         // Crop fileName to avoid its length exceeding 30 and prevent cutting into the extension.
         if (fileName.length > 30) {
