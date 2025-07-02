@@ -366,7 +366,7 @@ ${markdownContent}`;
     function saveNote(noteMeta: NoteMeta, filePathPrefix: string) {
         log.info(`Exporting note '${noteMeta.noteId}'`);
 
-        if (!noteMeta.noteId || !noteMeta.title) {
+        if (!noteMeta.noteId || noteMeta.title === undefined) {
             throw new Error("Missing note meta.");
         }
 
