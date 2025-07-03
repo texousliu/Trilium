@@ -898,7 +898,7 @@ importers:
         version: 9.28.0(jiti@2.4.2)
       eslint-config-ckeditor5:
         specifier: '>=9.1.0'
-        version: 10.0.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
+        version: 11.0.1(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
       http-server:
         specifier: ^14.1.0
         version: 14.1.1
@@ -910,7 +910,7 @@ importers:
         version: 16.20.0(typescript@5.8.3)
       stylelint-config-ckeditor5:
         specifier: '>=9.1.0'
-        version: 10.0.0(stylelint@16.20.0(typescript@5.8.3))
+        version: 11.0.1(stylelint@16.20.0(typescript@5.8.3))
       ts-node:
         specifier: ^10.9.1
         version: 10.9.2(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@22.16.0)(typescript@5.8.3)
@@ -958,7 +958,7 @@ importers:
         version: 9.28.0(jiti@2.4.2)
       eslint-config-ckeditor5:
         specifier: '>=9.1.0'
-        version: 10.0.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
+        version: 11.0.1(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
       http-server:
         specifier: ^14.1.0
         version: 14.1.1
@@ -970,7 +970,7 @@ importers:
         version: 16.20.0(typescript@5.8.3)
       stylelint-config-ckeditor5:
         specifier: '>=9.1.0'
-        version: 10.0.0(stylelint@16.20.0(typescript@5.8.3))
+        version: 11.0.1(stylelint@16.20.0(typescript@5.8.3))
       ts-node:
         specifier: ^10.9.1
         version: 10.9.2(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@22.16.0)(typescript@5.8.3)
@@ -1018,7 +1018,7 @@ importers:
         version: 9.28.0(jiti@2.4.2)
       eslint-config-ckeditor5:
         specifier: '>=9.1.0'
-        version: 10.0.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
+        version: 11.0.1(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
       http-server:
         specifier: ^14.1.0
         version: 14.1.1
@@ -1030,7 +1030,7 @@ importers:
         version: 16.20.0(typescript@5.8.3)
       stylelint-config-ckeditor5:
         specifier: '>=9.1.0'
-        version: 10.0.0(stylelint@16.20.0(typescript@5.8.3))
+        version: 11.0.1(stylelint@16.20.0(typescript@5.8.3))
       ts-node:
         specifier: ^10.9.1
         version: 10.9.2(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@22.16.0)(typescript@5.8.3)
@@ -1085,7 +1085,7 @@ importers:
         version: 9.28.0(jiti@2.4.2)
       eslint-config-ckeditor5:
         specifier: '>=9.1.0'
-        version: 10.0.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
+        version: 11.0.1(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
       http-server:
         specifier: ^14.1.0
         version: 14.1.1
@@ -1097,7 +1097,7 @@ importers:
         version: 16.20.0(typescript@5.8.3)
       stylelint-config-ckeditor5:
         specifier: '>=9.1.0'
-        version: 10.0.0(stylelint@16.20.0(typescript@5.8.3))
+        version: 11.0.1(stylelint@16.20.0(typescript@5.8.3))
       ts-node:
         specifier: ^10.9.1
         version: 10.9.2(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@22.16.0)(typescript@5.8.3)
@@ -1152,7 +1152,7 @@ importers:
         version: 9.28.0(jiti@2.4.2)
       eslint-config-ckeditor5:
         specifier: '>=9.1.0'
-        version: 10.0.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
+        version: 11.0.1(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
       http-server:
         specifier: ^14.1.0
         version: 14.1.1
@@ -1164,7 +1164,7 @@ importers:
         version: 16.20.0(typescript@5.8.3)
       stylelint-config-ckeditor5:
         specifier: '>=9.1.0'
-        version: 10.0.0(stylelint@16.20.0(typescript@5.8.3))
+        version: 11.0.1(stylelint@16.20.0(typescript@5.8.3))
       ts-node:
         specifier: ^10.9.1
         version: 10.9.2(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@22.16.0)(typescript@5.8.3)
@@ -2569,9 +2569,26 @@ packages:
     peerDependencies:
       '@csstools/css-tokenizer': ^3.0.3
 
+  '@csstools/css-parser-algorithms@3.0.5':
+    resolution: {integrity: sha512-DaDeUkXZKjdGhgYaHNJTV9pV7Y9B3b644jCLs9Upc3VeNGg6LWARAT6O+Q+/COo+2gg/bM5rhpMAtf70WqfBdQ==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@csstools/css-tokenizer': ^3.0.4
+
   '@csstools/css-tokenizer@3.0.3':
     resolution: {integrity: sha512-UJnjoFsmxfKUdNYdWgOB0mWUypuLvAfQPH1+pyvRJs6euowbFkFC6P13w1l8mJyi3vxYMxc9kld5jZEGRQs6bw==}
     engines: {node: '>=18'}
+
+  '@csstools/css-tokenizer@3.0.4':
+    resolution: {integrity: sha512-Vd/9EVDiu6PPJt9yAh6roZP6El1xHrdvIVGjyBsHR0RYwNHgL7FJPyIIW4fANJNG6FtyZfvlRPpFI4ZM/lubvw==}
+    engines: {node: '>=18'}
+
+  '@csstools/media-query-list-parser@3.0.1':
+    resolution: {integrity: sha512-HNo8gGD02kHmcbX6PvCoUuOQvn4szyB9ca63vZHKX5A81QytgDG4oxG4IaEfHTlEZSZ6MjPEMWIVU+zF2PZcgw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@csstools/css-parser-algorithms': ^3.0.1
+      '@csstools/css-tokenizer': ^3.0.1
 
   '@csstools/media-query-list-parser@4.0.2':
     resolution: {integrity: sha512-EUos465uvVvMJehckATTlNqGj4UJWkTmdWuDMjqvSUkjGpmOyFZBVwb4knxCm/k2GMTXY+c/5RkdndzFYWeX5A==}
@@ -2750,9 +2767,9 @@ packages:
   '@emnapi/wasi-threads@1.0.2':
     resolution: {integrity: sha512-5n3nTJblwRi8LlXkJ9eBzu+kZR8Yxcc7ubakyQTFzPMtIhFpUBRbsnc2Dv88IZDIbCDlBiWrknhB4Lsz7mg6BA==}
 
-  '@es-joy/jsdoccomment@0.40.1':
-    resolution: {integrity: sha512-YORCdZSusAlBrFpZ77pJjc5r1bQs5caPWtAu+WWmiSo+8XaUzseapVrfAtiRFbQWnrBxxLLEwF6f6ZG/UgCQCg==}
-    engines: {node: '>=16'}
+  '@es-joy/jsdoccomment@0.50.2':
+    resolution: {integrity: sha512-YAdE/IJSpwbOTiaURNCKECdAwqrJuFiZhylmesBcIRawtYKnBR2wxPhoIewMg+Yu+QuYvHfJNReWpoxGBKOChA==}
+    engines: {node: '>=18'}
 
   '@esbuild/aix-ppc64@0.25.5':
     resolution: {integrity: sha512-9o3TMmpmftaCMepOdA5k/yDw8SfInyzWWTjYTFCX3kPSDJMROQTb8jg+h9Cnwnmm1vOzvxN7gIfB5V2ewpjtGA==}
@@ -4766,11 +4783,17 @@ packages:
   '@ssddanbrown/codemirror-lang-twig@1.0.0':
     resolution: {integrity: sha512-7WIMIh8Ssc54TooGCY57WU2rKEqZZrcV2tZSVRPtd0gKYsrDEKCSLWpQjUWEx7bdgh3NKHUjq1O4ugIzI/+dwQ==}
 
-  '@stylistic/eslint-plugin@4.4.0':
-    resolution: {integrity: sha512-bIh/d9X+OQLCAMdhHtps+frvyjvAM4B1YlSJzcEEhl7wXLIqPar3ngn9DrHhkBOrTA/z9J0bUMtctAspe0dxdQ==}
+  '@stylistic/eslint-plugin@4.4.1':
+    resolution: {integrity: sha512-CEigAk7eOLyHvdgmpZsKFwtiqS2wFwI1fn4j09IU9GmD4euFM4jEBAViWeCqaNLlbX2k2+A/Fq9cje4HQBXuJQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: '>=9.0.0'
+
+  '@stylistic/stylelint-plugin@3.1.3':
+    resolution: {integrity: sha512-85fsmzgsIVmyG3/GFrjuYj6Cz8rAM7IZiPiXCMiSMfoDOC1lOrzrXPDk24WqviAghnPqGpx8b0caK2PuewWGFg==}
+    engines: {node: ^18.12 || >=20.9}
+    peerDependencies:
+      stylelint: ^16.8.0
 
   '@sveltejs/acorn-typescript@1.0.5':
     resolution: {integrity: sha512-IwQk4yfwLdibDlrXVE04jTZYlLnwsTT2PIOQQGNLWfjavGifnk1JD1LcZjZaBTRcxZu2FfPfNLOE04DSu9lqtQ==}
@@ -6866,8 +6889,8 @@ packages:
     resolution: {integrity: sha512-bKw/r35jR3HGt5PEPm1ljsQQGyCrR8sFGNiN5L+ykDHdpO8Smxkrkla9Yi6NkQyUrb8V54PGhfMs6NrIwtxtdw==}
     engines: {node: '>= 6'}
 
-  comment-parser@1.4.0:
-    resolution: {integrity: sha512-QLyTNiZ2KDOibvFPlZ6ZngVsZ/0gYnE6uTXi5aoDg8ed3AkJAz4sEje3Y8a29hQ1s6A99MZXe47fLAXQ1rTqaw==}
+  comment-parser@1.4.1:
+    resolution: {integrity: sha512-buhp5kePrmda3vhc5B9t7pUQXAb2Tnd0qgpkIhPhkHXxJpiPJ11H0ZEU0oBpJ2QztSbzG/ZxMj/CHsYJqRHmyg==}
     engines: {node: '>= 12.0.0'}
 
   commondir@1.0.1:
@@ -7995,8 +8018,8 @@ packages:
     engines: {node: '>=6.0'}
     hasBin: true
 
-  eslint-config-ckeditor5@10.0.0:
-    resolution: {integrity: sha512-QgWEvm0Ir8m9wxq0Z/TR+TQ6DZLYPc6vzqpsh/Uuv9vX8QKKz4175KQjkkhdysMd61XcqZb/rAeGdeRAHz+2YA==}
+  eslint-config-ckeditor5@11.0.1:
+    resolution: {integrity: sha512-sFi8wpMP3i2rPySA2mzmO5y1hTbNH1EWKZxQJ9q8O2hAPFzjpZ3HJzohlnYP1ZlPA49XYXwViwMwa5JhhmlI9A==}
     peerDependencies:
       eslint: ^9.0.0
       typescript: ^5.0.0
@@ -8010,8 +8033,8 @@ packages:
   eslint-linter-browserify@9.30.1:
     resolution: {integrity: sha512-kAa6rPKyabTgyaGScFtMw8UGui7a/26F/OVx+5mdONMu/San8y5dgFCeBks5NrzxK9QYu2C8NBtyqwCTkVqeHw==}
 
-  eslint-plugin-ckeditor5-rules@10.0.0:
-    resolution: {integrity: sha512-0gYPxrvzQmljIUHnxCUKrH0NsLsJNoR316wihe4QSeSSqe4zIv0MLI9ROyXt8HiuAQgSSnGnzVCcdg+T0PxpuQ==}
+  eslint-plugin-ckeditor5-rules@11.0.1:
+    resolution: {integrity: sha512-IY8rnMZGG4K2GSV+ZIp6ykIhrxIiYbO9yWnCOx+vUJw23lQYXd8H6/X56M6IsTHc+XIgdEn0mVqDX+bmoz2adw==}
 
   eslint-plugin-mocha@11.1.0:
     resolution: {integrity: sha512-rKntVWRsQFPbf8OkSgVNRVRrcVAPaGTyEgWCEyXaPDJkTl0v5/lwu1vTk5sWiUJU8l2sxwvGUZzSNrEKdVMeQw==}
@@ -9618,8 +9641,8 @@ packages:
   jsbn@1.1.0:
     resolution: {integrity: sha512-4bYVV3aAMtDTTu4+xsDYa6sy9GyJ69/amsu9sYF2zqjiEoZA5xJi3BrfX3uY+/IekIu7MwdObdbDWpoZdBv3/A==}
 
-  jsdoc-type-pratt-parser@4.0.0:
-    resolution: {integrity: sha512-YtOli5Cmzy3q4dP26GraSOeAhqecewG04hoO8DY56CH4KJ9Fvv5qKWUCCo3HZob7esJQHCv6/+bnTy72xZZaVQ==}
+  jsdoc-type-pratt-parser@4.1.0:
+    resolution: {integrity: sha512-Hicd6JK5Njt2QB6XYFS7ok9e37O8AYk3jTcppG4YVQnYjOemymvTcmc7OWsmq/Qqj5TdRFO5/x/tIPmBeRtGHg==}
     engines: {node: '>=12.0.0'}
 
   jsdom@16.7.0:
@@ -12875,6 +12898,9 @@ packages:
   style-mod@4.1.2:
     resolution: {integrity: sha512-wnD1HyVqpJUI2+eKZ+eo1UwghftP6yuFheBqqe+bWCotBjC2K1YnteJILRMs3SM4V/0dLEW1SC27MWP5y+mwmw==}
 
+  style-search@0.1.0:
+    resolution: {integrity: sha512-Dj1Okke1C3uKKwQcetra4jSuk0DqbzbYtXipzFlFMZtowbF1x7BKJwB9AayVMyFARvU8EDrZdcax4At/452cAg==}
+
   stylehacks@5.1.1:
     resolution: {integrity: sha512-sBpcd5Hx7G6seo7b1LkpttvTz7ikD0LlH5RmdcBNb6fFR0Fl7LQwHDFr300q4cwUqi+IYrFGmsIHieMBfnN/Bw==}
     engines: {node: ^10 || ^12 || >=14.0}
@@ -12893,25 +12919,31 @@ packages:
     peerDependencies:
       postcss: ^8.4.31
 
-  stylelint-config-ckeditor5@10.0.0:
-    resolution: {integrity: sha512-0kCrtIx4uvuv5iUR4/OcOqj4m4Rnfqzw7vnvfwoVYLiv3MZA59ZTIY82g+fcMPNEKvPixkIc82YAlKuHTZRTmQ==}
+  stylelint-config-ckeditor5@11.0.1:
+    resolution: {integrity: sha512-faW/mgpMC1OlGhYBN+E27vHAHLXCyMQDr7ICdUlWqrYjsAYNR0AgHBqfcHA7zMg8dW9tA7ZJ987zVkW0fZCE6w==}
     peerDependencies:
-      stylelint: '>=13.5.0'
+      stylelint: '>=16.0.0'
 
   stylelint-config-ckeditor5@2.0.1:
     resolution: {integrity: sha512-EyDzmwkn2pT5j/hIruvKef4IFNYXKPmWrVlwK2QV2HN1Hyo3z6kxdT+z59TRyUniDeB3HoODBAu29ZchuTnB8Q==}
     peerDependencies:
       stylelint: '>=13.5.0'
 
+  stylelint-config-recommended@16.0.0:
+    resolution: {integrity: sha512-4RSmPjQegF34wNcK1e1O3Uz91HN8P1aFdFzio90wNK9mjgAI19u5vsU868cVZboKzCaa5XbpvtTzAAGQAxpcXA==}
+    engines: {node: '>=18.12.0'}
+    peerDependencies:
+      stylelint: ^16.16.0
+
   stylelint-config-recommended@3.0.0:
     resolution: {integrity: sha512-F6yTRuc06xr1h5Qw/ykb2LuFynJ2IxkKfCMf+1xqPffkxh0S09Zc902XCffcsw/XMFq/OzQ1w54fLIDtmRNHnQ==}
     peerDependencies:
       stylelint: '>=10.1.0'
 
-  stylelint-plugin-ckeditor5-rules@10.0.0:
-    resolution: {integrity: sha512-glHrq6s6fIzX8Te3d3l42oFfgGh7KX8az/0ipLow7pJ4kx5+HYgQRwU4OCBK9RScXSDdOjCsEDpFJ56chAUQ5Q==}
+  stylelint-plugin-ckeditor5-rules@11.0.1:
+    resolution: {integrity: sha512-E/UNFeHxbWJgaOZb5P9VyokRnT4lnjzzoQDHvCmqiv/5PZwcer7+eoVdpMe/sE7oupv1gRSMrmfO4EoUAfehtg==}
     peerDependencies:
-      stylelint: '>=13.5.0'
+      stylelint: '>=16.0.0'
 
   stylelint@16.20.0:
     resolution: {integrity: sha512-B5Myu9WRxrgKuLs3YyUXLP2H0mrbejwNxPmyADlACWwFsrL8Bmor/nTSh4OMae5sHjOz6gkSeccQH34gM4/nAw==}
@@ -13635,6 +13667,10 @@ packages:
   validate-npm-package-name@5.0.1:
     resolution: {integrity: sha512-OljLrQ9SQdOUqTaQxqL5dEfZWrXExyyWsozYlAWFawPVNuD83igl7uJD2RTkNMbniIYgt8l81eCJGIdQF7avLQ==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
+
+  validate-npm-package-name@6.0.1:
+    resolution: {integrity: sha512-OaI//3H0J7ZkR1OqlhGA8cA+Cbk/2xFOQpJOt5+s27/ta9eZwpeervh4Mxh4w0im/kdgktowaqVNR7QOrUd7Yg==}
+    engines: {node: ^18.17.0 || >=20.5.0}
 
   validator@13.15.0:
     resolution: {integrity: sha512-36B2ryl4+oL5QxZ3AzD0t5SsMNGvTtQHpjgFO5tbNxfXbMFkY822ktCDe1MnlqV3301QQI9SLHDNJokDI+Z9pA==}
@@ -16759,7 +16795,18 @@ snapshots:
     dependencies:
       '@csstools/css-tokenizer': 3.0.3
 
+  '@csstools/css-parser-algorithms@3.0.5(@csstools/css-tokenizer@3.0.4)':
+    dependencies:
+      '@csstools/css-tokenizer': 3.0.4
+
   '@csstools/css-tokenizer@3.0.3': {}
+
+  '@csstools/css-tokenizer@3.0.4': {}
+
+  '@csstools/media-query-list-parser@3.0.1(@csstools/css-parser-algorithms@3.0.5(@csstools/css-tokenizer@3.0.4))(@csstools/css-tokenizer@3.0.4)':
+    dependencies:
+      '@csstools/css-parser-algorithms': 3.0.5(@csstools/css-tokenizer@3.0.4)
+      '@csstools/css-tokenizer': 3.0.4
 
   '@csstools/media-query-list-parser@4.0.2(@csstools/css-parser-algorithms@3.0.4(@csstools/css-tokenizer@3.0.3))(@csstools/css-tokenizer@3.0.3)':
     dependencies:
@@ -17186,11 +17233,13 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@es-joy/jsdoccomment@0.40.1':
+  '@es-joy/jsdoccomment@0.50.2':
     dependencies:
-      comment-parser: 1.4.0
+      '@types/estree': 1.0.8
+      '@typescript-eslint/types': 8.35.1
+      comment-parser: 1.4.1
       esquery: 1.6.0
-      jsdoc-type-pratt-parser: 4.0.0
+      jsdoc-type-pratt-parser: 4.1.0
 
   '@esbuild/aix-ppc64@0.25.5':
     optional: true
@@ -19609,7 +19658,7 @@ snapshots:
       '@lezer/highlight': 1.2.1
       '@lezer/lr': 1.4.2
 
-  '@stylistic/eslint-plugin@4.4.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)':
+  '@stylistic/eslint-plugin@4.4.1(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)':
     dependencies:
       '@typescript-eslint/utils': 8.35.1(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
       eslint: 9.28.0(jiti@2.4.2)
@@ -19620,6 +19669,18 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
       - typescript
+
+  '@stylistic/stylelint-plugin@3.1.3(stylelint@16.20.0(typescript@5.8.3))':
+    dependencies:
+      '@csstools/css-parser-algorithms': 3.0.5(@csstools/css-tokenizer@3.0.4)
+      '@csstools/css-tokenizer': 3.0.4
+      '@csstools/media-query-list-parser': 3.0.1(@csstools/css-parser-algorithms@3.0.5(@csstools/css-tokenizer@3.0.4))(@csstools/css-tokenizer@3.0.4)
+      is-plain-object: 5.0.0
+      postcss: 8.5.6
+      postcss-selector-parser: 6.1.2
+      postcss-value-parser: 4.2.0
+      style-search: 0.1.0
+      stylelint: 16.20.0(typescript@5.8.3)
 
   '@sveltejs/acorn-typescript@1.0.5(acorn@8.14.1)':
     dependencies:
@@ -22342,7 +22403,7 @@ snapshots:
       has-own-prop: 2.0.0
       repeat-string: 1.6.1
 
-  comment-parser@1.4.0: {}
+  comment-parser@1.4.1: {}
 
   commondir@1.0.1: {}
 
@@ -23688,12 +23749,12 @@ snapshots:
     optionalDependencies:
       source-map: 0.6.1
 
-  eslint-config-ckeditor5@10.0.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3):
+  eslint-config-ckeditor5@11.0.1(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3):
     dependencies:
-      '@eslint/js': 9.30.0
-      '@stylistic/eslint-plugin': 4.4.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
+      '@eslint/js': 9.30.1
+      '@stylistic/eslint-plugin': 4.4.1(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
       eslint: 9.28.0(jiti@2.4.2)
-      eslint-plugin-ckeditor5-rules: 10.0.0
+      eslint-plugin-ckeditor5-rules: 11.0.1
       eslint-plugin-mocha: 11.1.0(eslint@9.28.0(jiti@2.4.2))
       globals: 16.3.0
       typescript: 5.8.3
@@ -23707,14 +23768,14 @@ snapshots:
 
   eslint-linter-browserify@9.30.1: {}
 
-  eslint-plugin-ckeditor5-rules@10.0.0:
+  eslint-plugin-ckeditor5-rules@11.0.1:
     dependencies:
-      '@es-joy/jsdoccomment': 0.40.1
-      enhanced-resolve: 5.18.1
+      '@es-joy/jsdoccomment': 0.50.2
+      enhanced-resolve: 5.18.2
       fs-extra: 11.3.0
       resolve.exports: 2.0.3
       upath: 2.0.1
-      validate-npm-package-name: 5.0.1
+      validate-npm-package-name: 6.0.1
 
   eslint-plugin-mocha@11.1.0(eslint@9.28.0(jiti@2.4.2)):
     dependencies:
@@ -25746,7 +25807,7 @@ snapshots:
 
   jsbn@1.1.0: {}
 
-  jsdoc-type-pratt-parser@4.0.0: {}
+  jsdoc-type-pratt-parser@4.1.0: {}
 
   jsdom@16.7.0(bufferutil@4.0.9)(utf-8-validate@6.0.5):
     dependencies:
@@ -29279,6 +29340,8 @@ snapshots:
 
   style-mod@4.1.2: {}
 
+  style-search@0.1.0: {}
+
   stylehacks@5.1.1(postcss@8.5.3):
     dependencies:
       browserslist: 4.24.4
@@ -29297,22 +29360,27 @@ snapshots:
       postcss: 8.5.3
       postcss-selector-parser: 6.1.2
 
-  stylelint-config-ckeditor5@10.0.0(stylelint@16.20.0(typescript@5.8.3)):
+  stylelint-config-ckeditor5@11.0.1(stylelint@16.20.0(typescript@5.8.3)):
     dependencies:
+      '@stylistic/stylelint-plugin': 3.1.3(stylelint@16.20.0(typescript@5.8.3))
       stylelint: 16.20.0(typescript@5.8.3)
-      stylelint-config-recommended: 3.0.0(stylelint@16.20.0(typescript@5.8.3))
-      stylelint-plugin-ckeditor5-rules: 10.0.0(stylelint@16.20.0(typescript@5.8.3))
+      stylelint-config-recommended: 16.0.0(stylelint@16.20.0(typescript@5.8.3))
+      stylelint-plugin-ckeditor5-rules: 11.0.1(stylelint@16.20.0(typescript@5.8.3))
 
   stylelint-config-ckeditor5@2.0.1(stylelint@16.20.0(typescript@5.8.3)):
     dependencies:
       stylelint: 16.20.0(typescript@5.8.3)
       stylelint-config-recommended: 3.0.0(stylelint@16.20.0(typescript@5.8.3))
 
+  stylelint-config-recommended@16.0.0(stylelint@16.20.0(typescript@5.8.3)):
+    dependencies:
+      stylelint: 16.20.0(typescript@5.8.3)
+
   stylelint-config-recommended@3.0.0(stylelint@16.20.0(typescript@5.8.3)):
     dependencies:
       stylelint: 16.20.0(typescript@5.8.3)
 
-  stylelint-plugin-ckeditor5-rules@10.0.0(stylelint@16.20.0(typescript@5.8.3)):
+  stylelint-plugin-ckeditor5-rules@11.0.1(stylelint@16.20.0(typescript@5.8.3)):
     dependencies:
       stylelint: 16.20.0(typescript@5.8.3)
 
@@ -30240,6 +30308,8 @@ snapshots:
       spdx-expression-parse: 3.0.1
 
   validate-npm-package-name@5.0.1: {}
+
+  validate-npm-package-name@6.0.1: {}
 
   validator@13.15.0: {}
 
