@@ -432,7 +432,7 @@ importers:
         version: 7.6.13
       '@types/mime-types':
         specifier: ^3.0.0
-        version: 3.0.0
+        version: 3.0.1
       '@types/yargs':
         specifier: ^17.0.33
         version: 17.0.33
@@ -5342,9 +5342,6 @@ packages:
 
   '@types/methods@1.1.4':
     resolution: {integrity: sha512-ymXWVrDiCxTBE3+RIrrP533E70eA+9qu7zdWoHuOmGujkYtzf4HQF96b8nwHLqhuf4ykX61IGRIB38CC6/sImQ==}
-
-  '@types/mime-types@3.0.0':
-    resolution: {integrity: sha512-9gFWMsVgEtbsD6yY/2z8pAtnZhdRKl4Q9xmKQJy5gv0fMpzJeeWtQyd7WpdhaIbRSwPCfnjXOsNMcoQvu5giGg==}
 
   '@types/mime-types@3.0.1':
     resolution: {integrity: sha512-xRMsfuQbnRq1Ef+C+RKaENOxXX87Ygl38W1vDfPHRku02TgQr+Qd8iivLtAMcR0KF5/29xlnFihkTlbqFrGOVQ==}
@@ -20287,8 +20284,6 @@ snapshots:
       '@types/unist': 2.0.11
 
   '@types/methods@1.1.4': {}
-
-  '@types/mime-types@3.0.0': {}
 
   '@types/mime-types@3.0.1': {}
 
