@@ -22,7 +22,6 @@ const TPL = /*html*/`
         position: relative;
         height: 100%;
         user-select: none;
-        padding: 10px;
     }
 
     .table-view-container {
@@ -45,8 +44,19 @@ const TPL = /*html*/`
         outline: none !important;
     }
 
+    .tabulator .tabulator-header {
+        border-top: unset;
+        border-bottom-width: 1px;
+    }
+
+    .tabulator .tabulator-header .tabulator-frozen.tabulator-frozen-left,
+    .tabulator-row .tabulator-cell.tabulator-frozen.tabulator-frozen-left {
+        border-right-width: 1px;
+    }
+
     .tabulator .tabulator-footer {
         background-color: unset;
+        padding: 5px 0;
     }
 
     .tabulator .tabulator-footer .tabulator-footer-contents {
