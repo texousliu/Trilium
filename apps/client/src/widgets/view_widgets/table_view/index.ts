@@ -135,7 +135,7 @@ export default class TableView extends ViewMode<StateInfo> {
             persistence: true,
             movableColumns: true,
             movableRows,
-            footerElement: buildFooter(),
+            footerElement: buildFooter(this.parentNote),
             persistenceWriterFunc: (_id, type: string, data: object) => {
                 this.persistentData[type] = data;
                 this.spacedUpdate.scheduleUpdate();
