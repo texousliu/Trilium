@@ -12,6 +12,7 @@ import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, Resi
 import "tabulator-tables/dist/css/tabulator_bootstrap5.min.css";
 import { applyHeaderMenu } from "./header-menu.js";
 import { canReorderRows, configureReorderingRows } from "./dragging.js";
+import buildFooter from "./footer.js";
 
 const TPL = /*html*/`
 <div class="table-view">
@@ -43,12 +44,16 @@ const TPL = /*html*/`
         background: transparent;
         outline: none !important;
     }
-    </style>
 
-    <div class="header">
-        <button data-trigger-command="addNoteListItem">Add new column</button>
-        <button data-trigger-command="addNewRow">Add new row</button>
-    </div>
+    .tabulator .tabulator-footer {
+        background-color: unset;
+    }
+
+    .tabulator .tabulator-footer .tabulator-footer-contents {
+        justify-content: left;
+        gap: 0.5em;
+    }
+    </style>
 
     <div class="table-view-container"></div>
 </div>
@@ -117,6 +122,7 @@ export default class TableView extends ViewMode<StateInfo> {
             persistence: true,
             movableColumns: true,
             movableRows,
+            footerElement: buildFooter(),
             persistenceWriterFunc: (_id, type: string, data: object) => {
                 this.persistentData[type] = data;
                 this.spacedUpdate.scheduleUpdate();

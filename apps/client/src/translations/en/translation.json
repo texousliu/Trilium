@@ -1934,5 +1934,9 @@
     "title": "Features",
     "emoji_completion_enabled": "Enable Emoji auto-completion",
     "note_completion_enabled": "Enable note auto-completion"
+  },
+  "table_view": {
+    "new-row": "New row",
+    "new-column": "New column"
   }
 }
