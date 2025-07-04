@@ -24,6 +24,7 @@ const TPL = /*html*/`
             <option value="grid">${t("book_properties.grid")}</option>
             <option value="list">${t("book_properties.list")}</option>
             <option value="calendar">${t("book_properties.calendar")}</option>
+            <option value="table">${t("book_properties.table")}</option>
         </select>
     </div>
 
@@ -67,7 +68,6 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
     getTitle() {
         return {
             show: this.isEnabled(),
-            activate: true,
             title: t("book_properties.book_properties"),
             icon: "bx bx-book"
         };
@@ -126,7 +126,7 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
             return;
         }
 
-        if (!["list", "grid", "calendar"].includes(type)) {
+        if (!["list", "grid", "calendar", "table"].includes(type)) {
             throw new Error(t("book_properties.invalid_view_type", { type }));
         }
 
