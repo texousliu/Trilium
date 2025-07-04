@@ -89,7 +89,7 @@
       "@nx/js": "patches/@nx__js.patch"
     },
     "overrides": {
-      "mermaid": "11.7.0",
+      "mermaid": "11.8.0",
       "preact": "10.26.9",
       "roughjs": "4.6.6",
       "@types/express-serve-static-core": "5.0.6",
