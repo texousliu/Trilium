@@ -1,9 +1,10 @@
-import type { CellComponent, MenuObject, Tabulator } from "tabulator-tables";
+import type { CellComponent, ColumnComponent, MenuObject, Tabulator } from "tabulator-tables";
 
-export function applyHeaderMenu(columns) {
-    //apply header menu to each column
+export function applyHeaderMenu(columns: ColumnComponent[]) {
     for (let column of columns) {
-        column.headerMenu = headerMenu;
+        if (column.headerSort !== false) {
+            column.headerMenu = headerMenu;
+        }
     }
 }
 
