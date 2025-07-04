@@ -17,7 +17,7 @@ interface MenuSeparatorItem {
     title: "----";
 }
 
-interface MenuItemBadge {
+export interface MenuItemBadge {
     title: string;
     className?: string;
 }

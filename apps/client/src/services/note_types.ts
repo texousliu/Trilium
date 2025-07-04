@@ -1,10 +1,11 @@
 import server from "./server.js";
 import froca from "./froca.js";
 import { t } from "./i18n.js";
-import type { MenuItem } from "../menus/context_menu.js";
+import type { MenuItem, MenuItemBadge } from "../menus/context_menu.js";
 import type { TreeCommandNames } from "../menus/tree_context_menu.js";
 
 const SEPARATOR = { title: "----" };
+const BETA_BADGE: MenuItemBadge = {title: t("note_types.beta-feature")};
 
 async function getNoteTypeItems(command?: TreeCommandNames) {
     const items: MenuItem<TreeCommandNames>[] = [
@@ -24,7 +25,7 @@ async function getNoteTypeItems(command?: TreeCommandNames) {
         
         // Map notes
         { title: t("note_types.geo-map"), command, type: "geoMap", uiIcon: "bx bx-map-alt" },
-        { title: t("note_types.mind-map"), command, type: "mindMap", uiIcon: "bx bx-sitemap" },
+        { title: t("note_types.mind-map"), command, type: "mindMap", uiIcon: "bx bx-sitemap", badges: [BETA_BADGE]},
         { title: t("note_types.note-map"), command, type: "noteMap", uiIcon: "bx bxs-network-chart" },
         { title: t("note_types.relation-map"), command, type: "relationMap", uiIcon: "bx bxs-network-chart" },
 
