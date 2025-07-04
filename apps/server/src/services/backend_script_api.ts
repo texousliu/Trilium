@@ -255,8 +255,12 @@ export interface Api {
     /**
      * Returns week note for given date. If such a note doesn't exist, it is created.
      *
+     * <p>
+     * If the calendar does not support week notes, this method will return `null`.
+     *
      * @param date in YYYY-MM-DD format
      * @param rootNote - specify calendar root note, normally leave empty to use the default calendar
+     * @return an existing or newly created week note, or `null` if the calendar does not support week notes.
      */
     getWeekNote(date: string, rootNote: BNote): BNote | null;
 
