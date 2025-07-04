@@ -88,15 +88,22 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[], exi
         }
     ];
 
+    const seenFields = new Set<string>();
     for (const { name, title, type } of info) {
         const prefix = (type === "relation" ? "relations" : "labels");
+        const field = `${prefix}.${name}`;
+
+        if (seenFields.has(field)) {
+            continue;
+        }
 
         columnDefs.push({
-            field: `${prefix}.${name}`,
+            field,
             title: title ?? name,
             editor: "input",
             ...labelTypeMappings[type ?? "text"],
         });
+        seenFields.add(field);
     }
 
     applyHeaderMenu(columnDefs);
