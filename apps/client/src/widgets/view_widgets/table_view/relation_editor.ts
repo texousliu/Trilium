@@ -58,11 +58,13 @@ export function RelationFormatter(cell: CellComponent, formatterParams, onRender
     }
 
     onRendered(async () => {
-        const $link = $("<a>");
-        $link.addClass("reference-link");
-        $link.attr("href", `#root/${noteId}`);
-        await loadReferenceLinkTitle($link);
-        cell.getElement().appendChild($link[0]);
+        const $noteRef = $("<span>");
+        const href = `#root/${noteId}`;
+        $noteRef.addClass("reference-link");
+        $noteRef.attr("data-href", href);
+
+        await loadReferenceLinkTitle($noteRef, href);
+        cell.getElement().appendChild($noteRef[0]);
     });
     return "";
 }
