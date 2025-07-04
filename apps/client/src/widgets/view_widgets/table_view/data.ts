@@ -11,7 +11,6 @@ export type TableData = {
     labels: Record<string, boolean | string | null>;
     relations: Record<string, boolean | string | null>;
     branchId: string;
-    position: number;
 };
 
 type ColumnType = LabelType | "relation";
@@ -94,10 +93,6 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
             field: "title",
             title: "Title",
             editor: "input"
-        },
-        {
-            field: "position",
-            title: "Position"
         }
     ];
 
@@ -155,7 +150,6 @@ export async function buildRowDefinitions(parentNote: FNote, notes: FNote[], inf
             title: note.title,
             labels,
             relations,
-            position: branch.notePosition,
             branchId: branch.branchId
         });
     }
