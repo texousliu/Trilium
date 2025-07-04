@@ -50,7 +50,7 @@ function removeOwnedLabelByName(note: FNote, labelName: string) {
  * @param name the name of the attribute to set.
  * @param value the value of the attribute to set.
  */
-async function setAttribute(note: FNote, type: "label" | "relation", name: string, value: string | null | undefined) {
+export async function setAttribute(note: FNote, type: "label" | "relation", name: string, value: string | null | undefined) {
     if (value) {
         // Create or update the attribute.
         await server.put(`notes/${note.noteId}/set-attribute`, { type, name, value });

@@ -1,6 +1,6 @@
 import froca from "../../../services/froca.js";
 import ViewMode, { type ViewModeArgs } from "../view_mode.js";
-import attributes, { setLabel } from "../../../services/attributes.js";
+import attributes, { setAttribute, setLabel } from "../../../services/attributes.js";
 import getPromotedAttributeInformation, { buildColumnDefinitions, buildData, buildRowDefinitions, TableData } from "./data.js";
 import server from "../../../services/server.js";
 import SpacedUpdate from "../../../services/spaced_update.js";
@@ -120,7 +120,7 @@ export default class TableView extends ViewMode<StateInfo> {
     }
 
     private setupEditing() {
-        this.api!.on("cellEdited", (cell) => {
+        this.api!.on("cellEdited", async (cell) => {
             const noteId = cell.getRow().getData().noteId;
             const field = cell.getField();
             const newValue = cell.getValue();
@@ -130,9 +130,16 @@ export default class TableView extends ViewMode<StateInfo> {
                 return;
             }
 
-            if (field.startsWith("labels.")) {
-                const labelName = field.split(".", 2)[1];
-                setLabel(noteId, labelName, newValue);
+            if (field.includes(".")) {
+                const [ type, name ] = field.split(".", 2);
+                if (type === "labels") {
+                    setLabel(noteId, name, newValue);
+                } else if (type === "relations") {
+                    const note = await froca.getNote(noteId);
+                    if (note) {
+                        setAttribute(note, "relation", name, newValue);
+                    }
+                }
             }
         });
     }
