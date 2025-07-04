@@ -19,6 +19,7 @@ interface NoteTypeMapping {
 const NOTE_TYPES: NoteTypeMapping[] = [
     // The suggested note type ordering method: insert the item into the corresponding group,
     // then ensure the items within the group are ordered alphabetically.
+    // Please keep the order synced with the listing found also in apps/client/src/services/note_types.ts.
 
     // The default note type (always the first item)
     { type: "text", mime: "text/html", title: t("note_types.text"), selectable: true },
