@@ -88,6 +88,7 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
         {
             field: "noteId",
             title: "Note ID",
+            visible: false
         },
         {
             field: "title",
