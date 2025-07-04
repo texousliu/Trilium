@@ -159,8 +159,6 @@ export async function buildRowDefinitions(parentNote: FNote, notes: FNote[], inf
         });
     }
 
-    console.log("Built row definitions", definitions);
-
     return definitions;
 }
 

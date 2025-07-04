@@ -1,6 +1,7 @@
 import { CellComponent } from "tabulator-tables";
 import note_autocomplete from "../../../services/note_autocomplete";
 import { loadReferenceLinkTitle } from "../../../services/link";
+import froca from "../../../services/froca";
 
 export function RelationEditor(cell: CellComponent, onRendered, success, cancel, editorParams){
     //cell - the cell component for the editable cell
@@ -20,7 +21,11 @@ export function RelationEditor(cell: CellComponent, onRendered, success, cancel,
     editor.style.boxSizing = "border-box";
 
     //Set value of editor to the current value of the cell
-    editor.value = cell.getValue();
+    const noteId = cell.getValue();
+    if (noteId) {
+        const note = froca.getNoteFromCache(noteId);
+        editor.value = note.title;
+    }
 
     //set focus on the select box when the editor is selected
     onRendered(function(){
