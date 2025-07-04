@@ -3,7 +3,8 @@ import type FNote from "../../../entities/fnote.js";
 import branches from "../../../services/branches.js";
 
 export function canReorderRows(parentNote: FNote) {
-    return !parentNote.hasLabel("sorted");
+    return !parentNote.hasLabel("sorted")
+        && parentNote.type !== "search";
 }
 
 export function configureReorderingRows(tabulator: Tabulator) {
