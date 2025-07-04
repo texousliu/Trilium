@@ -110,7 +110,6 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
         formatter: () => `<span class="bx bx-window-open"></span>`,
         cellClick: (e, cell) => {
             const noteId = cell.getRow().getCell("noteId").getValue();
-            console.log("Got note ID", noteId);
             if (noteId) {
                 link.goToLinkExt(e as MouseEvent, `#root/${noteId}`);
             }
