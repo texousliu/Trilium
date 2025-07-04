@@ -450,10 +450,13 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 log.info(`Empty result detected for tool ${name}. Will add suggestion to try different parameters.`);
             }
 
-            // Add enhancement for empty results
+            // Add enhancement for empty results and continuation signals
             let enhancedContent = resultContent;
             if (isEmptyResult && !resultContent.startsWith('Error:')) {
-                enhancedContent = `${resultContent}\n\nNOTE: This tool returned no useful results with the provided parameters. Consider trying again with different parameters such as broader search terms, different filters, or alternative approaches.`;
+                enhancedContent = `${resultContent}\n\nCONTINUATION REQUIRED: This tool returned no useful results with the provided parameters. You MUST immediately try additional searches with broader terms, alternative keywords, or different tools. Do not stop here - continue your investigation.`;
+            } else if (!resultContent.startsWith('Error:')) {
+                // Add continuation signal for successful results too
+                enhancedContent = `${resultContent}\n\nCONTINUATION: Analyze these results and determine if additional tools are needed to provide a comprehensive response. Consider follow-up searches, reading specific notes, or cross-referencing with other tools.`;
             }
 
             // Add a new message for the tool result
@@ -483,31 +486,34 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
         log.info(`Follow-up needed: ${needsFollowUp}`);
         log.info(`Reasoning: ${hasToolResults ? 'Has tool results to process' : 'No tool results'} ${hasErrors ? ', contains errors' : ''} ${hasEmptyResults ? ', contains empty results' : ''}`);
 
-        // Add aggressive system message for continued tool usage
+        // Add system message to ensure continuation - always add this for any tool results
         if (needsFollowUp) {
-            log.info('Adding enhanced system message to encourage continued tool usage');
+            log.info('Adding system message to ensure LLM continues with additional tools');
 
             let directiveMessage = '';
 
+            // Handle empty results with aggressive re-search instructions
             if (hasEmptyResults) {
-                directiveMessage = `IMPORTANT: No results found with your search. You MUST continue searching with different approaches:
-1. Use discover_tools to find alternative search methods
-2. Try broader search terms or synonyms
-3. Use different search tools (search_notes, keyword_search_notes, attribute_search)
-4. Search for related concepts instead of specific terms
-5. Use read_note on any noteIds you've found previously
-
-CRITICAL: Continue executing tools to find information. Do NOT ask the user for guidance yet - exhaust all search options first.`;
+                directiveMessage = `CRITICAL: Empty results detected. YOU MUST NOT GIVE UP. IMMEDIATELY try alternative approaches:
+- Use broader search terms (remove specific qualifiers)
+- Try synonyms and related concepts
+- Use different search tools (if keyword_search failed, try search_notes)
+- Remove date/time constraints and try general terms
+DO NOT respond to the user until you've tried at least 2-3 additional search variations.`;
             } else {
-                directiveMessage = `EXCELLENT! You found ${toolResultMessages.length} results. Now you MUST continue with these actions:
-1. Use read_note with ALL noteId values to get full content
-2. After reading notes, use search_notes or keyword_search_notes to find related information
-3. Use attribute_search to find notes with similar tags/labels
-4. Use note_summarization on long notes
-5. Use content_extraction to pull specific information
-6. Use relationship tool to find connected notes
+                // For successful results, provide comprehensive follow-up instructions
+                directiveMessage = `TOOL ANALYSIS CONTINUATION: You have received tool results above. This is NOT the end of your investigation. You must:
 
-REMEMBER: Execute multiple tools in sequence to gather comprehensive information. The user expects thorough analysis using 10-20+ tool calls. Continue executing tools!`;
+1. Analyze the results thoroughly
+2. Determine if additional information is needed
+3. Use follow-up tools to gather comprehensive information
+4. If search results included note IDs, use read_note to get full content
+5. Cross-reference findings with alternative search approaches
+6. Continue investigation until you can provide a complete, well-researched response
+
+REMEMBER: Execute multiple tools in sequence to build comprehensive answers. The user expects thorough investigation with systematic tool usage.
+
+Continue your systematic investigation now.`;
             }
 
             updatedMessages.push({

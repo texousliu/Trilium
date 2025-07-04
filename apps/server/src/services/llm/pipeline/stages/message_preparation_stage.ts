@@ -42,11 +42,29 @@ export class MessagePreparationStage extends BasePipelineStage<MessagePreparatio
         // If tools are enabled, enhance system prompt with tools guidance
         if (toolsEnabled) {
             const toolCount = toolRegistry.getAllTools().length;
-            const toolsPrompt = `You have access to ${toolCount} tools to help you respond. When you need information that might be in the user's notes, use the search_notes tool to find relevant content or the read_note tool to read a specific note by ID. Use tools when specific information is required rather than making assumptions.`;
+            const toolsPrompt = `You have access to ${toolCount} tools to help you respond. 
+
+CRITICAL: You are designed for CONTINUOUS TOOL USAGE and ITERATIVE INVESTIGATION. When you receive tool results, this is NOT the end of your analysis - it's the beginning of deeper investigation.
+
+MANDATORY APPROACH:
+- After ANY tool execution, immediately analyze the results and plan follow-up actions
+- Use multiple tools in sequence to build comprehensive responses
+- Chain tools together systematically - use results from one tool to inform the next
+- When you find partial information, immediately search for additional details
+- Cross-reference findings with alternative search approaches
+- Never stop after a single tool unless you have completely fulfilled the request
+
+TOOL CHAINING EXAMPLES:
+- If search_notes finds relevant note IDs → immediately use read_note to get full content
+- If initial search returns partial results → try broader terms or alternative keywords
+- If one search tool fails → immediately try a different search tool
+- Use the information from each tool to inform better parameters for subsequent tools
+
+Remember: Tool usage should be continuous and iterative until you have thoroughly investigated the user's request.`;
 
             // Add tools guidance to system prompt
             finalSystemPrompt = finalSystemPrompt + '\n\n' + toolsPrompt;
-            log.info(`Enhanced system prompt with tools guidance: ${toolCount} tools available`);
+            log.info(`Enhanced system prompt with aggressive tool chaining guidance: ${toolCount} tools available`);
         }
 
         // Format messages using provider-specific approach
