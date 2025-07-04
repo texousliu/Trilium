@@ -10,6 +10,8 @@ export interface NoteTypeMapping {
     mime?: string;
     title: string;
     icon?: string;
+    /** Indicates whether this type should be marked as a newly introduced feature. */
+    isNew?: boolean;
     /** Indicates that this note type is part of a beta feature. */
     isBeta?: boolean;
     /** Indicates that this note type cannot be created by the user. */
@@ -75,6 +77,10 @@ function getBlankNoteTypes(command): MenuItem<TreeCommandNames>[] {
             type: nt.type,
             uiIcon: "bx " + nt.icon,
             badges: []
+        }
+
+        if (nt.isNew) {
+            menuItem.badges?.push({title: t("note_types.new-feature"), className: "new-note-type-badge"});
         }
 
         if (nt.isBeta) {
