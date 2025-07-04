@@ -217,7 +217,7 @@ export default class TableView extends ViewMode<StateInfo> {
         // Refresh if promoted attributes get changed.
         if (loadResults.getAttributeRows().find(attr =>
             attr.type === "label" &&
-            attr.name?.startsWith("label:") &&
+            (attr.name?.startsWith("label:") || attr.name?.startsWith("relation:")) &&
             attributes.isAffecting(attr, this.parentNote))) {
             this.#manageColumnUpdate();
         }
