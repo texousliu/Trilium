@@ -72,6 +72,8 @@ export default class TableView extends ViewMode<StateInfo> {
     private api?: Tabulator;
     private newAttribute?: Attribute;
     private persistentData: Record<string, object>;
+    /** If set to a note ID, whenever the rows will be updated, the title of the note will be automatically focused for editing. */
+    private noteIdToEdit?: string;
 
     constructor(args: ViewModeArgs) {
         super(args, "table");
@@ -188,7 +190,12 @@ export default class TableView extends ViewMode<StateInfo> {
         if (parentNotePath) {
             note_create.createNote(parentNotePath, {
                 activate: false
-            });
+            }).then(({ note }) => {
+                if (!note) {
+                    return;
+                }
+                this.noteIdToEdit = note.noteId;
+            })
         }
     }
 
@@ -242,6 +249,14 @@ export default class TableView extends ViewMode<StateInfo> {
         const notes = await froca.getNotes(this.args.noteIds);
         const info = getPromotedAttributeInformation(this.parentNote);
         this.api.setData(await buildRowDefinitions(this.parentNote, notes, info));
+
+        if (this.noteIdToEdit) {
+            const row = this.api?.getRows(true).find(r => r.getData().noteId === this.noteIdToEdit);
+            if (row) {
+                row.getCell("title").edit();
+            }
+            this.noteIdToEdit = undefined;
+        }
     }
 
 }
