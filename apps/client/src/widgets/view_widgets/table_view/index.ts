@@ -253,7 +253,7 @@ export default class TableView extends ViewMode<StateInfo> {
         this.api.replaceData(await buildRowDefinitions(this.parentNote, notes, info));
 
         if (this.noteIdToEdit) {
-            const row = this.api?.getRows(true).find(r => r.getData().noteId === this.noteIdToEdit);
+            const row = this.api?.getRows().find(r => r.getData().noteId === this.noteIdToEdit);
             if (row) {
                 row.getCell("title").edit();
             }

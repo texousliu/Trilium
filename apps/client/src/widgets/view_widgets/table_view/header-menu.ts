@@ -1,6 +1,6 @@
-import type { CellComponent, ColumnComponent, MenuObject, Tabulator } from "tabulator-tables";
+import type { ColumnComponent, ColumnDefinition, MenuObject, Tabulator } from "tabulator-tables";
 
-export function applyHeaderMenu(columns: ColumnComponent[]) {
+export function applyHeaderMenu(columns: ColumnDefinition[]) {
     for (let column of columns) {
         if (column.headerSort !== false) {
             column.headerMenu = headerMenu;
@@ -9,7 +9,7 @@ export function applyHeaderMenu(columns: ColumnComponent[]) {
 }
 
 function headerMenu(this: Tabulator) {
-    const menu: MenuObject<CellComponent>[] = [];
+    const menu: MenuObject<ColumnComponent>[] = [];
     const columns = this.getColumns();
 
     for (let column of columns) {
