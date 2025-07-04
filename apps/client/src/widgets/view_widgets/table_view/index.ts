@@ -4,13 +4,11 @@ import attributes, { setAttribute, setLabel } from "../../../services/attributes
 import getPromotedAttributeInformation, { buildColumnDefinitions, buildData, buildRowDefinitions, TableData } from "./data.js";
 import server from "../../../services/server.js";
 import SpacedUpdate from "../../../services/spaced_update.js";
-import branches from "../../../services/branches.js";
 import type { CommandListenerData, EventData } from "../../../components/app_context.js";
 import type { Attribute } from "../../../services/attribute_parser.js";
 import note_create from "../../../services/note_create.js";
 import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MenuModule, MoveRowsModule} from 'tabulator-tables';
 import "tabulator-tables/dist/css/tabulator_bootstrap5.min.css";
-import { applyHeaderMenu } from "./header-menu.js";
 import { canReorderRows, configureReorderingRows } from "./dragging.js";
 import buildFooter from "./footer.js";
 
@@ -120,7 +118,6 @@ export default class TableView extends ViewMode<StateInfo> {
         const info = getPromotedAttributeInformation(this.parentNote);
 
         const columnDefs = buildColumnDefinitions(info);
-        applyHeaderMenu(columnDefs);
 
         const viewStorage = await this.viewStorage.restore();
         this.persistentData = viewStorage?.tableData || {};

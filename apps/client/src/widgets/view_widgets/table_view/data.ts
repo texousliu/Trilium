@@ -3,6 +3,7 @@ import type { LabelType } from "../../../services/promoted_attribute_definition_
 import type { ColumnDefinition } from "tabulator-tables";
 import { RelationEditor } from "./relation_editor.js";
 import { NoteFormatter, NoteTitleFormatter } from "./formatters.js";
+import { applyHeaderMenu } from "./header-menu.js";
 
 export type TableData = {
     iconClass: string;
@@ -64,7 +65,6 @@ export async function buildData(parentNote: FNote, info: PromotedAttributeInform
 }
 
 export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
-    const emptyTitleFormatter = () => "";
     const columnDefs: ColumnDefinition[] = [
         {
             title: "#",
@@ -98,6 +98,8 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
             ...labelTypeMappings[type ?? "text"],
         });
     }
+
+    applyHeaderMenu(columnDefs);
 
     return columnDefs;
 }
