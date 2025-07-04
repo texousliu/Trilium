@@ -9,6 +9,7 @@ export type TableData = {
     noteId: string;
     title: string;
     labels: Record<string, boolean | string | null>;
+    relations: Record<string, boolean | string | null>;
     branchId: string;
     position: number;
 };
@@ -100,8 +101,10 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
     ];
 
     for (const { name, title, type } of info) {
+        const prefix = (type === "relation" ? "relations" : "labels");
+
         columnDefs.push({
-            field: `labels.${name}`,
+            field: `${prefix}.${name}`,
             title: title ?? name,
             editor: "input",
             ...labelTypeMappings[type ?? "text"],
@@ -135,9 +138,10 @@ export async function buildRowDefinitions(parentNote: FNote, notes: FNote[], inf
         }
 
         const labels: typeof definitions[0]["labels"] = {};
+        const relations: typeof definitions[0]["relations"] = {};
         for (const { name, type } of infos) {
             if (type === "relation") {
-                labels[name] = note.getRelationValue(name);
+                relations[name] = note.getRelationValue(name);
             } else if (type === "boolean") {
                 labels[name] = note.hasLabel(name);
             } else {
@@ -149,6 +153,7 @@ export async function buildRowDefinitions(parentNote: FNote, notes: FNote[], inf
             noteId: note.noteId,
             title: note.title,
             labels,
+            relations,
             position: branch.notePosition,
             branchId: branch.branchId
         });
