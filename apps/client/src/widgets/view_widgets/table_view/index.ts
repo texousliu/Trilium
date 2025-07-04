@@ -257,7 +257,7 @@ export default class TableView extends ViewMode<StateInfo> {
 
         const notes = await froca.getNotes(this.args.noteIds);
         const info = getPromotedAttributeInformation(this.parentNote);
-        this.api.setData(await buildRowDefinitions(this.parentNote, notes, info));
+        this.api.replaceData(await buildRowDefinitions(this.parentNote, notes, info));
 
         if (this.noteIdToEdit) {
             const row = this.api?.getRows(true).find(r => r.getData().noteId === this.noteIdToEdit);
