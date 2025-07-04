@@ -26,6 +26,10 @@
     --bs-body-color: var(--main-text-color) !important;
     --bs-body-bg: var(--main-background-color) !important;    
     --ck-mention-list-max-height: 500px;
+
+    --tn-bs-badge-background: var(--accented-background-color);
+    --bs-badge-color: var(--menu-text-color);
+    --bs-badge-font-weight: normal;
 }
 
 .table {
@@ -190,6 +194,11 @@ kbd,
 pre,
 samp {
     font-family: var(--monospace-font-family) !important;
+}
+
+.badge {
+    margin-left: 8px;
+    background: var(--tn-bs-badge-background);
 }
 
 .input-group-text {

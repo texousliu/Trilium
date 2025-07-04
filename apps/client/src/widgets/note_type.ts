@@ -63,13 +63,6 @@ const TPL = /*html*/`
             overflow-y: auto;
             overflow-x: hidden;
         }
-
-        .note-type-dropdown .badge {
-            margin-left: 8px;
-            background: var(--accented-background-color);
-            font-weight: normal;
-            color: var(--menu-text-color);
-        }
     </style>
     <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm dropdown-toggle select-button note-type-button">
         <span class="note-type-desc"></span>
