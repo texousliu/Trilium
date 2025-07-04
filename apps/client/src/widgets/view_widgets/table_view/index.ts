@@ -116,6 +116,7 @@ export default class TableView extends ViewMode<StateInfo> {
         const movableRows = canReorderRows(this.parentNote);
 
         this.api = new Tabulator(el, {
+            layout: "fitDataFill",
             index: "noteId",
             columns: columnDefs,
             data: await buildRowDefinitions(this.parentNote, notes, info),

@@ -94,7 +94,8 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
         {
             field: "title",
             title: "Title",
-            editor: "input"
+            editor: "input",
+            width: 400
         }
     ];
 
