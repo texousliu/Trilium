@@ -224,8 +224,8 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
       force-graph:
-        specifier: 1.49.6
-        version: 1.49.6
+        specifier: 1.50.1
+        version: 1.50.1
       globals:
         specifier: 16.3.0
         version: 16.3.0
@@ -8251,8 +8251,8 @@ packages:
     resolution: {integrity: sha512-dKx12eRCVIzqCxFGplyFKJMPvLEWgmNtUrpTiJIR5u97zEhRG8ySrtboPHZXx7daLxQVrl643cTzbab2tkQjxg==}
     engines: {node: '>= 0.4'}
 
-  force-graph@1.49.6:
-    resolution: {integrity: sha512-o3uZ22YMvRwcS4RZ5lMQE5mCsQ5w1AzR4bPlQ1cThqgAxRrzOO4mGOaeNGTAkGGQwL6f7RIBCaxPNtvkbgAykw==}
+  force-graph@1.50.1:
+    resolution: {integrity: sha512-CtldBdsUHLmlnerVYe09V9Bxi5iz8GZce1WdBSkwGAFgNFTYn6cW90NQ1lOh/UVm0NhktMRHKugXrS9Sl8Bl3A==}
     engines: {node: '>=12'}
 
   foreground-child@3.3.1:
@@ -23726,7 +23726,7 @@ snapshots:
     dependencies:
       is-callable: 1.2.7
 
-  force-graph@1.49.6:
+  force-graph@1.50.1:
     dependencies:
       '@tweenjs/tween.js': 25.0.0
       accessor-fn: 1.5.3
