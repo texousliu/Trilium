@@ -2,6 +2,7 @@ import FNote from "../../../entities/fnote.js";
 import type { LabelType } from "../../../services/promoted_attribute_definition_parser.js";
 import type { ColumnDefinition } from "tabulator-tables";
 import link from "../../../services/link.js";
+import RelationEditor from "./relation_editor.js";
 
 export type TableData = {
     iconClass: string;
@@ -12,13 +13,15 @@ export type TableData = {
     position: number;
 };
 
+type ColumnType = LabelType | "relation";
+
 export interface PromotedAttributeInformation {
     name: string;
     title?: string;
-    type?: LabelType | "relation";
+    type?: ColumnType;
 }
 
-const labelTypeMappings: Record<LabelType, Partial<ColumnDefinition>> = {
+const labelTypeMappings: Record<ColumnType, Partial<ColumnDefinition>> = {
     text: {
         editor: "input"
     },
@@ -41,6 +44,9 @@ const labelTypeMappings: Record<LabelType, Partial<ColumnDefinition>> = {
     url: {
         formatter: "link",
         editor: "input"
+    },
+    relation: {
+        editor: RelationEditor
     }
 };
 

@@ -1,4 +1,5 @@
 import { CellComponent } from "tabulator-tables";
+import note_autocomplete from "../../../services/note_autocomplete";
 
 export default function RelationEditor(cell: CellComponent, onRendered, success, cancel, editorParams){
     //cell - the cell component for the editable cell
@@ -8,9 +9,9 @@ export default function RelationEditor(cell: CellComponent, onRendered, success,
     //editorParams - params object passed into the editorParams column definition property
 
     //create and style editor
-    var editor = document.createElement("input");
-
-    editor.setAttribute("type", "date");
+    const editor = document.createElement("input");
+    const $editor = $(editor);
+    editor.classList.add("form-control");
 
     //create and style input
     editor.style.padding = "3px";
@@ -22,13 +23,13 @@ export default function RelationEditor(cell: CellComponent, onRendered, success,
 
     //set focus on the select box when the editor is selected
     onRendered(function(){
+        note_autocomplete.initNoteAutocomplete($editor);
         editor.focus();
-        editor.style.css = "100%";
     });
 
     //when the value has been set, trigger the cell to update
     function successFunc(){
-        success("Hi");
+        success($editor.getSelectedNoteId());
     }
 
     editor.addEventListener("change", successFunc);
