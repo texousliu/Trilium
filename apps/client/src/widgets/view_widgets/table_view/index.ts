@@ -8,9 +8,10 @@ import branches from "../../../services/branches.js";
 import type { CommandListenerData, EventData } from "../../../components/app_context.js";
 import type { Attribute } from "../../../services/attribute_parser.js";
 import note_create from "../../../services/note_create.js";
-import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MenuModule} from 'tabulator-tables';
+import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MenuModule, MoveRowsModule} from 'tabulator-tables';
 import "tabulator-tables/dist/css/tabulator_bootstrap5.min.css";
 import { applyHeaderMenu } from "./header-menu.js";
+import { canReorderRows, configureReorderingRows } from "./dragging.js";
 
 const TPL = /*html*/`
 <div class="table-view">
@@ -89,7 +90,7 @@ export default class TableView extends ViewMode<StateInfo> {
     }
 
     private async renderTable(el: HTMLElement) {
-        const modules = [SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MenuModule];
+        const modules = [SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, MenuModule];
         for (const module of modules) {
             Tabulator.registerModule(module);
         }
@@ -106,18 +107,23 @@ export default class TableView extends ViewMode<StateInfo> {
 
         const viewStorage = await this.viewStorage.restore();
         this.persistentData = viewStorage?.tableData || {};
+
+        const movableRows = canReorderRows(this.parentNote);
+
         this.api = new Tabulator(el, {
             index: "noteId",
             columns: columnDefs,
             data: await buildRowDefinitions(this.parentNote, notes, info),
             persistence: true,
             movableColumns: true,
+            movableRows,
             persistenceWriterFunc: (_id, type: string, data: object) => {
                 this.persistentData[type] = data;
                 this.spacedUpdate.scheduleUpdate();
             },
             persistenceReaderFunc: (_id, type: string) => this.persistentData[type],
         });
+        configureReorderingRows(this.api);
         this.setupEditing();
     }
 
@@ -150,37 +156,6 @@ export default class TableView extends ViewMode<StateInfo> {
                 }
             }
         });
-    }
-
-    private setupDragging() {
-        if (this.parentNote.hasLabel("sorted")) {
-            return {};
-        }
-
-        const config: GridOptions<TableData> = {
-            rowDragEntireRow: true,
-            onRowDragEnd(e) {
-                const fromIndex = e.node.rowIndex;
-                const toIndex = e.overNode?.rowIndex;
-                if (fromIndex === null || toIndex === null || toIndex === undefined || fromIndex === toIndex) {
-                    return;
-                }
-
-                const isBelow = (toIndex > fromIndex);
-                const fromBranchId = e.node.data?.branchId;
-                const toBranchId = e.overNode?.data?.branchId;
-                if (fromBranchId === undefined || toBranchId === undefined) {
-                    return;
-                }
-
-                if (isBelow) {
-                    branches.moveAfterBranch([ fromBranchId ], toBranchId);
-                } else {
-                    branches.moveBeforeBranch([ fromBranchId ], toBranchId);
-                }
-            }
-        };
-        return config;
     }
 
     async reloadAttributesCommand() {
