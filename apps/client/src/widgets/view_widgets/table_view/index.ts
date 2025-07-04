@@ -21,6 +21,7 @@ const TPL = /*html*/`
         position: relative;
         height: 100%;
         user-select: none;
+        padding: 0 5px 0 10px;
     }
 
     .table-view-container {
