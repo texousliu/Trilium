@@ -2,7 +2,7 @@ import FNote from "../../../entities/fnote.js";
 import type { LabelType } from "../../../services/promoted_attribute_definition_parser.js";
 import type { ColumnDefinition } from "tabulator-tables";
 import link from "../../../services/link.js";
-import RelationEditor from "./relation_editor.js";
+import { RelationEditor, RelationFormatter } from "./relation_editor.js";
 
 export type TableData = {
     iconClass: string;
@@ -46,7 +46,8 @@ const labelTypeMappings: Record<ColumnType, Partial<ColumnDefinition>> = {
         editor: "input"
     },
     relation: {
-        editor: RelationEditor
+        editor: RelationEditor,
+        formatter: RelationFormatter
     }
 };
 

@@ -1,7 +1,7 @@
 import { CellComponent } from "tabulator-tables";
 import note_autocomplete from "../../../services/note_autocomplete";
 
-export default function RelationEditor(cell: CellComponent, onRendered, success, cancel, editorParams){
+export function RelationEditor(cell: CellComponent, onRendered, success, cancel, editorParams){
     //cell - the cell component for the editable cell
     //onRendered - function to call when the editor has been rendered
     //success - function to call to pass thesuccessfully updated value to Tabulator
@@ -38,3 +38,12 @@ export default function RelationEditor(cell: CellComponent, onRendered, success,
     //return the editor element
     return editor;
 };
+
+export function RelationFormatter(cell: CellComponent, formatterParams, onRendered) {
+    const noteId = cell.getValue();
+    if (!noteId) {
+        return "";
+    }
+
+    return `<a href="#root/${noteId}">Title goes here</a>`;
+}
