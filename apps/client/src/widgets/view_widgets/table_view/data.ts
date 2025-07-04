@@ -64,6 +64,7 @@ export async function buildData(parentNote: FNote, info: PromotedAttributeInform
 }
 
 export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
+    const emptyTitleFormatter = () => "";
     const columnDefs: ColumnDefinition[] = [
         {
             title: "#",
@@ -75,7 +76,8 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
         },
         {
             field: "iconClass",
-            title: "Icon",
+            title: "Note icon",
+            titleFormatter: emptyTitleFormatter,
             width: 40,
             headerSort: false,
             hozAlign: "center",
@@ -109,11 +111,12 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
 
     // End actions
     columnDefs.push({
-        title: "Open note",
+        title: "Open note button",
         width: 40,
         hozAlign: "center",
         headerSort: false,
         formatter: () => `<span class="bx bx-window-open"></span>`,
+        titleFormatter: emptyTitleFormatter,
         cellClick: (e, cell) => {
             const noteId = cell.getRow().getCell("noteId").getValue();
             if (noteId) {
