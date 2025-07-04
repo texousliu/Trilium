@@ -256,7 +256,14 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                             name: toolCall.function.name,
                             arguments: args
                         },
-                        type: 'start' as const
+                        type: 'start' as const,
+                        progress: {
+                            current: index + 1,
+                            total: response.tool_calls?.length || 1,
+                            status: 'initializing',
+                            message: `Starting ${toolCall.function.name} execution...`,
+                            estimatedDuration: this.getEstimatedDuration(toolCall.function.name)
+                        }
                     };
 
                     // Don't wait for this to complete, but log any errors
@@ -274,6 +281,35 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                 let result;
                 try {
                     log.info(`Starting tool execution for ${toolCall.function.name}...`);
+                    
+                    // Send progress update during execution
+                    if (streamCallback) {
+                        const progressData = {
+                            action: 'progress',
+                            tool: {
+                                name: toolCall.function.name,
+                                arguments: args
+                            },
+                            type: 'progress' as const,
+                            progress: {
+                                current: index + 1,
+                                total: response.tool_calls?.length || 1,
+                                status: 'executing',
+                                message: `Executing ${toolCall.function.name}...`,
+                                startTime: executionStart
+                            }
+                        };
+
+                        const progressResult = streamCallback('', false, {
+                            text: '',
+                            done: false,
+                            toolExecution: progressData
+                        });
+                        if (progressResult instanceof Promise) {
+                            progressResult.catch((e: Error) => log.error(`Error sending tool execution progress event: ${e.message}`));
+                        }
+                    }
+
                     result = await tool.execute(args);
                     const executionTime = Date.now() - executionStart;
                     log.info(`================ TOOL EXECUTION COMPLETED in ${executionTime}ms ================`);
@@ -296,6 +332,10 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
 
                     // Emit tool completion event if streaming is enabled
                     if (streamCallback) {
+                        const resultSummary = typeof result === 'string' 
+                            ? result.substring(0, 200) + (result.length > 200 ? '...' : '')
+                            : `Object with ${Object.keys(result).length} properties`;
+
                         const toolExecutionData = {
                             action: 'complete',
                             tool: {
@@ -303,7 +343,15 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                                 arguments: {} as Record<string, unknown>
                             },
                             result: typeof result === 'string' ? result : result as Record<string, unknown>,
-                            type: 'complete' as const
+                            type: 'complete' as const,
+                            progress: {
+                                current: index + 1,
+                                total: response.tool_calls?.length || 1,
+                                status: 'completed',
+                                message: `${toolCall.function.name} completed successfully`,
+                                executionTime: executionTime,
+                                resultSummary: resultSummary
+                            }
                         };
 
                         // Don't wait for this to complete, but log any errors
@@ -352,7 +400,15 @@ export class ToolCallingStage extends BasePipelineStage<ToolExecutionInput, { re
                                 arguments: {} as Record<string, unknown>
                             },
                             error: enhancedErrorMessage, // Include guidance in the error message
-                            type: 'error' as const
+                            type: 'error' as const,
+                            progress: {
+                                current: index + 1,
+                                total: response.tool_calls?.length || 1,
+                                status: 'failed',
+                                message: `${toolCall.function.name} failed: ${errorMessage.substring(0, 100)}...`,
+                                executionTime: executionTime,
+                                errorType: execError instanceof Error ? execError.constructor.name : 'UnknownError'
+                            }
                         };
 
                         // Don't wait for this to complete, but log any errors
@@ -629,6 +685,26 @@ Continue your systematic investigation now.`;
         guidance += "\nTry alternative tools immediately. Use discover_tools if unsure which tool to use next.";
 
         return guidance;
+    }
+
+    /**
+     * Get estimated duration for a tool execution (in milliseconds)
+     * @param toolName The name of the tool
+     * @returns Estimated duration in milliseconds
+     */
+    private getEstimatedDuration(toolName: string): number {
+        // Tool-specific duration estimates based on typical execution times
+        const estimations = {
+            'search_notes': 2000,
+            'read_note': 1000,
+            'keyword_search': 1500,
+            'attribute_search': 1200,
+            'discover_tools': 500,
+            'note_by_path': 800,
+            'template_search': 1000
+        };
+
+        return estimations[toolName as keyof typeof estimations] || 1500; // Default 1.5 seconds
     }
 
     /**

@@ -649,6 +649,90 @@ async function handleStreamingProcess(
 }
 
 /**
+ * @swagger
+ * /api/llm/interactions/{interactionId}/respond:
+ *   post:
+ *     summary: Respond to a user interaction request (confirm/cancel tool execution)
+ *     operationId: llm-interaction-respond
+ *     parameters:
+ *       - name: interactionId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the interaction to respond to
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               response:
+ *                 type: string
+ *                 enum: [confirm, cancel]
+ *                 description: User's response to the interaction
+ *     responses:
+ *       '200':
+ *         description: Response processed successfully
+ *       '404':
+ *         description: Interaction not found
+ *       '400':
+ *         description: Invalid response
+ *     security:
+ *       - session: []
+ *     tags: ["llm"]
+ */
+async function respondToInteraction(req: Request, res: Response): Promise<void> {
+    try {
+        const interactionId = req.params.interactionId;
+        const { response } = req.body;
+
+        if (!interactionId || !response) {
+            res.status(400).json({
+                success: false,
+                error: 'Missing interactionId or response'
+            });
+            return;
+        }
+
+        if (response !== 'confirm' && response !== 'cancel') {
+            res.status(400).json({
+                success: false,
+                error: 'Response must be either "confirm" or "cancel"'
+            });
+            return;
+        }
+
+        // Import the pipeline to access user interaction stage
+        // Note: In a real implementation, you'd maintain a registry of active pipelines
+        // For now, we'll send this via WebSocket to be handled by the active pipeline
+        
+        const wsService = (await import('../../services/ws.js')).default;
+        
+        // Send the user response via WebSocket to be picked up by the active pipeline
+        wsService.sendMessageToAllClients({
+            type: 'user-interaction-response',
+            interactionId,
+            response,
+            timestamp: Date.now()
+        });
+
+        res.status(200).json({
+            success: true,
+            message: `User response "${response}" recorded for interaction ${interactionId}`
+        });
+
+    } catch (error) {
+        log.error(`Error handling user interaction response: ${error}`);
+        res.status(500).json({
+            success: false,
+            error: 'Internal server error'
+        });
+    }
+}
+
+/**
  * Debug endpoint to check tool recognition and registry status
  */
 async function debugTools(req: Request, res: Response): Promise<void> {
@@ -747,6 +831,9 @@ export default {
     deleteSession,
     sendMessage,
     streamMessage,
+    
+    // User interaction
+    respondToInteraction,
     
     // Debug endpoints
     debugTools
