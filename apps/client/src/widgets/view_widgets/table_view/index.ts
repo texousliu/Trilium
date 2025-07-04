@@ -227,6 +227,10 @@ export default class TableView extends ViewMode<StateInfo> {
             this.#manageRowsUpdate();
         }
 
+        if (loadResults.getAttributeRows().some(attr => this.args.noteIds.includes(attr.noteId!))) {
+            this.#manageRowsUpdate();
+        }
+
         return false;
     }
 
