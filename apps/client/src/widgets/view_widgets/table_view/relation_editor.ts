@@ -12,6 +12,7 @@ export function RelationEditor(cell: CellComponent, onRendered, success, cancel,
 
     //create and style editor
     const editor = document.createElement("input");
+
     const $editor = $(editor);
     editor.classList.add("form-control");
 
@@ -43,8 +44,11 @@ export function RelationEditor(cell: CellComponent, onRendered, success, cancel,
         editor.focus();
     });
 
-    //return the editor element
-    return editor;
+    const container = document.createElement("div");
+    container.classList.add("input-group");
+    container.classList.add("autocomplete");
+    container.appendChild(editor);
+    return container;
 };
 
 export function RelationFormatter(cell: CellComponent, formatterParams, onRendered) {

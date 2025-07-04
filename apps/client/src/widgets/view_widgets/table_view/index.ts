@@ -34,6 +34,14 @@ const TPL = /*html*/`
         right: 0;
         bottom: 0;
     }
+
+    .tabulator-cell .autocomplete {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        outline: none !important;
+    }
     </style>
 
     <div class="header">
