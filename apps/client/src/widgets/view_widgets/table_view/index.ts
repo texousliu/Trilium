@@ -7,7 +7,7 @@ import SpacedUpdate from "../../../services/spaced_update.js";
 import type { CommandListenerData, EventData } from "../../../components/app_context.js";
 import type { Attribute } from "../../../services/attribute_parser.js";
 import note_create from "../../../services/note_create.js";
-import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MenuModule, MoveRowsModule} from 'tabulator-tables';
+import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MenuModule, MoveRowsModule, ColumnDefinition} from 'tabulator-tables';
 import "tabulator-tables/dist/css/tabulator_bootstrap5.min.css";
 import { canReorderRows, configureReorderingRows } from "./dragging.js";
 import buildFooter from "./footer.js";
@@ -68,7 +68,9 @@ const TPL = /*html*/`
 `;
 
 export interface StateInfo {
-   tableData: Record<string, object>;
+    tableData?: {
+        columns?: ColumnDefinition[];
+    };
 }
 
 export default class TableView extends ViewMode<StateInfo> {
@@ -79,7 +81,7 @@ export default class TableView extends ViewMode<StateInfo> {
     private spacedUpdate: SpacedUpdate;
     private api?: Tabulator;
     private newAttribute?: Attribute;
-    private persistentData: Record<string, object>;
+    private persistentData: StateInfo["tableData"];
     /** If set to a note ID, whenever the rows will be updated, the title of the note will be automatically focused for editing. */
     private noteIdToEdit?: string;
 
@@ -117,11 +119,10 @@ export default class TableView extends ViewMode<StateInfo> {
         const notes = await froca.getNotes(this.args.noteIds);
         const info = getPromotedAttributeInformation(this.parentNote);
 
-        const columnDefs = buildColumnDefinitions(info);
-
         const viewStorage = await this.viewStorage.restore();
         this.persistentData = viewStorage?.tableData || {};
 
+        const columnDefs = buildColumnDefinitions(info);
         const movableRows = canReorderRows(this.parentNote);
 
         this.api = new Tabulator(el, {
@@ -134,10 +135,10 @@ export default class TableView extends ViewMode<StateInfo> {
             movableRows,
             footerElement: buildFooter(this.parentNote),
             persistenceWriterFunc: (_id, type: string, data: object) => {
-                this.persistentData[type] = data;
+                (this.persistentData as Record<string, {}>)[type] = data;
                 this.spacedUpdate.scheduleUpdate();
             },
-            persistenceReaderFunc: (_id, type: string) => this.persistentData[type],
+            persistenceReaderFunc: (_id, type: string) => this.persistentData?.[type],
         });
         configureReorderingRows(this.api);
         this.setupEditing();
@@ -244,7 +245,7 @@ export default class TableView extends ViewMode<StateInfo> {
         }
 
         const info = getPromotedAttributeInformation(this.parentNote);
-        const columnDefs = buildColumnDefinitions(info);
+        const columnDefs = buildColumnDefinitions(info, this.persistentData?.columns);
         this.api.setColumns(columnDefs);
     }
 

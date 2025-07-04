@@ -64,7 +64,7 @@ export async function buildData(parentNote: FNote, info: PromotedAttributeInform
     }
 }
 
-export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
+export function buildColumnDefinitions(info: PromotedAttributeInformation[], existingColumnData?: ColumnDefinition[]) {
     const columnDefs: ColumnDefinition[] = [
         {
             title: "#",
@@ -100,8 +100,28 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
     }
 
     applyHeaderMenu(columnDefs);
+    if (existingColumnData) {
+        restoreExistingData(columnDefs, existingColumnData);
+    }
 
     return columnDefs;
+}
+
+function restoreExistingData(newDefs: ColumnDefinition[], oldDefs: ColumnDefinition[]) {
+    const byField = new Map<string, ColumnDefinition>;
+    for (const def of oldDefs) {
+        byField.set(def.field, def);
+    }
+
+    for (const newDef of newDefs) {
+        const oldDef = byField.get(newDef.field);
+        if (!oldDef) {
+            continue;
+        }
+
+        newDef.width = oldDef.width;
+        newDef.visible = oldDef.visible;
+    }
 }
 
 export async function buildRowDefinitions(parentNote: FNote, notes: FNote[], infos: PromotedAttributeInformation[]) {
