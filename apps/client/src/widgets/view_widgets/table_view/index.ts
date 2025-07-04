@@ -1,7 +1,6 @@
 import froca from "../../../services/froca.js";
 import ViewMode, { type ViewModeArgs } from "../view_mode.js";
 import attributes, { setAttribute, setLabel } from "../../../services/attributes.js";
-import getPromotedAttributeInformation, { buildColumnDefinitions, buildData, buildRowDefinitions, TableData } from "./data.js";
 import server from "../../../services/server.js";
 import SpacedUpdate from "../../../services/spaced_update.js";
 import type { CommandListenerData, EventData } from "../../../components/app_context.js";
@@ -11,6 +10,8 @@ import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, Resi
 import "tabulator-tables/dist/css/tabulator_bootstrap5.min.css";
 import { canReorderRows, configureReorderingRows } from "./dragging.js";
 import buildFooter from "./footer.js";
+import getPromotedAttributeInformation, { buildRowDefinitions } from "./rows.js";
+import { buildColumnDefinitions } from "./columns.js";
 
 const TPL = /*html*/`
 <div class="table-view">
