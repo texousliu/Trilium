@@ -208,14 +208,6 @@ export default class TableView extends ViewMode<StateInfo> {
         }
     }
 
-    private getTheme(): Theme {
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            return themeQuartz.withPart(colorSchemeDark)
-        } else {
-            return themeQuartz;
-        }
-    }
-
     onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">): boolean | void {
         if (!this.api) {
             return;
