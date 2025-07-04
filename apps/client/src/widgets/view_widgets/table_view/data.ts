@@ -15,7 +15,7 @@ export type TableData = {
 export interface PromotedAttributeInformation {
     name: string;
     title?: string;
-    type?: LabelType;
+    type?: LabelType | "relation";
 }
 
 const labelTypeMappings: Record<LabelType, Partial<ColumnDefinition>> = {
@@ -130,7 +130,9 @@ export async function buildRowDefinitions(parentNote: FNote, notes: FNote[], inf
 
         const labels: typeof definitions[0]["labels"] = {};
         for (const { name, type } of infos) {
-            if (type === "boolean") {
+            if (type === "relation") {
+                labels[name] = note.getRelationValue(name);
+            } else if (type === "boolean") {
                 labels[name] = note.hasLabel(name);
             } else {
                 labels[name] = note.getLabelValue(name);
@@ -146,28 +148,37 @@ export async function buildRowDefinitions(parentNote: FNote, notes: FNote[], inf
         });
     }
 
+    console.log("Built row definitions", definitions);
+
     return definitions;
 }
 
 export default function getPromotedAttributeInformation(parentNote: FNote) {
     const info: PromotedAttributeInformation[] = [];
     for (const promotedAttribute of parentNote.getPromotedDefinitionAttributes()) {
-        if (promotedAttribute.type !== "label") {
-            console.warn("Relations are not supported for now");
-            continue;
-        }
-
         const def = promotedAttribute.getDefinition();
         if (def.multiplicity !== "single") {
             console.warn("Multiple values are not supported for now");
             continue;
         }
 
+        const [ labelType, name ] = promotedAttribute.name.split(":", 2);
+        if (promotedAttribute.type !== "label") {
+            console.warn("Relations are not supported for now");
+            continue;
+        }
+
+        let type: LabelType | "relation" = def.labelType || "text";
+        if (labelType === "relation") {
+            type = "relation";
+        }
+
         info.push({
-            name: promotedAttribute.name.split(":", 2)[1],
+            name,
             title: def.promotedAlias,
-            type: def.labelType
-        })
+            type
+        });
     }
+    console.log("Promoted attribute information", info);
     return info;
 }
