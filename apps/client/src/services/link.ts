@@ -384,7 +384,7 @@ function linkContextMenu(e: PointerEvent) {
     linkContextMenuService.openContextMenu(notePath, e, viewScope, null);
 }
 
-async function loadReferenceLinkTitle($el: JQuery<HTMLElement>, href: string | null | undefined = null) {
+export async function loadReferenceLinkTitle($el: JQuery<HTMLElement>, href: string | null | undefined = null) {
     const $link = $el[0].tagName === "A" ? $el : $el.find("a");
 
     href = href || $link.attr("href");

@@ -1,5 +1,6 @@
 import { CellComponent } from "tabulator-tables";
 import note_autocomplete from "../../../services/note_autocomplete";
+import { loadReferenceLinkTitle } from "../../../services/link";
 
 export function RelationEditor(cell: CellComponent, onRendered, success, cancel, editorParams){
     //cell - the cell component for the editable cell
@@ -45,5 +46,12 @@ export function RelationFormatter(cell: CellComponent, formatterParams, onRender
         return "";
     }
 
-    return `<a href="#root/${noteId}">Title goes here</a>`;
+    onRendered(async () => {
+        const $link = $("<a>");
+        $link.addClass("reference-link");
+        $link.attr("href", `#root/${noteId}`);
+        await loadReferenceLinkTitle($link);
+        cell.getElement().appendChild($link[0]);
+    });
+    return "";
 }
