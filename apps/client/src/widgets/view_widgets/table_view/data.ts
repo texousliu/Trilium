@@ -1,8 +1,8 @@
 import FNote from "../../../entities/fnote.js";
 import type { LabelType } from "../../../services/promoted_attribute_definition_parser.js";
 import type { ColumnDefinition } from "tabulator-tables";
-import link from "../../../services/link.js";
-import { RelationEditor, RelationFormatter } from "./relation_editor.js";
+import { RelationEditor } from "./relation_editor.js";
+import { NoteFormatter, NoteTitleFormatter } from "./formatters.js";
 
 export type TableData = {
     iconClass: string;
@@ -47,7 +47,7 @@ const labelTypeMappings: Record<ColumnType, Partial<ColumnDefinition>> = {
     },
     relation: {
         editor: RelationEditor,
-        formatter: RelationFormatter
+        formatter: NoteFormatter
     }
 };
 
@@ -75,18 +75,6 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
             frozen: true
         },
         {
-            field: "iconClass",
-            title: "Note icon",
-            titleFormatter: emptyTitleFormatter,
-            width: 40,
-            headerSort: false,
-            hozAlign: "center",
-            formatter(cell) {
-                const iconClass = cell.getValue();
-                return `<span class="bx ${iconClass}"></span>`;
-            },
-        },
-        {
             field: "noteId",
             title: "Note ID",
             visible: false
@@ -95,6 +83,7 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
             field: "title",
             title: "Title",
             editor: "input",
+            formatter: NoteTitleFormatter,
             width: 400
         }
     ];
@@ -109,22 +98,6 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[]) {
             ...labelTypeMappings[type ?? "text"],
         });
     }
-
-    // End actions
-    columnDefs.push({
-        title: "Open note button",
-        width: 40,
-        hozAlign: "center",
-        headerSort: false,
-        formatter: () => `<span class="bx bx-window-open"></span>`,
-        titleFormatter: emptyTitleFormatter,
-        cellClick: (e, cell) => {
-            const noteId = cell.getRow().getCell("noteId").getValue();
-            if (noteId) {
-                link.goToLinkExt(e as MouseEvent, `#root/${noteId}`);
-            }
-        }
-    });
 
     return columnDefs;
 }

@@ -1,6 +1,5 @@
 import { CellComponent } from "tabulator-tables";
 import note_autocomplete from "../../../services/note_autocomplete";
-import { loadReferenceLinkTitle } from "../../../services/link";
 import froca from "../../../services/froca";
 
 export function RelationEditor(cell: CellComponent, onRendered, success, cancel, editorParams){
@@ -50,21 +49,3 @@ export function RelationEditor(cell: CellComponent, onRendered, success, cancel,
     container.appendChild(editor);
     return container;
 };
-
-export function RelationFormatter(cell: CellComponent, formatterParams, onRendered) {
-    const noteId = cell.getValue();
-    if (!noteId) {
-        return "";
-    }
-
-    onRendered(async () => {
-        const $noteRef = $("<span>");
-        const href = `#root/${noteId}`;
-        $noteRef.addClass("reference-link");
-        $noteRef.attr("data-href", href);
-
-        await loadReferenceLinkTitle($noteRef, href);
-        cell.getElement().appendChild($noteRef[0]);
-    });
-    return "";
-}
