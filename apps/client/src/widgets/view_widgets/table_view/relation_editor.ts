@@ -24,17 +24,19 @@ export function RelationEditor(cell: CellComponent, onRendered, success, cancel,
 
     //set focus on the select box when the editor is selected
     onRendered(function(){
-        note_autocomplete.initNoteAutocomplete($editor);
+        note_autocomplete.initNoteAutocomplete($editor, {
+            allowCreatingNotes: true
+        }).on("autocomplete:noteselected", (event, suggestion, dataset) => {
+            const notePath = suggestion.notePath;
+            if (!notePath) {
+                return;
+            }
+
+            const noteId = notePath.split("/").at(-1);
+            success(noteId);
+        });
         editor.focus();
     });
-
-    //when the value has been set, trigger the cell to update
-    function successFunc(){
-        success($editor.getSelectedNoteId());
-    }
-
-    editor.addEventListener("change", successFunc);
-    editor.addEventListener("blur", successFunc);
 
     //return the editor element
     return editor;
