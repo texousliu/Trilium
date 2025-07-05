@@ -208,7 +208,7 @@ async function isNewTemplate(templateNoteId) {
 
         // Determine the difference in days between now and the template's creation date
         const age = (new Date().getTime() - creationDate.getTime()) / DAY_LENGTH;
-        // Return true if the template is at most NEW_TEMPLATE_MIN_AGE days old
+        // Return true if the template is at most NEW_TEMPLATE_MAX_AGE days old
         return (age <= NEW_TEMPLATE_MAX_AGE)
     } else {
         return false;
