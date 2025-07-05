@@ -178,7 +178,7 @@ async function isNewTemplate(templateNoteId) {
                 rootCreationDate = new Date(rootNoteInfo.dateCreated);
             }
         } catch (ex) {
-            console.log(ex);
+            console.error(ex);
         }
     }
 
