@@ -57,7 +57,21 @@ export const NOTE_TYPES: NoteTypeMapping[] = [
     { type: "aiChat", mime: "application/json", title: t("note_types.ai-chat"), reserved: true }
 ];
 
+/** The minimum age in days for a template to be marked with the "New" badge */
+const NEW_TEMPLATE_MIN_AGE = 3;
+
+/** The length of a day in milliseconds. */
+const DAY_LENGTH = 1000 * 60 * 60 * 24; 
+
+/** The menu item badge used to mark new note types and templates */
+const NEW_BADGE: MenuItemBadge = {
+    title: t("note_types.new-feature"),
+    className: "new-note-type-badge"
+};
+
 const SEPARATOR = { title: "----" };
+
+const creationDateCache = new Map<string, Date>();
 
 async function getNoteTypeItems(command?: TreeCommandNames) {
     const items: MenuItem<TreeCommandNames>[] = [
@@ -80,7 +94,7 @@ function getBlankNoteTypes(command): MenuItem<TreeCommandNames>[] {
         }
 
         if (nt.isNew) {
-            menuItem.badges?.push({title: t("note_types.new-feature"), className: "new-note-type-badge"});
+            menuItem.badges?.push(NEW_BADGE);
         }
 
         if (nt.isBeta) {
@@ -101,14 +115,21 @@ async function getUserTemplates(command?: TreeCommandNames) {
     const items: MenuItem<TreeCommandNames>[] = [
         SEPARATOR
     ];
+
     for (const templateNote of templateNotes) {
-        items.push({
+        const item: MenuItem<TreeCommandNames> = {
             title: templateNote.title,
             uiIcon: templateNote.getIcon(),
             command: command,
             type: templateNote.type,
             templateNoteId: templateNote.noteId
-        });
+        };
+
+        if (await isNewTemplate(templateNote.noteId)) {
+            item.badges = [NEW_BADGE];
+        }
+
+        items.push(item);
     }
     return items;
 }
@@ -128,16 +149,50 @@ async function getBuiltInTemplates(command?: TreeCommandNames) {
     const items: MenuItem<TreeCommandNames>[] = [
         SEPARATOR
     ];
+
     for (const templateNote of childNotes) {
-        items.push({
+        const item: MenuItem<TreeCommandNames> = {
             title: templateNote.title,
             uiIcon: templateNote.getIcon(),
             command: command,
             type: templateNote.type,
             templateNoteId: templateNote.noteId
-        });
+        };
+
+        if (await isNewTemplate(templateNote.noteId)) {
+            item.badges = [NEW_BADGE];
+        }
+
+        items.push(item);
     }
     return items;
+}
+
+async function isNewTemplate(templateNoteId) {
+    // Try to retrieve the template's creation date from the cache
+    let creationDate: Date | undefined = creationDateCache.get(templateNoteId);
+
+    if (creationDate === undefined) {
+        // The creation date isn't available in the cache, try to retrieve it from the server
+        try {
+            const noteInfo: any = await server.get("notes/" + templateNoteId);
+            if ("dateCreated" in noteInfo) {
+                creationDate = new Date(noteInfo.dateCreated);
+                creationDateCache.set(templateNoteId, creationDate);
+            }
+        } catch (ex) {
+            console.error(ex);
+        }
+    }
+
+    if (creationDate) {
+        // Determine the difference in days between now and the template's creation date
+        const age = (new Date().getTime() - creationDate.getTime()) / DAY_LENGTH;
+        // Return true if the template is at most NEW_TEMPLATE_MIN_AGE days old
+        return (age <= NEW_TEMPLATE_MIN_AGE)
+    } else {
+        return false;
+    }
 }
 
 export default {
