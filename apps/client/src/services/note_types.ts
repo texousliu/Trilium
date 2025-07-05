@@ -69,6 +69,11 @@ const NEW_BADGE: MenuItemBadge = {
     className: "new-note-type-badge"
 };
 
+/** The menu item badge used to mark note types that are part of a beta feature */
+const BETA_BADGE = {
+    title: t("note_types.beta-feature")
+};
+
 const SEPARATOR = { title: "----" };
 
 const creationDateCache = new Map<string, Date>();
@@ -99,7 +104,7 @@ function getBlankNoteTypes(command): MenuItem<TreeCommandNames>[] {
         }
 
         if (nt.isBeta) {
-            menuItem.badges?.push({title: t("note_types.beta-feature")});
+            menuItem.badges?.push(BETA_BADGE);
         }
 
         return menuItem;
@@ -209,7 +214,7 @@ async function isNewTemplate(templateNoteId) {
         // Determine the difference in days between now and the template's creation date
         const age = (new Date().getTime() - creationDate.getTime()) / DAY_LENGTH;
         // Return true if the template is at most NEW_TEMPLATE_MAX_AGE days old
-        return (age <= NEW_TEMPLATE_MAX_AGE)
+        return (age <= NEW_TEMPLATE_MAX_AGE);
     } else {
         return false;
     }
