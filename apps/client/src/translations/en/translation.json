@@ -760,7 +760,8 @@
     "expand": "Expand",
     "book_properties": "Book Properties",
     "invalid_view_type": "Invalid view type '{{type}}'",
-    "calendar": "Calendar"
+    "calendar": "Calendar",
+    "table": "Table"
   },
   "edited_notes": {
     "no_edited_notes_found": "No edited notes on this day yet...",
@@ -1934,5 +1935,9 @@
     "title": "Features",
     "emoji_completion_enabled": "Enable Emoji auto-completion",
     "note_completion_enabled": "Enable note auto-completion"
+  },
+  "table_view": {
+    "new-row": "New row",
+    "new-column": "New column"
   }
 }
