@@ -72,6 +72,7 @@ const NEW_BADGE: MenuItemBadge = {
 const SEPARATOR = { title: "----" };
 
 const creationDateCache = new Map<string, Date>();
+let rootCreationDate: Date | undefined;
 
 async function getNoteTypeItems(command?: TreeCommandNames) {
     const items: MenuItem<TreeCommandNames>[] = [
@@ -169,6 +170,18 @@ async function getBuiltInTemplates(command?: TreeCommandNames) {
 }
 
 async function isNewTemplate(templateNoteId) {
+    if (rootCreationDate === undefined) {
+        // Retrieve the root note creation date
+        try {
+            let rootNoteInfo: any = await server.get("notes/root");
+            if ("dateCreated" in rootNoteInfo) {
+                rootCreationDate = new Date(rootNoteInfo.dateCreated);
+            }
+        } catch (ex) {
+            console.log(ex);
+        }
+    }
+
     // Try to retrieve the template's creation date from the cache
     let creationDate: Date | undefined = creationDateCache.get(templateNoteId);
 
@@ -186,6 +199,13 @@ async function isNewTemplate(templateNoteId) {
     }
 
     if (creationDate) {
+        if (rootCreationDate && creationDate.getTime() - rootCreationDate.getTime() < 30000) {
+            // Ignore templates created within 30 seconds after the root note is created.
+            // This is useful to prevent predefined templates from being marked
+            // as 'New' after setting up a new database.
+            return false;
+        }
+
         // Determine the difference in days between now and the template's creation date
         const age = (new Date().getTime() - creationDate.getTime()) / DAY_LENGTH;
         // Return true if the template is at most NEW_TEMPLATE_MIN_AGE days old
