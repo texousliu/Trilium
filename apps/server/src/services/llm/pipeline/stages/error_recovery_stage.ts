@@ -98,7 +98,12 @@ export class ErrorRecoveryStage extends BasePipelineStage<ToolExecutionInput, { 
         log.info(`========== ERROR RECOVERY STAGE PROCESSING ==========`);
         log.info(`Processing ${response.tool_calls.length} tool calls with advanced error recovery`);
 
-        const recoveredToolCalls = [];
+        const recoveredToolCalls: Array<{
+            toolCall: any;
+            message: Message;
+            attempts: number;
+            recovered: boolean;
+        }> = [];
         const updatedMessages = [...input.messages];
 
         // Process each tool call with recovery
