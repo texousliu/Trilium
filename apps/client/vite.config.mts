@@ -36,7 +36,7 @@ export default defineConfig(() => ({
             ]
         }),
         webpackStatsPlugin()
-    ],
+    ] as any, // bypass typescript issues with viteStaticCopy
     resolve: {
         alias: [
             // Force the use of dist in development mode because upstream ESM is broken (some hybrid between CJS and ESM, will be improved in upcoming versions).
