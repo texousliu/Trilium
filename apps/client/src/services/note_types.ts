@@ -57,7 +57,7 @@ export const NOTE_TYPES: NoteTypeMapping[] = [
     { type: "aiChat", mime: "application/json", title: t("note_types.ai-chat"), reserved: true }
 ];
 
-/** The minimum age in days for a template to be marked with the "New" badge */
+/** The maximum age in days for a template to be marked with the "New" badge */
 const NEW_TEMPLATE_MIN_AGE = 3;
 
 /** The length of a day in milliseconds. */
