@@ -58,7 +58,7 @@ export const NOTE_TYPES: NoteTypeMapping[] = [
 ];
 
 /** The maximum age in days for a template to be marked with the "New" badge */
-const NEW_TEMPLATE_MIN_AGE = 3;
+const NEW_TEMPLATE_MAX_AGE = 3;
 
 /** The length of a day in milliseconds. */
 const DAY_LENGTH = 1000 * 60 * 60 * 24; 
@@ -209,7 +209,7 @@ async function isNewTemplate(templateNoteId) {
         // Determine the difference in days between now and the template's creation date
         const age = (new Date().getTime() - creationDate.getTime()) / DAY_LENGTH;
         // Return true if the template is at most NEW_TEMPLATE_MIN_AGE days old
-        return (age <= NEW_TEMPLATE_MIN_AGE)
+        return (age <= NEW_TEMPLATE_MAX_AGE)
     } else {
         return false;
     }
