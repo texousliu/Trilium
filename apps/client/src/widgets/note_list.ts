@@ -1,7 +1,7 @@
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import NoteListRenderer from "../services/note_list_renderer.js";
 import type FNote from "../entities/fnote.js";
-import type { CommandListener, CommandListenerData, CommandMappings, CommandNames, EventData } from "../components/app_context.js";
+import type { CommandListener, CommandListenerData, CommandMappings, CommandNames, EventData, EventNames } from "../components/app_context.js";
 import type ViewMode from "./view_widgets/view_mode.js";
 import AttributeDetailWidget from "./attribute_widgets/attribute_detail.js";
 import { Attribute } from "../services/attribute_parser.js";
@@ -174,6 +174,17 @@ export default class NoteListWidget extends NoteContextAwareWidget {
         }
 
         return super.triggerCommand(name, data);
+    }
+
+    handleEventInChildren<T extends EventNames>(name: T, data: EventData<T>): Promise<unknown[] | unknown> | null {
+        super.handleEventInChildren(name, data);
+
+        if (this.viewMode) {
+            const ret = this.viewMode.handleEvent(name, data);
+            if (ret) {
+                return ret;
+            }
+        }
     }
 
 }

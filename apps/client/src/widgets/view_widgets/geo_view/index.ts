@@ -1,10 +1,24 @@
 import ViewMode, { ViewModeArgs } from "../view_mode.js";
 import L from "leaflet";
-import type { GPX, LatLng, Map, Marker } from "leaflet";
+import type { GPX, LatLng, LeafletMouseEvent, Map, Marker } from "leaflet";
 import SpacedUpdate from "../../../services/spaced_update.js";
 import { t } from "../../../services/i18n.js";
 import processNoteWithMarker, { processNoteWithGpxTrack } from "./markers.js";
 import froca from "../../../services/froca.js";
+import { hasTouchBar } from "../../../services/utils.js";
+import toast from "../../../services/toast.js";
+import { EventData } from "../../../components/app_context.js";
+import dialog from "../../../services/dialog.js";
+import server from "../../../services/server.js";
+import attributes from "../../../services/attributes.js";
+import { moveMarker } from "./editing.js";
+
+// TODO: Deduplicate
+interface CreateChildResponse {
+    note: {
+        noteId: string;
+    };
+}
 
 const TPL = /*html*/`
 <div class="geo-view">
@@ -90,6 +104,11 @@ const DEFAULT_ZOOM = 2;
 export const LOCATION_ATTRIBUTE = "geolocation";
 const CHILD_NOTE_ICON = "bx bx-pin";
 
+enum State {
+    Normal,
+    NewNote
+}
+
 export default class GeoView extends ViewMode<MapData> {
 
     private args: ViewModeArgs;
@@ -97,6 +116,7 @@ export default class GeoView extends ViewMode<MapData> {
     private $container!: JQuery<HTMLElement>;
     private map?: Map;
     private spacedUpdate: SpacedUpdate;
+    private _state: State;
 
     private currentMarkerData: Record<string, Marker>;
     private currentTrackData: Record<string, GPX>;
@@ -110,6 +130,7 @@ export default class GeoView extends ViewMode<MapData> {
 
         this.currentMarkerData = {};
         this.currentTrackData = {};
+        this._state = State.Normal;
 
         args.$parent.append(this.$root);
     }
@@ -144,7 +165,7 @@ export default class GeoView extends ViewMode<MapData> {
         const updateFn = () => this.spacedUpdate.scheduleUpdate();
         map.on("moveend", updateFn);
         map.on("zoomend", updateFn);
-        // map.on("click", (e) => this.#onMapClicked(e));
+        map.on("click", (e) => this.#onMapClicked(e));
 
         this.#reloadMarkers();
     }
@@ -195,8 +216,9 @@ export default class GeoView extends ViewMode<MapData> {
 
         // Add the new markers.
         this.currentMarkerData = {};
+        await froca.getNotes(this.args.noteIds);
         for (const noteId of this.args.noteIds) {
-            const childNote = await froca.getNote(noteId);
+            const childNote = froca.getNoteFromCache(noteId);
             if (!childNote) {
                 continue;
             }
@@ -217,6 +239,73 @@ export default class GeoView extends ViewMode<MapData> {
 
     get isFullHeight(): boolean {
         return true;
+    }
+
+    #changeState(newState: State) {
+        this._state = newState;
+        this.$container.toggleClass("placing-note", newState === State.NewNote);
+        if (hasTouchBar) {
+            this.triggerCommand("refreshTouchBar");
+        }
+    }
+
+    onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">): boolean | void {
+        // If any of the children branches are altered.
+        if (loadResults.getBranchRows().find((branch) => branch.parentNoteId === this.parentNote.noteId)) {
+            this.#reloadMarkers();
+            return;
+        }
+
+        // If any of note has its location attribute changed.
+        // TODO: Should probably filter by parent here as well.
+        const attributeRows = loadResults.getAttributeRows();
+        if (attributeRows.find((at) => [LOCATION_ATTRIBUTE, "color"].includes(at.name ?? ""))) {
+            this.#reloadMarkers();
+        }
+    }
+
+    async geoMapCreateChildNoteEvent({ ntxId }: EventData<"geoMapCreateChildNote">) {
+        toast.showPersistent({
+            icon: "plus",
+            id: "geo-new-note",
+            title: "New note",
+            message: t("geo-map.create-child-note-instruction")
+        });
+
+        this.#changeState(State.NewNote);
+
+        const globalKeyListener: (this: Window, ev: KeyboardEvent) => any = (e) => {
+            if (e.key !== "Escape") {
+                return;
+            }
+
+            this.#changeState(State.Normal);
+
+            window.removeEventListener("keydown", globalKeyListener);
+            toast.closePersistent("geo-new-note");
+        };
+        window.addEventListener("keydown", globalKeyListener);
+    }
+
+    async #onMapClicked(e: LeafletMouseEvent) {
+        if (this._state !== State.NewNote) {
+            return;
+        }
+
+        toast.closePersistent("geo-new-note");
+        const title = await dialog.prompt({ message: t("relation_map.enter_title_of_new_note"), defaultValue: t("relation_map.default_new_note_title") });
+
+        if (title?.trim()) {
+            const { note } = await server.post<CreateChildResponse>(`notes/${this.parentNote.noteId}/children?target=into`, {
+                title,
+                content: "",
+                type: "text"
+            });
+            attributes.setLabel(note.noteId, "iconClass", CHILD_NOTE_ICON);
+            moveMarker(note.noteId, e.latlng);
+        }
+
+        this.#changeState(State.Normal);
     }
 
 }

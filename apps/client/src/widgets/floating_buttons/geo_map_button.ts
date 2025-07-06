@@ -23,7 +23,7 @@ const TPL = /*html*/`\
 export default class GeoMapButtons extends NoteContextAwareWidget {
 
     isEnabled() {
-        return super.isEnabled() && this.note?.type === "geoMap";
+        return super.isEnabled() && this.note?.getLabelValue("viewType") === "geoMap";
     }
 
     doRender() {
