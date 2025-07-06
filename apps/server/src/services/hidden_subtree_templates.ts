@@ -43,6 +43,33 @@ export default function buildHiddenSubtreeTemplates() {
                         value: "table"
                     }
                 ]
+            },
+            {
+                id: "_template_geo_map",
+                type: "book",
+                title: "Geo Map",
+                icon: "bx bx-map-alt",
+                attributes: [
+                    {
+                        name: "template",
+                        type: "label"
+                    },
+                    {
+                        name: "viewType",
+                        type: "label",
+                        value: "geoMap"
+                    },
+                    {
+                        name: "hidePromotedAttributes",
+                        type: "label"
+                    },
+                    {
+                        name: "label:geolocation",
+                        type: "label",
+                        value: "promoted,alias=Geolocation,single,text",
+                        isInheritable: true
+                    }
+                ]
             }
         ]
     };
