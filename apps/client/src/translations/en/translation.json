@@ -761,7 +761,8 @@
     "book_properties": "Book Properties",
     "invalid_view_type": "Invalid view type '{{type}}'",
     "calendar": "Calendar",
-    "table": "Table"
+    "table": "Table",
+    "geo-map": "Geo Map"
   },
   "edited_notes": {
     "no_edited_notes_found": "No edited notes on this day yet...",

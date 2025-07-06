@@ -25,6 +25,7 @@ const TPL = /*html*/`
             <option value="list">${t("book_properties.list")}</option>
             <option value="calendar">${t("book_properties.calendar")}</option>
             <option value="table">${t("book_properties.table")}</option>
+            <option value="geoMap">${t("book_properties.geo-map")}</option>
         </select>
     </div>
 
