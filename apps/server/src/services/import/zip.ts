@@ -656,12 +656,13 @@ export function readZipFile(buffer: Buffer, processEntryCallback: (zipfile: yauz
 
 function resolveNoteType(type: string | undefined): NoteType {
     // BC for ZIPs created in Trilium 0.57 and older
-    if (type === "relation-map") {
-        return "relationMap";
-    } else if (type === "note-map") {
-        return "noteMap";
-    } else if (type === "web-view") {
-        return "webView";
+    switch (type) {
+        case "relation-map":
+            return "relationMap";
+        case "note-map":
+            return "noteMap";
+        case "web-view":
+            return "webView";
     }
 
     if (type && (ALLOWED_NOTE_TYPES as readonly string[]).includes(type)) {
