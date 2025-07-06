@@ -502,6 +502,28 @@ async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRoo
                 firstNote = firstNote || note;
             }
         } else {
+            if (detectedType as string === "geoMap") {
+                attributes.push({
+                    noteId,
+                    type: "relation",
+                    name: "template",
+                    value: "_template_geo_map"
+                });
+
+                const attachment = new BAttachment({
+                    attachmentId: getNewAttachmentId(newEntityId()),
+                    ownerId: noteId,
+                    title: "geoMap.json",
+                    role: "viewConfig",
+                    mime: "application/json",
+                    position: 0
+                });
+
+                attachment.setContent(content, { forceSave: true });
+                content = "";
+                mime = "";
+            }
+
             ({ note } = noteService.createNewNote({
                 parentNoteId: parentNoteId,
                 title: noteTitle || "",
