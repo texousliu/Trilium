@@ -112,7 +112,6 @@ enum State {
 
 export default class GeoView extends ViewMode<MapData> {
 
-    private args: ViewModeArgs;
     private $root: JQuery<HTMLElement>;
     private $container!: JQuery<HTMLElement>;
     private map?: Map;
@@ -125,7 +124,6 @@ export default class GeoView extends ViewMode<MapData> {
 
     constructor(args: ViewModeArgs) {
         super(args, "geoMap");
-        this.args = args;
         this.$root = $(TPL);
         this.$container = this.$root.find(".geo-map-container");
         this.spacedUpdate = new SpacedUpdate(() => this.onSave(), 5_000);
