@@ -1,6 +1,7 @@
 import ViewMode, { ViewModeArgs } from "../view_mode.js";
 import L from "leaflet";
 import type { GPX, LatLng, LeafletMouseEvent, Map, Marker } from "leaflet";
+import "leaflet/dist/leaflet.css";
 import SpacedUpdate from "../../../services/spaced_update.js";
 import { t } from "../../../services/i18n.js";
 import processNoteWithMarker, { processNoteWithGpxTrack } from "./markers.js";

@@ -28,7 +28,6 @@ import ContentWidgetTypeWidget from "./type_widgets/content_widget.js";
 import AttachmentListTypeWidget from "./type_widgets/attachment_list.js";
 import AttachmentDetailTypeWidget from "./type_widgets/attachment_detail.js";
 import MindMapWidget from "./type_widgets/mind_map.js";
-import GeoMapTypeWidget from "./type_widgets/geo_map.js";
 import utils from "../services/utils.js";
 import type { NoteType } from "../entities/fnote.js";
 import type TypeWidget from "./type_widgets/type_widget.js";
@@ -71,7 +70,6 @@ const typeWidgetClasses = {
     attachmentDetail: AttachmentDetailTypeWidget,
     attachmentList: AttachmentListTypeWidget,
     mindMap: MindMapWidget,
-    geoMap: GeoMapTypeWidget,
     aiChat: AiChatTypeWidget,
 
     // Split type editors
