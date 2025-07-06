@@ -663,6 +663,8 @@ function resolveNoteType(type: string | undefined): NoteType {
             return "noteMap";
         case "web-view":
             return "webView";
+        case "geoMap":
+            return "book";
     }
 
     if (type && (ALLOWED_NOTE_TYPES as readonly string[]).includes(type)) {
