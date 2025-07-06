@@ -4,6 +4,9 @@ import { marker, latLng, divIcon, Map } from "leaflet";
 import type FNote from "../../../entities/fnote.js";
 import note_tooltip from "../../../services/note_tooltip.js";
 import openContextMenu from "../../type_widgets/geo_map_context_menu.js";
+import server from "../../../services/server.js";
+
+let gpxLoaded = false;
 
 export default function processNoteWithMarker(map: Map, note: FNote, location: string) {
     const [lat, lng] = location.split(",", 2).map((el) => parseFloat(el));
@@ -40,6 +43,36 @@ export default function processNoteWithMarker(map: Map, note: FNote, location: s
     }
 
     return newMarker;
+}
+
+export async function processNoteWithGpxTrack(map: Map, note: FNote) {
+    if (!gpxLoaded) {
+        await import("leaflet-gpx");
+        gpxLoaded = true;
+    }
+
+    const xmlResponse = await server.get<string | Uint8Array>(`notes/${note.noteId}/open`, undefined, true);
+    let stringResponse: string;
+    if (xmlResponse instanceof Uint8Array) {
+        stringResponse = new TextDecoder().decode(xmlResponse);
+    } else {
+        stringResponse = xmlResponse;
+    }
+
+    const track = new L.GPX(stringResponse, {
+        markers: {
+            startIcon: buildIcon(note.getIcon(), note.getColorClass(), note.title),
+            endIcon: buildIcon("bxs-flag-checkered"),
+            wptIcons: {
+                "": buildIcon("bx bx-pin")
+            }
+        },
+        polyline_options: {
+            color: note.getLabelValue("color") ?? "blue"
+        }
+    });
+    track.addTo(map);
+    return track;
 }
 
 function buildIcon(bxIconClass: string, colorClass?: string, title?: string) {

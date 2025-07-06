@@ -3,7 +3,7 @@ import L from "leaflet";
 import type { GPX, LatLng, Map, Marker } from "leaflet";
 import SpacedUpdate from "../../../services/spaced_update.js";
 import { t } from "../../../services/i18n.js";
-import processNoteWithMarker from "./markers.js";
+import processNoteWithMarker, { processNoteWithGpxTrack } from "./markers.js";
 import froca from "../../../services/froca.js";
 
 const TPL = /*html*/`
@@ -202,7 +202,8 @@ export default class GeoView extends ViewMode<MapData> {
             }
 
             if (childNote.mime === "application/gpx+xml") {
-                // this.#processNoteWithGpxTrack(childNote);
+                const track = await processNoteWithGpxTrack(this.map, childNote);
+                this.currentTrackData[childNote.noteId] = track;
                 continue;
             }
 

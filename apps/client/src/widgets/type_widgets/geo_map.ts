@@ -40,7 +40,6 @@ export default class GeoMapTypeWidget extends TypeWidget {
     private geoMapWidget: GeoMapWidget;
     private _state: State;
     private L!: Leaflet;
-    private gpxLoaded?: boolean;
     private ignoreNextZoomEvent?: boolean;
 
     static getType() {
@@ -85,42 +84,6 @@ export default class GeoMapTypeWidget extends TypeWidget {
         //     });
         // }
     }
-
-
-
-    // async #processNoteWithGpxTrack(note: FNote) {
-    //     if (!this.L || !this.geoMapWidget.map) {
-    //         return;
-    //     }
-
-    //     if (!this.gpxLoaded) {
-    //         await import("leaflet-gpx");
-    //         this.gpxLoaded = true;
-    //     }
-
-    //     const xmlResponse = await server.get<string | Uint8Array>(`notes/${note.noteId}/open`, undefined, true);
-    //     let stringResponse: string;
-    //     if (xmlResponse instanceof Uint8Array) {
-    //         stringResponse = new TextDecoder().decode(xmlResponse);
-    //     } else {
-    //         stringResponse = xmlResponse;
-    //     }
-
-    //     const track = new this.L.GPX(stringResponse, {
-    //         markers: {
-    //             startIcon: this.#buildIcon(note.getIcon(), note.getColorClass(), note.title),
-    //             endIcon: this.#buildIcon("bxs-flag-checkered"),
-    //             wptIcons: {
-    //                 "": this.#buildIcon("bx bx-pin")
-    //             }
-    //         },
-    //         polyline_options: {
-    //             color: note.getLabelValue("color") ?? "blue"
-    //         }
-    //     });
-    //     track.addTo(this.geoMapWidget.map);
-    //     this.currentTrackData[note.noteId] = track;
-    // }
 
     #changeState(newState: State) {
         this._state = newState;
