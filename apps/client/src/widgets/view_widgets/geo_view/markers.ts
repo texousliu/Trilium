@@ -3,7 +3,7 @@ import markerIconShadow from "leaflet/dist/images/marker-shadow.png";
 import { marker, latLng, divIcon, Map, type Marker } from "leaflet";
 import type FNote from "../../../entities/fnote.js";
 import note_tooltip from "../../../services/note_tooltip.js";
-import openContextMenu from "../../type_widgets/geo_map_context_menu.js";
+import openContextMenu from "./context_menu.js";
 import server from "../../../services/server.js";
 import { moveMarker } from "./editing.js";
 

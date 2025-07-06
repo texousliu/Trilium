@@ -1,8 +1,8 @@
-import appContext from "../../components/app_context.js";
-import type { ContextMenuEvent } from "../../menus/context_menu.js";
-import contextMenu from "../../menus/context_menu.js";
-import linkContextMenu from "../../menus/link_context_menu.js";
-import { t } from "../../services/i18n.js";
+import appContext from "../../../components/app_context.js";
+import type { ContextMenuEvent } from "../../../menus/context_menu.js";
+import contextMenu from "../../../menus/context_menu.js";
+import linkContextMenu from "../../../menus/link_context_menu.js";
+import { t } from "../../../services/i18n.js";
 
 export default function openContextMenu(noteId: string, e: ContextMenuEvent) {
     contextMenu.show({
