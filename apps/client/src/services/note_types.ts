@@ -35,7 +35,6 @@ export const NOTE_TYPES: NoteTypeMapping[] = [
     { type: "mermaid", mime: "text/mermaid", title: t("note_types.mermaid-diagram"), icon: "bx-selection" },
 
     // Map notes
-    { type: "geoMap", mime: "application/json", title: t("note_types.geo-map"), icon: "bx-map-alt", isBeta: true },
     { type: "mindMap", mime: "application/json", title: t("note_types.mind-map"), icon: "bx-sitemap" },
     { type: "noteMap", mime: "", title: t("note_types.note-map"), icon: "bxs-network-chart", static: true },
     { type: "relationMap", mime: "application/json", title: t("note_types.relation-map"), icon: "bxs-network-chart" },
@@ -61,7 +60,7 @@ export const NOTE_TYPES: NoteTypeMapping[] = [
 const NEW_TEMPLATE_MAX_AGE = 3;
 
 /** The length of a day in milliseconds. */
-const DAY_LENGTH = 1000 * 60 * 60 * 24; 
+const DAY_LENGTH = 1000 * 60 * 60 * 24;
 
 /** The menu item badge used to mark new note types and templates */
 const NEW_BADGE: MenuItemBadge = {

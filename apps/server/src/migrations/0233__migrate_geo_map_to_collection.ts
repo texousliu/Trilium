@@ -1,4 +1,3 @@
-import type { AttachmentRow } from "@triliumnext/commons";
 import becca from "../becca/becca";
 import becca_loader from "../becca/becca_loader";
 import cls from "../services/cls.js";
@@ -12,7 +11,7 @@ export default () => {
         hidden_subtree.checkHiddenSubtree(true);
 
         for (const note of Object.values(becca.notes)) {
-            if (note.type !== "geoMap") {
+            if (note.type as string !== "geoMap") {
                 continue;
             }
 
