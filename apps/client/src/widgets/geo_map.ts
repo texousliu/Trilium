@@ -8,10 +8,7 @@ const TPL = /*html*/`\
     <style>
         .note-detail-geo-map,
         .geo-map-widget,
-        .geo-map-container {
-            height: 100%;
-            overflow: hidden;
-        }
+
 
         .leaflet-top,
         .leaflet-bottom {
@@ -19,7 +16,6 @@ const TPL = /*html*/`\
         }
     </style>
 
-    <div class="geo-map-container"></div>
 </div>`;
 
 export type Leaflet = typeof L;
@@ -27,8 +23,6 @@ export type InitCallback = (L: Leaflet) => void;
 
 export default class GeoMapWidget extends NoteContextAwareWidget {
 
-    map?: Map;
-    $container!: JQuery<HTMLElement>;
     private initCallback?: InitCallback;
 
     constructor(widgetMode: "type", initCallback?: InitCallback) {
@@ -39,20 +33,10 @@ export default class GeoMapWidget extends NoteContextAwareWidget {
     doRender() {
         this.$widget = $(TPL);
 
-        this.$container = this.$widget.find(".geo-map-container");
-
-        const map = L.map(this.$container[0], {
-            worldCopyJump: true
-        });
-
-        this.map = map;
         if (this.initCallback) {
             this.initCallback(L);
         }
 
-        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            detectRetina: true
-        }).addTo(map);
+
     }
 }
