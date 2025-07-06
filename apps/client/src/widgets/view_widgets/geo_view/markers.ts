@@ -33,7 +33,7 @@ export default function processNoteWithMarker(map: Map, note: FNote, location: s
         }
     });
     newMarker.on("contextmenu", (e) => {
-        openContextMenu(note.noteId, e.originalEvent);
+        openContextMenu(note.noteId, e);
     });
 
     const el = newMarker.getElement();
