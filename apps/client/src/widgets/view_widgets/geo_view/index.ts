@@ -4,10 +4,9 @@ import type { GPX, LatLng, LeafletMouseEvent, Map, Marker } from "leaflet";
 import SpacedUpdate from "../../../services/spaced_update.js";
 import { t } from "../../../services/i18n.js";
 import processNoteWithMarker, { processNoteWithGpxTrack } from "./markers.js";
-import froca from "../../../services/froca.js";
 import { hasTouchBar } from "../../../services/utils.js";
 import toast from "../../../services/toast.js";
-import { EventData } from "../../../components/app_context.js";
+import { CommandListenerData, EventData } from "../../../components/app_context.js";
 import dialog from "../../../services/dialog.js";
 import server from "../../../services/server.js";
 import attributes from "../../../services/attributes.js";
@@ -117,6 +116,7 @@ export default class GeoView extends ViewMode<MapData> {
     private map?: Map;
     private spacedUpdate: SpacedUpdate;
     private _state: State;
+    private ignoreNextZoomEvent?: boolean;
 
     private currentMarkerData: Record<string, Marker>;
     private currentTrackData: Record<string, GPX>;
@@ -168,6 +168,16 @@ export default class GeoView extends ViewMode<MapData> {
         map.on("click", (e) => this.#onMapClicked(e));
 
         this.#reloadMarkers();
+
+        if (hasTouchBar) {
+            map.on("zoom", () => {
+                if (!this.ignoreNextZoomEvent) {
+                    this.triggerCommand("refreshTouchBar");
+                }
+
+                this.ignoreNextZoomEvent = false;
+            });
+        }
     }
 
     async #restoreViewportAndZoom() {
@@ -301,6 +311,32 @@ export default class GeoView extends ViewMode<MapData> {
         }
 
         this.#changeState(State.Normal);
+    }
+
+    buildTouchBarCommand({ TouchBar }: CommandListenerData<"buildTouchBar">) {
+        const map = this.map;
+        const that = this;
+        if (!map) {
+            return;
+        }
+
+        return [
+            new TouchBar.TouchBarSlider({
+                label: "Zoom",
+                value: map.getZoom(),
+                minValue: map.getMinZoom(),
+                maxValue: map.getMaxZoom(),
+                change(newValue) {
+                    that.ignoreNextZoomEvent = true;
+                    map.setZoom(newValue);
+                },
+            }),
+            new TouchBar.TouchBarButton({
+                label: "New geo note",
+                click: () => this.triggerCommand("geoMapCreateChildNote"),
+                enabled: (this._state === State.Normal)
+            })
+        ];
     }
 
 }

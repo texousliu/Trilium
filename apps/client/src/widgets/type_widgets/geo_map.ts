@@ -25,7 +25,6 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
     private geoMapWidget: GeoMapWidget;
     private L!: Leaflet;
-    private ignoreNextZoomEvent?: boolean;
 
     static getType() {
         return "geoMap";
@@ -55,15 +54,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
         //     map.invalidateSize();
         // }, 100);
 
-        // if (hasTouchBar) {
-        //     map.on("zoom", () => {
-        //         if (!this.ignoreNextZoomEvent) {
-        //             this.triggerCommand("refreshTouchBar");
-        //         }
 
-        //         this.ignoreNextZoomEvent = false;
-        //     });
-        // }
     }
 
     async doRefresh(note: FNote) {
@@ -89,32 +80,6 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
     deleteFromMapEvent({ noteId }: EventData<"deleteFromMap">) {
         // this.moveMarker(noteId, null);
-    }
-
-    buildTouchBarCommand({ TouchBar }: CommandListenerData<"buildTouchBar">) {
-        const map = this.geoMapWidget.map;
-        const that = this;
-        if (!map) {
-            return;
-        }
-
-        return [
-            new TouchBar.TouchBarSlider({
-                label: "Zoom",
-                value: map.getZoom(),
-                minValue: map.getMinZoom(),
-                maxValue: map.getMaxZoom(),
-                change(newValue) {
-                    that.ignoreNextZoomEvent = true;
-                    map.setZoom(newValue);
-                },
-            }),
-            new TouchBar.TouchBarButton({
-                label: "New geo note",
-                click: () => this.triggerCommand("geoMapCreateChildNote", { ntxId: this.ntxId }),
-                enabled: (this._state === State.Normal)
-            })
-        ];
     }
 
 }
