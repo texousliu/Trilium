@@ -11,6 +11,7 @@ import dialog from "../../../services/dialog.js";
 import server from "../../../services/server.js";
 import attributes from "../../../services/attributes.js";
 import { moveMarker } from "./editing.js";
+import link from "../../../services/link.js";
 
 // TODO: Deduplicate
 interface CreateChildResponse {
@@ -311,6 +312,21 @@ export default class GeoView extends ViewMode<MapData> {
         }
 
         this.#changeState(State.Normal);
+    }
+
+    openGeoLocationEvent({ noteId, event }: EventData<"openGeoLocation">) {
+        const marker = this.currentMarkerData[noteId];
+        if (!marker) {
+            return;
+        }
+
+        const latLng = this.currentMarkerData[noteId].getLatLng();
+        const url = `geo:${latLng.lat},${latLng.lng}`;
+        link.goToLinkExt(event, url);
+    }
+
+    deleteFromMapEvent({ noteId }: EventData<"deleteFromMap">) {
+        moveMarker(noteId, null);
     }
 
     buildTouchBarCommand({ TouchBar }: CommandListenerData<"buildTouchBar">) {

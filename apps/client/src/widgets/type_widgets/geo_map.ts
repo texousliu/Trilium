@@ -49,10 +49,10 @@ export default class GeoMapTypeWidget extends TypeWidget {
     async #onMapInitialized(L: Leaflet) {
         // this.L = L;
 
-        // // This fixes an issue with the map appearing cut off at the beginning, due to the container not being properly attached
-        // setTimeout(() => {
-        //     map.invalidateSize();
-        // }, 100);
+        // This fixes an issue with the map appearing cut off at the beginning, due to the container not being properly attached
+        setTimeout(() => {
+            map.invalidateSize();
+        }, 100);
 
 
     }
@@ -61,25 +61,6 @@ export default class GeoMapTypeWidget extends TypeWidget {
         await this.geoMapWidget.refresh();
         // this.#restoreViewportAndZoom();
         // await this.#reloadMarkers();
-    }
-
-    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-
-    }
-
-    openGeoLocationEvent({ noteId, event }: EventData<"openGeoLocation">) {
-        const marker = this.currentMarkerData[noteId];
-        if (!marker) {
-            return;
-        }
-
-        const latLng = this.currentMarkerData[noteId].getLatLng();
-        const url = `geo:${latLng.lat},${latLng.lng}`;
-        link.goToLinkExt(event, url);
-    }
-
-    deleteFromMapEvent({ noteId }: EventData<"deleteFromMap">) {
-        // this.moveMarker(noteId, null);
     }
 
 }
