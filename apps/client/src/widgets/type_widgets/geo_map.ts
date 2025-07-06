@@ -127,34 +127,25 @@ export default class GeoMapTypeWidget extends TypeWidget {
     }
 
     async #onMapInitialized(L: Leaflet) {
-        this.L = L;
-        const map = this.geoMapWidget.map;
-        if (!map) {
-            throw new Error(t("geo-map.unable-to-load-map"));
-        }
+        // this.L = L;
 
-        // Restore markers.
-        await this.#reloadMarkers();
+        // // Restore markers.
+        // await this.#reloadMarkers();
 
-        // This fixes an issue with the map appearing cut off at the beginning, due to the container not being properly attached
-        setTimeout(() => {
-            map.invalidateSize();
-        }, 100);
+        // // This fixes an issue with the map appearing cut off at the beginning, due to the container not being properly attached
+        // setTimeout(() => {
+        //     map.invalidateSize();
+        // }, 100);
 
-        const updateFn = () => this.spacedUpdate.scheduleUpdate();
-        map.on("moveend", updateFn);
-        map.on("zoomend", updateFn);
-        map.on("click", (e) => this.#onMapClicked(e));
+        // if (hasTouchBar) {
+        //     map.on("zoom", () => {
+        //         if (!this.ignoreNextZoomEvent) {
+        //             this.triggerCommand("refreshTouchBar");
+        //         }
 
-        if (hasTouchBar) {
-            map.on("zoom", () => {
-                if (!this.ignoreNextZoomEvent) {
-                    this.triggerCommand("refreshTouchBar");
-                }
-
-                this.ignoreNextZoomEvent = false;
-            });
-        }
+        //         this.ignoreNextZoomEvent = false;
+        //     });
+        // }
     }
 
     async #reloadMarkers() {
@@ -309,24 +300,6 @@ export default class GeoMapTypeWidget extends TypeWidget {
     async moveMarker(noteId: string, latLng: LatLng | null) {
         const value = latLng ? [latLng.lat, latLng.lng].join(",") : "";
         await attributes.setLabel(noteId, LOCATION_ATTRIBUTE, value);
-    }
-
-    getData(): any {
-        const map = this.geoMapWidget.map;
-        if (!map) {
-            return;
-        }
-
-        const data: MapData = {
-            view: {
-                center: map.getBounds().getCenter(),
-                zoom: map.getZoom()
-            }
-        };
-
-        return {
-            content: JSON.stringify(data)
-        };
     }
 
     async geoMapCreateChildNoteEvent({ ntxId }: EventData<"geoMapCreateChildNote">) {

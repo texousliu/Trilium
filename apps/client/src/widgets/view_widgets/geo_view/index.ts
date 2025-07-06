@@ -1,6 +1,8 @@
 import ViewMode, { ViewModeArgs } from "../view_mode.js";
 import L from "leaflet";
 import type { LatLng, Map } from "leaflet";
+import SpacedUpdate from "../../../services/spaced_update.js";
+import { t } from "../../../services/i18n.js";
 
 const TPL = /*html*/`
 <div class="geo-view">
@@ -35,11 +37,13 @@ export default class GeoView extends ViewMode<MapData> {
     private $root: JQuery<HTMLElement>;
     private $container!: JQuery<HTMLElement>;
     private map?: Map;
+    private spacedUpdate: SpacedUpdate;
 
     constructor(args: ViewModeArgs) {
         super(args, "geoMap");
         this.$root = $(TPL);
         this.$container = this.$root.find(".geo-map-container");
+        this.spacedUpdate = new SpacedUpdate(() => this.onSave(), 5_000);
         args.$parent.append(this.$root);
     }
 
@@ -63,7 +67,17 @@ export default class GeoView extends ViewMode<MapData> {
     }
 
     async #onMapInitialized() {
+        const map = this.map;
+        if (!map) {
+            throw new Error(t("geo-map.unable-to-load-map"));
+        }
+
         this.#restoreViewportAndZoom();
+
+        const updateFn = () => this.spacedUpdate.scheduleUpdate();
+        map.on("moveend", updateFn);
+        map.on("zoomend", updateFn);
+        // map.on("click", (e) => this.#onMapClicked(e));
     }
 
     async #restoreViewportAndZoom() {
@@ -78,6 +92,21 @@ export default class GeoView extends ViewMode<MapData> {
         const center = parsedContent?.view?.center ?? DEFAULT_COORDINATES;
         const zoom = parsedContent?.view?.zoom ?? DEFAULT_ZOOM;
         map.setView(center, zoom);
+    }
+
+    private onSave() {
+        const map = this.map;
+        let data: MapData = {};
+        if (map) {
+            data = {
+                view: {
+                    center: map.getBounds().getCenter(),
+                    zoom: map.getZoom()
+                }
+            };
+        }
+
+        this.viewStorage.store(data);
     }
 
     get isFullHeight(): boolean {
