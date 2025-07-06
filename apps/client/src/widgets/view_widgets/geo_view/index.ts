@@ -216,13 +216,8 @@ export default class GeoView extends ViewMode<MapData> {
 
         // Add the new markers.
         this.currentMarkerData = {};
-        await froca.getNotes(this.args.noteIds);
-        for (const noteId of this.args.noteIds) {
-            const childNote = froca.getNoteFromCache(noteId);
-            if (!childNote) {
-                continue;
-            }
-
+        const notes = await this.parentNote.getChildNotes();
+        for (const childNote of notes) {
             if (childNote.mime === "application/gpx+xml") {
                 const track = await processNoteWithGpxTrack(this.map, childNote);
                 this.currentTrackData[childNote.noteId] = track;
