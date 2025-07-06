@@ -1,10 +1,11 @@
-import { LeafletMouseEvent } from "leaflet";
+import type { LatLng, LeafletMouseEvent } from "leaflet";
 import appContext from "../../../components/app_context.js";
 import type { ContextMenuEvent } from "../../../menus/context_menu.js";
 import contextMenu from "../../../menus/context_menu.js";
 import linkContextMenu from "../../../menus/link_context_menu.js";
 import { t } from "../../../services/i18n.js";
 import { createNewNote } from "./editing.js";
+import { copyTextWithToast } from "../../../services/clipboard_ext.js";
 
 export default function openContextMenu(noteId: string, e: ContextMenuEvent) {
     contextMenu.show({
@@ -38,6 +39,10 @@ export function openMapContextMenu(noteId: string, e: LeafletMouseEvent) {
         x: e.originalEvent.pageX,
         y: e.originalEvent.pageY,
         items: [
+            {
+                title: formatGeoLocation(e.latlng),
+                handler: () => copyTextWithToast(formatGeoLocation(e.latlng, 15))
+            },
             { title: t("geo-map-context.add-note"), command: "addNoteToMap", uiIcon: "bx bx-plus" }
         ],
         selectMenuItemHandler: ({ command }) => {
@@ -50,4 +55,8 @@ export function openMapContextMenu(noteId: string, e: LeafletMouseEvent) {
             }
         }
     });
+}
+
+function formatGeoLocation(latlng: LatLng, precision: number = 6) {
+    return `${latlng.lat.toFixed(precision)}, ${latlng.lng.toFixed(precision)}`;
 }
