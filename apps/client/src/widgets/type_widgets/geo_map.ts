@@ -108,15 +108,10 @@ export default class GeoMapTypeWidget extends TypeWidget {
                 type: "text"
             });
             attributes.setLabel(note.noteId, "iconClass", CHILD_NOTE_ICON);
-            this.moveMarker(note.noteId, e.latlng);
+            // this.moveMarker(note.noteId, e.latlng);
         }
 
         this.#changeState(State.Normal);
-    }
-
-    async moveMarker(noteId: string, latLng: LatLng | null) {
-        const value = latLng ? [latLng.lat, latLng.lng].join(",") : "";
-        await attributes.setLabel(noteId, LOCATION_ATTRIBUTE, value);
     }
 
     async geoMapCreateChildNoteEvent({ ntxId }: EventData<"geoMapCreateChildNote">) {
@@ -179,7 +174,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
     }
 
     deleteFromMapEvent({ noteId }: EventData<"deleteFromMap">) {
-        this.moveMarker(noteId, null);
+        // this.moveMarker(noteId, null);
     }
 
     buildTouchBarCommand({ TouchBar }: CommandListenerData<"buildTouchBar">) {

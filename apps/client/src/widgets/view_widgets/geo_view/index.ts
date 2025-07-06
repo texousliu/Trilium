@@ -87,7 +87,7 @@ interface MapData {
 
 const DEFAULT_COORDINATES: [number, number] = [3.878638227135724, 446.6630455551659];
 const DEFAULT_ZOOM = 2;
-const LOCATION_ATTRIBUTE = "geolocation";
+export const LOCATION_ATTRIBUTE = "geolocation";
 const CHILD_NOTE_ICON = "bx bx-pin";
 
 export default class GeoView extends ViewMode<MapData> {

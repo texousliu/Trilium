@@ -1,10 +1,11 @@
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerIconShadow from "leaflet/dist/images/marker-shadow.png";
-import { marker, latLng, divIcon, Map } from "leaflet";
+import { marker, latLng, divIcon, Map, type Marker } from "leaflet";
 import type FNote from "../../../entities/fnote.js";
 import note_tooltip from "../../../services/note_tooltip.js";
 import openContextMenu from "../../type_widgets/geo_map_context_menu.js";
 import server from "../../../services/server.js";
+import { moveMarker } from "./editing.js";
 
 let gpxLoaded = false;
 
@@ -20,7 +21,7 @@ export default function processNoteWithMarker(map: Map, note: FNote, location: s
     })
         .addTo(map)
         .on("moveend", (e) => {
-            // this.moveMarker(note.noteId, (e.target as Marker).getLatLng());
+            moveMarker(note.noteId, (e.target as Marker).getLatLng());
         });
     newMarker.on("mousedown", ({ originalEvent }) => {
         // Middle click to open in new tab
