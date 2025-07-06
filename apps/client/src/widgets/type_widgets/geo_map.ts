@@ -78,15 +78,9 @@ const TPL = /*html*/`\
 
 const LOCATION_ATTRIBUTE = "geolocation";
 const CHILD_NOTE_ICON = "bx bx-pin";
-const DEFAULT_COORDINATES: [number, number] = [3.878638227135724, 446.6630455551659];
-const DEFAULT_ZOOM = 2;
 
-interface MapData {
-    view?: {
-        center?: LatLng | [number, number];
-        zoom?: number;
-    };
-}
+
+
 
 // TODO: Deduplicate
 interface CreateChildResponse {
@@ -139,8 +133,6 @@ export default class GeoMapTypeWidget extends TypeWidget {
             throw new Error(t("geo-map.unable-to-load-map"));
         }
 
-        this.#restoreViewportAndZoom();
-
         // Restore markers.
         await this.#reloadMarkers();
 
@@ -163,24 +155,6 @@ export default class GeoMapTypeWidget extends TypeWidget {
                 this.ignoreNextZoomEvent = false;
             });
         }
-    }
-
-    async #restoreViewportAndZoom() {
-        const map = this.geoMapWidget.map;
-        if (!map || !this.note) {
-            return;
-        }
-        const blob = await this.note.getBlob();
-
-        let parsedContent: MapData = {};
-        if (blob && blob.content) {
-            parsedContent = JSON.parse(blob.content);
-        }
-
-        // Restore viewport position & zoom
-        const center = parsedContent.view?.center ?? DEFAULT_COORDINATES;
-        const zoom = parsedContent.view?.zoom ?? DEFAULT_ZOOM;
-        map.setView(center, zoom);
     }
 
     async #reloadMarkers() {
@@ -384,7 +358,7 @@ export default class GeoMapTypeWidget extends TypeWidget {
 
     async doRefresh(note: FNote) {
         await this.geoMapWidget.refresh();
-        this.#restoreViewportAndZoom();
+        // this.#restoreViewportAndZoom();
         await this.#reloadMarkers();
     }
 

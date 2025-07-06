@@ -49,7 +49,7 @@ export default abstract class ViewMode<T extends object> extends Component {
             return this._viewStorage;
         }
 
-        this._viewStorage = new ViewModeStorage(this.parentNote, this.viewType);
+        this._viewStorage = new ViewModeStorage<T>(this.parentNote, this.viewType);
         return this._viewStorage;
     }
 

@@ -38,6 +38,6 @@ export default class ViewModeStorage<T extends object> {
         }
 
         const attachmentData = await server.get<{ content: string } | null>(`attachments/${attachment.attachmentId}/blob`);
-        return JSON.parse(attachmentData?.content ?? "{}");
+        return JSON.parse(attachmentData?.content ?? "{}") as T;
     }
 }

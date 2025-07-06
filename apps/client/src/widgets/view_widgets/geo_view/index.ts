@@ -1,5 +1,6 @@
 import ViewMode, { ViewModeArgs } from "../view_mode.js";
 import L from "leaflet";
+import type { LatLng, Map } from "leaflet";
 
 const TPL = /*html*/`
 <div class="geo-view">
@@ -19,11 +20,21 @@ const TPL = /*html*/`
     <div class="geo-map-container"></div>
 </div>`;
 
-export default class GeoView extends ViewMode<{}> {
+interface MapData {
+    view?: {
+        center?: LatLng | [number, number];
+        zoom?: number;
+    };
+}
+
+const DEFAULT_COORDINATES: [number, number] = [3.878638227135724, 446.6630455551659];
+const DEFAULT_ZOOM = 2;
+
+export default class GeoView extends ViewMode<MapData> {
 
     private $root: JQuery<HTMLElement>;
     private $container!: JQuery<HTMLElement>;
-    private map?: L.Map;
+    private map?: Map;
 
     constructor(args: ViewModeArgs) {
         super(args, "geoMap");
@@ -47,6 +58,26 @@ export default class GeoView extends ViewMode<{}> {
         }).addTo(map);
 
         this.map = map;
+
+        this.#onMapInitialized();
+    }
+
+    async #onMapInitialized() {
+        this.#restoreViewportAndZoom();
+    }
+
+    async #restoreViewportAndZoom() {
+        const map = this.map;
+        if (!map) {
+            return;
+        }
+
+        const parsedContent = await this.viewStorage.restore();
+
+        // Restore viewport position & zoom
+        const center = parsedContent?.view?.center ?? DEFAULT_COORDINATES;
+        const zoom = parsedContent?.view?.zoom ?? DEFAULT_ZOOM;
+        map.setView(center, zoom);
     }
 
     get isFullHeight(): boolean {
