@@ -248,7 +248,7 @@ function register(app: express.Application) {
     route(GET, "/api/setup/status", [], setupApiRoute.getStatus, apiResultHandler);
     asyncRoute(PST, "/api/setup/new-document", [auth.checkAppNotInitialized], setupApiRoute.setupNewDocument, apiResultHandler);
     asyncRoute(PST, "/api/setup/sync-from-server", [auth.checkAppNotInitialized], setupApiRoute.setupSyncFromServer, apiResultHandler);
-    route(GET, "/api/setup/sync-seed", [auth.checkCredentials], setupApiRoute.getSyncSeed, apiResultHandler);
+    route(GET, "/api/setup/sync-seed", [loginRateLimiter, auth.checkCredentials], setupApiRoute.getSyncSeed, apiResultHandler);
     asyncRoute(PST, "/api/setup/sync-seed", [auth.checkAppNotInitialized], setupApiRoute.saveSyncSeed, apiResultHandler);
 
     apiRoute(GET, "/api/autocomplete", autocompleteApiRoute.getAutocomplete);
@@ -263,7 +263,7 @@ function register(app: express.Application) {
     apiRoute(PST, "/api/bulk-action/execute", bulkActionRoute.execute);
     apiRoute(PST, "/api/bulk-action/affected-notes", bulkActionRoute.getAffectedNoteCount);
 
-    route(PST, "/api/login/sync", [], loginApiRoute.loginSync, apiResultHandler);
+    route(PST, "/api/login/sync", [loginRateLimiter], loginApiRoute.loginSync, apiResultHandler);
     // this is for entering protected mode so user has to be already logged-in (that's the reason we don't require username)
     apiRoute(PST, "/api/login/protected", loginApiRoute.loginToProtectedSession);
     apiRoute(PST, "/api/login/protected/touch", loginApiRoute.touchProtectedSession);
