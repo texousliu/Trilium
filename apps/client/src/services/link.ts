@@ -277,13 +277,13 @@ function goToLink(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent) {
     return goToLinkExt(evt, hrefLink, $link);
 }
 
-function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent | React.PointerEvent<HTMLCanvasElement>, hrefLink: string | undefined, $link?: JQuery<HTMLElement> | null) {
+function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent | React.PointerEvent<HTMLCanvasElement> | null, hrefLink: string | undefined, $link?: JQuery<HTMLElement> | null) {
     if (hrefLink?.startsWith("data:")) {
         return true;
     }
 
-    evt.preventDefault();
-    evt.stopPropagation();
+    evt?.preventDefault();
+    evt?.stopPropagation();
 
     if (hrefLink && hrefLink.startsWith("#") && !hrefLink.startsWith("#root/") && $link) {
         if (handleAnchor(hrefLink, $link)) {
@@ -293,14 +293,14 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
 
     const { notePath, viewScope } = parseNavigationStateFromUrl(hrefLink);
 
-    const ctrlKey = utils.isCtrlKey(evt);
-    const shiftKey = evt.shiftKey;
-    const isLeftClick = "which" in evt && evt.which === 1;
-    const isMiddleClick = "which" in evt && evt.which === 2;
+    const ctrlKey = evt && utils.isCtrlKey(evt);
+    const shiftKey = evt?.shiftKey;
+    const isLeftClick = !evt || ("which" in evt && evt.which === 1);
+    const isMiddleClick = evt && "which" in evt && evt.which === 2;
     const targetIsBlank = ($link?.attr("target") === "_blank");
     const openInNewTab = (isLeftClick && ctrlKey) || isMiddleClick || targetIsBlank;
     const activate = (isLeftClick && ctrlKey && shiftKey) || (isMiddleClick && shiftKey);
-    const openInNewWindow = isLeftClick && evt.shiftKey && !ctrlKey;
+    const openInNewWindow = isLeftClick && evt?.shiftKey && !ctrlKey;
 
     if (notePath) {
         if (openInNewWindow) {
@@ -311,7 +311,7 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
                 viewScope
             });
         } else if (isLeftClick) {
-            const ntxId = $(evt.target as any)
+            const ntxId = $(evt?.target as any)
                 .closest("[data-ntx-id]")
                 .attr("data-ntx-id");
 

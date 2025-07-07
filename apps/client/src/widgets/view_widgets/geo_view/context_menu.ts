@@ -5,6 +5,7 @@ import linkContextMenu from "../../../menus/link_context_menu.js";
 import { t } from "../../../services/i18n.js";
 import { createNewNote } from "./editing.js";
 import { copyTextWithToast } from "../../../services/clipboard_ext.js";
+import link from "../../../services/link.js";
 
 export default function openContextMenu(noteId: string, e: LeafletMouseEvent) {
     contextMenu.show({
@@ -13,18 +14,12 @@ export default function openContextMenu(noteId: string, e: LeafletMouseEvent) {
         items: [
             ...buildGeoLocationItem(e),
             ...linkContextMenu.getItems(),
-            { title: t("geo-map-context.open-location"), command: "openGeoLocation", uiIcon: "bx bx-map-alt" },
             { title: "----" },
             { title: t("geo-map-context.remove-from-map"), command: "deleteFromMap", uiIcon: "bx bx-trash" }
         ],
         selectMenuItemHandler: ({ command }, e) => {
             if (command === "deleteFromMap") {
                 appContext.triggerCommand(command, { noteId });
-                return;
-            }
-
-            if (command === "openGeoLocation") {
-                appContext.triggerCommand(command, { noteId, event: e });
                 return;
             }
 
@@ -48,7 +43,7 @@ export function openMapContextMenu(noteId: string, e: LeafletMouseEvent) {
                     createNewNote(noteId, e);
                     break;
                 default:
-                    appContext.triggerCommand(command);
+                    return;
             }
         }
     });
@@ -62,7 +57,13 @@ function buildGeoLocationItem(e: LeafletMouseEvent) {
     return [
         {
             title: formatGeoLocation(e.latlng),
+            uiIcon: "bx bx-current-location",
             handler: () => copyTextWithToast(formatGeoLocation(e.latlng, 15))
+        },
+        {
+            title: t("geo-map-context.open-location"),
+            uiIcon: "bx bx-map-alt",
+            handler: () => link.goToLinkExt(null, `geo:${e.latlng.lat},${e.latlng.lng}`)
         },
         {
             title: "----"
