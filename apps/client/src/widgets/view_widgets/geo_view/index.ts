@@ -7,10 +7,8 @@ import processNoteWithMarker, { processNoteWithGpxTrack } from "./markers.js";
 import { hasTouchBar } from "../../../services/utils.js";
 import toast from "../../../services/toast.js";
 import { CommandListenerData, EventData } from "../../../components/app_context.js";
-import { createNewNote, moveMarker } from "./editing.js";
-import link from "../../../services/link.js";
+import { createNewNote, moveMarker, setupDragging } from "./editing.js";
 import { openMapContextMenu } from "./context_menu.js";
-import setupDragging from "./dragging.js";
 
 const TPL = /*html*/`
 <div class="geo-view">
