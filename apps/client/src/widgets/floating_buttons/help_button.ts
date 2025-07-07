@@ -17,7 +17,6 @@ export const byNoteType: Record<Exclude<NoteType, "book">, string | null> = {
     contentWidget: null,
     doc: null,
     file: null,
-    geoMap: "81SGnPGMk7Xc",
     image: null,
     launcher: null,
     mermaid: null,
@@ -35,7 +34,8 @@ export const byBookType: Record<ViewTypeOptions, string | null> = {
     list: null,
     grid: null,
     calendar: "xWbu3jpNWapp",
-    table: "2FvYrpmOXm29"
+    table: "2FvYrpmOXm29",
+    geoMap: "81SGnPGMk7Xc"
 };
 
 export default class ContextualHelpButton extends NoteContextAwareWidget {

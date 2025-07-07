@@ -1,11 +1,12 @@
 import type FNote from "../entities/fnote.js";
 import CalendarView from "../widgets/view_widgets/calendar_view.js";
+import GeoView from "../widgets/view_widgets/geo_view/index.js";
 import ListOrGridView from "../widgets/view_widgets/list_or_grid_view.js";
 import TableView from "../widgets/view_widgets/table_view/index.js";
 import type { ViewModeArgs } from "../widgets/view_widgets/view_mode.js";
 import type ViewMode from "../widgets/view_widgets/view_mode.js";
 
-export type ViewTypeOptions = "list" | "grid" | "calendar" | "table";
+export type ViewTypeOptions = "list" | "grid" | "calendar" | "table" | "geoMap";
 
 export default class NoteListRenderer {
 
@@ -26,6 +27,9 @@ export default class NoteListRenderer {
             case "table":
                 this.viewMode = new TableView(args);
                 break;
+            case "geoMap":
+                this.viewMode = new GeoView(args);
+                break;
             default:
                 this.viewMode = null;
         }
@@ -34,7 +38,7 @@ export default class NoteListRenderer {
     #getViewType(parentNote: FNote): ViewTypeOptions {
         const viewType = parentNote.getLabelValue("viewType");
 
-        if (!["list", "grid", "calendar", "table"].includes(viewType || "")) {
+        if (!["list", "grid", "calendar", "table", "geoMap"].includes(viewType || "")) {
             // when not explicitly set, decide based on the note type
             return parentNote.type === "search" ? "list" : "grid";
         } else {

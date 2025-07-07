@@ -3177,6 +3177,27 @@
                                             "value": "bx bx-edit-alt",
                                             "isInheritable": false,
                                             "position": 40
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "_optionsTextNotes",
+                                            "isInheritable": false,
+                                            "position": 80
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "_optionsCodeNotes",
+                                            "isInheritable": false,
+                                            "position": 90
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "81SGnPGMk7Xc",
+                                            "isInheritable": false,
+                                            "position": 100
                                         }
                                     ],
                                     "format": "markdown",
@@ -3431,7 +3452,7 @@
                                                 "0ESUbbAxVnoK",
                                                 "2FvYrpmOXm29"
                                             ],
-                                            "title": "Table",
+                                            "title": "Table View",
                                             "notePosition": 20,
                                             "prefix": null,
                                             "isExpanded": false,
@@ -3439,30 +3460,30 @@
                                             "mime": "text/html",
                                             "attributes": [
                                                 {
-                                                    "type": "label",
-                                                    "name": "iconClass",
-                                                    "value": "bx bx-table",
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "OFXdgB2nNk1F",
                                                     "isInheritable": false,
                                                     "position": 10
                                                 },
                                                 {
                                                     "type": "relation",
                                                     "name": "internalLink",
-                                                    "value": "OFXdgB2nNk1F",
+                                                    "value": "m1lbrzyKDaRB",
                                                     "isInheritable": false,
                                                     "position": 20
                                                 },
                                                 {
                                                     "type": "relation",
                                                     "name": "internalLink",
-                                                    "value": "oPVyFC7WL2Lp",
+                                                    "value": "eIg8jdvaoNNd",
                                                     "isInheritable": false,
                                                     "position": 30
                                                 },
                                                 {
                                                     "type": "relation",
                                                     "name": "internalLink",
-                                                    "value": "m1lbrzyKDaRB",
+                                                    "value": "oPVyFC7WL2Lp",
                                                     "isInheritable": false,
                                                     "position": 40
                                                 },
@@ -3481,15 +3502,15 @@
                                                     "position": 60
                                                 },
                                                 {
-                                                    "type": "relation",
-                                                    "name": "internalLink",
-                                                    "value": "eIg8jdvaoNNd",
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bx-table",
                                                     "isInheritable": false,
-                                                    "position": 70
+                                                    "position": 10
                                                 }
                                             ],
                                             "format": "markdown",
-                                            "dataFileName": "Table.md",
+                                            "dataFileName": "Table View.md",
                                             "attachments": [
                                                 {
                                                     "attachmentId": "vJYUG9fLQ2Pd",
@@ -3497,7 +3518,232 @@
                                                     "role": "image",
                                                     "mime": "image/png",
                                                     "position": 10,
-                                                    "dataFileName": "Table_image.png"
+                                                    "dataFileName": "Table View_image.png"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "81SGnPGMk7Xc",
+                                            "notePath": [
+                                                "pOsGYCXsbNQG",
+                                                "gh7bpGYxajRS",
+                                                "BFs8mudNFgCS",
+                                                "0ESUbbAxVnoK",
+                                                "81SGnPGMk7Xc"
+                                            ],
+                                            "title": "Geo Map View",
+                                            "notePosition": 40,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "XpOYSgsLkTJy",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "label",
+                                                    "name": "iconClass",
+                                                    "value": "bx bx-map-alt",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "oPVyFC7WL2Lp",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "IakOLONlIfGI",
+                                                    "isInheritable": false,
+                                                    "position": 30
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "KSZ04uQ2D1St",
+                                                    "isInheritable": false,
+                                                    "position": 40
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "0ESUbbAxVnoK",
+                                                    "isInheritable": false,
+                                                    "position": 50
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "Geo Map View.md",
+                                            "attachments": [
+                                                {
+                                                    "attachmentId": "1f07O0Z25ZRr",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "Geo Map View_image.png"
+                                                },
+                                                {
+                                                    "attachmentId": "3oh61qhNLu7D",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "1_Geo Map View_image.png"
+                                                },
+                                                {
+                                                    "attachmentId": "aCSNn9QlgHFi",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "2_Geo Map View_image.png"
+                                                },
+                                                {
+                                                    "attachmentId": "aCuXZY7WV4li",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "3_Geo Map View_image.png"
+                                                },
+                                                {
+                                                    "attachmentId": "agH6yREFgsoU",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "4_Geo Map View_image.png"
+                                                },
+                                                {
+                                                    "attachmentId": "AHyDUM6R5HeG",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "5_Geo Map View_image.png"
+                                                },
+                                                {
+                                                    "attachmentId": "CcjWLhE3KKfv",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "6_Geo Map View_image.png"
+                                                },
+                                                {
+                                                    "attachmentId": "fQy8R1vxKhwN",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "7_Geo Map View_image.png"
+                                                },
+                                                {
+                                                    "attachmentId": "gJ4Yz80jxcbn",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "8_Geo Map View_image.png"
+                                                },
+                                                {
+                                                    "attachmentId": "I39BinT2gsN9",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "9_Geo Map View_image.png"
+                                                },
+                                                {
+                                                    "attachmentId": "IeXU8SLZU7Oz",
+                                                    "title": "image.jpg",
+                                                    "role": "image",
+                                                    "mime": "image/jpg",
+                                                    "position": 10,
+                                                    "dataFileName": "Geo Map View_image.jpg"
+                                                },
+                                                {
+                                                    "attachmentId": "Mb9kRm63MxjE",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "10_Geo Map View_image.png"
+                                                },
+                                                {
+                                                    "attachmentId": "Mx2xwNIk76ZS",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "11_Geo Map View_image.png"
+                                                },
+                                                {
+                                                    "attachmentId": "oaahbsMRbqd2",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "12_Geo Map View_image.png"
+                                                },
+                                                {
+                                                    "attachmentId": "pGf1p74KKGU4",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/jpg",
+                                                    "position": 10,
+                                                    "dataFileName": "13_Geo Map View_image.png"
+                                                },
+                                                {
+                                                    "attachmentId": "tfa1TRUatWEh",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "14_Geo Map View_image.png"
+                                                },
+                                                {
+                                                    "attachmentId": "tuNZ7Uk9WfX1",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "15_Geo Map View_image.png"
+                                                },
+                                                {
+                                                    "attachmentId": "x6yBLIsY2LSv",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "16_Geo Map View_image.png"
+                                                },
+                                                {
+                                                    "attachmentId": "yJMyBRYA3Kwi",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "17_Geo Map View_image.png"
+                                                },
+                                                {
+                                                    "attachmentId": "ZvTlu9WMd37z",
+                                                    "title": "image.png",
+                                                    "role": "image",
+                                                    "mime": "image/png",
+                                                    "position": 10,
+                                                    "dataFileName": "18_Geo Map View_image.png"
                                                 }
                                             ]
                                         }
@@ -7934,201 +8180,6 @@
                                     "mime": "image/png",
                                     "position": 10,
                                     "dataFileName": "Mind Map_image.png"
-                                }
-                            ]
-                        },
-                        {
-                            "isClone": false,
-                            "noteId": "81SGnPGMk7Xc",
-                            "notePath": [
-                                "pOsGYCXsbNQG",
-                                "KSZ04uQ2D1St",
-                                "81SGnPGMk7Xc"
-                            ],
-                            "title": "Geo Map",
-                            "notePosition": 200,
-                            "prefix": null,
-                            "isExpanded": false,
-                            "type": "text",
-                            "mime": "text/html",
-                            "attributes": [
-                                {
-                                    "type": "relation",
-                                    "name": "internalLink",
-                                    "value": "XpOYSgsLkTJy",
-                                    "isInheritable": false,
-                                    "position": 10
-                                },
-                                {
-                                    "type": "label",
-                                    "name": "iconClass",
-                                    "value": "bx bx-map-alt",
-                                    "isInheritable": false,
-                                    "position": 10
-                                }
-                            ],
-                            "format": "markdown",
-                            "dataFileName": "Geo Map.md",
-                            "attachments": [
-                                {
-                                    "attachmentId": "1f07O0Z25ZRr",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "Geo Map_image.png"
-                                },
-                                {
-                                    "attachmentId": "3oh61qhNLu7D",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "1_Geo Map_image.png"
-                                },
-                                {
-                                    "attachmentId": "aCSNn9QlgHFi",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "2_Geo Map_image.png"
-                                },
-                                {
-                                    "attachmentId": "aCuXZY7WV4li",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "3_Geo Map_image.png"
-                                },
-                                {
-                                    "attachmentId": "agH6yREFgsoU",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "4_Geo Map_image.png"
-                                },
-                                {
-                                    "attachmentId": "AHyDUM6R5HeG",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "5_Geo Map_image.png"
-                                },
-                                {
-                                    "attachmentId": "CcjWLhE3KKfv",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "6_Geo Map_image.png"
-                                },
-                                {
-                                    "attachmentId": "DapDey8gMiFc",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "7_Geo Map_image.png"
-                                },
-                                {
-                                    "attachmentId": "fQy8R1vxKhwN",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "8_Geo Map_image.png"
-                                },
-                                {
-                                    "attachmentId": "gJ4Yz80jxcbn",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "9_Geo Map_image.png"
-                                },
-                                {
-                                    "attachmentId": "I39BinT2gsN9",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "10_Geo Map_image.png"
-                                },
-                                {
-                                    "attachmentId": "IeXU8SLZU7Oz",
-                                    "title": "image.jpg",
-                                    "role": "image",
-                                    "mime": "image/jpg",
-                                    "position": 10,
-                                    "dataFileName": "Geo Map_image.jpg"
-                                },
-                                {
-                                    "attachmentId": "Mb9kRm63MxjE",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "11_Geo Map_image.png"
-                                },
-                                {
-                                    "attachmentId": "Mx2xwNIk76ZS",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "12_Geo Map_image.png"
-                                },
-                                {
-                                    "attachmentId": "oaahbsMRbqd2",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "13_Geo Map_image.png"
-                                },
-                                {
-                                    "attachmentId": "pGf1p74KKGU4",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/jpg",
-                                    "position": 10,
-                                    "dataFileName": "14_Geo Map_image.png"
-                                },
-                                {
-                                    "attachmentId": "tfa1TRUatWEh",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "15_Geo Map_image.png"
-                                },
-                                {
-                                    "attachmentId": "x6yBLIsY2LSv",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "16_Geo Map_image.png"
-                                },
-                                {
-                                    "attachmentId": "yJMyBRYA3Kwi",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "17_Geo Map_image.png"
-                                },
-                                {
-                                    "attachmentId": "ZvTlu9WMd37z",
-                                    "title": "image.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "18_Geo Map_image.png"
                                 }
                             ]
                         },

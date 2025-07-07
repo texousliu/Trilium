@@ -261,7 +261,6 @@ export type CommandMappings = {
 
     // Geomap
     deleteFromMap: { noteId: string };
-    openGeoLocation: { noteId: string; event: JQuery.MouseDownEvent };
 
     toggleZenMode: CommandData;
 

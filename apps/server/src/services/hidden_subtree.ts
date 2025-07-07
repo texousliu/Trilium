@@ -380,7 +380,7 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
                 type: attr.type,
                 name: attr.name,
                 value: attr.value,
-                isInheritable: false
+                isInheritable: attr.isInheritable
             }).save();
         } else if (attr.name === "docName" || (existingAttribute.noteId.startsWith("_help") && attr.name === "iconClass")) {
             if (existingAttribute.value !== attr.value) {

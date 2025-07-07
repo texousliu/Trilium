@@ -64,7 +64,7 @@ export default class NoteWrapperWidget extends FlexContainer<BasicWidget> {
     }
 
     #isFullWidthNote(note: FNote) {
-        if (["image", "mermaid", "book", "render", "canvas", "webView", "mindMap", "geoMap"].includes(note.type)) {
+        if (["image", "mermaid", "book", "render", "canvas", "webView", "mindMap"].includes(note.type)) {
             return true;
         }
 
