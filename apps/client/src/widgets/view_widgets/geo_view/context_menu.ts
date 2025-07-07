@@ -47,7 +47,11 @@ export function openMapContextMenu(noteId: string, e: LeafletMouseEvent, isEdita
         items = [
             ...items,
             { title: "----" },
-            { title: t("geo-map-context.add-note"), command: "addNoteToMap", uiIcon: "bx bx-plus" }
+            {
+                title: t("geo-map-context.add-note"),
+                handler: () => createNewNote(noteId, e),
+                uiIcon: "bx bx-plus"
+            }
         ]
     }
 
@@ -55,14 +59,8 @@ export function openMapContextMenu(noteId: string, e: LeafletMouseEvent, isEdita
         x: e.originalEvent.pageX,
         y: e.originalEvent.pageY,
         items,
-        selectMenuItemHandler: ({ command }) => {
-            switch (command) {
-                case "addNoteToMap":
-                    createNewNote(noteId, e);
-                    break;
-                default:
-                    return;
-            }
+        selectMenuItemHandler: () => {
+            // Nothing to do, as the commands handle themselves.
         }
     });
 }

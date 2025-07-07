@@ -6,6 +6,8 @@ import note_tooltip from "../../../services/note_tooltip.js";
 import openContextMenu from "./context_menu.js";
 import server from "../../../services/server.js";
 import { moveMarker } from "./editing.js";
+import appContext from "../../../components/app_context.js";
+import L from "leaflet";
 
 let gpxLoaded = false;
 
@@ -29,7 +31,7 @@ export default function processNoteWithMarker(map: Map, note: FNote, location: s
     newMarker.on("mousedown", ({ originalEvent }) => {
         // Middle click to open in new tab
         if (originalEvent.button === 1) {
-            const hoistedNoteId = this.hoistedNoteId;
+            const hoistedNoteId = appContext.tabManager.getActiveContext()?.hoistedNoteId;
             //@ts-ignore, fix once tab manager is ported.
             appContext.tabManager.openInNewTab(note.noteId, hoistedNoteId);
             return true;
@@ -51,7 +53,7 @@ export default function processNoteWithMarker(map: Map, note: FNote, location: s
 
 export async function processNoteWithGpxTrack(map: Map, note: FNote) {
     if (!gpxLoaded) {
-        await import("leaflet-gpx");
+        const GPX = await import("leaflet-gpx");
         gpxLoaded = true;
     }
 
