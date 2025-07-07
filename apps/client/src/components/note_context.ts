@@ -326,7 +326,7 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
         }
 
         // Some book types must always display a note list, even if no children.
-        if (["calendar", "table"].includes(note.getLabelValue("viewType") ?? "")) {
+        if (["calendar", "table", "geoMap"].includes(note.getLabelValue("viewType") ?? "")) {
             return true;
         }
 

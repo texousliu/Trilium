@@ -761,7 +761,8 @@
     "book_properties": "Book Properties",
     "invalid_view_type": "Invalid view type '{{type}}'",
     "calendar": "Calendar",
-    "table": "Table"
+    "table": "Table",
+    "geo-map": "Geo Map"
   },
   "edited_notes": {
     "no_edited_notes_found": "No edited notes on this day yet...",
@@ -1627,7 +1628,8 @@
     "geo-map": "Geo Map",
     "beta-feature": "Beta",
     "ai-chat": "AI Chat",
-    "task-list": "Task List"
+    "task-list": "Task List",
+    "new-feature": "New"
   },
   "protect_note": {
     "toggle-on": "Protect the note",
@@ -1858,7 +1860,8 @@
   },
   "geo-map-context": {
     "open-location": "Open location",
-    "remove-from-map": "Remove from map"
+    "remove-from-map": "Remove from map",
+    "add-note": "Add a marker at this location"
   },
   "help-button": {
     "title": "Open the relevant help page"

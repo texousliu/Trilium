@@ -70,6 +70,19 @@ describe("processNoteContent", () => {
         expect(content).toContain(`<a class="reference-link" href="#root/${shopNote.noteId}`);
         expect(content).toContain(`<img src="api/images/${bananaNote!.noteId}/banana.jpeg`);
     });
+
+    it("can import old geomap notes", async () => {
+        const { importedNote } = await testImport("geomap.zip");
+        expect(importedNote.type).toBe("book");
+        expect(importedNote.mime).toBe("");
+        expect(importedNote.getRelationValue("template")).toBe("_template_geo_map");
+
+        const attachment = importedNote.getAttachmentsByRole("viewConfig")[0];
+        expect(attachment.title).toBe("geoMap.json");
+        expect(attachment.mime).toBe("application/json");
+        const content = attachment.getContent();
+        expect(content).toStrictEqual(`{"view":{"center":{"lat":49.19598332223546,"lng":-2.1414576506668808},"zoom":12}}`);
+    });
 });
 
 function getNoteByTitlePath(parentNote: BNote, ...titlePath: string[]) {
