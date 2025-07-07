@@ -159,7 +159,7 @@ export default class GeoView extends ViewMode<MapData> {
         map.on("zoomend", updateFn);
         map.on("click", (e) => this.#onMapClicked(e))
         map.on("contextmenu", (e) => openMapContextMenu(this.parentNote.noteId, e));
-        setupDragging(this.$container, map);
+        setupDragging(this.$container, map, this.parentNote.noteId);
 
         this.#reloadMarkers();
 
