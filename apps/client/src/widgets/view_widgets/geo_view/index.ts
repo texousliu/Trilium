@@ -8,18 +8,8 @@ import processNoteWithMarker, { processNoteWithGpxTrack } from "./markers.js";
 import { hasTouchBar } from "../../../services/utils.js";
 import toast from "../../../services/toast.js";
 import { CommandListenerData, EventData } from "../../../components/app_context.js";
-import dialog from "../../../services/dialog.js";
-import server from "../../../services/server.js";
-import attributes from "../../../services/attributes.js";
-import { moveMarker } from "./editing.js";
-import link from "../../../services/link.js";
-
-// TODO: Deduplicate
-interface CreateChildResponse {
-    note: {
-        noteId: string;
-    };
-}
+import { createNewNote, moveMarker, setupDragging } from "./editing.js";
+import { openMapContextMenu } from "./context_menu.js";
 
 const TPL = /*html*/`
 <div class="geo-view">
@@ -103,7 +93,6 @@ interface MapData {
 const DEFAULT_COORDINATES: [number, number] = [3.878638227135724, 446.6630455551659];
 const DEFAULT_ZOOM = 2;
 export const LOCATION_ATTRIBUTE = "geolocation";
-const CHILD_NOTE_ICON = "bx bx-pin";
 
 enum State {
     Normal,
@@ -162,10 +151,16 @@ export default class GeoView extends ViewMode<MapData> {
 
         this.#restoreViewportAndZoom();
 
+        const isEditable = !this.isReadOnly;
         const updateFn = () => this.spacedUpdate.scheduleUpdate();
         map.on("moveend", updateFn);
         map.on("zoomend", updateFn);
-        map.on("click", (e) => this.#onMapClicked(e));
+        map.on("click", (e) => this.#onMapClicked(e))
+        map.on("contextmenu", (e) => openMapContextMenu(this.parentNote.noteId, e, isEditable));
+
+        if (isEditable) {
+            setupDragging(this.$container, map, this.parentNote.noteId);
+        }
 
         this.#reloadMarkers();
 
@@ -227,6 +222,7 @@ export default class GeoView extends ViewMode<MapData> {
         // Add the new markers.
         this.currentMarkerData = {};
         const notes = await this.parentNote.getChildNotes();
+        const draggable = !this.isReadOnly;
         for (const childNote of notes) {
             if (childNote.mime === "application/gpx+xml") {
                 const track = await processNoteWithGpxTrack(this.map, childNote);
@@ -236,7 +232,7 @@ export default class GeoView extends ViewMode<MapData> {
 
             const latLng = childNote.getAttributeValue("label", LOCATION_ATTRIBUTE);
             if (latLng) {
-                const marker = processNoteWithMarker(this.map, childNote, latLng);
+                const marker = processNoteWithMarker(this.map, childNote, latLng, draggable);
                 this.currentMarkerData[childNote.noteId] = marker;
             }
         }
@@ -298,30 +294,8 @@ export default class GeoView extends ViewMode<MapData> {
         }
 
         toast.closePersistent("geo-new-note");
-        const title = await dialog.prompt({ message: t("relation_map.enter_title_of_new_note"), defaultValue: t("relation_map.default_new_note_title") });
-
-        if (title?.trim()) {
-            const { note } = await server.post<CreateChildResponse>(`notes/${this.parentNote.noteId}/children?target=into`, {
-                title,
-                content: "",
-                type: "text"
-            });
-            attributes.setLabel(note.noteId, "iconClass", CHILD_NOTE_ICON);
-            moveMarker(note.noteId, e.latlng);
-        }
-
+        await createNewNote(this.parentNote.noteId, e);
         this.#changeState(State.Normal);
-    }
-
-    openGeoLocationEvent({ noteId, event }: EventData<"openGeoLocation">) {
-        const marker = this.currentMarkerData[noteId];
-        if (!marker) {
-            return;
-        }
-
-        const latLng = this.currentMarkerData[noteId].getLatLng();
-        const url = `geo:${latLng.lat},${latLng.lng}`;
-        link.goToLinkExt(event, url);
     }
 
     deleteFromMapEvent({ noteId }: EventData<"deleteFromMap">) {

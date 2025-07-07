@@ -5,34 +5,39 @@ import type FNote from "../../../entities/fnote.js";
 import openContextMenu from "./context_menu.js";
 import server from "../../../services/server.js";
 import { moveMarker } from "./editing.js";
+import appContext from "../../../components/app_context.js";
+import L from "leaflet";
 
 let gpxLoaded = false;
 
-export default function processNoteWithMarker(map: Map, note: FNote, location: string) {
+export default function processNoteWithMarker(map: Map, note: FNote, location: string, isEditable: boolean) {
     const [lat, lng] = location.split(",", 2).map((el) => parseFloat(el));
     const icon = buildIcon(note.getIcon(), note.getColorClass(), note.title, note.noteId);
 
     const newMarker = marker(latLng(lat, lng), {
         icon,
-        draggable: true,
+        draggable: isEditable,
         autoPan: true,
         autoPanSpeed: 5
-    })
-        .addTo(map)
-        .on("moveend", (e) => {
+    }).addTo(map);
+
+    if (isEditable) {
+        newMarker.on("moveend", (e) => {
             moveMarker(note.noteId, (e.target as Marker).getLatLng());
         });
+    }
+
     newMarker.on("mousedown", ({ originalEvent }) => {
         // Middle click to open in new tab
         if (originalEvent.button === 1) {
-            const hoistedNoteId = this.hoistedNoteId;
+            const hoistedNoteId = appContext.tabManager.getActiveContext()?.hoistedNoteId;
             //@ts-ignore, fix once tab manager is ported.
             appContext.tabManager.openInNewTab(note.noteId, hoistedNoteId);
             return true;
         }
     });
     newMarker.on("contextmenu", (e) => {
-        openContextMenu(note.noteId, e.originalEvent);
+        openContextMenu(note.noteId, e, isEditable);
     });
 
     return newMarker;
@@ -40,7 +45,7 @@ export default function processNoteWithMarker(map: Map, note: FNote, location: s
 
 export async function processNoteWithGpxTrack(map: Map, note: FNote) {
     if (!gpxLoaded) {
-        await import("leaflet-gpx");
+        const GPX = await import("leaflet-gpx");
         gpxLoaded = true;
     }
 
