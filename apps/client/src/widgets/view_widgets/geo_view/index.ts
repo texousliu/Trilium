@@ -152,12 +152,16 @@ export default class GeoView extends ViewMode<MapData> {
 
         this.#restoreViewportAndZoom();
 
+        const isEditable = !this.isReadOnly;
         const updateFn = () => this.spacedUpdate.scheduleUpdate();
         map.on("moveend", updateFn);
         map.on("zoomend", updateFn);
         map.on("click", (e) => this.#onMapClicked(e))
-        map.on("contextmenu", (e) => openMapContextMenu(this.parentNote.noteId, e));
-        setupDragging(this.$container, map, this.parentNote.noteId);
+        map.on("contextmenu", (e) => openMapContextMenu(this.parentNote.noteId, e, isEditable));
+
+        if (isEditable) {
+            setupDragging(this.$container, map, this.parentNote.noteId);
+        }
 
         this.#reloadMarkers();
 
@@ -219,6 +223,7 @@ export default class GeoView extends ViewMode<MapData> {
         // Add the new markers.
         this.currentMarkerData = {};
         const notes = await this.parentNote.getChildNotes();
+        const draggable = !this.isReadOnly;
         for (const childNote of notes) {
             if (childNote.mime === "application/gpx+xml") {
                 const track = await processNoteWithGpxTrack(this.map, childNote);
@@ -228,7 +233,7 @@ export default class GeoView extends ViewMode<MapData> {
 
             const latLng = childNote.getAttributeValue("label", LOCATION_ATTRIBUTE);
             if (latLng) {
-                const marker = processNoteWithMarker(this.map, childNote, latLng);
+                const marker = processNoteWithMarker(this.map, childNote, latLng, draggable);
                 this.currentMarkerData[childNote.noteId] = marker;
             }
         }

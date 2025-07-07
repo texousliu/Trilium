@@ -9,20 +9,23 @@ import { moveMarker } from "./editing.js";
 
 let gpxLoaded = false;
 
-export default function processNoteWithMarker(map: Map, note: FNote, location: string) {
+export default function processNoteWithMarker(map: Map, note: FNote, location: string, isEditable: boolean) {
     const [lat, lng] = location.split(",", 2).map((el) => parseFloat(el));
     const icon = buildIcon(note.getIcon(), note.getColorClass(), note.title);
 
     const newMarker = marker(latLng(lat, lng), {
         icon,
-        draggable: true,
+        draggable: isEditable,
         autoPan: true,
         autoPanSpeed: 5
-    })
-        .addTo(map)
-        .on("moveend", (e) => {
+    }).addTo(map);
+
+    if (isEditable) {
+        newMarker.on("moveend", (e) => {
             moveMarker(note.noteId, (e.target as Marker).getLatLng());
         });
+    }
+
     newMarker.on("mousedown", ({ originalEvent }) => {
         // Middle click to open in new tab
         if (originalEvent.button === 1) {
@@ -33,7 +36,7 @@ export default function processNoteWithMarker(map: Map, note: FNote, location: s
         }
     });
     newMarker.on("contextmenu", (e) => {
-        openContextMenu(note.noteId, e);
+        openContextMenu(note.noteId, e, isEditable);
     });
 
     const el = newMarker.getElement();

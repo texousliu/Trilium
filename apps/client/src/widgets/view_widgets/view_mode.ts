@@ -44,6 +44,10 @@ export default abstract class ViewMode<T extends object> extends Component {
         return false;
     }
 
+    get isReadOnly() {
+        return this.parentNote.hasLabel("readOnly");
+    }
+
     get viewStorage() {
         if (this._viewStorage) {
             return this._viewStorage;

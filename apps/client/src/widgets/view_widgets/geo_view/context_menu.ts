@@ -1,22 +1,31 @@
 import type { LatLng, LeafletMouseEvent } from "leaflet";
-import appContext from "../../../components/app_context.js";
-import contextMenu from "../../../menus/context_menu.js";
+import appContext, { type CommandMappings } from "../../../components/app_context.js";
+import contextMenu, { type MenuItem } from "../../../menus/context_menu.js";
 import linkContextMenu from "../../../menus/link_context_menu.js";
 import { t } from "../../../services/i18n.js";
 import { createNewNote } from "./editing.js";
 import { copyTextWithToast } from "../../../services/clipboard_ext.js";
 import link from "../../../services/link.js";
 
-export default function openContextMenu(noteId: string, e: LeafletMouseEvent) {
+export default function openContextMenu(noteId: string, e: LeafletMouseEvent, isEditable: boolean) {
+    let items: MenuItem<keyof CommandMappings>[] = [
+        ...buildGeoLocationItem(e),
+        { title: "----" },
+        ...linkContextMenu.getItems(),
+    ];
+
+    if (isEditable) {
+        items = [
+            ...items,
+            { title: "----" },
+            { title: t("geo-map-context.remove-from-map"), command: "deleteFromMap", uiIcon: "bx bx-trash" }
+        ];
+    }
+
     contextMenu.show({
         x: e.originalEvent.pageX,
         y: e.originalEvent.pageY,
-        items: [
-            ...buildGeoLocationItem(e),
-            ...linkContextMenu.getItems(),
-            { title: "----" },
-            { title: t("geo-map-context.remove-from-map"), command: "deleteFromMap", uiIcon: "bx bx-trash" }
-        ],
+        items,
         selectMenuItemHandler: ({ command }, e) => {
             if (command === "deleteFromMap") {
                 appContext.triggerCommand(command, { noteId });
@@ -29,14 +38,23 @@ export default function openContextMenu(noteId: string, e: LeafletMouseEvent) {
     });
 }
 
-export function openMapContextMenu(noteId: string, e: LeafletMouseEvent) {
+export function openMapContextMenu(noteId: string, e: LeafletMouseEvent, isEditable: boolean) {
+    let items: MenuItem<keyof CommandMappings>[] = [
+        ...buildGeoLocationItem(e)
+    ];
+
+    if (isEditable) {
+        items = [
+            ...items,
+            { title: "----" },
+            { title: t("geo-map-context.add-note"), command: "addNoteToMap", uiIcon: "bx bx-plus" }
+        ]
+    }
+
     contextMenu.show({
         x: e.originalEvent.pageX,
         y: e.originalEvent.pageY,
-        items: [
-            ...buildGeoLocationItem(e),
-            { title: t("geo-map-context.add-note"), command: "addNoteToMap", uiIcon: "bx bx-plus" }
-        ],
+        items,
         selectMenuItemHandler: ({ command }) => {
             switch (command) {
                 case "addNoteToMap":
@@ -64,9 +82,6 @@ function buildGeoLocationItem(e: LeafletMouseEvent) {
             title: t("geo-map-context.open-location"),
             uiIcon: "bx bx-map-alt",
             handler: () => link.goToLinkExt(null, `geo:${e.latlng.lat},${e.latlng.lng}`)
-        },
-        {
-            title: "----"
         }
     ];
 }
