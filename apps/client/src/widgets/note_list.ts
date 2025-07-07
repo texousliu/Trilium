@@ -185,6 +185,8 @@ export default class NoteListWidget extends NoteContextAwareWidget {
                 return ret;
             }
         }
+
+        return null;
     }
 
 }
