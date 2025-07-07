@@ -186,6 +186,12 @@ interface RefreshContext {
     noteIdsToReload: Set<string>;
 }
 
+export interface DragData {
+    noteId: string;
+    branchId: string;
+    title: string;
+}
+
 export default class NoteTreeWidget extends NoteContextAwareWidget {
     private $tree!: JQuery<HTMLElement>;
     private $treeActions!: JQuery<HTMLElement>;

@@ -10,6 +10,7 @@ import { CommandListenerData, EventData } from "../../../components/app_context.
 import { createNewNote, moveMarker } from "./editing.js";
 import link from "../../../services/link.js";
 import { openMapContextMenu } from "./context_menu.js";
+import setupDragging from "./dragging.js";
 
 const TPL = /*html*/`
 <div class="geo-view">
@@ -158,6 +159,7 @@ export default class GeoView extends ViewMode<MapData> {
         map.on("zoomend", updateFn);
         map.on("click", (e) => this.#onMapClicked(e))
         map.on("contextmenu", (e) => openMapContextMenu(this.parentNote.noteId, e));
+        setupDragging(this.$container, map);
 
         this.#reloadMarkers();
 
