@@ -277,6 +277,14 @@ function goToLink(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent) {
     return goToLinkExt(evt, hrefLink, $link);
 }
 
+/**
+ * Handles navigation to a link, which can be an internal note path (e.g., `#root/1234`) or an external URL (e.g., `https://example.com`).
+ *
+ * @param evt the event that triggered the link navigation, or `null` if the link was clicked programmatically. Used to determine if the link should be opened in a new tab/window, based on the button presses.
+ * @param hrefLink the link to navigate to, which can be a note path (e.g., `#root/1234`) or an external URL with any supported protocol (e.g., `https://example.com`).
+ * @param $link the jQuery element of the link that was clicked, used to determine if the link is an anchor link (e.g., `#fn1` or `#fnref1`) and to handle it accordingly.
+ * @returns `true` if the link was handled (i.e., the element was found and scrolled to), or a falsy value otherwise.
+ */
 function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent | React.PointerEvent<HTMLCanvasElement> | null, hrefLink: string | undefined, $link?: JQuery<HTMLElement> | null) {
     if (hrefLink?.startsWith("data:")) {
         return true;

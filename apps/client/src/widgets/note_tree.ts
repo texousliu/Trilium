@@ -186,6 +186,9 @@ interface RefreshContext {
     noteIdsToReload: Set<string>;
 }
 
+/**
+ * The information contained within a drag event.
+ */
 export interface DragData {
     noteId: string;
     branchId: string;
