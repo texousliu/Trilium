@@ -76,7 +76,8 @@ body.background-effects.platform-win32.layout-vertical #vertical-main-container 
     --tab-first-item-horiz-offset: 5px;
 }
 
-:has(#left-pane.hidden-int) #launcher-pane.vertical {
+/* Add a border to the vertical launch bar if collapsed. */
+body.layout-vertical #horizontal-main-container:has(#left-pane.hidden-int) #launcher-pane.vertical {
     border-right: 2px solid var(--left-pane-collapsed-border-color);
 }
 
