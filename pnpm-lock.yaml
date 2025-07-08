@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  mermaid: 11.8.0
+  mermaid: 11.8.1
   preact: 10.26.9
   roughjs: 4.6.6
   '@types/express-serve-static-core': 5.0.6
@@ -180,7 +180,7 @@ importers:
         version: 6.1.18(@fullcalendar/core@6.1.18)
       '@mermaid-js/layout-elk':
         specifier: 0.1.8
-        version: 0.1.8(mermaid@11.8.0)
+        version: 0.1.8(mermaid@11.8.1)
       '@mind-elixir/node-menu':
         specifier: 5.0.0
         version: 5.0.0(mind-elixir@5.0.1)
@@ -266,8 +266,8 @@ importers:
         specifier: 16.0.0
         version: 16.0.0
       mermaid:
-        specifier: 11.8.0
-        version: 11.8.0
+        specifier: 11.8.1
+        version: 11.8.1
       mind-elixir:
         specifier: 5.0.1
         version: 5.0.1
@@ -3671,10 +3671,10 @@ packages:
   '@mermaid-js/layout-elk@0.1.8':
     resolution: {integrity: sha512-uU+Glm1tQZScphrFuzf6dzPpYTrET3sz6Q2SqpLj/nr+FpO6cfgJmYdJ+vWA8oGoeNQZLVey480qbKAFk8DBuQ==}
     peerDependencies:
-      mermaid: 11.8.0
+      mermaid: 11.8.1
 
-  '@mermaid-js/parser@0.6.0':
-    resolution: {integrity: sha512-7DNESgpyZ5WG1SIkrYafVBhWmImtmQuoxOO1lawI3gQYWxBX3v1FW3IyuuRfKJAO06XrZR71W0Kif5VEGGd4VA==}
+  '@mermaid-js/parser@0.6.1':
+    resolution: {integrity: sha512-lCQNpV8R4lgsGcjX5667UiuDLk2micCtjtxR1YKbBXvN5w2v+FeLYoHrTSSrjwXdMcDYvE4ZBPvKT31dfeSmmA==}
 
   '@microsoft/api-extractor-model@7.30.6':
     resolution: {integrity: sha512-znmFn69wf/AIrwHya3fxX6uB5etSIn6vg4Q4RB/tb5VDDs1rqREc+AvMC/p19MUN13CZ7+V/8pkYPTj7q8tftg==}
@@ -10200,8 +10200,8 @@ packages:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
 
-  mermaid@11.8.0:
-    resolution: {integrity: sha512-uAZUwnBiqREZcUrFw3G5iQ5Pj3hTYUP95EZc3ec/nGBzHddJZydzYGE09tGZDBS1VoSoDn0symZ85FmypSTo5g==}
+  mermaid@11.8.1:
+    resolution: {integrity: sha512-VSXJLqP1Sqw5sGr273mhvpPRhXwE6NlmMSqBZQw+yZJoAJkOIPPn/uT3teeCBx60Fkt5zEI3FrH2eVT0jXRDzw==}
 
   methods@1.1.2:
     resolution: {integrity: sha512-iclAHeNqNm68zFtnZ0e+1L2yUIdvzNoauKU4WBA3VvH/vPFieF7qfRlwUZU+DA9P9bPXIS90ulxoUoCH23sV2w==}
@@ -17692,7 +17692,7 @@ snapshots:
   '@excalidraw/mermaid-to-excalidraw@1.1.2':
     dependencies:
       '@excalidraw/markdown-to-text': 0.1.2
-      mermaid: 11.8.0
+      mermaid: 11.8.1
       nanoid: 5.1.5
     transitivePeerDependencies:
       - supports-color
@@ -18540,13 +18540,13 @@ snapshots:
 
   '@marijn/find-cluster-break@1.0.2': {}
 
-  '@mermaid-js/layout-elk@0.1.8(mermaid@11.8.0)':
+  '@mermaid-js/layout-elk@0.1.8(mermaid@11.8.1)':
     dependencies:
       d3: 7.9.0
       elkjs: 0.9.3
-      mermaid: 11.8.0
+      mermaid: 11.8.1
 
-  '@mermaid-js/parser@0.6.0':
+  '@mermaid-js/parser@0.6.1':
     dependencies:
       langium: 3.3.1
 
@@ -26562,11 +26562,11 @@ snapshots:
 
   merge2@1.4.1: {}
 
-  mermaid@11.8.0:
+  mermaid@11.8.1:
     dependencies:
       '@braintree/sanitize-url': 7.1.1
       '@iconify/utils': 2.3.0
-      '@mermaid-js/parser': 0.6.0
+      '@mermaid-js/parser': 0.6.1
       '@types/d3': 7.4.3
       cytoscape: 3.31.2
       cytoscape-cose-bilkent: 4.1.0(cytoscape@3.31.2)
