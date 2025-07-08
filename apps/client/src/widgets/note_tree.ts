@@ -253,6 +253,11 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                 e.preventDefault();
             }
         });
+        this.$tree.on("auxclick", (e) => {
+            // Prevent middle click from pasting in the editor.
+            e.stopPropagation();
+            e.preventDefault();
+        });
 
         this.$treeSettingsPopup = this.$widget.find(".tree-settings-popup");
         this.$hideArchivedNotesCheckbox = this.$treeSettingsPopup.find(".hide-archived-notes");
