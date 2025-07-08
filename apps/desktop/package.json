@@ -128,7 +128,7 @@
           "build"
         ],
         "defaultConfiguration": "default",
-        "cache": true,
+        "cache": false,
         "configurations": {
           "default": {
             "command": "cross-env DEBUG=* tsx scripts/electron-rebuild.mts {projectRoot}/dist"
