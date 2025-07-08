@@ -188,6 +188,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
             .append($multiplicityCell);
 
         if (valueAttr.type === "label") {
+            $wrapper.addClass(`promoted-attribute-label-${definition.labelType}`);
             if (definition.labelType === "text") {
                 $input.prop("type", "text");
 

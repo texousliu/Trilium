@@ -1301,9 +1301,9 @@ div.promoted-attribute-cell .tn-checkbox {
     height: 1cap;
 }
 
-/* The <div> containing the checkbox for a promoted boolean attribute */
-div.promoted-attribute-cell div:has(input[type="checkbox"]) {
-    order: -1; /* Relocate the checkbox before the label */
+/* Relocate the checkbox before the label */
+div.promoted-attribute-cell.promoted-attribute-label-boolean > div:first-of-type {
+    order: -1;
     margin-right: 1.5em;
 }
 
