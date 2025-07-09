@@ -1,5 +1,6 @@
 import { openDialog } from "../../services/dialog.js";
 import BasicWidget from "../basic_widget.js";
+import Container from "../containers/container.js";
 
 const TPL = /*html*/`\
 <div class="popup-editor-dialog modal fade mx-auto" tabindex="-1" role="dialog">
@@ -11,14 +12,14 @@ const TPL = /*html*/`\
             </div>
 
             <div class="modal-body">
-                Hi
+                <!-- This is where the content will be injected. -->
             </div>
         </div>
     </div>
 </div>
 `;
 
-export default class PopupEditorDialog extends BasicWidget {
+export default class PopupEditorDialog extends Container<BasicWidget> {
 
     constructor() {
         super();
@@ -28,7 +29,13 @@ export default class PopupEditorDialog extends BasicWidget {
     }
 
     doRender() {
-        this.$widget = $(TPL);
+        // This will populate this.$widget with the content of the children.
+        super.doRender();
+
+        // Now we wrap it in the modal.
+        const $newWidget = $(TPL);
+        $newWidget.find(".modal-body").append(this.$widget.children());
+        this.$widget = $newWidget;
     }
 
     async refresh() {

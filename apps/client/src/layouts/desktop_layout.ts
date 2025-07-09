@@ -259,7 +259,8 @@ export default class DesktopLayout {
             // Desktop-specific dialogs.
             .child(new PasswordNoteSetDialog())
             .child(new UploadAttachmentsDialog())
-            .child(new PopupEditorDialog());
+            .child(new PopupEditorDialog()
+                .child(new NoteDetailWidget()));
 
         applyModals(rootContainer);
         return rootContainer;
