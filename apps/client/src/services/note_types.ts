@@ -89,26 +89,28 @@ async function getNoteTypeItems(command?: TreeCommandNames) {
     return items;
 }
 
-function getBlankNoteTypes(command): MenuItem<TreeCommandNames>[] {
-    return NOTE_TYPES.filter((nt) => !nt.reserved).map((nt) => {
-        const menuItem: MenuCommandItem<TreeCommandNames> = {
-            title: nt.title,
-            command,
-            type: nt.type,
-            uiIcon: "bx " + nt.icon,
-            badges: []
-        }
+function getBlankNoteTypes(command?: TreeCommandNames): MenuItem<TreeCommandNames>[] {
+    return NOTE_TYPES
+        .filter((nt) => !nt.reserved && nt.type !== "book")
+        .map((nt) => {
+            const menuItem: MenuCommandItem<TreeCommandNames> = {
+                title: nt.title,
+                command,
+                type: nt.type,
+                uiIcon: "bx " + nt.icon,
+                badges: []
+            }
 
-        if (nt.isNew) {
-            menuItem.badges?.push(NEW_BADGE);
-        }
+            if (nt.isNew) {
+                menuItem.badges?.push(NEW_BADGE);
+            }
 
-        if (nt.isBeta) {
-            menuItem.badges?.push(BETA_BADGE);
-        }
+            if (nt.isBeta) {
+                menuItem.badges?.push(BETA_BADGE);
+            }
 
-        return menuItem;
-    });
+            return menuItem;
+        });
 }
 
 async function getUserTemplates(command?: TreeCommandNames) {
