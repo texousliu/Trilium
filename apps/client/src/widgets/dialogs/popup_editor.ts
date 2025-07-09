@@ -45,20 +45,28 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
     async refresh() {
         if (!this.noteId) {
             console.warn("Popup editor noteId is not set, cannot refresh.");
-            return;
+            return false;
+        }
+
+        const note = await froca.getNote(this.noteId);
+        if (!note) {
+            console.warn(`Popup editor note with ID ${this.noteId} not found.`);
+            return false;
         }
 
         const noteContext = new NoteContext("_popup-editor");
-        noteContext.setNote(this.noteId);
+        await noteContext.setNote(note.noteId);
 
-        this.handleEventInChildren("setNoteContext", {
+        await this.handleEventInChildren("setNoteContext", {
             noteContext: noteContext
-        })
+        });
+        return true;
     }
 
     async openPopupEditorEvent(noteId: string) {
         this.noteId = noteId;
-        await this.refresh();
-        openDialog(this.$widget);
+        if (await this.refresh()) {
+            openDialog(this.$widget);
+        }
     }
 }
