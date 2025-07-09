@@ -81,7 +81,8 @@ let rootCreationDate: Date | undefined;
 async function getNoteTypeItems(command?: TreeCommandNames) {
     const items: MenuItem<TreeCommandNames>[] = [
         ...getBlankNoteTypes(command),
-        ...await getBuiltInTemplates(command),
+        ...await getBuiltInTemplates("Collections", command, true),
+        ...await getBuiltInTemplates(null, command, false),
         ...await getUserTemplates(command)
     ];
 
@@ -139,7 +140,7 @@ async function getUserTemplates(command?: TreeCommandNames) {
     return items;
 }
 
-async function getBuiltInTemplates(command?: TreeCommandNames) {
+async function getBuiltInTemplates(title: string | null, command: TreeCommandNames | undefined, filterCollections: boolean) {
     const templatesRoot = await froca.getNote("_templates");
     if (!templatesRoot) {
         console.warn("Unable to find template root.");
@@ -155,7 +156,18 @@ async function getBuiltInTemplates(command?: TreeCommandNames) {
         SEPARATOR
     ];
 
+    if (title) {
+        items.push({
+            title: title,
+            enabled: false
+        });
+    }
+
     for (const templateNote of childNotes) {
+        if (templateNote.hasLabel("collection") !== filterCollections) {
+            continue;
+        }
+
         const item: MenuItem<TreeCommandNames> = {
             title: templateNote.title,
             uiIcon: templateNote.getIcon(),

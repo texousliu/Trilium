@@ -38,6 +38,10 @@ export default function buildHiddenSubtreeTemplates() {
                         type: "label"
                     },
                     {
+                        name: "collection",
+                        type: "label"
+                    },
+                    {
                         name: "viewType",
                         type: "label",
                         value: "table"
@@ -52,6 +56,10 @@ export default function buildHiddenSubtreeTemplates() {
                 attributes: [
                     {
                         name: "template",
+                        type: "label"
+                    },
+                    {
+                        name: "collection",
                         type: "label"
                     },
                     {
