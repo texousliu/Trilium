@@ -28,6 +28,48 @@ export default function buildHiddenSubtreeTemplates() {
                 ]
             },
             {
+                id: "_template_list_view",
+                type: "book",
+                title: "List View",
+                icon: "bx bx-list-ul",
+                attributes: [
+                    {
+                        name: "template",
+                        type: "label"
+                    },
+                    {
+                        name: "collection",
+                        type: "label"
+                    },
+                    {
+                        name: "viewType",
+                        type: "label",
+                        value: "list"
+                    }
+                ]
+            },
+            {
+                id: "_template_grid_view",
+                type: "book",
+                title: "Grid View",
+                icon: "bx bxs-grid",
+                attributes: [
+                    {
+                        name: "template",
+                        type: "label"
+                    },
+                    {
+                        name: "collection",
+                        type: "label"
+                    },
+                    {
+                        name: "viewType",
+                        type: "label",
+                        value: "grid"
+                    }
+                ]
+            },
+            {
                 id: "_template_calendar",
                 type: "book",
                 title: "Calendar",
