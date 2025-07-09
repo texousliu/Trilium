@@ -1942,5 +1942,9 @@
   "table_view": {
     "new-row": "New row",
     "new-column": "New column"
+  },
+  "book_properties_config": {
+    "hide-weekends": "Hide weekends",
+    "display-week-numbers": "Display week numbers"
   }
 }

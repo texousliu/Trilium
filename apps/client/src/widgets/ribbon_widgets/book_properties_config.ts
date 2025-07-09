@@ -33,12 +33,12 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
     calendar: {
         properties: [
             {
-                label: "Hide weekends",
+                label: t("book_properties_config.hide-weekends"),
                 type: "checkbox",
                 bindToLabel: "calendar:hideWeekends"
             },
             {
-                label: "Show week numbers",
+                label: t("book_properties_config.display-week-numbers"),
                 type: "checkbox",
                 bindToLabel: "calendar:weekNumbers"
             }
