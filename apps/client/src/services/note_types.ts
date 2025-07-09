@@ -154,15 +154,15 @@ async function getBuiltInTemplates(title: string | null, command: TreeCommandNam
         return [];
     }
 
-    const items: MenuItem<TreeCommandNames>[] = [
-        SEPARATOR
-    ];
-
+    const items: MenuItem<TreeCommandNames>[] = [];
     if (title) {
         items.push({
             title: title,
-            enabled: false
+            enabled: false,
+            uiIcon: "bx bx-empty"
         });
+    } else {
+        items.push(SEPARATOR);
     }
 
     for (const templateNote of childNotes) {
