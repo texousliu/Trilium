@@ -94,6 +94,7 @@ import ToggleReadOnlyButton from "../widgets/floating_buttons/toggle_read_only_b
 import PngExportButton from "../widgets/floating_buttons/png_export_button.js";
 import RefreshButton from "../widgets/floating_buttons/refresh_button.js";
 import { applyModals } from "./layout_commons.js";
+import PopupEditorDialog from "../widgets/dialogs/popup_editor.js";
 
 export default class DesktopLayout {
 
@@ -257,7 +258,8 @@ export default class DesktopLayout {
 
             // Desktop-specific dialogs.
             .child(new PasswordNoteSetDialog())
-            .child(new UploadAttachmentsDialog());
+            .child(new UploadAttachmentsDialog())
+            .child(new PopupEditorDialog());
 
         applyModals(rootContainer);
         return rootContainer;
