@@ -1,4 +1,6 @@
+import NoteContext from "../../components/note_context.js";
 import { openDialog } from "../../services/dialog.js";
+import froca from "../../services/froca.js";
 import BasicWidget from "../basic_widget.js";
 import Container from "../containers/container.js";
 
@@ -21,10 +23,12 @@ const TPL = /*html*/`\
 
 export default class PopupEditorDialog extends Container<BasicWidget> {
 
+    private noteId?: string;
+
     constructor() {
         super();
         setTimeout(() => {
-            this.openPopupEditorEvent("7mLWh47uEPEp");
+            this.openPopupEditorEvent("vdJ8utb0A0Kd");
         }, 750);
     }
 
@@ -39,10 +43,21 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
     }
 
     async refresh() {
+        if (!this.noteId) {
+            console.warn("Popup editor noteId is not set, cannot refresh.");
+            return;
+        }
 
+        const noteContext = new NoteContext("_popup-editor");
+        noteContext.setNote(this.noteId);
+
+        this.handleEventInChildren("setNoteContext", {
+            noteContext: noteContext
+        })
     }
 
     async openPopupEditorEvent(noteId: string) {
+        this.noteId = noteId;
         await this.refresh();
         openDialog(this.$widget);
     }
