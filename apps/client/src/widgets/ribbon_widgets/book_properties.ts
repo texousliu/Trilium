@@ -3,7 +3,8 @@ import attributeService from "../../services/attributes.js";
 import { t } from "../../services/i18n.js";
 import type FNote from "../../entities/fnote.js";
 import type { EventData } from "../../components/app_context.js";
-import { bookPropertiesConfig, renderBookProperty } from "./book_properties_config.js";
+import { bookPropertiesConfig, BookProperty } from "./book_properties_config.js";
+import attributes from "../../services/attributes.js";
 
 const TPL = /*html*/`
 <div class="book-properties-widget">
@@ -98,10 +99,7 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
         const bookPropertiesData = bookPropertiesConfig[viewType];
         if (bookPropertiesData) {
             for (const property of bookPropertiesData.properties) {
-                this.$propertiesContainer.append(renderBookProperty(property, {
-                    note: this.note,
-                    triggerCommand: this.triggerCommand.bind(this)
-                }));
+                this.$propertiesContainer.append(this.renderBookProperty(property));
                 this.labelsToWatch.push(property.bindToLabel);
             }
         }
@@ -126,4 +124,54 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
             this.refresh();
         }
     }
+
+    renderBookProperty(property: BookProperty) {
+        const $container = $("<div>");
+        const note = this.note;
+        if (!note) {
+            return $container;
+        }
+        switch (property.type) {
+            case "checkbox":
+                const $label = $("<label>").text(property.label);
+                const $checkbox = $("<input>", {
+                    type: "checkbox",
+                    class: "form-check-input",
+                });
+                $checkbox.on("change", () => {
+                    if ($checkbox.prop("checked")) {
+                        attributes.setLabel(note.noteId, property.bindToLabel);
+                    } else {
+                        attributes.removeOwnedLabelByName(note, property.bindToLabel);
+                    }
+                });
+                $checkbox.prop("checked", note.hasOwnedLabel(property.bindToLabel));
+                $label.prepend($checkbox);
+                $container.append($label);
+                break;
+            case "button":
+                const $button = $("<button>", {
+                    type: "button",
+                    class: "btn btn-sm"
+                }).text(property.label);
+                if (property.title) {
+                    $button.attr("title", property.title);
+                }
+                if (property.icon) {
+                    $button.prepend($("<span>", { class: property.icon }));
+                }
+                $button.on("click", () => {
+                    property.onClick({
+                        note,
+                        triggerCommand: this.triggerCommand.bind(this)
+                    });
+                });
+                $container.append($button);
+                break;
+        }
+
+        return $container;
+    }
+
+
 }

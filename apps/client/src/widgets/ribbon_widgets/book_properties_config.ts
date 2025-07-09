@@ -4,7 +4,7 @@ import attributes from "../../services/attributes";
 import { ViewTypeOptions } from "../../services/note_list_renderer"
 import NoteContextAwareWidget from "../note_context_aware_widget";
 
-type BookProperty = CheckBoxProperty | ButtonProperty;
+export type BookProperty = CheckBoxProperty | ButtonProperty;
 
 interface BookConfig {
     properties: BookProperty[];
@@ -79,45 +79,3 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
         ]
     }
 };
-
-export function renderBookProperty(property: BookProperty, context: BookContext) {
-    const $container = $("<div>");
-    const { note } = context;
-    switch (property.type) {
-        case "checkbox":
-            const $label = $("<label>").text(property.label);
-            const $checkbox = $("<input>", {
-                type: "checkbox",
-                class: "form-check-input",
-            });
-            $checkbox.on("change", () => {
-                if ($checkbox.prop("checked")) {
-                    attributes.setLabel(note.noteId, property.bindToLabel);
-                } else {
-                    attributes.removeOwnedLabelByName(note, property.bindToLabel);
-                }
-            });
-            $checkbox.prop("checked", note.hasOwnedLabel(property.bindToLabel));
-            $label.prepend($checkbox);
-            $container.append($label);
-            break;
-        case "button":
-            const $button = $("<button>", {
-                type: "button",
-                class: "btn btn-sm"
-            }).text(property.label);
-            if (property.title) {
-                $button.attr("title", property.title);
-            }
-            if (property.icon) {
-                $button.prepend($("<span>", { class: property.icon }));
-            }
-            $button.on("click", () => {
-                property.onClick(context);
-            });
-            $container.append($button);
-            break;
-    }
-
-    return $container;
-}
