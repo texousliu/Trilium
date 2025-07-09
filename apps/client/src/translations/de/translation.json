@@ -750,7 +750,7 @@
     "expand_all_children": "Unternotizen ausklappen",
     "collapse": "Einklappen",
     "expand": "Ausklappen",
-    "book_properties": "Bucheigenschaften",
+    "book_properties": "",
     "invalid_view_type": "Ungültiger Ansichtstyp „{{type}}“",
     "calendar": "Kalender"
   },

@@ -753,7 +753,7 @@
     "expand_all_children": "Développer tous les enfants",
     "collapse": "Réduire",
     "expand": "Développer",
-    "book_properties": "Propriétés du livre",
+    "book_properties": "",
     "invalid_view_type": "Type de vue non valide '{{type}}'",
     "calendar": "Calendrier"
   },

@@ -718,7 +718,7 @@
     "expand_all_children": "展開所有子項",
     "collapse": "折疊",
     "expand": "展開",
-    "book_properties": "書籍屬性",
+    "book_properties": "",
     "invalid_view_type": "無效的查看類型 '{{type}}'"
   },
   "edited_notes": {

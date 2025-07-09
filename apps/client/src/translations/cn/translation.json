@@ -754,7 +754,7 @@
     "expand_all_children": "展开所有子项",
     "collapse": "折叠",
     "expand": "展开",
-    "book_properties": "书籍属性",
+    "book_properties": "",
     "invalid_view_type": "无效的查看类型 '{{type}}'",
     "calendar": "日历"
   },

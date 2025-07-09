@@ -274,7 +274,7 @@
     "no_children_help": "Această notiță de tip Carte nu are nicio subnotiță așadar nu este nimic de afișat. Vedeți <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> pentru detalii."
   },
   "book_properties": {
-    "book_properties": "Proprietăți carte",
+    "book_properties": "",
     "collapse": "Minimizează",
     "collapse_all_notes": "Minimizează toate notițele",
     "expand": "Expandează",

@@ -758,7 +758,7 @@
     "expand_all_children": "Expand all children",
     "collapse": "Collapse",
     "expand": "Expand",
-    "book_properties": "Book Properties",
+    "book_properties": "Collection Properties",
     "invalid_view_type": "Invalid view type '{{type}}'",
     "calendar": "Calendar",
     "table": "Table",
@@ -962,7 +962,7 @@
     "no_attachments": "This note has no attachments."
   },
   "book": {
-    "no_children_help": "This note of type Book doesn't have any child notes so there's nothing to display. See <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> for details."
+    "no_children_help": "This collection doesn't have any child notes so there's nothing to display. See <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> for details."
   },
   "editable_code": {
     "placeholder": "Type the content of your code note here..."
