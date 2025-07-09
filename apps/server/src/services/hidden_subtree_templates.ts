@@ -28,6 +28,55 @@ export default function buildHiddenSubtreeTemplates() {
                 ]
             },
             {
+                id: "_template_calendar",
+                type: "book",
+                title: "Calendar",
+                icon: "bx bx-calendar",
+                attributes: [
+                    {
+                        name: "template",
+                        type: "label",
+                    },
+                    {
+                        name: "collection",
+                        type: "label"
+                    },
+                    {
+                        name: "viewType",
+                        type: "label",
+                        value: "calendar"
+                    },
+                    {
+                        name: "hidePromotedAttributes",
+                        type: "label"
+                    },
+                    {
+                        name: "label:startDate",
+                        type: "label",
+                        value: "promoted,alias=Start Date,single,date",
+                        isInheritable: true
+                    },
+                    {
+                        name: "label:endDate",
+                        type: "label",
+                        value: "promoted,alias=End Date,single,date",
+                        isInheritable: true
+                    },
+                    {
+                        name: "label:startTime",
+                        type: "label",
+                        value: "promoted,alias=Start Time,single,time",
+                        isInheritable: true
+                    },
+                    {
+                        name: "label:endTime",
+                        type: "label",
+                        value: "promoted,alias=End Time,single,time",
+                        isInheritable: true
+                    }
+                ]
+            },
+            {
                 id: "_template_table",
                 type: "book",
                 title: "Table",
