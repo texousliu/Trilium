@@ -1,15 +1,32 @@
+import { t } from "i18next";
 import FNote from "../../entities/fnote";
 import attributes from "../../services/attributes";
 import { ViewTypeOptions } from "../../services/note_list_renderer"
+import NoteContextAwareWidget from "../note_context_aware_widget";
+
+type BookProperty = CheckBoxProperty | ButtonProperty;
 
 interface BookConfig {
-    properties: BookProperty[]
+    properties: BookProperty[];
 }
 
-interface BookProperty {
-    label: string;
+interface CheckBoxProperty {
     type: "checkbox",
+    label: string;
     bindToLabel: string
+}
+
+interface ButtonProperty {
+    type: "button",
+    label: string;
+    title?: string;
+    icon?: string;
+    onClick: (context: BookContext) => void;
+}
+
+interface BookContext {
+    note: FNote;
+    triggerCommand: NoteContextAwareWidget["triggerCommand"];
 }
 
 export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
@@ -26,16 +43,49 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
                 bindToLabel: "calendar:weekNumbers"
             }
         ]
+    },
+    list: {
+        properties: [
+            {
+                label: t("book_properties.collapse"),
+                title: t("book_properties.collapse_all_notes"),
+                type: "button",
+                icon: "bx bx-layer-minus",
+                async onClick({ note, triggerCommand }) {
+                    const { noteId } = note;
+
+                    // owned is important - we shouldn't remove inherited expanded labels
+                    for (const expandedAttr of note.getOwnedLabels("expanded")) {
+                        await attributes.removeAttributeById(noteId, expandedAttr.attributeId);
+                    }
+
+                    triggerCommand("refreshNoteList", { noteId: noteId });
+                },
+            },
+            {
+                label: t("book_properties.expand"),
+                title: t("book_properties.expand_all_children"),
+                type: "button",
+                icon: "bx bx-move-vertical",
+                async onClick({ note, triggerCommand }) {
+                    const { noteId } = note;
+                    if (!note.isLabelTruthy("expanded")) {
+                        await attributes.addLabel(noteId, "expanded");
+                    }
+
+                    triggerCommand("refreshNoteList", { noteId });
+                },
+            }
+        ]
     }
 };
 
-export function renderBookProperty(property: BookProperty, note: FNote) {
+export function renderBookProperty(property: BookProperty, context: BookContext) {
     const $container = $("<div>");
-    const $label = $("<label>").text(property.label);
-    $container.append($label);
-
+    const { note } = context;
     switch (property.type) {
         case "checkbox":
+            const $label = $("<label>").text(property.label);
             const $checkbox = $("<input>", {
                 type: "checkbox",
                 class: "form-check-input",
@@ -49,9 +99,24 @@ export function renderBookProperty(property: BookProperty, note: FNote) {
             });
             $checkbox.prop("checked", note.hasOwnedLabel(property.bindToLabel));
             $label.prepend($checkbox);
+            $container.append($label);
             break;
-        default:
-            throw new Error(`Unknown property type: ${property.type}`);
+        case "button":
+            const $button = $("<button>", {
+                type: "button",
+                class: "btn btn-sm"
+            }).text(property.label);
+            if (property.title) {
+                $button.attr("title", property.title);
+            }
+            if (property.icon) {
+                $button.prepend($("<span>", { class: property.icon }));
+            }
+            $button.on("click", () => {
+                property.onClick(context);
+            });
+            $container.append($button);
+            break;
     }
 
     return $container;

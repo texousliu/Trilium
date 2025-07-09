@@ -45,31 +45,12 @@ const TPL = /*html*/`
 
     <div class="book-properties-container">
     </div>
-
-    <button type="button"
-            class="collapse-all-button btn btn-sm"
-            title="${t("book_properties.collapse_all_notes")}">
-
-        <span class="bx bx-layer-minus"></span>
-
-        ${t("book_properties.collapse")}
-    </button>
-
-    <button type="button"
-            class="expand-children-button btn btn-sm"
-            title="${t("book_properties.expand_all_children")}">
-        <span class="bx bx-move-vertical"></span>
-
-        ${t("book_properties.expand")}
-    </button>
 </div>
 `;
 
 export default class BookPropertiesWidget extends NoteContextAwareWidget {
 
     private $viewTypeSelect!: JQuery<HTMLElement>;
-    private $expandChildrenButton!: JQuery<HTMLElement>;
-    private $collapseAllButton!: JQuery<HTMLElement>;
     private $propertiesContainer!: JQuery<HTMLElement>;
     private labelsToWatch: string[] = [];
 
@@ -100,33 +81,6 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
         this.$viewTypeSelect = this.$widget.find(".view-type-select");
         this.$viewTypeSelect.on("change", () => this.toggleViewType(String(this.$viewTypeSelect.val())));
 
-        this.$expandChildrenButton = this.$widget.find(".expand-children-button");
-        this.$expandChildrenButton.on("click", async () => {
-            if (!this.noteId || !this.note) {
-                return;
-            }
-
-            if (!this.note?.isLabelTruthy("expanded")) {
-                await attributeService.addLabel(this.noteId, "expanded");
-            }
-
-            this.triggerCommand("refreshNoteList", { noteId: this.noteId });
-        });
-
-        this.$collapseAllButton = this.$widget.find(".collapse-all-button");
-        this.$collapseAllButton.on("click", async () => {
-            if (!this.noteId || !this.note) {
-                return;
-            }
-
-            // owned is important - we shouldn't remove inherited expanded labels
-            for (const expandedAttr of this.note.getOwnedLabels("expanded")) {
-                await attributeService.removeAttributeById(this.noteId, expandedAttr.attributeId);
-            }
-
-            this.triggerCommand("refreshNoteList", { noteId: this.noteId });
-        });
-
         this.$propertiesContainer = this.$widget.find(".book-properties-container");
     }
 
@@ -139,15 +93,15 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
 
         this.$viewTypeSelect.val(viewType);
 
-        this.$expandChildrenButton.toggle(viewType === "list");
-        this.$collapseAllButton.toggle(viewType === "list");
-
         this.$propertiesContainer.empty();
 
         const bookPropertiesData = bookPropertiesConfig[viewType];
         if (bookPropertiesData) {
             for (const property of bookPropertiesData.properties) {
-                this.$propertiesContainer.append(renderBookProperty(property, note));
+                this.$propertiesContainer.append(renderBookProperty(property, {
+                    note: this.note,
+                    triggerCommand: this.triggerCommand.bind(this)
+                }));
                 this.labelsToWatch.push(property.bindToLabel);
             }
         }
