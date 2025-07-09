@@ -30,19 +30,8 @@ interface BookContext {
 }
 
 export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
-    calendar: {
-        properties: [
-            {
-                label: t("book_properties_config.hide-weekends"),
-                type: "checkbox",
-                bindToLabel: "calendar:hideWeekends"
-            },
-            {
-                label: t("book_properties_config.display-week-numbers"),
-                type: "checkbox",
-                bindToLabel: "calendar:weekNumbers"
-            }
-        ]
+    grid: {
+        properties: []
     },
     list: {
         properties: [
@@ -77,5 +66,25 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
                 },
             }
         ]
+    },
+    calendar: {
+        properties: [
+            {
+                label: t("book_properties_config.hide-weekends"),
+                type: "checkbox",
+                bindToLabel: "calendar:hideWeekends"
+            },
+            {
+                label: t("book_properties_config.display-week-numbers"),
+                type: "checkbox",
+                bindToLabel: "calendar:weekNumbers"
+            }
+        ]
+    },
+    geoMap: {
+        properties: []
+    },
+    table: {
+        properties: []
     }
 };
