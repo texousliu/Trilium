@@ -1,5 +1,7 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import utils from "./utils.js";
+import fs from "fs";
+import path from "path";
 
 type TestCase<T extends (...args: any) => any> = [desc: string, fnParams: Parameters<T>, expected: ReturnType<T>];
 
@@ -474,7 +476,110 @@ describe("#envToBoolean", () => {
     });
 });
 
-describe.todo("#getResourceDir", () => {});
+describe("#getResourceDir", () => {
+    let originalEnv: typeof process.env;
+    let originalPlatform: typeof process.platform;
+    let originalVersions: typeof process.versions;
+    let originalArgv: typeof process.argv;
+    
+    beforeEach(() => {
+        // Save original values
+        originalEnv = { ...process.env };
+        originalPlatform = process.platform;
+        originalVersions = { ...process.versions };
+        originalArgv = [...process.argv];
+    });
+
+    afterEach(() => {
+        // Restore original values
+        process.env = originalEnv;
+        Object.defineProperty(process, 'platform', { value: originalPlatform });
+        Object.defineProperty(process, 'versions', { value: originalVersions });
+        process.argv = originalArgv;
+        vi.clearAllMocks();
+    });
+
+    it("should return TRILIUM_RESOURCE_DIR environment variable when set", () => {
+        const testPath = "/custom/resource/dir";
+        process.env.TRILIUM_RESOURCE_DIR = testPath;
+        
+        const result = utils.getResourceDir();
+        expect(result).toBe(testPath);
+    });
+
+    it("should dynamically find assets directory in Electron production mode", () => {
+        // Mock Electron production environment
+        delete process.env.TRILIUM_RESOURCE_DIR;
+        Object.defineProperty(process, 'versions', { 
+            value: { ...originalVersions, electron: '37.2.0' } 
+        });
+        delete process.env.TRILIUM_ENV;
+        
+        // Mock fs.existsSync to simulate finding assets directory
+        const mockExistsSync = vi.spyOn(fs, 'existsSync');
+        mockExistsSync.mockImplementation((pathToCheck: string) => {
+            // Simulate finding assets directory at the app root level
+            return pathToCheck.includes("assets") && 
+                   pathToCheck === path.join(path.dirname(path.dirname(path.dirname(path.dirname(__dirname)))), "assets");
+        });
+        
+        const result = utils.getResourceDir();
+        expect(result).toBe(path.dirname(path.dirname(path.dirname(path.dirname(__dirname)))));
+        expect(mockExistsSync).toHaveBeenCalled();
+    });
+
+    it("should fall back to hardcoded path when assets directory not found dynamically", () => {
+        // Mock Electron production environment
+        delete process.env.TRILIUM_RESOURCE_DIR;
+        Object.defineProperty(process, 'versions', { 
+            value: { ...originalVersions, electron: '37.2.0' } 
+        });
+        delete process.env.TRILIUM_ENV;
+        
+        // Mock fs.existsSync to always return false (assets not found)
+        const mockExistsSync = vi.spyOn(fs, 'existsSync');
+        mockExistsSync.mockReturnValue(false);
+        
+        const result = utils.getResourceDir();
+        expect(result).toBe(path.join(__dirname, "../../../.."));
+        expect(mockExistsSync).toHaveBeenCalled();
+    });
+
+    it("should return process.argv[1] directory in non-Electron production mode", () => {
+        delete process.env.TRILIUM_RESOURCE_DIR;
+        Object.defineProperty(process, 'versions', { 
+            value: { ...originalVersions, electron: undefined } 
+        });
+        delete process.env.TRILIUM_ENV;
+        
+        process.argv[1] = "/app/server/main.js";
+        
+        const result = utils.getResourceDir();
+        expect(result).toBe(path.dirname(process.argv[1]));
+    });
+
+    it("should return parent directory in development mode", () => {
+        delete process.env.TRILIUM_RESOURCE_DIR;
+        process.env.TRILIUM_ENV = "dev";
+        
+        const result = utils.getResourceDir();
+        expect(result).toBe(path.join(__dirname, ".."));
+    });
+
+    it("should handle edge case when reaching filesystem root", () => {
+        delete process.env.TRILIUM_RESOURCE_DIR;
+        Object.defineProperty(process, 'versions', { 
+            value: { ...originalVersions, electron: '37.2.0' } 
+        });
+        delete process.env.TRILIUM_ENV;
+        
+        const mockExistsSync = vi.spyOn(fs, 'existsSync');
+        mockExistsSync.mockReturnValue(false);
+        
+        const result = utils.getResourceDir();
+        expect(result).toBe(path.join(__dirname, "../../../.."));
+    });
+});
 
 describe("#isElectron", () => {
     it("should export a boolean", () => {

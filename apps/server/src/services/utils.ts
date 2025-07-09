@@ -9,6 +9,7 @@ import escape from "escape-html";
 import sanitize from "sanitize-filename";
 import mimeTypes from "mime-types";
 import path from "path";
+import fs from "fs";
 import type NoteMeta from "./meta/note_meta.js";
 import log from "./log.js";
 import { t } from "i18next";
@@ -292,7 +293,33 @@ export function getResourceDir() {
         return process.env.TRILIUM_RESOURCE_DIR;
     }
 
-    if (isElectron && !isDev) return path.join(__dirname, "../../../..");
+    if (isElectron && !isDev) {
+        // Dynamically find the correct resource directory by traversing upward
+        // until we find the assets directory or reach the root
+        let currentPath = __dirname;
+        let maxDepth = 10; // Safety limit to prevent infinite loops
+        
+        while (maxDepth > 0) {
+            const assetsPath = path.join(currentPath, "assets");
+            if (fs.existsSync(assetsPath)) {
+                return currentPath;
+            }
+            
+            const parentPath = path.dirname(currentPath);
+            if (parentPath === currentPath) {
+                // Reached root directory
+                break;
+            }
+            
+            currentPath = parentPath;
+            maxDepth--;
+        }
+        
+        // Fallback to the old hardcoded path if dynamic search fails
+        log.info("Could not dynamically find assets directory, falling back to hardcoded path");
+        return path.join(__dirname, "../../../..");
+    }
+    
     if (!isDev) {
         return path.dirname(process.argv[1]);
     }

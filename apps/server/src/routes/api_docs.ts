@@ -7,8 +7,11 @@ import { readFileSync } from "fs";
 import { RESOURCE_DIR } from "../services/resource_dir";
 
 export default function register(app: Application) {
-    const etapiDocument = yaml.load(readFileSync(join(RESOURCE_DIR, "etapi.openapi.yaml"), "utf8")) as JsonObject;
-    const apiDocument = JSON.parse(readFileSync(join(RESOURCE_DIR, "openapi.json"), "utf-8"));
+    // Clean trailing slashes from RESOURCE_DIR to prevent path resolution issues in packaged Electron apps
+    const cleanResourceDir = RESOURCE_DIR.replace(/[\\\/]+$/, '');
+    
+    const etapiDocument = yaml.load(readFileSync(join(cleanResourceDir, "etapi.openapi.yaml"), "utf8")) as JsonObject;
+    const apiDocument = JSON.parse(readFileSync(join(cleanResourceDir, "openapi.json"), "utf-8"));
 
     app.use(
         "/etapi/docs/",
