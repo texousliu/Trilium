@@ -70,6 +70,7 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
     private $expandChildrenButton!: JQuery<HTMLElement>;
     private $collapseAllButton!: JQuery<HTMLElement>;
     private $propertiesContainer!: JQuery<HTMLElement>;
+    private labelsToWatch: string[] = [];
 
     get name() {
         return "bookProperties";
@@ -146,6 +147,7 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
         if (bookPropertiesData) {
             for (const property of bookPropertiesData.properties) {
                 this.$propertiesContainer.append(renderBookProperty(property, note));
+                this.labelsToWatch.push(property.bindToLabel);
             }
         }
     }
@@ -163,7 +165,9 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
     }
 
     entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        if (loadResults.getAttributeRows().find((attr) => attr.noteId === this.noteId && attr.name === "viewType")) {
+        if (loadResults.getAttributeRows().find((attr) =>
+                attr.noteId === this.noteId
+                && (attr.name === "viewType" || this.labelsToWatch.includes(attr.name ?? "")))) {
             this.refresh();
         }
     }
