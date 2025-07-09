@@ -3,6 +3,7 @@ import attributeService from "../../services/attributes.js";
 import { t } from "../../services/i18n.js";
 import type FNote from "../../entities/fnote.js";
 import type { EventData } from "../../components/app_context.js";
+import { bookPropertiesConfig, renderBookProperty } from "./book_properties_config.js";
 
 const TPL = /*html*/`
 <div class="book-properties-widget">
@@ -14,6 +15,18 @@ const TPL = /*html*/`
 
         .book-properties-widget > * {
             margin-right: 15px;
+        }
+
+        .book-properties-container {
+            display: flex;
+        }
+
+        .book-properties-container > * {
+            margin-right: 15px;
+        }
+
+        .book-properties-container input[type="checkbox"] {
+            margin-right: 5px;
         }
     </style>
 
@@ -27,6 +40,9 @@ const TPL = /*html*/`
             <option value="table">${t("book_properties.table")}</option>
             <option value="geoMap">${t("book_properties.geo-map")}</option>
         </select>
+    </div>
+
+    <div class="book-properties-container">
     </div>
 
     <button type="button"
@@ -53,6 +69,7 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
     private $viewTypeSelect!: JQuery<HTMLElement>;
     private $expandChildrenButton!: JQuery<HTMLElement>;
     private $collapseAllButton!: JQuery<HTMLElement>;
+    private $propertiesContainer!: JQuery<HTMLElement>;
 
     get name() {
         return "bookProperties";
@@ -107,6 +124,8 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
 
             this.triggerCommand("refreshNoteList", { noteId: this.noteId });
         });
+
+        this.$propertiesContainer = this.$widget.find(".book-properties-container");
     }
 
     async refreshWithNote(note: FNote) {
@@ -120,6 +139,15 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
 
         this.$expandChildrenButton.toggle(viewType === "list");
         this.$collapseAllButton.toggle(viewType === "list");
+
+        this.$propertiesContainer.empty();
+
+        const bookPropertiesData = bookPropertiesConfig[viewType];
+        if (bookPropertiesData) {
+            for (const property of bookPropertiesData.properties) {
+                this.$propertiesContainer.append(renderBookProperty(property, note));
+            }
+        }
     }
 
     async toggleViewType(type: string) {
