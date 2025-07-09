@@ -35,6 +35,7 @@ export interface MenuCommandItem<T> {
     shortcut?: string;
     spellingSuggestion?: string;
     checked?: boolean;
+    columns?: number;
 }
 
 export type MenuItem<T> = MenuCommandItem<T> | MenuSeparatorItem;
@@ -235,6 +236,9 @@ class ContextMenu {
                     $link.addClass("dropdown-toggle");
 
                     const $subMenu = $("<ul>").addClass("dropdown-menu");
+                    if (!this.isMobile && item.columns) {
+                        $subMenu.css("column-count", item.columns);
+                    }
 
                     this.addItems($subMenu, item.items);
 

@@ -92,7 +92,8 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 command: "insertNoteAfter",
                 uiIcon: "bx bx-plus",
                 items: insertNoteAfterEnabled ? await noteTypesService.getNoteTypeItems("insertNoteAfter") : null,
-                enabled: insertNoteAfterEnabled && noSelectedNotes && notOptionsOrHelp
+                enabled: insertNoteAfterEnabled && noSelectedNotes && notOptionsOrHelp,
+                columns: 2
             },
 
             {
@@ -100,7 +101,8 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 command: "insertChildNote",
                 uiIcon: "bx bx-plus",
                 items: notSearch ? await noteTypesService.getNoteTypeItems("insertChildNote") : null,
-                enabled: notSearch && noSelectedNotes && notOptionsOrHelp
+                enabled: notSearch && noSelectedNotes && notOptionsOrHelp,
+                columns: 2
             },
 
             { title: "----" },
