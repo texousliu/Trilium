@@ -292,7 +292,7 @@ export function getResourceDir() {
         return process.env.TRILIUM_RESOURCE_DIR;
     }
 
-    if (isElectron && !isDev) return __dirname;
+    if (isElectron && !isDev) return path.join(__dirname, "../../../..");
     if (!isDev) {
         return path.dirname(process.argv[1]);
     }
