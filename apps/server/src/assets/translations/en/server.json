@@ -303,5 +303,20 @@
     "subpages": "Subpages:",
     "on-this-page": "On This Page",
     "expand": "Expand"
+  },
+  "hidden_subtree_templates": {
+    "text-snippet": "Text Snippet",
+    "description": "Description",
+    "list-view": "List View",
+    "grid-view": "Grid View",
+    "calendar": "Calendar",
+    "table": "Table",
+    "geo-map": "Geo Map",
+    "start-date": "Start Date",
+    "end-date": "End Date",
+    "start-time": "Start Time",
+    "end-time": "End Time",
+    "geolocation": "Geolocation",
+    "built-in-templates": "Built-in templates"
   }
 }

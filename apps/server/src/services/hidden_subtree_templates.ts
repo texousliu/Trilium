@@ -1,15 +1,16 @@
 import { HiddenSubtreeItem } from "@triliumnext/commons";
+import { t } from "i18next";
 
 export default function buildHiddenSubtreeTemplates() {
     const templates: HiddenSubtreeItem = {
         id: "_templates",
-        title: "Built-in templates",
+        title: t("hidden_subtree_templates.built-in-templates"),
         type: "book",
         children: [
             {
                 id: "_template_text_snippet",
                 type: "text",
-                title: "Text Snippet",
+                title: t("hidden_subtree_templates.text-snippet"),
                 icon: "bx-align-left",
                 attributes: [
                     {
@@ -23,14 +24,14 @@ export default function buildHiddenSubtreeTemplates() {
                     {
                         name: "label:textSnippetDescription",
                         type: "label",
-                        value: "promoted,alias=Description,single,text"
+                        value: `promoted,alias=${t("hidden_subtree_templates.description")},single,text`
                     }
                 ]
             },
             {
                 id: "_template_list_view",
                 type: "book",
-                title: "List View",
+                title: t("hidden_subtree_templates.list-view"),
                 icon: "bx bx-list-ul",
                 attributes: [
                     {
@@ -51,7 +52,7 @@ export default function buildHiddenSubtreeTemplates() {
             {
                 id: "_template_grid_view",
                 type: "book",
-                title: "Grid View",
+                title: t("hidden_subtree_templates.grid-view"),
                 icon: "bx bxs-grid",
                 attributes: [
                     {
@@ -72,7 +73,7 @@ export default function buildHiddenSubtreeTemplates() {
             {
                 id: "_template_calendar",
                 type: "book",
-                title: "Calendar",
+                title: t("hidden_subtree_templates.calendar"),
                 icon: "bx bx-calendar",
                 attributes: [
                     {
@@ -95,25 +96,25 @@ export default function buildHiddenSubtreeTemplates() {
                     {
                         name: "label:startDate",
                         type: "label",
-                        value: "promoted,alias=Start Date,single,date",
+                        value: `promoted,alias=${t("hidden_subtree_templates.start-date")},single,date`,
                         isInheritable: true
                     },
                     {
                         name: "label:endDate",
                         type: "label",
-                        value: "promoted,alias=End Date,single,date",
+                        value: `promoted,alias=${t("hidden_subtree_templates.end-date")},single,date`,
                         isInheritable: true
                     },
                     {
                         name: "label:startTime",
                         type: "label",
-                        value: "promoted,alias=Start Time,single,time",
+                        value: `promoted,alias=${t("hidden_subtree_templates.start-time")},single,time`,
                         isInheritable: true
                     },
                     {
                         name: "label:endTime",
                         type: "label",
-                        value: "promoted,alias=End Time,single,time",
+                        value: `promoted,alias=${t("hidden_subtree_templates.end-time")},single,time`,
                         isInheritable: true
                     }
                 ]
@@ -121,7 +122,7 @@ export default function buildHiddenSubtreeTemplates() {
             {
                 id: "_template_table",
                 type: "book",
-                title: "Table",
+                title: t("hidden_subtree_templates.table"),
                 icon: "bx bx-table",
                 attributes: [
                     {
@@ -142,7 +143,7 @@ export default function buildHiddenSubtreeTemplates() {
             {
                 id: "_template_geo_map",
                 type: "book",
-                title: "Geo Map",
+                title: t("hidden_subtree_templates.geo-map"),
                 icon: "bx bx-map-alt",
                 attributes: [
                     {
@@ -165,7 +166,7 @@ export default function buildHiddenSubtreeTemplates() {
                     {
                         name: "label:geolocation",
                         type: "label",
-                        value: "promoted,alias=Geolocation,single,text",
+                        value: `promoted,alias=${t("hidden_subtree_templates.geolocation")},single,text`,
                         isInheritable: true
                     }
                 ]
