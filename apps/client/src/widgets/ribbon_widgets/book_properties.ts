@@ -19,6 +19,7 @@ const TPL = /*html*/`
 
         .book-properties-container {
             display: flex;
+            align-items: center;
         }
 
         .book-properties-container > * {

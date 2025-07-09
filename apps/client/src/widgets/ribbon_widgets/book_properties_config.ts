@@ -48,7 +48,7 @@ export function renderBookProperty(property: BookProperty, note: FNote) {
                 }
             });
             $checkbox.prop("checked", note.hasOwnedLabel(property.bindToLabel));
-            $container.prepend($checkbox);
+            $label.prepend($checkbox);
             break;
         default:
             throw new Error(`Unknown property type: ${property.type}`);
