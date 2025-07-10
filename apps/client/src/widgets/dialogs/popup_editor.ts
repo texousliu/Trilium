@@ -80,6 +80,13 @@ const TPL = /*html*/`\
 
 export default class PopupEditorDialog extends Container<BasicWidget> {
 
+    private noteContext: NoteContext;
+
+    constructor() {
+        super();
+        this.noteContext = new NoteContext("_popup-editor");
+    }
+
     doRender() {
         // This will populate this.$widget with the content of the children.
         super.doRender();
@@ -95,34 +102,21 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
         this.$widget = $newWidget;
     }
 
-    async refresh(noteIdOrPath: string) {
-        const noteContext = new NoteContext("_popup-editor");
-        await noteContext.setNote(noteIdOrPath);
-
-        await this.handleEventInChildren("activeContextChanged", { noteContext });
-        return true;
-    }
-
     async openInPopupEvent({ noteIdOrPath }: EventData<"openInPopup">) {
-        if (await this.refresh(noteIdOrPath)) {
-            const $dialog = await openDialog(this.$widget, false, {
-                focus: false
-            });
+        const $dialog = await openDialog(this.$widget, false, {
+            focus: false
+        });
 
-            $dialog.on("shown.bs.modal", () => {
-                // Reduce the z-index of modals so that ckeditor popups are properly shown on top of it.
-                // The backdrop instance is not shared so it's OK to make a one-off modification.
-                $("body > .modal-backdrop").css("z-index", "998");
-                $dialog.css("z-index", "999");
+        await this.noteContext.setNote(noteIdOrPath);
 
-                // Mind map doesn't render off screen properly, so it needs refreshing once the modal is shown.
-                const $mindmap = $dialog.find(".note-detail-mind-map");
-                if ($mindmap.length) {
-                    const mindmapComponent = appContext.getComponentByEl($mindmap[0]);
-                    mindmapComponent.refresh();
-                }
-            });
-        }
+        $dialog.on("shown.bs.modal", () => {
+            // Reduce the z-index of modals so that ckeditor popups are properly shown on top of it.
+            // The backdrop instance is not shared so it's OK to make a one-off modification.
+            $("body > .modal-backdrop").css("z-index", "998");
+            $dialog.css("z-index", "999");
+
+            this.handleEventInChildren("activeContextChanged", { noteContext: this.noteContext });
+        });
     }
 
     handleEventInChildren<T extends EventNames>(name: T, data: EventData<T>): Promise<unknown[] | unknown> | null {
