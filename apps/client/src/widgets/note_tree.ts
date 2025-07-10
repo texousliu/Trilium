@@ -244,9 +244,13 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                 const notePath = treeService.getNotePath(node);
 
                 if (notePath) {
-                    appContext.tabManager.openTabWithNoteWithHoisting(notePath, {
-                        activate: e.shiftKey ? true : false
-                    });
+                    if (e.ctrlKey) {
+                        appContext.triggerCommand("openInPopup", { noteIdOrPath: notePath });
+                    } else {
+                        appContext.tabManager.openTabWithNoteWithHoisting(notePath, {
+                            activate: e.shiftKey ? true : false
+                        });
+                    }
                 }
 
                 e.stopPropagation();
