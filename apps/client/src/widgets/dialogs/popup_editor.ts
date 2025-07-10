@@ -9,7 +9,15 @@ const TPL = /*html*/`\
 <div class="popup-editor-dialog modal fade mx-auto" tabindex="-1" role="dialog">
     <style>
         .modal.popup-editor-dialog .modal-header .modal-title {
-            font-size: 1em;
+            font-size: 1.1em;
+        }
+
+        .modal.popup-editor-dialog .modal-body {
+            padding: 0.5em 1.5em;
+        }
+
+        .modal.popup-editor-dialog .note-detail-editable-text {
+            padding: 0;
         }
 
         .modal.popup-editor-dialog .title-row,
