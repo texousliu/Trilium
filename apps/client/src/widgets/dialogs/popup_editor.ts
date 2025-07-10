@@ -51,6 +51,14 @@ const TPL = /*html*/`\
             background: var(--modal-background-color);
             z-index: 1000;
         }
+
+        .modal.popup-editor-dialog .note-detail {
+            height: 100%;
+        }
+
+        .modal.popup-editor-dialog .note-detail-file {
+            padding: 0;
+        }
     </style>
 
     <div class="modal-dialog modal-lg" role="document">
