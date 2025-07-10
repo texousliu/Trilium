@@ -266,6 +266,7 @@ export default class DesktopLayout {
                     .cssBlock(".title-row > * { margin: 5px; }")
                     .child(new NoteIconWidget())
                     .child(new NoteTitleWidget()))
+                .child(new ClassicEditorToolbar())
                 .child(new NoteDetailWidget()));
 
         applyModals(rootContainer);

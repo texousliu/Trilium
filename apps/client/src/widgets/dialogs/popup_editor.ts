@@ -76,7 +76,6 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
         const $modalBody = $newWidget.find(".modal-body");
 
         const children = this.$widget.children();
-        console.log("Got children", children);
         $modalHeader.append(children[0]);
         $modalBody.append(children.slice(1));
         this.$widget = $newWidget;
