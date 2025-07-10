@@ -126,7 +126,6 @@ export type CommandMappings = {
     openNoteInNewTab: CommandData;
     openNoteInNewSplit: CommandData;
     openNoteInNewWindow: CommandData;
-    openNoteInPopup: CommandData;
     openAboutDialog: CommandData;
     hideFloatingButtons: {};
     hideLeftPane: CommandData;
@@ -142,6 +141,7 @@ export type CommandMappings = {
     };
     openInTab: ContextMenuCommandData;
     openNoteInSplit: ContextMenuCommandData;
+    openNoteInPopup: ContextMenuCommandData;
     toggleNoteHoisting: ContextMenuCommandData;
     insertNoteAfter: ContextMenuCommandData;
     insertChildNote: ContextMenuCommandData;
