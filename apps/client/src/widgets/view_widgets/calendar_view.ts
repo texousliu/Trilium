@@ -533,7 +533,7 @@ export default class CalendarView extends ViewMode<{}> {
             const eventData: EventInput = {
                 title: title,
                 start: startDate,
-                url: `#${note.noteId}`,
+                url: `#${note.noteId}?popup`,
                 noteId: note.noteId,
                 color: color ?? undefined,
                 iconClass: note.getLabelValue("iconClass"),
