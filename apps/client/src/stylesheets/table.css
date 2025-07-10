@@ -32,5 +32,5 @@
 }
 
 .tabulator .tabulator-header .tabulator-col {
-    background: transparent;
+    background: var(--col-header-background-color);
 }
