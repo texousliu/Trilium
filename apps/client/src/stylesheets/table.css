@@ -1,4 +1,36 @@
 .tabulator {
+    --col-header-background-color: gray;
+    --col-header-text-color: white;
+    --col-header-hover-background-color: yellow;
+    --col-header-arrow-active-color: blue;
+    --col-header-arrow-inactive-color: white;
+
     background: unset;
     border: unset;
+}
+
+/* Column headers */
+
+.tabulator .tabulator-header {
+    background: var(--col-header-background-color);
+    color: var(--col-header-text-color);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tabulator .tabulator-header .tabulator-col.tabulator-sortable.tabulator-col-sorter-element:hover {
+    background-color: var(--col-header-hover-background-color);
+  }
+}
+
+.tabulator .tabulator-header .tabulator-col.tabulator-sortable[aria-sort] .tabulator-col-content .tabulator-col-sorter .tabulator-arrow {
+    border-bottom-color: var(--col-header-arrow-active-color);
+    border-top-color: var(--col-header-arrow-active-color);
+}
+
+.tabulator .tabulator-header .tabulator-col.tabulator-sortable[aria-sort="none"] .tabulator-col-content .tabulator-col-sorter .tabulator-arrow {
+    border-bottom-color: var(--col-header-arrow-inactive-color);
+}
+
+.tabulator .tabulator-header .tabulator-col {
+    background: transparent;
 }
