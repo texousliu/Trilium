@@ -230,7 +230,7 @@ export default class DesktopLayout {
                                                                 .child(new PromotedAttributesWidget())
                                                                 .child(new SqlTableSchemasWidget())
                                                                 .child(new NoteDetailWidget())
-                                                                .child(new NoteListWidget())
+                                                                .child(new NoteListWidget(false))
                                                                 .child(new SearchResultWidget())
                                                                 .child(new SqlResultWidget())
                                                                 .child(new ScrollPaddingWidget())
@@ -268,7 +268,8 @@ export default class DesktopLayout {
                     .child(new NoteTitleWidget()))
                 .child(new ClassicEditorToolbar())
                 .child(new PromotedAttributesWidget())
-                .child(new NoteDetailWidget()));
+                .child(new NoteDetailWidget())
+                .child(new NoteListWidget(true)));
 
         applyModals(rootContainer);
         return rootContainer;
