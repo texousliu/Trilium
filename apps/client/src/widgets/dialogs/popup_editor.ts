@@ -1,7 +1,6 @@
 import type { EventNames, EventData } from "../../components/app_context.js";
 import NoteContext from "../../components/note_context.js";
 import { openDialog } from "../../services/dialog.js";
-import froca from "../../services/froca.js";
 import BasicWidget from "../basic_widget.js";
 import Container from "../containers/container.js";
 
@@ -13,13 +12,13 @@ const TPL = /*html*/`\
         }
 
         .modal.popup-editor-dialog .modal-body {
-            padding: 0 1.5em;
-            max-height: 75vh;
+            padding: 0;
+            height: 75vh;
             overflow: scroll;
         }
 
         .modal.popup-editor-dialog .note-detail-editable-text {
-            padding: 0;
+            padding: 0 1em;
         }
 
         .modal.popup-editor-dialog .title-row,
