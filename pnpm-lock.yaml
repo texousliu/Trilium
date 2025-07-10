@@ -409,8 +409,8 @@ importers:
   apps/desktop-e2e:
     devDependencies:
       dotenv:
-        specifier: 17.1.0
-        version: 17.1.0
+        specifier: 17.2.0
+        version: 17.2.0
       electron:
         specifier: 37.2.0
         version: 37.2.0
@@ -784,8 +784,8 @@ importers:
   apps/server-e2e:
     devDependencies:
       dotenv:
-        specifier: 17.1.0
-        version: 17.1.0
+        specifier: 17.2.0
+        version: 17.2.0
 
   apps/website:
     dependencies:
@@ -7938,6 +7938,10 @@ packages:
 
   dotenv@17.1.0:
     resolution: {integrity: sha512-tG9VUTJTuju6GcXgbdsOuRhupE8cb4mRgY5JLRCh4MtGoVo3/gfGUtOMwmProM6d0ba2mCFvv+WrpYJV6qgJXQ==}
+    engines: {node: '>=12'}
+
+  dotenv@17.2.0:
+    resolution: {integrity: sha512-Q4sgBT60gzd0BB0lSyYD3xM4YxrXA9y4uBDof1JNYGzOXrQdQ6yX+7XIAqoFOGQFOTK1D3Hts5OllpxMDZFONQ==}
     engines: {node: '>=12'}
 
   dotignore@0.1.2:
@@ -23787,6 +23791,8 @@ snapshots:
   dotenv@16.4.7: {}
 
   dotenv@17.1.0: {}
+
+  dotenv@17.2.0: {}
 
   dotignore@0.1.2:
     dependencies:
