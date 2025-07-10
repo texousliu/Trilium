@@ -68,15 +68,6 @@ const TPL = /*html*/`\
 
 export default class PopupEditorDialog extends Container<BasicWidget> {
 
-    private noteId?: string;
-
-    constructor() {
-        super();
-        setTimeout(() => {
-            this.openPopupEditorEvent("f4sIt7iRg0Lc");
-        }, 750);
-    }
-
     doRender() {
         // This will populate this.$widget with the content of the children.
         super.doRender();
@@ -92,28 +83,16 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
         this.$widget = $newWidget;
     }
 
-    async refresh() {
-        if (!this.noteId) {
-            console.warn("Popup editor noteId is not set, cannot refresh.");
-            return false;
-        }
-
-        const note = await froca.getNote(this.noteId);
-        if (!note) {
-            console.warn(`Popup editor note with ID ${this.noteId} not found.`);
-            return false;
-        }
-
+    async refresh(noteIdOrPath: string) {
         const noteContext = new NoteContext("_popup-editor");
-        await noteContext.setNote(note.noteId);
+        await noteContext.setNote(noteIdOrPath);
 
         await this.handleEventInChildren("activeContextChanged", { noteContext });
         return true;
     }
 
-    async openPopupEditorEvent(noteId: string) {
-        this.noteId = noteId;
-        if (await this.refresh()) {
+    async openInPopupEvent({ noteIdOrPath }: EventData<"openInPopup">) {
+        if (await this.refresh(noteIdOrPath)) {
             const $dialog = await openDialog(this.$widget);
             $dialog.on("shown.bs.modal", () => {
                 // Reduce the z-index of modals so that ckeditor popups are properly shown on top of it.

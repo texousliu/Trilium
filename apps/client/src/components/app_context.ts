@@ -122,9 +122,11 @@ export type CommandMappings = {
     showImportDialog: CommandData & { noteId: string };
     openNewNoteSplit: NoteCommandData;
     openInWindow: NoteCommandData;
+    openInPopup: CommandData & { noteIdOrPath: string; };
     openNoteInNewTab: CommandData;
     openNoteInNewSplit: CommandData;
     openNoteInNewWindow: CommandData;
+    openNoteInPopup: CommandData;
     openAboutDialog: CommandData;
     hideFloatingButtons: {};
     hideLeftPane: CommandData;

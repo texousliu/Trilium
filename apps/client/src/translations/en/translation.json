@@ -1832,7 +1832,8 @@
   "link_context_menu": {
     "open_note_in_new_tab": "Open note in a new tab",
     "open_note_in_new_split": "Open note in a new split",
-    "open_note_in_new_window": "Open note in a new window"
+    "open_note_in_new_window": "Open note in a new window",
+    "open_note_in_popup": "Quick edit"
   },
   "electron_integration": {
     "desktop-application": "Desktop Application",
