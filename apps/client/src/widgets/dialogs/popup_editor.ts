@@ -1,4 +1,5 @@
 import type { EventNames, EventData } from "../../components/app_context.js";
+import appContext from "../../components/app_context.js";
 import NoteContext from "../../components/note_context.js";
 import { openDialog } from "../../services/dialog.js";
 import BasicWidget from "../basic_widget.js";
@@ -99,11 +100,19 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
             const $dialog = await openDialog(this.$widget, false, {
                 focus: false
             });
+
             $dialog.on("shown.bs.modal", () => {
                 // Reduce the z-index of modals so that ckeditor popups are properly shown on top of it.
                 // The backdrop instance is not shared so it's OK to make a one-off modification.
                 $("body > .modal-backdrop").css("z-index", "998");
                 $dialog.css("z-index", "999");
+
+                // Mind map doesn't render off screen properly, so it needs refreshing once the modal is shown.
+                const $mindmap = $dialog.find(".note-detail-mind-map");
+                if ($mindmap.length) {
+                    const mindmapComponent = appContext.getComponentByEl($mindmap[0]);
+                    mindmapComponent.refresh();
+                }
             });
         }
     }
