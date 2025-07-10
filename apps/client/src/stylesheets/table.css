@@ -5,8 +5,23 @@
     --col-header-arrow-active-color: blue;
     --col-header-arrow-inactive-color: white;
 
+    --row-text-color: white;
+    --row-alternate-background-color: transparent;
+
+    --grid-color: gray;
+
+    --cell-read-only-text-color: gray;
+    --cell-editing-background-color: black;
+    --cell-editing-text-color: yellow;
+    --cell-editing-border-color: green;
+    --cell-editing-border-width: 2px;
+
     background: unset;
     border: unset;
+}
+
+.tabulator .tabulator-tableholder .tabulator-table {
+    background: unset;
 }
 
 /* Column headers */
@@ -33,4 +48,41 @@
 
 .tabulator .tabulator-header .tabulator-col {
     background: var(--col-header-background-color);
+}
+
+/* Rows */
+
+.tabulator-row {
+    background: transparent;
+    border: 1px solid var(--grid-color);
+    color: var(--row-text-color);
+}
+
+.tabulator-row.tabulator-row-even {
+    background: var(--row-alternate-background-color);
+}
+
+.tabulator-row.tabulator-moving {
+    backdrop-filter: blur(5px);
+}
+
+/* Cell */
+
+.tabulator-row .tabulator-cell.tabulator-frozen.tabulator-frozen-left,
+.tabulator-row .tabulator-cell {
+    border-right-color: var(--grid-color);
+}
+
+.tabulator-row .tabulator-cell:not(.tabulator-editable) {
+    color: var(--cell-read-only-text-color);
+}
+
+.tabulator-row .tabulator-cell.tabulator-editing {
+    outline: calc(var(--cell-editing-border-width) - 1px) solid var(--cell-editing-border-color);
+    border-color: var(--cell-editing-border-color);
+    background: var(--cell-editing-background-color);
+}
+
+.tabulator-row .tabulator-cell.tabulator-editing > * {
+    color: var(--cell-editing-text-color);
 }
