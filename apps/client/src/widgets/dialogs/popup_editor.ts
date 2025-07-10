@@ -13,7 +13,9 @@ const TPL = /*html*/`\
         }
 
         .modal.popup-editor-dialog .modal-body {
-            padding: 0.5em 1.5em;
+            padding: 0 1.5em;
+            max-height: 75vh;
+            overflow: scroll;
         }
 
         .modal.popup-editor-dialog .note-detail-editable-text {
