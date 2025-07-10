@@ -1854,7 +1854,8 @@
     "full-text-search": "Full text search"
   },
   "note_tooltip": {
-    "note-has-been-deleted": "Note has been deleted."
+    "note-has-been-deleted": "Note has been deleted.",
+    "quick-edit": "Quick edit"
   },
   "geo-map": {
     "create-child-note-title": "Create a new child note and add it to the map",

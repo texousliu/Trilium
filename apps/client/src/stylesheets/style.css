@@ -771,6 +771,14 @@ table.promoted-attributes-in-tooltip th {
     font-size: small;
 }
 
+.note-tooltip-content .open-popup-button {
+    position: absolute;
+    right: 15px;
+    bottom: 8px;
+    font-size: 1.2em;
+    color: inherit;
+}
+
 .note-tooltip-attributes {
     display: -webkit-box;
     -webkit-box-orient: vertical;
