@@ -1,3 +1,4 @@
+import type { EventNames, EventData } from "../../components/app_context.js";
 import NoteContext from "../../components/note_context.js";
 import { openDialog } from "../../services/dialog.js";
 import froca from "../../services/froca.js";
@@ -28,7 +29,7 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
     constructor() {
         super();
         setTimeout(() => {
-            this.openPopupEditorEvent("vdJ8utb0A0Kd");
+            this.openPopupEditorEvent("f4sIt7iRg0Lc");
         }, 750);
     }
 
@@ -57,9 +58,7 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
         const noteContext = new NoteContext("_popup-editor");
         await noteContext.setNote(note.noteId);
 
-        await this.handleEventInChildren("setNoteContext", {
-            noteContext: noteContext
-        });
+        await this.handleEventInChildren("activeContextChanged", { noteContext });
         return true;
     }
 
@@ -69,4 +68,14 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
             openDialog(this.$widget);
         }
     }
+
+    handleEventInChildren<T extends EventNames>(name: T, data: EventData<T>): Promise<unknown[] | unknown> | null {
+        // Avoid events related to the current tab interfere with our popup.
+        if (["noteSwitched", "noteSwitchedAndActivated"].includes(name)) {
+            return Promise.resolve();
+        }
+
+        return super.handleEventInChildren(name, data);
+    }
+
 }
