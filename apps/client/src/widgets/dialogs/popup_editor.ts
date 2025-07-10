@@ -96,7 +96,9 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
 
     async openInPopupEvent({ noteIdOrPath }: EventData<"openInPopup">) {
         if (await this.refresh(noteIdOrPath)) {
-            const $dialog = await openDialog(this.$widget);
+            const $dialog = await openDialog(this.$widget, false, {
+                focus: false
+            });
             $dialog.on("shown.bs.modal", () => {
                 // Reduce the z-index of modals so that ckeditor popups are properly shown on top of it.
                 // The backdrop instance is not shared so it's OK to make a one-off modification.

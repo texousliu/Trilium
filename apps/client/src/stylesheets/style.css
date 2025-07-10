@@ -540,6 +540,7 @@ button.btn-sm {
     /* Making this narrower because https://github.com/zadam/trilium/issues/502 (problem only in smaller font sizes) */
     min-width: 0;
     padding: 0;
+    z-index: 1000;
 }
 
 pre:not(.hljs) {
