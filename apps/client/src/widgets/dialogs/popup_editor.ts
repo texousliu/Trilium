@@ -38,6 +38,15 @@ const TPL = /*html*/`\
         .modal.popup-editor-dialog .note-title-widget input.note-title {
             font-size: 1em;
         }
+
+        .modal.popup-editor-dialog .classic-toolbar-widget {
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--modal-background-color);
+            z-index: 1000;
+        }
     </style>
 
     <div class="modal-dialog modal-lg" role="document">
