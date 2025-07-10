@@ -262,8 +262,6 @@ export default class DesktopLayout {
             .child(new PopupEditorDialog()
                 .child(new FlexContainer("row")
                     .class("title-row")
-                    .css("height", "50px")
-                    .css("min-height", "50px")
                     .css("align-items", "center")
                     .cssBlock(".title-row > * { margin: 5px; }")
                     .child(new NoteIconWidget())

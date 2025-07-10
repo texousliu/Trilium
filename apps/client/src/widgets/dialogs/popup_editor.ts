@@ -7,15 +7,40 @@ import Container from "../containers/container.js";
 
 const TPL = /*html*/`\
 <div class="popup-editor-dialog modal fade mx-auto" tabindex="-1" role="dialog">
+    <style>
+        .modal.popup-editor-dialog .modal-header .modal-title {
+            font-size: 1em;
+        }
+
+        .modal.popup-editor-dialog .title-row,
+        .modal.popup-editor-dialog .modal-title,
+        .modal.popup-editor-dialog .note-icon-widget {
+            height: 32px;
+        }
+
+        .modal.popup-editor-dialog .note-icon-widget {
+            width: 32px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .modal.popup-editor-dialog .note-icon-widget button.note-icon,
+        .modal.popup-editor-dialog .note-title-widget input.note-title {
+            font-size: 1em;
+        }
+    </style>
+
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Popup editor</h5>
+                <div class="modal-title">
+                    <!-- This is where the first child will be injected -->
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
-                <!-- This is where the content will be injected. -->
+                <!-- This is where all but the first child will be injected. -->
             </div>
         </div>
     </div>
@@ -39,7 +64,13 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
 
         // Now we wrap it in the modal.
         const $newWidget = $(TPL);
-        $newWidget.find(".modal-body").append(this.$widget.children());
+        const $modalHeader = $newWidget.find(".modal-title");
+        const $modalBody = $newWidget.find(".modal-body");
+
+        const children = this.$widget.children();
+        console.log("Got children", children);
+        $modalHeader.append(children[0]);
+        $modalBody.append(children.slice(1));
         this.$widget = $newWidget;
     }
 
