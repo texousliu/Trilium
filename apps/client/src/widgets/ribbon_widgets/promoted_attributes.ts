@@ -69,11 +69,6 @@ interface AttributeResult {
     attributeId: string;
 }
 
-/**
- * This widget is quite special because it's used in the desktop ribbon, but in mobile outside of ribbon.
- * This works without many issues (apart from autocomplete), but it should be kept in mind when changing things
- * and testing.
- */
 export default class PromotedAttributesWidget extends NoteContextAwareWidget {
 
     private $container!: JQuery<HTMLElement>;

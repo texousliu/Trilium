@@ -267,6 +267,7 @@ export default class DesktopLayout {
                     .child(new NoteIconWidget())
                     .child(new NoteTitleWidget()))
                 .child(new ClassicEditorToolbar())
+                .child(new PromotedAttributesWidget())
                 .child(new NoteDetailWidget()));
 
         applyModals(rootContainer);
