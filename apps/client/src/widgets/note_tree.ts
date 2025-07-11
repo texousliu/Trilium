@@ -244,6 +244,9 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                 const notePath = treeService.getNotePath(node);
 
                 if (notePath) {
+                    e.stopPropagation();
+                    e.preventDefault();
+
                     if (e.ctrlKey) {
                         appContext.triggerCommand("openInPopup", { noteIdOrPath: notePath });
                     } else {
@@ -252,7 +255,11 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                         });
                     }
                 }
-
+            }
+        });
+        this.$tree.on("mouseup", ".fancytree-title", (e) => {
+            // Prevent middle click from pasting in the editor.
+            if (e.which === 2) {
                 e.stopPropagation();
                 e.preventDefault();
             }
