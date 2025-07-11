@@ -22,13 +22,151 @@
             "children": [
                 {
                     "isClone": false,
+                    "noteId": "BOCnjTMBCoxW",
+                    "notePath": [
+                        "pOsGYCXsbNQG",
+                        "BOCnjTMBCoxW"
+                    ],
+                    "title": "Feature Highlights",
+                    "notePosition": 10,
+                    "prefix": null,
+                    "isExpanded": false,
+                    "type": "text",
+                    "mime": "text/html",
+                    "attributes": [
+                        {
+                            "type": "label",
+                            "name": "iconClass",
+                            "value": "bx bx-star",
+                            "isInheritable": false,
+                            "position": 10
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "GTwFsgaA0lCt",
+                            "isInheritable": false,
+                            "position": 20
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "2FvYrpmOXm29",
+                            "isInheritable": false,
+                            "position": 30
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "ZjLYv08Rp3qC",
+                            "isInheritable": false,
+                            "position": 40
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "ZlN4nump6EbW",
+                            "isInheritable": false,
+                            "position": 50
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "iPIMuisry3hd",
+                            "isInheritable": false,
+                            "position": 60
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "pwc194wlRzcH",
+                            "isInheritable": false,
+                            "position": 70
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "R9pX4DGra2Vt",
+                            "isInheritable": false,
+                            "position": 80
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "LMAv4Uy3Wk6J",
+                            "isInheritable": false,
+                            "position": 90
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "7DAiwaf8Z7Rz",
+                            "isInheritable": false,
+                            "position": 100
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "veGu4faJErEM",
+                            "isInheritable": false,
+                            "position": 110
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "NRnIZmSMc5sj",
+                            "isInheritable": false,
+                            "position": 120
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "rC3pL2aptaRE",
+                            "isInheritable": false,
+                            "position": 130
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "AgjCISero73a",
+                            "isInheritable": false,
+                            "position": 140
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "gBbsAeiuUxI5",
+                            "isInheritable": false,
+                            "position": 150
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "xWbu3jpNWapp",
+                            "isInheritable": false,
+                            "position": 160
+                        },
+                        {
+                            "type": "relation",
+                            "name": "internalLink",
+                            "value": "81SGnPGMk7Xc",
+                            "isInheritable": false,
+                            "position": 170
+                        }
+                    ],
+                    "format": "markdown",
+                    "dataFileName": "Feature Highlights.md",
+                    "attachments": []
+                },
+                {
+                    "isClone": false,
                     "noteId": "Otzi9La2YAUX",
                     "notePath": [
                         "pOsGYCXsbNQG",
                         "Otzi9La2YAUX"
                     ],
                     "title": "Installation & Setup",
-                    "notePosition": 10,
+                    "notePosition": 20,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -1144,7 +1282,7 @@
                         "gh7bpGYxajRS"
                     ],
                     "title": "Basic Concepts and Features",
-                    "notePosition": 30,
+                    "notePosition": 40,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -5189,7 +5327,7 @@
                         "s3YCWHBfmYuM"
                     ],
                     "title": "Quick Start",
-                    "notePosition": 50,
+                    "notePosition": 60,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -5250,7 +5388,7 @@
                         "i6dbnitykE5D"
                     ],
                     "title": "FAQ",
-                    "notePosition": 60,
+                    "notePosition": 70,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -5339,7 +5477,7 @@
                         "KSZ04uQ2D1St"
                     ],
                     "title": "Note Types",
-                    "notePosition": 120,
+                    "notePosition": 130,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -8731,7 +8869,7 @@
                         "BgmBlOIl72jZ"
                     ],
                     "title": "Troubleshooting",
-                    "notePosition": 240,
+                    "notePosition": 250,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -8990,7 +9128,7 @@
                         "pKK96zzmvBGf"
                     ],
                     "title": "Theme development",
-                    "notePosition": 250,
+                    "notePosition": 260,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -9193,7 +9331,7 @@
                         "tC7s2alapj8V"
                     ],
                     "title": "Advanced Usage",
-                    "notePosition": 310,
+                    "notePosition": 320,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
@@ -11731,7 +11869,7 @@
                         "LMAv4Uy3Wk6J"
                     ],
                     "title": "AI",
-                    "notePosition": 320,
+                    "notePosition": 330,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "book",
@@ -12094,7 +12232,7 @@
                         "CdNpE2pqjmI6"
                     ],
                     "title": "Scripting",
-                    "notePosition": 330,
+                    "notePosition": 340,
                     "prefix": null,
                     "isExpanded": false,
                     "type": "text",
