@@ -8,7 +8,7 @@ import Container from "../containers/container.js";
 const TPL = /*html*/`\
 <div class="popup-editor-dialog modal fade mx-auto" tabindex="-1" role="dialog">
     <style>
-        .modal.popup-editor-dialog .modal-dialog {
+        body.desktop .modal.popup-editor-dialog .modal-dialog {
             max-width: 75vw;
         }
 
