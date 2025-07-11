@@ -309,13 +309,14 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
     const shiftKey = evt?.shiftKey;
     const isLeftClick = !evt || ("which" in evt && evt.which === 1);
     const isMiddleClick = evt && "which" in evt && evt.which === 2;
+    const isRightClick = evt && "button" in evt && evt.button === 2;
     const targetIsBlank = ($link?.attr("target") === "_blank");
     const openInNewTab = (isLeftClick && ctrlKey) || isMiddleClick || targetIsBlank;
     const activate = (isLeftClick && ctrlKey && shiftKey) || (isMiddleClick && shiftKey);
     const openInNewWindow = isLeftClick && evt?.shiftKey && !ctrlKey;
 
     if (notePath) {
-        if (openInPopup || (ctrlKey && isMiddleClick)) {
+        if (openInPopup || (ctrlKey && isRightClick)) {
             appContext.triggerCommand("openInPopup", { noteIdOrPath: notePath });
         } else if (openInNewWindow) {
             appContext.triggerCommand("openInWindow", { notePath, viewScope });
@@ -384,6 +385,11 @@ function linkContextMenu(e: PointerEvent) {
     const url = $link.attr("href") || $link.attr("data-href");
 
     if ($link.attr("data-no-context-menu")) {
+        return;
+    }
+
+    if (e.button === 2) {
+        e.preventDefault();
         return;
     }
 

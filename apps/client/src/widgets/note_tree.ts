@@ -240,20 +240,15 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         this.$tree.on("mousedown", ".fancytree-title", (e) => {
             if (e.which === 2) {
                 const node = $.ui.fancytree.getNode(e as unknown as Event);
-
                 const notePath = treeService.getNotePath(node);
 
                 if (notePath) {
                     e.stopPropagation();
                     e.preventDefault();
 
-                    if (e.ctrlKey) {
-                        appContext.triggerCommand("openInPopup", { noteIdOrPath: notePath });
-                    } else {
-                        appContext.tabManager.openTabWithNoteWithHoisting(notePath, {
-                            activate: e.shiftKey ? true : false
-                        });
-                    }
+                    appContext.tabManager.openTabWithNoteWithHoisting(notePath, {
+                        activate: e.shiftKey ? true : false
+                    });
                 }
             }
         });
@@ -263,11 +258,6 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                 e.stopPropagation();
                 e.preventDefault();
             }
-        });
-        this.$tree.on("auxclick", (e) => {
-            // Prevent middle click from pasting in the editor.
-            e.stopPropagation();
-            e.preventDefault();
         });
 
         this.$treeSettingsPopup = this.$widget.find(".tree-settings-popup");
@@ -723,7 +713,13 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
             });
         } else {
             this.$tree.on("contextmenu", ".fancytree-node", (e) => {
-                this.showContextMenu(e);
+                if (!e.ctrlKey) {
+                    this.showContextMenu(e);
+                } else {
+                    const node = $.ui.fancytree.getNode(e as unknown as Event);
+                    const notePath = treeService.getNotePath(node);
+                    appContext.triggerCommand("openInPopup", { noteIdOrPath: notePath });
+                }
                 return false; // blocks default browser right click menu
             });
 
