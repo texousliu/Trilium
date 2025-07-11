@@ -1,5 +1,4 @@
 import type { EventNames, EventData } from "../../components/app_context.js";
-import appContext from "../../components/app_context.js";
 import NoteContext from "../../components/note_context.js";
 import { openDialog } from "../../services/dialog.js";
 import BasicWidget from "../basic_widget.js";
@@ -19,7 +18,7 @@ const TPL = /*html*/`\
         .modal.popup-editor-dialog .modal-body {
             padding: 0;
             height: 75vh;
-            overflow: scroll;
+            overflow: auto;
         }
 
         .modal.popup-editor-dialog .note-detail-editable-text {
