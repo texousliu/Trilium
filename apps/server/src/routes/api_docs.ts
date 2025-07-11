@@ -64,6 +64,15 @@ export default function register(app: Application) {
         "/etapi/docs/",
         (req, res, next) => {
             log.info(`[DEBUG] Request to /etapi/docs/: ${req.method} ${req.url}`);
+            // Temporarily disable ASAR for swagger-ui file access
+            const originalNoAsar = process.noAsar;
+            process.noAsar = true;
+            
+            // Restore ASAR setting after response
+            res.on('finish', () => {
+                process.noAsar = originalNoAsar;
+            });
+            
             next();
         },
         swaggerUi.serve,
@@ -75,6 +84,18 @@ export default function register(app: Application) {
 
     app.use(
         "/api/docs/",
+        (req, res, next) => {
+            // Temporarily disable ASAR for swagger-ui file access
+            const originalNoAsar = process.noAsar;
+            process.noAsar = true;
+            
+            // Restore ASAR setting after response
+            res.on('finish', () => {
+                process.noAsar = originalNoAsar;
+            });
+            
+            next();
+        },
         swaggerUi.serve,
         swaggerUi.setup(apiDocument, {
             explorer: true,
