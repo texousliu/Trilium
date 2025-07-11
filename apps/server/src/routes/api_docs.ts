@@ -7,6 +7,19 @@ import { readFileSync, existsSync, readdirSync } from "fs";
 import { RESOURCE_DIR } from "../services/resource_dir";
 import log from "../services/log";
 
+// Monkey patch fs.lstat to debug which files are causing the issue
+const originalFs = require('fs');
+const originalLstat = originalFs.lstat;
+originalFs.lstat = function(path: string, callback: any) {
+    log.info(`[FS DEBUG] lstat called on: ${path}`);
+    return originalLstat.call(this, path, (err: any, stats: any) => {
+        if (err) {
+            log.error(`[FS DEBUG] lstat error on ${path}: ${err.message}`);
+        }
+        callback(err, stats);
+    });
+};
+
 export default function register(app: Application) {
     log.info(`[DEBUG] Starting API docs registration`);
     log.info(`[DEBUG] RESOURCE_DIR: ${RESOURCE_DIR}`);
@@ -59,6 +72,16 @@ export default function register(app: Application) {
     
     log.info(`[DEBUG] Successfully loaded OpenAPI documents`);
     log.info(`[DEBUG] About to register swagger-ui endpoints...`);
+    
+    // Check swagger-ui-dist location
+    try {
+        const swaggerPath = require.resolve('swagger-ui-dist/package.json');
+        log.info(`[DEBUG] swagger-ui-dist package.json found at: ${swaggerPath}`);
+        const swaggerDistPath = require.resolve('swagger-ui-dist');
+        log.info(`[DEBUG] swagger-ui-dist main module at: ${swaggerDistPath}`);
+    } catch (e) {
+        log.error(`[DEBUG] Error finding swagger-ui-dist: ${e}`);
+    }
 
     app.use(
         "/etapi/docs/",
