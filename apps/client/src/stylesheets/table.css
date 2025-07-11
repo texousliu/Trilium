@@ -1,4 +1,6 @@
 .tabulator {
+    --table-background-color: var(--main-background-color);
+
     --col-header-background-color: var(--main-background-color);
     --col-header-hover-background-color: var(--accented-background-color);
     --col-header-text-color: var(--main-text-color);
@@ -11,10 +13,11 @@
     --row-alternate-background-color: var(--main-background-color);
     --row-moving-background-color: var(--accented-background-color);
     --row-text-color: var(--main-text-color);
-
-    --grid-horizontal-color: var(--more-accented-background-color);
-    --grid-vertical-color: red;
-
+    --row-delimiter-color: var(--more-accented-background-color);
+    
+    --cell-horiz-padding-size: 8px;
+    --cell-vert-padding-size: 8px;
+    
     --cell-editable-hover-outline-color: var(--main-border-color);
     --cell-read-only-text-color: var(--muted-text-color);
     
@@ -28,7 +31,7 @@
 }
 
 .tabulator .tabulator-tableholder .tabulator-table {
-    background: unset;
+    background: var(--table-background-color);
 }
 
 /* Column headers */
@@ -39,11 +42,6 @@
     color: var(--col-header-text-color);
 }
 
-.tabulator div.tabulator-header .tabulator-col.tabulator-moving {
-    border: none;
-    background: var(--col-header-hover-background-color);
-}
-
 .tabulator .tabulator-col-content {
     padding: 8px 4px !important;
 }
@@ -52,6 +50,11 @@
   .tabulator .tabulator-header .tabulator-col.tabulator-sortable.tabulator-col-sorter-element:hover {
     background-color: var(--col-header-hover-background-color);
   }
+}
+
+.tabulator div.tabulator-header .tabulator-col.tabulator-moving {
+    border: none;
+    background: var(--col-header-hover-background-color);
 }
 
 .tabulator .tabulator-header .tabulator-col.tabulator-sortable[aria-sort] .tabulator-col-content .tabulator-col-sorter .tabulator-arrow {
@@ -77,15 +80,19 @@
 
 /* Rows */
 
-.tabulator-row .tabulator-cell,
+.tabulator-row .tabulator-cell {
+    padding: var(--cell-vert-padding-size) var(--cell-horiz-padding-size);
+}
+
 .tabulator-row .tabulator-cell input {
-    padding: 8px 4px;
+    padding-left: var(--cell-horiz-padding-size) !important;
+    padding-right: var(--cell-horiz-padding-size) !important;
 }
 
 .tabulator-row {
     background: transparent;
     border-top: none;
-    border-bottom: 1px solid var(--grid-horizontal-color);
+    border-bottom: 1px solid var(--row-delimiter-color);
     color: var(--row-text-color);
 }
 
