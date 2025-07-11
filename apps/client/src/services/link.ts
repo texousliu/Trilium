@@ -308,15 +308,15 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
     const ctrlKey = evt && utils.isCtrlKey(evt);
     const shiftKey = evt?.shiftKey;
     const isLeftClick = !evt || ("which" in evt && evt.which === 1);
+    // Right click is handled separately.
     const isMiddleClick = evt && "which" in evt && evt.which === 2;
-    const isRightClick = evt && "button" in evt && evt.button === 2;
     const targetIsBlank = ($link?.attr("target") === "_blank");
     const openInNewTab = (isLeftClick && ctrlKey) || isMiddleClick || targetIsBlank;
     const activate = (isLeftClick && ctrlKey && shiftKey) || (isMiddleClick && shiftKey);
     const openInNewWindow = isLeftClick && evt?.shiftKey && !ctrlKey;
 
     if (notePath) {
-        if (openInPopup || (ctrlKey && isRightClick)) {
+        if (openInPopup) {
             appContext.triggerCommand("openInPopup", { noteIdOrPath: notePath });
         } else if (openInNewWindow) {
             appContext.triggerCommand("openInWindow", { notePath, viewScope });
@@ -388,14 +388,15 @@ function linkContextMenu(e: PointerEvent) {
         return;
     }
 
-    if (e.button === 2) {
-        e.preventDefault();
-        return;
-    }
-
     const { notePath, viewScope } = parseNavigationStateFromUrl(url);
 
     if (!notePath) {
+        return;
+    }
+
+    if (e.ctrlKey && e.button === 2) {
+        appContext.triggerCommand("openInPopup", { noteIdOrPath: notePath });
+        e.preventDefault();
         return;
     }
 
