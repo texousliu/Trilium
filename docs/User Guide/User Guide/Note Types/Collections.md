@@ -1,7 +1,7 @@
-# Book
+# Collections
 A **Book Note** in Trilium is a special type of [note](../Basic%20Concepts%20and%20Features/Notes.md) designed to display the contents of its child notes sequentially, creating a linear, book-like reading experience. This format is particularly useful for viewing multiple smaller notes in a cohesive, continuous manner.
 
-![](Book_image.png)
+![](Collections_image.png)
 
 In the example above, the "node.js" note on the left panel contains several child notes. The right panel displays the content of these child notes as a single continuous document.
 

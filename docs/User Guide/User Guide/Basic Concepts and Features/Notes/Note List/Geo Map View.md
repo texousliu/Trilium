@@ -60,10 +60,11 @@ If moved by mistake, there is currently no way to undo the change. If the mouse 
 
 ## Interaction with the markers
 
-*   Hovering over a marker will display the content of the note it belongs to.
+*   Hovering over a marker will display a <a class="reference-link" href="../../UI%20Elements/Note%20Tooltip.md">Note Tooltip</a> with the content of the note it belongs to.
     *   Clicking on the note title in the tooltip will navigate to the note in the current view.
 *   Middle-clicking the marker will open the note in a new tab.
-*   Right-clicking the marker will open a contextual menu allowing:
+*   Right-clicking the marker will open a contextual menu (as described below).
+*   If the map is in read-only mode, clicking on a marker will open a <a class="reference-link" href="../../UI%20Elements/Quick%20edit.md">Quick edit</a> popup for the corresponding note.
 
 ## Contextual menu
 

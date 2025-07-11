@@ -11,7 +11,7 @@ When a note has one or more child notes, they will be listed at the end of the n
 By default, the notes will be displayed in a grid, however there are also some other view types available.
 
 > [!TIP]
-> Generally the view type can only be changed in a <a class="reference-link" href="../../Note%20Types/Book.md">Book</a> note from the <a class="reference-link" href="../UI%20Elements/Ribbon.md">Ribbon</a>, but it can also be changed manually on any type of note using the `#viewType` attribute.
+> Generally the view type can only be changed in a <a class="reference-link" href="../../Note%20Types/Collections.md">Book</a> note from the <a class="reference-link" href="../UI%20Elements/Ribbon.md">Ribbon</a>, but it can also be changed manually on any type of note using the `#viewType` attribute.
 
 ### Grid view
 

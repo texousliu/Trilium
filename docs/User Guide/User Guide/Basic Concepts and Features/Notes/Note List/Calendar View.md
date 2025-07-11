@@ -28,7 +28,9 @@ Unlike other Book view types, the Calendar view also allows some kind of interac
 
 *   Hovering the mouse over an event will display information about the note.  
     ![](7_Calendar%20View_image.png)
-*   Left clicking the event will go to that note. Middle clicking will open the note in a new tab and right click will offer more options including opening the note in a new split or window.
+*   Left clicking the event will open a <a class="reference-link" href="../../UI%20Elements/Quick%20edit.md">Quick edit</a> to edit the note in a popup while allowing easy return to the calendar by just dismissing the popup.
+    *   Middle clicking will open the note in a new tab.
+    *   Right click will offer more options including opening the note in a new split or window.
 *   Drag and drop an event on the calendar to move it to another day.
 *   The length of an event can be changed by placing the mouse to the right edge of the event and dragging the mouse around.
 
