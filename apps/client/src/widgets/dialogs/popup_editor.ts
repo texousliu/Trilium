@@ -77,6 +77,8 @@ const TPL = /*html*/`\
 export default class PopupEditorDialog extends Container<BasicWidget> {
 
     private noteContext: NoteContext;
+    private $modalHeader!: JQuery<HTMLElement>;
+    private $modalBody!: JQuery<HTMLElement>;
 
     constructor() {
         super();
@@ -89,13 +91,14 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
 
         // Now we wrap it in the modal.
         const $newWidget = $(TPL);
-        const $modalHeader = $newWidget.find(".modal-title");
-        const $modalBody = $newWidget.find(".modal-body");
+        this.$modalHeader = $newWidget.find(".modal-title");
+        this.$modalBody = $newWidget.find(".modal-body");
 
         const children = this.$widget.children();
-        $modalHeader.append(children[0]);
-        $modalBody.append(children.slice(1));
+        this.$modalHeader.append(children[0]);
+        this.$modalBody.append(children.slice(1));
         this.$widget = $newWidget;
+        this.setVisibility(false);
     }
 
     async openInPopupEvent({ noteIdOrPath }: EventData<"openInPopup">) {
@@ -105,13 +108,14 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
 
         await this.noteContext.setNote(noteIdOrPath);
 
-        $dialog.on("shown.bs.modal", () => {
+        $dialog.on("shown.bs.modal", async () => {
             // Reduce the z-index of modals so that ckeditor popups are properly shown on top of it.
             // The backdrop instance is not shared so it's OK to make a one-off modification.
             $("body > .modal-backdrop").css("z-index", "998");
             $dialog.css("z-index", "999");
 
-            this.handleEventInChildren("activeContextChanged", { noteContext: this.noteContext });
+            await this.handleEventInChildren("activeContextChanged", { noteContext: this.noteContext });
+            this.setVisibility(true);
         });
         $dialog.on("hidden.bs.modal", () => {
             const $typeWidgetEl = $dialog.find(".note-detail-printable");
@@ -119,7 +123,19 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
                 const typeWidget = glob.getComponentByEl($typeWidgetEl[0]) as TypeWidget;
                 typeWidget.cleanup();
             }
+
+            this.setVisibility(false);
         });
+    }
+
+    setVisibility(visible: boolean) {
+        if (visible) {
+            this.$modalBody.children().fadeIn();
+            this.$modalHeader.children().show();
+        } else {
+            this.$modalBody.children().hide();
+            this.$modalHeader.children().hide();
+        }
     }
 
     handleEventInChildren<T extends EventNames>(name: T, data: EventData<T>): Promise<unknown[] | unknown> | null {
