@@ -66,7 +66,7 @@ export default function register(app: Application) {
             log.info(`[DEBUG] Request to /etapi/docs/: ${req.method} ${req.url}`);
             next();
         },
-        swaggerUi.serveFiles(etapiDocument),
+        swaggerUi.serve,
         swaggerUi.setup(etapiDocument, {
             explorer: true,
             customSiteTitle: "TriliumNext ETAPI Documentation"
@@ -75,7 +75,7 @@ export default function register(app: Application) {
 
     app.use(
         "/api/docs/",
-        swaggerUi.serveFiles(apiDocument),
+        swaggerUi.serve,
         swaggerUi.setup(apiDocument, {
             explorer: true,
             customSiteTitle: "TriliumNext Internal API Documentation"
