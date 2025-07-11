@@ -38,7 +38,8 @@ const config: ForgeConfig = {
         name: PRODUCT_NAME,
         overwrite: true,
         asar: {
-            unpackDir: "{node_modules/swagger-ui-dist,node_modules/swagger-ui-express,assets}"
+            unpack: "node_modules/swagger-ui-dist/**",
+            unpackDir: "assets"
         },
         icon: path.join(APP_ICON_PATH, "icon"),
         ...macosSignConfiguration,

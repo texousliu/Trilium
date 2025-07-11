@@ -62,6 +62,10 @@ export default function register(app: Application) {
 
     app.use(
         "/etapi/docs/",
+        (req, res, next) => {
+            log.info(`[DEBUG] Request to /etapi/docs/: ${req.method} ${req.url}`);
+            next();
+        },
         swaggerUi.serveFiles(etapiDocument),
         swaggerUi.setup(etapiDocument, {
             explorer: true,
