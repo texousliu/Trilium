@@ -4,14 +4,14 @@ import type { ConfirmDialogOptions, ConfirmDialogResult, ConfirmWithMessageOptio
 import type { PromptDialogOptions } from "../widgets/dialogs/prompt.js";
 import { focusSavedElement, saveFocusedElement } from "./focus.js";
 
-export async function openDialog($dialog: JQuery<HTMLElement>, closeActDialog = true) {
+export async function openDialog($dialog: JQuery<HTMLElement>, closeActDialog = true, config?: Partial<Modal.Options>) {
     if (closeActDialog) {
         closeActiveDialog();
         glob.activeDialog = $dialog;
     }
 
     saveFocusedElement();
-    Modal.getOrCreateInstance($dialog[0]).show();
+    Modal.getOrCreateInstance($dialog[0], config).show();
 
     $dialog.on("hidden.bs.modal", () => {
         const $autocompleteEl = $(".aa-input");

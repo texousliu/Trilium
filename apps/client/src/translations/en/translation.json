@@ -1025,7 +1025,7 @@
     "title": "Consistency Checks",
     "find_and_fix_button": "Find and fix consistency issues",
     "finding_and_fixing_message": "Finding and fixing consistency issues...",
-    "issues_fixed_message": "Consistency issues should be fixed."
+    "issues_fixed_message": "Any consistency issue which may have been found is now fixed."
   },
   "database_anonymization": {
     "title": "Database Anonymization",
@@ -1600,7 +1600,8 @@
     "import-into-note": "Import into note",
     "apply-bulk-actions": "Apply bulk actions",
     "converted-to-attachments": "{{count}} notes have been converted to attachments.",
-    "convert-to-attachment-confirm": "Are you sure you want to convert note selected notes into attachments of their parent notes?"
+    "convert-to-attachment-confirm": "Are you sure you want to convert note selected notes into attachments of their parent notes?",
+    "open-in-popup": "Quick edit"
   },
   "shared_info": {
     "shared_publicly": "This note is shared publicly on",
@@ -1832,7 +1833,8 @@
   "link_context_menu": {
     "open_note_in_new_tab": "Open note in a new tab",
     "open_note_in_new_split": "Open note in a new split",
-    "open_note_in_new_window": "Open note in a new window"
+    "open_note_in_new_window": "Open note in a new window",
+    "open_note_in_popup": "Quick edit"
   },
   "electron_integration": {
     "desktop-application": "Desktop Application",
@@ -1852,7 +1854,8 @@
     "full-text-search": "Full text search"
   },
   "note_tooltip": {
-    "note-has-been-deleted": "Note has been deleted."
+    "note-has-been-deleted": "Note has been deleted.",
+    "quick-edit": "Quick edit"
   },
   "geo-map": {
     "create-child-note-title": "Create a new child note and add it to the map",

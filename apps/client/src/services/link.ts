@@ -231,6 +231,7 @@ export function parseNavigationStateFromUrl(url: string | undefined) {
     let ntxId: string | null = null;
     let hoistedNoteId: string | null = null;
     let searchString: string | null = null;
+    let openInPopup = false;
 
     if (paramString) {
         for (const pair of paramString.split("&")) {
@@ -246,6 +247,8 @@ export function parseNavigationStateFromUrl(url: string | undefined) {
                 searchString = value; // supports triggering search from URL, e.g. #?searchString=blabla
             } else if (["viewMode", "attachmentId"].includes(name)) {
                 (viewScope as any)[name] = value;
+            } else if (name === "popup") {
+                openInPopup = true;
             } else {
                 console.warn(`Unrecognized hash parameter '${name}'.`);
             }
@@ -266,7 +269,8 @@ export function parseNavigationStateFromUrl(url: string | undefined) {
         ntxId,
         hoistedNoteId,
         viewScope,
-        searchString
+        searchString,
+        openInPopup
     };
 }
 
@@ -299,11 +303,12 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
         }
     }
 
-    const { notePath, viewScope } = parseNavigationStateFromUrl(hrefLink);
+    const { notePath, viewScope, openInPopup } = parseNavigationStateFromUrl(hrefLink);
 
     const ctrlKey = evt && utils.isCtrlKey(evt);
     const shiftKey = evt?.shiftKey;
     const isLeftClick = !evt || ("which" in evt && evt.which === 1);
+    // Right click is handled separately.
     const isMiddleClick = evt && "which" in evt && evt.which === 2;
     const targetIsBlank = ($link?.attr("target") === "_blank");
     const openInNewTab = (isLeftClick && ctrlKey) || isMiddleClick || targetIsBlank;
@@ -311,7 +316,9 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
     const openInNewWindow = isLeftClick && evt?.shiftKey && !ctrlKey;
 
     if (notePath) {
-        if (openInNewWindow) {
+        if (openInPopup) {
+            appContext.triggerCommand("openInPopup", { noteIdOrPath: notePath });
+        } else if (openInNewWindow) {
             appContext.triggerCommand("openInWindow", { notePath, viewScope });
         } else if (openInNewTab) {
             appContext.tabManager.openTabWithNoteWithHoisting(notePath, {
@@ -384,6 +391,12 @@ function linkContextMenu(e: PointerEvent) {
     const { notePath, viewScope } = parseNavigationStateFromUrl(url);
 
     if (!notePath) {
+        return;
+    }
+
+    if (utils.isCtrlKey(e) && e.button === 2) {
+        appContext.triggerCommand("openInPopup", { noteIdOrPath: notePath });
+        e.preventDefault();
         return;
     }
 

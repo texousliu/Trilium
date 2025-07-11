@@ -22,6 +22,14 @@ import RevisionsDialog from "../widgets/dialogs/revisions.js";
 import DeleteNotesDialog from "../widgets/dialogs/delete_notes.js";
 import InfoDialog from "../widgets/dialogs/info.js";
 import IncorrectCpuArchDialog from "../widgets/dialogs/incorrect_cpu_arch.js";
+import PopupEditorDialog from "../widgets/dialogs/popup_editor.js";
+import FlexContainer from "../widgets/containers/flex_container.js";
+import NoteIconWidget from "../widgets/note_icon.js";
+import NoteTitleWidget from "../widgets/note_title.js";
+import ClassicEditorToolbar from "../widgets/ribbon_widgets/classic_editor_toolbar.js";
+import PromotedAttributesWidget from "../widgets/ribbon_widgets/promoted_attributes.js";
+import NoteDetailWidget from "../widgets/note_detail.js";
+import NoteListWidget from "../widgets/note_list.js";
 
 export function applyModals(rootContainer: RootContainer) {
     rootContainer
@@ -47,4 +55,15 @@ export function applyModals(rootContainer: RootContainer) {
         .child(new ConfirmDialog())
         .child(new PromptDialog())
         .child(new IncorrectCpuArchDialog())
+        .child(new PopupEditorDialog()
+                .child(new FlexContainer("row")
+                    .class("title-row")
+                    .css("align-items", "center")
+                    .cssBlock(".title-row > * { margin: 5px; }")
+                    .child(new NoteIconWidget())
+                    .child(new NoteTitleWidget()))
+                .child(new ClassicEditorToolbar())
+                .child(new PromotedAttributesWidget())
+                .child(new NoteDetailWidget())
+                .child(new NoteListWidget(true)))
 }

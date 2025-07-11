@@ -225,6 +225,7 @@ export default class CalendarView extends ViewMode<{}> {
                     $(mainContainer ?? e.el).append($(promotedAttributesHtml));
                 }
             },
+            // Called upon when clicking the day number in the calendar, opens or creates the day note but only if in a calendar root.
             dateClick: async (e) => {
                 if (!this.isCalendarRoot) {
                     return;
@@ -232,7 +233,8 @@ export default class CalendarView extends ViewMode<{}> {
 
                 const note = await date_notes.getDayNote(e.dateStr);
                 if (note) {
-                    appContext.tabManager.getActiveContext()?.setNote(note.noteId);
+                    appContext.triggerCommand("openInPopup", { noteIdOrPath: note.noteId });
+                    appContext.triggerCommand("refreshNoteList", { noteId: this.parentNote.noteId });
                 }
             },
             datesSet: (e) => this.#onDatesSet(e),
@@ -533,7 +535,7 @@ export default class CalendarView extends ViewMode<{}> {
             const eventData: EventInput = {
                 title: title,
                 start: startDate,
-                url: `#${note.noteId}`,
+                url: `#${note.noteId}?popup`,
                 noteId: note.noteId,
                 color: color ?? undefined,
                 iconClass: note.getLabelValue("iconClass"),

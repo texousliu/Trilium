@@ -48,6 +48,18 @@ export default class ClassicEditorToolbar extends NoteContextAwareWidget {
         this.contentSized();
     }
 
+    isEnabled(): boolean | null | undefined {
+        if (options.get("textNoteEditorType") !== "ckeditor-classic") {
+            return false;
+        }
+
+        if (!this.note || this.note.type !== "text") {
+            return false;
+        }
+
+        return true;
+    }
+
     async getTitle() {
         return {
             show: await this.#shouldDisplay(),
@@ -58,11 +70,7 @@ export default class ClassicEditorToolbar extends NoteContextAwareWidget {
     }
 
     async #shouldDisplay() {
-        if (options.get("textNoteEditorType") !== "ckeditor-classic") {
-            return false;
-        }
-
-        if (!this.note || this.note.type !== "text") {
+        if (!this.isEnabled()) {
             return false;
         }
 
