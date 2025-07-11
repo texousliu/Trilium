@@ -135,11 +135,12 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
     }
 
     setVisibility(visible: boolean) {
+        const $bodyItems = this.$modalBody.find("> div");
         if (visible) {
-            this.$modalBody.children().fadeIn();
+            $bodyItems.fadeIn();
             this.$modalHeader.children().show();
         } else {
-            this.$modalBody.children().hide();
+            $bodyItems.hide();
             this.$modalHeader.children().hide();
         }
     }
