@@ -132,6 +132,21 @@
     color: var(--cell-editing-text-color);
 }
 
+/* Checkbox cells */
+
+.tabulator .tabulator-cell:has(svg),
+.tabulator .tabulator-cell:has(input[type="checkbox"]) {
+    padding-left: 8px;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.tabulator .tabulator-cell input[type="checkbox"] {
+    margin: 0;
+}
+
 /* Context menus */
 
 .tabulator-popup-container {
