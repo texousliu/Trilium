@@ -1,19 +1,21 @@
 .tabulator {
-    --col-header-background-color: gray;
-    --col-header-text-color: white;
-    --col-header-hover-background-color: yellow;
-    --col-header-arrow-active-color: blue;
-    --col-header-arrow-inactive-color: white;
+    --col-header-bottom-border: 2px solid var(--main-border-color);
+    --col-header-separator-border: none;
+    --col-header-background-color: transparent;
+    --col-header-text-color: var(--main-text-color);
+    --col-header-hover-background-color: var(--accented-background-color);
+    --col-header-arrow-active-color: var(--main-border-color);
+    --col-header-arrow-inactive-color: var(--more-accented-background-color);
 
-    --row-text-color: white;
+    --row-text-color: var(--main-text-color);
     --row-alternate-background-color: transparent;
 
-    --grid-color: gray;
+    --grid-color: var(--more-accented-background-color);
 
-    --cell-read-only-text-color: gray;
-    --cell-editing-background-color: black;
-    --cell-editing-text-color: yellow;
-    --cell-editing-border-color: green;
+    --cell-read-only-text-color: var(--muted-text-color);
+    --cell-editing-background-color: var(--ck-color-selector-focused-cell-background);
+    --cell-editing-text-color: initial;
+    --cell-editing-border-color: var(--main-border-color);
     --cell-editing-border-width: 2px;
 
     background: unset;
@@ -26,9 +28,14 @@
 
 /* Column headers */
 
-.tabulator .tabulator-header {
+.tabulator div.tabulator-header {
     background: var(--col-header-background-color);
+    border-bottom: var(--col-header-bottom-border);
     color: var(--col-header-text-color);
+}
+
+.tabulator .tabulator-col-content {
+    padding: 8px 4px !important;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -46,15 +53,29 @@
     border-bottom-color: var(--col-header-arrow-inactive-color);
 }
 
-.tabulator .tabulator-header .tabulator-col {
+.tabulator div.tabulator-header .tabulator-col,
+.tabulator div.tabulator-header .tabulator-frozen.tabulator-frozen-left {
     background: var(--col-header-background-color);
+    border-right: var(--col-header-separator-border);
+}
+
+/* Table body */
+
+.tabulator-tableholder {
+    padding-top: 4px;
 }
 
 /* Rows */
 
+.tabulator-row .tabulator-cell,
+.tabulator-row .tabulator-cell input {
+    padding: 8px 4px;
+}
+
 .tabulator-row {
     background: transparent;
-    border: 1px solid var(--grid-color);
+    border-top: none;
+    border-bottom: 1px solid var(--grid-color);
     color: var(--row-text-color);
 }
 
@@ -63,6 +84,10 @@
 }
 
 .tabulator-row.tabulator-moving {
+    border-color: transparent;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, .75);
+    transform: scaleX(.99);
     backdrop-filter: blur(5px);
 }
 
@@ -70,19 +95,27 @@
 
 .tabulator-row .tabulator-cell.tabulator-frozen.tabulator-frozen-left,
 .tabulator-row .tabulator-cell {
-    border-right-color: var(--grid-color);
+    border-right-color: transparent;
 }
 
 .tabulator-row .tabulator-cell:not(.tabulator-editable) {
     color: var(--cell-read-only-text-color);
 }
 
+.tabulator:not(.tabulator-editing) .tabulator-row .tabulator-cell.tabulator-editable:hover {
+    outline: 2px solid yellow;
+}
+
 .tabulator-row .tabulator-cell.tabulator-editing {
+    border-color: transparent;
+}
+
+.tabulator-row:not(.tabulator-moving) .tabulator-cell.tabulator-editing {
     outline: calc(var(--cell-editing-border-width) - 1px) solid var(--cell-editing-border-color);
     border-color: var(--cell-editing-border-color);
     background: var(--cell-editing-background-color);
 }
 
-.tabulator-row .tabulator-cell.tabulator-editing > * {
+.tabulator-row:not(.tabulator-moving) .tabulator-cell.tabulator-editing > * {
     color: var(--cell-editing-text-color);
 }
