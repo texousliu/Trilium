@@ -52,10 +52,6 @@ const TPL = /*html*/`\
             z-index: 1000;
         }
 
-        .modal.popup-editor-dialog .note-detail {
-            height: 100%;
-        }
-
         .modal.popup-editor-dialog .note-detail-file {
             padding: 0;
         }

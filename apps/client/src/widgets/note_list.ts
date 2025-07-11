@@ -58,7 +58,7 @@ export default class NoteListWidget extends NoteContextAwareWidget {
             return false;
         }
 
-        if (this.displayOnlyCollections) {
+        if (this.displayOnlyCollections && this.note?.type !== "book") {
             const viewType = this.note?.getLabelValue("viewType");
             if (!viewType || ["grid", "list"].includes(viewType)) {
                 return false;
