@@ -713,7 +713,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
             });
         } else {
             this.$tree.on("contextmenu", ".fancytree-node", (e) => {
-                if (!e.ctrlKey) {
+                if (!utils.isCtrlKey(e)) {
                     this.showContextMenu(e);
                 } else {
                     const node = $.ui.fancytree.getNode(e as unknown as Event);

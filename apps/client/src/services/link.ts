@@ -394,7 +394,7 @@ function linkContextMenu(e: PointerEvent) {
         return;
     }
 
-    if (e.ctrlKey && e.button === 2) {
+    if (utils.isCtrlKey(e) && e.button === 2) {
         appContext.triggerCommand("openInPopup", { noteIdOrPath: notePath });
         e.preventDefault();
         return;
