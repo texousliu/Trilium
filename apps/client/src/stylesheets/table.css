@@ -147,6 +147,10 @@
     margin: 0;
 }
 
+.tabulator .tabulator-footer {
+    color: var(--main-text-color);
+}
+
 /* Context menus */
 
 .tabulator-popup-container {
