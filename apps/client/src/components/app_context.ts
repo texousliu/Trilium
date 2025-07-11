@@ -122,6 +122,7 @@ export type CommandMappings = {
     showImportDialog: CommandData & { noteId: string };
     openNewNoteSplit: NoteCommandData;
     openInWindow: NoteCommandData;
+    openInPopup: CommandData & { noteIdOrPath: string; };
     openNoteInNewTab: CommandData;
     openNoteInNewSplit: CommandData;
     openNoteInNewWindow: CommandData;
@@ -140,6 +141,7 @@ export type CommandMappings = {
     };
     openInTab: ContextMenuCommandData;
     openNoteInSplit: ContextMenuCommandData;
+    openNoteInPopup: ContextMenuCommandData;
     toggleNoteHoisting: ContextMenuCommandData;
     insertNoteAfter: ContextMenuCommandData;
     insertChildNote: ContextMenuCommandData;

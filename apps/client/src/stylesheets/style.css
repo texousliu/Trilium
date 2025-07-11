@@ -540,6 +540,7 @@ button.btn-sm {
     /* Making this narrower because https://github.com/zadam/trilium/issues/502 (problem only in smaller font sizes) */
     min-width: 0;
     padding: 0;
+    z-index: 1000;
 }
 
 pre:not(.hljs) {
@@ -769,6 +770,14 @@ table.promoted-attributes-in-tooltip th {
 
 .note-tooltip-content .note-title-with-path .note-path {
     font-size: small;
+}
+
+.note-tooltip-content .open-popup-button {
+    position: absolute;
+    right: 15px;
+    bottom: 8px;
+    font-size: 1.2em;
+    color: inherit;
 }
 
 .note-tooltip-attributes {

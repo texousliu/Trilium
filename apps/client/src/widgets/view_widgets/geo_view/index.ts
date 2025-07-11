@@ -29,6 +29,11 @@ const TPL = /*html*/`
             z-index: 1;
         }
 
+        .leaflet-top,
+        .leaflet-bottom {
+            z-index: 997;
+        }
+
         .geo-map-container.placing-note {
             cursor: crosshair;
         }

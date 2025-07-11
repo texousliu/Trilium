@@ -40,16 +40,32 @@ export default class NoteListWidget extends NoteContextAwareWidget {
     private shownNoteId?: string | null;
     private viewMode?: ViewMode<any> | null;
     private attributeDetailWidget: AttributeDetailWidget;
+    private displayOnlyCollections: boolean;
 
-    constructor() {
+    /**
+     * @param displayOnlyCollections if set to `true` then only collection-type views are displayed such as geo-map and the calendar. The original book types grid and list will be ignored.
+     */
+    constructor(displayOnlyCollections: boolean) {
         super();
         this.attributeDetailWidget = new AttributeDetailWidget()
                 .contentSized()
                 .setParent(this);
+        this.displayOnlyCollections = displayOnlyCollections;
     }
 
     isEnabled() {
-        return super.isEnabled() && this.noteContext?.hasNoteList();
+        if (!super.isEnabled()) {
+            return false;
+        }
+
+        if (this.displayOnlyCollections && this.note?.type !== "book") {
+            const viewType = this.note?.getLabelValue("viewType");
+            if (!viewType || ["grid", "list"].includes(viewType)) {
+                return false;
+            }
+        }
+
+        return this.noteContext?.hasNoteList();
     }
 
     doRender() {

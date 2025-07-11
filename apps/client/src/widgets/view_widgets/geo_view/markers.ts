@@ -36,9 +36,16 @@ export default function processNoteWithMarker(map: Map, note: FNote, location: s
             return true;
         }
     });
+
     newMarker.on("contextmenu", (e) => {
         openContextMenu(note.noteId, e, isEditable);
     });
+
+    if (!isEditable) {
+        newMarker.on("click", (e) => {
+            appContext.triggerCommand("openInPopup", { noteIdOrPath: note.noteId });
+        });
+    }
 
     return newMarker;
 }

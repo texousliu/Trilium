@@ -11,8 +11,8 @@
   select <em>Insert child note</em> and look for the <em>Table item</em>.</p>
 <h3>Adding columns</h3>
 <p>Each column is a <a href="#root/_help_OFXdgB2nNk1F">promoted attribute</a> that
-  is defined on the Book note. Ideally, the promoted attributes need to be
-  inheritable in order to show up in the child notes.</p>
+  is defined on the Collection note. Ideally, the promoted attributes need
+  to be inheritable in order to show up in the child notes.</p>
 <p>To create a new column, simply press <em>Add new column</em> at the bottom
   of the table.</p>
 <p>There are also a few predefined columns:</p>
@@ -24,7 +24,7 @@
   <li>The title of the note.</li>
 </ul>
 <h3>Adding new rows</h3>
-<p>Each row is actually a note that is a child of the book note.</p>
+<p>Each row is actually a note that is a child of the Collection note.</p>
 <p>To create a new note, press <em>Add new row</em> at the bottom of the table.
   By default it will try to edit the title of the newly created note.</p>
 <p>Alternatively, the note can be created from the<a class="reference-link"
@@ -68,12 +68,12 @@
     class="reference-link" href="#root/_help_OFXdgB2nNk1F">Promoted Attributes</a>.
       <ol>
         <li>But only the promoted attributes that are defined at the level of the
-          Book note are actually taken into consideration.</li>
+          Collection note are actually taken into consideration.</li>
         <li>There are plans to recursively look for columns across the sub-hierarchy.</li>
       </ol>
   </li>
   <li>Hierarchy is not yet supported, so the table will only show the items
-    that are direct children of the <em>Book</em> note.</li>
+    that are direct children of the <em>Collection</em> note.</li>
   <li>Multiple labels and relations are not supported. If a&nbsp;<a class="reference-link"
     href="#root/_help_OFXdgB2nNk1F">Promoted Attributes</a>&nbsp;is defined
     with a <em>Multi value</em> specificity, they will be ignored.</li>
@@ -81,10 +81,9 @@
 <h2>Use in search</h2>
 <p>The table view can be used in a&nbsp;<a class="reference-link" href="#root/_help_m523cpzocqaD">Saved Search</a>&nbsp;by
   adding the <code>#viewType=table</code> attribute.</p>
-<p>Unlike when used in a book, saved searches are not limited to the sub-hierarchy
-  of a note and allows for advanced queries thanks to the power of the&nbsp;
-  <a
-  class="reference-link" href="#root/_help_eIg8jdvaoNNd">Search</a>.</p>
+<p>Unlike when used in a Collection, saved searches are not limited to the
+  sub-hierarchy of a note and allows for advanced queries thanks to the power
+  of the&nbsp;<a class="reference-link" href="#root/_help_eIg8jdvaoNNd">Search</a>.</p>
 <p>However, there are also some limitations:</p>
 <ul>
   <li>It's not possible to reorder notes.</li>
