@@ -1,14 +1,31 @@
 # Collections
-A **Book Note** in Trilium is a special type of [note](../Basic%20Concepts%20and%20Features/Notes.md) designed to display the contents of its child notes sequentially, creating a linear, book-like reading experience. This format is particularly useful for viewing multiple smaller notes in a cohesive, continuous manner.
+Collections are a unique type of notes that don't have a content, but instead display its child notes in various presentation methods.
 
-![](Collections_image.png)
+Classic collections are read-only mode and compiles the contents of all child notes into one continuous view. This makes it ideal for reading extensive information broken into smaller, manageable segments.
 
-In the example above, the "node.js" note on the left panel contains several child notes. The right panel displays the content of these child notes as a single continuous document.
+*   <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List/Grid%20View.md">Grid View</a> which is the default presentation method for child notes (see <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a>), where the notes are displayed as tiles with their title and content being visible.
+*   <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List/List%20View.md">List View</a> is similar to <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List/Grid%20View.md">Grid View</a>, but it displays the notes one under the other with the content being expandable/collapsible, but also works recursively.
 
-## Features
+More specialized collections were introduced, such as the:
 
-The Book Note format compiles the contents of all child notes into one continuous view. This makes it ideal for reading extensive information broken into smaller, manageable segments.
+*   <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List/Calendar%20View.md">Calendar View</a> which displays a week, month or year calendar with the notes being shown as events. New events can be added easily by dragging across the calendar.
+*   <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List/Geo%20Map%20View.md">Geo Map View</a> which displays a geographical map in which the notes are represented as markers/pins on the map. New events can be easily added by pointing on the map.
+*   <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List/Table%20View.md">Table View</a> displays each note as a row in a table, with <a class="reference-link" href="../Advanced%20Usage/Attributes/Promoted%20Attributes.md">Promoted Attributes</a> being shown as well. This makes it easy to visualize attributes of notes, as well as making them easily editable.
 
-It uses the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a> mechanism to display the child notes, allowing the use of any of the view types (grid, list, calendar).
+For a quick presentation of all the supported view types, see the child notes of this help page, including screenshots.
 
-To adjust the view type, see the dedicated _Book_ tab in the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a>.
+## Configuration
+
+To adjust the view type, see the dedicated _Collections_ tab in the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a>.
+
+## Use in saved search
+
+Since collections are based on the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a> mechanism, it's possible to apply the same configuration to <a class="reference-link" href="Saved%20Search.md">Saved Search</a> to do advanced querying and presenting the result in an adequate matter such as a calendar, a table or even a map.
+
+## Under the hood
+
+Collections by themselves are simply notes with no content that rely on the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a> mechanism (the one that lists the children notes at the bottom of a note) to display information.
+
+By default, new collections use predefined <a class="reference-link" href="../Advanced%20Usage/Templates.md">Templates</a> that are stored safely in the <a class="reference-link" href="../Advanced%20Usage/Hidden%20Notes.md">Hidden Notes</a> to define some basic configuration such as the type of view, but also some <a class="reference-link" href="../Advanced%20Usage/Attributes/Promoted%20Attributes.md">Promoted Attributes</a> to make editing easier.
+
+Collections don't store their configuration (e.g. the position on the map, the hidden columns in a table) in the content of the note itself, but as attachments.

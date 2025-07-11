@@ -1,7 +1,7 @@
 # Calendar View
 <figure class="image image-style-align-center"><img style="aspect-ratio:767/606;" src="4_Calendar View_image.png" width="767" height="606"></figure>
 
-The Calendar view of Book notes will display each child note in a calendar that has a start date and optionally an end date, as an event.
+The Calendar view will display each child note in a calendar that has a start date and optionally an end date, as an event.
 
 The Calendar view has multiple display modes:
 
@@ -10,11 +10,11 @@ The Calendar view has multiple display modes:
 *   Year view, which displays the entire year for quick reference.
 *   List view, which displays all the events of a given month in sequence.
 
-Unlike other Book view types, the Calendar view also allows some kind of interaction, such as moving events around as well as creating new ones.
+Unlike other Collection view types, the Calendar view also allows some kind of interaction, such as moving events around as well as creating new ones.
 
 ## Creating a calendar
 
-<figure class="table"><table><thead><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr></thead><tbody><tr><td>1</td><td><img src="2_Calendar View_image.png"></td><td>The Calendar View works only for Book note types. To create a new note, right click on the note tree on the left and select Insert note after, or Insert child note and then select <em>Book</em>.</td></tr><tr><td>2</td><td><img src="3_Calendar View_image.png"></td><td>Once created, the “View type” of the Book needs changed to “Calendar”, by selecting the “Book Properties” tab in the ribbon.</td></tr></tbody></table></figure>
+<figure class="table"><table><thead><tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th></tr></thead><tbody><tr><td>1</td><td><img src="2_Calendar View_image.png"></td><td>The Calendar View works only for Collection note types. To create a new note, right click on the note tree on the left and select Insert note after, or Insert child note and then select <em>Collection</em>.</td></tr><tr><td>2</td><td><img src="3_Calendar View_image.png"></td><td>Once created, the “View type” of the Collection needs changed to “Calendar”, by selecting the “Collection Properties” tab in the ribbon.</td></tr></tbody></table></figure>
 
 ## Creating a new event/note
 
@@ -22,7 +22,7 @@ Unlike other Book view types, the Calendar view also allows some kind of interac
     *   You will be asked for the name of the new note. If the popup is dismissed by pressing the close button or escape, then the note will not be created.
 *   It's possible to drag across multiple days to set both the start and end date of a particular note.  
     ![](Calendar%20View_image.png)
-*   Creating new notes from the calendar will respect the `~child:template` relation if set on the book note.
+*   Creating new notes from the calendar will respect the `~child:template` relation if set on the Collection note.
 
 ## Interacting with events
 
@@ -34,15 +34,22 @@ Unlike other Book view types, the Calendar view also allows some kind of interac
 *   Drag and drop an event on the calendar to move it to another day.
 *   The length of an event can be changed by placing the mouse to the right edge of the event and dragging the mouse around.
 
-## Configuring the calendar
+## Configuring the calendar view
 
-The following attributes can be added to the book type:
+In the _Collections_ tab in the <a class="reference-link" href="../../UI%20Elements/Ribbon.md">Ribbon</a>, it's possible to adjust the following:
+
+*   Hide weekends from the week view.
+*   Display week numbers on the calendar.
+
+## Configuring the calendar using attributes
+
+The following attributes can be added to the Collection type:
 
 <figure class="table"><table><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td><code>#calendar:hideWeekends</code></td><td>When present (regardless of value), it will hide Saturday and Sundays from the calendar.</td></tr><tr><td><code>#calendar:weekNumbers</code></td><td>When present (regardless of value), it will show the number of the week on the calendar.</td></tr><tr><td><code>#calendar:view</code></td><td><p>Which view to display in the calendar:</p><ul><li><code>timeGridWeek</code> for the <em>week</em> view;</li><li><code>dayGridMonth</code> for the <em>month</em> view;</li><li><code>multiMonthYear</code> for the <em>year</em> view;</li><li><code>listMonth</code> for the <em>list</em> view.</li></ul><p>Any other value will be dismissed and the default view (month) will be used instead.</p><p>The value of this label is automatically updated when changing the view using the UI buttons.</p></td></tr><tr><td><code>~child:template</code></td><td>Defines the template for newly created notes in the calendar (via dragging or clicking).</td></tr></tbody></table></figure>
 
 In addition, the first day of the week can be either Sunday or Monday and can be adjusted from the application settings.
 
-## Configuring the calendar events
+## Configuring the calendar events using attributes
 
 For each note of the calendar, the following attributes can be used:
 
@@ -52,9 +59,9 @@ For each note of the calendar, the following attributes can be used:
 
 ![](11_Calendar%20View_image.png)
 
-The calendar displays all the child notes of the book that have a `#startDate`. An `#endDate` can optionally be added.
+The calendar displays all the child notes of the Collection that have a `#startDate`. An `#endDate` can optionally be added.
 
-If editing the start date and end date from the note itself is desirable, the following attributes can be added to the book note:
+If editing the start date and end date from the note itself is desirable, the following attributes can be added to the Collection note:
 
 ```
 #viewType=calendar #label:startDate(inheritable)="promoted,alias=Start Date,single,date"
@@ -72,7 +79,7 @@ When not used in a Journal, the calendar is recursive. That is, it will look for
 
 ### Using with the Journal / calendar
 
-It is possible to integrate the calendar view into the Journal with day notes. In order to do so change the note type of the Journal note (calendar root) to Book and then select the Calendar View.
+It is possible to integrate the calendar view into the Journal with day notes. In order to do so change the note type of the Journal note (calendar root) to Collection and then select the Calendar View.
 
 Based on the `#calendarRoot` (or `#workspaceCalendarRoot`) attribute, the calendar will know that it's in a calendar and apply the following:
 
@@ -87,7 +94,7 @@ Based on the `#calendarRoot` (or `#workspaceCalendarRoot`) attribute, the calend
 
 By default, events are displayed on the calendar by their note title. However, it is possible to configure a different attribute to be displayed instead.
 
-To do so, assign `#calendar:title` to the child note (not the calendar/book note), with the value being `name` where `name` can be any label (make not to add the `#` prefix). The attribute can also come through inheritance such as a template attribute. If the note does not have the requested label, the title of the note will be used instead.
+To do so, assign `#calendar:title` to the child note (not the calendar/Collection note), with the value being `name` where `name` can be any label (make not to add the `#` prefix). The attribute can also come through inheritance such as a template attribute. If the note does not have the requested label, the title of the note will be used instead.
 
 <figure class="table" style="width:100%;"><table><thead><tr><th>&nbsp;</th><th>&nbsp;</th></tr></thead><tbody><tr><td><pre><code class="language-text-x-trilium-auto">#startDate=2025-02-11 #endDate=2025-02-13 #name="My vacation" #calendar:title="name"</code></pre></td><td><p>&nbsp;</p><figure class="image image-style-align-center"><img style="aspect-ratio:445/124;" src="5_Calendar View_image.png" width="445" height="124"></figure></td></tr></tbody></table></figure>
 
