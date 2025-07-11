@@ -1025,7 +1025,7 @@
     "title": "Consistency Checks",
     "find_and_fix_button": "Find and fix consistency issues",
     "finding_and_fixing_message": "Finding and fixing consistency issues...",
-    "issues_fixed_message": "Consistency issues should be fixed."
+    "issues_fixed_message": "Any consistency issue which may have been found is now fixed."
   },
   "database_anonymization": {
     "title": "Database Anonymization",
