@@ -11,7 +11,7 @@ import { defineSchema } from './schema.js';
 import { ATTRIBUTES, COMMANDS, ELEMENTS } from '../constants.js';
 import InsertFootnoteCommand from '../insert-footnote-command.js';
 import { modelQueryElement, modelQueryElementsAll } from '../utils.js';
-import { Autoformat, Batch, ModelElement, Plugin, ModelRootElement, viewToModelPositionOutsideModelElement, Widget, Writer } from 'ckeditor5';
+import { Autoformat, Batch, ModelElement, Plugin, ModelRootElement, viewToModelPositionOutsideModelElement, Widget, ModelWriter } from 'ckeditor5';
 
 export default class FootnoteEditing extends Plugin {
 
@@ -143,7 +143,7 @@ export default class FootnoteEditing extends Plugin {
    * batch these changes with the ones that instantiated them,
    * such that the set can be undone with a single action.
    */
-	private _clearContents( modelWriter: Writer, footnoteContent: ModelElement ) {
+	private _clearContents( modelWriter: ModelWriter, footnoteContent: ModelElement ) {
 		const contents = modelWriter.createRangeIn( footnoteContent );
 		modelWriter.appendElement( 'paragraph', footnoteContent );
 		modelWriter.remove( contents );
@@ -155,7 +155,7 @@ export default class FootnoteEditing extends Plugin {
    * which triggers the `updateReferenceIds` method. modelWriter is passed in to batch these changes with
    * the ones that instantiated them, such that the set can be undone with a single action.
    */
-	private _removeFootnote( modelWriter: Writer, footnote: ModelElement ) {
+	private _removeFootnote( modelWriter: ModelWriter, footnote: ModelElement ) {
 		// delete the current footnote and its references,
 		// and renumber subsequent footnotes.
 		if ( !this.editor ) {
@@ -212,7 +212,7 @@ export default class FootnoteEditing extends Plugin {
    * all references are deleted. modelWriter is passed in to batch these changes with
    * the ones that instantiated them, such that the set can be undone with a single action.
    */
-	private _removeReferences( modelWriter: Writer, footnoteId: string | undefined = undefined ) {
+	private _removeReferences( modelWriter: ModelWriter, footnoteId: string | undefined = undefined ) {
 		const removeList: Array<any> = [];
 		if ( !this.rootElement ) {
 			throw new Error( 'Document has no root element.' );
