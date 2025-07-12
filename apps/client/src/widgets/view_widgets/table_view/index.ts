@@ -13,6 +13,7 @@ import { canReorderRows, configureReorderingRows } from "./dragging.js";
 import buildFooter from "./footer.js";
 import getPromotedAttributeInformation, { buildRowDefinitions } from "./rows.js";
 import { buildColumnDefinitions } from "./columns.js";
+import { setupContextMenu } from "./context_menu.js";
 
 const TPL = /*html*/`
 <div class="table-view">
@@ -144,6 +145,7 @@ export default class TableView extends ViewMode<StateInfo> {
             persistenceReaderFunc: (_id, type: string) => this.persistentData?.[type],
         });
         configureReorderingRows(this.api);
+        setupContextMenu(this.api);
         this.setupEditing();
     }
 

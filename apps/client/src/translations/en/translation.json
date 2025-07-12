@@ -1949,5 +1949,8 @@
   "book_properties_config": {
     "hide-weekends": "Hide weekends",
     "display-week-numbers": "Display week numbers"
+  },
+  "table_context_menu": {
+    "delete_row": "Delete row"
   }
 }
