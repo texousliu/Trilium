@@ -1,6 +1,7 @@
 # Trilium Notes
 
-![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran?style=flat-square)
+Donate: ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran?style=flat-square) ![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran?style=flat-square)
+
 ![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/notes?style=flat-square)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/triliumnext/notes/total?style=flat-square)
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop&style=flat-square)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
