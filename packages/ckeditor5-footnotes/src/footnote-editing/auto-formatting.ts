@@ -1,4 +1,4 @@
-import { type Editor, Text, TextProxy, type Element, type Range, type Autoformat, inlineAutoformatEditing } from 'ckeditor5';
+import { type Editor, ModelText, TextProxy, type Element, type Range, type Autoformat, inlineAutoformatEditing } from 'ckeditor5';
 
 import { COMMANDS, ELEMENTS } from '../constants.js';
 import { modelQueryElement, modelQueryElementsAll } from '../utils.js';
@@ -74,7 +74,7 @@ const formatCallback = ( ranges: Array<Range>, editor: Editor, rootElement: Elem
 		return;
 	}
 	const text = [ ...ranges[ 0 ].getItems() ][ 0 ];
-	if ( !( text instanceof TextProxy || text instanceof Text ) ) {
+	if ( !( text instanceof TextProxy || text instanceof ModelText ) ) {
 		return false;
 	}
 	const match = text.data.match( /[0-9]+/ );
