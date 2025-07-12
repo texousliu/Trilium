@@ -409,8 +409,8 @@ importers:
   apps/desktop-e2e:
     devDependencies:
       dotenv:
-        specifier: 17.1.0
-        version: 17.1.0
+        specifier: 17.2.0
+        version: 17.2.0
       electron:
         specifier: 37.2.0
         version: 37.2.0
@@ -784,8 +784,8 @@ importers:
   apps/server-e2e:
     devDependencies:
       dotenv:
-        specifier: 17.1.0
-        version: 17.1.0
+        specifier: 17.2.0
+        version: 17.2.0
 
   apps/website:
     dependencies:
