@@ -2,7 +2,7 @@
  * https://github.com/TriliumNext/Trilium/issues/1002
  */
 
-import { Command, DocumentSelection, ModelElement, ModelNode, Plugin, ModelRange } from 'ckeditor5';
+import { Command, ModelDocumentSelection, ModelElement, ModelNode, Plugin, ModelRange } from 'ckeditor5';
 export default class MoveBlockUpDownPlugin extends Plugin {
 
     init() {
@@ -105,7 +105,7 @@ abstract class MoveBlockUpDownCommand extends Command {
 		});
     }
 
-	getSelectedBlocks(selection: DocumentSelection) {
+	getSelectedBlocks(selection: ModelDocumentSelection) {
 		const blocks = [...selection.getSelectedBlocks()];
 		const resolved: ModelElement[] = [];
 
