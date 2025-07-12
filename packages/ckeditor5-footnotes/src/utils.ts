@@ -1,4 +1,4 @@
-import { type Editor, Element, ModelText, TextProxy, ViewElement } from 'ckeditor5';
+import { type Editor, Element, ModelText, ModelTextProxy, ViewElement } from 'ckeditor5';
 
 // There's ample DRY violation in this file; type checking
 // polymorphism without full typescript is just incredibly finicky.
@@ -36,13 +36,13 @@ export const modelQueryElementsAll = (
 export const modelQueryTextAll = (
 	editor: Editor,
 	rootElement: Element,
-	predicate: ( item: ModelText | TextProxy ) => boolean = _ => true
-): Array<ModelText | TextProxy> => {
+	predicate: ( item: ModelText | ModelTextProxy ) => boolean = _ => true
+): Array<ModelText | ModelTextProxy> => {
 	const range = editor.model.createRangeIn( rootElement );
-	const output: Array<ModelText | TextProxy> = [];
+	const output: Array<ModelText | ModelTextProxy> = [];
 
 	for ( const item of range.getItems() ) {
-		if ( !( item instanceof ModelText || item instanceof TextProxy ) ) {
+		if ( !( item instanceof ModelText || item instanceof ModelTextProxy ) ) {
 			continue;
 		}
 
@@ -83,12 +83,12 @@ export const modelQueryElement = (
 export const modelQueryText = (
 	editor: Editor,
 	rootElement: Element,
-	predicate: ( item: ModelText | TextProxy ) => boolean = _ => true
-): ModelText | TextProxy | null => {
+	predicate: ( item: ModelText | ModelTextProxy ) => boolean = _ => true
+): ModelText | ModelTextProxy | null => {
 	const range = editor.model.createRangeIn( rootElement );
 
 	for ( const item of range.getItems() ) {
-		if ( !( item instanceof ModelText || item instanceof TextProxy ) ) {
+		if ( !( item instanceof ModelText || item instanceof ModelTextProxy ) ) {
 			continue;
 		}
 
