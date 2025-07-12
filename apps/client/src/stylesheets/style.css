@@ -924,6 +924,13 @@ div[data-notify="container"] {
     font-family: var(--monospace-font-family);
 }
 
+.ck-content {
+    --ck-content-font-family: var(--detail-font-family);
+    --ck-content-font-size: 1.1em;
+    --ck-content-font-color: var(--main-text-color);
+    --ck-content-line-height: var(--bs-body-line-height);
+}
+
 .ck-content .table table th {
     background-color: var(--accented-background-color);
 }
