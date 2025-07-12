@@ -1,4 +1,4 @@
-import { Clipboard, FileRepository, Notification, Plugin, UpcastWriter, ViewElement, type Editor, type FileLoader, type Item, type ModelNode, type ViewItem, type ViewRange } from 'ckeditor5';
+import { Clipboard, FileRepository, Notification, Plugin, UpcastWriter, ViewElement, type Editor, type FileLoader, type ModelItem, type ModelNode, type ViewItem, type ViewRange } from 'ckeditor5';
 import FileUploadCommand from './fileuploadcommand';
 
 export default class FileUploadEditing extends Plugin {
@@ -123,7 +123,7 @@ export default class FileUploadEditing extends Plugin {
 		} );
 	}
 
-	_readAndUpload( loader: FileLoader, fileElement: Item ) {
+	_readAndUpload( loader: FileLoader, fileElement: ModelItem ) {
 		const editor = this.editor;
 		const model = editor.model;
 		const t = editor.locale.t;
@@ -250,7 +250,7 @@ export function isHtmlIncluded( dataTransfer: DataTransfer ) {
 	return Array.from( dataTransfer.types ).includes( 'text/html' ) && dataTransfer.getData( 'text/html' ) !== '';
 }
 
-function getFileLinksFromChangeItem( editor: Editor, item: Item ) {
+function getFileLinksFromChangeItem( editor: Editor, item: ModelItem ) {
 	return Array.from( editor.model.createRangeOn( item ) )
 		.filter( value => value.item.hasAttribute( 'href' ) )
 		.map( value => value.item );
