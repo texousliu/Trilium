@@ -1595,7 +1595,7 @@
     "move-to": "Move to...",
     "paste-into": "Paste into",
     "paste-after": "Paste after",
-    "duplicate-subtree": "Duplicate subtree",
+    "duplicate": "Duplicate",
     "export": "Export",
     "import-into-note": "Import into note",
     "apply-bulk-actions": "Apply bulk actions",

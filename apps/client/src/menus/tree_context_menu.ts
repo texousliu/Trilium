@@ -129,13 +129,7 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                         enabled: isNotRoot && parentNotSearch && noSelectedNotes && notOptionsOrHelp
                     },
                     { title: t("tree-context-menu.convert-to-attachment"), command: "convertNoteToAttachment", uiIcon: "bx bx-paperclip", enabled: isNotRoot && !isHoisted && notOptionsOrHelp },
-                    {
-                        title: `${t("tree-context-menu.duplicate-subtree")} <kbd data-command="duplicateSubtree">`,
-                        command: "duplicateSubtree",
-                        uiIcon: "bx bx-outline",
-                        enabled: parentNotSearch && isNotRoot && !isHoisted && notOptionsOrHelp
-                    },
-
+                    
                     { title: "----" },
 
                     { title: `${t("tree-context-menu.expand-subtree")} <kbd data-command="expandSubtree"></kbd>`, command: "expandSubtree", uiIcon: "bx bx-expand", enabled: noSelectedNotes },
@@ -187,6 +181,13 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
             },
 
             { title: `${t("tree-context-menu.clone-to")} <kbd data-command="cloneNotesTo"></kbd>`, command: "cloneNotesTo", uiIcon: "bx bx-duplicate", enabled: isNotRoot && !isHoisted },
+
+            {
+                title: `${t("tree-context-menu.duplicate")} <kbd data-command="duplicateSubtree">`,
+                command: "duplicateSubtree",
+                uiIcon: "bx bx-outline",
+                enabled: parentNotSearch && isNotRoot && !isHoisted && notOptionsOrHelp
+            },
 
             {
                 title: `${t("tree-context-menu.delete")} <kbd data-command="deleteNotes"></kbd>`,
