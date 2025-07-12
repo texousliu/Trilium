@@ -14,4 +14,4 @@ jobs:
         uses: eps1lon/actions-label-merge-conflict@v3
         with:
           dirtyLabel: "merge-conflicts"
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          repoToken: "${{ secrets.MERGE_CONFLICT_LABEL_PAT }}"
