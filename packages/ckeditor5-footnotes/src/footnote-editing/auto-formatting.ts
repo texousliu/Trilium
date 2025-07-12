@@ -1,4 +1,4 @@
-import { type Editor, ModelText, ModelTextProxy, type ModelElement, type Range, type Autoformat, inlineAutoformatEditing } from 'ckeditor5';
+import { type Editor, ModelText, ModelTextProxy, type ModelElement, type ModelRange, type Autoformat, inlineAutoformatEditing } from 'ckeditor5';
 
 import { COMMANDS, ELEMENTS } from '../constants.js';
 import { modelQueryElement, modelQueryElementsAll } from '../utils.js';
@@ -68,7 +68,7 @@ const regexMatchCallback = (
  * Footnotes only get inserted if the matching range is an integer between 1
  * and the number of existing footnotes + 1.
  */
-const formatCallback = ( ranges: Array<Range>, editor: Editor, rootElement: ModelElement ): boolean | undefined => {
+const formatCallback = ( ranges: Array<ModelRange>, editor: Editor, rootElement: ModelElement ): boolean | undefined => {
 	const command = editor.commands.get( COMMANDS.insertFootnote );
 	if ( !command || !command.isEnabled ) {
 		return;
@@ -115,7 +115,7 @@ export const addFootnoteAutoformatting = ( editor: Editor, rootElement: ModelEle
 			editor,
 			autoformatPluginInstance,
 			text => regexMatchCallback( editor, text ),
-			( _, ranges: Array<Range> ) => formatCallback( ranges, editor, rootElement )
+			( _, ranges: Array<ModelRange> ) => formatCallback( ranges, editor, rootElement )
 		);
 	}
 };
