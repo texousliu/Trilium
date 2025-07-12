@@ -8,7 +8,7 @@
  */
 
 import { Command, first } from 'ckeditor5';
-import type { DocumentFragment, Element, Position, Range, Schema, Writer } from 'ckeditor5';
+import type { ViewDocumentFragment, Element, Position, Range, Schema, Writer } from 'ckeditor5';
 
 /**
  * The block quote command plugin.
@@ -191,7 +191,7 @@ export default class AdmonitionCommand extends Command {
 	 */
 	private _applyQuote( writer: Writer, blocks: Array<Element>, type?: AdmonitionType): void {
 		this._lastType = type;
-		const quotesToMerge: Array<Element | DocumentFragment> = [];
+		const quotesToMerge: Array<Element | ViewDocumentFragment> = [];
 
 		// Quote all groups of block. Iterate in the reverse order to not break following ranges.
 		getRangesOfBlockGroups( writer, blocks ).reverse().forEach( groupRange => {
@@ -228,7 +228,7 @@ export default class AdmonitionCommand extends Command {
 	}
 }
 
-function findQuote( elementOrPosition: Element | Position ): Element | DocumentFragment | null {
+function findQuote( elementOrPosition: Element | Position ): Element | ViewDocumentFragment | null {
 	return elementOrPosition.parent!.name == 'aside' ? elementOrPosition.parent : null;
 }
 
