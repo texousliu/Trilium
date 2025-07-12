@@ -37,7 +37,9 @@ const config: ForgeConfig = {
         executableName: EXECUTABLE_NAME,
         name: PRODUCT_NAME,
         overwrite: true,
-        asar: true,
+        asar: {
+            unpack: "**/.pnpm/**/swagger-ui-dist/**"
+        },
         icon: path.join(APP_ICON_PATH, "icon"),
         ...macosSignConfiguration,
         windowsSign: windowsSignConfiguration,
