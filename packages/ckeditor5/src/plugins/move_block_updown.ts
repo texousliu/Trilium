@@ -2,7 +2,7 @@
  * https://github.com/TriliumNext/Trilium/issues/1002
  */
 
-import { Command, DocumentSelection, Element, Node, Plugin, Range } from 'ckeditor5';
+import { Command, DocumentSelection, ModelElement, Node, Plugin, Range } from 'ckeditor5';
 export default class MoveBlockUpDownPlugin extends Plugin {
 
     init() {
@@ -46,7 +46,7 @@ export default class MoveBlockUpDownPlugin extends Plugin {
 
 abstract class MoveBlockUpDownCommand extends Command {
 
-	abstract getSibling(selectedBlock: Element): Node | null;
+	abstract getSibling(selectedBlock: ModelElement): Node | null;
     abstract get offset(): "before" | "after";
 
 	override execute() {
@@ -107,7 +107,7 @@ abstract class MoveBlockUpDownCommand extends Command {
 
 	getSelectedBlocks(selection: DocumentSelection) {
 		const blocks = [...selection.getSelectedBlocks()];
-		const resolved: Element[] = [];
+		const resolved: ModelElement[] = [];
 
 		// Selects elements (such as Mermaid) when there are no blocks
 		if (!blocks.length) {
@@ -118,10 +118,10 @@ abstract class MoveBlockUpDownCommand extends Command {
 		}
 
 		for (const block of blocks) {
-			let el: Element = block;
+			let el: ModelElement = block;
 			// Traverse up until the parent is the root ($root) or there is no parent
 			while (el.parent && el.parent.name !== '$root') {
-				el = el.parent as Element;
+				el = el.parent as ModelElement;
 			}
 			resolved.push(el);
 		}
@@ -140,7 +140,7 @@ abstract class MoveBlockUpDownCommand extends Command {
 
 class MoveBlockUpCommand extends MoveBlockUpDownCommand {
 
-    getSibling(selectedBlock: Element) {
+    getSibling(selectedBlock: ModelElement) {
         return selectedBlock.previousSibling;
     }
 
@@ -153,7 +153,7 @@ class MoveBlockUpCommand extends MoveBlockUpDownCommand {
 class MoveBlockDownCommand extends MoveBlockUpDownCommand {
 
 	/** @override */
-	getSibling(selectedBlock: Element) {
+	getSibling(selectedBlock: ModelElement) {
 		return selectedBlock.nextSibling;
 	}
 

@@ -2,7 +2,7 @@
  * https://github.com/zadam/trilium/issues/978
  */
 
-import { DocumentFragment, Element, Plugin, Position } from "ckeditor5";
+import { DocumentFragment, ModelElement, Plugin, Position } from "ckeditor5";
 
 export default class IndentBlockShortcutPlugin extends Plugin {
 
@@ -28,7 +28,7 @@ export default class IndentBlockShortcutPlugin extends Plugin {
 
     // in table TAB should switch cells
     isInTable() {
-        let el: Position | Element | DocumentFragment | null = this.editor.model.document.selection.getFirstPosition();
+        let el: Position | ModelElement | DocumentFragment | null = this.editor.model.document.selection.getFirstPosition();
 
         while (el) {
             if ("name" in el && el.name === 'tableCell') {
