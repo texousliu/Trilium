@@ -1,4 +1,4 @@
-import { Clipboard, Plugin, type Editor, ModelLivePosition, LiveRange, Undo } from 'ckeditor5';
+import { Clipboard, Plugin, type Editor, ModelLivePosition, ModelLiveRange, Undo } from 'ckeditor5';
 import { extractDelimiters, hasDelimiters, delimitersCounts } from './utils.js';
 
 export default class AutoMath extends Plugin {
@@ -71,7 +71,7 @@ export default class AutoMath extends Plugin {
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		const mathConfig = this.editor.config.get( 'math' );
 
-		const equationRange = new LiveRange( leftPosition, rightPosition );
+		const equationRange = new ModelLiveRange( leftPosition, rightPosition );
 		const walker = equationRange.getWalker( { ignoreElementEnd: true } );
 
 		let text = '';
