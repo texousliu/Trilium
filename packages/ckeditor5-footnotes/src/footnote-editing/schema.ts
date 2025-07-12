@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import { Schema } from 'ckeditor5';
+import { ModelSchema } from 'ckeditor5';
 import { ATTRIBUTES, ELEMENTS } from '../constants.js';
 
 /**
@@ -7,7 +7,7 @@ import { ATTRIBUTES, ELEMENTS } from '../constants.js';
  * See here for the meanings of each rule:
  * https://ckeditor.com/docs/ckeditor5/latest/api/module_engine_model_schema-SchemaItemDefinition.html#member-isObject
  */
-export const defineSchema = ( schema: Schema ): void => {
+export const defineSchema = ( schema: ModelSchema ): void => {
 	/**
    * Footnote section at the footer of the document.
    */
