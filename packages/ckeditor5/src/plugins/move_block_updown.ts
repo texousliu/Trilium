@@ -2,7 +2,7 @@
  * https://github.com/TriliumNext/Trilium/issues/1002
  */
 
-import { Command, DocumentSelection, ModelElement, Node, Plugin, Range } from 'ckeditor5';
+import { Command, DocumentSelection, ModelElement, ModelNode, Plugin, Range } from 'ckeditor5';
 export default class MoveBlockUpDownPlugin extends Plugin {
 
     init() {
@@ -46,7 +46,7 @@ export default class MoveBlockUpDownPlugin extends Plugin {
 
 abstract class MoveBlockUpDownCommand extends Command {
 
-	abstract getSibling(selectedBlock: ModelElement): Node | null;
+	abstract getSibling(selectedBlock: ModelElement): ModelNode | null;
     abstract get offset(): "before" | "after";
 
 	override execute() {

@@ -1,10 +1,10 @@
-import type { ModelElement, Position, Writer } from "ckeditor5";
-import type { Node, Editor } from "ckeditor5";
+import type { ModelElement, ModelPosition, Writer } from "ckeditor5";
+import type { ModelNode, Editor } from "ckeditor5";
 import { Plugin } from "ckeditor5";
 
 interface SpanStackEntry {
     className: string;
-    posStart: Position;
+    posStart: ModelPosition;
 }
 
 /*
@@ -79,7 +79,7 @@ export default class SyntaxHighlighting extends Plugin {
             const changes = document.differ.getChanges();
             let dirtyCodeBlocks = new Set<ModelElement>();
 
-            function lookForCodeBlocks(node: ModelElement | Node) {
+            function lookForCodeBlocks(node: ModelElement | ModelNode) {
                 if (!("getChildren" in node)) {
                     return;
                 }
@@ -242,7 +242,7 @@ export default class SyntaxHighlighting extends Plugin {
         let spanStack: SpanStackEntry[] = [];
         let iChild = -1;
         let childText = "";
-        let child: Node | null = null;
+        let child: ModelNode | null = null;
         let iChildText = 0;
 
         while (iHtml < html.length) {
