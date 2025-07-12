@@ -8,7 +8,7 @@ import MermaidPreviewCommand from './commands/mermaidPreviewCommand.js';
 import MermaidSourceViewCommand from './commands/mermaidSourceViewCommand.js';
 import MermaidSplitViewCommand from './commands/mermaidSplitViewCommand.js';
 import InsertMermaidCommand from './commands/insertMermaidCommand.js';
-import { DowncastAttributeEvent, DowncastConversionApi, EditorConfig, ModelElement, EventInfo, Item, Node, Plugin, toWidget, UpcastConversionApi, UpcastConversionData, ViewElement, ViewText, ViewUIElement } from 'ckeditor5';
+import { DowncastAttributeEvent, DowncastConversionApi, EditorConfig, ModelElement, EventInfo, ModelItem, ModelNode, Plugin, toWidget, UpcastConversionApi, UpcastConversionData, ViewElement, ViewText, ViewUIElement } from 'ckeditor5';
 
 // Time in milliseconds.
 const DEBOUNCE_TIME = 300;
@@ -95,7 +95,7 @@ export default class MermaidEditing extends Plugin {
 			return;
 		}
 
-		const targetViewPosition = mapper.toViewPosition( model.createPositionBefore( data.item as Item ) );
+		const targetViewPosition = mapper.toViewPosition( model.createPositionBefore( data.item as ModelItem ) );
 		// For downcast we're using only language-mermaid class. We don't set class to `mermaid language-mermaid` as
 		// multiple markdown converters that we have seen are using only `language-mermaid` class and not `mermaid` alone.
 		const code = writer.createContainerElement( 'code', {
@@ -122,7 +122,7 @@ export default class MermaidEditing extends Plugin {
 			return;
 		}
 
-		const targetViewPosition = mapper.toViewPosition( model.createPositionBefore( data.item as Item ) );
+		const targetViewPosition = mapper.toViewPosition( model.createPositionBefore( data.item as ModelItem ) );
 
 		const wrapperAttributes = {
 			class: [ 'ck-mermaid__wrapper' ]
@@ -158,7 +158,7 @@ export default class MermaidEditing extends Plugin {
 
 			const debouncedListener = debounce( event => {
 				editor.model.change( writer => {
-					writer.setAttribute( 'source', event.target.value, data.item as Node );
+					writer.setAttribute( 'source', event.target.value, data.item as ModelNode );
 				} );
 			}, DEBOUNCE_TIME );
 
@@ -171,7 +171,7 @@ export default class MermaidEditing extends Plugin {
 
 				// Move the selection onto the mermaid widget if it's currently not selected.
 				if ( selectedElement !== data.item ) {
-					model.change( writer => writer.setSelection( data.item as Node, 'on' ) );
+					model.change( writer => writer.setSelection( data.item as ModelNode, 'on' ) );
 				}
 			}, true );
 
@@ -208,7 +208,7 @@ export default class MermaidEditing extends Plugin {
 			for ( const _child of mermaidView.getChildren() ) {
 				const child = _child as ViewElement;
 				if ( child.name === 'textarea' && child.hasClass( 'ck-mermaid__editing-view' ) ) {
-					// Text & HTMLElement & Node & DocumentFragment
+					// Text & HTMLElement & ModelNode & DocumentFragment
 					const domEditingTextarea = domConverter.viewToDom(child) as HTMLElement as HTMLInputElement;
 
 					if ( domEditingTextarea.value != newSource ) {
