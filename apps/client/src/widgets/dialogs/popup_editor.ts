@@ -49,7 +49,7 @@ const TPL = /*html*/`\
             left: 0;
             right: 0;
             background: var(--modal-background-color);
-            z-index: 1000;
+            z-index: 998;
         }
 
         .modal.popup-editor-dialog .note-detail-file {
