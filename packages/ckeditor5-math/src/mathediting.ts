@@ -1,5 +1,5 @@
 import MathCommand from './mathcommand.js';
-import { type Editor, Plugin, toWidget, Widget, viewToModelPositionOutsideModelElement, type DowncastWriter, type ModelElement, CKEditorError, uid } from 'ckeditor5';
+import { type Editor, Plugin, toWidget, Widget, viewToModelPositionOutsideModelElement, type ViewDowncastWriter, type ModelElement, CKEditorError, uid } from 'ckeditor5';
 import { renderEquation, extractDelimiters } from './utils.js';
 
 export default class MathEditing extends Plugin {
@@ -212,7 +212,7 @@ export default class MathEditing extends Plugin {
 		// Create view for editor
 		function createMathtexEditingView(
 			modelItem: ModelElement,
-			writer: DowncastWriter
+			writer: ViewDowncastWriter
 		) {
 			const equation = String( modelItem.getAttribute( 'equation' ) );
 			const display = !!modelItem.getAttribute( 'display' );
@@ -262,7 +262,7 @@ export default class MathEditing extends Plugin {
 		// Create view for data
 		function createMathtexView(
 			modelItem: ModelElement,
-			{ writer }: { writer: DowncastWriter }
+			{ writer }: { writer: ViewDowncastWriter }
 		) {
 			const equation = modelItem.getAttribute( 'equation' );
 			if ( typeof equation != 'string' ) {
