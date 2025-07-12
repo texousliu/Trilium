@@ -7,7 +7,8 @@ import type { CommandListenerData, EventData } from "../../../components/app_con
 import type { Attribute } from "../../../services/attribute_parser.js";
 import note_create from "../../../services/note_create.js";
 import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MenuModule, MoveRowsModule, ColumnDefinition} from 'tabulator-tables';
-import "tabulator-tables/dist/css/tabulator_bootstrap5.min.css";
+import "tabulator-tables/dist/css/tabulator.css";
+import "../../../../src/stylesheets/table.css";
 import { canReorderRows, configureReorderingRows } from "./dragging.js";
 import buildFooter from "./footer.js";
 import getPromotedAttributeInformation, { buildRowDefinitions } from "./rows.js";

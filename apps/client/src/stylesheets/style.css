@@ -327,7 +327,8 @@ button kbd {
     }
 }
 
-.dropdown-menu {
+.dropdown-menu,
+.tabulator-popup-container {
     color: var(--menu-text-color) !important;
     font-size: inherit;
     background-color: var(--menu-background-color) !important;
@@ -342,7 +343,8 @@ button kbd {
     break-after: avoid;
 }
 
-body.desktop .dropdown-menu {
+body.desktop .dropdown-menu,
+body.desktop .tabulator-popup-container {
     border: 1px solid var(--dropdown-border-color);
     box-shadow: 0px 10px 20px rgba(0, 0, 0, var(--dropdown-shadow-opacity));
     animation: dropdown-menu-opening 100ms ease-in;
@@ -385,7 +387,8 @@ body.desktop .dropdown-menu {
 }
 
 .dropdown-menu a:hover:not(.disabled),
-.dropdown-item:hover:not(.disabled, .dropdown-item-container) {
+.dropdown-item:hover:not(.disabled, .dropdown-item-container),
+.tabulator-menu-item:hover {
     color: var(--hover-item-text-color) !important;
     background-color: var(--hover-item-background-color) !important;
     border-color: var(--hover-item-border-color) !important;
@@ -1207,12 +1210,14 @@ body.mobile .dropdown-submenu > .dropdown-menu {
 }
 
 #context-menu-container,
-#context-menu-container .dropdown-menu {
-    padding: 3px 0 0;
+#context-menu-container .dropdown-menu,
+.tabulator-popup-container {
+    padding: 3px 0;
     z-index: 2000;
 }
 
-#context-menu-container .dropdown-item {
+#context-menu-container .dropdown-item,
+.tabulator-menu .tabulator-menu-item {
     padding: 0 7px 0 10px;
     cursor: pointer;
     user-select: none;
