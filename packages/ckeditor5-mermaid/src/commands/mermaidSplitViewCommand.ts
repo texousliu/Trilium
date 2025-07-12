@@ -3,7 +3,7 @@
  */
 
 import { checkIsOn } from '../utils.js';
-import { Command, Element } from 'ckeditor5';
+import { Command, ModelElement } from 'ckeditor5';
 
 /**
  * The mermaid split view command.
@@ -31,7 +31,7 @@ export default class MermaidSplitViewCommand extends Command {
 		const editor = this.editor;
 		const model = editor.model;
 		const documentSelection = this.editor.model.document.selection;
-		const mermaidItem = (documentSelection.getSelectedElement() || documentSelection.getLastPosition()?.parent) as Element;
+		const mermaidItem = (documentSelection.getSelectedElement() || documentSelection.getLastPosition()?.parent) as ModelElement;
 
 		model.change( writer => {
 			if ( mermaidItem.getAttribute( 'displayMode' ) !== 'split' ) {

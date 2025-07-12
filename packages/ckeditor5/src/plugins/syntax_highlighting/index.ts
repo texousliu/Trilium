@@ -1,10 +1,10 @@
-import type { Element, Position, Writer } from "ckeditor5";
-import type { Node, Editor } from "ckeditor5";
+import type { ModelElement, ModelPosition, ModelWriter } from "ckeditor5";
+import type { ModelNode, Editor } from "ckeditor5";
 import { Plugin } from "ckeditor5";
 
 interface SpanStackEntry {
     className: string;
-    posStart: Position;
+    posStart: ModelPosition;
 }
 
 /*
@@ -77,9 +77,9 @@ export default class SyntaxHighlighting extends Plugin {
             // See
             // https://github.com/ckeditor/ckeditor5/blob/b53d2a4b49679b072f4ae781ac094e7e831cfb14/packages/ckeditor5-block-quote/src/blockquoteediting.js#L54
             const changes = document.differ.getChanges();
-            let dirtyCodeBlocks = new Set<Element>();
+            let dirtyCodeBlocks = new Set<ModelElement>();
 
-            function lookForCodeBlocks(node: Element | Node) {
+            function lookForCodeBlocks(node: ModelElement | ModelNode) {
                 if (!("getChildren" in node)) {
                     return;
                 }
@@ -91,7 +91,7 @@ export default class SyntaxHighlighting extends Plugin {
 
                     if (child.is("element", "codeBlock")) {
                         dirtyCodeBlocks.add(child);
-                    } else if ((child as Element).childCount > 0) {
+                    } else if ((child as ModelElement).childCount > 0) {
                         lookForCodeBlocks(child);
                     }
                 }
@@ -100,7 +100,7 @@ export default class SyntaxHighlighting extends Plugin {
             for (const change of changes) {
                 dbg("change " + JSON.stringify(change));
 
-                if ("name" in change && change.name !== "paragraph" && change.name !== "codeBlock" && change?.position?.nodeAfter && (change.position.nodeAfter as Element).childCount > 0) {
+                if ("name" in change && change.name !== "paragraph" && change.name !== "codeBlock" && change?.position?.nodeAfter && (change.position.nodeAfter as ModelElement).childCount > 0) {
                     /*
                      * We need to look for code blocks recursively, as they can be placed within a <div> due to
                      * general HTML support or normally underneath other elements such as tables, blockquotes, etc.
@@ -115,7 +115,7 @@ export default class SyntaxHighlighting extends Plugin {
                     // etc (the postfixer won't get later changes for those).
                     if (codeBlock) {
                         log("dirtying inserted codeBlock " + JSON.stringify(codeBlock.toJSON()));
-                        dirtyCodeBlocks.add(codeBlock as Element);
+                        dirtyCodeBlocks.add(codeBlock as ModelElement);
                     }
                 } else if (change.type == "remove" && change.name == "codeBlock" && change.position) {
                     // An existing codeblock was removed, do nothing. Note the
@@ -149,7 +149,7 @@ export default class SyntaxHighlighting extends Plugin {
      *     the formatting would be stored with the note and it would need a
      *     way to remove that formatting when editing back the note.
      */
-    highlightCodeBlock(codeBlock: Element, writer: Writer) {
+    highlightCodeBlock(codeBlock: ModelElement, writer: ModelWriter) {
         log("highlighting codeblock " + JSON.stringify(codeBlock.toJSON()));
         const model = codeBlock.root.document?.model;
         if (!model) {
@@ -242,7 +242,7 @@ export default class SyntaxHighlighting extends Plugin {
         let spanStack: SpanStackEntry[] = [];
         let iChild = -1;
         let childText = "";
-        let child: Node | null = null;
+        let child: ModelNode | null = null;
         let iChildText = 0;
 
         while (iHtml < html.length) {

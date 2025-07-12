@@ -1,4 +1,4 @@
-import { Command, type Element, type RootElement, type Writer } from "ckeditor5";
+import { Command, type ModelElement, type ModelRootElement, type ModelWriter } from "ckeditor5";
 
 import { ATTRIBUTES, ELEMENTS } from './constants.js';
 import { modelQueryElement } from './utils.js';
@@ -82,7 +82,7 @@ export default class InsertFootnoteCommand extends Command {
 	/**
    * Returns the footnote section if it exists, or creates on if it doesn't.
    */
-	private _getFootnoteSection( writer: Writer, rootElement: RootElement ): Element {
+	private _getFootnoteSection( writer: ModelWriter, rootElement: ModelRootElement ): ModelElement {
 		const footnoteSection = modelQueryElement( this.editor, rootElement, element =>
 			element.is( 'element', ELEMENTS.footnoteSection )
 		);
