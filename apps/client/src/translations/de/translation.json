@@ -1384,7 +1384,7 @@
     "move-to": "Verschieben nach...",
     "paste-into": "Als Unternotiz einfügen",
     "paste-after": "Danach einfügen",
-    "duplicate-subtree": "Notizbaum duplizieren",
+    "duplicate": "Duplizieren",
     "export": "Exportieren",
     "import-into-note": "In Notiz importieren",
     "apply-bulk-actions": "Massenaktionen ausführen",

@@ -1349,7 +1349,7 @@
     "copy-note-path-to-clipboard": "Copiază calea notiței în clipboard",
     "cut": "Decupează",
     "delete": "Șterge",
-    "duplicate-subtree": "Dublifică ierarhia",
+    "duplicate": "Dublifică",
     "edit-branch-prefix": "Editează prefixul ramurii",
     "expand-subtree": "Expandează subnotițele",
     "export": "Exportă",

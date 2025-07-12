@@ -1593,7 +1593,7 @@
     "move-to": "Mover a...",
     "paste-into": "Pegar en",
     "paste-after": "Pegar después de",
-    "duplicate-subtree": "Duplicar subárbol",
+    "duplicate": "Duplicar",
     "export": "Exportar",
     "import-into-note": "Importar a nota",
     "apply-bulk-actions": "Aplicar acciones en lote",

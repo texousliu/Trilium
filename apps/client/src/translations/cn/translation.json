@@ -1431,7 +1431,6 @@
     "move-to": "移动到...",
     "paste-into": "粘贴到里面",
     "paste-after": "粘贴到后面",
-    "duplicate-subtree": "复制子树",
     "export": "导出",
     "import-into-note": "导入到笔记",
     "apply-bulk-actions": "应用批量操作",
