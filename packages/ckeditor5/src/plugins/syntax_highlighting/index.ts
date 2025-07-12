@@ -1,4 +1,4 @@
-import type { ModelElement, ModelPosition, Writer } from "ckeditor5";
+import type { ModelElement, ModelPosition, ModelWriter } from "ckeditor5";
 import type { ModelNode, Editor } from "ckeditor5";
 import { Plugin } from "ckeditor5";
 
@@ -149,7 +149,7 @@ export default class SyntaxHighlighting extends Plugin {
      *     the formatting would be stored with the note and it would need a
      *     way to remove that formatting when editing back the note.
      */
-    highlightCodeBlock(codeBlock: ModelElement, writer: Writer) {
+    highlightCodeBlock(codeBlock: ModelElement, writer: ModelWriter) {
         log("highlighting codeblock " + JSON.stringify(codeBlock.toJSON()));
         const model = codeBlock.root.document?.model;
         if (!model) {
