@@ -8,7 +8,7 @@ import MermaidPreviewCommand from './commands/mermaidPreviewCommand.js';
 import MermaidSourceViewCommand from './commands/mermaidSourceViewCommand.js';
 import MermaidSplitViewCommand from './commands/mermaidSplitViewCommand.js';
 import InsertMermaidCommand from './commands/insertMermaidCommand.js';
-import { DowncastAttributeEvent, DowncastConversionApi, EditorConfig, Element, EventInfo, Item, Node, Plugin, toWidget, UpcastConversionApi, UpcastConversionData, ViewElement, ViewText, ViewUIElement } from 'ckeditor5';
+import { DowncastAttributeEvent, DowncastConversionApi, EditorConfig, ModelElement, EventInfo, Item, Node, Plugin, toWidget, UpcastConversionApi, UpcastConversionData, ViewElement, ViewText, ViewUIElement } from 'ckeditor5';
 
 // Time in milliseconds.
 const DEBOUNCE_TIME = 300;
@@ -109,7 +109,7 @@ export default class MermaidEditing extends Plugin {
 		writer.insert( model.createPositionAt( code, 'end' ) as any, sourceTextNode );
 		writer.insert( model.createPositionAt( pre, 'end' ) as any, code );
 		writer.insert( targetViewPosition, pre );
-		mapper.bindElements( data.item as Element, code as ViewElement );
+		mapper.bindElements( data.item as ModelElement, code as ViewElement );
 	}
 
 	_mermaidDowncast( evt: EventInfo, data: DowncastConversionData, conversionApi: DowncastConversionApi ) {
@@ -144,7 +144,7 @@ export default class MermaidEditing extends Plugin {
 
 		writer.insert( targetViewPosition, wrapper );
 
-		mapper.bindElements( data.item as Element, wrapper );
+		mapper.bindElements( data.item as ModelElement, wrapper );
 
 		return toWidget( wrapper, writer, {
 			label: t( 'Mermaid widget' ),
@@ -200,7 +200,7 @@ export default class MermaidEditing extends Plugin {
 		const domConverter = this.editor.editing.view.domConverter;
 
 		if ( newSource ) {
-			const mermaidView = conversionApi.mapper.toViewElement( data.item as Element );
+			const mermaidView = conversionApi.mapper.toViewElement( data.item as ModelElement );
 			if (!mermaidView) {
 				return;
 			}
