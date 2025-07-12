@@ -11,7 +11,7 @@ import { defineSchema } from './schema.js';
 import { ATTRIBUTES, COMMANDS, ELEMENTS } from '../constants.js';
 import InsertFootnoteCommand from '../insert-footnote-command.js';
 import { modelQueryElement, modelQueryElementsAll } from '../utils.js';
-import { Autoformat, Batch, Element, Plugin, ModelRootElement, viewToModelPositionOutsideModelElement, Widget, Writer } from 'ckeditor5';
+import { Autoformat, Batch, ModelElement, Plugin, ModelRootElement, viewToModelPositionOutsideModelElement, Widget, Writer } from 'ckeditor5';
 
 export default class FootnoteEditing extends Plugin {
 
@@ -56,7 +56,7 @@ export default class FootnoteEditing extends Plugin {
 					if ( diffItem.type === 'attribute' && diffItem.attributeKey === ATTRIBUTES.footnoteIndex ) {
 						const { attributeNewValue: newFootnoteIndex } = diffItem;
 						const footnote = [ ...diffItem.range.getItems() ].find( item => item.is( 'element', ELEMENTS.footnoteItem ) );
-						const footnoteId = footnote instanceof Element && footnote.getAttribute( ATTRIBUTES.footnoteId );
+						const footnoteId = footnote instanceof ModelElement && footnote.getAttribute( ATTRIBUTES.footnoteId );
 						if ( !footnoteId ) {
 							return;
 						}
@@ -143,7 +143,7 @@ export default class FootnoteEditing extends Plugin {
    * batch these changes with the ones that instantiated them,
    * such that the set can be undone with a single action.
    */
-	private _clearContents( modelWriter: Writer, footnoteContent: Element ) {
+	private _clearContents( modelWriter: Writer, footnoteContent: ModelElement ) {
 		const contents = modelWriter.createRangeIn( footnoteContent );
 		modelWriter.appendElement( 'paragraph', footnoteContent );
 		modelWriter.remove( contents );
@@ -155,7 +155,7 @@ export default class FootnoteEditing extends Plugin {
    * which triggers the `updateReferenceIds` method. modelWriter is passed in to batch these changes with
    * the ones that instantiated them, such that the set can be undone with a single action.
    */
-	private _removeFootnote( modelWriter: Writer, footnote: Element ) {
+	private _removeFootnote( modelWriter: Writer, footnote: ModelElement ) {
 		// delete the current footnote and its references,
 		// and renumber subsequent footnotes.
 		if ( !this.editor ) {
@@ -185,7 +185,7 @@ export default class FootnoteEditing extends Plugin {
 			// immediately deletes the footnote. This deliberately sets the new selection position
 			// to avoid that.
 			const neighborFootnote = index === 0 ? footnoteSection.getChild( index ) : footnoteSection.getChild( ( index ?? 0 ) - 1 );
-			if ( !( neighborFootnote instanceof Element ) ) {
+			if ( !( neighborFootnote instanceof ModelElement ) ) {
 				return;
 			}
 

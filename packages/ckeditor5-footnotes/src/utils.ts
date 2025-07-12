@@ -1,4 +1,4 @@
-import { type Editor, Element, ModelText, ModelTextProxy, ViewElement } from 'ckeditor5';
+import { type Editor, ModelElement, ModelText, ModelTextProxy, ViewElement } from 'ckeditor5';
 
 // There's ample DRY violation in this file; type checking
 // polymorphism without full typescript is just incredibly finicky.
@@ -11,14 +11,14 @@ import { type Editor, Element, ModelText, ModelTextProxy, ViewElement } from 'ck
  */
 export const modelQueryElementsAll = (
 	editor: Editor,
-	rootElement: Element,
-	predicate: ( item: Element ) => boolean = _ => true
-): Array<Element> => {
+	rootElement: ModelElement,
+	predicate: ( item: ModelElement ) => boolean = _ => true
+): Array<ModelElement> => {
 	const range = editor.model.createRangeIn( rootElement );
-	const output: Array<Element> = [];
+	const output: Array<ModelElement> = [];
 
 	for ( const item of range.getItems() ) {
-		if ( !( item instanceof Element ) ) {
+		if ( !( item instanceof ModelElement ) ) {
 			continue;
 		}
 
@@ -35,7 +35,7 @@ export const modelQueryElementsAll = (
  */
 export const modelQueryTextAll = (
 	editor: Editor,
-	rootElement: Element,
+	rootElement: ModelElement,
 	predicate: ( item: ModelText | ModelTextProxy ) => boolean = _ => true
 ): Array<ModelText | ModelTextProxy> => {
 	const range = editor.model.createRangeIn( rootElement );
@@ -59,13 +59,13 @@ export const modelQueryTextAll = (
  */
 export const modelQueryElement = (
 	editor: Editor,
-	rootElement: Element,
-	predicate: ( item: Element ) => boolean = _ => true
-): Element | null => {
+	rootElement: ModelElement,
+	predicate: ( item: ModelElement ) => boolean = _ => true
+): ModelElement | null => {
 	const range = editor.model.createRangeIn( rootElement );
 
 	for ( const item of range.getItems() ) {
-		if ( !( item instanceof Element ) ) {
+		if ( !( item instanceof ModelElement ) ) {
 			continue;
 		}
 
@@ -82,7 +82,7 @@ export const modelQueryElement = (
  */
 export const modelQueryText = (
 	editor: Editor,
-	rootElement: Element,
+	rootElement: ModelElement,
 	predicate: ( item: ModelText | ModelTextProxy ) => boolean = _ => true
 ): ModelText | ModelTextProxy | null => {
 	const range = editor.model.createRangeIn( rootElement );
