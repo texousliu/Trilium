@@ -11,7 +11,7 @@ import { defineSchema } from './schema.js';
 import { ATTRIBUTES, COMMANDS, ELEMENTS } from '../constants.js';
 import InsertFootnoteCommand from '../insert-footnote-command.js';
 import { modelQueryElement, modelQueryElementsAll } from '../utils.js';
-import { Autoformat, Batch, Element, Plugin, RootElement, viewToModelPositionOutsideModelElement, Widget, Writer } from 'ckeditor5';
+import { Autoformat, Batch, Element, Plugin, ModelRootElement, viewToModelPositionOutsideModelElement, Widget, Writer } from 'ckeditor5';
 
 export default class FootnoteEditing extends Plugin {
 
@@ -26,7 +26,7 @@ export default class FootnoteEditing extends Plugin {
 	/**
    * The root element of the document.
    */
-	public get rootElement(): RootElement {
+	public get rootElement(): ModelRootElement {
 		const rootElement = this.editor.model.document.getRoot();
 		if ( !rootElement ) {
 			throw new Error( 'Document has no rootElement element.' );
