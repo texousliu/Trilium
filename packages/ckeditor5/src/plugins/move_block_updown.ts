@@ -2,7 +2,7 @@
  * https://github.com/TriliumNext/Trilium/issues/1002
  */
 
-import { Command, DocumentSelection, ModelElement, ModelNode, Plugin, Range } from 'ckeditor5';
+import { Command, DocumentSelection, ModelElement, ModelNode, Plugin, ModelRange } from 'ckeditor5';
 export default class MoveBlockUpDownPlugin extends Plugin {
 
     init() {
@@ -81,7 +81,7 @@ abstract class MoveBlockUpDownCommand extends Command {
 			}
 
 			// Restore selection
-			let range: Range;
+			let range: ModelRange;
 			const maxStart = firstBlock.maxOffset ?? startOffset;
 			const maxEnd = lastBlock.maxOffset ?? endOffset;
 			// If original offsets valid within bounds, restore partial selection

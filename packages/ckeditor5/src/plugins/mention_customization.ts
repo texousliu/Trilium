@@ -1,4 +1,4 @@
-import { Command, Mention, Plugin, Range, type Selectable } from "ckeditor5";
+import { Command, Mention, Plugin, ModelRange, type Selectable } from "ckeditor5";
 
 /**
  * Overrides the actions taken by the Mentions plugin (triggered by `@` in the text editor, or `~` & `#` in the attribute editor):
@@ -31,7 +31,7 @@ interface MentionOpts {
     };
     marker: string;
     text?: string;
-    range?: Range;
+    range?: ModelRange;
 }
 
 interface MentionAttribute {
