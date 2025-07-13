@@ -120,8 +120,8 @@ To install TriliumNext on your own server (including via Docker from [Dockerhub]
 
 Download the repository, install dependencies using `pnpm` and then run the server (available at http://localhost:8080):
 ```shell
-git clone https://github.com/TriliumNext/Notes.git
-cd Notes
+git clone https://github.com/TriliumNext/Trilium.git
+cd Trilium
 pnpm install
 pnpm run server:start
 ```
@@ -130,8 +130,8 @@ pnpm run server:start
 
 Download the repository, install dependencies using `pnpm` and then run the environment required to edit the documentation:
 ```shell
-git clone https://github.com/TriliumNext/Notes.git
-cd Notes
+git clone https://github.com/TriliumNext/Trilium.git
+cd Trilium
 pnpm install
 pnpm nx run edit-docs:edit-docs
 ```
@@ -139,8 +139,8 @@ pnpm nx run edit-docs:edit-docs
 ### Building the Executable
 Download the repository, install dependencies using `pnpm` and then build the desktop app for Windows:
 ```shell
-git clone https://github.com/TriliumNext/Notes.git
-cd Notes
+git clone https://github.com/TriliumNext/Trilium.git
+cd Trilium
 pnpm install
 pnpm nx --project=desktop electron-forge:make -- --arch=x64 --platform=win32
 ```
