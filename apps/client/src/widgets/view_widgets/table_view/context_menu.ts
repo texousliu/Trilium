@@ -14,15 +14,48 @@ export function setupContextMenu(tabulator: Tabulator, parentNote: FNote) {
 
 function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: Tabulator) {
     const e = _e as MouseEvent;
+    const { title, field } = column.getDefinition();
+    const sorter = tabulator.getSorters().find(sorter => sorter.field === field);
     contextMenu.show({
         items: [
             {
-                title: `Hide column ${column.getDefinition().title}`,
+                title: `Hide column ${title}`,
                 handler: () => column.hide()
             },
             {
                 title: "Show/hide columns",
                 items: buildColumnItems()
+            },
+            {
+                title: "----"
+            },
+            {
+                title: `Sort by ${title}`,
+                enabled: !!field,
+                items: [
+                    {
+                        title: "Ascending",
+                        checked: (sorter?.dir === "asc"),
+                        uiIcon: "bx bx-empty",
+                        handler: () => tabulator.setSort([
+                            {
+                                column: field!,
+                                dir: "asc",
+                            }
+                        ])
+                    },
+                    {
+                        title: "Descending",
+                        checked: (sorter?.dir === "desc"),
+                        uiIcon: "bx bx-empty",
+                        handler: () => tabulator.setSort([
+                            {
+                                column: field!,
+                                dir: "desc"
+                            }
+                        ])
+                    }
+                ]
             }
         ],
         selectMenuItemHandler() {},
