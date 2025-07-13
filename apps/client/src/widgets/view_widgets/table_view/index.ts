@@ -159,7 +159,7 @@ export default class TableView extends ViewMode<StateInfo> {
         this.api!.on("cellEdited", async (cell) => {
             const noteId = cell.getRow().getData().noteId;
             const field = cell.getField();
-            const newValue = cell.getValue();
+            let newValue = cell.getValue();
 
             if (field === "title") {
                 server.put(`notes/${noteId}/title`, { title: newValue });
@@ -169,6 +169,9 @@ export default class TableView extends ViewMode<StateInfo> {
             if (field.includes(".")) {
                 const [ type, name ] = field.split(".", 2);
                 if (type === "labels") {
+                    if (typeof newValue === "boolean") {
+                        newValue = newValue ? "true" : "false";
+                    }
                     setLabel(noteId, name, newValue);
                 } else if (type === "relations") {
                     const note = await froca.getNote(noteId);

@@ -24,8 +24,6 @@ export async function buildRowDefinitions(parentNote: FNote, notes: FNote[], inf
         for (const { name, type } of infos) {
             if (type === "relation") {
                 relations[name] = note.getRelationValue(name);
-            } else if (type === "boolean") {
-                labels[name] = note.hasLabel(name);
             } else {
                 labels[name] = note.getLabelValue(name);
             }
