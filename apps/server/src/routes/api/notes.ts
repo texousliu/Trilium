@@ -110,7 +110,7 @@ function createNote(req: Request) {
 
     const { target, targetBranchId } = req.query;
 
-    if (target !== "into" && target !== "after") {
+    if (target !== "into" && target !== "after" && target !== "before") {
         throw new ValidationError("Invalid target type.");
     }
 

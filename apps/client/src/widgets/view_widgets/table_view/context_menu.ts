@@ -22,7 +22,17 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
                 title: "Insert row above",
                 uiIcon: "bx bx-list-plus",
                 handler: () => {
-
+                    const target = e.target;
+                    if (!target) {
+                        return;
+                    }
+                    const component = $(target).closest(".component").prop("component");
+                    component.triggerCommand("addNewRow", {
+                        customOpts: {
+                            target: "before",
+                            targetBranchId: rowData.branchId,
+                        }
+                    });
                 }
             },
             {
