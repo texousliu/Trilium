@@ -4,17 +4,44 @@ import { TableData } from "./rows.js";
 import branches from "../../../services/branches.js";
 import { t } from "../../../services/i18n.js";
 import link_context_menu from "../../../menus/link_context_menu.js";
+import type FNote from "../../../entities/fnote.js";
+import appContext from "../../../components/app_context.js";
 
-export function setupContextMenu(tabulator: Tabulator) {
-    tabulator.on("rowContext", showRowContextMenu);
+export function setupContextMenu(tabulator: Tabulator, parentNote: FNote) {
+    tabulator.on("rowContext", (e, row) => showRowContextMenu(e, row, parentNote));
 }
 
-export function showRowContextMenu(_e: UIEvent, row: RowComponent) {
+export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: FNote) {
     const e = _e as MouseEvent;
     const rowData = row.getData() as TableData;
     contextMenu.show({
         items: [
             ...link_context_menu.getItems(),
+            { title: "----" },
+            {
+                title: "Insert row above",
+                uiIcon: "bx bx-list-plus",
+                handler: () => {
+
+                }
+            },
+            {
+                title: "Insert row below",
+                uiIcon: "bx bx-empty",
+                handler: () => {
+                    const target = e.target;
+                    if (!target) {
+                        return;
+                    }
+                    const component = $(target).closest(".component").prop("component");
+                    component.triggerCommand("addNewRow", {
+                        customOpts: {
+                            target: "after",
+                            targetBranchId: rowData.branchId,
+                        }
+                    });
+                }
+            },
             { title: "----" },
             {
                 title: t("table_context_menu.delete_row"),

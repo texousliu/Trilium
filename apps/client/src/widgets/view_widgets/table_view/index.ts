@@ -5,7 +5,7 @@ import server from "../../../services/server.js";
 import SpacedUpdate from "../../../services/spaced_update.js";
 import type { CommandListenerData, EventData } from "../../../components/app_context.js";
 import type { Attribute } from "../../../services/attribute_parser.js";
-import note_create from "../../../services/note_create.js";
+import note_create, { CreateNoteOpts } from "../../../services/note_create.js";
 import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MenuModule, MoveRowsModule, ColumnDefinition} from 'tabulator-tables';
 import "tabulator-tables/dist/css/tabulator.css";
 import "../../../../src/stylesheets/table.css";
@@ -145,7 +145,7 @@ export default class TableView extends ViewMode<StateInfo> {
             persistenceReaderFunc: (_id, type: string) => this.persistentData?.[type],
         });
         configureReorderingRows(this.api);
-        setupContextMenu(this.api);
+        setupContextMenu(this.api, this.parentNote);
         this.setupEditing();
     }
 
@@ -198,12 +198,15 @@ export default class TableView extends ViewMode<StateInfo> {
         console.log("Save attributes", this.newAttribute);
     }
 
-    addNewRowCommand() {
+    addNewRowCommand({ customOpts }: { customOpts: CreateNoteOpts }) {
         const parentNotePath = this.args.parentNotePath;
         if (parentNotePath) {
-            note_create.createNote(parentNotePath, {
-                activate: false
-            }).then(({ note }) => {
+            const opts: CreateNoteOpts = {
+                activate: false,
+                ...customOpts
+            }
+            console.log("Create with ", opts);
+            note_create.createNote(parentNotePath, opts).then(({ note }) => {
                 if (!note) {
                     return;
                 }
