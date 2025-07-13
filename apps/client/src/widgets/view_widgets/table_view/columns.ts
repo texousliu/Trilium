@@ -1,5 +1,5 @@
 import { RelationEditor } from "./relation_editor.js";
-import { NoteFormatter, NoteTitleFormatter } from "./formatters.js";
+import { NoteFormatter, NoteTitleFormatter, RowNumberFormatter } from "./formatters.js";
 import { applyHeaderMenu } from "./header-menu.js";
 import type { ColumnDefinition } from "tabulator-tables";
 import { LabelType } from "../../../services/promoted_attribute_definition_parser.js";
@@ -46,11 +46,12 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[], exi
     const columnDefs: ColumnDefinition[] = [
         {
             title: "#",
-            formatter: "rownum",
             headerSort: false,
             hozAlign: "center",
             resizable: false,
-            frozen: true
+            frozen: true,
+            rowHandle: true,
+            formatter: RowNumberFormatter
         },
         {
             field: "noteId",
@@ -79,6 +80,7 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[], exi
             field,
             title: title ?? name,
             editor: "input",
+            rowHandle: false,
             ...labelTypeMappings[type ?? "text"],
         });
         seenFields.add(field);

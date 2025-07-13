@@ -36,6 +36,10 @@ export function NoteTitleFormatter(cell: CellComponent) {
     return $noteRef[0].outerHTML;
 }
 
+export function RowNumberFormatter(cell: CellComponent) {
+    return `<span class="bx bx-dots-vertical-rounded"></span> ` + cell.getRow().getPosition(true);
+}
+
 function buildNoteLink(noteId: string) {
     const $noteRef = $("<span>");
     const href = `#root/${noteId}`;
