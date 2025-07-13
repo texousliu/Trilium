@@ -15,7 +15,10 @@ export function setupContextMenu(tabulator: Tabulator, parentNote: FNote) {
 function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: Tabulator) {
     const e = _e as MouseEvent;
     const { title, field } = column.getDefinition();
-    const sorter = tabulator.getSorters().find(sorter => sorter.field === field);
+
+    const sorters = tabulator.getSorters();
+    const sorter = sorters.find(sorter => sorter.field === field);
+
     contextMenu.show({
         items: [
             {
@@ -56,6 +59,11 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
                         ])
                     }
                 ]
+            },
+            {
+                title: "Clear sorting",
+                enabled: sorters.length > 0,
+                handler: () => tabulator.clearSort()
             }
         ],
         selectMenuItemHandler() {},
