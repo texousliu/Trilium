@@ -22,19 +22,9 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
     contextMenu.show({
         items: [
             {
-                title: `Hide column ${title}`,
-                handler: () => column.hide()
-            },
-            {
-                title: "Show/hide columns",
-                items: buildColumnItems()
-            },
-            {
-                title: "----"
-            },
-            {
                 title: `Sort by ${title}`,
                 enabled: !!field,
+                uiIcon: "bx bx-sort-alt-2",
                 items: [
                     {
                         title: "Ascending",
@@ -63,8 +53,22 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
             {
                 title: "Clear sorting",
                 enabled: sorters.length > 0,
+                uiIcon: "bx bx-empty",
                 handler: () => tabulator.clearSort()
-            }
+            },
+            {
+                title: "----"
+            },
+            {
+                title: `Hide column ${title}`,
+                uiIcon: "bx bx-hide",
+                handler: () => column.hide()
+            },
+            {
+                title: "Show/hide columns",
+                uiIcon: "bx bx-empty",
+                items: buildColumnItems()
+            },
         ],
         selectMenuItemHandler() {},
         x: e.pageX,
