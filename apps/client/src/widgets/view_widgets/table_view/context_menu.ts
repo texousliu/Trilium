@@ -1,4 +1,4 @@
-import { RowComponent, Tabulator } from "tabulator-tables";
+import { ColumnComponent, RowComponent, Tabulator } from "tabulator-tables";
 import contextMenu from "../../../menus/context_menu.js";
 import { TableData } from "./rows.js";
 import branches from "../../../services/branches.js";
@@ -9,6 +9,23 @@ import appContext from "../../../components/app_context.js";
 
 export function setupContextMenu(tabulator: Tabulator, parentNote: FNote) {
     tabulator.on("rowContext", (e, row) => showRowContextMenu(e, row, parentNote));
+    tabulator.on("headerContext", (e, col) => showColumnContextMenu(e, col));
+}
+
+function showColumnContextMenu(_e: UIEvent, column: ColumnComponent) {
+    const e = _e as MouseEvent;
+    contextMenu.show({
+        items: [
+            {
+                title: "Hide column",
+                handler: () => column.hide()
+            }
+        ],
+        selectMenuItemHandler() {},
+        x: e.pageX,
+        y: e.pageY
+    });
+    e.preventDefault();
 }
 
 export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: FNote) {
@@ -59,9 +76,7 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
                 handler: () => branches.deleteNotes([ rowData.branchId ], false, false)
             }
         ],
-        selectMenuItemHandler: ({ command }) => {
-            link_context_menu.handleLinkContextMenuItem(command, rowData.noteId);
-        },
+        selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, rowData.noteId),
         x: e.pageX,
         y: e.pageY
     });
