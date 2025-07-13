@@ -1944,7 +1944,13 @@
   },
   "table_view": {
     "new-row": "New row",
-    "new-column": "New column"
+    "new-column": "New column",
+    "sort-column-by": "Sort by \"{{title}}\"",
+    "sort-column-ascending": "Ascending",
+    "sort-column-descending": "Descending",
+    "sort-column-clear": "Clear sorting",
+    "hide-column": "Hide column \"{{title}}\"",
+    "show-hide-columns": "Show/hide columns"
   },
   "book_properties_config": {
     "hide-weekends": "Hide weekends",

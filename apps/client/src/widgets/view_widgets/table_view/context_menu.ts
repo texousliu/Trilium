@@ -5,7 +5,6 @@ import branches from "../../../services/branches.js";
 import { t } from "../../../services/i18n.js";
 import link_context_menu from "../../../menus/link_context_menu.js";
 import type FNote from "../../../entities/fnote.js";
-import appContext from "../../../components/app_context.js";
 
 export function setupContextMenu(tabulator: Tabulator, parentNote: FNote) {
     tabulator.on("rowContext", (e, row) => showRowContextMenu(e, row, parentNote));
@@ -22,12 +21,12 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
     contextMenu.show({
         items: [
             {
-                title: `Sort by ${title}`,
+                title: t("table_view.sort-column-by", { title }),
                 enabled: !!field,
                 uiIcon: "bx bx-sort-alt-2",
                 items: [
                     {
-                        title: "Ascending",
+                        title: t("table_view.sort-column-ascending"),
                         checked: (sorter?.dir === "asc"),
                         uiIcon: "bx bx-empty",
                         handler: () => tabulator.setSort([
@@ -38,7 +37,7 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
                         ])
                     },
                     {
-                        title: "Descending",
+                        title: t("table_view.sort-column-descending"),
                         checked: (sorter?.dir === "desc"),
                         uiIcon: "bx bx-empty",
                         handler: () => tabulator.setSort([
@@ -51,7 +50,7 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
                 ]
             },
             {
-                title: "Clear sorting",
+                title: t("table_view.sort-column-clear"),
                 enabled: sorters.length > 0,
                 uiIcon: "bx bx-empty",
                 handler: () => tabulator.clearSort()
@@ -60,12 +59,13 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
                 title: "----"
             },
             {
-                title: `Hide column ${title}`,
+                title: t("table_view.hide-column", { title }),
+                enabled: !!field,
                 uiIcon: "bx bx-hide",
                 handler: () => column.hide()
             },
             {
-                title: "Show/hide columns",
+                title: t("table_view.show-hide-columns"),
                 uiIcon: "bx bx-empty",
                 items: buildColumnItems()
             },
@@ -79,12 +79,13 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
     function buildColumnItems() {
         const items: MenuItem<unknown>[] = [];
         for (const column of tabulator.getColumns()) {
-            const { title, visible } = column.getDefinition();
+            const { title, visible, field } = column.getDefinition();
 
             items.push({
                 title,
                 checked: visible,
                 uiIcon: "bx bx-empty",
+                enabled: !!field,
                 handler: () => column.toggle()
             });
         }
