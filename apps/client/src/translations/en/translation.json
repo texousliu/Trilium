@@ -1950,7 +1950,9 @@
     "sort-column-descending": "Descending",
     "sort-column-clear": "Clear sorting",
     "hide-column": "Hide column \"{{title}}\"",
-    "show-hide-columns": "Show/hide columns"
+    "show-hide-columns": "Show/hide columns",
+    "row-insert-above": "Insert row above",
+    "row-insert-below": "Insert row below"
   },
   "book_properties_config": {
     "hide-weekends": "Hide weekends",

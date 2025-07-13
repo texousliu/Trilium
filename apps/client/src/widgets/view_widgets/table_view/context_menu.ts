@@ -102,7 +102,7 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
             ...link_context_menu.getItems(),
             { title: "----" },
             {
-                title: "Insert row above",
+                title: t("table_view.row-insert-above"),
                 uiIcon: "bx bx-list-plus",
                 handler: () => {
                     const target = e.target;
@@ -119,7 +119,7 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
                 }
             },
             {
-                title: "Insert row below",
+                title: t("table_view.row-insert-below"),
                 uiIcon: "bx bx-empty",
                 handler: () => {
                     const target = e.target;
