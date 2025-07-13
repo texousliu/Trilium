@@ -1,5 +1,5 @@
-import { ColumnComponent, RowComponent, Tabulator } from "tabulator-tables";
-import contextMenu from "../../../menus/context_menu.js";
+import { ColumnComponent, MenuSeparator, RowComponent, Tabulator } from "tabulator-tables";
+import contextMenu, { MenuItem } from "../../../menus/context_menu.js";
 import { TableData } from "./rows.js";
 import branches from "../../../services/branches.js";
 import { t } from "../../../services/i18n.js";
@@ -9,16 +9,20 @@ import appContext from "../../../components/app_context.js";
 
 export function setupContextMenu(tabulator: Tabulator, parentNote: FNote) {
     tabulator.on("rowContext", (e, row) => showRowContextMenu(e, row, parentNote));
-    tabulator.on("headerContext", (e, col) => showColumnContextMenu(e, col));
+    tabulator.on("headerContext", (e, col) => showColumnContextMenu(e, col, tabulator));
 }
 
-function showColumnContextMenu(_e: UIEvent, column: ColumnComponent) {
+function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: Tabulator) {
     const e = _e as MouseEvent;
     contextMenu.show({
         items: [
             {
-                title: "Hide column",
+                title: `Hide column ${column.getDefinition().title}`,
                 handler: () => column.hide()
+            },
+            {
+                title: "Show/hide columns",
+                items: buildColumnItems()
             }
         ],
         selectMenuItemHandler() {},
@@ -26,6 +30,22 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent) {
         y: e.pageY
     });
     e.preventDefault();
+
+    function buildColumnItems() {
+        const items: MenuItem<unknown>[] = [];
+        for (const column of tabulator.getColumns()) {
+            const { title, visible } = column.getDefinition();
+
+            items.push({
+                title,
+                checked: visible,
+                uiIcon: "bx bx-empty",
+                handler: () => column.toggle()
+            });
+        }
+
+        return items;
+    }
 }
 
 export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: FNote) {
