@@ -67,6 +67,5 @@ export default function getPromotedAttributeInformation(parentNote: FNote) {
             type
         });
     }
-    console.log("Promoted attribute information", info);
     return info;
 }
