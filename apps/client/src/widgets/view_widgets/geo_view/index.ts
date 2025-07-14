@@ -251,7 +251,7 @@ export default class GeoView extends ViewMode<MapData> {
         }
     }
 
-    async onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">): boolean | void {
+    async onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
         // If any of the children branches are altered.
         if (loadResults.getBranchRows().find((branch) => branch.parentNoteId === this.parentNote.noteId)) {
             this.#reloadMarkers();
