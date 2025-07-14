@@ -137,6 +137,7 @@ export default class TableView extends ViewMode<StateInfo> {
             movableColumns: true,
             movableRows,
             dataTree: hasChildren,
+            dataTreeElementColumn: "title",
             footerElement: buildFooter(this.parentNote),
             persistenceWriterFunc: (_id, type: string, data: object) => {
                 (this.persistentData as Record<string, {}>)[type] = data;
