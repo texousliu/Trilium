@@ -295,6 +295,7 @@ interface AttributeDetailOpts {
     x: number;
     y: number;
     focus?: "name";
+    parent?: HTMLElement;
 }
 
 interface SearchRelatedResponse {
@@ -560,18 +561,21 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
 
         this.toggleInt(true);
 
-        const offset = this.parent?.$widget.offset() || { top: 0, left: 0 };
+        const offset = this.parent?.$widget?.offset() || { top: 0, left: 0 };
         const detPosition = this.getDetailPosition(x, offset);
         const outerHeight = this.$widget.outerHeight();
         const height = $(window).height();
 
-        if (detPosition && outerHeight && height) {
-            this.$widget
-                .css("left", detPosition.left)
-                .css("right", detPosition.right)
-                .css("top", y - offset.top + 70)
-                .css("max-height", outerHeight + y > height - 50 ? height - y - 50 : 10000);
+        if (!detPosition || !outerHeight || !height) {
+            console.warn("Can't position popup, is it attached?");
+            return;
         }
+
+        this.$widget
+            .css("left", detPosition.left)
+            .css("right", detPosition.right)
+            .css("top", y - offset.top + 70)
+            .css("max-height", outerHeight + y > height - 50 ? height - y - 50 : 10000);
 
         if (focus === "name") {
             this.$inputName.trigger("focus").trigger("select");

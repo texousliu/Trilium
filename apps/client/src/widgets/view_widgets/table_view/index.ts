@@ -14,6 +14,7 @@ import buildFooter from "./footer.js";
 import getAttributeDefinitionInformation, { buildRowDefinitions, TableData } from "./rows.js";
 import { AttributeDefinitionInformation, buildColumnDefinitions } from "./columns.js";
 import { setupContextMenu } from "./context_menu.js";
+import AttributeDetailWidget from "../../attribute_widgets/attribute_detail.js";
 
 const TPL = /*html*/`
 <div class="table-view">
@@ -105,6 +106,8 @@ export default class TableView extends ViewMode<StateInfo> {
     private api?: Tabulator;
     private newAttribute?: Attribute;
     private persistentData: StateInfo["tableData"];
+    private attributeDetailWidget: AttributeDetailWidget;
+
 
     constructor(args: ViewModeArgs) {
         super(args, "table");
@@ -114,6 +117,11 @@ export default class TableView extends ViewMode<StateInfo> {
         this.spacedUpdate = new SpacedUpdate(() => this.onSave(), 5_000);
         this.persistentData = {};
         args.$parent.append(this.$root);
+
+        this.attributeDetailWidget = new AttributeDetailWidget()
+                .contentSized()
+                .setParent(glob.getComponentByEl(args.$parent[0]));
+        args.$parent.append(this.attributeDetailWidget.render());
     }
 
     async renderList() {
@@ -224,6 +232,23 @@ export default class TableView extends ViewMode<StateInfo> {
         const { name, value } = this.newAttribute;
         attributes.addLabel(this.parentNote.noteId, name, value, true);
         console.log("Save attributes", this.newAttribute);
+    }
+
+    addNoteListItemEvent() {
+        const attr: Attribute = {
+            type: "label",
+            name: "label:myLabel",
+            value: "promoted,single,text"
+        };
+
+        this.attributeDetailWidget!.showAttributeDetail({
+            attribute: attr,
+            allAttributes: [ attr ],
+            isOwned: true,
+            x: 0,
+            y: 75,
+            focus: "name"
+        });
     }
 
     addNewRowCommand({ customOpts, parentNotePath: customNotePath }: CommandListenerData<"addNewRow">) {
