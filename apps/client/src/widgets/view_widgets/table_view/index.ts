@@ -234,7 +234,7 @@ export default class TableView extends ViewMode<StateInfo> {
         console.log("Save attributes", this.newAttribute);
     }
 
-    addNoteListItemEvent({ referenceColumn }: { referenceColumn?: ColumnComponent }) {
+    addNoteListItemEvent({ referenceColumn, direction }: EventData<"addNoteListItem">) {
         const attr: Attribute = {
             type: "label",
             name: "label:myLabel",
@@ -243,6 +243,10 @@ export default class TableView extends ViewMode<StateInfo> {
 
         if (referenceColumn && this.api) {
             this.newAttributePosition = this.api.getColumns().indexOf(referenceColumn);
+
+            if (direction === "after") {
+                this.newAttributePosition++;
+            }
         } else {
             this.newAttributePosition = undefined;
         }

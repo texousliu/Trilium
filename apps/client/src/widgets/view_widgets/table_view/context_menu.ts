@@ -87,6 +87,16 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
                     });
                     console.log("Add col");
                 }
+            },
+            {
+                title: "Add column to the right",
+                handler: () => {
+                    getParentComponent(e)?.triggerCommand("addNoteListItem", {
+                        referenceColumn: column,
+                        direction: "after"
+                    });
+                    console.log("Add col after");
+                }
             }
         ],
         selectMenuItemHandler() {},
