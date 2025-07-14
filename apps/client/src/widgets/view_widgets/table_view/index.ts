@@ -248,6 +248,11 @@ export default class TableView extends ViewMode<StateInfo> {
             return;
         }
 
+        // Force a refresh if sorted is changed since we need to disable reordering.
+        if (loadResults.getAttributeRows().find(a => attributes.isAffecting(a, this.parentNote))) {
+            return true;
+        }
+
         // Refresh if promoted attributes get changed.
         if (loadResults.getAttributeRows().find(attr =>
             attr.type === "label" &&
