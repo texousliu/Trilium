@@ -36,13 +36,15 @@ export function NoteTitleFormatter(cell: CellComponent) {
     return $noteRef[0].outerHTML;
 }
 
-export function RowNumberFormatter(cell: CellComponent) {
-    let html = "";
-    if (cell.getColumn().getDefinition().rowHandle) {
-        html += `<span class="bx bx-dots-vertical-rounded"></span> `;
-    }
-    html += cell.getRow().getPosition(true);
-    return html;
+export function RowNumberFormatter(draggableRows: boolean) {
+    return (cell: CellComponent) => {
+        let html = "";
+        if (draggableRows) {
+            html += `<span class="bx bx-dots-vertical-rounded"></span> `;
+        }
+        html += cell.getRow().getPosition(true);
+        return html;
+    };
 }
 
 function buildNoteLink(noteId: string) {

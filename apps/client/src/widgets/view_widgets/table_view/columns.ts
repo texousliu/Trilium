@@ -51,7 +51,7 @@ export function buildColumnDefinitions(info: AttributeDefinitionInformation[], m
             resizable: false,
             frozen: true,
             rowHandle: movableRows,
-            formatter: RowNumberFormatter
+            formatter: RowNumberFormatter(movableRows)
         },
         {
             field: "noteId",
