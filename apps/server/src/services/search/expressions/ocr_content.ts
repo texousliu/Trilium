@@ -25,21 +25,30 @@ export default class OCRContentExpression extends Expression {
         const ocrResults = this.searchOCRContent(this.searchText);
 
         for (const ocrResult of ocrResults) {
-            let note: import('../../../becca/entities/bnote.js').default | null = null;
-            
-            if (ocrResult.entity_type === 'note') {
-                note = becca.getNote(ocrResult.entity_id);
-            } else if (ocrResult.entity_type === 'attachment') {
-                // For attachments, find the parent note
-                const attachment = becca.getAttachment(ocrResult.entity_id);
-                if (attachment) {
-                    note = becca.getNote(attachment.ownerId);
+            // Find notes that use this blob
+            const notes = sql.getRows<{noteId: string}>(`
+                SELECT noteId FROM notes 
+                WHERE blobId = ? AND isDeleted = 0
+            `, [ocrResult.blobId]);
+
+            for (const noteRow of notes) {
+                const note = becca.getNote(noteRow.noteId);
+                if (note && !note.isDeleted && inputNoteSet.hasNoteId(note.noteId)) {
+                    resultNoteSet.add(note);
                 }
             }
 
-            // Only add notes that are in the input note set and not deleted
-            if (note && !note.isDeleted && inputNoteSet.hasNoteId(note.noteId)) {
-                resultNoteSet.add(note);
+            // Find attachments that use this blob and their parent notes
+            const attachments = sql.getRows<{ownerId: string}>(`
+                SELECT ownerId FROM attachments
+                WHERE blobId = ? AND isDeleted = 0
+            `, [ocrResult.blobId]);
+
+            for (const attachmentRow of attachments) {
+                const note = becca.getNote(attachmentRow.ownerId);
+                if (note && !note.isDeleted && inputNoteSet.hasNoteId(note.noteId)) {
+                    resultNoteSet.add(note);
+                }
             }
         }
 
@@ -62,44 +71,24 @@ export default class OCRContentExpression extends Expression {
     }
 
     private searchOCRContent(searchText: string): Array<{
-        entity_id: string;
-        entity_type: string;
-        extracted_text: string;
-        confidence: number;
+        blobId: string;
+        ocr_text: string;
     }> {
         try {
-            // Use FTS search if available, otherwise fall back to LIKE
-            let query: string;
-            let params: unknown[];
-
-            try {
-                // Try FTS first
-                query = `
-                    SELECT ocr.entity_id, ocr.entity_type, ocr.extracted_text, ocr.confidence
-                    FROM ocr_results_fts fts
-                    JOIN ocr_results ocr ON fts.rowid = ocr.id
-                    WHERE ocr_results_fts MATCH ?
-                    ORDER BY ocr.confidence DESC, rank
-                    LIMIT 50
-                `;
-                params = [searchText];
-            } catch {
-                // Fallback to LIKE search
-                query = `
-                    SELECT entity_id, entity_type, extracted_text, confidence
-                    FROM ocr_results
-                    WHERE extracted_text LIKE ?
-                    ORDER BY confidence DESC
-                    LIMIT 50
-                `;
-                params = [`%${searchText}%`];
-            }
+            // Search in blobs table for OCR text
+            const query = `
+                SELECT blobId, ocr_text
+                FROM blobs
+                WHERE ocr_text LIKE ?
+                AND ocr_text IS NOT NULL
+                AND ocr_text != ''
+                LIMIT 50
+            `;
+            const params = [`%${searchText}%`];
 
             return sql.getRows<{
-                entity_id: string;
-                entity_type: string;
-                extracted_text: string;
-                confidence: number;
+                blobId: string;
+                ocr_text: string;
             }>(query, params);
         } catch (error) {
             console.error('Error searching OCR content:', error);

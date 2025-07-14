@@ -17,11 +17,9 @@ export interface OCRProcessingOptions {
     confidence?: number;
 }
 
-interface OCRResultRow {
-    entity_id: string;
-    entity_type: string;
-    extracted_text: string;
-    confidence: number;
+interface OCRBlobRow {
+    blobId: string;
+    ocr_text: string;
 }
 
 /**
@@ -176,8 +174,8 @@ class OCRService {
             return null;
         }
 
-        // Check if OCR already exists and we're not forcing reprocessing
-        const existingOCR = this.getStoredOCRResult(noteId);
+        // Check if OCR already exists in the blob and we're not forcing reprocessing
+        const existingOCR = this.getStoredOCRResult(note.blobId);
         if (existingOCR && !options.forceReprocess) {
             log.info(`OCR already exists for note ${noteId}, returning cached result`);
             return existingOCR;
@@ -191,8 +189,8 @@ class OCRService {
 
             const ocrResult = await this.extractTextFromImage(content, options);
             
-            // Store OCR result
-            await this.storeOCRResult(noteId, ocrResult);
+            // Store OCR result in blob
+            await this.storeOCRResult(note.blobId, ocrResult);
             
             return ocrResult;
         } catch (error) {
@@ -226,8 +224,8 @@ class OCRService {
             return null;
         }
 
-        // Check if OCR already exists and we're not forcing reprocessing
-        const existingOCR = this.getStoredOCRResult(attachmentId, 'attachment');
+        // Check if OCR already exists in the blob and we're not forcing reprocessing
+        const existingOCR = this.getStoredOCRResult(attachment.blobId);
         if (existingOCR && !options.forceReprocess) {
             log.info(`OCR already exists for attachment ${attachmentId}, returning cached result`);
             return existingOCR;
@@ -241,8 +239,8 @@ class OCRService {
 
             const ocrResult = await this.extractTextFromImage(content, options);
             
-            // Store OCR result
-            await this.storeOCRResult(attachmentId, ocrResult, 'attachment');
+            // Store OCR result in blob
+            await this.storeOCRResult(attachment.blobId, ocrResult);
             
             return ocrResult;
         } catch (error) {
@@ -252,57 +250,62 @@ class OCRService {
     }
 
     /**
-     * Store OCR result in database
+     * Store OCR result in blob
      */
-    async storeOCRResult(entityId: string, ocrResult: OCRResult, entityType: 'note' | 'attachment' = 'note'): Promise<void> {
+    async storeOCRResult(blobId: string | undefined, ocrResult: OCRResult): Promise<void> {
+        if (!blobId) {
+            log.error('Cannot store OCR result: blobId is undefined');
+            return;
+        }
+
         try {
+            // Store OCR text in blobs table
             sql.execute(`
-                INSERT OR REPLACE INTO ocr_results (entity_id, entity_type, extracted_text, confidence, language, extracted_at)
-                VALUES (?, ?, ?, ?, ?, ?)
+                UPDATE blobs SET ocr_text = ? WHERE blobId = ?
             `, [
-                entityId,
-                entityType,
                 ocrResult.text,
-                ocrResult.confidence,
-                ocrResult.language || 'eng',
-                ocrResult.extractedAt
+                blobId
             ]);
             
-            log.info(`Stored OCR result for ${entityType} ${entityId}`);
+            log.info(`Stored OCR result for blob ${blobId}`);
         } catch (error) {
-            log.error(`Failed to store OCR result for ${entityType} ${entityId}: ${error}`);
+            log.error(`Failed to store OCR result for blob ${blobId}: ${error}`);
             throw error;
         }
     }
 
     /**
-     * Get stored OCR result from database
+     * Get stored OCR result from blob
      */
-    private getStoredOCRResult(entityId: string, entityType: 'note' | 'attachment' = 'note'): OCRResult | null {
+    private getStoredOCRResult(blobId: string | undefined): OCRResult | null {
+        if (!blobId) {
+            return null;
+        }
+
         try {
             const row = sql.getRow<{
-                extracted_text: string;
-                confidence: number;
-                language?: string;
-                extracted_at: string;
+                ocr_text: string | null;
             }>(`
-                SELECT extracted_text, confidence, language, extracted_at
-                FROM ocr_results 
-                WHERE entity_id = ? AND entity_type = ?
-            `, [entityId, entityType]);
+                SELECT ocr_text
+                FROM blobs 
+                WHERE blobId = ?
+            `, [blobId]);
             
-            if (!row) {
+            if (!row || !row.ocr_text) {
                 return null;
             }
             
+            // Return basic OCR result from stored text
+            // Note: we lose confidence, language, and extractedAt metadata
+            // but gain simplicity by storing directly in blob
             return {
-                text: row.extracted_text,
-                confidence: row.confidence,
-                language: row.language,
-                extractedAt: row.extracted_at
+                text: row.ocr_text,
+                confidence: 0.95, // Default high confidence for existing OCR
+                extractedAt: new Date().toISOString(),
+                language: 'eng'
             };
         } catch (error) {
-            log.error(`Failed to get OCR result for ${entityType} ${entityId}: ${error}`);
+            log.error(`Failed to get OCR result for blob ${blobId}: ${error}`);
             return null;
         }
     }
@@ -310,29 +313,21 @@ class OCRService {
     /**
      * Search for text in OCR results
      */
-    searchOCRResults(searchText: string, entityType?: 'note' | 'attachment'): Array<{ entityId: string; entityType: string; text: string; confidence: number }> {
+    searchOCRResults(searchText: string): Array<{ blobId: string; text: string }> {
         try {
-            let query = `
-                SELECT entity_id, entity_type, extracted_text, confidence
-                FROM ocr_results 
-                WHERE extracted_text LIKE ?
+            const query = `
+                SELECT blobId, ocr_text
+                FROM blobs 
+                WHERE ocr_text LIKE ?
+                AND ocr_text IS NOT NULL
             `;
             const params = [`%${searchText}%`];
             
-            if (entityType) {
-                query += ' AND entity_type = ?';
-                params.push(entityType);
-            }
-            
-            query += ' ORDER BY confidence DESC';
-            
-            const rows = sql.getRows<OCRResultRow>(query, params);
+            const rows = sql.getRows<OCRBlobRow>(query, params);
             
             return rows.map(row => ({
-                entityId: row.entity_id,
-                entityType: row.entity_type,
-                text: row.extracted_text,
-                confidence: row.confidence
+                blobId: row.blobId,
+                text: row.ocr_text
             }));
         } catch (error) {
             log.error(`Failed to search OCR results: ${error}`);
@@ -341,18 +336,18 @@ class OCRService {
     }
 
     /**
-     * Delete OCR results for an entity
+     * Delete OCR results for a blob
      */
-    deleteOCRResult(entityId: string, entityType: 'note' | 'attachment' = 'note'): void {
+    deleteOCRResult(blobId: string): void {
         try {
             sql.execute(`
-                DELETE FROM ocr_results 
-                WHERE entity_id = ? AND entity_type = ?
-            `, [entityId, entityType]);
+                UPDATE blobs SET ocr_text = NULL 
+                WHERE blobId = ?
+            `, [blobId]);
             
-            log.info(`Deleted OCR result for ${entityType} ${entityId}`);
+            log.info(`Deleted OCR result for blob ${blobId}`);
         } catch (error) {
-            log.error(`Failed to delete OCR result for ${entityType} ${entityId}: ${error}`);
+            log.error(`Failed to delete OCR result for blob ${blobId}: ${error}`);
             throw error;
         }
     }
@@ -373,14 +368,15 @@ class OCRService {
             const imageNotes = sql.getRows<{
                 noteId: string;
                 mime: string;
+                blobId: string;
             }>(`
-                SELECT noteId, mime
-                FROM notes 
-                WHERE type = 'image' 
-                AND isDeleted = 0
-                AND noteId NOT IN (
-                    SELECT entity_id FROM ocr_results WHERE entity_type = 'note'
-                )
+                SELECT n.noteId, n.mime, n.blobId
+                FROM notes n
+                LEFT JOIN blobs b ON n.blobId = b.blobId
+                WHERE n.type = 'image' 
+                AND n.isDeleted = 0
+                AND n.blobId IS NOT NULL
+                AND (b.ocr_text IS NULL OR b.ocr_text = '')
             `);
 
             log.info(`Found ${imageNotes.length} image notes to process`);
@@ -401,14 +397,15 @@ class OCRService {
             const imageAttachments = sql.getRows<{
                 attachmentId: string;
                 mime: string;
+                blobId: string;
             }>(`
-                SELECT attachmentId, mime
-                FROM attachments 
-                WHERE role = 'image'
-                AND isDeleted = 0
-                AND attachmentId NOT IN (
-                    SELECT entity_id FROM ocr_results WHERE entity_type = 'attachment'
-                )
+                SELECT a.attachmentId, a.mime, a.blobId
+                FROM attachments a
+                LEFT JOIN blobs b ON a.blobId = b.blobId
+                WHERE a.role = 'image'
+                AND a.isDeleted = 0
+                AND a.blobId IS NOT NULL
+                AND (b.ocr_text IS NULL OR b.ocr_text = '')
             `);
 
             log.info(`Found ${imageAttachments.length} image attachments to process`);
@@ -435,38 +432,48 @@ class OCRService {
     /**
      * Get OCR statistics
      */
-    getOCRStats(): { totalProcessed: number; averageConfidence: number; byEntityType: Record<string, number> } {
+    getOCRStats(): { totalProcessed: number; imageNotes: number; imageAttachments: number } {
         try {
             const stats = sql.getRow<{
                 total_processed: number;
-                avg_confidence: number;
             }>(`
-                SELECT 
-                    COUNT(*) as total_processed,
-                    AVG(confidence) as avg_confidence
-                FROM ocr_results
+                SELECT COUNT(*) as total_processed
+                FROM blobs
+                WHERE ocr_text IS NOT NULL AND ocr_text != ''
             `);
 
-            const byEntityType = sql.getRows<{
-                entity_type: string;
+            // Count image notes with OCR
+            const noteStats = sql.getRow<{
                 count: number;
             }>(`
-                SELECT entity_type, COUNT(*) as count
-                FROM ocr_results
-                GROUP BY entity_type
+                SELECT COUNT(*) as count
+                FROM notes n
+                JOIN blobs b ON n.blobId = b.blobId
+                WHERE n.type = 'image'
+                AND n.isDeleted = 0
+                AND b.ocr_text IS NOT NULL AND b.ocr_text != ''
+            `);
+
+            // Count image attachments with OCR
+            const attachmentStats = sql.getRow<{
+                count: number;
+            }>(`
+                SELECT COUNT(*) as count
+                FROM attachments a
+                JOIN blobs b ON a.blobId = b.blobId
+                WHERE a.role = 'image'
+                AND a.isDeleted = 0
+                AND b.ocr_text IS NOT NULL AND b.ocr_text != ''
             `);
 
             return {
                 totalProcessed: stats?.total_processed || 0,
-                averageConfidence: stats?.avg_confidence || 0,
-                byEntityType: byEntityType.reduce((acc, row) => {
-                    acc[row.entity_type] = row.count;
-                    return acc;
-                }, {} as Record<string, number>)
+                imageNotes: noteStats?.count || 0,
+                imageAttachments: attachmentStats?.count || 0
             };
         } catch (error) {
             log.error(`Failed to get OCR stats: ${error}`);
-            return { totalProcessed: 0, averageConfidence: 0, byEntityType: {} };
+            return { totalProcessed: 0, imageNotes: 0, imageAttachments: 0 };
         }
     }
 
@@ -584,14 +591,15 @@ class OCRService {
             const imageNotes = sql.getRows<{
                 noteId: string;
                 mime: string;
+                blobId: string;
             }>(`
-                SELECT noteId, mime
-                FROM notes 
-                WHERE type = 'image' 
-                AND isDeleted = 0
-                AND noteId NOT IN (
-                    SELECT entity_id FROM ocr_results WHERE entity_type = 'note'
-                )
+                SELECT n.noteId, n.mime, n.blobId
+                FROM notes n
+                LEFT JOIN blobs b ON n.blobId = b.blobId
+                WHERE n.type = 'image' 
+                AND n.isDeleted = 0
+                AND n.blobId IS NOT NULL
+                AND (b.ocr_text IS NULL OR b.ocr_text = '')
             `);
 
             for (const noteRow of imageNotes) {
@@ -616,14 +624,15 @@ class OCRService {
             const imageAttachments = sql.getRows<{
                 attachmentId: string;
                 mime: string;
+                blobId: string;
             }>(`
-                SELECT attachmentId, mime
-                FROM attachments 
-                WHERE role = 'image'
-                AND isDeleted = 0
-                AND attachmentId NOT IN (
-                    SELECT entity_id FROM ocr_results WHERE entity_type = 'attachment'
-                )
+                SELECT a.attachmentId, a.mime, a.blobId
+                FROM attachments a
+                LEFT JOIN blobs b ON a.blobId = b.blobId
+                WHERE a.role = 'image'
+                AND a.isDeleted = 0
+                AND a.blobId IS NOT NULL
+                AND (b.ocr_text IS NULL OR b.ocr_text = '')
             `);
 
             for (const attachmentRow of imageAttachments) {

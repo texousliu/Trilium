@@ -246,13 +246,6 @@ async function processAttachmentOCR(req: Request, res: Response) {
  *         schema:
  *           type: string
  *         description: Search query text
- *       - name: entityType
- *         in: query
- *         required: false
- *         schema:
- *           type: string
- *           enum: [note, attachment]
- *         description: Filter by entity type
  *     responses:
  *       '200':
  *         description: Search results
@@ -268,14 +261,10 @@ async function processAttachmentOCR(req: Request, res: Response) {
  *                   items:
  *                     type: object
  *                     properties:
- *                       entityId:
- *                         type: string
- *                       entityType:
+ *                       blobId:
  *                         type: string
  *                       text:
  *                         type: string
- *                       confidence:
- *                         type: number
  *       '400':
  *         description: Bad request - missing search query
  *       '500':
@@ -286,7 +275,7 @@ async function processAttachmentOCR(req: Request, res: Response) {
  */
 async function searchOCR(req: Request, res: Response) {
     try {
-        const { q: searchText, entityType } = req.query;
+        const { q: searchText } = req.query;
 
         if (!searchText || typeof searchText !== 'string') {
             res.status(400).json({
@@ -297,10 +286,7 @@ async function searchOCR(req: Request, res: Response) {
             return;
         }
 
-        const results = ocrService.searchOCRResults(
-            searchText,
-            entityType as 'note' | 'attachment' | undefined
-        );
+        const results = ocrService.searchOCRResults(searchText);
 
         res.json({
             success: true,
@@ -431,10 +417,10 @@ async function getBatchProgress(req: Request, res: Response) {
  *                   properties:
  *                     totalProcessed:
  *                       type: number
- *                     averageConfidence:
+ *                     imageNotes:
  *                       type: number
- *                     byEntityType:
- *                       type: object
+ *                     imageAttachments:
+ *                       type: number
  *       '500':
  *         description: Internal server error
  *     security:
@@ -463,24 +449,17 @@ async function getOCRStats(req: Request, res: Response) {
 
 /**
  * @swagger
- * /api/ocr/delete/{entityType}/{entityId}:
+ * /api/ocr/delete/{blobId}:
  *   delete:
- *     summary: Delete OCR results for a specific entity
+ *     summary: Delete OCR results for a specific blob
  *     operationId: ocr-delete-results
  *     parameters:
- *       - name: entityType
+ *       - name: blobId
  *         in: path
  *         required: true
  *         schema:
  *           type: string
- *           enum: [note, attachment]
- *         description: Type of entity
- *       - name: entityId
- *         in: path
- *         required: true
- *         schema:
- *           type: string
- *         description: ID of the entity
+ *         description: ID of the blob
  *     responses:
  *       '200':
  *         description: OCR results deleted successfully
@@ -503,31 +482,22 @@ async function getOCRStats(req: Request, res: Response) {
  */
 async function deleteOCRResults(req: Request, res: Response) {
     try {
-        const { entityType, entityId } = req.params;
+        const { blobId } = req.params;
 
-        if (!entityType || !entityId) {
+        if (!blobId) {
             res.status(400).json({
                 success: false,
-                error: 'Entity type and ID are required'
+                error: 'Blob ID is required'
             });
             (res as any).triliumResponseHandled = true;
             return;
         }
 
-        if (!['note', 'attachment'].includes(entityType)) {
-            res.status(400).json({
-                success: false,
-                error: 'Entity type must be either "note" or "attachment"'
-            });
-            (res as any).triliumResponseHandled = true;
-            return;
-        }
-
-        ocrService.deleteOCRResult(entityId, entityType as 'note' | 'attachment');
+        ocrService.deleteOCRResult(blobId);
 
         res.json({
             success: true,
-            message: `OCR results deleted for ${entityType} ${entityId}`
+            message: `OCR results deleted for blob ${blobId}`
         });
         (res as any).triliumResponseHandled = true;
 

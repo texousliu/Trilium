@@ -240,7 +240,7 @@ describe('OCRService', () => {
     });
 
     describe('storeOCRResult', () => {
-        it('should store OCR result in database successfully', async () => {
+        it('should store OCR result in blob successfully', async () => {
             const ocrResult = {
                 text: 'Sample text',
                 confidence: 0.95,
@@ -248,15 +248,29 @@ describe('OCRService', () => {
                 language: 'eng'
             };
 
-            await ocrService.storeOCRResult('note123', ocrResult, 'note');
+            await ocrService.storeOCRResult('blob123', ocrResult);
 
             expect(mockSql.execute).toHaveBeenCalledWith(
-                expect.stringContaining('INSERT OR REPLACE INTO ocr_results'),
-                expect.arrayContaining(['note123', 'note', 'Sample text', 0.95, 'eng', expect.any(String)])
+                expect.stringContaining('UPDATE blobs SET ocr_text = ?'),
+                ['Sample text', 'blob123']
             );
         });
 
-        it('should handle database insertion errors', async () => {
+        it('should handle undefined blobId gracefully', async () => {
+            const ocrResult = {
+                text: 'Sample text',
+                confidence: 0.95,
+                extractedAt: '2025-06-10T10:00:00.000Z',
+                language: 'eng'
+            };
+
+            await ocrService.storeOCRResult(undefined, ocrResult);
+
+            expect(mockSql.execute).not.toHaveBeenCalled();
+            expect(mockLog.error).toHaveBeenCalledWith('Cannot store OCR result: blobId is undefined');
+        });
+
+        it('should handle database update errors', async () => {
             const error = new Error('Database error');
             mockSql.execute.mockImplementation(() => {
                 throw error;
@@ -269,8 +283,8 @@ describe('OCRService', () => {
                 language: 'eng'
             };
 
-            await expect(ocrService.storeOCRResult('note123', ocrResult, 'note')).rejects.toThrow('Database error');
-            expect(mockLog.error).toHaveBeenCalledWith('Failed to store OCR result for note note123: Error: Database error');
+            await expect(ocrService.storeOCRResult('blob123', ocrResult)).rejects.toThrow('Database error');
+            expect(mockLog.error).toHaveBeenCalledWith('Failed to store OCR result for blob blob123: Error: Database error');
         });
     });
 
@@ -279,6 +293,7 @@ describe('OCRService', () => {
             noteId: 'note123',
             type: 'image',
             mime: 'image/jpeg',
+            blobId: 'blob123',
             getContent: vi.fn()
         };
 
@@ -316,10 +331,7 @@ describe('OCRService', () => {
 
         it('should return existing OCR result if forceReprocess is false', async () => {
             const existingResult = {
-                extracted_text: 'Existing text',
-                confidence: 0.85,
-                language: 'eng',
-                extracted_at: '2025-06-10T09:00:00.000Z'
+                ocr_text: 'Existing text'
             };
             mockSql.getRow.mockReturnValue(existingResult);
 
@@ -327,19 +339,16 @@ describe('OCRService', () => {
 
             expect(result).toEqual({
                 text: 'Existing text',
-                confidence: 0.85,
+                confidence: 0.95,
                 language: 'eng',
-                extractedAt: '2025-06-10T09:00:00.000Z'
+                extractedAt: expect.any(String)
             });
             expect(mockNote.getContent).not.toHaveBeenCalled();
         });
 
         it('should reprocess if forceReprocess is true', async () => {
             const existingResult = {
-                extracted_text: 'Existing text',
-                confidence: 0.85,
-                language: 'eng',
-                extracted_at: '2025-06-10T09:00:00.000Z'
+                ocr_text: 'Existing text'
             };
             mockSql.getRow.mockResolvedValue(existingResult);
             
@@ -385,6 +394,7 @@ describe('OCRService', () => {
             attachmentId: 'attach123',
             role: 'image',
             mime: 'image/png',
+            blobId: 'blob456',
             getContent: vi.fn()
         };
 
@@ -434,10 +444,8 @@ describe('OCRService', () => {
         it('should search OCR results successfully', () => {
             const mockResults = [
                 {
-                    entity_id: 'note1',
-                    entity_type: 'note',
-                    extracted_text: 'Sample search text',
-                    confidence: 0.95
+                    blobId: 'blob1',
+                    ocr_text: 'Sample search text'
                 }
             ];
             mockSql.getRows.mockReturnValue(mockResults);
@@ -445,33 +453,12 @@ describe('OCRService', () => {
             const results = ocrService.searchOCRResults('search');
 
             expect(results).toEqual([{
-                entityId: 'note1',
-                entityType: 'note',
-                text: 'Sample search text',
-                confidence: 0.95
+                blobId: 'blob1',
+                text: 'Sample search text'
             }]);
             expect(mockSql.getRows).toHaveBeenCalledWith(
-                expect.stringContaining('WHERE extracted_text LIKE ?'),
+                expect.stringContaining('WHERE ocr_text LIKE ?'),
                 ['%search%']
-            );
-        });
-
-        it('should filter by entity type', () => {
-            const mockResults = [
-                {
-                    entity_id: 'note1',
-                    entity_type: 'note',
-                    extracted_text: 'Note text',
-                    confidence: 0.95
-                }
-            ];
-            mockSql.getRows.mockReturnValue(mockResults);
-
-            ocrService.searchOCRResults('text', 'note');
-
-            expect(mockSql.getRows).toHaveBeenCalledWith(
-                expect.stringContaining('AND entity_type = ?'),
-                ['%text%', 'note']
             );
         });
 
@@ -490,39 +477,37 @@ describe('OCRService', () => {
     describe('getOCRStats', () => {
         it('should return OCR statistics successfully', () => {
             const mockStats = {
-                total_processed: 150,
-                avg_confidence: 0.87
+                total_processed: 150
             };
-            const mockByEntityType = [
-                { entity_type: 'note', count: 100 },
-                { entity_type: 'attachment', count: 50 }
-            ];
+            const mockNoteStats = {
+                count: 100
+            };
+            const mockAttachmentStats = {
+                count: 50
+            };
             
-            mockSql.getRow.mockReturnValue(mockStats);
-            mockSql.getRows.mockReturnValue(mockByEntityType);
+            mockSql.getRow.mockReturnValueOnce(mockStats);
+            mockSql.getRow.mockReturnValueOnce(mockNoteStats);
+            mockSql.getRow.mockReturnValueOnce(mockAttachmentStats);
 
             const stats = ocrService.getOCRStats();
 
             expect(stats).toEqual({
                 totalProcessed: 150,
-                averageConfidence: 0.87,
-                byEntityType: {
-                    note: 100,
-                    attachment: 50
-                }
+                imageNotes: 100,
+                imageAttachments: 50
             });
         });
 
         it('should handle missing statistics gracefully', () => {
             mockSql.getRow.mockReturnValue(null);
-            mockSql.getRows.mockReturnValue([]);
 
             const stats = ocrService.getOCRStats();
 
             expect(stats).toEqual({
                 totalProcessed: 0,
-                averageConfidence: 0,
-                byEntityType: {}
+                imageNotes: 0,
+                imageAttachments: 0
             });
         });
     });
@@ -698,11 +683,11 @@ describe('OCRService', () => {
                 
                 // Mock data for batch processing
                 const imageNotes = [
-                    { noteId: 'note1', mime: 'image/jpeg' },
-                    { noteId: 'note2', mime: 'image/png' }
+                    { noteId: 'note1', mime: 'image/jpeg', blobId: 'blob1' },
+                    { noteId: 'note2', mime: 'image/png', blobId: 'blob2' }
                 ];
                 const imageAttachments = [
-                    { attachmentId: 'attach1', mime: 'image/gif' }
+                    { attachmentId: 'attach1', mime: 'image/gif', blobId: 'blob3' }
                 ];
 
                 // Setup mocks for startBatchProcessing
@@ -723,18 +708,21 @@ describe('OCRService', () => {
                     noteId: 'note1',
                     type: 'image',
                     mime: 'image/jpeg',
+                    blobId: 'blob1',
                     getContent: vi.fn().mockReturnValue(Buffer.from('fake-image-data'))
                 };
                 const mockNote2 = {
                     noteId: 'note2',
                     type: 'image',
                     mime: 'image/png',
+                    blobId: 'blob2',
                     getContent: vi.fn().mockReturnValue(Buffer.from('fake-image-data'))
                 };
                 const mockAttachment = {
                     attachmentId: 'attach1',
                     role: 'image',
                     mime: 'image/gif',
+                    blobId: 'blob3',
                     getContent: vi.fn().mockReturnValue(Buffer.from('fake-image-data'))
                 };
 
@@ -761,7 +749,7 @@ describe('OCRService', () => {
 
             it('should handle processing errors gracefully', async () => {
                 const imageNotes = [
-                    { noteId: 'note1', mime: 'image/jpeg' }
+                    { noteId: 'note1', mime: 'image/jpeg', blobId: 'blob1' }
                 ];
 
                 // Setup mocks for startBatchProcessing
@@ -777,6 +765,7 @@ describe('OCRService', () => {
                     noteId: 'note1',
                     type: 'image',
                     mime: 'image/jpeg',
+                    blobId: 'blob1',
                     getContent: vi.fn().mockImplementation(() => { throw new Error('Failed to get content'); })
                 };
                 mockBecca.getNote.mockReturnValue(mockNote);
@@ -796,8 +785,8 @@ describe('OCRService', () => {
 
             it('should stop processing when cancelled', async () => {
                 const imageNotes = [
-                    { noteId: 'note1', mime: 'image/jpeg' },
-                    { noteId: 'note2', mime: 'image/png' }
+                    { noteId: 'note1', mime: 'image/jpeg', blobId: 'blob1' },
+                    { noteId: 'note2', mime: 'image/png', blobId: 'blob2' }
                 ];
 
                 // Setup mocks
@@ -821,8 +810,8 @@ describe('OCRService', () => {
 
             it('should skip unsupported MIME types', async () => {
                 const imageNotes = [
-                    { noteId: 'note1', mime: 'text/plain' }, // unsupported
-                    { noteId: 'note2', mime: 'image/jpeg' }  // supported
+                    { noteId: 'note1', mime: 'text/plain', blobId: 'blob1' }, // unsupported
+                    { noteId: 'note2', mime: 'image/jpeg', blobId: 'blob2' }  // supported
                 ];
 
                 // Setup mocks
@@ -835,6 +824,7 @@ describe('OCRService', () => {
                     noteId: 'note2',
                     type: 'image',
                     mime: 'image/jpeg',
+                    blobId: 'blob2',
                     getContent: vi.fn().mockReturnValue(Buffer.from('fake-image-data'))
                 };
                 mockBecca.getNote.mockReturnValue(mockNote);
@@ -858,13 +848,13 @@ describe('OCRService', () => {
 
     describe('deleteOCRResult', () => {
         it('should delete OCR result successfully', () => {
-            ocrService.deleteOCRResult('note123', 'note');
+            ocrService.deleteOCRResult('blob123');
 
             expect(mockSql.execute).toHaveBeenCalledWith(
-                expect.stringContaining('DELETE FROM ocr_results'),
-                ['note123', 'note']
+                expect.stringContaining('UPDATE blobs SET ocr_text = NULL'),
+                ['blob123']
             );
-            expect(mockLog.info).toHaveBeenCalledWith('Deleted OCR result for note note123');
+            expect(mockLog.info).toHaveBeenCalledWith('Deleted OCR result for blob blob123');
         });
 
         it('should handle deletion errors', () => {
@@ -872,8 +862,8 @@ describe('OCRService', () => {
                 throw new Error('Database error');
             });
 
-            expect(() => ocrService.deleteOCRResult('note123', 'note')).toThrow('Database error');
-            expect(mockLog.error).toHaveBeenCalledWith('Failed to delete OCR result for note note123: Error: Database error');
+            expect(() => ocrService.deleteOCRResult('blob123')).toThrow('Database error');
+            expect(mockLog.error).toHaveBeenCalledWith('Failed to delete OCR result for blob blob123: Error: Database error');
         });
     });
 
@@ -886,6 +876,7 @@ describe('OCRService', () => {
             mockBecca.getNote.mockReturnValue({
                 noteId: 'note123',
                 mime: 'image/jpeg',
+                blobId: 'blob123',
                 getContent: vi.fn().mockReturnValue(Buffer.from('fake-image-data'))
             });
             mockSql.getRow.mockResolvedValue(null);
