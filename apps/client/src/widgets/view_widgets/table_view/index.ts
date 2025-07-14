@@ -136,7 +136,7 @@ export default class TableView extends ViewMode<StateInfo> {
         const viewStorage = await this.viewStorage.restore();
         this.persistentData = viewStorage?.tableData || {};
 
-        const { definitions: rowData, hasChildren } = await buildRowDefinitions(this.parentNote, info);
+        const { definitions: rowData, hasSubtree: hasChildren } = await buildRowDefinitions(this.parentNote, info);
         const movableRows = canReorderRows(this.parentNote) && !hasChildren;
         const columnDefs = buildColumnDefinitions(info, movableRows);
         let opts: Options = {
@@ -242,7 +242,7 @@ export default class TableView extends ViewMode<StateInfo> {
         }
     }
 
-    onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">): boolean | void {
+    async onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
         if (!this.api) {
             return;
         }
@@ -258,7 +258,7 @@ export default class TableView extends ViewMode<StateInfo> {
         if (loadResults.getBranchRows().some(branch => branch.parentNoteId === this.parentNote.noteId || this.noteIds.includes(branch.parentNoteId ?? ""))
             || loadResults.getNoteIds().some(noteId => this.noteIds.includes(noteId)
             || loadResults.getAttributeRows().some(attr => this.noteIds.includes(attr.noteId!)))) {
-            this.#manageRowsUpdate();
+            return await this.#manageRowsUpdate();
         }
 
         return false;
@@ -280,8 +280,15 @@ export default class TableView extends ViewMode<StateInfo> {
         }
 
         const info = getAttributeDefinitionInformation(this.parentNote);
-        const { definitions } = await buildRowDefinitions(this.parentNote, info);
+        const { definitions, hasSubtree } = await buildRowDefinitions(this.parentNote, info);
+
+        // Force a refresh if the data tree needs enabling/disabling.
+        if (this.api.options.dataTree !== hasSubtree) {
+            return true;
+        }
+
         await this.api.replaceData(definitions);
+        return false;
     }
 
     focusOnBranch(branchId: string) {

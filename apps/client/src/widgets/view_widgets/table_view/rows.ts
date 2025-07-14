@@ -14,7 +14,7 @@ export type TableData = {
 
 export async function buildRowDefinitions(parentNote: FNote, infos: AttributeDefinitionInformation[]) {
     const definitions: TableData[] = [];
-    let hasChildren = false;
+    let hasSubtree = false;
     for (const branch of parentNote.getChildBranches()) {
         const note = await branch.getNote();
         if (!note) {
@@ -42,7 +42,7 @@ export async function buildRowDefinitions(parentNote: FNote, infos: AttributeDef
 
         if (note.hasChildren()) {
             def._children = (await buildRowDefinitions(note, infos)).definitions;
-            hasChildren = true;
+            hasSubtree = true;
         }
 
         definitions.push(def);
@@ -50,7 +50,7 @@ export async function buildRowDefinitions(parentNote: FNote, infos: AttributeDef
 
     return {
         definitions,
-        hasChildren
+        hasSubtree
     };
 }
 

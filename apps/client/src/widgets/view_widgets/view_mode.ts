@@ -43,16 +43,16 @@ export default abstract class ViewMode<T extends object> extends Component {
      * @param e the event data.
      * @return {@code true} if the view should be re-rendered, a falsy value otherwise.
      */
-    onEntitiesReloaded(e: EventData<"entitiesReloaded">): boolean | void {
+    async onEntitiesReloaded(e: EventData<"entitiesReloaded">): Promise<boolean | void> {
         // Do nothing by default.
     }
 
-    entitiesReloadedEvent(e: EventData<"entitiesReloaded">) {
+    async entitiesReloadedEvent(e: EventData<"entitiesReloaded">) {
         if (e.loadResults.getBranchRows().some(branch => branch.parentNoteId === this.parentNote.noteId || this.noteIds.includes(branch.parentNoteId ?? ""))) {
             this.#refreshNoteIds();
         }
 
-        if (this.onEntitiesReloaded(e)) {
+        if (await this.onEntitiesReloaded(e)) {
             appContext.triggerEvent("refreshNoteList", { noteId: this.parentNote.noteId });
         }
     }

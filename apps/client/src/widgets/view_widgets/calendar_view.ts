@@ -390,7 +390,7 @@ export default class CalendarView extends ViewMode<{}> {
         }
     }
 
-    onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
+    async onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
         // Refresh note IDs if they got changed.
         if (loadResults.getBranchRows().some((branch) => branch.parentNoteId === this.parentNote.noteId)) {
             this.noteIds = this.parentNote.getChildNoteIds();
