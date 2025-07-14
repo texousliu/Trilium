@@ -92,14 +92,15 @@ export function buildColumnDefinitions(info: AttributeDefinitionInformation[], m
     return columnDefs;
 }
 
-function restoreExistingData(newDefs: ColumnDefinition[], oldDefs: ColumnDefinition[], position?: number) {
+export function restoreExistingData(newDefs: ColumnDefinition[], oldDefs: ColumnDefinition[], position?: number) {
+    const existingColumns: ColumnDefinition[] = []
     const byField = new Map<string, ColumnDefinition>;
     for (const def of oldDefs) {
         byField.set(def.field ?? "", def);
+        existingColumns.push(def);
     }
 
     const newColumns: ColumnDefinition[] = [];
-    const existingColumns: ColumnDefinition[] = []
     for (const newDef of newDefs) {
         const oldDef = byField.get(newDef.field ?? "");
         if (!oldDef) {
@@ -107,7 +108,6 @@ function restoreExistingData(newDefs: ColumnDefinition[], oldDefs: ColumnDefinit
         } else {
             newDef.width = oldDef.width;
             newDef.visible = oldDef.visible;
-            existingColumns.push(newDef);
         }
     }
 
