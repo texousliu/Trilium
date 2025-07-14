@@ -458,13 +458,6 @@ export default class CalendarView extends ViewMode<{}> {
         for (const note of notes) {
             const startDate = CalendarView.#getCustomisableLabel(note, "startDate", "calendar:startDate");
 
-            if (note.hasChildren()) {
-                const childrenEventData = await this.buildEvents(note.getChildNoteIds());
-                if (childrenEventData.length > 0) {
-                    events.push(childrenEventData);
-                }
-            }
-
             if (!startDate) {
                 continue;
             }
