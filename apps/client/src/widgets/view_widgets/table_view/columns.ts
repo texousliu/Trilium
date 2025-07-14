@@ -41,8 +41,8 @@ const labelTypeMappings: Record<ColumnType, Partial<ColumnDefinition>> = {
     }
 };
 
-export function buildColumnDefinitions(info: AttributeDefinitionInformation[], movableRows: boolean, existingColumnData?: ColumnDefinition[]) {
-    const columnDefs: ColumnDefinition[] = [
+export function buildColumnDefinitions(info: AttributeDefinitionInformation[], movableRows: boolean, existingColumnData?: ColumnDefinition[], position?: number) {
+    let columnDefs: ColumnDefinition[] = [
         {
             title: "#",
             headerSort: false,
@@ -86,25 +86,40 @@ export function buildColumnDefinitions(info: AttributeDefinitionInformation[], m
     }
 
     if (existingColumnData) {
-        restoreExistingData(columnDefs, existingColumnData);
+        columnDefs = restoreExistingData(columnDefs, existingColumnData, position);
     }
 
     return columnDefs;
 }
 
-function restoreExistingData(newDefs: ColumnDefinition[], oldDefs: ColumnDefinition[]) {
+function restoreExistingData(newDefs: ColumnDefinition[], oldDefs: ColumnDefinition[], position?: number) {
     const byField = new Map<string, ColumnDefinition>;
     for (const def of oldDefs) {
         byField.set(def.field ?? "", def);
     }
 
+    const newColumns: ColumnDefinition[] = [];
+    const existingColumns: ColumnDefinition[] = []
     for (const newDef of newDefs) {
         const oldDef = byField.get(newDef.field ?? "");
         if (!oldDef) {
-            continue;
+            newColumns.push(newDef);
+        } else {
+            newDef.width = oldDef.width;
+            newDef.visible = oldDef.visible;
+            existingColumns.push(newDef);
         }
-
-        newDef.width = oldDef.width;
-        newDef.visible = oldDef.visible;
     }
+
+    // Clamp position to a valid range
+    const insertPos = position !== undefined
+        ? Math.min(Math.max(position, 0), existingColumns.length)
+        : existingColumns.length;
+
+    // Insert new columns at the specified position
+    return [
+        ...existingColumns.slice(0, insertPos),
+        ...newColumns,
+        ...existingColumns.slice(insertPos)
+    ];
 }

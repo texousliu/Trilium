@@ -6,7 +6,7 @@ import SpacedUpdate from "../../../services/spaced_update.js";
 import type { CommandListenerData, EventData } from "../../../components/app_context.js";
 import type { Attribute } from "../../../services/attribute_parser.js";
 import note_create, { CreateNoteOpts } from "../../../services/note_create.js";
-import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule, Options, RowComponent} from 'tabulator-tables';
+import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule, Options, RowComponent, ColumnComponent} from 'tabulator-tables';
 import "tabulator-tables/dist/css/tabulator.css";
 import "../../../../src/stylesheets/table.css";
 import { canReorderRows, configureReorderingRows } from "./dragging.js";
@@ -105,9 +105,9 @@ export default class TableView extends ViewMode<StateInfo> {
     private spacedUpdate: SpacedUpdate;
     private api?: Tabulator;
     private newAttribute?: Attribute;
+    private newAttributePosition?: number;
     private persistentData: StateInfo["tableData"];
     private attributeDetailWidget: AttributeDetailWidget;
-
 
     constructor(args: ViewModeArgs) {
         super(args, "table");
@@ -234,12 +234,19 @@ export default class TableView extends ViewMode<StateInfo> {
         console.log("Save attributes", this.newAttribute);
     }
 
-    addNoteListItemEvent() {
+    addNoteListItemEvent({ referenceColumn }: { referenceColumn?: ColumnComponent }) {
+        console.log("Add note list item ", referenceColumn);
         const attr: Attribute = {
             type: "label",
             name: "label:myLabel",
             value: "promoted,single,text"
         };
+
+        if (referenceColumn && this.api) {
+            this.newAttributePosition = this.api.getColumns().indexOf(referenceColumn) - 1;
+        } else {
+            this.newAttributePosition = undefined;
+        }
 
         this.attributeDetailWidget!.showAttributeDetail({
             attribute: attr,
@@ -274,7 +281,7 @@ export default class TableView extends ViewMode<StateInfo> {
         }
 
         // Force a refresh if sorted is changed since we need to disable reordering.
-        if (loadResults.getAttributeRows().find(a => attributes.isAffecting(a, this.parentNote))) {
+        if (loadResults.getAttributeRows().find(a => a.name === "sorted" && attributes.isAffecting(a, this.parentNote))) {
             return true;
         }
 
@@ -283,6 +290,7 @@ export default class TableView extends ViewMode<StateInfo> {
             attr.type === "label" &&
             (attr.name?.startsWith("label:") || attr.name?.startsWith("relation:")) &&
             attributes.isAffecting(attr, this.parentNote))) {
+                console.log("Col update");
             this.#manageColumnUpdate();
         }
 
@@ -301,8 +309,9 @@ export default class TableView extends ViewMode<StateInfo> {
         }
 
         const info = getAttributeDefinitionInformation(this.parentNote);
-        const columnDefs = buildColumnDefinitions(info, !!this.api.options.movableRows, this.persistentData?.columns);
+        const columnDefs = buildColumnDefinitions(info, !!this.api.options.movableRows, this.persistentData?.columns, this.newAttributePosition);
         this.api.setColumns(columnDefs);
+        this.newAttributePosition = undefined;
     }
 
     async #manageRowsUpdate() {

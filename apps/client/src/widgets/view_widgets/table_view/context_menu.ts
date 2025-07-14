@@ -78,6 +78,16 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
                 uiIcon: "bx bx-empty",
                 items: buildColumnItems()
             },
+            { title: "----" },
+            {
+                title: "Add column to the left",
+                handler: () => {
+                    getParentComponent(e)?.triggerCommand("addNoteListItem", {
+                        referenceColumn: column
+                    });
+                    console.log("Add col");
+                }
+            }
         ],
         selectMenuItemHandler() {},
         x: e.pageX,
