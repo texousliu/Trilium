@@ -263,7 +263,7 @@ export default class TableView extends ViewMode<StateInfo> {
             this.#manageColumnUpdate();
         }
 
-        if (loadResults.getBranchRows().some(branch => branch.parentNoteId === this.parentNote.noteId)
+        if (loadResults.getBranchRows().some(branch => branch.parentNoteId === this.parentNote.noteId || this.args.noteIds.includes(branch.parentNoteId ?? ""))
             || loadResults.getNoteIds().some(noteId => this.args.noteIds.includes(noteId)
             || loadResults.getAttributeRows().some(attr => this.args.noteIds.includes(attr.noteId!)))) {
             this.#manageRowsUpdate();
