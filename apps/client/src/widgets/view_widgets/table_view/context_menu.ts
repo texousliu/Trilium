@@ -123,16 +123,19 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
                 title: t("table_view.row-insert-child"),
                 uiIcon: "bx bx-empty",
                 handler: async () => {
-                    const branchId = row.getData().branchId;
-                    const note = await froca.getBranch(branchId)?.getNote();
-                    const bestNotePath = note?.getBestNotePath(parentNote.noteId);
                     const target = e.target;
                     if (!target) {
                         return;
                     }
+                    const branchId = row.getData().branchId;
+                    const note = await froca.getBranch(branchId)?.getNote();
                     const component = $(target).closest(".component").prop("component");
                     component.triggerCommand("addNewRow", {
-                        parentNotePath: bestNotePath?.join("/")
+                        parentNotePath: note?.noteId,
+                        customOpts: {
+                            target: "after",
+                            targetBranchId: branchId,
+                        }
                     });
                 }
             },

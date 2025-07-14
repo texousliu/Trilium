@@ -6,7 +6,7 @@ import SpacedUpdate from "../../../services/spaced_update.js";
 import type { CommandListenerData, EventData } from "../../../components/app_context.js";
 import type { Attribute } from "../../../services/attribute_parser.js";
 import note_create, { CreateNoteOpts } from "../../../services/note_create.js";
-import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule, Options} from 'tabulator-tables';
+import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule, Options, RowComponent} from 'tabulator-tables';
 import "tabulator-tables/dist/css/tabulator.css";
 import "../../../../src/stylesheets/table.css";
 import { canReorderRows, configureReorderingRows } from "./dragging.js";
@@ -107,7 +107,7 @@ export default class TableView extends ViewMode<StateInfo> {
     private newAttribute?: Attribute;
     private persistentData: StateInfo["tableData"];
     /** If set to a note ID, whenever the rows will be updated, the title of the note will be automatically focused for editing. */
-    private noteIdToEdit?: string;
+    private branchIdToEdit?: string;
 
     constructor(args: ViewModeArgs) {
         super(args, "table");
@@ -145,7 +145,7 @@ export default class TableView extends ViewMode<StateInfo> {
         const columnDefs = buildColumnDefinitions(info, movableRows);
         let opts: Options = {
             layout: "fitDataFill",
-            index: "noteId",
+            index: "branchId",
             columns: columnDefs,
             data: rowData,
             persistence: true,
@@ -237,11 +237,12 @@ export default class TableView extends ViewMode<StateInfo> {
                 ...customOpts
             }
             console.log("Create with ", opts);
-            note_create.createNote(parentNotePath, opts).then(({ note }) => {
-                if (!note) {
-                    return;
+            note_create.createNote(parentNotePath, opts).then(({ branch }) => {
+                if (branch) {
+                    setTimeout(() => {
+                        this.focusOnBranch(branch?.branchId);
+                    });
                 }
-                this.noteIdToEdit = note.noteId;
             })
         }
     }
@@ -285,16 +286,43 @@ export default class TableView extends ViewMode<StateInfo> {
 
         const info = getAttributeDefinitionInformation(this.parentNote);
         const { definitions } = await buildRowDefinitions(this.parentNote, info);
-        this.api.replaceData(definitions);
+        await this.api.replaceData(definitions);
+    }
 
-        if (this.noteIdToEdit) {
-            const row = this.api?.getRows().find(r => r.getData().noteId === this.noteIdToEdit);
-            if (row) {
-                row.getCell("title").edit();
-            }
-            this.noteIdToEdit = undefined;
+    focusOnBranch(branchId: string) {
+        if (!this.api) {
+            return;
         }
+
+        const row = findRowDataById(this.api.getRows(), branchId);
+        if (!row) {
+            return;
+        }
+
+        // Expand the parent tree if any.
+        if (this.api.options.dataTree) {
+            const parent = row.getTreeParent();
+            if (parent) {
+                parent.treeExpand();
+            }
+        }
+
+        row.getCell("title").edit();
     }
 
 }
 
+
+function findRowDataById(rows: RowComponent[], branchId: string): RowComponent | null {
+    for (let row of rows) {
+        const item = row.getIndex() as string;
+
+        if (item === branchId) {
+            return row;
+        }
+
+        let found = findRowDataById(row.getTreeChildren(), branchId);
+        if (found) return found;
+    }
+    return null;
+}
