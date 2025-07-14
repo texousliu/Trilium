@@ -1,6 +1,6 @@
 import { RelationEditor } from "./relation_editor.js";
-import { NoteFormatter, NoteTitleFormatter, RowNumberFormatter } from "./formatters.js";
-import type { ColumnDefinition, Tabulator } from "tabulator-tables";
+import { MonospaceFormatter, NoteFormatter, NoteTitleFormatter, RowNumberFormatter } from "./formatters.js";
+import type { ColumnDefinition } from "tabulator-tables";
 import { LabelType } from "../../../services/promoted_attribute_definition_parser.js";
 
 type ColumnType = LabelType | "relation";
@@ -55,6 +55,7 @@ export function buildColumnDefinitions(info: AttributeDefinitionInformation[], m
         {
             field: "noteId",
             title: "Note ID",
+            formatter: MonospaceFormatter,
             visible: false
         },
         {

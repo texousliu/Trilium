@@ -47,6 +47,10 @@ export function RowNumberFormatter(draggableRows: boolean) {
     };
 }
 
+export function MonospaceFormatter(cell: CellComponent) {
+    return `<code>${cell.getValue()}</code>`;
+}
+
 function buildNoteLink(noteId: string) {
     const $noteRef = $("<span>");
     const href = `#root/${noteId}`;
