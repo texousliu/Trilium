@@ -6,14 +6,15 @@ import SpacedUpdate from "../../../services/spaced_update.js";
 import type { CommandListenerData, EventData } from "../../../components/app_context.js";
 import type { Attribute } from "../../../services/attribute_parser.js";
 import note_create, { CreateNoteOpts } from "../../../services/note_create.js";
-import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MenuModule, MoveRowsModule, ColumnDefinition} from 'tabulator-tables';
+import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule} from 'tabulator-tables';
 import "tabulator-tables/dist/css/tabulator.css";
 import "../../../../src/stylesheets/table.css";
 import { canReorderRows, configureReorderingRows } from "./dragging.js";
 import buildFooter from "./footer.js";
-import getAttributeDefinitionInformation, { buildRowDefinitions } from "./rows.js";
-import { buildColumnDefinitions } from "./columns.js";
+import getAttributeDefinitionInformation, { buildRowDefinitions, TableData } from "./rows.js";
+import { AttributeDefinitionInformation, buildColumnDefinitions } from "./columns.js";
 import { setupContextMenu } from "./context_menu.js";
+import { Unwrapped } from "knockout";
 
 const TPL = /*html*/`
 <div class="table-view">
@@ -111,32 +112,32 @@ export default class TableView extends ViewMode<StateInfo> {
     }
 
     private async renderTable(el: HTMLElement) {
-        const modules = [ SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule ];
+        const info = getAttributeDefinitionInformation(this.parentNote);
+        const modules = [ SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, DataTreeModule ];
         for (const module of modules) {
             Tabulator.registerModule(module);
         }
 
-        this.initialize(el);
+        this.initialize(el, info);
     }
 
-    private async initialize(el: HTMLElement) {
-        const notes = await froca.getNotes(this.args.noteIds);
-        const info = getAttributeDefinitionInformation(this.parentNote);
-
+    private async initialize(el: HTMLElement, info: AttributeDefinitionInformation[]) {
         const viewStorage = await this.viewStorage.restore();
         this.persistentData = viewStorage?.tableData || {};
 
         const columnDefs = buildColumnDefinitions(info);
-        const movableRows = canReorderRows(this.parentNote);
+        const { definitions: rowData, hasChildren } = await buildRowDefinitions(this.parentNote, info);
+        const movableRows = canReorderRows(this.parentNote) && !hasChildren;
 
         this.api = new Tabulator(el, {
             layout: "fitDataFill",
             index: "noteId",
             columns: columnDefs,
-            data: await buildRowDefinitions(this.parentNote, notes, info),
+            data: rowData,
             persistence: true,
             movableColumns: true,
             movableRows,
+            dataTree: hasChildren,
             footerElement: buildFooter(this.parentNote),
             persistenceWriterFunc: (_id, type: string, data: object) => {
                 (this.persistentData as Record<string, {}>)[type] = data;
@@ -255,9 +256,9 @@ export default class TableView extends ViewMode<StateInfo> {
             return;
         }
 
-        const notes = await froca.getNotes(this.args.noteIds);
         const info = getAttributeDefinitionInformation(this.parentNote);
-        this.api.replaceData(await buildRowDefinitions(this.parentNote, notes, info));
+        const { definitions } = await buildRowDefinitions(this.parentNote, info);
+        this.api.replaceData(definitions);
 
         if (this.noteIdToEdit) {
             const row = this.api?.getRows().find(r => r.getData().noteId === this.noteIdToEdit);

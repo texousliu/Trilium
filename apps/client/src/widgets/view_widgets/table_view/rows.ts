@@ -9,10 +9,12 @@ export type TableData = {
     labels: Record<string, boolean | string | null>;
     relations: Record<string, boolean | string | null>;
     branchId: string;
+    _children?: TableData[];
 };
 
-export async function buildRowDefinitions(parentNote: FNote, notes: FNote[], infos: AttributeDefinitionInformation[]) {
+export async function buildRowDefinitions(parentNote: FNote, infos: AttributeDefinitionInformation[]) {
     const definitions: TableData[] = [];
+    let hasChildren = false;
     for (const branch of parentNote.getChildBranches()) {
         const note = await branch.getNote();
         if (!note) {
@@ -28,17 +30,28 @@ export async function buildRowDefinitions(parentNote: FNote, notes: FNote[], inf
                 labels[name] = note.getLabelValue(name);
             }
         }
-        definitions.push({
+
+        const def: TableData = {
             iconClass: note.getIcon(),
             noteId: note.noteId,
             title: note.title,
             labels,
             relations,
-            branchId: branch.branchId
-        });
+            branchId: branch.branchId,
+        }
+
+        if (note.hasChildren()) {
+            def._children = (await buildRowDefinitions(note, infos)).definitions;
+            hasChildren = true;
+        }
+
+        definitions.push(def);
     }
 
-    return definitions;
+    return {
+        definitions,
+        hasChildren
+    };
 }
 
 export default function getAttributeDefinitionInformation(parentNote: FNote) {
