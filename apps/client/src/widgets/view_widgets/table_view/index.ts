@@ -11,7 +11,7 @@ import "tabulator-tables/dist/css/tabulator.css";
 import "../../../../src/stylesheets/table.css";
 import { canReorderRows, configureReorderingRows } from "./dragging.js";
 import buildFooter from "./footer.js";
-import getPromotedAttributeInformation, { buildRowDefinitions } from "./rows.js";
+import getAttributeDefinitionInformation, { buildRowDefinitions } from "./rows.js";
 import { buildColumnDefinitions } from "./columns.js";
 import { setupContextMenu } from "./context_menu.js";
 
@@ -121,7 +121,7 @@ export default class TableView extends ViewMode<StateInfo> {
 
     private async initialize(el: HTMLElement) {
         const notes = await froca.getNotes(this.args.noteIds);
-        const info = getPromotedAttributeInformation(this.parentNote);
+        const info = getAttributeDefinitionInformation(this.parentNote);
 
         const viewStorage = await this.viewStorage.restore();
         this.persistentData = viewStorage?.tableData || {};
@@ -245,7 +245,7 @@ export default class TableView extends ViewMode<StateInfo> {
             return;
         }
 
-        const info = getPromotedAttributeInformation(this.parentNote);
+        const info = getAttributeDefinitionInformation(this.parentNote);
         const columnDefs = buildColumnDefinitions(info, this.persistentData?.columns);
         this.api.setColumns(columnDefs);
     }
@@ -256,7 +256,7 @@ export default class TableView extends ViewMode<StateInfo> {
         }
 
         const notes = await froca.getNotes(this.args.noteIds);
-        const info = getPromotedAttributeInformation(this.parentNote);
+        const info = getAttributeDefinitionInformation(this.parentNote);
         this.api.replaceData(await buildRowDefinitions(this.parentNote, notes, info));
 
         if (this.noteIdToEdit) {

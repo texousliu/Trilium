@@ -6,7 +6,7 @@ import { LabelType } from "../../../services/promoted_attribute_definition_parse
 
 type ColumnType = LabelType | "relation";
 
-export interface PromotedAttributeInformation {
+export interface AttributeDefinitionInformation {
     name: string;
     title?: string;
     type?: ColumnType;
@@ -42,7 +42,7 @@ const labelTypeMappings: Record<ColumnType, Partial<ColumnDefinition>> = {
     }
 };
 
-export function buildColumnDefinitions(info: PromotedAttributeInformation[], existingColumnData?: ColumnDefinition[]) {
+export function buildColumnDefinitions(info: AttributeDefinitionInformation[], existingColumnData?: ColumnDefinition[]) {
     const columnDefs: ColumnDefinition[] = [
         {
             title: "#",

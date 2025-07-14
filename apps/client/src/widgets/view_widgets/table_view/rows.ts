@@ -1,6 +1,6 @@
 import FNote from "../../../entities/fnote.js";
 import type { LabelType } from "../../../services/promoted_attribute_definition_parser.js";
-import type { PromotedAttributeInformation } from "./columns.js";
+import type { AttributeDefinitionInformation } from "./columns.js";
 
 export type TableData = {
     iconClass: string;
@@ -11,7 +11,7 @@ export type TableData = {
     branchId: string;
 };
 
-export async function buildRowDefinitions(parentNote: FNote, notes: FNote[], infos: PromotedAttributeInformation[]) {
+export async function buildRowDefinitions(parentNote: FNote, notes: FNote[], infos: AttributeDefinitionInformation[]) {
     const definitions: TableData[] = [];
     for (const branch of parentNote.getChildBranches()) {
         const note = await branch.getNote();
@@ -41,17 +41,19 @@ export async function buildRowDefinitions(parentNote: FNote, notes: FNote[], inf
     return definitions;
 }
 
-export default function getPromotedAttributeInformation(parentNote: FNote) {
-    const info: PromotedAttributeInformation[] = [];
-    for (const promotedAttribute of parentNote.getPromotedDefinitionAttributes()) {
-        const def = promotedAttribute.getDefinition();
+export default function getAttributeDefinitionInformation(parentNote: FNote) {
+    const info: AttributeDefinitionInformation[] = [];
+    const attrDefs = parentNote.getAttributes()
+        .filter(attr => attr.isDefinition());
+    for (const attrDef of attrDefs) {
+        const def = attrDef.getDefinition();
         if (def.multiplicity !== "single") {
             console.warn("Multiple values are not supported for now");
             continue;
         }
 
-        const [ labelType, name ] = promotedAttribute.name.split(":", 2);
-        if (promotedAttribute.type !== "label") {
+        const [ labelType, name ] = attrDef.name.split(":", 2);
+        if (attrDef.type !== "label") {
             console.warn("Relations are not supported for now");
             continue;
         }
