@@ -88,11 +88,11 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
     function buildColumnItems() {
         const items: MenuItem<unknown>[] = [];
         for (const column of tabulator.getColumns()) {
-            const { title, visible, field } = column.getDefinition();
+            const { title, field } = column.getDefinition();
 
             items.push({
                 title,
-                checked: visible,
+                checked: column.isVisible(),
                 uiIcon: "bx bx-empty",
                 enabled: !!field,
                 handler: () => column.toggle()
