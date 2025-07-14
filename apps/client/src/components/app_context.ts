@@ -28,6 +28,7 @@ import TouchBarComponent from "./touch_bar.js";
 import type { CKTextEditor } from "@triliumnext/ckeditor5";
 import type CodeMirror from "@triliumnext/codemirror";
 import { StartupChecks } from "./startup_checks.js";
+import type { CreateNoteOpts } from "../services/note_create.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -275,6 +276,12 @@ export type CommandMappings = {
     refreshSearchDefinition: {};
 
     geoMapCreateChildNote: CommandData;
+
+    // Table view
+    addNewRow: CommandData & {
+        customOpts: CreateNoteOpts;
+        parentNotePath?: string;
+    };
 
     buildTouchBar: CommandData & {
         TouchBar: typeof TouchBar;

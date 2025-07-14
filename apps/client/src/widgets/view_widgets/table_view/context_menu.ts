@@ -6,6 +6,7 @@ import { t } from "../../../services/i18n.js";
 import link_context_menu from "../../../menus/link_context_menu.js";
 import type FNote from "../../../entities/fnote.js";
 import froca from "../../../services/froca.js";
+import type Component from "../../../components/component.js";
 
 export function setupContextMenu(tabulator: Tabulator, parentNote: FNote) {
     tabulator.on("rowContext", (e, row) => showRowContextMenu(e, row, parentNote));
@@ -105,32 +106,20 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
             {
                 title: t("table_view.row-insert-above"),
                 uiIcon: "bx bx-list-plus",
-                handler: () => {
-                    const target = e.target;
-                    if (!target) {
-                        return;
+                handler: () => getParentComponent(e)?.triggerCommand("addNewRow", {
+                    customOpts: {
+                        target: "before",
+                        targetBranchId: rowData.branchId,
                     }
-                    const component = $(target).closest(".component").prop("component");
-                    component.triggerCommand("addNewRow", {
-                        customOpts: {
-                            target: "before",
-                            targetBranchId: rowData.branchId,
-                        }
-                    });
-                }
+                })
             },
             {
                 title: t("table_view.row-insert-child"),
                 uiIcon: "bx bx-empty",
                 handler: async () => {
-                    const target = e.target;
-                    if (!target) {
-                        return;
-                    }
                     const branchId = row.getData().branchId;
                     const note = await froca.getBranch(branchId)?.getNote();
-                    const component = $(target).closest(".component").prop("component");
-                    component.triggerCommand("addNewRow", {
+                    getParentComponent(e)?.triggerCommand("addNewRow", {
                         parentNotePath: note?.noteId,
                         customOpts: {
                             target: "after",
@@ -142,19 +131,12 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
             {
                 title: t("table_view.row-insert-below"),
                 uiIcon: "bx bx-empty",
-                handler: () => {
-                    const target = e.target;
-                    if (!target) {
-                        return;
+                handler: () => getParentComponent(e)?.triggerCommand("addNewRow", {
+                    customOpts: {
+                        target: "after",
+                        targetBranchId: rowData.branchId,
                     }
-                    const component = $(target).closest(".component").prop("component");
-                    component.triggerCommand("addNewRow", {
-                        customOpts: {
-                            target: "after",
-                            targetBranchId: rowData.branchId,
-                        }
-                    });
-                }
+                })
             },
             { title: "----" },
             {
@@ -168,4 +150,14 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
         y: e.pageY
     });
     e.preventDefault();
+}
+
+function getParentComponent(e: MouseEvent) {
+    if (!e.target) {
+        return;
+    }
+
+    return $(e.target)
+        .closest(".component")
+        .prop("component") as Component;
 }
