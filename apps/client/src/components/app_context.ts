@@ -283,7 +283,7 @@ export type CommandMappings = {
         customOpts: CreateNoteOpts;
         parentNotePath?: string;
     };
-    addNoteListItem: CommandData & {
+    addNewTableColumn: CommandData & {
         referenceColumn?: ColumnComponent;
         direction?: "before" | "after";
     };

@@ -234,7 +234,7 @@ export default class TableView extends ViewMode<StateInfo> {
         console.log("Save attributes", this.newAttribute);
     }
 
-    addNoteListItemEvent({ referenceColumn, direction }: EventData<"addNoteListItem">) {
+    addNewTableColumnEvent({ referenceColumn, direction }: EventData<"addNewTableColumn">) {
         const attr: Attribute = {
             type: "label",
             name: "label:myLabel",
