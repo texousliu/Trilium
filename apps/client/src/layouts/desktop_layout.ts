@@ -46,28 +46,7 @@ import SharedInfoWidget from "../widgets/shared_info.js";
 import FindWidget from "../widgets/find.js";
 import TocWidget from "../widgets/toc.js";
 import HighlightsListWidget from "../widgets/highlights_list.js";
-import BulkActionsDialog from "../widgets/dialogs/bulk_actions.js";
-import AboutDialog from "../widgets/dialogs/about.js";
-import HelpDialog from "../widgets/dialogs/help.js";
-import RecentChangesDialog from "../widgets/dialogs/recent_changes.js";
-import BranchPrefixDialog from "../widgets/dialogs/branch_prefix.js";
-import SortChildNotesDialog from "../widgets/dialogs/sort_child_notes.js";
 import PasswordNoteSetDialog from "../widgets/dialogs/password_not_set.js";
-import IncludeNoteDialog from "../widgets/dialogs/include_note.js";
-import NoteTypeChooserDialog from "../widgets/dialogs/note_type_chooser.js";
-import JumpToNoteDialog from "../widgets/dialogs/jump_to_note.js";
-import AddLinkDialog from "../widgets/dialogs/add_link.js";
-import CloneToDialog from "../widgets/dialogs/clone_to.js";
-import MoveToDialog from "../widgets/dialogs/move_to.js";
-import ImportDialog from "../widgets/dialogs/import.js";
-import ExportDialog from "../widgets/dialogs/export.js";
-import MarkdownImportDialog from "../widgets/dialogs/markdown_import.js";
-import ProtectedSessionPasswordDialog from "../widgets/dialogs/protected_session_password.js";
-import RevisionsDialog from "../widgets/dialogs/revisions.js";
-import DeleteNotesDialog from "../widgets/dialogs/delete_notes.js";
-import InfoDialog from "../widgets/dialogs/info.js";
-import ConfirmDialog from "../widgets/dialogs/confirm.js";
-import PromptDialog from "../widgets/dialogs/prompt.js";
 import FloatingButtons from "../widgets/floating_buttons/floating_buttons.js";
 import RelationMapButtons from "../widgets/floating_buttons/relation_map_buttons.js";
 import SvgExportButton from "../widgets/floating_buttons/svg_export_button.js";
@@ -83,7 +62,7 @@ import CopyImageReferenceButton from "../widgets/floating_buttons/copy_image_ref
 import ScrollPaddingWidget from "../widgets/scroll_padding.js";
 import ClassicEditorToolbar from "../widgets/ribbon_widgets/classic_editor_toolbar.js";
 import options from "../services/options.js";
-import utils, { hasTouchBar } from "../services/utils.js";
+import utils from "../services/utils.js";
 import GeoMapButtons from "../widgets/floating_buttons/geo_map_button.js";
 import ContextualHelpButton from "../widgets/floating_buttons/help_button.js";
 import CloseZenButton from "../widgets/close_zen_button.js";
@@ -229,7 +208,7 @@ export default class DesktopLayout {
                                                                 .child(new PromotedAttributesWidget())
                                                                 .child(new SqlTableSchemasWidget())
                                                                 .child(new NoteDetailWidget())
-                                                                .child(new NoteListWidget())
+                                                                .child(new NoteListWidget(false))
                                                                 .child(new SearchResultWidget())
                                                                 .child(new SqlResultWidget())
                                                                 .child(new ScrollPaddingWidget())

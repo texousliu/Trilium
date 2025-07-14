@@ -4,7 +4,7 @@ import froca from "./froca.js";
 import linkService from "./link.js";
 import utils from "./utils.js";
 import { t } from "./i18n.js";
-import toast from "./toast.js";
+import { throwError } from "./ws.js";
 
 let clipboardBranchIds: string[] = [];
 let clipboardMode: string | null = null;
@@ -37,7 +37,7 @@ async function pasteAfter(afterBranchId: string) {
 
         // copy will keep clipboardBranchIds and clipboardMode, so it's possible to paste into multiple places
     } else {
-        toastService.throwError(`Unrecognized clipboard mode=${clipboardMode}`);
+        throwError(`Unrecognized clipboard mode=${clipboardMode}`);
     }
 }
 
@@ -69,7 +69,7 @@ async function pasteInto(parentBranchId: string) {
 
         // copy will keep clipboardBranchIds and clipboardMode, so it's possible to paste into multiple places
     } else {
-        toastService.throwError(`Unrecognized clipboard mode=${clipboardMode}`);
+        throwError(`Unrecognized clipboard mode=${clipboardMode}`);
     }
 }
 

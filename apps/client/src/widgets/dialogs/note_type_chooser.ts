@@ -2,6 +2,7 @@ import type { CommandNames } from "../../components/app_context.js";
 import type { MenuCommandItem } from "../../menus/context_menu.js";
 import { t } from "../../services/i18n.js";
 import noteTypesService from "../../services/note_types.js";
+import noteAutocompleteService from "../../services/note_autocomplete.js";
 import BasicWidget from "../basic_widget.js";
 import { Dropdown, Modal } from "bootstrap";
 
@@ -11,6 +12,11 @@ const TPL = /*html*/`
         .note-type-chooser-dialog {
             /* note type chooser needs to be higher than other dialogs from which it is triggered, e.g. "add link"*/
             z-index: 1100 !important;
+        }
+
+        .note-type-chooser-dialog .input-group {
+            margin-top: 15px;
+            margin-bottom: 15px;
         }
 
         .note-type-chooser-dialog .note-type-dropdown {
@@ -30,6 +36,12 @@ const TPL = /*html*/`
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t("note_type_chooser.close")}"></button>
             </div>
             <div class="modal-body">
+                ${t("note_type_chooser.change_path_prompt")}
+
+                <div class="input-group">
+                    <input class="choose-note-path form-control" placeholder="${t("note_type_chooser.search_placeholder")}">
+                </div>
+
                 ${t("note_type_chooser.modal_body")}
 
                 <div class="dropdown" style="display: flex;">
@@ -37,7 +49,7 @@ const TPL = /*html*/`
                             data-bs-toggle="dropdown" data-bs-display="static">
                     </button>
 
-                    <div class="note-type-dropdown dropdown-menu"></div>
+                    <div class="note-type-dropdown dropdown-menu static"></div>
                 </div>
             </div>
         </div>
@@ -48,6 +60,7 @@ export interface ChooseNoteTypeResponse {
     success: boolean;
     noteType?: string;
     templateNoteId?: string;
+    notePath?: string;
 }
 
 type Callback = (data: ChooseNoteTypeResponse) => void;
@@ -57,6 +70,7 @@ export default class NoteTypeChooserDialog extends BasicWidget {
     private dropdown!: Dropdown;
     private modal!: Modal;
     private $noteTypeDropdown!: JQuery<HTMLElement>;
+    private $autoComplete!: JQuery<HTMLElement>;
     private $originalFocused: JQuery<HTMLElement> | null;
     private $originalDialog: JQuery<HTMLElement> | null;
 
@@ -71,7 +85,8 @@ export default class NoteTypeChooserDialog extends BasicWidget {
     doRender() {
         this.$widget = $(TPL);
         this.modal = Modal.getOrCreateInstance(this.$widget[0]);
-
+        
+        this.$autoComplete = this.$widget.find(".choose-note-path");
         this.$noteTypeDropdown = this.$widget.find(".note-type-dropdown");
         this.dropdown = Dropdown.getOrCreateInstance(this.$widget.find(".note-type-dropdown-trigger")[0]);
 
@@ -116,8 +131,19 @@ export default class NoteTypeChooserDialog extends BasicWidget {
         });
     }
 
+    async refresh() {
+        noteAutocompleteService
+            .initNoteAutocomplete(this.$autoComplete, {
+                allowCreatingNotes: false,
+                hideGoToSelectedNoteButton: true,
+                allowJumpToSearchNotes: false,
+            })
+    }
+
     async chooseNoteTypeEvent({ callback }: { callback: Callback }) {
         this.$originalFocused = $(":focus");
+
+        await this.refresh();
 
         const noteTypes = await noteTypesService.getNoteTypeItems();
 
@@ -128,13 +154,21 @@ export default class NoteTypeChooserDialog extends BasicWidget {
                 this.$noteTypeDropdown.append($('<h6 class="dropdown-header">').append(t("note_type_chooser.templates")));
             } else {
                 const commandItem = noteType as MenuCommandItem<CommandNames>;
-                this.$noteTypeDropdown.append(
-                    $('<a class="dropdown-item" tabindex="0">')
-                        .attr("data-note-type", commandItem.type || "")
-                        .attr("data-template-note-id", commandItem.templateNoteId || "")
-                        .append($("<span>").addClass(commandItem.uiIcon || ""))
-                        .append(` ${noteType.title}`)
-                );
+                const listItem = $('<a class="dropdown-item" tabindex="0">')
+                    .attr("data-note-type", commandItem.type || "")
+                    .attr("data-template-note-id", commandItem.templateNoteId || "")
+                    .append($("<span>").addClass(commandItem.uiIcon || ""))
+                    .append(` ${noteType.title}`);
+
+                if (commandItem.badges) {
+                    for (let badge of commandItem.badges) {
+                        listItem.append($(`<span class="badge">`)
+                                .addClass(badge.className || "")
+                                .text(badge.title));
+                    }
+                }
+
+                this.$noteTypeDropdown.append(listItem);
             }
         }
 
@@ -153,12 +187,14 @@ export default class NoteTypeChooserDialog extends BasicWidget {
         const $item = $(e.target).closest(".dropdown-item");
         const noteType = $item.attr("data-note-type");
         const templateNoteId = $item.attr("data-template-note-id");
+        const notePath = this.$autoComplete.getSelectedNotePath() || undefined;
 
         if (this.resolve) {
             this.resolve({
                 success: true,
                 noteType,
-                templateNoteId
+                templateNoteId,
+                notePath
             });
         }
         this.resolve = null;

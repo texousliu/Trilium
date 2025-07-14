@@ -59,6 +59,12 @@
     },
     {
       "path": "./packages/share-theme"
+    },
+    {
+      "path": "./apps/website"
+    },
+    {
+      "path": "./apps/desktop-e2e"
     }
   ]
 }

@@ -1,13 +1,14 @@
-# TriliumNext Notes
+# Trilium Notes
 
-![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran?style=flat-square)
+Donate: ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran?style=flat-square) ![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran?style=flat-square)
+
 ![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/notes?style=flat-square)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/triliumnext/notes/total?style=flat-square)
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop&style=flat-square)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
 
 [English](./README.md) | [Chinese](./docs/README-ZH_CN.md) | [Russian](./docs/README.ru.md) | [Japanese](./docs/README.ja.md) | [Italian](./docs/README.it.md) | [Spanish](./docs/README.es.md)
 
-TriliumNext Notes is a free and open-source, cross-platform hierarchical note taking application with focus on building large personal knowledge bases.
+Trilium Notes is a free and open-source, cross-platform hierarchical note taking application with focus on building large personal knowledge bases.
 
 See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for quick overview:
 
@@ -22,7 +23,7 @@ See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for q
 * Seamless [note versioning](https://triliumnext.github.io/Docs/Wiki/note-revisions)
 * Note [attributes](https://triliumnext.github.io/Docs/Wiki/attributes) can be used for note organization, querying and advanced [scripting](https://triliumnext.github.io/Docs/Wiki/scripts)
 * UI available in English, German, Spanish, French, Romanian, and Chinese (simplified and traditional)
-* Direct [OpenID and TOTP integration](.docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md") for more secure login
+* Direct [OpenID and TOTP integration](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md) for more secure login
 * [Synchronization](https://triliumnext.github.io/Docs/Wiki/synchronization) with self-hosted sync server
   * there's a [3rd party service for hosting synchronisation server](https://trilium.cc/paid-hosting)
 * [Sharing](https://triliumnext.github.io/Docs/Wiki/sharing) (publishing) notes to public internet
@@ -119,8 +120,8 @@ To install TriliumNext on your own server (including via Docker from [Dockerhub]
 
 Download the repository, install dependencies using `pnpm` and then run the server (available at http://localhost:8080):
 ```shell
-git clone https://github.com/TriliumNext/Notes.git
-cd Notes
+git clone https://github.com/TriliumNext/Trilium.git
+cd Trilium
 pnpm install
 pnpm run server:start
 ```
@@ -129,8 +130,8 @@ pnpm run server:start
 
 Download the repository, install dependencies using `pnpm` and then run the environment required to edit the documentation:
 ```shell
-git clone https://github.com/TriliumNext/Notes.git
-cd Notes
+git clone https://github.com/TriliumNext/Trilium.git
+cd Trilium
 pnpm install
 pnpm nx run edit-docs:edit-docs
 ```
@@ -138,8 +139,8 @@ pnpm nx run edit-docs:edit-docs
 ### Building the Executable
 Download the repository, install dependencies using `pnpm` and then build the desktop app for Windows:
 ```shell
-git clone https://github.com/TriliumNext/Notes.git
-cd Notes
+git clone https://github.com/TriliumNext/Trilium.git
+cd Trilium
 pnpm install
 pnpm nx --project=desktop electron-forge:make -- --arch=x64 --platform=win32
 ```
@@ -153,7 +154,7 @@ Please view the [documentation guide](./docs/Developer%20Guide/Developer%20Guide
 ## 👏 Shoutouts
 
 * [CKEditor 5](https://github.com/ckeditor/ckeditor5) - best WYSIWYG editor on the market, very interactive and listening team
-* [FancyTree](https://github.com/mar10/fancytree) - very feature rich tree library without real competition. TriliumNext Notes would not be the same without it.
+* [FancyTree](https://github.com/mar10/fancytree) - very feature rich tree library without real competition. Trilium Notes would not be the same without it.
 * [CodeMirror](https://github.com/codemirror/CodeMirror) - code editor with support for huge amount of languages
 * [jsPlumb](https://github.com/jsplumb/jsplumb) - visual connectivity library without competition. Used in [relation maps](https://triliumnext.github.io/Docs/Wiki/relation-map.html) and [link maps](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)
 

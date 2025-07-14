@@ -192,7 +192,7 @@ class BRevision extends AbstractBeccaEntity<BRevision> {
             type: this.type,
             mime: this.mime,
             isProtected: this.isProtected,
-            title: this.title || undefined,
+            title: this.title,
             blobId: this.blobId,
             dateLastEdited: this.dateLastEdited,
             dateCreated: this.dateCreated,
@@ -211,10 +211,10 @@ class BRevision extends AbstractBeccaEntity<BRevision> {
 
         if (pojo.isProtected) {
             if (protectedSessionService.isProtectedSessionAvailable()) {
-                pojo.title = protectedSessionService.encrypt(this.title) || undefined;
+                pojo.title = protectedSessionService.encrypt(this.title) ?? "";
             } else {
                 // updating protected note outside of protected session means we will keep original ciphertexts
-                delete pojo.title;
+                pojo.title = "";
             }
         }
 

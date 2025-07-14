@@ -71,12 +71,13 @@ body.background-effects.platform-win32.layout-vertical #vertical-main-container 
 /* #endregion */
 
 /* Matches when the left pane is collapsed */
-:has(.layout-vertical #left-pane.hidden-int) {
+#horizontal-main-container.left-pane-hidden {
     --center-pane-border-radius: 0;
     --tab-first-item-horiz-offset: 5px;
 }
 
-:has(#left-pane.hidden-int) #launcher-pane.vertical {
+/* Add a border to the vertical launch bar if collapsed. */
+body.layout-vertical #horizontal-main-container.left-pane-hidden #launcher-pane.vertical {
     border-right: 2px solid var(--left-pane-collapsed-border-color);
 }
 
@@ -354,7 +355,7 @@ body.layout-horizontal > .horizontal {
 }
 
 .calendar-dropdown-widget .calendar-header .calendar-month-selector .select-button {
-    --select-arrow-svg: ""; /* Disable the dropdown arrow */
+    --select-arrow-svg: initial; /* Disable the dropdown arrow */
 }
 
 @media (max-width: 992px) {
@@ -1145,12 +1146,18 @@ body.mobile .note-title {
 
 /* The "Change note icon" button */
 
-.note-icon-widget .note-icon {
+:root .note-icon-widget button.note-icon,
+:root .note-icon-widget button.note-icon:hover {
     border: none;
     border-radius: 8px;
 }
 
-.note-icon-widget .note-icon:hover {
+/* Dropdown open */
+:root .note-icon-widget button.note-icon.show {
+    background: var(--ck-editor-toolbar-dropdown-button-open-background);
+}
+
+:root .note-icon-widget button.note-icon:not(:disabled):hover {
     background: var(--icon-button-hover-background);
     color: var(--icon-button-hover-color);
 }
@@ -1294,9 +1301,9 @@ div.promoted-attribute-cell .tn-checkbox {
     height: 1cap;
 }
 
-/* The <div> containing the checkbox for a promoted boolean attribute */
-div.promoted-attribute-cell div:has(input[type="checkbox"]) {
-    order: -1; /* Relocate the checkbox before the label */
+/* Relocate the checkbox before the label */
+div.promoted-attribute-cell.promoted-attribute-label-boolean > div:first-of-type {
+    order: -1;
     margin-right: 1.5em;
 }
 

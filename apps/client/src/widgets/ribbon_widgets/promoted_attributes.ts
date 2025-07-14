@@ -69,11 +69,6 @@ interface AttributeResult {
     attributeId: string;
 }
 
-/**
- * This widget is quite special because it's used in the desktop ribbon, but in mobile outside of ribbon.
- * This works without many issues (apart from autocomplete), but it should be kept in mind when changing things
- * and testing.
- */
 export default class PromotedAttributesWidget extends NoteContextAwareWidget {
 
     private $container!: JQuery<HTMLElement>;
@@ -117,7 +112,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
         // the order of attributes is important as well
         ownedAttributes.sort((a, b) => a.position - b.position);
 
-        if (promotedDefAttrs.length === 0) {
+        if (promotedDefAttrs.length === 0 || note.getLabelValue("viewType") === "table") {
             this.toggleInt(false);
             return;
         }
@@ -188,6 +183,7 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
             .append($multiplicityCell);
 
         if (valueAttr.type === "label") {
+            $wrapper.addClass(`promoted-attribute-label-${definition.labelType}`);
             if (definition.labelType === "text") {
                 $input.prop("type", "text");
 

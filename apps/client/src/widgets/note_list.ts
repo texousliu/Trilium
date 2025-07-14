@@ -1,8 +1,10 @@
 import NoteContextAwareWidget from "./note_context_aware_widget.js";
 import NoteListRenderer from "../services/note_list_renderer.js";
 import type FNote from "../entities/fnote.js";
-import type { CommandListener, CommandListenerData, EventData } from "../components/app_context.js";
+import type { CommandListener, CommandListenerData, CommandMappings, CommandNames, EventData, EventNames } from "../components/app_context.js";
 import type ViewMode from "./view_widgets/view_mode.js";
+import AttributeDetailWidget from "./attribute_widgets/attribute_detail.js";
+import { Attribute } from "../services/attribute_parser.js";
 
 const TPL = /*html*/`
 <div class="note-list-widget">
@@ -36,16 +38,41 @@ export default class NoteListWidget extends NoteContextAwareWidget {
     private isIntersecting?: boolean;
     private noteIdRefreshed?: string;
     private shownNoteId?: string | null;
-    private viewMode?: ViewMode | null;
+    private viewMode?: ViewMode<any> | null;
+    private attributeDetailWidget: AttributeDetailWidget;
+    private displayOnlyCollections: boolean;
+
+    /**
+     * @param displayOnlyCollections if set to `true` then only collection-type views are displayed such as geo-map and the calendar. The original book types grid and list will be ignored.
+     */
+    constructor(displayOnlyCollections: boolean) {
+        super();
+        this.attributeDetailWidget = new AttributeDetailWidget()
+                .contentSized()
+                .setParent(this);
+        this.displayOnlyCollections = displayOnlyCollections;
+    }
 
     isEnabled() {
-        return super.isEnabled() && this.noteContext?.hasNoteList();
+        if (!super.isEnabled()) {
+            return false;
+        }
+
+        if (this.displayOnlyCollections && this.note?.type !== "book") {
+            const viewType = this.note?.getLabelValue("viewType");
+            if (!viewType || ["grid", "list"].includes(viewType)) {
+                return false;
+            }
+        }
+
+        return this.noteContext?.hasNoteList();
     }
 
     doRender() {
         this.$widget = $(TPL);
         this.contentSized();
         this.$content = this.$widget.find(".note-list-widget-content");
+        this.$widget.append(this.attributeDetailWidget.render());
 
         const observer = new IntersectionObserver(
             (entries) => {
@@ -64,6 +91,23 @@ export default class NoteListWidget extends NoteContextAwareWidget {
         setTimeout(() => observer.observe(this.$widget[0]), 10);
     }
 
+    addNoteListItemEvent() {
+        const attr: Attribute = {
+            type: "label",
+            name: "label:myLabel",
+            value: "promoted,single,text"
+        };
+
+        this.attributeDetailWidget!.showAttributeDetail({
+            attribute: attr,
+            allAttributes: [ attr ],
+            isOwned: true,
+            x: 100,
+            y: 200,
+            focus: "name"
+        });
+    }
+
     checkRenderStatus() {
         // console.log("this.isIntersecting", this.isIntersecting);
         // console.log(`${this.noteIdRefreshed} === ${this.noteId}`, this.noteIdRefreshed === this.noteId);
@@ -76,7 +120,12 @@ export default class NoteListWidget extends NoteContextAwareWidget {
     }
 
     async renderNoteList(note: FNote) {
-        const noteListRenderer = new NoteListRenderer(this.$content, note, note.getChildNoteIds());
+        const noteListRenderer = new NoteListRenderer({
+            $parent: this.$content,
+            parentNote: note,
+            parentNotePath: this.notePath,
+            noteIds: note.getChildNoteIds()
+        });
         this.$widget.toggleClass("full-height", noteListRenderer.isFullHeight);
         await noteListRenderer.renderList();
         this.viewMode = noteListRenderer.viewMode;
@@ -132,6 +181,28 @@ export default class NoteListWidget extends NoteContextAwareWidget {
         if (this.viewMode && "buildTouchBarCommand" in this.viewMode) {
             return (this.viewMode as CommandListener<"buildTouchBar">).buildTouchBarCommand(data);
         }
+    }
+
+    triggerCommand<K extends CommandNames>(name: K, data?: CommandMappings[K]): Promise<unknown> | undefined | null {
+        // Pass the commands to the view mode, which is not actually attached to the hierarchy.
+        if (this.viewMode?.triggerCommand(name, data)) {
+            return;
+        }
+
+        return super.triggerCommand(name, data);
+    }
+
+    handleEventInChildren<T extends EventNames>(name: T, data: EventData<T>): Promise<unknown[] | unknown> | null {
+        super.handleEventInChildren(name, data);
+
+        if (this.viewMode) {
+            const ret = this.viewMode.handleEvent(name, data);
+            if (ret) {
+                return ret;
+            }
+        }
+
+        return null;
     }
 
 }

@@ -1,6 +1,6 @@
 {
   "about": {
-    "title": "About TriliumNext Notes",
+    "title": "About Trilium Notes",
     "close": "Close",
     "homepage": "Homepage:",
     "app_version": "App version:",
@@ -233,6 +233,8 @@
     "move_success_message": "Selected notes have been moved into "
   },
   "note_type_chooser": {
+    "change_path_prompt": "Change where to create the new note:",
+    "search_placeholder": "search path by name (default if empty)",
     "modal_title": "Choose note type",
     "close": "Close",
     "modal_body": "Choose note type / template of the new note:",
@@ -641,7 +643,7 @@
     "reload_frontend": "Reload Frontend",
     "show_hidden_subtree": "Show Hidden Subtree",
     "show_help": "Show Help",
-    "about": "About TriliumNext Notes",
+    "about": "About Trilium Notes",
     "logout": "Logout",
     "show-cheatsheet": "Show Cheatsheet",
     "toggle-zen-mode": "Zen Mode"
@@ -756,9 +758,11 @@
     "expand_all_children": "Expand all children",
     "collapse": "Collapse",
     "expand": "Expand",
-    "book_properties": "Book Properties",
+    "book_properties": "Collection Properties",
     "invalid_view_type": "Invalid view type '{{type}}'",
-    "calendar": "Calendar"
+    "calendar": "Calendar",
+    "table": "Table",
+    "geo-map": "Geo Map"
   },
   "edited_notes": {
     "no_edited_notes_found": "No edited notes on this day yet...",
@@ -958,7 +962,7 @@
     "no_attachments": "This note has no attachments."
   },
   "book": {
-    "no_children_help": "This note of type Book doesn't have any child notes so there's nothing to display. See <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> for details."
+    "no_children_help": "This collection doesn't have any child notes so there's nothing to display. See <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> for details."
   },
   "editable_code": {
     "placeholder": "Type the content of your code note here..."
@@ -1021,7 +1025,7 @@
     "title": "Consistency Checks",
     "find_and_fix_button": "Find and fix consistency issues",
     "finding_and_fixing_message": "Finding and fixing consistency issues...",
-    "issues_fixed_message": "Consistency issues should be fixed."
+    "issues_fixed_message": "Any consistency issue which may have been found is now fixed."
   },
   "database_anonymization": {
     "title": "Database Anonymization",
@@ -1195,7 +1199,6 @@
     "restore_provider": "Restore provider to search",
     "similarity_threshold": "Similarity Threshold",
     "similarity_threshold_description": "Minimum similarity score (0-1) for notes to be included in context for LLM queries",
-
     "reprocess_index": "Rebuild Search Index",
     "reprocessing_index": "Rebuilding...",
     "reprocess_index_started": "Search index optimization started in the background",
@@ -1508,7 +1511,7 @@
     "recovery_keys_used": "Used: {{date}}",
     "recovery_keys_unused": "Recovery code {{index}} is unused",
     "oauth_title": "OAuth/OpenID",
-    "oauth_description": "OpenID is a standardized way to let you log into websites using an account from another service, like Google, to verify your identity. Follow these <a href=\"https://developers.google.com/identity/openid-connect/openid-connect\">instructions</a> to setup an OpenID service through Google.",
+    "oauth_description": "OpenID is a standardized way to let you log into websites using an account from another service, like Google, to verify your identity. The default issuer is Google, but you can change it to any other OpenID provider. Check <a href=\"#root/_hidden/_help/_help_Otzi9La2YAUX/_help_WOcw2SLH6tbX/_help_7DAiwaf8Z7Rz\">here</a> for more information. Follow these <a href=\"https://developers.google.com/identity/openid-connect/openid-connect\">instructions</a> to setup an OpenID service through Google.",
     "oauth_description_warning": "To enable OAuth/OpenID, you need to set the OAuth/OpenID base URL, client ID and client secret in the config.ini file and restart the application. If you want to set from environment variables, please set TRILIUM_OAUTH_BASE_URL, TRILIUM_OAUTH_CLIENT_ID and TRILIUM_OAUTH_CLIENT_SECRET.",
     "oauth_missing_vars": "Missing settings: {{variables}}",
     "oauth_user_account": "User Account: ",
@@ -1607,12 +1610,13 @@
     "move-to": "Move to...",
     "paste-into": "Paste into",
     "paste-after": "Paste after",
-    "duplicate-subtree": "Duplicate subtree",
+    "duplicate": "Duplicate",
     "export": "Export",
     "import-into-note": "Import into note",
     "apply-bulk-actions": "Apply bulk actions",
     "converted-to-attachments": "{{count}} notes have been converted to attachments.",
-    "convert-to-attachment-confirm": "Are you sure you want to convert note selected notes into attachments of their parent notes?"
+    "convert-to-attachment-confirm": "Are you sure you want to convert note selected notes into attachments of their parent notes?",
+    "open-in-popup": "Quick edit"
   },
   "shared_info": {
     "shared_publicly": "This note is shared publicly on",
@@ -1640,7 +1644,9 @@
     "geo-map": "Geo Map",
     "beta-feature": "Beta",
     "ai-chat": "AI Chat",
-    "task-list": "Task List"
+    "task-list": "Task List",
+    "new-feature": "New",
+    "collections": "Collections"
   },
   "protect_note": {
     "toggle-on": "Protect the note",
@@ -1842,7 +1848,8 @@
   "link_context_menu": {
     "open_note_in_new_tab": "Open note in a new tab",
     "open_note_in_new_split": "Open note in a new split",
-    "open_note_in_new_window": "Open note in a new window"
+    "open_note_in_new_window": "Open note in a new window",
+    "open_note_in_popup": "Quick edit"
   },
   "electron_integration": {
     "desktop-application": "Desktop Application",
@@ -1862,7 +1869,8 @@
     "full-text-search": "Full text search"
   },
   "note_tooltip": {
-    "note-has-been-deleted": "Note has been deleted."
+    "note-has-been-deleted": "Note has been deleted.",
+    "quick-edit": "Quick edit"
   },
   "geo-map": {
     "create-child-note-title": "Create a new child note and add it to the map",
@@ -1871,7 +1879,8 @@
   },
   "geo-map-context": {
     "open-location": "Open location",
-    "remove-from-map": "Remove from map"
+    "remove-from-map": "Remove from map",
+    "add-note": "Add a marker at this location"
   },
   "help-button": {
     "title": "Open the relevant help page"
@@ -1933,5 +1942,38 @@
     "title": "Appearance",
     "word_wrapping": "Word wrapping",
     "color-scheme": "Color scheme"
+  },
+  "cpu_arch_warning": {
+    "title": "Please download the ARM64 version",
+    "message_macos": "TriliumNext is currently running under Rosetta 2 translation, which means you're using the Intel (x64) version on Apple Silicon Mac. This will significantly impact performance and battery life.",
+    "message_windows": "TriliumNext is currently running emulation, which means you're using the Intel (x64) version on a Windows on ARM device. This will significantly impact performance and battery life.",
+    "recommendation": "For the best experience, please download the native ARM64 version of TriliumNext from our releases page.",
+    "download_link": "Download Native Version",
+    "continue_anyway": "Continue Anyway",
+    "dont_show_again": "Don't show this warning again"
+  },
+  "editorfeatures": {
+    "title": "Features",
+    "emoji_completion_enabled": "Enable Emoji auto-completion",
+    "note_completion_enabled": "Enable note auto-completion"
+  },
+  "table_view": {
+    "new-row": "New row",
+    "new-column": "New column",
+    "sort-column-by": "Sort by \"{{title}}\"",
+    "sort-column-ascending": "Ascending",
+    "sort-column-descending": "Descending",
+    "sort-column-clear": "Clear sorting",
+    "hide-column": "Hide column \"{{title}}\"",
+    "show-hide-columns": "Show/hide columns",
+    "row-insert-above": "Insert row above",
+    "row-insert-below": "Insert row below"
+  },
+  "book_properties_config": {
+    "hide-weekends": "Hide weekends",
+    "display-week-numbers": "Display week numbers"
+  },
+  "table_context_menu": {
+    "delete_row": "Delete row"
   }
 }

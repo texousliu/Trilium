@@ -60,7 +60,41 @@ describe("processNoteContent", () => {
         const htmlNote = rootNote.children.find((ch) => ch.title === "IREN Reports Q2 FY25 Results");
         expect(htmlNote?.getContent().toString().substring(0, 4)).toEqual("<div");
     });
+
+    it("can import from Silverbullet", async () => {
+        const { importedNote } = await testImport("silverbullet.zip");
+        const bananaNote = getNoteByTitlePath(importedNote, "assets", "banana.jpeg");
+        const mondayNote = getNoteByTitlePath(importedNote, "journal", "monday");
+        const shopNote = getNoteByTitlePath(importedNote, "other", "shop");
+        const content = mondayNote?.getContent();
+        expect(content).toContain(`<a class="reference-link" href="#root/${shopNote.noteId}`);
+        expect(content).toContain(`<img src="api/images/${bananaNote!.noteId}/banana.jpeg`);
+    });
+
+    it("can import old geomap notes", async () => {
+        const { importedNote } = await testImport("geomap.zip");
+        expect(importedNote.type).toBe("book");
+        expect(importedNote.mime).toBe("");
+        expect(importedNote.getRelationValue("template")).toBe("_template_geo_map");
+
+        const attachment = importedNote.getAttachmentsByRole("viewConfig")[0];
+        expect(attachment.title).toBe("geoMap.json");
+        expect(attachment.mime).toBe("application/json");
+        const content = attachment.getContent();
+        expect(content).toStrictEqual(`{"view":{"center":{"lat":49.19598332223546,"lng":-2.1414576506668808},"zoom":12}}`);
+    });
 });
+
+function getNoteByTitlePath(parentNote: BNote, ...titlePath: string[]) {
+    let cursor = parentNote;
+    for (const title of titlePath) {
+        const childNote = cursor.getChildNotes().find(n => n.title === title);
+        expect(childNote).toBeTruthy();
+        cursor = childNote!;
+    }
+
+    return cursor;
+}
 
 describe("removeTriliumTags", () => {
     it("removes <h1> tags from HTML", () => {

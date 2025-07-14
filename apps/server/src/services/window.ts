@@ -45,7 +45,7 @@ async function createExtraWindow(extraWindowHash: string) {
     const win = new BrowserWindow({
         width: 1000,
         height: 800,
-        title: "TriliumNext Notes",
+        title: "Trilium Notes",
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -155,7 +155,7 @@ async function createMainWindow(app: App) {
         height: mainWindowState.height,
         minWidth: 500,
         minHeight: 400,
-        title: "TriliumNext Notes",
+        title: "Trilium Notes",
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -257,7 +257,7 @@ async function configureWebContents(webContents: WebContents, spellcheckEnabled:
 }
 
 function getIcon() {
-    return path.join(RESOURCE_DIR, "images/app-icons/png/256x256" + (isDev ? "-dev" : "") + ".png");
+    return path.join(RESOURCE_DIR, "../public/assets/icon.png");
 }
 
 async function createSetupWindow() {
@@ -268,7 +268,7 @@ async function createSetupWindow() {
         width,
         height,
         resizable: false,
-        title: "TriliumNext Notes Setup",
+        title: "Trilium Notes Setup",
         icon: getIcon(),
         webPreferences: {
             // necessary for e.g. utils.isElectron()

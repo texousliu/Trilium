@@ -59,6 +59,7 @@ import openaiRoute from "./api/openai.js";
 import anthropicRoute from "./api/anthropic.js";
 import llmRoute from "./api/llm.js";
 import ocrRoute from "./api/ocr.js";
+import systemInfoRoute from "./api/system_info.js";
 
 import etapiAuthRoutes from "../etapi/auth.js";
 import etapiAppInfoRoutes from "../etapi/app_info.js";
@@ -239,6 +240,7 @@ function register(app: express.Application) {
     apiRoute(PST, "/api/recent-notes", recentNotesRoute.addRecentNote);
     apiRoute(GET, "/api/app-info", appInfoRoute.getAppInfo);
     apiRoute(GET, "/api/metrics", metricsRoute.getMetrics);
+    apiRoute(GET, "/api/system-checks", systemInfoRoute.systemChecks);
 
     // docker health check
     route(GET, "/api/health-check", [], () => ({ status: "ok" }), apiResultHandler);
@@ -247,7 +249,7 @@ function register(app: express.Application) {
     route(GET, "/api/setup/status", [], setupApiRoute.getStatus, apiResultHandler);
     asyncRoute(PST, "/api/setup/new-document", [auth.checkAppNotInitialized], setupApiRoute.setupNewDocument, apiResultHandler);
     asyncRoute(PST, "/api/setup/sync-from-server", [auth.checkAppNotInitialized], setupApiRoute.setupSyncFromServer, apiResultHandler);
-    route(GET, "/api/setup/sync-seed", [auth.checkCredentials], setupApiRoute.getSyncSeed, apiResultHandler);
+    route(GET, "/api/setup/sync-seed", [loginRateLimiter, auth.checkCredentials], setupApiRoute.getSyncSeed, apiResultHandler);
     asyncRoute(PST, "/api/setup/sync-seed", [auth.checkAppNotInitialized], setupApiRoute.saveSyncSeed, apiResultHandler);
 
     apiRoute(GET, "/api/autocomplete", autocompleteApiRoute.getAutocomplete);
@@ -262,7 +264,7 @@ function register(app: express.Application) {
     apiRoute(PST, "/api/bulk-action/execute", bulkActionRoute.execute);
     apiRoute(PST, "/api/bulk-action/affected-notes", bulkActionRoute.getAffectedNoteCount);
 
-    route(PST, "/api/login/sync", [], loginApiRoute.loginSync, apiResultHandler);
+    route(PST, "/api/login/sync", [loginRateLimiter], loginApiRoute.loginSync, apiResultHandler);
     // this is for entering protected mode so user has to be already logged-in (that's the reason we don't require username)
     apiRoute(PST, "/api/login/protected", loginApiRoute.loginToProtectedSession);
     apiRoute(PST, "/api/login/protected/touch", loginApiRoute.touchProtectedSession);
@@ -391,7 +393,7 @@ function register(app: express.Application) {
     asyncApiRoute(PST, "/api/ocr/batch-process", ocrRoute.batchProcessOCR);
     asyncApiRoute(GET, "/api/ocr/batch-progress", ocrRoute.getBatchProgress);
     asyncApiRoute(GET, "/api/ocr/stats", ocrRoute.getOCRStats);
-    asyncApiRoute(DEL, "/api/ocr/delete/:entityType/:entityId", ocrRoute.deleteOCRResults);
+    asyncApiRoute(DEL, "/api/ocr/delete/:blobId", ocrRoute.deleteOCRResults);
 
     // API Documentation
     apiDocsRoute(app);

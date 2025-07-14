@@ -21,7 +21,7 @@ const loadSystemPrompt = (): string => {
     } catch (error) {
         console.error('Failed to load system prompt from file:', error);
         // Return fallback prompt if file can't be loaded
-        return "You are a helpful assistant embedded in the TriliumNext Notes application. " +
+        return "You are a helpful assistant embedded in the Trilium Notes application. " +
             "You can help users with their notes, answer questions, and provide information. " +
             "Keep your responses concise and helpful. " +
             "You're currently chatting with the user about their notes.";
@@ -57,7 +57,7 @@ export const SYSTEM_PROMPTS = {
 export const CONTEXT_PROMPTS = {
     // Query enhancer prompt for generating better search terms
     QUERY_ENHANCER:
-        `You are an AI assistant that decides what information needs to be retrieved from a user's knowledge base called TriliumNext Notes to answer the user's question.
+        `You are an AI assistant that decides what information needs to be retrieved from a user's knowledge base called Trilium Notes to answer the user's question.
 Given the user's question, generate 3-5 specific search queries that would help find relevant information.
 Each query should be focused on a different aspect of the question.
 Avoid generating queries that are too broad, vague, or about a user's entire Note database, and make sure they are relevant to the user's question.
@@ -184,7 +184,7 @@ When responding:
 
         INSTRUCTIONS_WRAPPER: (instructions: string) =>
             `<instructions>\n${instructions}\n</instructions>`,
-            
+
         // Tool instructions for Anthropic Claude
         TOOL_INSTRUCTIONS: `<instructions>
 When using tools to search for information, follow these requirements:
@@ -210,7 +210,7 @@ When using tools to search for information, follow these requirements:
         // OpenAI-specific prompt formatting
         SYSTEM_WITH_CONTEXT: (context: string) =>
             `<system_prompt>
-You are an AI assistant integrated into TriliumNext Notes.
+You are an AI assistant integrated into Trilium Notes.
 Use the following information from the user's notes to answer their questions:
 
 <user_notes>
@@ -220,7 +220,7 @@ ${context}
 Focus on relevant information from these notes when answering.
 Be concise and informative in your responses.
 </system_prompt>`,
-        
+
         // Tool instructions for OpenAI models
         TOOL_INSTRUCTIONS: `When using tools to search for information, you must follow these requirements:
 
@@ -264,7 +264,7 @@ CRITICAL INSTRUCTIONS FOR TOOL USAGE:
 
     // Common prompts across providers
     COMMON: {
-        DEFAULT_ASSISTANT_INTRO: "<assistant_role>You are an AI assistant integrated into TriliumNext Notes. Focus on helping users find information in their notes and answering questions based on their knowledge base. Be concise, informative, and direct when responding to queries.</assistant_role>"
+        DEFAULT_ASSISTANT_INTRO: "<assistant_role>You are an AI assistant integrated into Trilium Notes. Focus on helping users find information in their notes and answering questions based on their knowledge base. Be concise, informative, and direct when responding to queries.</assistant_role>"
     }
 };
 

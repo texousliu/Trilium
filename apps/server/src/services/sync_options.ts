@@ -2,6 +2,7 @@
 
 import optionService from "./options.js";
 import config from "./config.js";
+import { normalizeUrl } from "./utils.js";
 
 /*
  * Primary configuration for sync is in the options (document), but we allow to override
@@ -17,7 +18,10 @@ function get(name: keyof typeof config.Sync) {
 export default {
     // env variable is the easiest way to guarantee we won't overwrite prod data during development
     // after copying prod document/data directory
-    getSyncServerHost: () => get("syncServerHost"),
+    getSyncServerHost: () => {
+        const host = get("syncServerHost");
+        return host ? normalizeUrl(host) : host;
+    },
     isSyncSetup: () => {
         const syncServerHost = get("syncServerHost");
 

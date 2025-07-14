@@ -36,6 +36,17 @@ import type Becca from "../becca/becca-interface.js";
 import type { NoteParams } from "./note-interface.js";
 import type { ApiParams } from "./backend_script_api_interface.js";
 
+// Dayjs plugins
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isBetween from "dayjs/plugin/isBetween";
+import advancedFormat from "dayjs/plugin/advancedFormat.js";
+
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isBetween);
+dayjs.extend(advancedFormat);
+
 /**
  * A whole number
  * @typedef {number} int
@@ -244,8 +255,12 @@ export interface Api {
     /**
      * Returns week note for given date. If such a note doesn't exist, it is created.
      *
+     * <p>
+     * If the calendar does not support week notes, this method will return `null`.
+     *
      * @param date in YYYY-MM-DD format
      * @param rootNote - specify calendar root note, normally leave empty to use the default calendar
+     * @return an existing or newly created week note, or `null` if the calendar does not support week notes.
      */
     getWeekNote(date: string, rootNote: BNote): BNote | null;
 

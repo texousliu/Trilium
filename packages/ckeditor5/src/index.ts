@@ -1,9 +1,13 @@
 import "ckeditor5/ckeditor5.css";
 import "./theme/code_block_toolbar.css";
-import { COMMON_PLUGINS, CORE_PLUGINS, POPUP_EDITOR_PLUGINS } from "./plugins";
+import { COMMON_PLUGINS, CORE_PLUGINS, POPUP_EDITOR_PLUGINS } from "./plugins.js";
 import { BalloonEditor, DecoupledEditor, FindAndReplaceEditing, FindCommand } from "ckeditor5";
+import "./translation_overrides.js";
 export { EditorWatchdog } from "ckeditor5";
-export type { EditorConfig, MentionFeed, MentionFeedObjectItem, Node, Position, Element, WatchdogConfig } from "ckeditor5";
+export { PREMIUM_PLUGINS } from "./plugins.js";
+export type { EditorConfig, MentionFeed, MentionFeedObjectItem, ModelNode, ModelPosition, ModelElement, WatchdogConfig } from "ckeditor5";
+export type { TemplateDefinition } from "ckeditor5-premium-features";
+export { default as buildExtraCommands } from "./extra_slash_commands.js";
 
 // Import with sideffects to ensure that type augmentations are present.
 import "@triliumnext/ckeditor5-math";
@@ -25,6 +29,7 @@ export type FindCommandResult = ReturnType<FindCommand["execute"]>;
  * The text editor that can be used for editing attributes and relations.
  */
 export class AttributeEditor extends BalloonEditor {
+
     static override get builtinPlugins() {
         return CORE_PLUGINS;
     }

@@ -1,5 +1,4 @@
 import froca from "../services/froca.js";
-import bundleService from "../services/bundle.js";
 import RootCommandExecutor from "./root_command_executor.js";
 import Entrypoints, { type SqlExecuteResults } from "./entrypoints.js";
 import options from "../services/options.js";
@@ -28,6 +27,7 @@ import type { NativeImage, TouchBar } from "electron";
 import TouchBarComponent from "./touch_bar.js";
 import type { CKTextEditor } from "@triliumnext/ckeditor5";
 import type CodeMirror from "@triliumnext/codemirror";
+import { StartupChecks } from "./startup_checks.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -122,12 +122,14 @@ export type CommandMappings = {
     showImportDialog: CommandData & { noteId: string };
     openNewNoteSplit: NoteCommandData;
     openInWindow: NoteCommandData;
+    openInPopup: CommandData & { noteIdOrPath: string; };
     openNoteInNewTab: CommandData;
     openNoteInNewSplit: CommandData;
     openNoteInNewWindow: CommandData;
     openAboutDialog: CommandData;
     hideFloatingButtons: {};
     hideLeftPane: CommandData;
+    showCpuArchWarning: CommandData;
     showLeftPane: CommandData;
     hoistNote: CommandData & { noteId: string };
     leaveProtectedSession: CommandData;
@@ -139,6 +141,7 @@ export type CommandMappings = {
     };
     openInTab: ContextMenuCommandData;
     openNoteInSplit: ContextMenuCommandData;
+    openNoteInPopup: ContextMenuCommandData;
     toggleNoteHoisting: ContextMenuCommandData;
     insertNoteAfter: ContextMenuCommandData;
     insertChildNote: ContextMenuCommandData;
@@ -260,7 +263,6 @@ export type CommandMappings = {
 
     // Geomap
     deleteFromMap: { noteId: string };
-    openGeoLocation: { noteId: string; event: JQuery.MouseDownEvent };
 
     toggleZenMode: CommandData;
 
@@ -279,6 +281,7 @@ export type CommandMappings = {
         buildIcon(name: string): NativeImage;
     };
     refreshTouchBar: CommandData;
+    reloadTextEditor: CommandData;
 };
 
 type EventMappings = {
@@ -467,13 +470,21 @@ export class AppContext extends Component {
 
         this.tabManager.loadTabs();
 
+        const bundleService = (await import("../services/bundle.js")).default;
         setTimeout(() => bundleService.executeStartupBundles(), 2000);
     }
 
     initComponents() {
         this.tabManager = new TabManager();
 
-        this.components = [this.tabManager, new RootCommandExecutor(), new Entrypoints(), new MainTreeExecutors(), new ShortcutComponent()];
+        this.components = [
+            this.tabManager,
+            new RootCommandExecutor(),
+            new Entrypoints(),
+            new MainTreeExecutors(),
+            new ShortcutComponent(),
+            new StartupChecks()
+        ];
 
         if (utils.isMobile()) {
             this.components.push(new MobileScreenSwitcherExecutor());

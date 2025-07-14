@@ -95,7 +95,15 @@ async function moveToParentNote(branchIdsToMove: string[], newParentBranchId: st
     }
 }
 
-async function deleteNotes(branchIdsToDelete: string[], forceDeleteAllClones = false) {
+/**
+ * Shows the delete confirmation screen
+ *
+ * @param branchIdsToDelete the list of branch IDs to delete.
+ * @param forceDeleteAllClones whether to check by default the "Delete also all clones" checkbox.
+ * @param moveToParent whether to automatically go to the parent note path after a succesful delete. Usually makes sense if deleting the active note(s).
+ * @returns promise that returns false if the operation was cancelled or there was nothing to delete, true if the operation succeeded.
+ */
+async function deleteNotes(branchIdsToDelete: string[], forceDeleteAllClones = false, moveToParent = true) {
     branchIdsToDelete = filterRootNote(branchIdsToDelete);
 
     if (branchIdsToDelete.length === 0) {
@@ -110,10 +118,12 @@ async function deleteNotes(branchIdsToDelete: string[], forceDeleteAllClones = f
         return false;
     }
 
-    try {
-        await activateParentNotePath();
-    } catch (e) {
-        console.error(e);
+    if (moveToParent) {
+        try {
+            await activateParentNotePath();
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     const taskId = utils.randomString(10);

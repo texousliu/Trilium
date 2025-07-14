@@ -289,13 +289,11 @@ function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
         }
 
         if (suggestion.action === "create-note") {
-            const { success, noteType, templateNoteId } = await noteCreateService.chooseNoteType();
-
+            const { success, noteType, templateNoteId, notePath } = await noteCreateService.chooseNoteType();
             if (!success) {
                 return;
             }
-
-            const { note } = await noteCreateService.createNote(suggestion.parentNoteId, {
+            const { note } = await noteCreateService.createNote( notePath || suggestion.parentNoteId, {
                 title: suggestion.noteTitle,
                 activate: false,
                 type: noteType,

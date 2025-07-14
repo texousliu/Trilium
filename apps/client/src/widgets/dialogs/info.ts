@@ -1,9 +1,9 @@
 import type { EventData } from "../../components/app_context.js";
 import { t } from "../../services/i18n.js";
-import utils from "../../services/utils.js";
 import BasicWidget from "../basic_widget.js";
 import { Modal } from "bootstrap";
 import type { ConfirmDialogCallback } from "./confirm.js";
+import { openDialog } from "../../services/dialog.js";
 
 const TPL = /*html*/`
 <div class="info-dialog modal mx-auto" tabindex="-1" role="dialog" style="z-index: 2000;">
@@ -72,7 +72,7 @@ export default class InfoDialog extends BasicWidget {
         }
 
 
-        utils.openDialog(this.$widget);
+        openDialog(this.$widget);
 
         this.resolve = callback;
     }

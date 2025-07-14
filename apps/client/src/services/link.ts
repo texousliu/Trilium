@@ -231,6 +231,7 @@ export function parseNavigationStateFromUrl(url: string | undefined) {
     let ntxId: string | null = null;
     let hoistedNoteId: string | null = null;
     let searchString: string | null = null;
+    let openInPopup = false;
 
     if (paramString) {
         for (const pair of paramString.split("&")) {
@@ -246,6 +247,8 @@ export function parseNavigationStateFromUrl(url: string | undefined) {
                 searchString = value; // supports triggering search from URL, e.g. #?searchString=blabla
             } else if (["viewMode", "attachmentId"].includes(name)) {
                 (viewScope as any)[name] = value;
+            } else if (name === "popup") {
+                openInPopup = true;
             } else {
                 console.warn(`Unrecognized hash parameter '${name}'.`);
             }
@@ -266,7 +269,8 @@ export function parseNavigationStateFromUrl(url: string | undefined) {
         ntxId,
         hoistedNoteId,
         viewScope,
-        searchString
+        searchString,
+        openInPopup
     };
 }
 
@@ -277,13 +281,21 @@ function goToLink(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent) {
     return goToLinkExt(evt, hrefLink, $link);
 }
 
-function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent | React.PointerEvent<HTMLCanvasElement>, hrefLink: string | undefined, $link?: JQuery<HTMLElement> | null) {
+/**
+ * Handles navigation to a link, which can be an internal note path (e.g., `#root/1234`) or an external URL (e.g., `https://example.com`).
+ *
+ * @param evt the event that triggered the link navigation, or `null` if the link was clicked programmatically. Used to determine if the link should be opened in a new tab/window, based on the button presses.
+ * @param hrefLink the link to navigate to, which can be a note path (e.g., `#root/1234`) or an external URL with any supported protocol (e.g., `https://example.com`).
+ * @param $link the jQuery element of the link that was clicked, used to determine if the link is an anchor link (e.g., `#fn1` or `#fnref1`) and to handle it accordingly.
+ * @returns `true` if the link was handled (i.e., the element was found and scrolled to), or a falsy value otherwise.
+ */
+function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent | React.PointerEvent<HTMLCanvasElement> | null, hrefLink: string | undefined, $link?: JQuery<HTMLElement> | null) {
     if (hrefLink?.startsWith("data:")) {
         return true;
     }
 
-    evt.preventDefault();
-    evt.stopPropagation();
+    evt?.preventDefault();
+    evt?.stopPropagation();
 
     if (hrefLink && hrefLink.startsWith("#") && !hrefLink.startsWith("#root/") && $link) {
         if (handleAnchor(hrefLink, $link)) {
@@ -291,19 +303,22 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
         }
     }
 
-    const { notePath, viewScope } = parseNavigationStateFromUrl(hrefLink);
+    const { notePath, viewScope, openInPopup } = parseNavigationStateFromUrl(hrefLink);
 
-    const ctrlKey = utils.isCtrlKey(evt);
-    const shiftKey = evt.shiftKey;
-    const isLeftClick = "which" in evt && evt.which === 1;
-    const isMiddleClick = "which" in evt && evt.which === 2;
+    const ctrlKey = evt && utils.isCtrlKey(evt);
+    const shiftKey = evt?.shiftKey;
+    const isLeftClick = !evt || ("which" in evt && evt.which === 1);
+    // Right click is handled separately.
+    const isMiddleClick = evt && "which" in evt && evt.which === 2;
     const targetIsBlank = ($link?.attr("target") === "_blank");
     const openInNewTab = (isLeftClick && ctrlKey) || isMiddleClick || targetIsBlank;
     const activate = (isLeftClick && ctrlKey && shiftKey) || (isMiddleClick && shiftKey);
-    const openInNewWindow = isLeftClick && evt.shiftKey && !ctrlKey;
+    const openInNewWindow = isLeftClick && evt?.shiftKey && !ctrlKey;
 
     if (notePath) {
-        if (openInNewWindow) {
+        if (openInPopup) {
+            appContext.triggerCommand("openInPopup", { noteIdOrPath: notePath });
+        } else if (openInNewWindow) {
             appContext.triggerCommand("openInWindow", { notePath, viewScope });
         } else if (openInNewTab) {
             appContext.tabManager.openTabWithNoteWithHoisting(notePath, {
@@ -311,7 +326,7 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
                 viewScope
             });
         } else if (isLeftClick) {
-            const ntxId = $(evt.target as any)
+            const ntxId = $(evt?.target as any)
                 .closest("[data-ntx-id]")
                 .attr("data-ntx-id");
 
@@ -379,12 +394,18 @@ function linkContextMenu(e: PointerEvent) {
         return;
     }
 
+    if (utils.isCtrlKey(e) && e.button === 2) {
+        appContext.triggerCommand("openInPopup", { noteIdOrPath: notePath });
+        e.preventDefault();
+        return;
+    }
+
     e.preventDefault();
 
     linkContextMenuService.openContextMenu(notePath, e, viewScope, null);
 }
 
-async function loadReferenceLinkTitle($el: JQuery<HTMLElement>, href: string | null | undefined = null) {
+export async function loadReferenceLinkTitle($el: JQuery<HTMLElement>, href: string | null | undefined = null) {
     const $link = $el[0].tagName === "A" ? $el : $el.find("a");
 
     href = href || $link.attr("href");

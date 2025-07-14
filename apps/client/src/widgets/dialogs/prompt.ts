@@ -1,5 +1,5 @@
+import { openDialog } from "../../services/dialog.js";
 import { t } from "../../services/i18n.js";
-import utils from "../../services/utils.js";
 import BasicWidget from "../basic_widget.js";
 import { Modal } from "bootstrap";
 
@@ -110,6 +110,6 @@ export default class PromptDialog extends BasicWidget {
 
         this.$dialogBody.empty().append($("<div>").addClass("form-group").append(this.$question).append(this.$answer));
 
-        utils.openDialog(this.$widget, false);
+        openDialog(this.$widget, false);
     }
 }

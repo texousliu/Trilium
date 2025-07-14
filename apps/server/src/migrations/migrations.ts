@@ -8,7 +8,7 @@
 const MIGRATIONS: (SqlMigration | JsMigration)[] = [
     // Add OCR text column to blobs table for storing extracted text from images
     {
-        version: 233,
+        version: 234,
         sql: /*sql*/`\
             -- Add OCR text column to blobs table
             ALTER TABLE blobs ADD COLUMN ocr_text TEXT DEFAULT NULL;
@@ -17,6 +17,11 @@ const MIGRATIONS: (SqlMigration | JsMigration)[] = [
             CREATE INDEX IF NOT EXISTS idx_blobs_ocr_text 
             ON blobs (ocr_text);
         `
+    },
+    // Migrate geo map to collection
+    {
+        version: 233,
+        module: async () => import("./0233__migrate_geo_map_to_collection.js")
     },
     // Remove embedding tables since LLM embedding functionality has been removed
     {

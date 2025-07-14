@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - "develop"
+      - "main"
       - "feature/update**"
       - "feature/server_esm**"
     paths-ignore:
@@ -14,8 +14,8 @@ on:
 env:
   GHCR_REGISTRY: ghcr.io
   DOCKERHUB_REGISTRY: docker.io
-  IMAGE_NAME: ${{ github.repository_owner }}/notes
-  TEST_TAG: ${{ github.repository_owner }}/notes:test
+  IMAGE_NAME: ${{ github.repository}}
+  TEST_TAG: ${{ github.repository}}:test
 
 permissions:
   contents: read
@@ -53,7 +53,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Install Playwright Browsers
-        run: pnpx playwright install --with-deps
+        run: pnpm exec playwright install --with-deps
 
       - name: Run the TypeScript build
         run: pnpm run server:build
@@ -82,7 +82,15 @@ jobs:
           require-healthy: true
 
       - name: Run Playwright tests
-        run: TRILIUM_DOCKER=1 TRILIUM_PORT=8082 pnpx nx run server-e2e:e2e
+        run: TRILIUM_DOCKER=1 TRILIUM_PORT=8082 pnpm exec nx run server-e2e:e2e
+
+      - name: Upload Playwright trace
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Playwright trace (${{ matrix.dockerfile }})
+          path: test-output/playwright/output
+
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
