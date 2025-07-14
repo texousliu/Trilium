@@ -80,23 +80,19 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
             },
             { title: "----" },
             {
-                title: "Add column to the left",
-                handler: () => {
-                    getParentComponent(e)?.triggerCommand("addNoteListItem", {
-                        referenceColumn: column
-                    });
-                    console.log("Add col");
-                }
+                title: t("table_view.add-column-to-the-left"),
+                uiIcon: "bx bx-horizontal-left",
+                handler: () => getParentComponent(e)?.triggerCommand("addNoteListItem", {
+                    referenceColumn: column
+                })
             },
             {
-                title: "Add column to the right",
-                handler: () => {
-                    getParentComponent(e)?.triggerCommand("addNoteListItem", {
-                        referenceColumn: column,
-                        direction: "after"
-                    });
-                    console.log("Add col after");
-                }
+                title: t("table_view.add-column-to-the-right"),
+                uiIcon: "bx bx-horizontal-right",
+                handler: () => getParentComponent(e)?.triggerCommand("addNoteListItem", {
+                    referenceColumn: column,
+                    direction: "after"
+                })
             }
         ],
         selectMenuItemHandler() {},
