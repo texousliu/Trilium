@@ -9,7 +9,7 @@ import froca from "../../../services/froca.js";
 import type Component from "../../../components/component.js";
 
 export function setupContextMenu(tabulator: Tabulator, parentNote: FNote) {
-    tabulator.on("rowContext", (e, row) => showRowContextMenu(e, row, parentNote));
+    tabulator.on("rowContext", (e, row) => showRowContextMenu(e, row, parentNote, tabulator));
     tabulator.on("headerContext", (e, col) => showColumnContextMenu(e, col, tabulator));
 
     // Pressing the expand button prevents bubbling and the context menu remains menu when it shouldn't.
@@ -103,9 +103,19 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
     }
 }
 
-export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: FNote) {
+export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: FNote, tabulator: Tabulator) {
     const e = _e as MouseEvent;
     const rowData = row.getData() as TableData;
+
+    let parentNoteId: string = parentNote.noteId;
+
+    if (tabulator.options.dataTree) {
+        const parentRow = row.getTreeParent();
+        if (parentRow) {
+            parentNoteId = parentRow.getData().noteId as string;
+        }
+    }
+
     contextMenu.show({
         items: [
             ...link_context_menu.getItems(),
@@ -114,6 +124,7 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
                 title: t("table_view.row-insert-above"),
                 uiIcon: "bx bx-list-plus",
                 handler: () => getParentComponent(e)?.triggerCommand("addNewRow", {
+                    parentNotePath: parentNoteId,
                     customOpts: {
                         target: "before",
                         targetBranchId: rowData.branchId,
@@ -139,6 +150,7 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
                 title: t("table_view.row-insert-below"),
                 uiIcon: "bx bx-empty",
                 handler: () => getParentComponent(e)?.triggerCommand("addNewRow", {
+                    parentNotePath: parentNoteId,
                     customOpts: {
                         target: "after",
                         targetBranchId: rowData.branchId,
