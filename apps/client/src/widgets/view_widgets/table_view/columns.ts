@@ -1,6 +1,5 @@
 import { RelationEditor } from "./relation_editor.js";
 import { NoteFormatter, NoteTitleFormatter, RowNumberFormatter } from "./formatters.js";
-import { applyHeaderMenu } from "./header-menu.js";
 import type { ColumnDefinition, Tabulator } from "tabulator-tables";
 import { LabelType } from "../../../services/promoted_attribute_definition_parser.js";
 
@@ -86,7 +85,6 @@ export function buildColumnDefinitions(info: AttributeDefinitionInformation[], m
         seenFields.add(field);
     }
 
-    applyHeaderMenu(columnDefs);
     if (existingColumnData) {
         restoreExistingData(columnDefs, existingColumnData);
     }

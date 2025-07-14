@@ -106,8 +106,6 @@ export default class TableView extends ViewMode<StateInfo> {
     private api?: Tabulator;
     private newAttribute?: Attribute;
     private persistentData: StateInfo["tableData"];
-    /** If set to a note ID, whenever the rows will be updated, the title of the note will be automatically focused for editing. */
-    private branchIdToEdit?: string;
 
     constructor(args: ViewModeArgs) {
         super(args, "table");
