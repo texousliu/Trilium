@@ -11,6 +11,13 @@ import type Component from "../../../components/component.js";
 export function setupContextMenu(tabulator: Tabulator, parentNote: FNote) {
     tabulator.on("rowContext", (e, row) => showRowContextMenu(e, row, parentNote));
     tabulator.on("headerContext", (e, col) => showColumnContextMenu(e, col, tabulator));
+
+    // Pressing the expand button prevents bubbling and the context menu remains menu when it shouldn't.
+    if (tabulator.options.dataTree) {
+        const dismissContextMenu = () => contextMenu.hide();
+        tabulator.on("dataTreeRowExpanded", dismissContextMenu);
+        tabulator.on("dataTreeRowCollapsed", dismissContextMenu);
+    }
 }
 
 function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: Tabulator) {
