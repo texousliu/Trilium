@@ -235,7 +235,6 @@ export default class TableView extends ViewMode<StateInfo> {
     }
 
     addNoteListItemEvent({ referenceColumn }: { referenceColumn?: ColumnComponent }) {
-        console.log("Add note list item ", referenceColumn);
         const attr: Attribute = {
             type: "label",
             name: "label:myLabel",
@@ -243,7 +242,7 @@ export default class TableView extends ViewMode<StateInfo> {
         };
 
         if (referenceColumn && this.api) {
-            this.newAttributePosition = this.api.getColumns().indexOf(referenceColumn) - 1;
+            this.newAttributePosition = this.api.getColumns().indexOf(referenceColumn);
         } else {
             this.newAttributePosition = undefined;
         }
