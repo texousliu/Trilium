@@ -432,7 +432,7 @@ export default class CalendarView extends ViewMode<{}> {
             events.push(await CalendarView.buildEvent(dateNote, { startDate }));
 
             if (dateNote.hasChildren()) {
-                const childNoteIds = dateNote.getChildNoteIds();
+                const childNoteIds = await dateNote.getSubtreeNoteIds();
                 for (const childNoteId of childNoteIds) {
                     childNoteToDateMapping[childNoteId] = startDate;
                 }
