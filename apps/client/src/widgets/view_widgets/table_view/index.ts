@@ -124,9 +124,9 @@ export default class TableView extends ViewMode<StateInfo> {
         const viewStorage = await this.viewStorage.restore();
         this.persistentData = viewStorage?.tableData || {};
 
-        const columnDefs = buildColumnDefinitions(info);
         const { definitions: rowData, hasChildren } = await buildRowDefinitions(this.parentNote, info);
         const movableRows = canReorderRows(this.parentNote) && !hasChildren;
+        const columnDefs = buildColumnDefinitions(info, movableRows);
 
         this.api = new Tabulator(el, {
             layout: "fitDataFill",
@@ -249,7 +249,7 @@ export default class TableView extends ViewMode<StateInfo> {
         }
 
         const info = getAttributeDefinitionInformation(this.parentNote);
-        const columnDefs = buildColumnDefinitions(info, this.persistentData?.columns);
+        const columnDefs = buildColumnDefinitions(info, !!this.api.options.movableRows, this.persistentData?.columns);
         this.api.setColumns(columnDefs);
     }
 

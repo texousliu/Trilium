@@ -37,7 +37,12 @@ export function NoteTitleFormatter(cell: CellComponent) {
 }
 
 export function RowNumberFormatter(cell: CellComponent) {
-    return `<span class="bx bx-dots-vertical-rounded"></span> ` + cell.getRow().getPosition(true);
+    let html = "";
+    if (cell.getColumn().getDefinition().rowHandle) {
+        html += `<span class="bx bx-dots-vertical-rounded"></span> `;
+    }
+    html += cell.getRow().getPosition(true);
+    return html;
 }
 
 function buildNoteLink(noteId: string) {

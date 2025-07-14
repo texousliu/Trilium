@@ -1,7 +1,7 @@
 import { RelationEditor } from "./relation_editor.js";
 import { NoteFormatter, NoteTitleFormatter, RowNumberFormatter } from "./formatters.js";
 import { applyHeaderMenu } from "./header-menu.js";
-import type { ColumnDefinition } from "tabulator-tables";
+import type { ColumnDefinition, Tabulator } from "tabulator-tables";
 import { LabelType } from "../../../services/promoted_attribute_definition_parser.js";
 
 type ColumnType = LabelType | "relation";
@@ -42,7 +42,7 @@ const labelTypeMappings: Record<ColumnType, Partial<ColumnDefinition>> = {
     }
 };
 
-export function buildColumnDefinitions(info: AttributeDefinitionInformation[], existingColumnData?: ColumnDefinition[]) {
+export function buildColumnDefinitions(info: AttributeDefinitionInformation[], movableRows: boolean, existingColumnData?: ColumnDefinition[]) {
     const columnDefs: ColumnDefinition[] = [
         {
             title: "#",
@@ -50,7 +50,7 @@ export function buildColumnDefinitions(info: AttributeDefinitionInformation[], e
             hozAlign: "center",
             resizable: false,
             frozen: true,
-            rowHandle: true,
+            rowHandle: movableRows,
             formatter: RowNumberFormatter
         },
         {
