@@ -6,7 +6,7 @@ import SpacedUpdate from "../../../services/spaced_update.js";
 import type { CommandListenerData, EventData } from "../../../components/app_context.js";
 import type { Attribute } from "../../../services/attribute_parser.js";
 import note_create, { CreateNoteOpts } from "../../../services/note_create.js";
-import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule} from 'tabulator-tables';
+import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule, Options} from 'tabulator-tables';
 import "tabulator-tables/dist/css/tabulator.css";
 import "../../../../src/stylesheets/table.css";
 import { canReorderRows, configureReorderingRows } from "./dragging.js";
@@ -64,6 +64,26 @@ const TPL = /*html*/`
     .tabulator .tabulator-footer .tabulator-footer-contents {
         justify-content: left;
         gap: 0.5em;
+    }
+
+    .tabulator button.tree-expand,
+    .tabulator button.tree-collapse {
+        display: inline-block;
+        appearance: none;
+        border: 0;
+        background: transparent;
+        width: 1.5em;
+        position: relative;
+        vertical-align: middle;
+    }
+
+    .tabulator button.tree-expand span,
+    .tabulator button.tree-collapse span {
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-size: 1.5em;
+        transform: translateY(-50%);
     }
     </style>
 
@@ -127,8 +147,7 @@ export default class TableView extends ViewMode<StateInfo> {
         const { definitions: rowData, hasChildren } = await buildRowDefinitions(this.parentNote, info);
         const movableRows = canReorderRows(this.parentNote) && !hasChildren;
         const columnDefs = buildColumnDefinitions(info, movableRows);
-
-        this.api = new Tabulator(el, {
+        let opts: Options = {
             layout: "fitDataFill",
             index: "noteId",
             columns: columnDefs,
@@ -136,16 +155,25 @@ export default class TableView extends ViewMode<StateInfo> {
             persistence: true,
             movableColumns: true,
             movableRows,
-            dataTree: hasChildren,
-            dataTreeElementColumn: "title",
             footerElement: buildFooter(this.parentNote),
             persistenceWriterFunc: (_id, type: string, data: object) => {
                 (this.persistentData as Record<string, {}>)[type] = data;
                 this.spacedUpdate.scheduleUpdate();
             },
             persistenceReaderFunc: (_id, type: string) => this.persistentData?.[type],
-        });
+        };
 
+        if (hasChildren) {
+            opts = {
+                ...opts,
+                dataTree: hasChildren,
+                dataTreeElementColumn: "title",
+                dataTreeExpandElement: `<button class="tree-expand"><span class="bx bx-chevron-right"></span></button>`,
+                dataTreeCollapseElement: `<button class="tree-collapse"><span class="bx bx-chevron-down"></span></button>`
+            }
+        }
+
+        this.api = new Tabulator(el, opts);
         if (movableRows) {
             configureReorderingRows(this.api);
         }
