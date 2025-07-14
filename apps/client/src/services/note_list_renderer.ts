@@ -47,7 +47,13 @@ export default class NoteListRenderer {
     }
 
     get isFullHeight() {
-        return this.viewMode?.isFullHeight;
+        switch (this.viewType) {
+            case "list":
+            case "grid":
+                return false;
+            default:
+                return true;
+        }
     }
 
     async renderList() {

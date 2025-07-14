@@ -120,10 +120,6 @@ export default class TableView extends ViewMode<StateInfo> {
         args.$parent.append(this.$root);
     }
 
-    get isFullHeight(): boolean {
-        return true;
-    }
-
     async renderList() {
         this.$container.empty();
         this.renderTable(this.$container[0]);

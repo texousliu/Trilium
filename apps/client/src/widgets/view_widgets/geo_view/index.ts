@@ -243,10 +243,6 @@ export default class GeoView extends ViewMode<MapData> {
         }
     }
 
-    get isFullHeight(): boolean {
-        return true;
-    }
-
     #changeState(newState: State) {
         this._state = newState;
         this.$container.toggleClass("placing-note", newState === State.NewNote);

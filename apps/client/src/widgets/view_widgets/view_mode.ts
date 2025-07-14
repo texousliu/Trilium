@@ -39,11 +39,6 @@ export default abstract class ViewMode<T extends object> extends Component {
         // Do nothing by default.
     }
 
-    get isFullHeight() {
-        // Override to change its value.
-        return false;
-    }
-
     get isReadOnly() {
         return this.parentNote.hasLabel("readOnly");
     }

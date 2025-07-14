@@ -129,10 +129,6 @@ export default class CalendarView extends ViewMode<{}> {
         args.$parent.append(this.$root);
     }
 
-    get isFullHeight(): boolean {
-        return true;
-    }
-
     async renderList(): Promise<JQuery<HTMLElement> | undefined> {
         this.isCalendarRoot = this.parentNote.hasLabel("calendarRoot") || this.parentNote.hasLabel("workspaceCalendarRoot");
         const isEditable = !this.isCalendarRoot;
