@@ -168,12 +168,6 @@ export default class NoteListWidget extends NoteContextAwareWidget {
             this.refresh();
             this.checkRenderStatus();
         }
-
-        // Inform the view mode of changes and refresh if needed.
-        if (this.viewMode && this.viewMode.onEntitiesReloaded(e)) {
-            this.refresh();
-            this.checkRenderStatus();
-        }
     }
 
     buildTouchBarCommand(data: CommandListenerData<"buildTouchBar">) {

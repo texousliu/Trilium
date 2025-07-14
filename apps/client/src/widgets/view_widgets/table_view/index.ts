@@ -101,7 +101,6 @@ export default class TableView extends ViewMode<StateInfo> {
 
     private $root: JQuery<HTMLElement>;
     private $container: JQuery<HTMLElement>;
-    private args: ViewModeArgs;
     private spacedUpdate: SpacedUpdate;
     private api?: Tabulator;
     private newAttribute?: Attribute;
@@ -112,7 +111,6 @@ export default class TableView extends ViewMode<StateInfo> {
 
         this.$root = $(TPL);
         this.$container = this.$root.find(".table-view-container");
-        this.args = args;
         this.spacedUpdate = new SpacedUpdate(() => this.onSave(), 5_000);
         this.persistentData = {};
         args.$parent.append(this.$root);
@@ -257,9 +255,9 @@ export default class TableView extends ViewMode<StateInfo> {
             this.#manageColumnUpdate();
         }
 
-        if (loadResults.getBranchRows().some(branch => branch.parentNoteId === this.parentNote.noteId || this.args.noteIds.includes(branch.parentNoteId ?? ""))
-            || loadResults.getNoteIds().some(noteId => this.args.noteIds.includes(noteId)
-            || loadResults.getAttributeRows().some(attr => this.args.noteIds.includes(attr.noteId!)))) {
+        if (loadResults.getBranchRows().some(branch => branch.parentNoteId === this.parentNote.noteId || this.noteIds.includes(branch.parentNoteId ?? ""))
+            || loadResults.getNoteIds().some(noteId => this.noteIds.includes(noteId)
+            || loadResults.getAttributeRows().some(attr => this.noteIds.includes(attr.noteId!)))) {
             this.#manageRowsUpdate();
         }
 

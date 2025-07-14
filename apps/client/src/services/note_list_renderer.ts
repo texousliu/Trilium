@@ -43,19 +43,9 @@ export default class NoteListRenderer {
 
     async renderList() {
         const args = this.args;
-
-        let noteIds: string[];
-        if (this.viewType === "list" || this.viewType === "grid") {
-            noteIds = args.parentNote.getChildNoteIds();
-        } else {
-            noteIds = await args.parentNote.getSubtreeNoteIds();
-        }
-
-        const viewMode = this.#buildViewMode({
-            ...args,
-            noteIds
-        });
+        const viewMode = this.#buildViewMode(args);
         this.viewMode = viewMode;
+        await viewMode.beforeRender();
         return await viewMode.renderList();
     }
 

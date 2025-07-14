@@ -113,7 +113,6 @@ export default class CalendarView extends ViewMode<{}> {
 
     private $root: JQuery<HTMLElement>;
     private $calendarContainer: JQuery<HTMLElement>;
-    private noteIds: string[];
     private calendar?: Calendar;
     private isCalendarRoot: boolean;
     private lastView?: string;
@@ -124,7 +123,6 @@ export default class CalendarView extends ViewMode<{}> {
 
         this.$root = $(TPL);
         this.$calendarContainer = this.$root.find(".calendar-container");
-        this.noteIds = args.noteIds;
         this.isCalendarRoot = false;
         args.$parent.append(this.$root);
     }
