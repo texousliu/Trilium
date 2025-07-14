@@ -1952,7 +1952,8 @@
     "hide-column": "Hide column \"{{title}}\"",
     "show-hide-columns": "Show/hide columns",
     "row-insert-above": "Insert row above",
-    "row-insert-below": "Insert row below"
+    "row-insert-below": "Insert row below",
+    "row-insert-child": "Insert child note"
   },
   "book_properties_config": {
     "hide-weekends": "Hide weekends",

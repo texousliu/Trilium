@@ -229,8 +229,8 @@ export default class TableView extends ViewMode<StateInfo> {
         console.log("Save attributes", this.newAttribute);
     }
 
-    addNewRowCommand({ customOpts }: { customOpts: CreateNoteOpts }) {
-        const parentNotePath = this.args.parentNotePath;
+    addNewRowCommand({ customOpts, parentNotePath: customNotePath }: { customOpts: CreateNoteOpts, parentNotePath?: string }) {
+        const parentNotePath = customNotePath ?? this.args.parentNotePath;
         if (parentNotePath) {
             const opts: CreateNoteOpts = {
                 activate: false,

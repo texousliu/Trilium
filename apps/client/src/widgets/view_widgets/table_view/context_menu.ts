@@ -5,6 +5,7 @@ import branches from "../../../services/branches.js";
 import { t } from "../../../services/i18n.js";
 import link_context_menu from "../../../menus/link_context_menu.js";
 import type FNote from "../../../entities/fnote.js";
+import froca from "../../../services/froca.js";
 
 export function setupContextMenu(tabulator: Tabulator, parentNote: FNote) {
     tabulator.on("rowContext", (e, row) => showRowContextMenu(e, row, parentNote));
@@ -115,6 +116,23 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
                             target: "before",
                             targetBranchId: rowData.branchId,
                         }
+                    });
+                }
+            },
+            {
+                title: t("table_view.row-insert-child"),
+                uiIcon: "bx bx-empty",
+                handler: async () => {
+                    const branchId = row.getData().branchId;
+                    const note = await froca.getBranch(branchId)?.getNote();
+                    const bestNotePath = note?.getBestNotePath(parentNote.noteId);
+                    const target = e.target;
+                    if (!target) {
+                        return;
+                    }
+                    const component = $(target).closest(".component").prop("component");
+                    component.triggerCommand("addNewRow", {
+                        parentNotePath: bestNotePath?.join("/")
                     });
                 }
             },
