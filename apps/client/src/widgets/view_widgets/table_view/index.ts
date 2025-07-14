@@ -14,7 +14,6 @@ import buildFooter from "./footer.js";
 import getAttributeDefinitionInformation, { buildRowDefinitions, TableData } from "./rows.js";
 import { AttributeDefinitionInformation, buildColumnDefinitions } from "./columns.js";
 import { setupContextMenu } from "./context_menu.js";
-import { Unwrapped } from "knockout";
 
 const TPL = /*html*/`
 <div class="table-view">
@@ -145,7 +144,10 @@ export default class TableView extends ViewMode<StateInfo> {
             },
             persistenceReaderFunc: (_id, type: string) => this.persistentData?.[type],
         });
-        configureReorderingRows(this.api);
+
+        if (movableRows) {
+            configureReorderingRows(this.api);
+        }
         setupContextMenu(this.api, this.parentNote);
         this.setupEditing();
     }
