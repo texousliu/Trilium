@@ -4,17 +4,16 @@ import attributes, { setAttribute, setLabel } from "../../../services/attributes
 import server from "../../../services/server.js";
 import SpacedUpdate from "../../../services/spaced_update.js";
 import type { CommandListenerData, EventData } from "../../../components/app_context.js";
-import type { Attribute } from "../../../services/attribute_parser.js";
 import note_create, { CreateNoteOpts } from "../../../services/note_create.js";
 import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule, Options, RowComponent, ColumnComponent} from 'tabulator-tables';
 import "tabulator-tables/dist/css/tabulator.css";
 import "../../../../src/stylesheets/table.css";
 import { canReorderRows, configureReorderingRows } from "./dragging.js";
 import buildFooter from "./footer.js";
-import getAttributeDefinitionInformation, { buildRowDefinitions, TableData } from "./rows.js";
+import getAttributeDefinitionInformation, { buildRowDefinitions } from "./rows.js";
 import { AttributeDefinitionInformation, buildColumnDefinitions } from "./columns.js";
 import { setupContextMenu } from "./context_menu.js";
-import AttributeDetailWidget from "../../attribute_widgets/attribute_detail.js";
+import TableColumnEditing from "./col_editing.js";
 
 const TPL = /*html*/`
 <div class="table-view">
@@ -104,10 +103,8 @@ export default class TableView extends ViewMode<StateInfo> {
     private $container: JQuery<HTMLElement>;
     private spacedUpdate: SpacedUpdate;
     private api?: Tabulator;
-    private newAttribute?: Attribute;
-    private newAttributePosition?: number;
     private persistentData: StateInfo["tableData"];
-    private attributeDetailWidget: AttributeDetailWidget;
+    private colEditing?: TableColumnEditing;
 
     constructor(args: ViewModeArgs) {
         super(args, "table");
@@ -117,11 +114,6 @@ export default class TableView extends ViewMode<StateInfo> {
         this.spacedUpdate = new SpacedUpdate(() => this.onSave(), 5_000);
         this.persistentData = {};
         args.$parent.append(this.$root);
-
-        this.attributeDetailWidget = new AttributeDetailWidget()
-                .contentSized()
-                .setParent(glob.getComponentByEl(args.$parent[0]));
-        args.$parent.append(this.attributeDetailWidget.render());
     }
 
     async renderList() {
@@ -175,6 +167,10 @@ export default class TableView extends ViewMode<StateInfo> {
         }
 
         this.api = new Tabulator(el, opts);
+
+        this.colEditing = new TableColumnEditing(this.args.$parent, this.args.parentNote, this.api);
+        this.child(this.colEditing);
+
         if (movableRows) {
             configureReorderingRows(this.api);
         }
@@ -213,51 +209,6 @@ export default class TableView extends ViewMode<StateInfo> {
                     }
                 }
             }
-        });
-    }
-
-    async reloadAttributesCommand() {
-        console.log("Reload attributes");
-    }
-
-    async updateAttributeListCommand({ attributes }: CommandListenerData<"updateAttributeList">) {
-        this.newAttribute = attributes[0];
-    }
-
-    async saveAttributesCommand() {
-        if (!this.newAttribute) {
-            return;
-        }
-
-        const { name, value } = this.newAttribute;
-        attributes.addLabel(this.parentNote.noteId, name, value, true);
-        console.log("Save attributes", this.newAttribute);
-    }
-
-    addNewTableColumnEvent({ referenceColumn, direction }: EventData<"addNewTableColumn">) {
-        const attr: Attribute = {
-            type: "label",
-            name: "label:myLabel",
-            value: "promoted,single,text"
-        };
-
-        if (referenceColumn && this.api) {
-            this.newAttributePosition = this.api.getColumns().indexOf(referenceColumn);
-
-            if (direction === "after") {
-                this.newAttributePosition++;
-            }
-        } else {
-            this.newAttributePosition = undefined;
-        }
-
-        this.attributeDetailWidget!.showAttributeDetail({
-            attribute: attr,
-            allAttributes: [ attr ],
-            isOwned: true,
-            x: 0,
-            y: 75,
-            focus: "name"
         });
     }
 
@@ -312,9 +263,9 @@ export default class TableView extends ViewMode<StateInfo> {
         }
 
         const info = getAttributeDefinitionInformation(this.parentNote);
-        const columnDefs = buildColumnDefinitions(info, !!this.api.options.movableRows, this.persistentData?.columns, this.newAttributePosition);
+        const columnDefs = buildColumnDefinitions(info, !!this.api.options.movableRows, this.persistentData?.columns, this.colEditing?.getNewAttributePosition());
         this.api.setColumns(columnDefs);
-        this.newAttributePosition = undefined;
+        this.colEditing?.resetNewAttributePosition();
     }
 
     async #manageRowsUpdate() {
