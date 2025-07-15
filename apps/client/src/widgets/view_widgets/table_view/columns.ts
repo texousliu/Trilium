@@ -93,30 +93,30 @@ export function buildColumnDefinitions(info: AttributeDefinitionInformation[], m
 }
 
 export function restoreExistingData(newDefs: ColumnDefinition[], oldDefs: ColumnDefinition[], position?: number) {
-    const existingColumns: ColumnDefinition[] = []
-    const byField = new Map<string, ColumnDefinition>;
-    for (const def of oldDefs) {
-        byField.set(def.field ?? "", def);
-        existingColumns.push(def);
-    }
+    // 1. Keep existing columns, but restore their properties like width, visibility and order.
+    const newItemsByField = new Map<string, ColumnDefinition>(
+        newDefs.map(def => [def.field!, def])
+    );
+    const existingColumns = oldDefs
+        .map(item => {
+            return {
+                ...newItemsByField.get(item.field!),
+                width: item.width,
+                visible: item.visible,
+            };
+        }) as ColumnDefinition[];
 
-    const newColumns: ColumnDefinition[] = [];
-    for (const newDef of newDefs) {
-        const oldDef = byField.get(newDef.field ?? "");
-        if (!oldDef) {
-            newColumns.push(newDef);
-        } else {
-            newDef.width = oldDef.width;
-            newDef.visible = oldDef.visible;
-        }
-    }
+    // 2. Determine new columns.
+    const existingFields = new Set(existingColumns.map(item => item.field));
+    const newColumns = newDefs
+        .filter(item => !existingFields.has(item.field!));
 
     // Clamp position to a valid range
     const insertPos = position !== undefined
         ? Math.min(Math.max(position, 0), existingColumns.length)
         : existingColumns.length;
 
-    // Insert new columns at the specified position
+    // 3. Insert new columns at the specified position
     return [
         ...existingColumns.slice(0, insertPos),
         ...newColumns,
