@@ -1,10 +1,7 @@
-import froca from "../../../services/froca.js";
 import ViewMode, { type ViewModeArgs } from "../view_mode.js";
-import attributes, { setAttribute, setLabel } from "../../../services/attributes.js";
-import server from "../../../services/server.js";
+import attributes from "../../../services/attributes.js";
 import SpacedUpdate from "../../../services/spaced_update.js";
-import type { CommandListenerData, EventData } from "../../../components/app_context.js";
-import note_create, { CreateNoteOpts } from "../../../services/note_create.js";
+import type { EventData } from "../../../components/app_context.js";
 import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule, Options, RowComponent, ColumnComponent} from 'tabulator-tables';
 import "tabulator-tables/dist/css/tabulator.css";
 import "../../../../src/stylesheets/table.css";
@@ -14,6 +11,7 @@ import getAttributeDefinitionInformation, { buildRowDefinitions } from "./rows.j
 import { AttributeDefinitionInformation, buildColumnDefinitions } from "./columns.js";
 import { setupContextMenu } from "./context_menu.js";
 import TableColumnEditing from "./col_editing.js";
+import TableRowEditing from "./row_editing.js";
 
 const TPL = /*html*/`
 <div class="table-view">
@@ -171,62 +169,18 @@ export default class TableView extends ViewMode<StateInfo> {
         this.colEditing = new TableColumnEditing(this.args.$parent, this.args.parentNote, this.api);
         this.child(this.colEditing);
 
+        this.child(new TableRowEditing(this.api, this.args.parentNotePath!));
+
         if (movableRows) {
             configureReorderingRows(this.api);
         }
         setupContextMenu(this.api, this.parentNote);
-        this.setupEditing();
     }
 
     private onSave() {
         this.viewStorage.store({
             tableData: this.persistentData,
         });
-    }
-
-    private setupEditing() {
-        this.api!.on("cellEdited", async (cell) => {
-            const noteId = cell.getRow().getData().noteId;
-            const field = cell.getField();
-            let newValue = cell.getValue();
-
-            if (field === "title") {
-                server.put(`notes/${noteId}/title`, { title: newValue });
-                return;
-            }
-
-            if (field.includes(".")) {
-                const [ type, name ] = field.split(".", 2);
-                if (type === "labels") {
-                    if (typeof newValue === "boolean") {
-                        newValue = newValue ? "true" : "false";
-                    }
-                    setLabel(noteId, name, newValue);
-                } else if (type === "relations") {
-                    const note = await froca.getNote(noteId);
-                    if (note) {
-                        setAttribute(note, "relation", name, newValue);
-                    }
-                }
-            }
-        });
-    }
-
-    addNewRowCommand({ customOpts, parentNotePath: customNotePath }: CommandListenerData<"addNewRow">) {
-        const parentNotePath = customNotePath ?? this.args.parentNotePath;
-        if (parentNotePath) {
-            const opts: CreateNoteOpts = {
-                activate: false,
-                ...customOpts
-            }
-            note_create.createNote(parentNotePath, opts).then(({ branch }) => {
-                if (branch) {
-                    setTimeout(() => {
-                        this.focusOnBranch(branch?.branchId);
-                    });
-                }
-            })
-        }
     }
 
     async onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
@@ -285,40 +239,5 @@ export default class TableView extends ViewMode<StateInfo> {
         return false;
     }
 
-    focusOnBranch(branchId: string) {
-        if (!this.api) {
-            return;
-        }
-
-        const row = findRowDataById(this.api.getRows(), branchId);
-        if (!row) {
-            return;
-        }
-
-        // Expand the parent tree if any.
-        if (this.api.options.dataTree) {
-            const parent = row.getTreeParent();
-            if (parent) {
-                parent.treeExpand();
-            }
-        }
-
-        row.getCell("title").edit();
-    }
-
 }
 
-
-function findRowDataById(rows: RowComponent[], branchId: string): RowComponent | null {
-    for (let row of rows) {
-        const item = row.getIndex() as string;
-
-        if (item === branchId) {
-            return row;
-        }
-
-        let found = findRowDataById(row.getTreeChildren(), branchId);
-        if (found) return found;
-    }
-    return null;
-}
