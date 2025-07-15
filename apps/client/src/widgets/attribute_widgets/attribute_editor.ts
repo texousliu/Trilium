@@ -426,7 +426,7 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
             curNode = curNode.previousSibling;
 
             if ((curNode as ModelElement).name === "reference") {
-                clickIndex += (curNode.getAttribute("notePath") as string).length + 1;
+                clickIndex += (curNode.getAttribute("href") as string).length + 1;
             } else if ("data" in curNode) {
                 clickIndex += (curNode.data as string).length;
             }
