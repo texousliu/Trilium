@@ -5,6 +5,7 @@ import Component from "../../../components/component";
 import { CommandListenerData, EventData } from "../../../components/app_context";
 import attributes from "../../../services/attributes";
 import FNote from "../../../entities/fnote";
+import { renameColumn } from "./bulk_actions";
 
 export default class TableColumnEditing extends Component {
 
@@ -73,13 +74,20 @@ export default class TableColumnEditing extends Component {
             return;
         }
 
-        const { name, value } = this.newAttribute;
+        const { name, type, value } = this.newAttribute;
+
+        this.api.blockRedraw();
 
         if (this.existingAttributeToEdit && this.existingAttributeToEdit.name !== name) {
             attributes.removeOwnedLabelByName(this.parentNote, this.existingAttributeToEdit.name);
+
+            const oldName = this.existingAttributeToEdit.name.split(":")[1];
+            const newName = name.split(":")[1];
+            await renameColumn(this.parentNote.noteId, type, oldName, newName);
         }
 
         attributes.setLabel(this.parentNote.noteId, name, value);
+        this.api.restoreRedraw();
     }
 
     getNewAttributePosition() {
