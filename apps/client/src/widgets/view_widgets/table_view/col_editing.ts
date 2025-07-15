@@ -10,6 +10,7 @@ export default class TableColumnEditing extends Component {
 
     private attributeDetailWidget: AttributeDetailWidget;
     private newAttributePosition?: number;
+    private existingAttributeToEdit?: Attribute;
     private api: Tabulator;
     private newAttribute?: Attribute;
     private parentNote: FNote;
@@ -30,7 +31,9 @@ export default class TableColumnEditing extends Component {
 
         if (columnToEdit) {
             attr = this.getAttributeFromField(columnToEdit.getField());
-            console.log("Built ", attr);
+            this.existingAttributeToEdit = { ...attr };
+        } else {
+            this.existingAttributeToEdit = undefined;
         }
 
         if (!attr) {
@@ -71,6 +74,11 @@ export default class TableColumnEditing extends Component {
         }
 
         const { name, value } = this.newAttribute;
+
+        if (this.existingAttributeToEdit && this.existingAttributeToEdit.name !== name) {
+            attributes.removeOwnedLabelByName(this.parentNote, this.existingAttributeToEdit.name);
+        }
+
         attributes.setLabel(this.parentNote.noteId, name, value);
     }
 

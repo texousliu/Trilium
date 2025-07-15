@@ -99,6 +99,7 @@ export function restoreExistingData(newDefs: ColumnDefinition[], oldDefs: Column
         newDefs.map(def => [def.field!, def])
     );
     const existingColumns = oldDefs
+        .filter(item => item.field && newItemsByField.has(item.field!))
         .map(item => {
             return {
                 ...newItemsByField.get(item.field!),
