@@ -31,11 +31,12 @@ export default class TableColumnEditing extends Component {
     addNewTableColumnCommand({ referenceColumn, columnToEdit, direction }: EventData<"addNewTableColumn">) {
         let attr: Attribute | undefined;
 
+        this.existingAttributeToEdit = undefined;
         if (columnToEdit) {
             attr = this.getAttributeFromField(columnToEdit.getField());
-            this.existingAttributeToEdit = { ...attr };
-        } else {
-            this.existingAttributeToEdit = undefined;
+            if (attr) {
+                this.existingAttributeToEdit = { ...attr };
+            }
         }
 
         if (!attr) {
