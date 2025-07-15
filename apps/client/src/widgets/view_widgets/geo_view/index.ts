@@ -243,10 +243,6 @@ export default class GeoView extends ViewMode<MapData> {
         }
     }
 
-    get isFullHeight(): boolean {
-        return true;
-    }
-
     #changeState(newState: State) {
         this._state = newState;
         this.$container.toggleClass("placing-note", newState === State.NewNote);
@@ -255,7 +251,7 @@ export default class GeoView extends ViewMode<MapData> {
         }
     }
 
-    onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">): boolean | void {
+    async onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
         // If any of the children branches are altered.
         if (loadResults.getBranchRows().find((branch) => branch.parentNoteId === this.parentNote.noteId)) {
             this.#reloadMarkers();

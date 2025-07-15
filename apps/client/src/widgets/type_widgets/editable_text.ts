@@ -265,7 +265,12 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     }
 
     focus() {
-        this.$editor.trigger("focus");
+        const editor = this.watchdog.editor;
+        if (editor) {
+            editor.editing.view.focus();
+        } else {
+            this.$editor.trigger("focus");
+        }
     }
 
     scrollToEnd() {

@@ -1,19 +1,17 @@
-import froca from "../../../services/froca.js";
 import ViewMode, { type ViewModeArgs } from "../view_mode.js";
-import attributes, { setAttribute, setLabel } from "../../../services/attributes.js";
-import server from "../../../services/server.js";
+import attributes from "../../../services/attributes.js";
 import SpacedUpdate from "../../../services/spaced_update.js";
-import type { CommandListenerData, EventData } from "../../../components/app_context.js";
-import type { Attribute } from "../../../services/attribute_parser.js";
-import note_create, { CreateNoteOpts } from "../../../services/note_create.js";
-import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MenuModule, MoveRowsModule, ColumnDefinition} from 'tabulator-tables';
+import type { EventData } from "../../../components/app_context.js";
+import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule, Options, RowComponent, ColumnComponent} from 'tabulator-tables';
 import "tabulator-tables/dist/css/tabulator.css";
 import "../../../../src/stylesheets/table.css";
 import { canReorderRows, configureReorderingRows } from "./dragging.js";
 import buildFooter from "./footer.js";
-import getPromotedAttributeInformation, { buildRowDefinitions } from "./rows.js";
-import { buildColumnDefinitions } from "./columns.js";
+import getAttributeDefinitionInformation, { buildRowDefinitions } from "./rows.js";
+import { AttributeDefinitionInformation, buildColumnDefinitions } from "./columns.js";
 import { setupContextMenu } from "./context_menu.js";
+import TableColumnEditing from "./col_editing.js";
+import TableRowEditing from "./row_editing.js";
 
 const TPL = /*html*/`
 <div class="table-view">
@@ -65,6 +63,26 @@ const TPL = /*html*/`
         justify-content: left;
         gap: 0.5em;
     }
+
+    .tabulator button.tree-expand,
+    .tabulator button.tree-collapse {
+        display: inline-block;
+        appearance: none;
+        border: 0;
+        background: transparent;
+        width: 1.5em;
+        position: relative;
+        vertical-align: middle;
+    }
+
+    .tabulator button.tree-expand span,
+    .tabulator button.tree-collapse span {
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-size: 1.5em;
+        transform: translateY(-50%);
+    }
     </style>
 
     <div class="table-view-container"></div>
@@ -81,27 +99,20 @@ export default class TableView extends ViewMode<StateInfo> {
 
     private $root: JQuery<HTMLElement>;
     private $container: JQuery<HTMLElement>;
-    private args: ViewModeArgs;
     private spacedUpdate: SpacedUpdate;
     private api?: Tabulator;
-    private newAttribute?: Attribute;
     private persistentData: StateInfo["tableData"];
-    /** If set to a note ID, whenever the rows will be updated, the title of the note will be automatically focused for editing. */
-    private noteIdToEdit?: string;
+    private colEditing?: TableColumnEditing;
+    private rowEditing?: TableRowEditing;
 
     constructor(args: ViewModeArgs) {
         super(args, "table");
 
         this.$root = $(TPL);
         this.$container = this.$root.find(".table-view-container");
-        this.args = args;
         this.spacedUpdate = new SpacedUpdate(() => this.onSave(), 5_000);
         this.persistentData = {};
         args.$parent.append(this.$root);
-    }
-
-    get isFullHeight(): boolean {
-        return true;
     }
 
     async renderList() {
@@ -111,29 +122,27 @@ export default class TableView extends ViewMode<StateInfo> {
     }
 
     private async renderTable(el: HTMLElement) {
-        const modules = [SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, MenuModule];
+        const info = getAttributeDefinitionInformation(this.parentNote);
+        const modules = [ SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, DataTreeModule ];
         for (const module of modules) {
             Tabulator.registerModule(module);
         }
 
-        this.initialize(el);
+        this.initialize(el, info);
     }
 
-    private async initialize(el: HTMLElement) {
-        const notes = await froca.getNotes(this.args.noteIds);
-        const info = getPromotedAttributeInformation(this.parentNote);
-
+    private async initialize(el: HTMLElement, info: AttributeDefinitionInformation[]) {
         const viewStorage = await this.viewStorage.restore();
         this.persistentData = viewStorage?.tableData || {};
 
-        const columnDefs = buildColumnDefinitions(info);
-        const movableRows = canReorderRows(this.parentNote);
-
-        this.api = new Tabulator(el, {
+        const { definitions: rowData, hasSubtree: hasChildren } = await buildRowDefinitions(this.parentNote, info);
+        const movableRows = canReorderRows(this.parentNote) && !hasChildren;
+        const columnDefs = buildColumnDefinitions(info, movableRows);
+        let opts: Options = {
             layout: "fitDataFill",
-            index: "noteId",
+            index: "branchId",
             columns: columnDefs,
-            data: await buildRowDefinitions(this.parentNote, notes, info),
+            data: rowData,
             persistence: true,
             movableColumns: true,
             movableRows,
@@ -143,10 +152,28 @@ export default class TableView extends ViewMode<StateInfo> {
                 this.spacedUpdate.scheduleUpdate();
             },
             persistenceReaderFunc: (_id, type: string) => this.persistentData?.[type],
-        });
-        configureReorderingRows(this.api);
+        };
+
+        if (hasChildren) {
+            opts = {
+                ...opts,
+                dataTree: hasChildren,
+                dataTreeStartExpanded: true,
+                dataTreeElementColumn: "title",
+                dataTreeExpandElement: `<button class="tree-expand"><span class="bx bx-chevron-right"></span></button>`,
+                dataTreeCollapseElement: `<button class="tree-collapse"><span class="bx bx-chevron-down"></span></button>`
+            }
+        }
+
+        this.api = new Tabulator(el, opts);
+
+        this.colEditing = new TableColumnEditing(this.args.$parent, this.args.parentNote, this.api);
+        this.rowEditing = new TableRowEditing(this.api, this.args.parentNotePath!);
+
+        if (movableRows) {
+            configureReorderingRows(this.api);
+        }
         setupContextMenu(this.api, this.parentNote);
-        this.setupEditing();
     }
 
     private onSave() {
@@ -155,72 +182,14 @@ export default class TableView extends ViewMode<StateInfo> {
         });
     }
 
-    private setupEditing() {
-        this.api!.on("cellEdited", async (cell) => {
-            const noteId = cell.getRow().getData().noteId;
-            const field = cell.getField();
-            let newValue = cell.getValue();
-
-            if (field === "title") {
-                server.put(`notes/${noteId}/title`, { title: newValue });
-                return;
-            }
-
-            if (field.includes(".")) {
-                const [ type, name ] = field.split(".", 2);
-                if (type === "labels") {
-                    if (typeof newValue === "boolean") {
-                        newValue = newValue ? "true" : "false";
-                    }
-                    setLabel(noteId, name, newValue);
-                } else if (type === "relations") {
-                    const note = await froca.getNote(noteId);
-                    if (note) {
-                        setAttribute(note, "relation", name, newValue);
-                    }
-                }
-            }
-        });
-    }
-
-    async reloadAttributesCommand() {
-        console.log("Reload attributes");
-    }
-
-    async updateAttributeListCommand({ attributes }: CommandListenerData<"updateAttributeList">) {
-        this.newAttribute = attributes[0];
-    }
-
-    async saveAttributesCommand() {
-        if (!this.newAttribute) {
-            return;
-        }
-
-        const { name, value } = this.newAttribute;
-        attributes.addLabel(this.parentNote.noteId, name, value, true);
-        console.log("Save attributes", this.newAttribute);
-    }
-
-    addNewRowCommand({ customOpts }: { customOpts: CreateNoteOpts }) {
-        const parentNotePath = this.args.parentNotePath;
-        if (parentNotePath) {
-            const opts: CreateNoteOpts = {
-                activate: false,
-                ...customOpts
-            }
-            console.log("Create with ", opts);
-            note_create.createNote(parentNotePath, opts).then(({ note }) => {
-                if (!note) {
-                    return;
-                }
-                this.noteIdToEdit = note.noteId;
-            })
-        }
-    }
-
-    onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">): boolean | void {
+    async onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
         if (!this.api) {
             return;
+        }
+
+        // Force a refresh if sorted is changed since we need to disable reordering.
+        if (loadResults.getAttributeRows().find(a => a.name === "sorted" && attributes.isAffecting(a, this.parentNote))) {
+            return true;
         }
 
         // Refresh if promoted attributes get changed.
@@ -228,13 +197,14 @@ export default class TableView extends ViewMode<StateInfo> {
             attr.type === "label" &&
             (attr.name?.startsWith("label:") || attr.name?.startsWith("relation:")) &&
             attributes.isAffecting(attr, this.parentNote))) {
+                console.log("Col update");
             this.#manageColumnUpdate();
         }
 
-        if (loadResults.getBranchRows().some(branch => branch.parentNoteId === this.parentNote.noteId)
-            || loadResults.getNoteIds().some(noteId => this.args.noteIds.includes(noteId)
-            || loadResults.getAttributeRows().some(attr => this.args.noteIds.includes(attr.noteId!)))) {
-            this.#manageRowsUpdate();
+        if (loadResults.getBranchRows().some(branch => branch.parentNoteId === this.parentNote.noteId || this.noteIds.includes(branch.parentNoteId ?? ""))
+            || loadResults.getNoteIds().some(noteId => this.noteIds.includes(noteId)
+            || loadResults.getAttributeRows().some(attr => this.noteIds.includes(attr.noteId!)))) {
+            return await this.#manageRowsUpdate();
         }
 
         return false;
@@ -245,27 +215,44 @@ export default class TableView extends ViewMode<StateInfo> {
             return;
         }
 
-        const info = getPromotedAttributeInformation(this.parentNote);
-        const columnDefs = buildColumnDefinitions(info, this.persistentData?.columns);
+        const info = getAttributeDefinitionInformation(this.parentNote);
+        const columnDefs = buildColumnDefinitions(info, !!this.api.options.movableRows, this.persistentData?.columns, this.colEditing?.getNewAttributePosition());
         this.api.setColumns(columnDefs);
+        this.colEditing?.resetNewAttributePosition();
     }
+
+    addNewRowCommand(e) {
+        this.rowEditing?.addNewRowCommand(e);
+    }
+
+    addNewTableColumnCommand(e) {
+        this.colEditing?.addNewTableColumnCommand(e);
+    }
+
+    updateAttributeListCommand(e) {
+        this.colEditing?.updateAttributeListCommand(e);
+    }
+
+    saveAttributesCommand() {
+        this.colEditing?.saveAttributesCommand();
+    }
+
 
     async #manageRowsUpdate() {
         if (!this.api) {
             return;
         }
 
-        const notes = await froca.getNotes(this.args.noteIds);
-        const info = getPromotedAttributeInformation(this.parentNote);
-        this.api.replaceData(await buildRowDefinitions(this.parentNote, notes, info));
+        const info = getAttributeDefinitionInformation(this.parentNote);
+        const { definitions, hasSubtree } = await buildRowDefinitions(this.parentNote, info);
 
-        if (this.noteIdToEdit) {
-            const row = this.api?.getRows().find(r => r.getData().noteId === this.noteIdToEdit);
-            if (row) {
-                row.getCell("title").edit();
-            }
-            this.noteIdToEdit = undefined;
+        // Force a refresh if the data tree needs enabling/disabling.
+        if (this.api.options.dataTree !== hasSubtree) {
+            return true;
         }
+
+        await this.api.replaceData(definitions);
+        return false;
     }
 
 }

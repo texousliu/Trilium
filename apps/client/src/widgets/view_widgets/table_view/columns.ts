@@ -1,12 +1,11 @@
 import { RelationEditor } from "./relation_editor.js";
-import { NoteFormatter, NoteTitleFormatter, RowNumberFormatter } from "./formatters.js";
-import { applyHeaderMenu } from "./header-menu.js";
+import { MonospaceFormatter, NoteFormatter, NoteTitleFormatter, RowNumberFormatter } from "./formatters.js";
 import type { ColumnDefinition } from "tabulator-tables";
 import { LabelType } from "../../../services/promoted_attribute_definition_parser.js";
 
 type ColumnType = LabelType | "relation";
 
-export interface PromotedAttributeInformation {
+export interface AttributeDefinitionInformation {
     name: string;
     title?: string;
     type?: ColumnType;
@@ -42,20 +41,21 @@ const labelTypeMappings: Record<ColumnType, Partial<ColumnDefinition>> = {
     }
 };
 
-export function buildColumnDefinitions(info: PromotedAttributeInformation[], existingColumnData?: ColumnDefinition[]) {
-    const columnDefs: ColumnDefinition[] = [
+export function buildColumnDefinitions(info: AttributeDefinitionInformation[], movableRows: boolean, existingColumnData?: ColumnDefinition[], position?: number) {
+    let columnDefs: ColumnDefinition[] = [
         {
             title: "#",
             headerSort: false,
             hozAlign: "center",
             resizable: false,
             frozen: true,
-            rowHandle: true,
-            formatter: RowNumberFormatter
+            rowHandle: movableRows,
+            formatter: RowNumberFormatter(movableRows)
         },
         {
             field: "noteId",
             title: "Note ID",
+            formatter: MonospaceFormatter,
             visible: false
         },
         {
@@ -86,27 +86,41 @@ export function buildColumnDefinitions(info: PromotedAttributeInformation[], exi
         seenFields.add(field);
     }
 
-    applyHeaderMenu(columnDefs);
     if (existingColumnData) {
-        restoreExistingData(columnDefs, existingColumnData);
+        columnDefs = restoreExistingData(columnDefs, existingColumnData, position);
     }
 
     return columnDefs;
 }
 
-function restoreExistingData(newDefs: ColumnDefinition[], oldDefs: ColumnDefinition[]) {
-    const byField = new Map<string, ColumnDefinition>;
-    for (const def of oldDefs) {
-        byField.set(def.field ?? "", def);
-    }
+export function restoreExistingData(newDefs: ColumnDefinition[], oldDefs: ColumnDefinition[], position?: number) {
+    // 1. Keep existing columns, but restore their properties like width, visibility and order.
+    const newItemsByField = new Map<string, ColumnDefinition>(
+        newDefs.map(def => [def.field!, def])
+    );
+    const existingColumns = oldDefs
+        .map(item => {
+            return {
+                ...newItemsByField.get(item.field!),
+                width: item.width,
+                visible: item.visible,
+            };
+        }) as ColumnDefinition[];
 
-    for (const newDef of newDefs) {
-        const oldDef = byField.get(newDef.field ?? "");
-        if (!oldDef) {
-            continue;
-        }
+    // 2. Determine new columns.
+    const existingFields = new Set(existingColumns.map(item => item.field));
+    const newColumns = newDefs
+        .filter(item => !existingFields.has(item.field!));
 
-        newDef.width = oldDef.width;
-        newDef.visible = oldDef.visible;
-    }
+    // Clamp position to a valid range
+    const insertPos = position !== undefined
+        ? Math.min(Math.max(position, 0), existingColumns.length)
+        : existingColumns.length;
+
+    // 3. Insert new columns at the specified position
+    return [
+        ...existingColumns.slice(0, insertPos),
+        ...newColumns,
+        ...existingColumns.slice(insertPos)
+    ];
 }

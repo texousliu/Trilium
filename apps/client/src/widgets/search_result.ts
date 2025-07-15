@@ -68,7 +68,6 @@ export default class SearchResultWidget extends NoteContextAwareWidget {
         const noteListRenderer = new NoteListRenderer({
             $parent: this.$content,
             parentNote: note,
-            noteIds: note.getChildNoteIds(),
             showNotePath: true
         });
         await noteListRenderer.renderList();

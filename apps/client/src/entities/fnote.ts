@@ -256,6 +256,15 @@ class FNote {
         return this.children;
     }
 
+    async getSubtreeNoteIds() {
+        let noteIds: (string | string[])[] = [];
+        for (const child of await this.getChildNotes()) {
+            noteIds.push(child.noteId);
+            noteIds.push(await child.getSubtreeNoteIds());
+        }
+        return noteIds.flat();
+    }
+
     async getChildNotes() {
         return await this.froca.getNotes(this.children);
     }

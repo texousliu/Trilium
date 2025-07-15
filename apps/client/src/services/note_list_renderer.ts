@@ -6,33 +6,18 @@ import TableView from "../widgets/view_widgets/table_view/index.js";
 import type { ViewModeArgs } from "../widgets/view_widgets/view_mode.js";
 import type ViewMode from "../widgets/view_widgets/view_mode.js";
 
+export type ArgsWithoutNoteId = Omit<ViewModeArgs, "noteIds">;
 export type ViewTypeOptions = "list" | "grid" | "calendar" | "table" | "geoMap";
 
 export default class NoteListRenderer {
 
     private viewType: ViewTypeOptions;
-    public viewMode: ViewMode<any> | null;
+    private args: ArgsWithoutNoteId;
+    public viewMode?: ViewMode<any>;
 
-    constructor(args: ViewModeArgs) {
+    constructor(args: ArgsWithoutNoteId) {
+        this.args = args;
         this.viewType = this.#getViewType(args.parentNote);
-
-        switch (this.viewType) {
-            case "list":
-            case "grid":
-                this.viewMode = new ListOrGridView(this.viewType, args);
-                break;
-            case "calendar":
-                this.viewMode = new CalendarView(args);
-                break;
-            case "table":
-                this.viewMode = new TableView(args);
-                break;
-            case "geoMap":
-                this.viewMode = new GeoView(args);
-                break;
-            default:
-                this.viewMode = null;
-        }
     }
 
     #getViewType(parentNote: FNote): ViewTypeOptions {
@@ -47,15 +32,36 @@ export default class NoteListRenderer {
     }
 
     get isFullHeight() {
-        return this.viewMode?.isFullHeight;
+        switch (this.viewType) {
+            case "list":
+            case "grid":
+                return false;
+            default:
+                return true;
+        }
     }
 
     async renderList() {
-        if (!this.viewMode) {
-            return null;
-        }
+        const args = this.args;
+        const viewMode = this.#buildViewMode(args);
+        this.viewMode = viewMode;
+        await viewMode.beforeRender();
+        return await viewMode.renderList();
+    }
 
-        return await this.viewMode.renderList();
+    #buildViewMode(args: ViewModeArgs) {
+        switch (this.viewType) {
+            case "calendar":
+                return new CalendarView(args);
+            case "table":
+                return new TableView(args);
+            case "geoMap":
+                return new GeoView(args);
+            case "list":
+            case "grid":
+            default:
+                return new ListOrGridView(this.viewType, args);
+        }
     }
 
 }

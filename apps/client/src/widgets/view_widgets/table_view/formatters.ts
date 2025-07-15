@@ -36,8 +36,19 @@ export function NoteTitleFormatter(cell: CellComponent) {
     return $noteRef[0].outerHTML;
 }
 
-export function RowNumberFormatter(cell: CellComponent) {
-    return `<span class="bx bx-dots-vertical-rounded"></span> ` + cell.getRow().getPosition(true);
+export function RowNumberFormatter(draggableRows: boolean) {
+    return (cell: CellComponent) => {
+        let html = "";
+        if (draggableRows) {
+            html += `<span class="bx bx-dots-vertical-rounded"></span> `;
+        }
+        html += cell.getRow().getPosition(true);
+        return html;
+    };
+}
+
+export function MonospaceFormatter(cell: CellComponent) {
+    return `<code>${cell.getValue()}</code>`;
 }
 
 function buildNoteLink(noteId: string) {

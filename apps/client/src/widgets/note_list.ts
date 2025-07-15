@@ -3,8 +3,6 @@ import NoteListRenderer from "../services/note_list_renderer.js";
 import type FNote from "../entities/fnote.js";
 import type { CommandListener, CommandListenerData, CommandMappings, CommandNames, EventData, EventNames } from "../components/app_context.js";
 import type ViewMode from "./view_widgets/view_mode.js";
-import AttributeDetailWidget from "./attribute_widgets/attribute_detail.js";
-import { Attribute } from "../services/attribute_parser.js";
 
 const TPL = /*html*/`
 <div class="note-list-widget">
@@ -39,7 +37,6 @@ export default class NoteListWidget extends NoteContextAwareWidget {
     private noteIdRefreshed?: string;
     private shownNoteId?: string | null;
     private viewMode?: ViewMode<any> | null;
-    private attributeDetailWidget: AttributeDetailWidget;
     private displayOnlyCollections: boolean;
 
     /**
@@ -47,9 +44,7 @@ export default class NoteListWidget extends NoteContextAwareWidget {
      */
     constructor(displayOnlyCollections: boolean) {
         super();
-        this.attributeDetailWidget = new AttributeDetailWidget()
-                .contentSized()
-                .setParent(this);
+
         this.displayOnlyCollections = displayOnlyCollections;
     }
 
@@ -72,7 +67,6 @@ export default class NoteListWidget extends NoteContextAwareWidget {
         this.$widget = $(TPL);
         this.contentSized();
         this.$content = this.$widget.find(".note-list-widget-content");
-        this.$widget.append(this.attributeDetailWidget.render());
 
         const observer = new IntersectionObserver(
             (entries) => {
@@ -91,23 +85,6 @@ export default class NoteListWidget extends NoteContextAwareWidget {
         setTimeout(() => observer.observe(this.$widget[0]), 10);
     }
 
-    addNoteListItemEvent() {
-        const attr: Attribute = {
-            type: "label",
-            name: "label:myLabel",
-            value: "promoted,single,text"
-        };
-
-        this.attributeDetailWidget!.showAttributeDetail({
-            attribute: attr,
-            allAttributes: [ attr ],
-            isOwned: true,
-            x: 100,
-            y: 200,
-            focus: "name"
-        });
-    }
-
     checkRenderStatus() {
         // console.log("this.isIntersecting", this.isIntersecting);
         // console.log(`${this.noteIdRefreshed} === ${this.noteId}`, this.noteIdRefreshed === this.noteId);
@@ -123,8 +100,7 @@ export default class NoteListWidget extends NoteContextAwareWidget {
         const noteListRenderer = new NoteListRenderer({
             $parent: this.$content,
             parentNote: note,
-            parentNotePath: this.notePath,
-            noteIds: note.getChildNoteIds()
+            parentNotePath: this.notePath
         });
         this.$widget.toggleClass("full-height", noteListRenderer.isFullHeight);
         await noteListRenderer.renderList();
@@ -166,12 +142,6 @@ export default class NoteListWidget extends NoteContextAwareWidget {
 
     entitiesReloadedEvent(e: EventData<"entitiesReloaded">) {
         if (e.loadResults.getAttributeRows().find((attr) => attr.noteId === this.noteId && attr.name && ["viewType", "expanded", "pageSize"].includes(attr.name))) {
-            this.refresh();
-            this.checkRenderStatus();
-        }
-
-        // Inform the view mode of changes and refresh if needed.
-        if (this.viewMode && this.viewMode.onEntitiesReloaded(e)) {
             this.refresh();
             this.checkRenderStatus();
         }

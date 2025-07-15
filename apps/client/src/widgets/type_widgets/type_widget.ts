@@ -71,6 +71,15 @@ export default abstract class TypeWidget extends NoteContextAwareWidget {
         }
     }
 
+    activeNoteChangedEvent() {
+        if (!this.isActiveNoteContext()) {
+            return;
+        }
+
+        // Restore focus to the editor when switching tabs.
+        this.focus();
+    }
+
     /**
      * {@inheritdoc}
      *

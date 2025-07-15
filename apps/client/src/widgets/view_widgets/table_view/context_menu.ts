@@ -5,10 +5,19 @@ import branches from "../../../services/branches.js";
 import { t } from "../../../services/i18n.js";
 import link_context_menu from "../../../menus/link_context_menu.js";
 import type FNote from "../../../entities/fnote.js";
+import froca from "../../../services/froca.js";
+import type Component from "../../../components/component.js";
 
 export function setupContextMenu(tabulator: Tabulator, parentNote: FNote) {
-    tabulator.on("rowContext", (e, row) => showRowContextMenu(e, row, parentNote));
+    tabulator.on("rowContext", (e, row) => showRowContextMenu(e, row, parentNote, tabulator));
     tabulator.on("headerContext", (e, col) => showColumnContextMenu(e, col, tabulator));
+
+    // Pressing the expand button prevents bubbling and the context menu remains menu when it shouldn't.
+    if (tabulator.options.dataTree) {
+        const dismissContextMenu = () => contextMenu.hide();
+        tabulator.on("dataTreeRowExpanded", dismissContextMenu);
+        tabulator.on("dataTreeRowCollapsed", dismissContextMenu);
+    }
 }
 
 function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: Tabulator) {
@@ -69,6 +78,29 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
                 uiIcon: "bx bx-empty",
                 items: buildColumnItems()
             },
+            { title: "----" },
+            {
+                title: t("table_view.add-column-to-the-left"),
+                uiIcon: "bx bx-horizontal-left",
+                handler: () => getParentComponent(e)?.triggerCommand("addNewTableColumn", {
+                    referenceColumn: column
+                })
+            },
+            {
+                title: t("table_view.edit-column"),
+                uiIcon: "bx bx-edit",
+                handler: () => getParentComponent(e)?.triggerCommand("addNewTableColumn", {
+                    columnToEdit: column
+                })
+            },
+            {
+                title: t("table_view.add-column-to-the-right"),
+                uiIcon: "bx bx-horizontal-right",
+                handler: () => getParentComponent(e)?.triggerCommand("addNewTableColumn", {
+                    referenceColumn: column,
+                    direction: "after"
+                })
+            }
         ],
         selectMenuItemHandler() {},
         x: e.pageX,
@@ -79,11 +111,11 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
     function buildColumnItems() {
         const items: MenuItem<unknown>[] = [];
         for (const column of tabulator.getColumns()) {
-            const { title, visible, field } = column.getDefinition();
+            const { title, field } = column.getDefinition();
 
             items.push({
                 title,
-                checked: visible,
+                checked: column.isVisible(),
                 uiIcon: "bx bx-empty",
                 enabled: !!field,
                 handler: () => column.toggle()
@@ -94,9 +126,19 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
     }
 }
 
-export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: FNote) {
+export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: FNote, tabulator: Tabulator) {
     const e = _e as MouseEvent;
     const rowData = row.getData() as TableData;
+
+    let parentNoteId: string = parentNote.noteId;
+
+    if (tabulator.options.dataTree) {
+        const parentRow = row.getTreeParent();
+        if (parentRow) {
+            parentNoteId = parentRow.getData().noteId as string;
+        }
+    }
+
     contextMenu.show({
         items: [
             ...link_context_menu.getItems(),
@@ -104,16 +146,25 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
             {
                 title: t("table_view.row-insert-above"),
                 uiIcon: "bx bx-list-plus",
-                handler: () => {
-                    const target = e.target;
-                    if (!target) {
-                        return;
+                handler: () => getParentComponent(e)?.triggerCommand("addNewRow", {
+                    parentNotePath: parentNoteId,
+                    customOpts: {
+                        target: "before",
+                        targetBranchId: rowData.branchId,
                     }
-                    const component = $(target).closest(".component").prop("component");
-                    component.triggerCommand("addNewRow", {
+                })
+            },
+            {
+                title: t("table_view.row-insert-child"),
+                uiIcon: "bx bx-empty",
+                handler: async () => {
+                    const branchId = row.getData().branchId;
+                    const note = await froca.getBranch(branchId)?.getNote();
+                    getParentComponent(e)?.triggerCommand("addNewRow", {
+                        parentNotePath: note?.noteId,
                         customOpts: {
-                            target: "before",
-                            targetBranchId: rowData.branchId,
+                            target: "after",
+                            targetBranchId: branchId,
                         }
                     });
                 }
@@ -121,19 +172,13 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
             {
                 title: t("table_view.row-insert-below"),
                 uiIcon: "bx bx-empty",
-                handler: () => {
-                    const target = e.target;
-                    if (!target) {
-                        return;
+                handler: () => getParentComponent(e)?.triggerCommand("addNewRow", {
+                    parentNotePath: parentNoteId,
+                    customOpts: {
+                        target: "after",
+                        targetBranchId: rowData.branchId,
                     }
-                    const component = $(target).closest(".component").prop("component");
-                    component.triggerCommand("addNewRow", {
-                        customOpts: {
-                            target: "after",
-                            targetBranchId: rowData.branchId,
-                        }
-                    });
-                }
+                })
             },
             { title: "----" },
             {
@@ -147,4 +192,14 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
         y: e.pageY
     });
     e.preventDefault();
+}
+
+function getParentComponent(e: MouseEvent) {
+    if (!e.target) {
+        return;
+    }
+
+    return $(e.target)
+        .closest(".component")
+        .prop("component") as Component;
 }

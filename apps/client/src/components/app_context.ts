@@ -28,6 +28,8 @@ import TouchBarComponent from "./touch_bar.js";
 import type { CKTextEditor } from "@triliumnext/ckeditor5";
 import type CodeMirror from "@triliumnext/codemirror";
 import { StartupChecks } from "./startup_checks.js";
+import type { CreateNoteOpts } from "../services/note_create.js";
+import { ColumnComponent } from "tabulator-tables";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -275,6 +277,17 @@ export type CommandMappings = {
     refreshSearchDefinition: {};
 
     geoMapCreateChildNote: CommandData;
+
+    // Table view
+    addNewRow: CommandData & {
+        customOpts: CreateNoteOpts;
+        parentNotePath?: string;
+    };
+    addNewTableColumn: CommandData & {
+        columnToEdit?: ColumnComponent;
+        referenceColumn?: ColumnComponent;
+        direction?: "before" | "after";
+    };
 
     buildTouchBar: CommandData & {
         TouchBar: typeof TouchBar;
