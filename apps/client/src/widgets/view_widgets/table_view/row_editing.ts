@@ -42,7 +42,7 @@ export default class TableRowEditing extends Component {
         });
     }
 
-    addNewRowEvent({ customOpts, parentNotePath: customNotePath }: CommandListenerData<"addNewRow">) {
+    addNewRowCommand({ customOpts, parentNotePath: customNotePath }: CommandListenerData<"addNewRow">) {
         const parentNotePath = customNotePath ?? this.parentNotePath;
         if (parentNotePath) {
             const opts: CreateNoteOpts = {

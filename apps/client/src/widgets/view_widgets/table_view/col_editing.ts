@@ -25,7 +25,7 @@ export default class TableColumnEditing extends Component {
         this.parentNote = parentNote;
     }
 
-    addNewTableColumnEvent({ referenceColumn, direction }: EventData<"addNewTableColumn">) {
+    addNewTableColumnCommand({ referenceColumn, direction }: EventData<"addNewTableColumn">) {
         const attr: Attribute = {
             type: "label",
             name: "label:myLabel",
@@ -52,15 +52,11 @@ export default class TableColumnEditing extends Component {
         });
     }
 
-    async reloadAttributesEvent() {
-        console.log("Reload attributes");
-    }
-
-    async updateAttributeListEvent({ attributes }: CommandListenerData<"updateAttributeList">) {
+    async updateAttributeListCommand({ attributes }: CommandListenerData<"updateAttributeList">) {
         this.newAttribute = attributes[0];
     }
 
-    async saveAttributesEvent() {
+    async saveAttributesCommand() {
         if (!this.newAttribute) {
             return;
         }

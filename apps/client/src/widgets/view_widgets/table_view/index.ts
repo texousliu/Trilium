@@ -103,6 +103,7 @@ export default class TableView extends ViewMode<StateInfo> {
     private api?: Tabulator;
     private persistentData: StateInfo["tableData"];
     private colEditing?: TableColumnEditing;
+    private rowEditing?: TableRowEditing;
 
     constructor(args: ViewModeArgs) {
         super(args, "table");
@@ -167,9 +168,7 @@ export default class TableView extends ViewMode<StateInfo> {
         this.api = new Tabulator(el, opts);
 
         this.colEditing = new TableColumnEditing(this.args.$parent, this.args.parentNote, this.api);
-        this.child(this.colEditing);
-
-        this.child(new TableRowEditing(this.api, this.args.parentNotePath!));
+        this.rowEditing = new TableRowEditing(this.api, this.args.parentNotePath!);
 
         if (movableRows) {
             configureReorderingRows(this.api);
@@ -221,6 +220,23 @@ export default class TableView extends ViewMode<StateInfo> {
         this.api.setColumns(columnDefs);
         this.colEditing?.resetNewAttributePosition();
     }
+
+    addNewRowCommand(e) {
+        this.rowEditing?.addNewRowCommand(e);
+    }
+
+    addNewTableColumnCommand(e) {
+        this.colEditing?.addNewTableColumnCommand(e);
+    }
+
+    updateAttributeListCommand(e) {
+        this.colEditing?.updateAttributeListCommand(e);
+    }
+
+    saveAttributesCommand() {
+        this.colEditing?.saveAttributesCommand();
+    }
+
 
     async #manageRowsUpdate() {
         if (!this.api) {
