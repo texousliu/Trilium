@@ -284,6 +284,7 @@ export type CommandMappings = {
         parentNotePath?: string;
     };
     addNewTableColumn: CommandData & {
+        columnToEdit?: ColumnComponent;
         referenceColumn?: ColumnComponent;
         direction?: "before" | "after";
     };

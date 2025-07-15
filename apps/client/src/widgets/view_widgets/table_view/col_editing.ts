@@ -25,12 +25,21 @@ export default class TableColumnEditing extends Component {
         this.parentNote = parentNote;
     }
 
-    addNewTableColumnCommand({ referenceColumn, direction }: EventData<"addNewTableColumn">) {
-        const attr: Attribute = {
-            type: "label",
-            name: "label:myLabel",
-            value: "promoted,single,text"
-        };
+    addNewTableColumnCommand({ referenceColumn, columnToEdit, direction }: EventData<"addNewTableColumn">) {
+        let attr: Attribute | undefined;
+
+        if (columnToEdit) {
+            attr = this.getAttributeFromField(columnToEdit.getField());
+            console.log("Built ", attr);
+        }
+
+        if (!attr) {
+            attr = {
+                type: "label",
+                name: "label:myLabel",
+                value: "promoted,single,text"
+            };
+        }
 
         if (referenceColumn && this.api) {
             this.newAttributePosition = this.api.getColumns().indexOf(referenceColumn);
@@ -47,7 +56,7 @@ export default class TableColumnEditing extends Component {
             allAttributes: [ attr ],
             isOwned: true,
             x: 0,
-            y: 75,
+            y: 150,
             focus: "name"
         });
     }
@@ -62,7 +71,7 @@ export default class TableColumnEditing extends Component {
         }
 
         const { name, value } = this.newAttribute;
-        attributes.addLabel(this.parentNote.noteId, name, value, true);
+        attributes.setLabel(this.parentNote.noteId, name, value);
     }
 
     getNewAttributePosition() {
@@ -73,4 +82,23 @@ export default class TableColumnEditing extends Component {
         this.newAttributePosition = 0;
     }
 
+    getFAttributeFromField(field: string) {
+        const [ type, name ] = field.split(".", 2);
+        const attrName = `${type.replace("s", "")}:${name}`;
+        return this.parentNote.getLabel(attrName);
+    }
+
+    getAttributeFromField(field: string) {
+        const fAttribute = this.getFAttributeFromField(field);
+        if (fAttribute) {
+            return {
+                name: fAttribute.name,
+                value: fAttribute.value,
+                type: fAttribute.type
+            };
+        }
+        return undefined;
+    }
+
 }
+

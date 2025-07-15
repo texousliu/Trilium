@@ -1955,7 +1955,8 @@
     "row-insert-below": "Insert row below",
     "row-insert-child": "Insert child note",
     "add-column-to-the-left": "Add column to the left",
-    "add-column-to-the-right": "Add column to the right"
+    "add-column-to-the-right": "Add column to the right",
+    "edit-column": "Edit column"
   },
   "book_properties_config": {
     "hide-weekends": "Hide weekends",

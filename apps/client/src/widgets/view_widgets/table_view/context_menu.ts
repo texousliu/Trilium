@@ -87,6 +87,13 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
                 })
             },
             {
+                title: t("table_view.edit-column"),
+                uiIcon: "bx bx-edit",
+                handler: () => getParentComponent(e)?.triggerCommand("addNewTableColumn", {
+                    columnToEdit: column
+                })
+            },
+            {
                 title: t("table_view.add-column-to-the-right"),
                 uiIcon: "bx bx-horizontal-right",
                 handler: () => getParentComponent(e)?.triggerCommand("addNewTableColumn", {
