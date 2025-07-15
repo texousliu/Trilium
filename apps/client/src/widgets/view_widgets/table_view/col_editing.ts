@@ -10,11 +10,12 @@ import { renameColumn } from "./bulk_actions";
 export default class TableColumnEditing extends Component {
 
     private attributeDetailWidget: AttributeDetailWidget;
+    private api: Tabulator;
+    private parentNote: FNote;
+
+    private newAttribute?: Attribute;
     private newAttributePosition?: number;
     private existingAttributeToEdit?: Attribute;
-    private api: Tabulator;
-    private newAttribute?: Attribute;
-    private parentNote: FNote;
 
     constructor($parent: JQuery<HTMLElement>, parentNote: FNote, api: Tabulator) {
         super();
@@ -95,7 +96,9 @@ export default class TableColumnEditing extends Component {
     }
 
     resetNewAttributePosition() {
-        this.newAttributePosition = 0;
+        this.newAttribute = undefined;
+        this.newAttributePosition = undefined;
+        this.existingAttributeToEdit = undefined;
     }
 
     getFAttributeFromField(field: string) {
