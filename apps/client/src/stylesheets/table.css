@@ -147,6 +147,15 @@
     color: var(--cell-editing-text-color);
 }
 
+.tabulator .tree-collapse,
+.tabulator .tree-expand {
+    color: var(--row-text-color);
+}
+
+.tabulator-data-tree-branch {
+    visibility: hidden;
+}
+
 /* Checkbox cells */
 
 .tabulator .tabulator-cell:has(svg),
