@@ -7,10 +7,12 @@ import link_context_menu from "../../../menus/link_context_menu.js";
 import type FNote from "../../../entities/fnote.js";
 import froca from "../../../services/froca.js";
 import type Component from "../../../components/component.js";
+import dialog from "../../../services/dialog.js";
+import { deleteColumn } from "./bulk_actions.js";
 
 export function setupContextMenu(tabulator: Tabulator, parentNote: FNote) {
     tabulator.on("rowContext", (e, row) => showRowContextMenu(e, row, parentNote, tabulator));
-    tabulator.on("headerContext", (e, col) => showColumnContextMenu(e, col, tabulator));
+    tabulator.on("headerContext", (e, col) => showColumnContextMenu(e, col, parentNote, tabulator));
 
     // Pressing the expand button prevents bubbling and the context menu remains menu when it shouldn't.
     if (tabulator.options.dataTree) {
@@ -20,7 +22,7 @@ export function setupContextMenu(tabulator: Tabulator, parentNote: FNote) {
     }
 }
 
-function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: Tabulator) {
+function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote: FNote, tabulator: Tabulator) {
     const e = _e as MouseEvent;
     const { title, field } = column.getDefinition();
 
@@ -88,6 +90,15 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
                 })
             },
             {
+                title: t("table_view.add-column-to-the-right"),
+                uiIcon: "bx bx-horizontal-right",
+                handler: () => getParentComponent(e)?.triggerCommand("addNewTableColumn", {
+                    referenceColumn: column,
+                    direction: "after"
+                })
+            },
+            { title: "----" },
+            {
                 title: t("table_view.edit-column"),
                 uiIcon: "bx bx-edit",
                 enabled: !!column.getField() && column.getField() !== "title",
@@ -97,12 +108,22 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
                 })
             },
             {
-                title: t("table_view.add-column-to-the-right"),
-                uiIcon: "bx bx-horizontal-right",
-                handler: () => getParentComponent(e)?.triggerCommand("addNewTableColumn", {
-                    referenceColumn: column,
-                    direction: "after"
-                })
+                title: t("table_view.delete-column"),
+                uiIcon: "bx bx-trash",
+                enabled: !!column.getField() && column.getField() !== "title",
+                handler: async () => {
+                    if (!await dialog.confirm(t("table_view.delete_column_confirmation"))) {
+                        return;
+                    }
+
+                    let [ type, name ] = column.getField()?.split(".", 2);
+                    if (!type || !name) {
+                        return;
+                    }
+
+                    type = type.replace("s", "");
+                    deleteColumn(parentNote.noteId, type as "label" | "relation", name);
+                }
             }
         ],
         selectMenuItemHandler() {},
