@@ -82,6 +82,7 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
             {
                 title: t("table_view.add-column-to-the-left"),
                 uiIcon: "bx bx-horizontal-left",
+                enabled: !column.getDefinition().frozen,
                 handler: () => getParentComponent(e)?.triggerCommand("addNewTableColumn", {
                     referenceColumn: column
                 })
@@ -89,7 +90,9 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
             {
                 title: t("table_view.edit-column"),
                 uiIcon: "bx bx-edit",
+                enabled: !!column.getField() && column.getField() !== "title",
                 handler: () => getParentComponent(e)?.triggerCommand("addNewTableColumn", {
+                    referenceColumn: column,
                     columnToEdit: column
                 })
             },

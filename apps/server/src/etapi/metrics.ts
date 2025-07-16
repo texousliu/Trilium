@@ -43,7 +43,6 @@ interface MetricsData {
  */
 function formatPrometheusMetrics(data: MetricsData): string {
     const lines: string[] = [];
-    const timestamp = Math.floor(new Date(data.timestamp).getTime() / 1000);
 
     // Helper function to add a metric
     const addMetric = (name: string, value: number | null, help: string, type: string = 'gauge', labels: Record<string, string> = {}) => {
@@ -56,7 +55,7 @@ function formatPrometheusMetrics(data: MetricsData): string {
             ? `{${Object.entries(labels).map(([k, v]) => `${k}="${v}"`).join(',')}}`
             : '';
 
-        lines.push(`${name}${labelStr} ${value} ${timestamp}`);
+        lines.push(`${name}${labelStr} ${value}`);
         lines.push('');
     };
 

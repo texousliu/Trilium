@@ -78,4 +78,34 @@ describe("restoreExistingData", () => {
         expect(restored[1].field).toBe("noteId");
         expect(restored[2].field).toBe("newColumn");
     });
+
+    it("supports a rename", () => {
+        const newDefs: ColumnDefinition[] = [
+            { field: "title", title: "Title", editor: "input" },
+            { field: "noteId", title: "Note ID", visible: false },
+            { field: "newColumn", title: "New Column", editor: "input" }
+        ];
+        const oldDefs: ColumnDefinition[] = [
+            { field: "title", title: "Title", width: 300, visible: true },
+            { field: "noteId", title: "Note ID", width: 200, visible: true },
+            { field: "oldColumn", title: "New Column", editor: "input" }
+        ];
+        const restored = restoreExistingData(newDefs, oldDefs);
+        expect(restored.length).toBe(3);
+    });
+
+    it("doesn't alter the existing order", () => {
+        const newDefs: ColumnDefinition[] = [
+            { title: "#", headerSort: false, hozAlign: "center", resizable: false, frozen: true, rowHandle: false },
+            { field: "noteId", title: "Note ID", visible: false },
+            { field: "title", title: "Title", editor: "input", width: 400 }
+        ]
+        const oldDefs: ColumnDefinition[] = [
+            { title: "#", headerSort: false, hozAlign: "center", resizable: false, rowHandle: false },
+            { field: "noteId", title: "Note ID", visible: false },
+            { field: "title", title: "Title", editor: "input", width: 400 }
+        ];
+        const restored = restoreExistingData(newDefs, oldDefs);
+        expect(restored).toStrictEqual(newDefs);
+    });
 });

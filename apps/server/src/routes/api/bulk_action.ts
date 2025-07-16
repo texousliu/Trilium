@@ -4,6 +4,9 @@ import bulkActionService from "../../services/bulk_actions.js";
 
 function execute(req: Request) {
     const { noteIds, includeDescendants } = req.body;
+    if (!Array.isArray(noteIds)) {
+        throw new Error("noteIds must be an array");
+    }
 
     const affectedNoteIds = getAffectedNoteIds(noteIds, includeDescendants);
 

@@ -4,6 +4,7 @@
 @import url(./pages.css);
 @import url(./ribbon.css);
 @import url(./notes/text.css);
+@import url(./notes/collections/table.css);
 
 @font-face {
     font-family: "Inter";

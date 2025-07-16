@@ -5,14 +5,17 @@ import Component from "../../../components/component";
 import { CommandListenerData, EventData } from "../../../components/app_context";
 import attributes from "../../../services/attributes";
 import FNote from "../../../entities/fnote";
+import { renameColumn } from "./bulk_actions";
 
 export default class TableColumnEditing extends Component {
 
     private attributeDetailWidget: AttributeDetailWidget;
-    private newAttributePosition?: number;
     private api: Tabulator;
-    private newAttribute?: Attribute;
     private parentNote: FNote;
+
+    private newAttribute?: Attribute;
+    private newAttributePosition?: number;
+    private existingAttributeToEdit?: Attribute;
 
     constructor($parent: JQuery<HTMLElement>, parentNote: FNote, api: Tabulator) {
         super();
@@ -28,9 +31,12 @@ export default class TableColumnEditing extends Component {
     addNewTableColumnCommand({ referenceColumn, columnToEdit, direction }: EventData<"addNewTableColumn">) {
         let attr: Attribute | undefined;
 
+        this.existingAttributeToEdit = undefined;
         if (columnToEdit) {
             attr = this.getAttributeFromField(columnToEdit.getField());
-            console.log("Built ", attr);
+            if (attr) {
+                this.existingAttributeToEdit = { ...attr };
+            }
         }
 
         if (!attr) {
@@ -70,8 +76,21 @@ export default class TableColumnEditing extends Component {
             return;
         }
 
-        const { name, value } = this.newAttribute;
+        const { name, type, value } = this.newAttribute;
+
+        this.api.blockRedraw();
+
+        if (this.existingAttributeToEdit && this.existingAttributeToEdit.name !== name) {
+            const oldName = this.existingAttributeToEdit.name.split(":")[1];
+            const newName = name.split(":")[1];
+            await renameColumn(this.parentNote.noteId, type, oldName, newName);
+        }
+
         attributes.setLabel(this.parentNote.noteId, name, value);
+        if (this.existingAttributeToEdit) {
+            attributes.removeOwnedLabelByName(this.parentNote, this.existingAttributeToEdit.name);
+        }
+        this.api.restoreRedraw();
     }
 
     getNewAttributePosition() {
@@ -79,7 +98,9 @@ export default class TableColumnEditing extends Component {
     }
 
     resetNewAttributePosition() {
-        this.newAttributePosition = 0;
+        this.newAttribute = undefined;
+        this.newAttributePosition = undefined;
+        this.existingAttributeToEdit = undefined;
     }
 
     getFAttributeFromField(field: string) {

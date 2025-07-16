@@ -197,8 +197,8 @@ export default class TableView extends ViewMode<StateInfo> {
             attr.type === "label" &&
             (attr.name?.startsWith("label:") || attr.name?.startsWith("relation:")) &&
             attributes.isAffecting(attr, this.parentNote))) {
-                console.log("Col update");
             this.#manageColumnUpdate();
+            return await this.#manageRowsUpdate();
         }
 
         if (loadResults.getBranchRows().some(branch => branch.parentNoteId === this.parentNote.noteId || this.noteIds.includes(branch.parentNoteId ?? ""))
