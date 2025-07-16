@@ -92,6 +92,7 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, tabulator: 
                 uiIcon: "bx bx-edit",
                 enabled: !!column.getField() && column.getField() !== "title",
                 handler: () => getParentComponent(e)?.triggerCommand("addNewTableColumn", {
+                    referenceColumn: column,
                     columnToEdit: column
                 })
             },
