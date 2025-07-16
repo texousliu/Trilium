@@ -288,6 +288,9 @@ export type CommandMappings = {
         referenceColumn?: ColumnComponent;
         direction?: "before" | "after";
     };
+    deleteTableColumn: CommandData & {
+        columnToDelete?: ColumnComponent;
+    };
 
     buildTouchBar: CommandData & {
         TouchBar: typeof TouchBar;

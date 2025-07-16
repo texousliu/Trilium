@@ -1,4 +1,4 @@
-import { ColumnComponent, MenuSeparator, RowComponent, Tabulator } from "tabulator-tables";
+import { ColumnComponent, RowComponent, Tabulator } from "tabulator-tables";
 import contextMenu, { MenuItem } from "../../../menus/context_menu.js";
 import { TableData } from "./rows.js";
 import branches from "../../../services/branches.js";
@@ -7,8 +7,6 @@ import link_context_menu from "../../../menus/link_context_menu.js";
 import type FNote from "../../../entities/fnote.js";
 import froca from "../../../services/froca.js";
 import type Component from "../../../components/component.js";
-import dialog from "../../../services/dialog.js";
-import { deleteColumn } from "./bulk_actions.js";
 
 export function setupContextMenu(tabulator: Tabulator, parentNote: FNote) {
     tabulator.on("rowContext", (e, row) => showRowContextMenu(e, row, parentNote, tabulator));
@@ -111,19 +109,9 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote:
                 title: t("table_view.delete-column"),
                 uiIcon: "bx bx-trash",
                 enabled: !!column.getField() && column.getField() !== "title",
-                handler: async () => {
-                    if (!await dialog.confirm(t("table_view.delete_column_confirmation"))) {
-                        return;
-                    }
-
-                    let [ type, name ] = column.getField()?.split(".", 2);
-                    if (!type || !name) {
-                        return;
-                    }
-
-                    type = type.replace("s", "");
-                    deleteColumn(parentNote.noteId, type as "label" | "relation", name);
-                }
+                handler: () => getParentComponent(e)?.triggerCommand("deleteTableColumn", {
+                    columnToDelete: column
+                })
             }
         ],
         selectMenuItemHandler() {},

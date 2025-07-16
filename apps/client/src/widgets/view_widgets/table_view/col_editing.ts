@@ -5,7 +5,9 @@ import Component from "../../../components/component";
 import { CommandListenerData, EventData } from "../../../components/app_context";
 import attributes from "../../../services/attributes";
 import FNote from "../../../entities/fnote";
-import { renameColumn } from "./bulk_actions";
+import { deleteColumn, renameColumn } from "./bulk_actions";
+import dialog from "../../../services/dialog";
+import { t } from "../../../services/i18n";
 
 export default class TableColumnEditing extends Component {
 
@@ -79,18 +81,40 @@ export default class TableColumnEditing extends Component {
         const { name, type, value } = this.newAttribute;
 
         this.api.blockRedraw();
+        try {
+            if (this.existingAttributeToEdit && this.existingAttributeToEdit.name !== name) {
+                const oldName = this.existingAttributeToEdit.name.split(":")[1];
+                const newName = name.split(":")[1];
+                await renameColumn(this.parentNote.noteId, type, oldName, newName);
+            }
 
-        if (this.existingAttributeToEdit && this.existingAttributeToEdit.name !== name) {
-            const oldName = this.existingAttributeToEdit.name.split(":")[1];
-            const newName = name.split(":")[1];
-            await renameColumn(this.parentNote.noteId, type, oldName, newName);
+            attributes.setLabel(this.parentNote.noteId, name, value);
+            if (this.existingAttributeToEdit) {
+                attributes.removeOwnedLabelByName(this.parentNote, this.existingAttributeToEdit.name);
+            }
+        } finally {
+            this.api.restoreRedraw();
+        }
+    }
+
+    async deleteTableColumnCommand({ columnToDelete }: CommandListenerData<"deleteTableColumn">) {
+        if (!columnToDelete || !await dialog.confirm(t("table_view.delete_column_confirmation"))) {
+            return;
         }
 
-        attributes.setLabel(this.parentNote.noteId, name, value);
-        if (this.existingAttributeToEdit) {
-            attributes.removeOwnedLabelByName(this.parentNote, this.existingAttributeToEdit.name);
+        let [ type, name ] = columnToDelete.getField()?.split(".", 2);
+        if (!type || !name) {
+            return;
         }
-        this.api.restoreRedraw();
+        type = type.replace("s", "");
+
+        this.api.blockRedraw();
+        try {
+            await deleteColumn(this.parentNote.noteId, type as "label" | "relation", name);
+            attributes.removeOwnedLabelByName(this.parentNote, `${type}:${name}`);
+        } finally {
+            this.api.restoreRedraw();
+        }
     }
 
     getNewAttributePosition() {
