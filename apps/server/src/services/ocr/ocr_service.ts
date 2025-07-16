@@ -3,23 +3,31 @@ import log from '../log.js';
 import sql from '../sql.js';
 import becca from '../../becca/becca.js';
 import options from '../options.js';
+import { ImageProcessor } from './processors/image_processor.js';
+import { PDFProcessor } from './processors/pdf_processor.js';
+import { TIFFProcessor } from './processors/tiff_processor.js';
+import { OfficeProcessor } from './processors/office_processor.js';
+import { FileProcessor } from './processors/file_processor.js';
 
 export interface OCRResult {
     text: string;
     confidence: number;
     extractedAt: string;
     language?: string;
+    pageCount?: number;
 }
 
 export interface OCRProcessingOptions {
     language?: string;
     forceReprocess?: boolean;
     confidence?: number;
+    enablePDFTextExtraction?: boolean;
 }
 
 interface OCRBlobRow {
     blobId: string;
     ocr_text: string;
+    ocr_last_processed?: string;
 }
 
 /**
@@ -30,6 +38,7 @@ class OCRService {
     private isInitialized = false;
     private worker: Tesseract.Worker | null = null;
     private isProcessing = false;
+    private processors: Map<string, FileProcessor> = new Map();
 
     /**
      * Initialize the OCR service
@@ -40,25 +49,14 @@ class OCRService {
         }
 
         try {
-            log.info('Initializing OCR service with Tesseract.js...');
+            log.info('Initializing OCR service with file processors...');
             
-            // Configure proper paths for Node.js environment
-            const tesseractDir = require.resolve('tesseract.js').replace('/src/index.js', '');
-            const workerPath = require.resolve('tesseract.js/src/worker-script/node/index.js');
-            const corePath = require.resolve('tesseract.js-core/tesseract-core.wasm.js');
+            // Initialize file processors
+            this.processors.set('image', new ImageProcessor());
+            this.processors.set('pdf', new PDFProcessor());
+            this.processors.set('tiff', new TIFFProcessor());
+            this.processors.set('office', new OfficeProcessor());
             
-            log.info(`Using worker path: ${workerPath}`);
-            log.info(`Using core path: ${corePath}`);
-            
-            this.worker = await Tesseract.createWorker('eng', 1, {
-                workerPath,
-                corePath,
-                logger: (m: { status: string; progress: number }) => {
-                    if (m.status === 'recognizing text') {
-                        log.info(`OCR progress: ${Math.round(m.progress * 100)}%`);
-                    }
-                }
-            });
             this.isInitialized = true;
             log.info('OCR service initialized successfully');
         } catch (error) {
@@ -100,46 +98,27 @@ class OCRService {
     }
 
     /**
-     * Extract text from image buffer
+     * Extract text from file buffer using appropriate processor
      */
-    async extractTextFromImage(imageBuffer: Buffer, options: OCRProcessingOptions = {}): Promise<OCRResult> {
+    async extractTextFromFile(fileBuffer: Buffer, mimeType: string, options: OCRProcessingOptions = {}): Promise<OCRResult> {
         if (!this.isInitialized) {
             await this.initialize();
         }
 
-        if (!this.worker) {
-            throw new Error('OCR worker not initialized');
-        }
-
         try {
-            log.info('Starting OCR text extraction...');
+            log.info(`Starting OCR text extraction for MIME type: ${mimeType}`);
             this.isProcessing = true;
 
-            // Set language if specified and different from current
-            const language = options.language || 'eng';
-            if (language !== 'eng') {
-                // For different languages, create a new worker
-                await this.worker.terminate();
-                this.worker = await Tesseract.createWorker(language, 1, {
-                    logger: (m: { status: string; progress: number }) => {
-                        if (m.status === 'recognizing text') {
-                            log.info(`OCR progress: ${Math.round(m.progress * 100)}%`);
-                        }
-                    }
-                });
+            // Find appropriate processor
+            const processor = this.getProcessorForMimeType(mimeType);
+            if (!processor) {
+                throw new Error(`No processor found for MIME type: ${mimeType}`);
             }
 
-            const result = await this.worker.recognize(imageBuffer);
+            const result = await processor.extractText(fileBuffer, options);
             
-            const ocrResult: OCRResult = {
-                text: result.data.text.trim(),
-                confidence: result.data.confidence / 100,  // Convert percentage to decimal
-                extractedAt: new Date().toISOString(),
-                language: options.language || 'eng'
-            };
-
-            log.info(`OCR extraction completed. Confidence: ${ocrResult.confidence}%, Text length: ${ocrResult.text.length}`);
-            return ocrResult;
+            log.info(`OCR extraction completed. Confidence: ${result.confidence}%, Text length: ${result.text.length}`);
+            return result;
 
         } catch (error) {
             log.error(`OCR text extraction failed: ${error}`);
@@ -174,10 +153,10 @@ class OCRService {
             return null;
         }
 
-        // Check if OCR already exists in the blob and we're not forcing reprocessing
+        // Check if OCR already exists and is up-to-date
         const existingOCR = this.getStoredOCRResult(note.blobId);
-        if (existingOCR && !options.forceReprocess) {
-            log.info(`OCR already exists for note ${noteId}, returning cached result`);
+        if (existingOCR && !options.forceReprocess && note.blobId && !this.needsReprocessing(note.blobId)) {
+            log.info(`OCR already exists and is up-to-date for note ${noteId}, returning cached result`);
             return existingOCR;
         }
 
@@ -187,7 +166,7 @@ class OCRService {
                 throw new Error(`Cannot get image content for note ${noteId}`);
             }
 
-            const ocrResult = await this.extractTextFromImage(content, options);
+            const ocrResult = await this.extractTextFromFile(content, note.mime, options);
             
             // Store OCR result in blob
             await this.storeOCRResult(note.blobId, ocrResult);
@@ -224,10 +203,10 @@ class OCRService {
             return null;
         }
 
-        // Check if OCR already exists in the blob and we're not forcing reprocessing
+        // Check if OCR already exists and is up-to-date
         const existingOCR = this.getStoredOCRResult(attachment.blobId);
-        if (existingOCR && !options.forceReprocess) {
-            log.info(`OCR already exists for attachment ${attachmentId}, returning cached result`);
+        if (existingOCR && !options.forceReprocess && attachment.blobId && !this.needsReprocessing(attachment.blobId)) {
+            log.info(`OCR already exists and is up-to-date for attachment ${attachmentId}, returning cached result`);
             return existingOCR;
         }
 
@@ -237,7 +216,7 @@ class OCRService {
                 throw new Error(`Cannot get image content for attachment ${attachmentId}`);
             }
 
-            const ocrResult = await this.extractTextFromImage(content, options);
+            const ocrResult = await this.extractTextFromFile(content, attachment.mime, options);
             
             // Store OCR result in blob
             await this.storeOCRResult(attachment.blobId, ocrResult);
@@ -259,11 +238,15 @@ class OCRService {
         }
 
         try {
-            // Store OCR text in blobs table
+            // Store OCR text and timestamp in blobs table
             sql.execute(`
-                UPDATE blobs SET ocr_text = ? WHERE blobId = ?
+                UPDATE blobs SET 
+                    ocr_text = ?, 
+                    ocr_last_processed = ?
+                WHERE blobId = ?
             `, [
                 ocrResult.text,
+                new Date().toISOString(),
                 blobId
             ]);
             
@@ -353,80 +336,10 @@ class OCRService {
     }
 
     /**
-     * Process OCR for all images that don't have OCR results yet
+     * Process OCR for all files that don't have OCR results yet or need reprocessing
      */
     async processAllImages(): Promise<void> {
-        if (!this.isOCREnabled()) {
-            log.info('OCR is disabled, skipping batch processing');
-            return;
-        }
-
-        log.info('Starting batch OCR processing for all images...');
-
-        try {
-            // Process image notes
-            const imageNotes = sql.getRows<{
-                noteId: string;
-                mime: string;
-                blobId: string;
-            }>(`
-                SELECT n.noteId, n.mime, n.blobId
-                FROM notes n
-                LEFT JOIN blobs b ON n.blobId = b.blobId
-                WHERE n.type = 'image' 
-                AND n.isDeleted = 0
-                AND n.blobId IS NOT NULL
-                AND (b.ocr_text IS NULL OR b.ocr_text = '')
-            `);
-
-            log.info(`Found ${imageNotes.length} image notes to process`);
-
-            for (const noteRow of imageNotes) {
-                if (this.isSupportedMimeType(noteRow.mime)) {
-                    try {
-                        await this.processNoteOCR(noteRow.noteId);
-                        // Add small delay to prevent overwhelming the system
-                        await new Promise(resolve => setTimeout(resolve, 100));
-                    } catch (error) {
-                        log.error(`Failed to process OCR for note ${noteRow.noteId}: ${error}`);
-                    }
-                }
-            }
-
-            // Process image attachments
-            const imageAttachments = sql.getRows<{
-                attachmentId: string;
-                mime: string;
-                blobId: string;
-            }>(`
-                SELECT a.attachmentId, a.mime, a.blobId
-                FROM attachments a
-                LEFT JOIN blobs b ON a.blobId = b.blobId
-                WHERE a.role = 'image'
-                AND a.isDeleted = 0
-                AND a.blobId IS NOT NULL
-                AND (b.ocr_text IS NULL OR b.ocr_text = '')
-            `);
-
-            log.info(`Found ${imageAttachments.length} image attachments to process`);
-
-            for (const attachmentRow of imageAttachments) {
-                if (this.isSupportedMimeType(attachmentRow.mime)) {
-                    try {
-                        await this.processAttachmentOCR(attachmentRow.attachmentId);
-                        // Add small delay to prevent overwhelming the system
-                        await new Promise(resolve => setTimeout(resolve, 100));
-                    } catch (error) {
-                        log.error(`Failed to process OCR for attachment ${attachmentRow.attachmentId}: ${error}`);
-                    }
-                }
-            }
-
-            log.info('Batch OCR processing completed');
-        } catch (error) {
-            log.error(`Batch OCR processing failed: ${error}`);
-            throw error;
-        }
+        return this.processAllBlobsNeedingOCR();
     }
 
     /**
@@ -521,28 +434,9 @@ class OCRService {
         }
 
         try {
-            // Count total images to process
-            const imageNotesCount = sql.getRow<{ count: number }>(`
-                SELECT COUNT(*) as count
-                FROM notes 
-                WHERE type = 'image' 
-                AND isDeleted = 0
-                AND noteId NOT IN (
-                    SELECT entity_id FROM ocr_results WHERE entity_type = 'note'
-                )
-            `)?.count || 0;
-
-            const imageAttachmentsCount = sql.getRow<{ count: number }>(`
-                SELECT COUNT(*) as count
-                FROM attachments 
-                WHERE role = 'image'
-                AND isDeleted = 0
-                AND attachmentId NOT IN (
-                    SELECT entity_id FROM ocr_results WHERE entity_type = 'attachment'
-                )
-            `)?.count || 0;
-
-            const totalCount = imageNotesCount + imageAttachmentsCount;
+            // Count total blobs needing OCR processing
+            const blobsNeedingOCR = this.getBlobsNeedingOCR();
+            const totalCount = blobsNeedingOCR.length;
 
             if (totalCount === 0) {
                 return { success: false, message: 'No images found that need OCR processing' };
@@ -557,7 +451,7 @@ class OCRService {
             };
 
             // Start processing in background
-            this.processBatchInBackground().catch(error => {
+            this.processBatchInBackground(blobsNeedingOCR).catch(error => {
                 log.error(`Batch processing failed: ${error instanceof Error ? error.message : String(error)}`);
                 this.batchProcessingState.inProgress = false;
             });
@@ -583,79 +477,33 @@ class OCRService {
     /**
      * Process batch OCR in background with progress tracking
      */
-    private async processBatchInBackground(): Promise<void> {
+    private async processBatchInBackground(blobsToProcess: Array<{ blobId: string; mimeType: string; entityType: 'note' | 'attachment'; entityId: string }>): Promise<void> {
         try {
             log.info('Starting batch OCR processing...');
 
-            // Process image notes
-            const imageNotes = sql.getRows<{
-                noteId: string;
-                mime: string;
-                blobId: string;
-            }>(`
-                SELECT n.noteId, n.mime, n.blobId
-                FROM notes n
-                LEFT JOIN blobs b ON n.blobId = b.blobId
-                WHERE n.type = 'image' 
-                AND n.isDeleted = 0
-                AND n.blobId IS NOT NULL
-                AND (b.ocr_text IS NULL OR b.ocr_text = '')
-            `);
-
-            for (const noteRow of imageNotes) {
+            for (const blobInfo of blobsToProcess) {
                 if (!this.batchProcessingState.inProgress) {
                     break; // Stop if processing was cancelled
                 }
 
-                if (this.isSupportedMimeType(noteRow.mime)) {
-                    try {
-                        await this.processNoteOCR(noteRow.noteId);
-                        this.batchProcessingState.processed++;
-                        // Add small delay to prevent overwhelming the system
-                        await new Promise(resolve => setTimeout(resolve, 500));
-                    } catch (error) {
-                        log.error(`Failed to process OCR for note ${noteRow.noteId}: ${error}`);
-                        this.batchProcessingState.processed++; // Count as processed even if failed
+                try {
+                    if (blobInfo.entityType === 'note') {
+                        await this.processNoteOCR(blobInfo.entityId);
+                    } else {
+                        await this.processAttachmentOCR(blobInfo.entityId);
                     }
-                }
-            }
-
-            // Process image attachments
-            const imageAttachments = sql.getRows<{
-                attachmentId: string;
-                mime: string;
-                blobId: string;
-            }>(`
-                SELECT a.attachmentId, a.mime, a.blobId
-                FROM attachments a
-                LEFT JOIN blobs b ON a.blobId = b.blobId
-                WHERE a.role = 'image'
-                AND a.isDeleted = 0
-                AND a.blobId IS NOT NULL
-                AND (b.ocr_text IS NULL OR b.ocr_text = '')
-            `);
-
-            for (const attachmentRow of imageAttachments) {
-                if (!this.batchProcessingState.inProgress) {
-                    break; // Stop if processing was cancelled
-                }
-
-                if (this.isSupportedMimeType(attachmentRow.mime)) {
-                    try {
-                        await this.processAttachmentOCR(attachmentRow.attachmentId);
-                        this.batchProcessingState.processed++;
-                        // Add small delay to prevent overwhelming the system
-                        await new Promise(resolve => setTimeout(resolve, 500));
-                    } catch (error) {
-                        log.error(`Failed to process OCR for attachment ${attachmentRow.attachmentId}: ${error}`);
-                        this.batchProcessingState.processed++; // Count as processed even if failed
-                    }
+                    this.batchProcessingState.processed++;
+                    // Add small delay to prevent overwhelming the system
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                } catch (error) {
+                    log.error(`Failed to process OCR for ${blobInfo.entityType} ${blobInfo.entityId}: ${error}`);
+                    this.batchProcessingState.processed++; // Count as processed even if failed
                 }
             }
 
             // Mark as completed
             this.batchProcessingState.inProgress = false;
-            log.info(`Batch OCR processing completed. Processed ${this.batchProcessingState.processed} images.`);
+            log.info(`Batch OCR processing completed. Processed ${this.batchProcessingState.processed} files.`);
         } catch (error) {
             log.error(`Batch OCR processing failed: ${error}`);
             this.batchProcessingState.inProgress = false;
@@ -671,6 +519,170 @@ class OCRService {
             this.batchProcessingState.inProgress = false;
             log.info('Batch OCR processing cancelled');
         }
+    }
+
+    /**
+     * Get processor for a given MIME type
+     */
+    private getProcessorForMimeType(mimeType: string): FileProcessor | null {
+        for (const processor of this.processors.values()) {
+            if (processor.canProcess(mimeType)) {
+                return processor;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Check if blob needs OCR re-processing due to content changes
+     */
+    needsReprocessing(blobId: string): boolean {
+        if (!blobId) {
+            return false;
+        }
+
+        try {
+            const blobInfo = sql.getRow<{
+                utcDateModified: string;
+                ocr_last_processed: string | null;
+            }>(`
+                SELECT utcDateModified, ocr_last_processed
+                FROM blobs 
+                WHERE blobId = ?
+            `, [blobId]);
+
+            if (!blobInfo) {
+                return false;
+            }
+
+            // If OCR was never processed, it needs processing
+            if (!blobInfo.ocr_last_processed) {
+                return true;
+            }
+
+            // If blob was modified after last OCR processing, it needs re-processing
+            const blobModified = new Date(blobInfo.utcDateModified);
+            const lastOcrProcessed = new Date(blobInfo.ocr_last_processed);
+            
+            return blobModified > lastOcrProcessed;
+        } catch (error) {
+            log.error(`Failed to check if blob ${blobId} needs reprocessing: ${error}`);
+            return false;
+        }
+    }
+
+    /**
+     * Invalidate OCR results for a blob (clear ocr_text and ocr_last_processed)
+     */
+    invalidateOCRResult(blobId: string): void {
+        if (!blobId) {
+            return;
+        }
+
+        try {
+            sql.execute(`
+                UPDATE blobs SET 
+                    ocr_text = NULL,
+                    ocr_last_processed = NULL
+                WHERE blobId = ?
+            `, [blobId]);
+            
+            log.info(`Invalidated OCR result for blob ${blobId}`);
+        } catch (error) {
+            log.error(`Failed to invalidate OCR result for blob ${blobId}: ${error}`);
+            throw error;
+        }
+    }
+
+    /**
+     * Get blobs that need OCR processing (modified after last OCR or never processed)
+     */
+    getBlobsNeedingOCR(): Array<{ blobId: string; mimeType: string; entityType: 'note' | 'attachment'; entityId: string }> {
+        try {
+            // Get notes with blobs that need OCR
+            const noteBlobs = sql.getRows<{
+                blobId: string;
+                mimeType: string;
+                entityId: string;
+            }>(`
+                SELECT n.blobId, n.mime as mimeType, n.noteId as entityId
+                FROM notes n
+                JOIN blobs b ON n.blobId = b.blobId
+                WHERE n.type = 'image' 
+                AND n.isDeleted = 0
+                AND n.blobId IS NOT NULL
+                AND (
+                    b.ocr_last_processed IS NULL 
+                    OR b.utcDateModified > b.ocr_last_processed
+                )
+            `);
+
+            // Get attachments with blobs that need OCR
+            const attachmentBlobs = sql.getRows<{
+                blobId: string;
+                mimeType: string;
+                entityId: string;
+            }>(`
+                SELECT a.blobId, a.mime as mimeType, a.attachmentId as entityId
+                FROM attachments a
+                JOIN blobs b ON a.blobId = b.blobId
+                WHERE a.role = 'image'
+                AND a.isDeleted = 0
+                AND a.blobId IS NOT NULL
+                AND (
+                    b.ocr_last_processed IS NULL 
+                    OR b.utcDateModified > b.ocr_last_processed
+                )
+            `);
+
+            // Combine results
+            const result = [
+                ...noteBlobs.map(blob => ({ ...blob, entityType: 'note' as const })),
+                ...attachmentBlobs.map(blob => ({ ...blob, entityType: 'attachment' as const }))
+            ];
+
+            // Filter to only supported MIME types
+            return result.filter(blob => this.isSupportedMimeType(blob.mimeType));
+        } catch (error) {
+            log.error(`Failed to get blobs needing OCR: ${error}`);
+            return [];
+        }
+    }
+
+    /**
+     * Process OCR for all blobs that need it (auto-processing)
+     */
+    async processAllBlobsNeedingOCR(): Promise<void> {
+        if (!this.isOCREnabled()) {
+            log.info('OCR is disabled, skipping auto-processing');
+            return;
+        }
+
+        const blobsNeedingOCR = this.getBlobsNeedingOCR();
+        if (blobsNeedingOCR.length === 0) {
+            log.info('No blobs need OCR processing');
+            return;
+        }
+
+        log.info(`Auto-processing OCR for ${blobsNeedingOCR.length} blobs...`);
+
+        for (const blobInfo of blobsNeedingOCR) {
+            try {
+                if (blobInfo.entityType === 'note') {
+                    await this.processNoteOCR(blobInfo.entityId);
+                } else {
+                    await this.processAttachmentOCR(blobInfo.entityId);
+                }
+                
+                // Add small delay to prevent overwhelming the system
+                await new Promise(resolve => setTimeout(resolve, 100));
+            } catch (error) {
+                log.error(`Failed to auto-process OCR for ${blobInfo.entityType} ${blobInfo.entityId}: ${error}`);
+                // Continue with other blobs
+            }
+        }
+
+        log.info('Auto-processing OCR completed');
     }
 }
 
