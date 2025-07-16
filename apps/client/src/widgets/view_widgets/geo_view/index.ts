@@ -226,7 +226,7 @@ export default class GeoView extends ViewMode<MapData> {
 
         // Add the new markers.
         this.currentMarkerData = {};
-        const notes = await this.parentNote.getChildNotes();
+        const notes = await this.parentNote.getSubtreeNotes();
         const draggable = !this.isReadOnly;
         for (const childNote of notes) {
             if (childNote.mime === "application/gpx+xml") {

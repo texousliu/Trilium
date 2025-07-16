@@ -265,6 +265,11 @@ class FNote {
         return noteIds.flat();
     }
 
+    async getSubtreeNotes() {
+        const noteIds = await this.getSubtreeNoteIds();
+        return this.froca.getNotes(noteIds);
+    }
+
     async getChildNotes() {
         return await this.froca.getNotes(this.children);
     }
