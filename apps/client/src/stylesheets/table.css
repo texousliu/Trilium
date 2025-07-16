@@ -66,6 +66,10 @@
     border-bottom-color: var(--col-header-arrow-inactive-color);
 }
 
+.tabulator div.tabulator-header .tabulator-frozen.tabulator-frozen-left {
+    margin-left: var(--cell-editing-border-width);
+}
+
 .tabulator div.tabulator-header .tabulator-col,
 .tabulator div.tabulator-header .tabulator-frozen.tabulator-frozen-left {
     background: var(--col-header-background-color);
@@ -110,6 +114,10 @@
 }
 
 /* Cell */
+
+.tabulator-row .tabulator-cell.tabulator-frozen.tabulator-frozen-left {
+    margin-right: var(--cell-editing-border-width);
+}
 
 .tabulator-row .tabulator-cell.tabulator-frozen.tabulator-frozen-left,
 .tabulator-row .tabulator-cell {
