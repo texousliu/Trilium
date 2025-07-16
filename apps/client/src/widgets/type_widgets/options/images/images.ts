@@ -17,6 +17,37 @@ const TPL = /*html*/`
         .batch-ocr-button {
             margin-top: 10px;
         }
+        .ocr-language-checkboxes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px;
+            margin-bottom: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+        }
+        .ocr-language-display {
+            background-color: #f8f9fa;
+            min-height: 38px;
+            padding: 8px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        .ocr-language-display .placeholder-text {
+            color: #6c757d;
+            font-style: italic;
+        }
+        .ocr-language-display .language-code {
+            background-color: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-right: 4px;
+            font-weight: 500;
+        }
     </style>
 
     <h4>${t("images.images_section_title")}</h4>
@@ -72,23 +103,76 @@ const TPL = /*html*/`
 
         <div class="form-group">
             <label>${t("images.ocr_language")}</label>
-            <select class="ocr-language form-control">
-                <option value="eng">English</option>
-                <option value="spa">Spanish</option>
-                <option value="fra">French</option>
-                <option value="deu">German</option>
-                <option value="ita">Italian</option>
-                <option value="por">Portuguese</option>
-                <option value="rus">Russian</option>
-                <option value="chi_sim">Chinese (Simplified)</option>
-                <option value="chi_tra">Chinese (Traditional)</option>
-                <option value="jpn">Japanese</option>
-                <option value="kor">Korean</option>
-                <option value="ara">Arabic</option>
-                <option value="hin">Hindi</option>
-                <option value="tha">Thai</option>
-                <option value="vie">Vietnamese</option>
-            </select>
+            <p class="form-text">${t("images.ocr_multi_language_description")}</p>
+            <div class="ocr-language-checkboxes">
+                <label class="tn-checkbox">
+                    <input type="checkbox" value="eng" data-language="eng">
+                    English
+                </label>
+                <label class="tn-checkbox">
+                    <input type="checkbox" value="spa" data-language="spa">
+                    Spanish
+                </label>
+                <label class="tn-checkbox">
+                    <input type="checkbox" value="fra" data-language="fra">
+                    French
+                </label>
+                <label class="tn-checkbox">
+                    <input type="checkbox" value="deu" data-language="deu">
+                    German
+                </label>
+                <label class="tn-checkbox">
+                    <input type="checkbox" value="ita" data-language="ita">
+                    Italian
+                </label>
+                <label class="tn-checkbox">
+                    <input type="checkbox" value="por" data-language="por">
+                    Portuguese
+                </label>
+                <label class="tn-checkbox">
+                    <input type="checkbox" value="rus" data-language="rus">
+                    Russian
+                </label>
+                <label class="tn-checkbox">
+                    <input type="checkbox" value="chi_sim" data-language="chi_sim">
+                    Chinese (Simplified)
+                </label>
+                <label class="tn-checkbox">
+                    <input type="checkbox" value="chi_tra" data-language="chi_tra">
+                    Chinese (Traditional)
+                </label>
+                <label class="tn-checkbox">
+                    <input type="checkbox" value="jpn" data-language="jpn">
+                    Japanese
+                </label>
+                <label class="tn-checkbox">
+                    <input type="checkbox" value="kor" data-language="kor">
+                    Korean
+                </label>
+                <label class="tn-checkbox">
+                    <input type="checkbox" value="ara" data-language="ara">
+                    Arabic
+                </label>
+                <label class="tn-checkbox">
+                    <input type="checkbox" value="hin" data-language="hin">
+                    Hindi
+                </label>
+                <label class="tn-checkbox">
+                    <input type="checkbox" value="tha" data-language="tha">
+                    Thai
+                </label>
+                <label class="tn-checkbox">
+                    <input type="checkbox" value="vie" data-language="vie">
+                    Vietnamese
+                </label>
+                <label class="tn-checkbox">
+                    <input type="checkbox" value="ron" data-language="ron">
+                    Romanian
+                </label>
+            </div>
+            <div class="ocr-language-display form-control" readonly>
+                <span class="placeholder-text">${t("images.ocr_no_languages_selected")}</span>
+            </div>
         </div>
 
         <div class="form-group">
@@ -130,7 +214,8 @@ export default class ImageOptions extends OptionsWidget {
     // OCR elements
     private $ocrEnabled!: JQuery<HTMLElement>;
     private $ocrAutoProcess!: JQuery<HTMLElement>;
-    private $ocrLanguage!: JQuery<HTMLElement>;
+    private $ocrLanguageCheckboxes!: JQuery<HTMLElement>;
+    private $ocrLanguageDisplay!: JQuery<HTMLElement>;
     private $ocrMinConfidence!: JQuery<HTMLElement>;
     private $ocrSettingsWrapper!: JQuery<HTMLElement>;
     private $batchOcrButton!: JQuery<HTMLElement>;
@@ -164,7 +249,8 @@ export default class ImageOptions extends OptionsWidget {
         // OCR settings
         this.$ocrEnabled = this.$widget.find(".ocr-enabled");
         this.$ocrAutoProcess = this.$widget.find(".ocr-auto-process");
-        this.$ocrLanguage = this.$widget.find(".ocr-language");
+        this.$ocrLanguageCheckboxes = this.$widget.find(".ocr-language-checkboxes");
+        this.$ocrLanguageDisplay = this.$widget.find(".ocr-language-display");
         this.$ocrMinConfidence = this.$widget.find(".ocr-min-confidence");
         this.$ocrSettingsWrapper = this.$widget.find(".ocr-settings-wrapper");
         this.$batchOcrButton = this.$widget.find(".batch-ocr-button");
@@ -179,7 +265,7 @@ export default class ImageOptions extends OptionsWidget {
 
         this.$ocrAutoProcess.on("change", () => this.updateCheckboxOption("ocrAutoProcessImages", this.$ocrAutoProcess));
 
-        this.$ocrLanguage.on("change", () => this.updateOption("ocrLanguage", this.$ocrLanguage.val()));
+        this.$ocrLanguageCheckboxes.on("change", "input[type='checkbox']", () => this.updateOcrLanguages());
 
         this.$ocrMinConfidence.on("change", () => this.updateOption("ocrMinConfidence", String(this.$ocrMinConfidence.val()).trim() || "0.6"));
 
@@ -197,7 +283,7 @@ export default class ImageOptions extends OptionsWidget {
         // OCR settings
         this.setCheckboxState(this.$ocrEnabled, options.ocrEnabled);
         this.setCheckboxState(this.$ocrAutoProcess, options.ocrAutoProcessImages);
-        this.$ocrLanguage.val(options.ocrLanguage || "eng");
+        this.setOcrLanguages(options.ocrLanguage || "eng");
         this.$ocrMinConfidence.val(options.ocrMinConfidence || "0.6");
 
         this.setImageCompression();
@@ -217,6 +303,59 @@ export default class ImageOptions extends OptionsWidget {
             this.$ocrSettingsWrapper.removeClass("disabled-field");
         } else {
             this.$ocrSettingsWrapper.addClass("disabled-field");
+        }
+    }
+
+    setOcrLanguages(languageString: string) {
+        // Clear all checkboxes first
+        this.$ocrLanguageCheckboxes.find('input[type="checkbox"]').prop('checked', false);
+        
+        if (languageString) {
+            // Split by '+' to handle multi-language format like "ron+eng"
+            const languages = languageString.split('+');
+            
+            languages.forEach(lang => {
+                const checkbox = this.$ocrLanguageCheckboxes.find(`input[data-language="${lang.trim()}"]`);
+                if (checkbox.length > 0) {
+                    checkbox.prop('checked', true);
+                }
+            });
+        }
+        
+        this.updateOcrLanguageDisplay();
+    }
+
+    updateOcrLanguages() {
+        const selectedLanguages: string[] = [];
+        
+        this.$ocrLanguageCheckboxes.find('input[type="checkbox"]:checked').each(function() {
+            selectedLanguages.push($(this).val() as string);
+        });
+        
+        // Join with '+' for Tesseract multi-language format
+        const languageString = selectedLanguages.join('+');
+        
+        this.updateOption("ocrLanguage", languageString || "eng");
+        this.updateOcrLanguageDisplay();
+    }
+
+    updateOcrLanguageDisplay() {
+        const selectedLanguages: string[] = [];
+        
+        this.$ocrLanguageCheckboxes.find('input[type="checkbox"]:checked').each(function() {
+            selectedLanguages.push($(this).val() as string);
+        });
+        
+        const displayContent = this.$ocrLanguageDisplay.find('.placeholder-text, .language-code');
+        displayContent.remove();
+        
+        if (selectedLanguages.length === 0) {
+            this.$ocrLanguageDisplay.html(`<span class="placeholder-text">${t("images.ocr_no_languages_selected")}</span>`);
+        } else {
+            const languageTags = selectedLanguages.map(lang => 
+                `<span class="language-code">${lang}</span>`
+            ).join('');
+            this.$ocrLanguageDisplay.html(languageTags);
         }
     }
 
