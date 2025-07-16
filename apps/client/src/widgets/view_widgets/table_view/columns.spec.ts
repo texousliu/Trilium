@@ -92,5 +92,20 @@ describe("restoreExistingData", () => {
         ];
         const restored = restoreExistingData(newDefs, oldDefs);
         expect(restored.length).toBe(3);
-    })
+    });
+
+    it("doesn't alter the existing order", () => {
+        const newDefs: ColumnDefinition[] = [
+            { title: "#", headerSort: false, hozAlign: "center", resizable: false, frozen: true, rowHandle: false },
+            { field: "noteId", title: "Note ID", visible: false },
+            { field: "title", title: "Title", editor: "input", width: 400 }
+        ]
+        const oldDefs: ColumnDefinition[] = [
+            { title: "#", headerSort: false, hozAlign: "center", resizable: false, rowHandle: false },
+            { field: "noteId", title: "Note ID", visible: false },
+            { field: "title", title: "Title", editor: "input", width: 400 }
+        ];
+        const restored = restoreExistingData(newDefs, oldDefs);
+        expect(restored).toStrictEqual(newDefs);
+    });
 });
