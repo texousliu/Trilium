@@ -69,7 +69,6 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote:
             },
             {
                 title: t("table_view.hide-column", { title }),
-                enabled: !!field,
                 uiIcon: "bx bx-hide",
                 handler: () => column.hide()
             },
@@ -129,7 +128,6 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote:
                 title,
                 checked: column.isVisible(),
                 uiIcon: "bx bx-empty",
-                enabled: !!field,
                 handler: () => column.toggle()
             });
         }

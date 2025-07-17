@@ -41,7 +41,7 @@ const labelTypeMappings: Record<ColumnType, Partial<ColumnDefinition>> = {
     }
 };
 
-export function buildColumnDefinitions(info: AttributeDefinitionInformation[], movableRows: boolean, existingColumnData?: ColumnDefinition[], position?: number) {
+export function buildColumnDefinitions(info: AttributeDefinitionInformation[], movableRows: boolean, existingColumnData: ColumnDefinition[] | undefined, position?: number) {
     let columnDefs: ColumnDefinition[] = [
         {
             title: "#",
@@ -102,10 +102,10 @@ export function restoreExistingData(newDefs: ColumnDefinition[], oldDefs: Column
         .filter(item => (item.field && newItemsByField.has(item.field!)) || item.title === "#")
         .map(oldItem => {
             const data = newItemsByField.get(oldItem.field!)!;
-            if (oldItem.width) {
+            if (oldItem.width !== undefined) {
                 data.width = oldItem.width;
             }
-            if (oldItem.visible) {
+            if (oldItem.visible !== undefined) {
                 data.visible = oldItem.visible;
             }
             return data;

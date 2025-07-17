@@ -137,7 +137,7 @@ export default class TableView extends ViewMode<StateInfo> {
 
         const { definitions: rowData, hasSubtree: hasChildren } = await buildRowDefinitions(this.parentNote, info);
         const movableRows = canReorderRows(this.parentNote) && !hasChildren;
-        const columnDefs = buildColumnDefinitions(info, movableRows);
+        const columnDefs = buildColumnDefinitions(info, movableRows, this.persistentData.columns);
         let opts: Options = {
             layout: "fitDataFill",
             index: "branchId",
