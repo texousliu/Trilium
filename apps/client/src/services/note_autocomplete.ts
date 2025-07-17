@@ -40,7 +40,10 @@ interface Options {
     allowCreatingNotes?: boolean;
     allowJumpToSearchNotes?: boolean;
     allowExternalLinks?: boolean;
+    /** If set, hides the right-side button corresponding to go to selected note. */
     hideGoToSelectedNoteButton?: boolean;
+    /** If set, hides all right-side buttons in the autocomplete dropdown */
+    hideAllButtons?: boolean;
 }
 
 async function autocompleteSourceForCKEditor(queryText: string) {
@@ -190,9 +193,11 @@ function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
 
     const $goToSelectedNoteButton = $("<a>").addClass("input-group-text go-to-selected-note-button bx bx-arrow-to-right");
 
-    $el.after($clearTextButton).after($showRecentNotesButton).after($fullTextSearchButton);
+    if (!options.hideAllButtons) {
+        $el.after($clearTextButton).after($showRecentNotesButton).after($fullTextSearchButton);
+    }
 
-    if (!options.hideGoToSelectedNoteButton) {
+    if (!options.hideGoToSelectedNoteButton && !options.hideAllButtons) {
         $el.after($goToSelectedNoteButton);
     }
 
