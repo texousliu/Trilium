@@ -41,7 +41,15 @@ const labelTypeMappings: Record<ColumnType, Partial<ColumnDefinition>> = {
     }
 };
 
-export function buildColumnDefinitions(info: AttributeDefinitionInformation[], movableRows: boolean, existingColumnData: ColumnDefinition[] | undefined, rowNumberHint: number, position?: number) {
+interface BuildColumnArgs {
+    info: AttributeDefinitionInformation[];
+    movableRows: boolean;
+    existingColumnData: ColumnDefinition[] | undefined;
+    rowNumberHint: number;
+    position?: number;
+}
+
+export function buildColumnDefinitions({ info, movableRows, existingColumnData, rowNumberHint, position }: BuildColumnArgs) {
     let columnDefs: ColumnDefinition[] = [
         {
             title: "#",

@@ -141,7 +141,12 @@ export default class TableView extends ViewMode<StateInfo> {
         const { definitions: rowData, hasSubtree: hasChildren, rowNumber } = await buildRowDefinitions(this.parentNote, info, this.maxDepth);
         this.rowNumberHint = rowNumber;
         const movableRows = canReorderRows(this.parentNote) && !hasChildren;
-        const columnDefs = buildColumnDefinitions(info, movableRows, this.persistentData.columns, this.rowNumberHint);
+        const columnDefs = buildColumnDefinitions({
+            info,
+            movableRows,
+            existingColumnData: this.persistentData.columns,
+            rowNumberHint: this.rowNumberHint
+        });
         let opts: Options = {
             layout: "fitDataFill",
             index: "branchId",
@@ -228,7 +233,13 @@ export default class TableView extends ViewMode<StateInfo> {
         }
 
         const info = getAttributeDefinitionInformation(this.parentNote);
-        const columnDefs = buildColumnDefinitions(info, !!this.api.options.movableRows, this.persistentData?.columns, this.colEditing?.getNewAttributePosition(), this.rowNumberHint);
+        const columnDefs = buildColumnDefinitions({
+            info,
+            movableRows: !!this.api.options.movableRows,
+            existingColumnData: this.persistentData?.columns,
+            rowNumberHint: this.rowNumberHint,
+            position: this.colEditing?.getNewAttributePosition()
+        });
         this.api.setColumns(columnDefs);
         this.colEditing?.resetNewAttributePosition();
     }

@@ -7,7 +7,7 @@ import FNote from "../../../entities/fnote.js";
  *
  * The value of the cell must be the note ID.
  */
-export function NoteFormatter(cell: CellComponent, _formatterParams, onRendered) {
+export function NoteFormatter(cell: CellComponent, _formatterParams, onRendered): string {
     let noteId = cell.getValue();
     if (!noteId) {
         return "";
@@ -30,7 +30,7 @@ export function NoteFormatter(cell: CellComponent, _formatterParams, onRendered)
     if (cachedNote) {
         // Cache hit, build the link immediately
         const el = buildLink(cachedNote);
-        return el?.outerHTML;
+        return el?.outerHTML ?? "";
     } else {
         // Cache miss, load the note asynchronously
         onRendered(async () => {
@@ -44,9 +44,9 @@ export function NoteFormatter(cell: CellComponent, _formatterParams, onRendered)
                 cell.getElement().appendChild(el);
             }
         });
-    }
 
-    return "";
+        return "";
+    }
 }
 
 /**
