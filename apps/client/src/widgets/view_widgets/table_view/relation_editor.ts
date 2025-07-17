@@ -29,18 +29,15 @@ export function RelationEditor(cell: CellComponent, onRendered, success, cancel,
 
     //set focus on the select box when the editor is selected
     onRendered(function(){
+        let noteId = "";
+
         note_autocomplete.initNoteAutocomplete($editor, {
             allowCreatingNotes: true,
             hideAllButtons: true
         }).on("autocomplete:noteselected", (event, suggestion, dataset) => {
             const notePath = suggestion.notePath;
-            if (!notePath) {
-                return;
-            }
-
-            const noteId = notePath.split("/").at(-1);
-            success(noteId);
-        });
+            noteId = (notePath ?? "").split("/").at(-1);
+        }).on("blur", () => success(noteId));
         editor.focus();
     });
 
