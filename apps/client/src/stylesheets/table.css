@@ -153,8 +153,8 @@
 }
 
 /* Align items without children/expander to the ones with. */
-.tabulator-cell > span:first-child,         /* 1st level */
-.tabulator-cell > div:first-child + span {  /* sub-level */
+.tabulator-cell[tabulator-field="title"] > span:first-child,         /* 1st level */
+.tabulator-cell[tabulator-field="title"] > div:first-child + span {  /* sub-level */
     padding-left: 21px;
 }
 
