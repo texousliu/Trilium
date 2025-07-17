@@ -1,5 +1,6 @@
 import { CellComponent } from "tabulator-tables";
-import { loadReferenceLinkTitle } from "../../../services/link.js";
+import froca from "../../../services/froca.js";
+import FNote from "../../../entities/fnote.js";
 
 /**
  * Custom formatter to represent a note, with the icon and note title being rendered.
@@ -12,11 +13,39 @@ export function NoteFormatter(cell: CellComponent, _formatterParams, onRendered)
         return "";
     }
 
-    onRendered(async () => {
-        const { $noteRef, href } = buildNoteLink(noteId);
-        await loadReferenceLinkTitle($noteRef, href);
-        cell.getElement().appendChild($noteRef[0]);
-    });
+    function buildLink(note: FNote | undefined) {
+        if (!note) {
+            return;
+        }
+
+        const iconClass = note.getIcon();
+        const title = note.title;
+        const { $noteRef } = buildNoteLink(noteId);
+        $noteRef.text(title);
+        $noteRef.prepend($("<span>").addClass(iconClass));
+        return $noteRef[0];
+    }
+
+    const cachedNote = froca.getNoteFromCache(noteId);
+    if (cachedNote) {
+        // Cache hit, build the link immediately
+        const el = buildLink(cachedNote);
+        return el?.outerHTML;
+    } else {
+        // Cache miss, load the note asynchronously
+        onRendered(async () => {
+            const note = await froca.getNote(noteId);
+            if (!note) {
+                return;
+            }
+
+            const el = buildLink(note);
+            if (el) {
+                cell.getElement().appendChild(el);
+            }
+        });
+    }
+
     return "";
 }
 

@@ -67,7 +67,6 @@ export function buildColumnDefinitions(info: AttributeDefinitionInformation[], m
             width: 400
         }
     ];
-    console.log("Log ", rowNumberHint, columnDefs[0].width);
 
     const seenFields = new Set<string>();
     for (const { name, title, type } of info) {

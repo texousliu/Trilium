@@ -21,23 +21,30 @@ export function RelationEditor(cell: CellComponent, onRendered, success, cancel,
     editor.style.boxSizing = "border-box";
 
     //Set value of editor to the current value of the cell
-    const noteId = cell.getValue();
-    if (noteId) {
-        const note = froca.getNoteFromCache(noteId);
+    const originalNoteId = cell.getValue();
+    if (originalNoteId) {
+        const note = froca.getNoteFromCache(originalNoteId);
         editor.value = note.title;
+    } else {
+        editor.value = "";
     }
 
     //set focus on the select box when the editor is selected
     onRendered(function(){
-        let noteId = "";
+        let newNoteId = originalNoteId;
 
         note_autocomplete.initNoteAutocomplete($editor, {
             allowCreatingNotes: true,
             hideAllButtons: true
         }).on("autocomplete:noteselected", (event, suggestion, dataset) => {
             const notePath = suggestion.notePath;
-            noteId = (notePath ?? "").split("/").at(-1);
-        }).on("blur", () => success(noteId));
+            newNoteId = (notePath ?? "").split("/").at(-1);
+        }).on("blur", () => {
+            if (!editor.value) {
+                newNoteId = "";
+            }
+            success(newNoteId);
+        });
         editor.focus();
     });
 
