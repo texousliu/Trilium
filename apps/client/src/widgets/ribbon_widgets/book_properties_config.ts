@@ -4,8 +4,6 @@ import attributes from "../../services/attributes";
 import { ViewTypeOptions } from "../../services/note_list_renderer"
 import NoteContextAwareWidget from "../note_context_aware_widget";
 
-export type BookProperty = CheckBoxProperty | ButtonProperty;
-
 interface BookConfig {
     properties: BookProperty[];
 }
@@ -23,6 +21,14 @@ interface ButtonProperty {
     icon?: string;
     onClick: (context: BookContext) => void;
 }
+
+interface NumberProperty {
+    type: "number",
+    label: string;
+    bindToLabel: string;
+}
+
+export type BookProperty = CheckBoxProperty | ButtonProperty | NumberProperty;
 
 interface BookContext {
     note: FNote;
@@ -85,6 +91,12 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
         properties: []
     },
     table: {
-        properties: []
+        properties: [
+            {
+                label: "Max nesting depth",
+                type: "number",
+                bindToLabel: "maxNestingDepth"
+            }
+        ]
     }
 };

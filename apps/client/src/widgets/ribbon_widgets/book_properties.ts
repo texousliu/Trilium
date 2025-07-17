@@ -168,6 +168,22 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
                 });
                 $container.append($button);
                 break;
+            case "number":
+                const $numberInput = $("<input>", {
+                    type: "number",
+                    class: "form-control form-control-sm",
+                    value: note.getLabelValue(property.bindToLabel) || "",
+                });
+                $numberInput.on("change", () => {
+                    const value = $numberInput.val();
+                    if (value === "") {
+                        attributes.removeOwnedLabelByName(note, property.bindToLabel);
+                    } else {
+                        attributes.setLabel(note.noteId, property.bindToLabel, String(value));
+                    }
+                });
+                $container.append($("<label>").text(property.label).append($numberInput));
+                break;
         }
 
         return $container;
