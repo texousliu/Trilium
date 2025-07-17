@@ -26,6 +26,8 @@ interface NumberProperty {
     type: "number",
     label: string;
     bindToLabel: string;
+    width?: number;
+    min?: number;
 }
 
 export type BookProperty = CheckBoxProperty | ButtonProperty | NumberProperty;
@@ -93,9 +95,10 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
     table: {
         properties: [
             {
-                label: "Max nesting depth",
+                label: "Max nesting depth:",
                 type: "number",
-                bindToLabel: "maxNestingDepth"
+                bindToLabel: "maxNestingDepth",
+                width: 65
             }
         ]
     }

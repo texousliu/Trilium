@@ -23,8 +23,13 @@ const TPL = /*html*/`
             align-items: center;
         }
 
-        .book-properties-container > * {
+        .book-properties-container > div {
             margin-right: 15px;
+        }
+
+        .book-properties-container > .type-number > label {
+            display: flex;
+            align-items: baseline;
         }
 
         .book-properties-container input[type="checkbox"] {
@@ -127,6 +132,7 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
 
     renderBookProperty(property: BookProperty) {
         const $container = $("<div>");
+        $container.addClass(`type-${property.type}`);
         const note = this.note;
         if (!note) {
             return $container;
@@ -173,6 +179,8 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
                     type: "number",
                     class: "form-control form-control-sm",
                     value: note.getLabelValue(property.bindToLabel) || "",
+                    width: property.width ?? 100,
+                    min: property.min ?? 0
                 });
                 $numberInput.on("change", () => {
                     const value = $numberInput.val();
@@ -182,7 +190,10 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
                         attributes.setLabel(note.noteId, property.bindToLabel, String(value));
                     }
                 });
-                $container.append($("<label>").text(property.label).append($numberInput));
+                $container.append($("<label>")
+                    .text(property.label)
+                    .append("&nbsp;".repeat(2))
+                    .append($numberInput));
                 break;
         }
 
