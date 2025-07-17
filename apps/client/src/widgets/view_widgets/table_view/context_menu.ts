@@ -11,6 +11,10 @@ import type Component from "../../../components/component.js";
 export function setupContextMenu(tabulator: Tabulator, parentNote: FNote) {
     tabulator.on("rowContext", (e, row) => showRowContextMenu(e, row, parentNote, tabulator));
     tabulator.on("headerContext", (e, col) => showColumnContextMenu(e, col, parentNote, tabulator));
+    tabulator.on("renderComplete", () => {
+        const headerRow = tabulator.element.querySelector(".tabulator-header-contents");
+        headerRow?.addEventListener("contextmenu", (e) => showHeaderContextMenu(e, tabulator));
+    });
 
     // Pressing the expand button prevents bubbling and the context menu remains menu when it shouldn't.
     if (tabulator.options.dataTree) {
@@ -75,7 +79,7 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote:
             {
                 title: t("table_view.show-hide-columns"),
                 uiIcon: "bx bx-empty",
-                items: buildColumnItems()
+                items: buildColumnItems(tabulator)
             },
             { title: "----" },
             {
@@ -118,22 +122,32 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote:
         y: e.pageY
     });
     e.preventDefault();
+}
 
-    function buildColumnItems() {
-        const items: MenuItem<unknown>[] = [];
-        for (const column of tabulator.getColumns()) {
-            const { title, field } = column.getDefinition();
-
-            items.push({
-                title,
-                checked: column.isVisible(),
+/**
+ * Shows a context menu which has options dedicated to the header area (the part where the columns are, but in the empty space).
+ * Provides generic options such as toggling columns.
+ */
+function showHeaderContextMenu(_e: Event, tabulator: Tabulator) {
+    const e = _e as MouseEvent;
+    contextMenu.show({
+        items: [
+            {
+                title: t("table_view.show-hide-columns"),
                 uiIcon: "bx bx-empty",
-                handler: () => column.toggle()
-            });
-        }
-
-        return items;
-    }
+                items: buildColumnItems(tabulator)
+            },
+            {
+                title: t("table_view.new-column"),
+                uiIcon: "bx bx-columns",
+                handler: () => getParentComponent(e)?.triggerCommand("addNewTableColumn", {})
+            },
+        ],
+        selectMenuItemHandler() {},
+        x: e.pageX,
+        y: e.pageY
+    });
+    e.preventDefault();
 }
 
 export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: FNote, tabulator: Tabulator) {
@@ -212,4 +226,20 @@ function getParentComponent(e: MouseEvent) {
     return $(e.target)
         .closest(".component")
         .prop("component") as Component;
+}
+
+function buildColumnItems(tabulator: Tabulator) {
+    const items: MenuItem<unknown>[] = [];
+    for (const column of tabulator.getColumns()) {
+        const { title } = column.getDefinition();
+
+        items.push({
+            title,
+            checked: column.isVisible(),
+            uiIcon: "bx bx-empty",
+            handler: () => column.toggle()
+        });
+    }
+
+    return items;
 }
