@@ -12,7 +12,7 @@ export type TableData = {
     _children?: TableData[];
 };
 
-export async function buildRowDefinitions(parentNote: FNote, infos: AttributeDefinitionInformation[]) {
+export async function buildRowDefinitions(parentNote: FNote, infos: AttributeDefinitionInformation[], maxDepth = -1, currentDepth = 0) {
     const definitions: TableData[] = [];
     let hasSubtree = false;
     for (const branch of parentNote.getChildBranches()) {
@@ -40,8 +40,8 @@ export async function buildRowDefinitions(parentNote: FNote, infos: AttributeDef
             branchId: branch.branchId,
         }
 
-        if (note.hasChildren()) {
-            def._children = (await buildRowDefinitions(note, infos)).definitions;
+        if (note.hasChildren() && (maxDepth < 0 || currentDepth < maxDepth)) {
+            def._children = (await buildRowDefinitions(note, infos, maxDepth, currentDepth + 1)).definitions;
             hasSubtree = true;
         }
 
