@@ -41,7 +41,7 @@ const labelTypeMappings: Record<ColumnType, Partial<ColumnDefinition>> = {
     }
 };
 
-export function buildColumnDefinitions(info: AttributeDefinitionInformation[], movableRows: boolean, existingColumnData: ColumnDefinition[] | undefined, position?: number) {
+export function buildColumnDefinitions(info: AttributeDefinitionInformation[], movableRows: boolean, existingColumnData: ColumnDefinition[] | undefined, rowNumberHint: number, position?: number) {
     let columnDefs: ColumnDefinition[] = [
         {
             title: "#",
@@ -50,6 +50,7 @@ export function buildColumnDefinitions(info: AttributeDefinitionInformation[], m
             resizable: false,
             frozen: true,
             rowHandle: movableRows,
+            width: calculateIndexColumnWidth(rowNumberHint, movableRows),
             formatter: RowNumberFormatter(movableRows)
         },
         {
@@ -66,6 +67,7 @@ export function buildColumnDefinitions(info: AttributeDefinitionInformation[], m
             width: 400
         }
     ];
+    console.log("Log ", rowNumberHint, columnDefs[0].width);
 
     const seenFields = new Set<string>();
     for (const { name, title, type } of info) {
@@ -102,7 +104,7 @@ export function restoreExistingData(newDefs: ColumnDefinition[], oldDefs: Column
         .filter(item => (item.field && newItemsByField.has(item.field!)) || item.title === "#")
         .map(oldItem => {
             const data = newItemsByField.get(oldItem.field!)!;
-            if (oldItem.width !== undefined) {
+            if (oldItem.resizable && oldItem.width !== undefined) {
                 data.width = oldItem.width;
             }
             if (oldItem.visible !== undefined) {
@@ -127,4 +129,12 @@ export function restoreExistingData(newDefs: ColumnDefinition[], oldDefs: Column
         ...newColumns,
         ...existingColumns.slice(insertPos)
     ];
+}
+
+function calculateIndexColumnWidth(rowNumberHint: number, movableRows: boolean): number {
+    let columnWidth = 16 * (rowNumberHint.toString().length || 1);
+    if (movableRows) {
+        columnWidth += 32;
+    }
+    return columnWidth;
 }

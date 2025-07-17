@@ -14,8 +14,11 @@ export type TableData = {
 
 export async function buildRowDefinitions(parentNote: FNote, infos: AttributeDefinitionInformation[], maxDepth = -1, currentDepth = 0) {
     const definitions: TableData[] = [];
+    const childBranches = parentNote.getChildBranches();
     let hasSubtree = false;
-    for (const branch of parentNote.getChildBranches()) {
+    let rowNumber = childBranches.length;
+
+    for (const branch of childBranches) {
         const note = await branch.getNote();
         if (!note) {
             continue; // Skip if the note is not found
@@ -41,8 +44,10 @@ export async function buildRowDefinitions(parentNote: FNote, infos: AttributeDef
         }
 
         if (note.hasChildren() && (maxDepth < 0 || currentDepth < maxDepth)) {
-            def._children = (await buildRowDefinitions(note, infos, maxDepth, currentDepth + 1)).definitions;
+            const { definitions, rowNumber: subRowNumber } = (await buildRowDefinitions(note, infos, maxDepth, currentDepth + 1));
+            def._children = definitions;
             hasSubtree = true;
+            rowNumber += subRowNumber;
         }
 
         definitions.push(def);
@@ -50,7 +55,8 @@ export async function buildRowDefinitions(parentNote: FNote, infos: AttributeDef
 
     return {
         definitions,
-        hasSubtree
+        hasSubtree,
+        rowNumber
     };
 }
 

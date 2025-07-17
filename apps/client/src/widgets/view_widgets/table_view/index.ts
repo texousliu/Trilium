@@ -105,6 +105,7 @@ export default class TableView extends ViewMode<StateInfo> {
     private colEditing?: TableColumnEditing;
     private rowEditing?: TableRowEditing;
     private maxDepth: number = -1;
+    private rowNumberHint: number = 1;
 
     constructor(args: ViewModeArgs) {
         super(args, "table");
@@ -137,9 +138,10 @@ export default class TableView extends ViewMode<StateInfo> {
         this.persistentData = viewStorage?.tableData || {};
 
         this.maxDepth = parseInt(this.parentNote.getLabelValue("maxNestingDepth") ?? "-1", 10);
-        const { definitions: rowData, hasSubtree: hasChildren } = await buildRowDefinitions(this.parentNote, info, this.maxDepth);
+        const { definitions: rowData, hasSubtree: hasChildren, rowNumber } = await buildRowDefinitions(this.parentNote, info, this.maxDepth);
+        this.rowNumberHint = rowNumber;
         const movableRows = canReorderRows(this.parentNote) && !hasChildren;
-        const columnDefs = buildColumnDefinitions(info, movableRows, this.persistentData.columns);
+        const columnDefs = buildColumnDefinitions(info, movableRows, this.persistentData.columns, this.rowNumberHint);
         let opts: Options = {
             layout: "fitDataFill",
             index: "branchId",
@@ -226,7 +228,7 @@ export default class TableView extends ViewMode<StateInfo> {
         }
 
         const info = getAttributeDefinitionInformation(this.parentNote);
-        const columnDefs = buildColumnDefinitions(info, !!this.api.options.movableRows, this.persistentData?.columns, this.colEditing?.getNewAttributePosition());
+        const columnDefs = buildColumnDefinitions(info, !!this.api.options.movableRows, this.persistentData?.columns, this.colEditing?.getNewAttributePosition(), this.rowNumberHint);
         this.api.setColumns(columnDefs);
         this.colEditing?.resetNewAttributePosition();
     }
@@ -243,7 +245,8 @@ export default class TableView extends ViewMode<StateInfo> {
         }
 
         const info = getAttributeDefinitionInformation(this.parentNote);
-        const { definitions, hasSubtree } = await buildRowDefinitions(this.parentNote, info, this.maxDepth);
+        const { definitions, hasSubtree, rowNumber } = await buildRowDefinitions(this.parentNote, info, this.maxDepth);
+        this.rowNumberHint = rowNumber;
 
         // Force a refresh if the data tree needs enabling/disabling.
         if (this.api.options.dataTree !== hasSubtree) {
