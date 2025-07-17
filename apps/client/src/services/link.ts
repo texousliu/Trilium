@@ -316,7 +316,7 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
     const openInNewWindow = isLeftClick && evt?.shiftKey && !ctrlKey;
 
     if (notePath) {
-        if (openInPopup) {
+        if (isLeftClick && openInPopup) {
             appContext.triggerCommand("openInPopup", { noteIdOrPath: notePath });
         } else if (openInNewWindow) {
             appContext.triggerCommand("openInWindow", { notePath, viewScope });
