@@ -152,6 +152,11 @@
     color: var(--row-text-color);
 }
 
+/* Align items without children/expander to the ones with. */
+.tabulator-cell > div:first-child + span {
+    padding-left: 21px;
+}
+
 /* Checkbox cells */
 
 .tabulator .tabulator-cell:has(svg),
