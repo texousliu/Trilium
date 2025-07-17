@@ -161,6 +161,7 @@ export default class TableView extends ViewMode<StateInfo> {
                 dataTreeStartExpanded: true,
                 dataTreeBranchElement: false,
                 dataTreeElementColumn: "title",
+                dataTreeChildIndent: 20,
                 dataTreeExpandElement: `<button class="tree-expand"><span class="bx bx-chevron-right"></span></button>`,
                 dataTreeCollapseElement: `<button class="tree-collapse"><span class="bx bx-chevron-down"></span></button>`
             }
