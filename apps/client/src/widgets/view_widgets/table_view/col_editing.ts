@@ -78,14 +78,14 @@ export default class TableColumnEditing extends Component {
             return;
         }
 
-        const { name, type, value } = this.newAttribute;
+        const { name, value } = this.newAttribute;
 
         this.api.blockRedraw();
         try {
             if (this.existingAttributeToEdit && this.existingAttributeToEdit.name !== name) {
                 const oldName = this.existingAttributeToEdit.name.split(":")[1];
-                const newName = name.split(":")[1];
-                await renameColumn(this.parentNote.noteId, type, oldName, newName);
+                const [ type, newName ] = name.split(":");
+                await renameColumn(this.parentNote.noteId, type as "label" | "relation", oldName, newName);
             }
 
             attributes.setLabel(this.parentNote.noteId, name, value);
