@@ -52,7 +52,7 @@
     "cheerio": "1.1.0",
     "chokidar": "4.0.3",
     "cls-hooked": "4.2.2",
-    "compression": "1.8.0",
+    "compression": "1.8.1",
     "cookie-parser": "1.4.7",
     "csrf-csrf": "3.2.2",
     "dayjs": "1.11.13",
