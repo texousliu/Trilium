@@ -86,6 +86,7 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote:
                 title: t("table_view.add-column-to-the-left"),
                 uiIcon: "bx bx-horizontal-left",
                 enabled: !column.getDefinition().frozen,
+                items: buildInsertSubmenu(e, column, "before"),
                 handler: () => getParentComponent(e)?.triggerCommand("addNewTableColumn", {
                     referenceColumn: column
                 })
@@ -93,6 +94,7 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote:
             {
                 title: t("table_view.add-column-to-the-right"),
                 uiIcon: "bx bx-horizontal-right",
+                items: buildInsertSubmenu(e, column, "after"),
                 handler: () => getParentComponent(e)?.triggerCommand("addNewTableColumn", {
                     referenceColumn: column,
                     direction: "after"
@@ -242,4 +244,27 @@ function buildColumnItems(tabulator: Tabulator) {
     }
 
     return items;
+}
+
+function buildInsertSubmenu(e: MouseEvent, referenceColumn: ColumnComponent, direction: "before" | "after"): MenuItem<unknown>[] {
+    return [
+        {
+            title: "Label",
+            handler: () => {
+                getParentComponent(e)?.triggerCommand("addNewTableColumn", {
+                    referenceColumn,
+                    type: "label"
+                });
+            }
+        },
+        {
+            title: "Relation",
+            handler: () => {
+                getParentComponent(e)?.triggerCommand("addNewTableColumn", {
+                    referenceColumn,
+                    type: "relation"
+                });
+            }
+        }
+    ]
 }

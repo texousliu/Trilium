@@ -30,7 +30,7 @@ export default class TableColumnEditing extends Component {
         this.parentNote = parentNote;
     }
 
-    addNewTableColumnCommand({ referenceColumn, columnToEdit, direction }: EventData<"addNewTableColumn">) {
+    addNewTableColumnCommand({ referenceColumn, columnToEdit, direction, type }: EventData<"addNewTableColumn">) {
         let attr: Attribute | undefined;
 
         this.existingAttributeToEdit = undefined;
@@ -44,7 +44,7 @@ export default class TableColumnEditing extends Component {
         if (!attr) {
             attr = {
                 type: "label",
-                name: "label:myLabel",
+                name: `${type ?? "label"}:myLabel`,
                 value: "promoted,single,text"
             };
         }
