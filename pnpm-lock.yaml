@@ -263,8 +263,8 @@ importers:
         specifier: 8.11.1
         version: 8.11.1
       marked:
-        specifier: 16.0.0
-        version: 16.0.0
+        specifier: 16.1.0
+        version: 16.1.0
       mermaid:
         specifier: 11.8.1
         version: 11.8.1
@@ -706,8 +706,8 @@ importers:
         specifier: 26.1.0
         version: 26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       marked:
-        specifier: 16.0.0
-        version: 16.0.0
+        specifier: 16.1.0
+        version: 16.1.0
       mime-types:
         specifier: 3.0.1
         version: 3.0.1
@@ -10367,8 +10367,8 @@ packages:
     engines: {node: '>= 18'}
     hasBin: true
 
-  marked@16.0.0:
-    resolution: {integrity: sha512-MUKMXDjsD/eptB7GPzxo4xcnLS6oo7/RHimUMHEDRhUooPwmN9BEpMl7AEOJv3bmso169wHI2wUF9VQgL7zfmA==}
+  marked@16.1.0:
+    resolution: {integrity: sha512-Me7BNa1aqrxVinDnFfvCgHh2yHvLbFvILBs899MhuBpbE5VPzpSqv7alaESfkqkgc9JNvUGH4gqwZeOzLnY8Jg==}
     engines: {node: '>= 20'}
     hasBin: true
 
@@ -27259,7 +27259,7 @@ snapshots:
 
   marked@15.0.12: {}
 
-  marked@16.0.0: {}
+  marked@16.1.0: {}
 
   matcher@3.0.0:
     dependencies:
