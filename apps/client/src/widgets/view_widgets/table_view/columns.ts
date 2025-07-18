@@ -111,7 +111,7 @@ export function restoreExistingData(newDefs: ColumnDefinition[], oldDefs: Column
         .filter(item => (item.field && newItemsByField.has(item.field!)) || item.title === "#")
         .map(oldItem => {
             const data = newItemsByField.get(oldItem.field!)!;
-            if (oldItem.resizable && oldItem.width !== undefined) {
+            if (oldItem.resizable !== false && oldItem.width !== undefined) {
                 data.width = oldItem.width;
             }
             if (oldItem.visible !== undefined) {
