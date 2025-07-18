@@ -253,7 +253,8 @@ function buildInsertSubmenu(e: MouseEvent, referenceColumn: ColumnComponent, dir
             handler: () => {
                 getParentComponent(e)?.triggerCommand("addNewTableColumn", {
                     referenceColumn,
-                    type: "label"
+                    type: "label",
+                    direction
                 });
             }
         },
@@ -262,7 +263,8 @@ function buildInsertSubmenu(e: MouseEvent, referenceColumn: ColumnComponent, dir
             handler: () => {
                 getParentComponent(e)?.triggerCommand("addNewTableColumn", {
                     referenceColumn,
-                    type: "relation"
+                    type: "relation",
+                    direction
                 });
             }
         }
