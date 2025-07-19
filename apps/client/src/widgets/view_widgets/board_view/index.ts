@@ -15,11 +15,11 @@ const TPL = /*html*/`
         .board-view-container {
             height: 100%;
             display: flex;
-            gap: 1em;
+            gap: 1.5em;
         }
 
         .board-view-container .board-column {
-            min-width: 200px;
+            width: 250px;
         }
 
         .board-view-container .board-column h3 {
