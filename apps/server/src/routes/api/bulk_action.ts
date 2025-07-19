@@ -12,7 +12,7 @@ function execute(req: Request) {
 
     const bulkActionNote = becca.getNoteOrThrow("_bulkAction");
 
-    bulkActionService.executeActions(bulkActionNote, affectedNoteIds);
+    bulkActionService.executeActionsFromNote(bulkActionNote, affectedNoteIds);
 }
 
 function getAffectedNoteCount(req: Request) {

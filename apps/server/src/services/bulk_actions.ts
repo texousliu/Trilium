@@ -6,97 +6,88 @@ import { randomString } from "./utils.js";
 import eraseService from "./erase.js";
 import type BNote from "../becca/entities/bnote.js";
 
-interface AddLabelAction {
-    labelName: string;
-    labelValue?: string;
-}
-
-interface AddRelationAction {
-    relationName: string;
-    targetNoteId: string;
-}
-
-interface DeleteRevisionsAction {}
-interface DeleteLabelAction {
-    labelName: string;
-}
-
-interface DeleteRelationAction {
-    relationName: string;
-}
-
-interface RenameNoteAction {
-    newTitle: string;
-}
-
-interface RenameLabelAction {
-    oldLabelName: string;
-    newLabelName: string;
-}
-
-interface RenameRelationAction {
-    oldRelationName: string;
-    newRelationName: string;
-}
-
-interface UpdateLabelValueAction {
-    labelName: string;
-    labelValue: string;
-}
-
-interface UpdateRelationTargetAction {
-    relationName: string;
-    targetNoteId: string;
-}
-
-interface MoveNoteAction {
-    targetParentNoteId: string;
-}
-
-interface ExecuteScriptAction {
-    script: string;
-}
-
-interface DeleteNoteAction { }
-
-type BulkAction = AddLabelAction | AddRelationAction | DeleteNoteAction | DeleteRevisionsAction | DeleteLabelAction | DeleteRelationAction | RenameNoteAction | RenameLabelAction | RenameRelationAction | UpdateLabelValueAction | UpdateRelationTargetAction | MoveNoteAction | ExecuteScriptAction;
+type ActionHandlers = {
+    addLabel: {
+        labelName: string;
+        labelValue?: string;
+    },
+    addRelation: {
+        relationName: string;
+        targetNoteId: string;
+    },
+    deleteNote: {},
+    deleteRevisions: {},
+    deleteLabel: {
+        labelName: string;
+    },
+    deleteRelation: {
+        relationName: string;
+    },
+    renameNote: {
+        newTitle: string;
+    },
+    renameLabel: {
+        oldLabelName: string;
+        newLabelName: string;
+    },
+    renameRelation: {
+        oldRelationName: string;
+        newRelationName: string;
+    },
+    updateLabelValue: {
+        labelName: string;
+        labelValue: string;
+    },
+    updateRelationTarget: {
+        relationName: string;
+        targetNoteId: string;
+    },
+    moveNote: {
+        targetParentNoteId: string;
+    },
+    executeScript: {
+        script: string;
+    }
+};
 
 type ActionHandler<T> = (action: T, note: BNote) => void;
 
 type ActionHandlerMap = {
-    [K in keyof BulkAction]: ActionHandler<K>;
-}
+    [K in keyof ActionHandlers]: ActionHandler<ActionHandlers[K] & { name: K }>;
+};
+
+export type BulkAction = { name: keyof ActionHandlers } & ActionHandlers[keyof ActionHandlers];
 
 const ACTION_HANDLERS: ActionHandlerMap = {
-    addLabel: (action: AddLabelAction, note: BNote) => {
+    addLabel: (action, note) => {
         note.addLabel(action.labelName, action.labelValue);
     },
-    addRelation: (action: AddRelationAction, note: BNote) => {
+    addRelation: (action, note) => {
         note.addRelation(action.relationName, action.targetNoteId);
     },
-    deleteNote: (action: DeleteNoteAction, note: BNote) => {
+    deleteNote: (action, note) => {
         const deleteId = `searchbulkaction-${randomString(10)}`;
 
         note.deleteNote(deleteId);
     },
-    deleteRevisions: (action: DeleteRevisionsAction, note: BNote) => {
+    deleteRevisions: (action, note) => {
         const revisionIds = note
             .getRevisions()
             .map((rev) => rev.revisionId)
             .filter((rev) => !!rev) as string[];
         eraseService.eraseRevisions(revisionIds);
     },
-    deleteLabel: (action: DeleteLabelAction, note: BNote) => {
+    deleteLabel: (action, note) => {
         for (const label of note.getOwnedLabels(action.labelName)) {
             label.markAsDeleted();
         }
     },
-    deleteRelation: (action: DeleteRelationAction, note: BNote) => {
+    deleteRelation: (action, note) => {
         for (const relation of note.getOwnedRelations(action.relationName)) {
             relation.markAsDeleted();
         }
     },
-    renameNote: (action: RenameNoteAction, note: BNote) => {
+    renameNote: (action, note) => {
         // "officially" injected value:
         // - note
 
@@ -107,7 +98,7 @@ const ACTION_HANDLERS: ActionHandlerMap = {
             note.save();
         }
     },
-    renameLabel: (action: RenameLabelAction, note: BNote) => {
+    renameLabel: (action, note) => {
         for (const label of note.getOwnedLabels(action.oldLabelName)) {
             // attribute name is immutable, renaming means delete old + create new
             const newLabel = label.createClone("label", action.newLabelName, label.value);
@@ -116,7 +107,7 @@ const ACTION_HANDLERS: ActionHandlerMap = {
             label.markAsDeleted();
         }
     },
-    renameRelation: (action: RenameRelationAction, note: BNote) => {
+    renameRelation: (action, note) => {
         for (const relation of note.getOwnedRelations(action.oldRelationName)) {
             // attribute name is immutable, renaming means delete old + create new
             const newRelation = relation.createClone("relation", action.newRelationName, relation.value);
@@ -125,19 +116,19 @@ const ACTION_HANDLERS: ActionHandlerMap = {
             relation.markAsDeleted();
         }
     },
-    updateLabelValue: (action: UpdateLabelValueAction, note: BNote) => {
+    updateLabelValue: (action, note) => {
         for (const label of note.getOwnedLabels(action.labelName)) {
             label.value = action.labelValue;
             label.save();
         }
     },
-    updateRelationTarget: (action: UpdateRelationTargetAction, note: BNote) => {
+    updateRelationTarget: (action, note) => {
         for (const relation of note.getOwnedRelations(action.relationName)) {
             relation.value = action.targetNoteId;
             relation.save();
         }
     },
-    moveNote: (action: MoveNoteAction, note: BNote) => {
+    moveNote: (action, note) => {
         const targetParentNote = becca.getNote(action.targetParentNoteId);
 
         if (!targetParentNote) {
@@ -158,7 +149,7 @@ const ACTION_HANDLERS: ActionHandlerMap = {
             log.info(`Moving/cloning note ${note.noteId} to ${action.targetParentNoteId} failed with error ${JSON.stringify(res)}`);
         }
     },
-    executeScript: (action: ExecuteScriptAction, note: BNote) => {
+    executeScript: (action, note) => {
         if (!action.script || !action.script.trim()) {
             log.info("Ignoring executeScript since the script is empty.");
             return;
@@ -169,7 +160,7 @@ const ACTION_HANDLERS: ActionHandlerMap = {
 
         note.save();
     }
-};
+} as const;
 
 function getActions(note: BNote) {
     return note
@@ -189,15 +180,23 @@ function getActions(note: BNote) {
                 return null;
             }
 
-            return action;
+            return action as BulkAction;
         })
         .filter((a) => !!a);
 }
 
-function executeActions(note: BNote, searchResultNoteIds: string[] | Set<string>) {
+/**
+ * Executes the bulk actions defined in the note against the provided search result note IDs.
+ * @param note the note containing the bulk actions, read from the `action` label.
+ * @param noteIds the IDs of the notes to apply the actions to.
+ */
+function executeActionsFromNote(note: BNote, noteIds: string[] | Set<string>) {
     const actions = getActions(note);
+    return executeActions(actions, noteIds);
+}
 
-    for (const resultNoteId of searchResultNoteIds) {
+function executeActions(actions: BulkAction[], noteIds: string[] | Set<string>) {
+    for (const resultNoteId of noteIds) {
         const resultNote = becca.getNote(resultNoteId);
 
         if (!resultNote) {
@@ -217,5 +216,6 @@ function executeActions(note: BNote, searchResultNoteIds: string[] | Set<string>
 }
 
 export default {
-    executeActions
+    executeActions,
+    executeActionsFromNote
 };
