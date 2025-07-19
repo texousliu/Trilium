@@ -139,11 +139,13 @@ function showHeaderContextMenu(_e: Event, tabulator: Tabulator) {
                 uiIcon: "bx bx-empty",
                 items: buildColumnItems(tabulator)
             },
+            { title: "----" },
             {
                 title: t("table_view.new-column"),
-                uiIcon: "bx bx-columns",
-                handler: () => getParentComponent(e)?.triggerCommand("addNewTableColumn", {})
+                uiIcon: "bx bx-empty",
+                enabled: false
             },
+            ...buildInsertSubmenu(e)
         ],
         selectMenuItemHandler() {},
         x: e.pageX,
@@ -246,7 +248,7 @@ function buildColumnItems(tabulator: Tabulator) {
     return items;
 }
 
-function buildInsertSubmenu(e: MouseEvent, referenceColumn: ColumnComponent, direction: "before" | "after"): MenuItem<unknown>[] {
+function buildInsertSubmenu(e: MouseEvent, referenceColumn?: ColumnComponent, direction?: "before" | "after"): MenuItem<unknown>[] {
     return [
         {
             title: t("table_view.new-column-label"),

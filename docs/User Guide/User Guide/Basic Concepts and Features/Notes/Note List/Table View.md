@@ -35,7 +35,7 @@ To create a new column, either:
 
 *   Press _Add new column_ at the bottom of the table.
 *   Right click on an existing column and select Add column to the left/right.
-*   Right click on the empty space of the column header and select _New column_.
+*   Right click on the empty space of the column header and select _Label_ or _Relation_ in the _New column_ section.
 
 ### Adding new rows
 

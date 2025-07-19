@@ -26,6 +26,11 @@ export interface MenuCommandItem<T> {
     title: string;
     command?: T;
     type?: string;
+    /**
+     * The icon to display in the menu item.
+     *
+     * If not set, no icon is displayed and the item will appear shifted slightly to the left if there are other items with icons. To avoid this, use `bx bx-empty`.
+     */
     uiIcon?: string;
     badges?: MenuItemBadge[];
     templateNoteId?: string;
