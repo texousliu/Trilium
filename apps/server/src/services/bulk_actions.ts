@@ -162,9 +162,8 @@ function executeActions(actions: BulkAction[], noteIds: string[] | Set<string>) 
             try {
                 log.info(`Applying action handler to note ${resultNote.noteId}: ${JSON.stringify(action)}`);
 
-                const handler = ACTION_HANDLERS[action.name];
-                //@ts-ignore
-                handler(action as BulkAction, resultNote);
+                const handler = ACTION_HANDLERS[action.name] as (a: typeof action, n: BNote) => void;
+                handler(action, resultNote);
             } catch (e: any) {
                 log.error(`ExecuteScript search action failed with ${e.message}`);
             }
