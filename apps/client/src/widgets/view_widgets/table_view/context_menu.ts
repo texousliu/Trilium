@@ -249,7 +249,7 @@ function buildColumnItems(tabulator: Tabulator) {
 function buildInsertSubmenu(e: MouseEvent, referenceColumn: ColumnComponent, direction: "before" | "after"): MenuItem<unknown>[] {
     return [
         {
-            title: "Label",
+            title: t("table_view.new-column-label"),
             handler: () => {
                 getParentComponent(e)?.triggerCommand("addNewTableColumn", {
                     referenceColumn,
@@ -259,7 +259,7 @@ function buildInsertSubmenu(e: MouseEvent, referenceColumn: ColumnComponent, dir
             }
         },
         {
-            title: "Relation",
+            title: t("table_view.new-column-relation"),
             handler: () => {
                 getParentComponent(e)?.triggerCommand("addNewTableColumn", {
                     referenceColumn,
