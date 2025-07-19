@@ -219,8 +219,8 @@ export default class TableView extends ViewMode<StateInfo> {
         }
 
         if (loadResults.getBranchRows().some(branch => branch.parentNoteId === this.parentNote.noteId || this.noteIds.includes(branch.parentNoteId ?? ""))
-            || loadResults.getNoteIds().some(noteId => this.noteIds.includes(noteId)
-            || loadResults.getAttributeRows().some(attr => this.noteIds.includes(attr.noteId!)))) {
+            || loadResults.getNoteIds().some(noteId => this.noteIds.includes(noteId))
+            || loadResults.getAttributeRows().some(attr => this.noteIds.includes(attr.noteId!))) {
             return await this.#manageRowsUpdate();
         }
 

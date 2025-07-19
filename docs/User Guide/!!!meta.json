@@ -3742,13 +3742,6 @@
                                                 {
                                                     "type": "relation",
                                                     "name": "internalLink",
-                                                    "value": "m1lbrzyKDaRB",
-                                                    "isInheritable": false,
-                                                    "position": 20
-                                                },
-                                                {
-                                                    "type": "relation",
-                                                    "name": "internalLink",
                                                     "value": "eIg8jdvaoNNd",
                                                     "isInheritable": false,
                                                     "position": 30
@@ -3780,6 +3773,20 @@
                                                     "value": "bx bx-table",
                                                     "isInheritable": false,
                                                     "position": 10
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "m1lbrzyKDaRB",
+                                                    "isInheritable": false,
+                                                    "position": 70
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "BlN9DFI679QC",
+                                                    "isInheritable": false,
+                                                    "position": 80
                                                 }
                                             ],
                                             "format": "markdown",
