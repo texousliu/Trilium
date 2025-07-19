@@ -66,7 +66,8 @@ export default class TableColumnEditing extends Component {
             isOwned: true,
             x: 0,
             y: 150,
-            focus: "name"
+            focus: "name",
+            hideMultiplicity: true
         });
     }
 
