@@ -45,7 +45,8 @@ export default class TableColumnEditing extends Component {
             attr = {
                 type: "label",
                 name: `${type ?? "label"}:myLabel`,
-                value: "promoted,single,text"
+                value: "promoted,single,text",
+                isInheritable: true
             };
         }
 
@@ -78,7 +79,7 @@ export default class TableColumnEditing extends Component {
             return;
         }
 
-        const { name, value } = this.newAttribute;
+        const { name, value, isInheritable } = this.newAttribute;
 
         this.api.blockRedraw();
         try {
@@ -88,7 +89,7 @@ export default class TableColumnEditing extends Component {
                 await renameColumn(this.parentNote.noteId, type as "label" | "relation", oldName, newName);
             }
 
-            attributes.setLabel(this.parentNote.noteId, name, value);
+            attributes.setLabel(this.parentNote.noteId, name, value, isInheritable);
             if (this.existingAttributeToEdit) {
                 attributes.removeOwnedLabelByName(this.parentNote, this.existingAttributeToEdit.name);
             }
