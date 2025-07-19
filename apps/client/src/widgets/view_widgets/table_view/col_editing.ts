@@ -82,17 +82,18 @@ export default class TableColumnEditing extends Component {
         const { name, value, isInheritable } = this.newAttribute;
 
         this.api.blockRedraw();
+        const isRename = (this.existingAttributeToEdit && this.existingAttributeToEdit.name !== name);
         try {
-            if (this.existingAttributeToEdit && this.existingAttributeToEdit.name !== name) {
-                const oldName = this.existingAttributeToEdit.name.split(":")[1];
+            if (isRename) {
+                const oldName = this.existingAttributeToEdit!.name.split(":")[1];
                 const [ type, newName ] = name.split(":");
                 await renameColumn(this.parentNote.noteId, type as "label" | "relation", oldName, newName);
             }
 
-            attributes.setLabel(this.parentNote.noteId, name, value, isInheritable);
-            if (this.existingAttributeToEdit) {
+            if (this.existingAttributeToEdit && (isRename || this.existingAttributeToEdit.isInheritable !== isInheritable)) {
                 attributes.removeOwnedLabelByName(this.parentNote, this.existingAttributeToEdit.name);
             }
+            attributes.setLabel(this.parentNote.noteId, name, value, isInheritable);
         } finally {
             this.api.restoreRedraw();
         }
@@ -134,17 +135,17 @@ export default class TableColumnEditing extends Component {
         return this.parentNote.getLabel(attrName);
     }
 
-    getAttributeFromField(field: string) {
+    getAttributeFromField(field: string): Attribute | undefined {
         const fAttribute = this.getFAttributeFromField(field);
         if (fAttribute) {
             return {
                 name: fAttribute.name,
                 value: fAttribute.value,
-                type: fAttribute.type
+                type: fAttribute.type,
+                isInheritable: fAttribute.isInheritable
             };
         }
         return undefined;
     }
 
 }
-
