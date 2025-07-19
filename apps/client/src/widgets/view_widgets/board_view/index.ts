@@ -1,4 +1,5 @@
 import ViewMode, { ViewModeArgs } from "../view_mode";
+import { getBoardData } from "./data";
 
 const TPL = /*html*/`
 <div class="board-view">
@@ -45,7 +46,8 @@ export default class BoardView extends ViewMode<StateInfo> {
     }
 
     private async renderBoard(el: HTMLElement) {
-
+        const data = await getBoardData(this.noteIds, "status");
+        console.log("Board data:", data);
     }
 
 }
