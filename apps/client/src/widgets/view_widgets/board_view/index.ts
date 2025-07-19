@@ -3,6 +3,7 @@ import ViewMode, { ViewModeArgs } from "../view_mode";
 import { getBoardData } from "./data";
 import attributeService from "../../../services/attributes";
 import branchService from "../../../services/branches";
+import noteCreateService from "../../../services/note_create";
 import appContext, { EventData } from "../../../components/app_context";
 
 const TPL = /*html*/`
@@ -85,6 +86,28 @@ const TPL = /*html*/`
 
         .board-drop-indicator.show {
             opacity: 1;
+        }
+
+        .board-new-item {
+            margin-top: 0.5em;
+            padding: 0.5em;
+            border: 2px dashed var(--main-border-color);
+            border-radius: 5px;
+            text-align: center;
+            color: var(--muted-text-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: transparent;
+        }
+
+        .board-new-item:hover {
+            border-color: var(--main-text-color);
+            color: var(--main-text-color);
+            background-color: var(--hover-item-background-color);
+        }
+
+        .board-new-item .icon {
+            margin-right: 0.25em;
         }
     </style>
 
@@ -173,6 +196,18 @@ export default class BoardView extends ViewMode<StateInfo> {
 
                 $columnEl.append($noteEl);
             }
+
+            // Add "New item" link at the bottom of the column
+            const $newItemEl = $("<div>")
+                .addClass("board-new-item")
+                .attr("data-column", column)
+                .html('<span class="icon bx bx-plus"></span>New item');
+
+            $newItemEl.on("click", () => {
+                this.createNewItem(column);
+            });
+
+            $columnEl.append($newItemEl);
 
             $(el).append($columnEl);
         }
@@ -340,6 +375,31 @@ export default class BoardView extends ViewMode<StateInfo> {
         }
 
         $dropIndicator.addClass("show");
+    }
+
+    private async createNewItem(column: string) {
+        try {
+            // Get the parent note path
+            const parentNotePath = this.parentNote.noteId;
+
+            // Create a new note as a child of the parent note
+            const { note: newNote } = await noteCreateService.createNote(parentNotePath, {
+                activate: false
+            });
+
+            if (newNote) {
+                // Set the status label to place it in the correct column
+                await attributeService.setLabel(newNote.noteId, "status", column);
+
+                // Refresh the board to show the new item
+                await this.renderList();
+
+                // Optionally, open the new note for editing
+                appContext.triggerCommand("openInPopup", { noteIdOrPath: newNote.noteId });
+            }
+        } catch (error) {
+            console.error("Failed to create new item:", error);
+        }
     }
 
     async onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
