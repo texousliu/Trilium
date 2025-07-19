@@ -1,3 +1,4 @@
+import { setupHorizontalScrollViaWheel } from "../../widget_utils";
 import ViewMode, { ViewModeArgs } from "../view_mode";
 import { getBoardData } from "./data";
 
@@ -56,7 +57,9 @@ export default class BoardView extends ViewMode<StateInfo> {
         super(args, "board");
 
         this.$root = $(TPL);
+        setupHorizontalScrollViaWheel(this.$root);
         this.$container = this.$root.find(".board-view-container");
+
         args.$parent.append(this.$root);
     }
 
