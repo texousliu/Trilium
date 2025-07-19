@@ -236,8 +236,11 @@ export default class BoardView extends ViewMode<StateInfo> {
             e.preventDefault();
             $columnEl.removeClass("drag-over");
 
-            if (this.draggedNote && this.draggedNoteElement && this.draggedBranch) {
-                const currentColumn = this.draggedNoteElement.attr("data-current-column");
+            const draggedNoteElement = this.draggedNoteElement;
+            const draggedNote = this.draggedNote;
+            const draggedBranch = this.draggedBranch;
+            if (draggedNote && draggedNoteElement && draggedBranch) {
+                const currentColumn = draggedNoteElement.attr("data-current-column");
 
                 // Capture drop indicator position BEFORE removing it
                 const dropIndicator = $columnEl.find(".board-drop-indicator.show");
@@ -264,32 +267,32 @@ export default class BoardView extends ViewMode<StateInfo> {
                 try {
                     // Handle column change
                     if (currentColumn !== column) {
-                        await attributeService.setLabel(this.draggedNote.noteId, "status", column);
+                        await attributeService.setLabel(draggedNote.noteId, "status", column);
                     }
 
                     // Handle position change (works for both same column and different column moves)
                     if (targetBranchId && moveType) {
                         if (moveType === "before") {
-                            console.log("Move before branch:", this.draggedBranch.branchId, "to", targetBranchId);
-                            await branchService.moveBeforeBranch([this.draggedBranch.branchId], targetBranchId);
+                            console.log("Move before branch:", draggedBranch.branchId, "to", targetBranchId);
+                            await branchService.moveBeforeBranch([draggedBranch.branchId], targetBranchId);
                         } else if (moveType === "after") {
-                            console.log("Move after branch:", this.draggedBranch.branchId, "to", targetBranchId);
-                            await branchService.moveAfterBranch([this.draggedBranch.branchId], targetBranchId);
+                            console.log("Move after branch:", draggedBranch.branchId, "to", targetBranchId);
+                            await branchService.moveAfterBranch([draggedBranch.branchId], targetBranchId);
                         }
                     }
 
                     // Update the UI
                     if (dropIndicator.length > 0) {
-                        dropIndicator.after(this.draggedNoteElement);
+                        dropIndicator.after(draggedNoteElement);
                     } else {
-                        $columnEl.append(this.draggedNoteElement);
+                        $columnEl.append(draggedNoteElement);
                     }
 
                     // Update the data attributes
-                    this.draggedNoteElement.attr("data-current-column", column);
+                    draggedNoteElement.attr("data-current-column", column);
 
                     // Show success feedback
-                    console.log(`Moved note "${this.draggedNote.title}" from "${currentColumn}" to "${column}"`);
+                    console.log(`Moved note "${draggedNote.title}" from "${currentColumn}" to "${column}"`);
                 } catch (error) {
                     console.error("Failed to update note position:", error);
                     // Optionally show user-facing error message
