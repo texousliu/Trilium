@@ -5,6 +5,8 @@ import attributeService from "../../../services/attributes";
 import branchService from "../../../services/branches";
 import noteCreateService from "../../../services/note_create";
 import appContext, { EventData } from "../../../components/app_context";
+import { BoardData } from "./config";
+import SpacedUpdate from "../../../services/spaced_update";
 
 const TPL = /*html*/`
 <div class="board-view">
@@ -115,17 +117,15 @@ const TPL = /*html*/`
 </div>
 `;
 
-export interface StateInfo {
-
-};
-
-export default class BoardView extends ViewMode<StateInfo> {
+export default class BoardView extends ViewMode<BoardData> {
 
     private $root: JQuery<HTMLElement>;
     private $container: JQuery<HTMLElement>;
+    private spacedUpdate: SpacedUpdate;
     private draggedNote: any = null;
     private draggedBranch: any = null;
     private draggedNoteElement: JQuery<HTMLElement> | null = null;
+    private persistentData: BoardData;
 
     constructor(args: ViewModeArgs) {
         super(args, "board");
@@ -133,6 +133,10 @@ export default class BoardView extends ViewMode<StateInfo> {
         this.$root = $(TPL);
         setupHorizontalScrollViaWheel(this.$root);
         this.$container = this.$root.find(".board-view-container");
+        this.spacedUpdate = new SpacedUpdate(() => this.onSave(), 5_000);
+        this.persistentData = {
+            columns: []
+        };
 
         args.$parent.append(this.$root);
     }
@@ -145,7 +149,12 @@ export default class BoardView extends ViewMode<StateInfo> {
     }
 
     private async renderBoard(el: HTMLElement) {
-        const data = await getBoardData(this.parentNote, "status");
+        const data = await getBoardData(this.parentNote, "status", this.persistentData);
+
+        if (data.newPersistedData) {
+            this.persistentData = data.newPersistedData;
+            this.viewStorage.store(this.persistentData);
+        }
 
         for (const column of data.byColumn.keys()) {
             const columnItems = data.byColumn.get(column);
@@ -419,6 +428,10 @@ export default class BoardView extends ViewMode<StateInfo> {
         }
 
         return false;
+    }
+
+    private onSave() {
+        this.viewStorage.store(this.persistentData);
     }
 
 }
