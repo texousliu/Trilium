@@ -5,60 +5,13 @@ import branchService from "./branches.js";
 import { randomString } from "./utils.js";
 import eraseService from "./erase.js";
 import type BNote from "../becca/entities/bnote.js";
-
-type ActionHandlers = {
-    addLabel: {
-        labelName: string;
-        labelValue?: string;
-    },
-    addRelation: {
-        relationName: string;
-        targetNoteId: string;
-    },
-    deleteNote: {},
-    deleteRevisions: {},
-    deleteLabel: {
-        labelName: string;
-    },
-    deleteRelation: {
-        relationName: string;
-    },
-    renameNote: {
-        newTitle: string;
-    },
-    renameLabel: {
-        oldLabelName: string;
-        newLabelName: string;
-    },
-    renameRelation: {
-        oldRelationName: string;
-        newRelationName: string;
-    },
-    updateLabelValue: {
-        labelName: string;
-        labelValue: string;
-    },
-    updateRelationTarget: {
-        relationName: string;
-        targetNoteId: string;
-    },
-    moveNote: {
-        targetParentNoteId: string;
-    },
-    executeScript: {
-        script: string;
-    }
-};
-
-type BulkActionData<T extends keyof ActionHandlers> = ActionHandlers[T] & { name: T };
+import { ActionHandlers, BulkAction, BulkActionData } from "@triliumnext/commons";
 
 type ActionHandler<T> = (action: T, note: BNote) => void;
 
 type ActionHandlerMap = {
     [K in keyof ActionHandlers]: ActionHandler<BulkActionData<K>>;
 };
-
-export type BulkAction = BulkActionData<keyof ActionHandlers>;
 
 const ACTION_HANDLERS: ActionHandlerMap = {
     addLabel: (action, note) => {

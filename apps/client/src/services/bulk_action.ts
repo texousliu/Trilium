@@ -16,6 +16,7 @@ import RenameNoteBulkAction from "../widgets/bulk_actions/note/rename_note.js";
 import { t } from "./i18n.js";
 import type FNote from "../entities/fnote.js";
 import toast from "./toast.js";
+import { BulkAction } from "@triliumnext/commons";
 
 const ACTION_GROUPS = [
     {
@@ -90,7 +91,7 @@ function parseActions(note: FNote) {
         .filter((action) => !!action);
 }
 
-export async function executeBulkActions(parentNoteId: string, actions: {}[]) {
+export async function executeBulkActions(parentNoteId: string, actions: BulkAction[]) {
     await server.post("bulk-action/execute", {
         noteIds: [ parentNoteId ],
         includeDescendants: true,
