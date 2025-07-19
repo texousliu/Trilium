@@ -3,7 +3,7 @@ import ViewMode, { ViewModeArgs } from "../view_mode";
 import { getBoardData } from "./data";
 import attributeService from "../../../services/attributes";
 import branchService from "../../../services/branches";
-import { EventData } from "../../../components/app_context";
+import appContext, { EventData } from "../../../components/app_context";
 
 const TPL = /*html*/`
 <div class="board-view">
@@ -166,6 +166,7 @@ export default class BoardView extends ViewMode<StateInfo> {
                     .text(note.title);
 
                 $noteEl.prepend($iconEl);
+                $noteEl.on("click", () => appContext.triggerCommand("openInPopup", { noteIdOrPath: note.noteId }));
 
                 // Setup drag functionality for the note
                 this.setupNoteDrag($noteEl, note, branch);
