@@ -16,7 +16,7 @@ export default function buildFooter(parentNote: FNote) {
         </button>
 
         <button class="btn btn-sm" style="padding: 0px 10px 0px 10px;" data-trigger-command="addNewTableColumn">
-            <span class="bx bx-columns"></span> ${t("table_view.new-column")}
+            <span class="bx bx-carousel"></span> ${t("table_view.new-column")}
         </button>
     `.trimStart();
 }
