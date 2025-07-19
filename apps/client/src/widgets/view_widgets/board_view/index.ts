@@ -5,10 +5,9 @@ const TPL = /*html*/`
 <div class="board-view">
     <style>
         .board-view {
-            overflow: hidden;
+            overflow-x: auto;
             position: relative;
             height: 100%;
-            padding: 1em;
             user-select: none;
         }
 
@@ -16,10 +15,12 @@ const TPL = /*html*/`
             height: 100%;
             display: flex;
             gap: 1.5em;
+            padding: 1em;
         }
 
         .board-view-container .board-column {
             width: 250px;
+            flex-shrink: 0;
         }
 
         .board-view-container .board-column h3 {
