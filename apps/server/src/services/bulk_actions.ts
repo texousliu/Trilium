@@ -6,53 +6,97 @@ import { randomString } from "./utils.js";
 import eraseService from "./erase.js";
 import type BNote from "../becca/entities/bnote.js";
 
-interface Action {
+interface AddLabelAction {
     labelName: string;
-    labelValue: string;
+    labelValue?: string;
+}
+
+interface AddRelationAction {
+    relationName: string;
+    targetNoteId: string;
+}
+
+interface DeleteRevisionsAction {}
+interface DeleteLabelAction {
+    labelName: string;
+}
+
+interface DeleteRelationAction {
+    relationName: string;
+}
+
+interface RenameNoteAction {
+    newTitle: string;
+}
+
+interface RenameLabelAction {
     oldLabelName: string;
     newLabelName: string;
+}
 
-    relationName: string;
+interface RenameRelationAction {
     oldRelationName: string;
     newRelationName: string;
+}
 
+interface UpdateLabelValueAction {
+    labelName: string;
+    labelValue: string;
+}
+
+interface UpdateRelationTargetAction {
+    relationName: string;
     targetNoteId: string;
+}
+
+interface MoveNoteAction {
     targetParentNoteId: string;
-    newTitle: string;
+}
+
+interface ExecuteScriptAction {
     script: string;
 }
-type ActionHandler = (action: Action, note: BNote) => void;
 
-const ACTION_HANDLERS: Record<string, ActionHandler> = {
-    addLabel: (action, note) => {
+interface DeleteNoteAction { }
+
+type BulkAction = AddLabelAction | AddRelationAction | DeleteNoteAction | DeleteRevisionsAction | DeleteLabelAction | DeleteRelationAction | RenameNoteAction | RenameLabelAction | RenameRelationAction | UpdateLabelValueAction | UpdateRelationTargetAction | MoveNoteAction | ExecuteScriptAction;
+
+type ActionHandler<T> = (action: T, note: BNote) => void;
+
+type ActionHandlerMap = {
+    [K in keyof BulkAction]: ActionHandler<K>;
+}
+
+const ACTION_HANDLERS: ActionHandlerMap = {
+    addLabel: (action: AddLabelAction, note: BNote) => {
         note.addLabel(action.labelName, action.labelValue);
     },
-    addRelation: (action, note) => {
+    addRelation: (action: AddRelationAction, note: BNote) => {
         note.addRelation(action.relationName, action.targetNoteId);
     },
-    deleteNote: (action, note) => {
+    deleteNote: (action: DeleteNoteAction, note: BNote) => {
         const deleteId = `searchbulkaction-${randomString(10)}`;
 
         note.deleteNote(deleteId);
     },
-    deleteRevisions: (action, note) => {
+    deleteRevisions: (action: DeleteRevisionsAction, note: BNote) => {
         const revisionIds = note
             .getRevisions()
             .map((rev) => rev.revisionId)
             .filter((rev) => !!rev) as string[];
         eraseService.eraseRevisions(revisionIds);
     },
-    deleteLabel: (action, note) => {
+    deleteLabel: (action: DeleteLabelAction, note: BNote) => {
         for (const label of note.getOwnedLabels(action.labelName)) {
             label.markAsDeleted();
         }
     },
-    deleteRelation: (action, note) => {
+    deleteRelation: (action: DeleteRelationAction, note: BNote) => {
         for (const relation of note.getOwnedRelations(action.relationName)) {
             relation.markAsDeleted();
         }
     },
-    renameNote: (action, note) => {
+    renameNote: (action: RenameNoteAction, note: BNote) => {
         // "officially" injected value:
         // - note
 
@@ -63,7 +107,7 @@ const ACTION_HANDLERS: Record<string, ActionHandler> = {
             note.save();
         }
     },
-    renameLabel: (action, note) => {
+    renameLabel: (action: RenameLabelAction, note: BNote) => {
         for (const label of note.getOwnedLabels(action.oldLabelName)) {
             // attribute name is immutable, renaming means delete old + create new
             const newLabel = label.createClone("label", action.newLabelName, label.value);
@@ -72,7 +116,7 @@ const ACTION_HANDLERS: Record<string, ActionHandler> = {
             label.markAsDeleted();
         }
     },
-    renameRelation: (action, note) => {
+    renameRelation: (action: RenameRelationAction, note: BNote) => {
         for (const relation of note.getOwnedRelations(action.oldRelationName)) {
             // attribute name is immutable, renaming means delete old + create new
             const newRelation = relation.createClone("relation", action.newRelationName, relation.value);
@@ -81,19 +125,19 @@ const ACTION_HANDLERS: Record<string, ActionHandler> = {
             relation.markAsDeleted();
         }
     },
-    updateLabelValue: (action, note) => {
+    updateLabelValue: (action: UpdateLabelValueAction, note: BNote) => {
         for (const label of note.getOwnedLabels(action.labelName)) {
             label.value = action.labelValue;
             label.save();
         }
     },
-    updateRelationTarget: (action, note) => {
+    updateRelationTarget: (action: UpdateRelationTargetAction, note: BNote) => {
         for (const relation of note.getOwnedRelations(action.relationName)) {
             relation.value = action.targetNoteId;
             relation.save();
         }
     },
-    moveNote: (action, note) => {
+    moveNote: (action: MoveNoteAction, note: BNote) => {
         const targetParentNote = becca.getNote(action.targetParentNoteId);
 
         if (!targetParentNote) {
@@ -114,7 +158,7 @@ const ACTION_HANDLERS: Record<string, ActionHandler> = {
             log.info(`Moving/cloning note ${note.noteId} to ${action.targetParentNoteId} failed with error ${JSON.stringify(res)}`);
         }
     },
-    executeScript: (action, note) => {
+    executeScript: (action: ExecuteScriptAction, note: BNote) => {
         if (!action.script || !action.script.trim()) {
             log.info("Ignoring executeScript since the script is empty.");
             return;
