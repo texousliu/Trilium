@@ -50,13 +50,15 @@ type ActionHandlers = {
     }
 };
 
+type BulkActionData<T extends keyof ActionHandlers> = ActionHandlers[T] & { name: T };
+
 type ActionHandler<T> = (action: T, note: BNote) => void;
 
 type ActionHandlerMap = {
-    [K in keyof ActionHandlers]: ActionHandler<ActionHandlers[K] & { name: K }>;
+    [K in keyof ActionHandlers]: ActionHandler<BulkActionData<K>>;
 };
 
-export type BulkAction = { name: keyof ActionHandlers } & ActionHandlers[keyof ActionHandlers];
+export type BulkAction = BulkActionData<keyof ActionHandlers>;
 
 const ACTION_HANDLERS: ActionHandlerMap = {
     addLabel: (action, note) => {
@@ -207,7 +209,9 @@ function executeActions(actions: BulkAction[], noteIds: string[] | Set<string>) 
             try {
                 log.info(`Applying action handler to note ${resultNote.noteId}: ${JSON.stringify(action)}`);
 
-                ACTION_HANDLERS[action.name](action, resultNote);
+                const handler = ACTION_HANDLERS[action.name];
+                //@ts-ignore
+                handler(action as BulkAction, resultNote);
             } catch (e: any) {
                 log.error(`ExecuteScript search action failed with ${e.message}`);
             }

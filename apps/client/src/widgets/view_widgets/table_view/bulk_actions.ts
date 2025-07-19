@@ -1,6 +1,4 @@
 import { t } from "i18next";
-import attributes from "../../../services/attributes";
-import froca from "../../../services/froca";
 import server from "../../../services/server";
 import toast from "../../../services/toast";
 import ws from "../../../services/ws";
@@ -36,16 +34,10 @@ export async function deleteColumn(parentNoteId: string, type: "label" | "relati
 }
 
 async function executeBulkAction(parentNoteId: string, action: {}) {
-    const bulkActionNote = await froca.getNote("_bulkAction");
-    if (!bulkActionNote) {
-        console.warn("Bulk action note not found");
-        return;
-    }
-
-    attributes.setLabel("_bulkAction", "action", JSON.stringify(action));
     await server.post("bulk-action/execute", {
         noteIds: [ parentNoteId ],
-        includeDescendants: true
+        includeDescendants: true,
+        actions: [ action ]
     });
 
     await ws.waitForMaxKnownEntityChangeId();
