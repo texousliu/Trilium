@@ -1,11 +1,23 @@
+import FBranch from "../../../entities/fbranch";
 import FNote from "../../../entities/fnote";
-import froca from "../../../services/froca";
 
-export async function getBoardData(noteIds: string[], groupByColumn: string) {
-    const notes = await froca.getNotes(noteIds);
-    const byColumn: Map<string, FNote[]> = new Map();
+export async function getBoardData(parentNote: FNote, groupByColumn: string) {
+    const byColumn: Map<string, FBranch[]> = new Map();
 
-    for (const note of notes) {
+    await recursiveGroupBy(parentNote.getChildBranches(), byColumn, groupByColumn);
+
+    return {
+        byColumn
+    };
+}
+
+async function recursiveGroupBy(branches: FBranch[], byColumn: Map<string, FBranch[]>, groupByColumn: string) {
+    for (const branch of branches) {
+        const note = await branch.getNote();
+        if (!note) {
+            continue;
+        }
+
         const group = note.getLabelValue(groupByColumn);
         if (!group) {
             continue;
@@ -14,10 +26,6 @@ export async function getBoardData(noteIds: string[], groupByColumn: string) {
         if (!byColumn.has(group)) {
             byColumn.set(group, []);
         }
-        byColumn.get(group)!.push(note);
+        byColumn.get(group)!.push(branch);
     }
-
-    return {
-        byColumn
-    };
 }

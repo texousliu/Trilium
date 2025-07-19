@@ -120,11 +120,11 @@ export default class BoardView extends ViewMode<StateInfo> {
     }
 
     private async renderBoard(el: HTMLElement) {
-        const data = await getBoardData(this.noteIds, "status");
+        const data = await getBoardData(this.parentNote, "status");
 
         for (const column of data.byColumn.keys()) {
-            const columnNotes = data.byColumn.get(column);
-            if (!columnNotes) {
+            const columnBranches = data.byColumn.get(column);
+            if (!columnBranches) {
                 continue;
             }
 
@@ -145,7 +145,12 @@ export default class BoardView extends ViewMode<StateInfo> {
             // Setup drop zone for the column
             this.setupColumnDropZone($columnEl, column);
 
-            for (const note of columnNotes) {
+            for (const branch of columnBranches) {
+                const note = await branch.getNote();
+                if (!note) {
+                    continue;
+                }
+
                 const $iconEl = $("<span>")
                     .addClass("icon")
                     .addClass(note.getIcon());
