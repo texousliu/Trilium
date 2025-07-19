@@ -44,4 +44,6 @@ export type ActionHandlers = {
 
 export type BulkActionData<T extends keyof ActionHandlers> = ActionHandlers[T] & { name: T };
 
-export type BulkAction = BulkActionData<keyof ActionHandlers>;
+export type BulkAction = {
+  [K in keyof ActionHandlers]: { name: K; } & ActionHandlers[K];
+}[keyof ActionHandlers];
