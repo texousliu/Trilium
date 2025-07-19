@@ -2,6 +2,7 @@ import { setupHorizontalScrollViaWheel } from "../../widget_utils";
 import ViewMode, { ViewModeArgs } from "../view_mode";
 import { getBoardData } from "./data";
 import attributeService from "../../../services/attributes";
+import { EventData } from "../../../components/app_context";
 
 const TPL = /*html*/`
 <div class="board-view">
@@ -293,6 +294,14 @@ export default class BoardView extends ViewMode<StateInfo> {
         }
 
         $dropIndicator.addClass("show");
+    }
+
+    async onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
+        if (loadResults.getAttributeRows().some(attr => attr.name === "status" && this.noteIds.includes(attr.noteId!))) {
+            return true;
+        }
+
+        return false;
     }
 
 }
