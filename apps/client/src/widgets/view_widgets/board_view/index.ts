@@ -29,6 +29,7 @@ const TPL = /*html*/`
             padding: 0.5em;
             background-color: var(--accented-background-color);
             transition: border-color 0.2s ease;
+            overflow-y: auto;
         }
 
         .board-view-container .board-column.drag-over {
@@ -130,6 +131,15 @@ export default class BoardView extends ViewMode<StateInfo> {
                 .addClass("board-column")
                 .attr("data-column", column)
                 .append($("<h3>").text(column));
+
+            // Allow vertical scrolling in the column, bypassing the horizontal scroll of the container.
+            $columnEl.on("wheel", (event) => {
+                const el = $columnEl[0];
+                const needsScroll = el.scrollHeight > el.clientHeight;
+                if (needsScroll) {
+                    event.stopPropagation();
+                }
+            });
 
             // Setup drop zone for the column
             this.setupColumnDropZone($columnEl, column);
