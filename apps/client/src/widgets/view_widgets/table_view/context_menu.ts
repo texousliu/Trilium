@@ -250,6 +250,7 @@ function buildInsertSubmenu(e: MouseEvent, referenceColumn: ColumnComponent, dir
     return [
         {
             title: t("table_view.new-column-label"),
+            uiIcon: "bx bx-hash",
             handler: () => {
                 getParentComponent(e)?.triggerCommand("addNewTableColumn", {
                     referenceColumn,
@@ -260,6 +261,7 @@ function buildInsertSubmenu(e: MouseEvent, referenceColumn: ColumnComponent, dir
         },
         {
             title: t("table_view.new-column-relation"),
+            uiIcon: "bx bx-transfer",
             handler: () => {
                 getParentComponent(e)?.triggerCommand("addNewTableColumn", {
                     referenceColumn,
