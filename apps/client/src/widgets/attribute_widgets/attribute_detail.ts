@@ -296,6 +296,7 @@ interface AttributeDetailOpts {
     y: number;
     focus?: "name";
     parent?: HTMLElement;
+    hideMultiplicity?: boolean;
 }
 
 interface SearchRelatedResponse {
@@ -478,7 +479,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
         });
     }
 
-    async showAttributeDetail({ allAttributes, attribute, isOwned, x, y, focus }: AttributeDetailOpts) {
+    async showAttributeDetail({ allAttributes, attribute, isOwned, x, y, focus, hideMultiplicity }: AttributeDetailOpts) {
         if (!attribute) {
             this.hide();
 
@@ -529,7 +530,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
         this.$rowPromotedAlias.toggle(!!definition.isPromoted);
         this.$inputPromotedAlias.val(definition.promotedAlias || "").attr("disabled", disabledFn);
 
-        this.$rowMultiplicity.toggle(["label-definition", "relation-definition"].includes(this.attrType || ""));
+        this.$rowMultiplicity.toggle(["label-definition", "relation-definition"].includes(this.attrType || "") && !hideMultiplicity);
         this.$inputMultiplicity.val(definition.multiplicity || "").attr("disabled", disabledFn);
 
         this.$rowLabelType.toggle(this.attrType === "label-definition");
