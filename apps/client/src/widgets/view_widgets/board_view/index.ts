@@ -123,8 +123,8 @@ export default class BoardView extends ViewMode<StateInfo> {
         const data = await getBoardData(this.parentNote, "status");
 
         for (const column of data.byColumn.keys()) {
-            const columnBranches = data.byColumn.get(column);
-            if (!columnBranches) {
+            const columnItems = data.byColumn.get(column);
+            if (!columnItems) {
                 continue;
             }
 
@@ -145,8 +145,8 @@ export default class BoardView extends ViewMode<StateInfo> {
             // Setup drop zone for the column
             this.setupColumnDropZone($columnEl, column);
 
-            for (const branch of columnBranches) {
-                const note = await branch.getNote();
+            for (const item of columnItems) {
+                const note = item.note;
                 if (!note) {
                     continue;
                 }

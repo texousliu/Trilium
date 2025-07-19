@@ -1,8 +1,13 @@
 import FBranch from "../../../entities/fbranch";
 import FNote from "../../../entities/fnote";
 
+type ColumnMap = Map<string, {
+    branch: FBranch;
+    note: FNote;
+}[]>;
+
 export async function getBoardData(parentNote: FNote, groupByColumn: string) {
-    const byColumn: Map<string, FBranch[]> = new Map();
+    const byColumn: ColumnMap = new Map();
 
     await recursiveGroupBy(parentNote.getChildBranches(), byColumn, groupByColumn);
 
@@ -11,7 +16,7 @@ export async function getBoardData(parentNote: FNote, groupByColumn: string) {
     };
 }
 
-async function recursiveGroupBy(branches: FBranch[], byColumn: Map<string, FBranch[]>, groupByColumn: string) {
+async function recursiveGroupBy(branches: FBranch[], byColumn: ColumnMap, groupByColumn: string) {
     for (const branch of branches) {
         const note = await branch.getNote();
         if (!note) {
@@ -26,6 +31,9 @@ async function recursiveGroupBy(branches: FBranch[], byColumn: Map<string, FBran
         if (!byColumn.has(group)) {
             byColumn.set(group, []);
         }
-        byColumn.get(group)!.push(branch);
+        byColumn.get(group)!.push({
+            branch,
+            note
+        });
     }
 }
