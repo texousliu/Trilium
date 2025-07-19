@@ -23,7 +23,14 @@ const TPL = /*html*/`
         }
 
         .board-view-container .board-column h3 {
-            font-size: 1.2em;
+            font-size: 1em;
+        }
+
+        .board-view-container .board-note {
+            box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+            margin: 0.65em 0;
+            padding: 0.5em;
+            border-radius: 5px;
         }
     </style>
 
