@@ -76,7 +76,7 @@ Simply click on a cell within a row to change its value. The change will not onl
 *   It also possible to change the title of a note.
 *   Editing relations is also possible
     *   Simply click on a relation and it will become editable. Enter the text to look for a note and click on it.
-    *   To remove a relation, remove the title of the note from the text box and press Enter.
+    *   To remove a relation, remove the title of the note from the text box and click outside the cell.
 
 ### Editing columns
 
