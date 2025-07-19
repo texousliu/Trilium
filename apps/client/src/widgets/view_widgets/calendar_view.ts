@@ -401,9 +401,14 @@ export default class CalendarView extends ViewMode<{}> {
             return true;
         }
 
+        // Refresh on note title change.
+        if (loadResults.getNoteIds().some(noteId => this.noteIds.includes(noteId))) {
+            this.calendar?.refetchEvents();
+        }
+
         // Refresh dataset on subnote change.
-        if (this.calendar && loadResults.getAttributeRows().some((a) => this.noteIds.includes(a.noteId ?? ""))) {
-            this.calendar.refetchEvents();
+        if (loadResults.getAttributeRows().some((a) => this.noteIds.includes(a.noteId ?? ""))) {
+            this.calendar?.refetchEvents();
         }
     }
 
