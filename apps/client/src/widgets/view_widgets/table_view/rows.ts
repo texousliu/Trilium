@@ -9,6 +9,7 @@ export type TableData = {
     labels: Record<string, boolean | string | null>;
     relations: Record<string, boolean | string | null>;
     branchId: string;
+    colorClass: string | undefined;
     _children?: TableData[];
 };
 
@@ -41,6 +42,7 @@ export async function buildRowDefinitions(parentNote: FNote, infos: AttributeDef
             labels,
             relations,
             branchId: branch.branchId,
+            colorClass: note.getColorClass()
         }
 
         if (note.hasChildren() && (maxDepth < 0 || currentDepth < maxDepth)) {

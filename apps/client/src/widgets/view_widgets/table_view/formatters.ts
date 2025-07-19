@@ -20,9 +20,7 @@ export function NoteFormatter(cell: CellComponent, _formatterParams, onRendered)
 
         const iconClass = note.getIcon();
         const title = note.title;
-        const { $noteRef } = buildNoteLink(noteId);
-        $noteRef.text(title);
-        $noteRef.prepend($("<span>").addClass(iconClass));
+        const { $noteRef } = buildNoteLink(noteId, title, iconClass, note.getColorClass());
         return $noteRef[0];
     }
 
@@ -53,15 +51,12 @@ export function NoteFormatter(cell: CellComponent, _formatterParams, onRendered)
  * Custom formatter for the note title that is quite similar to {@link NoteFormatter}, but where the title and icons are read from separate fields.
  */
 export function NoteTitleFormatter(cell: CellComponent) {
-    const { noteId, iconClass } = cell.getRow().getData();
+    const { noteId, iconClass, colorClass } = cell.getRow().getData();
     if (!noteId) {
         return "";
     }
 
-    const { $noteRef } = buildNoteLink(noteId);
-    $noteRef.text(cell.getValue());
-    $noteRef.prepend($("<span>").addClass(iconClass));
-
+    const { $noteRef } = buildNoteLink(noteId, cell.getValue(), iconClass, colorClass);
     return $noteRef[0].outerHTML;
 }
 
@@ -80,10 +75,15 @@ export function MonospaceFormatter(cell: CellComponent) {
     return `<code>${cell.getValue()}</code>`;
 }
 
-function buildNoteLink(noteId: string) {
+function buildNoteLink(noteId: string, title: string, iconClass: string, colorClass?: string) {
     const $noteRef = $("<span>");
     const href = `#root/${noteId}`;
     $noteRef.addClass("reference-link");
     $noteRef.attr("data-href", href);
+    $noteRef.text(title);
+    $noteRef.prepend($("<span>").addClass(iconClass));
+    if (colorClass) {
+        $noteRef.addClass(colorClass);
+    }
     return { $noteRef, href };
 }
