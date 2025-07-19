@@ -408,6 +408,11 @@ export default class BoardView extends ViewMode<StateInfo> {
             return true;
         }
 
+        // React to changes in note title.
+        if (loadResults.getNoteIds().some(noteId => this.noteIds.includes(noteId))) {
+            return true;
+        }
+
         // React to changes in branches for subchildren (e.g., moved, added, or removed notes)
         if (loadResults.getBranchRows().some(branch => this.noteIds.includes(branch.noteId!))) {
             return true;
