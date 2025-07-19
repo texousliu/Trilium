@@ -32,6 +32,10 @@ const TPL = /*html*/`
             padding: 0.5em;
             border-radius: 5px;
         }
+
+        .board-view-container .board-note .icon {
+            margin-right: 0.25em;
+        }
     </style>
 
     <div class="board-view-container"></div>
@@ -76,7 +80,14 @@ export default class BoardView extends ViewMode<StateInfo> {
                 .append($("<h3>").text(column));
 
             for (const note of columnNotes) {
-                const $noteEl = $("<div>").addClass("board-note").text(note.title); // Assuming FNote has a title property
+                const $iconEl = $("<span>")
+                    .addClass("icon")
+                    .addClass(note.getIcon());
+
+                const $noteEl = $("<div>")
+                    .addClass("board-note")
+                    .text(note.title); // Assuming FNote has a title property
+                $noteEl.prepend($iconEl);
                 $columnEl.append($noteEl);
             }
 
