@@ -149,7 +149,10 @@ export default class BoardView extends ViewMode<BoardData> {
     }
 
     private async renderBoard(el: HTMLElement) {
-        const data = await getBoardData(this.parentNote, "status", this.persistentData);
+        const persistedData = await this.viewStorage.restore() ?? this.persistentData;
+        this.persistentData = persistedData;
+
+        const data = await getBoardData(this.parentNote, "status", persistedData);
 
         if (data.newPersistedData) {
             this.persistentData = data.newPersistedData;

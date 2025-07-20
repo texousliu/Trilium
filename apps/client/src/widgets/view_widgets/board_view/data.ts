@@ -10,28 +10,31 @@ type ColumnMap = Map<string, {
 export async function getBoardData(parentNote: FNote, groupByColumn: string, persistedData: BoardData) {
     const byColumn: ColumnMap = new Map();
 
+    // Add back existing columns.
+    for (const column of persistedData.columns || []) {
+        byColumn.set(column.value, []);
+    }
+
     await recursiveGroupBy(parentNote.getChildBranches(), byColumn, groupByColumn);
 
     let newPersistedData: BoardData | undefined;
-    if (persistedData) {
-        // Check if we have new columns.
-        const existingColumns = persistedData.columns?.map(c => c.value) || [];
-        for (const column of existingColumns) {
-            if (!byColumn.has(column)) {
-                byColumn.set(column, []);
-            }
+    // Check if we have new columns.
+    const existingColumns = persistedData.columns?.map(c => c.value) || [];
+    for (const column of existingColumns) {
+        if (!byColumn.has(column)) {
+            byColumn.set(column, []);
         }
+    }
 
-        const newColumns = [...byColumn.keys()]
-            .filter(column => !existingColumns.includes(column))
-            .map(column => ({ value: column }));
+    const newColumns = [...byColumn.keys()]
+        .filter(column => !existingColumns.includes(column))
+        .map(column => ({ value: column }));
 
-        if (newColumns.length > 0) {
-            newPersistedData = {
-                ...persistedData,
-                columns: [...(persistedData.columns || []), ...newColumns]
-            };
-        }
+    if (newColumns.length > 0) {
+        newPersistedData = {
+            ...persistedData,
+            columns: [...(persistedData.columns || []), ...newColumns]
+        };
     }
 
     return {
