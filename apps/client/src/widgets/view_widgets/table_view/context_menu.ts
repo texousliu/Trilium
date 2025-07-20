@@ -30,6 +30,7 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote:
 
     const sorters = tabulator.getSorters();
     const sorter = sorters.find(sorter => sorter.field === field);
+    const isUserDefinedColumn = (!!field && (field?.startsWith("labels.") || field?.startsWith("relations.")));
 
     contextMenu.show({
         items: [
@@ -104,7 +105,7 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote:
             {
                 title: t("table_view.edit-column"),
                 uiIcon: "bx bxs-edit-alt",
-                enabled: !!column.getField() && column.getField() !== "title",
+                enabled: isUserDefinedColumn,
                 handler: () => getParentComponent(e)?.triggerCommand("addNewTableColumn", {
                     referenceColumn: column,
                     columnToEdit: column
@@ -113,7 +114,7 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote:
             {
                 title: t("table_view.delete-column"),
                 uiIcon: "bx bx-trash",
-                enabled: !!column.getField() && column.getField() !== "title",
+                enabled: isUserDefinedColumn,
                 handler: () => getParentComponent(e)?.triggerCommand("deleteTableColumn", {
                     columnToDelete: column
                 })
