@@ -1,6 +1,7 @@
 import appContext from "../../../components/app_context";
 import FNote from "../../../entities/fnote";
 import attributes from "../../../services/attributes";
+import bulk_action, { executeBulkActions } from "../../../services/bulk_action";
 import note_create from "../../../services/note_create";
 import ViewModeStorage from "../view_mode_storage";
 import { BoardData } from "./config";
@@ -69,6 +70,15 @@ export default class BoardApi {
     }
 
     async removeColumn(column: string) {
+        // Remove the value from the notes.
+        const noteIds = this.byColumn.get(column)?.map(item => item.note.noteId) || [];
+        await executeBulkActions(noteIds, [
+            {
+                name: "deleteLabel",
+                labelName: "status"
+            }
+        ]);
+
         this.persistedData.columns = (this.persistedData.columns ?? []).filter(col => col.value !== column);
         this.viewStorage.store(this.persistedData);
     }
