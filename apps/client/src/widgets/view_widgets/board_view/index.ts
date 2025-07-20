@@ -49,6 +49,54 @@ const TPL = /*html*/`
             margin-bottom: 0.75em;
             padding-bottom: 0.5em;
             border-bottom: 1px solid var(--main-border-color);
+            cursor: pointer;
+            position: relative;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .board-view-container .board-column h3:hover {
+            background-color: var(--hover-item-background-color);
+            border-radius: 4px;
+            padding: 0.25em 0.5em;
+            margin: -0.25em -0.5em 0.75em -0.5em;
+        }
+
+        .board-view-container .board-column h3.editing {
+            background-color: var(--main-background-color);
+            border: 1px solid var(--main-text-color);
+            border-radius: 4px;
+            padding: 0.25em 0.5em;
+            margin: -0.25em -0.5em 0.75em -0.5em;
+        }
+
+        .board-view-container .board-column h3 input {
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: inherit;
+            font-weight: inherit;
+            color: inherit;
+            width: 100%;
+            font-family: inherit;
+        }
+
+        .board-view-container .board-column h3 .edit-icon {
+            opacity: 0;
+            font-size: 0.8em;
+            margin-left: 0.5em;
+            transition: opacity 0.2s ease;
+            color: var(--muted-text-color);
+        }
+
+        .board-view-container .board-column h3:hover .edit-icon {
+            opacity: 1;
+        }
+
+        .board-view-container .board-column h3.editing .edit-icon {
+            display: none;
         }
 
         .board-view-container .board-note {
@@ -177,10 +225,23 @@ export default class BoardView extends ViewMode<BoardData> {
                 continue;
             }
 
+            // Find the column data to get custom title
+            const columnTitle = column;
+
             const $columnEl = $("<div>")
                 .addClass("board-column")
-                .attr("data-column", column)
-                .append($("<h3>").text(column));
+                .attr("data-column", column);
+
+            const $titleEl = $("<h3>")
+                .attr("data-column-value", column);
+
+            const { $titleText, $editIcon } = this.createTitleStructure(columnTitle);
+            $titleEl.append($titleText, $editIcon);
+
+            // Make column title editable
+            this.setupColumnTitleEdit($titleEl, column, columnItems);
+
+            $columnEl.append($titleEl);
 
             // Allow vertical scrolling in the column, bypassing the horizontal scroll of the container.
             $columnEl.on("wheel", (event) => {
@@ -399,6 +460,87 @@ export default class BoardView extends ViewMode<BoardData> {
         }
 
         $dropIndicator.addClass("show");
+    }
+
+    private createTitleStructure(title: string): { $titleText: JQuery<HTMLElement>; $editIcon: JQuery<HTMLElement> } {
+        const $titleText = $("<span>").text(title);
+        const $editIcon = $("<span>")
+            .addClass("edit-icon icon bx bx-edit-alt")
+            .attr("title", "Click to edit column title");
+
+        return { $titleText, $editIcon };
+    }
+
+    private setupColumnTitleEdit($titleEl: JQuery<HTMLElement>, columnValue: string, columnItems: { branch: any; note: any; }[]) {
+        $titleEl.on("click", (e) => {
+            e.stopPropagation();
+            this.startEditingColumnTitle($titleEl, columnValue, columnItems);
+        });
+    }
+
+    private startEditingColumnTitle($titleEl: JQuery<HTMLElement>, columnValue: string, columnItems: { branch: any; note: any; }[]) {
+        if ($titleEl.hasClass("editing")) {
+            return; // Already editing
+        }
+
+        const $titleText = $titleEl.find("span").first();
+        const currentTitle = $titleText.text();
+        $titleEl.addClass("editing");
+
+        const $input = $("<input>")
+            .attr("type", "text")
+            .val(currentTitle)
+            .attr("placeholder", "Column title");
+
+        $titleEl.empty().append($input);
+        $input.focus().select();
+
+        const finishEdit = async (save: boolean = true) => {
+            if (!$titleEl.hasClass("editing")) {
+                return; // Already finished
+            }
+
+            $titleEl.removeClass("editing");
+
+            let finalTitle = currentTitle;
+            if (save) {
+                const newTitle = $input.val() as string;
+                if (newTitle.trim() && newTitle !== currentTitle) {
+                    await this.renameColumn(columnValue, newTitle.trim(), columnItems);
+                    finalTitle = newTitle.trim();
+                }
+            }
+
+            // Recreate the title structure
+            const { $titleText, $editIcon } = this.createTitleStructure(finalTitle);
+            $titleEl.empty().append($titleText, $editIcon);
+        };
+
+        $input.on("blur", () => finishEdit(true));
+        $input.on("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                finishEdit(true);
+            } else if (e.key === "Escape") {
+                e.preventDefault();
+                finishEdit(false);
+            }
+        });
+    }
+
+    private async renameColumn(oldValue: string, newValue: string, columnItems: { branch: any; note: any; }[]) {
+        try {
+            // Get all note IDs in this column
+            const noteIds = columnItems.map(item => item.note.noteId);
+
+            // Use the API to rename the column (update all notes)
+            await this.api?.renameColumn(oldValue, newValue, noteIds);
+
+            // Refresh the board to reflect the changes
+            await this.renderList();
+        } catch (error) {
+            console.error("Failed to rename column:", error);
+        }
     }
 
     private async createNewItem(column: string) {

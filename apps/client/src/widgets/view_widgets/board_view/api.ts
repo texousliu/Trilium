@@ -42,4 +42,11 @@ export default class BoardApi {
         }
     }
 
+    async renameColumn(oldValue: string, newValue: string, noteIds: string[]) {
+        // Update all notes that have the old status value to the new value
+        for (const noteId of noteIds) {
+            await attributes.setLabel(noteId, "status", newValue);
+        }
+    }
+
 }
