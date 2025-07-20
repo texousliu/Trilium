@@ -1,4 +1,4 @@
-interface BoardColumnData {
+export interface BoardColumnData {
     value: string;
 }
 

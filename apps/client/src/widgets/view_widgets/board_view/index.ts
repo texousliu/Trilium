@@ -8,6 +8,7 @@ import appContext, { EventData } from "../../../components/app_context";
 import { BoardData } from "./config";
 import SpacedUpdate from "../../../services/spaced_update";
 import { showNoteContextMenu } from "./context_menu";
+import BoardApi from "./api";
 
 const TPL = /*html*/`
 <div class="board-view">
@@ -127,6 +128,7 @@ export default class BoardView extends ViewMode<BoardData> {
     private draggedBranch: any = null;
     private draggedNoteElement: JQuery<HTMLElement> | null = null;
     private persistentData: BoardData;
+    private api?: BoardApi;
 
     constructor(args: ViewModeArgs) {
         super(args, "board");
@@ -134,7 +136,6 @@ export default class BoardView extends ViewMode<BoardData> {
         this.$root = $(TPL);
         setupHorizontalScrollViaWheel(this.$root);
         this.$container = this.$root.find(".board-view-container");
-        showNoteContextMenu(this.$container);
         this.spacedUpdate = new SpacedUpdate(() => this.onSave(), 5_000);
         this.persistentData = {
             columns: []
@@ -155,6 +156,12 @@ export default class BoardView extends ViewMode<BoardData> {
         this.persistentData = persistedData;
 
         const data = await getBoardData(this.parentNote, "status", persistedData);
+        const columns = Array.from(data.byColumn.keys()) || [];
+        this.api = new BoardApi(columns);
+        showNoteContextMenu({
+            $container: this.$container,
+            api: this.api
+        });
 
         if (data.newPersistedData) {
             this.persistentData = data.newPersistedData;
@@ -317,7 +324,7 @@ export default class BoardView extends ViewMode<BoardData> {
                 try {
                     // Handle column change
                     if (currentColumn !== column) {
-                        await attributeService.setLabel(draggedNote.noteId, "status", column);
+                        await this.api?.changeColumn(draggedNote.noteId, column);
                     }
 
                     // Handle position change (works for both same column and different column moves)

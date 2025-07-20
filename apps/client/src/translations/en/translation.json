@@ -1970,6 +1970,7 @@
     "delete_row": "Delete row"
   },
   "board_view": {
-    "delete-note": "Delete Note"
+    "delete-note": "Delete Note",
+    "move-to": "Move to"
   }
 }

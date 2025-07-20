@@ -2,8 +2,14 @@ import contextMenu from "../../../menus/context_menu.js";
 import link_context_menu from "../../../menus/link_context_menu.js";
 import branches from "../../../services/branches.js";
 import { t } from "../../../services/i18n.js";
+import BoardApi from "./api.js";
 
-export function showNoteContextMenu($container: JQuery<HTMLElement>) {
+interface ShowNoteContextMenuArgs {
+    $container: JQuery<HTMLElement>;
+    api: BoardApi;
+}
+
+export function showNoteContextMenu({ $container, api }: ShowNoteContextMenuArgs) {
     $container.on("contextmenu", ".board-note", (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -18,6 +24,15 @@ export function showNoteContextMenu($container: JQuery<HTMLElement>) {
             y: event.pageY,
             items: [
                 ...link_context_menu.getItems(),
+                { title: "----" },
+                {
+                    title: t("board_view.move-to"),
+                    uiIcon: "bx bx-transfer",
+                    items: api.columns.map(column => ({
+                        title: column,
+                        handler: () => api.changeColumn(noteId, column)
+                    }))
+                },
                 { title: "----" },
                 {
                     title: t("board_view.delete-note"),
