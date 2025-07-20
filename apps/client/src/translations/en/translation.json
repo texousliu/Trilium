@@ -1968,5 +1968,8 @@
   },
   "table_context_menu": {
     "delete_row": "Delete row"
+  },
+  "board_view": {
+    "delete-note": "Delete Note"
   }
 }

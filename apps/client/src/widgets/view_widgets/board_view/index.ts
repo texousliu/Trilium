@@ -7,6 +7,7 @@ import noteCreateService from "../../../services/note_create";
 import appContext, { EventData } from "../../../components/app_context";
 import { BoardData } from "./config";
 import SpacedUpdate from "../../../services/spaced_update";
+import { showNoteContextMenu } from "./context_menu";
 
 const TPL = /*html*/`
 <div class="board-view">
@@ -133,6 +134,7 @@ export default class BoardView extends ViewMode<BoardData> {
         this.$root = $(TPL);
         setupHorizontalScrollViaWheel(this.$root);
         this.$container = this.$root.find(".board-view-container");
+        showNoteContextMenu(this.$container);
         this.spacedUpdate = new SpacedUpdate(() => this.onSave(), 5_000);
         this.persistentData = {
             columns: []
