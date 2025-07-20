@@ -8,31 +8,31 @@
 <h2>How it works</h2>
 <p>The tabular structure is represented as such:</p>
 <ul>
-  <li data-list-item-id="e2f9c74f491f19544cc8bd91d4f0e2b7b">Each child note is a row in the table.</li>
-  <li data-list-item-id="e088e11b32fc5e97177413ef35dccf3b1">If child rows also have children, they will be displayed under an expander
+  <li>Each child note is a row in the table.</li>
+  <li>If child rows also have children, they will be displayed under an expander
     (nested notes).</li>
-  <li data-list-item-id="e3e02ff50b40091e780be35dd4a141fec">Each column is a <a href="#root/_help_OFXdgB2nNk1F">promoted attribute</a> that
+  <li>Each column is a <a href="#root/_help_OFXdgB2nNk1F">promoted attribute</a> that
     is defined on the Collection note.
     <ul>
-      <li data-list-item-id="ed84d0aaca22ddfa667e0e5e2b8a2b571">Actually, both promoted and unpromoted attributes are supported, but it's
+      <li>Actually, both promoted and unpromoted attributes are supported, but it's
         a requirement to use a label/relation definition.</li>
-      <li data-list-item-id="ec2c84efcd7687c2cbb0fa46b5b04e035">The promoted attributes are usually defined as inheritable in order to
+      <li>The promoted attributes are usually defined as inheritable in order to
         show up in the child notes, but it's not a requirement.</li>
     </ul>
   </li>
-  <li data-list-item-id="e32b3ee6aa63a43bbba2a8127f7573f9e">If there are multiple attribute definitions with the same <code>name</code>,
+  <li>If there are multiple attribute definitions with the same <code>name</code>,
     only one will be displayed.</li>
 </ul>
 <p>There are also a few predefined columns:</p>
 <ul>
-  <li data-list-item-id="e75fca7a0d17de2b1e99a5d1ae717f1a7">The current item number, identified by the <code>#</code> symbol.
+  <li>The current item number, identified by the <code>#</code> symbol.
     <ul>
-      <li data-list-item-id="e2f1150a9bdc8e95c23f4453a00d0947b">This simply counts the note and is affected by sorting.</li>
+      <li>This simply counts the note and is affected by sorting.</li>
     </ul>
   </li>
-  <li data-list-item-id="e6cf914471a03a8a06f8aee385da0f21d"><a class="reference-link" href="#root/_help_m1lbrzyKDaRB">Note ID</a>,
+  <li><a class="reference-link" href="#root/_help_m1lbrzyKDaRB">Note ID</a>,
     representing the unique ID used internally by Trilium</li>
-  <li data-list-item-id="ea8ddddd631b9fb155528ef4757672587">The title of the note.</li>
+  <li>The title of the note.</li>
 </ul>
 <h2>Interaction</h2>
 <h3>Creating a new table</h3>
@@ -43,18 +43,17 @@
   is defined on the Collection note.</p>
 <p>To create a new column, either:</p>
 <ul>
-  <li data-list-item-id="e3bb3951707ab03fccab11c9b83d8f7a1">Press <em>Add new column</em> at the bottom of the table.</li>
-  <li data-list-item-id="e59ac48e5d7f2f1119d27db5b01eb0635">Right click on an existing column and select Add column to the left/right.</li>
-  <li
-  data-list-item-id="e681ba5bf3901016423216783a17f13f8">Right click on the empty space of the column header and select <em>Label</em> or <em>Relation</em> in
-    the <em>New column </em>section.</li>
+  <li>Press <em>Add new column</em> at the bottom of the table.</li>
+  <li>Right click on an existing column and select Add column to the left/right.</li>
+  <li>Right click on the empty space of the column header and select <em>Label</em> or <em>Relation</em> in
+    the <em>New column</em> section.</li>
 </ul>
 <h3>Adding new rows</h3>
 <p>Each row is actually a note that is a child of the Collection note.</p>
 <p>To create a new note, either:</p>
 <ul>
-  <li data-list-item-id="e5b398750eec8daa1284942454b1da03f">Press <em>Add new row</em> at the bottom of the table.</li>
-  <li data-list-item-id="ed1fafca8d339a070b31ed86735757ad7">Right click on an existing row and select <em>Insert row above, Insert child note</em> or <em>Insert row below</em>.</li>
+  <li>Press <em>Add new row</em> at the bottom of the table.</li>
+  <li>Right click on an existing row and select <em>Insert row above, Insert child note</em> or <em>Insert row below</em>.</li>
 </ul>
 <p>By default it will try to edit the title of the newly created note.</p>
 <p>Alternatively, the note can be created from the&nbsp;<a class="reference-link"
@@ -62,28 +61,27 @@
 <h3>Context menu</h3>
 <p>There are multiple menus:</p>
 <ul>
-  <li data-list-item-id="ec7554ef5c121bbbe605c6a960207ce15">Right clicking on a column, allows:
+  <li>Right clicking on a column, allows:
     <ul>
-      <li data-list-item-id="ef38b337e0b988758a61114627bb60c4c">Sorting by the selected column and resetting the sort.</li>
-      <li data-list-item-id="ecf9fc40517000ac6fd34ca1179145a11">Hiding the selected column or adjusting the visibility of every column.</li>
-      <li
-      data-list-item-id="ee7af88842f7f7191fa4f928929bb5e09">Adding new columns to the left or the right of the column.</li>
-  <li data-list-item-id="e4f04719c833b3048900a7fc4edad3aa1">Editing the current column.</li>
-  <li data-list-item-id="e648918725f9db40574f254ae7e973098">Deleting the current column.</li>
-  </ul>
-  </li>
-  <li data-list-item-id="e17dcbc050ffe71df0177061ea6083077">Right clicking on the space to the right of the columns, allows:
-    <ul>
-      <li data-list-item-id="e7245250ae9974578ac22f0804b9359f3">Adjusting the visibility of every column.</li>
-      <li data-list-item-id="ea854723a7e177b2fab226f2f47e74300">Adding new columns.</li>
+      <li>Sorting by the selected column and resetting the sort.</li>
+      <li>Hiding the selected column or adjusting the visibility of every column.</li>
+      <li>Adding new columns to the left or the right of the column.</li>
+      <li>Editing the current column.</li>
+      <li>Deleting the current column.</li>
     </ul>
   </li>
-  <li data-list-item-id="e1432be94738a66d9b1b6aeb09a939541">Right clicking on a row, allows:
+  <li>Right clicking on the space to the right of the columns, allows:
     <ul>
-      <li data-list-item-id="ea2b4133e43708b251b3a513edb37446a">Opening the corresponding note of the row in a new tab, split, window
+      <li>Adjusting the visibility of every column.</li>
+      <li>Adding new columns.</li>
+    </ul>
+  </li>
+  <li>Right clicking on a row, allows:
+    <ul>
+      <li>Opening the corresponding note of the row in a new tab, split, window
         or quick editing it.</li>
-      <li data-list-item-id="e0b1aecd8bf3fbb9810fc0ad43a8eecdc">Inserting rows above, below or as a child note.</li>
-      <li data-list-item-id="e9dc521aef229564b75d983e134646dda">Deleting the row.</li>
+      <li>Inserting rows above, below or as a child note.</li>
+      <li>Deleting the row.</li>
     </ul>
   </li>
 </ul>
@@ -92,21 +90,20 @@
   not only reflect in the table, but also as an attribute of the corresponding
   note.</p>
 <ul>
-  <li data-list-item-id="ec968ed99278fdb8197fd621c69e7f6cc">The editing will respect the type of the promoted attribute, by presenting
+  <li>The editing will respect the type of the promoted attribute, by presenting
     a normal text box, a number selector or a date selector for example.</li>
-  <li
-  data-list-item-id="ecef0e73fd2da5ac88fe23ba83e725c1e">It also possible to change the title of a note.</li>
-    <li data-list-item-id="ef7b78a619db0596c6dfbeeb8c4ccb8e2">Editing relations is also possible
-      <ul>
-        <li data-list-item-id="eae5e595b5850aba8949d5bfb8e5c7da2">Simply click on a relation and it will become editable. Enter the text
-          to look for a note and click on it.</li>
-        <li data-list-item-id="e288ea9202d96e940abbbdc2ea33086b4">To remove a relation, remove the title of the note from the text box and
-          click outside the cell.</li>
-      </ul>
-    </li>
+  <li>It also possible to change the title of a note.</li>
+  <li>Editing relations is also possible
+    <ul>
+      <li>Simply click on a relation and it will become editable. Enter the text
+        to look for a note and click on it.</li>
+      <li>To remove a relation, remove the title of the note from the text box and
+        click outside the cell.</li>
+    </ul>
+  </li>
 </ul>
 <h3>Editing columns</h3>
-<p>It is possible to edit a column by right clicking it and selecting <em>Edit column. </em>This
+<p>It is possible to edit a column by right clicking it and selecting <em>Edit column.</em> This
   will basically change the label/relation definition at the collection level.</p>
 <p>If the <em>Name</em> field of a column is changed, this will trigger a batch
   operation in which the corresponding label/relation will be renamed in
@@ -114,22 +111,21 @@
 <h2>Working with the data</h2>
 <h3>Sorting by column</h3>
 <p>By default, the order of the notes matches the order in the&nbsp;<a class="reference-link"
-  href="#root/pOsGYCXsbNQG/gh7bpGYxajRS/Vc8PjrjAGuOp/_help_oPVyFC7WL2Lp">Note Tree</a>.
-  However, it is possible to sort the data by the values of a column:</p>
+  href="#root/_help_oPVyFC7WL2Lp">Note Tree</a>. However, it is possible
+  to sort the data by the values of a column:</p>
 <ul>
-  <li data-list-item-id="e1e0145471fc5258ad92621a89ac2c718">To do so, simply click on a column.</li>
-  <li data-list-item-id="e821bd86e23576f9eaa14c0db4fb91b83">To switch between ascending or descending sort, simply click again on
+  <li>To do so, simply click on a column.</li>
+  <li>To switch between ascending or descending sort, simply click again on
     the same column. The arrow next to the column will indicate the direction
     of the sort.</li>
-  <li data-list-item-id="ef51898adc5db8930da95259860497bea">To disable sorting and fall back to the original order, right click any
+  <li>To disable sorting and fall back to the original order, right click any
     column on the header and select <em>Clear sorting.</em>
   </li>
 </ul>
 <h3>Reordering and hiding columns</h3>
 <ul>
-  <li data-list-item-id="ea338c99f7b7e97886b988db91b3dd8d1">Columns can be reordered by dragging the header of the columns.</li>
-  <li
-  data-list-item-id="e383f93282db3299145a4371452636ce6">Columns can be hidden or shown by right clicking on a column and clicking
+  <li>Columns can be reordered by dragging the header of the columns.</li>
+  <li>Columns can be hidden or shown by right clicking on a column and clicking
     the item corresponding to the column.</li>
 </ul>
 <h3>Reordering rows</h3>
@@ -140,12 +136,10 @@
   href="#root/_help_oPVyFC7WL2Lp">Note Tree</a>.</p>
 <p>Reordering does have some limitations:</p>
 <ul>
-  <li data-list-item-id="ee5f38e1c946944bf94b2efe364c5b744">If the parent note has <code>#sorted</code>, reordering will be disabled.</li>
-  <li
-  data-list-item-id="e0efec2f2857fcddbf66080bd4451e61d">If using nested tables, then reordering will also be disabled.</li>
-    <li
-    data-list-item-id="e23e93f53c136142acb82818be192764c">Currently, it's possible to reorder notes even if column sorting is used,
-      but the result might be inconsistent.</li>
+  <li>If the parent note has <code>#sorted</code>, reordering will be disabled.</li>
+  <li>If using nested tables, then reordering will also be disabled.</li>
+  <li>Currently, it's possible to reorder notes even if column sorting is used,
+    but the result might be inconsistent.</li>
 </ul>
 <h3>Nested trees</h3>
 <p>If the child notes of the collection also have their own child notes,
@@ -156,21 +150,20 @@
   to a certain number of levels or even disable it completely. To do so,
   either:</p>
 <ul>
-  <li data-list-item-id="e4b19a78e59f20a154e4c3ee997705226">Go to <em>Collection Properties</em> in the&nbsp;<a class="reference-link"
-    href="#root/pOsGYCXsbNQG/gh7bpGYxajRS/Vc8PjrjAGuOp/_help_BlN9DFI679QC">Ribbon</a>&nbsp;and
-    look for the <em>Max nesting depth</em> section.
+  <li>Go to <em>Collection Properties</em> in the&nbsp;<a class="reference-link"
+    href="#root/_help_BlN9DFI679QC">Ribbon</a>&nbsp;and look for the <em>Max nesting depth</em> section.
     <ul>
-      <li data-list-item-id="ef74f1b3782dfc806487a991c0355e0bb">To disable nesting, type 0 and press Enter.</li>
-      <li data-list-item-id="e73d79dbe86cced5465bc7d3df3477d90">To limit to a certain depth, type in the desired number (e.g. 2 to only
+      <li>To disable nesting, type 0 and press Enter.</li>
+      <li>To limit to a certain depth, type in the desired number (e.g. 2 to only
         display children and sub-children).</li>
-      <li data-list-item-id="ec208d87bccb6c4dc7bc69dfce7bcf43b">To re-enable unlimited nesting, remove the number and press Enter.</li>
+      <li>To re-enable unlimited nesting, remove the number and press Enter.</li>
     </ul>
   </li>
-  <li data-list-item-id="e51ebf8e9b9d8a2a85714d1d0efb676a6">Manually set <code>maxNestingDepth</code> to the desired value.</li>
+  <li>Manually set <code>maxNestingDepth</code> to the desired value.</li>
 </ul>
 <p>Limitations:</p>
 <ul>
-  <li data-list-item-id="ec2c723dc60844af4b399f78b7ee5790c">While in this mode, it's not possible to reorder notes.</li>
+  <li>While in this mode, it's not possible to reorder notes.</li>
 </ul>
 <h2>Limitations</h2>
 <p>Multi-value labels and relations are not supported. If a&nbsp;<a class="reference-link"
@@ -184,8 +177,8 @@
   of the&nbsp;<a class="reference-link" href="#root/_help_eIg8jdvaoNNd">Search</a>.</p>
 <p>However, there are also some limitations:</p>
 <ul>
-  <li data-list-item-id="e2f9d55f137f7700d85e0a4d2d22a1f59">It's not possible to reorder notes.</li>
-  <li data-list-item-id="e2c278adf505c58a9d11c87d1a6238f4c">It's not possible to add a new row.</li>
+  <li>It's not possible to reorder notes.</li>
+  <li>It's not possible to add a new row.</li>
 </ul>
 <p>Columns are supported, by being defined as&nbsp;<a class="reference-link"
   href="#root/_help_OFXdgB2nNk1F">Promoted Attributes</a>&nbsp;to the&nbsp;
