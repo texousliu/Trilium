@@ -46,29 +46,27 @@ const TPL = /*html*/`
         .board-view-container .board-column h3 {
             font-size: 1em;
             margin-bottom: 0.75em;
-            padding-bottom: 0.5em;
+            padding: 0.5em 0.5em 0.5em 0.5em;
             border-bottom: 1px solid var(--main-border-color);
             cursor: pointer;
             position: relative;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s ease, border-radius 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            box-sizing: border-box;
+            background-color: transparent;
         }
 
         .board-view-container .board-column h3:hover {
             background-color: var(--hover-item-background-color);
             border-radius: 4px;
-            padding: 0.25em 0.5em;
-            margin: -0.25em -0.5em 0.75em -0.5em;
         }
 
         .board-view-container .board-column h3.editing {
             background-color: var(--main-background-color);
             border: 1px solid var(--main-text-color);
             border-radius: 4px;
-            padding: 0.25em 0.5em;
-            margin: -0.25em -0.5em 0.75em -0.5em;
         }
 
         .board-view-container .board-column h3 input {
@@ -84,7 +82,6 @@ const TPL = /*html*/`
 
         .board-view-container .board-column h3 .edit-icon {
             opacity: 0;
-            font-size: 0.8em;
             margin-left: 0.5em;
             transition: opacity 0.2s ease;
             color: var(--muted-text-color);
