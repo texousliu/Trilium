@@ -170,7 +170,34 @@ export default function buildHiddenSubtreeTemplates() {
                         isInheritable: true
                     }
                 ]
-            }
+            },
+            {
+                id: "_template_board",
+                type: "book",
+                title: t("hidden_subtree_templates.board"),
+                icon: "bx bx-columns",
+                attributes: [
+                    {
+                        name: "template",
+                        type: "label"
+                    },
+                    {
+                        name: "collection",
+                        type: "label"
+                    },
+                    {
+                        name: "viewType",
+                        type: "label",
+                        value: "board"
+                    },
+                    {
+                        name: "label:status",
+                        type: "label",
+                        value: `promoted,alias=${t("hidden_subtree_templates.status")},single,text`,
+                        isInheritable: true
+                    }
+                ]
+            },
         ]
     };
 

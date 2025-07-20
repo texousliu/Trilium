@@ -317,6 +317,8 @@
     "start-time": "Start Time",
     "end-time": "End Time",
     "geolocation": "Geolocation",
-    "built-in-templates": "Built-in templates"
+    "built-in-templates": "Built-in templates",
+    "board": "Board",
+    "status": "Status"
   }
 }
