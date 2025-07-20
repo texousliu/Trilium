@@ -17,6 +17,7 @@ export function showNoteContextMenu({ $container, api }: ShowNoteContextMenuArgs
         const $el = $(event.currentTarget);
         const noteId = $el.data("note-id");
         const branchId = $el.data("branch-id");
+        const column = $el.closest(".board-column").data("column");
         if (!noteId) return;
 
         contextMenu.show({
@@ -32,6 +33,15 @@ export function showNoteContextMenu({ $container, api }: ShowNoteContextMenuArgs
                         title: column,
                         handler: () => api.changeColumn(noteId, column)
                     }))
+                },
+                { title: "----" },
+                {
+                    title: t("board_view.insert-above"),
+                    handler: () => api.insertRowAtPosition(column, branchId, "before")
+                },
+                {
+                    title: t("board_view.insert-below"),
+                    handler: () => api.insertRowAtPosition(column, branchId, "after")
                 },
                 { title: "----" },
                 {

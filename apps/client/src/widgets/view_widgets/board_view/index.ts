@@ -157,7 +157,10 @@ export default class BoardView extends ViewMode<BoardData> {
 
         const data = await getBoardData(this.parentNote, "status", persistedData);
         const columns = Array.from(data.byColumn.keys()) || [];
-        this.api = new BoardApi(columns);
+        this.api = new BoardApi(
+            columns,
+            this.parentNote.noteId
+        );
         showNoteContextMenu({
             $container: this.$container,
             api: this.api

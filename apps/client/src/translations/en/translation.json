@@ -1971,6 +1971,8 @@
   },
   "board_view": {
     "delete-note": "Delete Note",
-    "move-to": "Move to"
+    "move-to": "Move to",
+    "insert-above": "Insert above",
+    "insert-below": "Insert below"
   }
 }
