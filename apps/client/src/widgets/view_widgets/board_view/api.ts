@@ -12,7 +12,8 @@ export default class BoardApi {
         private _columns: string[],
         private _parentNoteId: string,
         private viewStorage: ViewModeStorage<BoardData>,
-        private byColumn: ColumnMap) {}
+        private byColumn: ColumnMap,
+        private persistedData: BoardData) {}
 
     get columns() {
         return this._columns;
@@ -53,6 +54,14 @@ export default class BoardApi {
     }
 
     async renameColumn(oldValue: string, newValue: string, noteIds: string[]) {
+        // Rename the column in the persisted data.
+        for (const column of this.persistedData.columns || []) {
+            if (column.value === oldValue) {
+                column.value = newValue;
+            }
+        }
+        this.viewStorage.store(this.persistedData);
+
         // Update all notes that have the old status value to the new value
         for (const noteId of noteIds) {
             await attributes.setLabel(noteId, "status", newValue);
@@ -69,7 +78,7 @@ export default class BoardApi {
             viewStorage.store(persistedData);
         }
 
-        return new BoardApi(columns, parentNote.noteId, viewStorage, byColumn);
+        return new BoardApi(columns, parentNote.noteId, viewStorage, byColumn, persistedData);
     }
 
 }
