@@ -191,6 +191,10 @@ export default function buildHiddenSubtreeTemplates() {
                         value: "board"
                     },
                     {
+                        name: "hidePromotedAttributes",
+                        type: "label"
+                    },
+                    {
                         name: "label:status",
                         type: "label",
                         value: `promoted,alias=${t("hidden_subtree_templates.status")},single,text`,
