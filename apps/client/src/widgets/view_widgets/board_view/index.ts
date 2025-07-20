@@ -334,6 +334,7 @@ export default class BoardView extends ViewMode<BoardData> {
     private setupNoteDrag($noteEl: JQuery<HTMLElement>, note: any, branch: any) {
         $noteEl.attr("draggable", "true");
 
+        // Mouse drag events
         $noteEl.on("dragstart", (e) => {
             this.draggedNote = note;
             this.draggedBranch = branch;
@@ -356,6 +357,82 @@ export default class BoardView extends ViewMode<BoardData> {
 
             // Remove all drop indicators
             this.$container.find(".board-drop-indicator").removeClass("show");
+        });
+
+        // Touch drag events
+        let isDragging = false;
+        let startY = 0;
+        let startX = 0;
+        let dragThreshold = 10; // Minimum distance to start dragging
+
+        $noteEl.on("touchstart", (e) => {
+            const touch = (e.originalEvent as TouchEvent).touches[0];
+            startX = touch.clientX;
+            startY = touch.clientY;
+            isDragging = false;
+        });
+
+        $noteEl.on("touchmove", (e) => {
+            e.preventDefault(); // Prevent scrolling
+            const touch = (e.originalEvent as TouchEvent).touches[0];
+            const deltaX = Math.abs(touch.clientX - startX);
+            const deltaY = Math.abs(touch.clientY - startY);
+
+            // Start dragging if we've moved beyond threshold
+            if (!isDragging && (deltaX > dragThreshold || deltaY > dragThreshold)) {
+                isDragging = true;
+                this.draggedNote = note;
+                this.draggedBranch = branch;
+                this.draggedNoteElement = $noteEl;
+                $noteEl.addClass("dragging");
+            }
+
+            if (isDragging) {
+                // Find element under touch point
+                const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                if (elementBelow) {
+                    const $columnEl = $(elementBelow).closest('.board-column');
+
+                    if ($columnEl.length > 0) {
+                        // Remove drag-over from all columns
+                        this.$container.find('.board-column').removeClass('drag-over');
+                        $columnEl.addClass('drag-over');
+
+                        // Show drop indicator
+                        this.showDropIndicatorAtPoint($columnEl, touch.clientY);
+                    } else {
+                        // Remove all drag indicators if not over a column
+                        this.$container.find('.board-column').removeClass('drag-over');
+                        this.$container.find(".board-drop-indicator").removeClass("show");
+                    }
+                }
+            }
+        });
+
+        $noteEl.on("touchend", async (e) => {
+            if (isDragging) {
+                const touch = (e.originalEvent as TouchEvent).changedTouches[0];
+                const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                if (elementBelow) {
+                    const $columnEl = $(elementBelow).closest('.board-column');
+
+                    if ($columnEl.length > 0) {
+                        const column = $columnEl.attr('data-column');
+                        if (column && this.draggedNote && this.draggedNoteElement && this.draggedBranch) {
+                            await this.handleNoteDrop($columnEl, column);
+                        }
+                    }
+                }
+
+                // Clean up
+                $noteEl.removeClass("dragging");
+                this.draggedNote = null;
+                this.draggedBranch = null;
+                this.draggedNoteElement = null;
+                this.$container.find('.board-column').removeClass('drag-over');
+                this.$container.find(".board-drop-indicator").removeClass("show");
+            }
+            isDragging = false;
         });
     }
 
@@ -435,21 +512,16 @@ export default class BoardView extends ViewMode<BoardData> {
                         }
                     }
 
-                    // Update the UI
-                    if (dropIndicator.length > 0) {
-                        dropIndicator.after(draggedNoteElement);
-                    } else {
-                        $columnEl.append(draggedNoteElement);
-                    }
-
                     // Update the data attributes
                     draggedNoteElement.attr("data-current-column", column);
 
                     // Show success feedback
                     console.log(`Moved note "${draggedNote.title}" from "${currentColumn}" to "${column}"`);
+
+                    // Refresh the board to reflect the changes
+                    await this.renderList();
                 } catch (error) {
                     console.error("Failed to update note position:", error);
-                    // Optionally show user-facing error message
                 }
             }
         });
@@ -493,6 +565,102 @@ export default class BoardView extends ViewMode<BoardData> {
         }
 
         $dropIndicator.addClass("show");
+    }
+
+    private showDropIndicatorAtPoint($columnEl: JQuery<HTMLElement>, touchY: number) {
+        const columnRect = $columnEl[0].getBoundingClientRect();
+        const relativeY = touchY - columnRect.top;
+
+        // Find existing drop indicator or create one
+        let $dropIndicator = $columnEl.find(".board-drop-indicator");
+        if ($dropIndicator.length === 0) {
+            $dropIndicator = $("<div>").addClass("board-drop-indicator");
+            $columnEl.append($dropIndicator);
+        }
+
+        // Find the best position to insert the note
+        const $notes = this.draggedNoteElement ?
+            $columnEl.find(".board-note").not(this.draggedNoteElement) :
+            $columnEl.find(".board-note");
+        let insertAfterElement: HTMLElement | null = null;
+
+        $notes.each((_, noteEl) => {
+            const noteRect = noteEl.getBoundingClientRect();
+            const noteMiddle = noteRect.top + noteRect.height / 2 - columnRect.top;
+
+            if (relativeY > noteMiddle) {
+                insertAfterElement = noteEl;
+            }
+        });
+
+        // Position the drop indicator
+        if (insertAfterElement) {
+            $(insertAfterElement).after($dropIndicator);
+        } else {
+            // Insert at the beginning (after the header)
+            const $header = $columnEl.find("h3");
+            $header.after($dropIndicator);
+        }
+
+        $dropIndicator.addClass("show");
+    }
+
+    private async handleNoteDrop($columnEl: JQuery<HTMLElement>, column: string) {
+        const draggedNoteElement = this.draggedNoteElement;
+        const draggedNote = this.draggedNote;
+        const draggedBranch = this.draggedBranch;
+
+        if (draggedNote && draggedNoteElement && draggedBranch) {
+            const currentColumn = draggedNoteElement.attr("data-current-column");
+
+            // Capture drop indicator position BEFORE removing it
+            const dropIndicator = $columnEl.find(".board-drop-indicator.show");
+            let targetBranchId: string | null = null;
+            let moveType: "before" | "after" | null = null;
+
+            if (dropIndicator.length > 0) {
+                // Find the note element that the drop indicator is positioned relative to
+                const nextNote = dropIndicator.next(".board-note");
+                const prevNote = dropIndicator.prev(".board-note");
+
+                if (nextNote.length > 0) {
+                    targetBranchId = nextNote.attr("data-branch-id") || null;
+                    moveType = "before";
+                } else if (prevNote.length > 0) {
+                    targetBranchId = prevNote.attr("data-branch-id") || null;
+                    moveType = "after";
+                }
+            }
+
+            try {
+                // Handle column change
+                if (currentColumn !== column) {
+                    await this.api?.changeColumn(draggedNote.noteId, column);
+                }
+
+                // Handle position change (works for both same column and different column moves)
+                if (targetBranchId && moveType) {
+                    if (moveType === "before") {
+                        console.log("Move before branch:", draggedBranch.branchId, "to", targetBranchId);
+                        await branchService.moveBeforeBranch([draggedBranch.branchId], targetBranchId);
+                    } else if (moveType === "after") {
+                        console.log("Move after branch:", draggedBranch.branchId, "to", targetBranchId);
+                        await branchService.moveAfterBranch([draggedBranch.branchId], targetBranchId);
+                    }
+                }
+
+                // Update the data attributes
+                draggedNoteElement.attr("data-current-column", column);
+
+                // Show success feedback
+                console.log(`Moved note "${draggedNote.title}" from "${currentColumn}" to "${column}"`);
+
+                // Refresh the board to reflect the changes
+                await this.renderList();
+            } catch (error) {
+                console.error("Failed to update note position:", error);
+            }
+        }
     }
 
     private createTitleStructure(title: string): { $titleText: JQuery<HTMLElement>; $editIcon: JQuery<HTMLElement> } {
