@@ -68,6 +68,11 @@ export default class BoardApi {
         }
     }
 
+    async removeColumn(column: string) {
+        this.persistedData.columns = (this.persistedData.columns ?? []).filter(col => col.value !== column);
+        this.viewStorage.store(this.persistedData);
+    }
+
     static async build(parentNote: FNote, viewStorage: ViewModeStorage<BoardData>) {
         let persistedData = await viewStorage.restore() ?? {};
         const { byColumn, newPersistedData } = await getBoardData(parentNote, "status", persistedData);

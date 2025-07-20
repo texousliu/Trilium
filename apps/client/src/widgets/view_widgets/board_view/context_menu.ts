@@ -1,6 +1,7 @@
-import contextMenu from "../../../menus/context_menu.js";
+import contextMenu, { ContextMenuEvent } from "../../../menus/context_menu.js";
 import link_context_menu from "../../../menus/link_context_menu.js";
 import branches from "../../../services/branches.js";
+import dialog from "../../../services/dialog.js";
 import { t } from "../../../services/i18n.js";
 import BoardApi from "./api.js";
 
@@ -9,8 +10,39 @@ interface ShowNoteContextMenuArgs {
     api: BoardApi;
 }
 
-export function showNoteContextMenu({ $container, api }: ShowNoteContextMenuArgs) {
-    $container.on("contextmenu", ".board-note", (event) => {
+export function setupContextMenu({ $container, api }: ShowNoteContextMenuArgs) {
+    $container.on("contextmenu", ".board-note", showNoteContextMenu);
+    $container.on("contextmenu", ".board-column", showColumnContextMenu);
+
+    function showColumnContextMenu(event: ContextMenuEvent) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const $el = $(event.currentTarget);
+        const column = $el.closest(".board-column").data("column");
+
+        contextMenu.show({
+            x: event.pageX,
+            y: event.pageY,
+            items: [
+                {
+                    title: t("board_view.delete-column"),
+                    uiIcon: "bx bx-trash",
+                    async handler() {
+                        const confirmed = await dialog.confirm(t("board_view.delete-column-confirmation"));
+                        if (!confirmed) {
+                            return;
+                        }
+
+                        await api.removeColumn(column);
+                    }
+                }
+            ],
+            selectMenuItemHandler() {}
+        });
+    }
+
+    function showNoteContextMenu(event: ContextMenuEvent) {
         event.preventDefault();
         event.stopPropagation();
 
@@ -55,5 +87,5 @@ export function showNoteContextMenu({ $container, api }: ShowNoteContextMenuArgs
             ],
             selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, noteId),
         });
-    });
+    }
 }

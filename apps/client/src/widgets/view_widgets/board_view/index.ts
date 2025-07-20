@@ -1,13 +1,12 @@
 import { setupHorizontalScrollViaWheel } from "../../widget_utils";
 import ViewMode, { ViewModeArgs } from "../view_mode";
-import { getBoardData } from "./data";
 import attributeService from "../../../services/attributes";
 import branchService from "../../../services/branches";
 import noteCreateService from "../../../services/note_create";
 import appContext, { EventData } from "../../../components/app_context";
 import { BoardData } from "./config";
 import SpacedUpdate from "../../../services/spaced_update";
-import { showNoteContextMenu } from "./context_menu";
+import { setupContextMenu } from "./context_menu";
 import BoardApi from "./api";
 
 const TPL = /*html*/`
@@ -201,7 +200,7 @@ export default class BoardView extends ViewMode<BoardData> {
 
     private async renderBoard(el: HTMLElement) {
         this.api = await BoardApi.build(this.parentNote, this.viewStorage);
-        showNoteContextMenu({
+        setupContextMenu({
             $container: this.$container,
             api: this.api
         });
@@ -568,6 +567,11 @@ export default class BoardView extends ViewMode<BoardData> {
 
         // React to changes in branches for subchildren (e.g., moved, added, or removed notes)
         if (loadResults.getBranchRows().some(branch => this.noteIds.includes(branch.noteId!))) {
+            return true;
+        }
+
+        // React to attachment change.
+        if (loadResults.getAttachmentRows().some(att => att.ownerId === this.parentNote.noteId && att.title === "board.json")) {
             return true;
         }
 
