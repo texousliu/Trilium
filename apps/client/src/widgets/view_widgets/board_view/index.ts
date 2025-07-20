@@ -160,6 +160,39 @@ const TPL = /*html*/`
         .board-new-item .icon {
             margin-right: 0.25em;
         }
+
+        .board-add-column {
+            width: 250px;
+            flex-shrink: 0;
+            min-height: 200px;
+            border: 2px dashed var(--main-border-color);
+            border-radius: 8px;
+            padding: 0.5em;
+            background-color: transparent;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--muted-text-color);
+        }
+
+        .board-add-column:hover {
+            border-color: var(--main-text-color);
+            color: var(--main-text-color);
+            background-color: var(--hover-item-background-color);
+        }
+
+        .board-add-column.editing {
+            border-style: solid;
+            border-color: var(--main-text-color);
+            background-color: var(--main-background-color);
+        }
+
+        .board-add-column .icon {
+            margin-right: 0.5em;
+            font-size: 1.2em;
+        }
     </style>
 
     <div class="board-view-container"></div>
@@ -282,6 +315,18 @@ export default class BoardView extends ViewMode<BoardData> {
 
             $(el).append($columnEl);
         }
+
+        // Add "Add Column" button at the end
+        const $addColumnEl = $("<div>")
+            .addClass("board-add-column")
+            .html('<span class="icon bx bx-plus"></span>Add Column');
+
+        $addColumnEl.on("click", (e) => {
+            e.stopPropagation();
+            this.startCreatingNewColumn($addColumnEl);
+        });
+
+        $(el).append($addColumnEl);
     }
 
     private setupNoteDrag($noteEl: JQuery<HTMLElement>, note: any, branch: any) {
@@ -551,6 +596,79 @@ export default class BoardView extends ViewMode<BoardData> {
             }
         } catch (error) {
             console.error("Failed to create new item:", error);
+        }
+    }
+
+    private startCreatingNewColumn($addColumnEl: JQuery<HTMLElement>) {
+        if ($addColumnEl.hasClass("editing")) {
+            return; // Already editing
+        }
+
+        $addColumnEl.addClass("editing");
+
+        const $input = $("<input>")
+            .attr("type", "text")
+            .attr("placeholder", "Enter column name...")
+            .css({
+                background: "var(--main-background-color)",
+                border: "1px solid var(--main-text-color)",
+                borderRadius: "4px",
+                padding: "0.5em",
+                color: "var(--main-text-color)",
+                fontFamily: "inherit",
+                fontSize: "inherit",
+                width: "100%",
+                textAlign: "center"
+            });
+
+        $addColumnEl.empty().append($input);
+        $input.focus();
+
+        const finishEdit = async (save: boolean = true) => {
+            if (!$addColumnEl.hasClass("editing")) {
+                return; // Already finished
+            }
+
+            $addColumnEl.removeClass("editing");
+
+            if (save) {
+                const columnName = $input.val() as string;
+                if (columnName.trim()) {
+                    await this.createNewColumn(columnName.trim());
+                }
+            }
+
+            // Restore the add button
+            $addColumnEl.html('<span class="icon bx bx-plus"></span>Add Column');
+        };
+
+        $input.on("blur", () => finishEdit(true));
+        $input.on("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                finishEdit(true);
+            } else if (e.key === "Escape") {
+                e.preventDefault();
+                finishEdit(false);
+            }
+        });
+    }
+
+    private async createNewColumn(columnName: string) {
+        try {
+            // Check if column already exists
+            if (this.api?.columns.includes(columnName)) {
+                console.warn("A column with this name already exists.");
+                return;
+            }
+
+            // Create the new column
+            await this.api?.createColumn(columnName);
+
+            // Refresh the board to show the new column
+            await this.renderList();
+        } catch (error) {
+            console.error("Failed to create new column:", error);
         }
     }
 

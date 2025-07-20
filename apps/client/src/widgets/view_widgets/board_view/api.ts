@@ -87,6 +87,21 @@ export default class BoardApi {
         this.viewStorage.store(this.persistedData);
     }
 
+    async createColumn(columnValue: string) {
+        // Add the new column to persisted data if it doesn't exist
+        if (!this.persistedData.columns) {
+            this.persistedData.columns = [];
+        }
+
+        const existingColumn = this.persistedData.columns.find(col => col.value === columnValue);
+        if (!existingColumn) {
+            this.persistedData.columns.push({ value: columnValue });
+            await this.viewStorage.store(this.persistedData);
+        }
+
+        return columnValue;
+    }
+
     static async build(parentNote: FNote, viewStorage: ViewModeStorage<BoardData>) {
         let persistedData = await viewStorage.restore() ?? {};
         const { byColumn, newPersistedData } = await getBoardData(parentNote, "status", persistedData);
