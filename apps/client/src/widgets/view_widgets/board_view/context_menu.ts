@@ -37,10 +37,12 @@ export function showNoteContextMenu({ $container, api }: ShowNoteContextMenuArgs
                 { title: "----" },
                 {
                     title: t("board_view.insert-above"),
+                    uiIcon: "bx bx-list-plus",
                     handler: () => api.insertRowAtPosition(column, branchId, "before")
                 },
                 {
                     title: t("board_view.insert-below"),
+                    uiIcon: "bx bx-empty",
                     handler: () => api.insertRowAtPosition(column, branchId, "after")
                 },
                 { title: "----" },
