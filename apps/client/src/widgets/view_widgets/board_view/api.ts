@@ -55,18 +55,22 @@ export default class BoardApi {
     }
 
     async renameColumn(oldValue: string, newValue: string, noteIds: string[]) {
+        // Change the value in the notes.
+        await executeBulkActions(noteIds, [
+            {
+                name: "updateLabelValue",
+                labelName: "status",
+                labelValue: newValue
+            }
+        ]);
+
         // Rename the column in the persisted data.
         for (const column of this.persistedData.columns || []) {
             if (column.value === oldValue) {
                 column.value = newValue;
             }
         }
-        this.viewStorage.store(this.persistedData);
-
-        // Update all notes that have the old status value to the new value
-        for (const noteId of noteIds) {
-            await attributes.setLabel(noteId, "status", newValue);
-        }
+        await this.viewStorage.store(this.persistedData);
     }
 
     async removeColumn(column: string) {
