@@ -29,9 +29,10 @@ export function showNoteContextMenu({ $container, api }: ShowNoteContextMenuArgs
                 {
                     title: t("board_view.move-to"),
                     uiIcon: "bx bx-transfer",
-                    items: api.columns.map(column => ({
-                        title: column,
-                        handler: () => api.changeColumn(noteId, column)
+                    items: api.columns.map(columnToMoveTo => ({
+                        title: columnToMoveTo,
+                        enabled: columnToMoveTo !== column,
+                        handler: () => api.changeColumn(noteId, columnToMoveTo)
                     }))
                 },
                 { title: "----" },
