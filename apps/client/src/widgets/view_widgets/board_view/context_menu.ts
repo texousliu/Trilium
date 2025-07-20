@@ -1,4 +1,5 @@
 import contextMenu from "../../../menus/context_menu.js";
+import link_context_menu from "../../../menus/link_context_menu.js";
 import branches from "../../../services/branches.js";
 import { t } from "../../../services/i18n.js";
 
@@ -16,13 +17,15 @@ export function showNoteContextMenu($container: JQuery<HTMLElement>) {
             x: event.pageX,
             y: event.pageY,
             items: [
+                ...link_context_menu.getItems(),
+                { title: "----" },
                 {
                     title: t("board_view.delete-note"),
                     uiIcon: "bx bx-trash",
                     handler: () => branches.deleteNotes([ branchId ], false, false)
                 }
             ],
-            selectMenuItemHandler: () => {}
+            selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, noteId),
         });
     });
 }
