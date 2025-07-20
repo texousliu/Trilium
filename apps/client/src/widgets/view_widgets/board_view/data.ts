@@ -2,7 +2,7 @@ import FBranch from "../../../entities/fbranch";
 import FNote from "../../../entities/fnote";
 import { BoardData } from "./config";
 
-type ColumnMap = Map<string, {
+export type ColumnMap = Map<string, {
     branch: FBranch;
     note: FNote;
 }[]>;

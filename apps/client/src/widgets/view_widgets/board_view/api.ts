@@ -1,15 +1,25 @@
 import appContext from "../../../components/app_context";
+import FNote from "../../../entities/fnote";
 import attributes from "../../../services/attributes";
 import note_create from "../../../services/note_create";
+import ViewModeStorage from "../view_mode_storage";
+import { BoardData } from "./config";
+import { ColumnMap, getBoardData } from "./data";
 
 export default class BoardApi {
 
-    constructor(
+    private constructor(
         private _columns: string[],
-        private _parentNoteId: string) {}
+        private _parentNoteId: string,
+        private viewStorage: ViewModeStorage<BoardData>,
+        private byColumn: ColumnMap) {}
 
     get columns() {
         return this._columns;
+    }
+
+    getColumn(column: string) {
+        return this.byColumn.get(column);
     }
 
     async changeColumn(noteId: string, newColumn: string) {
@@ -47,6 +57,19 @@ export default class BoardApi {
         for (const noteId of noteIds) {
             await attributes.setLabel(noteId, "status", newValue);
         }
+    }
+
+    static async build(parentNote: FNote, viewStorage: ViewModeStorage<BoardData>) {
+        let persistedData = await viewStorage.restore() ?? {};
+        const { byColumn, newPersistedData } = await getBoardData(parentNote, "status", persistedData);
+        const columns = Array.from(byColumn.keys()) || [];
+
+        if (newPersistedData) {
+            persistedData = newPersistedData;
+            viewStorage.store(persistedData);
+        }
+
+        return new BoardApi(columns, parentNote.noteId, viewStorage, byColumn);
     }
 
 }

@@ -200,27 +200,14 @@ export default class BoardView extends ViewMode<BoardData> {
     }
 
     private async renderBoard(el: HTMLElement) {
-        const persistedData = await this.viewStorage.restore() ?? this.persistentData;
-        this.persistentData = persistedData;
-
-        const data = await getBoardData(this.parentNote, "status", persistedData);
-        const columns = Array.from(data.byColumn.keys()) || [];
-        this.api = new BoardApi(
-            columns,
-            this.parentNote.noteId
-        );
+        this.api = await BoardApi.build(this.parentNote, this.viewStorage);
         showNoteContextMenu({
             $container: this.$container,
             api: this.api
         });
 
-        if (data.newPersistedData) {
-            this.persistentData = data.newPersistedData;
-            this.viewStorage.store(this.persistentData);
-        }
-
-        for (const column of data.byColumn.keys()) {
-            const columnItems = data.byColumn.get(column);
+        for (const column of this.api.columns) {
+            const columnItems = this.api.getColumn(column);
             if (!columnItems) {
                 continue;
             }
