@@ -162,9 +162,9 @@ const TPL = /*html*/`
         }
 
         .board-add-column {
-            width: 250px;
+            width: 180px;
             flex-shrink: 0;
-            min-height: 200px;
+            height: 60px;
             border: 2px dashed var(--main-border-color);
             border-radius: 8px;
             padding: 0.5em;
@@ -175,6 +175,8 @@ const TPL = /*html*/`
             justify-content: center;
             cursor: pointer;
             color: var(--muted-text-color);
+            font-size: 0.9em;
+            align-self: flex-start;
         }
 
         .board-add-column:hover {
