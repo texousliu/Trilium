@@ -196,6 +196,38 @@ export default function buildHiddenSubtreeTemplates() {
                         value: `promoted,alias=${t("hidden_subtree_templates.status")},single,text`,
                         isInheritable: true
                     }
+                ],
+                children: [
+                    {
+                        id: "_template_board_first",
+                        title: t("hidden_subtree_templates.board_note_first"),
+                        attributes: [{
+                            name: "status",
+                            value: t("hidden_subtree_templates.board_status_todo"),
+                            type: "label"
+                        }],
+                        type: "text"
+                    },
+                    {
+                        id: "_template_board_second",
+                        title: t("hidden_subtree_templates.board_note_second"),
+                        attributes: [{
+                            name: "status",
+                            value: t("hidden_subtree_templates.board_status_progress"),
+                            type: "label"
+                        }],
+                        type: "text"
+                    },
+                    {
+                        id: "_template_board_third",
+                        title: t("hidden_subtree_templates.board_note_third"),
+                        attributes: [{
+                            name: "status",
+                            value: t("hidden_subtree_templates.board_status_done"),
+                            type: "label"
+                        }],
+                        type: "text"
+                    }
                 ]
             },
         ]
