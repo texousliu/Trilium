@@ -5,6 +5,16 @@ import type FNote from "../../entities/fnote.js";
 import type { EventData } from "../../components/app_context.js";
 import { bookPropertiesConfig, BookProperty } from "./book_properties_config.js";
 import attributes from "../../services/attributes.js";
+import type { ViewTypeOptions } from "../../services/note_list_renderer.js";
+
+const VIEW_TYPE_MAPPINGS: Record<ViewTypeOptions, string> = {
+    grid: t("book_properties.grid"),
+    list: t("book_properties.list"),
+    calendar: t("book_properties.calendar"),
+    table: t("book_properties.table"),
+    geoMap: t("book_properties.geo-map"),
+    board: t("book_properties.board")
+};
 
 const TPL = /*html*/`
 <div class="book-properties-widget">
@@ -41,11 +51,9 @@ const TPL = /*html*/`
         <span style="white-space: nowrap">${t("book_properties.view_type")}:&nbsp; &nbsp;</span>
 
         <select class="view-type-select form-select form-select-sm">
-            <option value="grid">${t("book_properties.grid")}</option>
-            <option value="list">${t("book_properties.list")}</option>
-            <option value="calendar">${t("book_properties.calendar")}</option>
-            <option value="table">${t("book_properties.table")}</option>
-            <option value="geoMap">${t("book_properties.geo-map")}</option>
+            ${Object.entries(VIEW_TYPE_MAPPINGS).map(([type, label]) => `
+                <option value="${type}">${label}</option>
+            `).join("")}
         </select>
     </div>
 
@@ -115,7 +123,7 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
             return;
         }
 
-        if (!["list", "grid", "calendar", "table", "geoMap"].includes(type)) {
+        if (!VIEW_TYPE_MAPPINGS.hasOwnProperty(type)) {
             throw new Error(t("book_properties.invalid_view_type", { type }));
         }
 

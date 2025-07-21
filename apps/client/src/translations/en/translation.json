@@ -762,7 +762,8 @@
     "invalid_view_type": "Invalid view type '{{type}}'",
     "calendar": "Calendar",
     "table": "Table",
-    "geo-map": "Geo Map"
+    "geo-map": "Geo Map",
+    "board": "Board"
   },
   "edited_notes": {
     "no_edited_notes_found": "No edited notes on this day yet...",
