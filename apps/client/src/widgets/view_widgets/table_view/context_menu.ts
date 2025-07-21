@@ -30,6 +30,7 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote:
 
     const sorters = tabulator.getSorters();
     const sorter = sorters.find(sorter => sorter.field === field);
+    const isUserDefinedColumn = (!!field && (field?.startsWith("labels.") || field?.startsWith("relations.")));
 
     contextMenu.show({
         items: [
@@ -65,7 +66,7 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote:
             {
                 title: t("table_view.sort-column-clear"),
                 enabled: sorters.length > 0,
-                uiIcon: "bx bx-empty",
+                uiIcon: "bx bx-x-circle",
                 handler: () => tabulator.clearSort()
             },
             {
@@ -78,7 +79,7 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote:
             },
             {
                 title: t("table_view.show-hide-columns"),
-                uiIcon: "bx bx-empty",
+                uiIcon: "bx bx-columns",
                 items: buildColumnItems(tabulator)
             },
             { title: "----" },
@@ -103,8 +104,8 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote:
             { title: "----" },
             {
                 title: t("table_view.edit-column"),
-                uiIcon: "bx bx-edit",
-                enabled: !!column.getField() && column.getField() !== "title",
+                uiIcon: "bx bxs-edit-alt",
+                enabled: isUserDefinedColumn,
                 handler: () => getParentComponent(e)?.triggerCommand("addNewTableColumn", {
                     referenceColumn: column,
                     columnToEdit: column
@@ -113,7 +114,7 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote:
             {
                 title: t("table_view.delete-column"),
                 uiIcon: "bx bx-trash",
-                enabled: !!column.getField() && column.getField() !== "title",
+                enabled: isUserDefinedColumn,
                 handler: () => getParentComponent(e)?.triggerCommand("deleteTableColumn", {
                     columnToDelete: column
                 })
@@ -136,7 +137,7 @@ function showHeaderContextMenu(_e: Event, tabulator: Tabulator) {
         items: [
             {
                 title: t("table_view.show-hide-columns"),
-                uiIcon: "bx bx-empty",
+                uiIcon: "bx bx-columns",
                 items: buildColumnItems(tabulator)
             },
             { title: "----" },
@@ -173,7 +174,7 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
             { title: "----" },
             {
                 title: t("table_view.row-insert-above"),
-                uiIcon: "bx bx-list-plus",
+                uiIcon: "bx bx-horizontal-left bx-rotate-90",
                 handler: () => getParentComponent(e)?.triggerCommand("addNewRow", {
                     parentNotePath: parentNoteId,
                     customOpts: {
@@ -184,7 +185,7 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
             },
             {
                 title: t("table_view.row-insert-child"),
-                uiIcon: "bx bx-empty",
+                uiIcon: "bx bx-subdirectory-right",
                 handler: async () => {
                     const branchId = row.getData().branchId;
                     const note = await froca.getBranch(branchId)?.getNote();
@@ -199,7 +200,7 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
             },
             {
                 title: t("table_view.row-insert-below"),
-                uiIcon: "bx bx-empty",
+                uiIcon: "bx bx-horizontal-left bx-rotate-270",
                 handler: () => getParentComponent(e)?.triggerCommand("addNewRow", {
                     parentNotePath: parentNoteId,
                     customOpts: {

@@ -80,6 +80,7 @@
 
 .tabulator-tableholder {
     padding-top: 10px;
+    height: unset !important; /* Don't extend on the full height */
 }
 
 /* Rows */
@@ -188,4 +189,11 @@
     border: 1px solid transparent;
     color: var(--menu-text-color);
     font-size: 16px;
+}
+
+/* Footer */
+
+:root .tabulator .tabulator-footer {
+    border-top: unset;
+    padding: 10px 0;
 }

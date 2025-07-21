@@ -11,12 +11,12 @@ export default function buildFooter(parentNote: FNote) {
     }
 
     return /*html*/`\
-        <button class="btn btn-sm" style="padding: 0px 10px 0px 10px;" data-trigger-command="addNewRow">
+        <button class="btn btn-sm" data-trigger-command="addNewRow">
             <span class="bx bx-plus"></span> ${t("table_view.new-row")}
         </button>
 
-        <button class="btn btn-sm" style="padding: 0px 10px 0px 10px;" data-trigger-command="addNewTableColumn">
-            <span class="bx bx-columns"></span> ${t("table_view.new-column")}
+        <button class="btn btn-sm" data-trigger-command="addNewTableColumn">
+            <span class="bx bx-carousel"></span> ${t("table_view.new-column")}
         </button>
     `.trimStart();
 }
