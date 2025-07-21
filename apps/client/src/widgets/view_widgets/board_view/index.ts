@@ -139,6 +139,22 @@ const TPL = /*html*/`
             box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.5);
         }
 
+        .board-view-container .board-note.editing {
+            box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.35);
+            border-color: var(--main-text-color);
+        }
+
+        .board-view-container .board-note.editing input {
+            background: transparent;
+            border: none;
+            outline: none;
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+            width: 100%;
+            padding: 0;
+        }
+
         .board-view-container .board-note .icon {
             margin-right: 0.25em;
         }
@@ -270,7 +286,7 @@ export default class BoardView extends ViewMode<BoardData> {
             this.$container.empty();
             await this.initializeRenderer();
         }
-        
+
         await this.renderer!.renderBoard();
         return this.$root;
     }
@@ -402,7 +418,8 @@ export default class BoardView extends ViewMode<BoardData> {
 
             // Create a new note as a child of the parent note
             const { note: newNote } = await noteCreateService.createNote(parentNotePath, {
-                activate: false
+                activate: false,
+                title: "New item"
             });
 
             if (newNote) {
@@ -412,12 +429,16 @@ export default class BoardView extends ViewMode<BoardData> {
                 // Refresh the board to show the new item
                 await this.renderList();
 
-                // Optionally, open the new note for editing
-                appContext.triggerCommand("openInPopup", { noteIdOrPath: newNote.noteId });
+                // Start inline editing of the newly created card
+                this.startInlineEditingCard(newNote.noteId);
             }
         } catch (error) {
             console.error("Failed to create new item:", error);
         }
+    }
+
+    private startInlineEditingCard(noteId: string) {
+        this.renderer?.startInlineEditing(noteId);
     }
 
     forceFullRefresh() {
@@ -500,7 +521,7 @@ export default class BoardView extends ViewMode<BoardData> {
 
     async onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
         // Check if any changes affect our board
-        const hasRelevantChanges = 
+        const hasRelevantChanges =
             // React to changes in "status" attribute for notes in this board
             loadResults.getAttributeRows().some(attr => attr.name === "status" && this.noteIds.includes(attr.noteId!)) ||
             // React to changes in note title

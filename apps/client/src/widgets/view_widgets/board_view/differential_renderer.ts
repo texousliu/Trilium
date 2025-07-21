@@ -183,6 +183,7 @@ export class DifferentialBoardRenderer {
             const item = newCards[i];
             const noteId = item.note.noteId;
             let $existingCard = $cardContainer.find(`[data-note-id="${noteId}"]`);
+            const isNewCard = !oldCardIds.includes(noteId);
 
             if ($existingCard.length) {
                 // Update existing card if title changed
@@ -197,8 +198,8 @@ export class DifferentialBoardRenderer {
                 // Ensure card is in correct position
                 this.ensureCardPosition($existingCard, i, $cardContainer);
             } else {
-                // Create new card
-                const $newCard = this.createCard(item.note, item.branch, column);
+                // Create new card (pass isNewCard flag)
+                const $newCard = this.createCard(item.note, item.branch, column, isNewCard);
                 $newCard.addClass('fade-in').css('opacity', '0');
 
                 // Insert at correct position
@@ -264,7 +265,7 @@ export class DifferentialBoardRenderer {
         // Add cards
         for (const item of columnItems) {
             if (item.note) {
-                const $noteEl = this.createCard(item.note, item.branch, column);
+                const $noteEl = this.createCard(item.note, item.branch, column, false); // false = existing card
                 $columnEl.append($noteEl);
             }
         }
@@ -281,7 +282,7 @@ export class DifferentialBoardRenderer {
         return $columnEl;
     }
 
-    private createCard(note: any, branch: any, column: string): JQuery<HTMLElement> {
+    private createCard(note: any, branch: any, column: string, isNewCard: boolean = false): JQuery<HTMLElement> {
         const $iconEl = $("<span>")
             .addClass("icon")
             .addClass(note.getIcon());
@@ -291,10 +292,15 @@ export class DifferentialBoardRenderer {
             .attr("data-note-id", note.noteId)
             .attr("data-branch-id", branch.branchId)
             .attr("data-current-column", column)
+            .attr("data-icon-class", note.getIcon())
             .text(note.title);
 
         $noteEl.prepend($iconEl);
-        $noteEl.on("click", () => appContext.triggerCommand("openInPopup", { noteIdOrPath: note.noteId }));
+        
+        // Only add quick edit click handler for existing cards (not new ones)
+        if (!isNewCard) {
+            $noteEl.on("click", () => appContext.triggerCommand("openInPopup", { noteIdOrPath: note.noteId }));
+        }
 
         // Setup drag functionality
         this.dragHandler.setupNoteDrag($noteEl, note, branch);
@@ -326,5 +332,102 @@ export class DifferentialBoardRenderer {
             this.updateTimeout = null;
             await this.performUpdate();
         }
+    }
+
+    startInlineEditing(noteId: string): void {
+        // Use setTimeout to ensure the card is rendered before trying to edit it
+        setTimeout(() => {
+            const $card = this.$container.find(`[data-note-id="${noteId}"]`);
+            if ($card.length) {
+                this.makeCardEditable($card, noteId);
+            }
+        }, 100);
+    }
+
+    private makeCardEditable($card: JQuery<HTMLElement>, noteId: string): void {
+        if ($card.hasClass('editing')) {
+            return; // Already editing
+        }
+
+        // Get the current title (get text without icon)
+        const $icon = $card.find('.icon');
+        const currentTitle = $card.text().trim();
+        
+        // Add editing class and store original click handler
+        $card.addClass('editing');
+        $card.off('click'); // Remove any existing click handlers temporarily
+
+        // Create input element
+        const $input = $('<input>')
+            .attr('type', 'text')
+            .val(currentTitle)
+            .css({
+                background: 'transparent',
+                border: 'none',
+                outline: 'none',
+                fontFamily: 'inherit',
+                fontSize: 'inherit',
+                color: 'inherit',
+                flex: '1',
+                minWidth: '0',
+                padding: '0',
+                marginLeft: '0.25em'
+            });
+
+        // Create a flex container to keep icon and input inline
+        const $editContainer = $('<div>')
+            .css({
+                display: 'flex',
+                alignItems: 'center',
+                width: '100%'
+            });
+
+        // Replace content with icon + input in flex container
+        $editContainer.append($icon.clone(), $input);
+        $card.empty().append($editContainer);
+        $input.focus().select();
+
+        const finishEdit = async (save: boolean = true) => {
+            if (!$card.hasClass('editing')) {
+                return; // Already finished
+            }
+
+            $card.removeClass('editing');
+
+            let finalTitle = currentTitle;
+            if (save) {
+                const newTitle = $input.val() as string;
+                if (newTitle.trim() && newTitle !== currentTitle) {
+                    try {
+                        // Update the note title using the board view's server call
+                        import('../../../services/server').then(async ({ default: server }) => {
+                            await server.put(`notes/${noteId}/title`, { title: newTitle.trim() });
+                            finalTitle = newTitle.trim();
+                        });
+                    } catch (error) {
+                        console.error("Failed to update note title:", error);
+                    }
+                }
+            }
+
+            // Restore the card content
+            const iconClass = $card.attr('data-icon-class') || 'bx bx-file';
+            const $newIcon = $('<span>').addClass('icon').addClass(iconClass);
+            $card.empty().append($newIcon, finalTitle);
+            
+            // Re-attach click handler for quick edit (for existing cards)
+            $card.on('click', () => appContext.triggerCommand("openInPopup", { noteIdOrPath: noteId }));
+        };
+
+        $input.on('blur', () => finishEdit(true));
+        $input.on('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                finishEdit(true);
+            } else if (e.key === 'Escape') {
+                e.preventDefault();
+                finishEdit(false);
+            }
+        });
     }
 }
