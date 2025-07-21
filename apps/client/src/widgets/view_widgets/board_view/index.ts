@@ -192,6 +192,22 @@ const TPL = /*html*/`
             margin-right: 0.5em;
             font-size: 1.2em;
         }
+
+        .board-drag-preview {
+            position: fixed;
+            z-index: 10000;
+            pointer-events: none;
+            opacity: 0.8;
+            transform: rotate(5deg);
+            box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.5);
+            background-color: var(--main-background-color);
+            border: 1px solid var(--main-border-color);
+            border-radius: 5px;
+            padding: 0.5em;
+            font-size: 0.9em;
+            max-width: 200px;
+            word-wrap: break-word;
+        }
     </style>
 
     <div class="board-view-container"></div>
@@ -361,12 +377,14 @@ export default class BoardView extends ViewMode<BoardData> {
         let startY = 0;
         let startX = 0;
         let dragThreshold = 10; // Minimum distance to start dragging
+        let $dragPreview: JQuery<HTMLElement> | null = null;
 
         $noteEl.on("touchstart", (e) => {
             const touch = (e.originalEvent as TouchEvent).touches[0];
             startX = touch.clientX;
             startY = touch.clientY;
             isDragging = false;
+            $dragPreview = null;
         });
 
         $noteEl.on("touchmove", (e) => {
@@ -382,9 +400,18 @@ export default class BoardView extends ViewMode<BoardData> {
                 this.draggedBranch = branch;
                 this.draggedNoteElement = $noteEl;
                 $noteEl.addClass("dragging");
+
+                // Create drag preview
+                $dragPreview = this.createDragPreview($noteEl, touch.clientX, touch.clientY);
             }
 
-            if (isDragging) {
+            if (isDragging && $dragPreview) {
+                // Update drag preview position
+                $dragPreview.css({
+                    left: touch.clientX - ($dragPreview.outerWidth() || 0) / 2,
+                    top: touch.clientY - ($dragPreview.outerHeight() || 0) / 2
+                });
+
                 // Find element under touch point
                 const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
                 if (elementBelow) {
@@ -428,6 +455,12 @@ export default class BoardView extends ViewMode<BoardData> {
                 this.draggedNoteElement = null;
                 this.$container.find('.board-column').removeClass('drag-over');
                 this.$container.find(".board-drop-indicator").removeClass("show");
+
+                // Remove drag preview
+                if ($dragPreview) {
+                    $dragPreview.remove();
+                    $dragPreview = null;
+                }
             }
             isDragging = false;
         });
@@ -600,6 +633,24 @@ export default class BoardView extends ViewMode<BoardData> {
         }
 
         $dropIndicator.addClass("show");
+    }
+
+    private createDragPreview($noteEl: JQuery<HTMLElement>, x: number, y: number): JQuery<HTMLElement> {
+        // Clone the note element for the preview
+        const $preview = $noteEl.clone();
+        
+        $preview
+            .addClass('board-drag-preview')
+            .css({
+                position: 'fixed',
+                left: x - ($noteEl.outerWidth() || 0) / 2,
+                top: y - ($noteEl.outerHeight() || 0) / 2,
+                pointerEvents: 'none',
+                zIndex: 10000
+            })
+            .appendTo('body');
+
+        return $preview;
     }
 
     private async handleNoteDrop($columnEl: JQuery<HTMLElement>, column: string) {
