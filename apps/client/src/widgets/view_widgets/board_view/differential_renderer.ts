@@ -56,6 +56,9 @@ export class DifferentialBoardRenderer {
     }
 
     private async performUpdate(): Promise<void> {
+        // Clean up any stray drag indicators before updating
+        this.dragHandler.cleanup();
+        
         const currentState = this.getCurrentState();
 
         if (!this.lastState) {

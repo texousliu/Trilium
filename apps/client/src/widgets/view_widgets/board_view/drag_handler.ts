@@ -39,6 +39,22 @@ export class BoardDragHandler {
         this.api = newApi;
     }
 
+    private cleanupAllDropIndicators() {
+        // Remove all drop indicators from the DOM to prevent layout issues
+        this.$container.find(".board-drop-indicator").remove();
+    }
+
+    private cleanupColumnDropIndicators($columnEl: JQuery<HTMLElement>) {
+        // Remove drop indicators from a specific column
+        $columnEl.find(".board-drop-indicator").remove();
+    }
+
+    // Public method to clean up any stray indicators - can be called externally
+    cleanup() {
+        this.cleanupAllDropIndicators();
+        this.$container.find('.board-column').removeClass('drag-over');
+    }
+
     private setupMouseDrag($noteEl: JQuery<HTMLElement>, note: any, branch: any) {
         $noteEl.on("dragstart", (e) => {
             this.context.draggedNote = note;
@@ -60,8 +76,8 @@ export class BoardDragHandler {
             this.context.draggedBranch = null;
             this.context.draggedNoteElement = null;
 
-            // Remove all drop indicators
-            this.$container.find(".board-drop-indicator").removeClass("show");
+            // Clean up all drop indicators properly
+            this.cleanupAllDropIndicators();
         });
     }
 
@@ -120,7 +136,7 @@ export class BoardDragHandler {
                     } else {
                         // Remove all drag indicators if not over a column
                         this.$container.find('.board-column').removeClass('drag-over');
-                        this.$container.find(".board-drop-indicator").removeClass("show");
+                        this.cleanupAllDropIndicators();
                     }
                 }
             }
@@ -147,7 +163,7 @@ export class BoardDragHandler {
                 this.context.draggedBranch = null;
                 this.context.draggedNoteElement = null;
                 this.$container.find('.board-column').removeClass('drag-over');
-                this.$container.find(".board-drop-indicator").removeClass("show");
+                this.cleanupAllDropIndicators();
 
                 // Remove drag preview
                 if ($dragPreview) {
@@ -182,7 +198,7 @@ export class BoardDragHandler {
 
             if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
                 $columnEl.removeClass("drag-over");
-                $columnEl.find(".board-drop-indicator").removeClass("show");
+                this.cleanupColumnDropIndicators($columnEl);
             }
         });
 
@@ -228,12 +244,11 @@ export class BoardDragHandler {
         const columnRect = $columnEl[0].getBoundingClientRect();
         const relativeY = y - columnRect.top;
 
-        // Find existing drop indicator or create one
-        let $dropIndicator = $columnEl.find(".board-drop-indicator");
-        if ($dropIndicator.length === 0) {
-            $dropIndicator = $("<div>").addClass("board-drop-indicator");
-            $columnEl.append($dropIndicator);
-        }
+        // Clean up any existing drop indicators in this column first
+        this.cleanupColumnDropIndicators($columnEl);
+
+        // Create a new drop indicator
+        const $dropIndicator = $("<div>").addClass("board-drop-indicator");
 
         // Find the best position to insert the note
         const $notes = this.context.draggedNoteElement ?
@@ -316,6 +331,9 @@ export class BoardDragHandler {
                 await this.onBoardRefresh();
             } catch (error) {
                 console.error("Failed to update note position:", error);
+            } finally {
+                // Always clean up drop indicators after drop operation
+                this.cleanupAllDropIndicators();
             }
         }
     }
