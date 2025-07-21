@@ -1,13 +1,13 @@
 import { setupHorizontalScrollViaWheel } from "../../widget_utils";
 import ViewMode, { ViewModeArgs } from "../view_mode";
 import attributeService from "../../../services/attributes";
-import branchService from "../../../services/branches";
 import noteCreateService from "../../../services/note_create";
 import appContext, { EventData } from "../../../components/app_context";
 import { BoardData } from "./config";
 import SpacedUpdate from "../../../services/spaced_update";
 import { setupContextMenu } from "./context_menu";
 import BoardApi from "./api";
+import { BoardDragHandler, DragContext } from "./drag_handler";
 
 const TPL = /*html*/`
 <div class="board-view">
@@ -219,11 +219,10 @@ export default class BoardView extends ViewMode<BoardData> {
     private $root: JQuery<HTMLElement>;
     private $container: JQuery<HTMLElement>;
     private spacedUpdate: SpacedUpdate;
-    private draggedNote: any = null;
-    private draggedBranch: any = null;
-    private draggedNoteElement: JQuery<HTMLElement> | null = null;
+    private dragContext: DragContext;
     private persistentData: BoardData;
     private api?: BoardApi;
+    private dragHandler?: BoardDragHandler;
 
     constructor(args: ViewModeArgs) {
         super(args, "board");
@@ -234,6 +233,11 @@ export default class BoardView extends ViewMode<BoardData> {
         this.spacedUpdate = new SpacedUpdate(() => this.onSave(), 5_000);
         this.persistentData = {
             columns: []
+        };
+        this.dragContext = {
+            draggedNote: null,
+            draggedBranch: null,
+            draggedNoteElement: null
         };
 
         args.$parent.append(this.$root);
@@ -248,6 +252,13 @@ export default class BoardView extends ViewMode<BoardData> {
 
     private async renderBoard(el: HTMLElement) {
         this.api = await BoardApi.build(this.parentNote, this.viewStorage);
+        this.dragHandler = new BoardDragHandler(
+            this.$container,
+            this.api,
+            this.dragContext,
+            async () => { await this.renderList(); }
+        );
+
         setupContextMenu({
             $container: this.$container,
             api: this.api
@@ -287,7 +298,7 @@ export default class BoardView extends ViewMode<BoardData> {
             });
 
             // Setup drop zone for the column
-            this.setupColumnDropZone($columnEl, column);
+            this.dragHandler!.setupColumnDropZone($columnEl, column);
 
             for (const item of columnItems) {
                 const note = item.note;
@@ -311,7 +322,7 @@ export default class BoardView extends ViewMode<BoardData> {
                 $noteEl.on("click", () => appContext.triggerCommand("openInPopup", { noteIdOrPath: note.noteId }));
 
                 // Setup drag functionality for the note
-                this.setupNoteDrag($noteEl, note, branch);
+                this.dragHandler!.setupNoteDrag($noteEl, note, branch);
 
                 $columnEl.append($noteEl);
             }
@@ -342,373 +353,6 @@ export default class BoardView extends ViewMode<BoardData> {
         });
 
         $(el).append($addColumnEl);
-    }
-
-    private setupNoteDrag($noteEl: JQuery<HTMLElement>, note: any, branch: any) {
-        $noteEl.attr("draggable", "true");
-
-        // Mouse drag events
-        $noteEl.on("dragstart", (e) => {
-            this.draggedNote = note;
-            this.draggedBranch = branch;
-            this.draggedNoteElement = $noteEl;
-            $noteEl.addClass("dragging");
-
-            // Set drag data
-            const originalEvent = e.originalEvent as DragEvent;
-            if (originalEvent.dataTransfer) {
-                originalEvent.dataTransfer.effectAllowed = "move";
-                originalEvent.dataTransfer.setData("text/plain", note.noteId);
-            }
-        });
-
-        $noteEl.on("dragend", () => {
-            $noteEl.removeClass("dragging");
-            this.draggedNote = null;
-            this.draggedBranch = null;
-            this.draggedNoteElement = null;
-
-            // Remove all drop indicators
-            this.$container.find(".board-drop-indicator").removeClass("show");
-        });
-
-        // Touch drag events
-        let isDragging = false;
-        let startY = 0;
-        let startX = 0;
-        let dragThreshold = 10; // Minimum distance to start dragging
-        let $dragPreview: JQuery<HTMLElement> | null = null;
-
-        $noteEl.on("touchstart", (e) => {
-            const touch = (e.originalEvent as TouchEvent).touches[0];
-            startX = touch.clientX;
-            startY = touch.clientY;
-            isDragging = false;
-            $dragPreview = null;
-        });
-
-        $noteEl.on("touchmove", (e) => {
-            e.preventDefault(); // Prevent scrolling
-            const touch = (e.originalEvent as TouchEvent).touches[0];
-            const deltaX = Math.abs(touch.clientX - startX);
-            const deltaY = Math.abs(touch.clientY - startY);
-
-            // Start dragging if we've moved beyond threshold
-            if (!isDragging && (deltaX > dragThreshold || deltaY > dragThreshold)) {
-                isDragging = true;
-                this.draggedNote = note;
-                this.draggedBranch = branch;
-                this.draggedNoteElement = $noteEl;
-                $noteEl.addClass("dragging");
-
-                // Create drag preview
-                $dragPreview = this.createDragPreview($noteEl, touch.clientX, touch.clientY);
-            }
-
-            if (isDragging && $dragPreview) {
-                // Update drag preview position
-                $dragPreview.css({
-                    left: touch.clientX - ($dragPreview.outerWidth() || 0) / 2,
-                    top: touch.clientY - ($dragPreview.outerHeight() || 0) / 2
-                });
-
-                // Find element under touch point
-                const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
-                if (elementBelow) {
-                    const $columnEl = $(elementBelow).closest('.board-column');
-
-                    if ($columnEl.length > 0) {
-                        // Remove drag-over from all columns
-                        this.$container.find('.board-column').removeClass('drag-over');
-                        $columnEl.addClass('drag-over');
-
-                        // Show drop indicator
-                        this.showDropIndicatorAtPoint($columnEl, touch.clientY);
-                    } else {
-                        // Remove all drag indicators if not over a column
-                        this.$container.find('.board-column').removeClass('drag-over');
-                        this.$container.find(".board-drop-indicator").removeClass("show");
-                    }
-                }
-            }
-        });
-
-        $noteEl.on("touchend", async (e) => {
-            if (isDragging) {
-                const touch = (e.originalEvent as TouchEvent).changedTouches[0];
-                const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
-                if (elementBelow) {
-                    const $columnEl = $(elementBelow).closest('.board-column');
-
-                    if ($columnEl.length > 0) {
-                        const column = $columnEl.attr('data-column');
-                        if (column && this.draggedNote && this.draggedNoteElement && this.draggedBranch) {
-                            await this.handleNoteDrop($columnEl, column);
-                        }
-                    }
-                }
-
-                // Clean up
-                $noteEl.removeClass("dragging");
-                this.draggedNote = null;
-                this.draggedBranch = null;
-                this.draggedNoteElement = null;
-                this.$container.find('.board-column').removeClass('drag-over');
-                this.$container.find(".board-drop-indicator").removeClass("show");
-
-                // Remove drag preview
-                if ($dragPreview) {
-                    $dragPreview.remove();
-                    $dragPreview = null;
-                }
-            }
-            isDragging = false;
-        });
-    }
-
-    private setupColumnDropZone($columnEl: JQuery<HTMLElement>, column: string) {
-        $columnEl.on("dragover", (e) => {
-            e.preventDefault();
-            const originalEvent = e.originalEvent as DragEvent;
-            if (originalEvent.dataTransfer) {
-                originalEvent.dataTransfer.dropEffect = "move";
-            }
-
-            if (this.draggedNote) {
-                $columnEl.addClass("drag-over");
-                this.showDropIndicator($columnEl, e);
-            }
-        });
-
-        $columnEl.on("dragleave", (e) => {
-            // Only remove drag-over if we're leaving the column entirely
-            const rect = $columnEl[0].getBoundingClientRect();
-            const originalEvent = e.originalEvent as DragEvent;
-            const x = originalEvent.clientX;
-            const y = originalEvent.clientY;
-
-            if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
-                $columnEl.removeClass("drag-over");
-                $columnEl.find(".board-drop-indicator").removeClass("show");
-            }
-        });
-
-        $columnEl.on("drop", async (e) => {
-            e.preventDefault();
-            $columnEl.removeClass("drag-over");
-
-            const draggedNoteElement = this.draggedNoteElement;
-            const draggedNote = this.draggedNote;
-            const draggedBranch = this.draggedBranch;
-            if (draggedNote && draggedNoteElement && draggedBranch) {
-                const currentColumn = draggedNoteElement.attr("data-current-column");
-
-                // Capture drop indicator position BEFORE removing it
-                const dropIndicator = $columnEl.find(".board-drop-indicator.show");
-                let targetBranchId: string | null = null;
-                let moveType: "before" | "after" | null = null;
-
-                if (dropIndicator.length > 0) {
-                    // Find the note element that the drop indicator is positioned relative to
-                    const nextNote = dropIndicator.next(".board-note");
-                    const prevNote = dropIndicator.prev(".board-note");
-
-                    if (nextNote.length > 0) {
-                        targetBranchId = nextNote.attr("data-branch-id") || null;
-                        moveType = "before";
-                    } else if (prevNote.length > 0) {
-                        targetBranchId = prevNote.attr("data-branch-id") || null;
-                        moveType = "after";
-                    }
-                }
-
-                // Now remove the drop indicator
-                $columnEl.find(".board-drop-indicator").removeClass("show");
-
-                try {
-                    // Handle column change
-                    if (currentColumn !== column) {
-                        await this.api?.changeColumn(draggedNote.noteId, column);
-                    }
-
-                    // Handle position change (works for both same column and different column moves)
-                    if (targetBranchId && moveType) {
-                        if (moveType === "before") {
-                            console.log("Move before branch:", draggedBranch.branchId, "to", targetBranchId);
-                            await branchService.moveBeforeBranch([draggedBranch.branchId], targetBranchId);
-                        } else if (moveType === "after") {
-                            console.log("Move after branch:", draggedBranch.branchId, "to", targetBranchId);
-                            await branchService.moveAfterBranch([draggedBranch.branchId], targetBranchId);
-                        }
-                    }
-
-                    // Update the data attributes
-                    draggedNoteElement.attr("data-current-column", column);
-
-                    // Show success feedback
-                    console.log(`Moved note "${draggedNote.title}" from "${currentColumn}" to "${column}"`);
-
-                    // Refresh the board to reflect the changes
-                    await this.renderList();
-                } catch (error) {
-                    console.error("Failed to update note position:", error);
-                }
-            }
-        });
-    }
-
-    private showDropIndicator($columnEl: JQuery<HTMLElement>, e: JQuery.DragOverEvent) {
-        const originalEvent = e.originalEvent as DragEvent;
-        const mouseY = originalEvent.clientY;
-        const columnRect = $columnEl[0].getBoundingClientRect();
-        const relativeY = mouseY - columnRect.top;
-
-        // Find existing drop indicator or create one
-        let $dropIndicator = $columnEl.find(".board-drop-indicator");
-        if ($dropIndicator.length === 0) {
-            $dropIndicator = $("<div>").addClass("board-drop-indicator");
-            $columnEl.append($dropIndicator);
-        }
-
-        // Find the best position to insert the note
-        const $notes = this.draggedNoteElement ?
-            $columnEl.find(".board-note").not(this.draggedNoteElement) :
-            $columnEl.find(".board-note");
-        let insertAfterElement: HTMLElement | null = null;
-
-        $notes.each((_, noteEl) => {
-            const noteRect = noteEl.getBoundingClientRect();
-            const noteMiddle = noteRect.top + noteRect.height / 2 - columnRect.top;
-
-            if (relativeY > noteMiddle) {
-                insertAfterElement = noteEl;
-            }
-        });
-
-        // Position the drop indicator
-        if (insertAfterElement) {
-            $(insertAfterElement).after($dropIndicator);
-        } else {
-            // Insert at the beginning (after the header)
-            const $header = $columnEl.find("h3");
-            $header.after($dropIndicator);
-        }
-
-        $dropIndicator.addClass("show");
-    }
-
-    private showDropIndicatorAtPoint($columnEl: JQuery<HTMLElement>, touchY: number) {
-        const columnRect = $columnEl[0].getBoundingClientRect();
-        const relativeY = touchY - columnRect.top;
-
-        // Find existing drop indicator or create one
-        let $dropIndicator = $columnEl.find(".board-drop-indicator");
-        if ($dropIndicator.length === 0) {
-            $dropIndicator = $("<div>").addClass("board-drop-indicator");
-            $columnEl.append($dropIndicator);
-        }
-
-        // Find the best position to insert the note
-        const $notes = this.draggedNoteElement ?
-            $columnEl.find(".board-note").not(this.draggedNoteElement) :
-            $columnEl.find(".board-note");
-        let insertAfterElement: HTMLElement | null = null;
-
-        $notes.each((_, noteEl) => {
-            const noteRect = noteEl.getBoundingClientRect();
-            const noteMiddle = noteRect.top + noteRect.height / 2 - columnRect.top;
-
-            if (relativeY > noteMiddle) {
-                insertAfterElement = noteEl;
-            }
-        });
-
-        // Position the drop indicator
-        if (insertAfterElement) {
-            $(insertAfterElement).after($dropIndicator);
-        } else {
-            // Insert at the beginning (after the header)
-            const $header = $columnEl.find("h3");
-            $header.after($dropIndicator);
-        }
-
-        $dropIndicator.addClass("show");
-    }
-
-    private createDragPreview($noteEl: JQuery<HTMLElement>, x: number, y: number): JQuery<HTMLElement> {
-        // Clone the note element for the preview
-        const $preview = $noteEl.clone();
-        
-        $preview
-            .addClass('board-drag-preview')
-            .css({
-                position: 'fixed',
-                left: x - ($noteEl.outerWidth() || 0) / 2,
-                top: y - ($noteEl.outerHeight() || 0) / 2,
-                pointerEvents: 'none',
-                zIndex: 10000
-            })
-            .appendTo('body');
-
-        return $preview;
-    }
-
-    private async handleNoteDrop($columnEl: JQuery<HTMLElement>, column: string) {
-        const draggedNoteElement = this.draggedNoteElement;
-        const draggedNote = this.draggedNote;
-        const draggedBranch = this.draggedBranch;
-
-        if (draggedNote && draggedNoteElement && draggedBranch) {
-            const currentColumn = draggedNoteElement.attr("data-current-column");
-
-            // Capture drop indicator position BEFORE removing it
-            const dropIndicator = $columnEl.find(".board-drop-indicator.show");
-            let targetBranchId: string | null = null;
-            let moveType: "before" | "after" | null = null;
-
-            if (dropIndicator.length > 0) {
-                // Find the note element that the drop indicator is positioned relative to
-                const nextNote = dropIndicator.next(".board-note");
-                const prevNote = dropIndicator.prev(".board-note");
-
-                if (nextNote.length > 0) {
-                    targetBranchId = nextNote.attr("data-branch-id") || null;
-                    moveType = "before";
-                } else if (prevNote.length > 0) {
-                    targetBranchId = prevNote.attr("data-branch-id") || null;
-                    moveType = "after";
-                }
-            }
-
-            try {
-                // Handle column change
-                if (currentColumn !== column) {
-                    await this.api?.changeColumn(draggedNote.noteId, column);
-                }
-
-                // Handle position change (works for both same column and different column moves)
-                if (targetBranchId && moveType) {
-                    if (moveType === "before") {
-                        console.log("Move before branch:", draggedBranch.branchId, "to", targetBranchId);
-                        await branchService.moveBeforeBranch([draggedBranch.branchId], targetBranchId);
-                    } else if (moveType === "after") {
-                        console.log("Move after branch:", draggedBranch.branchId, "to", targetBranchId);
-                        await branchService.moveAfterBranch([draggedBranch.branchId], targetBranchId);
-                    }
-                }
-
-                // Update the data attributes
-                draggedNoteElement.attr("data-current-column", column);
-
-                // Show success feedback
-                console.log(`Moved note "${draggedNote.title}" from "${currentColumn}" to "${column}"`);
-
-                // Refresh the board to reflect the changes
-                await this.renderList();
-            } catch (error) {
-                console.error("Failed to update note position:", error);
-            }
-        }
     }
 
     private createTitleStructure(title: string): { $titleText: JQuery<HTMLElement>; $editIcon: JQuery<HTMLElement> } {
