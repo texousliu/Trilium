@@ -425,7 +425,7 @@ export default class BoardView extends ViewMode<BoardData> {
 
             if (newNote) {
                 // Set the status label to place it in the correct column
-                await attributeService.setLabel(newNote.noteId, "status", column);
+                await this.api?.changeColumn(newNote.noteId, column);
 
                 // Refresh the board to show the new item
                 await this.renderList();
@@ -442,7 +442,7 @@ export default class BoardView extends ViewMode<BoardData> {
         try {
             // Create the note without opening it
             const newNote = await this.api?.insertRowAtPosition(column, relativeToBranchId, direction, false);
-            
+
             if (newNote) {
                 // Refresh the board to show the new item
                 await this.renderList();
@@ -540,8 +540,8 @@ export default class BoardView extends ViewMode<BoardData> {
     async onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
         // Check if any changes affect our board
         const hasRelevantChanges =
-            // React to changes in "status" attribute for notes in this board
-            loadResults.getAttributeRows().some(attr => attr.name === "status" && this.noteIds.includes(attr.noteId!)) ||
+            // React to changes in status attribute for notes in this board
+            loadResults.getAttributeRows().some(attr => attr.name === this.api?.statusAttribute && this.noteIds.includes(attr.noteId!)) ||
             // React to changes in note title
             loadResults.getNoteIds().some(noteId => this.noteIds.includes(noteId)) ||
             // React to changes in branches for subchildren (e.g., moved, added, or removed notes)

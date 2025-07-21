@@ -14,10 +14,15 @@ export default class BoardApi {
         private _parentNoteId: string,
         private viewStorage: ViewModeStorage<BoardData>,
         private byColumn: ColumnMap,
-        private persistedData: BoardData) {}
+        private persistedData: BoardData,
+        private _statusAttribute: string) {}
 
     get columns() {
         return this._columns;
+    }
+
+    get statusAttribute() {
+        return this._statusAttribute;
     }
 
     getColumn(column: string) {
@@ -25,7 +30,7 @@ export default class BoardApi {
     }
 
     async changeColumn(noteId: string, newColumn: string) {
-        await attributes.setLabel(noteId, "status", newColumn);
+        await attributes.setLabel(noteId, this._statusAttribute, newColumn);
     }
 
     openNote(noteId: string) {
@@ -62,7 +67,7 @@ export default class BoardApi {
         await executeBulkActions(noteIds, [
             {
                 name: "updateLabelValue",
-                labelName: "status",
+                labelName: this._statusAttribute,
                 labelValue: newValue
             }
         ]);
@@ -82,7 +87,7 @@ export default class BoardApi {
         await executeBulkActions(noteIds, [
             {
                 name: "deleteLabel",
-                labelName: "status"
+                labelName: this._statusAttribute
             }
         ]);
 
@@ -106,8 +111,10 @@ export default class BoardApi {
     }
 
     static async build(parentNote: FNote, viewStorage: ViewModeStorage<BoardData>) {
+        const statusAttribute = "status"; // This should match the attribute used for grouping
+
         let persistedData = await viewStorage.restore() ?? {};
-        const { byColumn, newPersistedData } = await getBoardData(parentNote, "status", persistedData);
+        const { byColumn, newPersistedData } = await getBoardData(parentNote, statusAttribute, persistedData);
         const columns = Array.from(byColumn.keys()) || [];
 
         if (newPersistedData) {
@@ -115,7 +122,7 @@ export default class BoardApi {
             viewStorage.store(persistedData);
         }
 
-        return new BoardApi(columns, parentNote.noteId, viewStorage, byColumn, persistedData);
+        return new BoardApi(columns, parentNote.noteId, viewStorage, byColumn, persistedData, statusAttribute);
     }
 
 }
