@@ -311,7 +311,8 @@ export default class BoardView extends ViewMode<BoardData> {
 
         setupContextMenu({
             $container: this.$container,
-            api: this.api
+            api: this.api,
+            boardView: this
         });
 
         // Setup column title editing and add column functionality
@@ -434,6 +435,23 @@ export default class BoardView extends ViewMode<BoardData> {
             }
         } catch (error) {
             console.error("Failed to create new item:", error);
+        }
+    }
+
+    async insertItemAtPosition(column: string, relativeToBranchId: string, direction: "before" | "after"): Promise<void> {
+        try {
+            // Create the note without opening it
+            const newNote = await this.api?.insertRowAtPosition(column, relativeToBranchId, direction, false);
+            
+            if (newNote) {
+                // Refresh the board to show the new item
+                await this.renderList();
+
+                // Start inline editing of the newly created card
+                this.startInlineEditingCard(newNote.noteId);
+            }
+        } catch (error) {
+            console.error("Failed to insert new item:", error);
         }
     }
 

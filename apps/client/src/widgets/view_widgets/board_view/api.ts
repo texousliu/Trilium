@@ -1,7 +1,7 @@
 import appContext from "../../../components/app_context";
 import FNote from "../../../entities/fnote";
 import attributes from "../../../services/attributes";
-import bulk_action, { executeBulkActions } from "../../../services/bulk_action";
+import { executeBulkActions } from "../../../services/bulk_action";
 import note_create from "../../../services/note_create";
 import ViewModeStorage from "../view_mode_storage";
 import { BoardData } from "./config";
@@ -40,7 +40,8 @@ export default class BoardApi {
         const { note } = await note_create.createNote(this._parentNoteId, {
             activate: false,
             targetBranchId: relativeToBranchId,
-            target: direction
+            target: direction,
+            title: "New item"
         });
 
         if (!note) {
@@ -52,6 +53,8 @@ export default class BoardApi {
         if (open) {
             this.openNote(noteId);
         }
+
+        return note;
     }
 
     async renameColumn(oldValue: string, newValue: string, noteIds: string[]) {

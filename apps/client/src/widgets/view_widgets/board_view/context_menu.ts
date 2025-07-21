@@ -4,13 +4,15 @@ import branches from "../../../services/branches.js";
 import dialog from "../../../services/dialog.js";
 import { t } from "../../../services/i18n.js";
 import BoardApi from "./api.js";
+import type BoardView from "./index.js";
 
 interface ShowNoteContextMenuArgs {
     $container: JQuery<HTMLElement>;
     api: BoardApi;
+    boardView: BoardView;
 }
 
-export function setupContextMenu({ $container, api }: ShowNoteContextMenuArgs) {
+export function setupContextMenu({ $container, api, boardView }: ShowNoteContextMenuArgs) {
     $container.on("contextmenu", ".board-note", showNoteContextMenu);
     $container.on("contextmenu", ".board-column", showColumnContextMenu);
 
@@ -71,12 +73,12 @@ export function setupContextMenu({ $container, api }: ShowNoteContextMenuArgs) {
                 {
                     title: t("board_view.insert-above"),
                     uiIcon: "bx bx-list-plus",
-                    handler: () => api.insertRowAtPosition(column, branchId, "before")
+                    handler: () => boardView.insertItemAtPosition(column, branchId, "before")
                 },
                 {
                     title: t("board_view.insert-below"),
                     uiIcon: "bx bx-empty",
-                    handler: () => api.insertRowAtPosition(column, branchId, "after")
+                    handler: () => boardView.insertItemAtPosition(column, branchId, "after")
                 },
                 { title: "----" },
                 {
