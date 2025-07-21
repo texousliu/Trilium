@@ -762,7 +762,8 @@
     "invalid_view_type": "Invalid view type '{{type}}'",
     "calendar": "Calendar",
     "table": "Table",
-    "geo-map": "Geo Map"
+    "geo-map": "Geo Map",
+    "board": "Board"
   },
   "edited_notes": {
     "no_edited_notes_found": "No edited notes on this day yet...",
@@ -1968,5 +1969,13 @@
   },
   "table_context_menu": {
     "delete_row": "Delete row"
+  },
+  "board_view": {
+    "delete-note": "Delete Note",
+    "move-to": "Move to",
+    "insert-above": "Insert above",
+    "insert-below": "Insert below",
+    "delete-column": "Delete column",
+    "delete-column-confirmation": "Are you sure you want to delete this column? The corresponding attribute will be deleted in the notes under this column as well."
   }
 }

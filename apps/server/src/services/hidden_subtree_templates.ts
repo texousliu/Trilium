@@ -170,7 +170,70 @@ export default function buildHiddenSubtreeTemplates() {
                         isInheritable: true
                     }
                 ]
-            }
+            },
+            {
+                id: "_template_board",
+                type: "book",
+                title: t("hidden_subtree_templates.board"),
+                icon: "bx bx-columns",
+                attributes: [
+                    {
+                        name: "template",
+                        type: "label"
+                    },
+                    {
+                        name: "collection",
+                        type: "label"
+                    },
+                    {
+                        name: "viewType",
+                        type: "label",
+                        value: "board"
+                    },
+                    {
+                        name: "hidePromotedAttributes",
+                        type: "label"
+                    },
+                    {
+                        name: "label:status",
+                        type: "label",
+                        value: `promoted,alias=${t("hidden_subtree_templates.status")},single,text`,
+                        isInheritable: true
+                    }
+                ],
+                children: [
+                    {
+                        id: "_template_board_first",
+                        title: t("hidden_subtree_templates.board_note_first"),
+                        attributes: [{
+                            name: "status",
+                            value: t("hidden_subtree_templates.board_status_todo"),
+                            type: "label"
+                        }],
+                        type: "text"
+                    },
+                    {
+                        id: "_template_board_second",
+                        title: t("hidden_subtree_templates.board_note_second"),
+                        attributes: [{
+                            name: "status",
+                            value: t("hidden_subtree_templates.board_status_progress"),
+                            type: "label"
+                        }],
+                        type: "text"
+                    },
+                    {
+                        id: "_template_board_third",
+                        title: t("hidden_subtree_templates.board_note_third"),
+                        attributes: [{
+                            name: "status",
+                            value: t("hidden_subtree_templates.board_status_done"),
+                            type: "label"
+                        }],
+                        type: "text"
+                    }
+                ]
+            },
         ]
     };
 

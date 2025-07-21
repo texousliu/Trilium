@@ -35,7 +35,8 @@ export const byBookType: Record<ViewTypeOptions, string | null> = {
     grid: "8QqnMzx393bx",
     calendar: "xWbu3jpNWapp",
     table: "2FvYrpmOXm29",
-    geoMap: "81SGnPGMk7Xc"
+    geoMap: "81SGnPGMk7Xc",
+    board: null
 };
 
 export default class ContextualHelpButton extends NoteContextAwareWidget {

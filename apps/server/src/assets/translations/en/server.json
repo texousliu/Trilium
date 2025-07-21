@@ -317,6 +317,14 @@
     "start-time": "Start Time",
     "end-time": "End Time",
     "geolocation": "Geolocation",
-    "built-in-templates": "Built-in templates"
+    "built-in-templates": "Built-in templates",
+    "board": "Board",
+    "status": "Status",
+    "board_note_first": "First note",
+    "board_note_second": "Second note",
+    "board_note_third": "Third note",
+    "board_status_todo": "To Do",
+    "board_status_progress": "In Progress",
+    "board_status_done": "Done"
   }
 }

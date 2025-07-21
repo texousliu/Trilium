@@ -1,4 +1,5 @@
 import type FNote from "../entities/fnote.js";
+import BoardView from "../widgets/view_widgets/board_view/index.js";
 import CalendarView from "../widgets/view_widgets/calendar_view.js";
 import GeoView from "../widgets/view_widgets/geo_view/index.js";
 import ListOrGridView from "../widgets/view_widgets/list_or_grid_view.js";
@@ -6,8 +7,9 @@ import TableView from "../widgets/view_widgets/table_view/index.js";
 import type { ViewModeArgs } from "../widgets/view_widgets/view_mode.js";
 import type ViewMode from "../widgets/view_widgets/view_mode.js";
 
+const allViewTypes = ["list", "grid", "calendar", "table", "geoMap", "board"] as const;
 export type ArgsWithoutNoteId = Omit<ViewModeArgs, "noteIds">;
-export type ViewTypeOptions = "list" | "grid" | "calendar" | "table" | "geoMap";
+export type ViewTypeOptions = typeof allViewTypes[number];
 
 export default class NoteListRenderer {
 
@@ -23,7 +25,7 @@ export default class NoteListRenderer {
     #getViewType(parentNote: FNote): ViewTypeOptions {
         const viewType = parentNote.getLabelValue("viewType");
 
-        if (!["list", "grid", "calendar", "table", "geoMap"].includes(viewType || "")) {
+        if (!(allViewTypes as readonly string[]).includes(viewType || "")) {
             // when not explicitly set, decide based on the note type
             return parentNote.type === "search" ? "list" : "grid";
         } else {
@@ -57,6 +59,8 @@ export default class NoteListRenderer {
                 return new TableView(args);
             case "geoMap":
                 return new GeoView(args);
+            case "board":
+                return new BoardView(args);
             case "list":
             case "grid":
             default:
