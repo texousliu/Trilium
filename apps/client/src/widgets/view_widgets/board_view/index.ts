@@ -403,10 +403,8 @@ export default class BoardView extends ViewMode<BoardData> {
             const noteIds = columnItems.map(item => item.note.noteId);
 
             // Use the API to rename the column (update all notes)
+            // This will trigger onEntitiesReloaded which will automatically refresh the board
             await this.api?.renameColumn(oldValue, newValue, noteIds);
-
-            // Refresh the board to reflect the changes
-            await this.renderList();
         } catch (error) {
             console.error("Failed to rename column:", error);
         }
