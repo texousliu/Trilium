@@ -101,5 +101,8 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
                 width: 65
             }
         ]
+    },
+    board: {
+        properties: []
     }
 };
