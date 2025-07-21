@@ -547,7 +547,9 @@ export default class BoardView extends ViewMode<BoardData> {
             // React to changes in branches for subchildren (e.g., moved, added, or removed notes)
             loadResults.getBranchRows().some(branch => this.noteIds.includes(branch.noteId!)) ||
             // React to attachment change
-            loadResults.getAttachmentRows().some(att => att.ownerId === this.parentNote.noteId && att.title === "board.json");
+            loadResults.getAttachmentRows().some(att => att.ownerId === this.parentNote.noteId && att.title === "board.json") ||
+            // React to changes in "groupBy"
+            loadResults.getAttributeRows().some(attr => attr.name === "board:groupBy" && attr.noteId === this.parentNote.noteId);
 
         if (hasRelevantChanges && this.renderer) {
             // Use differential rendering with API refresh
