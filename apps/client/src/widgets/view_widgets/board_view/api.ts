@@ -111,7 +111,7 @@ export default class BoardApi {
     }
 
     static async build(parentNote: FNote, viewStorage: ViewModeStorage<BoardData>) {
-        const statusAttribute = "status"; // This should match the attribute used for grouping
+        const statusAttribute = parentNote.getLabelValue("board:groupBy") ?? "status";
 
         let persistedData = await viewStorage.restore() ?? {};
         const { byColumn, newPersistedData } = await getBoardData(parentNote, statusAttribute, persistedData);
