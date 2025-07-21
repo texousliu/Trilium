@@ -8,6 +8,7 @@ import SpacedUpdate from "../../../services/spaced_update";
 import { setupContextMenu } from "./context_menu";
 import BoardApi from "./api";
 import { BoardDragHandler, DragContext } from "./drag_handler";
+import { DifferentialBoardRenderer } from "./differential_renderer";
 
 const TPL = /*html*/`
 <div class="board-view">
@@ -104,7 +105,26 @@ const TPL = /*html*/`
             position: relative;
             background-color: var(--main-background-color);
             border: 1px solid var(--main-border-color);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.15s ease;
+            opacity: 1;
+        }
+
+        .board-view-container .board-note.fade-in {
+            animation: fadeIn 0.15s ease-in;
+        }
+
+        .board-view-container .board-note.fade-out {
+            animation: fadeOut 0.15s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-10px); }
         }
 
         .board-view-container .board-note:hover {
@@ -223,6 +243,7 @@ export default class BoardView extends ViewMode<BoardData> {
     private persistentData: BoardData;
     private api?: BoardApi;
     private dragHandler?: BoardDragHandler;
+    private renderer?: DifferentialBoardRenderer;
 
     constructor(args: ViewModeArgs) {
         super(args, "board");
@@ -244,13 +265,17 @@ export default class BoardView extends ViewMode<BoardData> {
     }
 
     async renderList(): Promise<JQuery<HTMLElement> | undefined> {
-        this.$container.empty();
-        await this.renderBoard(this.$container[0]);
-
+        if (!this.renderer) {
+            // First time setup
+            this.$container.empty();
+            await this.initializeRenderer();
+        }
+        
+        await this.renderer!.renderBoard();
         return this.$root;
     }
 
-    private async renderBoard(el: HTMLElement) {
+    private async initializeRenderer() {
         this.api = await BoardApi.build(this.parentNote, this.viewStorage);
         this.dragHandler = new BoardDragHandler(
             this.$container,
@@ -259,100 +284,41 @@ export default class BoardView extends ViewMode<BoardData> {
             async () => { await this.renderList(); }
         );
 
+        this.renderer = new DifferentialBoardRenderer(
+            this.$container,
+            this.api,
+            this.dragHandler,
+            (column: string) => this.createNewItem(column),
+            this.parentNote,
+            this.viewStorage
+        );
+
         setupContextMenu({
             $container: this.$container,
             api: this.api
         });
 
-        for (const column of this.api.columns) {
-            const columnItems = this.api.getColumn(column);
-            if (!columnItems) {
-                continue;
-            }
+        // Setup column title editing and add column functionality
+        this.setupBoardInteractions();
+    }
 
-            // Find the column data to get custom title
-            const columnTitle = column;
-
-            const $columnEl = $("<div>")
-                .addClass("board-column")
-                .attr("data-column", column);
-
-            const $titleEl = $("<h3>")
-                .attr("data-column-value", column);
-
-            const { $titleText, $editIcon } = this.createTitleStructure(columnTitle);
-            $titleEl.append($titleText, $editIcon);
-
-            // Make column title editable
-            this.setupColumnTitleEdit($titleEl, column, columnItems);
-
-            $columnEl.append($titleEl);
-
-            // Allow vertical scrolling in the column, bypassing the horizontal scroll of the container.
-            $columnEl.on("wheel", (event) => {
-                const el = $columnEl[0];
-                const needsScroll = el.scrollHeight > el.clientHeight;
-                if (needsScroll) {
-                    event.stopPropagation();
-                }
-            });
-
-            // Setup drop zone for the column
-            this.dragHandler!.setupColumnDropZone($columnEl, column);
-
-            for (const item of columnItems) {
-                const note = item.note;
-                const branch = item.branch;
-                if (!note) {
-                    continue;
-                }
-
-                const $iconEl = $("<span>")
-                    .addClass("icon")
-                    .addClass(note.getIcon());
-
-                const $noteEl = $("<div>")
-                    .addClass("board-note")
-                    .attr("data-note-id", note.noteId)
-                    .attr("data-branch-id", branch.branchId)
-                    .attr("data-current-column", column)
-                    .text(note.title);
-
-                $noteEl.prepend($iconEl);
-                $noteEl.on("click", () => appContext.triggerCommand("openInPopup", { noteIdOrPath: note.noteId }));
-
-                // Setup drag functionality for the note
-                this.dragHandler!.setupNoteDrag($noteEl, note, branch);
-
-                $columnEl.append($noteEl);
-            }
-
-            // Add "New item" link at the bottom of the column
-            const $newItemEl = $("<div>")
-                .addClass("board-new-item")
-                .attr("data-column", column)
-                .html('<span class="icon bx bx-plus"></span>New item');
-
-            $newItemEl.on("click", () => {
-                this.createNewItem(column);
-            });
-
-            $columnEl.append($newItemEl);
-
-            $(el).append($columnEl);
-        }
-
-        // Add "Add Column" button at the end
-        const $addColumnEl = $("<div>")
-            .addClass("board-add-column")
-            .html('<span class="icon bx bx-plus"></span>Add Column');
-
-        $addColumnEl.on("click", (e) => {
+    private setupBoardInteractions() {
+        // Handle column title editing
+        this.$container.on('click', 'h3[data-column-value]', (e) => {
             e.stopPropagation();
-            this.startCreatingNewColumn($addColumnEl);
+            const $titleEl = $(e.currentTarget);
+            const columnValue = $titleEl.attr('data-column-value');
+            if (columnValue) {
+                const columnItems = this.api?.getColumn(columnValue) || [];
+                this.startEditingColumnTitle($titleEl, columnValue, columnItems);
+            }
         });
 
-        $(el).append($addColumnEl);
+        // Handle add column button
+        this.$container.on('click', '.board-add-column', (e) => {
+            e.stopPropagation();
+            this.startCreatingNewColumn($(e.currentTarget));
+        });
     }
 
     private createTitleStructure(title: string): { $titleText: JQuery<HTMLElement>; $editIcon: JQuery<HTMLElement> } {
@@ -362,13 +328,6 @@ export default class BoardView extends ViewMode<BoardData> {
             .attr("title", "Click to edit column title");
 
         return { $titleText, $editIcon };
-    }
-
-    private setupColumnTitleEdit($titleEl: JQuery<HTMLElement>, columnValue: string, columnItems: { branch: any; note: any; }[]) {
-        $titleEl.on("click", (e) => {
-            e.stopPropagation();
-            this.startEditingColumnTitle($titleEl, columnValue, columnItems);
-        });
     }
 
     private startEditingColumnTitle($titleEl: JQuery<HTMLElement>, columnValue: string, columnItems: { branch: any; note: any; }[]) {
@@ -461,6 +420,11 @@ export default class BoardView extends ViewMode<BoardData> {
         }
     }
 
+    forceFullRefresh() {
+        this.renderer?.forceFullRender();
+        return this.renderList();
+    }
+
     private startCreatingNewColumn($addColumnEl: JQuery<HTMLElement>) {
         if ($addColumnEl.hasClass("editing")) {
             return; // Already editing
@@ -535,26 +499,23 @@ export default class BoardView extends ViewMode<BoardData> {
     }
 
     async onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
-        // React to changes in "status" attribute for notes in this board
-        if (loadResults.getAttributeRows().some(attr => attr.name === "status" && this.noteIds.includes(attr.noteId!))) {
-            return true;
+        // Check if any changes affect our board
+        const hasRelevantChanges = 
+            // React to changes in "status" attribute for notes in this board
+            loadResults.getAttributeRows().some(attr => attr.name === "status" && this.noteIds.includes(attr.noteId!)) ||
+            // React to changes in note title
+            loadResults.getNoteIds().some(noteId => this.noteIds.includes(noteId)) ||
+            // React to changes in branches for subchildren (e.g., moved, added, or removed notes)
+            loadResults.getBranchRows().some(branch => this.noteIds.includes(branch.noteId!)) ||
+            // React to attachment change
+            loadResults.getAttachmentRows().some(att => att.ownerId === this.parentNote.noteId && att.title === "board.json");
+
+        if (hasRelevantChanges && this.renderer) {
+            // Use differential rendering with API refresh
+            await this.renderer.renderBoard(true);
         }
 
-        // React to changes in note title.
-        if (loadResults.getNoteIds().some(noteId => this.noteIds.includes(noteId))) {
-            return true;
-        }
-
-        // React to changes in branches for subchildren (e.g., moved, added, or removed notes)
-        if (loadResults.getBranchRows().some(branch => this.noteIds.includes(branch.noteId!))) {
-            return true;
-        }
-
-        // React to attachment change.
-        if (loadResults.getAttachmentRows().some(att => att.ownerId === this.parentNote.noteId && att.title === "board.json")) {
-            return true;
-        }
-
+        // Don't trigger full view refresh - let differential renderer handle it
         return false;
     }
 

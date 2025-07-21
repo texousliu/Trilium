@@ -1,0 +1,327 @@
+import { BoardDragHandler, DragContext } from "./drag_handler";
+import BoardApi from "./api";
+import appContext from "../../../components/app_context";
+import FNote from "../../../entities/fnote";
+import ViewModeStorage from "../view_mode_storage";
+import { BoardData } from "./config";
+
+export interface BoardState {
+    columns: { [key: string]: { note: any; branch: any }[] };
+    columnOrder: string[];
+}
+
+export class DifferentialBoardRenderer {
+    private $container: JQuery<HTMLElement>;
+    private api: BoardApi;
+    private dragHandler: BoardDragHandler;
+    private lastState: BoardState | null = null;
+    private onCreateNewItem: (column: string) => void;
+    private updateTimeout: number | null = null;
+    private pendingUpdate = false;
+    private parentNote: FNote;
+    private viewStorage: ViewModeStorage<BoardData>;
+
+    constructor(
+        $container: JQuery<HTMLElement>,
+        api: BoardApi,
+        dragHandler: BoardDragHandler,
+        onCreateNewItem: (column: string) => void,
+        parentNote: FNote,
+        viewStorage: ViewModeStorage<BoardData>
+    ) {
+        this.$container = $container;
+        this.api = api;
+        this.dragHandler = dragHandler;
+        this.onCreateNewItem = onCreateNewItem;
+        this.parentNote = parentNote;
+        this.viewStorage = viewStorage;
+    }
+
+    async renderBoard(refreshApi: boolean = false): Promise<void> {
+        // Refresh API data if requested
+        if (refreshApi) {
+            this.api = await BoardApi.build(this.parentNote, this.viewStorage);
+            this.dragHandler.updateApi(this.api);
+        }
+
+        // Debounce rapid updates
+        if (this.updateTimeout) {
+            clearTimeout(this.updateTimeout);
+        }
+
+        this.updateTimeout = window.setTimeout(async () => {
+            await this.performUpdate();
+            this.updateTimeout = null;
+        }, 16); // ~60fps
+    }
+
+    private async performUpdate(): Promise<void> {
+        const currentState = this.getCurrentState();
+
+        if (!this.lastState) {
+            // First render - do full render
+            await this.fullRender(currentState);
+        } else {
+            // Differential render - only update what changed
+            await this.differentialRender(this.lastState, currentState);
+        }
+
+        this.lastState = currentState;
+    }
+
+    private getCurrentState(): BoardState {
+        const columns: { [key: string]: { note: any; branch: any }[] } = {};
+        const columnOrder: string[] = [];
+
+        for (const column of this.api.columns) {
+            columnOrder.push(column);
+            columns[column] = this.api.getColumn(column) || [];
+        }
+
+        return { columns, columnOrder };
+    }
+
+    private async fullRender(state: BoardState): Promise<void> {
+        this.$container.empty();
+
+        for (const column of state.columnOrder) {
+            const columnItems = state.columns[column];
+            const $columnEl = this.createColumn(column, columnItems);
+            this.$container.append($columnEl);
+        }
+
+        this.addAddColumnButton();
+    }
+
+    private async differentialRender(oldState: BoardState, newState: BoardState): Promise<void> {
+        // Store scroll positions before making changes
+        const scrollPositions = this.saveScrollPositions();
+
+        // Handle column additions/removals
+        this.updateColumns(oldState, newState);
+
+        // Handle card updates within existing columns
+        for (const column of newState.columnOrder) {
+            this.updateColumnCards(column, oldState.columns[column] || [], newState.columns[column]);
+        }
+
+        // Restore scroll positions
+        this.restoreScrollPositions(scrollPositions);
+    }
+
+    private saveScrollPositions(): { [column: string]: number } {
+        const positions: { [column: string]: number } = {};
+        this.$container.find('.board-column').each((_, el) => {
+            const column = $(el).attr('data-column');
+            if (column) {
+                positions[column] = el.scrollTop;
+            }
+        });
+        return positions;
+    }
+
+    private restoreScrollPositions(positions: { [column: string]: number }): void {
+        this.$container.find('.board-column').each((_, el) => {
+            const column = $(el).attr('data-column');
+            if (column && positions[column] !== undefined) {
+                el.scrollTop = positions[column];
+            }
+        });
+    }
+
+    private updateColumns(oldState: BoardState, newState: BoardState): void {
+        // Remove columns that no longer exist
+        for (const oldColumn of oldState.columnOrder) {
+            if (!newState.columnOrder.includes(oldColumn)) {
+                this.$container.find(`[data-column="${oldColumn}"]`).remove();
+            }
+        }
+
+        // Add new columns
+        for (const newColumn of newState.columnOrder) {
+            if (!oldState.columnOrder.includes(newColumn)) {
+                const columnItems = newState.columns[newColumn];
+                const $columnEl = this.createColumn(newColumn, columnItems);
+
+                // Insert at correct position
+                const insertIndex = newState.columnOrder.indexOf(newColumn);
+                const $existingColumns = this.$container.find('.board-column');
+
+                if (insertIndex === 0) {
+                    this.$container.prepend($columnEl);
+                } else if (insertIndex >= $existingColumns.length) {
+                    this.$container.find('.board-add-column').before($columnEl);
+                } else {
+                    $($existingColumns[insertIndex - 1]).after($columnEl);
+                }
+            }
+        }
+    }
+
+    private updateColumnCards(column: string, oldCards: { note: any; branch: any }[], newCards: { note: any; branch: any }[]): void {
+        const $column = this.$container.find(`[data-column="${column}"]`);
+        if (!$column.length) return;
+
+        const $cardContainer = $column;
+        const oldCardIds = oldCards.map(item => item.note.noteId);
+        const newCardIds = newCards.map(item => item.note.noteId);
+
+        // Remove cards that no longer exist
+        $cardContainer.find('.board-note').each((_, el) => {
+            const noteId = $(el).attr('data-note-id');
+            if (noteId && !newCardIds.includes(noteId)) {
+                $(el).addClass('fade-out');
+                setTimeout(() => $(el).remove(), 150);
+            }
+        });
+
+        // Add or update cards
+        for (let i = 0; i < newCards.length; i++) {
+            const item = newCards[i];
+            const noteId = item.note.noteId;
+            let $existingCard = $cardContainer.find(`[data-note-id="${noteId}"]`);
+
+            if ($existingCard.length) {
+                // Update existing card if title changed
+                const currentTitle = $existingCard.text().trim();
+                if (currentTitle !== item.note.title) {
+                    $existingCard.contents().filter(function() {
+                        return this.nodeType === 3; // Text nodes
+                    }).remove();
+                    $existingCard.append(item.note.title);
+                }
+
+                // Ensure card is in correct position
+                this.ensureCardPosition($existingCard, i, $cardContainer);
+            } else {
+                // Create new card
+                const $newCard = this.createCard(item.note, item.branch, column);
+                $newCard.addClass('fade-in').css('opacity', '0');
+
+                // Insert at correct position
+                if (i === 0) {
+                    $cardContainer.find('h3').after($newCard);
+                } else {
+                    const $prevCard = $cardContainer.find('.board-note').eq(i - 1);
+                    if ($prevCard.length) {
+                        $prevCard.after($newCard);
+                    } else {
+                        $cardContainer.find('.board-new-item').before($newCard);
+                    }
+                }
+
+                // Trigger fade in animation
+                setTimeout(() => $newCard.css('opacity', '1'), 10);
+            }
+        }
+    }
+
+    private ensureCardPosition($card: JQuery<HTMLElement>, targetIndex: number, $container: JQuery<HTMLElement>): void {
+        const $allCards = $container.find('.board-note');
+        const currentIndex = $allCards.index($card);
+
+        if (currentIndex !== targetIndex) {
+            if (targetIndex === 0) {
+                $container.find('h3').after($card);
+            } else {
+                const $targetPrev = $allCards.eq(targetIndex - 1);
+                if ($targetPrev.length) {
+                    $targetPrev.after($card);
+                }
+            }
+        }
+    }
+
+    private createColumn(column: string, columnItems: { note: any; branch: any }[]): JQuery<HTMLElement> {
+        const $columnEl = $("<div>")
+            .addClass("board-column")
+            .attr("data-column", column);
+
+        // Create header
+        const $titleEl = $("<h3>").attr("data-column-value", column);
+        const $titleText = $("<span>").text(column);
+        const $editIcon = $("<span>")
+            .addClass("edit-icon icon bx bx-edit-alt")
+            .attr("title", "Click to edit column title");
+        $titleEl.append($titleText, $editIcon);
+        $columnEl.append($titleEl);
+
+        // Handle wheel events for scrolling
+        $columnEl.on("wheel", (event) => {
+            const el = $columnEl[0];
+            const needsScroll = el.scrollHeight > el.clientHeight;
+            if (needsScroll) {
+                event.stopPropagation();
+            }
+        });
+
+        // Setup drop zone
+        this.dragHandler.setupColumnDropZone($columnEl, column);
+
+        // Add cards
+        for (const item of columnItems) {
+            if (item.note) {
+                const $noteEl = this.createCard(item.note, item.branch, column);
+                $columnEl.append($noteEl);
+            }
+        }
+
+        // Add "New item" button
+        const $newItemEl = $("<div>")
+            .addClass("board-new-item")
+            .attr("data-column", column)
+            .html('<span class="icon bx bx-plus"></span>New item');
+
+        $newItemEl.on("click", () => this.onCreateNewItem(column));
+        $columnEl.append($newItemEl);
+
+        return $columnEl;
+    }
+
+    private createCard(note: any, branch: any, column: string): JQuery<HTMLElement> {
+        const $iconEl = $("<span>")
+            .addClass("icon")
+            .addClass(note.getIcon());
+
+        const $noteEl = $("<div>")
+            .addClass("board-note")
+            .attr("data-note-id", note.noteId)
+            .attr("data-branch-id", branch.branchId)
+            .attr("data-current-column", column)
+            .text(note.title);
+
+        $noteEl.prepend($iconEl);
+        $noteEl.on("click", () => appContext.triggerCommand("openInPopup", { noteIdOrPath: note.noteId }));
+
+        // Setup drag functionality
+        this.dragHandler.setupNoteDrag($noteEl, note, branch);
+
+        return $noteEl;
+    }
+
+    private addAddColumnButton(): void {
+        if (this.$container.find('.board-add-column').length === 0) {
+            const $addColumnEl = $("<div>")
+                .addClass("board-add-column")
+                .html('<span class="icon bx bx-plus"></span>Add Column');
+
+            this.$container.append($addColumnEl);
+        }
+    }
+
+    forceFullRender(): void {
+        this.lastState = null;
+        if (this.updateTimeout) {
+            clearTimeout(this.updateTimeout);
+            this.updateTimeout = null;
+        }
+    }
+
+    async flushPendingUpdates(): Promise<void> {
+        if (this.updateTimeout) {
+            clearTimeout(this.updateTimeout);
+            this.updateTimeout = null;
+            await this.performUpdate();
+        }
+    }
+}

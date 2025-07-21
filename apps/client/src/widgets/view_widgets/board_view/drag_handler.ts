@@ -35,6 +35,10 @@ export class BoardDragHandler {
         this.setupTouchDrag($noteEl, note, branch);
     }
 
+    updateApi(newApi: BoardApi) {
+        this.api = newApi;
+    }
+
     private setupMouseDrag($noteEl: JQuery<HTMLElement>, note: any, branch: any) {
         $noteEl.on("dragstart", (e) => {
             this.context.draggedNote = note;
