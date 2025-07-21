@@ -58,7 +58,7 @@ export class DifferentialBoardRenderer {
     private async performUpdate(): Promise<void> {
         // Clean up any stray drag indicators before updating
         this.dragHandler.cleanup();
-        
+
         const currentState = this.getCurrentState();
 
         if (!this.lastState) {
@@ -192,7 +192,7 @@ export class DifferentialBoardRenderer {
                     $existingCard.contents().filter(function() {
                         return this.nodeType === 3; // Text nodes
                     }).remove();
-                    $existingCard.append(item.note.title);
+                    $existingCard.append(document.createTextNode(item.note.title));
                 }
 
                 // Ensure card is in correct position
@@ -296,7 +296,7 @@ export class DifferentialBoardRenderer {
             .text(note.title);
 
         $noteEl.prepend($iconEl);
-        
+
         // Only add quick edit click handler for existing cards (not new ones)
         if (!isNewCard) {
             $noteEl.on("click", () => appContext.triggerCommand("openInPopup", { noteIdOrPath: note.noteId }));
@@ -352,7 +352,7 @@ export class DifferentialBoardRenderer {
         // Get the current title (get text without icon)
         const $icon = $card.find('.icon');
         const currentTitle = $card.text().trim();
-        
+
         // Add editing class and store original click handler
         $card.addClass('editing');
         $card.off('click'); // Remove any existing click handlers temporarily
@@ -413,8 +413,9 @@ export class DifferentialBoardRenderer {
             // Restore the card content
             const iconClass = $card.attr('data-icon-class') || 'bx bx-file';
             const $newIcon = $('<span>').addClass('icon').addClass(iconClass);
-            $card.empty().append($newIcon, finalTitle);
-            
+            $card.text(finalTitle);
+            $card.prepend($newIcon);
+
             // Re-attach click handler for quick edit (for existing cards)
             $card.on('click', () => appContext.triggerCommand("openInPopup", { noteIdOrPath: noteId }));
         };
