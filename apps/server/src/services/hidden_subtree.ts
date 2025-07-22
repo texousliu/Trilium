@@ -291,6 +291,47 @@ function checkHiddenSubtree(force = false, extraOpts: CheckHiddenExtraOpts = {})
     }
 }
 
+/**
+ * Get all expected parent IDs for a given note ID from the hidden subtree definition
+ */
+function getExpectedParentIds(noteId: string, subtree: HiddenSubtreeItem): string[] {
+    const expectedParents: string[] = [];
+
+    function traverse(item: HiddenSubtreeItem, parentId: string) {
+        if (item.id === noteId) {
+            expectedParents.push(parentId);
+        }
+
+        if (item.children) {
+            for (const child of item.children) {
+                traverse(child, item.id);
+            }
+        }
+    }
+
+    // Start traversal from root
+    if (subtree.id === noteId) {
+        expectedParents.push("root");
+    }
+
+    if (subtree.children) {
+        for (const child of subtree.children) {
+            traverse(child, subtree.id);
+        }
+    }
+
+    return expectedParents;
+}
+
+/**
+ * Check if a note ID is within the hidden subtree structure
+ */
+function isWithinHiddenSubtree(noteId: string): boolean {
+    // Consider a note to be within hidden subtree if it starts with underscore
+    // This is the convention used for hidden subtree notes
+    return noteId.startsWith("_") || noteId === "root";
+}
+
 function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtreeItem, extraOpts: CheckHiddenExtraOpts = {}) {
     if (!item.id || !item.type || !item.title) {
         throw new Error(`Item does not contain mandatory properties: ${JSON.stringify(item)}`);
@@ -324,6 +365,21 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
                 notePosition: item.notePosition !== undefined ? item.notePosition : undefined,
                 isExpanded: item.isExpanded !== undefined ? item.isExpanded : false
             }).save();
+        }
+
+        // Clean up any branches that shouldn't exist according to the meta definition
+        // For hidden subtree notes, we want to ensure they only exist in their designated locations
+        const expectedParents = getExpectedParentIds(item.id, hiddenSubtreeDefinition);
+        const currentBranches = note.getParentBranches();
+
+        for (const currentBranch of currentBranches) {
+            // Only delete branches that are not in the expected locations
+            // and are within the hidden subtree structure (avoid touching user-created clones)
+            if (!expectedParents.includes(currentBranch.parentNoteId) &&
+                isWithinHiddenSubtree(currentBranch.parentNoteId)) {
+                log.info(`Removing unexpected branch for note '${item.id}' from parent '${currentBranch.parentNoteId}'`);
+                currentBranch.markAsDeleted();
+            }
         }
     }
 
