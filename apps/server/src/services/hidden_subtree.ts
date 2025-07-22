@@ -1,4 +1,5 @@
 import BAttribute from "../becca/entities/battribute.js";
+import BBranch from "../becca/entities/bbranch.js";
 import type { HiddenSubtreeItem } from "@triliumnext/commons";
 
 import becca from "../becca/becca.js";
@@ -313,6 +314,17 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
         }));
     } else {
         branch = note.getParentBranches().find((branch) => branch.parentNoteId === parentNoteId);
+
+        // If the note exists but doesn't have a branch in the expected parent,
+        // create the missing branch to ensure it's in the correct location
+        if (!branch) {
+            branch = new BBranch({
+                noteId: item.id,
+                parentNoteId: parentNoteId,
+                notePosition: item.notePosition !== undefined ? item.notePosition : undefined,
+                isExpanded: item.isExpanded !== undefined ? item.isExpanded : false
+            }).save();
+        }
     }
 
     const attrs = [...(item.attributes || [])];
