@@ -176,7 +176,10 @@ describe("Markdown export", () => {
             > [!IMPORTANT]
             > This is a very important information.
             >${space}
-            > <figure class="table"><table><tbody><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></tbody></table></figure>
+            > |     |     |
+            > | --- | --- |
+            > | 1   | 2   |
+            > | 3   | 4   |
 
             > [!CAUTION]
             > This is a caution.
@@ -339,6 +342,39 @@ describe("Markdown export", () => {
         const expected = trimIndentation`\
             - [x] Hello
             - [ ] World`;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
+    it("exports unformatted table", () => {
+        const html = trimIndentation/*html*/`\
+            <figure class="table">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                Hi
+                            </td>
+                            <td>
+                                there
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Hi
+                            </td>
+                            <td>
+                                there
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </figure>
+        `;
+        const expected = trimIndentation`\
+            |     |     |
+            | --- | --- |
+            | Hi  | there |
+            | Hi  | there |`;
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
 
