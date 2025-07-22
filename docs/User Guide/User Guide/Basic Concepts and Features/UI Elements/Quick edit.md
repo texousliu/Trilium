@@ -26,8 +26,8 @@ This feature is also well integrated with <a class="reference-link" href="../..
     *   or, press <kbd>Ctrl</kbd>+<kbd>Right click</kbd> on the link.
 *   On a <a class="reference-link" href="Note%20Tooltip.md">Note Tooltip</a>, press the quick edit icon.
 *   In <a class="reference-link" href="../../Note%20Types/Collections.md">Collections</a>:
-    *   For <a class="reference-link" href="../Notes/Note%20List/Calendar%20View.md">Calendar View</a>:
+    *   For <a class="reference-link" href="../../Note%20Types/Collections/Calendar%20View.md">Calendar View</a>:
         *   Clicking on an event will open that event for quick editing.
         *   If the calendar is for the <a class="reference-link" href="../../Advanced%20Usage/Advanced%20Showcases/Day%20Notes.md">Day Notes</a> root, clicking on the day number will open the popup for that day note.
-    *   For <a class="reference-link" href="../Notes/Note%20List/Geo%20Map%20View.md">Geo Map View</a>:
+    *   For <a class="reference-link" href="../../Note%20Types/Collections/Geo%20Map%20View.md">Geo Map View</a>:
         *   Clicking on a marker will open that marker, but only if the map is in read-only mode.

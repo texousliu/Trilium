@@ -8,4 +8,4 @@ In the example above, the "Node.js" note on the left panel contains several chil
 ## Interaction
 
 *   Each note can be expanded or collapsed by clicking on the arrow to the left of the title.
-*   In the <a class="reference-link" href="../../UI%20Elements/Ribbon.md">Ribbon</a>, in the _Collection_ tab there are options to expand and to collapse all notes easily.
+*   In the <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a>, in the _Collection_ tab there are options to expand and to collapse all notes easily.

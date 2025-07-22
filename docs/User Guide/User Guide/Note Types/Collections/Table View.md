@@ -1,7 +1,7 @@
 # Table View
 <figure class="image"><img style="aspect-ratio:1050/259;" src="Table View_image.png" width="1050" height="259"></figure>
 
-The table view displays information in a grid, where the rows are individual notes and the columns are <a class="reference-link" href="../../../Advanced%20Usage/Attributes/Promoted%20Attributes.md">Promoted Attributes</a>. In addition, values are editable.
+The table view displays information in a grid, where the rows are individual notes and the columns are <a class="reference-link" href="../../Advanced%20Usage/Attributes/Promoted%20Attributes.md">Promoted Attributes</a>. In addition, values are editable.
 
 ## How it works
 
@@ -9,7 +9,7 @@ The tabular structure is represented as such:
 
 *   Each child note is a row in the table.
 *   If child rows also have children, they will be displayed under an expander (nested notes).
-*   Each column is a [promoted attribute](../../../Advanced%20Usage/Attributes/Promoted%20Attributes.md) that is defined on the Collection note.
+*   Each column is a [promoted attribute](../../Advanced%20Usage/Attributes/Promoted%20Attributes.md) that is defined on the Collection note.
     *   Actually, both promoted and unpromoted attributes are supported, but it's a requirement to use a label/relation definition.
     *   The promoted attributes are usually defined as inheritable in order to show up in the child notes, but it's not a requirement.
 *   If there are multiple attribute definitions with the same `name`, only one will be displayed.
@@ -18,18 +18,18 @@ There are also a few predefined columns:
 
 *   The current item number, identified by the `#` symbol.
     *   This simply counts the note and is affected by sorting.
-*   <a class="reference-link" href="../../../Advanced%20Usage/Note%20ID.md">Note ID</a>, representing the unique ID used internally by Trilium
+*   <a class="reference-link" href="../../Advanced%20Usage/Note%20ID.md">Note ID</a>, representing the unique ID used internally by Trilium
 *   The title of the note.
 
 ## Interaction
 
 ### Creating a new table
 
-Right click the <a class="reference-link" href="../../UI%20Elements/Note%20Tree.md">Note Tree</a> and select _Insert child note_ and look for the _Table item_.
+Right click the <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20Tree.md">Note Tree</a> and select _Insert child note_ and look for the _Table item_.
 
 ### Adding columns
 
-Each column is a [promoted or unpromoted attribute](../../../Advanced%20Usage/Attributes/Promoted%20Attributes.md) that is defined on the Collection note.
+Each column is a [promoted or unpromoted attribute](../../Advanced%20Usage/Attributes/Promoted%20Attributes.md) that is defined on the Collection note.
 
 To create a new column, either:
 
@@ -48,7 +48,7 @@ To create a new note, either:
 
 By default it will try to edit the title of the newly created note.
 
-Alternatively, the note can be created from the <a class="reference-link" href="../../UI%20Elements/Note%20Tree.md">Note Tree</a> or [scripting](../../../Scripting.md).
+Alternatively, the note can be created from the <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20Tree.md">Note Tree</a> or [scripting](../../Scripting.md).
 
 ### Context menu
 
@@ -88,7 +88,7 @@ If the _Name_ field of a column is changed, this will trigger a batch operation 
 
 ### Sorting by column
 
-By default, the order of the notes matches the order in the <a class="reference-link" href="../../UI%20Elements/Note%20Tree.md">Note Tree</a>. However, it is possible to sort the data by the values of a column:
+By default, the order of the notes matches the order in the <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20Tree.md">Note Tree</a>. However, it is possible to sort the data by the values of a column:
 
 *   To do so, simply click on a column.
 *   To switch between ascending or descending sort, simply click again on the same column. The arrow next to the column will indicate the direction of the sort.
@@ -103,7 +103,7 @@ By default, the order of the notes matches the order in the <a class="reference
 
 Notes can be dragged around to change their order. To do so, move the mouse over the three vertical dots near the number row and drag the mouse to the desired position.
 
-This will also change the order of the note in the <a class="reference-link" href="../../UI%20Elements/Note%20Tree.md">Note Tree</a>.
+This will also change the order of the note in the <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20Tree.md">Note Tree</a>.
 
 Reordering does have some limitations:
 
@@ -119,7 +119,7 @@ Next to the title of each element there will be a button to expand or collapse. 
 
 Since nesting is not always desirable, it is possible to limit the nesting to a certain number of levels or even disable it completely. To do so, either:
 
-*   Go to _Collection Properties_ in the <a class="reference-link" href="../../UI%20Elements/Ribbon.md">Ribbon</a> and look for the _Max nesting depth_ section.
+*   Go to _Collection Properties_ in the <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a> and look for the _Max nesting depth_ section.
     *   To disable nesting, type 0 and press Enter.
     *   To limit to a certain depth, type in the desired number (e.g. 2 to only display children and sub-children).
     *   To re-enable unlimited nesting, remove the number and press Enter.
@@ -131,19 +131,19 @@ Limitations:
 
 ## Limitations
 
-Multi-value labels and relations are not supported. If a <a class="reference-link" href="../../../Advanced%20Usage/Attributes/Promoted%20Attributes.md">Promoted Attributes</a> is defined with a _Multi value_ specificity, they will be ignored.
+Multi-value labels and relations are not supported. If a <a class="reference-link" href="../../Advanced%20Usage/Attributes/Promoted%20Attributes.md">Promoted Attributes</a> is defined with a _Multi value_ specificity, they will be ignored.
 
 ## Use in search
 
-The table view can be used in a <a class="reference-link" href="../../../Note%20Types/Saved%20Search.md">Saved Search</a> by adding the `#viewType=table` attribute.
+The table view can be used in a <a class="reference-link" href="../Saved%20Search.md">Saved Search</a> by adding the `#viewType=table` attribute.
 
-Unlike when used in a Collection, saved searches are not limited to the sub-hierarchy of a note and allows for advanced queries thanks to the power of the <a class="reference-link" href="../../Navigation/Search.md">Search</a>.
+Unlike when used in a Collection, saved searches are not limited to the sub-hierarchy of a note and allows for advanced queries thanks to the power of the <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/Navigation/Search.md">Search</a>.
 
 However, there are also some limitations:
 
 *   It's not possible to reorder notes.
 *   It's not possible to add a new row.
 
-Columns are supported, by being defined as <a class="reference-link" href="../../../Advanced%20Usage/Attributes/Promoted%20Attributes.md">Promoted Attributes</a> to the <a class="reference-link" href="../../../Note%20Types/Saved%20Search.md">Saved Search</a> note.
+Columns are supported, by being defined as <a class="reference-link" href="../../Advanced%20Usage/Attributes/Promoted%20Attributes.md">Promoted Attributes</a> to the <a class="reference-link" href="../Saved%20Search.md">Saved Search</a> note.
 
 Editing is also supported.

@@ -11,12 +11,12 @@ Each tile contains:
 
 Depending on the type of note:
 
-*   For <a class="reference-link" href="../../../Note%20Types/Text.md">Text</a> notes, the text can be slightly scrollable via the mouse wheel to reveal more context.
-*   For <a class="reference-link" href="../../../Note%20Types/Code.md">Code</a> notes, syntax highlighting is applied.
-*   For <a class="reference-link" href="../../../Note%20Types/File.md">File</a> notes, a preview is made available for audio, video and PDF notes.
+*   For <a class="reference-link" href="../Text.md">Text</a> notes, the text can be slightly scrollable via the mouse wheel to reveal more context.
+*   For <a class="reference-link" href="../Code.md">Code</a> notes, syntax highlighting is applied.
+*   For <a class="reference-link" href="../File.md">File</a> notes, a preview is made available for audio, video and PDF notes.
 *   If the note does not have a content, a list of its child notes will be displayed instead.
 
-The grid view is also used by default in the <a class="reference-link" href="../Note%20List.md">Note List</a> of every note, making it easy to navigate to children notes.
+The grid view is also used by default in the <a class="reference-link" href="../../Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a> of every note, making it easy to navigate to children notes.
 
 ## Configuration
 

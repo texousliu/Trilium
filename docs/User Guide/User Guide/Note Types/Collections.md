@@ -3,14 +3,14 @@ Collections are a unique type of notes that don't have a content, but instead di
 
 Classic collections are read-only mode and compiles the contents of all child notes into one continuous view. This makes it ideal for reading extensive information broken into smaller, manageable segments.
 
-*   <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List/Grid%20View.md">Grid View</a> which is the default presentation method for child notes (see <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a>), where the notes are displayed as tiles with their title and content being visible.
-*   <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List/List%20View.md">List View</a> is similar to <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List/Grid%20View.md">Grid View</a>, but it displays the notes one under the other with the content being expandable/collapsible, but also works recursively.
+*   <a class="reference-link" href="Collections/Grid%20View.md">Grid View</a> which is the default presentation method for child notes (see <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a>), where the notes are displayed as tiles with their title and content being visible.
+*   <a class="reference-link" href="Collections/List%20View.md">List View</a> is similar to <a class="reference-link" href="Collections/Grid%20View.md">Grid View</a>, but it displays the notes one under the other with the content being expandable/collapsible, but also works recursively.
 
 More specialized collections were introduced, such as the:
 
-*   <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List/Calendar%20View.md">Calendar View</a> which displays a week, month or year calendar with the notes being shown as events. New events can be added easily by dragging across the calendar.
-*   <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List/Geo%20Map%20View.md">Geo Map View</a> which displays a geographical map in which the notes are represented as markers/pins on the map. New events can be easily added by pointing on the map.
-*   <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List/Table%20View.md">Table View</a> displays each note as a row in a table, with <a class="reference-link" href="../Advanced%20Usage/Attributes/Promoted%20Attributes.md">Promoted Attributes</a> being shown as well. This makes it easy to visualize attributes of notes, as well as making them easily editable.
+*   <a class="reference-link" href="Collections/Calendar%20View.md">Calendar View</a> which displays a week, month or year calendar with the notes being shown as events. New events can be added easily by dragging across the calendar.
+*   <a class="reference-link" href="Collections/Geo%20Map%20View.md">Geo Map View</a> which displays a geographical map in which the notes are represented as markers/pins on the map. New events can be easily added by pointing on the map.
+*   <a class="reference-link" href="Collections/Table%20View.md">Table View</a> displays each note as a row in a table, with <a class="reference-link" href="../Advanced%20Usage/Attributes/Promoted%20Attributes.md">Promoted Attributes</a> being shown as well. This makes it easy to visualize attributes of notes, as well as making them easily editable.
 
 For a quick presentation of all the supported view types, see the child notes of this help page, including screenshots.
 
