@@ -29,6 +29,14 @@ async function formatCodeBlocks() {
     await formatCodeBlocks($("#content"));
 }
 
+async function setupTextNote() {
+    formatCodeBlocks();
+    applyMath();
+
+    const setupMermaid = (await import("./share/mermaid.js")).default;
+    setupMermaid();
+}
+
 /**
  * Fetch note with given ID from backend
  *
@@ -50,8 +58,7 @@ document.addEventListener(
         const noteType = determineNoteType();
 
         if (noteType === "text") {
-            formatCodeBlocks();
-            applyMath();
+            setupTextNote();
         }
 
         const toggleMenuButton = document.getElementById("toggleMenuButton");
