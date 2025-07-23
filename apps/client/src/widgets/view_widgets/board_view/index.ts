@@ -106,11 +106,6 @@ const TPL = /*html*/`
             transition: opacity 0.2s ease, transform 0.2s ease;
         }
 
-        .board-view-container .board-column.column-drag-over {
-            border-color: var(--main-text-color);
-            background-color: var(--hover-item-background-color);
-        }
-
         .board-view-container .board-column h3 input {
             background: transparent;
             border: none;

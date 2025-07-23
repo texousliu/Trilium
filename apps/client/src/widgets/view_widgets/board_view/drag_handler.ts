@@ -62,7 +62,6 @@ export class BoardDragHandler {
 
         $dragHandle.on("dragend", () => {
             $columnEl.removeClass("column-dragging");
-            this.$container.find('.board-column').removeClass('column-drag-over');
             this.context.draggedColumn = null;
             this.context.draggedColumnElement = null;
             this.cleanupColumnDropIndicators();
@@ -109,7 +108,6 @@ export class BoardDragHandler {
     cleanup() {
         this.cleanupAllDropIndicators();
         this.$container.find('.board-column').removeClass('drag-over');
-        this.$container.find('.board-column').removeClass('column-drag-over');
         this.context.draggedColumn = null;
         this.context.draggedColumnElement = null;
         this.cleanupGlobalColumnDragTracking();
@@ -285,33 +283,16 @@ export class BoardDragHandler {
                     originalEvent.dataTransfer.dropEffect = "move";
                 }
 
-                if (this.context.draggedColumn !== columnValue) {
-                    $columnEl.addClass("column-drag-over");
-                }
-            }
-        });
-
-        $columnEl.on("dragleave", (e) => {
-            if (this.context.draggedColumn && !this.context.draggedNote) {
-                const rect = $columnEl[0].getBoundingClientRect();
-                const originalEvent = e.originalEvent as DragEvent;
-                const x = originalEvent.clientX;
-                const y = originalEvent.clientY;
-
-                if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
-                    $columnEl.removeClass("column-drag-over");
-                }
+                // Don't highlight columns - we only care about the drop indicator position
             }
         });
 
         $columnEl.on("drop", async (e) => {
             if (this.context.draggedColumn && !this.context.draggedNote) {
                 e.preventDefault();
-                $columnEl.removeClass("column-drag-over");
 
-                if (this.context.draggedColumn !== columnValue) {
-                    await this.handleColumnDrop($columnEl, columnValue);
-                }
+                // Use the drop indicator position to determine where to place the column
+                await this.handleColumnDrop();
             }
         });
     }
@@ -499,31 +480,30 @@ export class BoardDragHandler {
         }
     }
 
-    private async handleColumnDrop($targetColumnEl: JQuery<HTMLElement>, targetColumnValue: string) {
+    private async handleColumnDrop() {
         if (!this.context.draggedColumn || !this.context.draggedColumnElement) {
             return;
         }
 
         try {
-            // Get current column order from the DOM
-            const currentOrder = Array.from(this.$container.find('.board-column')).map(el => 
-                $(el).attr('data-column')
-            ).filter(col => col) as string[];
-
-            console.log("Current order:", currentOrder);
-            console.log("Dragged column:", this.context.draggedColumn);
-            console.log("Target column:", targetColumnValue);
-
             // Find the drop indicator to determine insert position
             const $dropIndicator = this.$container.find(".column-drop-indicator.show");
             
             if ($dropIndicator.length > 0) {
+                // Get current column order from the DOM
+                const currentOrder = Array.from(this.$container.find('.board-column')).map(el => 
+                    $(el).attr('data-column')
+                ).filter(col => col) as string[];
+
+                console.log("Current order:", currentOrder);
+                console.log("Dragged column:", this.context.draggedColumn);
+
                 let newOrder = [...currentOrder];
                 
                 // Remove dragged column from current position
                 newOrder = newOrder.filter(col => col !== this.context.draggedColumn);
 
-                // Determine insertion position based on drop indicator
+                // Determine insertion position based on drop indicator position
                 const $nextColumn = $dropIndicator.next('.board-column');
                 const $prevColumn = $dropIndicator.prev('.board-column');
                 
@@ -533,21 +513,25 @@ export class BoardDragHandler {
                     // Insert before the next column
                     const nextColumnValue = $nextColumn.attr('data-column');
                     insertIndex = newOrder.indexOf(nextColumnValue!);
+                    console.log("Inserting before column:", nextColumnValue, "at index:", insertIndex);
                 } else if ($prevColumn.length > 0) {
                     // Insert after the previous column
                     const prevColumnValue = $prevColumn.attr('data-column');
                     insertIndex = newOrder.indexOf(prevColumnValue!) + 1;
+                    console.log("Inserting after column:", prevColumnValue, "at index:", insertIndex);
                 } else {
                     // Insert at the beginning
                     insertIndex = 0;
+                    console.log("Inserting at the beginning");
                 }
 
                 // Insert the dragged column at the determined position
-                if (insertIndex >= 0) {
+                if (insertIndex >= 0 && insertIndex <= newOrder.length) {
                     newOrder.splice(insertIndex, 0, this.context.draggedColumn);
                 } else {
                     // Fallback: insert at the end
                     newOrder.push(this.context.draggedColumn);
+                    console.log("Fallback: inserting at the end");
                 }
 
                 console.log("New order:", newOrder);
