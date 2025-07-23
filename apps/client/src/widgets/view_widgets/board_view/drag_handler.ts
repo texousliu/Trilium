@@ -490,13 +490,8 @@ export class BoardDragHandler {
             const $dropIndicator = this.$container.find(".column-drop-indicator.show");
             
             if ($dropIndicator.length > 0) {
-                // Get current column order from the DOM
-                const currentOrder = Array.from(this.$container.find('.board-column')).map(el => 
-                    $(el).attr('data-column')
-                ).filter(col => col) as string[];
-
-                console.log("Current order:", currentOrder);
-                console.log("Dragged column:", this.context.draggedColumn);
+                // Get current column order from the API (source of truth)
+                const currentOrder = [...this.api.columns];
 
                 let newOrder = [...currentOrder];
                 
@@ -513,16 +508,13 @@ export class BoardDragHandler {
                     // Insert before the next column
                     const nextColumnValue = $nextColumn.attr('data-column');
                     insertIndex = newOrder.indexOf(nextColumnValue!);
-                    console.log("Inserting before column:", nextColumnValue, "at index:", insertIndex);
                 } else if ($prevColumn.length > 0) {
                     // Insert after the previous column
                     const prevColumnValue = $prevColumn.attr('data-column');
                     insertIndex = newOrder.indexOf(prevColumnValue!) + 1;
-                    console.log("Inserting after column:", prevColumnValue, "at index:", insertIndex);
                 } else {
                     // Insert at the beginning
                     insertIndex = 0;
-                    console.log("Inserting at the beginning");
                 }
 
                 // Insert the dragged column at the determined position
@@ -531,15 +523,10 @@ export class BoardDragHandler {
                 } else {
                     // Fallback: insert at the end
                     newOrder.push(this.context.draggedColumn);
-                    console.log("Fallback: inserting at the end");
                 }
-
-                console.log("New order:", newOrder);
 
                 // Update column order in API
                 await this.api.reorderColumns(newOrder);
-
-                console.log(`Moved column "${this.context.draggedColumn}" to new position`);
 
                 // Refresh the board to reflect the changes
                 await this.onBoardRefresh();

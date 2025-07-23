@@ -137,7 +137,6 @@ export class DifferentialBoardRenderer {
         const orderChanged = !this.arraysEqual(oldState.columnOrder, newState.columnOrder);
         
         if (orderChanged) {
-            console.log("Column order changed from", oldState.columnOrder, "to", newState.columnOrder);
             // If order changed, we need to reorder the columns in the DOM
             this.reorderColumns(newState.columnOrder);
         }
@@ -175,8 +174,6 @@ export class DifferentialBoardRenderer {
     }
 
     private reorderColumns(newOrder: string[]): void {
-        console.log("Reordering columns to:", newOrder);
-        
         // Get all existing column elements
         const $columns = this.$container.find('.board-column');
         const $addColumnButton = this.$container.find('.board-add-column');
@@ -213,8 +210,6 @@ export class DifferentialBoardRenderer {
         if ($addColumnButton.length) {
             this.$container.append($addColumnButton);
         }
-        
-        console.log("Column reordering complete");
     }
 
     private updateColumnCards(column: string, oldCards: { note: any; branch: any }[], newCards: { note: any; branch: any }[]): void {
