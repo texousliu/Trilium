@@ -411,7 +411,7 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
         }
     }
 
-    if (extraOpts.restoreNames && note.title !== item.title) {
+    if ((extraOpts.restoreNames || note.noteId.startsWith("_help")) && note.title !== item.title) {
         note.title = item.title;
         note.save();
     }
