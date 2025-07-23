@@ -241,14 +241,32 @@ export class DifferentialBoardRenderer {
             .addClass("board-column")
             .attr("data-column", column);
 
-        // Create header
+        // Create header with drag handle
         const $titleEl = $("<h3>").attr("data-column-value", column);
+        
+        // Create drag handle
+        const $dragHandle = $("<span>")
+            .addClass("column-drag-handle icon bx bx-menu")
+            .attr("title", "Drag to reorder column");
+
+        // Create title text
         const $titleText = $("<span>").text(column);
+        
+        // Create title content container
+        const $titleContent = $("<div>")
+            .addClass("column-title-content")
+            .append($dragHandle, $titleText);
+
+        // Create edit icon
         const $editIcon = $("<span>")
             .addClass("edit-icon icon bx bx-edit-alt")
             .attr("title", "Click to edit column title");
-        $titleEl.append($titleText, $editIcon);
+
+        $titleEl.append($titleContent, $editIcon);
         $columnEl.append($titleEl);
+
+        // Setup column dragging
+        this.dragHandler.setupColumnDrag($columnEl, column);
 
         // Handle wheel events for scrolling
         $columnEl.on("wheel", (event) => {
@@ -259,7 +277,8 @@ export class DifferentialBoardRenderer {
             }
         });
 
-        // Setup drop zone
+        // Setup drop zones for both notes and columns
+        this.dragHandler.setupNoteDropZone($columnEl, column);
         this.dragHandler.setupColumnDropZone($columnEl, column);
 
         // Add cards

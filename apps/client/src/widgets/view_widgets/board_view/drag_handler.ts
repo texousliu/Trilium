@@ -5,6 +5,8 @@ export interface DragContext {
     draggedNote: any;
     draggedBranch: any;
     draggedNoteElement: JQuery<HTMLElement> | null;
+    draggedColumn: string | null;
+    draggedColumnElement: JQuery<HTMLElement> | null;
 }
 
 export class BoardDragHandler {
@@ -35,6 +37,54 @@ export class BoardDragHandler {
         this.setupTouchDrag($noteEl, note, branch);
     }
 
+    setupColumnDrag($columnEl: JQuery<HTMLElement>, columnValue: string) {
+        const $dragHandle = $columnEl.find('.column-drag-handle');
+        
+        $dragHandle.attr("draggable", "true");
+
+        $dragHandle.on("dragstart", (e) => {
+            this.context.draggedColumn = columnValue;
+            this.context.draggedColumnElement = $columnEl;
+            $columnEl.addClass("column-dragging");
+
+            const originalEvent = e.originalEvent as DragEvent;
+            if (originalEvent.dataTransfer) {
+                originalEvent.dataTransfer.effectAllowed = "move";
+                originalEvent.dataTransfer.setData("text/plain", columnValue);
+            }
+
+            // Prevent note dragging when column is being dragged
+            e.stopPropagation();
+
+            // Setup global drag tracking for better drop indicator positioning
+            this.setupGlobalColumnDragTracking();
+        });
+
+        $dragHandle.on("dragend", () => {
+            $columnEl.removeClass("column-dragging");
+            this.$container.find('.board-column').removeClass('column-drag-over');
+            this.context.draggedColumn = null;
+            this.context.draggedColumnElement = null;
+            this.cleanupColumnDropIndicators();
+            this.cleanupGlobalColumnDragTracking();
+        });
+    }
+
+    private setupGlobalColumnDragTracking() {
+        // Add container-level drag tracking for better indicator positioning
+        this.$container.on("dragover.columnDrag", (e) => {
+            if (this.context.draggedColumn) {
+                e.preventDefault();
+                const originalEvent = e.originalEvent as DragEvent;
+                this.showColumnDropIndicator(originalEvent.clientX);
+            }
+        });
+    }
+
+    private cleanupGlobalColumnDragTracking() {
+        this.$container.off("dragover.columnDrag");
+    }
+
     updateApi(newApi: BoardApi) {
         this.api = newApi;
     }
@@ -42,10 +92,16 @@ export class BoardDragHandler {
     private cleanupAllDropIndicators() {
         // Remove all drop indicators from the DOM to prevent layout issues
         this.$container.find(".board-drop-indicator").remove();
+        this.$container.find(".column-drop-indicator").remove();
     }
 
-    private cleanupColumnDropIndicators($columnEl: JQuery<HTMLElement>) {
-        // Remove drop indicators from a specific column
+    private cleanupColumnDropIndicators() {
+        // Remove column drop indicators
+        this.$container.find(".column-drop-indicator").remove();
+    }
+
+    private cleanupNoteDropIndicators($columnEl: JQuery<HTMLElement>) {
+        // Remove note drop indicators from a specific column
         $columnEl.find(".board-drop-indicator").remove();
     }
 
@@ -53,6 +109,10 @@ export class BoardDragHandler {
     cleanup() {
         this.cleanupAllDropIndicators();
         this.$container.find('.board-column').removeClass('drag-over');
+        this.$container.find('.board-column').removeClass('column-drag-over');
+        this.context.draggedColumn = null;
+        this.context.draggedColumnElement = null;
+        this.cleanupGlobalColumnDragTracking();
     }
 
     private setupMouseDrag($noteEl: JQuery<HTMLElement>, note: any, branch: any) {
@@ -175,15 +235,16 @@ export class BoardDragHandler {
         });
     }
 
-    setupColumnDropZone($columnEl: JQuery<HTMLElement>, column: string) {
+    setupNoteDropZone($columnEl: JQuery<HTMLElement>, column: string) {
         $columnEl.on("dragover", (e) => {
-            e.preventDefault();
-            const originalEvent = e.originalEvent as DragEvent;
-            if (originalEvent.dataTransfer) {
-                originalEvent.dataTransfer.dropEffect = "move";
-            }
+            // Only handle note drops when a note is being dragged
+            if (this.context.draggedNote && !this.context.draggedColumn) {
+                e.preventDefault();
+                const originalEvent = e.originalEvent as DragEvent;
+                if (originalEvent.dataTransfer) {
+                    originalEvent.dataTransfer.dropEffect = "move";
+                }
 
-            if (this.context.draggedNote) {
                 $columnEl.addClass("drag-over");
                 this.showDropIndicator($columnEl, e);
             }
@@ -198,16 +259,59 @@ export class BoardDragHandler {
 
             if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
                 $columnEl.removeClass("drag-over");
-                this.cleanupColumnDropIndicators($columnEl);
+                this.cleanupNoteDropIndicators($columnEl);
             }
         });
 
         $columnEl.on("drop", async (e) => {
-            e.preventDefault();
-            $columnEl.removeClass("drag-over");
+            if (this.context.draggedNote && !this.context.draggedColumn) {
+                e.preventDefault();
+                $columnEl.removeClass("drag-over");
 
-            if (this.context.draggedNote && this.context.draggedNoteElement && this.context.draggedBranch) {
-                await this.handleNoteDrop($columnEl, column);
+                if (this.context.draggedNote && this.context.draggedNoteElement && this.context.draggedBranch) {
+                    await this.handleNoteDrop($columnEl, column);
+                }
+            }
+        });
+    }
+
+    setupColumnDropZone($columnEl: JQuery<HTMLElement>, columnValue: string) {
+        $columnEl.on("dragover", (e) => {
+            // Only handle column drops when a column is being dragged
+            if (this.context.draggedColumn && !this.context.draggedNote) {
+                e.preventDefault();
+                const originalEvent = e.originalEvent as DragEvent;
+                if (originalEvent.dataTransfer) {
+                    originalEvent.dataTransfer.dropEffect = "move";
+                }
+
+                if (this.context.draggedColumn !== columnValue) {
+                    $columnEl.addClass("column-drag-over");
+                }
+            }
+        });
+
+        $columnEl.on("dragleave", (e) => {
+            if (this.context.draggedColumn && !this.context.draggedNote) {
+                const rect = $columnEl[0].getBoundingClientRect();
+                const originalEvent = e.originalEvent as DragEvent;
+                const x = originalEvent.clientX;
+                const y = originalEvent.clientY;
+
+                if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+                    $columnEl.removeClass("column-drag-over");
+                }
+            }
+        });
+
+        $columnEl.on("drop", async (e) => {
+            if (this.context.draggedColumn && !this.context.draggedNote) {
+                e.preventDefault();
+                $columnEl.removeClass("column-drag-over");
+
+                if (this.context.draggedColumn !== columnValue) {
+                    await this.handleColumnDrop($columnEl, columnValue);
+                }
             }
         });
     }
@@ -245,7 +349,7 @@ export class BoardDragHandler {
         const relativeY = y - columnRect.top;
 
         // Clean up any existing drop indicators in this column first
-        this.cleanupColumnDropIndicators($columnEl);
+        this.cleanupNoteDropIndicators($columnEl);
 
         // Create a new drop indicator
         const $dropIndicator = $("<div>").addClass("board-drop-indicator");
@@ -275,6 +379,63 @@ export class BoardDragHandler {
         }
 
         $dropIndicator.addClass("show");
+    }
+
+    private showColumnDropIndicator(mouseX: number) {
+        // Clean up existing indicators
+        this.cleanupColumnDropIndicators();
+
+        // Get all columns (excluding the dragged one if it exists)
+        let $allColumns = this.$container.find('.board-column');
+        if (this.context.draggedColumnElement) {
+            $allColumns = $allColumns.not(this.context.draggedColumnElement);
+        }
+        
+        let $targetColumn: JQuery<HTMLElement> = $();
+        let insertBefore = false;
+
+        // Find which column the mouse is closest to
+        $allColumns.each((_, columnEl) => {
+            const $column = $(columnEl);
+            const rect = columnEl.getBoundingClientRect();
+            const columnMiddle = rect.left + rect.width / 2;
+
+            if (mouseX >= rect.left && mouseX <= rect.right) {
+                // Mouse is over this column
+                $targetColumn = $column;
+                insertBefore = mouseX < columnMiddle;
+                return false; // Break the loop
+            }
+        });
+
+        // If no column found under mouse, find the closest one
+        if ($targetColumn.length === 0) {
+            let closestDistance = Infinity;
+            $allColumns.each((_, columnEl) => {
+                const $column = $(columnEl);
+                const rect = columnEl.getBoundingClientRect();
+                const columnCenter = rect.left + rect.width / 2;
+                const distance = Math.abs(mouseX - columnCenter);
+
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    $targetColumn = $column;
+                    insertBefore = mouseX < columnCenter;
+                }
+            });
+        }
+
+        if ($targetColumn.length > 0) {
+            const $dropIndicator = $("<div>").addClass("column-drop-indicator");
+            
+            if (insertBefore) {
+                $targetColumn.before($dropIndicator);
+            } else {
+                $targetColumn.after($dropIndicator);
+            }
+
+            $dropIndicator.addClass("show");
+        }
     }
 
     private async handleNoteDrop($columnEl: JQuery<HTMLElement>, column: string) {
@@ -335,6 +496,76 @@ export class BoardDragHandler {
                 // Always clean up drop indicators after drop operation
                 this.cleanupAllDropIndicators();
             }
+        }
+    }
+
+    private async handleColumnDrop($targetColumnEl: JQuery<HTMLElement>, targetColumnValue: string) {
+        if (!this.context.draggedColumn || !this.context.draggedColumnElement) {
+            return;
+        }
+
+        try {
+            // Get current column order from the DOM
+            const currentOrder = Array.from(this.$container.find('.board-column')).map(el => 
+                $(el).attr('data-column')
+            ).filter(col => col) as string[];
+
+            console.log("Current order:", currentOrder);
+            console.log("Dragged column:", this.context.draggedColumn);
+            console.log("Target column:", targetColumnValue);
+
+            // Find the drop indicator to determine insert position
+            const $dropIndicator = this.$container.find(".column-drop-indicator.show");
+            
+            if ($dropIndicator.length > 0) {
+                let newOrder = [...currentOrder];
+                
+                // Remove dragged column from current position
+                newOrder = newOrder.filter(col => col !== this.context.draggedColumn);
+
+                // Determine insertion position based on drop indicator
+                const $nextColumn = $dropIndicator.next('.board-column');
+                const $prevColumn = $dropIndicator.prev('.board-column');
+                
+                let insertIndex = -1;
+                
+                if ($nextColumn.length > 0) {
+                    // Insert before the next column
+                    const nextColumnValue = $nextColumn.attr('data-column');
+                    insertIndex = newOrder.indexOf(nextColumnValue!);
+                } else if ($prevColumn.length > 0) {
+                    // Insert after the previous column
+                    const prevColumnValue = $prevColumn.attr('data-column');
+                    insertIndex = newOrder.indexOf(prevColumnValue!) + 1;
+                } else {
+                    // Insert at the beginning
+                    insertIndex = 0;
+                }
+
+                // Insert the dragged column at the determined position
+                if (insertIndex >= 0) {
+                    newOrder.splice(insertIndex, 0, this.context.draggedColumn);
+                } else {
+                    // Fallback: insert at the end
+                    newOrder.push(this.context.draggedColumn);
+                }
+
+                console.log("New order:", newOrder);
+
+                // Update column order in API
+                await this.api.reorderColumns(newOrder);
+
+                console.log(`Moved column "${this.context.draggedColumn}" to new position`);
+
+                // Refresh the board to reflect the changes
+                await this.onBoardRefresh();
+            } else {
+                console.warn("No drop indicator found for column drop");
+            }
+        } catch (error) {
+            console.error("Failed to reorder columns:", error);
+        } finally {
+            this.cleanupColumnDropIndicators();
         }
     }
 }
