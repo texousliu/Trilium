@@ -133,6 +133,15 @@ export class DifferentialBoardRenderer {
     }
 
     private updateColumns(oldState: BoardState, newState: BoardState): void {
+        // Check if column order has changed
+        const orderChanged = !this.arraysEqual(oldState.columnOrder, newState.columnOrder);
+        
+        if (orderChanged) {
+            console.log("Column order changed from", oldState.columnOrder, "to", newState.columnOrder);
+            // If order changed, we need to reorder the columns in the DOM
+            this.reorderColumns(newState.columnOrder);
+        }
+
         // Remove columns that no longer exist
         for (const oldColumn of oldState.columnOrder) {
             if (!newState.columnOrder.includes(oldColumn)) {
@@ -159,6 +168,53 @@ export class DifferentialBoardRenderer {
                 }
             }
         }
+    }
+
+    private arraysEqual(a: string[], b: string[]): boolean {
+        return a.length === b.length && a.every((val, index) => val === b[index]);
+    }
+
+    private reorderColumns(newOrder: string[]): void {
+        console.log("Reordering columns to:", newOrder);
+        
+        // Get all existing column elements
+        const $columns = this.$container.find('.board-column');
+        const $addColumnButton = this.$container.find('.board-add-column');
+        
+        // Create a map of column elements by their data-column attribute
+        const columnElements = new Map<string, JQuery<HTMLElement>>();
+        $columns.each((_, el) => {
+            const $el = $(el);
+            const columnValue = $el.attr('data-column');
+            if (columnValue) {
+                columnElements.set(columnValue, $el);
+            }
+        });
+
+        // Remove all columns from DOM (but keep references)
+        $columns.detach();
+        
+        // Re-insert columns in the new order
+        let $insertAfter: JQuery<HTMLElement> | null = null;
+        for (const columnValue of newOrder) {
+            const $columnEl = columnElements.get(columnValue);
+            if ($columnEl) {
+                if ($insertAfter) {
+                    $insertAfter.after($columnEl);
+                } else {
+                    // Insert at the beginning
+                    this.$container.prepend($columnEl);
+                }
+                $insertAfter = $columnEl;
+            }
+        }
+        
+        // Ensure add column button is at the end
+        if ($addColumnButton.length) {
+            this.$container.append($addColumnButton);
+        }
+        
+        console.log("Column reordering complete");
     }
 
     private updateColumnCards(column: string, oldCards: { note: any; branch: any }[], newCards: { note: any; branch: any }[]): void {

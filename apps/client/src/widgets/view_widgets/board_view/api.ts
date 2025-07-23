@@ -111,8 +111,6 @@ export default class BoardApi {
     }
 
     async reorderColumns(newColumnOrder: string[]) {
-        console.log("API: Reordering columns to:", newColumnOrder);
-        
         // Update the column order in persisted data
         if (!this.persistedData.columns) {
             this.persistedData.columns = [];
@@ -131,9 +129,6 @@ export default class BoardApi {
 
         // Update internal columns array
         this._columns = newColumnOrder;
-
-        console.log("API: Updated internal columns to:", this._columns);
-        console.log("API: Updated persisted data:", this.persistedData.columns);
 
         await this.viewStorage.store(this.persistedData);
     }
