@@ -141,7 +141,7 @@ export default class GeoView extends ViewMode<MapData> {
             worldCopyJump: true
         });
 
-        const layerName = this.parentNote.getLabelValue("mapLayer") ?? "openstreetmap";
+        const layerName = this.parentNote.getLabelValue("mapStyle") ?? "openstreetmap";
         const layer = (await getMapLayer(layerName));
         layer.addTo(map);
 
@@ -268,7 +268,7 @@ export default class GeoView extends ViewMode<MapData> {
         }
 
         // Full reload if map layer is changed.
-        if (loadResults.getAttributeRows().some(attr => attr.name === "mapLayer" && attributes.isAffecting(attr, this.parentNote))) {
+        if (loadResults.getAttributeRows().some(attr => attr.name === "mapStyle" && attributes.isAffecting(attr, this.parentNote))) {
             return true;
         }
     }

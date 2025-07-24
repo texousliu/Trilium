@@ -203,6 +203,33 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
                     .append("&nbsp;".repeat(2))
                     .append($numberInput));
                 break;
+            case "combobox":
+                const $select = $("<select>", {
+                    class: "form-select form-select-sm"
+                });
+                for (const option of property.options) {
+                    const $option = $("<option>", {
+                        value: option.value,
+                        text: option.label
+                    });
+                    if (note.getLabelValue(property.bindToLabel) === option.value) {
+                        $option.prop("selected", true);
+                    }
+                    $select.append($option);
+                }
+                $select.on("change", () => {
+                    const value = $select.val();
+                    if (value === null || value === "") {
+                        attributes.removeOwnedLabelByName(note, property.bindToLabel);
+                    } else {
+                        attributes.setLabel(note.noteId, property.bindToLabel, String(value));
+                    }
+                });
+                $container.append($("<label>")
+                    .text(property.label)
+                    .append("&nbsp;".repeat(2))
+                    .append($select));
+                break;
         }
 
         return $container;

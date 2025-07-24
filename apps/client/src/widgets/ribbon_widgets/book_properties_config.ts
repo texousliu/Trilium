@@ -30,7 +30,14 @@ interface NumberProperty {
     min?: number;
 }
 
-export type BookProperty = CheckBoxProperty | ButtonProperty | NumberProperty;
+interface ComboBoxProperty {
+    type: "combobox",
+    label: string;
+    bindToLabel: string;
+    options: { value: string; label: string }[];
+}
+
+export type BookProperty = CheckBoxProperty | ButtonProperty | NumberProperty | ComboBoxProperty;
 
 interface BookContext {
     note: FNote;
@@ -90,7 +97,17 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
         ]
     },
     geoMap: {
-        properties: []
+        properties: [
+            {
+                label: "Map style:",
+                type: "combobox",
+                bindToLabel: "mapStyle",
+                options: [
+                    { value: "openstreetmap", label: "OpenStreetMap" },
+                    { value: "versatiles-colorful", label: "Versatiles Colorful (vector)" }
+                ]
+            }
+        ]
     },
     table: {
         properties: [
