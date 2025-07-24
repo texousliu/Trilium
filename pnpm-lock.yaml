@@ -656,7 +656,7 @@ importers:
         version: 2.1.1
       express-openid-connect:
         specifier: ^2.17.1
-        version: 2.18.1(express@5.1.0)
+        version: 2.19.2(express@5.1.0)
       express-rate-limit:
         specifier: 8.0.1
         version: 8.0.1(express@5.1.0)
@@ -8606,8 +8606,8 @@ packages:
     resolution: {integrity: sha512-4aRQRqDQU7qNPV5av0/hLcyc0guB9UP71nCYrQEYml7YphTo8tmWf3nDZWdTJMMjFikyz9xKXaURor7Chygdwg==}
     engines: {node: '>=6.0.0'}
 
-  express-openid-connect@2.18.1:
-    resolution: {integrity: sha512-trHqgwXxWF0n/XrDsRzsvQtnBNbU03iCNXbKR/sHwBqXlvCgup341bW7B8t6nr3L/CMoDpK+9gsTnx3qLCqdjQ==}
+  express-openid-connect@2.19.2:
+    resolution: {integrity: sha512-hRRRBS+mH9hrhVcbg7+APe+dIsYB4BDLILv7QfTmM1jSDyaU9NYpTxqWourAnlud/E4Gf4Q0qCVmSJguh4BTaA==}
     engines: {node: ^10.19.0 || >=12.0.0 < 13 || >=13.7.0 < 14 || >= 14.2.0}
     peerDependencies:
       express: '>= 4.17.0'
@@ -16729,8 +16729,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 46.0.0
       '@ckeditor/ckeditor5-watchdog': 46.0.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-dev-build-tools@43.1.0(@swc/helpers@0.5.17)(tslib@2.8.1)(typescript@5.8.3)':
     dependencies:
@@ -16922,6 +16920,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 46.0.0
       ckeditor5: 46.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-editor-multi-root@46.0.0':
     dependencies:
@@ -16944,6 +16944,8 @@ snapshots:
       '@ckeditor/ckeditor5-table': 46.0.0
       '@ckeditor/ckeditor5-utils': 46.0.0
       ckeditor5: 46.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-emoji@46.0.0':
     dependencies:
@@ -17261,6 +17263,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 46.0.0
       '@ckeditor/ckeditor5-widget': 46.0.0
       ckeditor5: 46.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-mention@46.0.0(patch_hash=5981fb59ba35829e4dff1d39cf771000f8a8fdfa7a34b51d8af9549541f2d62d)':
     dependencies:
@@ -17609,8 +17613,6 @@ snapshots:
       '@ckeditor/ckeditor5-icons': 46.0.0
       '@ckeditor/ckeditor5-ui': 46.0.0
       '@ckeditor/ckeditor5-utils': 46.0.0
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-upload@46.0.0':
     dependencies:
@@ -23362,6 +23364,8 @@ snapshots:
   ckeditor5-collaboration@46.0.0:
     dependencies:
       '@ckeditor/ckeditor5-collaboration-core': 46.0.0
+    transitivePeerDependencies:
+      - supports-color
 
   ckeditor5-premium-features@46.0.0(bufferutil@4.0.9)(ckeditor5@46.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41))(utf-8-validate@6.0.5):
     dependencies:
@@ -25287,7 +25291,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  express-openid-connect@2.18.1(express@5.1.0):
+  express-openid-connect@2.19.2(express@5.1.0):
     dependencies:
       base64url: 3.0.1
       clone: 2.1.2
