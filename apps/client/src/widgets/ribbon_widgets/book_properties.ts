@@ -45,6 +45,14 @@ const TPL = /*html*/`
         .book-properties-container input[type="checkbox"] {
             margin-right: 5px;
         }
+
+        .book-properties-container label {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-overflow: clip;
+            white-space: nowrap;
+        }
     </style>
 
     <div style="display: flex; align-items: baseline">
