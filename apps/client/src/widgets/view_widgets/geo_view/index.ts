@@ -146,7 +146,7 @@ export default class GeoView extends ViewMode<MapData> {
             worldCopyJump: true
         });
 
-        const layerName = this.parentNote.getLabelValue("mapStyle") ?? DEFAULT_MAP_LAYER_NAME;
+        const layerName = this.parentNote.getLabelValue("map:style") ?? DEFAULT_MAP_LAYER_NAME;
         let layer: Layer;
         const layerData = MAP_LAYERS[layerName];
 
@@ -295,7 +295,7 @@ export default class GeoView extends ViewMode<MapData> {
         }
 
         // Full reload if map layer is changed.
-        if (loadResults.getAttributeRows().some(attr => ((attr.name === "mapStyle") || (attr.name === "map:scale") && attributes.isAffecting(attr, this.parentNote)))) {
+        if (loadResults.getAttributeRows().some(attr => (attr.name?.startsWith("map:") && attributes.isAffecting(attr, this.parentNote)))) {
             return true;
         }
     }

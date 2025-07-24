@@ -116,7 +116,7 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
             {
                 label: t("book_properties_config.map-style"),
                 type: "combobox",
-                bindToLabel: "mapStyle",
+                bindToLabel: "map:style",
                 defaultValue: DEFAULT_MAP_LAYER_NAME,
                 options: [
                     {
