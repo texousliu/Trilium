@@ -10,6 +10,8 @@ import toast from "../../../services/toast.js";
 import { CommandListenerData, EventData } from "../../../components/app_context.js";
 import { createNewNote, moveMarker, setupDragging } from "./editing.js";
 import { openMapContextMenu } from "./context_menu.js";
+import getMapLayer from "./map_layer.js";
+import attributes from "../../../services/attributes.js";
 
 const TPL = /*html*/`
 <div class="geo-view">
@@ -138,10 +140,10 @@ export default class GeoView extends ViewMode<MapData> {
         const map = L.map(this.$container[0], {
             worldCopyJump: true
         });
-        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            detectRetina: true
-        }).addTo(map);
+
+        const layerName = this.parentNote.getLabelValue("mapLayer") ?? "openstreetmap";
+        const layer = (await getMapLayer(layerName));
+        layer.addTo(map);
 
         this.map = map;
 
@@ -263,6 +265,11 @@ export default class GeoView extends ViewMode<MapData> {
         const attributeRows = loadResults.getAttributeRows();
         if (attributeRows.find((at) => [LOCATION_ATTRIBUTE, "color"].includes(at.name ?? ""))) {
             this.#reloadMarkers();
+        }
+
+        // Full reload if map layer is changed.
+        if (loadResults.getAttributeRows().some(attr => attr.name === "mapLayer" && attributes.isAffecting(attr, this.parentNote))) {
+            return true;
         }
     }
 
