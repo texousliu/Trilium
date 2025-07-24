@@ -3,6 +3,7 @@ import FNote from "../../entities/fnote";
 import attributes from "../../services/attributes";
 import { ViewTypeOptions } from "../../services/note_list_renderer"
 import NoteContextAwareWidget from "../note_context_aware_widget";
+import { MAP_LAYERS } from "../view_widgets/geo_view/map_layer";
 
 interface BookConfig {
     properties: BookProperty[];
@@ -102,10 +103,10 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
                 label: t("book_properties_config.map-style"),
                 type: "combobox",
                 bindToLabel: "mapStyle",
-                options: [
-                    { value: "openstreetmap", label: "OpenStreetMap" },
-                    { value: "versatiles-colorful", label: "Versatiles Colorful (vector)" }
-                ]
+                options: Object.entries(MAP_LAYERS).map(([id, layer]) => ({
+                    value: id,
+                    label: layer.name
+                }))
             }
         ]
     },

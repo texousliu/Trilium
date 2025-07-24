@@ -1,41 +1,68 @@
 import L from "leaflet";
-import type { StyleSpecification } from "maplibre-gl";
 
-interface VectorLayer {
-    type: "vector";
-    style: string | (() => Promise<StyleSpecification>)
+interface Layer {
+    name: string;
 }
 
-interface RasterLayer {
+interface VectorLayer extends Layer {
+    type: "vector";
+    style: string | (() => Promise<{}>)
+}
+
+interface RasterLayer extends Layer {
     type: "raster";
     url: string;
     attribution: string;
 }
 
-const LAYERS: Record<string, VectorLayer | RasterLayer> = {
+export const MAP_LAYERS: Record<string, VectorLayer | RasterLayer> = {
     "openstreetmap": {
+        name: "OpenStreetMap",
         type: "raster",
         url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     },
     "versatiles-colorful": {
+        name: "Versatiles Colorful (vector)",
         type: "vector",
-        style: async () => {
-            const style = await import("./styles/colorful/en.json");
-            return style.default as unknown as StyleSpecification;
-        }
+        style: async () => (await import("./styles/colorful/en.json")).default
+    },
+    "versatiles-eclipse": {
+        name: "Versatiles Eclipse (vector)",
+        type: "vector",
+        style: async () => (await import("./styles/eclipse/en.json")).default
+    },
+    "versatiles-empty": {
+        name: "Versatiles Empty (vector)",
+        type: "vector",
+        style: async () => (await import("./styles/empty/style.json")).default
+    },
+    "versatiles-graybeard": {
+        name: "Versatiles Graybeard (vector)",
+        type: "vector",
+        style: async () => (await import("./styles/graybeard/en.json")).default
+    },
+    "versatiles-neutrino": {
+        name: "Versatiles Neutrino (vector)",
+        type: "vector",
+        style: async () => (await import("./styles/neutrino/en.json")).default
+    },
+    "versatiles-shadow": {
+        name: "Versatiles Shadow (vector)",
+        type: "vector",
+        style: async () => (await import("./styles/shadow/en.json")).default
     }
 };
 
 export default async function getMapLayer(layerName: string) {
-    const layer = LAYERS[layerName] ?? LAYERS["openstreetmap"];
+    const layer = MAP_LAYERS[layerName] ?? MAP_LAYERS["openstreetmap"];
 
     if (layer.type === "vector") {
         const style = (typeof layer.style === "string" ? layer.style : await layer.style());
         await import("@maplibre/maplibre-gl-leaflet");
 
         return L.maplibreGL({
-            style
+            style: style as any
         });
     }
 
