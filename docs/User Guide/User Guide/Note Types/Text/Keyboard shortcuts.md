@@ -13,9 +13,9 @@
 | Mark selected text as [keyboard shortcut](Developer-specific%20formatting.md) | <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>K</kbd> | <kbd>⌘</kbd>\+ <kbd>⌥</kbd>\+ <kbd>K</kbd> |
 | Insert <a class="reference-link" href="Math%20Equations.md">Math Equations</a> | <kbd>Ctrl</kbd> + <kbd>M</kbd> | <kbd>⌘</kbd>\+ <kbd>M</kbd> |
 | Move blocks (lists, paragraphs, etc.) up | <kbd>Ctrl</kbd>+<kbd>↑</kbd> | <kbd>⌘</kbd>+<kbd>↑</kbd> |
-| <kbd>Alt</kbd>+<kbd>↑</kbd> | <kbd>⌥</kbd>+<kbd>↑</kbd> |
+| <kbd>Alt</kbd>+<kbd>↑</kbd> | <kbd>⌥</kbd>+<kbd>↑</kbd> |     |
 | Move blocks (lists, paragraphs, etc.) down | <kbd>Ctrl</kbd>+<kbd>↑</kbd> | <kbd>⌘</kbd>+<kbd>↑</kbd> |
-| <kbd>Alt</kbd>+<kbd>↓</kbd> | <kbd>⌥</kbd>+<kbd>↓</kbd> |
+| <kbd>Alt</kbd>+<kbd>↓</kbd> | <kbd>⌥</kbd>+<kbd>↓</kbd> |     |
 
 ## Common shortcuts
 
