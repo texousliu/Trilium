@@ -290,7 +290,7 @@ export default class GeoView extends ViewMode<MapData> {
         // If any of note has its location attribute changed.
         // TODO: Should probably filter by parent here as well.
         const attributeRows = loadResults.getAttributeRows();
-        if (attributeRows.find((at) => [LOCATION_ATTRIBUTE, "color"].includes(at.name ?? ""))) {
+        if (attributeRows.find((at) => [LOCATION_ATTRIBUTE, "color", "iconClass"].includes(at.name ?? ""))) {
             this.#reloadMarkers();
         }
 
