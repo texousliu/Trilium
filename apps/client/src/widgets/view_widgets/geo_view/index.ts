@@ -10,8 +10,8 @@ import toast from "../../../services/toast.js";
 import { CommandListenerData, EventData } from "../../../components/app_context.js";
 import { createNewNote, moveMarker, setupDragging } from "./editing.js";
 import { openMapContextMenu } from "./context_menu.js";
-import getMapLayer from "./map_layer.js";
 import attributes from "../../../services/attributes.js";
+import { MAP_LAYERS } from "./map_layer.js";
 
 const TPL = /*html*/`
 <div class="geo-view">
@@ -336,4 +336,22 @@ export default class GeoView extends ViewMode<MapData> {
         ];
     }
 
+}
+
+async function getMapLayer(layerName: string) {
+    const layer = MAP_LAYERS[layerName] ?? MAP_LAYERS["openstreetmap"];
+
+    if (layer.type === "vector") {
+        const style = (typeof layer.style === "string" ? layer.style : await layer.style());
+        await import("@maplibre/maplibre-gl-leaflet");
+
+        return L.maplibreGL({
+            style: style as any
+        });
+    }
+
+    return L.tileLayer(layer.url, {
+        attribution: layer.attribution,
+        detectRetina: true
+    });
 }

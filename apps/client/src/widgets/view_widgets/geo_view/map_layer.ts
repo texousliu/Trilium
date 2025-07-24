@@ -1,5 +1,3 @@
-import L from "leaflet";
-
 interface Layer {
     name: string;
 }
@@ -54,20 +52,3 @@ export const MAP_LAYERS: Record<string, VectorLayer | RasterLayer> = {
     }
 };
 
-export default async function getMapLayer(layerName: string) {
-    const layer = MAP_LAYERS[layerName] ?? MAP_LAYERS["openstreetmap"];
-
-    if (layer.type === "vector") {
-        const style = (typeof layer.style === "string" ? layer.style : await layer.style());
-        await import("@maplibre/maplibre-gl-leaflet");
-
-        return L.maplibreGL({
-            style: style as any
-        });
-    }
-
-    return L.tileLayer(layer.url, {
-        attribution: layer.attribution,
-        detectRetina: true
-    });
-}
