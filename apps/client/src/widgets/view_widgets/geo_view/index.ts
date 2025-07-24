@@ -11,7 +11,7 @@ import { CommandListenerData, EventData } from "../../../components/app_context.
 import { createNewNote, moveMarker, setupDragging } from "./editing.js";
 import { openMapContextMenu } from "./context_menu.js";
 import attributes from "../../../services/attributes.js";
-import { MAP_LAYERS } from "./map_layer.js";
+import { DEFAULT_MAP_LAYER_NAME, MAP_LAYERS } from "./map_layer.js";
 
 const TPL = /*html*/`
 <div class="geo-view">
@@ -146,9 +146,9 @@ export default class GeoView extends ViewMode<MapData> {
             worldCopyJump: true
         });
 
-        const layerName = this.parentNote.getLabelValue("mapStyle") ?? "openstreetmap";
+        const layerName = this.parentNote.getLabelValue("mapStyle") ?? DEFAULT_MAP_LAYER_NAME;
         let layer: Layer;
-        const layerData = MAP_LAYERS[layerName] ?? MAP_LAYERS["openstreetmap"];
+        const layerData = MAP_LAYERS[layerName];
 
         if (layerData.type === "vector") {
             const style = (typeof layerData.style === "string" ? layerData.style : await layerData.style());

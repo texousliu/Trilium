@@ -207,12 +207,13 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
                 const $select = $("<select>", {
                     class: "form-select form-select-sm"
                 });
+                const actualValue = note.getLabelValue(property.bindToLabel) ?? property.defaultValue;
                 for (const option of property.options) {
                     const $option = $("<option>", {
                         value: option.value,
                         text: option.label
                     });
-                    if (note.getLabelValue(property.bindToLabel) === option.value) {
+                    if (actualValue === option.value) {
                         $option.prop("selected", true);
                     }
                     $select.append($option);

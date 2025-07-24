@@ -50,3 +50,4 @@ export const MAP_LAYERS: Record<string, VectorLayer | RasterLayer> = {
     }
 };
 
+export const DEFAULT_MAP_LAYER_NAME: keyof typeof MAP_LAYERS = "versatiles-colorful";

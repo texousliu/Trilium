@@ -3,7 +3,7 @@ import FNote from "../../entities/fnote";
 import attributes from "../../services/attributes";
 import { ViewTypeOptions } from "../../services/note_list_renderer"
 import NoteContextAwareWidget from "../note_context_aware_widget";
-import { MAP_LAYERS } from "../view_widgets/geo_view/map_layer";
+import { DEFAULT_MAP_LAYER_NAME, MAP_LAYERS } from "../view_widgets/geo_view/map_layer";
 
 interface BookConfig {
     properties: BookProperty[];
@@ -35,6 +35,10 @@ interface ComboBoxProperty {
     type: "combobox",
     label: string;
     bindToLabel: string;
+    /**
+     * The default value is used when the label is not set.
+     */
+    defaultValue?: string;
     options: { value: string; label: string }[];
 }
 
@@ -103,6 +107,7 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
                 label: t("book_properties_config.map-style"),
                 type: "combobox",
                 bindToLabel: "mapStyle",
+                defaultValue: DEFAULT_MAP_LAYER_NAME,
                 options: Object.entries(MAP_LAYERS).map(([id, layer]) => ({
                     value: id,
                     label: layer.name
