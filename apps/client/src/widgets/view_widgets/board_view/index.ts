@@ -70,6 +70,42 @@ const TPL = /*html*/`
             border-radius: 4px;
         }
 
+        .board-view-container .board-column h3 .column-title-content {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            min-width: 0; /* Allow text to truncate */
+        }
+
+        .board-view-container .board-column h3 .column-drag-handle {
+            margin-right: 0.5em;
+            color: var(--muted-text-color);
+            cursor: grab;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            padding: 0.25em;
+            border-radius: 3px;
+        }
+
+        .board-view-container .board-column h3:hover .column-drag-handle {
+            opacity: 1;
+        }
+
+        .board-view-container .board-column h3 .column-drag-handle:hover {
+            background-color: var(--main-background-color);
+            color: var(--main-text-color);
+        }
+
+        .board-view-container .board-column h3 .column-drag-handle:active {
+            cursor: grabbing;
+        }
+
+        .board-view-container .board-column.column-dragging {
+            opacity: 0.6;
+            transform: scale(0.98);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
         .board-view-container .board-column h3 input {
             background: transparent;
             border: none;
@@ -169,6 +205,22 @@ const TPL = /*html*/`
         }
 
         .board-drop-indicator.show {
+            opacity: 1;
+        }
+
+        .column-drop-indicator {
+            width: 4px;
+            background-color: var(--main-text-color);
+            border-radius: 2px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            height: 100%;
+            z-index: 1000;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+            flex-shrink: 0;
+        }
+
+        .column-drop-indicator.show {
             opacity: 1;
         }
 
@@ -274,7 +326,9 @@ export default class BoardView extends ViewMode<BoardData> {
         this.dragContext = {
             draggedNote: null,
             draggedBranch: null,
-            draggedNoteElement: null
+            draggedNoteElement: null,
+            draggedColumn: null,
+            draggedColumnElement: null
         };
 
         args.$parent.append(this.$root);
@@ -320,14 +374,32 @@ export default class BoardView extends ViewMode<BoardData> {
     }
 
     private setupBoardInteractions() {
-        // Handle column title editing
-        this.$container.on('click', 'h3[data-column-value]', (e) => {
+        // Handle column title editing - listen for clicks on the title content, not the drag handle
+        this.$container.on('click', 'h3[data-column-value] .column-title-content span:not(.column-drag-handle)', (e) => {
             e.stopPropagation();
-            const $titleEl = $(e.currentTarget);
+            const $titleEl = $(e.currentTarget).closest('h3[data-column-value]');
             const columnValue = $titleEl.attr('data-column-value');
             if (columnValue) {
                 const columnItems = this.api?.getColumn(columnValue) || [];
                 this.startEditingColumnTitle($titleEl, columnValue, columnItems);
+            }
+        });
+
+        // Also handle clicks on the h3 element itself (but not on the drag handle)
+        this.$container.on('click', 'h3[data-column-value]', (e) => {
+            // Only proceed if the click wasn't on the drag handle or edit icon
+            if (!$(e.target).hasClass('column-drag-handle') && 
+                !$(e.target).hasClass('edit-icon') && 
+                !$(e.target).hasClass('bx-menu') &&
+                !$(e.target).hasClass('bx-edit-alt')) {
+                
+                e.stopPropagation();
+                const $titleEl = $(e.currentTarget);
+                const columnValue = $titleEl.attr('data-column-value');
+                if (columnValue) {
+                    const columnItems = this.api?.getColumn(columnValue) || [];
+                    this.startEditingColumnTitle($titleEl, columnValue, columnItems);
+                }
             }
         });
 
@@ -339,12 +411,21 @@ export default class BoardView extends ViewMode<BoardData> {
     }
 
     private createTitleStructure(title: string): { $titleText: JQuery<HTMLElement>; $editIcon: JQuery<HTMLElement> } {
+        const $dragHandle = $("<span>")
+            .addClass("column-drag-handle icon bx bx-menu")
+            .attr("title", "Drag to reorder column");
+
         const $titleText = $("<span>").text(title);
+        
+        const $titleContent = $("<div>")
+            .addClass("column-title-content")
+            .append($dragHandle, $titleText);
+
         const $editIcon = $("<span>")
             .addClass("edit-icon icon bx bx-edit-alt")
             .attr("title", "Click to edit column title");
 
-        return { $titleText, $editIcon };
+        return { $titleText: $titleContent, $editIcon };
     }
 
     private startEditingColumnTitle($titleEl: JQuery<HTMLElement>, columnValue: string, columnItems: { branch: any; note: any; }[]) {
@@ -352,8 +433,9 @@ export default class BoardView extends ViewMode<BoardData> {
             return; // Already editing
         }
 
-        const $titleText = $titleEl.find("span").first();
-        const currentTitle = $titleText.text();
+        const $titleContent = $titleEl.find(".column-title-content");
+        const $titleSpan = $titleContent.find("span").last(); // Get the text span, not the drag handle
+        const currentTitle = $titleSpan.text();
         $titleEl.addClass("editing");
 
         const $input = $("<input>")

@@ -133,6 +133,14 @@ export class DifferentialBoardRenderer {
     }
 
     private updateColumns(oldState: BoardState, newState: BoardState): void {
+        // Check if column order has changed
+        const orderChanged = !this.arraysEqual(oldState.columnOrder, newState.columnOrder);
+        
+        if (orderChanged) {
+            // If order changed, we need to reorder the columns in the DOM
+            this.reorderColumns(newState.columnOrder);
+        }
+
         // Remove columns that no longer exist
         for (const oldColumn of oldState.columnOrder) {
             if (!newState.columnOrder.includes(oldColumn)) {
@@ -158,6 +166,49 @@ export class DifferentialBoardRenderer {
                     $($existingColumns[insertIndex - 1]).after($columnEl);
                 }
             }
+        }
+    }
+
+    private arraysEqual(a: string[], b: string[]): boolean {
+        return a.length === b.length && a.every((val, index) => val === b[index]);
+    }
+
+    private reorderColumns(newOrder: string[]): void {
+        // Get all existing column elements
+        const $columns = this.$container.find('.board-column');
+        const $addColumnButton = this.$container.find('.board-add-column');
+        
+        // Create a map of column elements by their data-column attribute
+        const columnElements = new Map<string, JQuery<HTMLElement>>();
+        $columns.each((_, el) => {
+            const $el = $(el);
+            const columnValue = $el.attr('data-column');
+            if (columnValue) {
+                columnElements.set(columnValue, $el);
+            }
+        });
+
+        // Remove all columns from DOM (but keep references)
+        $columns.detach();
+        
+        // Re-insert columns in the new order
+        let $insertAfter: JQuery<HTMLElement> | null = null;
+        for (const columnValue of newOrder) {
+            const $columnEl = columnElements.get(columnValue);
+            if ($columnEl) {
+                if ($insertAfter) {
+                    $insertAfter.after($columnEl);
+                } else {
+                    // Insert at the beginning
+                    this.$container.prepend($columnEl);
+                }
+                $insertAfter = $columnEl;
+            }
+        }
+        
+        // Ensure add column button is at the end
+        if ($addColumnButton.length) {
+            this.$container.append($addColumnButton);
         }
     }
 
@@ -241,14 +292,32 @@ export class DifferentialBoardRenderer {
             .addClass("board-column")
             .attr("data-column", column);
 
-        // Create header
+        // Create header with drag handle
         const $titleEl = $("<h3>").attr("data-column-value", column);
+        
+        // Create drag handle
+        const $dragHandle = $("<span>")
+            .addClass("column-drag-handle icon bx bx-menu")
+            .attr("title", "Drag to reorder column");
+
+        // Create title text
         const $titleText = $("<span>").text(column);
+        
+        // Create title content container
+        const $titleContent = $("<div>")
+            .addClass("column-title-content")
+            .append($dragHandle, $titleText);
+
+        // Create edit icon
         const $editIcon = $("<span>")
             .addClass("edit-icon icon bx bx-edit-alt")
             .attr("title", "Click to edit column title");
-        $titleEl.append($titleText, $editIcon);
+
+        $titleEl.append($titleContent, $editIcon);
         $columnEl.append($titleEl);
+
+        // Setup column dragging
+        this.dragHandler.setupColumnDrag($columnEl, column);
 
         // Handle wheel events for scrolling
         $columnEl.on("wheel", (event) => {
@@ -259,7 +328,8 @@ export class DifferentialBoardRenderer {
             }
         });
 
-        // Setup drop zone
+        // Setup drop zones for both notes and columns
+        this.dragHandler.setupNoteDropZone($columnEl, column);
         this.dragHandler.setupColumnDropZone($columnEl, column);
 
         // Add cards

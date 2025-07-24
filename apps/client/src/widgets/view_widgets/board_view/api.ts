@@ -110,12 +110,40 @@ export default class BoardApi {
         return columnValue;
     }
 
+    async reorderColumns(newColumnOrder: string[]) {
+        // Update the column order in persisted data
+        if (!this.persistedData.columns) {
+            this.persistedData.columns = [];
+        }
+
+        // Create a map of existing column data
+        const columnDataMap = new Map();
+        this.persistedData.columns.forEach(col => {
+            columnDataMap.set(col.value, col);
+        });
+
+        // Reorder columns based on new order
+        this.persistedData.columns = newColumnOrder.map(columnValue => {
+            return columnDataMap.get(columnValue) || { value: columnValue };
+        });
+
+        // Update internal columns array
+        this._columns = newColumnOrder;
+
+        await this.viewStorage.store(this.persistedData);
+    }
+
     static async build(parentNote: FNote, viewStorage: ViewModeStorage<BoardData>) {
         const statusAttribute = parentNote.getLabelValue("board:groupBy") ?? "status";
 
         let persistedData = await viewStorage.restore() ?? {};
         const { byColumn, newPersistedData } = await getBoardData(parentNote, statusAttribute, persistedData);
-        const columns = Array.from(byColumn.keys()) || [];
+        
+        // Use the order from persistedData.columns, then add any new columns found
+        const orderedColumns = persistedData.columns?.map(col => col.value) || [];
+        const allColumns = Array.from(byColumn.keys());
+        const newColumns = allColumns.filter(col => !orderedColumns.includes(col));
+        const columns = [...orderedColumns, ...newColumns];
 
         if (newPersistedData) {
             persistedData = newPersistedData;
