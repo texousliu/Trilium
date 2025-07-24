@@ -1,6 +1,6 @@
 import ViewMode, { ViewModeArgs } from "../view_mode.js";
 import L from "leaflet";
-import type { GPX, LatLng, LeafletMouseEvent, Map, Marker } from "leaflet";
+import type { GPX, LatLng, Layer, LeafletMouseEvent, Map, Marker } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import SpacedUpdate from "../../../services/spaced_update.js";
 import { t } from "../../../services/i18n.js";
@@ -85,6 +85,11 @@ const TPL = /*html*/`
             white-space: no-wrap;
             overflow: hidden;
         }
+
+        .geo-map-container.dark .leaflet-div-icon .title-label {
+            color: white;
+            text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+        }
     </style>
 
     <div class="geo-map-container"></div>
@@ -142,7 +147,25 @@ export default class GeoView extends ViewMode<MapData> {
         });
 
         const layerName = this.parentNote.getLabelValue("mapStyle") ?? "openstreetmap";
-        const layer = (await getMapLayer(layerName));
+        let layer: Layer;
+        const layerData = MAP_LAYERS[layerName] ?? MAP_LAYERS["openstreetmap"];
+
+        if (layerData.type === "vector") {
+            const style = (typeof layerData.style === "string" ? layerData.style : await layerData.style());
+            await import("@maplibre/maplibre-gl-leaflet");
+
+            layer = L.maplibreGL({
+                style: style as any
+            });
+        } else {
+            layer = L.tileLayer(layerData.url, {
+                attribution: layerData.attribution,
+                detectRetina: true
+            });
+        }
+
+        this.$container.toggleClass("dark", !!layerData.isDarkTheme);
+
         layer.addTo(map);
 
         this.map = map;
@@ -338,20 +361,3 @@ export default class GeoView extends ViewMode<MapData> {
 
 }
 
-async function getMapLayer(layerName: string) {
-    const layer = MAP_LAYERS[layerName] ?? MAP_LAYERS["openstreetmap"];
-
-    if (layer.type === "vector") {
-        const style = (typeof layer.style === "string" ? layer.style : await layer.style());
-        await import("@maplibre/maplibre-gl-leaflet");
-
-        return L.maplibreGL({
-            style: style as any
-        });
-    }
-
-    return L.tileLayer(layer.url, {
-        attribution: layer.attribution,
-        detectRetina: true
-    });
-}

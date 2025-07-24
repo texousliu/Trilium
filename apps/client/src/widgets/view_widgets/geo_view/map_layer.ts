@@ -1,5 +1,6 @@
 interface Layer {
     name: string;
+    isDarkTheme?: boolean;
 }
 
 interface VectorLayer extends Layer {
@@ -21,29 +22,31 @@ export const MAP_LAYERS: Record<string, VectorLayer | RasterLayer> = {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     },
     "versatiles-colorful": {
-        name: "Versatiles Colorful (vector)",
+        name: "VersaTiles Colorful (vector)",
         type: "vector",
         style: async () => (await import("./styles/colorful/en.json")).default
     },
     "versatiles-eclipse": {
-        name: "Versatiles Eclipse (vector)",
+        name: "VersaTiles Eclipse (vector)",
         type: "vector",
-        style: async () => (await import("./styles/eclipse/en.json")).default
+        style: async () => (await import("./styles/eclipse/en.json")).default,
+        isDarkTheme: true
     },
     "versatiles-graybeard": {
-        name: "Versatiles Graybeard (vector)",
+        name: "VersaTiles Graybeard (vector)",
         type: "vector",
         style: async () => (await import("./styles/graybeard/en.json")).default
     },
     "versatiles-neutrino": {
-        name: "Versatiles Neutrino (vector)",
+        name: "VersaTiles Neutrino (vector)",
         type: "vector",
         style: async () => (await import("./styles/neutrino/en.json")).default
     },
     "versatiles-shadow": {
-        name: "Versatiles Shadow (vector)",
+        name: "VersaTiles Shadow (vector)",
         type: "vector",
-        style: async () => (await import("./styles/shadow/en.json")).default
+        style: async () => (await import("./styles/shadow/en.json")).default,
+        isDarkTheme: true
     }
 };
 
