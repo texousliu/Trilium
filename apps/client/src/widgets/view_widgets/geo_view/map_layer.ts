@@ -30,11 +30,6 @@ export const MAP_LAYERS: Record<string, VectorLayer | RasterLayer> = {
         type: "vector",
         style: async () => (await import("./styles/eclipse/en.json")).default
     },
-    "versatiles-empty": {
-        name: "Versatiles Empty (vector)",
-        type: "vector",
-        style: async () => (await import("./styles/empty/style.json")).default
-    },
     "versatiles-graybeard": {
         name: "Versatiles Graybeard (vector)",
         type: "vector",
