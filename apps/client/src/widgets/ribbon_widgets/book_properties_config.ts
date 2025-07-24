@@ -31,6 +31,16 @@ interface NumberProperty {
     min?: number;
 }
 
+interface ComboBoxItem {
+    value: string;
+    label: string;
+}
+
+interface ComboBoxGroup {
+    name: string;
+    items: ComboBoxItem[];
+}
+
 interface ComboBoxProperty {
     type: "combobox",
     label: string;
@@ -39,7 +49,7 @@ interface ComboBoxProperty {
      * The default value is used when the label is not set.
      */
     defaultValue?: string;
-    options: { value: string; label: string }[];
+    options: (ComboBoxItem | ComboBoxGroup)[];
 }
 
 export type BookProperty = CheckBoxProperty | ButtonProperty | NumberProperty | ComboBoxProperty;
@@ -108,10 +118,26 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
                 type: "combobox",
                 bindToLabel: "mapStyle",
                 defaultValue: DEFAULT_MAP_LAYER_NAME,
-                options: Object.entries(MAP_LAYERS).map(([id, layer]) => ({
-                    value: id,
-                    label: layer.name
-                }))
+                options: [
+                    {
+                        name: t("book_properties_config.raster"),
+                        items: Object.entries(MAP_LAYERS)
+                            .filter(([_, layer]) => layer.type === "raster")
+                            .map(([id, layer]) => ({
+                                value: id,
+                                label: layer.name
+                            }))
+                    },
+                    {
+                        name: t("book_properties_config.vector"),
+                        items: Object.entries(MAP_LAYERS)
+                            .filter(([_, layer]) => layer.type === "vector")
+                            .map(([id, layer]) => ({
+                                value: id,
+                                label: layer.name
+                            }))
+                    }
+                ]
             }
         ]
     },

@@ -1967,7 +1967,9 @@
     "hide-weekends": "Hide weekends",
     "display-week-numbers": "Display week numbers",
     "map-style": "Map style:",
-    "max-nesting-depth": "Max nesting depth:"
+    "max-nesting-depth": "Max nesting depth:",
+    "raster": "Raster",
+    "vector": "Vector"
   },
   "table_context_menu": {
     "delete_row": "Delete row"

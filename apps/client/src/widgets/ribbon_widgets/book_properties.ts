@@ -59,7 +59,9 @@ const TPL = /*html*/`
         <span style="white-space: nowrap">${t("book_properties.view_type")}:&nbsp; &nbsp;</span>
 
         <select class="view-type-select form-select form-select-sm">
-            ${Object.entries(VIEW_TYPE_MAPPINGS).map(([type, label]) => `
+            ${Object.entries(VIEW_TYPE_MAPPINGS)
+                .filter(([type]) => type !== "raster")
+                .map(([type, label]) => `
                 <option value="${type}">${label}</option>
             `).join("")}
         </select>
@@ -215,16 +217,17 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
                 const $select = $("<select>", {
                     class: "form-select form-select-sm"
                 });
-                const actualValue = note.getLabelValue(property.bindToLabel) ?? property.defaultValue;
+                const actualValue = note.getLabelValue(property.bindToLabel) ?? property.defaultValue ?? "";
                 for (const option of property.options) {
-                    const $option = $("<option>", {
-                        value: option.value,
-                        text: option.label
-                    });
-                    if (actualValue === option.value) {
-                        $option.prop("selected", true);
+                    if ("items" in option) {
+                        const $optGroup = $("<optgroup>", { label: option.name });
+                        for (const item of option.items) {
+                            buildComboBoxItem(item, actualValue).appendTo($optGroup);
+                        }
+                        $optGroup.appendTo($select);
+                    } else {
+                        buildComboBoxItem(option, actualValue).appendTo($select);
                     }
-                    $select.append($option);
                 }
                 $select.on("change", () => {
                     const value = $select.val();
@@ -245,4 +248,15 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
     }
 
 
+}
+
+function buildComboBoxItem({ value, label }: { value: string, label: string }, actualValue: string) {
+    const $option = $("<option>", {
+        value,
+        text: label
+    });
+    if (actualValue === value) {
+        $option.prop("selected", true);
+    }
+    return $option;
 }
