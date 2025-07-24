@@ -1969,7 +1969,8 @@
     "map-style": "Map style:",
     "max-nesting-depth": "Max nesting depth:",
     "raster": "Raster",
-    "vector": "Vector"
+    "vector_light": "Vector (Light)",
+    "vector_dark": "Vector (Dark)"
   },
   "table_context_menu": {
     "delete_row": "Delete row"

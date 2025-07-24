@@ -1,14 +1,14 @@
-interface Layer {
+export interface MapLayer {
     name: string;
     isDarkTheme?: boolean;
 }
 
-interface VectorLayer extends Layer {
+interface VectorLayer extends MapLayer {
     type: "vector";
     style: string | (() => Promise<{}>)
 }
 
-interface RasterLayer extends Layer {
+interface RasterLayer extends MapLayer {
     type: "raster";
     url: string;
     attribution: string;

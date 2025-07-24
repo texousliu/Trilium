@@ -3,7 +3,7 @@ import FNote from "../../entities/fnote";
 import attributes from "../../services/attributes";
 import { ViewTypeOptions } from "../../services/note_list_renderer"
 import NoteContextAwareWidget from "../note_context_aware_widget";
-import { DEFAULT_MAP_LAYER_NAME, MAP_LAYERS } from "../view_widgets/geo_view/map_layer";
+import { DEFAULT_MAP_LAYER_NAME, MAP_LAYERS, type MapLayer } from "../view_widgets/geo_view/map_layer";
 
 interface BookConfig {
     properties: BookProperty[];
@@ -123,19 +123,19 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
                         name: t("book_properties_config.raster"),
                         items: Object.entries(MAP_LAYERS)
                             .filter(([_, layer]) => layer.type === "raster")
-                            .map(([id, layer]) => ({
-                                value: id,
-                                label: layer.name
-                            }))
+                            .map(buildMapLayer)
                     },
                     {
-                        name: t("book_properties_config.vector"),
+                        name: t("book_properties_config.vector_light"),
                         items: Object.entries(MAP_LAYERS)
-                            .filter(([_, layer]) => layer.type === "vector")
-                            .map(([id, layer]) => ({
-                                value: id,
-                                label: layer.name
-                            }))
+                            .filter(([_, layer]) => layer.type === "vector" && !layer.isDarkTheme)
+                            .map(buildMapLayer)
+                    },
+                    {
+                        name: t("book_properties_config.vector_dark"),
+                        items: Object.entries(MAP_LAYERS)
+                            .filter(([_, layer]) => layer.type === "vector" && layer.isDarkTheme)
+                            .map(buildMapLayer)
                     }
                 ]
             }
@@ -155,3 +155,10 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
         properties: []
     }
 };
+
+function buildMapLayer([ id, layer ]: [ string, MapLayer ]): ComboBoxItem {
+    return {
+        value: id,
+        label: layer.name
+    };
+}
