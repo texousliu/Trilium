@@ -99,7 +99,7 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
     geoMap: {
         properties: [
             {
-                label: "Map style:",
+                label: t("book_properties_config.map-style"),
                 type: "combobox",
                 bindToLabel: "mapStyle",
                 options: [
@@ -112,7 +112,7 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
     table: {
         properties: [
             {
-                label: "Max nesting depth:",
+                label: t("book_properties_config.max-nesting-depth"),
                 type: "number",
                 bindToLabel: "maxNestingDepth",
                 width: 65
