@@ -1970,7 +1970,8 @@
     "max-nesting-depth": "Max nesting depth:",
     "raster": "Raster",
     "vector_light": "Vector (Light)",
-    "vector_dark": "Vector (Dark)"
+    "vector_dark": "Vector (Dark)",
+    "show-scale": "Show scale"
   },
   "table_context_menu": {
     "delete_row": "Delete row"

@@ -164,6 +164,10 @@ export default class GeoView extends ViewMode<MapData> {
             });
         }
 
+        if (this.parentNote.hasLabel("map:scale")) {
+            L.control.scale().addTo(map);
+        }
+
         this.$container.toggleClass("dark", !!layerData.isDarkTheme);
 
         layer.addTo(map);
@@ -291,7 +295,7 @@ export default class GeoView extends ViewMode<MapData> {
         }
 
         // Full reload if map layer is changed.
-        if (loadResults.getAttributeRows().some(attr => attr.name === "mapStyle" && attributes.isAffecting(attr, this.parentNote))) {
+        if (loadResults.getAttributeRows().some(attr => ((attr.name === "mapStyle") || (attr.name === "map:scale") && attributes.isAffecting(attr, this.parentNote)))) {
             return true;
         }
     }

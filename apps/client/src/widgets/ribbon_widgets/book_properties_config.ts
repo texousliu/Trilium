@@ -138,6 +138,11 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
                             .map(buildMapLayer)
                     }
                 ]
+            },
+            {
+                label: t("book_properties_config.show-scale"),
+                type: "checkbox",
+                bindToLabel: "map:scale"
             }
         ]
     },
