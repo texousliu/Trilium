@@ -4,6 +4,7 @@ import appContext from "../../../components/app_context";
 import FNote from "../../../entities/fnote";
 import ViewModeStorage from "../view_mode_storage";
 import { BoardData } from "./config";
+import { t } from "../../../services/i18n.js";
 
 export interface BoardState {
     columns: { [key: string]: { note: any; branch: any }[] };
@@ -344,7 +345,7 @@ export class DifferentialBoardRenderer {
         const $newItemEl = $("<div>")
             .addClass("board-new-item")
             .attr("data-column", column)
-            .html('<span class="icon bx bx-plus"></span>New item');
+            .html(`<span class="icon bx bx-plus"></span> ${t("board_view.new-item")}`);
 
         $newItemEl.on("click", () => this.onCreateNewItem(column));
         $columnEl.append($newItemEl);
@@ -382,7 +383,7 @@ export class DifferentialBoardRenderer {
         if (this.$container.find('.board-add-column').length === 0) {
             const $addColumnEl = $("<div>")
                 .addClass("board-add-column")
-                .html('<span class="icon bx bx-plus"></span>Add Column');
+                .html(`<span class="icon bx bx-plus"></span> ${t("board_view.add-column")}`);
 
             this.$container.append($addColumnEl);
         }
