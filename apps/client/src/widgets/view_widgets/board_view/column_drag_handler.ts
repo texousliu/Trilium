@@ -24,7 +24,12 @@ export class ColumnDragHandler implements BaseDragHandler {
         // Delay drag start to allow click detection
         let dragStartTimer: number | null = null;
 
-        $titleEl.on("mousedown", () => {
+        $titleEl.on("mousedown", (e) => {
+            // Don't interfere with editing mode or input field interactions
+            if ($titleEl.hasClass('editing') || $(e.target).is('input')) {
+                return;
+            }
+            
             // Clear any existing timer
             if (dragStartTimer) {
                 clearTimeout(dragStartTimer);
@@ -38,7 +43,12 @@ export class ColumnDragHandler implements BaseDragHandler {
             }, 150);
         });
 
-        $titleEl.on("mouseup mouseleave", () => {
+        $titleEl.on("mouseup mouseleave", (e) => {
+            // Don't interfere with editing mode
+            if ($titleEl.hasClass('editing') || $(e.target).is('input')) {
+                return;
+            }
+            
             // Cancel drag start timer on mouse up or leave
             if (dragStartTimer) {
                 clearTimeout(dragStartTimer);

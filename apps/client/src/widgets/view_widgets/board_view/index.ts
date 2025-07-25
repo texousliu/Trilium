@@ -363,6 +363,12 @@ export default class BoardView extends ViewMode<BoardData> {
         // Handle column title editing with click detection that works with dragging
         this.$container.on('mousedown', 'h3[data-column-value]', (e) => {
             const $titleEl = $(e.currentTarget);
+            
+            // Don't interfere with editing mode
+            if ($titleEl.hasClass('editing') || $(e.target).is('input')) {
+                return;
+            }
+            
             const startTime = Date.now();
             let hasMoved = false;
             const startX = e.clientX;
@@ -419,11 +425,19 @@ export default class BoardView extends ViewMode<BoardData> {
         const $titleSpan = $titleEl.find("span").first(); // Get the text span
         const currentTitle = $titleSpan.text();
         $titleEl.addClass("editing");
+        
+        // Disable dragging while editing
+        $titleEl.attr("draggable", "false");
 
         const $input = $("<input>")
             .attr("type", "text")
             .val(currentTitle)
             .attr("placeholder", "Column title");
+
+        // Prevent events from bubbling to parent drag handlers
+        $input.on('mousedown mouseup click', (e) => {
+            e.stopPropagation();
+        });
 
         $titleEl.empty().append($input);
         $input.focus().select();
@@ -434,6 +448,9 @@ export default class BoardView extends ViewMode<BoardData> {
             }
 
             $titleEl.removeClass("editing");
+            
+            // Re-enable dragging after editing
+            $titleEl.attr("draggable", "true");
 
             let finalTitle = currentTitle;
             if (save) {
