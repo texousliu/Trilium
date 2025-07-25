@@ -254,12 +254,6 @@ const TPL = /*html*/`
             background-color: var(--hover-item-background-color);
         }
 
-        .board-add-column.editing {
-            border-style: solid;
-            border-color: var(--main-text-color);
-            background-color: var(--main-background-color);
-        }
-
         .board-add-column .icon {
             margin-right: 0.5em;
             font-size: 1.2em;
