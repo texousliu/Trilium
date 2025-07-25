@@ -242,10 +242,10 @@ export class DifferentialBoardRenderer {
                 const currentTitle = $existingCard.text().trim();
                 const currentIconClass = $existingCard.attr('data-icon-class');
                 const currentColorClass = $existingCard.attr('data-color-class') || '';
-                
+
                 const newIconClass = item.note.getIcon();
                 const newColorClass = item.note.getColorClass() || '';
-                
+
                 let hasChanges = false;
 
                 // Update title if changed
@@ -288,8 +288,8 @@ export class DifferentialBoardRenderer {
                 // Ensure card is in correct position
                 this.ensureCardPosition($existingCard, i, $cardContainer);
             } else {
-                // Create new card (pass isNewCard flag)
-                const $newCard = this.createCard(item.note, item.branch, column, isNewCard);
+                // Create new card
+                const $newCard = this.createCard(item.note, item.branch, column);
                 $newCard.addClass('fade-in').css('opacity', '0');
 
                 // Insert at correct position
@@ -364,7 +364,7 @@ export class DifferentialBoardRenderer {
         // Add cards
         for (const item of columnItems) {
             if (item.note) {
-                const $noteEl = this.createCard(item.note, item.branch, column, false); // false = existing card
+                const $noteEl = this.createCard(item.note, item.branch, column);
                 $columnEl.append($noteEl);
             }
         }
@@ -381,13 +381,13 @@ export class DifferentialBoardRenderer {
         return $columnEl;
     }
 
-    private createCard(note: any, branch: any, column: string, isNewCard = false): JQuery<HTMLElement> {
+    private createCard(note: any, branch: any, column: string): JQuery<HTMLElement> {
         const $iconEl = $("<span>")
             .addClass("icon")
             .addClass(note.getIcon());
 
         const colorClass = note.getColorClass() || '';
-        
+
         const $noteEl = $("<div>")
             .addClass("board-note")
             .attr("data-note-id", note.noteId)
@@ -403,11 +403,7 @@ export class DifferentialBoardRenderer {
         }
 
         $noteEl.prepend($iconEl);
-
-        // Only add quick edit click handler for existing cards (not new ones)
-        if (!isNewCard) {
-            $noteEl.on("click", () => appContext.triggerCommand("openInPopup", { noteIdOrPath: note.noteId }));
-        }
+        $noteEl.on("click", () => appContext.triggerCommand("openInPopup", { noteIdOrPath: note.noteId }));
 
         // Setup drag functionality
         this.dragHandler.setupNoteDrag($noteEl, note, branch);
