@@ -348,15 +348,39 @@ export default class BoardView extends ViewMode<BoardData> {
     }
 
     private setupBoardInteractions() {
-        // Handle column title editing - double-click on h3 to edit
-        this.$container.on('dblclick', 'h3[data-column-value]', (e) => {
-            e.stopPropagation();
+        // Handle column title editing with click detection that works with dragging
+        this.$container.on('mousedown', 'h3[data-column-value]', (e) => {
             const $titleEl = $(e.currentTarget);
-            const columnValue = $titleEl.attr('data-column-value');
-            if (columnValue) {
-                const columnItems = this.api?.getColumn(columnValue) || [];
-                this.startEditingColumnTitle($titleEl, columnValue, columnItems);
-            }
+            const startTime = Date.now();
+            let hasMoved = false;
+            const startX = e.clientX;
+            const startY = e.clientY;
+
+            const handleMouseMove = (moveEvent: JQuery.MouseMoveEvent) => {
+                const deltaX = Math.abs(moveEvent.clientX - startX);
+                const deltaY = Math.abs(moveEvent.clientY - startY);
+                if (deltaX > 5 || deltaY > 5) {
+                    hasMoved = true;
+                }
+            };
+
+            const handleMouseUp = (upEvent: JQuery.MouseUpEvent) => {
+                const duration = Date.now() - startTime;
+                $(document).off('mousemove', handleMouseMove);
+                $(document).off('mouseup', handleMouseUp);
+
+                // If it was a quick click without much movement, treat as edit request
+                if (duration < 500 && !hasMoved && upEvent.button === 0) {
+                    const columnValue = $titleEl.attr('data-column-value');
+                    if (columnValue) {
+                        const columnItems = this.api?.getColumn(columnValue) || [];
+                        this.startEditingColumnTitle($titleEl, columnValue, columnItems);
+                    }
+                }
+            };
+
+            $(document).on('mousemove', handleMouseMove);
+            $(document).on('mouseup', handleMouseUp);
         });
 
         // Handle add column button
@@ -370,7 +394,7 @@ export default class BoardView extends ViewMode<BoardData> {
         const $titleText = $("<span>").text(title);
         const $editIcon = $("<span>")
             .addClass("edit-icon icon bx bx-edit-alt")
-            .attr("title", "Double-click to edit column title");
+            .attr("title", "Click to edit column title");
 
         return { $titleText, $editIcon };
     }

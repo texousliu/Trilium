@@ -321,7 +321,7 @@ export class DifferentialBoardRenderer {
 
         // Setup drop zones for both notes and columns
         this.dragHandler.setupNoteDropZone($columnEl, column);
-        this.dragHandler.setupColumnDropZone($columnEl, column);
+        this.dragHandler.setupColumnDropZone($columnEl);
 
         // Add cards
         for (const item of columnItems) {

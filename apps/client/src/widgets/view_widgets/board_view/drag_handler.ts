@@ -42,8 +42,8 @@ export class BoardDragHandler {
         this.columnDragHandler.setupColumnDrag($columnEl, columnValue);
     }
 
-    setupColumnDropZone($columnEl: JQuery<HTMLElement>, columnValue: string) {
-        this.columnDragHandler.setupColumnDropZone($columnEl, columnValue);
+    setupColumnDropZone($columnEl: JQuery<HTMLElement>) {
+        this.columnDragHandler.setupColumnDropZone($columnEl);
     }
 
     // Common methods

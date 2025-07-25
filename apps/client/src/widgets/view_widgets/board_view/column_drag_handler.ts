@@ -24,6 +24,31 @@ export class ColumnDragHandler implements BaseDragHandler {
         
         $titleEl.attr("draggable", "true");
 
+        // Delay drag start to allow click detection
+        let dragStartTimer: number | null = null;
+
+        $titleEl.on("mousedown", () => {
+            // Clear any existing timer
+            if (dragStartTimer) {
+                clearTimeout(dragStartTimer);
+                dragStartTimer = null;
+            }
+
+            // Set a short delay before enabling dragging
+            dragStartTimer = window.setTimeout(() => {
+                $titleEl.attr("draggable", "true");
+                dragStartTimer = null;
+            }, 150);
+        });
+
+        $titleEl.on("mouseup mouseleave", () => {
+            // Cancel drag start timer on mouse up or leave
+            if (dragStartTimer) {
+                clearTimeout(dragStartTimer);
+                dragStartTimer = null;
+            }
+        });
+
         $titleEl.on("dragstart", (e) => {
             // Only start dragging if the target is not an input (for inline editing)
             if ($(e.target).is('input') || $titleEl.hasClass('editing')) {
@@ -54,10 +79,13 @@ export class ColumnDragHandler implements BaseDragHandler {
             this.context.draggedColumnElement = null;
             this.cleanupColumnDropIndicators();
             this.cleanupGlobalColumnDragTracking();
+            
+            // Re-enable draggable
+            $titleEl.attr("draggable", "true");
         });
     }
 
-    setupColumnDropZone($columnEl: JQuery<HTMLElement>, _columnValue: string) {
+    setupColumnDropZone($columnEl: JQuery<HTMLElement>) {
         $columnEl.on("dragover", (e) => {
             // Only handle column drops when a column is being dragged
             if (this.context.draggedColumn && !this.context.draggedNote) {
