@@ -53,10 +53,17 @@ const TPL = /*html*/`
         word-break:keep-all;
         white-space: nowrap;
     }
+
     .promoted-attribute-cell input[type="checkbox"] {
         width: 22px !important;
         flex-grow: 0;
         width: unset;
+    }
+
+    /* Restore default apperance */
+    .promoted-attribute-cell input[type="number"],
+    .promoted-attribute-cell input[type="checkbox"] {
+        appearance: auto;
     }
 
     </style>
