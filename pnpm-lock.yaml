@@ -419,7 +419,7 @@ importers:
     devDependencies:
       dotenv:
         specifier: 17.2.0
-        version: 17.2.0
+        version: 17.2.1
       electron:
         specifier: 37.2.4
         version: 37.2.4
@@ -794,7 +794,7 @@ importers:
     devDependencies:
       dotenv:
         specifier: 17.2.0
-        version: 17.2.0
+        version: 17.2.1
 
   apps/website:
     dependencies:
@@ -1373,7 +1373,7 @@ importers:
         version: 8.38.0(eslint@9.32.0(jiti@2.5.0))(typescript@5.8.3)
       dotenv:
         specifier: ^17.0.0
-        version: 17.2.0
+        version: 17.2.1
       esbuild:
         specifier: ^0.25.0
         version: 0.25.8
@@ -8147,8 +8147,8 @@ packages:
     resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
     engines: {node: '>=12'}
 
-  dotenv@17.2.0:
-    resolution: {integrity: sha512-Q4sgBT60gzd0BB0lSyYD3xM4YxrXA9y4uBDof1JNYGzOXrQdQ6yX+7XIAqoFOGQFOTK1D3Hts5OllpxMDZFONQ==}
+  dotenv@17.2.1:
+    resolution: {integrity: sha512-kQhDYKZecqnM0fCnzI5eIv5L4cAe/iRI+HqMbO/hbRdTAeXDG+M9FjipUxNfbARuEg4iHIbhnhs78BCHNbSxEQ==}
     engines: {node: '>=12'}
 
   dotignore@0.1.2:
@@ -24637,7 +24637,7 @@ snapshots:
 
   dotenv@16.4.7: {}
 
-  dotenv@17.2.0: {}
+  dotenv@17.2.1: {}
 
   dotignore@0.1.2:
     dependencies:
