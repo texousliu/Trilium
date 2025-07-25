@@ -21,6 +21,7 @@ export class DifferentialBoardRenderer {
     private pendingUpdate = false;
     private parentNote: FNote;
     private viewStorage: ViewModeStorage<BoardData>;
+    private onRefreshApi: () => Promise<void>;
 
     constructor(
         $container: JQuery<HTMLElement>,
@@ -28,7 +29,8 @@ export class DifferentialBoardRenderer {
         dragHandler: BoardDragHandler,
         onCreateNewItem: (column: string) => void,
         parentNote: FNote,
-        viewStorage: ViewModeStorage<BoardData>
+        viewStorage: ViewModeStorage<BoardData>,
+        onRefreshApi: () => Promise<void>
     ) {
         this.$container = $container;
         this.api = api;
@@ -36,13 +38,13 @@ export class DifferentialBoardRenderer {
         this.onCreateNewItem = onCreateNewItem;
         this.parentNote = parentNote;
         this.viewStorage = viewStorage;
+        this.onRefreshApi = onRefreshApi;
     }
 
     async renderBoard(refreshApi = false): Promise<void> {
         // Refresh API data if requested
         if (refreshApi) {
-            this.api = await BoardApi.build(this.parentNote, this.viewStorage);
-            this.dragHandler.updateApi(this.api);
+            await this.onRefreshApi();
         }
 
         // Debounce rapid updates

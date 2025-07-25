@@ -133,6 +133,29 @@ export default class BoardApi {
         await this.viewStorage.store(this.persistedData);
     }
 
+    async refresh(parentNote: FNote) {
+        // Refresh the API data by re-fetching from the parent note
+        const statusAttribute = parentNote.getLabelValue("board:groupBy") ?? "status";
+        this._statusAttribute = statusAttribute;
+
+        let persistedData = await this.viewStorage.restore() ?? {};
+        const { byColumn, newPersistedData } = await getBoardData(parentNote, statusAttribute, persistedData);
+        
+        // Update internal state
+        this.byColumn = byColumn;
+        
+        if (newPersistedData) {
+            this.persistedData = newPersistedData;
+            this.viewStorage.store(this.persistedData);
+        }
+
+        // Use the order from persistedData.columns, then add any new columns found
+        const orderedColumns = this.persistedData.columns?.map(col => col.value) || [];
+        const allColumns = Array.from(byColumn.keys());
+        const newColumns = allColumns.filter(col => !orderedColumns.includes(col));
+        this._columns = [...orderedColumns, ...newColumns];
+    }
+
     static async build(parentNote: FNote, viewStorage: ViewModeStorage<BoardData>) {
         const statusAttribute = parentNote.getLabelValue("board:groupBy") ?? "status";
 

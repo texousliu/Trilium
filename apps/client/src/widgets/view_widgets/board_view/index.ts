@@ -337,7 +337,8 @@ export default class BoardView extends ViewMode<BoardData> {
             this.dragHandler,
             (column: string) => this.createNewItem(column),
             this.parentNote,
-            this.viewStorage
+            this.viewStorage,
+            () => this.refreshApi()
         );
 
         setupContextMenu({
@@ -348,6 +349,14 @@ export default class BoardView extends ViewMode<BoardData> {
 
         // Setup column title editing and add column functionality
         this.setupBoardInteractions();
+    }
+
+    private async refreshApi(): Promise<void> {
+        if (!this.api) {
+            throw new Error("API not initialized");
+        }
+        
+        await this.api.refresh(this.parentNote);
     }
 
     private setupBoardInteractions() {

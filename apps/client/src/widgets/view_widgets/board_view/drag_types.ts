@@ -8,5 +8,4 @@ export interface DragContext {
 
 export interface BaseDragHandler {
     cleanup(): void;
-    updateApi(api: any): void;
 }

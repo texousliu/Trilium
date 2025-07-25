@@ -107,10 +107,6 @@ export class ColumnDragHandler implements BaseDragHandler {
         });
     }
 
-    updateApi(newApi: BoardApi) {
-        this.api = newApi;
-    }
-
     cleanup() {
         this.cleanupColumnDropIndicators();
         this.context.draggedColumn = null;

@@ -35,12 +35,6 @@ export class BoardDragHandler {
         this.columnDragHandler.setupColumnDropZone($columnEl);
     }
 
-    // Common methods
-    updateApi(newApi: BoardApi) {
-        this.noteDragHandler.updateApi(newApi);
-        this.columnDragHandler.updateApi(newApi);
-    }
-
     cleanup() {
         this.noteDragHandler.cleanup();
         this.columnDragHandler.cleanup();

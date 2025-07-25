@@ -67,10 +67,6 @@ export class NoteDragHandler implements BaseDragHandler {
         });
     }
 
-    updateApi(newApi: BoardApi) {
-        this.api = newApi;
-    }
-
     cleanup() {
         this.cleanupAllDropIndicators();
         this.$container.find('.board-column').removeClass('drag-over');
