@@ -38,7 +38,7 @@ export class DifferentialBoardRenderer {
         this.viewStorage = viewStorage;
     }
 
-    async renderBoard(refreshApi: boolean = false): Promise<void> {
+    async renderBoard(refreshApi = false): Promise<void> {
         // Refresh API data if requested
         if (refreshApi) {
             this.api = await BoardApi.build(this.parentNote, this.viewStorage);
@@ -234,17 +234,55 @@ export class DifferentialBoardRenderer {
         for (let i = 0; i < newCards.length; i++) {
             const item = newCards[i];
             const noteId = item.note.noteId;
-            let $existingCard = $cardContainer.find(`[data-note-id="${noteId}"]`);
+            const $existingCard = $cardContainer.find(`[data-note-id="${noteId}"]`);
             const isNewCard = !oldCardIds.includes(noteId);
 
             if ($existingCard.length) {
-                // Update existing card if title changed
+                // Check for changes in title, icon, or color
                 const currentTitle = $existingCard.text().trim();
+                const currentIconClass = $existingCard.attr('data-icon-class');
+                const currentColorClass = $existingCard.attr('data-color-class') || '';
+                
+                const newIconClass = item.note.getIcon();
+                const newColorClass = item.note.getColorClass() || '';
+                
+                let hasChanges = false;
+
+                // Update title if changed
                 if (currentTitle !== item.note.title) {
                     $existingCard.contents().filter(function() {
                         return this.nodeType === 3; // Text nodes
                     }).remove();
                     $existingCard.append(document.createTextNode(item.note.title));
+                    hasChanges = true;
+                }
+
+                // Update icon if changed
+                if (currentIconClass !== newIconClass) {
+                    const $icon = $existingCard.find('.icon');
+                    $icon.removeClass().addClass('icon').addClass(newIconClass);
+                    $existingCard.attr('data-icon-class', newIconClass);
+                    hasChanges = true;
+                }
+
+                // Update color if changed
+                if (currentColorClass !== newColorClass) {
+                    // Remove old color class if it exists
+                    if (currentColorClass) {
+                        $existingCard.removeClass(currentColorClass);
+                    }
+                    // Add new color class if it exists
+                    if (newColorClass) {
+                        $existingCard.addClass(newColorClass);
+                    }
+                    $existingCard.attr('data-color-class', newColorClass);
+                    hasChanges = true;
+                }
+
+                // Add subtle animation if there were changes
+                if (hasChanges) {
+                    $existingCard.addClass('card-updated');
+                    setTimeout(() => $existingCard.removeClass('card-updated'), 300);
                 }
 
                 // Ensure card is in correct position
@@ -343,18 +381,26 @@ export class DifferentialBoardRenderer {
         return $columnEl;
     }
 
-    private createCard(note: any, branch: any, column: string, isNewCard: boolean = false): JQuery<HTMLElement> {
+    private createCard(note: any, branch: any, column: string, isNewCard = false): JQuery<HTMLElement> {
         const $iconEl = $("<span>")
             .addClass("icon")
             .addClass(note.getIcon());
 
+        const colorClass = note.getColorClass() || '';
+        
         const $noteEl = $("<div>")
             .addClass("board-note")
             .attr("data-note-id", note.noteId)
             .attr("data-branch-id", branch.branchId)
             .attr("data-current-column", column)
             .attr("data-icon-class", note.getIcon())
+            .attr("data-color-class", colorClass)
             .text(note.title);
+
+        // Add color class to the card if it exists
+        if (colorClass) {
+            $noteEl.addClass(colorClass);
+        }
 
         $noteEl.prepend($iconEl);
 
@@ -448,7 +494,7 @@ export class DifferentialBoardRenderer {
         $card.empty().append($editContainer);
         $input.focus().select();
 
-        const finishEdit = async (save: boolean = true) => {
+        const finishEdit = async (save = true) => {
             if (!$card.hasClass('editing')) {
                 return; // Already finished
             }

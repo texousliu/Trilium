@@ -140,6 +140,16 @@ const TPL = /*html*/`
             to { opacity: 0; transform: translateY(-10px); }
         }
 
+        .board-view-container .board-note.card-updated {
+            animation: cardUpdate 0.3s ease-in-out;
+        }
+
+        @keyframes cardUpdate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
+            100% { transform: scale(1); }
+        }
+
         .board-view-container .board-note:hover {
             transform: translateY(-2px);
             box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.35);
@@ -596,6 +606,8 @@ export default class BoardView extends ViewMode<BoardData> {
             loadResults.getNoteIds().some(noteId => this.noteIds.includes(noteId)) ||
             // React to changes in branches for subchildren (e.g., moved, added, or removed notes)
             loadResults.getBranchRows().some(branch => this.noteIds.includes(branch.noteId!)) ||
+            // React to changes in note icon or color.
+            loadResults.getAttributeRows().some(attr => [ "iconClass", "color" ].includes(attr.name ?? "") && this.noteIds.includes(attr.noteId ?? "")) ||
             // React to attachment change
             loadResults.getAttachmentRows().some(att => att.ownerId === this.parentNote.noteId && att.title === "board.json") ||
             // React to changes in "groupBy"
