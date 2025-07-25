@@ -5,23 +5,20 @@ export class ColumnDragHandler implements BaseDragHandler {
     private $container: JQuery<HTMLElement>;
     private api: BoardApi;
     private context: DragContext;
-    private onBoardRefresh: () => Promise<void>;
 
     constructor(
         $container: JQuery<HTMLElement>,
         api: BoardApi,
         context: DragContext,
-        onBoardRefresh: () => Promise<void>
     ) {
         this.$container = $container;
         this.api = api;
         this.context = context;
-        this.onBoardRefresh = onBoardRefresh;
     }
 
     setupColumnDrag($columnEl: JQuery<HTMLElement>, columnValue: string) {
         const $titleEl = $columnEl.find('h3[data-column-value]');
-        
+
         $titleEl.attr("draggable", "true");
 
         // Delay drag start to allow click detection
@@ -79,7 +76,7 @@ export class ColumnDragHandler implements BaseDragHandler {
             this.context.draggedColumnElement = null;
             this.cleanupColumnDropIndicators();
             this.cleanupGlobalColumnDragTracking();
-            
+
             // Re-enable draggable
             $titleEl.attr("draggable", "true");
         });
@@ -160,7 +157,7 @@ export class ColumnDragHandler implements BaseDragHandler {
         if (this.context.draggedColumnElement) {
             $allColumns = $allColumns.not(this.context.draggedColumnElement);
         }
-        
+
         let $targetColumn: JQuery<HTMLElement> = $();
         let insertBefore = false;
 
@@ -197,7 +194,7 @@ export class ColumnDragHandler implements BaseDragHandler {
 
         if ($targetColumn.length > 0) {
             const $dropIndicator = $("<div>").addClass("column-drop-indicator");
-            
+
             if (insertBefore) {
                 $targetColumn.before($dropIndicator);
             } else {
@@ -210,7 +207,7 @@ export class ColumnDragHandler implements BaseDragHandler {
 
     private async handleColumnDrop() {
         console.log("handleColumnDrop called for:", this.context.draggedColumn);
-        
+
         if (!this.context.draggedColumn || !this.context.draggedColumnElement) {
             console.log("No dragged column or element found");
             return;
@@ -220,22 +217,22 @@ export class ColumnDragHandler implements BaseDragHandler {
             // Find the drop indicator to determine insert position
             const $dropIndicator = this.$container.find(".column-drop-indicator.show");
             console.log("Drop indicator found:", $dropIndicator.length > 0);
-            
+
             if ($dropIndicator.length > 0) {
                 // Get current column order from the API (source of truth)
                 const currentOrder = [...this.api.columns];
 
                 let newOrder = [...currentOrder];
-                
+
                 // Remove dragged column from current position
                 newOrder = newOrder.filter(col => col !== this.context.draggedColumn);
 
                 // Determine insertion position based on drop indicator position
                 const $nextColumn = $dropIndicator.next('.board-column');
                 const $prevColumn = $dropIndicator.prev('.board-column');
-                
+
                 let insertIndex = -1;
-                
+
                 if ($nextColumn.length > 0) {
                     // Insert before the next column
                     const nextColumnValue = $nextColumn.attr('data-column');
@@ -263,9 +260,6 @@ export class ColumnDragHandler implements BaseDragHandler {
 
                 // Update column order in API
                 await this.api.reorderColumns(newOrder);
-
-                // Refresh the board to reflect the changes
-                await this.onBoardRefresh();
             } else {
                 console.warn("No drop indicator found for column drop");
             }

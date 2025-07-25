@@ -7,8 +7,7 @@ export class BoardDragHandler {
     private $container: JQuery<HTMLElement>;
     private api: BoardApi;
     private context: DragContext;
-    private onBoardRefresh: () => Promise<void>;
-    
+
     private noteDragHandler: NoteDragHandler;
     private columnDragHandler: ColumnDragHandler;
 
@@ -16,16 +15,14 @@ export class BoardDragHandler {
         $container: JQuery<HTMLElement>,
         api: BoardApi,
         context: DragContext,
-        onBoardRefresh: () => Promise<void>
     ) {
         this.$container = $container;
         this.api = api;
         this.context = context;
-        this.onBoardRefresh = onBoardRefresh;
 
         // Initialize specialized drag handlers
-        this.noteDragHandler = new NoteDragHandler($container, api, context, onBoardRefresh);
-        this.columnDragHandler = new ColumnDragHandler($container, api, context, onBoardRefresh);
+        this.noteDragHandler = new NoteDragHandler($container, api, context);
+        this.columnDragHandler = new ColumnDragHandler($container, api, context);
     }
 
     // Note drag methods - delegate to NoteDragHandler

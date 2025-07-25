@@ -334,8 +334,7 @@ export default class BoardView extends ViewMode<BoardData> {
         this.dragHandler = new BoardDragHandler(
             this.$container,
             this.api,
-            this.dragContext,
-            async () => { await this.renderList(); }
+            this.dragContext
         );
 
         this.renderer = new DifferentialBoardRenderer(

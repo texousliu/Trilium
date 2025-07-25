@@ -6,18 +6,15 @@ export class NoteDragHandler implements BaseDragHandler {
     private $container: JQuery<HTMLElement>;
     private api: BoardApi;
     private context: DragContext;
-    private onBoardRefresh: () => Promise<void>;
 
     constructor(
         $container: JQuery<HTMLElement>,
         api: BoardApi,
         context: DragContext,
-        onBoardRefresh: () => Promise<void>
     ) {
         this.$container = $container;
         this.api = api;
         this.context = context;
-        this.onBoardRefresh = onBoardRefresh;
     }
 
     setupNoteDrag($noteEl: JQuery<HTMLElement>, note: any, branch: any) {
@@ -308,9 +305,6 @@ export class NoteDragHandler implements BaseDragHandler {
 
                 // Update the data attributes
                 draggedNoteElement.attr("data-current-column", column);
-
-                // Refresh the board to reflect the changes
-                await this.onBoardRefresh();
             } catch (error) {
                 console.error("Failed to update note position:", error);
             } finally {
