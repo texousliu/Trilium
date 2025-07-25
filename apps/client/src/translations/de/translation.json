@@ -1403,7 +1403,7 @@
     "relation-map": "Beziehungskarte",
     "note-map": "Notizkarte",
     "render-note": "Render Notiz",
-    "book": "Buch",
+    "book": "",
     "mermaid-diagram": "Mermaid Diagram",
     "canvas": "Canvas",
     "web-view": "Webansicht",
