@@ -14,7 +14,7 @@ interface ShowNoteContextMenuArgs {
 
 export function setupContextMenu({ $container, api, boardView }: ShowNoteContextMenuArgs) {
     $container.on("contextmenu", ".board-note", showNoteContextMenu);
-    $container.on("contextmenu", ".board-column", showColumnContextMenu);
+    $container.on("contextmenu", ".board-column h3", showColumnContextMenu);
 
     function showColumnContextMenu(event: ContextMenuEvent) {
         event.preventDefault();
