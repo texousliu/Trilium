@@ -20,11 +20,17 @@ export class ColumnDragHandler implements BaseDragHandler {
     }
 
     setupColumnDrag($columnEl: JQuery<HTMLElement>, columnValue: string) {
-        const $dragHandle = $columnEl.find('.column-drag-handle');
+        const $titleEl = $columnEl.find('h3[data-column-value]');
         
-        $dragHandle.attr("draggable", "true");
+        $titleEl.attr("draggable", "true");
 
-        $dragHandle.on("dragstart", (e) => {
+        $titleEl.on("dragstart", (e) => {
+            // Only start dragging if the target is not an input (for inline editing)
+            if ($(e.target).is('input') || $titleEl.hasClass('editing')) {
+                e.preventDefault();
+                return false;
+            }
+
             this.context.draggedColumn = columnValue;
             this.context.draggedColumnElement = $columnEl;
             $columnEl.addClass("column-dragging");
@@ -42,7 +48,7 @@ export class ColumnDragHandler implements BaseDragHandler {
             this.setupGlobalColumnDragTracking();
         });
 
-        $dragHandle.on("dragend", () => {
+        $titleEl.on("dragend", () => {
             $columnEl.removeClass("column-dragging");
             this.context.draggedColumn = null;
             this.context.draggedColumnElement = null;
@@ -51,7 +57,7 @@ export class ColumnDragHandler implements BaseDragHandler {
         });
     }
 
-    setupColumnDropZone($columnEl: JQuery<HTMLElement>, columnValue: string) {
+    setupColumnDropZone($columnEl: JQuery<HTMLElement>, _columnValue: string) {
         $columnEl.on("dragover", (e) => {
             // Only handle column drops when a column is being dragged
             if (this.context.draggedColumn && !this.context.draggedNote) {
@@ -205,11 +211,15 @@ export class ColumnDragHandler implements BaseDragHandler {
                 if ($nextColumn.length > 0) {
                     // Insert before the next column
                     const nextColumnValue = $nextColumn.attr('data-column');
-                    insertIndex = newOrder.indexOf(nextColumnValue!);
+                    if (nextColumnValue) {
+                        insertIndex = newOrder.indexOf(nextColumnValue);
+                    }
                 } else if ($prevColumn.length > 0) {
                     // Insert after the previous column
                     const prevColumnValue = $prevColumn.attr('data-column');
-                    insertIndex = newOrder.indexOf(prevColumnValue!) + 1;
+                    if (prevColumnValue) {
+                        insertIndex = newOrder.indexOf(prevColumnValue) + 1;
+                    }
                 } else {
                     // Insert at the beginning
                     insertIndex = 0;

@@ -48,7 +48,7 @@ const TPL = /*html*/`
             margin-bottom: 0.75em;
             padding: 0.5em 0.5em 0.5em 0.5em;
             border-bottom: 1px solid var(--main-border-color);
-            cursor: pointer;
+            cursor: grab;
             position: relative;
             transition: background-color 0.2s ease, border-radius 0.2s ease;
             display: flex;
@@ -56,6 +56,14 @@ const TPL = /*html*/`
             justify-content: space-between;
             box-sizing: border-box;
             background-color: transparent;
+        }
+
+        .board-view-container .board-column h3:active {
+            cursor: grabbing;
+        }
+
+        .board-view-container .board-column h3.editing {
+            cursor: default;
         }
 
         .board-view-container .board-column h3:hover {
@@ -67,36 +75,6 @@ const TPL = /*html*/`
             background-color: var(--main-background-color);
             border: 1px solid var(--main-text-color);
             border-radius: 4px;
-        }
-
-        .board-view-container .board-column h3 .column-title-content {
-            display: flex;
-            align-items: center;
-            flex: 1;
-            min-width: 0; /* Allow text to truncate */
-        }
-
-        .board-view-container .board-column h3 .column-drag-handle {
-            margin-right: 0.5em;
-            color: var(--muted-text-color);
-            cursor: grab;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            padding: 0.25em;
-            border-radius: 3px;
-        }
-
-        .board-view-container .board-column h3:hover .column-drag-handle {
-            opacity: 1;
-        }
-
-        .board-view-container .board-column h3 .column-drag-handle:hover {
-            background-color: var(--main-background-color);
-            color: var(--main-text-color);
-        }
-
-        .board-view-container .board-column h3 .column-drag-handle:active {
-            cursor: grabbing;
         }
 
         .board-view-container .board-column.column-dragging {
@@ -370,32 +348,14 @@ export default class BoardView extends ViewMode<BoardData> {
     }
 
     private setupBoardInteractions() {
-        // Handle column title editing - listen for clicks on the title content, not the drag handle
-        this.$container.on('click', 'h3[data-column-value] .column-title-content span:not(.column-drag-handle)', (e) => {
+        // Handle column title editing - double-click on h3 to edit
+        this.$container.on('dblclick', 'h3[data-column-value]', (e) => {
             e.stopPropagation();
-            const $titleEl = $(e.currentTarget).closest('h3[data-column-value]');
+            const $titleEl = $(e.currentTarget);
             const columnValue = $titleEl.attr('data-column-value');
             if (columnValue) {
                 const columnItems = this.api?.getColumn(columnValue) || [];
                 this.startEditingColumnTitle($titleEl, columnValue, columnItems);
-            }
-        });
-
-        // Also handle clicks on the h3 element itself (but not on the drag handle)
-        this.$container.on('click', 'h3[data-column-value]', (e) => {
-            // Only proceed if the click wasn't on the drag handle or edit icon
-            if (!$(e.target).hasClass('column-drag-handle') &&
-                !$(e.target).hasClass('edit-icon') &&
-                !$(e.target).hasClass('bx-menu') &&
-                !$(e.target).hasClass('bx-edit-alt')) {
-
-                e.stopPropagation();
-                const $titleEl = $(e.currentTarget);
-                const columnValue = $titleEl.attr('data-column-value');
-                if (columnValue) {
-                    const columnItems = this.api?.getColumn(columnValue) || [];
-                    this.startEditingColumnTitle($titleEl, columnValue, columnItems);
-                }
             }
         });
 
@@ -407,21 +367,12 @@ export default class BoardView extends ViewMode<BoardData> {
     }
 
     private createTitleStructure(title: string): { $titleText: JQuery<HTMLElement>; $editIcon: JQuery<HTMLElement> } {
-        const $dragHandle = $("<span>")
-            .addClass("column-drag-handle icon bx bx-menu")
-            .attr("title", "Drag to reorder column");
-
         const $titleText = $("<span>").text(title);
-
-        const $titleContent = $("<div>")
-            .addClass("column-title-content")
-            .append($dragHandle, $titleText);
-
         const $editIcon = $("<span>")
             .addClass("edit-icon icon bx bx-edit-alt")
-            .attr("title", "Click to edit column title");
+            .attr("title", "Double-click to edit column title");
 
-        return { $titleText: $titleContent, $editIcon };
+        return { $titleText, $editIcon };
     }
 
     private startEditingColumnTitle($titleEl: JQuery<HTMLElement>, columnValue: string, columnItems: { branch: any; note: any; }[]) {
@@ -429,8 +380,7 @@ export default class BoardView extends ViewMode<BoardData> {
             return; // Already editing
         }
 
-        const $titleContent = $titleEl.find(".column-title-content");
-        const $titleSpan = $titleContent.find("span").last(); // Get the text span, not the drag handle
+        const $titleSpan = $titleEl.find("span").first(); // Get the text span
         const currentTitle = $titleSpan.text();
         $titleEl.addClass("editing");
 

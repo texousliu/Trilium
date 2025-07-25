@@ -293,28 +293,18 @@ export class DifferentialBoardRenderer {
             .addClass("board-column")
             .attr("data-column", column);
 
-        // Create header with drag handle
+        // Create header
         const $titleEl = $("<h3>").attr("data-column-value", column);
-
-        // Create drag handle
-        const $dragHandle = $("<span>")
-            .addClass("column-drag-handle icon bx bx-menu")
-            .attr("title", "Drag to reorder column");
 
         // Create title text
         const $titleText = $("<span>").text(column);
-
-        // Create title content container
-        const $titleContent = $("<div>")
-            .addClass("column-title-content")
-            .append($dragHandle, $titleText);
 
         // Create edit icon
         const $editIcon = $("<span>")
             .addClass("edit-icon icon bx bx-edit-alt")
             .attr("title", "Click to edit column title");
 
-        $titleEl.append($titleContent, $editIcon);
+        $titleEl.append($titleText, $editIcon);
         $columnEl.append($titleEl);
 
         // Setup column dragging
