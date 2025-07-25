@@ -24,6 +24,7 @@ const TPL = /*html*/`
             display: flex;
             gap: 1em;
             padding: 1em;
+            padding-bottom: 0;
             align-items: flex-start;
         }
 
@@ -36,6 +37,7 @@ const TPL = /*html*/`
             background-color: var(--accented-background-color);
             transition: border-color 0.2s ease;
             overflow-y: auto;
+            max-height: 100%;
         }
 
         .board-view-container .board-column.drag-over {
@@ -355,7 +357,7 @@ export default class BoardView extends ViewMode<BoardData> {
         if (!this.api) {
             throw new Error("API not initialized");
         }
-        
+
         await this.api.refresh(this.parentNote);
     }
 
@@ -363,12 +365,12 @@ export default class BoardView extends ViewMode<BoardData> {
         // Handle column title editing with click detection that works with dragging
         this.$container.on('mousedown', 'h3[data-column-value]', (e) => {
             const $titleEl = $(e.currentTarget);
-            
+
             // Don't interfere with editing mode
             if ($titleEl.hasClass('editing') || $(e.target).is('input')) {
                 return;
             }
-            
+
             const startTime = Date.now();
             let hasMoved = false;
             const startX = e.clientX;
@@ -425,7 +427,7 @@ export default class BoardView extends ViewMode<BoardData> {
         const $titleSpan = $titleEl.find("span").first(); // Get the text span
         const currentTitle = $titleSpan.text();
         $titleEl.addClass("editing");
-        
+
         // Disable dragging while editing
         $titleEl.attr("draggable", "false");
 
@@ -448,7 +450,7 @@ export default class BoardView extends ViewMode<BoardData> {
             }
 
             $titleEl.removeClass("editing");
-            
+
             // Re-enable dragging after editing
             $titleEl.attr("draggable", "true");
 
