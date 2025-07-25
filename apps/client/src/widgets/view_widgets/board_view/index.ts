@@ -1,8 +1,7 @@
 import { setupHorizontalScrollViaWheel } from "../../widget_utils";
 import ViewMode, { ViewModeArgs } from "../view_mode";
-import attributeService from "../../../services/attributes";
 import noteCreateService from "../../../services/note_create";
-import appContext, { EventData } from "../../../components/app_context";
+import { EventData } from "../../../components/app_context";
 import { BoardData } from "./config";
 import SpacedUpdate from "../../../services/spaced_update";
 import { setupContextMenu } from "./context_menu";
@@ -388,11 +387,11 @@ export default class BoardView extends ViewMode<BoardData> {
         // Also handle clicks on the h3 element itself (but not on the drag handle)
         this.$container.on('click', 'h3[data-column-value]', (e) => {
             // Only proceed if the click wasn't on the drag handle or edit icon
-            if (!$(e.target).hasClass('column-drag-handle') && 
-                !$(e.target).hasClass('edit-icon') && 
+            if (!$(e.target).hasClass('column-drag-handle') &&
+                !$(e.target).hasClass('edit-icon') &&
                 !$(e.target).hasClass('bx-menu') &&
                 !$(e.target).hasClass('bx-edit-alt')) {
-                
+
                 e.stopPropagation();
                 const $titleEl = $(e.currentTarget);
                 const columnValue = $titleEl.attr('data-column-value');
@@ -416,7 +415,7 @@ export default class BoardView extends ViewMode<BoardData> {
             .attr("title", "Drag to reorder column");
 
         const $titleText = $("<span>").text(title);
-        
+
         const $titleContent = $("<div>")
             .addClass("column-title-content")
             .append($dragHandle, $titleText);

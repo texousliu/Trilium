@@ -1,4 +1,4 @@
-import { BoardDragHandler, DragContext } from "./drag_handler";
+import { BoardDragHandler } from "./drag_handler";
 import BoardApi from "./api";
 import appContext from "../../../components/app_context";
 import FNote from "../../../entities/fnote";
@@ -135,7 +135,7 @@ export class DifferentialBoardRenderer {
     private updateColumns(oldState: BoardState, newState: BoardState): void {
         // Check if column order has changed
         const orderChanged = !this.arraysEqual(oldState.columnOrder, newState.columnOrder);
-        
+
         if (orderChanged) {
             // If order changed, we need to reorder the columns in the DOM
             this.reorderColumns(newState.columnOrder);
@@ -177,7 +177,7 @@ export class DifferentialBoardRenderer {
         // Get all existing column elements
         const $columns = this.$container.find('.board-column');
         const $addColumnButton = this.$container.find('.board-add-column');
-        
+
         // Create a map of column elements by their data-column attribute
         const columnElements = new Map<string, JQuery<HTMLElement>>();
         $columns.each((_, el) => {
@@ -190,7 +190,7 @@ export class DifferentialBoardRenderer {
 
         // Remove all columns from DOM (but keep references)
         $columns.detach();
-        
+
         // Re-insert columns in the new order
         let $insertAfter: JQuery<HTMLElement> | null = null;
         for (const columnValue of newOrder) {
@@ -205,7 +205,7 @@ export class DifferentialBoardRenderer {
                 $insertAfter = $columnEl;
             }
         }
-        
+
         // Ensure add column button is at the end
         if ($addColumnButton.length) {
             this.$container.append($addColumnButton);
@@ -294,7 +294,7 @@ export class DifferentialBoardRenderer {
 
         // Create header with drag handle
         const $titleEl = $("<h3>").attr("data-column-value", column);
-        
+
         // Create drag handle
         const $dragHandle = $("<span>")
             .addClass("column-drag-handle icon bx bx-menu")
@@ -302,7 +302,7 @@ export class DifferentialBoardRenderer {
 
         // Create title text
         const $titleText = $("<span>").text(column);
-        
+
         // Create title content container
         const $titleContent = $("<div>")
             .addClass("column-title-content")
