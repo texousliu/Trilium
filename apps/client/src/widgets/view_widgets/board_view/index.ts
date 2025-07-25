@@ -22,14 +22,14 @@ const TPL = /*html*/`
         .board-view-container {
             height: 100%;
             display: flex;
-            gap: 1.5em;
+            gap: 1em;
             padding: 1em;
+            align-items: flex-start;
         }
 
         .board-view-container .board-column {
             width: 250px;
             flex-shrink: 0;
-            min-height: 200px;
             border: 2px solid transparent;
             border-radius: 8px;
             padding: 0.5em;
