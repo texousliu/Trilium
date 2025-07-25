@@ -19,9 +19,33 @@ For a quick presentation of all the supported view types, see the child notes of
 
 To adjust the view type, see the dedicated _Collections_ tab in the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a>.
 
-## Use in saved search
+## Use cases
+
+### Creating a new collection
+
+To create a new collections, right click in the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Note%20Tree.md">Note Tree</a> and look for the _Collections_ entry and select the desired type.
+
+### Adding a description to a collection
+
+To add a text before the collection, for example to describe it:
+
+1.  Create a new collection.
+2.  In the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a>, go to _Basic Properties_ and change the note type from _Collection_ to _Text_.
+
+Now the text will be displayed above while still maintaining the collection view.
+
+### Using saved search
 
 Since collections are based on the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a> mechanism, it's possible to apply the same configuration to <a class="reference-link" href="Saved%20Search.md">Saved Search</a> to do advanced querying and presenting the result in an adequate matter such as a calendar, a table or even a map.
+
+### Creating a collection from scratch
+
+By default, collections come with a default configuration and sometimes even sample notes. To create a collection completely from scratch:
+
+1.  Create a new note of type _Text_ (or any type).
+2.  In the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a>, go to _Basic Properties_ and select _Collection_ as the note type.
+3.  Still in the ribbon, go to _Collection Properties_ and select the desired view type.
+4.  Consult the help page of the corresponding view type in order to understand how to configure them.
 
 ## Under the hood
 
