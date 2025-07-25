@@ -131,7 +131,8 @@ Limitations:
 
 ## Limitations
 
-Multi-value labels and relations are not supported. If a <a class="reference-link" href="../../Advanced%20Usage/Attributes/Promoted%20Attributes.md">Promoted Attributes</a> is defined with a _Multi value_ specificity, they will be ignored.
+*   Multi-value labels and relations are not supported. If a <a class="reference-link" href="../../Advanced%20Usage/Attributes/Promoted%20Attributes.md">Promoted Attributes</a> is defined with a _Multi value_ specificity, they will be ignored.
+*   There is no support to filter the rows by a certain criteria. Consider using the table view in search for that use case.
 
 ## Use in search
 

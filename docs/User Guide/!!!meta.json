@@ -7907,6 +7907,13 @@
                                     "value": "bx bx-book",
                                     "isInheritable": false,
                                     "position": 20
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "CtBQqbwXDx1w",
+                                    "isInheritable": false,
+                                    "position": 120
                                 }
                             ],
                             "format": "markdown",
@@ -8119,18 +8126,18 @@
                                             "position": 70
                                         },
                                         {
-                                            "type": "label",
-                                            "name": "iconClass",
-                                            "value": "bx bx-map-alt",
-                                            "isInheritable": false,
-                                            "position": 10
-                                        },
-                                        {
                                             "type": "relation",
                                             "name": "internalLink",
                                             "value": "BlN9DFI679QC",
                                             "isInheritable": false,
                                             "position": 80
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-map-alt",
+                                            "isInheritable": false,
+                                            "position": 10
                                         }
                                     ],
                                     "format": "markdown",
@@ -8497,6 +8504,50 @@
                                             "mime": "image/png",
                                             "position": 10,
                                             "dataFileName": "Table View_image.png"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "isClone": false,
+                                    "noteId": "CtBQqbwXDx1w",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "KSZ04uQ2D1St",
+                                        "GTwFsgaA0lCt",
+                                        "CtBQqbwXDx1w"
+                                    ],
+                                    "title": "Board View",
+                                    "notePosition": 60,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-columns",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "2FvYrpmOXm29",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "Board View.md",
+                                    "attachments": [
+                                        {
+                                            "attachmentId": "usSSa0WI6dDK",
+                                            "title": "image.png",
+                                            "role": "image",
+                                            "mime": "image/png",
+                                            "position": 10,
+                                            "dataFileName": "Board View_image.png"
                                         }
                                     ]
                                 }

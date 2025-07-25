@@ -11,6 +11,7 @@ More specialized collections were introduced, such as the:
 *   <a class="reference-link" href="Collections/Calendar%20View.md">Calendar View</a> which displays a week, month or year calendar with the notes being shown as events. New events can be added easily by dragging across the calendar.
 *   <a class="reference-link" href="Collections/Geo%20Map%20View.md">Geo Map View</a> which displays a geographical map in which the notes are represented as markers/pins on the map. New events can be easily added by pointing on the map.
 *   <a class="reference-link" href="Collections/Table%20View.md">Table View</a> displays each note as a row in a table, with <a class="reference-link" href="../Advanced%20Usage/Attributes/Promoted%20Attributes.md">Promoted Attributes</a> being shown as well. This makes it easy to visualize attributes of notes, as well as making them easily editable.
+*   <a class="reference-link" href="Collections/Board%20View.md">Board View</a> (Kanban) displays notes in columns, grouped by the value of a label.
 
 For a quick presentation of all the supported view types, see the child notes of this help page, including screenshots.
 

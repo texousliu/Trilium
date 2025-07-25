@@ -1,6 +1,6 @@
 # Adaptive icon
 |     |     |
-| --- | --- | 
+| --- | --- |
 | Before | <figure class="image"><img src="1_Adaptive icon_image.png"></figure> |
 | After | <figure class="image"><img src="6_Adaptive icon_image.png"></figure> |
 | With new scale | <figure class="image"><img src="4_Adaptive icon_image.png"></figure> |

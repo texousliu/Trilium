@@ -4,9 +4,9 @@ In the project root:
 | Platform | Architecture | Application | Build command |
 | --- | --- | --- | --- |
 | macOS | x86\_64 | Desktop / Electron app | `./bin/build-mac-x64.sh` |
-| ARM 64 | Desktop / Electron app | `./bin/build-mac-arm64.sh` |
+| ARM 64 | Desktop / Electron app | `./bin/build-mac-arm64.sh` |     |
 | Linux | x86\_64 | Desktop / Electron app | `./bin/build-linux-x64.sh` |
-| Server | `./bin/build-server.sh` |
+| Server | `./bin/build-server.sh` |     |     |
 | Windows | x86\_64 | Desktop / Electron app | `./bin/build-win-x64.sh` |
 
 Under NixOS the following `nix-shell` is needed:
