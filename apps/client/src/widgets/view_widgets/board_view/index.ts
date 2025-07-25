@@ -226,9 +226,7 @@ const TPL = /*html*/`
         .board-new-item {
             margin-top: 0.5em;
             padding: 0.5em;
-            border: 2px dashed var(--main-border-color);
             border-radius: 5px;
-            text-align: center;
             color: var(--muted-text-color);
             cursor: pointer;
             transition: all 0.2s ease;
@@ -249,10 +247,9 @@ const TPL = /*html*/`
             width: 180px;
             flex-shrink: 0;
             height: 60px;
-            border: 2px dashed var(--main-border-color);
             border-radius: 8px;
             padding: 0.5em;
-            background-color: transparent;
+            background-color: var(--accented-background-color);
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
