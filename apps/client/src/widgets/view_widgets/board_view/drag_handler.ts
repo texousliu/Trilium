@@ -4,10 +4,6 @@ import { NoteDragHandler } from "./note_drag_handler";
 import { ColumnDragHandler } from "./column_drag_handler";
 
 export class BoardDragHandler {
-    private $container: JQuery<HTMLElement>;
-    private api: BoardApi;
-    private context: DragContext;
-
     private noteDragHandler: NoteDragHandler;
     private columnDragHandler: ColumnDragHandler;
 
@@ -16,10 +12,6 @@ export class BoardDragHandler {
         api: BoardApi,
         context: DragContext,
     ) {
-        this.$container = $container;
-        this.api = api;
-        this.context = context;
-
         // Initialize specialized drag handlers
         this.noteDragHandler = new NoteDragHandler($container, api, context);
         this.columnDragHandler = new ColumnDragHandler($container, api, context);
@@ -45,7 +37,6 @@ export class BoardDragHandler {
 
     // Common methods
     updateApi(newApi: BoardApi) {
-        this.api = newApi;
         this.noteDragHandler.updateApi(newApi);
         this.columnDragHandler.updateApi(newApi);
     }
