@@ -138,8 +138,9 @@ export default class BoardApi {
         const statusAttribute = parentNote.getLabelValue("board:groupBy") ?? "status";
         this._statusAttribute = statusAttribute;
 
-        let persistedData = await this.viewStorage.restore() ?? {};
-        const { byColumn, newPersistedData } = await getBoardData(parentNote, statusAttribute, persistedData);
+        // Use the current in-memory persisted data instead of restoring from storage
+        // This ensures we don't lose recent updates like column renames
+        const { byColumn, newPersistedData } = await getBoardData(parentNote, statusAttribute, this.persistedData);
         
         // Update internal state
         this.byColumn = byColumn;
