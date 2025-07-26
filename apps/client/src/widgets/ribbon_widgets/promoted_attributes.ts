@@ -66,6 +66,12 @@ const TPL = /*html*/`
         appearance: auto;
     }
 
+    .promoted-attribute-cell input[type="color"] {
+        width: 50px;
+        padding: 0;
+        border: 0;
+    }
+
     </style>
 
     <div class="promoted-attributes-container"></div>
@@ -265,6 +271,8 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
                     .on("click", () => window.open($input.val() as string, "_blank"));
 
                 $input.after($openButton);
+            } else if (definition.labelType === "color") {
+                $input.prop("type", "color");
             } else {
                 ws.logError(t("promoted_attributes.unknown_label_type", { type: definition.labelType }));
             }

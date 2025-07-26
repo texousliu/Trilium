@@ -35,6 +35,15 @@ const labelTypeMappings: Record<ColumnType, Partial<ColumnDefinition>> = {
         formatter: "link",
         editor: "input"
     },
+    color: {
+        editor: "input",
+        formatter: "color",
+        editorParams: {
+            elementAttributes: {
+                type: "color"
+            }
+        }
+    },
     relation: {
         editor: RelationEditor,
         formatter: NoteFormatter
