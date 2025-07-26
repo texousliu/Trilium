@@ -12,8 +12,9 @@ import sanitizeFilename from "sanitize-filename";
 import isSvg from "is-svg";
 import isAnimated from "is-animated";
 import htmlSanitizer from "./html_sanitizer.js";
+import ocrService, { type OCRResult } from "./ocr/ocr_service.js";
 
-async function processImage(uploadBuffer: Buffer, originalName: string, shrinkImageSwitch: boolean) {
+async function processImage(uploadBuffer: Buffer, originalName: string, shrinkImageSwitch: boolean, noteId?: string) {
     const compressImages = optionService.getOptionBool("compressImages");
     const origImageFormat = await getImageType(uploadBuffer);
 
@@ -22,6 +23,24 @@ async function processImage(uploadBuffer: Buffer, originalName: string, shrinkIm
     } else if (isAnimated(uploadBuffer)) {
         // recompression of animated images will make them static
         shrinkImageSwitch = false;
+    }
+
+    // Process OCR on the original (uncompressed) image for best quality
+    let ocrResult: OCRResult | null = null;
+    if (noteId && ocrService.isOCREnabled() && origImageFormat) {
+        const imageMime = getImageMimeFromExtension(origImageFormat.ext);
+        const supportedMimeTypes = ocrService.getAllSupportedMimeTypes();
+
+        if (supportedMimeTypes.includes(imageMime)) {
+            try {
+                ocrResult = await ocrService.extractTextFromFile(uploadBuffer, imageMime);
+                if (ocrResult) {
+                    log.info(`Successfully processed OCR for image ${noteId} (${originalName})`);
+                }
+            } catch (error) {
+                log.error(`Failed to process OCR for image ${noteId}: ${error}`);
+            }
+        }
     }
 
     let finalImageBuffer;
@@ -39,7 +58,8 @@ async function processImage(uploadBuffer: Buffer, originalName: string, shrinkIm
 
     return {
         buffer: finalImageBuffer,
-        imageFormat
+        imageFormat,
+        ocrResult
     };
 }
 
@@ -72,12 +92,17 @@ function updateImage(noteId: string, uploadBuffer: Buffer, originalName: string)
     note.setLabel("originalFileName", originalName);
 
     // resizing images asynchronously since JIMP does not support sync operation
-    processImage(uploadBuffer, originalName, true).then(({ buffer, imageFormat }) => {
+    processImage(uploadBuffer, originalName, true, noteId).then(({ buffer, imageFormat, ocrResult }) => {
         sql.transactional(() => {
             note.mime = getImageMimeFromExtension(imageFormat.ext);
             note.save();
 
             note.setContent(buffer);
+
+            // Store OCR result if available
+            if (ocrResult && note.blobId) {
+                ocrService.storeOCRResult(note.blobId, ocrResult);
+            }
         });
     });
 }
@@ -108,7 +133,7 @@ function saveImage(parentNoteId: string, uploadBuffer: Buffer, originalName: str
     note.addLabel("originalFileName", originalName);
 
     // resizing images asynchronously since JIMP does not support sync operation
-    processImage(uploadBuffer, originalName, shrinkImageSwitch).then(({ buffer, imageFormat }) => {
+    processImage(uploadBuffer, originalName, shrinkImageSwitch, note.noteId).then(({ buffer, imageFormat, ocrResult }) => {
         sql.transactional(() => {
             note.mime = getImageMimeFromExtension(imageFormat.ext);
 
@@ -120,6 +145,11 @@ function saveImage(parentNoteId: string, uploadBuffer: Buffer, originalName: str
             }
 
             note.setContent(buffer, { forceSave: true });
+
+            // Store OCR result if available
+            if (ocrResult && note.blobId) {
+                ocrService.storeOCRResult(note.blobId, ocrResult);
+            }
         });
     });
 
@@ -159,7 +189,7 @@ function saveImageToAttachment(noteId: string, uploadBuffer: Buffer, originalNam
     }, 5000);
 
     // resizing images asynchronously since JIMP does not support sync operation
-    processImage(uploadBuffer, originalName, !!shrinkImageSwitch).then(({ buffer, imageFormat }) => {
+    processImage(uploadBuffer, originalName, !!shrinkImageSwitch, attachment.attachmentId).then(({ buffer, imageFormat, ocrResult }) => {
         sql.transactional(() => {
             // re-read, might be changed in the meantime
             if (!attachment.attachmentId) {
@@ -175,6 +205,11 @@ function saveImageToAttachment(noteId: string, uploadBuffer: Buffer, originalNam
             }
 
             attachment.setContent(buffer, { forceSave: true });
+
+            // Store OCR result if available
+            if (ocrResult && attachment.blobId) {
+                ocrService.storeOCRResult(attachment.blobId, ocrResult);
+            }
         });
     });
 

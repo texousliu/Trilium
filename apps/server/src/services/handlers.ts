@@ -139,12 +139,13 @@ eventService.subscribe(eventService.ENTITY_CREATED, ({ entityName, entity }) => 
         }
     } else if (entityName === "notes") {
         runAttachedRelations(entity, "runOnNoteCreation", entity);
-        
-        // Automatically process OCR for file notes if OCR is enabled
+
+        // Note: OCR processing for images is now handled in image.ts during image processing
+        // OCR processing for files remains here since they don't go through image processing
         if (entity.type === 'file' && ocrService.isOCREnabled()) {
             // Check if the file MIME type is supported by any OCR processor
             const supportedMimeTypes = ocrService.getAllSupportedMimeTypes();
-            
+
             if (entity.mime && supportedMimeTypes.includes(entity.mime)) {
                 // Process OCR asynchronously to avoid blocking note creation
                 ocrService.processNoteOCR(entity.noteId).then(result => {
