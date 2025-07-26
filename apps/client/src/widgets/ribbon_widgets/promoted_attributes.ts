@@ -80,9 +80,27 @@ const TPL = /*html*/`
     .promoted-attribute-cell input[type="color"]::-webkit-color-swatch-wrapper {
         padding: 0;
     }
+
     .promoted-attribute-cell input[type="color"]::-webkit-color-swatch {
         border: none;
         border-radius: 25%;
+    }
+
+    .promoted-attribute-label-color input[type="hidden"][value=""] + input[type="color"] {
+        position: relative;
+        opacity: 0.5;
+    }
+
+    .promoted-attribute-label-color input[type="hidden"][value=""] + input[type="color"]:after {
+        content: "";
+        position: absolute;
+        top: 10px;
+        left: 0px;
+        right: 0;
+        height: 2px;
+        background: rgba(0, 0, 0, 0.5);
+        transform: rotate(45deg);
+        pointer-events: none;
     }
 
     </style>
@@ -285,19 +303,15 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
 
                 $input.after($openButton);
             } else if (definition.labelType === "color") {
+                const defaultColor = "#ffffff";
                 $input.prop("type", "hidden");
-                const setValue = (color: string, event: JQuery.TriggeredEvent<HTMLElement, undefined, HTMLElement, HTMLElement>) => {
-                    $input.val(color);
-
-                    event.target = $input[0]; // Set the event target to the main input
-                    this.promotedAttributeChanged(event);
-                };
+                $input.val(valueAttr.value ?? "");
 
                 // We insert a separate input since the color input does not support empty value.
                 // This is a workaround to allow clearing the color input.
                 const $colorInput = $("<input>")
                     .prop("type", "color")
-                    .prop("value", valueAttr.value ?? "#000000")
+                    .prop("value", valueAttr.value || defaultColor)
                     .addClass("form-control promoted-attribute-input")
                     .on("change", e => setValue((e.target as HTMLInputElement).value, e));
                 $input.after($colorInput);
@@ -306,6 +320,15 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
                     .addClass("input-group-text bx bxs-tag-x")
                     .prop("title", t("promoted_attributes.remove_color"))
                     .on("click", e => setValue("", e));
+
+                const setValue = (color: string, event: JQuery.TriggeredEvent<HTMLElement, undefined, HTMLElement, HTMLElement>) => {
+                    $input.val(color);
+                    if (!color) {
+                        $colorInput.val(defaultColor);
+                    }
+                    event.target = $input[0]; // Set the event target to the main input
+                    this.promotedAttributeChanged(event);
+                };
 
                 $colorInput.after($clearButton);
             } else {
