@@ -188,14 +188,14 @@ async function addOCRTextIfAvailable(note: FNote, $content: JQuery<HTMLElement>)
             const data = await response.json();
             if (data.success && data.hasOcr && data.text) {
                 const $ocrSection = $(`
-                    <div class="ocr-text-section" style="margin: 10px 0; padding: 10px; background: var(--accented-background-color); border-radius: 5px; border-left: 3px solid var(--main-text-color);">
-                        <div class="ocr-header" style="font-weight: bold; margin-bottom: 8px; font-size: 0.9em; color: var(--muted-text-color);">
+                    <div class="ocr-text-section">
+                        <div class="ocr-header">
                             <span class="bx bx-text"></span> ${t("ocr.extracted_text")}
                         </div>
-                        <div class="ocr-content" style="max-height: 150px; overflow-y: auto; font-size: 0.9em; line-height: 1.4; white-space: pre-wrap;"></div>
+                        <div class="ocr-content"></div>
                     </div>
                 `);
-                
+
                 $ocrSection.find('.ocr-content').text(data.text);
                 $content.append($ocrSection);
             }
