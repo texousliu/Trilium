@@ -20,6 +20,11 @@ export abstract class FileProcessor {
     abstract getProcessingType(): string;
 
     /**
+     * Get list of MIME types supported by this processor
+     */
+    abstract getSupportedMimeTypes(): string[];
+
+    /**
      * Clean up any resources
      */
     cleanup(): Promise<void> {

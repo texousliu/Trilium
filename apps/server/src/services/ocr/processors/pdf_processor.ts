@@ -11,6 +11,7 @@ import sharp from 'sharp';
  */
 export class PDFProcessor extends FileProcessor {
     private imageProcessor: ImageProcessor;
+    private readonly supportedTypes = ['application/pdf'];
 
     constructor() {
         super();
@@ -19,6 +20,10 @@ export class PDFProcessor extends FileProcessor {
 
     canProcess(mimeType: string): boolean {
         return mimeType.toLowerCase() === 'application/pdf';
+    }
+
+    getSupportedMimeTypes(): string[] {
+        return [...this.supportedTypes];
     }
 
     async extractText(buffer: Buffer, options: OCRProcessingOptions = {}): Promise<OCRResult> {

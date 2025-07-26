@@ -9,6 +9,15 @@ import log from '../../log.js';
  */
 export class OfficeProcessor extends FileProcessor {
     private imageProcessor: ImageProcessor;
+    private readonly supportedTypes = [
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // DOCX
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // XLSX
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation', // PPTX
+        'application/msword', // DOC
+        'application/vnd.ms-excel', // XLS
+        'application/vnd.ms-powerpoint', // PPT
+        'application/rtf' // RTF
+    ];
 
     constructor() {
         super();
@@ -16,16 +25,11 @@ export class OfficeProcessor extends FileProcessor {
     }
 
     canProcess(mimeType: string): boolean {
-        const supportedTypes = [
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // DOCX
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // XLSX
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation', // PPTX
-            'application/msword', // DOC
-            'application/vnd.ms-excel', // XLS
-            'application/vnd.ms-powerpoint', // PPT
-            'application/rtf' // RTF
-        ];
-        return supportedTypes.includes(mimeType);
+        return this.supportedTypes.includes(mimeType);
+    }
+
+    getSupportedMimeTypes(): string[] {
+        return [...this.supportedTypes];
     }
 
     async extractText(buffer: Buffer, options: OCRProcessingOptions = {}): Promise<OCRResult> {

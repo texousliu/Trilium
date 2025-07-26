@@ -9,6 +9,7 @@ import log from '../../log.js';
  */
 export class TIFFProcessor extends FileProcessor {
     private imageProcessor: ImageProcessor;
+    private readonly supportedTypes = ['image/tiff', 'image/tif'];
 
     constructor() {
         super();
@@ -17,6 +18,10 @@ export class TIFFProcessor extends FileProcessor {
 
     canProcess(mimeType: string): boolean {
         return mimeType.toLowerCase() === 'image/tiff' || mimeType.toLowerCase() === 'image/tif';
+    }
+
+    getSupportedMimeTypes(): string[] {
+        return [...this.supportedTypes];
     }
 
     async extractText(buffer: Buffer, options: OCRProcessingOptions = {}): Promise<OCRResult> {

@@ -558,6 +558,58 @@ class OCRService {
     }
 
     /**
+     * Get all MIME types supported by all registered processors
+     */
+    getAllSupportedMimeTypes(): string[] {
+        const supportedTypes = new Set<string>();
+
+        // Initialize processors if not already done
+        if (!this.isInitialized) {
+            // Return a static list if not initialized to avoid async issues
+            // This covers all known supported types
+            return [
+                // Images
+                'image/jpeg',
+                'image/jpg',
+                'image/png',
+                'image/gif',
+                'image/bmp',
+                'image/tiff',
+                'image/tif',
+                'image/webp',
+                // Documents
+                'application/pdf',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                'application/msword',
+                'application/vnd.ms-excel',
+                'application/vnd.ms-powerpoint',
+                'application/rtf'
+            ];
+        }
+
+        // Gather MIME types from all registered processors
+        for (const processor of this.processors.values()) {
+            const processorTypes = processor.getSupportedMimeTypes();
+            processorTypes.forEach(type => supportedTypes.add(type));
+        }
+
+        return Array.from(supportedTypes);
+    }
+
+    /**
+     * Check if a MIME type is supported by any processor
+     */
+    isSupportedByAnyProcessor(mimeType: string): boolean {
+        if (!mimeType) return false;
+
+        // Check if any processor can handle this MIME type
+        const processor = this.getProcessorForMimeType(mimeType);
+        return processor !== null;
+    }
+
+    /**
      * Check if blob needs OCR re-processing due to content changes
      */
     needsReprocessing(blobId: string): boolean {

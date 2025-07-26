@@ -9,18 +9,22 @@ import log from '../../log.js';
 export class ImageProcessor extends FileProcessor {
     private worker: Tesseract.Worker | null = null;
     private isInitialized = false;
+    private readonly supportedTypes = [
+        'image/jpeg',
+        'image/jpg', 
+        'image/png',
+        'image/gif',
+        'image/bmp',
+        'image/tiff',
+        'image/webp'
+    ];
 
     canProcess(mimeType: string): boolean {
-        const supportedTypes = [
-            'image/jpeg',
-            'image/jpg', 
-            'image/png',
-            'image/gif',
-            'image/bmp',
-            'image/tiff',
-            'image/webp'
-        ];
-        return supportedTypes.includes(mimeType.toLowerCase());
+        return this.supportedTypes.includes(mimeType.toLowerCase());
+    }
+
+    getSupportedMimeTypes(): string[] {
+        return [...this.supportedTypes];
     }
 
     async extractText(buffer: Buffer, options: OCRProcessingOptions = {}): Promise<OCRResult> {

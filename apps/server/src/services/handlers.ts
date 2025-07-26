@@ -143,26 +143,7 @@ eventService.subscribe(eventService.ENTITY_CREATED, ({ entityName, entity }) => 
         // Automatically process OCR for file notes if OCR is enabled
         if (entity.type === 'file' && ocrService.isOCREnabled()) {
             // Check if the file MIME type is supported by any OCR processor
-            const supportedMimeTypes = [
-                // Office documents
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                'application/msword',
-                'application/vnd.ms-excel',
-                'application/vnd.ms-powerpoint',
-                'application/rtf',
-                // PDFs
-                'application/pdf',
-                // Images (though these are usually type='image', not 'file')
-                'image/jpeg',
-                'image/jpg',
-                'image/png',
-                'image/gif',
-                'image/bmp',
-                'image/tiff',
-                'image/webp'
-            ];
+            const supportedMimeTypes = ocrService.getAllSupportedMimeTypes();
             
             if (entity.mime && supportedMimeTypes.includes(entity.mime)) {
                 // Process OCR asynchronously to avoid blocking note creation
