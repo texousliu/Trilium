@@ -64,6 +64,10 @@ const TPL = /*html*/`
         border-radius: 4px;
         margin-top: 10px;
     }
+    
+    .ocr-process-button {
+        margin-top: 15px;
+    }
     </style>
 
     <div class="ocr-text-header">
@@ -71,6 +75,8 @@ const TPL = /*html*/`
     </div>
 
     <div class="ocr-text-content"></div>
+
+    <div class="ocr-text-actions"></div>
 
     <div class="ocr-text-meta"></div>
 </div>`;
@@ -86,7 +92,9 @@ interface OCRResponse {
 export default class ReadOnlyOCRTextWidget extends TypeWidget {
 
     private $content!: JQuery<HTMLElement>;
+    private $actions!: JQuery<HTMLElement>;
     private $meta!: JQuery<HTMLElement>;
+    private currentNote?: FNote;
 
     static getType() {
         return "readOnlyOCRText";
@@ -96,16 +104,20 @@ export default class ReadOnlyOCRTextWidget extends TypeWidget {
         this.$widget = $(TPL);
         this.contentSized();
         this.$content = this.$widget.find(".ocr-text-content");
+        this.$actions = this.$widget.find(".ocr-text-actions");
         this.$meta = this.$widget.find(".ocr-text-meta");
 
         super.doRender();
     }
 
     async doRefresh(note: FNote) {
+        this.currentNote = note;
+        
         // Show loading state
         this.$content.html(`<div class="ocr-text-loading">
             <span class="bx bx-loader-alt bx-spin"></span> ${t("ocr.loading_text")}
         </div>`);
+        this.$actions.empty();
         this.$meta.empty();
 
         try {
@@ -117,10 +129,7 @@ export default class ReadOnlyOCRTextWidget extends TypeWidget {
             }
 
             if (!response.hasOcr || !response.text) {
-                this.$content.html(`<div class="ocr-text-empty">
-                    <span class="bx bx-info-circle"></span> ${t("ocr.no_text_available")}
-                </div>`);
-                this.$meta.html(t("ocr.no_text_explanation"));
+                this.showNoOCRAvailable();
                 return;
             }
 
@@ -137,10 +146,61 @@ export default class ReadOnlyOCRTextWidget extends TypeWidget {
         }
     }
 
+    private showNoOCRAvailable() {
+        const $processButton = $(`<button class="btn btn-secondary ocr-process-button" type="button">
+            <span class="bx bx-play"></span> ${t("ocr.process_now")}
+        </button>`);
+
+        $processButton.on("click", () => this.processOCR());
+
+        this.$content.html(`<div class="ocr-text-empty">
+            <span class="bx bx-info-circle"></span> ${t("ocr.no_text_available")}
+        </div>`);
+        
+        this.$actions.append($processButton);
+        this.$meta.html(t("ocr.no_text_explanation"));
+    }
+
+    private async processOCR() {
+        if (!this.currentNote) {
+            return;
+        }
+
+        const $button = this.$actions.find(".ocr-process-button");
+        
+        // Disable button and show processing state
+        $button.prop("disabled", true);
+        $button.html(`<span class="bx bx-loader-alt bx-spin"></span> ${t("ocr.processing")}`);
+
+        try {
+            const response = await server.post(`ocr/process-note/${this.currentNote.noteId}`);
+            
+            if (response.success) {
+                toastService.showMessage(t("ocr.processing_started"));
+                // Refresh the view after a short delay to allow processing to begin
+                setTimeout(() => {
+                    if (this.currentNote) {
+                        this.doRefresh(this.currentNote);
+                    }
+                }, 2000);
+            } else {
+                throw new Error(response.error || t("ocr.processing_failed"));
+            }
+        } catch (error: any) {
+            console.error("Error processing OCR:", error);
+            toastService.showError(error.message || t("ocr.processing_failed"));
+            
+            // Re-enable button
+            $button.prop("disabled", false);
+            $button.html(`<span class="bx bx-play"></span> ${t("ocr.process_now")}`);
+        }
+    }
+
     private showError(message: string) {
         this.$content.html(`<div class="ocr-text-error">
             <span class="bx bx-error"></span> ${message}
         </div>`);
+        this.$actions.empty();
         this.$meta.empty();
     }
 
