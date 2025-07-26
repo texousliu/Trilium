@@ -63,6 +63,31 @@ interface ApiResponse {
 }
 
 const TPL = /*html*/`
+<style>
+.modal-hidden {
+    display: none !important;
+}
+.modal-visible {
+    display: flex !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    align-items: center;
+    justify-content: center;
+}
+.modal-content {
+    background: white;
+    border-radius: 0.5rem;
+    max-width: 600px;
+    width: 90%;
+    max-height: 90%;
+    overflow-y: auto;
+}
+</style>
 <div class="options-section">
     <h4>File System Sync</h4>
 
@@ -116,7 +141,7 @@ const TPL = /*html*/`
 </div>
 
 <!-- Create/Edit Mapping Modal -->
-<div class="mapping-modal" style="display: none;">
+<div class="mapping-modal modal-hidden">
     <div class="modal-backdrop"></div>
     <div class="modal-content">
         <div class="modal-header">
@@ -271,6 +296,8 @@ export default class FileSystemSyncOptions extends OptionsWidget {
     doRender() {
         this.$widget = $(TPL);
         this.initializeElements();
+        // Ensure modal is hidden on initialization
+        this.$mappingModal.addClass('modal-hidden').removeClass('modal-visible');
         this.setupEventHandlers();
     }
 
@@ -469,11 +496,11 @@ export default class FileSystemSyncOptions extends OptionsWidget {
             this.clearMappingForm();
         }
 
-        this.$mappingModal.show();
+        this.$mappingModal.removeClass('modal-hidden').addClass('modal-visible');
     }
 
     private hideMappingModal() {
-        this.$mappingModal.hide();
+        this.$mappingModal.removeClass('modal-visible').addClass('modal-hidden');
         this.clearMappingForm();
         this.currentEditingMappingId = null;
     }
