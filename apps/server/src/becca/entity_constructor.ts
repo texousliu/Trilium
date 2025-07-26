@@ -9,6 +9,8 @@ import BNote from "./entities/bnote.js";
 import BOption from "./entities/boption.js";
 import BRecentNote from "./entities/brecent_note.js";
 import BRevision from "./entities/brevision.js";
+import BFileSystemMapping from "./entities/bfile_system_mapping.js";
+import BFileNoteMapping from "./entities/bfile_note_mapping.js";
 
 type EntityClass = new (row?: any) => AbstractBeccaEntity<any>;
 
@@ -21,7 +23,9 @@ const ENTITY_NAME_TO_ENTITY: Record<string, ConstructorData<any> & EntityClass> 
     notes: BNote,
     options: BOption,
     recent_notes: BRecentNote,
-    revisions: BRevision
+    revisions: BRevision,
+    file_system_mappings: BFileSystemMapping,
+    file_note_mappings: BFileNoteMapping
 };
 
 function getEntityFromEntityName(entityName: keyof typeof ENTITY_NAME_TO_ENTITY) {

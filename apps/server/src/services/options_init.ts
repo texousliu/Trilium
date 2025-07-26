@@ -211,6 +211,9 @@ const defaultOptions: DefaultOption[] = [
     { name: "aiTemperature", value: "0.7", isSynced: true },
     { name: "aiSystemPrompt", value: "", isSynced: true },
     { name: "aiSelectedProvider", value: "openai", isSynced: true },
+
+    // File system sync options
+    { name: "fileSystemSyncEnabled", value: "false", isSynced: false },
 ];
 
 /**

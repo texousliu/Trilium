@@ -123,6 +123,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     /** Whether keyboard auto-completion for notes is triggered when typing `@` in text notes (attribute editing is not affected). */
     textNoteCompletionEnabled: boolean;
     backgroundEffects: boolean;
+    fileSystemSyncEnabled: boolean;
 
     // Share settings
     redirectBareDomain: boolean;

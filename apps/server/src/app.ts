@@ -20,6 +20,7 @@ import log from "./services/log.js";
 import "./services/handlers.js";
 import "./becca/becca_loader.js";
 import { RESOURCE_DIR } from "./services/resource_dir.js";
+import fileSystemSyncInit from "./services/file_system_sync_init.js";
 
 export default async function buildApp() {
     const app = express();
@@ -32,6 +33,9 @@ export default async function buildApp() {
         try {
             log.info("Database initialized, LLM features available");
             log.info("LLM features ready");
+            
+            // Initialize file system sync after database is ready
+            await fileSystemSyncInit.init();
         } catch (error) {
             console.error("Error initializing LLM features:", error);
         }
@@ -41,6 +45,9 @@ export default async function buildApp() {
     if (sql_init.isDbInitialized()) {
         try {
             log.info("LLM features ready");
+            
+            // Initialize file system sync if database is already ready
+            await fileSystemSyncInit.init();
         } catch (error) {
             console.error("Error initializing LLM features:", error);
         }

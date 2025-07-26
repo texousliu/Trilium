@@ -59,6 +59,7 @@ import openaiRoute from "./api/openai.js";
 import anthropicRoute from "./api/anthropic.js";
 import llmRoute from "./api/llm.js";
 import systemInfoRoute from "./api/system_info.js";
+import fileSystemSyncRoute from "./api/file_system_sync.js";
 
 import etapiAuthRoutes from "../etapi/auth.js";
 import etapiAppInfoRoutes from "../etapi/app_info.js";
@@ -384,6 +385,9 @@ function register(app: express.Application) {
     asyncApiRoute(GET, "/api/llm/providers/ollama/models", ollamaRoute.listModels);
     asyncApiRoute(GET, "/api/llm/providers/openai/models", openaiRoute.listModels);
     asyncApiRoute(GET, "/api/llm/providers/anthropic/models", anthropicRoute.listModels);
+
+    // File system sync API
+    app.use("/api/file-system-sync", [auth.checkApiAuthOrElectron, csrfMiddleware], fileSystemSyncRoute);
 
     // API Documentation
     apiDocsRoute(app);

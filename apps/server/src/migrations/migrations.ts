@@ -6,6 +6,64 @@
 
 // Migrations should be kept in descending order, so the latest migration is first.
 const MIGRATIONS: (SqlMigration | JsMigration)[] = [
+    // Add file system mapping support
+    {
+        version: 234,
+        sql: /*sql*/`
+            -- Table to store file system mappings for notes and subtrees
+            CREATE TABLE IF NOT EXISTS "file_system_mappings" (
+                "mappingId" TEXT NOT NULL PRIMARY KEY,
+                "noteId" TEXT NOT NULL,
+                "filePath" TEXT NOT NULL,
+                "syncDirection" TEXT NOT NULL DEFAULT 'bidirectional', -- 'bidirectional', 'trilium_to_disk', 'disk_to_trilium'
+                "isActive" INTEGER NOT NULL DEFAULT 1,
+                "includeSubtree" INTEGER NOT NULL DEFAULT 0,
+                "preserveHierarchy" INTEGER NOT NULL DEFAULT 1,
+                "contentFormat" TEXT NOT NULL DEFAULT 'auto', -- 'auto', 'markdown', 'html', 'raw'
+                "excludePatterns" TEXT DEFAULT NULL, -- JSON array of glob patterns to exclude
+                "lastSyncTime" TEXT DEFAULT NULL,
+                "syncErrors" TEXT DEFAULT NULL, -- JSON array of recent sync errors
+                "dateCreated" TEXT NOT NULL,
+                "dateModified" TEXT NOT NULL,
+                "utcDateCreated" TEXT NOT NULL,
+                "utcDateModified" TEXT NOT NULL
+            );
+
+            -- Index for quick lookup by noteId
+            CREATE INDEX "IDX_file_system_mappings_noteId" ON "file_system_mappings" ("noteId");
+            -- Index for finding active mappings
+            CREATE INDEX "IDX_file_system_mappings_active" ON "file_system_mappings" ("isActive", "noteId");
+            -- Unique constraint to prevent duplicate mappings for same note
+            CREATE UNIQUE INDEX "IDX_file_system_mappings_note_unique" ON "file_system_mappings" ("noteId");
+
+            -- Table to track file to note mappings for efficient lookups
+            CREATE TABLE IF NOT EXISTS "file_note_mappings" (
+                "fileNoteId" TEXT NOT NULL PRIMARY KEY,
+                "mappingId" TEXT NOT NULL,
+                "noteId" TEXT NOT NULL,
+                "filePath" TEXT NOT NULL,
+                "fileHash" TEXT DEFAULT NULL,
+                "fileModifiedTime" TEXT DEFAULT NULL,
+                "lastSyncTime" TEXT DEFAULT NULL,
+                "syncStatus" TEXT NOT NULL DEFAULT 'synced', -- 'synced', 'pending', 'conflict', 'error'
+                "dateCreated" TEXT NOT NULL,
+                "dateModified" TEXT NOT NULL,
+                "utcDateCreated" TEXT NOT NULL,
+                "utcDateModified" TEXT NOT NULL,
+                FOREIGN KEY ("mappingId") REFERENCES "file_system_mappings" ("mappingId") ON DELETE CASCADE,
+                FOREIGN KEY ("noteId") REFERENCES "notes" ("noteId") ON DELETE CASCADE
+            );
+
+            -- Index for quick lookup by file path
+            CREATE INDEX "IDX_file_note_mappings_filePath" ON "file_note_mappings" ("filePath");
+            -- Index for finding notes by mapping
+            CREATE INDEX "IDX_file_note_mappings_mapping" ON "file_note_mappings" ("mappingId", "noteId");
+            -- Index for finding pending syncs
+            CREATE INDEX "IDX_file_note_mappings_sync_status" ON "file_note_mappings" ("syncStatus", "mappingId");
+            -- Unique constraint for file path per mapping
+            CREATE UNIQUE INDEX "IDX_file_note_mappings_file_unique" ON "file_note_mappings" ("mappingId", "filePath");
+        `
+    },
     // Migrate geo map to collection
     {
         version: 233,

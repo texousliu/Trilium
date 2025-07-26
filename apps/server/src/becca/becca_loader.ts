@@ -9,9 +9,13 @@ import BBranch from "./entities/bbranch.js";
 import BAttribute from "./entities/battribute.js";
 import BOption from "./entities/boption.js";
 import BEtapiToken from "./entities/betapi_token.js";
+import BFileSystemMapping from "./entities/bfile_system_mapping.js";
+import BFileNoteMapping from "./entities/bfile_note_mapping.js";
 import cls from "../services/cls.js";
 import entityConstructor from "../becca/entity_constructor.js";
 import type { AttributeRow, BranchRow, EtapiTokenRow, NoteRow, OptionRow } from "@triliumnext/commons";
+import type { FileSystemMappingRow } from "./entities/bfile_system_mapping.js";
+import type { FileNoteMappingRow } from "./entities/bfile_note_mapping.js";
 import type AbstractBeccaEntity from "./entities/abstract_becca_entity.js";
 import ws from "../services/ws.js";
 
@@ -64,6 +68,14 @@ function load() {
             new BEtapiToken(row);
         }
 
+        for (const row of sql.getRows<FileSystemMappingRow>(/*sql*/`SELECT mappingId, noteId, filePath, syncDirection, isActive, includeSubtree, preserveHierarchy, contentFormat, excludePatterns, lastSyncTime, syncErrors, dateCreated, dateModified, utcDateCreated, utcDateModified FROM file_system_mappings`)) {
+            new BFileSystemMapping(row);
+        }
+
+        for (const row of sql.getRows<FileNoteMappingRow>(/*sql*/`SELECT fileNoteId, mappingId, noteId, filePath, fileHash, fileModifiedTime, lastSyncTime, syncStatus, dateCreated, dateModified, utcDateCreated, utcDateModified FROM file_note_mappings`)) {
+            new BFileNoteMapping(row);
+        }
+
     });
 
     for (const noteId in becca.notes) {
@@ -86,7 +98,7 @@ eventService.subscribeBeccaLoader([eventService.ENTITY_CHANGE_SYNCED], ({ entity
         return;
     }
 
-    if (["notes", "branches", "attributes", "etapi_tokens", "options"].includes(entityName)) {
+    if (["notes", "branches", "attributes", "etapi_tokens", "options", "file_system_mappings", "file_note_mappings"].includes(entityName)) {
         const EntityClass = entityConstructor.getEntityFromEntityName(entityName);
         const primaryKeyName = EntityClass.primaryKeyName;
 
@@ -144,6 +156,10 @@ eventService.subscribeBeccaLoader([eventService.ENTITY_DELETED, eventService.ENT
         attributeDeleted(entityId);
     } else if (entityName === "etapi_tokens") {
         etapiTokenDeleted(entityId);
+    } else if (entityName === "file_system_mappings") {
+        fileSystemMappingDeleted(entityId);
+    } else if (entityName === "file_note_mappings") {
+        fileNoteMappingDeleted(entityId);
     }
 });
 
@@ -277,6 +293,14 @@ function noteReorderingUpdated(branchIdList: number[]) {
 
 function etapiTokenDeleted(etapiTokenId: string) {
     delete becca.etapiTokens[etapiTokenId];
+}
+
+function fileSystemMappingDeleted(mappingId: string) {
+    delete becca.fileSystemMappings[mappingId];
+}
+
+function fileNoteMappingDeleted(fileNoteId: string) {
+    delete becca.fileNoteMappings[fileNoteId];
 }
 
 

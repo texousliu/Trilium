@@ -27,6 +27,7 @@ import RevisionSnapshotsLimitOptions from "./options/other/revision_snapshots_li
 import NetworkConnectionsOptions from "./options/other/network_connections.js";
 import HtmlImportTagsOptions from "./options/other/html_import_tags.js";
 import AdvancedSyncOptions from "./options/advanced/sync.js";
+import FileSystemSyncOptions from "./options/advanced/file_system_sync.js";
 import DatabaseIntegrityCheckOptions from "./options/advanced/database_integrity_check.js";
 import VacuumDatabaseOptions from "./options/advanced/vacuum_database.js";
 import DatabaseAnonymizationOptions from "./options/advanced/database_anonymization.js";
@@ -138,6 +139,7 @@ const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", (typeof NoteContextAw
     ],
     _optionsAdvanced: [
         AdvancedSyncOptions,
+        FileSystemSyncOptions,
         DatabaseIntegrityCheckOptions,
         DatabaseAnonymizationOptions,
         VacuumDatabaseOptions

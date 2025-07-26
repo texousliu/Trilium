@@ -12,6 +12,8 @@ import type { AttachmentRow, BlobRow, RevisionRow } from "@triliumnext/commons";
 import BBlob from "./entities/bblob.js";
 import BRecentNote from "./entities/brecent_note.js";
 import type AbstractBeccaEntity from "./entities/abstract_becca_entity.js";
+import type BFileSystemMapping from "./entities/bfile_system_mapping.js";
+import type BFileNoteMapping from "./entities/bfile_note_mapping.js";
 
 interface AttachmentOpts {
     includeContentLength?: boolean;
@@ -32,6 +34,8 @@ export default class Becca {
     attributeIndex!: Record<string, BAttribute[]>;
     options!: Record<string, BOption>;
     etapiTokens!: Record<string, BEtapiToken>;
+    fileSystemMappings!: Record<string, BFileSystemMapping>;
+    fileNoteMappings!: Record<string, BFileNoteMapping>;
 
     allNoteSetCache: NoteSet | null;
 
@@ -48,6 +52,8 @@ export default class Becca {
         this.attributeIndex = {};
         this.options = {};
         this.etapiTokens = {};
+        this.fileSystemMappings = {};
+        this.fileNoteMappings = {};
 
         this.dirtyNoteSetCache();
 
@@ -213,6 +219,39 @@ export default class Becca {
         return this.etapiTokens[etapiTokenId];
     }
 
+    getFileSystemMapping(mappingId: string): BFileSystemMapping | null {
+        return this.fileSystemMappings[mappingId];
+    }
+
+    getFileSystemMappingOrThrow(mappingId: string): BFileSystemMapping {
+        const mapping = this.getFileSystemMapping(mappingId);
+        if (!mapping) {
+            throw new NotFoundError(`File system mapping '${mappingId}' has not been found.`);
+        }
+        return mapping;
+    }
+
+    getFileNoteMapping(fileNoteId: string): BFileNoteMapping | null {
+        return this.fileNoteMappings[fileNoteId];
+    }
+
+    getFileNoteMappingOrThrow(fileNoteId: string): BFileNoteMapping {
+        const mapping = this.getFileNoteMapping(fileNoteId);
+        if (!mapping) {
+            throw new NotFoundError(`File note mapping '${fileNoteId}' has not been found.`);
+        }
+        return mapping;
+    }
+
+    getFileSystemMappingByNoteId(noteId: string): BFileSystemMapping | null {
+        for (const mapping of Object.values(this.fileSystemMappings)) {
+            if (mapping.noteId === noteId) {
+                return mapping;
+            }
+        }
+        return null;
+    }
+
     getEntity<T extends AbstractBeccaEntity<T>>(entityName: string, entityId: string): AbstractBeccaEntity<T> | null {
         if (!entityName || !entityId) {
             return null;
@@ -222,6 +261,10 @@ export default class Becca {
             return this.getRevision(entityId);
         } else if (entityName === "attachments") {
             return this.getAttachment(entityId);
+        } else if (entityName === "file_system_mappings") {
+            return this.getFileSystemMapping(entityId);
+        } else if (entityName === "file_note_mappings") {
+            return this.getFileNoteMapping(entityId);
         }
 
         const camelCaseEntityName = entityName.toLowerCase().replace(/(_[a-z])/g, (group) => group.toUpperCase().replace("_", ""));
