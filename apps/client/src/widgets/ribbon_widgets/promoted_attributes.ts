@@ -272,7 +272,29 @@ export default class PromotedAttributesWidget extends NoteContextAwareWidget {
 
                 $input.after($openButton);
             } else if (definition.labelType === "color") {
-                $input.prop("type", "color");
+                $input.prop("type", "hidden");
+                const setValue = (color: string, event: JQuery.TriggeredEvent<HTMLElement, undefined, HTMLElement, HTMLElement>) => {
+                    $input.val(color);
+
+                    event.target = $input[0]; // Set the event target to the main input
+                    this.promotedAttributeChanged(event);
+                };
+
+                // We insert a separate input since the color input does not support empty value.
+                // This is a workaround to allow clearing the color input.
+                const $colorInput = $("<input>")
+                    .prop("type", "color")
+                    .prop("value", valueAttr.value ?? "#000000")
+                    .addClass("form-control promoted-attribute-input")
+                    .on("change", e => setValue((e.target as HTMLInputElement).value, e));
+                $input.after($colorInput);
+
+                const $clearButton = $("<span>")
+                    .addClass("input-group-text bx bxs-tag-x")
+                    .prop("title", t("promoted_attributes.remove_color"))
+                    .on("click", e => setValue("", e));
+
+                $colorInput.after($clearButton);
             } else {
                 ws.logError(t("promoted_attributes.unknown_label_type", { type: definition.labelType }));
             }
