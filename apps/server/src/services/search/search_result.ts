@@ -85,21 +85,21 @@ class SearchResult {
 
             // Search for OCR results for this note and its attachments
             const ocrResults = sql.getRows(`
-                SELECT extracted_text, confidence 
-                FROM ocr_results 
-                WHERE (entity_id = ? AND entity_type = 'note')
-                   OR (entity_type = 'attachment' AND entity_id IN (
-                       SELECT attachmentId FROM attachments WHERE ownerId = ?
-                   ))
+                SELECT b.ocr_text
+                FROM blobs b
+                WHERE b.ocr_text IS NOT NULL 
+                  AND b.ocr_text != ''
+                  AND (
+                      b.blobId = (SELECT blobId FROM notes WHERE noteId = ? AND isDeleted = 0)
+                      OR b.blobId IN (
+                          SELECT blobId FROM attachments WHERE ownerId = ? AND isDeleted = 0
+                      )
+                  )
             `, [this.noteId, this.noteId]);
 
-            for (const ocrResult of ocrResults as Array<{extracted_text: string; confidence: number}>) {
-                // Calculate confidence-weighted score
-                const confidenceMultiplier = Math.max(0.5, ocrResult.confidence); // Minimum 0.5x multiplier
-                const adjustedFactor = factor * confidenceMultiplier;
-                
+            for (const ocrResult of ocrResults as Array<{ocr_text: string}>) {
                 // Add score for OCR text matches
-                this.addScoreForStrings(tokens, ocrResult.extracted_text, adjustedFactor);
+                this.addScoreForStrings(tokens, ocrResult.ocr_text, factor);
             }
         } catch (error) {
             // Silently fail if OCR service is not available
