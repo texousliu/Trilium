@@ -394,6 +394,7 @@ function register(app: express.Application) {
     asyncApiRoute(GET, "/api/ocr/batch-progress", ocrRoute.getBatchProgress);
     asyncApiRoute(GET, "/api/ocr/stats", ocrRoute.getOCRStats);
     asyncApiRoute(DEL, "/api/ocr/delete/:blobId", ocrRoute.deleteOCRResults);
+    asyncApiRoute(GET, "/api/ocr/notes/:noteId/text", ocrRoute.getNoteOCRText);
 
     // API Documentation
     apiDocsRoute(app);

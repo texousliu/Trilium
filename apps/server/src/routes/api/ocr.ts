@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import ocrService from "../../services/ocr/ocr_service.js";
 import log from "../../services/log.js";
 import becca from "../../becca/becca.js";
+import sql from "../../services/sql.js";
 
 /**
  * @swagger
@@ -511,6 +512,94 @@ async function deleteOCRResults(req: Request, res: Response) {
     }
 }
 
+/**
+ * @swagger
+ * /api/ocr/notes/{noteId}/text:
+ *   get:
+ *     summary: Get OCR text for a specific note
+ *     operationId: ocr-get-note-text
+ *     parameters:
+ *       - name: noteId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Note ID to get OCR text for
+ *     responses:
+ *       200:
+ *         description: OCR text retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 text:
+ *                   type: string
+ *                   description: The extracted OCR text
+ *                 hasOcr:
+ *                   type: boolean
+ *                   description: Whether OCR text exists for this note
+ *                 extractedAt:
+ *                   type: string
+ *                   format: date-time
+ *                   description: When the OCR was last processed
+ *       404:
+ *         description: Note not found
+ *     tags: ["ocr"]
+ */
+async function getNoteOCRText(req: Request, res: Response) {
+    try {
+        const { noteId } = req.params;
+        
+        const note = becca.getNote(noteId);
+        if (!note) {
+            res.status(404).json({ 
+                success: false, 
+                error: 'Note not found' 
+            });
+            (res as any).triliumResponseHandled = true;
+            return;
+        }
+        
+        // Get stored OCR result
+        let ocrText: string | null = null;
+        let extractedAt: string | null = null;
+        
+        if (note.blobId) {
+            const result = sql.getRow<{
+                ocr_text: string | null;
+                ocr_last_processed: string | null;
+            }>(`
+                SELECT ocr_text, ocr_last_processed
+                FROM blobs
+                WHERE blobId = ?
+            `, [note.blobId]);
+            
+            if (result) {
+                ocrText = result.ocr_text;
+                extractedAt = result.ocr_last_processed;
+            }
+        }
+        
+        res.json({
+            success: true,
+            text: ocrText || '',
+            hasOcr: !!ocrText,
+            extractedAt: extractedAt
+        });
+        (res as any).triliumResponseHandled = true;
+    } catch (error: unknown) {
+        log.error(`Error getting OCR text for note: ${error instanceof Error ? error.message : String(error)}`);
+        res.status(500).json({
+            success: false,
+            error: error instanceof Error ? error.message : 'Unknown error'
+        });
+        (res as any).triliumResponseHandled = true;
+    }
+}
+
 export default {
     processNoteOCR,
     processAttachmentOCR,
@@ -518,5 +607,6 @@ export default {
     batchProcessOCR,
     getBatchProgress,
     getOCRStats,
-    deleteOCRResults
+    deleteOCRResults,
+    getNoteOCRText
 };
