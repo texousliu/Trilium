@@ -154,6 +154,11 @@ class FileSystemSync {
                 await this.syncDirectory(mapping, mapping.filePath, stats);
             }
 
+            // Reverse sync: export notes that don't have corresponding files
+            if (mapping.canSyncToDisk) {
+                await this.syncNotesToFiles(mapping, stats);
+            }
+
             mapping.updateLastSyncTime();
             mapping.clearSyncErrors();
 
@@ -211,6 +216,102 @@ class FileSystemSync {
             } else if (entry.isDirectory() && mapping.includeSubtree) {
                 await this.syncDirectory(mapping, fullPath, stats);
             }
+        }
+    }
+
+    /**
+     * Sync notes to files (reverse sync) - export notes that don't have corresponding files
+     */
+    private async syncNotesToFiles(mapping: BFileSystemMapping, stats: SyncStats) {
+        const rootNote = mapping.getNote();
+        
+        // Sync the root note itself if it's mapped to a file
+        const pathStats = await fs.stat(mapping.filePath);
+        if (pathStats.isFile()) {
+            await this.syncNoteToFile(mapping, rootNote, mapping.filePath, stats);
+        } else {
+            // Sync child notes in the subtree
+            await this.syncNoteSubtreeToFiles(mapping, rootNote, mapping.filePath, stats);
+        }
+    }
+
+    /**
+     * Sync a note subtree to files recursively
+     */
+    private async syncNoteSubtreeToFiles(mapping: BFileSystemMapping, note: BNote, basePath: string, stats: SyncStats) {
+        for (const childBranch of note.children) {
+            const childNote = becca.notes[childBranch.noteId];
+            if (!childNote) continue;
+
+            // Skip system notes and other special notes
+            if (childNote.noteId.startsWith('_') || childNote.type === 'book') {
+                if (mapping.includeSubtree) {
+                    // For book notes, recurse into children but don't create a file
+                    await this.syncNoteSubtreeToFiles(mapping, childNote, basePath, stats);
+                }
+                continue;
+            }
+
+            // Generate file path for this note
+            const fileExtension = this.getFileExtensionForNote(childNote, mapping);
+            const fileName = this.sanitizeFileName(childNote.title) + fileExtension;
+            const filePath = path.join(basePath, fileName);
+
+            // Check if file already exists or has a mapping
+            const existingMapping = this.findFileNoteMappingByNote(mapping.mappingId, childNote.noteId);
+            
+            if (!existingMapping && !await fs.pathExists(filePath)) {
+                // Note doesn't have a file mapping and file doesn't exist - create it
+                await this.syncNoteToFile(mapping, childNote, filePath, stats);
+            }
+
+            // Recurse into children if includeSubtree is enabled
+            if (mapping.includeSubtree && childNote.children.length > 0) {
+                const childDir = path.join(basePath, this.sanitizeFileName(childNote.title));
+                await fs.ensureDir(childDir);
+                await this.syncNoteSubtreeToFiles(mapping, childNote, childDir, stats);
+            }
+        }
+    }
+
+    /**
+     * Sync a single note to a file
+     */
+    private async syncNoteToFile(mapping: BFileSystemMapping, note: BNote, filePath: string, stats: SyncStats) {
+        try {
+            // Convert note content to file format
+            const conversion = await fileSystemContentConverter.noteToFile(note, mapping, filePath, {
+                preserveAttributes: true,
+                includeFrontmatter: true
+            });
+
+            // Ensure directory exists
+            await fs.ensureDir(path.dirname(filePath));
+
+            // Write file
+            await fs.writeFile(filePath, conversion.content);
+
+            // Calculate file hash and get modification time
+            const fileStats = await fs.stat(filePath);
+            const fileHash = await this.calculateFileHash(filePath);
+
+            // Create file note mapping
+            const fileNoteMapping = new BFileNoteMapping({
+                mappingId: mapping.mappingId,
+                noteId: note.noteId,
+                filePath,
+                fileHash,
+                fileModifiedTime: fileStats.mtime.toISOString(),
+                syncStatus: 'synced'
+            }).save();
+
+            stats.filesCreated++;
+            log.info(`Created file ${filePath} from note ${note.noteId}`);
+
+        } catch (error) {
+            log.error(`Error creating file from note ${note.noteId}: ${error}`);
+            mapping.addSyncError(`Error creating file from note ${note.noteId}: ${(error as Error).message}`);
+            stats.errors++;
         }
     }
 
@@ -709,6 +810,74 @@ class FileSystemSync {
         }
 
         return mappings;
+    }
+
+    /**
+     * Find file note mapping by note ID within a specific mapping
+     */
+    private findFileNoteMappingByNote(mappingId: string, noteId: string): BFileNoteMapping | null {
+        for (const mapping of Object.values(becca.fileNoteMappings || {})) {
+            if (mapping.mappingId === mappingId && mapping.noteId === noteId) {
+                return mapping;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Get appropriate file extension for a note based on its type and mapping configuration
+     */
+    private getFileExtensionForNote(note: BNote, mapping: BFileSystemMapping): string {
+        const contentFormat = mapping.contentFormat;
+
+        if (contentFormat === 'markdown' || (contentFormat === 'auto' && note.type === 'text')) {
+            return '.md';
+        } else if (contentFormat === 'html' || (contentFormat === 'auto' && note.type === 'text' && note.mime === 'text/html')) {
+            return '.html';
+        } else if (note.type === 'code') {
+            // Map MIME types to file extensions
+            const mimeToExt: Record<string, string> = {
+                'application/javascript': '.js',
+                'text/javascript': '.js',
+                'application/typescript': '.ts',
+                'text/typescript': '.ts',
+                'application/json': '.json',
+                'text/css': '.css',
+                'text/x-python': '.py',
+                'text/x-java': '.java',
+                'text/x-csharp': '.cs',
+                'text/x-sql': '.sql',
+                'text/x-sh': '.sh',
+                'text/x-yaml': '.yaml',
+                'application/xml': '.xml',
+                'text/xml': '.xml'
+            };
+            return mimeToExt[note.mime] || '.txt';
+        } else if (note.type === 'image') {
+            const mimeToExt: Record<string, string> = {
+                'image/png': '.png',
+                'image/jpeg': '.jpg',
+                'image/gif': '.gif',
+                'image/svg+xml': '.svg'
+            };
+            return mimeToExt[note.mime] || '.png';
+        } else {
+            return '.txt';
+        }
+    }
+
+    /**
+     * Sanitize file name to be safe for file system
+     */
+    private sanitizeFileName(fileName: string): string {
+        // Replace invalid characters with underscores
+        return fileName
+            .replace(/[<>:"/\\|?*]/g, '_')
+            .replace(/\s+/g, '_')
+            .replace(/_{2,}/g, '_')
+            .replace(/^_+|_+$/g, '')
+            .substring(0, 100); // Limit length
     }
 
     /**
