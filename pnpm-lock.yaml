@@ -1328,8 +1328,8 @@ importers:
         specifier: 0.5.0
         version: 0.5.0
       eslint-linter-browserify:
-        specifier: 9.31.0
-        version: 9.31.0
+        specifier: 9.32.0
+        version: 9.32.0
 
   packages/commons: {}
 
@@ -8454,8 +8454,8 @@ packages:
     peerDependencies:
       eslint: '>=7.0.0'
 
-  eslint-linter-browserify@9.31.0:
-    resolution: {integrity: sha512-Utv/GchpL5EkPK1FcYvPjdfcYl6nEr2SaJgY4cZHRt/IVGxvojhdZQLHSC9CTpWVWt1fQ7McrzyfCCD1QxB9ow==}
+  eslint-linter-browserify@9.32.0:
+    resolution: {integrity: sha512-YmgNbyrXscxdVwQN22YG0mpxbW/QZolDnmjHq52DpEB9JfemjUJmjnavoHG1Rt7OL3maSPGr406P5dQDCnHCtA==}
 
   eslint-plugin-ckeditor5-rules@12.1.0:
     resolution: {integrity: sha512-tu8xYJkQ9CZzS+cDsBvnaKdADJVNzGNl/4a8i7A538y/YifyAiSMCSQOeefx5Ej27bBL+Wo9WlgeuLmjiyTP+A==}
@@ -16720,8 +16720,6 @@ snapshots:
       '@ckeditor/ckeditor5-core': 46.0.0
       '@ckeditor/ckeditor5-utils': 46.0.0
       ckeditor5: 46.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-code-block@46.0.0(patch_hash=2361d8caad7d6b5bddacc3a3b4aa37dbfba260b1c1b22a450413a79c1bb1ce95)':
     dependencies:
@@ -16781,8 +16779,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 46.0.0
       '@ckeditor/ckeditor5-watchdog': 46.0.0
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-dev-build-tools@43.1.0(@swc/helpers@0.5.17)(tslib@2.8.1)(typescript@5.8.3)':
     dependencies:
@@ -17025,8 +17021,6 @@ snapshots:
       '@ckeditor/ckeditor5-core': 46.0.0
       '@ckeditor/ckeditor5-engine': 46.0.0
       '@ckeditor/ckeditor5-utils': 46.0.0
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-essentials@46.0.0':
     dependencies:
@@ -17473,8 +17467,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.0.0
       '@ckeditor/ckeditor5-utils': 46.0.0
       ckeditor5: 46.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-restricted-editing@46.0.0':
     dependencies:
@@ -25117,7 +25109,7 @@ snapshots:
     dependencies:
       eslint: 9.32.0(jiti@2.5.1)
 
-  eslint-linter-browserify@9.31.0: {}
+  eslint-linter-browserify@9.32.0: {}
 
   eslint-plugin-ckeditor5-rules@12.1.0:
     dependencies:
