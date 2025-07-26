@@ -67,9 +67,22 @@ const TPL = /*html*/`
     }
 
     .promoted-attribute-cell input[type="color"] {
-        width: 50px;
+        width: 24px;
+        height: 24px;
+        margin-top: 2px;
+        appearance: none;
         padding: 0;
         border: 0;
+        outline: none;
+        border-radius: 25% !important;
+    }
+
+    .promoted-attribute-cell input[type="color"]::-webkit-color-swatch-wrapper {
+        padding: 0;
+    }
+    .promoted-attribute-cell input[type="color"]::-webkit-color-swatch {
+        border: none;
+        border-radius: 25%;
     }
 
     </style>
