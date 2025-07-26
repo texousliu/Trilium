@@ -7,6 +7,7 @@ import BAttribute from "../becca/entities/battribute.js";
 import hiddenSubtreeService from "./hidden_subtree.js";
 import oneTimeTimer from "./one_time_timer.js";
 import ocrService from "./ocr/ocr_service.js";
+import optionService from "./options.js";
 import log from "./log.js";
 import type BNote from "../becca/entities/bnote.js";
 import type AbstractBeccaEntity from "../becca/entities/abstract_becca_entity.js";
@@ -142,7 +143,8 @@ eventService.subscribe(eventService.ENTITY_CREATED, ({ entityName, entity }) => 
 
         // Note: OCR processing for images is now handled in image.ts during image processing
         // OCR processing for files remains here since they don't go through image processing
-        if (entity.type === 'file' && ocrService.isOCREnabled()) {
+        // Only auto-process if both OCR is enabled and auto-processing is enabled
+        if (entity.type === 'file' && ocrService.isOCREnabled() && optionService.getOptionBool("ocrAutoProcessImages")) {
             // Check if the file MIME type is supported by any OCR processor
             const supportedMimeTypes = ocrService.getAllSupportedMimeTypes();
 

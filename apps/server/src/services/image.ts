@@ -26,7 +26,8 @@ async function processImage(uploadBuffer: Buffer, originalName: string, shrinkIm
     }
 
     // Schedule OCR processing in the background for best quality
-    if (noteId && ocrService.isOCREnabled() && origImageFormat) {
+    // Only auto-process if both OCR is enabled and auto-processing is enabled
+    if (noteId && ocrService.isOCREnabled() && optionService.getOptionBool("ocrAutoProcessImages") && origImageFormat) {
         const imageMime = getImageMimeFromExtension(origImageFormat.ext);
         const supportedMimeTypes = ocrService.getAllSupportedMimeTypes();
 
