@@ -23,6 +23,7 @@ interface Options {
     tooltip?: boolean;
     trim?: boolean;
     imageHasZoom?: boolean;
+    showOcrText?: boolean;
 }
 
 const CODE_MIME_TYPES = new Set(["application/json"]);
@@ -48,7 +49,7 @@ async function getRenderedContent(this: {} | { ctx: string }, entity: FNote | FA
     } else if (["image", "canvas", "mindMap"].includes(type)) {
         await renderImage(entity, $renderedContent, options);
     } else if (!options.tooltip && ["file", "pdf", "audio", "video"].includes(type)) {
-        await renderFile(entity, type, $renderedContent);
+        await renderFile(entity, type, $renderedContent, options);
     } else if (type === "mermaid") {
         await renderMermaid(entity, $renderedContent);
     } else if (type === "render" && entity instanceof FNote) {
@@ -175,7 +176,7 @@ async function renderImage(entity: FNote | FAttachment, $renderedContent: JQuery
     imageContextMenuService.setupContextMenu($img);
 
     // Add OCR text display for image notes
-    if (entity instanceof FNote) {
+    if (entity instanceof FNote && options.showOcrText) {
         await addOCRTextIfAvailable(entity, $renderedContent);
     }
 }
@@ -205,7 +206,7 @@ async function addOCRTextIfAvailable(note: FNote, $content: JQuery<HTMLElement>)
     }
 }
 
-async function renderFile(entity: FNote | FAttachment, type: string, $renderedContent: JQuery<HTMLElement>) {
+async function renderFile(entity: FNote | FAttachment, type: string, $renderedContent: JQuery<HTMLElement>, options: Options = {}) {
     let entityType, entityId;
 
     if (entity instanceof FNote) {
@@ -242,7 +243,7 @@ async function renderFile(entity: FNote | FAttachment, type: string, $renderedCo
     }
 
     // Add OCR text display for file notes
-    if (entity instanceof FNote) {
+    if (entity instanceof FNote && options.showOcrText) {
         await addOCRTextIfAvailable(entity, $content);
     }
 
