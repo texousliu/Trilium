@@ -295,6 +295,13 @@ class FileSystemSync {
             const fileStats = await fs.stat(filePath);
             const fileHash = await this.calculateFileHash(filePath);
 
+            // Check if mapping already exists (safety check)
+            const existingMapping = this.findFileNoteMappingByPath(mapping.mappingId, filePath);
+            if (existingMapping) {
+                log.info(`File mapping already exists for ${filePath}, skipping creation`);
+                return;
+            }
+
             // Create file note mapping
             const fileNoteMapping = new BFileNoteMapping({
                 mappingId: mapping.mappingId,
@@ -379,6 +386,13 @@ class FileSystemSync {
 
             // Create note from file
             const note = await this.createNoteFromFile(mapping, filePath);
+
+            // Check if mapping already exists (safety check)
+            const existingMapping = this.findFileNoteMappingByPath(mapping.mappingId, filePath);
+            if (existingMapping) {
+                log.info(`File mapping already exists for ${filePath}, skipping creation`);
+                return;
+            }
 
             // Create file note mapping
             const fileNoteMapping = new BFileNoteMapping({

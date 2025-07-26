@@ -297,7 +297,7 @@ class FileSystemWatcher {
         // Find existing file note mapping
         let fileNoteMapping: BFileNoteMapping | null = null;
         for (const mapping of Object.values(becca.fileNoteMappings || {})) {
-            if (mapping.mappingId === event.mappingId && mapping.filePath === event.filePath) {
+            if (mapping.mappingId === event.mappingId && path.normalize(mapping.filePath) === path.normalize(event.filePath)) {
                 fileNoteMapping = mapping;
                 break;
             }
@@ -319,15 +319,41 @@ class FileSystemWatcher {
 
             fileNoteMapping.markPending();
         } else {
-            // Create new file note mapping
-            fileNoteMapping = new BFileNoteMapping({
-                mappingId: event.mappingId,
-                noteId: '', // Will be determined by sync service
-                filePath: event.filePath,
-                fileHash,
-                fileModifiedTime,
-                syncStatus: 'pending'
-            }).save();
+            // Double-check if mapping exists before creating (race condition protection)
+            const existingCheck = Object.values(becca.fileNoteMappings || {}).find(m =>
+                m.mappingId === event.mappingId && path.normalize(m.filePath) === path.normalize(event.filePath)
+            );
+
+            if (existingCheck) {
+                log.info(`File mapping already exists for ${event.filePath}, using existing mapping`);
+                fileNoteMapping = existingCheck;
+                fileNoteMapping.markPending();
+            } else {
+                // Create new file note mapping
+                try {
+                    fileNoteMapping = new BFileNoteMapping({
+                        mappingId: event.mappingId,
+                        noteId: '', // Will be determined by sync service
+                        filePath: event.filePath,
+                        fileHash,
+                        fileModifiedTime,
+                        syncStatus: 'pending'
+                    }).save();
+                } catch (error: any) {
+                    if (error.code === 'SQLITE_CONSTRAINT_UNIQUE') {
+                        log.info(`File mapping constraint violation for ${event.filePath}, trying to find existing mapping`);
+                        // Try to find the mapping again - it might have been created by another process
+                        fileNoteMapping = Object.values(becca.fileNoteMappings || {}).find(m =>
+                            m.mappingId === event.mappingId && path.normalize(m.filePath) === path.normalize(event.filePath)
+                        ) || null;
+                        if (!fileNoteMapping) {
+                            throw error; // Re-throw if we still can't find it
+                        }
+                    } else {
+                        throw error;
+                    }
+                }
+            }
         }
 
         // Emit event for sync service to handle
