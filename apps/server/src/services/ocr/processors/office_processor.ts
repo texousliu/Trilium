@@ -25,7 +25,7 @@ export class OfficeProcessor extends FileProcessor {
             'application/vnd.ms-powerpoint', // PPT
             'application/rtf' // RTF
         ];
-        return supportedTypes.includes(mimeType.toLowerCase());
+        return supportedTypes.includes(mimeType);
     }
 
     async extractText(buffer: Buffer, options: OCRProcessingOptions = {}): Promise<OCRResult> {
@@ -40,7 +40,7 @@ export class OfficeProcessor extends FileProcessor {
 
             // Extract text from Office document
             const data = await this.parseOfficeDocument(buffer);
-            
+
             // Extract text from Office document
             const combinedText = data.data && data.data.trim().length > 0 ? data.data.trim() : '';
             const confidence = combinedText.length > 0 ? 0.99 : 0; // High confidence for direct text extraction
@@ -71,7 +71,7 @@ export class OfficeProcessor extends FileProcessor {
                 ignoreNotes: false,
                 putNotesAtLast: false
             });
-            
+
             return {
                 data: data || ''
             };
@@ -113,13 +113,13 @@ export class OfficeProcessor extends FileProcessor {
         if (!language || typeof language !== 'string') {
             return false;
         }
-        
+
         // Split by '+' for multi-language format
         const languages = language.split('+');
-        
+
         // Check each language code (should be 2-7 characters, alphanumeric with underscores)
         const validLanguagePattern = /^[a-zA-Z]{2,3}(_[a-zA-Z]{2,3})?$/;
-        
+
         return languages.every(lang => {
             const trimmed = lang.trim();
             return trimmed.length > 0 && validLanguagePattern.test(trimmed);

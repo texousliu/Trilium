@@ -50,13 +50,13 @@ class OCRService {
 
         try {
             log.info('Initializing OCR service with file processors...');
-            
+
             // Initialize file processors
             this.processors.set('image', new ImageProcessor());
             this.processors.set('pdf', new PDFProcessor());
             this.processors.set('tiff', new TIFFProcessor());
             this.processors.set('office', new OfficeProcessor());
-            
+
             this.isInitialized = true;
             log.info('OCR service initialized successfully');
         } catch (error) {
@@ -84,10 +84,10 @@ class OCRService {
         if (!mimeType || typeof mimeType !== 'string') {
             return false;
         }
-        
+
         const supportedTypes = [
             'image/jpeg',
-            'image/jpg', 
+            'image/jpg',
             'image/png',
             'image/gif',
             'image/bmp',
@@ -116,7 +116,7 @@ class OCRService {
             }
 
             const result = await processor.extractText(fileBuffer, options);
-            
+
             log.info(`OCR extraction completed. Confidence: ${result.confidence}%, Text length: ${result.text.length}`);
             return result;
 
@@ -143,13 +143,25 @@ class OCRService {
             return null;
         }
 
-        if (note.type !== 'image') {
-            log.info(`Note ${noteId} is not an image note, skipping OCR`);
-            return null;
+        if (!this.isInitialized) {
+            await this.initialize();
         }
 
-        if (!this.isSupportedMimeType(note.mime)) {
-            log.info(`Note ${noteId} has unsupported MIME type ${note.mime}, skipping OCR`);
+        // Check if note type and MIME type are supported for OCR
+        if (note.type === 'image') {
+            if (!this.isSupportedMimeType(note.mime)) {
+                log.info(`Image note ${noteId} has unsupported MIME type ${note.mime}, skipping OCR`);
+                return null;
+            }
+        } else if (note.type === 'file') {
+            // Check if file MIME type is supported by any processor
+            const processor = this.getProcessorForMimeType(note.mime);
+            if (!processor) {
+                log.info(`File note ${noteId} has unsupported MIME type ${note.mime} for OCR, skipping`);
+                return null;
+            }
+        } else {
+            log.info(`Note ${noteId} is not an image or file note, skipping OCR`);
             return null;
         }
 
@@ -167,10 +179,10 @@ class OCRService {
             }
 
             const ocrResult = await this.extractTextFromFile(content, note.mime, options);
-            
+
             // Store OCR result in blob
             await this.storeOCRResult(note.blobId, ocrResult);
-            
+
             return ocrResult;
         } catch (error) {
             log.error(`Failed to process OCR for note ${noteId}: ${error}`);
@@ -193,13 +205,25 @@ class OCRService {
             return null;
         }
 
-        if (attachment.role !== 'image') {
-            log.info(`Attachment ${attachmentId} is not an image, skipping OCR`);
-            return null;
+        if (!this.isInitialized) {
+            await this.initialize();
         }
 
-        if (!this.isSupportedMimeType(attachment.mime)) {
-            log.info(`Attachment ${attachmentId} has unsupported MIME type ${attachment.mime}, skipping OCR`);
+        // Check if attachment role and MIME type are supported for OCR
+        if (attachment.role === 'image') {
+            if (!this.isSupportedMimeType(attachment.mime)) {
+                log.info(`Image attachment ${attachmentId} has unsupported MIME type ${attachment.mime}, skipping OCR`);
+                return null;
+            }
+        } else if (attachment.role === 'file') {
+            // Check if file MIME type is supported by any processor
+            const processor = this.getProcessorForMimeType(attachment.mime);
+            if (!processor) {
+                log.info(`File attachment ${attachmentId} has unsupported MIME type ${attachment.mime} for OCR, skipping`);
+                return null;
+            }
+        } else {
+            log.info(`Attachment ${attachmentId} is not an image or file, skipping OCR`);
             return null;
         }
 
@@ -217,10 +241,10 @@ class OCRService {
             }
 
             const ocrResult = await this.extractTextFromFile(content, attachment.mime, options);
-            
+
             // Store OCR result in blob
             await this.storeOCRResult(attachment.blobId, ocrResult);
-            
+
             return ocrResult;
         } catch (error) {
             log.error(`Failed to process OCR for attachment ${attachmentId}: ${error}`);
@@ -240,8 +264,8 @@ class OCRService {
         try {
             // Store OCR text and timestamp in blobs table
             sql.execute(`
-                UPDATE blobs SET 
-                    ocr_text = ?, 
+                UPDATE blobs SET
+                    ocr_text = ?,
                     ocr_last_processed = ?
                 WHERE blobId = ?
             `, [
@@ -249,7 +273,7 @@ class OCRService {
                 new Date().toISOString(),
                 blobId
             ]);
-            
+
             log.info(`Stored OCR result for blob ${blobId}`);
         } catch (error) {
             log.error(`Failed to store OCR result for blob ${blobId}: ${error}`);
@@ -270,14 +294,14 @@ class OCRService {
                 ocr_text: string | null;
             }>(`
                 SELECT ocr_text
-                FROM blobs 
+                FROM blobs
                 WHERE blobId = ?
             `, [blobId]);
-            
+
             if (!row || !row.ocr_text) {
                 return null;
             }
-            
+
             // Return basic OCR result from stored text
             // Note: we lose confidence, language, and extractedAt metadata
             // but gain simplicity by storing directly in blob
@@ -300,14 +324,14 @@ class OCRService {
         try {
             const query = `
                 SELECT blobId, ocr_text
-                FROM blobs 
+                FROM blobs
                 WHERE ocr_text LIKE ?
                 AND ocr_text IS NOT NULL
             `;
             const params = [`%${searchText}%`];
-            
+
             const rows = sql.getRows<OCRBlobRow>(query, params);
-            
+
             return rows.map(row => ({
                 blobId: row.blobId,
                 text: row.ocr_text
@@ -324,10 +348,10 @@ class OCRService {
     deleteOCRResult(blobId: string): void {
         try {
             sql.execute(`
-                UPDATE blobs SET ocr_text = NULL 
+                UPDATE blobs SET ocr_text = NULL
                 WHERE blobId = ?
             `, [blobId]);
-            
+
             log.info(`Deleted OCR result for blob ${blobId}`);
         } catch (error) {
             log.error(`Failed to delete OCR result for blob ${blobId}: ${error}`);
@@ -547,7 +571,7 @@ class OCRService {
                 ocr_last_processed: string | null;
             }>(`
                 SELECT utcDateModified, ocr_last_processed
-                FROM blobs 
+                FROM blobs
                 WHERE blobId = ?
             `, [blobId]);
 
@@ -563,7 +587,7 @@ class OCRService {
             // If blob was modified after last OCR processing, it needs re-processing
             const blobModified = new Date(blobInfo.utcDateModified);
             const lastOcrProcessed = new Date(blobInfo.ocr_last_processed);
-            
+
             return blobModified > lastOcrProcessed;
         } catch (error) {
             log.error(`Failed to check if blob ${blobId} needs reprocessing: ${error}`);
@@ -581,12 +605,12 @@ class OCRService {
 
         try {
             sql.execute(`
-                UPDATE blobs SET 
+                UPDATE blobs SET
                     ocr_text = NULL,
                     ocr_last_processed = NULL
                 WHERE blobId = ?
             `, [blobId]);
-            
+
             log.info(`Invalidated OCR result for blob ${blobId}`);
         } catch (error) {
             log.error(`Failed to invalidate OCR result for blob ${blobId}: ${error}`);
@@ -599,7 +623,7 @@ class OCRService {
      */
     getBlobsNeedingOCR(): Array<{ blobId: string; mimeType: string; entityType: 'note' | 'attachment'; entityId: string }> {
         try {
-            // Get notes with blobs that need OCR
+            // Get notes with blobs that need OCR (both image notes and file notes with supported MIME types)
             const noteBlobs = sql.getRows<{
                 blobId: string;
                 mimeType: string;
@@ -608,16 +632,38 @@ class OCRService {
                 SELECT n.blobId, n.mime as mimeType, n.noteId as entityId
                 FROM notes n
                 JOIN blobs b ON n.blobId = b.blobId
-                WHERE n.type = 'image' 
+                WHERE (
+                    n.type = 'image'
+                    OR (
+                        n.type = 'file'
+                        AND n.mime IN (
+                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                            'application/msword',
+                            'application/vnd.ms-excel',
+                            'application/vnd.ms-powerpoint',
+                            'application/rtf',
+                            'application/pdf',
+                            'image/jpeg',
+                            'image/jpg',
+                            'image/png',
+                            'image/gif',
+                            'image/bmp',
+                            'image/tiff',
+                            'image/webp'
+                        )
+                    )
+                )
                 AND n.isDeleted = 0
                 AND n.blobId IS NOT NULL
                 AND (
-                    b.ocr_last_processed IS NULL 
+                    b.ocr_last_processed IS NULL
                     OR b.utcDateModified > b.ocr_last_processed
                 )
             `);
 
-            // Get attachments with blobs that need OCR
+            // Get attachments with blobs that need OCR (both image and file attachments with supported MIME types)
             const attachmentBlobs = sql.getRows<{
                 blobId: string;
                 mimeType: string;
@@ -626,11 +672,33 @@ class OCRService {
                 SELECT a.blobId, a.mime as mimeType, a.attachmentId as entityId
                 FROM attachments a
                 JOIN blobs b ON a.blobId = b.blobId
-                WHERE a.role = 'image'
+                WHERE (
+                    a.role = 'image'
+                    OR (
+                        a.role = 'file'
+                        AND a.mime IN (
+                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                            'application/msword',
+                            'application/vnd.ms-excel',
+                            'application/vnd.ms-powerpoint',
+                            'application/rtf',
+                            'application/pdf',
+                            'image/jpeg',
+                            'image/jpg',
+                            'image/png',
+                            'image/gif',
+                            'image/bmp',
+                            'image/tiff',
+                            'image/webp'
+                        )
+                    )
+                )
                 AND a.isDeleted = 0
                 AND a.blobId IS NOT NULL
                 AND (
-                    b.ocr_last_processed IS NULL 
+                    b.ocr_last_processed IS NULL
                     OR b.utcDateModified > b.ocr_last_processed
                 )
             `);
@@ -641,8 +709,8 @@ class OCRService {
                 ...attachmentBlobs.map(blob => ({ ...blob, entityType: 'attachment' as const }))
             ];
 
-            // Filter to only supported MIME types
-            return result.filter(blob => this.isSupportedMimeType(blob.mimeType));
+            // Return all results (no need to filter by MIME type as we already did in the query)
+            return result;
         } catch (error) {
             log.error(`Failed to get blobs needing OCR: ${error}`);
             return [];
@@ -673,7 +741,7 @@ class OCRService {
                 } else {
                     await this.processAttachmentOCR(blobInfo.entityId);
                 }
-                
+
                 // Add small delay to prevent overwhelming the system
                 await new Promise(resolve => setTimeout(resolve, 100));
             } catch (error) {

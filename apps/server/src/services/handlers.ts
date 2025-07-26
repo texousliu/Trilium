@@ -6,6 +6,8 @@ import becca from "../becca/becca.js";
 import BAttribute from "../becca/entities/battribute.js";
 import hiddenSubtreeService from "./hidden_subtree.js";
 import oneTimeTimer from "./one_time_timer.js";
+import ocrService from "./ocr/ocr_service.js";
+import log from "./log.js";
 import type BNote from "../becca/entities/bnote.js";
 import type AbstractBeccaEntity from "../becca/entities/abstract_becca_entity.js";
 import type { DefinitionObject } from "./promoted_attribute_definition_interface.js";
@@ -137,6 +139,42 @@ eventService.subscribe(eventService.ENTITY_CREATED, ({ entityName, entity }) => 
         }
     } else if (entityName === "notes") {
         runAttachedRelations(entity, "runOnNoteCreation", entity);
+        
+        // Automatically process OCR for file notes if OCR is enabled
+        if (entity.type === 'file' && ocrService.isOCREnabled()) {
+            // Check if the file MIME type is supported by any OCR processor
+            const supportedMimeTypes = [
+                // Office documents
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                'application/msword',
+                'application/vnd.ms-excel',
+                'application/vnd.ms-powerpoint',
+                'application/rtf',
+                // PDFs
+                'application/pdf',
+                // Images (though these are usually type='image', not 'file')
+                'image/jpeg',
+                'image/jpg',
+                'image/png',
+                'image/gif',
+                'image/bmp',
+                'image/tiff',
+                'image/webp'
+            ];
+            
+            if (entity.mime && supportedMimeTypes.includes(entity.mime)) {
+                // Process OCR asynchronously to avoid blocking note creation
+                ocrService.processNoteOCR(entity.noteId).then(result => {
+                    if (result) {
+                        log.info(`Automatically processed OCR for file note ${entity.noteId} with MIME type ${entity.mime}`);
+                    }
+                }).catch(error => {
+                    log.error(`Failed to automatically process OCR for file note ${entity.noteId}: ${error}`);
+                });
+            }
+        }
     }
 });
 
