@@ -1,8 +1,9 @@
 import OptionsWidget from "../options_widget.js";
 import server from "../../../../services/server.js";
 import toastService from "../../../../services/toast.js";
-import { t } from "../../../../services/i18n.js";
+import noteAutocompleteService from "../../../../services/note_autocomplete.js";
 import type { OptionMap } from "@triliumnext/commons";
+import type { Suggestion } from "../../../../services/note_autocomplete.js";
 
 interface FileSystemMapping {
     mappingId: string;
@@ -154,9 +155,10 @@ const TPL = /*html*/`
             <form class="mapping-form">
                 <div class="form-group">
                     <label for="note-selector">Note:</label>
-                    <input type="text" id="note-selector" class="form-control note-selector"
-                           placeholder="Click to select a note..." readonly>
-                    <input type="hidden" class="selected-note-id">
+                    <div class="input-group">
+                        <input type="text" id="note-selector" class="form-control note-selector"
+                               placeholder="Search for a note...">
+                    </div>
                     <div class="help-block">Select the note to map to the file system.</div>
                 </div>
 
@@ -276,7 +278,6 @@ export default class FileSystemSyncOptions extends OptionsWidget {
     private $mappingModal!: JQuery<HTMLElement>;
     private $modalTitle!: JQuery<HTMLElement>;
     private $noteSelector!: JQuery<HTMLElement>;
-    private $selectedNoteId!: JQuery<HTMLElement>;
     private $filePathInput!: JQuery<HTMLElement>;
     private $validatePathButton!: JQuery<HTMLElement>;
     private $pathValidationResult!: JQuery<HTMLElement>;
@@ -314,7 +315,6 @@ export default class FileSystemSyncOptions extends OptionsWidget {
         this.$mappingModal = this.$widget.closest(".mapping-modal");
         this.$modalTitle = this.$mappingModal.find(".modal-title");
         this.$noteSelector = this.$mappingModal.find(".note-selector");
-        this.$selectedNoteId = this.$mappingModal.find(".selected-note-id");
         this.$filePathInput = this.$mappingModal.find(".file-path-input");
         this.$validatePathButton = this.$mappingModal.find(".validate-path-button");
         this.$pathValidationResult = this.$mappingModal.find(".path-validation-result");
@@ -387,11 +387,7 @@ export default class FileSystemSyncOptions extends OptionsWidget {
             this.hideMappingModal();
         });
 
-        // Note selector (simplified - in real implementation would integrate with note picker)
-        this.$noteSelector.on("click", () => {
-            // TODO: Integrate with Trilium's note picker dialog
-            toastService.showMessage("Note picker integration needed");
-        });
+        // Note selector autocomplete will be initialized in showMappingModal
     }
 
     private toggleControls(enabled: boolean) {
@@ -497,6 +493,17 @@ export default class FileSystemSyncOptions extends OptionsWidget {
             this.clearMappingForm();
         }
 
+        // Initialize note autocomplete
+        noteAutocompleteService.initNoteAutocomplete(this.$noteSelector, {
+            allowCreatingNotes: true,
+        });
+
+        // Handle note selection
+        this.$noteSelector.off("autocomplete:noteselected").on("autocomplete:noteselected", (event: JQuery.Event, suggestion: Suggestion) => {
+            // The note autocomplete service will automatically set the selected note path
+            // which we can retrieve using getSelectedNoteId()
+        });
+
         this.$mappingModal.removeClass('modal-hidden').addClass('modal-visible');
     }
 
@@ -506,9 +513,10 @@ export default class FileSystemSyncOptions extends OptionsWidget {
         this.currentEditingMappingId = null;
     }
 
-    private populateMappingForm(mapping: FileSystemMapping) {
-        this.$selectedNoteId.val(mapping.noteId);
-        this.$noteSelector.val(`Note: ${mapping.noteId}`); // TODO: Show actual note title
+    private async populateMappingForm(mapping: FileSystemMapping) {
+        // Set the note using the autocomplete service's setNote method
+        await this.$noteSelector.setNote(mapping.noteId);
+
         this.$filePathInput.val(mapping.filePath);
         this.$syncDirectionSelect.val(mapping.syncDirection);
         this.$contentFormatSelect.val(mapping.contentFormat);
@@ -522,8 +530,8 @@ export default class FileSystemSyncOptions extends OptionsWidget {
     }
 
     private clearMappingForm() {
-        this.$selectedNoteId.val('');
-        this.$noteSelector.val('');
+        // Clear the note selector using autocomplete service
+        this.$noteSelector.val('').setSelectedNotePath('');
         this.$filePathInput.val('');
         this.$syncDirectionSelect.val('bidirectional');
         this.$contentFormatSelect.val('auto');
@@ -558,7 +566,7 @@ export default class FileSystemSyncOptions extends OptionsWidget {
     }
 
     private async saveMapping() {
-        const noteId = this.$selectedNoteId.val() as string;
+        const noteId = this.$noteSelector.getSelectedNoteId();
         const filePath = this.$filePathInput.val() as string;
         const syncDirection = this.$syncDirectionSelect.val() as string;
         const contentFormat = this.$contentFormatSelect.val() as string;
