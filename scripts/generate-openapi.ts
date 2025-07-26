@@ -23,10 +23,10 @@ const options = {
             title: "Trilium Notes - Sync server API",
             version: packageJson["version"],
             description:
-                "This is the internal sync server API used by Trilium Notes / TriliumNext Notes.\n\n_If you're looking for the officially supported External Trilium API, see [here](https://triliumnext.github.io/Docs/Wiki/etapi.html)._\n\nThis page does not yet list all routes. For a full list, see the [route controller](https://github.com/TriliumNext/Notes/blob/v0.91.6/src/routes/routes.ts).",
+                "This is the internal sync server API used by Trilium Notes.\n\n_If you're looking for the officially supported External Trilium API, see [here](https://triliumnext.github.io/Docs/Wiki/etapi.html)._\n\nThis page does not yet list all routes. For a full list, see the [route controller](https://github.com/TriliumNext/Trilium/blob/v0.91.6/src/routes/routes.ts).",
             contact: {
                 name: "TriliumNext issue tracker",
-                url: "https://github.com/TriliumNext/Notes/issues"
+                url: "https://github.com/TriliumNext/Trilium/issues"
             },
             license: {
                 name: "GNU Free Documentation License 1.3 (or later)",
@@ -158,8 +158,8 @@ console.log("Saved to", outputPath);
  *         type:
  *           type: string
  *           example: "text"
- *           enum: ["text", "code", "render", "file", "image", "search", "relationMap", "book", "noteMap", "mermaid", "canvas", "webView", "launcher", "doc", "contentWidget", "mindMap", "geoMap"]
- *           description: "[Reference list](https://github.com/TriliumNext/Notes/blob/v0.91.6/src/services/note_types.ts)"
+ *           enum: ["text", "code", "render", "file", "image", "search", "relationMap", "book", "noteMap", "mermaid", "canvas", "webView", "launcher", "doc", "contentWidget", "mindMap"]
+ *           description: "[Reference list](https://github.com/TriliumNext/Trilium/blob/v0.91.6/src/services/note_types.ts)"
  *         mime:
  *           type: string
  *           example: "text/html"

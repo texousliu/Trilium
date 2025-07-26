@@ -1,6 +1,6 @@
 {
   "name": "@triliumnext/commons",
-  "version": "0.94.1",
+  "version": "0.97.1",
   "description": "Shared library between the clients (e.g. browser, Electron) and the server, mostly for type definitions and utility methods.",
   "private": true,
   "type": "module",
@@ -18,7 +18,7 @@
   },
   "license": "AGPL-3.0-only",
   "author": {
-    "name": "TriliumNext Notes Team",
+    "name": "Trilium Notes Team",
     "email": "contact@eliandoran.me",
     "url": "https://github.com/TriliumNext/Notes"
   },

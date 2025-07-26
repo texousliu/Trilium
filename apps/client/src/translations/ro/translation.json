@@ -1,6 +1,6 @@
 {
   "about": {
-    "title": "Despre TriliumNext Notes",
+    "title": "Despre Trilium Notes",
     "homepage": "Site web:",
     "app_version": "Versiune aplicație:",
     "db_version": "Versiune bază de date:",
@@ -274,7 +274,7 @@
     "no_children_help": "Această notiță de tip Carte nu are nicio subnotiță așadar nu este nimic de afișat. Vedeți <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> pentru detalii."
   },
   "book_properties": {
-    "book_properties": "Proprietăți carte",
+    "book_properties": "",
     "collapse": "Minimizează",
     "collapse_all_notes": "Minimizează toate notițele",
     "expand": "Expandează",
@@ -572,7 +572,7 @@
     "system-default": "Fontul predefinit al sistemului"
   },
   "global_menu": {
-    "about": "Despre TriliumNext Notes",
+    "about": "Despre Trilium Notes",
     "advanced": "Opțiuni avansate",
     "configure_launchbar": "Configurează bara de lansare",
     "logout": "Deautentificare",
@@ -1349,7 +1349,7 @@
     "copy-note-path-to-clipboard": "Copiază calea notiței în clipboard",
     "cut": "Decupează",
     "delete": "Șterge",
-    "duplicate-subtree": "Dublifică ierarhia",
+    "duplicate": "Dublifică",
     "edit-branch-prefix": "Editează prefixul ramurii",
     "expand-subtree": "Expandează subnotițele",
     "export": "Exportă",
@@ -1377,7 +1377,7 @@
     "shared_publicly": "Această notiță este partajată public la"
   },
   "note_types": {
-    "book": "Carte",
+    "book": "Colecție",
     "canvas": "Schiță",
     "code": "Cod sursă",
     "mermaid-diagram": "Diagramă Mermaid",

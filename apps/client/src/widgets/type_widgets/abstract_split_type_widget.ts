@@ -130,7 +130,8 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 
     constructor() {
         super();
-        this.editorTypeWidget = new EditableCodeTypeWidget();
+
+        this.editorTypeWidget = new EditableCodeTypeWidget(true);
         this.editorTypeWidget.updateBackgroundColor = () => {};
         this.editorTypeWidget.isEnabled = () => true;
 
@@ -145,6 +146,8 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 
     doRender(): void {
         this.$widget = $(TPL);
+
+        this.spacedUpdate.setUpdateInterval(750);
 
         // Preview pane
         this.$previewCol = this.$widget.find(".note-detail-split-preview-col");

@@ -10,7 +10,7 @@ const doubleCsrfUtilities = doubleCsrf({
         path: "/",
         secure: false,
         sameSite: "strict",
-        httpOnly: !isElectron // set to false for Electron, see https://github.com/TriliumNext/Notes/pull/966
+        httpOnly: !isElectron // set to false for Electron, see https://github.com/TriliumNext/Trilium/pull/966
     },
     cookieName: CSRF_COOKIE_NAME,
     getSessionIdentifier: (req) => req.session.id

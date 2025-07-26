@@ -4,6 +4,7 @@ import BasicWidget from "../basic_widget.js";
 import openService from "../../services/open.js";
 import server from "../../services/server.js";
 import utils from "../../services/utils.js";
+import { openDialog } from "../../services/dialog.js";
 
 interface AppInfo {
     appVersion: string;
@@ -26,7 +27,7 @@ const TPL = /*html*/`
                 <table class="table table-borderless">
                     <tr>
                         <th>${t("about.homepage")}</th>
-                        <td><a class="tn-link" href="https://github.com/TriliumNext/Notes" class="external">https://github.com/TriliumNext/Notes</a></td>
+                        <td><a class="tn-link" href="https://github.com/TriliumNext/Trilium" class="external">https://github.com/TriliumNext/Trilium</a></td>
                     </tr>
                     <tr>
                         <th>${t("about.app_version")}</th>
@@ -91,7 +92,7 @@ export default class AboutDialog extends BasicWidget {
         this.$syncVersion.text(appInfo.syncVersion.toString());
         this.$buildDate.text(formatDateTime(appInfo.buildDate));
         this.$buildRevision.text(appInfo.buildRevision);
-        this.$buildRevision.attr("href", `https://github.com/TriliumNext/Notes/commit/${appInfo.buildRevision}`);
+        this.$buildRevision.attr("href", `https://github.com/TriliumNext/Trilium/commit/${appInfo.buildRevision}`);
         if (utils.isElectron()) {
             this.$dataDirectory.html(
                 $("<a></a>", {
@@ -111,6 +112,6 @@ export default class AboutDialog extends BasicWidget {
 
     async openAboutDialogEvent() {
         await this.refresh();
-        utils.openDialog(this.$widget);
+        openDialog(this.$widget);
     }
 }

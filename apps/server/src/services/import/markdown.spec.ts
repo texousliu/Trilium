@@ -259,15 +259,15 @@ $$`;
         const input = trimIndentation`\
             ### 🐞 Bugfixes
 
-            *   [v0.90.4 docker does not read USER\_UID and USER\_GID from environment](https://github.com/TriliumNext/Notes/issues/331)
-            *   [Invalid CSRF token on Android phone](https://github.com/TriliumNext/Notes/issues/318)
-            *   [Excess spacing in lists](https://github.com/TriliumNext/Notes/issues/341)`;
+            *   [v0.90.4 docker does not read USER\_UID and USER\_GID from environment](https://github.com/TriliumNext/Trilium/issues/331)
+            *   [Invalid CSRF token on Android phone](https://github.com/TriliumNext/Trilium/issues/318)
+            *   [Excess spacing in lists](https://github.com/TriliumNext/Trilium/issues/341)`;
         const expected = [
             /*html*/`<h3>🐞 Bugfixes</h3>`,
             /*html*/`<ul>`,
-            /*html*/`<li><a href="https://github.com/TriliumNext/Notes/issues/331">v0.90.4 docker does not read USER_UID and USER_GID from environment</a></li>`,
-            /*html*/`<li><a href="https://github.com/TriliumNext/Notes/issues/318">Invalid CSRF token on Android phone</a></li>`,
-            /*html*/`<li><a href="https://github.com/TriliumNext/Notes/issues/341">Excess spacing in lists</a></li>`,
+            /*html*/`<li><a href="https://github.com/TriliumNext/Trilium/issues/331">v0.90.4 docker does not read USER_UID and USER_GID from environment</a></li>`,
+            /*html*/`<li><a href="https://github.com/TriliumNext/Trilium/issues/318">Invalid CSRF token on Android phone</a></li>`,
+            /*html*/`<li><a href="https://github.com/TriliumNext/Trilium/issues/341">Excess spacing in lists</a></li>`,
             /*html*/`</ul>`
         ].join("");
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
@@ -278,6 +278,24 @@ $$`;
             - [x] Hello
             - [ ] World`;
         const expected = `<ul class="todo-list"><li><label class="todo-list__label"><input type="checkbox" checked="checked" disabled="disabled"><span class="todo-list__label__description">Hello</span></label></li><li><label class="todo-list__label"><input type="checkbox" disabled="disabled"><span class="todo-list__label__description">World</span></label></li></ul>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
+    it("supports wikilink with root-relative path", () => {
+        const input = `oh no my banana I bought on [[journal/monday]] has gone off! I’m taking it back to the [[other/shop]] for a refund`;
+        const expected = `<p>oh no my banana I bought on <a class="reference-link" href="/journal/monday">journal/monday</a> has gone off! I’m taking it back to the <a class="reference-link" href="/other/shop">other/shop</a> for a refund</p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
+    it("supports wikilink in lists", () => {
+        const input = `- oh no my banana I bought on [[journal/monday]] has gone off! I’m taking it back to the [[other/shop]] for a refund`;
+        const expected = `<ul><li>oh no my banana I bought on <a class="reference-link" href="/journal/monday">journal/monday</a> has gone off! I’m taking it back to the <a class="reference-link" href="/other/shop">other/shop</a> for a refund</li></ul>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
+    it("supports wikilink with image (transclusion)", () => {
+        const input = `heres the handsome boy ![[assets/2025-06-20_14-05-20.jpeg]]`;
+        const expected = `<p>heres the handsome boy <img src="/assets/2025-06-20_14-05-20.jpeg"></p>`;
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 

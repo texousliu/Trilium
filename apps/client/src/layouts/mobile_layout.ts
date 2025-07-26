@@ -162,7 +162,7 @@ export default class MobileLayout {
                                     .filling()
                                     .contentSized()
                                     .child(new NoteDetailWidget())
-                                    .child(new NoteListWidget())
+                                    .child(new NoteListWidget(false))
                                     .child(new FilePropertiesWidget().css("font-size", "smaller"))
                             )
                             .child(new MobileEditorToolbar())

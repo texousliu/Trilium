@@ -3,13 +3,25 @@ import becca from "../../becca/becca.js";
 import bulkActionService from "../../services/bulk_actions.js";
 
 function execute(req: Request) {
-    const { noteIds, includeDescendants } = req.body;
+    const { noteIds, includeDescendants, actions } = req.body;
+    if (!Array.isArray(noteIds)) {
+        throw new Error("noteIds must be an array");
+    }
 
     const affectedNoteIds = getAffectedNoteIds(noteIds, includeDescendants);
 
     const bulkActionNote = becca.getNoteOrThrow("_bulkAction");
 
-    bulkActionService.executeActions(bulkActionNote, affectedNoteIds);
+    if (actions && actions.length > 0) {
+        for (const action of actions) {
+            if (!action.name) {
+                throw new Error("Action must have a name");
+            }
+        }
+        bulkActionService.executeActions(actions, affectedNoteIds);
+    } else {
+        bulkActionService.executeActionsFromNote(bulkActionNote, affectedNoteIds);
+    }
 }
 
 function getAffectedNoteCount(req: Request) {

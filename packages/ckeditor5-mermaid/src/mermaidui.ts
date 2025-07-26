@@ -7,7 +7,7 @@ import previewModeIcon from '../theme/icons/preview-mode.svg';
 import splitModeIcon from '../theme/icons/split-mode.svg';
 import sourceModeIcon from '../theme/icons/source-mode.svg';
 import infoIcon from '../theme/icons/info.svg';
-import { ButtonView, Editor, Element, Locale, Observable, Plugin } from 'ckeditor5';
+import { ButtonView, Editor, ModelElement, Locale, Observable, Plugin } from 'ckeditor5';
 import InsertMermaidCommand from './commands/insertMermaidCommand.js';
 
 /* global window, document */
@@ -69,7 +69,7 @@ export default class MermaidUI extends Plugin {
 
 			// Execute the command when the button is clicked.
 			command.listenTo( buttonView, 'execute', () => {
-				const mermaidItem = editor.execute( 'insertMermaidCommand' ) as Element;
+				const mermaidItem = editor.execute( 'insertMermaidCommand' ) as ModelElement;
 				const mermaidItemViewElement = editor.editing.mapper.toViewElement( mermaidItem );
 
 				view.scrollToTheSelection();

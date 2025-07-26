@@ -11,6 +11,7 @@ import utils from "../../services/utils.js";
 import shortcutService from "../../services/shortcuts.js";
 import appContext from "../../components/app_context.js";
 import type { Attribute } from "../../services/attribute_parser.js";
+import { focusSavedElement, saveFocusedElement } from "../../services/focus.js";
 
 const TPL = /*html*/`
 <div class="attr-detail tn-tool-dialog">
@@ -77,7 +78,7 @@ const TPL = /*html*/`
         }
     </style>
 
-    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
         <h5 class="attr-detail-title">${t("attribute_detail.attr_detail_title")}</h5>
 
         <span class="bx bx-x close-attr-detail-button tn-tool-button" title="${t("attribute_detail.close_button_title")}"></span>
@@ -141,6 +142,7 @@ const TPL = /*html*/`
                   <option value="datetime">${t("attribute_detail.date_time")}</option>
                   <option value="time">${t("attribute_detail.time")}</option>
                   <option value="url">${t("attribute_detail.url")}</option>
+                  <option value="color">${t("attribute_detail.color_type")}</option>
                 </select>
             </td>
         </tr>
@@ -294,6 +296,8 @@ interface AttributeDetailOpts {
     x: number;
     y: number;
     focus?: "name";
+    parent?: HTMLElement;
+    hideMultiplicity?: boolean;
 }
 
 interface SearchRelatedResponse {
@@ -476,14 +480,14 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
         });
     }
 
-    async showAttributeDetail({ allAttributes, attribute, isOwned, x, y, focus }: AttributeDetailOpts) {
+    async showAttributeDetail({ allAttributes, attribute, isOwned, x, y, focus, hideMultiplicity }: AttributeDetailOpts) {
         if (!attribute) {
             this.hide();
 
             return;
         }
 
-        utils.saveFocusedElement();
+        saveFocusedElement();
 
         this.attrType = this.getAttrType(attribute);
 
@@ -527,7 +531,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
         this.$rowPromotedAlias.toggle(!!definition.isPromoted);
         this.$inputPromotedAlias.val(definition.promotedAlias || "").attr("disabled", disabledFn);
 
-        this.$rowMultiplicity.toggle(["label-definition", "relation-definition"].includes(this.attrType || ""));
+        this.$rowMultiplicity.toggle(["label-definition", "relation-definition"].includes(this.attrType || "") && !hideMultiplicity);
         this.$inputMultiplicity.val(definition.multiplicity || "").attr("disabled", disabledFn);
 
         this.$rowLabelType.toggle(this.attrType === "label-definition");
@@ -559,18 +563,21 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
 
         this.toggleInt(true);
 
-        const offset = this.parent?.$widget.offset() || { top: 0, left: 0 };
+        const offset = this.parent?.$widget?.offset() || { top: 0, left: 0 };
         const detPosition = this.getDetailPosition(x, offset);
         const outerHeight = this.$widget.outerHeight();
         const height = $(window).height();
 
-        if (detPosition && outerHeight && height) {
-            this.$widget
-                .css("left", detPosition.left)
-                .css("right", detPosition.right)
-                .css("top", y - offset.top + 70)
-                .css("max-height", outerHeight + y > height - 50 ? height - y - 50 : 10000);
+        if (!detPosition || !outerHeight || !height) {
+            console.warn("Can't position popup, is it attached?");
+            return;
         }
+
+        this.$widget
+            .css("left", detPosition.left)
+            .css("right", detPosition.right)
+            .css("top", y - offset.top + 70)
+            .css("max-height", outerHeight + y > height - 50 ? height - y - 50 : 10000);
 
         if (focus === "name") {
             this.$inputName.trigger("focus").trigger("select");
@@ -605,7 +612,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
 
         this.hide();
 
-        utils.focusSavedElement();
+        focusSavedElement();
     }
 
     async cancelAndClose() {
@@ -613,7 +620,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
 
         this.hide();
 
-        utils.focusSavedElement();
+        focusSavedElement();
     }
 
     userEditedAttribute() {

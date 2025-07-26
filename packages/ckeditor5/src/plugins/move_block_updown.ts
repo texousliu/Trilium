@@ -1,8 +1,8 @@
 /**
- * https://github.com/TriliumNext/Notes/issues/1002
+ * https://github.com/TriliumNext/Trilium/issues/1002
  */
 
-import { Command, DocumentSelection, Element, Node, Plugin, Range } from 'ckeditor5';
+import { Command, ModelDocumentSelection, ModelElement, ModelNode, Plugin, ModelRange } from 'ckeditor5';
 export default class MoveBlockUpDownPlugin extends Plugin {
 
     init() {
@@ -11,11 +11,11 @@ export default class MoveBlockUpDownPlugin extends Plugin {
         editor.commands.add('moveBlockUp', new MoveBlockUpCommand(editor));
         editor.commands.add('moveBlockDown', new MoveBlockDownCommand(editor));
 
-		// Use native DOM capturing to intercept Ctrl/Alt + ↑/↓, 
+		// Use native DOM capturing to intercept Ctrl/Alt + ↑/↓,
 		// as plugin-level keystroke handling may fail when the selection is near an object.
         this.bindMoveBlockShortcuts(editor);
     }
-	
+
 	bindMoveBlockShortcuts(editor: any) {
 		editor.editing.view.once('render', () => {
 			const domRoot = editor.editing.view.getDomRoot();
@@ -46,7 +46,7 @@ export default class MoveBlockUpDownPlugin extends Plugin {
 
 abstract class MoveBlockUpDownCommand extends Command {
 
-	abstract getSibling(selectedBlock: Element): Node | null;
+	abstract getSibling(selectedBlock: ModelElement): ModelNode | null;
     abstract get offset(): "before" | "after";
 
 	override execute() {
@@ -59,7 +59,7 @@ abstract class MoveBlockUpDownCommand extends Command {
 		if (!isEnabled) {
 			return;
 		}
-		
+
 		const movingBlocks = this.offset === 'before'
             ? selectedBlocks
             : [...selectedBlocks].reverse();
@@ -81,7 +81,7 @@ abstract class MoveBlockUpDownCommand extends Command {
 			}
 
 			// Restore selection
-			let range: Range;
+			let range: ModelRange;
 			const maxStart = firstBlock.maxOffset ?? startOffset;
 			const maxEnd = lastBlock.maxOffset ?? endOffset;
 			// If original offsets valid within bounds, restore partial selection
@@ -104,10 +104,10 @@ abstract class MoveBlockUpDownCommand extends Command {
 			this.scrollToSelection();
 		});
     }
-	
-	getSelectedBlocks(selection: DocumentSelection) {
+
+	getSelectedBlocks(selection: ModelDocumentSelection) {
 		const blocks = [...selection.getSelectedBlocks()];
-		const resolved: Element[] = [];
+		const resolved: ModelElement[] = [];
 
 		// Selects elements (such as Mermaid) when there are no blocks
 		if (!blocks.length) {
@@ -118,10 +118,10 @@ abstract class MoveBlockUpDownCommand extends Command {
 		}
 
 		for (const block of blocks) {
-			let el: Element = block;
+			let el: ModelElement = block;
 			// Traverse up until the parent is the root ($root) or there is no parent
 			while (el.parent && el.parent.name !== '$root') {
-				el = el.parent as Element;
+				el = el.parent as ModelElement;
 			}
 			resolved.push(el);
 		}
@@ -129,7 +129,7 @@ abstract class MoveBlockUpDownCommand extends Command {
 		// Deduplicate adjacent duplicates (e.g., nested selections resolving to same block)
 		return resolved.filter((blk, idx) => idx === 0 || blk !== resolved[idx - 1]);
 	}
-	
+
 	scrollToSelection() {
 		// Ensure scroll happens in sync with DOM updates
 		requestAnimationFrame(() => {
@@ -140,7 +140,7 @@ abstract class MoveBlockUpDownCommand extends Command {
 
 class MoveBlockUpCommand extends MoveBlockUpDownCommand {
 
-    getSibling(selectedBlock: Element) {
+    getSibling(selectedBlock: ModelElement) {
         return selectedBlock.previousSibling;
     }
 
@@ -153,7 +153,7 @@ class MoveBlockUpCommand extends MoveBlockUpDownCommand {
 class MoveBlockDownCommand extends MoveBlockUpDownCommand {
 
 	/** @override */
-	getSibling(selectedBlock: Element) {
+	getSibling(selectedBlock: ModelElement) {
 		return selectedBlock.nextSibling;
 	}
 

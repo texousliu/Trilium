@@ -1,4 +1,4 @@
-import { Command, Mention, Plugin, Range, type Selectable } from "ckeditor5";
+import { Command, Mention, Plugin, ModelRange, type ModelSelectable } from "ckeditor5";
 
 /**
  * Overrides the actions taken by the Mentions plugin (triggered by `@` in the text editor, or `~` & `#` in the attribute editor):
@@ -11,6 +11,10 @@ export default class MentionCustomization extends Plugin {
 
     static get requires() {
 		return [ Mention ];
+	}
+
+    public static get pluginName() {
+		return "MentionCustomization" as const;
 	}
 
 	afterInit() {
@@ -27,7 +31,7 @@ interface MentionOpts {
     };
     marker: string;
     text?: string;
-    range?: Range;
+    range?: ModelRange;
 }
 
 interface MentionAttribute {
@@ -44,7 +48,7 @@ class CustomMentionCommand extends Command {
 		const {document} = model;
 		const {selection} = document;
 		const mention = options.mention as unknown as MentionAttribute;
-		const range = (options.range || selection.getFirstRange()) as Selectable;
+		const range = (options.range || selection.getFirstRange()) as ModelSelectable;
 
 		if (mention.id.startsWith('#') || mention.id.startsWith('~')) {
 			model.change(writer => {
@@ -65,7 +69,7 @@ class CustomMentionCommand extends Command {
 		}
 	}
 
-	insertReference(range: Selectable, notePath: string) {
+	insertReference(range: ModelSelectable, notePath: string) {
 		const {model} = this.editor;
 
 		model.change(writer => {

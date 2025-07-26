@@ -11,7 +11,7 @@ import type FBranch from "../entities/fbranch.js";
 import type { ChooseNoteTypeResponse } from "../widgets/dialogs/note_type_chooser.js";
 import type { CKTextEditor } from "@triliumnext/ckeditor5";
 
-interface CreateNoteOpts {
+export interface CreateNoteOpts {
     isProtected?: boolean;
     saveSelection?: boolean;
     title?: string | null;
@@ -116,7 +116,7 @@ async function chooseNoteType() {
 }
 
 async function createNoteWithTypePrompt(parentNotePath: string, options: CreateNoteOpts = {}) {
-    const { success, noteType, templateNoteId } = await chooseNoteType();
+    const { success, noteType, templateNoteId, notePath } = await chooseNoteType();
 
     if (!success) {
         return;
@@ -125,7 +125,7 @@ async function createNoteWithTypePrompt(parentNotePath: string, options: CreateN
     options.type = noteType;
     options.templateNoteId = templateNoteId;
 
-    return await createNote(parentNotePath, options);
+    return await createNote(notePath || parentNotePath, options);
 }
 
 /* If the first element is heading, parse it out and use it as a new heading. */

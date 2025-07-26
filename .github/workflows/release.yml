@@ -23,7 +23,7 @@ jobs:
             shell: bash
             forge_platform: darwin
           - name: linux
-            image: ubuntu-latest
+            image: ubuntu-22.04
             shell: bash
             forge_platform: linux
           - name: windows
@@ -120,7 +120,7 @@ jobs:
           body_path: docs/Release Notes/Release Notes/${{ github.ref_name }}.md
           fail_on_unmatched_files: true
           files: upload/*.*
-          discussion_category_name: Announcements
+          discussion_category_name: Releases
           make_latest: ${{ !contains(github.ref, 'rc') }}
           prerelease: ${{ contains(github.ref, 'rc') }}
           token: ${{ secrets.RELEASE_PAT }}

@@ -46,6 +46,7 @@ import LanguageOptions from "./options/i18n/language.js";
 import type BasicWidget from "../basic_widget.js";
 import CodeTheme from "./options/code_notes/code_theme.js";
 import RelatedSettings from "./options/appearance/related_settings.js";
+import EditorFeaturesOptions from "./options/text_notes/features.js";
 
 const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -85,6 +86,7 @@ const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", (typeof NoteContextAw
     ],
     _optionsTextNotes: [
         EditorOptions,
+        EditorFeaturesOptions,
         HeadingStyleOptions,
         CodeBlockOptions,
         TableOfContentsOptions,

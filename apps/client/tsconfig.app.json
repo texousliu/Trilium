@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "lib": [ "ESNext" ],
     "outDir": "dist",
     "types": [
       "node"
@@ -31,7 +32,8 @@
     "eslint.config.mjs"
   ],
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "src/**/*.json"
   ],
   "references": [
     {

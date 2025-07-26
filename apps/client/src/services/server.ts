@@ -276,7 +276,8 @@ async function reportError(method: string, url: string, statusCode: number, resp
     } else {
         const title = `${statusCode} ${method} ${url}`;
         toastService.showErrorTitleAndMessage(title, messageStr);
-        toastService.throwError(`${title} - ${message}`);
+        const { throwError } = await import("./ws.js");
+        throwError(`${title} - ${message}`);
     }
 }
 

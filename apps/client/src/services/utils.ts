@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import { Modal } from "bootstrap";
 import type { ViewScope } from "./link.js";
 
 const SVG_MIME = "image/svg+xml";
@@ -273,71 +272,6 @@ function getMimeTypeClass(mime: string) {
     }
 
     return `mime-${mime.toLowerCase().replace(/[\W_]+/g, "-")}`;
-}
-
-function closeActiveDialog() {
-    if (glob.activeDialog) {
-        Modal.getOrCreateInstance(glob.activeDialog[0]).hide();
-        glob.activeDialog = null;
-    }
-}
-
-let $lastFocusedElement: JQuery<HTMLElement> | null;
-
-// perhaps there should be saved focused element per tab?
-function saveFocusedElement() {
-    $lastFocusedElement = $(":focus");
-}
-
-function focusSavedElement() {
-    if (!$lastFocusedElement) {
-        return;
-    }
-
-    if ($lastFocusedElement.hasClass("ck")) {
-        // must handle CKEditor separately because of this bug: https://github.com/ckeditor/ckeditor5/issues/607
-        // the bug manifests itself in resetting the cursor position to the first character - jumping above
-
-        const editor = $lastFocusedElement.closest(".ck-editor__editable").prop("ckeditorInstance");
-
-        if (editor) {
-            editor.editing.view.focus();
-        } else {
-            console.log("Could not find CKEditor instance to focus last element");
-        }
-    } else {
-        $lastFocusedElement.focus();
-    }
-
-    $lastFocusedElement = null;
-}
-
-async function openDialog($dialog: JQuery<HTMLElement>, closeActDialog = true) {
-    if (closeActDialog) {
-        closeActiveDialog();
-        glob.activeDialog = $dialog;
-    }
-
-    saveFocusedElement();
-    Modal.getOrCreateInstance($dialog[0]).show();
-
-    $dialog.on("hidden.bs.modal", () => {
-        const $autocompleteEl = $(".aa-input");
-        if ("autocomplete" in $autocompleteEl) {
-            $autocompleteEl.autocomplete("close");
-        }
-
-        if (!glob.activeDialog || glob.activeDialog === $dialog) {
-            focusSavedElement();
-        }
-    });
-
-    // TODO: Fix once keyboard_actions is ported.
-    // @ts-ignore
-    const keyboardActionsService = (await import("./keyboard_actions.js")).default;
-    keyboardActionsService.updateDisplayedShortcuts($dialog);
-
-    return $dialog;
 }
 
 function isHtmlEmpty(html: string) {
@@ -825,10 +759,6 @@ export default {
     setCookie,
     getNoteTypeClass,
     getMimeTypeClass,
-    closeActiveDialog,
-    openDialog,
-    saveFocusedElement,
-    focusSavedElement,
     isHtmlEmpty,
     clearBrowserCache,
     copySelectionToClipboard,

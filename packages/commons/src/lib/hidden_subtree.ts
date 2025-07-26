@@ -1,6 +1,4 @@
-import type { AttributeType } from "./rows.js";
-
-type LauncherNoteType = "launcher" | "search" | "doc" | "noteMap" | "contentWidget" | "book" | "file" | "image" | "text" | "relationMap" | "render" | "canvas" | "mermaid" | "webView" | "code" | "mindMap" | "geoMap";
+type LauncherNoteType = "launcher" | "search" | "doc" | "noteMap" | "contentWidget" | "book" | "file" | "image" | "text" | "relationMap" | "render" | "canvas" | "mermaid" | "webView" | "code" | "mindMap";
 
 enum Command {
     jumpToNote,
@@ -12,7 +10,7 @@ enum Command {
 }
 
 export interface HiddenSubtreeAttribute {
-    type: AttributeType;
+    type: "label" | "relation";
     name: string;
     isInheritable?: boolean;
     value?: string;
@@ -23,6 +21,9 @@ export interface HiddenSubtreeItem {
     id: string;
     title: string;
     type: LauncherNoteType;
+    /**
+     * The icon to use for this item, in the format "bx-icon-name" (e.g., `bx-file-blank`), *without* the leading `bx `.
+     */
     icon?: string;
     attributes?: HiddenSubtreeAttribute[];
     children?: HiddenSubtreeItem[];

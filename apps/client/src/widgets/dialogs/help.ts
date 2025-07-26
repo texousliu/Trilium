@@ -1,6 +1,6 @@
-import utils from "../../services/utils.js";
 import BasicWidget from "../basic_widget.js";
 import { t } from "../../services/i18n.js";
+import { openDialog } from "../../services/dialog.js";
 
 const TPL = /*html*/`
 <div class="help-dialog modal use-tn-links" tabindex="-1" role="dialog">
@@ -155,6 +155,6 @@ export default class HelpDialog extends BasicWidget {
     }
 
     showCheatsheetEvent() {
-        utils.openDialog(this.$widget);
+        openDialog(this.$widget);
     }
 }

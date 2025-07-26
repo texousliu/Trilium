@@ -110,7 +110,7 @@
   },
   "javascript-required": "Trilium precisa que JavaScript esteja habilitado.",
   "setup": {
-    "heading": "TriliumNext Notes setup",
+    "heading": "Trilium Notes setup",
     "new-document": "Sou um novo usuário e quero criar um novo documento Trilium para minhas notas",
     "sync-from-desktop": "Já tenho uma instância no desktop e quero configurar a sincronização com ela",
     "sync-from-server": "Já tenho uma instância no servidor e quero configurar a sincronização com ela",
@@ -122,7 +122,7 @@
   "setup_sync-from-desktop": {
     "heading": "Sincronizar com Desktop",
     "description": "Esta configuração deve ser iniciada a partir da instância do desktop:",
-    "step1": "Abra sua instância do TriliumNext Notes no desktop.",
+    "step1": "Abra sua instância do Trilium Notes no desktop.",
     "step2": "No menu do Trilium, clique em Opções.",
     "step3": "Clique na categoria Sincronização.",
     "step4": "Altere o endereço da instância do servidor para: {{- host}} e clique em Salvar.",

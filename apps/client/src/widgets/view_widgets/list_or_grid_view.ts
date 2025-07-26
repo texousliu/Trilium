@@ -6,6 +6,7 @@ import treeService from "../../services/tree.js";
 import utils from "../../services/utils.js";
 import type FNote from "../../entities/fnote.js";
 import ViewMode, { type ViewModeArgs } from "./view_mode.js";
+import type { ViewTypeOptions } from "../../services/note_list_renderer.js";
 
 const TPL = /*html*/`
 <div class="note-list">
@@ -157,33 +158,22 @@ const TPL = /*html*/`
     </div>
 </div>`;
 
-class ListOrGridView extends ViewMode {
+class ListOrGridView extends ViewMode<{}> {
     private $noteList: JQuery<HTMLElement>;
 
-    private parentNote: FNote;
-    private noteIds: string[];
+    private filteredNoteIds!: string[];
     private page?: number;
     private pageSize?: number;
-    private viewType?: string | null;
     private showNotePath?: boolean;
     private highlightRegex?: RegExp | null;
 
     /*
      * We're using noteIds so that it's not necessary to load all notes at once when paging
      */
-    constructor(viewType: string, args: ViewModeArgs) {
-        super(args);
+    constructor(viewType: ViewTypeOptions, args: ViewModeArgs) {
+        super(args, viewType);
         this.$noteList = $(TPL);
-        this.viewType = viewType;
 
-        this.parentNote = args.parentNote;
-        const includedNoteIds = this.getIncludedNoteIds();
-
-        this.noteIds = args.noteIds.filter((noteId) => !includedNoteIds.has(noteId) && noteId !== "_hidden");
-
-        if (this.noteIds.length === 0) {
-            return;
-        }
 
         args.$parent.append(this.$noteList);
 
@@ -207,8 +197,14 @@ class ListOrGridView extends ViewMode {
         return new Set(includedLinks.map((rel) => rel.value));
     }
 
+    async beforeRender() {
+        super.beforeRender();
+        const includedNoteIds = this.getIncludedNoteIds();
+        this.filteredNoteIds = this.noteIds.filter((noteId) => !includedNoteIds.has(noteId) && noteId !== "_hidden");
+    }
+
     async renderList() {
-        if (this.noteIds.length === 0 || !this.page || !this.pageSize) {
+        if (this.filteredNoteIds.length === 0 || !this.page || !this.pageSize) {
             this.$noteList.hide();
             return;
         }
@@ -229,7 +225,7 @@ class ListOrGridView extends ViewMode {
         const startIdx = (this.page - 1) * this.pageSize;
         const endIdx = startIdx + this.pageSize;
 
-        const pageNoteIds = this.noteIds.slice(startIdx, Math.min(endIdx, this.noteIds.length));
+        const pageNoteIds = this.filteredNoteIds.slice(startIdx, Math.min(endIdx, this.filteredNoteIds.length));
         const pageNotes = await froca.getNotes(pageNoteIds);
 
         for (const note of pageNotes) {
@@ -249,7 +245,7 @@ class ListOrGridView extends ViewMode {
             return;
         }
 
-        const pageCount = Math.ceil(this.noteIds.length / this.pageSize);
+        const pageCount = Math.ceil(this.filteredNoteIds.length / this.pageSize);
 
         $pager.toggle(pageCount > 1);
 
@@ -260,7 +256,7 @@ class ListOrGridView extends ViewMode {
                 lastPrinted = true;
 
                 const startIndex = (i - 1) * this.pageSize + 1;
-                const endIndex = Math.min(this.noteIds.length, i * this.pageSize);
+                const endIndex = Math.min(this.filteredNoteIds.length, i * this.pageSize);
 
                 $pager.append(
                     i === this.page
@@ -282,7 +278,7 @@ class ListOrGridView extends ViewMode {
         }
 
         // no need to distinguish "note" vs "notes" since in case of one result, there's no paging at all
-        $pager.append(`<span class="note-list-pager-total-count">(${this.noteIds.length} notes)</span>`);
+        $pager.append(`<span class="note-list-pager-total-count">(${this.filteredNoteIds.length} notes)</span>`);
     }
 
     async renderNote(note: FNote, expand: boolean = false) {

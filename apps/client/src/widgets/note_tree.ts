@@ -186,6 +186,15 @@ interface RefreshContext {
     noteIdsToReload: Set<string>;
 }
 
+/**
+ * The information contained within a drag event.
+ */
+export interface DragData {
+    noteId: string;
+    branchId: string;
+    title: string;
+}
+
 export default class NoteTreeWidget extends NoteContextAwareWidget {
     private $tree!: JQuery<HTMLElement>;
     private $treeActions!: JQuery<HTMLElement>;
@@ -231,15 +240,21 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         this.$tree.on("mousedown", ".fancytree-title", (e) => {
             if (e.which === 2) {
                 const node = $.ui.fancytree.getNode(e as unknown as Event);
-
                 const notePath = treeService.getNotePath(node);
 
                 if (notePath) {
+                    e.stopPropagation();
+                    e.preventDefault();
+
                     appContext.tabManager.openTabWithNoteWithHoisting(notePath, {
                         activate: e.shiftKey ? true : false
                     });
                 }
-
+            }
+        });
+        this.$tree.on("mouseup", ".fancytree-title", (e) => {
+            // Prevent middle click from pasting in the editor.
+            if (e.which === 2) {
                 e.stopPropagation();
                 e.preventDefault();
             }
@@ -698,7 +713,13 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
             });
         } else {
             this.$tree.on("contextmenu", ".fancytree-node", (e) => {
-                this.showContextMenu(e);
+                if (!utils.isCtrlKey(e)) {
+                    this.showContextMenu(e);
+                } else {
+                    const node = $.ui.fancytree.getNode(e as unknown as Event);
+                    const notePath = treeService.getNotePath(node);
+                    appContext.triggerCommand("openInPopup", { noteIdOrPath: notePath });
+                }
                 return false; // blocks default browser right click menu
             });
 
@@ -1507,6 +1528,12 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
             );
 
             this.toggleHiddenNode(true); // hoisting will handle hidden note visibility
+
+            // Automatically expand the hoisted note by default
+            const node = this.getActiveNode();
+            if (node.data.noteId === this.noteContext.hoistedNoteId){
+                this.setExpanded(node.data.branchId, true);
+            }
         }
     }
 

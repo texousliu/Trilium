@@ -209,6 +209,7 @@ function buildFigureFilter(): Rule {
     return {
         filter(node, options) {
             return node.nodeName === 'FIGURE'
+                && node.classList.contains("image");
         },
         replacement(content, node) {
             return (node as HTMLElement).outerHTML;

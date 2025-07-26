@@ -1,6 +1,6 @@
 {
   "about": {
-    "title": "À propos de TriliumNext Notes",
+    "title": "À propos de Trilium Notes",
     "close": "Fermer",
     "homepage": "Page d'accueil :",
     "app_version": "Version de l'application :",
@@ -639,7 +639,7 @@
     "reload_frontend": "Recharger l'interface",
     "show_hidden_subtree": "Afficher le Sous-arbre caché",
     "show_help": "Afficher l'aide",
-    "about": "À propos de TriliumNext Notes",
+    "about": "À propos de Trilium Notes",
     "logout": "Déconnexion",
     "show-cheatsheet": "Afficher l'aide rapide",
     "toggle-zen-mode": "Zen Mode"
@@ -753,7 +753,7 @@
     "expand_all_children": "Développer tous les enfants",
     "collapse": "Réduire",
     "expand": "Développer",
-    "book_properties": "Propriétés du livre",
+    "book_properties": "",
     "invalid_view_type": "Type de vue non valide '{{type}}'",
     "calendar": "Calendrier"
   },
@@ -1389,7 +1389,7 @@
     "move-to": "Déplacer vers...",
     "paste-into": "Coller dans",
     "paste-after": "Coller après",
-    "duplicate-subtree": "Dupliquer le sous-arbre",
+    "duplicate": "Dupliquer",
     "export": "Exporter",
     "import-into-note": "Importer dans la note",
     "apply-bulk-actions": "Appliquer des Actions groupées",
@@ -1408,7 +1408,7 @@
     "relation-map": "Carte des relations",
     "note-map": "Carte de notes",
     "render-note": "Rendu Html",
-    "book": "Livre",
+    "book": "",
     "mermaid-diagram": "Diagramme Mermaid",
     "canvas": "Canevas",
     "web-view": "Affichage Web",

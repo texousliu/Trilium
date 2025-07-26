@@ -46,3 +46,4 @@ upload
 *.tsbuildinfo
 
 /result
+.svelte-kit

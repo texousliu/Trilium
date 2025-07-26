@@ -1,4 +1,5 @@
 import BAttribute from "../becca/entities/battribute.js";
+import BBranch from "../becca/entities/bbranch.js";
 import type { HiddenSubtreeItem } from "@triliumnext/commons";
 
 import becca from "../becca/becca.js";
@@ -8,6 +9,7 @@ import migrationService from "./migration.js";
 import { t } from "i18next";
 import { cleanUpHelp, getHelpHiddenSubtreeData } from "./in_app_help.js";
 import buildLaunchBarConfig from "./hidden_subtree_launcherbar.js";
+import buildHiddenSubtreeTemplates from "./hidden_subtree_templates.js";
 
 const LBTPL_ROOT = "_lbTplRoot";
 const LBTPL_BASE = "_lbTplBase";
@@ -257,7 +259,8 @@ function buildHiddenSubtreeDefinition(helpSubtree: HiddenSubtreeItem[]): HiddenS
                 icon: "bx-help-circle",
                 children: helpSubtree,
                 isExpanded: true
-            }
+            },
+            buildHiddenSubtreeTemplates()
         ]
     };
 }
@@ -288,6 +291,47 @@ function checkHiddenSubtree(force = false, extraOpts: CheckHiddenExtraOpts = {})
     }
 }
 
+/**
+ * Get all expected parent IDs for a given note ID from the hidden subtree definition
+ */
+function getExpectedParentIds(noteId: string, subtree: HiddenSubtreeItem): string[] {
+    const expectedParents: string[] = [];
+
+    function traverse(item: HiddenSubtreeItem, parentId: string) {
+        if (item.id === noteId) {
+            expectedParents.push(parentId);
+        }
+
+        if (item.children) {
+            for (const child of item.children) {
+                traverse(child, item.id);
+            }
+        }
+    }
+
+    // Start traversal from root
+    if (subtree.id === noteId) {
+        expectedParents.push("root");
+    }
+
+    if (subtree.children) {
+        for (const child of subtree.children) {
+            traverse(child, subtree.id);
+        }
+    }
+
+    return expectedParents;
+}
+
+/**
+ * Check if a note ID is within the hidden subtree structure
+ */
+function isWithinHiddenSubtree(noteId: string): boolean {
+    // Consider a note to be within hidden subtree if it starts with underscore
+    // This is the convention used for hidden subtree notes
+    return noteId.startsWith("_") || noteId === "root";
+}
+
 function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtreeItem, extraOpts: CheckHiddenExtraOpts = {}) {
     if (!item.id || !item.type || !item.title) {
         throw new Error(`Item does not contain mandatory properties: ${JSON.stringify(item)}`);
@@ -311,6 +355,32 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
         }));
     } else {
         branch = note.getParentBranches().find((branch) => branch.parentNoteId === parentNoteId);
+
+        // If the note exists but doesn't have a branch in the expected parent,
+        // create the missing branch to ensure it's in the correct location
+        if (!branch) {
+            branch = new BBranch({
+                noteId: item.id,
+                parentNoteId: parentNoteId,
+                notePosition: item.notePosition !== undefined ? item.notePosition : undefined,
+                isExpanded: item.isExpanded !== undefined ? item.isExpanded : false
+            }).save();
+        }
+
+        // Clean up any branches that shouldn't exist according to the meta definition
+        // For hidden subtree notes, we want to ensure they only exist in their designated locations
+        const expectedParents = getExpectedParentIds(item.id, hiddenSubtreeDefinition);
+        const currentBranches = note.getParentBranches();
+
+        for (const currentBranch of currentBranches) {
+            // Only delete branches that are not in the expected locations
+            // and are within the hidden subtree structure (avoid touching user-created clones)
+            if (!expectedParents.includes(currentBranch.parentNoteId) &&
+                isWithinHiddenSubtree(currentBranch.parentNoteId)) {
+                log.info(`Removing unexpected branch for note '${item.id}' from parent '${currentBranch.parentNoteId}'`);
+                currentBranch.markAsDeleted();
+            }
+        }
     }
 
     const attrs = [...(item.attributes || [])];
@@ -341,7 +411,7 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
         }
     }
 
-    if (extraOpts.restoreNames && note.title !== item.title) {
+    if ((extraOpts.restoreNames || note.noteId.startsWith("_help")) && note.title !== item.title) {
         note.title = item.title;
         note.save();
     }
@@ -378,7 +448,7 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
                 type: attr.type,
                 name: attr.name,
                 value: attr.value,
-                isInheritable: false
+                isInheritable: attr.isInheritable
             }).save();
         } else if (attr.name === "docName" || (existingAttribute.noteId.startsWith("_help") && attr.name === "iconClass")) {
             if (existingAttribute.value !== attr.value) {

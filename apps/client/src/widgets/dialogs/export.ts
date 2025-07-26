@@ -8,6 +8,7 @@ import BasicWidget from "../basic_widget.js";
 import { t } from "../../services/i18n.js";
 import type { EventData } from "../../components/app_context.js";
 import { Modal } from "bootstrap";
+import { openDialog } from "../../services/dialog.js";
 
 const TPL = /*html*/`
 <div class="export-dialog modal fade mx-auto" tabindex="-1" role="dialog">
@@ -214,7 +215,7 @@ export default class ExportDialog extends BasicWidget {
 
         this.$widget.find(".opml-v2").prop("checked", true); // setting default
 
-        utils.openDialog(this.$widget);
+        openDialog(this.$widget);
 
         const { noteId, parentNoteId } = treeService.getNoteIdAndParentIdFromUrl(notePath);
 

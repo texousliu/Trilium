@@ -46,6 +46,12 @@ div.promoted-attributes-container {
 .image-properties > div:first-child > span > strong {
     opacity: 0.65;
     font-weight: 500;
+    vertical-align: top;
+}
+
+.note-info-widget-table td,
+.file-properties-widget .file-table td {
+    vertical-align: top;
 }
 
 .file-properties-widget {

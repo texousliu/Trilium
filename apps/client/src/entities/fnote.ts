@@ -1,7 +1,6 @@
 import server from "../services/server.js";
 import noteAttributeCache from "../services/note_attribute_cache.js";
 import ws from "../services/ws.js";
-import froca from "../services/froca.js";
 import protectedSessionHolder from "../services/protected_session_holder.js";
 import cssClassManager from "../services/css_class_manager.js";
 import type { Froca } from "../services/froca-interface.js";
@@ -28,7 +27,6 @@ const NOTE_TYPE_ICONS = {
     doc: "bx bxs-file-doc",
     contentWidget: "bx bxs-widget",
     mindMap: "bx bx-sitemap",
-    geoMap: "bx bx-map-alt",
     aiChat: "bx bx-bot"
 };
 
@@ -37,7 +35,7 @@ const NOTE_TYPE_ICONS = {
  * end user. Those types should be used only for checking against, they are
  * not for direct use.
  */
-export type NoteType = "file" | "image" | "search" | "noteMap" | "launcher" | "doc" | "contentWidget" | "text" | "relationMap" | "render" | "canvas" | "mermaid" | "book" | "webView" | "code" | "mindMap" | "geoMap" | "aiChat";
+export type NoteType = "file" | "image" | "search" | "noteMap" | "launcher" | "doc" | "contentWidget" | "text" | "relationMap" | "render" | "canvas" | "mermaid" | "book" | "webView" | "code" | "mindMap" | "aiChat";
 
 export interface NotePathRecord {
     isArchived: boolean;
@@ -258,6 +256,20 @@ class FNote {
         return this.children;
     }
 
+    async getSubtreeNoteIds() {
+        let noteIds: (string | string[])[] = [];
+        for (const child of await this.getChildNotes()) {
+            noteIds.push(child.noteId);
+            noteIds.push(await child.getSubtreeNoteIds());
+        }
+        return noteIds.flat();
+    }
+
+    async getSubtreeNotes() {
+        const noteIds = await this.getSubtreeNoteIds();
+        return this.froca.getNotes(noteIds);
+    }
+
     async getChildNotes() {
         return await this.froca.getNotes(this.children);
     }
@@ -410,8 +422,8 @@ class FNote {
         const notePaths: NotePathRecord[] = this.getAllNotePaths().map((path) => ({
             notePath: path,
             isInHoistedSubTree: isHoistedRoot || path.includes(hoistedNoteId),
-            isArchived: path.some((noteId) => froca.notes[noteId].isArchived),
-            isSearch: path.some((noteId) => froca.notes[noteId].type === "search"),
+            isArchived: path.some((noteId) => this.froca.notes[noteId].isArchived),
+            isSearch: path.some((noteId) => this.froca.notes[noteId].type === "search"),
             isHidden: path.includes("_hidden")
         }));
 
@@ -982,7 +994,7 @@ class FNote {
                 continue;
             }
 
-            const parentNote = froca.notes[parentNoteId];
+            const parentNote = this.froca.notes[parentNoteId];
 
             if (!parentNote || parentNote.type === "search") {
                 continue;

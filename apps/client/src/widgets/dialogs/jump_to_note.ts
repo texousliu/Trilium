@@ -5,6 +5,7 @@ import appContext from "../../components/app_context.js";
 import BasicWidget from "../basic_widget.js";
 import shortcutService from "../../services/shortcuts.js";
 import { Modal } from "bootstrap";
+import { openDialog } from "../../services/dialog.js";
 
 const TPL = /*html*/`<div class="jump-to-note-dialog modal mx-auto" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
@@ -54,7 +55,7 @@ export default class JumpToNoteDialog extends BasicWidget {
     }
 
     async jumpToNoteEvent() {
-        const dialogPromise = utils.openDialog(this.$widget);
+        const dialogPromise = openDialog(this.$widget);
         if (utils.isMobile()) {
             dialogPromise.then(($dialog) => {
                 const el = $dialog.find(">.modal-dialog")[0];

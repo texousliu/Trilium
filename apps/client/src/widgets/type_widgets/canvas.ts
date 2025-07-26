@@ -166,7 +166,6 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
             onChange: () => this.onChangeHandler(),
             viewModeEnabled: options.is("databaseReadonly"),
             zenModeEnabled: false,
-            gridModeEnabled: false,
             isCollaborating: false,
             detectScroll: false,
             handleKeyboardGlobally: false,
