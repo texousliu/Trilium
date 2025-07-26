@@ -35,34 +35,16 @@ interface OCRBlobRow {
  * Uses Tesseract.js for text recognition
  */
 class OCRService {
-    private isInitialized = false;
     private worker: Tesseract.Worker | null = null;
     private isProcessing = false;
     private processors: Map<string, FileProcessor> = new Map();
 
-    /**
-     * Initialize the OCR service
-     */
-    async initialize(): Promise<void> {
-        if (this.isInitialized) {
-            return;
-        }
-
-        try {
-            log.info('Initializing OCR service with file processors...');
-
-            // Initialize file processors
-            this.processors.set('image', new ImageProcessor());
-            this.processors.set('pdf', new PDFProcessor());
-            this.processors.set('tiff', new TIFFProcessor());
-            this.processors.set('office', new OfficeProcessor());
-
-            this.isInitialized = true;
-            log.info('OCR service initialized successfully');
-        } catch (error) {
-            log.error(`Failed to initialize OCR service: ${error}`);
-            throw error;
-        }
+    constructor() {
+        // Initialize file processors
+        this.processors.set('image', new ImageProcessor());
+        this.processors.set('pdf', new PDFProcessor());
+        this.processors.set('tiff', new TIFFProcessor());
+        this.processors.set('office', new OfficeProcessor());
     }
 
     /**
@@ -101,10 +83,6 @@ class OCRService {
      * Extract text from file buffer using appropriate processor
      */
     async extractTextFromFile(fileBuffer: Buffer, mimeType: string, options: OCRProcessingOptions = {}): Promise<OCRResult> {
-        if (!this.isInitialized) {
-            await this.initialize();
-        }
-
         try {
             log.info(`Starting OCR text extraction for MIME type: ${mimeType}`);
             this.isProcessing = true;
@@ -141,10 +119,6 @@ class OCRService {
         if (!note) {
             log.error(`Note ${noteId} not found`);
             return null;
-        }
-
-        if (!this.isInitialized) {
-            await this.initialize();
         }
 
         // Check if note type and MIME type are supported for OCR
@@ -203,10 +177,6 @@ class OCRService {
         if (!attachment) {
             log.error(`Attachment ${attachmentId} not found`);
             return null;
-        }
-
-        if (!this.isInitialized) {
-            await this.initialize();
         }
 
         // Check if attachment role and MIME type are supported for OCR
@@ -422,7 +392,6 @@ class OCRService {
             await this.worker.terminate();
             this.worker = null;
         }
-        this.isInitialized = false;
         log.info('OCR service cleaned up');
     }
 
@@ -562,32 +531,6 @@ class OCRService {
      */
     getAllSupportedMimeTypes(): string[] {
         const supportedTypes = new Set<string>();
-
-        // Initialize processors if not already done
-        if (!this.isInitialized) {
-            // Return a static list if not initialized to avoid async issues
-            // This covers all known supported types
-            return [
-                // Images
-                'image/jpeg',
-                'image/jpg',
-                'image/png',
-                'image/gif',
-                'image/bmp',
-                'image/tiff',
-                'image/tif',
-                'image/webp',
-                // Documents
-                'application/pdf',
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                'application/msword',
-                'application/vnd.ms-excel',
-                'application/vnd.ms-powerpoint',
-                'application/rtf'
-            ];
-        }
 
         // Gather MIME types from all registered processors
         for (const processor of this.processors.values()) {
