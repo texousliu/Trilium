@@ -311,7 +311,7 @@ export default class FileSystemSyncOptions extends OptionsWidget {
         this.$refreshStatusButton = this.$widget.find(".refresh-status-button");
 
         // Modal elements
-        this.$mappingModal = this.$widget.find(".mapping-modal");
+        this.$mappingModal = this.$widget.closest(".mapping-modal");
         this.$modalTitle = this.$mappingModal.find(".modal-title");
         this.$noteSelector = this.$mappingModal.find(".note-selector");
         this.$selectedNoteId = this.$mappingModal.find(".selected-note-id");
@@ -487,6 +487,7 @@ export default class FileSystemSyncOptions extends OptionsWidget {
 
     private showMappingModal(mapping?: FileSystemMapping) {
         this.currentEditingMappingId = mapping?.mappingId || null;
+        console.log("Showing mapping modal", this.currentEditingMappingId, this.$mappingModal);
 
         if (mapping) {
             this.$modalTitle.text("Edit File System Mapping");
