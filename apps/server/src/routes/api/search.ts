@@ -40,7 +40,7 @@ function searchAndExecute(req: Request) {
 
     const { searchResultNoteIds } = searchService.searchFromNote(note);
 
-    bulkActionService.executeActions(note, searchResultNoteIds);
+    bulkActionService.executeActionsFromNote(note, searchResultNoteIds);
 }
 
 function quickSearch(req: Request) {

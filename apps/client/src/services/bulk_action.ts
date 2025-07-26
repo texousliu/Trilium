@@ -15,6 +15,8 @@ import AddRelationBulkAction from "../widgets/bulk_actions/relation/add_relation
 import RenameNoteBulkAction from "../widgets/bulk_actions/note/rename_note.js";
 import { t } from "./i18n.js";
 import type FNote from "../entities/fnote.js";
+import toast from "./toast.js";
+import { BulkAction } from "@triliumnext/commons";
 
 const ACTION_GROUPS = [
     {
@@ -87,6 +89,17 @@ function parseActions(note: FNote) {
             return new ActionClass(actionAttr, actionDef);
         })
         .filter((action) => !!action);
+}
+
+export async function executeBulkActions(targetNoteIds: string[], actions: BulkAction[], includeDescendants = false) {
+    await server.post("bulk-action/execute", {
+        noteIds: targetNoteIds,
+        includeDescendants,
+        actions
+    });
+
+    await ws.waitForMaxKnownEntityChangeId();
+    toast.showMessage(t("bulk_actions.bulk_actions_executed"), 3000);
 }
 
 export default {

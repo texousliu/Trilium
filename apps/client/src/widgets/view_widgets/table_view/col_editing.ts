@@ -5,7 +5,9 @@ import Component from "../../../components/component";
 import { CommandListenerData, EventData } from "../../../components/app_context";
 import attributes from "../../../services/attributes";
 import FNote from "../../../entities/fnote";
-import { renameColumn } from "./bulk_actions";
+import { deleteColumn, renameColumn } from "./bulk_actions";
+import dialog from "../../../services/dialog";
+import { t } from "../../../services/i18n";
 
 export default class TableColumnEditing extends Component {
 
@@ -28,7 +30,7 @@ export default class TableColumnEditing extends Component {
         this.parentNote = parentNote;
     }
 
-    addNewTableColumnCommand({ referenceColumn, columnToEdit, direction }: EventData<"addNewTableColumn">) {
+    addNewTableColumnCommand({ referenceColumn, columnToEdit, direction, type }: EventData<"addNewTableColumn">) {
         let attr: Attribute | undefined;
 
         this.existingAttributeToEdit = undefined;
@@ -42,8 +44,9 @@ export default class TableColumnEditing extends Component {
         if (!attr) {
             attr = {
                 type: "label",
-                name: "label:myLabel",
-                value: "promoted,single,text"
+                name: `${type ?? "label"}:myLabel`,
+                value: "promoted,single,text",
+                isInheritable: true
             };
         }
 
@@ -63,7 +66,8 @@ export default class TableColumnEditing extends Component {
             isOwned: true,
             x: 0,
             y: 150,
-            focus: "name"
+            focus: "name",
+            hideMultiplicity: true
         });
     }
 
@@ -76,21 +80,44 @@ export default class TableColumnEditing extends Component {
             return;
         }
 
-        const { name, type, value } = this.newAttribute;
+        const { name, value, isInheritable } = this.newAttribute;
 
         this.api.blockRedraw();
+        const isRename = (this.existingAttributeToEdit && this.existingAttributeToEdit.name !== name);
+        try {
+            if (isRename) {
+                const oldName = this.existingAttributeToEdit!.name.split(":")[1];
+                const [ type, newName ] = name.split(":");
+                await renameColumn(this.parentNote.noteId, type as "label" | "relation", oldName, newName);
+            }
 
-        if (this.existingAttributeToEdit && this.existingAttributeToEdit.name !== name) {
-            const oldName = this.existingAttributeToEdit.name.split(":")[1];
-            const newName = name.split(":")[1];
-            await renameColumn(this.parentNote.noteId, type, oldName, newName);
+            if (this.existingAttributeToEdit && (isRename || this.existingAttributeToEdit.isInheritable !== isInheritable)) {
+                attributes.removeOwnedLabelByName(this.parentNote, this.existingAttributeToEdit.name);
+            }
+            attributes.setLabel(this.parentNote.noteId, name, value, isInheritable);
+        } finally {
+            this.api.restoreRedraw();
+        }
+    }
+
+    async deleteTableColumnCommand({ columnToDelete }: CommandListenerData<"deleteTableColumn">) {
+        if (!columnToDelete || !await dialog.confirm(t("table_view.delete_column_confirmation"))) {
+            return;
         }
 
-        attributes.setLabel(this.parentNote.noteId, name, value);
-        if (this.existingAttributeToEdit) {
-            attributes.removeOwnedLabelByName(this.parentNote, this.existingAttributeToEdit.name);
+        let [ type, name ] = columnToDelete.getField()?.split(".", 2);
+        if (!type || !name) {
+            return;
         }
-        this.api.restoreRedraw();
+        type = type.replace("s", "");
+
+        this.api.blockRedraw();
+        try {
+            await deleteColumn(this.parentNote.noteId, type as "label" | "relation", name);
+            attributes.removeOwnedLabelByName(this.parentNote, `${type}:${name}`);
+        } finally {
+            this.api.restoreRedraw();
+        }
     }
 
     getNewAttributePosition() {
@@ -109,17 +136,17 @@ export default class TableColumnEditing extends Component {
         return this.parentNote.getLabel(attrName);
     }
 
-    getAttributeFromField(field: string) {
+    getAttributeFromField(field: string): Attribute | undefined {
         const fAttribute = this.getFAttributeFromField(field);
         if (fAttribute) {
             return {
                 name: fAttribute.name,
                 value: fAttribute.value,
-                type: fAttribute.type
+                type: fAttribute.type,
+                isInheritable: fAttribute.isInheritable
             };
         }
         return undefined;
     }
 
 }
-

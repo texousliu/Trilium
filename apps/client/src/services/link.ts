@@ -316,7 +316,7 @@ function goToLinkExt(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent
     const openInNewWindow = isLeftClick && evt?.shiftKey && !ctrlKey;
 
     if (notePath) {
-        if (openInPopup) {
+        if (isLeftClick && openInPopup) {
             appContext.triggerCommand("openInPopup", { noteIdOrPath: notePath });
         } else if (openInNewWindow) {
             appContext.triggerCommand("openInWindow", { notePath, viewScope });
@@ -405,7 +405,7 @@ function linkContextMenu(e: PointerEvent) {
     linkContextMenuService.openContextMenu(notePath, e, viewScope, null);
 }
 
-export async function loadReferenceLinkTitle($el: JQuery<HTMLElement>, href: string | null | undefined = null) {
+async function loadReferenceLinkTitle($el: JQuery<HTMLElement>, href: string | null | undefined = null) {
     const $link = $el[0].tagName === "A" ? $el : $el.find("a");
 
     href = href || $link.attr("href");

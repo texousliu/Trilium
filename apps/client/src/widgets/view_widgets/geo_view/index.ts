@@ -1,6 +1,6 @@
 import ViewMode, { ViewModeArgs } from "../view_mode.js";
 import L from "leaflet";
-import type { GPX, LatLng, LeafletMouseEvent, Map, Marker } from "leaflet";
+import type { GPX, LatLng, Layer, LeafletMouseEvent, Map, Marker } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import SpacedUpdate from "../../../services/spaced_update.js";
 import { t } from "../../../services/i18n.js";
@@ -10,6 +10,8 @@ import toast from "../../../services/toast.js";
 import { CommandListenerData, EventData } from "../../../components/app_context.js";
 import { createNewNote, moveMarker, setupDragging } from "./editing.js";
 import { openMapContextMenu } from "./context_menu.js";
+import attributes from "../../../services/attributes.js";
+import { DEFAULT_MAP_LAYER_NAME, MAP_LAYERS } from "./map_layer.js";
 
 const TPL = /*html*/`
 <div class="geo-view">
@@ -83,6 +85,11 @@ const TPL = /*html*/`
             white-space: no-wrap;
             overflow: hidden;
         }
+
+        .geo-map-container.dark .leaflet-div-icon .title-label {
+            color: white;
+            text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+        }
     </style>
 
     <div class="geo-map-container"></div>
@@ -138,10 +145,32 @@ export default class GeoView extends ViewMode<MapData> {
         const map = L.map(this.$container[0], {
             worldCopyJump: true
         });
-        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            detectRetina: true
-        }).addTo(map);
+
+        const layerName = this.parentNote.getLabelValue("map:style") ?? DEFAULT_MAP_LAYER_NAME;
+        let layer: Layer;
+        const layerData = MAP_LAYERS[layerName];
+
+        if (layerData.type === "vector") {
+            const style = (typeof layerData.style === "string" ? layerData.style : await layerData.style());
+            await import("@maplibre/maplibre-gl-leaflet");
+
+            layer = L.maplibreGL({
+                style: style as any
+            });
+        } else {
+            layer = L.tileLayer(layerData.url, {
+                attribution: layerData.attribution,
+                detectRetina: true
+            });
+        }
+
+        if (this.parentNote.hasLabel("map:scale")) {
+            L.control.scale().addTo(map);
+        }
+
+        this.$container.toggleClass("dark", !!layerData.isDarkTheme);
+
+        layer.addTo(map);
 
         this.map = map;
 
@@ -226,7 +255,7 @@ export default class GeoView extends ViewMode<MapData> {
 
         // Add the new markers.
         this.currentMarkerData = {};
-        const notes = await this.parentNote.getChildNotes();
+        const notes = await this.parentNote.getSubtreeNotes();
         const draggable = !this.isReadOnly;
         for (const childNote of notes) {
             if (childNote.mime === "application/gpx+xml") {
@@ -261,8 +290,13 @@ export default class GeoView extends ViewMode<MapData> {
         // If any of note has its location attribute changed.
         // TODO: Should probably filter by parent here as well.
         const attributeRows = loadResults.getAttributeRows();
-        if (attributeRows.find((at) => [LOCATION_ATTRIBUTE, "color"].includes(at.name ?? ""))) {
+        if (attributeRows.find((at) => [LOCATION_ATTRIBUTE, "color", "iconClass"].includes(at.name ?? ""))) {
             this.#reloadMarkers();
+        }
+
+        // Full reload if map layer is changed.
+        if (loadResults.getAttributeRows().some(attr => (attr.name?.startsWith("map:") && attributes.isAffecting(attr, this.parentNote)))) {
+            return true;
         }
     }
 
@@ -330,3 +364,4 @@ export default class GeoView extends ViewMode<MapData> {
     }
 
 }
+

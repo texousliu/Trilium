@@ -108,4 +108,26 @@ describe("restoreExistingData", () => {
         const restored = restoreExistingData(newDefs, oldDefs);
         expect(restored).toStrictEqual(newDefs);
     });
+
+    it("allows hiding the row number column", () => {
+        const newDefs: ColumnDefinition[] = [
+            { title: "#", headerSort: false, hozAlign: "center", resizable: false, frozen: true, rowHandle: false },
+        ]
+        const oldDefs: ColumnDefinition[] = [
+            { title: "#", headerSort: false, hozAlign: "center", resizable: false, rowHandle: false, visible: false },
+        ];
+        const restored = restoreExistingData(newDefs, oldDefs);
+        expect(restored[0].visible).toStrictEqual(false);
+    });
+
+    it("enforces size for non-resizable columns", () => {
+        const newDefs: ColumnDefinition[] = [
+            { title: "#", resizable: false, width: "100px" },
+        ]
+        const oldDefs: ColumnDefinition[] = [
+            { title: "#", resizable: false, width: "120px" },
+        ];
+        const restored = restoreExistingData(newDefs, oldDefs);
+        expect(restored[0].width).toStrictEqual("100px");
+    });
 });

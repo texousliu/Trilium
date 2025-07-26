@@ -78,7 +78,7 @@ const TPL = /*html*/`
         }
     </style>
 
-    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
         <h5 class="attr-detail-title">${t("attribute_detail.attr_detail_title")}</h5>
 
         <span class="bx bx-x close-attr-detail-button tn-tool-button" title="${t("attribute_detail.close_button_title")}"></span>
@@ -142,6 +142,7 @@ const TPL = /*html*/`
                   <option value="datetime">${t("attribute_detail.date_time")}</option>
                   <option value="time">${t("attribute_detail.time")}</option>
                   <option value="url">${t("attribute_detail.url")}</option>
+                  <option value="color">${t("attribute_detail.color_type")}</option>
                 </select>
             </td>
         </tr>
@@ -296,6 +297,7 @@ interface AttributeDetailOpts {
     y: number;
     focus?: "name";
     parent?: HTMLElement;
+    hideMultiplicity?: boolean;
 }
 
 interface SearchRelatedResponse {
@@ -478,7 +480,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
         });
     }
 
-    async showAttributeDetail({ allAttributes, attribute, isOwned, x, y, focus }: AttributeDetailOpts) {
+    async showAttributeDetail({ allAttributes, attribute, isOwned, x, y, focus, hideMultiplicity }: AttributeDetailOpts) {
         if (!attribute) {
             this.hide();
 
@@ -529,7 +531,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
         this.$rowPromotedAlias.toggle(!!definition.isPromoted);
         this.$inputPromotedAlias.val(definition.promotedAlias || "").attr("disabled", disabledFn);
 
-        this.$rowMultiplicity.toggle(["label-definition", "relation-definition"].includes(this.attrType || ""));
+        this.$rowMultiplicity.toggle(["label-definition", "relation-definition"].includes(this.attrType || "") && !hideMultiplicity);
         this.$inputMultiplicity.val(definition.multiplicity || "").attr("disabled", disabledFn);
 
         this.$rowLabelType.toggle(this.attrType === "label-definition");

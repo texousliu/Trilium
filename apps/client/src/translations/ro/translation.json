@@ -1377,7 +1377,7 @@
     "shared_publicly": "Această notiță este partajată public la"
   },
   "note_types": {
-    "book": "Carte",
+    "book": "Colecție",
     "canvas": "Schiță",
     "code": "Cod sursă",
     "mermaid-diagram": "Diagramă Mermaid",

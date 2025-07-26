@@ -80,6 +80,7 @@
 
 .tabulator-tableholder {
     padding-top: 10px;
+    height: unset !important; /* Don't extend on the full height */
 }
 
 /* Rows */
@@ -152,8 +153,10 @@
     color: var(--row-text-color);
 }
 
-.tabulator-data-tree-branch {
-    visibility: hidden;
+/* Align items without children/expander to the ones with. */
+.tabulator-cell[tabulator-field="title"] > span:first-child,         /* 1st level */
+.tabulator-cell[tabulator-field="title"] > div:first-child + span {  /* sub-level */
+    padding-left: 21px;
 }
 
 /* Checkbox cells */
@@ -186,4 +189,11 @@
     border: 1px solid transparent;
     color: var(--menu-text-color);
     font-size: 16px;
+}
+
+/* Footer */
+
+:root .tabulator .tabulator-footer {
+    border-top: unset;
+    padding: 10px 0;
 }

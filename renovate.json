@@ -45,7 +45,9 @@
         {
             "matchPackageNames": [
                 "@sveltejs/**",
-                "svelte"
+                "svelte",
+                "svelte-check",
+                "eslint-plugin-svelte"
             ],
             "groupName": "svelte monorepo"
         }

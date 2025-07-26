@@ -106,7 +106,11 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
             focus: false
         });
 
-        await this.noteContext.setNote(noteIdOrPath);
+        await this.noteContext.setNote(noteIdOrPath, {
+            viewScope: {
+                readOnlyTemporarilyDisabled: true
+            }
+        });
 
         const activeEl = document.activeElement;
         if (activeEl && "blur" in activeEl) {

@@ -41,8 +41,14 @@ async function info(message: string) {
     return new Promise((res) => appContext.triggerCommand("showInfoDialog", { message, callback: res }));
 }
 
+/**
+ * Displays a confirmation dialog with the given message.
+ *
+ * @param message the message to display in the dialog.
+ * @returns A promise that resolves to true if the user confirmed, false otherwise.
+ */
 async function confirm(message: string) {
-    return new Promise((res) =>
+    return new Promise<boolean>((res) =>
         appContext.triggerCommand("showConfirmDialog", <ConfirmWithMessageOptions>{
             message,
             callback: (x: false | ConfirmDialogOptions) => res(x && x.confirmed)

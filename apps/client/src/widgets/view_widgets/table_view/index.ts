@@ -104,6 +104,8 @@ export default class TableView extends ViewMode<StateInfo> {
     private persistentData: StateInfo["tableData"];
     private colEditing?: TableColumnEditing;
     private rowEditing?: TableRowEditing;
+    private maxDepth: number = -1;
+    private rowNumberHint: number = 1;
 
     constructor(args: ViewModeArgs) {
         super(args, "table");
@@ -135,9 +137,16 @@ export default class TableView extends ViewMode<StateInfo> {
         const viewStorage = await this.viewStorage.restore();
         this.persistentData = viewStorage?.tableData || {};
 
-        const { definitions: rowData, hasSubtree: hasChildren } = await buildRowDefinitions(this.parentNote, info);
+        this.maxDepth = parseInt(this.parentNote.getLabelValue("maxNestingDepth") ?? "-1", 10);
+        const { definitions: rowData, hasSubtree: hasChildren, rowNumber } = await buildRowDefinitions(this.parentNote, info, this.maxDepth);
+        this.rowNumberHint = rowNumber;
         const movableRows = canReorderRows(this.parentNote) && !hasChildren;
-        const columnDefs = buildColumnDefinitions(info, movableRows);
+        const columnDefs = buildColumnDefinitions({
+            info,
+            movableRows,
+            existingColumnData: this.persistentData.columns,
+            rowNumberHint: this.rowNumberHint
+        });
         let opts: Options = {
             layout: "fitDataFill",
             index: "branchId",
@@ -159,7 +168,9 @@ export default class TableView extends ViewMode<StateInfo> {
                 ...opts,
                 dataTree: hasChildren,
                 dataTreeStartExpanded: true,
+                dataTreeBranchElement: false,
                 dataTreeElementColumn: "title",
+                dataTreeChildIndent: 20,
                 dataTreeExpandElement: `<button class="tree-expand"><span class="bx bx-chevron-right"></span></button>`,
                 dataTreeCollapseElement: `<button class="tree-collapse"><span class="bx bx-chevron-down"></span></button>`
             }
@@ -201,9 +212,15 @@ export default class TableView extends ViewMode<StateInfo> {
             return await this.#manageRowsUpdate();
         }
 
+        // Refresh max depth
+        if (loadResults.getAttributeRows().find(attr => attr.type === "label" && attr.name === "maxNestingDepth" && attributes.isAffecting(attr, this.parentNote))) {
+            this.maxDepth = parseInt(this.parentNote.getLabelValue("maxNestingDepth") ?? "-1", 10);
+            return await this.#manageRowsUpdate();
+        }
+
         if (loadResults.getBranchRows().some(branch => branch.parentNoteId === this.parentNote.noteId || this.noteIds.includes(branch.parentNoteId ?? ""))
-            || loadResults.getNoteIds().some(noteId => this.noteIds.includes(noteId)
-            || loadResults.getAttributeRows().some(attr => this.noteIds.includes(attr.noteId!)))) {
+            || loadResults.getNoteIds().some(noteId => this.noteIds.includes(noteId))
+            || loadResults.getAttributeRows().some(attr => this.noteIds.includes(attr.noteId!))) {
             return await this.#manageRowsUpdate();
         }
 
@@ -216,27 +233,22 @@ export default class TableView extends ViewMode<StateInfo> {
         }
 
         const info = getAttributeDefinitionInformation(this.parentNote);
-        const columnDefs = buildColumnDefinitions(info, !!this.api.options.movableRows, this.persistentData?.columns, this.colEditing?.getNewAttributePosition());
+        const columnDefs = buildColumnDefinitions({
+            info,
+            movableRows: !!this.api.options.movableRows,
+            existingColumnData: this.persistentData?.columns,
+            rowNumberHint: this.rowNumberHint,
+            position: this.colEditing?.getNewAttributePosition()
+        });
         this.api.setColumns(columnDefs);
         this.colEditing?.resetNewAttributePosition();
     }
 
-    addNewRowCommand(e) {
-        this.rowEditing?.addNewRowCommand(e);
-    }
-
-    addNewTableColumnCommand(e) {
-        this.colEditing?.addNewTableColumnCommand(e);
-    }
-
-    updateAttributeListCommand(e) {
-        this.colEditing?.updateAttributeListCommand(e);
-    }
-
-    saveAttributesCommand() {
-        this.colEditing?.saveAttributesCommand();
-    }
-
+    addNewRowCommand(e) { this.rowEditing?.addNewRowCommand(e); }
+    addNewTableColumnCommand(e) { this.colEditing?.addNewTableColumnCommand(e); }
+    deleteTableColumnCommand(e) { this.colEditing?.deleteTableColumnCommand(e); }
+    updateAttributeListCommand(e) { this.colEditing?.updateAttributeListCommand(e); }
+    saveAttributesCommand() { this.colEditing?.saveAttributesCommand(); }
 
     async #manageRowsUpdate() {
         if (!this.api) {
@@ -244,7 +256,8 @@ export default class TableView extends ViewMode<StateInfo> {
         }
 
         const info = getAttributeDefinitionInformation(this.parentNote);
-        const { definitions, hasSubtree } = await buildRowDefinitions(this.parentNote, info);
+        const { definitions, hasSubtree, rowNumber } = await buildRowDefinitions(this.parentNote, info, this.maxDepth);
+        this.rowNumberHint = rowNumber;
 
         // Force a refresh if the data tree needs enabling/disabling.
         if (this.api.options.dataTree !== hasSubtree) {

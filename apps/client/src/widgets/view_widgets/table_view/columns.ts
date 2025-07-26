@@ -35,13 +35,30 @@ const labelTypeMappings: Record<ColumnType, Partial<ColumnDefinition>> = {
         formatter: "link",
         editor: "input"
     },
+    color: {
+        editor: "input",
+        formatter: "color",
+        editorParams: {
+            elementAttributes: {
+                type: "color"
+            }
+        }
+    },
     relation: {
         editor: RelationEditor,
         formatter: NoteFormatter
     }
 };
 
-export function buildColumnDefinitions(info: AttributeDefinitionInformation[], movableRows: boolean, existingColumnData?: ColumnDefinition[], position?: number) {
+interface BuildColumnArgs {
+    info: AttributeDefinitionInformation[];
+    movableRows: boolean;
+    existingColumnData: ColumnDefinition[] | undefined;
+    rowNumberHint: number;
+    position?: number;
+}
+
+export function buildColumnDefinitions({ info, movableRows, existingColumnData, rowNumberHint, position }: BuildColumnArgs) {
     let columnDefs: ColumnDefinition[] = [
         {
             title: "#",
@@ -50,6 +67,7 @@ export function buildColumnDefinitions(info: AttributeDefinitionInformation[], m
             resizable: false,
             frozen: true,
             rowHandle: movableRows,
+            width: calculateIndexColumnWidth(rowNumberHint, movableRows),
             formatter: RowNumberFormatter(movableRows)
         },
         {
@@ -102,10 +120,10 @@ export function restoreExistingData(newDefs: ColumnDefinition[], oldDefs: Column
         .filter(item => (item.field && newItemsByField.has(item.field!)) || item.title === "#")
         .map(oldItem => {
             const data = newItemsByField.get(oldItem.field!)!;
-            if (oldItem.width) {
+            if (oldItem.resizable !== false && oldItem.width !== undefined) {
                 data.width = oldItem.width;
             }
-            if (oldItem.visible) {
+            if (oldItem.visible !== undefined) {
                 data.visible = oldItem.visible;
             }
             return data;
@@ -127,4 +145,12 @@ export function restoreExistingData(newDefs: ColumnDefinition[], oldDefs: Column
         ...newColumns,
         ...existingColumns.slice(insertPos)
     ];
+}
+
+function calculateIndexColumnWidth(rowNumberHint: number, movableRows: boolean): number {
+    let columnWidth = 16 * (rowNumberHint.toString().length || 1);
+    if (movableRows) {
+        columnWidth += 32;
+    }
+    return columnWidth;
 }

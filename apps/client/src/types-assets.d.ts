@@ -3,6 +3,11 @@ declare module "*.png" {
     export default path;
 }
 
+declare module "*.json" {
+    var content: any;
+    export default content;
+}
+
 declare module "*?url" {
     var path: string;
     export default path;

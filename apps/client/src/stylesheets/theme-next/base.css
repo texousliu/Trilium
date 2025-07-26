@@ -184,7 +184,7 @@ html body .dropdown-item[disabled] {
 
 /* Menu item icon */
 .dropdown-item .bx {
-    transform: translateY(var(--menu-item-icon-vert-offset));
+    translate: 0 var(--menu-item-icon-vert-offset);
     color: var(--menu-item-icon-color) !important;
     font-size: 1.1em;
 }

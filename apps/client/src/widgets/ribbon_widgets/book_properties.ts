@@ -5,6 +5,16 @@ import type FNote from "../../entities/fnote.js";
 import type { EventData } from "../../components/app_context.js";
 import { bookPropertiesConfig, BookProperty } from "./book_properties_config.js";
 import attributes from "../../services/attributes.js";
+import type { ViewTypeOptions } from "../../services/note_list_renderer.js";
+
+const VIEW_TYPE_MAPPINGS: Record<ViewTypeOptions, string> = {
+    grid: t("book_properties.grid"),
+    list: t("book_properties.list"),
+    calendar: t("book_properties.calendar"),
+    table: t("book_properties.table"),
+    geoMap: t("book_properties.geo-map"),
+    board: t("book_properties.board")
+};
 
 const TPL = /*html*/`
 <div class="book-properties-widget">
@@ -23,12 +33,25 @@ const TPL = /*html*/`
             align-items: center;
         }
 
-        .book-properties-container > * {
+        .book-properties-container > div {
             margin-right: 15px;
+        }
+
+        .book-properties-container > .type-number > label {
+            display: flex;
+            align-items: baseline;
         }
 
         .book-properties-container input[type="checkbox"] {
             margin-right: 5px;
+        }
+
+        .book-properties-container label {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-overflow: clip;
+            white-space: nowrap;
         }
     </style>
 
@@ -36,11 +59,11 @@ const TPL = /*html*/`
         <span style="white-space: nowrap">${t("book_properties.view_type")}:&nbsp; &nbsp;</span>
 
         <select class="view-type-select form-select form-select-sm">
-            <option value="grid">${t("book_properties.grid")}</option>
-            <option value="list">${t("book_properties.list")}</option>
-            <option value="calendar">${t("book_properties.calendar")}</option>
-            <option value="table">${t("book_properties.table")}</option>
-            <option value="geoMap">${t("book_properties.geo-map")}</option>
+            ${Object.entries(VIEW_TYPE_MAPPINGS)
+                .filter(([type]) => type !== "raster")
+                .map(([type, label]) => `
+                <option value="${type}">${label}</option>
+            `).join("")}
         </select>
     </div>
 
@@ -110,7 +133,7 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
             return;
         }
 
-        if (!["list", "grid", "calendar", "table", "geoMap"].includes(type)) {
+        if (!VIEW_TYPE_MAPPINGS.hasOwnProperty(type)) {
             throw new Error(t("book_properties.invalid_view_type", { type }));
         }
 
@@ -127,6 +150,7 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
 
     renderBookProperty(property: BookProperty) {
         const $container = $("<div>");
+        $container.addClass(`type-${property.type}`);
         const note = this.note;
         if (!note) {
             return $container;
@@ -168,10 +192,71 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
                 });
                 $container.append($button);
                 break;
+            case "number":
+                const $numberInput = $("<input>", {
+                    type: "number",
+                    class: "form-control form-control-sm",
+                    value: note.getLabelValue(property.bindToLabel) || "",
+                    width: property.width ?? 100,
+                    min: property.min ?? 0
+                });
+                $numberInput.on("change", () => {
+                    const value = $numberInput.val();
+                    if (value === "") {
+                        attributes.removeOwnedLabelByName(note, property.bindToLabel);
+                    } else {
+                        attributes.setLabel(note.noteId, property.bindToLabel, String(value));
+                    }
+                });
+                $container.append($("<label>")
+                    .text(property.label)
+                    .append("&nbsp;".repeat(2))
+                    .append($numberInput));
+                break;
+            case "combobox":
+                const $select = $("<select>", {
+                    class: "form-select form-select-sm"
+                });
+                const actualValue = note.getLabelValue(property.bindToLabel) ?? property.defaultValue ?? "";
+                for (const option of property.options) {
+                    if ("items" in option) {
+                        const $optGroup = $("<optgroup>", { label: option.name });
+                        for (const item of option.items) {
+                            buildComboBoxItem(item, actualValue).appendTo($optGroup);
+                        }
+                        $optGroup.appendTo($select);
+                    } else {
+                        buildComboBoxItem(option, actualValue).appendTo($select);
+                    }
+                }
+                $select.on("change", () => {
+                    const value = $select.val();
+                    if (value === null || value === "") {
+                        attributes.removeOwnedLabelByName(note, property.bindToLabel);
+                    } else {
+                        attributes.setLabel(note.noteId, property.bindToLabel, String(value));
+                    }
+                });
+                $container.append($("<label>")
+                    .text(property.label)
+                    .append("&nbsp;".repeat(2))
+                    .append($select));
+                break;
         }
 
         return $container;
     }
 
 
+}
+
+function buildComboBoxItem({ value, label }: { value: string, label: string }, actualValue: string) {
+    const $option = $("<option>", {
+        value,
+        text: label
+    });
+    if (actualValue === value) {
+        $option.prop("selected", true);
+    }
+    return $option;
 }
