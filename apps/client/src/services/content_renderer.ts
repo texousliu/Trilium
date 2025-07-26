@@ -46,9 +46,9 @@ async function getRenderedContent(this: {} | { ctx: string }, entity: FNote | FA
     } else if (type === "code") {
         await renderCode(entity, $renderedContent);
     } else if (["image", "canvas", "mindMap"].includes(type)) {
-        renderImage(entity, $renderedContent, options);
+        await renderImage(entity, $renderedContent, options);
     } else if (!options.tooltip && ["file", "pdf", "audio", "video"].includes(type)) {
-        renderFile(entity, type, $renderedContent);
+        await renderFile(entity, type, $renderedContent);
     } else if (type === "mermaid") {
         await renderMermaid(entity, $renderedContent);
     } else if (type === "render" && entity instanceof FNote) {
@@ -133,7 +133,7 @@ async function renderCode(note: FNote | FAttachment, $renderedContent: JQuery<HT
     await applySingleBlockSyntaxHighlight($codeBlock, normalizeMimeTypeForCKEditor(note.mime));
 }
 
-function renderImage(entity: FNote | FAttachment, $renderedContent: JQuery<HTMLElement>, options: Options = {}) {
+async function renderImage(entity: FNote | FAttachment, $renderedContent: JQuery<HTMLElement>, options: Options = {}) {
     const encodedTitle = encodeURIComponent(entity.title);
 
     let url;
@@ -173,9 +173,39 @@ function renderImage(entity: FNote | FAttachment, $renderedContent: JQuery<HTMLE
     }
 
     imageContextMenuService.setupContextMenu($img);
+
+    // Add OCR text display for image notes
+    if (entity instanceof FNote) {
+        await addOCRTextIfAvailable(entity, $renderedContent);
+    }
 }
 
-function renderFile(entity: FNote | FAttachment, type: string, $renderedContent: JQuery<HTMLElement>) {
+async function addOCRTextIfAvailable(note: FNote, $content: JQuery<HTMLElement>) {
+    try {
+        const response = await fetch(`api/ocr/notes/${note.noteId}/text`);
+        if (response.ok) {
+            const data = await response.json();
+            if (data.success && data.hasOcr && data.text) {
+                const $ocrSection = $(`
+                    <div class="ocr-text-section" style="margin: 10px 0; padding: 10px; background: var(--accented-background-color); border-radius: 5px; border-left: 3px solid var(--main-text-color);">
+                        <div class="ocr-header" style="font-weight: bold; margin-bottom: 8px; font-size: 0.9em; color: var(--muted-text-color);">
+                            <span class="bx bx-text"></span> ${t("ocr.extracted_text")}
+                        </div>
+                        <div class="ocr-content" style="max-height: 150px; overflow-y: auto; font-size: 0.9em; line-height: 1.4; white-space: pre-wrap;"></div>
+                    </div>
+                `);
+                
+                $ocrSection.find('.ocr-content').text(data.text);
+                $content.append($ocrSection);
+            }
+        }
+    } catch (error) {
+        // Silently fail if OCR API is not available
+        console.debug('Failed to fetch OCR text:', error);
+    }
+}
+
+async function renderFile(entity: FNote | FAttachment, type: string, $renderedContent: JQuery<HTMLElement>) {
     let entityType, entityId;
 
     if (entity instanceof FNote) {
@@ -209,6 +239,11 @@ function renderFile(entity: FNote | FAttachment, type: string, $renderedContent:
             .css("width", "100%");
 
         $content.append($videoPreview);
+    }
+
+    // Add OCR text display for file notes
+    if (entity instanceof FNote) {
+        await addOCRTextIfAvailable(entity, $content);
     }
 
     if (entityType === "notes" && "noteId" in entity) {
