@@ -23,15 +23,20 @@ class CommandRegistry {
     private aliases: Map<string, string> = new Map();
 
     constructor() {
+        this.loadCommands();
+    }
+
+    private async loadCommands() {
+        await translationsInitializedPromise;
         this.registerDefaultCommands();
-        this.loadKeyboardActionsAsync();
+        await this.loadKeyboardActionsAsync();
     }
 
     private registerDefaultCommands() {
         this.register({
             id: "export-note",
-            name: "Export Note",
-            description: "Export current note",
+            name: t("command_palette.export_note_title"),
+            description: t("command_palette.export_note_description"),
             icon: "bx bx-export",
             handler: () => {
                 const notePath = appContext.tabManager.getActiveContextNotePath();
@@ -46,8 +51,8 @@ class CommandRegistry {
 
         this.register({
             id: "show-attachments",
-            name: "Show Attachments",
-            description: "View note attachments",
+            name: t("command_palette.show_attachments_title"),
+            description: t("command_palette.show_attachments_description"),
             icon: "bx bx-paperclip",
             handler: () => appContext.triggerCommand("showAttachments")
         });
@@ -55,16 +60,16 @@ class CommandRegistry {
         // Special search commands with custom logic
         this.register({
             id: "search-notes",
-            name: "Search Notes",
-            description: "Open advanced search",
+            name: t("command_palette.search_notes_title"),
+            description: t("command_palette.search_notes_description"),
             icon: "bx bx-search",
             handler: () => appContext.triggerCommand("searchNotes", {})
         });
 
         this.register({
             id: "search-in-subtree",
-            name: "Search in Subtree",
-            description: "Search within current subtree",
+            name: t("command_palette.search_subtree_title"),
+            description: t("command_palette.search_subtree_description"),
             icon: "bx bx-search-alt",
             handler: () => {
                 const notePath = appContext.tabManager.getActiveContextNotePath();
@@ -76,16 +81,16 @@ class CommandRegistry {
 
         this.register({
             id: "show-search-history",
-            name: "Show Search History",
-            description: "View previous searches",
+            name: t("command_palette.search_history_title"),
+            description: t("command_palette.search_history_description"),
             icon: "bx bx-history",
             handler: () => appContext.triggerCommand("showSearchHistory")
         });
 
         this.register({
             id: "show-launch-bar",
-            name: "Configure Launch Bar",
-            description: "Open the launch bar configuration, to add or remove items.",
+            name: t("command_palette.configure_launch_bar_title"),
+            description: t("command_palette.configure_launch_bar_description"),
             icon: "bx bx-sidebar",
             handler: () => appContext.triggerCommand("showLaunchBarSubtree")
         });
@@ -93,7 +98,6 @@ class CommandRegistry {
 
     private async loadKeyboardActionsAsync() {
         try {
-            await translationsInitializedPromise;
             const actions = await keyboardActions.getActions();
             this.registerKeyboardActions(actions);
         } catch (error) {
