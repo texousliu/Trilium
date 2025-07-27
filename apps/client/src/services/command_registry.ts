@@ -34,7 +34,7 @@ class CommandRegistry {
 
         this.register({
             id: "show-options",
-            name: "Show Options", 
+            name: "Show Options",
             description: "Open settings/preferences",
             icon: "bx bx-cog",
             commandName: "showOptions",
@@ -44,7 +44,7 @@ class CommandRegistry {
         this.register({
             id: "show-help",
             name: "Show Help",
-            description: "Open help documentation", 
+            description: "Open help documentation",
             icon: "bx bx-help-circle",
             handler: () => appContext.triggerCommand("showHelp")
         });
@@ -66,9 +66,9 @@ class CommandRegistry {
             handler: () => {
                 const notePath = appContext.tabManager.getActiveContextNotePath();
                 if (notePath) {
-                    appContext.triggerCommand("showExportDialog", { 
-                        notePath, 
-                        defaultType: "single" 
+                    appContext.triggerCommand("showExportDialog", {
+                        notePath,
+                        defaultType: "single"
                     });
                 }
             }
@@ -168,11 +168,11 @@ class CommandRegistry {
 
             // Get the primary shortcut (first one in the list)
             const primaryShortcut = action.effectiveShortcuts?.[0];
-            
+
             // Create a command definition from the keyboard action
             const commandDef: CommandDefinition = {
                 id: action.actionName,
-                name: this.formatActionName(action.actionName),
+                name: action.friendlyName,
                 description: action.description,
                 icon: this.getIconForAction(action.actionName),
                 shortcut: primaryShortcut ? this.formatShortcut(primaryShortcut) : undefined,
@@ -182,14 +182,6 @@ class CommandRegistry {
 
             this.register(commandDef);
         }
-    }
-
-    private formatActionName(actionName: string): string {
-        // Convert camelCase to Title Case
-        return actionName
-            .replace(/([A-Z])/g, ' $1')
-            .replace(/^./, str => str.toUpperCase())
-            .trim();
     }
 
     private formatShortcut(shortcut: string): string {
@@ -208,13 +200,13 @@ class CommandRegistry {
             'scrollToActiveNote': 'bx bx-target-lock',
             'backInNoteHistory': 'bx bx-arrow-back',
             'forwardInNoteHistory': 'bx bx-arrow-forward',
-            
+
             // Tree operations
             'collapseTree': 'bx bx-collapse',
             'collapseSubtree': 'bx bx-minus-circle',
             'expandSubtree': 'bx bx-plus-circle',
             'sortChildNotes': 'bx bx-sort',
-            
+
             // Note operations
             'createNoteAfter': 'bx bx-plus',
             'createNoteInto': 'bx bx-plus-circle',
@@ -222,34 +214,34 @@ class CommandRegistry {
             'deleteNotes': 'bx bx-trash',
             'editNoteTitle': 'bx bx-edit',
             'duplicateSubtree': 'bx bx-copy',
-            
+
             // Movement
             'moveNoteUp': 'bx bx-up-arrow',
             'moveNoteDown': 'bx bx-down-arrow',
             'moveNoteUpInHierarchy': 'bx bx-left-arrow',
             'moveNoteDownInHierarchy': 'bx bx-right-arrow',
-            
+
             // Clipboard
             'copyNotesToClipboard': 'bx bx-copy',
             'cutNotesToClipboard': 'bx bx-cut',
             'pasteNotesFromClipboard': 'bx bx-paste',
-            
+
             // Tabs
             'openNewTab': 'bx bx-tab',
             'closeActiveTab': 'bx bx-x',
             'activateNextTab': 'bx bx-chevron-right',
             'activatePreviousTab': 'bx bx-chevron-left',
             'reopenLastTab': 'bx bx-refresh',
-            
+
             // Windows
             'openNewWindow': 'bx bx-window-open',
             'toggleTray': 'bx bx-hide',
             'toggleZenMode': 'bx bx-fullscreen',
-            
+
             // Search
             'quickSearch': 'bx bx-search-alt',
             'searchInSubtree': 'bx bx-search-alt-2',
-            
+
             // Other
             'runActiveNote': 'bx bx-play',
             'showOptions': 'bx bx-cog'
@@ -260,7 +252,7 @@ class CommandRegistry {
 
     register(command: CommandDefinition) {
         this.commands.set(command.id, command);
-        
+
         // Register aliases
         if (command.aliases) {
             for (const alias of command.aliases) {

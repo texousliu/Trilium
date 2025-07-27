@@ -102,8 +102,9 @@ export interface KeyboardShortcutSeparator {
     separator: string;
 }
 
-export interface KeyboardShortcutBase {
+export interface ActionKeyboardShortcut {
     actionName: KeyboardActionNames;
+    friendlyName: string;
     description?: string;
     defaultShortcuts?: string[];
     effectiveShortcuts?: string[];
@@ -118,8 +119,8 @@ export interface KeyboardShortcutBase {
     scope?: "window" | "note-tree" | "text-detail" | "code-detail";
 }
 
-type KeyboardShortcut = KeyboardShortcutBase | KeyboardShortcutSeparator;
+export type KeyboardShortcut = ActionKeyboardShortcut | KeyboardShortcutSeparator;
 
-export interface KeyboardShortcutWithRequiredActionName extends KeyboardShortcut {
+export interface KeyboardShortcutWithRequiredActionName extends ActionKeyboardShortcut {
     actionName: KeyboardActionNames;
 }
