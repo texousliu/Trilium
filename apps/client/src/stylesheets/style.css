@@ -1793,21 +1793,36 @@ textarea {
     background-color: var(--hover-background-color);
 }
 
-.jump-to-note-dialog .command-suggestion kbd {
+.jump-to-note-dialog .command-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.jump-to-note-dialog .command-icon {
+    flex-shrink: 0;
+}
+
+.jump-to-note-dialog .command-name {
+    flex: 1;
+    font-weight: bold;
+}
+
+.jump-to-note-dialog .command-shortcut {
     padding: 0.2rem 0.4rem;
     font-size: 0.8em;
     background-color: var(--button-background-color);
     border: 1px solid var(--main-border-color);
     border-radius: 3px;
-    margin-left: 0.5rem;
-    position: absolute;
-    right: 1rem;
-    top: 0.75rem;
+    margin-left: auto;
+    flex-shrink: 0;
 }
 
-.jump-to-note-dialog .command-suggestion small {
-    display: block;
+.jump-to-note-dialog .command-description {
     margin-top: 0.25rem;
+    font-size: 0.875em;
+    color: var(--muted-text-color);
     line-height: 1.3;
 }
 
