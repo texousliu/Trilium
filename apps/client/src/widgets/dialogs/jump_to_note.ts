@@ -6,13 +6,14 @@ import BasicWidget from "../basic_widget.js";
 import shortcutService from "../../services/shortcuts.js";
 import { Modal } from "bootstrap";
 import { openDialog } from "../../services/dialog.js";
+import commandRegistry from "../../services/command_registry.js";
 
 const TPL = /*html*/`<div class="jump-to-note-dialog modal mx-auto" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="input-group">
-                    <input class="jump-to-note-autocomplete form-control" placeholder="${t("jump_to_note.search_placeholder")}">
+                    <input class="jump-to-note-autocomplete form-control" placeholder="${t("jump_to_note.search_placeholder", { defaultValue: "Search notes or type > for commands..." })}">
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t("jump_to_note.close")}"></button>
             </div>
@@ -92,16 +93,25 @@ export default class JumpToNoteDialog extends BasicWidget {
                 allowCreatingNotes: true,
                 hideGoToSelectedNoteButton: true,
                 allowJumpToSearchNotes: true,
-                container: this.$results[0]
+                container: this.$results[0],
+                isCommandPalette: true
             })
             // clear any event listener added in previous invocation of this function
             .off("autocomplete:noteselected")
+            .off("autocomplete:commandselected")
             .on("autocomplete:noteselected", function (event, suggestion, dataset) {
                 if (!suggestion.notePath) {
                     return false;
                 }
 
                 appContext.tabManager.getActiveContext()?.setNote(suggestion.notePath);
+            })
+            .on("autocomplete:commandselected", async function (event, suggestion, dataset) {
+                if (!suggestion.commandId) {
+                    return false;
+                }
+
+                await commandRegistry.executeCommand(suggestion.commandId);
             });
 
         // if you open the Jump To dialog soon after using it previously, it can often mean that you

@@ -3,6 +3,7 @@ import appContext from "../components/app_context.js";
 import noteCreateService from "./note_create.js";
 import froca from "./froca.js";
 import { t } from "./i18n.js";
+import commandRegistry from "./command_registry.js";
 import type { MentionFeedObjectItem } from "@triliumnext/ckeditor5";
 
 // this key needs to have this value, so it's hit by the tooltip
@@ -29,9 +30,12 @@ export interface Suggestion {
     notePathTitle?: string;
     notePath?: string;
     highlightedNotePathTitle?: string;
-    action?: string | "create-note" | "search-notes" | "external-link";
+    action?: string | "create-note" | "search-notes" | "external-link" | "command";
     parentNoteId?: string;
     icon?: string;
+    commandId?: string;
+    commandDescription?: string;
+    commandShortcut?: string;
 }
 
 interface Options {
@@ -44,6 +48,8 @@ interface Options {
     hideGoToSelectedNoteButton?: boolean;
     /** If set, hides all right-side buttons in the autocomplete dropdown */
     hideAllButtons?: boolean;
+    /** If set, enables command palette mode */
+    isCommandPalette?: boolean;
 }
 
 async function autocompleteSourceForCKEditor(queryText: string) {
@@ -73,6 +79,41 @@ async function autocompleteSourceForCKEditor(queryText: string) {
 }
 
 async function autocompleteSource(term: string, cb: (rows: Suggestion[]) => void, options: Options = {}) {
+    // Check if we're in command mode
+    if (options.isCommandPalette && term.startsWith(">")) {
+        const commandQuery = term.substring(1).trim();
+        
+        if (commandQuery.length === 0) {
+            // Show all commands if no query
+            const allCommands = commandRegistry.getAllCommands();
+            const commandSuggestions: Suggestion[] = allCommands.map(cmd => ({
+                action: "command",
+                commandId: cmd.id,
+                noteTitle: cmd.name,
+                highlightedNotePathTitle: cmd.name,
+                commandDescription: cmd.description,
+                commandShortcut: cmd.shortcut,
+                icon: cmd.icon
+            }));
+            cb(commandSuggestions);
+            return;
+        }
+        
+        // Search commands
+        const matchedCommands = commandRegistry.searchCommands(commandQuery);
+        const commandSuggestions: Suggestion[] = matchedCommands.map(cmd => ({
+            action: "command",
+            commandId: cmd.id,
+            noteTitle: cmd.name,
+            highlightedNotePathTitle: cmd.name,
+            commandDescription: cmd.description,
+            commandShortcut: cmd.shortcut,
+            icon: cmd.icon
+        }));
+        cb(commandSuggestions);
+        return;
+    }
+
     const fastSearch = options.fastSearch === false ? false : true;
     if (fastSearch === false) {
         if (term.trim().length === 0) {
@@ -270,7 +311,23 @@ function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
                 },
                 displayKey: "notePathTitle",
                 templates: {
-                    suggestion: (suggestion) => `<span class="${suggestion.icon ?? "bx bx-note"}"></span> ${suggestion.highlightedNotePathTitle}`
+                    suggestion: (suggestion) => {
+                        if (suggestion.action === "command") {
+                            let html = `<div class="command-suggestion">`;
+                            html += `<div style="position: relative;">`;
+                            html += `<span class="${suggestion.icon || "bx bx-terminal"}"></span> <strong>${suggestion.highlightedNotePathTitle}</strong>`;
+                            if (suggestion.commandShortcut) {
+                                html += ` <kbd>${suggestion.commandShortcut}</kbd>`;
+                            }
+                            html += `</div>`;
+                            if (suggestion.commandDescription) {
+                                html += `<small style="color: var(--muted-text-color);">${suggestion.commandDescription}</small>`;
+                            }
+                            html += '</div>';
+                            return html;
+                        }
+                        return `<span class="${suggestion.icon ?? "bx bx-note"}"></span> ${suggestion.highlightedNotePathTitle}`;
+                    }
                 },
                 // we can't cache identical searches because notes can be created / renamed, new recent notes can be added
                 cache: false
@@ -280,6 +337,12 @@ function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
 
     // TODO: Types fail due to "autocomplete:selected" not being registered in type definitions.
     ($el as any).on("autocomplete:selected", async (event: Event, suggestion: Suggestion) => {
+        if (suggestion.action === "command") {
+            $el.autocomplete("close");
+            $el.trigger("autocomplete:commandselected", [suggestion]);
+            return;
+        }
+
         if (suggestion.action === "external-link") {
             $el.setSelectedNotePath(null);
             $el.setSelectedExternalLink(suggestion.externalLink);
