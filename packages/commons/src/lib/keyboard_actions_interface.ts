@@ -98,9 +98,12 @@ const enum KeyboardActionNamesEnum {
 
 export type KeyboardActionNames = keyof typeof KeyboardActionNamesEnum;
 
-export interface KeyboardShortcut {
-    separator?: string;
-    actionName?: KeyboardActionNames;
+export interface KeyboardShortcutSeparator {
+    separator: string;
+}
+
+export interface KeyboardShortcutBase {
+    actionName: KeyboardActionNames;
     description?: string;
     defaultShortcuts?: string[];
     effectiveShortcuts?: string[];
@@ -114,6 +117,8 @@ export interface KeyboardShortcut {
      */
     scope?: "window" | "note-tree" | "text-detail" | "code-detail";
 }
+
+type KeyboardShortcut = KeyboardShortcutBase | KeyboardShortcutSeparator;
 
 export interface KeyboardShortcutWithRequiredActionName extends KeyboardShortcut {
     actionName: KeyboardActionNames;
