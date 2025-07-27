@@ -109,6 +109,11 @@ export interface ActionKeyboardShortcut {
     defaultShortcuts?: string[];
     effectiveShortcuts?: string[];
     /**
+     * An icon describing the action.
+     * This is currently only used in the command palette.
+     */
+    iconClass: string;
+    /**
      * Scope here means on which element the keyboard shortcuts are attached - this means that for the shortcut to work,
      * the focus has to be inside the element.
      *

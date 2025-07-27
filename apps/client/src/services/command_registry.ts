@@ -51,11 +51,11 @@ class CommandRegistry {
 
         // Special commands with custom handlers
         this.register({
-            id: "create-sql-console",
-            name: "Create SQL Console",
-            description: "Create a new SQL console note",
+            id: "show-sql-console",
+            name: "Show SQL Console",
+            description: "Open SQL console page",
             icon: "bx bx-data",
-            handler: () => appContext.triggerCommand("showSQLConsole")
+            commandName: "showSQLConsole"
         });
 
         this.register({
@@ -174,7 +174,7 @@ class CommandRegistry {
                 id: action.actionName,
                 name: action.friendlyName,
                 description: action.description,
-                icon: this.getIconForAction(action.actionName),
+                icon: action.iconClass || this.getIconForAction(action.actionName),
                 shortcut: primaryShortcut ? this.formatShortcut(primaryShortcut) : undefined,
                 commandName: action.actionName as CommandNames,
                 source: "keyboard-action"
