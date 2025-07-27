@@ -54,7 +54,7 @@ export default class JumpToNoteDialog extends BasicWidget {
         this.$modalFooter.find(".show-in-full-text-button").on("click", (e) => this.showInFullText(e));
 
         shortcutService.bindElShortcut(this.$widget, "ctrl+return", (e) => this.showInFullText(e));
-        
+
         // Monitor input changes to detect command mode switches
         this.$autoComplete.on("input", () => {
             this.updateCommandModeState();
@@ -64,7 +64,7 @@ export default class JumpToNoteDialog extends BasicWidget {
     private updateCommandModeState() {
         const currentValue = String(this.$autoComplete.val() || "");
         const newCommandMode = currentValue.startsWith(">");
-        
+
         if (newCommandMode !== this.isCommandMode) {
             this.isCommandMode = newCommandMode;
             this.updateButtonVisibility();
@@ -152,10 +152,10 @@ export default class JumpToNoteDialog extends BasicWidget {
             this.$autoComplete.autocomplete("val", ">");
             this.isCommandMode = true;
             this.updateButtonVisibility();
-            
+
             // Manually populate with all commands immediately
             noteAutocompleteService.showAllCommands(this.$autoComplete);
-            
+
             this.$autoComplete.trigger("focus");
         } else {
             // if you open the Jump To dialog soon after using it previously, it can often mean that you
@@ -173,9 +173,16 @@ export default class JumpToNoteDialog extends BasicWidget {
                     .autocomplete("val", this.$autoComplete.next().text())
                     .trigger("focus")
                     .trigger("select");
-                
+
                 // Update command mode state based on the restored value
                 this.updateCommandModeState();
+
+                // If we restored a command mode value, manually trigger command display
+                if (this.isCommandMode) {
+                    // Clear the value first, then set it to ">" to trigger a proper change
+                    this.$autoComplete.autocomplete("val", "");
+                    noteAutocompleteService.showAllCommands(this.$autoComplete);
+                }
             }
         }
     }
