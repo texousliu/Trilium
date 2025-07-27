@@ -11,7 +11,7 @@ export interface CommandDefinition {
     icon?: string;
     shortcut?: string;
     commandName?: CommandNames;
-    handler?: () => void | Promise<void>;
+    handler?: () => Promise<unknown> | null | undefined | void;
     aliases?: string[];
     source?: "manual" | "keyboard-action";
     /** Reference to the original keyboard action for scope checking. */
