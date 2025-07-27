@@ -83,26 +83,13 @@ async function autocompleteSource(term: string, cb: (rows: Suggestion[]) => void
     if (options.isCommandPalette && term.startsWith(">")) {
         const commandQuery = term.substring(1).trim();
         
-        if (commandQuery.length === 0) {
-            // Show all commands if no query
-            const allCommands = commandRegistry.getAllCommands();
-            const commandSuggestions: Suggestion[] = allCommands.map(cmd => ({
-                action: "command",
-                commandId: cmd.id,
-                noteTitle: cmd.name,
-                notePathTitle: `>${cmd.name}`,
-                highlightedNotePathTitle: cmd.name,
-                commandDescription: cmd.description,
-                commandShortcut: cmd.shortcut,
-                icon: cmd.icon
-            }));
-            cb(commandSuggestions);
-            return;
-        }
-        
-        // Search commands
-        const matchedCommands = commandRegistry.searchCommands(commandQuery);
-        const commandSuggestions: Suggestion[] = matchedCommands.map(cmd => ({
+        // Get commands (all if no query, filtered if query provided)
+        const commands = commandQuery.length === 0 
+            ? commandRegistry.getAllCommands()
+            : commandRegistry.searchCommands(commandQuery);
+            
+        // Convert commands to suggestions
+        const commandSuggestions: Suggestion[] = commands.map(cmd => ({
             action: "command",
             commandId: cmd.id,
             noteTitle: cmd.name,
@@ -112,6 +99,7 @@ async function autocompleteSource(term: string, cb: (rows: Suggestion[]) => void
             commandShortcut: cmd.shortcut,
             icon: cmd.icon
         }));
+        
         cb(commandSuggestions);
         return;
     }
