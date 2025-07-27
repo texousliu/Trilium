@@ -1,4 +1,5 @@
 import appContext, { type CommandNames } from "../components/app_context.js";
+import type NoteTreeWidget from "../widgets/note_tree.js";
 import keyboardActions from "./keyboard_actions.js";
 
 export interface CommandDefinition {
@@ -166,6 +167,9 @@ class CommandRegistry {
                 continue;
             }
 
+            // Note-tree scoped actions need special handling
+            const needsFocusEmulation = action.scope === "note-tree";
+
             // Get the primary shortcut (first one in the list)
             const primaryShortcut = action.effectiveShortcuts?.[0];
 
@@ -177,7 +181,8 @@ class CommandRegistry {
                 icon: action.iconClass || this.getIconForAction(action.actionName),
                 shortcut: primaryShortcut ? this.formatShortcut(primaryShortcut) : undefined,
                 commandName: action.actionName as CommandNames,
-                source: "keyboard-action"
+                source: "keyboard-action",
+                handler: needsFocusEmulation ? () => this.executeWithNoteTreeFocus(action.actionName) : undefined
             };
 
             this.register(commandDef);
@@ -327,6 +332,16 @@ class CommandRegistry {
         } else {
             console.error(`Command ${commandId} has no handler or commandName`);
         }
+    }
+
+    private executeWithNoteTreeFocus(actionName: CommandNames) {
+        const tree = document.querySelector(".tree-wrapper") as HTMLElement;
+        if (!tree) {
+            return;
+        }
+
+        const treeComponent = appContext.getComponentByEl(tree) as NoteTreeWidget;
+        treeComponent.triggerCommand(actionName, { ntxId: appContext.tabManager.activeNtxId });
     }
 }
 
