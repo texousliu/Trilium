@@ -320,15 +320,15 @@ function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
                     suggestion: (suggestion) => {
                         if (suggestion.action === "command") {
                             let html = `<div class="command-suggestion">`;
-                            html += `<div class="command-header">`;
                             html += `<span class="command-icon ${suggestion.icon || "bx bx-terminal"}"></span>`;
-                            html += `<span class="command-name">${suggestion.highlightedNotePathTitle}</span>`;
-                            if (suggestion.commandShortcut) {
-                                html += `<kbd class="command-shortcut">${suggestion.commandShortcut}</kbd>`;
-                            }
-                            html += `</div>`;
+                            html += `<div class="command-content">`;
+                            html += `<div class="command-name">${suggestion.highlightedNotePathTitle}</div>`;
                             if (suggestion.commandDescription) {
                                 html += `<div class="command-description">${suggestion.commandDescription}</div>`;
+                            }
+                            html += `</div>`;
+                            if (suggestion.commandShortcut) {
+                                html += `<kbd class="command-shortcut">${suggestion.commandShortcut}</kbd>`;
                             }
                             html += '</div>';
                             return html;
