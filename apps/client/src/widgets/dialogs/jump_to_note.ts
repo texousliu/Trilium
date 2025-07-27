@@ -35,7 +35,7 @@ export default class JumpToNoteDialog extends BasicWidget {
     private modal!: bootstrap.Modal;
     private $autoComplete!: JQuery<HTMLElement>;
     private $results!: JQuery<HTMLElement>;
-    private $showInFullTextButton!: JQuery<HTMLElement>;
+    private $modalFooter!: JQuery<HTMLElement>;
     private isCommandMode: boolean = false;
 
     constructor() {
@@ -50,8 +50,8 @@ export default class JumpToNoteDialog extends BasicWidget {
 
         this.$autoComplete = this.$widget.find(".jump-to-note-autocomplete");
         this.$results = this.$widget.find(".jump-to-note-results");
-        this.$showInFullTextButton = this.$widget.find(".show-in-full-text-button");
-        this.$showInFullTextButton.on("click", (e) => this.showInFullText(e));
+        this.$modalFooter = this.$widget.find(".modal-footer");
+        this.$modalFooter.find(".show-in-full-text-button").on("click", (e) => this.showInFullText(e));
 
         shortcutService.bindElShortcut(this.$widget, "ctrl+return", (e) => this.showInFullText(e));
         
@@ -73,9 +73,9 @@ export default class JumpToNoteDialog extends BasicWidget {
 
     private updateButtonVisibility() {
         if (this.isCommandMode) {
-            this.$showInFullTextButton.hide();
+            this.$modalFooter.hide();
         } else {
-            this.$showInFullTextButton.show();
+            this.$modalFooter.show();
         }
     }
 
