@@ -179,6 +179,7 @@ export default class JumpToNoteDialog extends BasicWidget {
 
                 // If we restored a command mode value, manually trigger command display
                 if (this.isCommandMode) {
+                    console.log("DEBUG: Restoring command mode, clearing and showing commands");
                     // Clear the value first, then set it to ">" to trigger a proper change
                     this.$autoComplete.autocomplete("val", "");
                     noteAutocompleteService.showAllCommands(this.$autoComplete);

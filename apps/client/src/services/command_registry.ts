@@ -1,6 +1,6 @@
 import appContext, { type CommandNames } from "../components/app_context.js";
 import type NoteTreeWidget from "../widgets/note_tree.js";
-import keyboardActions from "./keyboard_actions.js";
+import keyboardActions, { Action } from "./keyboard_actions.js";
 
 export interface CommandDefinition {
     id: string;
@@ -12,6 +12,8 @@ export interface CommandDefinition {
     handler?: () => void | Promise<void>;
     aliases?: string[];
     source?: "manual" | "keyboard-action";
+    /** Reference to the original keyboard action for scope checking. */
+    keyboardAction?: Action;
 }
 
 class CommandRegistry {
@@ -155,7 +157,7 @@ class CommandRegistry {
         }
     }
 
-    private registerKeyboardActions(actions: any[]) {
+    private registerKeyboardActions(actions: Action[]) {
         for (const action of actions) {
             // Skip actions that we've already manually registered
             if (this.commands.has(action.actionName)) {
@@ -166,9 +168,6 @@ class CommandRegistry {
             if (!action.description) {
                 continue;
             }
-
-            // Note-tree scoped actions need special handling
-            const needsFocusEmulation = action.scope === "note-tree";
 
             // Get the primary shortcut (first one in the list)
             const primaryShortcut = action.effectiveShortcuts?.[0];
@@ -182,7 +181,7 @@ class CommandRegistry {
                 shortcut: primaryShortcut ? this.formatShortcut(primaryShortcut) : undefined,
                 commandName: action.actionName as CommandNames,
                 source: "keyboard-action",
-                handler: needsFocusEmulation ? () => this.executeWithNoteTreeFocus(action.actionName) : undefined
+                keyboardAction: action
             };
 
             this.register(commandDef);
@@ -325,13 +324,29 @@ class CommandRegistry {
             return;
         }
 
+        // Execute custom handler if provided
         if (command.handler) {
             await command.handler();
-        } else if (command.commandName) {
-            appContext.triggerCommand(command.commandName);
-        } else {
-            console.error(`Command ${commandId} has no handler or commandName`);
+            return;
         }
+
+        // Handle keyboard action with scope-aware execution
+        if (command.keyboardAction && command.commandName) {
+            if (command.keyboardAction.scope === "note-tree") {
+                this.executeWithNoteTreeFocus(command.commandName);
+            } else {
+                appContext.triggerCommand(command.commandName);
+            }
+            return;
+        }
+
+        // Fallback for commands without keyboard action reference
+        if (command.commandName) {
+            appContext.triggerCommand(command.commandName);
+            return;
+        }
+
+        console.error(`Command ${commandId} has no handler or commandName`);
     }
 
     private executeWithNoteTreeFocus(actionName: CommandNames) {

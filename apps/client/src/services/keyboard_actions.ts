@@ -10,6 +10,9 @@ export interface Action {
     actionName: CommandNames;
     effectiveShortcuts: string[];
     scope: string;
+    friendlyName: string;
+    description?: string;
+    iconClass?: string;
 }
 
 const keyboardActionsLoaded = server.get<Action[]>("keyboard-actions").then((actions) => {
