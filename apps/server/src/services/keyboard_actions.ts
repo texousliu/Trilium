@@ -128,7 +128,7 @@ function getDefaultKeyboardActions() {
         {
             actionName: "createNoteIntoInbox",
             friendlyName: t("keyboard_action_names.create-note-into-inbox"),
-            iconClass: "bx bx-inbox",
+            iconClass: "bx bxs-inbox",
             defaultShortcuts: ["global:CommandOrControl+Alt+P"],
             description: t("keyboard_actions.create-note-into-inbox"),
             scope: "window"
