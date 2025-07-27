@@ -6,6 +6,11 @@ import type { Locale } from "@triliumnext/commons";
 
 let locales: Locale[] | null;
 
+/**
+ * A deferred promise that resolves when translations are initialized.
+ */
+export let translationsInitializedPromise = jQuery.Deferred();
+
 export async function initLocale() {
     const locale = (options.get("locale") as string) || "en";
 
@@ -19,6 +24,8 @@ export async function initLocale() {
         },
         returnEmptyString: false
     });
+
+    translationsInitializedPromise.resolve();
 }
 
 export function getAvailableLocales() {

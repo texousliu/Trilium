@@ -1,5 +1,6 @@
 import appContext, { type CommandNames } from "../components/app_context.js";
 import type NoteTreeWidget from "../widgets/note_tree.js";
+import { t, translationsInitializedPromise } from "./i18n.js";
 import keyboardActions, { Action } from "./keyboard_actions.js";
 
 export interface CommandDefinition {
@@ -150,6 +151,7 @@ class CommandRegistry {
 
     private async loadKeyboardActionsAsync() {
         try {
+            await translationsInitializedPromise;
             const actions = await keyboardActions.getActions();
             this.registerKeyboardActions(actions);
         } catch (error) {
@@ -172,10 +174,15 @@ class CommandRegistry {
             // Get the primary shortcut (first one in the list)
             const primaryShortcut = action.effectiveShortcuts?.[0];
 
+            let name = action.friendlyName;
+            if (action.scope === "note-tree") {
+                name = t("command_palette.tree-action-name", { name: action.friendlyName });
+            }
+
             // Create a command definition from the keyboard action
             const commandDef: CommandDefinition = {
                 id: action.actionName,
-                name: action.friendlyName,
+                name,
                 description: action.description,
                 icon: action.iconClass,
                 shortcut: primaryShortcut ? this.formatShortcut(primaryShortcut) : undefined,
