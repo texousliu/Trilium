@@ -187,6 +187,12 @@ function showRecentNotes($el: JQuery<HTMLElement>) {
     $el.trigger("focus");
 }
 
+function showAllCommands($el: JQuery<HTMLElement>) {
+    searchDelay = 0;
+    $el.setSelectedNotePath("");
+    $el.autocomplete("val", ">").autocomplete("open");
+}
+
 function fullTextSearch($el: JQuery<HTMLElement>, options: Options) {
     const searchString = $el.autocomplete("val") as unknown as string;
     if (options.fastSearch === false || searchString?.trim().length === 0) {
@@ -459,6 +465,7 @@ export default {
     autocompleteSourceForCKEditor,
     initNoteAutocomplete,
     showRecentNotes,
+    showAllCommands,
     setText,
     init
 };

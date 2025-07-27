@@ -124,11 +124,13 @@ export default class JumpToNoteDialog extends BasicWidget {
             });
 
         if (commandMode) {
-            // Start in command mode
-            this.$autoComplete
-                .autocomplete("val", ">")
-                .trigger("focus")
-                .trigger("select");
+            // Start in command mode - manually trigger command search
+            this.$autoComplete.autocomplete("val", ">");
+            
+            // Manually populate with all commands immediately
+            noteAutocompleteService.showAllCommands(this.$autoComplete);
+            
+            this.$autoComplete.trigger("focus");
         } else {
             // if you open the Jump To dialog soon after using it previously, it can often mean that you
             // actually want to search for the same thing (e.g., you opened the wrong note at first try)
