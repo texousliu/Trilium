@@ -36,6 +36,7 @@ export default class JumpToNoteDialog extends BasicWidget {
     private $autoComplete!: JQuery<HTMLElement>;
     private $results!: JQuery<HTMLElement>;
     private $showInFullTextButton!: JQuery<HTMLElement>;
+    private isCommandMode: boolean = false;
 
     constructor() {
         super();
@@ -53,6 +54,29 @@ export default class JumpToNoteDialog extends BasicWidget {
         this.$showInFullTextButton.on("click", (e) => this.showInFullText(e));
 
         shortcutService.bindElShortcut(this.$widget, "ctrl+return", (e) => this.showInFullText(e));
+        
+        // Monitor input changes to detect command mode switches
+        this.$autoComplete.on("input", () => {
+            this.updateCommandModeState();
+        });
+    }
+
+    private updateCommandModeState() {
+        const currentValue = String(this.$autoComplete.val() || "");
+        const newCommandMode = currentValue.startsWith(">");
+        
+        if (newCommandMode !== this.isCommandMode) {
+            this.isCommandMode = newCommandMode;
+            this.updateButtonVisibility();
+        }
+    }
+
+    private updateButtonVisibility() {
+        if (this.isCommandMode) {
+            this.$showInFullTextButton.hide();
+        } else {
+            this.$showInFullTextButton.show();
+        }
     }
 
     async jumpToNoteEvent() {
@@ -126,6 +150,8 @@ export default class JumpToNoteDialog extends BasicWidget {
         if (commandMode) {
             // Start in command mode - manually trigger command search
             this.$autoComplete.autocomplete("val", ">");
+            this.isCommandMode = true;
+            this.updateButtonVisibility();
             
             // Manually populate with all commands immediately
             noteAutocompleteService.showAllCommands(this.$autoComplete);
@@ -137,6 +163,8 @@ export default class JumpToNoteDialog extends BasicWidget {
             // so we'll keep the content.
             // if it's outside of this time limit, then we assume it's a completely new search and show recent notes instead.
             if (Date.now() - this.lastOpenedTs > KEEP_LAST_SEARCH_FOR_X_SECONDS * 1000) {
+                this.isCommandMode = false;
+                this.updateButtonVisibility();
                 noteAutocompleteService.showRecentNotes(this.$autoComplete);
             } else {
                 this.$autoComplete
@@ -145,6 +173,9 @@ export default class JumpToNoteDialog extends BasicWidget {
                     .autocomplete("val", this.$autoComplete.next().text())
                     .trigger("focus")
                     .trigger("select");
+                
+                // Update command mode state based on the restored value
+                this.updateCommandModeState();
             }
         }
     }
@@ -153,6 +184,11 @@ export default class JumpToNoteDialog extends BasicWidget {
         // stop from propagating upwards (dangerous, especially with ctrl+enter executable javascript notes)
         e.preventDefault();
         e.stopPropagation();
+
+        // Don't perform full text search in command mode
+        if (this.isCommandMode) {
+            return;
+        }
 
         const searchString = String(this.$autoComplete.val());
 
