@@ -28,41 +28,6 @@ class CommandRegistry {
     }
 
     private registerDefaultCommands() {
-        // Keep only commands with custom handlers or better descriptions
-        this.register({
-            id: "toggle-left-pane",
-            name: "Toggle Left Pane",
-            description: "Show/hide the note tree sidebar",
-            icon: "bx bx-sidebar",
-            handler: () => appContext.triggerCommand("toggleLeftPane")
-        });
-
-        this.register({
-            id: "show-options",
-            name: "Show Options",
-            description: "Open settings/preferences",
-            icon: "bx bx-cog",
-            commandName: "showOptions",
-            aliases: ["settings", "preferences"]
-        });
-
-        this.register({
-            id: "show-help",
-            name: "Show Help",
-            description: "Open help documentation",
-            icon: "bx bx-help-circle",
-            handler: () => appContext.triggerCommand("showHelp")
-        });
-
-        // Special commands with custom handlers
-        this.register({
-            id: "show-sql-console",
-            name: "Show SQL Console",
-            description: "Open SQL console page",
-            icon: "bx bx-data",
-            commandName: "showSQLConsole"
-        });
-
         this.register({
             id: "export-note",
             name: "Export Note",
@@ -77,14 +42,6 @@ class CommandRegistry {
                     });
                 }
             }
-        });
-
-        this.register({
-            id: "show-note-source",
-            name: "Show Note Source",
-            description: "View note in source mode",
-            icon: "bx bx-code",
-            handler: () => appContext.triggerCommand("showNoteSource")
         });
 
         this.register({
@@ -126,26 +83,10 @@ class CommandRegistry {
         });
 
         this.register({
-            id: "show-backend-log",
-            name: "Show Backend Log",
-            description: "View server logs",
-            icon: "bx bx-terminal",
-            handler: () => appContext.triggerCommand("showBackendLog")
-        });
-
-        this.register({
-            id: "show-recent-changes",
-            name: "Show Recent Changes",
-            description: "View recently modified notes",
-            icon: "bx bx-time",
-            handler: () => appContext.triggerCommand("showRecentChanges", { ancestorNoteId: "root" })
-        });
-
-        this.register({
             id: "show-launch-bar",
-            name: "Show Launch Bar",
-            description: "Open the launch bar subtree",
-            icon: "bx bx-grid-alt",
+            name: "Configure Launch Bar",
+            description: "Open the launch bar configuration, to add or remove items.",
+            icon: "bx bx-sidebar",
             handler: () => appContext.triggerCommand("showLaunchBarSubtree")
         });
     }
