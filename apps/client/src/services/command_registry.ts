@@ -1,4 +1,5 @@
 import appContext, { type CommandNames } from "../components/app_context.js";
+import keyboardActions from "./keyboard_actions.js";
 
 export interface CommandDefinition {
     id: string;
@@ -9,6 +10,7 @@ export interface CommandDefinition {
     commandName?: CommandNames;
     handler?: () => void | Promise<void>;
     aliases?: string[];
+    source?: "manual" | "keyboard-action";
 }
 
 class CommandRegistry {
@@ -17,19 +19,11 @@ class CommandRegistry {
 
     constructor() {
         this.registerDefaultCommands();
+        this.loadKeyboardActionsAsync();
     }
 
     private registerDefaultCommands() {
-        // Navigation & UI Commands
-        this.register({
-            id: "toggle-zen-mode",
-            name: "Toggle Zen Mode",
-            description: "Enter/exit distraction-free mode",
-            icon: "bx bx-fullscreen",
-            shortcut: "F9",
-            commandName: "toggleZenMode"
-        });
-
+        // Keep only commands with custom handlers or better descriptions
         this.register({
             id: "toggle-left-pane",
             name: "Toggle Left Pane",
@@ -40,7 +34,7 @@ class CommandRegistry {
 
         this.register({
             id: "show-options",
-            name: "Show Options",
+            name: "Show Options", 
             description: "Open settings/preferences",
             icon: "bx bx-cog",
             commandName: "showOptions",
@@ -50,63 +44,18 @@ class CommandRegistry {
         this.register({
             id: "show-help",
             name: "Show Help",
-            description: "Open help documentation",
+            description: "Open help documentation", 
             icon: "bx bx-help-circle",
             handler: () => appContext.triggerCommand("showHelp")
         });
 
-        this.register({
-            id: "collapse-tree",
-            name: "Collapse Tree",
-            description: "Collapse all tree nodes",
-            icon: "bx bx-collapse",
-            shortcut: "Alt+C",
-            handler: () => appContext.triggerCommand("collapseTree")
-        });
-
-        // Note Operations
-        this.register({
-            id: "create-note-into",
-            name: "Create New Note",
-            description: "Create a new child note",
-            icon: "bx bx-plus",
-            shortcut: "CommandOrControl+P",
-            commandName: "createNoteInto",
-            aliases: ["new note", "add note"]
-        });
-
+        // Special commands with custom handlers
         this.register({
             id: "create-sql-console",
             name: "Create SQL Console",
             description: "Create a new SQL console note",
             icon: "bx bx-data",
             handler: () => appContext.triggerCommand("showSQLConsole")
-        });
-
-        this.register({
-            id: "create-ai-chat",
-            name: "Create AI Chat",
-            description: "Create a new AI chat note",
-            icon: "bx bx-bot",
-            commandName: "createAiChat"
-        });
-
-        this.register({
-            id: "clone-notes-to",
-            name: "Clone Note",
-            description: "Clone current note to another location",
-            icon: "bx bx-copy",
-            shortcut: "CommandOrControl+Shift+C",
-            commandName: "cloneNotesTo"
-        });
-
-        this.register({
-            id: "delete-notes",
-            name: "Delete Note",
-            description: "Delete current note",
-            icon: "bx bx-trash",
-            shortcut: "Delete",
-            commandName: "deleteNotes"
         });
 
         this.register({
@@ -141,30 +90,12 @@ class CommandRegistry {
             handler: () => appContext.triggerCommand("showAttachments")
         });
 
-        // Session & Security
-        this.register({
-            id: "enter-protected-session",
-            name: "Enter Protected Session",
-            description: "Enter password-protected mode",
-            icon: "bx bx-lock",
-            commandName: "enterProtectedSession"
-        });
-
-        this.register({
-            id: "leave-protected-session",
-            name: "Leave Protected Session",
-            description: "Exit protected mode",
-            icon: "bx bx-lock-open",
-            commandName: "leaveProtectedSession"
-        });
-
-        // Search & Organization
+        // Special search commands with custom logic
         this.register({
             id: "search-notes",
             name: "Search Notes",
             description: "Open advanced search",
             icon: "bx bx-search",
-            shortcut: "CommandOrControl+Shift+F",
             handler: () => appContext.triggerCommand("searchNotes", {})
         });
 
@@ -173,7 +104,6 @@ class CommandRegistry {
             name: "Search in Subtree",
             description: "Search within current subtree",
             icon: "bx bx-search-alt",
-            shortcut: "CommandOrControl+Shift+S",
             handler: () => {
                 const notePath = appContext.tabManager.getActiveContextNotePath();
                 if (notePath) {
@@ -191,16 +121,6 @@ class CommandRegistry {
         });
 
         this.register({
-            id: "sort-child-notes",
-            name: "Sort Child Notes",
-            description: "Sort notes alphabetically",
-            icon: "bx bx-sort",
-            shortcut: "Alt+S",
-            commandName: "sortChildNotes"
-        });
-
-        // Developer Tools
-        this.register({
             id: "show-backend-log",
             name: "Show Backend Log",
             description: "View server logs",
@@ -209,39 +129,11 @@ class CommandRegistry {
         });
 
         this.register({
-            id: "run-active-note",
-            name: "Run Active Note",
-            description: "Execute current note as script",
-            icon: "bx bx-play",
-            commandName: "runActiveNote"
-        });
-
-        // Recent Changes
-        this.register({
             id: "show-recent-changes",
             name: "Show Recent Changes",
             description: "View recently modified notes",
             icon: "bx bx-time",
             handler: () => appContext.triggerCommand("showRecentChanges", { ancestorNoteId: "root" })
-        });
-
-        // Additional useful commands
-        this.register({
-            id: "open-new-tab",
-            name: "Open New Tab",
-            description: "Open a new tab",
-            icon: "bx bx-tab",
-            shortcut: "CommandOrControl+T",
-            commandName: "openNewTab"
-        });
-
-        this.register({
-            id: "close-active-tab",
-            name: "Close Active Tab",
-            description: "Close the current tab",
-            icon: "bx bx-x",
-            shortcut: "CommandOrControl+W",
-            commandName: "closeActiveTab"
         });
 
         this.register({
@@ -251,6 +143,119 @@ class CommandRegistry {
             icon: "bx bx-grid-alt",
             handler: () => appContext.triggerCommand("showLaunchBarSubtree")
         });
+    }
+
+    private async loadKeyboardActionsAsync() {
+        try {
+            const actions = await keyboardActions.getActions();
+            this.registerKeyboardActions(actions);
+        } catch (error) {
+            console.error("Failed to load keyboard actions:", error);
+        }
+    }
+
+    private registerKeyboardActions(actions: any[]) {
+        for (const action of actions) {
+            // Skip actions that we've already manually registered
+            if (this.commands.has(action.actionName)) {
+                continue;
+            }
+
+            // Skip actions that don't have a description (likely separators)
+            if (!action.description) {
+                continue;
+            }
+
+            // Get the primary shortcut (first one in the list)
+            const primaryShortcut = action.effectiveShortcuts?.[0];
+            
+            // Create a command definition from the keyboard action
+            const commandDef: CommandDefinition = {
+                id: action.actionName,
+                name: this.formatActionName(action.actionName),
+                description: action.description,
+                icon: this.getIconForAction(action.actionName),
+                shortcut: primaryShortcut ? this.formatShortcut(primaryShortcut) : undefined,
+                commandName: action.actionName as CommandNames,
+                source: "keyboard-action"
+            };
+
+            this.register(commandDef);
+        }
+    }
+
+    private formatActionName(actionName: string): string {
+        // Convert camelCase to Title Case
+        return actionName
+            .replace(/([A-Z])/g, ' $1')
+            .replace(/^./, str => str.toUpperCase())
+            .trim();
+    }
+
+    private formatShortcut(shortcut: string): string {
+        // Convert electron accelerator format to display format
+        return shortcut
+            .replace(/CommandOrControl/g, 'Ctrl')
+            .replace(/\+/g, ' + ');
+    }
+
+    private getIconForAction(actionName: string): string {
+        // Map common action patterns to icons
+        const iconMap: Record<string, string> = {
+            // Navigation
+            'jumpToNote': 'bx bx-search',
+            'commandPalette': 'bx bx-command',
+            'scrollToActiveNote': 'bx bx-target-lock',
+            'backInNoteHistory': 'bx bx-arrow-back',
+            'forwardInNoteHistory': 'bx bx-arrow-forward',
+            
+            // Tree operations
+            'collapseTree': 'bx bx-collapse',
+            'collapseSubtree': 'bx bx-minus-circle',
+            'expandSubtree': 'bx bx-plus-circle',
+            'sortChildNotes': 'bx bx-sort',
+            
+            // Note operations
+            'createNoteAfter': 'bx bx-plus',
+            'createNoteInto': 'bx bx-plus-circle',
+            'createNoteIntoInbox': 'bx bx-inbox',
+            'deleteNotes': 'bx bx-trash',
+            'editNoteTitle': 'bx bx-edit',
+            'duplicateSubtree': 'bx bx-copy',
+            
+            // Movement
+            'moveNoteUp': 'bx bx-up-arrow',
+            'moveNoteDown': 'bx bx-down-arrow',
+            'moveNoteUpInHierarchy': 'bx bx-left-arrow',
+            'moveNoteDownInHierarchy': 'bx bx-right-arrow',
+            
+            // Clipboard
+            'copyNotesToClipboard': 'bx bx-copy',
+            'cutNotesToClipboard': 'bx bx-cut',
+            'pasteNotesFromClipboard': 'bx bx-paste',
+            
+            // Tabs
+            'openNewTab': 'bx bx-tab',
+            'closeActiveTab': 'bx bx-x',
+            'activateNextTab': 'bx bx-chevron-right',
+            'activatePreviousTab': 'bx bx-chevron-left',
+            'reopenLastTab': 'bx bx-refresh',
+            
+            // Windows
+            'openNewWindow': 'bx bx-window-open',
+            'toggleTray': 'bx bx-hide',
+            'toggleZenMode': 'bx bx-fullscreen',
+            
+            // Search
+            'quickSearch': 'bx bx-search-alt',
+            'searchInSubtree': 'bx bx-search-alt-2',
+            
+            // Other
+            'runActiveNote': 'bx bx-play',
+            'showOptions': 'bx bx-cog'
+        };
+
+        return iconMap[actionName] || 'bx bx-command';
     }
 
     register(command: CommandDefinition) {
