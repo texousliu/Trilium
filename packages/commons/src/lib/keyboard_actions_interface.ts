@@ -122,6 +122,11 @@ export interface ActionKeyboardShortcut {
      * e.g. CTRL-C in note tree does something a bit different from CTRL-C in the text editor.
      */
     scope?: "window" | "note-tree" | "text-detail" | "code-detail";
+    /**
+     * Whether the action is only available for the desktop application.
+     * This is used to hide actions that are not available in the web version.
+     */
+    isElectronOnly?: boolean;
 }
 
 export type KeyboardShortcut = ActionKeyboardShortcut | KeyboardShortcutSeparator;

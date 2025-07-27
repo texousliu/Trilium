@@ -13,6 +13,7 @@ export interface Action {
     friendlyName: string;
     description?: string;
     iconClass?: string;
+    isElectronOnly?: boolean;
 }
 
 const keyboardActionsLoaded = server.get<Action[]>("keyboard-actions").then((actions) => {

@@ -2,6 +2,7 @@ import appContext, { type CommandNames } from "../components/app_context.js";
 import type NoteTreeWidget from "../widgets/note_tree.js";
 import { t, translationsInitializedPromise } from "./i18n.js";
 import keyboardActions, { Action } from "./keyboard_actions.js";
+import utils from "./utils.js";
 
 export interface CommandDefinition {
     id: string;
@@ -168,6 +169,11 @@ class CommandRegistry {
 
             // Skip actions that don't have a description (likely separators)
             if (!action.description) {
+                continue;
+            }
+
+            // Skip Electron-only actions if not in Electron environment
+            if (action.isElectronOnly && !utils.isElectron()) {
                 continue;
             }
 
