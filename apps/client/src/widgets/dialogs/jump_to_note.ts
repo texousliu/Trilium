@@ -106,12 +106,13 @@ export default class JumpToNoteDialog extends BasicWidget {
 
                 appContext.tabManager.getActiveContext()?.setNote(suggestion.notePath);
             })
-            .on("autocomplete:commandselected", async function (event, suggestion, dataset) {
+            .on("autocomplete:commandselected", async (event, suggestion, dataset) => {
                 if (!suggestion.commandId) {
                     return false;
                 }
 
                 await commandRegistry.executeCommand(suggestion.commandId);
+                this.modal.hide();
             });
 
         // if you open the Jump To dialog soon after using it previously, it can often mean that you
