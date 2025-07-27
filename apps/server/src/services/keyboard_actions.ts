@@ -762,7 +762,7 @@ function getDefaultKeyboardActions() {
         {
             actionName: "toggleLeftPane",
             friendlyName: t("keyboard_action_names.toggle-left-pane"),
-            iconClass: "bx bx-dock-left",
+            iconClass: "bx bx-sidebar",
             defaultShortcuts: [],
             description: t("keyboard_actions.toggle-left-note-tree-panel"),
             scope: "window"

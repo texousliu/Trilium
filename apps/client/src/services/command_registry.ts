@@ -177,7 +177,7 @@ class CommandRegistry {
                 id: action.actionName,
                 name: action.friendlyName,
                 description: action.description,
-                icon: action.iconClass || this.getIconForAction(action.actionName),
+                icon: action.iconClass,
                 shortcut: primaryShortcut ? this.formatShortcut(primaryShortcut) : undefined,
                 commandName: action.actionName as CommandNames,
                 source: "keyboard-action",
@@ -193,65 +193,6 @@ class CommandRegistry {
         return shortcut
             .replace(/CommandOrControl/g, 'Ctrl')
             .replace(/\+/g, ' + ');
-    }
-
-    private getIconForAction(actionName: string): string {
-        // Map common action patterns to icons
-        const iconMap: Record<string, string> = {
-            // Navigation
-            'jumpToNote': 'bx bx-search',
-            'commandPalette': 'bx bx-command',
-            'scrollToActiveNote': 'bx bx-target-lock',
-            'backInNoteHistory': 'bx bx-arrow-back',
-            'forwardInNoteHistory': 'bx bx-arrow-forward',
-
-            // Tree operations
-            'collapseTree': 'bx bx-collapse',
-            'collapseSubtree': 'bx bx-minus-circle',
-            'expandSubtree': 'bx bx-plus-circle',
-            'sortChildNotes': 'bx bx-sort',
-
-            // Note operations
-            'createNoteAfter': 'bx bx-plus',
-            'createNoteInto': 'bx bx-plus-circle',
-            'createNoteIntoInbox': 'bx bx-inbox',
-            'deleteNotes': 'bx bx-trash',
-            'editNoteTitle': 'bx bx-edit',
-            'duplicateSubtree': 'bx bx-copy',
-
-            // Movement
-            'moveNoteUp': 'bx bx-up-arrow',
-            'moveNoteDown': 'bx bx-down-arrow',
-            'moveNoteUpInHierarchy': 'bx bx-left-arrow',
-            'moveNoteDownInHierarchy': 'bx bx-right-arrow',
-
-            // Clipboard
-            'copyNotesToClipboard': 'bx bx-copy',
-            'cutNotesToClipboard': 'bx bx-cut',
-            'pasteNotesFromClipboard': 'bx bx-paste',
-
-            // Tabs
-            'openNewTab': 'bx bx-tab',
-            'closeActiveTab': 'bx bx-x',
-            'activateNextTab': 'bx bx-chevron-right',
-            'activatePreviousTab': 'bx bx-chevron-left',
-            'reopenLastTab': 'bx bx-refresh',
-
-            // Windows
-            'openNewWindow': 'bx bx-window-open',
-            'toggleTray': 'bx bx-hide',
-            'toggleZenMode': 'bx bx-fullscreen',
-
-            // Search
-            'quickSearch': 'bx bx-search-alt',
-            'searchInSubtree': 'bx bx-search-alt-2',
-
-            // Other
-            'runActiveNote': 'bx bx-play',
-            'showOptions': 'bx bx-cog'
-        };
-
-        return iconMap[actionName] || 'bx bx-command';
     }
 
     register(command: CommandDefinition) {
