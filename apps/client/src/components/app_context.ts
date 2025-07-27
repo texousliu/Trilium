@@ -262,6 +262,7 @@ export type CommandMappings = {
     closeThisNoteSplit: CommandData;
     moveThisNoteSplit: CommandData & { isMovingLeft: boolean };
     jumpToNote: CommandData;
+    commandPalette: CommandData;
 
     // Geomap
     deleteFromMap: { noteId: string };

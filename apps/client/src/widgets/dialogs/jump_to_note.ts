@@ -56,6 +56,14 @@ export default class JumpToNoteDialog extends BasicWidget {
     }
 
     async jumpToNoteEvent() {
+        await this.openDialog();
+    }
+
+    async commandPaletteEvent() {
+        await this.openDialog(true);
+    }
+
+    private async openDialog(commandMode = false) {
         const dialogPromise = openDialog(this.$widget);
         if (utils.isMobile()) {
             dialogPromise.then(($dialog) => {
@@ -82,12 +90,12 @@ export default class JumpToNoteDialog extends BasicWidget {
         }
 
         // first open dialog, then refresh since refresh is doing focus which should be visible
-        this.refresh();
+        this.refresh(commandMode);
 
         this.lastOpenedTs = Date.now();
     }
 
-    async refresh() {
+    async refresh(commandMode = false) {
         noteAutocompleteService
             .initNoteAutocomplete(this.$autoComplete, {
                 allowCreatingNotes: true,
@@ -115,19 +123,27 @@ export default class JumpToNoteDialog extends BasicWidget {
                 this.modal.hide();
             });
 
-        // if you open the Jump To dialog soon after using it previously, it can often mean that you
-        // actually want to search for the same thing (e.g., you opened the wrong note at first try)
-        // so we'll keep the content.
-        // if it's outside of this time limit, then we assume it's a completely new search and show recent notes instead.
-        if (Date.now() - this.lastOpenedTs > KEEP_LAST_SEARCH_FOR_X_SECONDS * 1000) {
-            noteAutocompleteService.showRecentNotes(this.$autoComplete);
-        } else {
+        if (commandMode) {
+            // Start in command mode
             this.$autoComplete
-                // hack, the actual search value is stored in <pre> element next to the search input
-                // this is important because the search input value is replaced with the suggestion note's title
-                .autocomplete("val", this.$autoComplete.next().text())
+                .autocomplete("val", ">")
                 .trigger("focus")
                 .trigger("select");
+        } else {
+            // if you open the Jump To dialog soon after using it previously, it can often mean that you
+            // actually want to search for the same thing (e.g., you opened the wrong note at first try)
+            // so we'll keep the content.
+            // if it's outside of this time limit, then we assume it's a completely new search and show recent notes instead.
+            if (Date.now() - this.lastOpenedTs > KEEP_LAST_SEARCH_FOR_X_SECONDS * 1000) {
+                noteAutocompleteService.showRecentNotes(this.$autoComplete);
+            } else {
+                this.$autoComplete
+                    // hack, the actual search value is stored in <pre> element next to the search input
+                    // this is important because the search input value is replaced with the suggestion note's title
+                    .autocomplete("val", this.$autoComplete.next().text())
+                    .trigger("focus")
+                    .trigger("select");
+            }
         }
     }
 

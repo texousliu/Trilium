@@ -3,6 +3,7 @@
     "back-in-note-history": "Navigate to previous note in history",
     "forward-in-note-history": "Navigate to next note in history",
     "open-jump-to-note-dialog": "Open \"Jump to note\" dialog",
+    "open-command-palette": "Open command palette",
     "scroll-to-active-note": "Scroll note tree to active note",
     "quick-search": "Activate quick search bar",
     "search-in-subtree": "Search for notes in the active note's subtree",

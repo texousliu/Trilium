@@ -2,6 +2,7 @@ const enum KeyboardActionNamesEnum {
     backInNoteHistory,
     forwardInNoteHistory,
     jumpToNote,
+    commandPalette,
     scrollToActiveNote,
     quickSearch,
     searchInSubtree,

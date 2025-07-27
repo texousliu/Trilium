@@ -36,6 +36,12 @@ function getDefaultKeyboardActions() {
             scope: "window"
         },
         {
+            actionName: "commandPalette",
+            defaultShortcuts: ["CommandOrControl+Shift+J"],
+            description: t("keyboard_actions.open-command-palette"),
+            scope: "window"
+        },
+        {
             actionName: "scrollToActiveNote",
             defaultShortcuts: ["CommandOrControl+."],
             description: t("keyboard_actions.scroll-to-active-note"),
