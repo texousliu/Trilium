@@ -1808,14 +1808,11 @@ textarea {
     font-weight: bold;
 }
 
-.jump-to-note-dialog .command-shortcut {
-    padding: 0.2rem 0.4rem;
-    font-size: 0.8em;
-    background-color: var(--button-background-color);
-    border: 1px solid var(--main-border-color);
-    border-radius: 3px;
-    margin-left: auto;
-    flex-shrink: 0;
+.jump-to-note-dialog kbd.command-shortcut {
+    background-color: transparent;
+    color: inherit;
+    opacity: 0.75;
+    font-family: inherit !important;
 }
 
 .jump-to-note-dialog .command-description {
