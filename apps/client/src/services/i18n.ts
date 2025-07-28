@@ -9,7 +9,7 @@ let locales: Locale[] | null;
 /**
  * A deferred promise that resolves when translations are initialized.
  */
-export let translationsInitializedPromise = jQuery.Deferred();
+export let translationsInitializedPromise = $.Deferred();
 
 export async function initLocale() {
     const locale = (options.get("locale") as string) || "en";
