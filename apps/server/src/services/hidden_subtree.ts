@@ -369,7 +369,7 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
 
         // Clean up any branches that shouldn't exist according to the meta definition
         // For hidden subtree notes, we want to ensure they only exist in their designated locations
-        if (item.enforceBranches) {
+        if (item.enforceBranches || item.id.startsWith("_help")) {
             const expectedParents = getExpectedParentIds(item.id, hiddenSubtreeDefinition);
             const currentBranches = note.getParentBranches();
 

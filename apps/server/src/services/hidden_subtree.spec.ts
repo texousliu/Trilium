@@ -1,4 +1,4 @@
-import { describe, it } from "vitest";
+import { describe, it, expect } from "vitest";
 import cls from "./cls.js";
 import hiddenSubtreeService from "./hidden_subtree.js";
 import sql_init from "./sql_init.js";
@@ -13,7 +13,7 @@ describe("Hidden Subtree", () => {
             cls.init(() => hiddenSubtreeService.checkHiddenSubtree());
         });
 
-        it("should persist launcher movement between visible and available after integrity check", async () => {
+        it("should persist launcher movement between visible and available after integrity check", () => {
             // Move backend log to visible launchers.
             const backendLogBranch = becca.getBranchFromChildAndParent("_lbBackendLog", "_lbAvailableLaunchers");
             expect(backendLogBranch).toBeDefined();
@@ -29,6 +29,40 @@ describe("Hidden Subtree", () => {
                 .filter((b) => !b.isDeleted);
             expect(childBranches).toBeDefined();
             expect(childBranches![0].parentNoteId).toStrictEqual("_lbVisibleLaunchers");
+        });
+
+        it("should enforce the correct placement of help", () => {
+            // First, verify the help note exists in its original correct location
+            const originalBranch = becca.getBranchFromChildAndParent("_help_Vc8PjrjAGuOp", "_help_gh7bpGYxajRS");
+            expect(originalBranch).toBeDefined();
+            expect(originalBranch?.parentNoteId).toBe("_help_gh7bpGYxajRS");
+
+            // Move the help note to an incorrect location (_help root instead of its proper parent)
+            cls.init(() => {
+                branches.moveBranchToNote(originalBranch!, "_help");
+            });
+
+            // Verify the note was moved to the wrong location
+            const movedBranches = becca.notes["_help_Vc8PjrjAGuOp"]?.getParentBranches()
+                .filter((b) => !b.isDeleted);
+            expect(movedBranches).toBeDefined();
+            expect(movedBranches![0].parentNoteId).toBe("_help");
+
+            // Run the hidden subtree integrity check
+            cls.init(() => {
+                hiddenSubtreeService.checkHiddenSubtree(true);
+            });
+
+            // Verify that the integrity check moved the help note back to its correct location
+            const correctedBranches = becca.notes["_help_Vc8PjrjAGuOp"]?.getParentBranches()
+                .filter((b) => !b.isDeleted);
+            expect(correctedBranches).toBeDefined();
+            expect(correctedBranches![0].parentNoteId).toBe("_help_gh7bpGYxajRS");
+            
+            // Ensure the note is no longer under the incorrect parent
+            const helpRootChildren = becca.notes["_help"]?.getChildNotes();
+            const incorrectChild = helpRootChildren?.find(note => note.noteId === "_help_Vc8PjrjAGuOp");
+            expect(incorrectChild).toBeUndefined();
         });
     });
 });
