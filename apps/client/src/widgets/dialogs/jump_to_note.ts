@@ -143,8 +143,8 @@ export default class JumpToNoteDialog extends BasicWidget {
                     return false;
                 }
 
-                await commandRegistry.executeCommand(suggestion.commandId);
                 this.modal.hide();
+                await commandRegistry.executeCommand(suggestion.commandId);
             });
 
         if (commandMode) {
