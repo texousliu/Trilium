@@ -211,7 +211,7 @@
     "okButton": "OK"
   },
   "jump_to_note": {
-    "search_placeholder": "search for note by its name",
+    "search_placeholder": "Search for note by its name or type > for commands...",
     "close": "Close",
     "search_button": "Search in full text <kbd>Ctrl+Enter</kbd>"
   },

@@ -211,7 +211,7 @@
     "okButton": "Aceptar"
   },
   "jump_to_note": {
-    "search_placeholder": "buscar nota por su nombre",
+    "search_placeholder": "",
     "close": "Cerrar",
     "search_button": "Buscar en texto completo <kbd>Ctrl+Enter</kbd>"
   },

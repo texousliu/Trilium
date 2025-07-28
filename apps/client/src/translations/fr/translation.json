@@ -210,7 +210,7 @@
     "okButton": "OK"
   },
   "jump_to_note": {
-    "search_placeholder": "rechercher une note par son nom",
+    "search_placeholder": "",
     "close": "Fermer",
     "search_button": "Rechercher dans le texte intégral <kbd>Ctrl+Entrée</kbd>"
   },

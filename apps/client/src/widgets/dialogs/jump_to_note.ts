@@ -13,7 +13,7 @@ const TPL = /*html*/`<div class="jump-to-note-dialog modal mx-auto" tabindex="-1
         <div class="modal-content">
             <div class="modal-header">
                 <div class="input-group">
-                    <input class="jump-to-note-autocomplete form-control" placeholder="${t("jump_to_note.search_placeholder", { defaultValue: "Search notes or type > for commands..." })}">
+                    <input class="jump-to-note-autocomplete form-control" placeholder="${t("jump_to_note.search_placeholder")}">
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${t("jump_to_note.close")}"></button>
             </div>
