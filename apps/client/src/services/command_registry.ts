@@ -169,7 +169,12 @@ class CommandRegistry {
     }
 
     getAllCommands(): CommandDefinition[] {
-        return Array.from(this.commands.values());
+        const commands = Array.from(this.commands.values());
+
+        // Sort commands by name
+        commands.sort((a, b) => a.name.localeCompare(b.name));
+
+        return commands;
     }
 
     searchCommands(query: string): CommandDefinition[] {
