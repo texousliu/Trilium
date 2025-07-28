@@ -11,15 +11,15 @@ import { cleanUpHelp, getHelpHiddenSubtreeData } from "./in_app_help.js";
 import buildLaunchBarConfig from "./hidden_subtree_launcherbar.js";
 import buildHiddenSubtreeTemplates from "./hidden_subtree_templates.js";
 
-const LBTPL_ROOT = "_lbTplRoot";
-const LBTPL_BASE = "_lbTplBase";
-const LBTPL_HEADER = "_lbTplHeader";
-const LBTPL_NOTE_LAUNCHER = "_lbTplLauncherNote";
-const LBTPL_WIDGET = "_lbTplLauncherWidget";
-const LBTPL_COMMAND = "_lbTplLauncherCommand";
-const LBTPL_SCRIPT = "_lbTplLauncherScript";
-const LBTPL_SPACER = "_lbTplSpacer";
-const LBTPL_CUSTOM_WIDGET = "_lbTplCustomWidget";
+export const LBTPL_ROOT = "_lbTplRoot";
+export const LBTPL_BASE = "_lbTplBase";
+export const LBTPL_HEADER = "_lbTplHeader";
+export const LBTPL_NOTE_LAUNCHER = "_lbTplLauncherNote";
+export const LBTPL_WIDGET = "_lbTplLauncherWidget";
+export const LBTPL_COMMAND = "_lbTplLauncherCommand";
+export const LBTPL_SCRIPT = "_lbTplLauncherScript";
+export const LBTPL_SPACER = "_lbTplSpacer";
+export const LBTPL_CUSTOM_WIDGET = "_lbTplCustomWidget";
 
 /*
  * Hidden subtree is generated as a "predictable structure" which means that it avoids generating random IDs to always
@@ -465,13 +465,5 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
 }
 
 export default {
-    checkHiddenSubtree,
-    LBTPL_ROOT,
-    LBTPL_BASE,
-    LBTPL_COMMAND,
-    LBTPL_NOTE_LAUNCHER,
-    LBTPL_WIDGET,
-    LBTPL_SCRIPT,
-    LBTPL_SPACER,
-    LBTPL_CUSTOM_WIDGET
+    checkHiddenSubtree
 };
