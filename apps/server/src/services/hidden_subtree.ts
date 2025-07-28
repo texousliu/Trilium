@@ -369,16 +369,18 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
 
         // Clean up any branches that shouldn't exist according to the meta definition
         // For hidden subtree notes, we want to ensure they only exist in their designated locations
-        const expectedParents = getExpectedParentIds(item.id, hiddenSubtreeDefinition);
-        const currentBranches = note.getParentBranches();
+        if (item.enforceBranches) {
+            const expectedParents = getExpectedParentIds(item.id, hiddenSubtreeDefinition);
+            const currentBranches = note.getParentBranches();
 
-        for (const currentBranch of currentBranches) {
-            // Only delete branches that are not in the expected locations
-            // and are within the hidden subtree structure (avoid touching user-created clones)
-            if (!expectedParents.includes(currentBranch.parentNoteId) &&
-                isWithinHiddenSubtree(currentBranch.parentNoteId)) {
-                log.info(`Removing unexpected branch for note '${item.id}' from parent '${currentBranch.parentNoteId}'`);
-                currentBranch.markAsDeleted();
+            for (const currentBranch of currentBranches) {
+                // Only delete branches that are not in the expected locations
+                // and are within the hidden subtree structure (avoid touching user-created clones)
+                if (!expectedParents.includes(currentBranch.parentNoteId) &&
+                    isWithinHiddenSubtree(currentBranch.parentNoteId)) {
+                    log.info(`Removing unexpected branch for note '${item.id}' from parent '${currentBranch.parentNoteId}'`);
+                    currentBranch.markAsDeleted();
+                }
             }
         }
     }
