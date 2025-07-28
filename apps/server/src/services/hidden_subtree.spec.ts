@@ -58,11 +58,26 @@ describe("Hidden Subtree", () => {
                 .filter((b) => !b.isDeleted);
             expect(correctedBranches).toBeDefined();
             expect(correctedBranches![0].parentNoteId).toBe("_help_gh7bpGYxajRS");
-            
+
             // Ensure the note is no longer under the incorrect parent
             const helpRootChildren = becca.notes["_help"]?.getChildNotes();
             const incorrectChild = helpRootChildren?.find(note => note.noteId === "_help_Vc8PjrjAGuOp");
             expect(incorrectChild).toBeUndefined();
+        });
+
+        it("enforces renames of launcher notes", () => {
+            const jumpToNote = becca.getNote("_lbJumpTo");
+            expect(jumpToNote).toBeDefined();
+            jumpToNote!.title = "Renamed";
+
+            cls.init(() => {
+                jumpToNote!.save();
+                hiddenSubtreeService.checkHiddenSubtree(true);
+            });
+
+            const updatedJumpToNote = becca.getNote("_lbJumpTo");
+            expect(updatedJumpToNote).toBeDefined();
+            expect(updatedJumpToNote?.title).not.toBe("Renamed");
         });
     });
 });

@@ -383,6 +383,12 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
                 }
             }
         }
+
+        if (item.id.startsWith("_lb") && note.title !== item.title) {
+            // If the note title is different from the expected title, update it
+            note.title = item.title;
+            note.save();
+        }
     }
 
     const attrs = [...(item.attributes || [])];

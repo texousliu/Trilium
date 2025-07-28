@@ -108,7 +108,7 @@
   "keyboard_action_names": {
     "back-in-note-history": "Back in Note History",
     "forward-in-note-history": "Forward in Note History",
-    "jump-to-note": "Jump to Note",
+    "jump-to-note": "Jump to...",
     "command-palette": "Command Palette",
     "scroll-to-active-note": "Scroll to Active Note",
     "quick-search": "Quick Search",
@@ -327,7 +327,7 @@
     "go-to-next-note-title": "Go to Next Note",
     "new-note-title": "New Note",
     "search-notes-title": "Search Notes",
-    "jump-to-note-title": "Jump to Note",
+    "jump-to-note-title": "Jump to...",
     "calendar-title": "Calendar",
     "recent-changes-title": "Recent Changes",
     "bookmarks-title": "Bookmarks",
