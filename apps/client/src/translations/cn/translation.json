@@ -210,7 +210,7 @@
     "okButton": "确定"
   },
   "jump_to_note": {
-    "search_placeholder": "按笔记名称搜索",
+    "search_placeholder": "",
     "close": "关闭",
     "search_button": "全文搜索 <kbd>Ctrl+回车</kbd>"
   },

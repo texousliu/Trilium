@@ -755,7 +755,7 @@
   },
   "jump_to_note": {
     "search_button": "Caută în întregul conținut <kbd>Ctrl+Enter</kbd>",
-    "search_placeholder": "căutați o notiță după denumirea ei",
+    "search_placeholder": "",
     "close": "Închide"
   },
   "left_pane_toggle": {

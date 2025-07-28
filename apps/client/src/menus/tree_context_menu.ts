@@ -23,7 +23,7 @@ let lastTargetNode: HTMLElement | null = null;
 
 // This will include all commands that implement ContextMenuCommandData, but it will not work if it additional options are added via the `|` operator,
 // so they need to be added manually.
-export type TreeCommandNames = FilteredCommandNames<ContextMenuCommandData> | "openBulkActionsDialog";
+export type TreeCommandNames = FilteredCommandNames<ContextMenuCommandData> | "openBulkActionsDialog" | "searchInSubtree";
 
 export default class TreeContextMenu implements SelectMenuItemEventListener<TreeCommandNames> {
     private treeWidget: NoteTreeWidget;
@@ -129,7 +129,7 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                         enabled: isNotRoot && parentNotSearch && noSelectedNotes && notOptionsOrHelp
                     },
                     { title: t("tree-context-menu.convert-to-attachment"), command: "convertNoteToAttachment", uiIcon: "bx bx-paperclip", enabled: isNotRoot && !isHoisted && notOptionsOrHelp },
-                    
+
                     { title: "----" },
 
                     { title: `${t("tree-context-menu.expand-subtree")} <kbd data-command="expandSubtree"></kbd>`, command: "expandSubtree", uiIcon: "bx bx-expand", enabled: noSelectedNotes },

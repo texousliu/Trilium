@@ -354,6 +354,9 @@
           "build"
         ],
         "command": "vitest --config {projectRoot}/vitest.build.config.mts"
+      },
+      "circular-deps": {
+        "command": "pnpx dpdm -T {projectRoot}/src/**/*.ts --tree=false --warning=false --skip-dynamic-imports=circular"
       }
     }
   },

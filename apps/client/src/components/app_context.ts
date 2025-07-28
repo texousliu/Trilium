@@ -133,6 +133,8 @@ export type CommandMappings = {
     hideLeftPane: CommandData;
     showCpuArchWarning: CommandData;
     showLeftPane: CommandData;
+    showAttachments: CommandData;
+    showSearchHistory: CommandData;
     hoistNote: CommandData & { noteId: string };
     leaveProtectedSession: CommandData;
     enterProtectedSession: CommandData;
@@ -173,7 +175,7 @@ export type CommandMappings = {
     deleteNotes: ContextMenuCommandData;
     importIntoNote: ContextMenuCommandData;
     exportNote: ContextMenuCommandData;
-    searchInSubtree: ContextMenuCommandData;
+    searchInSubtree: CommandData & { notePath: string; };
     moveNoteUp: ContextMenuCommandData;
     moveNoteDown: ContextMenuCommandData;
     moveNoteUpInHierarchy: ContextMenuCommandData;
@@ -262,6 +264,7 @@ export type CommandMappings = {
     closeThisNoteSplit: CommandData;
     moveThisNoteSplit: CommandData & { isMovingLeft: boolean };
     jumpToNote: CommandData;
+    commandPalette: CommandData;
 
     // Geomap
     deleteFromMap: { noteId: string };
