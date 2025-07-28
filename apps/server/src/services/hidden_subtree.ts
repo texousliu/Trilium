@@ -383,12 +383,6 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
                 }
             }
         }
-
-        if (item.id.startsWith("_lb") && note.title !== item.title) {
-            // If the note title is different from the expected title, update it
-            note.title = item.title;
-            note.save();
-        }
     }
 
     const attrs = [...(item.attributes || [])];
@@ -419,7 +413,8 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
         }
     }
 
-    if ((extraOpts.restoreNames || note.noteId.startsWith("_help")) && note.title !== item.title) {
+    const shouldRestoreNames = extraOpts.restoreNames || note.noteId.startsWith("_help") || item.id.startsWith("_lb");
+    if (shouldRestoreNames && note.title !== item.title) {
         note.title = item.title;
         note.save();
     }
