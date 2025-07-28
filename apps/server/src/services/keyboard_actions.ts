@@ -328,6 +328,7 @@ function getDefaultKeyboardActions() {
             friendlyName: t("keyboard_action_names.toggle-system-tray-icon"),
             iconClass: "bx bx-show",
             defaultShortcuts: [],
+            isElectronOnly: true,
             description: t("keyboard_actions.toggle-tray"),
             scope: "window"
         },
