@@ -4,6 +4,9 @@ import hiddenSubtreeService from "./hidden_subtree.js";
 import sql_init from "./sql_init.js";
 import branches from "./branches.js";
 import becca from "../becca/becca.js";
+import { LOCALES } from "@triliumnext/commons";
+import { changeLanguage } from "./i18n.js";
+import { deferred } from "./utils.js";
 
 describe("Hidden Subtree", () => {
     describe("Launcher movement persistence", () => {
@@ -78,6 +81,25 @@ describe("Hidden Subtree", () => {
             const updatedJumpToNote = becca.getNote("_lbJumpTo");
             expect(updatedJumpToNote).toBeDefined();
             expect(updatedJumpToNote?.title).not.toBe("Renamed");
+        });
+
+        it("can restore names in all languages", async () => {
+            const done = deferred<void>();
+            cls.wrap(async () => {
+                for (const locale of LOCALES) {
+                    if (locale.contentOnly) {
+                        continue;
+                    }
+
+                    try {
+                        await changeLanguage(locale.id);
+                    } catch (error) {
+                        done.reject(error);
+                    }
+                }
+                done.resolve();
+            })();
+            await done;
         });
     });
 });
