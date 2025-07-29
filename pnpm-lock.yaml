@@ -6,7 +6,7 @@ settings:
 
 overrides:
   mermaid: 11.9.0
-  preact: 10.26.9
+  preact: 10.27.0
   roughjs: 4.6.6
   '@types/express-serve-static-core': 5.0.7
   flat@<5.0.1: '>=5.0.1'
@@ -286,8 +286,8 @@ importers:
         specifier: 9.4.3
         version: 9.4.3
       preact:
-        specifier: 10.26.9
-        version: 10.26.9
+        specifier: 10.27.0
+        version: 10.27.0
       split.js:
         specifier: 1.6.5
         version: 1.6.5
@@ -12647,8 +12647,8 @@ packages:
   potpack@2.1.0:
     resolution: {integrity: sha512-pcaShQc1Shq0y+E7GqJqvZj8DTthWV1KeHGdi0Z6IAin2Oi3JnLCOfwnCo84qc+HAp52wT9nK9H7FAJp5a44GQ==}
 
-  preact@10.26.9:
-    resolution: {integrity: sha512-SSjF9vcnF27mJK1XyFMNJzFd5u3pQiATFqoaDy03XuN00u4ziveVVEGt5RKJrDR8MHE/wJo9Nnad56RLzS2RMA==}
+  preact@10.27.0:
+    resolution: {integrity: sha512-/DTYoB6mwwgPytiqQTh/7SFRL98ZdiD8Sk8zIUVOxtwq4oWcwrcd1uno9fE/zZmUaUrFNYzbH14CPebOz9tZQw==}
 
   prebuild-install@7.1.3:
     resolution: {integrity: sha512-8Mf2cbV7x1cXPUILADGI3wuhfqWvtiLA1iclTDbFRZkgRQS0NqsPZphna9V+HyTEadheuPmjaJMsbzKQFOzLug==}
@@ -18893,7 +18893,7 @@ snapshots:
 
   '@fullcalendar/core@6.1.18':
     dependencies:
-      preact: 10.26.9
+      preact: 10.27.0
 
   '@fullcalendar/daygrid@6.1.18(@fullcalendar/core@6.1.18)':
     dependencies:
@@ -25791,7 +25791,7 @@ snapshots:
     dependencies:
       d3-selection: 3.0.0
       kapsule: 1.16.3
-      preact: 10.26.9
+      preact: 10.27.0
 
   flora-colossus@2.0.0:
     dependencies:
@@ -30266,7 +30266,7 @@ snapshots:
 
   potpack@2.1.0: {}
 
-  preact@10.26.9: {}
+  preact@10.27.0: {}
 
   prebuild-install@7.1.3:
     dependencies:
