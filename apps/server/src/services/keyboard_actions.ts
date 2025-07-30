@@ -759,7 +759,6 @@ function getDefaultKeyboardActions() {
             friendlyName: t("keyboard_action_names.find-in-text"),
             iconClass: "bx bx-search",
             defaultShortcuts: isElectron ? ["CommandOrControl+F"] : [],
-            isElectronOnly: true,
             description: t("keyboard_actions.find-in-text"),
             scope: "window"
         },
