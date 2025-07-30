@@ -275,7 +275,6 @@ function getDefaultKeyboardActions() {
             friendlyName: t("keyboard_action_names.open-new-tab"),
             iconClass: "bx bx-plus",
             defaultShortcuts: isElectron ? ["CommandOrControl+T"] : [],
-            isElectronOnly: true,
             description: t("keyboard_actions.open-new-tab"),
             scope: "window"
         },
@@ -284,7 +283,6 @@ function getDefaultKeyboardActions() {
             friendlyName: t("keyboard_action_names.close-active-tab"),
             iconClass: "bx bx-minus",
             defaultShortcuts: isElectron ? ["CommandOrControl+W"] : [],
-            isElectronOnly: true,
             description: t("keyboard_actions.close-active-tab"),
             scope: "window"
         },
@@ -302,7 +300,6 @@ function getDefaultKeyboardActions() {
             friendlyName: t("keyboard_action_names.activate-next-tab"),
             iconClass: "bx bx-skip-next",
             defaultShortcuts: isElectron ? ["CommandOrControl+Tab", "CommandOrControl+PageDown"] : [],
-            isElectronOnly: true,
             description: t("keyboard_actions.activate-next-tab"),
             scope: "window"
         },
@@ -311,7 +308,6 @@ function getDefaultKeyboardActions() {
             friendlyName: t("keyboard_action_names.activate-previous-tab"),
             iconClass: "bx bx-skip-previous",
             defaultShortcuts: isElectron ? ["CommandOrControl+Shift+Tab", "CommandOrControl+PageUp"] : [],
-            isElectronOnly: true,
             description: t("keyboard_actions.activate-previous-tab"),
             scope: "window"
         },
