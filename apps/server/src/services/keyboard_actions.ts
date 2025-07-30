@@ -245,18 +245,18 @@ function getDefaultKeyboardActions() {
         {
             actionName: "addNoteAboveToSelection",
             friendlyName: t("keyboard_action_names.add-note-above-to-selection"),
-            iconClass: "bx bx-chevron-up-square",
             defaultShortcuts: ["Shift+Up"],
             description: t("keyboard_actions.add-note-above-to-the-selection"),
-            scope: "note-tree"
+            scope: "note-tree",
+            ignoreFromCommandPalette: true
         },
         {
             actionName: "addNoteBelowToSelection",
             friendlyName: t("keyboard_action_names.add-note-below-to-selection"),
-            iconClass: "bx bx-chevron-down-square",
             defaultShortcuts: ["Shift+Down"],
             description: t("keyboard_actions.add-note-below-to-selection"),
-            scope: "note-tree"
+            scope: "note-tree",
+            ignoreFromCommandPalette: true
         },
         {
             actionName: "duplicateSubtree",
