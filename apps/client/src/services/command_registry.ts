@@ -260,7 +260,11 @@ class CommandRegistry {
         }
 
         const treeComponent = appContext.getComponentByEl(tree) as NoteTreeWidget;
-        treeComponent.triggerCommand(actionName, { ntxId: appContext.tabManager.activeNtxId });
+        const activeNode = treeComponent.getActiveNode();
+        treeComponent.triggerCommand(actionName, {
+            ntxId: appContext.tabManager.activeNtxId,
+            node: activeNode
+        });
     }
 }
 
