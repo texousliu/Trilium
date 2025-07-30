@@ -36,18 +36,18 @@ function getDefaultKeyboardActions() {
         {
             actionName: "jumpToNote",
             friendlyName: t("keyboard_action_names.jump-to-note"),
-            iconClass: "bx bx-send",
             defaultShortcuts: ["CommandOrControl+J"],
             description: t("keyboard_actions.open-jump-to-note-dialog"),
-            scope: "window"
+            scope: "window",
+            ignoreFromCommandPalette: true
         },
         {
             actionName: "commandPalette",
             friendlyName: t("keyboard_action_names.command-palette"),
-            iconClass: "bx bx-terminal",
             defaultShortcuts: ["CommandOrControl+Shift+J"],
             description: t("keyboard_actions.open-command-palette"),
-            scope: "window"
+            scope: "window",
+            ignoreFromCommandPalette: true
         },
         {
             actionName: "scrollToActiveNote",
