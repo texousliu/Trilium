@@ -72,6 +72,7 @@ test("Tabs are restored in right order", async ({ page, context }) => {
 
     // Select the mid one.
     await app.getTab(1).click();
+    await expect(app.noteTreeActiveNote).toContainText("Text notes");
 
     // Refresh the page and check the order.
     await app.goto( { preserveTabs: true });
