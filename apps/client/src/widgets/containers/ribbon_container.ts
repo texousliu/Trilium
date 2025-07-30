@@ -268,7 +268,7 @@ export default class RibbonContainer extends NoteContextAwareWidget {
                     const action = actions.find((act) => act.actionName === toggleCommandName);
                     const title = $(this).attr("data-title");
 
-                    if (action && action.effectiveShortcuts.length > 0) {
+                    if (action?.effectiveShortcuts && action.effectiveShortcuts.length > 0) {
                         return `${title} (${action.effectiveShortcuts.join(", ")})`;
                     } else {
                         return title ?? "";

@@ -1552,7 +1552,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         const hotKeyMap: Record<string, (node: Fancytree.FancytreeNode, e: JQuery.KeyDownEvent) => boolean> = {};
 
         for (const action of actions) {
-            for (const shortcut of action.effectiveShortcuts) {
+            for (const shortcut of action.effectiveShortcuts ?? []) {
                 hotKeyMap[shortcutService.normalizeShortcut(shortcut)] = (node) => {
                     const notePath = treeService.getNotePath(node);
 

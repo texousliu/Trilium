@@ -15,10 +15,10 @@ const mockElement = {
 };
 
 const mockJQuery = vi.fn(() => [mockElement]);
-mockJQuery.length = 1;
+(mockJQuery as any).length = 1;
 mockJQuery[0] = mockElement;
 
-global.$ = mockJQuery as any;
+(global as any).$ = mockJQuery as any;
 global.document = mockElement as any;
 
 describe("shortcuts", () => {

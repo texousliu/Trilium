@@ -1,7 +1,7 @@
 import utils from "./utils.js";
 
 type ElementType = HTMLElement | Document;
-type Handler = () => void;
+type Handler = (e: KeyboardEvent) => void;
 
 interface ShortcutBinding {
     element: HTMLElement | Document;
@@ -45,7 +45,7 @@ function bindElShortcut($el: JQuery<ElementType | Element>, keyboardShortcut: st
                 if (matchesShortcut(e, keyboardShortcut)) {
                     e.preventDefault();
                     e.stopPropagation();
-                    handler();
+                    handler(e);
                 }
             };
 
