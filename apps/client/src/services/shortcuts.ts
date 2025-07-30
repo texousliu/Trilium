@@ -40,7 +40,7 @@ function bindElShortcut($el: JQuery<ElementType | Element>, keyboardShortcut: st
                 if (evt.type !== 'keydown' || !(evt instanceof KeyboardEvent)) {
                     return;
                 }
-                
+
                 const e = evt as KeyboardEvent;
                 if (matchesShortcut(e, keyboardShortcut)) {
                     e.preventDefault();
@@ -83,7 +83,7 @@ function removeNamespaceBindings(namespace: string) {
 
 function matchesShortcut(e: KeyboardEvent, shortcut: string): boolean {
     if (!shortcut) return false;
-    
+
     // Ensure we have a proper KeyboardEvent with key property
     if (!e || typeof e.key !== 'string') {
         console.warn('matchesShortcut called with invalid event:', e);
@@ -155,7 +155,18 @@ function keyMatches(e: KeyboardEvent, key: string): boolean {
         return mappedKeys.includes(e.key) || mappedKeys.includes(e.code);
     }
 
-    // For regular keys, check both key and code
+    // For number keys, use the physical key code regardless of modifiers
+    // This works across all keyboard layouts
+    if (key >= '0' && key <= '9') {
+        return e.code === `Digit${key}`;
+    }
+
+    // For letter keys, use the physical key code for consistency
+    if (key.length === 1 && key >= 'a' && key <= 'z') {
+        return e.code === `Key${key.toUpperCase()}`;
+    }
+
+    // For regular keys, check both key and code as fallback
     return e.key.toLowerCase() === key.toLowerCase() ||
            e.code.toLowerCase() === key.toLowerCase();
 }
@@ -169,12 +180,12 @@ function normalizeShortcut(shortcut: string): string {
     }
 
     const normalized = shortcut.toLowerCase().trim().replace(/\s+/g, '');
-    
+
     // Warn about potentially problematic shortcuts
     if (normalized.endsWith('+') || normalized.startsWith('+') || normalized.includes('++')) {
         console.warn('Potentially malformed shortcut:', shortcut, '-> normalized to:', normalized);
     }
-    
+
     return normalized;
 }
 
