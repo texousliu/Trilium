@@ -19,7 +19,7 @@ import password from "./encryption/password.js";
 import backup from "./backup.js";
 import eventService from "./events.js";
 
-const dbReady = deferred<void>();
+export const dbReady = deferred<void>();
 
 function schemaExists() {
     return !!sql.getValue(/*sql*/`SELECT name FROM sqlite_master
