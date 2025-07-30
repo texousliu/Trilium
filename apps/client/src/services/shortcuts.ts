@@ -81,7 +81,7 @@ function removeNamespaceBindings(namespace: string) {
     }
 }
 
-function matchesShortcut(e: KeyboardEvent, shortcut: string): boolean {
+export function matchesShortcut(e: KeyboardEvent, shortcut: string): boolean {
     if (!shortcut) return false;
 
     // Ensure we have a proper KeyboardEvent with key property
@@ -117,7 +117,7 @@ function matchesShortcut(e: KeyboardEvent, shortcut: string): boolean {
            e.metaKey === expectedMeta;
 }
 
-function keyMatches(e: KeyboardEvent, key: string): boolean {
+export function keyMatches(e: KeyboardEvent, key: string): boolean {
     // Defensive check for undefined/null key
     if (!key) {
         console.warn('keyMatches called with undefined/null key');
