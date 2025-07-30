@@ -36,6 +36,11 @@ function bindElShortcut($el: JQuery<ElementType | Element>, keyboardShortcut: st
             const element = $el.length > 0 ? $el[0] as (HTMLElement | Document) : document;
 
             const listener = (evt: Event) => {
+                // Only handle keyboard events
+                if (evt.type !== 'keydown' || !(evt instanceof KeyboardEvent)) {
+                    return;
+                }
+                
                 const e = evt as KeyboardEvent;
                 if (matchesShortcut(e, keyboardShortcut)) {
                     e.preventDefault();
@@ -78,10 +83,22 @@ function removeNamespaceBindings(namespace: string) {
 
 function matchesShortcut(e: KeyboardEvent, shortcut: string): boolean {
     if (!shortcut) return false;
+    
+    // Ensure we have a proper KeyboardEvent with key property
+    if (!e || typeof e.key !== 'string') {
+        console.warn('matchesShortcut called with invalid event:', e);
+        return false;
+    }
 
     const parts = shortcut.toLowerCase().split('+');
     const key = parts[parts.length - 1]; // Last part is the actual key
     const modifiers = parts.slice(0, -1); // Everything before is modifiers
+
+    // Defensive check - ensure we have a valid key
+    if (!key || key.trim() === '') {
+        console.warn('Invalid shortcut format:', shortcut);
+        return false;
+    }
 
     // Check if the main key matches
     if (!keyMatches(e, key)) {
@@ -101,6 +118,12 @@ function matchesShortcut(e: KeyboardEvent, shortcut: string): boolean {
 }
 
 function keyMatches(e: KeyboardEvent, key: string): boolean {
+    // Defensive check for undefined/null key
+    if (!key) {
+        console.warn('keyMatches called with undefined/null key');
+        return false;
+    }
+
     // Handle special key mappings and aliases
     const keyMap: { [key: string]: string[] } = {
         'return': ['Enter'],
@@ -145,7 +168,14 @@ function normalizeShortcut(shortcut: string): string {
         return shortcut;
     }
 
-    return shortcut.toLowerCase().trim().replace(/\s+/g, '');
+    const normalized = shortcut.toLowerCase().trim().replace(/\s+/g, '');
+    
+    // Warn about potentially problematic shortcuts
+    if (normalized.endsWith('+') || normalized.startsWith('+') || normalized.includes('++')) {
+        console.warn('Potentially malformed shortcut:', shortcut, '-> normalized to:', normalized);
+    }
+    
+    return normalized;
 }
 
 export default {
