@@ -244,6 +244,8 @@ class CommandRegistry {
         if (command.keyboardAction && command.commandName) {
             if (command.keyboardAction.scope === "note-tree") {
                 this.executeWithNoteTreeFocus(command.commandName);
+            } else if (command.keyboardAction.scope === "text-detail") {
+                this.executeWithTextDetail(command.commandName);
             } else {
                 appContext.triggerCommand(command.commandName);
             }
@@ -270,6 +272,17 @@ class CommandRegistry {
         treeComponent.triggerCommand(actionName, {
             ntxId: appContext.tabManager.activeNtxId,
             node: activeNode
+        });
+    }
+
+    private async executeWithTextDetail(actionName: CommandNames) {
+        const typeWidget = await appContext.tabManager.getActiveContext()?.getTypeWidget();
+        if (!typeWidget) {
+            return;
+        }
+
+        typeWidget.triggerCommand(actionName, {
+            ntxId: appContext.tabManager.activeNtxId
         });
     }
 }
