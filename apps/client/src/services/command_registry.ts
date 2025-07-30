@@ -247,14 +247,18 @@ class CommandRegistry {
             } else if (command.keyboardAction.scope === "text-detail") {
                 this.executeWithTextDetail(command.commandName);
             } else {
-                appContext.triggerCommand(command.commandName);
+                appContext.triggerCommand(command.commandName, {
+                    ntxId: appContext.tabManager.activeNtxId
+                });
             }
             return;
         }
 
         // Fallback for commands without keyboard action reference
         if (command.commandName) {
-            appContext.triggerCommand(command.commandName);
+            appContext.triggerCommand(command.commandName, {
+                ntxId: appContext.tabManager.activeNtxId
+            });
             return;
         }
 
