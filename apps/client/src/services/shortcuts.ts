@@ -101,11 +101,14 @@ function matchesShortcut(e: KeyboardEvent, shortcut: string): boolean {
 }
 
 function keyMatches(e: KeyboardEvent, key: string): boolean {
-    // Handle special key mappings
+    // Handle special key mappings and aliases
     const keyMap: { [key: string]: string[] } = {
         'return': ['Enter'],
+        'enter': ['Enter'],  // alias for return
         'del': ['Delete'],
+        'delete': ['Delete'], // alias for del
         'esc': ['Escape'],
+        'escape': ['Escape'], // alias for esc
         'space': [' ', 'Space'],
         'tab': ['Tab'],
         'backspace': ['Backspace'],
@@ -135,32 +138,14 @@ function keyMatches(e: KeyboardEvent, key: string): boolean {
 }
 
 /**
- * Normalize to a consistent format for our custom shortcut parser
+ * Simple normalization - just lowercase and trim whitespace
  */
 function normalizeShortcut(shortcut: string): string {
     if (!shortcut) {
         return shortcut;
     }
 
-    return shortcut
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, '') // Remove any spaces
-        .replace("enter", "return")
-        .replace("delete", "del")
-        .replace("escape", "esc")
-        // Normalize modifier order: ctrl, alt, shift, meta, then key
-        .split('+')
-        .sort((a, b) => {
-            const order = ['ctrl', 'control', 'alt', 'shift', 'meta', 'cmd', 'command'];
-            const aIndex = order.indexOf(a);
-            const bIndex = order.indexOf(b);
-            if (aIndex === -1 && bIndex === -1) return 0;
-            if (aIndex === -1) return 1;
-            if (bIndex === -1) return -1;
-            return aIndex - bIndex;
-        })
-        .join('+');
+    return shortcut.toLowerCase().trim().replace(/\s+/g, '');
 }
 
 export default {
