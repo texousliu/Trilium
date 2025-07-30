@@ -458,6 +458,11 @@ body.mobile .dropdown-menu .dropdown-item.submenu-open .dropdown-toggle::after {
     padding: 1rem;
 }
 
+.note-list-wrapper .note-book-card .note-book-content.type-image .rendered-content,
+.note-list-wrapper .note-book-card .note-book-content.type-pdf .rendered-content {
+    padding: 0;
+}
+
 .note-list-wrapper .note-book-card .note-book-content .rendered-content.text-with-ellipsis {
     padding: 1rem !important;
 }

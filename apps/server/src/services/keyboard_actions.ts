@@ -36,18 +36,18 @@ function getDefaultKeyboardActions() {
         {
             actionName: "jumpToNote",
             friendlyName: t("keyboard_action_names.jump-to-note"),
-            iconClass: "bx bx-send",
             defaultShortcuts: ["CommandOrControl+J"],
             description: t("keyboard_actions.open-jump-to-note-dialog"),
-            scope: "window"
+            scope: "window",
+            ignoreFromCommandPalette: true
         },
         {
             actionName: "commandPalette",
             friendlyName: t("keyboard_action_names.command-palette"),
-            iconClass: "bx bx-terminal",
             defaultShortcuts: ["CommandOrControl+Shift+J"],
             description: t("keyboard_actions.open-command-palette"),
-            scope: "window"
+            scope: "window",
+            ignoreFromCommandPalette: true
         },
         {
             actionName: "scrollToActiveNote",
@@ -245,18 +245,18 @@ function getDefaultKeyboardActions() {
         {
             actionName: "addNoteAboveToSelection",
             friendlyName: t("keyboard_action_names.add-note-above-to-selection"),
-            iconClass: "bx bx-chevron-up-square",
             defaultShortcuts: ["Shift+Up"],
             description: t("keyboard_actions.add-note-above-to-the-selection"),
-            scope: "note-tree"
+            scope: "note-tree",
+            ignoreFromCommandPalette: true
         },
         {
             actionName: "addNoteBelowToSelection",
             friendlyName: t("keyboard_action_names.add-note-below-to-selection"),
-            iconClass: "bx bx-chevron-down-square",
             defaultShortcuts: ["Shift+Down"],
             description: t("keyboard_actions.add-note-below-to-selection"),
-            scope: "note-tree"
+            scope: "note-tree",
+            ignoreFromCommandPalette: true
         },
         {
             actionName: "duplicateSubtree",
@@ -275,7 +275,6 @@ function getDefaultKeyboardActions() {
             friendlyName: t("keyboard_action_names.open-new-tab"),
             iconClass: "bx bx-plus",
             defaultShortcuts: isElectron ? ["CommandOrControl+T"] : [],
-            isElectronOnly: true,
             description: t("keyboard_actions.open-new-tab"),
             scope: "window"
         },
@@ -284,7 +283,6 @@ function getDefaultKeyboardActions() {
             friendlyName: t("keyboard_action_names.close-active-tab"),
             iconClass: "bx bx-minus",
             defaultShortcuts: isElectron ? ["CommandOrControl+W"] : [],
-            isElectronOnly: true,
             description: t("keyboard_actions.close-active-tab"),
             scope: "window"
         },
@@ -302,7 +300,6 @@ function getDefaultKeyboardActions() {
             friendlyName: t("keyboard_action_names.activate-next-tab"),
             iconClass: "bx bx-skip-next",
             defaultShortcuts: isElectron ? ["CommandOrControl+Tab", "CommandOrControl+PageDown"] : [],
-            isElectronOnly: true,
             description: t("keyboard_actions.activate-next-tab"),
             scope: "window"
         },
@@ -311,7 +308,6 @@ function getDefaultKeyboardActions() {
             friendlyName: t("keyboard_action_names.activate-previous-tab"),
             iconClass: "bx bx-skip-previous",
             defaultShortcuts: isElectron ? ["CommandOrControl+Shift+Tab", "CommandOrControl+PageUp"] : [],
-            isElectronOnly: true,
             description: t("keyboard_actions.activate-previous-tab"),
             scope: "window"
         },
@@ -763,7 +759,6 @@ function getDefaultKeyboardActions() {
             friendlyName: t("keyboard_action_names.find-in-text"),
             iconClass: "bx bx-search",
             defaultShortcuts: isElectron ? ["CommandOrControl+F"] : [],
-            isElectronOnly: true,
             description: t("keyboard_actions.find-in-text"),
             scope: "window"
         },

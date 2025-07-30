@@ -2002,5 +2002,8 @@
     "search_history_description": "View previous searches",
     "configure_launch_bar_title": "Configure Launch Bar",
     "configure_launch_bar_description": "Open the launch bar configuration, to add or remove items."
+  },
+  "content_renderer": {
+    "open_externally": "Open externally"
   }
 }

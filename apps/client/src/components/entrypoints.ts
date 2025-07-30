@@ -106,7 +106,9 @@ export default class Entrypoints extends Component {
             if (win.isFullScreenable()) {
                 win.setFullScreen(!win.isFullScreen());
             }
-        } // outside of electron this is handled by the browser
+        } else {
+            document.documentElement.requestFullscreen();
+        }
     }
 
     reloadFrontendAppCommand() {

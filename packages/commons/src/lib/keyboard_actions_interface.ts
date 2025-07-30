@@ -112,7 +112,7 @@ export interface ActionKeyboardShortcut {
      * An icon describing the action.
      * This is currently only used in the command palette.
      */
-    iconClass: string;
+    iconClass?: string;
     /**
      * Scope here means on which element the keyboard shortcuts are attached - this means that for the shortcut to work,
      * the focus has to be inside the element.
@@ -127,6 +127,10 @@ export interface ActionKeyboardShortcut {
      * This is used to hide actions that are not available in the web version.
      */
     isElectronOnly?: boolean;
+    /**
+     * If set to true, the action will not be shown in the command palette.
+     */
+    ignoreFromCommandPalette?: boolean;
 }
 
 export type KeyboardShortcut = ActionKeyboardShortcut | KeyboardShortcutSeparator;

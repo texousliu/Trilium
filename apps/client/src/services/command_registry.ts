@@ -1,7 +1,8 @@
+import { ActionKeyboardShortcut } from "@triliumnext/commons";
 import appContext, { type CommandNames } from "../components/app_context.js";
 import type NoteTreeWidget from "../widgets/note_tree.js";
 import { t, translationsInitializedPromise } from "./i18n.js";
-import keyboardActions, { Action } from "./keyboard_actions.js";
+import keyboardActions from "./keyboard_actions.js";
 import utils from "./utils.js";
 
 export interface CommandDefinition {
@@ -15,7 +16,7 @@ export interface CommandDefinition {
     aliases?: string[];
     source?: "manual" | "keyboard-action";
     /** Reference to the original keyboard action for scope checking. */
-    keyboardAction?: Action;
+    keyboardAction?: ActionKeyboardShortcut;
 }
 
 class CommandRegistry {
@@ -105,7 +106,7 @@ class CommandRegistry {
         }
     }
 
-    private registerKeyboardActions(actions: Action[]) {
+    private registerKeyboardActions(actions: ActionKeyboardShortcut[]) {
         for (const action of actions) {
             // Skip actions that we've already manually registered
             if (this.commands.has(action.actionName)) {
@@ -119,6 +120,11 @@ class CommandRegistry {
 
             // Skip Electron-only actions if not in Electron environment
             if (action.isElectronOnly && !utils.isElectron()) {
+                continue;
+            }
+
+            // Skip actions that should not appear in the command palette
+            if (action.ignoreFromCommandPalette) {
                 continue;
             }
 
@@ -238,15 +244,21 @@ class CommandRegistry {
         if (command.keyboardAction && command.commandName) {
             if (command.keyboardAction.scope === "note-tree") {
                 this.executeWithNoteTreeFocus(command.commandName);
+            } else if (command.keyboardAction.scope === "text-detail") {
+                this.executeWithTextDetail(command.commandName);
             } else {
-                appContext.triggerCommand(command.commandName);
+                appContext.triggerCommand(command.commandName, {
+                    ntxId: appContext.tabManager.activeNtxId
+                });
             }
             return;
         }
 
         // Fallback for commands without keyboard action reference
         if (command.commandName) {
-            appContext.triggerCommand(command.commandName);
+            appContext.triggerCommand(command.commandName, {
+                ntxId: appContext.tabManager.activeNtxId
+            });
             return;
         }
 
@@ -260,7 +272,22 @@ class CommandRegistry {
         }
 
         const treeComponent = appContext.getComponentByEl(tree) as NoteTreeWidget;
-        treeComponent.triggerCommand(actionName, { ntxId: appContext.tabManager.activeNtxId });
+        const activeNode = treeComponent.getActiveNode();
+        treeComponent.triggerCommand(actionName, {
+            ntxId: appContext.tabManager.activeNtxId,
+            node: activeNode
+        });
+    }
+
+    private async executeWithTextDetail(actionName: CommandNames) {
+        const typeWidget = await appContext.tabManager.getActiveContext()?.getTypeWidget();
+        if (!typeWidget) {
+            return;
+        }
+
+        typeWidget.triggerCommand(actionName, {
+            ntxId: appContext.tabManager.activeNtxId
+        });
     }
 }
 
