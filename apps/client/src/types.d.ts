@@ -97,16 +97,6 @@ declare global {
         setNote(noteId: string);
     }
 
-    interface JQueryStatic {
-        hotkeys: {
-            options: {
-                filterInputAcceptingElements: boolean;
-                filterContentEditable: boolean;
-                filterTextInputs: boolean;
-            }
-        }
-    }
-
     var logError: (message: string, e?: Error | string) => void;
     var logInfo: (message: string) => void;
     var glob: CustomGlobals;

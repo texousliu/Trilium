@@ -187,7 +187,7 @@ export default class JumpToNoteDialog extends BasicWidget {
         }
     }
 
-    showInFullText(e: JQuery.TriggeredEvent) {
+    showInFullText(e: JQuery.TriggeredEvent | KeyboardEvent) {
         // stop from propagating upwards (dangerous, especially with ctrl+enter executable javascript notes)
         e.preventDefault();
         e.stopPropagation();
