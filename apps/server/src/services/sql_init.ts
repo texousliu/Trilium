@@ -14,7 +14,6 @@ import type { OptionRow } from "@triliumnext/commons";
 import BNote from "../becca/entities/bnote.js";
 import BBranch from "../becca/entities/bbranch.js";
 import zipImportService from "./import/zip.js";
-import becca_loader from "../becca/becca_loader.js";
 import password from "./encryption/password.js";
 import backup from "./backup.js";
 import eventService from "./events.js";
@@ -83,6 +82,7 @@ async function createInitialDatabase(skipDemoDb?: boolean) {
 
     // We have to import async since options init requires keyboard actions which require translations.
     const optionsInitService = (await import("./options_init.js")).default;
+    const becca_loader = (await import("../becca/becca_loader.js")).default;
 
     sql.transactional(() => {
         log.info("Creating database schema ...");
