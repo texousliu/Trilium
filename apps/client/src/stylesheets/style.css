@@ -1937,12 +1937,14 @@ body.zen .note-title-widget input {
 
 /* Content renderer */
 
-footer.file-footer {
+footer.file-footer,
+footer.webview-footer {
     display: flex;
     justify-content: center;
 }
 
-footer.file-footer button {
+footer.file-footer button,
+footer.webview-footer button {
     margin: 5px;
 }
 
