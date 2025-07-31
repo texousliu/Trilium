@@ -126,7 +126,7 @@
         "collapseWholeTree": "colapsar todo el árbol de notas",
         "collapseSubTree": "colapsar subárbol",
         "tabShortcuts": "Atajos de pestañas",
-        "newTabNoteLink": "<kbd>CTRL+clic</kbd> - (o clic central del mouse) en el enlace de la nota abre la nota en una nueva pestaña",
+        "newTabNoteLink": "<kbd>CTRL+clic</kbd> - (o <kbd>clic central del mouse</kbd>) en el enlace de la nota abre la nota en una nueva pestaña",
         "newTabWithActivationNoteLink": "<kbd>Ctrl+Shift+clic</kbd> - (o <kbd>Shift+clic de rueda de ratón</kbd>) en el enlace de la nota abre y activa la nota en una nueva pestaña",
         "onlyInDesktop": "Solo en escritorio (compilación con Electron)",
         "openEmptyTab": "abrir pestaña vacía",
@@ -1925,5 +1925,23 @@
         "download_link": "Descargar versión nativa",
         "continue_anyway": "Continuar de todas maneras",
         "dont_show_again": "No mostrar esta advertencia otra vez"
+    },
+    "book_properties_config": {
+        "hide-weekends": "Ocultar fines de semana",
+        "show-scale": "Mostrar escala"
+    },
+    "table_context_menu": {
+        "delete_row": "Eliminar fila"
+    },
+    "board_view": {
+        "delete-note": "Eliminar nota",
+        "move-to": "Mover a",
+        "insert-above": "Insertar arriba",
+        "insert-below": "Insertar abajo",
+        "delete-column": "Eliminar columna",
+        "delete-column-confirmation": "¿Seguro que desea eliminar esta columna? El atributo correspondiente también se eliminará de las notas de esta columna."
+    },
+    "content_renderer": {
+        "open_externally": "Abrir externamente"
     }
 }
