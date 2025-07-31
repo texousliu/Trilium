@@ -66,6 +66,9 @@ async function getRenderedContent(this: {} | { ctx: string }, entity: FNote | FA
 
         $renderedContent.append($("<div>").append("<div>This note is protected and to access it you need to enter password.</div>").append("<br/>").append($button));
     } else if (entity instanceof FNote) {
+        $renderedContent
+            .css("display", "flex")
+            .css("flex-direction", "column");
         $renderedContent.append(
             $("<div>")
                 .css("display", "flex")
@@ -73,8 +76,33 @@ async function getRenderedContent(this: {} | { ctx: string }, entity: FNote | FA
                 .css("align-items", "center")
                 .css("height", "100%")
                 .css("font-size", "500%")
+                .css("flex-grow", "1")
                 .append($("<span>").addClass(entity.getIcon()))
         );
+
+        if (entity.type === "webView" && entity.hasLabel("webViewSrc")) {
+            const $footer = $("<footer>")
+                .addClass("webview-footer");
+            const $openButton = $(`
+                <button class="file-open btn btn-primary" type="button">
+                    <span class="bx bx-link-external"></span>
+                    ${t("content_renderer.open_externally")}
+                </button>
+            `)
+                .appendTo($footer)
+                .on("click", () => {
+                    const webViewSrc = entity.getLabelValue("webViewSrc");
+                    if (webViewSrc) {
+                        if (utils.isElectron()) {
+                            const electron = utils.dynamicRequire("electron");
+                            electron.shell.openExternal(webViewSrc);
+                        } else {
+                            window.open(webViewSrc, '_blank', 'noopener,noreferrer');
+                        }
+                    }
+                });
+            $footer.appendTo($renderedContent);
+        }
     }
 
     if (entity instanceof FNote) {

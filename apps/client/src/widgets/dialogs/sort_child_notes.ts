@@ -88,7 +88,9 @@ export default class SortChildNotesDialog extends BasicWidget {
         this.$widget = $(TPL);
         this.$form = this.$widget.find(".sort-child-notes-form");
 
-        this.$form.on("submit", async () => {
+        this.$form.on("submit", async (e) => {
+            e.preventDefault();
+
             const sortBy = this.$form.find("input[name='sort-by']:checked").val();
             const sortDirection = this.$form.find("input[name='sort-direction']:checked").val();
             const foldersFirst = this.$form.find("input[name='sort-folders-first']").is(":checked");

@@ -211,7 +211,7 @@
     "okButton": "OK"
   },
   "jump_to_note": {
-    "search_placeholder": "search for note by its name",
+    "search_placeholder": "Search for note by its name or type > for commands...",
     "close": "Close",
     "search_button": "Search in full text <kbd>Ctrl+Enter</kbd>"
   },
@@ -2017,5 +2017,23 @@
     "processing": "Processing...",
     "processing_started": "OCR processing has been started. Please wait a moment and refresh.",
     "processing_failed": "Failed to start OCR processing"
+  },
+  "command_palette": {
+    "tree-action-name": "Tree: {{name}}",
+    "export_note_title": "Export Note",
+    "export_note_description": "Export current note",
+    "show_attachments_title": "Show Attachments",
+    "show_attachments_description": "View note attachments",
+    "search_notes_title": "Search Notes",
+    "search_notes_description": "Open advanced search",
+    "search_subtree_title": "Search in Subtree",
+    "search_subtree_description": "Search within current subtree",
+    "search_history_title": "Show Search History",
+    "search_history_description": "View previous searches",
+    "configure_launch_bar_title": "Configure Launch Bar",
+    "configure_launch_bar_description": "Open the launch bar configuration, to add or remove items."
+  },
+  "content_renderer": {
+    "open_externally": "Open externally"
   }
 }

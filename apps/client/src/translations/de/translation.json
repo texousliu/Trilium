@@ -210,7 +210,7 @@
     "okButton": "OK"
   },
   "jump_to_note": {
-    "search_placeholder": "Suche nach einer Notiz anhand ihres Namens",
+    "search_placeholder": "",
     "close": "Schließen",
     "search_button": "Suche im Volltext: <kbd>Strg+Eingabetaste</kbd>"
   },

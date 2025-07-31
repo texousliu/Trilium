@@ -378,4 +378,10 @@ describe("Markdown export", () => {
         expect(markdownExportService.toMarkdown(html)).toBe(expected);
     });
 
+    it("preserves superscript and subscript", () => {
+        const html = /*html*/`<p>Hello <sup><strong>superscript</strong></sup> <sub><strong>subscript</strong></sub></p>`;
+        const expected = `Hello <sup><strong>superscript</strong></sup> <sub><strong>subscript</strong></sub>`;
+        expect(markdownExportService.toMarkdown(html)).toBe(expected);
+    });
+
 });

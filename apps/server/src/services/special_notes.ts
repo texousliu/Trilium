@@ -7,10 +7,9 @@ import log from "./log.js";
 import hoistedNoteService from "./hoisted_note.js";
 import searchService from "./search/services/search.js";
 import SearchContext from "./search/search_context.js";
-import hiddenSubtree from "./hidden_subtree.js";
+import { LBTPL_NOTE_LAUNCHER, LBTPL_CUSTOM_WIDGET, LBTPL_SPACER, LBTPL_SCRIPT } from "./hidden_subtree.js";
 import { t } from "i18next";
 import { BNote } from "./backend_script_entrypoint.js";
-const { LBTPL_NOTE_LAUNCHER, LBTPL_CUSTOM_WIDGET, LBTPL_SPACER, LBTPL_SCRIPT } = hiddenSubtree;
 
 function getInboxNote(date: string) {
     const workspaceNote = hoistedNoteService.getWorkspaceNote();

@@ -257,7 +257,7 @@ function initStartupOptions() {
 }
 
 function getKeyboardDefaultOptions() {
-    return (keyboardActions.getDefaultKeyboardActions().filter((ka) => !!ka.actionName) as KeyboardShortcutWithRequiredActionName[]).map((ka) => ({
+    return (keyboardActions.getDefaultKeyboardActions().filter((ka) => "actionName" in ka) as KeyboardShortcutWithRequiredActionName[]).map((ka) => ({
         name: `keyboardShortcuts${ka.actionName.charAt(0).toUpperCase()}${ka.actionName.slice(1)}`,
         value: JSON.stringify(ka.defaultShortcuts),
         isSynced: false

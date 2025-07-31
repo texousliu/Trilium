@@ -56,7 +56,7 @@ function toMarkdown(content: string) {
         instance.addRule("math", buildMathFilter());
         instance.addRule("li", buildListItemFilter());
         instance.use(gfm);
-        instance.keep([ "kbd" ]);
+        instance.keep([ "kbd", "sup", "sub" ]);
     }
 
     return instance.turndown(content);
