@@ -13,8 +13,8 @@ let openTooltipElements: JQuery<HTMLElement>[] = [];
 let dismissTimer: ReturnType<typeof setTimeout>;
 
 function setupGlobalTooltip() {
-    $(document).on("mouseenter", "a", mouseEnterHandler);
-    $(document).on("mouseenter", "[data-href]", mouseEnterHandler);
+    $(document).on("mouseenter", "a:not(.no-tooltip-preview)", mouseEnterHandler);
+    $(document).on("mouseenter", "[data-href]:not(.no-tooltip-preview)", mouseEnterHandler);
 
     // close any note tooltip after click, this fixes the problem that sometimes tooltips remained on the screen
     $(document).on("click", (e) => {
