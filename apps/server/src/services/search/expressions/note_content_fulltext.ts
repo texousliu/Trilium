@@ -11,8 +11,16 @@ import protectedSessionService from "../../protected_session.js";
 import striptags from "striptags";
 import { normalize } from "../../utils.js";
 import sql from "../../sql.js";
+import { 
+    normalizeSearchText, 
+    calculateOptimizedEditDistance, 
+    validateFuzzySearchTokens, 
+    validateAndPreprocessContent,
+    fuzzyMatchWord,
+    FUZZY_SEARCH_CONFIG 
+} from "../utils/text_utils.js";
 
-const ALLOWED_OPERATORS = new Set(["=", "!=", "*=*", "*=", "=*", "%="]);
+const ALLOWED_OPERATORS = new Set(["=", "!=", "*=*", "*=", "=*", "%=", "~=", "~*"]);
 
 const cachedRegexes: Record<string, RegExp> = {};
 
@@ -40,6 +48,16 @@ class NoteContentFulltextExp extends Expression {
 
     constructor(operator: string, { tokens, raw, flatText }: ConstructorOpts) {
         super();
+
+        if (!operator || !tokens || !Array.isArray(tokens)) {
+            throw new Error('Invalid parameters: operator and tokens are required');
+        }
+
+        // Validate fuzzy search tokens
+        const validation = validateFuzzySearchTokens(tokens, operator);
+        if (!validation.isValid) {
+            throw new Error(validation.error!);
+        }
 
         this.operator = operator;
         this.tokens = tokens;
@@ -89,6 +107,13 @@ class NoteContentFulltextExp extends Expression {
         }
 
         content = this.preprocessContent(content, type, mime);
+        
+        // Apply content size validation and preprocessing
+        const processedContent = validateAndPreprocessContent(content, noteId);
+        if (!processedContent) {
+            return; // Content too large or invalid
+        }
+        content = processedContent;
 
         if (this.tokens.length === 1) {
             const [token] = this.tokens;
@@ -99,21 +124,27 @@ class NoteContentFulltextExp extends Expression {
                 (this.operator === "*=" && content.endsWith(token)) ||
                 (this.operator === "=*" && content.startsWith(token)) ||
                 (this.operator === "*=*" && content.includes(token)) ||
-                (this.operator === "%=" && getRegex(token).test(content))
+                (this.operator === "%=" && getRegex(token).test(content)) ||
+                (this.operator === "~=" && this.matchesWithFuzzy(content, noteId)) ||
+                (this.operator === "~*" && this.fuzzyMatchToken(normalizeSearchText(token), normalizeSearchText(content)))
             ) {
                 resultNoteSet.add(becca.notes[noteId]);
             }
         } else {
-            const nonMatchingToken = this.tokens.find(
-                (token) =>
-                    !content?.includes(token) &&
-                    // in case of default fulltext search, we should consider both title, attrs and content
-                    // so e.g. "hello world" should match when "hello" is in title and "world" in content
-                    (!this.flatText || !becca.notes[noteId].getFlatText().includes(token))
-            );
+            // Multi-token matching with fuzzy support and phrase proximity
+            if (this.operator === "~=" || this.operator === "~*") {
+                if (this.matchesWithFuzzy(content, noteId)) {
+                    resultNoteSet.add(becca.notes[noteId]);
+                }
+            } else {
+                const nonMatchingToken = this.tokens.find(
+                    (token) =>
+                        !this.tokenMatchesContent(token, content, noteId)
+                );
 
-            if (!nonMatchingToken) {
-                resultNoteSet.add(becca.notes[noteId]);
+                if (!nonMatchingToken) {
+                    resultNoteSet.add(becca.notes[noteId]);
+                }
             }
         }
 
@@ -151,6 +182,141 @@ class NoteContentFulltextExp extends Expression {
 
         return content.trim();
     }
+
+    /**
+     * Checks if a token matches content with optional fuzzy matching
+     */
+    private tokenMatchesContent(token: string, content: string, noteId: string): boolean {
+        const normalizedToken = normalizeSearchText(token);
+        const normalizedContent = normalizeSearchText(content);
+        
+        if (normalizedContent.includes(normalizedToken)) {
+            return true;
+        }
+        
+        // Check flat text for default fulltext search
+        if (!this.flatText || !becca.notes[noteId].getFlatText().includes(token)) {
+            return false;
+        }
+        
+        return true;
+    }
+
+    /**
+     * Performs fuzzy matching with edit distance and phrase proximity
+     */
+    private matchesWithFuzzy(content: string, noteId: string): boolean {
+        try {
+            const normalizedContent = normalizeSearchText(content);
+            const flatText = this.flatText ? normalizeSearchText(becca.notes[noteId].getFlatText()) : "";
+            
+            // For phrase matching, check if tokens appear within reasonable proximity
+            if (this.tokens.length > 1) {
+                return this.matchesPhrase(normalizedContent, flatText);
+            }
+            
+            // Single token fuzzy matching
+            const token = normalizeSearchText(this.tokens[0]);
+            return this.fuzzyMatchToken(token, normalizedContent) || 
+                   (this.flatText && this.fuzzyMatchToken(token, flatText));
+        } catch (error) {
+            log.error(`Error in fuzzy matching for note ${noteId}: ${error}`);
+            return false;
+        }
+    }
+
+    /**
+     * Checks if multiple tokens match as a phrase with proximity consideration
+     */
+    private matchesPhrase(content: string, flatText: string): boolean {
+        const searchText = this.flatText ? `${content} ${flatText}` : content;
+        
+        // Apply content size limits for phrase matching
+        const limitedText = validateAndPreprocessContent(searchText);
+        if (!limitedText) {
+            return false;
+        }
+        
+        const words = limitedText.toLowerCase().split(/\s+/);
+        
+        // Early return for oversized word arrays
+        if (words.length > FUZZY_SEARCH_CONFIG.MAX_WORD_COUNT) {
+            return false;
+        }
+        
+        // Find positions of each token
+        const tokenPositions: number[][] = this.tokens.map(token => {
+            const normalizedToken = normalizeSearchText(token);
+            const positions: number[] = [];
+            
+            words.forEach((word, index) => {
+                if (this.fuzzyMatchSingle(normalizedToken, word)) {
+                    positions.push(index);
+                }
+            });
+            
+            return positions;
+        });
+        
+        // Check if we found all tokens
+        if (tokenPositions.some(positions => positions.length === 0)) {
+            return false;
+        }
+        
+        // Check for phrase proximity using configurable distance
+        return this.hasProximityMatch(tokenPositions, FUZZY_SEARCH_CONFIG.MAX_PHRASE_PROXIMITY);
+    }
+
+    /**
+     * Checks if token positions indicate a phrase match within max distance
+     */
+    private hasProximityMatch(tokenPositions: number[][], maxDistance: number): boolean {
+        // For 2 tokens, simple proximity check
+        if (tokenPositions.length === 2) {
+            const [pos1, pos2] = tokenPositions;
+            return pos1.some(p1 => pos2.some(p2 => Math.abs(p1 - p2) <= maxDistance));
+        }
+        
+        // For more tokens, check if we can find a sequence where all tokens are within range
+        const findSequence = (remaining: number[][], currentPos: number): boolean => {
+            if (remaining.length === 0) return true;
+            
+            const [nextPositions, ...rest] = remaining;
+            return nextPositions.some(pos => 
+                Math.abs(pos - currentPos) <= maxDistance && 
+                findSequence(rest, pos)
+            );
+        };
+        
+        const [firstPositions, ...rest] = tokenPositions;
+        return firstPositions.some(startPos => findSequence(rest, startPos));
+    }
+
+    /**
+     * Performs fuzzy matching for a single token against content
+     */
+    private fuzzyMatchToken(token: string, content: string): boolean {
+        if (token.length < FUZZY_SEARCH_CONFIG.MIN_FUZZY_TOKEN_LENGTH) {
+            // For short tokens, require exact match to avoid too many false positives
+            return content.includes(token);
+        }
+        
+        const words = content.split(/\s+/);
+        
+        // Limit word processing to prevent memory issues
+        const limitedWords = words.slice(0, FUZZY_SEARCH_CONFIG.MAX_WORD_COUNT);
+        
+        return limitedWords.some(word => this.fuzzyMatchSingle(token, word));
+    }
+
+    /**
+     * Fuzzy matches a single token against a single word
+     */
+    private fuzzyMatchSingle(token: string, word: string): boolean {
+        // Use shared optimized fuzzy matching logic
+        return fuzzyMatchWord(token, word, FUZZY_SEARCH_CONFIG.MAX_EDIT_DISTANCE);
+    }
+
 
     stripTags(content: string) {
         // we want to allow link to preserve URLs: https://github.com/zadam/trilium/issues/2412
