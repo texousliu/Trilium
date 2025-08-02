@@ -17,5 +17,5 @@ Go to `packages/ckeditor5-build-balloon-trilium/build` and copy `ckeditor.js` an
 An example shell command to copy it:
 
 ```
-cp build/ckeditor.* ~/Projects/TriliumNext/Notes/libraries/ckeditor/
+cp build/ckeditor.* ~/Projects/TriliumNext/Trilium/libraries/ckeditor/
 ```

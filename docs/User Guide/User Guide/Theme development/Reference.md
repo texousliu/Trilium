@@ -91,7 +91,7 @@ body.electron:not(.native-titlebar) {
 
 When running under Electron with native title bar off, a feature was introduced to use the platform-specific window buttons such as the semaphore on macOS.
 
-See [Native title bar buttons by eliandoran · Pull Request #702 · TriliumNext/Notes](https://github.com/TriliumNext/Notes/pull/702) for the original implementation of this feature, including screenshots.
+See [Native title bar buttons by eliandoran · Pull Request #702 · TriliumNext/Trilium](https://github.com/TriliumNext/Trilium/pull/702) for the original implementation of this feature, including screenshots.
 
 #### On Windows
 
