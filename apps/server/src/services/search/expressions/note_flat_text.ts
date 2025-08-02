@@ -7,6 +7,7 @@ import Expression from "./expression.js";
 import NoteSet from "../note_set.js";
 import becca from "../../../becca/becca.js";
 import { normalize } from "../../utils.js";
+import { normalizeSearchText } from "../utils/text_utils.js";
 import beccaService from "../../../becca/becca_service.js";
 
 class NoteFlatTextExp extends Expression {
@@ -15,7 +16,8 @@ class NoteFlatTextExp extends Expression {
     constructor(tokens: string[]) {
         super();
 
-        this.tokens = tokens;
+        // Normalize tokens using centralized normalization function
+        this.tokens = tokens.map(token => normalizeSearchText(token));
     }
 
     execute(inputNoteSet: NoteSet, executionContext: any, searchContext: SearchContext) {
@@ -61,8 +63,8 @@ class NoteFlatTextExp extends Expression {
             }
 
             for (const attribute of note.getOwnedAttributes()) {
-                const normalizedName = normalize(attribute.name);
-                const normalizedValue = normalize(attribute.value);
+                const normalizedName = normalizeSearchText(attribute.name);
+                const normalizedValue = normalizeSearchText(attribute.value);
 
                 for (const token of remainingTokens) {
                     if (normalizedName.includes(token) || normalizedValue.includes(token)) {
@@ -72,7 +74,7 @@ class NoteFlatTextExp extends Expression {
             }
 
             for (const parentNote of note.parents) {
-                const title = normalize(beccaService.getNoteTitle(note.noteId, parentNote.noteId));
+                const title = normalizeSearchText(beccaService.getNoteTitle(note.noteId, parentNote.noteId));
                 const foundTokens: string[] = foundAttrTokens.slice();
 
                 for (const token of remainingTokens) {
@@ -108,14 +110,14 @@ class NoteFlatTextExp extends Expression {
                 }
 
                 for (const attribute of note.ownedAttributes) {
-                    if (normalize(attribute.name).includes(token) || normalize(attribute.value).includes(token)) {
+                    if (normalizeSearchText(attribute.name).includes(token) || normalizeSearchText(attribute.value).includes(token)) {
                         foundAttrTokens.push(token);
                     }
                 }
             }
 
             for (const parentNote of note.parents) {
-                const title = normalize(beccaService.getNoteTitle(note.noteId, parentNote.noteId));
+                const title = normalizeSearchText(beccaService.getNoteTitle(note.noteId, parentNote.noteId));
                 const foundTokens = foundAttrTokens.slice();
 
                 for (const token of this.tokens) {
@@ -156,8 +158,9 @@ class NoteFlatTextExp extends Expression {
         const candidateNotes: BNote[] = [];
 
         for (const note of noteSet.notes) {
+            const normalizedFlatText = normalizeSearchText(note.getFlatText());
             for (const token of this.tokens) {
-                if (note.getFlatText().includes(token)) {
+                if (normalizedFlatText.includes(token)) {
                     candidateNotes.push(note);
                     break;
                 }
