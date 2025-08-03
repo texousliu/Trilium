@@ -1984,7 +1984,7 @@
         "new-column-label": "Etiqueta",
         "new-column-relation": "Relación",
         "delete-column": "Eliminar columna",
-        "row-insert-child": "Insertar nota hija"
+        "row-insert-child": "Insertar subnota"
     },
     "editorfeatures": {
         "note_completion_enabled": "Activar autocompletado de notas",
@@ -2005,5 +2005,8 @@
         "search_history_description": "Ver búsquedas previas",
         "configure_launch_bar_title": "Configurar barra de inicio",
         "configure_launch_bar_description": "Abrir la configuración de la barra de inicio, para agregar o quitar elementos."
+    },
+    "modal": {
+        "close": "Cerrar"
     }
 }
