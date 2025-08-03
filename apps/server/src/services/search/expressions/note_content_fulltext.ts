@@ -155,9 +155,11 @@ class NoteContentFulltextExp extends Expression {
         content = normalize(content.toString());
 
         if (type === "text" && mime === "text/html") {
-            if (!this.raw && content.length < 20000) {
-                // striptags is slow for very large notes
+            if (!this.raw && content.length < 10 * 1024 * 1024) {
+                // striptags is slow for very large notes - allow up to 10MB HTML processing
                 content = this.stripTags(content);
+            } else if (!this.raw) {
+                console.info(`Skipping HTML tag stripping for very large note: ${content.length} bytes - will search raw HTML`);
             }
 
             content = content.replace(/&nbsp;/g, " ");
@@ -239,9 +241,15 @@ class NoteContentFulltextExp extends Expression {
         
         const words = limitedText.toLowerCase().split(/\s+/);
         
-        // Early return for oversized word arrays
-        if (words.length > FUZZY_SEARCH_CONFIG.MAX_WORD_COUNT) {
+        // Only skip phrase matching for truly extreme word counts that could crash the system
+        if (words.length > FUZZY_SEARCH_CONFIG.ABSOLUTE_MAX_WORD_COUNT) {
+            console.error(`Phrase matching skipped due to extreme word count that could cause system instability: ${words.length} words`);
             return false;
+        }
+        
+        // Warn about large word counts but still attempt matching
+        if (words.length > FUZZY_SEARCH_CONFIG.PERFORMANCE_WARNING_WORDS) {
+            console.info(`Large word count for phrase matching: ${words.length} words - may take longer but will attempt full matching`);
         }
         
         // Find positions of each token
@@ -303,8 +311,8 @@ class NoteContentFulltextExp extends Expression {
         
         const words = content.split(/\s+/);
         
-        // Limit word processing to prevent memory issues
-        const limitedWords = words.slice(0, FUZZY_SEARCH_CONFIG.MAX_WORD_COUNT);
+        // Only limit word processing for truly extreme cases to prevent system instability
+        const limitedWords = words.slice(0, FUZZY_SEARCH_CONFIG.ABSOLUTE_MAX_WORD_COUNT);
         
         return limitedWords.some(word => this.fuzzyMatchSingle(token, word));
     }
