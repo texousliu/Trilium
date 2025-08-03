@@ -2005,5 +2005,8 @@
   },
   "content_renderer": {
     "open_externally": "Open externally"
+  },
+  "modal": {
+    "close": "Close"
   }
 }
