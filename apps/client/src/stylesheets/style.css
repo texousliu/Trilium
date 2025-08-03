@@ -2249,8 +2249,7 @@ footer.webview-footer button {
 .search-result-title b,
 .search-result-content b {
     font-weight: 900;
-    color: orange;
-    text-shadow: 0 0 1px rgba(255, 165, 0, 0.3);
+    color: var(--admonition-warning-accent-color);
 }
 
 /* Customized icons */
