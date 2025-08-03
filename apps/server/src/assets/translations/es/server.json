@@ -373,7 +373,24 @@
         "zoom-in": "Acercar",
         "zoom-out": "Alejar",
         "toggle-full-screen": "Activar/desactivar pantalla completa",
-        "toggle-left-pane": "Abrir/cerrar panel izquierdo"
+        "toggle-left-pane": "Abrir/cerrar panel izquierdo",
+        "toggle-right-pane": "Mostrar/ocultar panel derecho",
+        "unhoist-note": "Desanclar nota",
+        "toggle-note-hoisting": "Activar/desactivar anclaje de nota",
+        "show-cheatsheet": "Mostrar hoja de referencia",
+        "follow-link-under-cursor": "Seguir enlace bajo cursor",
+        "reload-frontend-app": "Recargar aplicación del cliente",
+        "run-active-note": "Ejecutar nota activa",
+        "render-active-note": "Generar nota activa",
+        "back-in-note-history": "Anterior en el historial de notas",
+        "forward-in-note-history": "Posterior en el historial de notas",
+        "cut-notes-to-clipboard": "Cortar notas al portapapeles",
+        "select-all-notes-in-parent": "Seleccionar todas las notas en padre",
+        "show-backend-log": "Mostrar registro del servidor",
+        "paste-markdown-into-text": "Pegar Markdown en el texto",
+        "cut-into-note": "Cortar en la nota",
+        "add-include-note-to-text": "Agregar nota incluida al texto",
+        "force-save-revision": "Forzar guardado de revisión"
     },
     "hidden_subtree_templates": {
         "board_note_first": "Primera nota",
@@ -385,6 +402,17 @@
         "list-view": "Vista de lista",
         "grid-view": "Vista de cuadrícula",
         "status": "Estado",
-        "table": "Tabla"
+        "table": "Tabla",
+        "text-snippet": "Fragmento de texto",
+        "geo-map": "Mapa Geo",
+        "start-date": "Fecha de inicio",
+        "end-date": "Fecha de finalización",
+        "start-time": "Hora de inicio",
+        "end-time": "Hora de finalización",
+        "geolocation": "Geolocalización",
+        "built-in-templates": "Plantillas predefinidas",
+        "board_status_todo": "Por hacer",
+        "board_status_done": "Hecho",
+        "board": "Tablero"
     }
 }
