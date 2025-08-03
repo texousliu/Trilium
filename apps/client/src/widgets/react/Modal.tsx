@@ -14,9 +14,10 @@ interface ModalProps {
      */
     onSubmit?: () => void;
     onShown?: () => void;
+    helpPageId?: string;
 }
 
-export default function Modal({ children, className, size, title, footer, onShown, onSubmit }: ModalProps) {
+export default function Modal({ children, className, size, title, footer, onShown, onSubmit, helpPageId }: ModalProps) {
     const modalRef = useRef<HTMLDivElement>(null);
 
     if (onShown) {
@@ -34,6 +35,9 @@ export default function Modal({ children, className, size, title, footer, onShow
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title">{title}</h5>
+                        {helpPageId && (
+                            <button className="help-button" type="button" data-in-app-help={helpPageId} title={t("branch_prefix.help_on_tree_prefix")}>?</button>
+                        )}
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label={t("modal.close")}></button>
                     </div>
 

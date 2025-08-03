@@ -34,6 +34,7 @@ function BranchPrefixDialogComponent({ branch }: BranchPrefixDialogProps) {
             size="lg"
             onShown={() => branchInput.current?.focus()}
             onSubmit={onSubmit}
+            helpPageId="TBwsyfadTA18"
             footer={<button class="btn btn-primary btn-sm">{t("branch_prefix.save")}</button>}
         >
             <div class="form-group">
