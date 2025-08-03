@@ -45,6 +45,13 @@ const MAX_DISPLAYED_NOTES = 15;
 // TODO: Deduplicate with server.
 interface QuickSearchResponse {
     searchResultNoteIds: string[];
+    searchResults?: Array<{
+        notePath: string;
+        noteTitle: string;
+        notePathTitle: string;
+        highlightedNotePathTitle: string;
+        icon: string;
+    }>;
     error: string;
 }
 
@@ -115,7 +122,7 @@ export default class QuickSearchWidget extends BasicWidget {
         this.$dropdownMenu.empty();
         this.$dropdownMenu.append(`<span class="dropdown-item disabled"><span class="bx bx-loader bx-spin"></span>${t("quick-search.searching")}</span>`);
 
-        const { searchResultNoteIds, error } = await server.get<QuickSearchResponse>(`quick-search/${encodeURIComponent(searchString)}`);
+        const { searchResultNoteIds, searchResults, error } = await server.get<QuickSearchResponse>(`quick-search/${encodeURIComponent(searchString)}`);
 
         if (error) {
             let tooltip = new Tooltip(this.$searchString[0], {
@@ -129,44 +136,88 @@ export default class QuickSearchWidget extends BasicWidget {
             setTimeout(() => tooltip.dispose(), 4000);
         }
 
-        const displayedNoteIds = searchResultNoteIds.slice(0, Math.min(MAX_DISPLAYED_NOTES, searchResultNoteIds.length));
-
         this.$dropdownMenu.empty();
 
-        if (displayedNoteIds.length === 0) {
-            this.$dropdownMenu.append(`<span class="dropdown-item disabled">${t("quick-search.no-results")}</span>`);
-        }
+        // Use highlighted search results if available, otherwise fall back to basic display
+        if (searchResults && searchResults.length > 0) {
+            const displayedResults = searchResults.slice(0, Math.min(MAX_DISPLAYED_NOTES, searchResults.length));
 
-        for (const note of await froca.getNotes(displayedNoteIds)) {
-            const $link = await linkService.createLink(note.noteId, { showNotePath: true, showNoteIcon: true });
-            $link.addClass("dropdown-item");
-            $link.attr("tabIndex", "0");
-            $link.on("click", (e) => {
-                this.dropdown.hide();
+            if (displayedResults.length === 0) {
+                this.$dropdownMenu.append(`<span class="dropdown-item disabled">${t("quick-search.no-results")}</span>`);
+            }
 
-                if (!e.target || e.target.nodeName !== "A") {
-                    // click on the link is handled by link handling, but we want the whole item clickable
+            for (const result of displayedResults) {
+                const noteId = result.notePath.split("/").pop();
+                if (!noteId) continue;
+
+                const $item = $('<a class="dropdown-item" tabindex="0" href="javascript:">');
+                $item.html(`<span class="${result.icon}"></span> ${result.highlightedNotePathTitle}`);
+                
+                $item.on("click", (e) => {
+                    this.dropdown.hide();
+                    e.preventDefault();
+                    
+                    const activeContext = appContext.tabManager.getActiveContext();
+                    if (activeContext) {
+                        activeContext.setNote(noteId);
+                    }
+                });
+                
+                shortcutService.bindElShortcut($item, "return", () => {
+                    this.dropdown.hide();
+
+                    const activeContext = appContext.tabManager.getActiveContext();
+                    if (activeContext) {
+                        activeContext.setNote(noteId);
+                    }
+                });
+
+                this.$dropdownMenu.append($item);
+            }
+
+            if (searchResults.length > MAX_DISPLAYED_NOTES) {
+                const numRemainingResults = searchResults.length - MAX_DISPLAYED_NOTES;
+                this.$dropdownMenu.append(`<span class="dropdown-item disabled">${t("quick-search.more-results", { number: numRemainingResults })}</span>`);
+            }
+        } else {
+            // Fallback to original behavior if no highlighted results
+            const displayedNoteIds = searchResultNoteIds.slice(0, Math.min(MAX_DISPLAYED_NOTES, searchResultNoteIds.length));
+
+            if (displayedNoteIds.length === 0) {
+                this.$dropdownMenu.append(`<span class="dropdown-item disabled">${t("quick-search.no-results")}</span>`);
+            }
+
+            for (const note of await froca.getNotes(displayedNoteIds)) {
+                const $link = await linkService.createLink(note.noteId, { showNotePath: true, showNoteIcon: true });
+                $link.addClass("dropdown-item");
+                $link.attr("tabIndex", "0");
+                $link.on("click", (e) => {
+                    this.dropdown.hide();
+
+                    if (!e.target || e.target.nodeName !== "A") {
+                        // click on the link is handled by link handling, but we want the whole item clickable
+                        const activeContext = appContext.tabManager.getActiveContext();
+                        if (activeContext) {
+                            activeContext.setNote(note.noteId);
+                        }
+                    }
+                });
+                shortcutService.bindElShortcut($link, "return", () => {
+                    this.dropdown.hide();
+
                     const activeContext = appContext.tabManager.getActiveContext();
                     if (activeContext) {
                         activeContext.setNote(note.noteId);
                     }
-                }
-            });
-            shortcutService.bindElShortcut($link, "return", () => {
-                this.dropdown.hide();
+                });
 
-                const activeContext = appContext.tabManager.getActiveContext();
-                if (activeContext) {
-                    activeContext.setNote(note.noteId);
-                }
-            });
+                this.$dropdownMenu.append($link);
+            }
 
-            this.$dropdownMenu.append($link);
-        }
-
-        if (searchResultNoteIds.length > MAX_DISPLAYED_NOTES) {
-            const numRemainingResults = searchResultNoteIds.length - MAX_DISPLAYED_NOTES;
-            this.$dropdownMenu.append(`<span class="dropdown-item disabled">${t("quick-search.more-results", { number: numRemainingResults })}</span>`);
+            if (searchResultNoteIds.length > MAX_DISPLAYED_NOTES) {
+                const numRemainingResults = searchResultNoteIds.length - MAX_DISPLAYED_NOTES;
+                this.$dropdownMenu.append(`<span class="dropdown-item disabled">${t("quick-search.more-results", { number: numRemainingResults })}</span>`);
+            }
         }
 
         const $showInFullButton = $('<a class="dropdown-item" tabindex="0">').text(t("quick-search.show-in-full-search"));
