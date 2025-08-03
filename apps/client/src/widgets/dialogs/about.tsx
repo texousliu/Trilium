@@ -3,10 +3,11 @@ import ReactBasicWidget from "../react/ReactBasicWidget.js";
 import Modal from "../react/Modal.js";
 import { t } from "../../services/i18n.js";
 import { formatDateTime } from "../../utils/formatters.js";
-import { useState } from "react";
 import server from "../../services/server.js";
 import utils from "../../services/utils.js";
 import openService from "../../services/open.js";
+import { useState } from "preact/hooks";
+import type { CSSProperties } from "preact/compat";
 
 interface AppInfo {
     appVersion: string;
@@ -25,7 +26,7 @@ function AboutDialogComponent() {
         setAppInfo(appInfo);
     }
 
-    const forceWordBreak = { wordBreak: "break-all" };
+    const forceWordBreak: CSSProperties = { wordBreak: "break-all" };
 
     return (
         <Modal className="about-dialog" size="lg" title={t("about.title")} onShown={onShown}>
@@ -73,9 +74,9 @@ function AboutDialogComponent() {
     );
 }
 
-function DirectoryLink({ directory, style }: { directory: string, style?: React.CSSProperties }) {
+function DirectoryLink({ directory, style }: { directory: string, style?: CSSProperties }) {
     if (utils.isElectron()) {
-        const onClick = (e: React.MouseEvent) => {
+        const onClick = (e: MouseEvent) => {
             e.preventDefault();
             openService.openDirectory(directory);
         };
