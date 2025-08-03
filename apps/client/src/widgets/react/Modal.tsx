@@ -7,10 +7,11 @@ interface ModalProps {
     title: string;
     size: "lg" | "sm";
     children: ComponentChildren;
+    footer?: ComponentChildren;
     onShown?: () => void;
 }
 
-export default function Modal({ children, className, size, title, onShown }: ModalProps) {
+export default function Modal({ children, className, size, title, footer, onShown }: ModalProps) {
     const modalRef = useRef<HTMLDivElement>(null);
 
     if (onShown) {
@@ -34,6 +35,12 @@ export default function Modal({ children, className, size, title, onShown }: Mod
                     <div className="modal-body">
                         {children}
                     </div>
+
+                    {footer && (
+                        <div className="modal-footer">
+                            {footer}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
