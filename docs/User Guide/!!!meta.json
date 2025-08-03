@@ -1,6 +1,6 @@
 {
     "formatVersion": 2,
-    "appVersion": "0.97.1",
+    "appVersion": "0.97.2",
     "files": [
         {
             "isClone": false,
@@ -3794,9 +3794,16 @@
                                         {
                                             "type": "relation",
                                             "name": "internalLink",
-                                            "value": "xYmIYSP6wE3F",
+                                            "value": "A9Oc6YKKc65v",
                                             "isInheritable": false,
                                             "position": 10
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "xYmIYSP6wE3F",
+                                            "isInheritable": false,
+                                            "position": 20
                                         },
                                         {
                                             "type": "label",
@@ -3804,13 +3811,6 @@
                                             "value": "bx bx-send",
                                             "isInheritable": false,
                                             "position": 10
-                                        },
-                                        {
-                                            "type": "relation",
-                                            "name": "internalLink",
-                                            "value": "A9Oc6YKKc65v",
-                                            "isInheritable": false,
-                                            "position": 20
                                         }
                                     ],
                                     "format": "markdown",
