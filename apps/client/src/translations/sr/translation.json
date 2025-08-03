@@ -309,7 +309,7 @@
     "sort_with_respect_to_different_character_sorting": "sortiranje sa poštovanjem različitih pravila sortiranja karaktera i kolacija u različitim jezicima ili regionima.",
     "natural_sort_language": "Jezik za prirodno sortiranje",
     "the_language_code_for_natural_sort": "Kod jezika za prirodno sortiranje, npr. \"zh-CN\" za Kineski.",
-    "sort": "Sortiraj <kbd>enter</kbd>"
+    "sort": "Sortiraj"
   },
   "upload_attachments": {
     "upload_attachments_to_note": "Otpremite priloge uz belešku",
