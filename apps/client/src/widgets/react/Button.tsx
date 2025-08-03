@@ -4,6 +4,7 @@ interface ButtonProps {
     text: string;
     className?: string;
     keyboardShortcut?: string;
+    /** Called when the button is clicked. If not set, the button will submit the form (if any). */
     onClick?: () => void;
 }
 
@@ -20,7 +21,7 @@ export default function Button({ className, text, onClick, keyboardShortcut }: B
     return (
         <button
             className={classes.join(" ")}
-            type="button"
+            type={onClick ? "button" : "submit"}
             onClick={onClick}
             ref={buttonRef}
         >
