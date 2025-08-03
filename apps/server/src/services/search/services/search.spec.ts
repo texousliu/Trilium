@@ -578,6 +578,43 @@ describe("Search", () => {
         expect(searchResults.length).toEqual(10);
     });
 
+    it("progressive search prioritizes exact matches over fuzzy matches", () => {
+        rootNote
+            .child(note("Analysis Report")) // Exact match
+            .child(note("Data Analysis")) // Exact match
+            .child(note("Test Analysis")) // Exact match
+            .child(note("Statistical Analysis")) // Exact match
+            .child(note("Business Analysis")) // Exact match
+            .child(note("Advanced Anaylsis")) // Fuzzy match (typo)
+            .child(note("Quick Anlaysis")); // Fuzzy match (typo)
+
+        const searchContext = new SearchContext();
+        const searchResults = searchService.findResultsWithQuery("analysis", searchContext);
+
+        // Should find all matches but exact ones should rank higher
+        expect(searchResults.length).toEqual(7);
+
+        // First 5 results should be exact matches with higher scores
+        const topResults = searchResults.slice(0, 5);
+        const bottomResults = searchResults.slice(5);
+
+        const topTitles = topResults.map(r => becca.notes[r.noteId].title);
+        const bottomTitles = bottomResults.map(r => becca.notes[r.noteId].title);
+
+        // All top results should be exact matches
+        expect(topTitles.every(title => title.toLowerCase().includes("analysis"))).toBeTruthy();
+        
+        // Bottom results should be fuzzy matches
+        expect(bottomTitles.some(title => title.includes("Anaylsis") || title.includes("Anlaysis"))).toBeTruthy();
+
+        // Verify score ordering
+        const lowestExactScore = Math.min(...topResults.map(r => r.score));
+        const highestFuzzyScore = Math.max(...bottomResults.map(r => r.score));
+        
+        expect(lowestExactScore).toBeGreaterThan(highestFuzzyScore);
+    });
+
+
     // FIXME: test what happens when we order without any filter criteria
 
     // it("comparison between labels", () => {
