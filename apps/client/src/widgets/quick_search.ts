@@ -32,11 +32,29 @@ const TPL = /*html*/`
     
     .quick-search .dropdown-item {
         white-space: normal;
-        padding: 8px 16px;
+        padding: 12px 16px;
+        line-height: 1.4;
+        border-bottom: 1px solid #dee2e6 !important;
+    }
+    
+    .quick-search .dropdown-item:last-child {
+        border-bottom: none !important;
+    }
+    
+    .quick-search .dropdown-item.disabled {
+        border-bottom: 1px solid #f8f9fa !important;
+    }
+    
+    .quick-search .dropdown-divider + .dropdown-item {
+        border-top: none !important;
     }
     
     .quick-search .dropdown-item:hover {
         background-color: #f8f9fa;
+    }
+    
+    .quick-search .dropdown-divider {
+        margin: 0;
     }
   </style>
 
@@ -163,13 +181,16 @@ export default class QuickSearchWidget extends BasicWidget {
 
                 const $item = $('<a class="dropdown-item" tabindex="0" href="javascript:">');
                 
-                // Build the display HTML
-                let itemHtml = `<div><span class="${result.icon}"></span> ${result.highlightedNotePathTitle}</div>`;
+                // Build the display HTML with content snippet below the title
+                let itemHtml = `<div style="display: flex; flex-direction: column;">
+                    <div><span class="${result.icon}"></span> ${result.highlightedNotePathTitle}</div>`;
                 
-                // Add content snippet if available
+                // Add content snippet below the title if available
                 if (result.highlightedContentSnippet) {
-                    itemHtml += `<div style="font-size: 0.85em; color: #666; margin-left: 20px; margin-top: 2px;">${result.highlightedContentSnippet}</div>`;
+                    itemHtml += `<div style="font-size: 0.85em; color: #666; margin-left: 20px; margin-top: 4px;">${result.highlightedContentSnippet}</div>`;
                 }
+                
+                itemHtml += `</div>`;
                 
                 $item.html(itemHtml);
                 

@@ -7,7 +7,7 @@ import Expression from "./expression.js";
 import NoteSet from "../note_set.js";
 import becca from "../../../becca/becca.js";
 import { normalize } from "../../utils.js";
-import { normalizeSearchText, fuzzyMatchWord } from "../utils/text_utils.js";
+import { normalizeSearchText, fuzzyMatchWord, fuzzyMatchWordWithResult } from "../utils/text_utils.js";
 import beccaService from "../../../becca/becca_service.js";
 
 class NoteFlatTextExp extends Expression {
@@ -78,7 +78,7 @@ class NoteFlatTextExp extends Expression {
                 const foundTokens: string[] = foundAttrTokens.slice();
 
                 for (const token of remainingTokens) {
-                    if (this.smartMatch(title, token)) {
+                    if (this.smartMatch(title, token, searchContext)) {
                         foundTokens.push(token);
                     }
                 }
@@ -93,7 +93,7 @@ class NoteFlatTextExp extends Expression {
             }
         };
 
-        const candidateNotes = this.getCandidateNotes(inputNoteSet);
+        const candidateNotes = this.getCandidateNotes(inputNoteSet, searchContext);
 
         for (const note of candidateNotes) {
             // autocomplete should be able to find notes by their noteIds as well (only leafs)
@@ -121,7 +121,7 @@ class NoteFlatTextExp extends Expression {
                 const foundTokens = foundAttrTokens.slice();
 
                 for (const token of this.tokens) {
-                    if (this.smartMatch(title, token)) {
+                    if (this.smartMatch(title, token, searchContext)) {
                         foundTokens.push(token);
                     }
                 }
@@ -154,13 +154,13 @@ class NoteFlatTextExp extends Expression {
     /**
      * Returns noteIds which have at least one matching tokens
      */
-    getCandidateNotes(noteSet: NoteSet): BNote[] {
+    getCandidateNotes(noteSet: NoteSet, searchContext?: SearchContext): BNote[] {
         const candidateNotes: BNote[] = [];
 
         for (const note of noteSet.notes) {
             const normalizedFlatText = normalizeSearchText(note.getFlatText());
             for (const token of this.tokens) {
-                if (this.smartMatch(normalizedFlatText, token)) {
+                if (this.smartMatch(normalizedFlatText, token, searchContext)) {
                     candidateNotes.push(note);
                     break;
                 }
@@ -174,9 +174,10 @@ class NoteFlatTextExp extends Expression {
      * Smart matching that tries exact match first, then fuzzy fallback
      * @param text The text to search in
      * @param token The token to search for
+     * @param searchContext The search context to track matched words for highlighting
      * @returns True if match found (exact or fuzzy)
      */
-    private smartMatch(text: string, token: string): boolean {
+    private smartMatch(text: string, token: string, searchContext?: SearchContext): boolean {
         // Exact match has priority
         if (text.includes(token)) {
             return true;
@@ -184,7 +185,14 @@ class NoteFlatTextExp extends Expression {
         
         // Fuzzy fallback only for tokens >= 4 characters
         if (token.length >= 4) {
-            return fuzzyMatchWord(token, text);
+            const matchedWord = fuzzyMatchWordWithResult(token, text);
+            if (matchedWord) {
+                // Track the fuzzy matched word for highlighting
+                if (searchContext && !searchContext.highlightedTokens.includes(matchedWord)) {
+                    searchContext.highlightedTokens.push(matchedWord);
+                }
+                return true;
+            }
         }
         
         return false;

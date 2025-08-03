@@ -249,22 +249,29 @@ export function validateAndPreprocessContent(content: string, noteId?: string): 
 }
 
 /**
- * Checks if a word matches a token with fuzzy matching.
+ * Escapes special regex characters in a string for use in RegExp constructor
+ */
+function escapeRegExp(string: string): string {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * Checks if a word matches a token with fuzzy matching and returns the matched word.
  * Optimized for common case where distances are small.
  * 
  * @param token The search token (should be normalized)
- * @param word The word to match against (should be normalized)
+ * @param text The text to match against (should be normalized)  
  * @param maxDistance Maximum allowed edit distance
- * @returns True if the word matches the token within the distance threshold
+ * @returns The matched word if found, null otherwise
  */
-export function fuzzyMatchWord(token: string, text: string, maxDistance: number = FUZZY_SEARCH_CONFIG.MAX_EDIT_DISTANCE): boolean {
+export function fuzzyMatchWordWithResult(token: string, text: string, maxDistance: number = FUZZY_SEARCH_CONFIG.MAX_EDIT_DISTANCE): string | null {
     // Input validation
     if (typeof token !== 'string' || typeof text !== 'string') {
-        return false;
+        return null;
     }
     
     if (token.length === 0 || text.length === 0) {
-        return false;
+        return null;
     }
     
     try {
@@ -274,14 +281,20 @@ export function fuzzyMatchWord(token: string, text: string, maxDistance: number 
         
         // Exact match check first (most common case)
         if (normalizedText.includes(normalizedToken)) {
-            return true;
+            // Find the exact match in the original text to preserve case
+            const exactMatch = text.match(new RegExp(escapeRegExp(token), 'i'));
+            return exactMatch ? exactMatch[0] : token;
         }
         
         // For fuzzy matching, we need to check individual words in the text
         // Split the text into words and check each word against the token
         const words = normalizedText.split(/\s+/).filter(word => word.length > 0);
+        const originalWords = text.split(/\s+/).filter(word => word.length > 0);
         
-        for (const word of words) {
+        for (let i = 0; i < words.length; i++) {
+            const word = words[i];
+            const originalWord = originalWords[i];
+            
             // Skip if word is too different in length for fuzzy matching
             if (Math.abs(word.length - normalizedToken.length) > maxDistance) {
                 continue;
@@ -295,14 +308,27 @@ export function fuzzyMatchWord(token: string, text: string, maxDistance: number 
             // Use optimized edit distance calculation
             const distance = calculateOptimizedEditDistance(normalizedToken, word, maxDistance);
             if (distance <= maxDistance) {
-                return true;
+                return originalWord; // Return the original word with case preserved
             }
         }
         
-        return false;
+        return null;
     } catch (error) {
-        // Log error and return false for safety
+        // Log error and return null for safety
         console.warn('Error in fuzzy word matching:', error);
-        return false;
+        return null;
     }
+}
+
+/**
+ * Checks if a word matches a token with fuzzy matching.
+ * Optimized for common case where distances are small.
+ * 
+ * @param token The search token (should be normalized)
+ * @param word The word to match against (should be normalized)
+ * @param maxDistance Maximum allowed edit distance
+ * @returns True if the word matches the token within the distance threshold
+ */
+export function fuzzyMatchWord(token: string, text: string, maxDistance: number = FUZZY_SEARCH_CONFIG.MAX_EDIT_DISTANCE): boolean {
+    return fuzzyMatchWordWithResult(token, text, maxDistance) !== null;
 }
