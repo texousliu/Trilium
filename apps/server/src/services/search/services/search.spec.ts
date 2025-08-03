@@ -553,6 +553,31 @@ describe("Search", () => {
         expect(becca.notes[searchResults[0].noteId].title).toEqual("Reddit is bad");
     });
 
+    it("search completes in reasonable time", () => {
+        // Create a moderate-sized dataset to test performance
+        const countries = ["Austria", "Belgium", "Croatia", "Denmark", "Estonia", "Finland", "Germany", "Hungary", "Ireland", "Japan"];
+        const europeanCountries = note("Europe");
+        
+        countries.forEach(country => {
+            europeanCountries.child(note(country).label("type", "country").label("continent", "Europe"));
+        });
+        
+        rootNote.child(europeanCountries);
+
+        const searchContext = new SearchContext();
+        const startTime = Date.now();
+        
+        // Perform a search that exercises multiple features
+        const searchResults = searchService.findResultsWithQuery("#type=country AND continent", searchContext);
+        
+        const endTime = Date.now();
+        const duration = endTime - startTime;
+        
+        // Search should complete in under 1 second for reasonable dataset
+        expect(duration).toBeLessThan(1000);
+        expect(searchResults.length).toEqual(10);
+    });
+
     // FIXME: test what happens when we order without any filter criteria
 
     // it("comparison between labels", () => {
