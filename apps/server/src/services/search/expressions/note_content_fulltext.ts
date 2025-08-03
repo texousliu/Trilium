@@ -22,6 +22,9 @@ import {
 
 const ALLOWED_OPERATORS = new Set(["=", "!=", "*=*", "*=", "=*", "%=", "~=", "~*"]);
 
+// Maximum content size for search processing (2MB)
+const MAX_SEARCH_CONTENT_SIZE = 2 * 1024 * 1024;
+
 const cachedRegexes: Record<string, RegExp> = {};
 
 function getRegex(str: string): RegExp {
@@ -77,7 +80,9 @@ class NoteContentFulltextExp extends Expression {
         for (const row of sql.iterateRows<SearchRow>(`
                 SELECT noteId, type, mime, content, isProtected
                 FROM notes JOIN blobs USING (blobId)
-                WHERE type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap') AND isDeleted = 0`)) {
+                WHERE type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap') 
+                  AND isDeleted = 0 
+                  AND LENGTH(content) < ${MAX_SEARCH_CONTENT_SIZE}`)) {
             this.findInText(row, inputNoteSet, resultNoteSet);
         }
 
@@ -155,11 +160,9 @@ class NoteContentFulltextExp extends Expression {
         content = normalize(content.toString());
 
         if (type === "text" && mime === "text/html") {
-            if (!this.raw && content.length < 10 * 1024 * 1024) {
-                // striptags is slow for very large notes - allow up to 10MB HTML processing
+            if (!this.raw) {
+                // Content size already filtered at DB level, safe to process
                 content = this.stripTags(content);
-            } else if (!this.raw) {
-                console.info(`Skipping HTML tag stripping for very large note: ${content.length} bytes - will search raw HTML`);
             }
 
             content = content.replace(/&nbsp;/g, " ");
