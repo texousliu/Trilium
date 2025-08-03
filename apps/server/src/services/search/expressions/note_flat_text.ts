@@ -183,12 +183,12 @@ class NoteFlatTextExp extends Expression {
             return true;
         }
         
-        // Fuzzy fallback only for tokens >= 4 characters
-        if (token.length >= 4) {
+        // Fuzzy fallback only if enabled and for tokens >= 4 characters
+        if (searchContext?.enableFuzzyMatching && token.length >= 4) {
             const matchedWord = fuzzyMatchWordWithResult(token, text);
             if (matchedWord) {
                 // Track the fuzzy matched word for highlighting
-                if (searchContext && !searchContext.highlightedTokens.includes(matchedWord)) {
+                if (!searchContext.highlightedTokens.includes(matchedWord)) {
                     searchContext.highlightedTokens.push(matchedWord);
                 }
                 return true;

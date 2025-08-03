@@ -20,7 +20,11 @@ const SCORE_WEIGHTS = {
     TOKEN_FUZZY_MATCH: 0.5,
     TITLE_FACTOR: 2.0,
     PATH_FACTOR: 0.3,
-    HIDDEN_NOTE_PENALTY: 3
+    HIDDEN_NOTE_PENALTY: 3,
+    // Score caps to prevent fuzzy matches from outranking exact matches
+    MAX_FUZZY_SCORE_PER_TOKEN: 3, // Cap fuzzy token contributions to stay below exact matches
+    MAX_FUZZY_TOKEN_LENGTH_MULTIPLIER: 3, // Limit token length impact for fuzzy matches
+    MAX_TOTAL_FUZZY_SCORE: 200 // Total cap on fuzzy scoring per search
 } as const;
 
 
@@ -31,11 +35,13 @@ class SearchResult {
     highlightedNotePathTitle?: string;
     contentSnippet?: string;
     highlightedContentSnippet?: string;
+    private fuzzyScore: number; // Track fuzzy score separately
 
     constructor(notePathArray: string[]) {
         this.notePathArray = notePathArray;
         this.notePathTitle = beccaService.getNoteTitleForPath(notePathArray);
         this.score = 0;
+        this.fuzzyScore = 0;
     }
 
     get notePath() {
@@ -46,8 +52,9 @@ class SearchResult {
         return this.notePathArray[this.notePathArray.length - 1];
     }
 
-    computeScore(fulltextQuery: string, tokens: string[]) {
+    computeScore(fulltextQuery: string, tokens: string[], enableFuzzyMatching: boolean = true) {
         this.score = 0;
+        this.fuzzyScore = 0; // Reset fuzzy score tracking
 
         const note = becca.notes[this.noteId];
         const normalizedQuery = normalizeSearchText(fulltextQuery.toLowerCase());
@@ -65,22 +72,23 @@ class SearchResult {
             this.score += SCORE_WEIGHTS.TITLE_PREFIX_MATCH;
         } else if (this.isWordMatch(normalizedTitle, normalizedQuery)) {
             this.score += SCORE_WEIGHTS.TITLE_WORD_MATCH;
-        } else {
-            // Try fuzzy matching for typos
+        } else if (enableFuzzyMatching) {
+            // Try fuzzy matching for typos only if enabled
             const fuzzyScore = this.calculateFuzzyTitleScore(normalizedTitle, normalizedQuery);
             this.score += fuzzyScore;
+            this.fuzzyScore += fuzzyScore; // Track fuzzy score contributions
         }
 
         // Add scores for token matches
-        this.addScoreForStrings(tokens, note.title, SCORE_WEIGHTS.TITLE_FACTOR);
-        this.addScoreForStrings(tokens, this.notePathTitle, SCORE_WEIGHTS.PATH_FACTOR);
+        this.addScoreForStrings(tokens, note.title, SCORE_WEIGHTS.TITLE_FACTOR, enableFuzzyMatching);
+        this.addScoreForStrings(tokens, this.notePathTitle, SCORE_WEIGHTS.PATH_FACTOR, enableFuzzyMatching);
 
         if (note.isInHiddenSubtree()) {
             this.score = this.score / SCORE_WEIGHTS.HIDDEN_NOTE_PENALTY;
         }
     }
 
-    addScoreForStrings(tokens: string[], str: string, factor: number) {
+    addScoreForStrings(tokens: string[], str: string, factor: number, enableFuzzyMatching: boolean = true) {
         const normalizedStr = normalizeSearchText(str.toLowerCase());
         const chunks = normalizedStr.split(" ");
 
@@ -96,11 +104,22 @@ class SearchResult {
                 } else if (chunk.includes(normalizedToken)) {
                     tokenScore += SCORE_WEIGHTS.TOKEN_CONTAINS_MATCH * token.length * factor;
                 } else {
-                    // Try fuzzy matching for individual tokens
+                    // Try fuzzy matching for individual tokens with caps applied
                     const editDistance = calculateOptimizedEditDistance(chunk, normalizedToken, FUZZY_SEARCH_CONFIG.MAX_EDIT_DISTANCE);
-                    if (editDistance <= FUZZY_SEARCH_CONFIG.MAX_EDIT_DISTANCE && normalizedToken.length >= FUZZY_SEARCH_CONFIG.MIN_FUZZY_TOKEN_LENGTH) {
+                    if (editDistance <= FUZZY_SEARCH_CONFIG.MAX_EDIT_DISTANCE && 
+                        normalizedToken.length >= FUZZY_SEARCH_CONFIG.MIN_FUZZY_TOKEN_LENGTH &&
+                        this.fuzzyScore < SCORE_WEIGHTS.MAX_TOTAL_FUZZY_SCORE) {
+                        
                         const fuzzyWeight = SCORE_WEIGHTS.TOKEN_FUZZY_MATCH * (1 - editDistance / FUZZY_SEARCH_CONFIG.MAX_EDIT_DISTANCE);
-                        tokenScore += fuzzyWeight * token.length * factor;
+                        // Apply caps: limit token length multiplier and per-token contribution
+                        const cappedTokenLength = Math.min(token.length, SCORE_WEIGHTS.MAX_FUZZY_TOKEN_LENGTH_MULTIPLIER);
+                        const fuzzyTokenScore = Math.min(
+                            fuzzyWeight * cappedTokenLength * factor,
+                            SCORE_WEIGHTS.MAX_FUZZY_SCORE_PER_TOKEN
+                        );
+                        
+                        tokenScore += fuzzyTokenScore;
+                        this.fuzzyScore += fuzzyTokenScore;
                     }
                 }
             }
@@ -119,9 +138,14 @@ class SearchResult {
     }
 
     /**
-     * Calculates fuzzy matching score for title matches
+     * Calculates fuzzy matching score for title matches with caps applied
      */
     private calculateFuzzyTitleScore(title: string, query: string): number {
+        // Check if we've already hit the fuzzy scoring cap
+        if (this.fuzzyScore >= SCORE_WEIGHTS.MAX_TOTAL_FUZZY_SCORE) {
+            return 0;
+        }
+        
         const editDistance = calculateOptimizedEditDistance(title, query, FUZZY_SEARCH_CONFIG.MAX_EDIT_DISTANCE);
         const maxLen = Math.max(title.length, query.length);
         
@@ -130,7 +154,10 @@ class SearchResult {
             editDistance <= FUZZY_SEARCH_CONFIG.MAX_EDIT_DISTANCE && 
             editDistance / maxLen <= 0.3) {
             const similarity = 1 - (editDistance / maxLen);
-            return SCORE_WEIGHTS.TITLE_WORD_MATCH * similarity * 0.7; // Reduced weight for fuzzy matches
+            const baseFuzzyScore = SCORE_WEIGHTS.TITLE_WORD_MATCH * similarity * 0.7; // Reduced weight for fuzzy matches
+            
+            // Apply cap to ensure fuzzy title matches don't exceed reasonable bounds
+            return Math.min(baseFuzzyScore, SCORE_WEIGHTS.MAX_TOTAL_FUZZY_SCORE * 0.3);
         }
         
         return 0;

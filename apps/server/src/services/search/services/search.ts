@@ -237,12 +237,38 @@ function findResultsWithExpression(expression: Expression, searchContext: Search
         loadNeededInfoFromDatabase();
     }
 
+    // Phase 1: Try exact matches first (without fuzzy matching)
+    const exactResults = performSearch(expression, searchContext, false);
+    
+    // Check if we have sufficient high-quality results
+    const minResultThreshold = 5;
+    const minScoreForQuality = 10; // Minimum score to consider a result "high quality"
+    
+    const highQualityResults = exactResults.filter(result => result.score >= minScoreForQuality);
+    
+    // If we have enough high-quality exact matches, return them
+    if (highQualityResults.length >= minResultThreshold) {
+        return exactResults;
+    }
+    
+    // Phase 2: Add fuzzy matching as fallback
+    const fuzzyResults = performSearch(expression, searchContext, true);
+    
+    // Merge results, ensuring exact matches always rank higher than fuzzy matches
+    return mergeExactAndFuzzyResults(exactResults, fuzzyResults);
+}
+
+function performSearch(expression: Expression, searchContext: SearchContext, enableFuzzyMatching: boolean): SearchResult[] {
     const allNoteSet = becca.getAllNoteSet();
 
     const noteIdToNotePath: Record<string, string[]> = {};
     const executionContext = {
         noteIdToNotePath
     };
+
+    // Store original fuzzy setting and temporarily override it
+    const originalFuzzyMatching = searchContext.enableFuzzyMatching;
+    searchContext.enableFuzzyMatching = enableFuzzyMatching;
 
     const noteSet = expression.execute(allNoteSet, executionContext, searchContext);
 
@@ -257,8 +283,11 @@ function findResultsWithExpression(expression: Expression, searchContext: Search
     });
 
     for (const res of searchResults) {
-        res.computeScore(searchContext.fulltextQuery, searchContext.highlightedTokens);
+        res.computeScore(searchContext.fulltextQuery, searchContext.highlightedTokens, enableFuzzyMatching);
     }
+
+    // Restore original fuzzy setting
+    searchContext.enableFuzzyMatching = originalFuzzyMatching;
 
     if (!noteSet.sorted) {
         searchResults.sort((a, b) => {
@@ -279,6 +308,35 @@ function findResultsWithExpression(expression: Expression, searchContext: Search
     }
 
     return searchResults;
+}
+
+function mergeExactAndFuzzyResults(exactResults: SearchResult[], fuzzyResults: SearchResult[]): SearchResult[] {
+    // Create a map of exact result note IDs for deduplication
+    const exactNoteIds = new Set(exactResults.map(result => result.noteId));
+    
+    // Add fuzzy results that aren't already in exact results
+    const additionalFuzzyResults = fuzzyResults.filter(result => !exactNoteIds.has(result.noteId));
+    
+    // Combine results with exact matches first, then fuzzy matches
+    const combinedResults = [...exactResults, ...additionalFuzzyResults];
+    
+    // Sort combined results by score
+    combinedResults.sort((a, b) => {
+        if (a.score > b.score) {
+            return -1;
+        } else if (a.score < b.score) {
+            return 1;
+        }
+
+        // if score does not decide then sort results by depth of the note.
+        if (a.notePathArray.length === b.notePathArray.length) {
+            return a.notePathTitle < b.notePathTitle ? -1 : 1;
+        }
+
+        return a.notePathArray.length < b.notePathArray.length ? -1 : 1;
+    });
+    
+    return combinedResults;
 }
 
 function parseQueryToExpression(query: string, searchContext: SearchContext) {
