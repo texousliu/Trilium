@@ -2245,6 +2245,14 @@ footer.webview-footer button {
     padding: 1px 10px 1px 10px;
 }
 
+/* Search result highlighting */
+.search-result-title b,
+.search-result-content b {
+    font-weight: 900;
+    color: orange;
+    text-shadow: 0 0 1px rgba(255, 165, 0, 0.3);
+}
+
 /* Customized icons */
 
 .bx-tn-toc::before {

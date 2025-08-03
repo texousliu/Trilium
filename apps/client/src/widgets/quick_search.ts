@@ -238,12 +238,12 @@ export default class QuickSearchWidget extends BasicWidget {
                 let itemHtml = `<div style="display: flex; flex-direction: column;">
                     <div style="display: flex; align-items: flex-start; gap: 6px;">
                         <span class="${result.icon}" style="flex-shrink: 0; margin-top: 1px;"></span>
-                        <span style="flex: 1;">${result.highlightedNotePathTitle}</span>
+                        <span style="flex: 1;" class="search-result-title">${result.highlightedNotePathTitle}</span>
                     </div>`;
                 
                 // Add content snippet below the title if available
                 if (result.highlightedContentSnippet) {
-                    itemHtml += `<div style="font-size: 0.85em; color: var(--main-text-color); opacity: 0.7; margin-left: 20px; margin-top: 4px; line-height: 1.3;">${result.highlightedContentSnippet}</div>`;
+                    itemHtml += `<div style="font-size: 0.85em; color: var(--main-text-color); opacity: 0.7; margin-left: 20px; margin-top: 4px; line-height: 1.3;" class="search-result-content">${result.highlightedContentSnippet}</div>`;
                 }
                 
                 itemHtml += `</div>`;
