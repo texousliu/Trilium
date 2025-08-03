@@ -8,15 +8,7 @@ import utils from "../../services/utils.js";
 import openService from "../../services/open.js";
 import { useState } from "preact/hooks";
 import type { CSSProperties } from "preact/compat";
-
-interface AppInfo {
-    appVersion: string;
-    dbVersion: number;
-    syncVersion: number;
-    buildDate: string;
-    buildRevision: string;
-    dataDirectory: string;
-}
+import type { AppInfo } from "@triliumnext/commons";
 
 function AboutDialogComponent() {
     let [appInfo, setAppInfo] = useState<AppInfo | null>(null);
