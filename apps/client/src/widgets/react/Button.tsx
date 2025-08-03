@@ -1,6 +1,9 @@
+import { RefObject } from "preact";
 import { useRef } from "preact/hooks";
 
 interface ButtonProps {
+    /** Reference to the button element. Mostly useful for requesting focus. */
+    buttonRef: RefObject<HTMLButtonElement>;
     text: string;
     className?: string;
     keyboardShortcut?: string;
@@ -8,14 +11,14 @@ interface ButtonProps {
     onClick?: () => void;
 }
 
-export default function Button({ className, text, onClick, keyboardShortcut }: ButtonProps) {
+export default function Button({ buttonRef: _buttonRef, className, text, onClick, keyboardShortcut }: ButtonProps) {
     const classes: string[] = ["btn"];
     classes.push("btn-primary");
     if (className) {
         classes.push(className);
     }
 
-    const buttonRef = useRef<HTMLButtonElement>(null);
+    const buttonRef = _buttonRef ?? useRef<HTMLButtonElement>(null);
     const splitShortcut = (keyboardShortcut ?? "").split("+");
 
     return (

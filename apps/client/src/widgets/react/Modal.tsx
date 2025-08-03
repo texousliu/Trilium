@@ -15,18 +15,26 @@ interface ModalProps {
      * Especially useful for user input that can be submitted with Enter key.
      */
     onSubmit?: () => void;
+    /** Called when the modal is shown. */
     onShown?: () => void;
+    /** Called when the modal is hidden, either via close button, backdrop click or submit. */
+    onHidden?: () => void;
     helpPageId?: string;
 }
 
-export default function Modal({ children, className, size, title, footer, onShown, onSubmit, helpPageId, maxWidth }: ModalProps) {
+export default function Modal({ children, className, size, title, footer, onShown, onSubmit, helpPageId, maxWidth, onHidden: onHidden }: ModalProps) {
     const modalRef = useRef<HTMLDivElement>(null);
 
-    if (onShown) {
+    if (onShown || onHidden) {
         useEffect(() => {
             const modalElement = modalRef.current;
             if (modalElement) {
-                modalElement.addEventListener("shown.bs.modal", onShown);
+                if (onShown) {
+                    modalElement.addEventListener("shown.bs.modal", onShown);
+                }
+                if (onHidden) {
+                    modalElement.addEventListener("hidden.bs.modal", onHidden);
+                }
             }
         });
     }
