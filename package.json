@@ -59,7 +59,7 @@
     "rollup-plugin-webpack-stats": "2.1.1",
     "tslib": "^2.3.0",
     "tsx": "4.20.3",
-    "typescript": "~5.8.0",
+    "typescript": "~5.9.0",
     "typescript-eslint": "^8.19.0",
     "upath": "2.0.1",
     "vite": "^7.0.0",
