@@ -9,6 +9,7 @@ import ReactBasicWidget from "../react/ReactBasicWidget.js";
 import froca from "../../services/froca.js";
 import tree from "../../services/tree.js";
 import FBranch from "../../entities/fbranch.js";
+import Button from "../react/Button.jsx";
 
 interface BranchPrefixDialogProps {
     branch?: FBranch;
@@ -35,7 +36,7 @@ function BranchPrefixDialogComponent({ branch }: BranchPrefixDialogProps) {
             onShown={() => branchInput.current?.focus()}
             onSubmit={onSubmit}
             helpPageId="TBwsyfadTA18"
-            footer={<button class="btn btn-primary btn-sm">{t("branch_prefix.save")}</button>}
+            footer={<Button text={t("branch_prefix.save")} />}
         >
             <div class="form-group">
                 <label for="branch-prefix-input">{t("branch_prefix.prefix")}</label> &nbsp;

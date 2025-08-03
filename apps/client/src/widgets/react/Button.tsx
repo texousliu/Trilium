@@ -1,11 +1,10 @@
-import { useEffect, useRef } from "preact/hooks";
-import shortcuts from "../../services/shortcuts";
+import { useRef } from "preact/hooks";
 
 interface ButtonProps {
     text: string;
     className?: string;
     keyboardShortcut?: string;
-    onClick: () => void;
+    onClick?: () => void;
 }
 
 export default function Button({ className, text, onClick, keyboardShortcut }: ButtonProps) {
