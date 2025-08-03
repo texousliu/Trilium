@@ -34,7 +34,7 @@ function SortChildNotesDialogComponent({ parentNoteId }: { parentNoteId?: string
         <Modal
             className="sort-child-notes-dialog"
             title={t("sort_child_notes.sort_children_by")}
-            size="lg"
+            size="lg" maxWidth={500}
             onSubmit={onSubmit}
             footer={<Button text={t("sort_child_notes.sort")} keyboardShortcut="Enter" />}
         >

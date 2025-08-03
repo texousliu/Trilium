@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "preact/hooks";
 import { t } from "../../services/i18n";
 import { ComponentChildren } from "preact";
+import type { CSSProperties } from "preact/compat";
 
 interface ModalProps {
     className: string;
@@ -8,6 +9,7 @@ interface ModalProps {
     size: "lg" | "sm";
     children: ComponentChildren;
     footer?: ComponentChildren;
+    maxWidth?: number;
     /**
      * If set, the modal body and footer will be wrapped in a form and the submit event will call this function.
      * Especially useful for user input that can be submitted with Enter key.
@@ -17,7 +19,7 @@ interface ModalProps {
     helpPageId?: string;
 }
 
-export default function Modal({ children, className, size, title, footer, onShown, onSubmit, helpPageId }: ModalProps) {
+export default function Modal({ children, className, size, title, footer, onShown, onSubmit, helpPageId, maxWidth }: ModalProps) {
     const modalRef = useRef<HTMLDivElement>(null);
 
     if (onShown) {
@@ -29,9 +31,14 @@ export default function Modal({ children, className, size, title, footer, onShow
         });
     }
 
+    const style: CSSProperties = {};
+    if (maxWidth) {
+        style.maxWidth = `${maxWidth}px`;
+    }
+
     return (
         <div className={`modal fade mx-auto ${className}`} tabIndex={-1} role="dialog" ref={modalRef}>
-            <div className={`modal-dialog modal-${size}`} role="document">
+            <div className={`modal-dialog modal-${size}`} style={style} role="document">
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title">{title}</h5>
