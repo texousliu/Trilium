@@ -356,20 +356,22 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
     } else {
         branch = note.getParentBranches().find((branch) => branch.parentNoteId === parentNoteId);
 
-        // If the note exists but doesn't have a branch in the expected parent,
-        // create the missing branch to ensure it's in the correct location
-        if (!branch) {
-            branch = new BBranch({
-                noteId: item.id,
-                parentNoteId: parentNoteId,
-                notePosition: item.notePosition !== undefined ? item.notePosition : undefined,
-                isExpanded: item.isExpanded !== undefined ? item.isExpanded : false
-            }).save();
-        }
-
         // Clean up any branches that shouldn't exist according to the meta definition
         // For hidden subtree notes, we want to ensure they only exist in their designated locations
         if (item.enforceBranches || item.id.startsWith("_help")) {
+            // If the note exists but doesn't have a branch in the expected parent,
+            // create the missing branch to ensure it's in the correct location
+            if (!branch) {
+                console.log("Creating missing branch for note", item.id, "under parent", parentNoteId);
+                branch = new BBranch({
+                    noteId: item.id,
+                    parentNoteId: parentNoteId,
+                    notePosition: item.notePosition !== undefined ? item.notePosition : undefined,
+                    isExpanded: item.isExpanded !== undefined ? item.isExpanded : false
+                }).save();
+            }
+
+            // Remove any branches that are not in the expected parent.
             const expectedParents = getExpectedParentIds(item.id, hiddenSubtreeDefinition);
             const currentBranches = note.getParentBranches();
 
