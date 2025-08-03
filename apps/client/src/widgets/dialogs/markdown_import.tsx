@@ -7,6 +7,7 @@ import toast from "../../services/toast";
 import utils from "../../services/utils";
 import Modal from "../react/Modal";
 import ReactBasicWidget from "../react/ReactBasicWidget";
+import Button from "../react/Button";
 
 interface RenderMarkdownResponse {
     htmlContent: string;
@@ -25,13 +26,19 @@ function MarkdownImportDialogComponent() {
     return (
         <Modal
             className="markdown-import-dialog" title={t("markdown_import.dialog_title")} size="lg"
-            footer={<button className="markdown-import-button btn btn-primary" onClick={sendForm}>{t("markdown_import.import_button")}</button>}
+            footer={<Button className="markdown-import-button" text={t("markdown_import.import_button")} onClick={sendForm} keyboardShortcut="Ctrl+Space" />}
             onShown={() => markdownImportTextArea.current?.focus()}
         >
             <p>{t("markdown_import.modal_body_text")}</p>
             <textarea ref={markdownImportTextArea} value={text}
                 onInput={(e) => setText(e.currentTarget.value)}
-                style={{ height: 340, width: "100%" }}></textarea>
+                style={{ height: 340, width: "100%" }}
+                onKeyDown={(e) => {
+                    if (e.key === "Enter" && e.ctrlKey) {
+                        e.preventDefault();
+                        sendForm();
+                    }
+                }}></textarea>
         </Modal>
     )
 }

@@ -219,7 +219,7 @@
     "dialog_title": "Markdown import",
     "close": "Close",
     "modal_body_text": "Because of browser sandbox it's not possible to directly read clipboard from JavaScript. Please paste the Markdown to import to textarea below and click on Import button",
-    "import_button": "Import Ctrl+Enter",
+    "import_button": "Import",
     "import_success": "Markdown content has been imported into the document."
   },
   "move_to": {
