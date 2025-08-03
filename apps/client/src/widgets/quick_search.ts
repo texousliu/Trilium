@@ -236,7 +236,10 @@ export default class QuickSearchWidget extends BasicWidget {
                 
                 // Build the display HTML with content snippet below the title
                 let itemHtml = `<div style="display: flex; flex-direction: column;">
-                    <div><span class="${result.icon}"></span> ${result.highlightedNotePathTitle}</div>`;
+                    <div style="display: flex; align-items: flex-start; gap: 6px;">
+                        <span class="${result.icon}" style="flex-shrink: 0; margin-top: 1px;"></span>
+                        <span style="flex: 1;">${result.highlightedNotePathTitle}</span>
+                    </div>`;
                 
                 // Add content snippet below the title if available
                 if (result.highlightedContentSnippet) {
