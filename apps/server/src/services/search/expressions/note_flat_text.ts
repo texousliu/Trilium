@@ -7,7 +7,7 @@ import Expression from "./expression.js";
 import NoteSet from "../note_set.js";
 import becca from "../../../becca/becca.js";
 import { normalize } from "../../utils.js";
-import { normalizeSearchText } from "../utils/text_utils.js";
+import { normalizeSearchText, fuzzyMatchWord } from "../utils/text_utils.js";
 import beccaService from "../../../becca/becca_service.js";
 
 class NoteFlatTextExp extends Expression {
@@ -78,7 +78,7 @@ class NoteFlatTextExp extends Expression {
                 const foundTokens: string[] = foundAttrTokens.slice();
 
                 for (const token of remainingTokens) {
-                    if (title.includes(token)) {
+                    if (this.smartMatch(title, token)) {
                         foundTokens.push(token);
                     }
                 }
@@ -121,7 +121,7 @@ class NoteFlatTextExp extends Expression {
                 const foundTokens = foundAttrTokens.slice();
 
                 for (const token of this.tokens) {
-                    if (title.includes(token)) {
+                    if (this.smartMatch(title, token)) {
                         foundTokens.push(token);
                     }
                 }
@@ -160,7 +160,7 @@ class NoteFlatTextExp extends Expression {
         for (const note of noteSet.notes) {
             const normalizedFlatText = normalizeSearchText(note.getFlatText());
             for (const token of this.tokens) {
-                if (normalizedFlatText.includes(token)) {
+                if (this.smartMatch(normalizedFlatText, token)) {
                     candidateNotes.push(note);
                     break;
                 }
@@ -168,6 +168,26 @@ class NoteFlatTextExp extends Expression {
         }
 
         return candidateNotes;
+    }
+
+    /**
+     * Smart matching that tries exact match first, then fuzzy fallback
+     * @param text The text to search in
+     * @param token The token to search for
+     * @returns True if match found (exact or fuzzy)
+     */
+    private smartMatch(text: string, token: string): boolean {
+        // Exact match has priority
+        if (text.includes(token)) {
+            return true;
+        }
+        
+        // Fuzzy fallback only for tokens >= 4 characters
+        if (token.length >= 4) {
+            return fuzzyMatchWord(token, text);
+        }
+        
+        return false;
     }
 }
 

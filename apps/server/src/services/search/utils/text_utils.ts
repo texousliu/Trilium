@@ -257,35 +257,49 @@ export function validateAndPreprocessContent(content: string, noteId?: string): 
  * @param maxDistance Maximum allowed edit distance
  * @returns True if the word matches the token within the distance threshold
  */
-export function fuzzyMatchWord(token: string, word: string, maxDistance: number = FUZZY_SEARCH_CONFIG.MAX_EDIT_DISTANCE): boolean {
+export function fuzzyMatchWord(token: string, text: string, maxDistance: number = FUZZY_SEARCH_CONFIG.MAX_EDIT_DISTANCE): boolean {
     // Input validation
-    if (typeof token !== 'string' || typeof word !== 'string') {
+    if (typeof token !== 'string' || typeof text !== 'string') {
         return false;
     }
     
-    if (token.length === 0 || word.length === 0) {
+    if (token.length === 0 || text.length === 0) {
         return false;
     }
     
     try {
+        // Normalize both strings for comparison
+        const normalizedToken = token.toLowerCase();
+        const normalizedText = text.toLowerCase();
+        
         // Exact match check first (most common case)
-        if (word.includes(token)) {
+        if (normalizedText.includes(normalizedToken)) {
             return true;
         }
         
-        // Length difference check for early exit
-        if (Math.abs(word.length - token.length) > maxDistance) {
-            return false;
+        // For fuzzy matching, we need to check individual words in the text
+        // Split the text into words and check each word against the token
+        const words = normalizedText.split(/\s+/).filter(word => word.length > 0);
+        
+        for (const word of words) {
+            // Skip if word is too different in length for fuzzy matching
+            if (Math.abs(word.length - normalizedToken.length) > maxDistance) {
+                continue;
+            }
+            
+            // For very short tokens or very different lengths, be more strict
+            if (normalizedToken.length < 4 || Math.abs(word.length - normalizedToken.length) > 2) {
+                continue;
+            }
+            
+            // Use optimized edit distance calculation
+            const distance = calculateOptimizedEditDistance(normalizedToken, word, maxDistance);
+            if (distance <= maxDistance) {
+                return true;
+            }
         }
         
-        // For very short tokens or very different lengths, be more strict
-        if (token.length < 4 || Math.abs(word.length - token.length) > 2) {
-            return false;
-        }
-        
-        // Use optimized edit distance calculation
-        const distance = calculateOptimizedEditDistance(token, word, maxDistance);
-        return distance <= maxDistance;
+        return false;
     } catch (error) {
         // Log error and return false for safety
         console.warn('Error in fuzzy word matching:', error);
