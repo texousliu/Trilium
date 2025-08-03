@@ -8,10 +8,15 @@ interface ModalProps {
     size: "lg" | "sm";
     children: ComponentChildren;
     footer?: ComponentChildren;
+    /**
+     * If set, the modal body and footer will be wrapped in a form and the submit event will call this function.
+     * Especially useful for user input that can be submitted with Enter key.
+     */
+    onSubmit?: () => void;
     onShown?: () => void;
 }
 
-export default function Modal({ children, className, size, title, footer, onShown }: ModalProps) {
+export default function Modal({ children, className, size, title, footer, onShown, onSubmit }: ModalProps) {
     const modalRef = useRef<HTMLDivElement>(null);
 
     if (onShown) {
@@ -32,17 +37,36 @@ export default function Modal({ children, className, size, title, footer, onShow
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label={t("modal.close")}></button>
                     </div>
 
-                    <div className="modal-body">
-                        {children}
-                    </div>
-
-                    {footer && (
-                        <div className="modal-footer">
-                            {footer}
-                        </div>
+                    {onSubmit ? (
+                        <form onSubmit={(e) => {
+                            e.preventDefault();
+                            onSubmit();
+                        }}>
+                            <ModalInner footer={footer}>{children}</ModalInner>
+                        </form>
+                    ) : (
+                        <ModalInner footer={footer}>
+                            {children}
+                        </ModalInner>
                     )}
                 </div>
             </div>
         </div>
+    );
+}
+
+function ModalInner({ children, footer }: Pick<ModalProps, "children" | "footer">) {
+    return (
+        <>
+            <div className="modal-body">
+                {children}
+            </div>
+
+            {footer && (
+                <div className="modal-footer">
+                    {footer}
+                </div>
+            )}
+        </>
     );
 }
