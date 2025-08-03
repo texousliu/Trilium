@@ -4,6 +4,7 @@ import { defineConfig, type Plugin } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 import asset_path from './src/asset_path';
 import webpackStatsPlugin from 'rollup-plugin-webpack-stats';
+import preact from "@preact/preset-vite";
 
 const assets = [ "assets", "stylesheets", "fonts", "translations" ];
 
@@ -20,6 +21,7 @@ export default defineConfig(() => ({
         host: 'localhost',
     },
     plugins: [
+        preact(),
         viteStaticCopy({
             targets: assets.map((asset) => ({
                 src: `src/${asset}/*`,

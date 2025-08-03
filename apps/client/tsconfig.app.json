@@ -4,9 +4,13 @@
     "lib": [ "ESNext" ],
     "outDir": "dist",
     "types": [
-      "node"
+      "node",
+      "preact"
     ],
     "rootDir": "src",
+    "jsx": "preserve",
+    "jsxFactory": "h",
+		"jsxImportSource": "preact",
     "module": "esnext",
     "moduleResolution": "bundler",
     "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo"
