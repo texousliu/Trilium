@@ -67,7 +67,8 @@ const TPL = /*html*/`
   <input type="text" class="form-control form-control-sm search-string" placeholder="${t("quick-search.placeholder")}">
 </div>`;
 
-const MAX_DISPLAYED_NOTES = 15;
+const INITIAL_DISPLAYED_NOTES = 15;
+const LOAD_MORE_BATCH_SIZE = 10;
 
 // TODO: Deduplicate with server.
 interface QuickSearchResponse {
@@ -89,6 +90,12 @@ export default class QuickSearchWidget extends BasicWidget {
     private dropdown!: bootstrap.Dropdown;
     private $searchString!: JQuery<HTMLElement>;
     private $dropdownMenu!: JQuery<HTMLElement>;
+    
+    // State for infinite scrolling
+    private allSearchResults: Array<any> = [];
+    private allSearchResultNoteIds: string[] = [];
+    private currentDisplayedCount: number = 0;
+    private isLoadingMore: boolean = false;
 
     doRender() {
         this.$widget = $(TPL);
@@ -104,6 +111,11 @@ export default class QuickSearchWidget extends BasicWidget {
         });
 
         this.$widget.find(".input-group-prepend").on("shown.bs.dropdown", () => this.search());
+        
+        // Add scroll event listener for infinite scrolling
+        this.$dropdownMenu.on("scroll", () => {
+            this.handleScroll();
+        });
 
         if (utils.isMobile()) {
             this.$searchString.keydown((e) => {
@@ -148,6 +160,12 @@ export default class QuickSearchWidget extends BasicWidget {
             return;
         }
 
+        // Reset state for new search
+        this.allSearchResults = [];
+        this.allSearchResultNoteIds = [];
+        this.currentDisplayedCount = 0;
+        this.isLoadingMore = false;
+
         this.$dropdownMenu.empty();
         this.$dropdownMenu.append(`<span class="dropdown-item disabled"><span class="bx bx-loader bx-spin"></span>${t("quick-search.searching")}</span>`);
 
@@ -165,17 +183,39 @@ export default class QuickSearchWidget extends BasicWidget {
             setTimeout(() => tooltip.dispose(), 4000);
         }
 
+        // Store all results for infinite scrolling
+        this.allSearchResults = searchResults || [];
+        this.allSearchResultNoteIds = searchResultNoteIds || [];
+
         this.$dropdownMenu.empty();
 
+        if (this.allSearchResults.length === 0 && this.allSearchResultNoteIds.length === 0) {
+            this.$dropdownMenu.append(`<span class="dropdown-item disabled">${t("quick-search.no-results")}</span>`);
+            return;
+        }
+
+        // Display initial batch
+        await this.displayMoreResults(INITIAL_DISPLAYED_NOTES);
+        this.addShowInFullSearchButton();
+
+        this.dropdown.update();
+    }
+
+    private async displayMoreResults(batchSize: number) {
+        if (this.isLoadingMore) return;
+        this.isLoadingMore = true;
+
+        // Remove the "Show in full search" button temporarily
+        this.$dropdownMenu.find('.show-in-full-search').remove();
+        this.$dropdownMenu.find('.dropdown-divider').remove();
+
         // Use highlighted search results if available, otherwise fall back to basic display
-        if (searchResults && searchResults.length > 0) {
-            const displayedResults = searchResults.slice(0, Math.min(MAX_DISPLAYED_NOTES, searchResults.length));
+        if (this.allSearchResults.length > 0) {
+            const startIndex = this.currentDisplayedCount;
+            const endIndex = Math.min(startIndex + batchSize, this.allSearchResults.length);
+            const resultsToDisplay = this.allSearchResults.slice(startIndex, endIndex);
 
-            if (displayedResults.length === 0) {
-                this.$dropdownMenu.append(`<span class="dropdown-item disabled">${t("quick-search.no-results")}</span>`);
-            }
-
-            for (const result of displayedResults) {
+            for (const result of resultsToDisplay) {
                 const noteId = result.notePath.split("/").pop();
                 if (!noteId) continue;
 
@@ -216,19 +256,14 @@ export default class QuickSearchWidget extends BasicWidget {
                 this.$dropdownMenu.append($item);
             }
 
-            if (searchResults.length > MAX_DISPLAYED_NOTES) {
-                const numRemainingResults = searchResults.length - MAX_DISPLAYED_NOTES;
-                this.$dropdownMenu.append(`<span class="dropdown-item disabled">${t("quick-search.more-results", { number: numRemainingResults })}</span>`);
-            }
+            this.currentDisplayedCount = endIndex;
         } else {
             // Fallback to original behavior if no highlighted results
-            const displayedNoteIds = searchResultNoteIds.slice(0, Math.min(MAX_DISPLAYED_NOTES, searchResultNoteIds.length));
+            const startIndex = this.currentDisplayedCount;
+            const endIndex = Math.min(startIndex + batchSize, this.allSearchResultNoteIds.length);
+            const noteIdsToDisplay = this.allSearchResultNoteIds.slice(startIndex, endIndex);
 
-            if (displayedNoteIds.length === 0) {
-                this.$dropdownMenu.append(`<span class="dropdown-item disabled">${t("quick-search.no-results")}</span>`);
-            }
-
-            for (const note of await froca.getNotes(displayedNoteIds)) {
+            for (const note of await froca.getNotes(noteIdsToDisplay)) {
                 const $link = await linkService.createLink(note.noteId, { showNotePath: true, showNoteIcon: true });
                 $link.addClass("dropdown-item");
                 $link.attr("tabIndex", "0");
@@ -255,13 +290,38 @@ export default class QuickSearchWidget extends BasicWidget {
                 this.$dropdownMenu.append($link);
             }
 
-            if (searchResultNoteIds.length > MAX_DISPLAYED_NOTES) {
-                const numRemainingResults = searchResultNoteIds.length - MAX_DISPLAYED_NOTES;
-                this.$dropdownMenu.append(`<span class="dropdown-item disabled">${t("quick-search.more-results", { number: numRemainingResults })}</span>`);
-            }
+            this.currentDisplayedCount = endIndex;
         }
 
-        const $showInFullButton = $('<a class="dropdown-item" tabindex="0">').text(t("quick-search.show-in-full-search"));
+        this.isLoadingMore = false;
+    }
+
+    private handleScroll() {
+        if (this.isLoadingMore) return;
+
+        const dropdown = this.$dropdownMenu[0];
+        const scrollTop = dropdown.scrollTop;
+        const scrollHeight = dropdown.scrollHeight;
+        const clientHeight = dropdown.clientHeight;
+
+        // Trigger loading more when user scrolls near the bottom (within 50px)
+        if (scrollTop + clientHeight >= scrollHeight - 50) {
+            const totalResults = this.allSearchResults.length > 0 ? this.allSearchResults.length : this.allSearchResultNoteIds.length;
+            
+            if (this.currentDisplayedCount < totalResults) {
+                this.displayMoreResults(LOAD_MORE_BATCH_SIZE).then(() => {
+                    this.addShowInFullSearchButton();
+                });
+            }
+        }
+    }
+
+    private addShowInFullSearchButton() {
+        // Remove existing button if it exists
+        this.$dropdownMenu.find('.show-in-full-search').remove();
+        this.$dropdownMenu.find('.dropdown-divider').remove();
+
+        const $showInFullButton = $('<a class="dropdown-item show-in-full-search" tabindex="0">').text(t("quick-search.show-in-full-search"));
 
         this.$dropdownMenu.append($(`<div class="dropdown-divider">`));
         this.$dropdownMenu.append($showInFullButton);
