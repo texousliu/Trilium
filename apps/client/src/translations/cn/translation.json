@@ -234,7 +234,8 @@
         "modal_title": "选择笔记类型",
         "close": "关闭",
         "modal_body": "选择新笔记的类型或模板：",
-        "templates": "模板:"
+        "templates": "模板:",
+        "change_path_prompt": "更改新笔记的创建位置："
     },
     "password_not_set": {
         "title": "密码未设置",
