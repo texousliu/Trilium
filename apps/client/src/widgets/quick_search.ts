@@ -34,19 +34,32 @@ const TPL = /*html*/`
         white-space: normal;
         padding: 12px 16px;
         line-height: 1.4;
-        border-bottom: 1px solid #dee2e6 !important;
+        position: relative;
     }
     
-    .quick-search .dropdown-item:last-child {
-        border-bottom: none !important;
+    .quick-search .dropdown-item:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        height: 2px;
+        background: var(--main-border-color);
+        border-radius: 1px;
+        opacity: 0.4;
     }
     
-    .quick-search .dropdown-item.disabled {
-        border-bottom: 1px solid #f8f9fa !important;
+    .quick-search .dropdown-item:last-child::after {
+        display: none;
     }
     
-    .quick-search .dropdown-divider + .dropdown-item {
-        border-top: none !important;
+    .quick-search .dropdown-item.disabled::after {
+        display: none;
+    }
+    
+    .quick-search .dropdown-item.show-in-full-search::after {
+        display: none;
     }
     
     .quick-search .dropdown-item:hover {
@@ -227,7 +240,7 @@ export default class QuickSearchWidget extends BasicWidget {
                 
                 // Add content snippet below the title if available
                 if (result.highlightedContentSnippet) {
-                    itemHtml += `<div style="font-size: 0.85em; color: #666; margin-left: 20px; margin-top: 4px;">${result.highlightedContentSnippet}</div>`;
+                    itemHtml += `<div style="font-size: 0.85em; color: var(--main-text-color); opacity: 0.7; margin-left: 20px; margin-top: 4px; line-height: 1.3;">${result.highlightedContentSnippet}</div>`;
                 }
                 
                 itemHtml += `</div>`;
