@@ -15,26 +15,26 @@ export async function getBoardData(parentNote: FNote, groupByColumn: string, per
 
     // Get all columns that exist in the notes
     const columnsFromNotes = [...byColumn.keys()];
-    
+
     // Get existing persisted columns and preserve their order
     const existingPersistedColumns = persistedData.columns || [];
     const existingColumnValues = existingPersistedColumns.map(c => c.value);
-    
+
     // Find truly new columns (exist in notes but not in persisted data)
     const newColumnValues = columnsFromNotes.filter(col => !existingColumnValues.includes(col));
-    
+
     // Build the complete correct column list: existing + new
     const allColumns = [
         ...existingPersistedColumns, // Preserve existing order
         ...newColumnValues.map(value => ({ value })) // Add new columns
     ];
-    
+
     // Remove duplicates (just in case) and ensure we only keep columns that exist in notes or are explicitly preserved
     const deduplicatedColumns = allColumns.filter((column, index) => {
         const firstIndex = allColumns.findIndex(c => c.value === column.value);
         return firstIndex === index; // Keep only the first occurrence
     });
-    
+
     // Ensure all persisted columns have empty arrays in byColumn (even if no notes use them)
     for (const column of deduplicatedColumns) {
         if (!byColumn.has(column.value)) {
@@ -44,10 +44,10 @@ export async function getBoardData(parentNote: FNote, groupByColumn: string, per
 
     // Return updated persisted data only if there were changes
     let newPersistedData: BoardData | undefined;
-    const hasChanges = newColumnValues.length > 0 || 
+    const hasChanges = newColumnValues.length > 0 ||
                       existingPersistedColumns.length !== deduplicatedColumns.length ||
                       !existingPersistedColumns.every((col, idx) => deduplicatedColumns[idx]?.value === col.value);
-                      
+
     if (hasChanges) {
         newPersistedData = {
             ...persistedData,
@@ -66,6 +66,10 @@ async function recursiveGroupBy(branches: FBranch[], byColumn: ColumnMap, groupB
         const note = await branch.getNote();
         if (!note) {
             continue;
+        }
+
+        if (note.hasChildren()) {
+            await recursiveGroupBy(note.getChildBranches(), byColumn, groupByColumn);
         }
 
         const group = note.getLabelValue(groupByColumn);
