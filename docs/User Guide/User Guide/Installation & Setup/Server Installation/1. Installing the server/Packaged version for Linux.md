@@ -4,7 +4,7 @@ This is essentially Trilium sources + node modules + node.js runtime packaged in
 ## Steps
 
 *   SSH into your server
-*   use `wget` (or `curl`) to download latest `TriliumNotes-Server-[VERSION]-linux-x64.tar.xz` (copy link from [release page](https://github.com/TriliumNext/Notes/releases), notice `-Server` suffix) on your server.
+*   use `wget` (or `curl`) to download latest `TriliumNotes-Server-[VERSION]-linux-x64.tar.xz` (copy link from [release page](https://github.com/TriliumNext/Trilium/releases), notice `-Server` suffix) on your server.
 *   unpack the archive, e.g. using `tar -xf -d TriliumNotes-Server-[VERSION]-linux-x64.tar.xz`
 *   `cd trilium-linux-x64-server`
 *   `./trilium.sh`

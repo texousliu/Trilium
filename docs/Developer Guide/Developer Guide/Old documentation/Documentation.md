@@ -52,7 +52,7 @@ Important aspects to consider:
 
 ## Location of the documentation
 
-All documentation is stored in the [Notes](https://github.com/TriliumNext/Notes) repository:
+All documentation is stored in the [Notes](https://github.com/TriliumNext/Trilium) repository:
 
 *   `docs/Developer Guide` contains Markdown documentation that can be modified either externally (using a Markdown editor, or internally using Trilium).
 *   `docs/Release Notes` is also stored in Markdown format and can be freely edited.

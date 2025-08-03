@@ -1,7 +1,7 @@
 # ETAPI (REST API)
 ETAPI is Trilium's public/external REST API. It is available since Trilium v0.50.
 
-The documentation is in OpenAPI format, available [here](https://github.com/TriliumNext/Notes/blob/master/src/etapi/etapi.openapi.yaml).
+The documentation is in OpenAPI format, available [here](https://github.com/TriliumNext/Trilium/blob/master/src/etapi/etapi.openapi.yaml).
 
 ## API clients
 
@@ -11,7 +11,7 @@ As an alternative to calling the API directly, there are client libraries to sim
 
 ## Obtaining a token
 
-All operations with the REST API have to be authenticated using a token. You can get this token either from Options -> ETAPI or programmatically using the `/auth/login` REST call (see the [spec](https://github.com/TriliumNext/Notes/blob/master/src/etapi/etapi.openapi.yaml)).
+All operations with the REST API have to be authenticated using a token. You can get this token either from Options -> ETAPI or programmatically using the `/auth/login` REST call (see the [spec](https://github.com/TriliumNext/Trilium/blob/master/src/etapi/etapi.openapi.yaml)).
 
 ## Authentication
 
