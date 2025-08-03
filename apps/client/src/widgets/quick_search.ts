@@ -23,11 +23,20 @@ const TPL = /*html*/`
 
     .quick-search .dropdown-menu {
         max-height: 600px;
-        max-width: 400px;
+        max-width: 600px;
         overflow-y: auto;
         overflow-x: hidden;
         text-overflow: ellipsis;
         box-shadow: -30px 50px 93px -50px black;
+    }
+    
+    .quick-search .dropdown-item {
+        white-space: normal;
+        padding: 8px 16px;
+    }
+    
+    .quick-search .dropdown-item:hover {
+        background-color: #f8f9fa;
     }
   </style>
 
@@ -50,6 +59,8 @@ interface QuickSearchResponse {
         noteTitle: string;
         notePathTitle: string;
         highlightedNotePathTitle: string;
+        contentSnippet?: string;
+        highlightedContentSnippet?: string;
         icon: string;
     }>;
     error: string;
@@ -151,7 +162,16 @@ export default class QuickSearchWidget extends BasicWidget {
                 if (!noteId) continue;
 
                 const $item = $('<a class="dropdown-item" tabindex="0" href="javascript:">');
-                $item.html(`<span class="${result.icon}"></span> ${result.highlightedNotePathTitle}`);
+                
+                // Build the display HTML
+                let itemHtml = `<div><span class="${result.icon}"></span> ${result.highlightedNotePathTitle}</div>`;
+                
+                // Add content snippet if available
+                if (result.highlightedContentSnippet) {
+                    itemHtml += `<div style="font-size: 0.85em; color: #666; margin-left: 20px; margin-top: 2px;">${result.highlightedContentSnippet}</div>`;
+                }
+                
+                $item.html(itemHtml);
                 
                 $item.on("click", (e) => {
                     this.dropdown.hide();

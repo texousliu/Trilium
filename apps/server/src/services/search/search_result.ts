@@ -29,6 +29,8 @@ class SearchResult {
     score: number;
     notePathTitle: string;
     highlightedNotePathTitle?: string;
+    contentSnippet?: string;
+    highlightedContentSnippet?: string;
 
     constructor(notePathArray: string[]) {
         this.notePathArray = notePathArray;
