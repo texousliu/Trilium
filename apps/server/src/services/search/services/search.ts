@@ -317,11 +317,8 @@ function mergeExactAndFuzzyResults(exactResults: SearchResult[], fuzzyResults: S
     // Add fuzzy results that aren't already in exact results
     const additionalFuzzyResults = fuzzyResults.filter(result => !exactNoteIds.has(result.noteId));
     
-    // Combine results with exact matches first, then fuzzy matches
-    const combinedResults = [...exactResults, ...additionalFuzzyResults];
-    
-    // Sort combined results by score
-    combinedResults.sort((a, b) => {
+    // Sort exact results by score (best exact matches first)
+    exactResults.sort((a, b) => {
         if (a.score > b.score) {
             return -1;
         } else if (a.score < b.score) {
@@ -336,7 +333,24 @@ function mergeExactAndFuzzyResults(exactResults: SearchResult[], fuzzyResults: S
         return a.notePathArray.length < b.notePathArray.length ? -1 : 1;
     });
     
-    return combinedResults;
+    // Sort fuzzy results by score (best fuzzy matches first)
+    additionalFuzzyResults.sort((a, b) => {
+        if (a.score > b.score) {
+            return -1;
+        } else if (a.score < b.score) {
+            return 1;
+        }
+
+        // if score does not decide then sort results by depth of the note.
+        if (a.notePathArray.length === b.notePathArray.length) {
+            return a.notePathTitle < b.notePathTitle ? -1 : 1;
+        }
+
+        return a.notePathArray.length < b.notePathArray.length ? -1 : 1;
+    });
+    
+    // CRITICAL: Always put exact matches before fuzzy matches, regardless of scores
+    return [...exactResults, ...additionalFuzzyResults];
 }
 
 function parseQueryToExpression(query: string, searchContext: SearchContext) {

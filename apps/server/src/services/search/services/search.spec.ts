@@ -578,7 +578,7 @@ describe("Search", () => {
         expect(searchResults.length).toEqual(10);
     });
 
-    it("progressive search prioritizes exact matches over fuzzy matches", () => {
+    it("progressive search always puts exact matches before fuzzy matches", () => {
         rootNote
             .child(note("Analysis Report")) // Exact match
             .child(note("Data Analysis")) // Exact match
@@ -591,27 +591,30 @@ describe("Search", () => {
         const searchContext = new SearchContext();
         const searchResults = searchService.findResultsWithQuery("analysis", searchContext);
 
-        // Should find all matches but exact ones should rank higher
+        // Should find all matches but exact ones should come first
         expect(searchResults.length).toEqual(7);
 
-        // First 5 results should be exact matches with higher scores
-        const topResults = searchResults.slice(0, 5);
-        const bottomResults = searchResults.slice(5);
-
-        const topTitles = topResults.map(r => becca.notes[r.noteId].title);
-        const bottomTitles = bottomResults.map(r => becca.notes[r.noteId].title);
-
-        // All top results should be exact matches
-        expect(topTitles.every(title => title.toLowerCase().includes("analysis"))).toBeTruthy();
+        // Get note titles in result order
+        const resultTitles = searchResults.map(r => becca.notes[r.noteId].title);
         
-        // Bottom results should be fuzzy matches
-        expect(bottomTitles.some(title => title.includes("Anaylsis") || title.includes("Anlaysis"))).toBeTruthy();
-
-        // Verify score ordering
-        const lowestExactScore = Math.min(...topResults.map(r => r.score));
-        const highestFuzzyScore = Math.max(...bottomResults.map(r => r.score));
+        // Find all exact matches (contain "analysis")
+        const exactMatchIndices = resultTitles.map((title, index) => 
+            title.toLowerCase().includes("analysis") ? index : -1
+        ).filter(index => index !== -1);
         
-        expect(lowestExactScore).toBeGreaterThan(highestFuzzyScore);
+        // Find all fuzzy matches (contain typos)
+        const fuzzyMatchIndices = resultTitles.map((title, index) => 
+            (title.includes("Anaylsis") || title.includes("Anlaysis")) ? index : -1
+        ).filter(index => index !== -1);
+
+        expect(exactMatchIndices.length).toEqual(5);
+        expect(fuzzyMatchIndices.length).toEqual(2);
+
+        // CRITICAL: All exact matches must appear before all fuzzy matches
+        const lastExactIndex = Math.max(...exactMatchIndices);
+        const firstFuzzyIndex = Math.min(...fuzzyMatchIndices);
+        
+        expect(lastExactIndex).toBeLessThan(firstFuzzyIndex);
     });
 
 

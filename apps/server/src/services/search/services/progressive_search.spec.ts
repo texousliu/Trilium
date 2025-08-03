@@ -81,7 +81,7 @@ describe("Progressive Search Strategy", () => {
             expect(findNoteByTitle(searchResults, "Anaylsis Three")).toBeTruthy();
         });
 
-        it("should merge exact and fuzzy results with exact matches ranked higher", () => {
+        it("should merge exact and fuzzy results with exact matches always ranked higher", () => {
             rootNote
                 .child(note("Analysis Report")) // Exact match
                 .child(note("Data Analysis")) // Exact match
@@ -93,26 +93,26 @@ describe("Progressive Search Strategy", () => {
 
             expect(searchResults.length).toBe(4);
 
-            // First two results should be exact matches with higher scores
-            const exactMatches = ["Analysis Report", "Data Analysis"];
-            const fuzzyMatches = ["Anaylsis Doc", "Statistical Anlaysis"];
-
-            // Find exact and fuzzy match results
-            const exactResults = searchResults.filter(result => 
-                exactMatches.includes(becca.notes[result.noteId].title)
-            );
-            const fuzzyResults = searchResults.filter(result => 
-                fuzzyMatches.includes(becca.notes[result.noteId].title)
-            );
-
-            expect(exactResults.length).toBe(2);
-            expect(fuzzyResults.length).toBe(2);
-
-            // Exact matches should have higher scores than fuzzy matches
-            const lowestExactScore = Math.min(...exactResults.map(r => r.score));
-            const highestFuzzyScore = Math.max(...fuzzyResults.map(r => r.score));
+            // Get the note titles in result order
+            const resultTitles = searchResults.map(r => becca.notes[r.noteId].title);
             
-            expect(lowestExactScore).toBeGreaterThan(highestFuzzyScore);
+            // Find positions of exact and fuzzy matches
+            const exactPositions = resultTitles.map((title, index) => 
+                title.toLowerCase().includes("analysis") ? index : -1
+            ).filter(pos => pos !== -1);
+            
+            const fuzzyPositions = resultTitles.map((title, index) => 
+                (title.includes("Anaylsis") || title.includes("Anlaysis")) ? index : -1
+            ).filter(pos => pos !== -1);
+
+            expect(exactPositions.length).toBe(2);
+            expect(fuzzyPositions.length).toBe(2);
+
+            // CRITICAL: All exact matches must come before all fuzzy matches
+            const lastExactPosition = Math.max(...exactPositions);
+            const firstFuzzyPosition = Math.min(...fuzzyPositions);
+            
+            expect(lastExactPosition).toBeLessThan(firstFuzzyPosition);
         });
 
         it("should not duplicate results between phases", () => {
