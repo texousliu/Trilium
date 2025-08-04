@@ -1,1 +1,99 @@
-{}
+{
+    "about": {
+        "close": "Chiudi",
+        "app_version": "Versione app:",
+        "db_version": "Version DB:",
+        "sync_version": "Versione Sync:",
+        "data_directory": "Cartella dati:"
+    },
+    "toast": {
+        "critical-error": {
+            "title": "Errore critico",
+            "message": "È avvenuto un errore critico che non permette all'applicazione client di avviarsi:\n\n{{message}}\n\nMolto probabilmente ciò è dovuto ad uno script che ha fallito in modo inaspettato. Prova ad avviare l'applicazione in modalità provvisoria per controllare il problema."
+        },
+        "bundle-error": {
+            "title": "Non si è riusciti a caricare uno script personalizzato"
+        }
+    },
+    "add_link": {
+        "add_link": "Aggiungi un collegamento",
+        "close": "Chiudi",
+        "note": "Nota",
+        "search_note": "cerca una nota per nome",
+        "link_title_mirrors": "il titolo del collegamento seguirà il titolo della nota corrente",
+        "link_title_arbitrary": "il titolo del collegamento può essere modificato arbitrariamente",
+        "link_title": "Titolo del collegamento",
+        "button_add_link": "Aggiungi il collegamento <kbd>invio</kbd>"
+    },
+    "branch_prefix": {
+        "edit_branch_prefix": "Modifica il prefisso del ramo",
+        "help_on_tree_prefix": "Aiuto sui prefissi dell'Albero",
+        "close": "Chiudi",
+        "prefix": "Prefisso: ",
+        "save": "Salva",
+        "branch_prefix_saved": "Il prefisso del ramo è stato salvato."
+    },
+    "bulk_actions": {
+        "bulk_actions": "Azioni massive",
+        "close": "Chiudi",
+        "affected_notes": "Note influenzate"
+    },
+    "clone_to": {
+        "clone_notes_to": "Clona note in...",
+        "close": "Chiudi"
+    },
+    "confirm": {
+        "close": "Chiudi",
+        "cancel": "Annulla",
+        "ok": "OK"
+    },
+    "delete_notes": {
+        "ok": "OK",
+        "close": "Chiudi"
+    },
+    "info": {
+        "okButton": "OK",
+        "closeButton": "Chiudi"
+    },
+    "export": {
+        "close": "Chiudi"
+    },
+    "help": {
+        "close": "Chiudi"
+    },
+    "import": {
+        "close": "Chiudi"
+    },
+    "include_note": {
+        "close": "Chiudi"
+    },
+    "jump_to_note": {
+        "close": "Chiudi"
+    },
+    "markdown_import": {
+        "close": "Chiudi"
+    },
+    "move_to": {
+        "close": "Chiudi"
+    },
+    "note_type_chooser": {
+        "close": "Chiudi"
+    },
+    "password_not_set": {
+        "close": "Chiudi",
+        "body1": "Le note protette sono crittografate utilizzando una password utente, ma la password non è stata ancora impostata.",
+        "body2": "Per proteggere le note, fare clic su <a class=\"open-password-options-button\" href=\"javascript:\">qui</a> per aprire la finestra di dialogo Opzioni e impostare la password."
+    },
+    "protected_session_password": {
+        "close_label": "Chiudi"
+    },
+    "prompt": {
+        "close": "Chiudi"
+    },
+    "recent_changes": {
+        "close": "Chiudi"
+    },
+    "revisions": {
+        "close": "Chiudi"
+    }
+}
