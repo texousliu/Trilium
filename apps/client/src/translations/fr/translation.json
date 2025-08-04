@@ -68,7 +68,7 @@
     "search_for_note_by_its_name": "rechercher une note par son nom",
     "cloned_note_prefix_title": "La note clonée sera affichée dans l'arbre des notes avec le préfixe donné",
     "prefix_optional": "Préfixe (facultatif)",
-    "clone_to_selected_note": "Cloner vers la note sélectionnée <kbd>entrer</kbd>",
+    "clone_to_selected_note": "Cloner vers la note sélectionnée",
     "no_path_to_clone_to": "Aucun chemin vers lequel cloner.",
     "note_cloned": "La note \"{{clonedTitle}}\" a été clonée dans \"{{targetTitle}}\""
   },

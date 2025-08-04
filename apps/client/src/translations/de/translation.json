@@ -68,7 +68,7 @@
     "search_for_note_by_its_name": "Suche nach einer Notiz anhand ihres Namens",
     "cloned_note_prefix_title": "Die geklonte Notiz wird im Notizbaum mit dem angegebenen Präfix angezeigt",
     "prefix_optional": "Präfix (optional)",
-    "clone_to_selected_note": "Auf ausgewählte Notiz klonen <kbd>Eingabe</kbd>",
+    "clone_to_selected_note": "Auf ausgewählte Notiz klonen",
     "no_path_to_clone_to": "Kein Pfad zum Klonen.",
     "note_cloned": "Die Notiz \"{{clonedTitle}}\" wurde in \"{{targetTitle}}\" hinein geklont"
   },

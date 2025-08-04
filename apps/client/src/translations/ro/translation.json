@@ -342,7 +342,7 @@
   },
   "clone_to": {
     "clone_notes_to": "Clonează notițele către...",
-    "clone_to_selected_note": "Clonează notița selectată <kbd>enter</kbd>",
+    "clone_to_selected_note": "Clonează notița selectată",
     "cloned_note_prefix_title": "Notița clonată va fi afișată în ierarhia notiței utilizând prefixul dat",
     "help_on_links": "Informații despre legături",
     "no_path_to_clone_to": "Nicio cale de clonat.",

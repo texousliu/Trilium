@@ -9,6 +9,7 @@ import FormTextBox from "../react/FormTextBox";
 import Modal from "../react/Modal";
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import server from "../../services/server";
+import FormGroup from "../react/FormGroup";
 
 function SortChildNotesDialogComponent({ parentNoteId }: { parentNoteId?: string }) {
     const [ sortBy, setSortBy ] = useState("title");
@@ -75,13 +76,12 @@ function SortChildNotesDialogComponent({ parentNoteId }: { parentNoteId?: string
                 label={t("sort_child_notes.sort_with_respect_to_different_character_sorting")}
                 currentValue={sortNatural} onChange={setSortNatural}
             />
-            <FormTextBox
-                className="form-check"
-                name="sort-locale"
-                label={t("sort_child_notes.natural_sort_language")}
-                description={t("sort_child_notes.the_language_code_for_natural_sort")}
-                currentValue={sortLocale} onChange={setSortLocale}
-            />
+            <FormGroup className="form-check" label={t("sort_child_notes.natural_sort_language")} description={t("sort_child_notes.the_language_code_for_natural_sort")}>
+                <FormTextBox
+                    name="sort-locale"                                        
+                    currentValue={sortLocale} onChange={setSortLocale}
+                />
+            </FormGroup>
         </Modal>
     )
 }

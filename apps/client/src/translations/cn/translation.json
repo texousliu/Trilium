@@ -68,7 +68,7 @@
     "search_for_note_by_its_name": "按名称搜索笔记",
     "cloned_note_prefix_title": "克隆的笔记将在笔记树中显示给定的前缀",
     "prefix_optional": "前缀（可选）",
-    "clone_to_selected_note": "克隆到选定的笔记 <kbd>回车</kbd>",
+    "clone_to_selected_note": "克隆到选定的笔记",
     "no_path_to_clone_to": "没有克隆路径。",
     "note_cloned": "笔记 \"{{clonedTitle}}\" 已克隆到 \"{{targetTitle}}\""
   },

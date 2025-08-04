@@ -68,7 +68,7 @@
     "search_for_note_by_its_name": "search for note by its name",
     "cloned_note_prefix_title": "Cloned note will be shown in note tree with given prefix",
     "prefix_optional": "Prefix (optional)",
-    "clone_to_selected_note": "Clone to selected note <kbd>enter</kbd>",
+    "clone_to_selected_note": "Clone to selected note",
     "no_path_to_clone_to": "No path to clone to.",
     "note_cloned": "Note \"{{clonedTitle}}\" has been cloned into \"{{targetTitle}}\""
   },
