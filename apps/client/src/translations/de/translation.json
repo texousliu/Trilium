@@ -34,7 +34,7 @@
     "link_title_mirrors": "Der Linktitel spiegelt den aktuellen Titel der Notiz wider",
     "link_title_arbitrary": "Der Linktitel kann beliebig geändert werden",
     "link_title": "Linktitel",
-    "button_add_link": "Link hinzufügen <kbd>Eingabetaste</kbd>"
+    "button_add_link": "Link hinzufügen"
   },
   "branch_prefix": {
     "edit_branch_prefix": "Zweigpräfix bearbeiten",

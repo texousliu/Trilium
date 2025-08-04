@@ -37,7 +37,7 @@ export default function Modal({ children, className, size, title, footer, onShow
                 }
             }
         });
-    }
+    }    
 
     const style: CSSProperties = {};
     if (maxWidth) {
@@ -51,7 +51,7 @@ export default function Modal({ children, className, size, title, footer, onShow
                     <div className="modal-header">
                         <h5 className="modal-title">{title}</h5>
                         {helpPageId && (
-                            <button className="help-button" type="button" data-in-app-help={helpPageId} title={t("branch_prefix.help_on_tree_prefix")}>?</button>
+                            <button className="help-button" type="button" data-in-app-help={helpPageId} title={t("modal.help_title")}>?</button>
                         )}
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label={t("modal.close")}></button>
                     </div>

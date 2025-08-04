@@ -34,7 +34,7 @@
     "link_title_mirrors": "link title mirrors the note's current title",
     "link_title_arbitrary": "link title can be changed arbitrarily",
     "link_title": "Link title",
-    "button_add_link": "Add link <kbd>enter</kbd>"
+    "button_add_link": "Add link"
   },
   "branch_prefix": {
     "edit_branch_prefix": "Edit branch prefix",
@@ -2007,6 +2007,7 @@
     "open_externally": "Open externally"
   },
   "modal": {
-    "close": "Close"
+    "close": "Close",
+    "help_title": "Display more information about this screen"
   }
 }

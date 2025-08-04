@@ -3,7 +3,7 @@ import { useRef } from "preact/hooks";
 
 interface ButtonProps {
     /** Reference to the button element. Mostly useful for requesting focus. */
-    buttonRef: RefObject<HTMLButtonElement>;
+    buttonRef?: RefObject<HTMLButtonElement>;
     text: string;
     className?: string;
     keyboardShortcut?: string;
