@@ -5,7 +5,10 @@
         "db_version": "Версия базы данных:",
         "sync_version": "Версия синхронизации:",
         "build_date": "Дата сборки:",
-        "build_revision": "Номер сборки:"
+        "build_revision": "Номер сборки:",
+        "data_directory": "Каталог с данными:",
+        "title": "О Trilium Notes",
+        "homepage": "Домашняя страница:"
     },
     "toast": {
         "critical-error": {
@@ -26,28 +29,54 @@
         "add_link": "Добавить ссылку",
         "close": "Закрыть",
         "note": "Заметка",
-        "link_title": "Заголовок ссылки"
+        "link_title": "Заголовок ссылки",
+        "link_title_arbitrary": "заголовок ссылки может быть изменен произвольно",
+        "button_add_link": "Добавить ссылку <kbd>enter</kbd>",
+        "help_on_links": "Помощь по ссылкам",
+        "search_note": "поиск заметки по ее названию"
     },
     "branch_prefix": {
         "close": "Закрыть",
-        "save": "Сохранить"
+        "save": "Сохранить",
+        "edit_branch_prefix": "Редактировать префикс ветки",
+        "prefix": "Префикс: ",
+        "branch_prefix_saved": "Префикс ветки сохранен.",
+        "help_on_tree_prefix": "Помощь по префиксу дерева"
     },
     "bulk_actions": {
         "available_actions": "Доступные действия",
         "chosen_actions": "Выбранные действия",
         "relations": "Связи",
         "notes": "Заметки",
-        "other": "Прочее"
+        "other": "Прочее",
+        "close": "Закрыть",
+        "affected_notes": "Затронутые заметки",
+        "include_descendants": "Включать потомков выбранных заметок",
+        "execute_bulk_actions": "Выполнить массовые действия",
+        "bulk_actions_executed": "Массовые действия были успешно выполнены.",
+        "labels": "Метки",
+        "bulk_actions": "Массовые действия"
     },
     "confirm": {
         "confirmation": "Подтверждение",
         "close": "Закрыть",
         "cancel": "Отмена",
-        "ok": "ОК"
+        "ok": "ОК",
+        "are_you_sure_remove_note": "Вы уверены, что хотите удалить заметку \"{{title}}\" из карты связей? ",
+        "if_you_dont_check": "Если вы не отметите этот флажок, заметка будет удалена только из карты связей.",
+        "also_delete_note": "Также удалить заметку"
     },
     "delete_notes": {
         "close": "Закрыть",
-        "erase_notes_description": "Обычное (мягкое) удаление только отмечает заметки как удалённые, и их можно восстановить (в диалоговом окне последних изменений) в течение определённого времени. Если выбрать этот параметр, заметки будут удалены немедленно, и восстановить их будет невозможно."
+        "erase_notes_description": "Обычное (мягкое) удаление только отмечает заметки как удалённые, и их можно восстановить (в диалоговом окне последних изменений) в течение определённого времени. Если выбрать этот параметр, заметки будут удалены немедленно, и восстановить их будет невозможно.",
+        "delete_all_clones_description": "Удалить также все клоны (можно отменить в последних изменениях)",
+        "erase_notes_warning": "Удалить заметки без возможности восстановления, включая все клоны. Это приведёт к принудительной перезагрузке приложения.",
+        "notes_to_be_deleted": "Следующие заметки будут удалены ({{- noteCount}})",
+        "no_note_to_delete": "Заметка не будет удалена (только клоны).",
+        "broken_relations_to_be_deleted": "Следующие связи будут разорваны и удалены ({{- relationCount}})",
+        "cancel": "Отмена",
+        "ok": "ОК",
+        "deleted_relation_text": "Примечание {{- note}} (подлежит удалению) ссылается на отношение {{- relation}}, происходящее из {{- source}}."
     },
     "database_anonymization": {
         "light_anonymization_description": "Это действие создаст новую копию базы данных и выполнит её лёгкую анонимизацию — в частности, будет удалён только контент всех заметок, но заголовки и атрибуты останутся. Кроме того, будут сохранены пользовательские заметки, содержащие JavaScript-скрипты frontend/backend и пользовательские виджеты. Это даёт больше контекста для отладки проблем.",
@@ -55,12 +84,798 @@
         "full_anonymization_description": "Это действие создаст новую копию базы данных и анонимизирует ее (удалит все содержимое заметок и оставит только структуру и некоторые неконфиденциальные метаданные) для совместного использования в Интернете в целях отладки без опасения утечки ваших личных данных."
     },
     "revisions_snapshot_limit": {
-        "note_revisions_snapshot_limit_description": "Ограничение на количество снимков ревизий заметки определяет максимальное количество ревизий, которые можно сохранить для каждой заметки. Значение -1 означает отсутствие ограничений, а 0 означает удаление всех ревизий. Максимальное количество ревизий для одной заметки можно задать с помощью метки #versioningLimit."
+        "note_revisions_snapshot_limit_description": "Ограничение на количество снимков ревизий заметки определяет максимальное количество ревизий, которые можно сохранить для каждой заметки. Значение -1 означает отсутствие ограничений, а 0 означает удаление всех ревизий. Максимальное количество ревизий для одной заметки можно задать с помощью метки #versioningLimit.",
+        "snapshot_number_limit_unit": "снимков"
     },
     "password": {
-        "alert_message": "Пожалуйста, запомните новый пароль. Пароль используется для входа в веб-интерфейс и шифрования защищённых заметок. Если вы забудете пароль, все ваши защищённые заметки будут потеряны навсегда."
+        "alert_message": "Пожалуйста, запомните новый пароль. Пароль используется для входа в веб-интерфейс и шифрования защищённых заметок. Если вы забудете пароль, все ваши защищённые заметки будут потеряны навсегда.",
+        "heading": "Пароль",
+        "wiki": "вики"
     },
     "content_language": {
-        "description": "Выберите один или несколько языков, которые должны отображаться в разделе «Основные свойства» текстовой заметки, доступной только для чтения или редактируемой. Это позволит реализовать такие функции, как проверка орфографии и поддержка письма справа налево."
+        "description": "Выберите один или несколько языков, которые должны отображаться в разделе «Основные свойства» текстовой заметки, доступной только для чтения или редактируемой. Это позволит реализовать такие функции, как проверка орфографии и поддержка письма справа налево.",
+        "title": "Языки контента"
+    },
+    "theme": {
+        "theme_label": "Тема",
+        "override_theme_fonts_label": "Переопределить шрифты темы",
+        "auto_theme": "Авто",
+        "light_theme": "Светлая",
+        "dark_theme": "Темная",
+        "triliumnext": "TriliumNext Beta (следует системной цветовой схеме)",
+        "triliumnext-light": "TriliumNext Beta (Светлая)",
+        "triliumnext-dark": "TriliumNext Beta (Темная)"
+    },
+    "tasks": {
+        "due": {
+            "today": "Сегодня",
+            "tomorrow": "Завтра",
+            "yesterday": "Вчера"
+        }
+    },
+    "sql_table_schemas": {
+        "tables": "Таблицы"
+    },
+    "tab_row": {
+        "close_tab": "Закрыть вкладку",
+        "close": "Закрыть",
+        "new_tab": "Новая вкладка",
+        "copy_tab_to_new_window": "Копировать вкладку в новое окно",
+        "move_tab_to_new_window": "Переместить вкладку в новое окно",
+        "reopen_last_tab": "Повторно открыть последнюю закрытую вкладку",
+        "close_all_tabs": "Закрыть все вкладки",
+        "close_other_tabs": "Закрыть остальные вкладки"
+    },
+    "table_view": {
+        "new-row": "Новая строка",
+        "new-column": "Новый столбец",
+        "sort-column-by": "Сортировать по \"{{title}}\"",
+        "sort-column-ascending": "По возрастанию",
+        "sort-column-descending": "По убыванию",
+        "sort-column-clear": "Сбросить сортировку",
+        "hide-column": "Скрыть столбец \"{{title}}\"",
+        "show-hide-columns": "Показать/скрыть столбцы",
+        "new-column-label": "Метка",
+        "delete-column": "Удалить столбец",
+        "delete_column_confirmation": "Вы уверены, что хотите удалить этот столбец? Соответствующий атрибут будет удалён из всех заметок.",
+        "edit-column": "Изменить столбец",
+        "add-column-to-the-right": "Добавить столбец справа",
+        "add-column-to-the-left": "Добавить столбец слева",
+        "row-insert-child": "Создать дочернюю заметку",
+        "row-insert-below": "Добавить строку ниже",
+        "row-insert-above": "Добавить строку выше",
+        "new-column-relation": "Связь"
+    },
+    "add_label": {
+        "add_label": "Добавить метку",
+        "label_name_placeholder": "название метки",
+        "label_name_title": "Разрешены буквенно-цифровые символы, подчеркивание и двоеточие.",
+        "new_value_placeholder": "новое значение"
+    },
+    "delete_label": {
+        "delete_label": "Удалить метку",
+        "label_name_placeholder": "название метки",
+        "label_name_title": "Разрешены буквенно-цифровые символы, подчеркивание и двоеточие."
+    },
+    "rename_label": {
+        "rename_label": "Переименовать метку",
+        "old_name_placeholder": "старое наименование",
+        "new_name_placeholder": "новое наименование",
+        "name_title": "Разрешены буквенно-цифровые символы, подчеркивание и двоеточие.",
+        "to": "В"
+    },
+    "clone_to": {
+        "clone_notes_to": "Клонировать заметки в...",
+        "close": "Закрыть",
+        "notes_to_clone": "Заметки для клонирования",
+        "target_parent_note": "Целевая родительская заметка",
+        "search_for_note_by_its_name": "поиск заметки по ее названию",
+        "cloned_note_prefix_title": "Клонированная заметка будет отображаться в дереве заметок с заданным префиксом",
+        "prefix_optional": "Префикс (необязательно)",
+        "no_path_to_clone_to": "Не задан путь для клонирования.",
+        "note_cloned": "Заметка \"{{clonedTitle}}\" клонирована в \"{{targetTitle}}\"",
+        "help_on_links": "Помощь по ссылкам"
+    },
+    "export": {
+        "export_note_title": "Экспортировать заметку",
+        "close": "Закрыть",
+        "export_type_subtree": "Эта заметка и все ее потомки",
+        "format_html": "HTML - рекомендуется, так как сохраняет все форматирование",
+        "format_html_zip": "HTML в ZIP-архиве — рекомендуется, так как в этом случае сохраняется все форматирование.",
+        "format_markdown": "Markdown - сохраняет большую часть форматирования.",
+        "format_opml": "OPML - формат обмена данными между планировщиками, предназначенный только для текста. Форматирование, изображения и файлы не включены.",
+        "opml_version_1": "OPML v1.0 - только простой текст",
+        "opml_version_2": "OPML v2.0 - также поддерживает HTML",
+        "export_type_single": "Только эта заметка без ее потомков",
+        "export": "Экспорт",
+        "choose_export_type": "Сначала выберите тип экспорта",
+        "export_status": "Статус экспорта",
+        "export_in_progress": "Экспорт: {{progressCount}}",
+        "export_finished_successfully": "Экспорт завершился успешно.",
+        "format_pdf": "PDF - для печати или обмена."
+    },
+    "help": {
+        "fullDocumentation": "Помощь (полная документация доступна <a class=\"external\" href=\"https://triliumnext.github.io/Docs/\">онлайн</a>)",
+        "close": "Закрыть",
+        "noteNavigation": "Навигация по заметке",
+        "goUpDown": "<kbd>UP</kbd>, <kbd>DOWN</kbd> - вверх/вниз в списке заметок",
+        "collapseExpand": "<kbd> LEFT</kbd>, <kbd>RIGHT</kbd> - свернуть/развернуть узел",
+        "notSet": "не установлено",
+        "goBackForwards": "назад / вперед в истории",
+        "showJumpToNoteDialog": "показать <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">окно \"Перейти к\"</a>",
+        "scrollToActiveNote": "прокрутка к активной заметке",
+        "jumpToParentNote": "<kbd>Backspace</kbd> - переход к родительской заметке",
+        "collapseWholeTree": "свернуть все дерево заметок",
+        "collapseSubTree": "свернуть поддерево",
+        "openEmptyTab": "открыть пустую вкладку",
+        "closeActiveTab": "закрыть активную вкладку",
+        "activateNextTab": "активировать следующую вкладку",
+        "activatePreviousTab": "активировать предыдущую вкладку",
+        "creatingNotes": "Создание заметок",
+        "selectAllNotes": "выбрать все заметки на текущем уровне",
+        "cutNotes": "вырезать текущую заметку (или текущее выделение) в буфер обмена (используется для перемещения заметок)",
+        "pasteNotes": "вставить заметку(и) как подзаметку в активную заметку (которая либо перемещается, либо клонируется в зависимости от того, была ли она скопирована или вырезана в буфер обмена)",
+        "deleteNotes": "удалить заметку / поддерево",
+        "createInternalLink": "создать внутреннюю ссылку",
+        "followLink": "перейти по ссылке под курсором",
+        "insertDateTime": "вставить текущую дату и время в позицию курсора",
+        "jumpToTreePane": "перейти к панели дерева и прокрутить до активной заметки",
+        "markdownAutoformat": "Автоформатирование в стиле Markdown",
+        "troubleshooting": "Поиск и решение неисправностей",
+        "reloadFrontend": "перезагрузить интерфейс Trilium",
+        "showDevTools": "показать инструменты разработчика",
+        "showSQLConsole": "показать консоль SQL",
+        "inPageSearch": "поиск на странице",
+        "editingNotes": "Редактирование заметок"
+    },
+    "modal": {
+        "close": "Закрыть"
+    },
+    "import": {
+        "importIntoNote": "Импортировать в заметку",
+        "chooseImportFile": "Выберите файл импорта",
+        "safeImport": "Безопасный импорт",
+        "shrinkImages": "Уменьшить изображения",
+        "textImportedAsText": "Импортировать HTML, Markdown и TXT как текстовые заметки, если из метаданные не позволяют определить тип заметки",
+        "replaceUnderscoresWithSpaces": "Заменить подчеркивания пробелами в названиях импортированных заметок",
+        "import": "Импорт",
+        "failed": "Сбой при импорте: {{message}}.",
+        "html_import_tags": {
+            "description": "Настройте HTML-теги, которые следует сохранять при импорте заметок. Теги, не указанные в этом списке, будут удалены при импорте. Некоторые теги (например, 'script') всегда удаляются в целях безопасности.",
+            "placeholder": "Введите HTML-теги, по одному в каждой строке"
+        },
+        "import-status": "Статус импорта",
+        "in-progress": "Импорт в процессе: {{progress}}",
+        "successful": "Импорт успешно завершен."
+    },
+    "markdown_import": {
+        "dialog_title": "Импорт Markdown",
+        "modal_body_text": "Из-за особенностей браузера песочница не позволяет напрямую читать буфер обмена из JavaScript. Вставьте разметку Markdown для импорта в текстовую область ниже и нажмите кнопку «Импорт»",
+        "close": "Закрыть",
+        "import_button": "Импорт Ctrl+Enter"
+    },
+    "note_type_chooser": {
+        "modal_title": "Выберите тип заметки",
+        "modal_body": "Выберите тип / шаблон новой заметки:",
+        "templates": "Шаблоны:",
+        "close": "Закрыть"
+    },
+    "password_not_set": {
+        "title": "Пароль не установлен",
+        "close": "Закрыть"
+    },
+    "protected_session_password": {
+        "modal_title": "Защищенный сеанс",
+        "form_label": "Чтобы продолжить, вам необходимо начать защищенный сеанс, введя пароль:",
+        "start_button": "Начать защищенный сеанс <kbd>enter</kbd>",
+        "close_label": "Закрыть"
+    },
+    "recent_changes": {
+        "title": "Последние изменения",
+        "erase_notes_button": "Удалить заметки, помеченные на удаление сейчас",
+        "undelete_link": "восстановить",
+        "close": "Закрыть"
+    },
+    "revisions": {
+        "restore_button": "Восстановить",
+        "delete_button": "Удалить",
+        "note_revisions": "Версии заметки",
+        "delete_all_revisions": "Удалить все версии этой заметки",
+        "delete_all_button": "Удалить все версии",
+        "help_title": "Помощь по версиям заметок",
+        "close": "Закрыть",
+        "confirm_delete_all": "Вы хотите удалить все версии этой заметки?",
+        "revision_last_edited": "Эта версия последний раз редактировалась {{date}}",
+        "confirm_restore": "Хотите восстановить эту версию? Текущее название и содержание заметки будут перезаписаны этой версией.",
+        "confirm_delete": "Вы хотите удалить эту версию?",
+        "revisions_deleted": "Версии заметки были удалены.",
+        "revision_restored": "Версия заметки была восстановлена.",
+        "revision_deleted": "Версия заметки были удалены.",
+        "download_button": "Скачать",
+        "file_size": "Размер файла:",
+        "preview": "Предпросмотр:",
+        "preview_not_available": "Предпосмотр недоступен для заметки этого типа.",
+        "mime": "MIME: "
+    },
+    "sort_child_notes": {
+        "sort_children_by": "Сортировать дочерние заметки по...",
+        "close": "Закрыть",
+        "sorting_criteria": "Критерии сортировки",
+        "title": "наименованию",
+        "date_created": "дате создания",
+        "date_modified": "дате изменения",
+        "sorting_direction": "Направление сортировки",
+        "ascending": "по возрастанию",
+        "descending": "по убыванию",
+        "sort_with_respect_to_different_character_sorting": "Сортировка с учетом различных правил сортировки и сопоставления символов в разных языках и регионах.",
+        "folders": "Папки",
+        "sort": "Сортировать <kbd>enter</kbd>"
+    },
+    "upload_attachments": {
+        "upload_attachments_to_note": "Загрузить вложения к заметке",
+        "close": "Закрыть",
+        "choose_files": "Выберите файлы",
+        "files_will_be_uploaded": "Файлы будут загружены как приложения в",
+        "options": "Параметры",
+        "shrink_images": "Сжать изображения",
+        "tooltip": "Если этот параметр включен, Trilium попытается уменьшить размер загружаемых изображений путём масштабирования и оптимизации, что может повлиять на воспринимаемое качество изображения. Если этот параметр не включен, изображения будут загружаться без изменений.",
+        "upload": "Загрузить"
+    },
+    "attribute_detail": {
+        "close_button_title": "Отменить изменения и закрыть",
+        "name": "Наименование",
+        "value": "Значение",
+        "promoted_alias": "Псевдоним",
+        "multiplicity": "Множественность",
+        "label_type": "Тип",
+        "text": "Текст",
+        "number": "Число",
+        "boolean": "Булево",
+        "date": "Дата",
+        "time": "Время",
+        "url": "URL",
+        "precision": "Точность",
+        "digits": "цифры",
+        "inheritable": "Наследуемый",
+        "delete": "Удалить",
+        "color_type": "Цвет",
+        "target_note": "Целевая заметка",
+        "single_value": "Одно значение",
+        "multi_value": "Много значений",
+        "inverse_relation": "Обратное отношение",
+        "more_notes": "Больше заметок"
+    },
+    "command_palette": {
+        "configure_launch_bar_description": "Откройте конфигурацию панели запуска, чтобы добавить или удалить элементы.",
+        "configure_launch_bar_title": "Настроить панель запуска",
+        "search_history_description": "Просмотреть предыдущие поиски",
+        "search_history_title": "Показать историю поиска",
+        "search_subtree_description": "Поиск в текущем поддереве",
+        "search_subtree_title": "Поиск в поддереве",
+        "search_notes_description": "Открыть расширенный поиск",
+        "search_notes_title": "Поиск заметок",
+        "show_attachments_description": "Просмотреть вложения к заметкам",
+        "show_attachments_title": "Показать вложения",
+        "export_note_description": "Экспортировать текущую заметку",
+        "export_note_title": "Экспортировать заметку",
+        "tree-action-name": "Дерево: {{name}}"
+    },
+    "board_view": {
+        "add-column": "Добавить столбец",
+        "new-item": "Добавить",
+        "delete-column-confirmation": "Вы уверены, что хотите удалить этот столбец? Соответствующий атрибут также будет удалён из заметок этого столбца.",
+        "delete-column": "Удалить столбец",
+        "insert-below": "Вставить ниже",
+        "insert-above": "Вставить выше",
+        "move-to": "Переместить",
+        "delete-note": "Удалить заметку"
+    },
+    "table_context_menu": {
+        "delete_row": "Удалить строку"
+    },
+    "book_properties_config": {
+        "vector_dark": "Vector (Темная)",
+        "vector_light": "Vector (Светлая)",
+        "max-nesting-depth": "Максимальная глубина вложенности:",
+        "map-style": "Стиль карты:",
+        "display-week-numbers": "Отображать номера недель",
+        "hide-weekends": "Скрыть выходные",
+        "raster": "Растр",
+        "show-scale": "Показать масштаб"
+    },
+    "editorfeatures": {
+        "note_completion_enabled": "Включить автодополнение",
+        "emoji_completion_enabled": "Включить автодополнение эмодзи",
+        "title": "Особенности"
+    },
+    "cpu_arch_warning": {
+        "dont_show_again": "Больше не показывать это предупреждение",
+        "continue_anyway": "Продолжить в любом случае",
+        "download_link": "Загрузить нативную версию",
+        "recommendation": "Для наилучшего использования загрузите версию TriliumNext для ARM64 с нашей страницы релизов.",
+        "message_windows": "TriliumNext в настоящее время работает в режиме эмуляции, что означает, что вы используете версию Intel (x64) на устройстве Windows on ARM. Это существенно повлияет на производительность и время автономной работы.",
+        "message_macos": "TriliumNext в настоящее время работает под управлением Rosetta 2, что означает, что вы используете версию Intel (x64) на Apple Silicon Mac. Это существенно повлияет на производительность и время автономной работы.",
+        "title": "Пожалуйста, загрузите версию ARM64"
+    },
+    "code_theme": {
+        "color-scheme": "Цветовая схема",
+        "word_wrapping": "Перенос слов",
+        "title": "Внешний вид"
+    },
+    "svg": {
+        "export_to_png": "Диаграмму не может быть экспортирована в PNG."
+    },
+    "png_export_button": {
+        "button_title": "Экспортировать диаграмму как PNG"
+    },
+    "toggle_read_only_button": {
+        "unlock-editing": "Разблокировать редактирование",
+        "lock-editing": "Заблокировать редактирование"
+    },
+    "switch_layout_button": {
+        "title_horizontal": "Переместить панель редактирования влево",
+        "title_vertical": "Переместить панель редактирования вниз"
+    },
+    "note_language": {
+        "configure-languages": "Настроить языки...",
+        "not_set": "Не установлен"
+    },
+    "time_selector": {
+        "invalid_input": "Введенное значение времени не является допустимым числом."
+    },
+    "share": {
+        "share_root_not_found": "Заметка с меткой #shareRoot не найдена"
+    },
+    "duration": {
+        "days": "Дни",
+        "hours": "Часы",
+        "minutes": "Минуты",
+        "seconds": "Секунды"
+    },
+    "geo-map-context": {
+        "add-note": "Добавить маркер в этом месте",
+        "remove-from-map": "Удалить с карты",
+        "open-location": "Открыть местоположение"
+    },
+    "geo-map": {
+        "unable-to-load-map": "Не удалось загрузить карту."
+    },
+    "note_tooltip": {
+        "quick-edit": "Быстрое редактирование",
+        "note-has-been-deleted": "Заметка удалена."
+    },
+    "note_autocomplete": {
+        "full-text-search": "Полнотекстовый поиск",
+        "show-recent-notes": "Показать последние заметки"
+    },
+    "electron_integration": {
+        "zoom-factor": "Коэффициент масштабирования",
+        "restart-app-button": "Перезапустите приложение, чтобы увидеть изменения",
+        "background-effects-description": "Эффект Mica добавляет размытый, стильный фон окнам приложений, создавая глубину и современный вид.",
+        "background-effects": "Включить фоновые эффекты (только Windows 11)",
+        "native-title-bar-description": "В Windows и macOS отключение нативной строки заголовка делает приложение более компактным. В Linux включение нативной строки заголовка улучшает интеграцию с остальной частью системы."
+    },
+    "link_context_menu": {
+        "open_note_in_popup": "Быстрое редактирование",
+        "open_note_in_new_window": "Открыть заметку в новом окне"
+    },
+    "image_context_menu": {
+        "copy_image_to_clipboard": "Копировать изображение в буфер обмена"
+    },
+    "electron_context_menu": {
+        "paste-as-plain-text": "Вставить как обычный текст",
+        "paste": "Вставить",
+        "copy-link": "Скопировать ссылку",
+        "copy": "Скопировать",
+        "cut": "Вырезать"
+    },
+    "editing": {
+        "editor_type": {
+            "fixed": {
+                "title": "Закрепленный"
+            },
+            "floating": {
+                "title": "Плавающий"
+            }
+        }
+    },
+    "editor": {
+        "title": "Редактор"
+    },
+    "classic_editor_toolbar": {
+        "title": "Форматирование"
+    },
+    "code_block": {
+        "copy_title": "Копировать в буфер обмена",
+        "theme_group_dark": "Темныце темы",
+        "theme_group_light": "Светлые темы",
+        "theme_none": "Нет подсветки синтаксиса",
+        "word_wrapping": "Перенос слов"
+    },
+    "highlighting": {
+        "color-scheme": "Цветовая схема",
+        "title": "Блоки кода"
+    },
+    "editable-text": {
+        "auto-detect-language": "Определен автоматически"
+    },
+    "launcher_context_menu": {
+        "reset": "Сбросить",
+        "add-spacer": "Добавить разделитель",
+        "add-custom-widget": "Добавить пользовательский виджет"
+    },
+    "toc": {
+        "table_of_contents": "Содержание",
+        "options": "Параметры"
+    },
+    "note_tree": {
+        "hide-archived-notes": "Скрыть архивные заметки",
+        "automatically-collapse-notes": "Автоматически сворачивать заметки",
+        "tree-settings-title": "Настройки дерева",
+        "unhoist": "Открепить"
+    },
+    "quick-search": {
+        "no-results": "Результаты не найдены",
+        "placeholder": "Быстрый поиск",
+        "searching": "Поиск..."
+    },
+    "find": {
+        "replace_all": "Заменить все",
+        "replace": "Заменить",
+        "replace_placeholder": "Заменить на...",
+        "find_placeholder": "Поиск в тексте...",
+        "case_sensitive": "С учетом регистра"
+    },
+    "template_switch": {
+        "template": "Шаблон"
+    },
+    "note_types": {
+        "collections": "Коллекции",
+        "new-feature": "Новое",
+        "beta-feature": "Бета",
+        "widget": "Виджет",
+        "image": "Изображение",
+        "file": "Файд",
+        "canvas": "Холст",
+        "mermaid-diagram": "Диаграмма Mermaid",
+        "book": "Коллекция",
+        "saved-search": "Сохраненный поиск",
+        "code": "Код",
+        "text": "Текст",
+        "launcher": "Лаунчер",
+        "doc": "Документация"
+    },
+    "tree-context-menu": {
+        "open-in-popup": "Быстрое редактирование",
+        "delete": "Удалить",
+        "advanced": "Расширенное",
+        "cut": "Вырезать",
+        "duplicate": "Создать дубликат",
+        "export": "Экспорт"
+    },
+    "info": {
+        "closeButton": "Закрыть",
+        "okButton": "ОК",
+        "modalTitle": "Информация"
+    },
+    "jump_to_note": {
+        "close": "Закрыть"
+    },
+    "move_to": {
+        "close": "Закрыть"
+    },
+    "prompt": {
+        "title": "Запрос",
+        "close": "Закрыть",
+        "defaultTitle": "Запрос",
+        "ok": "OK <kbd>enter</kbd>"
+    },
+    "move_note": {
+        "to": "в",
+        "move_note": "Переместить заметку"
+    },
+    "add_relation": {
+        "to": "в",
+        "add_relation": "Добавить отношение",
+        "relation_name": "название отношения",
+        "target_note": "целевая заметка"
+    },
+    "rename_relation": {
+        "to": "В",
+        "rename_relation": "Переименовать отношение",
+        "old_name": "старое наименование",
+        "new_name": "новое наименование"
+    },
+    "update_relation_target": {
+        "to": "в",
+        "update_relation": "Обновить отношение",
+        "relation_name": "название отношения",
+        "target_note": "целевая заметка"
+    },
+    "attachments_actions": {
+        "download": "Скачать",
+        "open_externally": "Открыть внешними средствами",
+        "rename_attachment": "Переименовать вложение",
+        "delete_attachment": "Удалить вложение"
+    },
+    "calendar": {
+        "mon": "Пн",
+        "tue": "Вт",
+        "wed": "Ср",
+        "thu": "Чт",
+        "fri": "Пт",
+        "sat": "Сбт",
+        "sun": "Вс",
+        "january": "Январь",
+        "febuary": "Февраль",
+        "march": "Март",
+        "april": "Апрель",
+        "may": "Май",
+        "june": "Июнь",
+        "july": "Июль",
+        "august": "Август",
+        "september": "Сентябрь",
+        "october": "Октябрь",
+        "november": "Ноябрь",
+        "december": "Декабрь"
+    },
+    "global_menu": {
+        "menu": "Меню",
+        "options": "Параметры",
+        "zoom": "Масштаб",
+        "advanced": "Расширенное",
+        "logout": "Выход",
+        "toggle_fullscreen": "На весь экран",
+        "zoom_out": "Уменьшить масштаб",
+        "zoom_in": "Увеличить масштаб",
+        "configure_launchbar": "Настроить панель запуска",
+        "reload_frontend": "Перезагрузить интерфейс",
+        "show_help": "Показать справку",
+        "show-cheatsheet": "Быстрая справка",
+        "toggle-zen-mode": "Режим дзен"
+    },
+    "zpetne_odkazy": {
+        "relation": "",
+        "backlink": "{{count}} ссылки",
+        "backlinks": "{{count}} ссылок"
+    },
+    "note_icon": {
+        "category": "Категория:",
+        "search": "Поиск:"
+    },
+    "basic_properties": {
+        "editable": "Изменяемое",
+        "language": "Язык",
+        "note_type": "Тип",
+        "basic_properties": "Основные свойства"
+    },
+    "book_properties": {
+        "grid": "Сетка",
+        "list": "Список",
+        "collapse": "Свернуть",
+        "expand": "Развернуть",
+        "calendar": "Календарь",
+        "table": "Таблица",
+        "board": "Доска",
+        "view_type": "Вид",
+        "book_properties": "Свойства коллекции",
+        "geo-map": "Карта"
+    },
+    "edited_notes": {
+        "deleted": "(удалено)"
+    },
+    "file_properties": {
+        "download": "Скачать",
+        "open": "Открыть",
+        "title": "Файд"
+    },
+    "image_properties": {
+        "download": "Скачать",
+        "open": "Открыть",
+        "title": "Изображение"
+    },
+    "note_info_widget": {
+        "created": "Создано",
+        "modified": "Изменено",
+        "type": "Тип"
+    },
+    "note_paths": {
+        "search": "Поиск"
+    },
+    "note_properties": {
+        "info": "Информация"
+    },
+    "promoted_attributes": {
+        "url_placeholder": "http://website..."
+    },
+    "script_executor": {
+        "query": "Запрос"
+    },
+    "search_definition": {
+        "limit": "предел"
+    },
+    "ancestor": {
+        "depth_label": "глубина"
+    },
+    "debug": {
+        "debug": "Отладка"
+    },
+    "limit": {
+        "limit": "Предел"
+    },
+    "order_by": {
+        "title": "Названию",
+        "desc": "По убыванию"
+    },
+    "search_string": {
+        "search_prefix": "Поиск:"
+    },
+    "backend_log": {
+        "refresh": "Обновить"
+    },
+    "sync": {
+        "title": "Синхронизация"
+    },
+    "fonts": {
+        "fonts": "Шрифты",
+        "size": "Размер",
+        "serif": "С засечками",
+        "monospace": "Моноширинный"
+    },
+    "max_content_width": {
+        "max_width_unit": "пикселей"
+    },
+    "native_title_bar": {
+        "enabled": "включено",
+        "disabled": "выключено"
+    },
+    "ai_llm": {
+        "progress": "Прогресс",
+        "openai_tab": "OpenAI",
+        "anthropic_tab": "Anthropic",
+        "ollama_tab": "Ollama",
+        "temperature": "Температура",
+        "model": "Модель",
+        "refreshing_models": "Обновление...",
+        "error": "Ошибка",
+        "actions": "Действия",
+        "retry": "Повторить",
+        "never": "Никогда",
+        "refreshing": "Обновление...",
+        "agent": {
+            "processing": "Обработка...",
+            "thinking": "Думаю...",
+            "loading": "Загрузка...",
+            "generating": "Создание..."
+        },
+        "name": "AI",
+        "openai": "OpenAI",
+        "sources": "Источники"
+    },
+    "code-editor-options": {
+        "title": "Редактор"
+    },
+    "images": {
+        "images_section_title": "Изображения",
+        "max_image_dimensions_unit": "пикселей"
+    },
+    "search_engine": {
+        "bing": "Bing",
+        "baidu": "Baidu",
+        "duckduckgo": "DuckDuckGo",
+        "google": "Google",
+        "save_button": "Сохранить"
+    },
+    "heading_style": {
+        "plain": "Обычный",
+        "underline": "Подчеркнутый",
+        "markdown": "В стиле Markdown"
+    },
+    "table_of_contents": {
+        "unit": "заголовки"
+    },
+    "text_auto_read_only_size": {
+        "unit": "символов"
+    },
+    "i18n": {
+        "title": "Локализация",
+        "language": "Язык",
+        "sunday": "Воскресенье",
+        "monday": "Понедельник"
+    },
+    "backup": {
+        "path": "Путь"
+    },
+    "etapi": {
+        "title": "ETAPI",
+        "wiki": "вики",
+        "created": "Создано",
+        "actions": "Действия"
+    },
+    "multi_factor_authentication": {
+        "oauth_title": "OAuth/OpenID"
+    },
+    "shortcuts": {
+        "shortcuts": "Сочетания клавиш",
+        "description": "Описание"
+    },
+    "sync_2": {
+        "timeout_unit": "миллисекунд",
+        "note": "Заметка",
+        "save": "Сохранить",
+        "help": "Помощь"
+    },
+    "api_log": {
+        "close": "Закрыть"
+    },
+    "bookmark_switch": {
+        "bookmark": "Закладка"
+    },
+    "editability_select": {
+        "auto": "Авто",
+        "read_only": "Только для чтения"
+    },
+    "shared_switch": {
+        "shared": "Общий доступ"
+    },
+    "highlights_list_2": {
+        "options": "Параметры"
+    },
+    "include_note": {
+        "dialog_title": "Вставить заметку"
+    },
+    "execute_script": {
+        "execute_script": "Выполнить скрипт"
+    },
+    "update_label_value": {
+        "label_name_placeholder": "название метки",
+        "new_value_placeholder": "новое значение"
+    },
+    "delete_note": {
+        "delete_note": "Удалить заметку"
+    },
+    "rename_note": {
+        "rename_note": "Переименовать заметку"
+    },
+    "delete_relation": {
+        "delete_relation": "Удалить отношение",
+        "relation_name": "название отношения"
+    },
+    "left_pane_toggle": {
+        "show_panel": "Показать панель",
+        "hide_panel": "Скрыть панель"
+    },
+    "move_pane_button": {
+        "move_left": "Переместить влево",
+        "move_right": "Переместить вправо"
+    },
+    "note_actions": {
+        "re_render_note": "Перерендерить заметку",
+        "note_source": "Источник заметки",
+        "note_attachments": "Вложения заметки",
+        "import_files": "Импорт файлов",
+        "export_note": "Экспортировать заметку",
+        "delete_note": "Удалить заметку",
+        "print_note": "Печать заметки",
+        "save_revision": "Сохранить версию"
+    },
+    "revisions_button": {
+        "note_revisions": "Версии заметки"
+    },
+    "update_available": {
+        "update_available": "Доступно обновление"
+    },
+    "code_buttons": {
+        "execute_button_title": "Выполнить скрипт"
+    },
+    "hide_floating_buttons_button": {
+        "button_title": "Скрыть кнопки"
+    },
+    "show_floating_buttons_button": {
+        "button_title": "Показать кнопки"
+    },
+    "relation_map_buttons": {
+        "zoom_in_title": "Увеличить масштаб",
+        "zoom_out_title": "Уменьшить масштаб"
     }
 }
