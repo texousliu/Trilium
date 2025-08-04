@@ -231,7 +231,7 @@
     "help_title": "關於保護筆記的幫助",
     "close_label": "關閉",
     "form_label": "輸入密碼進入保護會話以繼續：",
-    "start_button": "開始保護會話 <kbd>Enter</kbd>"
+    "start_button": "開始保護會話"
   },
   "recent_changes": {
     "title": "最近修改",

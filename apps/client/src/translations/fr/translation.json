@@ -253,7 +253,7 @@
     "help_title": "Aide sur les notes protégées",
     "close_label": "Fermer",
     "form_label": "Pour procéder à l'action demandée, vous devez démarrer une session protégée en saisissant le mot de passe :",
-    "start_button": "Démarrer une session protégée <kbd>entrer</kbd>"
+    "start_button": "Démarrer une session protégée"
   },
   "recent_changes": {
     "title": "Modifications récentes",

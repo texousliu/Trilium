@@ -257,7 +257,7 @@
     "help_title": "Help on Protected notes",
     "close_label": "Close",
     "form_label": "To proceed with requested action you need to start protected session by entering password:",
-    "start_button": "Start protected session <kbd>enter</kbd>"
+    "start_button": "Start protected session"
   },
   "recent_changes": {
     "title": "Recent changes",

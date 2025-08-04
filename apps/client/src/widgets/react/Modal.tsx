@@ -6,7 +6,7 @@ import type { CSSProperties } from "preact/compat";
 interface ModalProps {
     className: string;
     title: string | ComponentChildren;
-    size: "lg" | "sm";
+    size: "lg" | "md" | "sm";
     children: ComponentChildren;
     footer?: ComponentChildren;
     maxWidth?: number;

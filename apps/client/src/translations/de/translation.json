@@ -253,7 +253,7 @@
     "help_title": "Hilfe zu geschützten Notizen",
     "close_label": "Schließen",
     "form_label": "Um mit der angeforderten Aktion fortzufahren, musst du eine geschützte Sitzung starten, indem du ein Passwort eingibst:",
-    "start_button": "Geschützte Sitzung starten <kbd>enter</kbd>"
+    "start_button": "Geschützte Sitzung starten"
   },
   "recent_changes": {
     "title": "Aktuelle Änderungen",

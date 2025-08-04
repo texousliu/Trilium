@@ -256,7 +256,7 @@
     "help_title": "Ayuda sobre notas protegidas",
     "close_label": "Cerrar",
     "form_label": "Para continuar con la acción solicitada, debe iniciar en la sesión protegida ingresando la contraseña:",
-    "start_button": "Iniciar sesión protegida <kbd>entrar</kbd>"
+    "start_button": "Iniciar sesión protegida"
   },
   "recent_changes": {
     "title": "Cambios recientes",

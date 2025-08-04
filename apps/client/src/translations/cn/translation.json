@@ -253,7 +253,7 @@
     "help_title": "关于保护笔记的帮助",
     "close_label": "关闭",
     "form_label": "输入密码进入保护会话以继续：",
-    "start_button": "开始保护会话 <kbd>回车</kbd>"
+    "start_button": "开始保护会话"
   },
   "recent_changes": {
     "title": "最近修改",

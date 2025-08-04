@@ -257,7 +257,7 @@
     "help_title": "Pomoć za Zaštićene beleške",
     "close_label": "Zatvori",
     "form_label": "Da biste nastavili sa traženom akcijom moraćete započeti zaštićenu sesiju tako što ćete uneti lozinku:",
-    "start_button": "Započni zaštićenu sesiju <kbd>enter</kbd>"
+    "start_button": "Započni zaštićenu sesiju"
   },
   "recent_changes": {
     "title": "Nedavne promene",
