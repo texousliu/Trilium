@@ -207,7 +207,7 @@
     "notes_to_move": "需要移動的筆記",
     "target_parent_note": "目標上級筆記",
     "search_placeholder": "通過名稱搜尋筆記",
-    "move_button": "移動到選定的筆記 <kbd>Enter</kbd>",
+    "move_button": "移動到選定的筆記",
     "error_no_path": "沒有可以移動到的路徑。",
     "move_success_message": "已移動所選筆記到 "
   },

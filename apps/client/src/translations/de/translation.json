@@ -226,7 +226,7 @@
     "notes_to_move": "Notizen zum Verschieben",
     "target_parent_note": "Ziel-Elternnotiz",
     "search_placeholder": "Suche nach einer Notiz anhand ihres Namens",
-    "move_button": "Zur ausgewählten Notiz wechseln <kbd>Eingabetaste</kbd>",
+    "move_button": "Zur ausgewählten Notiz wechseln",
     "error_no_path": "Kein Weg, auf den man sich bewegen kann.",
     "move_success_message": "Ausgewählte Notizen wurden verschoben"
   },

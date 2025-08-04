@@ -226,7 +226,7 @@
     "notes_to_move": "需要移动的笔记",
     "target_parent_note": "目标父笔记",
     "search_placeholder": "通过名称搜索笔记",
-    "move_button": "移动到选定的笔记 <kbd>回车</kbd>",
+    "move_button": "移动到选定的笔记",
     "error_no_path": "没有可以移动到的路径。",
     "move_success_message": "所选笔记已移动到"
   },

@@ -228,7 +228,7 @@
     "notes_to_move": "Notes to move",
     "target_parent_note": "Target parent note",
     "search_placeholder": "search for note by its name",
-    "move_button": "Move to selected note <kbd>enter</kbd>",
+    "move_button": "Move to selected note",
     "error_no_path": "No path to move to.",
     "move_success_message": "Selected notes have been moved into "
   },

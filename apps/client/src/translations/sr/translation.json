@@ -228,7 +228,7 @@
     "notes_to_move": "Beleške za premeštanje",
     "target_parent_note": "Ciljana nadbeleška",
     "search_placeholder": "potraži belešku po njenom imenu",
-    "move_button": "Pređi na izabranu belešku <kbd>enter</kbd>",
+    "move_button": "Pređi na izabranu belešku",
     "error_no_path": "Nema putanje za premeštanje.",
     "move_success_message": "Izabrane beleške su premeštene u "
   },

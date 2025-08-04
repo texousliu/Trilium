@@ -1,4 +1,4 @@
-import { CSSProperties, useRef, useState } from "preact/compat";
+import { useRef, useState } from "preact/compat";
 import appContext, { EventData } from "../../components/app_context";
 import { closeActiveDialog, openDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
@@ -6,8 +6,6 @@ import Modal from "../react/Modal";
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import NoteAutocomplete from "../react/NoteAutocomplete";
 import froca from "../../services/froca";
-import { useEffect } from "react";
-import FNote from "../../entities/fnote";
 import FormGroup from "../react/FormGroup";
 import FormTextBox from "../react/FormTextBox";
 import Button from "../react/Button";
@@ -16,6 +14,7 @@ import { logError } from "../../services/ws";
 import tree from "../../services/tree";
 import branches from "../../services/branches";
 import toast from "../../services/toast";
+import NoteList from "../react/NoteList";
 
 interface CloneToDialogProps {
     clonedNoteIds: string[];
@@ -64,26 +63,6 @@ function CloneToDialogComponent({ clonedNoteIds }: CloneToDialogProps) {
             </FormGroup>
         </Modal>
     )
-}
-
-function NoteList({ noteIds, style }: { noteIds?: string[], style: CSSProperties }) {
-    const [ notes, setNotes ] = useState<FNote[]>([]);
-
-    useEffect(() => {
-        if (noteIds) {
-            froca.getNotes(noteIds).then((notes) => setNotes(notes));
-        }
-    }, [noteIds]);
-
-    return (notes &&
-        <ul style={style}>
-            {notes.map(note => (
-                <li key={note.noteId}>
-                    {note.title}
-                </li>
-            ))}
-        </ul>
-    );
 }
 
 export default class CloneToDialog extends ReactBasicWidget {

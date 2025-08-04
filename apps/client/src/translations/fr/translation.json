@@ -226,7 +226,7 @@
     "notes_to_move": "Notes à déplacer",
     "target_parent_note": "Note parent cible",
     "search_placeholder": "rechercher une note par son nom",
-    "move_button": "Déplacer vers la note sélectionnée <kbd>entrer</kbd>",
+    "move_button": "Déplacer vers la note sélectionnée",
     "error_no_path": "Aucun chemin vers lequel déplacer.",
     "move_success_message": "Les notes sélectionnées ont été déplacées dans "
   },

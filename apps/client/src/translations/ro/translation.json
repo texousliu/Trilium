@@ -817,7 +817,7 @@
   "move_to": {
     "dialog_title": "Mută notițele în...",
     "error_no_path": "Nicio cale la care să poată fi mutate.",
-    "move_button": "Mută la notița selectată <kbd>enter</kbd>",
+    "move_button": "Mută la notița selectată",
     "move_success_message": "Notițele selectate au fost mutate în",
     "notes_to_move": "Notițe de mutat",
     "search_placeholder": "căutați notița după denumirea ei",
