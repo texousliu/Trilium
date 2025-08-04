@@ -44,7 +44,10 @@
     "branch_prefix": {
         "close": "Fechar",
         "prefix": "Prefixo: ",
-        "save": "Salvar"
+        "save": "Salvar",
+        "edit_branch_prefix": "Editar Prefixo do Branch",
+        "help_on_tree_prefix": "Ajuda sobre o prefixo da árvore de notas",
+        "branch_prefix_saved": "O prefixo de ramificação foi salvo."
     },
     "bulk_actions": {
         "bulk_actions": "Ações em massa",
@@ -69,7 +72,10 @@
         "search_for_note_by_its_name": "pesquisar nota pelo nome",
         "cloned_note_prefix_title": "A nota clonada aparecerá na árvore de notas com o prefixo fornecido",
         "prefix_optional": "Prefixo (opcional)",
-        "no_path_to_clone_to": "Nenhum caminho para clonar."
+        "no_path_to_clone_to": "Nenhum caminho para clonar.",
+        "target_parent_note": "Nota pai-alvo",
+        "clone_to_selected_note": "Clonar para a nota selecionada <kbd>enter</kbd>",
+        "note_cloned": "A nota \"{{clonedTitle}}\" foi clonada para \"{{targetTitle}}\""
     },
     "ai_llm": {
         "n_notes_queued_0": "{{ count }} nota enfileirada para indexação",
@@ -85,6 +91,32 @@
         "cancel": "Cancelar",
         "ok": "OK",
         "are_you_sure_remove_note": "Tem certeza de que deseja remover a nota '{{title}}' do mapa de relações? ",
-        "if_you_dont_check": "Se você não marcar isso, a nota será removida apenas do mapa de relações."
+        "if_you_dont_check": "Se você não marcar isso, a nota será removida apenas do mapa de relações.",
+        "also_delete_note": "Também excluir a nota"
+    },
+    "delete_notes": {
+        "delete_notes_preview": "Excluir pré-visualização de notas",
+        "close": "Fechar",
+        "delete_all_clones_description": "Excluir também todos os clones (pode ser desfeito em alterações recentes)",
+        "erase_notes_description": "A exclusão normal (suave) apenas marca as notas como excluídas, permitindo que sejam recuperadas (no diálogo de alterações recentes) dentro de um período de tempo. Se esta opção for marcada, as notas serão apagadas imediatamente e não será possível restaurá-las.",
+        "erase_notes_warning": "Apagar notas permanentemente (não pode ser desfeito), incluindo todos os clones. Isso forçará o recarregamento do aplicativo.",
+        "notes_to_be_deleted": "As seguintes notas serão excluídas ({{- noteCount}})",
+        "no_note_to_delete": "Nenhuma nota será excluída (apenas os clones).",
+        "broken_relations_to_be_deleted": "As seguintes relações serão quebradas e excluídas ({{- relationCount}})",
+        "cancel": "Cancelar",
+        "ok": "OK",
+        "deleted_relation_text": "A nota {{- note}} (a ser excluída) está referenciada pela relação {{- relation}} originada de {{- source}}."
+    },
+    "export": {
+        "export_note_title": "Exportar nota",
+        "close": "Fechar",
+        "export_type_subtree": "Esta nota e todos os seus descendentes",
+        "format_html": "HTML – recomendado, pois mantém toda a formatação",
+        "format_html_zip": "HTML em arquivo ZIP – recomendado, pois isso preserva toda a formatação.",
+        "format_markdown": "Markdown – isso preserva a maior parte da formatação.",
+        "format_opml": "OPML - formato de intercâmbio de outliners apenas para texto. Formatação, imagens e arquivos não estão incluídos.",
+        "opml_version_1": "OPML v1.0 – apenas texto simples",
+        "opml_version_2": "OPML v2.0 – permite também HTML",
+        "export_type_single": "Apenas esta nota, sem seus descendentes"
     }
 }
