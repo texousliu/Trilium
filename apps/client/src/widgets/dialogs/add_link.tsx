@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import note_autocomplete, { Suggestion } from "../../services/note_autocomplete";
 import type { default as TextTypeWidget } from "../type_widgets/editable_text.js";
 import { logError } from "../../services/ws";
+import FormGroup from "../react/FormGroup.js";
 
 type LinkType = "reference-link" | "external-link" | "hyper-link";
 
@@ -100,9 +101,7 @@ function AddLinkDialogComponent({ text: _text, textTypeWidget }: AddLinkDialogPr
             onShown={onShown}
             onHidden={() => setSuggestion(null)}
         >
-            <div className="form-group">
-                <label htmlFor="add-link-note-autocomplete">{t("add_link.note")}</label>
-
+            <FormGroup label={t("add_link.note")}>
                 <NoteAutocomplete
                     inputRef={autocompleteRef}
                     text={text}
@@ -112,7 +111,7 @@ function AddLinkDialogComponent({ text: _text, textTypeWidget }: AddLinkDialogPr
                         allowCreatingNotes: true
                     }}
                 />
-            </div>
+            </FormGroup>
 
             {!hasSelection && (
                 <div className="add-link-title-settings">

@@ -10,6 +10,7 @@ import froca from "../../services/froca.js";
 import tree from "../../services/tree.js";
 import FBranch from "../../entities/fbranch.js";
 import Button from "../react/Button.jsx";
+import FormGroup from "../react/FormGroup.js";
 
 interface BranchPrefixDialogProps {
     branch?: FBranch;
@@ -38,15 +39,13 @@ function BranchPrefixDialogComponent({ branch }: BranchPrefixDialogProps) {
             helpPageId="TBwsyfadTA18"
             footer={<Button text={t("branch_prefix.save")} />}
         >
-            <div class="form-group">
-                <label for="branch-prefix-input">{t("branch_prefix.prefix")}</label> &nbsp;
-
+            <FormGroup label={t("branch_prefix.prefix")}>
                 <div class="input-group">
                     <input class="branch-prefix-input form-control" value={prefix} ref={branchInput}
                         onChange={(e) => setPrefix((e.target as HTMLInputElement).value)} />
                     <div class="branch-prefix-note-title input-group-text"> - {branch && branch.getNoteFromCache().title}</div>
                 </div>
-            </div>
+            </FormGroup>
         </Modal>
     );
 }
