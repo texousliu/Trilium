@@ -23,10 +23,6 @@ function JumpToNoteDialogComponent({ mode }: JumpToNoteDialogProps) {
     const [ isCommandMode, setIsCommandMode ] = useState(mode === "commands");
     const [ text, setText ] = useState(isCommandMode ? "> " : "");
 
-    console.log(`Got text '${text}'`);
-
-    console.log("Rendering with mode:", mode, "isCommandMode:", isCommandMode); 
-
     useEffect(() => {
         setIsCommandMode(text.startsWith(">"));
     }, [ text ]);
@@ -44,7 +40,10 @@ function JumpToNoteDialogComponent({ mode }: JumpToNoteDialogProps) {
         const $autoComplete = $(autocompleteRef.current);
         switch (mode) {
             case "last-search":
-                break;
+                // Fall-through if there is no text, in order to display the recent notes.
+                if (text) {
+                    break;
+                }
             case "recent-notes":
                 note_autocomplete.showRecentNotes($autoComplete);
                 break;
