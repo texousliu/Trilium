@@ -1,17 +1,19 @@
 import { useRef } from "preact/hooks";
 import { t } from "../../services/i18n";
-import { use, useEffect } from "react";
+import { useEffect } from "react";
 import note_autocomplete, { type Suggestion } from "../../services/note_autocomplete";
+import type { RefObject } from "preact";
 
 interface NoteAutocompleteProps {    
+    inputRef?: RefObject<HTMLInputElement>;
     text?: string;
     allowExternalLinks?: boolean;
     allowCreatingNotes?: boolean;
     onChange?: (suggestion: Suggestion) => void;
 }
 
-export default function NoteAutocomplete({ text, allowCreatingNotes, allowExternalLinks, onChange }: NoteAutocompleteProps) {
-    const ref = useRef<HTMLInputElement>(null);
+export default function NoteAutocomplete({ inputRef: _ref, text, allowCreatingNotes, allowExternalLinks, onChange }: NoteAutocompleteProps) {
+    const ref = _ref ?? useRef<HTMLInputElement>(null);
     
     useEffect(() => {
         if (!ref.current) return;

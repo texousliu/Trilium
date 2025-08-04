@@ -6,10 +6,10 @@ import ReactBasicWidget from "../react/ReactBasicWidget";
 import Button from "../react/Button";
 import FormRadioGroup from "../react/FormRadioGroup";
 import NoteAutocomplete from "../react/NoteAutocomplete";
-import { useState } from "preact/hooks";
+import { useRef, useState } from "preact/hooks";
 import tree from "../../services/tree";
 import { useEffect } from "react";
-import { Suggestion } from "../../services/note_autocomplete";
+import note_autocomplete, { Suggestion } from "../../services/note_autocomplete";
 import type { default as TextTypeWidget } from "../type_widgets/editable_text.js";
 import { logError } from "../../services/ws";
 
@@ -58,6 +58,20 @@ function AddLinkDialogComponent({ text: _text, textTypeWidget }: AddLinkDialogPr
         }
     }, [suggestion]);
 
+    function onShown() {
+        const $autocompleteEl = $(autocompleteRef.current);
+        if (!text) {
+            note_autocomplete.showRecentNotes($autocompleteEl);
+        } else {
+            note_autocomplete.setText($autocompleteEl, text);
+        }
+
+        // to be able to quickly remove entered text
+        $autocompleteEl
+            .trigger("focus")
+            .trigger("select");
+    }
+
     function onSubmit() {
         if (suggestion.notePath) {
             // Handle note link
@@ -72,6 +86,8 @@ function AddLinkDialogComponent({ text: _text, textTypeWidget }: AddLinkDialogPr
         }
     }
 
+    const autocompleteRef = useRef<HTMLInputElement>(null);
+
     return (
         <Modal
             className="add-link-dialog"
@@ -81,12 +97,14 @@ function AddLinkDialogComponent({ text: _text, textTypeWidget }: AddLinkDialogPr
             helpPageId="QEAPj01N5f7w"
             footer={<Button text={t("add_link.button_add_link")} keyboardShortcut="Enter" />}
             onSubmit={onSubmit}
-            onHidden={() => setSuggestion(null)}            
+            onShown={onShown}
+            onHidden={() => setSuggestion(null)}
         >
             <div className="form-group">
                 <label htmlFor="add-link-note-autocomplete">{t("add_link.note")}</label>
 
                 <NoteAutocomplete
+                    inputRef={autocompleteRef}
                     text={text}
                     allowExternalLinks
                     allowCreatingNotes
