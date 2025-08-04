@@ -211,7 +211,7 @@
   },
   "jump_to_note": {
     "close": "Schließen",
-    "search_button": "Suche im Volltext: <kbd>Strg+Eingabetaste</kbd>"
+    "search_button": "Suche im Volltext"
   },
   "markdown_import": {
     "dialog_title": "Markdown-Import",

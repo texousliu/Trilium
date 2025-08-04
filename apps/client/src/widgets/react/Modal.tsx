@@ -5,7 +5,7 @@ import type { CSSProperties } from "preact/compat";
 
 interface ModalProps {
     className: string;
-    title: string;
+    title: string | ComponentChildren;
     size: "lg" | "sm";
     children: ComponentChildren;
     footer?: ComponentChildren;
@@ -49,7 +49,11 @@ export default function Modal({ children, className, size, title, footer, onShow
             <div className={`modal-dialog modal-${size}`} style={style} role="document">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title">{title}</h5>
+                        {typeof title === "string" ? (
+                            <h5 className="modal-title">{title}</h5>
+                        ) : (
+                            title
+                        )}
                         {helpPageId && (
                             <button className="help-button" type="button" data-in-app-help={helpPageId} title={t("modal.help_title")}>?</button>
                         )}

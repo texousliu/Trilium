@@ -194,7 +194,7 @@
     "okButton": "確定"
   },
   "jump_to_note": {
-    "search_button": "全文搜尋 <kbd>Ctrl+Enter</kbd>"
+    "search_button": "全文搜尋"
   },
   "markdown_import": {
     "dialog_title": "Markdown 匯入",

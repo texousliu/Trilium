@@ -38,7 +38,7 @@ export interface Suggestion {
     commandShortcut?: string;
 }
 
-interface Options {
+export interface Options {
     container?: HTMLElement;
     fastSearch?: boolean;
     allowCreatingNotes?: boolean;
@@ -82,12 +82,12 @@ async function autocompleteSource(term: string, cb: (rows: Suggestion[]) => void
     // Check if we're in command mode
     if (options.isCommandPalette && term.startsWith(">")) {
         const commandQuery = term.substring(1).trim();
-        
+
         // Get commands (all if no query, filtered if query provided)
-        const commands = commandQuery.length === 0 
+        const commands = commandQuery.length === 0
             ? commandRegistry.getAllCommands()
             : commandRegistry.searchCommands(commandQuery);
-            
+
         // Convert commands to suggestions
         const commandSuggestions: Suggestion[] = commands.map(cmd => ({
             action: "command",
@@ -99,7 +99,7 @@ async function autocompleteSource(term: string, cb: (rows: Suggestion[]) => void
             commandShortcut: cmd.shortcut,
             icon: cmd.icon
         }));
-        
+
         cb(commandSuggestions);
         return;
     }

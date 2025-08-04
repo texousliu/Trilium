@@ -211,7 +211,7 @@
   },
   "jump_to_note": {
     "close": "关闭",
-    "search_button": "全文搜索 <kbd>Ctrl+回车</kbd>"
+    "search_button": "全文搜索"
   },
   "markdown_import": {
     "dialog_title": "Markdown 导入",

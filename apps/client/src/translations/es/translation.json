@@ -212,7 +212,7 @@
   },
   "jump_to_note": {
     "close": "Cerrar",
-    "search_button": "Buscar en texto completo <kbd>Ctrl+Enter</kbd>"
+    "search_button": "Buscar en texto completo"
   },
   "markdown_import": {
     "dialog_title": "Importación de Markdown",

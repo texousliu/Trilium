@@ -1,33 +1,46 @@
 import { useRef } from "preact/hooks";
 import { t } from "../../services/i18n";
 import { useEffect } from "react";
-import note_autocomplete, { type Suggestion } from "../../services/note_autocomplete";
+import note_autocomplete, { Options, type Suggestion } from "../../services/note_autocomplete";
 import type { RefObject } from "preact";
 
 interface NoteAutocompleteProps {    
     inputRef?: RefObject<HTMLInputElement>;
     text?: string;
-    allowExternalLinks?: boolean;
-    allowCreatingNotes?: boolean;
+    placeholder?: string;
+    container?: RefObject<HTMLDivElement>;
+    opts?: Omit<Options, "container">;
     onChange?: (suggestion: Suggestion) => void;
+    onTextChange?: (text: string) => void;
 }
 
-export default function NoteAutocomplete({ inputRef: _ref, text, allowCreatingNotes, allowExternalLinks, onChange }: NoteAutocompleteProps) {
+export default function NoteAutocomplete({ inputRef: _ref, text, placeholder, onChange, onTextChange, container, opts }: NoteAutocompleteProps) {
     const ref = _ref ?? useRef<HTMLInputElement>(null);
     
     useEffect(() => {
         if (!ref.current) return;
         const $autoComplete = $(ref.current);
 
+        // clear any event listener added in previous invocation of this function
+        $autoComplete
+            .off("autocomplete:noteselected")
+            .off("autocomplete:commandselected")
+
         note_autocomplete.initNoteAutocomplete($autoComplete, {
-            allowExternalLinks,
-            allowCreatingNotes
+            ...opts,
+            container: container?.current
         });
         if (onChange) {
-            $autoComplete.on("autocomplete:noteselected", (_e, suggestion) => onChange(suggestion));
-            $autoComplete.on("autocomplete:externallinkselected", (_e, suggestion) => onChange(suggestion));
-        }        
-    }, [allowExternalLinks, allowCreatingNotes]);
+            const listener = (_e, suggestion) => onChange(suggestion);
+            $autoComplete
+                .on("autocomplete:noteselected", listener)
+                .on("autocomplete:externallinkselected", listener)
+                .on("autocomplete:commandselected", listener);
+        }
+        if (onTextChange) {
+            $autoComplete.on("input", () => onTextChange($autoComplete[0].value));
+        }
+    }, [opts, container?.current]);
 
     useEffect(() => {
         if (!ref.current) return;
@@ -44,7 +57,7 @@ export default function NoteAutocomplete({ inputRef: _ref, text, allowCreatingNo
             <input
                 ref={ref}
                 className="note-autocomplete form-control"
-                placeholder={t("add_link.search_note")} />
+                placeholder={placeholder ?? t("add_link.search_note")} />
         </div>
     );
 }

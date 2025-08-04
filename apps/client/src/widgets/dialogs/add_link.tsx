@@ -106,9 +106,11 @@ function AddLinkDialogComponent({ text: _text, textTypeWidget }: AddLinkDialogPr
                 <NoteAutocomplete
                     inputRef={autocompleteRef}
                     text={text}
-                    allowExternalLinks
-                    allowCreatingNotes
                     onChange={setSuggestion}
+                    opts={{
+                        allowExternalLinks: true,
+                        allowCreatingNotes: true
+                    }}
                 />
             </div>
 

@@ -767,7 +767,7 @@
     "title": "Atribute moștenite"
   },
   "jump_to_note": {
-    "search_button": "Caută în întregul conținut <kbd>Ctrl+Enter</kbd>",
+    "search_button": "Caută în întregul conținut",
     "close": "Închide",
     "search_placeholder": "Căutați notițe după nume sau tastați > pentru comenzi..."
   },
