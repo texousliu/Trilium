@@ -28,14 +28,23 @@ export default function Modal({ children, className, size, title, footer, onShow
     if (onShown || onHidden) {
         useEffect(() => {
             const modalElement = modalRef.current;
-            if (modalElement) {
+            if (!modalElement) {
+                return;
+            }
+            if (onShown) {
+                modalElement.addEventListener("shown.bs.modal", onShown);
+            }
+            if (onHidden) {
+                modalElement.addEventListener("hidden.bs.modal", onHidden);
+            }
+            return () => {
                 if (onShown) {
-                    modalElement.addEventListener("shown.bs.modal", onShown);
+                    modalElement.removeEventListener("shown.bs.modal", onShown);
                 }
                 if (onHidden) {
-                    modalElement.addEventListener("hidden.bs.modal", onHidden);
+                    modalElement.removeEventListener("hidden.bs.modal", onHidden);
                 }
-            }
+            };
         });
     }    
 
