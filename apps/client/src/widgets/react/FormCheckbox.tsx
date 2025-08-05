@@ -1,3 +1,7 @@
+import { Tooltip } from "bootstrap";
+import { useEffect, useRef } from "preact/compat";
+import { escapeQuotes } from "../../services/utils";
+
 interface FormCheckboxProps {
     name: string;
     label: string;
@@ -11,11 +15,29 @@ interface FormCheckboxProps {
 }
 
 export default function FormCheckbox({ name, disabled, label, currentValue, onChange, hint }: FormCheckboxProps) {
+    const labelRef = useRef<HTMLLabelElement>(null);
+
+    if (hint) {
+        useEffect(() => {
+            let tooltipInstance: Tooltip | null = null;
+            if (labelRef.current) {
+                tooltipInstance = Tooltip.getOrCreateInstance(labelRef.current, {
+                    html: true,
+                    template: '<div class="tooltip tooltip-top" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+                });
+            }
+            return () => tooltipInstance?.dispose();
+        }, [labelRef.current]);
+    }
+
     return (
         <div className="form-checkbox">
             <label
                 className="form-check-label tn-checkbox"
-                style={hint && { textDecoration: "underline dotted var(--main-text-color)" }} title={hint}>
+                style={hint && { textDecoration: "underline dotted var(--main-text-color)" }}
+                title={hint && escapeQuotes(hint)}
+                ref={labelRef}
+            >
                 <input
                     className="form-check-input"
                     type="checkbox"
