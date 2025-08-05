@@ -83,9 +83,9 @@
     "delete_all_clones_description": "同時刪除所有複製（可以在最近修改中撤消）",
     "erase_notes_description": "通常（軟）刪除僅標記筆記為已刪除，可以在一段時間內通過最近修改對話框撤消。選中此選項將立即擦除筆記，無法撤銷。",
     "erase_notes_warning": "永久擦除筆記（無法撤銷），包括所有複製。這將強制應用程式重新加載。",
-    "notes_to_be_deleted": "將刪除以下筆記 ({{- noteCount}})",
+    "notes_to_be_deleted": "將刪除以下筆記 ({{notesCount}})",
     "no_note_to_delete": "沒有筆記將被刪除（僅複製）。",
-    "broken_relations_to_be_deleted": "將刪除以下關係並斷開連接 ({{- relationCount}})",
+    "broken_relations_to_be_deleted": "將刪除以下關係並斷開連接 ({{ relationCount}})",
     "cancel": "取消",
     "ok": "確定",
     "deleted_relation_text": "筆記 {{- note}} (將被刪除的筆記) 被以下關係 {{- relation}} 引用, 來自 {{- source}}。"

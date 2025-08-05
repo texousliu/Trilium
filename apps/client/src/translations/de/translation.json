@@ -87,9 +87,9 @@
     "delete_all_clones_description": "auch alle Klone löschen (kann bei letzte Änderungen rückgängig gemacht werden)",
     "erase_notes_description": "Beim normalen (vorläufigen) Löschen werden die Notizen nur als gelöscht markiert und sie können innerhalb eines bestimmten Zeitraums (im Dialogfeld „Letzte Änderungen“) wiederhergestellt werden. Wenn du diese Option aktivierst, werden die Notizen sofort gelöscht und es ist nicht möglich, die Notizen wiederherzustellen.",
     "erase_notes_warning": "Notizen dauerhaft löschen (kann nicht rückgängig gemacht werden), einschließlich aller Klone. Dadurch wird ein Neuladen der Anwendung erzwungen.",
-    "notes_to_be_deleted": "Folgende Notizen werden gelöscht (<span class=\"deleted-notes-count\"></span>)",
+    "notes_to_be_deleted": "Folgende Notizen werden gelöscht ({{notesCount}})",
     "no_note_to_delete": "Es werden keine Notizen gelöscht (nur Klone).",
-    "broken_relations_to_be_deleted": "Folgende Beziehungen werden gelöst und gelöscht (<span class=\"broke-relations-count\"></span>)",
+    "broken_relations_to_be_deleted": "Folgende Beziehungen werden gelöst und gelöscht ({{ relationCount}})",
     "cancel": "Abbrechen",
     "ok": "OK",
     "deleted_relation_text": "Notiz {{- note}} (soll gelöscht werden) wird von Beziehung {{- relation}} ausgehend von {{- source}} referenziert."

@@ -10,11 +10,16 @@ interface ButtonProps {
     keyboardShortcut?: string;
     /** Called when the button is clicked. If not set, the button will submit the form (if any). */
     onClick?: () => void;
+    primary?: boolean;
 }
 
-export default function Button({ buttonRef: _buttonRef, className, text, onClick, keyboardShortcut, icon }: ButtonProps) {
+export default function Button({ buttonRef: _buttonRef, className, text, onClick, keyboardShortcut, icon, primary }: ButtonProps) {
     const classes: string[] = ["btn"];
-    classes.push("btn-primary");
+    if (primary) {
+        classes.push("btn-primary");
+    } else {
+        classes.push("btn-secondary");
+    }
     if (className) {
         classes.push(className);
     }

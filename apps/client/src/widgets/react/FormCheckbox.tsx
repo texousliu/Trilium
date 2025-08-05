@@ -6,10 +6,11 @@ interface FormCheckboxProps {
      */
     hint?: string;
     currentValue: boolean;
+    disabled?: boolean;
     onChange(newValue: boolean): void;
 }
 
-export default function FormCheckbox({ name, label, currentValue, onChange, hint }: FormCheckboxProps) {
+export default function FormCheckbox({ name, disabled, label, currentValue, onChange, hint }: FormCheckboxProps) {
     return (
         <div className="form-checkbox">
             <label
@@ -21,6 +22,7 @@ export default function FormCheckbox({ name, label, currentValue, onChange, hint
                     name={name}
                     checked={currentValue || false}
                     value="1"
+                    disabled={disabled}
                     onChange={e => onChange((e.target as HTMLInputElement).checked)} />
                 {label}
             </label>
