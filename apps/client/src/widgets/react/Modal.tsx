@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "preact/hooks";
 import { t } from "../../services/i18n";
 import { ComponentChildren } from "preact";
-import type { CSSProperties } from "preact/compat";
+import type { CSSProperties, RefObject } from "preact/compat";
 
 interface ModalProps {
     className: string;
@@ -29,10 +29,20 @@ interface ModalProps {
     /** Called when the modal is hidden, either via close button, backdrop click or submit. */
     onHidden?: () => void;
     helpPageId?: string;
+    /**
+     * Gives access to the underlying modal element. This is useful for manipulating the modal directly
+     * or for attaching event listeners.
+     */
+    modalRef?: RefObject<HTMLDivElement>;
+    /**
+     * Gives access to the underlying form element of the modal. This is only set if `onSubmit` is provided.
+     */
+    formRef?: RefObject<HTMLFormElement>;
 }
 
-export default function Modal({ children, className, size, title, footer, footerAlignment, onShown, onSubmit, helpPageId, maxWidth, zIndex, scrollable, onHidden: onHidden }: ModalProps) {
-    const modalRef = useRef<HTMLDivElement>(null);
+export default function Modal({ children, className, size, title, footer, footerAlignment, onShown, onSubmit, helpPageId, maxWidth, zIndex, scrollable, onHidden: onHidden, modalRef: _modalRef, formRef: _formRef }: ModalProps) {
+    const modalRef = _modalRef ?? useRef<HTMLDivElement>(null);
+    const formRef = _formRef ?? useRef<HTMLFormElement>(null);
 
     if (onShown || onHidden) {
         useEffect(() => {
@@ -84,7 +94,7 @@ export default function Modal({ children, className, size, title, footer, footer
                     </div>
 
                     {onSubmit ? (
-                        <form onSubmit={(e) => {
+                        <form ref={formRef} onSubmit={(e) => {
                             e.preventDefault();
                             onSubmit();
                         }}>

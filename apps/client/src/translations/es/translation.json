@@ -247,7 +247,7 @@
   "prompt": {
     "title": "Aviso",
     "close": "Cerrar",
-    "ok": "Aceptar <kbd>enter</kbd>",
+    "ok": "Aceptar",
     "defaultTitle": "Aviso"
   },
   "protected_session_password": {

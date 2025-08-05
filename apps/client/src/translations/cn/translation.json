@@ -244,7 +244,7 @@
   "prompt": {
     "title": "提示",
     "close": "关闭",
-    "ok": "确定 <kbd>回车</kbd>",
+    "ok": "确定",
     "defaultTitle": "提示"
   },
   "protected_session_password": {

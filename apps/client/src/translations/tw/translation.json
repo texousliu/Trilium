@@ -222,7 +222,7 @@
   },
   "prompt": {
     "title": "提示",
-    "ok": "確定 <kbd>Enter</kbd>",
+    "ok": "確定",
     "defaultTitle": "提示"
   },
   "protected_session_password": {

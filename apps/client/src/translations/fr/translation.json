@@ -244,7 +244,7 @@
   "prompt": {
     "title": "Prompt",
     "close": "Fermer",
-    "ok": "OK <kbd>entrer</kbd>",
+    "ok": "OK",
     "defaultTitle": "Prompt"
   },
   "protected_session_password": {

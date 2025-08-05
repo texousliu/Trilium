@@ -1,4 +1,4 @@
-import { HTMLInputTypeAttribute } from "preact/compat";
+import { HTMLInputTypeAttribute, RefObject } from "preact/compat";
 
 interface FormTextBoxProps {
     id?: string;
@@ -8,13 +8,15 @@ interface FormTextBoxProps {
     className?: string;
     autoComplete?: string;
     onChange?(newValue: string): void;
+    inputRef?: RefObject<HTMLInputElement>;
 }
 
-export default function FormTextBox({ id, type, name, className, currentValue, onChange, autoComplete }: FormTextBoxProps) {
+export default function FormTextBox({ id, type, name, className, currentValue, onChange, autoComplete, inputRef }: FormTextBoxProps) {
     return (
         <input
+            ref={inputRef}
             type={type ?? "text"}
-            className={`form-control ${className}`}
+            className={`form-control ${className ?? ""}`}
             id={id}
             name={name}
             value={currentValue}

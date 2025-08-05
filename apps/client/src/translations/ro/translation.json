@@ -970,7 +970,7 @@
   },
   "prompt": {
     "defaultTitle": "Aviz",
-    "ok": "OK <kbd>enter</kbd>",
+    "ok": "OK",
     "title": "Aviz",
     "close": "Închide"
   },
