@@ -1,7 +1,7 @@
 {
     "keyboard_actions": {
         "open-jump-to-note-dialog": "Abrir diálogo \"Ir para nota\"",
-        "search-in-subtree": "Procurar por notas na subárvore ativa",
+        "search-in-subtree": "Buscar notas na subárvore da nota atual",
         "expand-subtree": "Expandir subárvore da nota atual",
         "collapse-tree": "Colapsar a árvore completa de notas",
         "collapse-subtree": "Colapsar subárvore da nota atual",
@@ -14,7 +14,7 @@
         "move-note-up-in-hierarchy": "Mover nota para cima em hierarquia",
         "move-note-down-in-hierarchy": "Mover nota para baixo em hierarquia",
         "edit-note-title": "Pule da árvore para os detalhes da nota e edite o título",
-        "edit-branch-prefix": "Exibir o diálogo de edição do prefixo da branch",
+        "edit-branch-prefix": "Exibir o diálogo \"Editar prefixo da ramificação\"",
         "note-clipboard": "Área de transferência de notas",
         "copy-notes-to-clipboard": "Copiar notas selecionadas para Área de transferência",
         "paste-notes-from-clipboard": "Colar notas da área de transferência na nota atual",
@@ -226,7 +226,7 @@
         "move-note-up-in-hierarchy": "Mover Nota Para Cima na Hierarquia",
         "move-note-down-in-hierarchy": "Mover Nota Para Baixo na Hierarquia",
         "edit-note-title": "Editar Título da Nota",
-        "edit-branch-prefix": "Editar Prefixo do Branch",
+        "edit-branch-prefix": "Editar prefixo da ramificação",
         "clone-notes-to": "Clonar Notas Para",
         "move-notes-to": "Mover Notas Para",
         "copy-notes-to-clipboard": "Copiar Notas para a Área de Transferência",
