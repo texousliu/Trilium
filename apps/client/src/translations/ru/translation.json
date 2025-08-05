@@ -1064,7 +1064,6 @@
         "convert_into_attachment_prompt": "Вы уверены, что хотите преобразовать заметку '{{title}}' во вложение родительской заметки?",
         "convert_into_attachment_successful": "Примечание '{{title}}' преобразовано во вложение.",
         "convert_into_attachment_failed": "Не удалось преобразовать заметку '{{title}}'.",
-        "open_note_custom": "",
         "open_note_externally_title": "Файл будет открыт во внешнем приложении и отслеживается на наличие изменений. После этого вы сможете загрузить изменённую версию обратно в Trilium."
     },
     "revisions_button": {
