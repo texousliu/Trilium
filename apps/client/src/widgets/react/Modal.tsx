@@ -10,6 +10,14 @@ interface ModalProps {
     children: ComponentChildren;
     footer?: ComponentChildren;
     maxWidth?: number;
+    zIndex?: number;
+    /**
+     * If true, the modal body will be scrollable if the content overflows.
+     * This is useful for larger modals where you want to keep the header and footer visible
+     * while allowing the body content to scroll.
+     * Defaults to false.
+     */
+    scrollable?: boolean;
     /**
      * If set, the modal body and footer will be wrapped in a form and the submit event will call this function.
      * Especially useful for user input that can be submitted with Enter key.
@@ -22,7 +30,7 @@ interface ModalProps {
     helpPageId?: string;
 }
 
-export default function Modal({ children, className, size, title, footer, onShown, onSubmit, helpPageId, maxWidth, onHidden: onHidden }: ModalProps) {
+export default function Modal({ children, className, size, title, footer, onShown, onSubmit, helpPageId, maxWidth, zIndex, scrollable, onHidden: onHidden }: ModalProps) {
     const modalRef = useRef<HTMLDivElement>(null);
 
     if (onShown || onHidden) {
@@ -48,18 +56,23 @@ export default function Modal({ children, className, size, title, footer, onShow
         });
     }    
 
-    const style: CSSProperties = {};
+    const dialogStyle: CSSProperties = {};
+    if (zIndex) {
+        dialogStyle.zIndex = zIndex;
+    }
+
+    const documentStyle: CSSProperties = {};
     if (maxWidth) {
-        style.maxWidth = `${maxWidth}px`;
+        documentStyle.maxWidth = `${maxWidth}px`;
     }
 
     return (
-        <div className={`modal fade mx-auto ${className}`} tabIndex={-1} role="dialog" ref={modalRef}>
-            <div className={`modal-dialog modal-${size}`} style={style} role="document">
+        <div className={`modal fade mx-auto ${className}`} tabIndex={-1} style={dialogStyle} role="dialog" ref={modalRef}>
+            <div className={`modal-dialog modal-${size} ${scrollable ? "modal-dialog-scrollable" : ""}`} style={documentStyle} role="document">
                 <div className="modal-content">
                     <div className="modal-header">
-                        {typeof title === "string" ? (
-                            <h5 className="modal-title">{title}</h5>
+                        {!title || typeof title === "string" ? (
+                            <h5 className="modal-title">{title ?? <>&nbsp;</>}</h5>
                         ) : (
                             title
                         )}
