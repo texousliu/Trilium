@@ -9,6 +9,7 @@ interface ModalProps {
     size: "lg" | "md" | "sm";
     children: ComponentChildren;
     footer?: ComponentChildren;
+    footerAlignment?: "right" | "between";
     maxWidth?: number;
     zIndex?: number;
     /**
@@ -30,7 +31,7 @@ interface ModalProps {
     helpPageId?: string;
 }
 
-export default function Modal({ children, className, size, title, footer, onShown, onSubmit, helpPageId, maxWidth, zIndex, scrollable, onHidden: onHidden }: ModalProps) {
+export default function Modal({ children, className, size, title, footer, footerAlignment, onShown, onSubmit, helpPageId, maxWidth, zIndex, scrollable, onHidden: onHidden }: ModalProps) {
     const modalRef = useRef<HTMLDivElement>(null);
 
     if (onShown || onHidden) {
@@ -100,7 +101,12 @@ export default function Modal({ children, className, size, title, footer, onShow
     );
 }
 
-function ModalInner({ children, footer }: Pick<ModalProps, "children" | "footer">) {
+function ModalInner({ children, footer, footerAlignment }: Pick<ModalProps, "children" | "footer" | "footerAlignment">) {
+    const footerStyle: CSSProperties = {};
+    if (footerAlignment === "between") {
+        footerStyle.justifyContent = "space-between";
+    }
+
     return (
         <>
             <div className="modal-body">
@@ -108,7 +114,7 @@ function ModalInner({ children, footer }: Pick<ModalProps, "children" | "footer"
             </div>
 
             {footer && (
-                <div className="modal-footer">
+                <div className="modal-footer" style={footerStyle}>
                     {footer}
                 </div>
             )}

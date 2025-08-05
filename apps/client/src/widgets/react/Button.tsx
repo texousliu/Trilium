@@ -6,12 +6,13 @@ interface ButtonProps {
     buttonRef?: RefObject<HTMLButtonElement>;
     text: string;
     className?: string;
+    icon?: string;
     keyboardShortcut?: string;
     /** Called when the button is clicked. If not set, the button will submit the form (if any). */
     onClick?: () => void;
 }
 
-export default function Button({ buttonRef: _buttonRef, className, text, onClick, keyboardShortcut }: ButtonProps) {
+export default function Button({ buttonRef: _buttonRef, className, text, onClick, keyboardShortcut, icon }: ButtonProps) {
     const classes: string[] = ["btn"];
     classes.push("btn-primary");
     if (className) {
@@ -28,6 +29,7 @@ export default function Button({ buttonRef: _buttonRef, className, text, onClick
             onClick={onClick}
             ref={buttonRef}
         >
+            {icon && <span className={`bx ${icon}`}></span>}
             {text} {keyboardShortcut && (
                 splitShortcut.map((key, index) => (
                     <>
