@@ -11,7 +11,7 @@ interface FormCheckboxProps {
 
 export default function FormCheckbox({ name, label, currentValue, onChange, hint }: FormCheckboxProps) {
     return (
-        <div className="form-check">
+        <div className="form-checkbox">
             <label
                 className="form-check-label tn-checkbox"
                 style={hint && { textDecoration: "underline dotted var(--main-text-color)" }} title={hint}>
