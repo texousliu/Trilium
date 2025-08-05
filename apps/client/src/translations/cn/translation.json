@@ -239,8 +239,7 @@
   "password_not_set": {
     "title": "密码未设置",
     "close": "关闭",
-    "body1": "受保护的笔记使用用户密码加密，但密码尚未设置。",
-    "body2": "点击<a class=\"open-password-options-button\" href=\"javascript:\">这里</a>打开选项对话框并设置您的密码。"
+    "body1": "受保护的笔记使用用户密码加密，但密码尚未设置。"
   },
   "prompt": {
     "title": "提示",

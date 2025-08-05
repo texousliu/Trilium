@@ -239,8 +239,7 @@
   "password_not_set": {
     "title": "Das Passwort ist nicht festgelegt",
     "close": "Schließen",
-    "body1": "Geschützte Notizen werden mit einem Benutzerpasswort verschlüsselt, es wurde jedoch noch kein Passwort festgelegt.",
-    "body2": "Um Notizen verschlüsseln zu können, klicke <a class=\"open-password-options-button\" href=\"javascript:\">hier</a> um das Optionsmenu zu öffnen und ein Passwort zu setzen."
+    "body1": "Geschützte Notizen werden mit einem Benutzerpasswort verschlüsselt, es wurde jedoch noch kein Passwort festgelegt."
   },
   "prompt": {
     "title": "Prompt",

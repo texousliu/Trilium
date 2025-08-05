@@ -242,8 +242,7 @@
   "password_not_set": {
     "title": "La contraseña no está establecida",
     "close": "Cerrar",
-    "body1": "Las notas protegidas se cifran mediante una contraseña de usuario, pero la contraseña aún no se ha establecido.",
-    "body2": "Para poder proteger notas, dé clic <a class=\"open-password-options-button\" href=\"javascript:\">aquí</a> para abrir el diálogo de Opciones y establecer tu contraseña."
+    "body1": "Las notas protegidas se cifran mediante una contraseña de usuario, pero la contraseña aún no se ha establecido."
   },
   "prompt": {
     "title": "Aviso",

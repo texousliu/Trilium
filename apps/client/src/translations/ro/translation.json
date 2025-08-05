@@ -954,7 +954,6 @@
   },
   "password_not_set": {
     "body1": "Notițele protejate sunt criptate utilizând parola de utilizator, dar nu a fost setată nicio parolă.",
-    "body2": "Pentru a putea să protejați notițe, clic <a class=\"open-password-options-button\" href=\"javascript:\">aici</a> pentru a deschide ecranul de opțiuni și pentru a seta parola.",
     "title": "Parola nu este setată",
     "close": "Închide"
   },

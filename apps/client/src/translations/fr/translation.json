@@ -239,8 +239,7 @@
   "password_not_set": {
     "title": "Le mot de passe n'est pas défini",
     "close": "Fermer",
-    "body1": "Les notes protégées sont cryptées à l'aide d'un mot de passe utilisateur, mais le mot de passe n'a pas encore été défini.",
-    "body2": "Pour pouvoir protéger les notes, cliquez <a class=\"open-password-options-button\" href=\"javascript:\">ici</a> pour ouvrir les Options et définir votre mot de passe."
+    "body1": "Les notes protégées sont cryptées à l'aide d'un mot de passe utilisateur, mais le mot de passe n'a pas encore été défini."
   },
   "prompt": {
     "title": "Prompt",

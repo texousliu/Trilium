@@ -244,7 +244,8 @@
     "title": "Password is not set",
     "close": "Close",
     "body1": "Protected notes are encrypted using a user password, but password has not been set yet.",
-    "body2": "To be able to protect notes, click <a class=\"open-password-options-button\" href=\"javascript:\">here</a> to open the Options dialog and set your password."
+    "body2": "To be able to protect notes, click the button below to open the Options dialog and set your password.",
+    "go_to_password_options": "Go to Password options"
   },
   "prompt": {
     "title": "Prompt",

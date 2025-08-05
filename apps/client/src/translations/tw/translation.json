@@ -218,8 +218,7 @@
   },
   "password_not_set": {
     "title": "密碼未設定",
-    "body1": "受保護的筆記使用用戶密碼加密，但密碼尚未設定。",
-    "body2": "點擊<a class=\"open-password-options-button\" href=\"javascript:\">這裡</a>打開選項對話框並設定您的密碼。"
+    "body1": "受保護的筆記使用用戶密碼加密，但密碼尚未設定。"
   },
   "prompt": {
     "title": "提示",
