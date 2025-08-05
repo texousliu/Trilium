@@ -36,15 +36,17 @@ function IncludeNoteDialogComponent({ textTypeWidget }: IncludeNoteDialogProps) 
                 closeActiveDialog();
                 includeNote(suggestion.notePath, textTypeWidget);
             }}
-            footer={
-                <Button text={t("include_note.button_include")} keyboardShortcut="Enter" />
-            }
+            footer={<Button text={t("include_note.button_include")} keyboardShortcut="Enter" />}
         >
             <FormGroup label={t("include_note.label_note")}>
                 <NoteAutocomplete
                     placeholder={t("include_note.placeholder_search")}
                     onChange={setSuggestion}
                     inputRef={autoCompleteRef}
+                    opts={{
+                        hideGoToSelectedNoteButton: true,
+                        allowCreatingNotes: true
+                    }}
                 />
             </FormGroup>
 
