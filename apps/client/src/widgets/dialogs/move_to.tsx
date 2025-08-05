@@ -8,7 +8,7 @@ import FormGroup from "../react/FormGroup";
 import NoteAutocomplete from "../react/NoteAutocomplete";
 import Button from "../react/Button";
 import { useRef, useState } from "preact/compat";
-import note_autocomplete, { Suggestion } from "../../services/note_autocomplete";
+import { Suggestion, triggerRecentNotes } from "../../services/note_autocomplete";
 import tree from "../../services/tree";
 import froca from "../../services/froca";
 import branches from "../../services/branches";
@@ -48,10 +48,7 @@ function MoveToDialogComponent({ movedBranchIds }: MoveToDialogProps) {
             title={t("move_to.dialog_title")}
             footer={<Button text={t("move_to.move_button")} keyboardShortcut="Enter" />}
             onSubmit={onSubmit}
-            onShown={() => {
-                autoCompleteRef.current?.focus();
-                note_autocomplete.showRecentNotes($(autoCompleteRef.current));
-            }}
+            onShown={() => triggerRecentNotes(autoCompleteRef.current)}
         >
             <h5>{t("move_to.notes_to_move")}</h5>
             <NoteList branchIds={movedBranchIds} />

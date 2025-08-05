@@ -9,7 +9,7 @@ import froca from "../../services/froca";
 import FormGroup from "../react/FormGroup";
 import FormTextBox from "../react/FormTextBox";
 import Button from "../react/Button";
-import note_autocomplete, { Suggestion } from "../../services/note_autocomplete";
+import { Suggestion, triggerRecentNotes } from "../../services/note_autocomplete";
 import { logError } from "../../services/ws";
 import tree from "../../services/tree";
 import branches from "../../services/branches";
@@ -44,10 +44,7 @@ function CloneToDialogComponent({ clonedNoteIds }: CloneToDialogProps) {
             size="lg"
             footer={<Button text={t("clone_to.clone_to_selected_note")} keyboardShortcut="Enter" />}
             onSubmit={onSubmit}
-            onShown={() => {
-                autoCompleteRef.current?.focus();
-                note_autocomplete.showRecentNotes($(autoCompleteRef.current));
-            }}
+            onShown={() => triggerRecentNotes(autoCompleteRef.current)}
         >
             <h5>{t("clone_to.notes_to_clone")}</h5>
             <NoteList style={{ maxHeight: "200px", overflow: "auto" }} noteIds={clonedNoteIds} />

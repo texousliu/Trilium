@@ -8,7 +8,7 @@ import Modal from "../react/Modal";
 import NoteAutocomplete from "../react/NoteAutocomplete";
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import Button from "../react/Button";
-import note_autocomplete, { Suggestion } from "../../services/note_autocomplete";
+import { Suggestion, triggerRecentNotes } from "../../services/note_autocomplete";
 import tree from "../../services/tree";
 import froca from "../../services/froca";
 import EditableTextTypeWidget from "../type_widgets/editable_text";
@@ -20,17 +20,14 @@ interface IncludeNoteDialogProps {
 function IncludeNoteDialogComponent({ textTypeWidget }: IncludeNoteDialogProps) {
     const [suggestion, setSuggestion] = useState<Suggestion | null>(null);
     const [boxSize, setBoxSize] = useState("medium");
-    const inputRef = useRef<HTMLInputElement>(null);
+    const autoCompleteRef = useRef<HTMLInputElement>(null);
 
     return (textTypeWidget &&
         <Modal
             className="include-note-dialog"
             title={t("include_note.dialog_title")}
             size="lg"
-            onShown={() => {
-                inputRef.current?.focus();
-                note_autocomplete.showRecentNotes($(inputRef.current!));
-            }}
+            onShown={() => triggerRecentNotes(autoCompleteRef.current)}
             onSubmit={() => {
                 if (!suggestion?.notePath) {
                     return;
@@ -47,7 +44,7 @@ function IncludeNoteDialogComponent({ textTypeWidget }: IncludeNoteDialogProps) 
                 <NoteAutocomplete
                     placeholder={t("include_note.placeholder_search")}
                     onChange={setSuggestion}
-                    inputRef={inputRef}
+                    inputRef={autoCompleteRef}
                 />
             </FormGroup>
 

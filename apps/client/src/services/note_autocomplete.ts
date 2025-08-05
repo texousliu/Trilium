@@ -452,6 +452,21 @@ function init() {
     };
 }
 
+/**
+ * Convenience function which triggers the display of recent notes in the autocomplete input and focuses it.
+ *
+ * @param inputElement - The input element to trigger recent notes on.
+ */
+export function triggerRecentNotes(inputElement: HTMLInputElement | null | undefined) {
+    if (!inputElement) {
+        return;
+    }
+
+    const $el = $(inputElement);
+    showRecentNotes($el);
+    $el.trigger("focus").trigger("select");
+}
+
 export default {
     autocompleteSourceForCKEditor,
     initNoteAutocomplete,
