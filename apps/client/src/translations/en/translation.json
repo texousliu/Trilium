@@ -316,7 +316,7 @@
     "upload_attachments_to_note": "Upload attachments to note",
     "close": "Close",
     "choose_files": "Choose files",
-    "files_will_be_uploaded": "Files will be uploaded as attachments into",
+    "files_will_be_uploaded": "Files will be uploaded as attachments into {{noteTitle}}",
     "options": "Options",
     "shrink_images": "Shrink images",
     "upload": "Upload",

@@ -11,9 +11,10 @@ interface ButtonProps {
     /** Called when the button is clicked. If not set, the button will submit the form (if any). */
     onClick?: () => void;
     primary?: boolean;
+    disabled?: boolean;
 }
 
-export default function Button({ buttonRef: _buttonRef, className, text, onClick, keyboardShortcut, icon, primary }: ButtonProps) {
+export default function Button({ buttonRef: _buttonRef, className, text, onClick, keyboardShortcut, icon, primary, disabled }: ButtonProps) {
     const classes: string[] = ["btn"];
     if (primary) {
         classes.push("btn-primary");
@@ -33,6 +34,7 @@ export default function Button({ buttonRef: _buttonRef, className, text, onClick
             type={onClick ? "button" : "submit"}
             onClick={onClick}
             ref={buttonRef}
+            disabled={disabled}
         >
             {icon && <span className={`bx ${icon}`}></span>}
             {text} {keyboardShortcut && (

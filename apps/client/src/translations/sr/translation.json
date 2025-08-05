@@ -315,7 +315,7 @@
     "upload_attachments_to_note": "Otpremite priloge uz belešku",
     "close": "Zatvori",
     "choose_files": "Izaberite datoteke",
-    "files_will_be_uploaded": "Datoteke će biti otpremljene kao prilozi u",
+    "files_will_be_uploaded": "Datoteke će biti otpremljene kao prilozi u {{noteTitle}}",
     "options": "Opcije",
     "shrink_images": "Smanji slike",
     "upload": "Otpremi",

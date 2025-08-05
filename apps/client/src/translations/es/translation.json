@@ -312,7 +312,7 @@
     "upload_attachments_to_note": "Cargar archivos adjuntos a nota",
     "close": "Cerrar",
     "choose_files": "Elija los archivos",
-    "files_will_be_uploaded": "Los archivos se cargarán como archivos adjuntos en",
+    "files_will_be_uploaded": "Los archivos se cargarán como archivos adjuntos en {{noteTitle}}",
     "options": "Opciones",
     "shrink_images": "Reducir imágenes",
     "upload": "Subir",

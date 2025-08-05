@@ -307,7 +307,7 @@
     "upload_attachments_to_note": "Téléverser des pièces jointes à la note",
     "close": "Fermer",
     "choose_files": "Choisir des fichiers",
-    "files_will_be_uploaded": "Les fichiers seront téléversés sous forme de pièces jointes dans",
+    "files_will_be_uploaded": "Les fichiers seront téléversés sous forme de pièces jointes dans {{noteTitle}}",
     "options": "Options",
     "shrink_images": "Réduire les images",
     "upload": "Téléverser",

@@ -310,7 +310,7 @@
     "upload_attachments_to_note": "上传附件到笔记",
     "close": "关闭",
     "choose_files": "选择文件",
-    "files_will_be_uploaded": "文件将作为附件上传到",
+    "files_will_be_uploaded": "文件将作为附件上传到 {{noteTitle}}",
     "options": "选项",
     "shrink_images": "缩小图片",
     "upload": "上传",

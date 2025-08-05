@@ -307,7 +307,7 @@
     "upload_attachments_to_note": "Lade Anhänge zur Notiz hoch",
     "close": "Schließen",
     "choose_files": "Wähle Dateien aus",
-    "files_will_be_uploaded": "Dateien werden als Anhänge in hochgeladen",
+    "files_will_be_uploaded": "Dateien werden als Anhänge in hochgeladen {{noteTitle}}",
     "options": "Optionen",
     "shrink_images": "Bilder verkleinern",
     "upload": "Hochladen",

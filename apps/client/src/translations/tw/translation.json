@@ -281,7 +281,7 @@
   "upload_attachments": {
     "upload_attachments_to_note": "上傳附件到筆記",
     "choose_files": "選擇文件",
-    "files_will_be_uploaded": "文件將作為附件上傳到",
+    "files_will_be_uploaded": "文件將作為附件上傳到 {{noteTitle}}",
     "options": "選項",
     "shrink_images": "縮小圖片",
     "upload": "上傳",

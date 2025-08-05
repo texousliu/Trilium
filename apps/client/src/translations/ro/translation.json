@@ -1309,7 +1309,7 @@
   },
   "upload_attachments": {
     "choose_files": "Selectați fișierele",
-    "files_will_be_uploaded": "Fișierele vor fi încărcate ca atașamente în",
+    "files_will_be_uploaded": "Fișierele vor fi încărcate ca atașamente în {{noteTitle}}",
     "options": "Opțuni",
     "shrink_images": "Micșorează imaginile",
     "tooltip": "Dacă această opțiune este bifată, Trilium va încerca micșorarea imaginilor încărcate prin scalarea și optimizarea lor, aspect ce va putea afecta calitatea imaginilor. Dacă nu este bifată, imaginile vor fi încărcate fără nicio schimbare.",
