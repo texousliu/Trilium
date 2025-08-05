@@ -11,6 +11,7 @@ import froca from "../../services/froca.js";
 import FNote from "../../entities/fnote.js";
 import link from "../../services/link.js";
 import Button from "../react/Button.jsx";
+import Alert from "../react/Alert.jsx";
 
 export interface ResolveOptions {
     proceed: boolean;
@@ -136,27 +137,23 @@ function BrokenRelations({ brokenRelations }: { brokenRelations: DeleteNotesPrev
 
     if (brokenRelations.length) {
         return (
-            <div className="broken-relations-wrapper">
-                <div className="alert alert-danger">
-                    <h4>{t("delete_notes.broken_relations_to_be_deleted", { relationCount: brokenRelations.length })}</h4>
-
-                    <ul className="broken-relations-list" style={{ maxHeight: "200px", overflow: "auto" }}>
-                        {brokenRelations.map((_, index) => {
-                            return (
-                                <li key={index}>
-                                    <span dangerouslySetInnerHTML={{ __html: t("delete_notes.deleted_relation_text", notesWithBrokenRelations[index]) }} />
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </div>
-            </div>
+            <Alert type="danger" title={t("delete_notes.broken_relations_to_be_deleted", { relationCount: brokenRelations.length })}>
+                <ul className="broken-relations-list" style={{ maxHeight: "200px", overflow: "auto" }}>
+                    {brokenRelations.map((_, index) => {
+                        return (
+                            <li key={index}>
+                                <span dangerouslySetInnerHTML={{ __html: t("delete_notes.deleted_relation_text", notesWithBrokenRelations[index]) }} />
+                            </li>
+                        );
+                    })}
+                </ul>
+            </Alert>
         );
     } else {
         return (
-            <div className="no-note-to-delete-wrapper alert alert-info">
-            {t("delete_notes.no_note_to_delete")}
-            </div>
+            <Alert type="info">
+                {t("delete_notes.no_note_to_delete")}
+            </Alert>
         );
     }
 }
