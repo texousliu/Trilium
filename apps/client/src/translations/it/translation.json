@@ -8,7 +8,7 @@
         "title": "Informazioni su Trilium Notes",
         "build_date": "Data della build:",
         "build_revision": "Revisione della build:",
-        "homepage": "Home page:"
+        "homepage": "Homepage:"
     },
     "toast": {
         "critical-error": {
@@ -142,7 +142,8 @@
         "new_token_message": "Inserire il nuovo nome del token"
     },
     "electron_integration": {
-        "zoom-factor": "Fattore di ingrandimento"
+        "zoom-factor": "Fattore di ingrandimento",
+        "desktop-application": "Applicazione Desktop"
     },
     "note_autocomplete": {
         "search-for": "Cerca \"{{term}}\"",
@@ -200,5 +201,78 @@
     },
     "ancestor": {
         "label": "Antenato"
+    },
+    "add_label": {
+        "add_label": "Aggiungi etichetta",
+        "label_name_placeholder": "nome dell'etichetta",
+        "new_value_placeholder": "nuovo valore",
+        "to_value": "al valore"
+    },
+    "update_label_value": {
+        "to_value": "al valore",
+        "label_name_placeholder": "nome dell'etichetta"
+    },
+    "delete_label": {
+        "delete_label": "Elimina etichetta",
+        "label_name_placeholder": "nome dell'etichetta"
+    },
+    "tree-context-menu": {
+        "move-to": "Muovi in...",
+        "cut": "Taglia"
+    },
+    "electron_context_menu": {
+        "cut": "Taglia",
+        "copy": "Copia",
+        "paste": "Incolla",
+        "copy-link": "Copia collegamento",
+        "paste-as-plain-text": "Incolla come testo semplice"
+    },
+    "editing": {
+        "editor_type": {
+            "multiline-toolbar": "Mostra la barra degli strumenti su più linee se non entra."
+        }
+    },
+    "edit_button": {
+        "edit_this_note": "Modifica questa nota"
+    },
+    "shortcuts": {
+        "shortcuts": "Scorciatoie"
+    },
+    "shared_switch": {
+        "toggle-on-title": "Condividi la nota",
+        "toggle-off-title": "Non condividere la nota"
+    },
+    "search_string": {
+        "search_prefix": "Cerca:"
+    },
+    "attachment_detail": {
+        "open_help_page": "Apri la pagina di aiuto sugli allegati"
+    },
+    "search_definition": {
+        "ancestor": "antenato",
+        "debug": "debug",
+        "action": "azione",
+        "add_search_option": "Aggiungi un opzione di ricerca:",
+        "search_string": "cerca la stringa",
+        "limit": "limite"
+    },
+    "modal": {
+        "close": "Chiudi"
+    },
+    "board_view": {
+        "insert-below": "Inserisci sotto",
+        "delete-column": "Elimina la colonna",
+        "delete-column-confirmation": "Sei sicuro di vole eliminare questa colonna? Il corrispondente attributo sarà eliminato anche nelle note sotto questa colonna."
+    },
+    "backup": {
+        "enable_weekly_backup": "Abilita le archiviazioni settimanali",
+        "enable_monthly_backup": "Abilita le archiviazioni mensili",
+        "backup_recommendation": "Si raccomanda di mantenere attive le archiviazioni, sebbene ciò possa rendere l'avvio dell'applicazione lento con database grandi e/o dispositivi di archiviazione lenti.",
+        "backup_now": "Archivia adesso",
+        "backup_database_now": "Archivia il database adesso",
+        "existing_backups": "Backup esistenti",
+        "date-and-time": "Data e ora",
+        "path": "Percorso",
+        "database_backed_up_to": "Il database è stato archiviato in {{backupFilePath}}"
     }
 }
