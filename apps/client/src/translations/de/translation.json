@@ -201,7 +201,7 @@
     "box_size_small": "klein (~ 10 Zeilen)",
     "box_size_medium": "mittel (~ 30 Zeilen)",
     "box_size_full": "vollständig (Feld zeigt vollständigen Text)",
-    "button_include": "Notiz beifügen <kbd>Eingabetaste</kbd>"
+    "button_include": "Notiz beifügen"
   },
   "info": {
     "modalTitle": "Infonachricht",
