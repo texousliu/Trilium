@@ -10,6 +10,7 @@ interface ModalProps {
     children: ComponentChildren;
     footer?: ComponentChildren;
     footerAlignment?: "right" | "between";
+    minWidth?: string;
     maxWidth?: number;
     zIndex?: number;
     /**
@@ -40,7 +41,7 @@ interface ModalProps {
     formRef?: RefObject<HTMLFormElement>;
 }
 
-export default function Modal({ children, className, size, title, footer, footerAlignment, onShown, onSubmit, helpPageId, maxWidth, zIndex, scrollable, onHidden: onHidden, modalRef: _modalRef, formRef: _formRef }: ModalProps) {
+export default function Modal({ children, className, size, title, footer, footerAlignment, onShown, onSubmit, helpPageId, minWidth, maxWidth, zIndex, scrollable, onHidden: onHidden, modalRef: _modalRef, formRef: _formRef }: ModalProps) {
     const modalRef = _modalRef ?? useRef<HTMLDivElement>(null);
     const formRef = _formRef ?? useRef<HTMLFormElement>(null);
 
@@ -75,6 +76,9 @@ export default function Modal({ children, className, size, title, footer, footer
     const documentStyle: CSSProperties = {};
     if (maxWidth) {
         documentStyle.maxWidth = `${maxWidth}px`;
+    }
+    if (minWidth) {
+        documentStyle.minWidth = minWidth;
     }
 
     return (
