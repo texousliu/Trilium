@@ -11,8 +11,10 @@ import Modal from "../react/Modal";
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import FormList, { FormListItem } from "../react/FormList";
 import utils from "../../services/utils";
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import protected_session_holder from "../../services/protected_session_holder";
+import { renderMathInElement } from "../../services/math";
+import { CSSProperties } from "preact/compat";
 
 interface RevisionsDialogProps {
     note?: FNote;
@@ -55,8 +57,8 @@ function RevisionsDialogComponent({ note }: RevisionsDialogProps) {
             title={t("revisions.note_revisions")}
             helpPageId="vZWERwf8U3nx"
             bodyStyle={{ display: "flex", height: "80vh" }}
-            header={<>
-                <Button text={t("revisions.delete_all_revisions")} small style={{ padding: "0 10px" }}
+            header={
+                (!!revisions?.length && <Button text={t("revisions.delete_all_revisions")} small style={{ padding: "0 10px" }}
                     onClick={async () => {
                         const text = t("revisions.confirm_delete_all");
 
@@ -66,8 +68,8 @@ function RevisionsDialogComponent({ note }: RevisionsDialogProps) {
                             closeActiveDialog();
                             toast.showMessage(t("revisions.revisions_deleted"));
                         }
-                    }}/>
-            </>}                
+                    }}/>)
+            }                
             >
                 <RevisionsList
                     revisions={revisions}
@@ -79,12 +81,12 @@ function RevisionsDialogComponent({ note }: RevisionsDialogProps) {
                     }}
                 />
 
-                <div class="revision-content-wrapper" style={{
-                    "flex-grow": "1",
-                    "margin-left": "20px",
-                    "display": "flex",
-                    "flex-direction": "column",
-                    "min-width": 0
+                <div className="revision-content-wrapper" style={{
+                    flexGrow: "1",
+                    marginLeft: "20px",
+                    display: "flex",
+                    flexDirection: "column",
+                    minWidth: 0                    
                 }}>
                     <RevisionPreview revisionItem={currentRevision} />
                 </div>
@@ -117,29 +119,108 @@ function RevisionPreview({ revisionItem }: { revisionItem?: RevisionItem}) {
         }
     }, [revisionItem]);
 
-    return revisionItem && (
+    return (
         <>
             <div style="flex-grow: 0; display: flex; justify-content: space-between;">
-                <h3 class="revision-title" style="margin: 3px; flex-grow: 100;">{revisionItem.title}</h3>
-                <div class="revision-title-buttons">
+                <h3 className="revision-title" style="margin: 3px; flex-grow: 100;">{revisionItem?.title ?? t("revisions.no_revisions")}</h3>
+                {(revisionItem && <div className="revision-title-buttons">
                     {(!revisionItem.isProtected || protected_session_holder.isProtectedSessionAvailable()) &&
-                        <Button icon="bx bx-history" text={t("revisions.restore_button")} />
+                        <Button icon="bx bx-history"
+                            text={t("revisions.restore_button")}
+                            onClick={async () => {
+                                if (await dialog.confirm(t("revisions.confirm_restore"))) {
+                                    await server.post(`revisions/${revisionItem.revisionId}/restore`);
+                                    closeActiveDialog();
+                                    toast.showMessage(t("revisions.revision_restored"));
+                                }
+                            }}/>
                     }
-                </div>
+                </div>)}
             </div>
-            <RevisionContent revisionItem={revisionItem} fullRevision={fullRevision} />
+            <div className="revision-content use-tn-links" style={{ overflow: "auto", wordBreak: "break-word" }}>
+                <RevisionContent revisionItem={revisionItem} fullRevision={fullRevision} />
+            </div>
         </>
     );
 }
+
+const IMAGE_STYLE: CSSProperties = {
+    maxWidth: "100%",
+    maxHeight: "90%",
+    objectFit: "contain"
+};
+
+const CODE_STYLE: CSSProperties = {
+    maxWidth: "100%",
+    wordBreak: "break-all",
+    whiteSpace: "pre-wrap"
+};
 
 function RevisionContent({ revisionItem, fullRevision }: { revisionItem?: RevisionItem, fullRevision?: FullRevision }) {
     if (!revisionItem || !fullRevision) {
         return <></>;
     }
 
+    const content = fullRevision.content;
+
     switch (revisionItem.type) {
-        case "text":
-            return <div class="ck-content" dangerouslySetInnerHTML={{ __html: fullRevision.content }}></div>
+        case "text": {
+            const contentRef = useRef<HTMLDivElement>();
+            useEffect(() => {
+                if (contentRef.current?.querySelector("span.math-tex")) {
+                    renderMathInElement(contentRef.current, { trust: true });
+                }
+            });
+            return <div ref={contentRef} className="ck-content" dangerouslySetInnerHTML={{ __html: content }}></div>
+        }
+        case "code":
+            return <pre style={CODE_STYLE}>{content}</pre>;
+        case "image":            
+            switch (revisionItem.mime) {
+                case "image/svg+xml": {
+                    //Base64 of other format images may be embedded in svg
+                    const encodedSVG = encodeURIComponent(content); 
+                    return <img
+                        src={`data:${fullRevision.mime};utf8,${encodedSVG}`}
+                        style={IMAGE_STYLE} />;
+                }
+                default: {
+                    // the reason why we put this inline as base64 is that we do not want to let user copy this
+                    // as a URL to be used in a note. Instead, if they copy and paste it into a note, it will be uploaded as a new note
+                    return <img
+                        src={`data:${fullRevision.mime};base64,${fullRevision.content}`}
+                        style={IMAGE_STYLE} />
+                }
+            }
+        case "file":
+            return <table cellPadding="10">
+                <tr>
+                    <th>{t("revisions.mime")}</th>
+                    <td>{revisionItem.mime}</td>
+                </tr>
+                <tr>
+                    <th>{t("revisions.file_size")}</th>
+                    <td>{utils.formatSize(revisionItem.contentLength)}</td>
+                </tr>
+                {fullRevision.content &&
+                    <tr>
+                        <td colspan={2}>
+                            <strong>{t("revisions.preview")}</strong>
+                            <pre className="file-preview-content" style={CODE_STYLE}>{fullRevision.content}</pre>
+                        </td>
+                    </tr>
+                }
+            </table>;
+        case "canvas":
+        case "mindMap":
+        case "mermaid": {
+            const encodedTitle = encodeURIComponent(revisionItem.title);
+            return <img
+                src={`api/revisions/${revisionItem.revisionId}/image/${encodedTitle}?${Math.random()}`}
+                style={IMAGE_STYLE} />;
+        }
+        default:
+            return <>{t("revisions.preview_not_available")}</>
     }
 }
 
