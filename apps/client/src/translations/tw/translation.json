@@ -213,7 +213,7 @@
   "note_type_chooser": {
     "modal_title": "選擇筆記類型",
     "modal_body": "選擇新筆記的類型或模板：",
-    "templates": "模板："
+    "templates": "模板"
   },
   "password_not_set": {
     "title": "密碼未設定",

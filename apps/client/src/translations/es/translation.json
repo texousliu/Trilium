@@ -236,7 +236,7 @@
     "modal_title": "Elija el tipo de nota",
     "close": "Cerrar",
     "modal_body": "Elija el tipo de nota/plantilla de la nueva nota:",
-    "templates": "Plantillas:"
+    "templates": "Plantillas"
   },
   "password_not_set": {
     "title": "La contraseña no está establecida",

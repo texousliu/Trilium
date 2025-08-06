@@ -233,7 +233,7 @@
     "modal_title": "Choisissez le type de note",
     "close": "Fermer",
     "modal_body": "Choisissez le type de note/le modèle de la nouvelle note :",
-    "templates": "Modèles :"
+    "templates": "Modèles"
   },
   "password_not_set": {
     "title": "Le mot de passe n'est pas défini",

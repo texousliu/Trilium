@@ -896,7 +896,7 @@
   "note_type_chooser": {
     "modal_body": "Selectați tipul notiței/șablonul pentru noua notiță:",
     "modal_title": "Selectați tipul notiței",
-    "templates": "Șabloane:",
+    "templates": "Șabloane",
     "close": "Închide",
     "change_path_prompt": "Selectați locul unde să se creeze noua notiță:",
     "search_placeholder": "căutare cale notiță după nume (cea implicită dacă este necompletat)"

@@ -233,7 +233,7 @@
     "modal_title": "Wähle den Notiztyp aus",
     "close": "Schließen",
     "modal_body": "Wähle den Notiztyp / die Vorlage der neuen Notiz:",
-    "templates": "Vorlagen:"
+    "templates": "Vorlagen"
   },
   "password_not_set": {
     "title": "Das Passwort ist nicht festgelegt",

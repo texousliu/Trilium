@@ -238,7 +238,8 @@
     "modal_title": "Choose note type",
     "close": "Close",
     "modal_body": "Choose note type / template of the new note:",
-    "templates": "Templates:"
+    "templates": "Templates",
+    "builtin_templates": "Built-in Templates"
   },
   "password_not_set": {
     "title": "Password is not set",
