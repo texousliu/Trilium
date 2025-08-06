@@ -45,3 +45,8 @@ export interface RevisionPojo {
     content?: string | Buffer<ArrayBufferLike>;
     contentLength?: number;
 }
+
+export interface RecentChangesRow {
+    noteId: string;
+    date: string;
+}
