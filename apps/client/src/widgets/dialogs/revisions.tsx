@@ -1,4 +1,4 @@
-import { NoteType } from "@triliumnext/commons";
+import type { FullRevision, RevisionItem } from "@triliumnext/commons";
 import appContext, { EventData } from "../../components/app_context";
 import FNote from "../../entities/fnote";
 import dialog, { closeActiveDialog, openDialog } from "../../services/dialog";
@@ -19,22 +19,6 @@ import open from "../../services/open";
 
 interface RevisionsDialogProps {
     note?: FNote;
-}
-
-interface RevisionItem {
-    noteId: string;
-    revisionId: string;
-    dateLastEdited: string;
-    contentLength: number;
-    type: NoteType;
-    title: string;
-    isProtected: boolean;
-    mime: string;
-}
-
-interface FullRevision {
-    content: string;
-    mime: string;
 }
 
 function RevisionsDialogComponent({ note }: RevisionsDialogProps) {

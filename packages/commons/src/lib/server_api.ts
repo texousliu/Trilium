@@ -1,4 +1,4 @@
-import { AttributeRow } from "./rows.js";
+import { AttributeRow, NoteType } from "./rows.js";
 
 export interface AppInfo {
     appVersion: string;
@@ -16,4 +16,15 @@ export interface AppInfo {
 export interface DeleteNotesPreview {
     noteIdsToBeDeleted: string[];
     brokenRelations: AttributeRow[];
+}
+
+export interface RevisionItem {
+    noteId: string;
+    revisionId?: string;
+    dateLastEdited?: string;
+    contentLength?: number;
+    type: NoteType;
+    title: string;
+    isProtected?: boolean;
+    mime: string;
 }
