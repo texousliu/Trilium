@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { openDialog } from "../../services/dialog.js";
+import { closeActiveDialog, openDialog } from "../../services/dialog.js";
 import { t } from "../../services/i18n.js";
 import utils from "../../services/utils.js";
 import Button from "../react/Button.js";
@@ -31,7 +31,7 @@ function IncorrectCpuArchDialogComponent() {
                         }
                     }}/>
                 <Button text={t("cpu_arch_warning.continue_anyway")}
-                    onClick={() => openDialog(null)} />
+                    onClick={() => closeActiveDialog()} />
             </>}
         >
             <p>{utils.isMac() ? t("cpu_arch_warning.message_macos") : t("cpu_arch_warning.message_windows")}</p>

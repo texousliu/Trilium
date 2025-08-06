@@ -20,6 +20,7 @@ function ConfirmDialogComponent({ title, message, callback, lastElementToFocus, 
 
     return ( 
         <Modal
+            className="confirm-dialog"
             title={title ?? t("confirm.confirmation")}
             size="md"
             zIndex={2000}
@@ -93,7 +94,7 @@ export default class ConfirmDialog extends ReactBasicWidget {
 
     private showDialog(title: string | null, message: MessageType, callback: ConfirmDialogCallback, isConfirmDeleteNoteBox: boolean) {
         this.props = {
-            title: title,
+            title: title ?? undefined,
             message: (typeof message === "object" && "length" in message ? message[0] : message),
             lastElementToFocus: (document.activeElement as HTMLElement),
             callback,

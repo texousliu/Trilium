@@ -94,7 +94,7 @@ function DeletedNotes({ noteIdsToBeDeleted }: { noteIdsToBeDeleted: DeleteNotesP
 
     useEffect(() => {
         froca.getNotes(noteIdsToBeDeleted).then(async (notes: FNote[]) => {
-            const noteLinks = [];
+            const noteLinks: string[] = [];
 
             for (const note of notes) {
                 noteLinks.push((await link.createLink(note.noteId, { showNotePath: true })).html());
@@ -121,7 +121,9 @@ function BrokenRelations({ brokenRelations }: { brokenRelations: DeleteNotesPrev
     const [ notesWithBrokenRelations, setNotesWithBrokenRelations ] = useState<BrokenRelationData[]>([]);
 
     useEffect(() => {
-        const noteIds = brokenRelations.map(relation => relation.noteId);
+        const noteIds = brokenRelations
+            .map(relation => relation.noteId)
+            .filter(noteId => noteId) as string[];
         froca.getNotes(noteIds).then(async (notes) => {
             const notesWithBrokenRelations: BrokenRelationData[] = [];
             for (const attr of brokenRelations) {
@@ -142,7 +144,7 @@ function BrokenRelations({ brokenRelations }: { brokenRelations: DeleteNotesPrev
                     {brokenRelations.map((_, index) => {
                         return (
                             <li key={index}>
-                                <span dangerouslySetInnerHTML={{ __html: t("delete_notes.deleted_relation_text", notesWithBrokenRelations[index]) }} />
+                                <span dangerouslySetInnerHTML={{ __html: t("delete_notes.deleted_relation_text", notesWithBrokenRelations[index] as unknown as Record<string, string>) }} />
                             </li>
                         );
                     })}

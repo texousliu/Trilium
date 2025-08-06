@@ -180,7 +180,7 @@ function RevisionContent({ revisionItem, fullRevision }: { revisionItem?: Revisi
 
     switch (revisionItem.type) {
         case "text": {
-            const contentRef = useRef<HTMLDivElement>();
+            const contentRef = useRef<HTMLDivElement>(null);
             useEffect(() => {
                 if (contentRef.current?.querySelector("span.math-tex")) {
                     renderMathInElement(contentRef.current, { trust: true });

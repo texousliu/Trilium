@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import note_autocomplete, { Suggestion } from "../../services/note_autocomplete";
 import appContext from "../../components/app_context";
 import commandRegistry from "../../services/command_registry";
+import { refToJQuerySelector } from "../react/react_utils";
 
 const KEEP_LAST_SEARCH_FOR_X_SECONDS = 120;
 
@@ -37,7 +38,7 @@ function JumpToNoteDialogComponent({ mode }: JumpToNoteDialogProps) {
     }
 
     function onShown() {
-        const $autoComplete = $(autocompleteRef.current);
+        const $autoComplete = refToJQuerySelector(autocompleteRef);
         switch (mode) {
             case "last-search":
                 // Fall-through if there is no text, in order to display the recent notes.
@@ -85,7 +86,7 @@ function JumpToNoteDialogComponent({ mode }: JumpToNoteDialogProps) {
 
 export default class JumpToNoteDialog extends ReactBasicWidget {
 
-    private lastOpenedTs: number;
+    private lastOpenedTs?: number;
     private props: JumpToNoteDialogProps = {
         mode: "last-search"
     };

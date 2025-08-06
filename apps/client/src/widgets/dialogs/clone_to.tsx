@@ -17,15 +17,19 @@ import toast from "../../services/toast";
 import NoteList from "../react/NoteList";
 
 interface CloneToDialogProps {
-    clonedNoteIds: string[];
+    clonedNoteIds?: string[];
 }
 
 function CloneToDialogComponent({ clonedNoteIds }: CloneToDialogProps) {
     const [ prefix, setPrefix ] = useState("");
-    const [ suggestion, setSuggestion ] = useState<Suggestion>(null);
+    const [ suggestion, setSuggestion ] = useState<Suggestion | null>(null);
     const autoCompleteRef = useRef<HTMLInputElement>(null);
 
     function onSubmit() {
+        if (!clonedNoteIds) {
+            return;
+        }
+
         const notePath = suggestion?.notePath;
         if (!notePath) {
             logError(t("clone_to.no_path_to_clone_to"));
@@ -64,7 +68,7 @@ function CloneToDialogComponent({ clonedNoteIds }: CloneToDialogProps) {
 
 export default class CloneToDialog extends ReactBasicWidget {
     
-    private props: CloneToDialogProps;
+    private props: CloneToDialogProps = {};
 
     get component() {
         return <CloneToDialogComponent {...this.props} />;
@@ -75,7 +79,7 @@ export default class CloneToDialog extends ReactBasicWidget {
             noteIds = [appContext.tabManager.getActiveContextNoteId() ?? ""];
         }
 
-        const clonedNoteIds = [];
+        const clonedNoteIds: string[] = [];
 
         for (const noteId of noteIds) {
             if (!clonedNoteIds.includes(noteId)) {

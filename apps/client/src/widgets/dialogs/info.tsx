@@ -6,6 +6,7 @@ import Modal from "../react/Modal";
 import { t } from "../../services/i18n";
 import Button from "../react/Button";
 import { useRef } from "preact/compat";
+import { RawHtmlBlock } from "../react/RawHtml";
 
 interface ShowInfoDialogProps {
     message?: string | HTMLElement;
@@ -31,7 +32,7 @@ function ShowInfoDialogComponent({ message, callback, lastElementToFocus }: Show
             onClick={() => closeActiveDialog()}
         />}
     >
-        <div className="info-dialog-content" dangerouslySetInnerHTML={{ __html: message ?? "" }}></div>
+        <RawHtmlBlock className="info-dialog-content" html={message} />
     </Modal>);
 }
 

@@ -2,7 +2,7 @@ import { ComponentChildren, RefObject } from "preact";
 
 interface FormGroupProps {
     labelRef?: RefObject<HTMLLabelElement>;
-    label: string;
+    label?: string;
     title?: string;
     className?: string;
     children: ComponentChildren;
@@ -14,7 +14,7 @@ export default function FormGroup({ label, title, className, children, descripti
         <div className={`form-group ${className}`} title={title}
             style={{ "margin-bottom": "15px" }}>
             <label style={{ width: "100%" }} ref={labelRef}>
-                <div style={{ "margin-bottom": "10px" }}>{label}</div>
+                {label && <div style={{ "margin-bottom": "10px" }}>{label}</div> }
                 {children}
             </label>
 

@@ -7,6 +7,7 @@ import { Modal as BootstrapModal } from "bootstrap";
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import FormTextBox from "../react/FormTextBox";
 import FormGroup from "../react/FormGroup";
+import { refToJQuerySelector } from "../react/react_utils";
 
 // JQuery here is maintained for compatibility with existing code.
 interface ShownCallbackData {
@@ -44,10 +45,10 @@ function PromptDialogComponent({ title, message, shown: shownCallback, callback 
             modalRef={modalRef} formRef={formRef}            
             onShown={() => {
                 shownCallback?.({
-                    $dialog: $(modalRef.current),
-                    $question: $(labelRef.current),
-                    $answer: $(answerRef.current),
-                    $form: $(formRef.current) as JQuery<HTMLFormElement>
+                    $dialog: refToJQuerySelector(modalRef),
+                    $question: refToJQuerySelector(labelRef),
+                    $answer: refToJQuerySelector(answerRef),
+                    $form: refToJQuerySelector(formRef)
                 });
                 answerRef.current?.focus();
             }}
@@ -72,7 +73,7 @@ function PromptDialogComponent({ title, message, shown: shownCallback, callback 
 
 export default class PromptDialog extends ReactBasicWidget {
 
-    private props: PromptDialogProps;
+    private props: PromptDialogProps = {};
 
     get component() {
         return <PromptDialogComponent {...this.props} />;

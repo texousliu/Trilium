@@ -13,6 +13,7 @@ import note_autocomplete, { Suggestion } from "../../services/note_autocomplete"
 import type { default as TextTypeWidget } from "../type_widgets/editable_text.js";
 import { logError } from "../../services/ws";
 import FormGroup from "../react/FormGroup.js";
+import { refToJQuerySelector } from "../react/react_utils";
 
 type LinkType = "reference-link" | "external-link" | "hyper-link";
 
@@ -26,7 +27,7 @@ function AddLinkDialogComponent({ text: _text, textTypeWidget }: AddLinkDialogPr
     const [ linkTitle, setLinkTitle ] = useState("");
     const hasSelection = textTypeWidget?.hasSelection();
     const [ linkType, setLinkType ] = useState<LinkType>(hasSelection ? "hyper-link" : "reference-link");
-    const [ suggestion, setSuggestion ] = useState<Suggestion>(null);
+    const [ suggestion, setSuggestion ] = useState<Suggestion | null>(null);
 
     async function setDefaultLinkTitle(noteId: string) {
         const noteTitle = await tree.getNoteTitle(noteId);
@@ -60,7 +61,7 @@ function AddLinkDialogComponent({ text: _text, textTypeWidget }: AddLinkDialogPr
     }, [suggestion]);
 
     function onShown() {
-        const $autocompleteEl = $(autocompleteRef.current);
+        const $autocompleteEl = refToJQuerySelector(autocompleteRef);
         if (!text) {
             note_autocomplete.showRecentNotes($autocompleteEl);
         } else {
@@ -74,11 +75,11 @@ function AddLinkDialogComponent({ text: _text, textTypeWidget }: AddLinkDialogPr
     }
 
     function onSubmit() {
-        if (suggestion.notePath) {
+        if (suggestion?.notePath) {
             // Handle note link
             closeActiveDialog();
             textTypeWidget?.addLink(suggestion.notePath, linkType === "reference-link" ? null : linkTitle);
-        } else if (suggestion.externalLink) {
+        } else if (suggestion?.externalLink) {
             // Handle external link
             closeActiveDialog();
             textTypeWidget?.addLink(suggestion.externalLink, linkTitle, true);
