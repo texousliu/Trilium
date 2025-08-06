@@ -28,3 +28,20 @@ export interface RevisionItem {
     isProtected?: boolean;
     mime: string;
 }
+
+export interface RevisionPojo {
+    revisionId?: string;
+    noteId: string;
+    type: NoteType;
+    mime: string;
+    isProtected?: boolean;
+    title: string;
+    blobId?: string;
+    dateLastEdited?: string;
+    dateCreated?: string;
+    utcDateLastEdited?: string;
+    utcDateCreated?: string;
+    utcDateModified?: string;
+    content?: string | Buffer<ArrayBufferLike>;
+    contentLength?: number;
+}

@@ -1,4 +1,4 @@
-import type { FullRevision, RevisionItem } from "@triliumnext/commons";
+import type { RevisionPojo, RevisionItem } from "@triliumnext/commons";
 import appContext, { EventData } from "../../components/app_context";
 import FNote from "../../entities/fnote";
 import dialog, { closeActiveDialog, openDialog } from "../../services/dialog";
@@ -91,20 +91,20 @@ function RevisionsList({ revisions, onSelect }: { revisions: RevisionItem[], onS
                     title={t("revisions.revision_last_edited", { date: item.dateLastEdited })}
                     value={item.revisionId}
                 >
-                    {item.dateLastEdited.substr(0, 16)} ({utils.formatSize(item.contentLength)})
+                    {item.dateLastEdited && item.dateLastEdited.substr(0, 16)} ({item.contentLength && utils.formatSize(item.contentLength)})
                 </FormListItem>
             )}
         </FormList>);
 }
 
 function RevisionPreview({ revisionItem }: { revisionItem?: RevisionItem}) {
-    const [ fullRevision, setFullRevision ] = useState<FullRevision>();
+    const [ fullRevision, setFullRevision ] = useState<RevisionPojo>();
     const [ needsRefresh, setNeedsRefresh ] = useState<boolean>();
 
     useEffect(() => {
         setNeedsRefresh(false);
         if (revisionItem) {
-            server.get<FullRevision>(`revisions/${revisionItem.revisionId}`).then(setFullRevision);
+            server.get<RevisionPojo>(`revisions/${revisionItem.revisionId}`).then(setFullRevision);
         } else {
             setFullRevision(undefined);            
         }
@@ -143,7 +143,11 @@ function RevisionPreview({ revisionItem }: { revisionItem?: RevisionItem}) {
                                 primary
                                 icon="bx bx-download"
                                 text={t("revisions.download_button")}
-                                onClick={() => open.downloadRevision(revisionItem.noteId, revisionItem.revisionId)} />
+                                onClick={() => {
+                                    if (revisionItem.revisionId) {
+                                        open.downloadRevision(revisionItem.noteId, revisionItem.revisionId)}
+                                    }
+                                }/>
                         </>
                     }
                 </div>)}
@@ -167,12 +171,12 @@ const CODE_STYLE: CSSProperties = {
     whiteSpace: "pre-wrap"
 };
 
-function RevisionContent({ revisionItem, fullRevision }: { revisionItem?: RevisionItem, fullRevision?: FullRevision }) {
-    if (!revisionItem || !fullRevision) {
+function RevisionContent({ revisionItem, fullRevision }: { revisionItem?: RevisionItem, fullRevision?: RevisionPojo }) {
+    const content = fullRevision?.content;
+    if (!revisionItem || !content) {
         return <></>;
     }
 
-    const content = fullRevision.content;
 
     switch (revisionItem.type) {
         case "text": {
@@ -182,7 +186,7 @@ function RevisionContent({ revisionItem, fullRevision }: { revisionItem?: Revisi
                     renderMathInElement(contentRef.current, { trust: true });
                 }
             });
-            return <div ref={contentRef} className="ck-content" dangerouslySetInnerHTML={{ __html: content }}></div>
+            return <div ref={contentRef} className="ck-content" dangerouslySetInnerHTML={{ __html: content as string }}></div>
         }
         case "code":
             return <pre style={CODE_STYLE}>{content}</pre>;
@@ -190,7 +194,7 @@ function RevisionContent({ revisionItem, fullRevision }: { revisionItem?: Revisi
             switch (revisionItem.mime) {
                 case "image/svg+xml": {
                     //Base64 of other format images may be embedded in svg
-                    const encodedSVG = encodeURIComponent(content); 
+                    const encodedSVG = encodeURIComponent(content as string); 
                     return <img
                         src={`data:${fullRevision.mime};utf8,${encodedSVG}`}
                         style={IMAGE_STYLE} />;
@@ -211,7 +215,7 @@ function RevisionContent({ revisionItem, fullRevision }: { revisionItem?: Revisi
                 </tr>
                 <tr>
                     <th>{t("revisions.file_size")}</th>
-                    <td>{utils.formatSize(revisionItem.contentLength)}</td>
+                    <td>{revisionItem.contentLength && utils.formatSize(revisionItem.contentLength)}</td>
                 </tr>
                 {fullRevision.content &&
                     <tr>

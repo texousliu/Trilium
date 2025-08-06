@@ -12,7 +12,7 @@ import type { Request, Response } from "express";
 import type BRevision from "../../becca/entities/brevision.js";
 import type BNote from "../../becca/entities/bnote.js";
 import type { NotePojo } from "../../becca/becca-interface.js";
-import { RevisionItem, RevisionRow } from "@triliumnext/commons";
+import { RevisionItem, RevisionPojo, RevisionRow } from "@triliumnext/commons";
 
 interface NotePath {
     noteId: string;
@@ -60,7 +60,7 @@ function getRevision(req: Request) {
         }
     }
 
-    return revision satisfies RevisionRow;
+    return revision satisfies RevisionPojo;
 }
 
 function getRevisionFilename(revision: BRevision) {
