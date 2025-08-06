@@ -15,6 +15,7 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import protected_session_holder from "../../services/protected_session_holder";
 import { renderMathInElement } from "../../services/math";
 import { CSSProperties } from "preact/compat";
+import open from "../../services/open";
 
 interface RevisionsDialogProps {
     note?: FNote;
@@ -110,14 +111,16 @@ function RevisionsList({ revisions, onSelect }: { revisions: RevisionItem[], onS
 
 function RevisionPreview({ revisionItem }: { revisionItem?: RevisionItem}) {
     const [ fullRevision, setFullRevision ] = useState<FullRevision>();
+    const [ needsRefresh, setNeedsRefresh ] = useState<boolean>();
 
     useEffect(() => {
+        setNeedsRefresh(false);
         if (revisionItem) {
             server.get<FullRevision>(`revisions/${revisionItem.revisionId}`).then(setFullRevision);
         } else {
-            setFullRevision(undefined);
+            setFullRevision(undefined);            
         }
-    }, [revisionItem]);
+    }, [revisionItem, needsRefresh]);
 
     return (
         <>
@@ -125,15 +128,35 @@ function RevisionPreview({ revisionItem }: { revisionItem?: RevisionItem}) {
                 <h3 className="revision-title" style="margin: 3px; flex-grow: 100;">{revisionItem?.title ?? t("revisions.no_revisions")}</h3>
                 {(revisionItem && <div className="revision-title-buttons">
                     {(!revisionItem.isProtected || protected_session_holder.isProtectedSessionAvailable()) &&
-                        <Button icon="bx bx-history"
-                            text={t("revisions.restore_button")}
-                            onClick={async () => {
-                                if (await dialog.confirm(t("revisions.confirm_restore"))) {
-                                    await server.post(`revisions/${revisionItem.revisionId}/restore`);
-                                    closeActiveDialog();
-                                    toast.showMessage(t("revisions.revision_restored"));
-                                }
-                            }}/>
+                        <>
+                            <Button
+                                icon="bx bx-history"
+                                text={t("revisions.restore_button")}
+                                onClick={async () => {
+                                    if (await dialog.confirm(t("revisions.confirm_restore"))) {
+                                        await server.post(`revisions/${revisionItem.revisionId}/restore`);
+                                        closeActiveDialog();
+                                        toast.showMessage(t("revisions.revision_restored"));
+                                    }
+                                }}/>
+                            &nbsp;
+                            <Button
+                                icon="bx bx-trash"
+                                text={t("revisions.delete_button")}
+                                onClick={async () => {
+                                    if (await dialog.confirm(t("revisions.confirm_delete"))) {
+                                        await server.remove(`revisions/${revisionItem.revisionId}`);
+                                        setNeedsRefresh(true);
+                                        toast.showMessage(t("revisions.revision_deleted"));
+                                    }
+                                }} />
+                            &nbsp;
+                            <Button
+                                primary
+                                icon="bx bx-download"
+                                text={t("revisions.download_button")}
+                                onClick={() => open.downloadRevision(revisionItem.noteId, revisionItem.revisionId)} />
+                        </>
                     }
                 </div>)}
             </div>
