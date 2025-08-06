@@ -13,7 +13,7 @@
     "@types/fs-extra": "11.0.4",
     "copy-webpack-plugin": "13.0.0",
     "electron": "37.2.5",
-    "fs-extra": "11.3.0"
+    "fs-extra": "11.3.1"
   },
   "nx": {
     "name": "edit-docs",
