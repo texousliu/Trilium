@@ -8,6 +8,10 @@ interface ModalProps {
     title: string | ComponentChildren;
     size: "xl" | "lg" | "md" | "sm";
     children: ComponentChildren;
+    /**
+     * Items to display in the modal header, apart from the title itself which is handled separately.
+     */
+    header?: ComponentChildren;
     footer?: ComponentChildren;
     footerAlignment?: "right" | "between";
     minWidth?: string;
@@ -39,9 +43,10 @@ interface ModalProps {
      * Gives access to the underlying form element of the modal. This is only set if `onSubmit` is provided.
      */
     formRef?: RefObject<HTMLFormElement>;
+    bodyStyle?: CSSProperties;
 }
 
-export default function Modal({ children, className, size, title, footer, footerAlignment, onShown, onSubmit, helpPageId, minWidth, maxWidth, zIndex, scrollable, onHidden: onHidden, modalRef: _modalRef, formRef: _formRef }: ModalProps) {
+export default function Modal({ children, className, size, title, header, footer, footerAlignment, onShown, onSubmit, helpPageId, minWidth, maxWidth, zIndex, scrollable, onHidden: onHidden, modalRef: _modalRef, formRef: _formRef, bodyStyle }: ModalProps) {
     const modalRef = _modalRef ?? useRef<HTMLDivElement>(null);
     const formRef = _formRef ?? useRef<HTMLFormElement>(null);
 
@@ -91,6 +96,7 @@ export default function Modal({ children, className, size, title, footer, footer
                         ) : (
                             title
                         )}
+                        {header}
                         {helpPageId && (
                             <button className="help-button" type="button" data-in-app-help={helpPageId} title={t("modal.help_title")}>?</button>
                         )}
@@ -102,10 +108,10 @@ export default function Modal({ children, className, size, title, footer, footer
                             e.preventDefault();
                             onSubmit();
                         }}>
-                            <ModalInner footer={footer}>{children}</ModalInner>
+                            <ModalInner footer={footer} bodyStyle={bodyStyle}>{children}</ModalInner>
                         </form>
                     ) : (
-                        <ModalInner footer={footer}>
+                        <ModalInner footer={footer} bodyStyle={bodyStyle}>
                             {children}
                         </ModalInner>
                     )}
@@ -115,7 +121,7 @@ export default function Modal({ children, className, size, title, footer, footer
     );
 }
 
-function ModalInner({ children, footer, footerAlignment }: Pick<ModalProps, "children" | "footer" | "footerAlignment">) {
+function ModalInner({ children, footer, footerAlignment, bodyStyle }: Pick<ModalProps, "children" | "footer" | "footerAlignment" | "bodyStyle">) {
     const footerStyle: CSSProperties = {};
     if (footerAlignment === "between") {
         footerStyle.justifyContent = "space-between";
@@ -123,7 +129,7 @@ function ModalInner({ children, footer, footerAlignment }: Pick<ModalProps, "chi
 
     return (
         <>
-            <div className="modal-body">
+            <div className="modal-body" style={bodyStyle}>
                 {children}
             </div>
 

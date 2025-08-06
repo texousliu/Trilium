@@ -1,4 +1,5 @@
 import { RefObject } from "preact";
+import { CSSProperties } from "preact/compat";
 import { useRef } from "preact/hooks";
 
 interface ButtonProps {
@@ -12,9 +13,11 @@ interface ButtonProps {
     onClick?: () => void;
     primary?: boolean;
     disabled?: boolean;
+    small?: boolean;
+    style?: CSSProperties;
 }
 
-export default function Button({ buttonRef: _buttonRef, className, text, onClick, keyboardShortcut, icon, primary, disabled }: ButtonProps) {
+export default function Button({ buttonRef: _buttonRef, className, text, onClick, keyboardShortcut, icon, primary, disabled, small, style }: ButtonProps) {
     const classes: string[] = ["btn"];
     if (primary) {
         classes.push("btn-primary");
@@ -23,6 +26,9 @@ export default function Button({ buttonRef: _buttonRef, className, text, onClick
     }
     if (className) {
         classes.push(className);
+    }
+    if (small) {
+        classes.push("btn-sm");
     }
 
     const buttonRef = _buttonRef ?? useRef<HTMLButtonElement>(null);
@@ -35,6 +41,7 @@ export default function Button({ buttonRef: _buttonRef, className, text, onClick
             onClick={onClick}
             ref={buttonRef}
             disabled={disabled}
+            style={style}
         >
             {icon && <span className={`bx ${icon}`}></span>}
             {text} {keyboardShortcut && (
