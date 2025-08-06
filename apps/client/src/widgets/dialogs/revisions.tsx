@@ -16,6 +16,8 @@ import protected_session_holder from "../../services/protected_session_holder";
 import { renderMathInElement } from "../../services/math";
 import { CSSProperties } from "preact/compat";
 import open from "../../services/open";
+import ActionButton from "../react/ActionButton";
+import options from "../../services/options";
 
 interface RevisionsDialogProps {
     note?: FNote;
@@ -54,7 +56,9 @@ function RevisionsDialogComponent({ note }: RevisionsDialogProps) {
                             toast.showMessage(t("revisions.revisions_deleted"));
                         }
                     }}/>)
-            }                
+            }
+            footer={<RevisionFooter note={note} />} 
+            footerStyle={{ paddingTop: 0, paddingBottom: 0 }}
             >
                 <RevisionsList
                     revisions={revisions}
@@ -229,6 +233,33 @@ function RevisionContent({ revisionItem, fullRevision }: { revisionItem?: Revisi
         default:
             return <>{t("revisions.preview_not_available")}</>
     }
+}
+
+function RevisionFooter({ note }: { note: FNote }) {
+    if (!note) {
+        return <></>;
+    }
+
+    let revisionsNumberLimit: number | string = parseInt(note?.getLabelValue("versioningLimit") ?? "");
+    if (!Number.isInteger(revisionsNumberLimit)) {
+        revisionsNumberLimit = options.getInt("revisionSnapshotNumberLimit") ?? 0;
+    }
+    if (revisionsNumberLimit === -1) {
+        revisionsNumberLimit = "∞";
+    }
+    
+    return <>
+        <span class="revisions-snapshot-interval flex-grow-1 my-0 py-0">
+            {t("revisions.snapshot_interval", { seconds: options.getInt("revisionSnapshotTimeInterval") })}
+        </span>
+        <span class="maximum-revisions-for-current-note flex-grow-1 my-0 py-0">
+            {t("revisions.maximum_revisions", { number: revisionsNumberLimit })}
+        </span>
+        <ActionButton
+            icon="bx bx-cog" text={t("revisions.settings")}
+            onClick={() => appContext.tabManager.openContextWithNote("_optionsOther", { activate: true })}
+        />
+    </>;
 }
 
 export default class RevisionsDialog extends ReactBasicWidget  {

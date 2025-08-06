@@ -13,6 +13,7 @@ interface ModalProps {
      */
     header?: ComponentChildren;
     footer?: ComponentChildren;
+    footerStyle?: CSSProperties;
     footerAlignment?: "right" | "between";
     minWidth?: string;
     maxWidth?: number;
@@ -46,7 +47,7 @@ interface ModalProps {
     bodyStyle?: CSSProperties;
 }
 
-export default function Modal({ children, className, size, title, header, footer, footerAlignment, onShown, onSubmit, helpPageId, minWidth, maxWidth, zIndex, scrollable, onHidden: onHidden, modalRef: _modalRef, formRef: _formRef, bodyStyle }: ModalProps) {
+export default function Modal({ children, className, size, title, header, footer, footerStyle, footerAlignment, onShown, onSubmit, helpPageId, minWidth, maxWidth, zIndex, scrollable, onHidden: onHidden, modalRef: _modalRef, formRef: _formRef, bodyStyle }: ModalProps) {
     const modalRef = _modalRef ?? useRef<HTMLDivElement>(null);
     const formRef = _formRef ?? useRef<HTMLFormElement>(null);
 
@@ -108,10 +109,10 @@ export default function Modal({ children, className, size, title, header, footer
                             e.preventDefault();
                             onSubmit();
                         }}>
-                            <ModalInner footer={footer} bodyStyle={bodyStyle}>{children}</ModalInner>
+                            <ModalInner footer={footer} bodyStyle={bodyStyle} footerStyle={footerStyle} footerAlignment={footerAlignment}>{children}</ModalInner>
                         </form>
                     ) : (
-                        <ModalInner footer={footer} bodyStyle={bodyStyle}>
+                        <ModalInner footer={footer} bodyStyle={bodyStyle} footerStyle={footerStyle} footerAlignment={footerAlignment}>
                             {children}
                         </ModalInner>
                     )}
@@ -121,8 +122,8 @@ export default function Modal({ children, className, size, title, header, footer
     );
 }
 
-function ModalInner({ children, footer, footerAlignment, bodyStyle }: Pick<ModalProps, "children" | "footer" | "footerAlignment" | "bodyStyle">) {
-    const footerStyle: CSSProperties = {};
+function ModalInner({ children, footer, footerAlignment, bodyStyle, footerStyle: _footerStyle }: Pick<ModalProps, "children" | "footer" | "footerAlignment" | "bodyStyle" | "footerStyle">) {
+    const footerStyle: CSSProperties = _footerStyle ?? {};
     if (footerAlignment === "between") {
         footerStyle.justifyContent = "space-between";
     }
