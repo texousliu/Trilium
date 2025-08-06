@@ -68,6 +68,7 @@ if you run as root please remove  'sudo' from the commands
 requires "jq" ```apt install jq```
 
 It will stop the service above, overwrite everything (i expect no config.ini), and start service
+It also creates a version file in the Trilium directory so it updates only with a newer Version
 
 ```
 #!/bin/bash
@@ -78,6 +79,7 @@ PATTERN="TriliumNotes-Server-.*-linux-x64.tar.xz"
 DOWNLOAD_DIR="/var/tmp/trilium_download"
 OUTPUT_DIR="/opt/trilium"
 SERVICE_NAME="trilium"
+VERSION_FILE="$OUTPUT_DIR/version.txt"
 
 # Ensure dependencies are installed
 command -v curl >/dev/null 2>&1 || { echo "Error: curl is required"; exit 1; }
@@ -86,6 +88,27 @@ command -v tar >/dev/null 2>&1 || { echo "Error: tar is required"; exit 1; }
 
 # Create download directory
 mkdir -p "$DOWNLOAD_DIR" || { echo "Error: Cannot create $DOWNLOAD_DIR"; exit 1; }
+
+# Get the latest release version
+LATEST_VERSION=$(curl -sL https://api.github.com/repos/$REPO/releases/latest | jq -r '.tag_name')
+if [ -z "$LATEST_VERSION" ]; then
+  echo "Error: Could not fetch latest release version"
+  exit 1
+fi
+
+# Check current installed version (from version.txt or existing tarball)
+CURRENT_VERSION=""
+if [ -f "$VERSION_FILE" ]; then
+  CURRENT_VERSION=$(cat "$VERSION_FILE")
+elif [ -f "$DOWNLOAD_DIR/TriliumNotes-Server-$LATEST_VERSION-linux-x64.tar.xz" ]; then
+  CURRENT_VERSION="$LATEST_VERSION"
+fi
+
+# Compare versions
+if [ "$CURRENT_VERSION" = "$LATEST_VERSION" ]; then
+  echo "Latest version ($LATEST_VERSION) is already installed"
+  exit 0
+fi
 
 # Download the latest release
 LATEST_URL=$(curl -sL https://api.github.com/repos/$REPO/releases/latest | jq -r ".assets[] | select(.name | test(\"$PATTERN\")) | .browser_download_url")
@@ -97,7 +120,7 @@ fi
 FILE_NAME=$(basename "$LATEST_URL")
 FILE_PATH="$DOWNLOAD_DIR/$FILE_NAME"
 
-# Check if the file already exists and is up-to-date
+# Download if not already present
 if [ -f "$FILE_PATH" ]; then
   echo "Latest release $FILE_NAME already downloaded"
 else
@@ -127,6 +150,7 @@ fi
 echo "Copying contents from $INNER_DIR to $OUTPUT_DIR..."
 sudo mkdir -p "$OUTPUT_DIR"
 sudo cp -r "$INNER_DIR"/* "$OUTPUT_DIR"/ || { echo "Error: Copy failed"; exit 1; }
+echo "$LATEST_VERSION" | sudo tee "$VERSION_FILE" >/dev/null
 echo "Files copied to $OUTPUT_DIR"
 
 # Start the trilium-server service
@@ -135,7 +159,7 @@ sudo systemctl start "$SERVICE_NAME" || { echo "Error: Failed to start $SERVICE_
 
 # Clean up
 rm -rf "$EXTRACT_DIR"
-echo "Cleanup complete. Trilium updated successfully."
+echo "Cleanup complete. Trilium updated to $LATEST_VERSION."
 ```
 
 ## Common issues
