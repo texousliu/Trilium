@@ -71,7 +71,7 @@ export default function Modal({ children, className, size, title, header, footer
                     modalElement.removeEventListener("hidden.bs.modal", onHidden);
                 }
             };
-        });
+        }, [ ]);
     }    
 
     const dialogStyle: CSSProperties = {};
