@@ -10,6 +10,7 @@ import note_types from "../../services/note_types";
 import { MenuCommandItem, MenuItem } from "../../menus/context_menu";
 import { TreeCommandNames } from "../../menus/tree_context_menu";
 import { Suggestion } from "../../services/note_autocomplete";
+import Badge from "../react/Badge";
 
 export interface ChooseNoteTypeResponse {
     success: boolean;
@@ -88,7 +89,8 @@ function NoteTypeChooserDialogComponent({ callback }: NoteTypeChooserDialogProps
             <FormGroup label={t("note_type_chooser.modal_body")}>
                 <FormList onSelect={onNoteTypeSelected}>
                     {noteTypes.map((_item) => {
-                        if (_item.title === "----") {                            
+                        if (_item.title === "----") {     
+                            return;                       
                         }
 
                         const item = _item as MenuCommandItem<TreeCommandNames>;
@@ -98,8 +100,10 @@ function NoteTypeChooserDialogComponent({ callback }: NoteTypeChooserDialogProps
                         } else {
                             return <FormListItem
                                 value={[ item.type, item.templateNoteId ].join(",") }
-                                icon={item.uiIcon}
-                                text={item.title} />;                            
+                                icon={item.uiIcon}>
+                                    {item.title}
+                                    {item.badges && item.badges.map((badge) => <Badge {...badge} />)}
+                                </FormListItem>;                            
                         }
                     })}
                 </FormList>

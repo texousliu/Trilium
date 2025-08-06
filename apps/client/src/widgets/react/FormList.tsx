@@ -22,16 +22,16 @@ export default function FormList({ children, onSelect }: FormListOpts) {
 }
 
 interface FormListItemOpts {
-    text: string;
+    children: ComponentChildren;
     icon?: string;
     value?: string;
 }
 
-export function FormListItem({ text, icon, value }: FormListItemOpts) {
+export function FormListItem({ children, icon, value }: FormListItemOpts) {
     return (
         <a class="dropdown-item" data-value={value}>
             <Icon icon={icon} />&nbsp;
-            {text}
+            {children}
         </a>
     );
 }
