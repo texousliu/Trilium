@@ -38,7 +38,6 @@ function DeleteNotesDialogComponent({ forceDeleteAllClones, branchIdsToDelete, c
     const [ eraseNotes, setEraseNotes ] = useState(!!forceDeleteAllClones);
     const [ brokenRelations, setBrokenRelations ] = useState<DeleteNotesPreview["brokenRelations"]>([]);
     const [ noteIdsToBeDeleted, setNoteIdsToBeDeleted ] = useState<DeleteNotesPreview["noteIdsToBeDeleted"]>([]);    
-    const [ proceed, setProceed ] = useState(false);
     const okButtonRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
@@ -62,14 +61,14 @@ function DeleteNotesDialogComponent({ forceDeleteAllClones, branchIdsToDelete, c
             scrollable
             title={t("delete_notes.delete_notes_preview")}
             onShown={() => okButtonRef.current?.focus()}
-            onHidden={() => callback?.({ proceed, deleteAllClones, eraseNotes })}
+            onHidden={() => callback?.({ proceed: false })}
             footer={<>
                 <Button text={t("delete_notes.cancel")}
                     onClick={() => closeActiveDialog()} />
                 <Button text={t("delete_notes.ok")} primary
                     buttonRef={okButtonRef}
                     onClick={() => {
-                        setProceed(true);
+                        callback?.({ proceed: true, deleteAllClones, eraseNotes });
                         closeActiveDialog();
                     }} />
             </>}
