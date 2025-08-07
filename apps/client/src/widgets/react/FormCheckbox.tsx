@@ -1,10 +1,11 @@
 import { Tooltip } from "bootstrap";
 import { useEffect, useRef } from "preact/compat";
 import { escapeQuotes } from "../../services/utils";
+import { ComponentChildren } from "preact";
 
 interface FormCheckboxProps {
     name: string;
-    label: string;
+    label: string | ComponentChildren;
     /**
      * If set, the checkbox label will be underlined and dotted, indicating a hint. When hovered, it will show the hint text.
      */

@@ -6,7 +6,7 @@ interface FormGroupProps {
     title?: string;
     className?: string;
     children: ComponentChildren;
-    description?: string;
+    description?: string | ComponentChildren;
 }
 
 export default function FormGroup({ label, title, className, children, description, labelRef }: FormGroupProps) {
