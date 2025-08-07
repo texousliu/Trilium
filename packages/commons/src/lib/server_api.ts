@@ -50,3 +50,7 @@ export interface RecentChangesRow {
     noteId: string;
     date: string;
 }
+
+export interface BulkActionAffectedNotes {
+    affectedNoteCount: number;
+}
