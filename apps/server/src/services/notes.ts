@@ -931,11 +931,6 @@ function duplicateSubtree(origNoteId: string, newParentNoteId: string) {
 
     const noteIdMapping = getNoteIdMapping(origNote);
 
-    // Not required - if origBranch doesn't exist, the subtree can still be created.
-    // if (!origBranch) {
-    //     throw new Error("Unable to find original branch to duplicate.");
-    // }
-
     const res = duplicateSubtreeInner(origNote, origBranch, newParentNoteId, noteIdMapping);
 
     const duplicateNoteSuffix = t("notes.duplicate-note-suffix");

@@ -413,9 +413,13 @@ export interface Api {
     backupNow(backupName: string): Promise<string>;
 
     /**
-     * Exposes the backend duplicateSubtree to the API
+     * Enables the complete duplication of the specified original note and all its children into the specified parent note.
+     * The new note will be named the same as the original, with (Dup) added to the end of it.
+     *
      * @param origNoteId - the noteId for the original note to be duplicated
      * @param newParentNoteId - the noteId for the parent note where the duplication is to be placed.
+     *
+     * @returns the note and the branch of the newly created note.
      */
     duplicateSubtree(origNoteId: string, newParentNoteId: string): { note: BNote; branch: BBranch; }
 
