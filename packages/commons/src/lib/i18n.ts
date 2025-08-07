@@ -45,6 +45,11 @@ const UNSORTED_LOCALES = [
         name: "Română",
         electronLocale: "ro"
     },
+    {
+        id: "ru",
+        name: "Русский",
+        electronLocale: "ru"
+    },
 
     /*
      * Right to left languages
