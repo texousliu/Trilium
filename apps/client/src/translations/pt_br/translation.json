@@ -225,6 +225,116 @@
     },
     "jump_to_note": {
         "search_placeholder": "Pesquise uma nota pelo nome ou digite > para comandos...",
-        "close": "Fechar"
+        "close": "Fechar",
+        "search_button": "Pesquisar em texto completo <kbd>Ctrl+Enter</kbd>"
+    },
+    "markdown_import": {
+        "dialog_title": "Importar Markdown",
+        "close": "Fechar",
+        "modal_body_text": "Por motivos de segurança (sandbox do navegador), o JavaScript não pode acessar diretamente a área de transferência. Por favor, cole o conteúdo Markdown na área de texto abaixo e clique em Importar",
+        "import_button": "Importar Ctrl+Enter",
+        "import_success": "O conteúdo Markdown foi importado para o documento."
+    },
+    "move_to": {
+        "dialog_title": "Mover notas para...",
+        "close": "Fechar",
+        "notes_to_move": "Notas para mover",
+        "target_parent_note": "Nota pai-alvo",
+        "search_placeholder": "pesquisar nota pelo nome",
+        "move_button": "Mover para a nota selecionada <kbd>enter</kbd>",
+        "error_no_path": "Nenhum caminho para mover.",
+        "move_success_message": "As notas selecionadas foram movidas para "
+    },
+    "note_type_chooser": {
+        "change_path_prompt": "Alterar onde criar a nova nota:",
+        "search_placeholder": "buscar caminho pelo nome (valor padrão se não for preenchido)",
+        "modal_title": "Escolher tipo de nota",
+        "close": "Fechar",
+        "modal_body": "Escolha o tipo/modelo da nova nota:",
+        "templates": "Modelos:"
+    },
+    "password_not_set": {
+        "title": "A senha não está definida",
+        "close": "Fechar",
+        "body1": "Notas protegidas são criptografadas usando uma senha do usuário, mas a senha ainda não foi definida.",
+        "body2": "Para poder proteger notas, clique <a class=\"open-password-options-button\" href=\"javascript:\">aqui</a> para abrir a caixa de diálogo de Opções e definir sua senha."
+    },
+    "prompt": {
+        "title": "Prompt",
+        "close": "Fechar",
+        "ok": "OK <kbd>enter</kbd>",
+        "defaultTitle": "Prompt"
+    },
+    "protected_session_password": {
+        "modal_title": "Sessão Protegida",
+        "help_title": "Ajuda sobre notas protegidas",
+        "close_label": "Fechar",
+        "form_label": "Para prosseguir com a ação solicitada, você precisa iniciar uma sessão protegida digitando a senha:",
+        "start_button": "Iniciar sessão protegida <kbd>enter</kbd>"
+    },
+    "recent_changes": {
+        "title": "Alterações recentes",
+        "erase_notes_button": "Remover permanentemente as notas excluídas agora",
+        "close": "Fechar",
+        "deleted_notes_message": "As notas excluídas foram removidas permanentemente.",
+        "no_changes_message": "Nenhuma alteração ainda...",
+        "undelete_link": "Restaurar",
+        "confirm_undelete": "Você deseja restaurar esta nota e suas subnotas?"
+    },
+    "revisions": {
+        "note_revisions": "Versões da nota",
+        "delete_all_revisions": "Excluir todas as versões desta nota",
+        "delete_all_button": "Excluir todas as versões",
+        "help_title": "Ajuda sobre as versões da nota",
+        "close": "Fechar",
+        "revision_last_edited": "Esta versão foi editada pela última vez em {{date}}",
+        "confirm_delete_all": "Você quer excluir todas as versões desta nota?",
+        "no_revisions": "Ainda não há versões para esta nota...",
+        "restore_button": "Recuperar",
+        "confirm_restore": "Deseja restaurar esta versão? Isso irá substituir o título e o conteúdo atuais da nota por esta versão.",
+        "delete_button": "Excluir",
+        "confirm_delete": "Deseja excluir esta versão?",
+        "revisions_deleted": "As versões da nota foram removidas.",
+        "revision_restored": "A versão da nota foi restaurada.",
+        "revision_deleted": "A versão da nota foi excluída.",
+        "snapshot_interval": "Intervalo de captura das versões da nota: {{seconds}}s.",
+        "maximum_revisions": "Limite de capturas das versões da nota: {{number}}.",
+        "settings": "Configurações de versões da nota",
+        "download_button": "Download",
+        "mime": "MIME: ",
+        "file_size": "Tamanho do arquivo:",
+        "preview": "Visualizar:",
+        "preview_not_available": "A visualização não está disponível para este tipo de nota."
+    },
+    "sort_child_notes": {
+        "sort_children_by": "Ordenar notas filhas por...",
+        "close": "Fechar",
+        "sorting_criteria": "Critérios de ordenação",
+        "title": "título",
+        "date_created": "data de criação",
+        "date_modified": "data de modificação",
+        "sorting_direction": "Direção de ordenação",
+        "ascending": "crescente",
+        "descending": "decrescente",
+        "folders": "Pastas",
+        "sort_folders_at_top": "colocar pastas no topo",
+        "natural_sort": "Ordenação Natural",
+        "sort_with_respect_to_different_character_sorting": "classificar de acordo com diferentes regras de ordenação de caracteres e colação em diferentes idiomas ou regiões.",
+        "natural_sort_language": "Linguagem da ordenação natural",
+        "the_language_code_for_natural_sort": "O código do idioma para ordenação natural, por exemplo, \"zh-CN\" para chinês.",
+        "sort": "Ordenar <kbd>enter</kbd>"
+    },
+    "upload_attachments": {
+        "upload_attachments_to_note": "Enviar anexos para a nota",
+        "close": "Fechar",
+        "choose_files": "Escolher arquivos",
+        "files_will_be_uploaded": "Os arquivos serão enviados como anexos para",
+        "options": "Opções",
+        "shrink_images": "Reduzir imagens",
+        "upload": "Enviar",
+        "tooltip": "Se você marcar esta opção, o Trilium tentará reduzir as imagens enviadas redimensionando e otimizando, o que pode afetar a qualidade visual percebida. Se desmarcada, as imagens serão enviadas sem alterações."
+    },
+    "attribute_detail": {
+        "attr_detail_title": "Título Detalhado do Atributo"
     }
 }
