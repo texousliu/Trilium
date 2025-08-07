@@ -8,20 +8,20 @@ interface RawHtmlProps {
     style?: CSSProperties;
 }
 
-export default function RawHtml({ className, html, style }: RawHtmlProps) {
-    return <span
-        className={className}
-        dangerouslySetInnerHTML={getHtml(html)}
-        style={style}
-    />;
+export default function RawHtml(props: RawHtmlProps) {
+    return <span {...getProps(props)} />;
 }
 
-export function RawHtmlBlock({ className, html, style }: RawHtmlProps) {
-    return <div
-        className={className}
-        dangerouslySetInnerHTML={getHtml(html)}
-        style={style}
-    />
+export function RawHtmlBlock(props: RawHtmlProps) {
+    return <div {...getProps(props)} />
+}
+
+function getProps({ className, html, style }: RawHtmlProps) {
+    return {
+        className: className,
+        dangerouslySetInnerHTML: getHtml(html),
+        style
+    }
 }
 
 function getHtml(html: string | HTMLElement | JQuery<HTMLElement>) {
