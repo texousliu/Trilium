@@ -46,9 +46,16 @@ export interface RevisionPojo {
     contentLength?: number;
 }
 
-export interface RecentChangesRow {
+export interface RecentChangeRow {
     noteId: string;
+    current_isDeleted: boolean;
+    current_deleteId: string;
+    current_title: string;
+    current_isProtected: boolean;
+    title: string;
+    utcDate: string;
     date: string;
+    canBeUndeleted?: boolean;
 }
 
 export interface BulkActionAffectedNotes {
