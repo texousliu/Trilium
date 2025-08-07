@@ -413,6 +413,13 @@ export interface Api {
     backupNow(backupName: string): Promise<string>;
 
     /**
+     * Exposes the backend duplicateSubtree to the API
+     * @param origNoteId - the noteId for the original note to be duplicated
+     * @param newParentNoteId - the noteId for the parent note where the duplication is to be placed.
+     */
+    duplicateSubtree(origNoteId: string, newParentNoteId: string): { note: BNote; branch: BBranch; }
+
+    /**
      * This object contains "at your risk" and "no BC guarantees" objects for advanced use cases.
      */
     __private: {
@@ -703,6 +710,7 @@ function BackendScriptApi(this: Api, currentNote: BNote, apiParams: ApiParams) {
 
     this.runOutsideOfSync = syncMutex.doExclusively;
     this.backupNow = backupService.backupNow;
+    this.duplicateSubtree = noteService.duplicateSubtree;
 
     this.__private = {
         becca
