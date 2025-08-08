@@ -1,17 +1,13 @@
-import { HTMLInputTypeAttribute, RefObject } from "preact/compat";
+import { InputHTMLAttributes, RefObject } from "preact/compat";
 
-interface FormTextBoxProps {
+interface FormTextBoxProps extends Pick<InputHTMLAttributes<HTMLInputElement>, "placeholder" | "autoComplete" | "className" | "type" | "name" | "pattern" | "title"> {
     id?: string;
-    name: string;
-    type?: HTMLInputTypeAttribute;
     currentValue?: string;
-    className?: string;
-    autoComplete?: string;
     onChange?(newValue: string): void;
     inputRef?: RefObject<HTMLInputElement>;
 }
 
-export default function FormTextBox({ id, type, name, className, currentValue, onChange, autoComplete, inputRef }: FormTextBoxProps) {
+export default function FormTextBox({ id, type, name, className, currentValue, onChange, autoComplete, inputRef, placeholder, title, pattern }: FormTextBoxProps) {
     return (
         <input
             ref={inputRef}
@@ -21,6 +17,9 @@ export default function FormTextBox({ id, type, name, className, currentValue, o
             name={name}
             value={currentValue}
             autoComplete={autoComplete}
+            placeholder={placeholder}
+            title={title}
+            pattern={pattern}
             onInput={e => onChange?.(e.currentTarget.value)} />
     );
 }

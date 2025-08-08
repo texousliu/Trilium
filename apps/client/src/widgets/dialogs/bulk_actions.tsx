@@ -104,16 +104,7 @@ function ExistingActionsList({ existingActions }: { existingActions?: RenameNote
         <table class="bulk-existing-action-list">
             { existingActions
                 ? existingActions
-                    .map(action => {
-                        const renderedAction = action.render();
-                        if (renderedAction) {
-                            return <RawHtmlBlock
-                                html={renderedAction[0].innerHTML}
-                                style={{ display: "flex", alignItems: "center" }} />
-                        } else {
-                            return null;
-                        }
-                    })
+                    .map(action => action.render())
                     .filter(renderedAction => renderedAction !== null)            
                 : <p>{t("bulk_actions.none_yet")}</p>
             }

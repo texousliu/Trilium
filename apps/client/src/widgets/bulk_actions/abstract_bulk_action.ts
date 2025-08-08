@@ -3,8 +3,9 @@ import server from "../../services/server.js";
 import ws from "../../services/ws.js";
 import utils from "../../services/utils.js";
 import type FAttribute from "../../entities/fattribute.js";
+import { VNode } from "preact";
 
-interface ActionDefinition {
+export interface ActionDefinition {
     script: string;
     relationName: string;
     targetNoteId: string;
@@ -30,15 +31,18 @@ export default abstract class AbstractBulkAction {
     render() {
         try {
             const $rendered = this.doRender();
+            if (Array.isArray($rendered)) {
+                $rendered
+                    .find(".action-conf-del")
+                    .on("click", () => this.deleteAction())
+                    .attr("title", t("abstract_bulk_action.remove_this_search_action"));
 
-            $rendered
-                .find(".action-conf-del")
-                .on("click", () => this.deleteAction())
-                .attr("title", t("abstract_bulk_action.remove_this_search_action"));
+                utils.initHelpDropdown($rendered);
 
-            utils.initHelpDropdown($rendered);
-
-            return $rendered;
+                return $rendered;
+            } else {
+                return $rendered;
+            }
         } catch (e: any) {
             logError(`Failed rendering search action: ${JSON.stringify(this.attribute.dto)} with error: ${e.message} ${e.stack}`);
             return null;
@@ -46,7 +50,7 @@ export default abstract class AbstractBulkAction {
     }
 
     // to be overridden
-    abstract doRender(): JQuery<HTMLElement>;
+    abstract doRender(): JQuery<HTMLElement> | VNode;
     static get actionName() {
         return "";
     }

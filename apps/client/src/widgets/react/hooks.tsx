@@ -1,6 +1,7 @@
-import { useContext, useEffect, useState } from "preact/hooks";
+import { useContext, useEffect, useMemo, useState } from "preact/hooks";
 import { EventData, EventNames } from "../../components/app_context";
 import { ParentComponent } from "./ReactBasicWidget";
+import SpacedUpdate from "../../services/spaced_update";
 
 export default function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
     const parentWidget = useContext(ParentComponent);
@@ -29,4 +30,12 @@ export default function useTriliumEvent<T extends EventNames>(eventName: T, hand
             parentWidget[handlerName] = originalHandler;
         };
     }, [parentWidget]);
+}
+
+export function useSpacedUpdate(callback: () => Promise<void>, interval = 1000) {
+    const spacedUpdate = useMemo(() => {
+        return new SpacedUpdate(callback, interval);
+    }, [callback, interval]);
+
+    return spacedUpdate;
 }
