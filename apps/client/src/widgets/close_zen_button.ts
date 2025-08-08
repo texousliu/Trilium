@@ -1,5 +1,6 @@
 import BasicWidget from "./basic_widget.js";
 import { t } from "../services/i18n.js";
+import utils from "../services/utils.js";
 
 const TPL = /*html*/`\
 <div class="close-zen-container">
@@ -28,6 +29,10 @@ const TPL = /*html*/`\
         -webkit-app-region: no-drag;
     }
 
+    body.zen .mobile-close-zen-container {
+        top: -2px;
+    }
+
     body.zen.electron:not(.platform-darwin):not(.native-titlebar) .close-zen-container {
         left: calc(env(titlebar-area-width) - var(--zen-button-size) - 2px);
         right: unset;
@@ -40,6 +45,7 @@ export default class CloseZenButton extends BasicWidget {
 
     doRender(): void {
         this.$widget = $(TPL);
+        this.$widget.toggleClass("mobile-close-zen-container", utils.isMobile())
     }
 
     zenChangedEvent() {
