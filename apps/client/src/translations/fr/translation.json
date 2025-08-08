@@ -1664,5 +1664,8 @@
   "time_selector": {
     "invalid_input": "La valeur de l'heure saisie n'est pas un nombre valide.",
     "minimum_input": "La valeur de temps saisie doit être d'au moins {{minimumSeconds}} secondes."
+    },
+    "multi_factor_authentication": {
+        "oauth_user_email": "Courriel de l'utilisateur : "
   }
 }
