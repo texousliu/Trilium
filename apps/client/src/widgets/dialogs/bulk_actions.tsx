@@ -38,13 +38,16 @@ function BulkActionComponent({ selectedOrActiveNoteIds, bulkActionNote }: BulkAc
         }).then(({ affectedNoteCount }) => setAffectedNoteCount(affectedNoteCount));
     }, [ selectedOrActiveNoteIds, includeDescendants ]);
 
-    // Refresh is forced by the entities reloaded event outside React.
-    useEffect(() => {        
-        setExistingActions(bulk_action.parseActions(bulkActionNote));
-    }, []);
+    function refreshExistingActions() {
+        setExistingActions(bulk_action.parseActions(bulkActionNote!));
+    }
 
-    useTriliumEvent("entitiesReloaded", () => {
-        console.log("Got entities reloaded.");
+    useEffect(() => refreshExistingActions(), []);
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        if (loadResults.getAttributeRows().find((row) =>
+            row.type === "label" && row.name === "action" && row.noteId === "_bulkAction")) {
+            refreshExistingActions();
+        }
     });
 
     return ( selectedOrActiveNoteIds &&
