@@ -15,6 +15,7 @@ import RenameNoteBulkAction from "../bulk_actions/note/rename_note";
 import { RawHtmlBlock } from "../react/RawHtml";
 import FNote from "../../entities/fnote";
 import froca from "../../services/froca";
+import useTriliumEvent from "../react/hooks";
 
 interface BulkActionProps {
     bulkActionNote?: FNote | null;
@@ -41,6 +42,10 @@ function BulkActionComponent({ selectedOrActiveNoteIds, bulkActionNote }: BulkAc
     useEffect(() => {        
         setExistingActions(bulk_action.parseActions(bulkActionNote));
     }, []);
+
+    useTriliumEvent("entitiesReloaded", () => {
+        console.log("Got entities reloaded.");
+    });
 
     return ( selectedOrActiveNoteIds &&
         <Modal
@@ -128,16 +133,6 @@ export default class BulkActionsDialog extends ReactBasicWidget {
         };
         this.doRender();
         openDialog(this.$widget);
-    }
-
-    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        // only refreshing deleted attrs, otherwise components update themselves
-        if (loadResults.getAttributeRows().find((row) => row.type === "label" && row.name === "action" && row.noteId === "_bulkAction" && row.isDeleted)) {
-            // this may be triggered from e.g., sync without open widget, then no need to refresh the widget
-            if (this.props.selectedOrActiveNoteIds && this.$widget.is(":visible")) {
-                this.doRender();
-            }
-        }
     }
 
 }
