@@ -8,7 +8,7 @@
  * - Performance characteristics
  */
 
-import log from '../../../log.js';
+import log from '../../log.js';
 
 // Model capability interfaces
 export interface ModelCapabilities {
@@ -354,7 +354,7 @@ export class ModelRegistry {
     registerModel(model: ModelInfo): void {
         const key = `${model.provider}:${model.id}`;
         this.models.set(key, model);
-        log.debug(`Registered model: ${key}`);
+        log.info(`Registered model: ${key}`);
     }
 
     /**
@@ -412,15 +412,16 @@ export class ModelRegistry {
         if (constraints?.requiresStreaming) {
             candidates = candidates.filter(m => m.capabilities.supportsStreaming);
         }
-        if (constraints?.minContextWindow) {
-            candidates = candidates.filter(m => m.capabilities.contextWindow >= constraints.minContextWindow);
+        if (constraints?.minContextWindow !== undefined) {
+            const minWindow = constraints.minContextWindow;
+            candidates = candidates.filter(m => m.capabilities.contextWindow >= minWindow);
         }
 
         // Filter by cost
         if (constraints?.maxCost !== undefined) {
             candidates = candidates.filter(m => {
                 if (!m.cost) return true; // Local models have no cost
-                return m.cost.inputTokens <= constraints.maxCost;
+                return m.cost.inputTokens <= constraints.maxCost!;
             });
         }
 

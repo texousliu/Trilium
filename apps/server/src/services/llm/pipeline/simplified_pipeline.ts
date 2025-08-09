@@ -177,12 +177,12 @@ export class SimplifiedChatPipeline {
         }
         
         // Execute LLM call
-        const service = aiServiceManager.getService();
+        const service = await aiServiceManager.getService();
         if (!service) {
             throw new Error('No AI service available');
         }
         
-        const response = await service.chat(messages, options);
+        const response = await service.generateChatCompletion(messages, options);
         
         this.recordMetric('llm_execution', Date.now() - startTime);
         logger.log(LogLevel.DEBUG, 'Stage 2: LLM execution completed', {
@@ -249,12 +249,12 @@ export class SimplifiedChatPipeline {
                 enableTools: true
             };
             
-            const service = aiServiceManager.getService();
+            const service = await aiServiceManager.getService();
             if (!service) {
                 throw new Error('No AI service available');
             }
             
-            currentResponse = await service.chat(currentMessages, followUpOptions);
+            currentResponse = await service.generateChatCompletion(currentMessages, followUpOptions);
             
             // Check if we need another iteration
             if (!currentResponse.tool_calls?.length) {
@@ -302,9 +302,8 @@ export class SimplifiedChatPipeline {
             response.text = accumulatedText;
         }
         
-        // Add metadata
-        response.metadata = {
-            ...response.metadata,
+        // Add metadata to response (cast to any to add extra properties)
+        (response as any).metadata = {
             requestId: logger.requestId,
             processingTime: Date.now() - startTime
         };
@@ -325,7 +324,7 @@ export class SimplifiedChatPipeline {
         toolCalls: ToolCall[],
         logger: ReturnType<typeof loggingService.withRequestId>
     ): Promise<Array<{ toolCallId: string; content: string }>> {
-        const results = [];
+        const results: Array<{ toolCallId: string; content: string }> = [];
         
         for (const toolCall of toolCalls) {
             try {
@@ -334,17 +333,20 @@ export class SimplifiedChatPipeline {
                     throw new Error(`Tool not found: ${toolCall.function.name}`);
                 }
                 
-                const args = JSON.parse(toolCall.function.arguments || '{}');
+                const argsString = typeof toolCall.function.arguments === 'string' 
+                    ? toolCall.function.arguments 
+                    : JSON.stringify(toolCall.function.arguments || {});
+                const args = JSON.parse(argsString);
                 const result = await tool.execute(args);
                 
                 results.push({
-                    toolCallId: toolCall.id,
+                    toolCallId: toolCall.id || `tool_${Date.now()}`,
                     content: typeof result === 'string' ? result : JSON.stringify(result)
                 });
                 
                 logger.log(LogLevel.DEBUG, 'Tool executed successfully', {
                     tool: toolCall.function.name,
-                    toolCallId: toolCall.id
+                    toolCallId: toolCall.id || 'no-id'
                 });
                 
             } catch (error) {
@@ -354,7 +356,7 @@ export class SimplifiedChatPipeline {
                 });
                 
                 results.push({
-                    toolCallId: toolCall.id,
+                    toolCallId: toolCall.id || `tool_error_${Date.now()}`,
                     content: `Error: ${error instanceof Error ? error.message : String(error)}`
                 });
             }
@@ -371,7 +373,16 @@ export class SimplifiedChatPipeline {
             // This is a simplified context extraction
             // In production, this would call the semantic search service
             const contextService = await import('../context/services/context_service.js');
-            return await contextService.default.getContextForQuery(query, noteId);
+            const results = await contextService.default.findRelevantNotes(query, noteId, {
+                maxResults: 5,
+                summarize: true
+            });
+            
+            // Format results as context string
+            if (results && results.length > 0) {
+                return results.map(r => `${r.title}: ${r.content}`).join('\n\n');
+            }
+            return null;
         } catch (error) {
             loggingService.log(LogLevel.ERROR, 'Context extraction failed', { error });
             return null;

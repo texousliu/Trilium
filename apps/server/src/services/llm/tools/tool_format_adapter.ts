@@ -60,7 +60,7 @@ export class ToolFormatAdapter {
                 // OpenAI format matches our standard format
                 return tools;
             default:
-                log.warn(`Unknown provider ${provider}, returning tools in standard format`);
+                log.info(`Warning: Unknown provider ${provider}, returning tools in standard format`);
                 return tools;
         }
     }
@@ -148,7 +148,7 @@ export class ToolFormatAdapter {
                 // OpenAI format matches our standard format
                 return toolCalls as ToolCall[];
             default:
-                log.warn(`Unknown provider ${provider}, attempting standard conversion`);
+                log.info(`Warning: Unknown provider ${provider}, attempting standard conversion`);
                 return toolCalls as ToolCall[];
         }
     }
@@ -265,7 +265,7 @@ export class ToolFormatAdapter {
 
         // Warn if required array is missing or empty (Anthropic may send empty inputs)
         if (!tool.input_schema.required || tool.input_schema.required.length === 0) {
-            log.warn(`Anthropic tool ${tool.name} has no required parameters - may receive empty inputs`);
+            log.info(`Warning: Anthropic tool ${tool.name} has no required parameters - may receive empty inputs`);
         }
 
         return true;

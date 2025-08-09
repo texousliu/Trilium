@@ -1,5 +1,8 @@
-import type { ToolCall } from './tools/tool_interfaces.js';
 import type { ModelMetadata } from './providers/provider_options.js';
+import type { ToolCall } from './tools/tool_interfaces.js';
+
+// Re-export ToolCall so it's available from this module
+export type { ToolCall } from './tools/tool_interfaces.js';
 
 /**
  * Interface for chat messages between client and LLM models

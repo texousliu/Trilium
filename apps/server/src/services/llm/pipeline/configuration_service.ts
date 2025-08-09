@@ -8,8 +8,8 @@
  * - No scattered options.getOption() calls
  */
 
-import options from '../../../options.js';
-import log from '../../../log.js';
+import options from '../../options.js';
+import log from '../../log.js';
 import type { ChatCompletionOptions } from '../ai_interface.js';
 
 // Configuration interfaces
@@ -108,9 +108,9 @@ export class ConfigurationService {
             this.lastLoadTime = Date.now();
             
             if (!this.validationResult.valid) {
-                log.error('Configuration validation failed', this.validationResult.errors);
+                log.error(`Configuration validation failed: ${JSON.stringify(this.validationResult.errors)}`);
             } else if (this.validationResult.warnings.length > 0) {
-                log.warn('Configuration warnings', this.validationResult.warnings);
+                log.info(`[WARN] Configuration warnings: ${JSON.stringify(this.validationResult.warnings)}`);
             } else {
                 log.info('Configuration loaded and validated successfully');
             }
@@ -146,43 +146,43 @@ export class ConfigurationService {
 
         // Default configuration
         const defaults: DefaultConfiguration = {
-            systemPrompt: options.getOption('llmSystemPrompt') || 'You are a helpful AI assistant.',
-            temperature: this.parseFloat(options.getOption('llmTemperature'), 0.7),
-            maxTokens: this.parseInt(options.getOption('llmMaxTokens'), 2000),
-            topP: this.parseFloat(options.getOption('llmTopP'), 0.9),
-            presencePenalty: this.parseFloat(options.getOption('llmPresencePenalty'), 0),
-            frequencyPenalty: this.parseFloat(options.getOption('llmFrequencyPenalty'), 0)
+            systemPrompt: (options as any).getOptionOrNull('llmSystemPrompt') || 'You are a helpful AI assistant.',
+            temperature: this.parseFloat((options as any).getOptionOrNull('llmTemperature'), 0.7),
+            maxTokens: this.parseInt((options as any).getOptionOrNull('llmMaxTokens'), 2000),
+            topP: this.parseFloat((options as any).getOptionOrNull('llmTopP'), 0.9),
+            presencePenalty: this.parseFloat((options as any).getOptionOrNull('llmPresencePenalty'), 0),
+            frequencyPenalty: this.parseFloat((options as any).getOptionOrNull('llmFrequencyPenalty'), 0)
         };
 
         // Tool configuration
         const tools: ToolConfiguration = {
-            enabled: options.getOptionBool('llmToolsEnabled') !== false,
-            maxIterations: this.parseInt(options.getOption('llmMaxToolIterations'), 5),
-            timeout: this.parseInt(options.getOption('llmToolTimeout'), 30000),
-            parallelExecution: options.getOptionBool('llmParallelTools') !== false
+            enabled: (options as any).getOptionBool('llmToolsEnabled') !== false,
+            maxIterations: this.parseInt((options as any).getOptionOrNull('llmMaxToolIterations'), 5),
+            timeout: this.parseInt((options as any).getOptionOrNull('llmToolTimeout'), 30000),
+            parallelExecution: (options as any).getOptionBool('llmParallelTools') !== false
         };
 
         // Streaming configuration
         const streaming: StreamingConfiguration = {
-            enabled: options.getOptionBool('llmStreamingEnabled') !== false,
-            chunkSize: this.parseInt(options.getOption('llmStreamChunkSize'), 256),
-            flushInterval: this.parseInt(options.getOption('llmStreamFlushInterval'), 100)
+            enabled: (options as any).getOptionBool('llmStreamingEnabled') !== false,
+            chunkSize: this.parseInt((options as any).getOptionOrNull('llmStreamChunkSize'), 256),
+            flushInterval: this.parseInt((options as any).getOptionOrNull('llmStreamFlushInterval'), 100)
         };
 
         // Debug configuration
         const debug: DebugConfiguration = {
-            enabled: options.getOptionBool('llmDebugEnabled'),
+            enabled: (options as any).getOptionBool('llmDebugEnabled'),
             logLevel: this.getLogLevel(),
-            enableMetrics: options.getOptionBool('llmMetricsEnabled'),
-            enableTracing: options.getOptionBool('llmTracingEnabled')
+            enableMetrics: (options as any).getOptionBool('llmMetricsEnabled'),
+            enableTracing: (options as any).getOptionBool('llmTracingEnabled')
         };
 
         // Limit configuration
         const limits: LimitConfiguration = {
-            maxMessageLength: this.parseInt(options.getOption('llmMaxMessageLength'), 100000),
-            maxConversationLength: this.parseInt(options.getOption('llmMaxConversationLength'), 50),
-            maxContextLength: this.parseInt(options.getOption('llmMaxContextLength'), 10000),
-            rateLimitPerMinute: this.parseInt(options.getOption('llmRateLimitPerMinute'), 60)
+            maxMessageLength: this.parseInt((options as any).getOptionOrNull('llmMaxMessageLength'), 100000),
+            maxConversationLength: this.parseInt((options as any).getOptionOrNull('llmMaxConversationLength'), 50),
+            maxContextLength: this.parseInt((options as any).getOptionOrNull('llmMaxContextLength'), 10000),
+            rateLimitPerMinute: this.parseInt((options as any).getOptionOrNull('llmRateLimitPerMinute'), 60)
         };
 
         return {
@@ -199,14 +199,14 @@ export class ConfigurationService {
      * Load OpenAI configuration
      */
     private loadOpenAIConfig() {
-        const apiKey = options.getOption('openaiApiKey');
+        const apiKey = options.getOption('openaiApiKey' as any);
         if (!apiKey) return undefined;
 
         return {
             apiKey,
-            baseUrl: options.getOption('openaiBaseUrl') || undefined,
-            defaultModel: options.getOption('openaiDefaultModel') || 'gpt-4-turbo-preview',
-            maxTokens: this.parseInt(options.getOption('openaiMaxTokens'), 4096)
+            baseUrl: options.getOption('openaiBaseUrl' as any) || undefined,
+            defaultModel: options.getOption('openaiDefaultModel' as any) || 'gpt-4-turbo-preview',
+            maxTokens: this.parseInt(options.getOption('openaiMaxTokens' as any), 4096)
         };
     }
 
@@ -214,14 +214,14 @@ export class ConfigurationService {
      * Load Anthropic configuration
      */
     private loadAnthropicConfig() {
-        const apiKey = options.getOption('anthropicApiKey');
+        const apiKey = options.getOption('anthropicApiKey' as any);
         if (!apiKey) return undefined;
 
         return {
             apiKey,
-            baseUrl: options.getOption('anthropicBaseUrl') || undefined,
-            defaultModel: options.getOption('anthropicDefaultModel') || 'claude-3-opus-20240229',
-            maxTokens: this.parseInt(options.getOption('anthropicMaxTokens'), 4096)
+            baseUrl: options.getOption('anthropicBaseUrl' as any) || undefined,
+            defaultModel: options.getOption('anthropicDefaultModel' as any) || 'claude-3-opus-20240229',
+            maxTokens: this.parseInt(options.getOption('anthropicMaxTokens' as any), 4096)
         };
     }
 
@@ -229,13 +229,13 @@ export class ConfigurationService {
      * Load Ollama configuration
      */
     private loadOllamaConfig() {
-        const baseUrl = options.getOption('ollamaBaseUrl');
+        const baseUrl = options.getOption('ollamaBaseUrl' as any);
         if (!baseUrl) return undefined;
 
         return {
             baseUrl,
-            defaultModel: options.getOption('ollamaDefaultModel') || 'llama2',
-            maxTokens: this.parseInt(options.getOption('ollamaMaxTokens'), 2048)
+            defaultModel: options.getOption('ollamaDefaultModel' as any) || 'llama2',
+            maxTokens: this.parseInt(options.getOption('ollamaMaxTokens' as any), 2048)
         };
     }
 
@@ -262,13 +262,13 @@ export class ConfigurationService {
                 errors.push(`Configuration missing for selected provider: ${config.providers.selected}`);
             } else {
                 // Provider-specific validation
-                if (config.providers.selected === 'openai' && !selectedConfig.apiKey) {
+                if (config.providers.selected === 'openai' && !('apiKey' in selectedConfig && selectedConfig.apiKey)) {
                     errors.push('OpenAI API key is required');
                 }
-                if (config.providers.selected === 'anthropic' && !selectedConfig.apiKey) {
+                if (config.providers.selected === 'anthropic' && !('apiKey' in selectedConfig && selectedConfig.apiKey)) {
                     errors.push('Anthropic API key is required');
                 }
-                if (config.providers.selected === 'ollama' && !selectedConfig.baseUrl) {
+                if (config.providers.selected === 'ollama' && !('baseUrl' in selectedConfig && selectedConfig.baseUrl)) {
                     errors.push('Ollama base URL is required');
                 }
             }
@@ -304,7 +304,7 @@ export class ConfigurationService {
      * Get selected provider
      */
     private getSelectedProvider(): 'openai' | 'anthropic' | 'ollama' | null {
-        const provider = options.getOption('aiSelectedProvider');
+        const provider = options.getOption('aiSelectedProvider' as any);
         if (provider === 'openai' || provider === 'anthropic' || provider === 'ollama') {
             return provider;
         }
@@ -315,7 +315,7 @@ export class ConfigurationService {
      * Get log level
      */
     private getLogLevel(): 'error' | 'warn' | 'info' | 'debug' {
-        const level = options.getOption('llmLogLevel') || 'info';
+        const level = options.getOption('llmLogLevel' as any) || 'info';
         if (level === 'error' || level === 'warn' || level === 'info' || level === 'debug') {
             return level;
         }
@@ -347,7 +347,7 @@ export class ConfigurationService {
         if (!this.config || Date.now() - this.lastLoadTime > this.CACHE_DURATION) {
             // Reload configuration if cache expired
             this.initialize().catch(error => {
-                log.error('Failed to reload configuration', error);
+                log.error(`Failed to reload configuration: ${error instanceof Error ? error.message : String(error)}`);
             });
         }
         
@@ -416,10 +416,10 @@ export class ConfigurationService {
         const defaults = this.getDefaultConfig();
         return {
             temperature: defaults.temperature,
-            max_tokens: defaults.maxTokens,
-            top_p: defaults.topP,
-            presence_penalty: defaults.presencePenalty,
-            frequency_penalty: defaults.frequencyPenalty
+            maxTokens: defaults.maxTokens,
+            topP: defaults.topP,
+            presencePenalty: defaults.presencePenalty,
+            frequencyPenalty: defaults.frequencyPenalty
         };
     }
 

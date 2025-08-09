@@ -8,7 +8,7 @@
  * - No production debug statements
  */
 
-import log from '../../../log.js';
+import log from '../../log.js';
 import configurationService from './configuration_service.js';
 
 // Log levels
@@ -128,14 +128,20 @@ export class LoggingService {
         switch (entry.level) {
             case LogLevel.ERROR:
                 if (entry.error) {
-                    log.error(formattedMessage, entry.error);
+                    log.error(`${formattedMessage}: ${entry.error instanceof Error ? entry.error.message : String(entry.error)}`);
+                } else if (entry.data) {
+                    log.error(`${formattedMessage}: ${JSON.stringify(entry.data)}`);
                 } else {
-                    log.error(formattedMessage, entry.data);
+                    log.error(formattedMessage);
                 }
                 break;
                 
             case LogLevel.WARN:
-                log.warn(formattedMessage, entry.data);
+                if (entry.data && Object.keys(entry.data).length > 0) {
+                    log.info(`[WARN] ${formattedMessage} - ${JSON.stringify(entry.data)}`);
+                } else {
+                    log.info(`[WARN] ${formattedMessage}`);
+                }
                 break;
                 
             case LogLevel.INFO:

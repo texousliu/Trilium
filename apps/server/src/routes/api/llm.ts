@@ -561,13 +561,9 @@ async function handleStreamingProcess(
         const aiServiceManager = await import('../../services/llm/ai_service_manager.js');
         await aiServiceManager.default.getOrCreateAnyService();
 
-        // Use the chat pipeline directly for streaming
-        const { ChatPipeline } = await import('../../services/llm/pipeline/chat_pipeline.js');
-        const pipeline = new ChatPipeline({
-            enableStreaming: true,
-            enableMetrics: true,
-            maxToolCallIterations: 5
-        });
+        // Use the simplified chat pipeline directly for streaming
+        const simplifiedPipeline = await import('../../services/llm/pipeline/simplified_pipeline.js');
+        const pipeline = simplifiedPipeline.default;
 
         // Get selected model
         const { getSelectedModelConfig } = await import('../../services/llm/config/configuration_helpers.js');

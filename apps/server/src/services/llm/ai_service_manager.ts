@@ -755,12 +755,21 @@ export class AIServiceManager implements IAIServiceManager, Disposable {
     }
 
     /**
+     * Check if a service cache entry is stale
+     */
+    private isServiceStale(entry: ServiceCacheEntry): boolean {
+        const now = Date.now();
+        return now - entry.lastUsed > this.SERVICE_TTL_MS;
+    }
+
+    /**
      * Check if a specific provider is available
      */
     isProviderAvailable(provider: string): boolean {
-        // Check if this is the current provider and if it's available
-        if (this.currentProvider === provider && this.currentService) {
-            return this.currentService.isAvailable();
+        // Check if we have a cached service for this provider
+        const cachedEntry = this.serviceCache.get(provider as ServiceProviders);
+        if (cachedEntry && !this.isServiceStale(cachedEntry)) {
+            return cachedEntry.service.isAvailable();
         }
 
         // For other providers, check configuration
@@ -784,8 +793,9 @@ export class AIServiceManager implements IAIServiceManager, Disposable {
      * Get metadata about a provider
      */
     getProviderMetadata(provider: string): ProviderMetadata | null {
-        // Only return metadata if this is the current active provider
-        if (this.currentProvider === provider && this.currentService) {
+        // Check if we have a cached service for this provider
+        const cachedEntry = this.serviceCache.get(provider as ServiceProviders);
+        if (cachedEntry && !this.isServiceStale(cachedEntry)) {
             return {
                 name: provider,
                 capabilities: {
