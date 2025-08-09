@@ -1,7 +1,9 @@
-import { useEffect, useRef } from "preact/hooks";
+import { useContext, useEffect, useRef } from "preact/hooks";
 import { t } from "../../services/i18n";
 import { ComponentChildren } from "preact";
 import type { CSSProperties, RefObject } from "preact/compat";
+import { openDialog } from "../../services/dialog";
+import { ParentComponent } from "./ReactBasicWidget";
 
 interface ModalProps {
     className: string;
@@ -45,11 +47,13 @@ interface ModalProps {
      */
     formRef?: RefObject<HTMLFormElement>;
     bodyStyle?: CSSProperties;
+    show?: boolean;
 }
 
-export default function Modal({ children, className, size, title, header, footer, footerStyle, footerAlignment, onShown, onSubmit, helpPageId, minWidth, maxWidth, zIndex, scrollable, onHidden: onHidden, modalRef: _modalRef, formRef: _formRef, bodyStyle }: ModalProps) {
+export default function Modal({ children, className, size, title, header, footer, footerStyle, footerAlignment, onShown, onSubmit, helpPageId, minWidth, maxWidth, zIndex, scrollable, onHidden: onHidden, modalRef: _modalRef, formRef: _formRef, bodyStyle, show }: ModalProps) {
     const modalRef = _modalRef ?? useRef<HTMLDivElement>(null);
     const formRef = _formRef ?? useRef<HTMLFormElement>(null);
+    const parentWidget = useContext(ParentComponent);
 
     if (onShown || onHidden) {
         useEffect(() => {
@@ -73,6 +77,12 @@ export default function Modal({ children, className, size, title, header, footer
             };
         }, [ ]);
     }    
+
+    useEffect(() => {
+        if (show && parentWidget) {
+            openDialog(parentWidget.$widget);
+        }
+    }, [ show ]);
 
     const dialogStyle: CSSProperties = {};
     if (zIndex) {
