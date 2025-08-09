@@ -104,7 +104,7 @@ function ExistingActionsList({ existingActions }: { existingActions?: RenameNote
         <table class="bulk-existing-action-list">
             { existingActions
                 ? existingActions
-                    .map(action => action.render())
+                    .map(action => action.doRender())
                     .filter(renderedAction => renderedAction !== null)            
                 : <p>{t("bulk_actions.none_yet")}</p>
             }
