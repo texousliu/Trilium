@@ -4,7 +4,7 @@ import noteAutocompleteService, { type Suggestion } from "../../services/note_au
 import server from "../../services/server.js";
 import contextMenuService from "../../menus/context_menu.js";
 import attributeParser, { type Attribute } from "../../services/attribute_parser.js";
-import { AttributeEditor, type EditorConfig, type Element, type MentionFeed, type Node, type Position } from "@triliumnext/ckeditor5";
+import { AttributeEditor, type EditorConfig, type ModelElement, type MentionFeed, type ModelNode, type ModelPosition } from "@triliumnext/ckeditor5";
 import froca from "../../services/froca.js";
 import attributeRenderer from "../../services/attribute_renderer.js";
 import noteCreateService from "../../services/note_create.js";
@@ -417,16 +417,16 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
         this.$editor.tooltip("show");
     }
 
-    getClickIndex(pos: Position) {
+    getClickIndex(pos: ModelPosition) {
         let clickIndex = pos.offset - (pos.textNode?.startOffset ?? 0);
 
-        let curNode: Node | Text | Element | null = pos.textNode;
+        let curNode: ModelNode | Text | ModelElement | null = pos.textNode;
 
         while (curNode?.previousSibling) {
             curNode = curNode.previousSibling;
 
-            if ((curNode as Element).name === "reference") {
-                clickIndex += (curNode.getAttribute("notePath") as string).length + 1;
+            if ((curNode as ModelElement).name === "reference") {
+                clickIndex += (curNode.getAttribute("href") as string).length + 1;
             } else if ("data" in curNode) {
                 clickIndex += (curNode.data as string).length;
             }

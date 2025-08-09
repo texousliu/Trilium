@@ -39,10 +39,20 @@ export default class ToggleReadOnlyButton extends OnClickButtonWidget {
     }
 
     isEnabled() {
-        return super.isEnabled()
-            && this.note?.type === "mermaid"
-            && this.note?.isContentAvailable()
-            && this.noteContext?.viewScope?.viewMode === "default";
+        if (!super.isEnabled()) {
+            return false;
+        }
+
+        if (!this?.note?.isContentAvailable()) {
+            return false;
+        }
+
+        if (this.noteContext?.viewScope?.viewMode !== "default") {
+            return false;
+        }
+
+        return this.note.type === "mermaid" ||
+            (this.note.getLabelValue("viewType") === "geoMap");
     }
 
 }

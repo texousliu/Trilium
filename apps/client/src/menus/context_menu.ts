@@ -17,11 +17,22 @@ interface MenuSeparatorItem {
     title: "----";
 }
 
+export interface MenuItemBadge {
+    title: string;
+    className?: string;
+}
+
 export interface MenuCommandItem<T> {
     title: string;
     command?: T;
     type?: string;
+    /**
+     * The icon to display in the menu item.
+     *
+     * If not set, no icon is displayed and the item will appear shifted slightly to the left if there are other items with icons. To avoid this, use `bx bx-empty`.
+     */
     uiIcon?: string;
+    badges?: MenuItemBadge[];
     templateNoteId?: string;
     enabled?: boolean;
     handler?: MenuHandler<T>;
@@ -29,6 +40,7 @@ export interface MenuCommandItem<T> {
     shortcut?: string;
     spellingSuggestion?: string;
     checked?: boolean;
+    columns?: number;
 }
 
 export type MenuItem<T> = MenuCommandItem<T> | MenuSeparatorItem;
@@ -161,6 +173,18 @@ class ContextMenu {
                     .append(" &nbsp; ") // some space between icon and text
                     .append(item.title);
 
+                if ("badges" in item && item.badges) {
+                    for (let badge of item.badges) {
+                        const badgeElement = $(`<span class="badge">`).text(badge.title);
+
+                        if (badge.className) {
+                            badgeElement.addClass(badge.className);
+                        }
+
+                        $link.append(badgeElement);
+                    }
+                }
+
                 if ("shortcut" in item && item.shortcut) {
                     $link.append($("<kbd>").text(item.shortcut));
                 }
@@ -217,6 +241,9 @@ class ContextMenu {
                     $link.addClass("dropdown-toggle");
 
                     const $subMenu = $("<ul>").addClass("dropdown-menu");
+                    if (!this.isMobile && item.columns) {
+                        $subMenu.css("column-count", item.columns);
+                    }
 
                     this.addItems($subMenu, item.items);
 

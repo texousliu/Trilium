@@ -59,7 +59,7 @@ async function handleContentUpdate(affectedNoteIds: string[]) {
     const templateNoteIds = new Set(templateCache.keys());
     const affectedTemplateNoteIds = templateNoteIds.intersection(updatedNoteIds);
 
-    await froca.getNotes(affectedNoteIds);
+    await froca.getNotes(affectedNoteIds, true);
 
     let fullReloadNeeded = false;
     for (const affectedTemplateNoteId of affectedTemplateNoteIds) {

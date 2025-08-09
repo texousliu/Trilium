@@ -1,11 +1,12 @@
 import TypeWidget from "./type_widget.js";
 import utils from "../../services/utils.js";
-import type { MindElixirCtor, MindElixirInstance } from "mind-elixir";
+import type { MindElixirInstance } from "mind-elixir";
 import nodeMenu from "@mind-elixir/node-menu";
 import type FNote from "../../entities/fnote.js";
 import type { EventData } from "../../components/app_context.js";
 
 // allow node-menu plugin css to be bundled by webpack
+import "mind-elixir/style";
 import "@mind-elixir/node-menu/dist/style.css";
 
 const NEW_TOPIC_NAME = "";

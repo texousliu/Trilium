@@ -1,9 +1,9 @@
 # Trilium Notes
 
-![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran?style=flat-square)
-![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/notes?style=flat-square)
-![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/triliumnext/notes/total?style=flat-square)
-[![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop&style=flat-square)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
+![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran) ![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran)  
+![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/notes)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/triliumnext/notes/total)  
+[![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp) [![Translation status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
 [English](./README.md) | [Chinese](./docs/README-ZH_CN.md) | [Russian](./docs/README.ru.md) | [Japanese](./docs/README.ja.md) | [Italian](./docs/README.it.md) | [Spanish](./docs/README.es.md)
 
@@ -115,12 +115,20 @@ To install TriliumNext on your own server (including via Docker from [Dockerhub]
 
 ## 💻 Contribute
 
+### Translations
+
+If you are a native speaker, help us translate Trilium by heading over to our [Weblate page](https://hosted.weblate.org/engage/trilium/).
+
+Here's the language coverage we have so far:
+
+[![Translation status](https://hosted.weblate.org/widget/trilium/multi-auto.svg)](https://hosted.weblate.org/engage/trilium/)
+
 ### Code
 
 Download the repository, install dependencies using `pnpm` and then run the server (available at http://localhost:8080):
 ```shell
-git clone https://github.com/TriliumNext/Notes.git
-cd Notes
+git clone https://github.com/TriliumNext/Trilium.git
+cd Trilium
 pnpm install
 pnpm run server:start
 ```
@@ -129,8 +137,8 @@ pnpm run server:start
 
 Download the repository, install dependencies using `pnpm` and then run the environment required to edit the documentation:
 ```shell
-git clone https://github.com/TriliumNext/Notes.git
-cd Notes
+git clone https://github.com/TriliumNext/Trilium.git
+cd Trilium
 pnpm install
 pnpm nx run edit-docs:edit-docs
 ```
@@ -138,8 +146,8 @@ pnpm nx run edit-docs:edit-docs
 ### Building the Executable
 Download the repository, install dependencies using `pnpm` and then build the desktop app for Windows:
 ```shell
-git clone https://github.com/TriliumNext/Notes.git
-cd Notes
+git clone https://github.com/TriliumNext/Trilium.git
+cd Trilium
 pnpm install
 pnpm nx --project=desktop electron-forge:make -- --arch=x64 --platform=win32
 ```

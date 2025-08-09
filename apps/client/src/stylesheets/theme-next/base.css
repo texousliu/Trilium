@@ -4,6 +4,7 @@
 @import url(./pages.css);
 @import url(./ribbon.css);
 @import url(./notes/text.css);
+@import url(./notes/collections/table.css);
 
 @font-face {
     font-family: "Inter";
@@ -171,9 +172,19 @@ html body .dropdown-item[disabled] {
     opacity: var(--menu-item-disabled-opacity);
 }
 
+/* Badges */
+:root .badge {
+    --bs-badge-color: var(--badge-text-color);
+    --bs-badge-font-weight: 500;
+
+    background: var(--badge-background-color);
+    text-transform: uppercase;
+    letter-spacing: .2pt;
+}
+
 /* Menu item icon */
 .dropdown-item .bx {
-    transform: translateY(var(--menu-item-icon-vert-offset));
+    translate: 0 var(--menu-item-icon-vert-offset);
     color: var(--menu-item-icon-color) !important;
     font-size: 1.1em;
 }
@@ -445,6 +456,11 @@ body.mobile .dropdown-menu .dropdown-item.submenu-open .dropdown-toggle::after {
 
 .note-list-wrapper .note-book-card .note-book-content .rendered-content {
     padding: 1rem;
+}
+
+.note-list-wrapper .note-book-card .note-book-content.type-image .rendered-content,
+.note-list-wrapper .note-book-card .note-book-content.type-pdf .rendered-content {
+    padding: 0;
 }
 
 .note-list-wrapper .note-book-card .note-book-content .rendered-content.text-with-ellipsis {

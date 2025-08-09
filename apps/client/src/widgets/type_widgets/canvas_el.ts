@@ -153,7 +153,8 @@ export default class Canvas {
             appState: {
                 scrollX: appState.scrollX,
                 scrollY: appState.scrollY,
-                zoom: appState.zoom
+                zoom: appState.zoom,
+                gridModeEnabled: appState.gridModeEnabled
             }
         };
 

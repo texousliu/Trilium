@@ -158,7 +158,7 @@ console.log("Saved to", outputPath);
  *         type:
  *           type: string
  *           example: "text"
- *           enum: ["text", "code", "render", "file", "image", "search", "relationMap", "book", "noteMap", "mermaid", "canvas", "webView", "launcher", "doc", "contentWidget", "mindMap", "geoMap"]
+ *           enum: ["text", "code", "render", "file", "image", "search", "relationMap", "book", "noteMap", "mermaid", "canvas", "webView", "launcher", "doc", "contentWidget", "mindMap"]
  *           description: "[Reference list](https://github.com/TriliumNext/Trilium/blob/v0.91.6/src/services/note_types.ts)"
  *         mime:
  *           type: string

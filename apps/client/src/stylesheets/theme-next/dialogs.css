@@ -128,10 +128,15 @@ div.tn-tool-dialog {
 
 .jump-to-note-dialog .modal-header {
     padding: unset !important;
+    padding-bottom: 26px !important;
 }
 
 .jump-to-note-dialog .modal-body {
-    padding: 26px 0 !important;
+    padding: 0 !important;
+}
+
+.jump-to-note-dialog .modal-footer {
+    padding-top: 26px;
 }
 
 /* Search box wrapper */

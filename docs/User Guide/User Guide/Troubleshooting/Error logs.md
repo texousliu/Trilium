@@ -26,7 +26,7 @@ Copy-paste (or screenshot) the logs. It's better to provide not just errors, but
 
 ## Providing sensitive data
 
-If you don't feel comfortable attaching the logs or anything sensitive to the public GitHub issues, feel free to contact the devs in our Matrix [support channel](https://github.com/TriliumNext/Notes#-discuss-with-us).
+If you don't feel comfortable attaching the logs or anything sensitive to the public GitHub issues, feel free to contact the devs in our Matrix [support channel](https://github.com/TriliumNext/Trilium#-discuss-with-us).
 
 Use this email to also provide anything which could assist in analysing the bug - e.g. files/images/ZIPs being imported or [anonymized database](Anonymized%20Database.md).
 

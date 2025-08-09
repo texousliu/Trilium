@@ -97,6 +97,7 @@ const TPL = /*html*/`
     </div>
 </div>`;
 
+const SUPPORTED_NOTE_TYPES = ["text", "code", "render", "mindMap", "doc"];
 export default class FindWidget extends NoteContextAwareWidget {
 
     private searchTerm: string | null;
@@ -188,7 +189,7 @@ export default class FindWidget extends NoteContextAwareWidget {
             return;
         }
 
-        if (!["text", "code", "render", "mindMap"].includes(this.note?.type ?? "")) {
+        if (!SUPPORTED_NOTE_TYPES.includes(this.note?.type ?? "")) {
             return;
         }
 
@@ -251,6 +252,7 @@ export default class FindWidget extends NoteContextAwareWidget {
                 const readOnly = await this.noteContext?.isReadOnly();
                 return readOnly ? this.htmlHandler : this.textHandler;
             case "mindMap":
+            case "doc":
                 return this.htmlHandler;
             default:
                 console.warn("FindWidget: Unsupported note type for find widget", this.note?.type);
@@ -354,7 +356,7 @@ export default class FindWidget extends NoteContextAwareWidget {
     }
 
     isEnabled() {
-        return super.isEnabled() && ["text", "code", "render", "mindMap"].includes(this.note?.type ?? "");
+        return super.isEnabled() && SUPPORTED_NOTE_TYPES.includes(this.note?.type ?? "");
     }
 
     async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {

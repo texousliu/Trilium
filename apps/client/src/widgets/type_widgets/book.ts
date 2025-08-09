@@ -45,11 +45,11 @@ export default class BookTypeWidget extends TypeWidget {
         }
 
         switch (this.note?.getAttributeValue("label", "viewType")) {
-            case "calendar":
-            case "table":
-                return false;
-            default:
+            case "list":
+            case "grid":
                 return true;
+            default:
+                return false;
         }
     }
 

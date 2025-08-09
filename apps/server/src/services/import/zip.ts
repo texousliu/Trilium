@@ -502,6 +502,28 @@ async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRoo
                 firstNote = firstNote || note;
             }
         } else {
+            if (detectedType as string === "geoMap") {
+                attributes.push({
+                    noteId,
+                    type: "relation",
+                    name: "template",
+                    value: "_template_geo_map"
+                });
+
+                const attachment = new BAttachment({
+                    attachmentId: getNewAttachmentId(newEntityId()),
+                    ownerId: noteId,
+                    title: "geoMap.json",
+                    role: "viewConfig",
+                    mime: "application/json",
+                    position: 0
+                });
+
+                attachment.setContent(content, { forceSave: true });
+                content = "";
+                mime = "";
+            }
+
             ({ note } = noteService.createNewNote({
                 parentNoteId: parentNoteId,
                 title: noteTitle || "",
@@ -656,12 +678,15 @@ export function readZipFile(buffer: Buffer, processEntryCallback: (zipfile: yauz
 
 function resolveNoteType(type: string | undefined): NoteType {
     // BC for ZIPs created in Trilium 0.57 and older
-    if (type === "relation-map") {
-        return "relationMap";
-    } else if (type === "note-map") {
-        return "noteMap";
-    } else if (type === "web-view") {
-        return "webView";
+    switch (type) {
+        case "relation-map":
+            return "relationMap";
+        case "note-map":
+            return "noteMap";
+        case "web-view":
+            return "webView";
+        case "geoMap":
+            return "book";
     }
 
     if (type && (ALLOWED_NOTE_TYPES as readonly string[]).includes(type)) {

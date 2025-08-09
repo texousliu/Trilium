@@ -5,25 +5,15 @@ import branchService from "./branches.js";
 import { randomString } from "./utils.js";
 import eraseService from "./erase.js";
 import type BNote from "../becca/entities/bnote.js";
+import { ActionHandlers, BulkAction, BulkActionData } from "@triliumnext/commons";
 
-interface Action {
-    labelName: string;
-    labelValue: string;
-    oldLabelName: string;
-    newLabelName: string;
+type ActionHandler<T> = (action: T, note: BNote) => void;
 
-    relationName: string;
-    oldRelationName: string;
-    newRelationName: string;
+type ActionHandlerMap = {
+    [K in keyof ActionHandlers]: ActionHandler<BulkActionData<K>>;
+};
 
-    targetNoteId: string;
-    targetParentNoteId: string;
-    newTitle: string;
-    script: string;
-}
-type ActionHandler = (action: Action, note: BNote) => void;
-
-const ACTION_HANDLERS: Record<string, ActionHandler> = {
+const ACTION_HANDLERS: ActionHandlerMap = {
     addLabel: (action, note) => {
         note.addLabel(action.labelName, action.labelValue);
     },
@@ -125,7 +115,7 @@ const ACTION_HANDLERS: Record<string, ActionHandler> = {
 
         note.save();
     }
-};
+} as const;
 
 function getActions(note: BNote) {
     return note
@@ -145,15 +135,23 @@ function getActions(note: BNote) {
                 return null;
             }
 
-            return action;
+            return action as BulkAction;
         })
         .filter((a) => !!a);
 }
 
-function executeActions(note: BNote, searchResultNoteIds: string[] | Set<string>) {
+/**
+ * Executes the bulk actions defined in the note against the provided search result note IDs.
+ * @param note the note containing the bulk actions, read from the `action` label.
+ * @param noteIds the IDs of the notes to apply the actions to.
+ */
+function executeActionsFromNote(note: BNote, noteIds: string[] | Set<string>) {
     const actions = getActions(note);
+    return executeActions(actions, noteIds);
+}
 
-    for (const resultNoteId of searchResultNoteIds) {
+function executeActions(actions: BulkAction[], noteIds: string[] | Set<string>) {
+    for (const resultNoteId of noteIds) {
         const resultNote = becca.getNote(resultNoteId);
 
         if (!resultNote) {
@@ -164,7 +162,8 @@ function executeActions(note: BNote, searchResultNoteIds: string[] | Set<string>
             try {
                 log.info(`Applying action handler to note ${resultNote.noteId}: ${JSON.stringify(action)}`);
 
-                ACTION_HANDLERS[action.name](action, resultNote);
+                const handler = ACTION_HANDLERS[action.name] as (a: typeof action, n: BNote) => void;
+                handler(action, resultNote);
             } catch (e: any) {
                 log.error(`ExecuteScript search action failed with ${e.message}`);
             }
@@ -173,5 +172,6 @@ function executeActions(note: BNote, searchResultNoteIds: string[] | Set<string>
 }
 
 export default {
-    executeActions
+    executeActions,
+    executeActionsFromNote
 };

@@ -1,4 +1,5 @@
 import BAttribute from "../becca/entities/battribute.js";
+import BBranch from "../becca/entities/bbranch.js";
 import type { HiddenSubtreeItem } from "@triliumnext/commons";
 
 import becca from "../becca/becca.js";
@@ -10,15 +11,15 @@ import { cleanUpHelp, getHelpHiddenSubtreeData } from "./in_app_help.js";
 import buildLaunchBarConfig from "./hidden_subtree_launcherbar.js";
 import buildHiddenSubtreeTemplates from "./hidden_subtree_templates.js";
 
-const LBTPL_ROOT = "_lbTplRoot";
-const LBTPL_BASE = "_lbTplBase";
-const LBTPL_HEADER = "_lbTplHeader";
-const LBTPL_NOTE_LAUNCHER = "_lbTplLauncherNote";
-const LBTPL_WIDGET = "_lbTplLauncherWidget";
-const LBTPL_COMMAND = "_lbTplLauncherCommand";
-const LBTPL_SCRIPT = "_lbTplLauncherScript";
-const LBTPL_SPACER = "_lbTplSpacer";
-const LBTPL_CUSTOM_WIDGET = "_lbTplCustomWidget";
+export const LBTPL_ROOT = "_lbTplRoot";
+export const LBTPL_BASE = "_lbTplBase";
+export const LBTPL_HEADER = "_lbTplHeader";
+export const LBTPL_NOTE_LAUNCHER = "_lbTplLauncherNote";
+export const LBTPL_WIDGET = "_lbTplLauncherWidget";
+export const LBTPL_COMMAND = "_lbTplLauncherCommand";
+export const LBTPL_SCRIPT = "_lbTplLauncherScript";
+export const LBTPL_SPACER = "_lbTplSpacer";
+export const LBTPL_CUSTOM_WIDGET = "_lbTplCustomWidget";
 
 /*
  * Hidden subtree is generated as a "predictable structure" which means that it avoids generating random IDs to always
@@ -290,6 +291,47 @@ function checkHiddenSubtree(force = false, extraOpts: CheckHiddenExtraOpts = {})
     }
 }
 
+/**
+ * Get all expected parent IDs for a given note ID from the hidden subtree definition
+ */
+function getExpectedParentIds(noteId: string, subtree: HiddenSubtreeItem): string[] {
+    const expectedParents: string[] = [];
+
+    function traverse(item: HiddenSubtreeItem, parentId: string) {
+        if (item.id === noteId) {
+            expectedParents.push(parentId);
+        }
+
+        if (item.children) {
+            for (const child of item.children) {
+                traverse(child, item.id);
+            }
+        }
+    }
+
+    // Start traversal from root
+    if (subtree.id === noteId) {
+        expectedParents.push("root");
+    }
+
+    if (subtree.children) {
+        for (const child of subtree.children) {
+            traverse(child, subtree.id);
+        }
+    }
+
+    return expectedParents;
+}
+
+/**
+ * Check if a note ID is within the hidden subtree structure
+ */
+function isWithinHiddenSubtree(noteId: string): boolean {
+    // Consider a note to be within hidden subtree if it starts with underscore
+    // This is the convention used for hidden subtree notes
+    return noteId.startsWith("_") || noteId === "root";
+}
+
 function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtreeItem, extraOpts: CheckHiddenExtraOpts = {}) {
     if (!item.id || !item.type || !item.title) {
         throw new Error(`Item does not contain mandatory properties: ${JSON.stringify(item)}`);
@@ -313,6 +355,36 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
         }));
     } else {
         branch = note.getParentBranches().find((branch) => branch.parentNoteId === parentNoteId);
+
+        // Clean up any branches that shouldn't exist according to the meta definition
+        // For hidden subtree notes, we want to ensure they only exist in their designated locations
+        if (item.enforceBranches || item.id.startsWith("_help")) {
+            // If the note exists but doesn't have a branch in the expected parent,
+            // create the missing branch to ensure it's in the correct location
+            if (!branch) {
+                console.log("Creating missing branch for note", item.id, "under parent", parentNoteId);
+                branch = new BBranch({
+                    noteId: item.id,
+                    parentNoteId: parentNoteId,
+                    notePosition: item.notePosition !== undefined ? item.notePosition : undefined,
+                    isExpanded: item.isExpanded !== undefined ? item.isExpanded : false
+                }).save();
+            }
+
+            // Remove any branches that are not in the expected parent.
+            const expectedParents = getExpectedParentIds(item.id, hiddenSubtreeDefinition);
+            const currentBranches = note.getParentBranches();
+
+            for (const currentBranch of currentBranches) {
+                // Only delete branches that are not in the expected locations
+                // and are within the hidden subtree structure (avoid touching user-created clones)
+                if (!expectedParents.includes(currentBranch.parentNoteId) &&
+                    isWithinHiddenSubtree(currentBranch.parentNoteId)) {
+                    log.info(`Removing unexpected branch for note '${item.id}' from parent '${currentBranch.parentNoteId}'`);
+                    currentBranch.markAsDeleted();
+                }
+            }
+        }
     }
 
     const attrs = [...(item.attributes || [])];
@@ -343,7 +415,8 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
         }
     }
 
-    if (extraOpts.restoreNames && note.title !== item.title) {
+    const shouldRestoreNames = extraOpts.restoreNames || note.noteId.startsWith("_help") || item.id.startsWith("_lb");
+    if (shouldRestoreNames && note.title !== item.title) {
         note.title = item.title;
         note.save();
     }
@@ -380,7 +453,7 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
                 type: attr.type,
                 name: attr.name,
                 value: attr.value,
-                isInheritable: false
+                isInheritable: attr.isInheritable
             }).save();
         } else if (attr.name === "docName" || (existingAttribute.noteId.startsWith("_help") && attr.name === "iconClass")) {
             if (existingAttribute.value !== attr.value) {
@@ -397,13 +470,5 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
 }
 
 export default {
-    checkHiddenSubtree,
-    LBTPL_ROOT,
-    LBTPL_BASE,
-    LBTPL_COMMAND,
-    LBTPL_NOTE_LAUNCHER,
-    LBTPL_WIDGET,
-    LBTPL_SCRIPT,
-    LBTPL_SPACER,
-    LBTPL_CUSTOM_WIDGET
+    checkHiddenSubtree
 };

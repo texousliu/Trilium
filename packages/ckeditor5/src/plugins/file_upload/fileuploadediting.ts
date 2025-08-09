@@ -1,4 +1,4 @@
-import { Clipboard, FileRepository, Notification, Plugin, UpcastWriter, ViewElement, type Editor, type FileLoader, type Item, type Node, type ViewItem, type ViewRange } from 'ckeditor5';
+import { Clipboard, FileRepository, Notification, Plugin, UpcastWriter, ViewElement, type Editor, type FileLoader, type ModelItem, type ModelNode, type ViewItem, type ViewRange } from 'ckeditor5';
 import FileUploadCommand from './fileuploadcommand';
 
 export default class FileUploadEditing extends Plugin {
@@ -58,7 +58,7 @@ export default class FileUploadEditing extends Plugin {
 
 		this.listenTo( editor.plugins.get( Clipboard ), 'inputTransformation', ( evt, data ) => {
 			const fetchableFiles = Array.from( editor.editing.view.createRangeIn( data.content ) )
-				.filter( value => isLocalFile( value.item ) && !(value.item as unknown as Node).getAttribute( 'uploadProcessed' ) )
+				.filter( value => isLocalFile( value.item ) && !(value.item as unknown as ModelNode).getAttribute( 'uploadProcessed' ) )
 				.map( value => {
 					return { promise: fetchLocalFile( value.item ), fileElement: value as unknown as ViewElement };
 				} );
@@ -123,7 +123,7 @@ export default class FileUploadEditing extends Plugin {
 		} );
 	}
 
-	_readAndUpload( loader: FileLoader, fileElement: Item ) {
+	_readAndUpload( loader: FileLoader, fileElement: ModelItem ) {
 		const editor = this.editor;
 		const model = editor.model;
 		const t = editor.locale.t;
@@ -195,7 +195,7 @@ export default class FileUploadEditing extends Plugin {
 
 function fetchLocalFile( link: ViewItem ) {
 	return new Promise<File>( ( resolve, reject ) => {
-		const href = (link as unknown as Node).getAttribute( 'href' ) as string;
+		const href = (link as unknown as ModelNode).getAttribute( 'href' ) as string;
 
 		// Fetch works asynchronously and so does not block the browser UI when processing data.
 		fetch( href )
@@ -250,7 +250,7 @@ export function isHtmlIncluded( dataTransfer: DataTransfer ) {
 	return Array.from( dataTransfer.types ).includes( 'text/html' ) && dataTransfer.getData( 'text/html' ) !== '';
 }
 
-function getFileLinksFromChangeItem( editor: Editor, item: Item ) {
+function getFileLinksFromChangeItem( editor: Editor, item: ModelItem ) {
 	return Array.from( editor.model.createRangeOn( item ) )
 		.filter( value => value.item.hasAttribute( 'href' ) )
 		.map( value => value.item );

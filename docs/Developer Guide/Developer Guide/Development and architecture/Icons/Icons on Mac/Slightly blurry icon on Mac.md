@@ -27,7 +27,7 @@ Even with a 1024x1024 icon, the image is still blurry.
 
 Comparing the `.icns` file from the Electron build reveals that the `.icns` file has been tampered with:
 
-<figure class="table"><table><thead><tr><th>The <code>electron.icns</code> from the resulting build</th><th>The icon source</th></tr></thead><tbody><tr><td><pre><code class="language-text-plain">File: images/app-icons/mac/electron.icns
+<table><thead><tr><th>The <code>electron.icns</code> from the resulting build</th><th>The icon source</th></tr></thead><tbody><tr><td><pre><code class="language-text-plain">File: images/app-icons/mac/electron.icns
   icp4: 1140 bytes, png: 16x16
   icp5: 1868 bytes, png: 32x32
   ic07: 9520 bytes, png: 128x128
@@ -37,7 +37,7 @@ Comparing the `.icns` file from the Electron build reveals that the `.icns` file
   icp5: 4364 bytes, png: 32x32
   ic07: 26273 bytes, png: 128x128
   ic09: 206192 bytes, png: 512x512
-  ic10: 716034 bytes, png: 512x512@2x</code></pre></td></tr></tbody></table></figure>
+  ic10: 716034 bytes, png: 512x512@2x</code></pre></td></tr></tbody></table>
 
 The bluriness might come from the image itself: [https://stackoverflow.com/questions/54030521/convert-svg-to-png-with-sharp-edges](https://stackoverflow.com/questions/54030521/convert-svg-to-png-with-sharp-edges) 
 

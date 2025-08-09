@@ -299,4 +299,10 @@ $$`;
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
+    it("preserves superscript and subscript", () => {
+        const input = `Hello <sup>superscript</sup> <sub>subscript</sub>`;
+        const expected = /*html*/`<p>Hello <sup>superscript</sup> <sub>subscript</sub></p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
 });

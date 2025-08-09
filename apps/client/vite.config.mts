@@ -1,9 +1,10 @@
 /// <reference types='vitest' />
 import { join, resolve } from 'path';
-import { defineConfig } from 'vite';
+import { defineConfig, type Plugin } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 import asset_path from './src/asset_path';
 import webpackStatsPlugin from 'rollup-plugin-webpack-stats';
+import preact from "@preact/preset-vite";
 
 const assets = [ "assets", "stylesheets", "fonts", "translations" ];
 
@@ -20,6 +21,7 @@ export default defineConfig(() => ({
         host: 'localhost',
     },
     plugins: [
+        preact(),
         viteStaticCopy({
             targets: assets.map((asset) => ({
                 src: `src/${asset}/*`,
@@ -36,7 +38,7 @@ export default defineConfig(() => ({
             ]
         }),
         webpackStatsPlugin()
-    ],
+    ] as Plugin[],
     resolve: {
         alias: [
             // Force the use of dist in development mode because upstream ESM is broken (some hybrid between CJS and ESM, will be improved in upcoming versions).

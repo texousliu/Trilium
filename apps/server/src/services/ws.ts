@@ -199,13 +199,21 @@ function fillInAdditionalProperties(entityChange: EntityChange) {
             entityChange.entity = sql.getRow(/*sql*/`SELECT * FROM options WHERE name = ?`, [entityChange.entityId]);
         }
     } else if (entityChange.entityName === "attachments") {
-        entityChange.entity = sql.getRow(
-            /*sql*/`SELECT attachments.*, LENGTH(blobs.content) AS contentLength
-                                                FROM attachments
-                                                JOIN blobs USING (blobId)
-                                                WHERE attachmentId = ?`,
-            [entityChange.entityId]
-        );
+        entityChange.entity = becca.getAttachment(entityChange.entityId);
+
+        if (!entityChange.entity) {
+            entityChange.entity = sql.getRow(
+                /*sql*/`SELECT attachments.*, LENGTH(blobs.content) AS contentLength
+                                                    FROM attachments
+                                                    JOIN blobs USING (blobId)
+                                                    WHERE attachmentId = ?`,
+                [entityChange.entityId]
+            );
+
+            if (entityChange.entity?.isProtected) {
+                entityChange.entity.title = protectedSessionService.decryptString(entityChange.entity.title || "");
+            }
+        }
     }
 
     if (entityChange.entity instanceof AbstractBeccaEntity) {

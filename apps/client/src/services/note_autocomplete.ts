@@ -3,6 +3,7 @@ import appContext from "../components/app_context.js";
 import noteCreateService from "./note_create.js";
 import froca from "./froca.js";
 import { t } from "./i18n.js";
+import commandRegistry from "./command_registry.js";
 import type { MentionFeedObjectItem } from "@triliumnext/ckeditor5";
 
 // this key needs to have this value, so it's hit by the tooltip
@@ -29,9 +30,12 @@ export interface Suggestion {
     notePathTitle?: string;
     notePath?: string;
     highlightedNotePathTitle?: string;
-    action?: string | "create-note" | "search-notes" | "external-link";
+    action?: string | "create-note" | "search-notes" | "external-link" | "command";
     parentNoteId?: string;
     icon?: string;
+    commandId?: string;
+    commandDescription?: string;
+    commandShortcut?: string;
 }
 
 interface Options {
@@ -40,7 +44,12 @@ interface Options {
     allowCreatingNotes?: boolean;
     allowJumpToSearchNotes?: boolean;
     allowExternalLinks?: boolean;
+    /** If set, hides the right-side button corresponding to go to selected note. */
     hideGoToSelectedNoteButton?: boolean;
+    /** If set, hides all right-side buttons in the autocomplete dropdown */
+    hideAllButtons?: boolean;
+    /** If set, enables command palette mode */
+    isCommandPalette?: boolean;
 }
 
 async function autocompleteSourceForCKEditor(queryText: string) {
@@ -70,6 +79,31 @@ async function autocompleteSourceForCKEditor(queryText: string) {
 }
 
 async function autocompleteSource(term: string, cb: (rows: Suggestion[]) => void, options: Options = {}) {
+    // Check if we're in command mode
+    if (options.isCommandPalette && term.startsWith(">")) {
+        const commandQuery = term.substring(1).trim();
+        
+        // Get commands (all if no query, filtered if query provided)
+        const commands = commandQuery.length === 0 
+            ? commandRegistry.getAllCommands()
+            : commandRegistry.searchCommands(commandQuery);
+            
+        // Convert commands to suggestions
+        const commandSuggestions: Suggestion[] = commands.map(cmd => ({
+            action: "command",
+            commandId: cmd.id,
+            noteTitle: cmd.name,
+            notePathTitle: `>${cmd.name}`,
+            highlightedNotePathTitle: cmd.name,
+            commandDescription: cmd.description,
+            commandShortcut: cmd.shortcut,
+            icon: cmd.icon
+        }));
+        
+        cb(commandSuggestions);
+        return;
+    }
+
     const fastSearch = options.fastSearch === false ? false : true;
     if (fastSearch === false) {
         if (term.trim().length === 0) {
@@ -143,6 +177,12 @@ function showRecentNotes($el: JQuery<HTMLElement>) {
     $el.trigger("focus");
 }
 
+function showAllCommands($el: JQuery<HTMLElement>) {
+    searchDelay = 0;
+    $el.setSelectedNotePath("");
+    $el.autocomplete("val", ">").autocomplete("open");
+}
+
 function fullTextSearch($el: JQuery<HTMLElement>, options: Options) {
     const searchString = $el.autocomplete("val") as unknown as string;
     if (options.fastSearch === false || searchString?.trim().length === 0) {
@@ -190,9 +230,11 @@ function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
 
     const $goToSelectedNoteButton = $("<a>").addClass("input-group-text go-to-selected-note-button bx bx-arrow-to-right");
 
-    $el.after($clearTextButton).after($showRecentNotesButton).after($fullTextSearchButton);
+    if (!options.hideAllButtons) {
+        $el.after($clearTextButton).after($showRecentNotesButton).after($fullTextSearchButton);
+    }
 
-    if (!options.hideGoToSelectedNoteButton) {
+    if (!options.hideGoToSelectedNoteButton && !options.hideAllButtons) {
         $el.after($goToSelectedNoteButton);
     }
 
@@ -265,7 +307,24 @@ function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
                 },
                 displayKey: "notePathTitle",
                 templates: {
-                    suggestion: (suggestion) => `<span class="${suggestion.icon ?? "bx bx-note"}"></span> ${suggestion.highlightedNotePathTitle}`
+                    suggestion: (suggestion) => {
+                        if (suggestion.action === "command") {
+                            let html = `<div class="command-suggestion">`;
+                            html += `<span class="command-icon ${suggestion.icon || "bx bx-terminal"}"></span>`;
+                            html += `<div class="command-content">`;
+                            html += `<div class="command-name">${suggestion.highlightedNotePathTitle}</div>`;
+                            if (suggestion.commandDescription) {
+                                html += `<div class="command-description">${suggestion.commandDescription}</div>`;
+                            }
+                            html += `</div>`;
+                            if (suggestion.commandShortcut) {
+                                html += `<kbd class="command-shortcut">${suggestion.commandShortcut}</kbd>`;
+                            }
+                            html += '</div>';
+                            return html;
+                        }
+                        return `<span class="${suggestion.icon ?? "bx bx-note"}"></span> ${suggestion.highlightedNotePathTitle}`;
+                    }
                 },
                 // we can't cache identical searches because notes can be created / renamed, new recent notes can be added
                 cache: false
@@ -275,6 +334,12 @@ function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
 
     // TODO: Types fail due to "autocomplete:selected" not being registered in type definitions.
     ($el as any).on("autocomplete:selected", async (event: Event, suggestion: Suggestion) => {
+        if (suggestion.action === "command") {
+            $el.autocomplete("close");
+            $el.trigger("autocomplete:commandselected", [suggestion]);
+            return;
+        }
+
         if (suggestion.action === "external-link") {
             $el.setSelectedNotePath(null);
             $el.setSelectedExternalLink(suggestion.externalLink);
@@ -391,6 +456,7 @@ export default {
     autocompleteSourceForCKEditor,
     initNoteAutocomplete,
     showRecentNotes,
+    showAllCommands,
     setText,
     init
 };

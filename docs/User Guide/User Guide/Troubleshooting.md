@@ -67,5 +67,5 @@ If you continue using the existing document file, change your password (Options 
 
 Reporting bugs is highly valuable. Here are some tips:
 
-*   Use GitHub issues for reporting: [https://github.com/TriliumNext/Notes/issues](https://github.com/TriliumNext/Notes/issues)
+*   Use GitHub issues for reporting: [https://github.com/TriliumNext/Trilium/issues](https://github.com/TriliumNext/Trilium/issues)
 *   Refer to the [error logs](Troubleshooting/Error%20logs.md) page for information on providing necessary details.
