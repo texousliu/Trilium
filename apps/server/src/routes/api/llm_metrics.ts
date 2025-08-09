@@ -79,51 +79,7 @@ router.get('/llm/metrics/summary', (req: Request, res: Response) => {
     }
 });
 
-/**
- * GET /api/llm/circuit-breaker/status
- * Returns circuit breaker status for all providers
- */
-router.get('/llm/circuit-breaker/status', (req: Request, res: Response) => {
-    try {
-        const factory = getProviderFactory();
-        
-        if (!factory) {
-            return res.status(503).json({ error: 'LLM service not initialized' });
-        }
 
-        const status = factory.getCircuitBreakerStatus();
-        
-        if (!status) {
-            return res.status(503).json({ error: 'Circuit breaker not enabled' });
-        }
-
-        res.json(status);
-    } catch (error: any) {
-        log.error(`[LLM Metrics API] Error getting circuit breaker status: ${error.message}`);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-/**
- * POST /api/llm/circuit-breaker/reset/:provider
- * Reset circuit breaker for a specific provider
- */
-router.post('/llm/circuit-breaker/reset/:provider', (req: Request, res: Response) => {
-    try {
-        const { provider } = req.params;
-        const factory = getProviderFactory();
-        
-        if (!factory) {
-            return res.status(503).json({ error: 'LLM service not initialized' });
-        }
-
-        factory.resetCircuitBreaker(provider as any);
-        res.json({ message: `Circuit breaker reset for provider: ${provider}` });
-    } catch (error: any) {
-        log.error(`[LLM Metrics API] Error resetting circuit breaker: ${error.message}`);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
 
 /**
  * GET /api/llm/health
@@ -140,16 +96,28 @@ router.get('/llm/health', (req: Request, res: Response) => {
             });
         }
 
-        const circuitStatus = factory.getCircuitBreakerStatus();
         const metrics = factory.getMetricsSummary();
         const statistics = factory.getStatistics();
+        const healthStatuses = factory.getAllHealthStatuses();
+        
+        // Get available/unavailable providers from health statuses
+        const available: string[] = [];
+        const unavailable: string[] = [];
+        
+        for (const [provider, status] of healthStatuses) {
+            if (status.healthy) {
+                available.push(provider);
+            } else {
+                unavailable.push(provider);
+            }
+        }
         
         const health = {
             status: 'healthy',
             timestamp: new Date().toISOString(),
             providers: {
-                available: circuitStatus?.summary?.availableProviders || [],
-                unavailable: circuitStatus?.summary?.unavailableProviders || [],
+                available,
+                unavailable,
                 cached: statistics?.cachedProviders || 0,
                 healthy: statistics?.healthyProviders || 0,
                 unhealthy: statistics?.unhealthyProviders || 0
@@ -158,8 +126,7 @@ router.get('/llm/health', (req: Request, res: Response) => {
                 totalRequests: metrics?.system?.totalRequests || 0,
                 totalFailures: metrics?.system?.totalFailures || 0,
                 uptime: metrics?.system?.uptime || 0
-            },
-            circuitBreakers: circuitStatus?.summary || {}
+            }
         };
 
         // Determine overall health

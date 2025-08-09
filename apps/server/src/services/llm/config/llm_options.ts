@@ -13,13 +13,6 @@ import { ExportFormat } from '../metrics/metrics_exporter.js';
  * LLM configuration options
  */
 export interface LLMOptions {
-    // Circuit Breaker Configuration
-    circuitBreakerEnabled: boolean;
-    circuitBreakerFailureThreshold: number;
-    circuitBreakerFailureWindow: number;
-    circuitBreakerCooldownPeriod: number;
-    circuitBreakerSuccessThreshold: number;
-    
     // Metrics Configuration
     metricsEnabled: boolean;
     metricsExportFormat: ExportFormat;
@@ -43,13 +36,6 @@ export interface LLMOptions {
  * Default LLM options
  */
 const DEFAULT_OPTIONS: LLMOptions = {
-    // Circuit Breaker Defaults
-    circuitBreakerEnabled: true,
-    circuitBreakerFailureThreshold: 5,
-    circuitBreakerFailureWindow: 60000, // 1 minute
-    circuitBreakerCooldownPeriod: 30000, // 30 seconds
-    circuitBreakerSuccessThreshold: 2,
-    
     // Metrics Defaults
     metricsEnabled: true,
     metricsExportFormat: 'prometheus' as ExportFormat,
@@ -70,13 +56,6 @@ const DEFAULT_OPTIONS: LLMOptions = {
  * Option keys in Trilium's option system
  */
 export const LLM_OPTION_KEYS = {
-    // Circuit Breaker
-    CIRCUIT_BREAKER_ENABLED: 'llmCircuitBreakerEnabled' as const,
-    CIRCUIT_BREAKER_FAILURE_THRESHOLD: 'llmCircuitBreakerFailureThreshold' as const,
-    CIRCUIT_BREAKER_FAILURE_WINDOW: 'llmCircuitBreakerFailureWindow' as const,
-    CIRCUIT_BREAKER_COOLDOWN_PERIOD: 'llmCircuitBreakerCooldownPeriod' as const,
-    CIRCUIT_BREAKER_SUCCESS_THRESHOLD: 'llmCircuitBreakerSuccessThreshold' as const,
-    
     // Metrics
     METRICS_ENABLED: 'llmMetricsEnabled' as const,
     METRICS_EXPORT_FORMAT: 'llmMetricsExportFormat' as const,
@@ -110,28 +89,6 @@ export function getLLMOptions(): LLMOptions {
     }
 
     return {
-        // Circuit Breaker
-        circuitBreakerEnabled: getOptionSafe(
-            () => optionService.getOptionBool(LLM_OPTION_KEYS.CIRCUIT_BREAKER_ENABLED),
-            DEFAULT_OPTIONS.circuitBreakerEnabled
-        ),
-        circuitBreakerFailureThreshold: getOptionSafe(
-            () => optionService.getOptionInt(LLM_OPTION_KEYS.CIRCUIT_BREAKER_FAILURE_THRESHOLD),
-            DEFAULT_OPTIONS.circuitBreakerFailureThreshold
-        ),
-        circuitBreakerFailureWindow: getOptionSafe(
-            () => optionService.getOptionInt(LLM_OPTION_KEYS.CIRCUIT_BREAKER_FAILURE_WINDOW),
-            DEFAULT_OPTIONS.circuitBreakerFailureWindow
-        ),
-        circuitBreakerCooldownPeriod: getOptionSafe(
-            () => optionService.getOptionInt(LLM_OPTION_KEYS.CIRCUIT_BREAKER_COOLDOWN_PERIOD),
-            DEFAULT_OPTIONS.circuitBreakerCooldownPeriod
-        ),
-        circuitBreakerSuccessThreshold: getOptionSafe(
-            () => optionService.getOptionInt(LLM_OPTION_KEYS.CIRCUIT_BREAKER_SUCCESS_THRESHOLD),
-            DEFAULT_OPTIONS.circuitBreakerSuccessThreshold
-        ),
-        
         // Metrics
         metricsEnabled: getOptionSafe(
             () => optionService.getOptionBool(LLM_OPTION_KEYS.METRICS_ENABLED),
@@ -269,14 +226,6 @@ export function createProviderFactoryOptions() {
         enableCaching: options.providerCachingEnabled,
         cacheTimeout: options.providerCacheTimeout,
         enableMetrics: options.metricsEnabled,
-        enableCircuitBreaker: options.circuitBreakerEnabled,
-        circuitBreakerConfig: {
-            failureThreshold: options.circuitBreakerFailureThreshold,
-            failureWindow: options.circuitBreakerFailureWindow,
-            cooldownPeriod: options.circuitBreakerCooldownPeriod,
-            successThreshold: options.circuitBreakerSuccessThreshold,
-            enableLogging: true
-        },
         metricsExporterConfig: {
             enabled: options.metricsEnabled,
             format: options.metricsExportFormat,

@@ -23,11 +23,6 @@ import {
     getOllamaOptions 
 } from './providers.js';
 import { 
-    CircuitBreakerManager, 
-    CircuitOpenError,
-    type CircuitBreakerConfig 
-} from './circuit_breaker.js';
-import { 
     MetricsExporter,
     ExportFormat,
     type ExporterConfig 
@@ -96,8 +91,6 @@ export interface ProviderFactoryOptions {
     enableCaching?: boolean;
     cacheTimeout?: number;
     enableMetrics?: boolean;
-    enableCircuitBreaker?: boolean;
-    circuitBreakerConfig?: Partial<CircuitBreakerConfig>;
     metricsExporterConfig?: Partial<ExporterConfig>;
 }
 
@@ -128,7 +121,8 @@ export class ProviderFactory {
     private options: ProviderFactoryOptions;
     private healthCheckTimer?: NodeJS.Timeout;
     private disposed: boolean = false;
-    private circuitBreakerManager?: CircuitBreakerManager;
+    private retryCount: Map<string, number> = new Map();
+    private lastRetryTime: Map<string, number> = new Map();
     private metricsExporter?: MetricsExporter;
 
     constructor(options: ProviderFactoryOptions = {}) {
@@ -140,19 +134,10 @@ export class ProviderFactory {
             enableCaching: options.enableCaching ?? true,
             cacheTimeout: options.cacheTimeout ?? 300000, // 5 minutes
             enableMetrics: options.enableMetrics ?? true,
-            enableCircuitBreaker: options.enableCircuitBreaker ?? true,
-            circuitBreakerConfig: options.circuitBreakerConfig,
             metricsExporterConfig: options.metricsExporterConfig
         };
 
         this.initializeCapabilities();
-        
-        // Initialize circuit breaker if enabled
-        if (this.options.enableCircuitBreaker) {
-            this.circuitBreakerManager = CircuitBreakerManager.getInstance(
-                this.options.circuitBreakerConfig
-            );
-        }
 
         // Initialize metrics exporter if enabled
         if (this.options.enableMetrics) {
@@ -292,7 +277,7 @@ export class ProviderFactory {
     }
 
     /**
-     * Instantiate a specific provider
+     * Instantiate a specific provider with retry and fallback logic
      */
     private async instantiateProvider(
         type: ProviderType,
@@ -300,56 +285,35 @@ export class ProviderFactory {
         options?: ChatCompletionOptions
     ): Promise<AIService | null> {
         const startTime = Date.now();
+        const maxRetries = 3;
+        const baseDelay = 1000; // 1 second
         
         try {
-            // Use circuit breaker if enabled
-            if (this.circuitBreakerManager) {
-                const breaker = this.circuitBreakerManager.getBreaker(type);
-                
-                // Check if circuit is open
-                if (!breaker.isAvailable()) {
-                    const nextRetry = breaker.getNextRetryTime();
-                    log.info(`[ProviderFactory] Circuit breaker OPEN for ${type}. Next retry: ${nextRetry?.toISOString()}`);
-                    
-                    // Record metric
-                    if (this.metricsExporter) {
-                        this.metricsExporter.getCollector().recordError(type, 'Circuit breaker open');
-                    }
-                    
-                    // Try fallback immediately
-                    if (this.options.enableFallback && this.options.fallbackProviders?.length) {
-                        return this.tryFallbackProvider(options);
-                    }
-                    
-                    throw new CircuitOpenError(type, nextRetry!);
-                }
-                
-                // Execute with circuit breaker protection
-                return await breaker.execute(async () => {
-                    const service = await this.createProviderInternal(type, config, options);
-                    
-                    // Record success metric
-                    if (this.metricsExporter && service) {
-                        const latency = Date.now() - startTime;
-                        this.metricsExporter.getCollector().recordLatency(type, latency);
-                        this.metricsExporter.getCollector().recordRequest(type, true);
-                    }
-                    
-                    return service;
-                });
-            } else {
-                // No circuit breaker, create directly
-                const service = await this.createProviderInternal(type, config, options);
-                
-                // Record metrics
-                if (this.metricsExporter && service) {
+            // Try to create the provider
+            const service = await this.createProviderByType(type, config, options);
+            
+            if (service && service.isAvailable()) {
+                // Record success metric
+                if (this.metricsExporter) {
                     const latency = Date.now() - startTime;
                     this.metricsExporter.getCollector().recordLatency(type, latency);
                     this.metricsExporter.getCollector().recordRequest(type, true);
                 }
                 
+                // Reset retry count on success
+                this.retryCount.delete(type);
+                this.lastRetryTime.delete(type);
+                
                 return service;
             }
+            
+            // If not available, try fallback
+            if (this.options.enableFallback && this.options.fallbackProviders?.length) {
+                log.info(`[ProviderFactory] Provider ${type} not available, trying fallback`);
+                return this.tryFallbackProvider(options);
+            }
+            
+            return null;
         } catch (error: any) {
             log.error(`[ProviderFactory] Error creating ${type} provider: ${error.message}`);
             
@@ -359,10 +323,24 @@ export class ProviderFactory {
                 this.metricsExporter.getCollector().recordError(type, error.message);
             }
             
-            // Try fallback if enabled and not a circuit breaker error
-            if (!(error instanceof CircuitOpenError) && 
-                this.options.enableFallback && 
-                this.options.fallbackProviders?.length) {
+            // Simple exponential backoff for retries
+            if (this.shouldRetry(type, error, maxRetries)) {
+                const retryDelay = await this.getRetryDelay(type, baseDelay, error);
+                log.info(`[ProviderFactory] Retrying ${type} after ${retryDelay}ms`);
+                
+                await new Promise(resolve => setTimeout(resolve, retryDelay));
+                
+                // Increment retry count
+                const currentRetries = this.retryCount.get(type) || 0;
+                this.retryCount.set(type, currentRetries + 1);
+                this.lastRetryTime.set(type, Date.now());
+                
+                return this.instantiateProvider(type, config, options);
+            }
+            
+            // Try fallback on failure
+            if (this.options.enableFallback && this.options.fallbackProviders?.length) {
+                log.info(`[ProviderFactory] Max retries reached for ${type}, trying fallback`);
                 return this.tryFallbackProvider(options);
             }
             
@@ -371,9 +349,9 @@ export class ProviderFactory {
     }
 
     /**
-     * Internal provider creation logic
+     * Create provider by type
      */
-    private async createProviderInternal(
+    private async createProviderByType(
         type: ProviderType,
         config?: Partial<ProviderConfig>,
         options?: ChatCompletionOptions
@@ -396,6 +374,65 @@ export class ProviderFactory {
                 return null;
         }
     }
+
+    /**
+     * Check if we should retry a failed request
+     */
+    private shouldRetry(type: ProviderType, error: any, maxRetries: number): boolean {
+        const currentRetries = this.retryCount.get(type) || 0;
+        
+        if (currentRetries >= maxRetries) {
+            return false;
+        }
+        
+        // Check for retryable errors
+        if (error.status === 429) { // Rate limit
+            return true;
+        }
+        
+        if (error.status >= 500) { // Server errors
+            return true;
+        }
+        
+        if (error.code === 'ECONNREFUSED' || error.code === 'ETIMEDOUT') {
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     * Calculate retry delay with exponential backoff
+     */
+    private async getRetryDelay(type: ProviderType, baseDelay: number, error: any): Promise<number> {
+        const currentRetries = this.retryCount.get(type) || 0;
+        
+        // Check for rate limit headers
+        if (error.status === 429 && error.headers) {
+            // Check for Retry-After header
+            const retryAfter = error.headers['retry-after'];
+            if (retryAfter) {
+                const delay = parseInt(retryAfter) * 1000;
+                return Math.min(delay, 60000); // Cap at 60 seconds
+            }
+            
+            // Check for X-RateLimit-Reset header
+            const resetTime = error.headers['x-ratelimit-reset'];
+            if (resetTime) {
+                const delay = Math.max(0, parseInt(resetTime) * 1000 - Date.now());
+                return Math.min(delay, 60000);
+            }
+        }
+        
+        // Exponential backoff: baseDelay * (2 ^ retries)
+        const delay = baseDelay * Math.pow(2, currentRetries);
+        
+        // Add jitter to prevent thundering herd
+        const jitter = Math.random() * 0.3 * delay;
+        
+        return Math.min(delay + jitter, 30000); // Cap at 30 seconds
+    }
+
 
     /**
      * Create OpenAI provider
@@ -469,7 +506,7 @@ export class ProviderFactory {
         for (const fallbackType of this.options.fallbackProviders) {
             try {
                 log.info(`[ProviderFactory] Trying fallback provider: ${fallbackType}`);
-                const service = await this.instantiateProvider(fallbackType, undefined, options);
+                const service = await this.createProviderByType(fallbackType, undefined, options);
                 
                 if (service && service.isAvailable()) {
                     log.info(`[ProviderFactory] Fallback to ${fallbackType} successful`);
@@ -553,20 +590,14 @@ export class ProviderFactory {
         const startTime = Date.now();
         
         try {
-            const service = await this.createProvider(type);
-            
-            // Try a simple completion to test the service
-            const testMessages = [{ role: 'user' as const, content: 'Hi' }];
-            const response = await service.generateChatCompletion(testMessages, {
-                maxTokens: 1,
-                temperature: 0
-            });
-
+            // Just try to create the provider and check if it's available
+            const service = await this.createProviderByType(type);
+            const isHealthy = service ? service.isAvailable() : false;
             const latency = Date.now() - startTime;
             
             const status: ProviderHealthStatus = {
                 provider: type,
-                healthy: true,
+                healthy: isHealthy,
                 lastChecked: new Date(),
                 latency
             };
@@ -771,22 +802,6 @@ export class ProviderFactory {
         }
     }
 
-    /**
-     * Get circuit breaker status
-     */
-    public getCircuitBreakerStatus(): any {
-        if (!this.circuitBreakerManager) {
-            return null;
-        }
-        
-        return {
-            summary: this.circuitBreakerManager.getHealthSummary(),
-            details: Array.from(this.circuitBreakerManager.getAllStats().entries()).map(([name, stats]) => ({
-                provider: name,
-                ...stats
-            }))
-        };
-    }
 
     /**
      * Get metrics summary
@@ -821,18 +836,6 @@ export class ProviderFactory {
         return this.metricsExporter.export(exportFormat);
     }
 
-    /**
-     * Reset circuit breaker for a specific provider
-     */
-    public resetCircuitBreaker(provider: ProviderType): void {
-        if (!this.circuitBreakerManager) {
-            return;
-        }
-
-        const breaker = this.circuitBreakerManager.getBreaker(provider);
-        breaker.forceClose('Manual reset');
-        log.info(`[ProviderFactory] Circuit breaker reset for ${provider}`);
-    }
 
     /**
      * Configure metrics export
@@ -862,10 +865,6 @@ export class ProviderFactory {
             this.healthCheckTimer = undefined;
         }
 
-        // Dispose circuit breaker manager
-        if (this.circuitBreakerManager) {
-            this.circuitBreakerManager.dispose();
-        }
 
         // Dispose metrics exporter
         if (this.metricsExporter) {
