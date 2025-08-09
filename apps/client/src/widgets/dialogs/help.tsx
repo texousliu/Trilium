@@ -1,4 +1,3 @@
-import { openDialog } from "../../services/dialog.js";
 import ReactBasicWidget from "../react/ReactBasicWidget.js";
 import Modal from "../react/Modal.jsx";
 import { t } from "../../services/i18n.js";
@@ -7,10 +6,18 @@ import { CommandNames } from "../../components/app_context.js";
 import RawHtml from "../react/RawHtml.jsx";
 import { useEffect, useState } from "preact/hooks";
 import keyboard_actions from "../../services/keyboard_actions.js";
+import useTriliumEvent from "../react/hooks.jsx";
 
 function HelpDialogComponent() {
+    const [ shown, setShown ] = useState(false);
+    useTriliumEvent("showCheatsheet", () => setShown(true));
+
     return (
-        <Modal title={t("help.title")} className="help-dialog use-tn-links" minWidth="90%" size="lg" scrollable>
+        <Modal
+            title={t("help.title")} className="help-dialog use-tn-links" minWidth="90%" size="lg" scrollable
+            onHidden={() => setShown(false)}
+            show={shown}
+        >
             <div className="help-cards row row-cols-md-3 g-3">
                 <Card title={t("help.noteNavigation")}>
                     <ul>
@@ -161,7 +168,4 @@ export default class HelpDialog extends ReactBasicWidget {
         return <HelpDialogComponent />;
     }
 
-    showCheatsheetEvent() {
-        openDialog(this.$widget);
-    }
 }

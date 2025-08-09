@@ -1,6 +1,5 @@
 import { useEffect, useState } from "preact/hooks";
-import { EventData } from "../../components/app_context";
-import { closeActiveDialog, openDialog } from "../../services/dialog";
+import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import Modal from "../react/Modal";
 import ReactBasicWidget from "../react/ReactBasicWidget";
@@ -12,50 +11,52 @@ import Button from "../react/Button";
 import bulk_action from "../../services/bulk_action";
 import toast from "../../services/toast";
 import RenameNoteBulkAction from "../bulk_actions/note/rename_note";
-import { RawHtmlBlock } from "../react/RawHtml";
 import FNote from "../../entities/fnote";
 import froca from "../../services/froca";
 import useTriliumEvent from "../react/hooks";
 
-interface BulkActionProps {
-    bulkActionNote?: FNote | null;
-    selectedOrActiveNoteIds?: string[];
-}
-
-function BulkActionComponent({ selectedOrActiveNoteIds, bulkActionNote }: BulkActionProps) {
+function BulkActionComponent() {
+    const [ selectedOrActiveNoteIds, setSelectedOrActiveNoteIds ] = useState<string[]>();
+    const [ bulkActionNote, setBulkActionNote ] = useState<FNote | null>();
     const [ includeDescendants, setIncludeDescendants ] = useState(false);
     const [ affectedNoteCount, setAffectedNoteCount ] = useState(0);
     const [ existingActions, setExistingActions ] = useState<RenameNoteBulkAction[]>([]);
+    const [ shown, setShown ] = useState(false);
 
-    if (!selectedOrActiveNoteIds || !bulkActionNote) {
-        return;
-    }
-
-    useEffect(() => {
-        server.post<BulkActionAffectedNotes>("bulk-action/affected-notes", {
-            noteIds: selectedOrActiveNoteIds,
-            includeDescendants
-        }).then(({ affectedNoteCount }) => setAffectedNoteCount(affectedNoteCount));
-    }, [ selectedOrActiveNoteIds, includeDescendants ]);
-
-    function refreshExistingActions() {
-        setExistingActions(bulk_action.parseActions(bulkActionNote!));
-    }
-
-    useEffect(() => refreshExistingActions(), []);
-    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
-        if (loadResults.getAttributeRows().find((row) =>
-            row.type === "label" && row.name === "action" && row.noteId === "_bulkAction")) {
-            refreshExistingActions();
-        }
+    useTriliumEvent("openBulkActionsDialog", async ({ selectedOrActiveNoteIds }) => {
+        setSelectedOrActiveNoteIds(selectedOrActiveNoteIds);
+        setBulkActionNote(await froca.getNote("_bulkAction"));
+        setShown(true);
     });
 
-    return ( selectedOrActiveNoteIds &&
+    if (selectedOrActiveNoteIds && bulkActionNote) {
+        useEffect(() => {
+            server.post<BulkActionAffectedNotes>("bulk-action/affected-notes", {
+                noteIds: selectedOrActiveNoteIds,
+                includeDescendants
+            }).then(({ affectedNoteCount }) => setAffectedNoteCount(affectedNoteCount));
+        }, [ selectedOrActiveNoteIds, includeDescendants ]);
+
+        function refreshExistingActions() {
+            setExistingActions(bulk_action.parseActions(bulkActionNote!));
+        }
+        
+        useEffect(() => refreshExistingActions(), []);
+        useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+            if (loadResults.getAttributeRows().find((row) =>
+                row.type === "label" && row.name === "action" && row.noteId === "_bulkAction")) {
+                    refreshExistingActions();
+            }
+        });
+    }
+
+    return (
         <Modal
             className="bulk-actions-dialog"
             size="xl"
             title={t("bulk_actions.bulk_actions")}
             footer={<Button text={t("bulk_actions.execute_bulk_actions")} primary />}
+            show={shown}
             onSubmit={async () => {
                 await server.post("bulk-action/execute", {
                     noteIds: selectedOrActiveNoteIds,
@@ -65,6 +66,7 @@ function BulkActionComponent({ selectedOrActiveNoteIds, bulkActionNote }: BulkAc
                 toast.showMessage(t("bulk_actions.bulk_actions_executed"), 3000);
                 closeActiveDialog();
             }}
+            onHidden={() => setShown(false)}
         >
             <h4>{t("bulk_actions.affected_notes")}: <span>{affectedNoteCount}</span></h4>
             <FormCheckbox 
@@ -114,19 +116,8 @@ function ExistingActionsList({ existingActions }: { existingActions?: RenameNote
 
 export default class BulkActionsDialog extends ReactBasicWidget {
 
-    private props: BulkActionProps = {};
-
     get component() {
-        return <BulkActionComponent {...this.props} />
-    }
-
-    async openBulkActionsDialogEvent({ selectedOrActiveNoteIds }: EventData<"openBulkActionsDialog">) {                
-        this.props = {
-            selectedOrActiveNoteIds,
-            bulkActionNote: await froca.getNote("_bulkAction")
-        };
-        this.doRender();
-        openDialog(this.$widget);
+        return <BulkActionComponent />
     }
 
 }

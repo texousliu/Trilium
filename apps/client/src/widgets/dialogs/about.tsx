@@ -1,4 +1,3 @@
-import { openDialog } from "../../services/dialog.js";
 import ReactBasicWidget from "../react/ReactBasicWidget.js";
 import Modal from "../react/Modal.js";
 import { t } from "../../services/i18n.js";
@@ -9,19 +8,26 @@ import openService from "../../services/open.js";
 import { useState } from "preact/hooks";
 import type { CSSProperties } from "preact/compat";
 import type { AppInfo } from "@triliumnext/commons";
+import useTriliumEvent from "../react/hooks.jsx";
 
 function AboutDialogComponent() {
     let [appInfo, setAppInfo] = useState<AppInfo | null>(null);
-
-    async function onShown() {
-        const appInfo = await server.get<AppInfo>("app-info");
-        setAppInfo(appInfo);
-    }
-
+    let [shown, setShown] = useState(false);
     const forceWordBreak: CSSProperties = { wordBreak: "break-all" };
 
+    useTriliumEvent("openAboutDialog", () => setShown(true));
+
     return (
-        <Modal className="about-dialog" size="lg" title={t("about.title")} onShown={onShown}>
+        <Modal className="about-dialog"
+            size="lg"
+            title={t("about.title")}
+            show={shown}
+            onShown={async () => {
+                const appInfo = await server.get<AppInfo>("app-info");
+                setAppInfo(appInfo);
+            }}
+            onHidden={() => setShown(false)}
+        >
             <table className="table table-borderless">
                 <tbody>
                     <tr>
@@ -83,7 +89,4 @@ export default class AboutDialog extends ReactBasicWidget {
         return <AboutDialogComponent />;
     }
 
-    async openAboutDialogEvent() {
-        openDialog(this.$widget);
-    }
 }

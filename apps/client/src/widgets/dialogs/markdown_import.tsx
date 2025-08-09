@@ -1,6 +1,6 @@
-import { useRef, useState } from "preact/compat";
+import { useCallback, useRef, useState } from "preact/compat";
 import appContext from "../../components/app_context";
-import { closeActiveDialog, openDialog } from "../../services/dialog";
+import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import server from "../../services/server";
 import toast from "../../services/toast";
@@ -8,6 +8,7 @@ import utils from "../../services/utils";
 import Modal from "../react/Modal";
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import Button from "../react/Button";
+import useTriliumEvent from "../react/hooks";
 
 interface RenderMarkdownResponse {
     htmlContent: string;
@@ -15,7 +16,26 @@ interface RenderMarkdownResponse {
 
 function MarkdownImportDialogComponent() {
     const markdownImportTextArea = useRef<HTMLTextAreaElement>(null);
-    let [ text, setText ] = useState("");  
+    let [ text, setText ] = useState("");
+    let [ shown, setShown ] = useState(false);
+
+    const triggerImport = useCallback(() => {
+        if (appContext.tabManager.getActiveContextNoteType() !== "text") {
+            return;
+        }
+    
+        if (utils.isElectron()) {
+            const { clipboard } = utils.dynamicRequire("electron");
+            const text = clipboard.readText();
+    
+            convertMarkdownToHtml(text);
+        } else {
+            setShown(true);
+        }
+    }, []);
+
+    useTriliumEvent("importMarkdownInline", triggerImport);
+    useTriliumEvent("pasteMarkdownIntoText", triggerImport);
 
     async function sendForm() {
         await convertMarkdownToHtml(text);
@@ -28,6 +48,8 @@ function MarkdownImportDialogComponent() {
             className="markdown-import-dialog" title={t("markdown_import.dialog_title")} size="lg"
             footer={<Button className="markdown-import-button" text={t("markdown_import.import_button")} onClick={sendForm} keyboardShortcut="Ctrl+Space" />}
             onShown={() => markdownImportTextArea.current?.focus()}
+            onHidden={() => setShown(false) }
+            show={shown}
         >
             <p>{t("markdown_import.modal_body_text")}</p>
             <textarea ref={markdownImportTextArea} value={text}
@@ -47,26 +69,6 @@ export default class MarkdownImportDialog extends ReactBasicWidget {
 
     get component() {
         return <MarkdownImportDialogComponent />;
-    }
-
-    async importMarkdownInlineEvent() {
-        if (appContext.tabManager.getActiveContextNoteType() !== "text") {
-            return;
-        }
-
-        if (utils.isElectron()) {
-            const { clipboard } = utils.dynamicRequire("electron");
-            const text = clipboard.readText();
-
-            convertMarkdownToHtml(text);
-        } else {
-            openDialog(this.$widget);
-        }
-    }
-
-    async pasteMarkdownIntoTextEvent() {
-        // BC with keyboard shortcuts command
-        await this.importMarkdownInlineEvent();
     }
 
 }

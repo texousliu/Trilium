@@ -1,6 +1,5 @@
 import { useState } from "preact/hooks";
-import { EventData } from "../../components/app_context";
-import { closeActiveDialog, openDialog } from "../../services/dialog";
+import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import Button from "../react/Button";
 import FormCheckbox from "../react/FormCheckbox";
@@ -10,13 +9,21 @@ import Modal from "../react/Modal";
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import server from "../../services/server";
 import FormGroup from "../react/FormGroup";
+import useTriliumEvent from "../react/hooks";
 
-function SortChildNotesDialogComponent({ parentNoteId }: { parentNoteId?: string }) {
+function SortChildNotesDialogComponent() {
+    const [ parentNoteId, setParentNoteId ] = useState<string>();
     const [ sortBy, setSortBy ] = useState("title");
     const [ sortDirection, setSortDirection ] = useState("asc");
     const [ foldersFirst, setFoldersFirst ] = useState(false);
     const [ sortNatural, setSortNatural ] = useState(false);
     const [ sortLocale, setSortLocale ] = useState("");
+    const [ shown, setShown ] = useState(false);
+
+    useTriliumEvent("sortChildNotes", ({ node }) => {
+        setParentNoteId(node.data.noteId);
+        setShown(true);
+    });
 
     async function onSubmit() {
         await server.put(`notes/${parentNoteId}/sort-children`, { 
@@ -31,12 +38,14 @@ function SortChildNotesDialogComponent({ parentNoteId }: { parentNoteId?: string
         closeActiveDialog();
     }
 
-    return (parentNoteId &&
+    return (
         <Modal
             className="sort-child-notes-dialog"
             title={t("sort_child_notes.sort_children_by")}
             size="lg" maxWidth={500}
             onSubmit={onSubmit}
+            onHidden={() => setShown(false)}
+            show={shown}
             footer={<Button text={t("sort_child_notes.sort")} keyboardShortcut="Enter" />}
         >
             <h5>{t("sort_child_notes.sorting_criteria")}</h5>
@@ -88,17 +97,8 @@ function SortChildNotesDialogComponent({ parentNoteId }: { parentNoteId?: string
 
 export default class SortChildNotesDialog extends ReactBasicWidget {
 
-    private parentNoteId?: string;
-    
     get component() {
-        return <SortChildNotesDialogComponent parentNoteId={this.parentNoteId} />;
+        return <SortChildNotesDialogComponent />;
     }
-
-    async sortChildNotesEvent({ node }: EventData<"sortChildNotes">) {
-        this.parentNoteId = node.data.noteId;
-        this.doRender();
-        openDialog(this.$widget);
-    }
-
 
 }

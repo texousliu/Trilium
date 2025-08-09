@@ -1,6 +1,6 @@
 import { useEffect, useState } from "preact/hooks";
-import appContext, { EventData } from "../../components/app_context";
-import dialog, { closeActiveDialog, openDialog } from "../../services/dialog";
+import appContext from "../../components/app_context";
+import dialog, { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import server from "../../services/server";
 import toast from "../../services/toast";
@@ -14,14 +14,19 @@ import { formatDateTime } from "../../utils/formatters";
 import link from "../../services/link";
 import RawHtml from "../react/RawHtml";
 import ws from "../../services/ws";
+import useTriliumEvent from "../react/hooks";
 
-interface RecentChangesDialogProps {
-    ancestorNoteId?: string;
-}
-
-function RecentChangesDialogComponent({ ancestorNoteId }: RecentChangesDialogProps) {
+function RecentChangesDialogComponent() {
+    const [ ancestorNoteId, setAncestorNoteId ] = useState<string>();
     const [ groupedByDate, setGroupedByDate ] = useState<Map<String, RecentChangesRow[]>>();
-    const [ needsRefresh, setNeedsRefresh ] = useState<boolean>(false);
+    const [ needsRefresh, setNeedsRefresh ] = useState(false);
+    const [ shown, setShown ] = useState(false);
+
+    useTriliumEvent("showRecentChanges", ({ ancestorNoteId }) => {
+        setNeedsRefresh(true);
+        setAncestorNoteId(ancestorNoteId ?? hoisted_note.getHoistedNoteId());
+        setShown(true);
+    });
 
     if (!groupedByDate || needsRefresh) {
         useEffect(() => {
@@ -43,7 +48,7 @@ function RecentChangesDialogComponent({ ancestorNoteId }: RecentChangesDialogPro
         })
     }
 
-    return (ancestorNoteId &&
+    return (
         <Modal
             title={t("recent_changes.title")}
             className="recent-changes-dialog"
@@ -61,6 +66,8 @@ function RecentChangesDialogComponent({ ancestorNoteId }: RecentChangesDialogPro
                     }}
                 />
             }
+            onHidden={() => setShown(false)}
+            show={shown}
         >
             <div className="recent-changes-content">
                 {groupedByDate?.size
@@ -152,18 +159,8 @@ function DeletedNoteLink({ change }: { change: RecentChangesRow }) {
 
 export default class RecentChangesDialog extends ReactBasicWidget {
 
-    private props: RecentChangesDialogProps = {};
-
     get component() {
-        return <RecentChangesDialogComponent {...this.props} />
-    }
-
-    async showRecentChangesEvent({ ancestorNoteId }: EventData<"showRecentChanges">) {
-        this.props = {
-            ancestorNoteId: ancestorNoteId ?? hoisted_note.getHoistedNoteId()
-        };
-        this.doRender();
-        openDialog(this.$widget);
+        return <RecentChangesDialogComponent />
     }
 
 }

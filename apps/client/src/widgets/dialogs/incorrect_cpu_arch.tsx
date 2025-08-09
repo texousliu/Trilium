@@ -1,13 +1,17 @@
 import { useRef } from "react";
-import { closeActiveDialog, openDialog } from "../../services/dialog.js";
+import { closeActiveDialog } from "../../services/dialog.js";
 import { t } from "../../services/i18n.js";
 import utils from "../../services/utils.js";
 import Button from "../react/Button.js";
 import Modal from "../react/Modal.js";
 import ReactBasicWidget from "../react/ReactBasicWidget.js";
+import { useState } from "preact/hooks";
+import useTriliumEvent from "../react/hooks.jsx";
 
 function IncorrectCpuArchDialogComponent() {
+    const [ shown, setShown ] = useState(false);
     const downloadButtonRef = useRef<HTMLButtonElement>(null);
+    useTriliumEvent("showCpuArchWarning", () => setShown(true));
 
     return (
         <Modal
@@ -33,6 +37,8 @@ function IncorrectCpuArchDialogComponent() {
                 <Button text={t("cpu_arch_warning.continue_anyway")}
                     onClick={() => closeActiveDialog()} />
             </>}
+            onHidden={() => setShown(false)}
+            show={shown}
         >
             <p>{utils.isMac() ? t("cpu_arch_warning.message_macos") : t("cpu_arch_warning.message_windows")}</p>
             <p>{t("cpu_arch_warning.recommendation")}</p>
@@ -44,10 +50,6 @@ export default class IncorrectCpuArchDialog extends ReactBasicWidget {
  
     get component() {
         return <IncorrectCpuArchDialogComponent />
-    }
-
-    showCpuArchWarningEvent() {        
-        openDialog(this.$widget);
     }
 
 }

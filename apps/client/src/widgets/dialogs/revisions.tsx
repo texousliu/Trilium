@@ -1,7 +1,7 @@
 import type { RevisionPojo, RevisionItem } from "@triliumnext/commons";
-import appContext, { EventData } from "../../components/app_context";
+import appContext from "../../components/app_context";
 import FNote from "../../entities/fnote";
-import dialog, { closeActiveDialog, openDialog } from "../../services/dialog";
+import dialog, { closeActiveDialog } from "../../services/dialog";
 import froca from "../../services/froca";
 import { t } from "../../services/i18n";
 import server from "../../services/server";
@@ -18,26 +18,35 @@ import { CSSProperties } from "preact/compat";
 import open from "../../services/open";
 import ActionButton from "../react/ActionButton";
 import options from "../../services/options";
+import useTriliumEvent from "../react/hooks";
 
-interface RevisionsDialogProps {
-    note?: FNote;
-}
-
-function RevisionsDialogComponent({ note }: RevisionsDialogProps) {
-    const [ revisions, setRevisions ] = useState<RevisionItem[]>([]);
+function RevisionsDialogComponent() {
+    const [ note, setNote ] = useState<FNote>();
+    const [ revisions, setRevisions ] = useState<RevisionItem[]>();
     const [ currentRevision, setCurrentRevision ] = useState<RevisionItem>();
+    const [ shown, setShown ] = useState(false);
 
-    if (note) {
-        useEffect(() => {
+    useTriliumEvent("showRevisions", async ({ noteId }) => {
+        const note = await getNote(noteId);
+        if (note) {
+            setNote(note);
+            setShown(true);
+        }
+    });
+
+    useEffect(() => {
+        if (note?.noteId) {
             server.get<RevisionItem[]>(`notes/${note.noteId}/revisions`).then(setRevisions);
-        }, [ note.noteId ]);
-    }
+        } else {
+            setRevisions(undefined);
+        }
+    }, [ note?.noteId ]);
 
     if (revisions?.length && !currentRevision) {
         setCurrentRevision(revisions[0]);
     }
 
-    return (note &&
+    return (
         <Modal
             className="revisions-dialog"
             size="xl"
@@ -49,7 +58,7 @@ function RevisionsDialogComponent({ note }: RevisionsDialogProps) {
                     onClick={async () => {
                         const text = t("revisions.confirm_delete_all");
 
-                        if (await dialog.confirm(text)) {
+                        if (note && await dialog.confirm(text)) {
                             await server.remove(`notes/${note.noteId}/revisions`);
 
                             closeActiveDialog();
@@ -59,11 +68,16 @@ function RevisionsDialogComponent({ note }: RevisionsDialogProps) {
             }
             footer={<RevisionFooter note={note} />} 
             footerStyle={{ paddingTop: 0, paddingBottom: 0 }}
+            onHidden={() => {
+                setShown(false);
+                setNote(undefined);
+            }}
+            show={shown}
             >
                 <RevisionsList
-                    revisions={revisions}
+                    revisions={revisions ?? []}
                     onSelect={(revisionId) => {
-                        const correspondingRevision = revisions.find((r) => r.revisionId === revisionId);
+                        const correspondingRevision = (revisions ?? []).find((r) => r.revisionId === revisionId);
                         if (correspondingRevision) {
                             setCurrentRevision(correspondingRevision);
                         }
@@ -239,7 +253,7 @@ function RevisionContent({ revisionItem, fullRevision }: { revisionItem?: Revisi
     }
 }
 
-function RevisionFooter({ note }: { note: FNote }) {
+function RevisionFooter({ note }: { note?: FNote }) {
     if (!note) {
         return <></>;
     }
@@ -268,18 +282,8 @@ function RevisionFooter({ note }: { note: FNote }) {
 
 export default class RevisionsDialog extends ReactBasicWidget  {
 
-    private props: RevisionsDialogProps = {};
-
     get component() {
-        return <RevisionsDialogComponent {...this.props} />
-    }
-
-    async showRevisionsEvent({ noteId }: EventData<"showRevisions">) {
-        this.props = {
-            note: await getNote(noteId) ?? undefined
-        };
-        this.doRender();
-        openDialog(this.$widget);
+        return <RevisionsDialogComponent />
     }
 
 }

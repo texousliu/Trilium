@@ -1,5 +1,5 @@
 import { useEffect, useState } from "preact/compat";
-import { closeActiveDialog, openDialog } from "../../services/dialog";
+import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import Button from "../react/Button";
 import FormCheckbox from "../react/FormCheckbox";
@@ -9,18 +9,21 @@ import Modal from "../react/Modal";
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import options from "../../services/options";
 import importService from "../../services/import.js";
-import { EventData } from "../../components/app_context";
 import tree from "../../services/tree";
+import useTriliumEvent from "../react/hooks";
 
-interface UploadAttachmentsDialogProps {
-    parentNoteId?: string;
-}
-
-function UploadAttachmentsDialogComponent({ parentNoteId }: UploadAttachmentsDialogProps) {
+function UploadAttachmentsDialogComponent() {
+    const [ parentNoteId, setParentNoteId ] = useState<string>();
     const [ files, setFiles ] = useState<FileList | null>(null);
     const [ shrinkImages, setShrinkImages ] = useState(options.is("compressImages"));
     const [ isUploading, setIsUploading ] = useState(false);
     const [ description, setDescription ] = useState<string | undefined>(undefined);
+    const [ shown, setShown ] = useState(false);
+
+    useTriliumEvent("showUploadAttachmentsDialog", ({ noteId }) => {
+        setParentNoteId(noteId);
+        setShown(true);
+    });
 
     if (parentNoteId) {
         useEffect(() => {
@@ -29,23 +32,25 @@ function UploadAttachmentsDialogComponent({ parentNoteId }: UploadAttachmentsDia
         }, [parentNoteId]);
     }
 
-    return (parentNoteId &&
+    return (
         <Modal
             className="upload-attachments-dialog"
             size="lg"
             title={t("upload_attachments.upload_attachments_to_note")}
             footer={<Button text={t("upload_attachments.upload")} primary disabled={!files || isUploading} />}
             onSubmit={async () => {
-                if (!files) {
+                if (!files || !parentNoteId) {
                     return;
                 }
-
+                
                 setIsUploading(true);
                 const filesCopy = Array.from(files);
                 await importService.uploadFiles("attachments", parentNoteId, filesCopy, { shrinkImages });
                 setIsUploading(false);
                 closeActiveDialog();
             }}
+            onHidden={() => setShown(false)}
+            show={shown}
         >
             <FormGroup label={t("upload_attachments.choose_files")} description={description}>
                 <FormFileUpload onChange={setFiles} multiple />
@@ -64,16 +69,8 @@ function UploadAttachmentsDialogComponent({ parentNoteId }: UploadAttachmentsDia
 
 export default class UploadAttachmentsDialog extends ReactBasicWidget {
 
-    private props: UploadAttachmentsDialogProps = {};
-
     get component() {
-        return <UploadAttachmentsDialogComponent {...this.props} />;
-    }
-
-    showUploadAttachmentsDialogEvent({ noteId }: EventData<"showUploadAttachmentsDialog">) {
-        this.props = { parentNoteId: noteId };
-        this.doRender();
-        openDialog(this.$widget);    
+        return <UploadAttachmentsDialogComponent />;
     }
 
 }

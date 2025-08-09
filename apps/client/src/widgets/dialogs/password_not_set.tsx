@@ -1,11 +1,16 @@
-import { closeActiveDialog, openDialog } from "../../services/dialog";
+import { closeActiveDialog } from "../../services/dialog";
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import Modal from "../react/Modal";
 import { t } from "../../services/i18n";
 import Button from "../react/Button";
 import appContext from "../../components/app_context";
+import { useState } from "preact/hooks";
+import useTriliumEvent from "../react/hooks";
 
 function PasswordNotSetDialogComponent() {
+    const [ shown, setShown ] = useState(false);
+    useTriliumEvent("showPasswordNotSet", () => setShown(true));
+
     return (
         <Modal
             size="md" className="password-not-set-dialog"
@@ -14,6 +19,8 @@ function PasswordNotSetDialogComponent() {
                 closeActiveDialog();
                 appContext.triggerCommand("showOptions", { section: "_optionsPassword" });
             }} />}
+            onHidden={() => setShown(false)}
+            show={shown}
         >
             <p>{t("password_not_set.body1")}</p>
             <p>{t("password_not_set.body2")}</p>
@@ -25,10 +32,6 @@ export default class PasswordNotSetDialog extends ReactBasicWidget {
 
     get component() {
         return <PasswordNotSetDialogComponent />;
-    }
-
-    showPasswordNotSetEvent() {
-        openDialog(this.$widget);
     }
 
 }

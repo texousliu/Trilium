@@ -1,8 +1,7 @@
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import Modal from "../react/Modal";
 import { t } from "../../services/i18n";
-import { closeActiveDialog, openDialog } from "../../services/dialog";
-import { EventData } from "../../components/app_context";
+import { closeActiveDialog } from "../../services/dialog";
 import NoteList from "../react/NoteList";
 import FormGroup from "../react/FormGroup";
 import NoteAutocomplete from "../react/NoteAutocomplete";
@@ -13,14 +12,18 @@ import tree from "../../services/tree";
 import froca from "../../services/froca";
 import branches from "../../services/branches";
 import toast from "../../services/toast";
+import useTriliumEvent from "../react/hooks";
 
-interface MoveToDialogProps {
-    movedBranchIds?: string[];
-}
-
-function MoveToDialogComponent({ movedBranchIds }: MoveToDialogProps) {
+function MoveToDialogComponent() {
+    const [ movedBranchIds, setMovedBranchIds ] = useState<string[]>();
     const [ suggestion, setSuggestion ] = useState<Suggestion | null>(null);
+    const [ shown, setShown ] = useState(false);
     const autoCompleteRef = useRef<HTMLInputElement>(null);
+
+    useTriliumEvent("moveBranchIdsTo", ({ branchIds }) => {
+        setMovedBranchIds(branchIds);
+        setShown(true);
+    });
 
     async function onSubmit() {
         const notePath = suggestion?.notePath;
@@ -49,6 +52,8 @@ function MoveToDialogComponent({ movedBranchIds }: MoveToDialogProps) {
             footer={<Button text={t("move_to.move_button")} keyboardShortcut="Enter" />}
             onSubmit={onSubmit}
             onShown={() => triggerRecentNotes(autoCompleteRef.current)}
+            onHidden={() => setShown(false)}
+            show={shown}
         >
             <h5>{t("move_to.notes_to_move")}</h5>
             <NoteList branchIds={movedBranchIds} />
@@ -65,17 +70,8 @@ function MoveToDialogComponent({ movedBranchIds }: MoveToDialogProps) {
 
 export default class MoveToDialog extends ReactBasicWidget {
 
-    private props: MoveToDialogProps = {};
-
     get component() {
-        return <MoveToDialogComponent {...this.props} />;
-    }
-
-    async moveBranchIdsToEvent({ branchIds }: EventData<"moveBranchIdsTo">) {
-        const movedBranchIds = branchIds;
-        this.props = { movedBranchIds };
-        this.doRender();
-        openDialog(this.$widget);
+        return <MoveToDialogComponent />;
     }
 
 }

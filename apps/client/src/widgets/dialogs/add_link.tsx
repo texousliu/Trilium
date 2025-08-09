@@ -1,5 +1,4 @@
-import { EventData } from "../../components/app_context";
-import { closeActiveDialog, openDialog } from "../../services/dialog";
+import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import Modal from "../react/Modal";
 import ReactBasicWidget from "../react/ReactBasicWidget";
@@ -10,24 +9,28 @@ import { useRef, useState } from "preact/hooks";
 import tree from "../../services/tree";
 import { useEffect } from "react";
 import note_autocomplete, { Suggestion } from "../../services/note_autocomplete";
-import type { default as TextTypeWidget } from "../type_widgets/editable_text.js";
+import { default as TextTypeWidget } from "../type_widgets/editable_text.js";
 import { logError } from "../../services/ws";
 import FormGroup from "../react/FormGroup.js";
 import { refToJQuerySelector } from "../react/react_utils";
+import useTriliumEvent from "../react/hooks";
 
 type LinkType = "reference-link" | "external-link" | "hyper-link";
 
-interface AddLinkDialogProps {
-    text?: string;
-    textTypeWidget?: TextTypeWidget;
-}
-
-function AddLinkDialogComponent({ text: _text, textTypeWidget }: AddLinkDialogProps) {
-    const [ text, setText ] = useState(_text ?? "");
+function AddLinkDialogComponent() {
+    const [ textTypeWidget, setTextTypeWidget ] = useState<TextTypeWidget>();
+    const [ text, setText ] = useState<string>();
     const [ linkTitle, setLinkTitle ] = useState("");
     const hasSelection = textTypeWidget?.hasSelection();
     const [ linkType, setLinkType ] = useState<LinkType>(hasSelection ? "hyper-link" : "reference-link");
     const [ suggestion, setSuggestion ] = useState<Suggestion | null>(null);
+    const [ shown, setShown ] = useState(false);
+
+    useTriliumEvent("showAddLinkDialog", ( { textTypeWidget, text }) => {
+        setTextTypeWidget(textTypeWidget);
+        setText(text);
+        setShown(true);
+    });
 
     async function setDefaultLinkTitle(noteId: string) {
         const noteTitle = await tree.getNoteTitle(noteId);
@@ -100,7 +103,11 @@ function AddLinkDialogComponent({ text: _text, textTypeWidget }: AddLinkDialogPr
             footer={<Button text={t("add_link.button_add_link")} keyboardShortcut="Enter" />}
             onSubmit={onSubmit}
             onShown={onShown}
-            onHidden={() => setSuggestion(null)}
+            onHidden={() => {
+                setSuggestion(null);
+                setShown(false);
+            }}
+            show={shown}
         >
             <FormGroup label={t("add_link.note")}>
                 <NoteAutocomplete
@@ -150,18 +157,9 @@ function AddLinkDialogComponent({ text: _text, textTypeWidget }: AddLinkDialogPr
 }
 
 export default class AddLinkDialog extends ReactBasicWidget {
-
-    private props: AddLinkDialogProps = {};
     
     get component() {
-        return <AddLinkDialogComponent {...this.props} />;
-    }
-
-    async showAddLinkDialogEvent({ textTypeWidget, text = "" }: EventData<"showAddLinkDialog">) {
-        this.props.text = text;
-        this.props.textTypeWidget = textTypeWidget;
-        this.doRender();
-        await openDialog(this.$widget);
+        return <AddLinkDialogComponent />;
     }
 
 }

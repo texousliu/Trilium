@@ -1,6 +1,6 @@
 import { useRef, useState } from "preact/compat";
-import appContext, { EventData } from "../../components/app_context";
-import { closeActiveDialog, openDialog } from "../../services/dialog";
+import appContext from "../../components/app_context";
+import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import Modal from "../react/Modal";
 import ReactBasicWidget from "../react/ReactBasicWidget";
@@ -15,15 +15,31 @@ import tree from "../../services/tree";
 import branches from "../../services/branches";
 import toast from "../../services/toast";
 import NoteList from "../react/NoteList";
+import useTriliumEvent from "../react/hooks";
 
-interface CloneToDialogProps {
-    clonedNoteIds?: string[];
-}
-
-function CloneToDialogComponent({ clonedNoteIds }: CloneToDialogProps) {
+function CloneToDialogComponent() {
+    const [ clonedNoteIds, setClonedNoteIds ] = useState<string[]>();
     const [ prefix, setPrefix ] = useState("");
     const [ suggestion, setSuggestion ] = useState<Suggestion | null>(null);
+    const [ shown, setShown ] = useState(false);
     const autoCompleteRef = useRef<HTMLInputElement>(null);
+
+    useTriliumEvent("cloneNoteIdsTo", ({ noteIds }) => {
+        if (!noteIds || noteIds.length === 0) {
+            noteIds = [appContext.tabManager.getActiveContextNoteId() ?? ""];
+        }
+
+        const clonedNoteIds: string[] = [];
+
+        for (const noteId of noteIds) {
+            if (!clonedNoteIds.includes(noteId)) {
+                clonedNoteIds.push(noteId);
+            }
+        }
+
+        setClonedNoteIds(clonedNoteIds);
+        setShown(true);
+    });
 
     function onSubmit() {
         if (!clonedNoteIds) {
@@ -49,6 +65,8 @@ function CloneToDialogComponent({ clonedNoteIds }: CloneToDialogProps) {
             footer={<Button text={t("clone_to.clone_to_selected_note")} keyboardShortcut="Enter" />}
             onSubmit={onSubmit}
             onShown={() => triggerRecentNotes(autoCompleteRef.current)}
+            onHidden={() => setShown(false)}
+            show={shown}
         >
             <h5>{t("clone_to.notes_to_clone")}</h5>
             <NoteList style={{ maxHeight: "200px", overflow: "auto" }} noteIds={clonedNoteIds} />
@@ -67,29 +85,9 @@ function CloneToDialogComponent({ clonedNoteIds }: CloneToDialogProps) {
 }
 
 export default class CloneToDialog extends ReactBasicWidget {
-    
-    private props: CloneToDialogProps = {};
 
     get component() {
-        return <CloneToDialogComponent {...this.props} />;
-    }
-
-    async cloneNoteIdsToEvent({ noteIds }: EventData<"cloneNoteIdsTo">) {
-        if (!noteIds || noteIds.length === 0) {
-            noteIds = [appContext.tabManager.getActiveContextNoteId() ?? ""];
-        }
-
-        const clonedNoteIds: string[] = [];
-
-        for (const noteId of noteIds) {
-            if (!clonedNoteIds.includes(noteId)) {
-                clonedNoteIds.push(noteId);
-            }
-        }
-
-        this.props = { clonedNoteIds };
-        this.doRender();
-        openDialog(this.$widget);
+        return <CloneToDialogComponent />;
     }
 
 }
