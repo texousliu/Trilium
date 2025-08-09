@@ -12,6 +12,7 @@ function DeleteLabelBulkActionComponent({ bulkAction, actionDef }: { bulkAction:
 
     return (
         <BulkAction
+            bulkAction={bulkAction}
             label={t("delete_label.delete_label")}
         >
             <FormTextBox

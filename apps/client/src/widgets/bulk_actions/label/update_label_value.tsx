@@ -13,6 +13,7 @@ function UpdateLabelValueComponent({ bulkAction, actionDef }: { bulkAction: Abst
 
     return (
         <BulkAction
+            bulkAction={bulkAction}
             label={t("update_label_value.update_label_value")}
             helpText={<>
                 <p>${t("update_label_value.help_text")}</p>

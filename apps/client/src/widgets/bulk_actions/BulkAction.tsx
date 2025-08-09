@@ -1,12 +1,14 @@
 import { ComponentChildren } from "preact";
+import AbstractBulkAction from "./abstract_bulk_action";
 
 interface BulkActionProps {
     label: string;   
     children: ComponentChildren;
     helpText?: ComponentChildren;
+    bulkAction: AbstractBulkAction;
 }
 
-export default function BulkAction({ label, children, helpText }: BulkActionProps) {
+export default function BulkAction({ label, children, helpText, bulkAction }: BulkActionProps) {
     return (
         <tr>
             <td colSpan={2}>
@@ -24,7 +26,10 @@ export default function BulkAction({ label, children, helpText }: BulkActionProp
                     </div>
                 </div>}
 
-                <span className="bx bx-x icon-action action-conf-del"></span>
+                <span
+                    className="bx bx-x icon-action action-conf-del"
+                    onClick={() => bulkAction?.deleteAction()}
+                />
             </td>
         </tr>
     );

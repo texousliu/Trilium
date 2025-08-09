@@ -13,6 +13,7 @@ function AddLabelBulkActionComponent({ bulkAction, actionDef }: { bulkAction: Ab
 
     return (
         <BulkAction
+            bulkAction={bulkAction}
             label={t("add_label.add_label")}
             helpText={<>
                 <p>{t("add_label.help_text")}</p>

@@ -13,6 +13,7 @@ function RenameLabelBulkActionComponent({ bulkAction, actionDef }: { bulkAction:
 
     return (
         <BulkAction
+            bulkAction={bulkAction}
             label={t("rename_label.rename_label_from")}
         >
             <FormTextBox
