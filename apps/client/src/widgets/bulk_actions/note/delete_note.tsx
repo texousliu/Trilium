@@ -9,11 +9,11 @@ function DeleteNoteBulkActionComponent({ bulkAction }: { bulkAction: AbstractBul
             bulkAction={bulkAction}
             label={<><Icon icon="bx bx-trash" /> {t("delete_note.delete_matched_notes")}</>}
             helpText={<>
-                <p>${t("delete_note.delete_matched_notes_description")}</p>
+                <p>{t("delete_note.delete_matched_notes_description")}</p>
 
-                <p>${t("delete_note.undelete_notes_instruction")}</p>
+                <p>{t("delete_note.undelete_notes_instruction")}</p>
 
-                ${t("delete_note.erase_notes_instruction")}
+                {t("delete_note.erase_notes_instruction")}
             </>}
         />
     );
