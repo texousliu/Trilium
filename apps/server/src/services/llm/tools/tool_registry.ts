@@ -154,18 +154,22 @@ export class ToolRegistry {
         const validTools = this.getAllTools();
         const toolDefs = validTools.map(handler => handler.definition);
         
-        // Enhanced debugging for tool recognition issues
-        log.info(`========== TOOL REGISTRY DEBUG INFO ==========`);
-        log.info(`Total tools in registry: ${this.tools.size}`);
-        log.info(`Valid tools after validation: ${validTools.length}`);
-        log.info(`Tool definitions being sent to LLM: ${toolDefs.length}`);
+        // Enhanced debugging for tool recognition issues (only in debug mode)
+        if (process.env.LLM_DEBUG === 'true') {
+            log.info(`========== TOOL REGISTRY INFO ==========`);
+            log.info(`Total tools in registry: ${this.tools.size}`);
+            log.info(`Valid tools after validation: ${validTools.length}`);
+            log.info(`Tool definitions being sent to LLM: ${toolDefs.length}`);
+        }
         
-        // Log each tool for debugging
-        toolDefs.forEach((def, idx) => {
-            log.info(`Tool ${idx + 1}: ${def.function.name} - ${def.function.description?.substring(0, 100) || 'No description'}...`);
-            log.info(`  Parameters: ${Object.keys(def.function.parameters?.properties || {}).join(', ') || 'none'}`);
-            log.info(`  Required: ${def.function.parameters?.required?.join(', ') || 'none'}`);
-        });
+        // Log each tool for debugging (only in debug mode)
+        if (process.env.LLM_DEBUG === 'true') {
+            toolDefs.forEach((def, idx) => {
+                log.info(`Tool ${idx + 1}: ${def.function.name} - ${def.function.description?.substring(0, 100) || 'No description'}...`);
+                log.info(`  Parameters: ${Object.keys(def.function.parameters?.properties || {}).join(', ') || 'none'}`);
+                log.info(`  Required: ${def.function.parameters?.required?.join(', ') || 'none'}`);
+            });
+        }
         
         if (toolDefs.length === 0) {
             log.error(`CRITICAL: No tool definitions available for LLM! This will prevent tool calling.`);

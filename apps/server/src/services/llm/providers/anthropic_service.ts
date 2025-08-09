@@ -97,10 +97,12 @@ export class AnthropicService extends BaseAIService {
                 providerOptions.betaVersion
             );
 
-            // Log API key format (without revealing the actual key)
-            const apiKeyPrefix = providerOptions.apiKey?.substring(0, 7) || 'undefined';
-            const apiKeyLength = providerOptions.apiKey?.length || 0;
-            log.info(`[DEBUG] Using Anthropic API key with prefix '${apiKeyPrefix}...' and length ${apiKeyLength}`);
+            // Log API key format (without revealing the actual key) - only in debug mode
+            if (process.env.LLM_DEBUG === 'true') {
+                const apiKeyPrefix = providerOptions.apiKey?.substring(0, 7) || 'undefined';
+                const apiKeyLength = providerOptions.apiKey?.length || 0;
+                log.info(`Using Anthropic API key with prefix '${apiKeyPrefix}...' and length ${apiKeyLength}`);
+            }
 
             log.info(`Using Anthropic API with model: ${providerOptions.model}`);
 
@@ -162,8 +164,10 @@ export class AnthropicService extends BaseAIService {
                 // Non-streaming request
                 const response = await client.messages.create(requestParams);
 
-                // Log the complete response for debugging
-                log.info(`[DEBUG] Complete Anthropic API response: ${JSON.stringify(response, null, 2)}`);
+                // Log the complete response only in debug mode
+                if (process.env.LLM_DEBUG === 'true') {
+                    log.info(`Complete Anthropic API response: ${JSON.stringify(response, null, 2)}`);
+                }
 
                 // Get the assistant's response text from the content blocks
                 const textContent = response.content
@@ -180,7 +184,9 @@ export class AnthropicService extends BaseAIService {
                     );
 
                     if (toolBlocks.length > 0) {
-                        log.info(`[DEBUG] Found ${toolBlocks.length} tool-related blocks in response`);
+                        if (process.env.LLM_DEBUG === 'true') {
+                            log.info(`Found ${toolBlocks.length} tool-related blocks in response`);
+                        }
 
                         // Use ToolFormatAdapter to convert from Anthropic format
                         toolCalls = ToolFormatAdapter.convertToolCallsFromProvider(
