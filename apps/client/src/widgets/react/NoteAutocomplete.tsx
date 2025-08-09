@@ -3,12 +3,14 @@ import { t } from "../../services/i18n";
 import { useEffect } from "react";
 import note_autocomplete, { Options, type Suggestion } from "../../services/note_autocomplete";
 import type { RefObject } from "preact";
+import { CSSProperties } from "preact/compat";
 
 interface NoteAutocompleteProps {    
     inputRef?: RefObject<HTMLInputElement>;
     text?: string;
     placeholder?: string;
     container?: RefObject<HTMLDivElement>;
+    containerStyle?: CSSProperties;
     opts?: Omit<Options, "container">;
     onChange?: (suggestion: Suggestion | null) => void;
     onTextChange?: (text: string) => void;
@@ -16,7 +18,7 @@ interface NoteAutocompleteProps {
     noteId?: string;
 }
 
-export default function NoteAutocomplete({ inputRef: _ref, text, placeholder, onChange, onTextChange, container, opts, noteId, noteIdChanged }: NoteAutocompleteProps) {
+export default function NoteAutocomplete({ inputRef: _ref, text, placeholder, onChange, onTextChange, container, containerStyle, opts, noteId, noteIdChanged }: NoteAutocompleteProps) {
     const ref = _ref ?? useRef<HTMLInputElement>(null);
     
     useEffect(() => {
@@ -67,7 +69,7 @@ export default function NoteAutocomplete({ inputRef: _ref, text, placeholder, on
     }, [text]);
 
     return (
-        <div className="input-group">
+        <div className="input-group" style={containerStyle}>
             <input
                 ref={ref}
                 className="note-autocomplete form-control"
