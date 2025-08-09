@@ -32,6 +32,7 @@ function AddRelationBulkActionComponent({ bulkAction, actionDef }: { bulkAction:
 
             <NoteAutocomplete
                 placeholder={t("add_relation.target_note")}
+                noteId={targetNoteId} noteIdChanged={setTargetNoteId}
             />
         </BulkAction>
     )  

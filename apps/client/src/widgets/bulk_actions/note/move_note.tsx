@@ -4,15 +4,13 @@ import BulkAction, { BulkActionText } from "../BulkAction.jsx";
 import NoteAutocomplete from "../../react/NoteAutocomplete.jsx";
 import { useEffect, useState } from "preact/hooks";
 import { useSpacedUpdate } from "../../react/hooks.jsx";
-import { Suggestion } from "../../../services/note_autocomplete.js";
 
 function MoveNoteBulkActionComponent({ bulkAction, actionDef }: { bulkAction: AbstractBulkAction, actionDef: ActionDefinition }) {
-    const [ suggestion, setSuggestion ] = useState<Suggestion>();
+    const [ targetParentNoteId, setTargetParentNoteId ] = useState<string>();
     const spacedUpdate = useSpacedUpdate(() => {
-        const noteId = suggestion?.notePath?.split("/")?.at(-1);
-        return bulkAction.saveAction({ targetParentNoteId: noteId })
+        return bulkAction.saveAction({ targetParentNoteId: targetParentNoteId })
     });
-    useEffect(() => spacedUpdate.scheduleUpdate(), [ suggestion ]);
+    useEffect(() => spacedUpdate.scheduleUpdate(), [ targetParentNoteId ]);
 
     return (
         <BulkAction
@@ -32,7 +30,7 @@ function MoveNoteBulkActionComponent({ bulkAction, actionDef }: { bulkAction: Ab
 
             <NoteAutocomplete
                 placeholder={t("move_note.target_parent_note")}
-                onChange={setSuggestion}
+                noteId={targetParentNoteId} noteIdChanged={setTargetParentNoteId}
             />
         </BulkAction>
     )

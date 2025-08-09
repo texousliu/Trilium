@@ -12,9 +12,11 @@ interface NoteAutocompleteProps {
     opts?: Omit<Options, "container">;
     onChange?: (suggestion: Suggestion | null) => void;
     onTextChange?: (text: string) => void;
+    noteIdChanged?: (noteId: string) => void;
+    noteId?: string;
 }
 
-export default function NoteAutocomplete({ inputRef: _ref, text, placeholder, onChange, onTextChange, container, opts }: NoteAutocompleteProps) {
+export default function NoteAutocomplete({ inputRef: _ref, text, placeholder, onChange, onTextChange, container, opts, noteId, noteIdChanged }: NoteAutocompleteProps) {
     const ref = _ref ?? useRef<HTMLInputElement>(null);
     
     useEffect(() => {
@@ -30,8 +32,15 @@ export default function NoteAutocomplete({ inputRef: _ref, text, placeholder, on
             ...opts,
             container: container?.current
         });
-        if (onChange) {
-            const listener = (_e, suggestion) => onChange(suggestion);
+        if (onChange || noteIdChanged) {
+            const listener = (_e, suggestion) => {
+                onChange?.(suggestion);
+
+                if (noteIdChanged) {
+                    const noteId = suggestion?.notePath?.split("/")?.at(-1);
+                    noteIdChanged(noteId);
+                }
+            };
             $autoComplete
                 .on("autocomplete:noteselected", listener)
                 .on("autocomplete:externallinkselected", listener)
