@@ -29,7 +29,7 @@ const TPL = /*html*/`\
         -webkit-app-region: no-drag;
     }
 
-    body.zen .mobile-close-zen-container {
+    body.zen.mobile .close-zen-container {
         top: -2px;
     }
 
@@ -45,7 +45,6 @@ export default class CloseZenButton extends BasicWidget {
 
     doRender(): void {
         this.$widget = $(TPL);
-        this.$widget.toggleClass("mobile-close-zen-container", utils.isMobile())
     }
 
     zenChangedEvent() {
