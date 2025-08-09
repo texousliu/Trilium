@@ -72,9 +72,14 @@ export async function setupStreamingResponse(
         let timeoutId: number | null = null;
         let initialTimeoutId: number | null = null;
         let cleanupTimeoutId: number | null = null;
+        let heartbeatTimeoutId: number | null = null;
         let receivedAnyMessage = false;
         let eventListener: ((event: Event) => void) | null = null;
         let lastMessageTimestamp = 0;
+        
+        // Configuration for timeouts
+        const HEARTBEAT_TIMEOUT_MS = 30000; // 30 seconds between messages
+        const MAX_IDLE_TIME_MS = 60000; // 60 seconds max idle time
 
         // Create a unique identifier for this response process
         const responseId = `llm-stream-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
@@ -107,11 +112,42 @@ export async function setupStreamingResponse(
             }
         })();
 
+        // Function to reset heartbeat timeout
+        const resetHeartbeatTimeout = () => {
+            if (heartbeatTimeoutId) {
+                window.clearTimeout(heartbeatTimeoutId);
+            }
+            
+            heartbeatTimeoutId = window.setTimeout(() => {
+                const idleTime = Date.now() - lastMessageTimestamp;
+                console.warn(`[${responseId}] No message received for ${idleTime}ms`);
+                
+                if (idleTime > MAX_IDLE_TIME_MS) {
+                    console.error(`[${responseId}] Connection appears to be stalled (idle for ${idleTime}ms)`);
+                    performCleanup();
+                    reject(new Error('Connection lost: The AI service stopped responding. Please try again.'));
+                } else {
+                    // Send a warning but continue waiting
+                    console.warn(`[${responseId}] Connection may be slow, continuing to wait...`);
+                    resetHeartbeatTimeout(); // Reset for another check
+                }
+            }, HEARTBEAT_TIMEOUT_MS);
+        };
+
         // Function to safely perform cleanup
         const performCleanup = () => {
+            // Clear all timeouts
             if (cleanupTimeoutId) {
                 window.clearTimeout(cleanupTimeoutId);
                 cleanupTimeoutId = null;
+            }
+            if (heartbeatTimeoutId) {
+                window.clearTimeout(heartbeatTimeoutId);
+                heartbeatTimeoutId = null;
+            }
+            if (initialTimeoutId) {
+                window.clearTimeout(initialTimeoutId);
+                initialTimeoutId = null;
             }
 
             console.log(`[${responseId}] Performing final cleanup of event listener`);
@@ -121,13 +157,15 @@ export async function setupStreamingResponse(
         };
 
         // Set initial timeout to catch cases where no message is received at all
+        // Increased timeout and better error messaging
+        const INITIAL_TIMEOUT_MS = 15000; // 15 seconds for initial response
         initialTimeoutId = window.setTimeout(() => {
             if (!receivedAnyMessage) {
-                console.error(`[${responseId}] No initial message received within timeout`);
+                console.error(`[${responseId}] No initial message received within ${INITIAL_TIMEOUT_MS}ms timeout`);
                 performCleanup();
-                reject(new Error('No response received from server'));
+                reject(new Error('Connection timeout: The AI service is taking longer than expected to respond. Please check your connection and try again.'));
             }
-        }, 10000);
+        }, INITIAL_TIMEOUT_MS);
 
         // Create a message handler for CustomEvents
         eventListener = (event: Event) => {
@@ -161,6 +199,12 @@ export async function setupStreamingResponse(
                     window.clearTimeout(initialTimeoutId);
                     initialTimeoutId = null;
                 }
+                
+                // Start heartbeat monitoring
+                resetHeartbeatTimeout();
+            } else {
+                // Reset heartbeat on each new message
+                resetHeartbeatTimeout();
             }
 
             // Handle error
