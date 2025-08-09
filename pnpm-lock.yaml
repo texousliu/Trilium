@@ -918,7 +918,7 @@ importers:
         version: 14.1.1
       lint-staged:
         specifier: ^16.0.0
-        version: 16.1.4
+        version: 16.1.5
       stylelint:
         specifier: ^16.0.0
         version: 16.23.1(typescript@5.9.2)
@@ -978,7 +978,7 @@ importers:
         version: 14.1.1
       lint-staged:
         specifier: ^16.0.0
-        version: 16.1.4
+        version: 16.1.5
       stylelint:
         specifier: ^16.0.0
         version: 16.23.1(typescript@5.9.2)
@@ -1038,7 +1038,7 @@ importers:
         version: 14.1.1
       lint-staged:
         specifier: ^16.0.0
-        version: 16.1.4
+        version: 16.1.5
       stylelint:
         specifier: ^16.0.0
         version: 16.23.1(typescript@5.9.2)
@@ -1105,7 +1105,7 @@ importers:
         version: 14.1.1
       lint-staged:
         specifier: ^16.0.0
-        version: 16.1.4
+        version: 16.1.5
       stylelint:
         specifier: ^16.0.0
         version: 16.23.1(typescript@5.9.2)
@@ -1172,7 +1172,7 @@ importers:
         version: 14.1.1
       lint-staged:
         specifier: ^16.0.0
-        version: 16.1.4
+        version: 16.1.5
       stylelint:
         specifier: ^16.0.0
         version: 16.23.1(typescript@5.9.2)
@@ -10610,8 +10610,8 @@ packages:
     resolution: {integrity: sha512-cNOjgCnLB+FnvWWtyRTzmB3POJ+cXxTA81LoW7u8JdmhfXzriropYwpjShnz1QLLWsQwY7nIxoDmcPTwphDK9w==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
-  lint-staged@16.1.4:
-    resolution: {integrity: sha512-xy7rnzQrhTVGKMpv6+bmIA3C0yET31x8OhKBYfvGo0/byeZ6E0BjGARrir3Kg/RhhYHutpsi01+2J5IpfVoueA==}
+  lint-staged@16.1.5:
+    resolution: {integrity: sha512-uAeQQwByI6dfV7wpt/gVqg+jAPaSp8WwOA8kKC/dv1qw14oGpnpAisY65ibGHUGDUv0rYaZ8CAJZ/1U8hUvC2A==}
     engines: {node: '>=20.17'}
     hasBin: true
 
@@ -28002,7 +28002,7 @@ snapshots:
 
   lines-and-columns@2.0.3: {}
 
-  lint-staged@16.1.4:
+  lint-staged@16.1.5:
     dependencies:
       chalk: 5.5.0
       commander: 14.0.0
