@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "preact/hooks";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { EventData, EventNames } from "../../components/app_context";
 import { ParentComponent } from "./ReactBasicWidget";
 import SpacedUpdate from "../../services/spaced_update";
@@ -33,9 +33,26 @@ export default function useTriliumEvent<T extends EventNames>(eventName: T, hand
 }
 
 export function useSpacedUpdate(callback: () => Promise<void>, interval = 1000) {
-    const spacedUpdate = useMemo(() => {
-        return new SpacedUpdate(callback, interval);
-    }, [callback, interval]);
+    const callbackRef = useRef(callback);
+    const spacedUpdateRef = useRef<SpacedUpdate>();
 
-    return spacedUpdate;
+    // Update callback ref when it changes
+    useEffect(() => {
+        callbackRef.current = callback;
+    });
+
+    // Create SpacedUpdate instance only once
+    if (!spacedUpdateRef.current) {
+        spacedUpdateRef.current = new SpacedUpdate(
+            () => callbackRef.current(),
+            interval
+        );
+    }
+
+    // Update interval if it changes
+    useEffect(() => {
+        spacedUpdateRef.current?.setUpdateInterval(interval);
+    }, [interval]);
+
+    return spacedUpdateRef.current;
 }
