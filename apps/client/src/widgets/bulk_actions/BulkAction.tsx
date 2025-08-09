@@ -2,8 +2,8 @@ import { ComponentChildren } from "preact";
 import AbstractBulkAction from "./abstract_bulk_action";
 
 interface BulkActionProps {
-    label: string;   
-    children: ComponentChildren;
+    label: string | ComponentChildren;   
+    children?: ComponentChildren;
     helpText?: ComponentChildren;
     bulkAction: AbstractBulkAction;
 }
