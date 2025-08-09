@@ -6,6 +6,9 @@ import type { Message } from "../../ai_interface.js";
 import { toolPreviewManager } from "../../tools/tool_preview.js";
 import { toolFeedbackManager } from "../../tools/tool_feedback.js";
 import { toolErrorRecoveryManager } from "../../tools/tool_error_recovery.js";
+import { toolTimeoutEnforcer } from "../../tools/tool_timeout_enforcer.js";
+import { parameterCoercer } from "../../tools/parameter_coercer.js";
+import { toolExecutionMonitor } from "../../monitoring/tool_execution_monitor.js";
 
 /**
  * Handles the execution of LLM tools

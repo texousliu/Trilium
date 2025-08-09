@@ -7,6 +7,9 @@
 
 import log from '../../log.js';
 import type { Tool, ToolCall, ToolParameter } from './tool_interfaces.js';
+import { providerToolValidator } from './provider_tool_validator.js';
+import { edgeCaseHandler } from '../providers/edge_case_handler.js';
+import { parameterCoercer } from './parameter_coercer.js';
 
 /**
  * Anthropic tool format
@@ -51,17 +54,23 @@ export class ToolFormatAdapter {
      * Convert tools from standard format to provider-specific format
      */
     static convertToProviderFormat(tools: Tool[], provider: ProviderType): unknown[] {
+        // First validate and fix tools for the provider
+        const validatedTools = providerToolValidator.autoFixTools(tools, provider);
+        
+        // Apply edge case fixes
+        const fixedTools = edgeCaseHandler.fixToolsForProvider(validatedTools, provider);
+        
         switch (provider) {
             case 'anthropic':
-                return this.convertToAnthropicFormat(tools);
+                return this.convertToAnthropicFormat(fixedTools);
             case 'ollama':
-                return this.convertToOllamaFormat(tools);
+                return this.convertToOllamaFormat(fixedTools);
             case 'openai':
                 // OpenAI format matches our standard format
-                return tools;
+                return fixedTools;
             default:
                 log.info(`Warning: Unknown provider ${provider}, returning tools in standard format`);
-                return tools;
+                return fixedTools;
         }
     }
 
@@ -300,18 +309,42 @@ export class ToolFormatAdapter {
     }
 
     /**
-     * Parse tool arguments safely
+     * Parse tool arguments safely with coercion
      */
-    static parseToolArguments(args: string | Record<string, unknown>): Record<string, unknown> {
+    static parseToolArguments(
+        args: string | Record<string, unknown>,
+        tool?: Tool,
+        provider?: string
+    ): Record<string, unknown> {
+        let parsedArgs: Record<string, unknown>;
+        
         if (typeof args === 'string') {
             try {
-                return JSON.parse(args);
+                parsedArgs = JSON.parse(args);
             } catch (error) {
                 log.error(`Failed to parse tool arguments as JSON: ${error}`);
                 return {};
             }
+        } else {
+            parsedArgs = args || {};
         }
-        return args || {};
+        
+        // Apply parameter coercion if tool definition is provided
+        if (tool) {
+            const coercionResult = parameterCoercer.coerceToolArguments(
+                parsedArgs,
+                tool,
+                { provider }
+            );
+            
+            if (coercionResult.warnings.length > 0) {
+                log.info(`Parameter coercion warnings: ${coercionResult.warnings.join(', ')}`);
+            }
+            
+            return coercionResult.value;
+        }
+        
+        return parsedArgs;
     }
 
     /**

@@ -27,6 +27,9 @@ import {
     ExportFormat,
     type ExporterConfig 
 } from '../metrics/metrics_exporter.js';
+import { providerHealthMonitor } from '../monitoring/provider_health_monitor.js';
+import { edgeCaseHandler } from './edge_case_handler.js';
+import { providerToolValidator } from '../tools/provider_tool_validator.js';
 
 /**
  * Provider type enumeration

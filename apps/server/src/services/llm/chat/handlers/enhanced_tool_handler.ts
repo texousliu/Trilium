@@ -17,6 +17,16 @@ export interface ToolExecutionOptions {
     enableFeedback?: boolean;
     enableErrorRecovery?: boolean;
     timeout?: number;
+    /** Maximum parallel executions (default: 3) */
+    maxConcurrency?: number;
+    /** Enable dependency analysis for parallel execution (default: true) */
+    analyzeDependencies?: boolean;
+    /** Provider for tool execution */
+    provider?: string;
+    /** Custom timeout per tool in ms */
+    customTimeouts?: Map<string, number>;
+    /** Enable caching for read operations */
+    enableCache?: boolean;
     onPreview?: (plan: ToolExecutionPlan) => Promise<ToolApproval>;
     onProgress?: (executionId: string, progress: ToolExecutionProgress) => void;
     onStep?: (executionId: string, step: any) => void;
