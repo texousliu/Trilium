@@ -8,6 +8,7 @@ import contextService from './context/services/context_service.js';
 import log from '../log.js';
 import { OllamaService } from './providers/ollama_service.js';
 import { OpenAIService } from './providers/openai_service.js';
+import { ProviderFactory, ProviderType, getProviderFactory } from './providers/provider_factory.js';
 
 // Import interfaces
 import type {
@@ -26,7 +27,6 @@ import {
     clearConfigurationCache,
     validateConfiguration
 } from './config/configuration_helpers.js';
-import type { ProviderType } from './interfaces/configuration_interfaces.js';
 
 /**
  * Interface representing relevant note context
@@ -59,8 +59,19 @@ export class AIServiceManager implements IAIServiceManager, Disposable {
     private cleanupTimer: NodeJS.Timeout | null = null;
     private initialized = false;
     private disposed = false;
+    private providerFactory: ProviderFactory | null = null;
 
     constructor() {
+        // Initialize provider factory
+        this.providerFactory = getProviderFactory({
+            enableHealthChecks: true,
+            healthCheckInterval: 60000,
+            enableFallback: true,
+            enableCaching: true,
+            cacheTimeout: this.SERVICE_TTL_MS,
+            enableMetrics: true
+        });
+
         // Initialize tools immediately
         this.initializeTools().catch(error => {
             log.error(`Error initializing LLM tools during AIServiceManager construction: ${error.message || String(error)}`);
@@ -456,7 +467,12 @@ export class AIServiceManager implements IAIServiceManager, Disposable {
      * Clear all cached providers (forces recreation on next access)
      */
     public clearCurrentProvider(): void {
-        // Clear all cached services
+        // Clear provider factory cache
+        if (this.providerFactory) {
+            this.providerFactory.clearCache();
+        }
+        
+        // Clear local cache
         for (const provider of this.serviceCache.keys()) {
             this.disposeService(provider);
         }
@@ -464,87 +480,66 @@ export class AIServiceManager implements IAIServiceManager, Disposable {
     }
 
     /**
-     * Get or create a provider instance with proper caching and TTL
+     * Get or create a provider instance using the provider factory
      */
     private async getOrCreateChatProvider(providerName: ServiceProviders): Promise<AIService | null> {
         if (this.disposed) {
             throw new Error('AIServiceManager has been disposed');
         }
 
-        // Check cache first
-        const cached = this.serviceCache.get(providerName);
-        if (cached && cached.service.isAvailable()) {
-            // Update last used time
-            cached.lastUsed = Date.now();
-            
-            // Check if service is still within TTL
-            if (Date.now() - cached.createdAt <= this.SERVICE_TTL_MS) {
-                log.info(`Using cached ${providerName} service (age: ${Math.round((Date.now() - cached.createdAt) / 1000)}s)`);
-                return cached.service;
-            } else {
-                // Service is stale, dispose and recreate
-                log.info(`Cached ${providerName} service is stale, recreating`);
-                this.disposeService(providerName);
-            }
+        if (!this.providerFactory) {
+            throw new Error('Provider factory not initialized');
         }
 
-        // Create new service for the requested provider
         try {
-            let service: AIService | null = null;
+            // Map ServiceProviders to ProviderType
+            const providerTypeMap: Record<ServiceProviders, ProviderType> = {
+                'openai': ProviderType.OPENAI,
+                'anthropic': ProviderType.ANTHROPIC,
+                'ollama': ProviderType.OLLAMA
+            };
 
+            const providerType = providerTypeMap[providerName];
+            if (!providerType) {
+                log.error(`Unknown provider name: ${providerName}`);
+                return null;
+            }
+
+            // Check if provider is configured
             switch (providerName) {
                 case 'openai': {
                     const apiKey = options.getOption('openaiApiKey');
                     const baseUrl = options.getOption('openaiBaseUrl');
                     if (!apiKey && !baseUrl) return null;
-
-                    service = new OpenAIService();
-                    if (!service.isAvailable()) {
-                        throw new Error('OpenAI service not available');
-                    }
                     break;
                 }
-
                 case 'anthropic': {
                     const apiKey = options.getOption('anthropicApiKey');
                     if (!apiKey) return null;
-
-                    service = new AnthropicService();
-                    if (!service.isAvailable()) {
-                        throw new Error('Anthropic service not available');
-                    }
                     break;
                 }
-
                 case 'ollama': {
                     const baseUrl = options.getOption('ollamaBaseUrl');
                     if (!baseUrl) return null;
-
-                    service = new OllamaService();
-                    if (!service.isAvailable()) {
-                        throw new Error('Ollama service not available');
-                    }
                     break;
                 }
             }
 
-            if (service) {
-                // Cache the new service with metadata
-                const now = Date.now();
-                this.serviceCache.set(providerName, {
-                    service,
-                    provider: providerName,
-                    createdAt: now,
-                    lastUsed: now
-                });
-                log.info(`Created and cached new ${providerName} service`);
+            // Use provider factory to create the service
+            const service = await this.providerFactory.createProvider(providerType);
+            
+            if (service && service.isAvailable()) {
+                log.info(`Created ${providerName} service via provider factory`);
                 return service;
             }
+
+            throw new Error(`${providerName} service not available`);
         } catch (error: any) {
             log.error(`Failed to create ${providerName} chat provider: ${error.message || 'Unknown error'}`);
+            
+            // Provider factory handles fallback internally if configured
+            return null;
         }
-
-        return null;
     }
 
     /**
@@ -558,6 +553,12 @@ export class AIServiceManager implements IAIServiceManager, Disposable {
 
         // Stop cleanup timer
         this.stopCleanupTimer();
+
+        // Dispose provider factory
+        if (this.providerFactory) {
+            this.providerFactory.dispose();
+            this.providerFactory = null;
+        }
 
         // Dispose all cached services
         for (const provider of this.serviceCache.keys()) {
@@ -766,13 +767,24 @@ export class AIServiceManager implements IAIServiceManager, Disposable {
      * Check if a specific provider is available
      */
     isProviderAvailable(provider: string): boolean {
-        // Check if we have a cached service for this provider
-        const cachedEntry = this.serviceCache.get(provider as ServiceProviders);
-        if (cachedEntry && !this.isServiceStale(cachedEntry)) {
-            return cachedEntry.service.isAvailable();
+        // Check health status from provider factory
+        if (this.providerFactory) {
+            const providerTypeMap: Record<string, ProviderType> = {
+                'openai': ProviderType.OPENAI,
+                'anthropic': ProviderType.ANTHROPIC,
+                'ollama': ProviderType.OLLAMA
+            };
+            
+            const providerType = providerTypeMap[provider];
+            if (providerType) {
+                const healthStatus = this.providerFactory.getHealthStatus(providerType);
+                if (healthStatus) {
+                    return healthStatus.healthy;
+                }
+            }
         }
 
-        // For other providers, check configuration
+        // Fallback to configuration check
         try {
             switch (provider) {
                 case 'openai':
@@ -793,22 +805,43 @@ export class AIServiceManager implements IAIServiceManager, Disposable {
      * Get metadata about a provider
      */
     getProviderMetadata(provider: string): ProviderMetadata | null {
-        // Check if we have a cached service for this provider
-        const cachedEntry = this.serviceCache.get(provider as ServiceProviders);
-        if (cachedEntry && !this.isServiceStale(cachedEntry)) {
-            return {
-                name: provider,
-                capabilities: {
-                    chat: true,
-                    streaming: true,
-                    functionCalling: provider === 'openai' // Only OpenAI has function calling
-                },
-                models: ['default'], // Placeholder, could be populated from the service
-                defaultModel: 'default'
+        // Get capabilities from provider factory
+        if (this.providerFactory) {
+            const providerTypeMap: Record<string, ProviderType> = {
+                'openai': ProviderType.OPENAI,
+                'anthropic': ProviderType.ANTHROPIC,
+                'ollama': ProviderType.OLLAMA
             };
+            
+            const providerType = providerTypeMap[provider];
+            if (providerType) {
+                const capabilities = this.providerFactory.getCapabilities(providerType);
+                if (capabilities) {
+                    return {
+                        name: provider,
+                        capabilities: {
+                            chat: true,
+                            streaming: capabilities.streaming,
+                            functionCalling: capabilities.functionCalling
+                        },
+                        models: ['default'], // Could be enhanced to get actual models
+                        defaultModel: 'default'
+                    };
+                }
+            }
         }
 
-        return null;
+        // Fallback
+        return {
+            name: provider,
+            capabilities: {
+                chat: true,
+                streaming: true,
+                functionCalling: provider === 'openai'
+            },
+            models: ['default'],
+            defaultModel: 'default'
+        };
     }
 
 
