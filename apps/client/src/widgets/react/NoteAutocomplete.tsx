@@ -10,7 +10,7 @@ interface NoteAutocompleteProps {
     placeholder?: string;
     container?: RefObject<HTMLDivElement>;
     opts?: Omit<Options, "container">;
-    onChange?: (suggestion: Suggestion) => void;
+    onChange?: (suggestion: Suggestion | null) => void;
     onTextChange?: (text: string) => void;
 }
 
@@ -35,7 +35,12 @@ export default function NoteAutocomplete({ inputRef: _ref, text, placeholder, on
             $autoComplete
                 .on("autocomplete:noteselected", listener)
                 .on("autocomplete:externallinkselected", listener)
-                .on("autocomplete:commandselected", listener);
+                .on("autocomplete:commandselected", listener)
+                .on("autocomplete:closed", (e) => {
+                    if (!ref.current?.value) {
+                        listener(e, null);
+                    }
+                });
         }
         if (onTextChange) {
             $autoComplete.on("input", () => onTextChange($autoComplete[0].value));
