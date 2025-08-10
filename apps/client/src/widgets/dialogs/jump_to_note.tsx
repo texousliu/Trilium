@@ -3,7 +3,7 @@ import Modal from "../react/Modal";
 import Button from "../react/Button";
 import NoteAutocomplete from "../react/NoteAutocomplete";
 import { t } from "../../services/i18n";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useRef, useState } from "preact/hooks";
 import note_autocomplete, { Suggestion } from "../../services/note_autocomplete";
 import appContext from "../../components/app_context";
 import commandRegistry from "../../services/command_registry";
@@ -20,7 +20,8 @@ function JumpToNoteDialogComponent() {
     const containerRef = useRef<HTMLDivElement>(null);
     const autocompleteRef = useRef<HTMLInputElement>(null);
     const [ isCommandMode, setIsCommandMode ] = useState(mode === "commands");
-    const [ text, setText ] = useState(isCommandMode ? "> " : "");
+    const [ initialText, setInitialText ] = useState(isCommandMode ? "> " : "");
+    const actualText = useRef<string>(initialText);
     const [ shown, setShown ] = useState(false);
 
     async function openDialog(commandMode: boolean) {        
@@ -48,10 +49,6 @@ function JumpToNoteDialogComponent() {
     useTriliumEvent("jumpToNote", () => openDialog(false));
     useTriliumEvent("commandPalette", () => openDialog(true));
 
-    useEffect(() => {
-        setIsCommandMode(text.startsWith(">"));
-    }, [ text ]);
-
     async function onItemSelected(suggestion?: Suggestion | null) {
         if (!suggestion) {
             return;
@@ -70,7 +67,7 @@ function JumpToNoteDialogComponent() {
         switch (mode) {
             case "last-search":
                 // Fall-through if there is no text, in order to display the recent notes.
-                if (text) {
+                if (initialText) {
                     break;
                 }
             case "recent-notes":
@@ -94,14 +91,17 @@ function JumpToNoteDialogComponent() {
                 placeholder={t("jump_to_note.search_placeholder")}
                 inputRef={autocompleteRef}
                 container={containerRef}
-                text={text}
+                text={initialText}
                 opts={{
                     allowCreatingNotes: true,
                     hideGoToSelectedNoteButton: true,
                     allowJumpToSearchNotes: true,
                     isCommandPalette: true
                 }}
-                onTextChange={setText}
+                onTextChange={(text) => {
+                    actualText.current = text;
+                    setIsCommandMode(text.startsWith(">"));
+                }}
                 onChange={onItemSelected}
                 />}
             onShown={onShown}
