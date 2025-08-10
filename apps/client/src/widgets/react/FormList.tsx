@@ -29,11 +29,12 @@ interface FormListItemOpts {
     icon?: string;
     value?: string;
     title?: string;
+    active?: boolean;
 }
 
-export function FormListItem({ children, icon, value, title }: FormListItemOpts) {
+export function FormListItem({ children, icon, value, title, active }: FormListItemOpts) {
     return (
-        <a class="dropdown-item" data-value={value} title={title}>
+        <a class={`dropdown-item ${active ? "active" : ""}`} data-value={value} title={title}>
             <Icon icon={icon} />&nbsp;
             {children}
         </a>
