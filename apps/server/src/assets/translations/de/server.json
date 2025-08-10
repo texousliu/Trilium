@@ -32,7 +32,7 @@
         "open-new-window": "Neues leeres Fenster öffnen",
         "toggle-tray": "Anwendung im Systemtray anzeigen/verstecken",
         "first-tab": "Ersten Tab in der Liste aktivieren",
-        "second-tab": " Zweiten Tab in der Liste aktivieren",
+        "second-tab": "Zweiten Tab in der Liste aktivieren",
         "third-tab": "Dritten Tab in der Liste aktivieren",
         "fourth-tab": "Vierten Tab in der Liste aktivieren",
         "fifth-tab": "Fünften Tab in der Liste aktivieren",
@@ -92,7 +92,18 @@
         "toggle-book-properties": "Buch-Eigenschaften umschalten",
         "clone-notes-to": "Ausgewählte Notizen duplizieren",
         "open-command-palette": "Kommandopalette öffnen",
-        "export-as-pdf": "Aktuelle Notiz als PDF exportieren"
+        "export-as-pdf": "Aktuelle Notiz als PDF exportieren",
+        "back-in-note-history": "Navigiere zur vorherigen Notiz im Verlauf",
+        "forward-in-note-history": "Navigiere zur nächsten Notiz im Verlauf",
+        "scroll-to-active-note": "Zum aktiven Notizbaumeintrag springen",
+        "quick-search": "Schnellsuche öffnen",
+        "create-note-after": "Erstelle eine neue Notiz nach der aktuellen Notiz",
+        "create-note-into": "Unternotiz zur aktiven Notiz anlegen",
+        "move-notes-to": "Ausgewählte Notizen verschieben",
+        "show-cheatsheet": "Übersicht der Tastenkombinationen anzeigen",
+        "find-in-text": "Suchleiste umschalten",
+        "toggle-classic-editor-toolbar": "Schalte um zum Formatierungs-Tab für den Editor mit fester Werkzeugleiste",
+        "toggle-zen-mode": "Zen-Modus ein-/ausschalten (reduzierte Benutzeroberfläche für ablenkungsfreies Arbeiten)"
     },
     "login": {
         "title": "Anmeldung",
@@ -272,6 +283,23 @@
     },
     "keyboard_action_names": {
         "copy-notes-to-clipboard": "Notizen in Zwischenablage kopieren",
-        "paste-notes-from-clipboard": "Notizen aus Zwischenablage einfügen"
+        "paste-notes-from-clipboard": "Notizen aus Zwischenablage einfügen",
+        "back-in-note-history": "Zurück im Notizverlauf",
+        "forward-in-note-history": "Vorwärts im Notizverlauf",
+        "jump-to-note": "Wechseln zu...",
+        "command-palette": "Befehlsübersicht",
+        "scroll-to-active-note": "Zur aktiven Notiz scrollen",
+        "quick-search": "Schnellsuche",
+        "search-in-subtree": "In Unterzweig suchen",
+        "expand-subtree": "Unterzweig aufklappen",
+        "collapse-tree": "Baumstruktur einklappen",
+        "collapse-subtree": "Unterzweig einklappen",
+        "sort-child-notes": "Unternotizen sortieren",
+        "create-note-after": "Erstelle eine neue Notiz dahinter",
+        "create-note-into": "Erstelle eine neue Notiz davor",
+        "create-note-into-inbox": "Neue Notiz in Inbox erstellen",
+        "delete-notes": "Notizen löschen",
+        "move-note-up": "Notiz nach oben verschieben",
+        "move-note-down": "Notiz nach unten verschieben"
     }
 }

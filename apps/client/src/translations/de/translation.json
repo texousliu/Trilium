@@ -126,7 +126,7 @@
         "collapseWholeTree": "Reduziere den gesamten Notizbaum",
         "collapseSubTree": "Teilbaum einklappen",
         "tabShortcuts": "Tab-Tastenkürzel",
-        "newTabNoteLink": "<kbd>Strg+Klick</kbd> - (oder mittlerer Mausklick) auf den Notizlink öffnet die Notiz in einem neuen Tab",
+        "newTabNoteLink": "<kbd>Strg+Klick</kbd> - (oder <kbd>mittlerer Mausklick</kbd> ) auf den Notizlink öffnet die Notiz in einem neuen Tab",
         "onlyInDesktop": "Nur im Desktop (Electron Build)",
         "openEmptyTab": "Leeren Tab öffnen",
         "closeActiveTab": "Aktiven Tab schließen",
@@ -164,7 +164,8 @@
         "showSQLConsole": "SQL-Konsole anzeigen",
         "other": "Andere",
         "quickSearch": "Fokus auf schnelle Sucheingabe",
-        "inPageSearch": "Auf-der-Seite-Suche"
+        "inPageSearch": "Auf-der-Seite-Suche",
+        "newTabWithActivationNoteLink": "<kbd>Strg+Umschalt+Klick</kbd> - (oder <kbd>Umschalt+Mittlere Maustaste</kbd>) auf einen Notiz-Link öffnet und aktiviert die Notiz in einem neuen Tab"
     },
     "import": {
         "importIntoNote": "In Notiz importieren",
