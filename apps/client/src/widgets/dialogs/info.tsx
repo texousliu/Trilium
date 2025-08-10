@@ -32,6 +32,7 @@ function ShowInfoDialogComponent() {
             onClick={() => setShown(false)}
         />}
         show={shown}
+        stackable
     >
         <RawHtmlBlock className="info-dialog-content" html={opts?.message ?? ""} />
     </Modal>);

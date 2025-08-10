@@ -69,6 +69,7 @@ function PromptDialogComponent() {
             }}
             footer={<Button text={t("prompt.ok")} keyboardShortcut="Enter" primary />}
             show={shown}
+            stackable
         >
             <FormGroup label={opts?.message} labelRef={labelRef}>
                 <FormTextBox

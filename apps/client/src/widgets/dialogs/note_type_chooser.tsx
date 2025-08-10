@@ -81,6 +81,7 @@ function NoteTypeChooserDialogComponent() {
                 setShown(false);
             }}
             show={shown}
+            stackable
         >
             <FormGroup label={t("note_type_chooser.change_path_prompt")}>
                 <NoteAutocomplete

@@ -58,9 +58,13 @@ interface ModalProps {
      * This method must generally be coupled with `onHidden` in order to detect when the modal was closed externally (e.g. by the user clicking on the backdrop or on the close button).
      */
     show: boolean;
+    /**
+     * By default displaying a modal will close all existing modals. Set this to true to keep the existing modals open instead. This is useful for confirmation modals.
+     */
+    stackable?: boolean;
 }
 
-export default function Modal({ children, className, size, title, header, footer, footerStyle, footerAlignment, onShown, onSubmit, helpPageId, minWidth, maxWidth, zIndex, scrollable, onHidden: onHidden, modalRef: _modalRef, formRef: _formRef, bodyStyle, show }: ModalProps) {
+export default function Modal({ children, className, size, title, header, footer, footerStyle, footerAlignment, onShown, onSubmit, helpPageId, minWidth, maxWidth, zIndex, scrollable, onHidden: onHidden, modalRef: _modalRef, formRef: _formRef, bodyStyle, show, stackable }: ModalProps) {
     const modalRef = _modalRef ?? useRef<HTMLDivElement>(null);
     const modalInstanceRef = useRef<BootstrapModal>();
     const formRef = _formRef ?? useRef<HTMLFormElement>(null);
@@ -94,7 +98,7 @@ export default function Modal({ children, className, size, title, header, footer
             return;
         }
         if (show) {
-            openDialog(parentWidget.$widget).then(($widget) => {
+            openDialog(parentWidget.$widget, !stackable).then(($widget) => {
                 modalInstanceRef.current = BootstrapModal.getOrCreateInstance($widget[0]);
             })
         } else {

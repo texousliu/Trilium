@@ -54,6 +54,7 @@ function ConfirmDialogComponent() {
                 }} />
             </>}
             show={shown}
+            stackable
         >
             {!opts?.message || typeof opts?.message === "string"
                 ? <div>{(opts?.message as string) ?? ""}</div>
