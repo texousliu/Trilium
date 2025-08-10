@@ -60,13 +60,16 @@ export default function NoteAutocomplete({ inputRef: _ref, text, placeholder, on
 
     useEffect(() => {
         if (!ref.current) return;
-        if (text) {
-            const $autoComplete = $(ref.current);
+        const $autoComplete = $(ref.current);
+
+        if (noteId) {
+            $autoComplete.setNote(noteId);
+        } else if (text) {
             note_autocomplete.setText($autoComplete, text);
         } else {
             ref.current.value = "";
         }
-    }, [text]);
+    }, [text, noteId]);
 
     return (
         <div className="input-group" style={containerStyle}>
