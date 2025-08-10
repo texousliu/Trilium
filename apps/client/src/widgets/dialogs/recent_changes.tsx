@@ -8,7 +8,7 @@ import Button from "../react/Button";
 import Modal from "../react/Modal";
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import hoisted_note from "../../services/hoisted_note";
-import type { RecentChangesRow } from "@triliumnext/commons";
+import type { RecentChangeRow } from "@triliumnext/commons";
 import froca from "../../services/froca";
 import { formatDateTime } from "../../utils/formatters";
 import link from "../../services/link";
@@ -18,7 +18,7 @@ import useTriliumEvent from "../react/hooks";
 
 function RecentChangesDialogComponent() {
     const [ ancestorNoteId, setAncestorNoteId ] = useState<string>();
-    const [ groupedByDate, setGroupedByDate ] = useState<Map<String, RecentChangesRow[]>>();
+    const [ groupedByDate, setGroupedByDate ] = useState<Map<String, RecentChangeRow[]>>();
     const [ needsRefresh, setNeedsRefresh ] = useState(false);
     const [ shown, setShown ] = useState(false);
 
@@ -34,7 +34,7 @@ function RecentChangesDialogComponent() {
                 setNeedsRefresh(false);   
             }
 
-            server.get<RecentChangesRow[]>(`recent-changes/${ancestorNoteId}`)
+            server.get<RecentChangeRow[]>(`recent-changes/${ancestorNoteId}`)
                 .then(async (recentChanges) => {
                     // preload all notes into cache
                     await froca.getNotes(
@@ -78,7 +78,7 @@ function RecentChangesDialogComponent() {
     )
 }
 
-function RecentChangesTimeline({ groupedByDate, setShown }: { groupedByDate: Map<String, RecentChangesRow[]>, setShown: Dispatch<StateUpdater<boolean>> }) {
+function RecentChangesTimeline({ groupedByDate, setShown }: { groupedByDate: Map<String, RecentChangeRow[]>, setShown: Dispatch<StateUpdater<boolean>> }) {
     return (
         <>
             { Array.from(groupedByDate.entries()).map(([dateDay, dayChanges]) => {
@@ -129,7 +129,7 @@ function NoteLink({ notePath, title }: { notePath: string, title: string }) {
     );
 }
 
-function DeletedNoteLink({ change, setShown }: { change: RecentChangesRow, setShown: Dispatch<StateUpdater<boolean>> }) {
+function DeletedNoteLink({ change, setShown }: { change: RecentChangeRow, setShown: Dispatch<StateUpdater<boolean>> }) {
     return (
         <>
             <span className="note-title">{change.current_title}</span>
@@ -165,8 +165,8 @@ export default class RecentChangesDialog extends ReactBasicWidget {
 
 }
 
-function groupByDate(rows: RecentChangesRow[]) {
-    const groupedByDate = new Map<String, RecentChangesRow[]>();
+function groupByDate(rows: RecentChangeRow[]) {
+    const groupedByDate = new Map<String, RecentChangeRow[]>();
 
     for (const row of rows) {
         const dateDay = row.date.substr(0, 10);

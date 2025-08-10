@@ -21,7 +21,7 @@ interface ExportDialogProps {
 
 function ExportDialogComponent() {
     const [ opts, setOpts ] = useState<ExportDialogProps>();
-    const [ exportType, setExportType ] = useState(opts?.defaultType ?? "subtree");
+    const [ exportType, setExportType ] = useState<string>(opts?.defaultType ?? "subtree");
     const [ subtreeFormat, setSubtreeFormat ] = useState("html");
     const [ singleFormat, setSingleFormat ] = useState("html");
     const [ opmlVersion, setOpmlVersion ] = useState("2.0");

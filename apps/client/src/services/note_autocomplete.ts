@@ -39,7 +39,7 @@ export interface Suggestion {
 }
 
 export interface Options {
-    container?: HTMLElement;
+    container?: HTMLElement | null;
     fastSearch?: boolean;
     allowCreatingNotes?: boolean;
     allowJumpToSearchNotes?: boolean;

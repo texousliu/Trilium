@@ -9,8 +9,8 @@ interface DropdownProps {
 }
 
 export default function Dropdown({ className, isStatic, children }: DropdownProps) {
-    const dropdownRef = useRef<HTMLDivElement>();
-    const triggerRef = useRef<HTMLButtonElement>();
+    const dropdownRef = useRef<HTMLDivElement | null>(null);
+    const triggerRef = useRef<HTMLButtonElement | null>(null);
 
     if (triggerRef?.current) {
         useEffect(() => {

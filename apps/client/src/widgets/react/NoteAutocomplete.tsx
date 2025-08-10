@@ -9,7 +9,7 @@ interface NoteAutocompleteProps {
     inputRef?: RefObject<HTMLInputElement>;
     text?: string;
     placeholder?: string;
-    container?: RefObject<HTMLDivElement>;
+    container?: RefObject<HTMLElement | null | undefined>;
     containerStyle?: CSSProperties;
     opts?: Omit<Options, "container">;
     onChange?: (suggestion: Suggestion | null) => void;

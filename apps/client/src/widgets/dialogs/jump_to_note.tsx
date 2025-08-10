@@ -52,7 +52,11 @@ function JumpToNoteDialogComponent() {
         setIsCommandMode(text.startsWith(">"));
     }, [ text ]);
 
-    async function onItemSelected(suggestion: Suggestion) {
+    async function onItemSelected(suggestion?: Suggestion | null) {
+        if (!suggestion) {
+            return;
+        }
+        
         setShown(false);
         if (suggestion.notePath) {
             appContext.tabManager.getActiveContext()?.setNote(suggestion.notePath);
