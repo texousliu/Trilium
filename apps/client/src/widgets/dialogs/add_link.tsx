@@ -17,7 +17,7 @@ type LinkType = "reference-link" | "external-link" | "hyper-link";
 
 function AddLinkDialogComponent() {
     const [ textTypeWidget, setTextTypeWidget ] = useState<TextTypeWidget>();
-    const [ text, setText ] = useState<string>();
+    const initialText = useRef<string>();
     const [ linkTitle, setLinkTitle ] = useState("");
     const hasSelection = textTypeWidget?.hasSelection();
     const [ linkType, setLinkType ] = useState<LinkType>(hasSelection ? "hyper-link" : "reference-link");
@@ -26,7 +26,7 @@ function AddLinkDialogComponent() {
 
     useTriliumEvent("showAddLinkDialog", ( { textTypeWidget, text }) => {
         setTextTypeWidget(textTypeWidget);
-        setText(text);
+        initialText.current = text;
         setShown(true);
     });
 
@@ -63,10 +63,10 @@ function AddLinkDialogComponent() {
 
     function onShown() {
         const $autocompleteEl = refToJQuerySelector(autocompleteRef);
-        if (!text) {
+        if (!initialText.current) {
             note_autocomplete.showRecentNotes($autocompleteEl);
         } else {
-            note_autocomplete.setText($autocompleteEl, text);
+            note_autocomplete.setText($autocompleteEl, initialText.current);
         }
 
         // to be able to quickly remove entered text
@@ -110,7 +110,6 @@ function AddLinkDialogComponent() {
             <FormGroup label={t("add_link.note")}>
                 <NoteAutocomplete
                     inputRef={autocompleteRef}
-                    text={text}
                     onChange={setSuggestion}
                     opts={{
                         allowExternalLinks: true,
