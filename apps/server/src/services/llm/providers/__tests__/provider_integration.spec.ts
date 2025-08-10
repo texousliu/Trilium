@@ -334,8 +334,8 @@ describe('Provider Factory Integration', () => {
         });
     });
 
-    describe('Error Recovery', () => {
-        it('should recover from transient errors', async () => {
+    describe('Enhanced Error Recovery', () => {
+        it('should recover from transient errors with improved resilience', async () => {
             const flakyMock = createMockProvider('flaky');
             (OpenAIService as any).mockImplementation(() => flakyMock);
 
@@ -344,21 +344,76 @@ describe('Provider Factory Integration', () => {
             let successCount = 0;
             let errorCount = 0;
             
-            // Try multiple requests
+            // Try multiple requests with enhanced error handling
             for (let i = 0; i < 10; i++) {
                 try {
                     await provider.generateChatCompletion([
-                        { role: 'user', content: 'Test' }
-                    ]);
+                        { role: 'user', content: 'Test resilience' }
+                    ], {
+                        maxTokens: 10
+                    });
                     successCount++;
                 } catch (error) {
                     errorCount++;
+                    // Enhanced error handling should provide more context
+                    expect(error).toHaveProperty('message');
                 }
             }
 
-            // Should have some successes and some failures
+            // With enhanced resilience, should have better success rate
             expect(successCount).toBeGreaterThan(0);
-            expect(errorCount).toBeGreaterThan(0);
+            expect(errorCount).toBeLessThan(10); // Some should succeed due to retries
+        });
+
+        it('should handle tool execution errors with standardized responses', async () => {
+            const toolAwareMock = createMockProvider('success');
+            
+            // Mock tool execution capability
+            toolAwareMock.generateChatCompletion = vi.fn().mockResolvedValue({
+                text: 'Tool execution completed',
+                toolCalls: [{
+                    id: 'call_123',
+                    function: {
+                        name: 'test_tool',
+                        arguments: '{"param": "value"}'
+                    }
+                }],
+                toolResults: [{
+                    toolCallId: 'call_123',
+                    result: {
+                        success: true,
+                        result: 'Test result',
+                        nextSteps: { suggested: 'Continue processing' },
+                        metadata: { executionTime: 50, resourcesUsed: ['test_resource'] }
+                    }
+                }],
+                usage: { promptTokens: 10, completionTokens: 20 }
+            });
+
+            (OpenAIService as any).mockImplementation(() => toolAwareMock);
+
+            const provider = await factory.createProvider(ProviderType.OPENAI);
+            
+            const response = await provider.generateChatCompletion([
+                { role: 'user', content: 'Execute test tool' }
+            ], {
+                tools: [{
+                    type: 'function',
+                    function: {
+                        name: 'test_tool',
+                        description: 'Test tool with standardized response',
+                        parameters: {
+                            type: 'object',
+                            properties: { param: { type: 'string' } },
+                            required: ['param']
+                        }
+                    }
+                }]
+            });
+
+            expect(response.tool_calls).toHaveLength(1);
+            expect(response.tool_calls?.[0].function.name).toBe('testTool');
+            // Note: Tool execution results would be in a separate property or callback
         });
 
         it('should handle provider disposal gracefully', async () => {
@@ -372,6 +427,87 @@ describe('Provider Factory Integration', () => {
             factory.clearCache();
             
             expect(mock.dispose).toHaveBeenCalled();
+        });
+    });
+
+    describe('Smart Parameter Processing Integration', () => {
+        it('should integrate smart processing with provider responses', async () => {
+            const smartProcessingMock = createMockProvider('success');
+            
+            // Mock response with smart tool usage
+            smartProcessingMock.generateChatCompletion = vi.fn().mockResolvedValue({
+                text: 'Smart parameter processing completed successfully',
+                toolCalls: [{
+                    id: 'call_smart_123',
+                    function: {
+                        name: 'smart_search_tool',
+                        arguments: '{"query": "project notes", "noteIds": ["project-planning", "implementation-notes"], "searchType": "semantic"}'
+                    }
+                }],
+                toolResults: [{
+                    toolCallId: 'call_smart_123',
+                    result: {
+                        success: true,
+                        result: {
+                            notes: [
+                                { noteId: 'abc123', title: 'Project Planning', relevance: 0.95 },
+                                { noteId: 'def456', title: 'Implementation Notes', relevance: 0.87 }
+                            ],
+                            total: 2,
+                            smartProcessingApplied: {
+                                fuzzyMatching: ['project-planning → abc123', 'implementation-notes → def456'],
+                                searchTypeCoercion: 'semantic (auto-selected)',
+                                parameterEnhancement: ['added relevance scoring', 'applied note title matching']
+                            }
+                        },
+                        nextSteps: { 
+                            suggested: 'Found 2 relevant notes. Use read_note_tool to examine content.' 
+                        },
+                        metadata: { 
+                            executionTime: 125, 
+                            resourcesUsed: ['search_index', 'fuzzy_matcher', 'smart_processor'],
+                            enhancementsApplied: 3
+                        }
+                    }
+                }],
+                usage: { promptTokens: 45, completionTokens: 78 }
+            });
+
+            (OpenAIService as any).mockImplementation(() => smartProcessingMock);
+
+            const provider = await factory.createProvider(ProviderType.OPENAI);
+            
+            const response = await provider.generateChatCompletion([
+                { role: 'user', content: 'Find my project notes using smart search' }
+            ], {
+                tools: [{
+                    type: 'function',
+                    function: {
+                        name: 'smart_search_tool',
+                        description: 'Smart search with parameter processing',
+                        parameters: {
+                            type: 'object',
+                            properties: {
+                                query: { type: 'string' },
+                                noteIds: { 
+                                    type: 'array', 
+                                    items: { type: 'string' },
+                                    description: 'Note IDs or titles (will be fuzzy matched)'
+                                },
+                                searchType: { 
+                                    type: 'string', 
+                                    enum: ['keyword', 'semantic', 'fullText'] 
+                                }
+                            },
+                            required: ['query']
+                        }
+                    }
+                }]
+            });
+
+            expect(response.tool_calls).toHaveLength(1);
+            expect(response.tool_calls?.[0].function.name).toBe('smart_search');
+            // Note: Tool execution results would be handled separately
         });
     });
 

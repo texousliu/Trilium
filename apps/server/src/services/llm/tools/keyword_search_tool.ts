@@ -17,21 +17,21 @@ export const keywordSearchToolDefinition: Tool = {
     type: 'function',
     function: {
         name: 'keyword_search_notes',
-        description: 'Keyword search for exact text matches. Supports phrases in quotes, #labels, ~relations, and search operators like OR.',
+        description: 'Find notes with exact text matches. Best for finding specific words or phrases. Examples: keyword_search_notes("python code") → finds notes containing exactly "python code", keyword_search_notes("#important") → finds notes tagged with "important".',
         parameters: {
             type: 'object',
             properties: {
                 query: {
                     type: 'string',
-                    description: 'Search query. Examples: "machine learning", "#important", "python OR javascript", "note.title *= weekly"'
+                    description: 'Exact text to find in notes. Use quotes for phrases: "exact phrase". Find tags: "#tagname". Find by title: note.title="Weekly Report". Use OR for alternatives: "python OR javascript"'
                 },
                 maxResults: {
                     type: 'number',
-                    description: 'Number of results (1-50, default: 10). Use higher values for comprehensive searches.'
+                    description: 'How many results to return. Use 5-10 for quick checks, 20-50 for thorough searches. Default is 10, maximum is 50.'
                 },
                 includeArchived: {
                     type: 'boolean',
-                    description: 'Include archived notes in search (default: false).'
+                    description: 'Also search old archived notes. Use true to search everything, false (default) to skip archived notes.'
                 }
             },
             required: ['query']

@@ -4,7 +4,8 @@
  * This tool allows the LLM to search for notes using keyword search.
  */
 
-import type { Tool, ToolHandler } from './tool_interfaces.js';
+import type { Tool, ToolHandler, StandardizedToolResponse } from './tool_interfaces.js';
+import { ToolResponseFormatter } from './tool_interfaces.js';
 import log from '../../log.js';
 import searchService from '../../search/services/search.js';
 import becca from '../../../becca/becca.js';
@@ -18,25 +19,25 @@ export const searchNotesToolDefinition: Tool = {
     type: 'function',
     function: {
         name: 'search_notes',
-        description: 'Search for notes using keywords and phrases. Use descriptive terms and phrases for best results. Returns noteId values to use with other tools.',
+        description: 'Find notes by searching for keywords or phrases. Returns noteId values for use with read_note, note_update, or attribute_manager tools. Examples: search_notes("meeting notes") → finds meeting-related notes, search_notes("python tutorial") → finds programming tutorials.',
         parameters: {
             type: 'object',
             properties: {
                 query: {
                     type: 'string',
-                    description: 'Search query for finding notes. Use descriptive phrases like "machine learning classification" for better results.'
+                    description: 'What to search for. Use natural language like "project planning documents" or "python tutorial". Examples: "meeting notes", "budget planning", "recipe ideas", "work tasks"'
                 },
                 parentNoteId: {
                     type: 'string',
-                    description: 'Optional noteId to limit search to children of this note. Must be a noteId from search results, not a title.'
+                    description: 'Look only inside this note folder. Use noteId from previous search results. Leave empty to search everywhere. Example: "abc123def456"'
                 },
                 maxResults: {
                     type: 'number',
-                    description: 'Maximum number of results to return (default: 5, max: 20).'
+                    description: 'How many results to return. Choose 5 for quick scan, 10-20 for thorough search. Default is 5, maximum is 20.'
                 },
                 summarize: {
                     type: 'boolean',
-                    description: 'Get AI-generated summaries instead of truncated previews (default: false).'
+                    description: 'Get AI-generated summaries of each note instead of content snippets. Use true when you need quick overviews. Default is false for faster results.'
                 }
             },
             required: ['query']
@@ -220,14 +221,16 @@ export class SearchNotesTool implements ToolHandler {
     }
 
     /**
-     * Execute the search notes tool
+     * Execute the search notes tool with standardized response format
      */
-    public async execute(args: {
+    public async executeStandardized(args: {
         query: string,
         parentNoteId?: string,
         maxResults?: number,
         summarize?: boolean
-    }): Promise<string | object> {
+    }): Promise<StandardizedToolResponse> {
+        const startTime = Date.now();
+
         try {
             const {
                 query,
@@ -237,6 +240,15 @@ export class SearchNotesTool implements ToolHandler {
             } = args;
 
             log.info(`Executing search_notes tool - Query: "${query}", ParentNoteId: ${parentNoteId || 'not specified'}, MaxResults: ${maxResults}, Summarize: ${summarize}`);
+
+            // Validate maxResults parameter
+            if (maxResults < 1 || maxResults > 20) {
+                return ToolResponseFormatter.invalidParameterError(
+                    'maxResults',
+                    'number between 1 and 20',
+                    String(maxResults)
+                );
+            }
 
             // Execute the search using keyword search
             const searchStartTime = Date.now();
@@ -273,26 +285,120 @@ export class SearchNotesTool implements ToolHandler {
                 })
             );
 
+            const executionTime = Date.now() - startTime;
+
             // Format the results with enhanced guidance
             if (results.length === 0) {
-                return {
-                    count: 0,
-                    results: [],
-                    query: query,
-                    message: `No results found. Try rephrasing your query, using simpler terms, or check your spelling.`
-                };
+                const broaderTerm = this.suggestBroaderTerms(query);
+                const keywords = this.extractKeywords(query);
+                
+                return ToolResponseFormatter.error(
+                    `No results found for query: "${query}"`,
+                    {
+                        possibleCauses: [
+                            'Search terms too specific or misspelled',
+                            'No notes contain the exact phrase',
+                            'Content may be in different format than expected'
+                        ],
+                        suggestions: [
+                            `Try broader terms like "${broaderTerm}"`,
+                            `Search for individual keywords: "${keywords}"`,
+                            'Check spelling of search terms',
+                            'Try searching without quotes for phrase matching'
+                        ],
+                        examples: [
+                            `search_notes("${broaderTerm}")`,
+                            `search_notes("${keywords}")`,
+                            'search_notes("general topic") for broader results'
+                        ]
+                    }
+                );
             } else {
-                return {
-                    count: enhancedResults.length,
-                    results: enhancedResults,
-                    query: query,
-                    message: `Found ${enhancedResults.length} matches. Use read_note with noteId to get full content.`
+                const nextSteps = {
+                    suggested: `Use read_note with noteId to get full content: read_note("${enhancedResults[0].noteId}")`,
+                    alternatives: [
+                        'Use note_update to modify any of these notes',
+                        'Use attribute_manager to add tags or relations',
+                        'Use search_notes with different terms to find related notes'
+                    ],
+                    examples: [
+                        `read_note("${enhancedResults[0].noteId}")`,
+                        `search_notes("${query} related concepts")`
+                    ]
                 };
+
+                return ToolResponseFormatter.success(
+                    {
+                        count: enhancedResults.length,
+                        results: enhancedResults,
+                        query: query
+                    },
+                    nextSteps,
+                    {
+                        executionTime,
+                        resourcesUsed: ['search', 'content'],
+                        searchDuration,
+                        summarized: summarize,
+                        maxResultsRequested: maxResults
+                    }
+                );
             }
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : String(error);
             log.error(`Error executing search_notes tool: ${errorMessage}`);
-            return `Error: ${errorMessage}`;
+            
+            return ToolResponseFormatter.error(
+                `Search execution failed: ${errorMessage}`,
+                {
+                    possibleCauses: [
+                        'Database connectivity issue',
+                        'Search service unavailable',
+                        'Invalid search parameters'
+                    ],
+                    suggestions: [
+                        'Try again with simplified search terms',
+                        'Check if Trilium service is running properly',
+                        'Verify search parameters are valid'
+                    ]
+                }
+            );
+        }
+    }
+
+    /**
+     * Execute the search notes tool (legacy method for backward compatibility)
+     */
+    public async execute(args: {
+        query: string,
+        parentNoteId?: string,
+        maxResults?: number,
+        summarize?: boolean
+    }): Promise<string | object> {
+        // Delegate to the standardized method and extract the result for backward compatibility
+        const startTime = Date.now();
+        const standardizedResponse = await this.executeStandardized(args);
+        const executionTime = Date.now() - startTime;
+
+        // For backward compatibility, return the legacy format
+        if (standardizedResponse.success) {
+            const result = standardizedResponse.result as any;
+            if (result.count === 0) {
+                return {
+                    count: 0,
+                    results: [],
+                    query: result.query || args.query,
+                    message: `No results found. Try rephrasing your query, using simpler terms, or check your spelling.`
+                };
+            } else {
+                return {
+                    count: result.count,
+                    results: result.results,
+                    query: result.query,
+                    message: `Found ${result.count} matches. Use read_note with noteId to get full content.`
+                };
+            }
+        } else {
+            return `Error: ${standardizedResponse.error}`;
         }
     }
 }
