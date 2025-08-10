@@ -10,7 +10,7 @@
     "url": "https://github.com/TriliumNext/Notes"
   },
   "dependencies": {
-    "@eslint/js": "9.32.0",
+    "@eslint/js": "9.33.0",
     "@excalidraw/excalidraw": "0.18.0",
     "@fullcalendar/core": "6.1.18",
     "@fullcalendar/daygrid": "6.1.18",
@@ -48,7 +48,7 @@
     "mark.js": "8.11.1",
     "marked": "16.1.2",
     "mermaid": "11.9.0",
-    "mind-elixir": "5.0.4",
+    "mind-elixir": "5.0.5",
     "normalize.css": "8.0.1",
     "panzoom": "9.4.3",
     "preact": "10.27.0",

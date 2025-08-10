@@ -1890,6 +1890,7 @@ body.zen #launcher-container,
 body.zen #launcher-pane,
 body.zen #left-pane,
 body.zen #right-pane,
+body.zen #mobile-sidebar-wrapper,
 body.zen .tab-row-container,
 body.zen .tab-row-widget,
 body.zen .ribbon-container:not(:has(.classic-toolbar-widget.visible)),
@@ -1897,7 +1898,8 @@ body.zen .ribbon-container:has(.classic-toolbar-widget.visible) .ribbon-top-row,
 body.zen .ribbon-container .ribbon-body:not(:has(.classic-toolbar-widget.visible)),
 body.zen .note-icon-widget,
 body.zen .title-row .button-widget,
-body.zen .floating-buttons-children > *:not(.bx-edit-alt) {
+body.zen .floating-buttons-children > *:not(.bx-edit-alt),
+body.zen .action-button {
     display: none !important;
 }
 
@@ -1937,6 +1939,10 @@ body.zen .note-title-widget,
 body.zen .note-title-widget input {
     font-size: 1rem !important;
     background: transparent !important;
+}
+
+body.zen #detail-container {
+    width: 100%;
 }
 
 /* Content renderer */

@@ -411,6 +411,21 @@
         "sql_console_home": "localização padrão das notas do console SQL",
         "bookmark_folder": "nota com este rótulo aparecerá nos favoritos como uma pasta (permitindo acesso aos seus filhos)",
         "share_hidden_from_tree": "esta nota está oculta na árvore de navegação à esquerda, mas ainda pode ser acessada via sua URL",
-        "share_external_link": "a nota funcionará como um link para um site externo na árvore de compartilhamento"
+        "share_external_link": "a nota funcionará como um link para um site externo na árvore de compartilhamento",
+        "share_alias": "defina um alias por meio do qual a nota ficará disponível em https://your_trilium_host/share/[your_alias]",
+        "share_omit_default_css": "o CSS padrão da página de compartilhamento será omitido. Use quando você fizer alterações extensas de estilo.",
+        "share_root": "marca a nota que é servida na raiz de /share.",
+        "share_description": "defina o texto a ser adicionado à meta tag HTML \"description\"",
+        "share_raw": "a nota será servida em seu formato bruto, sem o wrapper HTML",
+        "share_disallow_robot_indexing": "impedirá que robôs indexem esta nota por meio do cabeçalho <code>X-Robots-Tag: noindex</code>",
+        "share_credentials": "exigir credenciais para acessar esta nota compartilhada. O valor deve estar no formato 'usuário:senha'. Não se esqueça de tornar esta configuração herdável para que seja aplicada às notas-filhas/imagens.",
+        "share_index": "notas com este rótulo irão listar todas as raízes das notas compartilhadas",
+        "display_relations": "nomes das relações separados por vírgula que devem ser exibidos. Todas as outras serão ocultadas.",
+        "hide_relations": "nomes das relações separados por vírgula que devem ser ocultados. Todas as outras serão exibidas.",
+        "title_template": "Título padrão das notas criadas como filhas desta nota. O valor é avaliado como uma string JavaScript e pode ser enriquecido com conteúdo dinâmico usando as variáveis injetadas <code>now</code> e <code>parentNote</code>. Exemplos:\n\n<ul>\n    <li><code>${parentNote.getLabelValue('authorName')}'s literary works</code></li>\n    <li><code>Log for ${now.format('YYYY-MM-DD HH:mm:ss')}</code></li>\n</ul>\n\nVeja a <a href=\"https://triliumnext.github.io/Docs/Wiki/default-note-title.html\">wiki com detalhes</a>, a documentação da API para <a href=\"https://zadam.github.io/trilium/backend_api/Note.html\">parentNote</a> e para <a href=\"https://day.js.org/docs/en/display/format\">now</a> para mais informações.",
+        "template": "Esta nota aparecerá na seleção de modelos disponíveis ao criar uma nova nota",
+        "toc": "<code>#toc</code> ou <code>#toc=show</code> irá forçar a exibição do Sumário, <code>#toc=hide</code> irá forçar que ele fique oculto. Se o rótulo não existir, será considerado o ajuste global",
+        "color": "define a cor da nota na árvore de notas, links etc. Use qualquer valor de cor CSS válido, como 'red' ou #a13d5f",
+        "keyboard_shortcut": "Define um atalho de teclado que irá pular imediatamente para esta nota. Exemplo: 'ctrl+alt+e'. É necessário recarregar o frontend para que a alteração tenha efeito."
     }
 }
