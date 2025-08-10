@@ -1,8 +1,12 @@
 /**
- * Smart Search Tool - Phase 1.3 of LLM Tool Effectiveness Improvement
+ * Smart Search Tool - Phase 4 Core Tool Optimization 
  *
- * This unified search tool automatically chooses the best search method based on query analysis,
- * combines results from multiple approaches when beneficial, and provides intelligent fallback options.
+ * THE UNIVERSAL SEARCH INTERFACE - Consolidates 4 search tools into 1 intelligent system.
+ * Replaces: search_notes_tool, keyword_search_tool, attribute_search_tool, unified_search_tool
+ * 
+ * This tool automatically chooses optimal search methods, provides intelligent fallbacks,
+ * and handles all search patterns that the replaced tools supported. It's the ONLY search
+ * tool needed in the core tool set, reducing token usage while improving effectiveness.
  */
 
 import type { Tool, ToolHandler, StandardizedToolResponse } from './tool_interfaces.js';
@@ -61,7 +65,7 @@ export const smartSearchToolDefinition: Tool = {
     type: 'function',
     function: {
         name: 'smart_search',
-        description: 'Intelligent search that automatically chooses the best search approach for your query. Handles concepts ("project planning"), exact phrases ("weekly meeting"), tags (#important), dates ("last week"), and provides smart fallbacks. This is the recommended search tool for most queries.',
+        description: '🔍 UNIVERSAL SEARCH - The only search tool you need! Automatically detects and executes optimal search strategy. Supports semantic concepts ("machine learning"), keywords (AND/OR), exact phrases ("meeting notes"), tags (#important), relations (~linkedTo), dates ("last week"), and all search patterns from replaced tools. Provides intelligent fallbacks and result merging. Use this instead of any other search tool.',
         parameters: {
             type: 'object',
             properties: {

@@ -188,6 +188,15 @@ export class ToolRegistry {
     }
 
     /**
+     * Clear all tools from the registry
+     */
+    public clearTools(): void {
+        this.tools.clear();
+        this.initializationAttempted = false;
+        log.info('Tool registry cleared');
+    }
+
+    /**
      * Debug method to get detailed registry status
      */
     public getDebugInfo(): {
