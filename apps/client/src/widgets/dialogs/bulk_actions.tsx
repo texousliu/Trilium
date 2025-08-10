@@ -46,7 +46,7 @@ function BulkActionComponent() {
                 row.type === "label" && row.name === "action" && row.noteId === "_bulkAction")) {
                     refreshExistingActions();
             }
-        });
+        }, shown);
     }
 
     return (
