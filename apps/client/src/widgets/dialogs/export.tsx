@@ -1,5 +1,4 @@
 import { useState } from "preact/hooks";
-import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import tree from "../../services/tree";
 import Button from "../react/Button";
@@ -57,7 +56,7 @@ function ExportDialogComponent() {
                 const format = (exportType === "subtree" ? subtreeFormat : singleFormat);
                 const version = (format === "opml" ? opmlVersion : "1.0");
                 exportBranch(opts.branchId, exportType, format, version);
-                closeActiveDialog();
+                setShown(false);
             }}
             onHidden={() => setShown(false)}
             footer={<Button className="export-button" text={t("export.export")} primary />}

@@ -1,6 +1,5 @@
 import { useRef, useState } from "preact/compat";
 import appContext from "../../components/app_context";
-import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import Modal from "../react/Modal";
 import ReactBasicWidget from "../react/ReactBasicWidget";
@@ -52,7 +51,7 @@ function CloneToDialogComponent() {
             return;
         }
 
-        closeActiveDialog();
+        setShown(false);
         cloneNotesTo(notePath, clonedNoteIds, prefix);
     }
 

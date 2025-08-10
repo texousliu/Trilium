@@ -1,4 +1,3 @@
-import { closeActiveDialog } from "../../services/dialog";
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import Modal from "../react/Modal";
 import Button from "../react/Button";
@@ -54,10 +53,10 @@ function JumpToNoteDialogComponent() {
     }, [ text ]);
 
     async function onItemSelected(suggestion: Suggestion) {
+        setShown(false);
         if (suggestion.notePath) {
             appContext.tabManager.getActiveContext()?.setNote(suggestion.notePath);
         } else if (suggestion.commandId) {
-            closeActiveDialog();
             await commandRegistry.executeCommand(suggestion.commandId);
         }
     }

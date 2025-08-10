@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { closeActiveDialog } from "../../services/dialog.js";
 import { t } from "../../services/i18n.js";
 import utils from "../../services/utils.js";
 import Button from "../react/Button.js";
@@ -35,7 +34,7 @@ function IncorrectCpuArchDialogComponent() {
                         }
                     }}/>
                 <Button text={t("cpu_arch_warning.continue_anyway")}
-                    onClick={() => closeActiveDialog()} />
+                    onClick={() => setShown(false)} />
             </>}
             onHidden={() => setShown(false)}
             show={shown}

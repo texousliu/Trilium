@@ -1,4 +1,3 @@
-import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import Modal from "../react/Modal";
 import ReactBasicWidget from "../react/ReactBasicWidget";
@@ -80,11 +79,11 @@ function AddLinkDialogComponent() {
     function onSubmit() {
         if (suggestion?.notePath) {
             // Handle note link
-            closeActiveDialog();
+            setShown(false);
             textTypeWidget?.addLink(suggestion.notePath, linkType === "reference-link" ? null : linkTitle);
         } else if (suggestion?.externalLink) {
             // Handle external link
-            closeActiveDialog();
+            setShown(false);
             textTypeWidget?.addLink(suggestion.externalLink, linkTitle, true);
         } else {
             logError("No link to add.");

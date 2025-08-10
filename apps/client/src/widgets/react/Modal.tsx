@@ -4,6 +4,7 @@ import { ComponentChildren } from "preact";
 import type { CSSProperties, RefObject } from "preact/compat";
 import { openDialog } from "../../services/dialog";
 import { ParentComponent } from "./ReactBasicWidget";
+import { Modal as BootstrapModal } from "bootstrap";
 
 interface ModalProps {
     className: string;
@@ -52,6 +53,7 @@ interface ModalProps {
 
 export default function Modal({ children, className, size, title, header, footer, footerStyle, footerAlignment, onShown, onSubmit, helpPageId, minWidth, maxWidth, zIndex, scrollable, onHidden: onHidden, modalRef: _modalRef, formRef: _formRef, bodyStyle, show }: ModalProps) {
     const modalRef = _modalRef ?? useRef<HTMLDivElement>(null);
+    const modalInstanceRef = useRef<BootstrapModal>();
     const formRef = _formRef ?? useRef<HTMLFormElement>(null);
     const parentWidget = useContext(ParentComponent);
 
@@ -79,8 +81,15 @@ export default function Modal({ children, className, size, title, header, footer
     }    
 
     useEffect(() => {
-        if (show && parentWidget) {
-            openDialog(parentWidget.$widget);
+        if (!parentWidget) {
+            return;
+        }
+        if (show) {
+            openDialog(parentWidget.$widget).then(($widget) => {
+                modalInstanceRef.current = BootstrapModal.getOrCreateInstance($widget[0]);
+            })
+        } else {
+            modalInstanceRef.current?.hide();
         }
     }, [ show ]);
 

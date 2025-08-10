@@ -1,6 +1,6 @@
-import { useEffect, useState } from "preact/hooks";
+import { Dispatch, StateUpdater, useEffect, useState } from "preact/hooks";
 import appContext from "../../components/app_context";
-import dialog, { closeActiveDialog } from "../../services/dialog";
+import dialog from "../../services/dialog";
 import { t } from "../../services/i18n";
 import server from "../../services/server";
 import toast from "../../services/toast";
@@ -71,14 +71,14 @@ function RecentChangesDialogComponent() {
         >
             <div className="recent-changes-content">
                 {groupedByDate?.size
-                    ? <RecentChangesTimeline groupedByDate={groupedByDate} />
+                    ? <RecentChangesTimeline groupedByDate={groupedByDate} setShown={setShown} />
                     : <>{t("recent_changes.no_changes_message")}</>}
             </div>
         </Modal>
     )
 }
 
-function RecentChangesTimeline({ groupedByDate }: { groupedByDate: Map<String, RecentChangesRow[]> }) {
+function RecentChangesTimeline({ groupedByDate, setShown }: { groupedByDate: Map<String, RecentChangesRow[]>, setShown: Dispatch<StateUpdater<boolean>> }) {
     return (
         <>
             { Array.from(groupedByDate.entries()).map(([dateDay, dayChanges]) => {
@@ -100,7 +100,7 @@ function RecentChangesTimeline({ groupedByDate }: { groupedByDate: Map<String, R
                                         <span title={change.date}>{formattedTime}</span>
                                         { !isDeleted
                                         ? <NoteLink notePath={notePath} title={change.current_title} />
-                                        : <DeletedNoteLink change={change} /> }
+                                        : <DeletedNoteLink change={change} setShown={setShown} /> }
                                     </li>
                                 );
                             })}
@@ -129,7 +129,7 @@ function NoteLink({ notePath, title }: { notePath: string, title: string }) {
     );
 }
 
-function DeletedNoteLink({ change }: { change: RecentChangesRow }) {
+function DeletedNoteLink({ change, setShown }: { change: RecentChangesRow, setShown: Dispatch<StateUpdater<boolean>> }) {
     return (
         <>
             <span className="note-title">{change.current_title}</span>
@@ -141,7 +141,7 @@ function DeletedNoteLink({ change }: { change: RecentChangesRow }) {
 
                         if (await dialog.confirm(text)) {
                             await server.put(`notes/${change.noteId}/undelete`);
-                            closeActiveDialog();
+                            setShown(false);
                             await ws.waitForMaxKnownEntityChangeId();
 
                             const activeContext = appContext.tabManager.getActiveContext();

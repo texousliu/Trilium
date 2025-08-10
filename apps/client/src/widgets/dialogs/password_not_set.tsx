@@ -1,4 +1,3 @@
-import { closeActiveDialog } from "../../services/dialog";
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import Modal from "../react/Modal";
 import { t } from "../../services/i18n";
@@ -16,7 +15,7 @@ function PasswordNotSetDialogComponent() {
             size="md" className="password-not-set-dialog"
             title={t("password_not_set.title")}
             footer={<Button icon="bx bx-lock" text={t("password_not_set.go_to_password_options")} onClick={() => {
-                closeActiveDialog();
+                setShown(false);
                 appContext.triggerCommand("showOptions", { section: "_optionsPassword" });
             }} />}
             onHidden={() => setShown(false)}

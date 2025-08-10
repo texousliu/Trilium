@@ -1,5 +1,4 @@
 import { useEffect, useState } from "preact/compat";
-import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import Button from "../react/Button";
 import FormCheckbox from "../react/FormCheckbox";
@@ -47,7 +46,7 @@ function UploadAttachmentsDialogComponent() {
                 const filesCopy = Array.from(files);
                 await importService.uploadFiles("attachments", parentNoteId, filesCopy, { shrinkImages });
                 setIsUploading(false);
-                closeActiveDialog();
+                setShown(false);
             }}
             onHidden={() => setShown(false)}
             show={shown}

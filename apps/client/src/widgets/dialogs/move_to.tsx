@@ -1,7 +1,6 @@
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import Modal from "../react/Modal";
 import { t } from "../../services/i18n";
-import { closeActiveDialog } from "../../services/dialog";
 import NoteList from "../react/NoteList";
 import FormGroup from "../react/FormGroup";
 import NoteAutocomplete from "../react/NoteAutocomplete";
@@ -32,7 +31,7 @@ function MoveToDialogComponent() {
             return;
         }
 
-        closeActiveDialog();
+        setShown(false);
         const { noteId, parentNoteId } = tree.getNoteIdAndParentIdFromUrl(notePath);
         if (!parentNoteId) {
             return;

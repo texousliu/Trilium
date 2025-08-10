@@ -1,6 +1,5 @@
 import { useCallback, useRef, useState } from "preact/compat";
 import appContext from "../../components/app_context";
-import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import server from "../../services/server";
 import toast from "../../services/toast";
@@ -40,7 +39,7 @@ function MarkdownImportDialogComponent() {
     async function sendForm() {
         await convertMarkdownToHtml(text);
         setText("");
-        closeActiveDialog();
+        setShown(false);
     }
 
     return (

@@ -1,5 +1,4 @@
 import { useRef, useState } from "preact/hooks";
-import { closeActiveDialog } from "../../services/dialog.js";
 import { t } from "../../services/i18n.js";
 import FormCheckbox from "../react/FormCheckbox.js";
 import Modal from "../react/Modal.js";
@@ -74,12 +73,12 @@ function DeleteNotesDialogComponent() {
             }}
             footer={<>
                 <Button text={t("delete_notes.cancel")}
-                    onClick={() => closeActiveDialog()} />
+                    onClick={() => setShown(false)} />
                 <Button text={t("delete_notes.ok")} primary
                     buttonRef={okButtonRef}
                     onClick={() => {
                         opts.callback?.({ proceed: true, deleteAllClones, eraseNotes });
-                        closeActiveDialog();
+                        setShown(false);
                     }} />
             </>}
             show={shown}

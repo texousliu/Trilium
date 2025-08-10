@@ -1,6 +1,5 @@
 import { useRef, useState } from "preact/hooks";
 import appContext from "../../components/app_context.js";
-import { closeActiveDialog } from "../../services/dialog.js";
 import { t } from "../../services/i18n.js";
 import server from "../../services/server.js";
 import toast from "../../services/toast.js";
@@ -50,7 +49,7 @@ function BranchPrefixDialogComponent() {
         }
 
         savePrefix(branch.branchId, prefix);
-        closeActiveDialog();
+        setShown(false);
     }
 
     return (

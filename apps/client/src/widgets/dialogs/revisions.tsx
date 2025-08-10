@@ -1,7 +1,7 @@
 import type { RevisionPojo, RevisionItem } from "@triliumnext/commons";
 import appContext from "../../components/app_context";
 import FNote from "../../entities/fnote";
-import dialog, { closeActiveDialog } from "../../services/dialog";
+import dialog from "../../services/dialog";
 import froca from "../../services/froca";
 import { t } from "../../services/i18n";
 import server from "../../services/server";
@@ -11,7 +11,7 @@ import Modal from "../react/Modal";
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import FormList, { FormListItem } from "../react/FormList";
 import utils from "../../services/utils";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { Dispatch, StateUpdater, useEffect, useRef, useState } from "preact/hooks";
 import protected_session_holder from "../../services/protected_session_holder";
 import { renderMathInElement } from "../../services/math";
 import { CSSProperties } from "preact/compat";
@@ -61,7 +61,7 @@ function RevisionsDialogComponent() {
                         if (note && await dialog.confirm(text)) {
                             await server.remove(`notes/${note.noteId}/revisions`);
 
-                            closeActiveDialog();
+                            setShown(false);
                             toast.showMessage(t("revisions.revisions_deleted"));
                         }
                     }}/>)
@@ -91,7 +91,7 @@ function RevisionsDialogComponent() {
                     flexDirection: "column",
                     minWidth: 0                    
                 }}>
-                    <RevisionPreview revisionItem={currentRevision} />
+                    <RevisionPreview revisionItem={currentRevision} setShown={setShown} />
                 </div>
         </Modal>
     )
@@ -111,7 +111,7 @@ function RevisionsList({ revisions, onSelect }: { revisions: RevisionItem[], onS
         </FormList>);
 }
 
-function RevisionPreview({ revisionItem }: { revisionItem?: RevisionItem}) {
+function RevisionPreview({ revisionItem, setShown }: { revisionItem?: RevisionItem, setShown: Dispatch<StateUpdater<boolean>>}) {
     const [ fullRevision, setFullRevision ] = useState<RevisionPojo>();
     const [ needsRefresh, setNeedsRefresh ] = useState<boolean>();
 
@@ -137,7 +137,7 @@ function RevisionPreview({ revisionItem }: { revisionItem?: RevisionItem}) {
                                 onClick={async () => {
                                     if (await dialog.confirm(t("revisions.confirm_restore"))) {
                                         await server.post(`revisions/${revisionItem.revisionId}/restore`);
-                                        closeActiveDialog();
+                                        setShown(false);
                                         toast.showMessage(t("revisions.revision_restored"));
                                     }
                                 }}/>

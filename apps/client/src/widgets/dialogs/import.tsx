@@ -1,5 +1,4 @@
 import { useState } from "preact/hooks";
-import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import tree from "../../services/tree";
 import Button from "../react/Button";
@@ -49,7 +48,7 @@ function ImportDialogComponent() {
                     replaceUnderscoresWithSpaces: boolToString(replaceUnderscoresWithSpaces)
                 };
 
-                closeActiveDialog();
+                setShown(false);
                 await importService.uploadFiles("notes", parentNoteId, Array.from(files), options);
             }}
             onHidden={() => setShown(false)}

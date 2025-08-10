@@ -1,5 +1,4 @@
 import { useState } from "preact/hooks";
-import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import Button from "../react/Button";
 import FormCheckbox from "../react/FormCheckbox";
@@ -34,8 +33,7 @@ function SortChildNotesDialogComponent() {
             sortLocale
         });
 
-        // Close the dialog after submission
-        closeActiveDialog();
+        setShown(false);
     }
 
     return (

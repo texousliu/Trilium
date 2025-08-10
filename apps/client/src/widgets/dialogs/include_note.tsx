@@ -1,5 +1,4 @@
 import { useRef, useState } from "preact/compat";
-import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import FormGroup from "../react/FormGroup";
 import FormRadioGroup from "../react/FormRadioGroup";
@@ -38,7 +37,7 @@ function IncludeNoteDialogComponent() {
                     return;
                 }
 
-                closeActiveDialog();
+                setShown(false);
                 includeNote(suggestion.notePath, textTypeWidget);
             }}
             footer={<Button text={t("include_note.button_include")} keyboardShortcut="Enter" />}

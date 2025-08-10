@@ -1,7 +1,6 @@
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import Modal from "../react/Modal";
 import Button from "../react/Button";
-import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import { useState } from "react";
 import FormCheckbox from "../react/FormCheckbox";
@@ -48,10 +47,10 @@ function ConfirmDialogComponent() {
                 setShown(false);
             }}
             footer={<>
-                <Button text={t("confirm.cancel")} onClick={() => closeActiveDialog()} />
+                <Button text={t("confirm.cancel")} onClick={() => setShown(false)} />
                 <Button text={t("confirm.ok")} onClick={() => {
                     setConfirmed(true);
-                    closeActiveDialog();
+                    setShown(false);
                 }} />
             </>}
             show={shown}

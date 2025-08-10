@@ -1,6 +1,5 @@
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import Modal from "../react/Modal";
-import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import FormGroup from "../react/FormGroup";
 import NoteAutocomplete from "../react/NoteAutocomplete";
@@ -67,7 +66,7 @@ function NoteTypeChooserDialogComponent() {
             templateNoteId,
             notePath: parentNote?.notePath
         });
-        closeActiveDialog();
+        setShown(false);
     }
 
     return (

@@ -1,5 +1,4 @@
 import { useRef, useState } from "preact/hooks";
-import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import Button from "../react/Button";
 import FormTextBox from "../react/FormTextBox";
@@ -14,6 +13,7 @@ function ProtectedSessionPasswordDialogComponent() {
     const inputRef = useRef<HTMLInputElement>(null);
 
     useTriliumEvent("showProtectedSessionPasswordDialog", () => setShown(true));
+    useTriliumEvent("closeProtectedSessionPasswordDialog", () => setShown(false));
 
     return (
         <Modal
@@ -43,10 +43,6 @@ export default class ProtectedSessionPasswordDialog extends ReactBasicWidget {
 
     get component() {
         return <ProtectedSessionPasswordDialogComponent />;
-    }
-
-    closeProtectedSessionPasswordDialogEvent() {
-        closeActiveDialog();
     }
 
 }

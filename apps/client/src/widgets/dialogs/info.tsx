@@ -1,6 +1,5 @@
 import { EventData } from "../../components/app_context";
 import ReactBasicWidget from "../react/ReactBasicWidget";
-import { closeActiveDialog } from "../../services/dialog";
 import Modal from "../react/Modal";
 import { t } from "../../services/i18n";
 import Button from "../react/Button";
@@ -30,7 +29,7 @@ function ShowInfoDialogComponent() {
         footer={<Button
             buttonRef={okButtonRef}
             text={t("info.okButton")}
-            onClick={() => closeActiveDialog()}
+            onClick={() => setShown(false)}
         />}
         show={shown}
     >

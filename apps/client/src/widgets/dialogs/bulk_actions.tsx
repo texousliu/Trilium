@@ -1,5 +1,4 @@
 import { useEffect, useState } from "preact/hooks";
-import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import Modal from "../react/Modal";
 import ReactBasicWidget from "../react/ReactBasicWidget";
@@ -64,7 +63,7 @@ function BulkActionComponent() {
                 });
 
                 toast.showMessage(t("bulk_actions.bulk_actions_executed"), 3000);
-                closeActiveDialog();
+                setShown(false);
             }}
             onHidden={() => setShown(false)}
         >
