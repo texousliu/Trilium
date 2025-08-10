@@ -47,7 +47,7 @@ export default function NoteAutocomplete({ inputRef: _ref, text, placeholder, on
                 .on("autocomplete:noteselected", listener)
                 .on("autocomplete:externallinkselected", listener)
                 .on("autocomplete:commandselected", listener)
-                .on("autocomplete:closed", (e) => {
+                .on("change", (e) => {
                     if (!ref.current?.value) {
                         listener(e, null);
                     }
