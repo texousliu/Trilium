@@ -25,6 +25,7 @@ function RevisionsDialogComponent() {
     const [ revisions, setRevisions ] = useState<RevisionItem[]>();
     const [ currentRevision, setCurrentRevision ] = useState<RevisionItem>();
     const [ shown, setShown ] = useState(false);
+    const [ refreshCounter, setRefreshCounter ] = useState(0);
 
     useTriliumEvent("showRevisions", async ({ noteId }) => {
         const note = await getNote(noteId);
@@ -40,7 +41,7 @@ function RevisionsDialogComponent() {
         } else {
             setRevisions(undefined);
         }
-    }, [ note?.noteId ]);
+    }, [ note?.noteId, refreshCounter ]);
 
     if (revisions?.length && !currentRevision) {
         setCurrentRevision(revisions[0]);
@@ -60,8 +61,8 @@ function RevisionsDialogComponent() {
 
                         if (note && await dialog.confirm(text)) {
                             await server.remove(`notes/${note.noteId}/revisions`);
-
-                            setShown(false);
+                            setRevisions([]);
+                            setCurrentRevision(undefined);
                             toast.showMessage(t("revisions.revisions_deleted"));
                         }
                     }}/>)
@@ -91,7 +92,13 @@ function RevisionsDialogComponent() {
                     flexDirection: "column",
                     minWidth: 0                    
                 }}>
-                    <RevisionPreview revisionItem={currentRevision} setShown={setShown} />
+                    <RevisionPreview 
+                        revisionItem={currentRevision} 
+                        setShown={setShown}
+                        onRevisionDeleted={() => {
+                            setRefreshCounter(c => c + 1);
+                            setCurrentRevision(undefined);
+                        }} />
                 </div>
         </Modal>
     )
@@ -111,18 +118,20 @@ function RevisionsList({ revisions, onSelect }: { revisions: RevisionItem[], onS
         </FormList>);
 }
 
-function RevisionPreview({ revisionItem, setShown }: { revisionItem?: RevisionItem, setShown: Dispatch<StateUpdater<boolean>>}) {
+function RevisionPreview({ revisionItem, setShown, onRevisionDeleted }: { 
+    revisionItem?: RevisionItem, 
+    setShown: Dispatch<StateUpdater<boolean>>,
+    onRevisionDeleted?: () => void
+}) {
     const [ fullRevision, setFullRevision ] = useState<RevisionPojo>();
-    const [ needsRefresh, setNeedsRefresh ] = useState<boolean>();
 
     useEffect(() => {
-        setNeedsRefresh(false);
         if (revisionItem) {
             server.get<RevisionPojo>(`revisions/${revisionItem.revisionId}`).then(setFullRevision);
         } else {
             setFullRevision(undefined);            
         }
-    }, [revisionItem, needsRefresh]);
+    }, [revisionItem]);
 
     return (
         <>
@@ -148,8 +157,8 @@ function RevisionPreview({ revisionItem, setShown }: { revisionItem?: RevisionIt
                                 onClick={async () => {
                                     if (await dialog.confirm(t("revisions.confirm_delete"))) {
                                         await server.remove(`revisions/${revisionItem.revisionId}`);
-                                        setNeedsRefresh(true);
                                         toast.showMessage(t("revisions.revision_deleted"));
+                                        onRevisionDeleted?.();
                                     }
                                 }} />
                             &nbsp;
