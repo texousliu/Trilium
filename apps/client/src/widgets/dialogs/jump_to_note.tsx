@@ -27,17 +27,19 @@ function JumpToNoteDialogComponent() {
     async function openDialog(commandMode: boolean) {        
         let newMode: Mode;
         let initialText: string = "";
+
         if (commandMode) {
             newMode = "commands";
             initialText = ">";            
-        } else if (Date.now() - lastOpenedTs > KEEP_LAST_SEARCH_FOR_X_SECONDS * 1000) {
+        } else if (Date.now() - lastOpenedTs <= KEEP_LAST_SEARCH_FOR_X_SECONDS * 1000 && actualText) {
             // if you open the Jump To dialog soon after using it previously, it can often mean that you
             // actually want to search for the same thing (e.g., you opened the wrong note at first try)
             // so we'll keep the content.
             // if it's outside of this time limit, then we assume it's a completely new search and show recent notes instead.
-            newMode = "recent-notes";
-        } else {
             newMode = "last-search";
+            initialText = actualText.current;
+        } else {
+            newMode = "recent-notes";
         }
 
         if (mode !== newMode) {
@@ -69,10 +71,7 @@ function JumpToNoteDialogComponent() {
         const $autoComplete = refToJQuerySelector(autocompleteRef);
         switch (mode) {
             case "last-search":
-                // Fall-through if there is no text, in order to display the recent notes.
-                if (initialText) {
-                    break;
-                }
+                break;
             case "recent-notes":
                 note_autocomplete.showRecentNotes($autoComplete);
                 break;
