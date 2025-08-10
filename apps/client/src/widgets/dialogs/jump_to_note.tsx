@@ -15,7 +15,7 @@ const KEEP_LAST_SEARCH_FOR_X_SECONDS = 120;
 type Mode = "last-search" | "recent-notes" | "commands";
 
 function JumpToNoteDialogComponent() {
-    const [ mode, setMode ] = useState<Mode>("last-search");
+    const [ mode, setMode ] = useState<Mode>();
     const [ lastOpenedTs, setLastOpenedTs ] = useState<number>(0);
     const containerRef = useRef<HTMLDivElement>(null);
     const autocompleteRef = useRef<HTMLInputElement>(null);
@@ -23,11 +23,13 @@ function JumpToNoteDialogComponent() {
     const [ initialText, setInitialText ] = useState(isCommandMode ? "> " : "");
     const actualText = useRef<string>(initialText);
     const [ shown, setShown ] = useState(false);
-
+    
     async function openDialog(commandMode: boolean) {        
         let newMode: Mode;
+        let initialText: string = "";
         if (commandMode) {
-            newMode = "commands";            
+            newMode = "commands";
+            initialText = ">";            
         } else if (Date.now() - lastOpenedTs > KEEP_LAST_SEARCH_FOR_X_SECONDS * 1000) {
             // if you open the Jump To dialog soon after using it previously, it can often mean that you
             // actually want to search for the same thing (e.g., you opened the wrong note at first try)
@@ -42,6 +44,7 @@ function JumpToNoteDialogComponent() {
             setMode(newMode);
         }
 
+        setInitialText(initialText);
         setShown(true);
         setLastOpenedTs(Date.now());
     }
