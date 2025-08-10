@@ -69,6 +69,7 @@ export default function Modal({ children, className, size, title, header, footer
     const modalInstanceRef = useRef<BootstrapModal>();
     const formRef = _formRef ?? useRef<HTMLFormElement>(null);
     const parentWidget = useContext(ParentComponent);
+    const elementToFocus = useRef<Element | null>();
 
     if (onShown || onHidden) {
         useEffect(() => {
@@ -79,16 +80,17 @@ export default function Modal({ children, className, size, title, header, footer
             if (onShown) {
                 modalElement.addEventListener("shown.bs.modal", onShown);
             }
-            if (onHidden) {
-                modalElement.addEventListener("hidden.bs.modal", onHidden);
-            }
+            modalElement.addEventListener("hidden.bs.modal", () => {
+                onHidden();
+                if (elementToFocus.current && "focus" in elementToFocus.current) {
+                    (elementToFocus.current as HTMLElement).focus();
+                }
+            });
             return () => {
                 if (onShown) {
                     modalElement.removeEventListener("shown.bs.modal", onShown);
                 }
-                if (onHidden) {
-                    modalElement.removeEventListener("hidden.bs.modal", onHidden);
-                }
+                modalElement.removeEventListener("hidden.bs.modal", onHidden);
             };
         }, [ ]);
     }    
@@ -98,6 +100,7 @@ export default function Modal({ children, className, size, title, header, footer
             return;
         }
         if (show) {
+            elementToFocus.current = document.activeElement;
             openDialog(parentWidget.$widget, !stackable).then(($widget) => {
                 modalInstanceRef.current = BootstrapModal.getOrCreateInstance($widget[0]);
             })
