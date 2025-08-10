@@ -15,7 +15,6 @@ interface ConfirmDialogProps {
 
 function ConfirmDialogComponent() {
     const [ opts, setOpts ] = useState<ConfirmDialogProps>();
-    const [ confirmed, setConfirmed ] = useState<boolean>(false);
     const [ isDeleteNoteChecked, setIsDeleteNoteChecked ] = useState(false);
     const [ shown, setShown ] = useState(false);
 
@@ -41,7 +40,7 @@ function ConfirmDialogComponent() {
             scrollable={true}
             onHidden={() => {
                 opts?.callback?.({
-                    confirmed,
+                    confirmed: false,
                     isDeleteNoteChecked
                 });
                 setShown(false);
@@ -49,7 +48,10 @@ function ConfirmDialogComponent() {
             footer={<>
                 <Button text={t("confirm.cancel")} onClick={() => setShown(false)} />
                 <Button text={t("confirm.ok")} onClick={() => {
-                    setConfirmed(true);
+                    opts?.callback?.({
+                        confirmed: true,
+                        isDeleteNoteChecked
+                    });
                     setShown(false);
                 }} />
             </>}
