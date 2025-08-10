@@ -35,8 +35,12 @@ interface ModalProps {
     onSubmit?: () => void;
     /** Called when the modal is shown. */
     onShown?: () => void;
-    /** Called when the modal is hidden, either via close button, backdrop click or submit. */
-    onHidden?: () => void;
+    /** 
+     * Called when the modal is hidden, either via close button, backdrop click or submit.
+     * 
+     * Here it's generally a good idea to set `show` to false to reflect the actual state of the modal.
+     */
+    onHidden: () => void;
     helpPageId?: string;
     /**
      * Gives access to the underlying modal element. This is useful for manipulating the modal directly
@@ -48,7 +52,11 @@ interface ModalProps {
      */
     formRef?: RefObject<HTMLFormElement>;
     bodyStyle?: CSSProperties;
-    show?: boolean;
+    /**
+     * Controls whether the modal is shown. Setting it to `true` will trigger the modal to be displayed to the user, whereas setting it to `false` will hide the modal.
+     * This method must generally be coupled with `onHidden` in order to detect when the modal was closed externally (e.g. by the user clicking on the backdrop or on the close button).
+     */
+    show: boolean;
 }
 
 export default function Modal({ children, className, size, title, header, footer, footerStyle, footerAlignment, onShown, onSubmit, helpPageId, minWidth, maxWidth, zIndex, scrollable, onHidden: onHidden, modalRef: _modalRef, formRef: _formRef, bodyStyle, show }: ModalProps) {
