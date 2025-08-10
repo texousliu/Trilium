@@ -1,4 +1,4 @@
-import { useRef, useState } from "preact/compat";
+import { useRef, useState } from "preact/hooks";
 import { t } from "../../services/i18n";
 import FormGroup from "../react/FormGroup";
 import FormRadioGroup from "../react/FormRadioGroup";

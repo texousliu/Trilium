@@ -1,6 +1,6 @@
 import { ComponentChildren } from "preact";
 import Icon from "./Icon";
-import { CSSProperties } from "preact/compat";
+import type { CSSProperties } from "preact/compat";
 
 interface FormListOpts {
     children: ComponentChildren;

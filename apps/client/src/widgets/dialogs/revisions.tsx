@@ -14,7 +14,7 @@ import utils from "../../services/utils";
 import { Dispatch, StateUpdater, useEffect, useRef, useState } from "preact/hooks";
 import protected_session_holder from "../../services/protected_session_holder";
 import { renderMathInElement } from "../../services/math";
-import { CSSProperties } from "preact/compat";
+import type { CSSProperties } from "preact/compat";
 import open from "../../services/open";
 import ActionButton from "../react/ActionButton";
 import options from "../../services/options";

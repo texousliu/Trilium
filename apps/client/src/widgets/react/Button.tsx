@@ -1,5 +1,5 @@
-import { RefObject } from "preact";
-import { CSSProperties } from "preact/compat";
+import type { RefObject } from "preact";
+import type { CSSProperties } from "preact/compat";
 import { useRef } from "preact/hooks";
 
 interface ButtonProps {

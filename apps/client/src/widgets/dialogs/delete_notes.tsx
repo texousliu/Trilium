@@ -3,7 +3,7 @@ import { t } from "../../services/i18n.js";
 import FormCheckbox from "../react/FormCheckbox.js";
 import Modal from "../react/Modal.js";
 import ReactBasicWidget from "../react/ReactBasicWidget.js";
-import { useEffect } from "react";
+import { useEffect } from "preact/hooks";
 import type { DeleteNotesPreview } from "@triliumnext/commons";
 import server from "../../services/server.js";
 import froca from "../../services/froca.js";

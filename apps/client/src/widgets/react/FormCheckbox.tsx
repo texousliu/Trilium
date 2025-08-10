@@ -1,5 +1,5 @@
 import { Tooltip } from "bootstrap";
-import { useEffect, useRef } from "preact/compat";
+import { useEffect, useRef } from "preact/hooks";
 import { escapeQuotes } from "../../services/utils";
 import { ComponentChildren } from "preact";
 

@@ -1,4 +1,4 @@
-import { CSSProperties } from "preact/compat";
+import type { CSSProperties } from "preact/compat";
 
 type HTMLElementLike = string | HTMLElement | JQuery<HTMLElement>;
 

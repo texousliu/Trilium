@@ -1,4 +1,4 @@
-import { useEffect, useState } from "preact/compat";
+import { useEffect, useState } from "preact/hooks";
 import { t } from "../../services/i18n";
 import Button from "../react/Button";
 import FormCheckbox from "../react/FormCheckbox";

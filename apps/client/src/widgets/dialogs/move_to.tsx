@@ -5,7 +5,7 @@ import NoteList from "../react/NoteList";
 import FormGroup from "../react/FormGroup";
 import NoteAutocomplete from "../react/NoteAutocomplete";
 import Button from "../react/Button";
-import { useRef, useState } from "preact/compat";
+import { useRef, useState } from "preact/hooks";
 import { Suggestion, triggerRecentNotes } from "../../services/note_autocomplete";
 import tree from "../../services/tree";
 import froca from "../../services/froca";

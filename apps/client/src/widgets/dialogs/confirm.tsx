@@ -2,7 +2,7 @@ import ReactBasicWidget from "../react/ReactBasicWidget";
 import Modal from "../react/Modal";
 import Button from "../react/Button";
 import { t } from "../../services/i18n";
-import { useState } from "react";
+import { useState } from "preact/hooks";
 import FormCheckbox from "../react/FormCheckbox";
 import useTriliumEvent from "../react/hooks";
 

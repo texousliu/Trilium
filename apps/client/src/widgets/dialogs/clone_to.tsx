@@ -1,4 +1,4 @@
-import { useRef, useState } from "preact/compat";
+import { useRef, useState } from "preact/hooks";
 import appContext from "../../components/app_context";
 import { t } from "../../services/i18n";
 import Modal from "../react/Modal";

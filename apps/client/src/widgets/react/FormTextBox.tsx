@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, RefObject } from "preact/compat";
+import type { InputHTMLAttributes, RefObject } from "preact/compat";
 
 interface FormTextBoxProps extends Pick<InputHTMLAttributes<HTMLInputElement>, "placeholder" | "autoComplete" | "className" | "type" | "name" | "pattern" | "title" | "style"> {
     id?: string;

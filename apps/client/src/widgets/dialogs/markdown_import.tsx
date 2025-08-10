@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "preact/compat";
+import { useCallback, useRef, useState } from "preact/hooks";
 import appContext from "../../components/app_context";
 import { t } from "../../services/i18n";
 import server from "../../services/server";

@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef } from "preact/hooks";
 import { t } from "../../services/i18n.js";
 import utils from "../../services/utils.js";
 import Button from "../react/Button.js";

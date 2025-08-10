@@ -1,9 +1,9 @@
 import { useRef } from "preact/hooks";
 import { t } from "../../services/i18n";
-import { useEffect } from "react";
+import { useEffect } from "preact/hooks";
 import note_autocomplete, { Options, type Suggestion } from "../../services/note_autocomplete";
 import type { RefObject } from "preact";
-import { CSSProperties } from "preact/compat";
+import type { CSSProperties } from "preact/compat";
 
 interface NoteAutocompleteProps {    
     inputRef?: RefObject<HTMLInputElement>;
