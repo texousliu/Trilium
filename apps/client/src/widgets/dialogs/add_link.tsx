@@ -143,7 +143,7 @@ function AddLinkDialogComponent() {
 
                                 <input className="link-title form-control" style={{ width: "100%" }}
                                     value={linkTitle}
-                                    onInput={(e: any) => setLinkTitle(e.target.value)}
+                                    onInput={e => setLinkTitle((e.target as HTMLInputElement)?.value ?? "")}
                                 />
                             </label>
                         </div>
