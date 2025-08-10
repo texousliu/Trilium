@@ -1,15 +1,16 @@
 import { Dropdown as BootstrapDropdown } from "bootstrap";
 import { ComponentChildren } from "preact";
 import Icon from "./Icon";
-import { useEffect, useRef, type CSSProperties } from "preact/compat";
+import { useEffect, useMemo, useRef, type CSSProperties } from "preact/compat";
 
 interface FormListOpts {
     children: ComponentChildren;
     onSelect?: (value: string) => void;
     style?: CSSProperties;
+    fullHeight?: boolean;
 }
 
-export default function FormList({ children, onSelect, style }: FormListOpts) {
+export default function FormList({ children, onSelect, style, fullHeight }: FormListOpts) {
     const wrapperRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
 
@@ -28,9 +29,17 @@ export default function FormList({ children, onSelect, style }: FormListOpts) {
         }
     }, [ triggerRef, wrapperRef ]);
 
+    const builtinStyles = useMemo(() => {
+        const style: CSSProperties = {};
+        if (fullHeight) {
+            style.height = "100%";
+        }
+        return style;
+    }, [ fullHeight ]);
+
     return (
-        <div className="dropdownWrapper" ref={wrapperRef}>
-            <div className="dropdown">
+        <div className="dropdownWrapper" ref={wrapperRef} style={builtinStyles}>
+            <div className="dropdown" style={builtinStyles}>
                 <button
                     ref={triggerRef}
                     type="button" style="display: none;"
@@ -39,6 +48,7 @@ export default function FormList({ children, onSelect, style }: FormListOpts) {
 
                 <div class="dropdown-menu static show" style={{
                     ...style ?? {},
+                    ...builtinStyles,
                     position: "relative",
                 }} onClick={(e) => {
                     const value = (e.target as HTMLElement)?.dataset?.value;

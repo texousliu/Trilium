@@ -107,7 +107,7 @@ function RevisionsDialogComponent() {
 
 function RevisionsList({ revisions, onSelect, currentRevision }: { revisions: RevisionItem[], onSelect: (val: string) => void, currentRevision?: RevisionItem }) {
     return (
-        <FormList style={{ height: "100%", flexShrink: 0 }} onSelect={onSelect}>
+        <FormList onSelect={onSelect} fullHeight>
             {revisions.map((item) => 
                 <FormListItem
                     title={t("revisions.revision_last_edited", { date: item.dateLastEdited })}
