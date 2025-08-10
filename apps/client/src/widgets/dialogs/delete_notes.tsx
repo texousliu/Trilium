@@ -58,7 +58,7 @@ function DeleteNotesDialogComponent() {
             setBrokenRelations(response.brokenRelations);
             setNoteIdsToBeDeleted(response.noteIdsToBeDeleted);
         });
-    }, [ opts ]);
+    }, [ opts, deleteAllClones ]);
 
     return (
         <Modal
@@ -113,17 +113,25 @@ function DeletedNotes({ noteIdsToBeDeleted }: { noteIdsToBeDeleted: DeleteNotesP
         });
     }, [noteIdsToBeDeleted]);
 
-    return (
-        <div className="delete-notes-list-wrapper">
-            <h4>{t("delete_notes.notes_to_be_deleted", { notesCount: noteIdsToBeDeleted.length })}</h4>
-
-            <ul className="delete-notes-list" style={{ maxHeight: "200px", overflow: "auto" }}>
-                {noteLinks.map((link, index) => (
-                    <li key={index} dangerouslySetInnerHTML={{ __html: link }} />
-                ))}
-            </ul>
-        </div>
-    );
+    if (noteIdsToBeDeleted.length) {
+        return (
+            <div className="delete-notes-list-wrapper">
+                <h4>{t("delete_notes.notes_to_be_deleted", { notesCount: noteIdsToBeDeleted.length })}</h4>
+    
+                <ul className="delete-notes-list" style={{ maxHeight: "200px", overflow: "auto" }}>
+                    {noteLinks.map((link, index) => (
+                        <li key={index} dangerouslySetInnerHTML={{ __html: link }} />
+                    ))}
+                </ul>
+            </div>
+        );
+    } else {
+        return (
+            <Alert type="info">
+                {t("delete_notes.no_note_to_delete")}
+            </Alert>
+        )
+    }
 }
 
 function BrokenRelations({ brokenRelations }: { brokenRelations: DeleteNotesPreview["brokenRelations"] }) {
@@ -161,11 +169,7 @@ function BrokenRelations({ brokenRelations }: { brokenRelations: DeleteNotesPrev
             </Alert>
         );
     } else {
-        return (
-            <Alert type="info">
-                {t("delete_notes.no_note_to_delete")}
-            </Alert>
-        );
+        return <></>;
     }
 }
 
