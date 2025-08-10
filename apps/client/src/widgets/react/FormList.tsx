@@ -1,6 +1,7 @@
+import { Dropdown as BootstrapDropdown } from "bootstrap";
 import { ComponentChildren } from "preact";
 import Icon from "./Icon";
-import type { CSSProperties } from "preact/compat";
+import { useEffect, useRef, type CSSProperties } from "preact/compat";
 
 interface FormListOpts {
     children: ComponentChildren;
@@ -9,17 +10,45 @@ interface FormListOpts {
 }
 
 export default function FormList({ children, onSelect, style }: FormListOpts) {
+    const wrapperRef = useRef<HTMLDivElement | null>(null);
+    const triggerRef = useRef<HTMLButtonElement | null>(null);
+
+    useEffect(() => {
+        if (!triggerRef.current || !wrapperRef.current) {
+            return;
+        }
+        
+        const $wrapperRef = $(wrapperRef.current);
+        const dropdown = BootstrapDropdown.getOrCreateInstance(triggerRef.current);
+        $wrapperRef.on("hide.bs.dropdown", (e) => e.preventDefault());
+
+        return () => {
+            $wrapperRef.off("hide.bs.dropdown");
+            dropdown.dispose();
+        }
+    }, [ triggerRef, wrapperRef ]);
+
     return (
-        <div class="dropdown-menu static show" style={{
-            ...style ?? {},
-            position: "relative",
-        }} onClick={(e) => {
-            const value = (e.target as HTMLElement)?.dataset?.value;
-            if (value && onSelect) {
-                onSelect(value);
-            }
-        }}>
-            {children}
+        <div className="dropdownWrapper" ref={wrapperRef}>
+            <div className="dropdown">
+                <button
+                    ref={triggerRef}
+                    type="button" style="display: none;"
+                    data-bs-toggle="dropdown" data-bs-display="static">
+                </button>
+
+                <div class="dropdown-menu static show" style={{
+                    ...style ?? {},
+                    position: "relative",
+                }} onClick={(e) => {
+                    const value = (e.target as HTMLElement)?.dataset?.value;
+                    if (value && onSelect) {
+                        onSelect(value);
+                    }
+                }}>
+                    {children}
+                </div>
+            </div>
         </div>
     );
 }
@@ -34,7 +63,11 @@ interface FormListItemOpts {
 
 export function FormListItem({ children, icon, value, title, active }: FormListItemOpts) {
     return (
-        <a class={`dropdown-item ${active ? "active" : ""}`} data-value={value} title={title}>
+        <a
+            class={`dropdown-item ${active ? "active" : ""}`}
+            data-value={value} title={title}
+            tabIndex={0}
+        >
             <Icon icon={icon} />&nbsp;
             {children}
         </a>
