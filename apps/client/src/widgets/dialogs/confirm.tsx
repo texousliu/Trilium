@@ -1,36 +1,51 @@
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import Modal from "../react/Modal";
 import Button from "../react/Button";
-import { closeActiveDialog, openDialog } from "../../services/dialog";
+import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import { useState } from "react";
 import FormCheckbox from "../react/FormCheckbox";
+import useTriliumEvent from "../react/hooks";
 
 interface ConfirmDialogProps {
     title?: string;
     message?: string | HTMLElement;
     callback?: ConfirmDialogCallback;
-    lastElementToFocus?: HTMLElement | null;
     isConfirmDeleteNoteBox?: boolean;   
 }
 
-function ConfirmDialogComponent({ title, message, callback, lastElementToFocus, isConfirmDeleteNoteBox }: ConfirmDialogProps) {
+function ConfirmDialogComponent() {
+    const [ opts, setOpts ] = useState<ConfirmDialogProps>();
     const [ confirmed, setConfirmed ] = useState<boolean>(false);
-    const [ isDeleteNoteChecked, setIsDeleteNoteChecked ] = useState<boolean>(false);
+    const [ isDeleteNoteChecked, setIsDeleteNoteChecked ] = useState(false);
+    const [ shown, setShown ] = useState(false);
+
+    function showDialog(title: string | null, message: MessageType, callback: ConfirmDialogCallback, isConfirmDeleteNoteBox: boolean) {
+        setOpts({
+            title: title ?? undefined,
+            message: (typeof message === "object" && "length" in message ? message[0] : message),
+            callback,
+            isConfirmDeleteNoteBox
+        });
+        setShown(true);
+    }
+
+    useTriliumEvent("showConfirmDialog", ({ message, callback }) => showDialog(null, message, callback, false));
+    useTriliumEvent("showConfirmDeleteNoteBoxWithNoteDialog", ({ title, callback }) => showDialog(title, t("confirm.are_you_sure_remove_note", { title: title }), callback, true));
 
     return ( 
         <Modal
             className="confirm-dialog"
-            title={title ?? t("confirm.confirmation")}
+            title={opts?.title ?? t("confirm.confirmation")}
             size="md"
             zIndex={2000}
             scrollable={true}
             onHidden={() => {
-                callback?.({
+                opts?.callback?.({
                     confirmed,
                     isDeleteNoteChecked
                 });
-                lastElementToFocus?.focus();
+                setShown(false);
             }}
             footer={<>
                 <Button text={t("confirm.cancel")} onClick={() => closeActiveDialog()} />
@@ -39,12 +54,13 @@ function ConfirmDialogComponent({ title, message, callback, lastElementToFocus, 
                     closeActiveDialog();
                 }} />
             </>}
+            show={shown}
         >
-            {!message || typeof message === "string"
-                ? <div>{(message as string) ?? ""}</div>
-                : <div dangerouslySetInnerHTML={{ __html: message.outerHTML ?? "" }} />}
+            {!opts?.message || typeof opts?.message === "string"
+                ? <div>{(opts?.message as string) ?? ""}</div>
+                : <div dangerouslySetInnerHTML={{ __html: opts?.message.outerHTML ?? "" }} />}
 
-            {isConfirmDeleteNoteBox && (
+            {opts?.isConfirmDeleteNoteBox && (
                 <FormCheckbox
                     name="confirm-dialog-delete-note"
                     label={t("confirm.also_delete_note")}
@@ -77,31 +93,8 @@ export interface ConfirmWithTitleOptions {
 
 export default class ConfirmDialog extends ReactBasicWidget {
 
-    private props: ConfirmDialogProps = {};
-
     get component() {
-        return <ConfirmDialogComponent {...this.props} />;
-    }
-
-    showConfirmDialogEvent({ message, callback }: ConfirmWithMessageOptions) {
-        this.showDialog(null, message, callback, false);        
-    }
-
-    showConfirmDeleteNoteBoxWithNoteDialogEvent({ title, callback }: ConfirmWithTitleOptions) {
-        const message = t("confirm.are_you_sure_remove_note", { title: title });
-        this.showDialog(title, message, callback, true);
-    }
-
-    private showDialog(title: string | null, message: MessageType, callback: ConfirmDialogCallback, isConfirmDeleteNoteBox: boolean) {
-        this.props = {
-            title: title ?? undefined,
-            message: (typeof message === "object" && "length" in message ? message[0] : message),
-            lastElementToFocus: (document.activeElement as HTMLElement),
-            callback,
-            isConfirmDeleteNoteBox
-        };
-        this.doRender();
-        openDialog(this.$widget);
+        return <ConfirmDialogComponent />;
     }
 
 }

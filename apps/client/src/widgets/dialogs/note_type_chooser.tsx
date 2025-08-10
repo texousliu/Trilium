@@ -1,6 +1,6 @@
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import Modal from "../react/Modal";
-import { closeActiveDialog, openDialog } from "../../services/dialog";
+import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import FormGroup from "../react/FormGroup";
 import NoteAutocomplete from "../react/NoteAutocomplete";
@@ -11,6 +11,7 @@ import { MenuCommandItem, MenuItem } from "../../menus/context_menu";
 import { TreeCommandNames } from "../../menus/tree_context_menu";
 import { Suggestion } from "../../services/note_autocomplete";
 import Badge from "../react/Badge";
+import useTriliumEvent from "../react/hooks";
 
 export interface ChooseNoteTypeResponse {
     success: boolean;
@@ -19,20 +20,24 @@ export interface ChooseNoteTypeResponse {
     notePath?: string;
 }
 
-type Callback = (data: ChooseNoteTypeResponse) => void;
+export type ChooseNoteTypeCallback = (data: ChooseNoteTypeResponse) => void;
 
 const SEPARATOR_TITLE_REPLACEMENTS = [
     t("note_type_chooser.builtin_templates"),
     t("note_type_chooser.templates")
 ];
 
-interface NoteTypeChooserDialogProps {
-    callback?: Callback;
-}
+function NoteTypeChooserDialogComponent() {
+    const [ callback, setCallback ] = useState<ChooseNoteTypeCallback>();
+    const [ shown, setShown ] = useState(false);
+    const [ parentNote, setParentNote ] = useState<Suggestion | null>(); 
+    const [ noteTypes, setNoteTypes ] = useState<MenuItem<TreeCommandNames>[]>([]);    
 
-function NoteTypeChooserDialogComponent({ callback }: NoteTypeChooserDialogProps) {
-    const [ parentNote, setParentNote ] = useState<Suggestion>(); 
-    const [ noteTypes, setNoteTypes ] = useState<MenuItem<TreeCommandNames>[]>([]);
+    useTriliumEvent("chooseNoteType", ({ callback }) => {
+        setCallback(() => callback);
+        setShown(true);
+    });
+
     if (!noteTypes.length) {
         useEffect(() => {
             note_types.getNoteTypeItems().then(noteTypes => {
@@ -72,7 +77,11 @@ function NoteTypeChooserDialogComponent({ callback }: NoteTypeChooserDialogProps
             size="md"
             zIndex={1100} // note type chooser needs to be higher than other dialogs from which it is triggered, e.g. "add link"
             scrollable
-            onHidden={() => callback?.({ success: false })}
+            onHidden={() => {
+                callback?.({ success: false });
+                setShown(false);
+            }}
+            show={shown}
         >
             <FormGroup label={t("note_type_chooser.change_path_prompt")}>
                 <NoteAutocomplete
@@ -114,16 +123,8 @@ function NoteTypeChooserDialogComponent({ callback }: NoteTypeChooserDialogProps
 
 export default class NoteTypeChooserDialog extends ReactBasicWidget {
 
-    private props: NoteTypeChooserDialogProps = {};
-
     get component() {
-        return <NoteTypeChooserDialogComponent {...this.props} />
-    }
-
-    async chooseNoteTypeEvent({ callback }: { callback: Callback }) {
-        this.props = { callback };
-        this.doRender();
-        openDialog(this.$widget);
-    }
+        return <NoteTypeChooserDialogComponent />
+    }    
 
 }

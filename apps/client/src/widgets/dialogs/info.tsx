@@ -1,29 +1,30 @@
 import { EventData } from "../../components/app_context";
 import ReactBasicWidget from "../react/ReactBasicWidget";
-import { ConfirmDialogCallback } from "./confirm";
-import { closeActiveDialog, openDialog } from "../../services/dialog";
+import { closeActiveDialog } from "../../services/dialog";
 import Modal from "../react/Modal";
 import { t } from "../../services/i18n";
 import Button from "../react/Button";
-import { useRef } from "preact/compat";
+import { useRef, useState } from "preact/hooks";
 import { RawHtmlBlock } from "../react/RawHtml";
+import useTriliumEvent from "../react/hooks";
 
-interface ShowInfoDialogProps {
-    message?: string | HTMLElement;
-    callback?: ConfirmDialogCallback;
-    lastElementToFocus?: HTMLElement | null;
-}
-
-function ShowInfoDialogComponent({ message, callback, lastElementToFocus }: ShowInfoDialogProps) {
+function ShowInfoDialogComponent() {
+    const [ opts, setOpts ] = useState<EventData<"showInfoDialog">>();
+    const [ shown, setShown ] = useState(false);
     const okButtonRef = useRef<HTMLButtonElement>(null);
 
-    return (message && <Modal
+    useTriliumEvent("showInfoDialog", (opts) => {
+        setOpts(opts);
+        setShown(true);
+    });
+
+    return (<Modal
         className="info-dialog"
         size="sm"
         title={t("info.modalTitle")}
         onHidden={() => {
-            callback?.();
-            lastElementToFocus?.focus();
+            opts?.callback?.();
+            setShown(false);
         }}
         onShown={() => okButtonRef.current?.focus?.()}
         footer={<Button
@@ -31,27 +32,16 @@ function ShowInfoDialogComponent({ message, callback, lastElementToFocus }: Show
             text={t("info.okButton")}
             onClick={() => closeActiveDialog()}
         />}
+        show={shown}
     >
-        <RawHtmlBlock className="info-dialog-content" html={message} />
+        <RawHtmlBlock className="info-dialog-content" html={opts?.message ?? ""} />
     </Modal>);
 }
 
 export default class InfoDialog extends ReactBasicWidget {
 
-    private props: ShowInfoDialogProps = {};
-
     get component() {
-        return <ShowInfoDialogComponent {...this.props} />;
-    }
-
-    showInfoDialogEvent({ message, callback }: EventData<"showInfoDialog">) {
-        this.props = { 
-            message: Array.isArray(message) ? message[0] : message,
-            callback,
-            lastElementToFocus: (document.activeElement as HTMLElement)
-        };
-        this.doRender();
-        openDialog(this.$widget);
+        return <ShowInfoDialogComponent />;
     }
 
 }

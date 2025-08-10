@@ -1,6 +1,5 @@
 import { useState } from "preact/hooks";
-import { EventData } from "../../components/app_context";
-import { closeActiveDialog, openDialog } from "../../services/dialog";
+import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import tree from "../../services/tree";
 import Button from "../react/Button";
@@ -11,13 +10,11 @@ import Modal from "../react/Modal";
 import RawHtml from "../react/RawHtml";
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import importService, { UploadFilesOptions } from "../../services/import";
+import useTriliumEvent from "../react/hooks";
 
-interface ImportDialogComponentProps {
-    parentNoteId?: string;
-    noteTitle?: string;
-}
-
-function ImportDialogComponent({  parentNoteId, noteTitle }: ImportDialogComponentProps) {
+function ImportDialogComponent() {
+    const [ parentNoteId, setParentNoteId ] = useState<string>();
+    const [ noteTitle, setNoteTitle ] = useState<string>();
     const [ files, setFiles ] = useState<FileList | null>(null);
     const [ safeImport, setSafeImport ] = useState(true);
     const [ explodeArchives, setExplodeArchives ] = useState(true);
@@ -25,14 +22,21 @@ function ImportDialogComponent({  parentNoteId, noteTitle }: ImportDialogCompone
     const [ textImportedAsText, setTextImportedAsText ] = useState(true);
     const [ codeImportedAsCode, setCodeImportedAsCode ] = useState(true);
     const [ replaceUnderscoresWithSpaces, setReplaceUnderscoresWithSpaces ] = useState(true);
+    const [ shown, setShown ] = useState(false);
 
-    return (parentNoteId &&
+    useTriliumEvent("showImportDialog", ({ noteId }) => {
+        setParentNoteId(noteId);
+        tree.getNoteTitle(noteId).then(setNoteTitle);
+        setShown(true);
+    });
+
+    return (
         <Modal
             className="import-dialog"
             size="lg"
             title={t("import.importIntoNote")}
             onSubmit={async () => {
-                if (!files) {
+                if (!files || !parentNoteId) {
                     return;
                 }                
 
@@ -48,7 +52,9 @@ function ImportDialogComponent({  parentNoteId, noteTitle }: ImportDialogCompone
                 closeActiveDialog();
                 await importService.uploadFiles("notes", parentNoteId, Array.from(files), options);
             }}
+            onHidden={() => setShown(false)}
             footer={<Button text={t("import.import")} primary disabled={!files} />}
+            show={shown}
         >
             <FormGroup label={t("import.chooseImportFile")} description={<>{t("import.importDescription")} <strong>{ noteTitle }</strong></>}>
                 <FormFileUpload multiple onChange={setFiles} />
@@ -86,21 +92,9 @@ function ImportDialogComponent({  parentNoteId, noteTitle }: ImportDialogCompone
 
 export default class ImportDialog extends ReactBasicWidget {
 
-    private props?: ImportDialogComponentProps = {};
-
     get component() {
-        return <ImportDialogComponent {...this.props} />
-    }
-
-    async showImportDialogEvent({ noteId }: EventData<"showImportDialog">) {
-        this.props = {
-            parentNoteId: noteId,
-            noteTitle: await tree.getNoteTitle(noteId)
-        }
-        this.doRender();
-
-        openDialog(this.$widget);
-    }
+        return <ImportDialogComponent />
+    }    
 
 }
 

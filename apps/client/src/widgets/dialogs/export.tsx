@@ -1,6 +1,5 @@
 import { useState } from "preact/hooks";
-import { EventData } from "../../components/app_context";
-import { closeActiveDialog, openDialog } from "../../services/dialog";
+import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import tree from "../../services/tree";
 import Button from "../react/Button";
@@ -13,6 +12,7 @@ import toastService, { ToastOptions } from "../../services/toast";
 import utils from "../../services/utils";
 import open from "../../services/open";
 import froca from "../../services/froca";
+import useTriliumEvent from "../react/hooks";
 
 interface ExportDialogProps {
     branchId?: string | null;
@@ -20,24 +20,48 @@ interface ExportDialogProps {
     defaultType?: "subtree" | "single";
 }
 
-function ExportDialogComponent({ branchId, noteTitle, defaultType }: ExportDialogProps) {
-    const [ exportType, setExportType ] = useState<string>(defaultType ?? "subtree");
-    const [ subtreeFormat, setSubtreeFormat ] = useState<string>("html");
-    const [ singleFormat, setSingleFormat ] = useState<string>("html");
-    const [ opmlVersion, setOpmlVersion ] = useState<string>("2.0");
+function ExportDialogComponent() {
+    const [ opts, setOpts ] = useState<ExportDialogProps>();
+    const [ exportType, setExportType ] = useState(opts?.defaultType ?? "subtree");
+    const [ subtreeFormat, setSubtreeFormat ] = useState("html");
+    const [ singleFormat, setSingleFormat ] = useState("html");
+    const [ opmlVersion, setOpmlVersion ] = useState("2.0");
+    const [ shown, setShown ] = useState(false);
 
-    return (branchId &&
+    useTriliumEvent("showExportDialog", async ({ notePath, defaultType }) => {
+        const { noteId, parentNoteId } = tree.getNoteIdAndParentIdFromUrl(notePath);
+        if (!parentNoteId) {
+            return;
+        }
+
+        const branchId = await froca.getBranchId(parentNoteId, noteId);
+
+        setOpts({
+            noteTitle: noteId && await tree.getNoteTitle(noteId),
+            defaultType,
+            branchId
+        });
+        setShown(true);
+    });
+
+    return (
         <Modal
             className="export-dialog"
-            title={`${t("export.export_note_title")} ${noteTitle ?? ""}`}
+            title={`${t("export.export_note_title")} ${opts?.noteTitle ?? ""}`}
             size="lg"
             onSubmit={() => {
+                if (!opts || !opts.branchId) {
+                    return;
+                }
+
                 const format = (exportType === "subtree" ? subtreeFormat : singleFormat);
                 const version = (format === "opml" ? opmlVersion : "1.0");
-                exportBranch(branchId, exportType, format, version);
+                exportBranch(opts.branchId, exportType, format, version);
                 closeActiveDialog();
             }}
+            onHidden={() => setShown(false)}
             footer={<Button className="export-button" text={t("export.export")} primary />}
+            show={shown}
         >
 
             <FormRadioGroup
@@ -104,29 +128,10 @@ function ExportDialogComponent({ branchId, noteTitle, defaultType }: ExportDialo
 
 export default class ExportDialog extends ReactBasicWidget {
 
-    private props: ExportDialogProps = {};
-
     get component() {
-        return <ExportDialogComponent {...this.props} />
-    }
+        return <ExportDialogComponent />
+    }    
 
-    async showExportDialogEvent({ notePath, defaultType }: EventData<"showExportDialog">) {
-        const { noteId, parentNoteId } = tree.getNoteIdAndParentIdFromUrl(notePath);
-        if (!parentNoteId) {
-            return;
-        }
-
-        const branchId = await froca.getBranchId(parentNoteId, noteId);
-
-        this.props = {
-            noteTitle: noteId && await tree.getNoteTitle(noteId),
-            defaultType,
-            branchId
-        };
-        this.doRender();
-        
-        openDialog(this.$widget);
-    }
 }
 
 function exportBranch(branchId: string, type: string, format: string, version: string) {

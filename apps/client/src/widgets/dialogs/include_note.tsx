@@ -1,6 +1,5 @@
 import { useRef, useState } from "preact/compat";
-import type { EventData } from "../../components/app_context";
-import { closeActiveDialog, openDialog } from "../../services/dialog";
+import { closeActiveDialog } from "../../services/dialog";
 import { t } from "../../services/i18n";
 import FormGroup from "../react/FormGroup";
 import FormRadioGroup from "../react/FormRadioGroup";
@@ -12,24 +11,30 @@ import { Suggestion, triggerRecentNotes } from "../../services/note_autocomplete
 import tree from "../../services/tree";
 import froca from "../../services/froca";
 import EditableTextTypeWidget from "../type_widgets/editable_text";
+import useTriliumEvent from "../react/hooks";
 
-interface IncludeNoteDialogProps {
-    textTypeWidget?: EditableTextTypeWidget;
-}
-
-function IncludeNoteDialogComponent({ textTypeWidget }: IncludeNoteDialogProps) {
+function IncludeNoteDialogComponent() {
+    const [textTypeWidget, setTextTypeWidget] = useState<EditableTextTypeWidget>();
     const [suggestion, setSuggestion] = useState<Suggestion | null>(null);
     const [boxSize, setBoxSize] = useState("medium");
+    const [shown, setShown] = useState(false);
+
+    useTriliumEvent("showIncludeNoteDialog", ({ textTypeWidget }) => {
+        setTextTypeWidget(textTypeWidget);
+        setShown(true);
+    });
+
     const autoCompleteRef = useRef<HTMLInputElement>(null);
 
-    return (textTypeWidget &&
+    return (
         <Modal
             className="include-note-dialog"
             title={t("include_note.dialog_title")}
             size="lg"
             onShown={() => triggerRecentNotes(autoCompleteRef.current)}
+            onHidden={() => setShown(false)}
             onSubmit={() => {
-                if (!suggestion?.notePath) {
+                if (!suggestion?.notePath || !textTypeWidget) {
                     return;
                 }
 
@@ -37,6 +42,7 @@ function IncludeNoteDialogComponent({ textTypeWidget }: IncludeNoteDialogProps) 
                 includeNote(suggestion.notePath, textTypeWidget);
             }}
             footer={<Button text={t("include_note.button_include")} keyboardShortcut="Enter" />}
+            show={shown}
         >
             <FormGroup label={t("include_note.label_note")}>
                 <NoteAutocomplete
@@ -66,17 +72,9 @@ function IncludeNoteDialogComponent({ textTypeWidget }: IncludeNoteDialogProps) 
 
 export default class IncludeNoteDialog extends ReactBasicWidget {
 
-    private props: IncludeNoteDialogProps = {};
-
     get component() {
-        return <IncludeNoteDialogComponent {...this.props} />;
-    }
-
-    async showIncludeNoteDialogEvent({ textTypeWidget }: EventData<"showIncludeDialog">) {
-        this.props = { textTypeWidget };
-        this.doRender();
-        openDialog(this.$widget);
-    }
+        return <IncludeNoteDialogComponent />;
+    }    
 
 }
 

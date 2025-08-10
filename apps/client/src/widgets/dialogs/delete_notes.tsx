@@ -1,5 +1,5 @@
 import { useRef, useState } from "preact/hooks";
-import { closeActiveDialog, openDialog } from "../../services/dialog.js";
+import { closeActiveDialog } from "../../services/dialog.js";
 import { t } from "../../services/i18n.js";
 import FormCheckbox from "../react/FormCheckbox.js";
 import Modal from "../react/Modal.js";
@@ -12,6 +12,7 @@ import FNote from "../../entities/fnote.js";
 import link from "../../services/link.js";
 import Button from "../react/Button.jsx";
 import Alert from "../react/Alert.jsx";
+import useTriliumEvent from "../react/hooks.jsx";
 
 export interface ResolveOptions {
     proceed: boolean;
@@ -25,22 +26,28 @@ interface ShowDeleteNotesDialogOpts {
     forceDeleteAllClones?: boolean;
 }
 
-interface ShowDeleteNotesDialogProps extends ShowDeleteNotesDialogOpts { }
-
 interface BrokenRelationData {
     note: string;
     relation: string;
     source: string;
 }
 
-function DeleteNotesDialogComponent({ forceDeleteAllClones, branchIdsToDelete, callback }: ShowDeleteNotesDialogProps) {
+function DeleteNotesDialogComponent() {
+    const [ opts, setOpts ] = useState<ShowDeleteNotesDialogOpts>({});
     const [ deleteAllClones, setDeleteAllClones ] = useState(false);
-    const [ eraseNotes, setEraseNotes ] = useState(!!forceDeleteAllClones);
+    const [ eraseNotes, setEraseNotes ] = useState(!!opts.forceDeleteAllClones);
     const [ brokenRelations, setBrokenRelations ] = useState<DeleteNotesPreview["brokenRelations"]>([]);
     const [ noteIdsToBeDeleted, setNoteIdsToBeDeleted ] = useState<DeleteNotesPreview["noteIdsToBeDeleted"]>([]);    
+    const [ shown, setShown ] = useState(false);
     const okButtonRef = useRef<HTMLButtonElement>(null);
 
+    useTriliumEvent("showDeleteNotesDialog", (opts) => {
+        setOpts(opts);
+        setShown(true);
+    })
+
     useEffect(() => {
+        const { branchIdsToDelete, forceDeleteAllClones } = opts;
         if (!branchIdsToDelete || branchIdsToDelete.length === 0) {
             return;
         }        
@@ -52,7 +59,7 @@ function DeleteNotesDialogComponent({ forceDeleteAllClones, branchIdsToDelete, c
             setBrokenRelations(response.brokenRelations);
             setNoteIdsToBeDeleted(response.noteIdsToBeDeleted);
         });
-    }, [ branchIdsToDelete, deleteAllClones, forceDeleteAllClones ]);
+    }, [ opts ]);
 
     return (
         <Modal
@@ -61,24 +68,28 @@ function DeleteNotesDialogComponent({ forceDeleteAllClones, branchIdsToDelete, c
             scrollable
             title={t("delete_notes.delete_notes_preview")}
             onShown={() => okButtonRef.current?.focus()}
-            onHidden={() => callback?.({ proceed: false })}
+            onHidden={() => {
+                opts.callback?.({ proceed: false })
+                setShown(false);
+            }}
             footer={<>
                 <Button text={t("delete_notes.cancel")}
                     onClick={() => closeActiveDialog()} />
                 <Button text={t("delete_notes.ok")} primary
                     buttonRef={okButtonRef}
                     onClick={() => {
-                        callback?.({ proceed: true, deleteAllClones, eraseNotes });
+                        opts.callback?.({ proceed: true, deleteAllClones, eraseNotes });
                         closeActiveDialog();
                     }} />
             </>}
+            show={shown}
         >
             <FormCheckbox name="delete-all-clones" label={t("delete_notes.delete_all_clones_description")}
                 currentValue={deleteAllClones} onChange={setDeleteAllClones}
             />
             <FormCheckbox
                 name="erase-notes" label={t("delete_notes.erase_notes_warning")}
-                disabled={forceDeleteAllClones}
+                disabled={opts.forceDeleteAllClones}
                 currentValue={eraseNotes} onChange={setEraseNotes}
             />
 
@@ -160,21 +171,9 @@ function BrokenRelations({ brokenRelations }: { brokenRelations: DeleteNotesPrev
 }
 
 export default class DeleteNotesDialog extends ReactBasicWidget {
-    
-    private props: ShowDeleteNotesDialogProps = {};
 
     get component() {
-        return <DeleteNotesDialogComponent {...this.props} />;
-    }
-
-    async showDeleteNotesDialogEvent({ branchIdsToDelete, callback, forceDeleteAllClones }: ShowDeleteNotesDialogOpts) {
-        this.props = {
-            branchIdsToDelete,
-            callback,
-            forceDeleteAllClones
-        };
-        this.doRender();
-        openDialog(this.$widget);
-    }
+        return <DeleteNotesDialogComponent />;
+    }    
 
 }

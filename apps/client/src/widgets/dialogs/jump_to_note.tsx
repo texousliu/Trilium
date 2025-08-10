@@ -1,4 +1,4 @@
-import { closeActiveDialog, openDialog } from "../../services/dialog";
+import { closeActiveDialog } from "../../services/dialog";
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import Modal from "../react/Modal";
 import Button from "../react/Button";
@@ -9,20 +9,45 @@ import note_autocomplete, { Suggestion } from "../../services/note_autocomplete"
 import appContext from "../../components/app_context";
 import commandRegistry from "../../services/command_registry";
 import { refToJQuerySelector } from "../react/react_utils";
+import useTriliumEvent from "../react/hooks";
 
 const KEEP_LAST_SEARCH_FOR_X_SECONDS = 120;
 
 type Mode = "last-search" | "recent-notes" | "commands";
 
-interface JumpToNoteDialogProps {
-    mode: Mode;
-}
-
-function JumpToNoteDialogComponent({ mode }: JumpToNoteDialogProps) {
+function JumpToNoteDialogComponent() {
+    const [ mode, setMode ] = useState<Mode>("last-search");
+    const [ lastOpenedTs, setLastOpenedTs ] = useState<number>(0);
     const containerRef = useRef<HTMLDivElement>(null);
     const autocompleteRef = useRef<HTMLInputElement>(null);
     const [ isCommandMode, setIsCommandMode ] = useState(mode === "commands");
     const [ text, setText ] = useState(isCommandMode ? "> " : "");
+    const [ shown, setShown ] = useState(false);
+
+    async function openDialog(commandMode: boolean) {        
+        let newMode: Mode;
+        if (commandMode) {
+            newMode = "commands";            
+        } else if (Date.now() - lastOpenedTs > KEEP_LAST_SEARCH_FOR_X_SECONDS * 1000) {
+            // if you open the Jump To dialog soon after using it previously, it can often mean that you
+            // actually want to search for the same thing (e.g., you opened the wrong note at first try)
+            // so we'll keep the content.
+            // if it's outside of this time limit, then we assume it's a completely new search and show recent notes instead.
+            newMode = "recent-notes";
+        } else {
+            newMode = "last-search";
+        }
+
+        if (mode !== newMode) {
+            setMode(newMode);
+        }
+
+        setShown(true);
+        setLastOpenedTs(Date.now());
+    }
+
+    useTriliumEvent("jumpToNote", () => openDialog(false));
+    useTriliumEvent("commandPalette", () => openDialog(true));
 
     useEffect(() => {
         setIsCommandMode(text.startsWith(">"));
@@ -77,7 +102,9 @@ function JumpToNoteDialogComponent({ mode }: JumpToNoteDialogProps) {
                 onChange={onItemSelected}
                 />}
             onShown={onShown}
+            onHidden={() => setShown(false)}
             footer={!isCommandMode && <Button className="show-in-full-text-button" text={t("jump_to_note.search_button")} keyboardShortcut="Ctrl+Enter" />}
+            show={shown}
         >
             <div className="algolia-autocomplete-container jump-to-note-results" ref={containerRef}></div>
         </Modal>
@@ -86,45 +113,8 @@ function JumpToNoteDialogComponent({ mode }: JumpToNoteDialogProps) {
 
 export default class JumpToNoteDialog extends ReactBasicWidget {
 
-    private lastOpenedTs?: number;
-    private props: JumpToNoteDialogProps = {
-        mode: "last-search"
-    };
-
     get component() {
-        return <JumpToNoteDialogComponent {...this.props} />;
-    }
-
-    async openDialog(commandMode = false) {        
-        this.lastOpenedTs = Date.now();
-        
-        let newMode: Mode;
-        if (commandMode) {
-            newMode = "commands";            
-        } else if (Date.now() - this.lastOpenedTs > KEEP_LAST_SEARCH_FOR_X_SECONDS * 1000) {
-            // if you open the Jump To dialog soon after using it previously, it can often mean that you
-            // actually want to search for the same thing (e.g., you opened the wrong note at first try)
-            // so we'll keep the content.
-            // if it's outside of this time limit, then we assume it's a completely new search and show recent notes instead.
-            newMode = "recent-notes";
-        } else {
-            newMode = "last-search";
-        }
-
-        if (this.props.mode !== newMode) {
-            this.props.mode = newMode;
-            this.doRender();
-        }
-
-        openDialog(this.$widget);
-    }
-
-    async jumpToNoteEvent() {
-        await this.openDialog();
-    }
-    
-    async commandPaletteEvent() {
-        await this.openDialog(true);
+        return <JumpToNoteDialogComponent />;
     }
 
 }
