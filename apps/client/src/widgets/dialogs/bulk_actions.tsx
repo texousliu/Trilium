@@ -1,4 +1,4 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState, useCallback } from "preact/hooks";
 import { t } from "../../services/i18n";
 import Modal from "../react/Modal";
 import ReactBasicWidget from "../react/ReactBasicWidget";
@@ -28,26 +28,30 @@ function BulkActionComponent() {
         setShown(true);
     });
 
-    if (selectedOrActiveNoteIds && bulkActionNote) {
-        useEffect(() => {
-            server.post<BulkActionAffectedNotes>("bulk-action/affected-notes", {
-                noteIds: selectedOrActiveNoteIds,
-                includeDescendants
-            }).then(({ affectedNoteCount }) => setAffectedNoteCount(affectedNoteCount));
-        }, [ selectedOrActiveNoteIds, includeDescendants ]);
-
-        function refreshExistingActions() {
-            setExistingActions(bulk_action.parseActions(bulkActionNote!));
-        }
+    useEffect(() => {
+        if (!selectedOrActiveNoteIds || !bulkActionNote) return;
         
-        useEffect(() => refreshExistingActions(), []);
-        useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
-            if (loadResults.getAttributeRows().find((row) =>
-                row.type === "label" && row.name === "action" && row.noteId === "_bulkAction")) {
-                    refreshExistingActions();
-            }
-        }, shown);
-    }
+        server.post<BulkActionAffectedNotes>("bulk-action/affected-notes", {
+            noteIds: selectedOrActiveNoteIds,
+            includeDescendants
+        }).then(({ affectedNoteCount }) => setAffectedNoteCount(affectedNoteCount));
+    }, [ selectedOrActiveNoteIds, includeDescendants, bulkActionNote ]);
+
+    const refreshExistingActions = useCallback(() => {
+        if (!bulkActionNote) return;
+        setExistingActions(bulk_action.parseActions(bulkActionNote));
+    }, [bulkActionNote]);
+    
+    useEffect(() => {
+        refreshExistingActions();
+    }, [refreshExistingActions]);
+    
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        if (loadResults.getAttributeRows().find((row) =>
+            row.type === "label" && row.name === "action" && row.noteId === "_bulkAction")) {
+                refreshExistingActions();
+        }
+    }, shown);
 
     return (
         <Modal

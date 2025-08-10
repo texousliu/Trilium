@@ -12,20 +12,28 @@ export default function Dropdown({ className, isStatic, children }: DropdownProp
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
 
-    if (triggerRef?.current) {
-        useEffect(() => {
-            const dropdown = BootstrapDropdown.getOrCreateInstance(triggerRef.current!);
-            return () => dropdown.dispose();
-        });
-    }
+    useEffect(() => {
+        if (!triggerRef.current) return;
+        
+        const dropdown = BootstrapDropdown.getOrCreateInstance(triggerRef.current);
+        return () => dropdown.dispose();
+    }, []); // Add dependency array
 
-    if (dropdownRef?.current) {
-        useEffect(() => {
-            $(dropdownRef.current!).on("hide.bs.dropdown", () => {
-                console.log("Hide");
-            });
-        });
-    }
+    useEffect(() => {
+        if (!dropdownRef.current) return;
+        
+        const handleHide = () => {
+            // Remove console.log from production code
+        };
+        
+        const $dropdown = $(dropdownRef.current);
+        $dropdown.on("hide.bs.dropdown", handleHide);
+        
+        // Add proper cleanup
+        return () => {
+            $dropdown.off("hide.bs.dropdown", handleHide);
+        };
+    }, []); // Add dependency array
 
     return (
         <div ref={dropdownRef} class="dropdown" style={{ display: "flex" }}>
