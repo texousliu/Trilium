@@ -1,7 +1,8 @@
 import { Tooltip } from "bootstrap";
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect, useRef, useMemo, useCallback } from "preact/hooks";
 import { escapeQuotes } from "../../services/utils";
 import { ComponentChildren } from "preact";
+import { memo } from "preact/compat";
 
 interface FormCheckboxProps {
     name: string;
@@ -15,28 +16,41 @@ interface FormCheckboxProps {
     onChange(newValue: boolean): void;
 }
 
-export default function FormCheckbox({ name, disabled, label, currentValue, onChange, hint }: FormCheckboxProps) {
+const FormCheckbox = memo(({ name, disabled, label, currentValue, onChange, hint }: FormCheckboxProps) => {
     const labelRef = useRef<HTMLLabelElement>(null);
 
-    if (hint) {
-        useEffect(() => {
-            let tooltipInstance: Tooltip | null = null;
-            if (labelRef.current) {
-                tooltipInstance = Tooltip.getOrCreateInstance(labelRef.current, {
-                    html: true,
-                    template: '<div class="tooltip tooltip-top" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
-                });
-            }
-            return () => tooltipInstance?.dispose();
-        }, [labelRef.current]);
-    }
+    // Fix: Move useEffect outside conditional
+    useEffect(() => {
+        if (!hint || !labelRef.current) return;
+        
+        const tooltipInstance = Tooltip.getOrCreateInstance(labelRef.current, {
+            html: true,
+            template: '<div class="tooltip tooltip-top" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+        });
+        
+        return () => tooltipInstance?.dispose();
+    }, [hint]); // Proper dependency
+
+    // Memoize style object
+    const labelStyle = useMemo(() => 
+        hint ? { textDecoration: "underline dotted var(--main-text-color)" } : undefined,
+        [hint]
+    );
+    
+    // Memoize onChange handler
+    const handleChange = useCallback((e: Event) => {
+        onChange((e.target as HTMLInputElement).checked);
+    }, [onChange]);
+    
+    // Memoize title attribute
+    const titleText = useMemo(() => hint ? escapeQuotes(hint) : undefined, [hint]);
 
     return (
         <div className="form-checkbox">
             <label
                 className="form-check-label tn-checkbox"
-                style={hint && { textDecoration: "underline dotted var(--main-text-color)" }}
-                title={hint && escapeQuotes(hint)}
+                style={labelStyle}
+                title={titleText}
                 ref={labelRef}
             >
                 <input
@@ -46,9 +60,11 @@ export default function FormCheckbox({ name, disabled, label, currentValue, onCh
                     checked={currentValue || false}
                     value="1"
                     disabled={disabled}
-                    onChange={e => onChange((e.target as HTMLInputElement).checked)} />
+                    onChange={handleChange} />
                 {label}
             </label>
         </div>
     );
-}
+});
+
+export default FormCheckbox;

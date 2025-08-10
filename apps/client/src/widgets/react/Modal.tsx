@@ -1,10 +1,11 @@
-import { useContext, useEffect, useRef } from "preact/hooks";
+import { useContext, useEffect, useRef, useMemo, useCallback } from "preact/hooks";
 import { t } from "../../services/i18n";
 import { ComponentChildren } from "preact";
 import type { CSSProperties, RefObject } from "preact/compat";
 import { openDialog } from "../../services/dialog";
 import { ParentComponent } from "./ReactBasicWidget";
 import { Modal as BootstrapModal } from "bootstrap";
+import { memo } from "preact/compat";
 
 interface ModalProps {
     className: string;
@@ -101,18 +102,25 @@ export default function Modal({ children, className, size, title, header, footer
         }
     }, [ show ]);
 
-    const dialogStyle: CSSProperties = {};
-    if (zIndex) {
-        dialogStyle.zIndex = zIndex;
-    }
+    // Memoize styles to prevent recreation on every render
+    const dialogStyle = useMemo<CSSProperties>(() => {
+        const style: CSSProperties = {};
+        if (zIndex) {
+            style.zIndex = zIndex;
+        }
+        return style;
+    }, [zIndex]);
 
-    const documentStyle: CSSProperties = {};
-    if (maxWidth) {
-        documentStyle.maxWidth = `${maxWidth}px`;
-    }
-    if (minWidth) {
-        documentStyle.minWidth = minWidth;
-    }
+    const documentStyle = useMemo<CSSProperties>(() => {
+        const style: CSSProperties = {};
+        if (maxWidth) {
+            style.maxWidth = `${maxWidth}px`;
+        }
+        if (minWidth) {
+            style.minWidth = minWidth;
+        }
+        return style;
+    }, [maxWidth, minWidth]);
 
     return (
         <div className={`modal fade mx-auto ${className}`} tabIndex={-1} style={dialogStyle} role="dialog" ref={modalRef}>
@@ -132,10 +140,10 @@ export default function Modal({ children, className, size, title, header, footer
                     </div>
 
                     {onSubmit ? (
-                        <form ref={formRef} onSubmit={(e) => {
+                        <form ref={formRef} onSubmit={useCallback((e) => {
                             e.preventDefault();
                             onSubmit();
-                        }}>
+                        }, [onSubmit])}>
                             <ModalInner footer={footer} bodyStyle={bodyStyle} footerStyle={footerStyle} footerAlignment={footerAlignment}>{children}</ModalInner>
                         </form>
                     ) : (
@@ -149,11 +157,15 @@ export default function Modal({ children, className, size, title, header, footer
     );
 }
 
-function ModalInner({ children, footer, footerAlignment, bodyStyle, footerStyle: _footerStyle }: Pick<ModalProps, "children" | "footer" | "footerAlignment" | "bodyStyle" | "footerStyle">) {
-    const footerStyle: CSSProperties = _footerStyle ?? {};
-    if (footerAlignment === "between") {
-        footerStyle.justifyContent = "space-between";
-    }
+const ModalInner = memo(({ children, footer, footerAlignment, bodyStyle, footerStyle: _footerStyle }: Pick<ModalProps, "children" | "footer" | "footerAlignment" | "bodyStyle" | "footerStyle">) => {
+    // Memoize footer style
+    const footerStyle = useMemo<CSSProperties>(() => {
+        const style: CSSProperties = _footerStyle ?? {};
+        if (footerAlignment === "between") {
+            style.justifyContent = "space-between";
+        }
+        return style;
+    }, [_footerStyle, footerAlignment]);
 
     return (
         <>
@@ -168,4 +180,4 @@ function ModalInner({ children, footer, footerAlignment, bodyStyle, footerStyle:
             )}
         </>
     );
-}
+});

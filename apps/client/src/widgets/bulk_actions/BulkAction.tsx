@@ -1,4 +1,5 @@
 import { ComponentChildren } from "preact";
+import { memo } from "preact/compat";
 import AbstractBulkAction from "./abstract_bulk_action";
 
 interface BulkActionProps {
@@ -8,12 +9,17 @@ interface BulkActionProps {
     bulkAction: AbstractBulkAction;
 }
 
-export default function BulkAction({ label, children, helpText, bulkAction }: BulkActionProps) {
+// Define styles as constants to prevent recreation
+const flexContainerStyle = { display: "flex", alignItems: "center" } as const;
+const labelStyle = { marginRight: "10px" } as const;
+const textStyle = { marginRight: "10px", marginLeft: "10px" } as const;
+
+const BulkAction = memo(({ label, children, helpText, bulkAction }: BulkActionProps) => {
     return (
         <tr>
             <td colSpan={2}>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                    <div style={{ marginRight: "10px" }} className="text-nowrap">{label}</div>
+                <div style={flexContainerStyle}>
+                    <div style={labelStyle} className="text-nowrap">{label}</div>
 
                     {children}
                 </div>
@@ -33,14 +39,16 @@ export default function BulkAction({ label, children, helpText, bulkAction }: Bu
             </td>
         </tr>
     );
-}
+});
 
-export function BulkActionText({ text }: { text: string }) {
+export default BulkAction;
+
+export const BulkActionText = memo(({ text }: { text: string }) => {
     return (
         <div
-            style={{ marginRight: "10px", marginLeft: "10px" }}
+            style={textStyle}
             className="text-nowrap">
                 {text}
             </div>
     );
-}
+});
