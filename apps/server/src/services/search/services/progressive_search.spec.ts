@@ -25,25 +25,25 @@ describe("Progressive Search Strategy", () => {
         it("should complete search with exact matches when sufficient results found", () => {
             // Create notes with exact matches
             rootNote
-                .child(note("Test Document One"))
-                .child(note("Test Report Two"))
-                .child(note("Test Analysis Three"))
-                .child(note("Test Summary Four"))
-                .child(note("Test Review Five"))
-                .child(note("Typo Test Documnt")); // This has a typo
+                .child(note("Document Analysis One"))
+                .child(note("Document Report Two"))
+                .child(note("Document Review Three"))
+                .child(note("Document Summary Four"))
+                .child(note("Document Overview Five"))
+                .child(note("Documnt Analysis Six")); // This has a typo that should require fuzzy matching
 
             const searchContext = new SearchContext();
-            const searchResults = searchService.findResultsWithQuery("test", searchContext);
+            const searchResults = searchService.findResultsWithQuery("document", searchContext);
 
-            // Should find 5+ exact matches and not process the typo
-            expect(searchResults.length).toBeGreaterThanOrEqual(5);
+            // Should find 5 exact matches and not need fuzzy matching
+            expect(searchResults.length).toEqual(5);
             
             // Verify all results have high scores (exact matches)
             const highQualityResults = searchResults.filter(result => result.score >= 10);
-            expect(highQualityResults.length).toBeGreaterThanOrEqual(5);
+            expect(highQualityResults.length).toEqual(5);
             
             // The typo document should not be in results since we have enough exact matches
-            expect(findNoteByTitle(searchResults, "Typo Test Documnt")).toBeFalsy();
+            expect(findNoteByTitle(searchResults, "Documnt Analysis Six")).toBeFalsy();
         });
 
         it("should use exact match scoring only in Phase 1", () => {

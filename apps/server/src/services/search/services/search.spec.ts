@@ -583,16 +583,15 @@ describe("Search", () => {
             .child(note("Analysis Report")) // Exact match
             .child(note("Data Analysis")) // Exact match
             .child(note("Test Analysis")) // Exact match
-            .child(note("Statistical Analysis")) // Exact match
-            .child(note("Business Analysis")) // Exact match
             .child(note("Advanced Anaylsis")) // Fuzzy match (typo)
             .child(note("Quick Anlaysis")); // Fuzzy match (typo)
 
         const searchContext = new SearchContext();
         const searchResults = searchService.findResultsWithQuery("analysis", searchContext);
 
-        // Should find all matches but exact ones should come first
-        expect(searchResults.length).toEqual(7);
+        // With only 3 exact matches (below threshold), fuzzy should be triggered
+        // Should find all 5 matches but exact ones should come first
+        expect(searchResults.length).toEqual(5);
 
         // Get note titles in result order
         const resultTitles = searchResults.map(r => becca.notes[r.noteId].title);
@@ -607,7 +606,7 @@ describe("Search", () => {
             (title.includes("Anaylsis") || title.includes("Anlaysis")) ? index : -1
         ).filter(index => index !== -1);
 
-        expect(exactMatchIndices.length).toEqual(5);
+        expect(exactMatchIndices.length).toEqual(3);
         expect(fuzzyMatchIndices.length).toEqual(2);
 
         // CRITICAL: All exact matches must appear before all fuzzy matches

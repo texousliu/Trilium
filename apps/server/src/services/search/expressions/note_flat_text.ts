@@ -57,7 +57,11 @@ class NoteFlatTextExp extends Expression {
             const foundAttrTokens: string[] = [];
 
             for (const token of remainingTokens) {
-                if (note.type.includes(token) || note.mime.includes(token)) {
+                // Add defensive checks for undefined properties
+                const typeMatches = note.type && note.type.includes(token);
+                const mimeMatches = note.mime && note.mime.includes(token);
+                
+                if (typeMatches || mimeMatches) {
                     foundAttrTokens.push(token);
                 }
             }
@@ -105,7 +109,11 @@ class NoteFlatTextExp extends Expression {
             const foundAttrTokens: string[] = [];
 
             for (const token of this.tokens) {
-                if (note.type.includes(token) || note.mime.includes(token)) {
+                // Add defensive checks for undefined properties
+                const typeMatches = note.type && note.type.includes(token);
+                const mimeMatches = note.mime && note.mime.includes(token);
+                
+                if (typeMatches || mimeMatches) {
                     foundAttrTokens.push(token);
                 }
 

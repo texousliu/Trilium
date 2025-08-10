@@ -237,6 +237,19 @@ function findResultsWithExpression(expression: Expression, searchContext: Search
         loadNeededInfoFromDatabase();
     }
 
+    // If there's an explicit orderBy clause, skip progressive search
+    // as it would interfere with the ordering
+    if (searchContext.orderBy) {
+        // For ordered queries, don't use progressive search but respect
+        // the original fuzzy matching setting
+        return performSearch(expression, searchContext, searchContext.enableFuzzyMatching);
+    }
+
+    // If fuzzy matching is explicitly disabled, skip progressive search
+    if (!searchContext.enableFuzzyMatching) {
+        return performSearch(expression, searchContext, false);
+    }
+
     // Phase 1: Try exact matches first (without fuzzy matching)
     const exactResults = performSearch(expression, searchContext, false);
     
@@ -251,7 +264,7 @@ function findResultsWithExpression(expression: Expression, searchContext: Search
         return exactResults;
     }
     
-    // Phase 2: Add fuzzy matching as fallback
+    // Phase 2: Add fuzzy matching as fallback when exact matches are insufficient
     const fuzzyResults = performSearch(expression, searchContext, true);
     
     // Merge results, ensuring exact matches always rank higher than fuzzy matches
@@ -400,6 +413,16 @@ function findResultsWithQuery(query: string, searchContext: SearchContext): Sear
 
     if (!expression) {
         return [];
+    }
+
+    // If the query starts with '#', it's a pure expression query.
+    // Don't use progressive search for these as they may have complex 
+    // ordering or other logic that shouldn't be interfered with.
+    const isPureExpressionQuery = query.trim().startsWith('#');
+    
+    if (isPureExpressionQuery) {
+        // For pure expression queries, use standard search without progressive phases
+        return performSearch(expression, searchContext, searchContext.enableFuzzyMatching);
     }
 
     return findResultsWithExpression(expression, searchContext);
