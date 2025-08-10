@@ -2012,5 +2012,8 @@
   },
   "content_renderer": {
     "open_externally": "Deschide în afara programului"
+  },
+  "modal": {
+    "close": "Închide"
   }
 }

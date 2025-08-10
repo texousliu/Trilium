@@ -163,8 +163,8 @@
     "showSQLConsole": "SQL-Konsole anzeigen",
     "other": "Andere",
     "quickSearch": "Fokus auf schnelle Sucheingabe",
-        "inPageSearch": "Auf-der-Seite-Suche",
-        "newTabWithActivationNoteLink": "<kbd>Strg+Umschalt+Klick</kbd> - (oder <kbd>Umschalt+Mittlere Maustaste</kbd>) auf einen Notiz-Link öffnet und aktiviert die Notiz in einem neuen Tab"
+    "inPageSearch": "Auf-der-Seite-Suche",
+    "newTabWithActivationNoteLink": "<kbd>Strg+Umschalt+Klick</kbd> - (oder <kbd>Umschalt+Mittlere Maustaste</kbd>) auf einen Notiz-Link öffnet und aktiviert die Notiz in einem neuen Tab"
   },
   "import": {
     "importIntoNote": "In Notiz importieren",
@@ -1649,5 +1649,8 @@
   },
   "time_selector": {
     "invalid_input": "Die eingegebene Zeit ist keine valide Zahl."
+  },
+  "modal": {
+    "close": "Schließen"
   }
 }
