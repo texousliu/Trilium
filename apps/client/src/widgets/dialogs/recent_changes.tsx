@@ -135,19 +135,17 @@ function DeletedNoteLink({ change, setShown }: { change: RecentChangeRow, setSho
             <span className="note-title">{change.current_title}</span>
             &nbsp;
             (<a href="javascript:"
-                onClick={() => {
-                    async () => {
-                        const text = t("recent_changes.confirm_undelete");
+                onClick={async () => {
+                    const text = t("recent_changes.confirm_undelete");
 
-                        if (await dialog.confirm(text)) {
-                            await server.put(`notes/${change.noteId}/undelete`);
-                            setShown(false);
-                            await ws.waitForMaxKnownEntityChangeId();
+                    if (await dialog.confirm(text)) {
+                        await server.put(`notes/${change.noteId}/undelete`);
+                        setShown(false);
+                        await ws.waitForMaxKnownEntityChangeId();
 
-                            const activeContext = appContext.tabManager.getActiveContext();
-                            if (activeContext) {
-                                activeContext.setNote(change.noteId);
-                            }
+                        const activeContext = appContext.tabManager.getActiveContext();
+                        if (activeContext) {
+                            activeContext.setNote(change.noteId);
                         }
                     }
                 }}>
