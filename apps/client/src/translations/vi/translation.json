@@ -1,0 +1,43 @@
+{
+    "about": {
+        "close": "Đóng",
+        "homepage": "Trang chủ:",
+        "title": "Về Trilium Notes"
+    },
+    "add_link": {
+        "close": "Đóng"
+    },
+    "bulk_actions": {
+        "close": "Đóng"
+    },
+    "branch_prefix": {
+        "close": "Đóng",
+        "save": "Lưu"
+    },
+    "clone_to": {
+        "close": "Đóng"
+    },
+    "confirm": {
+        "close": "Đóng",
+        "ok": "OK"
+    },
+    "delete_notes": {
+        "close": "Đóng",
+        "ok": "OK"
+    },
+    "export": {
+        "close": "Đóng"
+    },
+    "help": {
+        "close": "Đóng"
+    },
+    "toast": {
+        "critical-error": {
+            "title": "Lỗi nghiêm trọng"
+        }
+    },
+    "import": {
+        "close": "Đóng",
+        "options": "Tuỳ chọn"
+    }
+}
