@@ -116,7 +116,7 @@ export default function Modal({ children, className, size, title, header, footer
 
     return (
         <div className={`modal fade mx-auto ${className}`} tabIndex={-1} style={dialogStyle} role="dialog" ref={modalRef}>
-            <div className={`modal-dialog modal-${size} ${scrollable ? "modal-dialog-scrollable" : ""}`} style={documentStyle} role="document">
+            {show && <div className={`modal-dialog modal-${size} ${scrollable ? "modal-dialog-scrollable" : ""}`} style={documentStyle} role="document">
                 <div className="modal-content">
                     <div className="modal-header">
                         {!title || typeof title === "string" ? (
@@ -144,7 +144,7 @@ export default function Modal({ children, className, size, title, header, footer
                         </ModalInner>
                     )}
                 </div>
-            </div>
+            </div>}
         </div>
     );
 }
