@@ -16,9 +16,9 @@ function UpdateLabelValueComponent({ bulkAction, actionDef }: { bulkAction: Abst
             bulkAction={bulkAction}
             label={t("update_label_value.update_label_value")}
             helpText={<>
-                <p>${t("update_label_value.help_text")}</p>
+                <p>{t("update_label_value.help_text")}</p>
 
-                ${t("update_label_value.help_text_note")}
+                {t("update_label_value.help_text_note")}
             </>}
         >
             <FormTextBox

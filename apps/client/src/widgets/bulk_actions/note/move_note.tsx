@@ -17,12 +17,12 @@ function MoveNoteBulkActionComponent({ bulkAction, actionDef }: { bulkAction: Ab
             bulkAction={bulkAction}
             label={t("move_note.move_note")}
             helpText={<>
-                <p>${t("move_note.on_all_matched_notes")}:</p>
+                <p>{t("move_note.on_all_matched_notes")}:</p>
 
                 <ul style="margin-bottom: 0;">
-                    <li>${t("move_note.move_note_new_parent")}</li>
-                    <li>${t("move_note.clone_note_new_parent")}</li>
-                    <li>${t("move_note.nothing_will_happen")}</li>
+                    <li>{t("move_note.move_note_new_parent")}</li>
+                    <li>{t("move_note.clone_note_new_parent")}</li>
+                    <li>{t("move_note.nothing_will_happen")}</li>
                 </ul>
             </>}
         >
