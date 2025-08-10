@@ -145,7 +145,13 @@ export function getLLMOptions(): LLMOptions {
             DEFAULT_OPTIONS.providerFallbackEnabled
         ),
         providerFallbackList: getOptionSafe(
-            () => optionService.getOption(LLM_OPTION_KEYS.PROVIDER_FALLBACK_LIST).split(',').map((s: string) => s.trim()).filter(Boolean),
+            () => {
+                const value = optionService.getOption(LLM_OPTION_KEYS.PROVIDER_FALLBACK_LIST);
+                if (typeof value === 'string' && value) {
+                    return value.split(',').map((s: string) => s.trim()).filter(Boolean);
+                }
+                return DEFAULT_OPTIONS.providerFallbackList;
+            },
             DEFAULT_OPTIONS.providerFallbackList
         )
     };
