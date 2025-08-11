@@ -85,6 +85,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     minTocHeadings: number;
     eraseUnusedAttachmentsAfterSeconds: number;
     eraseUnusedAttachmentsAfterTimeScale: number;
+    logRetentionDays: number;
     firstDayOfWeek: number;
     firstWeekOfYear: number;
     minDaysInFirstWeek: number;
