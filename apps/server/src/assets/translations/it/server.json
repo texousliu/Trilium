@@ -152,6 +152,13 @@
         "add-new-label": "Crea una nuova etichetta",
         "create-new-relation": "Crea una nuova relazione",
         "ribbon-tabs": "Nastro delle schede",
-        "toggle-basic-properties": "Mostra/nascondi le Proprietà di Base"
+        "toggle-basic-properties": "Mostra/nascondi le Proprietà di Base",
+        "toggle-file-properties": "Attiva Proprietà del file",
+        "toggle-image-properties": "Attiva Proprietà Immagine",
+        "toggle-owned-attributes": "Attiva Attributi Propri",
+        "toggle-inherited-attributes": "Attiva Attributi Ereditati",
+        "toggle-promoted-attributes": "Attiva Attributi Promossi",
+        "toggle-link-map": "Attiva Mappa Link",
+        "toggle-note-info": "Attiva Informazioni Nota"
     }
 }
