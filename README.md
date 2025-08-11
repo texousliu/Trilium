@@ -82,7 +82,7 @@ Feel free to join our official conversations. We would love to hear what feature
 
 ### Windows / MacOS
 
-Download the binary release for your platform from the [latest release page](https://github.com/TriliumNext/Notes/releases/latest), unzip the package and run the `trilium` executable.
+Download the binary release for your platform from the [latest release page](https://github.com/TriliumNext/Trilium/releases/latest), unzip the package and run the `trilium` executable.
 
 ### Linux
 
@@ -90,7 +90,7 @@ If your distribution is listed in the table below, use your distribution's packa
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/triliumnext.svg)](https://repology.org/project/triliumnext/versions)
 
-You may also download the binary release for your platform from the [latest release page](https://github.com/TriliumNext/Notes/releases/latest), unzip the package and run the `trilium` executable.
+You may also download the binary release for your platform from the [latest release page](https://github.com/TriliumNext/Trilium/releases/latest), unzip the package and run the `trilium` executable.
 
 TriliumNext is also provided as a Flatpak, but not yet published on FlatHub.
 
