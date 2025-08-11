@@ -106,7 +106,11 @@
         "choose_export_type": "Scegli prima il tipo di esportazione, per favore",
         "export_in_progress": "Esportazione in corso: {{progressCount}}",
         "export_finished_successfully": "Esportazione terminata con successo.",
-        "format_pdf": "PDF- allo scopo di stampa o esportazione."
+        "format_pdf": "PDF- allo scopo di stampa o esportazione.",
+        "export_type_subtree": "Questa nota e tutti i suoi discendenti",
+        "format_html": "HTML - raccomandato in quanto mantiene tutti i formati",
+        "format_html_zip": "HTML in archivio ZIP - questo è raccomandato in quanto conserva tutta la formattazione.",
+        "format_markdown": "MArkdown - questo conserva la maggior parte della formattazione."
     },
     "help": {
         "close": "Chiudi",
