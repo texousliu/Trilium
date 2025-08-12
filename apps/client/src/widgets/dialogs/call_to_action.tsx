@@ -5,13 +5,13 @@ import ReactBasicWidget from "../react/ReactBasicWidget";
 import { CallToAction, dismissCallToAction, getCallToActions } from "./call_to_action_definitions";
 
 function CallToActionDialogComponent({ activeCallToActions }: { activeCallToActions: CallToAction[] }) {
-    const [ activeIndex, setActiveIndex ] = useState(0);
-    const [ shown, setShown ] = useState(true);
-    const activeItem = activeCallToActions[activeIndex];
-
     if (!activeCallToActions.length) {
         return <></>;
     }
+    
+    const [ activeIndex, setActiveIndex ] = useState(0);
+    const [ shown, setShown ] = useState(true);
+    const activeItem = activeCallToActions[activeIndex];
 
     function goToNext() {
         if (activeIndex + 1 < activeCallToActions.length) {
