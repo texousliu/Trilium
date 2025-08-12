@@ -3,6 +3,7 @@ import options from "../../services/options";
 import { t } from "../../services/i18n";
 
 export interface CallToAction {
+    id: string;
     title: string;
     message: string;
     enabled: () => boolean;
@@ -18,6 +19,7 @@ function isNextTheme() {
 
 const CALL_TO_ACTIONS: CallToAction[] = [
     {
+        id: "next_theme",
         title: t("call_to_action.next_theme_title"),
         message: t("call_to_action.next_theme_message"),
         enabled: () => !isNextTheme(),
@@ -33,6 +35,7 @@ const CALL_TO_ACTIONS: CallToAction[] = [
         ]
     },
     {
+        id: "background_effects",
         title: t("call_to_action.background_effects_title"),
         message: t("call_to_action.background_effects_message"),
         enabled: () => isNextTheme() && !options.is("backgroundEffects"),
