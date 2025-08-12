@@ -21,7 +21,7 @@ const CALL_TO_ACTIONS: CallToAction[] = [
     {
         title: "TriliumNext theme is now stable",
         message: "For a while now, we've been working on a new theme to give the application a more modern look.",
-        enabled: isNextTheme,
+        enabled: () => !isNextTheme(),
         buttons: [
             { text: "Switch to the TriliumNext theme"}
         ]
@@ -40,6 +40,10 @@ function CallToActionDialogComponent({ activeCallToActions }: { activeCallToActi
     const [ activeIndex, setActiveIndex ] = useState(0);
     const [ shown, setShown ] = useState(true);
     const activeItem = activeCallToActions[activeIndex];
+
+    if (!activeCallToActions.length) {
+        return <></>;
+    }
 
     function goToNext() {
         if (activeIndex + 1 < activeCallToActions.length) {
