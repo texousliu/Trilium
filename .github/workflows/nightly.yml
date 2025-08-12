@@ -27,6 +27,7 @@ permissions:
 
 jobs:
   nightly-electron:
+    if: github.repository == 'TriliumNext/Trilium'
     name: Deploy nightly
     strategy:
       fail-fast: false
@@ -96,6 +97,7 @@ jobs:
           path: apps/desktop/upload
 
   nightly-server:
+    if: github.repository == 'TriliumNext/Trilium'  
     name: Deploy server nightly
     strategy:
       fail-fast: false
