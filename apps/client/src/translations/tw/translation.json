@@ -27,7 +27,6 @@
   "add_link": {
     "add_link": "添加鏈接",
     "help_on_links": "鏈接幫助",
-    "close": "關閉",
     "note": "筆記",
     "search_note": "按名稱搜尋筆記",
     "link_title_mirrors": "鏈接標題跟隨筆記標題變化",
@@ -38,14 +37,12 @@
   "branch_prefix": {
     "edit_branch_prefix": "編輯分支前綴",
     "help_on_tree_prefix": "有關樹前綴的幫助",
-    "close": "關閉",
     "prefix": "前綴： ",
     "save": "保存",
     "branch_prefix_saved": "已保存分支前綴。"
   },
   "bulk_actions": {
     "bulk_actions": "批量操作",
-    "close": "關閉",
     "affected_notes": "受影響的筆記",
     "include_descendants": "包括所選筆記的子筆記",
     "available_actions": "可用操作",
@@ -108,7 +105,6 @@
     "export_finished_successfully": "匯出成功完成。"
   },
   "help": {
-    "close": "關閉",
     "noteNavigation": "筆記導航",
     "goUpDown": "在筆記列表中向上/向下移動",
     "collapseExpand": "收合/展開節點",
@@ -161,7 +157,6 @@
   },
   "import": {
     "importIntoNote": "匯入到筆記",
-    "close": "關閉",
     "chooseImportFile": "選擇匯入文件",
     "importDescription": "所選文件的內容將作為子筆記匯入到",
     "options": "選項",

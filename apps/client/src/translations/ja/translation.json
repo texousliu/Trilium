@@ -1,7 +1,6 @@
 {
     "about": {
         "title": "Trilium Notesについて",
-        "close": "閉じる",
         "homepage": "ホームページ:",
         "app_version": "アプリのバージョン:",
         "db_version": "データベースのバージョン:",

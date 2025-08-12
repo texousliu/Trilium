@@ -1,7 +1,6 @@
 {
   "about": {
     "title": "Über Trilium Notes",
-    "close": "Schließen",
     "homepage": "Startseite:",
     "app_version": "App-Version:",
     "db_version": "DB-Version:",
@@ -28,7 +27,6 @@
   "add_link": {
     "add_link": "Link hinzufügen",
     "help_on_links": "Hilfe zu Links",
-    "close": "Schließen",
     "note": "Notiz",
     "search_note": "Suche nach einer Notiz anhand ihres Namens",
     "link_title_mirrors": "Der Linktitel spiegelt den aktuellen Titel der Notiz wider",
@@ -39,14 +37,12 @@
   "branch_prefix": {
     "edit_branch_prefix": "Zweigpräfix bearbeiten",
     "help_on_tree_prefix": "Hilfe zum Baumpräfix",
-    "close": "Schließen",
     "prefix": "Präfix: ",
     "save": "Speichern",
     "branch_prefix_saved": "Zweigpräfix wurde gespeichert."
   },
   "bulk_actions": {
     "bulk_actions": "Massenaktionen",
-    "close": "Schließen",
     "affected_notes": "Betroffene Notizen",
     "include_descendants": "Unternotizen der ausgewählten Notizen einbeziehen",
     "available_actions": "Verfügbare Aktionen",
@@ -61,7 +57,6 @@
   },
   "clone_to": {
     "clone_notes_to": "Notizen klonen nach...",
-    "close": "Schließen",
     "help_on_links": "Hilfe zu Links",
     "notes_to_clone": "Notizen zum Klonen",
     "target_parent_note": "Ziel-Übergeordnetenotiz",
@@ -74,7 +69,6 @@
   },
   "confirm": {
     "confirmation": "Bestätigung",
-    "close": "Schließen",
     "cancel": "Abbrechen",
     "ok": "OK",
     "are_you_sure_remove_note": "Bist du sicher, dass du \"{{title}}\" von der Beziehungskarte entfernen möchten? ",
@@ -113,7 +107,6 @@
     "format_pdf": "PDF - für Ausdrucke oder Teilen."
   },
   "help": {
-    "close": "Schließen",
     "noteNavigation": "Notiz Navigation",
     "goUpDown": "In der Liste der Notizen nach oben/unten gehen",
     "collapseExpand": "Knoten reduzieren/erweitern",
@@ -169,7 +162,6 @@
   },
   "import": {
     "importIntoNote": "In Notiz importieren",
-    "close": "Schließen",
     "chooseImportFile": "Wähle Importdatei aus",
     "importDescription": "Der Inhalt der ausgewählten Datei(en) wird als untergeordnete Notiz(en) importiert",
     "options": "Optionen",
@@ -196,7 +188,6 @@
   },
   "include_note": {
     "dialog_title": "Notiz beifügen",
-    "close": "Schließen",
     "label_note": "Notiz",
     "placeholder_search": "Suche nach einer Notiz anhand ihres Namens",
     "box_size_prompt": "Kartongröße des beigelegten Zettels:",
@@ -211,19 +202,16 @@
     "okButton": "OK"
   },
   "jump_to_note": {
-    "close": "Schließen",
     "search_button": "Suche im Volltext"
   },
   "markdown_import": {
     "dialog_title": "Markdown-Import",
-    "close": "Schließen",
     "modal_body_text": "Aufgrund der Browser-Sandbox ist es nicht möglich, die Zwischenablage direkt aus JavaScript zu lesen. Bitte füge den zu importierenden Markdown in den Textbereich unten ein und klicke auf die Schaltfläche „Importieren“.",
     "import_button": "Importieren",
     "import_success": "Markdown-Inhalt wurde in das Dokument importiert."
   },
   "move_to": {
     "dialog_title": "Notizen verschieben nach ...",
-    "close": "Schließen",
     "notes_to_move": "Notizen zum Verschieben",
     "target_parent_note": "Ziel-Elternnotiz",
     "search_placeholder": "Suche nach einer Notiz anhand ihres Namens",
@@ -233,18 +221,15 @@
   },
   "note_type_chooser": {
     "modal_title": "Wähle den Notiztyp aus",
-    "close": "Schließen",
     "modal_body": "Wähle den Notiztyp / die Vorlage der neuen Notiz:",
     "templates": "Vorlagen"
   },
   "password_not_set": {
     "title": "Das Passwort ist nicht festgelegt",
-    "close": "Schließen",
     "body1": "Geschützte Notizen werden mit einem Benutzerpasswort verschlüsselt, es wurde jedoch noch kein Passwort festgelegt."
   },
   "prompt": {
     "title": "Prompt",
-    "close": "Schließen",
     "ok": "OK",
     "defaultTitle": "Prompt"
   },
@@ -258,7 +243,6 @@
   "recent_changes": {
     "title": "Aktuelle Änderungen",
     "erase_notes_button": "Jetzt gelöschte Notizen löschen",
-    "close": "Schließen",
     "deleted_notes_message": "Gelöschte Notizen wurden gelöscht.",
     "no_changes_message": "Noch keine Änderungen...",
     "undelete_link": "Wiederherstellen",
@@ -269,7 +253,6 @@
     "delete_all_revisions": "Lösche alle Revisionen dieser Notiz",
     "delete_all_button": "Alle Revisionen löschen",
     "help_title": "Hilfe zu Notizrevisionen",
-    "close": "Schließen",
     "revision_last_edited": "Diese Revision wurde zuletzt am {{date}} bearbeitet",
     "confirm_delete_all": "Möchtest du alle Revisionen dieser Notiz löschen?",
     "no_revisions": "Für diese Notiz gibt es noch keine Revisionen...",
@@ -289,7 +272,6 @@
   },
   "sort_child_notes": {
     "sort_children_by": "Unternotizen sortieren nach...",
-    "close": "Schließen",
     "sorting_criteria": "Sortierkriterien",
     "title": "Titel",
     "date_created": "Erstellungsdatum",
@@ -307,7 +289,6 @@
   },
   "upload_attachments": {
     "upload_attachments_to_note": "Lade Anhänge zur Notiz hoch",
-    "close": "Schließen",
     "choose_files": "Wähle Dateien aus",
     "files_will_be_uploaded": "Dateien werden als Anhänge in hochgeladen {{noteTitle}}",
     "options": "Optionen",

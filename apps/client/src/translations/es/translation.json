@@ -1,7 +1,6 @@
 {
   "about": {
     "title": "Acerca de Trilium Notes",
-    "close": "Cerrar",
     "homepage": "Página principal:",
     "app_version": "Versión de la aplicación:",
     "db_version": "Versión de base de datos:",
@@ -28,7 +27,6 @@
   "add_link": {
     "add_link": "Agregar enlace",
     "help_on_links": "Ayuda sobre enlaces",
-    "close": "Cerrar",
     "note": "Nota",
     "search_note": "buscar nota por su nombre",
     "link_title_mirrors": "el título del enlace replica el título actual de la nota",
@@ -39,14 +37,12 @@
   "branch_prefix": {
     "edit_branch_prefix": "Editar prefijo de rama",
     "help_on_tree_prefix": "Ayuda sobre el prefijo del árbol",
-    "close": "Cerrar",
     "prefix": "Prefijo: ",
     "save": "Guardar",
     "branch_prefix_saved": "Se ha guardado el prefijo de rama."
   },
   "bulk_actions": {
     "bulk_actions": "Acciones en bloque",
-    "close": "Cerrar",
     "affected_notes": "Notas afectadas",
     "include_descendants": "Incluir descendientes de las notas seleccionadas",
     "available_actions": "Acciones disponibles",
@@ -61,7 +57,6 @@
   },
   "clone_to": {
     "clone_notes_to": "Clonar notas a...",
-    "close": "Cerrar",
     "help_on_links": "Ayuda sobre enlaces",
     "notes_to_clone": "Notas a clonar",
     "target_parent_note": "Nota padre de destino",
@@ -74,7 +69,6 @@
   },
   "confirm": {
     "confirmation": "Confirmación",
-    "close": "Cerrar",
     "cancel": "Cancelar",
     "ok": "Aceptar",
     "are_you_sure_remove_note": "¿Está seguro que desea eliminar la nota \"{{title}}\" del mapa de relaciones? ",
@@ -113,7 +107,6 @@
     "format_pdf": "PDF - para propósitos de impresión o compartición."
   },
   "help": {
-    "close": "Cerrar",
     "noteNavigation": "Navegación de notas",
     "goUpDown": "subir/bajar en la lista de notas",
     "collapseExpand": "colapsar/expandir nodo",
@@ -168,7 +161,6 @@
   },
   "import": {
     "importIntoNote": "Importar a nota",
-    "close": "Cerrar",
     "chooseImportFile": "Elija el archivo de importación",
     "importDescription": "El contenido de los archivos seleccionados se importará como notas secundarias en",
     "options": "Opciones",
@@ -195,7 +187,6 @@
   },
   "include_note": {
     "dialog_title": "Incluir nota",
-    "close": "Cerrar",
     "label_note": "Nota",
     "placeholder_search": "buscar nota por su nombre",
     "box_size_prompt": "Tamaño de caja de la nota incluida:",
@@ -210,20 +201,17 @@
     "okButton": "Aceptar"
   },
   "jump_to_note": {
-    "close": "Cerrar",
     "search_button": "Buscar en texto completo",
     "search_placeholder": "Busque nota por su nombre o escriba > para comandos..."
   },
   "markdown_import": {
     "dialog_title": "Importación de Markdown",
-    "close": "Cerrar",
     "modal_body_text": "Debido al entorno limitado del navegador, no es posible leer directamente el portapapeles desde JavaScript. Por favor, pegue el código Markdown para importar en el área de texto a continuación y haga clic en el botón Importar",
     "import_button": "Importar",
     "import_success": "El contenido de Markdown se ha importado al documento."
   },
   "move_to": {
     "dialog_title": "Mover notas a...",
-    "close": "Cerrar",
     "notes_to_move": "Notas a mover",
     "target_parent_note": "Nota padre de destino",
     "search_placeholder": "buscar nota por su nombre",
@@ -235,18 +223,15 @@
     "change_path_prompt": "Cambiar donde se creará la nueva nota:",
     "search_placeholder": "ruta de búsqueda por nombre (por defecto si está vacío)",
     "modal_title": "Elija el tipo de nota",
-    "close": "Cerrar",
     "modal_body": "Elija el tipo de nota/plantilla de la nueva nota:",
     "templates": "Plantillas"
   },
   "password_not_set": {
     "title": "La contraseña no está establecida",
-    "close": "Cerrar",
     "body1": "Las notas protegidas se cifran mediante una contraseña de usuario, pero la contraseña aún no se ha establecido."
   },
   "prompt": {
     "title": "Aviso",
-    "close": "Cerrar",
     "ok": "Aceptar",
     "defaultTitle": "Aviso"
   },
@@ -260,7 +245,6 @@
   "recent_changes": {
     "title": "Cambios recientes",
     "erase_notes_button": "Borrar notas eliminadas ahora",
-    "close": "Cerrar",
     "deleted_notes_message": "Las notas eliminadas han sido borradas.",
     "no_changes_message": "Aún no hay cambios...",
     "undelete_link": "recuperar",
@@ -271,7 +255,6 @@
     "delete_all_revisions": "Eliminar todas las revisiones de esta nota",
     "delete_all_button": "Eliminar todas las revisiones",
     "help_title": "Ayuda sobre revisiones de notas",
-    "close": "Cerrar",
     "revision_last_edited": "Esta revisión se editó por última vez en {{date}}",
     "confirm_delete_all": "¿Quiere eliminar todas las revisiones de esta nota?",
     "no_revisions": "Aún no hay revisiones para esta nota...",
@@ -293,7 +276,6 @@
   },
   "sort_child_notes": {
     "sort_children_by": "Ordenar hijos por...",
-    "close": "Cerrar",
     "sorting_criteria": "Criterios de ordenamiento",
     "title": "título",
     "date_created": "fecha de creación",
@@ -311,7 +293,6 @@
   },
   "upload_attachments": {
     "upload_attachments_to_note": "Cargar archivos adjuntos a nota",
-    "close": "Cerrar",
     "choose_files": "Elija los archivos",
     "files_will_be_uploaded": "Los archivos se cargarán como archivos adjuntos en {{noteTitle}}",
     "options": "Opciones",

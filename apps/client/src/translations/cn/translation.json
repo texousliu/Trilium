@@ -1,7 +1,6 @@
 {
   "about": {
     "title": "关于 Trilium Notes",
-    "close": "关闭",
     "homepage": "项目主页：",
     "app_version": "应用版本：",
     "db_version": "数据库版本：",
@@ -28,7 +27,6 @@
   "add_link": {
     "add_link": "添加链接",
     "help_on_links": "链接帮助",
-    "close": "关闭",
     "note": "笔记",
     "search_note": "按名称搜索笔记",
     "link_title_mirrors": "链接标题跟随笔记标题变化",
@@ -39,14 +37,12 @@
   "branch_prefix": {
     "edit_branch_prefix": "编辑分支前缀",
     "help_on_tree_prefix": "有关树前缀的帮助",
-    "close": "关闭",
     "prefix": "前缀：",
     "save": "保存",
     "branch_prefix_saved": "分支前缀已保存。"
   },
   "bulk_actions": {
     "bulk_actions": "批量操作",
-    "close": "关闭",
     "affected_notes": "受影响的笔记",
     "include_descendants": "包括所选笔记的子笔记",
     "available_actions": "可用操作",
@@ -61,7 +57,6 @@
   },
   "clone_to": {
     "clone_notes_to": "克隆笔记到...",
-    "close": "关闭",
     "help_on_links": "链接帮助",
     "notes_to_clone": "要克隆的笔记",
     "target_parent_note": "目标父笔记",
@@ -74,7 +69,6 @@
   },
   "confirm": {
     "confirmation": "确认",
-    "close": "关闭",
     "cancel": "取消",
     "ok": "确定",
     "are_you_sure_remove_note": "确定要从关系图中移除笔记 \"{{title}}\" ？",
@@ -113,8 +107,6 @@
     "format_pdf": "PDF - 用于打印或共享目的。"
   },
   "help": {
-    "fullDocumentation": "帮助（完整<a class=\"external\" href=\"https://triliumnext.github.io/Docs/\">在线文档</a>)",
-    "close": "关闭",
     "noteNavigation": "笔记导航",
     "goUpDown": "在笔记列表中向上/向下移动",
     "collapseExpand": "折叠/展开节点",
@@ -168,7 +160,6 @@
   },
   "import": {
     "importIntoNote": "导入到笔记",
-    "close": "关闭",
     "chooseImportFile": "选择导入文件",
     "importDescription": "所选文件的内容将作为子笔记导入到",
     "options": "选项",
@@ -195,7 +186,6 @@
   },
   "include_note": {
     "dialog_title": "包含笔记",
-    "close": "关闭",
     "label_note": "笔记",
     "placeholder_search": "按名称搜索笔记",
     "box_size_prompt": "包含笔记的框大小：",
@@ -210,20 +200,17 @@
     "okButton": "确定"
   },
   "jump_to_note": {
-    "close": "关闭",
     "search_button": "全文搜索",
     "search_placeholder": "按名称或类型搜索笔记 > 查看命令..."
   },
   "markdown_import": {
     "dialog_title": "Markdown 导入",
-    "close": "关闭",
     "modal_body_text": "由于浏览器沙箱的限制，无法直接从 JavaScript 读取剪贴板内容。请将要导入的 Markdown 文本粘贴到下面的文本框中，然后点击导入按钮",
     "import_button": "导入",
     "import_success": "Markdown 内容已成功导入文档。"
   },
   "move_to": {
     "dialog_title": "移动笔记到...",
-    "close": "关闭",
     "notes_to_move": "需要移动的笔记",
     "target_parent_note": "目标父笔记",
     "search_placeholder": "通过名称搜索笔记",
@@ -233,7 +220,6 @@
   },
   "note_type_chooser": {
     "modal_title": "选择笔记类型",
-    "close": "关闭",
     "modal_body": "选择新笔记的类型或模板：",
     "templates": "模板",
     "change_path_prompt": "更改创建新笔记的位置：",
@@ -241,12 +227,10 @@
   },
   "password_not_set": {
     "title": "密码未设置",
-    "close": "关闭",
     "body1": "受保护的笔记使用用户密码加密，但密码尚未设置。"
   },
   "prompt": {
     "title": "提示",
-    "close": "关闭",
     "ok": "确定",
     "defaultTitle": "提示"
   },
@@ -260,7 +244,6 @@
   "recent_changes": {
     "title": "最近修改",
     "erase_notes_button": "立即清理已删除的笔记",
-    "close": "关闭",
     "deleted_notes_message": "已删除的笔记已清理。",
     "no_changes_message": "暂无修改...",
     "undelete_link": "恢复删除",
@@ -271,7 +254,6 @@
     "delete_all_revisions": "删除此笔记的所有修订版本",
     "delete_all_button": "删除所有修订版本",
     "help_title": "关于笔记修订版本的帮助",
-    "close": "关闭",
     "revision_last_edited": "此修订版本上次编辑于 {{date}}",
     "confirm_delete_all": "您是否要删除此笔记的所有修订版本？",
     "no_revisions": "此笔记暂无修订版本...",
@@ -293,7 +275,6 @@
   },
   "sort_child_notes": {
     "sort_children_by": "按...排序子笔记",
-    "close": "关闭",
     "sorting_criteria": "排序条件",
     "title": "标题",
     "date_created": "创建日期",
@@ -311,7 +292,6 @@
   },
   "upload_attachments": {
     "upload_attachments_to_note": "上传附件到笔记",
-    "close": "关闭",
     "choose_files": "选择文件",
     "files_will_be_uploaded": "文件将作为附件上传到 {{noteTitle}}",
     "options": "选项",

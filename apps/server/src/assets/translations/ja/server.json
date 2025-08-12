@@ -57,6 +57,7 @@
         "follow-link-under-cursor": "カーソル下のリンク先へ移動",
         "insert-date-and-time-to-text": "現在の日時を挿入する",
         "paste-markdown-into-text": "クリップボードからMarkdownをテキストノートに貼り付けます",
-        "cut-into-note": "現在のノートから選択範囲を切り取り、サブノートを作成"
+        "cut-into-note": "現在のノートから選択範囲を切り取り、サブノートを作成",
+        "edit-readonly-note": "読み取り専用ノートの編集"
     }
 }
