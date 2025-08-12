@@ -3,11 +3,11 @@
         "title": "Trilium Notesについて",
         "close": "閉じる",
         "homepage": "ホームページ:",
-        "app_version": "アプリのヴァージョン:",
-        "db_version": "データベースのヴァージョン:",
-        "sync_version": "同期のヴァージョン:",
+        "app_version": "アプリのバージョン:",
+        "db_version": "データベースのバージョン:",
+        "sync_version": "同期のバージョン:",
         "build_date": "Build の日時:",
-        "build_revision": "Build のヴァージョン:",
+        "build_revision": "Build のバージョン:",
         "data_directory": "データの場所:"
     },
     "toast": {
@@ -17,7 +17,23 @@
         },
         "widget-error": {
             "title": "ウィジェットを初期化できませんでした",
-            "message-custom": "ノートID”{{id}}”, ノートタイトル “{{title}}” のカスタムウィジェットを初期化できませんでした:\n\n{{message}}"
+            "message-custom": "ノートID”{{id}}”, ノートタイトル “{{title}}” のカスタムウィジェットを初期化できませんでした:\n\n{{message}}",
+            "message-unknown": "不明なウィジェットが初期化できませんでした。理由は以下の通りです:\n\n{{message}}"
+        },
+        "bundle-error": {
+            "title": "カスタムスクリプトの読み込みに失敗しました",
+            "message": "ノートID”{{id}}”, ノートタイトル “{{title}}” のスクリプトを初期化できませんでした:\n\n{{message}}"
         }
+    },
+    "add_link": {
+        "add_link": "リンクを追加",
+        "note": "ノート",
+        "link_title": "リンクタイトル",
+        "button_add_link": "リンクを追加",
+        "help_on_links": "リンクに関するヘルプ",
+        "search_note": "ノート名で検索"
+    },
+    "branch_prefix": {
+        "save": "保存"
     }
 }
