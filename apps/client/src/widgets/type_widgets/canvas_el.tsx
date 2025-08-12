@@ -1,8 +1,7 @@
 import "@excalidraw/excalidraw/index.css";
 import { Excalidraw, getSceneVersion, exportToSvg } from "@excalidraw/excalidraw";
-import { createElement, render, unmountComponentAtNode } from "preact/compat";
+import { render, unmountComponentAtNode } from "preact/compat";
 import { AppState, BinaryFileData, ExcalidrawImperativeAPI, ExcalidrawProps, LibraryItem } from "@excalidraw/excalidraw/types";
-import type { ComponentType } from "preact";
 import { ExcalidrawElement, NonDeletedExcalidrawElement, Theme } from "@excalidraw/excalidraw/element/types";
 
 export interface CanvasContent {
@@ -45,8 +44,10 @@ export default class Canvas {
     }
 
     private createCanvasElement(opts: ExcalidrawProps) {
-        return createElement("div", { className: "excalidraw-wrapper", },
-            createElement(Excalidraw as ComponentType<ExcalidrawProps>, opts)
+        return (
+            <div className="excalidraw-wrapper">
+                <Excalidraw {...opts} />
+            </div>
         );
     }
 
