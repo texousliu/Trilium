@@ -441,8 +441,8 @@
     "other_notes_with_name": "Otras notas con nombre de {{attributeType}} \"{{attributeName}}\"",
     "and_more": "... y {{count}} más.",
     "print_landscape": "Al exportar a PDF, cambia la orientación de la página a paisaje en lugar de retrato.",
-        "print_page_size": "Al exportar a PDF, cambia el tamaño de la página. Valores soportados: <code>A0</code>, <code>A1</code>, <code>A2</code>, <code>A3</code>, <code>A4</code>, <code>A5</code>, <code>A6</code>, <code>Legal</code>, <code>Letter</code>, <code>Tabloid</code>, <code>Ledger</code>.",
-        "color_type": "Color"
+    "print_page_size": "Al exportar a PDF, cambia el tamaño de la página. Valores soportados: <code>A0</code>, <code>A1</code>, <code>A2</code>, <code>A3</code>, <code>A4</code>, <code>A5</code>, <code>A6</code>, <code>Legal</code>, <code>Letter</code>, <code>Tabloid</code>, <code>Ledger</code>.",
+    "color_type": "Color"
   },
   "attribute_editor": {
     "help_text_body1": "Para agregar una etiqueta, simplemente escriba, por ejemplo. <code>#rock</code> o si desea agregar también valor, p.e. <code>#año = 2020</code>",
@@ -758,11 +758,11 @@
     "collapse": "Colapsar",
     "expand": "Expandir",
     "invalid_view_type": "Tipo de vista inválida '{{type}}'",
-        "calendar": "Calendario",
-        "book_properties": "Propiedades de colección",
-        "table": "Tabla",
-        "geo-map": "Mapa Geo",
-        "board": "Tablero"
+    "calendar": "Calendario",
+    "book_properties": "Propiedades de colección",
+    "table": "Tabla",
+    "geo-map": "Mapa Geo",
+    "board": "Tablero"
   },
   "edited_notes": {
     "no_edited_notes_found": "Aún no hay notas editadas en este día...",
@@ -839,8 +839,8 @@
     "unknown_label_type": "Tipo de etiqueta desconocido '{{type}}'",
     "unknown_attribute_type": "Tipo de atributo desconocido '{{type}}'",
     "add_new_attribute": "Agregar nuevo atributo",
-        "remove_this_attribute": "Eliminar este atributo",
-        "remove_color": "Eliminar la etiqueta del color"
+    "remove_this_attribute": "Eliminar este atributo",
+    "remove_color": "Eliminar la etiqueta del color"
   },
   "script_executor": {
     "query": "Consulta",
@@ -1116,12 +1116,12 @@
     "title": "Tema",
     "theme_label": "Tema",
     "override_theme_fonts_label": "Sobreescribir fuentes de tema",
-    "auto_theme": "Automático",
-    "light_theme": "Claro",
-    "dark_theme": "Oscuro",
-    "triliumnext": "TriliumNext Beta (Sigue el esquema de color del sistema)",
-    "triliumnext-light": "TriliumNext Beta (Claro)",
-    "triliumnext-dark": "TriliumNext Beta (Oscuro)",
+    "auto_theme": "",
+    "light_theme": "",
+    "dark_theme": "",
+    "triliumnext": "Trilium (Sigue el esquema de color del sistema)",
+    "triliumnext-light": "Trilium (Claro)",
+    "triliumnext-dark": "Trilium (Oscuro)",
     "layout": "Disposición",
     "layout-vertical-title": "Vertical",
     "layout-horizontal-title": "Horizontal",
@@ -1601,8 +1601,8 @@
     "import-into-note": "Importar a nota",
     "apply-bulk-actions": "Aplicar acciones en lote",
     "converted-to-attachments": "{{count}} notas han sido convertidas en archivos adjuntos.",
-        "convert-to-attachment-confirm": "¿Está seguro que desea convertir las notas seleccionadas en archivos adjuntos de sus notas padres?",
-        "open-in-popup": "Edición rápida"
+    "convert-to-attachment-confirm": "¿Está seguro que desea convertir las notas seleccionadas en archivos adjuntos de sus notas padres?",
+    "open-in-popup": "Edición rápida"
   },
   "shared_info": {
     "shared_publicly": "Esta nota está compartida públicamente en",
@@ -1629,10 +1629,10 @@
     "geo-map": "Mapa Geo",
     "beta-feature": "Beta",
     "ai-chat": "Chat de IA",
-        "task-list": "Lista de tareas",
-        "book": "Colección",
-        "new-feature": "Nuevo",
-        "collections": "Colecciones"
+    "task-list": "Lista de tareas",
+    "book": "Colección",
+    "new-feature": "Nuevo",
+    "collections": "Colecciones"
   },
   "protect_note": {
     "toggle-on": "Proteger la nota",
@@ -1834,8 +1834,8 @@
   "link_context_menu": {
     "open_note_in_new_tab": "Abrir nota en una pestaña nueva",
     "open_note_in_new_split": "Abrir nota en una nueva división",
-        "open_note_in_new_window": "Abrir nota en una nueva ventana",
-        "open_note_in_popup": "Edición rápida"
+    "open_note_in_new_window": "Abrir nota en una nueva ventana",
+    "open_note_in_popup": "Edición rápida"
   },
   "electron_integration": {
     "desktop-application": "Aplicación de escritorio",
@@ -1855,8 +1855,8 @@
     "full-text-search": "Búsqueda de texto completo"
   },
   "note_tooltip": {
-        "note-has-been-deleted": "La nota ha sido eliminada.",
-        "quick-edit": "Edición rápida"
+    "note-has-been-deleted": "La nota ha sido eliminada.",
+    "quick-edit": "Edición rápida"
   },
   "geo-map": {
     "create-child-note-title": "Crear una nueva subnota y agregarla al mapa",
@@ -1865,8 +1865,8 @@
   },
   "geo-map-context": {
     "open-location": "Abrir ubicación",
-        "remove-from-map": "Eliminar del mapa",
-        "add-note": "Agregar un marcador en esta ubicación"
+    "remove-from-map": "Eliminar del mapa",
+    "add-note": "Agregar un marcador en esta ubicación"
   },
   "help-button": {
     "title": "Abrir la página de ayuda relevante"
@@ -1940,13 +1940,13 @@
   },
   "book_properties_config": {
     "hide-weekends": "Ocultar fines de semana",
-        "show-scale": "Mostrar escala",
-        "display-week-numbers": "Mostrar números de semana",
-        "map-style": "Estilo de mapa:",
-        "max-nesting-depth": "Máxima profundidad de anidamiento:",
-        "vector_light": "Vector (claro)",
-        "vector_dark": "Vector (oscuro)",
-        "raster": "Trama"
+    "show-scale": "Mostrar escala",
+    "display-week-numbers": "Mostrar números de semana",
+    "map-style": "Estilo de mapa:",
+    "max-nesting-depth": "Máxima profundidad de anidamiento:",
+    "vector_light": "Vector (claro)",
+    "vector_dark": "Vector (oscuro)",
+    "raster": "Trama"
   },
   "table_context_menu": {
     "delete_row": "Eliminar fila"
@@ -1957,54 +1957,54 @@
     "insert-above": "Insertar arriba",
     "insert-below": "Insertar abajo",
     "delete-column": "Eliminar columna",
-        "delete-column-confirmation": "¿Seguro que desea eliminar esta columna? El atributo correspondiente también se eliminará de las notas de esta columna.",
-        "add-column": "Añadir columna",
-        "new-item": "Nuevo elemento"
+    "delete-column-confirmation": "¿Seguro que desea eliminar esta columna? El atributo correspondiente también se eliminará de las notas de esta columna.",
+    "add-column": "Añadir columna",
+    "new-item": "Nuevo elemento"
   },
   "content_renderer": {
     "open_externally": "Abrir externamente"
-    },
-    "table_view": {
-        "new-column": "Nueva columna",
-        "new-row": "Nueva fila",
-        "show-hide-columns": "Mostrar/ocultar columnas",
-        "row-insert-above": "Insertar fila arriba",
-        "row-insert-below": "Insertar fila debajo",
-        "sort-column-by": "Ordenar por \"{{title}}\"",
-        "sort-column-ascending": "Ascendiente",
-        "sort-column-descending": "Descendiente",
-        "sort-column-clear": "Quitar ordenación",
-        "hide-column": "Ocultar columna \"{{title}}\"",
-        "add-column-to-the-left": "Añadir columna a la izquierda",
-        "add-column-to-the-right": "Añadir columna a la derecha",
-        "edit-column": "Editar columna",
-        "delete_column_confirmation": "¿Seguro que desea eliminar esta columna? Se eliminará el atributo asociado de todas las notas.",
-        "new-column-label": "Etiqueta",
-        "new-column-relation": "Relación",
-        "delete-column": "Eliminar columna",
-        "row-insert-child": "Insertar subnota"
-    },
-    "editorfeatures": {
-        "note_completion_enabled": "Activar autocompletado de notas",
-        "emoji_completion_enabled": "Activar autocompletado de emojis",
-        "title": "Funciones"
-    },
-    "command_palette": {
-        "tree-action-name": "Árbol:{{name}}",
-        "export_note_title": "Exportar nota",
-        "export_note_description": "Exportar nota actual",
-        "show_attachments_title": "Mostrar adjuntos",
-        "show_attachments_description": "Ver adjuntos de la nota",
-        "search_notes_title": "Buscar notas",
-        "search_notes_description": "Abrir búsqueda avanzada",
-        "search_subtree_title": "Buscar en subárbol",
-        "search_subtree_description": "Buscar dentro del subárbol actual",
-        "search_history_title": "Mostrar historial de búsqueda",
-        "search_history_description": "Ver búsquedas previas",
-        "configure_launch_bar_title": "Configurar barra de inicio",
-        "configure_launch_bar_description": "Abrir la configuración de la barra de inicio, para agregar o quitar elementos."
-    },
-    "modal": {
-        "close": "Cerrar"
+  },
+  "table_view": {
+    "new-column": "Nueva columna",
+    "new-row": "Nueva fila",
+    "show-hide-columns": "Mostrar/ocultar columnas",
+    "row-insert-above": "Insertar fila arriba",
+    "row-insert-below": "Insertar fila debajo",
+    "sort-column-by": "Ordenar por \"{{title}}\"",
+    "sort-column-ascending": "Ascendiente",
+    "sort-column-descending": "Descendiente",
+    "sort-column-clear": "Quitar ordenación",
+    "hide-column": "Ocultar columna \"{{title}}\"",
+    "add-column-to-the-left": "Añadir columna a la izquierda",
+    "add-column-to-the-right": "Añadir columna a la derecha",
+    "edit-column": "Editar columna",
+    "delete_column_confirmation": "¿Seguro que desea eliminar esta columna? Se eliminará el atributo asociado de todas las notas.",
+    "new-column-label": "Etiqueta",
+    "new-column-relation": "Relación",
+    "delete-column": "Eliminar columna",
+    "row-insert-child": "Insertar subnota"
+  },
+  "editorfeatures": {
+    "note_completion_enabled": "Activar autocompletado de notas",
+    "emoji_completion_enabled": "Activar autocompletado de emojis",
+    "title": "Funciones"
+  },
+  "command_palette": {
+    "tree-action-name": "Árbol:{{name}}",
+    "export_note_title": "Exportar nota",
+    "export_note_description": "Exportar nota actual",
+    "show_attachments_title": "Mostrar adjuntos",
+    "show_attachments_description": "Ver adjuntos de la nota",
+    "search_notes_title": "Buscar notas",
+    "search_notes_description": "Abrir búsqueda avanzada",
+    "search_subtree_title": "Buscar en subárbol",
+    "search_subtree_description": "Buscar dentro del subárbol actual",
+    "search_history_title": "Mostrar historial de búsqueda",
+    "search_history_description": "Ver búsquedas previas",
+    "configure_launch_bar_title": "Configurar barra de inicio",
+    "configure_launch_bar_description": "Abrir la configuración de la barra de inicio, para agregar o quitar elementos."
+  },
+  "modal": {
+    "close": "Cerrar"
   }
 }

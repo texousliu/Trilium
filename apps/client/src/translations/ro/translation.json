@@ -1251,12 +1251,12 @@
     "unit": "caractere"
   },
   "theme": {
-    "auto_theme": "Temă auto (se adaptează la schema de culori a sistemului)",
-    "dark_theme": "Temă întunecată",
-    "light_theme": "Temă luminoasă",
-    "triliumnext": "TriliumNext Beta (se adaptează la schema de culori a sistemului)",
-    "triliumnext-light": "TriliumNext Beta (luminoasă)",
-    "triliumnext-dark": "TriliumNext Beta (întunecată)",
+    "auto_theme": "",
+    "dark_theme": "",
+    "light_theme": "",
+    "triliumnext": "Trilium (se adaptează la schema de culori a sistemului)",
+    "triliumnext-light": "Trilium (luminoasă)",
+    "triliumnext-dark": "Trilium (întunecată)",
     "override_theme_fonts_label": "Suprascrie fonturile temei",
     "theme_label": "Temă",
     "title": "Tema aplicației",
