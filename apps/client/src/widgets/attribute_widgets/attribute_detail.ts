@@ -142,6 +142,7 @@ const TPL = /*html*/`
                   <option value="datetime">${t("attribute_detail.date_time")}</option>
                   <option value="time">${t("attribute_detail.time")}</option>
                   <option value="url">${t("attribute_detail.url")}</option>
+                  <option value="color">${t("attribute_detail.color_type")}</option>
                 </select>
             </td>
         </tr>

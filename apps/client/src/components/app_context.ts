@@ -30,6 +30,7 @@ import type CodeMirror from "@triliumnext/codemirror";
 import { StartupChecks } from "./startup_checks.js";
 import type { CreateNoteOpts } from "../services/note_create.js";
 import { ColumnComponent } from "tabulator-tables";
+import { ChooseNoteTypeCallback } from "../widgets/dialogs/note_type_chooser.jsx";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -92,7 +93,9 @@ export type CommandMappings = {
     closeTocCommand: CommandData;
     closeHlt: CommandData;
     showLaunchBarSubtree: CommandData;
-    showRevisions: CommandData;
+    showRevisions: CommandData & {
+        noteId?: string | null;
+    };
     showLlmChat: CommandData;
     createAiChat: CommandData;
     showOptions: CommandData & {
@@ -133,6 +136,8 @@ export type CommandMappings = {
     hideLeftPane: CommandData;
     showCpuArchWarning: CommandData;
     showLeftPane: CommandData;
+    showAttachments: CommandData;
+    showSearchHistory: CommandData;
     hoistNote: CommandData & { noteId: string };
     leaveProtectedSession: CommandData;
     enterProtectedSession: CommandData;
@@ -173,7 +178,7 @@ export type CommandMappings = {
     deleteNotes: ContextMenuCommandData;
     importIntoNote: ContextMenuCommandData;
     exportNote: ContextMenuCommandData;
-    searchInSubtree: ContextMenuCommandData;
+    searchInSubtree: CommandData & { notePath: string; };
     moveNoteUp: ContextMenuCommandData;
     moveNoteDown: ContextMenuCommandData;
     moveNoteUpInHierarchy: ContextMenuCommandData;
@@ -262,6 +267,73 @@ export type CommandMappings = {
     closeThisNoteSplit: CommandData;
     moveThisNoteSplit: CommandData & { isMovingLeft: boolean };
     jumpToNote: CommandData;
+    commandPalette: CommandData;
+
+    // Keyboard shortcuts
+    backInNoteHistory: CommandData;
+    forwardInNoteHistory: CommandData;
+    forceSaveRevision: CommandData;
+    scrollToActiveNote: CommandData;
+    quickSearch: CommandData;
+    collapseTree: CommandData;
+    createNoteAfter: CommandData;
+    createNoteInto: CommandData;
+    addNoteAboveToSelection: CommandData;
+    addNoteBelowToSelection: CommandData;
+    openNewTab: CommandData;
+    activateNextTab: CommandData;
+    activatePreviousTab: CommandData;
+    openNewWindow: CommandData;
+    toggleTray: CommandData;
+    firstTab: CommandData;
+    secondTab: CommandData;
+    thirdTab: CommandData;
+    fourthTab: CommandData;
+    fifthTab: CommandData;
+    sixthTab: CommandData;
+    seventhTab: CommandData;
+    eigthTab: CommandData;
+    ninthTab: CommandData;
+    lastTab: CommandData;
+    showNoteSource: CommandData;
+    showSQLConsole: CommandData;
+    showBackendLog: CommandData;
+    showCheatsheet: CommandData;
+    showHelp: CommandData;
+    addLinkToText: CommandData;
+    followLinkUnderCursor: CommandData;
+    insertDateTimeToText: CommandData;
+    pasteMarkdownIntoText: CommandData;
+    cutIntoNote: CommandData;
+    addIncludeNoteToText: CommandData;
+    editReadOnlyNote: CommandData;
+    toggleRibbonTabClassicEditor: CommandData;
+    toggleRibbonTabBasicProperties: CommandData;
+    toggleRibbonTabBookProperties: CommandData;
+    toggleRibbonTabFileProperties: CommandData;
+    toggleRibbonTabImageProperties: CommandData;
+    toggleRibbonTabOwnedAttributes: CommandData;
+    toggleRibbonTabInheritedAttributes: CommandData;
+    toggleRibbonTabPromotedAttributes: CommandData;
+    toggleRibbonTabNoteMap: CommandData;
+    toggleRibbonTabNoteInfo: CommandData;
+    toggleRibbonTabNotePaths: CommandData;
+    toggleRibbonTabSimilarNotes: CommandData;
+    toggleRightPane: CommandData;
+    printActiveNote: CommandData;
+    exportAsPdf: CommandData;
+    openNoteExternally: CommandData;
+    renderActiveNote: CommandData;
+    unhoist: CommandData;
+    reloadFrontendApp: CommandData;
+    openDevTools: CommandData;
+    findInText: CommandData;
+    toggleLeftPane: CommandData;
+    toggleFullscreen: CommandData;
+    zoomOut: CommandData;
+    zoomIn: CommandData;
+    zoomReset: CommandData;
+    copyWithoutFormatting: CommandData;
 
     // Geomap
     deleteFromMap: { noteId: string };
@@ -299,6 +371,9 @@ export type CommandMappings = {
     };
     refreshTouchBar: CommandData;
     reloadTextEditor: CommandData;
+    chooseNoteType: CommandData & {
+        callback: ChooseNoteTypeCallback
+    }
 };
 
 type EventMappings = {

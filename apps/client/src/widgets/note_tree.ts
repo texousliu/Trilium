@@ -727,9 +727,9 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                 for (const key in hotKeys) {
                     const handler = hotKeys[key];
 
-                    $(this.tree.$container).on("keydown", null, key, (evt) => {
+                    shortcutService.bindElShortcut($(this.tree.$container), key, () => {
                         const node = this.tree.getActiveNode();
-                        return handler(node, evt);
+                        return handler(node, {} as JQuery.KeyDownEvent);
                         // return false from the handler will stop default handling.
                     });
                 }
@@ -1552,7 +1552,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         const hotKeyMap: Record<string, (node: Fancytree.FancytreeNode, e: JQuery.KeyDownEvent) => boolean> = {};
 
         for (const action of actions) {
-            for (const shortcut of action.effectiveShortcuts) {
+            for (const shortcut of action.effectiveShortcuts ?? []) {
                 hotKeyMap[shortcutService.normalizeShortcut(shortcut)] = (node) => {
                     const notePath = treeService.getNotePath(node);
 

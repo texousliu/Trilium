@@ -43,4 +43,10 @@ export interface HiddenSubtreeItem {
         | "quickSearch"
         | "aiChatLauncher";
     command?: keyof typeof Command;
+    /**
+     * If set to true, then branches will be enforced to be in the correct place.
+     * This is useful for ensuring that the launcher is always in the correct place, even if
+     * the user moves it around.
+     */
+    enforceBranches?: boolean;
 }

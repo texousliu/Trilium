@@ -52,7 +52,8 @@ export default class DateTimeFormatOptions extends OptionsWidget {
     }
 
     async optionsLoaded(options: OptionMap) {
-        const shortcutKey = (await keyboardActionsService.getAction("insertDateTimeToText")).effectiveShortcuts.join(", ");
+        const action = await keyboardActionsService.getAction("insertDateTimeToText");
+        const shortcutKey = (action.effectiveShortcuts ?? []).join(", ");
         const $link = await linkService.createLink("_hidden/_options/_optionsShortcuts", {
             "title": shortcutKey,
             "showTooltip": false

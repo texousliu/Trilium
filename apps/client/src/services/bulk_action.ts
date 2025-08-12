@@ -91,10 +91,10 @@ function parseActions(note: FNote) {
         .filter((action) => !!action);
 }
 
-export async function executeBulkActions(parentNoteId: string, actions: BulkAction[]) {
+export async function executeBulkActions(targetNoteIds: string[], actions: BulkAction[], includeDescendants = false) {
     await server.post("bulk-action/execute", {
-        noteIds: [ parentNoteId ],
-        includeDescendants: true,
+        noteIds: targetNoteIds,
+        includeDescendants,
         actions
     });
 

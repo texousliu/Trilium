@@ -292,6 +292,7 @@ class ListOrGridView extends ViewMode<{}> {
 
         const $card = $('<div class="note-book-card">')
             .attr("data-note-id", note.noteId)
+            .addClass("no-tooltip-preview")
             .append(
                 $('<h5 class="note-book-header">')
                     .append($expander)

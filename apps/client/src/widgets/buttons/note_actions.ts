@@ -186,7 +186,7 @@ export default class NoteActionsWidget extends NoteContextAwareWidget {
 
         this.$convertNoteIntoAttachmentButton.toggle(note.isEligibleForConversionToAttachment());
 
-        this.toggleDisabled(this.$findInTextButton, ["text", "code", "book", "mindMap"].includes(note.type));
+        this.toggleDisabled(this.$findInTextButton, ["text", "code", "book", "mindMap", "doc"].includes(note.type));
 
         this.toggleDisabled(this.$showAttachmentsButton, !isInOptions);
         this.toggleDisabled(this.$showSourceButton, ["text", "code", "relationMap", "mermaid", "canvas", "mindMap"].includes(note.type));

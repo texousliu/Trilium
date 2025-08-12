@@ -1679,3 +1679,41 @@ div.find-replace-widget div.find-widget-found-wrapper > span {
     background: transparent;
     transition: none;
 }
+
+/** Canvas **/
+
+.excalidraw {
+    --border-radius-lg: 6px;
+}
+
+.excalidraw .Island {
+    backdrop-filter: var(--dropdown-backdrop-filter);
+}
+
+.excalidraw .Island.App-toolbar {
+    --island-bg-color: var(--floating-button-background-color);
+    --shadow-island: 1px 1px 1px var(--floating-button-shadow-color);
+}
+
+.excalidraw .dropdown-menu {
+    border: unset !important;
+    box-shadow: unset !important;    
+    background-color: transparent !important;
+    --island-bg-color: var(--menu-background-color);
+    --shadow-island: 0px 10px 20px rgba(0, 0, 0, var(--dropdown-shadow-opacity));
+    --default-border-color: var(--bs-dropdown-divider-bg);
+    --button-hover-bg: var(--hover-item-background-color);
+}
+
+.excalidraw .dropdown-menu .dropdown-menu-container {
+    border-radius: var(--dropdown-border-radius);
+}
+
+.excalidraw .dropdown-menu .dropdown-menu-container > div:not([class]):not(:last-child) {
+    margin-left: calc(var(--padding) * var(--space-factor) * -1) !important;
+    margin-right: calc(var(--padding) * var(--space-factor) * -1) !important;
+}
+
+.excalidraw .dropdown-menu:before {
+    content: unset !important;
+}

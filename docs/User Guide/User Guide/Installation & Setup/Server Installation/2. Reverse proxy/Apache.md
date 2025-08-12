@@ -4,8 +4,8 @@ I've assumed you have created a DNS A record for `trilium.yourdomain.com` that y
 1.  Download docker image and create container
     
     ```
-     docker pull triliumnext/notes:[VERSION]
-     docker create --name trilium -t -p 127.0.0.1:8080:8080 -v ~/trilium-data:/home/node/trilium-data triliumnext/notes:[VERSION]
+     docker pull triliumnext/trilium:[VERSION]
+     docker create --name trilium -t -p 127.0.0.1:8080:8080 -v ~/trilium-data:/home/node/trilium-data triliumnext/trilium:[VERSION]
     ```
 2.  Configure Apache proxy and websocket proxy
     

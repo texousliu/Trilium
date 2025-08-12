@@ -3,6 +3,7 @@ import FNote from "../../entities/fnote";
 import attributes from "../../services/attributes";
 import { ViewTypeOptions } from "../../services/note_list_renderer"
 import NoteContextAwareWidget from "../note_context_aware_widget";
+import { DEFAULT_MAP_LAYER_NAME, MAP_LAYERS, type MapLayer } from "../view_widgets/geo_view/map_layer";
 
 interface BookConfig {
     properties: BookProperty[];
@@ -30,7 +31,28 @@ interface NumberProperty {
     min?: number;
 }
 
-export type BookProperty = CheckBoxProperty | ButtonProperty | NumberProperty;
+interface ComboBoxItem {
+    value: string;
+    label: string;
+}
+
+interface ComboBoxGroup {
+    name: string;
+    items: ComboBoxItem[];
+}
+
+interface ComboBoxProperty {
+    type: "combobox",
+    label: string;
+    bindToLabel: string;
+    /**
+     * The default value is used when the label is not set.
+     */
+    defaultValue?: string;
+    options: (ComboBoxItem | ComboBoxGroup)[];
+}
+
+export type BookProperty = CheckBoxProperty | ButtonProperty | NumberProperty | ComboBoxProperty;
 
 interface BookContext {
     note: FNote;
@@ -90,16 +112,58 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
         ]
     },
     geoMap: {
-        properties: []
+        properties: [
+            {
+                label: t("book_properties_config.map-style"),
+                type: "combobox",
+                bindToLabel: "map:style",
+                defaultValue: DEFAULT_MAP_LAYER_NAME,
+                options: [
+                    {
+                        name: t("book_properties_config.raster"),
+                        items: Object.entries(MAP_LAYERS)
+                            .filter(([_, layer]) => layer.type === "raster")
+                            .map(buildMapLayer)
+                    },
+                    {
+                        name: t("book_properties_config.vector_light"),
+                        items: Object.entries(MAP_LAYERS)
+                            .filter(([_, layer]) => layer.type === "vector" && !layer.isDarkTheme)
+                            .map(buildMapLayer)
+                    },
+                    {
+                        name: t("book_properties_config.vector_dark"),
+                        items: Object.entries(MAP_LAYERS)
+                            .filter(([_, layer]) => layer.type === "vector" && layer.isDarkTheme)
+                            .map(buildMapLayer)
+                    }
+                ]
+            },
+            {
+                label: t("book_properties_config.show-scale"),
+                type: "checkbox",
+                bindToLabel: "map:scale"
+            }
+        ]
     },
     table: {
         properties: [
             {
-                label: "Max nesting depth:",
+                label: t("book_properties_config.max-nesting-depth"),
                 type: "number",
                 bindToLabel: "maxNestingDepth",
                 width: 65
             }
         ]
+    },
+    board: {
+        properties: []
     }
 };
+
+function buildMapLayer([ id, layer ]: [ string, MapLayer ]): ComboBoxItem {
+    return {
+        value: id,
+        label: layer.name
+    };
+}

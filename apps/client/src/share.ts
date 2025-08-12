@@ -29,6 +29,14 @@ async function formatCodeBlocks() {
     await formatCodeBlocks($("#content"));
 }
 
+async function setupTextNote() {
+    formatCodeBlocks();
+    applyMath();
+
+    const setupMermaid = (await import("./share/mermaid.js")).default;
+    setupMermaid();
+}
+
 /**
  * Fetch note with given ID from backend
  *
@@ -47,8 +55,11 @@ async function fetchNote(noteId: string | null = null) {
 document.addEventListener(
     "DOMContentLoaded",
     () => {
-        formatCodeBlocks();
-        applyMath();
+        const noteType = determineNoteType();
+
+        if (noteType === "text") {
+            setupTextNote();
+        }
 
         const toggleMenuButton = document.getElementById("toggleMenuButton");
         const layout = document.getElementById("layout");
@@ -59,6 +70,12 @@ document.addEventListener(
     },
     false
 );
+
+function determineNoteType() {
+    const bodyClass = document.body.className;
+    const match = bodyClass.match(/type-([^\s]+)/);
+    return match ? match[1] : null;
+}
 
 // workaround to prevent webpack from removing "fetchNote" as dead code:
 // add fetchNote as property to the window object

@@ -295,7 +295,7 @@ async function registerGlobalShortcuts() {
     const allActions = keyboardActionsService.getKeyboardActions();
 
     for (const action of allActions) {
-        if (!action.effectiveShortcuts) {
+        if (!("effectiveShortcuts" in action) || !action.effectiveShortcuts) {
             continue;
         }
 

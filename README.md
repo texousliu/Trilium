@@ -1,10 +1,9 @@
 # Trilium Notes
 
-Donate: ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran?style=flat-square) ![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran?style=flat-square)
-
-![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/notes?style=flat-square)
-![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/triliumnext/notes/total?style=flat-square)
-[![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop&style=flat-square)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
+![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran) ![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran)  
+![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/notes)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/triliumnext/notes/total)  
+[![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp) [![Translation status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
 [English](./README.md) | [Chinese](./docs/README-ZH_CN.md) | [Russian](./docs/README.ru.md) | [Japanese](./docs/README.ja.md) | [Italian](./docs/README.it.md) | [Spanish](./docs/README.es.md)
 
@@ -83,7 +82,7 @@ Feel free to join our official conversations. We would love to hear what feature
 
 ### Windows / MacOS
 
-Download the binary release for your platform from the [latest release page](https://github.com/TriliumNext/Notes/releases/latest), unzip the package and run the `trilium` executable.
+Download the binary release for your platform from the [latest release page](https://github.com/TriliumNext/Trilium/releases/latest), unzip the package and run the `trilium` executable.
 
 ### Linux
 
@@ -91,7 +90,7 @@ If your distribution is listed in the table below, use your distribution's packa
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/triliumnext.svg)](https://repology.org/project/triliumnext/versions)
 
-You may also download the binary release for your platform from the [latest release page](https://github.com/TriliumNext/Notes/releases/latest), unzip the package and run the `trilium` executable.
+You may also download the binary release for your platform from the [latest release page](https://github.com/TriliumNext/Trilium/releases/latest), unzip the package and run the `trilium` executable.
 
 TriliumNext is also provided as a Flatpak, but not yet published on FlatHub.
 
@@ -115,6 +114,14 @@ To install TriliumNext on your own server (including via Docker from [Dockerhub]
 
 
 ## 💻 Contribute
+
+### Translations
+
+If you are a native speaker, help us translate Trilium by heading over to our [Weblate page](https://hosted.weblate.org/engage/trilium/).
+
+Here's the language coverage we have so far:
+
+[![Translation status](https://hosted.weblate.org/widget/trilium/multi-auto.svg)](https://hosted.weblate.org/engage/trilium/)
 
 ### Code
 
