@@ -1,6 +1,5 @@
 import "@excalidraw/excalidraw/index.css";
 import { Excalidraw, getSceneVersion, exportToSvg } from "@excalidraw/excalidraw";
-import { render, unmountComponentAtNode } from "preact/compat";
 import { AppState, BinaryFileData, ExcalidrawImperativeAPI, ExcalidrawProps, LibraryItem } from "@excalidraw/excalidraw/types";
 import { ExcalidrawElement, NonDeletedExcalidrawElement, Theme } from "@excalidraw/excalidraw/element/types";
 
@@ -26,27 +25,22 @@ export default class Canvas {
         this.initializedPromise = $.Deferred();
     }
 
-    renderCanvas(targetEl: HTMLElement) {
-        unmountComponentAtNode(targetEl);
-        render(this.createCanvasElement({
-            ...this.opts,
-            excalidrawAPI: (api: ExcalidrawImperativeAPI) => {
-                this.excalidrawApi = api;
-                this.initializedPromise.resolve();
-            },
-        }), targetEl);
-    }
-
     async waitForApiToBecomeAvailable() {
         while (!this.excalidrawApi) {
             await this.initializedPromise;
         }
     }
 
-    private createCanvasElement(opts: ExcalidrawProps) {
+    createCanvasElement() {
         return (
             <div className="excalidraw-wrapper">
-                <Excalidraw {...opts} />
+                <Excalidraw
+                    {...this.opts}
+                    excalidrawAPI={api => {
+                        this.excalidrawApi = api;
+                        this.initializedPromise.resolve();
+                    }}
+                />
             </div>
         );
     }
