@@ -183,7 +183,7 @@ const defaultOptions: DefaultOption[] = [
 
     // HTML import configuration
     { name: "layoutOrientation", value: "vertical", isSynced: false },
-    { name: "backgroundEffects", value: "false", isSynced: false },
+    { name: "backgroundEffects", value: "true", isSynced: false },
     {
         name: "allowedHtmlTags",
         value: JSON.stringify(DEFAULT_ALLOWED_TAGS),
