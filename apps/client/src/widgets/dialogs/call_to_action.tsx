@@ -3,6 +3,8 @@ import Button from "../react/Button";
 import Modal from "../react/Modal";
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import options from "../../services/options";
+import { OptionNames } from "@triliumnext/commons";
+import utils from "../../services/utils";
 
 interface CallToAction {
     title: string;
@@ -10,6 +12,7 @@ interface CallToAction {
     enabled: () => boolean;
     buttons: {
         text: string;
+        onClick: () => (void | Promise<void>);
     }[];
 }
 
@@ -23,15 +26,28 @@ const CALL_TO_ACTIONS: CallToAction[] = [
         message: "For a while now, we've been working on a new theme to give the application a more modern look.",
         enabled: () => !isNextTheme(),
         buttons: [
-            { text: "Switch to the TriliumNext theme"}
+            {
+                text: "Switch to the TriliumNext theme",
+                async onClick() {
+                    await options.save("theme", "next");
+                    await options.save("backgroundEffects", "true");
+                    utils.reloadFrontendApp("call-to-action");
+                }
+            }
         ]
     },
     {
         title: "Background effects are now stable",
         message: "On Windows devices, background effects are now fully stable. The background effects adds a touch of color to the user interface by blurring the background behind it. This technique is also used in other applications such as Windows Explorer.",
-        enabled: () => isNextTheme() && options.is("backgroundEffects"),
+        enabled: () => isNextTheme() && !options.is("backgroundEffects"),
         buttons: [
-            { text: "Enable background effects" }
+            {
+                text: "Enable background effects",
+                async onClick() {
+                    await options.save("backgroundEffects", "true");
+                    utils.restartDesktopApp();
+                }
+            }
         ]
     }
 ];
@@ -55,13 +71,17 @@ function CallToActionDialogComponent({ activeCallToActions }: { activeCallToActi
 
     return (
         <Modal
+            className="call-to-action"
+            size="md"
             title="New features"
             show={shown}
+            onHidden={() => setShown(false)}
             footerAlignment="between"
             footer={<>
                 <Button text="Dismiss" onClick={goToNext} />
                 {activeItem.buttons.map((button) =>
-                    <Button text={button.text} onClick={() => {
+                    <Button text={button.text} onClick={async () => {
+                        await button.onClick();
                         goToNext();
                     }}/>   
                 )}
