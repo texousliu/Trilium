@@ -52,5 +52,26 @@ const CALL_TO_ACTIONS: CallToAction[] = [
 ];
 
 export function getCallToActions() {
-    return CALL_TO_ACTIONS.filter((callToAction) => callToAction.enabled());
+    const seenCallToActions = new Set(getSeenCallToActions());
+
+    return CALL_TO_ACTIONS.filter((callToAction) =>
+        !seenCallToActions.has(callToAction.id) && callToAction.enabled());
+}
+
+export async function dismissCallToAction(id: string) {
+    const seenCallToActions = getSeenCallToActions();
+    if (seenCallToActions.find(seenId => seenId === id)) {
+        return;
+    }
+
+    seenCallToActions.push(id);
+    await options.save("seenCallToActions", JSON.stringify(seenCallToActions));
+}
+
+function getSeenCallToActions() {
+    try {
+        return JSON.parse(options.get("seenCallToActions")) as string[];
+    } catch (e) {
+        return [];
+    }
 }

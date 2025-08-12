@@ -2,7 +2,7 @@ import { useState } from "preact/hooks";
 import Button from "../react/Button";
 import Modal from "../react/Modal";
 import ReactBasicWidget from "../react/ReactBasicWidget";
-import { CallToAction, getCallToActions } from "./call_to_action_definitions";
+import { CallToAction, dismissCallToAction, getCallToActions } from "./call_to_action_definitions";
 
 function CallToActionDialogComponent({ activeCallToActions }: { activeCallToActions: CallToAction[] }) {
     const [ activeIndex, setActiveIndex ] = useState(0);
@@ -30,9 +30,13 @@ function CallToActionDialogComponent({ activeCallToActions }: { activeCallToActi
             onHidden={() => setShown(false)}
             footerAlignment="between"
             footer={<>
-                <Button text="Dismiss" onClick={goToNext} />
+                <Button text="Dismiss" onClick={async () => {
+                    await dismissCallToAction(activeItem.id);
+                    goToNext();
+                }} />
                 {activeItem.buttons.map((button) =>
                     <Button text={button.text} onClick={async () => {
+                        await dismissCallToAction(activeItem.id);
                         await button.onClick();
                         goToNext();
                     }}/>   
