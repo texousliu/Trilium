@@ -2,6 +2,8 @@ import "@excalidraw/excalidraw/index.css";
 import { Excalidraw, getSceneVersion, exportToSvg } from "@excalidraw/excalidraw";
 import { AppState, BinaryFileData, ExcalidrawImperativeAPI, ExcalidrawProps, LibraryItem } from "@excalidraw/excalidraw/types";
 import { ExcalidrawElement, NonDeletedExcalidrawElement, Theme } from "@excalidraw/excalidraw/element/types";
+import { useCallback } from "preact/hooks";
+import linkService from "../../services/link.js";
 
 export interface CanvasContent {
     elements: ExcalidrawElement[];
@@ -32,17 +34,13 @@ export default class Canvas {
     }
 
     createCanvasElement() {
-        return (
-            <div className="excalidraw-wrapper">
-                <Excalidraw
-                    {...this.opts}
-                    excalidrawAPI={api => {
-                        this.excalidrawApi = api;
-                        this.initializedPromise.resolve();
-                    }}
-                />
-            </div>
-        );
+        return <CanvasElement
+            {...this.opts}
+            excalidrawAPI={api => {
+                this.excalidrawApi = api;
+                this.initializedPromise.resolve();
+            }}
+        />
     }
 
     /**
@@ -172,4 +170,28 @@ export default class Canvas {
         this.excalidrawApi.updateLibrary({ libraryItems, merge: false });
     }
 
+}
+
+function CanvasElement(opts: ExcalidrawProps) {
+    return (
+        <div className="excalidraw-wrapper">
+            <Excalidraw
+                {...opts}
+                onLinkOpen={useCallback((element: NonDeletedExcalidrawElement, event: CustomEvent) => {
+                    let link = element.link;
+                    if (!link) {
+                        return false;
+                    }
+
+                    if (link.startsWith("root/")) {
+                        link = "#" + link;
+                    }
+
+                    const { nativeEvent } = event.detail;
+                    event.preventDefault();
+                    return linkService.goToLinkExt(nativeEvent, link, null);
+                }, [])}
+            />
+        </div>
+    );
 }
