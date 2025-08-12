@@ -164,7 +164,8 @@
         "other": "Andere",
         "quickSearch": "Fokus auf schnelle Sucheingabe",
         "inPageSearch": "Auf-der-Seite-Suche",
-        "newTabWithActivationNoteLink": "<kbd>Strg+Umschalt+Klick</kbd> - (oder <kbd>Umschalt+Mittlere Maustaste</kbd>) auf einen Notiz-Link öffnet und aktiviert die Notiz in einem neuen Tab"
+        "newTabWithActivationNoteLink": "auf einen Notiz-Link öffnet und aktiviert die Notiz in einem neuen Tab",
+        "title": "Spickzettel"
     },
     "import": {
         "importIntoNote": "In Notiz importieren",
