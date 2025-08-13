@@ -231,6 +231,36 @@
         "not-configured": "同期サーバーホストが設定されていません。最初に同期を設定してください。"
     },
     "hidden-subtree": {
-        "search-history-title": "検索履歴"
+        "search-history-title": "検索履歴",
+        "sync-title": "同期",
+        "appearance-title": "外観",
+        "shortcuts-title": "ショートカット",
+        "text-notes": "テキストノート",
+        "code-notes-title": "コードノート",
+        "images-title": "画像",
+        "spellcheck-title": "スペルチェック",
+        "password-title": "パスワード",
+        "backup-title": "バックアップ",
+        "ai-llm-title": "AI/LLM",
+        "other": "その他",
+        "advanced-title": "高度",
+        "user-guide": "ユーザーガイド",
+        "localization": "言語と地域"
+    },
+    "notes": {
+        "new-note": "新しいノート",
+        "duplicate-note-suffix": "(重複)",
+        "duplicate-note-title": "{{- noteTitle }} {{ duplicateNoteSuffix }}"
+    },
+    "backend_log": {
+        "log-does-not-exist": "バックエンドのログファイル '{{ fileName }}' は（まだ）存在しません。",
+        "reading-log-failed": "バックエンドのログファイル '{{ fileName }}' の読み込みに失敗しました。"
+    },
+    "content_renderer": {
+        "note-cannot-be-displayed": "このノートタイプは表示できません。"
+    },
+    "pdf": {
+        "export_filter": "PDFドキュメント (*.pdf)",
+        "unable-to-export-message": "現在のノートをPDFとしてエクスポートできませんでした。"
     }
 }
