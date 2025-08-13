@@ -27,36 +27,43 @@ class="admonition warning">
   </aside>
   <h3>TOTP</h3>
   <ol>
-    <li>Go to "Menu" -&gt; "Options" -&gt; "MFA"</li>
-    <li>Click the “Enable Multi-Factor Authentication” checkbox if not checked</li>
-    <li>Choose “Time-Based One-Time Password (TOTP)” under MFA Method</li>
-    <li>Click the "Generate TOTP Secret" button</li>
-    <li>Copy the generated secret to your authentication app/extension</li>
-    <li>Click the "Generate Recovery Codes" button</li>
-    <li>Save the recovery codes. Recovery codes can be used once in place of the
-      TOTP if you loose access to your authenticator. After a rerecovery code
-      is used, it will show the unix timestamp when it was used in the MFA options
-      tab.</li>
-    <li>Re-login will be required after TOTP setup is finished (After you refreshing
-      the page).</li>
+    <li data-list-item-id="ee190226d19e91a9330c263fa05fc61e7">Go to "Menu" -&gt; "Options" -&gt; "MFA"</li>
+    <li data-list-item-id="ec7573505a7c9607c44a6a525a063fd3d">Click the “Enable Multi-Factor Authentication” checkbox if not checked</li>
+    <li
+    data-list-item-id="e49b476d39ceb086ac8ffab93be7ddb46">Choose “Time-Based One-Time Password (TOTP)” under MFA Method</li>
+      <li
+      data-list-item-id="e8104db62f8a7b835cba5c79377ea441d">Click the "Generate TOTP Secret" button</li>
+        <li data-list-item-id="e4928e65314a99efe44ee2806c989ac45">Copy the generated secret to your authentication app/extension</li>
+        <li
+        data-list-item-id="ea96afadbac44638a6ec6e13733e23b53">Click the "Generate Recovery Codes" button</li>
+          <li data-list-item-id="e67fffe2e3d945b23f93668c3ead03da7">Save the recovery codes. Recovery codes can be used once in place of the
+            TOTP if you loose access to your authenticator. After a rerecovery code
+            is used, it will show the unix timestamp when it was used in the MFA options
+            tab.</li>
+          <li data-list-item-id="ee94c4493042bb4d50ef6e07a30c65b95">Re-login will be required after TOTP setup is finished (After you refreshing
+            the page).</li>
   </ol>
   <h3>OpenID</h3>
   <p>In order to setup OpenID, you will need to setup a authentication provider.
     This requires a bit of extra setup. Follow <a href="https://developers.google.com/identity/openid-connect/openid-connect">these instructions</a> to
-    setup an OpenID service through google.</p>
+    setup an OpenID service through google. The Redirect URL of Trilium is <code>https://&lt;your-trilium-domain&gt;/callback</code>.</p>
   <ol>
-    <li>Set the <code>oauthBaseUrl</code>, <code>oauthClientId</code> and <code>oauthClientSecret</code> in
+    <li data-list-item-id="e12ea6450b407f0bbcb4109ef082bdfe3">Set the <code>oauthBaseUrl</code>, <code>oauthClientId</code> and <code>oauthClientSecret</code> in
       the <code>config.ini</code> file (check&nbsp;<a class="reference-link" href="#root/_help_Gzjqa934BdH4">Configuration (config.ini or environment variables)</a>&nbsp;for
       more information).
       <ol>
-        <li>You can also setup through environment variables (<code>TRILIUM_OAUTH_BASE_URL</code>, <code>TRILIUM_OAUTH_CLIENT_ID</code> and <code>TRILIUM_OAUTH_CLIENT_SECRET</code>).</li>
-      </ol>
+        <li data-list-item-id="ed369d1f114cb20a128dc286729d8370d">You can also setup through environment variables (<code>TRILIUM_OAUTH_BASE_URL</code>, <code>TRILIUM_OAUTH_CLIENT_ID</code> and <code>TRILIUM_OAUTH_CLIENT_SECRET</code>).</li>
+        <li
+        data-list-item-id="e1b13f1b5f3be3cf1d2cb4f26da326b60"><code>oauthBaseUrl</code> should be the link of your Trilium instance server,
+          for example, <code>https://&lt;your-trilium-domain&gt;</code>.</li>
+    </ol>
     </li>
-    <li>Restart the server</li>
-    <li>Go to "Menu" -&gt; "Options" -&gt; "MFA"</li>
-    <li>Click the “Enable Multi-Factor Authentication” checkbox if not checked</li>
-    <li>Choose “OAuth/OpenID” under MFA Method</li>
-    <li>Refresh the page and login through OpenID provider</li>
+    <li data-list-item-id="e7e03745ea93c9ce8d79cfb4bd2815db2">Restart the server</li>
+    <li data-list-item-id="edbb2231e1ec4b4d1296245db1ab87f8d">Go to "Menu" -&gt; "Options" -&gt; "MFA"</li>
+    <li data-list-item-id="e1300f72967b25817d5944b27afa26182">Click the “Enable Multi-Factor Authentication” checkbox if not checked</li>
+    <li
+    data-list-item-id="ea1290a6b9568d1f4bf44c803d366248d">Choose “OAuth/OpenID” under MFA Method</li>
+      <li data-list-item-id="e1801298cdda474547d810959fc3e79ef">Refresh the page and login through OpenID provider</li>
   </ol>
   <aside class="admonition note">
     <p>The default OAuth issuer is Google. To use other services such as Authentik
@@ -66,3 +73,24 @@ class="admonition warning">
       and <code>TRILIUM_OAUTH_ISSUER_ICON</code>. <code>oauthIssuerName</code> and <code>oauthIssuerIcon</code> are
       required for displaying correct issuer information at the Login page.</p>
   </aside>
+  <h4>Authentik</h4>
+  <p>If you don’t already have a running Authentik instance, please follow
+    <a
+    href="https://docs.goauthentik.io/docs/install-config/install/docker-compose">these instructions</a>to set one up.</p>
+  <ol>
+    <li data-list-item-id="eedb3ea2a0107b0bc34a61a088fba1b2d">In the Authentik admin dashboard, create a new OAuth2 application by following
+      <a
+      href="https://docs.goauthentik.io/docs/add-secure-apps/providers/oauth2/create-oauth2-provider">these steps</a>. Make sure to set the Redirect URL to: <code>https://&lt;your-trilium-domain&gt;/callback</code>.</li>
+    <li
+    data-list-item-id="eb98f26412740c574a384128637681e7d">In your config.ini file, set the relevant OAuth variables:
+      <ol>
+        <li data-list-item-id="e12ec552e0c5ce7f6a12af520dc6d8aa2"><code>oauthIssuerBaseUrl</code> → Use the <code>OpenID Configuration Issuer</code> URL
+          from your application's overview page.</li>
+        <li data-list-item-id="e3f6d6bbf6cf4cdee38be3a7d53bd57b9"><code>oauthIssuerName</code> and <code>oauthIssuerIcon</code> → Set these
+          to customize the name and icon displayed on the login page. If omitted,
+          Google’s name and icon will be shown by default.</li>
+      </ol>
+      </li>
+      <li data-list-item-id="eeae084919db88733646612f3c4f55a6e">Apply the changes by restarting your server.</li>
+      <li data-list-item-id="ec71ab917862af5f96f2a5567d82ac0da">Proceed with the remaining steps starting from Step 3 in the OpenID section.</li>
+  </ol>

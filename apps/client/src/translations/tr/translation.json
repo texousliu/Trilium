@@ -1,28 +1,11 @@
 {
     "about": {
-        "close": "Kapat",
         "homepage": "Giriş sayfası:",
         "app_version": "Uygulama versiyonu:",
         "db_version": "Veritabanı versiyonu:"
     },
-    "add_link": {
-        "close": "Kapat"
-    },
     "branch_prefix": {
-        "close": "Kapat",
         "save": "Kaydet"
-    },
-    "bulk_actions": {
-        "close": "Kapat"
-    },
-    "clone_to": {
-        "close": "Kapat"
-    },
-    "confirm": {
-        "close": "Kapat"
-    },
-    "recent_changes": {
-        "close": "Kapat"
     },
     "delete_notes": {
         "close": "Kapat"
@@ -30,42 +13,14 @@
     "export": {
         "close": "Kapat"
     },
-    "help": {
-        "close": "Kapat"
-    },
-    "include_note": {
-        "close": "Kapat"
-    },
     "import": {
-        "close": "Kapat",
         "chooseImportFile": "İçe aktarım dosyası",
         "importDescription": "Seçilen dosya(lar) alt not olarak içe aktarılacaktır"
     },
     "info": {
         "closeButton": "Kapat"
     },
-    "jump_to_note": {
-        "close": "Kapat"
-    },
-    "markdown_import": {
-        "close": "Kapat"
-    },
-    "move_to": {
-        "close": "Kapat"
-    },
-    "note_type_chooser": {
-        "close": "Kapat"
-    },
-    "password_not_set": {
-        "close": "Kapat"
-    },
-    "prompt": {
-        "close": "Kapat"
-    },
     "protected_session_password": {
         "close_label": "Kapat"
-    },
-    "revisions": {
-        "close": "Kapat"
     }
 }

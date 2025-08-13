@@ -184,7 +184,7 @@ const defaultOptions: DefaultOption[] = [
 
     // HTML import configuration
     { name: "layoutOrientation", value: "vertical", isSynced: false },
-    { name: "backgroundEffects", value: "false", isSynced: false },
+    { name: "backgroundEffects", value: "true", isSynced: false },
     {
         name: "allowedHtmlTags",
         value: JSON.stringify(DEFAULT_ALLOWED_TAGS),
@@ -207,11 +207,11 @@ const defaultOptions: DefaultOption[] = [
     { name: "ollamaEnabled", value: "false", isSynced: true },
     { name: "ollamaDefaultModel", value: "", isSynced: true },
     { name: "ollamaBaseUrl", value: "http://localhost:11434", isSynced: true },
-
-    // Adding missing AI options
     { name: "aiTemperature", value: "0.7", isSynced: true },
     { name: "aiSystemPrompt", value: "", isSynced: true },
     { name: "aiSelectedProvider", value: "openai", isSynced: true },
+
+    { name: "seenCallToActions", value: "[]", isSynced: true }
 ];
 
 /**

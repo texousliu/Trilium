@@ -30,6 +30,7 @@ import type CodeMirror from "@triliumnext/codemirror";
 import { StartupChecks } from "./startup_checks.js";
 import type { CreateNoteOpts } from "../services/note_create.js";
 import { ColumnComponent } from "tabulator-tables";
+import { ChooseNoteTypeCallback } from "../widgets/dialogs/note_type_chooser.jsx";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootWidget;
@@ -92,7 +93,9 @@ export type CommandMappings = {
     closeTocCommand: CommandData;
     closeHlt: CommandData;
     showLaunchBarSubtree: CommandData;
-    showRevisions: CommandData;
+    showRevisions: CommandData & {
+        noteId?: string | null;
+    };
     showLlmChat: CommandData;
     createAiChat: CommandData;
     showOptions: CommandData & {
@@ -368,6 +371,9 @@ export type CommandMappings = {
     };
     refreshTouchBar: CommandData;
     reloadTextEditor: CommandData;
+    chooseNoteType: CommandData & {
+        callback: ChooseNoteTypeCallback
+    }
 };
 
 type EventMappings = {

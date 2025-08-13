@@ -642,6 +642,10 @@ table.promoted-attributes-in-tooltip th {
     z-index: calc(var(--ck-z-panel) - 1) !important;
 }
 
+.tooltip.tooltip-top {
+    z-index: 32767 !important;
+}
+
 .tooltip-trigger {
     background: transparent;
     pointer-events: none;
@@ -2249,6 +2253,13 @@ footer.webview-footer button {
 .content-floating-buttons button.bx {
     font-size: 130%;
     padding: 1px 10px 1px 10px;
+}
+
+/* Search result highlighting */
+.search-result-title b,
+.search-result-content b {
+    font-weight: 900;
+    color: var(--admonition-warning-accent-color);
 }
 
 /* Customized icons */
