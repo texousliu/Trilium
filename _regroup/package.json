@@ -50,7 +50,7 @@
     "rimraf": "6.0.1",    
     "tslib": "2.8.1",    
     "typedoc": "0.28.10",
-    "typedoc-plugin-missing-exports": "4.0.0"
+    "typedoc-plugin-missing-exports": "4.1.0"
   },
   "optionalDependencies": {
     "appdmg": "0.6.6"
