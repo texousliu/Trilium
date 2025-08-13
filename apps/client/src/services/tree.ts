@@ -79,8 +79,8 @@ async function resolveNotePathToSegments(notePath: string, hoistedNoteId = "root
                         You can ignore this message as it is mostly harmless.`
                     );
                 }
-
-                const bestNotePath = child.getBestNotePath(hoistedNoteId);
+                const activeNotePath = appContext.tabManager.getActiveContextNotePath();
+                const bestNotePath = child.getBestNotePath(hoistedNoteId, activeNotePath);
 
                 if (bestNotePath) {
                     const pathToRoot = bestNotePath.reverse().slice(1);
