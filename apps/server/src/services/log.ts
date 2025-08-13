@@ -6,6 +6,7 @@ import path from "path";
 import { EOL } from "os";
 import dataDir from "./data_dir.js";
 import cls from "./cls.js";
+import config, { LOGGING_DEFAULT_RETENTION_DAYS } from "./config.js";
 
 if (!fs.existsSync(dataDir.LOG_DIR)) {
     fs.mkdirSync(dataDir.LOG_DIR, 0o700);
@@ -18,7 +19,6 @@ const MINUTE = 60 * SECOND;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
 
-const DEFAULT_RETENTION_DAYS = 90;
 const MINIMUM_FILES_TO_KEEP = 7;
 
 let todaysMidnight!: Date;
@@ -34,17 +34,10 @@ function getTodaysMidnight() {
 async function cleanupOldLogFiles() {
     try {
         // Get retention days from environment or options
-        const envRetention = process.env.TRILIUM_LOG_RETENTION_DAYS;
-        let retentionDays = DEFAULT_RETENTION_DAYS;
-
-        if (envRetention) {
-            const parsed = parseInt(envRetention, 10);
-            if (!isNaN(parsed) && parsed > 0 && parsed <= 3650) {
-                retentionDays = parsed;
-            }
-        } else {
-            const optionService = (await import("./options.js")).default;
-            retentionDays = optionService.getOptionInt("logRetentionDays", DEFAULT_RETENTION_DAYS);
+        let retentionDays = LOGGING_DEFAULT_RETENTION_DAYS;
+        const customRetentionDays = config.Logging.retentionDays;
+        if (customRetentionDays > 0) {
+            retentionDays = customRetentionDays;
         }
 
         const cutoffDate = new Date();
