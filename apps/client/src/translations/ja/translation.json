@@ -1,176 +1,176 @@
 {
-    "about": {
-        "title": "Trilium Notesについて",
-        "homepage": "ホームページ:",
-        "app_version": "アプリのバージョン:",
-        "db_version": "データベースのバージョン:",
-        "sync_version": "同期のバージョン:",
-        "build_date": "Build の日時:",
-        "build_revision": "Build のバージョン:",
-        "data_directory": "データの場所:"
+  "about": {
+    "title": "Trilium Notesについて",
+    "homepage": "ホームページ:",
+    "app_version": "アプリのバージョン:",
+    "db_version": "データベースのバージョン:",
+    "sync_version": "同期のバージョン:",
+    "build_date": "Build の日時:",
+    "build_revision": "Build のバージョン:",
+    "data_directory": "データの場所:"
+  },
+  "toast": {
+    "critical-error": {
+      "title": "致命的なエラー",
+      "message": "致命的なエラーのせいでアプリをスタートできません:\n\n{{message}}\n\nおそらくスクリプトが予期しないバグを含んでいると思われます。アプリをセーフモードでスタートしてみて下さい。"
     },
-    "toast": {
-        "critical-error": {
-            "title": "致命的なエラー",
-            "message": "致命的なエラーのせいでアプリをスタートできません:\n\n{{message}}\n\nおそらくスクリプトが予期しないバグを含んでいると思われます。アプリをセーフモードでスタートしてみて下さい。"
-        },
-        "widget-error": {
-            "title": "ウィジェットを初期化できませんでした",
-            "message-custom": "ノートID”{{id}}”, ノートタイトル “{{title}}” のカスタムウィジェットを初期化できませんでした:\n\n{{message}}",
-            "message-unknown": "不明なウィジェットが初期化できませんでした。理由は以下の通りです:\n\n{{message}}"
-        },
-        "bundle-error": {
-            "title": "カスタムスクリプトの読み込みに失敗しました",
-            "message": "ノートID”{{id}}”, ノートタイトル “{{title}}” のスクリプトを実行できませんでした。理由は以下の通りです:\n\n{{message}}"
-        }
+    "widget-error": {
+      "title": "ウィジェットを初期化できませんでした",
+      "message-custom": "ノートID”{{id}}”, ノートタイトル “{{title}}” のカスタムウィジェットを初期化できませんでした:\n\n{{message}}",
+      "message-unknown": "不明なウィジェットが初期化できませんでした。理由は以下の通りです:\n\n{{message}}"
     },
-    "add_link": {
-        "add_link": "リンクを追加",
-        "note": "ノート",
-        "link_title": "リンクタイトル",
-        "button_add_link": "リンクを追加",
-        "help_on_links": "リンクに関するヘルプ",
-        "search_note": "ノート名で検索",
-        "link_title_mirrors": "リンクタイトルはノートタイトルの変更を反映します",
-        "link_title_arbitrary": "リンクタイトルは自由に変更可能"
-    },
-    "branch_prefix": {
-        "save": "保存"
-    },
-    "global_menu": {
-        "menu": "メニュー",
-        "options": "オプション",
-        "open_new_window": "新しいウィンドウを開く",
-        "zoom": "ズーム",
-        "toggle_fullscreen": "フルスクリーンの切り替え",
-        "reset_zoom_level": "ズームレベルのリセット",
-        "open_dev_tools": "開発者ツールを開く",
-        "open_sql_console": "SQLコンソールを開く",
-        "open_sql_console_history": "SQLコンソールの履歴を開く",
-        "open_search_history": "検索履歴を開く",
-        "show_backend_log": "バックエンドログの表示",
-        "reload_hint": "リロードは、アプリ全体を再起動することなく、視覚的な不具合を解消することができます。",
-        "reload_frontend": "フロントエンドをリロード",
-        "show_hidden_subtree": "隠れたサブツリーを表示",
-        "show_help": "ヘルプを表示",
-        "about": "Trilium Notesについて",
-        "logout": "ログアウト",
-        "show-cheatsheet": "チートシートを表示"
-    },
-    "left_pane_toggle": {
-        "show_panel": "パネルを表示",
-        "hide_panel": "パネルを隠す"
-    },
-    "move_pane_button": {
-        "move_left": "左に移動",
-        "move_right": "右に移動"
-    },
-    "clone_to": {
-        "notes_to_clone": "複製するノート",
-        "target_parent_note": "ターゲットの親ノート",
-        "search_for_note_by_its_name": "ノート名で検索",
-        "cloned_note_prefix_title": "複製されたノートは、指定された接頭辞を付けてノートツリーに表示されます",
-        "prefix_optional": "接頭辞（任意）",
-        "clone_to_selected_note": "選択したノートに複製",
-        "no_path_to_clone_to": "複製先のパスが存在しません。",
-        "note_cloned": "ノート \"{{clonedTitle}}\" は \"{{targetTitle}}\" に複製されました"
-    },
-    "delete_notes": {
-        "delete_all_clones_description": "すべての複製も削除する（最近の変更では元に戻すことができる）",
-        "erase_notes_description": "通常の（ソフト）削除では、ノートは削除されたものとしてマークされ、一定期間内に（最近の変更で）削除を取り消すことができます。このオプションをオンにすると、ノートは即座に削除され、削除を取り消すことはできません。",
-        "erase_notes_warning": "すべての複製を含め、ノートを完全に消去します（元に戻せません）。これにより、アプリケーションは強制的にリロードされます。",
-        "notes_to_be_deleted": "以下のノートが削除されます ({{notesCount}})",
-        "no_note_to_delete": "ノートは削除されません（複製のみ）。",
-        "cancel": "キャンセル",
-        "ok": "OK"
-    },
-    "calendar": {
-        "mon": "月",
-        "tue": "火",
-        "wed": "水",
-        "thu": "木",
-        "fri": "金",
-        "sat": "土",
-        "sun": "日",
-        "january": "1月",
-        "febuary": "2月",
-        "march": "3月",
-        "april": "4月",
-        "may": "5月",
-        "june": "6月",
-        "july": "7月",
-        "august": "8月",
-        "september": "9月",
-        "october": "10月",
-        "november": "11月",
-        "december": "12月"
-    },
-    "note_icon": {
-        "change_note_icon": "ノートアイコンの変更",
-        "category": "カテゴリー:",
-        "search": "検索:",
-        "reset-default": "アイコンをデフォルトに戻す"
-    },
-    "basic_properties": {
-        "note_type": "ノートタイプ",
-        "editable": "編集可能"
-    },
-    "i18n": {
-        "title": "ローカライゼーション",
-        "language": "言語",
-        "first-day-of-the-week": "週の最初",
-        "sunday": "日曜日",
-        "monday": "月曜日"
-    },
-    "tab_row": {
-        "close_tab": "タブを閉じる",
-        "add_new_tab": "新しいタブ",
-        "close": "閉じる",
-        "close_other_tabs": "他のタブを閉じる",
-        "close_right_tabs": "右側のタブをすべて閉じる",
-        "close_all_tabs": "すべてのタブを閉じる",
-        "reopen_last_tab": "最後に閉じたタブを開く",
-        "move_tab_to_new_window": "このタブを新しいウィンドウに移動する",
-        "copy_tab_to_new_window": "このタブを新しいウィンドウにコピーする"
-    },
-    "tasks": {
-        "due": {
-            "today": "今日",
-            "tomorrow": "明日",
-            "yesterday": "昨日"
-        }
-    },
-    "classic_editor_toolbar": {
-        "title": "書式設定"
-    },
-    "search_definition": {
-        "add_search_option": "検索オプションを追加:",
-        "search_string": "文字列検索",
-        "search_script": "スクリプト検索",
-        "fast_search": "高速検索",
-        "fast_search_description": "高速検索オプションは、ノートの全文検索を無効にし、大規模データベースでの検索を高速化します。",
-        "include_archived": "アーカイブを含む",
-        "include_archived_notes_description": "アーカイブされたノートはデフォルトで検索結果から除外されますが、このオプションを使用すると含まれるようになります。",
-        "order_by": "並べ替え",
-        "limit": "リミット",
-        "limit_description": "検索結果の数を制限する",
-        "debug": "デバッグ",
-        "debug_description": "デバッグは複雑なクエリのデバッグを支援するために、追加のデバッグ情報をコンソールに出力します",
-        "action": "アクション",
-        "search_button": "検索 <kbd>Enter</kbd>",
-        "search_execute": "検索とアクションの実行",
-        "save_to_note": "ノートに保存"
-    },
-    "shortcuts": {
-        "multiple_shortcuts": "同じアクションに対して複数のショートカットを設定する場合、カンマで区切ることができます。",
-        "electron_documentation": "使用可能な修飾キーとキーコードについては、 <a href=\"https://www.electronjs.org/docs/latest/api/accelerator\">Electronのドキュメント</a>を参照してください。",
-        "type_text_to_filter": "テキストを入力してショートカットを絞り込む...",
-        "action_name": "アクション名",
-        "shortcuts": "ショートカットキー",
-        "default_shortcuts": "デフォルトのショートカットキー",
-        "description": "説明",
-        "reload_app": "リロードして変更を適用する",
-        "set_all_to_default": "すべてのショートカットをデフォルトに戻す",
-        "confirm_reset": "キーボードショートカットをすべてデフォルトにリセットしますか？"
+    "bundle-error": {
+      "title": "カスタムスクリプトの読み込みに失敗しました",
+      "message": "ノートID”{{id}}”, ノートタイトル “{{title}}” のスクリプトを実行できませんでした。理由は以下の通りです:\n\n{{message}}"
     }
+  },
+  "add_link": {
+    "add_link": "リンクを追加",
+    "note": "ノート",
+    "link_title": "リンクタイトル",
+    "button_add_link": "リンクを追加",
+    "help_on_links": "リンクに関するヘルプ",
+    "search_note": "ノート名で検索",
+    "link_title_mirrors": "リンクタイトルはノートタイトルの変更を反映します",
+    "link_title_arbitrary": "リンクタイトルは自由に変更可能"
+  },
+  "branch_prefix": {
+    "save": "保存"
+  },
+  "global_menu": {
+    "menu": "メニュー",
+    "options": "オプション",
+    "open_new_window": "新しいウィンドウを開く",
+    "zoom": "ズーム",
+    "toggle_fullscreen": "フルスクリーンの切り替え",
+    "reset_zoom_level": "ズームレベルのリセット",
+    "open_dev_tools": "開発者ツールを開く",
+    "open_sql_console": "SQLコンソールを開く",
+    "open_sql_console_history": "SQLコンソールの履歴を開く",
+    "open_search_history": "検索履歴を開く",
+    "show_backend_log": "バックエンドログの表示",
+    "reload_hint": "リロードは、アプリ全体を再起動することなく、視覚的な不具合を解消することができます。",
+    "reload_frontend": "フロントエンドをリロード",
+    "show_hidden_subtree": "隠れたサブツリーを表示",
+    "show_help": "ヘルプを表示",
+    "about": "Trilium Notesについて",
+    "logout": "ログアウト",
+    "show-cheatsheet": "チートシートを表示"
+  },
+  "left_pane_toggle": {
+    "show_panel": "パネルを表示",
+    "hide_panel": "パネルを隠す"
+  },
+  "move_pane_button": {
+    "move_left": "左に移動",
+    "move_right": "右に移動"
+  },
+  "clone_to": {
+    "notes_to_clone": "複製するノート",
+    "target_parent_note": "ターゲットの親ノート",
+    "search_for_note_by_its_name": "ノート名で検索",
+    "cloned_note_prefix_title": "複製されたノートは、指定された接頭辞を付けてノートツリーに表示されます",
+    "prefix_optional": "接頭辞（任意）",
+    "clone_to_selected_note": "選択したノートに複製",
+    "no_path_to_clone_to": "複製先のパスが存在しません。",
+    "note_cloned": "ノート \"{{clonedTitle}}\" は \"{{targetTitle}}\" に複製されました"
+  },
+  "delete_notes": {
+    "delete_all_clones_description": "すべての複製も削除する（最近の変更では元に戻すことができる）",
+    "erase_notes_description": "通常の（ソフト）削除では、ノートは削除されたものとしてマークされ、一定期間内に（最近の変更で）削除を取り消すことができます。このオプションをオンにすると、ノートは即座に削除され、削除を取り消すことはできません。",
+    "erase_notes_warning": "すべての複製を含め、ノートを完全に消去します（元に戻せません）。これにより、アプリケーションは強制的にリロードされます。",
+    "notes_to_be_deleted": "以下のノートが削除されます ({{notesCount}})",
+    "no_note_to_delete": "ノートは削除されません（複製のみ）。",
+    "cancel": "キャンセル",
+    "ok": "OK"
+  },
+  "calendar": {
+    "mon": "月",
+    "tue": "火",
+    "wed": "水",
+    "thu": "木",
+    "fri": "金",
+    "sat": "土",
+    "sun": "日",
+    "january": "1月",
+    "febuary": "2月",
+    "march": "3月",
+    "april": "4月",
+    "may": "5月",
+    "june": "6月",
+    "july": "7月",
+    "august": "8月",
+    "september": "9月",
+    "october": "10月",
+    "november": "11月",
+    "december": "12月"
+  },
+  "note_icon": {
+    "change_note_icon": "ノートアイコンの変更",
+    "category": "カテゴリー:",
+    "search": "検索:",
+    "reset-default": "アイコンをデフォルトに戻す"
+  },
+  "basic_properties": {
+    "note_type": "ノートタイプ",
+    "editable": "編集可能"
+  },
+  "i18n": {
+    "title": "ローカライゼーション",
+    "language": "言語",
+    "first-day-of-the-week": "週の最初",
+    "sunday": "日曜日",
+    "monday": "月曜日"
+  },
+  "tab_row": {
+    "close_tab": "タブを閉じる",
+    "add_new_tab": "新しいタブ",
+    "close": "閉じる",
+    "close_other_tabs": "他のタブを閉じる",
+    "close_right_tabs": "右側のタブをすべて閉じる",
+    "close_all_tabs": "すべてのタブを閉じる",
+    "reopen_last_tab": "最後に閉じたタブを開く",
+    "move_tab_to_new_window": "このタブを新しいウィンドウに移動する",
+    "copy_tab_to_new_window": "このタブを新しいウィンドウにコピーする"
+  },
+  "tasks": {
+    "due": {
+      "today": "今日",
+      "tomorrow": "明日",
+      "yesterday": "昨日"
+    }
+  },
+  "classic_editor_toolbar": {
+    "title": "書式設定"
+  },
+  "search_definition": {
+    "add_search_option": "検索オプションを追加:",
+    "search_string": "文字列検索",
+    "search_script": "スクリプト検索",
+    "fast_search": "高速検索",
+    "fast_search_description": "高速検索オプションは、ノートの全文検索を無効にし、大規模データベースでの検索を高速化します。",
+    "include_archived": "アーカイブを含む",
+    "include_archived_notes_description": "アーカイブされたノートはデフォルトで検索結果から除外されますが、このオプションを使用すると含まれるようになります。",
+    "order_by": "並べ替え",
+    "limit": "リミット",
+    "limit_description": "検索結果の数を制限する",
+    "debug": "デバッグ",
+    "debug_description": "デバッグは複雑なクエリのデバッグを支援するために、追加のデバッグ情報をコンソールに出力します",
+    "action": "アクション",
+    "search_button": "検索 <kbd>Enter</kbd>",
+    "search_execute": "検索とアクションの実行",
+    "save_to_note": "ノートに保存"
+  },
+  "shortcuts": {
+    "multiple_shortcuts": "同じアクションに対して複数のショートカットを設定する場合、カンマで区切ることができます。",
+    "electron_documentation": "使用可能な修飾キーとキーコードについては、 <a href=\"https://www.electronjs.org/docs/latest/api/accelerator\">Electronのドキュメント</a>を参照してください。",
+    "type_text_to_filter": "テキストを入力してショートカットを絞り込む...",
+    "action_name": "アクション名",
+    "shortcuts": "ショートカット",
+    "default_shortcuts": "デフォルトのショートカットキー",
+    "description": "説明",
+    "reload_app": "リロードして変更を適用する",
+    "set_all_to_default": "すべてのショートカットをデフォルトに戻す",
+    "confirm_reset": "キーボードショートカットをすべてデフォルトにリセットしますか？"
+  }
 }
