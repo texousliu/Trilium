@@ -37,7 +37,7 @@
   "branch_prefix": {
     "edit_branch_prefix": "编辑分支前缀",
     "help_on_tree_prefix": "有关树前缀的帮助",
-    "prefix": "前缀：",
+    "prefix": "前缀： ",
     "save": "保存",
     "branch_prefix_saved": "分支前缀已保存。"
   },
@@ -71,7 +71,7 @@
     "confirmation": "确认",
     "cancel": "取消",
     "ok": "确定",
-    "are_you_sure_remove_note": "确定要从关系图中移除笔记 \"{{title}}\" ？",
+    "are_you_sure_remove_note": "确定要从关系图中移除笔记 \"{{title}}\" ？ ",
     "if_you_dont_check": "如果不选中此项，笔记将仅从关系图中移除。",
     "also_delete_note": "同时删除笔记"
   },
@@ -218,7 +218,7 @@
     "search_placeholder": "通过名称搜索笔记",
     "move_button": "移动到选定的笔记",
     "error_no_path": "没有可以移动到的路径。",
-    "move_success_message": "所选笔记已移动到"
+    "move_success_message": "所选笔记已移动到 "
   },
   "note_type_chooser": {
     "modal_title": "选择笔记类型",
@@ -273,7 +273,7 @@
     "maximum_revisions": "当前笔记的最大历史数量: {{number}}。",
     "settings": "笔记修订设置",
     "download_button": "下载",
-    "mime": "MIME 类型：",
+    "mime": "MIME 类型： ",
     "file_size": "文件大小：",
     "preview": "预览：",
     "preview_not_available": "无法预览此类型的笔记。"
@@ -413,7 +413,7 @@
     "run_on_branch_change": "在分支更新时执行。",
     "run_on_branch_deletion": "在删除分支时执行。分支是父笔记和子笔记之间的链接，例如在移动笔记时删除（删除旧的分支/链接）。",
     "run_on_attribute_creation": "在为定义此关系的笔记创建新属性时执行",
-    "run_on_attribute_change": "当修改定义此关系的笔记的属性时执行。删除属性时也会触发此操作。",
+    "run_on_attribute_change": " 当修改定义此关系的笔记的属性时执行。删除属性时也会触发此操作。",
     "relation_template": "即使没有父子关系，笔记的属性也将继承。如果空，则笔记的内容和子树将添加到实例笔记中。有关详细信息，请参见文档。",
     "inherit": "即使没有父子关系，笔记的属性也将继承。有关类似概念的模板关系，请参见模板关系。请参阅文档中的属性继承。",
     "render_note": "“渲染 HTML 笔记”类型的笔记将使用代码笔记（HTML 或脚本）进行呈现，因此需要指定要渲染的笔记",
@@ -424,7 +424,7 @@
     "share_favicon": "在分享页面中设置的 favicon 笔记。一般需要将它设置为分享和可继承。Favicon 笔记也必须位于分享子树中。可以考虑一并使用 'share_hidden_from_tree'。",
     "is_owned_by_note": "由此笔记所有",
     "other_notes_with_name": "其它含有 {{attributeType}} 名为 \"{{attributeName}}\" 的的笔记",
-    "and_more": "... 以及另外 {{count}} 个",
+    "and_more": "... 以及另外 {{count}} 个。",
     "print_landscape": "导出为 PDF 时，将页面方向更改为横向而不是纵向。",
     "print_page_size": "导出为 PDF 时，更改页面大小。支持的值：<code>A0</code>、<code>A1</code>、<code>A2</code>、<code>A3</code>、<code>A4</code>、<code>A5</code>、<code>A6</code>、<code>Legal</code>、<code>Letter</code>、<code>Tabloid</code>、<code>Ledger</code>。",
     "color_type": "颜色"
@@ -432,7 +432,7 @@
   "attribute_editor": {
     "help_text_body1": "要添加标签，只需输入例如 <code>#rock</code> 或者如果您还想添加值，则例如 <code>#year = 2020</code>",
     "help_text_body2": "对于关系，请输入 <code>~author = @</code>，这将显示一个自动完成列表，您可以查找所需的笔记。",
-    "help_text_body3": "您也可以使用右侧的 <code>+</code> 按钮添加标签和关系。</p>",
+    "help_text_body3": "您也可以使用右侧的 <code>+</code> 按钮添加标签和关系。",
     "save_attributes": "保存属性 <enter>",
     "add_a_new_attribute": "添加新属性",
     "add_new_label": "添加新标签 <kbd data-command=\"addNewLabel\"></kbd>",
@@ -936,19 +936,19 @@
   },
   "attachment_detail": {
     "open_help_page": "打开附件帮助页面",
-    "owning_note": "所属笔记：",
-    "you_can_also_open": "，您还可以打开",
+    "owning_note": "所属笔记： ",
+    "you_can_also_open": "，您还可以打开 ",
     "list_of_all_attachments": "所有附件列表",
     "attachment_deleted": "该附件已被删除。"
   },
   "attachment_list": {
     "open_help_page": "打开附件帮助页面",
-    "owning_note": "所属笔记：",
+    "owning_note": "所属笔记： ",
     "upload_attachments": "上传附件",
     "no_attachments": "此笔记没有附件。"
   },
   "book": {
-    "no_children_help": "此类型为书籍的笔记没有任何子笔记，因此没有内容显示。请参阅 <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> 了解详情"
+    "no_children_help": "此类型为书籍的笔记没有任何子笔记，因此没有内容显示。请参阅 <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> 了解详情。"
   },
   "editable_code": {
     "placeholder": "在这里输入您的代码笔记内容..."
