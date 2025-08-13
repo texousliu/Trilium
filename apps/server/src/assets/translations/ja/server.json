@@ -262,6 +262,21 @@
     "pdf": {
         "export_filter": "PDFドキュメント (*.pdf)",
         "unable-to-export-message": "現在のノートをPDFとしてエクスポートできませんでした。",
-        "unable-to-export-title": "PDFとしてエクスポートできません"
+        "unable-to-export-title": "PDFとしてエクスポートできません",
+        "unable-to-save-message": "選択されたファイルに書き込めませんでした。もう一度試すか、別の保存先を選択してください。"
+    },
+    "tray": {
+        "tooltip": "Trilium Notes",
+        "close": "Triliumを終了",
+        "recents": "最近のノート",
+        "bookmarks": "ブックマーク",
+        "today": "今日の日記を開く",
+        "new-note": "新しいノート",
+        "show-windows": "ウィンドウを表示",
+        "open_new_window": "新しいウィンドウを開く"
+    },
+    "migration": {
+        "old_version": "現在のバージョンからの直接的な移行はサポートされていません。まず最新のv0.60.4にアップグレードしてから、このバージョンにアップグレードしてください。",
+        "error_message": "バージョン {{version}} への移行中にエラーが発生しました: {{stack}}"
     }
 }
