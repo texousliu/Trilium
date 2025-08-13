@@ -261,6 +261,7 @@
     },
     "pdf": {
         "export_filter": "PDFドキュメント (*.pdf)",
-        "unable-to-export-message": "現在のノートをPDFとしてエクスポートできませんでした。"
+        "unable-to-export-message": "現在のノートをPDFとしてエクスポートできませんでした。",
+        "unable-to-export-title": "PDFとしてエクスポートできません"
     }
 }
