@@ -71,6 +71,17 @@ export default abstract class TypeWidget extends NoteContextAwareWidget {
         }
     }
 
+    activeNoteChangedEvent() {
+        if (!this.isActiveNoteContext()) {
+            return;
+        }
+
+        // Restore focus to the editor when switching tabs, but only if the note tree is not already focused.
+        if (!document.activeElement?.classList.contains("fancytree-title")) {
+            this.focus();
+        }
+    }
+
     /**
      * {@inheritdoc}
      *

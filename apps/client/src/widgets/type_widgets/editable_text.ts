@@ -178,13 +178,7 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             });
 
             if (isClassicEditor) {
-                let $classicToolbarWidget;
-                if (!utils.isMobile()) {
-                    const $parentSplit = this.$widget.parents(".note-split.type-text");
-                    $classicToolbarWidget = $parentSplit.find("> .ribbon-container .classic-toolbar-widget");
-                } else {
-                    $classicToolbarWidget = $("body").find(".classic-toolbar-widget");
-                }
+                const $classicToolbarWidget = this.findClassicToolbar();
 
                 $classicToolbarWidget.empty();
                 if ($classicToolbarWidget.length) {
@@ -271,7 +265,12 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     }
 
     focus() {
-        this.$editor.trigger("focus");
+        const editor = this.watchdog.editor;
+        if (editor) {
+            editor.editing.view.focus();
+        } else {
+            this.$editor.trigger("focus");
+        }
     }
 
     scrollToEnd() {
@@ -512,6 +511,22 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
         if (updateTemplateCache(e.loadResults)) {
             await this.reinitialize();
+        }
+    }
+
+    findClassicToolbar(): JQuery<HTMLElement> {
+        if (!utils.isMobile()) {
+            const $parentSplit = this.$widget.parents(".note-split.type-text");
+
+            if ($parentSplit.length) {
+                // The editor is in a normal tab.
+                return $parentSplit.find("> .ribbon-container .classic-toolbar-widget");
+            } else {
+                // The editor is in a popup.
+                return this.$widget.closest(".modal-body").find(".classic-toolbar-widget");
+            }
+        } else {
+            return $("body").find(".classic-toolbar-widget");
         }
     }
 

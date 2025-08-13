@@ -139,12 +139,6 @@ textarea,
     color: var(--muted-text-color);
 }
 
-/* Restore default apperance */
-input[type="number"],
-input[type="checkbox"] {
-    appearance: auto !important;
-}
-
 /* Add a gap between consecutive radios / check boxes */
 label.tn-radio + label.tn-radio,
 label.tn-checkbox + label.tn-checkbox {
@@ -190,6 +184,13 @@ kbd,
 pre,
 samp {
     font-family: var(--monospace-font-family) !important;
+}
+
+.badge {
+    --bs-badge-color: var(--muted-text-color);
+
+    margin-left: 8px;
+    background: var(--accented-background-color);
 }
 
 .input-group-text {
@@ -320,7 +321,8 @@ button kbd {
     }
 }
 
-.dropdown-menu {
+.dropdown-menu,
+.tabulator-popup-container {
     color: var(--menu-text-color) !important;
     font-size: inherit;
     background-color: var(--menu-background-color) !important;
@@ -330,7 +332,13 @@ button kbd {
     --bs-dropdown-link-active-bg: var(--active-item-background-color) !important;
 }
 
-body.desktop .dropdown-menu {
+.dropdown-menu .dropdown-divider {
+    break-before: avoid;
+    break-after: avoid;
+}
+
+body.desktop .dropdown-menu,
+body.desktop .tabulator-popup-container {
     border: 1px solid var(--dropdown-border-color);
     box-shadow: 0px 10px 20px rgba(0, 0, 0, var(--dropdown-shadow-opacity));
     animation: dropdown-menu-opening 100ms ease-in;
@@ -373,7 +381,8 @@ body.desktop .dropdown-menu {
 }
 
 .dropdown-menu a:hover:not(.disabled),
-.dropdown-item:hover:not(.disabled, .dropdown-item-container) {
+.dropdown-item:hover:not(.disabled, .dropdown-item-container),
+.tabulator-menu-item:hover {
     color: var(--hover-item-text-color) !important;
     background-color: var(--hover-item-background-color) !important;
     border-color: var(--hover-item-border-color) !important;
@@ -528,6 +537,7 @@ button.btn-sm {
     /* Making this narrower because https://github.com/zadam/trilium/issues/502 (problem only in smaller font sizes) */
     min-width: 0;
     padding: 0;
+    z-index: 1000;
 }
 
 pre:not(.hljs) {
@@ -630,6 +640,10 @@ table.promoted-attributes-in-tooltip th {
 .tooltip {
     font-size: var(--main-font-size) !important;
     z-index: calc(var(--ck-z-panel) - 1) !important;
+}
+
+.tooltip.tooltip-top {
+    z-index: 32767 !important;
 }
 
 .tooltip-trigger {
@@ -757,6 +771,14 @@ table.promoted-attributes-in-tooltip th {
 
 .note-tooltip-content .note-title-with-path .note-path {
     font-size: small;
+}
+
+.note-tooltip-content .open-popup-button {
+    position: absolute;
+    right: 15px;
+    bottom: 8px;
+    font-size: 1.2em;
+    color: inherit;
 }
 
 .note-tooltip-attributes {
@@ -898,6 +920,13 @@ div[data-notify="container"] {
 
 .ck-editor__editable .ck-mermaid__editing-view {
     font-family: var(--monospace-font-family);
+}
+
+.ck-content {
+    --ck-content-font-family: var(--detail-font-family);
+    --ck-content-font-size: 1.1em;
+    --ck-content-font-color: var(--main-text-color);
+    --ck-content-line-height: var(--bs-body-line-height);
 }
 
 .ck-content .table table th {
@@ -1186,12 +1215,14 @@ body.mobile .dropdown-submenu > .dropdown-menu {
 }
 
 #context-menu-container,
-#context-menu-container .dropdown-menu {
-    padding: 3px 0 0;
+#context-menu-container .dropdown-menu,
+.tabulator-popup-container {
+    padding: 3px 0;
     z-index: 2000;
 }
 
-#context-menu-container .dropdown-item {
+#context-menu-container .dropdown-item,
+.tabulator-menu .tabulator-menu-item {
     padding: 0 7px 0 10px;
     cursor: pointer;
     user-select: none;
@@ -1753,6 +1784,54 @@ textarea {
     padding: 1rem;
 }
 
+/* Command palette styling */
+.jump-to-note-dialog .command-suggestion {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9em;
+}
+
+.jump-to-note-dialog .aa-suggestion .command-suggestion,
+.jump-to-note-dialog .aa-suggestion .command-suggestion div {
+    padding: 0;
+}
+
+.jump-to-note-dialog .aa-cursor .command-suggestion,
+.jump-to-note-dialog .aa-suggestion:hover .command-suggestion {
+    border-left-color: var(--link-color);
+    background-color: var(--hover-background-color);
+}
+
+.jump-to-note-dialog .command-icon {
+    color: var(--muted-text-color);
+    font-size: 1.125rem;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+
+.jump-to-note-dialog .command-content {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.jump-to-note-dialog .command-name {
+    font-weight: bold;
+}
+
+.jump-to-note-dialog .command-description {
+    font-size: 0.8em;
+    line-height: 1.3;
+    opacity: 0.75;
+}
+
+.jump-to-note-dialog kbd.command-shortcut {
+    background-color: transparent;
+    color: inherit;
+    opacity: 0.75;
+    font-family: inherit !important;
+}
+
 .empty-table-placeholder {
     text-align: center;
     color: var(--muted-text-color);
@@ -1811,6 +1890,7 @@ body.zen #launcher-container,
 body.zen #launcher-pane,
 body.zen #left-pane,
 body.zen #right-pane,
+body.zen #mobile-sidebar-wrapper,
 body.zen .tab-row-container,
 body.zen .tab-row-widget,
 body.zen .ribbon-container:not(:has(.classic-toolbar-widget.visible)),
@@ -1818,7 +1898,8 @@ body.zen .ribbon-container:has(.classic-toolbar-widget.visible) .ribbon-top-row,
 body.zen .ribbon-container .ribbon-body:not(:has(.classic-toolbar-widget.visible)),
 body.zen .note-icon-widget,
 body.zen .title-row .button-widget,
-body.zen .floating-buttons-children > *:not(.bx-edit-alt) {
+body.zen .floating-buttons-children > *:not(.bx-edit-alt),
+body.zen .action-button {
     display: none !important;
 }
 
@@ -1860,14 +1941,20 @@ body.zen .note-title-widget input {
     background: transparent !important;
 }
 
+body.zen #detail-container {
+    width: 100%;
+}
+
 /* Content renderer */
 
-footer.file-footer {
+footer.file-footer,
+footer.webview-footer {
     display: flex;
     justify-content: center;
 }
 
-footer.file-footer button {
+footer.file-footer button,
+footer.webview-footer button {
     margin: 5px;
 }
 
@@ -2166,6 +2253,13 @@ footer.file-footer button {
 .content-floating-buttons button.bx {
     font-size: 130%;
     padding: 1px 10px 1px 10px;
+}
+
+/* Search result highlighting */
+.search-result-title b,
+.search-result-content b {
+    font-weight: 900;
+    color: var(--admonition-warning-accent-color);
 }
 
 /* Customized icons */

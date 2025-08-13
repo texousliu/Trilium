@@ -4,14 +4,14 @@ import type { ConfirmDialogOptions, ConfirmDialogResult, ConfirmWithMessageOptio
 import type { PromptDialogOptions } from "../widgets/dialogs/prompt.js";
 import { focusSavedElement, saveFocusedElement } from "./focus.js";
 
-export async function openDialog($dialog: JQuery<HTMLElement>, closeActDialog = true) {
+export async function openDialog($dialog: JQuery<HTMLElement>, closeActDialog = true, config?: Partial<Modal.Options>) {
     if (closeActDialog) {
         closeActiveDialog();
         glob.activeDialog = $dialog;
     }
 
     saveFocusedElement();
-    Modal.getOrCreateInstance($dialog[0]).show();
+    Modal.getOrCreateInstance($dialog[0], config).show();
 
     $dialog.on("hidden.bs.modal", () => {
         const $autocompleteEl = $(".aa-input");
@@ -41,8 +41,14 @@ async function info(message: string) {
     return new Promise((res) => appContext.triggerCommand("showInfoDialog", { message, callback: res }));
 }
 
+/**
+ * Displays a confirmation dialog with the given message.
+ *
+ * @param message the message to display in the dialog.
+ * @returns A promise that resolves to true if the user confirmed, false otherwise.
+ */
 async function confirm(message: string) {
-    return new Promise((res) =>
+    return new Promise<boolean>((res) =>
         appContext.triggerCommand("showConfirmDialog", <ConfirmWithMessageOptions>{
             message,
             callback: (x: false | ConfirmDialogOptions) => res(x && x.confirmed)

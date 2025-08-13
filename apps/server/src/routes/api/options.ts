@@ -95,6 +95,7 @@ const ALLOWED_OPTIONS = new Set<OptionNames>([
     "shareSubtree",
     "sharePath",
     "splitEditorOrientation",
+    "seenCallToActions",
 
     // AI/LLM integration options
     "aiEnabled",

@@ -2,8 +2,8 @@
   you want to use for your Trilium server.</p>
 <ol>
   <li>
-    <p>Download docker image and create container</p><pre><code class="language-text-x-trilium-auto"> docker pull triliumnext/notes:[VERSION]
- docker create --name trilium -t -p 127.0.0.1:8080:8080 -v ~/trilium-data:/home/node/trilium-data triliumnext/notes:[VERSION]</code></pre>
+    <p>Download docker image and create container</p><pre><code class="language-text-x-trilium-auto"> docker pull triliumnext/trilium:[VERSION]
+ docker create --name trilium -t -p 127.0.0.1:8080:8080 -v ~/trilium-data:/home/node/trilium-data triliumnext/trilium:[VERSION]</code></pre>
   </li>
   <li>
     <p>Configure Apache proxy and websocket proxy</p>

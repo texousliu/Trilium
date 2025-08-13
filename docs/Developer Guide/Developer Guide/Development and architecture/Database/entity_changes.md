@@ -1,4 +1,15 @@
 # entity_changes
-<figure class="table"><table><thead><tr><th>Column Name</th><th>Data Type</th><th>Nullity</th><th>Default value</th><th>Description</th></tr></thead><tbody><tr><th><code>id</code></th><td>Integer</td><td>Non-null</td><td>&nbsp;</td><td>A sequential numeric index of the entity change.</td></tr><tr><th><code>entityName</code></th><td>Text</td><td>Non-null</td><td>&nbsp;</td><td>The type of entity being changed (<code>attributes</code>, <code>branches</code>, <code>note_reordering</code>, etc.)</td></tr><tr><th><code>entityId</code></th><td>Text</td><td>Non-null</td><td>&nbsp;</td><td>The ID of the entity being changed.</td></tr><tr><th><code>hash</code></th><td>Text</td><td>Nullable (*)</td><td>&nbsp;</td><td>TODO: Describe how the hash is calculated</td></tr><tr><th><code>isErased</code></th><td>Integer (1 or 0)</td><td>Nullable (*)</td><td>&nbsp;</td><td>TODO: What does this do?</td></tr><tr><th><code>changeId</code></th><td>Text</td><td>Nullable (*)</td><td>&nbsp;</td><td>TODO: What does this do?</td></tr><tr><th><code>componentId</code></th><td>Text</td><td>Nullable (*)</td><td>&nbsp;</td><td><p>The ID of the UI component that caused this change.</p><p>Examples: <code>date-note</code>, <code>F-PoZMI0vc</code>, <code>NA</code> (catch all)</p></td></tr><tr><th><code>instanceId</code></th><td>Text</td><td>Nullable (*)</td><td>&nbsp;</td><td>The ID of the <a href="#root/pOsGYCXsbNQG/tC7s2alapj8V/Gzjqa934BdH4/c5xB8m4g2IY6">instance</a> that created this change.</td></tr><tr><th><code>isSynced</code></th><td>Integer (1 or 0)</td><td>Non-null</td><td>&nbsp;</td><td>TODO: What does this do?</td></tr><tr><th><code>utcDateChanged</code></th><td>Text</td><td>Non-null</td><td>&nbsp;</td><td>Date of the entity change in UTC format (e.g. <code>2023-11-08 16:43:44.204Z</code>)</td></tr></tbody></table></figure>
+| Column Name | Data Type | Nullity | Default value | Description |
+| --- | --- | --- | --- | --- |
+| `id` | Integer | Non-null |     | A sequential numeric index of the entity change. |
+| `entityName` | Text | Non-null |     | The type of entity being changed (`attributes`, `branches`, `note_reordering`, etc.) |
+| `entityId` | Text | Non-null |     | The ID of the entity being changed. |
+| `hash` | Text | Nullable (\*) |     | TODO: Describe how the hash is calculated |
+| `isErased` | Integer (1 or 0) | Nullable (\*) |     | TODO: What does this do? |
+| `changeId` | Text | Nullable (\*) |     | TODO: What does this do? |
+| `componentId` | Text | Nullable (\*) |     | The ID of the UI component that caused this change.  <br>  <br>Examples: `date-note`, `F-PoZMI0vc`, `NA` (catch all) |
+| `instanceId` | Text | Nullable (\*) |     | The ID of the [instance](#root/pOsGYCXsbNQG/tC7s2alapj8V/Gzjqa934BdH4/c5xB8m4g2IY6) that created this change. |
+| `isSynced` | Integer (1 or 0) | Non-null |     | TODO: What does this do? |
+| `utcDateChanged` | Text | Non-null |     | Date of the entity change in UTC format (e.g. `2023-11-08 16:43:44.204Z`) |
 
 Nullable (\*) means all new values are non-null, old rows may contain null values.

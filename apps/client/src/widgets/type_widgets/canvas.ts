@@ -6,6 +6,7 @@ import type { LibraryItem } from "@excalidraw/excalidraw/types";
 import type { Theme } from "@excalidraw/excalidraw/element/types";
 import type Canvas from "./canvas_el.js";
 import { CanvasContent } from "./canvas_el.js";
+import { renderReactWidget } from "../react/ReactBasicWidget.jsx";
 
 const TPL = /*html*/`
     <div class="canvas-widget note-detail-canvas note-detail-printable note-detail">
@@ -166,7 +167,6 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
             onChange: () => this.onChangeHandler(),
             viewModeEnabled: options.is("databaseReadonly"),
             zenModeEnabled: false,
-            gridModeEnabled: false,
             isCollaborating: false,
             detectScroll: false,
             handleKeyboardGlobally: false,
@@ -185,7 +185,8 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         });
 
         await setupFonts();
-        this.canvasInstance.renderCanvas(renderElement);
+        const canvasEl = renderReactWidget(this, this.canvasInstance.createCanvasElement())[0];
+        renderElement.replaceChildren(canvasEl);
     }
 
     /**

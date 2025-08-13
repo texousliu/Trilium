@@ -1,7 +1,7 @@
 # Desktop Installation
 To install Trilium on your desktop, follow these steps:
 
-1.  **Download the Latest Release**: Obtain the appropriate binary release for your operating system from the [latest release page](https://github.com/TriliumNext/Notes/releases/latest) on GitHub.
+1.  **Download the Latest Release**: Obtain the appropriate binary release for your operating system from the [latest release page](https://github.com/TriliumNext/Trilium/releases/latest) on GitHub.
 2.  **Extract the Package**: Unzip the downloaded package to a location of your choice.
 3.  **Run the Application**: Launch Trilium by executing the `trilium` executable found within the unzipped folder.
 

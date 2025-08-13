@@ -126,6 +126,7 @@ const defaultOptions: DefaultOption[] = [
     { name: "disableTray", value: "false", isSynced: false },
     { name: "eraseUnusedAttachmentsAfterSeconds", value: "2592000", isSynced: true }, // default 30 days
     { name: "eraseUnusedAttachmentsAfterTimeScale", value: "86400", isSynced: true }, // default 86400 seconds = Day
+    { name: "logRetentionDays", value: "90", isSynced: false }, // default 90 days
     { name: "customSearchEngineName", value: "DuckDuckGo", isSynced: true },
     { name: "customSearchEngineUrl", value: "https://duckduckgo.com/?q={keyword}", isSynced: true },
     { name: "promotedAttributesOpenInRibbon", value: "true", isSynced: true },
@@ -183,7 +184,7 @@ const defaultOptions: DefaultOption[] = [
 
     // HTML import configuration
     { name: "layoutOrientation", value: "vertical", isSynced: false },
-    { name: "backgroundEffects", value: "false", isSynced: false },
+    { name: "backgroundEffects", value: "true", isSynced: false },
     {
         name: "allowedHtmlTags",
         value: JSON.stringify(DEFAULT_ALLOWED_TAGS),
@@ -208,11 +209,11 @@ const defaultOptions: DefaultOption[] = [
     { name: "ollamaEnabled", value: "false", isSynced: true },
     { name: "ollamaDefaultModel", value: "", isSynced: true },
     { name: "ollamaBaseUrl", value: "http://localhost:11434", isSynced: true },
-
-    // Adding missing AI options
     { name: "aiTemperature", value: "0.7", isSynced: true },
     { name: "aiSystemPrompt", value: "", isSynced: true },
     { name: "aiSelectedProvider", value: "openai", isSynced: true },
+
+    { name: "seenCallToActions", value: "[]", isSynced: true }
 ];
 
 /**
@@ -253,7 +254,7 @@ function initStartupOptions() {
 }
 
 function getKeyboardDefaultOptions() {
-    return (keyboardActions.getDefaultKeyboardActions().filter((ka) => !!ka.actionName) as KeyboardShortcutWithRequiredActionName[]).map((ka) => ({
+    return (keyboardActions.getDefaultKeyboardActions().filter((ka) => "actionName" in ka) as KeyboardShortcutWithRequiredActionName[]).map((ka) => ({
         name: `keyboardShortcuts${ka.actionName.charAt(0).toUpperCase()}${ka.actionName.slice(1)}`,
         value: JSON.stringify(ka.defaultShortcuts),
         isSynced: false

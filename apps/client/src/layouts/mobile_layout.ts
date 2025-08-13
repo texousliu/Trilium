@@ -26,6 +26,7 @@ import TabRowWidget from "../widgets/tab_row.js";
 import RefreshButton from "../widgets/floating_buttons/refresh_button.js";
 import MobileEditorToolbar from "../widgets/ribbon_widgets/mobile_editor_toolbar.js";
 import { applyModals } from "./layout_commons.js";
+import CloseZenButton from "../widgets/close_zen_button.js";
 
 const MOBILE_CSS = `
 <style>
@@ -162,7 +163,7 @@ export default class MobileLayout {
                                     .filling()
                                     .contentSized()
                                     .child(new NoteDetailWidget())
-                                    .child(new NoteListWidget())
+                                    .child(new NoteListWidget(false))
                                     .child(new FilePropertiesWidget().css("font-size", "smaller"))
                             )
                             .child(new MobileEditorToolbar())
@@ -174,7 +175,8 @@ export default class MobileLayout {
                     .id("mobile-bottom-bar")
                     .child(new TabRowWidget().css("height", "40px"))
                     .child(new FlexContainer("row").class("horizontal").css("height", "53px").child(new LauncherContainer(true)).child(new GlobalMenuWidget(true)).id("launcher-pane"))
-            );
+            )
+            .child(new CloseZenButton());
         applyModals(rootContainer);
         return rootContainer;
     }

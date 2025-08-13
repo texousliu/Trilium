@@ -56,7 +56,7 @@ function toMarkdown(content: string) {
         instance.addRule("math", buildMathFilter());
         instance.addRule("li", buildListItemFilter());
         instance.use(gfm);
-        instance.keep([ "kbd" ]);
+        instance.keep([ "kbd", "sup", "sub" ]);
     }
 
     return instance.turndown(content);
@@ -209,6 +209,7 @@ function buildFigureFilter(): Rule {
     return {
         filter(node, options) {
             return node.nodeName === 'FIGURE'
+                && node.classList.contains("image");
         },
         replacement(content, node) {
             return (node as HTMLElement).outerHTML;

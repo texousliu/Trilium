@@ -2,7 +2,7 @@ import keyboardActionService from "../services/keyboard_actions.js";
 import note_tooltip from "../services/note_tooltip.js";
 import utils from "../services/utils.js";
 
-interface ContextMenuOptions<T> {
+export interface ContextMenuOptions<T> {
     x: number;
     y: number;
     orientation?: "left";
@@ -17,17 +17,30 @@ interface MenuSeparatorItem {
     title: "----";
 }
 
+export interface MenuItemBadge {
+    title: string;
+    className?: string;
+}
+
 export interface MenuCommandItem<T> {
     title: string;
     command?: T;
     type?: string;
+    /**
+     * The icon to display in the menu item.
+     *
+     * If not set, no icon is displayed and the item will appear shifted slightly to the left if there are other items with icons. To avoid this, use `bx bx-empty`.
+     */
     uiIcon?: string;
+    badges?: MenuItemBadge[];
     templateNoteId?: string;
     enabled?: boolean;
     handler?: MenuHandler<T>;
     items?: MenuItem<T>[] | null;
     shortcut?: string;
     spellingSuggestion?: string;
+    checked?: boolean;
+    columns?: number;
 }
 
 export type MenuItem<T> = MenuCommandItem<T> | MenuSeparatorItem;
@@ -146,16 +159,31 @@ class ContextMenu {
             } else {
                 const $icon = $("<span>");
 
-                if ("uiIcon" in item && item.uiIcon) {
-                    $icon.addClass(item.uiIcon);
-                } else {
-                    $icon.append("&nbsp;");
+                if ("uiIcon" in item || "checked" in item) {
+                    const icon = (item.checked ? "bx bx-check" : item.uiIcon);
+                    if (icon) {
+                        $icon.addClass(icon);
+                    } else {
+                        $icon.append("&nbsp;");
+                    }
                 }
 
                 const $link = $("<span>")
                     .append($icon)
                     .append(" &nbsp; ") // some space between icon and text
                     .append(item.title);
+
+                if ("badges" in item && item.badges) {
+                    for (let badge of item.badges) {
+                        const badgeElement = $(`<span class="badge">`).text(badge.title);
+
+                        if (badge.className) {
+                            badgeElement.addClass(badge.className);
+                        }
+
+                        $link.append(badgeElement);
+                    }
+                }
 
                 if ("shortcut" in item && item.shortcut) {
                     $link.append($("<kbd>").text(item.shortcut));
@@ -213,6 +241,9 @@ class ContextMenu {
                     $link.addClass("dropdown-toggle");
 
                     const $subMenu = $("<ul>").addClass("dropdown-menu");
+                    if (!this.isMobile && item.columns) {
+                        $subMenu.css("column-count", item.columns);
+                    }
 
                     this.addItems($subMenu, item.items);
 

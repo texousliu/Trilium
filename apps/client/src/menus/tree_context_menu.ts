@@ -23,7 +23,7 @@ let lastTargetNode: HTMLElement | null = null;
 
 // This will include all commands that implement ContextMenuCommandData, but it will not work if it additional options are added via the `|` operator,
 // so they need to be added manually.
-export type TreeCommandNames = FilteredCommandNames<ContextMenuCommandData> | "openBulkActionsDialog";
+export type TreeCommandNames = FilteredCommandNames<ContextMenuCommandData> | "openBulkActionsDialog" | "searchInSubtree";
 
 export default class TreeContextMenu implements SelectMenuItemEventListener<TreeCommandNames> {
     private treeWidget: NoteTreeWidget;
@@ -70,8 +70,8 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
 
         const items: (MenuItem<TreeCommandNames> | null)[] = [
             { title: `${t("tree-context-menu.open-in-a-new-tab")}`, command: "openInTab", uiIcon: "bx bx-link-external", enabled: noSelectedNotes },
-
             { title: t("tree-context-menu.open-in-a-new-split"), command: "openNoteInSplit", uiIcon: "bx bx-dock-right", enabled: noSelectedNotes },
+            { title: t("tree-context-menu.open-in-popup"), command: "openNoteInPopup", uiIcon: "bx bx-edit", enabled: noSelectedNotes },
 
             isHoisted
                 ? null
@@ -92,7 +92,8 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 command: "insertNoteAfter",
                 uiIcon: "bx bx-plus",
                 items: insertNoteAfterEnabled ? await noteTypesService.getNoteTypeItems("insertNoteAfter") : null,
-                enabled: insertNoteAfterEnabled && noSelectedNotes && notOptionsOrHelp
+                enabled: insertNoteAfterEnabled && noSelectedNotes && notOptionsOrHelp,
+                columns: 2
             },
 
             {
@@ -100,7 +101,8 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 command: "insertChildNote",
                 uiIcon: "bx bx-plus",
                 items: notSearch ? await noteTypesService.getNoteTypeItems("insertChildNote") : null,
-                enabled: notSearch && noSelectedNotes && notOptionsOrHelp
+                enabled: notSearch && noSelectedNotes && notOptionsOrHelp,
+                columns: 2
             },
 
             { title: "----" },
@@ -127,12 +129,6 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                         enabled: isNotRoot && parentNotSearch && noSelectedNotes && notOptionsOrHelp
                     },
                     { title: t("tree-context-menu.convert-to-attachment"), command: "convertNoteToAttachment", uiIcon: "bx bx-paperclip", enabled: isNotRoot && !isHoisted && notOptionsOrHelp },
-                    {
-                        title: `${t("tree-context-menu.duplicate-subtree")} <kbd data-command="duplicateSubtree">`,
-                        command: "duplicateSubtree",
-                        uiIcon: "bx bx-outline",
-                        enabled: parentNotSearch && isNotRoot && !isHoisted && notOptionsOrHelp
-                    },
 
                     { title: "----" },
 
@@ -185,6 +181,13 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
             },
 
             { title: `${t("tree-context-menu.clone-to")} <kbd data-command="cloneNotesTo"></kbd>`, command: "cloneNotesTo", uiIcon: "bx bx-duplicate", enabled: isNotRoot && !isHoisted },
+
+            {
+                title: `${t("tree-context-menu.duplicate")} <kbd data-command="duplicateSubtree">`,
+                command: "duplicateSubtree",
+                uiIcon: "bx bx-outline",
+                enabled: parentNotSearch && isNotRoot && !isHoisted && notOptionsOrHelp
+            },
 
             {
                 title: `${t("tree-context-menu.delete")} <kbd data-command="deleteNotes"></kbd>`,
@@ -244,6 +247,8 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
             const { ntxId } = subContexts?.[subContexts.length - 1] ?? {};
 
             this.treeWidget.triggerCommand("openNewNoteSplit", { ntxId, notePath });
+        } else if (command === "openNoteInPopup") {
+            appContext.triggerCommand("openInPopup", { noteIdOrPath: notePath })
         } else if (command === "convertNoteToAttachment") {
             if (!(await dialogService.confirm(t("tree-context-menu.convert-to-attachment-confirm")))) {
                 return;

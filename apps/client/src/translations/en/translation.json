@@ -1,7 +1,6 @@
 {
   "about": {
     "title": "About Trilium Notes",
-    "close": "Close",
     "homepage": "Homepage:",
     "app_version": "App version:",
     "db_version": "DB version:",
@@ -28,25 +27,22 @@
   "add_link": {
     "add_link": "Add link",
     "help_on_links": "Help on links",
-    "close": "Close",
     "note": "Note",
     "search_note": "search for note by its name",
     "link_title_mirrors": "link title mirrors the note's current title",
     "link_title_arbitrary": "link title can be changed arbitrarily",
     "link_title": "Link title",
-    "button_add_link": "Add link <kbd>enter</kbd>"
+    "button_add_link": "Add link"
   },
   "branch_prefix": {
     "edit_branch_prefix": "Edit branch prefix",
     "help_on_tree_prefix": "Help on Tree prefix",
-    "close": "Close",
     "prefix": "Prefix: ",
     "save": "Save",
     "branch_prefix_saved": "Branch prefix has been saved."
   },
   "bulk_actions": {
     "bulk_actions": "Bulk actions",
-    "close": "Close",
     "affected_notes": "Affected notes",
     "include_descendants": "Include descendants of the selected notes",
     "available_actions": "Available actions",
@@ -61,20 +57,18 @@
   },
   "clone_to": {
     "clone_notes_to": "Clone notes to...",
-    "close": "Close",
     "help_on_links": "Help on links",
     "notes_to_clone": "Notes to clone",
     "target_parent_note": "Target parent note",
     "search_for_note_by_its_name": "search for note by its name",
     "cloned_note_prefix_title": "Cloned note will be shown in note tree with given prefix",
     "prefix_optional": "Prefix (optional)",
-    "clone_to_selected_note": "Clone to selected note <kbd>enter</kbd>",
+    "clone_to_selected_note": "Clone to selected note",
     "no_path_to_clone_to": "No path to clone to.",
     "note_cloned": "Note \"{{clonedTitle}}\" has been cloned into \"{{targetTitle}}\""
   },
   "confirm": {
     "confirmation": "Confirmation",
-    "close": "Close",
     "cancel": "Cancel",
     "ok": "OK",
     "are_you_sure_remove_note": "Are you sure you want to remove the note \"{{title}}\" from relation map? ",
@@ -87,9 +81,9 @@
     "delete_all_clones_description": "Delete also all clones (can be undone in recent changes)",
     "erase_notes_description": "Normal (soft) deletion only marks the notes as deleted and they can be undeleted (in recent changes dialog) within a period of time. Checking this option will erase the notes immediately and it won't be possible to undelete the notes.",
     "erase_notes_warning": "Erase notes permanently (can't be undone), including all clones. This will force application reload.",
-    "notes_to_be_deleted": "Following notes will be deleted ({{- noteCount}})",
+    "notes_to_be_deleted": "Following notes will be deleted ({{notesCount}})",
     "no_note_to_delete": "No note will be deleted (only clones).",
-    "broken_relations_to_be_deleted": "Following relations will be broken and deleted ({{- relationCount}})",
+    "broken_relations_to_be_deleted": "Following relations will be broken and deleted ({{ relationCount}})",
     "cancel": "Cancel",
     "ok": "OK",
     "deleted_relation_text": "Note {{- note}} (to be deleted) is referenced by relation {{- relation}} originating from {{- source}}."
@@ -113,21 +107,20 @@
     "format_pdf": "PDF - for printing or sharing purposes."
   },
   "help": {
-    "fullDocumentation": "Help (full documentation is available <a class=\"external\" href=\"https://triliumnext.github.io/Docs/\">online</a>)",
-    "close": "Close",
+    "title": "Cheatsheet",
     "noteNavigation": "Note navigation",
-    "goUpDown": "<kbd>UP</kbd>, <kbd>DOWN</kbd> - go up/down in the list of notes",
-    "collapseExpand": "<kbd>LEFT</kbd>, <kbd>RIGHT</kbd> - collapse/expand node",
+    "goUpDown": "go up/down in the list of notes",
+    "collapseExpand": "collapse/expand node",
     "notSet": "not set",
     "goBackForwards": "go back / forwards in the history",
     "showJumpToNoteDialog": "show <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">\"Jump to\" dialog</a>",
     "scrollToActiveNote": "scroll to active note",
-    "jumpToParentNote": "<kbd>Backspace</kbd> - jump to parent note",
+    "jumpToParentNote": "jump to parent note",
     "collapseWholeTree": "collapse whole note tree",
     "collapseSubTree": "collapse sub-tree",
     "tabShortcuts": "Tab shortcuts",
-    "newTabNoteLink": "<kbd>Ctrl+click</kbd> - (or <kbd>middle mouse click</kbd>) on note link opens note in a new tab",
-    "newTabWithActivationNoteLink": "<kbd>Ctrl+Shift+click</kbd> - (or <kbd>Shift+middle mouse click</kbd>) on note link opens and activates the note in a new tab",
+    "newTabNoteLink": "on note link opens note in a new tab",
+    "newTabWithActivationNoteLink": "on note link opens and activates the note in a new tab",
     "onlyInDesktop": "Only in desktop (Electron build)",
     "openEmptyTab": "open empty tab",
     "closeActiveTab": "close active tab",
@@ -142,14 +135,14 @@
     "moveNoteUpHierarchy": "move note up in the hierarchy",
     "multiSelectNote": "multi-select note above/below",
     "selectAllNotes": "select all notes in the current level",
-    "selectNote": "<kbd>Shift+click</kbd> - select note",
+    "selectNote": "select note",
     "copyNotes": "copy active note (or current selection) into clipboard (used for <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/cloning-notes.html#cloning-notes\">cloning</a>)",
     "cutNotes": "cut current note (or current selection) into clipboard (used for moving notes)",
     "pasteNotes": "paste note(s) as sub-note into active note (which is either move or clone depending on whether it was copied or cut into clipboard)",
     "deleteNotes": "delete note / sub-tree",
     "editingNotes": "Editing notes",
     "editNoteTitle": "in tree pane will switch from tree pane into note title. Enter from note title will switch focus to text editor. <kbd>Ctrl+.</kbd> will switch back from editor to tree pane.",
-    "createEditLink": "<kbd>Ctrl+K</kbd> - create / edit external link",
+    "createEditLink": "create / edit external link",
     "createInternalLink": "create internal link",
     "followLink": "follow link under cursor",
     "insertDateTime": "insert current date and time at caret position",
@@ -169,7 +162,6 @@
   },
   "import": {
     "importIntoNote": "Import into note",
-    "close": "Close",
     "chooseImportFile": "Choose import file",
     "importDescription": "Content of the selected file(s) will be imported as child note(s) into",
     "options": "Options",
@@ -196,14 +188,13 @@
   },
   "include_note": {
     "dialog_title": "Include note",
-    "close": "Close",
     "label_note": "Note",
     "placeholder_search": "search for note by its name",
     "box_size_prompt": "Box size of the included note:",
     "box_size_small": "small (~ 10 lines)",
     "box_size_medium": "medium (~ 30 lines)",
     "box_size_full": "full (box shows complete text)",
-    "button_include": "Include note <kbd>enter</kbd>"
+    "button_include": "Include note"
   },
   "info": {
     "modalTitle": "Info message",
@@ -211,24 +202,21 @@
     "okButton": "OK"
   },
   "jump_to_note": {
-    "search_placeholder": "search for note by its name",
-    "close": "Close",
-    "search_button": "Search in full text <kbd>Ctrl+Enter</kbd>"
+    "search_placeholder": "Search for note by its name or type > for commands...",
+    "search_button": "Search in full text"
   },
   "markdown_import": {
     "dialog_title": "Markdown import",
-    "close": "Close",
     "modal_body_text": "Because of browser sandbox it's not possible to directly read clipboard from JavaScript. Please paste the Markdown to import to textarea below and click on Import button",
-    "import_button": "Import Ctrl+Enter",
+    "import_button": "Import",
     "import_success": "Markdown content has been imported into the document."
   },
   "move_to": {
     "dialog_title": "Move notes to ...",
-    "close": "Close",
     "notes_to_move": "Notes to move",
     "target_parent_note": "Target parent note",
     "search_placeholder": "search for note by its name",
-    "move_button": "Move to selected note <kbd>enter</kbd>",
+    "move_button": "Move to selected note",
     "error_no_path": "No path to move to.",
     "move_success_message": "Selected notes have been moved into "
   },
@@ -236,20 +224,19 @@
     "change_path_prompt": "Change where to create the new note:",
     "search_placeholder": "search path by name (default if empty)",
     "modal_title": "Choose note type",
-    "close": "Close",
     "modal_body": "Choose note type / template of the new note:",
-    "templates": "Templates:"
+    "templates": "Templates",
+    "builtin_templates": "Built-in Templates"
   },
   "password_not_set": {
     "title": "Password is not set",
-    "close": "Close",
     "body1": "Protected notes are encrypted using a user password, but password has not been set yet.",
-    "body2": "To be able to protect notes, click <a class=\"open-password-options-button\" href=\"javascript:\">here</a> to open the Options dialog and set your password."
+    "body2": "To be able to protect notes, click the button below to open the Options dialog and set your password.",
+    "go_to_password_options": "Go to Password options"
   },
   "prompt": {
     "title": "Prompt",
-    "close": "Close",
-    "ok": "OK <kbd>enter</kbd>",
+    "ok": "OK",
     "defaultTitle": "Prompt"
   },
   "protected_session_password": {
@@ -257,12 +244,11 @@
     "help_title": "Help on Protected notes",
     "close_label": "Close",
     "form_label": "To proceed with requested action you need to start protected session by entering password:",
-    "start_button": "Start protected session <kbd>enter</kbd>"
+    "start_button": "Start protected session"
   },
   "recent_changes": {
     "title": "Recent changes",
     "erase_notes_button": "Erase deleted notes now",
-    "close": "Close",
     "deleted_notes_message": "Deleted notes have been erased.",
     "no_changes_message": "No changes yet...",
     "undelete_link": "undelete",
@@ -273,7 +259,6 @@
     "delete_all_revisions": "Delete all revisions of this note",
     "delete_all_button": "Delete all revisions",
     "help_title": "Help on Note Revisions",
-    "close": "Close",
     "revision_last_edited": "This revision was last edited on {{date}}",
     "confirm_delete_all": "Do you want to delete all revisions of this note?",
     "no_revisions": "No revisions for this note yet...",
@@ -295,7 +280,6 @@
   },
   "sort_child_notes": {
     "sort_children_by": "Sort children by...",
-    "close": "Close",
     "sorting_criteria": "Sorting criteria",
     "title": "title",
     "date_created": "date created",
@@ -309,13 +293,12 @@
     "sort_with_respect_to_different_character_sorting": "sort with respect to different character sorting and collation rules in different languages or regions.",
     "natural_sort_language": "Natural sort language",
     "the_language_code_for_natural_sort": "The language code for natural sort, e.g. \"zh-CN\" for Chinese.",
-    "sort": "Sort <kbd>enter</kbd>"
+    "sort": "Sort"
   },
   "upload_attachments": {
     "upload_attachments_to_note": "Upload attachments to note",
-    "close": "Close",
     "choose_files": "Choose files",
-    "files_will_be_uploaded": "Files will be uploaded as attachments into",
+    "files_will_be_uploaded": "Files will be uploaded as attachments into {{noteTitle}}",
     "options": "Options",
     "shrink_images": "Shrink images",
     "upload": "Upload",
@@ -443,7 +426,8 @@
     "other_notes_with_name": "Other notes with {{attributeType}} name \"{{attributeName}}\"",
     "and_more": "... and {{count}} more.",
     "print_landscape": "When exporting to PDF, changes the orientation of the page to landscape instead of portrait.",
-    "print_page_size": "When exporting to PDF, changes the size of the page. Supported values: <code>A0</code>, <code>A1</code>, <code>A2</code>, <code>A3</code>, <code>A4</code>, <code>A5</code>, <code>A6</code>, <code>Legal</code>, <code>Letter</code>, <code>Tabloid</code>, <code>Ledger</code>."
+    "print_page_size": "When exporting to PDF, changes the size of the page. Supported values: <code>A0</code>, <code>A1</code>, <code>A2</code>, <code>A3</code>, <code>A4</code>, <code>A5</code>, <code>A6</code>, <code>Legal</code>, <code>Letter</code>, <code>Tabloid</code>, <code>Ledger</code>.",
+    "color_type": "Color"
   },
   "attribute_editor": {
     "help_text_body1": "To add label, just type e.g. <code>#rock</code> or if you want to add also value then e.g. <code>#year = 2020</code>",
@@ -758,9 +742,12 @@
     "expand_all_children": "Expand all children",
     "collapse": "Collapse",
     "expand": "Expand",
-    "book_properties": "Book Properties",
+    "book_properties": "Collection Properties",
     "invalid_view_type": "Invalid view type '{{type}}'",
-    "calendar": "Calendar"
+    "calendar": "Calendar",
+    "table": "Table",
+    "geo-map": "Geo Map",
+    "board": "Board"
   },
   "edited_notes": {
     "no_edited_notes_found": "No edited notes on this day yet...",
@@ -837,7 +824,8 @@
     "unknown_label_type": "Unknown label type '{{type}}'",
     "unknown_attribute_type": "Unknown attribute type '{{type}}'",
     "add_new_attribute": "Add new attribute",
-    "remove_this_attribute": "Remove this attribute"
+    "remove_this_attribute": "Remove this attribute",
+    "remove_color": "Remove the color label"
   },
   "script_executor": {
     "query": "Query",
@@ -960,7 +948,7 @@
     "no_attachments": "This note has no attachments."
   },
   "book": {
-    "no_children_help": "This note of type Book doesn't have any child notes so there's nothing to display. See <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> for details."
+    "no_children_help": "This collection doesn't have any child notes so there's nothing to display. See <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> for details."
   },
   "editable_code": {
     "placeholder": "Type the content of your code note here..."
@@ -1023,7 +1011,7 @@
     "title": "Consistency Checks",
     "find_and_fix_button": "Find and fix consistency issues",
     "finding_and_fixing_message": "Finding and fixing consistency issues...",
-    "issues_fixed_message": "Consistency issues should be fixed."
+    "issues_fixed_message": "Any consistency issue which may have been found is now fixed."
   },
   "database_anonymization": {
     "title": "Database Anonymization",
@@ -1113,12 +1101,12 @@
     "title": "Application Theme",
     "theme_label": "Theme",
     "override_theme_fonts_label": "Override theme fonts",
-    "auto_theme": "Auto",
-    "light_theme": "Light",
-    "dark_theme": "Dark",
-    "triliumnext": "TriliumNext Beta (Follow system color scheme)",
-    "triliumnext-light": "TriliumNext Beta (Light)",
-    "triliumnext-dark": "TriliumNext Beta (Dark)",
+    "auto_theme": "Legacy (Follow system color scheme)",
+    "light_theme": "Legacy (Light)",
+    "dark_theme": "Legacy (Dark)",
+    "triliumnext": "Trilium (Follow system color scheme)",
+    "triliumnext-light": "Trilium (Light)",
+    "triliumnext-dark": "Trilium (Dark)",
     "layout": "Layout",
     "layout-vertical-title": "Vertical",
     "layout-horizontal-title": "Horizontal",
@@ -1593,12 +1581,13 @@
     "move-to": "Move to...",
     "paste-into": "Paste into",
     "paste-after": "Paste after",
-    "duplicate-subtree": "Duplicate subtree",
+    "duplicate": "Duplicate",
     "export": "Export",
     "import-into-note": "Import into note",
     "apply-bulk-actions": "Apply bulk actions",
     "converted-to-attachments": "{{count}} notes have been converted to attachments.",
-    "convert-to-attachment-confirm": "Are you sure you want to convert note selected notes into attachments of their parent notes?"
+    "convert-to-attachment-confirm": "Are you sure you want to convert note selected notes into attachments of their parent notes?",
+    "open-in-popup": "Quick edit"
   },
   "shared_info": {
     "shared_publicly": "This note is shared publicly on",
@@ -1612,7 +1601,7 @@
     "relation-map": "Relation Map",
     "note-map": "Note Map",
     "render-note": "Render Note",
-    "book": "Book",
+    "book": "Collection",
     "mermaid-diagram": "Mermaid Diagram",
     "canvas": "Canvas",
     "web-view": "Web View",
@@ -1626,7 +1615,9 @@
     "geo-map": "Geo Map",
     "beta-feature": "Beta",
     "ai-chat": "AI Chat",
-    "task-list": "Task List"
+    "task-list": "Task List",
+    "new-feature": "New",
+    "collections": "Collections"
   },
   "protect_note": {
     "toggle-on": "Protect the note",
@@ -1828,7 +1819,8 @@
   "link_context_menu": {
     "open_note_in_new_tab": "Open note in a new tab",
     "open_note_in_new_split": "Open note in a new split",
-    "open_note_in_new_window": "Open note in a new window"
+    "open_note_in_new_window": "Open note in a new window",
+    "open_note_in_popup": "Quick edit"
   },
   "electron_integration": {
     "desktop-application": "Desktop Application",
@@ -1848,7 +1840,8 @@
     "full-text-search": "Full text search"
   },
   "note_tooltip": {
-    "note-has-been-deleted": "Note has been deleted."
+    "note-has-been-deleted": "Note has been deleted.",
+    "quick-edit": "Quick edit"
   },
   "geo-map": {
     "create-child-note-title": "Create a new child note and add it to the map",
@@ -1857,7 +1850,8 @@
   },
   "geo-map-context": {
     "open-location": "Open location",
-    "remove-from-map": "Remove from map"
+    "remove-from-map": "Remove from map",
+    "add-note": "Add a marker at this location"
   },
   "help-button": {
     "title": "Open the relevant help page"
@@ -1941,5 +1935,78 @@
     "title": "Features",
     "emoji_completion_enabled": "Enable Emoji auto-completion",
     "note_completion_enabled": "Enable note auto-completion"
+  },
+  "table_view": {
+    "new-row": "New row",
+    "new-column": "New column",
+    "sort-column-by": "Sort by \"{{title}}\"",
+    "sort-column-ascending": "Ascending",
+    "sort-column-descending": "Descending",
+    "sort-column-clear": "Clear sorting",
+    "hide-column": "Hide column \"{{title}}\"",
+    "show-hide-columns": "Show/hide columns",
+    "row-insert-above": "Insert row above",
+    "row-insert-below": "Insert row below",
+    "row-insert-child": "Insert child note",
+    "add-column-to-the-left": "Add column to the left",
+    "add-column-to-the-right": "Add column to the right",
+    "edit-column": "Edit column",
+    "delete_column_confirmation": "Are you sure you want to delete this column? The corresponding attribute will be removed from all notes.",
+    "delete-column": "Delete column",
+    "new-column-label": "Label",
+    "new-column-relation": "Relation"
+  },
+  "book_properties_config": {
+    "hide-weekends": "Hide weekends",
+    "display-week-numbers": "Display week numbers",
+    "map-style": "Map style:",
+    "max-nesting-depth": "Max nesting depth:",
+    "raster": "Raster",
+    "vector_light": "Vector (Light)",
+    "vector_dark": "Vector (Dark)",
+    "show-scale": "Show scale"
+  },
+  "table_context_menu": {
+    "delete_row": "Delete row"
+  },
+  "board_view": {
+    "delete-note": "Delete Note",
+    "move-to": "Move to",
+    "insert-above": "Insert above",
+    "insert-below": "Insert below",
+    "delete-column": "Delete column",
+    "delete-column-confirmation": "Are you sure you want to delete this column? The corresponding attribute will be deleted in the notes under this column as well.",
+    "new-item": "New item",
+    "add-column": "Add Column"
+  },
+  "command_palette": {
+    "tree-action-name": "Tree: {{name}}",
+    "export_note_title": "Export Note",
+    "export_note_description": "Export current note",
+    "show_attachments_title": "Show Attachments",
+    "show_attachments_description": "View note attachments",
+    "search_notes_title": "Search Notes",
+    "search_notes_description": "Open advanced search",
+    "search_subtree_title": "Search in Subtree",
+    "search_subtree_description": "Search within current subtree",
+    "search_history_title": "Show Search History",
+    "search_history_description": "View previous searches",
+    "configure_launch_bar_title": "Configure Launch Bar",
+    "configure_launch_bar_description": "Open the launch bar configuration, to add or remove items."
+  },
+  "content_renderer": {
+    "open_externally": "Open externally"
+  },
+  "modal": {
+    "close": "Close",
+    "help_title": "Display more information about this screen"
+  },
+  "call_to_action": {
+    "next_theme_title": "The new Trilium theme is now stable",
+    "next_theme_message": "For a while now, we've been working on a new theme to give the application a more modern look.",
+    "next_theme_button": "Switch to the new Trilium theme",
+    "background_effects_title": "Background effects are now stable",
+    "background_effects_message": "On Windows devices, background effects are now fully stable. The background effects adds a touch of color to the user interface by blurring the background behind it. This technique is also used in other applications such as Windows Explorer.",
+    "background_effects_button": "Enable background effects"
   }
 }

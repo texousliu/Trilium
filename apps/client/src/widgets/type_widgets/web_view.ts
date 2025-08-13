@@ -20,7 +20,7 @@ const TPL = /*html*/`
 
 function buildElement() {
     if (!utils.isElectron()) {
-        return `<iframe class="note-detail-web-view-content" sandbox="allow-same-origin allow-scripts"></iframe>`;
+        return `<iframe class="note-detail-web-view-content" sandbox="allow-same-origin allow-scripts allow-popups"></iframe>`;
     } else {
         return `<webview class="note-detail-web-view-content"></webview>`;
     }

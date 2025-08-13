@@ -11,7 +11,7 @@ import type FBranch from "../entities/fbranch.js";
 import type { ChooseNoteTypeResponse } from "../widgets/dialogs/note_type_chooser.js";
 import type { CKTextEditor } from "@triliumnext/ckeditor5";
 
-interface CreateNoteOpts {
+export interface CreateNoteOpts {
     isProtected?: boolean;
     saveSelection?: boolean;
     title?: string | null;
@@ -109,8 +109,6 @@ async function createNote(parentNotePath: string | undefined, options: CreateNot
 
 async function chooseNoteType() {
     return new Promise<ChooseNoteTypeResponse>((res) => {
-        // TODO: Remove ignore after callback for chooseNoteType is defined in app_context.ts
-        //@ts-ignore
         appContext.triggerCommand("chooseNoteType", { callback: res });
     });
 }

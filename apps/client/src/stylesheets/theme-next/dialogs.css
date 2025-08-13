@@ -128,10 +128,15 @@ div.tn-tool-dialog {
 
 .jump-to-note-dialog .modal-header {
     padding: unset !important;
+    padding-bottom: 26px !important;
 }
 
 .jump-to-note-dialog .modal-body {
-    padding: 26px 0 !important;
+    padding: 0 !important;
+}
+
+.jump-to-note-dialog .modal-footer {
+    padding-top: 26px;
 }
 
 /* Search box wrapper */
@@ -228,16 +233,16 @@ div.tn-tool-dialog {
 
 /* Item title link */
 
-.recent-changes-content ul li .note-title a {
+.recent-changes-content ul li a {
     color: currentColor;
 }
 
-.recent-changes-content ul li .note-title a:hover {
+.recent-changes-content ul li a:hover {
     text-decoration: underline;
 }
 
 /* Item title for deleted notes */
-.recent-changes-content ul li.deleted-note .note-title > .note-title {
+.recent-changes-content ul li.deleted-note .note-title {
     text-decoration: line-through;
 }
 
@@ -381,6 +386,10 @@ div.tn-tool-dialog {
 }
 
 /* DELETE NOTE PREVIEW DIALOG */
+
+.delete-notes-dialog .modal-dialog {
+    --bs-modal-width: fit-content;
+}
 
 .delete-notes-list .note-path {
     padding-left: 8px;

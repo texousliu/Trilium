@@ -2,21 +2,15 @@ import server from "./server.js";
 import appContext, { type CommandNames } from "../components/app_context.js";
 import shortcutService from "./shortcuts.js";
 import type Component from "../components/component.js";
+import type { ActionKeyboardShortcut } from "@triliumnext/commons";
 
-const keyboardActionRepo: Record<string, Action> = {};
+const keyboardActionRepo: Record<string, ActionKeyboardShortcut> = {};
 
-// TODO: Deduplicate with server.
-export interface Action {
-    actionName: CommandNames;
-    effectiveShortcuts: string[];
-    scope: string;
-}
-
-const keyboardActionsLoaded = server.get<Action[]>("keyboard-actions").then((actions) => {
+const keyboardActionsLoaded = server.get<ActionKeyboardShortcut[]>("keyboard-actions").then((actions) => {
     actions = actions.filter((a) => !!a.actionName); // filter out separators
 
     for (const action of actions) {
-        action.effectiveShortcuts = action.effectiveShortcuts.filter((shortcut) => !shortcut.startsWith("global:"));
+        action.effectiveShortcuts = (action.effectiveShortcuts ?? []).filter((shortcut) => !shortcut.startsWith("global:"));
 
         keyboardActionRepo[action.actionName] = action;
     }
@@ -38,7 +32,7 @@ async function setupActionsForElement(scope: string, $el: JQuery<HTMLElement>, c
     const actions = await getActionsForScope(scope);
 
     for (const action of actions) {
-        for (const shortcut of action.effectiveShortcuts) {
+        for (const shortcut of action.effectiveShortcuts ?? []) {
             shortcutService.bindElShortcut($el, shortcut, () => component.triggerCommand(action.actionName, { ntxId: appContext.tabManager.activeNtxId }));
         }
     }
@@ -46,7 +40,7 @@ async function setupActionsForElement(scope: string, $el: JQuery<HTMLElement>, c
 
 getActionsForScope("window").then((actions) => {
     for (const action of actions) {
-        for (const shortcut of action.effectiveShortcuts) {
+        for (const shortcut of action.effectiveShortcuts ?? []) {
             shortcutService.bindGlobalShortcut(shortcut, () => appContext.triggerCommand(action.actionName, { ntxId: appContext.tabManager.activeNtxId }));
         }
     }
@@ -80,7 +74,7 @@ function updateDisplayedShortcuts($container: JQuery<HTMLElement>) {
         const action = await getAction(actionName, true);
 
         if (action) {
-            const keyboardActions = action.effectiveShortcuts.join(", ");
+            const keyboardActions = (action.effectiveShortcuts ?? []).join(", ");
 
             if (keyboardActions || $(el).text() !== "not set") {
                 $(el).text(keyboardActions);
@@ -99,7 +93,7 @@ function updateDisplayedShortcuts($container: JQuery<HTMLElement>) {
 
         if (action) {
             const title = $(el).attr("title");
-            const shortcuts = action.effectiveShortcuts.join(", ");
+            const shortcuts = (action.effectiveShortcuts ?? []).join(", ");
 
             if (title?.includes(shortcuts)) {
                 return;

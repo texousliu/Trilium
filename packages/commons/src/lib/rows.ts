@@ -28,10 +28,10 @@ export interface RevisionRow {
     title: string;
     blobId?: string;
     dateLastEdited?: string;
-    dateCreated: string;
+    dateCreated?: string;
     utcDateLastEdited?: string;
     utcDateCreated: string;
-    utcDateModified: string;
+    utcDateModified?: string;
     contentLength?: number;
 }
 
@@ -119,8 +119,7 @@ export const ALLOWED_NOTE_TYPES = [
     "book",
     "webView",
     "code",
-    "mindMap",
-    "geoMap"
+    "mindMap"
 ] as const;
 export type NoteType = (typeof ALLOWED_NOTE_TYPES)[number];
 

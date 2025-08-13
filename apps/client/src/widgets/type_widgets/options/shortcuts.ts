@@ -3,7 +3,7 @@ import utils from "../../../services/utils.js";
 import dialogService from "../../../services/dialog.js";
 import OptionsWidget from "./options_widget.js";
 import { t } from "../../../services/i18n.js";
-import type { OptionNames, KeyboardShortcut } from "@triliumnext/commons";
+import type { OptionNames, KeyboardShortcut, KeyboardShortcutWithRequiredActionName } from "@triliumnext/commons";
 
 const TPL = /*html*/`
 <div class="options-section shortcuts-options-section tn-no-card">
@@ -75,10 +75,10 @@ export default class KeyboardShortcutsOptions extends OptionsWidget {
             for (const action of actions) {
                 const $tr = $("<tr>");
 
-                if (action.separator) {
+                if ("separator" in action) {
                     $tr.append($('<td class="separator" colspan="4">').attr("style", "background-color: var(--accented-background-color); font-weight: bold;").text(action.separator));
                 } else if (action.defaultShortcuts && action.actionName) {
-                    $tr.append($("<td>").text(action.actionName))
+                    $tr.append($("<td>").text(action.friendlyName))
                         .append(
                             $("<td>").append(
                                 $(`<input type="text" class="form-control">`)
@@ -145,9 +145,9 @@ export default class KeyboardShortcutsOptions extends OptionsWidget {
                     return;
                 }
 
-                const action = globActions.find((act) => act.actionName === actionName);
+                const action = globActions.find((act) => "actionName" in act && act.actionName === actionName) as KeyboardShortcutWithRequiredActionName;
 
-                if (!action || !action.actionName) {
+                if (!action) {
                     this.$widget.find(el).hide();
                     return;
                 }
@@ -157,6 +157,7 @@ export default class KeyboardShortcutsOptions extends OptionsWidget {
                     .toggle(
                         !!(
                             action.actionName.toLowerCase().includes(filter) ||
+                            (action.friendlyName && action.friendlyName.toLowerCase().includes(filter)) ||
                             (action.defaultShortcuts ?? []).some((shortcut) => shortcut.toLowerCase().includes(filter)) ||
                             (action.effectiveShortcuts ?? []).some((shortcut) => shortcut.toLowerCase().includes(filter)) ||
                             (action.description && action.description.toLowerCase().includes(filter))

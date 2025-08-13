@@ -5,7 +5,7 @@ import type Component from "../../components/component.js";
 
 export default class LeftPaneContainer extends FlexContainer<Component> {
     private currentLeftPaneVisible: boolean;
-    
+
     constructor() {
         super("column");
 
@@ -24,6 +24,7 @@ export default class LeftPaneContainer extends FlexContainer<Component> {
         this.currentLeftPaneVisible = leftPaneVisible ?? !this.currentLeftPaneVisible;
         const visible = this.isEnabled();
         this.toggleInt(visible);
+        this.parent?.$widget.toggleClass("left-pane-hidden", !visible);
 
         if (visible) {
             this.triggerEvent("focusTree", {});

@@ -7,7 +7,7 @@ import becca from "../becca.js";
 import AbstractBeccaEntity from "./abstract_becca_entity.js";
 import sql from "../../services/sql.js";
 import BAttachment from "./battachment.js";
-import type { AttachmentRow, NoteType, RevisionRow } from "@triliumnext/commons";
+import type { AttachmentRow, NoteType, RevisionPojo, RevisionRow } from "@triliumnext/commons";
 import eraseService from "../../services/erase.js";
 
 interface ContentOpts {
@@ -192,7 +192,7 @@ class BRevision extends AbstractBeccaEntity<BRevision> {
             type: this.type,
             mime: this.mime,
             isProtected: this.isProtected,
-            title: this.title || undefined,
+            title: this.title,
             blobId: this.blobId,
             dateLastEdited: this.dateLastEdited,
             dateCreated: this.dateCreated,
@@ -201,7 +201,7 @@ class BRevision extends AbstractBeccaEntity<BRevision> {
             utcDateModified: this.utcDateModified,
             content: this.content, // used when retrieving full note revision to frontend
             contentLength: this.contentLength
-        };
+        } satisfies RevisionPojo;
     }
 
     override getPojoToSave() {
@@ -211,10 +211,10 @@ class BRevision extends AbstractBeccaEntity<BRevision> {
 
         if (pojo.isProtected) {
             if (protectedSessionService.isProtectedSessionAvailable()) {
-                pojo.title = protectedSessionService.encrypt(this.title) || undefined;
+                pojo.title = protectedSessionService.encrypt(this.title) ?? "";
             } else {
                 // updating protected note outside of protected session means we will keep original ciphertexts
-                delete pojo.title;
+                pojo.title = "";
             }
         }
 

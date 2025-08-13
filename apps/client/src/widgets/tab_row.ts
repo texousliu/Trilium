@@ -8,6 +8,7 @@ import appContext, { type CommandNames, type CommandListenerData, type EventData
 import froca from "../services/froca.js";
 import attributeService from "../services/attributes.js";
 import type NoteContext from "../components/note_context.js";
+import { setupHorizontalScrollViaWheel } from "./widget_utils.js";
 
 const isDesktop = utils.isDesktop();
 
@@ -386,15 +387,7 @@ export default class TabRowWidget extends BasicWidget {
     };
 
     setupScrollEvents() {
-        this.$tabScrollingContainer.on('wheel', (event) => {
-            const wheelEvent = event.originalEvent as WheelEvent;
-            if (utils.isCtrlKey(event) || event.altKey || event.shiftKey) {
-                return;
-            }
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            event.currentTarget.scrollLeft += wheelEvent.deltaY + wheelEvent.deltaX;
-        });
+        setupHorizontalScrollViaWheel(this.$tabScrollingContainer);
 
         this.$scrollButtonLeft[0].addEventListener('click', () => this.scrollTabContainer(-210));
         this.$scrollButtonRight[0].addEventListener('click', () => this.scrollTabContainer(210));

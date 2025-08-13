@@ -315,14 +315,39 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
     }
 
     hasNoteList() {
-        return (
-            this.note &&
-            ["default", "contextual-help"].includes(this.viewScope?.viewMode ?? "") &&
-            (this.note.hasChildren() || this.note.getLabelValue("viewType") === "calendar") &&
-            ["book", "text", "code"].includes(this.note.type) &&
-            this.note.mime !== "text/x-sqlite;schema=trilium" &&
-            !this.note.isLabelTruthy("hideChildrenOverview")
-        );
+        const note = this.note;
+
+        if (!note) {
+            return false;
+        }
+
+        if (!["default", "contextual-help"].includes(this.viewScope?.viewMode ?? "")) {
+            return false;
+        }
+
+        // Collections must always display a note list, even if no children.
+        const viewType = note.getLabelValue("viewType") ?? "grid";
+        if (!["list", "grid"].includes(viewType)) {
+            return true;
+        }
+
+        if (!note.hasChildren()) {
+            return false;
+        }
+
+        if (!["book", "text", "code"].includes(note.type)) {
+            return false;
+        }
+
+        if (note.mime === "text/x-sqlite;schema=trilium") {
+            return false;
+        }
+
+        if (note.isLabelTruthy("hideChildrenOverview")) {
+            return false;
+        }
+
+        return true;
     }
 
     async getTextEditor(callback?: GetTextEditorCallback) {

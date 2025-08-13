@@ -65,6 +65,9 @@ async function getRenderedContent(this: {} | { ctx: string }, entity: FNote | FA
 
         $renderedContent.append($("<div>").append("<div>This note is protected and to access it you need to enter password.</div>").append("<br/>").append($button));
     } else if (entity instanceof FNote) {
+        $renderedContent
+            .css("display", "flex")
+            .css("flex-direction", "column");
         $renderedContent.append(
             $("<div>")
                 .css("display", "flex")
@@ -72,8 +75,33 @@ async function getRenderedContent(this: {} | { ctx: string }, entity: FNote | FA
                 .css("align-items", "center")
                 .css("height", "100%")
                 .css("font-size", "500%")
+                .css("flex-grow", "1")
                 .append($("<span>").addClass(entity.getIcon()))
         );
+
+        if (entity.type === "webView" && entity.hasLabel("webViewSrc")) {
+            const $footer = $("<footer>")
+                .addClass("webview-footer");
+            const $openButton = $(`
+                <button class="file-open btn btn-primary" type="button">
+                    <span class="bx bx-link-external"></span>
+                    ${t("content_renderer.open_externally")}
+                </button>
+            `)
+                .appendTo($footer)
+                .on("click", () => {
+                    const webViewSrc = entity.getLabelValue("webViewSrc");
+                    if (webViewSrc) {
+                        if (utils.isElectron()) {
+                            const electron = utils.dynamicRequire("electron");
+                            electron.shell.openExternal(webViewSrc);
+                        } else {
+                            window.open(webViewSrc, '_blank', 'noopener,noreferrer');
+                        }
+                    }
+                });
+            $footer.appendTo($renderedContent);
+        }
     }
 
     if (entity instanceof FNote) {
@@ -118,8 +146,17 @@ async function renderText(note: FNote | FAttachment, $renderedContent: JQuery<HT
 async function renderCode(note: FNote | FAttachment, $renderedContent: JQuery<HTMLElement>) {
     const blob = await note.getBlob();
 
+    let content = blob?.content || "";
+    if (note.mime === "application/json") {
+        try {
+            content = JSON.stringify(JSON.parse(content), null, 4);
+        } catch (e) {
+            // Ignore JSON parsing errors.
+        }
+    }
+
     const $codeBlock = $("<code>");
-    $codeBlock.text(blob?.content || "");
+    $codeBlock.text(content);
     $renderedContent.append($("<pre>").append($codeBlock));
     await applySingleBlockSyntaxHighlight($codeBlock, normalizeMimeTypeForCKEditor(note.mime));
 }
@@ -301,7 +338,7 @@ function getRenderingType(entity: FNote | FAttachment) {
 
     if (type === "file" && mime === "application/pdf") {
         type = "pdf";
-    } else if (type === "file" && mime && CODE_MIME_TYPES.has(mime)) {
+    } else if ((type === "file" || type === "viewConfig") && mime && CODE_MIME_TYPES.has(mime)) {
         type = "code";
     } else if (type === "file" && mime && mime.startsWith("audio/")) {
         type = "audio";

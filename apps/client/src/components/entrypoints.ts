@@ -30,13 +30,6 @@ interface CreateChildrenResponse {
 export default class Entrypoints extends Component {
     constructor() {
         super();
-
-        if (jQuery.hotkeys) {
-            // hot keys are active also inside inputs and content editables
-            jQuery.hotkeys.options.filterInputAcceptingElements = false;
-            jQuery.hotkeys.options.filterContentEditable = false;
-            jQuery.hotkeys.options.filterTextInputs = false;
-        }
     }
 
     openDevToolsCommand() {
@@ -113,7 +106,9 @@ export default class Entrypoints extends Component {
             if (win.isFullScreenable()) {
                 win.setFullScreen(!win.isFullScreen());
             }
-        } // outside of electron this is handled by the browser
+        } else {
+            document.documentElement.requestFullscreen();
+        }
     }
 
     reloadFrontendAppCommand() {

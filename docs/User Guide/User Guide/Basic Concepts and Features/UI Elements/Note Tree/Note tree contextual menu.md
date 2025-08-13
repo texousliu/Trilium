@@ -1,5 +1,5 @@
 # Note tree contextual menu
-<figure class="image image-style-align-right"><img style="aspect-ratio:372/760;" src="1_Note tree contextual menu_.png" width="372" height="760"></figure>
+<figure class="image image-style-align-right"><img style="aspect-ratio:269/608;" src="1_Note tree contextual menu_.png" width="269" height="608"></figure>
 
 The _note tree menu_ can be accessed by right-clicking in the <a class="reference-link" href="../Note%20Tree.md">Note Tree</a>.
 
@@ -48,6 +48,10 @@ The contextual menu can operate:
     *   Will display a modal to specify where to move the desired notes.
 *   **Clone to…**
     *   Will display a modal to specify where to [clone](../../Notes/Cloning%20Notes.md) the desired notes.
+*   **Duplicate**
+    *   Creates a copy of the note and its descendants.
+    *   This process is different from <a class="reference-link" href="../../Notes/Cloning%20Notes.md">Cloning Notes</a> since the duplicated note can be edited independently from the original.
+    *   An alternative to this, if done regularly, would be <a class="reference-link" href="../../../Advanced%20Usage/Templates.md">Templates</a>.
 *   **Delete**
     *   Will delete the given notes, asking for confirmation first.
     *   In the dialog, the following options can be configured:
@@ -62,7 +66,7 @@ The contextual menu can operate:
 
 ## Advanced options
 
-<figure class="image image-style-align-right"><img style="aspect-ratio:289/355;" src="Note tree contextual menu_.png" width="289" height="355"></figure>
+<figure class="image image-style-align-right"><img style="aspect-ratio:231/263;" src="Note tree contextual menu_.png" width="231" height="263"></figure>
 
 The advanced options menu offers some of the less frequently used actions for notes.
 
@@ -75,10 +79,6 @@ To access these options, first look for the _Advanced_ option in the contextual 
 *   **Convert to attachment**
     *   Converts the selected notes to <a class="reference-link" href="../../Notes/Attachments.md">Attachments</a> of their parent notes.
     *   This functional is most useful when dealing with image <a class="reference-link" href="../../../Note%20Types/File.md">File</a> notes that were imported from an external source or an older version of Trilium.
-*   **Duplicate subtree**
-    *   Creates a copy of the note and its descendants.
-    *   This process is different from <a class="reference-link" href="../../Notes/Cloning%20Notes.md">Cloning Notes</a> since the duplicated note can be edited independently from the original.
-    *   An alternative to this, if done regularly, would be <a class="reference-link" href="../../../Advanced%20Usage/Templates.md">Templates</a>.
 *   **Expand subtree**
     *   Expands all the child notes in the <a class="reference-link" href="../Note%20Tree.md">Note Tree</a>.
 *   **Collapse subtree**

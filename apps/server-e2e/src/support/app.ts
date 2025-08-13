@@ -65,9 +65,12 @@ export default class App {
     async goToNoteInNewTab(noteTitle: string) {
         const autocomplete = this.currentNoteSplit.locator(".note-autocomplete");
         await autocomplete.fill(noteTitle);
-        await expect(this.currentNoteSplit.locator(".note-detail-empty-results")).toContainText(noteTitle);
-        await autocomplete.press("ArrowDown");
-        await autocomplete.press("Enter");
+
+        const resultsSelector = this.currentNoteSplit.locator(".note-detail-empty-results");
+        await expect(resultsSelector).toContainText(noteTitle);
+        await resultsSelector.locator(".aa-suggestion", { hasText: noteTitle })
+            .nth(1) // Select the second one, as the first one is "Create a new note"
+            .click();
     }
 
     async goToSettings() {

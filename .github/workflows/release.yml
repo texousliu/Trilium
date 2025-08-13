@@ -32,7 +32,7 @@ jobs:
             forge_platform: win32
     runs-on: ${{ matrix.os.image }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
       - name: Set up node & dependencies
         uses: actions/setup-node@v4
@@ -78,7 +78,7 @@ jobs:
             runs-on: ubuntu-24.04-arm
     runs-on: ${{ matrix.runs-on }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Run the build
         uses: ./.github/actions/build-server
@@ -101,13 +101,13 @@ jobs:
     steps:
       - run: mkdir upload
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           sparse-checkout: |
             docs/Release Notes
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           merge-multiple: true
           pattern: release-*
@@ -120,7 +120,7 @@ jobs:
           body_path: docs/Release Notes/Release Notes/${{ github.ref_name }}.md
           fail_on_unmatched_files: true
           files: upload/*.*
-          discussion_category_name: Announcements
+          discussion_category_name: Releases
           make_latest: ${{ !contains(github.ref, 'rc') }}
           prerelease: ${{ contains(github.ref, 'rc') }}
           token: ${{ secrets.RELEASE_PAT }}

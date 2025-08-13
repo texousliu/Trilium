@@ -109,30 +109,22 @@ const CALENDAR_VIEWS = [
     "listMonth"
 ]
 
-export default class CalendarView extends ViewMode {
+export default class CalendarView extends ViewMode<{}> {
 
     private $root: JQuery<HTMLElement>;
     private $calendarContainer: JQuery<HTMLElement>;
-    private noteIds: string[];
-    private parentNote: FNote;
     private calendar?: Calendar;
     private isCalendarRoot: boolean;
     private lastView?: string;
     private debouncedSaveView?: DebouncedFunction<() => void>;
 
     constructor(args: ViewModeArgs) {
-        super(args);
+        super(args, "calendar");
 
         this.$root = $(TPL);
         this.$calendarContainer = this.$root.find(".calendar-container");
-        this.noteIds = args.noteIds;
-        this.parentNote = args.parentNote;
         this.isCalendarRoot = false;
         args.$parent.append(this.$root);
-    }
-
-    get isFullHeight(): boolean {
-        return true;
     }
 
     async renderList(): Promise<JQuery<HTMLElement> | undefined> {
@@ -174,7 +166,7 @@ export default class CalendarView extends ViewMode {
             firstDay: options.getInt("firstDayOfWeek") ?? 0,
             weekends: !this.parentNote.hasAttribute("label", "calendar:hideWeekends"),
             weekNumbers: this.parentNote.hasAttribute("label", "calendar:weekNumbers"),
-            locale: await CalendarView.#getLocale(),
+            locale: await getFullCalendarLocale(options.get("locale")),
             height: "100%",
             nowIndicator: true,
             handleWindowResize: false,
@@ -227,6 +219,7 @@ export default class CalendarView extends ViewMode {
                     $(mainContainer ?? e.el).append($(promotedAttributesHtml));
                 }
             },
+            // Called upon when clicking the day number in the calendar, opens or creates the day note but only if in a calendar root.
             dateClick: async (e) => {
                 if (!this.isCalendarRoot) {
                     return;
@@ -234,7 +227,8 @@ export default class CalendarView extends ViewMode {
 
                 const note = await date_notes.getDayNote(e.dateStr);
                 if (note) {
-                    appContext.tabManager.getActiveContext()?.setNote(note.noteId);
+                    appContext.triggerCommand("openInPopup", { noteIdOrPath: note.noteId });
+                    appContext.triggerCommand("refreshNoteList", { noteId: this.parentNote.noteId });
                 }
             },
             datesSet: (e) => this.#onDatesSet(e),
@@ -250,29 +244,6 @@ export default class CalendarView extends ViewMode {
             .observe(this.$calendarContainer[0]);
 
         return this.$root;
-    }
-
-    static async #getLocale() {
-        const locale = options.get("locale");
-
-        // Here we hard-code the imports in order to ensure that they are embedded by webpack without having to load all the languages.
-        switch (locale) {
-            case "de":
-                return (await import("@fullcalendar/core/locales/de")).default;
-            case "es":
-                return (await import("@fullcalendar/core/locales/es")).default;
-            case "fr":
-                return (await import("@fullcalendar/core/locales/fr")).default;
-            case "cn":
-                return (await import("@fullcalendar/core/locales/zh-cn")).default;
-            case "tw":
-                return (await import("@fullcalendar/core/locales/zh-tw")).default;
-            case "ro":
-                return (await import("@fullcalendar/core/locales/ro")).default;
-            case "en":
-            default:
-                return undefined;
-        }
     }
 
     #onDatesSet(e: DatesSetArg) {
@@ -396,7 +367,7 @@ export default class CalendarView extends ViewMode {
         }
     }
 
-    onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
+    async onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
         // Refresh note IDs if they got changed.
         if (loadResults.getBranchRows().some((branch) => branch.parentNoteId === this.parentNote.noteId)) {
             this.noteIds = this.parentNote.getChildNoteIds();
@@ -407,9 +378,14 @@ export default class CalendarView extends ViewMode {
             return true;
         }
 
+        // Refresh on note title change.
+        if (loadResults.getNoteIds().some(noteId => this.noteIds.includes(noteId))) {
+            this.calendar?.refetchEvents();
+        }
+
         // Refresh dataset on subnote change.
-        if (this.calendar && loadResults.getAttributeRows().some((a) => this.noteIds.includes(a.noteId ?? ""))) {
-            this.calendar.refetchEvents();
+        if (loadResults.getAttributeRows().some((a) => this.noteIds.includes(a.noteId ?? ""))) {
+            this.calendar?.refetchEvents();
         }
     }
 
@@ -438,7 +414,7 @@ export default class CalendarView extends ViewMode {
             events.push(await CalendarView.buildEvent(dateNote, { startDate }));
 
             if (dateNote.hasChildren()) {
-                const childNoteIds = dateNote.getChildNoteIds();
+                const childNoteIds = await dateNote.getSubtreeNoteIds();
                 for (const childNoteId of childNoteIds) {
                     childNoteToDateMapping[childNoteId] = startDate;
                 }
@@ -463,13 +439,6 @@ export default class CalendarView extends ViewMode {
 
         for (const note of notes) {
             const startDate = CalendarView.#getCustomisableLabel(note, "startDate", "calendar:startDate");
-
-            if (note.hasChildren()) {
-                const childrenEventData = await this.buildEvents(note.getChildNoteIds());
-                if (childrenEventData.length > 0) {
-                    events.push(childrenEventData);
-                }
-            }
 
             if (!startDate) {
                 continue;
@@ -535,7 +504,7 @@ export default class CalendarView extends ViewMode {
             const eventData: EventInput = {
                 title: title,
                 start: startDate,
-                url: `#${note.noteId}`,
+                url: `#${note.noteId}?popup`,
                 noteId: note.noteId,
                 color: color ?? undefined,
                 iconClass: note.getLabelValue("iconClass"),
@@ -686,4 +655,27 @@ export default class CalendarView extends ViewMode {
         return items;
     }
 
+}
+
+export async function getFullCalendarLocale(locale: string) {
+    // Here we hard-code the imports in order to ensure that they are embedded by webpack without having to load all the languages.
+    switch (locale) {
+        case "de":
+            return (await import("@fullcalendar/core/locales/de")).default;
+        case "es":
+            return (await import("@fullcalendar/core/locales/es")).default;
+        case "fr":
+            return (await import("@fullcalendar/core/locales/fr")).default;
+        case "cn":
+            return (await import("@fullcalendar/core/locales/zh-cn")).default;
+        case "tw":
+            return (await import("@fullcalendar/core/locales/zh-tw")).default;
+        case "ro":
+            return (await import("@fullcalendar/core/locales/ro")).default;
+        case "ru":
+            return (await import("@fullcalendar/core/locales/ru")).default;
+        case "en":
+        default:
+            return undefined;
+    }
 }

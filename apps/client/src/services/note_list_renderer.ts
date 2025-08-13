@@ -1,38 +1,31 @@
 import type FNote from "../entities/fnote.js";
+import BoardView from "../widgets/view_widgets/board_view/index.js";
 import CalendarView from "../widgets/view_widgets/calendar_view.js";
+import GeoView from "../widgets/view_widgets/geo_view/index.js";
 import ListOrGridView from "../widgets/view_widgets/list_or_grid_view.js";
+import TableView from "../widgets/view_widgets/table_view/index.js";
 import type { ViewModeArgs } from "../widgets/view_widgets/view_mode.js";
 import type ViewMode from "../widgets/view_widgets/view_mode.js";
 
-export type ViewTypeOptions = "list" | "grid" | "calendar";
+const allViewTypes = ["list", "grid", "calendar", "table", "geoMap", "board"] as const;
+export type ArgsWithoutNoteId = Omit<ViewModeArgs, "noteIds">;
+export type ViewTypeOptions = typeof allViewTypes[number];
 
 export default class NoteListRenderer {
 
     private viewType: ViewTypeOptions;
-    public viewMode: ViewMode | null;
+    private args: ArgsWithoutNoteId;
+    public viewMode?: ViewMode<any>;
 
-    constructor($parent: JQuery<HTMLElement>, parentNote: FNote, noteIds: string[], showNotePath: boolean = false) {
-        this.viewType = this.#getViewType(parentNote);
-        const args: ViewModeArgs = {
-            $parent,
-            parentNote,
-            noteIds,
-            showNotePath
-        };
-
-        if (this.viewType === "list" || this.viewType === "grid") {
-            this.viewMode = new ListOrGridView(this.viewType, args);
-        } else if (this.viewType === "calendar") {
-            this.viewMode = new CalendarView(args);
-        } else {
-            this.viewMode = null;
-        }
+    constructor(args: ArgsWithoutNoteId) {
+        this.args = args;
+        this.viewType = this.#getViewType(args.parentNote);
     }
 
     #getViewType(parentNote: FNote): ViewTypeOptions {
         const viewType = parentNote.getLabelValue("viewType");
 
-        if (!["list", "grid", "calendar"].includes(viewType || "")) {
+        if (!(allViewTypes as readonly string[]).includes(viewType || "")) {
             // when not explicitly set, decide based on the note type
             return parentNote.type === "search" ? "list" : "grid";
         } else {
@@ -41,15 +34,38 @@ export default class NoteListRenderer {
     }
 
     get isFullHeight() {
-        return this.viewMode?.isFullHeight;
+        switch (this.viewType) {
+            case "list":
+            case "grid":
+                return false;
+            default:
+                return true;
+        }
     }
 
     async renderList() {
-        if (!this.viewMode) {
-            return null;
-        }
+        const args = this.args;
+        const viewMode = this.#buildViewMode(args);
+        this.viewMode = viewMode;
+        await viewMode.beforeRender();
+        return await viewMode.renderList();
+    }
 
-        return await this.viewMode.renderList();
+    #buildViewMode(args: ViewModeArgs) {
+        switch (this.viewType) {
+            case "calendar":
+                return new CalendarView(args);
+            case "table":
+                return new TableView(args);
+            case "geoMap":
+                return new GeoView(args);
+            case "board":
+                return new BoardView(args);
+            case "list":
+            case "grid":
+            default:
+                return new ListOrGridView(this.viewType, args);
+        }
     }
 
 }

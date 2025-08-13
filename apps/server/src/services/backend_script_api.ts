@@ -255,8 +255,12 @@ export interface Api {
     /**
      * Returns week note for given date. If such a note doesn't exist, it is created.
      *
+     * <p>
+     * If the calendar does not support week notes, this method will return `null`.
+     *
      * @param date in YYYY-MM-DD format
      * @param rootNote - specify calendar root note, normally leave empty to use the default calendar
+     * @return an existing or newly created week note, or `null` if the calendar does not support week notes.
      */
     getWeekNote(date: string, rootNote: BNote): BNote | null;
 
@@ -407,6 +411,17 @@ export interface Api {
      * @returns resolves once the backup is finished
      */
     backupNow(backupName: string): Promise<string>;
+
+    /**
+     * Enables the complete duplication of the specified original note and all its children into the specified parent note.
+     * The new note will be named the same as the original, with (Dup) added to the end of it.
+     *
+     * @param origNoteId - the noteId for the original note to be duplicated
+     * @param newParentNoteId - the noteId for the parent note where the duplication is to be placed.
+     *
+     * @returns the note and the branch of the newly created note.
+     */
+    duplicateSubtree(origNoteId: string, newParentNoteId: string): { note: BNote; branch: BBranch; }
 
     /**
      * This object contains "at your risk" and "no BC guarantees" objects for advanced use cases.
@@ -699,6 +714,7 @@ function BackendScriptApi(this: Api, currentNote: BNote, apiParams: ApiParams) {
 
     this.runOutsideOfSync = syncMutex.doExclusively;
     this.backupNow = backupService.backupNow;
+    this.duplicateSubtree = noteService.duplicateSubtree;
 
     this.__private = {
         becca

@@ -259,15 +259,15 @@ $$`;
         const input = trimIndentation`\
             ### 🐞 Bugfixes
 
-            *   [v0.90.4 docker does not read USER\_UID and USER\_GID from environment](https://github.com/TriliumNext/Notes/issues/331)
-            *   [Invalid CSRF token on Android phone](https://github.com/TriliumNext/Notes/issues/318)
-            *   [Excess spacing in lists](https://github.com/TriliumNext/Notes/issues/341)`;
+            *   [v0.90.4 docker does not read USER\_UID and USER\_GID from environment](https://github.com/TriliumNext/Trilium/issues/331)
+            *   [Invalid CSRF token on Android phone](https://github.com/TriliumNext/Trilium/issues/318)
+            *   [Excess spacing in lists](https://github.com/TriliumNext/Trilium/issues/341)`;
         const expected = [
             /*html*/`<h3>🐞 Bugfixes</h3>`,
             /*html*/`<ul>`,
-            /*html*/`<li><a href="https://github.com/TriliumNext/Notes/issues/331">v0.90.4 docker does not read USER_UID and USER_GID from environment</a></li>`,
-            /*html*/`<li><a href="https://github.com/TriliumNext/Notes/issues/318">Invalid CSRF token on Android phone</a></li>`,
-            /*html*/`<li><a href="https://github.com/TriliumNext/Notes/issues/341">Excess spacing in lists</a></li>`,
+            /*html*/`<li><a href="https://github.com/TriliumNext/Trilium/issues/331">v0.90.4 docker does not read USER_UID and USER_GID from environment</a></li>`,
+            /*html*/`<li><a href="https://github.com/TriliumNext/Trilium/issues/318">Invalid CSRF token on Android phone</a></li>`,
+            /*html*/`<li><a href="https://github.com/TriliumNext/Trilium/issues/341">Excess spacing in lists</a></li>`,
             /*html*/`</ul>`
         ].join("");
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
@@ -296,6 +296,12 @@ $$`;
     it("supports wikilink with image (transclusion)", () => {
         const input = `heres the handsome boy ![[assets/2025-06-20_14-05-20.jpeg]]`;
         const expected = `<p>heres the handsome boy <img src="/assets/2025-06-20_14-05-20.jpeg"></p>`;
+        expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
+    });
+
+    it("preserves superscript and subscript", () => {
+        const input = `Hello <sup>superscript</sup> <sub>subscript</sub>`;
+        const expected = /*html*/`<p>Hello <sup>superscript</sup> <sub>subscript</sub></p>`;
         expect(markdownService.renderToHtml(input, "Title")).toStrictEqual(expected);
     });
 
