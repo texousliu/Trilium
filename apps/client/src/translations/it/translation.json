@@ -1,6 +1,5 @@
 {
     "about": {
-        "close": "Chiudi",
         "app_version": "Versione dell'app:",
         "db_version": "Versione DB:",
         "sync_version": "Versione Sync:",
@@ -27,7 +26,6 @@
     },
     "add_link": {
         "add_link": "Aggiungi un collegamento",
-        "close": "Chiudi",
         "note": "Nota",
         "search_note": "cerca una nota per nome",
         "link_title_mirrors": "il titolo del collegamento rispecchia il titolo della nota corrente",
@@ -39,14 +37,12 @@
     "branch_prefix": {
         "edit_branch_prefix": "Modifica il prefisso del ramo",
         "help_on_tree_prefix": "Aiuto sui prefissi dell'Albero",
-        "close": "Chiudi",
         "prefix": "Prefisso: ",
         "save": "Salva",
         "branch_prefix_saved": "Il prefisso del ramo è stato salvato."
     },
     "bulk_actions": {
         "bulk_actions": "Azioni massive",
-        "close": "Chiudi",
         "affected_notes": "Note influenzate",
         "include_descendants": "Includi i discendenti della nota selezionata",
         "available_actions": "Azioni disponibili",
@@ -61,7 +57,6 @@
     },
     "clone_to": {
         "clone_notes_to": "Clona note in...",
-        "close": "Chiudi",
         "help_on_links": "Aiuto sui collegamenti",
         "notes_to_clone": "Note da clonare",
         "target_parent_note": "Nodo padre obiettivo",
@@ -73,7 +68,6 @@
         "note_cloned": "La nota \"{{clonedTitle}}\" è stata clonata in \"{{targetTitle}}\""
     },
     "confirm": {
-        "close": "Chiudi",
         "cancel": "Annulla",
         "ok": "OK",
         "confirmation": "Conferma",
@@ -106,46 +100,18 @@
         "choose_export_type": "Scegli prima il tipo di esportazione, per favore",
         "export_in_progress": "Esportazione in corso: {{progressCount}}",
         "export_finished_successfully": "Esportazione terminata con successo.",
-        "format_pdf": "PDF- allo scopo di stampa o esportazione."
-    },
-    "help": {
-        "close": "Chiudi",
-        "fullDocumentation": "Aiuto (la documentazione completa è disponibile <a class=\"external\" href=\"https://triliumnext.github.io/Docs/\">online</a>)"
-    },
-    "import": {
-        "close": "Chiudi"
-    },
-    "include_note": {
-        "close": "Chiudi"
-    },
-    "jump_to_note": {
-        "close": "Chiudi"
-    },
-    "markdown_import": {
-        "close": "Chiudi"
-    },
-    "move_to": {
-        "close": "Chiudi"
-    },
-    "note_type_chooser": {
-        "close": "Chiudi"
+        "format_pdf": "PDF- allo scopo di stampa o esportazione.",
+        "export_type_subtree": "Questa nota e tutti i suoi discendenti",
+        "format_html": "HTML - raccomandato in quanto mantiene tutti i formati",
+        "format_html_zip": "HTML in archivio ZIP - questo è raccomandato in quanto conserva tutta la formattazione.",
+        "format_markdown": "MArkdown - questo conserva la maggior parte della formattazione."
     },
     "password_not_set": {
-        "close": "Chiudi",
         "body1": "Le note protette sono crittografate utilizzando una password utente, ma la password non è stata ancora impostata.",
         "body2": "Per proteggere le note, fare clic su <a class=\"open-password-options-button\" href=\"javascript:\">qui</a> per aprire la finestra di dialogo Opzioni e impostare la password."
     },
     "protected_session_password": {
         "close_label": "Chiudi"
-    },
-    "prompt": {
-        "close": "Chiudi"
-    },
-    "recent_changes": {
-        "close": "Chiudi"
-    },
-    "revisions": {
-        "close": "Chiudi"
     },
     "abstract_bulk_action": {
         "remove_this_search_action": "Rimuovi questa azione di ricerca"

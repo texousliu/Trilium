@@ -60,15 +60,16 @@ sudo systemctl enable --now -q trilium
 ```
 
 *   You can now open a browser to http://\[your-server-hostname\]:8080 and you should see the Trilium initialization page.
+
 ## Simple Autoupdate for Server
+
 Run as the same User Trilium runs
 
-if you run as root please remove  'sudo' from the commands
+if you run as root please remove 'sudo' from the commands
 
-requires "jq" ```apt install jq```
+requires "jq" `apt install jq`
 
-It will stop the service above, overwrite everything (i expect no config.ini), and start service
-It also creates a version file in the Trilium directory so it updates only with a newer Version
+It will stop the service above, overwrite everything (i expect no config.ini), and start service It also creates a version file in the Trilium directory so it updates only with a newer Version
 
 ```
 #!/bin/bash

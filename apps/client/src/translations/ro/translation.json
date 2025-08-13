@@ -7,8 +7,7 @@
         "sync_version": "Versiune sincronizare:",
         "build_date": "Data compilării:",
         "build_revision": "Revizia compilării:",
-        "data_directory": "Directorul de date:",
-        "close": "Închide"
+        "data_directory": "Directorul de date:"
     },
     "abstract_bulk_action": {
         "remove_this_search_action": "Înlătură acesată acțiune la căutare"
@@ -30,14 +29,13 @@
     },
     "add_link": {
         "add_link": "Adaugă legătură",
-        "close": "Închide",
         "help_on_links": "Informații despre legături",
         "link_title": "Titlu legătură",
         "link_title_arbitrary": "titlul legăturii poate fi schimbat în mod arbitrar",
         "link_title_mirrors": "titlul legăturii corespunde titlul curent al notiței",
         "note": "Notiță",
         "search_note": "căutați notița după nume",
-        "button_add_link": "Adaugă legătură <kbd>Enter</kbd>"
+        "button_add_link": "Adaugă legătură"
     },
     "add_relation": {
         "add_relation": "Adaugă relație",
@@ -296,7 +294,6 @@
     },
     "branch_prefix": {
         "branch_prefix_saved": "Prefixul ramurii a fost salvat.",
-        "close": "Închide",
         "edit_branch_prefix": "Editează prefixul ramurii",
         "help_on_tree_prefix": "Informații despre prefixe de ierarhie",
         "prefix": "Prefix:",
@@ -308,7 +305,6 @@
         "bulk_actions": "Acțiuni în masă",
         "bulk_actions_executed": "Acțiunile în masă au fost executate cu succes.",
         "chosen_actions": "Acțiuni selectate",
-        "close": "Închide",
         "execute_bulk_actions": "Execută acțiunile în masă",
         "include_descendants": "Include descendenții notiței selectate",
         "none_yet": "Nicio acțiune... adăugați una printr-un click pe cele disponibile mai jos.",
@@ -342,7 +338,7 @@
     },
     "clone_to": {
         "clone_notes_to": "Clonează notițele către...",
-        "clone_to_selected_note": "Clonează notița selectată <kbd>enter</kbd>",
+        "clone_to_selected_note": "Clonează notița selectată",
         "cloned_note_prefix_title": "Notița clonată va fi afișată în ierarhia notiței utilizând prefixul dat",
         "help_on_links": "Informații despre legături",
         "no_path_to_clone_to": "Nicio cale de clonat.",
@@ -350,8 +346,7 @@
         "notes_to_clone": "Notițe de clonat",
         "prefix_optional": "Prefix (opțional)",
         "search_for_note_by_its_name": "căutați notița după nume acesteia",
-        "target_parent_note": "Notița părinte țintă",
-        "close": "Închide"
+        "target_parent_note": "Notița părinte țintă"
     },
     "close_pane_button": {
         "close_this_pane": "Închide acest panou"
@@ -378,8 +373,7 @@
         "cancel": "Anulează",
         "confirmation": "Confirm",
         "if_you_dont_check": "Dacă această opțiune nu este bifată, notița va fi ștearsă doar din harta de relații.",
-        "ok": "OK",
-        "close": "Închide"
+        "ok": "OK"
     },
     "consistency_checks": {
         "find_and_fix_button": "Caută și repară probleme de consistență",
@@ -436,14 +430,14 @@
         "undelete_notes_instruction": "După ștergere, se pot recupera din ecranul Schimbări recente."
     },
     "delete_notes": {
-        "broken_relations_to_be_deleted": "Următoarele relații vor fi întrerupte și șterse ({{- relationCount}})",
+        "broken_relations_to_be_deleted": "Următoarele relații vor fi întrerupte și șterse ({{ relationCount}})",
         "cancel": "Anulează",
         "delete_all_clones_description": "Șterge și toate clonele (se pot recupera în ecranul Schimbări recente)",
         "delete_notes_preview": "Previzualizare ștergerea notițelor",
         "erase_notes_description": "Ștergerea obișnuită doar marchează notițele ca fiind șterse și pot fi recuperate (în ecranul Schimbări recente) pentru o perioadă de timp. Dacă se bifează această opțiune, notițele vor fi șterse imediat fără posibilitatea de a le recupera.",
         "erase_notes_warning": "Șterge notițele permanent (nu se mai pot recupera), incluzând toate clonele. Va forța reîncărcarea aplicației.",
         "no_note_to_delete": "Nicio notiță nu va fi ștearsă (doar clonele).",
-        "notes_to_be_deleted": "Următoarele notițe vor fi șterse ({{- noteCount}})",
+        "notes_to_be_deleted": "Următoarele notițe vor fi șterse ({{notesCount}})",
         "ok": "OK",
         "deleted_relation_text": "Notița {{- note}} ce va fi ștearsă este referențiată de relația {{- relation}}, originând din {{- source}}.",
         "close": "Închide"
@@ -615,13 +609,12 @@
         "activatePreviousTab": "activează tabul anterior",
         "blockQuote": "începeți un rând cu <code>></code> urmat de spațiu pentru un bloc de citat",
         "bulletList": "<code>*</code> sau <code>-</code> urmat de spațiu pentru o listă punctată",
-        "close": "Închide",
         "closeActiveTab": "închide tabul activ",
-        "collapseExpand": "<kbd>LEFT</kbd>, <kbd>RIGHT</kbd> - minimizează/expandează nodul",
+        "collapseExpand": "minimizează/expandează nodul",
         "collapseSubTree": "minimizează subarborele",
         "collapseWholeTree": "minimizează întregul arbore de notițe",
         "copyNotes": "copiază notița activă (sau selecția curentă) în clipboard (utilizat pentru <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/cloning-notes.html#cloning-notes\">clonare</a>)",
-        "createEditLink": "<kbd>Ctrl+K</kbd> - crează/editează legătură externă",
+        "createEditLink": "crează/editează legătură externă",
         "createInternalLink": "crează legătură internă",
         "createNoteAfter": "crează o nouă notiță după notița activă",
         "createNoteInto": "crează o subnotiță în notița activă",
@@ -632,20 +625,19 @@
         "editNoteTitle": "va sări de la arborele de notițe către titlul notiței. Enter de la titlul notiței va sări către editorul de text. <kbd>Ctrl+.</kbd> va sări înapoi de la editor către arborele de notițe.",
         "editingNotes": "Editarea notițelor",
         "followLink": "urmărește link-ul sub cursor",
-        "fullDocumentation": "Instrucțiuni (documentația completă se regăsește <a class=\"external\" href=\"https://triliumnext.github.io/Docs/\">online</a>)",
         "goBackForwards": "mergi înapoi/înainte în istoric",
-        "goUpDown": "<kbd>UP</kbd>, <kbd>DOWN</kbd> - mergi sus/jos în lista de notițe",
+        "goUpDown": "mergi sus/jos în lista de notițe",
         "headings": "<code>##</code>, <code>###</code>, <code>####</code>  etc. urmat de spațiu pentru titluri",
         "inPageSearch": "caută în interiorul paginii",
         "insertDateTime": "inserează data și timpul curente la poziția cursorului",
-        "jumpToParentNote": "<kbd>Backspace</kbd> - sari la pagina părinte",
+        "jumpToParentNote": "sari la pagina părinte",
         "jumpToTreePane": "sari către arborele de notițe și scrolează către notița activă",
         "markdownAutoformat": "Formatare în stil Markdown",
         "moveNoteUpDown": "mută notița sus/jos în lista de notițe",
         "moveNoteUpHierarchy": "mută notița mai sus în ierarhie",
         "movingCloningNotes": "Mutarea/clonarea notițelor",
         "multiSelectNote": "selectează multiplu notița de sus/jos",
-        "newTabNoteLink": "<kbd>CTRL+clic</kbd> - (sau clic mijlociu) pe o legătură către o notiță va deschide notița într-un tab nou",
+        "newTabNoteLink": "pe o legătură către o notiță va deschide notița într-un tab nou",
         "notSet": "nesetat",
         "noteNavigation": "Navigarea printre notițe",
         "numberedList": "<kbd>1.</code> sau <code>1)</code> urmat de spațiu pentru o listă numerotată",
@@ -657,13 +649,13 @@
         "reloadFrontend": "reîncarcă interfața Trilium",
         "scrollToActiveNote": "scrolează la notița activă",
         "selectAllNotes": "selectează toate notițele din nivelul curent",
-        "selectNote": "<kbd>Shift+Click</kbd> - selectează notița",
+        "selectNote": "selectează notița",
         "showDevTools": "afișează instrumentele de dezvoltatori",
         "showJumpToNoteDialog": "afișează <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">ecranul „Sari la”</a>",
         "showSQLConsole": "afișează consola SQL",
         "tabShortcuts": "Scurtături pentru tab-uri",
         "troubleshooting": "Unelte pentru depanare",
-        "newTabWithActivationNoteLink": "<kbd>Ctrl+Shift+click</kbd> - (sau <kbd>Shift+click mouse mijlociu</kbd>) pe o legătură către o notiță deschide și activează notița într-un tab nou"
+        "newTabWithActivationNoteLink": "pe o legătură către o notiță deschide și activează notița într-un tab nou"
     },
     "hide_floating_buttons_button": {
         "button_title": "Ascunde butoanele"
@@ -718,7 +710,6 @@
     },
     "import": {
         "chooseImportFile": "Selectați fișierul de importat",
-        "close": "Închide",
         "codeImportedAsCode": "Importă fișiere identificate drept cod sursă (e.g. <code>.json</code>) drept notițe de tip cod dacă nu este clar din metainformații",
         "explodeArchives": "Citește conținutul arhivelor <code>.zip</code>, <code>.enex</code> și <code>.opml</code>.",
         "explodeArchivesTooltip": "Dacă această opțiune este bifată atunci Trilium va citi fișiere de tip <code>.zip</code>, <code>.enex</code> și <code>.opml</code> și va crea notițe din fișierele din interiorul acestor arhive. Dacă este nebifat, atunci Trilium va atașa arhiva propriu-zisă la notiță.",
@@ -751,11 +742,10 @@
         "box_size_medium": "mediu (~ 30 de rânduri)",
         "box_size_prompt": "Dimensiunea căsuței notiței incluse:",
         "box_size_small": "mică (~ 10 rânduri)",
-        "button_include": "Include notița <kbd>Enter</kbd>",
+        "button_include": "Include notița",
         "dialog_title": "Includere notița",
         "label_note": "Notiță",
-        "placeholder_search": "căutați notița după denumirea ei",
-        "close": "Închide"
+        "placeholder_search": "căutați notița după denumirea ei"
     },
     "info": {
         "closeButton": "Închide",
@@ -767,8 +757,7 @@
         "title": "Atribute moștenite"
     },
     "jump_to_note": {
-        "search_button": "Caută în întregul conținut <kbd>Ctrl+Enter</kbd>",
-        "close": "Închide",
+        "search_button": "Caută în întregul conținut",
         "search_placeholder": "Căutați notițe după nume sau tastați > pentru comenzi..."
     },
     "left_pane_toggle": {
@@ -781,10 +770,9 @@
     },
     "markdown_import": {
         "dialog_title": "Importă Markdown",
-        "import_button": "Importă Ctrl+Enter",
+        "import_button": "Importă",
         "import_success": "Conținutul Markdown a fost importat în document.",
-        "modal_body_text": "Din cauza limitărilor la nivel de navigator, nu este posibilă citirea clipboard-ului din JavaScript. Inserați Markdown-ul pentru a-l importa în caseta de mai jos și dați clic pe butonul Import",
-        "close": "Închide"
+        "modal_body_text": "Din cauza limitărilor la nivel de navigator, nu este posibilă citirea clipboard-ului din JavaScript. Inserați Markdown-ul pentru a-l importa în caseta de mai jos și dați clic pe butonul Import"
     },
     "max_content_width": {
         "apply_changes_description": "Pentru a aplica schimbările de lățime a conținutului, dați click pe",
@@ -817,12 +805,11 @@
     "move_to": {
         "dialog_title": "Mută notițele în...",
         "error_no_path": "Nicio cale la care să poată fi mutate.",
-        "move_button": "Mută la notița selectată <kbd>enter</kbd>",
+        "move_button": "Mută la notița selectată",
         "move_success_message": "Notițele selectate au fost mutate în",
         "notes_to_move": "Notițe de mutat",
         "search_placeholder": "căutați notița după denumirea ei",
-        "target_parent_note": "Notița părinte destinație",
-        "close": "Închide"
+        "target_parent_note": "Notița părinte destinație"
     },
     "native_title_bar": {
         "disabled": "dezactivată",
@@ -897,8 +884,7 @@
     "note_type_chooser": {
         "modal_body": "Selectați tipul notiței/șablonul pentru noua notiță:",
         "modal_title": "Selectați tipul notiței",
-        "templates": "Șabloane:",
-        "close": "Închide",
+        "templates": "Șabloane",
         "change_path_prompt": "Selectați locul unde să se creeze noua notiță:",
         "search_placeholder": "căutare cale notiță după nume (cea implicită dacă este necompletat)"
     },
@@ -954,9 +940,7 @@
     },
     "password_not_set": {
         "body1": "Notițele protejate sunt criptate utilizând parola de utilizator, dar nu a fost setată nicio parolă.",
-        "body2": "Pentru a putea să protejați notițe, clic <a class=\"open-password-options-button\" href=\"javascript:\">aici</a> pentru a deschide ecranul de opțiuni și pentru a seta parola.",
-        "title": "Parola nu este setată",
-        "close": "Închide"
+        "title": "Parola nu este setată"
     },
     "promoted_attributes": {
         "add_new_attribute": "Adaugă un nou atribut",
@@ -971,9 +955,8 @@
     },
     "prompt": {
         "defaultTitle": "Aviz",
-        "ok": "OK <kbd>enter</kbd>",
-        "title": "Aviz",
-        "close": "Închide"
+        "ok": "OK",
+        "title": "Aviz"
     },
     "protected_session": {
         "enter_password_instruction": "Afișarea notițelor protejate necesită introducerea parolei:",
@@ -992,7 +975,7 @@
         "form_label": "Pentru a putea continua cu acțiunea cerută este nevoie să fie pornită sesiunea protejată prin introducerea parolei:",
         "help_title": "Informații despre notițe protejate",
         "modal_title": "Sesiune protejată",
-        "start_button": "Pornește sesiunea protejată <kbd>enter</kbd>"
+        "start_button": "Pornește sesiunea protejată"
     },
     "protected_session_status": {
         "active": "Sesiunea protejată este activă. Clic pentru a închide sesiunea protejată.",
@@ -1004,8 +987,7 @@
         "erase_notes_button": "Elimină notițele șterse",
         "no_changes_message": "Încă nicio schimbare...",
         "title": "Modificări recente",
-        "undelete_link": "restaurare",
-        "close": "Închide"
+        "undelete_link": "restaurare"
     },
     "relation_map": {
         "cannot_match_transform": "Nu s-a putut identifica transformarea: {{transform}}",
@@ -1084,8 +1066,7 @@
         "revisions_deleted": "Notița reviziei a fost ștearsă.",
         "maximum_revisions": "Numărul maxim de revizii pentru notița curentă: {{number}}.",
         "settings": "Setări revizii ale notițelor",
-        "snapshot_interval": "Intervalul de creare a reviziilor pentru notițe: {{seconds}}s.",
-        "close": "Închide"
+        "snapshot_interval": "Intervalul de creare a reviziilor pentru notițe: {{seconds}}s."
     },
     "revisions_button": {
         "note_revisions": "Revizii ale notiței"
@@ -1193,15 +1174,14 @@
         "folders": "Dosare",
         "natural_sort": "Ordonare naturală",
         "natural_sort_language": "Limba pentru ordonare naturală",
-        "sort": "Ordonare <kbd>Enter</kbd>",
+        "sort": "Ordonare",
         "sort_children_by": "Ordonează subnotițele după...",
         "sort_folders_at_top": "ordonează dosarele primele",
         "sort_with_respect_to_different_character_sorting": "ordonează respectând regulile de sortare și clasificare diferite în funcție de limbă și regiune.",
         "sorting_criteria": "Criterii de ordonare",
         "sorting_direction": "Direcția de ordonare",
         "the_language_code_for_natural_sort": "Codul limbii pentru ordonarea naturală, e.g. „zn-CN” pentru chineză.",
-        "title": "titlu",
-        "close": "Închide"
+        "title": "titlu"
     },
     "spellcheck": {
         "available_language_codes_label": "Coduri de limbă disponibile:",
@@ -1253,12 +1233,9 @@
         "unit": "caractere"
     },
     "theme": {
-        "auto_theme": "Temă auto (se adaptează la schema de culori a sistemului)",
-        "dark_theme": "Temă întunecată",
-        "light_theme": "Temă luminoasă",
-        "triliumnext": "TriliumNext Beta (se adaptează la schema de culori a sistemului)",
-        "triliumnext-light": "TriliumNext Beta (luminoasă)",
-        "triliumnext-dark": "TriliumNext Beta (întunecată)",
+        "triliumnext": "Trilium (se adaptează la schema de culori a sistemului)",
+        "triliumnext-light": "Trilium (luminoasă)",
+        "triliumnext-dark": "Trilium (întunecată)",
         "override_theme_fonts_label": "Suprascrie fonturile temei",
         "theme_label": "Temă",
         "title": "Tema aplicației",
@@ -1311,13 +1288,12 @@
     },
     "upload_attachments": {
         "choose_files": "Selectați fișierele",
-        "files_will_be_uploaded": "Fișierele vor fi încărcate ca atașamente în",
+        "files_will_be_uploaded": "Fișierele vor fi încărcate ca atașamente în {{noteTitle}}",
         "options": "Opțuni",
         "shrink_images": "Micșorează imaginile",
         "tooltip": "Dacă această opțiune este bifată, Trilium va încerca micșorarea imaginilor încărcate prin scalarea și optimizarea lor, aspect ce va putea afecta calitatea imaginilor. Dacă nu este bifată, imaginile vor fi încărcate fără nicio schimbare.",
         "upload": "Încărcare",
-        "upload_attachments_to_note": "Încarcă atașamentele la notiță",
-        "close": "Închide"
+        "upload_attachments_to_note": "Încarcă atașamentele la notiță"
     },
     "vacuum_database": {
         "button_text": "Compactează baza de date",
@@ -1673,10 +1649,6 @@
         "note-has-been-deleted": "Notița a fost ștearsă.",
         "quick-edit": "Editare rapidă"
     },
-    "notes": {
-        "duplicate-note-suffix": "(dupl.)",
-        "duplicate-note-title": "{{- noteTitle }} {{ duplicateNoteSuffix }}"
-    },
     "geo-map-context": {
         "open-location": "Deschide locația",
         "remove-from-map": "Înlătură de pe hartă",
@@ -1730,9 +1702,6 @@
     "content_language": {
         "description": "Selectați una sau mai multe limbi ce vor apărea în selecția limbii din cadrul secțiunii „Proprietăți de bază” pentru notițele de tip text (editabile sau doar în citire).",
         "title": "Limbi pentru conținutul notițelor"
-    },
-    "hidden-subtree": {
-        "localization": "Limbă și regiune"
     },
     "note_language": {
         "configure-languages": "Configurează limbile...",
@@ -2014,5 +1983,8 @@
     },
     "content_renderer": {
         "open_externally": "Deschide în afara programului"
+    },
+    "modal": {
+        "close": "Închide"
     }
 }
