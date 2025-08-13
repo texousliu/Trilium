@@ -102,7 +102,9 @@
     "choose_export_type": "請先選擇匯出類型",
     "export_status": "匯出狀態",
     "export_in_progress": "匯出進行中：{{progressCount}}",
-    "export_finished_successfully": "匯出成功完成。"
+    "export_finished_successfully": "匯出成功完成。",
+    "format_html": "HTML - 推薦，因為它保留所有格式",
+    "format_pdf": "PDF - 用於列印或與他人分享。"
   },
   "help": {
     "noteNavigation": "筆記導航",
@@ -153,7 +155,10 @@
     "showSQLConsole": "顯示SQL控制台",
     "other": "其他",
     "quickSearch": "定位到快速搜尋框",
-    "inPageSearch": "頁面內搜尋"
+    "inPageSearch": "頁面內搜尋",
+    "title": "資料表",
+    "newTabNoteLink": "在新分頁開啟筆記連結",
+    "newTabWithActivationNoteLink": "在新分頁開啟並切換至筆記連結"
   },
   "import": {
     "importIntoNote": "匯入到筆記",
@@ -170,7 +175,16 @@
     "codeImportedAsCode": "如果元數據不明確，將識別的程式碼文件（例如<code>.json</code>）匯入為程式碼筆記",
     "replaceUnderscoresWithSpaces": "在匯入的筆記名稱中將下劃線替換為空格",
     "import": "匯入",
-    "failed": "匯入失敗: {{message}}."
+    "failed": "匯入失敗: {{message}}.",
+    "html_import_tags": {
+      "title": "匯入 HTML 標籤",
+      "description": "設定在匯入筆記時應保留的 HTML 標籤。不在此列表中的標籤將在匯入過程中被移除。一些標籤（例如 'script'）為了安全性會始終被移除。",
+      "placeholder": "輸入 HTML 標籤，每行一個",
+      "reset_button": "重設為預設列表"
+    },
+    "import-status": "匯入狀態",
+    "in-progress": "正在匯入：{{progress}}",
+    "successful": "匯入成功。"
   },
   "include_note": {
     "dialog_title": "包含筆記",
@@ -188,7 +202,8 @@
     "okButton": "確定"
   },
   "jump_to_note": {
-    "search_button": "全文搜尋"
+    "search_button": "全文搜尋",
+    "search_placeholder": "依名稱或類型查詢筆記或按 > 查看命令…"
   },
   "markdown_import": {
     "dialog_title": "Markdown 匯入",
@@ -208,11 +223,16 @@
   "note_type_chooser": {
     "modal_title": "選擇筆記類型",
     "modal_body": "選擇新筆記的類型或模板：",
-    "templates": "模板"
+    "templates": "模板",
+    "change_path_prompt": "變更建立新筆記的位置：",
+    "search_placeholder": "依名稱搜尋路徑（若為空則預設）",
+    "builtin_templates": "內建模板"
   },
   "password_not_set": {
     "title": "密碼未設定",
-    "body1": "受保護的筆記使用用戶密碼加密，但密碼尚未設定。"
+    "body1": "受保護的筆記使用用戶密碼加密，但密碼尚未設定。",
+    "body2": "若要保護筆記，請按一下下面的按鈕開啟「選項」對話方塊並設定密碼。",
+    "go_to_password_options": "移動至密碼選項"
   },
   "prompt": {
     "title": "提示",
@@ -254,7 +274,9 @@
     "mime": "MIME類型： ",
     "file_size": "文件大小：",
     "preview": "預覽：",
-    "preview_not_available": "無法預覽此類型的筆記。"
+    "preview_not_available": "無法預覽此類型的筆記。",
+    "restore_button": "還原",
+    "delete_button": "刪除"
   },
   "sort_child_notes": {
     "sort_children_by": "按…排序子筆記",
@@ -401,7 +423,11 @@
     "share_favicon": "在分享頁面中設定的favicon筆記。一般需要將它設定為分享和可繼承。Favicon筆記也必須位於分享子階層中。可以考慮一並使用'share_hidden_from_tree'。",
     "is_owned_by_note": "由此筆記所有",
     "other_notes_with_name": "其它含有 {{attributeType}} 名為 \"{{attributeName}}\" 的的筆記",
-    "and_more": "…以及另外 {{count}} 個"
+    "and_more": "…以及另外 {{count}} 個",
+    "app_theme_base": "設定為 \"next\"、\"next-light \" 或 \"next-dark\"，以使用相應的 TriliumNext 主題（自動、淺色或深色）作為自訂主題的基礎，而非傳統主題。",
+    "print_landscape": "匯出為 PDF 時，將頁面方向更改為橫向而非縱向。",
+    "print_page_size": "在匯出 PDF 時更改頁面大小。支援的值：<code>A0</code>、<code>A1</code>、<code>A2</code>、<code>A3</code>、<code>A4</code>、<code>A5</code>、<code>A6</code>、<code>Legal</code>、<code>Letter</code>、<code>Tabloid</code>、<code>Ledger</code>。",
+    "color_type": "顏色"
   },
   "attribute_editor": {
     "help_text_body1": "要添加標籤，只需輸入例如 <code>#rock</code> 或者如果您還想添加值，則例如 <code>#year = 2020</code>",
@@ -560,7 +586,8 @@
     "september": "九月",
     "october": "十月",
     "november": "十一月",
-    "december": "十二月"
+    "december": "十二月",
+    "cannot_find_week_note": "無法找到週記"
   },
   "close_pane_button": {
     "close_this_pane": "關閉此面板"
@@ -601,7 +628,9 @@
     "show_hidden_subtree": "顯示隱藏子階層",
     "show_help": "顯示幫助",
     "about": "關於 TriliumNext 筆記",
-    "logout": "登出"
+    "logout": "登出",
+    "show-cheatsheet": "顯示工具表",
+    "toggle-zen-mode": "禪模式"
   },
   "sync_status": {
     "unknown": "<p>同步狀態將在下一次同步嘗試開始後顯示。</p><p>點擊以立即觸發同步。</p>",
@@ -635,7 +664,8 @@
     "save_revision": "保存筆記歷史",
     "convert_into_attachment_failed": "筆記 '{{title}}' 轉換失敗。",
     "convert_into_attachment_successful": "筆記 '{{title}}' 已成功轉換為附件。",
-    "convert_into_attachment_prompt": "確定要將筆記 '{{title}}' 轉換為上級筆記的附件嗎？"
+    "convert_into_attachment_prompt": "確定要將筆記 '{{title}}' 轉換為上級筆記的附件嗎？",
+    "print_pdf": "匯出為 PDF…"
   },
   "onclick_button": {
     "no_click_handler": "按鈕組件'{{componentId}}'沒有定義點擊處理程序"
@@ -698,7 +728,8 @@
   "basic_properties": {
     "note_type": "筆記類型",
     "editable": "可編輯",
-    "basic_properties": "基本屬性"
+    "basic_properties": "基本屬性",
+    "language": "語言"
   },
   "book_properties": {
     "view_type": "視圖類型",
@@ -708,7 +739,12 @@
     "expand_all_children": "展開所有子項",
     "collapse": "收合",
     "expand": "展開",
-    "invalid_view_type": "無效的查看類型 '{{type}}'"
+    "invalid_view_type": "無效的查看類型 '{{type}}'",
+    "book_properties": "集合屬性",
+    "calendar": "日曆",
+    "table": "表格",
+    "geo-map": "地理地圖",
+    "board": "看板"
   },
   "edited_notes": {
     "no_edited_notes_found": "今天還沒有編輯過的筆記...",
@@ -757,7 +793,9 @@
   "note_map": {
     "open_full": "展開顯示",
     "collapse": "收合到正常大小",
-    "title": "筆記地圖"
+    "title": "筆記地圖",
+    "fix-nodes": "固定節點",
+    "link-distance": "連結距離"
   },
   "note_paths": {
     "title": "筆記路徑",
@@ -782,7 +820,9 @@
     "unknown_label_type": "未知的標籤類型 '{{type}}'",
     "unknown_attribute_type": "未知的屬性類型 '{{type}}'",
     "add_new_attribute": "添加新屬性",
-    "remove_this_attribute": "移除此屬性"
+    "remove_this_attribute": "移除此屬性",
+    "unset-field-placeholder": "未設定",
+    "remove_color": "移除此顏色標籤"
   },
   "script_executor": {
     "query": "查詢",
@@ -919,7 +959,8 @@
     "enter_workspace": "進入工作區 {{title}}"
   },
   "file": {
-    "file_preview_not_available": "此文件格式不支持預覽。"
+    "file_preview_not_available": "此文件格式不支持預覽。",
+    "too_big": "預覽僅顯示文件的前 {{maxNumChars}} 個字元以提高性能。下載文件並在外部打開以查看完整內容。"
   },
   "protected_session": {
     "enter_password_instruction": "顯示受保護的筆記需要輸入您的密碼：",
@@ -1023,7 +1064,16 @@
     "note_tree_and_detail_font_sizing": "請注意，筆記樹字體和詳細字體的大小相對於主字體大小設定。",
     "not_all_fonts_available": "並非所有列出的字體都可能在您的系統上可用。",
     "apply_font_changes": "要應用字體更改，請點擊",
-    "reload_frontend": "重新載入前端"
+    "reload_frontend": "重新載入前端",
+    "generic-fonts": "通用字型",
+    "sans-serif-system-fonts": "無襯線系統字型",
+    "serif-system-fonts": "襯線系統字型",
+    "monospace-system-fonts": "等寬系統字型",
+    "handwriting-system-fonts": "手寫系統字型",
+    "serif": "襯線",
+    "sans-serif": "無襯線",
+    "monospace": "等寬",
+    "system-default": "系統預設"
   },
   "max_content_width": {
     "title": "內容寬度",
@@ -1031,7 +1081,8 @@
     "max_width_label": "內容最大寬度(像素)",
     "apply_changes_description": "要應用內容寬度更改，請點擊",
     "reload_button": "重新載入前端",
-    "reload_description": "來自外觀選項的更改"
+    "reload_description": "來自外觀選項的更改",
+    "max_width_unit": "像素"
   },
   "native_title_bar": {
     "title": "原生標題欄（需要重新啟動應用）",
@@ -1047,13 +1098,17 @@
     "title": "主題",
     "theme_label": "主題",
     "override_theme_fonts_label": "覆蓋主題字體",
-    "light_theme": "",
-    "dark_theme": "",
     "layout": "佈局",
     "layout-vertical-title": "垂直",
     "layout-horizontal-title": "水平",
-    "layout-vertical-description": "啟動欄位於左側（默認）",
-    "layout-horizontal-description": "啟動欄位於標籤欄下方，標籤欄現在是全寬的。"
+    "layout-vertical-description": "啟動欄位於左側（預設）",
+    "layout-horizontal-description": "啟動欄位於分頁欄下方，分頁欄現在是全寬的。",
+    "auto_theme": "傳統（遵循系統配色方案）",
+    "light_theme": "傳統（淺色）",
+    "dark_theme": "傳統（深色）",
+    "triliumnext": "Trilium（遵循系統配色方案）",
+    "triliumnext-light": "Trilium（淺色）",
+    "triliumnext-dark": "Trilium（深色）"
   },
   "zoom_factor": {
     "title": "縮放系數（僅桌面客戶端有效）",
@@ -1062,7 +1117,8 @@
   "code_auto_read_only_size": {
     "title": "自動唯讀大小",
     "description": "自動唯讀大小是指筆記超過設定的大小後自動設定為唯讀模式（為性能考慮）。",
-    "label": "自動唯讀大小（程式碼筆記）"
+    "label": "自動唯讀大小（程式碼筆記）",
+    "unit": "字元"
   },
   "code_mime_types": {
     "title": "下拉菜單可用的MIME文件類型"
@@ -1081,14 +1137,16 @@
     "download_images_description": "貼上的 HTML 可能包含在線圖片的引用，Trilium 會找到這些引用並下載圖片，以便它們可以離線使用。",
     "enable_image_compression": "啓用圖片壓縮",
     "max_image_dimensions": "圖片的最大寬度/高度（超過此限制的圖片將會被縮放）。",
-    "jpeg_quality_description": "JPEG 質量（10 - 最差質量，100 最佳質量，建議為 50 - 85）"
+    "jpeg_quality_description": "JPEG 質量（10 - 最差質量，100 最佳質量，建議為 50 - 85）",
+    "max_image_dimensions_unit": "像素"
   },
   "attachment_erasure_timeout": {
     "attachment_erasure_timeout": "附件清理超時",
     "attachment_auto_deletion_description": "如果附件在一段時間後不再被筆記引用，它們將自動被刪除（並被清理）。",
     "manual_erasing_description": "您還可以手動觸發清理（而不考慮上述定義的超時時間）：",
     "erase_unused_attachments_now": "立即清理未使用的附件筆記",
-    "unused_attachments_erased": "未使用的附件已被刪除。"
+    "unused_attachments_erased": "未使用的附件已被刪除。",
+    "erase_attachments_after": "在此時間後刪除未使用的附件："
   },
   "network_connections": {
     "network_connections_title": "網絡連接",
@@ -1099,14 +1157,16 @@
     "note_erasure_description": "被刪除的筆記（以及屬性、歷史版本等）最初僅被標記為「刪除」，可以從「最近修改」對話框中恢復它們。經過一段時間後，已刪除的筆記會被「清理」，這意味著它們的內容將無法恢復。此設定允許您設定從刪除到清除筆記之間的時間長度。",
     "manual_erasing_description": "您還可以手動觸發清理（不考慮上述定義的超時）：",
     "erase_deleted_notes_now": "立即清理已刪除的筆記",
-    "deleted_notes_erased": "已刪除的筆記已被清理。"
+    "deleted_notes_erased": "已刪除的筆記已被清理。",
+    "erase_notes_after": "在此時間後刪除筆記："
   },
   "revisions_snapshot_limit": {
     "note_revisions_snapshot_limit_title": "筆記歷史快照限制",
     "note_revisions_snapshot_limit_description": "筆記歷史快照數限制指的是每個筆記可以保存的最大歷史記錄數量。其中 -1 表示沒有限制，0 表示刪除所有歷史記錄。你可以通過 #versioningLimit 標籤設定單個筆記的最大歷史記錄數量。",
     "snapshot_number_limit_label": "筆記歷史快照數量限制：",
     "erase_excess_revision_snapshots": "立即刪除多餘的歷史快照",
-    "erase_excess_revision_snapshots_prompt": "多餘的歷史快照已被刪除。"
+    "erase_excess_revision_snapshots_prompt": "多餘的歷史快照已被刪除。",
+    "snapshot_number_limit_unit": "快照"
   },
   "search_engine": {
     "title": "搜尋引擎",
@@ -1148,19 +1208,29 @@
     "title": "目錄",
     "description": "當筆記中有超過一定數量的標題時，顯示目錄。您可以自定義此數量：",
     "disable_info": "您可以設定一個非常大的數來禁用目錄。",
-    "shortcut_info": "您可以在 「選項」 -> 「快捷鍵」 中設定一個鍵盤快捷鍵，以便快速切換右側面板（包括目錄）（名稱為 'toggleRightPane'）。"
+    "shortcut_info": "您可以在 「選項」 -> 「快捷鍵」 中設定一個鍵盤快捷鍵，以便快速切換右側面板（包括目錄）（名稱為 'toggleRightPane'）。",
+    "unit": "標題"
   },
   "text_auto_read_only_size": {
     "title": "自動唯讀大小",
     "description": "自動唯讀筆記大小是超過該大小後，筆記將以唯讀模式顯示（出於性能考慮）。",
-    "label": "自動唯讀大小（文字筆記）"
+    "label": "自動唯讀大小（文字筆記）",
+    "unit": "字元"
   },
   "i18n": {
     "title": "本地化",
     "language": "語言",
     "first-day-of-the-week": "一周的第一天",
     "sunday": "星期日",
-    "monday": "星期一"
+    "monday": "星期一",
+    "first-week-of-the-year": "年度第一週",
+    "first-week-contains-first-day": "年度第一週包含第一天",
+    "first-week-contains-first-thursday": "年度第一週包含第一個週四",
+    "first-week-has-minimum-days": "第一週有最少天數",
+    "min-days-in-first-week": "第一週的最少天數",
+    "first-week-info": "年度第一週包含第一個週四是基於 <a href=\"https://en.wikipedia.org/wiki/ISO_week_date#First_week\">ISO 8601</a> 標準。",
+    "first-week-warning": "變更第一週選項可能導致與現有的「週筆記」重複，現有的「週筆記」將不會相應更新。",
+    "formatting-locale": "日期和數字格式"
   },
   "backup": {
     "automatic_backup": "自動備份",
@@ -1198,7 +1268,9 @@
     "delete_token": "刪除/停用此令牌",
     "rename_token_title": "重新命名令牌",
     "rename_token_message": "請輸入新的令牌名稱",
-    "delete_token_confirmation": "你確定要刪除 ETAPI 令牌 \"{{name}}\" 嗎？"
+    "delete_token_confirmation": "你確定要刪除 ETAPI 令牌 \"{{name}}\" 嗎？",
+    "see_more": "有關更多詳細資訊，請參閱 {{- link_to_wiki}} 和 {{- link_to_openapi_spec}} 或 {{- link_to_swagger_ui}}。",
+    "swagger_ui": "ETAPI Swagger UI"
   },
   "options_widget": {
     "options_status": "選項狀態",
@@ -1222,12 +1294,13 @@
     "set_password_heading": "設定密碼",
     "set_password": "設定密碼",
     "password_mismatch": "新密碼不一致。",
-    "password_changed_success": "密碼已更改。按 OK 後 Trilium 將重新載入。"
+    "password_changed_success": "密碼已更改。按 OK 後 Trilium 將重新載入。",
+    "protected_session_timeout_label": "受保護的工作階段超時："
   },
   "shortcuts": {
     "keyboard_shortcuts": "快捷鍵",
     "multiple_shortcuts": "同一操作的多個快捷鍵可以用逗號分隔。",
-    "electron_documentation": "請參閱 <a href=\"https://www.electronjs.org/docs/latest/api/accelerator\">Electron文檔</a>，瞭解可用的修飾符和鍵碼。",
+    "electron_documentation": "請參閱 <a href=\"https://www.electronjs.org/docs/latest/api/accelerator\">Electron 文檔</a>，瞭解可用的修飾符和鍵碼。",
     "type_text_to_filter": "輸入文字以過濾快捷鍵...",
     "action_name": "操作名稱",
     "shortcuts": "快捷鍵",
@@ -1260,7 +1333,8 @@
     "test_title": "同步測試",
     "test_description": "測試和同步伺服器之間的連接。如果同步伺服器沒有初始化，會將本地文檔同步到同步伺服器上。",
     "test_button": "測試同步",
-    "handshake_failed": "同步伺服器握手失敗，錯誤：{{message}}"
+    "handshake_failed": "同步伺服器握手失敗，錯誤：{{message}}",
+    "timeout_unit": "毫秒"
   },
   "api_log": {
     "close": "關閉"
@@ -1309,8 +1383,8 @@
     "copy-note-path-to-clipboard": "複製筆記路徑到剪貼簿",
     "protect-subtree": "保護子階層",
     "unprotect-subtree": "取消保護子階層",
-    "copy-clone": "複製 / 再製",
-    "clone-to": "複製到...",
+    "copy-clone": "複製 / 克隆",
+    "clone-to": "克隆到...",
     "cut": "剪下",
     "move-to": "移動到...",
     "paste-into": "貼上到裡面",
@@ -1319,7 +1393,9 @@
     "import-into-note": "匯入到筆記",
     "apply-bulk-actions": "應用批量操作",
     "converted-to-attachments": "{{count}} 個筆記已被轉換為附件。",
-    "convert-to-attachment-confirm": "確定要將選中的筆記轉換為其上級筆記的附件嗎？"
+    "convert-to-attachment-confirm": "確定要將選中的筆記轉換為其上級筆記的附件嗎？",
+    "duplicate": "複製副本",
+    "open-in-popup": "快速編輯"
   },
   "shared_info": {
     "shared_publicly": "此筆記已公開分享在",
@@ -1342,7 +1418,14 @@
     "launcher": "啟動器",
     "doc": "文檔",
     "widget": "小工具",
-    "confirm-change": "當筆記內容不為空時，不建議更改筆記類型。您仍然要繼續嗎？"
+    "confirm-change": "當筆記內容不為空時，不建議更改筆記類型。您仍然要繼續嗎？",
+    "book": "集合",
+    "geo-map": "地理地圖",
+    "beta-feature": "Beta",
+    "ai-chat": "AI 聊天",
+    "task-list": "任務列表",
+    "new-feature": "新建",
+    "collections": "集合"
   },
   "protect_note": {
     "toggle-on": "保護筆記",
@@ -1391,7 +1474,11 @@
     "automatically-collapse-notes-title": "筆記在一段時間內未使用將被收合，以減少樹形結構的雜亂。",
     "save-changes": "保存並應用更改",
     "auto-collapsing-notes-after-inactivity": "在不活動後自動收合筆記...",
-    "saved-search-note-refreshed": "已保存的搜尋筆記已刷新。"
+    "saved-search-note-refreshed": "已保存的搜尋筆記已刷新。",
+    "hoist-this-note-workspace": "聚焦此筆記（工作區）",
+    "refresh-saved-search-results": "刷新儲存的搜尋結果",
+    "create-child-note": "建立子筆記",
+    "unhoist": "取消聚焦"
   },
   "title_bar_buttons": {
     "window-on-top": "保持此窗口置頂"
@@ -1448,7 +1535,9 @@
   },
   "clipboard": {
     "cut": "已剪下筆記到剪貼簿。",
-    "copied": "已複製筆記到剪貼簿。"
+    "copied": "已複製筆記到剪貼簿。",
+    "copy_failed": "由於權限問題，無法複製到剪貼簿。",
+    "copy_success": "已複製到剪貼簿。"
   },
   "entrypoints": {
     "note-revision-created": "已新增筆記修訂。",
@@ -1492,13 +1581,15 @@
   },
   "highlighting": {
     "description": "控制文字筆記中程式碼塊的語法高亮，程式碼筆記不會受到影響。",
-    "color-scheme": "顏色方案"
+    "color-scheme": "顏色方案",
+    "title": "程式碼區塊"
   },
   "code_block": {
     "word_wrapping": "自動換行",
     "theme_none": "無格式高亮",
     "theme_group_light": "淺色主題",
-    "theme_group_dark": "深色主題"
+    "theme_group_dark": "深色主題",
+    "copy_title": "複製到剪貼簿"
   },
   "classic_editor_toolbar": {
     "title": "格式化"
@@ -1516,7 +1607,8 @@
       "fixed": {
         "title": "固定",
         "description": "編輯工具出現在 \"格式化\" 功能區標籤中。"
-      }
+      },
+      "multiline-toolbar": "如果工具列無法完全顯示，則分多行顯示。"
     }
   },
   "electron_context_menu": {
@@ -1535,6 +1627,376 @@
   "link_context_menu": {
     "open_note_in_new_tab": "在新分頁中打開筆記",
     "open_note_in_new_split": "在新分屏中打開筆記",
-    "open_note_in_new_window": "在新窗口中打開筆記"
+    "open_note_in_new_window": "在新窗口中打開筆記",
+    "open_note_in_popup": "快速編輯"
+  },
+  "zen_mode": {
+    "button_exit": "退出禪模式"
+  },
+  "ai_llm": {
+    "not_started": "未開始",
+    "title": "AI 設定",
+    "processed_notes": "已處理筆記",
+    "total_notes": "筆記總數",
+    "progress": "進度",
+    "queued_notes": "隊列中筆記",
+    "failed_notes": "失敗筆記",
+    "last_processed": "最後處理時間",
+    "refresh_stats": "更新統計資料",
+    "enable_ai_features": "啟用 AI/LLM 功能",
+    "enable_ai_description": "啟用筆記摘要、內容生成等 AI 功能及其他 LLM 能力",
+    "openai_tab": "OpenAI",
+    "anthropic_tab": "Anthropic",
+    "voyage_tab": "Voyage AI",
+    "ollama_tab": "Ollama",
+    "enable_ai": "啟用 AI/LLM 功能",
+    "enable_ai_desc": "啟用筆記摘要、內容生成等 AI 功能及其他 LLM 能力",
+    "provider_configuration": "AI 提供者設定",
+    "provider_precedence": "提供者優先級",
+    "provider_precedence_description": "依優先級排序的提供者列表（用逗號分隔，例如：'openai,anthropic,ollama'）",
+    "temperature": "溫度",
+    "temperature_description": "控制回應的隨機性（0 = 確定性，2 = 最大隨機性）",
+    "system_prompt": "系統提示詞",
+    "system_prompt_description": "所有 AI 互動的預設系統提示詞",
+    "openai_configuration": "OpenAI 設定",
+    "openai_settings": "OpenAI 設定",
+    "api_key": "API 金鑰",
+    "url": "基礎 URL",
+    "model": "模型",
+    "openai_api_key_description": "用於存取 OpenAI 服務的 API 金鑰",
+    "anthropic_api_key_description": "用於存取 Claude 模型的 Anthropic API 金鑰",
+    "default_model": "預設模型",
+    "openai_model_description": "範例：gpt-4o, gpt-4-turbo, gpt-3.5-turbo",
+    "base_url": "基礎 URL",
+    "openai_url_description": "預設：https://api.openai.com/v1",
+    "anthropic_settings": "Anthropic 設定",
+    "anthropic_url_description": "Anthropic API 的基礎 URL（預設：https://api.anthropic.com）",
+    "anthropic_model_description": "用於聊天補全的 Anthropic Claude 模型",
+    "voyage_settings": "Voyage AI 設定",
+    "ollama_settings": "Ollama 設定",
+    "ollama_url_description": "Ollama API URL（預設：http://localhost:11434）",
+    "ollama_model_description": "用於聊天補全的 Ollama 模型",
+    "anthropic_configuration": "Anthropic 設定",
+    "voyage_configuration": "Voyage AI 設定",
+    "voyage_url_description": "預設：https://api.voyageai.com/v1",
+    "ollama_configuration": "Ollama 設定",
+    "enable_ollama": "啟用 Ollama",
+    "enable_ollama_description": "啟用 Ollama 以使用本地 AI 模型",
+    "ollama_url": "Ollama URL",
+    "ollama_model": "Ollama 模型",
+    "refresh_models": "刷新模型",
+    "refreshing_models": "正在刷新…",
+    "enable_automatic_indexing": "啟用自動索引",
+    "rebuild_index": "重建索引",
+    "rebuild_index_error": "啟動索引重建失敗。請查看日誌了解詳情。",
+    "note_title": "筆記標題",
+    "error": "錯誤",
+    "last_attempt": "最後嘗試時間",
+    "actions": "操作",
+    "retry": "重試",
+    "partial": "已完成 {{ percentage }}%",
+    "retry_queued": "筆記已加入重試隊列",
+    "retry_failed": "筆記加入重試隊列失敗",
+    "max_notes_per_llm_query": "每次查詢的最大筆記數",
+    "max_notes_per_llm_query_description": "AI 上下文包含的最大相似筆記數量",
+    "active_providers": "活躍提供者",
+    "disabled_providers": "已禁用的提供者",
+    "remove_provider": "從搜尋中移除提供者",
+    "restore_provider": "將提供者還原至搜尋中",
+    "similarity_threshold": "相似度閾值",
+    "similarity_threshold_description": "要包含在 LLM 查詢上下文中筆記的最低相似度分數（0-1）",
+    "reprocess_index": "重建搜尋索引",
+    "reprocessing_index": "正在重建…",
+    "reprocess_index_started": "搜尋索引最佳化已在背景中啟動",
+    "reprocess_index_error": "重建搜尋索引失敗",
+    "index_rebuild_progress": "索引重建進度",
+    "index_rebuilding": "正在最佳化索引（{{percentage}}%）",
+    "index_rebuild_complete": "完成索引最佳化",
+    "index_rebuild_status_error": "檢查索引重建狀態失敗",
+    "never": "從未",
+    "processing": "正在處理（{{percentage}}%）",
+    "incomplete": "未完成（{{percentage}}%）",
+    "complete": "已完成（100%）",
+    "refreshing": "正在刷新…",
+    "auto_refresh_notice": "每 {{seconds}} 秒自動刷新",
+    "note_queued_for_retry": "筆記已加入重試隊列",
+    "failed_to_retry_note": "重試筆記失敗",
+    "all_notes_queued_for_retry": "所有失敗筆記已加入重試隊列",
+    "failed_to_retry_all": "重試筆記失敗",
+    "ai_settings": "AI 設定",
+    "api_key_tooltip": "用於存取服務的 API 金鑰",
+    "empty_key_warning": {
+      "anthropic": "Anthropic API 金鑰為空。請輸入有效的 API 金鑰。",
+      "openai": "OpenAI API 金鑰為空。請輸入有效的 API 金鑰。",
+      "voyage": "Voyage API 金鑰為空。請輸入有效的 API 金鑰。",
+      "ollama": "Ollama API 金鑰為空。請輸入有效的 API 金鑰。"
+    },
+    "agent": {
+      "processing": "正在處理…",
+      "thinking": "正在思考…",
+      "loading": "正在載入…",
+      "generating": "正在生成…"
+    },
+    "name": "AI",
+    "openai": "OpenAI",
+    "use_enhanced_context": "使用增強的上下文",
+    "enhanced_context_description": "提供 AI 更多來自筆記及其相關筆記的內容，以獲得更好的回應",
+    "show_thinking": "顯示思考過程",
+    "show_thinking_description": "顯示 AI 的思維鏈過程",
+    "enter_message": "輸入您的訊息…",
+    "error_contacting_provider": "聯繫 AI 提供者失敗。請檢查您的設定和網路連接。",
+    "error_generating_response": "生成 AI 回應失敗",
+    "index_all_notes": "為所有筆記建立索引",
+    "index_status": "索引狀態",
+    "indexed_notes": "已索引筆記",
+    "indexing_stopped": "已停止索引",
+    "indexing_in_progress": "正在進行索引…",
+    "last_indexed": "最後索引時間",
+    "n_notes_queued_0": "{{ count }} 條筆記已加入索引隊列",
+    "note_chat": "筆記聊天",
+    "notes_indexed_0": "已索引 {{ count }} 條筆記",
+    "sources": "來源",
+    "start_indexing": "開始索引",
+    "use_advanced_context": "使用進階上下文",
+    "ollama_no_url": "Ollama 未設定。請輸入有效的 URL。",
+    "chat": {
+      "root_note_title": "AI 聊天記錄",
+      "root_note_content": "此筆記包含您儲存的 AI 聊天對話。",
+      "new_chat_title": "新聊天",
+      "create_new_ai_chat": "建立新的 AI 聊天"
+    },
+    "create_new_ai_chat": "建立新的 AI 聊天",
+    "configuration_warnings": "您的 AI 配置存在一些問題。請檢查您的設定。",
+    "experimental_warning": "特此提醒：LLM 功能目前正處於實驗階段。",
+    "selected_provider": "已選提供者",
+    "selected_provider_description": "選擇用於聊天和補全功能的 AI 提供者",
+    "select_model": "選擇模型…",
+    "select_provider": "選擇提供者…"
+  },
+  "code-editor-options": {
+    "title": "編輯器"
+  },
+  "revisions_snapshot_interval": {
+    "note_revisions_snapshot_interval_title": "筆記修訂快照間隔",
+    "note_revisions_snapshot_description": "筆記修訂快照間隔是建立新筆記修訂的時間。如需詳細資訊，請參閱 <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">wiki</a>。",
+    "snapshot_time_interval_label": "筆記修訂快照時間間隔："
+  },
+  "custom_date_time_format": {
+    "title": "自訂日期/時間格式",
+    "description": "透過 <kbd></kbd> 或工具列自訂插入日期和時間的格式。有關可用的格式及符號，請參閱 <a href=\"https://day.js.org/docs/en/display/format\" target=\"_blank\" rel=\"noopener noreferrer\">Day.js docs</a>。",
+    "format_string": "格式化字串：",
+    "formatted_time": "格式化日期/時間："
+  },
+  "multi_factor_authentication": {
+    "title": "多重身份驗證（MFA）",
+    "description": "多重身份驗證（MFA）為您的帳戶增加了一層額外的安全性。多重身份驗證要求您提供一個或多個額外的資訊來驗證您的身份，而不是只輸入密碼來登入。如此一來，即使有人取得您的密碼，如果沒有第二項資訊，他們仍然無法存取您的帳戶。這就像在您的門上多加了一把鎖，讓其他人更難破門而入。<br><br>請按照以下指示啟用 MFA。如果您沒有正確設定，登入方式將變回僅使用密碼。",
+    "mfa_enabled": "啟用多重身份驗證",
+    "mfa_method": "MFA 方式",
+    "electron_disabled": "目前桌面版本尚未支援多重身份驗證。",
+    "totp_title": "基於時間的一次性密碼（TOTP）",
+    "totp_description": "TOTP（基於時間的一次性密碼）是一種安全功能，可產生一個每 30 秒變更一次的獨特臨時密碼。您可以使用此代碼和密碼登入您的帳戶，使其他人更難存取您的帳戶。",
+    "totp_secret_title": "生成 TOTP 金鑰",
+    "totp_secret_generate": "生成 TOTP 金鑰",
+    "totp_secret_regenerate": "重新生成 TOTP 金鑰",
+    "no_totp_secret_warning": "您需要一個 TOTP 金鑰以啟用 TOTP。",
+    "totp_secret_description_warning": "在生成新的 TOTP 金鑰後，您需要使用新的金鑰重新登入。",
+    "totp_secret_generated": "已生成 TOTP 金鑰",
+    "totp_secret_warning": "請將生成的金鑰保存在安全的地方。金鑰將不會再次顯示。",
+    "totp_secret_regenerate_confirm": "您確定要重新產生 TOTP 金鑰嗎？這將使之前的 TOTP 密碼和所有的復原碼失效。",
+    "recovery_keys_title": "單一登入復原金鑰",
+    "recovery_keys_description": "單一登入復原金鑰您用於您無法存取 Authenticator 代碼時登入。",
+    "recovery_keys_description_warning": "離開頁面後，將不會再顯示復原金鑰，請妥善保管。<br>復原金鑰使用後將無法再次使用。",
+    "recovery_keys_error": "生成復原碼時出錯",
+    "recovery_keys_no_key_set": "尚未設置復原碼",
+    "recovery_keys_generate": "生成復原碼",
+    "recovery_keys_regenerate": "重新生成復原碼",
+    "recovery_keys_used": "已使用：{{date}}",
+    "recovery_keys_unused": "復原碼 {{index}} 未使用",
+    "oauth_title": "OAuth/OpenID 驗證",
+    "oauth_description": "OpenID 是一種標準化的方式，可讓您使用其他服務（如 Google）的帳號登入網站，以驗證您的身份。預設的提供者是 Google，但您可以將其變更為任何其他 OpenID 提供者。查看<a href=\"#root/_hidden/_help/_help_Otzi9La2YAUX/_help_WOcw2SLH6tbX/_help_7DAiwaf8Z7Rz\">此處</a>以瞭解更多資訊。按照這些 <a href=\"https://developers.google.com/identity/openid-connect/openid-connect\">指示</a>以透過 Google 設定 OpenID 服務。",
+    "oauth_description_warning": "要啟用 OAuth/OpenID，您需要設置 config.ini 文件中的 OAuth/OpenID 基礎 URL、用戶端 ID 和用戶端金鑰，並重新啟動應用程式。如果要從環境變數設置，請設置 TRILIUM_OAUTH_BASE_URL、TRILIUM_OAUTH_CLIENT_ID 和 TRILIUM_OAUTH_CLIENT_SECRET 環境變數。",
+    "oauth_missing_vars": "缺少以下設定：{{variables}}",
+    "oauth_user_account": "用戶帳號： ",
+    "oauth_user_email": "用戶信箱： ",
+    "oauth_user_not_logged_in": "尚未登入！"
+  },
+  "electron_integration": {
+    "desktop-application": "桌面版應用程式",
+    "native-title-bar": "原生標題列",
+    "native-title-bar-description": "對於 Windows 和 macOS，關閉原生標題列會讓應用程式看起來更緊湊。在 Linux 上，開啟原生標題列可以與系統的其他部分整合得更好。",
+    "background-effects": "啟用背景效果（僅適用於 Windows 11）",
+    "background-effects-description": "Mica 效果為程式視窗添加模糊且時尚的背景，營造出深度感和現代外觀。",
+    "restart-app-button": "重新啟動應用程式以查看更改",
+    "zoom-factor": "縮放係數"
+  },
+  "note_autocomplete": {
+    "search-for": "搜尋 \"{{term}}\"",
+    "create-note": "建立並連接子筆記 \"{{term}}\"",
+    "insert-external-link": "插入至 \"{{term}}\" 的外部連結",
+    "clear-text-field": "清空文字欄位",
+    "show-recent-notes": "顯示最近的筆記",
+    "full-text-search": "全文搜尋"
+  },
+  "note_tooltip": {
+    "note-has-been-deleted": "筆記已被刪除。",
+    "quick-edit": "快速編輯"
+  },
+  "geo-map": {
+    "create-child-note-title": "建立一個新的子筆記並將其加至地圖中",
+    "create-child-note-instruction": "點擊地圖以在該位置建立新筆記，或按 Escape 以取消。",
+    "unable-to-load-map": "無法載入地圖。"
+  },
+  "geo-map-context": {
+    "open-location": "打開位置",
+    "remove-from-map": "從地圖中移除",
+    "add-note": "在此處新增一個標記"
+  },
+  "help-button": {
+    "title": "打開相關的幫助頁面"
+  },
+  "duration": {
+    "seconds": "秒",
+    "minutes": "分鐘",
+    "hours": "小時",
+    "days": "天"
+  },
+  "share": {
+    "title": "分享設定",
+    "redirect_bare_domain": "將裸域名重新導向至分享頁面",
+    "redirect_bare_domain_description": "將匿名用戶重新導向至分享頁面，而非顯示登入",
+    "show_login_link": "在分享主題中顯示登入連結",
+    "show_login_link_description": "在分享頁面底部增加登入連結",
+    "check_share_root": "檢查分享根狀態",
+    "share_root_found": "已準備好分享根筆記 '{{noteTitle}}'",
+    "share_root_not_found": "未找到帶有 #shareRoot 標籤的筆記",
+    "share_root_not_shared": "筆記 '{{noteTitle}}' 具有 #shareRoot 標籤，但未分享"
+  },
+  "time_selector": {
+    "invalid_input": "輸入的時間值不是一個有效數字。",
+    "minimum_input": "輪入的時間值需要至少 {{minimumSeconds}} 秒。"
+  },
+  "tasks": {
+    "due": {
+      "today": "今天",
+      "tomorrow": "明天",
+      "yesterday": "昨天"
+    }
+  },
+  "content_widget": {
+    "unknown_widget": "未知小工具：\"{{id}}\"。"
+  },
+  "note_language": {
+    "not_set": "不設定",
+    "configure-languages": "設定語言…"
+  },
+  "content_language": {
+    "title": "內容語言",
+    "description": "選擇一種或多種語言出現在唯讀或可編輯文字筆記的基本屬性，這將支援拼寫檢查或從右向左之類的功能。"
+  },
+  "switch_layout_button": {
+    "title_vertical": "將編輯面板移至底部",
+    "title_horizontal": "將編輯面板移至左側"
+  },
+  "toggle_read_only_button": {
+    "unlock-editing": "解鎖編輯",
+    "lock-editing": "鎖定編輯"
+  },
+  "png_export_button": {
+    "button_title": "將圖表匯出為 PNG"
+  },
+  "svg": {
+    "export_to_png": "無法將圖表匯出為 PNG。"
+  },
+  "code_theme": {
+    "title": "外觀",
+    "word_wrapping": "自動換行",
+    "color-scheme": "顏色方案"
+  },
+  "cpu_arch_warning": {
+    "title": "請下載 ARM64 版本",
+    "message_macos": "TriliumNext 目前正在透過 Rosetta 2 轉譯執行，這意味著您在 Apple Silicon 晶片的 Mac 上使用 Intel (x64) 版本。這將顯著影響性能和電池續航。",
+    "message_windows": "TriliumNext 目前正在模擬環境中執行，這意味著您在 ARM 架構的 Windows 裝置上使用 Intel (x64) 版本。這將顯著影響性能和電池續航。",
+    "recommendation": "為獲得最佳體驗，請從我們的發布頁面下載原生 ARM64 版本的 TriliumNext。",
+    "download_link": "下載原生版本",
+    "continue_anyway": "仍要繼續",
+    "dont_show_again": "不再顯示此警告"
+  },
+  "editorfeatures": {
+    "title": "功能",
+    "emoji_completion_enabled": "啟用 Emoji 自動完成",
+    "note_completion_enabled": "啟用筆記自動完成"
+  },
+  "table_view": {
+    "new-row": "新增列",
+    "new-column": "新增行",
+    "sort-column-by": "依 \"{{title}}\" 排序",
+    "sort-column-ascending": "升冪",
+    "sort-column-descending": "降冪",
+    "sort-column-clear": "清除排序",
+    "hide-column": "隱藏 \"{{title}}\" 行",
+    "show-hide-columns": "顯示/隱藏行",
+    "row-insert-above": "在上方插入列",
+    "row-insert-below": "在下方插入列",
+    "row-insert-child": "插入子筆記",
+    "add-column-to-the-left": "在左側新增行",
+    "add-column-to-the-right": "在右側新增行",
+    "edit-column": "編輯行",
+    "delete_column_confirmation": "您確定要刪除此行嗎？所有筆記中對應的屬性都將被移除。",
+    "delete-column": "刪除行",
+    "new-column-label": "標籤",
+    "new-column-relation": "關聯"
+  },
+  "book_properties_config": {
+    "hide-weekends": "隱藏週末",
+    "display-week-numbers": "顯示週數",
+    "map-style": "地圖樣式：",
+    "max-nesting-depth": "最大嵌套深度：",
+    "raster": "柵格",
+    "vector_light": "向量（淺色）",
+    "vector_dark": "向量（深色）",
+    "show-scale": "顯示比例尺"
+  },
+  "table_context_menu": {
+    "delete_row": "刪除列"
+  },
+  "board_view": {
+    "delete-note": "刪除筆記",
+    "move-to": "移動到",
+    "insert-above": "在上方插入",
+    "insert-below": "在下方插入",
+    "delete-column": "刪除行",
+    "delete-column-confirmation": "您確定要刪除此行嗎？此行中所有筆記對應的屬性也將被移除。",
+    "new-item": "新增項目",
+    "add-column": "新增行"
+  },
+  "command_palette": {
+    "tree-action-name": "樹：{{name}}",
+    "export_note_title": "匯出筆記",
+    "export_note_description": "匯出目前筆記",
+    "show_attachments_title": "顯示附件",
+    "show_attachments_description": "查看筆記附件",
+    "search_notes_title": "搜尋筆記",
+    "search_notes_description": "打開進階搜尋",
+    "search_subtree_title": "在子樹中搜尋",
+    "search_subtree_description": "在目前子樹中搜尋",
+    "search_history_title": "顯示搜尋歷史",
+    "search_history_description": "查看搜尋記錄",
+    "configure_launch_bar_title": "設定啟動列",
+    "configure_launch_bar_description": "打開啟動列設定以新增或移除項目。"
+  },
+  "content_renderer": {
+    "open_externally": "在外部打開"
+  },
+  "modal": {
+    "close": "關閉",
+    "help_title": "顯示關於此畫面的更多資訊"
+  },
+  "call_to_action": {
+    "next_theme_title": "新的 Trilium 主題現已推出穩定版本",
+    "next_theme_message": "有一段時間，我們一直在設計新的主題，為了讓應用程式看起來更現代。",
+    "next_theme_button": "切換至新的 Trilium 主題",
+    "background_effects_title": "背景特效現在已推出穩定版本",
+    "background_effects_message": "在 Windows 裝置上，背景特效現在已完全穩定。背景特效透過模糊背後的背景，為使用者介面增添一抹色彩。此技術也用於其他應用程式，例如 Windows 檔案總管。",
+    "background_effects_button": "啟用背景特效"
   }
 }
