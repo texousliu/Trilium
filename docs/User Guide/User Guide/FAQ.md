@@ -65,8 +65,9 @@ Trilium uses a progressive search strategy that includes fuzzy matching when exa
 ### How can I search for notes when I'm not sure of the exact spelling?
 
 Use the fuzzy search operators:
-- `#title ~= "projct"` - finds notes with titles like "project" despite the typo
-- `note.content ~* "algoritm"` - finds content containing "algorithm" or similar words
+
+*   `#title ~= "projct"` - finds notes with titles like "project" despite the typo
+*   `note.content ~* "algoritm"` - finds content containing "algorithm" or similar words
 
 ### Why do some search results appear before others with lower scores?
 
@@ -74,7 +75,7 @@ Trilium places exact matches before fuzzy matches. When you search for "project"
 
 ### How can I make my searches faster?
 
-1. Use the "Fast search" option to search only titles and attributes (not content)
-2. Limit search scope using the "Ancestor" field
-3. Set a result limit to prevent loading too many results
-4. For large databases, consider archiving old notes to reduce search scope
+1.  Use the "Fast search" option to search only titles and attributes (not content)
+2.  Limit search scope using the "Ancestor" field
+3.  Set a result limit to prevent loading too many results
+4.  For large databases, consider archiving old notes to reduce search scope
