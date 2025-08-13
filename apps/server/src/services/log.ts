@@ -6,7 +6,6 @@ import path from "path";
 import { EOL } from "os";
 import dataDir from "./data_dir.js";
 import cls from "./cls.js";
-import optionService from "./options.js";
 
 if (!fs.existsSync(dataDir.LOG_DIR)) {
     fs.mkdirSync(dataDir.LOG_DIR, 0o700);
@@ -37,38 +36,39 @@ async function cleanupOldLogFiles() {
         // Get retention days from environment or options
         const envRetention = process.env.TRILIUM_LOG_RETENTION_DAYS;
         let retentionDays = DEFAULT_RETENTION_DAYS;
-        
+
         if (envRetention) {
             const parsed = parseInt(envRetention, 10);
             if (!isNaN(parsed) && parsed > 0 && parsed <= 3650) {
                 retentionDays = parsed;
             }
         } else {
+            const optionService = (await import("./options.js")).default;
             retentionDays = optionService.getOptionInt("logRetentionDays", DEFAULT_RETENTION_DAYS);
         }
-        
+
         const cutoffDate = new Date();
         cutoffDate.setDate(cutoffDate.getDate() - retentionDays);
-        
+
         // Read all log files
         const files = await fs.promises.readdir(dataDir.LOG_DIR);
         const logFiles: Array<{name: string, mtime: Date, path: string}> = [];
-        
+
         for (const file of files) {
             // Security: Only process files matching our log pattern
             if (!/^trilium-\d{4}-\d{2}-\d{2}\.log$/.test(file)) {
                 continue;
             }
-            
+
             const filePath = path.join(dataDir.LOG_DIR, file);
-            
+
             // Security: Verify path stays within LOG_DIR
             const resolvedPath = path.resolve(filePath);
             const resolvedLogDir = path.resolve(dataDir.LOG_DIR);
             if (!resolvedPath.startsWith(resolvedLogDir + path.sep)) {
                 continue;
             }
-            
+
             try {
                 const stats = await fs.promises.stat(filePath);
                 logFiles.push({ name: file, mtime: stats.mtime, path: filePath });
@@ -76,15 +76,15 @@ async function cleanupOldLogFiles() {
                 // Skip files we can't stat
             }
         }
-        
+
         // Sort by modification time (oldest first)
         logFiles.sort((a, b) => a.mtime.getTime() - b.mtime.getTime());
-        
+
         // Keep minimum number of files
         if (logFiles.length <= MINIMUM_FILES_TO_KEEP) {
             return;
         }
-        
+
         // Delete old files, keeping minimum
         let deletedCount = 0;
         for (let i = 0; i < logFiles.length - MINIMUM_FILES_TO_KEEP; i++) {
@@ -98,7 +98,7 @@ async function cleanupOldLogFiles() {
                 }
             }
         }
-        
+
         if (deletedCount > 0) {
             info(`Log cleanup: deleted ${deletedCount} old log files`);
         }
@@ -114,7 +114,7 @@ function initLogFile() {
 
     if (logFile) {
         logFile.end();
-        
+
         // Clean up old log files when rotating to a new file
         cleanupOldLogFiles().catch(() => {
             // Ignore cleanup errors
