@@ -19,34 +19,41 @@ Based on the <a class="reference-link" href="../UI%20Elements/Vertical%20and%20h
 Quick search includes the following features:
 
 ### Content Previews
+
 Search results now display a 200-character preview of the note content below the note title. This preview shows the context where your search terms appear, making it easier to identify the right note without opening it.
 
 ### Infinite Scrolling
+
 Results are loaded progressively as you scroll:
-- Initial display shows 15 results
-- Scrolling near the bottom automatically loads 10 more results
-- Continue scrolling to load all matching notes
+
+*   Initial display shows 15 results
+*   Scrolling near the bottom automatically loads 10 more results
+*   Continue scrolling to load all matching notes
 
 ### Visual Features
-- **Highlighting**: Search terms appear in bold with accent colors
-- **Separation**: Results are separated with dividers
-- **Theme Support**: Highlighting colors adapt to light/dark themes
+
+*   **Highlighting**: Search terms appear in bold with accent colors
+*   **Separation**: Results are separated with dividers
+*   **Theme Support**: Highlighting colors adapt to light/dark themes
 
 ### Search Behavior
+
 Quick search uses progressive search:
-1. Shows exact matches first
-2. Includes fuzzy matches when exact results are fewer than 5
-3. Exact matches appear before fuzzy matches
+
+1.  Shows exact matches first
+2.  Includes fuzzy matches when exact results are fewer than 5
+3.  Exact matches appear before fuzzy matches
 
 ### Keyboard Navigation
-- Press `Enter` to open the first result
-- Use arrow keys to navigate through results
-- Press `Escape` to close the quick search
+
+*   Press `Enter` to open the first result
+*   Use arrow keys to navigate through results
+*   Press `Escape` to close the quick search
 
 ## Using Quick Search
 
-1. **Typo tolerance**: Search finds results despite minor typos
-2. **Content previews**: 200-character snippets show match context
-3. **Infinite scrolling**: Additional results load on scroll
-4. **Specific terms**: Specific search terms return more focused results
-5. **Match locations**: Bold text indicates where matches occur
+1.  **Typo tolerance**: Search finds results despite minor typos
+2.  **Content previews**: 200-character snippets show match context
+3.  **Infinite scrolling**: Additional results load on scroll
+4.  **Specific terms**: Specific search terms return more focused results
+5.  **Match locations**: Bold text indicates where matches occur

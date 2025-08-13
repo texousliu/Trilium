@@ -80,10 +80,11 @@ Trilium supports fuzzy search operators that find results with typos or spelling
 *   `note.content ~* develpment`: Will find notes containing "development" despite the typo
 
 **Important notes about fuzzy search:**
-- Fuzzy search requires at least 3 characters in the search term
-- Maximum edit distance is 2 characters (number of character changes needed)
-- Diacritics are normalized (e.g., "café" matches "cafe")
-- Fuzzy matches work best for finding content with minor typos or spelling variations
+
+*   Fuzzy search requires at least 3 characters in the search term
+*   Maximum edit distance is 2 characters (number of character changes needed)
+*   Diacritics are normalized (e.g., "café" matches "cafe")
+*   Fuzzy matches work best for finding content with minor typos or spelling variations
 
 ### Advanced Use Cases
 
@@ -137,25 +138,24 @@ Trilium uses a progressive search strategy that performs exact matching first, t
 
 ### How Progressive Search Works
 
-1. **Phase 1 - Exact Matching**: When you search, Trilium first looks for exact matches of your search terms. This handles the vast majority of searches (90%+) and returns results almost instantly.
-
-2. **Phase 2 - Fuzzy Fallback**: If Phase 1 doesn't find enough high-quality results (fewer than 5 results with good relevance scores), Trilium automatically adds fuzzy matching to find results with typos or spelling variations.
-
-3. **Result Ordering**: Exact matches always appear before fuzzy matches, regardless of individual scores. This ensures that when you search for "project", notes containing the exact word "project" will appear before notes containing similar words like "projects" or "projection".
+1.  **Phase 1 - Exact Matching**: When you search, Trilium first looks for exact matches of your search terms. This handles the vast majority of searches (90%+) and returns results almost instantly.
+2.  **Phase 2 - Fuzzy Fallback**: If Phase 1 doesn't find enough high-quality results (fewer than 5 results with good relevance scores), Trilium automatically adds fuzzy matching to find results with typos or spelling variations.
+3.  **Result Ordering**: Exact matches always appear before fuzzy matches, regardless of individual scores. This ensures that when you search for "project", notes containing the exact word "project" will appear before notes containing similar words like "projects" or "projection".
 
 ### Progressive Search Behavior
 
-- **Speed**: Most searches complete using only exact matching
-- **Ordering**: Exact matches appear before fuzzy matches
-- **Fallback**: Fuzzy matching activates when exact matches return fewer than 5 results
-- **Identification**: Results indicate whether they are exact or fuzzy matches
+*   **Speed**: Most searches complete using only exact matching
+*   **Ordering**: Exact matches appear before fuzzy matches
+*   **Fallback**: Fuzzy matching activates when exact matches return fewer than 5 results
+*   **Identification**: Results indicate whether they are exact or fuzzy matches
 
 ### Search Performance
 
 Search system specifications:
-- Content size limit: 10MB per note (previously 50KB)
-- Edit distance calculations for fuzzy matching
-- Infinite scrolling in Quick Search
+
+*   Content size limit: 10MB per note (previously 50KB)
+*   Edit distance calculations for fuzzy matching
+*   Infinite scrolling in Quick Search
 
 ## Under the Hood
 
@@ -228,14 +228,14 @@ You can open Trilium and automatically trigger a search by including the search 
 ### Parameters
 
 | Parameter | Value | Description |
-|-----------|-------|-------------|
-| MIN_FUZZY_TOKEN_LENGTH | 3 | Minimum characters for fuzzy matching |
-| MAX_EDIT_DISTANCE | 2 | Maximum character changes allowed |
-| RESULT_SUFFICIENCY_THRESHOLD | 5 | Minimum exact results before fuzzy fallback |
-| MAX_CONTENT_SIZE | 10MB | Maximum note content size for search processing |
+| --- | --- | --- |
+| MIN\_FUZZY\_TOKEN\_LENGTH | 3   | Minimum characters for fuzzy matching |
+| MAX\_EDIT\_DISTANCE | 2   | Maximum character changes allowed |
+| RESULT\_SUFFICIENCY\_THRESHOLD | 5   | Minimum exact results before fuzzy fallback |
+| MAX\_CONTENT\_SIZE | 10MB | Maximum note content size for search processing |
 
 ### Limits
 
-* Searched note content is limited to 10MB per note to prevent performance issues
-* Notes exceeding this limit will still be included in title and attribute searches
-* Fuzzy matching requires tokens of at least 3 characters
+*   Searched note content is limited to 10MB per note to prevent performance issues
+*   Notes exceeding this limit will still be included in title and attribute searches
+*   Fuzzy matching requires tokens of at least 3 characters
