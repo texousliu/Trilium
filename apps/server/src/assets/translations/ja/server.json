@@ -76,6 +76,7 @@
         "toggle-left-note-tree-panel": "左パネルの切り替え (ノートツリー)",
         "toggle-full-screen": "フルスクリーンの切り替え",
         "note-navigation": "ノートナビゲーション",
-        "copy-without-formatting": "選択したテキストを書式なしでコピーする"
+        "copy-without-formatting": "選択したテキストを書式なしでコピーする",
+        "export-as-pdf": "現在のノートをPDFとしてエクスポートする"
     }
 }
