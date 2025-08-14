@@ -74,12 +74,14 @@ const FONT_FAMILIES: FontGroup[] = [
 ];
 
 export default function AppearanceSettings() {    
+    const [ overrideThemeFonts ] = useTriliumOption("overrideThemeFonts");
+
     return (
-        <>
+        <div>
             <LayoutOrientation />
             <ApplicationTheme />
-            <Fonts />
-        </>
+            {overrideThemeFonts === "true" && <Fonts />}
+        </div>
     )
 }
 
@@ -141,7 +143,7 @@ function ApplicationTheme() {
     )
 }
 
-function Fonts() {
+function Fonts() {    
     return (
         <OptionsSection title={t("fonts.fonts")}>
             <Font title={t("fonts.main_font")} fontFamilyOption="mainFontFamily" />

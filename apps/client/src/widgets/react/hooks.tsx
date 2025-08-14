@@ -5,7 +5,10 @@ import SpacedUpdate from "../../services/spaced_update";
 import { OptionNames } from "@triliumnext/commons";
 import options from "../../services/options";
 import utils, { reloadFrontendApp } from "../../services/utils";
-import { __values } from "tslib";
+import Component from "../../components/component";
+
+type TriliumEventHandler<T extends EventNames> = (data: EventData<T>) => void;
+const registeredHandlers: Map<Component, Map<EventNames, TriliumEventHandler<any>[]>> = new Map();
 
 /**
  * Allows a React component to react to Trilium events (e.g. `entitiesReloaded`). When the desired event is triggered, the handler is invoked with the event parameters.
@@ -16,32 +19,59 @@ import { __values } from "tslib";
  * @param handler the handler to be invoked when the event is triggered.
  * @param enabled determines whether the event should be listened to or not. Useful to conditionally limit the listener based on a state (e.g. a modal being displayed).
  */
-export default function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void, enabled = true) {
+export default function useTriliumEvent<T extends EventNames>(eventName: T, handler: TriliumEventHandler<T>, enabled = true) {
     const parentWidget = useContext(ParentComponent);
-    useEffect(() => {
-        if (!parentWidget || !enabled) {            
-            return;
-        }        
-
-        // Create a unique handler name for this specific event listener
-        const handlerName = `${eventName}Event`;
-        const originalHandler = parentWidget[handlerName];
-
-        // Override the event handler to call our handler
-        parentWidget[handlerName] = async function(data: EventData<T>) {
-            // Call original handler if it exists
-            if (originalHandler) {
-                await originalHandler.call(parentWidget, data);
+    if (!parentWidget) {
+        return;
+    }
+    
+    const handlerName = `${eventName}Event`;
+    const customHandler  = useMemo(() => {
+        return async (data: EventData<T>) => {
+            // Inform the attached event listeners.
+            const eventHandlers = registeredHandlers.get(parentWidget)?.get(eventName) ?? [];
+            for (const eventHandler of eventHandlers) {
+                eventHandler(data);
             }
-            // Call our React component's handler
-            handler(data);
-        };
+        }
+    }, [ eventName, parentWidget ]);    
 
-        // Cleanup: restore original handler on unmount or when disabled
+    useEffect(() => {
+        // Attach to the list of handlers.
+        let handlersByWidget = registeredHandlers.get(parentWidget);
+        if (!handlersByWidget) {
+            handlersByWidget = new Map();
+            registeredHandlers.set(parentWidget, handlersByWidget);
+        }
+
+        let handlersByWidgetAndEventName = handlersByWidget.get(eventName);
+        if (!handlersByWidgetAndEventName) {
+            handlersByWidgetAndEventName = [];
+            handlersByWidget.set(eventName, handlersByWidgetAndEventName);
+        }
+
+        if (!handlersByWidgetAndEventName.includes(handler)) {
+            handlersByWidgetAndEventName.push(handler);
+        }
+
+        // Apply the custom event handler.
+        if (parentWidget[handlerName] && parentWidget[handlerName] !== customHandler) {
+            console.warn(`Widget ${parentWidget.componentId} already had an event listener and it was replaced by the React one.`);
+        }
+        
+        parentWidget[handlerName] = customHandler;
+    
         return () => {
-            parentWidget[handlerName] = originalHandler;
+            const eventHandlers = registeredHandlers.get(parentWidget)?.get(eventName);
+            if (!eventHandlers || !eventHandlers.includes(handler)) {
+                return;
+            }
+    
+            // Remove the event handler from the array.
+            const newEventHandlers = eventHandlers.filter(e => e !== handler);
+            registeredHandlers.get(parentWidget)?.set(eventName, newEventHandlers);        
         };
-    }, [parentWidget, enabled, eventName, handler]);
+    }, [ eventName, parentWidget, handler ]);
 }
 
 export function useSpacedUpdate(callback: () => Promise<void>, interval = 1000) {
