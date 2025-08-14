@@ -41,6 +41,7 @@ import AppearanceSettings from "./options/appearance.jsx";
 import { renderReactWidget } from "../react/ReactBasicWidget.jsx";
 import ImageSettings from "./options/images.jsx";
 import AdvancedSettings from "./options/advanced.jsx";
+import InternationalizationOptions from "./options/i18n.jsx";
 
 const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -118,10 +119,7 @@ const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", ((typeof NoteContextA
         ShareSettingsOptions,
         NetworkConnectionsOptions
     ],
-    _optionsLocalization: [
-        LocalizationOptions,
-        LanguageOptions
-    ],
+    _optionsLocalization: <InternationalizationOptions />,
     _optionsAdvanced: <AdvancedSettings />,
     _backendLog: [
         BackendLogWidget

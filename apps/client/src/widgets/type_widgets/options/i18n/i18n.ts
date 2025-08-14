@@ -6,14 +6,7 @@ import type { OptionMap, Locale } from "@triliumnext/commons";
 
 const TPL = /*html*/`
 <div class="options-section">
-    <h4>${t("i18n.title")}</h4>
-
     <div class="locale-options-container">
-        <div class="option-row">
-            <label for="locale-select">${t("i18n.language")}</label>
-            <select id="locale-select" class="locale-select form-select"></select>
-        </div>
-
         <div class="option-row electron-only">
             <label for="formatting-locale-select">${t("i18n.formatting-locale")}</label>
             <select id="formatting-locale-select" class="formatting-locale-select form-select"></select>
@@ -123,12 +116,6 @@ export default class LocalizationOptions extends OptionsWidget {
 
         this.$minDaysRow = this.$widget.find(".min-days-row");
 
-        this.$localeSelect = this.$widget.find(".locale-select");
-        this.$localeSelect.on("change", async () => {
-            const newLocale = this.$localeSelect.val();
-            await server.put(`options/locale/${newLocale}`);
-        });
-
         this.$formattingLocaleSelect = this.$widget.find(".formatting-locale-select");
         this.$formattingLocaleSelect.on("change", async () => {
             const newLocale = this.$formattingLocaleSelect.val();
@@ -168,19 +155,6 @@ export default class LocalizationOptions extends OptionsWidget {
 
     async optionsLoaded(options: OptionMap) {
         const allLocales = getAvailableLocales();
-
-        function buildLocaleItem(locale: Locale, value: string) {
-            return $("<option>")
-                .attr("value", value)
-                .text(locale.name)
-        }
-
-        // Build list of UI locales.
-        this.$localeSelect.empty();
-        for (const locale of allLocales.filter(l => !l.contentOnly)) {
-            this.$localeSelect.append(buildLocaleItem(locale, locale.id));
-        }
-        this.$localeSelect.val(options.locale);
 
         // Build list of Electron locales.
         this.$formattingLocaleSelect.empty();
