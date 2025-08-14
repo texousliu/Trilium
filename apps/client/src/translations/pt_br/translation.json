@@ -249,7 +249,7 @@
   },
   "prompt": {
     "title": "Prompt",
-    "ok": "OK <kbd>enter</kbd>",
+    "ok": "OK",
     "defaultTitle": "Prompt"
   },
   "protected_session_password": {
@@ -257,7 +257,7 @@
     "help_title": "Ajuda sobre notas protegidas",
     "close_label": "Fechar",
     "form_label": "Para prosseguir com a ação solicitada, você precisa iniciar uma sessão protegida digitando a senha:",
-    "start_button": "Iniciar sessão protegida <kbd>enter</kbd>"
+    "start_button": "Iniciar sessão protegida"
   },
   "recent_changes": {
     "title": "Alterações recentes",
@@ -306,12 +306,12 @@
     "sort_with_respect_to_different_character_sorting": "classificar de acordo com diferentes regras de ordenação de caracteres e colação em diferentes idiomas ou regiões.",
     "natural_sort_language": "Linguagem da ordenação natural",
     "the_language_code_for_natural_sort": "O código do idioma para ordenação natural, por exemplo, \"zh-CN\" para chinês.",
-    "sort": "Ordenar <kbd>enter</kbd>"
+    "sort": "Ordenar"
   },
   "upload_attachments": {
     "upload_attachments_to_note": "Enviar anexos para a nota",
     "choose_files": "Escolher arquivos",
-    "files_will_be_uploaded": "Os arquivos serão enviados como anexos para",
+    "files_will_be_uploaded": "Os arquivos serão enviados como anexos para {{noteTitle}}",
     "options": "Opções",
     "shrink_images": "Reduzir imagens",
     "upload": "Enviar",

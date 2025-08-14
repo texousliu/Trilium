@@ -967,7 +967,7 @@
   },
   "protected_session": {
     "enter_password_instruction": "显示受保护的笔记需要输入您的密码：",
-    "start_session_button": "开始受保护的会话",
+    "start_session_button": "开始受保护的会话 <kbd>Enter</kbd>",
     "started": "受保护的会话已启动。",
     "wrong_password": "密码错误。",
     "protecting-finished-successfully": "保护操作已成功完成。",
@@ -1028,7 +1028,7 @@
     "error_creating_anonymized_database": "无法创建匿名化数据库，请检查后端日志以获取详细信息",
     "successfully_created_fully_anonymized_database": "成功创建完全匿名化的数据库，路径为 {{anonymizedFilePath}}",
     "successfully_created_lightly_anonymized_database": "成功创建轻度匿名化的数据库，路径为 {{anonymizedFilePath}}",
-    "no_anonymized_database_yet": "尚无匿名化数据库"
+    "no_anonymized_database_yet": "尚无匿名化数据库。"
   },
   "database_integrity_check": {
     "title": "数据库完整性检查",
@@ -1333,9 +1333,9 @@
     "oauth_title": "OAuth/OpenID 认证",
     "oauth_description": "OpenID 是一种标准化方式，允许您使用其他服务（如 Google）的账号登录网站来验证您的身份。默认的身份提供者是 Google，但您可以更改为任何其他 OpenID 提供者。点击<a href=\"#root/_hidden/_help/_help_Otzi9La2YAUX/_help_WOcw2SLH6tbX/_help_7DAiwaf8Z7Rz\">这里</a>了解更多信息。请参阅这些 <a href=\"https://developers.google.com/identity/openid-connect/openid-connect\">指南</a> 通过 Google 设置 OpenID 服务。",
     "oauth_description_warning": "要启用 OAuth/OpenID，您需要设置 config.ini 文件中的 OAuth/OpenID 基础 URL、客户端 ID 和客户端密钥，并重新启动应用程序。如果要从环境变量设置，请设置 TRILIUM_OAUTH_BASE_URL、TRILIUM_OAUTH_CLIENT_ID 和 TRILIUM_OAUTH_CLIENT_SECRET 环境变量。",
-    "oauth_missing_vars": "缺少以下设置项: {{missingVars}}",
-    "oauth_user_account": "用户账号：",
-    "oauth_user_email": "用户邮箱：",
+    "oauth_missing_vars": "缺少以下设置项：{{variables}}",
+    "oauth_user_account": "用户账号： ",
+    "oauth_user_email": "用户邮箱： ",
     "oauth_user_not_logged_in": "未登录！"
   },
   "shortcuts": {
@@ -1357,7 +1357,7 @@
     "enable": "启用拼写检查",
     "language_code_label": "语言代码",
     "language_code_placeholder": "例如 \"en-US\", \"de-AT\"",
-    "multiple_languages_info": "多种语言可以用逗号分隔，例如 \"en-US, de-DE, cs\"。",
+    "multiple_languages_info": "多种语言可以用逗号分隔，例如 \"en-US, de-DE, cs\"。 ",
     "available_language_codes_label": "可用的语言代码：",
     "restart-required": "拼写检查选项的更改将在应用重启后生效。"
   },
