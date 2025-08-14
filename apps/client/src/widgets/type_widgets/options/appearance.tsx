@@ -24,8 +24,39 @@ const BUILTIN_THEMES: Theme[] = [
     { val: "dark", title: t("theme.dark_theme") }
 ]
 
-export default function AppearanceSettings() {
+export default function AppearanceSettings() {    
+    return (
+        <>
+            <LayoutOrientation />
+            <ApplicationTheme />
+        </>
+    )
+}
+
+function LayoutOrientation() {
     const [ layoutOrientation, setLayoutOrientation ] = useTriliumOption("layoutOrientation", true);
+    
+    return (
+        <OptionsSection title={t("theme.layout")}>
+            {!isMobile() && <FormRadioGroup
+                name="layout-orientation"
+                values={[
+                    {
+                        label: <><strong>{t("theme.layout-vertical-title")}</strong> - {t("theme.layout-vertical-description")}</>,
+                        value: "vertical"
+                    },
+                    {
+                        label: <><strong>{t("theme.layout-horizontal-title")}</strong> - {t("theme.layout-horizontal-description")}</>,
+                        value: "horizontal"
+                    }
+                ]}
+                currentValue={layoutOrientation} onChange={setLayoutOrientation}
+            />}
+        </OptionsSection>
+    );
+}
+
+function ApplicationTheme() {
     const [ theme, setTheme ] = useTriliumOption("theme", true);
     const [ overrideThemeFonts, setOverrideThemeFonts ] = useTriliumOptionBool("overrideThemeFonts");
 
@@ -41,37 +72,18 @@ export default function AppearanceSettings() {
     }, []);
 
     return (
-        <>
-            <OptionsSection title={t("theme.layout")}>
-                {!isMobile() && <FormRadioGroup
-                    name="layout-orientation"
-                    values={[
-                        {
-                            label: <><strong>{t("theme.layout-vertical-title")}</strong> - {t("theme.layout-vertical-description")}</>,
-                            value: "vertical"
-                        },
-                        {
-                            label: <><strong>{t("theme.layout-horizontal-title")}</strong> - {t("theme.layout-horizontal-description")}</>,
-                            value: "horizontal"
-                        }
-                    ]}
-                    currentValue={layoutOrientation} onChange={setLayoutOrientation}
-                />}
-            </OptionsSection>
+        <OptionsSection title={t("theme.title")}>
+            <Column>
+                <label>{t("theme.theme_label")}</label>
+                <FormSelect values={themes} currentValue={theme} onChange={setTheme} />
+            </Column>
 
-            <OptionsSection title={t("theme.title")}>
-                <Column>
-                    <label>{t("theme.theme_label")}</label>
-                    <FormSelect values={themes} currentValue={theme} onChange={setTheme} />
-                </Column>
-
-                <Column className="side-checkbox">
-                    <FormCheckbox
-                        name="override-theme-fonts"
-                        label={t("theme.override_theme_fonts_label")}
-                        currentValue={overrideThemeFonts} onChange={setOverrideThemeFonts} />
-                </Column>
-            </OptionsSection>
-        </>
+            <Column className="side-checkbox">
+                <FormCheckbox
+                    name="override-theme-fonts"
+                    label={t("theme.override_theme_fonts_label")}
+                    currentValue={overrideThemeFonts} onChange={setOverrideThemeFonts} />
+            </Column>
+        </OptionsSection>
     )
 }
