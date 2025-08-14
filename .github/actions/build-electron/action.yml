@@ -55,12 +55,6 @@ runs:
       security set-keychain-settings -t 3600 -l build-app-${{ github.run_id }}.keychain
       security set-keychain-settings -t 3600 -l build-installer-${{ github.run_id }}.keychain
 
-  - name: Import GPG signing key
-    if: inputs.os == 'linux'
-    shell: ${{ inputs.shell }}
-    run: |
-      echo -n "$GPG_SIGNING_KEY" | base64 --decode | gpg --import
-
   - name: Set up Python and other macOS dependencies
     if: ${{ inputs.os == 'macos' }}
     shell: ${{ inputs.shell }}
@@ -167,4 +161,23 @@ runs:
       if [ -n "$zip_file" ]; then
         echo "Found ZIP: $zip_file"
         echo "Note: ZIP files are not code signed, but their contents should be"
+      fi
+
+  - name: Import GPG signing key
+    if: inputs.os == 'linux'
+    shell: ${{ inputs.shell }}
+    run: |
+      echo -n "$GPG_SIGNING_KEY" | base64 --decode | gpg --import
+
+      # Import the key into RPM for verification
+      gpg --export -a > pubkey
+      rpm --import pubkey
+      rm pubkey
+
+      # Validate code signing
+      rpm_file=$(find ./apps/desktop/dist -name "*.rpm" -print -quit)
+      if ! rpm -K "$rpm_file" | grep -q "digests signatures OK"; then
+        echo .rpm file not signed
+        rpm -Kv "$rpm_file"
+        exit 1
       fi
