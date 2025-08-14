@@ -4,9 +4,10 @@ import { isMobile, reloadFrontendApp } from "../../../services/utils";
 import Column from "../../react/Column";
 import FormRadioGroup from "../../react/FormRadioGroup";
 import FormSelect from "../../react/FormSelect";
-import { useTriliumOption } from "../../react/hooks";
+import { useTriliumOption, useTriliumOptionBool } from "../../react/hooks";
 import OptionsSection from "./components/OptionsSection";
 import server from "../../../services/server";
+import FormCheckbox from "../../react/FormCheckbox";
 
 interface Theme {
     val: string;
@@ -26,6 +27,7 @@ const BUILTIN_THEMES: Theme[] = [
 export default function AppearanceSettings() {
     const [ layoutOrientation, setLayoutOrientation ] = useTriliumOption("layoutOrientation", true);
     const [ theme, setTheme ] = useTriliumOption("theme", true);
+    const [ overrideThemeFonts, setOverrideThemeFonts ] = useTriliumOptionBool("overrideThemeFonts");
 
     const [ themes, setThemes ] = useState<Theme[]>([]);
 
@@ -58,9 +60,16 @@ export default function AppearanceSettings() {
             </OptionsSection>
 
             <OptionsSection title={t("theme.title")}>
-                <Column md={6}>
+                <Column>
                     <label>{t("theme.theme_label")}</label>
                     <FormSelect values={themes} currentValue={theme} onChange={setTheme} />
+                </Column>
+
+                <Column className="side-checkbox">
+                    <FormCheckbox
+                        name="override-theme-fonts"
+                        label={t("theme.override_theme_fonts_label")}
+                        currentValue={overrideThemeFonts} onChange={setOverrideThemeFonts} />
                 </Column>
             </OptionsSection>
         </>

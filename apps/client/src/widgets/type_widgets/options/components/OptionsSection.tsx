@@ -10,7 +10,9 @@ export default function OptionsSection({ title, children }: OptionsSectionProps)
         <div className="options-section">
             <h4>{title}</h4>
 
-            {children}
+            <div className="form-group row">
+                {children}
+            </div>
         </div>
     );
 }
