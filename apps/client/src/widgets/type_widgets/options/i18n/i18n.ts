@@ -7,11 +7,6 @@ import type { OptionMap, Locale } from "@triliumnext/commons";
 const TPL = /*html*/`
 <div class="options-section">
     <div class="locale-options-container">
-        <div class="option-row electron-only">
-            <label for="formatting-locale-select">${t("i18n.formatting-locale")}</label>
-            <select id="formatting-locale-select" class="formatting-locale-select form-select"></select>
-        </div>
-
         <div class="option-row">
             <label id="first-day-of-week-label">${t("i18n.first-day-of-the-week")}</label>
             <div role="group" aria-labelledby="first-day-of-week-label">
@@ -115,12 +110,6 @@ export default class LocalizationOptions extends OptionsWidget {
         this.$widget = $(TPL);
 
         this.$minDaysRow = this.$widget.find(".min-days-row");
-
-        this.$formattingLocaleSelect = this.$widget.find(".formatting-locale-select");
-        this.$formattingLocaleSelect.on("change", async () => {
-            const newLocale = this.$formattingLocaleSelect.val();
-            await server.put(`options/formattingLocale/${newLocale}`);
-        });
 
         this.$widget.find(`input[name="first-day-of-week"]`).on("change", () => {
             const firstDayOfWeek = String(this.$widget.find(`input[name="first-day-of-week"]:checked`).val());
