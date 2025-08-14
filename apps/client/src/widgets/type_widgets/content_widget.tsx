@@ -1,8 +1,4 @@
 import TypeWidget from "./type_widget.js";
-import ElectronIntegrationOptions from "./options/appearance/electron_integration.js";
-import ThemeOptions from "./options/appearance/theme.js";
-import FontsOptions from "./options/appearance/fonts.js";
-import MaxContentWidthOptions from "./options/appearance/max_content_width.js";
 import KeyboardShortcutsOptions from "./options/shortcuts.js";
 import HeadingStyleOptions from "./options/text_notes/heading_style.js";
 import TableOfContentsOptions from "./options/text_notes/table_of_contents.js";
@@ -12,7 +8,6 @@ import DateTimeFormatOptions from "./options/text_notes/date_time_format.js";
 import CodeEditorOptions from "./options/code_notes/code_editor.js";
 import CodeAutoReadOnlySizeOptions from "./options/code_notes/code_auto_read_only_size.js";
 import CodeMimeTypesOptions from "./options/code_notes/code_mime_types.js";
-import ImageOptions from "./options/images/images.js";
 import SpellcheckOptions from "./options/spellcheck.js";
 import PasswordOptions from "./options/password/password.js";
 import ProtectedSessionTimeoutOptions from "./options/password/protected_session_timeout.js";
@@ -50,6 +45,7 @@ import type { JSX } from "preact/jsx-runtime";
 import AppearanceSettings from "./options/appearance.jsx";
 import { renderReactWidget } from "../react/ReactBasicWidget.jsx";
 import ImageSettings from "./options/images.jsx";
+import AdvancedSettings from "./options/advanced.jsx";
 
 const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -131,12 +127,7 @@ const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", ((typeof NoteContextA
         LocalizationOptions,
         LanguageOptions
     ],
-    _optionsAdvanced: [
-        AdvancedSyncOptions,
-        DatabaseIntegrityCheckOptions,
-        DatabaseAnonymizationOptions,
-        VacuumDatabaseOptions
-    ],
+    _optionsAdvanced: <AdvancedSettings />,
     _backendLog: [
         BackendLogWidget
     ]
