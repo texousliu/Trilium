@@ -175,7 +175,7 @@ runs:
       rm pubkey
 
       # Sign the RPM
-      rpm_file=$(find ./apps/desktop/dist -name "*.rpm" -print -quit)
+      rpm_file=$(find ./apps/desktop/upload -name "*.rpm" -print -quit)
       rpmsign --define "_gpg_name Trilium Notes Signing Key <triliumnotes@outlook.com>" --addsign "$rpm_file"
       rpm -Kv "$rpm_file"
 
