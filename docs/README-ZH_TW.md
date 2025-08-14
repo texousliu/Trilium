@@ -9,7 +9,7 @@
 
 Trilium Notes 是一款免費且開源、跨平台的階層式筆記應用程式，專注於建立大型個人知識庫。
 
-想快速了解，請查看 [螢幕截圖](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)：
+想快速了解，請查看[螢幕截圖](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)：
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
 
