@@ -61,3 +61,9 @@ export interface RecentChangeRow {
 export interface BulkActionAffectedNotes {
     affectedNoteCount: number;
 }
+
+export interface DatabaseCheckIntegrityResponse {
+    results: {
+        integrity_check: string;
+    }[];
+}

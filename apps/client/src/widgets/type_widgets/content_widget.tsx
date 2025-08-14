@@ -21,8 +21,6 @@ import RevisionsSnapshotIntervalOptions from "./options/other/revisions_snapshot
 import RevisionSnapshotsLimitOptions from "./options/other/revision_snapshots_limit.js";
 import NetworkConnectionsOptions from "./options/other/network_connections.js";
 import HtmlImportTagsOptions from "./options/other/html_import_tags.js";
-import AdvancedSyncOptions from "./options/advanced/sync.js";
-import DatabaseIntegrityCheckOptions from "./options/advanced/database_integrity_check.js";
 import VacuumDatabaseOptions from "./options/advanced/vacuum_database.js";
 import DatabaseAnonymizationOptions from "./options/advanced/database_anonymization.js";
 import BackendLogWidget from "./content/backend_log.js";
