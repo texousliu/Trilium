@@ -55,7 +55,11 @@
     "show_help": "ヘルプを表示",
     "about": "Trilium Notesについて",
     "logout": "ログアウト",
-    "show-cheatsheet": "チートシートを表示"
+    "show-cheatsheet": "チートシートを表示",
+    "zoom_out": "ズームアウト",
+    "zoom_in": "ズームイン",
+    "advanced": "高度",
+    "toggle-zen-mode": "禅モード"
   },
   "left_pane_toggle": {
     "show_panel": "パネルを表示",
@@ -66,21 +70,23 @@
     "move_right": "右に移動"
   },
   "clone_to": {
-    "notes_to_clone": "複製するノート",
+    "notes_to_clone": "クローンするノート",
     "target_parent_note": "ターゲットの親ノート",
     "search_for_note_by_its_name": "ノート名で検索",
-    "cloned_note_prefix_title": "複製されたノートは、指定された接頭辞を付けてノートツリーに表示されます",
+    "cloned_note_prefix_title": "クローンされたノートは、指定された接頭辞を付けてノートツリーに表示されます",
     "prefix_optional": "接頭辞（任意）",
-    "clone_to_selected_note": "選択したノートに複製",
-    "no_path_to_clone_to": "複製先のパスが存在しません。",
-    "note_cloned": "ノート \"{{clonedTitle}}\" は \"{{targetTitle}}\" に複製されました"
+    "clone_to_selected_note": "選択したノートにクローン",
+    "no_path_to_clone_to": "クローン先のパスが存在しません。",
+    "note_cloned": "ノート \"{{clonedTitle}}\" は \"{{targetTitle}}\" にクローンされました",
+    "clone_notes_to": "ノートをクローンして...",
+    "help_on_links": "ヘルプへのリンク"
   },
   "delete_notes": {
-    "delete_all_clones_description": "すべての複製も削除する（最近の変更では元に戻すことができる）",
+    "delete_all_clones_description": "すべてのクローンも削除する（最近の変更では元に戻すことができる）",
     "erase_notes_description": "通常の（ソフト）削除では、ノートは削除されたものとしてマークされ、一定期間内に（最近の変更で）削除を取り消すことができます。このオプションをオンにすると、ノートは即座に削除され、削除を取り消すことはできません。",
-    "erase_notes_warning": "すべての複製を含め、ノートを完全に消去します（元に戻せません）。これにより、アプリケーションは強制的にリロードされます。",
+    "erase_notes_warning": "すべてのクローンを含め、ノートを完全に消去します（元に戻せません）。これにより、アプリケーションは強制的にリロードされます。",
     "notes_to_be_deleted": "以下のノートが削除されます ({{notesCount}})",
-    "no_note_to_delete": "ノートは削除されません（複製のみ）。",
+    "no_note_to_delete": "ノートは削除されません（クローンのみ）。",
     "cancel": "キャンセル",
     "ok": "OK"
   },
@@ -113,14 +119,24 @@
   },
   "basic_properties": {
     "note_type": "ノートタイプ",
-    "editable": "編集可能"
+    "editable": "編集可能",
+    "basic_properties": "基本プロパティ",
+    "language": "言語"
   },
   "i18n": {
     "title": "ローカライゼーション",
     "language": "言語",
     "first-day-of-the-week": "週の最初",
     "sunday": "日曜日",
-    "monday": "月曜日"
+    "monday": "月曜日",
+    "first-week-of-the-year": "年の最初の週",
+    "first-week-contains-first-day": "最初の週には、元日が含まれる",
+    "first-week-contains-first-thursday": "最初の週には、その年の最初の木曜日が含まれる",
+    "first-week-has-minimum-days": "最初の週は最低日数",
+    "min-days-in-first-week": "最初の週の最低日数",
+    "first-week-info": "最初の週は、その年の最初の木曜日を含む週を指し、<a href=\"https://en.wikipedia.org/wiki/ISO_week_date#First_week\">ISO 8601</a>規格に基づいています。",
+    "first-week-warning": "最初の週のオプションを変更すると、既存のウィークノートと重複する可能性があり、既存のウィークノートはそれに応じて更新されません。",
+    "formatting-locale": "日付と数値のフォーマット"
   },
   "tab_row": {
     "close_tab": "タブを閉じる",
@@ -159,7 +175,11 @@
     "action": "アクション",
     "search_button": "検索 <kbd>Enter</kbd>",
     "search_execute": "検索とアクションの実行",
-    "save_to_note": "ノートに保存"
+    "save_to_note": "ノートに保存",
+    "search_parameters": "検索パラメータ",
+    "unknown_search_option": "不明な検索オプション {{searchOptionName}}",
+    "search_note_saved": "検索ノートが {{- notePathTitle}} に保存されました",
+    "actions_executed": "アクションが実行されました。"
   },
   "shortcuts": {
     "multiple_shortcuts": "同じアクションに対して複数のショートカットを設定する場合、カンマで区切ることができます。",
@@ -171,6 +191,547 @@
     "description": "説明",
     "reload_app": "リロードして変更を適用する",
     "set_all_to_default": "すべてのショートカットをデフォルトに戻す",
-    "confirm_reset": "キーボードショートカットをすべてデフォルトにリセットしますか？"
+    "confirm_reset": "キーボードショートカットをすべてデフォルトにリセットしますか？",
+    "keyboard_shortcuts": "キーボードショートカット"
+  },
+  "confirm": {
+    "confirmation": "確認",
+    "cancel": "キャンセル",
+    "ok": "OK"
+  },
+  "export": {
+    "export_note_title": "ノートをエクスポート",
+    "close": "閉じる",
+    "export_type_subtree": "このノートとすべての子孫",
+    "format_html": "HTML - すべての書式が保たれるため、おすすめ",
+    "format_html_zip": "HTML ZIPアーカイブ - すべての書式が保たれるため、推奨されます。",
+    "format_markdown": "Markdown - ほとんどの書式が維持される。",
+    "format_opml": "OPML - テキストのみのアウトライン交換フォーマットです。書式設定、画像、ファイルは含まれません。",
+    "opml_version_1": "OPML v1.0 - プレーンテキストのみ",
+    "opml_version_2": "OPML v2.0 - HTMLが許可されています",
+    "export_type_single": "このノートのみで、子孫ノートは含まない",
+    "export": "エクスポート",
+    "choose_export_type": "最初にエクスポートタイプを選択してください",
+    "export_status": "エクスポート状況",
+    "export_in_progress": "エクスポート処理中: {{progressCount}}",
+    "export_finished_successfully": "エクスポートが正常に完了しました。",
+    "format_pdf": "PDF - 印刷または共有目的に。"
+  },
+  "help": {
+    "title": "チートシート",
+    "noteNavigation": "ノートナビゲーション",
+    "collapseExpand": "ノードの格納/展開",
+    "goBackForwards": "履歴を戻る／進む",
+    "scrollToActiveNote": "アクティブノートまでスクロール",
+    "jumpToParentNote": "親ノートへ移動",
+    "collapseWholeTree": "すべてのノートツリーを格納",
+    "collapseSubTree": "サブツリーを格納",
+    "tabShortcuts": "タブショートカット",
+    "newTabNoteLink": "ノートのリンクをクリックすると、新しいタブで開く",
+    "newTabWithActivationNoteLink": "ノートのリンクをクリックすると、新しいタブで開き、アクティブにします",
+    "onlyInDesktop": "デスクトップ版（Electronビルド）のみ",
+    "openEmptyTab": "空のタブを開く",
+    "closeActiveTab": "アクティブなタブを閉じる",
+    "activateNextTab": "次のタブに移動",
+    "activatePreviousTab": "前のタブに移動",
+    "creatingNotes": "ノートの作成",
+    "createNoteAfter": "アクティブなノートの後ろに新しいノートを作成",
+    "createNoteInto": "アクティブなノートに新しいサブノートを作成",
+    "movingCloningNotes": "ノートの移動/クローン",
+    "moveNoteUpHierarchy": "階層内でノートを上下に移動",
+    "multiSelectNote": "複数選択に上/下のノートを追加",
+    "selectAllNotes": "現在のレベルのノートをすべて選択",
+    "selectNote": "ノートを選択",
+    "copyNotes": "アクティブなノート（または現在の選択範囲）をクリップボードにコピーする（<a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/cloning-notes.html#cloning-notes\">クローン</a>に使用）",
+    "cutNotes": "アクティブなノート（または現在の選択範囲）をクリップボードにカットする（ノートの移動に使用）",
+    "pasteNotes": "ノートをサブノートとしてアクティブノートに貼り付ける（コピーされたかカットされたかに よって、移動またはクローンになる）",
+    "deleteNotes": "ノート/サブツリーを削除",
+    "editingNotes": "ノート編集",
+    "editNoteTitle": "押下するとツリーペインからタイトルの編集に移ります。タイトルの編集からEnterキーを押すと、本文の編集に移動します。<kbd>Ctrl+.</kbd> で本文の編集からツリーペインに戻ります。",
+    "createEditLink": "外部リンクの作成/編集",
+    "createInternalLink": "内部リンクの作成",
+    "followLink": "カーソル下のリンクをたどる",
+    "insertDateTime": "カーソル位置に現在の日時を挿入",
+    "jumpToTreePane": "ツリーペインにジャンプし、アクティブなノートまでスクロール",
+    "markdownAutoformat": "Markdownライクな自動フォーマット",
+    "headings": "<code>##</code>, <code>###</code>, <code>####</code>  など。その後にスペースで見出しになる",
+    "bulletList": "<code>*</code> または <code>-</code> その後にスペースで箇条書きになる",
+    "numberedList": "<code>1.</code> または <code>1)</code> その後にスペースで番号付きリストになる",
+    "blockQuote": "行の先頭に <code>></code> その後にスペースで引用になる",
+    "troubleshooting": "トラブルシューティング",
+    "reloadFrontend": "Triliumのフロントエンドをリロード",
+    "showDevTools": "開発者ツールを表示",
+    "showSQLConsole": "SQLコンソールを表示",
+    "other": "その他",
+    "quickSearch": "クイックサーチにフォーカス",
+    "inPageSearch": "ページ内検索"
+  },
+  "import": {
+    "importIntoNote": "ノートにインポート",
+    "chooseImportFile": "インポートするファイルを選択",
+    "importDescription": "選択されたファイルの内容は、子ノートとしてインポートされます",
+    "options": "オプション",
+    "safeImportTooltip": "Triliumの <code>.zip</code> 形式のエクスポートファイルには、有害な動作を含む実行可能スクリプトが含まれている可能性があります。セーフインポートは、インポートされたすべてのスクリプトの自動実行を無効にします。インポートするファイルの内容を完全に信頼できる場合のみ、「セーフインポート」のチェックを外してください。",
+    "safeImport": "セーフインポート",
+    "explodeArchivesTooltip": "これがチェックされている場合、Triliumは<code>.zip</code>、<code>.enex</code>、<code>.opml</code>ファイルを読み込み、それらのアーカイブからノートを作成します。チェックされていない場合、Triliumはアーカイブ自体をノートに添付します。",
+    "shrinkImagesTooltip": "<p>これをチェックすると、Triliumはインポートされた画像を、拡大縮小や最適化によって縮小しようとします。これにより、画像の品質が損なわれる可能性があります。チェックを外すと、画像は変更されずにインポートされます。</p><p>これは、メタデータ付きの<code>.zip</code>インポートには適用されません。これらのファイルは既に最適化されていると考えられるためです。</p>",
+    "shrinkImages": "画像を縮小",
+    "textImportedAsText": "メタデータから判断できない場合は、HTML、Markdown、TXTをテキストノートとしてインポート",
+    "codeImportedAsCode": "メタデータから判断できない場合は、コードファイル（例: <code>.json</code>）をコードノートとしてインポート",
+    "replaceUnderscoresWithSpaces": "インポートされたノート名のアンダーバーをスペースに置換する",
+    "import": "インポート",
+    "failed": "インポートに失敗しました: {{message}}.",
+    "html_import_tags": {
+      "title": "HTMLインポートタグ",
+      "description": "インポート時に保持するHTMLタグを設定します。このリストにないタグはインポート時に削除されます。一部のタグ（'script'など）は、セキュリティ上の懸念から常に削除されます。",
+      "placeholder": "HTMLタグを1行に1つ入力",
+      "reset_button": "リストをデフォルトにリセット"
+    },
+    "import-status": "インポート状況",
+    "in-progress": "インポート中: {{progress}}",
+    "successful": "インポートは正常に終了しました。"
+  },
+  "password_not_set": {
+    "title": "パスワードが設定されていない",
+    "body1": "保護されたノートはユーザーのパスワードを使用して暗号化されますが、パスワードはまだ設定されていません。",
+    "body2": "ノートを保護するには、下のボタンをクリックしてオプションダイアログを開き、パスワードを設定してください。",
+    "go_to_password_options": "パスワードのオプションへ"
+  },
+  "recent_changes": {
+    "title": "最近の変更",
+    "erase_notes_button": "削除したメモを今すぐ消去する",
+    "deleted_notes_message": "削除されたメモは完全に消去されました。",
+    "no_changes_message": "変更はまだありません...",
+    "undelete_link": "削除を取り消す",
+    "confirm_undelete": "このノートとサブノートを復元しますか？"
+  },
+  "sort_child_notes": {
+    "sort_children_by": "子ノートの並び替え...",
+    "sorting_criteria": "ソート基準",
+    "title": "タイトル",
+    "date_created": "作成日",
+    "date_modified": "更新日",
+    "sorting_direction": "ソート方向",
+    "ascending": "昇順",
+    "descending": "降順",
+    "folders": "フォルダ",
+    "sort_folders_at_top": "フォルダーを一番上にソートする",
+    "natural_sort": "自然順",
+    "sort_with_respect_to_different_character_sorting": "言語や地域によって異なる文字の並べ替えや照合順序の規則に従ってソートする。",
+    "sort": "ソート",
+    "natural_sort_language": "自然順言語",
+    "the_language_code_for_natural_sort": "自然順の言語コード。例えば、中国語の場合は \"zh-CN\"。"
+  },
+  "close_pane_button": {
+    "close_this_pane": "ペインを閉じる"
+  },
+  "create_pane_button": {
+    "create_new_split": "新しく分割する"
+  },
+  "edit_button": {
+    "edit_this_note": "このノートを編集"
+  },
+  "show_toc_widget_button": {
+    "show_toc": "目次を表示"
+  },
+  "show_highlights_list_widget_button": {
+    "show_highlights_list": "ハイライト一覧を表示"
+  },
+  "relation_map_buttons": {
+    "zoom_out_title": "ズームアウト",
+    "zoom_in_title": "ズームイン"
+  },
+  "tree-context-menu": {
+    "advanced": "高度"
+  },
+  "zen_mode": {
+    "button_exit": "禅モードを退出"
+  },
+  "sync_status": {
+    "unknown": "<p>同期状況は、次回の同期が開始されるとわかるようになります。</p><p>クリックして今すぐ同期を開始する。</p>",
+    "connected_with_changes": "<p>同期サーバーに接続されました。<br>まだ同期されていない未処理の変更がいくつかあります。</p><p>クリックして同期を開始。</p>",
+    "connected_no_changes": "<p>同期サーバーに接続されました。<br>すべての変更はすでに同期されています。</p><p>クリックして同期を開始。</p>",
+    "disconnected_with_changes": "<p>同期サーバーへの接続の確立に失敗しました。<br>まだ同期されていない未処理の変更がいくつかあります。</p><p>クリックして同期を開始。</p>",
+    "disconnected_no_changes": "<p>同期サーバーへの接続確立に失敗しました。<br>既知の変更はすべて同期されました。</p><p>クリックして同期を開始。</p>",
+    "in_progress": "サーバーと同期中です。"
+  },
+  "note_actions": {
+    "re_render_note": "ノートを再描画",
+    "search_in_note": "ノート内検索",
+    "note_source": "ノートのソース",
+    "open_note_externally": "外部でノートを開く",
+    "open_note_externally_title": "ファイルを外部アプリケーションで開き、変更を監視します。その後、変更されたバージョンをTriliumにアップロードできるようになります。",
+    "open_note_custom": "プログラムからノートを開く",
+    "import_files": "ファイルをインポート",
+    "export_note": "ノートをエクスポート",
+    "delete_note": "ノートを削除する",
+    "print_note": "ノートを印刷",
+    "print_pdf": "PDFとしてエクスポート..."
+  },
+  "command_palette": {
+    "export_note_title": "ノートをエクスポート"
+  },
+  "delete_note": {
+    "delete_note": "ノートを削除する"
+  },
+  "board_view": {
+    "delete-note": "ノートを削除する"
+  },
+  "code_buttons": {
+    "execute_button_title": "スクリプトを実行",
+    "trilium_api_docs_button_title": "Trilium APIのドキュメントを開く",
+    "save_to_note_button_title": "ノートに保存",
+    "opening_api_docs_message": "APIドキュメントを開いています...",
+    "sql_console_saved_message": "SQLコンソールが {{note_path}} に保存されました"
+  },
+  "execute_script": {
+    "execute_script": "スクリプトを実行"
+  },
+  "script_executor": {
+    "execute_script": "スクリプトを実行",
+    "query": "クエリ",
+    "script": "スクリプト",
+    "execute_query": "クエリを実行"
+  },
+  "hide_floating_buttons_button": {
+    "button_title": "ボタンを非表示"
+  },
+  "show_floating_buttons_button": {
+    "button_title": "ボタンを表示"
+  },
+  "svg_export_button": {
+    "button_title": "図をSVGとしてエクスポート"
+  },
+  "book_properties": {
+    "grid": "グリッド",
+    "list": "リスト",
+    "collapse_all_notes": "すべてのノートを格納",
+    "expand_all_children": "すべての子を展開",
+    "collapse": "格納",
+    "expand": "展開",
+    "book_properties": "コレクションプロパティ",
+    "invalid_view_type": "無効なビュータイプ '{{type}}'",
+    "view_type": "ビュータイプ",
+    "calendar": "カレンダー",
+    "table": "テーブル",
+    "geo-map": "ジオマップ",
+    "board": "ボード"
+  },
+  "note_types": {
+    "geo-map": "ジオマップ",
+    "file": "ファイル",
+    "image": "画像"
+  },
+  "edited_notes": {
+    "no_edited_notes_found": "この日の編集されたメモはまだありません...",
+    "title": "編集されたノート",
+    "deleted": "（削除済み）"
+  },
+  "file_properties": {
+    "note_id": "ノート ID",
+    "file_type": "ファイルタイプ",
+    "file_size": "ファイルサイズ",
+    "download": "ダウンロード",
+    "open": "開く",
+    "title": "ファイル"
+  },
+  "note_info_widget": {
+    "note_id": "ノート ID",
+    "created": "作成日時",
+    "modified": "更新日時",
+    "type": "タイプ",
+    "note_size": "ノートサイズ",
+    "calculate": "計算",
+    "subtree_size": "（サブツリーサイズ: {{size}}、ノード数: {{count}}）",
+    "title": "ノート情報"
+  },
+  "image_properties": {
+    "file_type": "ファイルタイプ",
+    "file_size": "ファイルサイズ",
+    "download": "ダウンロード",
+    "open": "開く",
+    "title": "画像"
+  },
+  "revisions": {
+    "download_button": "ダウンロード"
+  },
+  "attachments_actions": {
+    "download": "ダウンロード"
+  },
+  "etapi": {
+    "created": "作成日時",
+    "title": "ETAPI",
+    "description": "ETAPI は、Trilium インスタンスに UI なしでプログラム的にアクセスするための REST API です。",
+    "see_more": "詳細は{{- link_to_wiki}}と{{- link_to_openapi_spec}}または{{- link_to_swagger_ui }}を参照してください。",
+    "wiki": "wiki",
+    "openapi_spec": "ETAPI OpenAPIの仕様",
+    "swagger_ui": "ETAPI Swagger UI",
+    "create_token": "新しくETAPIトークンを作成",
+    "existing_tokens": "既存のトークン",
+    "no_tokens_yet": "トークンはまだありません。上のボタンをクリックして作成してください。",
+    "token_name": "トークン名",
+    "actions": "アクション",
+    "new_token_title": "新しいETAPIトークン",
+    "new_token_message": "新しいトークンの名前を入力",
+    "rename_token_message": "新しいトークンの名前を入力",
+    "default_token_name": "新しいトークン",
+    "error_empty_name": "トークン名は空にできません",
+    "token_created_title": "ETAPIトークン作成",
+    "token_created_message": "作成されたトークンをクリップボードにコピーします。Trilium はトークンをハッシュ化して保存するため、これがトークンを見る最後の機会となります。",
+    "rename_token": "トークン名を変更",
+    "delete_token": "このトークンを削除/無効にする",
+    "rename_token_title": "トークン名の変更",
+    "delete_token_confirmation": "本当にETAPIトークン\"{{name}}\"を削除しますか？"
+  },
+  "note_paths": {
+    "title": "ノートパス",
+    "clone_button": "ノートを新しい場所にクローン...",
+    "intro_placed": "このノートは以下のパスに置かれる:",
+    "intro_not_placed": "このノートはまだノートツリーに配置されていません。",
+    "archived": "アーカイブされた",
+    "search": "検索"
+  },
+  "note_properties": {
+    "info": "情報"
+  },
+  "similar_notes": {
+    "title": "類似ノート",
+    "no_similar_notes_found": "類似したノートが見つかりません。"
+  },
+  "abstract_search_option": {
+    "remove_this_search_option": "この検索オプションを削除"
+  },
+  "debug": {
+    "debug": "デバッグ",
+    "debug_info": "デバッグは、複雑なクエリのデバッグを支援するために、追加のデバッグ情報をコンソールに表示します。",
+    "access_info": "デバッグ情報にアクセスするには、クエリを実行し、左上隅にある \"バックエンドログを表示 \"をクリックしてください。"
+  },
+  "fast_search": {
+    "fast_search": "高速検索",
+    "description": "高速検索オプションは、ノートの全文検索を無効にし、大規模データベースでの検索を高速化します。"
+  },
+  "include_archived_notes": {
+    "include_archived_notes": "アーカイブされたノートを含む"
+  },
+  "limit": {
+    "limit": "リミット",
+    "take_first_x_results": "最初からX個の結果のみを取得。"
+  },
+  "order_by": {
+    "order_by": "並べ替え",
+    "relevancy": "関連性（デフォルト）",
+    "title": "タイトル",
+    "date_created": "作成日",
+    "date_modified": "最終更新日",
+    "content_size": "ノート内容のサイズ",
+    "children_count": "子ノートの数",
+    "parent_count": "クローンの数",
+    "random": "ランダムな順番",
+    "asc": "昇順（デフォルト）",
+    "desc": "降順"
+  },
+  "table_view": {
+    "sort-column-descending": "降順",
+    "sort-column-ascending": "昇順"
+  },
+  "search_script": {
+    "title": "検索スクリプト:",
+    "placeholder": "ノート名で検索"
+  },
+  "include_note": {
+    "placeholder_search": "ノート名で検索"
+  },
+  "ancestor": {
+    "placeholder": "ノート名で検索"
+  },
+  "move_to": {
+    "search_placeholder": "ノート名で検索"
+  },
+  "web_view": {
+    "web_view": "Web ビュー",
+    "embed_websites": "Web ビュータイプでは、ウェブサイトをTriliumに埋め込むことができます。",
+    "create_label": "まず始めに、埋め込みたいURLアドレスのラベルを作成してください。例: #webViewSrc=\"https://www.google.com\""
+  },
+  "backend_log": {
+    "refresh": "リフレッシュ"
+  },
+  "sync": {
+    "title": "同期"
+  },
+  "fonts": {
+    "fonts": "フォント",
+    "main_font": "メインフォント",
+    "font_family": "フォントファミリー",
+    "size": "サイズ",
+    "note_tree_font": "ノートツリーフォント",
+    "note_detail_font": "ノート詳細フォント",
+    "monospace_font": "等幅（コード）フォント",
+    "note_tree_and_detail_font_sizing": "ツリーと詳細のフォントサイズは、メインのフォントサイズに対して相対的であることに注意してください。",
+    "not_all_fonts_available": "リストされているすべてのフォントが、お使いのシステムで利用できるとは限りません。",
+    "apply_font_changes": "フォントの変更を適用するには、クリックしてください",
+    "reload_frontend": "フロントエンドをリロード",
+    "generic-fonts": "一般的なフォント",
+    "sans-serif-system-fonts": "サンセリフのシステムフォント",
+    "serif-system-fonts": "セリフのシステムフォント",
+    "monospace-system-fonts": "等幅のシステムフォント",
+    "handwriting-system-fonts": "手書きのシステムフォント",
+    "serif": "セリフ",
+    "sans-serif": "サンセリフ",
+    "monospace": "等幅",
+    "system-default": "システムのデフォルト"
+  },
+  "max_content_width": {
+    "reload_button": "フロントエンドをリロード"
+  },
+  "theme": {
+    "title": "アプリのテーマ",
+    "theme_label": "テーマ",
+    "override_theme_fonts_label": "テーマのフォントを上書き",
+    "auto_theme": "レガシー（システムの配色に従う）",
+    "light_theme": "レガシー（ライト）",
+    "dark_theme": "レガシー（ダーク）",
+    "triliumnext": "Trilium（システムの配色に従う）",
+    "triliumnext-light": "Trilium（ライト）",
+    "triliumnext-dark": "Trilium（ダーク）",
+    "layout": "レイアウト",
+    "layout-vertical-title": "垂直",
+    "layout-horizontal-title": "水平",
+    "layout-vertical-description": "ランチャーバーは左側（デフォルト）",
+    "layout-horizontal-description": "ランチャーバーはタブバーの下にあり、タブバーは全幅に。"
+  },
+  "vim_key_bindings": {
+    "use_vim_keybindings_in_code_notes": "Vimキーバインド",
+    "enable_vim_keybindings": "Vimキーバインドをコードノートで有効にします（exモードはありません）"
+  },
+  "wrap_lines": {
+    "wrap_lines_in_code_notes": "コードノートで行を折り返す",
+    "enable_line_wrap": "行の折り返しを有効にする（変更を適用にするにはフロントエンドのリロードが必要な場合があります）"
+  },
+  "images": {
+    "images_section_title": "画像",
+    "download_images_automatically": "画像を自動的にダウンロードしてオフラインで使用可能にする。",
+    "download_images_description": "貼り付けられたHTMLにはオンライン画像への参照が含まれていることがありますが、Triliumはそれらの参照を見つけて画像をダウンロードし、オフラインで利用できるようにします。",
+    "enable_image_compression": "画像の圧縮を有効にする",
+    "max_image_dimensions": "画像の最大幅/高さ（この設定を超えると画像はリサイズされます）。",
+    "max_image_dimensions_unit": "ピクセル",
+    "jpeg_quality_description": "JPEGの品質（10 - 最低品質、100 - 最高品質、50 - 80を推奨）"
+  },
+  "search_engine": {
+    "title": "検索エンジン",
+    "custom_search_engine_info": "カスタム検索エンジンは、名前とURLの両方を設定する必要があります。どちらも設定されていない場合、DuckDuckGoがデフォルトの検索エンジンとして使用されます。",
+    "predefined_templates_label": "定義済みの検索エンジンのテンプレート",
+    "bing": "Bing",
+    "baidu": "Baidu",
+    "duckduckgo": "DuckDuckGo",
+    "google": "Google",
+    "custom_name_label": "カスタム検索エンジンの名前",
+    "custom_name_placeholder": "カスタム検索エンジンの名前",
+    "custom_url_label": "カスタム検索エンジンのURLには、検索語句のプレースホルダーとして {keyword} を含める必要があります。",
+    "custom_url_placeholder": "カスタム検索エンジンのurl",
+    "save_button": "保存"
+  },
+  "tray": {
+    "title": "システムトレイ",
+    "enable_tray": "トレイを有効にする (この変更を適用にするには、Triliumを再起動する必要があります)"
+  },
+  "heading_style": {
+    "title": "見出しのスタイル",
+    "plain": "プレーン",
+    "underline": "下線",
+    "markdown": "Markdownスタイル"
+  },
+  "highlights_list": {
+    "title": "ハイライトリスト",
+    "description": "右のパネルに表示されるハイライトリストをカスタマイズできます:",
+    "bold": "太字",
+    "italic": "イタリック体",
+    "underline": "下線",
+    "color": "カラーテキスト",
+    "bg_color": "背景色付きテキスト",
+    "visibility_title": "ハイライトリスト表示",
+    "visibility_description": "#hideHighlightWidget ラベルを追加することで、ノートごとにハイライトウィジェットを非表示にできます。",
+    "shortcut_info": "オプション -> ショートカット（'右ペイン切り替え'）で、右ペイン（ハイライトを含む）を素早く切り替えるキーボードショートカットを設定できます。"
+  },
+  "table_of_contents": {
+    "title": "目次",
+    "description": "ノートに定義された数以上の見出しがある場合、テキストノートに目次が表示されます。この数はカスタマイズできます:",
+    "unit": "見出し",
+    "disable_info": "このオプションに非常に大きな数値を設定することで、目次を効果的に無効にすることもできる。",
+    "shortcut_info": "オプション -> ショートカット（'右ペイン切り替え'）で、右ペイン（目次を含む）を素早く切り替えるキーボードショートカットを設定できます。"
+  },
+  "toc": {
+    "table_of_contents": "目次"
+  },
+  "text_auto_read_only_size": {
+    "title": "自動読み取り専用のサイズ",
+    "description": "自動読み取り専用のノートサイズは、ノートが読み取り専用モード（パフォーマンス上の理由）で表示されるようになるサイズです。",
+    "label": "自動読み取り専用のサイズ（テキストノート）",
+    "unit": "文字"
+  },
+  "code_auto_read_only_size": {
+    "title": "自動読み取り専用のサイズ",
+    "description": "自動読み取り専用のノートサイズは、ノートが読み取り専用モード（パフォーマンス上の理由）で表示されるようになるサイズです。",
+    "unit": "文字"
+  },
+  "custom_date_time_format": {
+    "title": "日付/時刻フォーマットのカスタム",
+    "description": "<kbd></kbd>またはツールバーから挿入される日付と時刻のフォーマットをカスタマイズする。 利用可能なトークンについては <a href=\"https://day.js.org/docs/en/display/format\" target=\"_blank\" rel=\"noopener noreferrer\">Day.js ドキュメント</a> を参照してください。",
+    "format_string": "文字列形式:",
+    "formatted_time": "日付/時刻形式:"
+  },
+  "backup": {
+    "automatic_backup": "自動バックアップ",
+    "automatic_backup_description": "Triliumは自動的にデータベースをバックアップすることができます:",
+    "enable_daily_backup": "毎日バックアップ",
+    "enable_weekly_backup": "毎週バックアップ",
+    "enable_monthly_backup": "毎月バックアップ",
+    "backup_recommendation": "バックアップはオンが推奨されますが、大規模なデータベースや低速なストレージデバイスの場合、アプリの起動を遅くする可能性があります。",
+    "backup_now": "今すぐバックアップ",
+    "backup_database_now": "今すぐデータベースをバックアップ",
+    "existing_backups": "既存のバックアップ",
+    "date-and-time": "日時",
+    "path": "パス",
+    "database_backed_up_to": "データベースは{{backupFilePath}}にバックアップされました",
+    "no_backup_yet": "バックアップがありません"
+  },
+  "password": {
+    "wiki": "wiki",
+    "heading": "パスワード",
+    "alert_message": "新しいパスワードは大切に保管してください。パスワードはウェブインターフェースへのログインや、保護されたノートの暗号化に使用されます。パスワードを忘れると、保護されたノートはすべて永久に失われます。",
+    "reset_link": "リセットするにはここをクリック。",
+    "old_password": "旧パスワード",
+    "new_password": "新パスワード",
+    "new_password_confirmation": "新パスワードの確認",
+    "change_password": "パスワードの変更",
+    "change_password_heading": "パスワードの変更",
+    "protected_session_timeout": "保護されたセッションのタイムアウト",
+    "protected_session_timeout_description": "保護されたセッションのタイムアウトは、保護されたセッションがブラウザのメモリから消去される時間です。これは、保護されたノートとの最後のやり取りから測定されます。参照",
+    "for_more_info": "詳細はこちら。",
+    "protected_session_timeout_label": "保護されたセッションのタイムアウト:",
+    "reset_confirmation": "パスワードをリセットすると、保護されているすべてのノートにアクセスできなくなります。本当にパスワードをリセットしますか？",
+    "reset_success_message": "パスワードがリセットされました。新しいパスワードを設定してください",
+    "set_password_heading": "パスワードの設定",
+    "set_password": "パスワードの設定",
+    "password_mismatch": "新しいパスワードが同じではありません。",
+    "password_changed_success": "パスワードが変更されました。OKを押すとTriliumがリロードされます。"
+  },
+  "spellcheck": {
+    "title": "スペルチェック",
+    "description": "これらのオプションはデスクトップビルドにのみ適用され、ブラウザはそれぞれのネイティブスペルチェックを使用します。",
+    "enable": "スペルチェックを有効",
+    "language_code_label": "言語コード",
+    "language_code_placeholder": "例えば \"en-US\", \"de-AT\"",
+    "multiple_languages_info": "複数の言語はカンマで区切ることができます。例: \"en-US, de-DE, cs\"。 ",
+    "available_language_codes_label": "使用可能な言語コード:",
+    "restart-required": "スペルチェックオプションの変更は、アプリケーションの再起動後に有効になります。"
+  },
+  "sync_2": {
+    "config_title": "同期設定",
+    "server_address": "サーバーインスタンスのアドレス",
+    "timeout": "同期タイムアウト",
+    "timeout_unit": "ミリ秒",
+    "proxy_label": "同期プロキシサーバー（任意）",
+    "note": "注",
+    "note_description": "プロキシ設定を空白のままにすると、システムプロキシが使用されます（デスクトップ/electronビルドにのみ適用されます）。"
   }
 }
