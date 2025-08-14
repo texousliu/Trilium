@@ -5,13 +5,13 @@
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/triliumnext/notes/total)  
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp) [![Translation status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[英文](./README.md) | [簡體中文](./docs/README-ZH_CN.md) | [正體中文](./docs/README-ZH_TW.md) | [俄文](./docs/README.ru.md) | [日文](./docs/README.ja.md) | [義大利文](./docs/README.it.md) | [西班牙文](./docs/README.es.md)
+[英文](../README.md) | [簡體中文](./README-ZH_CN.md) | [正體中文](./README-ZH_TW.md) | [俄文](./README.ru.md) | [日文](./README.ja.md) | [義大利文](./README.it.md) | [西班牙文](./README.es.md)
 
 Trilium Notes 是一款免費且開源、跨平台的階層式筆記應用程式，專注於建立大型個人知識庫。
 
 想快速了解，請查看 [螢幕截圖](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)：
 
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium 截圖" width="1000"></a>
+<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
 
 ## 🎁 功能
 
@@ -22,7 +22,7 @@ Trilium Notes 是一款免費且開源、跨平台的階層式筆記應用程式
 * 無縫的[筆記版本管理](https://triliumnext.github.io/Docs/Wiki/note-revisions)。
 * 筆記[屬性](https://triliumnext.github.io/Docs/Wiki/attributes)可用於筆記的組織、查詢與進階[腳本](https://triliumnext.github.io/Docs/Wiki/scripts)。
 * 介面提供英文、德文、西班牙文、法文、羅馬尼亞文與中文（簡體與正體）。
-* 直接整合 [OpenID 與 TOTP](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md) 以實現更安全的登入。
+* 直接整合 [OpenID 與 TOTP](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md) 以實現更安全的登入。
 * 與自架的同步伺服器進行[同步](https://triliumnext.github.io/Docs/Wiki/synchronization)  
   * 另有[第三方同步伺服器託管服務](https://trilium.cc/paid-hosting)。
 * 將筆記[分享](https://triliumnext.github.io/Docs/Wiki/sharing)（公開發布）到網際網路。
@@ -30,7 +30,7 @@ Trilium Notes 是一款免費且開源、跨平台的階層式筆記應用程式
 * 手繪/示意圖：基於 [Excalidraw](https://excalidraw.com/)（筆記類型為「canvas」）。
 * 用於視覺化筆記及其關係的[關聯圖](https://triliumnext.github.io/Docs/Wiki/relation-map)與[連結圖](https://triliumnext.github.io/Docs/Wiki/link-map)。
 * 心智圖：基於 [Mind Elixir](https://docs.mind-elixir.com/)。
-* 具有定位釘與 GPX 軌跡的[地圖](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md)。
+* 具有定位釘與 GPX 軌跡的[地圖](./User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md)。
 * [腳本](https://triliumnext.github.io/Docs/Wiki/scripts)——參見[進階展示](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)。
 * 用於自動化的 [REST API](https://triliumnext.github.io/Docs/Wiki/etapi)。
 * 在可用性與效能上均可良好擴展，支援超過 100,000 筆筆記。
@@ -39,7 +39,7 @@ Trilium Notes 是一款免費且開源、跨平台的階層式筆記應用程式
 * [Evernote 匯入](https://triliumnext.github.io/Docs/Wiki/evernote-import)與 [Markdown 匯入與匯出](https://triliumnext.github.io/Docs/Wiki/markdown)。
 * 用於快速保存網頁內容的 [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper)。
 * 可自訂的 UI（側邊欄按鈕、使用者自訂小工具等）。
-* [度量指標（Metrics）](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md)，並附有 [Grafana 儀表板](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)。
+* [度量指標（Metrics）](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md)，並附有 [Grafana 儀表板](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)。
 
 ✨ 想要更多 TriliumNext 的主題、腳本、外掛與資源，亦可參考以下第三方資源／社群：
 
@@ -52,19 +52,19 @@ Trilium Notes 是一款免費且開源、跨平台的階層式筆記應用程式
 
 ### 從 Trilium 遷移？
 
-從既有的 zadam/Trilium 例項遷移到 TriliumNext/Notes 不需要特別的遷移步驟。只要[照一般方式安裝 TriliumNext/Notes](#-installation)，它就會直接使用你現有的資料庫。
+從既有的 zadam/Trilium 例項遷移到 TriliumNext/Notes 不需要特別的遷移步驟。只要[照一般方式安裝 TriliumNext/Notes](#-安裝)，它就會直接使用你現有的資料庫。
 
 版本至多至 [v0.90.4](https://github.com/TriliumNext/Notes/releases/tag/v0.90.4) 與 zadam/trilium 最新版本 [v0.63.7](https://github.com/zadam/trilium/releases/tag/v0.63.7) 相容。之後的 TriliumNext 版本已提升同步版本號（與上述不再相容）。
 
 ## 📖 文件
 
-我們目前正將文件搬移至應用程式內（在 Trilium 中按 `F1`）。在完成前，文件中可能會有缺漏。如果你想在 GitHub 上瀏覽，也可以直接查看[使用說明](./docs/User%20Guide/User%20Guide/)。
+我們目前正將文件搬移至應用程式內（在 Trilium 中按 `F1`）。在完成前，文件中可能會有缺漏。如果你想在 GitHub 上瀏覽，也可以直接查看[使用說明](./User%20Guide/User%20Guide/)。
 
 以下提供一些快速連結，方便你導覽文件：
-- [伺服器安裝](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
-  - [Docker 安裝](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
-- [升級 TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
-- [基本概念與功能－筆記](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+- [伺服器安裝](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+  - [Docker 安裝](./User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+- [升級 TriliumNext](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+- [基本概念與功能－筆記](./User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
 - [個人知識庫的模式](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
 在我們完成重新整理文件架構之前，你也可以[瀏覽舊版文件](https://triliumnext.github.io/Docs)。
@@ -156,7 +156,7 @@ pnpm nx --project=desktop electron-forge:make -- --arch=x64 --platform=win32
 
 ### 開發者文件
 
-請參閱[環境設定指南](./docs/Developer%20Guide/Developer%20Guide/Environment%20Setup.md)。若有更多疑問，歡迎透過上方「與我們交流」章節所列連結與我們聯繫。
+請參閱[環境設定指南](./Developer%20Guide/Developer%20Guide/Environment%20Setup.md)。若有更多疑問，歡迎透過上方「與我們交流」章節所列連結與我們聯繫。
 
 ## 👏 鳴謝
 
