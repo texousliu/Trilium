@@ -3,11 +3,13 @@ import { t } from "../../../services/i18n";
 import { isMobile, reloadFrontendApp } from "../../../services/utils";
 import Column from "../../react/Column";
 import FormRadioGroup from "../../react/FormRadioGroup";
-import FormSelect from "../../react/FormSelect";
+import FormSelect, { FormSelectWithGroups } from "../../react/FormSelect";
 import { useTriliumOption, useTriliumOptionBool } from "../../react/hooks";
 import OptionsSection from "./components/OptionsSection";
 import server from "../../../services/server";
 import FormCheckbox from "../../react/FormCheckbox";
+import FormGroup from "../../react/FormGroup";
+import { FontFamily, OptionNames } from "@triliumnext/commons";
 
 interface Theme {
     val: string;
@@ -24,11 +26,59 @@ const BUILTIN_THEMES: Theme[] = [
     { val: "dark", title: t("theme.dark_theme") }
 ]
 
+interface FontFamilyEntry {
+    value: FontFamily;
+    label?: string;
+}
+
+interface FontGroup {
+    title: string;
+    items: FontFamilyEntry[];
+}
+
+const FONT_FAMILIES: FontGroup[] = [
+    {
+        title: t("fonts.generic-fonts"),
+        items: [
+            { value: "theme", label: t("fonts.theme_defined") },
+            { value: "system", label: t("fonts.system-default") },
+            { value: "serif", label: t("fonts.serif") },
+            { value: "sans-serif", label: t("fonts.sans-serif") },
+            { value: "monospace", label: t("fonts.monospace") }
+        ]
+    },
+    {
+        title: t("fonts.sans-serif-system-fonts"),
+        items: [{ value: "Arial" }, { value: "Verdana" }, { value: "Helvetica" }, { value: "Tahoma" }, { value: "Trebuchet MS" }, { value: "Microsoft YaHei" }]
+    },
+    {
+        title: t("fonts.serif-system-fonts"),
+        items: [{ value: "Times New Roman" }, { value: "Georgia" }, { value: "Garamond" }]
+    },
+    {
+        title: t("fonts.monospace-system-fonts"),
+        items: [
+            { value: "Courier New" },
+            { value: "Brush Script MT" },
+            { value: "Impact" },
+            { value: "American Typewriter" },
+            { value: "Andalé Mono" },
+            { value: "Lucida Console" },
+            { value: "Monaco" }
+        ]
+    },
+    {
+        title: t("fonts.handwriting-system-fonts"),
+        items: [{ value: "Bradley Hand" }, { value: "Luminari" }, { value: "Comic Sans MS" }]
+    }
+];
+
 export default function AppearanceSettings() {    
     return (
         <>
             <LayoutOrientation />
             <ApplicationTheme />
+            <Fonts />
         </>
     )
 }
@@ -75,7 +125,10 @@ function ApplicationTheme() {
         <OptionsSection title={t("theme.title")}>
             <Column>
                 <label>{t("theme.theme_label")}</label>
-                <FormSelect values={themes} currentValue={theme} onChange={setTheme} />
+                <FormSelect 
+                    values={themes} currentValue={theme} onChange={setTheme}
+                    keyProperty="val" titleProperty="title"
+                />
             </Column>
 
             <Column className="side-checkbox">
@@ -86,4 +139,35 @@ function ApplicationTheme() {
             </Column>
         </OptionsSection>
     )
+}
+
+function Fonts() {
+    return (
+        <OptionsSection title={t("fonts.fonts")}>
+            <Font title={t("fonts.main_font")} fontFamilyOption="mainFontFamily" />
+            <Font title={t("fonts.note_tree_font")} fontFamilyOption="treeFontFamily" />
+            <Font title={t("fonts.note_detail_font")} fontFamilyOption="detailFontFamily" />
+            <Font title={t("fonts.monospace_font")} fontFamilyOption="monospaceFontFamily" />
+        </OptionsSection>
+    );
+}
+
+function Font({ title, fontFamilyOption }: { title: string, fontFamilyOption: OptionNames }) {    
+    const [ fontFamily, setFontFamily ] = useTriliumOption(fontFamilyOption);    
+
+    return (
+        <>
+            <h5>{title}</h5>
+            <FormGroup>
+                <Column>
+                    <label>{t("fonts.font_family")}</label>
+                    <FormSelectWithGroups
+                        values={FONT_FAMILIES}
+                        currentValue={fontFamily} onChange={setFontFamily}
+                        keyProperty="value" titleProperty="label"                    
+                    />
+                </Column>
+            </FormGroup>
+        </>
+    );
 }

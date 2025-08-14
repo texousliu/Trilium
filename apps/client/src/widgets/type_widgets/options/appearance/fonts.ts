@@ -1,64 +1,14 @@
 import OptionsWidget from "../options_widget.js";
 import utils from "../../../../services/utils.js";
 import { t } from "../../../../services/i18n.js";
-import type { FontFamily, OptionMap, OptionNames } from "@triliumnext/commons";
+import type { OptionMap, OptionNames } from "@triliumnext/commons";
 
-interface FontFamilyEntry {
-    value: FontFamily;
-    label?: string;
-}
 
-interface FontGroup {
-    title: string;
-    items: FontFamilyEntry[];
-}
-
-const FONT_FAMILIES: FontGroup[] = [
-    {
-        title: t("fonts.generic-fonts"),
-        items: [
-            { value: "theme", label: t("fonts.theme_defined") },
-            { value: "system", label: t("fonts.system-default") },
-            { value: "serif", label: t("fonts.serif") },
-            { value: "sans-serif", label: t("fonts.sans-serif") },
-            { value: "monospace", label: t("fonts.monospace") }
-        ]
-    },
-    {
-        title: t("fonts.sans-serif-system-fonts"),
-        items: [{ value: "Arial" }, { value: "Verdana" }, { value: "Helvetica" }, { value: "Tahoma" }, { value: "Trebuchet MS" }, { value: "Microsoft YaHei" }]
-    },
-    {
-        title: t("fonts.serif-system-fonts"),
-        items: [{ value: "Times New Roman" }, { value: "Georgia" }, { value: "Garamond" }]
-    },
-    {
-        title: t("fonts.monospace-system-fonts"),
-        items: [
-            { value: "Courier New" },
-            { value: "Brush Script MT" },
-            { value: "Impact" },
-            { value: "American Typewriter" },
-            { value: "Andalé Mono" },
-            { value: "Lucida Console" },
-            { value: "Monaco" }
-        ]
-    },
-    {
-        title: t("fonts.handwriting-system-fonts"),
-        items: [{ value: "Bradley Hand" }, { value: "Luminari" }, { value: "Comic Sans MS" }]
-    }
-];
 
 const TPL = /*html*/`
 <div class="options-section">
-    <h4>${t("fonts.fonts")}</h4>
-
-    <h5>${t("fonts.main_font")}</h5>
-
     <div class="form-group row">
         <div class="col-4">
-            <label for="main-font-family">${t("fonts.font_family")}</label>
             <select id="main-font-family" class="main-font-family form-select"></select>
         </div>
 
@@ -71,8 +21,6 @@ const TPL = /*html*/`
             </label>
         </div>
     </div>
-
-    <h5>${t("fonts.note_tree_font")}</h5>
 
     <div class="form-group row">
         <div class="col-4">
@@ -90,8 +38,6 @@ const TPL = /*html*/`
         </div>
     </div>
 
-    <h5>${t("fonts.note_detail_font")}</h5>
-
     <div class="form-group row">
         <div class="col-4">
             <label for="detail-font-family">${t("fonts.font_family")}</label>
@@ -107,8 +53,6 @@ const TPL = /*html*/`
             </label>
         </div>
     </div>
-
-    <h5>${t("fonts.monospace_font")}</h5>
 
     <div class="form-group row">
         <div class="col-4">
@@ -189,7 +133,7 @@ export default class FontsOptions extends OptionsWidget {
         this.$monospaceFontSize.val(options.monospaceFontSize);
         this.fillFontFamilyOptions(this.$monospaceFontFamily, options.monospaceFontFamily);
 
-        const optionsToSave: OptionNames[] = ["mainFontFamily", "mainFontSize", "treeFontFamily", "treeFontSize", "detailFontFamily", "detailFontSize", "monospaceFontFamily", "monospaceFontSize"];
+        const optionsToSave: OptionNames[] = ["mainFontSize", "treeFontSize", "monospaceFontSize"];
 
         for (const optionName of optionsToSave) {
             const $el = (this as any)[`$${optionName}`];
@@ -197,22 +141,4 @@ export default class FontsOptions extends OptionsWidget {
         }
     }
 
-    fillFontFamilyOptions($select: JQuery<HTMLElement>, currentValue: string) {
-        $select.empty();
-
-        for (const { title, items } of Object.values(FONT_FAMILIES)) {
-            const $group = $("<optgroup>").attr("label", title);
-
-            for (const { value, label } of items) {
-                $group.append(
-                    $("<option>")
-                        .attr("value", value)
-                        .prop("selected", value === currentValue)
-                        .text(label ?? value)
-                );
-            }
-
-            $select.append($group);
-        }
-    }
 }
