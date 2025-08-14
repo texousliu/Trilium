@@ -10,6 +10,7 @@ export default function AdvancedSettings() {
     return <>
         <AdvancedSyncOptions />
         <DatabaseIntegrityOptions />
+        <VacuumDatabaseOptions />
     </>;
 }
 
@@ -62,6 +63,23 @@ function DatabaseIntegrityOptions() {
                     toast.showMessage(t("consistency_checks.finding_and_fixing_message"));
                     await server.post("database/find-and-fix-consistency-issues");
                     toast.showMessage(t("consistency_checks.issues_fixed_message"));
+                }}
+            />
+        </OptionsSection>
+    )
+}
+
+function VacuumDatabaseOptions() {
+    return (
+        <OptionsSection title={t("vacuum_database.title")}>
+            <FormText>{t("vacuum_database.description")}</FormText>
+
+            <Button
+                text={t("vacuum_database.button_text")}
+                onClick={async () => {
+                    toast.showMessage(t("vacuum_database.vacuuming_database"));
+                    await server.post("database/vacuum-database");
+                    toast.showMessage(t("vacuum_database.database_vacuumed"));
                 }}
             />
         </OptionsSection>
