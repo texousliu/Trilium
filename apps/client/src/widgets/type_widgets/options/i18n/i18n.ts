@@ -2,20 +2,10 @@ import OptionsWidget from "../options_widget.js";
 import server from "../../../../services/server.js";
 import utils from "../../../../services/utils.js";
 import { getAvailableLocales, t } from "../../../../services/i18n.js";
-import type { OptionMap, Locale } from "@triliumnext/commons";
 
 const TPL = /*html*/`
 <div class="options-section">
     <div class="locale-options-container">
-        <div class="option-row min-days-row" style="display: none;">
-            <label for="min-days-in-first-week">${}</label>
-            <select id="min-days-in-first-week" class="form-select">
-                ${
-        .map(num => `<option value="${num}">${num}</option>`)
-        .join('')}
-            </select>
-        </div>
-
         <p class="form-text use-tn-links">${t("i18n.first-week-info")}</p>
 
         <div class="admonition warning" role="alert">

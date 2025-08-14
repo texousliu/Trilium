@@ -54,7 +54,7 @@ function LocaleSelector({ locales, currentValue, onChange }: { locales: Locale[]
 function DateSettings() {
     const [ firstDayOfWeek, setFirstDayOfWeek ] = useTriliumOption("firstDayOfWeek");
     const [ firstWeekOfYear, setFirstWeekOfYear ] = useTriliumOption("firstWeekOfYear");
-    const [ minDaysInFirstWeek, setMinDaysInFirstWeek ] = useTriliumOptionInt("minDaysInFirstWeek");
+    const [ minDaysInFirstWeek, setMinDaysInFirstWeek ] = useTriliumOption("minDaysInFirstWeek");
 
     return (
         <>
@@ -87,7 +87,7 @@ function DateSettings() {
                     currentValue={minDaysInFirstWeek} onChange={setMinDaysInFirstWeek}
                     values={Array.from(
                         { length: 7 }, 
-                        (_, i) => ({ days: i + 1 }))} />
+                        (_, i) => ({ days: String(i + 1) }))} />
             </OptionsRow>}
         </>
     )
