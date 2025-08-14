@@ -67,3 +67,13 @@ export interface DatabaseCheckIntegrityResponse {
         integrity_check: string;
     }[];
 }
+
+export interface DatabaseAnonymizeResponse {
+    success: boolean;
+    anonymizedFilePath: string;
+}
+
+export interface AnonymizedDbResponse {
+    filePath: string;
+    fileName: string;
+}
