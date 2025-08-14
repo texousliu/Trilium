@@ -4,7 +4,7 @@ import { ParentComponent } from "./ReactBasicWidget";
 import SpacedUpdate from "../../services/spaced_update";
 import { OptionNames } from "@triliumnext/commons";
 import options from "../../services/options";
-import utils from "../../services/utils";
+import utils, { reloadFrontendApp } from "../../services/utils";
 
 /**
  * Allows a React component to react to Trilium events (e.g. `entitiesReloaded`). When the desired event is triggered, the handler is invoked with the event parameters.
@@ -68,12 +68,16 @@ export function useSpacedUpdate(callback: () => Promise<void>, interval = 1000) 
     return spacedUpdateRef.current;
 }
 
-export function useTriliumOption(name: OptionNames): [string, (newValue: string) => Promise<void>] {
+export function useTriliumOption(name: OptionNames, needsRefresh?: boolean): [string, (newValue: string) => Promise<void>] {
     const initialValue = options.get(name);
     const [ value, setValue ] = useState(initialValue);
 
     async function wrappedSetValue(newValue: string) {
         await options.save(name, newValue);
+
+        if (needsRefresh) {
+            reloadFrontendApp(`option change: ${name}`);
+        }
     };
 
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
