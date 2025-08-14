@@ -9,36 +9,36 @@
 
 Trilium Notes 是一款免费且开源、跨平台的阶层式笔记应用程序，专注于建立大型个人知识库。
 
-想快速了解，请查看 [屏幕截图](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)：
+想快速了解，请查看[屏幕截图](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)：
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
 
 ## 🎁 功能
 
-* 笔记可组织成任意深度的树状结构。单一笔记可放在树中的多个位置（参见[笔记复制/克隆](https://triliumnext.github.io/Docs/Wiki/cloning-notes)）。
-* 丰富的所见即所得（WYSIWYG）笔记编辑器，支持表格、图片与[数学公式](https://triliumnext.github.io/Docs/Wiki/text-notes)，并具备 Markdown 的[自动格式化](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat)。
+* 笔记可组织成任意深度的树形结构。单一笔记可放在树中的多个位置（参见[笔记复制/克隆](https://triliumnext.github.io/Docs/Wiki/cloning-notes)）。
+* 丰富的所见即所得（WYSIWYG）笔记编辑器，支持表格、图片与[数学公式](https://triliumnext.github.io/Docs/Wiki/text-notes)，并具备 Markdown 的[自动格式](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat)。
 * 支持编辑[程序代码笔记](https://triliumnext.github.io/Docs/Wiki/code-notes)，包含语法高亮。 
-* 快速、轻松地在笔记间[导航](https://triliumnext.github.io/Docs/Wiki/note-navigation)、全文搜寻，以及[笔记聚焦（hoisting）](https://triliumnext.github.io/Docs/Wiki/note-hoisting)。
+* 快速、轻松地在笔记间[导航](https://triliumnext.github.io/Docs/Wiki/note-navigation)、全文搜索，以及[笔记聚焦（hoisting）](https://triliumnext.github.io/Docs/Wiki/note-hoisting)。
 * 无缝的[笔记版本管理](https://triliumnext.github.io/Docs/Wiki/note-revisions)。
-* 笔记[属性](https://triliumnext.github.io/Docs/Wiki/attributes)可用于笔记的组织、查询与进阶[脚本](https://triliumnext.github.io/Docs/Wiki/scripts)。
+* 笔记[属性](https://triliumnext.github.io/Docs/Wiki/attributes)可用于笔记的组织、查询与高级[脚本](https://triliumnext.github.io/Docs/Wiki/scripts)。
 * 接口提供英文、德文、西班牙文、法文、罗马尼亚文与中文（简体与正体）。
-* 直接整合 [OpenID 与 TOTP](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md) 以实现更安全的登入。
+* 直接整合 [OpenID 与 TOTP](./User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md) 以实现更安全的登录。
 * 与自架的同步服务器进行[同步](https://triliumnext.github.io/Docs/Wiki/synchronization)  
   * 另有[第三方同步服务器托管服务](https://trilium.cc/paid-hosting)。
-* 将笔记[分享](https://triliumnext.github.io/Docs/Wiki/sharing)（公开发布）到因特网。
+* 将笔记[分享](https://triliumnext.github.io/Docs/Wiki/sharing)（公开发布）到互联网。
 * 以每则笔记为粒度的强大[笔记加密](https://triliumnext.github.io/Docs/Wiki/protected-notes)。
 * 手绘/示意图：基于 [Excalidraw](https://excalidraw.com/)（笔记类型为「canvas」）。
-* 用于可视化笔记及其关系的[关联图](https://triliumnext.github.io/Docs/Wiki/relation-map)与[连结图](https://triliumnext.github.io/Docs/Wiki/link-map)。
-* 心智图：基于 [Mind Elixir](https://docs.mind-elixir.com/)。
+* 用于可视化笔记及其关系的[关系图](https://triliumnext.github.io/Docs/Wiki/relation-map)与[链接图](https://triliumnext.github.io/Docs/Wiki/link-map)。
+* 思维导图：基于 [Mind Elixir](https://docs.mind-elixir.com/)。
 * 具有定位钉与 GPX 轨迹的[地图](./User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md)。
-* [脚本](https://triliumnext.github.io/Docs/Wiki/scripts)——参见[进阶展示](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)。
+* [脚本](https://triliumnext.github.io/Docs/Wiki/scripts)——参见[高级展示](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)。
 * 用于自动化的 [REST API](https://triliumnext.github.io/Docs/Wiki/etapi)。
 * 在可用性与效能上均可良好扩展，支持超过 100,000 笔笔记。
-* 为手机与平板优化的[行动前端](https://triliumnext.github.io/Docs/Wiki/mobile-frontend)。
-* 内建[深色主题](https://triliumnext.github.io/Docs/Wiki/themes)，并支持用户主题。
+* 为手机与平板优化的[移动前端](https://triliumnext.github.io/Docs/Wiki/mobile-frontend)。
+* 内置[深色主题](https://triliumnext.github.io/Docs/Wiki/themes)，并支持用户主题。
 * [Evernote 导入](https://triliumnext.github.io/Docs/Wiki/evernote-import)与 [Markdown 导入与导出](https://triliumnext.github.io/Docs/Wiki/markdown)。
 * 用于快速保存网页内容的 [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper)。
-* 可自定义的 UI（侧边栏按钮、用户自定义小工具等）。
+* 可自定义的 UI（侧边栏按钮、用户自定义小组件等）。
 * [度量指标（Metrics）](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md)，并附有 [Grafana 仪表板](./User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)。
 
 ✨ 想要更多 TriliumNext 的主题、脚本、外挂与资源，亦可参考以下第三方资源／社群：
@@ -54,7 +54,7 @@ Trilium Notes 是一款免费且开源、跨平台的阶层式笔记应用程序
 
 从既有的 zadam/Trilium 例项迁移到 TriliumNext/Notes 不需要特别的迁移步骤。只要[照一般方式安装 TriliumNext/Notes](#-安装)，它就会直接使用你现有的数据库。
 
-版本至多至 [v0.90.4](https://github.com/TriliumNext/Notes/releases/tag/v0.90.4) 与 zadam/trilium 最新版本 [v0.63.7](https://github.com/zadam/trilium/releases/tag/v0.63.7) 相容。之后的 TriliumNext 版本已提升同步版本号（与上述不再兼容）。
+版本至多至 [v0.90.4](https://github.com/TriliumNext/Notes/releases/tag/v0.90.4) 与 zadam/trilium 最新版本 [v0.63.7](https://github.com/zadam/trilium/releases/tag/v0.63.7) 兼容。之后的 TriliumNext 版本已提升同步版本号（与上述不再兼容）。
 
 ## 📖 文件
 
@@ -106,7 +106,7 @@ TriliumNext 也提供 Flatpak，惟尚未发布到 FlatHub。
 
 如果你偏好原生 Android 应用，可使用 [TriliumDroid](https://apt.izzysoft.de/fdroid/index/apk/eu.fliegendewurst.triliumdroid)。回报问题或缺少的功能，请至[其储存库](https://github.com/FliegendeWurst/TriliumDroid)。
 
-更多关于行动应用支持的信息，请见议题：https://github.com/TriliumNext/Notes/issues/72。
+更多关于移动应用支持的信息，请见议题：https://github.com/TriliumNext/Notes/issues/72。
 
 ### 服务器
 
@@ -124,7 +124,7 @@ TriliumNext 也提供 Flatpak，惟尚未发布到 FlatHub。
 
 ### 程序代码
 
-下载储存库，使用 `pnpm` 安装相依套件，接着启动服务器（将于 http://localhost:8080 提供服务）：
+下载储存库，使用 `pnpm` 安装相依套件，接着启动服务器（于 http://localhost:8080 提供服务）：
 ```shell
 git clone https://github.com/TriliumNext/Trilium.git
 cd Trilium
