@@ -9,6 +9,15 @@ interface FormTextBoxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "
 }
 
 export default function FormTextBox({ inputRef, className, type, currentValue, onChange, ...rest}: FormTextBoxProps) {
+    if (type === "number" && currentValue) {
+        const { min, max } = rest;
+        if (min && currentValue < min) {
+            currentValue = String(min);
+        } else if (max && currentValue > max) {
+            currentValue = String(max);
+        }
+    }
+
     return (
         <input
             ref={inputRef}

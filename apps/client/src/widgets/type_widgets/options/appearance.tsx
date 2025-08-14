@@ -14,6 +14,8 @@ import FormTextBox, { FormTextBoxWithUnit } from "../../react/FormTextBox";
 import FormText from "../../react/FormText";
 import Button from "../../react/Button";
 
+const MIN_CONTENT_WIDTH = 640;
+
 interface Theme {
     val: string;
     title: string;
@@ -85,6 +87,7 @@ export default function AppearanceSettings() {
             <ApplicationTheme />
             {overrideThemeFonts === "true" && <Fonts />}
             {isElectron() && <ElectronIntegration /> }
+            <MaxContentWidth />
         </div>
     )
 }
@@ -159,7 +162,7 @@ function Fonts() {
             <FormText>{t("fonts.not_all_fonts_available")}</FormText>
 
             <p>
-                {t("fonts.apply_font_changes")} <Button text={t("fonts.reload_frontend")} size="micro" />
+                {t("fonts.apply_font_changes")} <Button text={t("fonts.reload_frontend")} size="micro" onClick={reloadFrontendApp} />
             </p>
         </OptionsSection>
     );
@@ -227,6 +230,31 @@ function ElectronIntegration() {
             </FormGroup>
 
             <Button text={t("electron_integration.restart-app-button")} onClick={restartDesktopApp} />
+        </OptionsSection>
+    )
+}
+
+function MaxContentWidth() {
+    const [ maxContentWidth, setMaxContentWidth ] = useTriliumOption("maxContentWidth");
+
+    return (
+        <OptionsSection title={t("max_content_width.title")}>
+            <FormText>{t("max_content_width.default_description")}</FormText>
+
+            <Column md={6}>
+                <FormGroup label={t("max_content_width.max_width_label")}>
+                    <FormTextBoxWithUnit
+                        name="max-content-width"
+                        type="number" min={MIN_CONTENT_WIDTH} step="10" 
+                        currentValue={maxContentWidth} onChange={setMaxContentWidth}
+                        unit={t("max_content_width.max_width_unit")}
+                    />
+                </FormGroup>
+            </Column>
+
+            <p>
+                {t("max_content_width.apply_changes_description")} <Button text={t("max_content_width.reload_button")} size="micro" onClick={reloadFrontendApp} />
+            </p>
         </OptionsSection>
     )
 }
