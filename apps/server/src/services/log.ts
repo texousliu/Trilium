@@ -38,6 +38,9 @@ async function cleanupOldLogFiles() {
         const customRetentionDays = config.Logging.retentionDays;
         if (customRetentionDays > 0) {
             retentionDays = customRetentionDays;
+        } else if (customRetentionDays <= -1){
+            info(`Log cleanup: keeping all log files, as specified by configuration.`);
+            return
         }
 
         const cutoffDate = new Date();
