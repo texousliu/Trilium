@@ -10,6 +10,9 @@ import server from "../../../services/server";
 import FormCheckbox from "../../react/FormCheckbox";
 import FormGroup from "../../react/FormGroup";
 import { FontFamily, OptionNames } from "@triliumnext/commons";
+import FormTextBox, { FormTextBoxWithUnit } from "../../react/FormTextBox";
+import FormText from "../../react/FormText";
+import Button from "../../react/Button";
 
 interface Theme {
     val: string;
@@ -146,22 +149,30 @@ function ApplicationTheme() {
 function Fonts() {    
     return (
         <OptionsSection title={t("fonts.fonts")}>
-            <Font title={t("fonts.main_font")} fontFamilyOption="mainFontFamily" />
-            <Font title={t("fonts.note_tree_font")} fontFamilyOption="treeFontFamily" />
-            <Font title={t("fonts.note_detail_font")} fontFamilyOption="detailFontFamily" />
-            <Font title={t("fonts.monospace_font")} fontFamilyOption="monospaceFontFamily" />
+            <Font title={t("fonts.main_font")} fontFamilyOption="mainFontFamily" fontSizeOption="mainFontSize" />
+            <Font title={t("fonts.note_tree_font")} fontFamilyOption="treeFontFamily" fontSizeOption="treeFontSize" />
+            <Font title={t("fonts.note_detail_font")} fontFamilyOption="detailFontFamily" fontSizeOption="detailFontSize" />
+            <Font title={t("fonts.monospace_font")} fontFamilyOption="monospaceFontFamily" fontSizeOption="monospaceFontSize" />
+
+            <FormText>{t("fonts.note_tree_and_detail_font_sizing")}</FormText>
+            <FormText>{t("fonts.not_all_fonts_available")}</FormText>
+
+            <p>
+                {t("fonts.apply_font_changes")} <Button text={t("fonts.reload_frontend")} size="micro" />
+            </p>
         </OptionsSection>
     );
 }
 
-function Font({ title, fontFamilyOption }: { title: string, fontFamilyOption: OptionNames }) {    
+function Font({ title, fontFamilyOption, fontSizeOption }: { title: string, fontFamilyOption: OptionNames, fontSizeOption: OptionNames }) {    
     const [ fontFamily, setFontFamily ] = useTriliumOption(fontFamilyOption);    
+    const [ fontSize, setFontSize ] = useTriliumOption(fontSizeOption);
 
     return (
         <>
             <h5>{title}</h5>
-            <FormGroup>
-                <Column>
+            <div className="row">
+                <Column md={4}>
                     <label>{t("fonts.font_family")}</label>
                     <FormSelectWithGroups
                         values={FONT_FAMILIES}
@@ -169,7 +180,17 @@ function Font({ title, fontFamilyOption }: { title: string, fontFamilyOption: Op
                         keyProperty="value" titleProperty="label"                    
                     />
                 </Column>
-            </FormGroup>
+
+                <Column md={6}>
+                    <label>{t("fonts.size")}</label>
+                    <FormTextBoxWithUnit
+                        name="tree-font-size"
+                        type="number" min={50} max={200} step={10}
+                        currentValue={fontSize} onChange={setFontSize}
+                        unit="%"
+                    />
+                </Column>
+            </div>            
         </>
     );
 }
