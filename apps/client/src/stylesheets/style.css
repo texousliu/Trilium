@@ -139,6 +139,11 @@ textarea,
     color: var(--muted-text-color);
 }
 
+.form-group.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
 /* Add a gap between consecutive radios / check boxes */
 label.tn-radio + label.tn-radio,
 label.tn-checkbox + label.tn-checkbox {

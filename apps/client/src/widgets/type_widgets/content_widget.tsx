@@ -45,11 +45,11 @@ import { t } from "../../services/i18n.js";
 import LanguageOptions from "./options/i18n/language.js";
 import type BasicWidget from "../basic_widget.js";
 import CodeTheme from "./options/code_notes/code_theme.js";
-import RelatedSettings from "./options/appearance/related_settings.js";
 import EditorFeaturesOptions from "./options/text_notes/features.js";
 import type { JSX } from "preact/jsx-runtime";
 import AppearanceSettings from "./options/appearance.jsx";
 import { renderReactWidget } from "../react/ReactBasicWidget.jsx";
+import ImageSettings from "./options/images.jsx";
 
 const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -97,9 +97,7 @@ const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", ((typeof NoteContextA
         CodeMimeTypesOptions,
         CodeAutoReadOnlySizeOptions
     ],
-    _optionsImages: [
-        ImageOptions
-    ],
+    _optionsImages: <ImageSettings />,
     _optionsSpellcheck: [
         SpellcheckOptions
     ],
