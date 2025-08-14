@@ -40,14 +40,6 @@ export default class ThemeOptions extends OptionsWidget {
         this.$widget = $(TPL);
         this.$themeSelect = this.$widget.find(".theme-select");
         this.$overrideThemeFonts = this.$widget.find(".override-theme-fonts");
-        this.$layoutOrientation = this.$widget.find(`input[name="layout-orientation"]`).on("change", async () => {
-            const newLayoutOrientation = String(this.$widget.find(`input[name="layout-orientation"]:checked`).val());
-            await this.updateOption("layoutOrientation", newLayoutOrientation);
-            utils.reloadFrontendApp("layout orientation change");
-        });
-
-        const $layoutOrientationSection = $(this.$widget[0]);
-        $layoutOrientationSection.toggleClass("hidden-ext", utils.isMobile());
 
         this.$themeSelect.on("change", async () => {
             const newTheme = this.$themeSelect.val();

@@ -5,7 +5,7 @@ const SVG_MIME = "image/svg+xml";
 
 export const isShare = !window.glob;
 
-function reloadFrontendApp(reason?: string) {
+export function reloadFrontendApp(reason?: string) {
     if (reason) {
         logInfo(`Frontend app reload: ${reason}`);
     }
@@ -218,7 +218,7 @@ function randomString(len: number) {
     return text;
 }
 
-function isMobile() {
+export function isMobile() {
     return (
         window.glob?.device === "mobile" ||
         // window.glob.device is not available in setup

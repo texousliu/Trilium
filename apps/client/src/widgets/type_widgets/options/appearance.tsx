@@ -1,15 +1,15 @@
 import { t } from "../../../services/i18n";
+import { isMobile, reloadFrontendApp } from "../../../services/utils";
 import FormRadioGroup from "../../react/FormRadioGroup";
 import { useTriliumOption } from "../../react/hooks";
 import OptionsSection from "./components/OptionsSection";
 
 export default function AppearanceSettings() {
     const [ layoutOrientation, setLayoutOrientation ] = useTriliumOption("layoutOrientation");
-    console.log("Render with ", layoutOrientation);
 
     return (
         <OptionsSection title={t("theme.layout")}>
-            <FormRadioGroup
+            {!isMobile() && <FormRadioGroup
                 name="layout-orientation"
                 values={[
                     {
@@ -21,8 +21,11 @@ export default function AppearanceSettings() {
                         value: "horizontal"
                     }
                 ]}
-                currentValue={layoutOrientation} onChange={setLayoutOrientation}
-            />
+                currentValue={layoutOrientation} onChange={async (newValue) => {
+                    await setLayoutOrientation(newValue);
+                    reloadFrontendApp("layout orientation change");
+                }}
+            />}
         </OptionsSection>
     )
 }
