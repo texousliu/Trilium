@@ -1,0 +1,284 @@
+/**
+ * Gallery styles for PhotoSwipe integration
+ * Provides styling for gallery UI elements
+ */
+
+/* Gallery thumbnail strip */
+.gallery-thumbnail-strip {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.gallery-thumbnail-strip::-webkit-scrollbar {
+    height: 6px;
+}
+
+.gallery-thumbnail-strip::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.gallery-thumbnail-strip::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.gallery-thumbnail-strip::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.gallery-thumbnail {
+    position: relative;
+    overflow: hidden;
+}
+
+.gallery-thumbnail.active::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+}
+
+/* Gallery controls animations */
+.gallery-slideshow-controls button {
+    transition: transform 0.2s, background 0.2s;
+}
+
+.gallery-slideshow-controls button:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 1) !important;
+}
+
+.gallery-slideshow-controls button:active {
+    transform: scale(0.95);
+}
+
+/* Slideshow progress indicator */
+.slideshow-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.2);
+    z-index: 101;
+}
+
+.slideshow-progress-bar {
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    width: 0;
+    transition: width linear;
+}
+
+.slideshow-progress.active .slideshow-progress-bar {
+    animation: slideshow-progress var(--slideshow-interval) linear;
+}
+
+@keyframes slideshow-progress {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+/* Gallery counter styling */
+.gallery-counter {
+    font-family: var(--font-family-monospace);
+    letter-spacing: 0.05em;
+    user-select: none;
+}
+
+.gallery-counter .current-index {
+    font-weight: bold;
+    color: #fff;
+}
+
+.gallery-counter .total-count {
+    opacity: 0.8;
+}
+
+/* Enhanced image hover effects */
+.pswp__img {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pswp__img.pswp__img--zoomed {
+    cursor: move;
+}
+
+/* Gallery navigation arrows */
+.pswp__button--arrow--left,
+.pswp__button--arrow--right {
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(10px);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin: 20px;
+}
+
+.pswp__button--arrow--left:hover,
+.pswp__button--arrow--right:hover {
+    background: rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Touch-friendly tap areas */
+@media (pointer: coarse) {
+    .gallery-thumbnail {
+        min-width: 60px;
+        min-height: 60px;
+    }
+    
+    .gallery-slideshow-controls button {
+        min-width: 50px;
+        min-height: 50px;
+    }
+}
+
+/* Smooth transitions */
+.pswp--animate_opacity {
+    transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pswp__bg {
+    transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Loading state */
+.pswp__preloader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.pswp__preloader__icn {
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: gallery-spin 1s linear infinite;
+}
+
+@keyframes gallery-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Error state */
+.pswp__error-msg {
+    background: rgba(0, 0, 0, 0.8);
+    color: #ff6b6b;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Accessibility improvements */
+.pswp__button:focus-visible {
+    outline: 2px solid #4a9eff;
+    outline-offset: 2px;
+}
+
+.gallery-thumbnail:focus-visible {
+    outline: 2px solid #4a9eff;
+    outline-offset: -2px;
+}
+
+/* Dark theme adjustments */
+body.theme-dark .gallery-thumbnail-strip {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+body.theme-dark .gallery-slideshow-controls button {
+    background: rgba(255, 255, 255, 0.8);
+    color: #000;
+}
+
+body.theme-dark .gallery-slideshow-controls button:hover {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+/* Light theme adjustments */
+body.theme-light .pswp__bg {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+body.theme-light .gallery-counter,
+body.theme-light .gallery-keyboard-hints {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+    .gallery-thumbnail-strip {
+        bottom: 40px;
+        padding: 6px;
+        gap: 4px;
+    }
+    
+    .gallery-thumbnail {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    .gallery-slideshow-controls {
+        top: 10px;
+        right: 10px;
+    }
+    
+    .gallery-counter {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+    
+    .pswp__button--arrow--left,
+    .pswp__button--arrow--right {
+        width: 40px;
+        height: 40px;
+        margin: 10px;
+    }
+}
+
+/* Tablet-specific styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .gallery-thumbnail-strip {
+        max-width: 80%;
+    }
+    
+    .gallery-thumbnail {
+        width: 70px !important;
+        height: 70px !important;
+    }
+}
+
+/* High-DPI display optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .gallery-thumbnail img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .gallery-thumbnail,
+    .gallery-slideshow-controls button,
+    .pswp__img,
+    .pswp--animate_opacity,
+    .pswp__bg {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+/* Print styles */
+@media print {
+    .gallery-thumbnail-strip,
+    .gallery-slideshow-controls,
+    .gallery-counter,
+    .gallery-keyboard-hints {
+        display: none !important;
+    }
+}

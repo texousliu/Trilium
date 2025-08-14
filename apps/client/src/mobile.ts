@@ -3,6 +3,7 @@ import noteAutocompleteService from "./services/note_autocomplete.js";
 import glob from "./services/glob.js";
 import "./stylesheets/bootstrap.scss";
 import "boxicons/css/boxicons.min.css";
+import "./stylesheets/media-viewer.css";
 import "autocomplete.js/index_jquery.js";
 
 glob.setupGlobs();

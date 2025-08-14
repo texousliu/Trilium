@@ -14,6 +14,7 @@ import type FNote from "../../entities/fnote.js";
 import { PopupEditor, ClassicEditor, EditorWatchdog, type CKTextEditor, type MentionFeed, type WatchdogConfig, EditorConfig } from "@triliumnext/ckeditor5";
 import "@triliumnext/ckeditor5/index.css";
 import { updateTemplateCache } from "./ckeditor/snippets.js";
+import ckeditorPhotoSwipe from "../../services/ckeditor_photoswipe_integration.js";
 
 const TPL = /*html*/`
 <div class="note-detail-editable-text note-detail-printable">
@@ -162,6 +163,19 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 isClassicEditor
             };
             const editor = await buildEditor(this.$editor[0], isClassicEditor, opts);
+            
+            // Setup PhotoSwipe integration for images in the editor
+            setTimeout(() => {
+                const editorElement = this.$editor[0];
+                if (editorElement) {
+                    ckeditorPhotoSwipe.setupContainer(editorElement, {
+                        enableGalleryMode: true,
+                        showHints: true,
+                        hintDelay: 2000,
+                        excludeSelector: '.cke_widget_element, .ck-widget'
+                    });
+                }
+            }, 100);
 
             const notificationsPlugin = editor.plugins.get("Notification");
             notificationsPlugin.on("show:warning", (evt, data) => {
@@ -291,11 +305,25 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     }
 
     cleanup() {
+        // Cleanup PhotoSwipe integration
+        if (this.$editor?.[0]) {
+            ckeditorPhotoSwipe.cleanupContainer(this.$editor[0]);
+        }
+        
         if (this.watchdog?.editor) {
             this.spacedUpdate.allowUpdateWithoutChange(() => {
                 this.watchdog.editor?.setData("");
             });
         }
+        
+        // Destroy the watchdog to clean up all CKEditor resources
+        if (this.watchdog) {
+            this.watchdog.destroy().catch((error: any) => {
+                console.error('Error destroying CKEditor watchdog:', error);
+            });
+        }
+        
+        super.cleanup();
     }
 
     insertDateTimeToTextCommand() {

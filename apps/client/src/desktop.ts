@@ -13,6 +13,8 @@ import type ElectronRemote from "@electron/remote";
 import type Electron from "electron";
 import "./stylesheets/bootstrap.scss";
 import "boxicons/css/boxicons.min.css";
+import "./stylesheets/media-viewer.css";
+import "./styles/gallery.css";
 import "autocomplete.js/index_jquery.js";
 
 await appContext.earlyInit();

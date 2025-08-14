@@ -1,0 +1,253 @@
+/**
+ * Media Viewer Styles for Trilium Notes
+ * Customizes PhotoSwipe appearance to match Trilium's theme
+ */
+
+/* Base PhotoSwipe container customization */
+.pswp {
+    --pswp-bg: rgba(0, 0, 0, 0.95);
+    --pswp-placeholder-bg: rgba(30, 30, 30, 0.9);
+    --pswp-icon-color: #fff;
+    --pswp-icon-color-secondary: rgba(255, 255, 255, 0.75);
+    --pswp-icon-stroke-color: #fff;
+    --pswp-icon-stroke-width: 1px;
+    --pswp-error-text-color: #f44336;
+}
+
+/* Dark theme adjustments */
+body.theme-dark .pswp,
+body.theme-next-dark .pswp {
+    --pswp-bg: rgba(0, 0, 0, 0.95);
+    --pswp-placeholder-bg: rgba(30, 30, 30, 0.9);
+}
+
+/* Light theme adjustments */
+body.theme-light .pswp,
+body.theme-next-light .pswp {
+    --pswp-bg: rgba(0, 0, 0, 0.9);
+    --pswp-placeholder-bg: rgba(50, 50, 50, 0.8);
+}
+
+/* Toolbar and controls styling */
+.pswp__top-bar {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+}
+
+.pswp__button {
+    transition: opacity 0.2s ease-in-out;
+}
+
+.pswp__button:hover {
+    opacity: 1;
+}
+
+/* Counter styling */
+.pswp__counter {
+    font-family: var(--main-font-family);
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Caption styling */
+.pswp__caption {
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+}
+
+.pswp__caption__center {
+    text-align: center;
+    font-family: var(--main-font-family);
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 10px 20px;
+}
+
+/* Image styling */
+.pswp__img {
+    cursor: zoom-in;
+}
+
+.pswp__img--placeholder {
+    background-color: var(--pswp-placeholder-bg);
+}
+
+.pswp--zoomed-in .pswp__img {
+    cursor: grab;
+}
+
+.pswp--dragging .pswp__img {
+    cursor: grabbing;
+}
+
+/* Loading indicator */
+.pswp__preloader {
+    width: 44px;
+    height: 44px;
+}
+
+.pswp__preloader__icn {
+    width: 20px;
+    height: 20px;
+}
+
+/* Error message styling */
+.pswp__error-msg {
+    font-family: var(--main-font-family);
+    font-size: 14px;
+    color: var(--pswp-error-text-color);
+    text-align: center;
+    padding: 20px;
+}
+
+/* Thumbnails strip (for future implementation) */
+.pswp__thumbnails {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    overflow-x: auto;
+    z-index: 1;
+}
+
+.pswp__thumbnail {
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    object-fit: cover;
+    border: 2px solid transparent;
+}
+
+.pswp__thumbnail:hover {
+    opacity: 0.9;
+}
+
+.pswp__thumbnail--active {
+    opacity: 1;
+    border-color: var(--main-border-color);
+}
+
+/* Animations */
+.pswp--open {
+    animation: pswpFadeIn 0.25s ease-out;
+}
+
+.pswp--closing {
+    animation: pswpFadeOut 0.25s ease-out;
+}
+
+@keyframes pswpFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes pswpFadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* Zoom animation */
+.pswp__zoom-wrap {
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+    .pswp__caption__center {
+        font-size: 12px;
+        padding: 8px 16px;
+    }
+    
+    .pswp__counter {
+        font-size: 12px;
+    }
+    
+    .pswp__thumbnails {
+        height: 60px;
+    }
+    
+    .pswp__thumbnail {
+        width: 45px;
+        height: 45px;
+    }
+}
+
+/* Integration with Trilium's note context */
+.media-viewer-trigger {
+    cursor: zoom-in;
+    transition: opacity 0.2s;
+}
+
+.media-viewer-trigger:hover {
+    opacity: 0.9;
+}
+
+/* Gallery mode indicators */
+.media-viewer-gallery-indicator {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: var(--main-font-family);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Fullscreen mode adjustments */
+.pswp--fs {
+    background-color: black;
+}
+
+.pswp--fs .pswp__top-bar {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Accessibility improvements */
+.pswp__button:focus {
+    outline: 2px solid var(--main-border-color);
+    outline-offset: 2px;
+}
+
+.pswp__img:focus {
+    outline: none;
+}
+
+/* Custom toolbar buttons */
+.pswp__button--download {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'%3E%3C/path%3E%3Cpolyline points='7 10 12 15 17 10'%3E%3C/polyline%3E%3Cline x1='12' y1='15' x2='12' y2='3'%3E%3C/line%3E%3C/svg%3E");
+    background-size: 24px 24px;
+}
+
+.pswp__button--info {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='16' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='8' x2='12.01' y2='8'%3E%3C/line%3E%3C/svg%3E");
+    background-size: 24px 24px;
+}
+
+/* Print styles */
+@media print {
+    .pswp {
+        display: none !important;
+    }
+}

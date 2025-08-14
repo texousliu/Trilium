@@ -6,6 +6,7 @@ import { getLocaleById } from "../../services/i18n.js";
 import appContext from "../../components/app_context.js";
 import { getMermaidConfig } from "../../services/mermaid.js";
 import { renderMathInElement } from "../../services/math.js";
+import ckeditorPhotoSwipe from "../../services/ckeditor_photoswipe_integration.js";
 
 const TPL = /*html*/`
 <div class="note-detail-readonly-text note-detail-printable" tabindex="100">
@@ -93,7 +94,19 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
     }
 
     cleanup() {
-        this.$content.html("");
+        // Cleanup PhotoSwipe integration
+        if (this.$content?.[0]) {
+            ckeditorPhotoSwipe.cleanupContainer(this.$content[0]);
+        }
+        
+        // Remove all event handlers from content
+        if (this.$content) {
+            this.$content.off();
+            this.$content.find('*').off();
+            this.$content.html("");
+        }
+        
+        super.cleanup();
     }
 
     async doRefresh(note: FNote) {
@@ -107,6 +120,18 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
         const blob = await note.getBlob();
 
         this.$content.html(blob?.content ?? "");
+        
+        // Setup PhotoSwipe integration for images in read-only content
+        setTimeout(() => {
+            if (this.$content[0]) {
+                ckeditorPhotoSwipe.setupContainer(this.$content[0], {
+                    enableGalleryMode: true,
+                    showHints: true,
+                    hintDelay: 2000,
+                    excludeSelector: '.no-lightbox'
+                });
+            }
+        }, 100);
 
         this.$content.find("a.reference-link").each((_, el) => {
             this.loadReferenceLinkTitle($(el));

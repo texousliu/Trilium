@@ -9,6 +9,8 @@ import contentRenderer from "../services/content_renderer.js";
 import toastService from "../services/toast.js";
 import type FAttachment from "../entities/fattachment.js";
 import type { EventData } from "../components/app_context.js";
+import mediaViewer from "../services/media_viewer.js";
+import type { MediaItem } from "../services/media_viewer.js";
 
 const TPL = /*html*/`
 <div class="attachment-detail-widget">
@@ -65,6 +67,12 @@ const TPL = /*html*/`
 
         .attachment-content-wrapper img {
             margin: 10px;
+            cursor: zoom-in;
+            transition: opacity 0.2s;
+        }
+        
+        .attachment-content-wrapper img:hover {
+            opacity: 0.9;
         }
 
         .attachment-detail-wrapper.list-view .attachment-content-wrapper img, .attachment-detail-wrapper.list-view .attachment-content-wrapper video {
@@ -76,6 +84,24 @@ const TPL = /*html*/`
         .attachment-detail-wrapper.full-detail .attachment-content-wrapper img {
             max-width: 90%;
             object-fit: contain;
+        }
+        
+        .attachment-lightbox-hint {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        
+        .attachment-content-wrapper:hover .attachment-lightbox-hint {
+            opacity: 1;
         }
 
         .attachment-detail-wrapper.scheduled-for-deletion .attachment-content-wrapper img {
@@ -170,7 +196,83 @@ export default class AttachmentDetailWidget extends BasicWidget {
         this.$wrapper.find(".attachment-actions-container").append(this.attachmentActionsWidget.render());
 
         const { $renderedContent } = await contentRenderer.getRenderedContent(this.attachment, { imageHasZoom: this.isFullDetail });
-        this.$wrapper.find(".attachment-content-wrapper").append($renderedContent);
+        const $contentWrapper = this.$wrapper.find(".attachment-content-wrapper");
+        $contentWrapper.append($renderedContent);
+        
+        // Add PhotoSwipe integration for image attachments
+        if (this.attachment.role === 'image') {
+            this.setupPhotoSwipeIntegration($contentWrapper);
+        }
+    }
+
+    setupPhotoSwipeIntegration($contentWrapper: JQuery<HTMLElement>) {
+        // Add lightbox hint
+        const $hint = $('<div class="attachment-lightbox-hint">Click to view in lightbox</div>');
+        $contentWrapper.css('position', 'relative').append($hint);
+        
+        // Find the image element
+        const $img = $contentWrapper.find('img');
+        if (!$img.length) return;
+        
+        // Setup click handler for lightbox with namespace for proper cleanup
+        $img.off('click.photoswipe').on('click.photoswipe', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const item: MediaItem = {
+                src: $img.attr('src') || '',
+                alt: this.attachment.title,
+                title: this.attachment.title,
+                noteId: this.attachment.ownerId,
+                element: $img[0] as HTMLElement
+            };
+            
+            // Try to get actual dimensions
+            const imgElement = $img[0] as HTMLImageElement;
+            if (imgElement.naturalWidth && imgElement.naturalHeight) {
+                item.width = imgElement.naturalWidth;
+                item.height = imgElement.naturalHeight;
+            }
+            
+            mediaViewer.openSingle(item, {
+                bgOpacity: 0.95,
+                showHideOpacity: true,
+                pinchToClose: true,
+                closeOnScroll: false,
+                closeOnVerticalDrag: true,
+                wheelToZoom: true,
+                getThumbBoundsFn: () => {
+                    // Get position for zoom animation
+                    const rect = imgElement.getBoundingClientRect();
+                    return {
+                        x: rect.left,
+                        y: rect.top,
+                        w: rect.width
+                    };
+                }
+            }, {
+                onOpen: () => {
+                    console.log('Attachment image opened in lightbox');
+                },
+                onClose: () => {
+                    // Restore focus to the image
+                    $img.focus();
+                }
+            });
+        });
+        
+        // Add keyboard support
+        $img.attr('tabindex', '0')
+            .attr('role', 'button')
+            .attr('aria-label', 'Click to view in lightbox');
+        
+        // Use namespaced event for proper cleanup
+        $img.off('keydown.photoswipe').on('keydown.photoswipe', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                $img.trigger('click');
+            }
+        });
     }
 
     async copyAttachmentLinkToClipboard() {
@@ -203,5 +305,19 @@ export default class AttachmentDetailWidget extends BasicWidget {
                 this.refresh();
             }
         }
+    }
+    
+    cleanup() {
+        // Remove all event handlers before cleanup
+        const $contentWrapper = this.$wrapper?.find('.attachment-content-wrapper');
+        if ($contentWrapper?.length) {
+            const $img = $contentWrapper.find('img');
+            if ($img.length) {
+                // Remove namespaced event handlers
+                $img.off('.photoswipe');
+            }
+        }
+        
+        super.cleanup();
     }
 }
