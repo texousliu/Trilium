@@ -1,4 +1,5 @@
 import type { ComponentChildren } from "preact";
+import { useUniqueName } from "./hooks";
 
 interface FormRadioProps {
     name: string;
@@ -19,7 +20,7 @@ export default function FormRadioGroup({ name, values, currentValue, onChange }:
                         <input
                             className="form-check-input"
                             type="radio"
-                            name={name}
+                            name={useUniqueName(name)}
                             value={value}
                             checked={value === currentValue}
                         onChange={e => onChange((e.target as HTMLInputElement).value)} />

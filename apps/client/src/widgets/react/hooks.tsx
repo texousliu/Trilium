@@ -1,9 +1,10 @@
-import { type Dispatch, type StateUpdater, useContext, useEffect, useRef, useState } from "preact/hooks";
+import { type Dispatch, type StateUpdater, useContext, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { EventData, EventNames } from "../../components/app_context";
 import { ParentComponent } from "./ReactBasicWidget";
 import SpacedUpdate from "../../services/spaced_update";
 import { OptionNames } from "@triliumnext/commons";
 import options from "../../services/options";
+import utils from "../../services/utils";
 
 /**
  * Allows a React component to react to Trilium events (e.g. `entitiesReloaded`). When the desired event is triggered, the handler is invoked with the event parameters.
@@ -78,7 +79,6 @@ export function useTriliumOption(name: OptionNames): [string, (newValue: string)
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         if (loadResults.getOptionNames().includes(name)) {
             const newValue = options.get(name);
-            console.log("Got entities reloaded for option ", name, "value", newValue);
             setValue(newValue);
         }
     });
@@ -87,4 +87,17 @@ export function useTriliumOption(name: OptionNames): [string, (newValue: string)
         value,
         wrappedSetValue
     ]
+}
+
+/**
+ * Generates a unique name via a random alphanumeric string of a fixed length.
+ * 
+ * <p>
+ * Generally used to assign names to inputs that are unique, especially useful for widgets inside tabs.
+ * 
+ * @param prefix a prefix to add to the unique name.
+ * @returns a name with the given prefix and a random alpanumeric string appended to it.
+ */
+export function useUniqueName(prefix: string) {
+    return useMemo(() => prefix + utils.randomString(10), [ prefix]);
 }
