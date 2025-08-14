@@ -76,6 +76,7 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
           WINDOWS_SIGN_EXECUTABLE: ${{ vars.WINDOWS_SIGN_EXECUTABLE }}
+          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGN_KEY }}
 
       - name: Publish release
         uses: softprops/action-gh-release@v2.3.2
@@ -97,7 +98,7 @@ jobs:
           path: apps/desktop/upload
 
   nightly-server:
-    if: github.repository == 'TriliumNext/Trilium'  
+    if: github.repository == 'TriliumNext/Trilium'
     name: Deploy server nightly
     strategy:
       fail-fast: false

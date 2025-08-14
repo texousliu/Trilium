@@ -106,7 +106,8 @@ const config: ForgeConfig = {
         {
             name: "@electron-forge/maker-rpm",
             config: {
-                options: baseLinuxMakerConfigOptions
+                options: baseLinuxMakerConfigOptions,
+                args: ["--rpm-sign"]
             }
         },
         {
