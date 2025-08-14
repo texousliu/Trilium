@@ -70,7 +70,7 @@
     "open-note-externally": "デフォルトのアプリケーションでノートをファイルとして開く",
     "render-active-note": "アクティブなノートを再描画（再レンダリング）する",
     "run-active-note": "アクティブなJavaScript（フロントエンド/バックエンド）のコードノートを実行する",
-    "reload-frontend-app": "フロントエンドのリロード",
+    "reload-frontend-app": "フロントエンドをリロード",
     "open-dev-tools": "開発者ツールを開く",
     "find-in-text": "検索パネルの切り替え",
     "toggle-left-note-tree-panel": "左パネルの切り替え (ノートツリー)",
@@ -156,7 +156,12 @@
     "toggle-left-pane": "左ペイン切り替え",
     "toggle-full-screen": "フルスクリーンの切り替え",
     "copy-without-formatting": "書式なしでコピー",
-    "duplicate-subtree": "サブツリーの複製"
+    "duplicate-subtree": "サブツリーの複製",
+    "create-note-into-inbox": "Inboxにノートを作成",
+    "toggle-zen-mode": "禅モードの切り替え",
+    "reset-zoom-level": "ズームレベルのリセット",
+    "zoom-out": "ズームアウト",
+    "zoom-in": "ズームイン"
   },
   "login": {
     "title": "ログイン",
@@ -254,7 +259,13 @@
     "other": "その他",
     "advanced-title": "高度",
     "user-guide": "ユーザーガイド",
-    "localization": "言語と地域"
+    "localization": "言語と地域",
+    "sql-console-history-title": "SQLコンソール履歴",
+    "new-note-title": "新しいノート",
+    "bookmarks-title": "ブックマーク",
+    "open-today-journal-note-title": "今日の日記を開く",
+    "quick-search-title": "クイックサーチ",
+    "recent-changes-title": "最近の変更"
   },
   "notes": {
     "new-note": "新しいノート",
@@ -315,6 +326,7 @@
     "board_note_second": "2番目のノート",
     "board_note_third": "3番目のノート",
     "board_status_progress": "進行中",
-    "board_status_done": "完了"
+    "board_status_done": "完了",
+    "geo-map": "ジオマップ"
   }
 }
