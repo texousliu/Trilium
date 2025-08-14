@@ -174,8 +174,11 @@ runs:
       rpm --import pubkey
       rm pubkey
 
-      # Validate code signing
+      # Sign the RPM
       rpm_file=$(find ./apps/desktop/dist -name "*.rpm" -print -quit)
+      rpmsign --define "_gpg_name Trilium Notes Signing Key <triliumnotes@outlook.com>" --addsign "$rpm_file"
+
+      # Validate code signing
       if ! rpm -K "$rpm_file" | grep -q "digests signatures OK"; then
         echo .rpm file not signed
         rpm -Kv "$rpm_file"
