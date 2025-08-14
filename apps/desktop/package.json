@@ -3,7 +3,7 @@
   "version": "0.97.2",
   "description": "Build your personal knowledge base with Trilium Notes",
   "private": true,
-  "main": "main.cjs",
+  "main": "dist/main.cjs",
   "dependencies": {
     "@electron/remote": "2.1.3",
     "better-sqlite3": "^12.0.0",
@@ -196,6 +196,15 @@
         ],
         "command": "pnpm -C apps/desktop exec cross-env NODE_INSTALLER=npm TRILIUM_DATA_DIR=./data electron-forge start dist"
       }
+    }
+  },
+  "build": {
+    "appId": "org.triliumnotes.desktop",
+    "npmRebuild": false,
+    "directories": {
+      "app": "",
+      "output": "out",
+      "buildResources": "build_resources"
     }
   }
 }
