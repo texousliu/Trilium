@@ -65,7 +65,7 @@ function FormSelectGroup<T>({ values, keyProperty, titleProperty, currentValue }
         return (
             <option
                 value={item[keyProperty] as any}
-                selected={item[keyProperty] === currentValue}
+                selected={item[keyProperty] == currentValue}    // triple equal is intentionally not used here, for comparisons with numeric values
             >
                 {item[titleProperty ?? keyProperty] ?? item[keyProperty] as any}
             </option>

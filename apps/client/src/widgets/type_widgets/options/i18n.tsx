@@ -27,7 +27,6 @@ function LocalizationOptions() {
 
     const [ locale, setLocale ] = useTriliumOption("locale");
     const [ formattingLocale, setFormattingLocale ] = useTriliumOption("formattingLocale");
-    const [ firstDayOfWeek, setFirstDayOfWeek ] = useTriliumOption("firstDayOfWeek");
 
     return (
         <OptionsSection title={t("i18n.title")}>
@@ -39,16 +38,7 @@ function LocalizationOptions() {
                 <LocaleSelector locales={contentLocales} currentValue={formattingLocale} onChange={setFormattingLocale} />
             </OptionsRow>}
 
-            <OptionsRow label={t("i18n.first-day-of-the-week")}>
-                <FormRadioGroup
-                    name="first-day-of-week"
-                    values={[
-                        { value: "0", label: t("i18n.sunday") },
-                        { value: "1", label: t("i18n.monday") }
-                    ]}
-                    currentValue={firstDayOfWeek} onChange={setFirstDayOfWeek}
-                />
-            </OptionsRow>
+            <DateSettings />
         </OptionsSection>
     )
 }
@@ -61,10 +51,44 @@ function LocaleSelector({ locales, currentValue, onChange }: { locales: Locale[]
     />;
 }
 
-function FirstDayOfWeekSettings() {
+function DateSettings() {
+    const [ firstDayOfWeek, setFirstDayOfWeek ] = useTriliumOption("firstDayOfWeek");
+    const [ firstWeekOfYear, setFirstWeekOfYear ] = useTriliumOption("firstWeekOfYear");
+    const [ minDaysInFirstWeek, setMinDaysInFirstWeek ] = useTriliumOption("minDaysInFirstWeek");
+
     return (
         <>
-            
+            <OptionsRow label={t("i18n.first-day-of-the-week")}>
+                <FormRadioGroup
+                    name="first-day-of-week"
+                    values={[
+                        { value: "0", label: t("i18n.sunday") },
+                        { value: "1", label: t("i18n.monday") }
+                    ]}
+                    currentValue={firstDayOfWeek} onChange={setFirstDayOfWeek}
+                />
+            </OptionsRow>  
+
+            <OptionsRow label={t("i18n.first-week-of-the-year")}>
+                <FormRadioGroup
+                    name="first-week-of-year"
+                    currentValue={firstWeekOfYear} onChange={setFirstWeekOfYear}
+                    values={[
+                        { value: "0", label: t("i18n.first-week-contains-first-day") },
+                        { value: "1", label: t("i18n.first-week-contains-first-thursday") },
+                        { value: "2", label: t("i18n.first-week-has-minimum-days") }
+                    ]}
+                />
+            </OptionsRow>
+
+            {firstWeekOfYear === "2" && <OptionsRow label={t("i18n.min-days-in-first-week")}>
+                <FormSelect
+                    keyProperty="days"
+                    currentValue={minDaysInFirstWeek} onChange={setMinDaysInFirstWeek}
+                    values={Array.from(
+                        { length: 7 }, 
+                        (_, i) => ({ days: i + 1 }))} />
+            </OptionsRow>}
         </>
     )
 }
