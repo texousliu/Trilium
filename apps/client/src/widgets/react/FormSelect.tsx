@@ -1,10 +1,12 @@
-interface FormSelectProps {
+interface FormSelectProps<T> {
     currentValue?: string;
     onChange(newValue: string): void;
-    values: { val: string, title: string }[];
+    values: T[];
+    keyProperty: keyof T;
+    titleProperty: keyof T; 
 }
 
-export default function FormSelect({ currentValue, values, onChange }: FormSelectProps) {
+export default function FormSelect<T>({ currentValue, values, onChange, keyProperty, titleProperty }: FormSelectProps<T>) {
     return (
         <select
             class="form-select"
@@ -13,10 +15,10 @@ export default function FormSelect({ currentValue, values, onChange }: FormSelec
             {values.map(item => {
                 return (
                     <option
-                        value={item.val}
-                        selected={item.val === currentValue}
+                        value={item[keyProperty] as any}
+                        selected={item[keyProperty] === currentValue}
                     >
-                        {item.title}
+                        {item[titleProperty] as any}
                     </option>
                 );
             })}
