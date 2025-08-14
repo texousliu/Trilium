@@ -163,7 +163,7 @@ pnpm nx --project=desktop electron-forge:make -- --arch=x64 --platform=win32
 * [CKEditor 5](https://github.com/ckeditor/ckeditor5) —— 業界最佳的所見即所得編輯器，團隊互動積極。
 * [FancyTree](https://github.com/mar10/fancytree) —— 功能非常豐富的樹狀元件，幾乎沒有對手。沒有它，Trilium Notes 將不會是今天的樣子。
 * [CodeMirror](https://github.com/codemirror/CodeMirror) —— 支援大量語言的程式碼編輯器。
-* [jsPlumb](https://github.com/jsplumb/jsplumb) —— 無可匹敵的視覺連線函式庫。用於[關係圖](https://triliumnext.github.io/Docs/Wiki/relation-map.html)與[連結圖](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)。
+* [jsPlumb](https://github.com/jsplumb/jsplumb) —— 無可匹敵的視覺連線函式庫。用於[關聯圖](https://triliumnext.github.io/Docs/Wiki/relation-map.html)與[連結圖](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)。
 
 ## 🤝 支援我們
 
