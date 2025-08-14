@@ -6,7 +6,7 @@ import OptionsSection from "./components/OptionsSection";
 import { useTriliumOption, useTriliumOptionInt } from "../../react/hooks";
 import type { Locale } from "@triliumnext/commons";
 import { isElectron, restartDesktopApp } from "../../../services/utils";
-import FormRadioGroup from "../../react/FormRadioGroup";
+import FormRadioGroup, { FormInlineRadioGroup } from "../../react/FormRadioGroup";
 import FormText from "../../react/FormText";
 import RawHtml from "../../react/RawHtml";
 import Admonition from "../../react/Admonition";
@@ -63,14 +63,16 @@ function DateSettings() {
     return (
         <>
             <OptionsRow label={t("i18n.first-day-of-the-week")}>
-                <FormRadioGroup
-                    name="first-day-of-week"
-                    values={[
-                        { value: "0", label: t("i18n.sunday") },
-                        { value: "1", label: t("i18n.monday") }
-                    ]}
-                    currentValue={firstDayOfWeek} onChange={setFirstDayOfWeek}
-                />
+                <div role="group">
+                    <FormInlineRadioGroup
+                        name="first-day-of-week"
+                        values={[
+                            { value: "0", label: t("i18n.sunday") },
+                            { value: "1", label: t("i18n.monday") }
+                        ]}
+                        currentValue={firstDayOfWeek} onChange={setFirstDayOfWeek}
+                    />
+                </div>
             </OptionsRow>  
 
             <OptionsRow label={t("i18n.first-week-of-the-year")}>
