@@ -5,8 +5,12 @@ import OptionsRow from "./components/OptionsRow";
 import OptionsSection from "./components/OptionsSection";
 import { useTriliumOption, useTriliumOptionInt } from "../../react/hooks";
 import type { Locale } from "@triliumnext/commons";
-import { isElectron } from "../../../services/utils";
+import { isElectron, restartDesktopApp } from "../../../services/utils";
 import FormRadioGroup from "../../react/FormRadioGroup";
+import FormText from "../../react/FormText";
+import RawHtml from "../../react/RawHtml";
+import Admonition from "../../react/Admonition";
+import Button from "../../react/Button";
 
 export default function InternationalizationOptions() {
     return (
@@ -70,15 +74,17 @@ function DateSettings() {
             </OptionsRow>  
 
             <OptionsRow label={t("i18n.first-week-of-the-year")}>
-                <FormRadioGroup
-                    name="first-week-of-year"
-                    currentValue={firstWeekOfYear} onChange={setFirstWeekOfYear}
-                    values={[
-                        { value: "0", label: t("i18n.first-week-contains-first-day") },
-                        { value: "1", label: t("i18n.first-week-contains-first-thursday") },
-                        { value: "2", label: t("i18n.first-week-has-minimum-days") }
-                    ]}
-                />
+                <div role="group">
+                    <FormRadioGroup
+                        name="first-week-of-year"
+                        currentValue={firstWeekOfYear} onChange={setFirstWeekOfYear}
+                        values={[
+                            { value: "0", label: t("i18n.first-week-contains-first-day") },
+                            { value: "1", label: t("i18n.first-week-contains-first-thursday") },
+                            { value: "2", label: t("i18n.first-week-has-minimum-days") }
+                        ]}
+                    />
+                </div>
             </OptionsRow>
 
             {firstWeekOfYear === "2" && <OptionsRow label={t("i18n.min-days-in-first-week")}>
@@ -89,6 +95,22 @@ function DateSettings() {
                         { length: 7 }, 
                         (_, i) => ({ days: String(i + 1) }))} />
             </OptionsRow>}
+
+            <FormText>
+                <RawHtml html={t("i18n.first-week-info")} />
+            </FormText>
+
+            <Admonition type="warning">
+                {t("i18n.first-week-warning")}
+            </Admonition>
+
+            <OptionsRow centered>
+                <Button
+                    text={t("electron_integration.restart-app-button")}
+                    size="micro"
+                    onClick={restartDesktopApp}
+                />
+            </OptionsRow>
         </>
     )
 }
