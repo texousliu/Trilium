@@ -134,7 +134,7 @@
   },
   "setup_sync-from-desktop": {
     "heading": "Synchroniser depuis une application de bureau",
-    "description": "Cette procédure doit être réalisée depuis l'application de bureau:",
+    "description": "Cette procédure doit être réalisée depuis l'application de bureau :",
     "step1": "Ouvrez l'application Trilium Notes.",
     "step2": "Dans le menu Trilium, cliquez sur Options.",
     "step3": "Cliquez sur la catégorie Synchroniser.",
