@@ -47,6 +47,9 @@ import type BasicWidget from "../basic_widget.js";
 import CodeTheme from "./options/code_notes/code_theme.js";
 import RelatedSettings from "./options/appearance/related_settings.js";
 import EditorFeaturesOptions from "./options/text_notes/features.js";
+import type { JSX } from "preact/jsx-runtime";
+import AppearanceSettings from "./options/appearance.jsx";
+import { renderReactWidget } from "../react/ReactBasicWidget.jsx";
 
 const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -73,14 +76,8 @@ const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printabl
 
 export type OptionPages = "_optionsAppearance" | "_optionsShortcuts" | "_optionsTextNotes" | "_optionsCodeNotes" | "_optionsImages" | "_optionsSpellcheck" | "_optionsPassword" | "_optionsMFA" | "_optionsEtapi" | "_optionsBackup" | "_optionsSync" | "_optionsAi" | "_optionsOther" | "_optionsLocalization" | "_optionsAdvanced";
 
-const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", (typeof NoteContextAwareWidget)[]> = {
-    _optionsAppearance: [
-        ThemeOptions,
-        FontsOptions,
-        ElectronIntegrationOptions,
-        MaxContentWidthOptions,
-        RibbonOptions
-    ],
+const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", ((typeof NoteContextAwareWidget)[] | (() => JSX.Element))> = {
+    _optionsAppearance: AppearanceSettings,
     _optionsShortcuts: [
         KeyboardShortcutsOptions
     ],
@@ -172,13 +169,17 @@ export default class ContentWidgetTypeWidget extends TypeWidget {
         this.$content.empty();
         this.children = [];
 
-        const contentWidgets = [
-            ...((CONTENT_WIDGETS as Record<string, typeof NoteContextAwareWidget[]>)[note.noteId]),
-            RelatedSettings
-        ];
+        const contentWidgets = (CONTENT_WIDGETS as Record<string, (typeof NoteContextAwareWidget[] | (() => JSX.Element))>)[note.noteId];
         this.$content.toggleClass("options", note.noteId.startsWith("_options"));
 
-        if (contentWidgets) {
+        // Unknown widget.
+        if (!contentWidgets) {
+            this.$content.append(t("content_widget.unknown_widget", { id: note.noteId }));
+            return;
+        }
+
+        // Legacy widget.
+        if (Array.isArray(contentWidgets)) {
             for (const clazz of contentWidgets) {
                 const widget = new clazz();
 
@@ -191,9 +192,11 @@ export default class ContentWidgetTypeWidget extends TypeWidget {
                 this.widget = widget;
                 await widget.refresh();
             }
-        } else {
-            this.$content.append(t("content_widget.unknown_widget", { id: note.noteId }));
+            return;
         }
+
+        // React widget.
+        this.$content.append(renderReactWidget(this, contentWidgets()));
     }
 
 }
