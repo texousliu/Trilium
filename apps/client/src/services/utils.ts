@@ -13,7 +13,7 @@ export function reloadFrontendApp(reason?: string) {
     window.location.reload();
 }
 
-function restartDesktopApp() {
+export function restartDesktopApp() {
     if (!isElectron()) {
         reloadFrontendApp();
         return;
@@ -144,7 +144,7 @@ function now() {
 /**
  * Returns `true` if the client is currently running under Electron, or `false` if running in a web browser.
  */
-function isElectron() {
+export function isElectron() {
     return !!(window && window.process && window.process.type);
 }
 

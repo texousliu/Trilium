@@ -1,6 +1,6 @@
 import { useEffect, useState } from "preact/hooks";
 import { t } from "../../../services/i18n";
-import { isMobile, reloadFrontendApp } from "../../../services/utils";
+import { isElectron, isMobile, reloadFrontendApp, restartDesktopApp } from "../../../services/utils";
 import Column from "../../react/Column";
 import FormRadioGroup from "../../react/FormRadioGroup";
 import FormSelect, { FormSelectWithGroups } from "../../react/FormSelect";
@@ -81,9 +81,10 @@ export default function AppearanceSettings() {
 
     return (
         <div>
-            <LayoutOrientation />
+            {!isMobile() && <LayoutOrientation />}
             <ApplicationTheme />
             {overrideThemeFonts === "true" && <Fonts />}
+            {isElectron() && <ElectronIntegration /> }
         </div>
     )
 }
@@ -93,7 +94,7 @@ function LayoutOrientation() {
     
     return (
         <OptionsSection title={t("theme.layout")}>
-            {!isMobile() && <FormRadioGroup
+            <FormRadioGroup
                 name="layout-orientation"
                 values={[
                     {
@@ -106,7 +107,7 @@ function LayoutOrientation() {
                     }
                 ]}
                 currentValue={layoutOrientation} onChange={setLayoutOrientation}
-            />}
+            />
         </OptionsSection>
     );
 }
@@ -193,4 +194,39 @@ function Font({ title, fontFamilyOption, fontSizeOption }: { title: string, font
             </div>            
         </>
     );
+}
+
+function ElectronIntegration() {
+    const [ zoomFactor, setZoomFactor ] = useTriliumOption("zoomFactor");
+    const [ nativeTitleBarVisible, setNativeTitleBarVisible ] = useTriliumOptionBool("nativeTitleBarVisible");
+    const [ backgroundEffects, setBackgroundEffects ] = useTriliumOptionBool("backgroundEffects");
+
+    return (
+        <OptionsSection title={t("electron_integration.desktop-application")}>
+            <FormGroup label={t("electron_integration.zoom-factor")} description={t("zoom_factor.description")}>
+                <FormTextBox
+                    type="number"
+                    min="0.3" max="2.0" step="0.1"                    
+                    currentValue={zoomFactor} onChange={setZoomFactor}
+                />
+            </FormGroup>
+            <hr/>
+
+            <FormGroup description={t("electron_integration.native-title-bar-description")}>
+                <FormCheckbox
+                    name="native-title-bar" label={t("electron_integration.native-title-bar")}
+                    currentValue={nativeTitleBarVisible} onChange={setNativeTitleBarVisible}
+                />
+            </FormGroup>
+
+            <FormGroup description={t("electron_integration.background-effects-description")}>
+                <FormCheckbox
+                    name="background-effects" label={t("electron_integration.background-effects")}
+                    currentValue={backgroundEffects} onChange={setBackgroundEffects}
+                />
+            </FormGroup>
+
+            <Button text={t("electron_integration.restart-app-button")} onClick={restartDesktopApp} />
+        </OptionsSection>
+    )
 }

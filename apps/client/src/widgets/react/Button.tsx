@@ -14,7 +14,7 @@ interface ButtonProps {
     onClick?: () => void;
     primary?: boolean;
     disabled?: boolean;
-    size: "normal" | "small" | "micro";
+    size?: "normal" | "small" | "micro";
     style?: CSSProperties;
 }
 
