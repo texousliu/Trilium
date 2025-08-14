@@ -88,7 +88,8 @@
     "notes_to_be_deleted": "以下のノートが削除されます ({{notesCount}})",
     "no_note_to_delete": "ノートは削除されません（クローンのみ）。",
     "cancel": "キャンセル",
-    "ok": "OK"
+    "ok": "OK",
+    "close": "閉じる"
   },
   "calendar": {
     "mon": "月",
@@ -342,7 +343,34 @@
     "zoom_in_title": "ズームイン"
   },
   "tree-context-menu": {
-    "advanced": "高度"
+    "advanced": "高度",
+    "open-in-a-new-tab": "新しいタブで開く <kbd>Ctrl+Click</kbd>",
+    "open-in-a-new-split": "新しく分割して開く",
+    "insert-note-after": "ノートを後ろに挿入",
+    "insert-child-note": "子ノートを挿入",
+    "delete": "削除",
+    "search-in-subtree": "サブツリー内を検索",
+    "expand-subtree": "サブツリーを展開",
+    "collapse-subtree": "サブツリーを折りたたむ",
+    "sort-by": "並べ替え...",
+    "recent-changes-in-subtree": "サブツリー内の最近の変更",
+    "copy-note-path-to-clipboard": "ノートのパスをクリップボードにコピー",
+    "protect-subtree": "サブツリーを保護",
+    "unprotect-subtree": "サブツリーの保護を解除",
+    "copy-clone": "コピー/クローン",
+    "clone-to": "クローンして...",
+    "cut": "カット",
+    "move-to": "移動して...",
+    "paste-into": "貼り付け",
+    "paste-after": "後ろに貼り付け",
+    "duplicate": "複製",
+    "export": "エクスポート",
+    "import-into-note": "ノートにインポート",
+    "apply-bulk-actions": "一括操作の適用",
+    "converted-to-attachments": "{{count}}ノートが添付ファイルに変換されました。",
+    "convert-to-attachment": "添付ファイルに変換",
+    "convert-to-attachment-confirm": "選択したノートを親ノートの添付ファイルに変換しますか？",
+    "open-in-popup": "クイックエディット"
   },
   "zen_mode": {
     "button_exit": "禅モードを退出"
@@ -369,7 +397,8 @@
     "print_pdf": "PDFとしてエクスポート..."
   },
   "command_palette": {
-    "export_note_title": "ノートをエクスポート"
+    "export_note_title": "ノートをエクスポート",
+    "search_subtree_title": "サブツリー内を検索"
   },
   "delete_note": {
     "delete_note": "ノートを削除する"
@@ -420,7 +449,27 @@
   "note_types": {
     "geo-map": "ジオマップ",
     "file": "ファイル",
-    "image": "画像"
+    "image": "画像",
+    "text": "テキスト",
+    "code": "コード",
+    "saved-search": "検索の保存",
+    "relation-map": "関係マップ",
+    "note-map": "ノートマップ",
+    "render-note": "レンダリングノート",
+    "book": "コレクション",
+    "mermaid-diagram": "Mermaidダイアグラム",
+    "canvas": "キャンバス",
+    "web-view": "Web ビュー",
+    "mind-map": "マインドマップ",
+    "launcher": "ランチャー",
+    "doc": "ドキュメント",
+    "widget": "ウィジェット",
+    "confirm-change": "ノートの内容が空ではない場合、ノートタイプを変更することは推奨されません。続行しますか？",
+    "beta-feature": "Beta",
+    "ai-chat": "AI チャット",
+    "task-list": "タスクリスト",
+    "new-feature": "新しい",
+    "collections": "コレクション"
   },
   "edited_notes": {
     "no_edited_notes_found": "この日の編集されたメモはまだありません...",
@@ -453,7 +502,8 @@
     "title": "画像"
   },
   "revisions": {
-    "download_button": "ダウンロード"
+    "download_button": "ダウンロード",
+    "delete_button": "削除"
   },
   "attachments_actions": {
     "download": "ダウンロード"
@@ -735,6 +785,82 @@
     "timeout_unit": "ミリ秒",
     "proxy_label": "同期プロキシサーバー（任意）",
     "note": "注",
-    "note_description": "プロキシ設定を空白のままにすると、システムプロキシが使用されます（デスクトップ/electronビルドにのみ適用されます）。"
+    "note_description": "プロキシ設定を空白のままにすると、システムプロキシが使用されます（デスクトップ/electronビルドにのみ適用されます）。",
+    "special_value_description": "もう一つの特別な値は <code>noproxy</code> で、これはシステムプロキシさえも無視して、 <code>NODE_TLS_REJECT_UNAUTHORIZED</code> を尊重するように強制します。",
+    "save": "保存",
+    "help": "ヘルプ",
+    "test_title": "同期のテスト",
+    "test_description": "これは同期サーバとの接続とハンドシェイクをテストします。同期サーバーが初期化されていない場合、ローカルドキュメントと同期するように設定します。",
+    "test_button": "同期試行",
+    "handshake_failed": "同期サーバーのハンドシェイクに失敗しました。エラー: {{message}}"
+  },
+  "api_log": {
+    "close": "閉じる"
+  },
+  "info": {
+    "closeButton": "閉じる"
+  },
+  "protected_session_password": {
+    "close_label": "閉じる"
+  },
+  "modal": {
+    "close": "閉じる"
+  },
+  "bookmark_switch": {
+    "bookmark": "ブックマーク",
+    "bookmark_this_note": "このノートを左サイドパネルにブックマークする",
+    "remove_bookmark": "ブックマークを削除"
+  },
+  "attribute_detail": {
+    "delete": "削除"
+  },
+  "link_context_menu": {
+    "open_note_in_popup": "クイックエディット"
+  },
+  "note_tooltip": {
+    "quick-edit": "クイックエディット"
+  },
+  "protect_note": {
+    "toggle-on": "ノートを保護",
+    "toggle-off": "ノートの保護を解除",
+    "toggle-on-hint": "ノートは保護されていません。クリックして保護してください",
+    "toggle-off-hint": "ノートは保護されています。クリックして保護を解除してください"
+  },
+  "shared_switch": {
+    "shared": "共有",
+    "toggle-on-title": "ノートを共有",
+    "toggle-off-title": "ノートの共有を解除",
+    "shared-branch": "このノートは共有ノートとしてのみ存在し、共有を解除すると削除されます。続行してこのノートを削除しますか？",
+    "inherited": "このノートは、親から継承された共有方法のため、ここでは共有解除できません。"
+  },
+  "template_switch": {
+    "template": "テンプレート",
+    "toggle-on-hint": "ノートをテンプレート化する"
+  },
+  "open-help-page": "ヘルプページを開く",
+  "shared_info": {
+    "shared_publicly": "このノートは一般公開されています",
+    "shared_locally": "このノートはローカルで共有されています",
+    "help_link": "ヘルプについては、<a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>をご覧ください。"
+  },
+  "highlights_list_2": {
+    "title": "ハイライトリスト",
+    "options": "オプション"
+  },
+  "quick-search": {
+    "placeholder": "クイックサーチ",
+    "searching": "検索中...",
+    "no-results": "結果は見つかりませんでした",
+    "more-results": "... および {{number}} 件の他の結果。",
+    "show-in-full-search": "検索結果をすべて表示"
+  },
+  "note_tree": {
+    "collapse-title": "ノートツリーを折りたたむ",
+    "scroll-active-title": "アクティブノートまでスクロール",
+    "tree-settings-title": "ツリーの設定",
+    "hide-archived-notes": "アーカイブノートを隠す",
+    "automatically-collapse-notes": "ノートを自動的に折りたたむ",
+    "automatically-collapse-notes-title": "一定期間使用されないと、ツリーを整理するためにノートは折りたたまれます。",
+    "save-changes": "変更を保存して適用"
   }
 }
