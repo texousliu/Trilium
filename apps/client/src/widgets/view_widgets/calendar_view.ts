@@ -674,6 +674,8 @@ export async function getFullCalendarLocale(locale: string) {
             return (await import("@fullcalendar/core/locales/ro")).default;
         case "ru":
             return (await import("@fullcalendar/core/locales/ru")).default;
+        case "ja":
+            return (await import("@fullcalendar/core/locales/ja")).default;
         case "en":
         default:
             return undefined;
