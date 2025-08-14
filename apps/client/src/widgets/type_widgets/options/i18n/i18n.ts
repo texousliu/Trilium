@@ -67,20 +67,8 @@ const TPL = /*html*/`
 
 export default class LocalizationOptions extends OptionsWidget {
 
-    private $formattingLocaleSelect!: JQuery<HTMLElement>;
-    private $minDaysRow!: JQuery<HTMLElement>;
-
     doRender() {
         this.$widget = $(TPL);
-
-        this.$minDaysRow = this.$widget.find(".min-days-row");
-
-        this.$widget.find('input[name="first-week-of-year"]').on('change', (e) => {
-            const target = e.target as HTMLInputElement;
-            const value = parseInt(target.value);
-            this.updateOption("firstWeekOfYear", value);
-        });
-
         this.$widget.find(".restart-app-button").on("click", utils.restartDesktopApp);
     }
 

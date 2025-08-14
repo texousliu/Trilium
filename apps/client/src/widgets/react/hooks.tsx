@@ -3,7 +3,7 @@ import { EventData, EventNames } from "../../components/app_context";
 import { ParentComponent } from "./ReactBasicWidget";
 import SpacedUpdate from "../../services/spaced_update";
 import { OptionNames } from "@triliumnext/commons";
-import options from "../../services/options";
+import options, { type OptionValue } from "../../services/options";
 import utils, { reloadFrontendApp } from "../../services/utils";
 import Component from "../../components/component";
 
@@ -99,12 +99,12 @@ export function useSpacedUpdate(callback: () => Promise<void>, interval = 1000) 
     return spacedUpdateRef.current;
 }
 
-export function useTriliumOption(name: OptionNames, needsRefresh?: boolean): [string, (newValue: string) => Promise<void>] {
+export function useTriliumOption(name: OptionNames, needsRefresh?: boolean): [string, (newValue: OptionValue) => Promise<void>] {
     const initialValue = options.get(name);
     const [ value, setValue ] = useState(initialValue);
 
     const wrappedSetValue = useMemo(() => {
-        return async (newValue: string) => {
+        return async (newValue: OptionValue) => {
             await options.save(name, newValue);
 
             if (needsRefresh) {
@@ -131,6 +131,14 @@ export function useTriliumOptionBool(name: OptionNames): [boolean, (newValue: bo
     return [
         (value === "true"),
         (newValue) => setValue(newValue ? "true" : "false")
+    ]
+}
+
+export function useTriliumOptionInt(name: OptionNames): [number, (newValue: number) => Promise<void>] {
+    const [ value, setValue ] = useTriliumOption(name);
+    return [
+        (parseInt(value, 10)),
+        (newValue) => setValue(newValue)
     ]
 }
 

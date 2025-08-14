@@ -3,7 +3,7 @@ import { getAvailableLocales, t } from "../../../services/i18n";
 import FormSelect from "../../react/FormSelect";
 import OptionsRow from "./components/OptionsRow";
 import OptionsSection from "./components/OptionsSection";
-import { useTriliumOption } from "../../react/hooks";
+import { useTriliumOption, useTriliumOptionInt } from "../../react/hooks";
 import type { Locale } from "@triliumnext/commons";
 import { isElectron } from "../../../services/utils";
 import FormRadioGroup from "../../react/FormRadioGroup";
@@ -54,7 +54,7 @@ function LocaleSelector({ locales, currentValue, onChange }: { locales: Locale[]
 function DateSettings() {
     const [ firstDayOfWeek, setFirstDayOfWeek ] = useTriliumOption("firstDayOfWeek");
     const [ firstWeekOfYear, setFirstWeekOfYear ] = useTriliumOption("firstWeekOfYear");
-    const [ minDaysInFirstWeek, setMinDaysInFirstWeek ] = useTriliumOption("minDaysInFirstWeek");
+    const [ minDaysInFirstWeek, setMinDaysInFirstWeek ] = useTriliumOptionInt("minDaysInFirstWeek");
 
     return (
         <>
