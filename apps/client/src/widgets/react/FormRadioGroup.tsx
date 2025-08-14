@@ -15,7 +15,7 @@ export default function FormRadioGroup({ name, values, currentValue, onChange }:
     return (
         <>
             {(values || []).map(({ value, label }) => (
-                <div className="form-check">
+                <div className="form-checkbox">
                     <label className="form-check-label tn-radio">
                         <input
                             className="form-check-input"

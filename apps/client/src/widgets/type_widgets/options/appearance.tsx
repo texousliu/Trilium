@@ -13,17 +13,11 @@ export default function AppearanceSettings() {
                 name="layout-orientation"
                 values={[
                     {
-                        label: <>
-                            <strong>{t("theme.layout-vertical-title")}</strong>
-                            - {t("theme.layout-vertical-description")}
-                        </>,
+                        label: <><strong>{t("theme.layout-vertical-title")}</strong> - {t("theme.layout-vertical-description")}</>,
                         value: "vertical"
                     },
                     {
-                        label: <>
-                            <strong>{t("theme.layout-horizontal-title")}</strong>
-                            - {t("theme.layout-horizontal-description")}
-                        </>,
+                        label: <><strong>{t("theme.layout-horizontal-title")}</strong> - {t("theme.layout-horizontal-description")}</>,
                         value: "horizontal"
                     }
                 ]}
