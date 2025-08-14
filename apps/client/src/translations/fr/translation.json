@@ -202,7 +202,8 @@
     "okButton": "OK"
   },
   "jump_to_note": {
-    "search_button": "Rechercher dans le texte intégral"
+    "search_button": "Rechercher dans le texte intégral",
+    "search_placeholder": "Rechercher une note par son nom ou saisir ‘>’ pour les commandes…"
   },
   "markdown_import": {
     "dialog_title": "Importation Markdown",
@@ -222,11 +223,16 @@
   "note_type_chooser": {
     "modal_title": "Choisissez le type de note",
     "modal_body": "Choisissez le type de note/le modèle de la nouvelle note :",
-    "templates": "Modèles"
+    "templates": "Modèles",
+    "change_path_prompt": "Modifier l’emplacement de création de la nouvelle note :",
+    "search_placeholder": "Rechercher le chemin par nom (par défaut si vide)",
+    "builtin_templates": "Modèles intégrés"
   },
   "password_not_set": {
     "title": "Le mot de passe n'est pas défini",
-    "body1": "Les notes protégées sont cryptées à l'aide d'un mot de passe utilisateur, mais le mot de passe n'a pas encore été défini."
+    "body1": "Les notes protégées sont cryptées à l'aide d'un mot de passe utilisateur, mais le mot de passe n'a pas encore été défini.",
+    "body2": "Pour pouvoir protéger les notes, cliquez sur le bouton ci-dessous pour ouvrir la boîte de dialogue Options et définir votre mot de passe.",
+    "go_to_password_options": "Accéder aux options de mot de passe"
   },
   "prompt": {
     "title": "Prompt",
@@ -268,7 +274,9 @@
     "mime": "MIME : ",
     "file_size": "Taille du fichier :",
     "preview": "Aperçu :",
-    "preview_not_available": "L'aperçu n'est pas disponible pour ce type de note."
+    "preview_not_available": "L'aperçu n'est pas disponible pour ce type de note.",
+    "restore_button": "Restaurer",
+    "delete_button": "Supprimer"
   },
   "sort_child_notes": {
     "sort_children_by": "Trier les enfants par...",
@@ -384,7 +392,7 @@
     "share_index": "la note avec ce label listera toutes les racines des notes partagées",
     "display_relations": "noms des relations délimités par des virgules qui doivent être affichés. Tous les autres seront masqués.",
     "hide_relations": "noms de relations délimités par des virgules qui doivent être masqués. Tous les autres seront affichés.",
-    "title_template": "titre par défaut des notes créées en tant qu'enfants de cette note. La valeur est évaluée sous forme de chaîne JavaScript \n                        et peut ainsi être enrichi de contenu dynamique via les variables injectées <code>now</code> et <code>parentNote</code>. Exemples :\n                        \n                        <ul>\n                            <li><code>Œuvres littéraires de ${parentNote.getLabelValue('authorName')}</code></li>\n                            <li><code>Connectez-vous pour ${now.format('YYYY-MM-DD HH:mm:ss')}</code></li>\n                        </ul>\n                        \n                        Consultez le <a href=\"https://triliumnext.github.io/Docs/Wiki/default-note-title.html\">wiki avec plus de détails</a>, la documentation sur l'API pour <a href=\"https://zadam.github.io/trilium/backend_api/Note.html\">parentNote</a> et <a href=\"https://day.js.org/docs/en/display/format\">maintenant< /a> pour plus de détails.",
+    "title_template": "titre par défaut des notes créées en tant qu'enfants de cette note. La valeur est évaluée sous forme de chaîne JavaScript \n                                                et peut ainsi être enrichi de contenu dynamique via les variables injectées <code>now</code> et <code>parentNote</code>. Exemples :\n                                                \n                                                <ul>\n                                                        <li><code>Œuvres littéraires de ${parentNote.getLabelValue('authorName')}</code></li>\n                                                        <li><code>Connectez-vous pour ${now.format('YYYY-MM-DD HH:mm:ss')}</code></li>\n                                                </ul>\n                                                \n                                                Consultez le <a href=\"https://triliumnext.github.io/Docs/Wiki/default-note-title.html\">wiki avec plus de détails</a>, la documentation sur l'API pour <a href=\"https://zadam.github.io/trilium/backend_api/Note.html\">parentNote</a> et <a href=\"https://day.js.org/docs/en/display/format\">maintenant</a> pour plus de détails.",
     "template": "Cette note apparaîtra parmi les modèles disponibles lors de la création d'une nouvelle note",
     "toc": "<code>#toc</code> ou <code>#toc=show</code> forcera l'affichage de la table des matières, <code>#toc=hide</code> force qu'elle soit masquée. Si le label n'existe pas, le paramètre global est utilisé",
     "color": "définit la couleur de la note dans l'arborescence des notes, les liens, etc. Utilisez n'importe quelle valeur de couleur CSS valide comme « rouge » ou #a13d5f",
@@ -418,7 +426,8 @@
     "other_notes_with_name": "Autres notes portant le nom {{attributeType}} \"{{attributeName}}\"",
     "and_more": "... et {{count}} plus.",
     "print_landscape": "Lors de l'exportation en PDF, change l'orientation de la page en paysage au lieu de portrait.",
-    "print_page_size": "Lors de l'exportation en PDF, change la taille de la page. Valeurs supportées : <code>A0</code>, <code>A1</code>, <code>A2</code>, <code>A3</code>, <code>A4</code>, <code>A5</code>, <code>A6</code>, <code>Legal</code>, <code>Letter</code>, <code>Tabloid</code>, <code>Ledger</code>."
+    "print_page_size": "Lors de l'exportation en PDF, change la taille de la page. Valeurs supportées : <code>A0</code>, <code>A1</code>, <code>A2</code>, <code>A3</code>, <code>A4</code>, <code>A5</code>, <code>A6</code>, <code>Legal</code>, <code>Letter</code>, <code>Tabloid</code>, <code>Ledger</code>.",
+    "color_type": "Couleur"
   },
   "attribute_editor": {
     "help_text_body1": "Pour ajouter un label, tapez simplement par ex. <code>#rock</code>, ou si vous souhaitez également ajouter une valeur, tapez par ex. <code>#année = 2020</code>",
@@ -577,7 +586,8 @@
     "september": "Septembre",
     "october": "Octobre",
     "november": "Novembre",
-    "december": "Décembre"
+    "december": "Décembre",
+    "cannot_find_week_note": "Impossible de trouver la note de la semaine"
   },
   "close_pane_button": {
     "close_this_pane": "Fermer ce volet"
@@ -721,7 +731,8 @@
   "basic_properties": {
     "note_type": "Type de note",
     "editable": "Modifiable",
-    "basic_properties": "Propriétés de base"
+    "basic_properties": "Propriétés de base",
+    "language": "Langage"
   },
   "book_properties": {
     "view_type": "Type d'affichage",
@@ -732,7 +743,11 @@
     "collapse": "Réduire",
     "expand": "Développer",
     "invalid_view_type": "Type de vue non valide '{{type}}'",
-    "calendar": "Calendrier"
+    "calendar": "Calendrier",
+    "book_properties": "Propriétés de la collection",
+    "table": "Tableau",
+    "geo-map": "Carte géographique",
+    "board": "Tableau de bord"
   },
   "edited_notes": {
     "no_edited_notes_found": "Aucune note modifiée ce jour-là...",
@@ -809,7 +824,8 @@
     "unknown_label_type": "Type de label inconnu '{{type}}'",
     "unknown_attribute_type": "Type d'attribut inconnu '{{type}}'",
     "add_new_attribute": "Ajouter un nouvel attribut",
-    "remove_this_attribute": "Supprimer cet attribut"
+    "remove_this_attribute": "Supprimer cet attribut",
+    "remove_color": "Supprimer l’étiquette de couleur"
   },
   "script_executor": {
     "query": "Requête",
@@ -899,7 +915,7 @@
     "description1": "Le script de recherche permet de définir les résultats de la recherche en exécutant un script. Cela offre une flexibilité maximale lorsque la recherche standard ne suffit pas.",
     "description2": "Le script de recherche doit être de type \"code\" et sous-type \"backend JavaScript\". Le script doit retourner un tableau de noteIds ou de notes.",
     "example_title": "Voir cet exemple :",
-    "example_code": "// 1. préfiltrage à l'aide de la recherche standard\nconst candidateNotes = api.searchForNotes(\"#journal\"); \n\n// 2. application de critères de recherche personnalisés\nconst matchedNotes = candidateNotes\n    .filter(note => note.title.match(/[0-9]{1,2}\\. ?[0-9]{1,2}\\. ?[0-9]{4}/));\n\nreturn matchedNotes;",
+    "example_code": "// 1. préfiltrage à l'aide de la recherche standard\nconst candidateNotes = api.searchForNotes(\"#journal\"); \n\n// 2. application de critères de recherche personnalisés\nconst matchedNotes = candidateNotes\n        .filter(note => note.title.match(/[0-9]{1,2}\\. ?[0-9]{1,2}\\. ?[0-9]{4}/));\n\nreturn matchedNotes;",
     "note": "Notez que le script de recherche et la l'expression à rechercher standard ne peuvent pas être combinés."
   },
   "search_string": {
@@ -1068,7 +1084,8 @@
     "max_width_label": "Largeur maximale du contenu en pixels",
     "apply_changes_description": "Pour appliquer les modifications de largeur du contenu, cliquez sur",
     "reload_button": "recharger l'interface",
-    "reload_description": "changements par rapport aux options d'apparence"
+    "reload_description": "changements par rapport aux options d'apparence",
+    "max_width_unit": "Pixels"
   },
   "native_title_bar": {
     "title": "Barre de titre native (nécessite le redémarrage de l'application)",
@@ -1091,7 +1108,10 @@
     "layout-vertical-title": "Vertical",
     "layout-horizontal-title": "Horizontal",
     "layout-vertical-description": "la barre de raccourcis est à gauche (défaut)",
-    "layout-horizontal-description": "la barre de raccourcis est sous la barre des onglets, cette-dernière est s'affiche en pleine largeur."
+    "layout-horizontal-description": "la barre de raccourcis est sous la barre des onglets, cette-dernière est s'affiche en pleine largeur.",
+    "auto_theme": "Hérité (suivre le schéma de couleurs du système)",
+    "light_theme": "Hérité (clair)",
+    "dark_theme": "Hérité (foncé)"
   },
   "zoom_factor": {
     "title": "Facteur de zoom (version bureau uniquement)",
@@ -1136,7 +1156,7 @@
   "note_erasure_timeout": {
     "note_erasure_timeout_title": "Délai d'effacement des notes",
     "note_erasure_description": "Les notes supprimées (et les attributs, versions...) sont seulement marquées comme supprimées et il est possible de les récupérer à partir de la boîte de dialogue Notes récentes. Après un certain temps, les notes supprimées sont « effacées », ce qui signifie que leur contenu n'est plus récupérable. Ce paramètre vous permet de configurer la durée entre la suppression et l'effacement de la note.",
-    "erase_notes_after": "Effacer les notes après:",
+    "erase_notes_after": "Effacer les notes après :",
     "manual_erasing_description": "Vous pouvez également déclencher l'effacement manuellement (sans tenir compte de la durée définie ci-dessus) :",
     "erase_deleted_notes_now": "Effacer les notes supprimées maintenant",
     "deleted_notes_erased": "Les notes supprimées ont été effacées."
@@ -1650,5 +1670,16 @@
   },
   "modal": {
     "close": "Fermer"
+  },
+  "ai_llm": {
+    "not_started": "Non démarré",
+    "title": "Paramètres IA",
+    "processed_notes": "Notes traitées",
+    "n_notes_queued_0": "{{ count }} note en attente d’indexation",
+    "n_notes_queued_1": "{{ count }} notes en attente d’indexation",
+    "n_notes_queued_2": "",
+    "notes_indexed_0": "{{ count }} note indexée",
+    "notes_indexed_1": "{{ count }} notes indexées",
+    "notes_indexed_2": ""
   }
 }
