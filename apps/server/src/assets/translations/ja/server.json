@@ -53,7 +53,7 @@
     "show-help": "内蔵のユーザーガイドを開く",
     "show-cheatsheet": "よく使うキーボードショートカットをモーダルで表示する",
     "text-note-operations": "テキストノート操作",
-    "add-link-to-text": "テキストにリンクを追加するダイアログを開く",
+    "add-link-to-text": "テキストにリンクを追加ダイアログを開く",
     "follow-link-under-cursor": "カーソル下のリンク先へ移動",
     "insert-date-and-time-to-text": "現在の日時を挿入する",
     "paste-markdown-into-text": "クリップボードからMarkdownをテキストノートに貼り付けます",
@@ -180,8 +180,8 @@
     "jump-to-note": "ジャンプ先…",
     "edit-branch-prefix": "ブランチ接頭辞の編集",
     "show-revisions": "変更履歴を表示",
-    "add-new-label": "ラベルを追加する",
-    "add-new-relation": "関係を追加する",
+    "add-new-label": "ラベルを追加",
+    "add-new-relation": "関係を追加",
     "toggle-ribbon-tab-basic-properties": "リボンタブ切り替え：基本属性",
     "toggle-ribbon-tab-book-properties": "リボンタブ切り替え：書籍属性",
     "toggle-ribbon-tab-file-properties": "リボンタブ切り替え：ファイル属性",
@@ -195,7 +195,7 @@
     "toggle-note-hoisting": "ノートホイスト切り替え",
     "unhoist-note": "ノートホイストを無効にする",
     "force-save-revision": "強制保存リビジョン",
-    "add-include-note-to-text": "埋め込みノートを追加する"
+    "add-include-note-to-text": "埋め込みノートを追加"
   },
   "login": {
     "title": "ログイン",
