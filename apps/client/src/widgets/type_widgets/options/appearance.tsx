@@ -13,6 +13,7 @@ import { FontFamily, OptionNames } from "@triliumnext/commons";
 import FormTextBox, { FormTextBoxWithUnit } from "../../react/FormTextBox";
 import FormText from "../../react/FormText";
 import Button from "../../react/Button";
+import RelatedSettings from "./components/RelatedSettings";
 
 const MIN_CONTENT_WIDTH = 640;
 
@@ -88,6 +89,16 @@ export default function AppearanceSettings() {
             {overrideThemeFonts === "true" && <Fonts />}
             {isElectron() && <ElectronIntegration /> }
             <MaxContentWidth />
+            <RelatedSettings items={[
+                {
+                    title: t("settings_appearance.related_code_blocks"),
+                    targetPage: "_optionsTextNotes"
+                },
+                {
+                    title: t("settings_appearance.related_code_notes"),
+                    targetPage: "_optionsCodeNotes"
+                }
+            ]} />
         </div>
     )
 }
