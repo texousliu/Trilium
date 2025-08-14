@@ -67,12 +67,24 @@ export function useSpacedUpdate(callback: () => Promise<void>, interval = 1000) 
     return spacedUpdateRef.current;
 }
 
-export function useTriliumOption(name: OptionNames): [string, Dispatch<StateUpdater<string>>] {
+export function useTriliumOption(name: OptionNames): [string, (newValue: string) => void] {
     const initialValue = options.get(name);
     const [ value, setValue ] = useState(initialValue);
 
+    function wrappedSetValue(newValue: string) {
+        options.save(name, newValue);
+    };
+
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        if (loadResults.getOptionNames().includes(name)) {
+            const newValue = options.get(name);
+            console.log("Got entities reloaded for option ", name, "value", newValue);
+            setValue(newValue);
+        }
+    });
+
     return [
         value,
-        setValue
+        wrappedSetValue
     ]
 }

@@ -5,6 +5,7 @@ import OptionsSection from "./components/OptionsSection";
 
 export default function AppearanceSettings() {
     const [ layoutOrientation, setLayoutOrientation ] = useTriliumOption("layoutOrientation");
+    console.log("Render with ", layoutOrientation);
 
     return (
         <OptionsSection title={t("theme.layout")}>
