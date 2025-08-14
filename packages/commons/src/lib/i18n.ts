@@ -50,6 +50,11 @@ const UNSORTED_LOCALES: Locale[] = [
         name: "Русский",
         electronLocale: "ru"
     },
+    {
+        id: "ja",
+        name: "日本語",
+        electronLocale: "ja"
+    },
 
     /*
      * Right to left languages
