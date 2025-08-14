@@ -6,28 +6,6 @@ import type { OptionMap } from "@triliumnext/commons";
 
 const TPL = /*html*/`
 <div class="options-section">
-    <h4>${t("theme.layout")}</h4>
-
-    <div class="form-group row">
-        <div>
-            <label class="tn-radio">
-                <input type="radio" name="layout-orientation" value="vertical" />
-                <strong>${t("theme.layout-vertical-title")}</strong>
-                - ${t("theme.layout-vertical-description")}
-            </label>
-        </div>
-
-        <div>
-            <label class="tn-radio">
-                <input type="radio" name="layout-orientation" value="horizontal" />
-                <strong>${t("theme.layout-horizontal-title")}</strong>
-                - ${t("theme.layout-horizontal-description")}
-            </label>
-        </div>
-    </div>
-</div>
-
-<div class="options-section">
     <h4>${t("theme.title")}</h4>
 
     <div class="form-group row">

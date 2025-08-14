@@ -76,8 +76,8 @@ const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printabl
 
 export type OptionPages = "_optionsAppearance" | "_optionsShortcuts" | "_optionsTextNotes" | "_optionsCodeNotes" | "_optionsImages" | "_optionsSpellcheck" | "_optionsPassword" | "_optionsMFA" | "_optionsEtapi" | "_optionsBackup" | "_optionsSync" | "_optionsAi" | "_optionsOther" | "_optionsLocalization" | "_optionsAdvanced";
 
-const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", ((typeof NoteContextAwareWidget)[] | (() => JSX.Element))> = {
-    _optionsAppearance: AppearanceSettings,
+const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", ((typeof NoteContextAwareWidget)[] | JSX.Element)> = {
+    _optionsAppearance: <AppearanceSettings />,
     _optionsShortcuts: [
         KeyboardShortcutsOptions
     ],
@@ -169,7 +169,7 @@ export default class ContentWidgetTypeWidget extends TypeWidget {
         this.$content.empty();
         this.children = [];
 
-        const contentWidgets = (CONTENT_WIDGETS as Record<string, (typeof NoteContextAwareWidget[] | (() => JSX.Element))>)[note.noteId];
+        const contentWidgets = (CONTENT_WIDGETS as Record<string, (typeof NoteContextAwareWidget[] | JSX.Element)>)[note.noteId];
         this.$content.toggleClass("options", note.noteId.startsWith("_options"));
 
         // Unknown widget.
@@ -196,7 +196,7 @@ export default class ContentWidgetTypeWidget extends TypeWidget {
         }
 
         // React widget.
-        this.$content.append(renderReactWidget(this, contentWidgets()));
+        this.$content.append(renderReactWidget(this, contentWidgets));
     }
 
 }

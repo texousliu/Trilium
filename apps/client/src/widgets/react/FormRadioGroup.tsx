@@ -1,9 +1,11 @@
+import type { ComponentChildren } from "preact";
+
 interface FormRadioProps {
     name: string;
     currentValue?: string;
     values: {
         value: string;
-        label: string;
+        label: string | ComponentChildren;
     }[];
     onChange(newValue: string): void;
 }

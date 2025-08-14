@@ -1,7 +1,9 @@
-import { useContext, useEffect, useRef } from "preact/hooks";
+import { type Dispatch, type StateUpdater, useContext, useEffect, useRef, useState } from "preact/hooks";
 import { EventData, EventNames } from "../../components/app_context";
 import { ParentComponent } from "./ReactBasicWidget";
 import SpacedUpdate from "../../services/spaced_update";
+import { OptionNames } from "@triliumnext/commons";
+import options from "../../services/options";
 
 /**
  * Allows a React component to react to Trilium events (e.g. `entitiesReloaded`). When the desired event is triggered, the handler is invoked with the event parameters.
@@ -63,4 +65,14 @@ export function useSpacedUpdate(callback: () => Promise<void>, interval = 1000) 
     }, [interval]);
 
     return spacedUpdateRef.current;
+}
+
+export function useTriliumOption(name: OptionNames): [string, Dispatch<StateUpdater<string>>] {
+    const initialValue = options.get(name);
+    const [ value, setValue ] = useState(initialValue);
+
+    return [
+        value,
+        setValue
+    ]
 }
