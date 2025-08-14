@@ -1,4 +1,4 @@
-import { type Dispatch, type StateUpdater, useContext, useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { EventData, EventNames } from "../../components/app_context";
 import { ParentComponent } from "./ReactBasicWidget";
 import SpacedUpdate from "../../services/spaced_update";
@@ -73,20 +73,22 @@ export function useTriliumOption(name: OptionNames, needsRefresh?: boolean): [st
     const initialValue = options.get(name);
     const [ value, setValue ] = useState(initialValue);
 
-    async function wrappedSetValue(newValue: string) {
-        await options.save(name, newValue);
+    const wrappedSetValue = useMemo(() => {
+        return async (newValue: string) => {
+            await options.save(name, newValue);
 
-        if (needsRefresh) {
-            reloadFrontendApp(`option change: ${name}`);
+            if (needsRefresh) {
+                reloadFrontendApp(`option change: ${name}`);
+            }
         }
-    };
+    }, [ name, needsRefresh ]);
 
-    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+    useTriliumEvent("entitiesReloaded", useCallback(({ loadResults }) => {
         if (loadResults.getOptionNames().includes(name)) {
             const newValue = options.get(name);
             setValue(newValue);
         }
-    });
+     }, [ name ]));
 
     return [
         value,
