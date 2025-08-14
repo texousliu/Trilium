@@ -23,7 +23,6 @@ import NetworkConnectionsOptions from "./options/other/network_connections.js";
 import HtmlImportTagsOptions from "./options/other/html_import_tags.js";
 import BackendLogWidget from "./content/backend_log.js";
 import AttachmentErasureTimeoutOptions from "./options/other/attachment_erasure_timeout.js";
-import RibbonOptions from "./options/appearance/ribbon.js";
 import MultiFactorAuthenticationOptions from './options/multi_factor_authentication.js';
 import LocalizationOptions from "./options/i18n/i18n.js";
 import CodeBlockOptions from "./options/text_notes/code_block.js";
