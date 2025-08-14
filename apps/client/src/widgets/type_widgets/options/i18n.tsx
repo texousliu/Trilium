@@ -6,6 +6,7 @@ import OptionsSection from "./components/OptionsSection";
 import { useTriliumOption } from "../../react/hooks";
 import type { Locale } from "@triliumnext/commons";
 import { isElectron } from "../../../services/utils";
+import FormRadioGroup from "../../react/FormRadioGroup";
 
 export default function InternationalizationOptions() {
     return (
@@ -26,6 +27,7 @@ function LocalizationOptions() {
 
     const [ locale, setLocale ] = useTriliumOption("locale");
     const [ formattingLocale, setFormattingLocale ] = useTriliumOption("formattingLocale");
+    const [ firstDayOfWeek, setFirstDayOfWeek ] = useTriliumOption("firstDayOfWeek");
 
     return (
         <OptionsSection title={t("i18n.title")}>
@@ -36,6 +38,17 @@ function LocalizationOptions() {
             {isElectron() && <OptionsRow label={t("i18n.formatting-locale")}>
                 <LocaleSelector locales={contentLocales} currentValue={formattingLocale} onChange={setFormattingLocale} />
             </OptionsRow>}
+
+            <OptionsRow label={t("i18n.first-day-of-the-week")}>
+                <FormRadioGroup
+                    name="first-day-of-week"
+                    values={[
+                        { value: "0", label: t("i18n.sunday") },
+                        { value: "1", label: t("i18n.monday") }
+                    ]}
+                    currentValue={firstDayOfWeek} onChange={setFirstDayOfWeek}
+                />
+            </OptionsRow>
         </OptionsSection>
     )
 }
@@ -46,4 +59,12 @@ function LocaleSelector({ locales, currentValue, onChange }: { locales: Locale[]
         keyProperty="id" titleProperty="name"                
         currentValue={currentValue} onChange={onChange}
     />;
+}
+
+function FirstDayOfWeekSettings() {
+    return (
+        <>
+            
+        </>
+    )
 }
