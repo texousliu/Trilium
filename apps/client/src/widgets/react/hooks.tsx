@@ -142,6 +142,14 @@ export function useTriliumOptionInt(name: OptionNames): [number, (newValue: numb
     ]
 }
 
+export function useTriliumOptionJson<T>(name: OptionNames): [ T, (newValue: T) => Promise<void> ] {
+    const [ value, setValue ] = useTriliumOption(name);
+    return [
+        (JSON.parse(value) as T),
+        (newValue => setValue(JSON.stringify(newValue)))
+    ];
+}
+
 /**
  * Generates a unique name via a random alphanumeric string of a fixed length.
  * 

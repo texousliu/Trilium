@@ -40,7 +40,8 @@ function FormRadio({ name, value, label, currentValue, onChange, labelClassName 
                 name={useUniqueName(name)}
                 value={value}
                 checked={value === currentValue}
-            onChange={e => onChange((e.target as HTMLInputElement).value)} />
+                onChange={e => onChange((e.target as HTMLInputElement).value)}
+            />
             {label}
         </label>
     )
