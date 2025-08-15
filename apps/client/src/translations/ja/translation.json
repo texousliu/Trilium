@@ -63,7 +63,9 @@
     "zoom_out": "ズームアウト",
     "zoom_in": "ズームイン",
     "advanced": "高度",
-    "toggle-zen-mode": "禅モード"
+    "toggle-zen-mode": "禅モード",
+    "switch_to_mobile_version": "モバイル版に切り替え",
+    "switch_to_desktop_version": "デスクトップ版に切り替え"
   },
   "left_pane_toggle": {
     "show_panel": "パネルを表示",
@@ -525,10 +527,40 @@
   },
   "revisions": {
     "download_button": "ダウンロード",
-    "delete_button": "削除"
+    "delete_button": "削除",
+    "note_revisions": "ノートの変更履歴",
+    "delete_all_revisions": "このノートの変更履歴をすべて削除",
+    "delete_all_button": "変更履歴をすべて削除",
+    "help_title": "変更履歴のヘルプ",
+    "revision_last_edited": "この変更は{{date}}に行われました",
+    "confirm_delete_all": "このノートのすべての変更履歴を削除しますか？",
+    "no_revisions": "このノートに変更履歴はまだありません...",
+    "restore_button": "復元",
+    "confirm_restore": "この変更を復元しますか？現在のノートのタイトルとコンテンツはこの変更で上書きされます。",
+    "confirm_delete": "この変更履歴を削除しますか？",
+    "revisions_deleted": "ノートの変更履歴は削除されました。",
+    "revision_restored": "ノートの変更が復元されました。",
+    "revision_deleted": "ノートの変更履歴は削除されました。",
+    "settings": "ノートの変更履歴の設定",
+    "file_size": "ファイルサイズ:",
+    "preview": "プレビュー:",
+    "preview_not_available": "このノートタイプではプレビューは利用できません。"
   },
   "attachments_actions": {
-    "download": "ダウンロード"
+    "download": "ダウンロード",
+    "open_externally": "外部で開く",
+    "open_externally_title": "ファイルを外部アプリケーションで開き、変更を監視します。その後、変更されたバージョンをTriliumにアップロードできるようになります。",
+    "open_custom": "プログラムから開く",
+    "open_custom_title": "ファイルを外部アプリケーションで開き、変更を監視します。その後、変更されたバージョンをTriliumにアップロードできるようになります。",
+    "rename_attachment": "添付ファイルの名前を変更",
+    "copy_link_to_clipboard": "リンクをクリップボードにコピー",
+    "convert_attachment_into_note": "添付ファイルをノートに変換",
+    "delete_attachment": "添付ファイルを削除",
+    "open_externally_detail_page": "添付ファイルを外部で開くは、詳細ページからのみ可能です。まず添付ファイル詳細をクリックしてから、再度操作を行ってください。",
+    "open_custom_client_only": "添付ファイルをプログラムから開くは、デスクトップクライアントからのみ可能です。",
+    "delete_confirm": "本当に添付ファイル '{{title}}' を削除しますか？",
+    "delete_success": "添付ファイル '{{title}}' は削除されました。",
+    "enter_new_name": "新しい添付ファイルの名前を入力してください"
   },
   "etapi": {
     "created": "作成日時",
@@ -852,7 +884,33 @@
     "remove_bookmark": "ブックマークを削除"
   },
   "attribute_detail": {
-    "delete": "削除"
+    "delete": "削除",
+    "close_button_title": "変更を破棄して閉じる",
+    "attr_is_owned_by": "属性の所有者",
+    "attr_name_title": "属性の名前は英数字、コロン、アンダーバーのみで構成します",
+    "name": "名前",
+    "value": "値",
+    "promoted_alias": "エイリアス",
+    "multiplicity_title": "多重性とは、同じ名前を持つ属性をいくつ作成できるかを定義するもので、1つまたはそれ以上です。",
+    "multiplicity": "多重性",
+    "single_value": "単一の値",
+    "multi_value": "複数の値",
+    "label_type_title": "ラベルのタイプは、Triliumがラベルの値を入力するのに適したインターフェースを選択するのに役立ちます。",
+    "label_type": "タイプ",
+    "text": "テキスト",
+    "number": "数値",
+    "boolean": "真偽値",
+    "date": "日付",
+    "date_time": "日付と時間",
+    "time": "時間",
+    "url": "URL",
+    "save_and_close": "保存して閉じる <kbd>Ctrl+Enter</kbd>",
+    "precision_title": "値設定インターフェースで、小数点以下何桁まで利用可能にするか。",
+    "precision": "精度",
+    "digits": "桁",
+    "inheritable_title": "継承属性は、このツリー配下のすべての子孫に継承されます。",
+    "inheritable": "継承",
+    "related_notes_title": "このラベルが付いた他のノート"
   },
   "link_context_menu": {
     "open_note_in_popup": "クイックエディット",
@@ -1129,5 +1187,54 @@
     "selected_provider": "プロバイダーを選択",
     "select_model": "モデルを選択...",
     "select_provider": "プロバイダーを選択..."
+  },
+  "add_label": {
+    "add_label": "ラベルを追加",
+    "label_name_placeholder": "ラベル名",
+    "label_name_title": "英数字、アンダーバー、コロンが使用可能な文字です。",
+    "new_value_placeholder": "新しい値"
+  },
+  "delete_label": {
+    "delete_label": "ラベルを削除",
+    "label_name_placeholder": "ラベル名",
+    "label_name_title": "英数字、アンダーバー、コロンが使用可能な文字です。"
+  },
+  "rename_label": {
+    "rename_label": "ラベル名の変更",
+    "rename_label_from": "ラベル名を",
+    "old_name_placeholder": "古い名前",
+    "to": "から",
+    "new_name_placeholder": "新しい名前",
+    "name_title": "英数字、アンダーバー、コロンが使用可能な文字です。"
+  },
+  "update_label_value": {
+    "update_label_value": "ラベルの値を更新",
+    "label_name_placeholder": "ラベル名",
+    "label_name_title": "英数字、アンダーバー、コロンが使用可能な文字です。",
+    "new_value_placeholder": "新しい値",
+    "help_text_note": "このメソッドは値なしで呼び出すこともできます。その場合、値なしでラベルがノートに割り当てられます。"
+  },
+  "add_relation": {
+    "add_relation": "関係を追加",
+    "relation_name": "関係の名前",
+    "allowed_characters": "英数字、アンダーバー、コロンが使用可能な文字です。"
+  },
+  "delete_relation": {
+    "delete_relation": "関係を削除",
+    "relation_name": "関係の名前",
+    "allowed_characters": "英数字、アンダーバー、コロンが使用可能な文字です。"
+  },
+  "rename_relation": {
+    "rename_relation": "関係の名前を変更",
+    "rename_relation_from": "関係の名前を",
+    "old_name": "古い名前",
+    "to": "から",
+    "new_name": "新しい名前",
+    "allowed_characters": "英数字、アンダーバー、コロンが使用可能な文字です。"
+  },
+  "update_relation_target": {
+    "update_relation": "関係の更新",
+    "relation_name": "関係の名前",
+    "allowed_characters": "英数字、アンダーバー、コロンが使用可能な文字です。"
   }
 }
