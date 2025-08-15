@@ -8,11 +8,8 @@ import DateTimeFormatOptions from "./options/text_notes/date_time_format.js";
 import CodeEditorOptions from "./options/code_notes/code_editor.js";
 import CodeAutoReadOnlySizeOptions from "./options/code_notes/code_auto_read_only_size.js";
 import CodeMimeTypesOptions from "./options/code_notes/code_mime_types.js";
-import SpellcheckOptions from "./options/spellcheck.js";
 import PasswordOptions from "./options/password/password.js";
 import ProtectedSessionTimeoutOptions from "./options/password/protected_session_timeout.js";
-import EtapiOptions from "./options/etapi.js";
-import BackupOptions from "./options/backup.js";
 import SearchEngineOptions from "./options/other/search_engine.js";
 import TrayOptions from "./options/other/tray.js";
 import NoteErasureTimeoutOptions from "./options/other/note_erasure_timeout.js";
@@ -42,6 +39,7 @@ import InternationalizationOptions from "./options/i18n.jsx";
 import SyncOptions from "./options/sync.jsx";
 import EtapiSettings from "./options/etapi.js";
 import BackupSettings from "./options/backup.js";
+import SpellcheckSettings from "./options/spellcheck.js";
 
 const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -90,9 +88,7 @@ const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", ((typeof NoteContextA
         CodeAutoReadOnlySizeOptions
     ],
     _optionsImages: <ImageSettings />,
-    _optionsSpellcheck: [
-        SpellcheckOptions
-    ],
+    _optionsSpellcheck: <SpellcheckSettings />,
     _optionsPassword: [
         PasswordOptions,
         ProtectedSessionTimeoutOptions

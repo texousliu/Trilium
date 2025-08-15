@@ -306,7 +306,7 @@ function copySelectionToClipboard() {
     }
 }
 
-function dynamicRequire(moduleName: string) {
+export function dynamicRequire(moduleName: string) {
     if (typeof __non_webpack_require__ !== "undefined") {
         return __non_webpack_require__(moduleName);
     } else {
