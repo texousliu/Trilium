@@ -74,7 +74,7 @@ function periodBackup(optionName: "lastDailyBackupDate" | "lastWeeklyBackupDate"
 async function backupNow(name: string) {
     // we don't want to back up DB in the middle of sync with potentially inconsistent DB state
     return await syncMutexService.doExclusively(async () => {
-        const backupFile = `${dataDir.BACKUP_DIR}/backup-${name}.db`;
+        const backupFile = path.resolve(`${dataDir.BACKUP_DIR}/backup-${name}.db`);
 
         if (!fs.existsSync(dataDir.BACKUP_DIR)) {
             fs.mkdirSync(dataDir.BACKUP_DIR, 0o700);
