@@ -1,1 +1,46 @@
-{}
+{
+  "about": {
+    "title": "Lisätietoja Trilium Notes:ista",
+    "homepage": "Kotisivu:",
+    "app_version": "Sovelluksen versio:",
+    "db_version": "Tietokannan versio:",
+    "build_date": "Koontipäivämäärä:",
+    "data_directory": "Datakansio:"
+  },
+  "toast": {
+    "critical-error": {
+      "title": "Kriittinen virhe"
+    },
+    "widget-error": {
+      "title": "Widgetin luonti epäonnistui"
+    }
+  },
+  "add_link": {
+    "add_link": "Lisää linkki",
+    "link_title": "Linkin otsikko",
+    "button_add_link": "Lisää linkki"
+  },
+  "branch_prefix": {
+    "prefix": "Etuliite: ",
+    "save": "Tallenna"
+  },
+  "bulk_actions": {
+    "bulk_actions": "Massa toiminnot",
+    "available_actions": "Saatavilla olevat toiminnot",
+    "chosen_actions": "Valitut toiminnot",
+    "execute_bulk_actions": "Toteuta massatoiminnot",
+    "bulk_actions_executed": "Massatoiminnot on toteutettu onnistuneesti.",
+    "none_yet": "Ei vielä... lisää toiminto klikkaamalla jotiain yllä saatavilla olevaa yltä.",
+    "labels": "Merkit",
+    "relations": "Suhteet",
+    "notes": "Muistiot",
+    "other": "Muut"
+  },
+  "clone_to": {
+    "clone_notes_to": "Kopioi muistiot...",
+    "help_on_links": "Apua linkkeihin",
+    "notes_to_clone": "Kopioitavat muistiot",
+    "target_parent_note": "Kohteen päämuistio",
+    "search_for_note_by_its_name": "ensi muistiota sen nimellä"
+  }
+}
