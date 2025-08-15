@@ -119,22 +119,20 @@ function KeyboardShortcutTable({ filter, keyboardShortcuts }: { filter?: string,
 }
 
 function ShortcutEditor({ keyboardShortcut: action }: { keyboardShortcut: ActionKeyboardShortcut }) {
-    const [ shortcuts, setShortcuts ] = useState((action.effectiveShortcuts ?? []).join(", "));
-
-    useEffect(() => {
-        const { actionName } = action;
-        const optionName = `keyboardShortcuts${actionName.substr(0, 1).toUpperCase()}${actionName.substr(1)}`;
-        const newShortcuts = shortcuts
-            .replace("+,", "+Comma")
-            .split(",")
-            .map((shortcut) => shortcut.replace("+Comma", "+,"))
-            .filter((shortcut) => !!shortcut);
-        options.save(optionName, JSON.stringify(newShortcuts));
-    }, [ shortcuts ])
+    const originalShortcut = (action.effectiveShortcuts ?? []).join(", ");
 
     return (
         <FormTextBox
-            currentValue={shortcuts} onChange={setShortcuts}
+            currentValue={originalShortcut} onChange={(newShortcut) => {
+                const { actionName } = action;
+                const optionName = `keyboardShortcuts${actionName.substr(0, 1).toUpperCase()}${actionName.substr(1)}`;
+                const newShortcuts = newShortcut
+                    .replace("+,", "+Comma")
+                    .split(",")
+                    .map((shortcut) => shortcut.replace("+Comma", "+,"))
+                    .filter((shortcut) => !!shortcut);
+                options.save(optionName, JSON.stringify(newShortcuts));
+            }}
         />
     )
 }
