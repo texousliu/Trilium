@@ -2,6 +2,11 @@
   "keyboard_actions": {
     "back-in-note-history": "Перейти до минулої нотатки в історії",
     "forward-in-note-history": "Перейти до наступної нотатки в історії",
-    "open-command-palette": "Відкрити палітру команд"
+    "open-command-palette": "Відкрити палітру команд",
+    "scroll-to-active-note": "Прокрутити дерево нотаток до активної нотатки",
+    "quick-search": "Показати панель швидкого пошуку",
+    "search-in-subtree": "Пошук нотаток в піддереві активної нотатки",
+    "expand-subtree": "Розкрити піддерево поточної нотатки",
+    "collapse-tree": "Згорнути все дерево нотаток"
   }
 }
