@@ -2,7 +2,7 @@ import { AttributeRow, NoteType } from "./rows.js";
 
 type Response = {
     success: true,
-    message: string;
+    message?: string;
 } | {
     success: false;
     message: string;
@@ -107,3 +107,5 @@ export interface DatabaseBackup {
     filePath: string;
     mtime: Date;
 }
+
+export type ChangePasswordResponse = Response;
