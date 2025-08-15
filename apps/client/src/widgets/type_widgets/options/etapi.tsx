@@ -10,6 +10,7 @@ import toast from "../../../services/toast";
 import dialog from "../../../services/dialog";
 import { formatDateTime } from "../../../utils/formatters";
 import ActionButton from "../../react/ActionButton";
+import useTriliumEvent from "../../react/hooks";
 
 type RenameTokenCallback = (tokenId: string, oldName: string) => Promise<void>;
 type DeleteTokenCallback = (tokenId: string, name: string ) => Promise<void>;
@@ -22,6 +23,11 @@ export default function EtapiSettings() {
     }
 
     useEffect(refreshTokens, []);
+    useTriliumEvent("entitiesReloaded", ({loadResults}) => {
+        if (loadResults.hasEtapiTokenChanges) {
+            refreshTokens();
+        }
+    });
 
     const createTokenCallback = useCallback(async () => {
         const tokenName = await dialog.prompt({
@@ -42,34 +48,7 @@ export default function EtapiSettings() {
             message: t("etapi.token_created_message"),
             defaultValue: authToken
         });
-
-        refreshTokens();
-    }, []);
-
-    const renameTokenCallback = useCallback<RenameTokenCallback>(async (tokenId: string, oldName: string) => {
-        const tokenName = await dialog.prompt({
-            title: t("etapi.rename_token_title"),
-            message: t("etapi.rename_token_message"),
-            defaultValue: oldName
-        });
-
-        if (!tokenName?.trim()) {
-            return;
-        }
-
-        await server.patch(`etapi-tokens/${tokenId}`, { name: tokenName });
-
-        refreshTokens();
-    }, []);
-
-    const deleteTokenCallback = useCallback<DeleteTokenCallback>(async (tokenId: string, name: string) => {
-        if (!(await dialog.confirm(t("etapi.delete_token_confirmation", { name })))) {
-            return;
-        }
-
-        await server.remove(`etapi-tokens/${tokenId}`);
-        refreshTokens();
-    }, []);
+    }, []);    
 
     return (
         <OptionsSection title={t("etapi.title")}>
@@ -92,15 +71,37 @@ export default function EtapiSettings() {
             <hr />
 
             <h5>{t("etapi.existing_tokens")}</h5>
-            <TokenList tokens={tokens} renameCallback={renameTokenCallback} deleteCallback={deleteTokenCallback} />
+            <TokenList tokens={tokens} />
         </OptionsSection>
     )
 }
 
-function TokenList({ tokens, renameCallback, deleteCallback }: { tokens: EtapiToken[], renameCallback: RenameTokenCallback, deleteCallback: DeleteTokenCallback }) {
+function TokenList({ tokens }: { tokens: EtapiToken[] }) {
     if (!tokens.length) {
         return <div>{t("etapi.no_tokens_yet")}</div>;
     }    
+    
+    const renameCallback = useCallback<RenameTokenCallback>(async (tokenId: string, oldName: string) => {
+        const tokenName = await dialog.prompt({
+            title: t("etapi.rename_token_title"),
+            message: t("etapi.rename_token_message"),
+            defaultValue: oldName
+        });
+
+        if (!tokenName?.trim()) {
+            return;
+        }
+
+        await server.patch(`etapi-tokens/${tokenId}`, { name: tokenName });
+    }, []);
+
+    const deleteCallback = useCallback<DeleteTokenCallback>(async (tokenId: string, name: string) => {
+        if (!(await dialog.confirm(t("etapi.delete_token_confirmation", { name })))) {
+            return;
+        }
+
+        await server.remove(`etapi-tokens/${tokenId}`);
+    }, []);
 
     return (
         <div style={{ overflow: "auto", height: "500px"}}>
