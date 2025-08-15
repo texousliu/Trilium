@@ -238,8 +238,8 @@ importers:
         specifier: 16.3.0
         version: 16.3.0
       i18next:
-        specifier: 25.3.4
-        version: 25.3.4(typescript@5.9.2)
+        specifier: 25.3.6
+        version: 25.3.6(typescript@5.9.2)
       i18next-http-backend:
         specifier: 3.0.2
         version: 3.0.2(encoding@0.1.13)
@@ -687,8 +687,8 @@ importers:
         specifier: 7.0.6
         version: 7.0.6
       i18next:
-        specifier: 25.3.4
-        version: 25.3.4(typescript@5.9.2)
+        specifier: 25.3.6
+        version: 25.3.6(typescript@5.9.2)
       i18next-fs-backend:
         specifier: 2.6.0
         version: 2.6.0
@@ -9530,8 +9530,8 @@ packages:
   i18next-http-backend@3.0.2:
     resolution: {integrity: sha512-PdlvPnvIp4E1sYi46Ik4tBYh/v/NbYfFFgTjkwFl0is8A18s7/bx9aXqsrOax9WUbeNS6mD2oix7Z0yGGf6m5g==}
 
-  i18next@25.3.4:
-    resolution: {integrity: sha512-AHklEYFLiRRxW1Cb6zE9lfnEtYvsydRC8nRS3RSKGX3zCqZ8nLZwMaUsrb80YuccPNv2RNokDL8LkTNnp+6mDw==}
+  i18next@25.3.6:
+    resolution: {integrity: sha512-dThZ0CTCM3sUG/qS0ZtQYZQcUI6DtBN8yBHK+SKEqihPcEYmjVWh/YJ4luic73Iq6Uxhp6q7LJJntRK5+1t7jQ==}
     peerDependencies:
       typescript: ^5
     peerDependenciesMeta:
@@ -17103,8 +17103,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 46.0.1
       ckeditor5: 46.0.1(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-editor-multi-root@46.0.1':
     dependencies:
@@ -26722,7 +26720,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  i18next@25.3.4(typescript@5.9.2):
+  i18next@25.3.6(typescript@5.9.2):
     dependencies:
       '@babel/runtime': 7.27.6
     optionalDependencies:
