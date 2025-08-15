@@ -1,1 +1,11 @@
-{}
+{
+  "keyboard_actions": {
+    "open-command-palette": "Открыть палитру команд",
+    "quick-search": "Активировать панель быстрого поиска",
+    "move-note-up": "Переместить заметку вверх",
+    "move-note-down": "Переместить заметку вниз",
+    "move-note-up-in-hierarchy": "Переместить заметку вверх в иерархии",
+    "move-note-down-in-hierarchy": "Переместить заметку вниз в иерархии",
+    "delete-note": "Удалить заметку"
+  }
+}
