@@ -13,7 +13,6 @@ import PasswordOptions from "./options/password/password.js";
 import ProtectedSessionTimeoutOptions from "./options/password/protected_session_timeout.js";
 import EtapiOptions from "./options/etapi.js";
 import BackupOptions from "./options/backup.js";
-import SyncOptions from "./options/sync.js";
 import SearchEngineOptions from "./options/other/search_engine.js";
 import TrayOptions from "./options/other/tray.js";
 import NoteErasureTimeoutOptions from "./options/other/note_erasure_timeout.js";
@@ -40,6 +39,7 @@ import { renderReactWidget } from "../react/ReactBasicWidget.jsx";
 import ImageSettings from "./options/images.jsx";
 import AdvancedSettings from "./options/advanced.jsx";
 import InternationalizationOptions from "./options/i18n.jsx";
+import SyncOptions from "./options/sync.jsx";
 
 const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -102,9 +102,7 @@ const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", ((typeof NoteContextA
     _optionsBackup: [
         BackupOptions
     ],
-    _optionsSync: [
-        SyncOptions
-    ],
+    _optionsSync: <SyncOptions />,
     _optionsAi: [AiSettingsOptions],
     _optionsOther: [
         SearchEngineOptions,

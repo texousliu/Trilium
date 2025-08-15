@@ -6,6 +6,7 @@ import { OptionNames } from "@triliumnext/commons";
 import options, { type OptionValue } from "../../services/options";
 import utils, { reloadFrontendApp } from "../../services/utils";
 import Component from "../../components/component";
+import server from "../../services/server";
 
 type TriliumEventHandler<T extends EventNames> = (data: EventData<T>) => void;
 const registeredHandlers: Map<Component, Map<EventNames, TriliumEventHandler<any>[]>> = new Map();
@@ -148,6 +149,19 @@ export function useTriliumOptionJson<T>(name: OptionNames): [ T, (newValue: T) =
         (JSON.parse(value) as T),
         (newValue => setValue(JSON.stringify(newValue)))
     ];
+}
+
+export function useTriliumOptions<T extends OptionNames>(...names: T[]) {
+    const values: Record<string, string> = {};
+    for (const name of names) {
+        values[name] = options.get(name);
+    }
+
+    const setValue = (newValues: Record<T, string>) => server.put<void>("options", newValues);
+    return [
+        values as Record<T, string>,
+        setValue
+    ] as const;
 }
 
 /**

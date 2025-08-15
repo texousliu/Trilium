@@ -1,5 +1,4 @@
 import type { InputHTMLAttributes, RefObject } from "preact/compat";
-import FormText from "./FormText";
 
 interface FormTextBoxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "value"> {
     id?: string;
@@ -11,9 +10,11 @@ interface FormTextBoxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "
 export default function FormTextBox({ inputRef, className, type, currentValue, onChange, ...rest}: FormTextBoxProps) {
     if (type === "number" && currentValue) {
         const { min, max } = rest;
-        if (min && currentValue < min) {
+        console.log(currentValue , min, max);
+        const currentValueNum = parseInt(currentValue, 10);
+        if (min && currentValueNum < parseInt(String(min), 10)) {
             currentValue = String(min);
-        } else if (max && currentValue > max) {
+        } else if (max && currentValueNum > parseInt(String(max), 10)) {
             currentValue = String(max);
         }
     }
