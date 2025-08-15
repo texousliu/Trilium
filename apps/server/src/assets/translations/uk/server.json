@@ -1,1 +1,7 @@
-{}
+{
+  "keyboard_actions": {
+    "back-in-note-history": "Перейти до минулої нотатки в історії",
+    "forward-in-note-history": "Перейти до наступної нотатки в історії",
+    "open-command-palette": "Відкрити палітру команд"
+  }
+}
