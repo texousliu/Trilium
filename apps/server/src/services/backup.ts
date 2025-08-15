@@ -9,11 +9,11 @@ import syncMutexService from "./sync_mutex.js";
 import cls from "./cls.js";
 import sql from "./sql.js";
 import path from "path";
-import type { OptionNames } from "@triliumnext/commons";
+import type { DatabaseBackup, OptionNames } from "@triliumnext/commons";
 
 type BackupType = "daily" | "weekly" | "monthly";
 
-function getExistingBackups() {
+function getExistingBackups(): DatabaseBackup[] {
     if (!fs.existsSync(dataDir.BACKUP_DIR)) {
         return [];
     }

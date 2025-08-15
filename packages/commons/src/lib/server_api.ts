@@ -101,3 +101,9 @@ export interface PostTokensResponse {
 export interface BackupDatabaseNowResponse {
     backupFile: string;
 }
+
+export interface DatabaseBackup {
+    fileName: string;
+    filePath: string;
+    mtime: Date;
+}
