@@ -411,7 +411,8 @@
     "save_revision": "変更履歴を保存",
     "convert_into_attachment_failed": "ノート '{{title}}' の変換に失敗しました。",
     "convert_into_attachment_successful": "ノート '{{title}}' は添付ファイルに変換されました。",
-    "convert_into_attachment_prompt": "本当にノート '{{title}}' を親ノートの添付ファイルに変換しますか？"
+    "convert_into_attachment_prompt": "本当にノート '{{title}}' を親ノートの添付ファイルに変換しますか？",
+    "note_attachments": "ノートの添付ファイル"
   },
   "command_palette": {
     "export_note_title": "ノートをエクスポート",
