@@ -11,12 +11,12 @@ import OptionsSection from "./components/OptionsSection"
 import protected_session_holder from "../../../services/protected_session_holder"
 import { ChangePasswordResponse } from "@triliumnext/commons"
 import dialog from "../../../services/dialog"
-import { reloadFrontendApp } from "../../../services/utils"
 
 export default function PasswordSettings() {
     return (
         <>
             <ChangePassword />
+            <ProtectedSessionTimeout />
         </>
     )
 }
@@ -99,6 +99,16 @@ function ChangePassword() {
                     primary
                 />
             </form>
+        </OptionsSection>
+    )
+}
+
+function ProtectedSessionTimeout() {
+    return (
+        <OptionsSection title={t("password.protected_session_timeout")}>
+            {t("password.protected_session_timeout_description")}
+            &nbsp;
+            <a class="tn-link" href="https://triliumnext.github.io/Docs/Wiki/protected-notes.html" className="external">{t("password.wiki")}</a> {t("password.for_more_info")}
         </OptionsSection>
     )
 }
