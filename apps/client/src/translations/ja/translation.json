@@ -65,7 +65,8 @@
     "advanced": "高度",
     "toggle-zen-mode": "禅モード",
     "switch_to_mobile_version": "モバイル版に切り替え",
-    "switch_to_desktop_version": "デスクトップ版に切り替え"
+    "switch_to_desktop_version": "デスクトップ版に切り替え",
+    "configure_launchbar": "ランチャーバーの設定"
   },
   "left_pane_toggle": {
     "show_panel": "パネルを表示",
@@ -405,7 +406,12 @@
     "export_note": "ノートをエクスポート",
     "delete_note": "ノートを削除",
     "print_note": "ノートを印刷",
-    "print_pdf": "PDFとしてエクスポート..."
+    "print_pdf": "PDFとしてエクスポート...",
+    "convert_into_attachment": "添付ファイルに変換",
+    "save_revision": "変更履歴を保存",
+    "convert_into_attachment_failed": "ノート '{{title}}' の変換に失敗しました。",
+    "convert_into_attachment_successful": "ノート '{{title}}' は添付ファイルに変換されました。",
+    "convert_into_attachment_prompt": "本当にノート '{{title}}' を親ノートの添付ファイルに変換しますか？"
   },
   "command_palette": {
     "export_note_title": "ノートをエクスポート",
