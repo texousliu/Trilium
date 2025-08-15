@@ -40,6 +40,7 @@ import ImageSettings from "./options/images.jsx";
 import AdvancedSettings from "./options/advanced.jsx";
 import InternationalizationOptions from "./options/i18n.jsx";
 import SyncOptions from "./options/sync.jsx";
+import EtapiSettings from "./options/etapi.js";
 
 const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -96,9 +97,7 @@ const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", ((typeof NoteContextA
         ProtectedSessionTimeoutOptions
     ],
     _optionsMFA: [MultiFactorAuthenticationOptions],
-    _optionsEtapi: [
-        EtapiOptions
-    ],
+    _optionsEtapi: <EtapiSettings />,
     _optionsBackup: [
         BackupOptions
     ],

@@ -35,7 +35,7 @@ async function testSync(): Promise<SyncTestResponse> {
         const [errMessage] = safeExtractMessageAndStackFromError(e);
         return {
             success: false,
-            error: errMessage
+            message: errMessage
         };
     }
 }

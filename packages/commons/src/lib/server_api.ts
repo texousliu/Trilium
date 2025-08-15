@@ -1,5 +1,13 @@
 import { AttributeRow, NoteType } from "./rows.js";
 
+type Response = {
+    success: true,
+    message: string;
+} | {
+    success: false;
+    message: string;
+}
+
 export interface AppInfo {
     appVersion: string;
     dbVersion: number;
@@ -78,10 +86,14 @@ export interface AnonymizedDbResponse {
     fileName: string;
 }
 
-export type SyncTestResponse = {
-    success: true;
-    message: string;
-} | {
-    success: false;
-    error: string;
-};
+export type SyncTestResponse = Response;
+
+export interface EtapiToken {
+    name: string;
+    utcDateCreated: string;
+    etapiTokenId?: string;
+}
+
+export interface PostTokensResponse {
+    authToken: string;
+}

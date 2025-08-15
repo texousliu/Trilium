@@ -86,7 +86,7 @@ export function SyncTest() {
                     if (result.success) {
                         toast.showMessage(result.message);
                     } else {
-                        toast.showError(t("sync_2.handshake_failed", { message: result.error }));
+                        toast.showError(t("sync_2.handshake_failed", { message: result.message }));
                     }
                 }}
             />
