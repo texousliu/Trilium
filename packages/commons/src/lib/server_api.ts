@@ -77,3 +77,11 @@ export interface AnonymizedDbResponse {
     filePath: string;
     fileName: string;
 }
+
+export type SyncTestResponse = {
+    success: true;
+    message: string;
+} | {
+    success: false;
+    error: string;
+};

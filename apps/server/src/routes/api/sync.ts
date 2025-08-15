@@ -16,8 +16,9 @@ import type { EntityChange } from "../../services/entity_changes_interface.js";
 import ValidationError from "../../errors/validation_error.js";
 import consistencyChecksService from "../../services/consistency_checks.js";
 import { t } from "i18next";
+import { SyncTestResponse } from "@triliumnext/commons";
 
-async function testSync() {
+async function testSync(): Promise<SyncTestResponse> {
     try {
         if (!syncOptions.isSyncSetup()) {
             return { success: false, message: t("test_sync.not-configured") };

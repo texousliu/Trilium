@@ -7,8 +7,21 @@ import FormTextBox, { FormTextBoxWithUnit } from "../../react/FormTextBox";
 import RawHtml from "../../react/RawHtml";
 import OptionsSection from "./components/OptionsSection";
 import { useTriliumOptions } from "../../react/hooks";
+import FormText from "../../react/FormText";
+import server from "../../../services/server";
+import toast from "../../../services/toast";
+import { SyncTestResponse } from "@triliumnext/commons";
 
 export default function SyncOptions() {
+    return (
+        <>
+            <SyncConfiguration />
+            <SyncTest />
+        </>
+    )
+}
+
+export function SyncConfiguration() {
     const [ options, setOptions ] = useTriliumOptions("syncServerHost", "syncServerTimeout", "syncProxy");
     const syncServerHost = useRef(options.syncServerHost);
     const syncServerTimeout = useRef(options.syncServerTimeout);
@@ -57,6 +70,26 @@ export default function SyncOptions() {
                     <Button text={t("sync_2.help")} onClick={() => openInAppHelpFromUrl("cbkrhQjrkKrh")} />
                 </div>
             </form>
+        </OptionsSection>
+    )
+}
+
+export function SyncTest() {
+    return (
+        <OptionsSection title={t("sync_2.test_title")}>
+            <FormText>{t("sync_2.test_description")}</FormText>
+            <Button
+                text={t("sync_2.test_button")}
+                onClick={async () => {
+                    const result = await server.post<SyncTestResponse>("sync/test");
+
+                    if (result.success) {
+                        toast.showMessage(result.message);
+                    } else {
+                        toast.showError(t("sync_2.handshake_failed", { message: result.error }));
+                    }
+                }}
+            />
         </OptionsSection>
     )
 }
