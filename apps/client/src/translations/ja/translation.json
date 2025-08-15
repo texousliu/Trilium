@@ -35,7 +35,11 @@
     "link_title_arbitrary": "リンクタイトルは自由に変更可能"
   },
   "branch_prefix": {
-    "save": "保存"
+    "save": "保存",
+    "edit_branch_prefix": "ブランチ接頭辞の編集",
+    "help_on_tree_prefix": "ツリー接頭辞に関するヘルプ",
+    "prefix": "接頭辞： ",
+    "branch_prefix_saved": "ブランチ接頭辞が保存されました。"
   },
   "global_menu": {
     "menu": "メニュー",
@@ -82,14 +86,15 @@
     "help_on_links": "ヘルプへのリンク"
   },
   "delete_notes": {
-    "delete_all_clones_description": "すべてのクローンも削除する（最近の変更では元に戻すことができる）",
+    "delete_all_clones_description": "すべてのクローンも削除（最近の変更では元に戻すことができる）",
     "erase_notes_description": "通常の（ソフト）削除では、ノートは削除されたものとしてマークされ、一定期間内に（最近の変更で）削除を取り消すことができます。このオプションをオンにすると、ノートは即座に削除され、削除を取り消すことはできません。",
     "erase_notes_warning": "すべてのクローンを含め、ノートを完全に消去します（元に戻せません）。これにより、アプリケーションは強制的にリロードされます。",
     "notes_to_be_deleted": "以下のノートが削除されます ({{notesCount}})",
     "no_note_to_delete": "ノートは削除されません（クローンのみ）。",
     "cancel": "キャンセル",
     "ok": "OK",
-    "close": "閉じる"
+    "close": "閉じる",
+    "delete_notes_preview": "ノートのプレビューを削除"
   },
   "calendar": {
     "mon": "月",
@@ -147,7 +152,7 @@
     "close_right_tabs": "右側のタブをすべて閉じる",
     "close_all_tabs": "すべてのタブを閉じる",
     "reopen_last_tab": "最後に閉じたタブを開く",
-    "move_tab_to_new_window": "このタブを新しいウィンドウに移動する",
+    "move_tab_to_new_window": "このタブを新しいウィンドウに移動",
     "copy_tab_to_new_window": "このタブを新しいウィンドウにコピーする"
   },
   "tasks": {
@@ -198,7 +203,8 @@
   "confirm": {
     "confirmation": "確認",
     "cancel": "キャンセル",
-    "ok": "OK"
+    "ok": "OK",
+    "also_delete_note": "同時にノートを削除"
   },
   "export": {
     "export_note_title": "ノートをエクスポート",
@@ -265,7 +271,8 @@
     "showSQLConsole": "SQLコンソールを表示",
     "other": "その他",
     "quickSearch": "クイックサーチにフォーカス",
-    "inPageSearch": "ページ内検索"
+    "inPageSearch": "ページ内検索",
+    "showJumpToNoteDialog": "<a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">「ジャンプ先」ダイアログ</a>を表示"
   },
   "import": {
     "importIntoNote": "ノートにインポート",
@@ -392,7 +399,7 @@
     "open_note_custom": "プログラムからノートを開く",
     "import_files": "ファイルをインポート",
     "export_note": "ノートをエクスポート",
-    "delete_note": "ノートを削除する",
+    "delete_note": "ノートを削除",
     "print_note": "ノートを印刷",
     "print_pdf": "PDFとしてエクスポート..."
   },
@@ -401,10 +408,10 @@
     "search_subtree_title": "サブツリー内を検索"
   },
   "delete_note": {
-    "delete_note": "ノートを削除する"
+    "delete_note": "ノートを削除"
   },
   "board_view": {
-    "delete-note": "ノートを削除する"
+    "delete-note": "ノートを削除"
   },
   "code_buttons": {
     "execute_button_title": "スクリプトを実行",
@@ -862,5 +869,18 @@
     "automatically-collapse-notes": "ノートを自動的に折りたたむ",
     "automatically-collapse-notes-title": "一定期間使用されないと、ツリーを整理するためにノートは折りたたまれます。",
     "save-changes": "変更を保存して適用"
+  },
+  "bulk_actions": {
+    "bulk_actions": "一括操作",
+    "affected_notes": "影響されたノート",
+    "include_descendants": "選択したノートの子ノートを含む",
+    "available_actions": "利用可能なアクション",
+    "chosen_actions": "選択されたアクション",
+    "execute_bulk_actions": "一括操作を実行",
+    "bulk_actions_executed": "一括操作が成功に実行されました。",
+    "labels": "ラベル",
+    "relations": "関係",
+    "notes": "ノート",
+    "other": "その他"
   }
 }
