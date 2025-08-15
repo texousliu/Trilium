@@ -36,7 +36,7 @@ export default function ShortcutSettings() {
 
     return (
         <OptionsSection
-            title={t("shortcuts.keyboard_shortcuts")}
+            className="shortcuts-options-section"
             style={{ display: "flex", flexDirection: "column", height: "100%" }}
             noCard
         >
