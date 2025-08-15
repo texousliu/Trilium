@@ -39,6 +39,7 @@ import EtapiSettings from "./options/etapi.js";
 import BackupSettings from "./options/backup.js";
 import SpellcheckSettings from "./options/spellcheck.js";
 import PasswordSettings from "./options/password.jsx";
+import ShortcutSettings from "./options/shortcuts.js";
 
 const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -67,9 +68,7 @@ export type OptionPages = "_optionsAppearance" | "_optionsShortcuts" | "_options
 
 const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", ((typeof NoteContextAwareWidget)[] | JSX.Element)> = {
     _optionsAppearance: <AppearanceSettings />,
-    _optionsShortcuts: [
-        KeyboardShortcutsOptions
-    ],
+    _optionsShortcuts: <ShortcutSettings />,
     _optionsTextNotes: [
         EditorOptions,
         EditorFeaturesOptions,
