@@ -41,6 +41,7 @@ import AdvancedSettings from "./options/advanced.jsx";
 import InternationalizationOptions from "./options/i18n.jsx";
 import SyncOptions from "./options/sync.jsx";
 import EtapiSettings from "./options/etapi.js";
+import BackupSettings from "./options/backup.js";
 
 const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -98,9 +99,7 @@ const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", ((typeof NoteContextA
     ],
     _optionsMFA: [MultiFactorAuthenticationOptions],
     _optionsEtapi: <EtapiSettings />,
-    _optionsBackup: [
-        BackupOptions
-    ],
+    _optionsBackup: <BackupSettings />,
     _optionsSync: <SyncOptions />,
     _optionsAi: [AiSettingsOptions],
     _optionsOther: [
