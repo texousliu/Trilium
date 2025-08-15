@@ -1,4 +1,8 @@
+import { BackupDatabaseNowResponse } from "@triliumnext/commons";
 import { t } from "../../../services/i18n";
+import server from "../../../services/server";
+import toast from "../../../services/toast";
+import Button from "../../react/Button";
 import FormCheckbox from "../../react/FormCheckbox";
 import FormGroup from "../../react/FormGroup";
 import FormText from "../../react/FormText";
@@ -9,6 +13,7 @@ export default function BackupSettings() {
     return (
         <>
             <AutomaticBackup />
+            <BackupNow />
         </>
     )
 }
@@ -41,6 +46,20 @@ export function AutomaticBackup() {
             </FormGroup>
 
             <FormText>{t("backup.backup_recommendation")}</FormText>
+        </OptionsSection>
+    )
+}
+
+export function BackupNow() {
+    return (
+        <OptionsSection title={t("backup.backup_now")}>
+            <Button
+                text={t("backup.backup_database_now")}
+                onClick={async () => {
+                    const { backupFile } = await server.post<BackupDatabaseNowResponse>("database/backup-database");
+                    toast.showMessage(t("backup.database_backed_up_to", { backupFilePath: backupFile }), 10000);
+                }}
+            />
         </OptionsSection>
     )
 }

@@ -9,7 +9,7 @@ import type { Request } from "express";
 import ValidationError from "../../errors/validation_error.js";
 import sql_init from "../../services/sql_init.js";
 import becca_loader from "../../becca/becca_loader.js";
-import { DatabaseCheckIntegrityResponse } from "@triliumnext/commons";
+import { BackupDatabaseNowResponse, DatabaseCheckIntegrityResponse } from "@triliumnext/commons";
 
 function getExistingBackups() {
     return backupService.getExistingBackups();
@@ -18,7 +18,7 @@ function getExistingBackups() {
 async function backupDatabase() {
     return {
         backupFile: await backupService.backupNow("now")
-    };
+    } satisfies BackupDatabaseNowResponse;
 }
 
 function vacuumDatabase() {

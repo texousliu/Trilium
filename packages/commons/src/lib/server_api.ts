@@ -97,3 +97,7 @@ export interface EtapiToken {
 export interface PostTokensResponse {
     authToken: string;
 }
+
+export interface BackupDatabaseNowResponse {
+    backupFile: string;
+}
