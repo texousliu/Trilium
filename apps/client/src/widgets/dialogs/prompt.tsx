@@ -33,12 +33,13 @@ function PromptDialogComponent() {
     const labelRef = useRef<HTMLLabelElement>(null);
     const answerRef = useRef<HTMLInputElement>(null);
     const [ opts, setOpts ] = useState<PromptDialogOptions>();
-    const [ value, setValue ] = useState("");    
+    const [ value, setValue ] = useState("");
     const [ shown, setShown ] = useState(false);
     
     useTriliumEvent("showPromptDialog", (opts) => {
         setOpts(opts);
         setShown(true);
+        setValue(opts.defaultValue ?? "");
     })
 
     return (
