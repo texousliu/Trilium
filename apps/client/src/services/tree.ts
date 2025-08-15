@@ -30,20 +30,12 @@ async function resolveNotePathToSegments(notePath: string, hoistedNoteId = "root
 
     const path = notePath.split("/").reverse();
 
-    if (!path.includes("root")) {
-        path.push("root");
-    }
-
     const effectivePathSegments: string[] = [];
     let childNoteId: string | null = null;
     let i = 0;
 
-    while (true) {
-        if (i >= path.length) {
-            break;
-        }
-
-        const parentNoteId = path[i++];
+    for (let i = 0; i < path.length; i++) {
+        const parentNoteId = path[i];
 
         if (childNoteId !== null) {
             const child = await froca.getNote(childNoteId, !logErrors);
@@ -68,7 +60,7 @@ async function resolveNotePathToSegments(notePath: string, hoistedNoteId = "root
                 return null;
             }
 
-            if (!parents.some((p) => p.noteId === parentNoteId)) {
+            if (!parents.some(p => p.noteId === parentNoteId) || (i === path.length - 1 && parentNoteId !== 'root')) {
                 if (logErrors) {
                     const parent = froca.getNoteFromCache(parentNoteId);
 
