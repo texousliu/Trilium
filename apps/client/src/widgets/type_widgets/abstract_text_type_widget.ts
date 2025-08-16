@@ -6,6 +6,7 @@ import contentRenderer from "../../services/content_renderer.js";
 import utils from "../../services/utils.js";
 import options from "../../services/options.js";
 import attributes from "../../services/attributes.js";
+import ckeditorPhotoswipeIntegration from "../../services/ckeditor_photoswipe_integration.js";
 
 export default class AbstractTextTypeWidget extends TypeWidget {
     doRender() {
@@ -35,7 +36,29 @@ export default class AbstractTextTypeWidget extends TypeWidget {
         const parsedImage  = await this.parseFromImage($img);
 
         if (parsedImage) {
-            appContext.tabManager.getActiveContext()?.setNote(parsedImage.noteId, { viewScope: parsedImage.viewScope });
+            // Check if this is an attachment image and PhotoSwipe is available
+            if (parsedImage.viewScope?.attachmentId) {
+                // Instead of navigating to attachment detail, trigger PhotoSwipe
+                // Check if the image is already processed by PhotoSwipe
+                const imgElement = $img[0] as HTMLImageElement;
+                
+                // Check if PhotoSwipe is integrated with this image using multiple reliable indicators
+                const hasPhotoSwipe = imgElement.classList.contains('photoswipe-enabled') || 
+                                      imgElement.hasAttribute('data-photoswipe') ||
+                                      imgElement.style.cursor === 'zoom-in';
+                
+                if (hasPhotoSwipe) {
+                    // Image has PhotoSwipe integration, trigger click to open lightbox
+                    $img.trigger('click');
+                    return;
+                }
+                
+                // Otherwise, fall back to opening attachment detail (but with improved navigation)
+                appContext.tabManager.getActiveContext()?.setNote(parsedImage.noteId, { viewScope: parsedImage.viewScope });
+            } else {
+                // Regular note image, navigate normally
+                appContext.tabManager.getActiveContext()?.setNote(parsedImage.noteId, { viewScope: parsedImage.viewScope });
+            }
         } else {
             window.open($img.prop("src"), "_blank");
         }

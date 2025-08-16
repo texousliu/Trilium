@@ -5,6 +5,7 @@
 
 import mediaViewer from './media_viewer.js';
 import galleryManager from './gallery_manager.js';
+import appContext from '../components/app_context.js';
 import type { MediaItem } from './media_viewer.js';
 import type { GalleryItem } from './gallery_manager.js';
 
@@ -97,9 +98,11 @@ class CKEditorPhotoSwipeIntegration {
             return;
         }
         
-        // Make image clickable
+        // Make image clickable and mark it as PhotoSwipe-enabled
         img.style.cursor = 'zoom-in';
         img.style.transition = 'opacity 0.2s';
+        img.classList.add('photoswipe-enabled');
+        img.setAttribute('data-photoswipe', 'true');
         
         // Store event handlers for cleanup
         const mouseEnterHandler = () => {
@@ -120,6 +123,24 @@ class CKEditorPhotoSwipeIntegration {
         
         // Store handlers for cleanup
         (img as any)._photoswipeHandlers = { mouseEnterHandler, mouseLeaveHandler };
+        
+        // Add double-click handler to prevent default navigation behavior
+        const dblClickHandler = (e: MouseEvent) => {
+            // Only prevent double-click in specific contexts to avoid breaking other features
+            if (img.closest('.attachment-detail-wrapper') || 
+                img.closest('.note-detail-editable-text') ||
+                img.closest('.note-detail-readonly-text')) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                
+                // Trigger the same behavior as single click (open lightbox)
+                img.click();
+            }
+        };
+        
+        img.addEventListener('dblclick', dblClickHandler, true); // Use capture phase to ensure we get it first
+        (img as any)._photoswipeHandlers.dblClickHandler = dblClickHandler;
         
         // Add click handler
         img.addEventListener('click', (e) => {
@@ -194,6 +215,27 @@ class CKEditorPhotoSwipeIntegration {
             }
         }, {
             onClose: () => {
+                // Check if we're in attachment detail view and need to reset viewScope
+                const activeContext = appContext.tabManager.getActiveContext();
+                if (activeContext?.viewScope?.viewMode === 'attachments') {
+                    // Get the note ID from the image source
+                    const attachmentMatch = img.src.match(/\/api\/attachments\/([A-Za-z0-9_]+)\/image\//);
+                    if (attachmentMatch) {
+                        const currentAttachmentId = activeContext.viewScope.attachmentId;
+                        if (currentAttachmentId === attachmentMatch[1]) {
+                            // Actually reset the viewScope instead of just logging
+                            try {
+                                if (activeContext.note) {
+                                    activeContext.setNote(activeContext.note.noteId, { 
+                                        viewScope: { viewMode: 'default' } 
+                                    });
+                                }
+                            } catch (error) {
+                                console.error('Failed to reset viewScope after PhotoSwipe close:', error);
+                            }
+                        }
+                    }
+                }
                 // Restore focus to the image
                 img.focus();
             }
@@ -429,6 +471,9 @@ class CKEditorPhotoSwipeIntegration {
             if (handlers) {
                 img.removeEventListener('mouseenter', handlers.mouseEnterHandler);
                 img.removeEventListener('mouseleave', handlers.mouseLeaveHandler);
+                if (handlers.dblClickHandler) {
+                    img.removeEventListener('dblclick', handlers.dblClickHandler, true);
+                }
                 delete (img as any)._photoswipeHandlers;
             }
             

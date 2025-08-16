@@ -9,6 +9,7 @@ import contentRenderer from "../services/content_renderer.js";
 import toastService from "../services/toast.js";
 import type FAttachment from "../entities/fattachment.js";
 import type { EventData } from "../components/app_context.js";
+import appContext from "../components/app_context.js";
 import mediaViewer from "../services/media_viewer.js";
 import type { MediaItem } from "../services/media_viewer.js";
 
@@ -114,7 +115,9 @@ const TPL = /*html*/`
             <div class="attachment-actions-container"></div>
             <h4 class="attachment-title"></h4>
             <div class="attachment-details"></div>
-            <div style="flex: 1 1;"></div>
+            <button class="btn btn-sm back-to-note-btn" style="margin-left: auto;" title="Back to Note">
+                <span class="bx bx-arrow-back"></span> Back to Note
+            </button>
         </div>
 
         <div class="attachment-deletion-warning alert alert-info" style="margin-top: 15px;"></div>
@@ -150,6 +153,14 @@ export default class AttachmentDetailWidget extends BasicWidget {
         this.$widget.find(".attachment-detail-wrapper").empty().append($(TPL).find(".attachment-detail-wrapper").html());
         this.$wrapper = this.$widget.find(".attachment-detail-wrapper");
         this.$wrapper.addClass(this.isFullDetail ? "full-detail" : "list-view");
+        
+        // Setup back to note button (only show in full detail mode)
+        if (this.isFullDetail) {
+            const $backBtn = this.$wrapper.find('.back-to-note-btn');
+            $backBtn.on('click', () => this.handleBackToNote());
+        } else {
+            this.$wrapper.find('.back-to-note-btn').hide();
+        }
 
         if (!this.isFullDetail) {
             const $link = await linkService.createLink(this.attachment.ownerId, {
@@ -255,6 +266,15 @@ export default class AttachmentDetailWidget extends BasicWidget {
                     console.log('Attachment image opened in lightbox');
                 },
                 onClose: () => {
+                    // Check if we're in attachment detail view and reset viewScope if needed
+                    const activeContext = appContext.tabManager.getActiveContext();
+                    if (activeContext?.viewScope?.viewMode === 'attachments' && 
+                        activeContext?.viewScope?.attachmentId === this.attachment.attachmentId) {
+                        // Reset to normal note view when closing lightbox from attachment detail
+                        activeContext.setNote(this.attachment.ownerId, { 
+                            viewScope: { viewMode: 'default' } 
+                        });
+                    }
                     // Restore focus to the image
                     $img.focus();
                 }
@@ -307,6 +327,28 @@ export default class AttachmentDetailWidget extends BasicWidget {
         }
     }
     
+    async handleBackToNote() {
+        try {
+            const activeContext = appContext.tabManager.getActiveContext();
+            if (!activeContext) {
+                console.warn('No active context available for navigation');
+                return;
+            }
+            
+            if (!this.attachment.ownerId) {
+                console.error('Cannot navigate back: no owner ID available');
+                return;
+            }
+            
+            await activeContext.setNote(this.attachment.ownerId, { 
+                viewScope: { viewMode: 'default' } 
+            });
+        } catch (error) {
+            console.error('Failed to navigate back to note:', error);
+            toastService.showError('Failed to navigate back to note');
+        }
+    }
+    
     cleanup() {
         // Remove all event handlers before cleanup
         const $contentWrapper = this.$wrapper?.find('.attachment-content-wrapper');
@@ -317,6 +359,9 @@ export default class AttachmentDetailWidget extends BasicWidget {
                 $img.off('.photoswipe');
             }
         }
+        
+        // Remove back button handler
+        this.$wrapper?.find('.back-to-note-btn').off('click');
         
         super.cleanup();
     }
