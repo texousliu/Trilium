@@ -468,8 +468,13 @@ function extractContentSnippet(noteId: string, searchTokens: string[], maxLength
             content = striptags(content);
         }
 
-        // Normalize whitespace
-        content = content.replace(/\s+/g, " ").trim();
+        // Normalize whitespace while preserving paragraph breaks
+        // First, normalize multiple newlines to double newlines (paragraph breaks)
+        content = content.replace(/\n\s*\n/g, "\n\n");
+        // Then normalize spaces within lines
+        content = content.split('\n').map(line => line.replace(/\s+/g, " ").trim()).join('\n');
+        // Finally trim the whole content
+        content = content.trim();
 
         if (!content) {
             return "";
@@ -495,21 +500,36 @@ function extractContentSnippet(noteId: string, searchTokens: string[], maxLength
         // Extract snippet
         let snippet = content.substring(snippetStart, snippetStart + maxLength);
         
-        // Try to start/end at word boundaries
-        if (snippetStart > 0) {
-            const firstSpace = snippet.indexOf(" ");
-            if (firstSpace > 0 && firstSpace < 20) {
-                snippet = snippet.substring(firstSpace + 1);
-            }
-            snippet = "..." + snippet;
-        }
-        
-        if (snippetStart + maxLength < content.length) {
-            const lastSpace = snippet.lastIndexOf(" ");
-            if (lastSpace > snippet.length - 20) {
-                snippet = snippet.substring(0, lastSpace);
-            }
+        // If snippet contains linebreaks, limit to max 4 lines and override character limit
+        const lines = snippet.split('\n');
+        if (lines.length > 4) {
+            snippet = lines.slice(0, 4).join('\n');
+            // Add ellipsis if we truncated lines
             snippet = snippet + "...";
+        } else if (lines.length > 1) {
+            // For multi-line snippets, just limit to 4 lines (keep existing snippet)
+            snippet = lines.slice(0, 4).join('\n');
+            if (lines.length > 4) {
+                snippet = snippet + "...";
+            }
+        } else {
+            // Single line content - apply original word boundary logic
+            // Try to start/end at word boundaries
+            if (snippetStart > 0) {
+                const firstSpace = snippet.search(/\s/);
+                if (firstSpace > 0 && firstSpace < 20) {
+                    snippet = snippet.substring(firstSpace + 1);
+                }
+                snippet = "..." + snippet;
+            }
+            
+            if (snippetStart + maxLength < content.length) {
+                const lastSpace = snippet.search(/\s[^\s]*$/);
+                if (lastSpace > snippet.length - 20 && lastSpace > 0) {
+                    snippet = snippet.substring(0, lastSpace);
+                }
+                snippet = snippet + "...";
+            }
         }
 
         return snippet;
@@ -574,7 +594,10 @@ function highlightSearchResults(searchResults: SearchResult[], highlightedTokens
         
         // Initialize highlighted content snippet
         if (result.contentSnippet) {
-            result.highlightedContentSnippet = escapeHtml(result.contentSnippet).replace(/[<{}]/g, "");
+            // Escape HTML but preserve newlines for later conversion to <br>
+            result.highlightedContentSnippet = escapeHtml(result.contentSnippet);
+            // Remove any stray < { } that might interfere with our highlighting markers
+            result.highlightedContentSnippet = result.highlightedContentSnippet.replace(/[<{}]/g, "");
         }
     }
 
@@ -621,7 +644,10 @@ function highlightSearchResults(searchResults: SearchResult[], highlightedTokens
         }
         
         if (result.highlightedContentSnippet) {
+            // Replace highlighting markers with HTML tags
             result.highlightedContentSnippet = result.highlightedContentSnippet.replace(/{/g, "<b>").replace(/}/g, "</b>");
+            // Convert newlines to <br> tags for HTML display
+            result.highlightedContentSnippet = result.highlightedContentSnippet.replace(/\n/g, "<br>");
         }
     }
 }
