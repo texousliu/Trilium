@@ -1,1 +1,7 @@
-{}
+{
+  "about": {
+    "title": "درباره Trilium Notes",
+    "homepage": "صفحه اصلی:",
+    "app_version": "نسخه برنامه:"
+  }
+}
