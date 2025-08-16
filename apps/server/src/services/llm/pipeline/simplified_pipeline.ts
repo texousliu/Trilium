@@ -42,16 +42,32 @@ interface PipelineConfig {
  * Simplified Chat Pipeline Implementation
  */
 export class SimplifiedChatPipeline {
-    private config: PipelineConfig;
+    private config: PipelineConfig | null = null;
     private metrics: Map<string, number> = new Map();
 
     constructor() {
-        // Load configuration from centralized service
-        this.config = {
-            maxToolIterations: configurationService.getToolConfig().maxIterations,
-            enableMetrics: configurationService.getDebugConfig().enableMetrics,
-            enableStreaming: configurationService.getStreamingConfig().enabled
-        };
+        // Configuration will be loaded lazily on first use
+    }
+
+    private getConfig(): PipelineConfig {
+        if (!this.config) {
+            try {
+                // Load configuration from centralized service
+                this.config = {
+                    maxToolIterations: configurationService.getToolConfig().maxIterations,
+                    enableMetrics: configurationService.getDebugConfig().enableMetrics,
+                    enableStreaming: configurationService.getStreamingConfig().enabled
+                };
+            } catch (error) {
+                // Use defaults if configuration not available
+                this.config = {
+                    maxToolIterations: 5,
+                    enableMetrics: false,
+                    enableStreaming: true
+                };
+            }
+        }
+        return this.config;
     }
 
     /**
@@ -83,7 +99,7 @@ export class SimplifiedChatPipeline {
             const processedResponse = await this.processResponse(finalResponse, input, logger);
             
             // Record metrics
-            if (this.config.enableMetrics) {
+            if (this.getConfig().enableMetrics) {
                 this.recordMetric('pipeline_duration', Date.now() - startTime);
             }
             
@@ -164,7 +180,7 @@ export class SimplifiedChatPipeline {
         const options: ChatCompletionOptions = {
             ...configurationService.getDefaultCompletionOptions(),
             ...input.options,
-            stream: this.config.enableStreaming && !!input.streamCallback
+            stream: this.getConfig().enableStreaming && !!input.streamCallback
         };
         
         // Add tools if enabled
@@ -219,9 +235,9 @@ export class SimplifiedChatPipeline {
         let currentMessages = [...messages];
         let iterations = 0;
         
-        while (iterations < this.config.maxToolIterations && currentResponse.tool_calls?.length) {
+        while (iterations < this.getConfig().maxToolIterations && currentResponse.tool_calls?.length) {
             iterations++;
-            logger.log(LogLevel.DEBUG, `Tool iteration ${iterations}/${this.config.maxToolIterations}`);
+            logger.log(LogLevel.DEBUG, `Tool iteration ${iterations}/${this.getConfig().maxToolIterations}`);
             
             // Add assistant message with tool calls
             currentMessages.push({
@@ -262,9 +278,9 @@ export class SimplifiedChatPipeline {
             }
         }
         
-        if (iterations >= this.config.maxToolIterations) {
+        if (iterations >= this.getConfig().maxToolIterations) {
             logger.log(LogLevel.WARN, 'Maximum tool iterations reached', {
-                iterations: this.config.maxToolIterations
+                iterations: this.getConfig().maxToolIterations
             });
         }
         
@@ -400,7 +416,7 @@ export class SimplifiedChatPipeline {
      * Record a metric
      */
     private recordMetric(name: string, value: number): void {
-        if (!this.config.enableMetrics) return;
+        if (!this.getConfig().enableMetrics) return;
         
         const current = this.metrics.get(name) || 0;
         const count = this.metrics.get(`${name}_count`) || 0;

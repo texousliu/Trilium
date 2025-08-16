@@ -195,24 +195,6 @@ describe('OllamaService', () => {
         OllamaMock.mockImplementation(() => mockOllamaInstance);
         
         service = new OllamaService();
-        
-        // Replace the formatter with a mock after construction
-        (service as any).formatter = {
-            formatMessages: vi.fn().mockReturnValue([
-                { role: 'user', content: 'Hello' }
-            ]),
-            formatResponse: vi.fn().mockReturnValue({
-                text: 'Hello! How can I help you today?',
-                provider: 'Ollama',
-                model: 'llama2',
-                usage: {
-                    promptTokens: 5,
-                    completionTokens: 10,
-                    totalTokens: 15
-                },
-                tool_calls: null
-            })
-        };
     });
 
     afterEach(() => {
@@ -220,10 +202,9 @@ describe('OllamaService', () => {
     });
 
     describe('constructor', () => {
-        it('should initialize with provider name and formatter', () => {
+        it('should initialize with provider name', () => {
             expect(service).toBeDefined();
             expect((service as any).name).toBe('Ollama');
-            expect((service as any).formatter).toBeDefined();
         });
     });
 
@@ -487,7 +468,7 @@ describe('OllamaService', () => {
             expect(result.tool_calls).toHaveLength(1);
         });
 
-        it('should format messages using the formatter', async () => {
+        it('should pass messages to Ollama client', async () => {
             vi.mocked(options.getOption).mockReturnValue('http://localhost:11434');
             
             const mockOptions = {
@@ -497,17 +478,15 @@ describe('OllamaService', () => {
             };
             vi.mocked(providers.getOllamaOptions).mockResolvedValueOnce(mockOptions);
             
-            const formattedMessages = [{ role: 'user', content: 'Hello' }];
-            (service as any).formatter.formatMessages.mockReturnValueOnce(formattedMessages);
-            
             const chatSpy = vi.spyOn(mockOllamaInstance, 'chat');
             
             await service.generateChatCompletion(messages);
             
-            expect((service as any).formatter.formatMessages).toHaveBeenCalled();
             expect(chatSpy).toHaveBeenCalledWith(
                 expect.objectContaining({
-                    messages: formattedMessages
+                    messages: expect.arrayContaining([
+                        expect.objectContaining({ role: 'user', content: 'Hello' })
+                    ])
                 })
             );
         });
