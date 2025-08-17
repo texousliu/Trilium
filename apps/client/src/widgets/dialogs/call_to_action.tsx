@@ -25,7 +25,7 @@ function CallToActionDialogComponent({ activeCallToActions }: { activeCallToActi
         <Modal
             className="call-to-action"
             size="md"
-            title="New features"
+            title={activeItem.title}
             show={shown}
             onHidden={() => setShown(false)}
             footerAlignment="between"
@@ -43,7 +43,6 @@ function CallToActionDialogComponent({ activeCallToActions }: { activeCallToActi
                 )}
             </>}
         >
-            <h4>{activeItem.title}</h4>
             <p>{activeItem.message}</p>
         </Modal>
     )

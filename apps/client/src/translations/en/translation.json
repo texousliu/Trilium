@@ -1994,9 +1994,9 @@
     "help_title": "Display more information about this screen"
   },
   "call_to_action": {
-    "next_theme_title": "The new Trilium theme is now stable",
-    "next_theme_message": "For a while now, we've been working on a new theme to give the application a more modern look.",
-    "next_theme_button": "Switch to the new Trilium theme",
+    "next_theme_title": "Try the new Trilium theme",
+    "next_theme_message": "You are currently using the legacy theme, would you like to try the new theme?",
+    "next_theme_button": "Try the new theme",
     "background_effects_title": "Background effects are now stable",
     "background_effects_message": "On Windows devices, background effects are now fully stable. The background effects adds a touch of color to the user interface by blurring the background behind it. This technique is also used in other applications such as Windows Explorer.",
     "background_effects_button": "Enable background effects"
