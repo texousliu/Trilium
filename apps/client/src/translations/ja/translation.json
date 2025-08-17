@@ -818,7 +818,8 @@
   "code_auto_read_only_size": {
     "title": "自動読み取り専用のサイズ",
     "description": "自動読み取り専用のノートサイズは、ノートが読み取り専用モード（パフォーマンス上の理由）で表示されるようになるサイズです。",
-    "unit": "文字"
+    "unit": "文字",
+    "label": "自動読み取り専用のサイズ（コードノート）"
   },
   "custom_date_time_format": {
     "title": "日付/時刻フォーマットのカスタム",
@@ -1334,5 +1335,8 @@
     "checking_integrity": "データベースの整合性をチェックしています...",
     "integrity_check_succeeded": "整合性チェックに成功 - 問題は見つかりませんでした。",
     "integrity_check_failed": "整合性チェックに失敗: {{results}}"
+  },
+  "code-editor-options": {
+    "title": "エディター"
   }
 }
