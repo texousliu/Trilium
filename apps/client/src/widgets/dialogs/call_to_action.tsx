@@ -3,6 +3,7 @@ import Button from "../react/Button";
 import Modal from "../react/Modal";
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import { CallToAction, dismissCallToAction, getCallToActions } from "./call_to_action_definitions";
+import { t } from "../../services/i18n";
 
 function CallToActionDialogComponent({ activeCallToActions }: { activeCallToActions: CallToAction[] }) {
     if (!activeCallToActions.length) {
@@ -30,7 +31,7 @@ function CallToActionDialogComponent({ activeCallToActions }: { activeCallToActi
             onHidden={() => setShown(false)}
             footerAlignment="between"
             footer={<>
-                <Button text="Dismiss" onClick={async () => {
+                <Button text={t("call_to_action.dismiss")} onClick={async () => {
                     await dismissCallToAction(activeItem.id);
                     goToNext();
                 }} />
