@@ -1,14 +1,17 @@
+import { useEffect } from "preact/hooks";
 import { t } from "../../../services/i18n";
 import FormCheckbox from "../../react/FormCheckbox";
 import FormRadioGroup from "../../react/FormRadioGroup";
 import { useTriliumOption, useTriliumOptionBool } from "../../react/hooks";
 import OptionsSection from "./components/OptionsSection";
+import { toggleBodyClass } from "../../../services/utils";
 
 export default function TextNoteSettings() {
     return (
         <>
             <FormattingToolbar />
             <EditorFeatures />
+            <HeadingStyle />
         </>
     )
 }
@@ -62,6 +65,28 @@ function EditorFeatures() {
                 name="note-completion-enabled"
                 label={t("editorfeatures.note_completion_enabled")}
                 currentValue={textNoteCompletionEnabled} onChange={setTextNoteCompletionEnabled}
+            />
+        </OptionsSection>
+    );
+}
+
+function HeadingStyle() {
+    const [ headingStyle, setHeadingStyle ] = useTriliumOption("headingStyle");
+
+    useEffect(() => {
+        toggleBodyClass("heading-style-", headingStyle);
+    }, [ headingStyle ]);
+
+    return (
+        <OptionsSection title={t("heading_style.title")}>
+            <FormRadioGroup
+                name="heading-style"
+                currentValue={headingStyle} onChange={setHeadingStyle}
+                values={[
+                    { value: "plain", label: t("heading_style.plain") },
+                    { value: "underline", label: t("heading_style.underline") },
+                    { value: "markdown", label: t("heading_style.markdown") }
+                ]}
             />
         </OptionsSection>
     );

@@ -738,6 +738,18 @@ function isLaunchBarConfig(noteId: string) {
     return ["_lbRoot", "_lbAvailableLaunchers", "_lbVisibleLaunchers", "_lbMobileRoot", "_lbMobileAvailableLaunchers", "_lbMobileVisibleLaunchers"].includes(noteId);
 }
 
+export function toggleBodyClass(prefix: string, value: string) {
+    const $body = $("body");
+    for (const clazz of Array.from($body[0].classList)) {
+        // create copy to safely iterate over while removing classes
+        if (clazz.startsWith(prefix)) {
+            $body.removeClass(clazz);
+        }
+    }
+
+    $body.addClass(prefix + value);
+}
+
 export default {
     reloadFrontendApp,
     restartDesktopApp,
