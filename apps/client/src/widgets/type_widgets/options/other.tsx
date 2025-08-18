@@ -19,7 +19,10 @@ import { isElectron } from "../../../services/utils";
 export default function OtherSettings() {
     return (
         <>
-            {isElectron() && <SearchEngineSettings />}
+            {isElectron() && <>
+                <SearchEngineSettings />
+                <TrayOptionsSettings />
+            </>}
             <NoteErasureTimeout />
             <AttachmentErasureTimeout />
             <RevisionSnapshotInterval />
@@ -78,6 +81,21 @@ function SearchEngineSettings() {
                     placeholder={t("search_engine.custom_url_placeholder")}
                 />
             </FormGroup>
+        </OptionsSection>
+    )
+}
+
+function TrayOptionsSettings() {
+    const [ disableTray, setDisableTray ] = useTriliumOptionBool("disableTray");
+
+    return (
+        <OptionsSection title={t("tray.title")}>
+            <FormCheckbox
+                name="tray-enabled"
+                label={t("tray.enable_tray")}
+                currentValue={!disableTray}
+                onChange={trayEnabled => setDisableTray(!trayEnabled)}
+            />
         </OptionsSection>
     )
 }

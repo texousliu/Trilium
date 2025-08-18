@@ -1,15 +1,5 @@
 import TypeWidget from "./type_widget.js";
-import SearchEngineOptions from "./options/other/search_engine.js";
-import TrayOptions from "./options/other/tray.js";
-import NoteErasureTimeoutOptions from "./options/other/note_erasure_timeout.js";
-import RevisionsSnapshotIntervalOptions from "./options/other/revisions_snapshot_interval.js";
-import RevisionSnapshotsLimitOptions from "./options/other/revision_snapshots_limit.js";
-import NetworkConnectionsOptions from "./options/other/network_connections.js";
-import HtmlImportTagsOptions from "./options/other/html_import_tags.js";
-import BackendLogWidget from "./content/backend_log.js";
-import AttachmentErasureTimeoutOptions from "./options/other/attachment_erasure_timeout.js";
 import MultiFactorAuthenticationOptions from './options/multi_factor_authentication.js';
-import ShareSettingsOptions from "./options/other/share_settings.js";
 import AiSettingsOptions from "./options/ai_settings.js";
 import type FNote from "../../entities/fnote.js";
 import type NoteContextAwareWidget from "../note_context_aware_widget.js";
@@ -30,6 +20,7 @@ import ShortcutSettings from "./options/shortcuts.js";
 import TextNoteSettings from "./options/text_notes.jsx";
 import CodeNoteSettings from "./options/code_notes.jsx";
 import OtherSettings from "./options/other.jsx";
+import BackendLogWidget from "./content/backend_log.js";
 
 const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
