@@ -26,6 +26,7 @@ export default function TextNoteSettings() {
             <CodeBlockStyle />
             <TableOfContent />
             <HighlightsList />
+            <AutoReadOnlySize />
         </>
     )
 }
@@ -277,6 +278,25 @@ function HighlightsList() {
             <h5>{t("highlights_list.visibility_title")}</h5>
             <FormText>{t("highlights_list.visibility_description")}</FormText>
             <FormText>{t("highlights_list.shortcut_info")}</FormText>
+        </OptionsSection>
+    )
+}
+
+function AutoReadOnlySize() {
+    const [ autoReadonlySizeText, setAutoReadonlySizeText ] = useTriliumOption("autoReadonlySizeText");
+
+    return (
+        <OptionsSection title={t("text_auto_read_only_size.title")}>
+            <FormText>{t("text_auto_read_only_size.description")}</FormText>
+
+            <FormGroup label={t("text_auto_read_only_size.label")}>
+                <FormTextBoxWithUnit
+                    name="auto-readonly-size-text"
+                    type="number" min={0}
+                    unit={t("text_auto_read_only_size.unit")}
+                    currentValue={autoReadonlySizeText} onChange={setAutoReadonlySizeText}
+                />
+            </FormGroup>
         </OptionsSection>
     )
 }
