@@ -7,11 +7,12 @@ import FormText from "../../react/FormText";
 import OptionsSection from "./components/OptionsSection";
 import TimeSelector from "./components/TimeSelector";
 import { useMemo } from "preact/hooks";
-import { useTriliumOptionBool, useTriliumOptionJson } from "../../react/hooks";
+import { useTriliumOption, useTriliumOptionBool, useTriliumOptionInt, useTriliumOptionJson } from "../../react/hooks";
 import { SANITIZER_DEFAULT_ALLOWED_TAGS } from "@triliumnext/commons";
 import FormCheckbox from "../../react/FormCheckbox";
 import FormGroup from "../../react/FormGroup";
 import search from "../../../services/search";
+import { FormTextBoxWithUnit } from "../../react/FormTextBox";
 
 export default function OtherSettings() {
     return (
@@ -19,6 +20,7 @@ export default function OtherSettings() {
             <NoteErasureTimeout />
             <AttachmentErasureTimeout />
             <RevisionSnapshotInterval />
+            <RevisionSnapshotLimit />
             <HtmlImportTags />
             <ShareSettings />
             <NetworkSettings />
@@ -86,6 +88,39 @@ function RevisionSnapshotInterval() {
                 label={t("revisions_snapshot_interval.snapshot_time_interval_label")}
                 optionValueId="revisionSnapshotTimeInterval" optionTimeScaleId="revisionSnapshotTimeIntervalTimeScale"
                 minimumSeconds={10}
+            />
+        </OptionsSection>
+    )
+}
+
+function RevisionSnapshotLimit() {
+    const [ revisionSnapshotNumberLimit, setRevisionSnapshotNumberLimit ] = useTriliumOption("revisionSnapshotNumberLimit");
+
+    return (
+        <OptionsSection title={t("revisions_snapshot_limit.note_revisions_snapshot_limit_title")}>
+            <FormText>{t("revisions_snapshot_limit.note_revisions_snapshot_limit_description")}</FormText>
+
+            <FormGroup>
+                <FormTextBoxWithUnit
+                    name="revision-snapshot-number-limit"  
+                    type="number" min={-1}
+                    currentValue={revisionSnapshotNumberLimit}
+                    unit={t("revisions_snapshot_limit.snapshot_number_limit_unit")}
+                    onChange={value => {
+                        const newValue = parseInt(value, 10);
+                        if (!isNaN(newValue) && newValue >= -1) {
+                            setRevisionSnapshotNumberLimit(newValue);
+                        }
+                    }}
+                />
+            </FormGroup>
+
+            <Button
+                text={t("revisions_snapshot_limit.erase_excess_revision_snapshots")}
+                onClick={async () => {
+                    await server.post("revisions/erase-all-excess-revisions");
+                    toast.showMessage(t("revisions_snapshot_limit.erase_excess_revision_snapshots_prompt"));
+                }}
             />
         </OptionsSection>
     )
