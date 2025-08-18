@@ -1,3 +1,4 @@
+import { Trans } from "react-i18next";
 import { t } from "../../../services/i18n";
 import server from "../../../services/server";
 import toast from "../../../services/toast";
@@ -11,6 +12,7 @@ export default function OtherSettings() {
         <>
             <NoteErasureTimeout />
             <AttachmentErasureTimeout />
+            <RevisionSnapshotInterval />
         </>
     )
 }
@@ -56,6 +58,25 @@ function AttachmentErasureTimeout() {
                         toast.showMessage(t("attachment_erasure_timeout.unused_attachments_erased"));
                     });
                 }}
+            />
+        </OptionsSection>
+    )
+}
+
+function RevisionSnapshotInterval() {
+    return (
+        <OptionsSection title={t("revisions_snapshot_interval.note_revisions_snapshot_interval_title")}>
+            <FormText>
+                <Trans
+                    i18nKey="revisions_snapshot_interval.note_revisions_snapshot_description"
+                    components={{ doc: <a href="https://triliumnext.github.io/Docs/Wiki/note-revisions.html" class="external" />}}
+                />
+            </FormText>
+            <TimeSelector
+                name="revision-snapshot-time-interval"
+                label={t("revisions_snapshot_interval.snapshot_time_interval_label")}
+                optionValueId="revisionSnapshotTimeInterval" optionTimeScaleId="revisionSnapshotTimeIntervalTimeScale"
+                minimumSeconds={10}
             />
         </OptionsSection>
     )

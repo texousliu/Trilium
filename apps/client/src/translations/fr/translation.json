@@ -1143,7 +1143,7 @@
   },
   "revisions_snapshot_interval": {
     "note_revisions_snapshot_interval_title": "Délai d'enregistrement automatique d'une version de note",
-    "note_revisions_snapshot_description": "Le délai d'enregistrement automatique des versions de note définit le temps avant la création automatique d'une nouvelle version de note. Consultez le <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">wiki</a> pour plus d'informations.",
+    "note_revisions_snapshot_description": "Le délai d'enregistrement automatique des versions de note définit le temps avant la création automatique d'une nouvelle version de note. Consultez le <doc>wiki</doc> pour plus d'informations.",
     "snapshot_time_interval_label": "Délai d'enregistrement automatique de version de note :"
   },
   "revisions_snapshot_limit": {
