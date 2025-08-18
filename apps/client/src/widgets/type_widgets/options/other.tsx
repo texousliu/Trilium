@@ -6,6 +6,9 @@ import Button from "../../react/Button";
 import FormText from "../../react/FormText";
 import OptionsSection from "./components/OptionsSection";
 import TimeSelector from "./components/TimeSelector";
+import { useMemo } from "preact/hooks";
+import { useTriliumOptionJson } from "../../react/hooks";
+import { SANITIZER_DEFAULT_ALLOWED_TAGS } from "@triliumnext/commons";
 
 export default function OtherSettings() {
     return (
@@ -13,6 +16,7 @@ export default function OtherSettings() {
             <NoteErasureTimeout />
             <AttachmentErasureTimeout />
             <RevisionSnapshotInterval />
+            <HtmlImportTags />
         </>
     )
 }
@@ -77,6 +81,45 @@ function RevisionSnapshotInterval() {
                 label={t("revisions_snapshot_interval.snapshot_time_interval_label")}
                 optionValueId="revisionSnapshotTimeInterval" optionTimeScaleId="revisionSnapshotTimeIntervalTimeScale"
                 minimumSeconds={10}
+            />
+        </OptionsSection>
+    )
+}
+
+function HtmlImportTags() {
+    const [ allowedHtmlTags, setAllowedHtmlTags ] = useTriliumOptionJson<readonly string[]>("allowedHtmlTags");
+
+    const parsedValue = useMemo(() => {
+        return allowedHtmlTags.join(" ");
+    }, allowedHtmlTags);
+
+    return (
+        <OptionsSection title={t("import.html_import_tags.title")}>
+            <FormText>{t("import.html_import_tags.description")}</FormText>
+
+            <textarea
+                className="allowed-html-tags"
+                spellcheck={false}
+                placeholder={t("import.html_import_tags.placeholder")}
+                style={useMemo(() => ({
+                    width: "100%",
+                    height: "150px",
+                    marginBottom: "12px",
+                    fontFamily: "var(--monospace-font-family)"
+                }), [])}
+                value={parsedValue}
+                onChange={e => {
+                    const tags = e.currentTarget.value
+                        .split(/[\n,\s]+/) // Split on newlines, commas, or spaces
+                        .map((tag) => tag.trim())
+                        .filter((tag) => tag.length > 0);
+                    setAllowedHtmlTags(tags);
+                }}
+            />
+
+            <Button
+                text={t("import.html_import_tags.reset_button")}
+                onClick={() => setAllowedHtmlTags(SANITIZER_DEFAULT_ALLOWED_TAGS)}
             />
         </OptionsSection>
     )
