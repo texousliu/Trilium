@@ -1,10 +1,4 @@
 import TypeWidget from "./type_widget.js";
-import KeyboardShortcutsOptions from "./options/shortcuts.js";
-import HeadingStyleOptions from "./options/text_notes/heading_style.js";
-import TableOfContentsOptions from "./options/text_notes/table_of_contents.js";
-import HighlightsListOptions from "./options/text_notes/highlights_list.js";
-import TextAutoReadOnlySizeOptions from "./options/text_notes/text_auto_read_only_size.js";
-import DateTimeFormatOptions from "./options/text_notes/date_time_format.js";
 import CodeEditorOptions from "./options/code_notes/code_editor.js";
 import CodeAutoReadOnlySizeOptions from "./options/code_notes/code_auto_read_only_size.js";
 import CodeMimeTypesOptions from "./options/code_notes/code_mime_types.js";
@@ -18,8 +12,6 @@ import HtmlImportTagsOptions from "./options/other/html_import_tags.js";
 import BackendLogWidget from "./content/backend_log.js";
 import AttachmentErasureTimeoutOptions from "./options/other/attachment_erasure_timeout.js";
 import MultiFactorAuthenticationOptions from './options/multi_factor_authentication.js';
-import CodeBlockOptions from "./options/text_notes/code_block.js";
-import EditorOptions from "./options/text_notes/editor.js";
 import ShareSettingsOptions from "./options/other/share_settings.js";
 import AiSettingsOptions from "./options/ai_settings.js";
 import type FNote from "../../entities/fnote.js";
@@ -27,7 +19,6 @@ import type NoteContextAwareWidget from "../note_context_aware_widget.js";
 import { t } from "../../services/i18n.js";
 import type BasicWidget from "../basic_widget.js";
 import CodeTheme from "./options/code_notes/code_theme.js";
-import EditorFeaturesOptions from "./options/text_notes/features.js";
 import type { JSX } from "preact/jsx-runtime";
 import AppearanceSettings from "./options/appearance.jsx";
 import { renderReactWidget } from "../react/ReactBasicWidget.jsx";
@@ -41,6 +32,7 @@ import SpellcheckSettings from "./options/spellcheck.js";
 import PasswordSettings from "./options/password.jsx";
 import ShortcutSettings from "./options/shortcuts.js";
 import TextNoteSettings from "./options/text_notes.jsx";
+import CodeNoteSettings from "./options/code_notes.jsx";
 
 const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -71,12 +63,7 @@ const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", ((typeof NoteContextA
     _optionsAppearance: <AppearanceSettings />,
     _optionsShortcuts: <ShortcutSettings />,
     _optionsTextNotes: <TextNoteSettings />,
-    _optionsCodeNotes: [
-        CodeEditorOptions,
-        CodeTheme,
-        CodeMimeTypesOptions,
-        CodeAutoReadOnlySizeOptions
-    ],
+    _optionsCodeNotes: <CodeNoteSettings />,
     _optionsImages: <ImageSettings />,
     _optionsSpellcheck: <SpellcheckSettings />,
     _optionsPassword: <PasswordSettings />,
