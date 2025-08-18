@@ -21,6 +21,7 @@ export default function OtherSettings() {
             <RevisionSnapshotInterval />
             <HtmlImportTags />
             <ShareSettings />
+            <NetworkSettings />
         </>
     )
 }
@@ -165,6 +166,20 @@ function ShareSettings() {
                     currentValue={showLogInShareTheme} onChange={setShowLogInShareTheme}
                 />
             </FormGroup>
+        </OptionsSection>
+    )
+}
+
+function NetworkSettings() {
+    const [ checkForUpdates, setCheckForUpdates ] = useTriliumOptionBool("checkForUpdates");
+
+    return (
+        <OptionsSection title={t("network_connections.network_connections_title")}>
+            <FormCheckbox
+                name="check-for-updates"
+                label={t("network_connections.check_for_updates")}
+                currentValue={checkForUpdates} onChange={setCheckForUpdates}
+            />
         </OptionsSection>
     )
 }
