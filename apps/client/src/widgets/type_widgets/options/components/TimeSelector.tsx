@@ -61,13 +61,13 @@ export default function TimeSelector({ name, label, includedTimeScales, optionVa
 
                         let time = parseInt(value, 10);
                         const minimumSecondsOrDefault = (minimumSeconds ?? 0);
+                        const newTime = convertTime(time, scale).toOption();
 
-                        if (Number.isNaN(time) || time < (minimumSecondsOrDefault)) {
+                        if (Number.isNaN(time) || newTime < (minimumSecondsOrDefault)) {
                             toast.showError(t("time_selector.minimum_input", { minimumSeconds: minimumSecondsOrDefault }));
                             time = minimumSecondsOrDefault;
                         }
 
-                        const newTime = convertTime(time, scale).toOption();
                         setValue(newTime);
                     }}
                 />
