@@ -1,4 +1,5 @@
 import type { ComponentChildren } from "preact";
+import { CSSProperties } from "preact/compat";
 
 type OnChangeListener = (newValue: string) => void;
 
@@ -19,15 +20,16 @@ interface ValueConfig<T, Q> {
 
 interface FormSelectProps<T, Q> extends ValueConfig<T, Q> {
     onChange: OnChangeListener;
+    style?: CSSProperties;
 }
 
 /**
  * Combobox component that takes in any object array as data. Each item of the array is rendered as an item, and the key and values are obtained by looking into the object by a specified key.
  */
-export default function FormSelect<T>(props: FormSelectProps<T, T>) {
+export default function FormSelect<T>({ onChange, style, ...restProps }: FormSelectProps<T, T>) {
     return (
-        <FormSelectBody onChange={props.onChange}>
-            <FormSelectGroup {...props} />
+        <FormSelectBody onChange={onChange} style={style}>
+            <FormSelectGroup {...restProps} />
         </FormSelectBody>
     );
 }
@@ -49,11 +51,12 @@ export function FormSelectWithGroups<T>({ values, keyProperty, titleProperty, cu
     )
 }
 
-function FormSelectBody({ children, onChange }: { children: ComponentChildren, onChange: OnChangeListener }) {
+function FormSelectBody({ children, onChange, style }: { children: ComponentChildren, onChange: OnChangeListener, style?: CSSProperties }) {
     return (
         <select
             class="form-select"
             onChange={e => onChange((e.target as HTMLInputElement).value)}
+            style={style}
         >
             {children}
         </select>

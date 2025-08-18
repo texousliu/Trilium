@@ -29,6 +29,7 @@ import PasswordSettings from "./options/password.jsx";
 import ShortcutSettings from "./options/shortcuts.js";
 import TextNoteSettings from "./options/text_notes.jsx";
 import CodeNoteSettings from "./options/code_notes.jsx";
+import OtherSettings from "./options/other.jsx";
 
 const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -68,17 +69,7 @@ const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", ((typeof NoteContextA
     _optionsBackup: <BackupSettings />,
     _optionsSync: <SyncOptions />,
     _optionsAi: [AiSettingsOptions],
-    _optionsOther: [
-        SearchEngineOptions,
-        TrayOptions,
-        NoteErasureTimeoutOptions,
-        AttachmentErasureTimeoutOptions,
-        RevisionsSnapshotIntervalOptions,
-        RevisionSnapshotsLimitOptions,
-        HtmlImportTagsOptions,
-        ShareSettingsOptions,
-        NetworkConnectionsOptions
-    ],
+    _optionsOther: <OtherSettings />,
     _optionsLocalization: <InternationalizationOptions />,
     _optionsAdvanced: <AdvancedSettings />,
     _backendLog: [
