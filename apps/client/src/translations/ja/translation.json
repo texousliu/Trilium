@@ -679,7 +679,8 @@
     "description1": "検索スクリプトは、スクリプトを実行することによって検索結果を定義することができます。標準の検索では不十分な場合に、最大限の柔軟性を提供します。",
     "description2": "検索スクリプトはノートタイプが \"code\" かつ \"JavaScript backend\" でなければならない。スクリプトは、 noteIds または note の配列を返す必要があります。",
     "example_title": "例は以下です:",
-    "example_code": "// 1. 標準検索によるプレフィルタリング\nconst candidateNotes = api.searchForNotes(\"#journal\"); \n\n// 2. カスタム検索条件の適用\nconst matchedNotes = candidateNotes\n    .filter(note => note.title.match(/[0-9]{1,2}\\. ?[0-9]{1,2}\\. ?[0-9]{4}/));\n\nreturn matchedNotes;"
+    "example_code": "// 1. 標準検索によるプレフィルタリング\nconst candidateNotes = api.searchForNotes(\"#journal\"); \n\n// 2. カスタム検索条件の適用\nconst matchedNotes = candidateNotes\n    .filter(note => note.title.match(/[0-9]{1,2}\\. ?[0-9]{1,2}\\. ?[0-9]{4}/));\n\nreturn matchedNotes;",
+    "note": "検索スクリプトと文字列検索は、互いに組み合わせることはできません。"
   },
   "include_note": {
     "placeholder_search": "ノート名で検索",
@@ -1341,6 +1342,31 @@
   },
   "search_string": {
     "title_column": "文字列検索:",
-    "search_syntax": "検索構文"
+    "search_syntax": "検索構文",
+    "also_see": "詳しくは",
+    "complete_help": "検索構文に関する完全なヘルプ",
+    "full_text_search": "テキストを入力すると全文検索が可能",
+    "label_abc": "ラベルabcを持つノートを返す",
+    "label_year": "ラベル「year」の値が「2019」と一致するノート",
+    "label_rock_pop": "rock と pop のラベルを持つノート",
+    "label_rock_or_pop": "どれかのラベルが存在すること",
+    "label_year_comparison": "数値比較（>、>=、<も含む）。",
+    "label_date_created": "過去1ヶ月以内に作成されたノート",
+    "error": "検索エラー: {{error}}",
+    "search_prefix": "検索:"
+  },
+  "delete_revisions": {
+    "delete_note_revisions": "ノートの変更履歴を削除",
+    "all_past_note_revisions": "一致したノートの過去の変更履歴がすべて削除されます。ノート自体は完全に保持されます。言い換えると、ノートのリビジョンが削除されます。"
+  },
+  "rename_note": {
+    "rename_note": "ノート名を変更",
+    "new_note_title": "新しいノート名",
+    "rename_note_title_to": "ノート名を変更",
+    "example_note": "<code>Note</code> - マッチしたノートの名前はすべて'Note'に変更",
+    "example_new_title": "<code>NEW: ${note.title}</code> - 一致したノートの名前の前に 'NEW: ' を付ける",
+    "example_date_prefix": "<code>${note.dateCreatedObj.format('MM-DD:')}: ${note.title}</code> - マッチしたノートの前にノートの作成月日を付ける",
+    "api_docs": "詳細については、 <a href='https://zadam.github.io/trilium/backend_api/Note.html'>note</a> および <a href='https://day.js.org/docs/en/display/format'>dateCreatedObj / utcDateCreatedObj properties</a> の API ドキュメントを参照してください。",
+    "evaluated_as_js_string": "与えられた値はJavaScript文字列として評価されるため、注入された<code>note</code>変数（noteは名前が変更されます）を介して動的なコンテンツで強化できます。例:"
   }
 }
