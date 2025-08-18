@@ -12,7 +12,7 @@ import { DEFAULT_PREFIX } from "../abstract_code_type_widget";
 import { MimeType } from "@triliumnext/commons";
 import mime_types from "../../../services/mime_types";
 import CheckboxList from "./components/CheckboxList";
-import { CSSProperties, memo } from "preact/compat";
+import AutoReadOnlySize from "./components/AutoReadOnlySize";
 
 const SAMPLE_MIME = "application/typescript";
 
@@ -22,6 +22,7 @@ export default function CodeNoteSettings() {
             <Editor />
             <Appearance />
             <CodeMimeTypes />
+            <AutoReadOnlySize option="autoReadonlySizeCode" label={t("code_auto_read_only_size.label")} />
         </>
     )
 }
