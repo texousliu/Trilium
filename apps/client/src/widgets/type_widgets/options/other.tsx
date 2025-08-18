@@ -10,6 +10,7 @@ export default function OtherSettings() {
     return (
         <>
             <NoteErasureTimeout />
+            <AttachmentErasureTimeout />
         </>
     )
 }
@@ -21,8 +22,7 @@ function NoteErasureTimeout() {
             <TimeSelector
                 name="erase-entities-after"
                 label={t("note_erasure_timeout.erase_notes_after")}
-                optionValueId="eraseEntitiesAfterTimeInSeconds"
-                optionTimeScaleId="eraseEntitiesAfterTimeScale"
+                optionValueId="eraseEntitiesAfterTimeInSeconds" optionTimeScaleId="eraseEntitiesAfterTimeScale"
             />
             <FormText>{t("note_erasure_timeout.manual_erasing_description")}</FormText>
             
@@ -31,6 +31,29 @@ function NoteErasureTimeout() {
                 onClick={() => {
                     server.post("notes/erase-deleted-notes-now").then(() => {
                         toast.showMessage(t("note_erasure_timeout.deleted_notes_erased"));
+                    });
+                }}
+            />
+        </OptionsSection>
+    )
+}
+
+function AttachmentErasureTimeout() {
+    return (
+        <OptionsSection title={t("attachment_erasure_timeout.attachment_erasure_timeout")}>
+            <FormText>{t("attachment_erasure_timeout.attachment_auto_deletion_description")}</FormText>
+            <TimeSelector
+                name="erase-unused-attachments-after"
+                label={t("attachment_erasure_timeout.erase_attachments_after")}
+                optionValueId="eraseUnusedAttachmentsAfterSeconds" optionTimeScaleId="eraseUnusedAttachmentsAfterTimeScale"
+            />
+            <FormText>{t("attachment_erasure_timeout.manual_erasing_description")}</FormText>
+
+            <Button
+                text={t("attachment_erasure_timeout.erase_unused_attachments_now")}
+                onClick={() => {
+                    server.post("notes/erase-unused-attachments-now").then(() => {
+                        toast.showMessage(t("attachment_erasure_timeout.unused_attachments_erased"));
                     });
                 }}
             />
