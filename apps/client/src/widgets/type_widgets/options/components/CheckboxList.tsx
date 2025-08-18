@@ -4,9 +4,10 @@ interface CheckboxListProps<T> {
     titleProperty?: keyof T;
     currentValue: string[];
     onChange: (newValues: string[]) => void;
+    columnWidth?: string;
 }
 
-export default function CheckboxList<T>({ values, keyProperty, titleProperty, currentValue, onChange }: CheckboxListProps<T>) {    
+export default function CheckboxList<T>({ values, keyProperty, titleProperty, currentValue, onChange, columnWidth }: CheckboxListProps<T>) {    
     function toggleValue(value: string) {
         if (currentValue.includes(value)) {
             // Already there, needs removing.
@@ -18,7 +19,7 @@ export default function CheckboxList<T>({ values, keyProperty, titleProperty, cu
     }
 
     return (
-        <ul style={{ listStyleType: "none", marginBottom: 0, columnWidth: "400px" }}>
+        <ul style={{ listStyleType: "none", marginBottom: 0, columnWidth: columnWidth ?? "400px" }}>
             {values.map(value => (
                 <li>
                     <label className="tn-checkbox">
