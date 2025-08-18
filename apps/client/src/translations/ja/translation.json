@@ -1338,5 +1338,9 @@
   },
   "code-editor-options": {
     "title": "エディター"
+  },
+  "search_string": {
+    "title_column": "文字列検索:",
+    "search_syntax": "検索構文"
   }
 }
