@@ -4,18 +4,20 @@ import FormCheckbox from "../../react/FormCheckbox";
 import FormRadioGroup from "../../react/FormRadioGroup";
 import { useTriliumOption, useTriliumOptionBool, useTriliumOptionJson } from "../../react/hooks";
 import OptionsSection from "./components/OptionsSection";
-import { toggleBodyClass } from "../../../services/utils";
+import { formatDateTime, toggleBodyClass } from "../../../services/utils";
 import FormGroup from "../../react/FormGroup";
 import Column from "../../react/Column";
 import { FormSelectGroup, FormSelectWithGroups } from "../../react/FormSelect";
-import { Themes, type Theme } from "@triliumnext/highlightjs";
+import { Themes } from "@triliumnext/highlightjs";
 import { ensureMimeTypesForHighlighting, loadHighlightingTheme } from "../../../services/syntax_highlight";
 import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
 import { getHtml } from "../../react/RawHtml";
 import { CSSProperties } from "preact/compat";
 import FormText from "../../react/FormText";
-import { FormTextBoxWithUnit } from "../../react/FormTextBox";
+import FormTextBox, { FormTextBoxWithUnit } from "../../react/FormTextBox";
 import CheckboxList from "./components/CheckboxList";
+import KeyboardShortcut from "../../react/KeyboardShortcut";
+import { Trans } from "react-i18next";
 
 export default function TextNoteSettings() {
     return (
@@ -27,6 +29,7 @@ export default function TextNoteSettings() {
             <TableOfContent />
             <HighlightsList />
             <AutoReadOnlySize />
+            <DateTimeFormatOptions />
         </>
     )
 }
@@ -296,6 +299,42 @@ function AutoReadOnlySize() {
                     unit={t("text_auto_read_only_size.unit")}
                     currentValue={autoReadonlySizeText} onChange={setAutoReadonlySizeText}
                 />
+            </FormGroup>
+        </OptionsSection>
+    )
+}
+
+function DateTimeFormatOptions() {
+    const [ customDateTimeFormat, setCustomDateTimeFormat ] = useTriliumOption("customDateTimeFormat");
+
+    return (
+        <OptionsSection title={t("custom_date_time_format.title")}>
+            <FormText>
+                <Trans
+                    i18nKey="custom_date_time_format.description"
+                    components={{
+                        shortcut: <KeyboardShortcut actionName="insertDateTimeToText" />,
+                        doc: <a href="https://day.js.org/docs/en/display/format" target="_blank" rel="noopener noreferrer" />
+                    }}
+                />
+            </FormText>
+            
+            <FormGroup className="row align-items-center">
+              <Column>
+                  <label>{t("custom_date_time_format.format_string")}</label>
+                  <FormTextBox
+                        name="custom-date-time-format"
+                        placeholder="YYYY-MM-DD HH:mm"
+                        currentValue={customDateTimeFormat || "YYYY-MM-DD HH:mm"} onChange={setCustomDateTimeFormat}
+                  />
+              </Column>
+
+              <Column>
+                <label>{t("custom_date_time_format.formatted_time")}</label>
+                <div className="formatted-date">
+                    {formatDateTime(new Date(), customDateTimeFormat)}
+                </div>
+              </Column>
             </FormGroup>
         </OptionsSection>
     )

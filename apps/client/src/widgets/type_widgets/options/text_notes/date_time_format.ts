@@ -7,10 +7,7 @@ import linkService from "../../../.././services/link.js";
 
 const TPL = /*html*/`
 <div class="options-section">
-    <h4>${t("custom_date_time_format.title")}</h4>
-
     <p class="description use-tn-links">
-        ${t("custom_date_time_format.description")}
     </p>
 
     <div class="form-group row align-items-center">
@@ -52,7 +49,7 @@ export default class DateTimeFormatOptions extends OptionsWidget {
     }
 
     async optionsLoaded(options: OptionMap) {
-        const action = await keyboardActionsService.getAction("insertDateTimeToText");
+        const action = await keyboardActionsService.getAction("");
         const shortcutKey = (action.effectiveShortcuts ?? []).join(", ");
         const $link = await linkService.createLink("_hidden/_options/_optionsShortcuts", {
             "title": shortcutKey,

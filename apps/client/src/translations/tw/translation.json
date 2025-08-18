@@ -1783,7 +1783,7 @@
   },
   "custom_date_time_format": {
     "title": "自訂日期/時間格式",
-    "description": "透過 <kbd></kbd> 或工具列自訂插入日期和時間的格式。有關可用的格式及符號，請參閱 <a href=\"https://day.js.org/docs/en/display/format\" target=\"_blank\" rel=\"noopener noreferrer\">Day.js docs</a>。",
+    "description": "透過 <shortcut /> 或工具列自訂插入日期和時間的格式。有關可用的格式及符號，請參閱 <doc>Day.js docs</doc>。",
     "format_string": "格式化字串：",
     "formatted_time": "格式化日期/時間："
   },
