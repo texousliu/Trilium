@@ -93,6 +93,8 @@ interface QuickSearchResponse {
         highlightedNotePathTitle: string;
         contentSnippet?: string;
         highlightedContentSnippet?: string;
+        attributeSnippet?: string;
+        highlightedAttributeSnippet?: string;
         icon: string;
     }>;
     error: string;
@@ -241,7 +243,12 @@ export default class QuickSearchWidget extends BasicWidget {
                         <span style="flex: 1;" class="search-result-title">${result.highlightedNotePathTitle}</span>
                     </div>`;
                 
-                // Add content snippet below the title if available
+                // Add attribute snippet (tags/attributes) below the title if available
+                if (result.highlightedAttributeSnippet) {
+                    itemHtml += `<div style="font-size: 0.75em; color: var(--muted-text-color); opacity: 0.5; margin-left: 20px; margin-top: 2px; line-height: 1.2;" class="search-result-attributes">${result.highlightedAttributeSnippet}</div>`;
+                }
+                
+                // Add content snippet below the attributes if available
                 if (result.highlightedContentSnippet) {
                     itemHtml += `<div style="font-size: 0.85em; color: var(--main-text-color); opacity: 0.7; margin-left: 20px; margin-top: 4px; line-height: 1.3;" class="search-result-content">${result.highlightedContentSnippet}</div>`;
                 }
