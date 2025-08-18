@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "preact/hooks";
+import { useEffect, useMemo, useState } from "preact/hooks";
 import { t } from "../../../services/i18n";
 import FormCheckbox from "../../react/FormCheckbox";
 import FormRadioGroup from "../../react/FormRadioGroup";
@@ -11,10 +11,10 @@ import { FormSelectGroup, FormSelectWithGroups } from "../../react/FormSelect";
 import { Themes, type Theme } from "@triliumnext/highlightjs";
 import { ensureMimeTypesForHighlighting, loadHighlightingTheme } from "../../../services/syntax_highlight";
 import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
-import { ComponentChildren } from "preact";
-import RawHtml, { getHtml } from "../../react/RawHtml";
-import { ParentComponent } from "../../react/ReactBasicWidget";
+import { getHtml } from "../../react/RawHtml";
 import { CSSProperties } from "preact/compat";
+import FormText from "../../react/FormText";
+import { FormTextBoxWithUnit } from "../../react/FormTextBox";
 
 export default function TextNoteSettings() {
     return (
@@ -23,6 +23,7 @@ export default function TextNoteSettings() {
             <EditorFeatures />
             <HeadingStyle />
             <CodeBlockStyle />
+            <TableOfContent />
         </>
     )
 }
@@ -104,7 +105,42 @@ function HeadingStyle() {
 }
 
 function CodeBlockStyle() {
-    const themes = useMemo(() => groupThemesByLightOrDark(), []);
+    const themes = useMemo(() => {
+        const darkThemes: ThemeData[] = [];
+        const lightThemes: ThemeData[] = [];
+
+        for (const [ id, theme ] of Object.entries(Themes)) {
+            const data: ThemeData = {
+                val: "default:" + id,
+                title: theme.name
+            };
+
+            if (theme.name.includes("Dark")) {
+                darkThemes.push(data);
+            } else {
+                lightThemes.push(data);
+            }
+        }
+
+        const output: FormSelectGroup<ThemeData>[] = [
+            {
+                title: "",
+                items: [{
+                    val: "none",
+                    title: t("code_block.theme_none")
+                }]
+            },
+            {
+                title: t("code_block.theme_group_light"),
+                items: lightThemes
+            },
+            {
+                title: t("code_block.theme_group_dark"),
+                items: darkThemes
+            }
+        ];
+        return output;
+    }, []);
     const [ codeBlockTheme, setCodeBlockTheme ] = useTriliumOption("codeBlockTheme");
     const [ codeBlockWordWrap, setCodeBlockWordWrap ] = useTriliumOptionBool("codeBlockWordWrap");
 
@@ -195,39 +231,24 @@ interface ThemeData {
     title: string;
 }
 
-function groupThemesByLightOrDark() {
-    const darkThemes: ThemeData[] = [];
-    const lightThemes: ThemeData[] = [];
+function TableOfContent() {
+    const [ minTocHeadings, setMinTocHeadings ] = useTriliumOption("minTocHeadings");
 
-    for (const [ id, theme ] of Object.entries(Themes)) {
-        const data: ThemeData = {
-            val: "default:" + id,
-            title: theme.name
-        };
+    return (
+        <OptionsSection title={t("table_of_contents.title")}>
+            <FormText>{t("table_of_contents.description")}</FormText>
 
-        if (theme.name.includes("Dark")) {
-            darkThemes.push(data);
-        } else {
-            lightThemes.push(data);
-        }
-    }
+            <FormGroup>
+                <FormTextBoxWithUnit
+                    type="number"
+                    min={0} max={999999999999999} step={1}
+                    unit={t("table_of_contents.unit")}
+                    currentValue={minTocHeadings} onChange={setMinTocHeadings}
+                />
+            </FormGroup>
 
-    const output: FormSelectGroup<ThemeData>[] = [
-        {
-            title: "",
-            items: [{
-                val: "none",
-                title: t("code_block.theme_none")
-            }]
-        },
-        {
-            title: t("code_block.theme_group_light"),
-            items: lightThemes
-        },
-        {
-            title: t("code_block.theme_group_dark"),
-            items: darkThemes
-        }
-    ];
-    return output;
+            <FormText>{t("table_of_contents.disable_info")}</FormText>
+            <FormText>{t("table_of_contents.shortcut_info")}</FormText>
+        </OptionsSection>
+    )
 }
