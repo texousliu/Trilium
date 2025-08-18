@@ -1,7 +1,4 @@
 import TypeWidget from "./type_widget.js";
-import CodeEditorOptions from "./options/code_notes/code_editor.js";
-import CodeAutoReadOnlySizeOptions from "./options/code_notes/code_auto_read_only_size.js";
-import CodeMimeTypesOptions from "./options/code_notes/code_mime_types.js";
 import SearchEngineOptions from "./options/other/search_engine.js";
 import TrayOptions from "./options/other/tray.js";
 import NoteErasureTimeoutOptions from "./options/other/note_erasure_timeout.js";
@@ -18,7 +15,6 @@ import type FNote from "../../entities/fnote.js";
 import type NoteContextAwareWidget from "../note_context_aware_widget.js";
 import { t } from "../../services/i18n.js";
 import type BasicWidget from "../basic_widget.js";
-import CodeTheme from "./options/code_notes/code_theme.js";
 import type { JSX } from "preact/jsx-runtime";
 import AppearanceSettings from "./options/appearance.jsx";
 import { renderReactWidget } from "../react/ReactBasicWidget.jsx";
