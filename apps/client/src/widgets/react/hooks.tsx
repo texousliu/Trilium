@@ -100,6 +100,16 @@ export function useSpacedUpdate(callback: () => Promise<void>, interval = 1000) 
     return spacedUpdateRef.current;
 }
 
+/**
+ * Allows a React component to read and write a Trilium option, while also watching for external changes.
+ * 
+ * Conceptually, `useTriliumOption` works just like `useState`, but the value is also automatically updated if
+ * the option is changed somewhere else in the client.
+ * 
+ * @param name the name of the option to listen for.
+ * @param needsRefresh whether to reload the frontend whenever the value is changed.
+ * @returns an array where the first value is the current option value and the second value is the setter.
+ */
 export function useTriliumOption(name: OptionNames, needsRefresh?: boolean): [string, (newValue: OptionValue) => Promise<void>] {
     const initialValue = options.get(name);
     const [ value, setValue ] = useState(initialValue);
@@ -127,8 +137,8 @@ export function useTriliumOption(name: OptionNames, needsRefresh?: boolean): [st
     ]
 }
 
-export function useTriliumOptionBool(name: OptionNames): [boolean, (newValue: boolean) => Promise<void>] {
-    const [ value, setValue ] = useTriliumOption(name);
+export function useTriliumOptionBool(name: OptionNames, needsRefresh?: boolean): [boolean, (newValue: boolean) => Promise<void>] {
+    const [ value, setValue ] = useTriliumOption(name, needsRefresh);
     return [
         (value === "true"),
         (newValue) => setValue(newValue ? "true" : "false")

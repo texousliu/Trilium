@@ -7,6 +7,7 @@ interface FormRadioProps {
     values: {
         value: string;
         label: string | ComponentChildren;
+        inlineDescription?: string | ComponentChildren;
     }[];
     onChange(newValue: string): void;
 }
@@ -14,9 +15,14 @@ interface FormRadioProps {
 export default function FormRadioGroup({ values, ...restProps }: FormRadioProps) {
     return (
         <>
-            {(values || []).map(({ value, label }) => (
+            {(values || []).map(({ value, label, inlineDescription }) => (
                 <div className="form-checkbox">
-                    <FormRadio value={value} label={label} {...restProps} labelClassName="form-check-label" />
+                    <FormRadio
+                        value={value}
+                        label={label} inlineDescription={inlineDescription}
+                        labelClassName="form-check-label"
+                        {...restProps}
+                    />
                 </div>
             ))}
         </>
@@ -31,7 +37,7 @@ export function FormInlineRadioGroup({ values, ...restProps }: FormRadioProps) {
     )
 }
 
-function FormRadio({ name, value, label, currentValue, onChange, labelClassName }: Omit<FormRadioProps, "values"> & { value: string, label: ComponentChildren, labelClassName?: string }) {
+function FormRadio({ name, value, label, currentValue, onChange, labelClassName, inlineDescription }: Omit<FormRadioProps, "values"> & { value: string, label: ComponentChildren, inlineDescription?: ComponentChildren, labelClassName?: string }) {
     return (
         <label className={`tn-radio ${labelClassName ?? ""}`}>
             <input
@@ -42,7 +48,9 @@ function FormRadio({ name, value, label, currentValue, onChange, labelClassName 
                 checked={value === currentValue}
                 onChange={e => onChange((e.target as HTMLInputElement).value)}
             />
-            {label}
+            {inlineDescription ?
+                <><strong>{label}</strong> - {inlineDescription}</>
+            : label}
         </label>
     )
 }

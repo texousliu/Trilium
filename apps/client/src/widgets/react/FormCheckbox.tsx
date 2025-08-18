@@ -2,7 +2,7 @@ import { Tooltip } from "bootstrap";
 import { useEffect, useRef, useMemo, useCallback } from "preact/hooks";
 import { escapeQuotes } from "../../services/utils";
 import { ComponentChildren } from "preact";
-import { memo } from "preact/compat";
+import { CSSProperties, memo } from "preact/compat";
 
 interface FormCheckboxProps {
     name: string;
@@ -14,9 +14,10 @@ interface FormCheckboxProps {
     currentValue: boolean;
     disabled?: boolean;
     onChange(newValue: boolean): void;
+    containerStyle?: CSSProperties;
 }
 
-const FormCheckbox = memo(({ name, disabled, label, currentValue, onChange, hint }: FormCheckboxProps) => {
+const FormCheckbox = memo(({ name, disabled, label, currentValue, onChange, hint, containerStyle }: FormCheckboxProps) => {
     const labelRef = useRef<HTMLLabelElement>(null);
 
     // Fix: Move useEffect outside conditional
@@ -46,7 +47,7 @@ const FormCheckbox = memo(({ name, disabled, label, currentValue, onChange, hint
     const titleText = useMemo(() => hint ? escapeQuotes(hint) : undefined, [hint]);
 
     return (
-        <div className="form-checkbox">
+        <div className="form-checkbox" style={containerStyle}>
             <label
                 className="form-check-label tn-checkbox"
                 style={labelStyle}

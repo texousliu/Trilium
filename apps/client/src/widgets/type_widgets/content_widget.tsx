@@ -40,6 +40,7 @@ import BackupSettings from "./options/backup.js";
 import SpellcheckSettings from "./options/spellcheck.js";
 import PasswordSettings from "./options/password.jsx";
 import ShortcutSettings from "./options/shortcuts.js";
+import TextNoteSettings from "./options/text_notes.jsx";
 
 const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -69,16 +70,7 @@ export type OptionPages = "_optionsAppearance" | "_optionsShortcuts" | "_options
 const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", ((typeof NoteContextAwareWidget)[] | JSX.Element)> = {
     _optionsAppearance: <AppearanceSettings />,
     _optionsShortcuts: <ShortcutSettings />,
-    _optionsTextNotes: [
-        EditorOptions,
-        EditorFeaturesOptions,
-        HeadingStyleOptions,
-        CodeBlockOptions,
-        TableOfContentsOptions,
-        HighlightsListOptions,
-        TextAutoReadOnlySizeOptions,
-        DateTimeFormatOptions
-    ],
+    _optionsTextNotes: <TextNoteSettings />,
     _optionsCodeNotes: [
         CodeEditorOptions,
         CodeTheme,
