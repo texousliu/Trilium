@@ -156,7 +156,7 @@
     "other": "其他",
     "quickSearch": "定位至快速搜尋框",
     "inPageSearch": "頁面內搜尋",
-    "title": "資料表",
+    "title": "列表",
     "newTabNoteLink": "在新分頁開啟筆記連結",
     "newTabWithActivationNoteLink": "在新分頁開啟並切換至筆記連結"
   },
@@ -362,7 +362,7 @@
     "auto_read_only_disabled": "文字 / 程式碼筆記可以在太大時自動設定為唯讀模式。您可以透過向筆記新增此標籤來對單個筆記單獨設定禁用唯讀。",
     "app_css": "標記載入至 Trilium 應用程式中的 CSS 筆記，因此可以用於修改 Trilium 的外觀。",
     "app_theme": "標記為完整的 Trilium 主題的 CSS 筆記，因此可以在 Trilium 選項中使用。",
-    "css_class": "該標籤的值將作為 CSS 類新增至樹中表示給定筆記的節點。這對於高級主題設定非常有用。可用於模板筆記。",
+    "css_class": "該標籤的值將作為 CSS 類新增至樹中表示給定筆記的節點。這對於進階主題設定非常有用。可用於模板筆記。",
     "icon_class": "該標籤的值將作為 CSS 類新增至樹中圖標上，有助於從視覺上區分筆記樹裡的筆記。比如可以是 bx bx-home——圖標來自 boxicons。可用於模板筆記。",
     "page_size": "筆記列表中每頁的項目數",
     "custom_request_handler": "請參閱<a href=\"javascript:\" data-help-page=\"custom-request-handler.html\">自訂請求處理程序</a>",
@@ -615,9 +615,9 @@
     "zoom_out": "縮小",
     "reset_zoom_level": "重置縮放級別",
     "zoom_in": "放大",
-    "configure_launchbar": "設定啟動列",
+    "configure_launchbar": "設定啟動欄",
     "show_shared_notes_subtree": "顯示分享筆記子階層",
-    "advanced": "高級",
+    "advanced": "進階",
     "open_dev_tools": "打開開發者工具",
     "open_sql_console": "打開 SQL 控制台",
     "open_sql_console_history": "打開 SQL 控制台歷史記錄",
@@ -625,11 +625,11 @@
     "show_backend_log": "顯示後台日誌",
     "reload_hint": "重新載入可以幫助解決一些視覺故障，而無需重新啟動整個應用程式。",
     "reload_frontend": "重新載入前端",
-    "show_hidden_subtree": "顯示隱藏子階層",
+    "show_hidden_subtree": "顯示隱藏的子階層",
     "show_help": "顯示說明",
     "about": "關於 TriliumNext 筆記",
     "logout": "登出",
-    "show-cheatsheet": "顯示工具表",
+    "show-cheatsheet": "顯示快捷鍵說明",
     "toggle-zen-mode": "禪模式"
   },
   "sync_status": {
@@ -654,13 +654,13 @@
     "search_in_note": "在筆記中搜尋",
     "note_source": "筆記原始碼",
     "note_attachments": "筆記附件",
-    "open_note_externally": "用外部程序打開筆記",
+    "open_note_externally": "用外部程式打開筆記",
     "open_note_externally_title": "檔案將在外部應用程式中打開並監視其更改。然後您可以將修改後的版本上傳回 Trilium。",
-    "open_note_custom": "使用自訂程序打開筆記",
+    "open_note_custom": "使用自訂程式打開筆記",
     "import_files": "匯入檔案",
     "export_note": "匯出筆記",
     "delete_note": "刪除筆記",
-    "print_note": "打印筆記",
+    "print_note": "列印筆記",
     "save_revision": "儲存筆記歷史",
     "convert_into_attachment_failed": "筆記 '{{title}}' 轉換失敗。",
     "convert_into_attachment_successful": "筆記 '{{title}}' 已成功轉換為附件。",
@@ -675,7 +675,7 @@
     "inactive": "點擊進入受保護的作業階段"
   },
   "revisions_button": {
-    "note_revisions": "筆記修改歷史"
+    "note_revisions": "筆記歷史版本"
   },
   "update_available": {
     "update_available": "有更新可用"
@@ -781,7 +781,7 @@
   },
   "note_info_widget": {
     "note_id": "筆記 ID",
-    "created": "新增時間",
+    "created": "建立時間",
     "modified": "修改時間",
     "type": "類型",
     "note_size": "筆記大小",
@@ -843,7 +843,7 @@
     "limit": "限制",
     "limit_description": "限制結果數量",
     "debug": "除錯",
-    "debug_description": "除錯將打印額外的除錯資訊至控制台，以幫助除錯複雜查詢",
+    "debug_description": "除錯將顯示額外的除錯資訊至控制台，以幫助除錯複雜查詢",
     "action": "操作",
     "search_button": "搜尋 <kbd>Enter</kbd>",
     "search_execute": "搜尋並執行操作",
@@ -1056,7 +1056,7 @@
     "theme_defined": "跟隨主題",
     "fonts": "字型",
     "main_font": "主字型",
-    "font_family": "字型家族",
+    "font_family": "字型",
     "size": "大小",
     "note_tree_font": "筆記樹字型",
     "note_detail_font": "筆記內容字型",
@@ -1097,12 +1097,12 @@
   "theme": {
     "title": "主題",
     "theme_label": "主題",
-    "override_theme_fonts_label": "覆寫主題字型",
+    "override_theme_fonts_label": "更改主題字型",
     "layout": "佈局",
     "layout-vertical-title": "垂直",
     "layout-horizontal-title": "水平",
-    "layout-vertical-description": "啟動列位於左側（預設）",
-    "layout-horizontal-description": "啟動列位於分頁欄下方，分頁欄現在是全寬的。",
+    "layout-vertical-description": "啟動欄位於左側（預設）",
+    "layout-horizontal-description": "啟動欄位於分頁欄下方，分頁欄現在是全寬的。",
     "auto_theme": "傳統（遵循系統配色方案）",
     "light_theme": "傳統（淺色）",
     "dark_theme": "傳統（深色）",
@@ -1374,7 +1374,7 @@
     "hoist-note": "聚焦筆記",
     "unhoist-note": "取消聚焦筆記",
     "edit-branch-prefix": "編輯分支前綴",
-    "advanced": "高級",
+    "advanced": "進階",
     "expand-subtree": "展開子階層",
     "collapse-subtree": "收摺子階層",
     "sort-by": "排序方式…",
@@ -1494,7 +1494,7 @@
     "search_not_executed": "尚未執行搜尋。請點擊上方的「搜尋」按鈕查看結果。"
   },
   "spacer": {
-    "configure_launchbar": "設定啟動列"
+    "configure_launchbar": "設定啟動欄"
   },
   "sql_result": {
     "no_rows": "此次查詢沒有返回任何數據"
@@ -1981,8 +1981,8 @@
     "search_subtree_description": "在目前子階層中搜尋",
     "search_history_title": "顯示搜尋歷史",
     "search_history_description": "查看搜尋記錄",
-    "configure_launch_bar_title": "設定啟動列",
-    "configure_launch_bar_description": "打開啟動列設定以新增或移除項目。"
+    "configure_launch_bar_title": "設定啟動欄",
+    "configure_launch_bar_description": "打開啟動欄設定以新增或移除項目。"
   },
   "content_renderer": {
     "open_externally": "以外部程式打開"
@@ -1994,6 +1994,10 @@
   "call_to_action": {
     "background_effects_title": "背景特效已推出穩定版本",
     "background_effects_message": "在 Windows 裝置上，背景特效現在已完全穩定。背景特效透過模糊背後的背景，為使用者介面增添一抹色彩。此技術也用於其他應用程式，例如 Windows 檔案總管。",
-    "background_effects_button": "啟用背景特效"
+    "background_effects_button": "啟用背景特效",
+    "next_theme_title": "試用新 Trilium 主題",
+    "next_theme_message": "您正在使用舊版主題，要試用新主題嗎？",
+    "next_theme_button": "試用新主題",
+    "dismiss": "關閉"
   }
 }
