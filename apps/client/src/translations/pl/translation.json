@@ -14,5 +14,28 @@
       "title": "Błąd krytyczny",
       "message": "Wystąpił krytyczny błąd uniemożliwiający uruchomienie aplikacji:\n\n{{message}}\n\nJest to spowodowane najprawdopodobniej niespodziewanym błędem skryptu. Spróbuj uruchomić aplikację ponownie w trybie bezpiecznym i zaadresuj problem."
     }
+  },
+  "add_link": {
+    "add_link": "Dodaj link"
+  },
+  "branch_prefix": {
+    "save": "Zapisz"
+  },
+  "bulk_actions": {
+    "labels": "Etykiety",
+    "notes": "Notatki",
+    "other": "Inne",
+    "relations": "Powiązania"
+  },
+  "confirm": {
+    "ok": "OK",
+    "cancel": "Anuluj"
+  },
+  "delete_notes": {
+    "cancel": "Anuluj",
+    "close": "Zamknij"
+  },
+  "export": {
+    "close": "Zamknij"
   }
 }
