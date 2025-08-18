@@ -3,7 +3,7 @@ import type { InputHTMLAttributes, RefObject } from "preact/compat";
 interface FormTextBoxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "value"> {
     id?: string;
     currentValue?: string;
-    onChange?(newValue: string, validity: ValidityState): void | false;
+    onChange?(newValue: string, validity: ValidityState): void;
     inputRef?: RefObject<HTMLInputElement>;
 }
 

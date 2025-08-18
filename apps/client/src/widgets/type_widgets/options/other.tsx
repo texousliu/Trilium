@@ -12,11 +12,14 @@ import { SANITIZER_DEFAULT_ALLOWED_TAGS } from "@triliumnext/commons";
 import FormCheckbox from "../../react/FormCheckbox";
 import FormGroup from "../../react/FormGroup";
 import search from "../../../services/search";
-import { FormTextBoxWithUnit } from "../../react/FormTextBox";
+import FormTextBox, { FormTextBoxWithUnit } from "../../react/FormTextBox";
+import FormSelect from "../../react/FormSelect";
+import { isElectron } from "../../../services/utils";
 
 export default function OtherSettings() {
     return (
         <>
+            {isElectron() && <SearchEngineSettings />}
             <NoteErasureTimeout />
             <AttachmentErasureTimeout />
             <RevisionSnapshotInterval />
@@ -25,6 +28,57 @@ export default function OtherSettings() {
             <ShareSettings />
             <NetworkSettings />
         </>
+    )
+}
+
+function SearchEngineSettings() {
+    const [ customSearchEngineName, setCustomSearchEngineName ] = useTriliumOption("customSearchEngineName");
+    const [ customSearchEngineUrl, setCustomSearchEngineUrl ] = useTriliumOption("customSearchEngineUrl");
+
+    const searchEngines = useMemo(() => {
+        return [
+            { url: "https://www.bing.com/search?q={keyword}", name: t("search_engine.bing") },
+            { url: "https://www.baidu.com/s?wd={keyword}", name: t("search_engine.baidu") },
+            { url: "https://duckduckgo.com/?q={keyword}", name: t("search_engine.duckduckgo") },
+            { url: "https://www.google.com/search?q={keyword}", name: t("search_engine.google") }
+        ];
+    }, []);
+
+    return (
+        <OptionsSection title={t("search_engine.title")}>
+            <FormText>{t("search_engine.custom_search_engine_info")}</FormText>
+
+            <FormGroup label={t("search_engine.predefined_templates_label")}>
+                <FormSelect
+                    values={searchEngines}
+                    currentValue={customSearchEngineUrl}
+                    keyProperty="url" titleProperty="name"
+                    onChange={newValue => {
+                        const searchEngine = searchEngines.find(e => e.url === newValue);
+                        if (!searchEngine) {
+                            return;
+                        }
+
+                        setCustomSearchEngineName(searchEngine.name);
+                        setCustomSearchEngineUrl(searchEngine.url);
+                    }}
+                />
+            </FormGroup>
+
+            <FormGroup label={t("search_engine.custom_name_label")}>
+                <FormTextBox
+                    currentValue={customSearchEngineName} onChange={setCustomSearchEngineName}
+                    placeholder={t("search_engine.custom_name_placeholder")}
+                />
+            </FormGroup>
+
+            <FormGroup label={t("search_engine.custom_url_label")}>
+                <FormTextBox
+                    currentValue={customSearchEngineUrl} onChange={setCustomSearchEngineUrl}
+                    placeholder={t("search_engine.custom_url_placeholder")}
+                />
+            </FormGroup>
+        </OptionsSection>
     )
 }
 
