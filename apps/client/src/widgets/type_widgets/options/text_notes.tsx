@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "preact/hooks";
 import { t } from "../../../services/i18n";
 import FormCheckbox from "../../react/FormCheckbox";
 import FormRadioGroup from "../../react/FormRadioGroup";
-import { useTriliumOption, useTriliumOptionBool } from "../../react/hooks";
+import { useTriliumOption, useTriliumOptionBool, useTriliumOptionJson } from "../../react/hooks";
 import OptionsSection from "./components/OptionsSection";
 import { toggleBodyClass } from "../../../services/utils";
 import FormGroup from "../../react/FormGroup";
@@ -15,6 +15,7 @@ import { getHtml } from "../../react/RawHtml";
 import { CSSProperties } from "preact/compat";
 import FormText from "../../react/FormText";
 import { FormTextBoxWithUnit } from "../../react/FormTextBox";
+import CheckboxList from "./components/CheckboxList";
 
 export default function TextNoteSettings() {
     return (
@@ -24,6 +25,7 @@ export default function TextNoteSettings() {
             <HeadingStyle />
             <CodeBlockStyle />
             <TableOfContent />
+            <HighlightsList />
         </>
     )
 }
@@ -249,6 +251,32 @@ function TableOfContent() {
 
             <FormText>{t("table_of_contents.disable_info")}</FormText>
             <FormText>{t("table_of_contents.shortcut_info")}</FormText>
+        </OptionsSection>
+    )
+}
+
+function HighlightsList() {
+    const [ highlightsList, setHighlightsList ] = useTriliumOptionJson<string[]>("highlightsList");
+
+    return (
+        <OptionsSection title={t("highlights_list.title")}>
+            <FormText>{t("highlights_list.description")}</FormText>
+            <CheckboxList
+                values={[
+                    { val: "bold", title: t("highlights_list.bold") },
+                    { val: "italic", title: t("highlights_list.italic") },
+                    { val: "underline", title: t("highlights_list.underline") },
+                    { val: "color", title: t("highlights_list.color") },
+                    { val: "bgColor", title: t("highlights_list.bg_color") }
+                ]}
+                keyProperty="val" titleProperty="title"
+                currentValue={highlightsList} onChange={setHighlightsList}
+            />
+            <hr />
+
+            <h5>{t("highlights_list.visibility_title")}</h5>
+            <FormText>{t("highlights_list.visibility_description")}</FormText>
+            <FormText>{t("highlights_list.shortcut_info")}</FormText>
         </OptionsSection>
     )
 }

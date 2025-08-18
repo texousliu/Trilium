@@ -1,5 +1,3 @@
-import { useEffect, useState } from "preact/hooks";
-
 interface CheckboxListProps<T> {
     values: T[];
     keyProperty: keyof T;
