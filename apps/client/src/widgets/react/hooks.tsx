@@ -68,9 +68,17 @@ export default function useTriliumEvent<T extends EventNames>(eventName: T, hand
                 return;
             }
     
-            // Remove the event handler from the array.
-            const newEventHandlers = eventHandlers.filter(e => e !== handler);
-            registeredHandlers.get(parentWidget)?.set(eventName, newEventHandlers);        
+            // Remove the event handler from the array.            
+            const newEventHandlers = eventHandlers.filter(e => e !== handler);            
+            if (newEventHandlers.length) {
+                registeredHandlers.get(parentWidget)?.set(eventName, newEventHandlers);        
+            } else {
+                registeredHandlers.get(parentWidget)?.delete(eventName);
+            }
+
+            if (!registeredHandlers.get(parentWidget)?.size) {
+                registeredHandlers.delete(parentWidget);
+            }
         };
     }, [ eventName, parentWidget, handler ]);
 }

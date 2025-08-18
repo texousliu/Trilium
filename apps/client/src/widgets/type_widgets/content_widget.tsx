@@ -7,7 +7,7 @@ import { t } from "../../services/i18n.js";
 import type BasicWidget from "../basic_widget.js";
 import type { JSX } from "preact/jsx-runtime";
 import AppearanceSettings from "./options/appearance.jsx";
-import { renderReactWidget } from "../react/ReactBasicWidget.jsx";
+import { disposeReactWidget, renderReactWidget, renderReactWidgetAtElement } from "../react/ReactBasicWidget.jsx";
 import ImageSettings from "./options/images.jsx";
 import AdvancedSettings from "./options/advanced.jsx";
 import InternationalizationOptions from "./options/i18n.jsx";
@@ -21,6 +21,7 @@ import TextNoteSettings from "./options/text_notes.jsx";
 import CodeNoteSettings from "./options/code_notes.jsx";
 import OtherSettings from "./options/other.jsx";
 import BackendLogWidget from "./content/backend_log.js";
+import { unmountComponentAtNode } from "preact/compat";
 
 const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -120,7 +121,18 @@ export default class ContentWidgetTypeWidget extends TypeWidget {
         }
 
         // React widget.
-        this.$content.append(renderReactWidget(this, contentWidgets));
+        renderReactWidgetAtElement(this, contentWidgets, this.$content[0]);
+    }
+
+    cleanup(): void {
+        if (this.noteId) {
+            const contentWidgets = (CONTENT_WIDGETS as Record<string, (typeof NoteContextAwareWidget[] | JSX.Element)>)[this.noteId];
+            if (contentWidgets && !Array.isArray(contentWidgets)) {
+                disposeReactWidget(this.$content[0]);
+            }
+        }
+
+        super.cleanup();
     }
 
 }
