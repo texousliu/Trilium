@@ -8,6 +8,7 @@ export default function TextNoteSettings() {
     return (
         <>
             <FormattingToolbar />
+            <EditorFeatures />
         </>
     )
 }
@@ -43,4 +44,25 @@ function FormattingToolbar() {
             />
         </OptionsSection>
     )
+}
+
+function EditorFeatures() {
+    const [ textNoteEmojiCompletionEnabled, setTextNoteEmojiCompletionEnabled] = useTriliumOptionBool("textNoteEmojiCompletionEnabled");
+    const [ textNoteCompletionEnabled, setTextNoteCompletionEnabled ] = useTriliumOptionBool("textNoteCompletionEnabled");
+
+    return (
+        <OptionsSection title={t("editorfeatures.title")}>
+            <FormCheckbox
+                name="emoji-completion-enabled"
+                label={t("editorfeatures.emoji_completion_enabled")}
+                currentValue={textNoteEmojiCompletionEnabled} onChange={setTextNoteEmojiCompletionEnabled}
+            /> 
+
+            <FormCheckbox
+                name="note-completion-enabled"
+                label={t("editorfeatures.note_completion_enabled")}
+                currentValue={textNoteCompletionEnabled} onChange={setTextNoteCompletionEnabled}
+            />
+        </OptionsSection>
+    );
 }
