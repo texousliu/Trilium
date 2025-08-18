@@ -539,6 +539,90 @@ function extractContentSnippet(noteId: string, searchTokens: string[], maxLength
     }
 }
 
+function extractAttributeSnippet(noteId: string, searchTokens: string[], maxLength: number = 200): string {
+    const note = becca.notes[noteId];
+    if (!note) {
+        return "";
+    }
+
+    try {
+        // Get all attributes for this note
+        const attributes = note.getAttributes();
+        if (!attributes || attributes.length === 0) {
+            return "";
+        }
+
+        let matchingAttributes: Array<{name: string, value: string, type: string}> = [];
+        
+        // Look for attributes that match the search tokens
+        for (const attr of attributes) {
+            const attrName = attr.name?.toLowerCase() || "";
+            const attrValue = attr.value?.toLowerCase() || "";
+            const attrType = attr.type || "";
+            
+            // Check if any search token matches the attribute name or value
+            const hasMatch = searchTokens.some(token => {
+                const normalizedToken = normalizeString(token.toLowerCase());
+                return attrName.includes(normalizedToken) || attrValue.includes(normalizedToken);
+            });
+            
+            if (hasMatch) {
+                matchingAttributes.push({
+                    name: attr.name || "",
+                    value: attr.value || "",
+                    type: attrType
+                });
+            }
+        }
+
+        if (matchingAttributes.length === 0) {
+            return "";
+        }
+
+        // Limit to 4 lines maximum, similar to content snippet logic
+        const lines: string[] = [];
+        for (const attr of matchingAttributes.slice(0, 4)) {
+            let line = "";
+            if (attr.type === "label") {
+                line = attr.value ? `#${attr.name}="${attr.value}"` : `#${attr.name}`;
+            } else if (attr.type === "relation") {
+                // For relations, show the target note title if possible
+                const targetNote = attr.value ? becca.notes[attr.value] : null;
+                const targetTitle = targetNote ? targetNote.title : attr.value;
+                line = `~${attr.name}="${targetTitle}"`;
+            }
+            
+            if (line) {
+                lines.push(line);
+            }
+        }
+
+        let snippet = lines.join('\n');
+        
+        // Apply length limit while preserving line structure
+        if (snippet.length > maxLength) {
+            // Try to truncate at word boundaries but keep lines intact
+            const truncated = snippet.substring(0, maxLength);
+            const lastNewline = truncated.lastIndexOf('\n');
+            
+            if (lastNewline > maxLength / 2) {
+                // If we can keep most content by truncating to last complete line
+                snippet = truncated.substring(0, lastNewline);
+            } else {
+                // Otherwise just truncate and add ellipsis
+                const lastSpace = truncated.lastIndexOf(' ');
+                snippet = truncated.substring(0, lastSpace > maxLength / 2 ? lastSpace : maxLength - 3);
+                snippet = snippet + "...";
+            }
+        }
+
+        return snippet;
+    } catch (e) {
+        log.error(`Error extracting attribute snippet for note ${noteId}: ${e}`);
+        return "";
+    }
+}
+
 function searchNotesForAutocomplete(query: string, fastSearch: boolean = true) {
     const searchContext = new SearchContext({
         fastSearch: fastSearch,
@@ -553,9 +637,10 @@ function searchNotesForAutocomplete(query: string, fastSearch: boolean = true) {
 
     const trimmed = allSearchResults.slice(0, 200);
 
-    // Extract content snippets
+    // Extract content and attribute snippets
     for (const result of trimmed) {
         result.contentSnippet = extractContentSnippet(result.noteId, searchContext.highlightedTokens);
+        result.attributeSnippet = extractAttributeSnippet(result.noteId, searchContext.highlightedTokens);
     }
 
     highlightSearchResults(trimmed, searchContext.highlightedTokens, searchContext.ignoreInternalAttributes);
@@ -569,6 +654,8 @@ function searchNotesForAutocomplete(query: string, fastSearch: boolean = true) {
             highlightedNotePathTitle: result.highlightedNotePathTitle,
             contentSnippet: result.contentSnippet,
             highlightedContentSnippet: result.highlightedContentSnippet,
+            attributeSnippet: result.attributeSnippet,
+            highlightedAttributeSnippet: result.highlightedAttributeSnippet,
             icon: icon ?? "bx bx-note"
         };
     });
@@ -598,6 +685,14 @@ function highlightSearchResults(searchResults: SearchResult[], highlightedTokens
             result.highlightedContentSnippet = escapeHtml(result.contentSnippet);
             // Remove any stray < { } that might interfere with our highlighting markers
             result.highlightedContentSnippet = result.highlightedContentSnippet.replace(/[<{}]/g, "");
+        }
+        
+        // Initialize highlighted attribute snippet
+        if (result.attributeSnippet) {
+            // Escape HTML but preserve newlines for later conversion to <br>
+            result.highlightedAttributeSnippet = escapeHtml(result.attributeSnippet);
+            // Remove any stray < { } that might interfere with our highlighting markers
+            result.highlightedAttributeSnippet = result.highlightedAttributeSnippet.replace(/[<{}]/g, "");
         }
     }
 
@@ -635,6 +730,16 @@ function highlightSearchResults(searchResults: SearchResult[], highlightedTokens
                     contentRegex.lastIndex += 2;
                 }
             }
+
+            // Highlight in attribute snippet
+            if (result.highlightedAttributeSnippet) {
+                const attributeRegex = new RegExp(escapeRegExp(token), "gi");
+                while ((match = attributeRegex.exec(normalizeString(result.highlightedAttributeSnippet))) !== null) {
+                    result.highlightedAttributeSnippet = wrapText(result.highlightedAttributeSnippet, match.index, token.length, "{", "}");
+                    // 2 characters are added, so we need to adjust the index
+                    attributeRegex.lastIndex += 2;
+                }
+            }
         }
     }
 
@@ -648,6 +753,13 @@ function highlightSearchResults(searchResults: SearchResult[], highlightedTokens
             result.highlightedContentSnippet = result.highlightedContentSnippet.replace(/{/g, "<b>").replace(/}/g, "</b>");
             // Convert newlines to <br> tags for HTML display
             result.highlightedContentSnippet = result.highlightedContentSnippet.replace(/\n/g, "<br>");
+        }
+        
+        if (result.highlightedAttributeSnippet) {
+            // Replace highlighting markers with HTML tags
+            result.highlightedAttributeSnippet = result.highlightedAttributeSnippet.replace(/{/g, "<b>").replace(/}/g, "</b>");
+            // Convert newlines to <br> tags for HTML display
+            result.highlightedAttributeSnippet = result.highlightedAttributeSnippet.replace(/\n/g, "<br>");
         }
     }
 }
