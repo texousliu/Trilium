@@ -1996,9 +1996,6 @@
     "help_title": "Afișează mai multe informații despre acest ecran"
   },
   "call_to_action": {
-    "next_theme_title": "Noua tema Trilium este stabilă",
-    "next_theme_message": "Lucrăm de ceva timp la o nouă temă, cu un aspect modern.",
-    "next_theme_button": "Testează noua temă Trilium",
     "background_effects_title": "Efectele de fundal sunt acum stabile",
     "background_effects_message": "Pe dispozitive cu Windows, efectele de fundal sunt complet stabile. Acestea adaugă un strop de culoare interfeței grafice prin estomparea fundalului din spatele ferestrei. Această tehnică este folosită și în alte aplicații precum Windows Explorer.",
     "background_effects_button": "Activează efectele de fundal"

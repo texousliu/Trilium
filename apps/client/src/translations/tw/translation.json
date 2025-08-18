@@ -1992,9 +1992,6 @@
     "help_title": "顯示關於此畫面的更多資訊"
   },
   "call_to_action": {
-    "next_theme_title": "新的 Trilium 主題已推出穩定版本",
-    "next_theme_message": "有一段時間，我們一直在設計新的主題，為了讓應用程式看起來更現代。",
-    "next_theme_button": "切換至新的 Trilium 主題",
     "background_effects_title": "背景特效已推出穩定版本",
     "background_effects_message": "在 Windows 裝置上，背景特效現在已完全穩定。背景特效透過模糊背後的背景，為使用者介面增添一抹色彩。此技術也用於其他應用程式，例如 Windows 檔案總管。",
     "background_effects_button": "啟用背景特效"

@@ -277,7 +277,8 @@
     "quickSearch": "クイックサーチにフォーカス",
     "inPageSearch": "ページ内検索",
     "showJumpToNoteDialog": "<a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">「ジャンプ先」ダイアログ</a>を表示",
-    "moveNoteUpDown": "ノートリストでノートを上/下に移動"
+    "moveNoteUpDown": "ノートリストでノートを上/下に移動",
+    "notSet": "未設定"
   },
   "import": {
     "importIntoNote": "ノートにインポート",
@@ -352,7 +353,9 @@
   },
   "relation_map_buttons": {
     "zoom_out_title": "ズームアウト",
-    "zoom_in_title": "ズームイン"
+    "zoom_in_title": "ズームイン",
+    "create_child_note_title": "新しい子ノートを作成し、関連マップに追加",
+    "reset_pan_zoom_title": "パンとズームを初期座標と倍率にリセット"
   },
   "tree-context-menu": {
     "advanced": "高度",
@@ -513,7 +516,8 @@
     "file_size": "ファイルサイズ",
     "download": "ダウンロード",
     "open": "開く",
-    "title": "ファイル"
+    "title": "ファイル",
+    "upload_new_revision": "編集履歴をアップロード"
   },
   "note_info_widget": {
     "note_id": "ノート ID",
@@ -523,14 +527,16 @@
     "note_size": "ノートサイズ",
     "calculate": "計算",
     "subtree_size": "（サブツリーサイズ: {{size}}、ノード数: {{count}}）",
-    "title": "ノート情報"
+    "title": "ノート情報",
+    "note_size_info": "ノートのサイズは、このノートに必要なストレージの概算を示します。これは、ノートの内容とそのノートの編集履歴の内容を考慮したものです。"
   },
   "image_properties": {
     "file_type": "ファイルタイプ",
     "file_size": "ファイルサイズ",
     "download": "ダウンロード",
     "open": "開く",
-    "title": "画像"
+    "title": "画像",
+    "upload_new_revision": "編集履歴をアップロード"
   },
   "revisions": {
     "download_button": "ダウンロード",
@@ -567,7 +573,8 @@
     "open_custom_client_only": "添付ファイルをプログラムから開くは、デスクトップクライアントからのみ可能です。",
     "delete_confirm": "本当に添付ファイル '{{title}}' を削除しますか？",
     "delete_success": "添付ファイル '{{title}}' は削除されました。",
-    "enter_new_name": "新しい添付ファイルの名前を入力してください"
+    "enter_new_name": "新しい添付ファイルの名前を入力してください",
+    "upload_new_revision": "編集履歴をアップロード"
   },
   "etapi": {
     "created": "作成日時",
@@ -639,7 +646,12 @@
     "parent_count": "クローンの数",
     "random": "ランダムな順番",
     "asc": "昇順（デフォルト）",
-    "desc": "降順"
+    "desc": "降順",
+    "content_and_attachments_size": "添付ファイルを含むノート内容のサイズ",
+    "content_and_attachments_and_revisions_size": "添付ファイルと編集履歴を含むノート内容のサイズ",
+    "revision_count": "編集履歴の回数",
+    "owned_label_count": "ラベルの数",
+    "owned_relation_count": "関係の数"
   },
   "table_view": {
     "sort-column-descending": "降順",
@@ -663,7 +675,11 @@
   },
   "search_script": {
     "title": "検索スクリプト:",
-    "placeholder": "ノート名で検索"
+    "placeholder": "ノート名で検索",
+    "description1": "検索スクリプトは、スクリプトを実行することによって検索結果を定義することができます。標準の検索では不十分な場合に、最大限の柔軟性を提供します。",
+    "description2": "検索スクリプトはノートタイプが \"code\" かつ \"JavaScript backend\" でなければならない。スクリプトは、 noteIds または note の配列を返す必要があります。",
+    "example_title": "例は以下です:",
+    "example_code": "// 1. 標準検索によるプレフィルタリング\nconst candidateNotes = api.searchForNotes(\"#journal\"); \n\n// 2. カスタム検索条件の適用\nconst matchedNotes = candidateNotes\n    .filter(note => note.title.match(/[0-9]{1,2}\\. ?[0-9]{1,2}\\. ?[0-9]{4}/));\n\nreturn matchedNotes;"
   },
   "include_note": {
     "placeholder_search": "ノート名で検索",
@@ -802,7 +818,8 @@
   "code_auto_read_only_size": {
     "title": "自動読み取り専用のサイズ",
     "description": "自動読み取り専用のノートサイズは、ノートが読み取り専用モード（パフォーマンス上の理由）で表示されるようになるサイズです。",
-    "unit": "文字"
+    "unit": "文字",
+    "label": "自動読み取り専用のサイズ（コードノート）"
   },
   "custom_date_time_format": {
     "title": "日付/時刻フォーマットのカスタム",
@@ -1243,5 +1260,83 @@
     "update_relation": "関係の更新",
     "relation_name": "関係の名前",
     "allowed_characters": "英数字、アンダーバー、コロンが使用可能な文字です。"
+  },
+  "revisions_button": {
+    "note_revisions": "ノートの変更履歴"
+  },
+  "note_launcher": {
+    "this_launcher_doesnt_define_target_note": "このランチャーはターゲットノートを定義していません。"
+  },
+  "zpetne_odkazy": {
+    "backlink": "{{count}} バックリンク",
+    "backlinks": "{{count}} バックリンク",
+    "relation": "関係"
+  },
+  "mobile_detail_menu": {
+    "delete_this_note": "このノートを削除",
+    "error_unrecognized_command": "認識されないコマンド {{command}}"
+  },
+  "inherited_attribute_list": {
+    "title": "継承属性",
+    "no_inherited_attributes": "継承属性ではありません。"
+  },
+  "note_map": {
+    "open_full": "拡大表示",
+    "collapse": "通常サイズに折りたたむ",
+    "title": "ノートマップ",
+    "link-distance": "リンク距離"
+  },
+  "owned_attribute_list": {
+    "owned_attributes": "所有属性"
+  },
+  "promoted_attributes": {
+    "unset-field-placeholder": "未設定",
+    "open_external_link": "外部でリンクを開く",
+    "unknown_label_type": "不明なラベルタイプ '{{type}}'",
+    "unknown_attribute_type": "不明な属性タイプ '{{type}}'",
+    "add_new_attribute": "新しい属性を追加",
+    "remove_this_attribute": "この属性を削除",
+    "remove_color": "このカラーラベルを削除"
+  },
+  "relation_map": {
+    "open_in_new_tab": "新しいタブで開く",
+    "remove_note": "ノートを削除",
+    "edit_title": "タイトルを編集",
+    "rename_note": "ノート名を変更",
+    "enter_new_title": "新しいノート名を入力:",
+    "remove_relation": "関係を削除",
+    "confirm_remove_relation": "本当にこの関係を削除しますか？",
+    "specify_new_relation_name": "新しい関係の名前（使用可能な文字: 英数字、コロン、アンダースコア）を指定:",
+    "note_not_found": "ノート {{noteId}} が見つかりません！",
+    "enter_title_of_new_note": "新しいノートのタイトルを入力",
+    "default_new_note_title": "新しいノート"
+  },
+  "database_anonymization": {
+    "title": "データベースの匿名化",
+    "full_anonymization": "完全匿名化",
+    "full_anonymization_description": "この操作により、データベースの新しいコピーが作成され、匿名化されます（すべてのノートの内容を削除し、構造と一部の非機密メタデータのみを残します）。これにより、個人データが漏洩する心配なく、デバッグ目的でオンライン共有できます。",
+    "save_fully_anonymized_database": "完全に匿名化されたデータベースを保存",
+    "light_anonymization": "軽い匿名化",
+    "light_anonymization_description": "この操作により、データベースの新しいコピーが作成され、軽い匿名化が適用されます。具体的には、すべてのノートの内容のみが削除され、タイトルと属性はそのまま残ります。さらに、カスタムJSフロントエンド/バックエンドスクリプトノートとカスタムウィジェットもそのまま残ります。これにより、問題のデバッグのためのコンテキストがより多く提供されます。",
+    "choose_anonymization": "完全に匿名化したデータベースを提供するか、軽く匿名化したデータベースを提供するかは、あなた自身が決めることができます。完全に匿名化されたDBであっても非常に有用ですが、場合によっては軽く匿名化されたDBの方がバグの特定と修正のプロセスを速めることができます。",
+    "save_lightly_anonymized_database": "軽く匿名化されたデータベースを保存",
+    "existing_anonymized_databases": "既存の匿名化データベース",
+    "creating_fully_anonymized_database": "完全に匿名化されたデータベースを作成中...",
+    "creating_lightly_anonymized_database": "軽く匿名化されたデータベースを作成中...",
+    "error_creating_anonymized_database": "匿名化データベースの作成に失敗しました。詳細はバックエンドログを確認してください",
+    "successfully_created_fully_anonymized_database": "完全に匿名化されたデータベースを {{anonymizedFilePath}} に作成",
+    "successfully_created_lightly_anonymized_database": "軽く匿名化されたデータベースを {{anonymizedFilePath}} に作成",
+    "no_anonymized_database_yet": "匿名化されたデータベースはまだありません。"
+  },
+  "database_integrity_check": {
+    "title": "データベースの整合性チェック",
+    "description": "これは、データベースがSQLiteレベルで破損がないかをチェックします。DBのサイズによっては時間がかかる場合があります。",
+    "check_button": "データベースの整合性をチェック",
+    "checking_integrity": "データベースの整合性をチェックしています...",
+    "integrity_check_succeeded": "整合性チェックに成功 - 問題は見つかりませんでした。",
+    "integrity_check_failed": "整合性チェックに失敗: {{results}}"
+  },
+  "code-editor-options": {
+    "title": "エディター"
   }
 }
