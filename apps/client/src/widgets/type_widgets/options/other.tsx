@@ -7,8 +7,11 @@ import FormText from "../../react/FormText";
 import OptionsSection from "./components/OptionsSection";
 import TimeSelector from "./components/TimeSelector";
 import { useMemo } from "preact/hooks";
-import { useTriliumOptionJson } from "../../react/hooks";
+import { useTriliumOptionBool, useTriliumOptionJson } from "../../react/hooks";
 import { SANITIZER_DEFAULT_ALLOWED_TAGS } from "@triliumnext/commons";
+import FormCheckbox from "../../react/FormCheckbox";
+import FormGroup from "../../react/FormGroup";
+import search from "../../../services/search";
 
 export default function OtherSettings() {
     return (
@@ -17,6 +20,7 @@ export default function OtherSettings() {
             <AttachmentErasureTimeout />
             <RevisionSnapshotInterval />
             <HtmlImportTags />
+            <ShareSettings />
         </>
     )
 }
@@ -121,6 +125,46 @@ function HtmlImportTags() {
                 text={t("import.html_import_tags.reset_button")}
                 onClick={() => setAllowedHtmlTags(SANITIZER_DEFAULT_ALLOWED_TAGS)}
             />
+        </OptionsSection>
+    )
+}
+
+function ShareSettings() {
+    const [ redirectBareDomain, setRedirectBareDomain ] = useTriliumOptionBool("redirectBareDomain");
+    const [ showLogInShareTheme, setShowLogInShareTheme ] = useTriliumOptionBool("showLoginInShareTheme");
+
+    return (
+        <OptionsSection title={t("share.title")}>
+            <FormGroup description={t("share.redirect_bare_domain_description")}>
+                <FormCheckbox
+                    name="redirectBareDomain"
+                    label={t(t("share.redirect_bare_domain"))}   
+                    currentValue={redirectBareDomain}
+                    onChange={async value => {
+                        if (value) {
+                            const shareRootNotes = await search.searchForNotes("#shareRoot");
+                            const sharedShareRootNote = shareRootNotes.find((note) => note.isShared());
+
+                            if (sharedShareRootNote) {
+                                toast.showMessage(t("share.share_root_found", { noteTitle: sharedShareRootNote.title }));
+                            } else if (shareRootNotes.length > 0) {
+                                toast.showError(t("share.share_root_not_shared", { noteTitle: shareRootNotes[0].title }));
+                            } else {
+                                toast.showError(t("share.share_root_not_found"));
+                            }
+                        }
+                        setRedirectBareDomain(value);
+                    }}
+                /> 
+            </FormGroup>
+
+            <FormGroup description={t("share.show_login_link_description")}>
+                <FormCheckbox
+                    name="showLoginInShareTheme"
+                    label={t("share.show_login_link")}
+                    currentValue={showLogInShareTheme} onChange={setShowLogInShareTheme}
+                />
+            </FormGroup>
         </OptionsSection>
     )
 }
