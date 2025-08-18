@@ -4,10 +4,11 @@ interface FormTextBoxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "
     id?: string;
     currentValue?: string;
     onChange?(newValue: string, validity: ValidityState): void;
+    onBlur?(newValue: string): void;
     inputRef?: RefObject<HTMLInputElement>;
 }
 
-export default function FormTextBox({ inputRef, className, type, currentValue, onChange, ...rest}: FormTextBoxProps) {
+export default function FormTextBox({ inputRef, className, type, currentValue, onChange, onBlur,...rest}: FormTextBoxProps) {
     if (type === "number" && currentValue) {
         const { min, max } = rest;
         const currentValueNum = parseInt(currentValue, 10);
@@ -24,10 +25,14 @@ export default function FormTextBox({ inputRef, className, type, currentValue, o
             className={`form-control ${className ?? ""}`}
             type={type ?? "text"}
             value={currentValue}
-            onInput={e => {
+            onInput={onChange && (e => {
                 const target = e.currentTarget;
                 onChange?.(target.value, target.validity);
-            }}
+            })}
+            onBlur={onBlur && (e => {
+                const target = e.currentTarget;
+                onBlur(target.value);
+            })}
             {...rest}
         />
     );

@@ -11,15 +11,45 @@ import { useCallback, useEffect, useState } from "preact/hooks";
 import server from "../../../services/server";
 import options from "../../../services/options";
 import dialog from "../../../services/dialog";
-import { useTriliumOptions } from "../../react/hooks";
+import useTriliumEvent from "../../react/hooks";
 
 export default function ShortcutSettings() {
-    const [ keyboardShortcuts, setKeyboardShortcuts ] = useState<KeyboardShortcut[]>([]);
+    const [ keyboardShortcuts, setKeyboardShortcuts ] = useState<KeyboardShortcut[]>([]);    
     const [ filter, setFilter ] = useState<string>();
     
     useEffect(() => {
         server.get<KeyboardShortcut[]>("keyboard-actions").then(setKeyboardShortcuts);
     }, [])
+
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        const optionNames = loadResults.getOptionNames();
+        if (!optionNames || !optionNames.length) {
+            return;
+        }
+
+        let updatedShortcuts: KeyboardShortcut[] = null;
+
+        for (const optionName of optionNames) {
+            if (!(optionName.startsWith("keyboardShortcuts"))) {
+                continue;
+            }
+
+            const newValue = options.get(optionName);
+            const actionName = getActionNameFromOptionName(optionName);
+            const correspondingShortcut = keyboardShortcuts.find(s => "actionName" in s && s.actionName === actionName);
+            if (correspondingShortcut && "effectiveShortcuts" in correspondingShortcut) {
+                correspondingShortcut.effectiveShortcuts = JSON.parse(newValue);
+
+                if (!updatedShortcuts) {
+                    updatedShortcuts = Array.from(keyboardShortcuts);
+                }
+            }
+        }
+
+        if (updatedShortcuts) {
+            setKeyboardShortcuts(updatedShortcuts);
+        }
+    });
 
     const resetShortcuts = useCallback(async () => {
         if (!(await dialog.confirm(t("shortcuts.confirm_reset")))) {
@@ -128,7 +158,8 @@ function ShortcutEditor({ keyboardShortcut: action }: { keyboardShortcut: Action
 
     return (
         <FormTextBox
-            currentValue={originalShortcut} onChange={(newShortcut) => {
+            currentValue={originalShortcut}
+            onBlur={(newShortcut) => {
                 const { actionName } = action;
                 const optionName = getOptionName(actionName);
                 const newShortcuts = newShortcut
@@ -142,6 +173,12 @@ function ShortcutEditor({ keyboardShortcut: action }: { keyboardShortcut: Action
     )
 }
 
+const PREFIX = "keyboardShortcuts";
+
 function getOptionName(actionName: string) {
-    return `keyboardShortcuts${actionName.substr(0, 1).toUpperCase()}${actionName.substr(1)}` as OptionNames;
+    return `${PREFIX}${actionName.substr(0, 1).toUpperCase()}${actionName.substr(1)}` as OptionNames;
+}
+
+function getActionNameFromOptionName(optionName: string) {
+    return optionName.at(PREFIX.length)?.toLowerCase() + optionName.substring(PREFIX.length + 1);
 }
