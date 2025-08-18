@@ -167,10 +167,9 @@ export function useTriliumOptions<T extends OptionNames>(...names: T[]) {
         values[name] = options.get(name);
     }
 
-    const setValue = (newValues: Record<T, string>) => server.put<void>("options", newValues);
     return [
         values as Record<T, string>,
-        setValue
+        options.saveMany
     ] as const;
 }
 

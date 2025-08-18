@@ -1,6 +1,6 @@
-import { ActionKeyboardShortcut, KeyboardShortcut } from "@triliumnext/commons";
+import { ActionKeyboardShortcut, KeyboardShortcut, OptionNames } from "@triliumnext/commons";
 import { t } from "../../../services/i18n";
-import { reloadFrontendApp } from "../../../services/utils";
+import { arrayEqual, reloadFrontendApp } from "../../../services/utils";
 import Button from "../../react/Button";
 import FormGroup from "../../react/FormGroup";
 import FormText from "../../react/FormText";
@@ -11,6 +11,7 @@ import { useCallback, useEffect, useState } from "preact/hooks";
 import server from "../../../services/server";
 import options from "../../../services/options";
 import dialog from "../../../services/dialog";
+import { useTriliumOptions } from "../../react/hooks";
 
 export default function ShortcutSettings() {
     const [ keyboardShortcuts, setKeyboardShortcuts ] = useState<KeyboardShortcut[]>([]);
@@ -25,13 +26,17 @@ export default function ShortcutSettings() {
             return;
         }
 
-        const newKeyboardShortcuts = [];
+        const optionsToSet: Record<string, string> = {};
         for (const keyboardShortcut of keyboardShortcuts) {
             if (!("effectiveShortcuts" in keyboardShortcut)) {
                 continue;
             }
 
+            if (!arrayEqual(keyboardShortcut.effectiveShortcuts, keyboardShortcut.defaultShortcuts)) {
+                optionsToSet[getOptionName(keyboardShortcut.actionName)] = JSON.stringify(keyboardShortcut.defaultShortcuts);
+            }
         }
+        options.saveMany(optionsToSet);
     }, [ keyboardShortcuts ]);
 
     return (
@@ -125,7 +130,7 @@ function ShortcutEditor({ keyboardShortcut: action }: { keyboardShortcut: Action
         <FormTextBox
             currentValue={originalShortcut} onChange={(newShortcut) => {
                 const { actionName } = action;
-                const optionName = `keyboardShortcuts${actionName.substr(0, 1).toUpperCase()}${actionName.substr(1)}`;
+                const optionName = getOptionName(actionName);
                 const newShortcuts = newShortcut
                     .replace("+,", "+Comma")
                     .split(",")
@@ -135,4 +140,8 @@ function ShortcutEditor({ keyboardShortcut: action }: { keyboardShortcut: Action
             }}
         />
     )
+}
+
+function getOptionName(actionName: string) {
+    return `keyboardShortcuts${actionName.substr(0, 1).toUpperCase()}${actionName.substr(1)}` as OptionNames;
 }
