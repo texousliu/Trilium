@@ -2,7 +2,7 @@ import type { ComponentChildren } from "preact";
 
 type OnChangeListener = (newValue: string) => void;
 
-interface FormSelectGroup<T> {
+export interface FormSelectGroup<T> {
     title: string;
     items: T[];
 }

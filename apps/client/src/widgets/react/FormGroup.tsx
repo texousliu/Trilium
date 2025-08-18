@@ -14,10 +14,12 @@ export default function FormGroup({ label, title, className, children, descripti
     return (
         <div className={`form-group ${className} ${disabled ? "disabled" : ""}`} title={title}
             style={{ "margin-bottom": "15px" }}>
-            <label style={{ width: "100%" }} ref={labelRef}>
+            { label
+            ? <label style={{ width: "100%" }} ref={labelRef}>
                 {label && <div style={{ "margin-bottom": "10px" }}>{label}</div> }
                 {children}
             </label>
+            : children}
 
             {description && <small className="form-text">{description}</small>}
         </div>
