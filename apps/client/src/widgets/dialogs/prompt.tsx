@@ -25,6 +25,7 @@ export interface PromptDialogOptions {
     defaultValue?: string;
     shown?: PromptShownDialogCallback;
     callback?: (value: string | null) => void;
+    readOnly?: boolean;
 }
 
 function PromptDialogComponent() {    
@@ -77,7 +78,9 @@ function PromptDialogComponent() {
                 <FormTextBox
                     name="prompt-dialog-answer"
                     inputRef={answerRef}
-                    currentValue={value} onChange={setValue} />
+                    currentValue={value} onChange={setValue}
+                    readOnly={opts.current?.readOnly}
+                />
             </FormGroup>
         </Modal>
     );

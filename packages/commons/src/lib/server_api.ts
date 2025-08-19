@@ -109,3 +109,19 @@ export interface DatabaseBackup {
 }
 
 export type ChangePasswordResponse = Response;
+
+export interface TOTPStatus {
+    set: boolean;
+}
+
+export interface TOTPGenerate {
+    success: boolean;
+    message: string;
+}
+
+export interface TOTPRecoveryKeysResponse {
+    success: boolean;
+    recoveryCodes?: string[];
+    keysExist?: boolean;
+    usedRecoveryCodes?: string[];
+}

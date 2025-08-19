@@ -1,7 +1,7 @@
 import { ComponentChildren } from "preact";
 
 interface AdmonitionProps {
-    type: "warning";
+    type: "warning" | "note" | "caution";
     children: ComponentChildren;
 }
 
