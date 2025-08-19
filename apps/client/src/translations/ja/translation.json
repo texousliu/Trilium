@@ -728,7 +728,12 @@
     "system-default": "システムのデフォルト"
   },
   "max_content_width": {
-    "reload_button": "フロントエンドをリロード"
+    "reload_button": "フロントエンドをリロード",
+    "title": "コンテンツ幅",
+    "default_description": "Triliumは、ワイドスクリーンで最大化された画面での可読性を向上させるために、デフォルトでコンテンツの最大幅を制限しています。",
+    "max_width_label": "最大コンテンツ幅",
+    "max_width_unit": "ピクセル",
+    "apply_changes_description": "コンテンツ幅の変更を適用するには、クリックしてください"
   },
   "theme": {
     "title": "アプリのテーマ",
@@ -1363,10 +1368,23 @@
     "rename_note": "ノート名を変更",
     "new_note_title": "新しいノート名",
     "rename_note_title_to": "ノート名を変更",
-    "example_note": "<code>Note</code> - マッチしたノートの名前はすべて'Note'に変更",
+    "example_note": "<code>Note</code> - マッチしたノートの名前をすべて'Note'に変更",
     "example_new_title": "<code>NEW: ${note.title}</code> - 一致したノートの名前の前に 'NEW: ' を付ける",
     "example_date_prefix": "<code>${note.dateCreatedObj.format('MM-DD:')}: ${note.title}</code> - マッチしたノートの前にノートの作成月日を付ける",
     "api_docs": "詳細については、 <a href='https://zadam.github.io/trilium/backend_api/Note.html'>note</a> および <a href='https://day.js.org/docs/en/display/format'>dateCreatedObj / utcDateCreatedObj properties</a> の API ドキュメントを参照してください。",
     "evaluated_as_js_string": "与えられた値はJavaScript文字列として評価されるため、注入された<code>note</code>変数（noteは名前が変更されます）を介して動的なコンテンツで強化できます。例:"
+  },
+  "electron_integration": {
+    "desktop-application": "デスクトップアプリケーション",
+    "native-title-bar": "ネイティブタイトルバー",
+    "native-title-bar-description": "WindowsとmacOSでは、ネイティブタイトルバーをオフにしておくと、アプリケーションがよりコンパクトに見えます。Linuxでは、ネイティブタイトルバーを表示したままの方が、他のシステムとの統一性が高まります。",
+    "background-effects": "背景効果を有効化（Windows 11のみ）",
+    "background-effects-description": "Mica効果は、アプリのウィンドウにぼかされたスタイリッシュな背景を追加し、奥行きとモダンな外観を作り出します。",
+    "restart-app-button": "アプリケーションを再起動して変更を反映",
+    "zoom-factor": "ズーム倍率"
+  },
+  "zoom_factor": {
+    "description": "ズームは CTRL+- と CTRL+= のショートカットでも操作可能。",
+    "title": "ズーム倍率（デスクトップビルドのみ）"
   }
 }
