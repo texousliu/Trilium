@@ -282,8 +282,7 @@
     "title": "Справка"
   },
   "modal": {
-    "close": "Закрыть",
-    "help_title": ""
+    "close": "Закрыть"
   },
   "import": {
     "importIntoNote": "Импортировать в заметку",
@@ -1031,7 +1030,6 @@
     "full_sync_triggered": "Полная синхронизация запущена",
     "finished-successfully": "Синхронизация успешно завершена.",
     "failed": "Синхронизация не удалась: {{message}}",
-    "filling_entity_changes": "",
     "sync_rows_filled_successfully": "Строки синхронизации успешно заполнены"
   },
   "fonts": {
@@ -1175,7 +1173,6 @@
     "partial": "{{ percentage }}% завершено",
     "retry_queued": "Примечание поставлено в очередь на повторную попытку",
     "max_notes_per_llm_query": "Макс. количество заметок на запрос",
-    "restore_provider": "",
     "reprocess_index_error": "Ошибка перестройки поискового индекса",
     "auto_refresh_notice": "Автоматически обновляется каждые {{seconds}} секунд",
     "note_queued_for_retry": "Заметка поставлена в очередь на повторную попытку",
