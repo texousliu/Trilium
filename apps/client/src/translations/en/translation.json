@@ -1253,7 +1253,12 @@
     "selected_provider": "Selected Provider",
     "selected_provider_description": "Choose the AI provider for chat and completion features",
     "select_model": "Select model...",
-    "select_provider": "Select provider..."
+    "select_provider": "Select provider...",
+    "ai_enabled": "AI features enabled",
+    "ai_disabled": "AI features disabled",
+    "no_models_found_online": "No models found. Please check your API key and settings.",
+    "no_models_found_ollama": "No Ollama models found. Please check if Ollama is running.",
+    "error_fetching": "Error fetching models: {{error}}"
   },
   "zoom_factor": {
     "title": "Zoom Factor (desktop build only)",

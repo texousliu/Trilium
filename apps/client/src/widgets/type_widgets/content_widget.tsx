@@ -1,5 +1,4 @@
 import TypeWidget from "./type_widget.js";
-import AiSettingsOptions from "./options/ai_settings.js";
 import type FNote from "../../entities/fnote.js";
 import type NoteContextAwareWidget from "../note_context_aware_widget.js";
 import { t } from "../../services/i18n.js";
@@ -21,6 +20,7 @@ import CodeNoteSettings from "./options/code_notes.jsx";
 import OtherSettings from "./options/other.jsx";
 import BackendLogWidget from "./content/backend_log.js";
 import MultiFactorAuthenticationSettings from "./options/multi_factor_authentication.js";
+import AiSettings from "./options/ai_settings.jsx";
 
 const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -59,7 +59,7 @@ const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", ((typeof NoteContextA
     _optionsEtapi: <EtapiSettings />,
     _optionsBackup: <BackupSettings />,
     _optionsSync: <SyncOptions />,
-    _optionsAi: [AiSettingsOptions],
+    _optionsAi: <AiSettings />,
     _optionsOther: <OtherSettings />,
     _optionsLocalization: <InternationalizationOptions />,
     _optionsAdvanced: <AdvancedSettings />,
