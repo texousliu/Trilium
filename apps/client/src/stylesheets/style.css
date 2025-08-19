@@ -144,6 +144,10 @@ textarea,
     pointer-events: none;
 }
 
+.form-group {
+    margin-bottom: 15px;
+}
+
 /* Add a gap between consecutive radios / check boxes */
 label.tn-radio + label.tn-radio,
 label.tn-checkbox + label.tn-checkbox {

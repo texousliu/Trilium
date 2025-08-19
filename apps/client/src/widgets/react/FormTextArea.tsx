@@ -1,11 +1,13 @@
 interface FormTextAreaProps {
+    id?: string;
     currentValue: string;
     onBlur?(newValue: string): void;
     rows: number;
 }
-export default function FormTextArea({ onBlur, rows, currentValue }: FormTextAreaProps) {
+export default function FormTextArea({ id, onBlur, rows, currentValue }: FormTextAreaProps) {
     return (
         <textarea
+            id={id}
             rows={rows}
             onBlur={(e) => {
                 onBlur?.(e.currentTarget.value);

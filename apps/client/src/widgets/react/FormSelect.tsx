@@ -19,6 +19,7 @@ interface ValueConfig<T, Q> {
 }
 
 interface FormSelectProps<T, Q> extends ValueConfig<T, Q> {
+    id?: string;
     onChange: OnChangeListener;
     style?: CSSProperties;
 }
@@ -26,9 +27,9 @@ interface FormSelectProps<T, Q> extends ValueConfig<T, Q> {
 /**
  * Combobox component that takes in any object array as data. Each item of the array is rendered as an item, and the key and values are obtained by looking into the object by a specified key.
  */
-export default function FormSelect<T>({ onChange, style, ...restProps }: FormSelectProps<T, T>) {
+export default function FormSelect<T>({ id, onChange, style, ...restProps }: FormSelectProps<T, T>) {
     return (
-        <FormSelectBody onChange={onChange} style={style}>
+        <FormSelectBody id={id} onChange={onChange} style={style}>
             <FormSelectGroup {...restProps} />
         </FormSelectBody>
     );
@@ -37,9 +38,9 @@ export default function FormSelect<T>({ onChange, style, ...restProps }: FormSel
 /**
  * Similar to {@link FormSelect}, but the top-level elements are actually groups.
  */
-export function FormSelectWithGroups<T>({ values, keyProperty, titleProperty, currentValue, onChange }: FormSelectProps<T, FormSelectGroup<T>>) {
+export function FormSelectWithGroups<T>({ id, values, keyProperty, titleProperty, currentValue, onChange }: FormSelectProps<T, FormSelectGroup<T>>) {
     return (
-        <FormSelectBody onChange={onChange}>
+        <FormSelectBody id={id} onChange={onChange}>
             {values.map(({ title, items }) => {
                 return (
                     <optgroup label={title}>
@@ -51,9 +52,10 @@ export function FormSelectWithGroups<T>({ values, keyProperty, titleProperty, cu
     )
 }
 
-function FormSelectBody({ children, onChange, style }: { children: ComponentChildren, onChange: OnChangeListener, style?: CSSProperties }) {
+function FormSelectBody({ id, children, onChange, style }: { id?: string, children: ComponentChildren, onChange: OnChangeListener, style?: CSSProperties }) {
     return (
         <select
+            id={id}
             class="form-select"
             onChange={e => onChange((e.target as HTMLInputElement).value)}
             style={style}

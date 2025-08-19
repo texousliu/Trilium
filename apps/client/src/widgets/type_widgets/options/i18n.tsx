@@ -49,8 +49,9 @@ function LocalizationOptions() {
     )
 }
 
-function LocaleSelector({ locales, currentValue, onChange }: { locales: Locale[], currentValue: string, onChange: (newLocale: string) => void }) {
+function LocaleSelector({ id, locales, currentValue, onChange }: { id?: string; locales: Locale[], currentValue: string, onChange: (newLocale: string) => void }) {
     return <FormSelect
+        id={id}
         values={locales}
         keyProperty="id" titleProperty="name"                
         currentValue={currentValue} onChange={onChange}
