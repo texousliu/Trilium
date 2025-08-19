@@ -10,6 +10,7 @@ export default function FormTextArea({ onBlur, rows, currentValue }: FormTextAre
             onBlur={(e) => {
                 onBlur?.(e.currentTarget.value);
             }}
+            style={{ width: "100%" }}
         >{currentValue}</textarea>
     )
 }
