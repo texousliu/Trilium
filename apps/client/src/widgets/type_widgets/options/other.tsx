@@ -220,7 +220,7 @@ function HtmlImportTags() {
                     fontFamily: "var(--monospace-font-family)"
                 }), [])}
                 value={parsedValue}
-                onChange={e => {
+                onBlur={e => {
                     const tags = e.currentTarget.value
                         .split(/[\n,\s]+/) // Split on newlines, commas, or spaces
                         .map((tag) => tag.trim())
