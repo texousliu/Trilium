@@ -14,15 +14,20 @@ import Button from "../../react/Button"
 import dialog from "../../../services/dialog"
 import toast from "../../../services/toast"
 import RawHtml from "../../react/RawHtml"
+import { isElectron } from "../../../services/utils"
 
 export default function MultiFactorAuthenticationSettings() {
     const [ mfaEnabled, setMfaEnabled ] = useTriliumOptionBool("mfaEnabled");
 
-    return (
-        <>
-            <EnableMultiFactor mfaEnabled={mfaEnabled} setMfaEnabled={setMfaEnabled} />
-            <MultiFactorMethod />
-        </>
+    return (!isElectron()
+        ? (
+            <>
+                <EnableMultiFactor mfaEnabled={mfaEnabled} setMfaEnabled={setMfaEnabled} />
+                { mfaEnabled && <MultiFactorMethod /> }
+            </>
+        ) : (
+            <FormText>{t("multi_factor_authentication.electron_disabled")}</FormText>
+        )
     )
 }
 
@@ -70,14 +75,6 @@ function MultiFactorMethod() {
 }
 
 function TotpSettings() {
-    return (
-        <div class="totp-options">
-            <TotpGenerateSecret />
-        </div>
-    );
-}
-
-function TotpGenerateSecret() {
     const [ totpStatus, setTotpStatus ] = useState<TOTPStatus>();
     const [ recoveryKeys, setRecoveryKeys ] = useState<string[]>();
 
