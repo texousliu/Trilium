@@ -27,7 +27,7 @@ export default function ShortcutSettings() {
             return;
         }
 
-        let updatedShortcuts: KeyboardShortcut[] = null;
+        let updatedShortcuts: (KeyboardShortcut[] | null) = null;
 
         for (const optionName of optionNames) {
             if (!(optionName.startsWith("keyboardShortcuts"))) {
@@ -58,12 +58,13 @@ export default function ShortcutSettings() {
 
         const optionsToSet: Record<string, string> = {};
         for (const keyboardShortcut of keyboardShortcuts) {
-            if (!("effectiveShortcuts" in keyboardShortcut)) {
+            if (!("effectiveShortcuts" in keyboardShortcut) || !keyboardShortcut.effectiveShortcuts) {
                 continue;
             }
 
-            if (!arrayEqual(keyboardShortcut.effectiveShortcuts, keyboardShortcut.defaultShortcuts)) {
-                optionsToSet[getOptionName(keyboardShortcut.actionName)] = JSON.stringify(keyboardShortcut.defaultShortcuts);
+            const defaultShortcuts = keyboardShortcut.defaultShortcuts ?? [];
+            if (!arrayEqual(keyboardShortcut.effectiveShortcuts, defaultShortcuts)) {
+                optionsToSet[getOptionName(keyboardShortcut.actionName)] = JSON.stringify(defaultShortcuts);
             }
         }
         options.saveMany(optionsToSet);

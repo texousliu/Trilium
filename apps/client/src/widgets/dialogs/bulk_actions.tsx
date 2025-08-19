@@ -94,7 +94,8 @@ function AvailableActionsList() {
                     <td>{ actionGroup.title }:</td>
                     {actionGroup.actions.map(({ actionName, actionTitle }) =>
                         <Button
-                            small text={actionTitle}
+                            size="small"
+                            text={actionTitle}
                             onClick={() => bulk_action.addAction("_bulkAction", actionName)}
                         />
                     )}

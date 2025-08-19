@@ -1,6 +1,6 @@
 import type { InputHTMLAttributes, RefObject } from "preact/compat";
 
-interface FormTextBoxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "value"> {
+interface FormTextBoxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "onBlur" | "value"> {
     id?: string;
     currentValue?: string;
     onChange?(newValue: string, validity: ValidityState): void;

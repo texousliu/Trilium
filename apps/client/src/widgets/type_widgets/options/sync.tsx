@@ -83,7 +83,7 @@ export function SyncTest() {
                 onClick={async () => {
                     const result = await server.post<SyncTestResponse>("sync/test");
 
-                    if (result.success) {
+                    if (result.success && result.message) {
                         toast.showMessage(result.message);
                     } else {
                         toast.showError(t("sync_2.handshake_failed", { message: result.message }));
