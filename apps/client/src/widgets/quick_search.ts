@@ -7,6 +7,7 @@ import appContext from "../components/app_context.js";
 import shortcutService from "../services/shortcuts.js";
 import { t } from "../services/i18n.js";
 import { Dropdown, Tooltip } from "bootstrap";
+import { createSearchResultHtml } from "../services/quick_search_renderer.js";
 
 const TPL = /*html*/`
 <div class="quick-search input-group input-group-sm">
@@ -236,24 +237,14 @@ export default class QuickSearchWidget extends BasicWidget {
 
                 const $item = $('<a class="dropdown-item" tabindex="0" href="javascript:">');
                 
-                // Build the display HTML with content snippet below the title
-                let itemHtml = `<div style="display: flex; flex-direction: column;">
-                    <div style="display: flex; align-items: flex-start; gap: 6px;">
-                        <span class="${result.icon}" style="flex-shrink: 0; margin-top: 1px;"></span>
-                        <span style="flex: 1;" class="search-result-title">${result.highlightedNotePathTitle}</span>
-                    </div>`;
-                
-                // Add attribute snippet (tags/attributes) below the title if available
-                if (result.highlightedAttributeSnippet) {
-                    itemHtml += `<div style="font-size: 0.75em; color: var(--muted-text-color); opacity: 0.5; margin-left: 20px; margin-top: 2px; line-height: 1.2;" class="search-result-attributes">${result.highlightedAttributeSnippet}</div>`;
-                }
-                
-                // Add content snippet below the attributes if available
-                if (result.highlightedContentSnippet) {
-                    itemHtml += `<div style="font-size: 0.85em; color: var(--main-text-color); opacity: 0.7; margin-left: 20px; margin-top: 4px; line-height: 1.3;" class="search-result-content">${result.highlightedContentSnippet}</div>`;
-                }
-                
-                itemHtml += `</div>`;
+                // Use the shared renderer for consistent display
+                const itemHtml = createSearchResultHtml({
+                    icon: result.icon,
+                    notePathTitle: result.notePathTitle,
+                    highlightedNotePathTitle: result.highlightedNotePathTitle,
+                    highlightedAttributeSnippet: result.highlightedAttributeSnippet,
+                    highlightedContentSnippet: result.highlightedContentSnippet
+                });
                 
                 $item.html(itemHtml);
                 

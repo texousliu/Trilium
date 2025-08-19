@@ -285,15 +285,19 @@ function performSearch(expression: Expression, searchContext: SearchContext, ena
 
     const noteSet = expression.execute(allNoteSet, executionContext, searchContext);
 
-    const searchResults = noteSet.notes.map((note) => {
-        const notePathArray = executionContext.noteIdToNotePath[note.noteId] || note.getBestNotePath();
+    const searchResults = noteSet.notes
+        .map((note) => {
+            const notePathArray = executionContext.noteIdToNotePath[note.noteId] || note.getBestNotePath();
 
-        if (!notePathArray) {
-            throw new Error(`Can't find note path for note ${JSON.stringify(note.getPojo())}`);
-        }
+            if (!notePathArray) {
+                // Log the orphaned note but don't throw - just skip it
+                log.info(`Skipping orphaned note without path: ${note.noteId} "${note.title}"`);
+                return null;
+            }
 
-        return new SearchResult(notePathArray);
-    });
+            return new SearchResult(notePathArray);
+        })
+        .filter(result => result !== null) as SearchResult[];
 
     for (const res of searchResults) {
         res.computeScore(searchContext.fulltextQuery, searchContext.highlightedTokens, enableFuzzyMatching);
@@ -497,6 +501,12 @@ function extractContentSnippet(noteId: string, searchTokens: string[], maxLength
             }
         }
 
+        // If no match found in content, always show the beginning of the note
+        // This ensures users always get context even when searching by tags/attributes
+        if (!matchFound) {
+            snippetStart = 0;
+        }
+
         // Extract snippet
         let snippet = content.substring(snippetStart, snippetStart + maxLength);
         
@@ -575,6 +585,24 @@ function extractAttributeSnippet(noteId: string, searchTokens: string[], maxLeng
             }
         }
 
+        // If no matching attributes found but we have attributes, show the first few
+        // This provides context even when searching didn't match attributes
+        if (matchingAttributes.length === 0 && attributes.length > 0) {
+            // Filter out internal attributes if not searching for them
+            const visibleAttributes = attributes.filter(attr => 
+                !attr.name?.startsWith("internal") && 
+                !attr.name?.startsWith("dateCreated") && 
+                !attr.name?.startsWith("dateModified")
+            );
+            
+            // Take up to 4 visible attributes
+            matchingAttributes = visibleAttributes.slice(0, 4).map(attr => ({
+                name: attr.name || "",
+                value: attr.value || "",
+                type: attr.type || ""
+            }));
+        }
+        
         if (matchingAttributes.length === 0) {
             return "";
         }

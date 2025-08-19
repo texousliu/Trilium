@@ -530,17 +530,16 @@ body.mobile .dropdown-menu .dropdown-item.submenu-open .dropdown-toggle::after {
 }
 
 /* List item */
-.jump-to-note-dialog .aa-suggestions div,
-.note-detail-empty .aa-suggestions div {
+.jump-to-note-dialog .aa-suggestions .aa-suggestion,
+.note-detail-empty .aa-suggestions .aa-suggestion {
     border-radius: 6px;
-    padding: 6px 12px;
     color: var(--menu-text-color);
     cursor: default;
 }
 
 /* Selected list item */
-.jump-to-note-dialog .aa-suggestions div.aa-cursor,
-.note-detail-empty .aa-suggestions div.aa-cursor {
+.jump-to-note-dialog .aa-suggestions .aa-suggestion.aa-cursor,
+.note-detail-empty .aa-suggestions .aa-suggestion.aa-cursor {
     background: var(--hover-item-background-color);
     color: var(--hover-item-text-color);
 }

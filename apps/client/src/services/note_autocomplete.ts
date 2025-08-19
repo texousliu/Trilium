@@ -30,6 +30,10 @@ export interface Suggestion {
     notePathTitle?: string;
     notePath?: string;
     highlightedNotePathTitle?: string;
+    contentSnippet?: string;
+    highlightedContentSnippet?: string;
+    attributeSnippet?: string;
+    highlightedAttributeSnippet?: string;
     action?: string | "create-note" | "search-notes" | "external-link" | "command";
     parentNoteId?: string;
     icon?: string;
@@ -308,11 +312,12 @@ function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
                 displayKey: "notePathTitle",
                 templates: {
                     suggestion: (suggestion) => {
+                        // Handle different suggestion types
                         if (suggestion.action === "command") {
                             let html = `<div class="command-suggestion">`;
                             html += `<span class="command-icon ${suggestion.icon || "bx bx-terminal"}"></span>`;
                             html += `<div class="command-content">`;
-                            html += `<div class="command-name">${suggestion.highlightedNotePathTitle}</div>`;
+                            html += `<div class="command-name">${suggestion.highlightedNotePathTitle || suggestion.noteTitle || ''}</div>`;
                             if (suggestion.commandDescription) {
                                 html += `<div class="command-description">${suggestion.commandDescription}</div>`;
                             }
@@ -323,7 +328,25 @@ function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
                             html += '</div>';
                             return html;
                         }
-                        return `<span class="${suggestion.icon ?? "bx bx-note"}"></span> ${suggestion.highlightedNotePathTitle}`;
+                        
+                        // For note suggestions, match Quick Search structure exactly
+                        // Title row with icon
+                        let html = `<div style="display: flex; align-items: center; gap: 6px;">`;
+                        html += `<span class="${suggestion.icon ?? "bx bx-note"}" style="flex-shrink: 0;"></span>`;
+                        html += `<span class="search-result-title" style="flex: 1;">${suggestion.highlightedNotePathTitle || ''}</span>`;
+                        html += `</div>`;
+                        
+                        // Add attribute snippet if available
+                        if (suggestion.highlightedAttributeSnippet && suggestion.highlightedAttributeSnippet.trim()) {
+                            html += `<div class="search-result-attributes" style="margin-left: 20px; margin-top: 2px;">${suggestion.highlightedAttributeSnippet}</div>`;
+                        }
+                        
+                        // Add content snippet if available
+                        if (suggestion.highlightedContentSnippet && suggestion.highlightedContentSnippet.trim()) {
+                            html += `<div class="search-result-content" style="margin-left: 20px; margin-top: 2px;">${suggestion.highlightedContentSnippet}</div>`;
+                        }
+                        
+                        return html;
                     }
                 },
                 // we can't cache identical searches because notes can be created / renamed, new recent notes can be added
