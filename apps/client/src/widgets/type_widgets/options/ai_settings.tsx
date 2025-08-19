@@ -28,9 +28,8 @@ function EnableAiSettings() {
     return (
         <>            
             <OptionsSection title={t("ai_llm.title")}>                            
-                <FormGroup description={t("ai_llm.enable_ai_description")}>
-                    <FormCheckbox
-                        name="ai-enabled"
+                <FormGroup name="ai-enabled" description={t("ai_llm.enable_ai_description")}>
+                    <FormCheckbox                        
                         label={t("ai_llm.enable_ai_features")}
                         currentValue={aiEnabled} onChange={(isEnabled) => {
                             if (isEnabled) {
@@ -56,7 +55,7 @@ function ProviderSettings() {
 
     return (
         <OptionsSection title={t("ai_llm.provider_configuration")}>
-            <FormGroup label={t("ai_llm.selected_provider")} description={t("ai_llm.selected_provider_description")}>
+            <FormGroup name="selected-provider" label={t("ai_llm.selected_provider")} description={t("ai_llm.selected_provider_description")}>
                 <FormSelect
                     values={[
                         { value: "", text: t("ai_llm.select_provider") },
@@ -103,15 +102,14 @@ function ProviderSettings() {
                     <></>
             }    
 
-            <FormGroup label={t("ai_llm.temperature")} description={t("ai_llm.temperature_description")}>
+            <FormGroup name="ai-temperature" label={t("ai_llm.temperature")} description={t("ai_llm.temperature_description")}>
                 <FormTextBox
-                    name="ai-temperature"
                     type="number" min="0" max="2" step="0.1"
                     currentValue={aiTemperature} onChange={setAiTemperature}
                 />
             </FormGroup>
 
-            <FormGroup label={t("ai_llm.system_prompt")} description={t("ai_llm.system_prompt_description")}>
+            <FormGroup name="system-prompt" label={t("ai_llm.system_prompt")} description={t("ai_llm.system_prompt_description")}>
                 <FormTextArea
                     rows={3}
                     currentValue={aiSystemPrompt} onBlur={setAiSystemPrompt}
@@ -149,7 +147,7 @@ function SingleProviderSettings({ provider, title, apiKeyDescription, baseUrlDes
                     {!isValid && <Admonition type="caution">{validationErrorMessage}</Admonition> }
 
                     {apiKeyOption && (
-                        <FormGroup label={t("ai_llm.api_key")} description={apiKeyDescription}>
+                        <FormGroup name="api-key" label={t("ai_llm.api_key")} description={apiKeyDescription}>
                             <FormTextBox
                                 type="password" autoComplete="off"
                                 currentValue={apiKey} onChange={setApiKey}
@@ -157,14 +155,14 @@ function SingleProviderSettings({ provider, title, apiKeyDescription, baseUrlDes
                         </FormGroup>
                     )}
 
-                    <FormGroup label={t("ai_llm.url")} description={baseUrlDescription}>
+                    <FormGroup name="base-url" label={t("ai_llm.url")} description={baseUrlDescription}>
                         <FormTextBox
                             currentValue={baseUrl ?? "https://api.openai.com/v1"} onChange={setBaseUrl}
                         />
                     </FormGroup>
 
                     {isValid && 
-                        <FormGroup label={t("ai_llm.model")} description={modelDescription}>
+                        <FormGroup name="model" label={t("ai_llm.model")} description={modelDescription}>
                             <ModelSelector provider={provider} baseUrl={baseUrl} modelOption={modelOption} />
                         </FormGroup>
                     }

@@ -190,6 +190,6 @@ export function useTriliumOptions<T extends OptionNames>(...names: T[]) {
  * @param prefix a prefix to add to the unique name.
  * @returns a name with the given prefix and a random alpanumeric string appended to it.
  */
-export function useUniqueName(prefix: string) {
-    return useMemo(() => prefix + "-" + utils.randomString(10), [ prefix]);
+export function useUniqueName(prefix?: string) {
+    return useMemo(() => (prefix ? prefix + "-" : "") + utils.randomString(10), [ prefix ]);
 }

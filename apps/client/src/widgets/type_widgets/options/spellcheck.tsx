@@ -39,9 +39,8 @@ function ElectronSpellcheckSettings() {
                 currentValue={spellCheckEnabled} onChange={setSpellCheckEnabled}
             />
 
-            <FormGroup label={t("spellcheck.language_code_label")} description={t("spellcheck.multiple_languages_info")}>
-                <FormTextBox                    
-                    name="spell-check-languages"
+            <FormGroup name="spell-check-languages" label={t("spellcheck.language_code_label")} description={t("spellcheck.multiple_languages_info")}>
+                <FormTextBox                                        
                     placeholder={t("spellcheck.language_code_placeholder")}
                     currentValue={spellCheckLanguageCode} onChange={setSpellCheckLanguageCode}
                 />

@@ -154,7 +154,7 @@ function CodeBlockStyle() {
     return (
         <OptionsSection title={t("highlighting.title")}>            
             <div className="row" style={{ marginBottom: "15px" }}>
-                <FormGroup className="col-md-6" label={t("highlighting.color-scheme")} style={{ marginBottom: 0 }}>
+                <FormGroup name="theme" className="col-md-6" label={t("highlighting.color-scheme")} style={{ marginBottom: 0 }}>
                     <FormSelectWithGroups
                         values={themes}
                         keyProperty="val" titleProperty="title"
@@ -244,7 +244,7 @@ function TableOfContent() {
         <OptionsSection title={t("table_of_contents.title")}>
             <FormText>{t("table_of_contents.description")}</FormText>
 
-            <FormGroup>
+            <FormGroup name="min-toc-headings">
                 <FormTextBoxWithUnit
                     type="number"
                     min={0} max={999999999999999} step={1}
@@ -300,21 +300,20 @@ function DateTimeFormatOptions() {
                 />
             </FormText>
             
-            <FormGroup className="row align-items-center">
-              <FormGroup className="col-md-6" label={t("custom_date_time_format.format_string")}>
-                  <FormTextBox
-                        name="custom-date-time-format"
+            <div className="row align-items-center">
+              <FormGroup name="custom-date-time-format" className="col-md-6" label={t("custom_date_time_format.format_string")}>
+                  <FormTextBox                        
                         placeholder="YYYY-MM-DD HH:mm"
                         currentValue={customDateTimeFormat || "YYYY-MM-DD HH:mm"} onChange={setCustomDateTimeFormat}
                   />
               </FormGroup>
 
-              <FormGroup className="col-md-6" label={t("custom_date_time_format.formatted_time")}>
-                <div className="formatted-date">
+              <FormGroup name="formatted-date" className="col-md-6" label={t("custom_date_time_format.formatted_time")}>
+                <div>
                     {formatDateTime(new Date(), customDateTimeFormat)}
                 </div>
               </FormGroup>
-            </FormGroup>
+            </div>
         </OptionsSection>
     )
 }

@@ -3,9 +3,11 @@ import { useEffect, useRef, useMemo, useCallback } from "preact/hooks";
 import { escapeQuotes } from "../../services/utils";
 import { ComponentChildren } from "preact";
 import { CSSProperties, memo } from "preact/compat";
+import { useUniqueName } from "./hooks";
 
 interface FormCheckboxProps {
     id?: string;
+    name?: string;
     label: string | ComponentChildren;
     /**
      * If set, the checkbox label will be underlined and dotted, indicating a hint. When hovered, it will show the hint text.
@@ -17,7 +19,8 @@ interface FormCheckboxProps {
     containerStyle?: CSSProperties;
 }
 
-const FormCheckbox = memo(({ id, disabled, label, currentValue, onChange, hint, containerStyle }: FormCheckboxProps) => {
+const FormCheckbox = memo(({ name, id: _id, disabled, label, currentValue, onChange, hint, containerStyle }: FormCheckboxProps) => {
+    const id = _id ?? useUniqueName(name);
     const labelRef = useRef<HTMLLabelElement>(null);
 
     // Fix: Move useEffect outside conditional

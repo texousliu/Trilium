@@ -7,7 +7,7 @@ import FormText from "../../react/FormText";
 import OptionsSection from "./components/OptionsSection";
 import TimeSelector from "./components/TimeSelector";
 import { useMemo } from "preact/hooks";
-import { useTriliumOption, useTriliumOptionBool, useTriliumOptionInt, useTriliumOptionJson } from "../../react/hooks";
+import { useTriliumOption, useTriliumOptionBool, useTriliumOptionJson } from "../../react/hooks";
 import { SANITIZER_DEFAULT_ALLOWED_TAGS } from "@triliumnext/commons";
 import FormCheckbox from "../../react/FormCheckbox";
 import FormGroup from "../../react/FormGroup";
@@ -51,7 +51,7 @@ function SearchEngineSettings() {
         <OptionsSection title={t("search_engine.title")}>
             <FormText>{t("search_engine.custom_search_engine_info")}</FormText>
 
-            <FormGroup label={t("search_engine.predefined_templates_label")}>
+            <FormGroup name="predefined-search-engine" label={t("search_engine.predefined_templates_label")}>
                 <FormSelect
                     values={searchEngines}
                     currentValue={customSearchEngineUrl}
@@ -68,14 +68,14 @@ function SearchEngineSettings() {
                 />
             </FormGroup>
 
-            <FormGroup label={t("search_engine.custom_name_label")}>
+            <FormGroup name="custom-name" label={t("search_engine.custom_name_label")}>
                 <FormTextBox
                     currentValue={customSearchEngineName} onChange={setCustomSearchEngineName}
                     placeholder={t("search_engine.custom_name_placeholder")}
                 />
             </FormGroup>
 
-            <FormGroup label={t("search_engine.custom_url_label")}>
+            <FormGroup name="custom-url" label={t("search_engine.custom_url_label")}>
                 <FormTextBox
                     currentValue={customSearchEngineUrl} onChange={setCustomSearchEngineUrl}
                     placeholder={t("search_engine.custom_url_placeholder")}
@@ -104,9 +104,9 @@ function NoteErasureTimeout() {
     return (
         <OptionsSection title={t("note_erasure_timeout.note_erasure_timeout_title")}>
             <FormText>{t("note_erasure_timeout.note_erasure_description")}</FormText>
-            <FormGroup label={t("note_erasure_timeout.erase_notes_after")}>
-                <TimeSelector
-                    name="erase-entities-after"                    
+            <FormGroup name="erase-entities-after" label={t("note_erasure_timeout.erase_notes_after")}>
+                <TimeSelector           
+                    name="erase-entities-after"         
                     optionValueId="eraseEntitiesAfterTimeInSeconds" optionTimeScaleId="eraseEntitiesAfterTimeScale"
                 />
             </FormGroup>
@@ -128,9 +128,9 @@ function AttachmentErasureTimeout() {
     return (
         <OptionsSection title={t("attachment_erasure_timeout.attachment_erasure_timeout")}>
             <FormText>{t("attachment_erasure_timeout.attachment_auto_deletion_description")}</FormText>
-            <FormGroup label={t("attachment_erasure_timeout.erase_attachments_after")}>
+            <FormGroup name="erase-unused-attachments-after" label={t("attachment_erasure_timeout.erase_attachments_after")}>
                 <TimeSelector
-                    name="erase-unused-attachments-after"                
+                    name="erase-unused-attachments-after"
                     optionValueId="eraseUnusedAttachmentsAfterSeconds" optionTimeScaleId="eraseUnusedAttachmentsAfterTimeScale"
                 />
             </FormGroup>
@@ -157,7 +157,7 @@ function RevisionSnapshotInterval() {
                     components={{ doc: <a href="https://triliumnext.github.io/Docs/Wiki/note-revisions.html" class="external" />}}
                 />
             </FormText>
-            <FormGroup label={t("revisions_snapshot_interval.snapshot_time_interval_label")}>
+            <FormGroup name="revision-snapshot-time-interval" label={t("revisions_snapshot_interval.snapshot_time_interval_label")}>
                 <TimeSelector
                     name="revision-snapshot-time-interval"
                     optionValueId="revisionSnapshotTimeInterval" optionTimeScaleId="revisionSnapshotTimeIntervalTimeScale"
@@ -175,9 +175,8 @@ function RevisionSnapshotLimit() {
         <OptionsSection title={t("revisions_snapshot_limit.note_revisions_snapshot_limit_title")}>
             <FormText>{t("revisions_snapshot_limit.note_revisions_snapshot_limit_description")}</FormText>
 
-            <FormGroup>
-                <FormTextBoxWithUnit
-                    name="revision-snapshot-number-limit"  
+            <FormGroup name="revision-snapshot-number-limit">
+                <FormTextBoxWithUnit                    
                     type="number" min={-1}
                     currentValue={revisionSnapshotNumberLimit}
                     unit={t("revisions_snapshot_limit.snapshot_number_limit_unit")}
@@ -246,9 +245,8 @@ function ShareSettings() {
 
     return (
         <OptionsSection title={t("share.title")}>
-            <FormGroup description={t("share.redirect_bare_domain_description")}>
-                <FormCheckbox
-                    name="redirectBareDomain"
+            <FormGroup name="redirectBareDomain" description={t("share.redirect_bare_domain_description")}>
+                <FormCheckbox                    
                     label={t(t("share.redirect_bare_domain"))}   
                     currentValue={redirectBareDomain}
                     onChange={async value => {
@@ -269,9 +267,8 @@ function ShareSettings() {
                 /> 
             </FormGroup>
 
-            <FormGroup description={t("share.show_login_link_description")}>
-                <FormCheckbox
-                    name="showLoginInShareTheme"
+            <FormGroup name="showLoginInShareTheme" description={t("share.show_login_link_description")}>
+                <FormCheckbox                    
                     label={t("share.show_login_link")}
                     currentValue={showLogInShareTheme} onChange={setShowLogInShareTheme}
                 />

@@ -81,9 +81,8 @@ export default function ShortcutSettings() {
                 <RawHtml html={t("shortcuts.electron_documentation")} />
             </FormText>
 
-            <FormGroup>
-                <FormTextBox
-                    name="keyboard-shortcut-filter"
+            <FormGroup name="keyboard-shortcut-filter">
+                <FormTextBox                    
                     placeholder={t("shortcuts.type_text_to_filter")}
                     currentValue={filter} onChange={(value) => setFilter(value.toLowerCase())}
                 />

@@ -72,25 +72,22 @@ function ChangePassword() {
                     toast.showError(result.message);
                 }
             }}>
-                <FormGroup label={t("password.old_password")}>
-                    <FormTextBox
-                        name="old-password"
+                <FormGroup name="old-password" label={t("password.old_password")}>
+                    <FormTextBox                        
                         type="password"
                         currentValue={oldPassword} onChange={setOldPassword}
                     />                    
                 </FormGroup>
 
-                <FormGroup label={t("password.new_password")}>
-                    <FormTextBox
-                        name="new-password1"
+                <FormGroup name="new-password1" label={t("password.new_password")}>
+                    <FormTextBox                        
                         type="password"
                         currentValue={newPassword1} onChange={setNewPassword1}
                     />
                 </FormGroup>
 
-                <FormGroup label={t("password.new_password_confirmation")}>
-                    <FormTextBox
-                        name="new-password2"
+                <FormGroup name="new-password2" label={t("password.new_password_confirmation")}>
+                    <FormTextBox                        
                         type="password"
                         currentValue={newPassword2} onChange={setNewPassword2}
                     />
@@ -114,9 +111,9 @@ function ProtectedSessionTimeout() {
                 <a class="tn-link" href="https://triliumnext.github.io/Docs/Wiki/protected-notes.html" className="external">{t("password.wiki")}</a> {t("password.for_more_info")}
             </FormText>
             
-            <FormGroup label={t("password.protected_session_timeout_label")}>
-                <TimeSelector
-                    name="protected-session-timeout"                
+            <FormGroup name="protected-session-timeout" label={t("password.protected_session_timeout_label")}>
+                <TimeSelector                    
+                    name="protected-session-timeout"
                     optionValueId="protectedSessionTimeout" optionTimeScaleId="protectedSessionTimeoutTimeScale"
                     minimumSeconds={60}
                 />

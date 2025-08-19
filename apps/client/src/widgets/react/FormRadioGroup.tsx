@@ -31,9 +31,9 @@ export default function FormRadioGroup({ values, ...restProps }: FormRadioProps)
 
 export function FormInlineRadioGroup({ values, ...restProps }: FormRadioProps) {
     return (
-        <>
+        <div role="group">
             {values.map(({ value, label }) => (<FormRadio value={value} label={label} {...restProps} />))}
-        </>
+        </div>
     )
 }
 

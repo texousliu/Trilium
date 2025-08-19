@@ -18,9 +18,8 @@ export default function AutoReadOnlySize({ label, option }: AutoReadOnlySizeProp
         <OptionsSection title={t("text_auto_read_only_size.title")}>
             <FormText>{t("text_auto_read_only_size.description")}</FormText>
 
-            <FormGroup label={label}>
-                <FormTextBoxWithUnit
-                    name="auto-readonly-size-text"
+            <FormGroup name="auto-readonly-size-text" label={label}>
+                <FormTextBoxWithUnit                    
                     type="number" min={0}
                     unit={t("text_auto_read_only_size.unit")}
                     currentValue={autoReadonlyOpt} onChange={setAutoReadonlyOpt}

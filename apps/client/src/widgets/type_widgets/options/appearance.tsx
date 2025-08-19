@@ -189,7 +189,7 @@ function Font({ title, fontFamilyOption, fontSizeOption }: { title: string, font
         <>
             <h5>{title}</h5>
             <div className="row">
-                <FormGroup className="col-md-4" label={t("fonts.font_family")}>
+                <FormGroup name="font-family" className="col-md-4" label={t("fonts.font_family")}>
                     <FormSelectWithGroups
                         values={FONT_FAMILIES}
                         currentValue={fontFamily} onChange={setFontFamily}
@@ -197,7 +197,7 @@ function Font({ title, fontFamilyOption, fontSizeOption }: { title: string, font
                     />
                 </FormGroup>
 
-                <FormGroup className="col-md-6" label={t("fonts.size")}>
+                <FormGroup name="font-size" className="col-md-6" label={t("fonts.size")}>
                     <FormTextBoxWithUnit
                         name="tree-font-size"
                         type="number" min={50} max={200} step={10}
@@ -217,7 +217,7 @@ function ElectronIntegration() {
 
     return (
         <OptionsSection title={t("electron_integration.desktop-application")}>
-            <FormGroup label={t("electron_integration.zoom-factor")} description={t("zoom_factor.description")}>
+            <FormGroup name="zoom-factor" label={t("electron_integration.zoom-factor")} description={t("zoom_factor.description")}>
                 <FormTextBox
                     type="number"
                     min="0.3" max="2.0" step="0.1"                    
@@ -226,16 +226,16 @@ function ElectronIntegration() {
             </FormGroup>
             <hr/>
 
-            <FormGroup description={t("electron_integration.native-title-bar-description")}>
+            <FormGroup name="native-title-bar" description={t("electron_integration.native-title-bar-description")}>
                 <FormCheckbox
-                    name="native-title-bar" label={t("electron_integration.native-title-bar")}
+                    label={t("electron_integration.native-title-bar")}
                     currentValue={nativeTitleBarVisible} onChange={setNativeTitleBarVisible}
                 />
             </FormGroup>
 
-            <FormGroup description={t("electron_integration.background-effects-description")}>
+            <FormGroup name="background-effects" description={t("electron_integration.background-effects-description")}>
                 <FormCheckbox
-                    name="background-effects" label={t("electron_integration.background-effects")}
+                    label={t("electron_integration.background-effects")}
                     currentValue={backgroundEffects} onChange={setBackgroundEffects}
                 />
             </FormGroup>
@@ -253,9 +253,8 @@ function MaxContentWidth() {
             <FormText>{t("max_content_width.default_description")}</FormText>
 
             <Column md={6}>
-                <FormGroup label={t("max_content_width.max_width_label")}>
-                    <FormTextBoxWithUnit
-                        name="max-content-width"
+                <FormGroup name="max-content-width" label={t("max_content_width.max_width_label")}>
+                    <FormTextBoxWithUnit                        
                         type="number" min={MIN_CONTENT_WIDTH} step="10" 
                         currentValue={maxContentWidth} onChange={setMaxContentWidth}
                         unit={t("max_content_width.max_width_unit")}

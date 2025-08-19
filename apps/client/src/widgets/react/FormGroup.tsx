@@ -29,3 +29,15 @@ export default function FormGroup({ name, label, title, className, children, des
         </div>
     );
 }
+
+/**
+ * Similar to {@link FormGroup} but allows more than one child. Due to this behaviour, there is no automatic ID assignment.
+ */
+export function FormMultiGroup({ label, children }: { label: string, children: ComponentChildren }) {
+    return (
+        <div className={`form-group`}>
+            {label && <label>{label}</label>}
+            {children}
+        </div>
+    );
+}

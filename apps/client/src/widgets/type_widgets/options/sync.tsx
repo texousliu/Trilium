@@ -37,28 +37,27 @@ export function SyncConfiguration() {
                 });
                 e.preventDefault();
             }}>
-                <FormGroup label={t("sync_2.server_address")}>
-                    <FormTextBox
-                        name="sync-server-host"
+                <FormGroup name="sync-server-host" label={t("sync_2.server_address")}>
+                    <FormTextBox                        
                         placeholder="https://<host>:<port>"
                         currentValue={syncServerHost.current} onChange={(newValue) => syncServerHost.current = newValue}
                     />
                 </FormGroup>
 
-                <FormGroup label={t("sync_2.proxy_label")} description={<>
-                    <strong>{t("sync_2.note")}:</strong> {t("sync_2.note_description")}<br/>
-                    <RawHtml html={t("sync_2.special_value_description")} /></>}
+                <FormGroup name="sync-proxy" label={t("sync_2.proxy_label")}
+                    description={<>
+                        <strong>{t("sync_2.note")}:</strong> {t("sync_2.note_description")}<br/>
+                        <RawHtml html={t("sync_2.special_value_description")} />
+                    </>}
                 >
-                    <FormTextBox
-                        name="sync-proxy"
+                    <FormTextBox                        
                         placeholder="https://<host>:<port>"
                         currentValue={syncProxy.current} onChange={(newValue) => syncProxy.current = newValue}
                     />
                 </FormGroup>
 
-                <FormGroup label={t("sync_2.timeout")}>
-                    <FormTextBoxWithUnit
-                        name="sync-server-timeout"
+                <FormGroup name="sync-server-timeout" label={t("sync_2.timeout")}>
+                    <FormTextBoxWithUnit                        
                         min={1} max={10000000} type="number"
                         unit={t("sync_2.timeout_unit")}
                         currentValue={syncServerTimeout.current} onChange={(newValue) => syncServerTimeout.current = newValue}

@@ -32,9 +32,8 @@ function Editor() {
 
     return (
         <OptionsSection title={t("code-editor-options.title")}>
-            <FormGroup description={t("vim_key_bindings.enable_vim_keybindings")}>
+            <FormGroup name="vim-keymap-enabled" description={t("vim_key_bindings.enable_vim_keybindings")}>
                 <FormCheckbox
-                    name="vim-keymap-enabled"
                     label={t("vim_key_bindings.use_vim_keybindings_in_code_notes")}
                     currentValue={vimKeymapEnabled} onChange={setVimKeymapEnabled}
                 />
@@ -57,7 +56,7 @@ function Appearance() {
     return (
         <OptionsSection title={t("code_theme.title")}>
             <div className="row" style={{ marginBottom: "15px" }}>
-                <FormGroup label={t("code_theme.color-scheme")} className="col-md-6" style={{ marginBottom: 0 }}>
+                <FormGroup name="color-scheme" label={t("code_theme.color-scheme")} className="col-md-6" style={{ marginBottom: 0 }}>
                     <FormSelect 
                         values={themes}
                         keyProperty="id" titleProperty="name"

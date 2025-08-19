@@ -74,9 +74,8 @@ function PromptDialogComponent() {
             show={shown}
             stackable
         >
-            <FormGroup label={opts.current?.message} labelRef={labelRef}>
+            <FormGroup name="prompt-dialog-answer" label={opts.current?.message} labelRef={labelRef}>
                 <FormTextBox
-                    name="prompt-dialog-answer"
                     inputRef={answerRef}
                     currentValue={value} onChange={setValue}
                     readOnly={opts.current?.readOnly}

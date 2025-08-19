@@ -13,9 +13,8 @@ export default function ImageSettings() {
 
     return (
         <OptionsSection title={t("images.images_section_title")}>
-            <FormGroup description={t("images.download_images_description")}>
-                <FormCheckbox
-                    name="download-images-automatically"
+            <FormGroup name="download-images-automatically" description={t("images.download_images_description")}>
+                <FormCheckbox                    
                     label={t("images.download_images_automatically")}
                     currentValue={downloadImagesAutomatically} onChange={setDownloadImagesAutomatically}
                 />
@@ -29,18 +28,16 @@ export default function ImageSettings() {
                 currentValue={compressImages} onChange={setCompressImages}
             />
 
-            <FormGroup label={t("images.max_image_dimensions")} disabled={!compressImages}>
+            <FormGroup name="image-max-width-height" label={t("images.max_image_dimensions")} disabled={!compressImages}>
                 <FormTextBoxWithUnit
-                    name="image-max-width-height"
                     type="number" min="1"
                     unit={t("images.max_image_dimensions_unit")}
                     currentValue={imageMaxWidthHeight} onChange={setImageMaxWidthHeight}
                 />
             </FormGroup>
 
-            <FormGroup label={t("images.jpeg_quality_description")} disabled={!compressImages}>
-                <FormTextBoxWithUnit
-                    name="image-jpeg-quality"
+            <FormGroup name="image-jpeg-quality" label={t("images.jpeg_quality_description")} disabled={!compressImages}>
+                <FormTextBoxWithUnit                    
                     min="10" max="100" type="number"
                     unit={t("units.percentage")}
                     currentValue={imageJpegQuality} onChange={setImageJpegQuality}

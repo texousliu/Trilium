@@ -36,11 +36,11 @@ function LocalizationOptions() {
 
     return (
         <OptionsSection title={t("i18n.title")}>
-            <OptionsRow label={t("i18n.language")}>
+            <OptionsRow name="language" label={t("i18n.language")}>
                 <LocaleSelector locales={uiLocales} currentValue={locale} onChange={setLocale} />
             </OptionsRow>
 
-            {isElectron() && <OptionsRow label={t("i18n.formatting-locale")}>
+            {isElectron() && <OptionsRow name="formatting-locale" label={t("i18n.formatting-locale")}>
                 <LocaleSelector locales={contentLocales} currentValue={formattingLocale} onChange={setFormattingLocale} />
             </OptionsRow>}
 
@@ -65,34 +65,30 @@ function DateSettings() {
 
     return (
         <>
-            <OptionsRow label={t("i18n.first-day-of-the-week")}>
-                <div role="group">
-                    <FormInlineRadioGroup
-                        name="first-day-of-week"
-                        values={[
-                            { value: "0", label: t("i18n.sunday") },
-                            { value: "1", label: t("i18n.monday") }
-                        ]}
-                        currentValue={firstDayOfWeek} onChange={setFirstDayOfWeek}
-                    />
-                </div>
+            <OptionsRow name="first-day-of-week" label={t("i18n.first-day-of-the-week")}>
+                <FormInlineRadioGroup
+                    name="first-day-of-week"
+                    values={[
+                        { value: "0", label: t("i18n.sunday") },
+                        { value: "1", label: t("i18n.monday") }
+                    ]}
+                    currentValue={firstDayOfWeek} onChange={setFirstDayOfWeek}
+                />
             </OptionsRow>  
 
-            <OptionsRow label={t("i18n.first-week-of-the-year")}>
-                <div role="group">
-                    <FormRadioGroup
-                        name="first-week-of-year"
-                        currentValue={firstWeekOfYear} onChange={setFirstWeekOfYear}
-                        values={[
-                            { value: "0", label: t("i18n.first-week-contains-first-day") },
-                            { value: "1", label: t("i18n.first-week-contains-first-thursday") },
-                            { value: "2", label: t("i18n.first-week-has-minimum-days") }
-                        ]}
-                    />
-                </div>
+            <OptionsRow name="first-week-of-year" label={t("i18n.first-week-of-the-year")}>
+                <FormRadioGroup
+                    name="first-week-of-year"
+                    currentValue={firstWeekOfYear} onChange={setFirstWeekOfYear}
+                    values={[
+                        { value: "0", label: t("i18n.first-week-contains-first-day") },
+                        { value: "1", label: t("i18n.first-week-contains-first-thursday") },
+                        { value: "2", label: t("i18n.first-week-has-minimum-days") }
+                    ]}
+                />
             </OptionsRow>
 
-            {firstWeekOfYear === "2" && <OptionsRow label={t("i18n.min-days-in-first-week")}>
+            {firstWeekOfYear === "2" && <OptionsRow name="min-days-in-first-week" label={t("i18n.min-days-in-first-week")}>
                 <FormSelect
                     keyProperty="days"
                     currentValue={minDaysInFirstWeek} onChange={setMinDaysInFirstWeek}
@@ -109,7 +105,7 @@ function DateSettings() {
                 {t("i18n.first-week-warning")}
             </Admonition>
 
-            <OptionsRow centered>
+            <OptionsRow name="restart" centered>
                 <Button
                     text={t("electron_integration.restart-app-button")}
                     size="micro"
