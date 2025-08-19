@@ -125,3 +125,10 @@ export interface TOTPRecoveryKeysResponse {
     keysExist?: boolean;
     usedRecoveryCodes?: string[];
 }
+
+export interface OAuthStatus {
+    enabled: boolean;
+    name?: string;
+    email?: string;
+    missingVars?: string[];
+}

@@ -8,11 +8,12 @@ import FormGroup from "../../react/FormGroup"
 import { FormInlineRadioGroup } from "../../react/FormRadioGroup"
 import Admonition from "../../react/Admonition"
 import { useCallback, useEffect, useMemo, useState } from "preact/hooks"
-import { TOTPGenerate, TOTPRecoveryKeysResponse, TOTPStatus } from "@triliumnext/commons"
+import { OAuthStatus, TOTPGenerate, TOTPRecoveryKeysResponse, TOTPStatus } from "@triliumnext/commons"
 import server from "../../../services/server"
 import Button from "../../react/Button"
 import dialog from "../../../services/dialog"
 import toast from "../../../services/toast"
+import RawHtml from "../../react/RawHtml"
 
 export default function MultiFactorAuthenticationSettings() {
     const [ mfaEnabled, setMfaEnabled ] = useTriliumOptionBool("mfaEnabled");
@@ -54,14 +55,16 @@ function MultiFactorMethod() {
                     ]}
                 />
 
-            <FormText>
-                { mfaMethod === "totp"
-                ? t("multi_factor_authentication.totp_description")
-                : ""}
-            </FormText>                
+                <FormText>
+                    { mfaMethod === "totp"
+                    ? t("multi_factor_authentication.totp_description")
+                    : <RawHtml html={t("multi_factor_authentication.oauth_description")} /> }
+                </FormText>                
             </OptionsSection>
 
-            { mfaMethod === "totp" && <TotpSettings />}
+            { mfaMethod === "totp"
+            ? <TotpSettings />
+            : <OAuthSettings /> }
         </>
     )
 }
@@ -201,4 +204,39 @@ function TotpRecoveryKeys({ values, generateRecoveryKeys }: { values?: string[],
             />
         </OptionsSection>
     );
+}
+
+function OAuthSettings() {
+    const [ status, setStatus ] = useState<OAuthStatus>();
+
+    useEffect(() => {
+        server.get<OAuthStatus>("oauth/status").then((result) => setStatus);
+    });
+
+    return (
+        <OptionsSection title={t("multi_factor_authentication.oauth_title")}>
+            { status?.enabled ? (
+                <div class="col-md-6">
+                    <span><b>{t("multi_factor_authentication.oauth_user_account")}</b></span>
+                    <span class="user-account-name">{status.name ?? t("multi_factor_authentication.oauth_user_not_logged_in")}</span>
+
+                    <br />
+                    <span><b>{t("multi_factor_authentication.oauth_user_email")}</b></span>
+                    <span class="user-account-email">{status.email ?? t("multi_factor_authentication.oauth_user_not_logged_in")}</span>
+                </div>
+            ) : (
+                <>
+                    <p>{t("multi_factor_authentication.oauth_description_warning")}</p>
+
+                    { status?.missingVars && (
+                        <Admonition type="caution">
+                            {t("multi_factor_authentication.oauth_missing_vars", {
+                                variables: status.missingVars.map(v => `"${v}"`).join(", ")
+                            })}
+                        </Admonition>
+                    )}
+                </>
+            )}
+        </OptionsSection>
+    )
 }
