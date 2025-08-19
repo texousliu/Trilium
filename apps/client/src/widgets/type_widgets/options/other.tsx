@@ -104,11 +104,12 @@ function NoteErasureTimeout() {
     return (
         <OptionsSection title={t("note_erasure_timeout.note_erasure_timeout_title")}>
             <FormText>{t("note_erasure_timeout.note_erasure_description")}</FormText>
-            <TimeSelector
-                name="erase-entities-after"
-                label={t("note_erasure_timeout.erase_notes_after")}
-                optionValueId="eraseEntitiesAfterTimeInSeconds" optionTimeScaleId="eraseEntitiesAfterTimeScale"
-            />
+            <FormGroup label={t("note_erasure_timeout.erase_notes_after")}>
+                <TimeSelector
+                    name="erase-entities-after"                    
+                    optionValueId="eraseEntitiesAfterTimeInSeconds" optionTimeScaleId="eraseEntitiesAfterTimeScale"
+                />
+            </FormGroup>
             <FormText>{t("note_erasure_timeout.manual_erasing_description")}</FormText>
             
             <Button
@@ -127,11 +128,12 @@ function AttachmentErasureTimeout() {
     return (
         <OptionsSection title={t("attachment_erasure_timeout.attachment_erasure_timeout")}>
             <FormText>{t("attachment_erasure_timeout.attachment_auto_deletion_description")}</FormText>
-            <TimeSelector
-                name="erase-unused-attachments-after"
-                label={t("attachment_erasure_timeout.erase_attachments_after")}
-                optionValueId="eraseUnusedAttachmentsAfterSeconds" optionTimeScaleId="eraseUnusedAttachmentsAfterTimeScale"
-            />
+            <FormGroup label={t("attachment_erasure_timeout.erase_attachments_after")}>
+                <TimeSelector
+                    name="erase-unused-attachments-after"                
+                    optionValueId="eraseUnusedAttachmentsAfterSeconds" optionTimeScaleId="eraseUnusedAttachmentsAfterTimeScale"
+                />
+            </FormGroup>
             <FormText>{t("attachment_erasure_timeout.manual_erasing_description")}</FormText>
 
             <Button
@@ -155,12 +157,13 @@ function RevisionSnapshotInterval() {
                     components={{ doc: <a href="https://triliumnext.github.io/Docs/Wiki/note-revisions.html" class="external" />}}
                 />
             </FormText>
-            <TimeSelector
-                name="revision-snapshot-time-interval"
-                label={t("revisions_snapshot_interval.snapshot_time_interval_label")}
-                optionValueId="revisionSnapshotTimeInterval" optionTimeScaleId="revisionSnapshotTimeIntervalTimeScale"
-                minimumSeconds={10}
-            />
+            <FormGroup label={t("revisions_snapshot_interval.snapshot_time_interval_label")}>
+                <TimeSelector
+                    name="revision-snapshot-time-interval"
+                    optionValueId="revisionSnapshotTimeInterval" optionTimeScaleId="revisionSnapshotTimeIntervalTimeScale"
+                    minimumSeconds={10}
+                />
+            </FormGroup>
         </OptionsSection>
     )
 }

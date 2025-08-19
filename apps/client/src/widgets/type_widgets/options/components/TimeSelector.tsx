@@ -10,8 +10,8 @@ import toast from "../../../../services/toast";
 type TimeSelectorScale = "seconds" | "minutes" | "hours" | "days";
 
 interface TimeSelectorProps {
+    id?: string;
     name: string;
-    label: string;
     optionValueId: keyof OptionDefinitions;
     optionTimeScaleId: keyof OptionDefinitions;
     includedTimeScales?: Set<TimeSelectorScale>;
@@ -23,7 +23,7 @@ interface TimeScaleInfo {
     unit: string;
 }
 
-export default function TimeSelector({ name, label, includedTimeScales, optionValueId, optionTimeScaleId, minimumSeconds }: TimeSelectorProps) {
+export default function TimeSelector({ id, name, includedTimeScales, optionValueId, optionTimeScaleId, minimumSeconds }: TimeSelectorProps) {
     const values = useMemo(() => {
         const values: TimeScaleInfo[] = [];
         const timeScalesWithDefault = includedTimeScales ?? new Set(["seconds", "minutes", "hours", "days"]);
@@ -48,38 +48,37 @@ export default function TimeSelector({ name, label, includedTimeScales, optionVa
     }, [ value, scale ]);
 
     return (
-        <FormGroup label={label}>
-            <div class="d-flex gap-2">
-                <FormTextBox
-                    name={name}
-                    type="number" min={0} step={1} required
-                    currentValue={displayedTime} onChange={(value, validity) => {
-                        if (!validity.valid) {
-                            toast.showError(t("time_selector.invalid_input"));
-                            return false;
-                        }
+        <div class="d-flex gap-2">
+            <FormTextBox
+                id={id}
+                name={name}
+                type="number" min={0} step={1} required
+                currentValue={displayedTime} onChange={(value, validity) => {
+                    if (!validity.valid) {
+                        toast.showError(t("time_selector.invalid_input"));
+                        return false;
+                    }
 
-                        let time = parseInt(value, 10);
-                        const minimumSecondsOrDefault = (minimumSeconds ?? 0);
-                        const newTime = convertTime(time, scale).toOption();
+                    let time = parseInt(value, 10);
+                    const minimumSecondsOrDefault = (minimumSeconds ?? 0);
+                    const newTime = convertTime(time, scale).toOption();
 
-                        if (Number.isNaN(time) || newTime < (minimumSecondsOrDefault)) {
-                            toast.showError(t("time_selector.minimum_input", { minimumSeconds: minimumSecondsOrDefault }));
-                            time = minimumSecondsOrDefault;
-                        }
+                    if (Number.isNaN(time) || newTime < (minimumSecondsOrDefault)) {
+                        toast.showError(t("time_selector.minimum_input", { minimumSeconds: minimumSecondsOrDefault }));
+                        time = minimumSecondsOrDefault;
+                    }
 
-                        setValue(newTime);
-                    }}
-                />
+                    setValue(newTime);
+                }}
+            />
 
-                <FormSelect
-                    values={values}
-                    keyProperty="value" titleProperty="unit"
-                    style={{ width: "auto" }}
-                    currentValue={scale} onChange={setScale}
-                />
-            </div>
-        </FormGroup>
+            <FormSelect
+                values={values}
+                keyProperty="value" titleProperty="unit"
+                style={{ width: "auto" }}
+                currentValue={scale} onChange={setScale}
+            />
+        </div>
     )
 }
 
