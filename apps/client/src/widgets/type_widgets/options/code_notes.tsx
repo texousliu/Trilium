@@ -56,15 +56,14 @@ function Appearance() {
 
     return (
         <OptionsSection title={t("code_theme.title")}>
-            <FormGroup className="row">
-                <Column>
-                    <label>{t("code_theme.color-scheme")}</label>
+            <div className="row" style={{ marginBottom: "15px" }}>
+                <FormGroup label={t("code_theme.color-scheme")} className="col-md-6" style={{ marginBottom: 0 }}>
                     <FormSelect 
                         values={themes}
                         keyProperty="id" titleProperty="name"
                         currentValue={codeNoteTheme} onChange={setCodeNoteTheme}
                     />
-                </Column>
+                </FormGroup>
 
                 <Column className="side-checkbox">
                     <FormCheckbox
@@ -73,7 +72,7 @@ function Appearance() {
                         currentValue={codeLineWrapEnabled} onChange={setCodeLineWrapEnabled}
                     />
                 </Column>
-            </FormGroup>
+            </div>
 
             <CodeNotePreview wordWrapping={codeLineWrapEnabled} themeName={codeNoteTheme} />
         </OptionsSection>

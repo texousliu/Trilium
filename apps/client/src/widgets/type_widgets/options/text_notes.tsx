@@ -153,9 +153,8 @@ function CodeBlockStyle() {
 
     return (
         <OptionsSection title={t("highlighting.title")}>            
-            <FormGroup className="row">
-                <Column md={6}>
-                    <label>{t("highlighting.color-scheme")}</label>
+            <div className="row" style={{ marginBottom: "15px" }}>
+                <FormGroup className="col-md-6" label={t("highlighting.color-scheme")} style={{ marginBottom: 0 }}>
                     <FormSelectWithGroups
                         values={themes}
                         keyProperty="val" titleProperty="title"
@@ -164,7 +163,7 @@ function CodeBlockStyle() {
                             setCodeBlockTheme(newTheme);
                         }}
                     />
-                </Column>
+                </FormGroup>
 
                 <Column md={6} className="side-checkbox">
                     <FormCheckbox
@@ -173,7 +172,7 @@ function CodeBlockStyle() {
                         currentValue={codeBlockWordWrap} onChange={setCodeBlockWordWrap}
                     />
                 </Column>
-            </FormGroup>
+            </div>
             
             <CodeBlockPreview theme={codeBlockTheme} wordWrap={codeBlockWordWrap} />
         </OptionsSection>
@@ -302,21 +301,19 @@ function DateTimeFormatOptions() {
             </FormText>
             
             <FormGroup className="row align-items-center">
-              <Column>
-                  <label>{t("custom_date_time_format.format_string")}</label>
+              <FormGroup className="col-md-6" label={t("custom_date_time_format.format_string")}>
                   <FormTextBox
                         name="custom-date-time-format"
                         placeholder="YYYY-MM-DD HH:mm"
                         currentValue={customDateTimeFormat || "YYYY-MM-DD HH:mm"} onChange={setCustomDateTimeFormat}
                   />
-              </Column>
+              </FormGroup>
 
-              <Column>
-                <label>{t("custom_date_time_format.formatted_time")}</label>
+              <FormGroup className="col-md-6" label={t("custom_date_time_format.formatted_time")}>
                 <div className="formatted-date">
                     {formatDateTime(new Date(), customDateTimeFormat)}
                 </div>
-              </Column>
+              </FormGroup>
             </FormGroup>
         </OptionsSection>
     )

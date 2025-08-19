@@ -145,20 +145,20 @@ function ApplicationTheme() {
 
     return (
         <OptionsSection title={t("theme.title")}>
-            <Column>
-                <label>{t("theme.theme_label")}</label>
-                <FormSelect 
-                    values={themes} currentValue={theme} onChange={setTheme}
-                    keyProperty="val" titleProperty="title"
-                />
-            </Column>
+            <div className="row">
+                <FormGroup name="theme" label={t("theme.theme_label")} className="col-md-6" style={{ marginBottom: 0 }}>
+                    <FormSelect
+                        values={themes} currentValue={theme} onChange={setTheme}
+                        keyProperty="val" titleProperty="title"
+                    />
+                </FormGroup>
 
-            <Column className="side-checkbox">
-                <FormCheckbox
-                    name="override-theme-fonts"
-                    label={t("theme.override_theme_fonts_label")}
-                    currentValue={overrideThemeFonts} onChange={setOverrideThemeFonts} />
-            </Column>
+                <FormGroup className="side-checkbox col-md-6" name="override-theme-fonts">
+                    <FormCheckbox                        
+                        label={t("theme.override_theme_fonts_label")}
+                        currentValue={overrideThemeFonts} onChange={setOverrideThemeFonts} />
+                </FormGroup>
+            </div>
         </OptionsSection>
     )
 }
@@ -189,24 +189,22 @@ function Font({ title, fontFamilyOption, fontSizeOption }: { title: string, font
         <>
             <h5>{title}</h5>
             <div className="row">
-                <Column md={4}>
-                    <label>{t("fonts.font_family")}</label>
+                <FormGroup className="col-md-4" label={t("fonts.font_family")}>
                     <FormSelectWithGroups
                         values={FONT_FAMILIES}
                         currentValue={fontFamily} onChange={setFontFamily}
                         keyProperty="value" titleProperty="label"                    
                     />
-                </Column>
+                </FormGroup>
 
-                <Column md={6}>
-                    <label>{t("fonts.size")}</label>
+                <FormGroup className="col-md-6" label={t("fonts.size")}>
                     <FormTextBoxWithUnit
                         name="tree-font-size"
                         type="number" min={50} max={200} step={10}
                         currentValue={fontSize} onChange={setFontSize}
                         unit={t("units.percentage")}
                     />
-                </Column>
+                </FormGroup>
             </div>            
         </>
     );
