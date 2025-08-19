@@ -204,7 +204,7 @@ function Font({ title, fontFamilyOption, fontSizeOption }: { title: string, font
                         name="tree-font-size"
                         type="number" min={50} max={200} step={10}
                         currentValue={fontSize} onChange={setFontSize}
-                        unit="%"
+                        unit={t("units.percentage")}
                     />
                 </Column>
             </div>            

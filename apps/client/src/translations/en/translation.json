@@ -2013,5 +2013,8 @@
   "settings_appearance": {
     "related_code_blocks": "Color scheme for code blocks in text notes",
     "related_code_notes": "Color scheme for code notes"
+  },
+  "units": {
+    "percentage": "%"
   }
 }

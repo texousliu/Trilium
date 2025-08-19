@@ -42,7 +42,7 @@ export default function ImageSettings() {
                 <FormTextBoxWithUnit
                     name="image-jpeg-quality"
                     min="10" max="100" type="number"
-                    unit="%"
+                    unit={t("units.percentage")}
                     currentValue={imageJpegQuality} onChange={setImageJpegQuality}
                 />
             </FormGroup>
