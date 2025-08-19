@@ -1,0 +1,91 @@
+{
+  "add_link": {
+    "add_link": "Додати посилання",
+    "help_on_links": "Довідка щодо посилань",
+    "note": "Нотатка",
+    "search_note": "Знайти нотатку за ім'ям",
+    "link_title_mirrors": "заголовок посилання відображає назву нотатки",
+    "link_title_arbitrary": "свій заголовок посилання",
+    "link_title": "Заголовок посилання",
+    "button_add_link": "Додати посилання"
+  },
+  "branch_prefix": {
+    "save": "Зберегти",
+    "edit_branch_prefix": "Редагувати префікс гілки",
+    "help_on_tree_prefix": "Довідка щодо префіксів гілок",
+    "prefix": "Префікс: ",
+    "branch_prefix_saved": "Префікс гілки збережено."
+  },
+  "about": {
+    "app_version": "Версія програми:",
+    "db_version": "Версія БД:",
+    "build_date": "Дата збірки:",
+    "build_revision": "Ревізія збірки:",
+    "data_directory": "Директорія даних:",
+    "homepage": "Домашня сторінка:",
+    "title": "Про Trilium Notes"
+  },
+  "global_menu": {
+    "about": "Про Trilium Notes"
+  },
+  "modal": {
+    "help_title": "Показати більше інформації про це вікно"
+  },
+  "toast": {
+    "critical-error": {
+      "title": "Критична помилка"
+    }
+  },
+  "bulk_actions": {
+    "bulk_actions": "Масові дії",
+    "affected_notes": "Зачеплені нотатки",
+    "available_actions": "Доступні дії",
+    "chosen_actions": "Обрані дії",
+    "execute_bulk_actions": "Виконати масові дії",
+    "bulk_actions_executed": "Масові дії успішно виконано.",
+    "none_yet": "Поки ніяких.. Додайте дію натиснувши на одну з наданих вище."
+  },
+  "clone_to": {
+    "clone_notes_to": "Клонувати нотатки до...",
+    "target_parent_note": "Цільова батьківська нотатка",
+    "search_for_note_by_its_name": "Знайти нотатку за ім'ям"
+  },
+  "clipboard": {
+    "copied": "Нотатку(-и) було скопійовано в буфер.",
+    "copy_failed": "Не вдалося скопіювати в буфер через проблеми з дозволами.",
+    "copy_success": "Скопійовано в буфер."
+  },
+  "entrypoints": {
+    "sql-error": "Виникла помилка при виконанні запиту SQL: {{message}}"
+  },
+  "branches": {
+    "undeleting-notes-finished-successfully": "Нотатки вдало відновлено.",
+    "undeleting-notes-in-progress": "Відновлюємо нотатки: {{count}}",
+    "delete-notes-in-progress": "Видаляємо нотатки: {{count}}",
+    "delete-finished-successfully": "Нотатки вдало видалено."
+  },
+  "launcher_context_menu": {
+    "add-spacer": "Додати розділювач",
+    "reset": "Скинути"
+  },
+  "editable-text": {
+    "auto-detect-language": "Автовизначена"
+  },
+  "highlighting": {
+    "color-scheme": "Схема кольорів"
+  },
+  "code_block": {
+    "copy_title": "Скопіювати в буфер"
+  },
+  "classic_editor_toolbar": {
+    "title": "Форматування"
+  },
+  "editor": {
+    "title": "Редактор"
+  },
+  "editing": {
+    "editor_type": {
+      "label": "Панель інструментів форматування"
+    }
+  }
+}

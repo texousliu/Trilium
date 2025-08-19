@@ -655,7 +655,8 @@
     "showSQLConsole": "afișează consola SQL",
     "tabShortcuts": "Scurtături pentru tab-uri",
     "troubleshooting": "Unelte pentru depanare",
-    "newTabWithActivationNoteLink": "pe o legătură către o notiță deschide și activează notița într-un tab nou"
+    "newTabWithActivationNoteLink": "pe o legătură către o notiță deschide și activează notița într-un tab nou",
+    "title": "Ghid rapid"
   },
   "hide_floating_buttons_button": {
     "button_title": "Ascunde butoanele"
@@ -886,7 +887,8 @@
     "modal_title": "Selectați tipul notiței",
     "templates": "Șabloane",
     "change_path_prompt": "Selectați locul unde să se creeze noua notiță:",
-    "search_placeholder": "căutare cale notiță după nume (cea implicită dacă este necompletat)"
+    "search_placeholder": "căutare cale notiță după nume (cea implicită dacă este necompletat)",
+    "builtin_templates": "Șabloane predefinite"
   },
   "onclick_button": {
     "no_click_handler": "Butonul „{{componentId}}” nu are nicio acțiune la clic definită"
@@ -940,7 +942,9 @@
   },
   "password_not_set": {
     "body1": "Notițele protejate sunt criptate utilizând parola de utilizator, dar nu a fost setată nicio parolă.",
-    "title": "Parola nu este setată"
+    "title": "Parola nu este setată",
+    "body2": "Pentru a putea proteja notițe, clic pe butonul de mai jos pentru a deschide fereastra de opțiuni și pentru a seta parola.",
+    "go_to_password_options": "Mergi la setările de parolă"
   },
   "promoted_attributes": {
     "add_new_attribute": "Adaugă un nou atribut",
@@ -1243,7 +1247,10 @@
     "layout-horizontal-description": "bara de lansare se află sub bara de taburi, bara de taburi este pe toată lungimea.",
     "layout-horizontal-title": "Orizontal",
     "layout-vertical-title": "Vertical",
-    "layout-vertical-description": "bara de lansare se află pe stânga (implicit)"
+    "layout-vertical-description": "bara de lansare se află pe stânga (implicit)",
+    "auto_theme": "Tema clasică (se adaptează la schema de culori a sistemului)",
+    "light_theme": "Tema clasică (luminoasă)",
+    "dark_theme": "Tema clasică (întunecată)"
   },
   "toast": {
     "critical-error": {
@@ -1985,6 +1992,12 @@
     "open_externally": "Deschide în afara programului"
   },
   "modal": {
-    "close": "Închide"
+    "close": "Închide",
+    "help_title": "Afișează mai multe informații despre acest ecran"
+  },
+  "call_to_action": {
+    "background_effects_title": "Efectele de fundal sunt acum stabile",
+    "background_effects_message": "Pe dispozitive cu Windows, efectele de fundal sunt complet stabile. Acestea adaugă un strop de culoare interfeței grafice prin estomparea fundalului din spatele ferestrei. Această tehnică este folosită și în alte aplicații precum Windows Explorer.",
+    "background_effects_button": "Activează efectele de fundal"
   }
 }

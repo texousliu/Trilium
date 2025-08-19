@@ -1992,11 +1992,12 @@
     "help_title": "显示关于此画面的更多信息"
   },
   "call_to_action": {
-    "next_theme_title": "新的 Trilium 主题已进入稳定版",
-    "next_theme_message": "有一段时间，我们一直在设计新的主题，为了让应用程序看起来更加现代。",
-    "next_theme_button": "切换至新的 Trilium 主题",
     "background_effects_title": "背景效果现已推出稳定版本",
     "background_effects_message": "在 Windows 装置上，背景效果现在已完全稳定。背景效果通过模糊背后的背景，为使用者界面增添一抹色彩。此技术也用于其他应用程序，例如 Windows 资源管理器。",
-    "background_effects_button": "启用背景效果"
+    "background_effects_button": "启用背景效果",
+    "next_theme_title": "试用新 Trilium 主题",
+    "next_theme_message": "当前使用旧版主题，要试用新主题吗？",
+    "next_theme_button": "试用新主题",
+    "dismiss": "关闭"
   }
 }

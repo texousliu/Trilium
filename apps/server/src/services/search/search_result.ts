@@ -35,6 +35,8 @@ class SearchResult {
     highlightedNotePathTitle?: string;
     contentSnippet?: string;
     highlightedContentSnippet?: string;
+    attributeSnippet?: string;
+    highlightedAttributeSnippet?: string;
     private fuzzyScore: number; // Track fuzzy score separately
 
     constructor(notePathArray: string[]) {
