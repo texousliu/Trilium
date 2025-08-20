@@ -151,6 +151,27 @@
     "switch-to-fifth-tab": "Перейти на п'яту вкладку",
     "switch-to-sixth-tab": "Перейти до шостої вкладки",
     "switch-to-seventh-tab": "Перейти до сьомої вкладки",
-    "switch-to-eighth-tab": "Перейти до восьмої вкладки"
+    "switch-to-eighth-tab": "Перейти до восьмої вкладки",
+    "find-in-text": "Знайти в тексті",
+    "toggle-left-pane": "Перемкнути ліву панель",
+    "toggle-full-screen": "Перемкнути повноекранний режим",
+    "zoom-out": "Зменшити масштаб",
+    "zoom-in": "Збільшити масштаб",
+    "reset-zoom-level": "Скинути рівень масштабування",
+    "copy-without-formatting": "Копіювати без форматування",
+    "force-save-revision": "Примусове збереження версії"
+  },
+  "login": {
+    "title": "Увійти",
+    "heading": "Вхід до Trilium",
+    "incorrect-totp": "TOTP неправильний. Спробуйте ще раз.",
+    "incorrect-password": "Пароль неправильний. Спробуйте ще раз.",
+    "password": "Пароль",
+    "remember-me": "Запам'ятати мене",
+    "button": "Вхід",
+    "sign_in_with_sso": "Увійти за допомогою {{ ssoIssuerName }}"
+  },
+  "set_password": {
+    "title": "Встановити пароль"
   }
 }
