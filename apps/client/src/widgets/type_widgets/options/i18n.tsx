@@ -107,6 +107,7 @@ function DateSettings() {
 
             <OptionsRow name="restart" centered>
                 <Button
+                    name="restart-app-button"
                     text={t("electron_integration.restart-app-button")}
                     size="micro"
                     onClick={restartDesktopApp}

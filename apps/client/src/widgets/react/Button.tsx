@@ -4,6 +4,7 @@ import { useRef, useMemo } from "preact/hooks";
 import { memo } from "preact/compat";
 
 interface ButtonProps {
+    name?: string;
     /** Reference to the button element. Mostly useful for requesting focus. */
     buttonRef?: RefObject<HTMLButtonElement>;
     text: string;
@@ -18,7 +19,7 @@ interface ButtonProps {
     style?: CSSProperties;
 }
 
-const Button = memo(({ buttonRef: _buttonRef, className, text, onClick, keyboardShortcut, icon, primary, disabled, size, style }: ButtonProps) => {
+const Button = memo(({ name, buttonRef: _buttonRef, className, text, onClick, keyboardShortcut, icon, primary, disabled, size, style }: ButtonProps) => {
     // Memoize classes array to prevent recreation
     const classes = useMemo(() => {
         const classList: string[] = ["btn"];
@@ -54,6 +55,7 @@ const Button = memo(({ buttonRef: _buttonRef, className, text, onClick, keyboard
 
     return (
         <button
+            name={name}
             className={classes}
             type={onClick ? "button" : "submit"}
             onClick={onClick}
