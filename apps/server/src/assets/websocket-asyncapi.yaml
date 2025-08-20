@@ -1,0 +1,487 @@
+asyncapi: 2.6.0
+info:
+  title: Trilium Notes WebSocket API
+  version: 0.98.0
+  description: |
+    Real-time WebSocket API for Trilium Notes client-server communication.
+    
+    This API handles real-time updates, synchronization, task progress, and streaming responses.
+    
+    ## Authentication
+    
+    WebSocket connections require the same session authentication as the HTTP API.
+    The session is validated during the initial WebSocket handshake.
+    
+  license:
+    name: GNU Affero General Public License v3.0
+    url: https://www.gnu.org/licenses/agpl-3.0.html
+
+servers:
+  development:
+    url: ws://localhost:8080
+    protocol: ws
+    description: Local development server
+    
+  production:
+    url: wss://your-trilium-server.com
+    protocol: wss
+    description: Production server (secure WebSocket)
+
+channels:
+  /:
+    description: Main WebSocket connection endpoint for real-time bidirectional communication
+    
+    subscribe:
+      summary: Messages from server to client
+      message:
+        oneOf:
+          - $ref: '#/components/messages/Ping'
+          - $ref: '#/components/messages/FrontendUpdate'
+          - $ref: '#/components/messages/SyncPullInProgress'
+          - $ref: '#/components/messages/SyncPushInProgress'
+          - $ref: '#/components/messages/SyncFinished'
+          - $ref: '#/components/messages/SyncFailed'
+          - $ref: '#/components/messages/ReloadFrontend'
+          - $ref: '#/components/messages/ConsistencyChecksFailed'
+          - $ref: '#/components/messages/TaskProgressCount'
+          - $ref: '#/components/messages/TaskError'
+          - $ref: '#/components/messages/TaskSucceeded'
+          - $ref: '#/components/messages/ProtectedSessionLogin'
+          - $ref: '#/components/messages/ProtectedSessionLogout'
+          - $ref: '#/components/messages/OpenNote'
+          - $ref: '#/components/messages/ExecuteScript'
+          - $ref: '#/components/messages/ApiLogMessages'
+          - $ref: '#/components/messages/Toast'
+          - $ref: '#/components/messages/LlmStream'
+          
+    publish:
+      summary: Messages from client to server
+      message:
+        oneOf:
+          - $ref: '#/components/messages/ClientPing'
+          - $ref: '#/components/messages/LogError'
+          - $ref: '#/components/messages/LogInfo'
+
+components:
+  messages:
+    # Client to Server Messages
+    ClientPing:
+      name: ping
+      title: Client Ping
+      summary: Keep-alive ping from client
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+        properties:
+          type:
+            type: string
+            const: ping
+            
+    LogError:
+      name: log-error
+      title: Log Error
+      summary: Report JavaScript error to server
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+          - error
+        properties:
+          type:
+            type: string
+            const: log-error
+          error:
+            type: string
+            description: Error message
+          stack:
+            type: string
+            description: Stack trace
+            
+    LogInfo:
+      name: log-info
+      title: Log Info
+      summary: Send info log to server
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+          - info
+        properties:
+          type:
+            type: string
+            const: log-info
+          info:
+            type: string
+            description: Information message
+            
+    # Server to Client Messages
+    Ping:
+      name: ping
+      title: Server Ping
+      summary: Keep-alive ping from server
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+        properties:
+          type:
+            type: string
+            const: ping
+            
+    FrontendUpdate:
+      name: frontend-update
+      title: Frontend Update
+      summary: Notify frontend of entity changes
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+          - data
+        properties:
+          type:
+            type: string
+            const: frontend-update
+          data:
+            type: object
+            properties:
+              entityChanges:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    entityName:
+                      type: string
+                      enum: [notes, branches, attributes, attachments]
+                    entity:
+                      type: object
+                      description: The changed entity data
+                      
+    SyncPullInProgress:
+      name: sync-pull-in-progress
+      title: Sync Pull In Progress
+      summary: Sync pull operation started
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+        properties:
+          type:
+            type: string
+            const: sync-pull-in-progress
+          lastSyncedPush:
+            type: integer
+            nullable: true
+            
+    SyncPushInProgress:
+      name: sync-push-in-progress
+      title: Sync Push In Progress
+      summary: Sync push operation started
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+        properties:
+          type:
+            type: string
+            const: sync-push-in-progress
+          lastSyncedPush:
+            type: integer
+            nullable: true
+            
+    SyncFinished:
+      name: sync-finished
+      title: Sync Finished
+      summary: Sync operation completed successfully
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+        properties:
+          type:
+            type: string
+            const: sync-finished
+          lastSyncedPush:
+            type: integer
+            nullable: true
+            
+    SyncFailed:
+      name: sync-failed
+      title: Sync Failed
+      summary: Sync operation failed
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+        properties:
+          type:
+            type: string
+            const: sync-failed
+          lastSyncedPush:
+            type: integer
+            nullable: true
+            
+    ReloadFrontend:
+      name: reload-frontend
+      title: Reload Frontend
+      summary: Request frontend to reload
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+        properties:
+          type:
+            type: string
+            const: reload-frontend
+          reason:
+            type: string
+            description: Reason for reload
+            
+    ConsistencyChecksFailed:
+      name: consistency-checks-failed
+      title: Consistency Checks Failed
+      summary: Database consistency check failed
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+        properties:
+          type:
+            type: string
+            const: consistency-checks-failed
+            
+    TaskProgressCount:
+      name: taskProgressCount
+      title: Task Progress Count
+      summary: Update task progress
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+          - taskId
+        properties:
+          type:
+            type: string
+            const: taskProgressCount
+          taskId:
+            type: string
+          taskType:
+            type: string
+            nullable: true
+          progressCount:
+            type: integer
+            
+    TaskError:
+      name: taskError
+      title: Task Error
+      summary: Task encountered an error
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+          - taskId
+        properties:
+          type:
+            type: string
+            const: taskError
+          taskId:
+            type: string
+          taskType:
+            type: string
+            nullable: true
+          message:
+            type: string
+            
+    TaskSucceeded:
+      name: taskSucceeded
+      title: Task Succeeded
+      summary: Task completed successfully
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+          - taskId
+        properties:
+          type:
+            type: string
+            const: taskSucceeded
+          taskId:
+            type: string
+          taskType:
+            type: string
+            nullable: true
+          result:
+            type: object
+            
+    ProtectedSessionLogin:
+      name: protectedSessionLogin
+      title: Protected Session Login
+      summary: Protected session was entered
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+        properties:
+          type:
+            type: string
+            const: protectedSessionLogin
+            
+    ProtectedSessionLogout:
+      name: protectedSessionLogout
+      title: Protected Session Logout
+      summary: Protected session was exited
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+        properties:
+          type:
+            type: string
+            const: protectedSessionLogout
+            
+    OpenNote:
+      name: openNote
+      title: Open Note
+      summary: Request to open a note
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+          - noteId
+        properties:
+          type:
+            type: string
+            const: openNote
+          noteId:
+            type: string
+            
+    ExecuteScript:
+      name: execute-script
+      title: Execute Script
+      summary: Execute a script
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+          - script
+        properties:
+          type:
+            type: string
+            const: execute-script
+          script:
+            type: string
+          params:
+            type: array
+            items:
+              type: any
+          startNoteId:
+            type: string
+          currentNoteId:
+            type: string
+          originEntityName:
+            type: string
+            const: notes
+          originEntityId:
+            type: string
+            nullable: true
+            
+    ApiLogMessages:
+      name: api-log-messages
+      title: API Log Messages
+      summary: API log messages
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+          - messages
+        properties:
+          type:
+            type: string
+            const: api-log-messages
+          messages:
+            type: array
+            items:
+              type: string
+              
+    Toast:
+      name: toast
+      title: Toast Notification
+      summary: Show toast notification
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+          - message
+        properties:
+          type:
+            type: string
+            const: toast
+          message:
+            type: string
+            
+    LlmStream:
+      name: llm-stream
+      title: LLM Stream
+      summary: LLM streaming response
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - type
+          - chatNoteId
+        properties:
+          type:
+            type: string
+            const: llm-stream
+          chatNoteId:
+            type: string
+          content:
+            type: string
+            description: Response text content
+          thinking:
+            type: string
+            description: Internal reasoning/thinking process
+          toolExecution:
+            type: object
+            properties:
+              action:
+                type: string
+              tool:
+                type: string
+              toolCallId:
+                type: string
+              args:
+                type: object
+              result:
+                type: any
+              error:
+                type: string
+          done:
+            type: boolean
+            description: Whether streaming is complete
+          error:
+            type: string
+            nullable: true
+          raw:
+            type: any
+            description: Raw response data
