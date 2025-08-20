@@ -19,7 +19,7 @@ import bulkActionService from "../../services/bulk_action.js";
 import { Dropdown } from "bootstrap";
 import type FNote from "../../entities/fnote.js";
 import type { AttributeType } from "../../entities/fattribute.js";
-import { renderReactWidget } from "../react/ReactBasicWidget.jsx";
+import { renderReactWidget } from "../react/react_utils.jsx";
 
 const TPL = /*html*/`
 <div class="search-definition-widget">

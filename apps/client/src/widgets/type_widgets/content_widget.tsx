@@ -5,7 +5,7 @@ import { t } from "../../services/i18n.js";
 import type BasicWidget from "../basic_widget.js";
 import type { JSX } from "preact/jsx-runtime";
 import AppearanceSettings from "./options/appearance.jsx";
-import { disposeReactWidget, renderReactWidget, renderReactWidgetAtElement } from "../react/ReactBasicWidget.jsx";
+import { disposeReactWidget, renderReactWidgetAtElement } from "../react/react_utils.jsx";
 import ImageSettings from "./options/images.jsx";
 import AdvancedSettings from "./options/advanced.jsx";
 import InternationalizationOptions from "./options/i18n.jsx";

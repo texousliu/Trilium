@@ -3,7 +3,7 @@ import { t } from "../../services/i18n";
 import { ComponentChildren } from "preact";
 import type { CSSProperties, RefObject } from "preact/compat";
 import { openDialog } from "../../services/dialog";
-import { ParentComponent } from "./ReactBasicWidget";
+import { ParentComponent } from "./react_utils";
 import { Modal as BootstrapModal } from "bootstrap";
 import { memo } from "preact/compat";
 

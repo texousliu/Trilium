@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { EventData, EventNames } from "../../components/app_context";
-import { ParentComponent } from "./ReactBasicWidget";
+import { ParentComponent } from "./react_utils";
 import SpacedUpdate from "../../services/spaced_update";
 import { OptionNames } from "@triliumnext/commons";
 import options, { type OptionValue } from "../../services/options";
