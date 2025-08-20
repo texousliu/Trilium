@@ -6,10 +6,10 @@
  * with different styling and layout requirements.
  * 
  * SECURITY NOTE: HTML Snippet Handling
- * The highlighted snippet fields (highlightedContentSnippet, highlightedAttributeSnippet) contain
+ * The highlighted snippet fields (highlightedAttributeSnippet) contain
  * pre-sanitized HTML from the server. The server-side processing:
  * 1. Escapes all HTML using the escape-html library
- * 2. Adds safe HTML tags for display: <b> for search term highlighting, <br> for line breaks
+ * 2. Adds safe HTML tags for display: <b> for search term highlighting
  * 3. See apps/server/src/services/search/services/search.ts for implementation
  * 
  * This means the HTML snippets can be safely inserted without additional escaping on the client side.
@@ -41,7 +41,7 @@ export function createSearchResultHtml(result: Suggestion): string {
         return html;
     }
 
-    // Default: render as note result with snippets
+    // Default: render as note result
     // Wrap everything in a flex column container
     let itemHtml = `<div style="display: flex; flex-direction: column; gap: 2px;">`;
     
@@ -51,14 +51,9 @@ export function createSearchResultHtml(result: Suggestion): string {
     itemHtml += `<span class="search-result-title" style="flex: 1;">${result.highlightedNotePathTitle || result.notePathTitle || ''}</span>`;
     itemHtml += `</div>`;
     
-    // Add attribute snippet if available
+    // Add attribute snippet if available (inline display)
     if (result.highlightedAttributeSnippet && result.highlightedAttributeSnippet.trim()) {
-        itemHtml += `<div class="search-result-attributes" style="margin-left: 20px;">${result.highlightedAttributeSnippet}</div>`;
-    }
-    
-    // Add content snippet if available
-    if (result.highlightedContentSnippet && result.highlightedContentSnippet.trim()) {
-        itemHtml += `<div class="search-result-content" style="margin-left: 20px;">${result.highlightedContentSnippet}</div>`;
+        itemHtml += `<div class="search-result-attributes" style="margin-left: 20px; color: var(--muted-text-color); font-size: 0.9em;">${result.highlightedAttributeSnippet}</div>`;
     }
     
     itemHtml += `</div>`;

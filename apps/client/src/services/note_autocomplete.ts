@@ -30,8 +30,6 @@ export interface Suggestion {
     notePathTitle?: string;
     notePath?: string;
     highlightedNotePathTitle?: string;
-    contentSnippet?: string;
-    highlightedContentSnippet?: string;
     attributeSnippet?: string;
     highlightedAttributeSnippet?: string;
     action?: string | "create-note" | "search-notes" | "external-link" | "command";
@@ -329,21 +327,16 @@ function initNoteAutocomplete($el: JQuery<HTMLElement>, options?: Options) {
                             return html;
                         }
                         
-                        // For note suggestions, match Quick Search structure exactly
+                        // For note suggestions, match Quick Search structure
                         // Title row with icon
                         let html = `<div style="display: flex; align-items: center; gap: 6px;">`;
                         html += `<span class="${suggestion.icon ?? "bx bx-note"}" style="flex-shrink: 0;"></span>`;
                         html += `<span class="search-result-title" style="flex: 1;">${suggestion.highlightedNotePathTitle || ''}</span>`;
                         html += `</div>`;
                         
-                        // Add attribute snippet if available
+                        // Add attribute snippet if available (inline display)
                         if (suggestion.highlightedAttributeSnippet && suggestion.highlightedAttributeSnippet.trim()) {
-                            html += `<div class="search-result-attributes" style="margin-left: 20px; margin-top: 2px;">${suggestion.highlightedAttributeSnippet}</div>`;
-                        }
-                        
-                        // Add content snippet if available
-                        if (suggestion.highlightedContentSnippet && suggestion.highlightedContentSnippet.trim()) {
-                            html += `<div class="search-result-content" style="margin-left: 20px; margin-top: 2px;">${suggestion.highlightedContentSnippet}</div>`;
+                            html += `<div class="search-result-attributes" style="margin-left: 20px; margin-top: 2px; color: var(--muted-text-color); font-size: 0.9em;">${suggestion.highlightedAttributeSnippet}</div>`;
                         }
                         
                         return html;

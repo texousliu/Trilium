@@ -607,7 +607,7 @@ function extractAttributeSnippet(noteId: string, searchTokens: string[], maxLeng
             return "";
         }
 
-        // Limit to 4 lines maximum, similar to content snippet logic
+        // Display attributes inline, separated by spaces
         const lines: string[] = [];
         for (const attr of matchingAttributes.slice(0, 4)) {
             let line = "";
@@ -625,7 +625,7 @@ function extractAttributeSnippet(noteId: string, searchTokens: string[], maxLeng
             }
         }
 
-        let snippet = lines.join('\n');
+        let snippet = lines.join(' '); // Join with spaces instead of newlines
         
         // Apply length limit while preserving line structure
         if (snippet.length > maxLength) {
@@ -665,9 +665,8 @@ function searchNotesForAutocomplete(query: string, fastSearch: boolean = true) {
 
     const trimmed = allSearchResults.slice(0, 200);
 
-    // Extract content and attribute snippets
+    // Extract attribute snippets only (content snippets removed for performance)
     for (const result of trimmed) {
-        result.contentSnippet = extractContentSnippet(result.noteId, searchContext.highlightedTokens);
         result.attributeSnippet = extractAttributeSnippet(result.noteId, searchContext.highlightedTokens);
     }
 
@@ -680,8 +679,6 @@ function searchNotesForAutocomplete(query: string, fastSearch: boolean = true) {
             noteTitle: title,
             notePathTitle: result.notePathTitle,
             highlightedNotePathTitle: result.highlightedNotePathTitle,
-            contentSnippet: result.contentSnippet,
-            highlightedContentSnippet: result.highlightedContentSnippet,
             attributeSnippet: result.attributeSnippet,
             highlightedAttributeSnippet: result.highlightedAttributeSnippet,
             icon: icon ?? "bx bx-note"
@@ -707,17 +704,9 @@ function highlightSearchResults(searchResults: SearchResult[], highlightedTokens
     for (const result of searchResults) {
         result.highlightedNotePathTitle = result.notePathTitle.replace(/[<{}]/g, "");
         
-        // Initialize highlighted content snippet
-        if (result.contentSnippet) {
-            // Escape HTML but preserve newlines for later conversion to <br>
-            result.highlightedContentSnippet = escapeHtml(result.contentSnippet);
-            // Remove any stray < { } that might interfere with our highlighting markers
-            result.highlightedContentSnippet = result.highlightedContentSnippet.replace(/[<{}]/g, "");
-        }
-        
         // Initialize highlighted attribute snippet
         if (result.attributeSnippet) {
-            // Escape HTML but preserve newlines for later conversion to <br>
+            // Escape HTML
             result.highlightedAttributeSnippet = escapeHtml(result.attributeSnippet);
             // Remove any stray < { } that might interfere with our highlighting markers
             result.highlightedAttributeSnippet = result.highlightedAttributeSnippet.replace(/[<{}]/g, "");
@@ -749,16 +738,6 @@ function highlightSearchResults(searchResults: SearchResult[], highlightedTokens
                 }
             }
 
-            // Highlight in content snippet
-            if (result.highlightedContentSnippet) {
-                const contentRegex = new RegExp(escapeRegExp(token), "gi");
-                while ((match = contentRegex.exec(normalizeString(result.highlightedContentSnippet))) !== null) {
-                    result.highlightedContentSnippet = wrapText(result.highlightedContentSnippet, match.index, token.length, "{", "}");
-                    // 2 characters are added, so we need to adjust the index
-                    contentRegex.lastIndex += 2;
-                }
-            }
-
             // Highlight in attribute snippet
             if (result.highlightedAttributeSnippet) {
                 const attributeRegex = new RegExp(escapeRegExp(token), "gi");
@@ -776,18 +755,10 @@ function highlightSearchResults(searchResults: SearchResult[], highlightedTokens
             result.highlightedNotePathTitle = result.highlightedNotePathTitle.replace(/{/g, "<b>").replace(/}/g, "</b>");
         }
         
-        if (result.highlightedContentSnippet) {
-            // Replace highlighting markers with HTML tags
-            result.highlightedContentSnippet = result.highlightedContentSnippet.replace(/{/g, "<b>").replace(/}/g, "</b>");
-            // Convert newlines to <br> tags for HTML display
-            result.highlightedContentSnippet = result.highlightedContentSnippet.replace(/\n/g, "<br>");
-        }
-        
         if (result.highlightedAttributeSnippet) {
             // Replace highlighting markers with HTML tags
             result.highlightedAttributeSnippet = result.highlightedAttributeSnippet.replace(/{/g, "<b>").replace(/}/g, "</b>");
-            // Convert newlines to <br> tags for HTML display
-            result.highlightedAttributeSnippet = result.highlightedAttributeSnippet.replace(/\n/g, "<br>");
+            // Keep inline display - no conversion of newlines needed
         }
     }
 }

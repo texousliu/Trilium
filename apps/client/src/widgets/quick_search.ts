@@ -92,8 +92,6 @@ interface QuickSearchResponse {
         noteTitle: string;
         notePathTitle: string;
         highlightedNotePathTitle: string;
-        contentSnippet?: string;
-        highlightedContentSnippet?: string;
         attributeSnippet?: string;
         highlightedAttributeSnippet?: string;
         icon: string;
