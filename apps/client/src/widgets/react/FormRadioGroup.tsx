@@ -14,7 +14,7 @@ interface FormRadioProps {
 
 export default function FormRadioGroup({ values, ...restProps }: FormRadioProps) {
     return (
-        <>
+        <div role="group">
             {(values || []).map(({ value, label, inlineDescription }) => (
                 <div className="form-checkbox">
                     <FormRadio
@@ -25,7 +25,7 @@ export default function FormRadioGroup({ values, ...restProps }: FormRadioProps)
                     />
                 </div>
             ))}
-        </>
+        </div>
     );
 }
 
