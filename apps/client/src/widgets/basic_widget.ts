@@ -4,6 +4,7 @@ import froca from "../services/froca.js";
 import { t } from "../services/i18n.js";
 import toastService from "../services/toast.js";
 import { renderReactWidget } from "./react/react_utils.jsx";
+import { EventNames, EventData } from "../components/app_context.js";
 
 export class TypedBasicWidget<T extends TypedComponent<any>> extends TypedComponent<T> {
     protected attrs: Record<string, string>;
@@ -276,9 +277,10 @@ export function wrapReactWidgets<T extends TypedComponent<any>>(components: (T |
     return wrappedResult;
 }
 
-class ReactWrappedWidget extends BasicWidget {
+export class ReactWrappedWidget extends BasicWidget {
 
     private el: VNode;
+    listeners: Record<string, (data: any) => void> = {};
 
     constructor(el: VNode) {
         super();
@@ -287,6 +289,12 @@ class ReactWrappedWidget extends BasicWidget {
 
     doRender() {
         this.$widget = renderReactWidget(this, this.el);
+    }
+
+    handleEvent<T extends EventNames>(name: T, data: EventData<T>): Promise<unknown[] | unknown> | null | undefined {
+        const listener = this.listeners[name];
+        console.log("Handle ", name, listener);
+        listener?.(data);
     }
 
 }

@@ -4,7 +4,7 @@ import TabRowWidget from "../widgets/tab_row.js";
 import TitleBarButtonsWidget from "../widgets/title_bar_buttons.js";
 import LeftPaneContainer from "../widgets/containers/left_pane_container.js";
 import NoteTreeWidget from "../widgets/note_tree.js";
-import NoteTitleWidget from "../widgets/note_title.js";
+import NoteTitleWidget from "../widgets/note_title.jsx";
 import OwnedAttributeListWidget from "../widgets/ribbon_widgets/owned_attribute_list.js";
 import NoteActionsWidget from "../widgets/buttons/note_actions.js";
 import NoteDetailWidget from "../widgets/note_detail.js";
@@ -152,7 +152,7 @@ export default class DesktopLayout {
                                                                 .css("align-items", "center")
                                                                 .cssBlock(".title-row > * { margin: 5px; }")
                                                                 .child(new NoteIconWidget())
-                                                                .child(new NoteTitleWidget())
+                                                                .child(<NoteTitleWidget />)
                                                                 .child(new SpacerWidget(0, 1))
                                                                 .child(new MovePaneButton(true))
                                                                 .child(new MovePaneButton(false))

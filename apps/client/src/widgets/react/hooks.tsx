@@ -6,7 +6,8 @@ import { OptionNames } from "@triliumnext/commons";
 import options, { type OptionValue } from "../../services/options";
 import utils, { reloadFrontendApp } from "../../services/utils";
 import Component from "../../components/component";
-import server from "../../services/server";
+import NoteContext from "../../components/note_context";
+import { ReactWrappedWidget } from "../basic_widget";
 
 type TriliumEventHandler<T extends EventNames> = (data: EventData<T>) => void;
 const registeredHandlers: Map<Component, Map<EventNames, TriliumEventHandler<any>[]>> = new Map();
@@ -81,6 +82,11 @@ export default function useTriliumEvent<T extends EventNames>(eventName: T, hand
             }
         };
     }, [ eventName, parentWidget, handler ]);
+}
+
+export function useTriliumEventBeta<T extends EventNames>(eventName: T, handler: TriliumEventHandler<T>) {
+    const parentComponent = useContext(ParentComponent) as ReactWrappedWidget;
+    parentComponent.listeners[eventName] = handler;
 }
 
 export function useSpacedUpdate(callback: () => Promise<void>, interval = 1000) {
@@ -218,4 +224,36 @@ export function useTriliumOptions<T extends OptionNames>(...names: T[]) {
  */
 export function useUniqueName(prefix?: string) {
     return useMemo(() => (prefix ? prefix + "-" : "") + utils.randomString(10), [ prefix ]);
+}
+
+export function useNoteContext() {
+
+    const [ noteContext, setNoteContext ] = useState<NoteContext>();
+    const [ notePath, setNotePath ] = useState<string | null | undefined>();
+
+    useTriliumEvent("activeContextChanged", ({ noteContext }) => {
+        console.log("Active context changed.");
+        setNoteContext(noteContext);
+    });
+    useTriliumEventBeta("setNoteContext", ({ noteContext }) => {
+        console.log("Set note context", noteContext, noteContext.noteId);
+        setNoteContext(noteContext);
+    });
+    useTriliumEvent("noteSwitchedAndActivated", ({ noteContext }) => {
+        console.log("Note switched and activated")
+        setNoteContext(noteContext);
+    });
+    useTriliumEvent("noteSwitched", ({ noteContext, notePath }) => {
+        console.warn("Note switched", notePath);
+        setNotePath(notePath);
+    });
+
+    return {
+        note: noteContext?.note,
+        noteId: noteContext?.note?.noteId,
+        notePath: noteContext?.notePath,
+        hoistedNoteId: noteContext?.hoistedNoteId,
+        ntxId: noteContext?.ntxId
+    };
+
 }
