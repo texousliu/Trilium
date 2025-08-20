@@ -77,6 +77,10 @@ class Options {
         await server.put(`options`, payload);
     }
 
+    /**
+     * Saves multiple options at once, by supplying a record where the keys are the option names and the values represent the stringified value to set.
+     * @param newValues the record of keys and values.
+     */
     async saveMany<T extends OptionNames>(newValues: Record<T, OptionValue>) {
         await server.put<void>("options", newValues);
     }

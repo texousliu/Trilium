@@ -145,6 +145,13 @@ export function useTriliumOption(name: OptionNames, needsRefresh?: boolean): [st
     ]
 }
 
+/**
+ * Similar to {@link useTriliumOption}, but the value is converted to and from a boolean instead of a string.
+ * 
+ * @param name the name of the option to listen for.
+ * @param needsRefresh whether to reload the frontend whenever the value is changed.
+ * @returns an array where the first value is the current option value and the second value is the setter.
+ */
 export function useTriliumOptionBool(name: OptionNames, needsRefresh?: boolean): [boolean, (newValue: boolean) => Promise<void>] {
     const [ value, setValue ] = useTriliumOption(name, needsRefresh);
     return [
@@ -153,6 +160,13 @@ export function useTriliumOptionBool(name: OptionNames, needsRefresh?: boolean):
     ]
 }
 
+/**
+ * Similar to {@link useTriliumOption}, but the value is converted to and from a int instead of a string.
+ * 
+ * @param name the name of the option to listen for.
+ * @param needsRefresh whether to reload the frontend whenever the value is changed.
+ * @returns an array where the first value is the current option value and the second value is the setter.
+ */
 export function useTriliumOptionInt(name: OptionNames): [number, (newValue: number) => Promise<void>] {
     const [ value, setValue ] = useTriliumOption(name);
     return [
@@ -161,6 +175,12 @@ export function useTriliumOptionInt(name: OptionNames): [number, (newValue: numb
     ]
 }
 
+/**
+ * Similar to {@link useTriliumOption}, but the object value is parsed to and from a JSON instead of a string.
+ * 
+ * @param name the name of the option to listen for.
+ * @returns an array where the first value is the current option value and the second value is the setter.
+ */
 export function useTriliumOptionJson<T>(name: OptionNames): [ T, (newValue: T) => Promise<void> ] {
     const [ value, setValue ] = useTriliumOption(name);
     return [
@@ -169,6 +189,12 @@ export function useTriliumOptionJson<T>(name: OptionNames): [ T, (newValue: T) =
     ];
 }
 
+/**
+ * Similar to {@link useTriliumOption}, but operates with multiple options at once. 
+ * 
+ * @param names the name of the option to listen for.
+ * @returns an array where the first value is a map where the keys are the option names and the values, and the second value is the setter which takes in the same type of map and saves them all at once.
+ */
 export function useTriliumOptions<T extends OptionNames>(...names: T[]) {
     const values: Record<string, string> = {};
     for (const name of names) {

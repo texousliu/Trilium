@@ -378,6 +378,12 @@ async function openInAppHelp($button: JQuery<HTMLElement>) {
     }
 }
 
+/**
+ * Opens the in-app help at the given page in a split note. If there already is a split note open with a help page, it will be replaced by this one.
+ *
+ * @param inAppHelpPage the ID of the help note (excluding the `_help_` prefix).
+ * @returns a promise that resolves once the help has been opened.
+ */
 export async function openInAppHelpFromUrl(inAppHelpPage: string) {
     // Dynamic import to avoid import issues in tests.
     const appContext = (await import("../components/app_context.js")).default;
@@ -738,6 +744,14 @@ function isLaunchBarConfig(noteId: string) {
     return ["_lbRoot", "_lbAvailableLaunchers", "_lbVisibleLaunchers", "_lbMobileRoot", "_lbMobileAvailableLaunchers", "_lbMobileVisibleLaunchers"].includes(noteId);
 }
 
+/**
+ * Adds a class to the <body> of the page, where the class name is formed via a prefix and a value.
+ * Useful for configurable options such as `heading-style-markdown`, where `heading-style` is the prefix and `markdown` is the dynamic value.
+ * There is no separator between the prefix and the value, if needed it has to be supplied manually to the prefix.
+ *
+ * @param prefix the prefix.
+ * @param value the value to be appended to the prefix.
+ */
 export function toggleBodyClass(prefix: string, value: string) {
     const $body = $("body");
     for (const clazz of Array.from($body[0].classList)) {
@@ -750,6 +764,13 @@ export function toggleBodyClass(prefix: string, value: string) {
     $body.addClass(prefix + value);
 }
 
+/**
+ * Basic comparison for equality between the two arrays. The values are strictly checked via `===`.
+ *
+ * @param a the first array to compare.
+ * @param b the second array to compare.
+ * @returns `true` if both arrays are equals, `false` otherwise.
+ */
 export function arrayEqual<T>(a: T[], b: T[]) {
     if (a === b) {
         return true;
