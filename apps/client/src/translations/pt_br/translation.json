@@ -409,6 +409,11 @@
     "template": "Esta nota aparecerá na seleção de modelos disponíveis ao criar uma nova nota",
     "toc": "<code>#toc</code> ou <code>#toc=show</code> irá forçar a exibição do Sumário, <code>#toc=hide</code> irá forçar que ele fique oculto. Se o rótulo não existir, será considerado o ajuste global",
     "color": "define a cor da nota na árvore de notas, links etc. Use qualquer valor de cor CSS válido, como 'red' ou #a13d5f",
-    "keyboard_shortcut": "Define um atalho de teclado que irá pular imediatamente para esta nota. Exemplo: 'ctrl+alt+e'. É necessário recarregar o frontend para que a alteração tenha efeito."
+    "keyboard_shortcut": "Define um atalho de teclado que irá pular imediatamente para esta nota. Exemplo: 'ctrl+alt+e'. É necessário recarregar o frontend para que a alteração tenha efeito.",
+    "hide_highlight_widget": "Ocultar o widget da lista de destaques",
+    "keep_current_hoisting": "Abrir este link não alterará o destaque, mesmo que a nota não seja exibível na subárvore destacada atual.",
+    "execute_button": "Titulo do botão que executará a nota de código atual",
+    "exclude_from_note_map": "Notas com este rótulo ficarão ocultas no Mapa de Notas",
+    "new_notes_on_top": "Novas notas serão criadas no topo da nota raiz, não na parte inferior."
   }
 }
