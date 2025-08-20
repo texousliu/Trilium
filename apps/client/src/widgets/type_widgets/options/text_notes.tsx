@@ -12,7 +12,7 @@ import { Themes } from "@triliumnext/highlightjs";
 import { ensureMimeTypesForHighlighting, loadHighlightingTheme } from "../../../services/syntax_highlight";
 import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
 import { getHtml } from "../../react/RawHtml";
-import { CSSProperties } from "preact/compat";
+import type { CSSProperties } from "preact/compat";
 import FormText from "../../react/FormText";
 import FormTextBox, { FormTextBoxWithUnit } from "../../react/FormTextBox";
 import CheckboxList from "./components/CheckboxList";
@@ -294,8 +294,8 @@ function DateTimeFormatOptions() {
                 <Trans
                     i18nKey="custom_date_time_format.description"
                     components={{
-                        shortcut: <KeyboardShortcut actionName="insertDateTimeToText" />,
-                        doc: <a href="https://day.js.org/docs/en/display/format" target="_blank" rel="noopener noreferrer" />
+                        shortcut: <KeyboardShortcut actionName="insertDateTimeToText" /> as React.ReactElement,
+                        doc: <a href="https://day.js.org/docs/en/display/format" target="_blank" rel="noopener noreferrer" /> as React.ReactElement
                     }}
                 />
             </FormText>

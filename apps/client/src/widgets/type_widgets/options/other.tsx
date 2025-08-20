@@ -154,7 +154,7 @@ function RevisionSnapshotInterval() {
             <FormText>
                 <Trans
                     i18nKey="revisions_snapshot_interval.note_revisions_snapshot_description"
-                    components={{ doc: <a href="https://triliumnext.github.io/Docs/Wiki/note-revisions.html" class="external" />}}
+                    components={{ doc: <a href="https://triliumnext.github.io/Docs/Wiki/note-revisions.html" class="external" /> as React.ReactElement }}
                 />
             </FormText>
             <FormGroup name="revision-snapshot-time-interval" label={t("revisions_snapshot_interval.snapshot_time_interval_label")}>
