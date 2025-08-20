@@ -3,22 +3,14 @@ import swaggerUi from "swagger-ui-express";
 import { join } from "path";
 import yaml from "js-yaml";
 import type { JsonObject } from "swagger-ui-express";
-import { readFileSync, existsSync } from "fs";
+import { readFileSync } from "fs";
 import { RESOURCE_DIR } from "../services/resource_dir";
 
 export default function register(app: Application) {
     const etapiDocument = yaml.load(readFileSync(join(RESOURCE_DIR, "etapi.openapi.yaml"), "utf8")) as JsonObject;
     
-    // Load the comprehensive API documentation (YAML) if available, otherwise fall back to JSON
-    const apiYamlPath = join(RESOURCE_DIR, "api-openapi.yaml");
-    const apiJsonPath = join(RESOURCE_DIR, "openapi.json");
-    
-    let apiDocument: JsonObject;
-    if (existsSync(apiYamlPath)) {
-        apiDocument = yaml.load(readFileSync(apiYamlPath, "utf8")) as JsonObject;
-    } else {
-        apiDocument = JSON.parse(readFileSync(apiJsonPath, "utf-8"));
-    }
+    // Load the comprehensive API documentation from YAML
+    const apiDocument = yaml.load(readFileSync(join(RESOURCE_DIR, "api-openapi.yaml"), "utf8")) as JsonObject;
 
     app.use(
         "/etapi/docs/",
