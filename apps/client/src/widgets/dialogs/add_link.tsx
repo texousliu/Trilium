@@ -107,7 +107,7 @@ function AddLinkDialogComponent() {
             }}
             show={shown}
         >
-            <FormGroup label={t("add_link.note")}>
+            <FormGroup label={t("add_link.note")} name="note">
                 <NoteAutocomplete
                     inputRef={autocompleteRef}
                     onChange={setSuggestion}

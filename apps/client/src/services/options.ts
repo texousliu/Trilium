@@ -1,7 +1,8 @@
+import { OptionNames } from "@triliumnext/commons";
 import server from "./server.js";
 import { isShare } from "./utils.js";
 
-type OptionValue = number | string;
+export type OptionValue = number | string;
 
 class Options {
     initializedPromise: Promise<void>;
@@ -74,6 +75,10 @@ class Options {
         payload[key] = value;
 
         await server.put(`options`, payload);
+    }
+
+    async saveMany<T extends OptionNames>(newValues: Record<T, OptionValue>) {
+        await server.put<void>("options", newValues);
     }
 
     async toggle(key: string) {

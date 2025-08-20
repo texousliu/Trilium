@@ -43,7 +43,7 @@ function IncludeNoteDialogComponent() {
             footer={<Button text={t("include_note.button_include")} keyboardShortcut="Enter" />}
             show={shown}
         >
-            <FormGroup label={t("include_note.label_note")}>
+            <FormGroup name="note" label={t("include_note.label_note")}>
                 <NoteAutocomplete
                     placeholder={t("include_note.placeholder_search")}
                     onChange={setSuggestion}
@@ -55,8 +55,9 @@ function IncludeNoteDialogComponent() {
                 />
             </FormGroup>
 
-            <FormGroup label={t("include_note.box_size_prompt")}>
-                <FormRadioGroup name="include-note-box-size"
+            <FormGroup name="include-note-box-size" label={t("include_note.box_size_prompt")}>
+                <FormRadioGroup
+                    name="include-note-box-size"
                     currentValue={boxSize} onChange={setBoxSize}
                     values={[
                         { label: t("include_note.box_size_small"), value: "small" },

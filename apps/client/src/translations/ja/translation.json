@@ -835,7 +835,7 @@
   },
   "custom_date_time_format": {
     "title": "日付/時刻フォーマットのカスタム",
-    "description": "<kbd></kbd>またはツールバーから挿入される日付と時刻のフォーマットをカスタマイズする。 利用可能なトークンについては <a href=\"https://day.js.org/docs/en/display/format\" target=\"_blank\" rel=\"noopener noreferrer\">Day.js ドキュメント</a> を参照してください。",
+    "description": "<shortcut />またはツールバーから挿入される日付と時刻のフォーマットをカスタマイズする。 利用可能なトークンについては <doc>Day.js ドキュメント</doc> を参照してください。",
     "format_string": "文字列形式:",
     "formatted_time": "日付/時刻形式:"
   },

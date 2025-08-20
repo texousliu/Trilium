@@ -57,7 +57,8 @@ function RecentChangesDialogComponent() {
             header={
                 <Button
                     text={t("recent_changes.erase_notes_button")}
-                    small style={{ padding: "0 10px" }}
+                    size="small"
+                    style={{ padding: "0 10px" }}
                     onClick={() => {
                         server.post("notes/erase-deleted-notes-now").then(() => {
                             setNeedsRefresh(true);

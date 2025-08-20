@@ -4,7 +4,7 @@ import tree from "../../services/tree";
 import Button from "../react/Button";
 import FormCheckbox from "../react/FormCheckbox";
 import FormFileUpload from "../react/FormFileUpload";
-import FormGroup from "../react/FormGroup";
+import FormGroup, { FormMultiGroup } from "../react/FormGroup";
 import Modal from "../react/Modal";
 import RawHtml from "../react/RawHtml";
 import ReactBasicWidget from "../react/ReactBasicWidget";
@@ -55,11 +55,11 @@ function ImportDialogComponent() {
             footer={<Button text={t("import.import")} primary disabled={!files} />}
             show={shown}
         >
-            <FormGroup label={t("import.chooseImportFile")} description={<>{t("import.importDescription")} <strong>{ noteTitle }</strong></>}>
+            <FormGroup name="files" label={t("import.chooseImportFile")} description={<>{t("import.importDescription")} <strong>{ noteTitle }</strong></>}>
                 <FormFileUpload multiple onChange={setFiles} />
             </FormGroup>
 
-            <FormGroup label={t("import.options")}>
+            <FormMultiGroup label={t("import.options")}>
                 <FormCheckbox
                     name="safe-import" hint={t("import.safeImportTooltip")} label={t("import.safeImport")}
                     currentValue={safeImport} onChange={setSafeImport}
@@ -84,7 +84,7 @@ function ImportDialogComponent() {
                     name="replace-underscores-with-spaces" label={t("import.replaceUnderscoresWithSpaces")} 
                     currentValue={replaceUnderscoresWithSpaces} onChange={setReplaceUnderscoresWithSpaces}
                 />
-            </FormGroup>
+            </FormMultiGroup>
         </Modal>
     );
 }

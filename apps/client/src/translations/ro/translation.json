@@ -1076,7 +1076,7 @@
     "note_revisions": "Revizii ale notiței"
   },
   "revisions_snapshot_interval": {
-    "note_revisions_snapshot_description": "Intervalul de salvare a reviziilor este timpul după care se crează o nouă revizie a unei notițe. Vedeți <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">wiki-ul</a> pentru mai multe informații.",
+    "note_revisions_snapshot_description": "Intervalul de salvare a reviziilor este timpul după care se crează o nouă revizie a unei notițe. Vedeți <doc>wiki-ul</doc> pentru mai multe informații.",
     "note_revisions_snapshot_interval_title": "Intervalul de salvare a reviziilor",
     "snapshot_time_interval_label": "Intervalul de salvare a reviziilor:"
   },
@@ -1871,7 +1871,7 @@
   },
   "custom_date_time_format": {
     "title": "Format dată/timp personalizat",
-    "description": "Personalizați formatul de dată și timp inserat prin <kbd></kbd> sau din bara de unelte. Vedeți <a href=\"https://day.js.org/docs/en/display/format\" target=\"_blank\" rel=\"noopener noreferrer\">Documentația Day.js</a> pentru câmpurile de formatare disponibile.",
+    "description": "Personalizați formatul de dată și timp inserat prin <shortcut /> sau din bara de unelte. Vedeți <doc>Documentația Day.js</doc> pentru câmpurile de formatare disponibile.",
     "format_string": "Șir de formatare:",
     "formatted_time": "Data și ora formatate:"
   },

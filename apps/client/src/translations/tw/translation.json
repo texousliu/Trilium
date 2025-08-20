@@ -1778,12 +1778,12 @@
   },
   "revisions_snapshot_interval": {
     "note_revisions_snapshot_interval_title": "筆記歷史快照間隔",
-    "note_revisions_snapshot_description": "筆記歷史快照間隔是建立新筆記修訂的時間。如需詳細資訊，請參閱 <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">wiki</a>。",
+    "note_revisions_snapshot_description": "筆記歷史快照間隔是建立新筆記修訂的時間。如需詳細資訊，請參閱 <doc>wiki</doc>。",
     "snapshot_time_interval_label": "筆記歷史快照時間間隔："
   },
   "custom_date_time_format": {
     "title": "自訂日期 / 時間格式",
-    "description": "透過 <kbd></kbd> 或工具列自訂插入日期和時間的格式。有關可用的格式及符號，請參閱 <a href=\"https://day.js.org/docs/en/display/format\" target=\"_blank\" rel=\"noopener noreferrer\">Day.js docs</a>。",
+    "description": "透過 <shortcut /> 或工具列自訂插入日期和時間的格式。有關可用的格式及符號，請參閱 <doc>Day.js docs</doc>。",
     "format_string": "格式化字串：",
     "formatted_time": "格式化日期 / 時間："
   },

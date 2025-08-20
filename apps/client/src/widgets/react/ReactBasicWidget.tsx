@@ -22,11 +22,18 @@ export default abstract class ReactBasicWidget extends BasicWidget {
  * @returns the rendered wrapped DOM element.
  */
 export function renderReactWidget(parentComponent: Component, el: JSX.Element) {
-    const renderContainer = new DocumentFragment();
+    return renderReactWidgetAtElement(parentComponent, el, new DocumentFragment()).children();
+}
+
+export function renderReactWidgetAtElement(parentComponent: Component, el: JSX.Element, container: Element | DocumentFragment) {
     render((
         <ParentComponent.Provider value={parentComponent}>
             {el}
         </ParentComponent.Provider>
-    ), renderContainer);
-    return $(renderContainer.firstChild as HTMLElement);
+    ), container);
+    return $(container) as JQuery<HTMLElement>;
+}
+
+export function disposeReactWidget(container: Element) {
+    render(null, container);
 }

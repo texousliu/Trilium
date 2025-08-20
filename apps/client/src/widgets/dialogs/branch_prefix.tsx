@@ -64,7 +64,7 @@ function BranchPrefixDialogComponent() {
             footer={<Button text={t("branch_prefix.save")} />}
             show={shown}
         >
-            <FormGroup label={t("branch_prefix.prefix")}>
+            <FormGroup label={t("branch_prefix.prefix")} name="prefix">
                 <div class="input-group">
                     <input class="branch-prefix-input form-control" value={prefix} ref={branchInput}
                         onChange={(e) => setPrefix((e.target as HTMLInputElement).value)} />

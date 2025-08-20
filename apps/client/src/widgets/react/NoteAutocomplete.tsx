@@ -6,6 +6,7 @@ import type { RefObject } from "preact";
 import type { CSSProperties } from "preact/compat";
 
 interface NoteAutocompleteProps {    
+    id?: string;
     inputRef?: RefObject<HTMLInputElement>;
     text?: string;
     placeholder?: string;
@@ -18,7 +19,7 @@ interface NoteAutocompleteProps {
     noteId?: string;
 }
 
-export default function NoteAutocomplete({ inputRef: _ref, text, placeholder, onChange, onTextChange, container, containerStyle, opts, noteId, noteIdChanged }: NoteAutocompleteProps) {
+export default function NoteAutocomplete({ id, inputRef: _ref, text, placeholder, onChange, onTextChange, container, containerStyle, opts, noteId, noteIdChanged }: NoteAutocompleteProps) {
     const ref = _ref ?? useRef<HTMLInputElement>(null);
     
     useEffect(() => {
@@ -74,6 +75,7 @@ export default function NoteAutocomplete({ inputRef: _ref, text, placeholder, on
     return (
         <div className="input-group" style={containerStyle}>
             <input
+                id={id}
                 ref={ref}
                 className="note-autocomplete form-control"
                 placeholder={placeholder ?? t("add_link.search_note")} />
