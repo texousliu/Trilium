@@ -220,5 +220,29 @@
     "replaceUnderscoresWithSpaces": "Замінити підкреслення пробілами в назвах імпортованих нотаток",
     "import": "Імпорт",
     "failed": "Помилка імпорту: {{message}}."
+  },
+  "prompt": {
+    "title": "Підказка",
+    "ok": "ОК",
+    "defaultTitle": "Підказка"
+  },
+  "protected_session_password": {
+    "modal_title": "Захищений сеанс",
+    "help_title": "Довідка щодо захищених нотаток",
+    "close_label": "Закрити",
+    "form_label": "Щоб продовжити запитувану дію, вам потрібно розпочати захищений сеанс, ввівши пароль:",
+    "start_button": "Розпочати захищений сеанс"
+  },
+  "recent_changes": {
+    "title": "Останні зміни",
+    "erase_notes_button": "Стерти видалені нотатки зараз",
+    "deleted_notes_message": "Видалені нотатки стерто.",
+    "no_changes_message": "Поки що жодних змін...",
+    "undelete_link": "відновити",
+    "confirm_undelete": "Ви хочете відновити цю нотатку та її піднотатки?"
+  },
+  "revisions": {
+    "note_revisions": "Зміни нотаток",
+    "delete_all_revisions": "Видалити всі редакції цієї нотатки"
   }
 }
