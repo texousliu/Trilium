@@ -157,7 +157,8 @@
     "showSQLConsole": "mostrar consola SQL",
     "other": "Otro",
     "quickSearch": "centrarse en la entrada de búsqueda rápida",
-    "inPageSearch": "búsqueda en la página"
+    "inPageSearch": "búsqueda en la página",
+    "title": "Hoja de ayuda"
   },
   "import": {
     "importIntoNote": "Importar a nota",
@@ -224,11 +225,14 @@
     "search_placeholder": "ruta de búsqueda por nombre (por defecto si está vacío)",
     "modal_title": "Elija el tipo de nota",
     "modal_body": "Elija el tipo de nota/plantilla de la nueva nota:",
-    "templates": "Plantillas"
+    "templates": "Plantillas",
+    "builtin_templates": "Plantillas incluidas"
   },
   "password_not_set": {
     "title": "La contraseña no está establecida",
-    "body1": "Las notas protegidas se cifran mediante una contraseña de usuario, pero la contraseña aún no se ha establecido."
+    "body1": "Las notas protegidas se cifran mediante una contraseña de usuario, pero la contraseña aún no se ha establecido.",
+    "go_to_password_options": "Ir a opciones de contraseña",
+    "body2": "Para poder proteger las notas, haz click en el botón inferior para abrir la pantalla de Opciones y establecer tu contraseña."
   },
   "prompt": {
     "title": "Aviso",
@@ -1104,7 +1108,10 @@
     "layout-vertical-title": "Vertical",
     "layout-horizontal-title": "Horizontal",
     "layout-vertical-description": "la barra del lanzador está en la izquierda (por defecto)",
-    "layout-horizontal-description": "la barra de lanzamiento está debajo de la barra de pestañas, la barra de pestañas ahora tiene ancho completo."
+    "layout-horizontal-description": "la barra de lanzamiento está debajo de la barra de pestañas, la barra de pestañas ahora tiene ancho completo.",
+    "auto_theme": "Heredado (Sigue el esquema de colores del sistema)",
+    "light_theme": "Heredado (Claro)",
+    "dark_theme": "Heredado (Oscuro)"
   },
   "ai_llm": {
     "not_started": "No iniciado",
@@ -1151,7 +1158,7 @@
     "ollama_model_description": "Modelo de Ollama a usar para el completado de chat",
     "anthropic_configuration": "Configuración de Anthropic",
     "voyage_configuration": "Configuración de Voyage AI",
-    "voyage_url_description": "Por defecto:  https://api.voyageai.com/v1",
+    "voyage_url_description": "Por defecto: https://api.voyageai.com/v1",
     "ollama_configuration": "Configuración de Ollama",
     "enable_ollama": "Habilitar Ollama",
     "enable_ollama_description": "Habilitar Ollama para uso de modelo de IA local",
@@ -1983,6 +1990,16 @@
     "configure_launch_bar_description": "Abrir la configuración de la barra de inicio, para agregar o quitar elementos."
   },
   "modal": {
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "help_title": "Mostrar más información sobre esta pantalla"
+  },
+  "call_to_action": {
+    "next_theme_title": "Prueba el nuevo tema de Trilium",
+    "next_theme_message": "Estas usando actualmente el tema heredado,  ¿Te gustaría probar el nuevo tema?",
+    "next_theme_button": "Prueba el nuevo tema",
+    "background_effects_title": "Los efectos de fondo son ahora estables",
+    "background_effects_message": "En los dispositivos Windows, los efectos de fondo ya son totalmente estables. Los efectos de fondo añaden un toque de color a la interfaz de usuario difuminando el fondo que hay detrás. Esta técnica también se utiliza en otras aplicaciones como el Explorador de Windows.",
+    "background_effects_button": "Activar efectos de fondo",
+    "dismiss": "Desestimar"
   }
 }

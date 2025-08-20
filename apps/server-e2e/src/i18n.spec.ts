@@ -54,7 +54,7 @@ test("User can change language from settings", async ({ page, context }) => {
 
     // Select English again.
     await languageCombobox.selectOption("en");
-    await app.currentNoteSplit.locator("button.restart-app-button").click();
+    await app.currentNoteSplit.locator("button[name=restart-app-button]").click();
     await expect(app.currentNoteSplit).toContainText("Language", { timeout: 15000 });
     await expect(languageCombobox).toHaveValue("en");
 });

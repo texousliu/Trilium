@@ -100,7 +100,10 @@
     "unhoist": "すべてのホイストを無効にする",
     "toggle-book-properties": "コレクションプロパティ切り替え",
     "toggle-zen-mode": "禅モード（集中した編集のための最小限のUI）を有効/無効にする",
-    "add-include-note-to-text": "ノートを埋め込むダイアログを開く"
+    "add-include-note-to-text": "ノートを埋め込むダイアログを開く",
+    "toggle-promoted-attributes": "プロモートされた属性をトグルする",
+    "force-save-revision": "アクティブノートの新しいノートリヴィジョンを強制する",
+    "toggle-classic-editor-toolbar": "固定ツールバーを持ったエディターのフォーマットタブをトグルする"
   },
   "keyboard_action_names": {
     "back-in-note-history": "ノートの履歴を戻る",
