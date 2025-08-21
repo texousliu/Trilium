@@ -1,7 +1,7 @@
 import Dropdown from "./react/Dropdown";
 import "./note_icon.css";
 import { t } from "i18next";
-import { useNoteContext } from "./react/hooks";
+import { useNoteContext, useNoteLabel } from "./react/hooks";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import server from "../services/server";
 import type { Category, Icon } from "./icon_list";
@@ -28,26 +28,24 @@ let iconToCountCache!: Promise<IconToCountCache> | null;
 
 export default function NoteIcon() {
     const { note, viewScope } = useNoteContext();
-    const [ icon, setIcon ] = useState("bx bx-empty");
+    const [ icon, setIcon ] = useState<string | null | undefined>();
+    const [ iconClass ] = useNoteLabel(note, "iconClass");
+    const [ workspaceIconClass ] = useNoteLabel(note, "workspaceIconClass");
 
-    const refreshIcon = useCallback(() => {
-        if (note) {
-            setIcon(note.getIcon());
-        }
-    }, [ note ]);
-
-    useEffect(refreshIcon, [ note ]);
+    useEffect(() => {
+        setIcon(note?.getIcon());
+    }, [ note, iconClass, workspaceIconClass ]);
 
     return (
         <Dropdown
             className="note-icon-widget"
             title={t("note_icon.change_note_icon")}
             dropdownContainerStyle={{ width: "610px" }}
-            buttonClassName={`note-icon ${icon}`}
+            buttonClassName={`note-icon ${icon ?? "bx bx-empty"}`}
             hideToggleArrow
             disabled={viewScope?.viewMode !== "default"}
         >
-            <NoteIconList note={note} />
+            { note && <NoteIconList note={note} /> }
         </Dropdown>
     )
 }

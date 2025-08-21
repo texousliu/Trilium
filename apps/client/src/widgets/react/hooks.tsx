@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "preact/hooks";
-import appContext, { BeforeUploadListener, EventData, EventNames } from "../../components/app_context";
+import { EventData, EventNames } from "../../components/app_context";
 import { ParentComponent } from "./react_utils";
 import SpacedUpdate from "../../services/spaced_update";
 import { OptionNames } from "@triliumnext/commons";
@@ -9,8 +9,7 @@ import Component from "../../components/component";
 import NoteContext from "../../components/note_context";
 import { ReactWrappedWidget } from "../basic_widget";
 import FNote from "../../entities/fnote";
-import froca from "../../services/froca";
-import toast from "../../services/toast";
+import attributes from "../../services/attributes";
 
 type TriliumEventHandler<T extends EventNames> = (data: EventData<T>) => void;
 const registeredHandlers: Map<Component, Map<EventNames, TriliumEventHandler<any>[]>> = new Map();
@@ -315,4 +314,27 @@ export function useNoteProperty<T extends keyof FNote>(note: FNote | null | unde
     });
 
     return note[property];
+}
+
+export function useNoteLabel(note: FNote | undefined | null, labelName: string): [string | undefined, (newValue: string) => void] {
+    const [ labelValue, setNoteValue ] = useState<string | null | undefined>(note?.getLabelValue(labelName));
+
+    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+        for (const attr of loadResults.getAttributeRows()) {
+            if (attr.type === "label" && attr.name === labelName && attributes.isAffecting(attr, note)) {
+                setNoteValue(attr.value ?? null);
+            }
+        }
+    });
+
+    const setter = useCallback((value: string | undefined) => {
+        if (note) {
+            attributes.setLabel(note.noteId, labelName, value)
+        }
+    }, [note]);
+
+    return [
+        labelValue,
+        setter
+    ] as const;
 }

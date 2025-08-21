@@ -20,20 +20,6 @@ export default class NoteIconWidget extends NoteContextAwareWidget {
         this.$iconList = this.$widget.find(".icon-list");
     }
 
-    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        if (this.noteId && loadResults.isNoteReloaded(this.noteId)) {
-            this.refresh();
-            return;
-        }
-
-        for (const attr of loadResults.getAttributeRows()) {
-            if (attr.type === "label" && ["iconClass", "workspaceIconClass"].includes(attr.name ?? "") && attributeService.isAffecting(attr, this.note)) {
-                this.refresh();
-                break;
-            }
-        }
-    }
-
     async renderDropdown() {
         this.$iconList.empty();
 
