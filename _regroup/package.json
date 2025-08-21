@@ -35,7 +35,7 @@
     "chore:generate-openapi": "tsx bin/generate-openapi.js"
   },
   "devDependencies": {    
-    "@playwright/test": "1.54.2",
+    "@playwright/test": "1.55.0",
     "@stylistic/eslint-plugin": "5.2.3",        
     "@types/express": "5.0.3",    
     "@types/node": "22.17.2",    
