@@ -21,6 +21,7 @@ function NoteTypeWidget() {
     const noteTypes = useMemo(() => NOTE_TYPES.filter((nt) => !nt.reserved && !nt.static), []);
     const [ codeNotesMimeTypes ] = useTriliumOption("codeNotesMimeTypes");
     const mimeTypes = useMemo(() => mime_types.getMimeTypes().filter(mimeType => mimeType.enabled), [ codeNotesMimeTypes ]);
+    const notSelectableNoteTypes = useMemo(() => NOTE_TYPES.filter((nt) => nt.reserved || nt.static).map((nt) => nt.type), []);
     
     const { note } = useNoteContext();
     const currentNoteType = useNoteProperty(note, "type") ?? undefined;
@@ -50,6 +51,7 @@ function NoteTypeWidget() {
             <Dropdown
                 dropdownContainerClassName="note-type-dropdown"
                 text={<span className="note-type-desc">{findTypeTitle(currentNoteType, currentNoteMime)}</span>}
+                disabled={notSelectableNoteTypes.includes(currentNoteType ?? "text")}
             >
                 {noteTypes.map(({ isNew, isBeta, type, mime, title }) => {
                     const badges: FormListBadge[] = [];
@@ -99,7 +101,7 @@ function NoteTypeWidget() {
     )   
 }
 
-function findTypeTitle(type?: NoteType, mime?: string) {
+function findTypeTitle(type?: NoteType, mime?: string | null) {
     if (type === "code") {
         const mimeTypes = mime_types.getMimeTypes();
         const found = mimeTypes.find((mt) => mt.mime === mime);
