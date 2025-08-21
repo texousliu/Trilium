@@ -676,14 +676,12 @@ $(window).on("beforeunload", () => {
 
         if (!component.beforeUnloadEvent()) {
             console.log(`Component ${component.componentId} is not finished saving its state.`);
-
-            toast.showMessage(t("app_context.please_wait_for_save"), 10000);
-
             allSaved = false;
         }
     }
 
     if (!allSaved) {
+        toast.showMessage(t("app_context.please_wait_for_save"), 10000);
         return "some string";
     }
 });
