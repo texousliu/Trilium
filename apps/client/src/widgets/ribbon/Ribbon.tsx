@@ -1,3 +1,4 @@
+import { useState } from "preact/hooks";
 import FNote from "../../entities/fnote";
 import { t } from "../../services/i18n";
 import { useNoteContext } from "../react/hooks";
@@ -96,15 +97,18 @@ const TAB_CONFIGURATION: TabConfiguration[] = [
 export default function Ribbon() {
     const { note } = useNoteContext();
     const context: TabContext = { note };
+    const [ activeTab, setActiveTab ] = useState<number>();
 
     return (
         <div class="ribbon-container" style={{ contain: "none" }}>
             <div className="ribbon-top-row">
                 <div className="ribbon-tab-container">
-                    {TAB_CONFIGURATION.map(({ title, icon }) => (
+                    {TAB_CONFIGURATION.map(({ title, icon }, i) => (
                         <RibbonTab
                             icon={icon}
                             title={typeof title === "string" ? title : title(context)}
+                            active={i === activeTab}
+                            onClick={() => setActiveTab(i)}
                         />
                     ))}
                 </div>
@@ -116,16 +120,17 @@ export default function Ribbon() {
     )
 }
 
-function RibbonTab({ icon, title }: { icon: string; title: string }) {
+function RibbonTab({ icon, title, active, onClick }: { icon: string; title: string; active: boolean, onClick: () => void }) {
     return (
         <>
-            <div className="ribbon-tab-title">
+            <div className={`ribbon-tab-title ${active ? "active" : ""}`}>
                 <span
                     className={`ribbon-tab-title-icon ${icon}`}
                     title={title}
+                    onClick={onClick}
                 />
                 &nbsp;
-                <span class="ribbon-tab-title-label">{title}</span>
+                { active && <span class="ribbon-tab-title-label">{title}</span> }
             </div>
 
             <div class="ribbon-tab-spacer" />

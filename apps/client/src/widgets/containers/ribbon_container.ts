@@ -61,12 +61,6 @@ export default class RibbonContainer extends NoteContextAwareWidget {
         for (const buttonWidget of this.buttonWidgets) {
             this.$buttonContainer.append(buttonWidget.render());
         }
-
-        this.$tabContainer.on("click", ".ribbon-tab-title", (e) => {
-            const $ribbonTitle = $(e.target).closest(".ribbon-tab-title");
-
-            this.toggleRibbonTab($ribbonTitle);
-        });
     }
 
     toggleRibbonTab($ribbonTitle: JQuery<HTMLElement>, refreshActiveTab = true) {
