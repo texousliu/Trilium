@@ -1,7 +1,7 @@
 import { Dropdown as BootstrapDropdown } from "bootstrap";
 import { ComponentChildren } from "preact";
 import { CSSProperties } from "preact/compat";
-import { useEffect, useRef } from "preact/hooks";
+import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { useUniqueName } from "./hooks";
 
 interface DropdownProps {
@@ -18,6 +18,8 @@ export default function Dropdown({ className, buttonClassName, isStatic, childre
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
 
+    const [ shown, setShown ] = useState(false);
+
     useEffect(() => {
         if (!triggerRef.current) return;
         
@@ -25,19 +27,25 @@ export default function Dropdown({ className, buttonClassName, isStatic, childre
         return () => dropdown.dispose();
     }, []); // Add dependency array
 
+    const onShown = useCallback(() => {
+        setShown(true);
+    }, [])
+
+    const onHidden = useCallback(() => {
+        setShown(false);
+    }, []);
+
     useEffect(() => {
         if (!dropdownRef.current) return;
         
-        const handleHide = () => {
-            // Remove console.log from production code
-        };
-        
         const $dropdown = $(dropdownRef.current);
-        $dropdown.on("hide.bs.dropdown", handleHide);
+        $dropdown.on("show.bs.dropdown", onShown);
+        $dropdown.on("hide.bs.dropdown", onHidden);
         
         // Add proper cleanup
         return () => {
-            $dropdown.off("hide.bs.dropdown", handleHide);
+            $dropdown.off("show.bs.dropdown", onShown);
+            $dropdown.off("hide.bs.dropdown", onHidden);
         };
     }, []); // Add dependency array
 
@@ -62,7 +70,7 @@ export default function Dropdown({ className, buttonClassName, isStatic, childre
                 style={dropdownContainerStyle}
                 aria-labelledby={ariaId}
             >
-                {children}
+                {shown && children}
             </div>
         </div>
     )
