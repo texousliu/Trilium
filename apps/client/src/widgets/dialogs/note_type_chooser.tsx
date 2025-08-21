@@ -83,7 +83,7 @@ function NoteTypeChooserDialogComponent() {
             show={shown}
             stackable
         >
-            <FormGroup label={t("note_type_chooser.change_path_prompt")}>
+            <FormGroup name="parent-note" label={t("note_type_chooser.change_path_prompt")}>
                 <NoteAutocomplete
                     onChange={setParentNote}
                     placeholder={t("note_type_chooser.search_placeholder")}
@@ -95,7 +95,7 @@ function NoteTypeChooserDialogComponent() {
                 />
             </FormGroup>
 
-            <FormGroup label={t("note_type_chooser.modal_body")}>
+            <FormGroup name="note-type" label={t("note_type_chooser.modal_body")}>
                 <FormList onSelect={onNoteTypeSelected}>
                     {noteTypes.map((_item) => {
                         if (_item.title === "----") {     

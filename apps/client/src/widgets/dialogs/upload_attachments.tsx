@@ -51,13 +51,12 @@ function UploadAttachmentsDialogComponent() {
             onHidden={() => setShown(false)}
             show={shown}
         >
-            <FormGroup label={t("upload_attachments.choose_files")} description={description}>
+            <FormGroup name="files" label={t("upload_attachments.choose_files")} description={description}>
                 <FormFileUpload onChange={setFiles} multiple />
             </FormGroup>
 
-            <FormGroup label={t("upload_attachments.options")}>
-                <FormCheckbox
-                    name="shrink-images"
+            <FormGroup name="shrink-images" label={t("upload_attachments.options")}>
+                <FormCheckbox                    
                     hint={t("upload_attachments.tooltip")} label={t("upload_attachments.shrink_images")}
                     currentValue={shrinkImages} onChange={setShrinkImages}
                 />

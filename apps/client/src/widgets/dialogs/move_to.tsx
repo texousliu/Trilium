@@ -57,7 +57,7 @@ function MoveToDialogComponent() {
             <h5>{t("move_to.notes_to_move")}</h5>
             <NoteList branchIds={movedBranchIds} />
 
-            <FormGroup label={t("move_to.target_parent_note")}>
+            <FormGroup name="parent-note" label={t("move_to.target_parent_note")}>
                 <NoteAutocomplete
                     onChange={setSuggestion}
                     inputRef={autoCompleteRef}

@@ -2,10 +2,12 @@ import { Tooltip } from "bootstrap";
 import { useEffect, useRef, useMemo, useCallback } from "preact/hooks";
 import { escapeQuotes } from "../../services/utils";
 import { ComponentChildren } from "preact";
-import { memo } from "preact/compat";
+import { CSSProperties, memo } from "preact/compat";
+import { useUniqueName } from "./hooks";
 
 interface FormCheckboxProps {
-    name: string;
+    id?: string;
+    name?: string;
     label: string | ComponentChildren;
     /**
      * If set, the checkbox label will be underlined and dotted, indicating a hint. When hovered, it will show the hint text.
@@ -14,9 +16,11 @@ interface FormCheckboxProps {
     currentValue: boolean;
     disabled?: boolean;
     onChange(newValue: boolean): void;
+    containerStyle?: CSSProperties;
 }
 
-const FormCheckbox = memo(({ name, disabled, label, currentValue, onChange, hint }: FormCheckboxProps) => {
+const FormCheckbox = memo(({ name, id: _id, disabled, label, currentValue, onChange, hint, containerStyle }: FormCheckboxProps) => {
+    const id = _id ?? useUniqueName(name);
     const labelRef = useRef<HTMLLabelElement>(null);
 
     // Fix: Move useEffect outside conditional
@@ -46,7 +50,7 @@ const FormCheckbox = memo(({ name, disabled, label, currentValue, onChange, hint
     const titleText = useMemo(() => hint ? escapeQuotes(hint) : undefined, [hint]);
 
     return (
-        <div className="form-checkbox">
+        <div className="form-checkbox" style={containerStyle}>
             <label
                 className="form-check-label tn-checkbox"
                 style={labelStyle}
@@ -54,9 +58,10 @@ const FormCheckbox = memo(({ name, disabled, label, currentValue, onChange, hint
                 ref={labelRef}
             >
                 <input
+                    id={id}
                     className="form-check-input"
                     type="checkbox"
-                    name={name}
+                    name={id}
                     checked={currentValue || false}
                     value="1"
                     disabled={disabled}

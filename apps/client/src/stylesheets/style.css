@@ -139,6 +139,15 @@ textarea,
     color: var(--muted-text-color);
 }
 
+.form-group.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
 /* Add a gap between consecutive radios / check boxes */
 label.tn-radio + label.tn-radio,
 label.tn-checkbox + label.tn-checkbox {
@@ -1755,14 +1764,10 @@ button.close:hover {
     margin-bottom: 10px;
 }
 
-.options-number-input {
+.options-section input[type="number"] {
     /* overriding settings from .form-control */
     width: 10em !important;
     flex-grow: 0 !important;
-}
-
-.options-mime-types {
-    column-width: 250px;
 }
 
 textarea {

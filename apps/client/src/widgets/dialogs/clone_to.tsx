@@ -69,15 +69,15 @@ function CloneToDialogComponent() {
         >
             <h5>{t("clone_to.notes_to_clone")}</h5>
             <NoteList style={{ maxHeight: "200px", overflow: "auto" }} noteIds={clonedNoteIds} />
-            <FormGroup label={t("clone_to.target_parent_note")}>
+            <FormGroup name="target-parent-note" label={t("clone_to.target_parent_note")}>
                 <NoteAutocomplete
                     placeholder={t("clone_to.search_for_note_by_its_name")}
                     onChange={setSuggestion}
                     inputRef={autoCompleteRef}
                 />      
             </FormGroup>
-            <FormGroup label={t("clone_to.prefix_optional")} title={t("clone_to.cloned_note_prefix_title")}>
-                <FormTextBox name="clone-prefix" onChange={setPrefix} />
+            <FormGroup name="clone-prefix" label={t("clone_to.prefix_optional")} title={t("clone_to.cloned_note_prefix_title")}>
+                <FormTextBox onChange={setPrefix} />
             </FormGroup>
         </Modal>
     )

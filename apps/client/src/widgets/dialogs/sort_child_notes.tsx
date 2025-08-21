@@ -83,11 +83,8 @@ function SortChildNotesDialogComponent() {
                 label={t("sort_child_notes.sort_with_respect_to_different_character_sorting")}
                 currentValue={sortNatural} onChange={setSortNatural}
             />
-            <FormGroup className="form-check" label={t("sort_child_notes.natural_sort_language")} description={t("sort_child_notes.the_language_code_for_natural_sort")}>
-                <FormTextBox
-                    name="sort-locale"                                        
-                    currentValue={sortLocale} onChange={setSortLocale}
-                />
+            <FormGroup name="sort-locale" className="form-check" label={t("sort_child_notes.natural_sort_language")} description={t("sort_child_notes.the_language_code_for_natural_sort")}>
+                <FormTextBox currentValue={sortLocale} onChange={setSortLocale} />
             </FormGroup>
         </Modal>
     )

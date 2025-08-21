@@ -1,5 +1,13 @@
 import { AttributeRow, NoteType } from "./rows.js";
 
+type Response = {
+    success: true,
+    message?: string;
+} | {
+    success: false;
+    message: string;
+}
+
 export interface AppInfo {
     appVersion: string;
     dbVersion: number;
@@ -60,4 +68,90 @@ export interface RecentChangeRow {
 
 export interface BulkActionAffectedNotes {
     affectedNoteCount: number;
+}
+
+export interface DatabaseCheckIntegrityResponse {
+    results: {
+        integrity_check: string;
+    }[];
+}
+
+export interface DatabaseAnonymizeResponse {
+    success: boolean;
+    anonymizedFilePath: string;
+}
+
+export interface AnonymizedDbResponse {
+    filePath: string;
+    fileName: string;
+}
+
+export type SyncTestResponse = Response;
+
+export interface EtapiToken {
+    name: string;
+    utcDateCreated: string;
+    etapiTokenId?: string;
+}
+
+export interface PostTokensResponse {
+    authToken: string;
+}
+
+export interface BackupDatabaseNowResponse {
+    backupFile: string;
+}
+
+export interface DatabaseBackup {
+    fileName: string;
+    filePath: string;
+    mtime: Date;
+}
+
+export type ChangePasswordResponse = Response;
+
+export interface TOTPStatus {
+    set: boolean;
+}
+
+export interface TOTPGenerate {
+    success: boolean;
+    message: string;
+}
+
+export interface TOTPRecoveryKeysResponse {
+    success: boolean;
+    recoveryCodes?: string[];
+    keysExist?: boolean;
+    usedRecoveryCodes?: string[];
+}
+
+export interface OAuthStatus {
+    enabled: boolean;
+    name?: string;
+    email?: string;
+    missingVars?: string[];
+}
+
+// Interface for the Ollama model response
+export interface OllamaModelResponse {
+    success: boolean;
+    models: Array<{
+        name: string;
+        model: string;
+        details?: {
+            family?: string;
+            parameter_size?: string;
+        }
+    }>;
+}
+
+
+export interface OpenAiOrAnthropicModelResponse {
+    success: boolean;
+    chatModels: Array<{
+        id: string;
+        name: string;
+        type: string;
+    }>;
 }

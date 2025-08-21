@@ -55,7 +55,7 @@ function RevisionsDialogComponent() {
             helpPageId="vZWERwf8U3nx"
             bodyStyle={{ display: "flex", height: "80vh" }}
             header={
-                (!!revisions?.length && <Button text={t("revisions.delete_all_revisions")} small style={{ padding: "0 10px" }}
+                (!!revisions?.length && <Button text={t("revisions.delete_all_revisions")} size="small" style={{ padding: "0 10px" }}
                     onClick={async () => {
                         const text = t("revisions.confirm_delete_all");
 

@@ -4,8 +4,7 @@ import { randomSecureToken, isWindows } from "./utils.js";
 import log from "./log.js";
 import dateUtils from "./date_utils.js";
 import keyboardActions from "./keyboard_actions.js";
-import type { KeyboardShortcutWithRequiredActionName, OptionMap, OptionNames } from "@triliumnext/commons";
-import { DEFAULT_ALLOWED_TAGS } from "./html_sanitizer.js";
+import { SANITIZER_DEFAULT_ALLOWED_TAGS, type KeyboardShortcutWithRequiredActionName, type OptionMap, type OptionNames } from "@triliumnext/commons";
 
 function initDocumentOptions() {
     optionService.createOption("documentId", randomSecureToken(16), false);
@@ -187,7 +186,7 @@ const defaultOptions: DefaultOption[] = [
     { name: "backgroundEffects", value: "true", isSynced: false },
     {
         name: "allowedHtmlTags",
-        value: JSON.stringify(DEFAULT_ALLOWED_TAGS),
+        value: JSON.stringify(SANITIZER_DEFAULT_ALLOWED_TAGS),
         isSynced: true
     },
 

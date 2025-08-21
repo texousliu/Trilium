@@ -97,7 +97,9 @@
     "cancel": "キャンセル",
     "ok": "OK",
     "close": "閉じる",
-    "delete_notes_preview": "ノートのプレビューを削除"
+    "delete_notes_preview": "ノートのプレビューを削除",
+    "broken_relations_to_be_deleted": "次のリレーション ({{relationCount}})は壊れているので消去されます",
+    "deleted_relation_text": "削除予定のノート{{- note}}は{{- source}}からリレーション{{- relation}}によって参照されています."
   },
   "calendar": {
     "mon": "月",
@@ -208,7 +210,9 @@
     "confirmation": "確認",
     "cancel": "キャンセル",
     "ok": "OK",
-    "also_delete_note": "同時にノートを削除"
+    "also_delete_note": "同時にノートを削除",
+    "are_you_sure_remove_note": "本当に\"{{title}}\"をリレーションマップから除きたいですか？ ",
+    "if_you_dont_check": "これをチェックしないと、このノートはリレーションマップからのみ除かれます。"
   },
   "export": {
     "export_note_title": "ノートをエクスポート",
@@ -278,7 +282,9 @@
     "inPageSearch": "ページ内検索",
     "showJumpToNoteDialog": "<a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">「ジャンプ先」ダイアログ</a>を表示",
     "moveNoteUpDown": "ノートリストでノートを上/下に移動",
-    "notSet": "未設定"
+    "notSet": "未設定",
+    "goUpDown": "ノートのリストで上下する",
+    "editBranchPrefix": "アクティブノートのクローンの <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/tree-concepts.html#prefix\">プレフィックス</a> を編集する"
   },
   "import": {
     "importIntoNote": "ノートにインポート",
@@ -829,7 +835,7 @@
   },
   "custom_date_time_format": {
     "title": "日付/時刻フォーマットのカスタム",
-    "description": "<kbd></kbd>またはツールバーから挿入される日付と時刻のフォーマットをカスタマイズする。 利用可能なトークンについては <a href=\"https://day.js.org/docs/en/display/format\" target=\"_blank\" rel=\"noopener noreferrer\">Day.js ドキュメント</a> を参照してください。",
+    "description": "<shortcut />またはツールバーから挿入される日付と時刻のフォーマットをカスタマイズする。 利用可能なトークンについては <doc>Day.js ドキュメント</doc> を参照してください。",
     "format_string": "文字列形式:",
     "formatted_time": "日付/時刻形式:"
   },
@@ -1007,7 +1013,8 @@
     "labels": "ラベル",
     "relations": "関係",
     "notes": "ノート",
-    "other": "その他"
+    "other": "その他",
+    "none_yet": "アクションを上のリストからクリックして追加。"
   },
   "note_title": {
     "placeholder": "ここにノートのタイトルを入力..."

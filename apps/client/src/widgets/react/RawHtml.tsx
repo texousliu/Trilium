@@ -24,7 +24,7 @@ function getProps({ className, html, style }: RawHtmlProps) {
     }
 }
 
-function getHtml(html: string | HTMLElement | JQuery<HTMLElement>) {
+export function getHtml(html: string | HTMLElement | JQuery<HTMLElement>) {
     if (typeof html === "object" && "length" in html) {
         html = html[0];
     }
