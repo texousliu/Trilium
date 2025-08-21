@@ -7,116 +7,6 @@ import type { NoteType } from "../../entities/fnote.js";
 import type { EventData, EventNames } from "../../components/app_context.js";
 import type NoteActionsWidget from "../buttons/note_actions.js";
 
-const TPL = /*html*/`
-<div class="ribbon-container">
-    <style>
-    .ribbon-container {
-        margin-bottom: 5px;
-    }
-
-    .ribbon-top-row {
-        display: flex;
-    }
-
-    .ribbon-tab-container {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        margin-left: 10px;
-        flex-grow: 1;
-        flex-flow: row wrap;
-    }
-
-    .ribbon-tab-title {
-        color: var(--muted-text-color);
-        border-bottom: 1px solid var(--main-border-color);
-        min-width: 24px;
-        flex-basis: 24px;
-        max-width: max-content;
-        flex-grow: 10;
-    }
-
-    .ribbon-tab-title .bx {
-        font-size: 150%;
-        position: relative;
-        top: 3px;
-    }
-
-    .ribbon-tab-title.active {
-        color: var(--main-text-color);
-        border-bottom: 3px solid var(--main-text-color);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .ribbon-tab-title:hover {
-        cursor: pointer;
-    }
-
-    .ribbon-tab-title:hover {
-        color: var(--main-text-color);
-    }
-
-    .ribbon-tab-title:first-of-type {
-        padding-left: 10px;
-    }
-
-    .ribbon-tab-spacer {
-        flex-basis: 0;
-        min-width: 0;
-        max-width: 35px;
-        flex-grow: 1;
-        border-bottom: 1px solid var(--main-border-color);
-    }
-
-    .ribbon-tab-spacer:last-of-type {
-        flex-grow: 1;
-        flex-basis: 0;
-        min-width: 0;
-        max-width: 10000px;
-    }
-
-    .ribbon-button-container {
-        display: flex;
-        border-bottom: 1px solid var(--main-border-color);
-        margin-right: 5px;
-    }
-
-    .ribbon-button-container > * {
-        position: relative;
-        top: -3px;
-        margin-left: 10px;
-    }
-
-    .ribbon-body {
-        display: none;
-        border-bottom: 1px solid var(--main-border-color);
-        margin-left: 10px;
-        margin-right: 5px; /* needs to have this value so that the bottom border is the same width as the top one */
-    }
-
-    .ribbon-body.active {
-        display: block;
-    }
-
-    .ribbon-tab-title-label {
-        display: none;
-    }
-
-    .ribbon-tab-title.active .ribbon-tab-title-label {
-        display: inline;
-    }
-    </style>
-
-    <div class="ribbon-top-row">
-        <div class="ribbon-tab-container"></div>
-        <div class="ribbon-button-container"></div>
-    </div>
-
-    <div class="ribbon-body-container"></div>
-</div>`;
-
 type ButtonWidget = (CommandButtonWidget | NoteActionsWidget);
 
 export default class RibbonContainer extends NoteContextAwareWidget {
@@ -160,8 +50,6 @@ export default class RibbonContainer extends NoteContextAwareWidget {
     }
 
     doRender() {
-        this.$widget = $(TPL);
-
         this.$tabContainer = this.$widget.find(".ribbon-tab-container");
         this.$buttonContainer = this.$widget.find(".ribbon-button-container");
         this.$bodyContainer = this.$widget.find(".ribbon-body-container");
@@ -241,16 +129,11 @@ export default class RibbonContainer extends NoteContextAwareWidget {
                 .attr("data-ribbon-component-id", ribbonWidget.componentId)
                 .attr("data-ribbon-component-name", (ribbonWidget as any).name as string) // TODO: base class for ribbon widgets
                 .append(
-                    $('<span class="ribbon-tab-title-icon">')
-                        .addClass(ret.icon)
-                        .attr("title", ret.title)
+                    $('<span class="">')
                         .attr("data-toggle-command", (ribbonWidget as any).toggleCommand)
-                ) // TODO: base class
-                .append(" ")
-                .append($('<span class="ribbon-tab-title-label">').text(ret.title));
+                )
 
-            this.$tabContainer.append($ribbonTitle);
-            this.$tabContainer.append('<div class="ribbon-tab-spacer">');
+            this.$tabContainer.append('');
 
             if (ret.activate && !this.lastActiveComponentId && !$ribbonTabToActivate && !noExplicitActivation) {
                 $ribbonTabToActivate = $ribbonTitle;

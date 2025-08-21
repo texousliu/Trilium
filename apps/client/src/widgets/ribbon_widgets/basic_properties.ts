@@ -99,8 +99,6 @@ export default class BasicPropertiesWidget extends NoteContextAwareWidget {
     getTitle() {
         return {
             show: !this.note?.isLaunchBarConfig(),
-            title: t("basic_properties.basic_properties"),
-            icon: "bx bx-slider"
         };
     }
 
