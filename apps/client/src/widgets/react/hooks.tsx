@@ -264,17 +264,30 @@ export function useNoteContext() {
 
 }
 
-export function useNoteProperty<T extends keyof FNote>(note: FNote | null | undefined, property: T) {
+/**
+ * Allows a React component to listen to obtain a property of a {@link FNote} while also automatically watching for changes, either via the user changing to a different note or the property being changed externally.
+ * 
+ * @param note the {@link FNote} whose property to obtain.
+ * @param property a property of a {@link FNote} to obtain the value from (e.g. `title`, `isProtected`).
+ * @param componentId optionally, constricts the refresh of the value if an update occurs externally via the component ID of a legacy widget. This can be used to avoid external data replacing fresher, user-inputted data.
+ * @returns the value of the requested property.
+ */
+export function useNoteProperty<T extends keyof FNote>(note: FNote | null | undefined, property: T, componentId?: string) {
     if (!note) {
         return null;
     }
-    
+
     const [ value, setValue ] = useState<FNote[T]>(note[property]);
-    useEffect(() => setValue(value), [ note[property] ]);
+
+    // Watch for note changes.
+    useEffect(() => setValue(note[property]), [ note[property] ]);
+
+    // Watch for external changes.
     useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
-        if (loadResults.isNoteReloaded(note.noteId)) {
+        if (loadResults.isNoteReloaded(note.noteId, componentId)) {
             setValue(note[property]);
         }
     });
+    
     return value;
 }

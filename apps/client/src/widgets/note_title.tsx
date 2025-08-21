@@ -1,41 +1,35 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useRef } from "preact/hooks";
 import { t } from "../services/i18n";
 import FormTextBox from "./react/FormTextBox";
-import { useNoteContext, useNoteProperty, useSpacedUpdate, useTriliumEventBeta } from "./react/hooks";
+import { useNoteContext, useNoteProperty, useSpacedUpdate } from "./react/hooks";
 import protected_session_holder from "../services/protected_session_holder";
 import server from "../services/server";
 import "./note_title.css";
 
 export default function NoteTitleWidget() {
     const { note, noteId, componentId } = useNoteContext();
-    const [ title, setTitle ] = useState(note?.title);
+    const title = useNoteProperty(note, "title", componentId);
     const isProtected = useNoteProperty(note, "isProtected");
-    useEffect(() => setTitle(note?.title), [ note?.noteId ]);
+    const newTitle = useRef("");
 
     const spacedUpdate = useSpacedUpdate(async () => {
         if (!note) {
             return;
         }
         protected_session_holder.touchProtectedSessionIfNecessary(note);
-        await server.put<void>(`notes/${noteId}/title`, { title: title }, componentId);
+        await server.put<void>(`notes/${noteId}/title`, { title: newTitle.current }, componentId);
     });    
-
-    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
-        if (loadResults.isNoteReloaded(noteId, componentId)) {
-            setTitle(note?.title);
-        }
-    });
 
     return (
         <div className="note-title-widget">
             <FormTextBox
                 autocomplete="off"
-                currentValue={title}
+                currentValue={title ?? ""}
                 placeholder={t("note_title.placeholder")}
                 className={`note-title ${isProtected ? "protected" : ""}`}
                 tabIndex={100}
                 onChange={(newValue) => {
-                    setTitle(newValue);
+                    newTitle.current = newValue;
                     spacedUpdate.scheduleUpdate();
                 }}
             />
