@@ -65,18 +65,8 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
             return;
         }
 
-        for (const noteType of NOTE_TYPES.filter((nt) => !nt.reserved && !nt.static)) {
+        for (const noteType of ) {
             let $typeLink: JQuery<HTMLElement>;
-
-            const $title = $("<span>").text(noteType.title);
-
-            if (noteType.isNew) {
-                $title.append($(`<span class="badge new-note-type-badge">`).text(t("note_types.new-feature")));
-            }
-
-            if (noteType.isBeta) {
-                $title.append($(`<span class="badge">`).text(t("note_types.beta-feature")));
-            }
 
             if (noteType.type !== "code") {
                 $typeLink = $('<a class="dropdown-item">')

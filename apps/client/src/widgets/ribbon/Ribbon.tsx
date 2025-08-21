@@ -101,7 +101,7 @@ const TAB_CONFIGURATION: TabConfiguration[] = [
 export default function Ribbon() {
     const { note } = useNoteContext();
     const context: TabContext = { note };
-    const [ activeTab, setActiveTab ] = useState<number>();
+    const [ activeTab, setActiveTab ] = useState<number | undefined>(8);
     const activeTabConfiguration = activeTab ? TAB_CONFIGURATION[activeTab] : undefined;
 
     return (

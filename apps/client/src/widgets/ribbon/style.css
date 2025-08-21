@@ -92,3 +92,26 @@
 .ribbon-tab-title.active .ribbon-tab-title-label {
     display: inline;
 }
+
+.basic-properties-widget {
+    padding: 0px 12px 6px 12px;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+
+.basic-properties-widget > * {
+    margin-top: 9px;
+    margin-bottom: 2px;
+}
+
+.basic-properties-widget > * > :last-child {
+    margin-right: 30px;
+}
+
+.note-type-container,
+.editability-select-container,
+.note-language-container {
+    display: flex;
+    align-items: center;
+}

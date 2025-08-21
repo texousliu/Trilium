@@ -63,15 +63,21 @@ export default function FormList({ children, onSelect, style, fullHeight }: Form
     );
 }
 
+export interface FormListBadge {
+    className?: string;
+    text: string;
+}
+
 interface FormListItemOpts {
     children: ComponentChildren;
     icon?: string;
     value?: string;
     title?: string;
     active?: boolean;
+    badges?: FormListBadge[];
 }
 
-export function FormListItem({ children, icon, value, title, active }: FormListItemOpts) {
+export function FormListItem({ children, icon, value, title, active, badges }: FormListItemOpts) {
     return (
         <a
             class={`dropdown-item ${active ? "active" : ""}`}
@@ -80,6 +86,9 @@ export function FormListItem({ children, icon, value, title, active }: FormListI
         >
             <Icon icon={icon} />&nbsp;
             {children}
+            {badges && badges.map(({ className, text }) => (
+                <span className={`badge ${className ?? ""}`}>{text}</span>
+            ))}
         </a>
     );
 }

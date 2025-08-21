@@ -10,32 +10,6 @@ import type FNote from "../../entities/fnote.js";
 import NoteLanguageWidget from "../note_language.js";
 
 const TPL = /*html*/`
-<div class="basic-properties-widget">
-    <style>
-        .basic-properties-widget {
-            padding: 0px 12px 6px 12px;
-            display: flex;
-            align-items: baseline;
-            flex-wrap: wrap;
-        }
-
-        .basic-properties-widget > * {
-            margin-top: 9px;
-            margin-bottom: 2px;
-        }
-
-        .basic-properties-widget > * > :last-child {
-            margin-right: 30px;
-        }
-
-        .note-type-container,
-        .editability-select-container,
-        .note-language-container {
-            display: flex;
-            align-items: center;
-        }
-    </style>
-
     <div class="note-type-container">
         <span>${t("basic_properties.note_type")}:</span> &nbsp;
     </div>
@@ -55,7 +29,7 @@ const TPL = /*html*/`
     <div class="note-language-container">
         <span>${t("basic_properties.language")}:</span> &nbsp;
     </div>
-</div>`;
+`;
 
 export default class BasicPropertiesWidget extends NoteContextAwareWidget {
 
