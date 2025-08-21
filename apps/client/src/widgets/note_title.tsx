@@ -48,6 +48,7 @@ export default function NoteTitleWidget() {
     useEffect(() => {
         appContext.addBeforeUnloadListener(() => spacedUpdate.isAllSavedAndTriggerUpdate());        
     }, []);
+    useTriliumEventBeta([ "beforeNoteSwitch", "beforeNoteContextRemove" ], () => spacedUpdate.updateNowIfNecessary());
 
     // Manage focus.
     const textBoxRef = useRef<HTMLInputElement>(null);
