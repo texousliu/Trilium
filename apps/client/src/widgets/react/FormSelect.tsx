@@ -20,6 +20,7 @@ interface ValueConfig<T, Q> {
 
 interface FormSelectProps<T, Q> extends ValueConfig<T, Q> {
     id?: string;
+    name?: string;
     onChange: OnChangeListener;
     style?: CSSProperties;
 }
@@ -27,9 +28,9 @@ interface FormSelectProps<T, Q> extends ValueConfig<T, Q> {
 /**
  * Combobox component that takes in any object array as data. Each item of the array is rendered as an item, and the key and values are obtained by looking into the object by a specified key.
  */
-export default function FormSelect<T>({ id, onChange, style, ...restProps }: FormSelectProps<T, T>) {
+export default function FormSelect<T>({ name, id, onChange, style, ...restProps }: FormSelectProps<T, T>) {
     return (
-        <FormSelectBody id={id} onChange={onChange} style={style}>
+        <FormSelectBody name={name} id={id} onChange={onChange} style={style}>
             <FormSelectGroup {...restProps} />
         </FormSelectBody>
     );
@@ -38,9 +39,9 @@ export default function FormSelect<T>({ id, onChange, style, ...restProps }: For
 /**
  * Similar to {@link FormSelect}, but the top-level elements are actually groups.
  */
-export function FormSelectWithGroups<T>({ id, values, keyProperty, titleProperty, currentValue, onChange }: FormSelectProps<T, FormSelectGroup<T>>) {
+export function FormSelectWithGroups<T>({ name, id, values, keyProperty, titleProperty, currentValue, onChange }: FormSelectProps<T, FormSelectGroup<T>>) {
     return (
-        <FormSelectBody id={id} onChange={onChange}>
+        <FormSelectBody name={name} id={id} onChange={onChange}>
             {values.map(({ title, items }) => {
                 return (
                     <optgroup label={title}>
@@ -52,7 +53,7 @@ export function FormSelectWithGroups<T>({ id, values, keyProperty, titleProperty
     )
 }
 
-function FormSelectBody({ id, children, onChange, style }: { id?: string, children: ComponentChildren, onChange: OnChangeListener, style?: CSSProperties }) {
+function FormSelectBody({ id, name, children, onChange, style }: { id?: string, name?: string, children: ComponentChildren, onChange: OnChangeListener, style?: CSSProperties }) {
     return (
         <select
             id={id}

@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "preact/hooks";
 import server from "../services/server";
 import type { Category, Icon } from "./icon_list";
 import FormTextBox from "./react/FormTextBox";
+import FormSelect from "./react/FormSelect";
 
 interface IconToCountCache {
     iconClassToCountMap: Record<string, number>;
@@ -13,6 +14,7 @@ interface IconToCountCache {
 
 interface IconData {
     iconToCount: Record<string, number>;
+    categories: Category[];
     icons: Icon[];
 }
 
@@ -49,7 +51,7 @@ export default function NoteIcon() {
 
 function NoteIconList() {
     const [ search, setSearch ] = useState<string>();
-    const [ categoryId, setCategoryId ] = useState<number>();
+    const [ categoryId, setCategoryId ] = useState<string>("0");
     const [ iconData, setIconData ] = useState<IconData>();
 
     useEffect(() => {
@@ -62,7 +64,7 @@ function NoteIconList() {
             let icons: Icon[] = fullIconData.icons;
             if (search || categoryId) {
                 icons = icons.filter((icon) => {
-                    if (categoryId && icon.category_id !== categoryId) {
+                    if (categoryId !== "0" && String(icon.category_id) !== categoryId) {
                         return false;
                     }
 
@@ -78,7 +80,8 @@ function NoteIconList() {
 
             setIconData({
                 iconToCount,
-                icons
+                icons,
+                categories: fullIconData.categories
             })
         }
 
@@ -88,7 +91,13 @@ function NoteIconList() {
     return (
         <>
             <div class="filter-row">
-                <span>{t("note_icon.category")}</span> <select name="icon-category" class="form-select"></select>
+                <span>{t("note_icon.category")}</span>
+                <FormSelect
+                    name="icon-category"
+                    values={fullIconData?.categories ?? []}
+                    currentValue={categoryId} onChange={setCategoryId}
+                    keyProperty="id" titleProperty="name"
+                />
 
                 <span>{t("note_icon.search")}</span>
                 <FormTextBox
