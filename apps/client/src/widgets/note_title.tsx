@@ -9,7 +9,7 @@ import { isLaunchBarConfig } from "../services/utils";
 import appContext from "../components/app_context";
 
 export default function NoteTitleWidget() {
-    const { note, noteId, componentId, viewScope, noteContext } = useNoteContext();    
+    const { note, noteId, componentId, viewScope, noteContext, parentComponent } = useNoteContext();    
     const title = useNoteProperty(note, "title", componentId);    
     const isProtected = useNoteProperty(note, "isProtected");
     const newTitle = useRef("");
@@ -41,7 +41,7 @@ export default function NoteTitleWidget() {
     });    
 
     useEffect(() => {
-        appContext.addBeforeUnloadListener(() => spacedUpdate.isAllSavedAndTriggerUpdate());
+        appContext.addBeforeUnloadListener(() => spacedUpdate.isAllSavedAndTriggerUpdate());        
     }, []);
 
     return (
@@ -56,6 +56,14 @@ export default function NoteTitleWidget() {
                 onChange={(newValue) => {
                     newTitle.current = newValue;
                     spacedUpdate.scheduleUpdate();
+                }}
+                onKeyDown={(e) => {
+                    // Focus on the note content when pressing enter.
+                    if (e.key === "Enter") {
+                        e.preventDefault();
+                        parentComponent.triggerCommand("focusOnDetail", { ntxId: noteContext?.ntxId });
+                        return;
+                    }
                 }}
             />}
         </div>

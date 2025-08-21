@@ -271,7 +271,8 @@ export function useNoteContext() {
         ntxId: noteContext?.ntxId,
         viewScope: noteContext?.viewScope,
         componentId: parentComponent.componentId,
-        noteContext: noteContext
+        noteContext,
+        parentComponent
     };
 
 }
