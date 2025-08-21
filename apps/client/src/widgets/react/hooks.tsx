@@ -9,6 +9,7 @@ import Component from "../../components/component";
 import NoteContext from "../../components/note_context";
 import { ReactWrappedWidget } from "../basic_widget";
 import FNote from "../../entities/fnote";
+import froca from "../../services/froca";
 
 type TriliumEventHandler<T extends EventNames> = (data: EventData<T>) => void;
 const registeredHandlers: Map<Component, Map<EventNames, TriliumEventHandler<any>[]>> = new Map();
@@ -233,10 +234,15 @@ export function useNoteContext() {
 
     const [ noteContext, setNoteContext ] = useState<NoteContext>();
     const [ notePath, setNotePath ] = useState<string | null | undefined>();
+    const [ note, setNote ] = useState<FNote | null | undefined>(); 
+
+    useEffect(() => {
+        setNote(noteContext?.note);
+    }, [ notePath ]);
 
     useTriliumEventBeta("activeContextChanged", ({ noteContext }) => {
         setNoteContext(noteContext);
-        setNotePath(noteContext.notePath);
+        setNotePath(noteContext.notePath);        
     });
     useTriliumEventBeta("setNoteContext", ({ noteContext }) => {
         console.log("Set note context", noteContext, noteContext.noteId);
@@ -250,11 +256,14 @@ export function useNoteContext() {
         console.warn("Note switched", notePath);
         setNotePath(notePath);
     });
+    useTriliumEventBeta("frocaReloaded", () => {
+        setNote(noteContext?.note);
+    });
     
     const parentComponent = useContext(ParentComponent) as ReactWrappedWidget;
 
     return {
-        note: noteContext?.note,
+        note: note,
         noteId: noteContext?.note?.noteId,
         notePath: noteContext?.notePath,
         hoistedNoteId: noteContext?.hoistedNoteId,
@@ -280,16 +289,17 @@ export function useNoteProperty<T extends keyof FNote>(note: FNote | null | unde
     }
 
     const [ value, setValue ] = useState<FNote[T]>(note[property]);
+    const refreshValue = () => setValue(note[property]);
 
     // Watch for note changes.
-    useEffect(() => setValue(note[property]), [ note[property] ]);
+    useEffect(() => refreshValue(), [ note, note[property] ]);
 
     // Watch for external changes.
     useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
         if (loadResults.isNoteReloaded(note.noteId, componentId)) {
-            setValue(note[property]);
+            refreshValue();
         }
     });
 
-    return value;
+    return note[property];
 }

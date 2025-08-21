@@ -12,10 +12,10 @@ export default function NoteTitleWidget() {
     const title = useNoteProperty(note, "title", componentId);    
     const isProtected = useNoteProperty(note, "isProtected");
     const newTitle = useRef("");
-
+    
     const [ isReadOnly, setReadOnly ] = useState<boolean>(false);
     const [ navigationTitle, setNavigationTitle ] = useState<string | null>(null);    
-
+    
     useEffect(() => {
         const isReadOnly = note === null
             || note === undefined
@@ -23,7 +23,7 @@ export default function NoteTitleWidget() {
             || isLaunchBarConfig(note.noteId)
             || viewScope?.viewMode !== "default";
         setReadOnly(isReadOnly);
-    }, [ note?.noteId, note?.isProtected, viewScope?.viewMode ]);
+    }, [ note, note?.noteId, note?.isProtected, viewScope?.viewMode ]);
 
     useEffect(() => {
         if (isReadOnly) {
