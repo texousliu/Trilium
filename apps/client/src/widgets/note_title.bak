@@ -37,8 +37,6 @@ const TPL = /*html*/`
         text-shadow: 4px 4px 4px var(--muted-text-color);
     }
     </style>
-
-    <input autocomplete="off" value="" placeholder="${t("note_title.placeholder")}" class="note-title" tabindex="100">
 </div>`;
 
 export default class NoteTitleWidget extends NoteContextAwareWidget {
@@ -51,13 +49,7 @@ export default class NoteTitleWidget extends NoteContextAwareWidget {
         super();
 
         this.spacedUpdate = new SpacedUpdate(async () => {
-            const title = this.$noteTitle.val();
-
-            if (this.note) {
-                protectedSessionHolder.touchProtectedSessionIfNecessary(this.note);
-            }
-
-            await server.put(`notes/${this.noteId}/title`, { title }, this.componentId);
+            
         });
 
         this.deleteNoteOnEscape = false;

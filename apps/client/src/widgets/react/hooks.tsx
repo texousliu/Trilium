@@ -86,7 +86,9 @@ export default function useTriliumEvent<T extends EventNames>(eventName: T, hand
 
 export function useTriliumEventBeta<T extends EventNames>(eventName: T, handler: TriliumEventHandler<T>) {
     const parentComponent = useContext(ParentComponent) as ReactWrappedWidget;
-    parentComponent.listeners[eventName] = handler;
+    parentComponent.registerHandler(eventName, handler);
+
+    return (() => parentComponent.removeHandler(eventName, handler));
 }
 
 export function useSpacedUpdate(callback: () => Promise<void>, interval = 1000) {
@@ -247,13 +249,16 @@ export function useNoteContext() {
         console.warn("Note switched", notePath);
         setNotePath(notePath);
     });
+    
+    const parentComponent = useContext(ParentComponent) as ReactWrappedWidget;
 
     return {
         note: noteContext?.note,
         noteId: noteContext?.note?.noteId,
         notePath: noteContext?.notePath,
         hoistedNoteId: noteContext?.hoistedNoteId,
-        ntxId: noteContext?.ntxId
+        ntxId: noteContext?.ntxId,
+        componentId: parentComponent.componentId
     };
 
 }
