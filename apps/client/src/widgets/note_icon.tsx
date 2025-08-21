@@ -102,11 +102,6 @@ function NoteIconList() {
         loadIcons();
     }, [ search, categoryId ]);
 
-    // Focus on search by default.
-    useEffect(() => {
-        searchBoxRef?.current?.focus();
-    }, []);
-
     return (
         <>
             <div class="filter-row">
@@ -124,6 +119,7 @@ function NoteIconList() {
                     type="text"
                     name="icon-search"
                     currentValue={search} onChange={setSearch}
+                    autoFocus
                 />
             </div>
 
