@@ -1,0 +1,47 @@
+import { t } from "../../services/i18n";
+import { openInAppHelpFromUrl } from "../../services/utils";
+import "./FormToggle.css";
+
+interface FormToggleProps {
+    currentValue: boolean | null;
+    onChange(newValue: boolean): void;
+    switchOnName: string;
+    switchOnTooltip: string;
+    switchOffName: string;
+    switchOffTooltip: string;
+    helpPage?: string;
+}
+
+export default function FormToggle({ currentValue, helpPage, switchOnName, switchOnTooltip, switchOffName, switchOffTooltip, onChange }: FormToggleProps) {
+    return (
+        <div className="switch-widget">
+            <span className="switch-name">{ currentValue ? switchOffName : switchOnName }</span>
+
+            <label>
+                <div
+                    className={`switch-button ${currentValue ? "on" : ""}`}
+                    title={currentValue ? switchOffTooltip : switchOnTooltip }
+                >
+                    <input
+                        className="switch-toggle"
+                        type="checkbox"
+                        checked={currentValue === true}
+                        onInput={(e) => {
+                            onChange(!currentValue);
+                            e.preventDefault();
+                        }}      
+                    />
+                </div>
+            </label>
+
+            { helpPage && (
+                <button
+                    class="switch-help-button icon-action bx bx-help-circle"
+                    type="button"
+                    onClick={() => openInAppHelpFromUrl(helpPage)}
+                    title={t("open-help-page")}
+                />
+            )}
+        </div>
+    )
+}

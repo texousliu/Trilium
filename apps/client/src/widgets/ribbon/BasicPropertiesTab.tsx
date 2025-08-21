@@ -8,22 +8,27 @@ import mime_types from "../../services/mime_types";
 import { NoteType } from "@triliumnext/commons";
 import server from "../../services/server";
 import dialog from "../../services/dialog";
+import FormToggle from "../react/FormToggle";
+import FNote from "../../entities/fnote";
+import protected_session from "../../services/protected_session";
 
 export default function BasicPropertiesTab() {
+    const { note } = useNoteContext();
+    
     return (
-        <div className="basic-properties-widget">
-            <NoteTypeWidget />
+        <div className="basic-properties-widget">        
+            <NoteTypeWidget note={note} />
+            <ProtectedNoteSwitch note={note} />
         </div>
     );
 }
 
-function NoteTypeWidget() {
+function NoteTypeWidget({ note }: { note?: FNote | null }) {
     const noteTypes = useMemo(() => NOTE_TYPES.filter((nt) => !nt.reserved && !nt.static), []);
     const [ codeNotesMimeTypes ] = useTriliumOption("codeNotesMimeTypes");
     const mimeTypes = useMemo(() => mime_types.getMimeTypes().filter(mimeType => mimeType.enabled), [ codeNotesMimeTypes ]);
     const notSelectableNoteTypes = useMemo(() => NOTE_TYPES.filter((nt) => nt.reserved || nt.static).map((nt) => nt.type), []);
     
-    const { note } = useNoteContext();
     const currentNoteType = useNoteProperty(note, "type") ?? undefined;
     const currentNoteMime = useNoteProperty(note, "mime");
 
@@ -99,6 +104,21 @@ function NoteTypeWidget() {
             </Dropdown>
         </div>
     )   
+}
+
+function ProtectedNoteSwitch({ note }: { note?: FNote | null }) {
+    const isProtected = useNoteProperty(note, "isProtected");
+
+    return (
+        <div className="protected-note-switch-container">
+            <FormToggle
+                currentValue={isProtected}
+                onChange={(shouldProtect) => note && protected_session.protectNote(note.noteId, shouldProtect, false)}
+                switchOnName={t("protect_note.toggle-on")} switchOnTooltip={t("protect_note.toggle-on-hint")}
+                switchOffName={t("protect_note.toggle-off")} switchOffTooltip={t("protect_note.toggle-off-hint")}
+            />
+        </div>
+    )
 }
 
 function findTypeTitle(type?: NoteType, mime?: string | null) {
