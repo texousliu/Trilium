@@ -259,7 +259,9 @@ export function useNoteContext() {
         notePath: noteContext?.notePath,
         hoistedNoteId: noteContext?.hoistedNoteId,
         ntxId: noteContext?.ntxId,
-        componentId: parentComponent.componentId
+        viewScope: noteContext?.viewScope,
+        componentId: parentComponent.componentId,
+        noteContext: noteContext
     };
 
 }
@@ -288,6 +290,6 @@ export function useNoteProperty<T extends keyof FNote>(note: FNote | null | unde
             setValue(note[property]);
         }
     });
-    
+
     return value;
 }

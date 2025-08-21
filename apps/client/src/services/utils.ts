@@ -740,7 +740,7 @@ function isUpdateAvailable(latestVersion: string | null | undefined, currentVers
     return compareVersions(latestVersion, currentVersion) > 0;
 }
 
-function isLaunchBarConfig(noteId: string) {
+export function isLaunchBarConfig(noteId: string) {
     return ["_lbRoot", "_lbAvailableLaunchers", "_lbVisibleLaunchers", "_lbMobileRoot", "_lbMobileAvailableLaunchers", "_lbMobileVisibleLaunchers"].includes(noteId);
 }
 
