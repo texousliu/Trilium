@@ -63,41 +63,6 @@ export default class RibbonContainer extends NoteContextAwareWidget {
         }
     }
 
-    toggleRibbonTab($ribbonTitle: JQuery<HTMLElement>, refreshActiveTab = true) {
-        const activate = !$ribbonTitle.hasClass("active");
-
-        this.$tabContainer.find(".ribbon-tab-title").removeClass("active");
-        this.$bodyContainer.find(".ribbon-body").removeClass("active");
-
-        if (activate) {
-            const ribbonComponendId = $ribbonTitle.attr("data-ribbon-component-id");
-
-            const wasAlreadyActive = this.lastActiveComponentId === ribbonComponendId;
-
-            this.lastActiveComponentId = ribbonComponendId;
-
-            this.$tabContainer.find(`.ribbon-tab-title[data-ribbon-component-id="${ribbonComponendId}"]`).addClass("active");
-            this.$bodyContainer.find(`.ribbon-body[data-ribbon-component-id="${ribbonComponendId}"]`).addClass("active");
-
-            const activeChild = this.getActiveRibbonWidget();
-
-            if (activeChild && (refreshActiveTab || !wasAlreadyActive) && this.noteContext && this.notePath) {
-                const handleEventPromise = activeChild.handleEvent("noteSwitched", { noteContext: this.noteContext, notePath: this.notePath });
-
-                if (refreshActiveTab) {
-                    if (handleEventPromise) {
-                        handleEventPromise.then(() => (activeChild as any).focus?.()); // TODO: Base class
-                    } else {
-                        // TODO: Base class
-                        (activeChild as any).focus?.();
-                    }
-                }
-            }
-        } else {
-            this.lastActiveComponentId = null;
-        }
-    }
-
     async noteSwitched() {
         this.lastActiveComponentId = null;
 

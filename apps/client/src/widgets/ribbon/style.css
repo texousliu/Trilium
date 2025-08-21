@@ -23,6 +23,7 @@
     flex-basis: 24px;
     max-width: max-content;
     flex-grow: 10;
+    user-select: none;
 }
 
 .ribbon-tab-title .bx {

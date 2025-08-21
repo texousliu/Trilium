@@ -256,15 +256,12 @@ export function useNoteContext() {
         setNotePath(noteContext.notePath);        
     });
     useTriliumEventBeta("setNoteContext", ({ noteContext }) => {
-        console.log("Set note context", noteContext, noteContext.noteId);
         setNoteContext(noteContext);
     });
     useTriliumEventBeta("noteSwitchedAndActivated", ({ noteContext }) => {
-        console.log("Note switched and activated")
         setNoteContext(noteContext);
     });
     useTriliumEventBeta("noteSwitched", ({ noteContext, notePath }) => {
-        console.warn("Note switched", notePath);
         setNotePath(notePath);
     });
     useTriliumEventBeta("frocaReloaded", () => {

@@ -108,7 +108,14 @@ export default function Ribbon() {
                             icon={icon}
                             title={typeof title === "string" ? title : title(context)}
                             active={i === activeTab}
-                            onClick={() => setActiveTab(i)}
+                            onClick={() => {
+                                if (activeTab !== i) {
+                                    setActiveTab(i);
+                                } else {
+                                    // Collapse
+                                    setActiveTab(undefined);
+                                }
+                            }}
                         />
                     ))}
                 </div>
@@ -123,11 +130,13 @@ export default function Ribbon() {
 function RibbonTab({ icon, title, active, onClick }: { icon: string; title: string; active: boolean, onClick: () => void }) {
     return (
         <>
-            <div className={`ribbon-tab-title ${active ? "active" : ""}`}>
+            <div
+                className={`ribbon-tab-title ${active ? "active" : ""}`}
+                onClick={onClick}
+            >
                 <span
                     className={`ribbon-tab-title-icon ${icon}`}
-                    title={title}
-                    onClick={onClick}
+                    title={title}                    
                 />
                 &nbsp;
                 { active && <span class="ribbon-tab-title-label">{title}</span> }
