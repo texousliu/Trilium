@@ -1,0 +1,5 @@
+.dropdown-item .description {
+    font-size: small;
+    color: var(--muted-text-color);
+    white-space: normal;
+}

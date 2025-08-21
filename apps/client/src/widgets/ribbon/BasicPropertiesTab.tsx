@@ -3,7 +3,7 @@ import Dropdown from "../react/Dropdown";
 import { NOTE_TYPES } from "../../services/note_types";
 import { FormDivider, FormListBadge, FormListItem } from "../react/FormList";
 import { t } from "../../services/i18n";
-import { useNoteContext, useNoteProperty, useTriliumOption } from "../react/hooks";
+import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumOption } from "../react/hooks";
 import mime_types from "../../services/mime_types";
 import { NoteType } from "@triliumnext/commons";
 import server from "../../services/server";
@@ -11,6 +11,7 @@ import dialog from "../../services/dialog";
 import FormToggle from "../react/FormToggle";
 import FNote from "../../entities/fnote";
 import protected_session from "../../services/protected_session";
+import FormDropdownList from "../react/FormDropdownList";
 
 export default function BasicPropertiesTab() {
     const { note } = useNoteContext();
@@ -19,6 +20,7 @@ export default function BasicPropertiesTab() {
         <div className="basic-properties-widget">        
             <NoteTypeWidget note={note} />
             <ProtectedNoteSwitch note={note} />
+            <EditabilitySelect note={note} />
         </div>
     );
 }
@@ -116,6 +118,45 @@ function ProtectedNoteSwitch({ note }: { note?: FNote | null }) {
                 onChange={(shouldProtect) => note && protected_session.protectNote(note.noteId, shouldProtect, false)}
                 switchOnName={t("protect_note.toggle-on")} switchOnTooltip={t("protect_note.toggle-on-hint")}
                 switchOffName={t("protect_note.toggle-off")} switchOffTooltip={t("protect_note.toggle-off-hint")}
+            />
+        </div>
+    )
+}
+
+function EditabilitySelect({ note }: { note?: FNote | null }) {
+    const [ readOnly, setReadOnly ] = useNoteLabelBoolean(note, "readOnly");
+    const [ autoReadOnlyDisabled, setAutoReadOnlyDisabled ] = useNoteLabelBoolean(note, "autoReadOnlyDisabled");    
+
+    const options = useMemo(() => ([
+        {
+            value: "auto",
+            label: t("editability_select.auto"),
+            description: t("editability_select.note_is_editable"),
+        },
+        {
+            value: "readOnly",
+            label: t("editability_select.read_only"),
+            description: t("editability_select.note_is_read_only")
+        },
+        {
+            value: "autoReadOnlyDisabled",
+            label: t("editability_select.always_editable"),
+            description: t("editability_select.note_is_always_editable")
+        }
+    ]), []);
+
+    return (
+        <div class="editability-select-container">
+            <span>{t("basic_properties.editable")}:</span> &nbsp;
+
+            <FormDropdownList
+                values={options}
+                currentValue={ readOnly ? "readOnly" : autoReadOnlyDisabled ? "autoReadOnlyDisabled" : "auto" }
+                keyProperty="value" titleProperty="label" descriptionProperty="description"
+                onChange={(editability: string) => {
+                    setReadOnly(editability === "readOnly");
+                    setAutoReadOnlyDisabled(editability === "autoReadOnlyDisabled");
+                }}
             />
         </div>
     )

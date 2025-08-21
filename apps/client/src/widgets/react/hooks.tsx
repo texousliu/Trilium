@@ -314,12 +314,12 @@ export function useNoteProperty<T extends keyof FNote>(note: FNote | null | unde
 }
 
 export function useNoteLabel(note: FNote | undefined | null, labelName: string): [string | null | undefined, (newValue: string) => void] {
-    const [ labelValue, setNoteValue ] = useState<string | null | undefined>(note?.getLabelValue(labelName));
+    const [ labelValue, setLabelValue ] = useState<string | null | undefined>(note?.getLabelValue(labelName));
 
     useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
         for (const attr of loadResults.getAttributeRows()) {
             if (attr.type === "label" && attr.name === labelName && attributes.isAffecting(attr, note)) {
-                setNoteValue(attr.value ?? null);
+                setLabelValue(attr.value ?? null);
             }
         }
     });
@@ -334,4 +334,28 @@ export function useNoteLabel(note: FNote | undefined | null, labelName: string):
         labelValue,
         setter
     ] as const;
+}
+
+export function useNoteLabelBoolean(note: FNote | undefined | null, labelName: string): [ boolean | null | undefined, (newValue: boolean) => void] {
+    const [ labelValue, setLabelValue ] = useState<boolean | null | undefined>(note?.hasLabel(labelName));
+
+    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+        for (const attr of loadResults.getAttributeRows()) {
+            if (attr.type === "label" && attr.name === labelName && attributes.isAffecting(attr, note)) {
+                setLabelValue(!attr.isDeleted);
+            }
+        }
+    });
+
+    const setter = useCallback((value: boolean) => {
+        if (note) {
+            if (value) {
+                attributes.setLabel(note.noteId, labelName, "");
+            } else {
+                attributes.removeOwnedLabelByName(note, labelName);
+            }
+        }
+    }, [note]);
+
+    return [ labelValue, setter ] as const;
 }
