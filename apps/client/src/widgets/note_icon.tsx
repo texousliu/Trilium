@@ -2,7 +2,7 @@ import Dropdown from "./react/Dropdown";
 import "./note_icon.css";
 import { t } from "i18next";
 import { useNoteContext } from "./react/hooks";
-import { useCallback, useEffect, useState } from "preact/hooks";
+import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import server from "../services/server";
 import type { Category, Icon } from "./icon_list";
 import FormTextBox from "./react/FormTextBox";
@@ -50,6 +50,7 @@ export default function NoteIcon() {
 }
 
 function NoteIconList() {
+    const searchBoxRef = useRef<HTMLInputElement>(null);
     const [ search, setSearch ] = useState<string>();
     const [ categoryId, setCategoryId ] = useState<string>("0");
     const [ iconData, setIconData ] = useState<IconData>();
@@ -101,6 +102,11 @@ function NoteIconList() {
         loadIcons();
     }, [ search, categoryId ]);
 
+    // Focus on search by default.
+    useEffect(() => {
+        searchBoxRef?.current?.focus();
+    }, []);
+
     return (
         <>
             <div class="filter-row">
@@ -114,6 +120,7 @@ function NoteIconList() {
 
                 <span>{t("note_icon.search")}</span>
                 <FormTextBox
+                    inputRef={searchBoxRef}
                     type="text"
                     name="icon-search"
                     currentValue={search} onChange={setSearch}
