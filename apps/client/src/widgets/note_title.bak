@@ -8,7 +8,6 @@ export default class NoteTitleWidget extends NoteContextAwareWidget {
 
     private $noteTitle!: JQuery<HTMLElement>;
     private deleteNoteOnEscape: boolean;
-    private spacedUpdate: SpacedUpdate;
 
     constructor() {
         super();
@@ -20,15 +19,7 @@ export default class NoteTitleWidget extends NoteContextAwareWidget {
         this.$widget = $(TPL);
         this.$noteTitle = this.$widget.find(".note-title");
         this.$noteTitle.on("blur", () => {
-            this.spacedUpdate.updateNowIfNecessary();
-
-            this.deleteNoteOnEscape = false;
-        });
-
-        shortcutService.bindElShortcut(this.$noteTitle, "esc", () => {
-            if (this.deleteNoteOnEscape && this.noteContext?.isActive() && this.noteContext?.note) {
-                branchService.deleteNotes(Object.values(this.noteContext.note.parentToBranch));
-            }
+            
         });
 
     }
@@ -45,17 +36,4 @@ export default class NoteTitleWidget extends NoteContextAwareWidget {
         }
     }
 
-    focusOnTitleEvent() {
-        if (this.noteContext && this.noteContext.isActive()) {
-            this.$noteTitle.trigger("focus");
-        }
-    }
-
-    focusAndSelectTitleEvent({ isNewNote } = { isNewNote: false }) {
-        if (this.noteContext && this.noteContext.isActive()) {
-            this.$noteTitle.trigger("focus").trigger("select");
-
-            this.deleteNoteOnEscape = isNewNote;
-        }
-    }
 }

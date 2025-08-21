@@ -101,7 +101,7 @@ export function useSpacedUpdate(callback: () => Promise<void>, interval = 1000) 
     // Update callback ref when it changes
     useEffect(() => {
         callbackRef.current = callback;
-    });
+    }, [callback]);
 
     // Create SpacedUpdate instance only once
     if (!spacedUpdateRef.current) {

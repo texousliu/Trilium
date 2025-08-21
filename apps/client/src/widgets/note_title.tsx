@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { t } from "../services/i18n";
 import FormTextBox from "./react/FormTextBox";
-import { useBeforeUnload, useNoteContext, useNoteProperty, useSpacedUpdate } from "./react/hooks";
+import { useNoteContext, useNoteProperty, useSpacedUpdate, useTriliumEventBeta } from "./react/hooks";
 import protected_session_holder from "../services/protected_session_holder";
 import server from "../services/server";
 import "./note_title.css";
 import { isLaunchBarConfig } from "../services/utils";
 import appContext from "../components/app_context";
+import branches from "../services/branches";
 
 export default function NoteTitleWidget() {
     const { note, noteId, componentId, viewScope, noteContext, parentComponent } = useNoteContext();    
@@ -17,6 +18,7 @@ export default function NoteTitleWidget() {
     const [ isReadOnly, setReadOnly ] = useState<boolean>(false);
     const [ navigationTitle, setNavigationTitle ] = useState<string | null>(null);    
     
+    // Manage read-only
     useEffect(() => {
         const isReadOnly = note === null
             || note === undefined
@@ -26,12 +28,14 @@ export default function NoteTitleWidget() {
         setReadOnly(isReadOnly);
     }, [ note, note?.noteId, note?.isProtected, viewScope?.viewMode ]);
 
+    // Manage the title for read-only notes
     useEffect(() => {
         if (isReadOnly) {
             noteContext?.getNavigationTitle().then(setNavigationTitle);
         }
     }, [isReadOnly]);
 
+    // Save changes to title.
     const spacedUpdate = useSpacedUpdate(async () => {
         if (!note) {
             return;
@@ -40,13 +44,31 @@ export default function NoteTitleWidget() {
         await server.put<void>(`notes/${noteId}/title`, { title: newTitle.current }, componentId);
     });    
 
+    // Prevent user from navigating away if the spaced update is not done.
     useEffect(() => {
         appContext.addBeforeUnloadListener(() => spacedUpdate.isAllSavedAndTriggerUpdate());        
     }, []);
 
+    // Manage focus.
+    const textBoxRef = useRef<HTMLInputElement>(null);
+    const isNewNote = useRef<boolean>();
+    useTriliumEventBeta("focusOnTitle", () => {
+        if (noteContext?.isActive() && textBoxRef.current) {
+            console.log(textBoxRef.current);
+            textBoxRef.current.focus();
+        }
+    });
+    useTriliumEventBeta("focusAndSelectTitle", ({ isNewNote: _isNewNote } ) => {
+        if (noteContext?.isActive() && textBoxRef.current) {
+            textBoxRef.current.focus();
+            isNewNote.current = _isNewNote;
+        }
+    });
+
     return (
         <div className="note-title-widget">
             {note && <FormTextBox
+                inputRef={textBoxRef}
                 autocomplete="off"
                 currentValue={(!isReadOnly ? title : navigationTitle) ?? ""}
                 placeholder={t("note_title.placeholder")}
@@ -64,6 +86,14 @@ export default function NoteTitleWidget() {
                         parentComponent.triggerCommand("focusOnDetail", { ntxId: noteContext?.ntxId });
                         return;
                     }
+
+                    if (e.key === "Escape" && isNewNote.current && noteContext?.isActive() && note) {
+                        branches.deleteNotes(Object.values(note.parentToBranch));
+                    }
+                }}
+                onBlur={() => {
+                    spacedUpdate.updateNowIfNecessary();
+                    isNewNote.current = false;
                 }}
             />}
         </div>
