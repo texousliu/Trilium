@@ -18,7 +18,7 @@ import SqlTableSchemasWidget from "../widgets/sql_table_schemas.js";
 import FilePropertiesWidget from "../widgets/ribbon_widgets/file_properties.js";
 import ImagePropertiesWidget from "../widgets/ribbon_widgets/image_properties.js";
 import NotePropertiesWidget from "../widgets/ribbon_widgets/note_properties.js";
-import NoteIconWidget from "../widgets/note_icon.js";
+import NoteIconWidget from "../widgets/note_icon.jsx";
 import SearchResultWidget from "../widgets/search_result.js";
 import ScrollingContainer from "../widgets/containers/scrolling_container.js";
 import RootContainer from "../widgets/containers/root_container.js";
@@ -151,7 +151,7 @@ export default class DesktopLayout {
                                                                 .css("min-height", "50px")
                                                                 .css("align-items", "center")
                                                                 .cssBlock(".title-row > * { margin: 5px; }")
-                                                                .child(new NoteIconWidget())
+                                                                .child(<NoteIconWidget />)
                                                                 .child(<NoteTitleWidget />)
                                                                 .child(new SpacerWidget(0, 1))
                                                                 .child(new MovePaneButton(true))
