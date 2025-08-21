@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { t } from "../services/i18n";
 import FormTextBox from "./react/FormTextBox";
-import { useNoteContext, useNoteProperty, useSpacedUpdate } from "./react/hooks";
+import { useBeforeUnload, useNoteContext, useNoteProperty, useSpacedUpdate } from "./react/hooks";
 import protected_session_holder from "../services/protected_session_holder";
 import server from "../services/server";
 import "./note_title.css";
 import { isLaunchBarConfig } from "../services/utils";
+import appContext from "../components/app_context";
 
 export default function NoteTitleWidget() {
     const { note, noteId, componentId, viewScope, noteContext } = useNoteContext();    
@@ -38,6 +39,10 @@ export default function NoteTitleWidget() {
         protected_session_holder.touchProtectedSessionIfNecessary(note);
         await server.put<void>(`notes/${noteId}/title`, { title: newTitle.current }, componentId);
     });    
+
+    useEffect(() => {
+        appContext.addBeforeUnloadListener(() => spacedUpdate.isAllSavedAndTriggerUpdate());
+    }, []);
 
     return (
         <div className="note-title-widget">

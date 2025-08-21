@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "preact/hooks";
-import { EventData, EventNames } from "../../components/app_context";
+import appContext, { BeforeUploadListener, EventData, EventNames } from "../../components/app_context";
 import { ParentComponent } from "./react_utils";
 import SpacedUpdate from "../../services/spaced_update";
 import { OptionNames } from "@triliumnext/commons";
@@ -10,6 +10,7 @@ import NoteContext from "../../components/note_context";
 import { ReactWrappedWidget } from "../basic_widget";
 import FNote from "../../entities/fnote";
 import froca from "../../services/froca";
+import toast from "../../services/toast";
 
 type TriliumEventHandler<T extends EventNames> = (data: EventData<T>) => void;
 const registeredHandlers: Map<Component, Map<EventNames, TriliumEventHandler<any>[]>> = new Map();
