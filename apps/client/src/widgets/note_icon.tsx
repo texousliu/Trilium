@@ -2,13 +2,14 @@ import Dropdown from "./react/Dropdown";
 import "./note_icon.css";
 import { t } from "i18next";
 import { useNoteContext, useNoteLabel } from "./react/hooks";
-import { useCallback, useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import server from "../services/server";
 import type { Category, Icon } from "./icon_list";
 import FormTextBox from "./react/FormTextBox";
 import FormSelect from "./react/FormSelect";
 import FNote from "../entities/fnote";
 import attributes from "../services/attributes";
+import Button from "./react/Button";
 
 interface IconToCountCache {
     iconClassToCountMap: Record<string, number>;
@@ -140,6 +141,22 @@ function NoteIconList({ note }: { note: FNote }) {
                     }
                 }}
             >
+                {getIconLabels(note).length > 0 && (
+                    <div style={{ textAlign: "center" }}>
+                        <Button
+                            text={t("note_icon.reset-default")}
+                            onClick={() => {
+                                if (!note) {
+                                    return;
+                                }
+                                for (const label of getIconLabels(note)) {
+                                    attributes.removeAttributeById(note.noteId, label.attributeId);
+                                }
+                            }}                    
+                        />
+                    </div> 
+                )}
+
                 {(iconData?.icons ?? []).map(({className, name}) => (
                     <span class={`bx ${className}`} title={name} />
                 ))}
@@ -155,4 +172,13 @@ async function getIconToCountMap() {
     }
 
     return (await iconToCountCache).iconClassToCountMap;
+}
+
+function getIconLabels(note: FNote) {
+    if (!note) {
+        return [];
+    }
+    return note.getOwnedLabels()
+        .filter((label) => ["workspaceIconClass", "iconClass"]
+        .includes(label.name));
 }
