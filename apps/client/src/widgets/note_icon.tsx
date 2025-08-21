@@ -48,7 +48,8 @@ export default function NoteIcon() {
 }
 
 function NoteIconList() {
-    const [ filter, setFilter ] = useState<string>();
+    const [ search, setSearch ] = useState<string>();
+    const [ categoryId, setCategoryId ] = useState<number>();
     const [ iconData, setIconData ] = useState<IconData>();
 
     useEffect(() => {
@@ -58,14 +59,31 @@ function NoteIconList() {
                 fullIconData = (await import("./icon_list.js")).default;
             }
 
+            let icons: Icon[] = fullIconData.icons;
+            if (search || categoryId) {
+                icons = icons.filter((icon) => {
+                    if (categoryId && icon.category_id !== categoryId) {
+                        return false;
+                    }
+
+                    if (search) {
+                        if (!icon.name.includes(search) && !icon.term?.find((t) => t.includes(search))) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                });
+            }
+
             setIconData({
                 iconToCount,
-                icons: fullIconData.icons
+                icons
             })
         }
 
         loadIcons();
-    }, []);
+    }, [ search, categoryId ]);
 
     return (
         <>
@@ -76,7 +94,7 @@ function NoteIconList() {
                 <FormTextBox
                     type="text"
                     name="icon-search"
-                    currentValue={filter} onChange={setFilter}
+                    currentValue={search} onChange={setSearch}
                 />
             </div>
 
