@@ -121,3 +121,7 @@
     overflow-y: auto;
     overflow-x: hidden;
 }
+
+.editability-dropdown {
+    width: 300px;
+}

@@ -4,7 +4,7 @@ import { CSSProperties } from "preact/compat";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { useUniqueName } from "./hooks";
 
-interface DropdownProps {
+export interface DropdownProps {
     className?: string;
     buttonClassName?: string;
     isStatic?: boolean;
