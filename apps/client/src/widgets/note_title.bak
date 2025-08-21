@@ -9,36 +9,6 @@ import shortcutService from "../services/shortcuts.js";
 import utils from "../services/utils.js";
 import type FNote from "../entities/fnote.js";
 
-const TPL = /*html*/`
-<div class="note-title-widget">
-    <style>
-    .note-title-widget {
-        flex-grow: 1000;
-        height: 100%;
-    }
-
-    .note-title-widget input.note-title {
-        font-size: 110%;
-        border: 0;
-        margin: 2px 0px;
-        min-width: 5em;
-        width: 100%;
-    }
-
-    body.mobile .note-title-widget input.note-title {
-        padding: 0;
-    }
-
-    body.desktop .note-title-widget input.note-title {
-        font-size: 180%;
-    }
-
-    .note-title-widget input.note-title.protected {
-        text-shadow: 4px 4px 4px var(--muted-text-color);
-    }
-    </style>
-</div>`;
-
 export default class NoteTitleWidget extends NoteContextAwareWidget {
 
     private $noteTitle!: JQuery<HTMLElement>;
@@ -47,10 +17,6 @@ export default class NoteTitleWidget extends NoteContextAwareWidget {
 
     constructor() {
         super();
-
-        this.spacedUpdate = new SpacedUpdate(async () => {
-            
-        });
 
         this.deleteNoteOnEscape = false;
 
@@ -92,10 +58,6 @@ export default class NoteTitleWidget extends NoteContextAwareWidget {
         this.setProtectedStatus(note);
     }
 
-    setProtectedStatus(note: FNote) {
-        this.$noteTitle.toggleClass("protected", !!note.isProtected);
-    }
-
     async beforeNoteSwitchEvent({ noteContext }: EventData<"beforeNoteSwitch">) {
         if (this.isNoteContext(noteContext.ntxId)) {
             await this.spacedUpdate.updateNowIfNecessary();
@@ -119,17 +81,6 @@ export default class NoteTitleWidget extends NoteContextAwareWidget {
             this.$noteTitle.trigger("focus").trigger("select");
 
             this.deleteNoteOnEscape = isNewNote;
-        }
-    }
-
-    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        if (loadResults.isNoteReloaded(this.noteId) && this.note) {
-            // not updating the title specifically since the synced title might be older than what the user is currently typing
-            this.setProtectedStatus(this.note);
-        }
-
-        if (loadResults.isNoteReloaded(this.noteId, this.componentId)) {
-            this.refresh();
         }
     }
 
