@@ -32,15 +32,6 @@ export default class RibbonContainer extends NoteContextAwareWidget {
         return super.isEnabled() && this.noteContext?.viewScope?.viewMode === "default";
     }
 
-    ribbon(widget: NoteContextAwareWidget) {
-        // TODO: Base class
-        super.child(widget);
-
-        this.ribbonWidgets.push(widget);
-
-        return this;
-    }
-
     button(widget: ButtonWidget) {
         super.child(widget);
 
@@ -53,10 +44,6 @@ export default class RibbonContainer extends NoteContextAwareWidget {
         this.$tabContainer = this.$widget.find(".ribbon-tab-container");
         this.$buttonContainer = this.$widget.find(".ribbon-button-container");
         this.$bodyContainer = this.$widget.find(".ribbon-body-container");
-
-        for (const ribbonWidget of this.ribbonWidgets) {
-            this.$bodyContainer.append($('<div class="ribbon-body">').attr("data-ribbon-component-id", ribbonWidget.componentId).append(ribbonWidget.render()));
-        }
 
         for (const buttonWidget of this.buttonWidgets) {
             this.$buttonContainer.append(buttonWidget.render());

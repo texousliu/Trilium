@@ -3,6 +3,8 @@ import FNote from "../../entities/fnote";
 import { t } from "../../services/i18n";
 import { useNoteContext } from "../react/hooks";
 import "./style.css";
+import { VNode } from "preact";
+import BasicPropertiesTab from "./BasicPropertiesTab";
 
 type TitleFn = string | ((context: TabContext) => string);
 
@@ -13,6 +15,7 @@ interface TabContext {
 interface TabConfiguration {
     title: TitleFn;
     icon: string;
+    content?: () => VNode;
 }
 
 const TAB_CONFIGURATION: TabConfiguration[] = [
@@ -59,7 +62,8 @@ const TAB_CONFIGURATION: TabConfiguration[] = [
     {
         // BasicProperties
         title: t("basic_properties.basic_properties"),
-        icon: "bx bx-slider"
+        icon: "bx bx-slider",
+        content: BasicPropertiesTab
     },
     {
         // OwnedAttributeListWidget
@@ -98,6 +102,7 @@ export default function Ribbon() {
     const { note } = useNoteContext();
     const context: TabContext = { note };
     const [ activeTab, setActiveTab ] = useState<number>();
+    const activeTabConfiguration = activeTab ? TAB_CONFIGURATION[activeTab] : undefined;
 
     return (
         <div class="ribbon-container" style={{ contain: "none" }}>
@@ -122,7 +127,11 @@ export default function Ribbon() {
                 <div className="ribbon-button-container"></div>
             </div>
         
-            <div className="ribbon-body-container"></div>
+            <div className="ribbon-body-container">
+                <div className="ribbon-body">
+                    {activeTabConfiguration?.content && activeTabConfiguration.content()}
+                </div>
+            </div>
         </div>
     )
 }
