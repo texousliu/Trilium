@@ -25,21 +25,6 @@ export default class NoteIconWidget extends NoteContextAwareWidget {
                 await attributeService.setLabel(this.noteId, this.note.hasOwnedLabel("workspace") ? "workspaceIconClass" : "iconClass", clazz);
             }
         });
-
-        this.$iconSearch = this.$widget.find("input[name='icon-search']");
-        this.$iconSearch.on("input", () => this.renderDropdown());
-
-        this.$widget.on("show.bs.dropdown", async () => {
-            const { categories } = (await import("./icon_list.js")).default;
-
-            this.$iconCategory.empty();
-
-            for (const category of categories) {
-                this.$iconCategory.append($("<option>").text(category.name).attr("value", category.id));
-            }
-
-            this.$iconSearch.val("");
-        });
     }
 
     async refreshWithNote(note: FNote) {
@@ -80,19 +65,6 @@ export default class NoteIconWidget extends NoteContextAwareWidget {
         }
 
         const search = String(this.$iconSearch.val())?.trim()?.toLowerCase();
-
-        if (iconToCount) {
-            filteredIcons.sort((a, b) => {
-                const countA = iconToCount[a.className ?? ""] || 0;
-                const countB = iconToCount[b.className ?? ""] || 0;
-
-                return countB - countA;
-            });
-        }
-
-        for (const icon of filteredIcons) {
-            this.$iconList.append(this.renderIcon(icon));
-        }
 
         this.$iconSearch.focus();
     }

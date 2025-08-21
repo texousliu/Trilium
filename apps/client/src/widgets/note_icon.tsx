@@ -56,11 +56,11 @@ function NoteIconList() {
 
     useEffect(() => {
         async function loadIcons() {
-            const iconToCount = await getIconToCountMap();
             if (!fullIconData) {
                 fullIconData = (await import("./icon_list.js")).default;
             }
 
+            // Filter by text and/or category.
             let icons: Icon[] = fullIconData.icons;
             if (search || categoryId) {
                 icons = icons.filter((icon) => {
@@ -75,6 +75,17 @@ function NoteIconList() {
                     }
 
                     return true;
+                });
+            }
+
+            // Sort by count.
+            const iconToCount = await getIconToCountMap();
+            if (iconToCount) {
+                icons.sort((a, b) => {
+                    const countA = iconToCount[a.className ?? ""] || 0;
+                    const countB = iconToCount[b.className ?? ""] || 0;
+
+                    return countB - countA;
                 });
             }
 
