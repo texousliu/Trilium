@@ -41,7 +41,7 @@ export default function NoteTitleWidget() {
 
     return (
         <div className="note-title-widget">
-            <FormTextBox
+            {note && <FormTextBox
                 autocomplete="off"
                 currentValue={(!isReadOnly ? title : navigationTitle) ?? ""}
                 placeholder={t("note_title.placeholder")}
@@ -52,7 +52,7 @@ export default function NoteTitleWidget() {
                     newTitle.current = newValue;
                     spacedUpdate.scheduleUpdate();
                 }}
-            />
+            />}
         </div>
     );
 }
