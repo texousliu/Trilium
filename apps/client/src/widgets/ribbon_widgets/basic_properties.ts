@@ -11,7 +11,7 @@ import NoteLanguageWidget from "../note_language.js";
 
 const TPL = /*html*/`
     <div class="note-type-container">
-        <span>${t("basic_properties.note_type")}:</span> &nbsp;
+
     </div>
 
     <div class="protected-note-switch-container"></div>

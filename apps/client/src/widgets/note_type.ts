@@ -14,8 +14,7 @@ const NOT_SELECTABLE_NOTE_TYPES = NOTE_TYPES.filter((nt) => nt.reserved || nt.st
 const TPL = /*html*/`
 <div class="dropdown note-type-widget">
     <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm dropdown-toggle select-button note-type-button">
-        <span class="note-type-desc"></span>
-        <span class="caret"></span>
+        <span class=""></span>
     </button>
 </div>
 `;
@@ -36,7 +35,6 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
 
         this.$noteTypeDropdown = this.$widget.find(".note-type-dropdown");
         this.$noteTypeButton = this.$widget.find(".note-type-button");
-        this.$noteTypeDesc = this.$widget.find(".note-type-desc");
 
         this.$widget.on("click", ".dropdown-item", () => this.dropdown.toggle());
     }
@@ -105,18 +103,7 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
         }
     }
 
-    async findTypeTitle(type: NoteType, mime: string) {
-        if (type === "code") {
-            const mimeTypes = mimeTypesService.getMimeTypes();
-            const found = mimeTypes.find((mt) => mt.mime === mime);
 
-            return found ? found.title : mime;
-        } else {
-            const noteType = NOTE_TYPES.find((nt) => nt.type === type);
-
-            return noteType ? noteType.title : type;
-        }
-    }
 
     async save(type: NoteType, mime?: string) {
         if (type === this.note?.type && mime === this.note?.mime) {

@@ -14,9 +14,10 @@ interface DropdownProps {
     dropdownContainerClassName?: string;
     hideToggleArrow?: boolean;
     disabled?: boolean;
+    text?: ComponentChildren;
 }
 
-export default function Dropdown({ className, buttonClassName, isStatic, children, title, dropdownContainerStyle, dropdownContainerClassName, hideToggleArrow, disabled }: DropdownProps) {
+export default function Dropdown({ className, buttonClassName, isStatic, children, title, text, dropdownContainerStyle, dropdownContainerClassName, hideToggleArrow, disabled }: DropdownProps) {
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
 
@@ -56,7 +57,7 @@ export default function Dropdown({ className, buttonClassName, isStatic, childre
     return (
         <div ref={dropdownRef} class={`dropdown ${className ?? ""}`} style={{ display: "flex" }}>
             <button
-                className={`btn ${buttonClassName ?? ""} ${!hideToggleArrow ? "dropdown-toggle" : ""}`}
+                className={`btn select-button ${buttonClassName ?? ""} ${!hideToggleArrow ? "dropdown-toggle" : ""}`}
                 ref={triggerRef}
                 type="button"
                 data-bs-toggle="dropdown"
@@ -66,7 +67,10 @@ export default function Dropdown({ className, buttonClassName, isStatic, childre
                 title={title}
                 id={ariaId}
                 disabled={disabled}
-            />
+            >
+                {text}
+                <span className="caret"></span>
+            </button>
 
             <div
                 class={`dropdown-menu ${isStatic ? "static" : ""} ${dropdownContainerClassName ?? ""} tn-dropdown-list`}
