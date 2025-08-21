@@ -159,8 +159,8 @@ describe('OpenID Service', () => {
                     'John Doe',
                     'john@example.com'
                 );
-                expect(mockReq.session.loggedIn).toBe(true);
-                expect(mockReq.session.lastAuthState).toEqual({
+                expect(mockReq.session!.loggedIn).toBe(true);
+                expect(mockReq.session!.lastAuthState).toEqual({
                     totpEnabled: false,
                     ssoEnabled: true
                 });
@@ -358,7 +358,7 @@ describe('OpenID Service', () => {
 
                 const result = await afterCallback(mockReq as Request, mockRes as Response, mockSession);
                 
-                expect(mockReq.session.loggedIn).toBe(true);
+                expect(mockReq.session!.loggedIn).toBe(true);
                 expect(result).toBe(mockSession);
             });
         });
