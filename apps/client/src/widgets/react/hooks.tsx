@@ -8,6 +8,7 @@ import utils, { reloadFrontendApp } from "../../services/utils";
 import Component from "../../components/component";
 import NoteContext from "../../components/note_context";
 import { ReactWrappedWidget } from "../basic_widget";
+import FNote from "../../entities/fnote";
 
 type TriliumEventHandler<T extends EventNames> = (data: EventData<T>) => void;
 const registeredHandlers: Map<Component, Map<EventNames, TriliumEventHandler<any>[]>> = new Map();
@@ -261,4 +262,19 @@ export function useNoteContext() {
         componentId: parentComponent.componentId
     };
 
+}
+
+export function useNoteProperty<T extends keyof FNote>(note: FNote | null | undefined, property: T) {
+    if (!note) {
+        return null;
+    }
+    
+    const [ value, setValue ] = useState<FNote[T]>(note[property]);
+    useEffect(() => setValue(value), [ note[property] ]);
+    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+        if (loadResults.isNoteReloaded(note.noteId)) {
+            setValue(note[property]);
+        }
+    });
+    return value;
 }
