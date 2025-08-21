@@ -93,8 +93,7 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
     getTitle() {
         return {
             show: this.isEnabled(),
-            title: t("book_properties.book_properties"),
-            icon: "bx bx-book"
+
         };
     }
 

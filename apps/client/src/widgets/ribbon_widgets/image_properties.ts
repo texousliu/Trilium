@@ -77,8 +77,7 @@ export default class ImagePropertiesWidget extends NoteContextAwareWidget {
         return {
             show: this.isEnabled(),
             activate: true,
-            title: t("image_properties.title"),
-            icon: "bx bx-image"
+
         };
     }
 

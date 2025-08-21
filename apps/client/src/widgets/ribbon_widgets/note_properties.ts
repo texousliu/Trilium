@@ -31,8 +31,7 @@ export default class NotePropertiesWidget extends NoteContextAwareWidget {
         return {
             show: this.isEnabled(),
             activate: true,
-            title: t("note_properties.info"),
-            icon: "bx bx-info-square"
+
         };
     }
 

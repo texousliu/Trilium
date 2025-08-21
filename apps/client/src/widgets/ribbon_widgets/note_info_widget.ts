@@ -105,8 +105,7 @@ export default class NoteInfoWidget extends NoteContextAwareWidget {
     getTitle() {
         return {
             show: this.isEnabled(),
-            title: t("note_info_widget.title"),
-            icon: "bx bx-info-circle"
+
         };
     }
 

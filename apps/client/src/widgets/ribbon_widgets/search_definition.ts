@@ -187,9 +187,7 @@ export default class SearchDefinitionWidget extends NoteContextAwareWidget {
     getTitle() {
         return {
             show: this.isEnabled(),
-            activate: true,
-            title: t("search_definition.search_parameters"),
-            icon: "bx bx-search"
+            activate: true
         };
     }
 

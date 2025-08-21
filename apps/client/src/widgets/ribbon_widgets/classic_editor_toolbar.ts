@@ -64,8 +64,6 @@ export default class ClassicEditorToolbar extends NoteContextAwareWidget {
         return {
             show: await this.#shouldDisplay(),
             activate: true,
-            title: t("classic_editor_toolbar.title"),
-            icon: "bx bx-text"
         };
     }
 

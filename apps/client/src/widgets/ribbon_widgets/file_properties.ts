@@ -93,8 +93,7 @@ export default class FilePropertiesWidget extends NoteContextAwareWidget {
         return {
             show: this.isEnabled(),
             activate: true,
-            title: t("file_properties.title"),
-            icon: "bx bx-file"
+
         };
     }
 

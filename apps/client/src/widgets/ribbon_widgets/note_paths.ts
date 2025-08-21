@@ -55,8 +55,7 @@ export default class NotePathsWidget extends NoteContextAwareWidget {
     getTitle() {
         return {
             show: true,
-            title: t("note_paths.title"),
-            icon: "bx bx-collection"
+
         };
     }
 

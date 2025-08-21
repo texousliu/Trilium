@@ -57,9 +57,7 @@ export default class NoteMapRibbonWidget extends NoteContextAwareWidget {
 
     getTitle() {
         return {
-            show: this.isEnabled(),
-            title: t("note_map.title"),
-            icon: "bx bxs-network-chart"
+            show: this.isEnabled()
         };
     }
 

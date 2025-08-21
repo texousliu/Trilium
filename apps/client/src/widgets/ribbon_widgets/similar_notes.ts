@@ -61,8 +61,7 @@ export default class SimilarNotesWidget extends NoteContextAwareWidget {
     getTitle() {
         return {
             show: this.isEnabled(),
-            title: t("similar_notes.title"),
-            icon: "bx bx-bar-chart"
+
         };
     }
 

@@ -37,16 +37,10 @@ export default class ScriptExecutorWidget extends NoteContextAwareWidget {
         );
     }
 
-    isTriliumSqlite() {
-        return this.note?.mime === "text/x-sqlite;schema=trilium";
-    }
-
     getTitle() {
         return {
             show: this.isEnabled(),
-            activate: true,
-            title: this.isTriliumSqlite() ? t("script_executor.query") : t("script_executor.script"),
-            icon: "bx bx-play"
+            activate: true
         };
     }
 

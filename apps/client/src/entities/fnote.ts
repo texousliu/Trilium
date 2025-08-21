@@ -1020,6 +1020,10 @@ class FNote {
         return this.noteId.startsWith("_options");
     }
 
+    isTriliumSqlite() {
+        return this.mime === "text/x-sqlite;schema=trilium";
+    }
+
     /**
      * Provides note's date metadata.
      */

@@ -49,8 +49,7 @@ export default class EditedNotesWidget extends NoteContextAwareWidget {
             show: this.isEnabled(),
             // promoted attributes have priority over edited notes
             activate: (this.note?.getPromotedDefinitionAttributes().length === 0 || !options.is("promotedAttributesOpenInRibbon")) && options.is("editedNotesOpenInRibbon"),
-            title: t("edited_notes.title"),
-            icon: "bx bx-calendar-edit"
+
         };
     }
 
