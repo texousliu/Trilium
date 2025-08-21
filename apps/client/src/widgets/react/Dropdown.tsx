@@ -11,11 +11,12 @@ interface DropdownProps {
     children: ComponentChildren;
     title?: string;
     dropdownContainerStyle?: CSSProperties;
+    dropdownContainerClassName?: string;
     hideToggleArrow?: boolean;
     disabled?: boolean;
 }
 
-export default function Dropdown({ className, buttonClassName, isStatic, children, title, dropdownContainerStyle, hideToggleArrow, disabled }: DropdownProps) {
+export default function Dropdown({ className, buttonClassName, isStatic, children, title, dropdownContainerStyle, dropdownContainerClassName, hideToggleArrow, disabled }: DropdownProps) {
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
 
@@ -68,7 +69,7 @@ export default function Dropdown({ className, buttonClassName, isStatic, childre
             />
 
             <div
-                class={`dropdown-menu ${isStatic ? "static" : undefined}`}
+                class={`dropdown-menu ${isStatic ? "static" : ""} ${dropdownContainerClassName ?? ""} tn-dropdown-list`}
                 style={dropdownContainerStyle}
                 aria-labelledby={ariaId}
             >

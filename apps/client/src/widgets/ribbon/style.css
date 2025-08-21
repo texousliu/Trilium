@@ -115,3 +115,9 @@
     display: flex;
     align-items: center;
 }
+
+.note-type-dropdown {
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}

@@ -75,12 +75,13 @@ interface FormListItemOpts {
     title?: string;
     active?: boolean;
     badges?: FormListBadge[];
+    disabled?: boolean;
 }
 
-export function FormListItem({ children, icon, value, title, active, badges }: FormListItemOpts) {
+export function FormListItem({ children, icon, value, title, active, badges, disabled }: FormListItemOpts) {
     return (
         <a
-            class={`dropdown-item ${active ? "active" : ""}`}
+            class={`dropdown-item ${active ? "active" : ""} ${disabled ? "disabled" : ""}`}
             data-value={value} title={title}
             tabIndex={0}
         >
@@ -103,4 +104,8 @@ export function FormListHeader({ text }: FormListHeaderOpts) {
             <h6 className="dropdown-header">{text}</h6>
         </li>
     )
+}
+
+export function FormDivider() {
+    return <div className="dropdown-divider" />;
 }

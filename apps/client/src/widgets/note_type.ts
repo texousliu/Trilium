@@ -13,18 +13,10 @@ const NOT_SELECTABLE_NOTE_TYPES = NOTE_TYPES.filter((nt) => nt.reserved || nt.st
 
 const TPL = /*html*/`
 <div class="dropdown note-type-widget">
-    <style>
-        .note-type-dropdown {
-            max-height: 500px;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-    </style>
     <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm dropdown-toggle select-button note-type-button">
         <span class="note-type-desc"></span>
         <span class="caret"></span>
     </button>
-    <div class="note-type-dropdown dropdown-menu dropdown-menu-left tn-dropdown-list"></div>
 </div>
 `;
 
@@ -83,7 +75,7 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
                     });
             } else {
                 this.$noteTypeDropdown.append('<div class="dropdown-divider"></div>');
-                $typeLink = $('<a class="dropdown-item disabled">').attr("data-note-type", noteType.type).append('<span class="check">&check;</span> ').append($("<strong>").text(noteType.title));
+                $typeLink = $('<a class="dropdown-item disabled">').attr("data-note-type", noteType.type).append('<span class="check">&check;</span> ').append($("<strong>").text());
             }
 
             if (this.note.type === noteType.type) {
@@ -93,15 +85,10 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
             this.$noteTypeDropdown.append($typeLink);
         }
 
-        for (const mimeType of mimeTypesService.getMimeTypes()) {
-            if (!mimeType.enabled) {
-                continue;
-            }
-
+        for (const mimeType of ) {
             const $mimeLink = $('<a class="dropdown-item">')
                 .attr("data-mime-type", mimeType.mime)
                 .append('<span class="check">&check;</span> ')
-                .append($("<span>").text(mimeType.title))
                 .on("click", (e) => {
                     const $link = $(e.target).closest(".dropdown-item");
 
