@@ -96,7 +96,6 @@ function extractUserInfo(user: OIDCUserClaims): {
     // Final fallback to subject identifier
     if (!isNonEmptyString(name)) {
         name = `User-${sub.substring(0, 8)}`;
-        log.info(`OAuth: No name found in claims, using fallback: ${name}`);
     }
 
     // Extract email with fallback
@@ -106,7 +105,6 @@ function extractUserInfo(user: OIDCUserClaims): {
     } else {
         // Generate a placeholder email if none provided
         email = `${sub}@oauth.local`;
-        log.info(`OAuth: No email found in claims, using placeholder: ${email}`);
     }
 
     return { sub, name, email };
@@ -213,6 +211,9 @@ function generateOAuthConfig() {
     const logoutParams = {
     };
 
+    // No need to log configuration details - users can check their environment variables
+    // The connectivity test will verify if everything is working
+
     const authConfig = {
         authRequired: false,
         auth0Logout: false,
@@ -231,11 +232,32 @@ function generateOAuthConfig() {
         routes: authRoutes,
         idpLogout: true,
         logoutParams: logoutParams,
+        // Add error handling for required auth failures
+        errorOnRequiredAuth: true,
+        // Enable detailed error messages
+        enableTelemetry: false,
+        // Handle OAuth callback errors
+        handleCallback: async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                // Only log if there's an error from the OAuth provider
+                if (req.query.error) {
+                    log.error(`OAuth: Provider returned error: ${req.query.error}`);
+                    if (req.query.error_description) {
+                        log.error(`OAuth: Error description: ${req.query.error_description}`);
+                    }
+                }
+                // No need to log successful callbacks - if it works, it works
+                // The library will handle the actual callback
+                return undefined;
+            } catch (error) {
+                log.error(`OAuth: Callback error: ${error instanceof Error ? error.message : String(error)}`);
+                throw error;
+            }
+        },
         afterCallback: async (req: Request, res: Response, session: Session) => {
             try {
                 // Check if database is initialized
                 if (!sqlInit.isDbInitialized()) {
-                    log.info("OAuth callback: Database not initialized yet, skipping user save");
                     return session;
                 }
 
@@ -247,18 +269,7 @@ function generateOAuthConfig() {
 
                 const user = req.oidc.user as OIDCUserClaims;
                 
-                // Log received claims for debugging (sanitize sensitive data)
-                const sanitizedClaims = {
-                    sub: user.sub ? '***' : undefined,
-                    name: user.name,
-                    given_name: user.given_name,
-                    family_name: user.family_name,
-                    preferred_username: user.preferred_username,
-                    email: user.email ? user.email.replace(/^(.{2}).*@/, '$1***@') : undefined,
-                    email_verified: user.email_verified,
-                    claim_keys: Object.keys(user)
-                };
-                log.info(`OAuth callback: Received user claims: ${JSON.stringify(sanitizedClaims)}`);
+                // No need to log user claims - if we got here, authentication worked
 
                 // Extract and validate user information
                 const userInfo = extractUserInfo(user);
@@ -266,27 +277,15 @@ function generateOAuthConfig() {
                 if (!userInfo) {
                     log.error("OAuth callback: Failed to extract valid user information from claims");
                     // Still return session to avoid breaking the auth flow
-                    // The user won't be saved but the OAuth flow can complete
                     return session;
                 }
 
-                // Attempt to save user with validated information
-                log.info(`OAuth callback: Saving user - name: "${userInfo.name}", email: "${userInfo.email}"`);
-                
-                const saveResult = openIDEncryption.saveUser(
+                // Save user (no need to log - this is internal operation)
+                openIDEncryption.saveUser(
                     userInfo.sub,
                     userInfo.name,
                     userInfo.email
                 );
-
-                if (saveResult === false) {
-                    log.info("OAuth callback: User already saved, skipping");
-                } else if (saveResult === undefined) {
-                    log.error("OAuth callback: Failed to save user (encryption key issue)");
-                    // Continue anyway as the OAuth flow succeeded
-                } else {
-                    log.info("OAuth callback: User successfully saved");
-                }
 
                 // Set session variables for successful authentication
                 req.session.loggedIn = true;
@@ -294,8 +293,8 @@ function generateOAuthConfig() {
                     totpEnabled: false,
                     ssoEnabled: true
                 };
-
-                log.info("OAuth callback: Authentication successful, session established");
+                
+                // Success - no need to log, user is logged in
 
             } catch (error) {
                 // Log the error but don't throw - we want to complete the OAuth flow
@@ -324,6 +323,79 @@ function generateOAuthConfig() {
     return authConfig;
 }
 
+/**
+ * Middleware to log OAuth errors
+ */
+function oauthErrorLogger(err: any, req: Request, res: Response, next: NextFunction) {
+    if (err) {
+        // Always log the basic error
+        log.error(`OAuth Error: ${err.message || 'Unknown error'}`);
+        
+        // Log OAuth-specific error details (these are from the provider, safe to log)
+        if (err.error) {
+            log.error(`OAuth Error Type: ${err.error}`);
+        }
+        if (err.error_description) {
+            log.error(`OAuth Error Description: ${err.error_description}`);
+        }
+        
+        // Provide helpful error messages based on error type
+        if (err.message?.includes('getaddrinfo') || err.message?.includes('ENOTFOUND')) {
+            log.error('Network Error: Cannot reach OAuth provider. Check network connectivity and DNS resolution.');
+        } else if (err.message?.includes('invalid_client')) {
+            log.error('Authentication Error: Invalid client credentials. Verify your OAuth client ID and secret.');
+        } else if (err.message?.includes('invalid_grant')) {
+            log.error('Token Error: Authorization code is invalid or expired. This can happen if the callback takes too long.');
+        } else if (err.message?.includes('self signed certificate') || err.message?.includes('certificate')) {
+            log.error('Certificate Error: SSL/TLS certificate verification failed.');
+            log.error('For testing with self-signed certificates, consult your OAuth provider documentation.');
+        } else if (err.message?.includes('timeout')) {
+            log.error('Timeout Error: Request to OAuth provider timed out. Check network latency and firewall rules.');
+        }
+    }
+    
+    // Pass the error to the next error handler
+    next(err);
+}
+
+/**
+ * Helper function to test OAuth connectivity
+ * Useful for debugging network issues between containers
+ */
+async function testOAuthConnectivity(): Promise<{success: boolean, error?: string}> {
+    const issuerUrl = config.MultiFactorAuthentication.oauthIssuerBaseUrl;
+    
+    if (!issuerUrl) {
+        return { success: false, error: 'No issuer URL configured' };
+    }
+    
+    try {
+        log.info(`Testing OAuth connectivity to: ${issuerUrl}`);
+        
+        // Try to fetch the OpenID configuration
+        const configUrl = issuerUrl.endsWith('/') 
+            ? `${issuerUrl}.well-known/openid-configuration`
+            : `${issuerUrl}/.well-known/openid-configuration`;
+            
+        const response = await fetch(configUrl);
+        
+        if (response.ok) {
+            log.info('OAuth connectivity test successful');
+            const config = await response.json();
+            log.info(`OAuth provider endpoints discovered: token=${config.token_endpoint ? 'yes' : 'no'}, userinfo=${config.userinfo_endpoint ? 'yes' : 'no'}`);
+            return { success: true };
+        } else {
+            const error = `OAuth provider returned status ${response.status}`;
+            log.error(`OAuth connectivity test failed: ${error}`);
+            return { success: false, error };
+        }
+    } catch (error) {
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        log.error(`OAuth connectivity test failed: ${errorMsg}`);
+        return { success: false, error: errorMsg };
+    }
+}
+
 export default {
     generateOAuthConfig,
     getOAuthStatus,
@@ -333,4 +405,6 @@ export default {
     clearSavedUser,
     isTokenValid,
     isUserSaved,
+    oauthErrorLogger,
+    testOAuthConnectivity,
 };
