@@ -231,19 +231,19 @@ export function useNoteContext() {
     const [ noteContext, setNoteContext ] = useState<NoteContext>();
     const [ notePath, setNotePath ] = useState<string | null | undefined>();
 
-    useTriliumEvent("activeContextChanged", ({ noteContext }) => {
-        console.log("Active context changed.");
+    useTriliumEventBeta("activeContextChanged", ({ noteContext }) => {
         setNoteContext(noteContext);
+        setNotePath(noteContext.notePath);
     });
     useTriliumEventBeta("setNoteContext", ({ noteContext }) => {
         console.log("Set note context", noteContext, noteContext.noteId);
         setNoteContext(noteContext);
     });
-    useTriliumEvent("noteSwitchedAndActivated", ({ noteContext }) => {
+    useTriliumEventBeta("noteSwitchedAndActivated", ({ noteContext }) => {
         console.log("Note switched and activated")
         setNoteContext(noteContext);
     });
-    useTriliumEvent("noteSwitched", ({ noteContext, notePath }) => {
+    useTriliumEventBeta("noteSwitched", ({ noteContext, notePath }) => {
         console.warn("Note switched", notePath);
         setNotePath(notePath);
     });

@@ -293,7 +293,6 @@ export class ReactWrappedWidget extends BasicWidget {
 
     handleEvent<T extends EventNames>(name: T, data: EventData<T>): Promise<unknown[] | unknown> | null | undefined {
         const listener = this.listeners[name];
-        console.log("Handle ", name, listener);
         listener?.(data);
     }
 
