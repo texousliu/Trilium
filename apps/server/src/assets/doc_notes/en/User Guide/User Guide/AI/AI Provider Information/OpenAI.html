@@ -1,0 +1,255 @@
+<h1>OpenAI Configuration Guide</h1>
+
+<h2>Overview</h2>
+<p>OpenAI provides access to GPT-4, GPT-3.5-turbo, and other advanced language models through their API. This guide will help you set up and configure OpenAI as your AI provider in Trilium Notes.</p>
+
+<h2>Getting Started</h2>
+
+<h3>Step 1: Create an OpenAI Account</h3>
+<ol>
+  <li>Visit <a href="https://platform.openai.com/signup" target="_blank">OpenAI Platform</a></li>
+  <li>Sign up with your email or Google/Microsoft account</li>
+  <li>Verify your email address</li>
+  <li>Complete your profile information</li>
+</ol>
+
+<h3>Step 2: Obtain an API Key</h3>
+<ol>
+  <li>Navigate to <a href="https://platform.openai.com/api-keys" target="_blank">API Keys</a> in your OpenAI account</li>
+  <li>Click <strong>"Create new secret key"</strong></li>
+  <li>Give your key a descriptive name (e.g., "Trilium Notes")</li>
+  <li><strong>Important:</strong> Copy the key immediately - it won't be shown again!</li>
+  <li>Store the key securely (password manager recommended)</li>
+</ol>
+
+<div class="admonition warning">
+  <p class="admonition-title">Security Note</p>
+  <p>Never share your API key or commit it to version control. Treat it like a password.</p>
+</div>
+
+<h3>Step 3: Configure in Trilium</h3>
+<ol>
+  <li>Open Trilium Notes</li>
+  <li>Navigate to <strong>Options ’ AI/LLM</strong></li>
+  <li>Enable AI features if not already enabled</li>
+  <li>Select <strong>OpenAI</strong> from the provider dropdown</li>
+  <li>Enter your configuration:
+    <ul>
+      <li><strong>API Key:</strong> Paste your OpenAI API key</li>
+      <li><strong>Base URL:</strong> <code>https://api.openai.com/v1</code> (default)</li>
+      <li><strong>Default Model:</strong> Select from available models (see below)</li>
+    </ul>
+  </li>
+  <li>Click <strong>Test Connection</strong> to verify setup</li>
+</ol>
+
+<h2>Available Models</h2>
+
+<h3>Chat Models</h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Model</th>
+      <th>Best For</th>
+      <th>Context Window</th>
+      <th>Cost (per 1K tokens)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>gpt-4-turbo-preview</code></td>
+      <td>Complex reasoning, analysis, latest knowledge</td>
+      <td>128,000 tokens</td>
+      <td>$0.01 input / $0.03 output</td>
+    </tr>
+    <tr>
+      <td><code>gpt-4</code></td>
+      <td>High-quality responses, complex tasks</td>
+      <td>8,192 tokens</td>
+      <td>$0.03 input / $0.06 output</td>
+    </tr>
+    <tr>
+      <td><code>gpt-4-32k</code></td>
+      <td>Long documents, extensive context</td>
+      <td>32,768 tokens</td>
+      <td>$0.06 input / $0.12 output</td>
+    </tr>
+    <tr>
+      <td><code>gpt-3.5-turbo</code></td>
+      <td>Quick responses, general use, cost-effective</td>
+      <td>16,385 tokens</td>
+      <td>$0.0005 input / $0.0015 output</td>
+    </tr>
+    <tr>
+      <td><code>gpt-3.5-turbo-16k</code></td>
+      <td>Longer conversations, more context</td>
+      <td>16,385 tokens</td>
+      <td>$0.003 input / $0.004 output</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Embedding Models</h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Model</th>
+      <th>Dimensions</th>
+      <th>Performance</th>
+      <th>Cost (per 1M tokens)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>text-embedding-3-small</code></td>
+      <td>1,536</td>
+      <td>Good, cost-effective</td>
+      <td>$0.02</td>
+    </tr>
+    <tr>
+      <td><code>text-embedding-3-large</code></td>
+      <td>3,072</td>
+      <td>Best quality</td>
+      <td>$0.13</td>
+    </tr>
+    <tr>
+      <td><code>text-embedding-ada-002</code></td>
+      <td>1,536</td>
+      <td>Legacy, still supported</td>
+      <td>$0.10</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Configuration Options</h2>
+
+<h3>Model Parameters</h3>
+<ul>
+  <li><strong>Temperature (0.0-2.0):</strong> Controls randomness. Lower = more focused, Higher = more creative
+    <ul>
+      <li>0.0-0.3: Factual, deterministic responses</li>
+      <li>0.4-0.7: Balanced (recommended)</li>
+      <li>0.8-1.0: Creative, varied responses</li>
+    </ul>
+  </li>
+  <li><strong>Max Tokens:</strong> Maximum response length (1 token H 0.75 words)
+    <ul>
+      <li>Default: 4000 tokens</li>
+      <li>Adjust based on needs and cost considerations</li>
+    </ul>
+  </li>
+  <li><strong>Top P (0.0-1.0):</strong> Nucleus sampling threshold
+    <ul>
+      <li>Default: 1.0 (consider all tokens)</li>
+      <li>Lower values = more focused responses</li>
+    </ul>
+  </li>
+</ul>
+
+<h3>Advanced Settings</h3>
+<h4>Custom Endpoints</h4>
+<p>For Azure OpenAI or OpenAI-compatible services:</p>
+<pre><code>Base URL: https://your-resource.openai.azure.com/
+API Version: 2024-02-15-preview
+Deployment Name: your-deployment-name</code></pre>
+
+<h4>Rate Limiting</h4>
+<p>Configure to avoid hitting API limits:</p>
+<ul>
+  <li>Tier 1: 60 requests/minute, 200,000 tokens/minute</li>
+  <li>Tier 2: 120 requests/minute, 400,000 tokens/minute</li>
+  <li>Higher tiers available upon request</li>
+</ul>
+
+<h2>Cost Management</h2>
+
+<h3>Estimating Costs</h3>
+<p>Typical usage patterns and estimated monthly costs:</p>
+<ul>
+  <li><strong>Light Use (Personal):</strong> ~$5-10/month
+    <ul>
+      <li>50 queries/day with GPT-3.5-turbo</li>
+      <li>Basic embeddings for 1000 notes</li>
+    </ul>
+  </li>
+  <li><strong>Regular Use (Professional):</strong> ~$20-50/month
+    <ul>
+      <li>100 queries/day with mix of GPT-4 and GPT-3.5</li>
+      <li>Comprehensive embeddings for 5000 notes</li>
+    </ul>
+  </li>
+  <li><strong>Heavy Use (Research/Business):</strong> ~$100+/month
+    <ul>
+      <li>200+ queries/day primarily with GPT-4</li>
+      <li>Large-scale embeddings and regular updates</li>
+    </ul>
+  </li>
+</ul>
+
+<h3>Cost Optimization Tips</h3>
+<ol>
+  <li><strong>Use GPT-3.5-turbo for simple queries</strong> - 60x cheaper than GPT-4</li>
+  <li><strong>Enable response caching</strong> - Avoid repeated API calls</li>
+  <li><strong>Set token limits</strong> - Prevent unexpectedly long responses</li>
+  <li><strong>Use text-embedding-3-small</strong> - Good quality at low cost</li>
+  <li><strong>Monitor usage</strong> - Check OpenAI dashboard regularly</li>
+</ol>
+
+<h2>Troubleshooting</h2>
+
+<h3>Common Issues</h3>
+
+<div class="admonition info">
+  <p class="admonition-title">Invalid API Key</p>
+  <p><strong>Solution:</strong> Verify the key is copied correctly without spaces. Check it hasn't been revoked in your OpenAI dashboard.</p>
+</div>
+
+<div class="admonition info">
+  <p class="admonition-title">Rate Limit Exceeded</p>
+  <p><strong>Solution:</strong> Wait a few minutes and retry. Consider upgrading your API tier or implementing request throttling.</p>
+</div>
+
+<div class="admonition info">
+  <p class="admonition-title">Model Not Found</p>
+  <p><strong>Solution:</strong> Ensure you have access to the model. GPT-4 requires separate approval from OpenAI.</p>
+</div>
+
+<div class="admonition info">
+  <p class="admonition-title">Connection Timeout</p>
+  <p><strong>Solution:</strong> Check your internet connection and firewall settings. Ensure port 443 is open for HTTPS.</p>
+</div>
+
+<h2>Best Practices</h2>
+
+<h3>Security</h3>
+<ul>
+  <li>Rotate API keys monthly</li>
+  <li>Use separate keys for development and production</li>
+  <li>Monitor usage for unusual activity</li>
+  <li>Set spending limits in OpenAI dashboard</li>
+</ul>
+
+<h3>Performance</h3>
+<ul>
+  <li>Start with smaller models and upgrade as needed</li>
+  <li>Use streaming for better perceived performance</li>
+  <li>Implement retry logic with exponential backoff</li>
+  <li>Cache frequently requested information</li>
+</ul>
+
+<h3>Quality</h3>
+<ul>
+  <li>Provide clear, specific prompts</li>
+  <li>Use system prompts to set behavior</li>
+  <li>Include examples in prompts when needed</li>
+  <li>Test different temperature settings</li>
+</ul>
+
+<h2>Additional Resources</h2>
+<ul>
+  <li><a href="https://platform.openai.com/docs" target="_blank">OpenAI API Documentation</a></li>
+  <li><a href="https://platform.openai.com/usage" target="_blank">Usage Dashboard</a></li>
+  <li><a href="https://openai.com/pricing" target="_blank">Pricing Calculator</a></li>
+  <li><a href="https://status.openai.com/" target="_blank">API Status Page</a></li>
+  <li><a href="https://cookbook.openai.com/" target="_blank">OpenAI Cookbook</a></li>
+</ul>

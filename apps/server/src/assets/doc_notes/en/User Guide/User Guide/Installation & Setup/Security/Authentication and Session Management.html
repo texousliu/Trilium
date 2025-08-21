@@ -1,0 +1,412 @@
+<div class="note-content">
+
+<h1>Authentication and Session Management</h1>
+
+<p>Trilium provides multiple authentication methods and robust session management to secure access to your notes while maintaining usability.</p>
+
+<h2>Authentication Methods</h2>
+
+<h3>Password Authentication</h3>
+
+<p>The primary authentication method uses a master password to secure your Trilium instance.</p>
+
+<h4>Password Setup</h4>
+
+<ol>
+<li><strong>Initial Setup</strong>: Set during first launch or server installation</li>
+<li><strong>Password Requirements</strong>: Configurable strength requirements</li>
+<li><strong>Verification</strong>: Scrypt-based password hashing for security</li>
+<li><strong>Storage</strong>: Hashed using scrypt with random salt</li>
+</ol>
+
+<h4>Password Security</h4>
+
+<ul>
+<li><strong>Hashing Algorithm</strong>: Scrypt with parameters N=16384, r=8, p=1</li>
+<li><strong>Salt</strong>: Unique random salt generated per installation</li>
+<li><strong>Verification Hash</strong>: Stored separately from encryption keys</li>
+<li><strong>Timing Attack Protection</strong>: Constant-time comparison</li>
+</ul>
+
+<h3>Multi-Factor Authentication (TOTP)</h3>
+
+<p>Trilium supports Time-based One-Time Password (TOTP) authentication for enhanced security.</p>
+
+<h4>Setup Process</h4>
+
+<ol>
+<li><strong>Enable MFA</strong>: Navigate to Options → Multi-Factor Authentication</li>
+<li><strong>Generate Secret</strong>: Click "Generate New Secret"</li>
+<li><strong>Add to Authenticator</strong>: Scan QR code or enter secret manually</li>
+<li><strong>Verify Setup</strong>: Enter TOTP code to confirm configuration</li>
+<li><strong>Save Recovery Codes</strong>: Store backup codes securely</li>
+</ol>
+
+<h4>Supported Authenticators</h4>
+
+<ul>
+<li><strong>Google Authenticator</strong>: Mobile app for Android/iOS</li>
+<li><strong>Authy</strong>: Cross-platform authenticator with cloud sync</li>
+<li><strong>Microsoft Authenticator</strong>: Integrated with Microsoft accounts</li>
+<li><strong>1Password</strong>: Built-in TOTP support</li>
+<li><strong>Any RFC 6238 Compatible App</strong>: Standard TOTP implementation</li>
+</ul>
+
+<h4>TOTP Configuration</h4>
+
+<pre><code class="language-typescript">// TOTP settings in options
+{
+  mfaEnabled: "true",           // Enable/disable MFA
+  mfaMethod: "totp",           // Authentication method
+  totpEncryptedSecret: "...",  // Encrypted TOTP secret
+  totpVerificationHash: "..."  // Secret verification hash
+}
+</code></pre>
+
+<h3>Recovery Codes</h3>
+
+<p>Recovery codes provide backup access when TOTP is unavailable.</p>
+
+<h4>Code Generation</h4>
+
+<ul>
+<li><strong>Format</strong>: Base64-encoded 24-character strings ending in "=="</li>
+<li><strong>Quantity</strong>: Multiple codes generated during setup</li>
+<li><strong>Encryption</strong>: AES-256-CBC encrypted storage</li>
+<li><strong>One-time Use</strong>: Each code invalidated after use</li>
+</ul>
+
+<h4>Usage Guidelines</h4>
+
+<ol>
+<li><strong>Secure Storage</strong>: Keep codes in password manager or secure location</li>
+<li><strong>Limited Use</strong>: Only use when primary authentication unavailable</li>
+<li><strong>Regeneration</strong>: Generate new codes if compromised</li>
+<li><strong>Expiration</strong>: Codes replaced with timestamp when used</li>
+</ol>
+
+<h3>Single Sign-On (SSO)</h3>
+
+<p>Trilium supports OpenID Connect for enterprise authentication.</p>
+
+<h4>Supported Providers</h4>
+
+<ul>
+<li><strong>Google</strong>: Google Workspace accounts</li>
+<li><strong>Microsoft</strong>: Azure AD integration</li>
+<li><strong>GitHub</strong>: Developer account authentication</li>
+<li><strong>Custom OIDC</strong>: Any OpenID Connect provider</li>
+</ul>
+
+<h4>Configuration</h4>
+
+<p>Set environment variables or config.ini:</p>
+
+<pre><code class="language-ini">[OpenID]
+enabled=true
+issuer=https://accounts.google.com
+client_id=your-client-id
+client_secret=your-client-secret
+redirect_uri=https://your-trilium.example.com/auth/callback
+</code></pre>
+
+<h2>Session Management</h2>
+
+<h3>Session Security</h3>
+
+<p>Trilium implements secure session management with multiple protection layers.</p>
+
+<h4>Session Storage</h4>
+
+<ul>
+<li><strong>Database Storage</strong>: Sessions stored in SQLite database</li>
+<li><strong>Secure Secrets</strong>: Cryptographically secure session secrets</li>
+<li><strong>Expiration Tracking</strong>: Automatic cleanup of expired sessions</li>
+<li><strong>Multiple Sessions</strong>: Support for concurrent user sessions</li>
+</ul>
+
+<h4>Session Configuration</h4>
+
+<pre><code class="language-typescript">// Session settings
+{
+  secret: sessionSecret,           // Cryptographic secret
+  resave: false,                  // Don't save unchanged sessions
+  saveUninitialized: false,       // Don't save empty sessions
+  rolling: true,                  // Reset expiration on activity
+  cookie: {
+    httpOnly: true,               // Prevent XSS attacks
+    secure: false,                // HTTPS-only in production
+    maxAge: 24 * 60 * 60 * 1000  // 24-hour expiration
+  }
+}
+</code></pre>
+
+<h3>Session Lifecycle</h3>
+
+<h4>Session Creation</h4>
+
+<ol>
+<li><strong>Authentication</strong>: User provides valid credentials</li>
+<li><strong>Session ID</strong>: Generate cryptographically secure session ID</li>
+<li><strong>Database Storage</strong>: Store session data with expiration</li>
+<li><strong>Cookie Setting</strong>: Send session cookie to client</li>
+<li><strong>State Tracking</strong>: Monitor authentication state changes</li>
+</ol>
+
+<h4>Session Maintenance</h4>
+
+<ul>
+<li><strong>Activity Tracking</strong>: Update session expiration on each request</li>
+<li><strong>State Validation</strong>: Verify session integrity on each access</li>
+<li><strong>Timeout Management</strong>: Automatic logout after inactivity</li>
+<li><strong>Cross-tab Sync</strong>: Session state synchronized across browser tabs</li>
+</ul>
+
+<h4>Session Termination</h4>
+
+<ol>
+<li><strong>Manual Logout</strong>: User-initiated session termination</li>
+<li><strong>Timeout Expiration</strong>: Automatic logout after inactivity</li>
+<li><strong>Security Events</strong>: Forced logout on security state changes</li>
+<li><strong>Cleanup</strong>: Remove session data from database</li>
+</ol>
+
+<h3>CSRF Protection</h3>
+
+<p>Trilium implements double-submit cookie CSRF protection.</p>
+
+<h4>Protection Mechanism</h4>
+
+<ul>
+<li><strong>Token Generation</strong>: Cryptographically secure CSRF tokens</li>
+<li><strong>Cookie Storage</strong>: Token stored in httpOnly cookie</li>
+<li><strong>Header Validation</strong>: Token required in request headers</li>
+<li><strong>Double Submit</strong>: Cookie and header values must match</li>
+</ul>
+
+<h4>Configuration</h4>
+
+<pre><code class="language-typescript">// CSRF protection settings
+{
+  cookieOptions: {
+    path: "/",
+    secure: false,        // HTTPS-only in production
+    sameSite: "strict",   // Strict same-site policy
+    httpOnly: true        // Prevent JavaScript access
+  },
+  cookieName: "_csrf"     // Cookie name for CSRF token
+}
+</code></pre>
+
+<h3>Session Security Headers</h3>
+
+<p>Trilium sets security headers to protect against common attacks.</p>
+
+<h4>Standard Headers</h4>
+
+<ul>
+<li><strong>X-Frame-Options</strong>: Prevent clickjacking attacks</li>
+<li><strong>X-Content-Type-Options</strong>: Prevent MIME sniffing</li>
+<li><strong>X-XSS-Protection</strong>: Enable browser XSS protection</li>
+<li><strong>Strict-Transport-Security</strong>: Enforce HTTPS connections</li>
+<li><strong>Content-Security-Policy</strong>: Control resource loading</li>
+</ul>
+
+<h2>Authentication Flow</h2>
+
+<h3>Standard Login Process</h3>
+
+<ol>
+<li><strong>Initial Request</strong>: User accesses protected resource</li>
+<li><strong>Redirect</strong>: System redirects to login page</li>
+<li><strong>Credential Entry</strong>: User enters username/password</li>
+<li><strong>Verification</strong>: System validates credentials</li>
+<li><strong>MFA Challenge</strong>: TOTP prompt if MFA enabled</li>
+<li><strong>Session Creation</strong>: Generate and store session</li>
+<li><strong>Redirect</strong>: Send user to requested resource</li>
+</ol>
+
+<h3>MFA Login Process</h3>
+
+<ol>
+<li><strong>Primary Authentication</strong>: Password verification succeeds</li>
+<li><strong>MFA Challenge</strong>: Display TOTP input form</li>
+<li><strong>Code Verification</strong>: Validate TOTP code</li>
+<li><strong>Recovery Option</strong>: Allow recovery code if TOTP fails</li>
+<li><strong>Session Creation</strong>: Create authenticated session</li>
+<li><strong>State Tracking</strong>: Update last authentication state</li>
+</ol>
+
+<h3>SSO Login Process</h3>
+
+<ol>
+<li><strong>Provider Redirect</strong>: Redirect to OpenID provider</li>
+<li><strong>Provider Authentication</strong>: User authenticates with provider</li>
+<li><strong>Authorization Code</strong>: Provider returns authorization code</li>
+<li><strong>Token Exchange</strong>: Exchange code for access token</li>
+<li><strong>User Info</strong>: Retrieve user information from provider</li>
+<li><strong>Local Session</strong>: Create local session for user</li>
+<li><strong>Access Grant</strong>: Allow access to protected resources</li>
+</ol>
+
+<h2>Security Best Practices</h2>
+
+<h3>Password Security</h3>
+
+<ol>
+<li><strong>Strong Passwords</strong>: Require complex passwords</li>
+<li><strong>Regular Updates</strong>: Encourage periodic password changes</li>
+<li><strong>Unique Passwords</strong>: Don't reuse passwords from other services</li>
+<li><strong>Secure Storage</strong>: Use password managers</li>
+</ol>
+
+<h3>Session Security</h3>
+
+<ol>
+<li><strong>HTTPS Only</strong>: Always use HTTPS in production</li>
+<li><strong>Secure Cookies</strong>: Enable secure flag for session cookies</li>
+<li><strong>Short Timeouts</strong>: Configure appropriate session timeouts</li>
+<li><strong>Regular Cleanup</strong>: Automatically clean expired sessions</li>
+</ol>
+
+<h3>Multi-Factor Authentication</h3>
+
+<ol>
+<li><strong>Enable MFA</strong>: Always enable MFA for sensitive installations</li>
+<li><strong>Secure Recovery</strong>: Store recovery codes securely</li>
+<li><strong>Regular Review</strong>: Periodically review MFA configuration</li>
+<li><strong>Backup Methods</strong>: Maintain multiple authentication methods</li>
+</ol>
+
+<h2>Troubleshooting</h2>
+
+<h3>Common Authentication Issues</h3>
+
+<h4>Login Failures</h4>
+
+<p><strong>Symptoms</strong>: Cannot login with correct credentials</p>
+
+<p><strong>Possible Causes</strong>:</p>
+<ul>
+<li>Incorrect password</li>
+<li>Database connectivity issues</li>
+<li>Session storage problems</li>
+<li>Browser cookie issues</li>
+</ul>
+
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>Verify password accuracy (check caps lock)</li>
+<li>Clear browser cookies and cache</li>
+<li>Check database connectivity</li>
+<li>Review server logs for errors</li>
+<li>Restart application if needed</li>
+</ol>
+
+<h4>MFA Issues</h4>
+
+<p><strong>Symptoms</strong>: TOTP codes rejected or recovery codes fail</p>
+
+<p><strong>Possible Causes</strong>:</p>
+<ul>
+<li>Clock synchronization issues</li>
+<li>Corrupted TOTP secret</li>
+<li>Used recovery codes</li>
+<li>Configuration problems</li>
+</ul>
+
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>Synchronize device time</li>
+<li>Regenerate TOTP secret</li>
+<li>Use fresh recovery codes</li>
+<li>Check MFA configuration</li>
+<li>Contact administrator if needed</li>
+</ol>
+
+<h4>Session Problems</h4>
+
+<p><strong>Symptoms</strong>: Frequent logouts or session errors</p>
+
+<p><strong>Possible Causes</strong>:</p>
+<ul>
+<li>Short session timeout</li>
+<li>Database session storage issues</li>
+<li>Browser cookie problems</li>
+<li>Network connectivity issues</li>
+</ul>
+
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>Increase session timeout</li>
+<li>Check database permissions</li>
+<li>Enable browser cookies</li>
+<li>Verify network stability</li>
+<li>Review session configuration</li>
+</ol>
+
+<h3>Security Monitoring</h3>
+
+<h4>Log Analysis</h4>
+
+<p>Monitor authentication logs for:</p>
+<ul>
+<li>Failed login attempts</li>
+<li>MFA failures</li>
+<li>Session anomalies</li>
+<li>Unusual access patterns</li>
+</ul>
+
+<h4>Alert Configuration</h4>
+
+<p>Set up alerts for:</p>
+<ul>
+<li>Multiple failed logins</li>
+<li>MFA bypass attempts</li>
+<li>Session manipulation</li>
+<li>Account lockouts</li>
+</ul>
+
+<h4>Regular Audits</h4>
+
+<p>Perform regular security audits:</p>
+<ul>
+<li>Review authentication logs</li>
+<li>Check session configurations</li>
+<li>Validate MFA setup</li>
+<li>Test recovery procedures</li>
+</ul>
+
+<h2>Configuration Reference</h2>
+
+<h3>Environment Variables</h3>
+
+<pre><code class="language-bash"># Authentication settings
+TRILIUM_NO_AUTHENTICATION=false
+TRILIUM_PASSWORD_MIN_LENGTH=8
+TRILIUM_SESSION_TIMEOUT=86400
+
+# MFA settings  
+TRILIUM_MFA_ENABLED=true
+TRILIUM_MFA_METHOD=totp
+
+# OpenID settings
+TRILIUM_OPENID_ENABLED=false
+TRILIUM_OPENID_ISSUER=https://provider.example.com
+TRILIUM_OPENID_CLIENT_ID=your-client-id
+TRILIUM_OPENID_CLIENT_SECRET=your-client-secret
+</code></pre>
+
+<h3>Database Options</h3>
+
+<pre><code class="language-sql">-- Authentication options
+INSERT INTO options (name, value) VALUES 
+('passwordMinLength', '8'),
+('sessionTimeout', '86400'),
+('mfaEnabled', 'true'),
+('mfaMethod', 'totp');
+</code></pre>
+
+<p><strong>Remember</strong>: Strong authentication and session management are critical for protecting your notes. Always use HTTPS in production and enable MFA for enhanced security.</p>
+
+</div>

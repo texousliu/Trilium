@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trilium Architecture Documentation</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        h1 { color: #2c3e50; }
+        h2 { color: #34495e; margin-top: 30px; }
+        ul { line-height: 1.8; }
+        a { color: #3498db; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .overview { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .quick-start { background: #e8f5e9; padding: 20px; border-radius: 8px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h1>Trilium Architecture Documentation</h1>
+    
+    <p>This comprehensive guide documents the architecture of Trilium Notes, providing developers with detailed information about the system's core components, data flow, and design patterns.</p>
+    
+    <h2>Table of Contents</h2>
+    <ol>
+        <li><a href="Three-Layer-Cache-System.html">Three-Layer Cache System</a></li>
+        <li><a href="Entity-System.html">Entity System</a></li>
+        <li><a href="Widget-Based-UI-Architecture.html">Widget-Based UI Architecture</a></li>
+        <li><a href="API-Architecture.html">API Architecture</a></li>
+        <li><a href="Monorepo-Structure.html">Monorepo Structure</a></li>
+    </ol>
+    
+    <div class="overview">
+        <h2>Overview</h2>
+        <p>Trilium Notes is built as a TypeScript monorepo using NX, featuring a sophisticated architecture that balances performance, flexibility, and maintainability. The system is designed around several key architectural patterns:</p>
+        
+        <ul>
+            <li><strong>Three-layer caching system</strong> for optimal performance across backend, frontend, and shared content</li>
+            <li><strong>Entity-based data model</strong> supporting hierarchical note structures with multiple parent relationships</li>
+            <li><strong>Widget-based UI architecture</strong> enabling modular and extensible interface components</li>
+            <li><strong>Multiple API layers</strong> for internal operations, external integrations, and real-time synchronization</li>
+            <li><strong>Monorepo structure</strong> facilitating code sharing and consistent development patterns</li>
+        </ul>
+    </div>
+    
+    <div class="quick-start">
+        <h2>Quick Start for Developers</h2>
+        
+        <p>If you're new to Trilium development, start with these sections:</p>
+        
+        <ol>
+            <li><a href="Monorepo-Structure.html">Monorepo Structure</a> - Understand the project organization</li>
+            <li><a href="Entity-System.html">Entity System</a> - Learn about the core data model</li>
+            <li><a href="Three-Layer-Cache-System.html">Three-Layer Cache System</a> - Understand data flow and caching</li>
+        </ol>
+        
+        <p>For UI development, refer to:</p>
+        <ul>
+            <li><a href="Widget-Based-UI-Architecture.html">Widget-Based UI Architecture</a></li>
+        </ul>
+        
+        <p>For API integration, see:</p>
+        <ul>
+            <li><a href="API-Architecture.html">API Architecture</a></li>
+        </ul>
+    </div>
+    
+    <h2>Architecture Principles</h2>
+    
+    <h3>Performance First</h3>
+    <ul>
+        <li>Lazy loading of note content</li>
+        <li>Efficient caching at multiple layers</li>
+        <li>Optimized database queries with prepared statements</li>
+    </ul>
+    
+    <h3>Flexibility</h3>
+    <ul>
+        <li>Support for multiple note types</li>
+        <li>Extensible through scripting</li>
+        <li>Plugin architecture for UI widgets</li>
+    </ul>
+    
+    <h3>Data Integrity</h3>
+    <ul>
+        <li>Transactional database operations</li>
+        <li>Revision history for all changes</li>
+        <li>Synchronization conflict resolution</li>
+    </ul>
+    
+    <h3>Security</h3>
+    <ul>
+        <li>Per-note encryption</li>
+        <li>Protected sessions</li>
+        <li>API authentication tokens</li>
+    </ul>
+    
+    <h2>Development Workflow</h2>
+    
+    <ol>
+        <li><strong>Setup Development Environment</strong>
+            <pre><code>pnpm install
+pnpm run server:start</code></pre>
+        </li>
+        
+        <li><strong>Make Changes</strong>
+            <ul>
+                <li>Backend changes in <code>apps/server/src/</code></li>
+                <li>Frontend changes in <code>apps/client/src/</code></li>
+                <li>Shared code in <code>packages/</code></li>
+            </ul>
+        </li>
+        
+        <li><strong>Test Your Changes</strong>
+            <pre><code>pnpm test:all
+pnpm nx run &lt;project&gt;:lint</code></pre>
+        </li>
+        
+        <li><strong>Build for Production</strong>
+            <pre><code>pnpm nx build server
+pnpm nx build client</code></pre>
+        </li>
+    </ol>
+</body>
+</html>

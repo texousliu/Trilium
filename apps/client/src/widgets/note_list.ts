@@ -81,7 +81,7 @@ export default class NoteListWidget extends NoteContextAwareWidget {
         );
 
         // there seems to be a race condition on Firefox which triggers the observer only before the widget is visible
-        // (intersection is false). https://github.com/zadam/trilium/issues/4165
+        // (intersection is false). https://github.com/TriliumNext/Trilium/issues/4165
         setTimeout(() => observer.observe(this.$widget[0]), 10);
     }
 

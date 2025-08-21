@@ -99,7 +99,7 @@ async function mouseEnterHandler(this: HTMLElement) {
     if ($link.filter(":hover").length > 0) {
         $link.tooltip({
             container: "body",
-            // https://github.com/zadam/trilium/issues/2794 https://github.com/zadam/trilium/issues/2988
+            // https://github.com/TriliumNext/Trilium/issues/2794 https://github.com/TriliumNext/Trilium/issues/2988
             // with bottom this flickering happens a bit less
             placement: "bottom",
             trigger: "manual",

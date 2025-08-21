@@ -50,7 +50,7 @@ function filterUrlValue(value: string) {
 }
 
 function buildRewardMap(note: BNote) {
-    // Need to use Map instead of object: https://github.com/zadam/trilium/issues/1895
+    // Need to use Map instead of object: https://github.com/TriliumNext/Trilium/issues/1895
     const map = new Map();
 
     function addToRewardMap(text: string | undefined | null, rewardFactor: number) {
@@ -188,7 +188,7 @@ function buildDateLimits(baseNote: BNote): DateLimits {
     };
 }
 
-// Need to use Map instead of object: https://github.com/zadam/trilium/issues/1895
+// Need to use Map instead of object: https://github.com/TriliumNext/Trilium/issues/1895
 const wordCache = new Map();
 
 const WORD_BLACKLIST = [

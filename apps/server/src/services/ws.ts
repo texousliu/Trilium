@@ -101,7 +101,7 @@ Stack: ${message.stack}`);
     });
 
     webSocketServer.on("error", (error) => {
-        // https://github.com/zadam/trilium/issues/3374#issuecomment-1341053765
+        // https://github.com/TriliumNext/Trilium/issues/3374#issuecomment-1341053765
         console.log(error);
     });
 }

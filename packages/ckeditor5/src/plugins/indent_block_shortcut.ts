@@ -1,5 +1,5 @@
 /**
- * https://github.com/zadam/trilium/issues/978
+ * https://github.com/TriliumNext/Trilium/issues/978
  */
 
 import { ModelDocumentFragment, ModelElement, Plugin, ModelPosition } from "ckeditor5";

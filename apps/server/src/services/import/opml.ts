@@ -53,7 +53,7 @@ async function importOpml(taskContext: TaskContext, fileBuffer: string | Buffer,
             content = toHtml(outline.$.text);
 
             if (!title || !title.trim()) {
-                // https://github.com/zadam/trilium/issues/1862
+                // https://github.com/TriliumNext/Trilium/issues/1862
                 title = outline.$.text;
                 content = "";
             }

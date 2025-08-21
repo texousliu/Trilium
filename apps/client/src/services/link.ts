@@ -507,7 +507,7 @@ $(document).on("dblclick", "a", (e) => {
 $(document).on("mousedown", "a", (e) => {
     if (e.which === 2) {
         // prevent paste on middle click
-        // https://github.com/zadam/trilium/issues/2995
+        // https://github.com/TriliumNext/Trilium/issues/2995
         // https://developer.mozilla.org/en-US/docs/Web/API/Element/auxclick_event#preventing_default_actions
         e.preventDefault();
         return false;

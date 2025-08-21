@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ETAPI Complete Guide</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            line-height: 1.6; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px; 
+        }
+        h1 { color: #2c3e50; border-bottom: 3px solid #e67e22; padding-bottom: 10px; }
+        h2 { color: #34495e; margin-top: 40px; border-bottom: 2px solid #ecf0f1; padding-bottom: 5px; }
+        h3 { color: #7f8c8d; margin-top: 30px; }
+        h4 { color: #95a5a6; margin-top: 25px; }
+        pre { 
+            background: #2c3e50; 
+            color: #ecf0f1; 
+            padding: 20px; 
+            border-radius: 8px; 
+            overflow-x: auto; 
+            border-left: 4px solid #e67e22;
+        }
+        code { 
+            background: #f4f4f4; 
+            padding: 3px 6px; 
+            border-radius: 4px; 
+            font-family: 'Courier New', Monaco, monospace; 
+            font-size: 0.9em;
+        }
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        .endpoint-box {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #e67e22;
+        }
+        .method-get { border-left-color: #28a745; }
+        .method-post { border-left-color: #007bff; }
+        .method-put { border-left-color: #ffc107; }
+        .method-patch { border-left-color: #fd7e14; }
+        .method-delete { border-left-color: #dc3545; }
+        .example-box {
+            background: #f1f3f4;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        table { 
+            border-collapse: collapse; 
+            width: 100%; 
+            margin: 20px 0; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 12px; 
+            text-align: left; 
+        }
+        th { 
+            background: #34495e; 
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) { background: #f8f9fa; }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #74c0fc;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #51cf66;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .toc {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .toc ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        .toc a {
+            text-decoration: none;
+            color: #495057;
+        }
+        .toc a:hover {
+            color: #e67e22;
+        }
+        .auth-example {
+            background: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>ETAPI Complete Guide</h1>
+    
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#authentication-setup">Authentication Setup</a></li>
+            <li><a href="#api-endpoints">API Endpoints</a></li>
+            <li><a href="#common-use-cases">Common Use Cases</a></li>
+            <li><a href="#client-library-examples">Client Library Examples</a></li>
+            <li><a href="#rate-limiting-and-best-practices">Rate Limiting and Best Practices</a></li>
+            <li><a href="#migration-from-internal-api">Migration from Internal API</a></li>
+            <li><a href="#error-handling">Error Handling</a></li>
+            <li><a href="#performance-considerations">Performance Considerations</a></li>
+        </ul>
+    </div>
+
+    <h2 id="introduction">Introduction</h2>
+    
+    <p>ETAPI (External Trilium API) is the recommended REST API for external integrations with Trilium Notes. It provides a secure, stable interface for programmatic access to notes, attributes, branches, and attachments.</p>
+
+    <div class="success">
+        <h4>Key Features</h4>
+        <ul>
+            <li>RESTful design with predictable endpoints</li>
+            <li>Token-based authentication</li>
+            <li>Comprehensive CRUD operations</li>
+            <li>Search functionality</li>
+            <li>Import/export capabilities</li>
+            <li>Calendar and special note access</li>
+        </ul>
+    </div>
+
+    <div class="info">
+        <strong>Base URL:</strong> <code>http://localhost:8080/etapi</code>
+    </div>
+
+    <h2 id="authentication-setup">Authentication Setup</h2>
+    
+    <h3>Method 1: Token Authentication</h3>
+    
+    <div class="auth-example">
+        <h4>Step 1: Generate ETAPI Token</h4>
+        <ol>
+            <li>Open Trilium Notes</li>
+            <li>Navigate to <strong>Options</strong> → <strong>ETAPI</strong></li>
+            <li>Click "Create new ETAPI token"</li>
+            <li>Copy the generated token</li>
+        </ol>
+    </div>
+
+    <h4>Step 2: Use Token in Requests</h4>
+
+    <div class="endpoint-box">
+        <strong>HTTP Header:</strong>
+        <pre><code>Authorization: &lt;your-token&gt;</code></pre>
+    </div>
+
+    <div class="example-box">
+        <strong>cURL Example:</strong>
+        <pre><code>curl -X GET http://localhost:8080/etapi/notes/root \
+  -H "Authorization: myEtapiToken123"</code></pre>
+    </div>
+
+    <div class="example-box">
+        <strong>Python Example:</strong>
+        <pre><code>import requests
+
+headers = {
+    'Authorization': 'myEtapiToken123'
+}
+
+response = requests.get('http://localhost:8080/etapi/notes/root', headers=headers)
+print(response.json())</code></pre>
+    </div>
+
+    <h3>Method 2: Basic Authentication</h3>
+    
+    <p>Use the ETAPI token as the password with any username:</p>
+    
+    <div class="example-box">
+        <pre><code>curl -X GET http://localhost:8080/etapi/notes/root \
+  -u "trilium:myEtapiToken123"</code></pre>
+    </div>
+
+    <h3>Method 3: Programmatic Login</h3>
+    
+    <div class="example-box">
+        <pre><code>import requests
+
+# Login to get token
+login_data = {'password': 'your-trilium-password'}
+response = requests.post('http://localhost:8080/etapi/auth/login', json=login_data)
+token = response.json()['authToken']
+
+# Use token for subsequent requests
+headers = {'Authorization': token}
+notes = requests.get('http://localhost:8080/etapi/notes/root', headers=headers)</code></pre>
+    </div>
+
+    <h2 id="api-endpoints">API Endpoints</h2>
+    
+    <h3>Notes</h3>
+    
+    <h4>Create Note</h4>
+    
+    <div class="endpoint-box method-post">
+        <strong>POST</strong> <code>/etapi/create-note</code>
+        <p>Creates a new note and places it in the tree.</p>
+    </div>
+
+    <div class="example-box">
+        <strong>Request Body:</strong>
+        <pre><code>{
+  "parentNoteId": "root",
+  "title": "My New Note",
+  "type": "text",
+  "content": "&lt;p&gt;This is the note content&lt;/p&gt;",
+  "notePosition": 10,
+  "prefix": "📝",
+  "isExpanded": true
+}</code></pre>
+    </div>
+
+    <div class="example-box">
+        <strong>Response (201 Created):</strong>
+        <pre><code>{
+  "note": {
+    "noteId": "evnnmvHTCgIn",
+    "title": "My New Note",
+    "type": "text",
+    "mime": "text/html",
+    "isProtected": false,
+    "dateCreated": "2024-01-15 10:30:00.000+0100",
+    "dateModified": "2024-01-15 10:30:00.000+0100",
+    "utcDateCreated": "2024-01-15 09:30:00.000Z",
+    "utcDateModified": "2024-01-15 09:30:00.000Z"
+  },
+  "branch": {
+    "branchId": "ibhg4WxTdULk",
+    "noteId": "evnnmvHTCgIn",
+    "parentNoteId": "root",
+    "prefix": "📝",
+    "notePosition": 10,
+    "isExpanded": true,
+    "utcDateModified": "2024-01-15 09:30:00.000Z"
+  }
+}</code></pre>
+    </div>
+
+    <div class="example-box">
+        <strong>Python Example:</strong>
+        <pre><code>import requests
+import json
+
+def create_note(parent_id, title, content, note_type="text"):
+    url = "http://localhost:8080/etapi/create-note"
+    headers = {
+        'Authorization': 'your-token',
+        'Content-Type': 'application/json'
+    }
+    
+    data = {
+        "parentNoteId": parent_id,
+        "title": title,
+        "type": note_type,
+        "content": content
+    }
+    
+    response = requests.post(url, headers=headers, json=data)
+    
+    if response.status_code == 201:
+        return response.json()
+    else:
+        raise Exception(f"Failed to create note: {response.text}")
+
+# Usage
+new_note = create_note("root", "Meeting Notes", "&lt;p&gt;Discussion points:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Item 1&lt;/li&gt;&lt;/ul&gt;")
+print(f"Created note with ID: {new_note['note']['noteId']}")</code></pre>
+    </div>
+
+    <h4>Get Note by ID</h4>
+    
+    <div class="endpoint-box method-get">
+        <strong>GET</strong> <code>/etapi/notes/{noteId}</code>
+    </div>
+
+    <div class="example-box">
+        <strong>cURL Example:</strong>
+        <pre><code>curl -X GET http://localhost:8080/etapi/notes/evnnmvHTCgIn \
+  -H "Authorization: your-token"</code></pre>
+    </div>
+
+    <div class="example-box">
+        <strong>Response:</strong>
+        <pre><code>{
+  "noteId": "evnnmvHTCgIn",
+  "title": "My Note",
+  "type": "text",
+  "mime": "text/html",
+  "isProtected": false,
+  "attributes": [
+    {
+      "attributeId": "abc123",
+      "noteId": "evnnmvHTCgIn",
+      "type": "label",
+      "name": "todo",
+      "value": "",
+      "position": 10,
+      "isInheritable": false
+    }
+  ],
+  "parentNoteIds": ["root"],
+  "childNoteIds": ["child1", "child2"],
+  "dateCreated": "2024-01-15 10:30:00.000+0100",
+  "dateModified": "2024-01-15 14:20:00.000+0100",
+  "utcDateCreated": "2024-01-15 09:30:00.000Z",
+  "utcDateModified": "2024-01-15 13:20:00.000Z"
+}</code></pre>
+    </div>
+
+    <h4>Update Note</h4>
+    
+    <div class="endpoint-box method-patch">
+        <strong>PATCH</strong> <code>/etapi/notes/{noteId}</code>
+    </div>
+
+    <div class="example-box">
+        <strong>Request Body:</strong>
+        <pre><code>{
+  "title": "Updated Title",
+  "type": "text",
+  "mime": "text/html"
+}</code></pre>
+    </div>
+
+    <div class="example-box">
+        <strong>JavaScript Example:</strong>
+        <pre><code>async function updateNote(noteId, updates) {
+    const response = await fetch(`http://localhost:8080/etapi/notes/${noteId}`, {
+        method: 'PATCH',
+        headers: {
+            'Authorization': 'your-token',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updates)
+    });
+    
+    if (!response.ok) {
+        throw new Error(`Failed to update note: ${response.statusText}`);
+    }
+    
+    return response.json();
+}
+
+// Usage
+updateNote('evnnmvHTCgIn', { title: 'New Title' })
+    .then(note => console.log('Updated note:', note))
+    .catch(err => console.error('Error:', err));</code></pre>
+    </div>
+
+    <h3>Search</h3>
+    
+    <h4>Search Notes</h4>
+    
+    <div class="endpoint-box method-get">
+        <strong>GET</strong> <code>/etapi/notes</code>
+        <p>Search for notes using Trilium's search syntax.</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Required</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>search</code></td>
+                <td>Yes</td>
+                <td>Search query string</td>
+                <td>#todo, "exact phrase"</td>
+            </tr>
+            <tr>
+                <td><code>fastSearch</code></td>
+                <td>No</td>
+                <td>Enable fast search (default: false)</td>
+                <td>true</td>
+            </tr>
+            <tr>
+                <td><code>includeArchivedNotes</code></td>
+                <td>No</td>
+                <td>Include archived notes (default: false)</td>
+                <td>true</td>
+            </tr>
+            <tr>
+                <td><code>ancestorNoteId</code></td>
+                <td>No</td>
+                <td>Search within subtree</td>
+                <td>root</td>
+            </tr>
+            <tr>
+                <td><code>orderBy</code></td>
+                <td>No</td>
+                <td>Property to order by</td>
+                <td>dateModified</td>
+            </tr>
+            <tr>
+                <td><code>orderDirection</code></td>
+                <td>No</td>
+                <td>"asc" or "desc"</td>
+                <td>desc</td>
+            </tr>
+            <tr>
+                <td><code>limit</code></td>
+                <td>No</td>
+                <td>Maximum number of results</td>
+                <td>10</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="example-box">
+        <strong>Python Examples:</strong>
+        <pre><code># Full-text search
+def search_notes(query, token, **kwargs):
+    url = "http://localhost:8080/etapi/notes"
+    headers = {'Authorization': token}
+    params = {'search': query, **kwargs}
+    
+    response = requests.get(url, headers=headers, params=params)
+    return response.json()
+
+# Search for keyword
+results = search_notes("project management", token)
+
+# Search with label
+results = search_notes("#todo", token)
+
+# Search for exact phrase
+results = search_notes('"exact phrase"', token)
+
+# Complex search with ordering and limit
+results = search_notes(
+    "type:text #important", 
+    token,
+    orderBy="dateModified",
+    orderDirection="desc",
+    limit=10
+)</code></pre>
+    </div>
+
+    <h2 id="common-use-cases">Common Use Cases</h2>
+    
+    <h3>1. Daily Journal Entry</h3>
+    
+    <div class="example-box">
+        <pre><code>from datetime import date
+import requests
+
+class TriliumJournal:
+    def __init__(self, base_url, token):
+        self.base_url = base_url
+        self.headers = {'Authorization': token}
+    
+    def create_journal_entry(self, content, tags=[]):
+        # Get today's day note
+        today = date.today().strftime('%Y-%m-%d')
+        day_note_url = f"{self.base_url}/calendar/days/{today}"
+        day_note = requests.get(day_note_url, headers=self.headers).json()
+        
+        # Create entry
+        entry_data = {
+            "parentNoteId": day_note['noteId'],
+            "title": f"Entry - {date.today().strftime('%H:%M')}",
+            "type": "text",
+            "content": content
+        }
+        
+        response = requests.post(
+            f"{self.base_url}/create-note",
+            headers={**self.headers, 'Content-Type': 'application/json'},
+            json=entry_data
+        )
+        
+        entry = response.json()
+        
+        # Add tags
+        for tag in tags:
+            self.add_tag(entry['note']['noteId'], tag)
+        
+        return entry
+    
+    def add_tag(self, note_id, tag_name):
+        attr_data = {
+            "noteId": note_id,
+            "type": "label",
+            "name": tag_name,
+            "value": ""
+        }
+        
+        requests.post(
+            f"{self.base_url}/attributes",
+            headers={**self.headers, 'Content-Type': 'application/json'},
+            json=attr_data
+        )
+
+# Usage
+journal = TriliumJournal("http://localhost:8080/etapi", "your-token")
+entry = journal.create_journal_entry(
+    "&lt;p&gt;Today's meeting went well. Key decisions:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Item 1&lt;/li&gt;&lt;/ul&gt;",
+    tags=["meeting", "important"]
+)</code></pre>
+    </div>
+
+    <h2 id="error-handling">Error Handling</h2>
+    
+    <h3>Common Error Codes</h3>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>Code</th>
+                <th>Description</th>
+                <th>Resolution</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>400</td>
+                <td>BAD_REQUEST</td>
+                <td>Invalid request format</td>
+                <td>Check request body and parameters</td>
+            </tr>
+            <tr>
+                <td>401</td>
+                <td>UNAUTHORIZED</td>
+                <td>Invalid or missing token</td>
+                <td>Verify authentication token</td>
+            </tr>
+            <tr>
+                <td>404</td>
+                <td>NOTE_NOT_FOUND</td>
+                <td>Note doesn't exist</td>
+                <td>Check note ID</td>
+            </tr>
+            <tr>
+                <td>400</td>
+                <td>NOTE_IS_PROTECTED</td>
+                <td>Cannot modify protected note</td>
+                <td>Unlock protected session first</td>
+            </tr>
+            <tr>
+                <td>429</td>
+                <td>TOO_MANY_REQUESTS</td>
+                <td>Rate limit exceeded</td>
+                <td>Wait before retrying</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Error Response Format</h3>
+    
+    <div class="example-box">
+        <pre><code>{
+  "status": 400,
+  "code": "VALIDATION_ERROR",
+  "message": "Note title cannot be empty"
+}</code></pre>
+    </div>
+
+    <h3>Handling Errors in Code</h3>
+    
+    <div class="example-box">
+        <pre><code>class ETAPIError(Exception):
+    def __init__(self, status, code, message):
+        self.status = status
+        self.code = code
+        self.message = message
+        super().__init__(f"{code}: {message}")
+
+def handle_api_response(response):
+    if response.status_code >= 400:
+        try:
+            error = response.json()
+            raise ETAPIError(
+                error.get('status'),
+                error.get('code'),
+                error.get('message')
+            )
+        except json.JSONDecodeError:
+            raise ETAPIError(
+                response.status_code,
+                'UNKNOWN_ERROR',
+                response.text
+            )
+    
+    return response.json() if response.content else None
+
+# Usage
+try:
+    response = requests.get(
+        'http://localhost:8080/etapi/notes/invalid',
+        headers={'Authorization': 'token'}
+    )
+    note = handle_api_response(response)
+except ETAPIError as e:
+    if e.code == 'NOTE_NOT_FOUND':
+        print("Note doesn't exist")
+    else:
+        print(f"API Error: {e.message}")</code></pre>
+    </div>
+
+    <h2 id="rate-limiting-and-best-practices">Rate Limiting and Best Practices</h2>
+    
+    <div class="warning">
+        <h4>Rate Limiting</h4>
+        <p>ETAPI implements rate limiting for authentication endpoints:</p>
+        <ul>
+            <li><strong>Login endpoint</strong>: Maximum 10 requests per IP per hour</li>
+            <li><strong>Other endpoints</strong>: No specific rate limits, but excessive requests may be throttled</li>
+        </ul>
+    </div>
+
+    <h3>Best Practices</h3>
+    
+    <div class="success">
+        <h4>1. Connection Pooling</h4>
+        <p>Reuse HTTP connections for better performance:</p>
+        <pre><code>import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
+
+session = requests.Session()
+retry = Retry(
+    total=3,
+    backoff_factor=0.3,
+    status_forcelist=[500, 502, 503, 504]
+)
+adapter = HTTPAdapter(max_retries=retry)
+session.mount('http://', adapter)
+session.mount('https://', adapter)</code></pre>
+    </div>
+
+    <div class="success">
+        <h4>2. Error Handling</h4>
+        <p>Implement robust error handling with specific exception types for different error conditions.</p>
+    </div>
+
+    <div class="success">
+        <h4>3. Caching</h4>
+        <p>Cache frequently accessed data to reduce API calls and improve performance.</p>
+    </div>
+
+    <h2 id="performance-considerations">Performance Considerations</h2>
+    
+    <h3>1. Minimize API Calls</h3>
+    
+    <div class="example-box">
+        <pre><code># Bad: Multiple calls (N+1 problem)
+note = api.get_note(note_id)
+for child_id in note['childNoteIds']:
+    child = api.get_note(child_id)  # N+1 problem
+    process(child)
+
+# Good: Batch processing
+note = api.get_note(note_id)
+children = api.search_notes(
+    f"note.parents.noteId={note_id}",
+    limit=1000
+)
+for child in children:
+    process(child)</code></pre>
+    </div>
+
+    <h3>2. Use Appropriate Search Depth</h3>
+    
+    <div class="example-box">
+        <pre><code># Limit search depth for better performance
+results = api.search_notes(
+    "keyword",
+    ancestor_note_id="root",
+    ancestor_depth="lt3"  # Only search 3 levels deep
+)</code></pre>
+    </div>
+
+    <div class="info">
+        <h4>Additional Resources</h4>
+        <ul>
+            <li><a href="https://github.com/TriliumNext/Trilium">Trilium GitHub Repository</a></li>
+            <li><a href="/apps/server/src/assets/etapi.openapi.yaml">OpenAPI Specification</a></li>
+            <li><a href="https://triliumnext.github.io/Docs/Wiki/search.html">Trilium Search Documentation</a></li>
+        </ul>
+    </div>
+
+</body>
+</html>

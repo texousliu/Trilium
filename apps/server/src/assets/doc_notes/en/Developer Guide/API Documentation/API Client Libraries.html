@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Client Libraries</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            line-height: 1.6; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px; 
+        }
+        h1 { color: #2c3e50; border-bottom: 3px solid #16a085; padding-bottom: 10px; }
+        h2 { color: #34495e; margin-top: 40px; border-bottom: 2px solid #ecf0f1; padding-bottom: 5px; }
+        h3 { color: #7f8c8d; margin-top: 30px; }
+        h4 { color: #95a5a6; margin-top: 25px; }
+        pre { 
+            background: #2c3e50; 
+            color: #ecf0f1; 
+            padding: 20px; 
+            border-radius: 8px; 
+            overflow-x: auto; 
+            border-left: 4px solid #16a085;
+        }
+        code { 
+            background: #f4f4f4; 
+            padding: 3px 6px; 
+            border-radius: 4px; 
+            font-family: 'Courier New', Monaco, monospace; 
+            font-size: 0.9em;
+        }
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        .language-box {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #16a085;
+        }
+        .typescript { border-left-color: #007ACC; }
+        .python { border-left-color: #3776ab; }
+        .go { border-left-color: #00ADD8; }
+        .ruby { border-left-color: #CC342D; }
+        .php { border-left-color: #777BB4; }
+        .csharp { border-left-color: #239120; }
+        .rust { border-left-color: #000000; }
+        .example-box {
+            background: #f1f3f4;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        table { 
+            border-collapse: collapse; 
+            width: 100%; 
+            margin: 20px 0; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 12px; 
+            text-align: left; 
+        }
+        th { 
+            background: #16a085; 
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) { background: #f8f9fa; }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #f39c12;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #74c0fc;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #51cf66;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #28a745;
+        }
+        .toc {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .toc ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        .toc a {
+            text-decoration: none;
+            color: #495057;
+        }
+        .toc a:hover {
+            color: #16a085;
+        }
+    </style>
+</head>
+<body>
+    <h1>API Client Libraries</h1>
+    
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#javascript-typescript-client">JavaScript/TypeScript Client</a></li>
+            <li><a href="#python-client">Python Client - trilium-py</a></li>
+            <li><a href="#go-client">Go Client</a></li>
+            <li><a href="#ruby-client">Ruby Client</a></li>
+            <li><a href="#php-client">PHP Client</a></li>
+            <li><a href="#csharp-client">C# Client</a></li>
+            <li><a href="#rest-client-best-practices">REST Client Best Practices</a></li>
+            <li><a href="#error-handling-patterns">Error Handling Patterns</a></li>
+            <li><a href="#retry-strategies">Retry Strategies</a></li>
+            <li><a href="#testing-client-libraries">Testing Client Libraries</a></li>
+        </ul>
+    </div>
+
+    <h2 id="overview">Overview</h2>
+    
+    <p>This guide provides comprehensive examples of Trilium API client libraries in various programming languages. Each implementation follows best practices for that language while maintaining consistent functionality across all clients.</p>
+
+    <h3>Common Features</h3>
+    
+    <div class="success">
+        <p>All client libraries should implement:</p>
+        <ul>
+            <li>Token-based authentication</li>
+            <li>CRUD operations for notes, attributes, branches, and attachments</li>
+            <li>Search functionality</li>
+            <li>Error handling with retry logic</li>
+            <li>Connection pooling</li>
+            <li>Request/response logging (optional)</li>
+            <li>Rate limiting support</li>
+        </ul>
+    </div>
+
+    <h2 id="javascript-typescript-client">JavaScript/TypeScript Client</h2>
+    
+    <h3>Full-Featured TypeScript Implementation</h3>
+    
+    <div class="language-box typescript">
+        <h4>TypeScript Client</h4>
+        <pre><code>// trilium-client.ts
+
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
+
+// Types
+export interface Note {
+    noteId: string;
+    title: string;
+    type: string;
+    mime: string;
+    isProtected: boolean;
+    attributes?: Attribute[];
+    parentNoteIds?: string[];
+    childNoteIds?: string[];
+    dateCreated: string;
+    dateModified: string;
+    utcDateCreated: string;
+    utcDateModified: string;
+}
+
+export interface CreateNoteParams {
+    parentNoteId: string;
+    title: string;
+    type: string;
+    content: string;
+    notePosition?: number;
+    prefix?: string;
+    isExpanded?: boolean;
+}
+
+export interface Attribute {
+    attributeId: string;
+    noteId: string;
+    type: 'label' | 'relation';
+    name: string;
+    value: string;
+    position?: number;
+    isInheritable?: boolean;
+}
+
+// Error classes
+export class TriliumError extends Error {
+    constructor(
+        message: string,
+        public statusCode?: number,
+        public code?: string,
+        public details?: any
+    ) {
+        super(message);
+        this.name = 'TriliumError';
+    }
+}
+
+export class TriliumConnectionError extends TriliumError {
+    constructor(message: string, details?: any) {
+        super(message, undefined, 'CONNECTION_ERROR', details);
+        this.name = 'TriliumConnectionError';
+    }
+}
+
+export class TriliumAuthError extends TriliumError {
+    constructor(message: string, details?: any) {
+        super(message, 401, 'AUTH_ERROR', details);
+        this.name = 'TriliumAuthError';
+    }
+}
+
+// Main client class
+export class TriliumClient {
+    private client: AxiosInstance;
+    private config: Required&lt;TriliumClientConfig&gt;;
+    
+    constructor(config: TriliumClientConfig) {
+        this.config = {
+            timeout: 30000,
+            retryAttempts: 3,
+            retryDelay: 1000,
+            enableLogging: false,
+            ...config
+        };
+        
+        this.client = axios.create({
+            baseURL: this.config.baseUrl,
+            timeout: this.config.timeout,
+            headers: {
+                'Authorization': this.config.token,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        this.setupInterceptors();
+    }
+    
+    private setupInterceptors(): void {
+        // Request interceptor for logging
+        this.client.interceptors.request.use(
+            (config) => {
+                if (this.config.enableLogging) {
+                    console.log(`[Trilium] ${config.method?.toUpperCase()} ${config.url}`);
+                }
+                return config;
+            },
+            (error) => Promise.reject(error)
+        );
+        
+        // Response interceptor for error handling and retry
+        this.client.interceptors.response.use(
+            (response) => response,
+            async (error: AxiosError) => {
+                const originalRequest = error.config as AxiosRequestConfig & { _retryCount?: number };
+                
+                if (!originalRequest._retryCount) {
+                    originalRequest._retryCount = 0;
+                }
+                
+                // Handle different error types
+                if (error.response) {
+                    if (error.response.status === 401) {
+                        throw new TriliumAuthError('Authentication failed', error.response.data);
+                    }
+                    
+                    if (error.response.status >= 400 && error.response.status < 500) {
+                        throw new TriliumError(
+                            error.response.data?.message || error.message,
+                            error.response.status,
+                            error.response.data?.code,
+                            error.response.data
+                        );
+                    }
+                } else if (error.request) {
+                    if (originalRequest._retryCount < this.config.retryAttempts) {
+                        originalRequest._retryCount++;
+                        
+                        await this.sleep(this.config.retryDelay * originalRequest._retryCount);
+                        
+                        return this.client(originalRequest);
+                    }
+                    
+                    throw new TriliumConnectionError('No response from server', error.request);
+                }
+                
+                throw new TriliumError(error.message);
+            }
+        );
+    }
+    
+    private sleep(ms: number): Promise&lt;void&gt; {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    
+    // Note operations
+    async createNote(params: CreateNoteParams): Promise&lt;{ note: Note; branch: Branch }&gt; {
+        const response = await this.client.post&lt;{ note: Note; branch: Branch }&gt;('/create-note', params);
+        return response.data;
+    }
+    
+    async getNote(noteId: string): Promise&lt;Note&gt; {
+        const response = await this.client.get&lt;Note&gt;(`/notes/${noteId}`);
+        return response.data;
+    }
+    
+    async updateNote(noteId: string, updates: Partial&lt;Note&gt;): Promise&lt;Note&gt; {
+        const response = await this.client.patch&lt;Note&gt;(`/notes/${noteId}`, updates);
+        return response.data;
+    }
+    
+    async deleteNote(noteId: string): Promise&lt;void&gt; {
+        await this.client.delete(`/notes/${noteId}`);
+    }
+    
+    async searchNotes(params: SearchParams): Promise&lt;SearchResponse&gt; {
+        const response = await this.client.get&lt;SearchResponse&gt;('/notes', { params });
+        return response.data;
+    }
+}
+
+// Helper functions
+export function createClient(baseUrl: string, token: string, options?: Partial&lt;TriliumClientConfig&gt;): TriliumClient {
+    return new TriliumClient({
+        baseUrl,
+        token,
+        ...options
+    });
+}
+
+// Usage example
+async function example() {
+    const client = createClient('http://localhost:8080/etapi', 'your-token', {
+        enableLogging: true,
+        retryAttempts: 5
+    });
+    
+    try {
+        // Create a note
+        const { note } = await client.createNote({
+            parentNoteId: 'root',
+            title: 'Test Note',
+            type: 'text',
+            content: '&lt;p&gt;Hello, Trilium!&lt;/p&gt;'
+        });
+        
+        console.log('Created note:', note.noteId);
+        
+        // Search for notes
+        const searchResults = await client.searchNotes({
+            search: '#todo',
+            limit: 10,
+            orderBy: 'dateModified',
+            orderDirection: 'desc'
+        });
+        
+        console.log(`Found ${searchResults.results.length} todo notes`);
+        
+    } catch (error) {
+        if (error instanceof TriliumAuthError) {
+            console.error('Authentication failed:', error.message);
+        } else if (error instanceof TriliumConnectionError) {
+            console.error('Connection error:', error.message);
+        } else if (error instanceof TriliumError) {
+            console.error(`API error (${error.statusCode}):`, error.message);
+        } else {
+            console.error('Unexpected error:', error);
+        }
+    }
+}</code></pre>
+    </div>
+
+    <h3>Browser-Compatible JavaScript Client</h3>
+    
+    <div class="language-box">
+        <h4>JavaScript for Browsers</h4>
+        <pre><code>// trilium-browser-client.js
+
+class TriliumBrowserClient {
+    constructor(baseUrl, token) {
+        this.baseUrl = baseUrl.replace(/\/$/, '');
+        this.token = token;
+        this.headers = {
+            'Authorization': token,
+            'Content-Type': 'application/json'
+        };
+    }
+    
+    async request(endpoint, options = {}) {
+        const url = `${this.baseUrl}${endpoint}`;
+        const config = {
+            headers: { ...this.headers, ...options.headers },
+            ...options
+        };
+        
+        try {
+            const response = await fetch(url, config);
+            
+            if (!response.ok) {
+                const error = await response.json().catch(() => ({}));
+                throw new Error(error.message || `HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            if (response.status === 204) {
+                return null;
+            }
+            
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                return response.json();
+            }
+            
+            return response.text();
+        } catch (error) {
+            console.error(`Request failed: ${endpoint}`, error);
+            throw error;
+        }
+    }
+    
+    // Notes
+    async createNote(parentNoteId, title, content, type = 'text') {
+        return this.request('/create-note', {
+            method: 'POST',
+            body: JSON.stringify({
+                parentNoteId,
+                title,
+                type,
+                content
+            })
+        });
+    }
+    
+    async getNote(noteId) {
+        return this.request(`/notes/${noteId}`);
+    }
+    
+    async searchNotes(query, options = {}) {
+        const params = new URLSearchParams({
+            search: query,
+            ...options
+        });
+        
+        return this.request(`/notes?${params}`);
+    }
+    
+    async addLabel(noteId, name, value = '') {
+        return this.request('/attributes', {
+            method: 'POST',
+            body: JSON.stringify({
+                noteId,
+                type: 'label',
+                name,
+                value
+            })
+        });
+    }
+    
+    async getTodayNote() {
+        const today = new Date().toISOString().split('T')[0];
+        return this.request(`/calendar/days/${today}`);
+    }
+}
+
+// Usage in browser
+const trilium = new TriliumBrowserClient('http://localhost:8080/etapi', 'your-token');
+
+// Create a quick note
+async function createQuickNote(title, content) {
+    try {
+        const inbox = await trilium.getTodayNote();
+        const result = await trilium.createNote(inbox.noteId, title, content);
+        console.log('Note created:', result.note.noteId);
+        return result;
+    } catch (error) {
+        console.error('Failed to create note:', error);
+    }
+}</code></pre>
+    </div>
+
+    <h2 id="python-client">Python Client - trilium-py</h2>
+    
+    <h3>Installation</h3>
+    
+    <div class="info">
+        <pre><code>pip install trilium-py</code></pre>
+    </div>
+
+    <h3>Complete Python Implementation</h3>
+    
+    <div class="language-box python">
+        <h4>Python Client</h4>
+        <pre><code># trilium_client.py
+
+import requests
+from typing import Optional, Dict, List, Any, Union
+from datetime import datetime, date
+from dataclasses import dataclass
+import time
+import logging
+from urllib.parse import urljoin
+import base64
+
+# Set up logging
+logger = logging.getLogger(__name__)
+
+# Data classes
+@dataclass
+class Note:
+    noteId: str
+    title: str
+    type: str
+    mime: Optional[str] = None
+    isProtected: bool = False
+    dateCreated: Optional[str] = None
+    dateModified: Optional[str] = None
+
+@dataclass
+class CreateNoteRequest:
+    parentNoteId: str
+    title: str
+    type: str
+    content: str
+    notePosition: Optional[int] = None
+    prefix: Optional[str] = None
+
+# Exceptions
+class TriliumError(Exception):
+    """Base exception for Trilium API errors"""
+    def __init__(self, message: str, status_code: Optional[int] = None, details: Optional[Dict] = None):
+        super().__init__(message)
+        self.status_code = status_code
+        self.details = details
+
+class TriliumAuthError(TriliumError):
+    """Authentication error"""
+    pass
+
+class TriliumNotFoundError(TriliumError):
+    """Resource not found error"""
+    pass
+
+# Main client class
+class TriliumClient:
+    """Python client for Trilium ETAPI"""
+    
+    def __init__(
+        self,
+        base_url: str,
+        token: str,
+        timeout: int = 30,
+        retry_attempts: int = 3,
+        retry_delay: float = 1.0,
+        verify_ssl: bool = True,
+        debug: bool = False
+    ):
+        self.base_url = base_url.rstrip('/')
+        self.token = token
+        self.timeout = timeout
+        self.retry_attempts = retry_attempts
+        self.retry_delay = retry_delay
+        self.verify_ssl = verify_ssl
+        self.debug = debug
+        
+        # Set up session
+        self.session = requests.Session()
+        self.session.headers.update({
+            'Authorization': token,
+            'Content-Type': 'application/json'
+        })
+        
+        # Configure logging
+        if debug:
+            logging.basicConfig(level=logging.DEBUG)
+    
+    def _request(
+        self,
+        method: str,
+        endpoint: str,
+        json_data: Optional[Dict] = None,
+        params: Optional[Dict] = None,
+        data: Optional[Union[str, bytes]] = None,
+        headers: Optional[Dict] = None,
+        **kwargs
+    ) -> Any:
+        """Make HTTP request with retry logic"""
+        url = urljoin(self.base_url, endpoint)
+        
+        # Merge headers
+        req_headers = self.session.headers.copy()
+        if headers:
+            req_headers.update(headers)
+        
+        # Retry logic
+        last_exception = None
+        for attempt in range(self.retry_attempts):
+            try:
+                if self.debug:
+                    logger.debug(f"[Attempt {attempt + 1}] {method} {url}")
+                
+                response = self.session.request(
+                    method=method,
+                    url=url,
+                    json=json_data,
+                    params=params,
+                    data=data,
+                    headers=req_headers,
+                    timeout=self.timeout,
+                    verify=self.verify_ssl,
+                    **kwargs
+                )
+                
+                # Handle different status codes
+                if response.status_code == 401:
+                    raise TriliumAuthError("Authentication failed", 401)
+                elif response.status_code == 404:
+                    raise TriliumNotFoundError("Resource not found", 404)
+                elif response.status_code >= 500:
+                    # Server error - retry
+                    if attempt < self.retry_attempts - 1:
+                        time.sleep(self.retry_delay * (attempt + 1))
+                        continue
+                    else:
+                        response.raise_for_status()
+                elif not response.ok:
+                    error_data = {}
+                    try:
+                        error_data = response.json()
+                    except:
+                        pass
+                    raise TriliumError(
+                        error_data.get('message', f"HTTP {response.status_code}"),
+                        response.status_code,
+                        error_data
+                    )
+                
+                # Parse response
+                if response.status_code == 204:
+                    return None
+                
+                content_type = response.headers.get('content-type', '')
+                if 'application/json' in content_type:
+                    return response.json()
+                elif 'text' in content_type:
+                    return response.text
+                else:
+                    return response.content
+                    
+            except requests.exceptions.ConnectionError as e:
+                last_exception = e
+                if attempt < self.retry_attempts - 1:
+                    logger.warning(f"Connection error, retrying in {self.retry_delay * (attempt + 1)}s...")
+                    time.sleep(self.retry_delay * (attempt + 1))
+                else:
+                    raise TriliumError(f"Connection failed after {self.retry_attempts} attempts") from e
+            except TriliumError:
+                raise
+            except Exception as e:
+                raise TriliumError(f"Unexpected error: {str(e)}") from e
+    
+    # Note operations
+    def create_note(
+        self,
+        parent_note_id: str,
+        title: str,
+        content: str,
+        note_type: str = "text",
+        **kwargs
+    ) -> Dict[str, Any]:
+        """Create a new note"""
+        data = {
+            'parentNoteId': parent_note_id,
+            'title': title,
+            'type': note_type,
+            'content': content,
+            **kwargs
+        }
+        
+        return self._request('POST', '/create-note', json_data=data)
+    
+    def get_note(self, note_id: str) -> Note:
+        """Get note by ID"""
+        data = self._request('GET', f'/notes/{note_id}')
+        return Note(**data)
+    
+    def search_notes(
+        self,
+        query: str,
+        fast_search: bool = False,
+        limit: Optional[int] = None
+    ) -> List[Note]:
+        """Search for notes"""
+        params = {
+            'search': query,
+            'fastSearch': fast_search
+        }
+        
+        if limit:
+            params['limit'] = limit
+        
+        data = self._request('GET', '/notes', params=params)
+        return [Note(**note) for note in data.get('results', [])]
+    
+    def add_label(
+        self,
+        note_id: str,
+        name: str,
+        value: str = ""
+    ) -> Dict[str, Any]:
+        """Add a label to a note"""
+        data = {
+            'noteId': note_id,
+            'type': 'label',
+            'name': name,
+            'value': value
+        }
+        
+        return self._request('POST', '/attributes', json_data=data)
+    
+    def get_day_note(self, target_date: Optional[Union[str, date]] = None) -> Note:
+        """Get day note for a date"""
+        if target_date is None:
+            target_date = date.today()
+        elif isinstance(target_date, date):
+            target_date = target_date.strftime('%Y-%m-%d')
+        
+        data = self._request('GET', f'/calendar/days/{target_date}')
+        return Note(**data)
+
+# Usage examples
+if __name__ == "__main__":
+    # Basic usage
+    client = TriliumClient(
+        base_url="http://localhost:8080/etapi",
+        token="your-token",
+        debug=True
+    )
+    
+    # Create a note
+    result = client.create_note(
+        parent_note_id="root",
+        title="Test Note",
+        content="&lt;p&gt;This is a test note&lt;/p&gt;"
+    )
+    print(f"Created note: {result['note']['noteId']}")
+    
+    # Search notes
+    todo_notes = client.search_notes("#todo", limit=10)
+    for note in todo_notes:
+        print(f"- {note.title}")
+    
+    # Get today's note
+    today_note = client.get_day_note()
+    print(f"Today's note ID: {today_note.noteId}")</code></pre>
+    </div>
+
+    <h2 id="go-client">Go Client</h2>
+    
+    <div class="language-box go">
+        <h4>Go Implementation</h4>
+        <pre><code>// trilium_client.go
+
+package trilium
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io"
+    "net/http"
+    "time"
+)
+
+// Note represents a Trilium note
+type Note struct {
+    NoteID          string      `json:"noteId"`
+    Title           string      `json:"title"`
+    Type            string      `json:"type"`
+    Mime            string      `json:"mime,omitempty"`
+    IsProtected     bool        `json:"isProtected"`
+    DateCreated     string      `json:"dateCreated,omitempty"`
+    DateModified    string      `json:"dateModified,omitempty"`
+}
+
+// CreateNoteRequest represents a request to create a note
+type CreateNoteRequest struct {
+    ParentNoteID string `json:"parentNoteId"`
+    Title        string `json:"title"`
+    Type         string `json:"type"`
+    Content      string `json:"content"`
+    NotePosition int    `json:"notePosition,omitempty"`
+    Prefix       string `json:"prefix,omitempty"`
+}
+
+// Client is the Trilium API client
+type Client struct {
+    BaseURL    string
+    Token      string
+    HTTPClient *http.Client
+}
+
+// NewClient creates a new Trilium client
+func NewClient(baseURL, token string) *Client {
+    return &Client{
+        BaseURL: baseURL,
+        Token:   token,
+        HTTPClient: &http.Client{
+            Timeout: 30 * time.Second,
+        },
+    }
+}
+
+// request makes an HTTP request to the API
+func (c *Client) request(method, endpoint string, body interface{}) (*http.Response, error) {
+    url := c.BaseURL + endpoint
+    
+    var reqBody io.Reader
+    if body != nil {
+        jsonBody, err := json.Marshal(body)
+        if err != nil {
+            return nil, fmt.Errorf("failed to marshal request body: %w", err)
+        }
+        reqBody = bytes.NewBuffer(jsonBody)
+    }
+    
+    req, err := http.NewRequest(method, url, reqBody)
+    if err != nil {
+        return nil, fmt.Errorf("failed to create request: %w", err)
+    }
+    
+    req.Header.Set("Authorization", c.Token)
+    if body != nil {
+        req.Header.Set("Content-Type", "application/json")
+    }
+    
+    resp, err := c.HTTPClient.Do(req)
+    if err != nil {
+        return nil, fmt.Errorf("request failed: %w", err)
+    }
+    
+    if resp.StatusCode >= 400 {
+        defer resp.Body.Close()
+        bodyBytes, _ := io.ReadAll(resp.Body)
+        return nil, fmt.Errorf("API error %d: %s", resp.StatusCode, string(bodyBytes))
+    }
+    
+    return resp, nil
+}
+
+// CreateNote creates a new note
+func (c *Client) CreateNote(req CreateNoteRequest) (*Note, error) {
+    resp, err := c.request("POST", "/create-note", req)
+    if err != nil {
+        return nil, err
+    }
+    defer resp.Body.Close()
+    
+    var result struct {
+        Note Note `json:"note"`
+    }
+    
+    if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+        return nil, fmt.Errorf("failed to decode response: %w", err)
+    }
+    
+    return &result.Note, nil
+}
+
+// GetNote retrieves a note by ID
+func (c *Client) GetNote(noteID string) (*Note, error) {
+    resp, err := c.request("GET", fmt.Sprintf("/notes/%s", noteID), nil)
+    if err != nil {
+        return nil, err
+    }
+    defer resp.Body.Close()
+    
+    var note Note
+    if err := json.NewDecoder(resp.Body).Decode(&note); err != nil {
+        return nil, fmt.Errorf("failed to decode response: %w", err)
+    }
+    
+    return &note, nil
+}
+
+// SearchNotes searches for notes
+func (c *Client) SearchNotes(query string, limit int) ([]Note, error) {
+    endpoint := fmt.Sprintf("/notes?search=%s", query)
+    if limit > 0 {
+        endpoint += fmt.Sprintf("&limit=%d", limit)
+    }
+    
+    resp, err := c.request("GET", endpoint, nil)
+    if err != nil {
+        return nil, err
+    }
+    defer resp.Body.Close()
+    
+    var searchResp struct {
+        Results []Note `json:"results"`
+    }
+    
+    if err := json.NewDecoder(resp.Body).Decode(&searchResp); err != nil {
+        return nil, fmt.Errorf("failed to decode response: %w", err)
+    }
+    
+    return searchResp.Results, nil
+}
+
+// Usage example
+func Example() {
+    client := NewClient("http://localhost:8080/etapi", "your-token")
+    
+    // Create a note
+    note, err := client.CreateNote(CreateNoteRequest{
+        ParentNoteID: "root",
+        Title:        "Test Note",
+        Type:         "text",
+        Content:      "&lt;p&gt;Hello from Go!&lt;/p&gt;",
+    })
+    
+    if err != nil {
+        panic(err)
+    }
+    
+    fmt.Printf("Created note %s\n", note.NoteID)
+    
+    // Search notes
+    results, err := client.SearchNotes("#todo", 10)
+    if err != nil {
+        panic(err)
+    }
+    
+    fmt.Printf("Found %d todo notes\n", len(results))
+}</code></pre>
+    </div>
+
+    <h2 id="rest-client-best-practices">REST Client Best Practices</h2>
+    
+    <h3>1. Connection Management</h3>
+    
+    <div class="success">
+        <h4>Python - Connection pooling with requests</h4>
+        <pre><code>import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+
+class RobustTriliumClient:
+    def __init__(self, base_url, token):
+        self.base_url = base_url
+        self.token = token
+        
+        # Configure connection pooling and retries
+        self.session = requests.Session()
+        
+        retry_strategy = Retry(
+            total=3,
+            backoff_factor=1,
+            status_forcelist=[429, 500, 502, 503, 504],
+            allowed_methods=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE", "POST"]
+        )
+        
+        adapter = HTTPAdapter(
+            max_retries=retry_strategy,
+            pool_connections=10,
+            pool_maxsize=10
+        )
+        
+        self.session.mount("http://", adapter)
+        self.session.mount("https://", adapter)
+        
+        self.session.headers.update({
+            'Authorization': token,
+            'Content-Type': 'application/json'
+        })</code></pre>
+    </div>
+
+    <h3>2. Request Timeout Handling</h3>
+    
+    <div class="success">
+        <h4>JavaScript - Timeout with abort controller</h4>
+        <pre><code>class TimeoutClient {
+    constructor(baseUrl, token, timeout = 30000) {
+        this.baseUrl = baseUrl;
+        this.token = token;
+        this.timeout = timeout;
+    }
+    
+    async request(endpoint, options = {}) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+        
+        try {
+            const response = await fetch(`${this.baseUrl}${endpoint}`, {
+                ...options,
+                headers: {
+                    'Authorization': this.token,
+                    ...options.headers
+                },
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            return response.json();
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                throw new Error(`Request timeout after ${this.timeout}ms`);
+            }
+            throw error;
+        } finally {
+            clearTimeout(timeoutId);
+        }
+    }
+}</code></pre>
+    </div>
+
+    <h3>3. Rate Limiting</h3>
+    
+    <div class="success">
+        <h4>Python - Rate limiting with token bucket</h4>
+        <pre><code>import time
+from threading import Lock
+
+class RateLimitedClient:
+    def __init__(self, base_url, token, requests_per_second=10):
+        self.base_url = base_url
+        self.token = token
+        self.rate_limit = requests_per_second
+        self.tokens = requests_per_second
+        self.last_update = time.time()
+        self.lock = Lock()
+    
+    def _wait_for_token(self):
+        with self.lock:
+            now = time.time()
+            elapsed = now - self.last_update
+            self.tokens = min(
+                self.rate_limit,
+                self.tokens + elapsed * self.rate_limit
+            )
+            self.last_update = now
+            
+            if self.tokens < 1:
+                sleep_time = (1 - self.tokens) / self.rate_limit
+                time.sleep(sleep_time)
+                self.tokens = 1
+            
+            self.tokens -= 1</code></pre>
+    </div>
+
+    <h2 id="error-handling-patterns">Error Handling Patterns</h2>
+    
+    <h3>Comprehensive Error Handling</h3>
+    
+    <div class="language-box python">
+        <pre><code># Python - Detailed error handling
+class TriliumAPIError(Exception):
+    """Base exception for API errors"""
+    def __init__(self, message, status_code=None, response_data=None):
+        super().__init__(message)
+        self.status_code = status_code
+        self.response_data = response_data
+
+class TriliumValidationError(TriliumAPIError):
+    """Validation error (400)"""
+    pass
+
+class TriliumAuthenticationError(TriliumAPIError):
+    """Authentication error (401)"""
+    pass
+
+class TriliumNotFoundError(TriliumAPIError):
+    """Resource not found (404)"""
+    pass
+
+def handle_api_error(response):
+    """Handle API error responses"""
+    try:
+        error_data = response.json()
+        message = error_data.get('message', response.reason)
+    except:
+        message = response.reason
+        error_data = None
+    
+    status_code = response.status_code
+    
+    if status_code == 400:
+        raise TriliumValidationError(message, status_code, error_data)
+    elif status_code == 401:
+        raise TriliumAuthenticationError(message, status_code, error_data)
+    elif status_code == 404:
+        raise TriliumNotFoundError(message, status_code, error_data)
+    else:
+        raise TriliumAPIError(message, status_code, error_data)
+
+# Usage
+try:
+    note = client.get_note('invalid_id')
+except TriliumNotFoundError as e:
+    print(f"Note not found: {e}")
+except TriliumAuthenticationError as e:
+    print(f"Authentication failed: {e}")
+    # Refresh token or re-authenticate
+except TriliumAPIError as e:
+    print(f"API error ({e.status_code}): {e}")</code></pre>
+    </div>
+
+    <h2 id="retry-strategies">Retry Strategies</h2>
+    
+    <h3>Exponential Backoff</h3>
+    
+    <div class="language-box">
+        <h4>JavaScript - Exponential backoff with jitter</h4>
+        <pre><code>class RetryClient {
+    constructor(baseUrl, token, maxRetries = 3) {
+        this.baseUrl = baseUrl;
+        this.token = token;
+        this.maxRetries = maxRetries;
+    }
+    
+    async requestWithRetry(endpoint, options = {}, attempt = 0) {
+        try {
+            const response = await fetch(`${this.baseUrl}${endpoint}`, {
+                ...options,
+                headers: {
+                    'Authorization': this.token,
+                    ...options.headers
+                }
+            });
+            
+            if (response.status >= 500 && attempt < this.maxRetries) {
+                throw new Error(`Server error: ${response.status}`);
+            }
+            
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || `HTTP ${response.status}`);
+            }
+            
+            return response.json();
+            
+        } catch (error) {
+            if (attempt >= this.maxRetries) {
+                throw error;
+            }
+            
+            // Calculate delay with exponential backoff and jitter
+            const baseDelay = Math.pow(2, attempt) * 1000;
+            const jitter = Math.random() * 1000;
+            const delay = baseDelay + jitter;
+            
+            console.log(`Retry attempt ${attempt + 1} after ${delay}ms`);
+            
+            await new Promise(resolve => setTimeout(resolve, delay));
+            
+            return this.requestWithRetry(endpoint, options, attempt + 1);
+        }
+    }
+}</code></pre>
+    </div>
+
+    <h2 id="testing-client-libraries">Testing Client Libraries</h2>
+    
+    <h3>Unit Testing</h3>
+    
+    <div class="language-box python">
+        <h4>Python - Unit tests with mocking</h4>
+        <pre><code>import unittest
+from unittest.mock import Mock, patch
+
+class TestTriliumClient(unittest.TestCase):
+    def setUp(self):
+        self.client = TriliumClient(
+            base_url="http://localhost:8080/etapi",
+            token="test-token"
+        )
+    
+    @patch('requests.Session.request')
+    def test_create_note(self, mock_request):
+        # Mock response
+        mock_response = Mock()
+        mock_response.status_code = 201
+        mock_response.json.return_value = {
+            'note': {
+                'noteId': 'test123',
+                'title': 'Test Note',
+                'type': 'text'
+            }
+        }
+        mock_request.return_value = mock_response
+        
+        # Test create note
+        result = self.client.create_note(
+            parent_note_id='root',
+            title='Test Note',
+            content='&lt;p&gt;Test content&lt;/p&gt;'
+        )
+        
+        # Assertions
+        self.assertEqual(result['note']['noteId'], 'test123')
+        self.assertEqual(result['note']['title'], 'Test Note')
+        
+        # Verify request was made correctly
+        mock_request.assert_called_once()
+    
+    @patch('requests.Session.request')
+    def test_error_handling(self, mock_request):
+        # Mock error response
+        mock_response = Mock()
+        mock_response.status_code = 404
+        mock_response.json.return_value = {
+            'status': 404,
+            'message': 'Note not found'
+        }
+        mock_request.return_value = mock_response
+        
+        # Test error handling
+        with self.assertRaises(TriliumNotFoundError):
+            self.client.get_note('invalid_id')
+
+if __name__ == '__main__':
+    unittest.main()</code></pre>
+    </div>
+
+    <div class="warning">
+        <h4>Key Considerations</h4>
+        <ol>
+            <li><strong>Choose the right language</strong> for your use case and environment</li>
+            <li><strong>Implement proper error handling</strong> with specific exception types</li>
+            <li><strong>Use connection pooling</strong> for better performance</li>
+            <li><strong>Add retry logic</strong> for resilience against transient failures</li>
+            <li><strong>Consider rate limiting</strong> to avoid overwhelming the server</li>
+            <li><strong>Cache responses</strong> when appropriate to reduce API calls</li>
+            <li><strong>Write comprehensive tests</strong> for reliability</li>
+            <li><strong>Document your client</strong> with clear examples</li>
+        </ol>
+    </div>
+
+    <div class="info">
+        <h4>Additional Resources</h4>
+        <ul>
+            <li><a href="ETAPI%20Complete%20Guide.html">ETAPI Complete Guide</a></li>
+            <li><a href="WebSocket%20API.html">WebSocket API Documentation</a></li>
+            <li><a href="Script%20API%20Cookbook.html">Script API Cookbook</a></li>
+        </ul>
+    </div>
+
+</body>
+</html>

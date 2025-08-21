@@ -1,0 +1,328 @@
+<h1>Security and Privacy Guidelines</h1>
+
+<h2>Overview</h2>
+<p>This document outlines important security considerations and privacy best practices for using AI features in Trilium Notes. Your privacy and data security are paramount.</p>
+
+<h2>Data Privacy by Provider</h2>
+
+<h3>Cloud Providers (OpenAI, Anthropic)</h3>
+
+<div class="admonition info">
+  <p class="admonition-title">What Gets Sent</p>
+  <ul>
+    <li>Selected note content based on your queries</li>
+    <li>Your questions and prompts</li>
+    <li>System instructions for AI behavior</li>
+    <li>Tool execution parameters</li>
+  </ul>
+</div>
+
+<div class="admonition success">
+  <p class="admonition-title">What Stays Private</p>
+  <ul>
+    <li>Notes marked with <code>#excludeFromAI</code> label</li>
+    <li>Encrypted note content (unless explicitly decrypted)</li>
+    <li>System metadata and file paths</li>
+    <li>Other users' data in multi-user setups</li>
+    <li>Your API keys and credentials</li>
+  </ul>
+</div>
+
+<h4>Provider Data Policies</h4>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Provider</th>
+      <th>Data Usage</th>
+      <th>Retention</th>
+      <th>Compliance</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>OpenAI</td>
+      <td>API data not used for training</td>
+      <td>30 days for abuse monitoring</td>
+      <td>SOC 2 Type II</td>
+    </tr>
+    <tr>
+      <td>Anthropic</td>
+      <td>No training on API inputs</td>
+      <td>Limited retention period</td>
+      <td>SOC 2 Type II</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Local Provider (Ollama)</h3>
+
+<div class="admonition success">
+  <p class="admonition-title">Complete Privacy with Ollama</p>
+  <ul>
+    <li>✅ No data leaves your machine</li>
+    <li>✅ No external API calls</li>
+    <li>✅ No usage tracking or telemetry</li>
+    <li>✅ Works completely offline</li>
+    <li>✅ You control all models and data</li>
+  </ul>
+</div>
+
+<h2>Protecting Sensitive Information</h2>
+
+<h3>Using the Exclusion System</h3>
+
+<h4>Excluding Individual Notes</h4>
+<ol>
+  <li>Open the note you want to protect</li>
+  <li>Add the label: <code>#excludeFromAI</code></li>
+  <li>The note will be completely excluded from AI processing</li>
+</ol>
+
+<h4>Bulk Exclusion Script</h4>
+<pre><code>// Script to exclude all notes in a folder
+const folder = api.getNoteWithLabel('confidential');
+const descendants = folder.getDescendants();
+
+for (const note of descendants) {
+    note.addLabel('excludeFromAI');
+}
+
+api.showMessage(`Excluded ${descendants.length} notes from AI`);</code></pre>
+
+<h4>Verifying Exclusions</h4>
+<p>To see which notes are excluded from AI:</p>
+<ol>
+  <li>Go to Search</li>
+  <li>Enter: <code>#excludeFromAI</code></li>
+  <li>Review the list of protected notes</li>
+</ol>
+
+<h3>Content Filtering</h3>
+
+<p>Trilium can automatically filter sensitive patterns:</p>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Pattern Type</th>
+      <th>Example</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Social Security Numbers</td>
+      <td>XXX-XX-XXXX</td>
+      <td>Automatically redacted</td>
+    </tr>
+    <tr>
+      <td>Credit Card Numbers</td>
+      <td>16-digit numbers</td>
+      <td>Automatically redacted</td>
+    </tr>
+    <tr>
+      <td>API Keys</td>
+      <td>Strings matching key patterns</td>
+      <td>Automatically redacted</td>
+    </tr>
+    <tr>
+      <td>Passwords</td>
+      <td>password: fields</td>
+      <td>Automatically redacted</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>API Key Security</h2>
+
+<h3>Best Practices</h3>
+
+<div class="admonition warning">
+  <p class="admonition-title">Never Do This</p>
+  <ul>
+    <li>❌ Share API keys in notes or messages</li>
+    <li>❌ Commit keys to version control</li>
+    <li>❌ Use the same key across multiple applications</li>
+    <li>❌ Store keys in plain text files</li>
+  </ul>
+</div>
+
+<div class="admonition success">
+  <p class="admonition-title">Always Do This</p>
+  <ul>
+    <li>✅ Store keys in Trilium's secure settings</li>
+    <li>✅ Rotate keys regularly (monthly recommended)</li>
+    <li>✅ Use separate keys for development/production</li>
+    <li>✅ Set spending limits in provider dashboards</li>
+    <li>✅ Monitor usage for unusual activity</li>
+  </ul>
+</div>
+
+<h3>Key Rotation Schedule</h3>
+<ol>
+  <li><strong>Monthly:</strong> Rotate API keys</li>
+  <li><strong>Immediately:</strong> If key may be compromised</li>
+  <li><strong>Quarterly:</strong> Review and audit all keys</li>
+  <li><strong>Annually:</strong> Full security review</li>
+</ol>
+
+<h2>Network Security</h2>
+
+<h3>Secure Connections</h3>
+<ul>
+  <li>All API communications use HTTPS/TLS encryption</li>
+  <li>Certificate verification is enabled by default</li>
+  <li>Minimum TLS version 1.2 required</li>
+</ul>
+
+<h3>Firewall Considerations</h3>
+<p>Required ports for AI providers:</p>
+<ul>
+  <li><strong>OpenAI/Anthropic:</strong> Port 443 (HTTPS)</li>
+  <li><strong>Ollama:</strong> Port 11434 (local only by default)</li>
+</ul>
+
+<h2>Compliance and Regulations</h2>
+
+<h3>GDPR Compliance</h3>
+
+<h4>Your Rights</h4>
+<ul>
+  <li><strong>Right to Access:</strong> Export all AI-related data</li>
+  <li><strong>Right to Deletion:</strong> Remove AI chat history and embeddings</li>
+  <li><strong>Right to Portability:</strong> Export data in standard formats</li>
+  <li><strong>Right to Restriction:</strong> Limit AI processing of your data</li>
+</ul>
+
+<h4>Data Minimization</h4>
+<ul>
+  <li>Send only necessary data to AI providers</li>
+  <li>Regularly clean up old chat sessions</li>
+  <li>Delete unused embeddings</li>
+  <li>Implement retention policies</li>
+</ul>
+
+<h3>Healthcare Data (HIPAA)</h3>
+
+<div class="admonition warning">
+  <p class="admonition-title">For Healthcare Professionals</p>
+  <p>If handling protected health information (PHI):</p>
+  <ul>
+    <li>Use Ollama (local) exclusively - no cloud providers</li>
+    <li>Or ensure Business Associate Agreement (BAA) with provider</li>
+    <li>Enable maximum audit logging</li>
+    <li>Implement additional encryption</li>
+  </ul>
+</div>
+
+<h2>Security Configurations by Use Case</h2>
+
+<h3>Personal Use (Maximum Privacy)</h3>
+<pre><code>Provider: Ollama (local)
+Model: llama3 or mistral
+Embeddings: mxbai-embed-large
+Network: Localhost only
+Exclusions: Personal notes labeled</code></pre>
+
+<h3>Professional Use (Balanced)</h3>
+<pre><code>Provider: OpenAI or Anthropic
+Model: GPT-4 or Claude Sonnet
+API Keys: Rotated monthly
+Exclusions: Confidential projects
+Audit: Logging enabled</code></pre>
+
+<h3>Enterprise Use (Maximum Security)</h3>
+<pre><code>Provider: Azure OpenAI (private instance)
+Authentication: SSO + MFA
+Network: VPN required
+Audit: Full logging to SIEM
+DLP: Content scanning enabled</code></pre>
+
+<h2>Incident Response</h2>
+
+<h3>If API Key is Compromised</h3>
+
+<div class="admonition danger">
+  <p class="admonition-title">Immediate Actions Required</p>
+  <ol>
+    <li><strong>Revoke the key immediately</strong> in provider dashboard</li>
+    <li><strong>Generate new key</strong> and update in Trilium</li>
+    <li><strong>Review usage logs</strong> for unauthorized activity</li>
+    <li><strong>Check billing</strong> for unexpected charges</li>
+    <li><strong>Document the incident</strong> for future reference</li>
+  </ol>
+</div>
+
+<h3>If Sensitive Data Was Sent</h3>
+<ol>
+  <li>Contact the AI provider's support team</li>
+  <li>Request data deletion if possible</li>
+  <li>Add affected notes to exclusion list</li>
+  <li>Review and update security practices</li>
+  <li>Consider switching to local AI (Ollama)</li>
+</ol>
+
+<h2>Security Checklist</h2>
+
+<h3>Initial Setup</h3>
+<ul class="checklist">
+  <li>☐ Reviewed provider privacy policies</li>
+  <li>☐ Created strong, unique API keys</li>
+  <li>☐ Configured exclusion labels for sensitive notes</li>
+  <li>☐ Tested security configuration</li>
+  <li>☐ Set up spending limits</li>
+  <li>☐ Enabled audit logging</li>
+</ul>
+
+<h3>Ongoing Maintenance</h3>
+<ul class="checklist">
+  <li>☐ Rotate API keys monthly</li>
+  <li>☐ Review audit logs weekly</li>
+  <li>☐ Update exclusion lists as needed</li>
+  <li>☐ Monitor usage and costs</li>
+  <li>☐ Check for security updates</li>
+  <li>☐ Verify no sensitive data in logs</li>
+</ul>
+
+<h2>Privacy-First Recommendations</h2>
+
+<h3>For Maximum Privacy</h3>
+<p><strong>Use Ollama exclusively:</strong></p>
+<ul>
+  <li>Complete data control</li>
+  <li>No external dependencies</li>
+  <li>Works offline</li>
+  <li>No usage tracking</li>
+</ul>
+
+<h3>For Convenience with Privacy</h3>
+<p><strong>Hybrid approach:</strong></p>
+<ul>
+  <li>Ollama for sensitive content</li>
+  <li>Cloud providers for general queries</li>
+  <li>Strict exclusion labels</li>
+  <li>Regular key rotation</li>
+</ul>
+
+<h3>For Teams and Organizations</h3>
+<p><strong>Enterprise configuration:</strong></p>
+<ul>
+  <li>Private AI instances (Azure OpenAI)</li>
+  <li>Centralized key management</li>
+  <li>Audit logging to SIEM</li>
+  <li>DLP integration</li>
+  <li>Regular security training</li>
+</ul>
+
+<h2>Additional Resources</h2>
+<ul>
+  <li><a href="https://openai.com/policies/privacy-policy" target="_blank">OpenAI Privacy Policy</a></li>
+  <li><a href="https://www.anthropic.com/privacy" target="_blank">Anthropic Privacy Policy</a></li>
+  <li><a href="https://gdpr.eu/" target="_blank">GDPR Information</a></li>
+  <li><a href="https://www.hhs.gov/hipaa/index.html" target="_blank">HIPAA Guidelines</a></li>
+</ul>
+
+<div class="admonition tip">
+  <p class="admonition-title">Remember</p>
+  <p>Security and privacy require ongoing attention. Start with the most restrictive settings and gradually relax them only as needed. When in doubt, prefer local processing with Ollama for sensitive data.</p>
+</div>

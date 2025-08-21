@@ -29,5 +29,5 @@ module.exports = new MyWidget();
 Reference:
 
 *   [https://trilium.rocks/X7pxYpiu0lgU](https://trilium.rocks/X7pxYpiu0lgU)
-*   [https://github.com/zadam/trilium/wiki/Widget-Basics](https://github.com/zadam/trilium/wiki/Widget-Basics)
-*   [https://github.com/zadam/trilium/wiki/Frontend-Basics](https://github.com/zadam/trilium/wiki/Frontend-Basics)
+*   [https://github.com/TriliumNext/Trilium/wiki/Widget-Basics](https://github.com/TriliumNext/Trilium/wiki/Widget-Basics)
+*   [https://github.com/TriliumNext/Trilium/wiki/Frontend-Basics](https://github.com/TriliumNext/Trilium/wiki/Frontend-Basics)

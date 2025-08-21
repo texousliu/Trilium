@@ -1,0 +1,476 @@
+<div class="note-content">
+
+<h1>Trilium Comprehensive Security Guide</h1>
+
+<p>This comprehensive guide covers all aspects of Trilium security, from protected notes to enterprise deployment security practices.</p>
+
+<div class="alert alert-info">
+    <strong>Note:</strong> This guide contains advanced security configurations. Always test changes in a non-production environment first.
+</div>
+
+<h2>Table of Contents</h2>
+
+<ol>
+    <li><a href="#protected-notes">Protected Notes and Encryption</a></li>
+    <li><a href="#authentication">Authentication and Access Control</a></li>
+    <li><a href="#deployment">Secure Deployment</a></li>
+    <li><a href="#best-practices">Security Best Practices</a></li>
+    <li><a href="#monitoring">Security Monitoring</a></li>
+    <li><a href="#incident-response">Incident Response</a></li>
+</ol>
+
+<h2 id="protected-notes">Protected Notes and Encryption</h2>
+
+<h3>Overview</h3>
+
+<p>Trilium's Protected Notes system provides robust encryption for sensitive content using industry-standard AES-128-CBC encryption with scrypt-based key derivation.</p>
+
+<h4>Key Features</h4>
+<ul>
+    <li><strong>Selective Encryption:</strong> Only notes marked as protected are encrypted</li>
+    <li><strong>Strong Encryption:</strong> AES-128-CBC with scrypt key derivation</li>
+    <li><strong>Session-based Access:</strong> Encrypted content accessible during protected sessions</li>
+    <li><strong>Zero-knowledge:</strong> Server never stores unencrypted protected content</li>
+</ul>
+
+<h3>Setting Up Protected Notes</h3>
+
+<h4>Initial Configuration</h4>
+
+<ol>
+    <li><strong>Set Master Password</strong>
+        <ul>
+            <li>Go to <em>Options → Security → Password</em></li>
+            <li>Choose a strong password (minimum 8 characters, recommended 12+)</li>
+            <li>Use a unique password not used elsewhere</li>
+        </ul>
+    </li>
+    
+    <li><strong>Configure Protected Session</strong>
+        <ul>
+            <li>Set session timeout (default: 10 minutes)</li>
+            <li>Configure auto-logout preferences</li>
+            <li>Enable session notifications</li>
+        </ul>
+    </li>
+    
+    <li><strong>Create Your First Protected Note</strong>
+        <ul>
+            <li>Right-click any note → "Toggle Protected Status"</li>
+            <li>Or use keyboard shortcut: <kbd>Ctrl+Shift+U</kbd></li>
+            <li>Or click Actions menu → "Protect this note"</li>
+        </ul>
+    </li>
+</ol>
+
+<h4>Managing Protected Sessions</h4>
+
+<p><strong>Entering Protected Session:</strong></p>
+<ul>
+    <li>Click the shield icon in the toolbar</li>
+    <li>Use keyboard shortcut: <kbd>Ctrl+Shift+P</kbd></li>
+    <li>Automatic prompt when accessing protected content</li>
+</ul>
+
+<p><strong>Session Security:</strong></p>
+<ul>
+    <li>Sessions timeout automatically after inactivity</li>
+    <li>Green shield indicates active protected session</li>
+    <li>Manual logout available via shield menu</li>
+    <li>Independent sessions per browser/client</li>
+</ul>
+
+<div class="alert alert-warning">
+    <strong>Security Note:</strong> Protected sessions store encryption keys in memory. Always log out when finished working with protected content.
+</div>
+
+<h3>Encryption Technical Details</h3>
+
+<h4>Encryption Process</h4>
+<pre><code>1. Generate random 16-byte IV
+2. Compute SHA-1 digest of plaintext (integrity check)  
+3. Prepend digest (4 bytes) to plaintext
+4. Encrypt with AES-128-CBC using data key and IV
+5. Prepend IV to encrypted data
+6. Encode result as Base64</code></pre>
+
+<h4>Key Management</h4>
+<ul>
+    <li><strong>Master Password:</strong> User-provided secret</li>
+    <li><strong>Password-Derived Key:</strong> Generated using scrypt (N=16384, r=8, p=1)</li>
+    <li><strong>Data Key:</strong> 32-byte random key, encrypted with password-derived key</li>
+    <li><strong>Session Key:</strong> Data key loaded into memory during protected session</li>
+</ul>
+
+<h2 id="authentication">Authentication and Access Control</h2>
+
+<h3>Password Authentication</h3>
+
+<h4>Security Features</h4>
+<ul>
+    <li><strong>Scrypt Hashing:</strong> CPU-intensive hashing prevents brute force attacks</li>
+    <li><strong>Salt:</strong> Unique random salt per installation</li>
+    <li><strong>Timing Attack Protection:</strong> Constant-time comparison</li>
+    <li><strong>Separation:</strong> Authentication separate from encryption keys</li>
+</ul>
+
+<h4>Password Management</h4>
+<ul>
+    <li><strong>Strong Passwords:</strong> Use complex, unique passwords</li>
+    <li><strong>Regular Updates:</strong> Change passwords periodically</li>
+    <li><strong>Secure Storage:</strong> Consider using a password manager</li>
+    <li><strong>Recovery:</strong> No built-in password recovery - keep backup access</li>
+</ul>
+
+<h3>Multi-Factor Authentication (MFA)</h3>
+
+<h4>TOTP Setup</h4>
+
+<ol>
+    <li>Go to <em>Options → Security → Multi-Factor Authentication</em></li>
+    <li>Click "Generate New Secret"</li>
+    <li>Scan QR code with authenticator app</li>
+    <li>Enter TOTP code to verify setup</li>
+    <li>Save recovery codes securely</li>
+</ol>
+
+<h4>Supported Authenticators</h4>
+<ul>
+    <li>Google Authenticator</li>
+    <li>Authy</li>
+    <li>Microsoft Authenticator</li>
+    <li>1Password</li>
+    <li>Any RFC 6238 compatible app</li>
+</ul>
+
+<h4>Recovery Codes</h4>
+<ul>
+    <li><strong>Format:</strong> Base64-encoded 24-character strings</li>
+    <li><strong>Storage:</strong> AES-256-CBC encrypted</li>
+    <li><strong>Usage:</strong> One-time use only</li>
+    <li><strong>Security:</strong> Store in secure location (password manager)</li>
+</ul>
+
+<h3>Session Management</h3>
+
+<h4>Session Security</h4>
+<ul>
+    <li><strong>Secure Storage:</strong> Sessions stored in encrypted database</li>
+    <li><strong>Automatic Cleanup:</strong> Expired sessions removed periodically</li>
+    <li><strong>CSRF Protection:</strong> Double-submit cookie pattern</li>
+    <li><strong>Secure Cookies:</strong> HTTPOnly, Secure, SameSite attributes</li>
+</ul>
+
+<h4>Configuration Options</h4>
+<ul>
+    <li><strong>Session Timeout:</strong> Configurable timeout period</li>
+    <li><strong>Remember Me:</strong> Extended session duration option</li>
+    <li><strong>Auto Logout:</strong> Automatic logout on browser close</li>
+    <li><strong>Multi-client:</strong> Independent sessions per device</li>
+</ul>
+
+<h2 id="deployment">Secure Deployment</h2>
+
+<h3>HTTPS Configuration</h3>
+
+<h4>SSL/TLS Requirements</h4>
+<ul>
+    <li><strong>Mandatory for Production:</strong> Always use HTTPS in production</li>
+    <li><strong>TLS Version:</strong> Use TLS 1.2 or higher</li>
+    <li><strong>Certificates:</strong> Valid SSL certificates (Let's Encrypt recommended)</li>
+    <li><strong>HSTS:</strong> Enable HTTP Strict Transport Security</li>
+</ul>
+
+<h4>Security Headers</h4>
+<pre><code># Essential security headers
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff  
+X-XSS-Protection: 1; mode=block
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+Content-Security-Policy: default-src 'self'; ...</code></pre>
+
+<h3>Network Security</h3>
+
+<h4>Firewall Configuration</h4>
+<ul>
+    <li><strong>Restrict Ports:</strong> Only allow necessary ports (22, 443)</li>
+    <li><strong>Block Direct Access:</strong> Block direct access to Trilium port (8080)</li>
+    <li><strong>IP Restrictions:</strong> Limit access to trusted IP ranges</li>
+    <li><strong>Rate Limiting:</strong> Implement connection rate limiting</li>
+</ul>
+
+<h4>Reverse Proxy</h4>
+<ul>
+    <li><strong>Nginx/Apache:</strong> Use reverse proxy for SSL termination</li>
+    <li><strong>Load Balancing:</strong> Distribute traffic across instances</li>
+    <li><strong>Caching:</strong> Cache static content</li>
+    <li><strong>Compression:</strong> Enable content compression</li>
+</ul>
+
+<h3>Database Security</h3>
+
+<h4>File Permissions</h4>
+<ul>
+    <li><strong>Database:</strong> 600 (owner read/write only)</li>
+    <li><strong>Data Directory:</strong> 700 (owner access only)</li>
+    <li><strong>Configuration:</strong> 600 (owner read/write only)</li>
+    <li><strong>Ownership:</strong> Dedicated trilium user</li>
+</ul>
+
+<h4>Backup Security</h4>
+<ul>
+    <li><strong>Encryption:</strong> Always encrypt backups</li>
+    <li><strong>Storage:</strong> Secure off-site storage</li>
+    <li><strong>Access Control:</strong> Limit backup access</li>
+    <li><strong>Testing:</strong> Regular restoration testing</li>
+</ul>
+
+<h2 id="best-practices">Security Best Practices</h2>
+
+<h3>Password Security</h3>
+
+<h4>Password Requirements</h4>
+<ul>
+    <li><strong>Length:</strong> Minimum 12 characters</li>
+    <li><strong>Complexity:</strong> Mix of letters, numbers, symbols</li>
+    <li><strong>Uniqueness:</strong> Don't reuse passwords</li>
+    <li><strong>Passphrases:</strong> Consider using memorable passphrases</li>
+</ul>
+
+<h4>Password Management</h4>
+<ul>
+    <li><strong>Password Manager:</strong> Use reputable password manager</li>
+    <li><strong>Regular Updates:</strong> Change passwords periodically</li>
+    <li><strong>Secure Recovery:</strong> Store recovery information safely</li>
+    <li><strong>Team Coordination:</strong> Coordinate password changes in shared environments</li>
+</ul>
+
+<h3>Access Control</h3>
+
+<h4>User Management</h4>
+<ul>
+    <li><strong>Single User Model:</strong> Trilium designed for single-user access</li>
+    <li><strong>Shared Access:</strong> Use with caution in shared environments</li>
+    <li><strong>Guest Access:</strong> Disable unless specifically needed</li>
+    <li><strong>Admin Privileges:</strong> Run with minimal necessary privileges</li>
+</ul>
+
+<h4>Session Management</h4>
+<ul>
+    <li><strong>Timeout Configuration:</strong> Set appropriate timeouts for usage pattern</li>
+    <li><strong>Device Security:</strong> Lock workstation when away</li>
+    <li><strong>Shared Computers:</strong> Always log out completely</li>
+    <li><strong>Browser Security:</strong> Use up-to-date browsers</li>
+</ul>
+
+<h3>Data Protection</h3>
+
+<h4>Backup Strategy</h4>
+<ul>
+    <li><strong>Regular Backups:</strong> Automated daily backups</li>
+    <li><strong>Encryption:</strong> All backups encrypted with strong keys</li>
+    <li><strong>Multiple Locations:</strong> Store backups in multiple secure locations</li>
+    <li><strong>Version Control:</strong> Maintain multiple backup versions</li>
+    <li><strong>Testing:</strong> Regular restoration testing</li>
+</ul>
+
+<h4>Data Classification</h4>
+<ul>
+    <li><strong>Sensitive Data:</strong> Always use protected notes for sensitive content</li>
+    <li><strong>Public Data:</strong> Separate public and private information</li>
+    <li><strong>Compliance:</strong> Follow industry-specific requirements</li>
+    <li><strong>Retention:</strong> Implement data retention policies</li>
+</ul>
+
+<h2 id="monitoring">Security Monitoring</h2>
+
+<h3>Log Monitoring</h3>
+
+<h4>Security Events</h4>
+<ul>
+    <li><strong>Authentication:</strong> Monitor login attempts and failures</li>
+    <li><strong>Authorization:</strong> Track access to protected resources</li>
+    <li><strong>Sessions:</strong> Monitor session creation and termination</li>
+    <li><strong>Data Access:</strong> Log protected note access</li>
+</ul>
+
+<h4>Alerting</h4>
+<ul>
+    <li><strong>Failed Logins:</strong> Alert on multiple failed attempts</li>
+    <li><strong>MFA Failures:</strong> Monitor MFA bypass attempts</li>
+    <li><strong>Session Anomalies:</strong> Detect unusual session patterns</li>
+    <li><strong>Data Changes:</strong> Monitor unexpected data modifications</li>
+</ul>
+
+<h3>Intrusion Detection</h3>
+
+<h4>Behavioral Analysis</h4>
+<ul>
+    <li><strong>Login Patterns:</strong> Detect unusual login times/locations</li>
+    <li><strong>Access Patterns:</strong> Monitor unusual data access</li>
+    <li><strong>Session Behavior:</strong> Identify suspicious session activity</li>
+    <li><strong>Network Activity:</strong> Monitor network connection patterns</li>
+</ul>
+
+<h4>Automated Response</h4>
+<ul>
+    <li><strong>Account Lockout:</strong> Temporary suspension of suspicious accounts</li>
+    <li><strong>IP Blocking:</strong> Block suspicious IP addresses</li>
+    <li><strong>Rate Limiting:</strong> Dynamic rate limit adjustment</li>
+    <li><strong>Alert Generation:</strong> Immediate notification of threats</li>
+</ul>
+
+<h2 id="incident-response">Incident Response</h2>
+
+<h3>Preparation</h3>
+
+<h4>Response Plan</h4>
+<ul>
+    <li><strong>Procedures:</strong> Document step-by-step response procedures</li>
+    <li><strong>Contacts:</strong> Maintain emergency contact information</li>
+    <li><strong>Tools:</strong> Prepare incident response tools and scripts</li>
+    <li><strong>Communication:</strong> Plan user notification procedures</li>
+</ul>
+
+<h4>Training</h4>
+<ul>
+    <li><strong>Team Training:</strong> Regular incident response training</li>
+    <li><strong>Simulations:</strong> Practice incident response scenarios</li>
+    <li><strong>Documentation:</strong> Keep response procedures updated</li>
+    <li><strong>Lessons Learned:</strong> Update procedures based on incidents</li>
+</ul>
+
+<h3>Detection and Response</h3>
+
+<h4>Immediate Actions</h4>
+<ol>
+    <li><strong>Identify:</strong> Quickly identify the type and scope of incident</li>
+    <li><strong>Contain:</strong> Isolate affected systems to prevent spread</li>
+    <li><strong>Preserve:</strong> Preserve evidence for forensic analysis</li>
+    <li><strong>Notify:</strong> Inform relevant stakeholders</li>
+    <li><strong>Assess:</strong> Evaluate impact and required response</li>
+</ol>
+
+<h4>Recovery Procedures</h4>
+<ul>
+    <li><strong>System Isolation:</strong> Temporarily isolate compromised systems</li>
+    <li><strong>Forensic Backup:</strong> Create forensic copies for analysis</li>
+    <li><strong>Restore from Backup:</strong> Restore from known good backups</li>
+    <li><strong>Verify Integrity:</strong> Confirm system and data integrity</li>
+    <li><strong>Resume Operations:</strong> Safely resume normal operations</li>
+</ul>
+
+<h3>Post-Incident</h3>
+
+<h4>Documentation</h4>
+<ul>
+    <li><strong>Incident Report:</strong> Complete incident documentation</li>
+    <li><strong>Timeline:</strong> Detailed timeline of events and responses</li>
+    <li><strong>Impact Assessment:</strong> Evaluation of damage and losses</li>
+    <li><strong>Lessons Learned:</strong> Identify improvements for future</li>
+</ul>
+
+<h4>Improvement</h4>
+<ul>
+    <li><strong>Process Updates:</strong> Update response procedures</li>
+    <li><strong>Security Enhancements:</strong> Implement additional security controls</li>
+    <li><strong>Training Updates:</strong> Update training based on lessons learned</li>
+    <li><strong>Regular Reviews:</strong> Periodic review of incident response capability</li>
+</ul>
+
+<h2>Troubleshooting</h2>
+
+<h3>Common Issues</h3>
+
+<h4>Authentication Problems</h4>
+<div class="alert alert-info">
+    <strong>Problem:</strong> Cannot login with correct credentials<br>
+    <strong>Solutions:</strong>
+    <ul>
+        <li>Check password spelling and case sensitivity</li>
+        <li>Clear browser cookies and cache</li>
+        <li>Verify database connectivity</li>
+        <li>Check server logs for errors</li>
+        <li>Restart application if needed</li>
+    </ul>
+</div>
+
+<h4>Protected Notes Issues</h4>
+<div class="alert alert-warning">
+    <strong>Problem:</strong> "Could not decrypt string" error<br>
+    <strong>Solutions:</strong>
+    <ul>
+        <li>Verify correct password entry</li>
+        <li>Check for active protected session</li>
+        <li>Restart application and retry</li>
+        <li>Restore from backup if corruption suspected</li>
+    </ul>
+</div>
+
+<h4>MFA Problems</h4>
+<div class="alert alert-info">
+    <strong>Problem:</strong> TOTP codes rejected<br>
+    <strong>Solutions:</strong>
+    <ul>
+        <li>Synchronize device time</li>
+        <li>Try recovery codes</li>
+        <li>Regenerate TOTP secret</li>
+        <li>Check authenticator app configuration</li>
+    </ul>
+</div>
+
+<h3>Emergency Procedures</h3>
+
+<h4>Password Recovery</h4>
+<div class="alert alert-danger">
+    <strong>Important:</strong> Trilium cannot recover forgotten passwords. Options include:
+    <ul>
+        <li>Restore from backup with known password</li>
+        <li>Export unprotected content before password reset</li>
+        <li>Complete reset (loses all protected content)</li>
+    </ul>
+</div>
+
+<h4>Data Recovery</h4>
+<ul>
+    <li><strong>Backup Restoration:</strong> Use recent encrypted backups</li>
+    <li><strong>Database Repair:</strong> Use SQLite repair tools if needed</li>
+    <li><strong>Partial Recovery:</strong> Export accessible content</li>
+    <li><strong>Professional Help:</strong> Contact data recovery services for critical data</li>
+</ul>
+
+<h2>Compliance and Standards</h2>
+
+<h3>Regulatory Compliance</h3>
+
+<h4>GDPR Compliance</h4>
+<ul>
+    <li><strong>Data Protection:</strong> AES encryption provides technical safeguards</li>
+    <li><strong>Right to Erasure:</strong> Secure deletion of encryption keys</li>
+    <li><strong>Data Portability:</strong> Export capabilities for protected content</li>
+    <li><strong>Privacy by Design:</strong> Encryption built into architecture</li>
+</ul>
+
+<h4>Industry Standards</h4>
+<ul>
+    <li><strong>ISO 27001:</strong> Information security management compliance</li>
+    <li><strong>SOC 2:</strong> Security and availability controls</li>
+    <li><strong>HIPAA:</strong> Healthcare data protection requirements</li>
+    <li><strong>PCI DSS:</strong> Payment card industry standards</li>
+</ul>
+
+<h3>Encryption Standards</h3>
+
+<h4>Algorithm Compliance</h4>
+<ul>
+    <li><strong>AES-128:</strong> NIST approved, FIPS 140-2 Level 1</li>
+    <li><strong>Scrypt:</strong> RFC 7914 standard</li>
+    <li><strong>SHA-1:</strong> NIST standard (integrity verification only)</li>
+    <li><strong>Random Generation:</strong> Cryptographically secure sources</li>
+</ul>
+
+<div class="alert alert-success">
+    <strong>Remember:</strong> Security is an ongoing process, not a one-time configuration. Regularly review and update your security posture to address evolving threats and requirements.
+</div>
+
+</div>

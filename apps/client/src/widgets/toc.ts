@@ -360,7 +360,7 @@ export default class TocWidget extends RightPanelWidget {
     }
 
     /**
-     * Reduce indent if a larger headings are not being used: https://github.com/zadam/trilium/issues/4363
+     * Reduce indent if a larger headings are not being used: https://github.com/TriliumNext/Trilium/issues/4363
      */
     pullLeft($toc: JQuery<HTMLElement>) {
         while (true) {
@@ -390,7 +390,7 @@ export default class TocWidget extends RightPanelWidget {
         // temporarily" (ie "edit this note" button) without any
         // intervening events, do the readonly calculation at navigation
         // time and not at outline creation time
-        // See https://github.com/zadam/trilium/issues/2828
+        // See https://github.com/TriliumNext/Trilium/issues/2828
         const isDocNote = this.note.type === "doc";
         const isReadOnly = await this.noteContext.isReadOnly();
 

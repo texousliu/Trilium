@@ -834,7 +834,7 @@ class FNote {
             if (a.noteId === b.noteId) {
                 return a.position < b.position ? -1 : 1;
             } else {
-                // inherited promoted attributes should stay grouped: https://github.com/zadam/trilium/issues/3761
+                // inherited promoted attributes should stay grouped: https://github.com/TriliumNext/Trilium/issues/3761
                 return a.noteId < b.noteId ? -1 : 1;
             }
         });

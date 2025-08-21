@@ -10,7 +10,7 @@ Vea estas [capturas de pantalla](https://triliumnext.github.io/Docs/Wiki/screens
 
 ## ⚠️ ¿Por qué usar TriliumNext?
 
-[El proyecto Trilium original está en modo de mantenimiento](https://github.com/zadam/trilium/issues/4620)
+[El proyecto Trilium original está en modo de mantenimiento](https://github.com/TriliumNext/Trilium/issues/4620)
 
 ### ¿Cómo migrar desde Trilium?
 

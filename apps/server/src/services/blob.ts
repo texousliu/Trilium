@@ -39,7 +39,7 @@ function processContent(content: Buffer | string | null, isProtected: boolean, i
     if (isStringContent) {
         return content === null ? "" : content.toString("utf-8");
     } else {
-        // see https://github.com/zadam/trilium/issues/3523
+        // see https://github.com/TriliumNext/Trilium/issues/3523
         // IIRC a zero-sized buffer can be returned as null from the database
         if (content === null) {
             // this will force de/encryption

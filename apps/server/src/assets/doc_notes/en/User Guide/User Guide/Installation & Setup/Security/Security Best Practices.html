@@ -1,0 +1,457 @@
+<div class="note-content">
+
+<h1>Security Best Practices</h1>
+
+<p>This guide provides comprehensive security recommendations for deploying and maintaining a secure Trilium installation.</p>
+
+<h2>Deployment Security</h2>
+
+<h3>Server Configuration</h3>
+
+<h4>HTTPS Deployment</h4>
+
+<p><strong>Always use HTTPS in production environments:</strong></p>
+
+<ol>
+<li><strong>TLS Configuration</strong>: Use TLS 1.2 or higher</li>
+<li><strong>Certificate Management</strong>: Use valid SSL certificates (Let's Encrypt recommended)</li>
+<li><strong>HSTS Headers</strong>: Enable HTTP Strict Transport Security</li>
+<li><strong>Secure Redirects</strong>: Redirect all HTTP traffic to HTTPS</li>
+</ol>
+
+<p>Example Nginx configuration:</p>
+<pre><code class="language-nginx">server {
+    listen 443 ssl http2;
+    server_name your-trilium.example.com;
+    
+    ssl_certificate /path/to/cert.pem;
+    ssl_certificate_key /path/to/private.key;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384;
+    
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header X-Frame-Options DENY;
+    add_header X-Content-Type-Options nosniff;
+    
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+</code></pre>
+
+<h4>Network Security</h4>
+
+<ol>
+<li><strong>Firewall Configuration</strong>: Restrict access to necessary ports only</li>
+<li><strong>Port Security</strong>: Use non-standard ports if required</li>
+<li><strong>IP Restrictions</strong>: Limit access to trusted IP ranges</li>
+<li><strong>VPN Access</strong>: Consider VPN for remote access</li>
+</ol>
+
+<p>Example firewall rules:</p>
+<pre><code class="language-bash"># Allow only HTTPS and SSH
+ufw allow 22/tcp
+ufw allow 443/tcp
+ufw deny 8080/tcp  # Block direct access to Trilium
+ufw enable
+</code></pre>
+
+<h3>Access Control</h3>
+
+<h4>User Management</h4>
+
+<ol>
+<li><strong>Single User Model</strong>: Trilium is designed for single-user access</li>
+<li><strong>Shared Access</strong>: Use shared hosting or family sharing with caution</li>
+<li><strong>Guest Access</strong>: Disable guest access unless specifically needed</li>
+<li><strong>Admin Privileges</strong>: Run Trilium with minimal necessary privileges</li>
+</ol>
+
+<h4>Authentication Hardening</h4>
+
+<ol>
+<li><strong>Strong Passwords</strong>: Enforce complex password requirements</li>
+<li><strong>Multi-Factor Authentication</strong>: Always enable MFA for production</li>
+<li><strong>Password Rotation</strong>: Regular password updates</li>
+<li><strong>Account Lockout</strong>: Monitor for brute force attempts</li>
+</ol>
+
+<h3>Data Protection</h3>
+
+<h4>Backup Security</h4>
+
+<ol>
+<li><strong>Encrypted Backups</strong>: Ensure backups are encrypted at rest</li>
+<li><strong>Secure Storage</strong>: Store backups in secure locations</li>
+<li><strong>Access Control</strong>: Limit backup access to authorized personnel</li>
+<li><strong>Regular Testing</strong>: Verify backup integrity regularly</li>
+</ol>
+
+<p>Backup encryption example:</p>
+<pre><code class="language-bash"># Create encrypted backup
+tar czf - trilium-data/ | gpg --cipher-algo AES256 --compress-algo 1 --symmetric --output trilium-backup-$(date +%Y%m%d).tar.gz.gpg
+
+# Restore encrypted backup
+gpg --decrypt trilium-backup-20240101.tar.gz.gpg | tar xzf -
+</code></pre>
+
+<h4>Database Security</h4>
+
+<ol>
+<li><strong>File Permissions</strong>: Restrict database file access (600 or 640)</li>
+<li><strong>Directory Security</strong>: Secure data directory permissions</li>
+<li><strong>Regular Monitoring</strong>: Monitor for unauthorized access attempts</li>
+<li><strong>Integrity Checks</strong>: Verify database integrity regularly</li>
+</ol>
+
+<pre><code class="language-bash"># Secure file permissions
+chmod 600 /path/to/trilium/data/document.db
+chmod 700 /path/to/trilium/data/
+chown trilium:trilium /path/to/trilium/data/ -R
+</code></pre>
+
+<h2>Application Security</h2>
+
+<h3>Configuration Hardening</h3>
+
+<h4>Security Headers</h4>
+
+<p>Configure security headers for web protection:</p>
+
+<pre><code class="language-typescript">// Security headers configuration
+app.use((req, res, next) => {
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('Content-Security-Policy', 
+        "default-src 'self'; " +
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
+        "style-src 'self' 'unsafe-inline';"
+    );
+    next();
+});
+</code></pre>
+
+<h4>Session Security</h4>
+
+<ol>
+<li><strong>Session Timeout</strong>: Configure appropriate timeout values</li>
+<li><strong>Secure Cookies</strong>: Enable secure flag for all cookies</li>
+<li><strong>Session Regeneration</strong>: Regenerate session IDs after login</li>
+<li><strong>CSRF Protection</strong>: Enable and properly configure CSRF protection</li>
+</ol>
+
+<p>Example session configuration:</p>
+<pre><code class="language-javascript">// Secure session configuration
+{
+    cookie: {
+        secure: true,         // HTTPS only
+        httpOnly: true,       // Prevent XSS
+        maxAge: 30 * 60 * 1000, // 30 minutes
+        sameSite: 'strict'    // CSRF protection
+    },
+    rolling: true,            // Reset timeout on activity
+    resave: false,           // Don't save unchanged sessions
+    saveUninitialized: false // Don't save empty sessions
+}
+</code></pre>
+
+<h3>Input Validation</h3>
+
+<h4>Content Security</h4>
+
+<ol>
+<li><strong>HTML Sanitization</strong>: Properly sanitize user-generated content</li>
+<li><strong>File Upload Security</strong>: Validate file types and sizes</li>
+<li><strong>Script Execution</strong>: Control custom script execution</li>
+<li><strong>SQL Injection Prevention</strong>: Use parameterized queries</li>
+</ol>
+
+<h4>API Security</h4>
+
+<ol>
+<li><strong>Rate Limiting</strong>: Implement API rate limiting</li>
+<li><strong>Input Validation</strong>: Validate all API inputs</li>
+<li><strong>Authentication</strong>: Require authentication for sensitive operations</li>
+<li><strong>Authorization</strong>: Implement proper access controls</li>
+</ol>
+
+<p>Example rate limiting:</p>
+<pre><code class="language-typescript">import rateLimit from 'express-rate-limit';
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    message: 'Too many requests, please try again later.'
+});
+
+app.use('/api/', limiter);
+</code></pre>
+
+<h2>Operational Security</h2>
+
+<h3>Monitoring and Logging</h3>
+
+<h4>Security Logging</h4>
+
+<ol>
+<li><strong>Authentication Events</strong>: Log all login attempts and failures</li>
+<li><strong>Authorization Events</strong>: Track access to protected resources</li>
+<li><strong>Data Access</strong>: Monitor sensitive data access patterns</li>
+<li><strong>System Events</strong>: Log system-level security events</li>
+</ol>
+
+<p>Example log monitoring:</p>
+<pre><code class="language-bash"># Monitor failed login attempts
+tail -f /var/log/trilium/security.log | grep "Failed login"
+
+# Alert on multiple failures
+tail -f /var/log/trilium/security.log | awk '/Failed login/ {count++} count>=5 {print "Alert: Multiple failed logins"; count=0}'
+</code></pre>
+
+<h4>Security Metrics</h4>
+
+<p>Monitor key security metrics:</p>
+<ul>
+<li>Failed authentication attempts</li>
+<li>Session anomalies</li>
+<li>Unusual access patterns</li>
+<li>Data export activities</li>
+<li>Configuration changes</li>
+</ul>
+
+<h3>Incident Response</h3>
+
+<h4>Preparation</h4>
+
+<ol>
+<li><strong>Incident Response Plan</strong>: Develop and document procedures</li>
+<li><strong>Contact Lists</strong>: Maintain emergency contact information</li>
+<li><strong>Backup Procedures</strong>: Ensure rapid recovery capabilities</li>
+<li><strong>Communication Plans</strong>: Prepare user notification procedures</li>
+</ol>
+
+<h4>Detection and Response</h4>
+
+<ol>
+<li><strong>Automated Monitoring</strong>: Implement automated threat detection</li>
+<li><strong>Alert Systems</strong>: Configure appropriate alerting thresholds</li>
+<li><strong>Response Procedures</strong>: Define step-by-step response actions</li>
+<li><strong>Forensic Preparation</strong>: Preserve evidence for analysis</li>
+</ol>
+
+<p>Example incident response checklist:</p>
+<pre><code>□ Identify and isolate affected systems
+□ Preserve logs and evidence
+□ Assess scope and impact
+□ Notify relevant stakeholders
+□ Implement containment measures
+□ Begin recovery procedures
+□ Document lessons learned
+□ Update security controls
+</code></pre>
+
+<h3>Regular Maintenance</h3>
+
+<h4>Security Updates</h4>
+
+<ol>
+<li><strong>Application Updates</strong>: Keep Trilium updated to latest version</li>
+<li><strong>Dependency Updates</strong>: Regularly update dependencies</li>
+<li><strong>System Updates</strong>: Maintain OS and security patches</li>
+<li><strong>Certificate Renewal</strong>: Monitor and renew SSL certificates</li>
+</ol>
+
+<h4>Security Audits</h4>
+
+<ol>
+<li><strong>Regular Reviews</strong>: Conduct periodic security assessments</li>
+<li><strong>Penetration Testing</strong>: Perform authorized security testing</li>
+<li><strong>Configuration Audits</strong>: Review security configurations</li>
+<li><strong>Access Reviews</strong>: Audit user access and permissions</li>
+</ol>
+
+<p>Automated update checking:</p>
+<pre><code class="language-bash">#!/bin/bash
+# Check for Trilium updates
+CURRENT_VERSION=$(curl -s https://api.github.com/repos/TriliumNext/Trilium/releases/latest | grep tag_name | cut -d'"' -f4)
+INSTALLED_VERSION=$(grep version /opt/trilium/package.json | cut -d'"' -f4)
+
+if [ "$CURRENT_VERSION" != "v$INSTALLED_VERSION" ]; then
+    echo "Update available: $CURRENT_VERSION (current: $INSTALLED_VERSION)"
+    # Add notification logic here
+fi
+</code></pre>
+
+<h2>Threat Mitigation</h2>
+
+<h3>Common Attack Vectors</h3>
+
+<h4>Web Application Attacks</h4>
+
+<p><strong>Cross-Site Scripting (XSS)</strong>:</p>
+<ul>
+<li>Content Security Policy headers</li>
+<li>Input sanitization</li>
+<li>Output encoding</li>
+<li>Secure cookie flags</li>
+</ul>
+
+<p><strong>Cross-Site Request Forgery (CSRF)</strong>:</p>
+<ul>
+<li>CSRF token validation</li>
+<li>SameSite cookie attributes</li>
+<li>Referrer validation</li>
+<li>Double-submit cookies</li>
+</ul>
+
+<p><strong>Session Hijacking</strong>:</p>
+<ul>
+<li>Secure session management</li>
+<li>HTTPS enforcement</li>
+<li>Session timeout controls</li>
+<li>Session regeneration</li>
+</ul>
+
+<h4>Infrastructure Attacks</h4>
+
+<p><strong>Denial of Service (DoS)</strong>:</p>
+<ul>
+<li>Rate limiting</li>
+<li>Request size limits</li>
+<li>Connection throttling</li>
+<li>Resource monitoring</li>
+</ul>
+
+<p><strong>Data Breaches</strong>:</p>
+<ul>
+<li>Encryption at rest</li>
+<li>Access controls</li>
+<li>Audit logging</li>
+<li>Regular backups</li>
+</ul>
+
+<h3>Security Controls Implementation</h3>
+
+<h4>Preventive Controls</h4>
+
+<ol>
+<li><strong>Authentication</strong>: Strong password policies and MFA</li>
+<li><strong>Authorization</strong>: Proper access controls and permissions</li>
+<li><strong>Encryption</strong>: Data encryption at rest and in transit</li>
+<li><strong>Input Validation</strong>: Comprehensive input sanitization</li>
+</ol>
+
+<h4>Detective Controls</h4>
+
+<ol>
+<li><strong>Logging</strong>: Comprehensive security logging</li>
+<li><strong>Monitoring</strong>: Real-time security monitoring</li>
+<li><strong>Alerting</strong>: Automated threat detection</li>
+<li><strong>Auditing</strong>: Regular security audits</li>
+</ol>
+
+<h4>Responsive Controls</h4>
+
+<ol>
+<li><strong>Incident Response</strong>: Documented response procedures</li>
+<li><strong>Backup and Recovery</strong>: Reliable backup systems</li>
+<li><strong>Isolation</strong>: Network segmentation capabilities</li>
+<li><strong>Communication</strong>: Stakeholder notification systems</li>
+</ol>
+
+<h2>Compliance Considerations</h2>
+
+<h3>Data Protection Regulations</h3>
+
+<h4>GDPR Compliance</h4>
+
+<ol>
+<li><strong>Data Minimization</strong>: Only collect necessary data</li>
+<li><strong>Consent Management</strong>: Obtain proper user consent</li>
+<li><strong>Right to Erasure</strong>: Implement data deletion capabilities</li>
+<li><strong>Data Portability</strong>: Enable data export functionality</li>
+<li><strong>Privacy by Design</strong>: Build privacy into system design</li>
+</ol>
+
+<h4>HIPAA Compliance (Healthcare)</h4>
+
+<ol>
+<li><strong>Access Controls</strong>: Implement user authentication and authorization</li>
+<li><strong>Audit Logs</strong>: Maintain comprehensive audit trails</li>
+<li><strong>Encryption</strong>: Encrypt data at rest and in transit</li>
+<li><strong>Risk Assessment</strong>: Conduct regular risk assessments</li>
+<li><strong>Business Associate Agreements</strong>: Ensure proper agreements</li>
+</ol>
+
+<h3>Industry Standards</h3>
+
+<h4>ISO 27001</h4>
+
+<ol>
+<li><strong>Information Security Management</strong>: Implement ISMS</li>
+<li><strong>Risk Management</strong>: Conduct regular risk assessments</li>
+<li><strong>Security Controls</strong>: Implement appropriate controls</li>
+<li><strong>Continuous Improvement</strong>: Regular reviews and updates</li>
+</ol>
+
+<h4>SOC 2</h4>
+
+<ol>
+<li><strong>Security</strong>: Implement comprehensive security controls</li>
+<li><strong>Availability</strong>: Ensure system availability and reliability</li>
+<li><strong>Processing Integrity</strong>: Maintain data processing integrity</li>
+<li><strong>Confidentiality</strong>: Protect sensitive information</li>
+<li><strong>Privacy</strong>: Implement privacy protection measures</li>
+</ol>
+
+<h2>Security Assessment Checklist</h2>
+
+<h3>Infrastructure Security</h3>
+<ul>
+<li>☐ HTTPS configured with valid certificates</li>
+<li>☐ Firewall rules properly configured</li>
+<li>☐ Network access controls implemented</li>
+<li>☐ System updates current</li>
+<li>☐ Backup procedures tested</li>
+<li>☐ Monitoring systems active</li>
+</ul>
+
+<h3>Application Security</h3>
+<ul>
+<li>☐ Strong authentication configured</li>
+<li>☐ Multi-factor authentication enabled</li>
+<li>☐ Session security properly configured</li>
+<li>☐ CSRF protection enabled</li>
+<li>☐ Security headers configured</li>
+<li>☐ Input validation implemented</li>
+</ul>
+
+<h3>Data Security</h3>
+<ul>
+<li>☐ Database properly secured</li>
+<li>☐ File permissions configured</li>
+<li>☐ Encryption properly implemented</li>
+<li>☐ Backup encryption verified</li>
+<li>☐ Access controls tested</li>
+<li>☐ Data retention policies defined</li>
+</ul>
+
+<h3>Operational Security</h3>
+<ul>
+<li>☐ Security logging enabled</li>
+<li>☐ Monitoring systems configured</li>
+<li>☐ Incident response plan documented</li>
+<li>☐ Security training completed</li>
+<li>☐ Regular audits scheduled</li>
+<li>☐ Update procedures documented</li>
+</ul>
+
+<p><strong>Remember</strong>: Security is an ongoing process, not a one-time configuration. Regularly review and update your security posture to address evolving threats and requirements.</p>
+
+</div>

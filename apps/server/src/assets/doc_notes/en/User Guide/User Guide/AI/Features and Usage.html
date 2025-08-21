@@ -1,0 +1,274 @@
+<h1>AI Features and Usage Guide</h1>
+
+<h2>Overview</h2>
+<p>This guide explains how to effectively use AI features in Trilium Notes to enhance your knowledge management workflow.</p>
+
+<h2>Chat with Notes</h2>
+
+<h3>Getting Started</h3>
+<p>The Chat with Notes feature provides an interactive AI assistant that has access to your knowledge base.</p>
+
+<h4>Accessing the Chat Interface</h4>
+<ol>
+  <li><strong>Via Launcher Button:</strong> Click the "Chat with Notes" button in the left sidebar</li>
+  <li><strong>Via Keyboard Shortcut:</strong> Press <code>Ctrl+Shift+C</code> (customizable)</li>
+  <li><strong>Via Command Palette:</strong> Press <code>Ctrl+P</code> and type "chat"</li>
+</ol>
+
+<h3>Basic Chat Operations</h3>
+
+<h4>Asking Questions</h4>
+<p>The AI can answer questions based on your notes:</p>
+<pre><code>User: What are the main points from my meeting notes this week?
+AI: Based on your meeting notes from this week, here are the main points:
+- Monday: Project timeline discussed, deadline set for March 30
+- Wednesday: Budget approved for Q2
+- Friday: New team member onboarding planned</code></pre>
+
+<h4>Summarizing Content</h4>
+<pre><code>User: Summarize my research notes on machine learning
+AI: Your machine learning research covers:
+1. Supervised learning algorithms (Random Forests, SVM)
+2. Neural network architectures
+3. Data preprocessing techniques
+4. Model evaluation metrics</code></pre>
+
+<h2>AI-Powered Tools</h2>
+
+<h3>Available Tools</h3>
+<p>The AI can execute various tools to interact with your notes:</p>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Tool</th>
+      <th>Function</th>
+      <th>Example Usage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>search_notes</code></td>
+      <td>Semantic search across notes</td>
+      <td>"Find all notes about project management"</td>
+    </tr>
+    <tr>
+      <td><code>keyword_search</code></td>
+      <td>Exact keyword matching</td>
+      <td>"Search for notes containing 'API documentation'"</td>
+    </tr>
+    <tr>
+      <td><code>read_note</code></td>
+      <td>Access full note content</td>
+      <td>"Show me the content of my budget proposal"</td>
+    </tr>
+    <tr>
+      <td><code>create_note</code></td>
+      <td>Generate new notes</td>
+      <td>"Create a note summarizing this discussion"</td>
+    </tr>
+    <tr>
+      <td><code>update_note</code></td>
+      <td>Modify existing notes</td>
+      <td>"Add these action items to my todo list"</td>
+    </tr>
+    <tr>
+      <td><code>manage_attributes</code></td>
+      <td>Handle note metadata</td>
+      <td>"Add #important label to my proposal"</td>
+    </tr>
+    <tr>
+      <td><code>calendar_integration</code></td>
+      <td>Work with date notes</td>
+      <td>"What's on my calendar tomorrow?"</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Tool Execution Examples</h3>
+
+<div class="admonition example">
+  <p class="admonition-title">Research Assistant Example</p>
+  <pre><code>User: Help me research quantum computing for my presentation
+
+AI: I'll help you research quantum computing. Let me search your notes.
+[Executing search_notes: "quantum computing"]
+Found 3 notes on quantum topics.
+
+[Executing read_note: "Quantum Basics"]
+You have notes covering superposition and entanglement.
+
+[Executing create_note: "Quantum Computing Presentation Outline"]
+Created outline with:
+1. Introduction to quantum concepts
+2. Current applications
+3. Future possibilities</code></pre>
+</div>
+
+<h2>Semantic Search</h2>
+
+<h3>How It Works</h3>
+<p>Semantic search uses AI embeddings to find conceptually related content, even when exact keywords don't match.</p>
+
+<h4>Benefits</h4>
+<ul>
+  <li>Find related concepts without exact keywords</li>
+  <li>Discover unexpected connections</li>
+  <li>More intuitive search results</li>
+  <li>Better context understanding</li>
+</ul>
+
+<h4>Example Searches</h4>
+<pre><code>Query: "improving productivity"
+Finds: Time management, GTD methodology, focus strategies, tool optimization
+
+Query: "customer satisfaction"
+Finds: User feedback, NPS scores, support tickets, product reviews</code></pre>
+
+<h2>Content Generation</h2>
+
+<h3>Note Creation</h3>
+<p>AI can help create various types of notes:</p>
+
+<ul>
+  <li><strong>Meeting Summaries:</strong> "Create a summary of today's standup discussion"</li>
+  <li><strong>Research Outlines:</strong> "Generate an outline for my thesis on climate change"</li>
+  <li><strong>Documentation:</strong> "Create API documentation from these code snippets"</li>
+  <li><strong>Reports:</strong> "Generate a weekly progress report from my task notes"</li>
+</ul>
+
+<h3>Content Enhancement</h3>
+<p>Improve existing notes with AI assistance:</p>
+
+<ul>
+  <li><strong>Expansion:</strong> "Expand the bullet points in my ideas note"</li>
+  <li><strong>Clarification:</strong> "Rewrite this technical explanation for beginners"</li>
+  <li><strong>Formatting:</strong> "Convert my rough notes into a structured document"</li>
+  <li><strong>Translation:</strong> "Translate this note to Spanish"</li>
+</ul>
+
+<h2>Workflow Integration</h2>
+
+<h3>Daily Review Workflow</h3>
+<pre><code>User: Give me my daily review
+
+AI: Daily Review for [Today's Date]:
+✅ Completed Tasks:
+- Reviewed design mockups
+- Sent project update
+- Prepared agenda
+
+📝 Notes Created:
+- "Client Feedback"
+- "API Research"
+- "Team Notes"
+
+📅 Tomorrow:
+- Project review at 10 AM
+- Sprint planning at 2 PM</code></pre>
+
+<h3>Research Workflow</h3>
+<ol>
+  <li><strong>Gather Information:</strong> "Find all notes about [topic]"</li>
+  <li><strong>Synthesize:</strong> "Create a summary of these research notes"</li>
+  <li><strong>Organize:</strong> "Suggest a structure for organizing this information"</li>
+  <li><strong>Generate:</strong> "Create a draft based on this research"</li>
+</ol>
+
+<h2>Best Practices</h2>
+
+<h3>Effective Prompting</h3>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Instead of...</th>
+      <th>Try...</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>"Tell me about my notes"</td>
+      <td>"Summarize my project management notes from Q1"</td>
+    </tr>
+    <tr>
+      <td>"What should I do?"</td>
+      <td>"Based on my project timeline, what tasks should I prioritize?"</td>
+    </tr>
+    <tr>
+      <td>"Give me information"</td>
+      <td>"Create a bullet-point summary of my research on AI"</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Managing Conversations</h3>
+<ul>
+  <li><strong>Start fresh:</strong> Begin new chats for different topics</li>
+  <li><strong>Be specific:</strong> Reference note titles when possible</li>
+  <li><strong>Iterate:</strong> Use follow-up questions to refine responses</li>
+  <li><strong>Provide context:</strong> Include relevant background information</li>
+</ul>
+
+<h3>Performance Tips</h3>
+<ul>
+  <li><strong>For speed:</strong> Use simpler models for basic tasks</li>
+  <li><strong>For quality:</strong> Provide examples of desired output</li>
+  <li><strong>For cost:</strong> Enable caching and batch similar queries</li>
+  <li><strong>For relevance:</strong> Keep your notes well-organized and labeled</li>
+</ul>
+
+<h2>Advanced Usage Patterns</h2>
+
+<h3>Creating Knowledge Graphs</h3>
+<pre><code>User: Create a knowledge graph of my programming notes
+
+AI: Analyzing your programming notes...
+[Creates visual representation showing connections between:
+- Languages (Python, JavaScript, Java)
+- Frameworks (React, Django, Spring)
+- Concepts (OOP, Functional, Design Patterns)
+- Projects (Web App, API, Mobile)]</code></pre>
+
+<h3>Automated Analysis</h3>
+<pre><code>User: Analyze sentiment in my journal entries this month
+
+AI: Sentiment Analysis - Past 30 Days:
+📈 Positive Trend: Mood improving over time
+😊 Positive themes: achievements, learning, relationships
+😟 Challenges: workload, deadlines
+💡 Suggestion: Schedule breaks after intense work periods</code></pre>
+
+<h2>Privacy and Control</h2>
+
+<h3>Excluding Notes from AI</h3>
+<p>To prevent specific notes from being accessed by AI:</p>
+<ol>
+  <li>Add the <code>#excludeFromAI</code> label to sensitive notes</li>
+  <li>These notes won't be included in searches or context</li>
+  <li>Perfect for personal or confidential information</li>
+</ol>
+
+<h3>Data Usage</h3>
+<ul>
+  <li>Only explicitly requested notes are sent to AI</li>
+  <li>No automatic uploads or background processing</li>
+  <li>You control what data the AI can access</li>
+</ul>
+
+<h2>Troubleshooting Common Issues</h2>
+
+<div class="admonition warning">
+  <p class="admonition-title">AI Not Finding Relevant Notes</p>
+  <p><strong>Solution:</strong> Ensure embeddings are generated. Go to Settings → AI/LLM and click "Recreate All Embeddings".</p>
+</div>
+
+<div class="admonition warning">
+  <p class="admonition-title">Tools Not Executing</p>
+  <p><strong>Solution:</strong> Verify tool calling is enabled in your AI settings and your provider supports function calling.</p>
+</div>
+
+<div class="admonition warning">
+  <p class="admonition-title">Slow Responses</p>
+  <p><strong>Solution:</strong> Try using a faster model (GPT-3.5-turbo, Claude Haiku) or reduce the context size in settings.</p>
+</div>

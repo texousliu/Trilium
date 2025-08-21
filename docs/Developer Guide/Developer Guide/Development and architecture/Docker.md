@@ -14,5 +14,5 @@ sudo docker run -p 8081:8080 triliumnext/trilium:v0.90.6-beta
 To enter a shell in the Docker container:
 
 ```
-sudo docker run -it --entrypoint=/bin/sh zadam/trilium:0.63-latest
+sudo docker run -it --entrypoint=/bin/sh TriliumNext/Trilium:0.63-latest
 ```

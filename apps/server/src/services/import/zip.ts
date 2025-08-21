@@ -477,7 +477,7 @@ async function importZip(taskContext: TaskContext, fileBuffer: Buffer, importRoo
 
         if (note) {
             // only skeleton was created because of altered order of cloned notes in ZIP, we need to update
-            // https://github.com/zadam/trilium/issues/2440
+            // https://github.com/TriliumNext/Trilium/issues/2440
             if (note.type === undefined) {
                 note.type = type;
                 note.mime = mime;

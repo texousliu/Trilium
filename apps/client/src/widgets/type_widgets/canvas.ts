@@ -16,7 +16,7 @@ const TPL = /*html*/`
         }
 
         /* Conflict between excalidraw and bootstrap classes keeps the menu hidden */
-        /* https://github.com/zadam/trilium/issues/3780 */
+        /* https://github.com/TriliumNext/Trilium/issues/3780 */
         /* https://github.com/excalidraw/excalidraw/issues/6567 */
         .excalidraw .dropdown-menu {
             display: block;

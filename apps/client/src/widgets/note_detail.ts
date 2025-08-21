@@ -192,7 +192,7 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
      * sets full height of container that contains note content for a subset of note-types
      */
     checkFullHeight() {
-        // https://github.com/zadam/trilium/issues/2522
+        // https://github.com/TriliumNext/Trilium/issues/2522
         const isBackendNote = this.noteContext?.noteId === "_backendLog";
         const isSqlNote = this.mime === "text/x-sqlite;schema=trilium";
         const isFullHeightNoteType = ["canvas", "webView", "noteMap", "mindMap", "mermaid", "file"].includes(this.type ?? "");

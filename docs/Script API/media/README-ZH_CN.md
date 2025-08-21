@@ -8,7 +8,7 @@ Trilium Notes 是一个层次化的笔记应用程序，专注于建立大型个
 
 ## ⚠️ 为什么选择TriliumNext？
 
-[原始的Trilium项目目前处于维护模式](https://github.com/zadam/trilium/issues/4620)
+[原始的Trilium项目目前处于维护模式](https://github.com/TriliumNext/Trilium/issues/4620)
 
 ## 🗭 与我们讨论
 

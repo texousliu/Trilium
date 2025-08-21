@@ -312,7 +312,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
     setupNoteTitleTooltip() {
         // the following will dynamically set tree item's tooltip if the whole item's text is not currently visible
         // if the whole text is visible then no tooltip is show since that's unnecessarily distracting
-        // see https://github.com/zadam/trilium/pull/1120 for discussion
+        // see https://github.com/TriliumNext/Trilium/pull/1120 for discussion
 
         // code inspired by https://gist.github.com/jtsternberg/c272d7de5b967cec2d3d
         const isEnclosing = ($container: JQuery<HTMLElement>, $sub: JQuery<HTMLElement>) => {
@@ -952,7 +952,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
 
         await this.filterHoistedBranch(true);
 
-        // don't activate the active note, see discussion in https://github.com/zadam/trilium/issues/3664
+        // don't activate the active note, see discussion in https://github.com/TriliumNext/Trilium/issues/3664
     }
 
     async expandTree(node: Fancytree.FancytreeNode | null = null) {
@@ -1181,7 +1181,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
             /*
              * We're collapsing notes after a period of inactivity to "cleanup" the tree - users rarely
              * collapse the notes and the tree becomes unusuably large.
-             * Some context: https://github.com/zadam/trilium/issues/1192
+             * Some context: https://github.com/TriliumNext/Trilium/issues/1192
              */
 
             const noteIdsToKeepExpanded = new Set(
@@ -1429,7 +1429,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         }
 
         if (activeNodeFocused) {
-            // needed by Firefox: https://github.com/zadam/trilium/issues/1865
+            // needed by Firefox: https://github.com/TriliumNext/Trilium/issues/1865
             this.tree.$container.focus();
         }
 

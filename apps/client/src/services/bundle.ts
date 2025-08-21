@@ -78,7 +78,7 @@ export class WidgetsByParent {
             this.byParent[parentName]
                 // previously, custom widgets were provided as a single instance, but that has the disadvantage
                 // for splits where we actually need multiple instaces and thus having a class to instantiate is better
-                // https://github.com/zadam/trilium/issues/4274
+                // https://github.com/TriliumNext/Trilium/issues/4274
                 .map((w: any) => (w.prototype ? new w() : w))
         );
     }

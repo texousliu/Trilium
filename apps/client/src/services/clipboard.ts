@@ -78,7 +78,7 @@ async function copy(branchIds: string[]) {
     clipboardMode = "copy";
 
     if (utils.isElectron()) {
-        // https://github.com/zadam/trilium/issues/2401
+        // https://github.com/TriliumNext/Trilium/issues/2401
         const { clipboard } = require("electron");
         const links: string[] = [];
 

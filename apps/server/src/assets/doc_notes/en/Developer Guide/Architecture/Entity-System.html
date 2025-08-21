@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Entity System Architecture</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+        h1 { color: #2c3e50; }
+        h2 { color: #34495e; margin-top: 30px; }
+        h3 { color: #7f8c8d; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-family: 'Courier New', monospace; }
+        .entity-box { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #3498db; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <h1>Entity System Architecture</h1>
+    
+    <p>The Entity System forms the core data model of Trilium Notes, providing a flexible and powerful structure for organizing information. This document details the entities, their relationships, and usage patterns.</p>
+    
+    <h2>Core Entities Overview</h2>
+    
+    <div class="entity-box">
+        <h3>BNote - Notes with Content and Metadata</h3>
+        <p><strong>Location:</strong> <code>/apps/server/src/becca/entities/bnote.ts</code></p>
+        
+        <p>Notes are the fundamental unit of information in Trilium. Each note can contain different types of content and maintain relationships with other notes.</p>
+        
+        <h4>Properties</h4>
+        <ul>
+            <li><code>noteId</code> - Unique identifier</li>
+            <li><code>title</code> - Display title</li>
+            <li><code>type</code> - Content type (text, code, file, etc.)</li>
+            <li><code>mime</code> - MIME type for content</li>
+            <li><code>isProtected</code> - Encryption flag</li>
+            <li><code>dateCreated</code> - Creation timestamp</li>
+            <li><code>dateModified</code> - Last modification</li>
+        </ul>
+        
+        <h4>Note Types</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Use Case</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>text</code></td>
+                    <td>Rich text with HTML formatting</td>
+                    <td>General notes, documentation</td>
+                </tr>
+                <tr>
+                    <td><code>code</code></td>
+                    <td>Source code with syntax highlighting</td>
+                    <td>Code snippets, scripts</td>
+                </tr>
+                <tr>
+                    <td><code>file</code></td>
+                    <td>Binary file attachment</td>
+                    <td>PDFs, documents, archives</td>
+                </tr>
+                <tr>
+                    <td><code>image</code></td>
+                    <td>Image with preview</td>
+                    <td>Pictures, diagrams</td>
+                </tr>
+                <tr>
+                    <td><code>search</code></td>
+                    <td>Saved search query</td>
+                    <td>Dynamic note collections</td>
+                </tr>
+                <tr>
+                    <td><code>canvas</code></td>
+                    <td>Drawing canvas (Excalidraw)</td>
+                    <td>Diagrams, sketches</td>
+                </tr>
+                <tr>
+                    <td><code>mermaid</code></td>
+                    <td>Mermaid diagram</td>
+                    <td>Flowcharts, graphs</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="entity-box">
+        <h3>BBranch - Hierarchical Relationships</h3>
+        <p><strong>Location:</strong> <code>/apps/server/src/becca/entities/bbranch.ts</code></p>
+        
+        <p>Branches define the parent-child relationships between notes, allowing a note to have multiple parents (cloning).</p>
+        
+        <h4>Key Features</h4>
+        <ul>
+            <li><strong>Multiple Parents:</strong> Notes can appear in multiple locations</li>
+            <li><strong>Ordering:</strong> Explicit positioning among siblings</li>
+            <li><strong>Prefixes:</strong> Optional labels for context (e.g., "Chapter 1:")</li>
+            <li><strong>UI State:</strong> Expansion state persisted per branch</li>
+        </ul>
+        
+        <h4>Usage Example</h4>
+        <pre><code>// Create parent-child relationship
+const branch = new BBranch({
+    noteId: childNote.noteId,
+    parentNoteId: parentNote.noteId,
+    notePosition: 10
+});
+branch.save();
+
+// Clone note to another parent
+const cloneBranch = childNote.cloneTo(otherParent.noteId);</code></pre>
+    </div>
+    
+    <div class="entity-box">
+        <h3>BAttribute - Key-Value Metadata</h3>
+        <p><strong>Location:</strong> <code>/apps/server/src/becca/entities/battribute.ts</code></p>
+        
+        <p>Attributes provide flexible metadata and relationships between notes.</p>
+        
+        <h4>Types</h4>
+        <ol>
+            <li><strong>Labels:</strong> Key-value pairs for metadata</li>
+            <li><strong>Relations:</strong> References to other notes</li>
+        </ol>
+        
+        <h4>Common Patterns</h4>
+        <pre><code>// Add label
+note.addLabel("status", "active");
+note.addLabel("priority", "high");
+
+// Add relation
+note.addRelation("template", templateNoteId);
+note.addRelation("renderNote", renderNoteId);
+
+// Query by attributes
+const todos = becca.findAttributes("label", "todoItem");</code></pre>
+        
+        <h4>System Attributes</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Attribute</th>
+                    <th>Type</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>#hidePromotedAttributes</code></td>
+                    <td>Label</td>
+                    <td>Hide promoted attributes in UI</td>
+                </tr>
+                <tr>
+                    <td><code>#readOnly</code></td>
+                    <td>Label</td>
+                    <td>Prevent note editing</td>
+                </tr>
+                <tr>
+                    <td><code>#workspace</code></td>
+                    <td>Label</td>
+                    <td>Workspace organization</td>
+                </tr>
+                <tr>
+                    <td><code>~template</code></td>
+                    <td>Relation</td>
+                    <td>Note template reference</td>
+                </tr>
+                <tr>
+                    <td><code>~renderNote</code></td>
+                    <td>Relation</td>
+                    <td>Custom rendering</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="entity-box">
+        <h3>BRevision - Version History</h3>
+        <p><strong>Location:</strong> <code>/apps/server/src/becca/entities/brevision.ts</code></p>
+        
+        <p>Revisions provide version history and recovery capabilities.</p>
+        
+        <h4>Revision Strategy</h4>
+        <ul>
+            <li>Created automatically on significant changes</li>
+            <li>Configurable retention period</li>
+            <li>Day/week/month/year retention rules</li>
+            <li>Protected note revisions are encrypted</li>
+        </ul>
+    </div>
+    
+    <div class="entity-box">
+        <h3>BOption - Application Configuration</h3>
+        <p><strong>Location:</strong> <code>/apps/server/src/becca/entities/boption.ts</code></p>
+        
+        <p>Options store application and user preferences.</p>
+        
+        <h4>Common Options</h4>
+        <pre><code>// Theme settings
+setOption("theme", "dark");
+
+// Protected session timeout
+setOption("protectedSessionTimeout", "600");
+
+// Sync settings
+setOption("syncServerHost", "https://sync.server");</code></pre>
+    </div>
+    
+    <h2>Entity Relationships</h2>
+    
+    <h3>Parent-Child Hierarchy</h3>
+    <pre><code>// Single parent
+childNote.setParent(parentNote.noteId);
+
+// Multiple parents (cloning)
+childNote.cloneTo(parent1.noteId);
+childNote.cloneTo(parent2.noteId);
+
+// Get parents
+const parents = childNote.getParentNotes();
+
+// Get children
+const children = parentNote.getChildNotes();</code></pre>
+    
+    <h3>Attribute Relationships</h3>
+    <pre><code>// Direct relations
+note.addRelation("author", authorNote.noteId);
+
+// Bidirectional relations
+note1.addRelation("related", note2.noteId);
+note2.addRelation("related", note1.noteId);
+
+// Get related notes
+const related = note.getRelations("related");</code></pre>
+    
+    <h2>Best Practices</h2>
+    
+    <h3>Entity Creation</h3>
+    <pre><code>// Always use transactions for multiple operations
+sql.transactional(() => {
+    const note = new BNote({...});
+    note.save();
+    
+    note.addLabel("status", "draft");
+    note.addRelation("template", templateId);
+});</code></pre>
+    
+    <h3>Entity Updates</h3>
+    <pre><code>// Check existence before update
+const note = becca.getNote(noteId);
+if (note) {
+    note.title = "Updated";
+    note.save();
+}</code></pre>
+    
+    <h3>Querying</h3>
+    <pre><code>// Use indexed queries
+const attrs = becca.findAttributes("label", "task");
+
+// Avoid N+1 queries
+const noteIds = [...];
+const notes = becca.getNotes(noteIds); // Single batch</code></pre>
+</body>
+</html>

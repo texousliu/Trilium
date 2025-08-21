@@ -79,7 +79,7 @@ body {
     height: unset !important;
     overflow: visible;
     position: unset;
-    /* https://github.com/zadam/trilium/issues/3202 */
+    /* https://github.com/TriliumNext/Trilium/issues/3202 */
     color: black;
 }
 

@@ -27,7 +27,7 @@ function decrypt(key: any, cipherText: any) {
 
     try {
         const cipherTextBufferWithIv = Buffer.from(cipherText.toString(), "base64");
-        // old encrypted data can have IV of length 13, see some details here: https://github.com/zadam/trilium/issues/3017
+        // old encrypted data can have IV of length 13, see some details here: https://github.com/TriliumNext/Trilium/issues/3017
         const ivLength = cipherTextBufferWithIv.length % 16 === 0 ? 16 : 13;
         const iv = cipherTextBufferWithIv.slice(0, ivLength);
 
@@ -48,7 +48,7 @@ function decrypt(key: any, cipherText: any) {
 
         return payload;
     } catch (e: any) {
-        // recovery from https://github.com/zadam/trilium/issues/510
+        // recovery from https://github.com/TriliumNext/Trilium/issues/510
         if (e.message?.includes("WRONG_FINAL_BLOCK_LENGTH") || e.message?.includes("wrong final block length")) {
             console.log("Caught WRONG_FINAL_BLOCK_LENGTH, returning cipherText instead");
             return cipherText;

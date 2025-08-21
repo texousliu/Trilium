@@ -48,13 +48,13 @@ Trilium Notes 是一款免費且開源、跨平台的階層式筆記應用程式
 
 ## ⚠️ 為什麼是 TriliumNext？
 
-[原本的 Trilium 專案目前處於維護模式](https://github.com/zadam/trilium/issues/4620)。
+[原本的 Trilium 專案目前處於維護模式](https://github.com/TriliumNext/Trilium/issues/4620)。
 
 ### 從 Trilium 遷移？
 
 從既有的 zadam/Trilium 例項遷移到 TriliumNext/Notes 不需要特別的遷移步驟。只要[照一般方式安裝 TriliumNext/Notes](#-安裝)，它就會直接使用你現有的資料庫。
 
-版本至多至 [v0.90.4](https://github.com/TriliumNext/Notes/releases/tag/v0.90.4) 與 zadam/trilium 最新版本 [v0.63.7](https://github.com/zadam/trilium/releases/tag/v0.63.7) 相容。之後的 TriliumNext 版本已提升同步版本號（與上述不再相容）。
+版本至多至 [v0.90.4](https://github.com/TriliumNext/Notes/releases/tag/v0.90.4) 與 TriliumNext/Trilium 最新版本 [v0.63.7](https://github.com/TriliumNext/Trilium/releases/tag/v0.63.7) 相容。之後的 TriliumNext 版本已提升同步版本號（與上述不再相容）。
 
 ## 📖 文件
 

@@ -9,7 +9,7 @@ Vedi [fotografie](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) per u
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
 
 ## ⚠️ Perchè TriliumNext?
-[Il progetto originale Trilium è in modalità di manutenzione](https://github.com/zadam/trilium/issues/4620)
+[Il progetto originale Trilium è in modalità di manutenzione](https://github.com/TriliumNext/Trilium/issues/4620)
 
 ## 🗭 Discuti con noi
 Sentiti libero di unirti alle nostre discussioni ufficiali e alla nostra comunità. Siamo concentrati sullo sviluppo di Trilium e ci piacerebbe sapere quali funzioni, suggerimenti o eventuali problemi hai!

@@ -99,7 +99,7 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
     async doRefresh(note: FNote) {
         // we load CKEditor also for read only notes because they contain content styles required for correct rendering of even read only notes
         // we could load just ckeditor-content.css but that causes CSS conflicts when both build CSS and this content CSS is loaded at the same time
-        // (see https://github.com/zadam/trilium/issues/1590 for example of such conflict)
+        // (see https://github.com/TriliumNext/Trilium/issues/1590 for example of such conflict)
         await import("@triliumnext/ckeditor5");
 
         this.onLanguageChanged();

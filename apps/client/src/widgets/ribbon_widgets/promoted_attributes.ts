@@ -16,7 +16,7 @@ const TPL = /*html*/`
 <div class="promoted-attributes-widget">
     <style>
     body.mobile .promoted-attributes-widget {
-        /* https://github.com/zadam/trilium/issues/4468 */
+        /* https://github.com/TriliumNext/Trilium/issues/4468 */
         flex-shrink: 0.4;
         overflow: auto;
     }

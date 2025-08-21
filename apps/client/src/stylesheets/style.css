@@ -40,7 +40,7 @@
 }
 
 html {
-    /* this fixes FF filter vs. position fixed bug: https://github.com/zadam/trilium/issues/233 */
+    /* this fixes FF filter vs. position fixed bug: https://github.com/TriliumNext/Trilium/issues/233 */
     height: 100vh;
     overscroll-behavior: none;
 }
@@ -543,7 +543,7 @@ button.btn-sm {
     transform: translateX(7px);
     color: var(--muted-text-color);
     background-color: var(--main-background-color);
-    /* Making this narrower because https://github.com/zadam/trilium/issues/502 (problem only in smaller font sizes) */
+    /* Making this narrower because https://github.com/TriliumNext/Trilium/issues/502 (problem only in smaller font sizes) */
     min-width: 0;
     padding: 0;
     z-index: 1000;
@@ -1117,7 +1117,7 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
     padding: 10px;
     border-radius: 10px;
     background-color: var(--accented-background-color);
-    display: flex; /* see https://github.com/zadam/trilium/issues/1590 */
+    display: flex; /* see https://github.com/TriliumNext/Trilium/issues/1590 */
 }
 
 .include-note.ck-placeholder::before {
@@ -1251,7 +1251,7 @@ body.desktop li.dropdown-submenu:hover > ul.dropdown-menu {
     left: calc(100% - 2px); /* -2px, otherwise there's a small gap between menu and submenu where the hover can disappear */
     margin-top: -10px;
     min-width: 15rem;
-    /* to make submenu scrollable https://github.com/zadam/trilium/issues/3136 */
+    /* to make submenu scrollable https://github.com/TriliumNext/Trilium/issues/3136 */
     max-height: 600px;
     overflow: auto;
 }

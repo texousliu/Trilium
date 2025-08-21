@@ -1,0 +1,119 @@
+<h1>Anthropic Configuration Guide</h1>
+
+<h2>Overview</h2>
+<p>Anthropic provides access to the Claude 3 family of models, known for their strong analytical capabilities, safety features, and large context windows. This guide will help you configure Anthropic as your AI provider in Trilium Notes.</p>
+
+<h2>Getting Started</h2>
+
+<h3>Step 1: Create an Anthropic Account</h3>
+<ol>
+  <li>Visit <a href="https://console.anthropic.com/signup" target="_blank">Anthropic Console</a></li>
+  <li>Sign up with your email address</li>
+  <li>Verify your email</li>
+  <li>Complete account setup and billing information</li>
+</ol>
+
+<h3>Step 2: Generate an API Key</h3>
+<ol>
+  <li>Log into the <a href="https://console.anthropic.com/" target="_blank">Anthropic Console</a></li>
+  <li>Navigate to <strong>API Keys</strong> section</li>
+  <li>Click <strong>"Create Key"</strong></li>
+  <li>Name your key (e.g., "Trilium Integration")</li>
+  <li><strong>Important:</strong> Copy and save the key immediately</li>
+  <li>Store securely - the key won't be shown again</li>
+</ol>
+
+<div class="admonition warning">
+  <p class="admonition-title">Security Notice</p>
+  <p>Your API key provides full access to your Anthropic account. Never share it publicly or commit it to version control.</p>
+</div>
+
+<h3>Step 3: Configure in Trilium</h3>
+<ol>
+  <li>Open Trilium Notes</li>
+  <li>Go to <strong>Options ’ AI/LLM</strong></li>
+  <li>Enable AI features</li>
+  <li>Select <strong>Anthropic</strong> from the provider dropdown</li>
+  <li>Enter your configuration:
+    <ul>
+      <li><strong>API Key:</strong> Your Anthropic API key (sk-ant-...)</li>
+      <li><strong>Base URL:</strong> <code>https://api.anthropic.com</code> (default)</li>
+      <li><strong>Default Model:</strong> Choose from available Claude models</li>
+    </ul>
+  </li>
+  <li>Click <strong>Test Connection</strong> to verify</li>
+</ol>
+
+<h2>Available Models</h2>
+
+<h3>Claude 3 Model Family</h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Model</th>
+      <th>Best For</th>
+      <th>Context Window</th>
+      <th>Speed</th>
+      <th>Cost (per 1M tokens)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>claude-3-opus-20240229</code></td>
+      <td>Most capable, complex analysis, research</td>
+      <td>200,000 tokens</td>
+      <td>Slower</td>
+      <td>$15 input / $75 output</td>
+    </tr>
+    <tr>
+      <td><code>claude-3-sonnet-20240229</code></td>
+      <td>Balanced performance, general use</td>
+      <td>200,000 tokens</td>
+      <td>Medium</td>
+      <td>$3 input / $15 output</td>
+    </tr>
+    <tr>
+      <td><code>claude-3-haiku-20240307</code></td>
+      <td>Fast responses, simple tasks</td>
+      <td>200,000 tokens</td>
+      <td>Fastest</td>
+      <td>$0.25 input / $1.25 output</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Configuration Options</h2>
+
+<h3>Model Parameters</h3>
+<ul>
+  <li><strong>Temperature (0.0-1.0):</strong> Controls response randomness
+    <ul>
+      <li>0.0-0.3: Precise, consistent responses</li>
+      <li>0.4-0.7: Balanced creativity and accuracy</li>
+      <li>0.8-1.0: Creative, varied outputs</li>
+    </ul>
+  </li>
+  <li><strong>Max Tokens:</strong> Maximum response length
+    <ul>
+      <li>Default: 4096 tokens</li>
+      <li>Maximum: Model-dependent (up to 200K)</li>
+    </ul>
+  </li>
+</ul>
+
+<h2>Best Practices</h2>
+
+<h3>Prompt Engineering for Claude</h3>
+<ul>
+  <li><strong>Be Direct:</strong> Claude responds well to clear, direct instructions</li>
+  <li><strong>Use XML Tags:</strong> Structure complex prompts with XML-like tags for better organization</li>
+  <li><strong>Provide Examples:</strong> Claude excels at following patterns from examples</li>
+  <li><strong>Think Step-by-Step:</strong> For complex tasks, ask Claude to reason through steps</li>
+</ul>
+
+<h2>Additional Resources</h2>
+<ul>
+  <li><a href="https://docs.anthropic.com/" target="_blank">Anthropic API Documentation</a></li>
+  <li><a href="https://console.anthropic.com/" target="_blank">Anthropic Console</a></li>
+  <li><a href="https://www.anthropic.com/claude" target="_blank">Claude Model Information</a></li>
+</ul>

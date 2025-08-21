@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend Script Development - Trilium Developer Guide</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .content {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-bottom: 1px solid #ecf0f1;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #555;
+            margin-top: 25px;
+        }
+        pre {
+            background: #f8f8f8;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 16px;
+            overflow-x: auto;
+        }
+        code {
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Courier New', monospace;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+        }
+        blockquote {
+            border-left: 4px solid #3498db;
+            margin: 0;
+            padding-left: 20px;
+            color: #666;
+            font-style: italic;
+        }
+        ul, ol {
+            margin: 16px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 4px;
+            padding: 12px;
+            margin: 20px 0;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #17a2b8;
+            border-radius: 4px;
+            padding: 12px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Frontend Script Development Guide</h1>
+
+<p>This guide covers developing frontend scripts in Trilium Notes. Frontend scripts run in the browser context and can interact with the UI, modify behavior, and create custom functionality.</p>
+
+<h2>Prerequisites</h2>
+
+<p>- JavaScript/TypeScript knowledge
+- Understanding of browser APIs and DOM manipulation
+- Basic knowledge of Trilium's note system
+- Familiarity with async/await patterns</p>
+
+<h2>Getting Started</h2>
+
+<h3>Creating a Frontend Script</h3>
+
+<li>Create a new code note with type "JS Frontend"</li>
+<li>Add the <code>#run=frontendStartup</code> label to run on startup</li>
+<li>Write your JavaScript code</li>
+
+<pre><code class="language-javascript">// Basic frontend script
+api.addButtonToToolbar({
+    title: 'My Custom Button',
+    icon: 'bx bx-star',
+    action: async () => {
+        await api.showMessage('Hello from custom script!');
+    }
+});
+</code></pre>
+
+<h3>Script Execution Context</h3>
+
+<p>Frontend scripts run in the browser with access to:
+- Trilium's Frontend API (<code>api</code> global object)
+- Browser APIs (DOM, fetch, localStorage, etc.)
+- jQuery (<code>$</code> global)
+- All loaded libraries</p>
+
+<h2>Frontend API Reference</h2>
+
+<h3>Core API Object</h3>
+
+<p>The <code>api</code> object is globally available in all frontend scripts:</p>
+
+<pre><code class="language-javascript">// Access current note
+const currentNote = api.getActiveContextNote();
+
+<p>// Get note by ID
+const note = await api.getNote('noteId123');</p>
+
+<p>// Search notes
+const results = await api.searchForNotes('type:text @label=important');
+</code></pre></p>
+
+<h3>Note Operations</h3>
+
+<p>#### Reading Notes</p>
+
+<pre><code class="language-javascript">// Get active note
+const activeNote = api.getActiveContextNote();
+console.log('Current note:', activeNote.title);
+
+<p>// Get note by ID
+const note = await api.getNote('noteId123');</p>
+
+<p>// Get note content
+const content = await note.getContent();</p>
+
+<p>// Get note attributes
+const attributes = note.getAttributes();
+const labels = note.getLabels();
+const relations = note.getRelations();</p>
+
+<p>// Get child notes
+const children = await note.getChildNotes();</p>
+
+<p>// Get parent notes
+const parents = await note.getParentNotes();
+</code></pre></p>
+
+<p>#### Creating Notes</p>
+
+<pre><code class="language-javascript">// Create a simple note
+const newNote = await api.createNote(
+    parentNoteId,
+    'New Note Title',
+    'Note content here'
+);
+
+<p>// Create note with options
+const note = await api.createNote(
+    parentNoteId,
+    'Advanced Note',
+    '<p>HTML content</p>',
+    {
+        type: 'text',
+        mime: 'text/html',
+        isProtected: false
+    }
+);</p>
+
+<p>// Create data note for storing JSON
+const dataNote = await api.createDataNote(
+    parentNoteId,
+    'config',
+    { key: 'value', settings: {} }
+);
+</code></pre></p>
+
+<p>#### Modifying Notes</p>
+
+<pre><code class="language-javascript">// Update note title
+await note.setTitle('New Title');
+
+<p>// Update note content
+await note.setContent('New content');</p>
+
+<p>// Add label
+await note.addLabel('status', 'completed');</p>
+
+<p>// Add relation
+await note.addRelation('relatedTo', targetNoteId);</p>
+
+<p>// Remove attribute
+await note.removeAttribute(attributeId);</p>
+
+<p>// Toggle label
+await note.toggleLabel('archived');
+await note.toggleLabel('priority', 'high');
+</code></pre></p>
+
+<h3>UI Interaction</h3>
+
+<p>#### Showing Messages</p>
+
+<pre><code class="language-javascript">// Simple message
+await api.showMessage('Operation completed');
+
+<p>// Error message
+await api.showError('Something went wrong');</p>
+
+<p>// Message with duration
+await api.showMessage('Saved!', 3000);</p>
+
+<p>// Persistent message
+const toast = await api.showPersistent({
+    title: 'Processing',
+    message: 'Please wait...',
+    icon: 'loader'
+});</p>
+
+<p>// Close persistent message
+toast.close();
+</code></pre></p>
+
+<p>#### Dialogs</p>
+
+<pre><code class="language-javascript">// Confirmation dialog
+const confirmed = await api.showConfirmDialog({
+    title: 'Delete Note?',
+    message: 'This action cannot be undone.',
+    okButtonLabel: 'Delete',
+    cancelButtonLabel: 'Keep'
+});
+
+<p>if (confirmed) {
+    // Proceed with deletion
+}</p>
+
+<p>// Prompt dialog
+const input = await api.showPromptDialog({
+    title: 'Enter Name',
+    message: 'Please enter a name for the new note:',
+    defaultValue: 'Untitled'
+});</p>
+
+<p>if (input) {
+    await api.createNote(parentId, input, '');
+}
+</code></pre></p>
+
+<h3>Custom Commands</h3>
+
+<p>#### Adding Menu Items</p>
+
+<pre><code class="language-javascript">// Add to note context menu
+api.addContextMenuItemToNotes({
+    title: 'Copy Note ID',
+    icon: 'bx bx-copy',
+    handler: async (note) => {
+        await navigator.clipboard.writeText(note.noteId);
+        await api.showMessage('Note ID copied');
+    }
+});
+
+<p>// Add to toolbar
+api.addButtonToToolbar({
+    title: 'Quick Action',
+    icon: 'bx bx-bolt',
+    shortcut: 'ctrl+shift+q',
+    action: async () => {
+        // Your action here
+    }
+});
+</code></pre></p>
+
+<p>#### Registering Commands</p>
+
+<pre><code class="language-javascript">// Register a global command
+api.bindGlobalShortcut('ctrl+shift+t', async () => {
+    const note = api.getActiveContextNote();
+    const timestamp = new Date().toISOString();
+    await note.addLabel('lastAccessed', timestamp);
+    await api.showMessage('Timestamp added');
+});
+
+<p>// Add command palette action
+api.addCommandPaletteItem({
+    name: 'Toggle Dark Mode',
+    description: 'Switch between light and dark themes',
+    action: async () => {
+        const currentTheme = await api.getOption('theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        await api.setOption('theme', newTheme);
+    }
+});
+</code></pre></p>
+
+<h3>Event Handling</h3>
+
+<p>#### Listening to Events</p>
+
+<pre><code class="language-javascript">// Note switch event
+api.onNoteChange(async ({ note, previousNote }) => {
+    console.log(<code>Switched from ${previousNote?.title} to ${note.title}</code>);
+    
+    // Update custom UI
+    updateCustomPanel(note);
+});
+
+<p>// Content change event
+api.onNoteContentChange(async ({ note }) => {
+    console.log(<code>Content changed for ${note.title}</code>);
+    
+    // Auto-save to external service
+    await syncToExternalService(note);
+});</p>
+
+<p>// Attribute change event
+api.onAttributeChange(async ({ note, attribute }) => {
+    if (attribute.name === 'status' && attribute.value === 'completed') {
+        await note.addLabel('completedDate', new Date().toISOString());
+    }
+});
+</code></pre></p>
+
+<p>#### Custom Events</p>
+
+<pre><code class="language-javascript">// Trigger custom event
+api.triggerEvent('myCustomEvent', { data: 'value' });
+
+<p>// Listen to custom event
+api.onCustomEvent('myCustomEvent', async (data) => {
+    console.log('Custom event received:', data);
+});
+</code></pre></p>
+
+<h3>Working with Widgets</h3>
+
+<pre><code class="language-javascript">// Access widget system
+const widget = api.getWidget('NoteTreeWidget');
+
+<p>// Refresh widget
+await widget.refresh();</p>
+
+<p>// Create custom widget container
+const container = api.createCustomWidget({
+    title: 'My Widget',
+    position: 'left',
+    render: async () => {
+        return <code>
+            <div class="custom-widget">
+                <h3>Custom Content</h3>
+                <button onclick="handleClick()">Click Me</button>
+            </div>
+        </code>;
+    }
+});
+</code></pre></p>
+
+<h2>Complete Example: Auto-Formatting Script</h2>
+
+<p>Here's a comprehensive example that automatically formats notes based on their type:</p>
+
+<pre><code class="language-javascript">/<em></em>
+ * Auto-Formatting Script
+ * Automatically formats notes based on their type and content
+ */
+
+<p>class NoteFormatter {
+    constructor() {
+        this.setupEventListeners();
+        this.registerCommands();
+    }
+    
+    setupEventListeners() {
+        // Format on note save
+        api.onNoteContentChange(async ({ note }) => {
+            if (await this.shouldAutoFormat(note)) {
+                await this.formatNote(note);
+            }
+        });
+        
+        // Format when label added
+        api.onAttributeChange(async ({ note, attribute }) => {
+            if (attribute.type === 'label' && 
+                attribute.name === 'autoFormat' && 
+                attribute.value === 'true') {
+                await this.formatNote(note);
+            }
+        });
+    }
+    
+    registerCommands() {
+        // Add toolbar button
+        api.addButtonToToolbar({
+            title: 'Format Note',
+            icon: 'bx bx-text',
+            shortcut: 'ctrl+shift+f',
+            action: async () => {
+                const note = api.getActiveContextNote();
+                await this.formatNote(note);
+                await api.showMessage('Note formatted');
+            }
+        });
+        
+        // Add context menu item
+        api.addContextMenuItemToNotes({
+            title: 'Auto-Format',
+            icon: 'bx bx-magic',
+            handler: async (note) => {
+                await this.formatNote(note);
+            }
+        });
+    }
+    
+    async shouldAutoFormat(note) {
+        // Check if note has autoFormat label
+        const labels = note.getLabels();
+        return labels.some(l => l.name === 'autoFormat' && l.value === 'true');
+    }
+    
+    async formatNote(note) {
+        const type = note.type;
+        
+        switch (type) {
+            case 'text':
+                await this.formatTextNote(note);
+                break;
+            case 'code':
+                await this.formatCodeNote(note);
+                break;
+            case 'book':
+                await this.formatBookNote(note);
+                break;
+        }
+    }
+    
+    async formatTextNote(note) {
+        let content = await note.getContent();
+        
+        // Apply formatting rules
+        content = this.addTableOfContents(content);
+        content = this.formatHeadings(content);
+        content = this.formatLists(content);
+        content = this.addMetadata(content, note);
+        
+        await note.setContent(content);
+    }
+    
+    async formatCodeNote(note) {
+        const content = await note.getContent();
+        const language = note.getLabelValue('language') || 'javascript';
+        
+        // Add syntax highlighting hints
+        if (!note.hasLabel('language')) {
+            await note.addLabel('language', language);
+        }
+        
+        // Format based on language
+        if (language === 'javascript' || language === 'typescript') {
+            await this.formatJavaScript(note, content);
+        } else if (language === 'python') {
+            await this.formatPython(note, content);
+        }
+    }
+    
+    async formatBookNote(note) {
+        // Organize child notes
+        const children = await note.getChildNotes();
+        
+        // Sort chapters
+        const chapters = children.filter(n => n.hasLabel('chapter'));
+        chapters.sort((a, b) => {
+            const aNum = parseInt(a.getLabelValue('chapter')) || 999;
+            const bNum = parseInt(b.getLabelValue('chapter')) || 999;
+            return aNum - bNum;
+        });
+        
+        // Generate table of contents
+        const toc = this.generateBookTOC(chapters);
+        await note.setContent(toc);
+    }
+    
+    addTableOfContents(content) {
+        const $content = $('<div>').html(content);
+        const headings = $content.find('h1, h2, h3');
+        
+        if (headings.length < 3) return content;
+        
+        let toc = '<div class="table-of-contents">\n<h2>Table of Contents</h2>\n<ul>\n';
+        
+        headings.each((i, heading) => {
+            const $h = $(heading);
+            const level = parseInt(heading.tagName.substring(1));
+            const text = $h.text();
+            const id = <code>heading-${i}</code>;
+            
+            $h.attr('id', id);
+            
+            const indent = '  '.repeat(level - 1);
+            toc += <code>${indent}<ul><li><a href="#${id}">${text}</a></li>\n</code>;
+        });
+        
+        toc += '</ul>\n</div>\n\n';
+        
+        return toc + $content.html();
+    }
+    
+    formatHeadings(content) {
+        const $content = $('<div>').html(content);
+        
+        // Ensure proper heading hierarchy
+        let lastLevel = 0;
+        $content.find('h1, h2, h3, h4, h5, h6').each((i, heading) => {
+            const $h = $(heading);
+            const level = parseInt(heading.tagName.substring(1));
+            
+            // Fix heading jumps (e.g., h1 -> h3 becomes h1 -> h2)
+            if (level > lastLevel + 1) {
+                const newTag = <code>h${lastLevel + 1}</code>;
+                const $newHeading = $(<code><${newTag}></code>).html($h.html());
+                $h.replaceWith($newHeading);
+            }
+            
+            lastLevel = level;
+        });
+        
+        return $content.html();
+    }
+    
+    formatLists(content) {
+        const $content = $('<div>').html(content);
+        
+        // Add classes to lists for styling
+        $content.find('ul').addClass('formatted-list');
+        $content.find('ol').addClass('formatted-list numbered');
+        
+        // Add checkboxes to task lists
+        $content.find('li').each((i, li) => {
+            const $li = $(li);
+            const text = $li.text();
+            
+            if (text.startsWith('[ ] ')) {
+                $li.html(<code><input type="checkbox"> ${text.substring(4)}</code>);
+                $li.addClass('task-item');
+            } else if (text.startsWith('[x] ')) {
+                $li.html(<code><input type="checkbox" checked> ${text.substring(4)}</code>);
+                $li.addClass('task-item completed');
+            }
+        });
+        
+        return $content.html();
+    }
+    
+    addMetadata(content, note) {
+        const metadata = {
+            lastFormatted: new Date().toISOString(),
+            wordCount: content.replace(/<[^>]*>/g, '').split(/\s+/).length,
+            noteId: note.noteId
+        };
+        
+        const metadataHtml = <code>
+            <div class="note-metadata" style="display:none;">
+                ${JSON.stringify(metadata)}
+            </div>
+        </code>;
+        
+        return content + metadataHtml;
+    }
+    
+    async formatJavaScript(note, content) {
+        // Add JSDoc comments if missing
+        const lines = content.split('\n');
+        const formatted = [];
+        
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            
+            // Detect function declarations
+            if (line.match(/^\s*(async\s+)?function\s+\w+/)) {
+                if (i === 0 || !lines[i-1].includes('*/')) {
+                    formatted.push('/<em></em>');
+                    formatted.push(' * [Description]');
+                    formatted.push(' */');
+                }
+            }
+            
+            formatted.push(line);
+        }
+        
+        await note.setContent(formatted.join('\n'));
+    }
+    
+    async formatPython(note, content) {
+        // Add docstrings if missing
+        const lines = content.split('\n');
+        const formatted = [];
+        
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            
+            // Detect function definitions
+            if (line.match(/^\s*def\s+\w+/)) {
+                formatted.push(line);
+                if (i + 1 < lines.length && !lines[i + 1].includes('"""')) {
+                    formatted.push('    """[Description]"""');
+                }
+            } else {
+                formatted.push(line);
+            }
+        }
+        
+        await note.setContent(formatted.join('\n'));
+    }
+    
+    generateBookTOC(chapters) {
+        let toc = '<h1>Table of Contents</h1>\n<ol>\n';
+        
+        for (const chapter of chapters) {
+            const num = chapter.getLabelValue('chapter');
+            const title = chapter.title;
+            toc += <code>  <li><a href="#${chapter.noteId}">${num}. ${title}</a></li></ul>\n</code>;
+        }
+        
+        toc += '</ol>';
+        return toc;
+    }
+}</p>
+
+<p>// Initialize formatter
+const formatter = new NoteFormatter();</p>
+
+<p>// Add settings UI
+api.addSettingsTab({
+    tabId: 'autoFormat',
+    title: 'Auto-Format',
+    render: () => {
+        return <code>
+            <div class="auto-format-settings">
+                <h3>Auto-Format Settings</h3>
+                
+                <label>
+                    <input type="checkbox" id="enableAutoFormat">
+                    Enable auto-formatting
+                </label>
+                
+                <label>
+                    <input type="checkbox" id="formatOnSave">
+                    Format on save
+                </label>
+                
+                <label>
+                    <input type="checkbox" id="addTOC">
+                    Auto-add table of contents
+                </label>
+                
+                <h4>Format Rules</h4>
+                <textarea id="formatRules" rows="10">
+{
+  "headings": true,
+  "lists": true,
+  "tables": true,
+  "codeBlocks": true
+}
+                </textarea>
+                
+                <button onclick="saveFormatSettings()">Save Settings</button>
+            </div>
+        </code>;
+    }
+});</p>
+
+<p>// Save settings function
+window.saveFormatSettings = async () => {
+    const settings = {
+        enableAutoFormat: document.getElementById('enableAutoFormat').checked,
+        formatOnSave: document.getElementById('formatOnSave').checked,
+        addTOC: document.getElementById('addTOC').checked,
+        rules: JSON.parse(document.getElementById('formatRules').value)
+    };
+    
+    await api.setOption('autoFormatSettings', JSON.stringify(settings));
+    await api.showMessage('Settings saved');
+};</p>
+
+<p>console.log('Auto-formatting script loaded');
+</code></pre></p>
+
+<h2>Advanced Techniques</h2>
+
+<h3>Working with External APIs</h3>
+
+<pre><code class="language-javascript">// Fetch data from external API
+async function fetchExternalData() {
+    try {
+        const response = await fetch('https://api.example.com/data', {
+            headers: {
+                'Authorization': <code>Bearer ${await api.getOption('apiKey')}</code>
+            }
+        });
+        
+        const data = await response.json();
+        
+        // Store in note
+        const dataNote = await api.createDataNote(
+            'root',
+            'External Data',
+            data
+        );
+        
+        await api.showMessage('Data imported successfully');
+        
+    } catch (error) {
+        await api.showError(<code>Failed to fetch data: ${error.message}</code>);
+    }
+}
+</code></pre>
+
+<h3>State Management</h3>
+
+<pre><code class="language-javascript">// Create a state manager
+class StateManager {
+    constructor() {
+        this.state = {};
+        this.subscribers = [];
+        this.loadState();
+    }
+    
+    async loadState() {
+        const stored = await api.getOption('scriptState');
+        if (stored) {
+            this.state = JSON.parse(stored);
+        }
+    }
+    
+    async setState(key, value) {
+        this.state[key] = value;
+        await this.saveState();
+        this.notifySubscribers(key, value);
+    }
+    
+    getState(key) {
+        return this.state[key];
+    }
+    
+    async saveState() {
+        await api.setOption('scriptState', JSON.stringify(this.state));
+    }
+    
+    subscribe(callback) {
+        this.subscribers.push(callback);
+    }
+    
+    notifySubscribers(key, value) {
+        this.subscribers.forEach(cb => cb(key, value));
+    }
+}
+
+<p>const state = new StateManager();
+</code></pre></p>
+
+<h3>Custom UI Components</h3>
+
+<pre><code class="language-javascript">// Create custom panel
+class CustomPanel {
+    constructor() {
+        this.createPanel();
+    }
+    
+    createPanel() {
+        const $panel = $(<code>
+            <div id="custom-panel" class="custom-panel">
+                <div class="panel-header">
+                    <h3>Custom Panel</h3>
+                    <button class="close-btn">×</button>
+                </div>
+                <div class="panel-body">
+                    <!-- Content here -->
+                </div>
+            </div>
+        </code>);
+        
+        $('body').append($panel);
+        
+        // Add styles
+        $('<style>').text(<code>
+            .custom-panel {
+                position: fixed;
+                right: 20px;
+                top: 80px;
+                width: 300px;
+                background: var(--main-background-color);
+                border: 1px solid var(--main-border-color);
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                z-index: 1000;
+            }
+            
+            .panel-header {
+                padding: 10px;
+                border-bottom: 1px solid var(--main-border-color);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .panel-body {
+                padding: 15px;
+                max-height: 400px;
+                overflow-y: auto;
+            }
+            
+            .close-btn {
+                background: none;
+                border: none;
+                font-size: 20px;
+                cursor: pointer;
+            }
+        </code>).appendTo('head');
+        
+        // Bind events
+        $panel.find('.close-btn').on('click', () => {
+            $panel.hide();
+        });
+    }
+    
+    show() {
+        $('#custom-panel').show();
+    }
+    
+    hide() {
+        $('#custom-panel').hide();
+    }
+    
+    setContent(html) {
+        $('#custom-panel .panel-body').html(html);
+    }
+}
+
+<p>const panel = new CustomPanel();
+</code></pre></p>
+
+<h2>Performance Optimization</h2>
+
+<h3>Debouncing</h3>
+
+<pre><code class="language-javascript">// Debounce function calls
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+<p>// Usage
+const debouncedSearch = debounce(async (query) => {
+    const results = await api.searchForNotes(query);
+    displayResults(results);
+}, 300);</p>
+
+<p>// Input handler
+$('#search-input').on('input', (e) => {
+    debouncedSearch(e.target.value);
+});
+</code></pre></p>
+
+<h3>Caching</h3>
+
+<pre><code class="language-javascript">// Implement caching for expensive operations
+class CacheManager {
+    constructor(maxAge = 60000) { // 1 minute default
+        this.cache = new Map();
+        this.maxAge = maxAge;
+    }
+    
+    set(key, value) {
+        this.cache.set(key, {
+            value,
+            timestamp: Date.now()
+        });
+    }
+    
+    get(key) {
+        const item = this.cache.get(key);
+        if (!item) return null;
+        
+        if (Date.now() - item.timestamp > this.maxAge) {
+            this.cache.delete(key);
+            return null;
+        }
+        
+        return item.value;
+    }
+    
+    clear() {
+        this.cache.clear();
+    }
+}
+
+<p>const cache = new CacheManager();</p>
+
+<p>// Use cache for API calls
+async function getCachedNote(noteId) {
+    let note = cache.get(noteId);
+    if (!note) {
+        note = await api.getNote(noteId);
+        cache.set(noteId, note);
+    }
+    return note;
+}
+</code></pre></p>
+
+<h2>Error Handling</h2>
+
+<pre><code class="language-javascript">// Global error handler for scripts
+window.addEventListener('error', async (event) => {
+    console.error('Script error:', event.error);
+    
+    // Log to note
+    const errorNote = await api.getNote('scriptErrorLog');
+    if (errorNote) {
+        const content = await errorNote.getContent();
+        const errorLog = <code>
+            <div class="error-entry">
+                <strong>${new Date().toISOString()}</strong><br>
+                ${event.error.message}<br>
+                <pre>${event.error.stack}</pre>
+            </div>
+        </code>;
+        await errorNote.setContent(content + errorLog);
+    }
+    
+    // Notify user
+    await api.showError('Script error occurred. Check error log.');
+});
+
+<p>// Wrap async operations
+async function safeExecute(func, fallback = null) {
+    try {
+        return await func();
+    } catch (error) {
+        console.error('Operation failed:', error);
+        await api.showError(<code>Operation failed: ${error.message}</code>);
+        return fallback;
+    }
+}</p>
+
+<p>// Usage
+const result = await safeExecute(
+    async () => await riskyOperation(),
+    defaultValue
+);
+</code></pre></p>
+
+<h2>Testing Frontend Scripts</h2>
+
+<pre><code class="language-javascript">// Simple test framework
+class TestRunner {
+    constructor() {
+        this.tests = [];
+        this.results = [];
+    }
+    
+    test(name, testFunc) {
+        this.tests.push({ name, testFunc });
+    }
+    
+    async run() {
+        console.log('Running tests...');
+        
+        for (const test of this.tests) {
+            try {
+                await test.testFunc();
+                this.results.push({
+                    name: test.name,
+                    status: 'passed'
+                });
+                console.log(<code>✓ ${test.name}</code>);
+            } catch (error) {
+                this.results.push({
+                    name: test.name,
+                    status: 'failed',
+                    error: error.message
+                });
+                console.error(<code>✗ ${test.name}: ${error.message}</code>);
+            }
+        }
+        
+        this.displayResults();
+    }
+    
+    displayResults() {
+        const passed = this.results.filter(r => r.status === 'passed').length;
+        const failed = this.results.filter(r => r.status === 'failed').length;
+        
+        console.log(<code>\nResults: ${passed} passed, ${failed} failed</code>);
+        
+        if (failed > 0) {
+            console.log('\nFailed tests:');
+            this.results
+                .filter(r => r.status === 'failed')
+                .forEach(r => console.log(<code>  - ${r.name}: ${r.error}</code>));
+        }
+    }
+}
+
+<p>// Write tests
+const runner = new TestRunner();</p>
+
+<p>runner.test('Note creation', async () => {
+    const note = await api.createNote('root', 'Test Note', 'Content');
+    if (!note.noteId) throw new Error('Note ID not set');
+    if (note.title !== 'Test Note') throw new Error('Title mismatch');
+});</p>
+
+<p>runner.test('Attribute handling', async () => {
+    const note = await api.getActiveContextNote();
+    await note.addLabel('test', 'value');
+    const label = note.getLabelValue('test');
+    if (label !== 'value') throw new Error('Label value mismatch');
+});</p>
+
+<p>// Run tests
+await runner.run();
+</code></pre></p>
+
+<h2>Best Practices</h2>
+
+<li><strong>Code Organization</strong></li>
+   - Use classes for complex functionality
+   - Separate concerns into modules
+   - Keep functions small and focused
+
+<li><strong>Performance</strong></li>
+   - Debounce expensive operations
+   - Cache frequently accessed data
+   - Use async/await properly
+
+<li><strong>Error Handling</strong></li>
+   - Always handle errors gracefully
+   - Provide meaningful error messages
+   - Log errors for debugging
+
+<li><strong>User Experience</strong></li>
+   - Show loading states
+   - Provide feedback for actions
+   - Ensure scripts don't block UI
+
+<li><strong>Security</strong></li>
+   - Validate user input
+   - Sanitize HTML content
+   - Be cautious with external APIs
+
+<h2>Troubleshooting</h2>
+
+<h3>Script Not Running</h3>
+- Check the <code>#run</code> label is set correctly
+- Verify syntax errors in console
+- Ensure script note is not archived
+
+<h3>API Methods Not Available</h3>
+- Check you're using correct API version
+- Verify method names and parameters
+- Consult API documentation
+
+<h3>Performance Issues</h3>
+- Profile script with browser dev tools
+- Implement caching
+- Optimize DOM operations
+
+<h3>Event Handlers Not Firing</h3>
+- Verify event names are correct
+- Check element selectors
+- Ensure elements exist when binding
+
+<h2>Next Steps</h2>
+
+<p>- Explore the Backend Script Development guide
+- Review existing scripts in the Trilium community
+- Experiment with the Script API documentation</p>
+    </div>
+</body>
+</html>

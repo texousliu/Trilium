@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Script API Cookbook</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            line-height: 1.6; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px; 
+        }
+        h1 { color: #2c3e50; border-bottom: 3px solid #8e44ad; padding-bottom: 10px; }
+        h2 { color: #34495e; margin-top: 40px; border-bottom: 2px solid #ecf0f1; padding-bottom: 5px; }
+        h3 { color: #7f8c8d; margin-top: 30px; }
+        h4 { color: #95a5a6; margin-top: 25px; }
+        pre { 
+            background: #2c3e50; 
+            color: #ecf0f1; 
+            padding: 20px; 
+            border-radius: 8px; 
+            overflow-x: auto; 
+            border-left: 4px solid #8e44ad;
+        }
+        code { 
+            background: #f4f4f4; 
+            padding: 3px 6px; 
+            border-radius: 4px; 
+            font-family: 'Courier New', Monaco, monospace; 
+            font-size: 0.9em;
+        }
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        .recipe-box {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #8e44ad;
+        }
+        .backend-script { border-left-color: #e74c3c; }
+        .frontend-script { border-left-color: #3498db; }
+        .example-box {
+            background: #f1f3f4;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        table { 
+            border-collapse: collapse; 
+            width: 100%; 
+            margin: 20px 0; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 12px; 
+            text-align: left; 
+        }
+        th { 
+            background: #8e44ad; 
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) { background: #f8f9fa; }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #f39c12;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #74c0fc;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #51cf66;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #28a745;
+        }
+        .toc {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .toc ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        .toc a {
+            text-decoration: none;
+            color: #495057;
+        }
+        .toc a:hover {
+            color: #8e44ad;
+        }
+        .use-case {
+            background: #f8f4ff;
+            border-left: 4px solid #8e44ad;
+            padding: 15px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Script API Cookbook</h1>
+    
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#backend-script-recipes">Backend Script Recipes</a></li>
+            <li><a href="#frontend-script-recipes">Frontend Script Recipes</a></li>
+            <li><a href="#common-patterns">Common Patterns</a></li>
+            <li><a href="#note-manipulation">Note Manipulation</a></li>
+            <li><a href="#attribute-operations">Attribute Operations</a></li>
+            <li><a href="#search-and-filtering">Search and Filtering</a></li>
+            <li><a href="#automation-examples">Automation Examples</a></li>
+            <li><a href="#integration-with-external-services">Integration with External Services</a></li>
+            <li><a href="#best-practices">Best Practices</a></li>
+        </ul>
+    </div>
+
+    <h2 id="introduction">Introduction</h2>
+    
+    <p>Trilium's Script API provides powerful automation capabilities through JavaScript code that runs either on the backend (Node.js) or frontend (browser). This cookbook contains practical recipes and patterns for common scripting tasks.</p>
+
+    <h3>Script Types</h3>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Environment</th>
+                <th>Access</th>
+                <th>Use Cases</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Backend Script</strong></td>
+                <td>Node.js</td>
+                <td>Full database, file system, network</td>
+                <td>Automation, data processing, integrations</td>
+            </tr>
+            <tr>
+                <td><strong>Frontend Script</strong></td>
+                <td>Browser</td>
+                <td>UI manipulation, user interaction</td>
+                <td>Custom widgets, UI enhancements</td>
+            </tr>
+            <tr>
+                <td><strong>Custom Widget</strong></td>
+                <td>Browser</td>
+                <td>Widget lifecycle, note context</td>
+                <td>Interactive components, visualizations</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Basic Script Structure</h3>
+    
+    <div class="recipe-box backend-script">
+        <h4>Backend Script:</h4>
+        <pre><code>// Access to api object is automatic
+const note = await api.getNoteWithLabel('todoList');
+const children = await note.getChildNotes();
+
+// Return value becomes script output
+return {
+    noteTitle: note.title,
+    childCount: children.length
+};</code></pre>
+    </div>
+
+    <div class="recipe-box frontend-script">
+        <h4>Frontend Script:</h4>
+        <pre><code>// Access to api object is automatic
+api.showMessage('Script executed!');
+
+// Manipulate UI
+const $button = $('&lt;button&gt;').text('Click Me').click(() => {
+    api.showMessage('Button clicked!');
+});
+
+$('body').append($button);</code></pre>
+    </div>
+
+    <h2 id="backend-script-recipes">Backend Script Recipes</h2>
+    
+    <h3>1. Daily Note Generator</h3>
+    
+    <div class="use-case">
+        <strong>Use Case:</strong> Automatically create daily notes with template content
+    </div>
+
+    <div class="recipe-box backend-script">
+        <pre><code>// #run=hourly
+
+async function createDailyNote() {
+    const today = api.dayjs().format('YYYY-MM-DD');
+    const dayNote = await api.getDayNote(today);
+    
+    // Check if content already exists
+    const content = await dayNote.getContent();
+    if (content && content.length > 100) {
+        return; // Already has content
+    }
+    
+    // Get template
+    const template = await api.getNoteWithLabel('dailyTemplate');
+    if (!template) {
+        await dayNote.setContent(`
+            &lt;h2&gt;📅 ${api.dayjs().format('dddd, MMMM D, YYYY')}&lt;/h2&gt;
+            
+            &lt;h3&gt;☀️ Morning Routine&lt;/h3&gt;
+            &lt;ul&gt;
+                &lt;li&gt;[ ] Morning meditation&lt;/li&gt;
+                &lt;li&gt;[ ] Exercise&lt;/li&gt;
+                &lt;li&gt;[ ] Review daily goals&lt;/li&gt;
+            &lt;/ul&gt;
+            
+            &lt;h3&gt;📋 Today's Tasks&lt;/h3&gt;
+            &lt;ul&gt;
+                &lt;li&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+            
+            &lt;h3&gt;📝 Notes&lt;/h3&gt;
+            &lt;p&gt;&lt;/p&gt;
+            
+            &lt;h3&gt;🌙 Evening Reflection&lt;/h3&gt;
+            &lt;p&gt;&lt;/p&gt;
+        `);
+    } else {
+        const templateContent = await template.getContent();
+        await dayNote.setContent(templateContent);
+    }
+    
+    // Add metadata
+    await dayNote.setLabel('type', 'daily');
+    await dayNote.setLabel('created', api.dayjs().format());
+    
+    api.log(`Daily note created for ${today}`);
+}
+
+await createDailyNote();</code></pre>
+    </div>
+
+    <h3>2. Note Statistics Collector</h3>
+    
+    <div class="use-case">
+        <strong>Use Case:</strong> Collect and display statistics about your notes
+    </div>
+
+    <div class="recipe-box backend-script">
+        <pre><code>async function collectStatistics() {
+    const stats = {
+        totalNotes: 0,
+        notesByType: {},
+        notesByMonth: {},
+        largestNotes: [],
+        recentlyModified: [],
+        tagCloud: {}
+    };
+    
+    // Get all notes
+    const notes = await api.searchForNotes('');
+    stats.totalNotes = notes.length;
+    
+    for (const note of notes) {
+        // Count by type
+        stats.notesByType[note.type] = (stats.notesByType[note.type] || 0) + 1;
+        
+        // Count by creation month
+        const month = api.dayjs(note.utcDateCreated).format('YYYY-MM');
+        stats.notesByMonth[month] = (stats.notesByMonth[month] || 0) + 1;
+        
+        // Track largest notes
+        const content = await note.getContent();
+        if (content) {
+            stats.largestNotes.push({
+                noteId: note.noteId,
+                title: note.title,
+                size: content.length
+            });
+        }
+        
+        // Collect labels for tag cloud
+        const labels = await note.getLabels();
+        for (const label of labels) {
+            if (!label.name.startsWith('child:')) {
+                stats.tagCloud[label.name] = (stats.tagCloud[label.name] || 0) + 1;
+            }
+        }
+    }
+    
+    // Sort largest notes
+    stats.largestNotes.sort((a, b) => b.size - a.size);
+    stats.largestNotes = stats.largestNotes.slice(0, 10);
+    
+    // Create or update statistics note
+    let statsNote = await api.getNoteWithLabel('statistics');
+    if (!statsNote) {
+        statsNote = await api.createTextNote('root', 'Statistics', '');
+        await statsNote.setLabel('statistics');
+    }
+    
+    // Generate report
+    const report = `
+        &lt;h1&gt;📊 Note Statistics&lt;/h1&gt;
+        &lt;p&gt;Generated: ${api.dayjs().format('YYYY-MM-DD HH:mm:ss')}&lt;/p&gt;
+        
+        &lt;h2&gt;Overview&lt;/h2&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Total Notes: &lt;strong&gt;${stats.totalNotes}&lt;/strong&gt;&lt;/li&gt;
+            &lt;li&gt;Note Types: ${Object.entries(stats.notesByType)
+                .map(([type, count]) => `${type} (${count})`)
+                .join(', ')}&lt;/li&gt;
+        &lt;/ul&gt;
+        
+        &lt;h2&gt;Largest Notes&lt;/h2&gt;
+        &lt;ol&gt;
+            ${stats.largestNotes.map(n => 
+                `&lt;li&gt;&lt;a href="#root/${n.noteId}"&gt;${n.title}&lt;/a&gt; - ${(n.size / 1024).toFixed(1)} KB&lt;/li&gt;`
+            ).join('')}
+        &lt;/ol&gt;
+        
+        &lt;h2&gt;Top Tags&lt;/h2&gt;
+        &lt;div class="tag-cloud"&gt;
+            ${Object.entries(stats.tagCloud)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 20)
+                .map(([tag, count]) => 
+                    `&lt;span style="font-size: ${Math.min(200, 100 + count * 5)}%"&gt;#${tag} (${count})&lt;/span&gt;`
+                ).join(' ')}
+        &lt;/div&gt;
+    `;
+    
+    await statsNote.setContent(report);
+    
+    return stats;
+}
+
+return await collectStatistics();</code></pre>
+    </div>
+
+    <h3>3. Task Aggregator</h3>
+    
+    <div class="use-case">
+        <strong>Use Case:</strong> Collect all tasks from different notes and create a dashboard
+    </div>
+
+    <div class="recipe-box backend-script">
+        <pre><code>async function aggregateTasks() {
+    // Find all notes with todos
+    const todoNotes = await api.searchForNotes('#todo OR #task OR content:"[ ]" OR content:"[x]"');
+    
+    const tasks = {
+        pending: [],
+        completed: [],
+        overdue: []
+    };
+    
+    for (const note of todoNotes) {
+        const content = await note.getContent();
+        if (!content) continue;
+        
+        // Parse checkbox tasks
+        const checkboxRegex = /\[([ x])\]\s*(.+?)(?=\n|\&lt;|$)/gi;
+        let match;
+        
+        while ((match = checkboxRegex.exec(content)) !== null) {
+            const isCompleted = match[1] === 'x';
+            const taskText = match[2].replace(/&lt;[^&gt;]*&gt;/g, ''); // Strip HTML
+            
+            const task = {
+                noteId: note.noteId,
+                noteTitle: note.title,
+                text: taskText,
+                completed: isCompleted
+            };
+            
+            // Check for due date
+            const dueDateLabel = await note.getLabel('dueDate');
+            if (dueDateLabel) {
+                task.dueDate = dueDateLabel.value;
+                const dueDate = api.dayjs(dueDateLabel.value);
+                if (!isCompleted && dueDate.isBefore(api.dayjs())) {
+                    tasks.overdue.push(task);
+                    continue;
+                }
+            }
+            
+            if (isCompleted) {
+                tasks.completed.push(task);
+            } else {
+                tasks.pending.push(task);
+            }
+        }
+    }
+    
+    // Create or update task dashboard
+    let dashboard = await api.getNoteWithLabel('taskDashboard');
+    if (!dashboard) {
+        dashboard = await api.createTextNote('root', '📋 Task Dashboard', '');
+        await dashboard.setLabel('taskDashboard');
+    }
+    
+    const dashboardContent = `
+        &lt;h1&gt;📋 Task Dashboard&lt;/h1&gt;
+        &lt;p&gt;Last updated: ${api.dayjs().format('YYYY-MM-DD HH:mm:ss')}&lt;/p&gt;
+        
+        &lt;h2&gt;⚠️ Overdue (${tasks.overdue.length})&lt;/h2&gt;
+        &lt;ul&gt;
+            ${tasks.overdue.map(t => 
+                `&lt;li style="color: red;"&gt;
+                    &lt;strong&gt;${t.text}&lt;/strong&gt; 
+                    (Due: ${api.dayjs(t.dueDate).format('MMM D')}) 
+                    - &lt;a href="#root/${t.noteId}"&gt;${t.noteTitle}&lt;/a&gt;
+                &lt;/li&gt;`
+            ).join('')}
+        &lt;/ul&gt;
+        
+        &lt;h2&gt;📌 Pending (${tasks.pending.length})&lt;/h2&gt;
+        &lt;ul&gt;
+            ${tasks.pending.slice(0, 20).map(t => 
+                `&lt;li&gt;
+                    ${t.text} 
+                    ${t.dueDate ? `(Due: ${api.dayjs(t.dueDate).format('MMM D')})` : ''} 
+                    - &lt;a href="#root/${t.noteId}"&gt;${t.noteTitle}&lt;/a&gt;
+                &lt;/li&gt;`
+            ).join('')}
+        &lt;/ul&gt;
+        ${tasks.pending.length > 20 ? `&lt;p&gt;&lt;em&gt;...and ${tasks.pending.length - 20} more&lt;/em&gt;&lt;/p&gt;` : ''}
+        
+        &lt;h2&gt;✅ Recently Completed (${tasks.completed.length})&lt;/h2&gt;
+        &lt;ul&gt;
+            ${tasks.completed.slice(0, 10).map(t => 
+                `&lt;li style="text-decoration: line-through; opacity: 0.7;"&gt;
+                    ${t.text} - &lt;a href="#root/${t.noteId}"&gt;${t.noteTitle}&lt;/a&gt;
+                &lt;/li&gt;`
+            ).join('')}
+        &lt;/ul&gt;
+    `;
+    
+    await dashboard.setContent(dashboardContent);
+    
+    return tasks;
+}
+
+return await aggregateTasks();</code></pre>
+    </div>
+
+    <h2 id="frontend-script-recipes">Frontend Script Recipes</h2>
+    
+    <h3>4. Quick Note Creator</h3>
+    
+    <div class="use-case">
+        <strong>Use Case:</strong> Add a floating button to quickly create notes from anywhere in the UI
+    </div>
+
+    <div class="recipe-box frontend-script">
+        <pre><code>// Create floating button
+const $button = $(`
+    &lt;div id="quick-note-btn" style="
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        background: #4CAF50;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        z-index: 10000;
+        color: white;
+        font-size: 30px;
+    "&gt;+&lt;/div&gt;
+`);
+
+// Create modal
+const $modal = $(`
+    &lt;div id="quick-note-modal" style="
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        z-index: 10001;
+        min-width: 400px;
+    "&gt;
+        &lt;h3&gt;Quick Note&lt;/h3&gt;
+        &lt;input type="text" id="quick-note-title" placeholder="Title..." style="
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        "&gt;
+        &lt;textarea id="quick-note-content" placeholder="Content..." style="
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: vertical;
+        "&gt;&lt;/textarea&gt;
+        &lt;div&gt;
+            &lt;button id="quick-note-save" style="
+                padding: 10px 20px;
+                background: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            "&gt;Save&lt;/button&gt;
+            &lt;button id="quick-note-cancel" style="
+                padding: 10px 20px;
+                background: #f44336;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-left: 10px;
+            "&gt;Cancel&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+`);
+
+// Add to page
+$('body').append($button, $modal);
+
+// Handle button click
+$button.click(() => {
+    $modal.show();
+    $('#quick-note-title').focus();
+});
+
+// Handle save
+$('#quick-note-save').click(async () => {
+    const title = $('#quick-note-title').val() || 'Quick Note';
+    const content = $('#quick-note-content').val() || '';
+    
+    // Get current note or use inbox
+    const currentNote = api.getActiveContextNote();
+    const parentNoteId = currentNote ? currentNote.noteId : (await api.getDayNote()).noteId;
+    
+    // Create note
+    const { note } = await api.runOnBackend(async (parentId, noteTitle, noteContent) => {
+        const parent = await api.getNote(parentId);
+        const newNote = await api.createNote(parent, noteTitle, noteContent, 'text');
+        return { note: newNote.getPojo() };
+    }, [parentNoteId, title, `&lt;h2&gt;${title}&lt;/h2&gt;&lt;p&gt;${content}&lt;/p&gt;`]);
+    
+    api.showMessage(`Note "${title}" created!`);
+    
+    // Clear and close
+    $('#quick-note-title').val('');
+    $('#quick-note-content').val('');
+    $modal.hide();
+    
+    // Navigate to new note
+    await api.activateNewNote(note.noteId);
+});
+
+// Handle cancel
+$('#quick-note-cancel').click(() => {
+    $modal.hide();
+});
+
+// Keyboard shortcuts
+$(document).keydown((e) => {
+    // Ctrl+Shift+N to open quick note
+    if (e.ctrlKey && e.shiftKey && e.key === 'N') {
+        e.preventDefault();
+        $button.click();
+    }
+    
+    // Escape to close
+    if (e.key === 'Escape' && $modal.is(':visible')) {
+        $modal.hide();
+    }
+});</code></pre>
+    </div>
+
+    <h3>5. Markdown Preview Toggle</h3>
+    
+    <div class="use-case">
+        <strong>Use Case:</strong> Add live markdown preview for text notes
+    </div>
+
+    <div class="recipe-box frontend-script">
+        <pre><code>// Create preview pane
+const $previewPane = $(`
+    &lt;div id="markdown-preview" style="
+        display: none;
+        position: absolute;
+        top: 50px;
+        right: 10px;
+        width: 45%;
+        height: calc(100% - 60px);
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 20px;
+        overflow-y: auto;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        z-index: 100;
+    "&gt;
+        &lt;div id="preview-content"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+`);
+
+// Create toggle button
+const $toggleBtn = $(`
+    &lt;button id="preview-toggle" style="
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 8px 15px;
+        background: #2196F3;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 101;
+    "&gt;
+        &lt;i class="bx bx-show"&gt;&lt;/i&gt; Preview
+    &lt;/button&gt;
+`);
+
+// Add to note detail
+$('.note-detail-text').css('position', 'relative').append($previewPane, $toggleBtn);
+
+let previewVisible = false;
+
+// Load markdown library (simplified conversion)
+const convertToMarkdown = (html) => {
+    return html
+        .replace(/&lt;h1[^&gt;]*&gt;(.*?)&lt;\/h1&gt;/g, '# $1\n')
+        .replace(/&lt;h2[^&gt;]*&gt;(.*?)&lt;\/h2&gt;/g, '## $1\n')
+        .replace(/&lt;h3[^&gt;]*&gt;(.*?)&lt;\/h3&gt;/g, '### $1\n')
+        .replace(/&lt;p[^&gt;]*&gt;(.*?)&lt;\/p&gt;/g, '$1\n\n')
+        .replace(/&lt;strong[^&gt;]*&gt;(.*?)&lt;\/strong&gt;/g, '**$1**')
+        .replace(/&lt;em[^&gt;]*&gt;(.*?)&lt;\/em&gt;/g, '*$1*')
+        .replace(/&lt;code[^&gt;]*&gt;(.*?)&lt;\/code&gt;/g, '`$1`')
+        .replace(/&lt;ul[^&gt;]*&gt;/g, '')
+        .replace(/&lt;\/ul&gt;/g, '\n')
+        .replace(/&lt;li[^&gt;]*&gt;(.*?)&lt;\/li&gt;/g, '- $1\n')
+        .replace(/&lt;br[^&gt;]*&gt;/g, '\n')
+        .replace(/&lt;[^&gt;]+&gt;/g, ''); // Remove remaining HTML tags
+};
+
+// Toggle preview
+$toggleBtn.click(() => {
+    previewVisible = !previewVisible;
+    
+    if (previewVisible) {
+        $previewPane.show();
+        $('.note-detail-text .note-detail-editable').css('width', '50%');
+        $toggleBtn.html('&lt;i class="bx bx-hide"&gt;&lt;/i&gt; Hide');
+        updatePreview();
+    } else {
+        $previewPane.hide();
+        $('.note-detail-text .note-detail-editable').css('width', '100%');
+        $toggleBtn.html('&lt;i class="bx bx-show"&gt;&lt;/i&gt; Preview');
+    }
+});
+
+// Update preview function
+async function updatePreview() {
+    if (!previewVisible) return;
+    
+    const content = await api.getActiveContextTextEditor().getContent();
+    const markdown = convertToMarkdown(content);
+    
+    // Simple markdown to HTML conversion
+    const html = markdown
+        .replace(/^# (.+)$/gm, '&lt;h1&gt;$1&lt;/h1&gt;')
+        .replace(/^## (.+)$/gm, '&lt;h2&gt;$1&lt;/h2&gt;')
+        .replace(/^### (.+)$/gm, '&lt;h3&gt;$1&lt;/h3&gt;')
+        .replace(/\*\*(.*?)\*\*/g, '&lt;strong&gt;$1&lt;/strong&gt;')
+        .replace(/\*(.*?)\*/g, '&lt;em&gt;$1&lt;/em&gt;')
+        .replace(/`(.*?)`/g, '&lt;code&gt;$1&lt;/code&gt;')
+        .replace(/^- (.+)$/gm, '&lt;li&gt;$1&lt;/li&gt;')
+        .replace(/(&lt;li&gt;.*&lt;\/li&gt;)/s, '&lt;ul&gt;$1&lt;/ul&gt;')
+        .replace(/\n\n/g, '&lt;/p&gt;&lt;p&gt;')
+        .replace(/^(?!&lt;[h|u])(.+)$/gm, '&lt;p&gt;$1&lt;/p&gt;');
+    
+    $('#preview-content').html(html);
+}</code></pre>
+    </div>
+
+    <h2 id="integration-with-external-services">Integration with External Services</h2>
+    
+    <h3>6. GitHub Integration</h3>
+    
+    <div class="use-case">
+        <strong>Use Case:</strong> Sync GitHub issues with Trilium notes
+    </div>
+
+    <div class="recipe-box backend-script">
+        <pre><code>// Requires axios library
+const axios = require('axios');
+
+class GitHubSync {
+    constructor(token, repo) {
+        this.token = token;
+        this.repo = repo; // format: "owner/repo"
+        this.apiBase = 'https://api.github.com';
+    }
+    
+    async getIssues(state = 'open') {
+        const response = await axios.get(`${this.apiBase}/repos/${this.repo}/issues`, {
+            headers: {
+                'Authorization': `token ${this.token}`,
+                'Accept': 'application/vnd.github.v3+json'
+            },
+            params: { state }
+        });
+        
+        return response.data;
+    }
+    
+    async syncIssuesToNotes() {
+        // Get or create GitHub folder
+        let githubFolder = await api.getNoteWithLabel('githubSync');
+        if (!githubFolder) {
+            githubFolder = await api.createTextNote('root', 'GitHub Issues', '');
+            await githubFolder.setLabel('githubSync');
+        }
+        
+        const issues = await this.getIssues();
+        const syncedNotes = [];
+        
+        for (const issue of issues) {
+            // Check if issue note already exists
+            let issueNote = await api.getNoteWithLabel(`github:issue:${issue.number}`);
+            
+            const content = `
+                &lt;h1&gt;${issue.title}&lt;/h1&gt;
+                
+                &lt;table&gt;
+                    &lt;tr&gt;&lt;th&gt;Issue #&lt;/th&gt;&lt;td&gt;${issue.number}&lt;/td&gt;&lt;/tr&gt;
+                    &lt;tr&gt;&lt;th&gt;State&lt;/th&gt;&lt;td&gt;${issue.state}&lt;/td&gt;&lt;/tr&gt;
+                    &lt;tr&gt;&lt;th&gt;Author&lt;/th&gt;&lt;td&gt;${issue.user.login}&lt;/td&gt;&lt;/tr&gt;
+                    &lt;tr&gt;&lt;th&gt;Created&lt;/th&gt;&lt;td&gt;${api.dayjs(issue.created_at).format('YYYY-MM-DD HH:mm')}&lt;/td&gt;&lt;/tr&gt;
+                    &lt;tr&gt;&lt;th&gt;Labels&lt;/th&gt;&lt;td&gt;${issue.labels.map(l => l.name).join(', ')}&lt;/td&gt;&lt;/tr&gt;
+                &lt;/table&gt;
+                
+                &lt;h2&gt;Description&lt;/h2&gt;
+                &lt;div style="background: #f5f5f5; padding: 10px; border-radius: 5px;"&gt;
+                    ${issue.body || 'No description'}
+                &lt;/div&gt;
+                
+                &lt;h2&gt;Links&lt;/h2&gt;
+                &lt;ul&gt;
+                    &lt;li&gt;&lt;a href="${issue.html_url}"&gt;View on GitHub&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="${issue.url}"&gt;API URL&lt;/a&gt;&lt;/li&gt;
+                &lt;/ul&gt;
+            `;
+            
+            if (!issueNote) {
+                // Create new note
+                issueNote = await api.createNote(
+                    githubFolder,
+                    `#${issue.number}: ${issue.title}`,
+                    content
+                );
+                await issueNote.setLabel(`github:issue:${issue.number}`);
+            } else {
+                // Update existing note
+                await issueNote.setContent(content);
+            }
+            
+            // Set labels based on issue state and labels
+            await issueNote.setLabel('githubIssue');
+            await issueNote.setLabel('state', issue.state);
+            
+            for (const label of issue.labels) {
+                await issueNote.setLabel(`gh:${label.name}`);
+            }
+            
+            syncedNotes.push({
+                noteId: issueNote.noteId,
+                issueNumber: issue.number,
+                title: issue.title
+            });
+        }
+        
+        api.log(`Synced ${syncedNotes.length} GitHub issues`);
+        return syncedNotes;
+    }
+}
+
+// Usage
+const github = new GitHubSync(
+    process.env.GITHUB_TOKEN || 'your-token',
+    'your-org/your-repo'
+);
+
+// Sync issues to notes
+const synced = await github.syncIssuesToNotes();
+return synced;</code></pre>
+    </div>
+
+    <h2 id="best-practices">Best Practices</h2>
+    
+    <h3>Error Handling</h3>
+    
+    <div class="success">
+        <p>Always wrap scripts in try-catch blocks:</p>
+        <pre><code>async function safeScriptExecution() {
+    try {
+        // Your script code here
+        const result = await riskyOperation();
+        
+        return {
+            success: true,
+            data: result
+        };
+    } catch (error) {
+        api.log(`Error in script: ${error.message}`, 'error');
+        
+        // Create error report note
+        const errorNote = await api.createTextNote(
+            'root',
+            `Script Error - ${api.dayjs().format('YYYY-MM-DD HH:mm:ss')}`,
+            `
+                &lt;h1&gt;Script Error&lt;/h1&gt;
+                &lt;p&gt;&lt;strong&gt;Error:&lt;/strong&gt; ${error.message}&lt;/p&gt;
+                &lt;p&gt;&lt;strong&gt;Stack:&lt;/strong&gt;&lt;/p&gt;
+                &lt;pre&gt;${error.stack}&lt;/pre&gt;
+                &lt;p&gt;&lt;strong&gt;Script:&lt;/strong&gt; ${api.currentNote.title}&lt;/p&gt;
+            `
+        );
+        
+        await errorNote.setLabel('scriptError');
+        
+        return {
+            success: false,
+            error: error.message
+        };
+    }
+}
+
+return await safeScriptExecution();</code></pre>
+    </div>
+
+    <h3>Performance Optimization</h3>
+    
+    <div class="success">
+        <p>Use batch operations and caching:</p>
+        <pre><code>class OptimizedNoteProcessor {
+    constructor() {
+        this.cache = new Map();
+    }
+    
+    async processNotes(noteIds) {
+        // Batch fetch notes
+        const notes = await Promise.all(
+            noteIds.map(id => this.getCachedNote(id))
+        );
+        
+        // Process in chunks to avoid memory issues
+        const chunkSize = 100;
+        const results = [];
+        
+        for (let i = 0; i &lt; notes.length; i += chunkSize) {
+            const chunk = notes.slice(i, i + chunkSize);
+            const chunkResults = await Promise.all(
+                chunk.map(note => this.processNote(note))
+            );
+            results.push(...chunkResults);
+            
+            // Allow other operations
+            await new Promise(resolve => setTimeout(resolve, 10));
+        }
+        
+        return results;
+    }
+    
+    async getCachedNote(noteId) {
+        if (!this.cache.has(noteId)) {
+            const note = await api.getNote(noteId);
+            this.cache.set(noteId, note);
+        }
+        return this.cache.get(noteId);
+    }
+}</code></pre>
+    </div>
+
+    <div class="warning">
+        <h4>Key Takeaways</h4>
+        <ol>
+            <li><strong>Use Backend Scripts</strong> for data processing, automation, and integrations</li>
+            <li><strong>Use Frontend Scripts</strong> for UI enhancements and user interactions</li>
+            <li><strong>Always handle errors</strong> gracefully and provide meaningful feedback</li>
+            <li><strong>Optimize performance</strong> with caching and batch operations</li>
+            <li><strong>Organize complex scripts</strong> into modules for reusability</li>
+            <li><strong>Test your scripts</strong> to ensure reliability</li>
+        </ol>
+    </div>
+
+    <div class="info">
+        <h4>Related Documentation</h4>
+        <ul>
+            <li><a href="https://triliumnext.github.io/Docs/api/Backend_Script_API.html">Backend Script API Reference</a></li>
+            <li><a href="https://triliumnext.github.io/Docs/api/Frontend_Script_API.html">Frontend Script API Reference</a></li>
+            <li><a href="Custom%20Widget%20Development.html">Custom Widget Development</a></li>
+        </ul>
+    </div>
+
+</body>
+</html>

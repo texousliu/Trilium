@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Three-Layer Cache System Architecture</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+        h1 { color: #2c3e50; }
+        h2 { color: #34495e; margin-top: 30px; }
+        h3 { color: #7f8c8d; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-family: 'Courier New', monospace; }
+        .cache-layer { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .becca { background: #e1f5fe; }
+        .froca { background: #fff3e0; }
+        .shaca { background: #f3e5f5; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <h1>Three-Layer Cache System Architecture</h1>
+    
+    <p>Trilium implements a sophisticated three-layer caching system to optimize performance and reduce database load. This architecture ensures fast access to frequently used data while maintaining consistency across different application contexts.</p>
+    
+    <h2>Overview</h2>
+    
+    <p>The three cache layers are:</p>
+    
+    <ol>
+        <li><strong>Becca</strong> (Backend Cache) - Server-side entity cache</li>
+        <li><strong>Froca</strong> (Frontend Cache) - Client-side mirror of backend data</li>
+        <li><strong>Shaca</strong> (Share Cache) - Optimized cache for shared/published notes</li>
+    </ol>
+    
+    <div class="cache-layer becca">
+        <h2>Becca (Backend Cache)</h2>
+        
+        <p><strong>Location:</strong> <code>/apps/server/src/becca/</code></p>
+        
+        <p>Becca is the authoritative cache layer that maintains all notes, branches, attributes, and options in server memory.</p>
+        
+        <h3>Key Components</h3>
+        
+        <h4>Becca Interface</h4>
+        <pre><code>export default class Becca {
+    loaded: boolean;
+    notes: Record&lt;string, BNote&gt;;
+    branches: Record&lt;string, BBranch&gt;;
+    childParentToBranch: Record&lt;string, BBranch&gt;;
+    attributes: Record&lt;string, BAttribute&gt;;
+    attributeIndex: Record&lt;string, BAttribute[]&gt;;
+    options: Record&lt;string, BOption&gt;;
+    etapiTokens: Record&lt;string, BEtapiToken&gt;;
+    allNoteSetCache: NoteSet | null;
+}</code></pre>
+        
+        <h3>Features</h3>
+        <ul>
+            <li><strong>In-memory storage:</strong> All active entities are kept in memory for fast access</li>
+            <li><strong>Lazy loading:</strong> Related entities (revisions, attachments) loaded on demand</li>
+            <li><strong>Index structures:</strong> Optimized lookups via childParentToBranch and attributeIndex</li>
+            <li><strong>Cache invalidation:</strong> Automatic cache updates on entity changes</li>
+            <li><strong>Protected note decryption:</strong> On-demand decryption of encrypted content</li>
+        </ul>
+        
+        <h3>Usage Example</h3>
+        <pre><code>import becca from "./becca/becca.js";
+
+// Get a note
+const note = becca.getNote("noteId");
+
+// Find attributes by type and name
+const labels = becca.findAttributes("label", "todoItem");
+
+// Get branch relationships
+const branch = becca.getBranchFromChildAndParent(childId, parentId);</code></pre>
+    </div>
+    
+    <div class="cache-layer froca">
+        <h2>Froca (Frontend Cache)</h2>
+        
+        <p><strong>Location:</strong> <code>/apps/client/src/services/froca.ts</code></p>
+        
+        <p>Froca is the frontend mirror of Becca, maintaining a subset of backend data for client-side operations.</p>
+        
+        <h3>Key Components</h3>
+        
+        <pre><code>class FrocaImpl implements Froca {
+    notes: Record&lt;string, FNote&gt;;
+    branches: Record&lt;string, FBranch&gt;;
+    attributes: Record&lt;string, FAttribute&gt;;
+    attachments: Record&lt;string, FAttachment&gt;;
+    blobPromises: Record&lt;string, Promise&lt;FBlob | null&gt; | null&gt;;
+}</code></pre>
+        
+        <h3>Features</h3>
+        <ul>
+            <li><strong>Lazy loading:</strong> Notes loaded on-demand with their immediate context</li>
+            <li><strong>Subtree loading:</strong> Efficient loading of note hierarchies</li>
+            <li><strong>Real-time updates:</strong> WebSocket synchronization with backend changes</li>
+            <li><strong>Search note support:</strong> Virtual branches for search results</li>
+            <li><strong>Promise-based blob loading:</strong> Asynchronous content loading</li>
+        </ul>
+        
+        <h3>Loading Strategy</h3>
+        <pre><code>// Initial load - loads root and immediate children
+await froca.loadInitialTree();
+
+// Load subtree on demand
+const note = await froca.loadSubTree(noteId);
+
+// Reload specific notes
+await froca.reloadNotes([noteId1, noteId2]);</code></pre>
+    </div>
+    
+    <div class="cache-layer shaca">
+        <h2>Shaca (Share Cache)</h2>
+        
+        <p><strong>Location:</strong> <code>/apps/server/src/share/shaca/</code></p>
+        
+        <p>Shaca is a specialized cache for publicly shared notes, optimized for read-only access.</p>
+        
+        <h3>Key Components</h3>
+        
+        <pre><code>export default class Shaca {
+    notes: Record&lt;string, SNote&gt;;
+    branches: Record&lt;string, SBranch&gt;;
+    childParentToBranch: Record&lt;string, SBranch&gt;;
+    attributes: Record&lt;string, SAttribute&gt;;
+    attachments: Record&lt;string, SAttachment&gt;;
+    aliasToNote: Record&lt;string, SNote&gt;;
+    shareRootNote: SNote | null;
+    shareIndexEnabled: boolean;
+}</code></pre>
+        
+        <h3>Features</h3>
+        <ul>
+            <li><strong>Read-only optimization:</strong> Streamlined for public access</li>
+            <li><strong>Alias support:</strong> URL-friendly note access via aliases</li>
+            <li><strong>Share index:</strong> Optional indexing of all shared subtrees</li>
+            <li><strong>Minimal memory footprint:</strong> Only shared content cached</li>
+            <li><strong>Security isolation:</strong> Separate from main application cache</li>
+        </ul>
+    </div>
+    
+    <h2>Cache Interaction and Data Flow</h2>
+    
+    <h3>Create/Update Flow</h3>
+    <ol>
+        <li>Client sends update request to API</li>
+        <li>API updates Becca cache</li>
+        <li>Becca persists change to database</li>
+        <li>API pushes update to Froca via WebSocket</li>
+        <li>Froca updates UI components</li>
+    </ol>
+    
+    <h3>Read Flow</h3>
+    <ol>
+        <li>Client requests note from Froca</li>
+        <li>If cached: Return immediately</li>
+        <li>If not cached: Fetch from API</li>
+        <li>API retrieves from Becca</li>
+        <li>Froca caches and returns data</li>
+    </ol>
+    
+    <h2>Performance Considerations</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Cache Layer</th>
+                <th>Memory Usage</th>
+                <th>Loading Strategy</th>
+                <th>Use Case</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Becca</td>
+                <td>100-500MB typical</td>
+                <td>Full load on startup</td>
+                <td>Server operations</td>
+            </tr>
+            <tr>
+                <td>Froca</td>
+                <td>Variable (on-demand)</td>
+                <td>Progressive loading</td>
+                <td>Client UI</td>
+            </tr>
+            <tr>
+                <td>Shaca</td>
+                <td>Minimal</td>
+                <td>Lazy loading</td>
+                <td>Public sharing</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h2>Best Practices</h2>
+    
+    <h3>When to Use Each Cache</h3>
+    
+    <p><strong>Use Becca when:</strong></p>
+    <ul>
+        <li>Implementing server-side business logic</li>
+        <li>Performing bulk operations</li>
+        <li>Handling synchronization</li>
+        <li>Managing protected notes</li>
+    </ul>
+    
+    <p><strong>Use Froca when:</strong></p>
+    <ul>
+        <li>Building UI components</li>
+        <li>Handling user interactions</li>
+        <li>Displaying note content</li>
+        <li>Managing client state</li>
+    </ul>
+    
+    <p><strong>Use Shaca when:</strong></p>
+    <ul>
+        <li>Serving public content</li>
+        <li>Building share pages</li>
+        <li>Implementing read-only access</li>
+        <li>Creating public APIs</li>
+    </ul>
+    
+    <h3>Cache Invalidation</h3>
+    <pre><code>// Becca - automatic on entity save
+note.save(); // Cache updated automatically
+
+// Froca - manual reload when needed
+await froca.reloadNotes([noteId]);
+
+// Shaca - rebuild on share changes
+shaca.reset();
+shaca.load();</code></pre>
+    
+    <h2>Troubleshooting</h2>
+    
+    <h3>Common Issues</h3>
+    
+    <ol>
+        <li><strong>Cache Inconsistency</strong>
+            <ul>
+                <li>Symptom: UI shows outdated data</li>
+                <li>Solution: Force reload with <code>froca.reloadNotes()</code></li>
+            </ul>
+        </li>
+        
+        <li><strong>Memory Growth</strong>
+            <ul>
+                <li>Symptom: Server memory usage increases</li>
+                <li>Solution: Check for memory leaks in custom scripts</li>
+            </ul>
+        </li>
+        
+        <li><strong>Slow Initial Load</strong>
+            <ul>
+                <li>Symptom: Long startup time</li>
+                <li>Solution: Optimize database queries, add indexes</li>
+            </ul>
+        </li>
+    </ol>
+</body>
+</html>

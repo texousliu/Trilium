@@ -33,7 +33,7 @@ function parseAuthToken(auth: string | undefined) {
     if (auth.startsWith("Basic ")) {
         // allow also basic auth format for systems which allow this type of authentication
         // expect ETAPI token in the password field, require "etapi" username
-        // https://github.com/zadam/trilium/issues/3181
+        // https://github.com/TriliumNext/Trilium/issues/3181
         const basicAuthStr = fromBase64(auth.substring(6)).toString("utf-8");
         const basicAuthChunks = basicAuthStr.split(":");
 

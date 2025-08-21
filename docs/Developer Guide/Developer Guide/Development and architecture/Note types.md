@@ -3,7 +3,7 @@ The note type is defined by the `type` column in <a class="reference-link" href
 
 Possible types:
 
-<table class="ck-table-resized"><colgroup><col> <col> <col> <col> <col></colgroup><thead><tr><th>Note Type</th><th><code>type</code> value</th><th>Corresponding MIME type</th><th>Content of the note's blob</th><th>Relevant attributes</th></tr></thead><tbody><tr><th>Text</th><td><code>text</code></td><td>&nbsp;</td><td>The HTML of the note.</td><td>&nbsp;</td></tr><tr><th><a href="https://github.com/zadam/trilium/wiki/Relation-map">Relation Map&nbsp;</a></th><td><code>relationMap</code></td><td><code>application/json</code></td><td><p>A JSON describing the note:</p><pre><code class="language-text-plain">{
+<table class="ck-table-resized"><colgroup><col> <col> <col> <col> <col></colgroup><thead><tr><th>Note Type</th><th><code>type</code> value</th><th>Corresponding MIME type</th><th>Content of the note's blob</th><th>Relevant attributes</th></tr></thead><tbody><tr><th>Text</th><td><code>text</code></td><td>&nbsp;</td><td>The HTML of the note.</td><td>&nbsp;</td></tr><tr><th><a href="https://github.com/TriliumNext/Trilium/wiki/Relation-map">Relation Map&nbsp;</a></th><td><code>relationMap</code></td><td><code>application/json</code></td><td><p>A JSON describing the note:</p><pre><code class="language-text-plain">{
     "notes": [
         {
             "noteId": "gFQDL11KEm9G",
@@ -21,7 +21,7 @@ Possible types:
         "x": 480.29766098682165,
         "y": 116.83892021963081
     }
-}</code></pre></td><td>None</td></tr><tr><th><a href="https://github.com/zadam/trilium/wiki/Scripts">Render Note</a></th><td><code>render</code></td><td><code>text/html</code> or blank.</td><td>An empty blob.</td><td><code>~renderNote</code> pointing to the HTML note to render.</td></tr><tr><th>Canvas</th><td><code>canvas</code></td><td><code>application/json</code></td><td><pre><code class="language-text-plain">{
+}</code></pre></td><td>None</td></tr><tr><th><a href="https://github.com/TriliumNext/Trilium/wiki/Scripts">Render Note</a></th><td><code>render</code></td><td><code>text/html</code> or blank.</td><td>An empty blob.</td><td><code>~renderNote</code> pointing to the HTML note to render.</td></tr><tr><th>Canvas</th><td><code>canvas</code></td><td><code>application/json</code></td><td><pre><code class="language-text-plain">{
 	"appState": {},
 	"elemenets": {},
 	"files": {},

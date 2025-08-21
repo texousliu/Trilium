@@ -48,7 +48,7 @@ export default class SharedInfoWidget extends NoteContextAwareWidget {
             let host = location.host;
             if (host.endsWith("/")) {
                 // seems like IE has trailing slash
-                // https://github.com/zadam/trilium/issues/3782
+                // https://github.com/TriliumNext/Trilium/issues/3782
                 host = host.substr(0, host.length - 1);
             }
 

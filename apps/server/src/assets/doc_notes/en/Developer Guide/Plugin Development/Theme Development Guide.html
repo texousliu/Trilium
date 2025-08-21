@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Development Guide - Trilium Developer Guide</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .content {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-bottom: 1px solid #ecf0f1;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #555;
+            margin-top: 25px;
+        }
+        pre {
+            background: #f8f8f8;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 16px;
+            overflow-x: auto;
+        }
+        code {
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Courier New', monospace;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+        }
+        blockquote {
+            border-left: 4px solid #3498db;
+            margin: 0;
+            padding-left: 20px;
+            color: #666;
+            font-style: italic;
+        }
+        ul, ol {
+            margin: 16px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 4px;
+            padding: 12px;
+            margin: 20px 0;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #17a2b8;
+            border-radius: 4px;
+            padding: 12px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Theme Development Guide</h1>
+
+<p>This guide covers creating custom themes for Trilium Notes. Themes allow you to customize the visual appearance of the application to match your preferences or organizational branding.</p>
+
+<h2>Prerequisites</h2>
+
+<p>- CSS and CSS Variables knowledge
+- Understanding of color theory and accessibility
+- Basic knowledge of Trilium's note system
+- Familiarity with browser developer tools</p>
+
+<h2>Understanding Trilium's Theme System</h2>
+
+<h3>Theme Architecture</h3>
+
+<p>Trilium's theming system uses CSS custom properties (variables) for consistent styling across the application. Themes are stored as CSS code notes that override default variables.</p>
+
+<h3>Default Themes</h3>
+
+<p>Trilium includes several built-in themes:
+- <strong>Light</strong> - Default light theme
+- <strong>Dark</strong> - Dark mode theme
+- <strong>Steel Blue</strong> - Professional blue theme
+- <strong>Next</strong> - Modern, clean theme</p>
+
+<h3>CSS Variable Structure</h3>
+
+<p>Themes work by overriding CSS custom properties defined in the root scope:</p>
+
+<pre><code class="language-css">:root {
+    /<em> Main colors </em>/
+    --main-background-color: #ffffff;
+    --main-text-color: #333333;
+    --main-border-color: #dddddd;
+    
+    /<em> Accent colors </em>/
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    
+    /<em> Component colors </em>/
+    --button-background-color: #f0f0f0;
+    --button-text-color: #333333;
+    
+    /<em> And many more... </em>/
+}
+</code></pre>
+
+<h2>Creating Your First Theme</h2>
+
+<h3>Step 1: Create Theme Note</h3>
+
+<li>Create a new code note</li>
+<li>Set type to "CSS"</li>
+<li>Add label <code>#appTheme=myThemeName</code></li>
+<li>Add label <code>#appCss</code> (for global application)</li>
+
+<h3>Step 2: Define Basic Colors</h3>
+
+<pre><code class="language-css">/<em> My Custom Theme </em>/
+:root {
+    /<em> Primary Palette </em>/
+    --theme-primary: #5e72e4;
+    --theme-secondary: #825ee4;
+    --theme-success: #2dce89;
+    --theme-info: #11cdef;
+    --theme-warning: #fb6340;
+    --theme-danger: #f5365c;
+    
+    /<em> Neutral Colors </em>/
+    --theme-white: #ffffff;
+    --theme-light: #f6f9fc;
+    --theme-gray: #8898aa;
+    --theme-dark: #32325d;
+    --theme-black: #000000;
+    
+    /<em> Main Application Colors </em>/
+    --main-background-color: var(--theme-light);
+    --main-text-color: var(--theme-dark);
+    --main-border-color: #e9ecef;
+    
+    /<em> Primary Actions </em>/
+    --primary-color: var(--theme-primary);
+    --primary-color-hover: #4c63d2;
+    --primary-text-color: var(--theme-white);
+    
+    /<em> Menu and Navigation </em>/
+    --menu-background-color: var(--theme-white);
+    --menu-text-color: var(--theme-dark);
+    --menu-hover-background-color: var(--theme-light);
+    
+    /<em> Tree Component </em>/
+    --tree-background-color: var(--theme-white);
+    --tree-text-color: var(--theme-dark);
+    --tree-hover-background-color: #f0f4f8;
+    --tree-selected-background-color: var(--theme-primary);
+    --tree-selected-text-color: var(--theme-white);
+    
+    /<em> Editor </em>/
+    --editor-background-color: var(--theme-white);
+    --editor-text-color: var(--theme-dark);
+    --editor-selection-background: rgba(94, 114, 228, 0.2);
+    
+    /<em> Buttons </em>/
+    --button-background-color: var(--theme-white);
+    --button-text-color: var(--theme-dark);
+    --button-border-color: var(--main-border-color);
+    --button-hover-background-color: var(--theme-light);
+    
+    /<em> Inputs </em>/
+    --input-background-color: var(--theme-white);
+    --input-text-color: var(--theme-dark);
+    --input-border-color: #cbd5e0;
+    --input-focus-border-color: var(--theme-primary);
+    
+    /<em> Code </em>/
+    --code-background-color: #f7fafc;
+    --code-text-color: #d63384;
+    
+    /<em> Links </em>/
+    --link-color: var(--theme-primary);
+    --link-hover-color: var(--theme-secondary);
+    
+    /<em> Shadows </em>/
+    --box-shadow-sm: 0 1px 3px rgba(50, 50, 93, 0.15);
+    --box-shadow-md: 0 4px 6px rgba(50, 50, 93, 0.11);
+    --box-shadow-lg: 0 10px 40px rgba(50, 50, 93, 0.2);
+}
+</code></pre>
+
+<h3>Step 3: Style Components</h3>
+
+<pre><code class="language-css">/<em> Component Customizations </em>/
+
+<p>/<em> Note Tree Styling </em>/
+.tree-wrapper {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 1px;
+}</p>
+
+<p>.tree {
+    background: var(--tree-background-color);
+    border-radius: 8px;
+    margin: 1px;
+}</p>
+
+<p>.fancytree-node {
+    border-radius: 4px;
+    margin: 2px 4px;
+    transition: all 0.2s ease;
+}</p>
+
+<p>.fancytree-node:hover {
+    transform: translateX(2px);
+    box-shadow: var(--box-shadow-sm);
+}</p>
+
+<p>/<em> Tab Styling </em>/
+.note-tab {
+    background: var(--theme-white);
+    border: none;
+    border-radius: 8px 8px 0 0;
+    margin-right: 2px;
+    transition: all 0.2s ease;
+}</p>
+
+<p>.note-tab:hover {
+    background: var(--theme-light);
+    transform: translateY(-2px);
+}</p>
+
+<p>.note-tab.active {
+    background: var(--theme-primary);
+    color: var(--theme-white);
+    box-shadow: var(--box-shadow-md);
+}</p>
+
+<p>/<em> Button Styling </em>/
+.btn {
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}</p>
+
+<p>.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--box-shadow-md);
+}</p>
+
+<p>.btn-primary {
+    background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%);
+    color: var(--theme-white);
+    border: none;
+}</p>
+
+<p>/<em> Card/Panel Styling </em>/
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: var(--box-shadow-sm);
+    overflow: hidden;
+}</p>
+
+<p>.card-header {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-bottom: 2px solid var(--main-border-color);
+    padding: 12px 16px;
+}</p>
+
+<p>/<em> Dialog Styling </em>/
+.modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: var(--box-shadow-lg);
+}</p>
+
+<p>.modal-header {
+    background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%);
+    color: var(--theme-white);
+    border-radius: 12px 12px 0 0;
+}</p>
+
+<p>/<em> Scrollbar Styling </em>/
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}</p>
+
+<p>::-webkit-scrollbar-track {
+    background: var(--theme-light);
+    border-radius: 10px;
+}</p>
+
+<p>::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%);
+    border-radius: 10px;
+}</p>
+
+<p>::-webkit-scrollbar-thumb:hover {
+    background: var(--theme-secondary);
+}
+</code></pre></p>
+
+<h2>Complete Theme Example: Modern Dark</h2>
+
+<p>Here's a complete example of a modern dark theme:</p>
+
+<pre><code class="language-css">/<em> Modern Dark Theme for Trilium </em>/
+
+<p>:root {
+    /<em> Color Palette </em>/
+    --md-bg-primary: #0f0f23;
+    --md-bg-secondary: #1a1b3a;
+    --md-bg-tertiary: #252647;
+    --md-bg-elevated: #2d2f54;
+    
+    --md-text-primary: #e4e4e7;
+    --md-text-secondary: #a1a1aa;
+    --md-text-muted: #71717a;
+    
+    --md-accent-primary: #7c3aed;
+    --md-accent-secondary: #a855f7;
+    --md-accent-success: #10b981;
+    --md-accent-warning: #f59e0b;
+    --md-accent-danger: #ef4444;
+    --md-accent-info: #3b82f6;
+    
+    --md-border: rgba(255, 255, 255, 0.1);
+    --md-border-strong: rgba(255, 255, 255, 0.2);
+    
+    /<em> Main Application </em>/
+    --main-background-color: var(--md-bg-primary);
+    --main-text-color: var(--md-text-primary);
+    --main-border-color: var(--md-border);
+    --body-background-color: var(--md-bg-primary);
+    
+    /<em> Accents </em>/
+    --primary-color: var(--md-accent-primary);
+    --primary-color-hover: var(--md-accent-secondary);
+    --primary-text-color: #ffffff;
+    
+    --muted-text-color: var(--md-text-muted);
+    --active-item-background-color: var(--md-bg-elevated);
+    --active-item-text-color: var(--md-accent-primary);
+    
+    /<em> Menu </em>/
+    --menu-background-color: var(--md-bg-secondary);
+    --menu-text-color: var(--md-text-primary);
+    --menu-hover-background-color: var(--md-bg-tertiary);
+    --dropdown-background-color: var(--md-bg-tertiary);
+    --dropdown-item-hover-background-color: var(--md-bg-elevated);
+    
+    /<em> Tree </em>/
+    --tree-background-color: var(--md-bg-secondary);
+    --tree-text-color: var(--md-text-primary);
+    --tree-hover-background-color: var(--md-bg-tertiary);
+    --tree-selected-background-color: var(--md-accent-primary);
+    --tree-selected-text-color: #ffffff;
+    
+    /<em> Editor </em>/
+    --editor-background-color: var(--md-bg-primary);
+    --editor-text-color: var(--md-text-primary);
+    --editor-selection-background: rgba(124, 58, 237, 0.3);
+    
+    /<em> Note Detail </em>/
+    --detail-background-color: var(--md-bg-primary);
+    --detail-text-color: var(--md-text-primary);
+    --accented-background-color: var(--md-bg-secondary);
+    
+    /<em> Buttons </em>/
+    --button-background-color: var(--md-bg-tertiary);
+    --button-text-color: var(--md-text-primary);
+    --button-border-color: var(--md-border);
+    --button-hover-background-color: var(--md-bg-elevated);
+    --button-disabled-background-color: var(--md-bg-secondary);
+    
+    /<em> Inputs </em>/
+    --input-background-color: var(--md-bg-secondary);
+    --input-text-color: var(--md-text-primary);
+    --input-border-color: var(--md-border);
+    --input-focus-border-color: var(--md-accent-primary);
+    
+    /<em> Modal </em>/
+    --modal-background-color: var(--md-bg-secondary);
+    --modal-header-background-color: var(--md-bg-tertiary);
+    --modal-backdrop-color: rgba(0, 0, 0, 0.7);
+    
+    /<em> Tabs </em>/
+    --tab-background-color: var(--md-bg-secondary);
+    --tab-hover-background-color: var(--md-bg-tertiary);
+    --tab-active-background-color: var(--md-bg-primary);
+    --tab-active-text-color: var(--md-accent-primary);
+    
+    /<em> Code </em>/
+    --code-background-color: var(--md-bg-secondary);
+    --code-text-color: var(--md-accent-info);
+    
+    /<em> Links </em>/
+    --link-color: var(--md-accent-info);
+    --link-hover-color: var(--md-accent-primary);
+    
+    /<em> Tooltips </em>/
+    --tooltip-background-color: var(--md-bg-elevated);
+    --tooltip-text-color: var(--md-text-primary);
+    
+    /<em> Scrollbar </em>/
+    --scrollbar-track-color: var(--md-bg-secondary);
+    --scrollbar-thumb-color: var(--md-bg-elevated);
+    
+    /<em> Shadows </em>/
+    --box-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --box-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+    --box-shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.5);
+}</p>
+
+<p>/<em> Component Overrides </em>/</p>
+
+<p>/<em> Smooth transitions </em>/
+<ul><li>{</li></ul>
+    transition: background-color 0.2s ease, color 0.2s ease;
+}</p>
+
+<p>/<em> Body and main containers </em>/
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--md-bg-primary);
+}</p>
+
+<p>/<em> Glass morphism effect for cards </em>/
+.card {
+    background: rgba(26, 27, 58, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--md-border);
+    border-radius: 12px;
+    box-shadow: var(--box-shadow-md);
+}</p>
+
+<p>.card-header {
+    background: rgba(37, 38, 71, 0.8);
+    border-bottom: 1px solid var(--md-border-strong);
+}</p>
+
+<p>/<em> Gradient accents </em>/
+.note-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--md-accent-primary), var(--md-accent-secondary));
+}</p>
+
+<p>/<em> Glow effects for focused elements </em>/
+input:focus,
+textarea:focus,
+.CodeMirror-focused {
+    outline: none;
+    border-color: var(--md-accent-primary);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}</p>
+
+<p>/<em> Button animations </em>/
+.btn {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    font-weight: 500;
+    letter-spacing: 0.025em;
+}</p>
+
+<p>.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+}</p>
+
+<p>.btn:hover::before {
+    left: 100%;
+}</p>
+
+<p>.btn-primary {
+    background: linear-gradient(135deg, var(--md-accent-primary), var(--md-accent-secondary));
+    border: none;
+    color: white;
+}</p>
+
+<p>/<em> Tree styling with hover effects </em>/
+.fancytree-node {
+    border-radius: 6px;
+    padding: 2px 4px;
+    margin: 2px 8px;
+}</p>
+
+<p>.fancytree-node:hover {
+    background: var(--md-bg-tertiary);
+    box-shadow: inset 0 0 0 1px var(--md-border-strong);
+}</p>
+
+<p>.fancytree-active {
+    background: var(--md-accent-primary) !important;
+    color: white !important;
+}</p>
+
+<p>.fancytree-active .fancytree-title {
+    color: white !important;
+}</p>
+
+<p>/<em> Note content styling </em>/
+.note-detail {
+    padding: 24px;
+}</p>
+
+<p>.note-detail h1 {
+    color: var(--md-accent-primary);
+    border-bottom: 2px solid var(--md-border-strong);
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+}</p>
+
+<p>.note-detail h2 {
+    color: var(--md-accent-secondary);
+    margin-top: 32px;
+    margin-bottom: 16px;
+}</p>
+
+<p>.note-detail code {
+    background: var(--md-bg-tertiary);
+    color: var(--md-accent-info);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}</p>
+
+<p>.note-detail pre {
+    background: var(--md-bg-secondary);
+    border: 1px solid var(--md-border);
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+}</p>
+
+<p>.note-detail blockquote {
+    border-left: 4px solid var(--md-accent-primary);
+    background: var(--md-bg-secondary);
+    padding: 12px 20px;
+    margin: 16px 0;
+    border-radius: 0 8px 8px 0;
+}</p>
+
+<p>/<em> Table styling </em>/
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--box-shadow-sm);
+}</p>
+
+<p>th {
+    background: var(--md-bg-tertiary);
+    color: var(--md-accent-primary);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.875em;
+    letter-spacing: 0.05em;
+}</p>
+
+<p>td {
+    background: var(--md-bg-secondary);
+    border-top: 1px solid var(--md-border);
+}</p>
+
+<p>tr:hover td {
+    background: var(--md-bg-tertiary);
+}</p>
+
+<p>/<em> Scrollbar styling </em>/
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}</p>
+
+<p>::-webkit-scrollbar-track {
+    background: var(--md-bg-secondary);
+    border-radius: 6px;
+}</p>
+
+<p>::-webkit-scrollbar-thumb {
+    background: var(--md-bg-elevated);
+    border-radius: 6px;
+    border: 2px solid var(--md-bg-secondary);
+}</p>
+
+<p>::-webkit-scrollbar-thumb:hover {
+    background: var(--md-accent-primary);
+}</p>
+
+<p>/<em> Animations </em>/
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}</p>
+
+<p>.modal {
+    animation: fadeIn 0.2s ease;
+}</p>
+
+<p>/<em> Loading states </em>/
+.loading {
+    position: relative;
+}</p>
+
+<p>.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, 
+        transparent,
+        rgba(124, 58, 237, 0.1),
+        transparent
+    );
+    animation: shimmer 2s infinite;
+}</p>
+
+<p>@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}</p>
+
+<p>/<em> Focus visible for accessibility </em>/
+*:focus-visible {
+    outline: 2px solid var(--md-accent-primary);
+    outline-offset: 2px;
+}</p>
+
+<p>/<em> Custom tooltip styling </em>/
+.tooltip {
+    background: var(--md-bg-elevated);
+    border: 1px solid var(--md-border-strong);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.875em;
+    box-shadow: var(--box-shadow-lg);
+}</p>
+
+<p>.tooltip-arrow {
+    border-color: var(--md-bg-elevated);
+}
+</code></pre></p>
+
+<h2>Advanced Theming Techniques</h2>
+
+<h3>Dynamic Theme Switching</h3>
+
+<pre><code class="language-javascript">// Frontend script for theme switching
+class ThemeSwitcher {
+    constructor() {
+        this.themes = ['light', 'dark', 'modern-dark', 'custom'];
+        this.currentTheme = this.getCurrentTheme();
+        this.init();
+    }
+    
+    init() {
+        this.createThemeToggle();
+        this.bindEvents();
+        this.applyTheme(this.currentTheme);
+    }
+    
+    createThemeToggle() {
+        const $toggle = $(<code>
+            <div class="theme-switcher">
+                <button class="theme-toggle" title="Switch Theme">
+                    <span class="bx bx-palette"></span>
+                </button>
+                <div class="theme-dropdown">
+                    ${this.themes.map(theme => </code>
+                        <div class="theme-option" data-theme="${theme}">
+                            <span class="theme-preview ${theme}"></span>
+                            <span class="theme-name">${this.formatThemeName(theme)}</span>
+                        </div>
+                    <code>).join('')}
+                </div>
+            </div>
+        </code>);
+        
+        $('body').append($toggle);
+        
+        // Add styles
+        $('<style>').text(<code>
+            .theme-switcher {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                z-index: 10000;
+            }
+            
+            .theme-toggle {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background: var(--primary-color);
+                color: white;
+                border: none;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                cursor: pointer;
+                font-size: 20px;
+            }
+            
+            .theme-dropdown {
+                position: absolute;
+                bottom: 60px;
+                right: 0;
+                background: var(--menu-background-color);
+                border: 1px solid var(--main-border-color);
+                border-radius: 8px;
+                padding: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                display: none;
+                min-width: 200px;
+            }
+            
+            .theme-switcher.active .theme-dropdown {
+                display: block;
+            }
+            
+            .theme-option {
+                display: flex;
+                align-items: center;
+                padding: 8px;
+                border-radius: 4px;
+                cursor: pointer;
+                gap: 12px;
+            }
+            
+            .theme-option:hover {
+                background: var(--menu-hover-background-color);
+            }
+            
+            .theme-preview {
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                border: 2px solid var(--main-border-color);
+            }
+            
+            .theme-preview.light {
+                background: linear-gradient(135deg, #ffffff, #f0f0f0);
+            }
+            
+            .theme-preview.dark {
+                background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            }
+            
+            .theme-preview.modern-dark {
+                background: linear-gradient(135deg, #0f0f23, #7c3aed);
+            }
+            
+            .theme-preview.custom {
+                background: linear-gradient(135deg, #667eea, #764ba2);
+            }
+        </code>).appendTo('head');
+    }
+    
+    bindEvents() {
+        $('.theme-toggle').on('click', () => {
+            $('.theme-switcher').toggleClass('active');
+        });
+        
+        $('.theme-option').on('click', (e) => {
+            const theme = $(e.currentTarget).data('theme');
+            this.applyTheme(theme);
+            $('.theme-switcher').removeClass('active');
+        });
+        
+        // Close on outside click
+        $(document).on('click', (e) => {
+            if (!$(e.target).closest('.theme-switcher').length) {
+                $('.theme-switcher').removeClass('active');
+            }
+        });
+    }
+    
+    async applyTheme(themeName) {
+        // Save preference
+        await api.setOption('theme', themeName);
+        
+        // Apply theme class
+        $('body').removeClass(this.themes.map(t => <code>theme-${t}</code>).join(' '));
+        $('body').addClass(<code>theme-${themeName}</code>);
+        
+        this.currentTheme = themeName;
+        
+        // Show notification
+        await api.showMessage(<code>Theme changed to ${this.formatThemeName(themeName)}</code>);
+    }
+    
+    getCurrentTheme() {
+        return api.getOption('theme') || 'light';
+    }
+    
+    formatThemeName(theme) {
+        return theme.split('-').map(word => 
+            word.charAt(0).toUpperCase() + word.slice(1)
+        ).join(' ');
+    }
+}
+
+<p>// Initialize theme switcher
+new ThemeSwitcher();
+</code></pre></p>
+
+<h3>Responsive Theme Variables</h3>
+
+<pre><code class="language-css">/<em> Responsive theme adjustments </em>/
+@media (max-width: 768px) {
+    :root {
+        /<em> Adjust spacing for mobile </em>/
+        --mobile-padding: 12px;
+        --mobile-margin: 8px;
+        
+        /<em> Larger touch targets </em>/
+        --button-min-height: 44px;
+        --input-min-height: 44px;
+    }
+    
+    .btn {
+        min-height: var(--button-min-height);
+        padding: 12px 16px;
+    }
+    
+    input,
+    textarea,
+    select {
+        min-height: var(--input-min-height);
+        font-size: 16px; /<em> Prevent zoom on iOS </em>/
+    }
+    
+    .tree {
+        font-size: 14px;
+    }
+    
+    .note-detail {
+        padding: var(--mobile-padding);
+    }
+}
+
+<p>/<em> High contrast mode support </em>/
+@media (prefers-contrast: high) {
+    :root {
+        --main-border-color: #000000;
+        --button-border-width: 2px;
+        --focus-outline-width: 3px;
+    }
+    
+    .btn {
+        border: var(--button-border-width) solid var(--button-border-color);
+    }
+    
+    *:focus {
+        outline: var(--focus-outline-width) solid var(--primary-color);
+    }
+}</p>
+
+<p>/<em> Dark mode preference </em>/
+@media (prefers-color-scheme: dark) {
+    :root:not(.theme-light) {
+        /<em> Automatically use dark colors </em>/
+        --main-background-color: #1a1a1a;
+        --main-text-color: #e0e0e0;
+        /<em> ... other dark mode variables </em>/
+    }
+}</p>
+
+<p>/<em> Reduced motion support </em>/
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+</code></pre></p>
+
+<h3>Theme-Specific Icons</h3>
+
+<pre><code class="language-css">/<em> Custom icon styling per theme </em>/
+.theme-modern-dark .bx {
+    /<em> Add glow effect to icons </em>/
+    filter: drop-shadow(0 0 2px rgba(124, 58, 237, 0.5));
+}
+
+<p>.theme-modern-dark .bx-star {
+    color: gold;
+    filter: drop-shadow(0 0 4px gold);
+}</p>
+
+<p>/<em> Replace icons with theme-specific versions </em>/
+.theme-cyberpunk .bx-folder::before {
+    content: '\eb1f'; /<em> Different icon </em>/
+    color: #00ff00;
+}</p>
+
+<p>/<em> Animated icons </em>/
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}</p>
+
+<p>.theme-animated .bx-bell {
+    animation: pulse 2s infinite;
+}</p>
+
+<p>.theme-animated .note-modified .bx {
+    animation: pulse 1s;
+}
+</code></pre></p>
+
+<h2>Accessibility Considerations</h2>
+
+<pre><code class="language-css">/<em> Ensure sufficient color contrast </em>/
+:root {
+    /<em> WCAG AAA compliant contrast ratios </em>/
+    --text-on-primary: #ffffff; /<em> 7:1 contrast with primary </em>/
+    --text-on-secondary: #000000; /<em> 7:1 contrast with secondary </em>/
+}
+
+<p>/<em> Focus indicators </em>/
+*:focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+}</p>
+
+<p>/<em> Skip to content link </em>/
+.skip-to-content {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary-color);
+    color: var(--text-on-primary);
+    padding: 8px;
+    text-decoration: none;
+    z-index: 100000;
+}</p>
+
+<p>.skip-to-content:focus {
+    top: 0;
+}</p>
+
+<p>/<em> High contrast borders </em>/
+.high-contrast {
+    --main-border-color: #000000;
+    --input-border-width: 2px;
+}</p>
+
+<p>/<em> Color blind friendly palette </em>/
+.theme-colorblind {
+    --success-color: #0066cc; /<em> Blue instead of green </em>/
+    --danger-color: #cc6600; /<em> Orange instead of red </em>/
+    --warning-color: #663399; /<em> Purple instead of yellow </em>/
+}</p>
+
+<p>/<em> Readable fonts </em>/
+body {
+    font-size: 16px;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+}</p>
+
+<p>/<em> Sufficient click targets </em>/
+button,
+a,
+input[type="checkbox"],
+input[type="radio"] {
+    min-width: 44px;
+    min-height: 44px;
+}
+</code></pre></p>
+
+<h2>Publishing Your Theme</h2>
+
+<h3>Package Structure</h3>
+
+<pre><code>my-theme/
+├── theme.css         # Main theme file
+├── preview.png       # Screenshot of theme
+├── README.md        # Documentation
+├── package.json     # Metadata
+└── variants/        # Optional theme variants
+    ├── dark.css
+    └── light.css
+</code></pre>
+
+<h3>Metadata File</h3>
+
+<pre><code class="language-json">{
+  "name": "my-awesome-theme",
+  "version": "1.0.0",
+  "description": "A beautiful theme for Trilium Notes",
+  "author": "Your Name",
+  "license": "MIT",
+  "trilium": {
+    "minVersion": "0.90.0",
+    "type": "theme",
+    "variants": ["light", "dark"],
+    "labels": {
+      "appTheme": "myAwesomeTheme",
+      "appCss": true
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/username/trilium-theme"
+  },
+  "keywords": ["trilium", "theme", "dark", "modern"]
+}
+</code></pre>
+
+<h3>Installation Instructions</h3>
+
+<pre><code class="language-markdown"><h1>My Awesome Theme</h1>
+
+<p>A modern theme for Trilium Notes with beautiful gradients and smooth animations.</p>
+
+<h2>Installation</h2>
+
+<li>Create a new CSS code note in Trilium</li>
+<li>Copy the contents of <code>theme.css</code></li>
+<li>Add the following labels to the note:</li>
+   - <code>#appTheme=myAwesomeTheme</code>
+   - <code>#appCss</code>
+<li>Reload Trilium (Ctrl+R)</li>
+<li>Select the theme from Options → Appearance → Theme</li>
+
+<h2>Features</h2>
+
+<p>- Beautiful gradient accents
+- Smooth animations
+- Dark and light variants
+- High contrast support
+- Mobile responsive</p>
+
+<h2>Customization</h2>
+
+<p>You can customize the theme by modifying the CSS variables at the top of the file.</p>
+
+<h2>Screenshots</h2>
+
+<p>!<a href="./screenshots/light.png">Light Mode</a>
+!<a href="./screenshots/dark.png">Dark Mode</a>
+</code></pre></p>
+
+<h2>Testing Your Theme</h2>
+
+<h3>Browser Developer Tools</h3>
+
+<pre><code class="language-javascript">// Test theme in console
+function testTheme() {
+    // Check contrast ratios
+    const bg = getComputedStyle(document.documentElement)
+        .getPropertyValue('--main-background-color');
+    const fg = getComputedStyle(document.documentElement)
+        .getPropertyValue('--main-text-color');
+    
+    console.log(<code>Background: ${bg}</code>);
+    console.log(<code>Foreground: ${fg}</code>);
+    
+    // Test all theme variables
+    const styles = getComputedStyle(document.documentElement);
+    const themeVars = Array.from(document.styleSheets)
+        .flatMap(sheet => Array.from(sheet.cssRules))
+        .filter(rule => rule.selectorText === ':root')
+        .flatMap(rule => Array.from(rule.style))
+        .filter(prop => prop.startsWith('--'));
+    
+    themeVars.forEach(varName => {
+        const value = styles.getPropertyValue(varName);
+        console.log(<code>${varName}: ${value}</code>);
+    });
+}
+
+<p>// Apply test theme
+function applyTestTheme(cssText) {
+    const style = document.createElement('style');
+    style.id = 'test-theme';
+    style.textContent = cssText;
+    document.head.appendChild(style);
+}</p>
+
+<p>// Remove test theme
+function removeTestTheme() {
+    document.getElementById('test-theme')?.remove();
+}
+</code></pre></p>
+
+<h3>Automated Testing</h3>
+
+<pre><code class="language-javascript">// Theme validation script
+class ThemeValidator {
+    validate(themeCSS) {
+        const errors = [];
+        const warnings = [];
+        
+        // Check required variables
+        const requiredVars = [
+            '--main-background-color',
+            '--main-text-color',
+            '--main-border-color',
+            '--primary-color'
+        ];
+        
+        requiredVars.forEach(varName => {
+            if (!themeCSS.includes(varName)) {
+                errors.push(<code>Missing required variable: ${varName}</code>);
+            }
+        });
+        
+        // Check color contrast
+        const colorPairs = [
+            ['--main-background-color', '--main-text-color'],
+            ['--primary-color', '--primary-text-color'],
+            ['--button-background-color', '--button-text-color']
+        ];
+        
+        // Validate color values
+        const colorRegex = /#[0-9a-fA-F]{3,6}|rgb\(|hsl\(/;
+        const matches = themeCSS.match(/--[\w-]+:\s*([^;]+);/g);
+        
+        matches?.forEach(match => {
+            const value = match.split(':')[1].trim().replace(';', '');
+            if (value && !colorRegex.test(value) && !value.startsWith('var(')) {
+                warnings.push(<code>Invalid color value: ${match}</code>);
+            }
+        });
+        
+        return { errors, warnings };
+    }
+}
+</code></pre>
+
+<h2>Best Practices</h2>
+
+<li><strong>Use CSS Variables</strong></li>
+   - Define all colors as variables
+   - Use semantic naming
+   - Provide fallback values
+
+<li><strong>Maintain Consistency</strong></li>
+   - Use consistent spacing
+   - Keep border radii uniform
+   - Use a limited color palette
+
+<li><strong>Ensure Accessibility</strong></li>
+   - Test color contrast
+   - Provide focus indicators
+   - Support high contrast mode
+
+<li><strong>Performance</strong></li>
+   - Avoid complex selectors
+   - Minimize animations
+   - Use efficient gradients
+
+<li><strong>Documentation</strong></li>
+   - Comment complex styles
+   - Provide customization guide
+   - Include screenshots
+
+<h2>Troubleshooting</h2>
+
+<h3>Theme Not Loading</h3>
+- Verify labels are correct
+- Check for CSS syntax errors
+- Ensure note type is CSS
+- Reload application
+
+<h3>Styles Not Applying</h3>
+- Check specificity conflicts
+- Verify variable names
+- Use browser dev tools
+- Clear cache
+
+<h3>Performance Issues</h3>
+- Reduce animation complexity
+- Optimize gradients
+- Minimize shadow usage
+- Profile with dev tools
+
+<h2>Next Steps</h2>
+
+<p>- Share your theme with the community
+- Create theme variants
+- Add custom animations
+- Build a theme generator tool</p>
+    </div>
+</body>
+</html>

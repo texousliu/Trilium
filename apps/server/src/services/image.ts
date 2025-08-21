@@ -86,7 +86,7 @@ function saveImage(parentNoteId: string, uploadBuffer: Buffer, originalName: str
     log.info(`Saving image ${originalName} into parent ${parentNoteId}`);
 
     if (trimFilename && originalName.length > 40) {
-        // https://github.com/zadam/trilium/issues/2307
+        // https://github.com/TriliumNext/Trilium/issues/2307
         originalName = "image";
     }
 
@@ -135,7 +135,7 @@ function saveImageToAttachment(noteId: string, uploadBuffer: Buffer, originalNam
     log.info(`Saving image '${originalName}' as attachment into note '${noteId}'`);
 
     if (trimFilename && originalName.length > 40) {
-        // https://github.com/zadam/trilium/issues/2307
+        // https://github.com/TriliumNext/Trilium/issues/2307
         originalName = "image";
     }
 

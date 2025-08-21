@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monorepo Structure</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+        h1 { color: #2c3e50; }
+        h2 { color: #34495e; margin-top: 30px; }
+        h3 { color: #7f8c8d; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-family: 'Courier New', monospace; }
+        .directory-tree { background: #2c3e50; color: #ecf0f1; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .app-section { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #3498db; }
+        .package-section { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #27ae60; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <h1>Monorepo Structure</h1>
+    
+    <p>Trilium is organized as a TypeScript monorepo using NX, facilitating code sharing, consistent tooling, and efficient build processes.</p>
+    
+    <h2>Project Organization</h2>
+    
+    <div class="directory-tree">
+        <pre>TriliumNext/Trilium/
+├── apps/                      # Runnable applications
+│   ├── client/               # Frontend web application
+│   ├── server/               # Node.js backend server
+│   ├── desktop/              # Electron desktop application
+│   ├── web-clipper/          # Browser extension
+│   ├── db-compare/           # Database comparison tool
+│   ├── dump-db/              # Database dump utility
+│   └── edit-docs/            # Documentation editor
+├── packages/                  # Shared libraries
+│   ├── commons/              # Shared interfaces and utilities
+│   ├── ckeditor5/            # Rich text editor
+│   ├── codemirror/           # Code editor
+│   ├── highlightjs/          # Syntax highlighting
+│   └── ckeditor5-*/          # CKEditor plugins
+├── docs/                      # Documentation
+├── nx.json                    # NX workspace configuration
+├── package.json              # Root package configuration
+├── pnpm-workspace.yaml       # PNPM workspace configuration
+└── tsconfig.base.json        # Base TypeScript configuration</pre>
+    </div>
+    
+    <h2>Applications</h2>
+    
+    <div class="app-section">
+        <h3>Client (/apps/client)</h3>
+        <p>The frontend application shared by both server and desktop versions.</p>
+        
+        <h4>Structure</h4>
+        <pre>apps/client/
+├── src/
+│   ├── components/         # Core UI components
+│   ├── entities/           # Frontend entities
+│   ├── services/           # Business logic
+│   ├── widgets/            # UI widgets system
+│   └── desktop.ts          # Entry point
+├── package.json
+└── vite.config.ts          # Vite configuration</pre>
+        
+        <h4>Key Files</h4>
+        <ul>
+            <li><code>desktop.ts</code> - Main application initialization</li>
+            <li><code>services/froca.ts</code> - Frontend cache implementation</li>
+            <li><code>widgets/basic_widget.ts</code> - Base widget class</li>
+            <li><code>services/server.ts</code> - API communication layer</li>
+        </ul>
+    </div>
+    
+    <div class="app-section">
+        <h3>Server (/apps/server)</h3>
+        <p>The Node.js backend providing API, database, and business logic.</p>
+        
+        <h4>Structure</h4>
+        <pre>apps/server/
+├── src/
+│   ├── becca/              # Backend cache system
+│   ├── routes/             # Express routes
+│   ├── etapi/              # External API
+│   ├── services/           # Business services
+│   ├── share/              # Note sharing
+│   └── main.ts             # Server entry point
+├── package.json
+└── webpack.config.js       # Webpack configuration</pre>
+        
+        <h4>Key Services</h4>
+        <ul>
+            <li><code>services/sql.ts</code> - Database access layer</li>
+            <li><code>services/sync.ts</code> - Synchronization logic</li>
+            <li><code>services/ws.ts</code> - WebSocket server</li>
+            <li><code>services/protected_session.ts</code> - Encryption handling</li>
+        </ul>
+    </div>
+    
+    <div class="app-section">
+        <h3>Desktop (/apps/desktop)</h3>
+        <p>Electron wrapper for the desktop application.</p>
+        
+        <h4>Key Components</h4>
+        <ul>
+            <li><code>main.ts</code> - Electron main process</li>
+            <li><code>preload.ts</code> - Preload script</li>
+            <li><code>electron-builder.yml</code> - Build configuration</li>
+        </ul>
+    </div>
+    
+    <h2>Packages</h2>
+    
+    <div class="package-section">
+        <h3>Commons (/packages/commons)</h3>
+        <p>Shared TypeScript interfaces and utilities used across applications.</p>
+        
+        <pre><code>// packages/commons/src/types.ts
+export interface NoteRow {
+    noteId: string;
+    title: string;
+    type: string;
+    mime: string;
+    isProtected: boolean;
+    dateCreated: string;
+    dateModified: string;
+}</code></pre>
+    </div>
+    
+    <div class="package-section">
+        <h3>CKEditor5 (/packages/ckeditor5)</h3>
+        <p>Custom CKEditor5 build with Trilium-specific plugins.</p>
+        
+        <h4>Custom Plugins</h4>
+        <ul>
+            <li><strong>Admonition:</strong> Note boxes with icons</li>
+            <li><strong>Footnotes:</strong> Reference footnotes</li>
+            <li><strong>Math:</strong> LaTeX equation rendering</li>
+            <li><strong>Mermaid:</strong> Diagram integration</li>
+        </ul>
+    </div>
+    
+    <h2>Build System</h2>
+    
+    <h3>Development Commands</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Command</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>pnpm install</code></td>
+                <td>Install dependencies</td>
+            </tr>
+            <tr>
+                <td><code>pnpm run server:start</code></td>
+                <td>Start development server</td>
+            </tr>
+            <tr>
+                <td><code>pnpm nx run desktop:serve</code></td>
+                <td>Start desktop app</td>
+            </tr>
+            <tr>
+                <td><code>pnpm test:all</code></td>
+                <td>Run all tests</td>
+            </tr>
+            <tr>
+                <td><code>pnpm nx build server</code></td>
+                <td>Build server</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h3>Build Commands</h3>
+    <pre><code># Build specific project
+pnpm nx build server
+pnpm nx build client
+
+# Build all projects
+pnpm nx run-many --target=build --all
+
+# Production build
+pnpm nx build server --configuration=production
+
+# Build only affected projects
+pnpm nx affected:build --base=main</code></pre>
+    
+    <h2>Development Workflow</h2>
+    
+    <h3>Initial Setup</h3>
+    <pre><code># Install dependencies
+pnpm install
+
+# Enable corepack for pnpm
+corepack enable
+
+# Build all packages
+pnpm nx run-many --target=build --all</code></pre>
+    
+    <h3>Testing</h3>
+    <pre><code># Run all tests
+pnpm test:all
+
+# Run tests for specific project
+pnpm nx test server
+
+# Run tests in watch mode
+pnpm nx test server --watch
+
+# Generate coverage
+pnpm nx test server --coverage</code></pre>
+    
+    <h3>Linting and Type Checking</h3>
+    <pre><code># Lint specific project
+pnpm nx lint server
+
+# Type check
+pnpm nx run server:typecheck
+
+# Fix lint issues
+pnpm nx lint server --fix</code></pre>
+    
+    <h2>TypeScript Configuration</h2>
+    
+    <h3>Base Configuration</h3>
+    <pre><code>{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": ["ES2022", "dom"],
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@triliumnext/commons": ["packages/commons/src/index.ts"]
+    }
+  }
+}</code></pre>
+    
+    <h2>Build Optimization</h2>
+    
+    <h3>NX Features</h3>
+    <ul>
+        <li><strong>Build Caching:</strong> Speeds up subsequent builds</li>
+        <li><strong>Affected Commands:</strong> Build/test only changed code</li>
+        <li><strong>Parallel Execution:</strong> Run tasks in parallel</li>
+        <li><strong>Dependency Graph:</strong> Visualize project dependencies</li>
+    </ul>
+    
+    <h3>Optimization Commands</h3>
+    <pre><code># Show project graph
+pnpm nx graph
+
+# Clear cache
+pnpm nx reset
+
+# Profile build performance
+pnpm nx build server --profile
+
+# Run with cache disabled
+pnpm nx build server --skip-nx-cache</code></pre>
+    
+    <h2>Production Builds</h2>
+    
+    <h3>Docker Build</h3>
+    <pre><code>FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json pnpm-lock.yaml ./
+RUN corepack enable && pnpm install --frozen-lockfile
+
+COPY . .
+RUN pnpm nx build server --configuration=production
+
+FROM node:20-alpine
+WORKDIR /app
+COPY --from=builder /app/dist/apps/server ./
+COPY --from=builder /app/node_modules ./node_modules
+CMD ["node", "main.js"]</code></pre>
+    
+    <h2>Best Practices</h2>
+    
+    <h3>Project Structure</h3>
+    <ol>
+        <li><strong>Keep packages focused:</strong> Each package should have a single, clear purpose</li>
+        <li><strong>Minimize circular dependencies:</strong> Use dependency graph to identify issues</li>
+        <li><strong>Share common code:</strong> Extract shared logic to packages/commons</li>
+    </ol>
+    
+    <h3>Development</h3>
+    <ol>
+        <li><strong>Use NX generators:</strong> Generate consistent code structure</li>
+        <li><strong>Leverage caching:</strong> Don't skip-nx-cache unless debugging</li>
+        <li><strong>Run affected commands:</strong> Save time by only building/testing changed code</li>
+    </ol>
+    
+    <h2>Troubleshooting</h2>
+    
+    <h3>Common Issues</h3>
+    
+    <h4>Build Cache Issues</h4>
+    <pre><code># Clear NX cache
+pnpm nx reset
+
+# Clear node_modules and reinstall
+rm -rf node_modules
+pnpm install</code></pre>
+    
+    <h4>Dependency Conflicts</h4>
+    <pre><code># Check for duplicate packages
+pnpm list --depth=0
+
+# Update all dependencies
+pnpm update --recursive</code></pre>
+    
+    <h4>Debug Commands</h4>
+    <pre><code># Verbose output
+pnpm nx build server --verbose
+
+# Show affected projects
+pnpm nx print-affected --type=app --select=projects</code></pre>
+</body>
+</html>

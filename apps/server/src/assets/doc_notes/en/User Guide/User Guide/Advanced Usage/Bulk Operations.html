@@ -1,0 +1,264 @@
+<h1>Bulk Operations</h1>
+
+<p>Execute actions on multiple notes simultaneously to save time and ensure consistency across your note collection.</p>
+
+<h2>Quick Start</h2>
+
+<p>Access bulk operations through:</p>
+<ul>
+    <li>Search results menu → "Bulk Actions"</li>
+    <li>Select multiple notes → Right-click → "Bulk Operations"</li>
+    <li>Script API: <code>api.executeBulkActions(noteIds, actions)</code></li>
+</ul>
+
+<h2>Available Operations</h2>
+
+<h3>Note Operations</h3>
+
+<div class="operation-card">
+    <h4>Move Notes</h4>
+    <p>Relocate multiple notes to a new parent location.</p>
+    <pre><code>{
+  "name": "moveNote",
+  "targetParentNoteId": "target_note_id"
+}</code></pre>
+    <p class="note">Notes with multiple parents will be cloned rather than moved.</p>
+</div>
+
+<div class="operation-card">
+    <h4>Delete Notes</h4>
+    <p>Permanently remove multiple notes from the database.</p>
+    <pre><code>{
+  "name": "deleteNote"
+}</code></pre>
+    <div class="warning">
+        <strong>Warning:</strong> This operation cannot be undone. Ensure you have backups.
+    </div>
+</div>
+
+<div class="operation-card">
+    <h4>Rename Notes</h4>
+    <p>Update titles using dynamic patterns with variables.</p>
+    <pre><code>{
+  "name": "renameNote",
+  "newTitle": "Project: ${note.title}"
+}</code></pre>
+    <p>Available variables: <code>${note.title}</code>, <code>${note.noteId}</code>, <code>${note.dateCreated}</code></p>
+</div>
+
+<h3>Attribute Operations</h3>
+
+<div class="operation-card">
+    <h4>Add Label</h4>
+    <p>Attach labels to multiple notes at once.</p>
+    <pre><code>{
+  "name": "addLabel",
+  "labelName": "reviewed",
+  "labelValue": "true"
+}</code></pre>
+</div>
+
+<div class="operation-card">
+    <h4>Update Label Value</h4>
+    <p>Modify existing label values across multiple notes.</p>
+    <pre><code>{
+  "name": "updateLabelValue",
+  "labelName": "status",
+  "labelValue": "completed"
+}</code></pre>
+</div>
+
+<div class="operation-card">
+    <h4>Add Relation</h4>
+    <p>Create relationships between notes and a target.</p>
+    <pre><code>{
+  "name": "addRelation",
+  "relationName": "references",
+  "targetNoteId": "bibliography_note"
+}</code></pre>
+</div>
+
+<h3>Custom Script Execution</h3>
+
+<div class="operation-card">
+    <h4>Execute Script</h4>
+    <p>Run custom JavaScript code on each selected note.</p>
+    <pre><code>{
+  "name": "executeScript",
+  "script": "note.setLabel('processed', new Date().toISOString());"
+}</code></pre>
+    <p>The <code>note</code> variable is available in the script context.</p>
+</div>
+
+<h2>Including Descendants</h2>
+
+<p>Apply operations to entire subtrees by enabling the "Include descendants" option:</p>
+
+<pre><code>api.executeBulkActions(noteIds, actions, true);</code></pre>
+
+<div class="info">
+    <strong>Tip:</strong> This is useful for moving or deleting entire project hierarchies.
+</div>
+
+<h2>Performance Guidelines</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Number of Notes</th>
+            <th>Expected Performance</th>
+            <th>Recommendations</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>&lt; 100</td>
+            <td>Instant</td>
+            <td>Execute directly</td>
+        </tr>
+        <tr>
+            <td>100-1000</td>
+            <td>Few seconds</td>
+            <td>Show progress indicator</td>
+        </tr>
+        <tr>
+            <td>&gt; 1000</td>
+            <td>May take minutes</td>
+            <td>Run during low activity, consider batching</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>Example: Project Archival</h2>
+
+<p>Archive completed projects with metadata:</p>
+
+<pre><code class="language-javascript">// Find completed projects
+const projectNotes = api.searchForNotes('#project #status=completed');
+
+// Define archive actions
+const archiveActions = [
+  { 
+    name: 'moveNote', 
+    targetParentNoteId: 'archive_folder_id' 
+  },
+  { 
+    name: 'addLabel', 
+    labelName: 'archivedDate', 
+    labelValue: new Date().toISOString() 
+  },
+  { 
+    name: 'deleteLabel', 
+    labelName: 'active' 
+  }
+];
+
+// Execute with descendants
+api.executeBulkActions(projectNotes, archiveActions, true);</code></pre>
+
+<h2>Safety Considerations</h2>
+
+<ul>
+    <li><strong>Always backup</strong> before large bulk operations</li>
+    <li><strong>Test first</strong> on a small subset of notes</li>
+    <li><strong>Review affected count</strong> before confirming</li>
+    <li><strong>Use transactions</strong> for related operations</li>
+    <li><strong>Monitor logs</strong> during execution</li>
+</ul>
+
+<h2>Troubleshooting</h2>
+
+<details>
+    <summary><strong>Operation appears to hang</strong></summary>
+    <p>For large operations (&gt; 1000 notes), the process may take several minutes. Check server logs for progress. Consider breaking into smaller batches.</p>
+</details>
+
+<details>
+    <summary><strong>Some notes not affected</strong></summary>
+    <p>Verify that:</p>
+    <ul>
+        <li>Notes exist and are accessible</li>
+        <li>Protected notes have unlocked session</li>
+        <li>No validation errors in logs</li>
+        <li>Target attributes don't have constraints</li>
+    </ul>
+</details>
+
+<details>
+    <summary><strong>Memory errors on large operations</strong></summary>
+    <p>Increase Node.js heap size:</p>
+    <pre><code>NODE_OPTIONS="--max-old-space-size=4096" npm start</code></pre>
+    <p>Or process in smaller batches of 500 notes.</p>
+</details>
+
+<style>
+.operation-card {
+    border: 1px solid var(--main-border-color);
+    border-radius: 4px;
+    padding: 15px;
+    margin: 15px 0;
+    background: var(--accented-background-color);
+}
+
+.operation-card h4 {
+    margin-top: 0;
+    color: var(--main-text-color);
+}
+
+.warning {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.info {
+    background: #d1ecf1;
+    border: 1px solid #17a2b8;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.note {
+    font-style: italic;
+    color: var(--muted-text-color);
+}
+
+pre {
+    background: var(--code-background-color);
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+details {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid var(--main-border-color);
+    border-radius: 4px;
+}
+
+summary {
+    cursor: pointer;
+    font-weight: 500;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+th, td {
+    border: 1px solid var(--main-border-color);
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background: var(--accented-background-color);
+    font-weight: 600;
+}
+</style>

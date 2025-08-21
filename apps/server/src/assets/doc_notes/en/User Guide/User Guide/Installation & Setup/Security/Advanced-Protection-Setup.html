@@ -1,0 +1,600 @@
+<div class="note-content">
+
+<h1>Advanced Protection Setup Guide</h1>
+
+<p>This guide provides step-by-step instructions for implementing advanced security features in Trilium, including enterprise-level protection measures and compliance configurations.</p>
+
+<div class="alert alert-info">
+    <strong>Target Audience:</strong> System administrators, security professionals, and advanced users implementing Trilium in production environments.
+</div>
+
+<h2>Table of Contents</h2>
+
+<ol>
+    <li><a href="#mfa-setup">Multi-Factor Authentication Setup</a></li>
+    <li><a href="#enterprise-auth">Enterprise Authentication</a></li>
+    <li><a href="#advanced-encryption">Advanced Encryption Configuration</a></li>
+    <li><a href="#security-monitoring">Security Monitoring Setup</a></li>
+    <li><a href="#compliance-config">Compliance Configuration</a></li>
+    <li><a href="#backup-security">Secure Backup Implementation</a></li>
+</ol>
+
+<h2 id="mfa-setup">Multi-Factor Authentication Setup</h2>
+
+<h3>Prerequisites</h3>
+<ul>
+    <li>Trilium instance with password authentication configured</li>
+    <li>Authenticator app (Google Authenticator, Authy, etc.)</li>
+    <li>Secure storage for recovery codes</li>
+</ul>
+
+<h3>Step-by-Step MFA Configuration</h3>
+
+<h4>Step 1: Enable MFA</h4>
+<ol>
+    <li>Navigate to <strong>Options → Security → Multi-Factor Authentication</strong></li>
+    <li>Click <strong>"Enable Multi-Factor Authentication"</strong></li>
+    <li>Confirm your current password when prompted</li>
+</ol>
+
+<h4>Step 2: Generate TOTP Secret</h4>
+<ol>
+    <li>Click <strong>"Generate New Secret"</strong></li>
+    <li>A QR code will be displayed along with the secret key</li>
+    <li>Copy the secret key to a secure location (backup)</li>
+</ol>
+
+<div class="alert alert-warning">
+    <strong>Security Note:</strong> The secret key is your backup method for setting up the authenticator on new devices. Store it securely.
+</div>
+
+<h4>Step 3: Configure Authenticator App</h4>
+
+<p><strong>Option A: QR Code (Recommended)</strong></p>
+<ol>
+    <li>Open your authenticator app</li>
+    <li>Tap "Add Account" or "+"</li>
+    <li>Select "Scan QR Code"</li>
+    <li>Point camera at the QR code displayed in Trilium</li>
+    <li>Verify the account is added with name "Trilium Notes"</li>
+</ol>
+
+<p><strong>Option B: Manual Entry</strong></p>
+<ol>
+    <li>Open your authenticator app</li>
+    <li>Tap "Add Account" or "+"</li>
+    <li>Select "Enter Key Manually"</li>
+    <li>Enter the following details:
+        <ul>
+            <li><strong>Account:</strong> Your email or username</li>
+            <li><strong>Key:</strong> The secret key from Trilium</li>
+            <li><strong>Type:</strong> Time-based</li>
+        </ul>
+    </li>
+</ol>
+
+<h4>Step 4: Verify TOTP Setup</h4>
+<ol>
+    <li>Wait for the authenticator to generate a 6-digit code</li>
+    <li>Enter the code in the "Verification Code" field</li>
+    <li>Click <strong>"Verify and Enable MFA"</strong></li>
+    <li>If successful, you'll see a confirmation message</li>
+</ol>
+
+<h4>Step 5: Save Recovery Codes</h4>
+<ol>
+    <li>Click <strong>"Generate Recovery Codes"</strong></li>
+    <li>Save the 10 recovery codes in a secure location:
+        <ul>
+            <li>Password manager</li>
+            <li>Encrypted file</li>
+            <li>Physical secure storage</li>
+        </ul>
+    </li>
+    <li>Click <strong>"I have saved my recovery codes"</strong></li>
+</ol>
+
+<div class="alert alert-danger">
+    <strong>Critical:</strong> Recovery codes are your only way to access Trilium if you lose access to your authenticator. Store them securely and treat them like passwords.
+</div>
+
+<h3>MFA Login Process</h3>
+
+<p>After enabling MFA, the login process becomes:</p>
+<ol>
+    <li>Enter your username and password</li>
+    <li>Click "Login"</li>
+    <li>Enter the 6-digit TOTP code from your authenticator</li>
+    <li>Alternatively, use a recovery code if TOTP is unavailable</li>
+    <li>Click "Verify" to complete login</li>
+</ol>
+
+<h3>Troubleshooting MFA</h3>
+
+<h4>Common Issues</h4>
+
+<div class="alert alert-info">
+    <strong>Issue:</strong> TOTP codes are rejected<br>
+    <strong>Solutions:</strong>
+    <ul>
+        <li>Check that your device time is synchronized (most common cause)</li>
+        <li>Ensure you're entering the current 6-digit code</li>
+        <li>Try the next generated code if the current one expires</li>
+        <li>Verify the secret was entered correctly in your authenticator</li>
+    </ul>
+</div>
+
+<div class="alert alert-warning">
+    <strong>Issue:</strong> Authenticator app lost or unavailable<br>
+    <strong>Solutions:</strong>
+    <ul>
+        <li>Use one of your saved recovery codes</li>
+        <li>Each recovery code can only be used once</li>
+        <li>Generate new recovery codes after using several</li>
+        <li>Re-setup MFA if all recovery codes are used</li>
+    </ul>
+</div>
+
+<h2 id="enterprise-auth">Enterprise Authentication</h2>
+
+<h3>Single Sign-On (SSO) Configuration</h3>
+
+<h4>OpenID Connect Setup</h4>
+
+<p>Configure Trilium to integrate with enterprise identity providers:</p>
+
+<h5>Configuration File Setup</h5>
+<pre><code># config.ini
+[OpenID]
+enabled=true
+issuer=https://your-provider.com
+client_id=your-client-id
+client_secret=your-client-secret
+redirect_uri=https://your-trilium.com/auth/callback
+scope=openid email profile</code></pre>
+
+<h5>Common Provider Configurations</h5>
+
+<p><strong>Google Workspace:</strong></p>
+<pre><code>[OpenID]
+enabled=true
+issuer=https://accounts.google.com
+client_id=your-google-client-id.apps.googleusercontent.com
+client_secret=your-google-client-secret
+redirect_uri=https://your-trilium.com/auth/callback
+scope=openid email profile</code></pre>
+
+<p><strong>Microsoft Azure AD:</strong></p>
+<pre><code>[OpenID]
+enabled=true
+issuer=https://login.microsoftonline.com/your-tenant-id/v2.0
+client_id=your-azure-client-id
+client_secret=your-azure-client-secret
+redirect_uri=https://your-trilium.com/auth/callback
+scope=openid email profile</code></pre>
+
+<h4>Environment Variable Configuration</h4>
+
+<p>For containerized deployments:</p>
+<pre><code># Docker environment variables
+TRILIUM_OPENID_ENABLED=true
+TRILIUM_OPENID_ISSUER=https://your-provider.com
+TRILIUM_OPENID_CLIENT_ID=your-client-id
+TRILIUM_OPENID_CLIENT_SECRET=your-client-secret
+TRILIUM_OPENID_REDIRECT_URI=https://your-trilium.com/auth/callback</code></pre>
+
+<h2 id="advanced-encryption">Advanced Encryption Configuration</h2>
+
+<h3>Custom Encryption Parameters</h3>
+
+<div class="alert alert-danger">
+    <strong>Warning:</strong> Modifying encryption parameters requires expert knowledge and may break compatibility with future versions. Only proceed if you understand the implications.
+</div>
+
+<h4>Scrypt Parameter Tuning</h4>
+
+<p>For high-security environments, you can increase scrypt parameters:</p>
+
+<pre><code>// Location: apps/server/src/services/encryption/my_scrypt.ts
+const customScryptParams = {
+    N: 32768,    // Higher CPU/memory cost (default: 16384)
+    r: 8,        // Block size (default: 8)
+    p: 2         // Parallelization (default: 1)
+};
+</code></pre>
+
+<p><strong>Impact Assessment:</strong></p>
+<ul>
+    <li><strong>Security:</strong> Higher parameters increase resistance to brute force</li>
+    <li><strong>Performance:</strong> Significantly slower password verification</li>
+    <li><strong>Compatibility:</strong> May break with future updates</li>
+    <li><strong>Hardware:</strong> Requires more RAM and CPU</li>
+</ul>
+
+<h3>Database-Level Encryption</h3>
+
+<h4>SQLite Encryption Extension</h4>
+
+<p>For additional database encryption (enterprise feature):</p>
+
+<ol>
+    <li>Install SQLCipher extension</li>
+    <li>Configure database encryption key</li>
+    <li>Modify connection string to use encryption</li>
+</ol>
+
+<pre><code># Database connection with encryption
+PRAGMA key = 'your-database-encryption-key';
+PRAGMA cipher_compatibility = 4;</code></pre>
+
+<h2 id="security-monitoring">Security Monitoring Setup</h2>
+
+<h3>Log Configuration</h3>
+
+<h4>Comprehensive Logging Setup</h4>
+
+<ol>
+    <li><strong>Create Log Directory</strong>
+        <pre><code>sudo mkdir -p /var/log/trilium
+sudo chown trilium:adm /var/log/trilium
+sudo chmod 750 /var/log/trilium</code></pre>
+    </li>
+    
+    <li><strong>Configure Log Rotation</strong>
+        <pre><code># /etc/logrotate.d/trilium
+/var/log/trilium/*.log {
+    daily
+    missingok
+    rotate 90
+    compress
+    delaycompress
+    notifempty
+    create 640 trilium adm
+    sharedscripts
+    postrotate
+        systemctl reload trilium
+    endscript
+}</code></pre>
+    </li>
+</ol>
+
+<h3>Security Event Monitoring</h3>
+
+<h4>Real-time Monitoring Script</h4>
+
+<p>Create automated monitoring for security events:</p>
+
+<pre><code>#!/bin/bash
+# /usr/local/bin/trilium-security-monitor.sh
+
+LOG_FILE="/var/log/trilium/security.log"
+ALERT_EMAIL="admin@yourdomain.com"
+
+# Monitor failed login attempts
+check_failed_logins() {
+    local count=$(grep -c "Failed login" "$LOG_FILE" 2>/dev/null || echo 0)
+    if [ "$count" -gt 5 ]; then
+        echo "ALERT: $count failed login attempts" | \
+        mail -s "Trilium Security Alert" "$ALERT_EMAIL"
+    fi
+}
+
+# Monitor CSRF violations
+check_csrf_violations() {
+    local count=$(grep -c "CSRF violation" "$LOG_FILE" 2>/dev/null || echo 0)
+    if [ "$count" -gt 0 ]; then
+        echo "ALERT: $count CSRF violations detected" | \
+        mail -s "Trilium Security Alert" "$ALERT_EMAIL"
+    fi
+}
+
+# Run checks
+check_failed_logins
+check_csrf_violations</code></pre>
+
+<h4>Automated Monitoring with Cron</h4>
+
+<pre><code># Add to crontab
+*/15 * * * * /usr/local/bin/trilium-security-monitor.sh</code></pre>
+
+<h2 id="compliance-config">Compliance Configuration</h2>
+
+<h3>GDPR Compliance</h3>
+
+<h4>Data Protection Settings</h4>
+
+<ol>
+    <li><strong>Enable Enhanced Logging</strong>
+        <pre><code># config.ini
+[Security]
+auditLogging=true
+dataAccessLogging=true
+retentionPeriod=2557</code></pre>
+    </li>
+    
+    <li><strong>Configure Data Export</strong>
+        <ul>
+            <li>Regular automated exports for data portability</li>
+            <li>User-accessible export functionality</li>
+            <li>Structured data format (JSON/XML)</li>
+        </ul>
+    </li>
+    
+    <li><strong>Right to Erasure Implementation</strong>
+        <ul>
+            <li>Secure deletion procedures</li>
+            <li>Encryption key destruction</li>
+            <li>Backup purging processes</li>
+        </ul>
+    </li>
+</ol>
+
+<h3>HIPAA Compliance</h3>
+
+<h4>Healthcare Data Protection</h4>
+
+<ol>
+    <li><strong>Access Controls</strong>
+        <ul>
+            <li>Strong authentication (password + MFA)</li>
+            <li>Session timeout configuration (max 10 minutes)</li>
+            <li>Automatic logout on inactivity</li>
+        </ul>
+    </li>
+    
+    <li><strong>Audit Requirements</strong>
+        <pre><code># Enhanced audit logging
+[HIPAA]
+auditAllAccess=true
+logUserActions=true
+retainLogs=2555  # 7 years in days
+encryptAuditLogs=true</code></pre>
+    </li>
+    
+    <li><strong>Encryption Standards</strong>
+        <ul>
+            <li>AES-128 minimum (meets HIPAA requirements)</li>
+            <li>Key management procedures</li>
+            <li>Encrypted backups and transmission</li>
+        </ul>
+    </li>
+</ol>
+
+<h2 id="backup-security">Secure Backup Implementation</h2>
+
+<h3>Automated Encrypted Backups</h3>
+
+<h4>Backup Script Configuration</h4>
+
+<pre><code>#!/bin/bash
+# /usr/local/bin/trilium-secure-backup.sh
+
+BACKUP_DIR="/opt/trilium/backups"
+GPG_RECIPIENT="trilium-backup@yourdomain.com"
+RETENTION_DAYS=90
+
+# Create encrypted backup
+create_backup() {
+    local timestamp=$(date +%Y%m%d_%H%M%S)
+    local backup_name="trilium_backup_$timestamp"
+    
+    # Stop Trilium for consistent backup
+    systemctl stop trilium
+    
+    # Create backup
+    tar czf - -C /opt/trilium/data . | \
+    gpg --trust-model always --encrypt -r "$GPG_RECIPIENT" \
+    > "$BACKUP_DIR/${backup_name}.tar.gz.gpg"
+    
+    # Start Trilium
+    systemctl start trilium
+    
+    # Verify backup
+    if gpg --decrypt "$BACKUP_DIR/${backup_name}.tar.gz.gpg" | tar tz > /dev/null; then
+        echo "Backup verification successful: $backup_name"
+    else
+        echo "Backup verification failed!" >&2
+        exit 1
+    fi
+    
+    # Set permissions
+    chown trilium:trilium "$BACKUP_DIR/${backup_name}.tar.gz.gpg"
+    chmod 600 "$BACKUP_DIR/${backup_name}.tar.gz.gpg"
+}
+
+# Cleanup old backups
+cleanup_backups() {
+    find "$BACKUP_DIR" -name "*.tar.gz.gpg" -mtime +$RETENTION_DAYS -delete
+}
+
+# Execute backup
+create_backup
+cleanup_backups</code></pre>
+
+<h4>Automated Backup Schedule</h4>
+
+<pre><code># Add to crontab for daily backups at 2 AM
+0 2 * * * /usr/local/bin/trilium-secure-backup.sh</code></pre>
+
+<h3>Backup Verification</h3>
+
+<h4>Regular Backup Testing</h4>
+
+<pre><code>#!/bin/bash
+# /usr/local/bin/trilium-backup-test.sh
+
+BACKUP_DIR="/opt/trilium/backups"
+TEST_DIR="/tmp/trilium-backup-test"
+
+# Test latest backup
+test_latest_backup() {
+    local latest_backup=$(ls -t "$BACKUP_DIR"/*.tar.gz.gpg | head -1)
+    
+    if [ -z "$latest_backup" ]; then
+        echo "No backups found!"
+        exit 1
+    fi
+    
+    echo "Testing backup: $latest_backup"
+    
+    # Create test directory
+    mkdir -p "$TEST_DIR"
+    
+    # Decrypt and extract
+    if gpg --decrypt "$latest_backup" | tar xzf - -C "$TEST_DIR"; then
+        echo "Backup extraction successful"
+        
+        # Test database integrity
+        if sqlite3 "$TEST_DIR/document.db" "PRAGMA integrity_check;" | grep -q "ok"; then
+            echo "Database integrity check passed"
+        else
+            echo "Database integrity check failed!"
+            exit 1
+        fi
+    else
+        echo "Backup extraction failed!"
+        exit 1
+    fi
+    
+    # Cleanup
+    rm -rf "$TEST_DIR"
+    
+    echo "Backup test completed successfully"
+}
+
+test_latest_backup</code></pre>
+
+<h3>Off-site Backup Synchronization</h3>
+
+<h4>Secure Remote Sync</h4>
+
+<pre><code>#!/bin/bash
+# /usr/local/bin/trilium-remote-sync.sh
+
+REMOTE_HOST="backup.yourdomain.com"
+REMOTE_USER="trilium-backup"
+REMOTE_PATH="/backups/trilium"
+LOCAL_BACKUP_DIR="/opt/trilium/backups"
+
+# Sync to remote location
+sync_to_remote() {
+    rsync -avz --progress --delete \
+        -e "ssh -i /home/trilium/.ssh/backup_key" \
+        "$LOCAL_BACKUP_DIR/" \
+        "$REMOTE_USER@$REMOTE_HOST:$REMOTE_PATH/"
+    
+    if [ $? -eq 0 ]; then
+        echo "Remote sync completed successfully"
+    else
+        echo "Remote sync failed!"
+        exit 1
+    fi
+}
+
+sync_to_remote</code></pre>
+
+<h2>Security Assessment Tools</h2>
+
+<h3>Security Scanner</h3>
+
+<h4>Automated Security Assessment</h4>
+
+<pre><code>#!/bin/bash
+# /usr/local/bin/trilium-security-scan.sh
+
+SCORE=0
+MAX_SCORE=0
+
+print_check() {
+    local status="$1"
+    local message="$2"
+    local points="$3"
+    
+    case "$status" in
+        "PASS")
+            echo "✓ $message (+$points points)"
+            SCORE=$((SCORE + points))
+            ;;
+        "FAIL")
+            echo "✗ $message"
+            ;;
+        "WARN")
+            echo "! $message"
+            ;;
+    esac
+    
+    MAX_SCORE=$((MAX_SCORE + points))
+}
+
+# Check HTTPS configuration
+check_https() {
+    if curl -s -I https://localhost:8080 2>/dev/null | grep -q "HTTP/"; then
+        print_check "PASS" "HTTPS is configured" 20
+    else
+        print_check "FAIL" "HTTPS is not configured" 20
+    fi
+}
+
+# Check MFA status
+check_mfa() {
+    local mfa_enabled=$(sqlite3 /opt/trilium/data/document.db \
+        "SELECT value FROM options WHERE name = 'mfaEnabled';" 2>/dev/null)
+    if [ "$mfa_enabled" = "true" ]; then
+        print_check "PASS" "MFA is enabled" 20
+    else
+        print_check "WARN" "MFA is not enabled" 20
+    fi
+}
+
+# Check file permissions
+check_permissions() {
+    local db_perms=$(stat -c "%a" /opt/trilium/data/document.db 2>/dev/null)
+    if [ "$db_perms" = "600" ]; then
+        print_check "PASS" "Database permissions are secure" 10
+    else
+        print_check "FAIL" "Database permissions are too permissive" 10
+    fi
+}
+
+# Run all checks
+echo "=== Trilium Security Assessment ==="
+check_https
+check_mfa
+check_permissions
+
+echo "=== Summary ==="
+echo "Score: $SCORE / $MAX_SCORE ($(($SCORE * 100 / $MAX_SCORE))%)"
+
+if [ $SCORE -eq $MAX_SCORE ]; then
+    echo "✓ Excellent security configuration!"
+elif [ $SCORE -ge $((MAX_SCORE * 80 / 100)) ]; then
+    echo "✓ Good security with minor improvements needed"
+else
+    echo "⚠ Security improvements required"
+fi</code></pre>
+
+<h2>Support and Resources</h2>
+
+<h3>Getting Help</h3>
+
+<ul>
+    <li><strong>Documentation:</strong> Comprehensive guides in help system</li>
+    <li><strong>Community:</strong> GitHub discussions and issues</li>
+    <li><strong>Security Issues:</strong> Report to security team</li>
+    <li><strong>Professional Support:</strong> Enterprise support options</li>
+</ul>
+
+<h3>Additional Resources</h3>
+
+<ul>
+    <li><a href="#comprehensive-security-guide">Comprehensive Security Guide</a></li>
+    <li><a href="#protected-notes-encryption">Protected Notes and Encryption</a></li>
+    <li><a href="#authentication-session-management">Authentication and Session Management</a></li>
+    <li><a href="#security-best-practices">Security Best Practices</a></li>
+</ul>
+
+<div class="alert alert-success">
+    <strong>Security is a Journey:</strong> Implementing these advanced protection measures is just the beginning. Regular security assessments, updates, and monitoring are essential for maintaining a secure Trilium environment.
+</div>
+
+</div>

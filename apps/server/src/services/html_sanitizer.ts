@@ -22,7 +22,7 @@ function sanitize(dirtyHtml: string) {
         return dirtyHtml;
     }
 
-    // avoid H1 per https://github.com/zadam/trilium/issues/1552
+    // avoid H1 per https://github.com/TriliumNext/Trilium/issues/1552
     // demote H1, and if that conflicts with existing H2, demote that, etc
     const transformTags: Record<string, string> = {};
     const lowercasedHtml = dirtyHtml.toLowerCase();

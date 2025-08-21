@@ -515,7 +515,7 @@ class ConsistencyChecks {
         );
 
         if (sqlInit.getDbSize() < 500000) {
-            // querying for "content IS NULL" is expensive since content is not indexed. See e.g. https://github.com/zadam/trilium/issues/2887
+            // querying for "content IS NULL" is expensive since content is not indexed. See e.g. https://github.com/TriliumNext/Trilium/issues/2887
 
             this.findAndFixIssues(
                 `

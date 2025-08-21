@@ -173,7 +173,7 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
             this.attributeDetailWidget.hide();
         });
 
-        this.$editor.on("blur", () => setTimeout(() => this.save(), 100)); // Timeout to fix https://github.com/zadam/trilium/issues/4160
+        this.$editor.on("blur", () => setTimeout(() => this.save(), 100)); // Timeout to fix https://github.com/TriliumNext/Trilium/issues/4160
 
         this.$addNewAttributeButton = this.$widget.find(".add-new-attribute-button");
         this.$addNewAttributeButton.on("click", (e) => this.addNewAttribute(e));
@@ -282,7 +282,7 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
 
     async save() {
         if (this.lastUpdatedNoteId !== this.noteId) {
-            // https://github.com/zadam/trilium/issues/3090
+            // https://github.com/TriliumNext/Trilium/issues/3090
             console.warn("Ignoring blur event because a different note is loaded.");
             return;
         }

@@ -364,7 +364,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
         this.$inputName = this.$widget.find(".attr-input-name");
         this.$inputName.on("input", (ev) => {
             if (!(ev.originalEvent as KeyboardEvent)?.isComposing) {
-                // https://github.com/zadam/trilium/pull/3812
+                // https://github.com/TriliumNext/Trilium/pull/3812
                 this.userEditedAttribute();
             }
         });
@@ -383,7 +383,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
         this.$inputValue = this.$widget.find(".attr-input-value");
         this.$inputValue.on("input", (ev) => {
             if (!(ev.originalEvent as KeyboardEvent)?.isComposing) {
-                // https://github.com/zadam/trilium/pull/3812
+                // https://github.com/TriliumNext/Trilium/pull/3812
                 this.userEditedAttribute();
             }
         });
@@ -421,7 +421,7 @@ export default class AttributeDetailWidget extends NoteContextAwareWidget {
         this.$inputInverseRelation = this.$widget.find(".attr-input-inverse-relation");
         this.$inputInverseRelation.on("input", (ev) => {
             if (!(ev.originalEvent as KeyboardEvent)?.isComposing) {
-                // https://github.com/zadam/trilium/pull/3812
+                // https://github.com/TriliumNext/Trilium/pull/3812
                 this.userEditedAttribute();
             }
         });

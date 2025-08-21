@@ -4,9 +4,9 @@
 
 **Trilium is in maintenance mode and Web Clipper is not likely to get new releases.**
 
-Trilium Web Clipper is a web browser extension which allows user to clip text, screenshots, whole pages and short notes and save them directly to [Trilium Notes](https://github.com/zadam/trilium). 
+Trilium Web Clipper is a web browser extension which allows user to clip text, screenshots, whole pages and short notes and save them directly to [Trilium Notes](https://github.com/TriliumNext/Trilium). 
 
-For more details, see the [wiki page](https://github.com/zadam/trilium/wiki/Web-clipper).
+For more details, see the [wiki page](https://github.com/TriliumNext/Trilium/wiki/Web-clipper).
 
 ## Keyboard shortcuts
 Keyboard shortcuts are available for most functions:  

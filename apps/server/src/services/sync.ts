@@ -185,7 +185,7 @@ async function pullChanges(syncContext: SyncContext) {
             break;
         } else {
             try {
-                // https://github.com/zadam/trilium/issues/4310
+                // https://github.com/TriliumNext/Trilium/issues/4310
                 const sizeInKb = Math.round(JSON.stringify(resp).length / 1024);
 
                 log.info(

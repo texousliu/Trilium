@@ -1,0 +1,378 @@
+<h1>Note Revisions</h1>
+
+<p>Track and restore previous versions of your notes with Trilium's comprehensive revision system.</p>
+
+<h2>Understanding Revisions</h2>
+
+<p>Revisions are automatic snapshots of your note content captured at specific intervals. Each revision preserves:</p>
+<ul>
+    <li>Complete note content</li>
+    <li>Note title at revision time</li>
+    <li>Type and MIME information</li>
+    <li>Creation and modification timestamps</li>
+    <li>Protection status</li>
+</ul>
+
+<h2>Accessing Revision History</h2>
+
+<div class="access-methods">
+    <div class="method">
+        <h4>Via Note Menu</h4>
+        <p>Click note menu (⋮) → "Revisions"</p>
+    </div>
+    <div class="method">
+        <h4>Keyboard Shortcut</h4>
+        <p>Press <kbd>Alt</kbd> + <kbd>R</kbd></p>
+    </div>
+    <div class="method">
+        <h4>Script API</h4>
+        <p><code>note.getRevisions()</code></p>
+    </div>
+</div>
+
+<h2>Automatic Creation Rules</h2>
+
+<div class="info-box">
+    <h3>Default Triggers</h3>
+    <ul>
+        <li>After 5 minutes of continuous editing</li>
+        <li>When switching to a different note</li>
+        <li>Before major operations (delete, move)</li>
+        <li>Content size changes > 20%</li>
+    </ul>
+</div>
+
+<h2>Retention Policies</h2>
+
+<table class="retention-table">
+    <thead>
+        <tr>
+            <th>Age</th>
+            <th>Retention</th>
+            <th>Example</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>&lt; 1 day</td>
+            <td>Keep all</td>
+            <td>Every revision saved</td>
+        </tr>
+        <tr>
+            <td>1-7 days</td>
+            <td>Daily</td>
+            <td>One per day</td>
+        </tr>
+        <tr>
+            <td>7-30 days</td>
+            <td>Weekly</td>
+            <td>One per week</td>
+        </tr>
+        <tr>
+            <td>&gt; 30 days</td>
+            <td>Monthly</td>
+            <td>One per month</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>Custom Retention Settings</h2>
+
+<p>Configure retention per note using attributes:</p>
+
+<div class="code-example">
+    <h4>Keep All Revisions</h4>
+    <pre><code>#revisionRetention=all</code></pre>
+</div>
+
+<div class="code-example">
+    <h4>Keep for Specific Duration</h4>
+    <pre><code>#revisionRetention=90d</code></pre>
+</div>
+
+<div class="code-example">
+    <h4>Disable Revisions</h4>
+    <pre><code>#disableRevisions</code></pre>
+</div>
+
+<h2>Comparing Revisions</h2>
+
+<div class="feature-box">
+    <h3>Visual Comparison</h3>
+    <ol>
+        <li>Open revision history</li>
+        <li>Select two revisions</li>
+        <li>Click "Compare"</li>
+        <li>View side-by-side differences</li>
+    </ol>
+    <p class="highlight">Added content shown in <span style="color: green;">green</span>, removed in <span style="color: red;">red</span>.</p>
+</div>
+
+<h2>Restoring Revisions</h2>
+
+<div class="steps">
+    <h3>Manual Restoration</h3>
+    <ol>
+        <li>Open revision history (<kbd>Alt</kbd> + <kbd>R</kbd>)</li>
+        <li>Browse revisions by date/time</li>
+        <li>Preview revision content</li>
+        <li>Click "Restore this version"</li>
+        <li>Confirm replacement</li>
+    </ol>
+</div>
+
+<div class="warning">
+    <strong>Important:</strong> Restoring a revision replaces current content. Consider creating a manual snapshot first.
+</div>
+
+<h2>Creating Manual Snapshots</h2>
+
+<p>Force revision creation for important milestones:</p>
+
+<pre><code class="language-javascript">// Via Script API
+api.createRevision(note.noteId, {
+  title: note.title,
+  content: note.getContent(),
+  reason: 'Before major refactoring'
+});</code></pre>
+
+<h2>Protected Note Revisions</h2>
+
+<div class="security-box">
+    <h3>Encryption Behavior</h3>
+    <ul>
+        <li>Revisions inherit note's protection status</li>
+        <li>Title and content encrypted separately</li>
+        <li>Requires unlocked session to view</li>
+        <li>Protection changes apply to all revisions</li>
+    </ul>
+</div>
+
+<h2>Storage Management</h2>
+
+<div class="metrics">
+    <h3>Typical Storage Usage</h3>
+    <table>
+        <tr>
+            <td>Text notes</td>
+            <td>~2KB per revision</td>
+        </tr>
+        <tr>
+            <td>Code notes</td>
+            <td>~5KB per revision</td>
+        </tr>
+        <tr>
+            <td>Image notes</td>
+            <td>Deduplicated via blobs</td>
+        </tr>
+        <tr>
+            <td>File notes</td>
+            <td>Full file size</td>
+        </tr>
+    </table>
+</div>
+
+<h2>Cleanup Operations</h2>
+
+<div class="code-example">
+    <h4>Automatic Cleanup</h4>
+    <pre><code class="language-javascript">// Configure in options
+api.setOption('revisionCleanupDays', 90);
+api.setOption('revisionCleanupEnabled', true);</code></pre>
+</div>
+
+<div class="code-example">
+    <h4>Manual Cleanup</h4>
+    <pre><code class="language-javascript">// Delete revisions older than 90 days
+const cutoffDate = new Date();
+cutoffDate.setDate(cutoffDate.getDate() - 90);
+
+for (const note of api.getAllNotes()) {
+  const revisions = note.getRevisions();
+  for (const revision of revisions) {
+    if (revision.dateCreated < cutoffDate) {
+      revision.delete();
+    }
+  }
+}</code></pre>
+</div>
+
+<h2>Performance Tips</h2>
+
+<ul class="tips">
+    <li><strong>Large files:</strong> Consider disabling revisions for binary attachments</li>
+    <li><strong>Frequent edits:</strong> Increase revision interval to reduce storage</li>
+    <li><strong>Cleanup:</strong> Run cleanup during low-activity periods</li>
+    <li><strong>Monitoring:</strong> Check database size regularly</li>
+</ul>
+
+<h2>Troubleshooting</h2>
+
+<details>
+    <summary><strong>Revisions not appearing</strong></summary>
+    <ul>
+        <li>Check if <code>#disableRevisions</code> is set</li>
+        <li>Verify revision creation interval in options</li>
+        <li>Ensure sufficient disk space</li>
+        <li>Check database write permissions</li>
+    </ul>
+</details>
+
+<details>
+    <summary><strong>Cannot view revision content</strong></summary>
+    <ul>
+        <li>For protected notes, unlock protected session</li>
+        <li>Verify blob storage integrity</li>
+        <li>Check database consistency</li>
+        <li>Review error logs for details</li>
+    </ul>
+</details>
+
+<details>
+    <summary><strong>Excessive storage usage</strong></summary>
+    <ul>
+        <li>Implement aggressive cleanup policy</li>
+        <li>Exclude binary notes from tracking</li>
+        <li>Archive old revisions externally</li>
+        <li>Consider compression options</li>
+    </ul>
+</details>
+
+<style>
+.access-methods {
+    display: flex;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.method {
+    flex: 1;
+    padding: 15px;
+    background: var(--accented-background-color);
+    border-radius: 4px;
+    border: 1px solid var(--main-border-color);
+}
+
+.method h4 {
+    margin-top: 0;
+    color: var(--main-text-color);
+}
+
+.info-box, .feature-box, .security-box {
+    background: #e8f4f8;
+    border-left: 4px solid #17a2b8;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+
+.warning {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+
+.code-example {
+    margin: 15px 0;
+}
+
+.code-example h4 {
+    margin-bottom: 5px;
+    color: var(--main-text-color);
+}
+
+.retention-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.retention-table th,
+.retention-table td {
+    border: 1px solid var(--main-border-color);
+    padding: 10px;
+    text-align: left;
+}
+
+.retention-table th {
+    background: var(--accented-background-color);
+}
+
+.metrics table {
+    width: 100%;
+    margin: 10px 0;
+}
+
+.metrics td {
+    padding: 8px;
+    border-bottom: 1px solid var(--main-border-color);
+}
+
+.steps {
+    background: var(--accented-background-color);
+    padding: 20px;
+    border-radius: 4px;
+    margin: 20px 0;
+}
+
+.steps ol {
+    margin: 10px 0;
+}
+
+.tips {
+    list-style: none;
+    padding: 0;
+}
+
+.tips li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--main-border-color);
+}
+
+.tips li:last-child {
+    border-bottom: none;
+}
+
+.highlight {
+    font-weight: 500;
+}
+
+kbd {
+    background: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+details {
+    margin: 15px 0;
+    padding: 15px;
+    background: var(--accented-background-color);
+    border-radius: 4px;
+    border: 1px solid var(--main-border-color);
+}
+
+summary {
+    cursor: pointer;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+pre {
+    background: var(--code-background-color);
+    padding: 15px;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+code {
+    background: var(--code-background-color);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: monospace;
+}
+</style>

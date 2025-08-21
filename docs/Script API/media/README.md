@@ -12,13 +12,13 @@ See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for q
 
 ## ⚠️ Why TriliumNext?
 
-[The original Trilium project is in maintenance mode](https://github.com/zadam/trilium/issues/4620)
+[The original Trilium project is in maintenance mode](https://github.com/TriliumNext/Trilium/issues/4620)
 
 ### Migrating from Trilium?
 
 There are no special migration steps to migrate from a zadam/Trilium instance to a TriliumNext/Trilium instance. Just upgrade your Trilium instance to the latest version and [install TriliumNext/Trilium as usual](#-installation)
 
-Versions up to and including [v0.90.4](https://github.com/TriliumNext/Trilium/releases/tag/v0.90.4) are compatible with the latest zadam/trilium version of [v0.63.7](https://github.com/zadam/trilium/releases/tag/v0.63.7). Any later versions of TriliumNext have their sync versions incremented.
+Versions up to and including [v0.90.4](https://github.com/TriliumNext/Trilium/releases/tag/v0.90.4) are compatible with the latest TriliumNext/Trilium version of [v0.63.7](https://github.com/TriliumNext/Trilium/releases/tag/v0.63.7). Any later versions of TriliumNext have their sync versions incremented.
 
 ## 💬 Discuss with us
 

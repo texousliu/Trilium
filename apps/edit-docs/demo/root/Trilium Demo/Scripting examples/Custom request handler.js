@@ -6,7 +6,7 @@ return api.res.send(404);
  * To test this, execute the following curl request: curl -X POST http://localhost:37740/custom/create-note -H "Content-Type: application/json" -d "{ \"secret\": \"secret-password\", \"title\": \"hello\", \"content\": \"world\" }"
  * (host and port might have to be adjusted based on your setup)
  *
- * See https://github.com/zadam/trilium/wiki/Custom-request-handler for details.
+ * See https://github.com/TriliumNext/Trilium/wiki/Custom-request-handler for details.
  */
 
 const {req, res} = api;

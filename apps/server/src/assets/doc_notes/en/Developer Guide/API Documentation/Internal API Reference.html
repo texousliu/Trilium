@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Internal API Reference</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            line-height: 1.6; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px; 
+        }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #34495e; margin-top: 40px; border-bottom: 2px solid #ecf0f1; padding-bottom: 5px; }
+        h3 { color: #7f8c8d; margin-top: 30px; }
+        h4 { color: #95a5a6; margin-top: 25px; }
+        pre { 
+            background: #2c3e50; 
+            color: #ecf0f1; 
+            padding: 20px; 
+            border-radius: 8px; 
+            overflow-x: auto; 
+            border-left: 4px solid #3498db;
+        }
+        code { 
+            background: #f4f4f4; 
+            padding: 3px 6px; 
+            border-radius: 4px; 
+            font-family: 'Courier New', Monaco, monospace; 
+            font-size: 0.9em;
+        }
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        .endpoint-box {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+        .method-get { border-left-color: #28a745; }
+        .method-post { border-left-color: #007bff; }
+        .method-put { border-left-color: #ffc107; }
+        .method-patch { border-left-color: #fd7e14; }
+        .method-delete { border-left-color: #dc3545; }
+        .example-box {
+            background: #f1f3f4;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        table { 
+            border-collapse: collapse; 
+            width: 100%; 
+            margin: 20px 0; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 12px; 
+            text-align: left; 
+        }
+        th { 
+            background: #34495e; 
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) { background: #f8f9fa; }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #f39c12;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #74c0fc;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+        .danger {
+            background: #f8d7da;
+            border: 1px solid #f1aeb5;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #dc3545;
+        }
+        .toc {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .toc ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        .toc a {
+            text-decoration: none;
+            color: #495057;
+        }
+        .toc a:hover {
+            color: #3498db;
+        }
+        .websocket-box {
+            background: #e8f4f8;
+            border-left: 4px solid #9b59b6;
+            padding: 15px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Internal API Reference</h1>
+    
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#authentication-and-session-management">Authentication and Session Management</a></li>
+            <li><a href="#core-api-endpoints">Core API Endpoints</a></li>
+            <li><a href="#websocket-real-time-updates">WebSocket Real-time Updates</a></li>
+            <li><a href="#file-operations">File Operations</a></li>
+            <li><a href="#import-export-operations">Import/Export Operations</a></li>
+            <li><a href="#when-to-use-internal-vs-etapi">When to Use Internal vs ETAPI</a></li>
+            <li><a href="#security-considerations">Security Considerations</a></li>
+        </ul>
+    </div>
+
+    <h2 id="introduction">Introduction</h2>
+    
+    <p>The Internal API is the primary interface used by the Trilium Notes client application to communicate with the server. While powerful and feature-complete, this API is primarily designed for internal use.</p>
+
+    <div class="danger">
+        <h4>Important Notice</h4>
+        <p><strong>For external integrations, please use <a href="ETAPI%20Complete%20Guide.html">ETAPI</a> instead.</strong> The Internal API:</p>
+        <ul>
+            <li>May change between versions without notice</li>
+            <li>Requires session-based authentication with CSRF protection</li>
+            <li>Is tightly coupled with the frontend application</li>
+            <li>Has limited documentation and stability guarantees</li>
+        </ul>
+    </div>
+
+    <div class="info">
+        <strong>Base URL:</strong> <code>http://localhost:8080/api</code>
+    </div>
+
+    <h3>Key Characteristics</h3>
+    <ul>
+        <li>Session-based authentication with cookies</li>
+        <li>CSRF token protection for state-changing operations</li>
+        <li>WebSocket support for real-time updates</li>
+        <li>Full feature parity with the Trilium UI</li>
+        <li>Complex request/response formats optimized for the client</li>
+    </ul>
+
+    <h2 id="authentication-and-session-management">Authentication and Session Management</h2>
+    
+    <h3>Password Login</h3>
+    
+    <div class="endpoint-box method-post">
+        <strong>POST</strong> <code>/api/login</code>
+        <p>Authenticates user with password and creates a session.</p>
+    </div>
+
+    <div class="example-box">
+        <strong>Request:</strong>
+        <pre><code>const formData = new URLSearchParams();
+formData.append('password', 'your-password');
+
+const response = await fetch('http://localhost:8080/api/login', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: formData,
+    credentials: 'include'  // Important for cookie handling
+});</code></pre>
+    </div>
+
+    <div class="example-box">
+        <strong>Response:</strong>
+        <pre><code>{
+    "success": true,
+    "message": "Login successful"
+}</code></pre>
+    </div>
+
+    <p>The server sets a session cookie (<code>trilium.sid</code>) that must be included in subsequent requests.</p>
+
+    <h3>TOTP Authentication (2FA)</h3>
+    
+    <p>If 2FA is enabled, include the TOTP token:</p>
+    
+    <div class="example-box">
+        <pre><code>formData.append('password', 'your-password');
+formData.append('totpToken', '123456');</code></pre>
+    </div>
+
+    <h3>Token Authentication</h3>
+    
+    <div class="endpoint-box method-post">
+        <strong>POST</strong> <code>/api/login/token</code>
+        <p>Generate an API token for programmatic access:</p>
+    </div>
+
+    <div class="example-box">
+        <pre><code>const response = await fetch('http://localhost:8080/api/login/token', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        password: 'your-password',
+        tokenName: 'My Integration'
+    })
+});
+
+const { authToken } = await response.json();
+// Use this token in Authorization header for future requests</code></pre>
+    </div>
+
+    <h3>Protected Session</h3>
+    
+    <div class="endpoint-box method-post">
+        <strong>POST</strong> <code>/api/login/protected</code>
+        <p>Enter protected session to access encrypted notes:</p>
+    </div>
+
+    <div class="example-box">
+        <pre><code>await fetch('http://localhost:8080/api/login/protected', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken
+    },
+    body: JSON.stringify({
+        password: 'your-password'
+    }),
+    credentials: 'include'
+});</code></pre>
+    </div>
+
+    <h2 id="core-api-endpoints">Core API Endpoints</h2>
+    
+    <h3>Notes</h3>
+    
+    <h4>Get Note</h4>
+    
+    <div class="endpoint-box method-get">
+        <strong>GET</strong> <code>/api/notes/{noteId}</code>
+    </div>
+
+    <div class="example-box">
+        <pre><code>const response = await fetch('http://localhost:8080/api/notes/root', {
+    credentials: 'include'
+});
+
+const note = await response.json();</code></pre>
+    </div>
+
+    <div class="example-box">
+        <strong>Response:</strong>
+        <pre><code>{
+    "noteId": "root",
+    "title": "Trilium Notes",
+    "type": "text",
+    "mime": "text/html",
+    "isProtected": false,
+    "isDeleted": false,
+    "dateCreated": "2024-01-01 00:00:00.000+0000",
+    "dateModified": "2024-01-15 10:30:00.000+0000",
+    "utcDateCreated": "2024-01-01 00:00:00.000Z",
+    "utcDateModified": "2024-01-15 10:30:00.000Z",
+    "parentBranches": [
+        {
+            "branchId": "root_root",
+            "parentNoteId": "none",
+            "prefix": null,
+            "notePosition": 10
+        }
+    ],
+    "attributes": [],
+    "cssClass": "",
+    "iconClass": "bx bx-folder"
+}</code></pre>
+    </div>
+
+    <h4>Create Note</h4>
+    
+    <div class="endpoint-box method-post">
+        <strong>POST</strong> <code>/api/notes/{parentNoteId}/children</code>
+    </div>
+
+    <div class="example-box">
+        <pre><code>const response = await fetch('http://localhost:8080/api/notes/root/children', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken
+    },
+    body: JSON.stringify({
+        title: 'New Note',
+        type: 'text',
+        content: '&lt;p&gt;Note content&lt;/p&gt;',
+        isProtected: false
+    }),
+    credentials: 'include'
+});
+
+const { note, branch } = await response.json();</code></pre>
+    </div>
+
+    <h4>Update Note</h4>
+    
+    <div class="endpoint-box method-put">
+        <strong>PUT</strong> <code>/api/notes/{noteId}</code>
+    </div>
+
+    <div class="example-box">
+        <pre><code>await fetch(`http://localhost:8080/api/notes/${noteId}`, {
+    method: 'PUT',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken
+    },
+    body: JSON.stringify({
+        title: 'Updated Title',
+        type: 'text',
+        mime: 'text/html'
+    }),
+    credentials: 'include'
+});</code></pre>
+    </div>
+
+    <h4>Get Note Content</h4>
+    
+    <div class="endpoint-box method-get">
+        <strong>GET</strong> <code>/api/notes/{noteId}/content</code>
+        <p>Returns the actual content of the note:</p>
+    </div>
+
+    <div class="example-box">
+        <pre><code>const response = await fetch(`http://localhost:8080/api/notes/${noteId}/content`, {
+    credentials: 'include'
+});
+
+const content = await response.text();</code></pre>
+    </div>
+
+    <h4>Save Note Content</h4>
+    
+    <div class="endpoint-box method-put">
+        <strong>PUT</strong> <code>/api/notes/{noteId}/content</code>
+    </div>
+
+    <div class="example-box">
+        <pre><code>await fetch(`http://localhost:8080/api/notes/${noteId}/content`, {
+    method: 'PUT',
+    headers: {
+        'Content-Type': 'text/html',
+        'X-CSRF-Token': csrfToken
+    },
+    body: '&lt;p&gt;Updated content&lt;/p&gt;',
+    credentials: 'include'
+});</code></pre>
+    </div>
+
+    <h3>Tree Operations</h3>
+    
+    <h4>Move Note</h4>
+    
+    <div class="endpoint-box method-put">
+        <strong>PUT</strong> <code>/api/branches/{branchId}/move</code>
+    </div>
+
+    <div class="example-box">
+        <pre><code>await fetch(`http://localhost:8080/api/branches/${branchId}/move`, {
+    method: 'PUT',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken
+    },
+    body: JSON.stringify({
+        parentNoteId: 'newParentId',
+        beforeNoteId: 'siblingNoteId'  // optional, for positioning
+    }),
+    credentials: 'include'
+});</code></pre>
+    </div>
+
+    <h4>Clone Note</h4>
+    
+    <div class="endpoint-box method-post">
+        <strong>POST</strong> <code>/api/notes/{noteId}/clone</code>
+    </div>
+
+    <div class="example-box">
+        <pre><code>const response = await fetch(`http://localhost:8080/api/notes/${noteId}/clone`, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken
+    },
+    body: JSON.stringify({
+        parentNoteId: 'targetParentId',
+        prefix: 'Copy of '
+    }),
+    credentials: 'include'
+});</code></pre>
+    </div>
+
+    <h3>Search</h3>
+    
+    <h4>Search Notes</h4>
+    
+    <div class="endpoint-box method-get">
+        <strong>GET</strong> <code>/api/search</code>
+    </div>
+
+    <div class="example-box">
+        <pre><code>const params = new URLSearchParams({
+    query: '#todo OR #task',
+    fastSearch: 'false',
+    includeArchivedNotes: 'false',
+    ancestorNoteId: 'root',
+    orderBy: 'relevancy',
+    orderDirection: 'desc',
+    limit: '50'
+});
+
+const response = await fetch(`http://localhost:8080/api/search?${params}`, {
+    credentials: 'include'
+});
+
+const { results } = await response.json();</code></pre>
+    </div>
+
+    <h2 id="websocket-real-time-updates">WebSocket Real-time Updates</h2>
+    
+    <div class="websocket-box">
+        <p>The Internal API provides WebSocket connections for real-time synchronization and updates.</p>
+    </div>
+
+    <h3>Connection Setup</h3>
+    
+    <div class="example-box">
+        <pre><code>class TriliumWebSocket {
+    constructor() {
+        this.ws = null;
+        this.reconnectInterval = 5000;
+        this.shouldReconnect = true;
+    }
+    
+    connect() {
+        // WebSocket URL same as base URL but with ws:// protocol
+        const wsUrl = 'ws://localhost:8080';
+        
+        this.ws = new WebSocket(wsUrl);
+        
+        this.ws.onopen = () => {
+            console.log('WebSocket connected');
+            this.sendPing();
+        };
+        
+        this.ws.onmessage = (event) => {
+            const message = JSON.parse(event.data);
+            this.handleMessage(message);
+        };
+        
+        this.ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+        
+        this.ws.onclose = () => {
+            console.log('WebSocket disconnected');
+            if (this.shouldReconnect) {
+                setTimeout(() => this.connect(), this.reconnectInterval);
+            }
+        };
+    }
+    
+    handleMessage(message) {
+        switch (message.type) {
+            case 'sync':
+                this.handleSync(message.data);
+                break;
+            case 'entity-changes':
+                this.handleEntityChanges(message.data);
+                break;
+            case 'refresh-tree':
+                this.refreshTree();
+                break;
+            case 'create-note':
+                this.handleNoteCreated(message.data);
+                break;
+            case 'update-note':
+                this.handleNoteUpdated(message.data);
+                break;
+            case 'delete-note':
+                this.handleNoteDeleted(message.data);
+                break;
+            default:
+                console.log('Unknown message type:', message.type);
+        }
+    }
+    
+    sendPing() {
+        if (this.ws.readyState === WebSocket.OPEN) {
+            this.ws.send(JSON.stringify({ type: 'ping' }));
+            setTimeout(() => this.sendPing(), 30000); // Ping every 30 seconds
+        }
+    }
+    
+    send(type, data) {
+        if (this.ws.readyState === WebSocket.OPEN) {
+            this.ws.send(JSON.stringify({ type, data }));
+        }
+    }
+}</code></pre>
+    </div>
+
+    <h3>Message Types</h3>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Direction</th>
+                <th>Description</th>
+                <th>Data Format</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>sync</code></td>
+                <td>Incoming</td>
+                <td>Synchronization data</td>
+                <td><code>{ entityChanges: [], lastSyncedPush: number }</code></td>
+            </tr>
+            <tr>
+                <td><code>entity-changes</code></td>
+                <td>Incoming</td>
+                <td>Entity modifications</td>
+                <td><code>[{ entityName, entityId, action }]</code></td>
+            </tr>
+            <tr>
+                <td><code>refresh-tree</code></td>
+                <td>Incoming</td>
+                <td>Tree structure changed</td>
+                <td><code>None</code></td>
+            </tr>
+            <tr>
+                <td><code>ping</code></td>
+                <td>Outgoing</td>
+                <td>Keep connection alive</td>
+                <td><code>None</code></td>
+            </tr>
+            <tr>
+                <td><code>log-error</code></td>
+                <td>Outgoing</td>
+                <td>Log client error</td>
+                <td><code>{ error, stack }</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="file-operations">File Operations</h2>
+    
+    <h3>Upload File</h3>
+    
+    <div class="endpoint-box method-post">
+        <strong>POST</strong> <code>/api/notes/{noteId}/attachments/upload</code>
+    </div>
+
+    <div class="example-box">
+        <pre><code>const formData = new FormData();
+formData.append('file', fileInput.files[0]);
+
+const response = await fetch(`/api/notes/${noteId}/attachments/upload`, {
+    method: 'POST',
+    headers: {
+        'X-CSRF-Token': csrfToken
+    },
+    body: formData,
+    credentials: 'include'
+});
+
+const attachment = await response.json();</code></pre>
+    </div>
+
+    <h3>Download Attachment</h3>
+    
+    <div class="endpoint-box method-get">
+        <strong>GET</strong> <code>/api/attachments/{attachmentId}/download</code>
+    </div>
+
+    <div class="example-box">
+        <pre><code>const response = await fetch(`/api/attachments/${attachmentId}/download`, {
+    credentials: 'include'
+});
+
+const blob = await response.blob();
+const url = URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href = url;
+a.download = 'attachment.pdf';
+a.click();</code></pre>
+    </div>
+
+    <h2 id="when-to-use-internal-vs-etapi">When to Use Internal vs ETAPI</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Use Internal API When</th>
+                <th>Use ETAPI When</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Building custom Trilium clients</td>
+                <td>Building external integrations</td>
+            </tr>
+            <tr>
+                <td>Needing WebSocket real-time updates</td>
+                <td>Creating automation scripts</td>
+            </tr>
+            <tr>
+                <td>Requiring full feature parity with the UI</td>
+                <td>Developing third-party applications</td>
+            </tr>
+            <tr>
+                <td>Working within the Trilium frontend environment</td>
+                <td>Needing stable, documented API</td>
+            </tr>
+            <tr>
+                <td>Accessing advanced features not available in ETAPI</td>
+                <td>Working with different programming languages</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Feature Comparison</h3>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>Internal API</th>
+                <th>ETAPI</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Authentication</strong></td>
+                <td>Session/Cookie</td>
+                <td>Token</td>
+            </tr>
+            <tr>
+                <td><strong>CSRF Protection</strong></td>
+                <td>Required</td>
+                <td>Not needed</td>
+            </tr>
+            <tr>
+                <td><strong>WebSocket</strong></td>
+                <td>Yes</td>
+                <td>No</td>
+            </tr>
+            <tr>
+                <td><strong>Stability</strong></td>
+                <td>May change</td>
+                <td>Stable</td>
+            </tr>
+            <tr>
+                <td><strong>Documentation</strong></td>
+                <td>Limited</td>
+                <td>Comprehensive</td>
+            </tr>
+            <tr>
+                <td><strong>Real-time updates</strong></td>
+                <td>Yes</td>
+                <td>No</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="security-considerations">Security Considerations</h2>
+    
+    <h3>CSRF Protection</h3>
+    
+    <p>All state-changing operations require a CSRF token:</p>
+    
+    <div class="example-box">
+        <pre><code>// Get CSRF token from meta tag or API
+async function getCsrfToken() {
+    const response = await fetch('/api/csrf-token', {
+        credentials: 'include'
+    });
+    const { token } = await response.json();
+    return token;
+}
+
+// Use in requests
+const csrfToken = await getCsrfToken();
+
+await fetch('/api/notes', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken
+    },
+    body: JSON.stringify(data),
+    credentials: 'include'
+});</code></pre>
+    </div>
+
+    <h3>Session Management</h3>
+    
+    <div class="example-box">
+        <pre><code>class TriliumSession {
+    constructor() {
+        this.isAuthenticated = false;
+        this.csrfToken = null;
+    }
+    
+    async login(password) {
+        const formData = new URLSearchParams();
+        formData.append('password', password);
+        
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: formData,
+            credentials: 'include'
+        });
+        
+        if (response.ok) {
+            this.isAuthenticated = true;
+            this.csrfToken = await this.getCsrfToken();
+            return true;
+        }
+        
+        return false;
+    }
+    
+    async getCsrfToken() {
+        const response = await fetch('/api/csrf-token', {
+            credentials: 'include'
+        });
+        const { token } = await response.json();
+        return token;
+    }
+    
+    async request(url, options = {}) {
+        if (!this.isAuthenticated) {
+            throw new Error('Not authenticated');
+        }
+        
+        const headers = {
+            ...options.headers
+        };
+        
+        if (options.method && options.method !== 'GET') {
+            headers['X-CSRF-Token'] = this.csrfToken;
+        }
+        
+        return fetch(url, {
+            ...options,
+            headers,
+            credentials: 'include'
+        });
+    }
+}</code></pre>
+    </div>
+
+    <div class="warning">
+        <h4>Important Security Notes</h4>
+        <ul>
+            <li>Always include <code>credentials: 'include'</code> for session-based requests</li>
+            <li>Use CSRF tokens for all state-changing operations</li>
+            <li>Handle protected notes with proper authentication</li>
+            <li>Validate all user input before sending to the API</li>
+            <li>Use HTTPS in production environments</li>
+        </ul>
+    </div>
+
+    <div class="info">
+        <h4>Related Documentation</h4>
+        <ul>
+            <li><a href="ETAPI%20Complete%20Guide.html">ETAPI Complete Guide</a></li>
+            <li><a href="WebSocket%20API.html">WebSocket API Documentation</a></li>
+            <li><a href="Script%20API%20Cookbook.html">Script API Cookbook</a></li>
+        </ul>
+    </div>
+
+</body>
+</html>

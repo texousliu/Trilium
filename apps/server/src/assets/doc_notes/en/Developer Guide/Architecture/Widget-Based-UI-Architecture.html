@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Widget-Based UI Architecture</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+        h1 { color: #2c3e50; }
+        h2 { color: #34495e; margin-top: 30px; }
+        h3 { color: #7f8c8d; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-family: 'Courier New', monospace; }
+        .widget-class { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #27ae60; }
+        .example-box { background: #ecf0f1; padding: 15px; border-radius: 5px; margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <h1>Widget-Based UI Architecture</h1>
+    
+    <p>Trilium's frontend is built on a modular widget system that provides flexibility, reusability, and maintainability. This architecture enables dynamic UI composition and extensibility through custom widgets.</p>
+    
+    <h2>Widget System Overview</h2>
+    
+    <p>The widget hierarchy follows an inheritance pattern where each level adds specific functionality:</p>
+    
+    <ol>
+        <li><strong>Component</strong> - Base class for all UI components</li>
+        <li><strong>BasicWidget</strong> - UI foundation with DOM manipulation</li>
+        <li><strong>NoteContextAwareWidget</strong> - Note-aware components</li>
+        <li><strong>RightPanelWidget</strong> - Side panel widgets</li>
+        <li><strong>TypeWidgets</strong> - Note type specific widgets</li>
+        <li><strong>CustomWidgets</strong> - User-created widgets</li>
+    </ol>
+    
+    <div class="widget-class">
+        <h2>Core Widget Classes</h2>
+        
+        <h3>BasicWidget</h3>
+        <p><strong>Location:</strong> <code>/apps/client/src/widgets/basic_widget.ts</code></p>
+        
+        <p>Base class for all UI widgets, providing DOM manipulation and styling capabilities.</p>
+        
+        <h4>Key Methods</h4>
+        <ul>
+            <li><code>id(id: string)</code> - Set widget ID</li>
+            <li><code>class(className: string)</code> - Add CSS class</li>
+            <li><code>css(name: string, value: string)</code> - Set CSS property</li>
+            <li><code>child(...components)</code> - Add child widgets</li>
+            <li><code>doRender()</code> - Render widget HTML</li>
+        </ul>
+        
+        <div class="example-box">
+            <h4>Usage Example</h4>
+            <pre><code>class MyWidget extends BasicWidget {
+    doRender() {
+        this.$widget = $('&lt;div&gt;')
+            .addClass('my-widget')
+            .append($('&lt;h3&gt;').text('Widget Title'));
+            
+        return this.$widget;
+    }
+    
+    async refreshWithNote(note) {
+        this.$widget.find('h3').text(note.title);
+    }
+}</code></pre>
+        </div>
+    </div>
+    
+    <div class="widget-class">
+        <h3>NoteContextAwareWidget</h3>
+        <p><strong>Location:</strong> <code>/apps/client/src/widgets/note_context_aware_widget.ts</code></p>
+        
+        <p>Base class for widgets that respond to note context changes.</p>
+        
+        <h4>Lifecycle Methods</h4>
+        <ul>
+            <li><code>refreshWithNote(note)</code> - Called when note context changes</li>
+            <li><code>noteSwitched()</code> - Called when user switches notes</li>
+            <li><code>activeContextChanged()</code> - Called on context change</li>
+            <li><code>noteTypeMimeChanged()</code> - React to note type changes</li>
+        </ul>
+        
+        <div class="example-box">
+            <h4>Context Management Example</h4>
+            <pre><code>class MyNoteWidget extends NoteContextAwareWidget {
+    async refreshWithNote(note) {
+        // Called when note context changes
+        this.$widget.find('.note-title').text(note.title);
+        this.$widget.find('.note-type').text(note.type);
+        
+        // Access note attributes
+        const labels = note.getLabels();
+        const relations = note.getRelations();
+    }
+    
+    async noteSwitched() {
+        // Called when user switches to different note
+        console.log(`Switched to note: ${this.noteId}`);
+    }
+}</code></pre>
+        </div>
+    </div>
+    
+    <div class="widget-class">
+        <h3>RightPanelWidget</h3>
+        <p><strong>Location:</strong> <code>/apps/client/src/widgets/right_panel_widget.ts</code></p>
+        
+        <p>Base class for widgets displayed in the right sidebar panel.</p>
+        
+        <h4>Required Methods</h4>
+        <ul>
+            <li><code>getTitle()</code> - Widget title</li>
+            <li><code>getIcon()</code> - Widget icon</li>
+            <li><code>getPosition()</code> - Display order</li>
+            <li><code>doRenderBody()</code> - Render widget content</li>
+        </ul>
+        
+        <div class="example-box">
+            <h4>Right Panel Widget Example</h4>
+            <pre><code>class InfoWidget extends RightPanelWidget {
+    getTitle() { return "Note Info"; }
+    getIcon() { return "info"; }
+    getPosition() { return 100; }
+    
+    async doRenderBody() {
+        return $('&lt;div class="info-widget"&gt;')
+            .append($('&lt;div class="created"&gt;'))
+            .append($('&lt;div class="modified"&gt;'))
+            .append($('&lt;div class="word-count"&gt;'));
+    }
+    
+    async refreshWithNote(note) {
+        this.$body.find('.created').text(`Created: ${note.dateCreated}`);
+        this.$body.find('.modified').text(`Modified: ${note.dateModified}`);
+    }
+}</code></pre>
+        </div>
+    </div>
+    
+    <h2>Type-Specific Widgets</h2>
+    
+    <p><strong>Location:</strong> <code>/apps/client/src/widgets/type_widgets/</code></p>
+    
+    <p>Each note type has a specialized widget for rendering and editing:</p>
+    
+    <ul>
+        <li><strong>TextTypeWidget</strong> - Rich text editor using CKEditor</li>
+        <li><strong>CodeTypeWidget</strong> - Code editor using CodeMirror</li>
+        <li><strong>FileTypeWidget</strong> - File attachment viewer</li>
+        <li><strong>ImageTypeWidget</strong> - Image viewer with editing</li>
+        <li><strong>CanvasTypeWidget</strong> - Excalidraw integration</li>
+        <li><strong>MermaidTypeWidget</strong> - Mermaid diagram renderer</li>
+    </ul>
+    
+    <h2>Widget Communication</h2>
+    
+    <h3>Event System</h3>
+    <pre><code>// Publishing events
+class PublisherWidget extends BasicWidget {
+    async handleClick() {
+        // Local event
+        this.trigger('itemSelected', { itemId: '123' });
+        
+        // Global event
+        appContext.triggerEvent('noteChanged', { noteId: this.noteId });
+    }
+}
+
+// Subscribing to events
+class SubscriberWidget extends BasicWidget {
+    constructor() {
+        super();
+        
+        // Local event subscription
+        this.on('itemSelected', (event) => {
+            console.log('Item selected:', event.itemId);
+        });
+        
+        // Global event subscription
+        appContext.addEventListener('noteChanged', (event) => {
+            this.handleNoteChange(event.noteId);
+        });
+    }
+}</code></pre>
+    
+    <h2>Custom Widget Development</h2>
+    
+    <h3>Creating Custom Widgets</h3>
+    <pre><code>// 1. Define widget class
+class TaskListWidget extends NoteContextAwareWidget {
+    doRender() {
+        this.$widget = $('&lt;div class="task-list-widget"&gt;');
+        this.$list = $('&lt;ul&gt;').appendTo(this.$widget);
+        return this.$widget;
+    }
+    
+    async refreshWithNote(note) {
+        const tasks = await this.loadTasks(note);
+        
+        this.$list.empty();
+        for (const task of tasks) {
+            $('&lt;li&gt;')
+                .text(task.title)
+                .toggleClass('completed', task.completed)
+                .appendTo(this.$list);
+        }
+    }
+    
+    private async loadTasks(note) {
+        // Load task data from note attributes
+        const taskLabels = note.getLabels('task');
+        return taskLabels.map(label => JSON.parse(label.value));
+    }
+}
+
+// 2. Register widget
+api.addWidget(TaskListWidget);</code></pre>
+    
+    <h2>Performance Optimization</h2>
+    
+    <h3>Lazy Loading</h3>
+    <pre><code>class LazyWidget extends BasicWidget {
+    private contentLoaded = false;
+    
+    async becomeVisible() {
+        if (!this.contentLoaded) {
+            await this.loadContent();
+            this.contentLoaded = true;
+        }
+    }
+    
+    private async loadContent() {
+        // Heavy content loading
+        const data = await server.get('expensive-data');
+        this.renderContent(data);
+    }
+}</code></pre>
+    
+    <h3>Debouncing Updates</h3>
+    <pre><code>class DebouncedWidget extends NoteContextAwareWidget {
+    private refreshDebounced = utils.debounce(
+        () => this.doRefresh(),
+        500
+    );
+    
+    async refreshWithNote(note) {
+        // Debounce rapid updates
+        this.refreshDebounced();
+    }
+    
+    private async doRefresh() {
+        // Actual refresh logic
+    }
+}</code></pre>
+    
+    <h2>Best Practices</h2>
+    
+    <h3>Widget Design</h3>
+    <ol>
+        <li><strong>Single Responsibility:</strong> Each widget should have one clear purpose</li>
+        <li><strong>Composition over Inheritance:</strong> Use composition for complex UIs</li>
+        <li><strong>Lazy Initialization:</strong> Load resources only when needed</li>
+        <li><strong>Event Cleanup:</strong> Remove event listeners in cleanup()</li>
+    </ol>
+    
+    <h3>Error Handling</h3>
+    <pre><code>class ResilientWidget extends BasicWidget {
+    async refreshWithNote(note) {
+        try {
+            await this.loadData(note);
+        } catch (error) {
+            this.showError('Failed to load data');
+            console.error('Widget error:', error);
+        }
+    }
+    
+    private showError(message) {
+        this.$widget.html(`
+            &lt;div class="alert alert-danger"&gt;
+                ${message}
+            &lt;/div&gt;
+        `);
+    }
+}</code></pre>
+</body>
+</html>

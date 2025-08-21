@@ -182,7 +182,7 @@ function importEnex(taskContext: TaskContext, file: File, parentNote: BNote): Pr
             if (currentTag === "data") {
                 text = text.replace(/\s/g, "");
 
-                // resource can be chunked into multiple events: https://github.com/zadam/trilium/issues/3424
+                // resource can be chunked into multiple events: https://github.com/TriliumNext/Trilium/issues/3424
                 // it would probably make sense to do this in a more global way since it can in theory affect any field,
                 // not just data
                 resource.content = (resource.content || "") + text;

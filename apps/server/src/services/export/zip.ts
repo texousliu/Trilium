@@ -332,7 +332,7 @@ async function exportToZip(taskContext: TaskContext, branch: BBranch, format: "h
                 const cssUrl = `${"../".repeat(noteMeta.notePath.length - 1)}style.css`;
                 const htmlTitle = escapeHtml(title);
 
-                // <base> element will make sure external links are openable - https://github.com/zadam/trilium/issues/1289#issuecomment-704066809
+                // <base> element will make sure external links are openable - https://github.com/TriliumNext/Trilium/issues/1289#issuecomment-704066809
                 content = `<html>
 <head>
     <meta charset="utf-8">

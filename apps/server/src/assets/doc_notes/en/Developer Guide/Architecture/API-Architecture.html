@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Architecture</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+        h1 { color: #2c3e50; }
+        h2 { color: #34495e; margin-top: 30px; }
+        h3 { color: #7f8c8d; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-family: 'Courier New', monospace; }
+        .api-layer { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .internal-api { border-left: 4px solid #3498db; }
+        .etapi { border-left: 4px solid #e67e22; }
+        .websocket { border-left: 4px solid #9b59b6; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <h1>API Architecture</h1>
+    
+    <p>Trilium provides multiple API layers for different use cases: Internal API for frontend-backend communication, ETAPI for external integrations, and WebSocket for real-time synchronization.</p>
+    
+    <h2>API Layers Overview</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>API Layer</th>
+                <th>Purpose</th>
+                <th>Authentication</th>
+                <th>Primary Users</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Internal API</td>
+                <td>Frontend-backend communication</td>
+                <td>Session-based</td>
+                <td>Web/Desktop clients</td>
+            </tr>
+            <tr>
+                <td>ETAPI</td>
+                <td>External integrations</td>
+                <td>Token-based</td>
+                <td>Third-party apps, scripts</td>
+            </tr>
+            <tr>
+                <td>WebSocket</td>
+                <td>Real-time sync</td>
+                <td>Session/Token</td>
+                <td>All clients</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div class="api-layer internal-api">
+        <h2>Internal API</h2>
+        <p><strong>Location:</strong> <code>/apps/server/src/routes/api/</code></p>
+        
+        <p>The Internal API handles communication between Trilium's frontend and backend, providing full access to application functionality.</p>
+        
+        <h3>Key Endpoints</h3>
+        
+        <h4>Note Operations</h4>
+        <pre><code>// Get note with content
+GET /api/notes/:noteId
+
+// Update note
+PUT /api/notes/:noteId
+Body: {
+    title?: string,
+    content?: string,
+    type?: string,
+    mime?: string
+}
+
+// Create note
+POST /api/notes/:parentNoteId/children
+Body: {
+    title: string,
+    type: string,
+    content?: string,
+    position?: number
+}
+
+// Delete note
+DELETE /api/notes/:noteId</code></pre>
+        
+        <h4>Tree Operations</h4>
+        <pre><code>// Get tree structure
+GET /api/tree
+Query: {
+    subTreeNoteId?: string,
+    includeAttributes?: boolean
+}
+
+// Move branch
+PUT /api/branches/:branchId/move
+Body: {
+    parentNoteId: string,
+    position: number
+}</code></pre>
+        
+        <h4>Search Operations</h4>
+        <pre><code>// Execute search
+GET /api/search
+Query: {
+    query: string,
+    fastSearch?: boolean,
+    includeArchivedNotes?: boolean
+}</code></pre>
+    </div>
+    
+    <div class="api-layer etapi">
+        <h2>ETAPI (External API)</h2>
+        <p><strong>Location:</strong> <code>/apps/server/src/etapi/</code></p>
+        
+        <p>ETAPI provides a stable, versioned API for external applications and scripts to interact with Trilium.</p>
+        
+        <h3>Authentication</h3>
+        <pre><code>// Creating ETAPI token
+POST /etapi/auth/login
+Body: {
+    username: string,
+    password: string
+}
+Response: {
+    authToken: string
+}
+
+// Using token in requests
+GET /etapi/notes/:noteId
+Headers: {
+    Authorization: "authToken"
+}</code></pre>
+        
+        <h3>Key Endpoints</h3>
+        
+        <h4>Note CRUD Operations</h4>
+        <pre><code>// Create note
+POST /etapi/notes
+Body: {
+    parentNoteId: string,
+    title: string,
+    type: string,
+    content?: string
+}
+
+// Get note
+GET /etapi/notes/:noteId
+
+// Update note content
+PUT /etapi/notes/:noteId/content
+Body: string | Buffer
+
+// Delete note
+DELETE /etapi/notes/:noteId</code></pre>
+        
+        <h4>Search</h4>
+        <pre><code>// Search notes
+GET /etapi/notes/search
+Query: {
+    search: string,
+    limit?: number,
+    orderBy?: string
+}</code></pre>
+        
+        <h3>Client Example (JavaScript)</h3>
+        <pre><code>class EtapiClient {
+    constructor(serverUrl, authToken) {
+        this.serverUrl = serverUrl;
+        this.authToken = authToken;
+    }
+    
+    async getNote(noteId) {
+        const response = await fetch(
+            `${this.serverUrl}/etapi/notes/${noteId}`,
+            {
+                headers: {
+                    'Authorization': this.authToken
+                }
+            }
+        );
+        return response.json();
+    }
+    
+    async createNote(parentNoteId, title, content) {
+        const response = await fetch(
+            `${this.serverUrl}/etapi/notes`,
+            {
+                method: 'POST',
+                headers: {
+                    'Authorization': this.authToken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    parentNoteId,
+                    title,
+                    type: 'text',
+                    content
+                })
+            }
+        );
+        return response.json();
+    }
+}</code></pre>
+    </div>
+    
+    <div class="api-layer websocket">
+        <h2>WebSocket Real-time Synchronization</h2>
+        <p><strong>Location:</strong> <code>/apps/server/src/services/ws.ts</code></p>
+        
+        <p>WebSocket connections provide real-time updates and synchronization between clients.</p>
+        
+        <h3>Message Types</h3>
+        <ul>
+            <li><code>entity-changes</code> - Entity updates</li>
+            <li><code>sync</code> - Sync events</li>
+            <li><code>note-content-change</code> - Content updates</li>
+            <li><code>refresh-tree</code> - Tree structure changes</li>
+            <li><code>options-changed</code> - Configuration updates</li>
+        </ul>
+        
+        <h3>Connection Example</h3>
+        <pre><code>// Client connection
+const ws = new WebSocket('wss://server/ws');
+
+ws.on('open', () => {
+    // Authenticate
+    ws.send(JSON.stringify({
+        type: 'auth',
+        token: sessionToken
+    }));
+});
+
+ws.on('message', (data) => {
+    const message = JSON.parse(data);
+    handleWSMessage(message);
+});
+
+// Handle messages
+function handleWSMessage(message) {
+    switch (message.type) {
+        case 'entity-changes':
+            handleEntityChanges(message.data);
+            break;
+        case 'refresh-tree':
+            froca.loadInitialTree();
+            break;
+        case 'note-content-change':
+            handleContentChange(message.data);
+            break;
+    }
+}</code></pre>
+    </div>
+    
+    <h2>API Security</h2>
+    
+    <h3>Authentication Methods</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Method</th>
+                <th>API</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Session-based</td>
+                <td>Internal API</td>
+                <td>Cookie-based sessions for web clients</td>
+            </tr>
+            <tr>
+                <td>Token-based</td>
+                <td>ETAPI</td>
+                <td>Bearer tokens for external apps</td>
+            </tr>
+            <tr>
+                <td>WebSocket auth</td>
+                <td>WebSocket</td>
+                <td>Initial auth message after connection</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h3>Rate Limiting</h3>
+    <pre><code>// Global rate limit
+const globalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 1000 // limit each IP to 1000 requests
+});
+
+// Strict limit for authentication
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 5,
+    message: 'Too many authentication attempts'
+});</code></pre>
+    
+    <h2>Performance Optimization</h2>
+    
+    <h3>Batch Operations</h3>
+    <pre><code>// Batch API endpoint
+router.post('/api/batch', async (req, res) => {
+    const operations = req.body.operations;
+    const results = [];
+    
+    await sql.transactional(async () => {
+        for (const op of operations) {
+            const result = await executeOperation(op);
+            results.push(result);
+        }
+    });
+    
+    res.json({ results });
+});</code></pre>
+    
+    <h3>Streaming Responses</h3>
+    <pre><code>// Stream large data
+router.get('/api/export', (req, res) => {
+    res.writeHead(200, {
+        'Content-Type': 'application/x-ndjson',
+        'Transfer-Encoding': 'chunked'
+    });
+    
+    const noteStream = createNoteExportStream();
+    
+    noteStream.on('data', (note) => {
+        res.write(JSON.stringify(note) + '\n');
+    });
+    
+    noteStream.on('end', () => {
+        res.end();
+    });
+});</code></pre>
+    
+    <h2>Best Practices</h2>
+    
+    <h3>API Design</h3>
+    <ol>
+        <li><strong>RESTful conventions:</strong> Use appropriate HTTP methods and status codes</li>
+        <li><strong>Consistent naming:</strong> Use camelCase for JSON properties</li>
+        <li><strong>Versioning:</strong> Version the API to maintain compatibility</li>
+        <li><strong>Documentation:</strong> Keep OpenAPI spec up to date</li>
+    </ol>
+    
+    <h3>Security</h3>
+    <ol>
+        <li><strong>Authentication:</strong> Always verify user identity</li>
+        <li><strong>Authorization:</strong> Check permissions for each operation</li>
+        <li><strong>Validation:</strong> Validate all input data</li>
+        <li><strong>Rate limiting:</strong> Prevent abuse with appropriate limits</li>
+    </ol>
+    
+    <h3>Performance</h3>
+    <ol>
+        <li><strong>Pagination:</strong> Limit response sizes with pagination</li>
+        <li><strong>Caching:</strong> Cache frequently accessed data</li>
+        <li><strong>Batch operations:</strong> Support bulk operations</li>
+        <li><strong>Async processing:</strong> Use queues for long-running tasks</li>
+    </ol>
+</body>
+</html>

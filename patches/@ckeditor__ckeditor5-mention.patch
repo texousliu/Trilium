@@ -12,7 +12,7 @@ index bbe511c5550e1cac8612e998034382b4eea1f1b8..8394fd8bba89f8a7b82d62fe613be6f1
 +
 +                    editor.model.change(writer => {
 +						// insert a zero-width space as a special marker that we don't want a mention active anymore
-+						// see e.g. https://github.com/zadam/trilium/issues/4692
++						// see e.g. https://github.com/TriliumNext/Trilium/issues/4692
 +						const insertPosition = editor.model.document.selection.getLastPosition();
 +
 +						if (insertPosition !== null) {

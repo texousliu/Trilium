@@ -17,7 +17,7 @@ async function getBackendLog() {
     } catch (e) {
         const isErrorInstance = e instanceof Error;
 
-        // most probably the log file does not exist yet - https://github.com/zadam/trilium/issues/1977
+        // most probably the log file does not exist yet - https://github.com/TriliumNext/Trilium/issues/1977
         if (isErrorInstance && "code" in e && e.code === "ENOENT") {
             log.error(e);
             return t("backend_log.log-does-not-exist", { fileName });

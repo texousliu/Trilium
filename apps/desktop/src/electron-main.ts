@@ -22,7 +22,7 @@ async function main() {
     electronDebug();
     electronDl({ saveAs: true });
 
-    // needed for excalidraw export https://github.com/zadam/trilium/issues/4271
+    // needed for excalidraw export https://github.com/TriliumNext/Trilium/issues/4271
     electron.app.commandLine.appendSwitch("enable-experimental-web-platform-features");
     electron.app.commandLine.appendSwitch("lang", options.getOptionOrNull("formattingLocale") ?? "en");
 

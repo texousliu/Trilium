@@ -156,7 +156,7 @@ class InsertIncludeNoteCommand extends Command {
 
 /**
  * Hack coming from https://github.com/ckeditor/ckeditor5/issues/4465
- * Source issue: https://github.com/zadam/trilium/issues/1117
+ * Source issue: https://github.com/TriliumNext/Trilium/issues/1117
  */
 function preventCKEditorHandling( domElement: HTMLElement, editor: Editor ) {
 	// Prevent the editor from listening on below events in order to stop rendering selection.

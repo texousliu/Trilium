@@ -19,7 +19,7 @@ function getDefaultKeyboardActions() {
             actionName: "backInNoteHistory",
             friendlyName: t("keyboard_action_names.back-in-note-history"),
             iconClass: "bx bxs-chevron-left",
-            // Mac has a different history navigation shortcuts - https://github.com/zadam/trilium/issues/376
+            // Mac has a different history navigation shortcuts - https://github.com/TriliumNext/Trilium/issues/376
             defaultShortcuts: isMac ? ["CommandOrControl+Left"] : ["Alt+Left"],
             description: t("keyboard_actions.back-in-note-history"),
             scope: "window"
@@ -28,7 +28,7 @@ function getDefaultKeyboardActions() {
             actionName: "forwardInNoteHistory",
             friendlyName: t("keyboard_action_names.forward-in-note-history"),
             iconClass: "bx bxs-chevron-right",
-            // Mac has a different history navigation shortcuts - https://github.com/zadam/trilium/issues/376
+            // Mac has a different history navigation shortcuts - https://github.com/TriliumNext/Trilium/issues/376
             defaultShortcuts: isMac ? ["CommandOrControl+Right"] : ["Alt+Right"],
             description: t("keyboard_actions.forward-in-note-history"),
             scope: "window"
