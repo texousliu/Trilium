@@ -62,14 +62,16 @@ function NoteIconList() {
 
             // Filter by text and/or category.
             let icons: Icon[] = fullIconData.icons;
-            if (search || categoryId) {
+            const processedSearch = search?.trim()?.toLowerCase();
+            if (processedSearch || categoryId) {
                 icons = icons.filter((icon) => {
                     if (categoryId !== "0" && String(icon.category_id) !== categoryId) {
                         return false;
                     }
 
-                    if (search) {
-                        if (!icon.name.includes(search) && !icon.term?.find((t) => t.includes(search))) {
+                    if (processedSearch) {
+                        if (!icon.name.includes(processedSearch) &&
+                            !icon.term?.find((t) => t.includes(processedSearch))) {
                             return false;
                         }
                     }
