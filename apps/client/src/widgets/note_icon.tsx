@@ -7,6 +7,8 @@ import server from "../services/server";
 import type { Category, Icon } from "./icon_list";
 import FormTextBox from "./react/FormTextBox";
 import FormSelect from "./react/FormSelect";
+import FNote from "../entities/fnote";
+import attributes from "../services/attributes";
 
 interface IconToCountCache {
     iconClassToCountMap: Record<string, number>;
@@ -45,12 +47,12 @@ export default function NoteIcon() {
             hideToggleArrow
             disabled={viewScope?.viewMode !== "default"}
         >
-            <NoteIconList />
+            <NoteIconList note={note} />
         </Dropdown>
     )
 }
 
-function NoteIconList() {
+function NoteIconList({ note }: { note: FNote }) {
     const searchBoxRef = useRef<HTMLInputElement>(null);
     const [ search, setSearch ] = useState<string>();
     const [ categoryId, setCategoryId ] = useState<string>("0");
@@ -124,7 +126,22 @@ function NoteIconList() {
                 />
             </div>
 
-            <div class="icon-list">
+            <div
+                class="icon-list"
+                onClick={(e) => {
+                    const clickedTarget = e.target as HTMLElement;
+                    
+                    if (!clickedTarget.classList.contains("bx")) {
+                        return;
+                    }
+
+                    const iconClass = Array.from(clickedTarget.classList.values()).join(" ");
+                    if (note) {
+                        const attributeToSet = note.hasOwnedLabel("workspace") ? "workspaceIconClass" : "iconClass";
+                        attributes.setLabel(note.noteId, attributeToSet, iconClass);
+                    }
+                }}
+            >
                 {(iconData?.icons ?? []).map(({className, name}) => (
                     <span class={`bx ${className}`} title={name} />
                 ))}

@@ -18,15 +18,8 @@ export default class NoteIconWidget extends NoteContextAwareWidget {
     doRender() {
         this.$icon = this.$widget.find("button.note-icon");
         this.$iconList = this.$widget.find(".icon-list");
-        this.$iconList.on("click", "span", async (e) => {
-            const clazz = $(e.target).attr("class");
-
-            if (this.noteId && this.note) {
-                await attributeService.setLabel(this.noteId, this.note.hasOwnedLabel("workspace") ? "workspaceIconClass" : "iconClass", clazz);
-            }
-        });
     }
-    
+
     async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         if (this.noteId && loadResults.isNoteReloaded(this.noteId)) {
             this.refresh();
