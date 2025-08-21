@@ -10,10 +10,6 @@ import type FNote from "../../entities/fnote.js";
 import NoteLanguageWidget from "../note_language.js";
 
 const TPL = /*html*/`
-    <div class="note-type-container">
-
-    </div>
-
     <div class="protected-note-switch-container"></div>
 
     <div class="editability-select-container">

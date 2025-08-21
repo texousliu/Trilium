@@ -76,14 +76,21 @@ interface FormListItemOpts {
     active?: boolean;
     badges?: FormListBadge[];
     disabled?: boolean;
+    checked?: boolean;
+    onClick?: () => void;
 }
 
-export function FormListItem({ children, icon, value, title, active, badges, disabled }: FormListItemOpts) {
+export function FormListItem({ children, icon, value, title, active, badges, disabled, checked, onClick }: FormListItemOpts) {
+    if (checked) {
+        icon = "bx bx-check";
+    }
+
     return (
         <a
             class={`dropdown-item ${active ? "active" : ""} ${disabled ? "disabled" : ""}`}
             data-value={value} title={title}
             tabIndex={0}
+            onClick={onClick}
         >
             <Icon icon={icon} />&nbsp;
             {children}

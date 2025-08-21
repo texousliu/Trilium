@@ -11,14 +11,6 @@ import type FNote from "../entities/fnote.js";
 
 const NOT_SELECTABLE_NOTE_TYPES = NOTE_TYPES.filter((nt) => nt.reserved || nt.static).map((nt) => nt.type);
 
-const TPL = /*html*/`
-<div class="dropdown note-type-widget">
-    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm dropdown-toggle select-button note-type-button">
-        <span class=""></span>
-    </button>
-</div>
-`;
-
 export default class NoteTypeWidget extends NoteContextAwareWidget {
 
     private dropdown!: Dropdown;
@@ -47,93 +39,4 @@ export default class NoteTypeWidget extends NoteContextAwareWidget {
         this.dropdown.hide();
     }
 
-    /** the actual body is rendered lazily on note-type button click */
-    async renderDropdown() {
-        this.$noteTypeDropdown.empty();
-
-        if (!this.note) {
-            return;
-        }
-
-        for (const noteType of ) {
-            let $typeLink: JQuery<HTMLElement>;
-
-            if (noteType.type !== "code") {
-                $typeLink = $('<a class="dropdown-item">')
-                    .attr("data-note-type", noteType.type)
-                    .append('<span class="check">&check;</span> ')
-                    .append($title)
-                    .on("click", (e) => {
-                        const type = $typeLink.attr("data-note-type");
-                        const noteType = NOTE_TYPES.find((nt) => nt.type === type);
-
-                        if (noteType) {
-                            this.save(noteType.type, noteType.mime);
-                        }
-                    });
-            } else {
-                this.$noteTypeDropdown.append('<div class="dropdown-divider"></div>');
-                $typeLink = $('<a class="dropdown-item disabled">').attr("data-note-type", noteType.type).append('<span class="check">&check;</span> ').append($("<strong>").text());
-            }
-
-            if (this.note.type === noteType.type) {
-                $typeLink.addClass("selected");
-            }
-
-            this.$noteTypeDropdown.append($typeLink);
-        }
-
-        for (const mimeType of ) {
-            const $mimeLink = $('<a class="dropdown-item">')
-                .attr("data-mime-type", mimeType.mime)
-                .append('<span class="check">&check;</span> ')
-                .on("click", (e) => {
-                    const $link = $(e.target).closest(".dropdown-item");
-
-                    this.save("code", $link.attr("data-mime-type") ?? "");
-                });
-
-            if (this.note.type === "code" && this.note.mime === mimeType.mime) {
-                $mimeLink.addClass("selected");
-
-                this.$noteTypeDesc.text(mimeType.title);
-            }
-
-            this.$noteTypeDropdown.append($mimeLink);
-        }
-    }
-
-
-
-    async save(type: NoteType, mime?: string) {
-        if (type === this.note?.type && mime === this.note?.mime) {
-            return;
-        }
-
-        if (type !== this.note?.type && !(await this.confirmChangeIfContent())) {
-            return;
-        }
-
-        await server.put(`notes/${this.noteId}/type`, { type, mime });
-    }
-
-    async confirmChangeIfContent() {
-        if (!this.note) {
-            return;
-        }
-
-        const blob = await this.note.getBlob();
-
-        if (!blob?.content || !blob.content.trim().length) {
-            return true;
-        }
-
-        return await dialogService.confirm(t("note_types.confirm-change"));
-    }
-
-    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        if (loadResults.isNoteReloaded(this.noteId)) {
-            this.refresh();
-        }
-    }
 }
