@@ -52,16 +52,10 @@ export default function NoteTitleWidget() {
     // Manage focus.
     const textBoxRef = useRef<HTMLInputElement>(null);
     const isNewNote = useRef<boolean>();
-    useTriliumEventBeta("focusOnTitle", () => {
-        if (noteContext?.isActive() && textBoxRef.current) {
-            console.log(textBoxRef.current);
-            textBoxRef.current.focus();
-        }
-    });
-    useTriliumEventBeta("focusAndSelectTitle", ({ isNewNote: _isNewNote } ) => {
+    useTriliumEventBeta([ "focusOnTitle", "focusAndSelectTitle" ], (e) => {
         if (noteContext?.isActive() && textBoxRef.current) {
             textBoxRef.current.focus();
-            isNewNote.current = _isNewNote;
+            isNewNote.current = ("isNewNote" in e ? e.isNewNote : false);
         }
     });
 

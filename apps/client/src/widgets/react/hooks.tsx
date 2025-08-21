@@ -87,11 +87,22 @@ export default function useTriliumEvent<T extends EventNames>(eventName: T, hand
     }, [ eventName, parentWidget, handler ]);
 }
 
-export function useTriliumEventBeta<T extends EventNames>(eventName: T, handler: TriliumEventHandler<T>) {
+export function useTriliumEventBeta<T extends EventNames>(eventName: T | T[], handler: TriliumEventHandler<T>) {
     const parentComponent = useContext(ParentComponent) as ReactWrappedWidget;
-    parentComponent.registerHandler(eventName, handler);
 
-    return (() => parentComponent.removeHandler(eventName, handler));
+    if (Array.isArray(eventName)) {
+        for (const eventSingleName of eventName) {
+            parentComponent.registerHandler(eventSingleName, handler);
+        }
+        return (() => {
+            for (const eventSingleName of eventName) {
+                parentComponent.removeHandler(eventSingleName, handler)
+            }
+        });
+    } else {
+        parentComponent.registerHandler(eventName, handler);
+        return (() => parentComponent.removeHandler(eventName, handler));
+    }
 }
 
 export function useSpacedUpdate(callback: () => Promise<void>, interval = 1000) {
