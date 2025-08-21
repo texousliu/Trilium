@@ -25,7 +25,7 @@ let fullIconData: {
 let iconToCountCache!: Promise<IconToCountCache> | null;
 
 export default function NoteIcon() {
-    const { note } = useNoteContext();
+    const { note, viewScope } = useNoteContext();
     const [ icon, setIcon ] = useState("bx bx-empty");
 
     const refreshIcon = useCallback(() => {
@@ -43,6 +43,7 @@ export default function NoteIcon() {
             dropdownContainerStyle={{ width: "610px" }}
             buttonClassName={`note-icon ${icon}`}
             hideToggleArrow
+            disabled={viewScope?.viewMode !== "default"}
         >
             <NoteIconList />
         </Dropdown>

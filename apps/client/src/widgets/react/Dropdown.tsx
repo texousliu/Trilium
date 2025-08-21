@@ -12,9 +12,10 @@ interface DropdownProps {
     title?: string;
     dropdownContainerStyle?: CSSProperties;
     hideToggleArrow?: boolean;
+    disabled?: boolean;
 }
 
-export default function Dropdown({ className, buttonClassName, isStatic, children, title, dropdownContainerStyle, hideToggleArrow }: DropdownProps) {
+export default function Dropdown({ className, buttonClassName, isStatic, children, title, dropdownContainerStyle, hideToggleArrow, disabled }: DropdownProps) {
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
 
@@ -63,6 +64,7 @@ export default function Dropdown({ className, buttonClassName, isStatic, childre
                 aria-expanded="false"
                 title={title}
                 id={ariaId}
+                disabled={disabled}
             />
 
             <div
