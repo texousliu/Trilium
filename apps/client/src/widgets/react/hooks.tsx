@@ -316,7 +316,7 @@ export function useNoteProperty<T extends keyof FNote>(note: FNote | null | unde
     return note[property];
 }
 
-export function useNoteLabel(note: FNote | undefined | null, labelName: string): [string | undefined, (newValue: string) => void] {
+export function useNoteLabel(note: FNote | undefined | null, labelName: string): [string | null | undefined, (newValue: string) => void] {
     const [ labelValue, setNoteValue ] = useState<string | null | undefined>(note?.getLabelValue(labelName));
 
     useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
