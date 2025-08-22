@@ -1,25 +1,41 @@
 import { useMemo, useState } from "preact/hooks";
-import FNote from "../../entities/fnote";
 import { t } from "../../services/i18n";
 import { useNoteContext } from "../react/hooks";
 import "./style.css";
 import { VNode } from "preact";
 import BasicPropertiesTab from "./BasicPropertiesTab";
+import FormattingTab from "./FormattingTab";
 import { numberObjectsInPlace } from "../../services/utils";
 import { TabContext } from "./ribbon-interface";
+import options from "../../services/options";
+import { CommandNames } from "../../components/app_context";
+import FNote from "../../entities/fnote";
+
+interface TitleContext {
+    note: FNote | null | undefined;
+}
+
 interface TabConfiguration {
-    title: string | ((context: TabContext) => string);
+    title: string | ((context: TitleContext) => string);
     icon: string;
     // TODO: Mark as required after porting them all.
     content?: (context: TabContext) => VNode;
-    show?: (context: TabContext) => boolean;
+    show?: (context: TitleContext) => boolean;
+    toggleCommand?: CommandNames;
+    /**
+     * By default the tab content will not be rendered unless the tab is active (i.e. selected by the user). Setting to `true` will ensure that the tab is rendered even when inactive, for cases where the tab needs to be accessible at all times (e.g. for the detached editor toolbar).
+     */
+    stayInDom?: boolean;
 }
 
 const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
     {
         title: t("classic_editor_toolbar.title"),
-        icon: "bx bx-text"
-        // ClassicEditorToolbar
+        icon: "bx bx-text",
+        show: ({ note }) => note?.type === "text" && options.get("textNoteEditorType") === "ckeditor-classic",
+        toggleCommand: "toggleRibbonTabClassicEditor",
+        content: FormattingTab,
+        stayInDom: true
     },
     {        
         title: ({ note }) => note?.isTriliumSqlite() ? t("script_executor.query") : t("script_executor.script"),
@@ -61,7 +77,8 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
         title: t("basic_properties.basic_properties"),
         icon: "bx bx-slider",
         content: BasicPropertiesTab,
-        show: ({note}) => !note?.isLaunchBarConfig()
+        show: ({note}) => !note?.isLaunchBarConfig(),
+        toggleCommand: "toggleRibbonTabBasicProperties"
     },
     {
         // OwnedAttributeListWidget
@@ -97,10 +114,9 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
 
 export default function Ribbon() {
     const { note } = useNoteContext();
-    const context: TabContext = { note };
+    const titleContext: TitleContext = { note };
     const [ activeTabIndex, setActiveTabIndex ] = useState<number | undefined>();
-    const filteredTabs = useMemo(() => TAB_CONFIGURATION.filter(tab => tab.show?.(context)), [ context, note ])
-    const activeTabConfiguration = activeTabIndex ? filteredTabs.find(tab => tab.index === activeTabIndex) : undefined;
+    const filteredTabs = useMemo(() => TAB_CONFIGURATION.filter(tab => tab.show?.(titleContext)), [ titleContext, note ])
 
     return (
         <div class="ribbon-container" style={{ contain: "none" }}>
@@ -109,7 +125,7 @@ export default function Ribbon() {
                     {filteredTabs.map(({ title, icon, index }) => (
                         <RibbonTab
                             icon={icon}
-                            title={typeof title === "string" ? title : title(context)}
+                            title={typeof title === "string" ? title : title(titleContext)}
                             active={index === activeTabIndex}
                             onClick={() => {
                                 if (activeTabIndex !== index) {
@@ -127,7 +143,14 @@ export default function Ribbon() {
         
             <div className="ribbon-body-container">
                 <div className="ribbon-body">
-                    {activeTabConfiguration?.content && activeTabConfiguration.content({ note })}
+                    {filteredTabs.map(tab => {
+                        const isActive = tab.index === activeTabIndex;
+                        if (!isActive && !tab.stayInDom) {
+                            return;
+                        }
+
+                        return tab?.content && tab.content({ note, hidden: !isActive });
+                    })}
                 </div>
             </div>
         </div>
