@@ -417,17 +417,27 @@ export function useNoteBlob(note: FNote | null | undefined): [ FBlob | null | un
 export function useLegacyWidget(widgetFactory: () => BasicWidget, { noteContext }: {
     noteContext?: NoteContext;
 } = {}) {
+    const ref = useRef<HTMLDivElement>(null);
     const widget = useMemo(widgetFactory, []);
     const parentComponent = useContext(ParentComponent);
 
+    useEffect(() => {
+        if (!ref.current) return;
+
+        const $container = $(ref.current);
+        $container.empty();
+        widget.render().appendTo($container);
+
+        if (noteContext && widget instanceof NoteContextAwareWidget) {
+            console.log("Injecting note context", noteContext);
+            widget.setNoteContextEvent({ noteContext });
+            widget.activeContextChangedEvent({ noteContext });
+        }
+    }, [ widget ]);
+
     if (parentComponent) {
         parentComponent.child(widget);
-    }
+    }    
 
-    if (noteContext && widget instanceof NoteContextAwareWidget) {
-        console.log("Inject!");
-        widget.setNoteContextEvent({ noteContext });
-    }
-
-    return <RawHtml html={widget.render()} />
+    return <div ref={ref} />
 }
