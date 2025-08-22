@@ -31,6 +31,7 @@ export default class RootContainer extends FlexContainer<BasicWidget> {
         }
 
         this.#setMotion(options.is("motionEnabled"));
+        this.#setShadows(options.is("shadowsEnabled"));
 
         return super.render();
     }
@@ -38,6 +39,10 @@ export default class RootContainer extends FlexContainer<BasicWidget> {
     entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         if (loadResults.isOptionReloaded("motionEnabled")) {
             this.#setMotion(options.is("motionEnabled"));
+        }
+
+        if (loadResults.isOptionReloaded("shadowsEnabled")) {
+            this.#setShadows(options.is("shadowsEnabled"));
         }
     }
 
@@ -50,6 +55,10 @@ export default class RootContainer extends FlexContainer<BasicWidget> {
     #setMotion(enabled: boolean) {
         document.body.classList.toggle("motion-disabled", !enabled);
         jQuery.fx.off = !enabled;
+    }
+
+    #setShadows(enabled: boolean) {
+        document.body.classList.toggle("shadows-disabled", !enabled);
     }
 }
 
