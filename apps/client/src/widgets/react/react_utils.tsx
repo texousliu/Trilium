@@ -1,4 +1,4 @@
-import { createContext, render, type JSX, type RefObject } from "preact";
+import { ComponentChild, createContext, render, type JSX, type RefObject } from "preact";
 import Component from "../../components/component";
 
 export const ParentComponent = createContext<Component | null>(null);
@@ -39,4 +39,9 @@ export function renderReactWidgetAtElement(parentComponent: Component, el: JSX.E
 
 export function disposeReactWidget(container: Element) {
     render(null, container);
+}
+
+export function separateByCommas(components: ComponentChild[]) {
+    return components.reduce<any>((acc, item) =>
+        (acc.length ? [...acc, ", ", item] : [item]), []);
 }

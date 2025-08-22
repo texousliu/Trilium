@@ -4,7 +4,7 @@ type HTMLElementLike = string | HTMLElement | JQuery<HTMLElement>;
 
 interface RawHtmlProps {
     className?: string;
-    html: HTMLElementLike;
+    html?: HTMLElementLike;
     style?: CSSProperties;
 }
 
@@ -19,7 +19,7 @@ export function RawHtmlBlock(props: RawHtmlProps) {
 function getProps({ className, html, style }: RawHtmlProps) {
     return {
         className: className,
-        dangerouslySetInnerHTML: getHtml(html),
+        dangerouslySetInnerHTML: getHtml(html ?? ""),
         style
     }
 }

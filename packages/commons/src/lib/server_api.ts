@@ -162,3 +162,10 @@ export type ToggleInParentResponse = {
     success: false;
     message: string;
 }
+
+export type EditedNotesResponse = {
+    noteId: string;
+    isDeleted: boolean;
+    title?: string;
+    notePath?: string[] | null;
+}[];
