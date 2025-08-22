@@ -32,6 +32,7 @@ export default class RootContainer extends FlexContainer<BasicWidget> {
 
         this.#setMotion(options.is("motionEnabled"));
         this.#setShadows(options.is("shadowsEnabled"));
+        this.#setBackdropEffects(options.is("backdropEffectsEnabled"));
 
         return super.render();
     }
@@ -43,6 +44,10 @@ export default class RootContainer extends FlexContainer<BasicWidget> {
 
         if (loadResults.isOptionReloaded("shadowsEnabled")) {
             this.#setShadows(options.is("shadowsEnabled"));
+        }
+
+        if (loadResults.isOptionReloaded("backdropEffectsEnabled")) {
+            this.#setBackdropEffects(options.is("backdropEffectsEnabled"));
         }
     }
 
@@ -59,6 +64,10 @@ export default class RootContainer extends FlexContainer<BasicWidget> {
 
     #setShadows(enabled: boolean) {
         document.body.classList.toggle("shadows-disabled", !enabled);
+    }
+
+    #setBackdropEffects(enabled: boolean) {
+        document.body.classList.toggle("backdrop-effects-disabled", !enabled);
     }
 }
 
