@@ -249,6 +249,7 @@ function ElectronIntegration() {
 function Performance() {
     const [ motionEnabled, setMotionEnabled ] = useTriliumOptionBool("motionEnabled");
     const [ shadowsEnabled, setShadowsEnabled ] = useTriliumOptionBool("shadowsEnabled");
+    const [ backdropEffectsEnabled, setBackdropEffectsEnabled ] = useTriliumOptionBool("backdropEffectsEnabled");
 
 
     return <OptionsSection title={t("ui-performance.title")}>
@@ -262,6 +263,12 @@ function Performance() {
             <FormCheckbox
                 label={t("ui-performance.enable-shadows")}
                 currentValue={shadowsEnabled} onChange={setShadowsEnabled}
+            />
+        </FormGroup>
+        <FormGroup name="backdrop-effects-enabled">
+            <FormCheckbox
+                label={t("ui-performance.enable-backdrop-effects")}
+                currentValue={backdropEffectsEnabled} onChange={setBackdropEffectsEnabled}
             />
         </FormGroup>
     </OptionsSection>

@@ -1116,7 +1116,8 @@
   "ui-performance": {
     "title": "Performance",
     "enable-motion": "Enable transitions and animations",
-    "enable-shadows": "Enable shadows"
+    "enable-shadows": "Enable shadows",
+    "enable-backdrop-effects": "Enable background effects for menus, popups and panels"
   },
   "ai_llm": {
     "not_started": "Not started",
