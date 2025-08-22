@@ -1024,6 +1024,10 @@ class FNote {
         return this.mime === "text/x-sqlite;schema=trilium";
     }
 
+    isTriliumScript() {
+        return this.mime.startsWith("application/javascript");
+    }
+
     /**
      * Provides note's date metadata.
      */

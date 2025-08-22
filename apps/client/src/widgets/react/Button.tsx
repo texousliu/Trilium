@@ -2,6 +2,7 @@ import type { RefObject } from "preact";
 import type { CSSProperties } from "preact/compat";
 import { useRef, useMemo } from "preact/hooks";
 import { memo } from "preact/compat";
+import { CommandNames } from "../../components/app_context";
 
 interface ButtonProps {
     name?: string;
@@ -17,9 +18,10 @@ interface ButtonProps {
     disabled?: boolean;
     size?: "normal" | "small" | "micro";
     style?: CSSProperties;
+    triggerCommand?: CommandNames;
 }
 
-const Button = memo(({ name, buttonRef: _buttonRef, className, text, onClick, keyboardShortcut, icon, primary, disabled, size, style }: ButtonProps) => {
+const Button = memo(({ name, buttonRef: _buttonRef, className, text, onClick, keyboardShortcut, icon, primary, disabled, size, style, triggerCommand }: ButtonProps) => {
     // Memoize classes array to prevent recreation
     const classes = useMemo(() => {
         const classList: string[] = ["btn"];
@@ -57,11 +59,12 @@ const Button = memo(({ name, buttonRef: _buttonRef, className, text, onClick, ke
         <button
             name={name}
             className={classes}
-            type={onClick ? "button" : "submit"}
+            type={onClick || triggerCommand ? "button" : "submit"}
             onClick={onClick}
             ref={buttonRef}
             disabled={disabled}
             style={style}
+            data-trigger-command={triggerCommand}
         >
             {icon && <span className={`bx ${icon}`}></span>}
             {text} {shortcutElements}

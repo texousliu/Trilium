@@ -10,6 +10,7 @@ import { TabContext } from "./ribbon-interface";
 import options from "../../services/options";
 import { CommandNames } from "../../components/app_context";
 import FNote from "../../entities/fnote";
+import ScriptTab from "./ScriptTab";
 
 interface TitleContext {
     note: FNote | null | undefined;
@@ -22,6 +23,7 @@ interface TabConfiguration {
     content?: (context: TabContext) => VNode;
     show?: (context: TitleContext) => boolean;
     toggleCommand?: CommandNames;
+    activate?: boolean;
     /**
      * By default the tab content will not be rendered unless the tab is active (i.e. selected by the user). Setting to `true` will ensure that the tab is rendered even when inactive, for cases where the tab needs to be accessible at all times (e.g. for the detached editor toolbar).
      */
@@ -39,8 +41,12 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
     },
     {        
         title: ({ note }) => note?.isTriliumSqlite() ? t("script_executor.query") : t("script_executor.script"),
-        icon: "bx bx-play"
-        // ScriptExecutorWidget
+        icon: "bx bx-play",
+        content: ScriptTab,
+        activate: true,
+        show: ({ note }) => !!note &&
+            (note.isTriliumScript() || note.isTriliumSqlite()) &&
+            (note.hasLabel("executeDescription") || note.hasLabel("executeButton"))
     },
     {
         // SearchDefinitionWidget
