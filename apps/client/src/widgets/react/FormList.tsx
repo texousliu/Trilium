@@ -82,9 +82,10 @@ interface FormListItemOpts {
     onClick?: () => void;
     description?: string;
     className?: string;
+    rtl?: boolean;
 }
 
-export function FormListItem({ children, icon, value, title, active, badges, disabled, checked, onClick, description, selected }: FormListItemOpts) {
+export function FormListItem({ children, icon, value, title, active, badges, disabled, checked, onClick, description, selected, rtl }: FormListItemOpts) {
     if (checked) {
         icon = "bx bx-check";
     }
@@ -95,6 +96,7 @@ export function FormListItem({ children, icon, value, title, active, badges, dis
             data-value={value} title={title}
             tabIndex={0}
             onClick={onClick}
+            dir={rtl ? "rtl" : undefined}
         >
             <Icon icon={icon} />&nbsp;
             <div>
@@ -120,6 +122,6 @@ export function FormListHeader({ text }: FormListHeaderOpts) {
     )
 }
 
-export function FormDivider() {
+export function FormDropdownDivider() {
     return <div className="dropdown-divider" />;
 }

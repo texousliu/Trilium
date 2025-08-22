@@ -38,11 +38,6 @@ const TPL = /*html*/`\
 </div>
 `;
 
-const DEFAULT_LOCALE: Locale = {
-    id: "",
-    name: t("note_language.not_set")
-};
-
 export default class NoteLanguageWidget extends NoteContextAwareWidget {
 
     private dropdown!: Dropdown;
@@ -59,7 +54,6 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
     doRender() {
         this.$widget = $(TPL);
         this.dropdown = Dropdown.getOrCreateInstance(this.$widget.find("[data-bs-toggle='dropdown']")[0]);
-        this.$widget.on("show.bs.dropdown", () => this.renderDropdown());
 
         this.$noteLanguageDropdown = this.$widget.find(".note-language-dropdown")
         this.$noteLanguageDesc = this.$widget.find(".note-language-desc");
@@ -72,36 +66,8 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
             return;
         }
 
-        for (const locale of this.locales) {
-            if (typeof locale === "object") {
-                const $title = $("<span>").text(locale.name);
-
-                const $link = $('<a class="dropdown-item">')
-                    .attr("data-language", locale.id)
-                    .append('<span class="check">&check;</span> ')
-                    .append($title)
-                    .on("click", () => {
-                    const languageId = $link.attr("data-language") ?? "";
-                    this.save(languageId);
-                });
-
-                if (locale.rtl) {
-                    $link.attr("dir", "rtl");
-                }
-
-                if (locale.id === this.currentLanguageId) {
-                    $link.addClass("selected");
-                }
-
-                this.$noteLanguageDropdown.append($link);
-            } else {
-                this.$noteLanguageDropdown.append('<div class="dropdown-divider"></div>');
-            }
-        }
-
         const $configureLink = $('<a class="dropdown-item">')
-            .append(`<span>${t("note_language.configure-languages")}</span>`)
-            .on("click", () => appContext.tabManager.openContextWithNote("_optionsLocalization", { activate: true }));
+            .on("click", () => ));
         this.$noteLanguageDropdown.append($configureLink);
     }
 
@@ -114,7 +80,6 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
     }
 
     async refreshWithNote(note: FNote) {
-        const currentLanguageId = note.getLabelValue("language") ?? "";
         const language = getLocaleById(currentLanguageId) ?? DEFAULT_LOCALE;
         this.currentLanguageId = currentLanguageId;
         this.$noteLanguageDesc.text(language.name);
@@ -132,35 +97,7 @@ export default class NoteLanguageWidget extends NoteContextAwareWidget {
     }
 
     static #buildLocales() {
-        const enabledLanguages = JSON.parse(options.get("languages") ?? "[]") as string[];
-        const filteredLanguages = getAvailableLocales().filter((l) => typeof l !== "object" || enabledLanguages.includes(l.id));
-        const leftToRightLanguages = filteredLanguages.filter((l) => !l.rtl);
-        const rightToLeftLanguages = filteredLanguages.filter((l) => l.rtl);
 
-        let locales: ("---" | Locale)[] = [
-            DEFAULT_LOCALE
-        ];
-
-        if (leftToRightLanguages.length > 0) {
-            locales = [
-                ...locales,
-                "---",
-                ...leftToRightLanguages
-            ];
-        }
-
-        if (rightToLeftLanguages.length > 0) {
-            locales = [
-                ...locales,
-                "---",
-                ...rightToLeftLanguages
-            ];
-        }
-
-        // This will separate the list of languages from the "Configure languages" button.
-        // If there is at least one language.
-        locales.push("---");
-        return locales;
     }
 
 }

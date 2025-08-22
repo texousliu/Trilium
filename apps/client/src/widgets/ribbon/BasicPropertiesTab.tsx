@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
 import Dropdown from "../react/Dropdown";
 import { NOTE_TYPES } from "../../services/note_types";
-import { FormDivider, FormListBadge, FormListItem } from "../react/FormList";
-import { t } from "../../services/i18n";
-import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEventBeta, useTriliumOption } from "../react/hooks";
+import { FormDropdownDivider, FormListBadge, FormListItem } from "../react/FormList";
+import { getAvailableLocales, t } from "../../services/i18n";
+import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEventBeta, useTriliumOption, useTriliumOptionJson } from "../react/hooks";
 import mime_types from "../../services/mime_types";
-import { NoteType, ToggleInParentResponse } from "@triliumnext/commons";
+import { Locale, NoteType, ToggleInParentResponse } from "@triliumnext/commons";
 import server from "../../services/server";
 import dialog from "../../services/dialog";
 import FormToggle from "../react/FormToggle";
@@ -15,7 +15,7 @@ import FormDropdownList from "../react/FormDropdownList";
 import toast from "../../services/toast";
 import branches from "../../services/branches";
 import sync from "../../services/sync";
-import TemplateSwitchWidget from "../template_switch";
+import appContext from "../../components/app_context";
 
 export default function BasicPropertiesTab() {
     const { note } = useNoteContext();
@@ -28,6 +28,7 @@ export default function BasicPropertiesTab() {
             <BookmarkSwitch note={note} />
             <SharedSwitch note={note} />
             <TemplateSwitch note={note} />
+            <NoteLanguageSwitch note={note} />
         </div>
     );
 }
@@ -93,7 +94,7 @@ function NoteTypeWidget({ note }: { note?: FNote | null }) {
                     } else {
                         return (
                             <>
-                                <FormDivider />
+                                <FormDropdownDivider />
                                 <FormListItem
                                     checked={checked}
                                     disabled                                    
@@ -261,6 +262,70 @@ function SharedSwitch({ note }: { note?: FNote | null }) {
                 helpPage="R9pX4DGra2Vt"
                 disabled={["root", "_share", "_hidden"].includes(note?.noteId ?? "") || note?.noteId.startsWith("_options")}
             />
+        </div>
+    )
+}
+
+function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
+    const [ languages ] = useTriliumOption("languages");
+    const DEFAULT_LOCALE = {
+        id: "",
+        name: t("note_language.not_set")
+    };
+
+    const [ currentNoteLanguage, setCurrentNoteLanguage ] = useNoteLabel(note, "language") ?? "";
+
+    const locales = useMemo(() => {
+        const enabledLanguages = JSON.parse(languages ?? "[]") as string[];
+        const filteredLanguages = getAvailableLocales().filter((l) => typeof l !== "object" || enabledLanguages.includes(l.id));
+        const leftToRightLanguages = filteredLanguages.filter((l) => !l.rtl);
+        const rightToLeftLanguages = filteredLanguages.filter((l) => l.rtl);
+
+        let locales: ("---" | Locale)[] = [
+            DEFAULT_LOCALE
+        ];
+
+        if (leftToRightLanguages.length > 0) {
+            locales = [
+                ...locales,
+                "---",
+                ...leftToRightLanguages
+            ];
+        }
+
+        if (rightToLeftLanguages.length > 0) {
+            locales = [
+                ...locales,
+                "---",
+                ...rightToLeftLanguages
+            ];
+        }
+
+        // This will separate the list of languages from the "Configure languages" button.
+        // If there is at least one language.
+        locales.push("---");
+        return locales;
+    }, [ languages ]);
+
+    return (
+        <div className="note-language-container">
+            <Dropdown>
+                {locales.map(locale => {
+                    if (typeof locale === "object") {
+                        return <FormListItem
+                            rtl={locale.rtl}
+                            selected={locale.id === currentNoteLanguage}
+                            onClick={() => setCurrentNoteLanguage(locale.id)}
+                        >{locale.name}</FormListItem>
+                    } else {
+                        return <FormDropdownDivider />
+                    }
+                })}
+
+                <FormListItem
+                    onClick={() => appContext.tabManager.openContextWithNote("_optionsLocalization", { activate: true })}
+                >{t("note_language.configure-languages")}</FormListItem>           
+            </Dropdown>
         </div>
     )
 }

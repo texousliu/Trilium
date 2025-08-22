@@ -57,7 +57,7 @@ export default class BasicPropertiesWidget extends NoteContextAwareWidget {
         this.$widget.find(".bookmark-switch-container").append(this.bookmarkSwitchWidget.render());
         this.$widget.find(".shared-switch-container").append(this.sharedSwitchWidget.render());
         this.$widget.find(".template-switch-container").append(this.templateSwitchWidget.render());
-        this.$widget.find(".note-language-container").append(this.noteLanguageWidget.render());
+        this.$widget.find(".").append(this.noteLanguageWidget.render());
     }
 
     async refreshWithNote(note: FNote) {
