@@ -10,8 +10,6 @@ import type FNote from "../../entities/fnote.js";
 import NoteLanguageWidget from "../note_language.js";
 
 const TPL = /*html*/`
-    <div class="shared-switch-container"></div>
-
     <div class="template-switch-container"></div>
 
     <div class="note-language-container">
@@ -28,7 +26,6 @@ export default class BasicPropertiesWidget extends NoteContextAwareWidget {
     constructor() {
         super();
 
-        this.sharedSwitchWidget = new SharedSwitchWidget().contentSized();
         this.templateSwitchWidget = new TemplateSwitchWidget().contentSized();
         this.noteLanguageWidget = new NoteLanguageWidget().contentSized();
 

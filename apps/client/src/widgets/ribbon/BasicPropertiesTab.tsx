@@ -13,6 +13,8 @@ import FNote from "../../entities/fnote";
 import protected_session from "../../services/protected_session";
 import FormDropdownList from "../react/FormDropdownList";
 import toast from "../../services/toast";
+import branches from "../../services/branches";
+import sync from "../../services/sync";
 
 export default function BasicPropertiesTab() {
     const { note } = useNoteContext();
@@ -23,6 +25,7 @@ export default function BasicPropertiesTab() {
             <ProtectedNoteSwitch note={note} />
             <EditabilitySelect note={note} />
             <BookmarkSwitch note={note} />
+            <SharedSwitch note={note} />
         </div>
     );
 }
@@ -194,6 +197,51 @@ function BookmarkSwitch({ note }: { note?: FNote | null }) {
                     }
                 }}
                 disabled={["root", "_hidden"].includes(note?.noteId ?? "")}
+            />
+        </div>
+    )
+}
+
+function SharedSwitch({ note }: { note?: FNote | null }) {
+    const [ isShared, setIsShared ] = useState(false);
+    const refreshState = useCallback(() => {
+        setIsShared(!!note?.hasAncestor("_share"));
+    }, [ note ]);
+
+    useEffect(() => refreshState(), [ note ]);
+    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+        if (note && loadResults.getBranchRows().find((b) => b.noteId === note.noteId)) {
+            refreshState();
+        }
+    });
+
+    const switchShareState = useCallback(async (shouldShare: boolean) => {
+        if (!note) return;
+
+        if (shouldShare) {
+            await branches.cloneNoteToParentNote(note.noteId, "_share");
+        } else {
+            if (note?.getParentBranches().length === 1 && !(await dialog.confirm(t("shared_switch.shared-branch")))) {
+                return;
+            }            
+
+            const shareBranch = note?.getParentBranches().find((b) => b.parentNoteId === "_share");
+            if (!shareBranch?.branchId) return;
+            await server.remove(`branches/${shareBranch.branchId}?taskId=no-progress-reporting`);            
+        }
+
+        sync.syncNow(true);
+    }, [ note ]);
+
+    return (
+        <div className="shared-switch-container">
+            <FormToggle
+                currentValue={isShared}
+                onChange={switchShareState}
+                switchOnName={t("shared_switch.shared")} switchOnTooltip={t("shared_switch.toggle-on-title")}
+                switchOffName={t("shared_switch.shared")} switchOffTooltip={t("shared_switch.toggle-off-title")}
+                helpPage="R9pX4DGra2Vt"
+                disabled={["root", "_share", "_hidden"].includes(note?.noteId ?? "") || note?.noteId.startsWith("_options")}
             />
         </div>
     )
