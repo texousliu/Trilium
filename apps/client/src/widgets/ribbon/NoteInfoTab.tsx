@@ -1,4 +1,4 @@
-import { useEffect, useState } from "preact/hooks";
+import { useCallback, useEffect, useState } from "preact/hooks";
 import { t } from "../../services/i18n";
 import { TabContext } from "./ribbon-interface";
 import { MetadataResponse, NoteSizeResponse, SubtreeSizeResponse } from "@triliumnext/commons";
@@ -7,6 +7,7 @@ import Button from "../react/Button";
 import { formatDateTime } from "../../utils/formatters";
 import { formatSize } from "../../services/utils";
 import LoadingSpinner from "../react/LoadingSpinner";
+import { useTriliumEventBeta } from "../react/hooks";
 
 export default function NoteInfoTab({ note }: TabContext) {
     const [ metadata, setMetadata ] = useState<MetadataResponse>();
@@ -14,7 +15,7 @@ export default function NoteInfoTab({ note }: TabContext) {
     const [ noteSizeResponse, setNoteSizeResponse ] = useState<NoteSizeResponse>();
     const [ subtreeSizeResponse, setSubtreeSizeResponse ] = useState<SubtreeSizeResponse>();
 
-    useEffect(() => {
+    function refresh() {
         if (note) {
             server.get<MetadataResponse>(`notes/${note?.noteId}/metadata`).then(setMetadata);
         }
@@ -22,9 +23,15 @@ export default function NoteInfoTab({ note }: TabContext) {
         setNoteSizeResponse(undefined);
         setSubtreeSizeResponse(undefined);
         setIsLoading(false);
-    }, [ note?.noteId ]);
+    }
 
-    console.log("Got ", noteSizeResponse, subtreeSizeResponse);
+    useEffect(refresh, [ note?.noteId ]);
+    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+        const noteId = note?.noteId;
+        if (noteId && (loadResults.isNoteReloaded(noteId) || loadResults.isNoteContentReloaded(noteId))) {
+            refresh();
+        }
+    });
 
     return (
         <div className="note-info-widget">
