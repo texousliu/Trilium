@@ -7,10 +7,12 @@ import options, { type OptionValue } from "../../services/options";
 import utils, { reloadFrontendApp } from "../../services/utils";
 import Component from "../../components/component";
 import NoteContext from "../../components/note_context";
-import { ReactWrappedWidget } from "../basic_widget";
+import BasicWidget, { ReactWrappedWidget } from "../basic_widget";
 import FNote from "../../entities/fnote";
 import attributes from "../../services/attributes";
 import FBlob from "../../entities/fblob";
+import RawHtml from "./RawHtml";
+import NoteContextAwareWidget from "../note_context_aware_widget";
 
 type TriliumEventHandler<T extends EventNames> = (data: EventData<T>) => void;
 const registeredHandlers: Map<Component, Map<EventNames, TriliumEventHandler<any>[]>> = new Map();
@@ -410,4 +412,22 @@ export function useNoteBlob(note: FNote | null | undefined): [ FBlob | null | un
     });
 
     return [ blob ] as const;
+}
+
+export function useLegacyWidget(widgetFactory: () => BasicWidget, { noteContext }: {
+    noteContext?: NoteContext;
+} = {}) {
+    const widget = useMemo(widgetFactory, []);
+    const parentComponent = useContext(ParentComponent);
+
+    if (parentComponent) {
+        parentComponent.child(widget);
+    }
+
+    if (noteContext && widget instanceof NoteContextAwareWidget) {
+        console.log("Inject!");
+        widget.setNoteContextEvent({ noteContext });
+    }
+
+    return <RawHtml html={widget.render()} />
 }
