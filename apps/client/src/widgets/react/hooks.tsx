@@ -418,26 +418,39 @@ export function useLegacyWidget(widgetFactory: () => BasicWidget, { noteContext 
     noteContext?: NoteContext;
 } = {}) {
     const ref = useRef<HTMLDivElement>(null);
-    const widget = useMemo(widgetFactory, []);
     const parentComponent = useContext(ParentComponent);
 
-    useEffect(() => {
-        if (!ref.current) return;
+    // Render the widget once.
+    const [ widget, renderedWidget ] = useMemo(() => {
+        const widget = widgetFactory();
 
-        const $container = $(ref.current);
-        $container.empty();
-        widget.render().appendTo($container);
+        if (parentComponent) {
+            parentComponent.child(widget);
+        }
 
         if (noteContext && widget instanceof NoteContextAwareWidget) {
-            console.log("Injecting note context", noteContext);
             widget.setNoteContextEvent({ noteContext });
+        }
+        
+        const renderedWidget = widget.render();
+        return [ widget, renderedWidget ];
+    }, [widgetFactory]);
+
+    // Attach the widget to the parent.
+    useEffect(() => {
+        if (ref.current) {
+            ref.current.innerHTML = "";
+            renderedWidget.appendTo(ref.current);
+        }
+    }, [ renderedWidget ]);
+
+    // Inject the note context.
+    useEffect(() => {
+        console.log("Injecting note context");
+        if (noteContext && widget instanceof NoteContextAwareWidget) {
             widget.activeContextChangedEvent({ noteContext });
         }
-    }, [ widget ]);
-
-    if (parentComponent) {
-        parentComponent.child(widget);
-    }    
+    }, [ noteContext ]);
 
     return <div ref={ref} />
 }

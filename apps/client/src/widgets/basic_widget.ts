@@ -302,6 +302,8 @@ export class ReactWrappedWidget extends BasicWidget {
         for (const listener of this.listeners[name]) {
             listener(data);
         }
+
+        super.handleEvent(name, data);
     }
 
     registerHandler<T extends EventNames>(name: T, handler: EventHandler) {
