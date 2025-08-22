@@ -153,6 +153,8 @@ const defaultOptions: DefaultOption[] = [
         isSynced: false
     },
     { name: "motionEnabled", value: "true", isSynced: false },
+    { name: "shadowsEnabled", value: "true", isSynced: false },
+
 
     // Internationalization
     { name: "locale", value: "en", isSynced: true },

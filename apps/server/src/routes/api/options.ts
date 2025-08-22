@@ -64,6 +64,7 @@ const ALLOWED_OPTIONS = new Set<OptionNames>([
     "weeklyBackupEnabled",
     "monthlyBackupEnabled",
     "motionEnabled",
+    "shadowsEnabled",
     "maxContentWidth",
     "compressImages",
     "downloadImagesAutomatically",
