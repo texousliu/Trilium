@@ -249,10 +249,10 @@ function ElectronIntegration() {
 function Performance() {
     const [ motionEnabled, setMotionEnabled ] = useTriliumOptionBool("motionEnabled", true);
 
-    return <OptionsSection title="Performance">
+    return <OptionsSection title={t("ui-performance.title")}>
         <FormGroup name="motion-enabled">
                 <FormCheckbox
-                    label={"Use transitions and animations"}
+                    label={t("ui-performance.enable-motion")}
                     currentValue={motionEnabled} onChange={setMotionEnabled}
                 />
         </FormGroup>
