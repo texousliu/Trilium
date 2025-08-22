@@ -43,6 +43,13 @@ body#trilium-app.shadows-disabled *::after {
     box-shadow: none !important;
 }
 
+body#trilium-app.backdrop-effects-disabled *,
+body#trilium-app.backdrop-effects-disabled *::before,
+body#trilium-app.backdrop-effects-disabled *::after {
+    /* Disable backdrop effects */
+    backdrop-filter: none !important;
+}
+
 .table {
     --bs-table-bg: transparent !important;
 }
