@@ -363,7 +363,7 @@ body.desktop .tabulator-popup-container {
 
 @supports (animation-fill-mode: forwards) {
     /* Delay the opening of submenus */
-    body.desktop .dropdown-submenu .dropdown-menu {
+    body.desktop:not(.motion-disabled) .dropdown-submenu .dropdown-menu {
         opacity: 0;
         animation-fill-mode: forwards;
         animation-delay: var(--submenu-opening-delay);
