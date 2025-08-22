@@ -12,6 +12,7 @@ import { CommandNames } from "../../components/app_context";
 import FNote from "../../entities/fnote";
 import ScriptTab from "./ScriptTab";
 import EditedNotesTab from "./EditedNotesTab";
+import NotePropertiesTab from "./NotePropertiesTab";
 
 interface TitleContext {
     note: FNote | null | undefined;
@@ -67,9 +68,11 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
         icon: "bx bx-book"
     },
     {
-        // NotePropertiesWidget
         title: t("note_properties.info"),
-        icon: "bx bx-info-square"
+        icon: "bx bx-info-square",
+        content: NotePropertiesTab,
+        show: ({ note }) => !!note?.getLabelValue("pageUrl"),
+        activate: true
     },
     {
         // FilePropertiesWidget
