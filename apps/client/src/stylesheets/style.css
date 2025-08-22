@@ -28,6 +28,14 @@
     --ck-mention-list-max-height: 500px;
 }
 
+body.motion-disabled *,
+body.motion-disabled *::before,
+body.motion-disabled *::after {
+    /* Disable transitions and animations */
+    transition: none !important;
+    animation: none !important;
+}
+
 .table {
     --bs-table-bg: transparent !important;
 }
