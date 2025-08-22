@@ -3,7 +3,7 @@ import Dropdown from "../react/Dropdown";
 import { NOTE_TYPES } from "../../services/note_types";
 import { FormDropdownDivider, FormListBadge, FormListItem } from "../react/FormList";
 import { getAvailableLocales, t } from "../../services/i18n";
-import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEventBeta, useTriliumOption, useTriliumOptionJson } from "../react/hooks";
+import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEventBeta, useTriliumOption, useTriliumOptionBeta, useTriliumOptionJson } from "../react/hooks";
 import mime_types from "../../services/mime_types";
 import { Locale, NoteType, ToggleInParentResponse } from "@triliumnext/commons";
 import server from "../../services/server";
@@ -267,13 +267,13 @@ function SharedSwitch({ note }: { note?: FNote | null }) {
 }
 
 function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
-    const [ languages ] = useTriliumOption("languages");
+    const [ languages ] = useTriliumOptionBeta("languages");
     const DEFAULT_LOCALE = {
         id: "",
         name: t("note_language.not_set")
     };
 
-    const [ currentNoteLanguage, setCurrentNoteLanguage ] = useNoteLabel(note, "language") ?? "";
+    const [ currentNoteLanguage, setCurrentNoteLanguage ] = useNoteLabel(note, "language");
 
     const locales = useMemo(() => {
         const enabledLanguages = JSON.parse(languages ?? "[]") as string[];
@@ -307,14 +307,16 @@ function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
         return locales;
     }, [ languages ]);
 
+    
     return (
         <div className="note-language-container">
             <Dropdown>
                 {locales.map(locale => {
                     if (typeof locale === "object") {
+                        const checked = locale.id === (currentNoteLanguage ?? "");
                         return <FormListItem
                             rtl={locale.rtl}
-                            selected={locale.id === currentNoteLanguage}
+                            checked={checked}
                             onClick={() => setCurrentNoteLanguage(locale.id)}
                         >{locale.name}</FormListItem>
                     } else {

@@ -166,6 +166,33 @@ export function useTriliumOption(name: OptionNames, needsRefresh?: boolean): [st
     ]
 }
 
+export function useTriliumOptionBeta(name: OptionNames, needsRefresh?: boolean): [string, (newValue: OptionValue) => Promise<void>] {
+    const initialValue = options.get(name);
+    const [ value, setValue ] = useState(initialValue);
+
+    const wrappedSetValue = useMemo(() => {
+        return async (newValue: OptionValue) => {
+            await options.save(name, newValue);
+
+            if (needsRefresh) {
+                reloadFrontendApp(`option change: ${name}`);
+            }
+        }
+    }, [ name, needsRefresh ]);
+
+    useTriliumEventBeta("entitiesReloaded", useCallback(({ loadResults }) => {
+        if (loadResults.getOptionNames().includes(name)) {
+            const newValue = options.get(name);
+            setValue(newValue);
+        }
+     }, [ name ]));
+
+    return [
+        value,
+        wrappedSetValue
+    ]
+}
+
 /**
  * Similar to {@link useTriliumOption}, but the value is converted to and from a boolean instead of a string.
  * 
