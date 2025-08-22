@@ -8,6 +8,48 @@ import config from "./config.js";
 import log from "./log.js";
 
 /**
+ * Enhanced error types for OAuth/OIDC errors
+ */
+interface OAuthError extends Error {
+    error?: string;
+    error_description?: string;
+    error_uri?: string;
+    error_hint?: string;
+    state?: string;
+    scope?: string;
+    code?: string;
+    errno?: string;
+    syscall?: string;
+    cause?: any;
+    statusCode?: number;
+    headers?: Record<string, string>;
+}
+
+/**
+ * OPError type - errors from the OpenID Provider
+ */
+interface OPError extends OAuthError {
+    name: 'OPError';
+    response?: {
+        body?: any;
+        statusCode?: number;
+        headers?: Record<string, string>;
+    };
+}
+
+/**
+ * RPError type - errors from the Relying Party (client-side)
+ */
+interface RPError extends OAuthError {
+    name: 'RPError';
+    response?: {
+        body?: any;
+        statusCode?: number;
+    };
+    checks?: Record<string, any>;
+}
+
+/**
  * Type definition for OIDC user claims
  * These may not all be present depending on the provider configuration
  */
@@ -53,6 +95,215 @@ function safeToString(value: unknown, fallback = ''): string {
 }
 
 /**
+ * Type guard for OPError
+ */
+function isOPError(error: any): error is OPError {
+    return error?.name === 'OPError' || 
+           (error?.constructor?.name === 'OPError') ||
+           (error?.error && typeof error?.error === 'string');
+}
+
+/**
+ * Type guard for RPError
+ */
+function isRPError(error: any): error is RPError {
+    return error?.name === 'RPError' || 
+           (error?.constructor?.name === 'RPError') ||
+           (error?.checks && typeof error?.checks === 'object');
+}
+
+/**
+ * Extract detailed error information from various error types
+ */
+function extractErrorDetails(error: any): Record<string, any> {
+    const details: Record<string, any> = {};
+    
+    // Basic error properties
+    if (error?.message) details.message = error.message;
+    if (error?.name) details.errorType = error.name;
+    if (error?.code) details.code = error.code;
+    if (error?.statusCode) details.statusCode = error.statusCode;
+    
+    // OAuth-specific error properties
+    if (error?.error) details.error = error.error;
+    if (error?.error_description) details.error_description = error.error_description;
+    if (error?.error_uri) details.error_uri = error.error_uri;
+    if (error?.error_hint) details.error_hint = error.error_hint;
+    if (error?.state) details.state = error.state;
+    if (error?.scope) details.scope = error.scope;
+    
+    // System error properties
+    if (error?.errno) details.errno = error.errno;
+    if (error?.syscall) details.syscall = error.syscall;
+    
+    // Response information for OPError/RPError
+    if (error?.response) {
+        details.response = {
+            statusCode: error.response.statusCode,
+            body: error.response.body
+        };
+        // Don't log full headers to avoid sensitive data, just important ones
+        if (error.response.headers) {
+            details.response.headers = {
+                'content-type': error.response.headers['content-type'],
+                'www-authenticate': error.response.headers['www-authenticate']
+            };
+        }
+    }
+    
+    // RPError specific checks
+    if (error?.checks) {
+        details.checks = error.checks;
+    }
+    
+    // Nested cause error
+    if (error?.cause) {
+        details.cause = extractErrorDetails(error.cause);
+    }
+    
+    return details;
+}
+
+/**
+ * Log comprehensive error details with actionable guidance
+ */
+function logOAuthError(context: string, error: any, req?: Request): void {
+    const errorDetails = extractErrorDetails(error);
+    
+    // Always log the full error details
+    log.error(`OAuth ${context}: ${JSON.stringify(errorDetails, null, 2)}`);
+    
+    // Provide specific guidance based on error type
+    if (isOPError(error)) {
+        log.error(`OAuth ${context}: OpenID Provider Error detected`);
+        
+        // Handle specific OPError types
+        switch (error.error) {
+            case 'invalid_request':
+                log.error('Action: Check that all required parameters are being sent in the authorization request');
+                break;
+            case 'invalid_client':
+                log.error('Action: Verify OAuth client ID and client secret are correct');
+                log.error(`Current client ID: ${config.MultiFactorAuthentication.oauthClientId?.substring(0, 10)}...`);
+                break;
+            case 'invalid_grant':
+                log.error('Action: Authorization code may be expired or already used. User should try logging in again');
+                if (req?.session) {
+                    log.error(`Session ID: ${req.session.id?.substring(0, 10)}...`);
+                }
+                break;
+            case 'unauthorized_client':
+                log.error('Action: Client is not authorized for this grant type. Check OAuth provider configuration');
+                break;
+            case 'unsupported_grant_type':
+                log.error('Action: Provider does not support authorization_code grant type. Check provider documentation');
+                break;
+            case 'invalid_scope':
+                log.error('Action: Requested scopes are invalid. Current scopes: openid profile email');
+                break;
+            case 'access_denied':
+                log.error('Action: User denied the authorization request or provider blocked access');
+                break;
+            case 'temporarily_unavailable':
+                log.error('Action: OAuth provider is temporarily unavailable. Try again later');
+                break;
+            case 'server_error':
+                log.error('Action: OAuth provider encountered an error. Check provider logs if available');
+                break;
+            case 'interaction_required':
+                log.error('Action: User interaction is required but prompt=none was requested');
+                break;
+            default:
+                if (error.error_description) {
+                    log.error(`Provider guidance: ${error.error_description}`);
+                }
+        }
+    } else if (isRPError(error)) {
+        log.error(`OAuth ${context}: Relying Party (Client) Error detected`);
+        
+        // Handle specific RPError types
+        if (error.checks) {
+            log.error('Failed validation checks:');
+            Object.entries(error.checks).forEach(([check, value]) => {
+                log.error(`  - ${check}: ${JSON.stringify(value)}`);
+            });
+        }
+        
+        if (error.message?.includes('state mismatch')) {
+            log.error('Action: State parameter mismatch. This can happen due to:');
+            log.error('  1. Multiple login attempts in different tabs');
+            log.error('  2. Session expired during login');
+            log.error('  3. CSRF attack attempt (unlikely)');
+            log.error('Solution: Clear cookies and try logging in again');
+        } else if (error.message?.includes('nonce mismatch')) {
+            log.error('Action: Nonce mismatch detected. Similar to state mismatch');
+            log.error('Solution: Clear session and retry authentication');
+        } else if (error.message?.includes('JWT')) {
+            log.error('Action: JWT validation failed. Check:');
+            log.error('  1. Clock synchronization between client and provider');
+            log.error('  2. JWT signature algorithm configuration');
+            log.error('  3. Issuer URL consistency');
+        }
+    } else if (error?.message?.includes('getaddrinfo') || error?.code === 'ENOTFOUND') {
+        log.error(`OAuth ${context}: DNS resolution failed`);
+        log.error(`Action: Cannot resolve host: ${config.MultiFactorAuthentication.oauthIssuerBaseUrl}`);
+        log.error('Solutions:');
+        log.error('  1. Verify the OAuth issuer URL is correct');
+        log.error('  2. Check DNS configuration (especially in Docker)');
+        log.error('  3. Try using IP address instead of hostname');
+        log.error('  4. Check network connectivity');
+    } else if (error?.code === 'ECONNREFUSED') {
+        log.error(`OAuth ${context}: Connection refused`);
+        log.error(`Target: ${config.MultiFactorAuthentication.oauthIssuerBaseUrl}`);
+        log.error('Solutions:');
+        log.error('  1. Verify the OAuth provider is running');
+        log.error('  2. Check firewall rules');
+        log.error('  3. In Docker, ensure services are on the same network');
+        log.error('  4. Verify port numbers are correct');
+    } else if (error?.code === 'ETIMEDOUT' || error?.code === 'ESOCKETTIMEDOUT') {
+        log.error(`OAuth ${context}: Request timeout`);
+        log.error('Solutions:');
+        log.error('  1. Check network latency to OAuth provider');
+        log.error('  2. Increase timeout values if possible');
+        log.error('  3. Check for network congestion or packet loss');
+    } else if (error?.message?.includes('certificate')) {
+        log.error(`OAuth ${context}: SSL/TLS certificate issue`);
+        log.error('Solutions:');
+        log.error('  1. For self-signed certificates, configure NODE_TLS_REJECT_UNAUTHORIZED=0 (dev only)');
+        log.error('  2. Add CA certificate to trusted store');
+        log.error('  3. Verify certificate validity and expiration');
+    } else if (error?.message?.includes('Unexpected token')) {
+        log.error(`OAuth ${context}: Invalid response format`);
+        log.error('Likely causes:');
+        log.error('  1. Provider returned HTML error page instead of JSON');
+        log.error('  2. Proxy or firewall intercepting requests');
+        log.error('  3. Wrong endpoint URL configured');
+    }
+    
+    // Log request context if available
+    if (req) {
+        const urlPath = req.originalUrl ? req.originalUrl.split('?')[0] : req.url;
+        if (urlPath) {
+            log.error(`Request path: ${urlPath}`);
+        }
+        if (req.method) {
+            log.error(`Request method: ${req.method}`);
+        }
+        // Log session state for debugging
+        if (req.session?.id) {
+            log.error(`Session ID (first 10 chars): ${req.session.id.substring(0, 10)}...`);
+        }
+    }
+    
+    // Always log stack trace for debugging
+    if (error?.stack) {
+        const stackLines = error.stack.split('\n').slice(0, 5);
+        log.error('Stack trace (first 5 lines):');
+        stackLines.forEach((line: string) => log.error(`  ${line.trim()}`));
+    }
+}
+
+/**
  * Extracts and validates user information from OIDC claims
  */
 function extractUserInfo(user: OIDCUserClaims): {
@@ -60,10 +311,31 @@ function extractUserInfo(user: OIDCUserClaims): {
     name: string;
     email: string;
 } | null {
-    // Extract subject identifier (required)
+    // Extract subject identifier (required by OIDC spec)
     const sub = safeToString(user.sub);
     if (!isNonEmptyString(sub)) {
-        log.error(`OAuth: Missing or invalid subject identifier in user claims: ${JSON.stringify(user)}`);
+        log.error('OAuth: CRITICAL - Missing or invalid subject identifier (sub) in user claims!');
+        log.error('The "sub" claim is REQUIRED by the OpenID Connect specification.');
+        log.error(`Received claims: ${JSON.stringify(user, null, 2)}`);
+        log.error('Possible causes:');
+        log.error('  1. OAuth provider is not OIDC-compliant');
+        log.error('  2. Provider configuration is incorrect');
+        log.error('  3. Token parsing failed');
+        log.error('  4. Using OAuth2 instead of OpenID Connect');
+        return null;
+    }
+    
+    // Validate subject identifier quality
+    if (sub.length < 1) {
+        log.error(`OAuth: Subject identifier too short (length=${sub.length}): "${sub}"`);
+        log.error('This may indicate a configuration problem with the OAuth provider');
+        return null;
+    }
+    
+    // Warn about suspicious subject identifiers
+    if (sub === 'undefined' || sub === 'null' || sub === '[object Object]') {
+        log.error(`OAuth: Subject identifier appears to be a stringified error value: "${sub}"`);
+        log.error('This indicates a serious problem with the OAuth provider or token parsing');
         return null;
     }
 
@@ -236,56 +508,135 @@ function generateOAuthConfig() {
         errorOnRequiredAuth: true,
         // Enable detailed error messages
         enableTelemetry: false,
-        // Handle OAuth callback errors
+        // Enhanced callback handler to intercept token exchange errors
         handleCallback: async (req: Request, res: Response, next: NextFunction) => {
             try {
-                // Only log if there's an error from the OAuth provider
+                // Log all callback parameters for debugging
+                log.info('OAuth callback initiated');
+                
+                // Check for OAuth error response
                 if (req.query.error) {
-                    log.error(`OAuth: Provider returned error: ${req.query.error}`);
-                    if (req.query.error_description) {
-                        log.error(`OAuth: Error description: ${req.query.error_description}`);
-                    }
+                    const errorInfo: OAuthError = {
+                        name: 'OAuthCallbackError',
+                        message: `OAuth provider error: ${req.query.error}`,
+                        error: req.query.error as string,
+                        error_description: req.query.error_description as string,
+                        error_uri: req.query.error_uri as string,
+                        state: req.query.state as string
+                    };
+                    
+                    logOAuthError('Callback Error Response', errorInfo, req);
+                    
+                    // Return custom error page with helpful information
+                    const errorMessage = errorInfo.error_description || errorInfo.error || 'Authentication failed';
+                    return res.status(400).send(`
+                        <html>
+                            <head><title>OAuth Error</title></head>
+                            <body>
+                                <h1>Authentication Failed</h1>
+                                <p>Error: ${errorMessage}</p>
+                                <p>Please check the server logs for more details.</p>
+                                <a href="/login">Try Again</a>
+                            </body>
+                        </html>
+                    `);
                 }
-                // No need to log successful callbacks - if it works, it works
-                // The library will handle the actual callback
+                
+                // Check for missing required parameters
+                if (!req.query.code && !req.query.error) {
+                    log.error('OAuth callback: Missing both code and error parameters');
+                    log.error(`Query parameters received: [${Object.keys(req.query).join(', ')}]`);
+                }
+                
+                // Log successful callback initiation (actual token exchange happens in library)
+                if (req.query.code) {
+                    log.info('OAuth callback: Authorization code received, proceeding with token exchange');
+                }
+                
+                // Let the library handle the actual callback
                 return undefined;
             } catch (error) {
-                log.error(`OAuth: Callback error: ${error instanceof Error ? error.message : String(error)}`);
+                // This catches errors during our custom handling
+                logOAuthError('Callback Handler Error', error, req);
                 throw error;
             }
         },
+        // afterCallback is called only on successful token exchange
         afterCallback: async (req: Request, res: Response, session: Session) => {
             try {
+                log.info('OAuth afterCallback: Token exchange successful, processing user information');
+                
                 // Check if database is initialized
                 if (!sqlInit.isDbInitialized()) {
+                    log.info('OAuth afterCallback: Database not initialized, skipping user save');
                     return session;
                 }
 
                 // Check if user object exists
                 if (!req.oidc?.user) {
-                    log.error("OAuth callback: No user object received from OIDC provider");
+                    log.error('OAuth afterCallback: No user object received despite successful token exchange');
+                    log.error(`Session data: hasOidc=${!!req.oidc}, hasIdToken=${!!req.oidc?.idToken}, hasAccessToken=${!!req.oidc?.accessToken}`);
                     return session;
                 }
 
                 const user = req.oidc.user as OIDCUserClaims;
                 
-                // No need to log user claims - if we got here, authentication worked
+                // Log available claims for debugging (without sensitive data)
+                log.info(`OAuth afterCallback: User claims received - hasSub=${!!user.sub}, hasName=${!!user.name}, hasEmail=${!!user.email}, hasGivenName=${!!user.given_name}, hasFamilyName=${!!user.family_name}, hasPreferredUsername=${!!user.preferred_username}, claimKeys=[${Object.keys(user).join(', ')}]`);
 
                 // Extract and validate user information
                 const userInfo = extractUserInfo(user);
                 
                 if (!userInfo) {
-                    log.error("OAuth callback: Failed to extract valid user information from claims");
+                    log.error('OAuth afterCallback: Failed to extract valid user information from claims');
+                    log.error(`Raw claims: ${JSON.stringify(user, null, 2)}`);
                     // Still return session to avoid breaking the auth flow
                     return session;
                 }
 
-                // Save user (no need to log - this is internal operation)
-                openIDEncryption.saveUser(
-                    userInfo.sub,
-                    userInfo.name,
-                    userInfo.email
-                );
+                log.info(`OAuth afterCallback: User info extracted successfully - subLength=${userInfo.sub.length}, hasName=${!!userInfo.name}, hasEmail=${!!userInfo.email}`);
+                
+                // Check if a user already exists and verify subject identifier matches
+                if (isUserSaved()) {
+                    // User exists, verify the subject identifier matches
+                    const isValidUser = openIDEncryption.verifyOpenIDSubjectIdentifier(userInfo.sub);
+                    
+                    if (isValidUser === false) {
+                        log.error('OAuth afterCallback: CRITICAL - Subject identifier mismatch!');
+                        log.error('A different user is already configured in Trilium.');
+                        log.error(`Current login sub: ${userInfo.sub.substring(0, 20)}...`);
+                        log.error('This is a single-user system. To use a different OAuth account:');
+                        log.error('  1. Clear the existing user data');
+                        log.error('  2. Restart Trilium');
+                        log.error('  3. Login with the new account');
+                        
+                        // Don't allow login with mismatched subject
+                        // We can't return a Response here, so we throw an error
+                        // The error will be handled by the Express error handler
+                        throw new Error('OAuth: User mismatch - a different user is already configured');
+                    } else if (isValidUser === undefined) {
+                        log.error('OAuth afterCallback: Unable to verify subject identifier');
+                        log.error('This might indicate database corruption or configuration issues');
+                    } else {
+                        log.info('OAuth afterCallback: Existing user verified successfully');
+                    }
+                } else {
+                    // No existing user, save the new one
+                    const saved = openIDEncryption.saveUser(
+                        userInfo.sub,
+                        userInfo.name,
+                        userInfo.email
+                    );
+                    
+                    if (saved === false) {
+                        log.error('OAuth afterCallback: Failed to save user - a user may already exist');
+                        log.error('This can happen in a race condition with concurrent logins');
+                    } else if (saved === undefined) {
+                        log.error('OAuth afterCallback: Critical error saving user - check logs');
+                    } else {
+                        log.info('OAuth afterCallback: New user saved successfully');
+                    }
+                }
 
                 // Set session variables for successful authentication
                 req.session.loggedIn = true;
@@ -294,16 +645,11 @@ function generateOAuthConfig() {
                     ssoEnabled: true
                 };
                 
-                // Success - no need to log, user is logged in
+                log.info('OAuth afterCallback: Authentication completed successfully');
 
             } catch (error) {
-                // Log the error but don't throw - we want to complete the OAuth flow
-                log.error(`OAuth callback: Unexpected error during user processing: ${error instanceof Error ? error.message : String(error)}`);
-                
-                // Log stack trace for debugging
-                if (error instanceof Error && error.stack) {
-                    log.error(`OAuth callback: Stack trace: ${error.stack}`);
-                }
+                // Log comprehensive error details
+                logOAuthError('AfterCallback Processing Error', error, req);
                 
                 // Still try to set session if possible
                 try {
@@ -312,8 +658,9 @@ function generateOAuthConfig() {
                         totpEnabled: false,
                         ssoEnabled: true
                     };
+                    log.info('OAuth afterCallback: Session set despite error');
                 } catch (sessionError) {
-                    log.error(`OAuth callback: Failed to set session: ${sessionError}`);
+                    logOAuthError('AfterCallback Session Error', sessionError, req);
                 }
             }
 
@@ -324,33 +671,70 @@ function generateOAuthConfig() {
 }
 
 /**
- * Middleware to log OAuth errors
+ * Enhanced middleware to log OAuth errors with comprehensive details
  */
 function oauthErrorLogger(err: any, req: Request, res: Response, next: NextFunction) {
     if (err) {
-        // Always log the basic error
-        log.error(`OAuth Error: ${err.message || 'Unknown error'}`);
+        // Use the comprehensive error logging function
+        logOAuthError('Middleware Error', err, req);
         
-        // Log OAuth-specific error details (these are from the provider, safe to log)
-        if (err.error) {
-            log.error(`OAuth Error Type: ${err.error}`);
-        }
-        if (err.error_description) {
-            log.error(`OAuth Error Description: ${err.error_description}`);
+        // Additional middleware-specific handling
+        if (err.name === 'InternalOAuthError') {
+            // InternalOAuthError is a wrapper used by express-openid-connect
+            log.error('OAuth Middleware: InternalOAuthError detected - this usually wraps the actual error');
+            
+            if (err.cause) {
+                log.error('OAuth Middleware: Examining wrapped error...');
+                logOAuthError('Wrapped Error', err.cause, req);
+            }
         }
         
-        // Provide helpful error messages based on error type
-        if (err.message?.includes('getaddrinfo') || err.message?.includes('ENOTFOUND')) {
-            log.error('Network Error: Cannot reach OAuth provider. Check network connectivity and DNS resolution.');
-        } else if (err.message?.includes('invalid_client')) {
-            log.error('Authentication Error: Invalid client credentials. Verify your OAuth client ID and secret.');
-        } else if (err.message?.includes('invalid_grant')) {
-            log.error('Token Error: Authorization code is invalid or expired. This can happen if the callback takes too long.');
-        } else if (err.message?.includes('self signed certificate') || err.message?.includes('certificate')) {
-            log.error('Certificate Error: SSL/TLS certificate verification failed.');
-            log.error('For testing with self-signed certificates, consult your OAuth provider documentation.');
-        } else if (err.message?.includes('timeout')) {
-            log.error('Timeout Error: Request to OAuth provider timed out. Check network latency and firewall rules.');
+        // Check for specific middleware states
+        if (req.oidc) {
+            log.error(`OAuth Middleware: OIDC state - isAuthenticated=${req.oidc.isAuthenticated()}, hasUser=${!!req.oidc.user}, hasIdToken=${!!req.oidc.idToken}, hasAccessToken=${!!req.oidc.accessToken}`);
+        }
+        
+        // Log response headers that might contain error information
+        const wwwAuth = res.getHeader('WWW-Authenticate');
+        if (wwwAuth) {
+            log.error(`OAuth Middleware: WWW-Authenticate header: ${wwwAuth}`);
+        }
+        
+        // For token exchange failures, provide specific guidance
+        if (err.message?.includes('Failed to obtain access token') || 
+            err.message?.includes('Token request failed') ||
+            err.error === 'invalid_grant') {
+            
+            log.error('OAuth Middleware: Token exchange failure detected');
+            log.error('Common solutions:');
+            log.error('  1. Verify client secret is correct and matches provider configuration');
+            log.error('  2. Check if authorization code expired (typically valid for 10 minutes)');
+            log.error('  3. Ensure redirect URI matches exactly what is configured in provider');
+            log.error('  4. Verify clock synchronization between client and provider (for JWT validation)');
+            log.error('  5. Check if the authorization code was already used (codes are single-use)');
+            
+            // Log timing information if available
+            if (req.session) {
+                const now = Date.now();
+                log.error(`Current time: ${new Date(now).toISOString()}`);
+            }
+        }
+        
+        // For state mismatch errors, provide detailed debugging
+        if (err.message?.includes('state') || err.checks?.state === false) {
+            log.error('OAuth Middleware: State parameter mismatch');
+            log.error('Debugging information:');
+            if (req.query.state) {
+                log.error(`  Received state (first 10 chars): ${String(req.query.state).substring(0, 10)}...`);
+            }
+            if (req.session?.id) {
+                log.error(`  Session ID (first 10 chars): ${req.session.id.substring(0, 10)}...`);
+            }
+            log.error('This can happen when:');
+            log.error('  - User has multiple login tabs open');
+            log.error('  - Session expired during login flow');
+            log.error('  - Cookies are blocked or not properly configured');
+            log.error('  - Load balancer without sticky sessions');
         }
     }
     

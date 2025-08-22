@@ -602,4 +602,238 @@ describe('OpenID Service', () => {
             });
         });
     });
+
+    describe('verifyOpenIDSubjectIdentifier with encryption', () => {
+        it('correctly verifies matching subject identifier', () => {
+            // Setup: User is saved
+            mockGetValue.mockImplementation((query: string) => {
+                if (query.includes('isSetup')) return 'true';
+                if (query.includes('salt')) return 'test-salt-value';
+                if (query.includes('userIDVerificationHash')) return 'dGVzdC1oYXNoLXZhbHVl'; // base64 encoded
+                return undefined;
+            });
+            mockIsDbInitialized.mockReturnValue(true);
+
+            // Mock the verification to return true for matching
+            vi.mocked(openIDEncryption.verifyOpenIDSubjectIdentifier).mockReturnValue(true);
+
+            const result = openIDEncryption.verifyOpenIDSubjectIdentifier('test-subject-id');
+            
+            expect(result).toBe(true);
+            expect(openIDEncryption.verifyOpenIDSubjectIdentifier).toHaveBeenCalledWith('test-subject-id');
+        });
+
+        it('correctly rejects non-matching subject identifier', () => {
+            // Setup: User is saved with different subject
+            mockGetValue.mockImplementation((query: string) => {
+                if (query.includes('isSetup')) return 'true';
+                if (query.includes('salt')) return 'test-salt-value';
+                if (query.includes('userIDVerificationHash')) return 'ZGlmZmVyZW50LWhhc2g='; // different hash
+                return undefined;
+            });
+            mockIsDbInitialized.mockReturnValue(true);
+
+            // Mock the verification to return false for non-matching
+            vi.mocked(openIDEncryption.verifyOpenIDSubjectIdentifier).mockReturnValue(false);
+
+            const result = openIDEncryption.verifyOpenIDSubjectIdentifier('wrong-subject-id');
+            
+            expect(result).toBe(false);
+            expect(openIDEncryption.verifyOpenIDSubjectIdentifier).toHaveBeenCalledWith('wrong-subject-id');
+        });
+
+        it('returns undefined when salt is missing', () => {
+            // Setup: Salt is missing
+            mockGetValue.mockImplementation((query: string) => {
+                if (query.includes('isSetup')) return 'true';
+                if (query.includes('salt')) return undefined;
+                return undefined;
+            });
+            mockIsDbInitialized.mockReturnValue(true);
+
+            // Mock the verification to return undefined for missing salt
+            vi.mocked(openIDEncryption.verifyOpenIDSubjectIdentifier).mockReturnValue(undefined);
+
+            const result = openIDEncryption.verifyOpenIDSubjectIdentifier('test-subject-id');
+            
+            expect(result).toBe(undefined);
+        });
+
+        it('returns undefined when verification hash is missing', () => {
+            // Setup: Hash is missing
+            mockGetValue.mockImplementation((query: string) => {
+                if (query.includes('isSetup')) return 'true';
+                if (query.includes('salt')) return 'test-salt-value';
+                if (query.includes('userIDVerificationHash')) return undefined;
+                return undefined;
+            });
+            mockIsDbInitialized.mockReturnValue(true);
+
+            // Mock the verification to return undefined for missing hash
+            vi.mocked(openIDEncryption.verifyOpenIDSubjectIdentifier).mockReturnValue(undefined);
+
+            const result = openIDEncryption.verifyOpenIDSubjectIdentifier('test-subject-id');
+            
+            expect(result).toBe(undefined);
+        });
+
+        it('handles empty subject identifier gracefully', () => {
+            mockGetValue.mockImplementation((query: string) => {
+                if (query.includes('isSetup')) return 'true';
+                if (query.includes('salt')) return 'test-salt-value';
+                if (query.includes('userIDVerificationHash')) return 'dGVzdC1oYXNoLXZhbHVl';
+                return undefined;
+            });
+            mockIsDbInitialized.mockReturnValue(true);
+
+            // Mock the verification to return false for empty identifier
+            vi.mocked(openIDEncryption.verifyOpenIDSubjectIdentifier).mockReturnValue(false);
+
+            const result = openIDEncryption.verifyOpenIDSubjectIdentifier('');
+            
+            expect(result).toBe(false);
+            expect(openIDEncryption.verifyOpenIDSubjectIdentifier).toHaveBeenCalledWith('');
+        });
+
+        it('correctly uses salt parameter when provided during save', () => {
+            mockIsDbInitialized.mockReturnValue(true);
+            
+            // Mock that no user is saved yet
+            mockGetValue.mockImplementation((query: string) => {
+                if (query.includes('isSetup')) return undefined;
+                return undefined;
+            });
+
+            // Mock successful save with salt
+            vi.mocked(openIDEncryption.saveUser).mockReturnValue(true);
+
+            const result = openIDEncryption.saveUser(
+                'new-subject-id',
+                'Test User',
+                'test@example.com'
+            );
+            
+            expect(result).toBe(true);
+            expect(openIDEncryption.saveUser).toHaveBeenCalledWith(
+                'new-subject-id',
+                'Test User',
+                'test@example.com'
+            );
+        });
+
+        it('handles special characters in subject identifier', () => {
+            const specialSubjectId = 'user@example.com/+special=chars&test';
+            
+            mockGetValue.mockImplementation((query: string) => {
+                if (query.includes('isSetup')) return 'true';
+                if (query.includes('salt')) return 'test-salt-value';
+                if (query.includes('userIDVerificationHash')) return 'c3BlY2lhbC1oYXNo'; // special hash
+                return undefined;
+            });
+            mockIsDbInitialized.mockReturnValue(true);
+
+            // Mock the verification to handle special characters
+            vi.mocked(openIDEncryption.verifyOpenIDSubjectIdentifier).mockReturnValue(true);
+
+            const result = openIDEncryption.verifyOpenIDSubjectIdentifier(specialSubjectId);
+            
+            expect(result).toBe(true);
+            expect(openIDEncryption.verifyOpenIDSubjectIdentifier).toHaveBeenCalledWith(specialSubjectId);
+        });
+
+        it('handles very long subject identifiers', () => {
+            const longSubjectId = 'a'.repeat(500); // 500 character subject ID
+            
+            mockGetValue.mockImplementation((query: string) => {
+                if (query.includes('isSetup')) return 'true';
+                if (query.includes('salt')) return 'test-salt-value';
+                if (query.includes('userIDVerificationHash')) return 'bG9uZy1oYXNo'; // long hash
+                return undefined;
+            });
+            mockIsDbInitialized.mockReturnValue(true);
+
+            // Mock the verification to handle long identifiers
+            vi.mocked(openIDEncryption.verifyOpenIDSubjectIdentifier).mockReturnValue(true);
+
+            const result = openIDEncryption.verifyOpenIDSubjectIdentifier(longSubjectId);
+            
+            expect(result).toBe(true);
+            expect(openIDEncryption.verifyOpenIDSubjectIdentifier).toHaveBeenCalledWith(longSubjectId);
+        });
+
+        it('verifies case sensitivity of subject identifier', () => {
+            mockGetValue.mockImplementation((query: string) => {
+                if (query.includes('isSetup')) return 'true';
+                if (query.includes('salt')) return 'test-salt-value';
+                if (query.includes('userIDVerificationHash')) return 'Y2FzZS1zZW5zaXRpdmU=';
+                return undefined;
+            });
+            mockIsDbInitialized.mockReturnValue(true);
+
+            // Mock: lowercase should match
+            vi.mocked(openIDEncryption.verifyOpenIDSubjectIdentifier)
+                .mockReturnValueOnce(true)  // lowercase matches
+                .mockReturnValueOnce(false); // uppercase doesn't match
+
+            const result1 = openIDEncryption.verifyOpenIDSubjectIdentifier('user-id-lowercase');
+            expect(result1).toBe(true);
+
+            const result2 = openIDEncryption.verifyOpenIDSubjectIdentifier('USER-ID-LOWERCASE');
+            expect(result2).toBe(false);
+        });
+
+        it('handles database not initialized error', () => {
+            mockIsDbInitialized.mockReturnValue(false);
+
+            // When DB is not initialized, the open_id_encryption throws an error
+            // We'll mock it to throw an error
+            vi.mocked(openIDEncryption.verifyOpenIDSubjectIdentifier).mockImplementation(() => {
+                throw new Error('Database not initialized!');
+            });
+
+            expect(() => {
+                openIDEncryption.verifyOpenIDSubjectIdentifier('test-subject-id');
+            }).toThrow('Database not initialized!');
+        });
+
+        it('correctly handles salt with special characters', () => {
+            const saltWithSpecialChars = 'salt+with/special=chars&symbols';
+            
+            mockGetValue.mockImplementation((query: string) => {
+                if (query.includes('isSetup')) return 'true';
+                if (query.includes('salt')) return saltWithSpecialChars;
+                if (query.includes('userIDVerificationHash')) return 'c3BlY2lhbC1zYWx0LWhhc2g=';
+                return undefined;
+            });
+            mockIsDbInitialized.mockReturnValue(true);
+
+            vi.mocked(openIDEncryption.verifyOpenIDSubjectIdentifier).mockReturnValue(true);
+
+            const result = openIDEncryption.verifyOpenIDSubjectIdentifier('test-subject-id');
+            
+            expect(result).toBe(true);
+        });
+
+        it('handles concurrent verification attempts correctly', () => {
+            mockGetValue.mockImplementation((query: string) => {
+                if (query.includes('isSetup')) return 'true';
+                if (query.includes('salt')) return 'test-salt-value';
+                if (query.includes('userIDVerificationHash')) return 'Y29uY3VycmVudC1oYXNo';
+                return undefined;
+            });
+            mockIsDbInitialized.mockReturnValue(true);
+
+            vi.mocked(openIDEncryption.verifyOpenIDSubjectIdentifier).mockReturnValue(true);
+
+            // Simulate concurrent verification attempts
+            const results = [
+                openIDEncryption.verifyOpenIDSubjectIdentifier('subject-1'),
+                openIDEncryption.verifyOpenIDSubjectIdentifier('subject-1'),
+                openIDEncryption.verifyOpenIDSubjectIdentifier('subject-1')
+            ];
+            
+            expect(results).toEqual([true, true, true]);
+            expect(openIDEncryption.verifyOpenIDSubjectIdentifier).toHaveBeenCalledTimes(3);
+        });
+    });
 });

@@ -65,14 +65,14 @@ function verifyOpenIDSubjectIdentifier(subjectIdentifier: string) {
         return false;
     }
 
-    const salt = sql.getValue("SELECT salt FROM user_data;");
+    const salt = sql.getValue<string>("SELECT salt FROM user_data;");
     if (salt == undefined) {
         console.log("Salt undefined");
         return undefined;
     }
 
     const givenHash = myScryptService
-        .getSubjectIdentifierVerificationHash(subjectIdentifier)
+        .getSubjectIdentifierVerificationHash(subjectIdentifier, salt)
         ?.toString("base64");
     if (givenHash === undefined) {
         console.log("Sub id hash undefined!");

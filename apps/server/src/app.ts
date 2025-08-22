@@ -100,8 +100,39 @@ export default async function buildApp() {
     app.use(sessionParser);
     app.use(favicon(path.join(assetsDir, "icon.ico")));
 
-    if (openID.isOpenIDEnabled())
+    if (openID.isOpenIDEnabled()) {
+        // Always log OAuth initialization for better debugging
+        log.info('OAuth: Initializing OAuth authentication middleware');
+        
+        // Test OAuth connectivity on startup for non-Google providers
+        const issuerUrl = config.MultiFactorAuthentication.oauthIssuerBaseUrl;
+        const isCustomProvider = issuerUrl && 
+                                issuerUrl !== "" && 
+                                issuerUrl !== "https://accounts.google.com";
+        
+        if (isCustomProvider) {
+            // For non-Google providers, verify connectivity
+            openID.testOAuthConnectivity().then(result => {
+                if (result.success) {
+                    log.info('OAuth: Provider connectivity verified successfully');
+                } else {
+                    log.error(`OAuth: Provider connectivity check failed: ${result.error}`);
+                    log.error('OAuth: Authentication may not work. Please verify:');
+                    log.error('  1. The OAuth provider URL is correct');
+                    log.error('  2. Network connectivity between Trilium and the OAuth provider');
+                    log.error('  3. Any firewall or proxy settings');
+                }
+            }).catch(err => {
+                log.error(`OAuth: Connectivity test error: ${err.message || err}`);
+            });
+        }
+        
+        // Register OAuth middleware
         app.use(auth(openID.generateOAuthConfig()));
+        
+        // Add OAuth error logging middleware AFTER auth middleware
+        app.use(openID.oauthErrorLogger);
+    }
 
     await assets.register(app);
     routes.register(app);
