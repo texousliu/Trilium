@@ -185,3 +185,11 @@ export interface SubtreeSizeResponse {
     subTreeNoteCount: number;
     subTreeSize: number;
 }
+
+export interface SimilarNote {
+    score: number;
+    notePath: string[];
+    noteId: string;
+}
+
+export type SimilarNoteResponse = (SimilarNote[] | undefined);

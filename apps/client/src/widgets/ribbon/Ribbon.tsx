@@ -14,6 +14,7 @@ import ScriptTab from "./ScriptTab";
 import EditedNotesTab from "./EditedNotesTab";
 import NotePropertiesTab from "./NotePropertiesTab";
 import NoteInfoTab from "./NoteInfoTab";
+import SimilarNotesTab from "./SimilarNotesTab";
 
 interface TitleContext {
     note: FNote | null | undefined;
@@ -114,9 +115,11 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
         icon: "bx bxs-network-chart"
     },
     {
-        // SimilarNotesWidget
         title: t("similar_notes.title"),
-        icon: "bx bx-bar-chart"
+        icon: "bx bx-bar-chart",
+        show: ({ note }) => note?.type !== "search" && !note?.isLabelTruthy("similarNotesWidgetDisabled"),
+        content: SimilarNotesTab,
+        toggleCommand: "toggleRibbonTabSimilarNotes"
     },
     {
         title: t("note_info_widget.title"),

@@ -183,3 +183,24 @@
     white-space: nowrap;
 }
 /* #endregion */
+
+/* #region Similar Notes */
+.similar-notes-wrapper {
+    max-height: 200px;
+    overflow: auto;
+    padding: 12px;
+}
+
+.similar-notes-wrapper a {
+    display: inline-block;
+    border: 1px dotted var(--main-border-color);
+    border-radius: 20px;
+    background-color: var(--accented-background-color);
+    padding: 0 10px 0 10px;
+    margin: 0 3px 0 3px;
+    max-width: 10em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+/* #endregion */
