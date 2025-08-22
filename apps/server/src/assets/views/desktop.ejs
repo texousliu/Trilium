@@ -56,5 +56,12 @@
 <script src="<%= appPath %>/runtime.js" crossorigin type="module"></script>
 <script src="<%= appPath %>/desktop.js" crossorigin type="module"></script>
 
+<script>
+    // Turn off jQuery animations if motion is disabled
+    addEventListener("DOMContentLoaded", () => {
+       jQuery.fx.off = <%= motionEnabled !== true %>;
+    });
+</script>
+
 </body>
 </html>
