@@ -247,7 +247,7 @@ function ElectronIntegration() {
 }
 
 function Performance() {
-    const [ motionEnabled, setMotionEnabled ] = useTriliumOptionBool("motionEnabled", true);
+    const [ motionEnabled, setMotionEnabled ] = useTriliumOptionBool("motionEnabled");
 
     return <OptionsSection title={t("ui-performance.title")}>
         <FormGroup name="motion-enabled">
