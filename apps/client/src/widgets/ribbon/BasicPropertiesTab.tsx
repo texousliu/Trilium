@@ -152,7 +152,7 @@ function EditabilitySelect({ note }: { note?: FNote | null }) {
             <span>{t("basic_properties.editable")}:</span> &nbsp;
 
             <FormDropdownList
-                className="editability-dropdown"
+                dropdownContainerClassName="editability-dropdown"
                 values={options}
                 currentValue={ readOnly ? "readOnly" : autoReadOnlyDisabled ? "autoReadOnlyDisabled" : "auto" }
                 keyProperty="value" titleProperty="label" descriptionProperty="description"
