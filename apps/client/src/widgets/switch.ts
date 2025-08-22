@@ -40,9 +40,6 @@ export default class SwitchWidget extends NoteContextAwareWidget {
     }
 
     set canToggle(isEnabled) {
-        this.$switchButton.toggleClass("disabled", !isEnabled);
-        this.$switchToggle.attr("disabled", !isEnabled ? "disabled" : null);
-
         if (isEnabled) {
             this.isToggled = this.currentState; // Reapply the correct tooltip
         } else {

@@ -1,17 +1,18 @@
-import { useCallback, useMemo } from "preact/hooks";
+import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
 import Dropdown from "../react/Dropdown";
 import { NOTE_TYPES } from "../../services/note_types";
 import { FormDivider, FormListBadge, FormListItem } from "../react/FormList";
 import { t } from "../../services/i18n";
-import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumOption } from "../react/hooks";
+import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEventBeta, useTriliumOption } from "../react/hooks";
 import mime_types from "../../services/mime_types";
-import { NoteType } from "@triliumnext/commons";
+import { NoteType, ToggleInParentResponse } from "@triliumnext/commons";
 import server from "../../services/server";
 import dialog from "../../services/dialog";
 import FormToggle from "../react/FormToggle";
 import FNote from "../../entities/fnote";
 import protected_session from "../../services/protected_session";
 import FormDropdownList from "../react/FormDropdownList";
+import toast from "../../services/toast";
 
 export default function BasicPropertiesTab() {
     const { note } = useNoteContext();
@@ -21,6 +22,7 @@ export default function BasicPropertiesTab() {
             <NoteTypeWidget note={note} />
             <ProtectedNoteSwitch note={note} />
             <EditabilitySelect note={note} />
+            <BookmarkSwitch note={note} />
         </div>
     );
 }
@@ -114,10 +116,10 @@ function ProtectedNoteSwitch({ note }: { note?: FNote | null }) {
     return (
         <div className="protected-note-switch-container">
             <FormToggle
-                currentValue={isProtected}
-                onChange={(shouldProtect) => note && protected_session.protectNote(note.noteId, shouldProtect, false)}
                 switchOnName={t("protect_note.toggle-on")} switchOnTooltip={t("protect_note.toggle-on-hint")}
                 switchOffName={t("protect_note.toggle-off")} switchOffTooltip={t("protect_note.toggle-off-hint")}
+                currentValue={isProtected}
+                onChange={(shouldProtect) => note && protected_session.protectNote(note.noteId, shouldProtect, false)}
             />
         </div>
     )
@@ -158,6 +160,40 @@ function EditabilitySelect({ note }: { note?: FNote | null }) {
                     setReadOnly(editability === "readOnly");
                     setAutoReadOnlyDisabled(editability === "autoReadOnlyDisabled");
                 }}
+            />
+        </div>
+    )
+}
+
+function BookmarkSwitch({ note }: { note?: FNote | null }) {
+    const [ isBookmarked, setIsBookmarked ] = useState<boolean>(false);
+    const refreshState = useCallback(() => {
+        const isBookmarked = note && !!note.getParentBranches().find((b) => b.parentNoteId === "_lbBookmarks");
+        setIsBookmarked(!!isBookmarked);
+    }, [ note ]);
+
+    useEffect(() => refreshState(), [ note ]);
+    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+        if (note && loadResults.getBranchRows().find((b) => b.noteId === note.noteId)) {
+            refreshState();
+        }
+    });
+
+    return (
+        <div className="bookmark-switch-container">
+            <FormToggle
+                switchOnName={t("bookmark_switch.bookmark")} switchOnTooltip={t("bookmark_switch.bookmark_this_note")}
+                switchOffName={t("bookmark_switch.bookmark")} switchOffTooltip={t("bookmark_switch.remove_bookmark")}
+                currentValue={isBookmarked}                
+                onChange={async (shouldBookmark) => {
+                    if (!note) return;
+                    const resp = await server.put<ToggleInParentResponse>(`notes/${note.noteId}/toggle-in-parent/_lbBookmarks/${shouldBookmark}`);
+
+                    if (!resp.success && "message" in resp) {
+                        toast.showError(resp.message);
+                    }
+                }}
+                disabled={["root", "_hidden"].includes(note?.noteId ?? "")}
             />
         </div>
     )

@@ -10,16 +10,17 @@ interface FormToggleProps {
     switchOffName: string;
     switchOffTooltip: string;
     helpPage?: string;
+    disabled?: boolean;
 }
 
-export default function FormToggle({ currentValue, helpPage, switchOnName, switchOnTooltip, switchOffName, switchOffTooltip, onChange }: FormToggleProps) {
+export default function FormToggle({ currentValue, helpPage, switchOnName, switchOnTooltip, switchOffName, switchOffTooltip, onChange, disabled }: FormToggleProps) {
     return (
         <div className="switch-widget">
             <span className="switch-name">{ currentValue ? switchOffName : switchOnName }</span>
 
             <label>
                 <div
-                    className={`switch-button ${currentValue ? "on" : ""}`}
+                    className={`switch-button ${currentValue ? "on" : ""} ${disabled ? "disabled" : ""}`}
                     title={currentValue ? switchOffTooltip : switchOnTooltip }
                 >
                     <input
@@ -29,7 +30,8 @@ export default function FormToggle({ currentValue, helpPage, switchOnName, switc
                         onInput={(e) => {
                             onChange(!currentValue);
                             e.preventDefault();
-                        }}      
+                        }}
+                        disabled={disabled}
                     />
                 </div>
             </label>

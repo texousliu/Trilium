@@ -10,8 +10,6 @@ import type FNote from "../../entities/fnote.js";
 import NoteLanguageWidget from "../note_language.js";
 
 const TPL = /*html*/`
-    <div class="bookmark-switch-container"></div>
-
     <div class="shared-switch-container"></div>
 
     <div class="template-switch-container"></div>
@@ -23,8 +21,6 @@ const TPL = /*html*/`
 
 export default class BasicPropertiesWidget extends NoteContextAwareWidget {
 
-    private editabilitySelectWidget: EditabilitySelectWidget;
-    private bookmarkSwitchWidget: BookmarkSwitchWidget;
     private sharedSwitchWidget: SharedSwitchWidget;
     private templateSwitchWidget: TemplateSwitchWidget;
     private noteLanguageWidget: NoteLanguageWidget;
@@ -32,15 +28,11 @@ export default class BasicPropertiesWidget extends NoteContextAwareWidget {
     constructor() {
         super();
 
-        this.editabilitySelectWidget = new EditabilitySelectWidget().contentSized();
-        this.bookmarkSwitchWidget = new BookmarkSwitchWidget().contentSized();
         this.sharedSwitchWidget = new SharedSwitchWidget().contentSized();
         this.templateSwitchWidget = new TemplateSwitchWidget().contentSized();
         this.noteLanguageWidget = new NoteLanguageWidget().contentSized();
 
         this.child(
-            this.editabilitySelectWidget,
-            this.bookmarkSwitchWidget,
             this.sharedSwitchWidget,
             this.templateSwitchWidget,
             this.noteLanguageWidget);

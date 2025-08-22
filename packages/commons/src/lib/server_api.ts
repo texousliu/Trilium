@@ -155,3 +155,10 @@ export interface OpenAiOrAnthropicModelResponse {
         type: string;
     }>;
 }
+
+export type ToggleInParentResponse = {
+    success: true;
+} | {
+    success: false;
+    message: string;
+}
