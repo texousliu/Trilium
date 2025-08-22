@@ -16,6 +16,7 @@ import toast from "../../services/toast";
 import branches from "../../services/branches";
 import sync from "../../services/sync";
 import appContext from "../../components/app_context";
+import HelpButton from "../react/HelpButton";
 
 export default function BasicPropertiesTab() {
     const { note } = useNoteContext();
@@ -307,10 +308,15 @@ function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
         return locales;
     }, [ languages ]);
 
-    
-    return (
+    const currentLocale = useMemo(() => {
+        return locales.find(locale => typeof locale === "object" && locale.id === currentNoteLanguage) as Locale | undefined;
+    }, [ currentNoteLanguage ]);
+
+    return (        
         <div className="note-language-container">
-            <Dropdown>
+            <span>{t("basic_properties.language")}:</span>
+            &nbsp;
+            <Dropdown text={currentLocale?.name ?? DEFAULT_LOCALE.name}>
                 {locales.map(locale => {
                     if (typeof locale === "object") {
                         const checked = locale.id === (currentNoteLanguage ?? "");
@@ -328,6 +334,8 @@ function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
                     onClick={() => appContext.tabManager.openContextWithNote("_optionsLocalization", { activate: true })}
                 >{t("note_language.configure-languages")}</FormListItem>           
             </Dropdown>
+
+            <HelpButton helpPage="B0lcI9xz1r8K" style={{ marginLeft: "4px" }} />
         </div>
     )
 }

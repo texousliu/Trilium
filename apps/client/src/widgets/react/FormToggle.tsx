@@ -1,6 +1,7 @@
 import { t } from "../../services/i18n";
 import { openInAppHelpFromUrl } from "../../services/utils";
 import "./FormToggle.css";
+import HelpButton from "./HelpButton";
 
 interface FormToggleProps {
     currentValue: boolean | null;
@@ -36,14 +37,7 @@ export default function FormToggle({ currentValue, helpPage, switchOnName, switc
                 </div>
             </label>
 
-            { helpPage && (
-                <button
-                    class="switch-help-button icon-action bx bx-help-circle"
-                    type="button"
-                    onClick={() => openInAppHelpFromUrl(helpPage)}
-                    title={t("open-help-page")}
-                />
-            )}
+            { helpPage && <HelpButton className="switch-help-button" helpPage={helpPage} />}
         </div>
     )
 }
