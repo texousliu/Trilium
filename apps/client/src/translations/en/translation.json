@@ -1115,7 +1115,7 @@
   },
   "ui-performance": {
     "title": "Performance",
-    "enable-motion": "Use transitions and animations"
+    "enable-motion": "Enable transitions and animations"
   },
   "ai_llm": {
     "not_started": "Not started",
