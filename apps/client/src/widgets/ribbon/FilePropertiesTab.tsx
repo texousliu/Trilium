@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { t } from "../../services/i18n";
 import { formatSize } from "../../services/utils";
-import FormFileUpload from "../react/FormFileUpload";
+import FormFileUpload, { FormFileUploadButton } from "../react/FormFileUpload";
 import { useNoteLabel, useTriliumEventBeta } from "../react/hooks";
 import { TabContext } from "./ribbon-interface";
 import FBlob from "../../entities/fblob";
@@ -15,7 +15,6 @@ export default function FilePropertiesTab({ note }: TabContext) {
     const [ originalFileName ] = useNoteLabel(note, "originalFileName");
     const [ blob, setBlob ] = useState<FBlob | null>();
     const canAccessProtectedNote = !note?.isProtected || protected_session_holder.isProtectedSessionAvailable();
-    const inputRef = useRef<HTMLInputElement>(null);
 
     function refresh() {
         note?.getBlob().then(setBlob);
@@ -63,16 +62,10 @@ export default function FilePropertiesTab({ note }: TabContext) {
                                     onClick={() => openNoteExternally(note.noteId, note.mime)}
                                 />
 
-                                <Button
+                                <FormFileUploadButton
                                     icon="bx bx-folder-open"
                                     text={t("file_properties.upload_new_revision")}
-                                    disabled={!canAccessProtectedNote}
-                                    onClick={() => inputRef.current?.click()}
-                                />
-
-                                <FormFileUpload
-                                    inputRef={inputRef}
-                                    hidden
+                                    disabled={!canAccessProtectedNote}                                    
                                     onChange={(fileToUpload) => {
                                         if (!fileToUpload) {
                                             return;

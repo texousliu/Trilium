@@ -1,4 +1,6 @@
 import { Ref } from "preact";
+import Button, { ButtonProps } from "./Button";
+import { useRef } from "preact/hooks";
 
 interface FormFileUploadProps {
     name?: string;
@@ -19,5 +21,28 @@ export default function FormFileUpload({ inputRef, name, onChange, multiple, hid
                 multiple={multiple}                
                 onChange={e => onChange((e.target as HTMLInputElement).files)} />
         </label>
+    )
+}
+
+/**
+ * Combination of a button with a hidden file upload field.
+ * 
+ * @param param the change listener for the file upload and the properties for the button.
+ */
+export function FormFileUploadButton({ onChange, ...buttonProps }: Omit<ButtonProps, "onClick"> & Pick<FormFileUploadProps, "onChange">) {
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    return (
+        <>
+            <Button
+                {...buttonProps}
+                onClick={() => inputRef.current?.click()}
+            />
+            <FormFileUpload
+                inputRef={inputRef} 
+                hidden
+                onChange={onChange}
+            />
+        </>
     )
 }

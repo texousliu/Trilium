@@ -4,7 +4,7 @@ import { useRef, useMemo } from "preact/hooks";
 import { memo } from "preact/compat";
 import { CommandNames } from "../../components/app_context";
 
-interface ButtonProps {
+export interface ButtonProps {
     name?: string;
     /** Reference to the button element. Mostly useful for requesting focus. */
     buttonRef?: RefObject<HTMLButtonElement>;
