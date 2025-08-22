@@ -136,6 +136,7 @@ describe('OpenID Service', () => {
             
             mockIsDbInitialized.mockReturnValue(true);
             mockGetValue.mockReturnValue('testuser');
+            mockSaveUser.mockResolvedValue(undefined); // Reset to default behavior
             
             const generatedConfig = openID.generateOAuthConfig();
             afterCallback = generatedConfig.afterCallback!;

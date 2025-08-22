@@ -486,6 +486,10 @@ function generateOAuthConfig() {
     // No need to log configuration details - users can check their environment variables
     // The connectivity test will verify if everything is working
 
+    // Log what we're configuring
+    log.info(`OAuth config: baseURL=${config.MultiFactorAuthentication.oauthBaseUrl}, issuerBaseURL=${config.MultiFactorAuthentication.oauthIssuerBaseUrl}`);
+    log.info(`OAuth config: redirect URI will be: ${config.MultiFactorAuthentication.oauthBaseUrl}/callback`);
+    
     const authConfig = {
         authRequired: false,
         auth0Logout: false,
@@ -700,8 +704,32 @@ function oauthErrorLogger(err: any, req: Request, res: Response, next: NextFunct
             log.error(`OAuth Middleware: WWW-Authenticate header: ${wwwAuth}`);
         }
         
-        // For token exchange failures, provide specific guidance
-        if (err.message?.includes('Failed to obtain access token') || 
+        // Check for redirect_uri mismatch errors specifically
+        if (err.message?.includes('redirect_uri_mismatch') || 
+            err.error_description?.includes('redirect_uri') || 
+            err.error_description?.includes('redirect URI') ||
+            err.error_description?.includes('Redirect URI')) {
+            
+            log.error('');
+            log.error('OAuth Error: redirect_uri mismatch detected!');
+            log.error('');
+            log.error('This error means the redirect URI sent to the OAuth provider does not match what was configured.');
+            log.error('');
+            log.error('POSSIBLE CAUSES:');
+            log.error('  1. If behind a reverse proxy: trustedReverseProxy may not be set');
+            log.error('     - The provider expects HTTPS but Trilium might be sending HTTP');
+            log.error('  2. The OAuth provider redirect URI configuration is incorrect');
+            log.error('  3. The baseURL in Trilium config does not match the actual URL');
+            log.error('');
+            log.error('Check the diagnostic logs above to see what protocol was detected.');
+            log.error('');
+            log.error('IF behind a reverse proxy, try setting:');
+            log.error('  In config.ini:  trustedReverseProxy=true');
+            log.error('  Or environment:  TRILIUM_NETWORK_TRUSTEDREVERSEPROXY=true');
+            log.error('');
+        }
+        // For other token exchange failures, provide general guidance
+        else if (err.message?.includes('Failed to obtain access token') || 
             err.message?.includes('Token request failed') ||
             err.error === 'invalid_grant') {
             
