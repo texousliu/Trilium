@@ -508,58 +508,12 @@ function generateOAuthConfig() {
         errorOnRequiredAuth: true,
         // Enable detailed error messages
         enableTelemetry: false,
-        // Enhanced callback handler to intercept token exchange errors
-        handleCallback: async (req: Request, res: Response, next: NextFunction) => {
-            try {
-                // Log all callback parameters for debugging
-                log.info('OAuth callback initiated');
-                
-                // Check for OAuth error response
-                if (req.query.error) {
-                    const errorInfo: OAuthError = {
-                        name: 'OAuthCallbackError',
-                        message: `OAuth provider error: ${req.query.error}`,
-                        error: req.query.error as string,
-                        error_description: req.query.error_description as string,
-                        error_uri: req.query.error_uri as string,
-                        state: req.query.state as string
-                    };
-                    
-                    logOAuthError('Callback Error Response', errorInfo, req);
-                    
-                    // Return custom error page with helpful information
-                    const errorMessage = errorInfo.error_description || errorInfo.error || 'Authentication failed';
-                    return res.status(400).send(`
-                        <html>
-                            <head><title>OAuth Error</title></head>
-                            <body>
-                                <h1>Authentication Failed</h1>
-                                <p>Error: ${errorMessage}</p>
-                                <p>Please check the server logs for more details.</p>
-                                <a href="/login">Try Again</a>
-                            </body>
-                        </html>
-                    `);
-                }
-                
-                // Check for missing required parameters
-                if (!req.query.code && !req.query.error) {
-                    log.error('OAuth callback: Missing both code and error parameters');
-                    log.error(`Query parameters received: [${Object.keys(req.query).join(', ')}]`);
-                }
-                
-                // Log successful callback initiation (actual token exchange happens in library)
-                if (req.query.code) {
-                    log.info('OAuth callback: Authorization code received, proceeding with token exchange');
-                }
-                
-                // Let the library handle the actual callback
-                return undefined;
-            } catch (error) {
-                // This catches errors during our custom handling
-                logOAuthError('Callback Handler Error', error, req);
-                throw error;
-            }
+        // Explicitly configure to get user info
+        getLoginState: (req: Request) => {
+            // This ensures user info is fetched
+            return {
+                returnTo: req.originalUrl || '/'
+            };
         },
         // afterCallback is called only on successful token exchange
         afterCallback: async (req: Request, res: Response, session: Session) => {
@@ -572,24 +526,71 @@ function generateOAuthConfig() {
                     return session;
                 }
 
-                // Check if user object exists
-                if (!req.oidc?.user) {
-                    log.error('OAuth afterCallback: No user object received despite successful token exchange');
-                    log.error(`Session data: hasOidc=${!!req.oidc}, hasIdToken=${!!req.oidc?.idToken}, hasAccessToken=${!!req.oidc?.accessToken}`);
+                // Check for callback errors in query parameters first
+                if (req.query?.error) {
+                    log.error(`OAuth afterCallback: Provider returned error: ${req.query.error}`);
+                    if (req.query.error_description) {
+                        log.error(`OAuth afterCallback: Error description: ${req.query.error_description}`);
+                    }
+                    // Still try to set session to avoid breaking the flow
+                    req.session.loggedIn = false;
                     return session;
                 }
+                
+                // Log detailed OIDC state and session info
+                log.info(`OAuth afterCallback: Session has idToken=${!!session.id_token}, hasAccessToken=${!!session.access_token}, hasRefreshToken=${!!session.refresh_token}`);
+                log.info(`OAuth afterCallback: OIDC state - hasOidc=${!!req.oidc}, hasIdTokenClaims=${!!req.oidc?.idTokenClaims}`);
+                
+                // According to express-openid-connect v2 best practices, idTokenClaims is most reliable in afterCallback
+                // The session parameter contains the verified tokens
+                let user: OIDCUserClaims | undefined;
+                
+                // Primary source: idTokenClaims from verified ID token
+                if (req.oidc?.idTokenClaims) {
+                    log.info('OAuth afterCallback: Using idTokenClaims from verified ID token');
+                    user = req.oidc.idTokenClaims as OIDCUserClaims;
+                } 
+                // Fallback: req.oidc.user (may be available in some configurations)
+                else if (req.oidc?.user) {
+                    log.info('OAuth afterCallback: idTokenClaims not available, using req.oidc.user');
+                    user = req.oidc.user as OIDCUserClaims;
+                }
+                // Log what we have for debugging
+                else {
+                    log.error('OAuth afterCallback: No user claims available in req.oidc');
+                    log.error(`Session has id_token: ${!!session.id_token}, access_token: ${!!session.access_token}`);
+                }
+                
+                // Note: We do NOT call fetchUserInfo() here as it's unreliable in afterCallback per v2 best practices
+                // If additional user info is needed, it should be fetched in middleware after authentication
+                
+                // Check if user object exists after all attempts
+                if (!user) {
+                    log.error('OAuth afterCallback: No user object received from ID token');
+                    log.error('This can happen when:');
+                    log.error('  1. ID token does not contain user claims (only sub)');
+                    log.error('  2. OAuth provider not configured to include claims in ID token');
+                    log.error('  3. Token validation failed');
+                    log.error('Consider checking your OAuth provider configuration for "openid profile email" scopes');
+                    
+                    // DO NOT allow login without proper authentication data
+                    req.session.loggedIn = false;
+                    
+                    // Throw error to prevent authentication without user info
+                    throw new Error('OAuth authentication failed: Unable to retrieve user information from ID token');
+                }
 
-                const user = req.oidc.user as OIDCUserClaims;
+                const userClaims = user as OIDCUserClaims;
                 
                 // Log available claims for debugging (without sensitive data)
-                log.info(`OAuth afterCallback: User claims received - hasSub=${!!user.sub}, hasName=${!!user.name}, hasEmail=${!!user.email}, hasGivenName=${!!user.given_name}, hasFamilyName=${!!user.family_name}, hasPreferredUsername=${!!user.preferred_username}, claimKeys=[${Object.keys(user).join(', ')}]`);
+                log.info(`OAuth afterCallback: User claims received - hasSub=${!!userClaims.sub}, hasName=${!!userClaims.name}, hasEmail=${!!userClaims.email}, hasGivenName=${!!userClaims.given_name}, hasFamilyName=${!!userClaims.family_name}, hasPreferredUsername=${!!userClaims.preferred_username}, claimKeys=[${Object.keys(userClaims).join(', ')}]`);
 
                 // Extract and validate user information
-                const userInfo = extractUserInfo(user);
+                const userInfo = extractUserInfo(userClaims);
                 
                 if (!userInfo) {
                     log.error('OAuth afterCallback: Failed to extract valid user information from claims');
-                    log.error(`Raw claims: ${JSON.stringify(user, null, 2)}`);
+                    log.error(`Raw claims: ${JSON.stringify(userClaims, null, 2)}`);
                     // Still return session to avoid breaking the auth flow
                     return session;
                 }
@@ -651,17 +652,16 @@ function generateOAuthConfig() {
                 // Log comprehensive error details
                 logOAuthError('AfterCallback Processing Error', error, req);
                 
-                // Still try to set session if possible
+                // DO NOT set loggedIn = true on errors - this is a security risk
                 try {
-                    req.session.loggedIn = true;
-                    req.session.lastAuthState = {
-                        totpEnabled: false,
-                        ssoEnabled: true
-                    };
-                    log.info('OAuth afterCallback: Session set despite error');
+                    req.session.loggedIn = false;
+                    log.error('OAuth afterCallback: Authentication failed due to error');
                 } catch (sessionError) {
                     logOAuthError('AfterCallback Session Error', sessionError, req);
                 }
+                
+                // Re-throw the error to ensure authentication fails
+                throw error;
             }
 
             return session;

@@ -130,7 +130,9 @@ describe('OpenID Service', () => {
             } as any;
             
             mockRes = {} as Response;
-            mockSession = {} as Session;
+            mockSession = {
+                id_token: 'mock.id.token'
+            } as Session;
             
             mockIsDbInitialized.mockReturnValue(true);
             mockGetValue.mockReturnValue('testuser');
@@ -143,6 +145,12 @@ describe('OpenID Service', () => {
             beforeEach(() => {
                 mockReq.oidc = {
                     user: {
+                        sub: 'user123',
+                        name: 'John Doe',
+                        email: 'john@example.com',
+                        email_verified: true
+                    },
+                    idTokenClaims: {
                         sub: 'user123',
                         name: 'John Doe',
                         email: 'john@example.com',
@@ -276,15 +284,14 @@ describe('OpenID Service', () => {
                 expect(result).toBe(mockSession);
             });
 
-            it('returns session when no user object is provided', async () => {
+            it('throws error when no user object is provided', async () => {
                 mockReq.oidc = {
                     user: undefined
                 } as any;
 
-                const result = await afterCallback(mockReq as Request, mockRes as Response, mockSession);
+                await expect(afterCallback(mockReq as Request, mockRes as Response, mockSession)).rejects.toThrow('OAuth authentication failed');
                 
                 expect(mockSaveUser).not.toHaveBeenCalled();
-                expect(result).toBe(mockSession);
             });
 
             it('returns session when subject identifier is missing', async () => {
@@ -343,7 +350,7 @@ describe('OpenID Service', () => {
                 });
             });
 
-            it('still sets session even if saveUser throws an error', async () => {
+            it('throws error and sets loggedIn to false when saveUser fails', async () => {
                 mockReq.oidc = {
                     user: {
                         sub: 'user123',
@@ -356,10 +363,8 @@ describe('OpenID Service', () => {
                     throw new Error('Database error');
                 });
 
-                const result = await afterCallback(mockReq as Request, mockRes as Response, mockSession);
-                
-                expect(mockReq.session!.loggedIn).toBe(true);
-                expect(result).toBe(mockSession);
+                await expect(afterCallback(mockReq as Request, mockRes as Response, mockSession)).rejects.toThrow('Database error');
+                expect(mockReq.session!.loggedIn).toBe(false);
             });
         });
 
