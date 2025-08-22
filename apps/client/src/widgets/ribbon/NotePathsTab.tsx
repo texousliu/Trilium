@@ -54,7 +54,7 @@ export default function NotePathsTab({ note, hoistedNoteId, notePath }: TabConte
     )
 }
 
-function NotePath({ currentNotePath, notePathRecord }: { currentNotePath: string, notePathRecord?: NotePathRecord }) {
+function NotePath({ currentNotePath, notePathRecord }: { currentNotePath?: string | null, notePathRecord?: NotePathRecord }) {
     const notePath = notePathRecord?.notePath ?? [];
     const notePathString = useMemo(() => notePath.join("/"), [ notePath ]);
     
