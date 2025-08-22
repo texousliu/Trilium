@@ -414,8 +414,9 @@ export function useNoteBlob(note: FNote | null | undefined): [ FBlob | null | un
     return [ blob ] as const;
 }
 
-export function useLegacyWidget(widgetFactory: () => BasicWidget, { noteContext }: {
+export function useLegacyWidget(widgetFactory: () => BasicWidget, { noteContext, containerClassName }: {
     noteContext?: NoteContext;
+    containerClassName?: string;
 } = {}) {
     const ref = useRef<HTMLDivElement>(null);
     const parentComponent = useContext(ParentComponent);
@@ -434,7 +435,7 @@ export function useLegacyWidget(widgetFactory: () => BasicWidget, { noteContext 
         
         const renderedWidget = widget.render();
         return [ widget, renderedWidget ];
-    }, [widgetFactory]);
+    }, []);
 
     // Attach the widget to the parent.
     useEffect(() => {
@@ -452,5 +453,5 @@ export function useLegacyWidget(widgetFactory: () => BasicWidget, { noteContext 
         }
     }, [ noteContext ]);
 
-    return <div ref={ref} />
+    return <div className={containerClassName} ref={ref} />
 }
