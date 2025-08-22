@@ -10,8 +10,6 @@ import type FNote from "../../entities/fnote.js";
 import NoteLanguageWidget from "../note_language.js";
 
 const TPL = /*html*/`
-    <div class="template-switch-container"></div>
-
     <div class="note-language-container">
         <span>${t("basic_properties.language")}:</span> &nbsp;
     </div>

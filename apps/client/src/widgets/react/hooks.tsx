@@ -316,6 +316,7 @@ export function useNoteProperty<T extends keyof FNote>(note: FNote | null | unde
 export function useNoteLabel(note: FNote | undefined | null, labelName: string): [string | null | undefined, (newValue: string) => void] {
     const [ labelValue, setLabelValue ] = useState<string | null | undefined>(note?.getLabelValue(labelName));
 
+    useEffect(() => setLabelValue(note?.getLabelValue(labelName) ?? null), [ note ]);
     useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
         for (const attr of loadResults.getAttributeRows()) {
             if (attr.type === "label" && attr.name === labelName && attributes.isAffecting(attr, note)) {
@@ -336,8 +337,10 @@ export function useNoteLabel(note: FNote | undefined | null, labelName: string):
     ] as const;
 }
 
-export function useNoteLabelBoolean(note: FNote | undefined | null, labelName: string): [ boolean | null | undefined, (newValue: boolean) => void] {
-    const [ labelValue, setLabelValue ] = useState<boolean | null | undefined>(note?.hasLabel(labelName));
+export function useNoteLabelBoolean(note: FNote | undefined | null, labelName: string): [ boolean, (newValue: boolean) => void] {
+    const [ labelValue, setLabelValue ] = useState<boolean>(!!note?.hasLabel(labelName));
+
+    useEffect(() => setLabelValue(!!note?.hasLabel(labelName)), [ note ]);
 
     useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
         for (const attr of loadResults.getAttributeRows()) {

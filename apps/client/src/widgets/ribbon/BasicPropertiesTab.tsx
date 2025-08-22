@@ -15,6 +15,7 @@ import FormDropdownList from "../react/FormDropdownList";
 import toast from "../../services/toast";
 import branches from "../../services/branches";
 import sync from "../../services/sync";
+import TemplateSwitchWidget from "../template_switch";
 
 export default function BasicPropertiesTab() {
     const { note } = useNoteContext();
@@ -26,6 +27,7 @@ export default function BasicPropertiesTab() {
             <EditabilitySelect note={note} />
             <BookmarkSwitch note={note} />
             <SharedSwitch note={note} />
+            <TemplateSwitch note={note} />
         </div>
     );
 }
@@ -197,6 +199,22 @@ function BookmarkSwitch({ note }: { note?: FNote | null }) {
                     }
                 }}
                 disabled={["root", "_hidden"].includes(note?.noteId ?? "")}
+            />
+        </div>
+    )
+}
+
+function TemplateSwitch({ note }: { note?: FNote | null }) {
+    const [ isTemplate, setIsTemplate ] = useNoteLabelBoolean(note, "template");
+
+    return (
+        <div className="template-switch-container">
+            <FormToggle
+                switchOnName={t("template_switch.template")} switchOnTooltip={t("template_switch.toggle-on-hint")}
+                switchOffName={t("template_switch.template")} switchOffTooltip={t("template_switch.toggle-off-hint")}
+                helpPage="KC1HB96bqqHX"
+                disabled={note?.noteId.startsWith("_options")}
+                currentValue={isTemplate} onChange={setIsTemplate}
             />
         </div>
     )
