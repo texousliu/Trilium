@@ -93,6 +93,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
 
     // Appearance
     splitEditorOrientation: "horziontal" | "vertical";
+    motionEnabled: boolean;
     codeNoteTheme: string;
 
     initialized: boolean;

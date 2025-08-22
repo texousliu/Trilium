@@ -53,6 +53,7 @@ function index(req: Request, res: Response) {
         isDev,
         isMainWindow: view === "mobile" ? true : !req.query.extraWindow,
         isProtectedSessionAvailable: protectedSessionService.isProtectedSessionAvailable(),
+        motionEnabled: options.motionEnabled === "true",
         maxContentWidth: Math.max(640, parseInt(options.maxContentWidth)),
         triliumVersion: packageJson.version,
         assetPath: assetPath,

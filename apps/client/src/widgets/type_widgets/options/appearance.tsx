@@ -88,6 +88,7 @@ export default function AppearanceSettings() {
             <ApplicationTheme />
             {overrideThemeFonts === "true" && <Fonts />}
             {isElectron() && <ElectronIntegration /> }
+            <Performance />
             <MaxContentWidth />
             <RelatedSettings items={[
                 {
@@ -244,6 +245,20 @@ function ElectronIntegration() {
         </OptionsSection>
     )
 }
+
+function Performance() {
+    const [ motionEnabled, setMotionEnabled ] = useTriliumOptionBool("motionEnabled", true);
+
+    return <OptionsSection title="Performance">
+        <FormGroup name="motion-enabled">
+                <FormCheckbox
+                    label={"Use transitions and animations"}
+                    currentValue={motionEnabled} onChange={setMotionEnabled}
+                />
+        </FormGroup>
+    </OptionsSection>
+}
+
 
 function MaxContentWidth() {
     const [ maxContentWidth, setMaxContentWidth ] = useTriliumOption("maxContentWidth");
