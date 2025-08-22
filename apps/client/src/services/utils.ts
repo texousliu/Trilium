@@ -788,6 +788,22 @@ export function arrayEqual<T>(a: T[], b: T[]) {
     return true;
 }
 
+type Indexed<T extends object> = T & { index: number };
+
+/**
+ * Given an object array, alters every object in the array to have an index field assigned to it.
+ *
+ * @param items the objects to be numbered.
+ * @returns the same object for convenience, with the type changed to indicate the new index field.
+ */
+export function numberObjectsInPlace<T extends object>(items: T[]): Indexed<T>[] {
+    let index = 0;
+    for (const item of items) {
+        (item as Indexed<T>).index = index++;
+    }
+    return items as Indexed<T>[];
+}
+
 export default {
     reloadFrontendApp,
     restartDesktopApp,

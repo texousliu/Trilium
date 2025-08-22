@@ -3,7 +3,7 @@ import Dropdown from "../react/Dropdown";
 import { NOTE_TYPES } from "../../services/note_types";
 import { FormDropdownDivider, FormListBadge, FormListItem } from "../react/FormList";
 import { getAvailableLocales, t } from "../../services/i18n";
-import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEventBeta, useTriliumOption, useTriliumOptionBeta, useTriliumOptionJson } from "../react/hooks";
+import { useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEventBeta, useTriliumOption, useTriliumOptionBeta, useTriliumOptionJson } from "../react/hooks";
 import mime_types from "../../services/mime_types";
 import { Locale, NoteType, ToggleInParentResponse } from "@triliumnext/commons";
 import server from "../../services/server";
@@ -17,10 +17,9 @@ import branches from "../../services/branches";
 import sync from "../../services/sync";
 import appContext from "../../components/app_context";
 import HelpButton from "../react/HelpButton";
+import { TabContext } from "./ribbon-interface";
 
-export default function BasicPropertiesTab() {
-    const { note } = useNoteContext();
-    
+export default function BasicPropertiesTab({ note }: TabContext) {
     return (
         <div className="basic-properties-widget">        
             <NoteTypeWidget note={note} />

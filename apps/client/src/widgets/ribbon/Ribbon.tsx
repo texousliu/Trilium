@@ -1,24 +1,21 @@
-import { useState } from "preact/hooks";
+import { useMemo, useState } from "preact/hooks";
 import FNote from "../../entities/fnote";
 import { t } from "../../services/i18n";
 import { useNoteContext } from "../react/hooks";
 import "./style.css";
 import { VNode } from "preact";
 import BasicPropertiesTab from "./BasicPropertiesTab";
-
-type TitleFn = string | ((context: TabContext) => string);
-
-interface TabContext {
-    note: FNote | null | undefined;
-}
-
+import { numberObjectsInPlace } from "../../services/utils";
+import { TabContext } from "./ribbon-interface";
 interface TabConfiguration {
-    title: TitleFn;
+    title: string | ((context: TabContext) => string);
     icon: string;
-    content?: () => VNode;
+    // TODO: Mark as required after porting them all.
+    content?: (context: TabContext) => VNode;
+    show?: (context: TabContext) => boolean;
 }
 
-const TAB_CONFIGURATION: TabConfiguration[] = [
+const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
     {
         title: t("classic_editor_toolbar.title"),
         icon: "bx bx-text"
@@ -63,7 +60,8 @@ const TAB_CONFIGURATION: TabConfiguration[] = [
         // BasicProperties
         title: t("basic_properties.basic_properties"),
         icon: "bx bx-slider",
-        content: BasicPropertiesTab
+        content: BasicPropertiesTab,
+        show: ({note}) => !note?.isLaunchBarConfig()
     },
     {
         // OwnedAttributeListWidget
@@ -94,31 +92,31 @@ const TAB_CONFIGURATION: TabConfiguration[] = [
         // NoteInfoWidget
         title: t("note_info_widget.title"),
         icon: "bx bx-info-circle"
-    },
-    
-];
+    }
+]);
 
 export default function Ribbon() {
     const { note } = useNoteContext();
     const context: TabContext = { note };
-    const [ activeTab, setActiveTab ] = useState<number | undefined>(8);
-    const activeTabConfiguration = activeTab ? TAB_CONFIGURATION[activeTab] : undefined;
+    const [ activeTabIndex, setActiveTabIndex ] = useState<number | undefined>();
+    const filteredTabs = useMemo(() => TAB_CONFIGURATION.filter(tab => tab.show?.(context)), [ context, note ])
+    const activeTabConfiguration = activeTabIndex ? filteredTabs.find(tab => tab.index === activeTabIndex) : undefined;
 
     return (
         <div class="ribbon-container" style={{ contain: "none" }}>
             <div className="ribbon-top-row">
                 <div className="ribbon-tab-container">
-                    {TAB_CONFIGURATION.map(({ title, icon }, i) => (
+                    {filteredTabs.map(({ title, icon, index }) => (
                         <RibbonTab
                             icon={icon}
                             title={typeof title === "string" ? title : title(context)}
-                            active={i === activeTab}
+                            active={index === activeTabIndex}
                             onClick={() => {
-                                if (activeTab !== i) {
-                                    setActiveTab(i);
+                                if (activeTabIndex !== index) {
+                                    setActiveTabIndex(index);
                                 } else {
                                     // Collapse
-                                    setActiveTab(undefined);
+                                    setActiveTabIndex(undefined);
                                 }
                             }}
                         />
@@ -129,7 +127,7 @@ export default function Ribbon() {
         
             <div className="ribbon-body-container">
                 <div className="ribbon-body">
-                    {activeTabConfiguration?.content && activeTabConfiguration.content()}
+                    {activeTabConfiguration?.content && activeTabConfiguration.content({ note })}
                 </div>
             </div>
         </div>
