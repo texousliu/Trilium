@@ -36,6 +36,13 @@ body#trilium-app.motion-disabled *::after {
     animation: none !important;
 }
 
+body#trilium-app.shadows-disabled *,
+body#trilium-app.shadows-disabled *::before,
+body#trilium-app.shadows-disabled *::after {
+    /* Disable shadows */
+    box-shadow: none !important;
+}
+
 .table {
     --bs-table-bg: transparent !important;
 }
