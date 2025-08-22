@@ -4,4 +4,6 @@ export interface TabContext {
     note: FNote | null | undefined;
     hidden: boolean;
     ntxId?: string | null | undefined;
+    hoistedNoteId?: string;
+    notePath?: string;
 }

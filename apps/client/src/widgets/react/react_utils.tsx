@@ -43,7 +43,7 @@ export function disposeReactWidget(container: Element) {
     render(null, container);
 }
 
-export function separateByCommas(components: ComponentChild[]) {
+export function joinElements(components: ComponentChild[], separator = ", ") {
     return components.reduce<any>((acc, item) =>
-        (acc.length ? [...acc, ", ", item] : [item]), []);
+        (acc.length ? [...acc, separator, item] : [item]), []);
 }

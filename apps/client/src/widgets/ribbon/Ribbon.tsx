@@ -17,6 +17,7 @@ import NoteInfoTab from "./NoteInfoTab";
 import SimilarNotesTab from "./SimilarNotesTab";
 import FilePropertiesTab from "./FilePropertiesTab";
 import ImagePropertiesTab from "./ImagePropertiesTab";
+import NotePathsTab from "./NotePathsTab";
 
 interface TitleContext {
     note: FNote | null | undefined;
@@ -27,7 +28,7 @@ interface TabConfiguration {
     icon: string;
     // TODO: Mark as required after porting them all.
     content?: (context: TabContext) => VNode;
-    show?: (context: TitleContext) => boolean | null | undefined;
+    show?: boolean | ((context: TitleContext) => boolean | null | undefined);
     toggleCommand?: CommandNames;
     activate?: boolean | ((context: TitleContext) => boolean);
     /**
@@ -113,9 +114,11 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
         icon: "bx bx-list-plus"
     },
     {
-        // NotePathsWidget
         title: t("note_paths.title"),
-        icon: "bx bx-collection"
+        icon: "bx bx-collection",
+        content: NotePathsTab,
+        show: true,
+        toggleCommand: "toggleRibbonTabNotePaths"
     },
     {
         // NoteMapRibbonWidget
@@ -139,10 +142,10 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
 ]);
 
 export default function Ribbon() {
-    const { note, ntxId } = useNoteContext();
+    const { note, ntxId, hoistedNoteId, notePath } = useNoteContext();
     const titleContext: TitleContext = { note };
     const [ activeTabIndex, setActiveTabIndex ] = useState<number | undefined>();
-    const filteredTabs = useMemo(() => TAB_CONFIGURATION.filter(tab => tab.show?.(titleContext)), [ titleContext, note ]);
+    const filteredTabs = useMemo(() => TAB_CONFIGURATION.filter(tab => typeof tab.show === "boolean" ? tab.show : tab.show?.(titleContext)), [ titleContext, note ]);
 
     return (
         <div class="ribbon-container" style={{ contain: "none" }}>
@@ -178,7 +181,9 @@ export default function Ribbon() {
                         return tab?.content && tab.content({
                             note,
                             hidden: !isActive,
-                            ntxId
+                            ntxId,
+                            hoistedNoteId,
+                            notePath
                         });
                     })}
                 </div>

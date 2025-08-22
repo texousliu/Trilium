@@ -5,7 +5,7 @@ import server from "../../services/server";
 import { t } from "../../services/i18n";
 import froca from "../../services/froca";
 import NoteLink from "../react/NoteLink";
-import { separateByCommas } from "../react/react_utils";
+import { joinElements } from "../react/react_utils";
 
 export default function EditedNotesTab({ note }: TabContext) {
     const [ editedNotes, setEditedNotes ] = useState<EditedNotesResponse>();
@@ -29,7 +29,7 @@ export default function EditedNotesTab({ note }: TabContext) {
         }}>
             {editedNotes ? (
                 <div className="edited-notes-list use-tn-links">
-                    {separateByCommas(editedNotes.map(editedNote => {
+                    {joinElements(editedNotes.map(editedNote => {
                         return (
                             <span className="edited-note-line">
                                 {editedNote.isDeleted ? (

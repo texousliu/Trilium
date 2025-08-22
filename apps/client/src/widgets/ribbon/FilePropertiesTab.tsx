@@ -1,10 +1,8 @@
-import { useEffect, useRef, useState } from "preact/hooks";
 import { t } from "../../services/i18n";
 import { formatSize } from "../../services/utils";
-import FormFileUpload, { FormFileUploadButton } from "../react/FormFileUpload";
-import { useNoteBlob, useNoteLabel, useTriliumEventBeta } from "../react/hooks";
+import { FormFileUploadButton } from "../react/FormFileUpload";
+import { useNoteBlob, useNoteLabel } from "../react/hooks";
 import { TabContext } from "./ribbon-interface";
-import FBlob from "../../entities/fblob";
 import Button from "../react/Button";
 import protected_session_holder from "../../services/protected_session_holder";
 import { downloadFileNote, openNoteExternally } from "../../services/open";

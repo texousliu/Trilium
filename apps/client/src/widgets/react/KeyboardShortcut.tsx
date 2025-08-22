@@ -1,7 +1,7 @@
 import { ActionKeyboardShortcut, KeyboardActionNames } from "@triliumnext/commons";
 import { useEffect, useState } from "preact/hooks";
 import keyboard_actions from "../../services/keyboard_actions";
-import { separateByCommas } from "./react_utils";
+import { joinElements } from "./react_utils";
 
 interface KeyboardShortcutProps {
     actionName: KeyboardActionNames;
@@ -22,7 +22,7 @@ export default function KeyboardShortcut({ actionName }: KeyboardShortcutProps) 
         <>
             {action.effectiveShortcuts?.map((shortcut, i) => {
                 const keys = shortcut.split("+");
-                return separateByCommas(keys
+                return joinElements(keys
                     .map((key, i) => (
                         <>
                             <kbd>{key}</kbd> {i + 1 < keys.length && "+ "}
