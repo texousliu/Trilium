@@ -28,9 +28,9 @@
     --ck-mention-list-max-height: 500px;
 }
 
-body.motion-disabled *,
-body.motion-disabled *::before,
-body.motion-disabled *::after {
+body#trilium-app.motion-disabled *,
+body#trilium-app.motion-disabled *::before,
+body#trilium-app.motion-disabled *::after {
     /* Disable transitions and animations */
     transition: none !important;
     animation: none !important;
