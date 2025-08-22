@@ -10,6 +10,7 @@ import NoteContext from "../../components/note_context";
 import { ReactWrappedWidget } from "../basic_widget";
 import FNote from "../../entities/fnote";
 import attributes from "../../services/attributes";
+import FBlob from "../../entities/fblob";
 
 type TriliumEventHandler<T extends EventNames> = (data: EventData<T>) => void;
 const registeredHandlers: Map<Component, Map<EventNames, TriliumEventHandler<any>[]>> = new Map();
@@ -388,4 +389,25 @@ export function useNoteLabelBoolean(note: FNote | undefined | null, labelName: s
     }, [note]);
 
     return [ labelValue, setter ] as const;
+}
+
+export function useNoteBlob(note: FNote | null | undefined): [ FBlob | null | undefined ] {
+    if (!note) {
+        return [ undefined ];
+    }
+
+    const [ blob, setBlob ] = useState<FBlob | null>();
+    
+    function refresh() {
+        note?.getBlob().then(setBlob);        
+    }
+
+    useEffect(refresh, [ note?.noteId ]);
+    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+        if (note && loadResults.hasRevisionForNote(note.noteId)) {
+            refresh();
+        }
+    });
+
+    return [ blob ] as const;
 }

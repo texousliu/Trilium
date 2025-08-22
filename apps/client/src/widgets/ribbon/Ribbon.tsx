@@ -16,6 +16,7 @@ import NotePropertiesTab from "./NotePropertiesTab";
 import NoteInfoTab from "./NoteInfoTab";
 import SimilarNotesTab from "./SimilarNotesTab";
 import FilePropertiesTab from "./FilePropertiesTab";
+import ImagePropertiesTab from "./ImagePropertiesTab";
 
 interface TitleContext {
     note: FNote | null | undefined;
@@ -86,9 +87,12 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
         activate: true
     },
     {
-        // ImagePropertiesWidget
         title: t("image_properties.title"),
-        icon: "bx bx-image"
+        icon: "bx bx-image",
+        content: ImagePropertiesTab,
+        show: ({ note }) => note?.type === "image",
+        toggleCommand: "toggleRibbonTabImageProperties",
+        activate: true,
     },
     {
         // BasicProperties
@@ -135,7 +139,7 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
 ]);
 
 export default function Ribbon() {
-    const { note } = useNoteContext();
+    const { note, ntxId } = useNoteContext();
     const titleContext: TitleContext = { note };
     const [ activeTabIndex, setActiveTabIndex ] = useState<number | undefined>();
     const filteredTabs = useMemo(() => TAB_CONFIGURATION.filter(tab => tab.show?.(titleContext)), [ titleContext, note ]);
@@ -171,7 +175,11 @@ export default function Ribbon() {
                             return;
                         }
 
-                        return tab?.content && tab.content({ note, hidden: !isActive });
+                        return tab?.content && tab.content({
+                            note,
+                            hidden: !isActive,
+                            ntxId
+                        });
                     })}
                 </div>
             </div>

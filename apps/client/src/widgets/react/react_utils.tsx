@@ -1,5 +1,7 @@
 import { ComponentChild, createContext, render, type JSX, type RefObject } from "preact";
 import Component from "../../components/component";
+import { EventData, EventNames } from "../../components/app_context";
+import { useContext } from "preact/hooks";
 
 export const ParentComponent = createContext<Component | null>(null);
 

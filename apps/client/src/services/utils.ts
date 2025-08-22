@@ -296,7 +296,7 @@ function isHtmlEmpty(html: string) {
     );
 }
 
-async function clearBrowserCache() {
+export async function clearBrowserCache() {
     if (isElectron()) {
         const win = dynamicRequire("@electron/remote").getCurrentWindow();
         await win.webContents.session.clearCache();
