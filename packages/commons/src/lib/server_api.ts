@@ -169,3 +169,19 @@ export type EditedNotesResponse = {
     title?: string;
     notePath?: string[] | null;
 }[];
+
+export interface MetadataResponse {
+    dateCreated: string | undefined;
+    utcDateCreated: string;
+    dateModified: string | undefined;
+    utcDateModified: string | undefined;
+}
+
+export interface NoteSizeResponse {
+    noteSize: number;
+}
+
+export interface SubtreeSizeResponse {
+    subTreeNoteCount: number;
+    subTreeSize: number;
+}

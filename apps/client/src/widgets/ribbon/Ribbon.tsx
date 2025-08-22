@@ -13,6 +13,7 @@ import FNote from "../../entities/fnote";
 import ScriptTab from "./ScriptTab";
 import EditedNotesTab from "./EditedNotesTab";
 import NotePropertiesTab from "./NotePropertiesTab";
+import NoteInfoTab from "./NoteInfoTab";
 
 interface TitleContext {
     note: FNote | null | undefined;
@@ -118,9 +119,11 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
         icon: "bx bx-bar-chart"
     },
     {
-        // NoteInfoWidget
         title: t("note_info_widget.title"),
-        icon: "bx bx-info-circle"
+        icon: "bx bx-info-circle",
+        show: ({ note }) => !!note,
+        content: NoteInfoTab,
+        toggleCommand: "toggleRibbonTabNoteInfo"
     }
 ]);
 
@@ -128,7 +131,7 @@ export default function Ribbon() {
     const { note } = useNoteContext();
     const titleContext: TitleContext = { note };
     const [ activeTabIndex, setActiveTabIndex ] = useState<number | undefined>();
-    const filteredTabs = useMemo(() => TAB_CONFIGURATION.filter(tab => tab.show?.(titleContext)), [ titleContext, note ])
+    const filteredTabs = useMemo(() => TAB_CONFIGURATION.filter(tab => tab.show?.(titleContext)), [ titleContext, note ]);
 
     return (
         <div class="ribbon-container" style={{ contain: "none" }}>

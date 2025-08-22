@@ -185,7 +185,11 @@ export function escapeQuotes(value: string) {
     return value.replaceAll('"', "&quot;");
 }
 
-function formatSize(size: number) {
+export function formatSize(size: number | null | undefined) {
+    if (size === null || size === undefined) {
+        return "";
+    }
+
     size = Math.max(Math.round(size / 1024), 1);
 
     if (size < 1024) {
