@@ -18,6 +18,7 @@ import SimilarNotesTab from "./SimilarNotesTab";
 import FilePropertiesTab from "./FilePropertiesTab";
 import ImagePropertiesTab from "./ImagePropertiesTab";
 import NotePathsTab from "./NotePathsTab";
+import NoteMapTab from "./NoteMapTab";
 
 interface TitleContext {
     note: FNote | null | undefined;
@@ -121,9 +122,11 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
         toggleCommand: "toggleRibbonTabNotePaths"
     },
     {
-        // NoteMapRibbonWidget
         title: t("note_map.title"),
-        icon: "bx bxs-network-chart"
+        icon: "bx bxs-network-chart",
+        content: NoteMapTab,
+        show: true,
+        toggleCommand: "toggleRibbonTabNoteMap"
     },
     {
         title: t("similar_notes.title"),
@@ -142,7 +145,7 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
 ]);
 
 export default function Ribbon() {
-    const { note, ntxId, hoistedNoteId, notePath } = useNoteContext();
+    const { note, ntxId, hoistedNoteId, notePath, noteContext } = useNoteContext();
     const titleContext: TitleContext = { note };
     const [ activeTabIndex, setActiveTabIndex ] = useState<number | undefined>();
     const filteredTabs = useMemo(() => TAB_CONFIGURATION.filter(tab => typeof tab.show === "boolean" ? tab.show : tab.show?.(titleContext)), [ titleContext, note ]);
@@ -183,7 +186,8 @@ export default function Ribbon() {
                             hidden: !isActive,
                             ntxId,
                             hoistedNoteId,
-                            notePath
+                            notePath,
+                            noteContext
                         });
                     })}
                 </div>

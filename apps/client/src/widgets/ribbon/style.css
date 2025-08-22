@@ -246,3 +246,25 @@
     font-style: italic;
 }
 /* #endregion */
+
+/* #region Note map */
+.note-map-ribbon-widget {
+    position: relative;
+}
+
+.note-map-ribbon-widget .note-map-container {
+    height: 300px;
+}
+
+.note-map-ribbon-widget .open-full-button, .note-map-ribbon-widget .collapse-button {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    z-index: 1000;
+}
+
+.style-resolver {
+    color: var(--muted-text-color);
+    display: none;
+}
+/* #endregion */

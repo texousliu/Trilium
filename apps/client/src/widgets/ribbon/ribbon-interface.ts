@@ -1,3 +1,4 @@
+import NoteContext from "../../components/note_context";
 import FNote from "../../entities/fnote";
 
 export interface TabContext {
@@ -6,4 +7,5 @@ export interface TabContext {
     ntxId?: string | null;
     hoistedNoteId?: string;
     notePath?: string | null;
+    noteContext?: NoteContext;
 }

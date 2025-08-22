@@ -3,63 +3,20 @@ import NoteMapWidget from "../note_map.js";
 import { t } from "../../services/i18n.js";
 
 const TPL = /*html*/`
-<div class="note-map-ribbon-widget">
-    <style>
-        .note-map-ribbon-widget {
-            position: relative;
-        }
-
-        .note-map-ribbon-widget .note-map-container {
-            height: 300px;
-        }
-
-        .note-map-ribbon-widget .open-full-button, .note-map-ribbon-widget .collapse-button {
-            position: absolute;
-            right: 5px;
-            bottom: 5px;
-            z-index: 1000;
-        }
-
-        .style-resolver {
-            color: var(--muted-text-color);
-            display: none;
-        }
-    </style>
 
     <button class="bx bx-arrow-to-bottom icon-action open-full-button" title="${t("note_map.open_full")}"></button>
     <button class="bx bx-arrow-to-top icon-action collapse-button" style="display: none;" title="${t("note_map.collapse")}"></button>
 
-    <div class="note-map-container"></div>
+
 </div>`;
 
 export default class NoteMapRibbonWidget extends NoteContextAwareWidget {
 
     private openState!: "small" | "full";
-    private noteMapWidget: NoteMapWidget;
     private $container!: JQuery<HTMLElement>;
     private $openFullButton!: JQuery<HTMLElement>;
     private $collapseButton!: JQuery<HTMLElement>;
 
-    constructor() {
-        super();
-
-        this.noteMapWidget = new NoteMapWidget("ribbon");
-        this.child(this.noteMapWidget);
-    }
-
-    get name() {
-        return "noteMap";
-    }
-
-    get toggleCommand() {
-        return "toggleRibbonTabNoteMap";
-    }
-
-    getTitle() {
-        return {
-            show: this.isEnabled()
-        };
-    }
 
     doRender() {
         this.$widget = $(TPL);
