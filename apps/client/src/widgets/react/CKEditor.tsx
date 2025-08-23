@@ -10,7 +10,7 @@ interface CKEditorOpts {
     disableNewlines?: boolean;
     disableSpellcheck?: boolean;
     onChange?: (newValue?: string) => void;
-    onClick?: (e, pos?: ModelPosition | null) => void;
+    onClick?: (e: MouseEvent, pos?: ModelPosition | null) => void;
 }
 
 export default function CKEditor({ currentValue, className, tabIndex, editor, config, disableNewlines, disableSpellcheck, onChange, onClick }: CKEditorOpts) {

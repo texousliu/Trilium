@@ -331,4 +331,9 @@
 .attribute-list-editor p {
     margin: 0 !important;
 }
+
+.attribute-list .attr-detail {
+    contain: none;
+}
+
 /* #endregion */

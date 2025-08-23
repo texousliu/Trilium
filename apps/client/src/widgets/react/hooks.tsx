@@ -14,6 +14,7 @@ import FBlob from "../../entities/fblob";
 import NoteContextAwareWidget from "../note_context_aware_widget";
 import { Ref, RefObject, VNode } from "preact";
 import { Tooltip } from "bootstrap";
+import { CSSProperties } from "preact/compat";
 
 type TriliumEventHandler<T extends EventNames> = (data: EventData<T>) => void;
 const registeredHandlers: Map<Component, Map<EventNames, TriliumEventHandler<any>[]>> = new Map();
@@ -415,9 +416,10 @@ export function useNoteBlob(note: FNote | null | undefined): [ FBlob | null | un
     return [ blob ] as const;
 }
 
-export function useLegacyWidget<T extends BasicWidget>(widgetFactory: () => T, { noteContext, containerClassName }: {
+export function useLegacyWidget<T extends BasicWidget>(widgetFactory: () => T, { noteContext, containerClassName, containerStyle }: {
     noteContext?: NoteContext;
     containerClassName?: string;
+    containerStyle?: CSSProperties;
 } = {}): [VNode, T] {
     const ref = useRef<HTMLDivElement>(null);
     const parentComponent = useContext(ParentComponent);
@@ -454,7 +456,7 @@ export function useLegacyWidget<T extends BasicWidget>(widgetFactory: () => T, {
         }
     }, [ noteContext ]);
 
-    return [ <div className={containerClassName} ref={ref} />, widget ]
+    return [ <div className={containerClassName} style={containerStyle} ref={ref} />, widget ]
 }
 
 /**
