@@ -1,15 +1,11 @@
 import AttributeEditor from "./components/AttributeEditor";
 import { TabContext } from "./ribbon-interface";
 
-export default function OwnedAttributesTab({ note, notePath, componentId }: TabContext) {
+export default function OwnedAttributesTab({ note, ...restProps }: TabContext) {
     return (
         <div className="attribute-list">
             { note && (
-                <AttributeEditor
-                    componentId={componentId}
-                    note={note}
-                    notePath={notePath}
-                />
+                <AttributeEditor note={note} {...restProps} />
             )}
         </div>
     )

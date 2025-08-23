@@ -450,7 +450,6 @@ export function useLegacyWidget<T extends BasicWidget>(widgetFactory: () => T, {
 
     // Inject the note context.
     useEffect(() => {
-        console.log("Injecting note context");
         if (noteContext && widget instanceof NoteContextAwareWidget) {
             widget.activeContextChangedEvent({ noteContext });
         }

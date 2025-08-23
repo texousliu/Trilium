@@ -76,7 +76,7 @@ const mentionSetup: MentionFeed[] = [
 ];
 
 
-export default function AttributeEditor({ note, componentId, notePath }: { note: FNote, componentId: string, notePath?: string | null }) {
+export default function AttributeEditor({ note, componentId, notePath, ntxId }: { note: FNote, componentId: string, notePath?: string | null, ntxId?: string | null }) {
     const [ state, setState ] = useState<"normal" | "showHelpTooltip" | "showAttributeDetail">();
     const [ error, setError ] = useState<unknown>();
     const [ needsSaving, setNeedsSaving ] = useState(false);
@@ -253,6 +253,16 @@ export default function AttributeEditor({ note, componentId, notePath }: { note:
         reloadAttributesCommand: refresh,
         updateAttributeListCommand: ({ attributes }: CommandListenerData<"updateAttributeList">) => renderOwnedAttributes(attributes as FAttribute[], false)
     }), []));
+
+    // Keyboard shortcuts
+    useTriliumEventBeta("addNewLabel", ({ ntxId: eventNtxId }) => {
+        if (eventNtxId !== ntxId) return;
+        handleAddNewAttributeCommand("addNewLabel");
+    });
+    useTriliumEventBeta("addNewRelation", ({ ntxId: eventNtxId }) => {
+        if (eventNtxId !== ntxId) return;
+        handleAddNewAttributeCommand("addNewRelation");
+    });
     
     return (
         <>
