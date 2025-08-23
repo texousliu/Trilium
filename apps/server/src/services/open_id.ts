@@ -545,6 +545,43 @@ function generateOAuthConfig() {
                 log.info(`OAuth afterCallback: Session has idToken=${!!session.id_token}, hasAccessToken=${!!session.access_token}, hasRefreshToken=${!!session.refresh_token}`);
                 log.info(`OAuth afterCallback: OIDC state - hasOidc=${!!req.oidc}, hasIdTokenClaims=${!!req.oidc?.idTokenClaims}`);
                 
+                // Log comprehensive OAuth context for debugging
+                if (req.oidc) {
+                    const isAuth = typeof req.oidc.isAuthenticated === 'function' ? req.oidc.isAuthenticated() : 'N/A';
+                    log.info(`OAuth afterCallback: Context details - isAuthenticated=${isAuth}, ` +
+                        `hasIdToken=${!!req.oidc.idToken}, hasAccessToken=${!!req.oidc.accessToken}, ` +
+                        `hasRefreshToken=${!!req.oidc.refreshToken}, hasUser=${!!req.oidc.user}`);
+                }
+                
+                // Parse and log ID token payload (safely) for debugging
+                if (session.id_token) {
+                    try {
+                        const parts = session.id_token.split('.');
+                        if (parts.length === 3) {
+                            const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
+                            // Log token payload for debugging (trusted logging environment)
+                            const safePayload = {
+                                iss: payload.iss,
+                                aud: payload.aud,
+                                exp: payload.exp ? new Date(payload.exp * 1000).toISOString() : undefined,
+                                iat: payload.iat ? new Date(payload.iat * 1000).toISOString() : undefined,
+                                sub: payload.sub,
+                                email: payload.email,
+                                name: payload.name,
+                                given_name: payload.given_name,
+                                family_name: payload.family_name,
+                                preferred_username: payload.preferred_username,
+                                nickname: payload.nickname,
+                                groups: payload.groups ? `[${payload.groups.length} groups]` : undefined,
+                                all_claims: Object.keys(payload).sort().join(', ')
+                            };
+                            log.info(`OAuth afterCallback: ID Token payload (masked): ${JSON.stringify(safePayload, null, 2)}`);
+                        }
+                    } catch (tokenError) {
+                        log.error(`OAuth afterCallback: Failed to parse ID token for logging: ${tokenError}`);
+                    }
+                }
+                
                 // According to express-openid-connect v2 best practices, idTokenClaims is most reliable in afterCallback
                 // The session parameter contains the verified tokens
                 let user: OIDCUserClaims | undefined;
@@ -553,11 +590,34 @@ function generateOAuthConfig() {
                 if (req.oidc?.idTokenClaims) {
                     log.info('OAuth afterCallback: Using idTokenClaims from verified ID token');
                     user = req.oidc.idTokenClaims as OIDCUserClaims;
+                    
+                    // Log the actual claims structure for debugging
+                    const claimKeys = Object.keys(req.oidc.idTokenClaims);
+                    log.info(`OAuth afterCallback: idTokenClaims has ${claimKeys.length} properties: [${claimKeys.sort().join(', ')}]`);
+                    
+                    // Log claim values for debugging (trusted logging environment)
+                    const claimValues: any = {};
+                    for (const key of claimKeys) {
+                        const value = (req.oidc.idTokenClaims as any)[key];
+                        if (typeof value === 'string' && value.length > 200) {
+                            claimValues[key] = `${value.substring(0, 200)}...[truncated, length: ${value.length}]`;
+                        } else if (Array.isArray(value)) {
+                            claimValues[key] = `[Array with ${value.length} items: ${JSON.stringify(value.slice(0, 5))}${value.length > 5 ? '...' : ''}]`;
+                        } else if (typeof value === 'object' && value !== null) {
+                            claimValues[key] = `[Object with keys: ${Object.keys(value).join(', ')}]`;
+                        } else {
+                            claimValues[key] = value;
+                        }
+                    }
+                    log.info(`OAuth afterCallback: idTokenClaims content: ${JSON.stringify(claimValues, null, 2)}`);
                 } 
                 // Fallback: req.oidc.user (may be available in some configurations)
                 else if (req.oidc?.user) {
                     log.info('OAuth afterCallback: idTokenClaims not available, using req.oidc.user');
                     user = req.oidc.user as OIDCUserClaims;
+                    
+                    const userKeys = Object.keys(req.oidc.user);
+                    log.info(`OAuth afterCallback: req.oidc.user has ${userKeys.length} properties: [${userKeys.sort().join(', ')}]`);
                 }
                 // Log what we have for debugging
                 else {
@@ -565,29 +625,118 @@ function generateOAuthConfig() {
                     log.error(`Session has id_token: ${!!session.id_token}, access_token: ${!!session.access_token}`);
                 }
                 
-                // Note: We do NOT call fetchUserInfo() here as it's unreliable in afterCallback per v2 best practices
-                // If additional user info is needed, it should be fetched in middleware after authentication
+                // Fallback: Parse ID token directly if req.oidc is not populated
+                // This handles cases where express-openid-connect doesn't properly populate req.oidc
+                if (!user && session.id_token) {
+                    log.info('OAuth afterCallback: Attempting to parse ID token directly from session');
+                    try {
+                        const parts = session.id_token.split('.');
+                        if (parts.length === 3) {
+                            const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
+                            user = payload as OIDCUserClaims;
+                            log.info('OAuth afterCallback: Successfully parsed ID token from session');
+                            log.info(`OAuth afterCallback: Parsed claims: sub="${payload.sub}", name="${payload.name}", email="${payload.email}"`);
+                        } else {
+                            log.error('OAuth afterCallback: Invalid ID token format (expected 3 parts)');
+                        }
+                    } catch (parseError) {
+                        log.error(`OAuth afterCallback: Failed to parse ID token from session: ${parseError}`);
+                    }
+                }
+                
+                // Fallback: Call UserInfo endpoint if we have an access token but no user info
+                if (!user && session.access_token) {
+                    log.info('OAuth afterCallback: No user info from ID token, attempting UserInfo endpoint');
+                    try {
+                        // Get the issuer URL from config
+                        const issuerURL = config.MultiFactorAuthentication.oauthIssuerBaseUrl;
+                        if (issuerURL) {
+                            // Construct UserInfo endpoint URL
+                            // Try to determine the correct URL format based on the issuer
+                            let userinfoUrl: string;
+                            
+                            // For Keycloak/Authentik style URLs (ends with /realms/xxx or similar)
+                            if (issuerURL.includes('/realms/') || issuerURL.includes('/application/o/')) {
+                                userinfoUrl = issuerURL.endsWith('/') 
+                                    ? `${issuerURL}protocol/openid-connect/userinfo`
+                                    : `${issuerURL}/protocol/openid-connect/userinfo`;
+                            }
+                            // For standard OIDC providers (Auth0, Okta, etc.)
+                            else {
+                                userinfoUrl = issuerURL.endsWith('/') 
+                                    ? `${issuerURL}userinfo`
+                                    : `${issuerURL}/userinfo`;
+                            }
+                            
+                            log.info(`OAuth afterCallback: Calling UserInfo endpoint at ${userinfoUrl}`);
+                            
+                            // Make the UserInfo request
+                            const response = await fetch(userinfoUrl, {
+                                method: 'GET',
+                                headers: {
+                                    'Authorization': `Bearer ${session.access_token}`,
+                                    'Accept': 'application/json'
+                                }
+                            });
+                            
+                            if (response.ok) {
+                                const userInfo = await response.json();
+                                user = userInfo as OIDCUserClaims;
+                                log.info('OAuth afterCallback: Successfully retrieved user info from UserInfo endpoint');
+                                log.info(`OAuth afterCallback: UserInfo claims: sub="${userInfo.sub}", name="${userInfo.name}", email="${userInfo.email}"`);
+                            } else {
+                                const errorText = await response.text();
+                                log.error(`OAuth afterCallback: UserInfo endpoint returned error: ${response.status} ${response.statusText}`);
+                                log.error(`OAuth afterCallback: UserInfo error response: ${errorText}`);
+                            }
+                        } else {
+                            log.error('OAuth afterCallback: Cannot call UserInfo endpoint - issuer URL not configured');
+                        }
+                    } catch (userinfoError) {
+                        log.error(`OAuth afterCallback: Failed to fetch UserInfo: ${userinfoError}`);
+                    }
+                }
                 
                 // Check if user object exists after all attempts
                 if (!user) {
-                    log.error('OAuth afterCallback: No user object received from ID token');
+                    log.error('OAuth afterCallback: No user object received after all fallback attempts');
+                    log.error('Attempted:');
+                    log.error('  1. req.oidc.idTokenClaims');
+                    log.error('  2. req.oidc.user');
+                    log.error('  3. Direct ID token parsing from session');
+                    log.error('  4. UserInfo endpoint (if access token available)');
                     log.error('This can happen when:');
                     log.error('  1. ID token does not contain user claims (only sub)');
                     log.error('  2. OAuth provider not configured to include claims in ID token');
                     log.error('  3. Token validation failed');
+                    log.error('  4. UserInfo endpoint is not accessible or returns no data');
                     log.error('Consider checking your OAuth provider configuration for "openid profile email" scopes');
+                    
+                    // Log raw OAuth context for maximum debugging
+                    if (req.oidc) {
+                        const isAuth = typeof req.oidc.isAuthenticated === 'function' ? req.oidc.isAuthenticated() : 'N/A';
+                        log.error(`OAuth afterCallback: Raw oidc state: ${JSON.stringify({
+                            isAuthenticated: isAuth,
+                            hasIdToken: !!req.oidc.idToken,
+                            hasAccessToken: !!req.oidc.accessToken,
+                            hasIdTokenClaims: !!req.oidc.idTokenClaims,
+                            hasUser: !!req.oidc.user,
+                            idTokenClaimsKeys: req.oidc.idTokenClaims ? Object.keys(req.oidc.idTokenClaims) : [],
+                            userKeys: req.oidc.user ? Object.keys(req.oidc.user) : []
+                        }, null, 2)}`);
+                    }
                     
                     // DO NOT allow login without proper authentication data
                     req.session.loggedIn = false;
                     
                     // Throw error to prevent authentication without user info
-                    throw new Error('OAuth authentication failed: Unable to retrieve user information from ID token');
+                    throw new Error('OAuth authentication failed: Unable to retrieve user information from any source');
                 }
 
                 const userClaims = user as OIDCUserClaims;
                 
-                // Log available claims for debugging (without sensitive data)
-                log.info(`OAuth afterCallback: User claims received - hasSub=${!!userClaims.sub}, hasName=${!!userClaims.name}, hasEmail=${!!userClaims.email}, hasGivenName=${!!userClaims.given_name}, hasFamilyName=${!!userClaims.family_name}, hasPreferredUsername=${!!userClaims.preferred_username}, claimKeys=[${Object.keys(userClaims).join(', ')}]`);
+                // Log available claims for debugging (trusted logging environment)
+                log.info(`OAuth afterCallback: User claims received - sub="${userClaims.sub}", name="${userClaims.name}", email="${userClaims.email}", given_name="${userClaims.given_name}", family_name="${userClaims.family_name}", preferred_username="${userClaims.preferred_username}", claimKeys=[${Object.keys(userClaims).join(', ')}]`);
 
                 // Extract and validate user information
                 const userInfo = extractUserInfo(userClaims);
@@ -599,7 +748,7 @@ function generateOAuthConfig() {
                     return session;
                 }
 
-                log.info(`OAuth afterCallback: User info extracted successfully - subLength=${userInfo.sub.length}, hasName=${!!userInfo.name}, hasEmail=${!!userInfo.email}`);
+                log.info(`OAuth afterCallback: User info extracted successfully - sub="${userInfo.sub}", name="${userInfo.name}", email="${userInfo.email}"`);
                 
                 // Check if a user already exists and verify subject identifier matches
                 if (isUserSaved()) {
@@ -609,7 +758,7 @@ function generateOAuthConfig() {
                     if (isValidUser === false) {
                         log.error('OAuth afterCallback: CRITICAL - Subject identifier mismatch!');
                         log.error('A different user is already configured in Trilium.');
-                        log.error(`Current login sub: ${userInfo.sub.substring(0, 20)}...`);
+                        log.error(`Current login sub: ${userInfo.sub}`);
                         log.error('This is a single-user system. To use a different OAuth account:');
                         log.error('  1. Clear the existing user data');
                         log.error('  2. Restart Trilium');
@@ -695,7 +844,8 @@ function oauthErrorLogger(err: any, req: Request, res: Response, next: NextFunct
         
         // Check for specific middleware states
         if (req.oidc) {
-            log.error(`OAuth Middleware: OIDC state - isAuthenticated=${req.oidc.isAuthenticated()}, hasUser=${!!req.oidc.user}, hasIdToken=${!!req.oidc.idToken}, hasAccessToken=${!!req.oidc.accessToken}`);
+            const isAuth = typeof req.oidc.isAuthenticated === 'function' ? req.oidc.isAuthenticated() : 'N/A';
+            log.error(`OAuth Middleware: OIDC state - isAuthenticated=${isAuth}, hasUser=${!!req.oidc.user}, hasIdToken=${!!req.oidc.idToken}, hasAccessToken=${!!req.oidc.accessToken}`);
         }
         
         // Log response headers that might contain error information
