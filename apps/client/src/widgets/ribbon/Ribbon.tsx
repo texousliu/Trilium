@@ -20,6 +20,7 @@ import ImagePropertiesTab from "./ImagePropertiesTab";
 import NotePathsTab from "./NotePathsTab";
 import NoteMapTab from "./NoteMapTab";
 import OwnedAttributesTab from "./OwnedAttributesTab";
+import InheritedAttributesTab from "./InheritedAttributesTab";
 
 interface TitleContext {
     note: FNote | null | undefined;
@@ -113,9 +114,11 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
         toggleCommand: "toggleRibbonTabOwnedAttributes"
     },
     {
-        // InheritedAttributesWidget
         title: t("inherited_attribute_list.title"),
-        icon: "bx bx-list-plus"
+        icon: "bx bx-list-plus",
+        content: InheritedAttributesTab,
+        show: ({note}) => !note?.isLaunchBarConfig(),
+        toggleCommand: "toggleRibbonTabInheritedAttributes"
     },
     {
         title: t("note_paths.title"),
