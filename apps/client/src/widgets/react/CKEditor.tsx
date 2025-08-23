@@ -1,7 +1,13 @@
 import { CKTextEditor, type AttributeEditor, type EditorConfig, type ModelPosition } from "@triliumnext/ckeditor5";
-import { useEffect, useRef } from "preact/compat";
+import { useEffect, useImperativeHandle, useRef } from "preact/compat";
+import { MutableRef } from "preact/hooks";
+
+export interface CKEditorApi {
+    focus: () => void;
+}
 
 interface CKEditorOpts {
+    apiRef: MutableRef<CKEditorApi | undefined>;
     currentValue?: string;
     className: string;
     tabIndex?: number;
@@ -15,9 +21,22 @@ interface CKEditorOpts {
     onBlur?: () => void;
 }
 
-export default function CKEditor({ currentValue, editor, config, disableNewlines, disableSpellcheck, onChange, onClick, ...restProps }: CKEditorOpts) {
+export default function CKEditor({ apiRef, currentValue, editor, config, disableNewlines, disableSpellcheck, onChange, onClick, ...restProps }: CKEditorOpts) {
     const editorContainerRef = useRef<HTMLDivElement>(null);    
     const textEditorRef = useRef<CKTextEditor>(null);
+    useImperativeHandle(apiRef, () => {
+        return {
+            focus() {
+                editorContainerRef.current?.focus();
+                textEditorRef.current?.model.change((writer) => {
+                    const documentRoot = textEditorRef.current?.editing.model.document.getRoot();
+                    if (documentRoot) {
+                        writer.setSelection(writer.createPositionAt(documentRoot, "end"));
+                    }
+                });
+            }
+        };
+    }, [ editorContainerRef ]);
 
     useEffect(() => {
         if (!editorContainerRef.current) return;

@@ -18,14 +18,6 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
         }
     }
 
-    async save() {
-        if (this.lastUpdatedNoteId !== this.noteId) {
-            // https://github.com/zadam/trilium/issues/3090
-            console.warn("Ignoring blur event because a different note is loaded.");
-            return;
-        }
-    }
-
     dataChanged() {
         this.lastUpdatedNoteId = this.noteId;
     }
@@ -49,20 +41,6 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
     focus() {
         this.$editor.trigger("focus");
 
-        this.textEditor.model.change((writer) => {
-            const documentRoot = this.textEditor.editing.model.document.getRoot();
-            if (!documentRoot) {
-                return;
-            }
 
-            const positionAt = writer.createPositionAt(documentRoot, "end");
-            writer.setSelection(positionAt);
-        });
-    }
-
-    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        if (loadResults.getAttributeRows(this.componentId).find((attr) => attributeService.isAffecting(attr, this.note))) {
-            this.refresh();
-        }
     }
 }

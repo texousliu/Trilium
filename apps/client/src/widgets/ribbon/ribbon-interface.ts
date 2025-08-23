@@ -8,4 +8,5 @@ export interface TabContext {
     hoistedNoteId?: string;
     notePath?: string | null;
     noteContext?: NoteContext;
+    componentId: string;
 }

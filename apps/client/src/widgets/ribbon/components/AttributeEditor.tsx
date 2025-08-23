@@ -3,8 +3,8 @@ import { AttributeEditor as CKEditorAttributeEditor, MentionFeed, ModelElement, 
 import { t } from "../../../services/i18n";
 import server from "../../../services/server";
 import note_autocomplete, { Suggestion } from "../../../services/note_autocomplete";
-import CKEditor from "../../react/CKEditor";
-import { useLegacyWidget, useTooltip } from "../../react/hooks";
+import CKEditor, { CKEditorApi } from "../../react/CKEditor";
+import { useLegacyWidget, useTooltip, useTriliumEventBeta } from "../../react/hooks";
 import FAttribute from "../../../entities/fattribute";
 import attribute_renderer from "../../../services/attribute_renderer";
 import FNote from "../../../entities/fnote";
@@ -19,6 +19,7 @@ import froca from "../../../services/froca";
 import contextMenu from "../../../menus/context_menu";
 import type { CommandData, FilteredCommandNames } from "../../../components/app_context";
 import { AttributeType } from "@triliumnext/commons";
+import attributes from "../../../services/attributes";
 
 type AttributeCommandNames = FilteredCommandNames<CommandData>;
 
@@ -86,6 +87,7 @@ export default function AttributeEditor({ note, componentId }: { note: FNote, co
     const lastSavedContent = useRef<string>();
     const currentValueRef = useRef(initialValue);
     const wrapperRef = useRef<HTMLDivElement>(null);
+    const editorRef = useRef<CKEditorApi>();
 
     const { showTooltip, hideTooltip } = useTooltip(wrapperRef, {
         trigger: "focus",
@@ -207,9 +209,23 @@ export default function AttributeEditor({ note, componentId }: { note: FNote, co
         }, 100);
     }
 
-    useEffect(() => {
+    // Refresh with note
+    function refresh() {
         renderOwnedAttributes(note.getOwnedAttributes(), true);
-    }, [ note ]);
+    }
+
+    useEffect(() => refresh(), [ note ]);
+    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+        if (loadResults.getAttributeRows(componentId).find((attr) => attributes.isAffecting(attr, note))) {
+            console.log("Trigger due to entities reloaded");
+            refresh();
+        }
+    });
+
+    // Focus on show.
+    useEffect(() => {
+        setTimeout(() => editorRef.current?.focus(), 0);
+    }, []);
     
     return (
         <>
@@ -224,6 +240,7 @@ export default function AttributeEditor({ note, componentId }: { note: FNote, co
                 }}
             >
                 <CKEditor
+                    apiRef={editorRef}
                     className="attribute-list-editor"
                     tabIndex={200}
                     editor={CKEditorAttributeEditor}

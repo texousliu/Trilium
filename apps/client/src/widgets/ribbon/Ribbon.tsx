@@ -148,7 +148,7 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
 ]);
 
 export default function Ribbon() {
-    const { note, ntxId, hoistedNoteId, notePath, noteContext } = useNoteContext();
+    const { note, ntxId, hoistedNoteId, notePath, noteContext, componentId } = useNoteContext();
     const titleContext: TitleContext = { note };
     const [ activeTabIndex, setActiveTabIndex ] = useState<number | undefined>();
     const filteredTabs = useMemo(() => TAB_CONFIGURATION.filter(tab => typeof tab.show === "boolean" ? tab.show : tab.show?.(titleContext)), [ titleContext, note ]);
@@ -190,7 +190,8 @@ export default function Ribbon() {
                             ntxId,
                             hoistedNoteId,
                             notePath,
-                            noteContext
+                            noteContext,
+                            componentId
                         });
                     })}
                 </div>
