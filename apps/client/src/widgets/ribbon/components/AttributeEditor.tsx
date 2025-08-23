@@ -165,12 +165,13 @@ export default function AttributeEditor({ note, componentId }: { note: FNote, co
                     onChange={(currentValue) => {
                         currentValueRef.current = currentValue ?? "";
                         setNeedsSaving(lastSavedContent.current !== currentValue);
+                        setError(undefined);
                     }}
                     onClick={(e, pos) => {
                         if (pos && pos.textNode && pos.textNode.data) {
                             const clickIndex = getClickIndex(pos);
 
-                            let parsedAttrs;
+                            let parsedAttrs: Attribute[];
 
                             try {
                                 parsedAttrs = attribute_parser.lexAndParse(getPreprocessedData(currentValueRef.current), true);
@@ -215,6 +216,12 @@ export default function AttributeEditor({ note, componentId }: { note: FNote, co
                     text={escapeQuotes(t("attribute_editor.save_attributes"))}
                     onClick={save}
                 /> }
+
+                { error && (
+                    <div className="attribute-errors">
+                        {typeof error === "object" && "message" in error && typeof error.message === "string" && error.message}
+                    </div>
+                )}
             </div>
 
             {attributeDetailWidgetEl}

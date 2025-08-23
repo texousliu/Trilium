@@ -11,14 +11,11 @@ import linkService from "../../services/link.js";
 import type AttributeDetailWidget from "./attribute_detail.js";
 import type { CommandData, EventData, EventListener, FilteredCommandNames } from "../../components/app_context.js";
 import type { default as FAttribute, AttributeType } from "../../entities/fattribute.js";
-import type FNote from "../../entities/fnote.js";
 import { escapeQuotes } from "../../services/utils.js";
 
 const TPL = /*html*/`
 
     <div class="bx bx-plus add-new-attribute-button tn-tool-button" title="${escapeQuotes(t("attribute_editor.add_a_new_attribute"))}"></div>
-
-    <div class="attribute-errors" style="display: none;"></div>
 </div>
 `;
 
@@ -29,11 +26,9 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
     private $editor!: JQuery<HTMLElement>;
     private $addNewAttributeButton!: JQuery<HTMLElement>;
     private $saveAttributesButton!: JQuery<HTMLElement>;
-    private $errors!: JQuery<HTMLElement>;
 
     private textEditor!: AttributeEditor;
     private lastUpdatedNoteId!: string | undefined;
-    private lastSavedContent!: string;
 
     constructor(attributeDetailWidget: AttributeDetailWidget) {
         super();
@@ -57,8 +52,6 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
         this.$addNewAttributeButton.on("click", (e) => this.addNewAttribute(e));
 
         this.$saveAttributesButton.on("click", () => this.save());
-
-        this.$errors = this.$widget.find(".attribute-errors");
     }
 
     addNewAttribute(e: JQuery.ClickEvent) {
@@ -167,12 +160,6 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
 
     dataChanged() {
         this.lastUpdatedNoteId = this.noteId;
-
-        if (this.$errors.is(":visible")) {
-            // using .hide() instead of .slideUp() since this will also hide the error after confirming
-            // mention for relation name which suits up. When using.slideUp() error will appear and the slideUp which is weird
-            this.$errors.hide();
-        }
     }
 
     async loadReferenceLinkTitle($el: JQuery<HTMLElement>, href: string) {
