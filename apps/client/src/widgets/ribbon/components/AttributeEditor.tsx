@@ -16,6 +16,11 @@ import { ParentComponent } from "../../react/react_utils";
 import Component from "../../../components/component";
 import link from "../../../services/link";
 import froca from "../../../services/froca";
+import contextMenu from "../../../menus/context_menu";
+import type { CommandData, FilteredCommandNames } from "../../../components/app_context";
+import { AttributeType } from "@triliumnext/commons";
+
+type AttributeCommandNames = FilteredCommandNames<CommandData>;
 
 const HELP_TEXT = `
 <p>${t("attribute_editor.help_text_body1")}</p>
@@ -143,6 +148,65 @@ export default function AttributeEditor({ note, componentId }: { note: FNote, co
         }
     }
 
+    async function handleAddNewAttributeCommand(command: AttributeCommandNames | undefined) {
+        // TODO: Not sure what the relation between FAttribute[] and Attribute[] is.
+        const attrs = parseAttributes() as FAttribute[];
+
+        if (!attrs) {
+            return;
+        }
+
+        let type: AttributeType;
+        let name;
+        let value;
+
+        if (command === "addNewLabel") {
+            type = "label";
+            name = "myLabel";
+            value = "";
+        } else if (command === "addNewRelation") {
+            type = "relation";
+            name = "myRelation";
+            value = "";
+        } else if (command === "addNewLabelDefinition") {
+            type = "label";
+            name = "label:myLabel";
+            value = "promoted,single,text";
+        } else if (command === "addNewRelationDefinition") {
+            type = "label";
+            name = "relation:myRelation";
+            value = "promoted,single";
+        } else {
+            return;
+        }
+
+        // TODO: Incomplete type
+        //@ts-ignore
+        attrs.push({
+            type,
+            name,
+            value,
+            isInheritable: false
+        });
+
+        await renderOwnedAttributes(attrs, false);
+
+        // this.$editor.scrollTop(this.$editor[0].scrollHeight);
+        const rect = wrapperRef.current?.getBoundingClientRect();
+
+        setTimeout(() => {
+            // showing a little bit later because there's a conflict with outside click closing the attr detail
+            attributeDetailWidget.showAttributeDetail({
+                allAttributes: attrs,
+                attribute: attrs[attrs.length - 1],
+                isOwned: true,
+                x: rect ? (rect.left + rect.right) / 2 : 0,
+                y: rect?.bottom ?? 0,
+                focus: "name"
+            });
+        }, 100);
+    }
+
     useEffect(() => {
         renderOwnedAttributes(note.getOwnedAttributes(), true);
     }, [ note ]);
@@ -227,6 +291,30 @@ export default function AttributeEditor({ note, componentId }: { note: FNote, co
                     text={escapeQuotes(t("attribute_editor.save_attributes"))}
                     onClick={save}
                 /> }
+
+                <ActionButton 
+                    icon="bx bx-plus"
+                    className="add-new-attribute-button"
+                    text={escapeQuotes(t("attribute_editor.add_a_new_attribute"))}
+                    onClick={(e) => {
+                        // Prevent automatic hiding of the context menu due to the button being clicked.
+                        e.stopPropagation();
+
+                        contextMenu.show<AttributeCommandNames>({
+                            x: e.pageX,
+                            y: e.pageY,
+                            orientation: "left",
+                            items: [
+                                { title: t("attribute_editor.add_new_label"), command: "addNewLabel", uiIcon: "bx bx-hash" },
+                                { title: t("attribute_editor.add_new_relation"), command: "addNewRelation", uiIcon: "bx bx-transfer" },
+                                { title: "----" },
+                                { title: t("attribute_editor.add_new_label_definition"), command: "addNewLabelDefinition", uiIcon: "bx bx-empty" },
+                                { title: t("attribute_editor.add_new_relation_definition"), command: "addNewRelationDefinition", uiIcon: "bx bx-empty" }
+                            ],
+                            selectMenuItemHandler: (item) => handleAddNewAttributeCommand(item.command)
+                        });
+                    }}
+                />
 
                 { error && (
                     <div className="attribute-errors">

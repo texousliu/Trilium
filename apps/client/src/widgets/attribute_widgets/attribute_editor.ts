@@ -1,25 +1,12 @@
 import { t } from "../../services/i18n.js";
 import NoteContextAwareWidget from "../note_context_aware_widget.js";
-import server from "../../services/server.js";
 import contextMenuService from "../../menus/context_menu.js";
-import attributeParser, { type Attribute } from "../../services/attribute_parser.js";
 import { AttributeEditor, type EditorConfig, type ModelElement, type MentionFeed, type ModelNode, type ModelPosition } from "@triliumnext/ckeditor5";
-import froca from "../../services/froca.js";
 import noteCreateService from "../../services/note_create.js";
 import attributeService from "../../services/attributes.js";
-import linkService from "../../services/link.js";
 import type AttributeDetailWidget from "./attribute_detail.js";
 import type { CommandData, EventData, EventListener, FilteredCommandNames } from "../../components/app_context.js";
 import type { default as FAttribute, AttributeType } from "../../entities/fattribute.js";
-import { escapeQuotes } from "../../services/utils.js";
-
-const TPL = /*html*/`
-
-    <div class="bx bx-plus add-new-attribute-button tn-tool-button" title="${escapeQuotes(t("attribute_editor.add_a_new_attribute"))}"></div>
-</div>
-`;
-
-type AttributeCommandNames = FilteredCommandNames<CommandData>;
 
 export default class AttributeEditorWidget extends NoteContextAwareWidget implements EventListener<"entitiesReloaded">, EventListener<"addNewLabel">, EventListener<"addNewRelation"> {
     private attributeDetailWidget: AttributeDetailWidget;
@@ -48,28 +35,7 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
 
         this.$editor.on("blur", () => setTimeout(() => this.save(), 100)); // Timeout to fix https://github.com/zadam/trilium/issues/4160
 
-        this.$addNewAttributeButton = this.$widget.find(".add-new-attribute-button");
-        this.$addNewAttributeButton.on("click", (e) => this.addNewAttribute(e));
-
         this.$saveAttributesButton.on("click", () => this.save());
-    }
-
-    addNewAttribute(e: JQuery.ClickEvent) {
-        contextMenuService.show<AttributeCommandNames>({
-            x: e.pageX,
-            y: e.pageY,
-            orientation: "left",
-            items: [
-                { title: t("attribute_editor.add_new_label"), command: "addNewLabel", uiIcon: "bx bx-hash" },
-                { title: t("attribute_editor.add_new_relation"), command: "addNewRelation", uiIcon: "bx bx-transfer" },
-                { title: "----" },
-                { title: t("attribute_editor.add_new_label_definition"), command: "addNewLabelDefinition", uiIcon: "bx bx-empty" },
-                { title: t("attribute_editor.add_new_relation_definition"), command: "addNewRelationDefinition", uiIcon: "bx bx-empty" }
-            ],
-            selectMenuItemHandler: ({ command }) => this.handleAddNewAttributeCommand(command)
-        });
-        // Prevent automatic hiding of the context menu due to the button being clicked.
-        e.stopPropagation();
     }
 
     // triggered from keyboard shortcut
@@ -88,66 +54,6 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
 
             this.handleAddNewAttributeCommand("addNewRelation");
         }
-    }
-
-    async handleAddNewAttributeCommand(command: AttributeCommandNames | undefined) {
-        // TODO: Not sure what the relation between FAttribute[] and Attribute[] is.
-        const attrs = this.parseAttributes() as FAttribute[];
-
-        if (!attrs) {
-            return;
-        }
-
-        let type: AttributeType;
-        let name;
-        let value;
-
-        if (command === "addNewLabel") {
-            type = "label";
-            name = "myLabel";
-            value = "";
-        } else if (command === "addNewRelation") {
-            type = "relation";
-            name = "myRelation";
-            value = "";
-        } else if (command === "addNewLabelDefinition") {
-            type = "label";
-            name = "label:myLabel";
-            value = "promoted,single,text";
-        } else if (command === "addNewRelationDefinition") {
-            type = "label";
-            name = "relation:myRelation";
-            value = "promoted,single";
-        } else {
-            return;
-        }
-
-        // TODO: Incomplete type
-        //@ts-ignore
-        attrs.push({
-            type,
-            name,
-            value,
-            isInheritable: false
-        });
-
-        await this.renderOwnedAttributes(attrs, false);
-
-        this.$editor.scrollTop(this.$editor[0].scrollHeight);
-
-        const rect = this.$editor[0].getBoundingClientRect();
-
-        setTimeout(() => {
-            // showing a little bit later because there's a conflict with outside click closing the attr detail
-            this.attributeDetailWidget.showAttributeDetail({
-                allAttributes: attrs,
-                attribute: attrs[attrs.length - 1],
-                isOwned: true,
-                x: (rect.left + rect.right) / 2,
-                y: rect.bottom,
-                focus: "name"
-            });
-        }, 100);
     }
 
     async save() {

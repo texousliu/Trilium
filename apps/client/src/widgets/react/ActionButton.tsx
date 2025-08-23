@@ -2,7 +2,7 @@ interface ActionButtonProps {
     text: string;
     icon: string;
     className?: string;
-    onClick?: () => void;
+    onClick?: (e: MouseEvent) => void;
 }
 
 export default function ActionButton({ text, icon, className, onClick }: ActionButtonProps) {
