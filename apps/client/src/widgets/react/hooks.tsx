@@ -539,3 +539,10 @@ export function useTooltip(elRef: RefObject<HTMLElement>, config: Partial<Toolti
 
     return { showTooltip, hideTooltip };
 }
+
+export function useLegacyImperativeHandlers(handlers: Record<string, Function>) {
+    const parentComponent = useContext(ParentComponent);
+    useEffect(() => {
+        Object.assign(parentComponent as any, handlers);
+    }, [ handlers ])
+}

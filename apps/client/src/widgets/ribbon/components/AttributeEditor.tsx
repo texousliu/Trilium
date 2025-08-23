@@ -1,10 +1,10 @@
-import { useContext, useEffect, useRef, useState } from "preact/hooks"
+import { useContext, useEffect, useMemo, useRef, useState } from "preact/hooks"
 import { AttributeEditor as CKEditorAttributeEditor, MentionFeed, ModelElement, ModelNode, ModelPosition } from "@triliumnext/ckeditor5";
 import { t } from "../../../services/i18n";
 import server from "../../../services/server";
 import note_autocomplete, { Suggestion } from "../../../services/note_autocomplete";
 import CKEditor, { CKEditorApi } from "../../react/CKEditor";
-import { useLegacyWidget, useTooltip, useTriliumEventBeta } from "../../react/hooks";
+import { useLegacyImperativeHandlers, useLegacyWidget, useTooltip, useTriliumEventBeta } from "../../react/hooks";
 import FAttribute from "../../../entities/fattribute";
 import attribute_renderer from "../../../services/attribute_renderer";
 import FNote from "../../../entities/fnote";
@@ -77,9 +77,6 @@ const mentionSetup: MentionFeed[] = [
 
 
 export default function AttributeEditor({ note, componentId, notePath }: { note: FNote, componentId: string, notePath?: string | null }) {
-    const parentComponent = useContext(ParentComponent);
-    injectLoadReferenceLinkTitle(parentComponent, notePath);
-
     const [ state, setState ] = useState<"normal" | "showHelpTooltip" | "showAttributeDetail">();
     const [ error, setError ] = useState<unknown>();
     const [ needsSaving, setNeedsSaving ] = useState(false);
@@ -227,6 +224,28 @@ export default function AttributeEditor({ note, componentId, notePath }: { note:
     useEffect(() => {
         setTimeout(() => editorRef.current?.focus(), 0);
     }, []);
+
+    // Interaction with CKEditor.
+    useLegacyImperativeHandlers(useMemo(() => ({
+        loadReferenceLinkTitle: async ($el: JQuery<HTMLElement>, href: string) => {
+            const { noteId } = link.parseNavigationStateFromUrl(href);
+            const note = noteId ? await froca.getNote(noteId, true) : null;
+            const title = note ? note.title : "[missing]";
+
+            $el.text(title);
+        },
+        createNoteForReferenceLink: async (title: string) => {
+            let result;
+            if (notePath) {
+                result = await note_create.createNoteWithTypePrompt(notePath, {
+                    activate: false,
+                    title: title
+                });
+            }
+
+            return result?.note?.getBestNotePathString();
+        }   
+    }), [ notePath ]))
     
     return (
         <>
@@ -372,26 +391,4 @@ function getClickIndex(pos: ModelPosition) {
     }
 
     return clickIndex;
-}
-
-function injectLoadReferenceLinkTitle(component: Component | null, notePath?: string | null) {
-    if (!component) return;
-    (component as any).loadReferenceLinkTitle = async ($el: JQuery<HTMLElement>, href: string) => {
-        const { noteId } = link.parseNavigationStateFromUrl(href);
-        const note = noteId ? await froca.getNote(noteId, true) : null;
-        const title = note ? note.title : "[missing]";
-
-        $el.text(title);
-    }
-    (component as any).createNoteForReferenceLink = async (title: string) => {
-        let result;
-        if (notePath) {
-            result = await note_create.createNoteWithTypePrompt(notePath, {
-                activate: false,
-                title: title
-            });
-        }
-
-        return result?.note?.getBestNotePathString();
-    }
 }
