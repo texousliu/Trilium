@@ -252,24 +252,20 @@ function Performance() {
     const [ backdropEffectsEnabled, setBackdropEffectsEnabled ] = useTriliumOptionBool("backdropEffectsEnabled");
 
     return <OptionsSection title={t("ui-performance.title")}>
-        <FormGroup name="motion-enabled">
-            <FormCheckbox
-                label={t("ui-performance.enable-motion")}
-                currentValue={motionEnabled} onChange={setMotionEnabled}
-            />
-        </FormGroup>
-        <FormGroup name="shadows-enabled">
-            <FormCheckbox
-                label={t("ui-performance.enable-shadows")}
-                currentValue={shadowsEnabled} onChange={setShadowsEnabled}
-            />
-        </FormGroup>
-        <FormGroup name="backdrop-effects-enabled">
-            <FormCheckbox
-                label={t("ui-performance.enable-backdrop-effects")}
-                currentValue={backdropEffectsEnabled} onChange={setBackdropEffectsEnabled}
-            />
-        </FormGroup>
+        <FormCheckbox
+            label={t("ui-performance.enable-motion")}
+            currentValue={motionEnabled} onChange={setMotionEnabled}
+        />
+
+        <FormCheckbox
+            label={t("ui-performance.enable-shadows")}
+            currentValue={shadowsEnabled} onChange={setShadowsEnabled}
+        />
+
+        <FormCheckbox
+            label={t("ui-performance.enable-backdrop-effects")}
+            currentValue={backdropEffectsEnabled} onChange={setBackdropEffectsEnabled}
+        />
     </OptionsSection>
 }
 
