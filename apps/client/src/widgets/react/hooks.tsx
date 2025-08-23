@@ -12,7 +12,7 @@ import FNote from "../../entities/fnote";
 import attributes from "../../services/attributes";
 import FBlob from "../../entities/fblob";
 import NoteContextAwareWidget from "../note_context_aware_widget";
-import { VNode } from "preact";
+import { RefObject, VNode } from "preact";
 
 type TriliumEventHandler<T extends EventNames> = (data: EventData<T>) => void;
 const registeredHandlers: Map<Component, Map<EventNames, TriliumEventHandler<any>[]>> = new Map();
@@ -454,4 +454,20 @@ export function useLegacyWidget<T extends BasicWidget>(widgetFactory: () => T, {
     }, [ noteContext ]);
 
     return [ <div className={containerClassName} ref={ref} />, widget ]
+}
+
+export function useResizeObserver(ref: RefObject<HTMLElement>, callback: ResizeObserverCallback) {
+    useEffect(() => {
+        if (!ref.current) {
+            return;
+        }
+
+        const element = ref.current;
+        const resizeObserver = new ResizeObserver(callback);
+        resizeObserver.observe(element);
+        return () => {
+            resizeObserver.unobserve(element);
+            resizeObserver.disconnect();
+        }
+    }, [ ref, callback ]);
 }
