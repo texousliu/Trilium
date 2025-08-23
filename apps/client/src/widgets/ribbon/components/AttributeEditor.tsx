@@ -20,6 +20,7 @@ import contextMenu from "../../../menus/context_menu";
 import type { CommandData, FilteredCommandNames } from "../../../components/app_context";
 import { AttributeType } from "@triliumnext/commons";
 import attributes from "../../../services/attributes";
+import note_create from "../../../services/note_create";
 
 type AttributeCommandNames = FilteredCommandNames<CommandData>;
 
@@ -75,9 +76,9 @@ const mentionSetup: MentionFeed[] = [
 ];
 
 
-export default function AttributeEditor({ note, componentId }: { note: FNote, componentId: string }) {
+export default function AttributeEditor({ note, componentId, notePath }: { note: FNote, componentId: string, notePath?: string | null }) {
     const parentComponent = useContext(ParentComponent);
-    injectLoadReferenceLinkTitle(parentComponent);
+    injectLoadReferenceLinkTitle(parentComponent, notePath);
 
     const [ state, setState ] = useState<"normal" | "showHelpTooltip" | "showAttributeDetail">();
     const [ error, setError ] = useState<unknown>();
@@ -373,7 +374,7 @@ function getClickIndex(pos: ModelPosition) {
     return clickIndex;
 }
 
-function injectLoadReferenceLinkTitle(component: Component | null) {
+function injectLoadReferenceLinkTitle(component: Component | null, notePath?: string | null) {
     if (!component) return;
     (component as any).loadReferenceLinkTitle = async ($el: JQuery<HTMLElement>, href: string) => {
         const { noteId } = link.parseNavigationStateFromUrl(href);
@@ -381,5 +382,16 @@ function injectLoadReferenceLinkTitle(component: Component | null) {
         const title = note ? note.title : "[missing]";
 
         $el.text(title);
+    }
+    (component as any).createNoteForReferenceLink = async (title: string) => {
+        let result;
+        if (notePath) {
+            result = await note_create.createNoteWithTypePrompt(notePath, {
+                activate: false,
+                title: title
+            });
+        }
+
+        return result?.note?.getBestNotePathString();
     }
 }
