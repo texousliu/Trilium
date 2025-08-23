@@ -11,6 +11,7 @@ import { ParentComponent } from "../react/react_utils";
 import FNote from "../../entities/fnote";
 import FormCheckbox from "../react/FormCheckbox";
 import FormTextBox from "../react/FormTextBox";
+import { ComponentChildren } from "preact";
 
 const VIEW_TYPE_MAPPINGS: Record<ViewTypeOptions, string> = {
   grid: t("book_properties.grid"),
@@ -106,18 +107,14 @@ function NumberPropertyView({ note, property }: { note: FNote, property: NumberP
     const [ value, setValue ] = useNoteLabel(note, property.bindToLabel);
 
     return (
-        <>
-            <label>
-                {property.label}
-                &nbsp;&nbsp;
-                <FormTextBox
-                    type="number"
-                    currentValue={value ?? ""} onChange={setValue}
-                    style={{ width: (property.width ?? 100) + "px" }}
-                    min={property.min ?? 0}
-                />
-            </label>
-        </>
+        <LabelledEntry label={property.label}>
+            <FormTextBox
+                type="number"
+                currentValue={value ?? ""} onChange={setValue}
+                style={{ width: (property.width ?? 100) + "px" }}
+                min={property.min ?? 0}
+            />
+        </LabelledEntry>
     )
 }
 
@@ -125,15 +122,23 @@ function ComboBoxPropertyView({ note, property }: { note: FNote, property: Combo
     const [ value, setValue ] = useNoteLabel(note, property.bindToLabel);
 
     return (
+        <LabelledEntry label={property.label}>
+            <FormSelectWithGroups
+                values={property.options}
+                keyProperty="value" titleProperty="label"
+                currentValue={value ?? ""} onChange={setValue}
+            />
+        </LabelledEntry>
+    )
+}
+
+function LabelledEntry({ label, children }: { label: string, children: ComponentChildren }) {
+    return (
         <>
             <label>
-                {property.label}
+                {label}
                 &nbsp;&nbsp;
-                <FormSelectWithGroups
-                    values={property.options}
-                    keyProperty="value" titleProperty="label"
-                    currentValue={value ?? ""} onChange={setValue}
-                />
+                {children}
             </label>
         </>
     )
