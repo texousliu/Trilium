@@ -471,3 +471,24 @@ export function useResizeObserver(ref: RefObject<HTMLElement>, callback: ResizeO
         }
     }, [ ref, callback ]);
 }
+
+export function useWindowSize() {
+    const [ size, setSize ] = useState<{ windowWidth: number, windowHeight: number }>({
+        windowWidth: window.innerWidth,
+        windowHeight: window.innerHeight
+    });
+    
+    useEffect(() => {
+        function onResize() {
+            setSize({
+                windowWidth: window.innerWidth,
+                windowHeight: window.innerHeight
+            });
+        }
+
+        window.addEventListener("resize", onResize);
+        return () => window.removeEventListener("resize", onResize);
+    });
+
+    return size;
+}
