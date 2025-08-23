@@ -19,9 +19,10 @@ export interface ButtonProps {
     size?: "normal" | "small" | "micro";
     style?: CSSProperties;
     triggerCommand?: CommandNames;
+    title?: string;
 }
 
-const Button = memo(({ name, buttonRef: _buttonRef, className, text, onClick, keyboardShortcut, icon, primary, disabled, size, style, triggerCommand }: ButtonProps) => {
+const Button = memo(({ name, buttonRef: _buttonRef, className, text, onClick, keyboardShortcut, icon, primary, disabled, size, style, triggerCommand, ...restProps }: ButtonProps) => {
     // Memoize classes array to prevent recreation
     const classes = useMemo(() => {
         const classList: string[] = ["btn"];
@@ -65,6 +66,7 @@ const Button = memo(({ name, buttonRef: _buttonRef, className, text, onClick, ke
             disabled={disabled}
             style={style}
             data-trigger-command={triggerCommand}
+            {...restProps}
         >
             {icon && <span className={`bx ${icon}`}></span>}
             {text} {shortcutElements}

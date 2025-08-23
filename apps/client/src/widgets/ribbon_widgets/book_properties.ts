@@ -40,18 +40,6 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
         }
     }
 
-    async toggleViewType(type: string) {
-        if (!this.noteId) {
-            return;
-        }
-
-        if (!VIEW_TYPE_MAPPINGS.hasOwnProperty(type)) {
-            throw new Error(t("book_properties.invalid_view_type", { type }));
-        }
-
-        await attributeService.setLabel(this.noteId, "viewType", type);
-    }
-
     entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         if (loadResults.getAttributeRows().find((attr) =>
                 attr.noteId === this.noteId
@@ -84,25 +72,6 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
                 $checkbox.prop("checked", note.hasOwnedLabel(property.bindToLabel));
                 $label.prepend($checkbox);
                 $container.append($label);
-                break;
-            case "button":
-                const $button = $("<button>", {
-                    type: "button",
-                    class: "btn btn-sm"
-                }).text(property.label);
-                if (property.title) {
-                    $button.attr("title", property.title);
-                }
-                if (property.icon) {
-                    $button.prepend($("<span>", { class: property.icon }));
-                }
-                $button.on("click", () => {
-                    property.onClick({
-                        note,
-                        triggerCommand: this.triggerCommand.bind(this)
-                    });
-                });
-                $container.append($button);
                 break;
             case "number":
                 const $numberInput = $("<input>", {

@@ -15,7 +15,7 @@ interface CheckBoxProperty {
     bindToLabel: string
 }
 
-interface ButtonProperty {
+export interface ButtonProperty {
     type: "button",
     label: string;
     title?: string;
