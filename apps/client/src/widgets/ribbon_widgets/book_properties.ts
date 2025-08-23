@@ -56,23 +56,6 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
             return $container;
         }
         switch (property.type) {
-            case "checkbox":
-                const $label = $("<label>").text(property.label);
-                const $checkbox = $("<input>", {
-                    type: "checkbox",
-                    class: "form-check-input",
-                });
-                $checkbox.on("change", () => {
-                    if ($checkbox.prop("checked")) {
-                        attributes.setLabel(note.noteId, property.bindToLabel);
-                    } else {
-                        attributes.removeOwnedLabelByName(note, property.bindToLabel);
-                    }
-                });
-                $checkbox.prop("checked", note.hasOwnedLabel(property.bindToLabel));
-                $label.prepend($checkbox);
-                $container.append($label);
-                break;
             case "number":
                 const $numberInput = $("<input>", {
                     type: "number",

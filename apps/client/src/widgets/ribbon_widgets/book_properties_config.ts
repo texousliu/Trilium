@@ -9,7 +9,7 @@ interface BookConfig {
     properties: BookProperty[];
 }
 
-interface CheckBoxProperty {
+export interface CheckBoxProperty {
     type: "checkbox",
     label: string;
     bindToLabel: string

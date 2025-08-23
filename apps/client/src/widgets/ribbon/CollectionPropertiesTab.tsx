@@ -4,11 +4,12 @@ import { ViewTypeOptions } from "../../services/note_list_renderer";
 import FormSelect from "../react/FormSelect";
 import { TabContext } from "./ribbon-interface";
 import { mapToKeyValueArray } from "../../services/utils";
-import { useNoteLabel } from "../react/hooks";
-import { bookPropertiesConfig, BookProperty, ButtonProperty } from "../ribbon_widgets/book_properties_config";
+import { useNoteLabel, useNoteLabelBoolean } from "../react/hooks";
+import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty } from "../ribbon_widgets/book_properties_config";
 import Button from "../react/Button";
 import { ParentComponent } from "../react/react_utils";
 import FNote from "../../entities/fnote";
+import FormCheckbox from "../react/FormCheckbox";
 
 const VIEW_TYPE_MAPPINGS: Record<ViewTypeOptions, string> = {
   grid: t("book_properties.grid"),
@@ -63,6 +64,8 @@ function mapPropertyView({ note, property }: { note: FNote, property: BookProper
   switch (property.type) {
     case "button":
       return <ButtonPropertyView note={note} property={property} />
+    case "checkbox":
+      return <CheckboxPropertyView note={note} property={property} />
   }
 }
 
@@ -81,4 +84,15 @@ function ButtonPropertyView({ note, property }: { note: FNote, property: ButtonP
     });
     }}
   />
+}
+
+function CheckboxPropertyView({ note, property }: { note: FNote, property: CheckBoxProperty }) {
+  const [ value, setValue ] = useNoteLabelBoolean(note, property.bindToLabel);
+
+  return (
+    <FormCheckbox
+      label={property.label}
+      currentValue={value} onChange={setValue}
+    />
+  )
 }
