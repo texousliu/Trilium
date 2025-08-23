@@ -212,29 +212,6 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
         return $("<div>").html(str).text();
     }
 
-    async initEditor() {
-        this.$widget.show();
-
-        this.$editor.on("click", (e) => this.handleEditorClick(e));
-
-        this.textEditor.model.document.on("change:data", () => this.dataChanged());
-        this.textEditor.editing.view.document.on(
-            "enter",
-            (event, data) => {
-                // disable entering new line - see https://github.com/ckeditor/ckeditor5/issues/9422
-                data.preventDefault();
-                event.stop();
-            },
-            { priority: "high" }
-        );
-
-        // disable spellcheck for attribute editor
-        const documentRoot = this.textEditor.editing.view.document.getRoot();
-        if (documentRoot) {
-            this.textEditor.editing.view.change((writer) => writer.setAttribute("spellcheck", "false", documentRoot));
-        }
-    }
-
     dataChanged() {
         this.lastUpdatedNoteId = this.noteId;
 
