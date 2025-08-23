@@ -253,7 +253,7 @@
 }
 
 .note-map-ribbon-widget .note-map-container {
-    height: 300px;
+    height: 100%;
 }
 
 .note-map-ribbon-widget .open-full-button, .note-map-ribbon-widget .collapse-button {
