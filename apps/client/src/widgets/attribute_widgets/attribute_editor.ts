@@ -24,58 +24,6 @@ const HELP_TEXT = `
 <p>${t("attribute_editor.help_text_body3")}</p>`;
 
 const TPL = /*html*/`
-<div style="position: relative; padding-top: 10px; padding-bottom: 10px">
-    <style>
-    .attribute-list-editor {
-        border: 0 !important;
-        outline: 0 !important;
-        box-shadow: none !important;
-        padding: 0 0 0 5px !important;
-        margin: 0 !important;
-        max-height: 100px;
-        overflow: auto;
-        transition: opacity .1s linear;
-    }
-
-    .attribute-list-editor.ck-content .mention {
-        color: var(--muted-text-color) !important;
-        background: transparent !important;
-    }
-
-    .save-attributes-button {
-        color: var(--muted-text-color);
-        position: absolute;
-        bottom: 14px;
-        right: 25px;
-        cursor: pointer;
-        border: 1px solid transparent;
-        font-size: 130%;
-    }
-
-    .add-new-attribute-button {
-        color: var(--muted-text-color);
-        position: absolute;
-        bottom: 13px;
-        right: 0;
-        cursor: pointer;
-        border: 1px solid transparent;
-        font-size: 130%;
-    }
-
-    .add-new-attribute-button:hover, .save-attributes-button:hover {
-        border: 1px solid var(--button-border-color);
-        border-radius: var(--button-border-radius);
-        background: var(--button-background-color);
-        color: var(--button-text-color);
-    }
-
-    .attribute-errors {
-        color: red;
-        padding: 5px 50px 0px 5px; /* large right padding to avoid buttons */
-    }
-    </style>
-
-    <div class="attribute-list-editor" tabindex="200"></div>
 
     <div class="bx bx-save save-attributes-button tn-tool-button" title="${escapeQuotes(t("attribute_editor.save_attributes"))}"></div>
     <div class="bx bx-plus add-new-attribute-button tn-tool-button" title="${escapeQuotes(t("attribute_editor.add_a_new_attribute"))}"></div>
@@ -83,61 +31,6 @@ const TPL = /*html*/`
     <div class="attribute-errors" style="display: none;"></div>
 </div>
 `;
-
-const mentionSetup: MentionFeed[] = [
-    {
-        marker: "@",
-        feed: (queryText) => noteAutocompleteService.autocompleteSourceForCKEditor(queryText),
-        itemRenderer: (_item) => {
-            const item = _item as Suggestion;
-            const itemElement = document.createElement("button");
-
-            itemElement.innerHTML = `${item.highlightedNotePathTitle} `;
-
-            return itemElement;
-        },
-        minimumCharacters: 0
-    },
-    {
-        marker: "#",
-        feed: async (queryText) => {
-            const names = await server.get<string[]>(`attribute-names/?type=label&query=${encodeURIComponent(queryText)}`);
-
-            return names.map((name) => {
-                return {
-                    id: `#${name}`,
-                    name: name
-                };
-            });
-        },
-        minimumCharacters: 0
-    },
-    {
-        marker: "~",
-        feed: async (queryText) => {
-            const names = await server.get<string[]>(`attribute-names/?type=relation&query=${encodeURIComponent(queryText)}`);
-
-            return names.map((name) => {
-                return {
-                    id: `~${name}`,
-                    name: name
-                };
-            });
-        },
-        minimumCharacters: 0
-    }
-];
-
-const editorConfig: EditorConfig = {
-    toolbar: {
-        items: []
-    },
-    placeholder: t("attribute_editor.placeholder"),
-    mention: {
-        feeds: mentionSetup
-    },
-    licenseKey: "GPL"
-};
 
 type AttributeCommandNames = FilteredCommandNames<CommandData>;
 
@@ -324,7 +217,6 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
 
         this.$editor.on("click", (e) => this.handleEditorClick(e));
 
-        this.textEditor = await AttributeEditor.create(this.$editor[0], editorConfig);
         this.textEditor.model.document.on("change:data", () => this.dataChanged());
         this.textEditor.editing.view.document.on(
             "enter",
