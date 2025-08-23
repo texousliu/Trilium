@@ -1,4 +1,4 @@
-import type { AttributeEditor, EditorConfig } from "@triliumnext/ckeditor5";
+import { CKTextEditor, type AttributeEditor, type EditorConfig, type ModelPosition } from "@triliumnext/ckeditor5";
 import { useEffect, useRef } from "preact/compat";
 
 interface CKEditorOpts {
@@ -9,15 +9,19 @@ interface CKEditorOpts {
     disableNewlines?: boolean;
     disableSpellcheck?: boolean;
     onChange?: () => void;
+    onClick?: (pos?: ModelPosition | null) => void;
 }
 
-export default function CKEditor({ className, tabIndex, editor, config, disableNewlines, disableSpellcheck, onChange }: CKEditorOpts) {
+export default function CKEditor({ className, tabIndex, editor, config, disableNewlines, disableSpellcheck, onChange, onClick }: CKEditorOpts) {
     const editorContainerRef = useRef<HTMLDivElement>(null);    
+    const textEditorRef = useRef<CKTextEditor>(null);
 
     useEffect(() => {
         if (!editorContainerRef.current) return;
 
         editor.create(editorContainerRef.current, config).then((textEditor) => {
+            textEditorRef.current = textEditor;
+
             if (disableNewlines) {
                 textEditor.editing.view.document.on(
                     "enter",
@@ -48,6 +52,12 @@ export default function CKEditor({ className, tabIndex, editor, config, disableN
             ref={editorContainerRef}
             className={className}
             tabIndex={tabIndex}
+            onClick={() => {
+                if (onClick) {
+                    const pos = textEditorRef.current?.model.document.selection.getFirstPosition();
+                    onClick(pos);
+                }
+            }}
         />
     )
 }

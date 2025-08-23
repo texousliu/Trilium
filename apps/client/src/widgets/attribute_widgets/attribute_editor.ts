@@ -16,12 +16,7 @@ import type { default as FAttribute, AttributeType } from "../../entities/fattri
 import type FNote from "../../entities/fnote.js";
 import { escapeQuotes } from "../../services/utils.js";
 
-const HELP_TEXT = `
-<p>${t("attribute_editor.help_text_body1")}</p>
 
-<p>${t("attribute_editor.help_text_body2")}</p>
-
-<p>${t("attribute_editor.help_text_body3")}</p>`;
 
 const TPL = /*html*/`
 
@@ -229,9 +224,7 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
     }
 
     async handleEditorClick(e: JQuery.ClickEvent) {
-        const pos = this.textEditor.model.document.selection.getFirstPosition();
-
-        if (pos && pos.textNode && pos.textNode.data) {
+        if () {
             const clickIndex = this.getClickIndex(pos);
 
             let parsedAttrs;
@@ -267,23 +260,7 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
                     this.showHelpTooltip();
                 }
             }, 100);
-        } else {
-            this.showHelpTooltip();
         }
-    }
-
-    showHelpTooltip() {
-        this.attributeDetailWidget.hide();
-
-        this.$editor.tooltip({
-            trigger: "focus",
-            html: true,
-            title: HELP_TEXT,
-            placement: "bottom",
-            offset: "0,30"
-        });
-
-        this.$editor.tooltip("show");
     }
 
     getClickIndex(pos: ModelPosition) {

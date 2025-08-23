@@ -12,7 +12,8 @@ import FNote from "../../entities/fnote";
 import attributes from "../../services/attributes";
 import FBlob from "../../entities/fblob";
 import NoteContextAwareWidget from "../note_context_aware_widget";
-import { RefObject, VNode } from "preact";
+import { Ref, RefObject, VNode } from "preact";
+import { Tooltip } from "bootstrap";
 
 type TriliumEventHandler<T extends EventNames> = (data: EventData<T>) => void;
 const registeredHandlers: Map<Component, Map<EventNames, TriliumEventHandler<any>[]>> = new Map();
@@ -510,4 +511,29 @@ export function useWindowSize() {
     });
 
     return size;
+}
+
+export function useTooltip(elRef: RefObject<HTMLElement>, config: Partial<Tooltip.Options>) {
+    useEffect(() => {
+        if (!elRef?.current) return;
+
+        const $el = $(elRef.current);
+        $el.tooltip(config);        
+    }, [ elRef, config ]);
+
+    const showTooltip = useCallback(() => {
+        if (!elRef?.current) return;
+
+        const $el = $(elRef.current);
+        $el.tooltip("show");
+    }, [ elRef ]);
+
+    const hideTooltip = useCallback(() => {
+        if (!elRef?.current) return;
+
+        const $el = $(elRef.current);
+        $el.tooltip("hide");
+    }, [ elRef ]);
+
+    return { showTooltip, hideTooltip };
 }
