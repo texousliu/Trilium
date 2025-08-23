@@ -285,9 +285,9 @@
     "successful": "Імпорт успішно завершено."
   },
   "prompt": {
-    "title": "Підказка",
+    "title": "Запит(prompt)",
     "ok": "ОК",
-    "defaultTitle": "Підказка"
+    "defaultTitle": "Запит(Prompt)"
   },
   "protected_session_password": {
     "modal_title": "Захищений сеанс",
@@ -1239,8 +1239,8 @@
     "provider_precedence_description": "Список постачальників, розділених комами, у порядку пріоритету (наприклад, «openai,anthropic,ollama»)",
     "temperature": "Температура",
     "temperature_description": "Контролює випадковість відповідей (0 = детермінований, 2 = максимальна випадковість)",
-    "system_prompt": "Системний запит",
-    "system_prompt_description": "Системний запит за замовчуванням використовується для всіх взаємодій з AI",
+    "system_prompt": "Системний Запит (Prompt)",
+    "system_prompt_description": "Системний запит (prompt) за замовчуванням використовується для всіх взаємодій з AI",
     "openai_configuration": "Конфігурація OpenAI",
     "openai_settings": "Налаштування OpenAI",
     "api_key": "API Key",
