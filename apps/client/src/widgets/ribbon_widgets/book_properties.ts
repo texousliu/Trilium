@@ -5,72 +5,6 @@ import type FNote from "../../entities/fnote.js";
 import type { EventData } from "../../components/app_context.js";
 import { bookPropertiesConfig, BookProperty } from "./book_properties_config.js";
 import attributes from "../../services/attributes.js";
-import type { ViewTypeOptions } from "../../services/note_list_renderer.js";
-
-const VIEW_TYPE_MAPPINGS: Record<ViewTypeOptions, string> = {
-    grid: t("book_properties.grid"),
-    list: t("book_properties.list"),
-    calendar: t("book_properties.calendar"),
-    table: t("book_properties.table"),
-    geoMap: t("book_properties.geo-map"),
-    board: t("book_properties.board")
-};
-
-const TPL = /*html*/`
-<div class="book-properties-widget">
-    <style>
-        .book-properties-widget {
-            padding: 12px 12px 6px 12px;
-            display: flex;
-        }
-
-        .book-properties-widget > * {
-            margin-right: 15px;
-        }
-
-        .book-properties-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .book-properties-container > div {
-            margin-right: 15px;
-        }
-
-        .book-properties-container > .type-number > label {
-            display: flex;
-            align-items: baseline;
-        }
-
-        .book-properties-container input[type="checkbox"] {
-            margin-right: 5px;
-        }
-
-        .book-properties-container label {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-overflow: clip;
-            white-space: nowrap;
-        }
-    </style>
-
-    <div style="display: flex; align-items: baseline">
-        <span style="white-space: nowrap">${t("book_properties.view_type")}:&nbsp; &nbsp;</span>
-
-        <select class="view-type-select form-select form-select-sm">
-            ${Object.entries(VIEW_TYPE_MAPPINGS)
-                .filter(([type]) => type !== "raster")
-                .map(([type, label]) => `
-                <option value="${type}">${label}</option>
-            `).join("")}
-        </select>
-    </div>
-
-    <div class="book-properties-container">
-    </div>
-</div>
-`;
 
 export default class BookPropertiesWidget extends NoteContextAwareWidget {
 
@@ -78,28 +12,7 @@ export default class BookPropertiesWidget extends NoteContextAwareWidget {
     private $propertiesContainer!: JQuery<HTMLElement>;
     private labelsToWatch: string[] = [];
 
-    get name() {
-        return "bookProperties";
-    }
-
-    get toggleCommand() {
-        return "toggleRibbonTabBookProperties";
-    }
-
-    isEnabled() {
-        return this.note && this.note.type === "book";
-    }
-
-    getTitle() {
-        return {
-            show: this.isEnabled(),
-
-        };
-    }
-
     doRender() {
-        this.$widget = $(TPL);
-        this.contentSized();
 
         this.$viewTypeSelect = this.$widget.find(".view-type-select");
         this.$viewTypeSelect.on("change", () => this.toggleViewType(String(this.$viewTypeSelect.val())));

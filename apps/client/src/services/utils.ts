@@ -808,6 +808,14 @@ export function numberObjectsInPlace<T extends object>(items: T[]): Indexed<T>[]
     return items as Indexed<T>[];
 }
 
+export function mapToKeyValueArray<K extends string | number | symbol, V>(map: Record<K, V>) {
+    const values: { key: K, value: V }[] = [];
+    for (const [ key, value ] of Object.entries(map)) {
+        values.push({ key: key as K, value: value as V });
+    }
+    return values;
+}
+
 export default {
     reloadFrontendApp,
     restartDesktopApp,

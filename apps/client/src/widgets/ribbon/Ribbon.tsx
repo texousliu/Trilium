@@ -21,6 +21,7 @@ import NotePathsTab from "./NotePathsTab";
 import NoteMapTab from "./NoteMapTab";
 import OwnedAttributesTab from "./OwnedAttributesTab";
 import InheritedAttributesTab from "./InheritedAttributesTab";
+import CollectionPropertiesTab from "./CollectionPropertiesTab";
 
 interface TitleContext {
     note: FNote | null | undefined;
@@ -71,9 +72,11 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
         activate: ({ note }) => (note?.getPromotedDefinitionAttributes().length === 0 || !options.is("promotedAttributesOpenInRibbon")) && options.is("editedNotesOpenInRibbon")
     },
     {
-        // BookPropertiesWidget
         title: t("book_properties.book_properties"),
-        icon: "bx bx-book"
+        icon: "bx bx-book",
+        content: CollectionPropertiesTab,
+        show: ({ note }) => note?.type === "book",
+        toggleCommand: "toggleRibbonTabBookProperties"
     },
     {
         title: t("note_properties.info"),
@@ -157,7 +160,7 @@ export default function Ribbon() {
     const filteredTabs = useMemo(() => TAB_CONFIGURATION.filter(tab => typeof tab.show === "boolean" ? tab.show : tab.show?.(titleContext)), [ titleContext, note ]);
 
     return (
-        <div class="ribbon-container" style={{ contain: "none" }}>
+        <div className="ribbon-container" style={{ contain: "none" }}>
             <div className="ribbon-top-row">
                 <div className="ribbon-tab-container">
                     {filteredTabs.map(({ title, icon, index }) => (
