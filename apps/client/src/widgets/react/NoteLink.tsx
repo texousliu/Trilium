@@ -7,9 +7,10 @@ interface NoteLinkOpts {
     showNotePath?: boolean;
     style?: Record<string, string | number>;
     noPreview?: boolean;
+    noTnLink?: boolean;
 }
 
-export default function NoteLink({ notePath, showNotePath, style, noPreview }: NoteLinkOpts) {
+export default function NoteLink({ notePath, showNotePath, style, noPreview, noTnLink }: NoteLinkOpts) {
     const stringifiedNotePath = Array.isArray(notePath) ? notePath.join("/") : notePath;
     const [ jqueryEl, setJqueryEl ] = useState<JQuery<HTMLElement>>();
 
@@ -27,7 +28,9 @@ export default function NoteLink({ notePath, showNotePath, style, noPreview }: N
         $linkEl?.addClass("no-tooltip-preview");
     }
 
-    $linkEl?.addClass("tn-link");
+    if (!noTnLink) {
+        $linkEl?.addClass("tn-link");
+    }
 
     return <RawHtml html={jqueryEl} />
     

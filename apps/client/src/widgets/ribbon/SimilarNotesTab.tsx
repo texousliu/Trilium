@@ -23,18 +23,24 @@ export default function SimilarNotesTab({ note }: TabContext) {
     }, [ note?.noteId ]);
 
     return (
-        <div className="similar-notes-wrapper">
-            {similarNotes?.length ? (
-                <div>
-                    {similarNotes.map(({notePath, score}) => (
-                        <NoteLink notePath={notePath} style={{
-                            "font-size": 24 * (1 - 1 / (1 + score))
-                        }}/>
-                    ))}
-                </div>
-            ) : (
-                <>{t("similar_notes.no_similar_notes_found")}</>
-            )}
+        <div className="similar-notes-widget">
+            <div className="similar-notes-wrapper">
+                {similarNotes?.length ? (
+                    <div>
+                        {similarNotes.map(({notePath, score}) => (
+                            <NoteLink
+                                notePath={notePath}
+                                noTnLink
+                                style={{
+                                    "font-size": 24 * (1 - 1 / (1 + score))
+                                }}
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <>{t("similar_notes.no_similar_notes_found")}</>
+                )}
+            </div>
         </div>
     )
 }
