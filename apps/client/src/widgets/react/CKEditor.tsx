@@ -9,8 +9,8 @@ interface CKEditorOpts {
     editor: typeof AttributeEditor;
     disableNewlines?: boolean;
     disableSpellcheck?: boolean;
-    onChange?: () => void;
-    onClick?: (pos?: ModelPosition | null) => void;
+    onChange?: (newValue?: string) => void;
+    onClick?: (e, pos?: ModelPosition | null) => void;
 }
 
 export default function CKEditor({ currentValue, className, tabIndex, editor, config, disableNewlines, disableSpellcheck, onChange, onClick }: CKEditorOpts) {
@@ -43,7 +43,9 @@ export default function CKEditor({ currentValue, className, tabIndex, editor, co
             }
 
             if (onChange) {
-                textEditor.model.document.on("change:data", onChange);
+                textEditor.model.document.on("change:data", () => {
+                    onChange(textEditor.getData())
+                });
             }
 
             if (currentValue) {
@@ -62,10 +64,10 @@ export default function CKEditor({ currentValue, className, tabIndex, editor, co
             ref={editorContainerRef}
             className={className}
             tabIndex={tabIndex}
-            onClick={() => {
+            onClick={(e) => {
                 if (onClick) {
                     const pos = textEditorRef.current?.model.document.selection.getFirstPosition();
-                    onClick(pos);
+                    onClick(e, pos);
                 }
             }}
         />

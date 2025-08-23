@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from "preact/hooks"
-import { AttributeEditor as CKEditorAttributeEditor, MentionFeed } from "@triliumnext/ckeditor5";
+import { AttributeEditor as CKEditorAttributeEditor, MentionFeed, ModelElement, ModelNode, ModelPosition } from "@triliumnext/ckeditor5";
 import { t } from "../../../services/i18n";
 import server from "../../../services/server";
 import note_autocomplete, { Suggestion } from "../../../services/note_autocomplete";
 import CKEditor from "../../react/CKEditor";
-import { useTooltip } from "../../react/hooks";
+import { useLegacyWidget, useTooltip } from "../../react/hooks";
 import FAttribute from "../../../entities/fattribute";
 import attribute_renderer from "../../../services/attribute_renderer";
 import FNote from "../../../entities/fnote";
+import AttributeDetailWidget from "../../attribute_widgets/attribute_detail";
+import attribute_parser, { Attribute } from "../../../services/attribute_parser";
 
 const HELP_TEXT = `
 <p>${t("attribute_editor.help_text_body1")}</p>
@@ -64,7 +66,8 @@ const mentionSetup: MentionFeed[] = [
 export default function AttributeEditor({ note }: { note: FNote }) {
 
     const [ state, setState ] = useState<"normal" | "showHelpTooltip" | "showAttributeDetail">();
-    const [ currentValue, setCurrentValue ] = useState<string>("");
+    const [ initialValue, setInitialValue ] = useState<string>("");
+    const currentValueRef = useRef(initialValue);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const { showTooltip, hideTooltip } = useTooltip(wrapperRef, {
         trigger: "focus",
@@ -73,6 +76,8 @@ export default function AttributeEditor({ note }: { note: FNote }) {
         placement: "bottom",
         offset: "0,30"
     });
+
+    const [ attributeDetailWidgetEl, attributeDetailWidget ] = useLegacyWidget(() => new AttributeDetailWidget());
 
     useEffect(() => {
         if (state === "showHelpTooltip") {
@@ -92,7 +97,7 @@ export default function AttributeEditor({ note }: { note: FNote }) {
             htmlAttrs += "&nbsp;";
         }
 
-        setCurrentValue(htmlAttrs);
+        setInitialValue(htmlAttrs);
     }
 
     useEffect(() => {
@@ -100,30 +105,93 @@ export default function AttributeEditor({ note }: { note: FNote }) {
     }, [ note ]);
     
     return (
-        <div ref={wrapperRef} style="position: relative; padding-top: 10px; padding-bottom: 10px">
-            <CKEditor
-                className="attribute-list-editor"
-                tabIndex={200}
-                editor={CKEditorAttributeEditor}
-                currentValue={currentValue}
-                config={{
-                    toolbar: { items: [] },
-                    placeholder: t("attribute_editor.placeholder"),
-                    mention: { feeds: mentionSetup },
-                    licenseKey: "GPL"
-                }}
-                onChange={() => {
-                    console.log("Data changed!");
-                }}
-                onClick={(pos) => {
-                    if (pos && pos.textNode && pos.textNode.data) {
-                        setState("showAttributeDetail")
-                    } else {
-                        setState("showHelpTooltip");
-                    }
-                }}
-                disableNewlines disableSpellcheck
-            />
-        </div>
+        <>
+            <div ref={wrapperRef} style="position: relative; padding-top: 10px; padding-bottom: 10px">
+                <CKEditor
+                    className="attribute-list-editor"
+                    tabIndex={200}
+                    editor={CKEditorAttributeEditor}
+                    currentValue={initialValue}
+                    config={{
+                        toolbar: { items: [] },
+                        placeholder: t("attribute_editor.placeholder"),
+                        mention: { feeds: mentionSetup },
+                        licenseKey: "GPL"
+                    }}
+                    onChange={(currentValue) => {
+                        currentValueRef.current = currentValue ?? "";
+                    }}
+                    onClick={(e, pos) => {
+                        if (pos && pos.textNode && pos.textNode.data) {
+                            const clickIndex = getClickIndex(pos);
+
+                            let parsedAttrs;
+
+                            try {
+                                parsedAttrs = attribute_parser.lexAndParse(getPreprocessedData(currentValueRef.current), true);
+                            } catch (e) {
+                                // the input is incorrect because the user messed up with it and now needs to fix it manually
+                                return null;
+                            }
+
+                            let matchedAttr: Attribute | null = null;
+
+                            for (const attr of parsedAttrs) {
+                                if (attr.startIndex && clickIndex > attr.startIndex && attr.endIndex && clickIndex <= attr.endIndex) {
+                                    matchedAttr = attr;
+                                    break;
+                                }
+                            }
+
+                            setTimeout(() => {
+                                if (matchedAttr) {
+                                    attributeDetailWidget.showAttributeDetail({
+                                        allAttributes: parsedAttrs,
+                                        attribute: matchedAttr,
+                                        isOwned: true,
+                                        x: e.pageX,
+                                        y: e.pageY
+                                    });
+                                    setState("showAttributeDetail");                                    
+                                } else {
+                                    setState("showHelpTooltip");
+                                }
+                            }, 100);
+                        } else {
+                            setState("showHelpTooltip");
+                        }
+                    }}
+                    disableNewlines disableSpellcheck
+                />
+            </div>
+
+            {attributeDetailWidgetEl}
+        </>
     )   
+}
+
+function getPreprocessedData(currentValue: string) {
+    const str = currentValue
+        .replace(/<a[^>]+href="(#[A-Za-z0-9_/]*)"[^>]*>[^<]*<\/a>/g, "$1")
+        .replace(/&nbsp;/g, " "); // otherwise .text() below outputs non-breaking space in unicode
+
+    return $("<div>").html(str).text();
+}
+
+function getClickIndex(pos: ModelPosition) {
+    let clickIndex = pos.offset - (pos.textNode?.startOffset ?? 0);
+
+    let curNode: ModelNode | Text | ModelElement | null = pos.textNode;
+
+    while (curNode?.previousSibling) {
+        curNode = curNode.previousSibling;
+
+        if ((curNode as ModelElement).name === "reference") {
+            clickIndex += (curNode.getAttribute("href") as string).length + 1;
+        } else if ("data" in curNode) {
+            clickIndex += (curNode.data as string).length;
+        }
+    }
+
+    return clickIndex;
 }

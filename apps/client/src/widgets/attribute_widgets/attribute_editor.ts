@@ -1,12 +1,10 @@
 import { t } from "../../services/i18n.js";
 import NoteContextAwareWidget from "../note_context_aware_widget.js";
-import noteAutocompleteService, { type Suggestion } from "../../services/note_autocomplete.js";
 import server from "../../services/server.js";
 import contextMenuService from "../../menus/context_menu.js";
 import attributeParser, { type Attribute } from "../../services/attribute_parser.js";
 import { AttributeEditor, type EditorConfig, type ModelElement, type MentionFeed, type ModelNode, type ModelPosition } from "@triliumnext/ckeditor5";
 import froca from "../../services/froca.js";
-import attributeRenderer from "../../services/attribute_renderer.js";
 import noteCreateService from "../../services/note_create.js";
 import attributeService from "../../services/attributes.js";
 import linkService from "../../services/link.js";
@@ -15,8 +13,6 @@ import type { CommandData, EventData, EventListener, FilteredCommandNames } from
 import type { default as FAttribute, AttributeType } from "../../entities/fattribute.js";
 import type FNote from "../../entities/fnote.js";
 import { escapeQuotes } from "../../services/utils.js";
-
-
 
 const TPL = /*html*/`
 
@@ -198,15 +194,6 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
         }
     }
 
-    getPreprocessedData() {
-        const str = this.textEditor
-            .getData()
-            .replace(/<a[^>]+href="(#[A-Za-z0-9_/]*)"[^>]*>[^<]*<\/a>/g, "$1")
-            .replace(/&nbsp;/g, " "); // otherwise .text() below outputs non-breaking space in unicode
-
-        return $("<div>").html(str).text();
-    }
-
     dataChanged() {
         this.lastUpdatedNoteId = this.noteId;
 
@@ -221,64 +208,6 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
             // mention for relation name which suits up. When using.slideUp() error will appear and the slideUp which is weird
             this.$errors.hide();
         }
-    }
-
-    async handleEditorClick(e: JQuery.ClickEvent) {
-        if () {
-            const clickIndex = this.getClickIndex(pos);
-
-            let parsedAttrs;
-
-            try {
-                parsedAttrs = attributeParser.lexAndParse(this.getPreprocessedData(), true);
-            } catch (e) {
-                // the input is incorrect because the user messed up with it and now needs to fix it manually
-                return null;
-            }
-
-            let matchedAttr: Attribute | null = null;
-
-            for (const attr of parsedAttrs) {
-                if (attr.startIndex && clickIndex > attr.startIndex && attr.endIndex && clickIndex <= attr.endIndex) {
-                    matchedAttr = attr;
-                    break;
-                }
-            }
-
-            setTimeout(() => {
-                if (matchedAttr) {
-                    this.$editor.tooltip("hide");
-
-                    this.attributeDetailWidget.showAttributeDetail({
-                        allAttributes: parsedAttrs,
-                        attribute: matchedAttr,
-                        isOwned: true,
-                        x: e.pageX,
-                        y: e.pageY
-                    });
-                } else {
-                    this.showHelpTooltip();
-                }
-            }, 100);
-        }
-    }
-
-    getClickIndex(pos: ModelPosition) {
-        let clickIndex = pos.offset - (pos.textNode?.startOffset ?? 0);
-
-        let curNode: ModelNode | Text | ModelElement | null = pos.textNode;
-
-        while (curNode?.previousSibling) {
-            curNode = curNode.previousSibling;
-
-            if ((curNode as ModelElement).name === "reference") {
-                clickIndex += (curNode.getAttribute("href") as string).length + 1;
-            } else if ("data" in curNode) {
-                clickIndex += (curNode.data as string).length;
-            }
-        }
-
-        return clickIndex;
     }
 
     async loadReferenceLinkTitle($el: JQuery<HTMLElement>, href: string) {
