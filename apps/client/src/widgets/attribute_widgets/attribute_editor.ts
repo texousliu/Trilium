@@ -289,22 +289,7 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
         $el.text(title);
     }
 
-    async refreshWithNote(note: FNote) {
-        await this.renderOwnedAttributes(note.getOwnedAttributes(), true);
-    }
-
     async renderOwnedAttributes(ownedAttributes: FAttribute[], saved: boolean) {
-        // attrs are not resorted if position changes after the initial load
-        ownedAttributes.sort((a, b) => a.position - b.position);
-
-        let htmlAttrs = (await attributeRenderer.renderAttributes(ownedAttributes, true)).html();
-
-        if (htmlAttrs.length > 0) {
-            htmlAttrs += "&nbsp;";
-        }
-
-        this.textEditor.setData(htmlAttrs);
-
         if (saved) {
             this.lastSavedContent = this.textEditor.getData();
 

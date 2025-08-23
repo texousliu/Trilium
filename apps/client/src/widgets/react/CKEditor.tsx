@@ -2,6 +2,7 @@ import { CKTextEditor, type AttributeEditor, type EditorConfig, type ModelPositi
 import { useEffect, useRef } from "preact/compat";
 
 interface CKEditorOpts {
+    currentValue?: string;
     className: string;
     tabIndex?: number;
     config: EditorConfig;
@@ -12,7 +13,7 @@ interface CKEditorOpts {
     onClick?: (pos?: ModelPosition | null) => void;
 }
 
-export default function CKEditor({ className, tabIndex, editor, config, disableNewlines, disableSpellcheck, onChange, onClick }: CKEditorOpts) {
+export default function CKEditor({ currentValue, className, tabIndex, editor, config, disableNewlines, disableSpellcheck, onChange, onClick }: CKEditorOpts) {
     const editorContainerRef = useRef<HTMLDivElement>(null);    
     const textEditorRef = useRef<CKTextEditor>(null);
 
@@ -44,8 +45,17 @@ export default function CKEditor({ className, tabIndex, editor, config, disableN
             if (onChange) {
                 textEditor.model.document.on("change:data", onChange);
             }
+
+            if (currentValue) {
+                textEditor.setData(currentValue);
+            }
         });
     }, []);
+
+    useEffect(() => {
+        if (!textEditorRef.current) return;
+        textEditorRef.current.setData(currentValue ?? "");
+    }, [ currentValue ]);
 
     return (
         <div

@@ -5,6 +5,9 @@ import server from "../../../services/server";
 import note_autocomplete, { Suggestion } from "../../../services/note_autocomplete";
 import CKEditor from "../../react/CKEditor";
 import { useTooltip } from "../../react/hooks";
+import FAttribute from "../../../entities/fattribute";
+import attribute_renderer from "../../../services/attribute_renderer";
+import FNote from "../../../entities/fnote";
 
 const HELP_TEXT = `
 <p>${t("attribute_editor.help_text_body1")}</p>
@@ -58,9 +61,10 @@ const mentionSetup: MentionFeed[] = [
 ];
 
 
-export default function AttributeEditor() {
+export default function AttributeEditor({ note }: { note: FNote }) {
 
     const [ state, setState ] = useState<"normal" | "showHelpTooltip" | "showAttributeDetail">();
+    const [ currentValue, setCurrentValue ] = useState<string>("");
     const wrapperRef = useRef<HTMLDivElement>(null);
     const { showTooltip, hideTooltip } = useTooltip(wrapperRef, {
         trigger: "focus",
@@ -77,6 +81,23 @@ export default function AttributeEditor() {
             hideTooltip();
         }
     }, [ state ]);
+
+    async function renderOwnedAttributes(ownedAttributes: FAttribute[], saved: boolean) {
+        // attrs are not resorted if position changes after the initial load
+        ownedAttributes.sort((a, b) => a.position - b.position);
+
+        let htmlAttrs = (await attribute_renderer.renderAttributes(ownedAttributes, true)).html();
+
+        if (htmlAttrs.length > 0) {
+            htmlAttrs += "&nbsp;";
+        }
+
+        setCurrentValue(htmlAttrs);
+    }
+
+    useEffect(() => {
+        renderOwnedAttributes(note.getOwnedAttributes(), true);
+    }, [ note ]);
     
     return (
         <div ref={wrapperRef} style="position: relative; padding-top: 10px; padding-bottom: 10px">
@@ -84,6 +105,7 @@ export default function AttributeEditor() {
                 className="attribute-list-editor"
                 tabIndex={200}
                 editor={CKEditorAttributeEditor}
+                currentValue={currentValue}
                 config={{
                     toolbar: { items: [] },
                     placeholder: t("attribute_editor.placeholder"),
