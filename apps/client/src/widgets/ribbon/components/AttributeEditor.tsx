@@ -96,16 +96,16 @@ export default function AttributeEditor({ note, componentId }: { note: FNote, co
         // attrs are not resorted if position changes after the initial load
         ownedAttributes.sort((a, b) => a.position - b.position);
 
-        let htmlAttrs = (await attribute_renderer.renderAttributes(ownedAttributes, true)).html();
+        let htmlAttrs = getPreprocessedData("<p>" + (await attribute_renderer.renderAttributes(ownedAttributes, true)).html() + "</p>");
+
+        if (saved) {
+            lastSavedContent.current = htmlAttrs;
+            setNeedsSaving(false);
+        }
 
         if (htmlAttrs.length > 0) {
             htmlAttrs += "&nbsp;";
-        }
-
-        if (saved) {
-            lastSavedContent.current = currentValueRef.current;
-            setNeedsSaving(false);
-        }
+        }        
 
         setInitialValue(htmlAttrs);
     }
@@ -164,7 +164,7 @@ export default function AttributeEditor({ note, componentId }: { note: FNote, co
                     }}
                     onChange={(currentValue) => {
                         currentValueRef.current = currentValue ?? "";
-                        setNeedsSaving(lastSavedContent.current !== currentValue);
+                        setNeedsSaving((lastSavedContent.current ?? "").trimEnd() !== getPreprocessedData(currentValue ?? "").trimEnd());
                         setError(undefined);
                     }}
                     onClick={(e, pos) => {
