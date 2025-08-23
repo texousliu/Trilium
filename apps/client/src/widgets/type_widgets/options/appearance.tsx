@@ -251,7 +251,6 @@ function Performance() {
     const [ shadowsEnabled, setShadowsEnabled ] = useTriliumOptionBool("shadowsEnabled");
     const [ backdropEffectsEnabled, setBackdropEffectsEnabled ] = useTriliumOptionBool("backdropEffectsEnabled");
 
-
     return <OptionsSection title={t("ui-performance.title")}>
         <FormGroup name="motion-enabled">
             <FormCheckbox
