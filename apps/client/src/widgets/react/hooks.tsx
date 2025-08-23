@@ -456,22 +456,41 @@ export function useLegacyWidget<T extends BasicWidget>(widgetFactory: () => T, {
     return [ <div className={containerClassName} ref={ref} />, widget ]
 }
 
-export function useResizeObserver(ref: RefObject<HTMLElement>, callback: ResizeObserverCallback) {
+/**
+ * Attaches a {@link ResizeObserver} to the given ref and reads the bounding client rect whenever it changes.
+ * 
+ * @param ref a ref to a {@link HTMLElement} to determine the size and observe the changes in size.
+ * @returns the size of the element, reacting to changes.
+ */
+export function useElementSize(ref: RefObject<HTMLElement>) {
+    const [ size, setSize ] = useState<DOMRect | undefined>(ref.current?.getBoundingClientRect());
+
     useEffect(() => {
         if (!ref.current) {
             return;
         }
 
+        function onResize() {
+            setSize(ref.current?.getBoundingClientRect());
+        }
+
         const element = ref.current;
-        const resizeObserver = new ResizeObserver(callback);
+        const resizeObserver = new ResizeObserver(onResize);
         resizeObserver.observe(element);
         return () => {
             resizeObserver.unobserve(element);
             resizeObserver.disconnect();
         }
-    }, [ ref, callback ]);
+    }, [ ref ]);
+
+    return size;
 }
 
+/**
+ * Obtains the inner width and height of the window, as well as reacts to changes in size.
+ * 
+ * @returns the width and height of the window.
+ */
 export function useWindowSize() {
     const [ size, setSize ] = useState<{ windowWidth: number, windowHeight: number }>({
         windowWidth: window.innerWidth,
