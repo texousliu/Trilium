@@ -6,6 +6,7 @@ interface RawHtmlProps {
     className?: string;
     html?: HTMLElementLike;
     style?: CSSProperties;
+    onClick?: (e: MouseEvent) => void;
 }
 
 export default function RawHtml(props: RawHtmlProps) {
@@ -16,11 +17,12 @@ export function RawHtmlBlock(props: RawHtmlProps) {
     return <div {...getProps(props)} />
 }
 
-function getProps({ className, html, style }: RawHtmlProps) {
+function getProps({ className, html, style, onClick }: RawHtmlProps) {
     return {
         className: className,
         dangerouslySetInnerHTML: getHtml(html ?? ""),
-        style
+        style,
+        onClick
     }
 }
 

@@ -332,7 +332,8 @@
     margin: 0 !important;
 }
 
-.attribute-list .attr-detail {
+.attribute-list .attr-detail,
+.inherited-attributes-widget .attr-detail {
     contain: none;
 }
 
