@@ -1,11 +1,11 @@
 import { useContext, useMemo } from "preact/hooks";
 import { t } from "../../services/i18n";
 import { ViewTypeOptions } from "../../services/note_list_renderer";
-import FormSelect from "../react/FormSelect";
+import FormSelect, { FormSelectWithGroups } from "../react/FormSelect";
 import { TabContext } from "./ribbon-interface";
 import { mapToKeyValueArray } from "../../services/utils";
 import { useNoteLabel, useNoteLabelBoolean } from "../react/hooks";
-import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty, NumberProperty } from "../ribbon_widgets/book_properties_config";
+import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty, ComboBoxGroup, ComboBoxProperty, NumberProperty } from "../ribbon_widgets/book_properties_config";
 import Button from "../react/Button";
 import { ParentComponent } from "../react/react_utils";
 import FNote from "../../entities/fnote";
@@ -69,6 +69,8 @@ function mapPropertyView({ note, property }: { note: FNote, property: BookProper
       return <CheckboxPropertyView note={note} property={property} />
     case "number":
       return <NumberPropertyView note={note} property={property} />
+    case "combobox":
+      return <ComboBoxPropertyView note={note} property={property} />
   }
 }
 
@@ -113,6 +115,24 @@ function NumberPropertyView({ note, property }: { note: FNote, property: NumberP
                     currentValue={value ?? ""} onChange={setValue}
                     style={{ width: (property.width ?? 100) + "px" }}
                     min={property.min ?? 0}
+                />
+            </label>
+        </>
+    )
+}
+
+function ComboBoxPropertyView({ note, property }: { note: FNote, property: ComboBoxProperty }) {
+    const [ value, setValue ] = useNoteLabel(note, property.bindToLabel);
+
+    return (
+        <>
+            <label>
+                {property.label}
+                &nbsp;&nbsp;
+                <FormSelectWithGroups
+                    values={property.options}
+                    keyProperty="value" titleProperty="label"
+                    currentValue={value ?? ""} onChange={setValue}
                 />
             </label>
         </>

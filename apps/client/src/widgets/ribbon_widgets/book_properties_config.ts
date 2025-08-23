@@ -37,11 +37,11 @@ interface ComboBoxItem {
 }
 
 interface ComboBoxGroup {
-    name: string;
+    title: string;
     items: ComboBoxItem[];
 }
 
-interface ComboBoxProperty {
+export interface ComboBoxProperty {
     type: "combobox",
     label: string;
     bindToLabel: string;
@@ -120,19 +120,19 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
                 defaultValue: DEFAULT_MAP_LAYER_NAME,
                 options: [
                     {
-                        name: t("book_properties_config.raster"),
+                        title: t("book_properties_config.raster"),
                         items: Object.entries(MAP_LAYERS)
                             .filter(([_, layer]) => layer.type === "raster")
                             .map(buildMapLayer)
                     },
                     {
-                        name: t("book_properties_config.vector_light"),
+                        title: t("book_properties_config.vector_light"),
                         items: Object.entries(MAP_LAYERS)
                             .filter(([_, layer]) => layer.type === "vector" && !layer.isDarkTheme)
                             .map(buildMapLayer)
                     },
                     {
-                        name: t("book_properties_config.vector_dark"),
+                        title: t("book_properties_config.vector_dark"),
                         items: Object.entries(MAP_LAYERS)
                             .filter(([_, layer]) => layer.type === "vector" && layer.isDarkTheme)
                             .map(buildMapLayer)

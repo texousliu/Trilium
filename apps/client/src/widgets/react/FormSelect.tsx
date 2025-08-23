@@ -39,15 +39,22 @@ export default function FormSelect<T>({ name, id, onChange, style, ...restProps 
 /**
  * Similar to {@link FormSelect}, but the top-level elements are actually groups.
  */
-export function FormSelectWithGroups<T>({ name, id, values, keyProperty, titleProperty, currentValue, onChange }: FormSelectProps<T, FormSelectGroup<T>>) {
+export function FormSelectWithGroups<T>({ name, id, values, keyProperty, titleProperty, currentValue, onChange }: FormSelectProps<T, FormSelectGroup<T> | T>) {
     return (
         <FormSelectBody name={name} id={id} onChange={onChange}>
-            {values.map(({ title, items }) => {
-                return (
-                    <optgroup label={title}>
-                        <FormSelectGroup values={items} keyProperty={keyProperty} titleProperty={titleProperty} currentValue={currentValue} />
-                    </optgroup>
-                );
+            {values.map((item) => {
+                if (!item) return <></>;
+                if (typeof item === "object" && "items" in item) {
+                    return (
+                        <optgroup label={item.title}>
+                            <FormSelectGroup values={item.items} keyProperty={keyProperty} titleProperty={titleProperty} currentValue={currentValue} />
+                        </optgroup>
+                    );
+                } else {
+                    return (
+                        <FormSelectGroup values={[ item ]} keyProperty={keyProperty} titleProperty={titleProperty} currentValue={currentValue} />
+                    )
+                }
             })}
         </FormSelectBody>
     )
