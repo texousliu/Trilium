@@ -11,9 +11,11 @@ interface CKEditorOpts {
     disableSpellcheck?: boolean;
     onChange?: (newValue?: string) => void;
     onClick?: (e: MouseEvent, pos?: ModelPosition | null) => void;
+    onKeyDown?: (e: KeyboardEvent) => void;
+    onBlur?: () => void;
 }
 
-export default function CKEditor({ currentValue, className, tabIndex, editor, config, disableNewlines, disableSpellcheck, onChange, onClick }: CKEditorOpts) {
+export default function CKEditor({ currentValue, editor, config, disableNewlines, disableSpellcheck, onChange, onClick, ...restProps }: CKEditorOpts) {
     const editorContainerRef = useRef<HTMLDivElement>(null);    
     const textEditorRef = useRef<CKTextEditor>(null);
 
@@ -62,14 +64,13 @@ export default function CKEditor({ currentValue, className, tabIndex, editor, co
     return (
         <div
             ref={editorContainerRef}
-            className={className}
-            tabIndex={tabIndex}
             onClick={(e) => {
                 if (onClick) {
                     const pos = textEditorRef.current?.model.document.selection.getFirstPosition();
                     onClick(e, pos);
                 }
             }}
+            {...restProps}
         />
     )
 }

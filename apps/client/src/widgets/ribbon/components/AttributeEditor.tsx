@@ -282,6 +282,8 @@ export default function AttributeEditor({ note, componentId }: { note: FNote, co
                             setState("showHelpTooltip");
                         }
                     }}
+                    onKeyDown={() => attributeDetailWidget.hide()}
+                    onBlur={() => save()}
                     disableNewlines disableSpellcheck
                 />
 
