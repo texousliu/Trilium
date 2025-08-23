@@ -5,11 +5,12 @@ import FormSelect from "../react/FormSelect";
 import { TabContext } from "./ribbon-interface";
 import { mapToKeyValueArray } from "../../services/utils";
 import { useNoteLabel, useNoteLabelBoolean } from "../react/hooks";
-import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty } from "../ribbon_widgets/book_properties_config";
+import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty, NumberProperty } from "../ribbon_widgets/book_properties_config";
 import Button from "../react/Button";
 import { ParentComponent } from "../react/react_utils";
 import FNote from "../../entities/fnote";
 import FormCheckbox from "../react/FormCheckbox";
+import FormTextBox from "../react/FormTextBox";
 
 const VIEW_TYPE_MAPPINGS: Record<ViewTypeOptions, string> = {
   grid: t("book_properties.grid"),
@@ -66,6 +67,8 @@ function mapPropertyView({ note, property }: { note: FNote, property: BookProper
       return <ButtonPropertyView note={note} property={property} />
     case "checkbox":
       return <CheckboxPropertyView note={note} property={property} />
+    case "number":
+      return <NumberPropertyView note={note} property={property} />
   }
 }
 
@@ -95,4 +98,23 @@ function CheckboxPropertyView({ note, property }: { note: FNote, property: Check
       currentValue={value} onChange={setValue}
     />
   )
+}
+
+function NumberPropertyView({ note, property }: { note: FNote, property: NumberProperty }) {
+    const [ value, setValue ] = useNoteLabel(note, property.bindToLabel);
+
+    return (
+        <>
+            <label>
+                {property.label}
+                &nbsp;&nbsp;
+                <FormTextBox
+                    type="number"
+                    currentValue={value ?? ""} onChange={setValue}
+                    style={{ width: (property.width ?? 100) + "px" }}
+                    min={property.min ?? 0}
+                />
+            </label>
+        </>
+    )
 }

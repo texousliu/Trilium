@@ -23,7 +23,7 @@ export interface ButtonProperty {
     onClick: (context: BookContext) => void;
 }
 
-interface NumberProperty {
+export interface NumberProperty {
     type: "number",
     label: string;
     bindToLabel: string;
