@@ -17,8 +17,4 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
             this.handleAddNewAttributeCommand("addNewRelation");
         }
     }
-
-    async updateAttributeList(attributes: FAttribute[]) {
-        await this.renderOwnedAttributes(attributes, false);
-    }
 }

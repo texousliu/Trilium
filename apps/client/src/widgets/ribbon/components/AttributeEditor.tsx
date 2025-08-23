@@ -17,7 +17,7 @@ import Component from "../../../components/component";
 import link from "../../../services/link";
 import froca from "../../../services/froca";
 import contextMenu from "../../../menus/context_menu";
-import type { CommandData, FilteredCommandNames } from "../../../components/app_context";
+import type { CommandData, CommandListenerData, FilteredCommandNames } from "../../../components/app_context";
 import { AttributeType } from "@triliumnext/commons";
 import attributes from "../../../services/attributes";
 import note_create from "../../../services/note_create";
@@ -245,7 +245,14 @@ export default function AttributeEditor({ note, componentId, notePath }: { note:
 
             return result?.note?.getBestNotePathString();
         }   
-    }), [ notePath ]))
+    }), [ notePath ]));
+
+    // Interaction with the attribute editor.
+    useLegacyImperativeHandlers(useMemo(() => ({
+        saveAttributesCommand: save,
+        reloadAttributesCommand: refresh,
+        updateAttributeListCommand: ({ attributes }: CommandListenerData<"updateAttributeList">) => renderOwnedAttributes(attributes as FAttribute[], false)
+    }), []));
     
     return (
         <>
