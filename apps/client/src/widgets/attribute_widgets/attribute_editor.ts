@@ -16,7 +16,6 @@ import { escapeQuotes } from "../../services/utils.js";
 
 const TPL = /*html*/`
 
-    <div class="bx bx-save save-attributes-button tn-tool-button" title="${escapeQuotes(t("attribute_editor.save_attributes"))}"></div>
     <div class="bx bx-plus add-new-attribute-button tn-tool-button" title="${escapeQuotes(t("attribute_editor.add_a_new_attribute"))}"></div>
 
     <div class="attribute-errors" style="display: none;"></div>
@@ -49,11 +48,6 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
         this.initialized = this.initEditor();
 
         this.$editor.on("keydown", async (e) => {
-            if (e.which === 13) {
-                // allow autocomplete to fill the result textarea
-                setTimeout(() => this.save(), 100);
-            }
-
             this.attributeDetailWidget.hide();
         });
 
@@ -62,7 +56,6 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
         this.$addNewAttributeButton = this.$widget.find(".add-new-attribute-button");
         this.$addNewAttributeButton.on("click", (e) => this.addNewAttribute(e));
 
-        this.$saveAttributesButton = this.$widget.find(".save-attributes-button");
         this.$saveAttributesButton.on("click", () => this.save());
 
         this.$errors = this.$widget.find(".attribute-errors");
@@ -170,38 +163,10 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
             console.warn("Ignoring blur event because a different note is loaded.");
             return;
         }
-
-        const attributes = this.parseAttributes();
-
-        if (attributes) {
-            await server.put(`notes/${this.noteId}/attributes`, attributes, this.componentId);
-
-            this.$saveAttributesButton.fadeOut();
-
-            // blink the attribute text to give a visual hint that save has been executed
-            this.$editor.css("opacity", 0);
-
-            // revert back
-            setTimeout(() => this.$editor.css("opacity", 1), 100);
-        }
-    }
-
-    parseAttributes() {
-        try {
-            return attributeParser.lexAndParse(this.getPreprocessedData());
-        } catch (e: any) {
-            this.$errors.text(e.message).slideDown();
-        }
     }
 
     dataChanged() {
         this.lastUpdatedNoteId = this.noteId;
-
-        if (this.lastSavedContent === this.textEditor.getData()) {
-            this.$saveAttributesButton.fadeOut();
-        } else {
-            this.$saveAttributesButton.fadeIn();
-        }
 
         if (this.$errors.is(":visible")) {
             // using .hide() instead of .slideUp() since this will also hide the error after confirming
@@ -216,14 +181,6 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
         const title = note ? note.title : "[missing]";
 
         $el.text(title);
-    }
-
-    async renderOwnedAttributes(ownedAttributes: FAttribute[], saved: boolean) {
-        if (saved) {
-            this.lastSavedContent = this.textEditor.getData();
-
-            this.$saveAttributesButton.fadeOut(0);
-        }
     }
 
     async createNoteForReferenceLink(title: string) {

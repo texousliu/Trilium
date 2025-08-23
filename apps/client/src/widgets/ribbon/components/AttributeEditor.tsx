@@ -10,6 +10,8 @@ import attribute_renderer from "../../../services/attribute_renderer";
 import FNote from "../../../entities/fnote";
 import AttributeDetailWidget from "../../attribute_widgets/attribute_detail";
 import attribute_parser, { Attribute } from "../../../services/attribute_parser";
+import ActionButton from "../../react/ActionButton";
+import { escapeQuotes } from "../../../services/utils";
 
 const HELP_TEXT = `
 <p>${t("attribute_editor.help_text_body1")}</p>
@@ -63,10 +65,13 @@ const mentionSetup: MentionFeed[] = [
 ];
 
 
-export default function AttributeEditor({ note }: { note: FNote }) {
+export default function AttributeEditor({ note, componentId }: { note: FNote, componentId: string }) {
 
     const [ state, setState ] = useState<"normal" | "showHelpTooltip" | "showAttributeDetail">();
+    const [ error, setError ] = useState<unknown>();
+    const [ needsSaving, setNeedsSaving ] = useState(false);
     const [ initialValue, setInitialValue ] = useState<string>("");
+    const lastSavedContent = useRef<string>();
     const currentValueRef = useRef(initialValue);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const { showTooltip, hideTooltip } = useTooltip(wrapperRef, {
@@ -97,7 +102,37 @@ export default function AttributeEditor({ note }: { note: FNote }) {
             htmlAttrs += "&nbsp;";
         }
 
+        if (saved) {
+            lastSavedContent.current = currentValueRef.current;
+            setNeedsSaving(false);
+        }
+
         setInitialValue(htmlAttrs);
+    }
+
+    function parseAttributes() {
+        try {
+            return attribute_parser.lexAndParse(getPreprocessedData(currentValueRef.current));
+        } catch (e: any) {
+            setError(e);
+        }
+    }
+
+    async function save() {
+        const attributes = parseAttributes();
+        if (!attributes) {
+            // An error occurred and will be reported to the user.
+            return;
+        }
+
+        await server.put(`notes/${note.noteId}/attributes`, attributes, componentId);
+        setNeedsSaving(false);
+
+        // blink the attribute text to give a visual hint that save has been executed
+        if (wrapperRef.current) {
+            wrapperRef.current.style.opacity = "0";
+            setTimeout(() => wrapperRef.current!.style.opacity = "1", 100);
+        }
     }
 
     useEffect(() => {
@@ -106,7 +141,16 @@ export default function AttributeEditor({ note }: { note: FNote }) {
     
     return (
         <>
-            <div ref={wrapperRef} style="position: relative; padding-top: 10px; padding-bottom: 10px">
+            <div
+                ref={wrapperRef}
+                style="position: relative; padding-top: 10px; padding-bottom: 10px"
+                onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                        // allow autocomplete to fill the result textarea
+                        setTimeout(() => save(), 100);
+                    }
+                }}
+            >
                 <CKEditor
                     className="attribute-list-editor"
                     tabIndex={200}
@@ -120,6 +164,7 @@ export default function AttributeEditor({ note }: { note: FNote }) {
                     }}
                     onChange={(currentValue) => {
                         currentValueRef.current = currentValue ?? "";
+                        setNeedsSaving(lastSavedContent.current !== currentValue);
                     }}
                     onClick={(e, pos) => {
                         if (pos && pos.textNode && pos.textNode.data) {
@@ -163,6 +208,13 @@ export default function AttributeEditor({ note }: { note: FNote }) {
                     }}
                     disableNewlines disableSpellcheck
                 />
+
+                { needsSaving && <ActionButton
+                    icon="bx bx-save"
+                    className="save-attributes-button"
+                    text={escapeQuotes(t("attribute_editor.save_attributes"))}
+                    onClick={save}
+                /> }
             </div>
 
             {attributeDetailWidgetEl}
