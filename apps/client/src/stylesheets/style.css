@@ -1794,7 +1794,7 @@ textarea {
     overflow-y: auto;
     overflow-x: hidden;
     text-overflow: ellipsis;
-    box-shadow: -30px 50px 93px -50px black;
+    box-shadow: none;
 }
 
 .jump-to-note-results {
