@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "preact/hooks"
+import { useContext, useEffect, useRef, useState } from "preact/hooks"
 import { AttributeEditor as CKEditorAttributeEditor, MentionFeed, ModelElement, ModelNode, ModelPosition } from "@triliumnext/ckeditor5";
 import { t } from "../../../services/i18n";
 import server from "../../../services/server";
@@ -12,6 +12,10 @@ import AttributeDetailWidget from "../../attribute_widgets/attribute_detail";
 import attribute_parser, { Attribute } from "../../../services/attribute_parser";
 import ActionButton from "../../react/ActionButton";
 import { escapeQuotes } from "../../../services/utils";
+import { ParentComponent } from "../../react/react_utils";
+import Component from "../../../components/component";
+import link from "../../../services/link";
+import froca from "../../../services/froca";
 
 const HELP_TEXT = `
 <p>${t("attribute_editor.help_text_body1")}</p>
@@ -66,14 +70,18 @@ const mentionSetup: MentionFeed[] = [
 
 
 export default function AttributeEditor({ note, componentId }: { note: FNote, componentId: string }) {
+    const parentComponent = useContext(ParentComponent);
+    injectLoadReferenceLinkTitle(parentComponent);
 
     const [ state, setState ] = useState<"normal" | "showHelpTooltip" | "showAttributeDetail">();
     const [ error, setError ] = useState<unknown>();
     const [ needsSaving, setNeedsSaving ] = useState(false);
     const [ initialValue, setInitialValue ] = useState<string>("");
+
     const lastSavedContent = useRef<string>();
     const currentValueRef = useRef(initialValue);
     const wrapperRef = useRef<HTMLDivElement>(null);
+
     const { showTooltip, hideTooltip } = useTooltip(wrapperRef, {
         trigger: "focus",
         html: true,
@@ -96,7 +104,7 @@ export default function AttributeEditor({ note, componentId }: { note: FNote, co
         // attrs are not resorted if position changes after the initial load
         ownedAttributes.sort((a, b) => a.position - b.position);
 
-        let htmlAttrs = getPreprocessedData("<p>" + (await attribute_renderer.renderAttributes(ownedAttributes, true)).html() + "</p>");
+        let htmlAttrs = ("<p>" + (await attribute_renderer.renderAttributes(ownedAttributes, true)).html() + "</p>");
 
         if (saved) {
             lastSavedContent.current = htmlAttrs;
@@ -164,7 +172,10 @@ export default function AttributeEditor({ note, componentId }: { note: FNote, co
                     }}
                     onChange={(currentValue) => {
                         currentValueRef.current = currentValue ?? "";
-                        setNeedsSaving((lastSavedContent.current ?? "").trimEnd() !== getPreprocessedData(currentValue ?? "").trimEnd());
+                        
+                        const oldValue = getPreprocessedData(lastSavedContent.current ?? "").trimEnd();
+                        const newValue = getPreprocessedData(currentValue ?? "").trimEnd();                
+                        setNeedsSaving(oldValue !== newValue);
                         setError(undefined);
                     }}
                     onClick={(e, pos) => {
@@ -253,4 +264,15 @@ function getClickIndex(pos: ModelPosition) {
     }
 
     return clickIndex;
+}
+
+function injectLoadReferenceLinkTitle(component: Component | null) {
+    if (!component) return;
+    (component as any).loadReferenceLinkTitle = async ($el: JQuery<HTMLElement>, href: string) => {
+        const { noteId } = link.parseNavigationStateFromUrl(href);
+        const note = noteId ? await froca.getNote(noteId, true) : null;
+        const title = note ? note.title : "[missing]";
+
+        $el.text(title);
+    }
 }

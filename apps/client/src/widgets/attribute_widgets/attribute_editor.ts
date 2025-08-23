@@ -162,14 +162,6 @@ export default class AttributeEditorWidget extends NoteContextAwareWidget implem
         this.lastUpdatedNoteId = this.noteId;
     }
 
-    async loadReferenceLinkTitle($el: JQuery<HTMLElement>, href: string) {
-        const { noteId } = linkService.parseNavigationStateFromUrl(href);
-        const note = noteId ? await froca.getNote(noteId, true) : null;
-        const title = note ? note.title : "[missing]";
-
-        $el.text(title);
-    }
-
     async createNoteForReferenceLink(title: string) {
         let result;
         if (this.notePath) {
