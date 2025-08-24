@@ -22,106 +22,10 @@ import type { AttributeType } from "../../entities/fattribute.js";
 import { renderReactWidget } from "../react/react_utils.jsx";
 
 const TPL = /*html*/`
-<div class="search-definition-widget">
-    <style>
-    .search-setting-table {
-        margin-top: 0;
-        margin-bottom: 7px;
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 10px;
-    }
-
-    .search-setting-table div {
-        white-space: nowrap;
-    }
-
-    .search-setting-table .button-column {
-        /* minimal width so that table remains static sized and most space remains for middle column with settings */
-        width: 50px;
-        white-space: nowrap;
-        text-align: right;
-    }
-
-    .search-setting-table .title-column {
-        /* minimal width so that table remains static sized and most space remains for middle column with settings */
-        width: 50px;
-        white-space: nowrap;
-    }
-
-    .search-setting-table .button-column .dropdown-menu {
-        white-space: normal;
-    }
-
-    .attribute-list hr {
-        height: 1px;
-        border-color: var(--main-border-color);
-        position: relative;
-        top: 4px;
-        margin-top: 5px;
-        margin-bottom: 0;
-    }
-
-    .search-definition-widget input:invalid {
-        border: 3px solid red;
-    }
-
-    .add-search-option button {
-        margin-top: 5px; /* to give some spacing when buttons overflow on the next line */
-    }
-
-    .dropdown-header {
-        background-color: var(--accented-background-color);
-    }
-    </style>
-
-    <div class="search-settings">
-        <table class="search-setting-table">
+<div class="">
+    <div class="">
             <tr>
-                <td class="title-column">${t("search_definition.add_search_option")}</td>
-                <td colspan="2" class="add-search-option">
-                    <button type="button" class="btn btn-sm" data-search-option-add="searchString">
-                        <span class="bx bx-text"></span>
-                        ${t("search_definition.search_string")}
-                    </button>
-
-                    <button type="button" class="btn btn-sm" data-search-option-add="searchScript">
-                        <span class="bx bx-code"></span>
-                        ${t("search_definition.search_script")}
-                    </button>
-
-                    <button type="button" class="btn btn-sm" data-search-option-add="ancestor">
-                        <span class="bx bx-filter-alt"></span>
-                        ${t("search_definition.ancestor")}
-                    </button>
-
-                    <button type="button" class="btn btn-sm" data-search-option-add="fastSearch"
-                        title="${t("search_definition.fast_search_description")}">
-                        <span class="bx bx-run"></span>
-                        ${t("search_definition.fast_search")}
-                    </button>
-
-                    <button type="button" class="btn btn-sm" data-search-option-add="includeArchivedNotes"
-                        title="${t("search_definition.include_archived_notes_description")}">
-                        <span class="bx bx-archive"></span>
-                        ${t("search_definition.include_archived")}
-                    </button>
-
-                    <button type="button" class="btn btn-sm" data-search-option-add="orderBy">
-                        <span class="bx bx-arrow-from-top"></span>
-                        ${t("search_definition.order_by")}
-                    </button>
-
-                    <button type="button" class="btn btn-sm" data-search-option-add="limit" title="${t("search_definition.limit_description")}">
-                        <span class="bx bx-stop"></span>
-                        ${t("search_definition.limit")}
-                    </button>
-
-                    <button type="button" class="btn btn-sm" data-search-option-add="debug" title="${t("search_definition.debug_description")}">
-                        <span class="bx bx-bug"></span>
-                        ${t("search_definition.debug")}
-                    </button>
-
+                <td>
                     <div class="dropdown" style="display: inline-block;">
                       <button class="btn btn-sm dropdown-toggle action-add-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="bx bxs-zap"></span>
@@ -178,17 +82,6 @@ export default class SearchDefinitionWidget extends NoteContextAwareWidget {
 
     get name() {
         return "searchDefinition";
-    }
-
-    isEnabled() {
-        return this.note && this.note.type === "search";
-    }
-
-    getTitle() {
-        return {
-            show: this.isEnabled(),
-            activate: true
-        };
     }
 
     doRender() {

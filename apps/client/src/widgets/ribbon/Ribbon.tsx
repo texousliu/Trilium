@@ -22,6 +22,7 @@ import NoteMapTab from "./NoteMapTab";
 import OwnedAttributesTab from "./OwnedAttributesTab";
 import InheritedAttributesTab from "./InheritedAttributesTab";
 import CollectionPropertiesTab from "./CollectionPropertiesTab";
+import SearchDefinitionTab from "./SearchDefinitionTab";
 
 interface TitleContext {
     note: FNote | null | undefined;
@@ -60,9 +61,11 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
             (note.hasLabel("executeDescription") || note.hasLabel("executeButton"))
     },
     {
-        // SearchDefinitionWidget
         title: t("search_definition.search_parameters"),
-        icon: "bx bx-search"
+        icon: "bx bx-search",
+        content: SearchDefinitionTab,
+        activate: true,
+        show: ({ note }) => note?.type === "search"
     },
     {
         title: t("edited_notes.title"),
