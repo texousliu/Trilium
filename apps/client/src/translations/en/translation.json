@@ -1113,6 +1113,12 @@
     "layout-vertical-description": "launcher bar is on the left (default)",
     "layout-horizontal-description": "launcher bar is underneath the tab bar, the tab bar is now full width."
   },
+  "ui-performance": {
+    "title": "Performance",
+    "enable-motion": "Enable transitions and animations",
+    "enable-shadows": "Enable shadows",
+    "enable-backdrop-effects": "Enable background effects for menus, popups and panels"
+  },
   "ai_llm": {
     "not_started": "Not started",
     "title": "AI Settings",

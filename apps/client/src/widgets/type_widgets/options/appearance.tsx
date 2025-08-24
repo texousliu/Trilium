@@ -88,6 +88,7 @@ export default function AppearanceSettings() {
             <ApplicationTheme />
             {overrideThemeFonts === "true" && <Fonts />}
             {isElectron() && <ElectronIntegration /> }
+            <Performance />
             <MaxContentWidth />
             <RelatedSettings items={[
                 {
@@ -244,6 +245,30 @@ function ElectronIntegration() {
         </OptionsSection>
     )
 }
+
+function Performance() {
+    const [ motionEnabled, setMotionEnabled ] = useTriliumOptionBool("motionEnabled");
+    const [ shadowsEnabled, setShadowsEnabled ] = useTriliumOptionBool("shadowsEnabled");
+    const [ backdropEffectsEnabled, setBackdropEffectsEnabled ] = useTriliumOptionBool("backdropEffectsEnabled");
+
+    return <OptionsSection title={t("ui-performance.title")}>
+        <FormCheckbox
+            label={t("ui-performance.enable-motion")}
+            currentValue={motionEnabled} onChange={setMotionEnabled}
+        />
+
+        <FormCheckbox
+            label={t("ui-performance.enable-shadows")}
+            currentValue={shadowsEnabled} onChange={setShadowsEnabled}
+        />
+
+        <FormCheckbox
+            label={t("ui-performance.enable-backdrop-effects")}
+            currentValue={backdropEffectsEnabled} onChange={setBackdropEffectsEnabled}
+        />
+    </OptionsSection>
+}
+
 
 function MaxContentWidth() {
     const [ maxContentWidth, setMaxContentWidth ] = useTriliumOption("maxContentWidth");
