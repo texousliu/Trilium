@@ -15,29 +15,31 @@ import { RefObject, VNode } from "preact";
 import { Tooltip } from "bootstrap";
 import { CSSProperties } from "preact/compat";
 
-type TriliumEventHandler<T extends EventNames> = (data: EventData<T>) => void;
+export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
+    const parentComponent = useContext(ParentComponent)!;
+    parentComponent.registerHandler(eventName, handler);
+    return (() => parentComponent.removeHandler(eventName, handler));
+}
 
-export function useTriliumEvent<T extends EventNames>(eventName: T | T[], handler: TriliumEventHandler<T>) {
-    const parentComponent = useContext(ParentComponent);
+export function useTriliumEvents<T extends EventNames>(eventNames: T[], handler: (data: EventData<T>, eventName: T) => void) {
+    const parentComponent = useContext(ParentComponent)!;
+    const handlers: ({ eventName: T, callback: (data: EventData<T>) => void })[] = [];
 
-    if (!parentComponent) {
-        console.error("React widget has no legacy parent component. Event handling will not work.", new Error().stack);
-        return;
+    for (const eventName of eventNames) {
+        handlers.push({ eventName, callback: (data) => {
+            handler(data, eventName);
+        }})
     }
 
-    if (Array.isArray(eventName)) {
-        for (const eventSingleName of eventName) {
-            parentComponent.registerHandler(eventSingleName, handler);
+    for (const { eventName, callback } of handlers) {
+        parentComponent.registerHandler(eventName, callback);
+    }
+
+    return (() => {
+        for (const { eventName, callback } of handlers) {
+            parentComponent.removeHandler(eventName, callback);
         }
-        return (() => {
-            for (const eventSingleName of eventName) {
-                parentComponent.removeHandler(eventSingleName, handler)
-            }
-        });
-    } else {
-        parentComponent.registerHandler(eventName, handler);
-        return (() => parentComponent.removeHandler(eventName, handler));
-    }
+    });
 }
 
 export function useSpacedUpdate(callback: () => void | Promise<void>, interval = 1000) {

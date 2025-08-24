@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "preact/hooks";
+import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
 import { t } from "../../services/i18n";
-import { useNoteContext } from "../react/hooks";
+import { useNoteContext, useTriliumEvent, useTriliumEvents } from "../react/hooks";
 import "./style.css";
 import { VNode } from "preact";
 import BasicPropertiesTab from "./BasicPropertiesTab";
@@ -8,7 +8,7 @@ import FormattingTab from "./FormattingTab";
 import { numberObjectsInPlace } from "../../services/utils";
 import { TabContext } from "./ribbon-interface";
 import options from "../../services/options";
-import { CommandNames } from "../../components/app_context";
+import { CommandNames, EventNames } from "../../components/app_context";
 import FNote from "../../entities/fnote";
 import ScriptTab from "./ScriptTab";
 import EditedNotesTab from "./EditedNotesTab";
@@ -169,6 +169,19 @@ export default function Ribbon() {
             setActiveTabIndex(tabToActivate.index);
         }
     }, [ note?.noteId ]);
+
+    // Register keyboard shortcuts.
+    const eventsToListenTo = useMemo(() => TAB_CONFIGURATION.filter(config => config.toggleCommand).map(config => config.toggleCommand) as EventNames[], []);
+    useTriliumEvents(eventsToListenTo, useCallback((e, toggleCommand) => {
+        const correspondingTab = filteredTabs.find(tab => tab.toggleCommand === toggleCommand);
+        if (correspondingTab) {
+            if (activeTabIndex !== correspondingTab.index) {
+                setActiveTabIndex(correspondingTab.index);
+            } else {
+                setActiveTabIndex(undefined);
+            }
+        }
+    }, [ filteredTabs, activeTabIndex ]));
 
     return (
         <div className="ribbon-container" style={{ contain: "none" }}>
