@@ -5,14 +5,7 @@ import { t } from "../../services/i18n.js";
 const TPL = /*html*/`
 <tr>
     <td colspan="2">
-        <div style="display: flex; align-items: center;">
-            <div style="margin-right: 10px">${t("ancestor.label")}:</div>
-            <div class="input-group" style="flex-shrink: 2">
-                <input class="ancestor form-control" placeholder="${t("ancestor.placeholder")}">
-            </div>
-
-            <div style="margin-left: 10px; margin-right: 10px">${t("ancestor.depth_label")}:</div>
-
+        <div style="margin-left: 10px; margin-right: 10px">${t("ancestor.depth_label")}:</div>
             <select name="depth" class="form-select d-inline ancestor-depth" style="flex-shrink: 3">
                 <option value="">${t("ancestor.depth_doesnt_matter")}</option>
                 <option value="eq1">${t("ancestor.depth_eq", { count: 1 })} (${t("ancestor.direct_children")})</option>
@@ -45,16 +38,9 @@ const TPL = /*html*/`
             </select>
         </div>
     </td>
-    <td class="button-column">
-        <span class="bx bx-x icon-action search-option-del"></span>
-    </td>
 </tr>`;
 
 export default class Ancestor extends AbstractSearchOption {
-    static async create(noteId: string) {
-        await AbstractSearchOption.setAttribute(noteId, "relation", "ancestor", "root");
-    }
-
     doRender() {
         const $option = $(TPL);
         const $ancestor = $option.find(".ancestor");

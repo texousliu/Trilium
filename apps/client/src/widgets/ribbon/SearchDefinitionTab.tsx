@@ -56,7 +56,8 @@ const SEARCH_OPTIONS: SearchOption[] = [
     attributeName: "ancestor",
     attributeType: "relation",
     icon: "bx bx-filter-alt",
-    label: t("search_definition.ancestor")
+    label: t("search_definition.ancestor"),
+    component: AncestorOption
   },
   {
     attributeName: "fastSearch",
@@ -341,8 +342,7 @@ function SearchScriptOption({ note, ...restProps }: SearchOptionProps) {
       <pre>{t("search_script.example_code")}</pre>
       {t("search_script.note")}
     </>}
-    note={note}
-    {...restProps}
+    note={note} {...restProps}
   >
     <NoteAutocomplete
       noteId={searchScript !== "root" ? searchScript ?? undefined : undefined}
@@ -350,4 +350,19 @@ function SearchScriptOption({ note, ...restProps }: SearchOptionProps) {
       placeholder={t("search_script.placeholder")}
     />
   </SearchOption>
+}
+
+function AncestorOption({ note, ...restProps}: SearchOptionProps) {
+  const [ ancestor, setAncestor ] = useNoteRelation(note, "ancestor");
+
+  return <SearchOption
+    title={t("ancestor.label")}    
+    note={note} {...restProps}
+  >
+    <NoteAutocomplete
+      noteId={ancestor !== "root" ? ancestor ?? undefined : undefined}
+      noteIdChanged={noteId => setAncestor(noteId ?? "root")}
+      placeholder={t("ancestor.placeholder")}
+    />
+  </SearchOption>;
 }
