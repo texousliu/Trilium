@@ -36,41 +36,6 @@ const TPL = /*html*/`
         }
 
     </style>
-
-    <div class="dropdown-menu dropdown-menu-right">
-
-
-
-        <li data-trigger-command="openNoteExternally" class="dropdown-item open-note-externally-button" title="${t("note_actions.open_note_externally_title")}">
-            <span class="bx bx-file-find"></span> ${t("note_actions.open_note_externally")}<kbd data-command="openNoteExternally"></kbd>
-        </li>
-
-        <li data-trigger-command="openNoteCustom" class="dropdown-item open-note-custom-button">
-            <span class="bx bx-customize"></span> ${t("note_actions.open_note_custom")}<kbd data-command="openNoteCustom"></kbd>
-        </li>
-
-        <li data-trigger-command="showNoteSource" class="dropdown-item show-source-button">
-            <span class="bx bx-code"></span> ${t("note_actions.note_source")}<kbd data-command="showNoteSource"></kbd>
-        </li>
-
-
-        <div class="dropdown-divider"></div>
-
-
-        <li data-trigger-command="forceSaveRevision" class="dropdown-item save-revision-button">
-            <span class="bx bx-save"></span> ${t("note_actions.save_revision")}<kbd data-command="forceSaveRevision"></kbd>
-        </li>
-
-        <li class="dropdown-item delete-note-button"><span class="bx bx-trash destructive-action-icon"></span> ${t("note_actions.delete_note")}</li>
-
-
-        <div class="dropdown-divider"></div>
-
-
-        <li data-trigger-command="showAttachments" class="dropdown-item show-attachments-button">
-            <span class="bx bx-paperclip"></span> ${t("note_actions.note_attachments")}<kbd data-command="showAttachments"></kbd>
-        </li>
-    </div>
 </div>`;
 
 export default class NoteActionsWidget extends NoteContextAwareWidget {
@@ -114,15 +79,6 @@ export default class NoteActionsWidget extends NoteContextAwareWidget {
 
         this.$openNoteExternallyButton = this.$widget.find(".open-note-externally-button");
         this.$openNoteCustomButton = this.$widget.find(".open-note-custom-button");
-
-        this.$deleteNoteButton = this.$widget.find(".delete-note-button");
-        this.$deleteNoteButton.on("click", () => {
-            if (!this.note || this.note.noteId === "root") {
-                return;
-            }
-
-            branchService.deleteNotes([this.note.getParentBranches()[0].branchId], true);
-        });
     }
 
     async refreshVisibility(note: FNote) {

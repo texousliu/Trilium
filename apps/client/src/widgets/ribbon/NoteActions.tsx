@@ -13,6 +13,7 @@ import { isElectron as getIsElectron } from "../../services/utils";
 import { ParentComponent } from "../react/react_utils";
 import { useContext } from "preact/hooks";
 import NoteContext from "../../components/note_context";
+import branches from "../../services/branches";
 
 interface NoteActionsProps {
   note?: FNote;
@@ -74,13 +75,27 @@ function NoteContextMenu(props: NoteActionsProps) {
           defaultType: "single"
         })} />
       <FormDropdownDivider />
+
+      <CommandItem command="openNoteExternally" icon="bx bx-file-find" text={t("note_actions.open_note_externally")} title={t("note_actions.open_note_externally_title")} />
+      <CommandItem command="openNoteCustom" icon="bx bx-customize" text={t("note_actions.open_note_custom")} />
+      <CommandItem command="showNoteSource" icon="bx bx-code" text={t("note_actions.note_source")} />
+      <FormDropdownDivider />
+
+      <CommandItem command="forceSaveRevision" icon="bx bx-save" text={t("note_actions.save_revision")} />
+      <CommandItem icon="bx bx-trash destructive-action-icon" text={t("note_actions.delete_note")} destructive
+        command={() => branches.deleteNotes([note.getParentBranches()[0].branchId])}
+      />
+      <FormDropdownDivider />
+
+      <CommandItem command="showAttachments" icon="bx bx-paperclip" text={t("note_actions.note_attachments")} />
     </Dropdown>
   );
 }
 
-function CommandItem({ icon, text, command, disabled }: { icon: string, text: string, command: CommandNames | (() => void), disabled?: boolean }) {
+function CommandItem({ icon, text, title, command, disabled }: { icon: string, text: string, title?: string, command: CommandNames | (() => void), disabled?: boolean, destructive?: boolean }) {
   return <FormListItem
     icon={icon}
+    title={title}
     triggerCommand={typeof command === "string" ? command : undefined}
     onClick={typeof command === "function" ? command : undefined}
     disabled={disabled}
