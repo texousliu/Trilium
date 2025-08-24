@@ -1,4 +1,3 @@
-import { VNode } from "preact";
 import { t } from "../../services/i18n";
 import Button from "../react/Button";
 import { TabContext } from "./ribbon-interface";
@@ -15,6 +14,11 @@ import server from "../../services/server";
 import ws from "../../services/ws";
 import tree from "../../services/tree";
 import { SEARCH_OPTIONS, SearchOption } from "./SearchDefinitionOptions";
+import Dropdown from "../react/Dropdown";
+import Icon from "../react/Icon";
+import bulk_action, { ACTION_GROUPS } from "../../services/bulk_action";
+import { FormListHeader, FormListItem } from "../react/FormList";
+import RenameNoteBulkAction from "../bulk_actions/note/rename_note";
 
 export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
   const parentComponent = useContext(ParentComponent);
@@ -77,12 +81,15 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
               <td colSpan={2} className="add-search-option">
                 {searchOptions?.availableOptions.map(({ icon, label, tooltip, attributeName, attributeType, defaultValue }) => (
                   <Button
+                    size="small"
                     icon={icon}
                     text={label}
                     title={tooltip}
                     onClick={() => attributes.setAttribute(note, attributeType, attributeName, defaultValue ?? "")}
                   />
                 ))}
+
+                <AddBulkActionButton note={note} />
               </td>
             </tr>
             <tbody className="search-options">
@@ -98,9 +105,7 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
                 });
               })}
             </tbody>
-            <tbody className="action-options">
-
-            </tbody>
+            <BulkActionsList note={note} />
             <tbody>
               <tr>
                 <td colSpan={3}>
@@ -150,3 +155,48 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
   )
 }
 
+function BulkActionsList({ note }: { note: FNote }) {
+  const [ bulkActions, setBulkActions ] = useState<RenameNoteBulkAction[]>();
+
+  function refreshBulkActions() {
+    if (note) {
+      setBulkActions(bulk_action.parseActions(note));
+    }
+  }
+
+  // React to changes.
+  useEffect(refreshBulkActions, [ note ]);
+  useTriliumEventBeta("entitiesReloaded", ({loadResults}) => {
+    if (loadResults.getAttributeRows().find(attr => attr.type === "label" && attr.name === "action" && attributes.isAffecting(attr, note))) {
+      refreshBulkActions();
+    }
+  });
+
+  return (
+    <tbody className="action-options">
+      {bulkActions?.map(bulkAction => (
+        bulkAction.doRender()
+      ))}
+    </tbody>
+  )
+}
+
+function AddBulkActionButton({ note }: { note: FNote }) {
+  return (
+    <Dropdown
+      buttonClassName="action-add-toggle btn-sm"
+      text={<><Icon icon="bx bxs-zap" />{" "}{t("search_definition.action")}</>}
+      noSelectButtonStyle
+    >
+        {ACTION_GROUPS.map(({ actions, title }) => (
+          <>
+            <FormListHeader text={title} />
+
+            {actions.map(({ actionName, actionTitle }) => (
+              <FormListItem onClick={() => bulk_action.addAction(note.noteId, actionName)}>{actionTitle}</FormListItem>
+            ))}          
+          </>
+        ))}
+    </Dropdown>
+  )
+}
