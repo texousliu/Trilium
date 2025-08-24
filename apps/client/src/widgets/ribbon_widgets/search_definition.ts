@@ -41,16 +41,6 @@ const TPL = /*html*/`
                 <tr>
                     <td colspan="3">
                         <div style="display: flex; justify-content: space-evenly">
-                            <button type="button" class="btn btn-sm search-button">
-                                <span class="bx bx-search"></span>
-                                ${}
-                            </button>
-
-                            <button type="button" class="btn btn-sm search-and-execute-button">
-                                <span class="bx bxs-zap"></span>
-                                ${t("search_definition.search_execute")}
-                            </button>
-
                             <button type="button" class="btn btn-sm save-to-note-button">
                                 <span class="bx bx-save"></span>
                                 ${t("search_definition.save_to_note")}
@@ -126,9 +116,6 @@ export default class SearchDefinitionWidget extends NoteContextAwareWidget {
         this.$searchOptions = this.$widget.find(".search-options");
         this.$actionOptions = this.$widget.find(".action-options");
 
-        this.$searchAndExecuteButton = this.$widget.find(".search-and-execute-button");
-        this.$searchAndExecuteButton.on("click", () => this.searchAndExecute());
-
         this.$saveToNoteButton = this.$widget.find(".save-to-note-button");
         this.$saveToNoteButton.on("click", async () => {
             const { notePath } = await server.post<SaveSearchNoteResponse>("special-notes/save-search-note", { searchNoteId: this.noteId });
@@ -160,18 +147,6 @@ export default class SearchDefinitionWidget extends NoteContextAwareWidget {
 
         this.$actionOptions.empty().append(...renderedEls);
         this.$searchAndExecuteButton.css("visibility", actions.length > 0 ? "visible" : "_hidden");
-    }
-
-    getContent() {
-        return "";
-    }
-
-    async searchAndExecute() {
-        await server.post(`search-and-execute-note/${this.noteId}`);
-
-        this.triggerCommand("refreshResults");
-
-        toastService.showMessage(t("search_definition.actions_executed"), 3000);
     }
 
     entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {

@@ -156,6 +156,16 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
                       keyboardShortcut="Enter"
                       onClick={refreshResults}
                     />
+
+                    <Button
+                      icon="bx bxs-zap"
+                      text={t("search_definition.search_execute")}
+                      onClick={async () => {
+                        await server.post(`search-and-execute-note/${note.noteId}`);
+                        refreshResults();
+                        toast.showMessage(t("search_definition.actions_executed"), 3000);                        
+                      }}
+                    />
                   </div>
                 </td>
               </tr>
