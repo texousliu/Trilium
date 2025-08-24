@@ -108,12 +108,12 @@ export const SEARCH_OPTIONS: SearchOption[] = [
 function SearchOption({ note, title, titleIcon, children, help, attributeName, attributeType, additionalAttributesToDelete }: {
   note: FNote;
   title: string,
-  titleIcon: string,
+  titleIcon?: string,
   children?: ComponentChildren,
-  help: ComponentChildren,
+  help?: ComponentChildren,
   attributeName: string,
   attributeType: AttributeType,
-  additionalAttributesToDelete: { type: "label" | "relation", name: string }[]
+  additionalAttributesToDelete?: { type: "label" | "relation", name: string }[]
 }) {
   return (
     <tr>

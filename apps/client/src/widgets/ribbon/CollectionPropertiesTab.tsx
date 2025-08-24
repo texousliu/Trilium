@@ -27,10 +27,14 @@ export default function CollectionPropertiesTab({ note }: TabContext) {
   const viewTypeWithDefault = viewType ?? "grid";
   const properties = bookPropertiesConfig[viewTypeWithDefault].properties;
 
-  return (note &&
+  return (
     <div className="book-properties-widget">
-      <CollectionTypeSwitcher viewType={viewTypeWithDefault} setViewType={setViewType} />
-      <BookProperties note={note} properties={properties} />
+      {note && (
+        <>
+          <CollectionTypeSwitcher viewType={viewTypeWithDefault} setViewType={setViewType} />
+          <BookProperties note={note} properties={properties} />
+        </>
+      )}
     </div>
   );
 }

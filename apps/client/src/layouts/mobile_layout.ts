@@ -143,7 +143,7 @@ export default class MobileLayout {
                                     .css("font-size", "larger")
                                     .css("align-items", "center")
                                     .child(new ToggleSidebarButtonWidget().contentSized())
-                                    .child(new NoteTitleWidget().contentSized().css("position", "relative").css("padding-left", "0.5em"))
+                                    .child(NoteTitleWidget().contentSized().css("position", "relative").css("padding-left", "0.5em"))
                                     .child(new MobileDetailMenuWidget(true).contentSized())
                             )
                             .child(new SharedInfoWidget())

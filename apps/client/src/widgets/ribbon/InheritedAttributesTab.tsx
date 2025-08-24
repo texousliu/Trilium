@@ -14,7 +14,8 @@ export default function InheritedAttributesTab({ note, componentId }: TabContext
     const [ attributeDetailWidgetEl, attributeDetailWidget ] = useLegacyWidget(() => new AttributeDetailWidget());
 
     function refresh() {
-        const attrs = note.getAttributes().filter((attr) => attr.noteId !== this.noteId);
+        if (!note) return;
+        const attrs = note.getAttributes().filter((attr) => attr.noteId !== note.noteId);
         attrs.sort((a, b) => {
             if (a.noteId === b.noteId) {
                 return a.position - b.position;
@@ -29,15 +30,15 @@ export default function InheritedAttributesTab({ note, componentId }: TabContext
 
     useEffect(refresh, [ note ]);
     useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
-        if (loadResults.getAttributeRows(componentId).find((attr) => attributes.isAffecting(attr, this.note))) {
-            this.refresh();
+        if (loadResults.getAttributeRows(componentId).find((attr) => attributes.isAffecting(attr, note))) {
+            refresh();
         }
     });
     
     return (
         <div className="inherited-attributes-widget">
             <div className="inherited-attributes-container">
-                {inheritedAttributes?.length > 0 ? (
+                {inheritedAttributes?.length ? (
                     joinElements(inheritedAttributes.map(attribute => (
                         <InheritedAttribute
                             attribute={attribute}
