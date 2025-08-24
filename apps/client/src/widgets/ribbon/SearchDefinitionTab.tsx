@@ -11,9 +11,9 @@ import { note } from "mermaid/dist/rendering-util/rendering-elements/shapes/note
 import FNote from "../../entities/fnote";
 import toast from "../../services/toast";
 import froca from "../../services/froca";
-import { useContext, useRef } from "preact/hooks";
+import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import { ParentComponent } from "../react/react_utils";
-import { useSpacedUpdate } from "../react/hooks";
+import { useSpacedUpdate, useTriliumEventBeta } from "../react/hooks";
 import appContext from "../../components/app_context";
 import server from "../../services/server";
 
@@ -92,7 +92,25 @@ const SEARCH_OPTIONS: SearchOption[] = [
 
 export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
   const parentComponent = useContext(ParentComponent);
-  
+  const [ searchOptions, setSearchOptions ] = useState<{ availableOptions: SearchOption[], activeOptions: SearchOption[] }>();
+
+  function refreshOptions() {
+    if (!note) return;
+
+    const availableOptions: SearchOption[] = [];
+    const activeOptions: SearchOption[] = [];
+
+    for (const searchOption of SEARCH_OPTIONS) {
+      const attr = note.getAttribute(searchOption.attributeType, searchOption.attributeName);      
+      if (attr && searchOption.component) {
+        activeOptions.push(searchOption);
+      } else {
+        availableOptions.push(searchOption);
+      }
+    }
+
+    setSearchOptions({ availableOptions, activeOptions });
+  }
 
   async function refreshResults() {
     const noteId = note?.noteId;
@@ -113,6 +131,14 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
     parentComponent?.triggerEvent("searchRefreshed", { ntxId });
   }
 
+  // Refresh the list of available and active options.
+  useEffect(refreshOptions, [ note ]);
+  useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+    if (loadResults.getAttributeRows().find((attrRow) => attributes.isAffecting(attrRow, note))) {
+      refreshOptions();
+    }
+  });
+
   return (
     <div className="search-definition-widget">
       <div className="search-settings">
@@ -121,7 +147,7 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
             <tr>
               <td className="title-column">{t("search_definition.add_search_option")}</td>
               <td colSpan={2} className="add-search-option">
-                {SEARCH_OPTIONS.map(({ icon, label, tooltip }) => (
+                {searchOptions?.availableOptions.map(({ icon, label, tooltip }) => (
                   <Button
                     icon={icon}
                     text={label}
@@ -131,16 +157,13 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
               </td>
             </tr>
             <tbody className="search-options">
-              {SEARCH_OPTIONS.map(({ attributeType, attributeName, component }) => {
-                const attr = note.getAttribute(attributeType, attributeName);      
-                if (attr && component) {
-                  return component({
-                    attributeName,
-                    attributeType,
-                    note,
-                    refreshResults
-                  });
-                }  
+              {searchOptions?.activeOptions.map(({ attributeType, attributeName, component }) => {
+                return component?.({
+                  attributeName,
+                  attributeType,
+                  note,
+                  refreshResults
+                });
               })}
             </tbody>
             <tbody className="action-options">
@@ -201,7 +224,7 @@ function SearchOption({ note, title, children, help, attributeName, attributeTyp
   )
 }
 
-function SearchStringOption({ note, refreshResults }: SearchOptionProps) {
+function SearchStringOption({ note, refreshResults, ...restProps }: SearchOptionProps) {
   const currentValue = useRef("");
   const spacedUpdate = useSpacedUpdate(async () => {
     const searchString = currentValue.current;
@@ -216,7 +239,7 @@ function SearchStringOption({ note, refreshResults }: SearchOptionProps) {
     }
   }, 1000);
 
-  return <SearchOption
+  return <SearchOption    
     title={t("search_string.title_column")}
     help={<>
       <strong>{t("search_string.search_syntax")}</strong> - {t("search_string.also_see")} <a href="#" data-help-page="search.html">{t("search_string.complete_help")}</a>
@@ -230,6 +253,7 @@ function SearchStringOption({ note, refreshResults }: SearchOptionProps) {
           <li><code>note.dateCreated &gt;= MONTH-1</code> - {t("search_string.label_date_created")}</li>
       </ul>
     </>}
+    note={note} {...restProps}
   >
     <FormTextArea
       className="search-string"

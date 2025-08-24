@@ -149,10 +149,4 @@ export default class SearchDefinitionWidget extends NoteContextAwareWidget {
         this.$searchAndExecuteButton.css("visibility", actions.length > 0 ? "visible" : "_hidden");
     }
 
-    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        // only refreshing deleted attrs, otherwise components update themselves
-        if (loadResults.getAttributeRows().find((attrRow) => attrRow.type === "label" && attrRow.name === "action" && attrRow.isDeleted)) {
-            this.refresh();
-        }
-    }
 }
