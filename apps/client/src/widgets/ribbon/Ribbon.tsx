@@ -205,7 +205,7 @@ export default function Ribbon() {
                     ))}
                 </div>
                 <div className="ribbon-button-container">
-                    <NoteActions note={note} />
+                    { note && <NoteActions note={note} noteContext={noteContext} /> }
                 </div>
             </div>
         

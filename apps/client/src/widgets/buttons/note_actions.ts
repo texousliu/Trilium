@@ -38,31 +38,6 @@ const TPL = /*html*/`
     </style>
 
     <div class="dropdown-menu dropdown-menu-right">
-        <li data-trigger-command="renderActiveNote" class="dropdown-item render-note-button">
-            <span class="bx bx-extension"></span> ${t("note_actions.re_render_note")}<kbd data-command="renderActiveNote"></kbd>
-        </li>
-
-        <li data-trigger-command="findInText" class="dropdown-item find-in-text-button">
-            <span class='bx bx-search'></span> ${t("note_actions.search_in_note")}<kbd data-command="findInText"></kbd>
-        </li>
-
-        <li data-trigger-command="printActiveNote" class="dropdown-item print-active-note-button">
-            <span class="bx bx-printer"></span> ${t("note_actions.print_note")}<kbd data-command="printActiveNote"></kbd>
-        </li>
-
-        <li data-trigger-command="exportAsPdf" class="dropdown-item export-as-pdf-button">
-            <span class="bx bxs-file-pdf"></span> ${t("note_actions.print_pdf")}<kbd data-command="exportAsPdf"></kbd>
-        </li>
-
-        <div class="dropdown-divider"></div>
-
-
-        <li class="dropdown-item import-files-button"><span class="bx bx-import"></span> ${t("note_actions.import_files")}</li>
-
-        <li class="dropdown-item export-note-button"><span class="bx bx-export"></span> ${t("note_actions.export_note")}</li>
-
-
-        <div class="dropdown-divider"></div>
 
 
 
@@ -135,25 +110,6 @@ export default class NoteActionsWidget extends NoteContextAwareWidget {
         this.$renderNoteButton = this.$widget.find(".render-note-button");
         this.$saveRevisionButton = this.$widget.find(".save-revision-button");
 
-        this.$exportNoteButton = this.$widget.find(".export-note-button");
-        this.$exportNoteButton.on("click", () => {
-            if (this.$exportNoteButton.hasClass("disabled") || !this.noteContext?.notePath) {
-                return;
-            }
-
-            this.triggerCommand("showExportDialog", {
-                notePath: this.noteContext.notePath,
-                defaultType: "single"
-            });
-        });
-
-        this.$importNoteButton = this.$widget.find(".import-files-button");
-        this.$importNoteButton.on("click", () => {
-            if (this.noteId) {
-                this.triggerCommand("showImportDialog", { noteId: this.noteId });
-            }
-        });
-
         this.$widget.on("click", ".dropdown-item", () => this.$widget.find("[data-bs-toggle='dropdown']").dropdown("toggle"));
 
         this.$openNoteExternallyButton = this.$widget.find(".open-note-externally-button");
@@ -170,21 +126,15 @@ export default class NoteActionsWidget extends NoteContextAwareWidget {
     }
 
     async refreshVisibility(note: FNote) {
-        const isInOptions = note.noteId.startsWith("_options");
-
         this.$convertNoteIntoAttachmentButton.toggle(note.isEligibleForConversionToAttachment());
-
-        this.toggleDisabled(this.$findInTextButton, ["text", "code", "book", "mindMap", "doc"].includes(note.type));
 
         this.toggleDisabled(this.$showAttachmentsButton, !isInOptions);
         this.toggleDisabled(this.$showSourceButton, ["text", "code", "relationMap", "mermaid", "canvas", "mindMap"].includes(note.type));
 
-        const canPrint = ["text", "code"].includes(note.type);
+
         this.toggleDisabled(this.$printActiveNoteButton, canPrint);
         this.toggleDisabled(this.$exportAsPdfButton, canPrint);
         this.$exportAsPdfButton.toggleClass("hidden-ext", !utils.isElectron());
-
-        this.$renderNoteButton.toggle(note.type === "render");
 
         this.toggleDisabled(this.$openNoteExternallyButton, utils.isElectron() && !["search", "book"].includes(note.type));
         this.toggleDisabled(
