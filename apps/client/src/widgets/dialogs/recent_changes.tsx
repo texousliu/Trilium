@@ -6,7 +6,6 @@ import server from "../../services/server";
 import toast from "../../services/toast";
 import Button from "../react/Button";
 import Modal from "../react/Modal";
-import ReactBasicWidget from "../react/ReactBasicWidget";
 import hoisted_note from "../../services/hoisted_note";
 import type { RecentChangeRow } from "@triliumnext/commons";
 import froca from "../../services/froca";
@@ -14,15 +13,15 @@ import { formatDateTime } from "../../utils/formatters";
 import link from "../../services/link";
 import RawHtml from "../react/RawHtml";
 import ws from "../../services/ws";
-import useTriliumEvent from "../react/hooks";
+import { useTriliumEventBeta } from "../react/hooks";
 
-function RecentChangesDialogComponent() {
+export default function RecentChangesDialog() {
     const [ ancestorNoteId, setAncestorNoteId ] = useState<string>();
     const [ groupedByDate, setGroupedByDate ] = useState<Map<String, RecentChangeRow[]>>();
     const [ needsRefresh, setNeedsRefresh ] = useState(false);
     const [ shown, setShown ] = useState(false);
 
-    useTriliumEvent("showRecentChanges", ({ ancestorNoteId }) => {
+    useTriliumEventBeta("showRecentChanges", ({ ancestorNoteId }) => {
         setNeedsRefresh(true);
         setAncestorNoteId(ancestorNoteId ?? hoisted_note.getHoistedNoteId());
         setShown(true);
@@ -154,14 +153,6 @@ function DeletedNoteLink({ change, setShown }: { change: RecentChangeRow, setSho
             </a>
         </>
     );
-}
-
-export default class RecentChangesDialog extends ReactBasicWidget {
-
-    get component() {
-        return <RecentChangesDialogComponent />
-    }
-
 }
 
 function groupByDate(rows: RecentChangeRow[]) {

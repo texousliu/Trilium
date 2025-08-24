@@ -196,8 +196,8 @@ export default class DesktopLayout {
             .child(new CloseZenButton())
 
             // Desktop-specific dialogs.
-            .child(new PasswordNoteSetDialog())
-            .child(new UploadAttachmentsDialog());
+            .child(<PasswordNoteSetDialog />)
+            .child(<UploadAttachmentsDialog />);
 
         applyModals(rootContainer);
         return rootContainer;

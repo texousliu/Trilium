@@ -12,9 +12,9 @@ import toast from "../../services/toast";
 import RenameNoteBulkAction from "../bulk_actions/note/rename_note";
 import FNote from "../../entities/fnote";
 import froca from "../../services/froca";
-import useTriliumEvent from "../react/hooks";
+import { useTriliumEventBeta } from "../react/hooks";
 
-function BulkActionComponent() {
+export default function BulkActionsDialog() {
     const [ selectedOrActiveNoteIds, setSelectedOrActiveNoteIds ] = useState<string[]>();
     const [ bulkActionNote, setBulkActionNote ] = useState<FNote | null>();
     const [ includeDescendants, setIncludeDescendants ] = useState(false);
@@ -22,7 +22,7 @@ function BulkActionComponent() {
     const [ existingActions, setExistingActions ] = useState<RenameNoteBulkAction[]>([]);
     const [ shown, setShown ] = useState(false);
 
-    useTriliumEvent("openBulkActionsDialog", async ({ selectedOrActiveNoteIds }) => {
+    useTriliumEventBeta("openBulkActionsDialog", async ({ selectedOrActiveNoteIds }) => {
         setSelectedOrActiveNoteIds(selectedOrActiveNoteIds);
         setBulkActionNote(await froca.getNote("_bulkAction"));
         setShown(true);
@@ -46,12 +46,12 @@ function BulkActionComponent() {
         refreshExistingActions();
     }, [refreshExistingActions]);
     
-    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
         if (loadResults.getAttributeRows().find((row) =>
             row.type === "label" && row.name === "action" && row.noteId === "_bulkAction")) {
                 refreshExistingActions();
         }
-    }, shown);
+    });
 
     return (
         <Modal
@@ -116,12 +116,4 @@ function ExistingActionsList({ existingActions }: { existingActions?: RenameNote
             }
         </table>
     );
-}
-
-export default class BulkActionsDialog extends ReactBasicWidget {
-
-    get component() {
-        return <BulkActionComponent />
-    }
-
 }

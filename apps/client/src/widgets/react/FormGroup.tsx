@@ -25,7 +25,7 @@ export default function FormGroup({ name, label, title, className, children, des
 
             {childWithId}
 
-            {description && <small className="form-text">{description}</small>}
+            {description && <div><small className="form-text">{description}</small></div>}
         </div>
     );
 }

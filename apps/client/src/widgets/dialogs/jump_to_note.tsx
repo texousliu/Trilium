@@ -1,4 +1,3 @@
-import ReactBasicWidget from "../react/ReactBasicWidget";
 import Modal from "../react/Modal";
 import Button from "../react/Button";
 import NoteAutocomplete from "../react/NoteAutocomplete";
@@ -8,13 +7,13 @@ import note_autocomplete, { Suggestion } from "../../services/note_autocomplete"
 import appContext from "../../components/app_context";
 import commandRegistry from "../../services/command_registry";
 import { refToJQuerySelector } from "../react/react_utils";
-import useTriliumEvent from "../react/hooks";
+import { useTriliumEventBeta } from "../react/hooks";
 
 const KEEP_LAST_SEARCH_FOR_X_SECONDS = 120;
 
 type Mode = "last-search" | "recent-notes" | "commands";
 
-function JumpToNoteDialogComponent() {
+export default function JumpToNoteDialogComponent() {
     const [ mode, setMode ] = useState<Mode>();
     const [ lastOpenedTs, setLastOpenedTs ] = useState<number>(0);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -51,8 +50,8 @@ function JumpToNoteDialogComponent() {
         setLastOpenedTs(Date.now());
     }
 
-    useTriliumEvent("jumpToNote", () => openDialog(false));
-    useTriliumEvent("commandPalette", () => openDialog(true));
+    useTriliumEventBeta("jumpToNote", () => openDialog(false));
+    useTriliumEventBeta("commandPalette", () => openDialog(true));
 
     async function onItemSelected(suggestion?: Suggestion | null) {
         if (!suggestion) {
@@ -114,12 +113,4 @@ function JumpToNoteDialogComponent() {
             <div className="algolia-autocomplete-container jump-to-note-results" ref={containerRef}></div>
         </Modal>
     );
-}
-
-export default class JumpToNoteDialog extends ReactBasicWidget {
-
-    get component() {
-        return <JumpToNoteDialogComponent />;
-    }
-
 }

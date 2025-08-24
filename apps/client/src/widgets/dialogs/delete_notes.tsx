@@ -10,7 +10,7 @@ import FNote from "../../entities/fnote.js";
 import link from "../../services/link.js";
 import Button from "../react/Button.jsx";
 import Alert from "../react/Alert.jsx";
-import useTriliumEvent from "../react/hooks.jsx";
+import useTriliumEvent, { useTriliumEventBeta } from "../react/hooks.jsx";
 
 export interface ResolveOptions {
     proceed: boolean;
@@ -30,7 +30,7 @@ interface BrokenRelationData {
     source: string;
 }
 
-function DeleteNotesDialogComponent() {
+export default function DeleteNotesDialog() {
     const [ opts, setOpts ] = useState<ShowDeleteNotesDialogOpts>({});
     const [ deleteAllClones, setDeleteAllClones ] = useState(false);
     const [ eraseNotes, setEraseNotes ] = useState(!!opts.forceDeleteAllClones);
@@ -39,7 +39,7 @@ function DeleteNotesDialogComponent() {
     const [ shown, setShown ] = useState(false);
     const okButtonRef = useRef<HTMLButtonElement>(null);
 
-    useTriliumEvent("showDeleteNotesDialog", (opts) => {
+    useTriliumEventBeta("showDeleteNotesDialog", (opts) => {
         setOpts(opts);
         setShown(true);
     })
@@ -170,12 +170,4 @@ function BrokenRelations({ brokenRelations }: { brokenRelations: DeleteNotesPrev
     } else {
         return <></>;
     }
-}
-
-export default class DeleteNotesDialog extends ReactBasicWidget {
-
-    get component() {
-        return <DeleteNotesDialogComponent />;
-    }    
-
 }

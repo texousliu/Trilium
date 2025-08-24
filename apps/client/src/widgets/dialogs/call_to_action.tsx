@@ -1,11 +1,12 @@
-import { useState } from "preact/hooks";
+import { useMemo, useState } from "preact/hooks";
 import Button from "../react/Button";
 import Modal from "../react/Modal";
-import ReactBasicWidget from "../react/ReactBasicWidget";
-import { CallToAction, dismissCallToAction, getCallToActions } from "./call_to_action_definitions";
+import { dismissCallToAction, getCallToActions } from "./call_to_action_definitions";
 import { t } from "../../services/i18n";
 
-function CallToActionDialogComponent({ activeCallToActions }: { activeCallToActions: CallToAction[] }) {
+export default function CallToActionDialog() {
+    const activeCallToActions = useMemo(() => getCallToActions(), []);
+    
     if (!activeCallToActions.length) {
         return <></>;
     }
@@ -47,12 +48,4 @@ function CallToActionDialogComponent({ activeCallToActions }: { activeCallToActi
             <p>{activeItem.message}</p>
         </Modal>
     )
-}
-
-export class CallToActionDialog extends ReactBasicWidget {
-
-    get component() {
-        return <CallToActionDialogComponent activeCallToActions={getCallToActions()} /> 
-    }
-
 }

@@ -9,9 +9,9 @@ import ReactBasicWidget from "../react/ReactBasicWidget";
 import options from "../../services/options";
 import importService from "../../services/import.js";
 import tree from "../../services/tree";
-import useTriliumEvent from "../react/hooks";
+import { useTriliumEventBeta } from "../react/hooks";
 
-function UploadAttachmentsDialogComponent() {
+export default function UploadAttachmentsDialog() {
     const [ parentNoteId, setParentNoteId ] = useState<string>();
     const [ files, setFiles ] = useState<FileList | null>(null);
     const [ shrinkImages, setShrinkImages ] = useState(options.is("compressImages"));
@@ -19,7 +19,7 @@ function UploadAttachmentsDialogComponent() {
     const [ description, setDescription ] = useState<string | undefined>(undefined);
     const [ shown, setShown ] = useState(false);
 
-    useTriliumEvent("showUploadAttachmentsDialog", ({ noteId }) => {
+    useTriliumEventBeta("showUploadAttachmentsDialog", ({ noteId }) => {
         setParentNoteId(noteId);
         setShown(true);
     });
@@ -63,12 +63,4 @@ function UploadAttachmentsDialogComponent() {
             </FormGroup>
         </Modal>
     );
-}
-
-export default class UploadAttachmentsDialog extends ReactBasicWidget {
-
-    get component() {
-        return <UploadAttachmentsDialogComponent />;
-    }
-
 }

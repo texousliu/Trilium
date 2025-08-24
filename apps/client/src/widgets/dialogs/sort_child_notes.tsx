@@ -5,12 +5,11 @@ import FormCheckbox from "../react/FormCheckbox";
 import FormRadioGroup from "../react/FormRadioGroup";
 import FormTextBox from "../react/FormTextBox";
 import Modal from "../react/Modal";
-import ReactBasicWidget from "../react/ReactBasicWidget";
 import server from "../../services/server";
 import FormGroup from "../react/FormGroup";
-import useTriliumEvent from "../react/hooks";
+import { useTriliumEventBeta } from "../react/hooks";
 
-function SortChildNotesDialogComponent() {
+export default function SortChildNotesDialog() {
     const [ parentNoteId, setParentNoteId ] = useState<string>();
     const [ sortBy, setSortBy ] = useState("title");
     const [ sortDirection, setSortDirection ] = useState("asc");
@@ -19,7 +18,7 @@ function SortChildNotesDialogComponent() {
     const [ sortLocale, setSortLocale ] = useState("");
     const [ shown, setShown ] = useState(false);
 
-    useTriliumEvent("sortChildNotes", ({ node }) => {
+    useTriliumEventBeta("sortChildNotes", ({ node }) => {
         setParentNoteId(node.data.noteId);
         setShown(true);
     });
@@ -88,12 +87,4 @@ function SortChildNotesDialogComponent() {
             </FormGroup>
         </Modal>
     )
-}
-
-export default class SortChildNotesDialog extends ReactBasicWidget {
-
-    get component() {
-        return <SortChildNotesDialogComponent />;
-    }
-
 }

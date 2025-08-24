@@ -5,15 +5,14 @@ import server from "../../services/server";
 import toast from "../../services/toast";
 import utils from "../../services/utils";
 import Modal from "../react/Modal";
-import ReactBasicWidget from "../react/ReactBasicWidget";
 import Button from "../react/Button";
-import useTriliumEvent from "../react/hooks";
+import { useTriliumEventBeta } from "../react/hooks";
 
 interface RenderMarkdownResponse {
     htmlContent: string;
 }
 
-function MarkdownImportDialogComponent() {
+export default function MarkdownImportDialog() {
     const markdownImportTextArea = useRef<HTMLTextAreaElement>(null);
     let [ text, setText ] = useState("");
     let [ shown, setShown ] = useState(false);
@@ -33,8 +32,8 @@ function MarkdownImportDialogComponent() {
         }
     }, []);
 
-    useTriliumEvent("importMarkdownInline", triggerImport);
-    useTriliumEvent("pasteMarkdownIntoText", triggerImport);
+    useTriliumEventBeta("importMarkdownInline", triggerImport);
+    useTriliumEventBeta("pasteMarkdownIntoText", triggerImport);
 
     async function sendForm() {
         await convertMarkdownToHtml(text);
@@ -62,14 +61,6 @@ function MarkdownImportDialogComponent() {
                 }}></textarea>
         </Modal>
     )
-}
-
-export default class MarkdownImportDialog extends ReactBasicWidget {
-
-    get component() {
-        return <MarkdownImportDialogComponent />;
-    }
-
 }
 
 async function convertMarkdownToHtml(markdownContent: string) {

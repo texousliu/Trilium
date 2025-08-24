@@ -28,33 +28,33 @@ import NoteIconWidget from "../widgets/note_icon";
 import PromotedAttributesWidget from "../widgets/promoted_attributes.js";
 import NoteDetailWidget from "../widgets/note_detail.js";
 import NoteListWidget from "../widgets/note_list.js";
-import { CallToActionDialog } from "../widgets/dialogs/call_to_action.jsx";
+import CallToActionDialog from "../widgets/dialogs/call_to_action.jsx";
 import NoteTitleWidget from "../widgets/note_title.jsx";
 
 export function applyModals(rootContainer: RootContainer) {
     rootContainer
-        .child(new BulkActionsDialog())
-        .child(new AboutDialog())
-        .child(new HelpDialog())
-        .child(new RecentChangesDialog())
-        .child(new BranchPrefixDialog())
-        .child(new SortChildNotesDialog())
-        .child(new IncludeNoteDialog())
-        .child(new NoteTypeChooserDialog())
-        .child(new JumpToNoteDialog())
-        .child(new AddLinkDialog())
-        .child(new CloneToDialog())
-        .child(new MoveToDialog())
-        .child(new ImportDialog())
-        .child(new ExportDialog())
-        .child(new MarkdownImportDialog())
-        .child(new ProtectedSessionPasswordDialog())
-        .child(new RevisionsDialog())
-        .child(new DeleteNotesDialog())
-        .child(new InfoDialog())
-        .child(new ConfirmDialog())
-        .child(new PromptDialog())
-        .child(new IncorrectCpuArchDialog())
+        .child(<BulkActionsDialog />)
+        .child(<AboutDialog />)
+        .child(<HelpDialog />)
+        .child(<RecentChangesDialog />)
+        .child(<BranchPrefixDialog />)
+        .child(<SortChildNotesDialog />)
+        .child(<IncludeNoteDialog />)
+        .child(<NoteTypeChooserDialog />)
+        .child(<JumpToNoteDialog />)
+        .child(<AddLinkDialog />)
+        .child(<CloneToDialog />)
+        .child(<MoveToDialog />)
+        .child(<ImportDialog />)
+        .child(<ExportDialog />)
+        .child(<MarkdownImportDialog />)
+        .child(<ProtectedSessionPasswordDialog />)
+        .child(<RevisionsDialog />)
+        .child(<DeleteNotesDialog />)
+        .child(<InfoDialog />)
+        .child(<ConfirmDialog />)
+        .child(<PromptDialog />)
+        .child(<IncorrectCpuArchDialog />)
         .child(new PopupEditorDialog()
                 .child(new FlexContainer("row")
                     .class("title-row")
@@ -66,5 +66,5 @@ export function applyModals(rootContainer: RootContainer) {
                 .child(new PromotedAttributesWidget())
                 .child(new NoteDetailWidget())
                 .child(new NoteListWidget(true)))
-        .child(new CallToActionDialog());
+        .child(<CallToActionDialog />);
 }

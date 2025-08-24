@@ -11,11 +11,11 @@ import { default as TextTypeWidget } from "../type_widgets/editable_text.js";
 import { logError } from "../../services/ws";
 import FormGroup from "../react/FormGroup.js";
 import { refToJQuerySelector } from "../react/react_utils";
-import useTriliumEvent from "../react/hooks";
+import { useTriliumEventBeta } from "../react/hooks";
 
 type LinkType = "reference-link" | "external-link" | "hyper-link";
 
-function AddLinkDialogComponent() {
+export default function AddLinkDialog() {
     const [ textTypeWidget, setTextTypeWidget ] = useState<TextTypeWidget>();
     const initialText = useRef<string>();
     const [ linkTitle, setLinkTitle ] = useState("");
@@ -24,7 +24,7 @@ function AddLinkDialogComponent() {
     const [ suggestion, setSuggestion ] = useState<Suggestion | null>(null);
     const [ shown, setShown ] = useState(false);
 
-    useTriliumEvent("showAddLinkDialog", ( { textTypeWidget, text }) => {
+    useTriliumEventBeta("showAddLinkDialog", ( { textTypeWidget, text }) => {
         setTextTypeWidget(textTypeWidget);
         initialText.current = text;
         setShown(true);
@@ -151,12 +151,4 @@ function AddLinkDialogComponent() {
             )}
         </Modal>
     );
-}
-
-export default class AddLinkDialog extends ReactBasicWidget {
-    
-    get component() {
-        return <AddLinkDialogComponent />;
-    }
-
 }

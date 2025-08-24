@@ -20,7 +20,7 @@ import ActionButton from "../react/ActionButton";
 import options from "../../services/options";
 import useTriliumEvent from "../react/hooks";
 
-function RevisionsDialogComponent() {
+export default function RevisionsDialog() {
     const [ note, setNote ] = useState<FNote>();
     const [ revisions, setRevisions ] = useState<RevisionItem[]>();
     const [ currentRevision, setCurrentRevision ] = useState<RevisionItem>();
@@ -289,14 +289,6 @@ function RevisionFooter({ note }: { note?: FNote }) {
             onClick={() => appContext.tabManager.openContextWithNote("_optionsOther", { activate: true })}
         />
     </>;
-}
-
-export default class RevisionsDialog extends ReactBasicWidget  {
-
-    get component() {
-        return <RevisionsDialogComponent />
-    }
-
 }
 
 async function getNote(noteId?: string | null) {

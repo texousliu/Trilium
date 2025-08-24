@@ -11,7 +11,7 @@ import toastService, { ToastOptions } from "../../services/toast";
 import utils from "../../services/utils";
 import open from "../../services/open";
 import froca from "../../services/froca";
-import useTriliumEvent from "../react/hooks";
+import { useTriliumEventBeta } from "../react/hooks";
 
 interface ExportDialogProps {
     branchId?: string | null;
@@ -19,7 +19,7 @@ interface ExportDialogProps {
     defaultType?: "subtree" | "single";
 }
 
-function ExportDialogComponent() {
+export default function ExportDialog() {
     const [ opts, setOpts ] = useState<ExportDialogProps>();
     const [ exportType, setExportType ] = useState<string>(opts?.defaultType ?? "subtree");
     const [ subtreeFormat, setSubtreeFormat ] = useState("html");
@@ -27,7 +27,7 @@ function ExportDialogComponent() {
     const [ opmlVersion, setOpmlVersion ] = useState("2.0");
     const [ shown, setShown ] = useState(false);
 
-    useTriliumEvent("showExportDialog", async ({ notePath, defaultType }) => {
+    useTriliumEventBeta("showExportDialog", async ({ notePath, defaultType }) => {
         const { noteId, parentNoteId } = tree.getNoteIdAndParentIdFromUrl(notePath);
         if (!parentNoteId) {
             return;
@@ -123,14 +123,6 @@ function ExportDialogComponent() {
 
         </Modal>
     );
-}
-
-export default class ExportDialog extends ReactBasicWidget {
-
-    get component() {
-        return <ExportDialogComponent />
-    }    
-
 }
 
 function exportBranch(branchId: string, type: string, format: string, version: string) {

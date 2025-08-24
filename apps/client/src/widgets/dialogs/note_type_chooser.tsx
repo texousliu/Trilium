@@ -1,4 +1,3 @@
-import ReactBasicWidget from "../react/ReactBasicWidget";
 import Modal from "../react/Modal";
 import { t } from "../../services/i18n";
 import FormGroup from "../react/FormGroup";
@@ -10,7 +9,7 @@ import { MenuCommandItem, MenuItem } from "../../menus/context_menu";
 import { TreeCommandNames } from "../../menus/tree_context_menu";
 import { Suggestion } from "../../services/note_autocomplete";
 import Badge from "../react/Badge";
-import useTriliumEvent from "../react/hooks";
+import { useTriliumEventBeta } from "../react/hooks";
 
 export interface ChooseNoteTypeResponse {
     success: boolean;
@@ -26,13 +25,13 @@ const SEPARATOR_TITLE_REPLACEMENTS = [
     t("note_type_chooser.templates")
 ];
 
-function NoteTypeChooserDialogComponent() {
+export default function NoteTypeChooserDialogComponent() {
     const [ callback, setCallback ] = useState<ChooseNoteTypeCallback>();
     const [ shown, setShown ] = useState(false);
     const [ parentNote, setParentNote ] = useState<Suggestion | null>(); 
     const [ noteTypes, setNoteTypes ] = useState<MenuItem<TreeCommandNames>[]>([]);    
 
-    useTriliumEvent("chooseNoteType", ({ callback }) => {
+    useTriliumEventBeta("chooseNoteType", ({ callback }) => {
         setCallback(() => callback);
         setShown(true);
     });
@@ -119,12 +118,4 @@ function NoteTypeChooserDialogComponent() {
             </FormGroup>
         </Modal>
     );
-}
-
-export default class NoteTypeChooserDialog extends ReactBasicWidget {
-
-    get component() {
-        return <NoteTypeChooserDialogComponent />
-    }    
-
 }

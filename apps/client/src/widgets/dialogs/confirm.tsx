@@ -1,10 +1,9 @@
-import ReactBasicWidget from "../react/ReactBasicWidget";
 import Modal from "../react/Modal";
 import Button from "../react/Button";
 import { t } from "../../services/i18n";
 import { useState } from "preact/hooks";
 import FormCheckbox from "../react/FormCheckbox";
-import useTriliumEvent from "../react/hooks";
+import { useTriliumEventBeta } from "../react/hooks";
 
 interface ConfirmDialogProps {
     title?: string;
@@ -13,7 +12,7 @@ interface ConfirmDialogProps {
     isConfirmDeleteNoteBox?: boolean;   
 }
 
-function ConfirmDialogComponent() {
+export default function ConfirmDialog() {
     const [ opts, setOpts ] = useState<ConfirmDialogProps>();
     const [ isDeleteNoteChecked, setIsDeleteNoteChecked ] = useState(false);
     const [ shown, setShown ] = useState(false);
@@ -28,8 +27,8 @@ function ConfirmDialogComponent() {
         setShown(true);
     }
 
-    useTriliumEvent("showConfirmDialog", ({ message, callback }) => showDialog(null, message, callback, false));
-    useTriliumEvent("showConfirmDeleteNoteBoxWithNoteDialog", ({ title, callback }) => showDialog(title, t("confirm.are_you_sure_remove_note", { title: title }), callback, true));
+    useTriliumEventBeta("showConfirmDialog", ({ message, callback }) => showDialog(null, message, callback, false));
+    useTriliumEventBeta("showConfirmDeleteNoteBoxWithNoteDialog", ({ title, callback }) => showDialog(title, t("confirm.are_you_sure_remove_note", { title: title }), callback, true));
 
     return ( 
         <Modal
@@ -91,12 +90,4 @@ export interface ConfirmWithMessageOptions {
 export interface ConfirmWithTitleOptions {
     title: string;
     callback: ConfirmDialogCallback;
-}
-
-export default class ConfirmDialog extends ReactBasicWidget {
-
-    get component() {
-        return <ConfirmDialogComponent />;
-    }
-
 }
