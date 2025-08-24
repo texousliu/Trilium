@@ -1,5 +1,5 @@
-import { isIOS } from "../../services/utils.js";
-import NoteContextAwareWidget from "../note_context_aware_widget.js";
+import { isIOS } from "../../../services/utils.js";
+import NoteContextAwareWidget from "../../note_context_aware_widget.js";
 
 const TPL = /*html*/`\
 <div class="classic-toolbar-outer-container">

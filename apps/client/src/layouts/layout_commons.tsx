@@ -25,7 +25,7 @@ import IncorrectCpuArchDialog from "../widgets/dialogs/incorrect_cpu_arch.js";
 import PopupEditorDialog from "../widgets/dialogs/popup_editor.js";
 import FlexContainer from "../widgets/containers/flex_container.js";
 import NoteIconWidget from "../widgets/note_icon";
-import PromotedAttributesWidget from "../widgets/ribbon_widgets/promoted_attributes.js";
+import PromotedAttributesWidget from "../widgets/promoted_attributes.js";
 import NoteDetailWidget from "../widgets/note_detail.js";
 import NoteListWidget from "../widgets/note_list.js";
 import { CallToActionDialog } from "../widgets/dialogs/call_to_action.jsx";

@@ -1,16 +1,16 @@
-import { t } from "../../services/i18n.js";
-import server from "../../services/server.js";
-import ws from "../../services/ws.js";
-import treeService from "../../services/tree.js";
-import noteAutocompleteService from "../../services/note_autocomplete.js";
-import NoteContextAwareWidget from "../note_context_aware_widget.js";
-import attributeService from "../../services/attributes.js";
-import options from "../../services/options.js";
-import utils from "../../services/utils.js";
-import type FNote from "../../entities/fnote.js";
-import type { Attribute } from "../../services/attribute_parser.js";
-import type FAttribute from "../../entities/fattribute.js";
-import type { EventData } from "../../components/app_context.js";
+import { t } from "../services/i18n.js";
+import server from "../services/server.js";
+import ws from "../services/ws.js";
+import treeService from "../services/tree.js";
+import noteAutocompleteService from "../services/note_autocomplete.js";
+import NoteContextAwareWidget from "./note_context_aware_widget.js";
+import attributeService from "../services/attributes.js";
+import options from "../services/options.js";
+import utils from "../services/utils.js";
+import type FNote from "../entities/fnote.js";
+import type { Attribute } from "../services/attribute_parser.js";
+import type FAttribute from "../entities/fattribute.js";
+import type { EventData } from "../components/app_context.js";
 
 const TPL = /*html*/`
 <div class="promoted-attributes-widget">

@@ -5,7 +5,7 @@ import FormSelect, { FormSelectWithGroups } from "../react/FormSelect";
 import { TabContext } from "./ribbon-interface";
 import { mapToKeyValueArray } from "../../services/utils";
 import { useNoteLabel, useNoteLabelBoolean } from "../react/hooks";
-import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty, ComboBoxGroup, ComboBoxProperty, NumberProperty } from "../ribbon_widgets/book_properties_config";
+import { bookPropertiesConfig, BookProperty, ButtonProperty, CheckBoxProperty, ComboBoxProperty, NumberProperty } from "./collection-properties-config";
 import Button from "../react/Button";
 import { ParentComponent } from "../react/react_utils";
 import FNote from "../../entities/fnote";
