@@ -97,7 +97,8 @@ const SEARCH_OPTIONS: SearchOption[] = [
     attributeType: "label",
     icon: "bx bx-bug",
     label: t("search_definition.debug"),
-    tooltip: t("search_definition.debug_description")
+    tooltip: t("search_definition.debug_description"),
+    component: DebugOption
   }
 ];
 
@@ -412,9 +413,19 @@ function AncestorOption({ note, ...restProps}: SearchOptionProps) {
 
 function FastSearchOption({ ...restProps }: SearchOptionProps) {
   return <SearchOption
-    titleIcon="bx bx-run"
-    title={t("fast_search.fast_search")}
+    titleIcon="bx bx-run" title={t("fast_search.fast_search")}
     help={t("fast_search.description")}
+    {...restProps}
+  />
+}
+
+function DebugOption({ ...restProps }: SearchOptionProps) {
+  return <SearchOption
+    titleIcon="bx bx-bug" title={t("debug.debug")}
+    help={<>
+      <p>{t("debug.debug_info")}</p>
+      {t("debug.access_info")}
+    </>}
     {...restProps}
   />
 }
