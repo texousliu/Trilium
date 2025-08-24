@@ -10,7 +10,7 @@ import attributes, { removeOwnedAttributesByNameOrType } from "../../services/at
 import FNote from "../../entities/fnote";
 import toast from "../../services/toast";
 import froca from "../../services/froca";
-import { useContext, useEffect, useRef, useState } from "preact/hooks";
+import { useContext, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { ParentComponent } from "../react/react_utils";
 import { useNoteLabel, useNoteRelation, useSpacedUpdate, useTooltip, useTriliumEventBeta } from "../react/hooks";
 import appContext from "../../components/app_context";
@@ -18,6 +18,7 @@ import server from "../../services/server";
 import ws from "../../services/ws";
 import tree from "../../services/tree";
 import NoteAutocomplete from "../react/NoteAutocomplete";
+import FormSelect from "../react/FormSelect";
 
 interface SearchOption {
   attributeName: string;
@@ -27,6 +28,7 @@ interface SearchOption {
   tooltip?: string;
   // TODO: Make mandatory once all components are ported.
   component?: (props: SearchOptionProps) => VNode;
+  additionalAttributesToDelete?: { type: "label" | "relation", name: string }[];
 }
 
 interface SearchOptionProps {
@@ -34,6 +36,7 @@ interface SearchOptionProps {
   refreshResults: () => void;
   attributeName: string;
   attributeType: "label" | "relation";
+  additionalAttributesToDelete?: { type: "label" | "relation", name: string }[];
   error?: { message: string };
 }
 
@@ -57,7 +60,8 @@ const SEARCH_OPTIONS: SearchOption[] = [
     attributeType: "relation",
     icon: "bx bx-filter-alt",
     label: t("search_definition.ancestor"),
-    component: AncestorOption
+    component: AncestorOption,
+    additionalAttributesToDelete: [ { type: "label", name: "ancestorDepth" } ]
   },
   {
     attributeName: "fastSearch",
@@ -168,13 +172,14 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
               </td>
             </tr>
             <tbody className="search-options">
-              {searchOptions?.activeOptions.map(({ attributeType, attributeName, component }) => {
+              {searchOptions?.activeOptions.map(({ attributeType, attributeName, component, additionalAttributesToDelete }) => {
                 return component?.({
                   attributeName,
                   attributeType,
                   note,
                   refreshResults,
-                  error
+                  error,
+                  additionalAttributesToDelete
                 });
               })}
             </tbody>
@@ -230,13 +235,14 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
   )
 }
 
-function SearchOption({ note, title, children, help, attributeName, attributeType }: {
+function SearchOption({ note, title, children, help, attributeName, attributeType, additionalAttributesToDelete }: {
   note: FNote;
   title: string,
   children: ComponentChildren,
   help: ComponentChildren,
   attributeName: string,
-  attributeType: AttributeType
+  attributeType: AttributeType,
+  additionalAttributesToDelete: { type: "label" | "relation", name: string }[]
 }) {
   return (
     <tr>
@@ -247,7 +253,14 @@ function SearchOption({ note, title, children, help, attributeName, attributeTyp
         <ActionButton
           icon="bx bx-x"
           className="search-option-del"
-          onClick={() => removeOwnedAttributesByNameOrType(note, attributeType, attributeName)}
+          onClick={() => {
+            removeOwnedAttributesByNameOrType(note, attributeType, attributeName);
+            if (additionalAttributesToDelete) {
+              for (const { type, name } of additionalAttributesToDelete) {
+                removeOwnedAttributesByNameOrType(note, type, name);
+              }
+            }
+          }}
         />
       </td>
     </tr>
@@ -354,15 +367,39 @@ function SearchScriptOption({ note, ...restProps }: SearchOptionProps) {
 
 function AncestorOption({ note, ...restProps}: SearchOptionProps) {
   const [ ancestor, setAncestor ] = useNoteRelation(note, "ancestor");
+  const [ depth, setDepth ] = useNoteLabel(note, "ancestorDepth");
+
+  const options = useMemo(() => {
+    const options: { value: string | undefined; label: string }[] = [
+      { value: "", label: t("ancestor.depth_doesnt_matter") },
+      { value: "eq1", label: `${t("ancestor.depth_eq", { count: 1 })} (${t("ancestor.direct_children")})` }
+    ];    
+
+    for (let i=2; i<=9; i++) options.push({ value: "eq" + i, label: t("ancestor.depth_eq", { count: i }) });
+    for (let i=0; i<=9; i++) options.push({ value: "gt" + i, label: t("ancestor.depth_gt", { count: i }) });
+    for (let i=2; i<=9; i++) options.push({ value: "lt" + i, label: t("ancestor.depth_lt", { count: i }) });
+
+    return options;
+  }, []);
 
   return <SearchOption
     title={t("ancestor.label")}    
     note={note} {...restProps}
   >
-    <NoteAutocomplete
-      noteId={ancestor !== "root" ? ancestor ?? undefined : undefined}
-      noteIdChanged={noteId => setAncestor(noteId ?? "root")}
-      placeholder={t("ancestor.placeholder")}
-    />
+    <div style={{display: "flex", alignItems: "center"}}>
+      <NoteAutocomplete
+        noteId={ancestor !== "root" ? ancestor ?? undefined : undefined}
+        noteIdChanged={noteId => setAncestor(noteId ?? "root")}
+        placeholder={t("ancestor.placeholder")}
+      />
+
+      <div style="margin-left: 10px; margin-right: 10px">{t("ancestor.depth_label")}:</div>
+      <FormSelect
+        values={options}
+        keyProperty="value" titleProperty="label"
+        currentValue={depth ?? ""} onChange={(value) => setDepth(value ? value : null)}
+        style={{ flexShrink: 3 }}
+      />
+    </div>
   </SearchOption>;
 }

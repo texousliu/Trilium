@@ -369,7 +369,14 @@ export function useNoteRelation(note: FNote | undefined | null, relationName: st
     ] as const;
 }
 
-export function useNoteLabel(note: FNote | undefined | null, labelName: string): [string | null | undefined, (newValue: string) => void] {
+/**
+ * Allows a React component to read or write a note's label while also reacting to changes in value.
+ * 
+ * @param note the note whose label to read/write.
+ * @param labelName the name of the label to read/write.
+ * @returns an array where the first element is the getter and the second element is the setter. The setter has a special behaviour for convenience: if the value is undefined, the label is created without a value (e.g. a tag), if the value is null then the label is removed.
+ */
+export function useNoteLabel(note: FNote | undefined | null, labelName: string): [string | null | undefined, (newValue: string | null | undefined) => void] {
     const [ labelValue, setLabelValue ] = useState<string | null | undefined>(note?.getLabelValue(labelName));
 
     useEffect(() => setLabelValue(note?.getLabelValue(labelName) ?? null), [ note ]);
@@ -381,9 +388,13 @@ export function useNoteLabel(note: FNote | undefined | null, labelName: string):
         }
     });
 
-    const setter = useCallback((value: string | undefined) => {
+    const setter = useCallback((value: string | null | undefined) => {
         if (note) {
-            attributes.setLabel(note.noteId, labelName, value)
+            if (value || value === undefined) {
+                attributes.setLabel(note.noteId, labelName, value)
+            } else if (value === null) {
+                attributes.removeOwnedLabelByName(note, labelName);
+            }
         }
     }, [note]);
 
