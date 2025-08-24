@@ -49,21 +49,4 @@ export default abstract class AbstractSearchOption extends Component {
     }
 
     abstract doRender(): JQuery<HTMLElement>;
-
-    async deleteOption() {
-        // TODO: Find a better pattern.
-        await this.deleteAttribute((this.constructor as any).attributeType, (this.constructor as any).optionName);
-
-        await ws.waitForMaxKnownEntityChangeId();
-
-        await this.triggerCommand("refreshSearchDefinition");
-    }
-
-    async deleteAttribute(type: AttributeType, name: string) {
-        for (const attr of this.note.getOwnedAttributes()) {
-            if (attr.type === type && attr.name === name) {
-                await server.remove(`notes/${this.note.noteId}/attributes/${attr.attributeId}`);
-            }
-        }
-    }
 }

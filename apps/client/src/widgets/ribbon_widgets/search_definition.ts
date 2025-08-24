@@ -163,10 +163,6 @@ export default class SearchDefinitionWidget extends NoteContextAwareWidget {
         this.triggerEvent("searchRefreshed", { ntxId: this.noteContext?.ntxId });
     }
 
-    async refreshSearchDefinitionCommand() {
-        await this.refresh();
-    }
-
     async refreshWithNote(note: FNote) {
         if (!this.note) {
             return;

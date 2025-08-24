@@ -6,34 +6,6 @@ import appContext, { type EventData } from "../../components/app_context.js";
 import { t } from "../../services/i18n.js";
 import { Tooltip } from "bootstrap";
 
-const TPL = /*html*/`
-<tr>
-    <td class="title-column">${t("search_string.title_column")}</td>
-    <td>
-        <textarea class="form-control search-string" placeholder="${t("search_string.placeholder")}" autofocus></textarea>
-    </td>
-    <td class="button-column">
-        <div class="dropdown help-dropdown">
-          <span class="bx bx-help-circle icon-action" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
-          <div class="dropdown-menu dropdown-menu-right p-4">
-            <strong>${t("search_string.search_syntax")}</strong> - ${t("search_string.also_see")} <a href="#" data-help-page="search.html">${t("search_string.complete_help")}</a>
-
-            <ul style="marigin-bottom: 0;">
-                <li>${t("search_string.full_text_search")}</li>
-                <li><code>#abc</code> - ${t("search_string.label_abc")}</li>
-                <li><code>#year = 2019</code> - ${t("search_string.label_year")}</li>
-                <li><code>#rock #pop</code> - ${t("search_string.label_rock_pop")}</li>
-                <li><code>#rock or #pop</code> - ${t("search_string.label_rock_or_pop")}</li>
-                <li><code>#year &lt;= 2000</code> - ${t("search_string.label_year_comparison")}</li>
-                <li><code>note.dateCreated >= MONTH-1</code> - ${t("search_string.label_date_created")}</li>
-            </ul>
-          </div>
-        </div>
-
-        <span class="bx bx-x icon-action search-option-del"></span>
-    </td>
-</tr>`;
-
 export default class SearchString extends AbstractSearchOption {
 
     private $searchString!: JQuery<HTMLElement>;

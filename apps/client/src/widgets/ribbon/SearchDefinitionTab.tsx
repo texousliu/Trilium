@@ -1,6 +1,14 @@
+import { ComponentChildren } from "preact";
 import { t } from "../../services/i18n";
 import Button from "../react/Button";
 import { TabContext } from "./ribbon-interface";
+import Dropdown from "../react/Dropdown";
+import ActionButton from "../react/ActionButton";
+import FormTextArea from "../react/FormTextArea";
+import { AttributeType, OptionNames } from "@triliumnext/commons";
+import { removeOwnedAttributesByNameOrType } from "../../services/attributes";
+import { note } from "mermaid/dist/rendering-util/rendering-elements/shapes/note.js";
+import FNote from "../../entities/fnote";
 
 interface SearchOption {
   searchOption: string;
@@ -73,8 +81,58 @@ export default function SearchDefinitionTab({ note }: TabContext) {
               ))}
             </td>
           </tr>
+          <tbody className="search-options">
+            <SearchStringOption />
+          </tbody>
         </table>
       </div>
     </div>
   )
+}
+
+function SearchOption({ note, title, children, help, attributeName, attributeType }: {
+  note: FNote;
+  title: string,
+  children: ComponentChildren,
+  help: ComponentChildren,
+  attributeName: string,
+  attributeType: AttributeType
+}) {
+  return (
+    <tr>
+      <td className="title-column">{title}</td>
+      <td>{children}</td>
+      <td className="button-column">
+        {help && <Dropdown buttonClassName="bx bx-help-circle icon-action" hideToggleArrow>{help}</Dropdown>}
+        <ActionButton
+          icon="bx bx-x"
+          className="search-option-del"
+          onClick={() => removeOwnedAttributesByNameOrType(note, attributeType, attributeName)}
+        />
+      </td>
+    </tr>
+  )
+}
+
+function SearchStringOption() {
+  return <SearchOption
+    title={t("search_string.title_column")}
+    help={<>
+      <strong>{t("search_string.search_syntax")}</strong> - {t("search_string.also_see")} <a href="#" data-help-page="search.html">{t("search_string.complete_help")}</a>
+      <ul style="marigin-bottom: 0;">
+          <li>{t("search_string.full_text_search")}</li>
+          <li><code>#abc</code> - {t("search_string.label_abc")}</li>
+          <li><code>#year = 2019</code> - {t("search_string.label_year")}</li>
+          <li><code>#rock #pop</code> - {t("search_string.label_rock_pop")}</li>
+          <li><code>#rock or #pop</code> - {t("search_string.label_rock_or_pop")}</li>
+          <li><code>#year &lt;= 2000</code> - {t("search_string.label_year_comparison")}</li>
+          <li><code>note.dateCreated &gt;= MONTH-1</code> - {t("search_string.label_date_created")}</li>
+      </ul>
+    </>}
+  >
+    <FormTextArea
+      className="search-string"
+      placeholder={t("search_string.placeholder")}
+    />
+  </SearchOption>
 }
