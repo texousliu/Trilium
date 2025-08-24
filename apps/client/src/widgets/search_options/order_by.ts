@@ -37,13 +37,6 @@ const TPL = /*html*/`
 
 export default class OrderBy extends AbstractSearchOption {
 
-    static get optionName() {
-        return "orderBy";
-    }
-    static get attributeType() {
-        return "label";
-    }
-
     static async create(noteId: string) {
         await AbstractSearchOption.setAttribute(noteId, "label", "orderBy", "relevancy");
         await AbstractSearchOption.setAttribute(noteId, "label", "orderDirection", "asc");

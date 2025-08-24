@@ -11,13 +11,6 @@ export default class SearchString extends AbstractSearchOption {
     private $searchString!: JQuery<HTMLElement>;
     private spacedUpdate!: SpacedUpdate;
 
-    static get optionName() {
-        return "searchString";
-    }
-    static get attributeType() {
-        return "label";
-    }
-
     static async create(noteId: string) {
         await AbstractSearchOption.setAttribute(noteId, "label", "searchString");
     }

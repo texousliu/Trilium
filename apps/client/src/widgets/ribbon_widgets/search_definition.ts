@@ -153,24 +153,6 @@ export default class SearchDefinitionWidget extends NoteContextAwareWidget {
 
         this.$searchOptions.empty();
 
-        for (const OptionClass of OPTION_CLASSES) {
-            const { attributeType, optionName } = OptionClass;
-
-            const attr = this.note.getAttribute(attributeType as AttributeType, optionName);
-
-            this.$widget.find(`[data-search-option-add='${optionName}'`).toggle(!attr);
-
-            if (attr) {
-                const searchOption = new OptionClass(attr, this.note).setParent(this);
-                this.child(searchOption);
-
-                const renderedEl = searchOption.render();
-                if (renderedEl) {
-                    this.$searchOptions.append(renderedEl);
-                }
-            }
-        }
-
         const actions = bulkActionService.parseActions(this.note);
         const renderedEls = actions
             .map((action) => renderReactWidget(this, action.doRender()))

@@ -13,12 +13,6 @@ const TPL = /*html*/`
 </tr>`;
 
 export default class IncludeArchivedNotes extends AbstractSearchOption {
-    static get optionName() {
-        return "includeArchivedNotes";
-    }
-    static get attributeType() {
-        return "label";
-    }
 
     static async create(noteId: string) {
         await AbstractSearchOption.setAttribute(noteId, "label", "includeArchivedNotes");

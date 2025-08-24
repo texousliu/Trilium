@@ -33,12 +33,6 @@ const TPL = /*html*/`
 </tr>`;
 
 export default class SearchScript extends AbstractSearchOption {
-    static get optionName() {
-        return "searchScript";
-    }
-    static get attributeType() {
-        return "relation";
-    }
 
     static async create(noteId: string) {
         await AbstractSearchOption.setAttribute(noteId, "relation", "searchScript", "root");

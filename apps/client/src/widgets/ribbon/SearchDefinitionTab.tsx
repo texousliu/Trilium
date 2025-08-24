@@ -1,4 +1,4 @@
-import { ComponentChildren } from "preact";
+import { ComponentChildren, VNode } from "preact";
 import { t } from "../../services/i18n";
 import Button from "../react/Button";
 import { TabContext } from "./ribbon-interface";
@@ -18,53 +18,72 @@ import appContext from "../../components/app_context";
 import server from "../../services/server";
 
 interface SearchOption {
-  searchOption: string;
+  attributeName: string;
+  attributeType: "label" | "relation";
   icon: string;
   label: string;
   tooltip?: string;
+  // TODO: Make mandatory once all components are ported.
+  component?: (props: SearchOptionProps) => VNode;
+}
+
+interface SearchOptionProps {
+  note: FNote;
+  refreshResults: () => void;
+  attributeName: string;
+  attributeType: "label" | "relation";
 }
 
 const SEARCH_OPTIONS: SearchOption[] = [
   {
-    searchOption: "searchString",
+    attributeName: "searchString",
+    attributeType: "label",
     icon: "bx bx-text",
-    label: t("search_definition.search_string")
+    label: t("search_definition.search_string"),
+    component: SearchStringOption
   },
   {
-    searchOption: "searchScript",
+    attributeName: "searchScript",
+    attributeType: "relation",
     icon: "bx bx-code",
     label: t("search_definition.search_script")
   },
   {
-    searchOption: "ancestor",
+    attributeName: "ancestor",
+    attributeType: "relation",
     icon: "bx bx-filter-alt",
     label: t("search_definition.ancestor")
   },
   {
-    searchOption: "fastSearch",
+    attributeName: "fastSearch",
+    attributeType: "label",
     icon: "bx bx-run",
     label: t("search_definition.fast_search"),
     tooltip: t("search_definition.fast_search_description")
   },
   {
-    searchOption: "includeArchivedNotes",
+    attributeName: "includeArchivedNotes",
+    attributeType: "label",
     icon: "bx bx-archive",
     label: t("search_definition.include_archived"),
     tooltip: t("search_definition.include_archived_notes_description")
   },
   {
-    searchOption: "orderBy",
+    attributeName: "orderBy",
+    attributeType: "label",
     icon: "bx bx-arrow-from-top",
     label: t("search_definition.order_by")
   },
   {
-    searchOption: "limit",
+    attributeName: "limit",
+    attributeType: "label",
     icon: "bx bx-stop",
     label: t("search_definition.limit"),
     tooltip: t("search_definition.limit_description")
   },
   {
-    searchOption: "debug",
+    attributeName: "debug",
+    attributeType: "label",
     icon: "bx bx-bug",
     label: t("search_definition.debug"),
     tooltip: t("search_definition.debug_description")
@@ -97,43 +116,52 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
   return (
     <div className="search-definition-widget">
       <div className="search-settings">
-        <table className="search-setting-table">
-          <tr>
-            <td className="title-column">{t("search_definition.add_search_option")}</td>
-            <td colSpan={2} className="add-search-option">
-              {SEARCH_OPTIONS.map(({ icon, label, tooltip }) => (
-                <Button
-                  icon={icon}
-                  text={label}
-                  title={tooltip}
-                />
-              ))}
-            </td>
-          </tr>
-          <tbody className="search-options">
-            <SearchStringOption
-              refreshResults={refreshResults}
-              note={note}
-            />
-          </tbody>
-          <tbody className="action-options">
-
-          </tbody>
-          <tbody>
+        {note && 
+          <table className="search-setting-table">
             <tr>
-              <td colSpan={3}>
-                <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+              <td className="title-column">{t("search_definition.add_search_option")}</td>
+              <td colSpan={2} className="add-search-option">
+                {SEARCH_OPTIONS.map(({ icon, label, tooltip }) => (
                   <Button
-                    icon="bx bx-search"
-                    text={t("search_definition.search_button")}
-                    keyboardShortcut="Enter"
-                    onClick={refreshResults}
+                    icon={icon}
+                    text={label}
+                    title={tooltip}
                   />
-                </div>
+                ))}
               </td>
             </tr>
-          </tbody>
-        </table>
+            <tbody className="search-options">
+              {SEARCH_OPTIONS.map(({ attributeType, attributeName, component }) => {
+                const attr = note.getAttribute(attributeType, attributeName);      
+                if (attr && component) {
+                  return component({
+                    attributeName,
+                    attributeType,
+                    note,
+                    refreshResults
+                  });
+                }  
+              })}
+            </tbody>
+            <tbody className="action-options">
+
+            </tbody>
+            <tbody>
+              <tr>
+                <td colSpan={3}>
+                  <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+                    <Button
+                      icon="bx bx-search"
+                      text={t("search_definition.search_button")}
+                      keyboardShortcut="Enter"
+                      onClick={refreshResults}
+                    />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        }
       </div>
     </div>
   )
@@ -163,7 +191,7 @@ function SearchOption({ note, title, children, help, attributeName, attributeTyp
   )
 }
 
-function SearchStringOption({ note, refreshResults }: { note: FNote, refreshResults: () => void }) {
+function SearchStringOption({ note, refreshResults }: SearchOptionProps) {
   const currentValue = useRef("");
   const spacedUpdate = useSpacedUpdate(async () => {
     const searchString = currentValue.current;

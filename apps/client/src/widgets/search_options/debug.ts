@@ -20,13 +20,6 @@ const TPL = /*html*/`
 </tr>`;
 
 export default class Debug extends AbstractSearchOption {
-    static get optionName() {
-        return "debug";
-    }
-    static get attributeType() {
-        return "label";
-    }
-
     static async create(noteId: string) {
         await AbstractSearchOption.setAttribute(noteId, "label", "debug");
     }

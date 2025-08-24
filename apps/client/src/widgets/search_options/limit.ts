@@ -26,13 +26,6 @@ export default class Limit extends AbstractSearchOption {
 
     private $limit!: JQuery<HTMLElement>;
 
-    static get optionName() {
-        return "limit";
-    }
-    static get attributeType() {
-        return "label";
-    }
-
     static async create(noteId: string) {
         await AbstractSearchOption.setAttribute(noteId, "label", "limit", "10");
     }

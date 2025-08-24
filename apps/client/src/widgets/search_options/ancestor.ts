@@ -51,13 +51,6 @@ const TPL = /*html*/`
 </tr>`;
 
 export default class Ancestor extends AbstractSearchOption {
-    static get optionName() {
-        return "ancestor";
-    }
-    static get attributeType() {
-        return "relation";
-    }
-
     static async create(noteId: string) {
         await AbstractSearchOption.setAttribute(noteId, "relation", "ancestor", "root");
     }

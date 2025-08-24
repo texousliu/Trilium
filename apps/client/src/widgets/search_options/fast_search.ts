@@ -19,12 +19,6 @@ const TPL = /*html*/`
 </tr>`;
 
 export default class FastSearch extends AbstractSearchOption {
-    static get optionName() {
-        return "fastSearch";
-    }
-    static get attributeType() {
-        return "label";
-    }
 
     static async create(noteId: string) {
         await AbstractSearchOption.setAttribute(noteId, "label", "fastSearch");
