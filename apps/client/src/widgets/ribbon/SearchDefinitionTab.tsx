@@ -77,7 +77,8 @@ const SEARCH_OPTIONS: SearchOption[] = [
     attributeType: "label",
     icon: "bx bx-archive",
     label: t("search_definition.include_archived"),
-    tooltip: t("search_definition.include_archived_notes_description")
+    tooltip: t("search_definition.include_archived_notes_description"),
+    component: IncludeArchivedNotesOption
   },
   {
     attributeName: "orderBy",
@@ -426,6 +427,13 @@ function DebugOption({ ...restProps }: SearchOptionProps) {
       <p>{t("debug.debug_info")}</p>
       {t("debug.access_info")}
     </>}
+    {...restProps}
+  />
+}
+
+function IncludeArchivedNotesOption({ ...restProps }: SearchOptionProps) {
+  return <SearchOption
+    titleIcon="bx bx-archive" title={t("include_archived_notes.include_archived_notes")}
     {...restProps}
   />
 }
