@@ -9,7 +9,7 @@ import Modal from "../react/Modal";
 import RawHtml from "../react/RawHtml";
 import ReactBasicWidget from "../react/ReactBasicWidget";
 import importService, { UploadFilesOptions } from "../../services/import";
-import { useTriliumEventBeta } from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
 export default function ImportDialog() {
     const [ parentNoteId, setParentNoteId ] = useState<string>();
@@ -23,7 +23,7 @@ export default function ImportDialog() {
     const [ replaceUnderscoresWithSpaces, setReplaceUnderscoresWithSpaces ] = useState(true);
     const [ shown, setShown ] = useState(false);
 
-    useTriliumEventBeta("showImportDialog", ({ noteId }) => {
+    useTriliumEvent("showImportDialog", ({ noteId }) => {
         setParentNoteId(noteId);
         tree.getNoteTitle(noteId).then(setNoteTitle);
         setShown(true);

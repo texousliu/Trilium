@@ -13,7 +13,7 @@ import { formatDateTime } from "../../utils/formatters";
 import link from "../../services/link";
 import RawHtml from "../react/RawHtml";
 import ws from "../../services/ws";
-import { useTriliumEventBeta } from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
 export default function RecentChangesDialog() {
     const [ ancestorNoteId, setAncestorNoteId ] = useState<string>();
@@ -21,7 +21,7 @@ export default function RecentChangesDialog() {
     const [ needsRefresh, setNeedsRefresh ] = useState(false);
     const [ shown, setShown ] = useState(false);
 
-    useTriliumEventBeta("showRecentChanges", ({ ancestorNoteId }) => {
+    useTriliumEvent("showRecentChanges", ({ ancestorNoteId }) => {
         setNeedsRefresh(true);
         setAncestorNoteId(ancestorNoteId ?? hoisted_note.getHoistedNoteId());
         setShown(true);

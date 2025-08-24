@@ -6,7 +6,7 @@ import toast from "../../services/toast";
 import utils from "../../services/utils";
 import Modal from "../react/Modal";
 import Button from "../react/Button";
-import { useTriliumEventBeta } from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
 interface RenderMarkdownResponse {
     htmlContent: string;
@@ -32,8 +32,8 @@ export default function MarkdownImportDialog() {
         }
     }, []);
 
-    useTriliumEventBeta("importMarkdownInline", triggerImport);
-    useTriliumEventBeta("pasteMarkdownIntoText", triggerImport);
+    useTriliumEvent("importMarkdownInline", triggerImport);
+    useTriliumEvent("pasteMarkdownIntoText", triggerImport);
 
     async function sendForm() {
         await convertMarkdownToHtml(text);

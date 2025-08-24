@@ -7,7 +7,7 @@ import note_autocomplete, { Suggestion } from "../../services/note_autocomplete"
 import appContext from "../../components/app_context";
 import commandRegistry from "../../services/command_registry";
 import { refToJQuerySelector } from "../react/react_utils";
-import { useTriliumEventBeta } from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
 const KEEP_LAST_SEARCH_FOR_X_SECONDS = 120;
 
@@ -50,8 +50,8 @@ export default function JumpToNoteDialogComponent() {
         setLastOpenedTs(Date.now());
     }
 
-    useTriliumEventBeta("jumpToNote", () => openDialog(false));
-    useTriliumEventBeta("commandPalette", () => openDialog(true));
+    useTriliumEvent("jumpToNote", () => openDialog(false));
+    useTriliumEvent("commandPalette", () => openDialog(true));
 
     async function onItemSelected(suggestion?: Suggestion | null) {
         if (!suggestion) {

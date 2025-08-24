@@ -3,11 +3,11 @@ import { t } from "../../services/i18n";
 import Button from "../react/Button";
 import appContext from "../../components/app_context";
 import { useState } from "preact/hooks";
-import { useTriliumEventBeta } from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
 export default function PasswordNotSetDialog() {
     const [ shown, setShown ] = useState(false);
-    useTriliumEventBeta("showPasswordNotSet", () => setShown(true));
+    useTriliumEvent("showPasswordNotSet", () => setShown(true));
 
     return (
         <Modal

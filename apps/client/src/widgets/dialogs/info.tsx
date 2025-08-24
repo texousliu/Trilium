@@ -4,14 +4,14 @@ import { t } from "../../services/i18n";
 import Button from "../react/Button";
 import { useRef, useState } from "preact/hooks";
 import { RawHtmlBlock } from "../react/RawHtml";
-import { useTriliumEventBeta } from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
 export default function InfoDialog() {
     const [ opts, setOpts ] = useState<EventData<"showInfoDialog">>();
     const [ shown, setShown ] = useState(false);
     const okButtonRef = useRef<HTMLButtonElement>(null);
 
-    useTriliumEventBeta("showInfoDialog", (opts) => {
+    useTriliumEvent("showInfoDialog", (opts) => {
         setOpts(opts);
         setShown(true);
     });

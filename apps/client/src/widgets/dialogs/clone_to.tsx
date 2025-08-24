@@ -13,7 +13,7 @@ import tree from "../../services/tree";
 import branches from "../../services/branches";
 import toast from "../../services/toast";
 import NoteList from "../react/NoteList";
-import { useTriliumEventBeta } from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
 export default function CloneToDialog() {
     const [ clonedNoteIds, setClonedNoteIds ] = useState<string[]>();
@@ -22,7 +22,7 @@ export default function CloneToDialog() {
     const [ shown, setShown ] = useState(false);
     const autoCompleteRef = useRef<HTMLInputElement>(null);
 
-    useTriliumEventBeta("cloneNoteIdsTo", ({ noteIds }) => {
+    useTriliumEvent("cloneNoteIdsTo", ({ noteIds }) => {
         if (!noteIds || noteIds.length === 0) {
             noteIds = [appContext.tabManager.getActiveContextNoteId() ?? ""];
         }

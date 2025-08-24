@@ -11,7 +11,7 @@ import toastService, { ToastOptions } from "../../services/toast";
 import utils from "../../services/utils";
 import open from "../../services/open";
 import froca from "../../services/froca";
-import { useTriliumEventBeta } from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
 interface ExportDialogProps {
     branchId?: string | null;
@@ -27,7 +27,7 @@ export default function ExportDialog() {
     const [ opmlVersion, setOpmlVersion ] = useState("2.0");
     const [ shown, setShown ] = useState(false);
 
-    useTriliumEventBeta("showExportDialog", async ({ notePath, defaultType }) => {
+    useTriliumEvent("showExportDialog", async ({ notePath, defaultType }) => {
         const { noteId, parentNoteId } = tree.getNoteIdAndParentIdFromUrl(notePath);
         if (!parentNoteId) {
             return;

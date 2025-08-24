@@ -4,7 +4,7 @@ import { t } from "../../../services/i18n";
 import server from "../../../services/server";
 import note_autocomplete, { Suggestion } from "../../../services/note_autocomplete";
 import CKEditor, { CKEditorApi } from "../../react/CKEditor";
-import { useLegacyImperativeHandlers, useLegacyWidget, useTooltip, useTriliumEventBeta } from "../../react/hooks";
+import { useLegacyImperativeHandlers, useLegacyWidget, useTooltip, useTriliumEvent } from "../../react/hooks";
 import FAttribute from "../../../entities/fattribute";
 import attribute_renderer from "../../../services/attribute_renderer";
 import FNote from "../../../entities/fnote";
@@ -215,7 +215,7 @@ export default function AttributeEditor({ note, componentId, notePath, ntxId }: 
     }
 
     useEffect(() => refresh(), [ note ]);
-    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         if (loadResults.getAttributeRows(componentId).find((attr) => attributes.isAffecting(attr, note))) {
             console.log("Trigger due to entities reloaded");
             refresh();
@@ -257,11 +257,11 @@ export default function AttributeEditor({ note, componentId, notePath, ntxId }: 
     }), []));
 
     // Keyboard shortcuts
-    useTriliumEventBeta("addNewLabel", ({ ntxId: eventNtxId }) => {
+    useTriliumEvent("addNewLabel", ({ ntxId: eventNtxId }) => {
         if (eventNtxId !== ntxId) return;
         handleAddNewAttributeCommand("addNewLabel");
     });
-    useTriliumEventBeta("addNewRelation", ({ ntxId: eventNtxId }) => {
+    useTriliumEvent("addNewRelation", ({ ntxId: eventNtxId }) => {
         if (eventNtxId !== ntxId) return;
         handleAddNewAttributeCommand("addNewRelation");
     });

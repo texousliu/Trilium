@@ -5,11 +5,11 @@ import { CommandNames } from "../../components/app_context.js";
 import RawHtml from "../react/RawHtml.jsx";
 import { useEffect, useState } from "preact/hooks";
 import keyboard_actions from "../../services/keyboard_actions.js";
-import { useTriliumEventBeta } from "../react/hooks.jsx";
+import { useTriliumEvent } from "../react/hooks.jsx";
 
 export default function HelpDialog() {
     const [ shown, setShown ] = useState(false);
-    useTriliumEventBeta("showCheatsheet", () => setShown(true));
+    useTriliumEvent("showCheatsheet", () => setShown(true));
 
     return (
         <Modal

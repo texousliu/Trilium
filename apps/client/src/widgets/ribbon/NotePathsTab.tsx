@@ -1,7 +1,7 @@
 import { TabContext } from "./ribbon-interface";
 import { t } from "../../services/i18n";
 import Button from "../react/Button";
-import { useTriliumEventBeta } from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 import { useEffect, useMemo, useState } from "preact/hooks";
 import { NotePathRecord } from "../../entities/fnote";
 import NoteLink from "../react/NoteLink";
@@ -18,7 +18,7 @@ export default function NotePathsTab({ note, hoistedNoteId, notePath }: TabConte
     }
 
     useEffect(refresh, [ note?.noteId ]);
-    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         const noteId = note?.noteId;
         if (!noteId) return;
         if (loadResults.getBranchRows().find((branch) => branch.noteId === noteId)

@@ -7,7 +7,7 @@ import Button from "../react/Button";
 import { formatDateTime } from "../../utils/formatters";
 import { formatSize } from "../../services/utils";
 import LoadingSpinner from "../react/LoadingSpinner";
-import { useTriliumEventBeta } from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
 export default function NoteInfoTab({ note }: TabContext) {
     const [ metadata, setMetadata ] = useState<MetadataResponse>();
@@ -26,7 +26,7 @@ export default function NoteInfoTab({ note }: TabContext) {
     }
 
     useEffect(refresh, [ note?.noteId ]);
-    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         const noteId = note?.noteId;
         if (noteId && (loadResults.isNoteReloaded(noteId) || loadResults.isNoteContentReloaded(noteId))) {
             refresh();

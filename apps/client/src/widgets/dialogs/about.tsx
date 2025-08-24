@@ -7,14 +7,14 @@ import openService from "../../services/open.js";
 import { useState } from "preact/hooks";
 import type { CSSProperties } from "preact/compat";
 import type { AppInfo } from "@triliumnext/commons";
-import { useTriliumEventBeta } from "../react/hooks.jsx";
+import { useTriliumEvent } from "../react/hooks.jsx";
 
 export default function AboutDialog() {
     let [appInfo, setAppInfo] = useState<AppInfo | null>(null);
     let [shown, setShown] = useState(false);
     const forceWordBreak: CSSProperties = { wordBreak: "break-all" };
 
-    useTriliumEventBeta("openAboutDialog", () => setShown(true));
+    useTriliumEvent("openAboutDialog", () => setShown(true));
 
     return (
         <Modal className="about-dialog"

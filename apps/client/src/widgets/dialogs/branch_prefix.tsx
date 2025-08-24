@@ -8,7 +8,7 @@ import froca from "../../services/froca.js";
 import tree from "../../services/tree.js";
 import Button from "../react/Button.jsx";
 import FormGroup from "../react/FormGroup.js";
-import { useTriliumEventBeta } from "../react/hooks.jsx";
+import { useTriliumEvent } from "../react/hooks.jsx";
 import FBranch from "../../entities/fbranch.js";
 
 export default function BranchPrefixDialog() {
@@ -17,7 +17,7 @@ export default function BranchPrefixDialog() {
     const [ prefix, setPrefix ] = useState(branch?.prefix ?? "");
     const branchInput = useRef<HTMLInputElement>(null);
 
-    useTriliumEventBeta("editBranchPrefix", async () => {
+    useTriliumEvent("editBranchPrefix", async () => {
         const notePath = appContext.tabManager.getActiveContextNotePath();
         if (!notePath) {
             return;

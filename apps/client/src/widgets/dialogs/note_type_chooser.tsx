@@ -9,7 +9,7 @@ import { MenuCommandItem, MenuItem } from "../../menus/context_menu";
 import { TreeCommandNames } from "../../menus/tree_context_menu";
 import { Suggestion } from "../../services/note_autocomplete";
 import Badge from "../react/Badge";
-import { useTriliumEventBeta } from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
 export interface ChooseNoteTypeResponse {
     success: boolean;
@@ -31,7 +31,7 @@ export default function NoteTypeChooserDialogComponent() {
     const [ parentNote, setParentNote ] = useState<Suggestion | null>(); 
     const [ noteTypes, setNoteTypes ] = useState<MenuItem<TreeCommandNames>[]>([]);    
 
-    useTriliumEventBeta("chooseNoteType", ({ callback }) => {
+    useTriliumEvent("chooseNoteType", ({ callback }) => {
         setCallback(() => callback);
         setShown(true);
     });

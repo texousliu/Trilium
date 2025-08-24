@@ -5,7 +5,7 @@ import Modal from "../react/Modal";
 import FormTextBox from "../react/FormTextBox";
 import FormGroup from "../react/FormGroup";
 import { refToJQuerySelector } from "../react/react_utils";
-import { useTriliumEventBeta } from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
 // JQuery here is maintained for compatibility with existing code.
 interface ShownCallbackData {
@@ -36,7 +36,7 @@ export default function PromptDialog() {
     const [ shown, setShown ] = useState(false);
     const submitValue = useRef<string>(null);
     
-    useTriliumEventBeta("showPromptDialog", (newOpts) => {
+    useTriliumEvent("showPromptDialog", (newOpts) => {
         opts.current = newOpts;
         setValue(newOpts.defaultValue ?? "");
         setShown(true);

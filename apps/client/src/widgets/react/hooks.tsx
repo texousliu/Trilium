@@ -5,94 +5,25 @@ import SpacedUpdate from "../../services/spaced_update";
 import { OptionNames } from "@triliumnext/commons";
 import options, { type OptionValue } from "../../services/options";
 import utils, { reloadFrontendApp } from "../../services/utils";
-import Component from "../../components/component";
 import NoteContext from "../../components/note_context";
 import BasicWidget, { ReactWrappedWidget } from "../basic_widget";
 import FNote from "../../entities/fnote";
 import attributes from "../../services/attributes";
 import FBlob from "../../entities/fblob";
 import NoteContextAwareWidget from "../note_context_aware_widget";
-import { Ref, RefObject, VNode } from "preact";
+import { RefObject, VNode } from "preact";
 import { Tooltip } from "bootstrap";
 import { CSSProperties } from "preact/compat";
 
 type TriliumEventHandler<T extends EventNames> = (data: EventData<T>) => void;
-const registeredHandlers: Map<Component, Map<EventNames, TriliumEventHandler<any>[]>> = new Map();
 
-/**
- * Allows a React component to react to Trilium events (e.g. `entitiesReloaded`). When the desired event is triggered, the handler is invoked with the event parameters.
- * 
- * Under the hood, it works by altering the parent (Trilium) component of the React element to introduce the corresponding event.
- * 
- * @param eventName the name of the Trilium event to listen for.
- * @param handler the handler to be invoked when the event is triggered.
- * @param enabled determines whether the event should be listened to or not. Useful to conditionally limit the listener based on a state (e.g. a modal being displayed).
- */
-export default function useTriliumEvent<T extends EventNames>(eventName: T, handler: TriliumEventHandler<T>, enabled = true) {
-    const parentWidget = useContext(ParentComponent);
-    if (!parentWidget) {
+export function useTriliumEvent<T extends EventNames>(eventName: T | T[], handler: TriliumEventHandler<T>) {
+    const parentComponent = useContext(ParentComponent);
+
+    if (!parentComponent) {
+        console.error("React widget has no legacy parent component. Event handling will not work.", new Error().stack);
         return;
     }
-    
-    const handlerName = `${eventName}Event`;
-    const customHandler  = useMemo(() => {
-        return async (data: EventData<T>) => {
-            // Inform the attached event listeners.
-            const eventHandlers = registeredHandlers.get(parentWidget)?.get(eventName) ?? [];
-            for (const eventHandler of eventHandlers) {
-                eventHandler(data);
-            }
-        }
-    }, [ eventName, parentWidget ]);    
-
-    useEffect(() => {
-        // Attach to the list of handlers.
-        let handlersByWidget = registeredHandlers.get(parentWidget);
-        if (!handlersByWidget) {
-            handlersByWidget = new Map();
-            registeredHandlers.set(parentWidget, handlersByWidget);
-        }
-
-        let handlersByWidgetAndEventName = handlersByWidget.get(eventName);
-        if (!handlersByWidgetAndEventName) {
-            handlersByWidgetAndEventName = [];
-            handlersByWidget.set(eventName, handlersByWidgetAndEventName);
-        }
-
-        if (!handlersByWidgetAndEventName.includes(handler)) {
-            handlersByWidgetAndEventName.push(handler);
-        }
-
-        // Apply the custom event handler.
-        if (parentWidget[handlerName] && parentWidget[handlerName] !== customHandler) {
-            console.warn(`Widget ${parentWidget.componentId} already had an event listener and it was replaced by the React one.`);
-        }
-        
-        parentWidget[handlerName] = customHandler;
-    
-        return () => {
-            const eventHandlers = registeredHandlers.get(parentWidget)?.get(eventName);
-            if (!eventHandlers || !eventHandlers.includes(handler)) {
-                return;
-            }
-    
-            // Remove the event handler from the array.            
-            const newEventHandlers = eventHandlers.filter(e => e !== handler);            
-            if (newEventHandlers.length) {
-                registeredHandlers.get(parentWidget)?.set(eventName, newEventHandlers);        
-            } else {
-                registeredHandlers.get(parentWidget)?.delete(eventName);
-            }
-
-            if (!registeredHandlers.get(parentWidget)?.size) {
-                registeredHandlers.delete(parentWidget);
-            }
-        };
-    }, [ eventName, parentWidget, handler ]);
-}
-
-export function useTriliumEventBeta<T extends EventNames>(eventName: T | T[], handler: TriliumEventHandler<T>) {
-    const parentComponent = useContext(ParentComponent) as ReactWrappedWidget;
 
     if (Array.isArray(eventName)) {
         for (const eventSingleName of eventName) {
@@ -185,7 +116,7 @@ export function useTriliumOptionBeta(name: OptionNames, needsRefresh?: boolean):
         }
     }, [ name, needsRefresh ]);
 
-    useTriliumEventBeta("entitiesReloaded", useCallback(({ loadResults }) => {
+    useTriliumEvent("entitiesReloaded", useCallback(({ loadResults }) => {
         if (loadResults.getOptionNames().includes(name)) {
             const newValue = options.get(name);
             setValue(newValue);
@@ -283,20 +214,20 @@ export function useNoteContext() {
         setNote(noteContext?.note);
     }, [ notePath ]);
 
-    useTriliumEventBeta("activeContextChanged", ({ noteContext }) => {
+    useTriliumEvent("activeContextChanged", ({ noteContext }) => {
         setNoteContext(noteContext);
         setNotePath(noteContext.notePath);        
     });
-    useTriliumEventBeta("setNoteContext", ({ noteContext }) => {
+    useTriliumEvent("setNoteContext", ({ noteContext }) => {
         setNoteContext(noteContext);
     });
-    useTriliumEventBeta("noteSwitchedAndActivated", ({ noteContext }) => {
+    useTriliumEvent("noteSwitchedAndActivated", ({ noteContext }) => {
         setNoteContext(noteContext);
     });
-    useTriliumEventBeta("noteSwitched", ({ noteContext, notePath }) => {
+    useTriliumEvent("noteSwitched", ({ noteContext, notePath }) => {
         setNotePath(notePath);
     });
-    useTriliumEventBeta("frocaReloaded", () => {
+    useTriliumEvent("frocaReloaded", () => {
         setNote(noteContext?.note);
     });
     
@@ -336,7 +267,7 @@ export function useNoteProperty<T extends keyof FNote>(note: FNote | null | unde
     useEffect(() => refreshValue(), [ note, note[property] ]);
 
     // Watch for external changes.
-    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         if (loadResults.isNoteReloaded(note.noteId, componentId)) {
             refreshValue();
         }
@@ -349,7 +280,7 @@ export function useNoteRelation(note: FNote | undefined | null, relationName: st
     const [ relationValue, setRelationValue ] = useState<string | null | undefined>(note?.getRelationValue(relationName));
 
     useEffect(() => setRelationValue(note?.getRelationValue(relationName) ?? null), [ note ]);
-    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         for (const attr of loadResults.getAttributeRows()) {
             if (attr.type === "relation" && attr.name === relationName && attributes.isAffecting(attr, note)) {
                 setRelationValue(attr.value ?? null);
@@ -380,7 +311,7 @@ export function useNoteLabel(note: FNote | undefined | null, labelName: string):
     const [ labelValue, setLabelValue ] = useState<string | null | undefined>(note?.getLabelValue(labelName));
 
     useEffect(() => setLabelValue(note?.getLabelValue(labelName) ?? null), [ note ]);
-    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         for (const attr of loadResults.getAttributeRows()) {
             if (attr.type === "label" && attr.name === labelName && attributes.isAffecting(attr, note)) {
                 setLabelValue(attr.value ?? null);
@@ -409,7 +340,7 @@ export function useNoteLabelBoolean(note: FNote | undefined | null, labelName: s
 
     useEffect(() => setLabelValue(!!note?.hasLabel(labelName)), [ note ]);
 
-    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         for (const attr of loadResults.getAttributeRows()) {
             if (attr.type === "label" && attr.name === labelName && attributes.isAffecting(attr, note)) {
                 setLabelValue(!attr.isDeleted);
@@ -442,7 +373,7 @@ export function useNoteBlob(note: FNote | null | undefined): [ FBlob | null | un
     }
 
     useEffect(refresh, [ note?.noteId ]);
-    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         if (note && loadResults.hasRevisionForNote(note.noteId)) {
             refresh();
         }

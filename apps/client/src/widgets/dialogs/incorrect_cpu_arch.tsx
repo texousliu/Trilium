@@ -4,12 +4,12 @@ import utils from "../../services/utils.js";
 import Button from "../react/Button.js";
 import Modal from "../react/Modal.js";
 import { useState } from "preact/hooks";
-import { useTriliumEventBeta } from "../react/hooks.jsx";
+import { useTriliumEvent } from "../react/hooks.jsx";
 
 export default function IncorrectCpuArchDialogComponent() {
     const [ shown, setShown ] = useState(false);
     const downloadButtonRef = useRef<HTMLButtonElement>(null);
-    useTriliumEventBeta("showCpuArchWarning", () => setShown(true));
+    useTriliumEvent("showCpuArchWarning", () => setShown(true));
 
     return (
         <Modal

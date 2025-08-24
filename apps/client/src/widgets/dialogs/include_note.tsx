@@ -9,7 +9,7 @@ import { Suggestion, triggerRecentNotes } from "../../services/note_autocomplete
 import tree from "../../services/tree";
 import froca from "../../services/froca";
 import EditableTextTypeWidget from "../type_widgets/editable_text";
-import useTriliumEvent from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
 export default function IncludeNoteDialog() {
     const [textTypeWidget, setTextTypeWidget] = useState<EditableTextTypeWidget>();

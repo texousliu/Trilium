@@ -9,7 +9,7 @@ import ReactBasicWidget from "../react/ReactBasicWidget";
 import options from "../../services/options";
 import importService from "../../services/import.js";
 import tree from "../../services/tree";
-import { useTriliumEventBeta } from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
 export default function UploadAttachmentsDialog() {
     const [ parentNoteId, setParentNoteId ] = useState<string>();
@@ -19,7 +19,7 @@ export default function UploadAttachmentsDialog() {
     const [ description, setDescription ] = useState<string | undefined>(undefined);
     const [ shown, setShown ] = useState(false);
 
-    useTriliumEventBeta("showUploadAttachmentsDialog", ({ noteId }) => {
+    useTriliumEvent("showUploadAttachmentsDialog", ({ noteId }) => {
         setParentNoteId(noteId);
         setShown(true);
     });

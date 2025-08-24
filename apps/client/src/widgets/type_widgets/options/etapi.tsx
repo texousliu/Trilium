@@ -10,7 +10,7 @@ import toast from "../../../services/toast";
 import dialog from "../../../services/dialog";
 import { formatDateTime } from "../../../utils/formatters";
 import ActionButton from "../../react/ActionButton";
-import useTriliumEvent from "../../react/hooks";
+import { useTriliumEvent } from "../../react/hooks";
 
 type RenameTokenCallback = (tokenId: string, oldName: string) => Promise<void>;
 type DeleteTokenCallback = (tokenId: string, name: string ) => Promise<void>;

@@ -8,7 +8,6 @@ import server from "../../services/server";
 import toast from "../../services/toast";
 import Button from "../react/Button";
 import Modal from "../react/Modal";
-import ReactBasicWidget from "../react/ReactBasicWidget";
 import FormList, { FormListItem } from "../react/FormList";
 import utils from "../../services/utils";
 import { Dispatch, StateUpdater, useEffect, useRef, useState } from "preact/hooks";
@@ -18,7 +17,7 @@ import type { CSSProperties } from "preact/compat";
 import open from "../../services/open";
 import ActionButton from "../react/ActionButton";
 import options from "../../services/options";
-import useTriliumEvent from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
 export default function RevisionsDialog() {
     const [ note, setNote ] = useState<FNote>();

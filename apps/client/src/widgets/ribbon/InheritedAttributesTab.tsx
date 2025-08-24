@@ -1,7 +1,7 @@
 import { useEffect, useState } from "preact/hooks";
 import { TabContext } from "./ribbon-interface";
 import FAttribute from "../../entities/fattribute";
-import { useLegacyWidget, useTriliumEventBeta } from "../react/hooks";
+import { useLegacyWidget, useTriliumEvent } from "../react/hooks";
 import attributes from "../../services/attributes";
 import { t } from "../../services/i18n";
 import attribute_renderer from "../../services/attribute_renderer";
@@ -29,7 +29,7 @@ export default function InheritedAttributesTab({ note, componentId }: TabContext
     }
 
     useEffect(refresh, [ note ]);
-    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         if (loadResults.getAttributeRows(componentId).find((attr) => attributes.isAffecting(attr, note))) {
             refresh();
         }

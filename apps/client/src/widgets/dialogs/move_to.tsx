@@ -11,7 +11,7 @@ import tree from "../../services/tree";
 import froca from "../../services/froca";
 import branches from "../../services/branches";
 import toast from "../../services/toast";
-import { useTriliumEventBeta } from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
 export default function MoveToDialog() {
     const [ movedBranchIds, setMovedBranchIds ] = useState<string[]>();
@@ -19,7 +19,7 @@ export default function MoveToDialog() {
     const [ shown, setShown ] = useState(false);
     const autoCompleteRef = useRef<HTMLInputElement>(null);
 
-    useTriliumEventBeta("moveBranchIdsTo", ({ branchIds }) => {
+    useTriliumEvent("moveBranchIdsTo", ({ branchIds }) => {
         setMovedBranchIds(branchIds);
         setShown(true);
     });

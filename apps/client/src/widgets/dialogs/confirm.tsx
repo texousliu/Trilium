@@ -3,7 +3,7 @@ import Button from "../react/Button";
 import { t } from "../../services/i18n";
 import { useState } from "preact/hooks";
 import FormCheckbox from "../react/FormCheckbox";
-import { useTriliumEventBeta } from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
 interface ConfirmDialogProps {
     title?: string;
@@ -27,8 +27,8 @@ export default function ConfirmDialog() {
         setShown(true);
     }
 
-    useTriliumEventBeta("showConfirmDialog", ({ message, callback }) => showDialog(null, message, callback, false));
-    useTriliumEventBeta("showConfirmDeleteNoteBoxWithNoteDialog", ({ title, callback }) => showDialog(title, t("confirm.are_you_sure_remove_note", { title: title }), callback, true));
+    useTriliumEvent("showConfirmDialog", ({ message, callback }) => showDialog(null, message, callback, false));
+    useTriliumEvent("showConfirmDeleteNoteBoxWithNoteDialog", ({ title, callback }) => showDialog(title, t("confirm.are_you_sure_remove_note", { title: title }), callback, true));
 
     return ( 
         <Modal

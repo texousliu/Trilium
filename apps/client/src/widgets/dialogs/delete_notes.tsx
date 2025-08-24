@@ -2,7 +2,6 @@ import { useRef, useState, useEffect } from "preact/hooks";
 import { t } from "../../services/i18n.js";
 import FormCheckbox from "../react/FormCheckbox.js";
 import Modal from "../react/Modal.js";
-import ReactBasicWidget from "../react/ReactBasicWidget.js";
 import type { DeleteNotesPreview } from "@triliumnext/commons";
 import server from "../../services/server.js";
 import froca from "../../services/froca.js";
@@ -10,7 +9,7 @@ import FNote from "../../entities/fnote.js";
 import link from "../../services/link.js";
 import Button from "../react/Button.jsx";
 import Alert from "../react/Alert.jsx";
-import useTriliumEvent, { useTriliumEventBeta } from "../react/hooks.jsx";
+import { useTriliumEvent } from "../react/hooks.jsx";
 
 export interface ResolveOptions {
     proceed: boolean;
@@ -39,7 +38,7 @@ export default function DeleteNotesDialog() {
     const [ shown, setShown ] = useState(false);
     const okButtonRef = useRef<HTMLButtonElement>(null);
 
-    useTriliumEventBeta("showDeleteNotesDialog", (opts) => {
+    useTriliumEvent("showDeleteNotesDialog", (opts) => {
         setOpts(opts);
         setShown(true);
     })

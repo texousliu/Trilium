@@ -8,7 +8,7 @@ import toast from "../../services/toast";
 import froca from "../../services/froca";
 import { useContext, useEffect, useState } from "preact/hooks";
 import { ParentComponent } from "../react/react_utils";
-import { useTriliumEventBeta } from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 import appContext from "../../components/app_context";
 import server from "../../services/server";
 import ws from "../../services/ws";
@@ -65,7 +65,7 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
 
   // Refresh the list of available and active options.
   useEffect(refreshOptions, [ note ]);
-  useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+  useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
     if (loadResults.getAttributeRows().find((attrRow) => attributes.isAffecting(attrRow, note))) {
       refreshOptions();
     }
@@ -166,7 +166,7 @@ function BulkActionsList({ note }: { note: FNote }) {
 
   // React to changes.
   useEffect(refreshBulkActions, [ note ]);
-  useTriliumEventBeta("entitiesReloaded", ({loadResults}) => {
+  useTriliumEvent("entitiesReloaded", ({loadResults}) => {
     if (loadResults.getAttributeRows().find(attr => attr.type === "label" && attr.name === "action" && attributes.isAffecting(attr, note))) {
       refreshBulkActions();
     }

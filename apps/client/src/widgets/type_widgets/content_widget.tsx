@@ -76,7 +76,6 @@ const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", ((typeof NoteContextA
  */
 export default class ContentWidgetTypeWidget extends TypeWidget {
     private $content!: JQuery<HTMLElement>;
-    private widget?: BasicWidget;
 
     static getType() {
         return "contentWidget";
@@ -113,7 +112,6 @@ export default class ContentWidgetTypeWidget extends TypeWidget {
                 this.child(widget);
 
                 this.$content.append(widget.render());
-                this.widget = widget;
                 await widget.refresh();
             }
             return;

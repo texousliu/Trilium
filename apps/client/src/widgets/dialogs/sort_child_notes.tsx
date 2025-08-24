@@ -7,7 +7,7 @@ import FormTextBox from "../react/FormTextBox";
 import Modal from "../react/Modal";
 import server from "../../services/server";
 import FormGroup from "../react/FormGroup";
-import { useTriliumEventBeta } from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
 export default function SortChildNotesDialog() {
     const [ parentNoteId, setParentNoteId ] = useState<string>();
@@ -18,7 +18,7 @@ export default function SortChildNotesDialog() {
     const [ sortLocale, setSortLocale ] = useState("");
     const [ shown, setShown ] = useState(false);
 
-    useTriliumEventBeta("sortChildNotes", ({ node }) => {
+    useTriliumEvent("sortChildNotes", ({ node }) => {
         setParentNoteId(node.data.noteId);
         setShown(true);
     });

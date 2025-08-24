@@ -3,7 +3,7 @@ import Dropdown from "../react/Dropdown";
 import { NOTE_TYPES } from "../../services/note_types";
 import { FormDropdownDivider, FormListBadge, FormListItem } from "../react/FormList";
 import { getAvailableLocales, t } from "../../services/i18n";
-import { useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEventBeta, useTriliumOption, useTriliumOptionBeta, useTriliumOptionJson } from "../react/hooks";
+import { useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEvent, useTriliumOption, useTriliumOptionBeta, useTriliumOptionJson } from "../react/hooks";
 import mime_types from "../../services/mime_types";
 import { Locale, NoteType, ToggleInParentResponse } from "@triliumnext/commons";
 import server from "../../services/server";
@@ -179,7 +179,7 @@ function BookmarkSwitch({ note }: { note?: FNote | null }) {
     }, [ note ]);
 
     useEffect(() => refreshState(), [ note ]);
-    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         if (note && loadResults.getBranchRows().find((b) => b.noteId === note.noteId)) {
             refreshState();
         }
@@ -228,7 +228,7 @@ function SharedSwitch({ note }: { note?: FNote | null }) {
     }, [ note ]);
 
     useEffect(() => refreshState(), [ note ]);
-    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         if (note && loadResults.getBranchRows().find((b) => b.noteId === note.noteId)) {
             refreshState();
         }

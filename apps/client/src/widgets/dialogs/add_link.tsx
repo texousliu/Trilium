@@ -11,7 +11,7 @@ import { default as TextTypeWidget } from "../type_widgets/editable_text.js";
 import { logError } from "../../services/ws";
 import FormGroup from "../react/FormGroup.js";
 import { refToJQuerySelector } from "../react/react_utils";
-import { useTriliumEventBeta } from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
 type LinkType = "reference-link" | "external-link" | "hyper-link";
 
@@ -24,7 +24,7 @@ export default function AddLinkDialog() {
     const [ suggestion, setSuggestion ] = useState<Suggestion | null>(null);
     const [ shown, setShown ] = useState(false);
 
-    useTriliumEventBeta("showAddLinkDialog", ( { textTypeWidget, text }) => {
+    useTriliumEvent("showAddLinkDialog", ( { textTypeWidget, text }) => {
         setTextTypeWidget(textTypeWidget);
         initialText.current = text;
         setShown(true);

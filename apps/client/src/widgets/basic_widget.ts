@@ -278,12 +278,9 @@ export function wrapReactWidgets<T extends TypedComponent<any>>(components: (T |
     return wrappedResult;
 }
 
-type EventHandler = ((data: any) => void);
-
 export class ReactWrappedWidget extends BasicWidget {
 
     private el: VNode;
-    private listeners: Record<string, EventHandler[]> = {};
 
     constructor(el: VNode) {
         super();
@@ -292,43 +289,6 @@ export class ReactWrappedWidget extends BasicWidget {
 
     doRender() {
         this.$widget = renderReactWidget(this, this.el);
-    }
-
-    handleEvent<T extends EventNames>(name: T, data: EventData<T>): Promise<unknown[] | unknown> | null | undefined {
-        if (!this.listeners[name]) {
-            return;
-        }
-
-        for (const listener of this.listeners[name]) {
-            listener(data);
-        }
-
-        super.handleEvent(name, data);
-    }
-
-    registerHandler<T extends EventNames>(name: T, handler: EventHandler) {
-        if (!this.listeners[name]) {
-            this.listeners[name] = [];
-        }
-
-        if (this.listeners[name].includes(handler)) {
-            return;
-        }
-
-        this.listeners[name].push(handler);
-    }
-
-    removeHandler<T extends EventNames>(name: T, handler: EventHandler) {
-        if (!this.listeners[name]?.includes(handler)) {
-            return;
-        }
-
-        this.listeners[name] = this.listeners[name]
-            .filter(listener => listener !== handler);
-
-        if (!this.listeners[name].length) {
-            delete this.listeners[name];
-        }
     }
 
 }
