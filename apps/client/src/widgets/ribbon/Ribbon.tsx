@@ -23,6 +23,7 @@ import OwnedAttributesTab from "./OwnedAttributesTab";
 import InheritedAttributesTab from "./InheritedAttributesTab";
 import CollectionPropertiesTab from "./CollectionPropertiesTab";
 import SearchDefinitionTab from "./SearchDefinitionTab";
+import NoteActions from "./NoteActions";
 
 interface TitleContext {
     note: FNote | null | undefined;
@@ -203,7 +204,9 @@ export default function Ribbon() {
                         />
                     ))}
                 </div>
-                <div className="ribbon-button-container"></div>
+                <div className="ribbon-button-container">
+                    <NoteActions note={note} />
+                </div>
             </div>
         
             <div className="ribbon-body-container">
