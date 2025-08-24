@@ -5,20 +5,19 @@ import { TabContext } from "./ribbon-interface";
 import Dropdown from "../react/Dropdown";
 import ActionButton from "../react/ActionButton";
 import FormTextArea from "../react/FormTextArea";
-import { AttributeType, OptionNames, SaveSearchNoteResponse } from "@triliumnext/commons";
+import { AttributeType, SaveSearchNoteResponse } from "@triliumnext/commons";
 import attributes, { removeOwnedAttributesByNameOrType } from "../../services/attributes";
-import { note } from "mermaid/dist/rendering-util/rendering-elements/shapes/note.js";
 import FNote from "../../entities/fnote";
 import toast from "../../services/toast";
 import froca from "../../services/froca";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import { ParentComponent } from "../react/react_utils";
-import { useNoteLabel, useSpacedUpdate, useTooltip, useTriliumEventBeta } from "../react/hooks";
+import { useNoteLabel, useNoteRelation, useSpacedUpdate, useTooltip, useTriliumEventBeta } from "../react/hooks";
 import appContext from "../../components/app_context";
 import server from "../../services/server";
-import { tooltip } from "leaflet";
 import ws from "../../services/ws";
 import tree from "../../services/tree";
+import NoteAutocomplete from "../react/NoteAutocomplete";
 
 interface SearchOption {
   attributeName: string;
@@ -50,7 +49,8 @@ const SEARCH_OPTIONS: SearchOption[] = [
     attributeName: "searchScript",
     attributeType: "relation",
     icon: "bx bx-code",
-    label: t("search_definition.search_script")
+    label: t("search_definition.search_script"),
+    component: SearchScriptOption
   },
   {
     attributeName: "ancestor",
@@ -158,7 +158,10 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
                     icon={icon}
                     text={label}
                     title={tooltip}
-                    onClick={() => attributes.setAttribute(note, attributeType, attributeName, "")}
+                    onClick={() => {
+                      const defaultValue = (attributeType === "relation" ? "root" : "");
+                      attributes.setAttribute(note, attributeType, attributeName, defaultValue);
+                    }}
                   />
                 ))}
               </td>
@@ -322,6 +325,29 @@ function SearchStringOption({ note, refreshResults, error, ...restProps }: Searc
           refreshResults();
         }
       }}
+    />
+  </SearchOption>
+}
+
+function SearchScriptOption({ note, ...restProps }: SearchOptionProps) {
+  const [ searchScript, setSearchScript ] = useNoteRelation(note, "searchScript");
+
+  return <SearchOption
+    title={t("search_script.title")}
+    help={<>
+      <p>{t("search_script.description1")}</p>
+      <p>{t("search_script.description2")}</p>
+      <p>{t("search_script.example_title")}</p>
+      <pre>{t("search_script.example_code")}</pre>
+      {t("search_script.note")}
+    </>}
+    note={note}
+    {...restProps}
+  >
+    <NoteAutocomplete
+      noteId={searchScript !== "root" ? searchScript ?? undefined : undefined}
+      noteIdChanged={noteId => setSearchScript(noteId ?? "root")}
+      placeholder={t("search_script.placeholder")}
     />
   </SearchOption>
 }

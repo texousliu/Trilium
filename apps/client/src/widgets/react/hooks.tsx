@@ -345,6 +345,30 @@ export function useNoteProperty<T extends keyof FNote>(note: FNote | null | unde
     return note[property];
 }
 
+export function useNoteRelation(note: FNote | undefined | null, relationName: string): [string | null | undefined, (newValue: string) => void] {
+    const [ relationValue, setRelationValue ] = useState<string | null | undefined>(note?.getRelationValue(relationName));
+
+    useEffect(() => setRelationValue(note?.getRelationValue(relationName) ?? null), [ note ]);
+    useTriliumEventBeta("entitiesReloaded", ({ loadResults }) => {
+        for (const attr of loadResults.getAttributeRows()) {
+            if (attr.type === "relation" && attr.name === relationName && attributes.isAffecting(attr, note)) {
+                setRelationValue(attr.value ?? null);
+            }
+        }
+    });
+
+    const setter = useCallback((value: string | undefined) => {
+        if (note) {
+            attributes.setAttribute(note, "relation", relationName, value)
+        }
+    }, [note]);
+
+    return [
+        relationValue,
+        setter
+    ] as const;
+}
+
 export function useNoteLabel(note: FNote | undefined | null, labelName: string): [string | null | undefined, (newValue: string) => void] {
     const [ labelValue, setLabelValue ] = useState<string | null | undefined>(note?.getLabelValue(labelName));
 
