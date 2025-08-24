@@ -20,6 +20,7 @@ import tree from "../../services/tree";
 import NoteAutocomplete from "../react/NoteAutocomplete";
 import FormSelect from "../react/FormSelect";
 import Icon from "../react/Icon";
+import FormTextBox from "../react/FormTextBox";
 
 interface SearchOption {
   attributeName: string;
@@ -39,6 +40,7 @@ interface SearchOptionProps {
   attributeName: string;
   attributeType: "label" | "relation";
   additionalAttributesToDelete?: { type: "label" | "relation", name: string }[];
+  defaultValue?: string;
   error?: { message: string };
 }
 
@@ -95,9 +97,11 @@ const SEARCH_OPTIONS: SearchOption[] = [
   {
     attributeName: "limit",
     attributeType: "label",
+    defaultValue: "10",
     icon: "bx bx-stop",
     label: t("search_definition.limit"),
-    tooltip: t("search_definition.limit_description")
+    tooltip: t("search_definition.limit_description"),
+    component: LimitOption
   },
   {
     attributeName: "debug",
@@ -179,14 +183,15 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
               </td>
             </tr>
             <tbody className="search-options">
-              {searchOptions?.activeOptions.map(({ attributeType, attributeName, component, additionalAttributesToDelete }) => {
+              {searchOptions?.activeOptions.map(({ attributeType, attributeName, component, additionalAttributesToDelete, defaultValue }) => {
                 return component?.({
                   attributeName,
                   attributeType,
                   note,
                   refreshResults,
                   error,
-                  additionalAttributesToDelete
+                  additionalAttributesToDelete,
+                  defaultValue
                 });
               })}
             </tbody>
@@ -480,6 +485,22 @@ function OrderByOption({ note, ...restProps }: SearchOptionProps) {
         { value: "asc", title: t("order_by.asc") },
         { value: "desc", title: t("order_by.desc") }
       ]}
+    />
+  </SearchOption>
+}
+
+function LimitOption({ note, defaultValue, ...restProps }: SearchOptionProps) {
+  const [ limit, setLimit ] = useNoteLabel(note, "limit");
+
+  return <SearchOption
+    titleIcon="bx bx-stop"
+    title={t("limit.limit")}
+    help={t("limit.take_first_x_results")}
+    note={note} {...restProps}
+  >
+    <FormTextBox
+      type="number" min="1" step="1"
+      currentValue={limit ?? defaultValue} onChange={setLimit}
     />
   </SearchOption>
 }
