@@ -123,10 +123,14 @@ function SearchOption({ note, title, titleIcon, children, help, attributeName, a
       </td>
       <td>{children}</td>
       <td className="button-column">
-        {help && <Dropdown buttonClassName="bx bx-help-circle icon-action" hideToggleArrow>{help}</Dropdown>}
+        {help && <>
+            <Dropdown buttonClassName="bx bx-help-circle icon-action" hideToggleArrow>{help}</Dropdown>
+            {" "}
+        </>}            
         <ActionButton
           icon="bx bx-x"
           className="search-option-del"
+          text={t("abstract_search_option.remove_this_search_option")}
           onClick={() => {
             removeOwnedAttributesByNameOrType(note, attributeType, attributeName);
             if (additionalAttributesToDelete) {

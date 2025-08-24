@@ -402,21 +402,30 @@
     white-space: nowrap;
 }
 
-.search-setting-table .button-column {
-    /* minimal width so that table remains static sized and most space remains for middle column with settings */
-    width: 50px;
-    white-space: nowrap;
-    text-align: right;
-}
-
 .search-setting-table .title-column {
     /* minimal width so that table remains static sized and most space remains for middle column with settings */
     width: 50px;
     white-space: nowrap;
 }
 
+.search-setting-table .button-column {
+    /* minimal width so that table remains static sized and most space remains for middle column with settings */
+    width: 50px;
+    white-space: nowrap;
+    text-align: right;
+    vertical-align: middle;
+}
+
+.search-setting-table .button-column .dropdown {
+    display: inline-block !important;
+}
+
 .search-setting-table .button-column .dropdown-menu {
     white-space: normal;
+}
+
+.search-setting-table .button-column > * {
+    vertical-align: middle;
 }
 
 .attribute-list hr {
