@@ -148,7 +148,7 @@ export function isElectron() {
     return !!(window && window.process && window.process.type);
 }
 
-function isMac() {
+export function isMac() {
     return navigator.platform.indexOf("Mac") > -1;
 }
 

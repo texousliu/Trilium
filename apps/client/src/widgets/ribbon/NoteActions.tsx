@@ -9,7 +9,7 @@ import ws from "../../services/ws";
 import ActionButton from "../react/ActionButton"
 import Dropdown from "../react/Dropdown";
 import { FormDropdownDivider, FormListItem } from "../react/FormList";
-import { isElectron as getIsElectron } from "../../services/utils";
+import { isElectron as getIsElectron, isMac as getIsMac } from "../../services/utils";
 import { ParentComponent } from "../react/react_utils";
 import { useContext } from "preact/hooks";
 import NoteContext from "../../components/note_context";
@@ -44,15 +44,19 @@ function RevisionsButton({ note }: NoteActionsProps) {
 
 function NoteContextMenu(props: NoteActionsProps) {
   const { note, noteContext } = props;
-  if (!note) {
+  if (!note || note.type === "launcher") {
     return <></>;
   }
 
   const parentComponent = useContext(ParentComponent);
+  const canBeConvertedToAttachment = note?.isEligibleForConversionToAttachment();
   const isSearchable = ["text", "code", "book", "mindMap", "doc"].includes(note.type);
   const isInOptions = note.noteId.startsWith("_options");
   const isPrintable = ["text", "code"].includes(note.type);
   const isElectron = getIsElectron();
+  const isMac = getIsMac();
+  const hasSource = ["text", "code", "relationMap", "mermaid", "canvas", "mindMap"].includes(note.type);
+  const isSearchOrBook = ["search", "book"].includes(note.type);  
 
   return (
     <Dropdown
@@ -60,34 +64,37 @@ function NoteContextMenu(props: NoteActionsProps) {
       hideToggleArrow
       noSelectButtonStyle
     >
-      <ConvertToAttachment {...props} />
+      {canBeConvertedToAttachment && <ConvertToAttachment {...props} /> }
       {note.type === "render" && <CommandItem command="renderActiveNote" icon="bx bx-extension" text={t("note_actions.re_render_note")} />}
       <CommandItem command="findInText" icon="bx bx-search" disabled={!isSearchable} text={t("note_actions.search_in_note")} />
       <CommandItem command="printActiveNote" icon="bx bx-printer" disabled={!isPrintable} text={t("note_actions.print_note")} />
-      {isElectron && <CommandItem command="exportAsPdf" icon="bx bxs-file-pdf" text={t("note_actions.print_pdf")} />}
+      {isElectron && <CommandItem command="exportAsPdf" icon="bx bxs-file-pdf" disabled={!isPrintable} text={t("note_actions.print_pdf")} />}
       <FormDropdownDivider />
 
       <CommandItem icon="bx bx-import" text={t("note_actions.import_files")}
+        disabled={isInOptions || note.type === "search"}
         command={() => parentComponent?.triggerCommand("showImportDialog", { noteId: note.noteId })} />
       <CommandItem icon="bx bx-export" text={t("note_actions.export_note")}
+        disabled={isInOptions || note.noteId === "_backendLog"}
         command={() => noteContext?.notePath && parentComponent?.triggerCommand("showExportDialog", {
           notePath: noteContext.notePath, 
           defaultType: "single"
         })} />
       <FormDropdownDivider />
 
-      <CommandItem command="openNoteExternally" icon="bx bx-file-find" text={t("note_actions.open_note_externally")} title={t("note_actions.open_note_externally_title")} />
-      <CommandItem command="openNoteCustom" icon="bx bx-customize" text={t("note_actions.open_note_custom")} />
-      <CommandItem command="showNoteSource" icon="bx bx-code" text={t("note_actions.note_source")} />
+      <CommandItem command="openNoteExternally" icon="bx bx-file-find" disabled={isSearchOrBook || !isElectron} text={t("note_actions.open_note_externally")} title={t("note_actions.open_note_externally_title")} />
+      <CommandItem command="openNoteCustom" icon="bx bx-customize" disabled={isSearchOrBook || isMac || !isElectron} text={t("note_actions.open_note_custom")} />
+      <CommandItem command="showNoteSource" icon="bx bx-code" disabled={!hasSource} text={t("note_actions.note_source")} />
       <FormDropdownDivider />
 
-      <CommandItem command="forceSaveRevision" icon="bx bx-save" text={t("note_actions.save_revision")} />
+      <CommandItem command="forceSaveRevision" icon="bx bx-save" disabled={isInOptions} text={t("note_actions.save_revision")} />
       <CommandItem icon="bx bx-trash destructive-action-icon" text={t("note_actions.delete_note")} destructive
+        disabled={isInOptions}
         command={() => branches.deleteNotes([note.getParentBranches()[0].branchId])}
       />
       <FormDropdownDivider />
 
-      <CommandItem command="showAttachments" icon="bx bx-paperclip" text={t("note_actions.note_attachments")} />
+      <CommandItem command="showAttachments" icon="bx bx-paperclip" disabled={isInOptions} text={t("note_actions.note_attachments")} />
     </Dropdown>
   );
 }
@@ -103,7 +110,7 @@ function CommandItem({ icon, text, title, command, disabled }: { icon: string, t
 }
 
 function ConvertToAttachment({ note }: NoteActionsProps) {
-  return (note?.isEligibleForConversionToAttachment() &&
+  return (
     <FormListItem
         icon="bx bx-paperclip"
         onClick={async () => {
