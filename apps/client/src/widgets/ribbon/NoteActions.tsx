@@ -61,6 +61,7 @@ function NoteContextMenu(props: NoteActionsProps) {
   return (
     <Dropdown
       buttonClassName="bx bx-dots-vertical-rounded"
+      className="note-actions"
       hideToggleArrow
       noSelectButtonStyle
     >

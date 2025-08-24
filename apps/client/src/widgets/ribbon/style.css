@@ -449,3 +449,27 @@
     background-color: var(--accented-background-color);
 }
 /* #endregion */
+
+/* #region Note actions */
+.note-actions {
+    width: 35px;
+    height: 35px;
+}
+
+.note-actions .dropdown-menu {
+    min-width: 15em;
+}
+
+.note-actions .dropdown-item .bx {
+    position: relative;
+    top: 3px;
+    font-size: 120%;
+    margin-right: 5px;
+}
+
+.note-actions .dropdown-item[disabled], .note-actions .dropdown-item[disabled]:hover {
+    color: var(--muted-text-color) !important;
+    background-color: transparent !important;
+    pointer-events: none; /* makes it unclickable */
+}
+/* #endregion */
