@@ -15,31 +15,49 @@ import { RefObject, VNode } from "preact";
 import { Tooltip } from "bootstrap";
 import { CSSProperties } from "preact/compat";
 
+/**
+ * Allows a React component to listen to Trilium's legacy event system.
+ * 
+ * The handler works by registering the event listener on the parent legacy component.
+ * 
+ * @param eventName the event to listen on.
+ * @param handler the callback to be invoked when the event is triggered.
+ */
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
     const parentComponent = useContext(ParentComponent)!;
-    parentComponent.registerHandler(eventName, handler);
-    return (() => parentComponent.removeHandler(eventName, handler));
+    useEffect(() => {
+        parentComponent.registerHandler(eventName, handler);
+        return (() => parentComponent.removeHandler(eventName, handler));
+    }, [ eventName, handler, parentComponent ])
 }
 
+/**
+ * Similar to {@link useTriliumEvent}, but listens to multiple events at once.
+ * 
+ * @param eventNames the events to listen on.
+ * @param handler the callback to be invoked when one of the events is triggered. The name of the event is provided as the second argument.
+ */
 export function useTriliumEvents<T extends EventNames>(eventNames: T[], handler: (data: EventData<T>, eventName: T) => void) {
     const parentComponent = useContext(ParentComponent)!;
-    const handlers: ({ eventName: T, callback: (data: EventData<T>) => void })[] = [];
-
-    for (const eventName of eventNames) {
-        handlers.push({ eventName, callback: (data) => {
-            handler(data, eventName);
-        }})
-    }
-
-    for (const { eventName, callback } of handlers) {
-        parentComponent.registerHandler(eventName, callback);
-    }
-
-    return (() => {
-        for (const { eventName, callback } of handlers) {
-            parentComponent.removeHandler(eventName, callback);
+    useEffect(() => {
+        const handlers: ({ eventName: T, callback: (data: EventData<T>) => void })[] = [];
+    
+        for (const eventName of eventNames) {
+            handlers.push({ eventName, callback: (data) => {
+                handler(data, eventName);
+            }})
         }
-    });
+    
+        for (const { eventName, callback } of handlers) {
+            parentComponent.registerHandler(eventName, callback);
+        }
+    
+        return (() => {
+            for (const { eventName, callback } of handlers) {
+                parentComponent.removeHandler(eventName, callback);
+            }
+        });
+    }, [ eventNames, handler, parentComponent ]);
 }
 
 export function useSpacedUpdate(callback: () => void | Promise<void>, interval = 1000) {
