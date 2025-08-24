@@ -10,11 +10,6 @@ import { t } from "../../services/i18n.js";
 import type FNote from "../../entities/fnote.js";
 import type { FAttachmentRow } from "../../entities/fattachment.js";
 
-// TODO: Deduplicate with server
-interface ConvertToAttachmentResponse {
-    attachment: FAttachmentRow;
-}
-
 const TPL = /*html*/`
 <div class="dropdown note-actions">
     <style>
@@ -42,14 +37,7 @@ const TPL = /*html*/`
 
     </style>
 
-    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-      class="icon-action bx bx-dots-vertical-rounded"></button>
-
     <div class="dropdown-menu dropdown-menu-right">
-        <li data-trigger-command="convertNoteIntoAttachment" class="dropdown-item">
-            <span class="bx bx-paperclip"></span> ${t("note_actions.convert_into_attachment")}
-        </li>
-
         <li data-trigger-command="renderActiveNote" class="dropdown-item render-note-button">
             <span class="bx bx-extension"></span> ${t("note_actions.re_render_note")}<kbd data-command="renderActiveNote"></kbd>
         </li>
@@ -212,28 +200,6 @@ export default class NoteActionsWidget extends NoteContextAwareWidget {
         this.toggleDisabled(this.$importNoteButton, !["search"].includes(note.type) && !isInOptions);
         this.toggleDisabled(this.$deleteNoteButton, !isInOptions);
         this.toggleDisabled(this.$saveRevisionButton, !isInOptions);
-    }
-
-    async convertNoteIntoAttachmentCommand() {
-        if (!this.note || !(await dialogService.confirm(t("note_actions.convert_into_attachment_prompt", { title: this.note.title })))) {
-            return;
-        }
-
-        const { attachment: newAttachment } = await server.post<ConvertToAttachmentResponse>(`notes/${this.noteId}/convert-to-attachment`);
-
-        if (!newAttachment) {
-            toastService.showMessage(t("note_actions.convert_into_attachment_failed", { title: this.note.title }));
-            return;
-        }
-
-        toastService.showMessage(t("note_actions.convert_into_attachment_successful", { title: newAttachment.title }));
-        await ws.waitForMaxKnownEntityChangeId();
-        await appContext.tabManager.getActiveContext()?.setNote(newAttachment.ownerId, {
-            viewScope: {
-                viewMode: "attachments",
-                attachmentId: newAttachment.attachmentId
-            }
-        });
     }
 
     toggleDisabled($el: JQuery<HTMLElement>, enable: boolean) {

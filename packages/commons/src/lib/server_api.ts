@@ -1,4 +1,4 @@
-import { AttributeRow, NoteType } from "./rows.js";
+import { AttachmentRow, AttributeRow, NoteType } from "./rows.js";
 
 type Response = {
     success: true,
@@ -201,4 +201,8 @@ export interface CloneResponse {
     message?: string;
     branchId?: string;
     notePath?: string;
+}
+
+export interface ConvertToAttachmentResponse {
+    attachment: AttachmentRow;
 }

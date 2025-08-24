@@ -3,6 +3,7 @@ import { ComponentChildren } from "preact";
 import Icon from "./Icon";
 import { useEffect, useMemo, useRef, type CSSProperties } from "preact/compat";
 import "./FormList.css";
+import { CommandNames } from "../../components/app_context";
 
 interface FormListOpts {
     children: ComponentChildren;
@@ -80,12 +81,13 @@ interface FormListItemOpts {
     checked?: boolean | null;
     selected?: boolean;
     onClick?: () => void;
+    triggerCommand?: CommandNames;
     description?: string;
     className?: string;
     rtl?: boolean;
 }
 
-export function FormListItem({ children, icon, value, title, active, badges, disabled, checked, onClick, description, selected, rtl }: FormListItemOpts) {
+export function FormListItem({ children, icon, value, title, active, badges, disabled, checked, onClick, description, selected, rtl, triggerCommand }: FormListItemOpts) {
     if (checked) {
         icon = "bx bx-check";
     }
@@ -96,6 +98,7 @@ export function FormListItem({ children, icon, value, title, active, badges, dis
             data-value={value} title={title}
             tabIndex={0}
             onClick={onClick}
+            data-trigger-command={triggerCommand}
             dir={rtl ? "rtl" : undefined}
         >
             <Icon icon={icon} />&nbsp;
