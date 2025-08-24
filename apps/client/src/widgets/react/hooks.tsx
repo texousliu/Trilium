@@ -519,7 +519,8 @@ export function useTooltip(elRef: RefObject<HTMLElement>, config: Partial<Toolti
         if (!elRef?.current) return;
 
         const $el = $(elRef.current);
-        $el.tooltip(config);        
+        $el.tooltip("dispose");
+        $el.tooltip(config);
     }, [ elRef, config ]);
 
     const showTooltip = useCallback(() => {
@@ -527,7 +528,8 @@ export function useTooltip(elRef: RefObject<HTMLElement>, config: Partial<Toolti
 
         const $el = $(elRef.current);
         $el.tooltip("show");
-    }, [ elRef ]);
+        console.log("Show tooltip ", elRef.current);
+    }, [ elRef, config ]);
 
     const hideTooltip = useCallback(() => {
         if (!elRef?.current) return;

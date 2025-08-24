@@ -8,38 +8,6 @@ import { Tooltip } from "bootstrap";
 
 export default class SearchString extends AbstractSearchOption {
 
-    private $searchString!: JQuery<HTMLElement>;
-    private spacedUpdate!: SpacedUpdate;
-
-    static async create(noteId: string) {
-        await AbstractSearchOption.setAttribute(noteId, "label", "searchString");
-    }
-
-    doRender() {
-        const $option = $(TPL);
-        this.$searchString = $option.find(".search-string");
-
-        this.spacedUpdate = new SpacedUpdate(async () => {
-
-        }, 1000);
-
-        this.$searchString.val(this.note.getLabelValue("searchString") ?? "");
-
-        return $option;
-    }
-
-    showSearchErrorEvent({ error }: EventData<"showSearchError">) {
-        let tooltip = new Tooltip(this.$searchString[0], {
-            trigger: "manual",
-            title: `${t("search_string.error", { error })}`,
-            placement: "bottom"
-        });
-
-        tooltip.show();
-
-        setTimeout(() => tooltip.dispose(), 4000);
-    }
-
     focusOnSearchDefinitionEvent() {
         this.$searchString
             .val(String(this.$searchString.val()).trim() ?? appContext.lastSearchString)

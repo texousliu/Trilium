@@ -1,4 +1,4 @@
-import { TextareaHTMLAttributes } from "preact/compat";
+import { RefObject, TextareaHTMLAttributes } from "preact/compat";
 
 interface FormTextAreaProps extends Omit<TextareaHTMLAttributes, "onBlur" | "onChange"> {
     id?: string;
@@ -6,10 +6,12 @@ interface FormTextAreaProps extends Omit<TextareaHTMLAttributes, "onBlur" | "onC
     onChange?(newValue: string): void;
     onBlur?(newValue: string): void;
     rows: number;
+    inputRef?: RefObject<HTMLTextAreaElement>
 }
-export default function FormTextArea({ id, onBlur, onChange, rows, currentValue, className, ...restProps }: FormTextAreaProps) {
+export default function FormTextArea({ inputRef, id, onBlur, onChange, rows, currentValue, className, ...restProps }: FormTextAreaProps) {
     return (
         <textarea
+            ref={inputRef}
             id={id}
             rows={rows}
             className={`form-control ${className ?? ""}`}

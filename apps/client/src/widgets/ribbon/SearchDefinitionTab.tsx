@@ -13,9 +13,10 @@ import toast from "../../services/toast";
 import froca from "../../services/froca";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import { ParentComponent } from "../react/react_utils";
-import { useSpacedUpdate, useTriliumEventBeta } from "../react/hooks";
+import { useNoteLabel, useSpacedUpdate, useTooltip, useTriliumEventBeta } from "../react/hooks";
 import appContext from "../../components/app_context";
 import server from "../../services/server";
+import { tooltip } from "leaflet";
 
 interface SearchOption {
   attributeName: string;
@@ -32,6 +33,7 @@ interface SearchOptionProps {
   refreshResults: () => void;
   attributeName: string;
   attributeType: "label" | "relation";
+  error?: { message: string };
 }
 
 const SEARCH_OPTIONS: SearchOption[] = [
@@ -93,6 +95,7 @@ const SEARCH_OPTIONS: SearchOption[] = [
 export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
   const parentComponent = useContext(ParentComponent);
   const [ searchOptions, setSearchOptions ] = useState<{ availableOptions: SearchOption[], activeOptions: SearchOption[] }>();
+  const [ error, setError ] = useState<{ message: string }>();
 
   function refreshOptions() {
     if (!note) return;
@@ -120,9 +123,10 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
 
     try {
         const result = await froca.loadSearchNote(noteId);
-
-        if (result && result.error) {
-          //this.handleEvent("showSearchError", { error: result.error });
+        if (result?.error) {
+          setError({ message: result?.error})
+        } else {
+          setError(undefined);
         }
     } catch (e: any) {
         toast.showError(e.message);
@@ -147,11 +151,12 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
             <tr>
               <td className="title-column">{t("search_definition.add_search_option")}</td>
               <td colSpan={2} className="add-search-option">
-                {searchOptions?.availableOptions.map(({ icon, label, tooltip }) => (
+                {searchOptions?.availableOptions.map(({ icon, label, tooltip, attributeName, attributeType }) => (
                   <Button
                     icon={icon}
                     text={label}
                     title={tooltip}
+                    onClick={() => attributes.setAttribute(note, attributeType, attributeName, "")}
                   />
                 ))}
               </td>
@@ -162,7 +167,8 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
                   attributeName,
                   attributeType,
                   note,
-                  refreshResults
+                  refreshResults,
+                  error
                 });
               })}
             </tbody>
@@ -224,20 +230,38 @@ function SearchOption({ note, title, children, help, attributeName, attributeTyp
   )
 }
 
-function SearchStringOption({ note, refreshResults, ...restProps }: SearchOptionProps) {
-  const currentValue = useRef("");
+function SearchStringOption({ note, refreshResults, error, ...restProps }: SearchOptionProps) {
+  const [ searchString, setSearchString ] = useNoteLabel(note, "searchString");
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const currentValue = useRef(searchString ?? "");
   const spacedUpdate = useSpacedUpdate(async () => {
     const searchString = currentValue.current;
     appContext.lastSearchString = searchString;
-
-    await attributes.setAttribute(note, "label", "searchString", searchString);
+    setSearchString(searchString);
 
     if (note.title.startsWith(t("search_string.search_prefix"))) {
       await server.put(`notes/${note.noteId}/title`, {
-          title: `${t("search_string.search_prefix")} ${searchString.length < 30 ? searchString : `${searchString.substr(0, 30)}…`}`
+        title: `${t("search_string.search_prefix")} ${searchString.length < 30 ? searchString : `${searchString.substr(0, 30)}…`}`
       });
     }
   }, 1000);
+
+  // React to errors
+  const { showTooltip, hideTooltip } = useTooltip(inputRef, {
+    trigger: "manual",
+    title: `${t("search_string.error", { error: error?.message })}`,
+    html: true,
+    placement: "bottom"
+  });
+
+  useEffect(() => {
+    if (error) {
+      showTooltip();
+      setTimeout(() => hideTooltip(), 4000);
+    } else {
+      hideTooltip();
+    }
+  }, [ error ]);
 
   return <SearchOption    
     title={t("search_string.title_column")}
@@ -256,8 +280,10 @@ function SearchStringOption({ note, refreshResults, ...restProps }: SearchOption
     note={note} {...restProps}
   >
     <FormTextArea
+      inputRef={inputRef}
       className="search-string"
       placeholder={t("search_string.placeholder")}
+      currentValue={searchString ?? ""}
       onChange={text => {
         currentValue.current = text;
         spacedUpdate.scheduleUpdate();
