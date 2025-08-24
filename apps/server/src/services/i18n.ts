@@ -18,6 +18,7 @@ const DAYJS_LOADER: Record<LOCALE_IDS, () => Promise<typeof import("dayjs/locale
     "he": () => import("dayjs/locale/he.js"),
     "ja": () => import("dayjs/locale/ja.js"),
     "ku": () => import("dayjs/locale/ku.js"),
+    "pt_BR": () => import("dayjs/locale/pt_BR.js"),
     "ro": () => import("dayjs/locale/ro.js"),
     "ru": () => import("dayjs/locale/ru.js"),
     "tw": () => import("dayjs/locale/zh-tw.js"),
@@ -40,8 +41,10 @@ export async function initializeTranslations() {
     });
 
     // Initialize dayjs locale.
-    const dayjsLocale = await DAYJS_LOADER[locale]();
-    dayjs.locale(dayjsLocale);
+    const dayjsLocale = DAYJS_LOADER[locale];
+    if (dayjsLocale) {
+        dayjs.locale(await dayjsLocale());
+    }
 }
 
 export function ordinal(date: Dayjs) {
