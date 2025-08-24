@@ -19,6 +19,7 @@ import ws from "../../services/ws";
 import tree from "../../services/tree";
 import NoteAutocomplete from "../react/NoteAutocomplete";
 import FormSelect from "../react/FormSelect";
+import Icon from "../react/Icon";
 
 interface SearchOption {
   attributeName: string;
@@ -68,7 +69,8 @@ const SEARCH_OPTIONS: SearchOption[] = [
     attributeType: "label",
     icon: "bx bx-run",
     label: t("search_definition.fast_search"),
-    tooltip: t("search_definition.fast_search_description")
+    tooltip: t("search_definition.fast_search_description"),
+    component: FastSearchOption
   },
   {
     attributeName: "includeArchivedNotes",
@@ -235,10 +237,11 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
   )
 }
 
-function SearchOption({ note, title, children, help, attributeName, attributeType, additionalAttributesToDelete }: {
+function SearchOption({ note, title, titleIcon, children, help, attributeName, attributeType, additionalAttributesToDelete }: {
   note: FNote;
   title: string,
-  children: ComponentChildren,
+  titleIcon: string,
+  children?: ComponentChildren,
   help: ComponentChildren,
   attributeName: string,
   attributeType: AttributeType,
@@ -246,7 +249,10 @@ function SearchOption({ note, title, children, help, attributeName, attributeTyp
 }) {
   return (
     <tr>
-      <td className="title-column">{title}</td>
+      <td className="title-column">
+        {titleIcon && <><Icon icon={titleIcon} />{" "}</>}
+        {title}
+      </td>
       <td>{children}</td>
       <td className="button-column">
         {help && <Dropdown buttonClassName="bx bx-help-circle icon-action" hideToggleArrow>{help}</Dropdown>}
@@ -402,4 +408,13 @@ function AncestorOption({ note, ...restProps}: SearchOptionProps) {
       />
     </div>
   </SearchOption>;
+}
+
+function FastSearchOption({ ...restProps }: SearchOptionProps) {
+  return <SearchOption
+    titleIcon="bx bx-run"
+    title={t("fast_search.fast_search")}
+    help={t("fast_search.description")}
+    {...restProps}
+  />
 }
