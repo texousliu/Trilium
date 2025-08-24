@@ -544,7 +544,7 @@ export function useWindowSize() {
 
         window.addEventListener("resize", onResize);
         return () => window.removeEventListener("resize", onResize);
-    });
+    }, []);
 
     return size;
 }

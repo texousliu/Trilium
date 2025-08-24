@@ -29,7 +29,7 @@ export default function NotePathsTab({ note, hoistedNoteId, notePath }: TabConte
 
     return (
         <div class="note-paths-widget">
-            {sortedNotePaths && (
+            {sortedNotePaths?.length && (
                 <>
                     <div className="note-path-intro">
                         {sortedNotePaths.length > 0 ? t("note_paths.intro_placed") : t("note_paths.intro_not_placed")}

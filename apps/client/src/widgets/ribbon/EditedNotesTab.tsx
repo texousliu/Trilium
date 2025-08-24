@@ -27,7 +27,7 @@ export default function EditedNotesTab({ note }: TabContext) {
             width: "100%",
             overflow: "auto"
         }}>
-            {editedNotes ? (
+            {editedNotes?.length ? (
                 <div className="edited-notes-list use-tn-links">
                     {joinElements(editedNotes.map(editedNote => {
                         return (
