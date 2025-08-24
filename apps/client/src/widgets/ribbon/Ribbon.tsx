@@ -1,4 +1,4 @@
-import { useMemo, useState } from "preact/hooks";
+import { useEffect, useMemo, useState } from "preact/hooks";
 import { t } from "../../services/i18n";
 import { useNoteContext } from "../react/hooks";
 import "./style.css";
@@ -161,6 +161,14 @@ export default function Ribbon() {
     const titleContext: TitleContext = { note };
     const [ activeTabIndex, setActiveTabIndex ] = useState<number | undefined>();
     const filteredTabs = useMemo(() => TAB_CONFIGURATION.filter(tab => typeof tab.show === "boolean" ? tab.show : tab.show?.(titleContext)), [ titleContext, note ]);
+
+    // Automatically activate the first ribbon tab that needs to be activated whenever a note changes.
+    useEffect(() => {
+        const tabToActivate = filteredTabs.find(tab => typeof tab.activate === "boolean" ? tab.activate : tab.activate?.(titleContext));
+        if (tabToActivate) {
+            setActiveTabIndex(tabToActivate.index);
+        }
+    }, [ note?.noteId ]);
 
     return (
         <div className="ribbon-container" style={{ contain: "none" }}>
