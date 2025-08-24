@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useRef, useState } from "preact/hooks"
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { AttributeEditor as CKEditorAttributeEditor, MentionFeed, ModelElement, ModelNode, ModelPosition } from "@triliumnext/ckeditor5";
 import { t } from "../../../services/i18n";
 import server from "../../../services/server";
@@ -12,8 +12,6 @@ import AttributeDetailWidget from "../../attribute_widgets/attribute_detail";
 import attribute_parser, { Attribute } from "../../../services/attribute_parser";
 import ActionButton from "../../react/ActionButton";
 import { escapeQuotes } from "../../../services/utils";
-import { ParentComponent } from "../../react/react_utils";
-import Component from "../../../components/component";
 import link from "../../../services/link";
 import froca from "../../../services/froca";
 import contextMenu from "../../../menus/context_menu";
@@ -144,7 +142,11 @@ export default function AttributeEditor({ note, componentId, notePath, ntxId }: 
         // blink the attribute text to give a visual hint that save has been executed
         if (wrapperRef.current) {
             wrapperRef.current.style.opacity = "0";
-            setTimeout(() => wrapperRef.current!.style.opacity = "1", 100);
+            setTimeout(() => {
+                if (wrapperRef.current) {
+                    wrapperRef.current.style.opacity = "1"
+                }
+            }, 100);
         }
     }
 
