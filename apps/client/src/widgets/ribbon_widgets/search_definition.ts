@@ -37,28 +37,11 @@ const TPL = /*html*/`
             </tr>
             <tbody class="search-options"></tbody>
             <tbody class="action-options"></tbody>
-            <tbody>
-                <tr>
-                    <td colspan="3">
-                        <div style="display: flex; justify-content: space-evenly">
-                            <button type="button" class="btn btn-sm save-to-note-button">
-                                <span class="bx bx-save"></span>
-                                ${t("search_definition.save_to_note")}
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
         </table>
     </div>
 </div>`;
 
 const OPTION_CLASSES = [SearchString, SearchScript, Ancestor, FastSearch, IncludeArchivedNotes, OrderBy, Limit, Debug];
-
-// TODO: Deduplicate with server
-interface SaveSearchNoteResponse {
-    notePath: string;
-}
 
 export default class SearchDefinitionWidget extends NoteContextAwareWidget {
 
@@ -88,19 +71,6 @@ export default class SearchDefinitionWidget extends NoteContextAwareWidget {
             }
         }
 
-        this.$widget.on("click", "[data-search-option-add]", async (event) => {
-            const searchOptionName = $(event.target).attr("data-search-option-add");
-            const clazz = OPTION_CLASSES.find((SearchOptionClass) => SearchOptionClass.optionName === searchOptionName);
-
-            if (clazz && this.noteId) {
-                await clazz.create(this.noteId);
-            } else {
-                logError(t("search_definition.unknown_search_option", { searchOptionName }));
-            }
-
-            this.refresh();
-        });
-
         this.$widget.on("click", "[data-action-add]", async (event) => {
             Dropdown.getOrCreateInstance(this.$widget.find(".action-add-toggle")[0]);
 
@@ -115,30 +85,12 @@ export default class SearchDefinitionWidget extends NoteContextAwareWidget {
 
         this.$searchOptions = this.$widget.find(".search-options");
         this.$actionOptions = this.$widget.find(".action-options");
-
-        this.$saveToNoteButton = this.$widget.find(".save-to-note-button");
-        this.$saveToNoteButton.on("click", async () => {
-            const { notePath } = await server.post<SaveSearchNoteResponse>("special-notes/save-search-note", { searchNoteId: this.noteId });
-
-            await ws.waitForMaxKnownEntityChangeId();
-
-            await appContext.tabManager.getActiveContext()?.setNote(notePath);
-            // Note the {{- notePathTitle}} in json file is not typo, it's unescaping
-            // See https://www.i18next.com/translation-function/interpolation#unescape
-            toastService.showMessage(t("search_definition.search_note_saved", { notePathTitle: await treeService.getNotePathTitle(notePath) }));
-        });
     }
 
     async refreshWithNote(note: FNote) {
         if (!this.note) {
             return;
         }
-
-        this.$component.show();
-
-        this.$saveToNoteButton.toggle(note.isHiddenCompletely());
-
-        this.$searchOptions.empty();
 
         const actions = bulkActionService.parseActions(this.note);
         const renderedEls = actions

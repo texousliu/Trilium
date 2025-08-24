@@ -5,7 +5,7 @@ import { TabContext } from "./ribbon-interface";
 import Dropdown from "../react/Dropdown";
 import ActionButton from "../react/ActionButton";
 import FormTextArea from "../react/FormTextArea";
-import { AttributeType, OptionNames } from "@triliumnext/commons";
+import { AttributeType, OptionNames, SaveSearchNoteResponse } from "@triliumnext/commons";
 import attributes, { removeOwnedAttributesByNameOrType } from "../../services/attributes";
 import { note } from "mermaid/dist/rendering-util/rendering-elements/shapes/note.js";
 import FNote from "../../entities/fnote";
@@ -17,6 +17,8 @@ import { useNoteLabel, useSpacedUpdate, useTooltip, useTriliumEventBeta } from "
 import appContext from "../../components/app_context";
 import server from "../../services/server";
 import { tooltip } from "leaflet";
+import ws from "../../services/ws";
+import tree from "../../services/tree";
 
 interface SearchOption {
   attributeName: string;
@@ -195,6 +197,24 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
                         toast.showMessage(t("search_definition.actions_executed"), 3000);                        
                       }}
                     />
+
+                    {note.isHiddenCompletely() && <Button
+                      icon="bx bx-save"
+                      text={t("search_definition.save_to_note")}
+                      onClick={async () => {
+                        const { notePath } = await server.post<SaveSearchNoteResponse>("special-notes/save-search-note", { searchNoteId: note.noteId });
+                        if (!notePath) {
+                          return;
+                        }
+
+                        await ws.waitForMaxKnownEntityChangeId();
+                        await appContext.tabManager.getActiveContext()?.setNote(notePath);
+
+                        // Note the {{- notePathTitle}} in json file is not typo, it's unescaping
+                        // See https://www.i18next.com/translation-function/interpolation#unescape
+                        toast.showMessage(t("search_definition.search_note_saved", { notePathTitle: await tree.getNotePathTitle(notePath) }));
+                      }}
+                    />}
                   </div>
                 </td>
               </tr>

@@ -193,3 +193,12 @@ export interface SimilarNote {
 }
 
 export type SimilarNoteResponse = (SimilarNote[] | undefined);
+
+export type SaveSearchNoteResponse = CloneResponse;
+
+export interface CloneResponse {
+    success: boolean;
+    message?: string;
+    branchId?: string;
+    notePath?: string;
+}
