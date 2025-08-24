@@ -29,6 +29,7 @@ interface SearchOption {
   tooltip?: string;
   // TODO: Make mandatory once all components are ported.
   component?: (props: SearchOptionProps) => VNode;
+  defaultValue?: string;
   additionalAttributesToDelete?: { type: "label" | "relation", name: string }[];
 }
 
@@ -52,6 +53,7 @@ const SEARCH_OPTIONS: SearchOption[] = [
   {
     attributeName: "searchScript",
     attributeType: "relation",
+    defaultValue: "root",
     icon: "bx bx-code",
     label: t("search_definition.search_script"),
     component: SearchScriptOption
@@ -59,9 +61,10 @@ const SEARCH_OPTIONS: SearchOption[] = [
   {
     attributeName: "ancestor",
     attributeType: "relation",
+    defaultValue: "root",
     icon: "bx bx-filter-alt",
     label: t("search_definition.ancestor"),
-    component: AncestorOption,
+    component: AncestorOption,    
     additionalAttributesToDelete: [ { type: "label", name: "ancestorDepth" } ]
   },
   {
@@ -83,8 +86,11 @@ const SEARCH_OPTIONS: SearchOption[] = [
   {
     attributeName: "orderBy",
     attributeType: "label",
+    defaultValue: "relevancy",
     icon: "bx bx-arrow-from-top",
-    label: t("search_definition.order_by")
+    label: t("search_definition.order_by"),
+    component: OrderByOption,
+    additionalAttributesToDelete: [ { type: "label", name: "orderDirection" } ]
   },
   {
     attributeName: "limit",
@@ -162,15 +168,12 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
             <tr>
               <td className="title-column">{t("search_definition.add_search_option")}</td>
               <td colSpan={2} className="add-search-option">
-                {searchOptions?.availableOptions.map(({ icon, label, tooltip, attributeName, attributeType }) => (
+                {searchOptions?.availableOptions.map(({ icon, label, tooltip, attributeName, attributeType, defaultValue }) => (
                   <Button
                     icon={icon}
                     text={label}
                     title={tooltip}
-                    onClick={() => {
-                      const defaultValue = (attributeType === "relation" ? "root" : "");
-                      attributes.setAttribute(note, attributeType, attributeName, defaultValue);
-                    }}
+                    onClick={() => attributes.setAttribute(note, attributeType, attributeName, defaultValue ?? "")}
                   />
                 ))}
               </td>
@@ -436,4 +439,47 @@ function IncludeArchivedNotesOption({ ...restProps }: SearchOptionProps) {
     titleIcon="bx bx-archive" title={t("include_archived_notes.include_archived_notes")}
     {...restProps}
   />
+}
+
+function OrderByOption({ note, ...restProps }: SearchOptionProps) {
+  const [ orderBy, setOrderBy ] = useNoteLabel(note, "orderBy");
+  const [ orderDirection, setOrderDirection ] = useNoteLabel(note, "orderDirection");
+
+  return <SearchOption
+    titleIcon="bx bx-arrow-from-top"
+    title={t("order_by.order_by")}
+    note={note} {...restProps}
+  >
+    <FormSelect
+      className="w-auto d-inline"
+      currentValue={orderBy ?? "relevancy"} onChange={setOrderBy}
+      keyProperty="value" titleProperty="title"
+      values={[
+        { value: "relevancy", title: t("order_by.relevancy") },
+        { value: "title", title: t("order_by.title") },
+        { value: "dateCreated", title: t("order_by.date_created") },
+        { value: "dateModified", title: t("order_by.date_modified") },
+        { value: "contentSize", title: t("order_by.content_size") },
+        { value: "contentAndAttachmentsSize", title: t("order_by.content_and_attachments_size") },
+        { value: "contentAndAttachmentsAndRevisionsSize", title: t("order_by.content_and_attachments_and_revisions_size") },
+        { value: "revisionCount", title: t("order_by.revision_count") },
+        { value: "childrenCount", title: t("order_by.children_count") },
+        { value: "parentCount", title: t("order_by.parent_count") },
+        { value: "ownedLabelCount", title: t("order_by.owned_label_count") },
+        { value: "ownedRelationCount", title: t("order_by.owned_relation_count") },
+        { value: "targetRelationCount", title: t("order_by.target_relation_count") },
+        { value: "random", title: t("order_by.random") }
+      ]}
+    />
+    {" "}
+    <FormSelect
+      className="w-auto d-inline"
+      currentValue={orderDirection ?? "asc"} onChange={setOrderDirection}
+      keyProperty="value" titleProperty="title"
+      values={[
+        { value: "asc", title: t("order_by.asc") },
+        { value: "desc", title: t("order_by.desc") }
+      ]}
+    />
+  </SearchOption>
 }

@@ -23,14 +23,15 @@ interface FormSelectProps<T, Q> extends ValueConfig<T, Q> {
     name?: string;
     onChange: OnChangeListener;
     style?: CSSProperties;
+    className?: string;
 }
 
 /**
  * Combobox component that takes in any object array as data. Each item of the array is rendered as an item, and the key and values are obtained by looking into the object by a specified key.
  */
-export default function FormSelect<T>({ name, id, onChange, style, ...restProps }: FormSelectProps<T, T>) {
+export default function FormSelect<T>({ name, id, onChange, style, className, ...restProps }: FormSelectProps<T, T>) {
     return (
-        <FormSelectBody name={name} id={id} onChange={onChange} style={style}>
+        <FormSelectBody name={name} id={id} onChange={onChange} style={style} className={className}>
             <FormSelectGroup {...restProps} />
         </FormSelectBody>
     );
@@ -39,9 +40,9 @@ export default function FormSelect<T>({ name, id, onChange, style, ...restProps 
 /**
  * Similar to {@link FormSelect}, but the top-level elements are actually groups.
  */
-export function FormSelectWithGroups<T>({ name, id, values, keyProperty, titleProperty, currentValue, onChange }: FormSelectProps<T, FormSelectGroup<T> | T>) {
+export function FormSelectWithGroups<T>({ name, id, values, keyProperty, titleProperty, currentValue, onChange, ...restProps }: FormSelectProps<T, FormSelectGroup<T> | T>) {
     return (
-        <FormSelectBody name={name} id={id} onChange={onChange}>
+        <FormSelectBody name={name} id={id} onChange={onChange} {...restProps}>
             {values.map((item) => {
                 if (!item) return <></>;
                 if (typeof item === "object" && "items" in item) {
@@ -60,13 +61,13 @@ export function FormSelectWithGroups<T>({ name, id, values, keyProperty, titlePr
     )
 }
 
-function FormSelectBody({ id, name, children, onChange, style }: { id?: string, name?: string, children: ComponentChildren, onChange: OnChangeListener, style?: CSSProperties }) {
+function FormSelectBody({ id, name, children, onChange, style, className }: { id?: string, name?: string, children: ComponentChildren, onChange: OnChangeListener, style?: CSSProperties, className?: string }) {
     return (
         <select
             id={id}
-            class="form-select"
             onChange={e => onChange((e.target as HTMLInputElement).value)}
             style={style}
+            className={`form-select ${className ?? ""}`}
         >
             {children}
         </select>
