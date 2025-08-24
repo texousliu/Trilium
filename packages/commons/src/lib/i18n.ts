@@ -51,6 +51,11 @@ const UNSORTED_LOCALES: Locale[] = [
         electronLocale: "ru"
     },
     {
+        id: "uk",
+        name: "Українська",
+        electronLocale: "uk"
+    },
+    {
         id: "ja",
         name: "日本語",
         electronLocale: "ja"

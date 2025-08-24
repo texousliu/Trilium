@@ -16,11 +16,12 @@ const DAYJS_LOADER: Record<LOCALE_IDS, () => Promise<typeof import("dayjs/locale
     "fa": () => import("dayjs/locale/fa.js"),
     "fr": () => import("dayjs/locale/fr.js"),
     "he": () => import("dayjs/locale/he.js"),
+    "ja": () => import("dayjs/locale/ja.js"),
     "ku": () => import("dayjs/locale/ku.js"),
     "ro": () => import("dayjs/locale/ro.js"),
     "ru": () => import("dayjs/locale/ru.js"),
     "tw": () => import("dayjs/locale/zh-tw.js"),
-    "ja": () => import("dayjs/locale/ja.js")
+    "uk": () => import("dayjs/locale/uk.js"),
 }
 
 export async function initializeTranslations() {
