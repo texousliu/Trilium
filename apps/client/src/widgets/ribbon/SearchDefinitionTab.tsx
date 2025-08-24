@@ -6,9 +6,16 @@ import Dropdown from "../react/Dropdown";
 import ActionButton from "../react/ActionButton";
 import FormTextArea from "../react/FormTextArea";
 import { AttributeType, OptionNames } from "@triliumnext/commons";
-import { removeOwnedAttributesByNameOrType } from "../../services/attributes";
+import attributes, { removeOwnedAttributesByNameOrType } from "../../services/attributes";
 import { note } from "mermaid/dist/rendering-util/rendering-elements/shapes/note.js";
 import FNote from "../../entities/fnote";
+import toast from "../../services/toast";
+import froca from "../../services/froca";
+import { useContext, useRef } from "preact/hooks";
+import { ParentComponent } from "../react/react_utils";
+import { useSpacedUpdate } from "../react/hooks";
+import appContext from "../../components/app_context";
+import server from "../../services/server";
 
 interface SearchOption {
   searchOption: string;
@@ -64,7 +71,29 @@ const SEARCH_OPTIONS: SearchOption[] = [
   }
 ];
 
-export default function SearchDefinitionTab({ note }: TabContext) {
+export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
+  const parentComponent = useContext(ParentComponent);
+  
+
+  async function refreshResults() {
+    const noteId = note?.noteId;
+    if (!noteId) {
+        return;
+    }
+
+    try {
+        const result = await froca.loadSearchNote(noteId);
+
+        if (result && result.error) {
+          //this.handleEvent("showSearchError", { error: result.error });
+        }
+    } catch (e: any) {
+        toast.showError(e.message);
+    }
+
+    parentComponent?.triggerEvent("searchRefreshed", { ntxId });
+  }
+
   return (
     <div className="search-definition-widget">
       <div className="search-settings">
@@ -82,7 +111,27 @@ export default function SearchDefinitionTab({ note }: TabContext) {
             </td>
           </tr>
           <tbody className="search-options">
-            <SearchStringOption />
+            <SearchStringOption
+              refreshResults={refreshResults}
+              note={note}
+            />
+          </tbody>
+          <tbody className="action-options">
+
+          </tbody>
+          <tbody>
+            <tr>
+              <td colSpan={3}>
+                <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+                  <Button
+                    icon="bx bx-search"
+                    text={t("search_definition.search_button")}
+                    keyboardShortcut="Enter"
+                    onClick={refreshResults}
+                  />
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -114,7 +163,21 @@ function SearchOption({ note, title, children, help, attributeName, attributeTyp
   )
 }
 
-function SearchStringOption() {
+function SearchStringOption({ note, refreshResults }: { note: FNote, refreshResults: () => void }) {
+  const currentValue = useRef("");
+  const spacedUpdate = useSpacedUpdate(async () => {
+    const searchString = currentValue.current;
+    appContext.lastSearchString = searchString;
+
+    await attributes.setAttribute(note, "label", "searchString", searchString);
+
+    if (note.title.startsWith(t("search_string.search_prefix"))) {
+      await server.put(`notes/${note.noteId}/title`, {
+          title: `${t("search_string.search_prefix")} ${searchString.length < 30 ? searchString : `${searchString.substr(0, 30)}…`}`
+      });
+    }
+  }, 1000);
+
   return <SearchOption
     title={t("search_string.title_column")}
     help={<>
@@ -133,6 +196,21 @@ function SearchStringOption() {
     <FormTextArea
       className="search-string"
       placeholder={t("search_string.placeholder")}
+      onChange={text => {
+        currentValue.current = text;
+        spacedUpdate.scheduleUpdate();
+      }}
+      onKeyDown={async (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+
+          // this also in effect disallows new lines in query string.
+          // on one hand, this makes sense since search string is a label
+          // on the other hand, it could be nice for structuring long search string. It's probably a niche case though.
+          await spacedUpdate.updateNowIfNecessary();
+          refreshResults();
+        }
+      }}
     />
   </SearchOption>
 }

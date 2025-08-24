@@ -25,28 +25,9 @@ export default class SearchString extends AbstractSearchOption {
     doRender() {
         const $option = $(TPL);
         this.$searchString = $option.find(".search-string");
-        this.$searchString.on("input", () => this.spacedUpdate.scheduleUpdate());
-
-        shortcutService.bindElShortcut(this.$searchString, "return", async () => {
-            // this also in effect disallows new lines in query string.
-            // on one hand, this makes sense since search string is a label
-            // on the other hand, it could be nice for structuring long search string. It's probably a niche case though.
-            await this.spacedUpdate.updateNowIfNecessary();
-
-            this.triggerCommand("refreshResults");
-        });
 
         this.spacedUpdate = new SpacedUpdate(async () => {
-            const searchString = String(this.$searchString.val());
-            appContext.lastSearchString = searchString;
 
-            await this.setAttribute("label", "searchString", searchString);
-
-            if (this.note.title.startsWith(t("search_string.search_prefix"))) {
-                await server.put(`notes/${this.note.noteId}/title`, {
-                    title: `${t("search_string.search_prefix")} ${searchString.length < 30 ? searchString : `${searchString.substr(0, 30)}…`}`
-                });
-            }
         }, 1000);
 
         this.$searchString.val(this.note.getLabelValue("searchString") ?? "");

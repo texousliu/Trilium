@@ -109,7 +109,7 @@ export function useTriliumEventBeta<T extends EventNames>(eventName: T | T[], ha
     }
 }
 
-export function useSpacedUpdate(callback: () => Promise<void>, interval = 1000) {
+export function useSpacedUpdate(callback: () => void | Promise<void>, interval = 1000) {
     const callbackRef = useRef(callback);
     const spacedUpdateRef = useRef<SpacedUpdate>();
 

@@ -19,12 +19,6 @@ export default abstract class AbstractSearchOption extends Component {
         this.note = note;
     }
 
-    static async setAttribute(noteId: string, type: AttributeType, name: string, value: string = "") {
-        await server.put(`notes/${noteId}/set-attribute`, { type, name, value });
-
-        await ws.waitForMaxKnownEntityChangeId();
-    }
-
     async setAttribute(type: AttributeType, name: string, value: string = "") {
         // TODO: Find a better pattern.
         await (this.constructor as any).setAttribute(this.note.noteId, type, name, value);

@@ -43,7 +43,7 @@ const TPL = /*html*/`
                         <div style="display: flex; justify-content: space-evenly">
                             <button type="button" class="btn btn-sm search-button">
                                 <span class="bx bx-search"></span>
-                                ${t("search_definition.search_button")}
+                                ${}
                             </button>
 
                             <button type="button" class="btn btn-sm search-and-execute-button">
@@ -126,9 +126,6 @@ export default class SearchDefinitionWidget extends NoteContextAwareWidget {
         this.$searchOptions = this.$widget.find(".search-options");
         this.$actionOptions = this.$widget.find(".action-options");
 
-        this.$searchButton = this.$widget.find(".search-button");
-        this.$searchButton.on("click", () => this.triggerCommand("refreshResults"));
-
         this.$searchAndExecuteButton = this.$widget.find(".search-and-execute-button");
         this.$searchAndExecuteButton.on("click", () => this.searchAndExecute());
 
@@ -143,24 +140,6 @@ export default class SearchDefinitionWidget extends NoteContextAwareWidget {
             // See https://www.i18next.com/translation-function/interpolation#unescape
             toastService.showMessage(t("search_definition.search_note_saved", { notePathTitle: await treeService.getNotePathTitle(notePath) }));
         });
-    }
-
-    async refreshResultsCommand() {
-        if (!this.noteId) {
-            return;
-        }
-
-        try {
-            const result = await froca.loadSearchNote(this.noteId);
-
-            if (result && result.error) {
-                this.handleEvent("showSearchError", { error: result.error });
-            }
-        } catch (e: any) {
-            toastService.showError(e.message);
-        }
-
-        this.triggerEvent("searchRefreshed", { ntxId: this.noteContext?.ntxId });
     }
 
     async refreshWithNote(note: FNote) {
