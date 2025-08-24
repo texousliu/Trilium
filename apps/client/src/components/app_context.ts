@@ -85,7 +85,6 @@ export type CommandMappings = {
     focusTree: CommandData;
     focusOnTitle: CommandData;
     focusOnDetail: CommandData;
-    focusOnSearchDefinition: Required<CommandData>;
     searchNotes: CommandData & {
         searchString?: string;
         ancestorNoteId?: string | null;

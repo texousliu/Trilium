@@ -254,6 +254,9 @@ function SearchStringOption({ note, refreshResults, error, ...restProps }: Searc
     placement: "bottom"
   });
 
+  // Auto-focus.
+  useEffect(() => inputRef.current?.focus(), []);
+
   useEffect(() => {
     if (error) {
       showTooltip();
