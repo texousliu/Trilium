@@ -17,31 +17,35 @@ import { CSSProperties } from "preact/compat";
 
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
     const parentComponent = useContext(ParentComponent)!;
-    parentComponent.registerHandler(eventName, handler);
+    useEffect(() => {
+        parentComponent.registerHandler(eventName, handler);
+        return (() => parentComponent.removeHandler(eventName, handler));
+    }, []);
     useDebugValue(eventName);
-    return (() => parentComponent.removeHandler(eventName, handler));
 }
 
 export function useTriliumEvents<T extends EventNames>(eventNames: T[], handler: (data: EventData<T>, eventName: T) => void) {
     const parentComponent = useContext(ParentComponent)!;
-    const handlers: ({ eventName: T, callback: (data: EventData<T>) => void })[] = [];
-    useDebugValue(() => eventNames.join(", "));
-
-    for (const eventName of eventNames) {
-        handlers.push({ eventName, callback: (data) => {
-            handler(data, eventName);
-        }})
-    }
-
-    for (const { eventName, callback } of handlers) {
-        parentComponent.registerHandler(eventName, callback);
-    }
-
-    return (() => {
-        for (const { eventName, callback } of handlers) {
-            parentComponent.removeHandler(eventName, callback);
+    
+    useEffect(() => {
+        const handlers: ({ eventName: T, callback: (data: EventData<T>) => void })[] = [];
+        for (const eventName of eventNames) {
+            handlers.push({ eventName, callback: (data) => {
+                handler(data, eventName);
+            }})
         }
-    });
+    
+        for (const { eventName, callback } of handlers) {
+            parentComponent.registerHandler(eventName, callback);
+        }
+    
+        return (() => {
+            for (const { eventName, callback } of handlers) {
+                parentComponent.removeHandler(eventName, callback);
+            }
+        });
+    }, []);
+    useDebugValue(() => eventNames.join(", "));
 }
 
 export function useSpacedUpdate(callback: () => void | Promise<void>, interval = 1000) {
@@ -202,9 +206,6 @@ export function useNoteContext() {
         setNoteContext(noteContext);
         setNotePath(noteContext.notePath);        
     });
-    useTriliumEvent("setNoteContext", ({ noteContext }) => {
-        setNoteContext(noteContext);
-    });
     useTriliumEvent("noteSwitchedAndActivated", ({ noteContext }) => {
         setNoteContext(noteContext);
     });
@@ -214,6 +215,12 @@ export function useNoteContext() {
     useTriliumEvent("frocaReloaded", () => {
         setNote(noteContext?.note);
     });
+
+    useLegacyImperativeHandlers({
+        setNoteContextEvent({ noteContext }: EventData<"setNoteContext">) {
+            setNoteContext(noteContext);
+        }
+    }, true);
 
     useDebugValue(() => `notePath=${notePath}, ntxId=${noteContext?.ntxId}`);
     
@@ -506,9 +513,13 @@ export function useTooltip(elRef: RefObject<HTMLElement>, config: Partial<Toolti
     return { showTooltip, hideTooltip };
 }
 
-export function useLegacyImperativeHandlers(handlers: Record<string, Function>) {
+export function useLegacyImperativeHandlers(handlers: Record<string, Function>, force?: boolean) {
     const parentComponent = useContext(ParentComponent);
-    useEffect(() => {
+    if (!force) {
+        useEffect(() => {
+            Object.assign(parentComponent as any, handlers);
+        }, [ handlers ])
+    } else {
         Object.assign(parentComponent as any, handlers);
-    }, [ handlers ])
+    }
 }
