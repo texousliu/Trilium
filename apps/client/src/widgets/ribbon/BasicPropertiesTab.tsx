@@ -267,7 +267,7 @@ function SharedSwitch({ note }: { note?: FNote | null }) {
 }
 
 function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
-    const [ languages ] = useTriliumOptionBeta("languages");
+    const [ languages ] = useTriliumOption("languages");
     const DEFAULT_LOCALE = {
         id: "",
         name: t("note_language.not_set")
