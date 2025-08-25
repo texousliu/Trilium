@@ -1,14 +1,9 @@
 import { ComponentChild, createContext, render, type JSX, type RefObject } from "preact";
 import Component from "../../components/component";
-import { type default as NoteContextType } from "../../components/note_context";
+import { EventData, EventNames } from "../../components/app_context";
+import { useContext } from "preact/hooks";
 
 export const ParentComponent = createContext<Component | null>(null);
-export const NoteContext = createContext<NoteContextType | null>(null);
-
-interface ComponentContext {
-    parentComponent: Component | null;
-    noteContext: NoteContextType | null;
-}
 
 /**
  * Takes in a React ref and returns a corresponding JQuery selector.
@@ -31,16 +26,14 @@ export function refToJQuerySelector<T extends HTMLElement>(ref: RefObject<T> | n
  * @param el the JSX element to render.
  * @returns the rendered wrapped DOM element.
  */
-export function renderReactWidget(context: ComponentContext, el: JSX.Element) {
-    return renderReactWidgetAtElement(context, el, new DocumentFragment()).children();
+export function renderReactWidget(parentComponent: Component, el: JSX.Element) {
+    return renderReactWidgetAtElement(parentComponent, el, new DocumentFragment()).children();
 }
 
-export function renderReactWidgetAtElement({ parentComponent, noteContext }: ComponentContext, el: JSX.Element, container: Element | DocumentFragment) {
+export function renderReactWidgetAtElement(parentComponent: Component, el: JSX.Element, container: Element | DocumentFragment) {
     render((
         <ParentComponent.Provider value={parentComponent}>
-            <NoteContext.Provider value={noteContext}>
-                {el}
-            </NoteContext.Provider>
+            {el}
         </ParentComponent.Provider>
     ), container);
     return $(container) as JQuery<HTMLElement>;

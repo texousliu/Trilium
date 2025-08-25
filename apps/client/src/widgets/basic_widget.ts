@@ -3,9 +3,9 @@ import Component, { TypedComponent } from "../components/component.js";
 import froca from "../services/froca.js";
 import { t } from "../services/i18n.js";
 import toastService from "../services/toast.js";
-import { renderReactWidgetAtElement } from "./react/react_utils.jsx";
-import { type default as NoteContextType } from "../../components/note_context";
-import { EventData } from "../components/app_context.js";
+import { renderReactWidget } from "./react/react_utils.jsx";
+import { EventNames, EventData } from "../components/app_context.js";
+import { Handler } from "leaflet";
 
 export class TypedBasicWidget<T extends TypedComponent<any>> extends TypedComponent<T> {
     protected attrs: Record<string, string>;
@@ -281,8 +281,6 @@ export function wrapReactWidgets<T extends TypedComponent<any>>(components: (T |
 export class ReactWrappedWidget extends BasicWidget {
 
     private el: VNode;
-    private noteContext: NoteContextType | null;
-    private fragment: DocumentFragment = new DocumentFragment();
 
     constructor(el: VNode) {
         super();
@@ -290,30 +288,7 @@ export class ReactWrappedWidget extends BasicWidget {
     }
 
     doRender() {
-        renderReactWidgetAtElement({
-            parentComponent: this,
-            noteContext: this.noteContext
-        }, this.el, this.fragment);
-        this.$widget = $(this.fragment);
-    }
-
-    activeContextChangedEvent({ noteContext }: EventData<"activeContextChanged">) {
-       this.noteContext = noteContext;
-       this.doRender();
-    }
-
-    setNoteContextEvent({ noteContext }: EventData<"setNoteContext">) {
-        this.noteContext = noteContext;
-        this.doRender();
-    }
-
-    noteSwitchedAndActivatedEvent({ noteContext }: EventData<"noteSwitchedAndActivated">) {
-        this.noteContext = noteContext;
-        this.doRender();
-    }
-
-    noteSwitchedEvent({ noteContext }: EventData<"noteSwitched">) {
-        this.doRender();
+        this.$widget = renderReactWidget(this, this.el);
     }
 
 }
