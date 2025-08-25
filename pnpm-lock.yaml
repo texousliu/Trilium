@@ -311,8 +311,8 @@ importers:
         specifier: 5.2.10
         version: 5.2.10
       '@types/jquery':
-        specifier: 3.5.32
-        version: 3.5.32
+        specifier: 3.5.33
+        version: 3.5.33
       '@types/leaflet':
         specifier: 1.9.20
         version: 1.9.20
@@ -881,8 +881,8 @@ importers:
         version: 46.0.2(bufferutil@4.0.9)(ckeditor5@46.0.2(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41))(utf-8-validate@6.0.5)
     devDependencies:
       '@types/jquery':
-        specifier: 3.5.32
-        version: 3.5.32
+        specifier: 3.5.33
+        version: 3.5.33
 
   packages/ckeditor5-admonition:
     devDependencies:
@@ -5734,8 +5734,8 @@ packages:
   '@types/istanbul-reports@3.0.4':
     resolution: {integrity: sha512-pk2B1NWalF9toCRu6gjBzR69syFjP4Od8WRAX+0mmf9lAjCRicLOWc+ZrxZHx/0XRjotgkF9t6iaMJ+aXcOdZQ==}
 
-  '@types/jquery@3.5.32':
-    resolution: {integrity: sha512-b9Xbf4CkMqS02YH8zACqN1xzdxc3cO735Qe5AbSUFmyOiaWAbcpqh9Wna+Uk0vgACvoQHpWDg2rGdHkYPLmCiQ==}
+  '@types/jquery@3.5.33':
+    resolution: {integrity: sha512-SeyVJXlCZpEki5F0ghuYe+L+PprQta6nRZqhONt9F13dWBtR/ftoaIbdRQ7cis7womE+X2LKhsDdDtkkDhJS6g==}
 
   '@types/js-yaml@4.0.9':
     resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
@@ -17106,8 +17106,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 46.0.2
       ckeditor5: 46.0.2(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-editor-decoupled@46.0.2':
     dependencies:
@@ -17323,8 +17321,6 @@ snapshots:
       '@ckeditor/ckeditor5-widget': 46.0.2
       ckeditor5: 46.0.2(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-icons@46.0.2': {}
 
@@ -21854,7 +21850,7 @@ snapshots:
     dependencies:
       '@types/istanbul-lib-report': 3.0.3
 
-  '@types/jquery@3.5.32':
+  '@types/jquery@3.5.33':
     dependencies:
       '@types/sizzle': 2.3.9
 
@@ -21902,7 +21898,7 @@ snapshots:
 
   '@types/mark.js@8.11.12':
     dependencies:
-      '@types/jquery': 3.5.32
+      '@types/jquery': 3.5.33
 
   '@types/mdast@4.0.4':
     dependencies:
