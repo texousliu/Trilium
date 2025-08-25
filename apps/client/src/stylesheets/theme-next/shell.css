@@ -330,7 +330,6 @@ body.layout-horizontal > .horizontal {
  */
 
  .calendar-dropdown-widget {
-    width: unset !important;
     padding: 12px;
     color: var(--calendar-color);
     user-select: none;
