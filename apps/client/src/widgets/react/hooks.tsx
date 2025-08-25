@@ -20,7 +20,7 @@ export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (da
     useEffect(() => {
         parentComponent.registerHandler(eventName, handler);
         return (() => parentComponent.removeHandler(eventName, handler));
-    }, []);
+    }, [ eventName, handler ]);
     useDebugValue(eventName);
 }
 
@@ -44,7 +44,7 @@ export function useTriliumEvents<T extends EventNames>(eventNames: T[], handler:
                 parentComponent.removeHandler(eventName, callback);
             }
         });
-    }, []);
+    }, [ eventNames, handler ]);
     useDebugValue(() => eventNames.join(", "));
 }
 
