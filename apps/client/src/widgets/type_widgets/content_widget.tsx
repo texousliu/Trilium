@@ -21,6 +21,7 @@ import OtherSettings from "./options/other.jsx";
 import BackendLogWidget from "./content/backend_log.js";
 import MultiFactorAuthenticationSettings from "./options/multi_factor_authentication.js";
 import AiSettings from "./options/ai_settings.jsx";
+import { unmountComponentAtNode } from "preact/compat";
 
 const TPL = /*html*/`<div class="note-detail-content-widget note-detail-printable">
     <style>
@@ -89,6 +90,7 @@ export default class ContentWidgetTypeWidget extends TypeWidget {
     }
 
     async doRefresh(note: FNote) {
+        unmountComponentAtNode(this.$content[0]);
         this.$content.empty();
         this.children = [];
 
