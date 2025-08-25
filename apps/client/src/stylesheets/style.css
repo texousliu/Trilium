@@ -176,6 +176,11 @@ label.tn-checkbox + label.tn-checkbox {
     margin-left: 12px;
 }
 
+label.tn-radio input[type="radio"],
+label.tn-checkbox input[type="checkbox"] {
+    margin-right: .5em;
+}
+
 #left-pane input,
 #left-pane select,
 #left-pane textarea {

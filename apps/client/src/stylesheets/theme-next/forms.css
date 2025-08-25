@@ -455,6 +455,7 @@ optgroup {
         left: 0;
         width: var(--box-size);
         height: 100%;
+        margin: unset;
         opacity: 0 !important;
     }
 
