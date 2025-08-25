@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useCallback, useContext, useDebugValue, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { EventData, EventNames } from "../../components/app_context";
 import { ParentComponent } from "./react_utils";
 import SpacedUpdate from "../../services/spaced_update";
@@ -18,12 +18,14 @@ import { CSSProperties } from "preact/compat";
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
     const parentComponent = useContext(ParentComponent)!;
     parentComponent.registerHandler(eventName, handler);
+    useDebugValue(eventName);
     return (() => parentComponent.removeHandler(eventName, handler));
 }
 
 export function useTriliumEvents<T extends EventNames>(eventNames: T[], handler: (data: EventData<T>, eventName: T) => void) {
     const parentComponent = useContext(ParentComponent)!;
     const handlers: ({ eventName: T, callback: (data: EventData<T>) => void })[] = [];
+    useDebugValue(() => eventNames.join(", "));
 
     for (const eventName of eventNames) {
         handlers.push({ eventName, callback: (data) => {
@@ -98,6 +100,8 @@ export function useTriliumOption(name: OptionNames, needsRefresh?: boolean): [st
         }
      }, [ name ]));
 
+    useDebugValue(name);
+
     return [
         value,
         wrappedSetValue
@@ -113,6 +117,7 @@ export function useTriliumOption(name: OptionNames, needsRefresh?: boolean): [st
  */
 export function useTriliumOptionBool(name: OptionNames, needsRefresh?: boolean): [boolean, (newValue: boolean) => Promise<void>] {
     const [ value, setValue ] = useTriliumOption(name, needsRefresh);
+    useDebugValue(name);
     return [
         (value === "true"),
         (newValue) => setValue(newValue ? "true" : "false")
@@ -128,6 +133,7 @@ export function useTriliumOptionBool(name: OptionNames, needsRefresh?: boolean):
  */
 export function useTriliumOptionInt(name: OptionNames): [number, (newValue: number) => Promise<void>] {
     const [ value, setValue ] = useTriliumOption(name);
+    useDebugValue(name);
     return [
         (parseInt(value, 10)),
         (newValue) => setValue(newValue)
@@ -142,6 +148,7 @@ export function useTriliumOptionInt(name: OptionNames): [number, (newValue: numb
  */
 export function useTriliumOptionJson<T>(name: OptionNames): [ T, (newValue: T) => Promise<void> ] {
     const [ value, setValue ] = useTriliumOption(name);
+    useDebugValue(name);
     return [
         (JSON.parse(value) as T),
         (newValue => setValue(JSON.stringify(newValue)))
@@ -159,6 +166,8 @@ export function useTriliumOptions<T extends OptionNames>(...names: T[]) {
     for (const name of names) {
         values[name] = options.get(name);
     }
+
+    useDebugValue(() => names.join(", "));
 
     return [
         values as Record<T, string>,
@@ -205,6 +214,8 @@ export function useNoteContext() {
     useTriliumEvent("frocaReloaded", () => {
         setNote(noteContext?.note);
     });
+
+    useDebugValue(() => `notePath=${notePath}, ntxId=${noteContext?.ntxId}`);
     
     const parentComponent = useContext(ParentComponent) as ReactWrappedWidget;
 
@@ -248,6 +259,7 @@ export function useNoteProperty<T extends keyof FNote>(note: FNote | null | unde
         }
     });
 
+    useDebugValue(property);
     return note[property];
 }
 
@@ -268,6 +280,8 @@ export function useNoteRelation(note: FNote | undefined | null, relationName: st
             attributes.setAttribute(note, "relation", relationName, value)
         }
     }, [note]);
+
+    useDebugValue(relationName);
 
     return [
         relationValue,
@@ -304,6 +318,8 @@ export function useNoteLabel(note: FNote | undefined | null, labelName: string):
         }
     }, [note]);
 
+    useDebugValue(labelName);
+
     return [
         labelValue,
         setter
@@ -333,6 +349,8 @@ export function useNoteLabelBoolean(note: FNote | undefined | null, labelName: s
         }
     }, [note]);
 
+    useDebugValue(labelName);
+
     return [ labelValue, setter ] as const;
 }
 
@@ -353,6 +371,8 @@ export function useNoteBlob(note: FNote | null | undefined): [ FBlob | null | un
             refresh();
         }
     });
+
+    useDebugValue(note.noteId);
 
     return [ blob ] as const;
 }
@@ -395,6 +415,8 @@ export function useLegacyWidget<T extends BasicWidget>(widgetFactory: () => T, {
             widget.activeContextChangedEvent({ noteContext });
         }
     }, [ noteContext ]);
+
+    useDebugValue(widget);
 
     return [ <div className={containerClassName} style={containerStyle} ref={ref} />, widget ]
 }
@@ -478,6 +500,8 @@ export function useTooltip(elRef: RefObject<HTMLElement>, config: Partial<Toolti
         const $el = $(elRef.current);
         $el.tooltip("hide");
     }, [ elRef ]);
+
+    useDebugValue(config.title);
 
     return { showTooltip, hideTooltip };
 }
