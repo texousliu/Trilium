@@ -23,12 +23,12 @@ export default function UploadAttachmentsDialog() {
         setShown(true);
     });
 
-    if (parentNoteId) {
-        useEffect(() => {
-            tree.getNoteTitle(parentNoteId).then((noteTitle) =>
-                setDescription(t("upload_attachments.files_will_be_uploaded", { noteTitle })));
-        }, [parentNoteId]);
-    }
+    useEffect(() => {
+        if (!parentNoteId) return;
+
+        tree.getNoteTitle(parentNoteId).then((noteTitle) =>
+            setDescription(t("upload_attachments.files_will_be_uploaded", { noteTitle })));
+    }, [parentNoteId]);
 
     return (
         <Modal

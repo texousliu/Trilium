@@ -71,29 +71,27 @@ export default function Modal({ children, className, size, title, header, footer
     const parentWidget = useContext(ParentComponent);
     const elementToFocus = useRef<Element | null>();
 
-    if (onShown || onHidden) {
-        useEffect(() => {
-            const modalElement = modalRef.current;
-            if (!modalElement) {
-                return;
+    useEffect(() => {
+        const modalElement = modalRef.current;
+        if (!modalElement) {
+            return;
+        }
+        if (onShown) {
+            modalElement.addEventListener("shown.bs.modal", onShown);
+        }
+        modalElement.addEventListener("hidden.bs.modal", () => {
+            onHidden();
+            if (elementToFocus.current && "focus" in elementToFocus.current) {
+                (elementToFocus.current as HTMLElement).focus();
             }
+        });
+        return () => {
             if (onShown) {
-                modalElement.addEventListener("shown.bs.modal", onShown);
+                modalElement.removeEventListener("shown.bs.modal", onShown);
             }
-            modalElement.addEventListener("hidden.bs.modal", () => {
-                onHidden();
-                if (elementToFocus.current && "focus" in elementToFocus.current) {
-                    (elementToFocus.current as HTMLElement).focus();
-                }
-            });
-            return () => {
-                if (onShown) {
-                    modalElement.removeEventListener("shown.bs.modal", onShown);
-                }
-                modalElement.removeEventListener("hidden.bs.modal", onHidden);
-            };
-        }, [ ]);
-    }    
+            modalElement.removeEventListener("hidden.bs.modal", onHidden);
+        };
+    }, [ onShown, onHidden ]);
 
     useEffect(() => {
         if (!parentWidget) {

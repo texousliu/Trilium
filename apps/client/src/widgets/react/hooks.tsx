@@ -216,15 +216,13 @@ export function useNoteContext() {
         setNote(noteContext?.note);
     });
 
-    useLegacyImperativeHandlers({
-        setNoteContextEvent({ noteContext }: EventData<"setNoteContext">) {
-            setNoteContext(noteContext);
-        }
-    }, true);
+    const parentComponent = useContext(ParentComponent) as ReactWrappedWidget;
+    (parentComponent as ReactWrappedWidget & { setNoteContextEvent: (data: EventData<"setNoteContext">) => void }).setNoteContextEvent = ({ noteContext }: EventData<"setNoteContext">) => {
+        setNoteContext(noteContext);
+    }
 
     useDebugValue(() => `notePath=${notePath}, ntxId=${noteContext?.ntxId}`);
     
-    const parentComponent = useContext(ParentComponent) as ReactWrappedWidget;
 
     return {
         note: note,
@@ -249,25 +247,21 @@ export function useNoteContext() {
  * @returns the value of the requested property.
  */
 export function useNoteProperty<T extends keyof FNote>(note: FNote | null | undefined, property: T, componentId?: string) {
-    if (!note) {
-        return null;
-    }
-
-    const [, setValue ] = useState<FNote[T]>(note[property]);
-    const refreshValue = () => setValue(note[property]);
+    const [, setValue ] = useState<FNote[T] | undefined>(note?.[property]);
+    const refreshValue = () => setValue(note?.[property]);
 
     // Watch for note changes.
-    useEffect(() => refreshValue(), [ note, note[property] ]);
+    useEffect(() => refreshValue(), [ note, note?.[property] ]);
 
     // Watch for external changes.
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
-        if (loadResults.isNoteReloaded(note.noteId, componentId)) {
+        if (loadResults.isNoteReloaded(note?.noteId, componentId)) {
             refreshValue();
         }
     });
 
     useDebugValue(property);
-    return note[property];
+    return note?.[property];
 }
 
 export function useNoteRelation(note: FNote | undefined | null, relationName: string): [string | null | undefined, (newValue: string) => void] {
@@ -362,10 +356,6 @@ export function useNoteLabelBoolean(note: FNote | undefined | null, labelName: s
 }
 
 export function useNoteBlob(note: FNote | null | undefined): [ FBlob | null | undefined ] {
-    if (!note) {
-        return [ undefined ];
-    }
-
     const [ blob, setBlob ] = useState<FBlob | null>();
     
     function refresh() {
@@ -379,7 +369,7 @@ export function useNoteBlob(note: FNote | null | undefined): [ FBlob | null | un
         }
     });
 
-    useDebugValue(note.noteId);
+    useDebugValue(note?.noteId);
 
     return [ blob ] as const;
 }
@@ -514,13 +504,9 @@ export function useTooltip(elRef: RefObject<HTMLElement>, config: Partial<Toolti
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-export function useLegacyImperativeHandlers(handlers: Record<string, Function>, force?: boolean) {
+export function useLegacyImperativeHandlers(handlers: Record<string, Function>) {
     const parentComponent = useContext(ParentComponent);
-    if (!force) {
-        useEffect(() => {
-            Object.assign(parentComponent as never, handlers);
-        }, [ handlers ])
-    } else {
+    useEffect(() => {
         Object.assign(parentComponent as never, handlers);
-    }
+    }, [ handlers ]);
 }

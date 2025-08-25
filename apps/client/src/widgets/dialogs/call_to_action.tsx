@@ -5,12 +5,7 @@ import { dismissCallToAction, getCallToActions } from "./call_to_action_definiti
 import { t } from "../../services/i18n";
 
 export default function CallToActionDialog() {
-    const activeCallToActions = useMemo(() => getCallToActions(), []);
-    
-    if (!activeCallToActions.length) {
-        return <></>;
-    }
-    
+    const activeCallToActions = useMemo(() => getCallToActions(), []);        
     const [ activeIndex, setActiveIndex ] = useState(0);
     const [ shown, setShown ] = useState(true);
     const activeItem = activeCallToActions[activeIndex];
@@ -23,7 +18,7 @@ export default function CallToActionDialog() {
         }
     }
 
-    return (
+    return (activeCallToActions.length &&
         <Modal
             className="call-to-action"
             size="md"

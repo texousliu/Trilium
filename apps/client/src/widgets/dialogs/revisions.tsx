@@ -201,17 +201,9 @@ function RevisionContent({ revisionItem, fullRevision }: { revisionItem?: Revisi
         return <></>;
     }
 
-
     switch (revisionItem.type) {
-        case "text": {
-            const contentRef = useRef<HTMLDivElement>(null);
-            useEffect(() => {
-                if (contentRef.current?.querySelector("span.math-tex")) {
-                    renderMathInElement(contentRef.current, { trust: true });
-                }
-            });
-            return <div ref={contentRef} className="ck-content" dangerouslySetInnerHTML={{ __html: content as string }}></div>
-        }
+        case "text":
+            return <RevisionContentText content={content} />
         case "code":
             return <pre style={CODE_STYLE}>{content}</pre>;
         case "image":            
@@ -261,6 +253,16 @@ function RevisionContent({ revisionItem, fullRevision }: { revisionItem?: Revisi
         default:
             return <>{t("revisions.preview_not_available")}</>
     }
+}
+
+function RevisionContentText({ content }: { content: string | Buffer<ArrayBufferLike> | undefined }) {
+    const contentRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (contentRef.current?.querySelector("span.math-tex")) {
+            renderMathInElement(contentRef.current, { trust: true });
+        }
+    }, [content]);
+    return <div ref={contentRef} className="ck-content" dangerouslySetInnerHTML={{ __html: content as string }}></div>
 }
 
 function RevisionFooter({ note }: { note?: FNote }) {

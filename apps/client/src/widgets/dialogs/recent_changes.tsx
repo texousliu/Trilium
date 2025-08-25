@@ -18,34 +18,27 @@ import { useTriliumEvent } from "../react/hooks";
 export default function RecentChangesDialog() {
     const [ ancestorNoteId, setAncestorNoteId ] = useState<string>();
     const [ groupedByDate, setGroupedByDate ] = useState<Map<string, RecentChangeRow[]>>();
-    const [ needsRefresh, setNeedsRefresh ] = useState(false);
+    const [ refreshCounter, setRefreshCounter ] = useState(0);
     const [ shown, setShown ] = useState(false);
 
-    useTriliumEvent("showRecentChanges", ({ ancestorNoteId }) => {
-        setNeedsRefresh(true);
+    useTriliumEvent("showRecentChanges", ({ ancestorNoteId }) => {        
         setAncestorNoteId(ancestorNoteId ?? hoisted_note.getHoistedNoteId());
         setShown(true);
     });
 
-    if (!groupedByDate || needsRefresh) {
-        useEffect(() => {
-            if (needsRefresh) {
-                setNeedsRefresh(false);   
-            }
+    useEffect(() => {
+        server.get<RecentChangeRow[]>(`recent-changes/${ancestorNoteId}`)
+            .then(async (recentChanges) => {
+                // preload all notes into cache
+                await froca.getNotes(
+                    recentChanges.map((r) => r.noteId),
+                    true
+                );
 
-            server.get<RecentChangeRow[]>(`recent-changes/${ancestorNoteId}`)
-                .then(async (recentChanges) => {
-                    // preload all notes into cache
-                    await froca.getNotes(
-                        recentChanges.map((r) => r.noteId),
-                        true
-                    );
-
-                    const groupedByDate = groupByDate(recentChanges);
-                    setGroupedByDate(groupedByDate);
-                });
-        })
-    }
+                const groupedByDate = groupByDate(recentChanges);
+                setGroupedByDate(groupedByDate);
+            });
+    }, [ shown, refreshCounter ])
 
     return (
         <Modal
@@ -60,7 +53,7 @@ export default function RecentChangesDialog() {
                     style={{ padding: "0 10px" }}
                     onClick={() => {
                         server.post("notes/erase-deleted-notes-now").then(() => {
-                            setNeedsRefresh(true);
+                            setRefreshCounter(refreshCounter + 1);
                             toast.showMessage(t("recent_changes.deleted_notes_message"));
                         });
                     }}
@@ -113,10 +106,6 @@ function RecentChangesTimeline({ groupedByDate, setShown }: { groupedByDate: Map
 }
 
 function NoteLink({ notePath, title }: { notePath: string, title: string }) {
-    if (!notePath || !title) {
-        return null;
-    }
-
     const [ noteLink, setNoteLink ] = useState<JQuery<HTMLElement> | null>(null);
     useEffect(() => {
         link.createLink(notePath, {

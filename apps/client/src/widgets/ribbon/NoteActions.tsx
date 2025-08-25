@@ -20,16 +20,16 @@ interface NoteActionsProps {
   noteContext?: NoteContext;
 }
 
-export default function NoteActions(props: NoteActionsProps) {
+export default function NoteActions({ note, noteContext }: NoteActionsProps) {
   return (
     <>
-      <RevisionsButton {...props} />
-      <NoteContextMenu {...props} />
+      {note && <RevisionsButton note={note} />}
+      {note && note.type !== "launcher" && <NoteContextMenu note={note as FNote} noteContext={noteContext}/>}
     </>
   );
 }
 
-function RevisionsButton({ note }: NoteActionsProps) {
+function RevisionsButton({ note }: { note: FNote }) {
   const isEnabled = !["launcher", "doc"].includes(note?.type ?? "");
 
   return (isEnabled &&
@@ -42,12 +42,7 @@ function RevisionsButton({ note }: NoteActionsProps) {
   );
 }
 
-function NoteContextMenu(props: NoteActionsProps) {
-  const { note, noteContext } = props;
-  if (!note || note.type === "launcher") {
-    return <></>;
-  }
-
+function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: NoteContext }) {
   const parentComponent = useContext(ParentComponent);
   const canBeConvertedToAttachment = note?.isEligibleForConversionToAttachment();
   const isSearchable = ["text", "code", "book", "mindMap", "doc"].includes(note.type);
@@ -65,7 +60,7 @@ function NoteContextMenu(props: NoteActionsProps) {
       hideToggleArrow
       noSelectButtonStyle
     >
-      {canBeConvertedToAttachment && <ConvertToAttachment {...props} /> }
+      {canBeConvertedToAttachment && <ConvertToAttachment note={note} /> }
       {note.type === "render" && <CommandItem command="renderActiveNote" icon="bx bx-extension" text={t("note_actions.re_render_note")} />}
       <CommandItem command="findInText" icon="bx bx-search" disabled={!isSearchable} text={t("note_actions.search_in_note")} />
       <CommandItem command="printActiveNote" icon="bx bx-printer" disabled={!isPrintable} text={t("note_actions.print_note")} />
@@ -110,7 +105,7 @@ function CommandItem({ icon, text, title, command, disabled }: { icon: string, t
   >{text}</FormListItem>
 }
 
-function ConvertToAttachment({ note }: NoteActionsProps) {
+function ConvertToAttachment({ note }: { note: FNote }) {
   return (
     <FormListItem
         icon="bx bx-paperclip"

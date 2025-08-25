@@ -36,25 +36,23 @@ export default function NoteTypeChooserDialogComponent() {
         setShown(true);
     });
 
-    if (!noteTypes.length) {
-        useEffect(() => {
-            note_types.getNoteTypeItems().then(noteTypes => {
-                let index = -1;
+    useEffect(() => {
+        note_types.getNoteTypeItems().then(noteTypes => {
+            let index = -1;
 
-                setNoteTypes((noteTypes ?? []).map((item) => {
-                    if (item.title === "----") {
-                        index++;
-                        return {
-                            title: SEPARATOR_TITLE_REPLACEMENTS[index],
-                            enabled: false
-                        }
+            setNoteTypes((noteTypes ?? []).map((item) => {
+                if (item.title === "----") {
+                    index++;
+                    return {
+                        title: SEPARATOR_TITLE_REPLACEMENTS[index],
+                        enabled: false
                     }
+                }
 
-                    return item;
-                }));
-            });
+                return item;
+            }));
         });
-    }
+    }, []);
 
     function onNoteTypeSelected(value: string) {
         const [ noteType, templateNoteId ] = value.split(",");
