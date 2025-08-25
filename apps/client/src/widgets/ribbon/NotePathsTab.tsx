@@ -29,27 +29,25 @@ export default function NotePathsTab({ note, hoistedNoteId, notePath }: TabConte
 
     return (
         <div class="note-paths-widget">
-            {sortedNotePaths?.length && (
-                <>
-                    <div className="note-path-intro">
-                        {sortedNotePaths.length > 0 ? t("note_paths.intro_placed") : t("note_paths.intro_not_placed")}
-                    </div>
-        
-                    <ul className="note-path-list">
-                        {sortedNotePaths.map(sortedNotePath => (
-                            <NotePath
-                                currentNotePath={notePath}
-                                notePathRecord={sortedNotePath}
-                            />
-                        ))}
-                    </ul>
-        
-                    <Button
-                        triggerCommand="cloneNoteIdsTo"
-                        text={t("note_paths.clone_button")}
-                    />
-                </>
-            )}
+            <>
+                <div className="note-path-intro">
+                    {sortedNotePaths?.length ? t("note_paths.intro_placed") : t("note_paths.intro_not_placed")}
+                </div>
+    
+                <ul className="note-path-list">
+                    {sortedNotePaths?.length ? sortedNotePaths.map(sortedNotePath => (
+                        <NotePath
+                            currentNotePath={notePath}
+                            notePathRecord={sortedNotePath}
+                        />
+                    )) : undefined}
+                </ul>
+    
+                <Button
+                    triggerCommand="cloneNoteIdsTo"
+                    text={t("note_paths.clone_button")}
+                />
+            </>
         </div>
     )
 }
