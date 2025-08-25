@@ -17,7 +17,7 @@ import { useTriliumEvent } from "../react/hooks";
 
 export default function RecentChangesDialog() {
     const [ ancestorNoteId, setAncestorNoteId ] = useState<string>();
-    const [ groupedByDate, setGroupedByDate ] = useState<Map<String, RecentChangeRow[]>>();
+    const [ groupedByDate, setGroupedByDate ] = useState<Map<string, RecentChangeRow[]>>();
     const [ needsRefresh, setNeedsRefresh ] = useState(false);
     const [ shown, setShown ] = useState(false);
 
@@ -78,7 +78,7 @@ export default function RecentChangesDialog() {
     )
 }
 
-function RecentChangesTimeline({ groupedByDate, setShown }: { groupedByDate: Map<String, RecentChangeRow[]>, setShown: Dispatch<StateUpdater<boolean>> }) {
+function RecentChangesTimeline({ groupedByDate, setShown }: { groupedByDate: Map<string, RecentChangeRow[]>, setShown: Dispatch<StateUpdater<boolean>> }) {
     return (
         <>
             { Array.from(groupedByDate.entries()).map(([dateDay, dayChanges]) => {
@@ -156,16 +156,18 @@ function DeletedNoteLink({ change, setShown }: { change: RecentChangeRow, setSho
 }
 
 function groupByDate(rows: RecentChangeRow[]) {
-    const groupedByDate = new Map<String, RecentChangeRow[]>();
+    const groupedByDate = new Map<string, RecentChangeRow[]>();
 
     for (const row of rows) {
         const dateDay = row.date.substr(0, 10);
 
-        if (!groupedByDate.has(dateDay)) {
-            groupedByDate.set(dateDay, []);
+        let dateDayArray = groupedByDate.get(dateDay);
+        if (!dateDayArray) {
+            dateDayArray = [];
+            groupedByDate.set(dateDay, dateDayArray);
         }
 
-        groupedByDate.get(dateDay)!.push(row);
+        dateDayArray.push(row);
     }
 
     return groupedByDate;

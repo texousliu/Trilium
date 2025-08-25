@@ -119,17 +119,21 @@ function TokenList({ tokens }: { tokens: EtapiToken[] }) {
                             <td>{name}</td>
                             <td>{formatDateTime(utcDateCreated)}</td>
                             <td>
-                                <ActionButton
-                                    icon="bx bx-edit-alt"
-                                    text={t("etapi.rename_token")}
-                                    onClick={() => renameCallback(etapiTokenId!, name)}
-                                />
-
-                                <ActionButton
-                                    icon="bx bx-trash"
-                                    text={t("etapi.delete_token")}
-                                    onClick={() => deleteCallback(etapiTokenId!, name)}
-                                />
+                                {etapiTokenId && (
+                                    <>
+                                        <ActionButton
+                                            icon="bx bx-edit-alt"
+                                            text={t("etapi.rename_token")}
+                                            onClick={() => renameCallback(etapiTokenId, name)}
+                                        />
+        
+                                        <ActionButton
+                                            icon="bx bx-trash"
+                                            text={t("etapi.delete_token")}
+                                            onClick={() => deleteCallback(etapiTokenId, name)}
+                                        />
+                                    </>
+                                )}
                             </td>
                         </tr>
                     ))}

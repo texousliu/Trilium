@@ -1,5 +1,3 @@
-import { t } from "../../services/i18n";
-import { openInAppHelpFromUrl } from "../../services/utils";
 import "./FormToggle.css";
 import HelpButton from "./HelpButton";
 

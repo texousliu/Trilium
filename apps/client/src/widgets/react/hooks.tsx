@@ -16,16 +16,16 @@ import { Tooltip } from "bootstrap";
 import { CSSProperties } from "preact/compat";
 
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
-    const parentComponent = useContext(ParentComponent)!;
+    const parentComponent = useContext(ParentComponent);
     useEffect(() => {
-        parentComponent.registerHandler(eventName, handler);
-        return (() => parentComponent.removeHandler(eventName, handler));
+        parentComponent?.registerHandler(eventName, handler);
+        return (() => parentComponent?.removeHandler(eventName, handler));
     }, [ eventName, handler ]);
     useDebugValue(eventName);
 }
 
 export function useTriliumEvents<T extends EventNames>(eventNames: T[], handler: (data: EventData<T>, eventName: T) => void) {
-    const parentComponent = useContext(ParentComponent)!;
+    const parentComponent = useContext(ParentComponent);
     
     useEffect(() => {
         const handlers: ({ eventName: T, callback: (data: EventData<T>) => void })[] = [];
@@ -36,12 +36,12 @@ export function useTriliumEvents<T extends EventNames>(eventNames: T[], handler:
         }
     
         for (const { eventName, callback } of handlers) {
-            parentComponent.registerHandler(eventName, callback);
+            parentComponent?.registerHandler(eventName, callback);
         }
     
         return (() => {
             for (const { eventName, callback } of handlers) {
-                parentComponent.removeHandler(eventName, callback);
+                parentComponent?.removeHandler(eventName, callback);
             }
         });
     }, [ eventNames, handler ]);
@@ -209,7 +209,7 @@ export function useNoteContext() {
     useTriliumEvent("noteSwitchedAndActivated", ({ noteContext }) => {
         setNoteContext(noteContext);
     });
-    useTriliumEvent("noteSwitched", ({ noteContext, notePath }) => {
+    useTriliumEvent("noteSwitched", ({ notePath }) => {
         setNotePath(notePath);
     });
     useTriliumEvent("frocaReloaded", () => {
@@ -253,7 +253,7 @@ export function useNoteProperty<T extends keyof FNote>(note: FNote | null | unde
         return null;
     }
 
-    const [ value, setValue ] = useState<FNote[T]>(note[property]);
+    const [, setValue ] = useState<FNote[T]>(note[property]);
     const refreshValue = () => setValue(note[property]);
 
     // Watch for note changes.
@@ -513,13 +513,14 @@ export function useTooltip(elRef: RefObject<HTMLElement>, config: Partial<Toolti
     return { showTooltip, hideTooltip };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export function useLegacyImperativeHandlers(handlers: Record<string, Function>, force?: boolean) {
     const parentComponent = useContext(ParentComponent);
     if (!force) {
         useEffect(() => {
-            Object.assign(parentComponent as any, handlers);
+            Object.assign(parentComponent as never, handlers);
         }, [ handlers ])
     } else {
-        Object.assign(parentComponent as any, handlers);
+        Object.assign(parentComponent as never, handlers);
     }
 }

@@ -14,8 +14,8 @@ interface RenderMarkdownResponse {
 
 export default function MarkdownImportDialog() {
     const markdownImportTextArea = useRef<HTMLTextAreaElement>(null);
-    let [ text, setText ] = useState("");
-    let [ shown, setShown ] = useState(false);
+    const [ text, setText ] = useState("");
+    const [ shown, setShown ] = useState(false);
 
     const triggerImport = useCallback(() => {
         if (appContext.tabManager.getActiveContextNoteType() !== "text") {

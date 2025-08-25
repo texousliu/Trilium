@@ -1,7 +1,5 @@
 import { ComponentChild, createContext, render, type JSX, type RefObject } from "preact";
 import Component from "../../components/component";
-import { EventData, EventNames } from "../../components/app_context";
-import { useContext } from "preact/hooks";
 
 export const ParentComponent = createContext<Component | null>(null);
 
@@ -44,6 +42,13 @@ export function disposeReactWidget(container: Element) {
 }
 
 export function joinElements(components: ComponentChild[], separator = ", ") {
-    return components.reduce<any>((acc, item) =>
-        (acc.length ? [...acc, separator, item] : [item]), []);
+    const joinedComponents: ComponentChild[] = [];
+    for (let i=0; i<components.length; i++) {
+        joinedComponents.push(components[i]);
+        if (i + 1 < components.length) {
+            joinedComponents.push(separator);
+        }
+    }
+
+    return joinedComponents;
 }

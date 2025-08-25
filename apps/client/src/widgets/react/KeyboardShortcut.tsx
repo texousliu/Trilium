@@ -20,7 +20,7 @@ export default function KeyboardShortcut({ actionName }: KeyboardShortcutProps) 
 
     return (
         <>
-            {action.effectiveShortcuts?.map((shortcut, i) => {
+            {action.effectiveShortcuts?.map((shortcut) => {
                 const keys = shortcut.split("+");
                 return joinElements(keys
                     .map((key, i) => (

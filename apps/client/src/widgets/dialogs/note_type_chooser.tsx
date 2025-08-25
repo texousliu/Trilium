@@ -41,7 +41,7 @@ export default function NoteTypeChooserDialogComponent() {
             note_types.getNoteTypeItems().then(noteTypes => {
                 let index = -1;
 
-                setNoteTypes((noteTypes ?? []).map((item, _index) => {
+                setNoteTypes((noteTypes ?? []).map((item) => {
                     if (item.title === "----") {
                         index++;
                         return {

@@ -1,4 +1,4 @@
-import { CKTextEditor, type AttributeEditor, type EditorConfig, type ModelPosition } from "@triliumnext/ckeditor5";
+import type { CKTextEditor, AttributeEditor, EditorConfig, ModelPosition } from "@triliumnext/ckeditor5";
 import { useEffect, useImperativeHandle, useRef } from "preact/compat";
 import { MutableRef } from "preact/hooks";
 

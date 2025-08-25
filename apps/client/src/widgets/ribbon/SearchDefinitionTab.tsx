@@ -19,6 +19,7 @@ import Icon from "../react/Icon";
 import bulk_action, { ACTION_GROUPS } from "../../services/bulk_action";
 import { FormListHeader, FormListItem } from "../react/FormList";
 import RenameNoteBulkAction from "../bulk_actions/note/rename_note";
+import { getErrorMessage } from "../../services/utils";
 
 export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
   const parentComponent = useContext(ParentComponent);
@@ -56,8 +57,8 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
         } else {
           setError(undefined);
         }
-    } catch (e: any) {
-        toast.showError(e.message);
+    } catch (e: unknown) {
+      toast.showError(getErrorMessage(e));
     }
 
     parentComponent?.triggerEvent("searchRefreshed", { ntxId });

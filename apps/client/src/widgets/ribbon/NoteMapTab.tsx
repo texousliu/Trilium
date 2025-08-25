@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "preact/hooks";
 
 const SMALL_SIZE_HEIGHT = "300px";
 
-export default function NoteMapTab({ note, noteContext }: TabContext) {
+export default function NoteMapTab({ noteContext }: TabContext) {
     const [ isExpanded, setExpanded ] = useState(false);
     const [ height, setHeight ] = useState(SMALL_SIZE_HEIGHT);
     const containerRef = useRef<HTMLDivElement>(null);

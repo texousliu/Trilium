@@ -10,8 +10,8 @@ import type { AppInfo } from "@triliumnext/commons";
 import { useTriliumEvent } from "../react/hooks.jsx";
 
 export default function AboutDialog() {
-    let [appInfo, setAppInfo] = useState<AppInfo | null>(null);
-    let [shown, setShown] = useState(false);
+    const [appInfo, setAppInfo] = useState<AppInfo | null>(null);
+    const [shown, setShown] = useState(false);
     const forceWordBreak: CSSProperties = { wordBreak: "break-all" };
 
     useTriliumEvent("openAboutDialog", () => setShown(true));

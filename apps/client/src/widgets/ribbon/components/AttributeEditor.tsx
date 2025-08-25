@@ -11,7 +11,7 @@ import FNote from "../../../entities/fnote";
 import AttributeDetailWidget from "../../attribute_widgets/attribute_detail";
 import attribute_parser, { Attribute } from "../../../services/attribute_parser";
 import ActionButton from "../../react/ActionButton";
-import { escapeQuotes } from "../../../services/utils";
+import { escapeQuotes, getErrorMessage } from "../../../services/utils";
 import link from "../../../services/link";
 import froca from "../../../services/froca";
 import contextMenu from "../../../menus/context_menu";
@@ -124,7 +124,7 @@ export default function AttributeEditor({ note, componentId, notePath, ntxId }: 
     function parseAttributes() {
         try {
             return attribute_parser.lexAndParse(getPreprocessedData(currentValueRef.current));
-        } catch (e: any) {
+        } catch (e: unknown) {
             setError(e);
         }
     }
@@ -182,8 +182,7 @@ export default function AttributeEditor({ note, componentId, notePath, ntxId }: 
             return;
         }
 
-        // TODO: Incomplete type
-        //@ts-ignore
+        //@ts-expect-error TODO: Incomplete type
         attrs.push({
             type,
             name,
@@ -306,8 +305,9 @@ export default function AttributeEditor({ note, componentId, notePath, ntxId }: 
 
                             try {
                                 parsedAttrs = attribute_parser.lexAndParse(getPreprocessedData(currentValueRef.current), true);
-                            } catch (e) {
+                            } catch (e: unknown) {
                                 // the input is incorrect because the user messed up with it and now needs to fix it manually
+                                console.log(e);
                                 return null;
                             }
 
@@ -376,7 +376,7 @@ export default function AttributeEditor({ note, componentId, notePath, ntxId }: 
 
                 { error && (
                     <div className="attribute-errors">
-                        {typeof error === "object" && "message" in error && typeof error.message === "string" && error.message}
+                        {getErrorMessage(error)}
                     </div>
                 )}
             </div>

@@ -816,6 +816,14 @@ export function mapToKeyValueArray<K extends string | number | symbol, V>(map: R
     return values;
 }
 
+export function getErrorMessage(e: unknown) {
+    if (e && typeof e === "object" && "message" in e && typeof e.message === "string") {
+        return e.message;
+    } else {
+        return "Unknown error";
+    }
+}
+
 export default {
     reloadFrontendApp,
     restartDesktopApp,

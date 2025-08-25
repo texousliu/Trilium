@@ -25,7 +25,7 @@ export default function JumpToNoteDialogComponent() {
     
     async function openDialog(commandMode: boolean) {        
         let newMode: Mode;
-        let initialText: string = "";
+        let initialText = "";
 
         if (commandMode) {
             newMode = "commands";

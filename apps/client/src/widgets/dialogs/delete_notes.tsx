@@ -139,7 +139,7 @@ function BrokenRelations({ brokenRelations }: { brokenRelations: DeleteNotesPrev
         const noteIds = brokenRelations
             .map(relation => relation.noteId)
             .filter(noteId => noteId) as string[];
-        froca.getNotes(noteIds).then(async (notes) => {
+        froca.getNotes(noteIds).then(async () => {
             const notesWithBrokenRelations: BrokenRelationData[] = [];
             for (const attr of brokenRelations) {
                 notesWithBrokenRelations.push({

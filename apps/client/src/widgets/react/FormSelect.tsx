@@ -65,6 +65,7 @@ function FormSelectBody({ id, name, children, onChange, style, className }: { id
     return (
         <select
             id={id}
+            name={name}
             onChange={e => onChange((e.target as HTMLInputElement).value)}
             style={style}
             className={`form-select ${className ?? ""}`}
@@ -78,10 +79,10 @@ function FormSelectGroup<T>({ values, keyProperty, titleProperty, currentValue }
     return values.map(item => {
         return (
             <option
-                value={item[keyProperty] as any}
+                value={item[keyProperty] as string | number}
                 selected={item[keyProperty] === currentValue}
             >
-                {item[titleProperty ?? keyProperty] ?? item[keyProperty] as any}
+                {item[titleProperty ?? keyProperty] ?? item[keyProperty] as string | number}
             </option>
         );
     });

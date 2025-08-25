@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
 import { t } from "../../services/i18n";
-import { useNoteContext, useTriliumEvent, useTriliumEvents } from "../react/hooks";
+import { useNoteContext, useTriliumEvents } from "../react/hooks";
 import "./style.css";
 import { VNode } from "preact";
 import BasicPropertiesTab from "./BasicPropertiesTab";
