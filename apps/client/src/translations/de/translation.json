@@ -202,7 +202,8 @@
     "okButton": "OK"
   },
   "jump_to_note": {
-    "search_button": "Suche im Volltext"
+    "search_button": "Suche im Volltext",
+    "search_placeholder": "Suche nach Notiz anhand ihres Titels oder gib > ein für Kommandos..."
   },
   "markdown_import": {
     "dialog_title": "Markdown-Import",
@@ -222,11 +223,16 @@
   "note_type_chooser": {
     "modal_title": "Wähle den Notiztyp aus",
     "modal_body": "Wähle den Notiztyp / die Vorlage der neuen Notiz:",
-    "templates": "Vorlagen"
+    "templates": "Vorlagen",
+    "change_path_prompt": "Ändern wo die neue Notiz erzeugt wird:",
+    "search_placeholder": "Durchsuche Pfad nach Namen (Standard falls leer)",
+    "builtin_templates": "Eingebaute Vorlage"
   },
   "password_not_set": {
     "title": "Das Passwort ist nicht festgelegt",
-    "body1": "Geschützte Notizen werden mit einem Benutzerpasswort verschlüsselt, es wurde jedoch noch kein Passwort festgelegt."
+    "body1": "Geschützte Notizen werden mit einem Benutzerpasswort verschlüsselt, es wurde jedoch noch kein Passwort festgelegt.",
+    "body2": "Um Notizen zu schützen, klicke den unteren Button um den Optionsdialog zu öffnen und dein Passwort festzulegen.",
+    "go_to_password_options": "Gehe zu Passwortoptionen"
   },
   "prompt": {
     "title": "Eingabeaufforderung",
@@ -268,7 +274,9 @@
     "mime": "MIME: ",
     "file_size": "Dateigröße:",
     "preview": "Vorschau:",
-    "preview_not_available": "Für diesen Notiztyp ist keine Vorschau verfügbar."
+    "preview_not_available": "Für diesen Notiztyp ist keine Vorschau verfügbar.",
+    "restore_button": "Wiederherstellen",
+    "delete_button": "Löschen"
   },
   "sort_child_notes": {
     "sort_children_by": "Unternotizen sortieren nach...",
@@ -418,7 +426,8 @@
     "other_notes_with_name": "Other notes with {{attributeType}} name \"{{attributeName}}\"",
     "and_more": "... und {{count}} mehr.",
     "print_landscape": "Beim Export als PDF, wird die Seitenausrichtung Querformat anstatt Hochformat verwendet.",
-    "print_page_size": "Beim Export als PDF, wird die Größe der Seite angepasst. Unterstützte Größen: <code>A0</code>, <code>A1</code>, <code>A2</code>, <code>A3</code>, <code>A4</code>, <code>A5</code>, <code>A6</code>, <code>Legal</code>, <code>Letter</code>, <code>Tabloid</code>, <code>Ledger</code>."
+    "print_page_size": "Beim Export als PDF, wird die Größe der Seite angepasst. Unterstützte Größen: <code>A0</code>, <code>A1</code>, <code>A2</code>, <code>A3</code>, <code>A4</code>, <code>A5</code>, <code>A6</code>, <code>Legal</code>, <code>Letter</code>, <code>Tabloid</code>, <code>Ledger</code>.",
+    "color_type": "Farbe"
   },
   "attribute_editor": {
     "help_text_body1": "Um ein Label hinzuzufügen, gebe einfach z.B. ein. <code>#rock</code> oder wenn du auch einen Wert hinzufügen möchten, dann z.B. <code>#year = 2024</code>",
@@ -577,7 +586,8 @@
     "september": "September",
     "october": "Oktober",
     "november": "November",
-    "december": "Dezember"
+    "december": "Dezember",
+    "cannot_find_week_note": "Wochennotiz kann nicht gefunden werden"
   },
   "close_pane_button": {
     "close_this_pane": "Schließe diesen Bereich"
@@ -718,7 +728,8 @@
   "basic_properties": {
     "note_type": "Notiztyp",
     "editable": "Bearbeitbar",
-    "basic_properties": "Grundlegende Eigenschaften"
+    "basic_properties": "Grundlegende Eigenschaften",
+    "language": "Sprache"
   },
   "book_properties": {
     "view_type": "Ansichtstyp",
@@ -729,7 +740,11 @@
     "collapse": "Einklappen",
     "expand": "Ausklappen",
     "invalid_view_type": "Ungültiger Ansichtstyp „{{type}}“",
-    "calendar": "Kalender"
+    "calendar": "Kalender",
+    "book_properties": "Sammlungseigenschaften",
+    "table": "Tabelle",
+    "geo-map": "Weltkarte",
+    "board": "Tafel"
   },
   "edited_notes": {
     "no_edited_notes_found": "An diesem Tag wurden noch keine Notizen bearbeitet...",
@@ -805,7 +820,9 @@
     "unknown_label_type": "Unbekannter Labeltyp „{{type}}“",
     "unknown_attribute_type": "Unbekannter Attributtyp „{{type}}“",
     "add_new_attribute": "Neues Attribut hinzufügen",
-    "remove_this_attribute": "Entferne dieses Attribut"
+    "remove_this_attribute": "Entferne dieses Attribut",
+    "unset-field-placeholder": "nicht gesetzt",
+    "remove_color": "Entferne Farblabel"
   },
   "script_executor": {
     "query": "Abfrage",
@@ -942,7 +959,8 @@
     "enter_workspace": "Betrete den Arbeitsbereich {{title}}"
   },
   "file": {
-    "file_preview_not_available": "Für dieses Dateiformat ist keine Dateivorschau verfügbar."
+    "file_preview_not_available": "Für dieses Dateiformat ist keine Dateivorschau verfügbar.",
+    "too_big": "Die Vorschau zeigt aus Effizienzgründen nur die ersten {{maxNumChars}} Zeichen der Datei an. Lade die Datei herunter und öffne sie extern um den gesamten Inhalt zu sehen."
   },
   "protected_session": {
     "enter_password_instruction": "Um die geschützte Notiz anzuzeigen, musst du dein Passwort eingeben:",
@@ -1063,7 +1081,8 @@
     "max_width_label": "Maximale Inhaltsbreite in Pixel",
     "apply_changes_description": "Um Änderungen an der Inhaltsbreite anzuwenden, klicke auf",
     "reload_button": "Frontend neu laden",
-    "reload_description": "Änderungen an den Darstellungsoptionen"
+    "reload_description": "Änderungen an den Darstellungsoptionen",
+    "max_width_unit": "Pixel"
   },
   "native_title_bar": {
     "title": "Native Titelleiste (App-Neustart erforderlich)",
@@ -1086,7 +1105,10 @@
     "layout-vertical-title": "Vertikal",
     "layout-horizontal-title": "Horizontal",
     "layout-vertical-description": "Startleiste ist auf der linken Seite (standard)",
-    "layout-horizontal-description": "Startleiste ist unter der Tableiste. Die Tableiste wird dadurch auf die ganze Breite erweitert."
+    "layout-horizontal-description": "Startleiste ist unter der Tableiste. Die Tableiste wird dadurch auf die ganze Breite erweitert.",
+    "auto_theme": "Alt (Folge dem Farbschema des Systems)",
+    "light_theme": "Alt (Hell)",
+    "dark_theme": "Alt (Dunkel)"
   },
   "zoom_factor": {
     "title": "Zoomfaktor (nur Desktop-Build)",
@@ -1636,6 +1658,44 @@
     "n_notes_queued": "{{ count }} Notiz zur Indizierung vorgemerkt",
     "n_notes_queued_plural": "{{ count }} Notizen zur Indizierung vorgemerkt",
     "notes_indexed": "{{ count }} Notiz indiziert",
-    "notes_indexed_plural": "{{ count }} Notizen indiziert"
+    "notes_indexed_plural": "{{ count }} Notizen indiziert",
+    "not_started": "Nicht gestartet",
+    "title": "KI Einstellungen",
+    "processed_notes": "Verarbeitete Notizen",
+    "total_notes": "Gesamt Notizen",
+    "progress": "Fortschritt",
+    "queued_notes": "Eingereihte Notizen",
+    "failed_notes": "Fehlgeschlagenen Notizen",
+    "last_processed": "Zuletzt verarbeitet",
+    "refresh_stats": "Statistiken neu laden",
+    "enable_ai_features": "Aktiviere KI/LLM Funktionen",
+    "enable_ai_description": "Aktiviere KI-Funktionen wie Notizzusammenfassungen, Inhaltserzeugung und andere LLM-Funktionen",
+    "openai_tab": "OpenAI",
+    "anthropic_tab": "Anthropic",
+    "voyage_tab": "Voyage AI",
+    "ollama_tab": "Ollama",
+    "enable_ai": "Aktiviere KI/LLM Funktionen",
+    "enable_ai_desc": "Aktiviere KI-Funktionen wie Notizzusammenfassungen, Inhaltserzeugung und andere LLM-Funktionen",
+    "provider_configuration": "KI-Anbieterkonfiguration",
+    "provider_precedence": "Anbieter Priorität",
+    "provider_precedence_description": "Komma-getrennte Liste von Anbieter in der Reihenfolge ihrer Priorität (z.B. 'openai, anthropic,ollama')",
+    "temperature": "Temperatur",
+    "temperature_description": "Regelt die Zufälligkeit in Antworten (0 = deterministisch, 2 = maximale Zufälligkeit)",
+    "system_prompt": "Systemaufforderung",
+    "system_prompt_description": "Standard Systemaufforderung für alle KI-Interaktionen",
+    "openai_configuration": "OpenAI Konfiguration",
+    "openai_settings": "OpenAI Einstellungen",
+    "api_key": "API Schlüssel",
+    "url": "Basis-URL",
+    "model": "Modell"
+  },
+  "zen_mode": {
+    "button_exit": "Verlasse Zen Modus"
+  },
+  "ui-performance": {
+    "title": "Leistung",
+    "enable-motion": "Aktiviere Übergänge und Animationen",
+    "enable-shadows": "Aktiviere Schatten",
+    "enable-backdrop-effects": "Aktiviere Hintergrundeffekte für Menüs, Pop-up Fenster und Panele"
   }
 }
