@@ -9,6 +9,7 @@
     margin: 2px 0px;
     min-width: 5em;
     width: 100%;
+    padding: 1px 12px;
 }
 
 .note-title-widget input.note-title.protected {
