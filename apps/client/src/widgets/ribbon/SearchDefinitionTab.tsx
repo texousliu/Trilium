@@ -186,7 +186,7 @@ function BulkActionsList({ note }: { note: FNote }) {
 function AddBulkActionButton({ note }: { note: FNote }) {
   return (
     <Dropdown
-      buttonClassName="action-add-toggle btn-sm"
+      buttonClassName="action-add-toggle btn btn-sm"
       text={<><Icon icon="bx bxs-zap" />{" "}{t("search_definition.action")}</>}
       noSelectButtonStyle
     >
