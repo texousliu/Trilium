@@ -510,3 +510,15 @@ export function useLegacyImperativeHandlers(handlers: Record<string, Function>) 
         Object.assign(parentComponent as never, handlers);
     }, [ handlers ]);
 }
+
+export function useSyncedRef<T>(externalRef?: RefObject<T>, initialValue: T | null = null): RefObject<T> {
+    const ref = useRef<T>(initialValue);
+
+    useEffect(() => {
+        if (externalRef) {
+            externalRef.current = ref.current;
+        }
+    }, [ ref, externalRef ]);
+
+    return ref;
+}

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useMemo, useCallback } from "preact/hooks";
+import { useContext, useEffect, useRef, useMemo } from "preact/hooks";
 import { t } from "../../services/i18n";
 import { ComponentChildren } from "preact";
 import type { CSSProperties, RefObject } from "preact/compat";
@@ -6,6 +6,7 @@ import { openDialog } from "../../services/dialog";
 import { ParentComponent } from "./react_utils";
 import { Modal as BootstrapModal } from "bootstrap";
 import { memo } from "preact/compat";
+import { useSyncedRef } from "./hooks";
 
 interface ModalProps {
     className: string;
@@ -64,10 +65,9 @@ interface ModalProps {
     stackable?: boolean;
 }
 
-export default function Modal({ children, className, size, title, header, footer, footerStyle, footerAlignment, onShown, onSubmit, helpPageId, minWidth, maxWidth, zIndex, scrollable, onHidden: onHidden, modalRef: _modalRef, formRef: _formRef, bodyStyle, show, stackable }: ModalProps) {
-    const modalRef = _modalRef ?? useRef<HTMLDivElement>(null);
+export default function Modal({ children, className, size, title, header, footer, footerStyle, footerAlignment, onShown, onSubmit, helpPageId, minWidth, maxWidth, zIndex, scrollable, onHidden: onHidden, modalRef: externalModalRef, formRef, bodyStyle, show, stackable }: ModalProps) {
+    const modalRef = useSyncedRef<HTMLDivElement>(externalModalRef);
     const modalInstanceRef = useRef<BootstrapModal>();
-    const formRef = _formRef ?? useRef<HTMLFormElement>(null);
     const parentWidget = useContext(ParentComponent);
     const elementToFocus = useRef<Element | null>();
 
@@ -145,10 +145,10 @@ export default function Modal({ children, className, size, title, header, footer
                     </div>
 
                     {onSubmit ? (
-                        <form ref={formRef} onSubmit={useCallback((e) => {
+                        <form ref={formRef} onSubmit={(e) => {
                             e.preventDefault();
                             onSubmit();
-                        }, [onSubmit])}>
+                        }}>
                             <ModalInner footer={footer} bodyStyle={bodyStyle} footerStyle={footerStyle} footerAlignment={footerAlignment}>{children}</ModalInner>
                         </form>
                     ) : (

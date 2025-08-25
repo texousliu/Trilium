@@ -1,6 +1,6 @@
 import type { RefObject } from "preact";
 import type { CSSProperties } from "preact/compat";
-import { useRef, useMemo } from "preact/hooks";
+import { useMemo } from "preact/hooks";
 import { memo } from "preact/compat";
 import { CommandNames } from "../../components/app_context";
 
@@ -22,7 +22,7 @@ export interface ButtonProps {
     title?: string;
 }
 
-const Button = memo(({ name, buttonRef: _buttonRef, className, text, onClick, keyboardShortcut, icon, primary, disabled, size, style, triggerCommand, ...restProps }: ButtonProps) => {
+const Button = memo(({ name, buttonRef, className, text, onClick, keyboardShortcut, icon, primary, disabled, size, style, triggerCommand, ...restProps }: ButtonProps) => {
     // Memoize classes array to prevent recreation
     const classes = useMemo(() => {
         const classList: string[] = ["btn"];
@@ -42,8 +42,6 @@ const Button = memo(({ name, buttonRef: _buttonRef, className, text, onClick, ke
         return classList.join(" ");
     }, [primary, className, size]);
 
-    const buttonRef = _buttonRef ?? useRef<HTMLButtonElement>(null);
-    
     // Memoize keyboard shortcut rendering
     const shortcutElements = useMemo(() => {
         if (!keyboardShortcut) return null;
