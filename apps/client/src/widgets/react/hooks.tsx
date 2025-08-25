@@ -17,9 +17,13 @@ import { CSSProperties } from "preact/compat";
 
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
     const parentComponent = useContext(ParentComponent)!;
-    parentComponent.registerHandler(eventName, handler);
+
+    useEffect(() => {
+        parentComponent.registerHandler(eventName, handler);
+        return (() => parentComponent.removeHandler(eventName, handler));
+    }, [eventName, handler]);
+
     useDebugValue(eventName);
-    return (() => parentComponent.removeHandler(eventName, handler));
 }
 
 export function useTriliumEvents<T extends EventNames>(eventNames: T[], handler: (data: EventData<T>, eventName: T) => void) {
@@ -199,7 +203,6 @@ export function useNoteContext() {
     }, [ notePath ]);
 
     useTriliumEvent("activeContextChanged", ({ noteContext }) => {
-        setNoteContext(noteContext);
         setNotePath(noteContext.notePath);        
     });
     useTriliumEvent("setNoteContext", ({ noteContext }) => {

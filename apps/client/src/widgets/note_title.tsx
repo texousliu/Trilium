@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import { t } from "../services/i18n";
 import FormTextBox from "./react/FormTextBox";
 import { useNoteContext, useNoteProperty, useSpacedUpdate, useTriliumEvent } from "./react/hooks";
@@ -8,9 +8,13 @@ import "./note_title.css";
 import { isLaunchBarConfig } from "../services/utils";
 import appContext from "../components/app_context";
 import branches from "../services/branches";
+import { NoteContext, ParentComponent } from "./react/react_utils";
 
 export default function NoteTitleWidget() {
-    const { note, noteId, componentId, viewScope, noteContext, parentComponent } = useNoteContext();    
+    const parentComponent = useContext(ParentComponent);
+    const noteContext = useContext(NoteContext);  
+    const { noteId, note, componentId, viewScope } = noteContext ?? {};
+    
     const title = useNoteProperty(note, "title", componentId);    
     const isProtected = useNoteProperty(note, "isProtected");
     const newTitle = useRef("");
@@ -31,7 +35,7 @@ export default function NoteTitleWidget() {
     // Manage the title for read-only notes
     useEffect(() => {
         if (isReadOnly) {
-            noteContext?.getNavigationTitle().then(setNavigationTitle);
+            noteContext?.getNavigationTitle?.().then(setNavigationTitle);
         }
     }, [isReadOnly]);
 
@@ -78,7 +82,7 @@ export default function NoteTitleWidget() {
                     // Focus on the note content when pressing enter.
                     if (e.key === "Enter") {
                         e.preventDefault();
-                        parentComponent.triggerCommand("focusOnDetail", { ntxId: noteContext?.ntxId });
+                        parentComponent?.triggerCommand("focusOnDetail", { ntxId: noteContext?.ntxId });
                         return;
                     }
 

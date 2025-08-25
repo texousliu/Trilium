@@ -15,7 +15,7 @@ type EventHandler = ((data: any) => void);
  *   event / command is executed in all components - by simply awaiting the `triggerEvent()`.
  */
 export class TypedComponent<ChildT extends TypedComponent<ChildT>> {
-    $widget!: JQuery<HTMLElement>;
+    $widget!: JQuery<HTMLElement | DocumentFragment>;
     componentId: string;
     children: ChildT[];
     initialized: Promise<void> | null;
