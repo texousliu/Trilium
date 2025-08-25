@@ -330,7 +330,10 @@ function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
                 })}
 
                 <FormListItem
-                    onClick={() => appContext.tabManager.openContextWithNote("_optionsLocalization", { activate: true })}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        appContext.tabManager.openContextWithNote("_optionsLocalization", { activate: true });
+                    }}
                 >{t("note_language.configure-languages")}</FormListItem>           
             </Dropdown>
 

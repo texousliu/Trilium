@@ -80,7 +80,7 @@ interface FormListItemOpts {
     disabled?: boolean;
     checked?: boolean | null;
     selected?: boolean;
-    onClick?: () => void;
+    onClick?: (e: MouseEvent) => void;
     triggerCommand?: CommandNames;
     description?: string;
     className?: string;
