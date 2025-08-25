@@ -7,7 +7,6 @@ import FormFileUpload from "../react/FormFileUpload";
 import FormGroup, { FormMultiGroup } from "../react/FormGroup";
 import Modal from "../react/Modal";
 import RawHtml from "../react/RawHtml";
-import ReactBasicWidget from "../react/ReactBasicWidget";
 import importService, { UploadFilesOptions } from "../../services/import";
 import { useTriliumEvent } from "../react/hooks";
 

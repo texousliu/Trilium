@@ -4,7 +4,6 @@ import tree from "../../services/tree";
 import Button from "../react/Button";
 import FormRadioGroup from "../react/FormRadioGroup";
 import Modal from "../react/Modal";
-import ReactBasicWidget from "../react/ReactBasicWidget";
 import "./export.css";
 import ws from "../../services/ws";
 import toastService, { ToastOptions } from "../../services/toast";

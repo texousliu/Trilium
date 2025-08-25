@@ -5,7 +5,6 @@ import FormCheckbox from "../react/FormCheckbox";
 import FormFileUpload from "../react/FormFileUpload";
 import FormGroup from "../react/FormGroup";
 import Modal from "../react/Modal";
-import ReactBasicWidget from "../react/ReactBasicWidget";
 import options from "../../services/options";
 import importService from "../../services/import.js";
 import tree from "../../services/tree";

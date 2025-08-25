@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from "preact/hooks";
 import { t } from "../../services/i18n";
 import Modal from "../react/Modal";
-import ReactBasicWidget from "../react/ReactBasicWidget";
 import "./bulk_actions.css";
 import { BulkActionAffectedNotes } from "@triliumnext/commons";
 import server from "../../services/server";

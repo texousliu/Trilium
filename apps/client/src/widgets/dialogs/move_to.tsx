@@ -1,4 +1,3 @@
-import ReactBasicWidget from "../react/ReactBasicWidget";
 import Modal from "../react/Modal";
 import { t } from "../../services/i18n";
 import NoteList from "../react/NoteList";

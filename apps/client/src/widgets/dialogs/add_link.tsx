@@ -1,6 +1,5 @@
 import { t } from "../../services/i18n";
 import Modal from "../react/Modal";
-import ReactBasicWidget from "../react/ReactBasicWidget";
 import Button from "../react/Button";
 import FormRadioGroup from "../react/FormRadioGroup";
 import NoteAutocomplete from "../react/NoteAutocomplete";
