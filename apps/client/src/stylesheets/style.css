@@ -2349,14 +2349,6 @@ footer.webview-footer button {
     padding: 1px 10px 1px 10px;
 }
 
-/* Search result highlighting */
-.search-result-title b,
-.search-result-content b,
-.search-result-attributes b {
-    color: var(--admonition-warning-accent-color);
-    text-decoration: underline;
-}
-
 /* Customized icons */
 
 .bx-tn-toc::before {

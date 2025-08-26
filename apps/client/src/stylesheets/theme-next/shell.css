@@ -586,6 +586,10 @@ div.quick-search .search-button.show {
     top: 1px;
 }
 
+.quick-search .quick-search-item-icon {
+    vertical-align: text-bottom;
+}
+
 /* Note title */
 .quick-search .dropdown-menu .dropdown-item > a {
     color: var(--menu-text-color);
@@ -604,15 +608,13 @@ div.quick-search .search-button.show {
     overflow: hidden;
 }
 
-.quick-search .quick-search-item-icon {
-    vertical-align: text-bottom;
-}
-
+/* Note content snippet */
 :root .quick-search .search-result-content {
     background-color: var(--quick-search-result-content-background);
     border-radius: 4px;
 }
 
+/* Divider line */
 .quick-search .dropdown-item::after {
     display: none;
 }

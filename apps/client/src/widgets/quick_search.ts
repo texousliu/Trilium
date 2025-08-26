@@ -98,6 +98,14 @@ const TPL = /*html*/`
         font-size: .85em;
     }
 
+    /* Search result highlighting */
+    .quick-search .search-result-title b,
+    .quick-search .search-result-content b,
+    .quick-search .search-result-attributes b {
+        color: var(--admonition-warning-accent-color);
+        text-decoration: underline;
+    }
+
     .quick-search .dropdown-divider {
         margin: 0;
     }
