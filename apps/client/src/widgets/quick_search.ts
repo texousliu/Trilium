@@ -62,13 +62,52 @@ const TPL = /*html*/`
         display: none;
     }
     
-    .quick-search .dropdown-item:hover {
+    .quick-search-item.dropdown-item:hover {
         background-color: #f8f9fa;
     }
     
+     .quick-search .quick-search-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .quick-search .quick-search-item-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .quick-search .quick-search-item-icon {
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+
+    .quick-search search-result-title {
+        flex: 1;
+    }
+
+    .quick-search .search-result-attributes {
+        font-size: 0.75em;
+        color: var(--muted-text-color);
+        opacity: 0.5;
+        margin-left: 20px;
+        margin-top: 2px;
+        line-height: 1.2;"
+    }
+
+    .quick-search .search-result-content {
+        font-size: 0.85em;
+        color: var(--main-text-color);
+        opacity: 0.7;
+        margin-left: 20px;
+        margin-top: 4px;
+        line-height: 1.3;
+    }
+
     .quick-search .dropdown-divider {
         margin: 0;
     }
+
   </style>
 
   <div class="input-group-prepend">
@@ -82,6 +121,7 @@ const TPL = /*html*/`
 
 const INITIAL_DISPLAYED_NOTES = 15;
 const LOAD_MORE_BATCH_SIZE = 10;
+
 
 // TODO: Deduplicate with server.
 interface QuickSearchResponse {
@@ -237,20 +277,20 @@ export default class QuickSearchWidget extends BasicWidget {
                 const $item = $('<a class="dropdown-item" tabindex="0" href="javascript:">');
                 
                 // Build the display HTML with content snippet below the title
-                let itemHtml = `<div style="display: flex; flex-direction: column;">
-                    <div style="display: flex; align-items: flex-start; gap: 6px;">
-                        <span class="${result.icon}" style="flex-shrink: 0; margin-top: 1px;"></span>
-                        <span style="flex: 1;" class="search-result-title">${result.highlightedNotePathTitle}</span>
+                let itemHtml = `<div class="quick-search-item">
+                    <div class="quick-search-item-header">
+                        <span class="quick-search-item-icon ${result.icon}"></span>
+                        <span class="search-result-title">${result.highlightedNotePathTitle}</span>
                     </div>`;
                 
                 // Add attribute snippet (tags/attributes) below the title if available
                 if (result.highlightedAttributeSnippet) {
-                    itemHtml += `<div style="font-size: 0.75em; color: var(--muted-text-color); opacity: 0.5; margin-left: 20px; margin-top: 2px; line-height: 1.2;" class="search-result-attributes">${result.highlightedAttributeSnippet}</div>`;
+                    itemHtml += `<div class="search-result-attributes">${result.highlightedAttributeSnippet}</div>`;
                 }
                 
                 // Add content snippet below the attributes if available
                 if (result.highlightedContentSnippet) {
-                    itemHtml += `<div style="font-size: 0.85em; color: var(--main-text-color); opacity: 0.7; margin-left: 20px; margin-top: 4px; line-height: 1.3;" class="search-result-content">${result.highlightedContentSnippet}</div>`;
+                    itemHtml += `<div class="search-result-content">${result.highlightedContentSnippet}</div>`;
                 }
                 
                 itemHtml += `</div>`;
