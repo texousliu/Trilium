@@ -26,6 +26,10 @@ import RefreshButton from "../widgets/floating_buttons/refresh_button.js";
 import MobileEditorToolbar from "../widgets/type_widgets/ckeditor/mobile_editor_toolbar.js";
 import { applyModals } from "./layout_commons.js";
 import CloseZenButton from "../widgets/close_zen_button.js";
+import FilePropertiesTab from "../widgets/ribbon/FilePropertiesTab.jsx";
+import { useNoteContext } from "../widgets/react/hooks.jsx";
+import { useContext } from "preact/hooks";
+import { ParentComponent } from "../widgets/react/react_utils.jsx";
 
 const MOBILE_CSS = `
 <style>
@@ -163,7 +167,7 @@ export default class MobileLayout {
                                     .contentSized()
                                     .child(new NoteDetailWidget())
                                     .child(new NoteListWidget(false))
-                                    //.child(new FilePropertiesWidget().css("font-size", "smaller"))
+                                    .child(<FilePropertiesWrapper />)
                             )
                             .child(new MobileEditorToolbar())
                     )
@@ -179,4 +183,14 @@ export default class MobileLayout {
         applyModals(rootContainer);
         return rootContainer;
     }
+}
+
+function FilePropertiesWrapper() {
+    const { note } = useNoteContext();
+
+    return (
+        <div>
+            {note?.type === "file" && <FilePropertiesTab note={note} />}
+        </div>
+    );
 }

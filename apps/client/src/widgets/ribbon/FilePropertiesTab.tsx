@@ -2,14 +2,14 @@ import { t } from "../../services/i18n";
 import { formatSize } from "../../services/utils";
 import { FormFileUploadButton } from "../react/FormFileUpload";
 import { useNoteBlob, useNoteLabel } from "../react/hooks";
-import { TabContext } from "./ribbon-interface";
 import Button from "../react/Button";
 import protected_session_holder from "../../services/protected_session_holder";
 import { downloadFileNote, openNoteExternally } from "../../services/open";
 import toast from "../../services/toast";
 import server from "../../services/server";
+import FNote from "../../entities/fnote";
 
-export default function FilePropertiesTab({ note }: TabContext) {
+export default function FilePropertiesTab({ note }: { note?: FNote | null }) {
     const [ originalFileName ] = useNoteLabel(note, "originalFileName");
     const canAccessProtectedNote = !note?.isProtected || protected_session_holder.isProtectedSessionAvailable();
     const [ blob ] = useNoteBlob(note);    
