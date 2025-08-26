@@ -4,7 +4,7 @@ import { useNoteContext, useTriliumEvents } from "../react/hooks";
 import "./style.css";
 import { VNode } from "preact";
 import BasicPropertiesTab from "./BasicPropertiesTab";
-import FormattingTab from "./FormattingTab";
+import FormattingToolbar from "./FormattingToolbar";
 import { numberObjectsInPlace } from "../../services/utils";
 import { TabContext } from "./ribbon-interface";
 import options from "../../services/options";
@@ -32,9 +32,8 @@ interface TitleContext {
 interface TabConfiguration {
     title: string | ((context: TitleContext) => string);
     icon: string;
-    // TODO: Mark as required after porting them all.
-    content?: (context: TabContext) => VNode;
-    show?: boolean | ((context: TitleContext) => boolean | null | undefined);
+    content: (context: TabContext) => VNode | false;
+    show: boolean | ((context: TitleContext) => boolean | null | undefined);
     toggleCommand?: CommandNames;
     activate?: boolean | ((context: TitleContext) => boolean);
     /**
@@ -49,7 +48,7 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
         icon: "bx bx-text",
         show: ({ note }) => note?.type === "text" && options.get("textNoteEditorType") === "ckeditor-classic",
         toggleCommand: "toggleRibbonTabClassicEditor",
-        content: FormattingTab,
+        content: FormattingToolbar,
         stayInDom: true
     },
     {        
