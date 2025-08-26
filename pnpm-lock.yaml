@@ -314,8 +314,8 @@ importers:
         specifier: 5.2.10
         version: 5.2.10
       '@types/jquery':
-        specifier: 3.5.32
-        version: 3.5.32
+        specifier: 3.5.33
+        version: 3.5.33
       '@types/leaflet':
         specifier: 1.9.20
         version: 1.9.20
@@ -442,7 +442,7 @@ importers:
         version: 1.6.3
       tsx:
         specifier: ^4.19.3
-        version: 4.20.4
+        version: 4.20.5
       yargs:
         specifier: ^18.0.0
         version: 18.0.0
@@ -884,8 +884,8 @@ importers:
         version: 46.0.2(bufferutil@4.0.9)(ckeditor5@46.0.2(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41))(utf-8-validate@6.0.5)
     devDependencies:
       '@types/jquery':
-        specifier: 3.5.32
-        version: 3.5.32
+        specifier: 3.5.33
+        version: 3.5.33
 
   packages/ckeditor5-admonition:
     devDependencies:
@@ -5737,8 +5737,8 @@ packages:
   '@types/istanbul-reports@3.0.4':
     resolution: {integrity: sha512-pk2B1NWalF9toCRu6gjBzR69syFjP4Od8WRAX+0mmf9lAjCRicLOWc+ZrxZHx/0XRjotgkF9t6iaMJ+aXcOdZQ==}
 
-  '@types/jquery@3.5.32':
-    resolution: {integrity: sha512-b9Xbf4CkMqS02YH8zACqN1xzdxc3cO735Qe5AbSUFmyOiaWAbcpqh9Wna+Uk0vgACvoQHpWDg2rGdHkYPLmCiQ==}
+  '@types/jquery@3.5.33':
+    resolution: {integrity: sha512-SeyVJXlCZpEki5F0ghuYe+L+PprQta6nRZqhONt9F13dWBtR/ftoaIbdRQ7cis7womE+X2LKhsDdDtkkDhJS6g==}
 
   '@types/js-yaml@4.0.9':
     resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
@@ -14413,11 +14413,6 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  tsx@4.20.4:
-    resolution: {integrity: sha512-yyxBKfORQ7LuRt/BQKBXrpcq59ZvSW0XxwfjAt3w2/8PmdxaFzijtMhTawprSHhpzeM5BgU2hXHG3lklIERZXg==}
-    engines: {node: '>=18.0.0'}
-    hasBin: true
-
   tsx@4.20.5:
     resolution: {integrity: sha512-+wKjMNU9w/EaQayHXb7WA7ZaHY6hN8WgfvHNQ3t1PnU91/7O8TcTnIhCDYTZwnt8JsO9IBqZ30Ln1r7pPF52Aw==}
     engines: {node: '>=18.0.0'}
@@ -17341,8 +17336,6 @@ snapshots:
       '@ckeditor/ckeditor5-widget': 46.0.2
       ckeditor5: 46.0.2(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-icons@46.0.2': {}
 
@@ -17712,6 +17705,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.0.2
       '@ckeditor/ckeditor5-utils': 46.0.2
       ckeditor5: 46.0.2(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-special-characters@46.0.2':
     dependencies:
@@ -21846,7 +21841,7 @@ snapshots:
     dependencies:
       '@types/istanbul-lib-report': 3.0.3
 
-  '@types/jquery@3.5.32':
+  '@types/jquery@3.5.33':
     dependencies:
       '@types/sizzle': 2.3.9
 
@@ -21894,7 +21889,7 @@ snapshots:
 
   '@types/mark.js@8.11.12':
     dependencies:
-      '@types/jquery': 3.5.32
+      '@types/jquery': 3.5.33
 
   '@types/mdast@4.0.4':
     dependencies:
@@ -32483,13 +32478,6 @@ snapshots:
       strip-bom: 3.0.0
 
   tslib@2.8.1: {}
-
-  tsx@4.20.4:
-    dependencies:
-      esbuild: 0.25.9
-      get-tsconfig: 4.10.1
-    optionalDependencies:
-      fsevents: 2.3.3
 
   tsx@4.20.5:
     dependencies:
