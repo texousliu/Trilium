@@ -604,6 +604,19 @@ div.quick-search .search-button.show {
     overflow: hidden;
 }
 
+.quick-search .quick-search-item-icon {
+    vertical-align: text-bottom;
+}
+
+:root .quick-search .search-result-content {
+    background-color: var(--quick-search-result-content-background);
+    border-radius: 4px;
+}
+
+.quick-search .dropdown-item::after {
+    display: none;
+}
+
 /*
  * TREE PANE
  */

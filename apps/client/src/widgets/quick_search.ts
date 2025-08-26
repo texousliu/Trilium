@@ -22,8 +22,9 @@ const TPL = /*html*/`
     }
 
     .quick-search .dropdown-menu {
-        max-height: 600px;
-        max-width: 600px;
+        max-height: 80vh;
+        min-width: 400px;
+        max-width: 720px;
         overflow-y: auto;
         overflow-x: hidden;
         text-overflow: ellipsis;
