@@ -40,14 +40,11 @@ const TPL = /*html*/`
     .quick-search .dropdown-item:not(:last-child)::after {
         content: '';
         position: absolute;
+        left: 0;
         bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80%;
-        height: 2px;
-        background: var(--main-border-color);
-        border-radius: 1px;
-        opacity: 0.4;
+        width: 100%;
+        height: 1px;
+        background: var(--dropdown-border-color);
     }
     
     .quick-search .dropdown-item:last-child::after {
@@ -67,41 +64,37 @@ const TPL = /*html*/`
     }
     
      .quick-search .quick-search-item {
-        display: flex;
-        flex-direction: column;
+        width: 100%;
     }
 
     .quick-search .quick-search-item-header {
-        display: flex;
-        align-items: flex-start;
-        gap: 6px;
+        padding: 0 8px;
     }
 
     .quick-search .quick-search-item-icon {
-        flex-shrink: 0;
-        margin-top: 1px;
+        margin-inline-end: 2px;
     }
 
-    .quick-search search-result-title {
-        flex: 1;
+    .quick-search .search-result-title {
+        font-weight: 500;
     }
 
     .quick-search .search-result-attributes {
-        font-size: 0.75em;
-        color: var(--muted-text-color);
-        opacity: 0.5;
-        margin-left: 20px;
-        margin-top: 2px;
-        line-height: 1.2;"
+        opacity: .5;
+        padding: 0 8px;
+        font-size: .75em;
+    }
+
+    .quick-search .search-result-attributes br {
+        display: none;
     }
 
     .quick-search .search-result-content {
-        font-size: 0.85em;
+        margin-top: 8px;
+        padding: 8px;
+        background-color: var(--accented-background-color);
         color: var(--main-text-color);
-        opacity: 0.7;
-        margin-left: 20px;
-        margin-top: 4px;
-        line-height: 1.3;
+        font-size: .85em;
     }
 
     .quick-search .dropdown-divider {
@@ -293,6 +286,8 @@ export default class QuickSearchWidget extends BasicWidget {
                     itemHtml += `<div class="search-result-content">${result.highlightedContentSnippet}</div>`;
                 }
                 
+                console.log(result);
+
                 itemHtml += `</div>`;
                 
                 $item.html(itemHtml);

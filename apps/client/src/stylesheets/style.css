@@ -2353,8 +2353,8 @@ footer.webview-footer button {
 .search-result-title b,
 .search-result-content b,
 .search-result-attributes b {
-    font-weight: 900;
     color: var(--admonition-warning-accent-color);
+    text-decoration: underline;
 }
 
 /* Customized icons */
