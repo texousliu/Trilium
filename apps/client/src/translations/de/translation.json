@@ -1688,7 +1688,7 @@
     "api_key": "API Schlüssel",
     "url": "Basis-URL",
     "model": "Modell",
-    "anthropic_settings": "Anthropic-Einstellungen",
+    "anthropic_settings": "Anthropic Einstellungen",
     "partial": "{{ percentage }}% verarbeitet",
     "anthropic_api_key_description": "Dein Anthropic API-Key für den Zugriff auf Claude Modelle",
     "anthropic_model_description": "Anthropic Claude Modell für Chat-Vervollständigung",
@@ -1742,7 +1742,20 @@
     },
     "name": "KI",
     "openai": "OpenAI",
-    "use_enhanced_context": "Benutze erweiterten Kontext"
+    "use_enhanced_context": "Benutze erweiterten Kontext",
+    "openai_api_key_description": "Dein OpenAPI-Key für den Zugriff auf den KI-Dienst",
+    "default_model": "Standardmodell",
+    "openai_model_description": "Beispiele: gpt-4o, gpt-4-turbo, gpt-3.5-turbo",
+    "base_url": "Basis URL",
+    "openai_url_description": "Standard: https://api.openai.com/v1",
+    "anthropic_url_description": "Basis URL für Anthropic API (Standard: https://api.anthropic.com)",
+    "ollama_settings": "Ollama Einstellungen",
+    "note_title": "Notiz Titel",
+    "error": "Fehler",
+    "last_attempt": "Letzter Versuch",
+    "actions": "Aktionen",
+    "retry": "Erneut versuchen",
+    "retry_queued": "Notiz für weiteren Versuch eingereiht"
   },
   "zen_mode": {
     "button_exit": "Verlasse Zen Modus"
