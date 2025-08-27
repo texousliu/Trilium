@@ -729,7 +729,8 @@
     "note_type": "Notiztyp",
     "editable": "Bearbeitbar",
     "basic_properties": "Grundlegende Eigenschaften",
-    "language": "Sprache"
+    "language": "Sprache",
+    "configure_code_notes": "Code-Notizen konfigurieren..."
   },
   "book_properties": {
     "view_type": "Ansichtstyp",
@@ -1338,7 +1339,8 @@
     "test_title": "Synchronisierungstest",
     "test_description": "Dadurch werden die Verbindung und der Handshake zum Synchronisierungsserver getestet. Wenn der Synchronisierungsserver nicht initialisiert ist, wird er dadurch für die Synchronisierung mit dem lokalen Dokument eingerichtet.",
     "test_button": "Teste die Synchronisierung",
-    "handshake_failed": "Handshake des Synchronisierungsservers fehlgeschlagen, Fehler: {{message}}"
+    "handshake_failed": "Handshake des Synchronisierungsservers fehlgeschlagen, Fehler: {{message}}",
+    "timeout_unit": "Millisekunden"
   },
   "api_log": {
     "close": "Schließen"
@@ -1379,7 +1381,7 @@
     "unhoist-note": "Notiz-Fokus aufheben",
     "edit-branch-prefix": "Zweig-Präfix bearbeiten",
     "advanced": "Erweitert",
-    "expand-subtree": "Notizbaum ausklappen",
+    "expand-subtree": "Unterzweig aufklappen",
     "collapse-subtree": "Notizbaum einklappen",
     "sort-by": "Sortieren nach...",
     "recent-changes-in-subtree": "Kürzliche Änderungen im Notizbaum",
@@ -1398,7 +1400,8 @@
     "import-into-note": "In Notiz importieren",
     "apply-bulk-actions": "Massenaktionen anwenden",
     "converted-to-attachments": "{{count}} Notizen wurden als Anhang konvertiert.",
-    "convert-to-attachment-confirm": "Bist du sicher, dass du die ausgewählten Notizen in Anhänge ihrer übergeordneten Notizen umwandeln möchtest?"
+    "convert-to-attachment-confirm": "Bist du sicher, dass du die ausgewählten Notizen in Anhänge ihrer übergeordneten Notizen umwandeln möchtest?",
+    "open-in-popup": "Schnellbearbeitung"
   },
   "shared_info": {
     "shared_publicly": "Diese Notiz ist öffentlich geteilt auf",
@@ -1423,7 +1426,12 @@
     "widget": "Widget",
     "confirm-change": "Es is nicht empfehlenswert den Notiz-Typ zu ändern, wenn der Inhalt der Notiz nicht leer ist. Möchtest du dennoch fortfahren?",
     "geo-map": "Geo-Karte",
-    "beta-feature": "Beta"
+    "beta-feature": "Beta",
+    "book": "Sammlung",
+    "ai-chat": "KI Chat",
+    "task-list": "Aufgabenliste",
+    "new-feature": "Neu",
+    "collections": "Sammlungen"
   },
   "protect_note": {
     "toggle-on": "Notiz schützen",
@@ -1476,7 +1484,7 @@
     "hoist-this-note-workspace": "Diese Notiz fokussieren (Arbeitsbereich)",
     "refresh-saved-search-results": "Gespeicherte Suchergebnisse aktualisieren",
     "create-child-note": "Unternotiz anlegen",
-    "unhoist": "Entfokussieren"
+    "unhoist": "Fokus verlassen"
   },
   "title_bar_buttons": {
     "window-on-top": "Dieses Fenster immer oben halten"
@@ -1533,7 +1541,9 @@
   },
   "clipboard": {
     "cut": "Notiz(en) wurden in die Zwischenablage ausgeschnitten.",
-    "copied": "Notiz(en) wurden in die Zwischenablage kopiert."
+    "copied": "Notiz(en) wurden in die Zwischenablage kopiert.",
+    "copy_failed": "Speichern in Zwischenablage aufgrund von Berechtigungsproblemen gescheitert.",
+    "copy_success": "In Zwischenablage kopiert."
   },
   "entrypoints": {
     "note-revision-created": "Notizrevision wurde erstellt.",
@@ -1577,13 +1587,15 @@
   },
   "highlighting": {
     "description": "Steuert die Syntaxhervorhebung für Codeblöcke in Textnotizen, Code-Notizen sind nicht betroffen.",
-    "color-scheme": "Farbschema"
+    "color-scheme": "Farbschema",
+    "title": "Code-Blöcke"
   },
   "code_block": {
     "word_wrapping": "Wortumbruch",
     "theme_none": "Keine Syntax-Hervorhebung",
     "theme_group_light": "Helle Themen",
-    "theme_group_dark": "Dunkle Themen"
+    "theme_group_dark": "Dunkle Themen",
+    "copy_title": "Kopiere in Zwischenablage"
   },
   "classic_editor_toolbar": {
     "title": "Format"
@@ -1621,7 +1633,8 @@
   "link_context_menu": {
     "open_note_in_new_tab": "Notiz in neuen Tab öffnen",
     "open_note_in_new_split": "Notiz in neuen geteilten Tab öffnen",
-    "open_note_in_new_window": "Notiz in neuen Fenster öffnen"
+    "open_note_in_new_window": "Notiz in neuen Fenster öffnen",
+    "open_note_in_popup": "Schnellbearbeitung"
   },
   "electron_integration": {
     "desktop-application": "Desktop Anwendung",
@@ -1641,7 +1654,8 @@
     "full-text-search": "Volltextsuche"
   },
   "note_tooltip": {
-    "note-has-been-deleted": "Notiz wurde gelöscht."
+    "note-has-been-deleted": "Notiz wurde gelöscht.",
+    "quick-edit": "Schnellbearbeitung"
   },
   "geo-map": {
     "create-child-note-title": "Neue Unternotiz anlegen und zur Karte hinzufügen",
@@ -1650,7 +1664,8 @@
   },
   "geo-map-context": {
     "open-location": "Ort öffnen",
-    "remove-from-map": "Von Karte entfernen"
+    "remove-from-map": "Von Karte entfernen",
+    "add-note": "Markierung an dieser Position erstellen"
   },
   "help-button": {
     "title": "Relevante Hilfeseite öffnen"
@@ -1662,10 +1677,12 @@
     "days": "Tage"
   },
   "time_selector": {
-    "invalid_input": "Die eingegebene Zeit ist keine valide Zahl."
+    "invalid_input": "Die eingegebene Zeit ist keine valide Zahl.",
+    "minimum_input": "Die eingegebene Zeit muss mindestens {{minimumSeconds}} Sekunden entsprechen."
   },
   "modal": {
-    "close": "Schließen"
+    "close": "Schließen",
+    "help_title": "Zeige mehr Informationen zu diesem Fenster"
   },
   "ai_llm": {
     "n_notes_queued": "{{ count }} Notiz zur Indizierung vorgemerkt",
@@ -1848,6 +1865,163 @@
     "totp_secret_generated": "TOTP Geheimnis generiert",
     "totp_secret_warning": "Bitte speichere das TOTP Geheimnis an einem sicheren Ort. Es wird nicht noch einmal angezeigt.",
     "totp_secret_regenerate_confirm": "Möchten Sie das TOTP-Geheimnis wirklich neu generieren? Dadurch werden das bisherige TOTP-Geheimnis und alle vorhandenen Wiederherstellungscodes ungültig.",
-    "recovery_keys_title": "Einmalige Wiederherstellungsschlüssel"
+    "recovery_keys_title": "Einmalige Wiederherstellungsschlüssel",
+    "recovery_keys_description": "Einmalige Wiederherstellungsschlüssel werden verwendet, um sich anzumelden, falls Sie keinen Zugriff auf Ihre Authentifizierungscodes haben.",
+    "recovery_keys_description_warning": "Wiederherstellungsschlüssel werden nach dem Verlassen der Seite nicht erneut angezeigt. Bewahren Sie sie an einem sicheren Ort auf.<br>Wiederherstellungsschlüssel können nach ihrer Verwendung nicht erneut verwendet werden.",
+    "recovery_keys_error": "Fehler beim Generieren der Wiederherstellungscodes",
+    "recovery_keys_no_key_set": "Keine Wiederherstellungscodes eingerichtet",
+    "recovery_keys_generate": "Generiere Wiederherstellungscodes",
+    "recovery_keys_regenerate": "Wiederherstellungscodes erneut generieren",
+    "recovery_keys_used": "Verwendet: {{date}}",
+    "recovery_keys_unused": "Wiederherstellungscode {{index}} ist unbenutzt",
+    "oauth_title": "OAuth/OpenID",
+    "oauth_description": "OpenID ist ein standardisiertes Verfahren, mit dem Sie sich über ein Konto eines anderen Dienstes, beispielsweise Google, bei Websites anmelden können, um Ihre Identität zu bestätigen. Der Standardaussteller ist Google, Sie können jedoch jeden anderen OpenID-Anbieter auswählen. Weitere Informationen finden Sie <a href=\"#root/_hidden/_help/_help_Otzi9La2YAUX/_help_WOcw2SLH6tbX/_help_7DAiwaf8Z7Rz\">hier</a>. Befolgen Sie diese <a href=\"https://developers.google.com/identity/openid-connect/openid-connect\">Anweisungen</a>, um einen OpenID-Dienst über Google einzurichten.",
+    "oauth_description_warning": "Um OAuth/OpenID zu aktivieren, müssen Sie die OAuth/OpenID-Basis-URL, die Client-ID und den Client-Secret in der Datei config.ini festlegen und die Anwendung neu starten. Wenn Sie die Einstellungen über Umgebungsvariablen vornehmen möchten, legen Sie bitte TRILIUM_OAUTH_BASE_URL, TRILIUM_OAUTH_CLIENT_ID und TRILIUM_OAUTH_CLIENT_SECRET fest.",
+    "oauth_missing_vars": "Fehlende Einstellung: {{variables}}",
+    "oauth_user_account": "Benutzerkonto: ",
+    "oauth_user_email": "Benutzer E-Mail: ",
+    "oauth_user_not_logged_in": "Nicht eingeloggt!"
+  },
+  "share": {
+    "title": "Freigabeeinstellungen",
+    "redirect_bare_domain": "Hauptdomain zur Freigabeseite weiterleiten",
+    "redirect_bare_domain_description": "Anonyme Benutzer zur Freigabeseite weiterleiten, anstatt die Anmeldung anzuzeigen",
+    "show_login_link": "Zeige Anmeldelink im Design der Freigabeseite",
+    "show_login_link_description": "Füge einen Anmeldelink in der Fußzeile der Freigabeseite hinzu",
+    "check_share_root": "Status des Freigabe-Roots prüfen",
+    "share_root_found": "Freigabe-Root-Notiz '{{noteTitle}}' ist bereit",
+    "share_root_not_found": "Keine Notiz mit #shareRoot Label gefunden",
+    "share_root_not_shared": "Notiz '{{noteTitle}}' hat das #shareRoot Label, wurde jedoch noch nicht geteilt"
+  },
+  "tasks": {
+    "due": {
+      "today": "Heute",
+      "tomorrow": "Morgen",
+      "yesterday": "Gestern"
+    }
+  },
+  "content_widget": {
+    "unknown_widget": "Unbekanntes Widget für '{{id}}'."
+  },
+  "note_language": {
+    "not_set": "Nicht gesetzt",
+    "configure-languages": "Konfiguriere Sprachen..."
+  },
+  "content_language": {
+    "title": "Inhaltssprachen",
+    "description": "Wähle eine oder mehrere Sprachen aus, die in der Sprachauswahl im Abschnitt „Grundlegende Eigenschaften“ einer schreibgeschützten oder bearbeitbaren Textnotiz angezeigt werden sollen. Dadurch stehen Funktionen wie Rechtschreibprüfung oder Unterstützung für Rechts-nach-Links-Sprachen zur Verfügung."
+  },
+  "switch_layout_button": {
+    "title_vertical": "Bearbeitungsbereich nach unten verschieben",
+    "title_horizontal": "Bearbeitungsbereich nach links verschieben"
+  },
+  "toggle_read_only_button": {
+    "unlock-editing": "Bearbeitung freischalten",
+    "lock-editing": "Bearbeitung sperren"
+  },
+  "png_export_button": {
+    "button_title": "Exportiere Diagramm als PNG"
+  },
+  "svg": {
+    "export_to_png": "Das Diagramm konnte als PNG nicht exportiert werden."
+  },
+  "code_theme": {
+    "title": "Aussehen",
+    "word_wrapping": "Zeilenumbruch",
+    "color-scheme": "Farbschema"
+  },
+  "cpu_arch_warning": {
+    "title": "Bitte lade die ARM64-Version herunter",
+    "message_macos": "TriliumNext läuft aktuell über Rosetta 2. Nutzen Sie die Intel-Version (x64) auf einem Apple-Silicon-Mac, wird dadurch die Leistung und Akkulaufzeit deutlich beeinträchtigt.",
+    "message_windows": "TriliumNext läuft momentan in einer Emulation. Verwenden Sie eine Intel-Version (x64) auf einem Windows ARM Gerät, kann dadurch die Leistung und Akkulaufzeit deutlich beeinträchtigt werden.",
+    "recommendation": "Für ein optimales Erlebnis lade bitte die native ARM64-Version von TriliumNext von unserer Release-Seite herunter.",
+    "download_link": "Lade native Version herunter",
+    "continue_anyway": "Trotzdem fortfahren",
+    "dont_show_again": "Zeige diese Warnung nicht erneut"
+  },
+  "editorfeatures": {
+    "title": "Funktionen",
+    "emoji_completion_enabled": "Emoji-Autovervollständigung aktivieren",
+    "note_completion_enabled": "Automatisches Vervollständigen von Notizen aktivieren"
+  },
+  "table_view": {
+    "new-row": "Neue Zeile",
+    "new-column": "Neue Spalte",
+    "sort-column-by": "Sortiere nach '{{title}}'",
+    "sort-column-ascending": "Aufsteigend",
+    "sort-column-descending": "Absteigend",
+    "sort-column-clear": "Sortierung zurücksetzen",
+    "hide-column": "Spalte '{{title}}' ausblenden",
+    "show-hide-columns": "Zeige/verberge Spalten",
+    "row-insert-above": "Zeile oberhalb einfügen",
+    "row-insert-below": "Zeile unterhalb einfügen",
+    "row-insert-child": "Unternotiz einfügen",
+    "add-column-to-the-left": "Spalte links einfügen",
+    "add-column-to-the-right": "Spalte rechts einfügen",
+    "edit-column": "Spalte editieren",
+    "delete_column_confirmation": "Soll diese Spalte wirklich gelöscht werden? Das entsprechende Attribut wird aus allen Notizen entfernt.",
+    "delete-column": "Spalte entfernen",
+    "new-column-label": "Label",
+    "new-column-relation": "Beziehung"
+  },
+  "book_properties_config": {
+    "hide-weekends": "Wochenenden ausblenden",
+    "display-week-numbers": "Zeige Kalenderwoche",
+    "map-style": "Kartenstil:",
+    "max-nesting-depth": "Maximale Verschachtelungstiefe:",
+    "raster": "Raster",
+    "vector_light": "Vektor (Hell)",
+    "vector_dark": "Vektor (Dunkel)",
+    "show-scale": "Zeige Skalierung"
+  },
+  "table_context_menu": {
+    "delete_row": "Zeile entfernen"
+  },
+  "board_view": {
+    "delete-note": "Lösche Notiz",
+    "move-to": "Verschiebe zu",
+    "insert-above": "Oberhalb einfügen",
+    "insert-below": "Unterhalb einfügen",
+    "delete-column": "Spalte entfernen",
+    "delete-column-confirmation": "Soll die Spalte wirklich gelöscht werden? Abhängige Attribute werden auch in den Notizen unter dieser Spalte gelöscht.",
+    "new-item": "Neuer Artikel",
+    "add-column": "Spalte hinzufügen"
+  },
+  "command_palette": {
+    "tree-action-name": "Struktur: {{name}}",
+    "export_note_title": "Notiz exportieren",
+    "export_note_description": "aktuelle Notiz exportieren",
+    "show_attachments_title": "Zeige Anhänge",
+    "show_attachments_description": "Notizanhänge anzeigen",
+    "search_notes_title": "Suche Notiz",
+    "search_notes_description": "Öffne erweiterte Suche",
+    "search_subtree_title": "Im Unterzweig suchen",
+    "search_subtree_description": "Im aktuellen Unterzweig suchen",
+    "search_history_title": "Zeige Suchhistorie",
+    "search_history_description": "Zeige vorherige Suchen",
+    "configure_launch_bar_title": "Startleiste anpassen",
+    "configure_launch_bar_description": "Öffnen Sie die Einstellungen der Startleiste, um Elemente hinzuzufügen oder zu entfernen."
+  },
+  "content_renderer": {
+    "open_externally": "Öffne extern"
+  },
+  "call_to_action": {
+    "next_theme_title": "Teste das neue Trilium Design",
+    "next_theme_message": "Es wird aktuell das alte Design verwendet. Möchten Sie das neue Design ausprobieren?",
+    "next_theme_button": "Teste das neue Design",
+    "background_effects_title": "Hintergrundeffekte sind jetzt zuverlässig nutzbar",
+    "background_effects_message": "Auf Windows-Geräten sind die Hintergrundeffekte nun vollständig stabil. Die Hintergrundeffekte verleihen der Benutzeroberfläche einen Farbakzent, indem der Hintergrund dahinter weichgezeichnet wird. Diese Technik wird auch in anderen Anwendungen wie dem Windows-Explorer eingesetzt.",
+    "background_effects_button": "Aktiviere Hintergrundeffekte",
+    "dismiss": "Ablehnen"
+  },
+  "settings": {
+    "related_settings": "Ähnliche Einstellungen"
+  },
+  "settings_appearance": {
+    "related_code_blocks": "Farbschema für Code-Blöcke in Textnotizen",
+    "related_code_notes": "Farbschema für Code-Notizen"
+  },
+  "units": {
+    "percentage": "%"
   }
 }
