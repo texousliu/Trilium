@@ -4,11 +4,12 @@ import Button from "./react/Button";
 import ActionButton from "./react/ActionButton";
 import FNote from "../entities/fnote";
 import NoteContext from "../components/note_context";
-import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useTriliumOption } from "./react/hooks";
-import { useContext, useEffect, useMemo } from "preact/hooks";
+import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useTriliumEvent, useTriliumOption, useTriliumOptionBool } from "./react/hooks";
+import { useContext, useEffect, useMemo, useState } from "preact/hooks";
 import { ParentComponent } from "./react/react_utils";
 import Component from "../components/component";
 import { VNode } from "preact";
+import attributes from "../services/attributes";
 
 interface FloatingButtonContext {
     parentComponent: Component;
@@ -29,6 +30,13 @@ const FLOATING_BUTTON_DEFINITIONS: FloatingButtonDefinition[] = [
     {
         component: SwitchSplitOrientationButton,
         isEnabled: ({ note, noteContext }) => note.type === "mermaid" && note.isContentAvailable() && !note.hasLabel("readOnly") && noteContext.viewScope?.viewMode === "default"
+    },
+    {
+        component: ToggleReadOnlyButton,
+        isEnabled: ({ note, noteContext }) =>
+            (note.type === "mermaid" || note.getLabelValue("viewType") === "geoMap")
+            && note.isContentAvailable()
+            && noteContext.viewScope?.viewMode === "default"
     }
 ];
 
@@ -52,11 +60,18 @@ export default function FloatingButtons() {
         };
     }, [ note, noteContext, parentComponent ]);
 
-    const isReadOnly = useNoteLabelBoolean(note, "readOnly");
+    // Refresh on any note attribute change.
+    const [ refreshCounter, setRefreshCounter ] = useState(0);
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {        
+        if (loadResults.getAttributeRows().find(attrRow => attributes.isAffecting(attrRow, note))) {
+            setRefreshCounter(refreshCounter+1);
+        }
+    });
+
     const definitions = useMemo<FloatingButtonDefinition[]>(() => {    
         if (!context) return [];
         return FLOATING_BUTTON_DEFINITIONS.filter(def => def.isEnabled(context));
-    }, [ context, isReadOnly ]);
+    }, [ context, refreshCounter ]);
     
     return (
         <div className="floating-buttons no-print">
@@ -87,6 +102,16 @@ function SwitchSplitOrientationButton({ }: FloatingButtonContext) {
         text={upcomingOrientation === "vertical" ? t("switch_layout_button.title_vertical") : t("switch_layout_button.title_horizontal")}
         icon={upcomingOrientation === "vertical" ? "bx bxs-dock-bottom" : "bx bxs-dock-left"}        
         onClick={() => setSplitEditorOrientation(upcomingOrientation)}
+    />
+}
+
+function ToggleReadOnlyButton({ note }: FloatingButtonContext) {
+    const [ isReadOnly, setReadOnly ] = useNoteLabelBoolean(note, "readOnly");
+
+    return <ActionButton
+        text={isReadOnly ? t("toggle_read_only_button.unlock-editing") : t("toggle_read_only_button.lock-editing")}
+        icon={isReadOnly ? "bx bx-lock-open-alt" : "bx bx-lock-alt"}
+        onClick={() => setReadOnly(!isReadOnly)}
     />
 }
 
