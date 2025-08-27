@@ -83,12 +83,13 @@ interface AttributeEditorProps {
 }
 
 export default function AttributeEditor({ note, componentId, notePath, ntxId, hidden }: AttributeEditorProps) {
+    const [ currentValue, setCurrentValue ] = useState("");
     const [ state, setState ] = useState<"normal" | "showHelpTooltip" | "showAttributeDetail">();
     const [ error, setError ] = useState<unknown>();
     const [ needsSaving, setNeedsSaving ] = useState(false);
 
     const lastSavedContent = useRef<string>();
-    const currentValueRef = useRef("");
+    const currentValueRef = useRef(currentValue);
     const wrapperRef = useRef<HTMLDivElement>(null);
     const editorRef = useRef<CKEditorApi>();
 
@@ -126,6 +127,7 @@ export default function AttributeEditor({ note, componentId, notePath, ntxId, hi
         }        
 
         editorRef.current?.setText(htmlAttrs);
+        setCurrentValue(htmlAttrs);
     }
 
     function parseAttributes() {
@@ -289,7 +291,7 @@ export default function AttributeEditor({ note, componentId, notePath, ntxId, hi
                     className="attribute-list-editor"
                     tabIndex={200}
                     editor={CKEditorAttributeEditor}
-                    currentValue="" // handled imperatively
+                    currentValue={currentValue}
                     config={{
                         toolbar: { items: [] },
                         placeholder: t("attribute_editor.placeholder"),
