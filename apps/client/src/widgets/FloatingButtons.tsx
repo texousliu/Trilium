@@ -4,7 +4,7 @@ import Button from "./react/Button";
 import ActionButton from "./react/ActionButton";
 import FNote from "../entities/fnote";
 import NoteContext from "../components/note_context";
-import { useNoteContext } from "./react/hooks";
+import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useTriliumOption } from "./react/hooks";
 import { useContext, useEffect, useMemo } from "preact/hooks";
 import { ParentComponent } from "./react/react_utils";
 import Component from "../components/component";
@@ -25,6 +25,10 @@ const FLOATING_BUTTON_DEFINITIONS: FloatingButtonDefinition[] = [
     {
         component: RefreshBackendLogButton,
         isEnabled: ({ note, noteContext }) => note.noteId === "_backendLog" && noteContext.viewScope?.viewMode === "default",
+    },
+    {
+        component: SwitchSplitOrientationButton,
+        isEnabled: ({ note, noteContext }) => note.type === "mermaid" && note.isContentAvailable() && !note.hasLabel("readOnly") && noteContext.viewScope?.viewMode === "default"
     }
 ];
 
@@ -48,10 +52,11 @@ export default function FloatingButtons() {
         };
     }, [ note, noteContext, parentComponent ]);
 
+    const isReadOnly = useNoteLabelBoolean(note, "readOnly");
     const definitions = useMemo<FloatingButtonDefinition[]>(() => {    
         if (!context) return [];
         return FLOATING_BUTTON_DEFINITIONS.filter(def => def.isEnabled(context));
-    }, [ context ]);
+    }, [ context, isReadOnly ]);
     
     return (
         <div className="floating-buttons no-print">
@@ -71,6 +76,17 @@ function RefreshBackendLogButton({ parentComponent, noteContext }: FloatingButto
         text={t("backend_log.refresh")}
         icon="bx bx-refresh"
         onClick={() => parentComponent.triggerEvent("refreshData", { ntxId: noteContext.ntxId })}
+    />
+}
+
+function SwitchSplitOrientationButton({ }: FloatingButtonContext) {
+    const [ splitEditorOrientation, setSplitEditorOrientation ] = useTriliumOption("splitEditorOrientation");
+    const upcomingOrientation = splitEditorOrientation === "horizontal" ? "vertical" : "horizontal";
+
+    return <ActionButton
+        text={upcomingOrientation === "vertical" ? t("switch_layout_button.title_vertical") : t("switch_layout_button.title_horizontal")}
+        icon={upcomingOrientation === "vertical" ? "bx bxs-dock-bottom" : "bx bxs-dock-left"}        
+        onClick={() => setSplitEditorOrientation(upcomingOrientation)}
     />
 }
 
