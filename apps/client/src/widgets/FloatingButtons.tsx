@@ -5,7 +5,7 @@ import ActionButton, { ActionButtonProps } from "./react/ActionButton";
 import FNote from "../entities/fnote";
 import NoteContext from "../components/note_context";
 import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEvent, useTriliumEvents, useTriliumOption, useTriliumOptionBool } from "./react/hooks";
-import { useContext, useEffect, useMemo, useState } from "preact/hooks";
+import { useContext, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { ParentComponent } from "./react/react_utils";
 import Component from "../components/component";
 import { VNode } from "preact";
@@ -13,11 +13,12 @@ import attributes from "../services/attributes";
 import appContext, { EventData, EventNames } from "../components/app_context";
 import protected_session_holder from "../services/protected_session_holder";
 import options from "../services/options";
-import { openInAppHelpFromUrl } from "../services/utils";
+import { createImageSrcUrl, openInAppHelpFromUrl } from "../services/utils";
 import toast from "../services/toast";
 import server from "../services/server";
 import { SaveSqlConsoleResponse } from "@triliumnext/commons";
 import tree from "../services/tree";
+import { copyImageReferenceToClipboard } from "../services/image";
 
 interface FloatingButtonContext {
     parentComponent: Component;
@@ -87,6 +88,12 @@ const FLOATING_BUTTON_DEFINITIONS: FloatingButtonDefinition[] = [
     {
         component: GeoMapButtons,
         isEnabled: ({ note }) => note?.getLabelValue("viewType") === "geoMap" && !note.hasLabel("readOnly")
+    },
+    {
+        component: CopyImageReferenceButton,
+        isEnabled: ({ note, noteContext }) =>
+            ["mermaid", "canvas", "mindMap"].includes(note?.type ?? "")
+            && note?.isContentAvailable() && noteContext.viewScope?.viewMode === "default"
     }
 ];
 
@@ -318,6 +325,31 @@ function GeoMapButtons({ triggerEvent }) {
             onClick={() => triggerEvent("geoMapCreateChildNote")}
         />
     );
+}
+
+function CopyImageReferenceButton({ note }: FloatingButtonContext) {
+    const hiddenImageCopyRef = useRef<HTMLDivElement>(null);
+
+    return (
+        <>
+            <FloatingButton
+                icon="bx bx-copy"
+                text={t("copy_image_reference_button.button_title")}
+                onClick={() => {
+                    if (!hiddenImageCopyRef.current) return;
+                    const imageEl = document.createElement("img");
+                    imageEl.src = createImageSrcUrl(note);
+                    hiddenImageCopyRef.current.replaceChildren(imageEl);
+                    copyImageReferenceToClipboard($(hiddenImageCopyRef.current));
+                    hiddenImageCopyRef.current.removeChild(imageEl);
+                }}
+            />
+
+            <div ref={hiddenImageCopyRef} className="hidden-image-copy" style={{
+                position: "absolute" // Take out of the the hidden image from flexbox to prevent the layout being affected
+            }} />
+        </>
+    )
 }
 
 function FloatingButton({ className, ...props }: ActionButtonProps) {

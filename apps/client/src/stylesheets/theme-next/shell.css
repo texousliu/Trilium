@@ -1477,13 +1477,6 @@ div.floating-buttons-children .close-floating-buttons:has(.close-floating-button
     padding-inline-start: 8px;
 }
 
-/* Copy image reference */
-
-.floating-buttons .copy-image-reference-button .hidden-image-copy {
-    /* Take out of the the hidden image from flexbox to prevent the layout being affected */
-    position: absolute;
-}
-
 /* Code, relation map buttons */
 
 .floating-buttons .code-buttons-widget,

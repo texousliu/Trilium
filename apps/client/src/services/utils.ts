@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import type { ViewScope } from "./link.js";
+import { FNote } from "./frontend_script_entrypoint.js";
 
 const SVG_MIME = "image/svg+xml";
 
@@ -574,8 +575,7 @@ function copyHtmlToClipboard(content: string) {
     document.removeEventListener("copy", listener);
 }
 
-// TODO: Set to FNote once the file is ported.
-function createImageSrcUrl(note: { noteId: string; title: string }) {
+export function createImageSrcUrl(note: FNote) {
     return `api/images/${note.noteId}/${encodeURIComponent(note.title)}?timestamp=${Date.now()}`;
 }
 
