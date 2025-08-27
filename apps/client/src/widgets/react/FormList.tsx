@@ -35,6 +35,7 @@ export default function FormList({ children, onSelect, style, fullHeight }: Form
         const style: CSSProperties = {};
         if (fullHeight) {
             style.height = "100%";
+            style.overflow = "auto";
         }
         return style;
     }, [ fullHeight ]);
