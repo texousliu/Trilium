@@ -59,6 +59,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
       className="note-actions"
       hideToggleArrow
       noSelectButtonStyle
+      iconAction
     >
       {canBeConvertedToAttachment && <ConvertToAttachment note={note} /> }
       {note.type === "render" && <CommandItem command="renderActiveNote" icon="bx bx-extension" text={t("note_actions.re_render_note")} />}

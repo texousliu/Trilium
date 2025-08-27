@@ -13,12 +13,14 @@ export interface DropdownProps {
     dropdownContainerStyle?: CSSProperties;
     dropdownContainerClassName?: string;
     hideToggleArrow?: boolean;
+    /** If set to true, then the dropdown button will be considered an icon action (without normal border and sized for icons only). */
+    iconAction?: boolean;
     noSelectButtonStyle?: boolean;
     disabled?: boolean;
     text?: ComponentChildren;
 }
 
-export default function Dropdown({ className, buttonClassName, isStatic, children, title, text, dropdownContainerStyle, dropdownContainerClassName, hideToggleArrow, disabled, noSelectButtonStyle }: DropdownProps) {
+export default function Dropdown({ className, buttonClassName, isStatic, children, title, text, dropdownContainerStyle, dropdownContainerClassName, hideToggleArrow, iconAction, disabled, noSelectButtonStyle }: DropdownProps) {
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
 
@@ -58,7 +60,7 @@ export default function Dropdown({ className, buttonClassName, isStatic, childre
     return (
         <div ref={dropdownRef} class={`dropdown ${className ?? ""}`} style={{ display: "flex" }}>
             <button
-                className={`btn ${!noSelectButtonStyle ? "select-button" : ""} ${buttonClassName ?? ""} ${!hideToggleArrow ? "dropdown-toggle" : ""}`}
+                className={`${iconAction ? "icon-action" : "btn"} ${!noSelectButtonStyle ? "select-button" : ""} ${buttonClassName ?? ""} ${!hideToggleArrow ? "dropdown-toggle" : ""}`}
                 ref={triggerRef}
                 type="button"
                 data-bs-toggle="dropdown"
