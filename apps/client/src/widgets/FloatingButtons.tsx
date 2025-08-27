@@ -8,6 +8,7 @@ import { useNoteContext } from "./react/hooks";
 import { useContext, useEffect, useMemo } from "preact/hooks";
 import { ParentComponent } from "./react/react_utils";
 import Component from "../components/component";
+import { VNode } from "preact";
 
 interface FloatingButtonContext {
     parentComponent: Component;
@@ -16,18 +17,14 @@ interface FloatingButtonContext {
 }
 
 interface FloatingButtonDefinition {
-    title: string;
-    icon: string;
+    component: (context: FloatingButtonContext) => VNode;    
     isEnabled: (context: FloatingButtonContext) => boolean;
-    onClick: (context: FloatingButtonContext) => void;
 }
 
 const FLOATING_BUTTON_DEFINITIONS: FloatingButtonDefinition[] = [
     {
-        title: t("backend_log.refresh"),
-        icon: "bx bx-refresh",
+        component: RefreshBackendLogButton,
         isEnabled: ({ note, noteContext }) => note.noteId === "_backendLog" && noteContext.viewScope?.viewMode === "default",
-        onClick: ({ parentComponent, noteContext }) => parentComponent.triggerEvent("refreshData", { ntxId: noteContext.ntxId })
     }
 ];
 
@@ -59,18 +56,22 @@ export default function FloatingButtons() {
     return (
         <div className="floating-buttons no-print">
             <div className="floating-buttons-children">
-                {context && definitions.map(({ title, icon, onClick }) => (
-                    <ActionButton
-                        text={title}
-                        icon={icon}
-                        onClick={() => onClick(context)}
-                    />
+                {context && definitions.map(({ component: Component }) => (
+                    <Component {...context} />
                 ))}
             </div>
 
             <ShowFloatingButton />
         </div>
     )
+}
+
+function RefreshBackendLogButton({ parentComponent, noteContext }: FloatingButtonContext) {
+    return <ActionButton
+        text={t("backend_log.refresh")}
+        icon="bx bx-refresh"
+        onClick={() => parentComponent.triggerEvent("refreshData", { ntxId: noteContext.ntxId })}
+    />
 }
 
 /**
