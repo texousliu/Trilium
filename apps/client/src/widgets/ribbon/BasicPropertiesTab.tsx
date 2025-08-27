@@ -38,7 +38,10 @@ export default function BasicPropertiesTab({ note }: TabContext) {
 function NoteTypeWidget({ note }: { note?: FNote | null }) {
     const noteTypes = useMemo(() => NOTE_TYPES.filter((nt) => !nt.reserved && !nt.static), []);
     const [ codeNotesMimeTypes ] = useTriliumOption("codeNotesMimeTypes");
-    const mimeTypes = useMemo(() => mime_types.getMimeTypes().filter(mimeType => mimeType.enabled), [ codeNotesMimeTypes ]);
+    const mimeTypes = useMemo(() => {
+        mime_types.loadMimeTypes();
+        return mime_types.getMimeTypes().filter(mimeType => mimeType.enabled)
+    }, [ codeNotesMimeTypes ]);
     const notSelectableNoteTypes = useMemo(() => NOTE_TYPES.filter((nt) => nt.reserved || nt.static).map((nt) => nt.type), []);
     
     const currentNoteType = useNoteProperty(note, "type") ?? undefined;
