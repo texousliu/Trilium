@@ -504,6 +504,24 @@ export function useTooltip(elRef: RefObject<HTMLElement>, config: Partial<Toolti
     return { showTooltip, hideTooltip };
 }
 
+/**
+ * Similar to {@link useTooltip}, but doesn't expose methods to imperatively hide or show the tooltip.
+ * 
+ * @param elRef the element to bind the tooltip to.
+ * @param config optionally, the tooltip configuration.
+ */
+export function useStaticTooltip(elRef: RefObject<HTMLElement>, config?: Partial<Tooltip.Options>) {
+    useEffect(() => {
+        if (!elRef?.current) return;
+
+        const $el = $(elRef.current);
+        $el.tooltip(config);
+        return () => {
+            $el.tooltip("dispose");
+        }
+    }, [ elRef, config ]);
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export function useLegacyImperativeHandlers(handlers: Record<string, Function>) {
     const parentComponent = useContext(ParentComponent);

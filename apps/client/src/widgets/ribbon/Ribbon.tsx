@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
+import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { t } from "../../services/i18n";
-import { useNoteContext, useTriliumEvents } from "../react/hooks";
+import { useNoteContext, useStaticTooltip, useTooltip, useTriliumEvents } from "../react/hooks";
 import "./style.css";
 import { VNode } from "preact";
 import BasicPropertiesTab from "./BasicPropertiesTab";
@@ -233,6 +233,9 @@ export default function Ribbon() {
 }
 
 function RibbonTab({ icon, title, active, onClick }: { icon: string; title: string; active: boolean, onClick: () => void }) {
+    const iconRef = useRef<HTMLDivElement>(null);
+    useStaticTooltip(iconRef, {  });
+
     return (
         <>
             <div
@@ -240,6 +243,7 @@ function RibbonTab({ icon, title, active, onClick }: { icon: string; title: stri
                 onClick={onClick}
             >
                 <span
+                    ref={iconRef}
                     className={`ribbon-tab-title-icon ${icon}`}
                     title={title}                    
                 />
