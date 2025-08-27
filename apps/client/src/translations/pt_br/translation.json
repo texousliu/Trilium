@@ -544,7 +544,17 @@
     "run_on_branch_change": "executa quando uma remificação é atualizada.",
     "run_on_attribute_creation": "executa quando um novo atributo é criado para a nota que define esta relação",
     "run_on_attribute_change": " executa quando o atributo é alterado na nota que define esta relação. Também é disparado quando o atributo é excluído",
-    "widget_relation": "o destino desta relação será executado e renderizado como um widget na barra lateral"
+    "widget_relation": "o destino desta relação será executado e renderizado como um widget na barra lateral",
+    "run_on_branch_deletion": "executa quando uma ramificação é excluída. Ramificação é um link entre a nota pai e a nota filha e é excluído, por exemplo, ao mover a nota (a ramificação/link antiga é excluída).",
+    "relation_template": "os atributos da nota serão herdados mesmo sem um relacionamento pai-filho, o conteúdo e subárvore da nota serão adicionados às notas da instância se vazias. Veja a documentação para detalhes.",
+    "inherit": "os atributos da nota serão herdados mesmo sem um relacionamento pai-filho. Veja relação de modelos para um conceito semelhante. Veja a herança de atributos na documentação.",
+    "render_note": "notas do tipo \"nota de renderização HTML\" serão renderizadas usando uma nota de código (HTML ou script) e é necessário apontar usando esta relação qual nota deve ser renderizada",
+    "share_css": "Nota CSS que será injetada na página de compartilhamento. A nota CSS também deve estar na subárvore compartilhada. Considere usar também 'share_hidden_from_tree' e 'share_omit_default_css'.",
+    "share_js": "Nota JavaScript que será injetada na página de compartilhamento. A nota JS também deve estar na subárvore compartilhada. Considere usar 'share_hidden_from_tree'.",
+    "share_template": "Nota JavaScript incorporada que será usada como modelo para exibir a nota compartilhada. Retorna ao modelo padrão. Considere usar 'share_hidden_from_tree'.",
+    "share_favicon": "Nota Favicon que será usada na página compartilhada. Tipicamente você quer defini-la na raiz do compartilhamento e torná-lo herdável. A nota de Favicon também deve estar na subárvore compartilhada. Considere usar 'share_hidden_from_tree'.",
+    "is_owned_by_note": "é propriedade da nota",
+    "print_landscape": "Ao exportar para PDF, muda a orientação da página para paisagem em vez de retrato."
   },
   "attachments_actions": {
     "delete_attachment": "Excluir anexo",
@@ -732,7 +742,10 @@
     "move_note": "Mover nota",
     "to": "para",
     "target_parent_note": "nota pai destino",
-    "on_all_matched_notes": "Em todas as notas correspondentes"
+    "on_all_matched_notes": "Em todas as notas correspondentes",
+    "move_note_new_parent": "move a nota para o novo pai se a nota tem apenas um pai (ou seja, a antiga ramificação é removida e uma nova ramificação é criada para o novo pai)",
+    "clone_note_new_parent": "clona a nota para o novo pai se a nota tem vários clones / ramificações (não é claro qual ramificação deve ser removida)",
+    "nothing_will_happen": "nada acontecerá se a nota não puder ser movida para a nota de destino (por exemplo, se criaria um ciclo de árvore)"
   },
   "rename_note": {
     "rename_note": "Renomear nota",
@@ -742,7 +755,8 @@
     "example_note": "<code>Nota</code> - todas as notas correspondentes serão renomeadas para 'Nota'",
     "example_new_title": "<code>NOVO: ${note.title}</code> - o título das notas correspondentes receberá o prefixo 'NOVO: '",
     "example_date_prefix": "<code>${note.dateCreatedObj.format('MM-DD:')}: ${note.title}</code> - notas correspondentes receberão um prefixo com o mês-dia da data de criação da nota",
-    "api_docs": "Veja da documentação da API para <a href='https://zadam.github.io/trilium/backend_api/Note.html'>nota</a> e suas <a href='https://day.js.org/docs/en/display/format'>propriedades dateCreatedObj / utcDateCreatedObj</a> para detalhes."
+    "api_docs": "Veja da documentação da API para <a href='https://zadam.github.io/trilium/backend_api/Note.html'>nota</a> e suas <a href='https://day.js.org/docs/en/display/format'>propriedades dateCreatedObj / utcDateCreatedObj</a> para detalhes.",
+    "evaluated_as_js_string": "O valor digitado é avaliado como string JavaScript e, portanto, pode ser enriquecido com conteúdo dinâmico através da variável injetada <code>note</code> (nota sendo renomeada). Exemplos:"
   },
   "calendar": {
     "mon": "Seg",
@@ -877,7 +891,8 @@
   "relation_map_buttons": {
     "zoom_in_title": "Aumentar",
     "zoom_out_title": "Reduzir",
-    "create_child_note_title": "Criar nova nota filha e adicione neste mapa de relação"
+    "create_child_note_title": "Criar nova nota filha e adicione neste mapa de relação",
+    "reset_pan_zoom_title": "Redefinir pan & zoom para coordenadas e ampliação iniciais"
   },
   "zpetne_odkazy": {
     "backlink": "{{count}} Links Reversos",
@@ -887,7 +902,8 @@
   "mobile_detail_menu": {
     "insert_child_note": "Inserir nota filha",
     "delete_this_note": "Excluir essa nota",
-    "error_unrecognized_command": "Comando não reconhecido {{command}}"
+    "error_unrecognized_command": "Comando não reconhecido {{command}}",
+    "error_cannot_get_branch_id": "Não foi possível obter o branchId para o notePath '{{notePath}} '"
   },
   "note_icon": {
     "change_note_icon": "Alterar ícone da nota",
@@ -957,7 +973,8 @@
     "note_size": "Tamanho da nota",
     "calculate": "calcular",
     "title": "Informações da nota",
-    "subtree_size": "(tamanho da subárvore: {{size}} em {{count}} notas)"
+    "subtree_size": "(tamanho da subárvore: {{size}} em {{count}} notas)",
+    "note_size_info": "O tamanho da nota fornece uma estimativa aproximada dos requisitos de armazenamento para esta nota. Leva em conta o conteúdo e o conteúdo de suas revisões de nota."
   },
   "note_map": {
     "open_full": "Expandir completamente",
@@ -972,7 +989,8 @@
     "intro_placed": "Esta nova está localizada nos caminhos:",
     "intro_not_placed": "Esta nota ainda não está em nenhuma árvore de notas.",
     "archived": "Arquivado",
-    "search": "Pesquisar"
+    "search": "Pesquisar",
+    "outside_hoisted": "Este caminho está fora de uma nota fixada e você teria que desafixar."
   },
   "note_properties": {
     "this_note_was_originally_taken_from": "Esta nota foi originalmente obtida de:",
@@ -986,7 +1004,8 @@
     "unknown_attribute_type": "Tipo de atributo desconhecido '{{type}}'",
     "add_new_attribute": "Adicionar novo atributo",
     "remove_this_attribute": "Remover este atributo",
-    "remove_color": "Remover a etiqueta de cor"
+    "remove_color": "Remover a etiqueta de cor",
+    "url_placeholder": "http://website..."
   },
   "script_executor": {
     "query": "Consulta",
@@ -1012,7 +1031,10 @@
     "search_parameters": "Parâmetros de Pesquisa",
     "unknown_search_option": "Opção de pesquisa desconhecida {{searchOptionName}}",
     "actions_executed": "As ações foram executadas.",
-    "search_note_saved": "Nota de pesquisa foi salva em {{- notePathTitle}}"
+    "search_note_saved": "Nota de pesquisa foi salva em {{- notePathTitle}}",
+    "fast_search_description": "A opção de pesquisa rápida desabilita a pesquisa de texto completo do conteúdo de nota, o que pode acelerar a pesquisa em grandes bancos de dados.",
+    "include_archived_notes_description": "As notas arquivadas são por padrão excluídas dos resultados da pesquisa, com esta opção elas serão incluídas.",
+    "debug_description": "A depuração irá imprimir informações adicionais no console para ajudar na depuração de consultas complexas"
   },
   "similar_notes": {
     "title": "Notas Similares",
@@ -1023,10 +1045,13 @@
     "failed_rendering": "A renderização da opção de busca falhou: {{dto}} com o erro: {{error}} {{stack}}"
   },
   "debug": {
-    "debug": "Depurar"
+    "debug": "Depurar",
+    "debug_info": "A depuração irá imprimir informações adicionais no console para ajudar em depuração de consultas complexas.",
+    "access_info": "Para acessar as informações de depuração, execute a consulta e clique em \"Exibir log do servidor\" no canto superior esquerdo."
   },
   "fast_search": {
-    "fast_search": "Pesquisa rápida"
+    "fast_search": "Pesquisa rápida",
+    "description": "A opção de pesquisa rápida desabilita a pesquisa de texto completo do conteúdo de nota, o que pode acelerar a pesquisa em grandes bancos de dados."
   },
   "include_archived_notes": {
     "include_archived_notes": "Incluir notas arquivadas"
@@ -1058,7 +1083,10 @@
     "title": "Buscar script:",
     "placeholder": "buscar notas pelo nome",
     "example_title": "Veja este exemplo:",
-    "example_code": "// 1. pré-filtro usando pesquisa padrão\nconst candidateNotes = api.searchForNotes(\"#journal\"); \n\n// 2. aplicando critérios de pesquisa customizados\nconst matchedNotes = candidateNotes\n    .filter(note => note.title.match(/[0-9]{1,2}\\. ?[0-9]{1,2}\\. ?[0-9]{4}/));\n\nreturn matchedNotes;"
+    "example_code": "// 1. pré-filtro usando pesquisa padrão\nconst candidateNotes = api.searchForNotes(\"#journal\"); \n\n// 2. aplicando critérios de pesquisa customizados\nconst matchedNotes = candidateNotes\n    .filter(note => note.title.match(/[0-9]{1,2}\\. ?[0-9]{1,2}\\. ?[0-9]{4}/));\n\nreturn matchedNotes;",
+    "description1": "O script de pesquisa permite definir os resultados da pesquisa executando um script. Isso proporciona flexibilidade máxima quando a busca padrão não é suficiente.",
+    "description2": "O script de pesquisa deve ser do tipo \"código\" e subtipo \"JavaScript no servidor\". O script precisa retornar um array de noteIds ou de notas.",
+    "note": "Note que o script de pesquisa e a pesquisa de texto não podem ser combinados entre si."
   },
   "search_string": {
     "title_column": "Buscar texto:",
@@ -1072,7 +1100,8 @@
     "label_year_comparison": "comparação numérica (também >, >=, <).",
     "label_date_created": "notas criadas no último mês",
     "error": "Erro na busca: {{error}}",
-    "search_prefix": "Busca:"
+    "search_prefix": "Busca:",
+    "placeholder": "palavras-chave fulltext, #tag = valor..."
   },
   "attachment_list": {
     "open_help_page": "Abrir página de ajuda nos anexos",
@@ -1202,5 +1231,11 @@
   },
   "copy_image_reference_button": {
     "button_title": "Copiar referência da imagem para a área de transferência, pode ser colado em uma nota de texto."
+  },
+  "onclick_button": {
+    "no_click_handler": "Componente de botão '{{componentId}}' não possui manipulador de clique definido"
+  },
+  "owned_attribute_list": {
+    "owned_attributes": "Atributos próprios"
   }
 }
