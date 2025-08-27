@@ -214,28 +214,30 @@ export default function Ribbon() {
                         </div>
                     </div>
                 
-                    <div className="ribbon-body-container">
-                        <div className="ribbon-body">
-                            {filteredTabs.map(tab => {
-                                const isActive = tab.index === activeTabIndex;
-                                if (!isActive && !tab.stayInDom) {
-                                    return;
-                                }
+                    <div className="ribbon-body-container">                        
+                        {filteredTabs.map(tab => {
+                            const isActive = tab.index === activeTabIndex;
+                            if (!isActive && !tab.stayInDom) {
+                                return;
+                            }
 
-                                return tab?.content && tab.content({
-                                    note,
-                                    hidden: !isActive,
-                                    ntxId,
-                                    hoistedNoteId,
-                                    notePath,
-                                    noteContext,
-                                    componentId,
-                                    activate: useCallback(() => {
-                                        setActiveTabIndex(tab.index)
-                                    }, [setActiveTabIndex])
-                                });
-                            })}
-                        </div>
+                            return (
+                                <div className={`ribbon-body ${!isActive ? "hidden-ext" : ""}`}>
+                                    {tab?.content && tab.content({
+                                        note,
+                                        hidden: !isActive,
+                                        ntxId,
+                                        hoistedNoteId,
+                                        notePath,
+                                        noteContext,
+                                        componentId,
+                                        activate: useCallback(() => {
+                                            setActiveTabIndex(tab.index)
+                                        }, [setActiveTabIndex])
+                                    })}
+                                </div>
+                            );
+                        })}
                     </div>
                 </>
             )}

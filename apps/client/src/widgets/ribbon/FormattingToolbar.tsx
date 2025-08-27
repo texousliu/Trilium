@@ -1,4 +1,3 @@
-import { CSSProperties } from "preact/compat";
 import { useTriliumOption } from "../react/hooks";
 
 /**
@@ -10,17 +9,10 @@ import { useTriliumOption } from "../react/hooks";
  * 
  * ! The toolbar is not only used in the ribbon, but also in the quick edit feature.
  */
-export default function FormattingToolbar({ hidden }: { hidden?: boolean }) {
+export default function FormattingToolbar() {
     const [ textNoteEditorType ] = useTriliumOption("textNoteEditorType");
 
-    const style: CSSProperties = {};
-    if (hidden) {
-        style.display = "none";
-    }
-
     return (textNoteEditorType === "ckeditor-classic" &&
-        <div className="classic-toolbar-widget" style={style}>
-
-        </div>
+        <div className="classic-toolbar-widget" />
     )
 };
