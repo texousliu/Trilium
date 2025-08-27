@@ -224,20 +224,22 @@ export default function Ribbon() {
                                 return;
                             }
 
+                            const TabContent = tab.content;
+
                             return (
                                 <div className={`ribbon-body ${!isActive ? "hidden-ext" : ""}`}>
-                                    {tab?.content && tab.content({
-                                        note,
-                                        hidden: !isActive,
-                                        ntxId,
-                                        hoistedNoteId,
-                                        notePath,
-                                        noteContext,
-                                        componentId,
-                                        activate: useCallback(() => {
+                                    <TabContent
+                                        note={note}
+                                        hidden={!isActive}
+                                        ntxId={ntxId}
+                                        hoistedNoteId={hoistedNoteId}
+                                        notePath={notePath}
+                                        noteContext={noteContext}
+                                        componentId={componentId}
+                                        activate={useCallback(() => {
                                             setActiveTabIndex(tab.index)
-                                        }, [setActiveTabIndex])
-                                    })}
+                                        }, [setActiveTabIndex])}
+                                    />
                                 </div>
                             );
                         })}
