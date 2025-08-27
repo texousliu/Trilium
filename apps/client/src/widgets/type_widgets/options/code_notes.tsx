@@ -13,6 +13,7 @@ import { MimeType } from "@triliumnext/commons";
 import mime_types from "../../../services/mime_types";
 import CheckboxList from "./components/CheckboxList";
 import AutoReadOnlySize from "./components/AutoReadOnlySize";
+import "./code_notes.css";
 
 const SAMPLE_MIME = "application/typescript";
 
@@ -132,7 +133,6 @@ function CodeMimeTypes() {
 
 export function CodeMimeTypesList() {
     const [ codeNotesMimeTypes, setCodeNotesMimeTypes ] = useTriliumOptionJson<string[]>("codeNotesMimeTypes");
-    const sectionStyle = useMemo(() => ({ marginBottom: "1em", breakInside: "avoid-column" }), []);
     const groupedMimeTypes: Record<string, MimeType[]> = useMemo(() => {
         mime_types.loadMimeTypes();
 
@@ -156,9 +156,9 @@ export function CodeMimeTypesList() {
     }, [ codeNotesMimeTypes ]);  
 
     return (
-        <ul class="options-mime-types" style={{ listStyleType: "none", columnWidth: "250px" }}>
+        <ul class="options-mime-types">
             {Object.entries(groupedMimeTypes).map(([ initial, mimeTypes ]) => (
-                <section style={sectionStyle}>
+                <section>
                     { initial && <h5>{initial}</h5> }
                     <CheckboxList
                         values={mimeTypes}
