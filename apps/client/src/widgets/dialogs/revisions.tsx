@@ -71,6 +71,8 @@ export default function RevisionsDialog() {
             onHidden={() => {
                 setShown(false);
                 setNote(undefined);
+                setCurrentRevision(undefined);
+                setRevisions(undefined);
             }}
             show={shown}
             >
