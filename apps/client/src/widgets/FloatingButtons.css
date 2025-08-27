@@ -72,10 +72,6 @@
     display: block;
 }
 
-.floating-buttons-children:not(.temporarily-hidden)+.show-floating-buttons {
-    display: none;
-}
-
 .show-floating-buttons {
     /* display: none;*/
     margin-left: 5px !important;
@@ -96,5 +92,22 @@
 /* #region Geo map buttons */
 .leaflet-pane {
     z-index: 50;
+}
+/* #endregion */
+
+/* #region Close floating buttons */
+.close-floating-buttons {
+    margin-left: 5px !important;
+}
+
+.close-floating-buttons-button {
+    border: 1px solid transparent;
+    color: var(--button-text-color);
+    padding: 6px;
+    border-radius: 100px;
+}
+
+.close-floating-buttons-button:hover {
+    border: 1px solid var(--button-border-color);
 }
 /* #endregion */

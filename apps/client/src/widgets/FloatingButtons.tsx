@@ -1,12 +1,12 @@
 import { t } from "i18next";
 import "./FloatingButtons.css";
-import Button from "./react/Button";
 import { useNoteContext, useNoteProperty, useTriliumEvent, useTriliumEvents } from "./react/hooks";
 import { useContext, useEffect, useMemo, useState } from "preact/hooks";
 import { ParentComponent } from "./react/react_utils";
 import attributes from "../services/attributes";
 import { EventData, EventNames } from "../components/app_context";
 import { FLOATING_BUTTON_DEFINITIONS, FloatingButtonContext, FloatingButtonDefinition } from "./FloatingButtonsDefinitions";
+import ActionButton from "./react/ActionButton";
 
 async function getFloatingButtonDefinitions(context: FloatingButtonContext) {
     const defs: FloatingButtonDefinition[] = [];
@@ -70,15 +70,21 @@ export default function FloatingButtons() {
         getFloatingButtonDefinitions(context).then(setDefinitions);
     }, [ context, refreshCounter, noteMime ]);
 
+    // Manage the user-adjustable visibility of the floating buttons.
+    const [ visible, setVisible ] = useState(true);
+    useEffect(() => setVisible(true), [ note ]);
+
     return (
         <div className="floating-buttons no-print">
-            <div className="floating-buttons-children">
+            <div className={`floating-buttons-children ${!visible ? "temporarily-hidden" : ""}`}>
                 {context && definitions.map(({ component: Component }) => (
                     <Component {...context} />
                 ))}
+
+                {definitions.length && <CloseFloatingButton setVisible={setVisible} />}
             </div>
 
-            <ShowFloatingButton />
+            {!visible && definitions.length && <ShowFloatingButton setVisible={setVisible} /> }
         </div>
     )
 }
@@ -86,13 +92,27 @@ export default function FloatingButtons() {
 /**
  * Show button that displays floating button after click on close button
  */
-function ShowFloatingButton() {
+function ShowFloatingButton({ setVisible }: { setVisible(visible: boolean): void }) {
     return (
-        <div class="show-floating-buttons">
-            <Button
+        <div className="show-floating-buttons">
+            <ActionButton
                 className="show-floating-buttons-button"
                 icon="bx bx-chevrons-left"
                 text={t("show_floating_buttons_button.button_title")}
+                onClick={() => setVisible(true)}
+            />
+        </div>
+    );
+}
+
+function CloseFloatingButton({ setVisible }: { setVisible(visible: boolean): void }) {
+    return (
+        <div className="close-floating-buttons">
+            <ActionButton
+                className="close-floating-buttons-button"
+                icon="bx bx-chevrons-right"
+                text={t("hide_floating_buttons_button.button_title")}
+                onClick={() => setVisible(false)}
             />
         </div>
     );
