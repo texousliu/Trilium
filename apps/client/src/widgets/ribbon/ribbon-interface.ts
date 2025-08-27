@@ -9,4 +9,5 @@ export interface TabContext {
     notePath?: string | null;
     noteContext?: NoteContext;
     componentId: string;
+    activate(): void;
 }

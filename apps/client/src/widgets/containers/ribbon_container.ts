@@ -28,50 +28,6 @@ export default class RibbonContainer extends NoteContextAwareWidget {
         this.buttonWidgets = [];
     }
 
-    isRibbonTabActive(name: string) {
-        const $ribbonComponent = this.$widget.find(`.ribbon-tab-title[data-ribbon-component-name='${name}']`);
-
-        return $ribbonComponent.hasClass("active");
-    }
-
-    ensureOwnedAttributesAreOpen(ntxId: string | null | undefined) {
-        if (ntxId && this.isNoteContext(ntxId) && !this.isRibbonTabActive("ownedAttributes")) {
-            this.toggleRibbonTabWithName("ownedAttributes", ntxId);
-        }
-    }
-
-    addNewLabelEvent({ ntxId }: EventData<"addNewLabel">) {
-        this.ensureOwnedAttributesAreOpen(ntxId);
-    }
-
-    addNewRelationEvent({ ntxId }: EventData<"addNewRelation">) {
-        this.ensureOwnedAttributesAreOpen(ntxId);
-    }
-
-    toggleRibbonTabWithName(name: string, ntxId?: string) {
-        if (!this.isNoteContext(ntxId)) {
-            return false;
-        }
-
-        const $ribbonComponent = this.$widget.find(`.ribbon-tab-title[data-ribbon-component-name='${name}']`);
-
-        if ($ribbonComponent) {
-            this.toggleRibbonTab($ribbonComponent);
-        }
-    }
-
-    handleEvent<T extends EventNames>(name: T, data: EventData<T>) {
-        const PREFIX = "toggleRibbonTab";
-
-        if (name.startsWith(PREFIX)) {
-            let componentName = name.substr(PREFIX.length);
-            componentName = componentName[0].toLowerCase() + componentName.substr(1);
-
-            this.toggleRibbonTabWithName(componentName, (data as any).ntxId);
-        } else {
-            return super.handleEvent(name, data);
-        }
-    }
 
     async handleEventInChildren<T extends EventNames>(name: T, data: EventData<T>) {
         if (["activeContextChanged", "setNoteContext"].includes(name)) {

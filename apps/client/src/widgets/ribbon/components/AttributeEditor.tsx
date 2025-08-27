@@ -74,7 +74,15 @@ const mentionSetup: MentionFeed[] = [
 ];
 
 
-export default function AttributeEditor({ note, componentId, notePath, ntxId }: { note: FNote, componentId: string, notePath?: string | null, ntxId?: string | null }) {
+interface AttributeEditorProps {
+    note: FNote;
+    componentId: string;
+    notePath?: string | null;
+    ntxId?: string | null;
+    hidden?: boolean;
+}
+
+export default function AttributeEditor({ note, componentId, notePath, ntxId, hidden }: AttributeEditorProps) {
     const [ state, setState ] = useState<"normal" | "showHelpTooltip" | "showAttributeDetail">();
     const [ error, setError ] = useState<unknown>();
     const [ needsSaving, setNeedsSaving ] = useState(false);
@@ -267,7 +275,7 @@ export default function AttributeEditor({ note, componentId, notePath, ntxId }: 
     
     return (
         <>
-            <div
+            {!hidden && <div
                 ref={wrapperRef}
                 style="position: relative; padding-top: 10px; padding-bottom: 10px"
                 onKeyDown={(e) => {
@@ -379,7 +387,7 @@ export default function AttributeEditor({ note, componentId, notePath, ntxId }: 
                         {getErrorMessage(error)}
                     </div>
                 )}
-            </div>
+            </div>}
 
             {attributeDetailWidgetEl}
         </>

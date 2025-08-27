@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { t } from "../../services/i18n";
-import { useNoteContext, useStaticTooltip, useTooltip, useTriliumEvents } from "../react/hooks";
+import { useNoteContext, useStaticTooltip, useTooltip, useTriliumEvent, useTriliumEvents } from "../react/hooks";
 import "./style.css";
 import { VNode } from "preact";
 import BasicPropertiesTab from "./BasicPropertiesTab";
@@ -39,7 +39,7 @@ interface TabConfiguration {
     toggleCommand?: KeyboardActionNames;
     activate?: boolean | ((context: TitleContext) => boolean);
     /**
-     * By default the tab content will not be rendered unless the tab is active (i.e. selected by the user). Setting to `true` will ensure that the tab is rendered even when inactive, for cases where the tab needs to be accessible at all times (e.g. for the detached editor toolbar).
+     * By default the tab content will not be rendered unless the tab is active (i.e. selected by the user). Setting to `true` will ensure that the tab is rendered even when inactive, for cases where the tab needs to be accessible at all times (e.g. for the detached editor toolbar) or if event handling is needed.
      */
     stayInDom?: boolean;
 }
@@ -119,7 +119,8 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
         icon: "bx bx-list-check",
         content: OwnedAttributesTab,
         show: ({note}) => !note?.isLaunchBarConfig(),
-        toggleCommand: "toggleRibbonTabOwnedAttributes"
+        toggleCommand: "toggleRibbonTabOwnedAttributes",
+        stayInDom: true
     },
     {
         title: t("inherited_attribute_list.title"),
@@ -228,7 +229,10 @@ export default function Ribbon() {
                                     hoistedNoteId,
                                     notePath,
                                     noteContext,
-                                    componentId
+                                    componentId,
+                                    activate: useCallback(() => {
+                                        setActiveTabIndex(tab.index)
+                                    }, [setActiveTabIndex])
                                 });
                             })}
                         </div>
