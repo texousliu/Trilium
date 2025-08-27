@@ -139,8 +139,8 @@ export default function AttributeEditor({ note, componentId, notePath, ntxId, hi
 
     async function save() {
         const attributes = parseAttributes();
-        if (!attributes) {
-            // An error occurred and will be reported to the user.
+        if (!attributes || !needsSaving) {
+            // An error occurred and will be reported to the user, or nothing to save.
             return;
         }
 
