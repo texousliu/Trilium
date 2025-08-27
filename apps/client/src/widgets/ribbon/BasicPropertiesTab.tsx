@@ -18,6 +18,8 @@ import sync from "../../services/sync";
 import appContext from "../../components/app_context";
 import HelpButton from "../react/HelpButton";
 import { TabContext } from "./ribbon-interface";
+import Modal from "../react/Modal";
+import { CodeMimeTypesList } from "../type_widgets/options/code_notes";
 
 export default function BasicPropertiesTab({ note }: TabContext) {
     return (
@@ -41,6 +43,7 @@ function NoteTypeWidget({ note }: { note?: FNote | null }) {
     
     const currentNoteType = useNoteProperty(note, "type") ?? undefined;
     const currentNoteMime = useNoteProperty(note, "mime");
+    const [ modalShown, setModalShown ] = useState(false);
 
     const changeNoteType = useCallback(async (type: NoteType, mime?: string) => {
         if (!note || (type === currentNoteType && mime === currentNoteMime)) {
@@ -111,7 +114,19 @@ function NoteTypeWidget({ note }: { note?: FNote | null }) {
                         {title}
                     </FormListItem>
                 ))}
+
+                <FormDropdownDivider />
+                <FormListItem icon="bx bx-cog" onClick={() => setModalShown(true)}>{t("basic_properties.configure_code_notes")}</FormListItem>
             </Dropdown>
+
+            <Modal
+                className="code-mime-types-modal"
+                title={t("code_mime_types.title")}
+                show={modalShown} onHidden={() => setModalShown(false)}
+                size="xl" scrollable
+            >
+                <CodeMimeTypesList />
+            </Modal>
         </div>
     )   
 }

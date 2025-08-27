@@ -732,7 +732,8 @@
     "note_type": "Note type",
     "editable": "Editable",
     "basic_properties": "Basic Properties",
-    "language": "Language"
+    "language": "Language",
+    "configure_code_notes": "Configure code notes..."
   },
   "book_properties": {
     "view_type": "View type",

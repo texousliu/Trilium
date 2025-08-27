@@ -123,6 +123,14 @@ function CodeNotePreview({ themeName, wordWrapping }: { themeName: string, wordW
 }
 
 function CodeMimeTypes() {
+    return (
+        <OptionsSection title={t("code_mime_types.title")}>
+            <CodeMimeTypesList />
+        </OptionsSection>
+    )
+}
+
+export function CodeMimeTypesList() {
     const [ codeNotesMimeTypes, setCodeNotesMimeTypes ] = useTriliumOptionJson<string[]>("codeNotesMimeTypes");
     const sectionStyle = useMemo(() => ({ marginBottom: "1em", breakInside: "avoid-column" }), []);
     const groupedMimeTypes: Record<string, MimeType[]> = useMemo(() => {
@@ -148,20 +156,18 @@ function CodeMimeTypes() {
     }, [ codeNotesMimeTypes ]);  
 
     return (
-        <OptionsSection title={t("code_mime_types.title")}>
-            <ul class="options-mime-types" style={{ listStyleType: "none", columnWidth: "250px" }}>
-                {Object.entries(groupedMimeTypes).map(([ initial, mimeTypes ]) => (
-                    <section style={sectionStyle}>
-                        { initial && <h5>{initial}</h5> }
-                        <CheckboxList
-                            values={mimeTypes}
-                            keyProperty="mime" titleProperty="title"
-                            currentValue={codeNotesMimeTypes} onChange={setCodeNotesMimeTypes}
-                            columnWidth="inherit"
-                        />
-                    </section>
-                ))}
-            </ul>
-        </OptionsSection>
-    )
+        <ul class="options-mime-types" style={{ listStyleType: "none", columnWidth: "250px" }}>
+            {Object.entries(groupedMimeTypes).map(([ initial, mimeTypes ]) => (
+                <section style={sectionStyle}>
+                    { initial && <h5>{initial}</h5> }
+                    <CheckboxList
+                        values={mimeTypes}
+                        keyProperty="mime" titleProperty="title"
+                        currentValue={codeNotesMimeTypes} onChange={setCodeNotesMimeTypes}
+                        columnWidth="inherit"
+                    />
+                </section>
+            ))}
+        </ul>
+    );
 }
