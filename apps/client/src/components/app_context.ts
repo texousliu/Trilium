@@ -31,13 +31,10 @@ import { StartupChecks } from "./startup_checks.js";
 import type { CreateNoteOpts } from "../services/note_create.js";
 import { ColumnComponent } from "tabulator-tables";
 import { ChooseNoteTypeCallback } from "../widgets/dialogs/note_type_chooser.jsx";
+import type RootContainer from "../widgets/containers/root_container.js";
 
 interface Layout {
-    getRootWidget: (appContext: AppContext) => RootWidget;
-}
-
-interface RootWidget extends Component {
-    render: () => JQuery<HTMLElement>;
+    getRootWidget: (appContext: AppContext) => RootContainer;
 }
 
 export interface BeforeUploadListener extends Component {
@@ -619,7 +616,7 @@ export class AppContext extends Component {
             component.triggerCommand(commandName, { $el: $(this) });
         });
 
-        this.child(rootWidget);
+        this.child(rootWidget as Component);
 
         this.triggerEvent("initialRenderComplete", {});
     }
