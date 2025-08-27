@@ -86,10 +86,6 @@ const TPL = /*html*/`
         font-size: .75em;
     }
 
-    .quick-search .search-result-attributes br {
-        display: none;
-    }
-
     .quick-search .search-result-content {
         margin-top: 8px;
         padding: 8px;
@@ -287,7 +283,9 @@ export default class QuickSearchWidget extends BasicWidget {
                 
                 // Add attribute snippet (tags/attributes) below the title if available
                 if (result.highlightedAttributeSnippet) {
-                    itemHtml += `<div class="search-result-attributes">${result.highlightedAttributeSnippet}</div>`;
+                    // Replace <br> with a blank space to join the atributes on the same single line
+                    const snippet = (result.highlightedAttributeSnippet as string).replace(/<br\s?\/?>/g, " ");
+                    itemHtml += `<div class="search-result-attributes">${snippet}</div>`;
                 }
                 
                 // Add content snippet below the attributes if available
@@ -295,8 +293,6 @@ export default class QuickSearchWidget extends BasicWidget {
                     itemHtml += `<div class="search-result-content">${result.highlightedContentSnippet}</div>`;
                 }
                 
-                console.log(result);
-
                 itemHtml += `</div>`;
                 
                 $item.html(itemHtml);
