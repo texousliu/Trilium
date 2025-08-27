@@ -124,7 +124,7 @@ function ProtectedNoteSwitch({ note }: { note?: FNote | null }) {
             <FormToggle
                 switchOnName={t("protect_note.toggle-on")} switchOnTooltip={t("protect_note.toggle-on-hint")}
                 switchOffName={t("protect_note.toggle-off")} switchOffTooltip={t("protect_note.toggle-off-hint")}
-                currentValue={isProtected}
+                currentValue={!!isProtected}
                 onChange={(shouldProtect) => note && protected_session.protectNote(note.noteId, shouldProtect, false)}
             />
         </div>

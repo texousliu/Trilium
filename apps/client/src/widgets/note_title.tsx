@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { t } from "../services/i18n";
 import FormTextBox from "./react/FormTextBox";
-import { useNoteContext, useNoteProperty, useSpacedUpdate, useTriliumEvent } from "./react/hooks";
+import { useNoteContext, useNoteProperty, useSpacedUpdate, useTriliumEvent, useTriliumEvents } from "./react/hooks";
 import protected_session_holder from "../services/protected_session_holder";
 import server from "../services/server";
 import "./note_title.css";
@@ -48,12 +48,12 @@ export default function NoteTitleWidget() {
     useEffect(() => {
         appContext.addBeforeUnloadListener(() => spacedUpdate.isAllSavedAndTriggerUpdate());        
     }, []);
-    useTriliumEvent([ "beforeNoteSwitch", "beforeNoteContextRemove" ], () => spacedUpdate.updateNowIfNecessary());
+    useTriliumEvents([ "beforeNoteSwitch", "beforeNoteContextRemove" ], () => spacedUpdate.updateNowIfNecessary());
 
     // Manage focus.
     const textBoxRef = useRef<HTMLInputElement>(null);
     const isNewNote = useRef<boolean>();
-    useTriliumEvent([ "focusOnTitle", "focusAndSelectTitle" ], (e) => {
+    useTriliumEvents([ "focusOnTitle", "focusAndSelectTitle" ], (e) => {
         if (noteContext?.isActive() && textBoxRef.current) {
             textBoxRef.current.focus();
             isNewNote.current = ("isNewNote" in e ? e.isNewNote : false);

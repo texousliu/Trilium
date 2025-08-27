@@ -6,7 +6,7 @@ import { CSSProperties, memo } from "preact/compat";
 import { useUniqueName } from "./hooks";
 
 interface FormCheckboxProps {
-    name: string;
+    name?: string;
     label: string | ComponentChildren;
     /**
      * If set, the checkbox label will be underlined and dotted, indicating a hint. When hovered, it will show the hint text.
