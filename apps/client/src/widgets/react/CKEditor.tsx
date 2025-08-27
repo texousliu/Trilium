@@ -3,7 +3,15 @@ import { useEffect, useImperativeHandle, useRef } from "preact/compat";
 import { MutableRef } from "preact/hooks";
 
 export interface CKEditorApi {
-    focus: () => void;
+    focus(): void;
+    /**
+     * Imperatively sets the text in the editor.
+     * 
+     * Prefer setting `currentValue` prop where possible.
+     * 
+     * @param text text to set in the editor
+     */
+    setText(text: string): void;
 }
 
 interface CKEditorOpts {
@@ -34,6 +42,9 @@ export default function CKEditor({ apiRef, currentValue, editor, config, disable
                         writer.setSelection(writer.createPositionAt(documentRoot, "end"));
                     }
                 });
+            },
+            setText(text: string) {
+                textEditorRef.current?.setData(text);
             }
         };
     }, [ editorContainerRef ]);
