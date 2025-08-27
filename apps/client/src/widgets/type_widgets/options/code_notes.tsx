@@ -131,18 +131,22 @@ function CodeMimeTypes() {
     )
 }
 
+type MimeTypeWithDisabled = MimeType & { disabled?: boolean };
+
 export function CodeMimeTypesList() {
     const [ codeNotesMimeTypes, setCodeNotesMimeTypes ] = useTriliumOptionJson<string[]>("codeNotesMimeTypes");
     const groupedMimeTypes: Record<string, MimeType[]> = useMemo(() => {
         mime_types.loadMimeTypes();
 
-        const ungroupedMimeTypes = Array.from(mime_types.getMimeTypes());
+        const ungroupedMimeTypes = Array.from(mime_types.getMimeTypes()) as MimeTypeWithDisabled[];
         const plainTextMimeType = ungroupedMimeTypes.shift();
         const result: Record<string, MimeType[]> = {};
         ungroupedMimeTypes.sort((a, b) => a.title.localeCompare(b.title));
 
         if (plainTextMimeType) {
             result[""] = [ plainTextMimeType ];
+            plainTextMimeType.enabled = true;
+            plainTextMimeType.disabled = true;
         }
         
         for (const mimeType of ungroupedMimeTypes) {
@@ -161,8 +165,8 @@ export function CodeMimeTypesList() {
                 <section>
                     { initial && <h5>{initial}</h5> }
                     <CheckboxList
-                        values={mimeTypes}
-                        keyProperty="mime" titleProperty="title"
+                        values={mimeTypes as MimeTypeWithDisabled[]}
+                        keyProperty="mime" titleProperty="title" disabledProperty="disabled"
                         currentValue={codeNotesMimeTypes} onChange={setCodeNotesMimeTypes}
                         columnWidth="inherit"
                     />
