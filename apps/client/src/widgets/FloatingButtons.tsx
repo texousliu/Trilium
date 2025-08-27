@@ -14,6 +14,7 @@ import appContext from "../components/app_context";
 import protected_session_holder from "../services/protected_session_holder";
 import options from "../services/options";
 import { AttributeRow } from "../services/load_results";
+import { openInAppHelpFromUrl } from "../services/utils";
 
 interface FloatingButtonContext {
     parentComponent: Component;
@@ -65,6 +66,10 @@ const FLOATING_BUTTON_DEFINITIONS: FloatingButtonDefinition[] = [
     {
         component: RunActiveNoteButton,
         isEnabled: ({ note }) => note.mime.startsWith("application/javascript") || note.mime === "text/x-sqlite;schema=trilium"
+    },
+    {
+        component: OpenTriliumApiDocsButton,
+        isEnabled: ({ note }) => note.mime.startsWith("application/javascript;env=")
     }
 ];
 
@@ -222,6 +227,14 @@ function RunActiveNoteButton() {
         icon="bx bx-play"
         text={t("code_buttons.execute_button_title")}
         triggerCommand="runActiveNote"
+    />
+}
+
+function OpenTriliumApiDocsButton({ note }: FloatingButtonContext) {
+    return <ActionButton
+        icon="bx bx-help-circle"
+        text={t("code_buttons.trilium_api_docs_button_title")}
+        onClick={() => openInAppHelpFromUrl(note.mime.endsWith("frontend") ? "Q2z6av6JZVWm" : "MEtfsqa5VwNi")}
     />
 }
 

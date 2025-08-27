@@ -17,10 +17,6 @@ const TPL = /*html*/`
         }
     </style>
 
-    <button class="trilium-api-docs-button floating-button btn" title="${t("code_buttons.trilium_api_docs_button_title")}">
-        <span class="bx bx-help-circle"></span>
-    </button>
-
     <button class="save-to-note-button floating-button btn" title="${t("code_buttons.save_to_note_button_title")}">
         <span class="bx bx-save"></span>
     </button>
@@ -42,16 +38,6 @@ export default class CodeButtonsWidget extends NoteContextAwareWidget {
 
     doRender() {
         this.$widget = $(TPL);
-        this.$openTriliumApiDocsButton = this.$widget.find(".trilium-api-docs-button");
-        this.$openTriliumApiDocsButton.on("click", () => {
-            toastService.showMessage(t("code_buttons.opening_api_docs_message"));
-
-            if (this.note?.mime.endsWith("frontend")) {
-                window.open("https://triliumnext.github.io/Notes/Script%20API/interfaces/Frontend_Script_API.Api.html", "_blank");
-            } else {
-                window.open("https://triliumnext.github.io/Notes/Script%20API/interfaces/Backend_Script_API.Api.html", "_blank");
-            }
-        });
 
         this.$executeButton = this.$widget.find(".execute-button");
         this.$saveToNoteButton = this.$widget.find(".save-to-note-button");
@@ -74,8 +60,6 @@ export default class CodeButtonsWidget extends NoteContextAwareWidget {
 
     async refreshWithNote(note: FNote) {
         this.$saveToNoteButton.toggle(note.mime === "text/x-sqlite;schema=trilium" && note.isHiddenCompletely());
-
-        this.$openTriliumApiDocsButton.toggle(note.mime.startsWith("application/javascript;env="));
     }
 
     async noteTypeMimeChangedEvent({ noteId }: EventData<"noteTypeMimeChanged">) {
