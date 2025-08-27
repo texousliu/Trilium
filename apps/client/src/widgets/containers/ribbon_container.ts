@@ -90,22 +90,6 @@ export default class RibbonContainer extends NoteContextAwareWidget {
             }
         }
 
-        keyboardActionsService.getActions().then((actions) => {
-            this.$tabContainer.find(".ribbon-tab-title-icon").tooltip({
-                title: () => {
-                    const toggleCommandName = $(this).attr("data-toggle-command");
-                    const action = actions.find((act) => act.actionName === toggleCommandName);
-                    const title = $(this).attr("data-title");
-
-                    if (action?.effectiveShortcuts && action.effectiveShortcuts.length > 0) {
-                        return `${title} (${action.effectiveShortcuts.join(", ")})`;
-                    } else {
-                        return title ?? "";
-                    }
-                }
-            });
-        });
-
         if (!$ribbonTabToActivate) {
             $ribbonTabToActivate = $lastActiveRibbon;
         }

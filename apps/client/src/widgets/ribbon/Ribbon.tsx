@@ -8,7 +8,7 @@ import FormattingToolbar from "./FormattingToolbar";
 import { numberObjectsInPlace } from "../../services/utils";
 import { TabContext } from "./ribbon-interface";
 import options from "../../services/options";
-import { CommandNames, EventNames } from "../../components/app_context";
+import { EventNames } from "../../components/app_context";
 import FNote from "../../entities/fnote";
 import ScriptTab from "./ScriptTab";
 import EditedNotesTab from "./EditedNotesTab";
@@ -24,6 +24,8 @@ import InheritedAttributesTab from "./InheritedAttributesTab";
 import CollectionPropertiesTab from "./CollectionPropertiesTab";
 import SearchDefinitionTab from "./SearchDefinitionTab";
 import NoteActions from "./NoteActions";
+import keyboard_actions from "../../services/keyboard_actions";
+import { KeyboardActionNames } from "@triliumnext/commons";
 
 interface TitleContext {
     note: FNote | null | undefined;
@@ -34,7 +36,7 @@ interface TabConfiguration {
     icon: string;
     content: (context: TabContext) => VNode | false;
     show: boolean | ((context: TitleContext) => boolean | null | undefined);
-    toggleCommand?: CommandNames;
+    toggleCommand?: KeyboardActionNames;
     activate?: boolean | ((context: TitleContext) => boolean);
     /**
      * By default the tab content will not be rendered unless the tab is active (i.e. selected by the user). Setting to `true` will ensure that the tab is rendered even when inactive, for cases where the tab needs to be accessible at all times (e.g. for the detached editor toolbar).
@@ -187,11 +189,12 @@ export default function Ribbon() {
         <div className="ribbon-container" style={{ contain: "none" }}>
             <div className="ribbon-top-row">
                 <div className="ribbon-tab-container">
-                    {filteredTabs.map(({ title, icon, index }) => (
+                    {filteredTabs.map(({ title, icon, index, toggleCommand }) => (
                         <RibbonTab
                             icon={icon}
                             title={typeof title === "string" ? title : title(titleContext)}
                             active={index === activeTabIndex}
+                            toggleCommand={toggleCommand}
                             onClick={() => {
                                 if (activeTabIndex !== index) {
                                     setActiveTabIndex(index);
@@ -232,9 +235,18 @@ export default function Ribbon() {
     )
 }
 
-function RibbonTab({ icon, title, active, onClick }: { icon: string; title: string; active: boolean, onClick: () => void }) {
+function RibbonTab({ icon, title, active, onClick, toggleCommand }: { icon: string; title: string; active: boolean, onClick: () => void, toggleCommand?: KeyboardActionNames }) {
     const iconRef = useRef<HTMLDivElement>(null);
-    useStaticTooltip(iconRef, {  });
+    const [ keyboardShortcut, setKeyboardShortcut ] = useState<string[]>();
+    useStaticTooltip(iconRef, {
+        title: keyboardShortcut?.length ? `${title} (${keyboardShortcut?.join(",")})` : title
+    });
+
+    useEffect(() => {
+        if (toggleCommand) {
+            keyboard_actions.getAction(toggleCommand).then(action => setKeyboardShortcut(action?.effectiveShortcuts));
+        }
+    }, [toggleCommand]);
 
     return (
         <>
@@ -245,7 +257,6 @@ function RibbonTab({ icon, title, active, onClick }: { icon: string; title: stri
                 <span
                     ref={iconRef}
                     className={`ribbon-tab-title-icon ${icon}`}
-                    title={title}                    
                 />
                 &nbsp;
                 { active && <span class="ribbon-tab-title-label">{title}</span> }
