@@ -476,7 +476,6 @@ export function useTooltip(elRef: RefObject<HTMLElement>, config: Partial<Toolti
 
         const $el = $(elRef.current);
         $el.tooltip("show");
-        console.log("Show tooltip ", elRef.current);
     }, [ elRef, config ]);
 
     const hideTooltip = useCallback(() => {
