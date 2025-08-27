@@ -187,50 +187,54 @@ export default function Ribbon() {
 
     return (
         <div className="ribbon-container" style={{ contain: "none" }}>
-            <div className="ribbon-top-row">
-                <div className="ribbon-tab-container">
-                    {filteredTabs.map(({ title, icon, index, toggleCommand }) => (
-                        <RibbonTab
-                            icon={icon}
-                            title={typeof title === "string" ? title : title(titleContext)}
-                            active={index === activeTabIndex}
-                            toggleCommand={toggleCommand}
-                            onClick={() => {
-                                if (activeTabIndex !== index) {
-                                    setActiveTabIndex(index);
-                                } else {
-                                    // Collapse
-                                    setActiveTabIndex(undefined);
+            {noteContext?.viewScope?.viewMode === "default" && (
+                <>
+                    <div className="ribbon-top-row">
+                        <div className="ribbon-tab-container">
+                            {filteredTabs.map(({ title, icon, index, toggleCommand }) => (
+                                <RibbonTab
+                                    icon={icon}
+                                    title={typeof title === "string" ? title : title(titleContext)}
+                                    active={index === activeTabIndex}
+                                    toggleCommand={toggleCommand}
+                                    onClick={() => {
+                                        if (activeTabIndex !== index) {
+                                            setActiveTabIndex(index);
+                                        } else {
+                                            // Collapse
+                                            setActiveTabIndex(undefined);
+                                        }
+                                    }}
+                                />
+                            ))}
+                        </div>
+                        <div className="ribbon-button-container">
+                            { note && <NoteActions note={note} noteContext={noteContext} /> }
+                        </div>
+                    </div>
+                
+                    <div className="ribbon-body-container">
+                        <div className="ribbon-body">
+                            {filteredTabs.map(tab => {
+                                const isActive = tab.index === activeTabIndex;
+                                if (!isActive && !tab.stayInDom) {
+                                    return;
                                 }
-                            }}
-                        />
-                    ))}
-                </div>
-                <div className="ribbon-button-container">
-                    { note && <NoteActions note={note} noteContext={noteContext} /> }
-                </div>
-            </div>
-        
-            <div className="ribbon-body-container">
-                <div className="ribbon-body">
-                    {filteredTabs.map(tab => {
-                        const isActive = tab.index === activeTabIndex;
-                        if (!isActive && !tab.stayInDom) {
-                            return;
-                        }
 
-                        return tab?.content && tab.content({
-                            note,
-                            hidden: !isActive,
-                            ntxId,
-                            hoistedNoteId,
-                            notePath,
-                            noteContext,
-                            componentId
-                        });
-                    })}
-                </div>
-            </div>
+                                return tab?.content && tab.content({
+                                    note,
+                                    hidden: !isActive,
+                                    ntxId,
+                                    hoistedNoteId,
+                                    notePath,
+                                    noteContext,
+                                    componentId
+                                });
+                            })}
+                        </div>
+                    </div>
+                </>
+            )}
         </div>
     )
 }
