@@ -1,4 +1,4 @@
-import { useCallback, useContext, useDebugValue, useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useCallback, useContext, useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import { EventData, EventNames } from "../../components/app_context";
 import { ParentComponent } from "./react_utils";
 import SpacedUpdate from "../../services/spaced_update";
@@ -17,7 +17,7 @@ import { CSSProperties } from "preact/compat";
 
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
     const parentComponent = useContext(ParentComponent);
-    useEffect(() => {
+    useLayoutEffect(() => {
         parentComponent?.registerHandler(eventName, handler);
         return (() => parentComponent?.removeHandler(eventName, handler));
     }, [ eventName, handler ]);
@@ -27,7 +27,7 @@ export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (da
 export function useTriliumEvents<T extends EventNames>(eventNames: T[], handler: (data: EventData<T>, eventName: T) => void) {
     const parentComponent = useContext(ParentComponent);
     
-    useEffect(() => {
+    useLayoutEffect(() => {
         const handlers: ({ eventName: T, callback: (data: EventData<T>) => void })[] = [];
         for (const eventName of eventNames) {
             handlers.push({ eventName, callback: (data) => {
@@ -193,7 +193,6 @@ export function useUniqueName(prefix?: string) {
 }
 
 export function useNoteContext() {
-
     const [ noteContext, setNoteContext ] = useState<NoteContext>();
     const [ notePath, setNotePath ] = useState<string | null | undefined>();
     const [ note, setNote ] = useState<FNote | null | undefined>(); 
@@ -211,12 +210,7 @@ export function useNoteContext() {
     });
 
     const parentComponent = useContext(ParentComponent) as ReactWrappedWidget;
-    (parentComponent as ReactWrappedWidget & { setNoteContextEvent: (data: EventData<"setNoteContext">) => void }).setNoteContextEvent = ({ noteContext }: EventData<"setNoteContext">) => {
-        setNoteContext(noteContext);
-    }
-
     useDebugValue(() => `notePath=${notePath}, ntxId=${noteContext?.ntxId}`);
-    
 
     return {
         note: note,
