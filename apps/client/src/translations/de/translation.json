@@ -1227,7 +1227,15 @@
     "language": "Sprache",
     "first-day-of-the-week": "Erster Tag der Woche",
     "sunday": "Sonntag",
-    "monday": "Montag"
+    "monday": "Montag",
+    "first-week-of-the-year": "Erste Woche des Jahres",
+    "first-week-contains-first-day": "Erste Woche enthält den ersten Tag des Jahres",
+    "first-week-contains-first-thursday": "Erste Woche enthält den ersten Donnerstag des Jahres",
+    "first-week-has-minimum-days": "Erste Woche hat Mindestanzahl an Tagen",
+    "min-days-in-first-week": "Mindestanzahl an Tagen in erster Woche",
+    "first-week-info": "Die erste Woche, die den ersten Donnerstag des Jahres enthält, basiert auf dem Standard <a href=\"https://en.wikipedia.org/wiki/ISO_week_date#First_week\">ISO 8601</a>.",
+    "first-week-warning": "Das Ändern der Optionen für die erste Woche kann zu Duplikaten mit bestehenden Wochen-Notizen führen. Bestehende Wochen-Notizen werden nicht entsprechend aktualisiert.",
+    "formatting-locale": "Datums- und Zahlenformat"
   },
   "backup": {
     "automatic_backup": "Automatische Sicherung",
@@ -1823,5 +1831,23 @@
     "description": "Passe das Format des Datums und der Uhrzeit an, die über <shortcut /> oder die Symbolleiste eingefügt werden. Die verfügbaren Format-Tokens sind unter <doc>Day.js docs</doc> zu finden.",
     "format_string": "Format Zeichenfolge:",
     "formatted_time": "Formatiertes Datum/Uhrzeit:"
+  },
+  "multi_factor_authentication": {
+    "title": "Multi-Faktor-Authentifizierung",
+    "description": "Die Multi-Faktor-Authentifizierung (MFA) bietet Ihrem Konto eine zusätzliche Sicherheitsebene. Anstatt sich lediglich mit einem Passwort anzumelden, müssen bei der MFA ein oder mehrere zusätzliche Nachweise erbracht werden, um die Identität zu bestätigen. Auf diese Weise kann selbst bei Bekanntwerden des Passworts, ohne die zweite Information nicht auf Ihr Konto zugegriffen werden. Das ist so, als würden Sie ein zusätzliches Schloss an einer Tür anbringen, wodurch es für andere viel schwieriger wird, einzubrechen.<br><br>Befolgen Sie bitte die nachstehenden Anweisungen, um MFA zu aktivieren. Wenn Sie die Konfiguration nicht korrekt vornehmen, erfolgt die Anmeldung weiterhin nur mit dem Passwort.",
+    "mfa_enabled": "Aktiviere Multi-Faktor-Authentifizierung",
+    "mfa_method": "MFA Methode",
+    "electron_disabled": "Multi-Faktor-Authentifizierung wird aktuell nicht in der Desktop-Version unterstützt.",
+    "totp_title": "Zeitbasiertes Einmalpasswort (TOTP)",
+    "totp_description": "TOTP (Zeitbasiertes Einmalpasswort) ist eine Sicherheitsfunktion, die einen einzigartigen, temporären Code generiert, der sich alle 30 Sekunden ändert. Sie verwenden diesen Code zusammen mit Ihrem Passwort, um sich bei Ihrem Konto anzumelden, wodurch es für andere Personen wesentlich schwieriger wird, darauf unbefugt zuzugreifen.",
+    "totp_secret_title": "Generiere TOTP Geheimnis",
+    "totp_secret_generate": "Generiere TOTP Geheimnis",
+    "totp_secret_regenerate": "TOTP-Geheimnis neu generieren",
+    "no_totp_secret_warning": "Um TOTP zu aktivieren, muss zunächst ein TOTP Geheimnis generiert werden.",
+    "totp_secret_description_warning": "Nach der Generierung des TOTP Geheimnisses ist eine Neuanmeldung mit dem TOTP Geheimnis erforderlich.",
+    "totp_secret_generated": "TOTP Geheimnis generiert",
+    "totp_secret_warning": "Bitte speichere das TOTP Geheimnis an einem sicheren Ort. Es wird nicht noch einmal angezeigt.",
+    "totp_secret_regenerate_confirm": "Möchten Sie das TOTP-Geheimnis wirklich neu generieren? Dadurch werden das bisherige TOTP-Geheimnis und alle vorhandenen Wiederherstellungscodes ungültig.",
+    "recovery_keys_title": "Einmalige Wiederherstellungsschlüssel"
   }
 }
