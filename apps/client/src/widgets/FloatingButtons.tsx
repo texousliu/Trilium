@@ -94,6 +94,12 @@ const FLOATING_BUTTON_DEFINITIONS: FloatingButtonDefinition[] = [
         isEnabled: ({ note, noteContext }) =>
             ["mermaid", "canvas", "mindMap"].includes(note?.type ?? "")
             && note?.isContentAvailable() && noteContext.viewScope?.viewMode === "default"
+    },
+    {
+        component: ExportImageButtons,
+        isEnabled: ({ note, noteContext }) =>
+            ["mermaid", "mindMap"].includes(note?.type ?? "")
+            && note?.isContentAvailable() && noteContext?.viewScope?.viewMode === "default"
     }
 ];
 
@@ -348,6 +354,24 @@ function CopyImageReferenceButton({ note }: FloatingButtonContext) {
             <div ref={hiddenImageCopyRef} className="hidden-image-copy" style={{
                 position: "absolute" // Take out of the the hidden image from flexbox to prevent the layout being affected
             }} />
+        </>
+    )
+}
+
+function ExportImageButtons({ triggerEvent }: FloatingButtonContext) {
+    return (
+        <>
+            <FloatingButton
+                icon="bx bxs-file-image"
+                text={t("svg_export_button.button_title")}
+                onClick={() => triggerEvent("exportSvg")}
+            />
+
+            <FloatingButton
+                icon="bx bxs-file-png"
+                text={t("png_export_button.button_title")}
+                onClick={() => triggerEvent("exportPng")}
+            />
         </>
     )
 }
