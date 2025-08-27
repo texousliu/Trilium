@@ -49,6 +49,13 @@ const FLOATING_BUTTON_DEFINITIONS: FloatingButtonDefinition[] = [
             && (!note.isProtected || protected_session_holder.isProtectedSessionAvailable())
             && !options.is("databaseReadonly")
             && await noteContext?.isReadOnly()
+    },
+    {
+        component: ShowTocWidgetButton,
+        isEnabled: ({ note, noteContext }) => 
+            note.type === "text"
+            && noteContext?.viewScope?.viewMode === "default"
+            && !!noteContext.viewScope?.tocTemporarilyHidden
     }
 ];
 
@@ -91,6 +98,11 @@ export default function FloatingButtons() {
     });
     useTriliumEvent("readOnlyTemporarilyDisabled", ({ noteContext: eventNoteContext }) => {
         if (noteContext?.ntxId === eventNoteContext.ntxId) {
+            setRefreshCounter(refreshCounter + 1);
+        }
+    });
+    useTriliumEvent("reEvaluateTocWidgetVisibility", ({ noteId }) => {
+        if (noteId === note?.noteId) {
             setRefreshCounter(refreshCounter + 1);
         }
     });
@@ -165,6 +177,19 @@ function EditButton({ noteContext }: FloatingButtonContext) {
             if (noteContext.viewScope) {
                 noteContext.viewScope.readOnlyTemporarilyDisabled = true;
                 appContext.triggerEvent("readOnlyTemporarilyDisabled", { noteContext });
+            }
+        }}
+    />
+}
+
+function ShowTocWidgetButton({ noteContext }: FloatingButtonContext) {
+    return <ActionButton
+        text={t("show_toc_widget_button.show_toc")}
+        icon="bx bx-tn-toc"
+        onClick={() => {
+            if (noteContext?.viewScope && noteContext.noteId) {
+                noteContext.viewScope.tocTemporarilyHidden = false;
+                appContext.triggerEvent("showTocWidget", { noteId: noteContext.noteId });
             }
         }}
     />
