@@ -31,7 +31,7 @@ export default function JumpToNoteDialogComponent() {
         if (commandMode) {
             newMode = "commands";
             initialText = ">";            
-        } else if (Date.now() - lastOpenedTs <= KEEP_LAST_SEARCH_FOR_X_SECONDS * 1000 && actualText) {
+        } else if (Date.now() - lastOpenedTs <= KEEP_LAST_SEARCH_FOR_X_SECONDS * 1000 && actualText.current) {
             // if you open the Jump To dialog soon after using it previously, it can often mean that you
             // actually want to search for the same thing (e.g., you opened the wrong note at first try)
             // so we'll keep the content.
