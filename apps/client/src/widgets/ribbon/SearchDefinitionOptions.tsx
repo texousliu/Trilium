@@ -1,5 +1,3 @@
-import Dropdown from "../react/Dropdown";
-import ActionButton from "../react/ActionButton";
 import FormTextArea from "../react/FormTextArea";
 import NoteAutocomplete from "../react/NoteAutocomplete";
 import FormSelect from "../react/FormSelect";
@@ -14,6 +12,7 @@ import { t } from "../../services/i18n";
 import { useEffect, useMemo, useRef } from "preact/hooks";
 import appContext from "../../components/app_context";
 import server from "../../services/server";
+import HelpRemoveButtons from "../react/HelpRemoveButtons";
 
 export interface SearchOption {
   attributeName: string;
@@ -122,25 +121,18 @@ function SearchOption({ note, title, titleIcon, children, help, attributeName, a
         {title}
       </td>
       <td>{children}</td>
-      <td className="button-column">
-        {help && <>
-            <Dropdown buttonClassName="bx bx-help-circle icon-action" hideToggleArrow>{help}</Dropdown>
-            {" "}
-        </>}            
-        <ActionButton
-          icon="bx bx-x"
-          className="search-option-del"
-          text={t("abstract_search_option.remove_this_search_option")}
-          onClick={() => {
-            removeOwnedAttributesByNameOrType(note, attributeType, attributeName);
-            if (additionalAttributesToDelete) {
-              for (const { type, name } of additionalAttributesToDelete) {
-                removeOwnedAttributesByNameOrType(note, type, name);
-              }
+      <HelpRemoveButtons
+        help={help}
+        removeText={t("abstract_search_option.remove_this_search_option")}
+        onRemove={() => {
+          removeOwnedAttributesByNameOrType(note, attributeType, attributeName);
+          if (additionalAttributesToDelete) {
+            for (const { type, name } of additionalAttributesToDelete) {
+              removeOwnedAttributesByNameOrType(note, type, name);
             }
-          }}
-        />
-      </td>
+          }
+        }}
+      />
     </tr>
   )
 }
