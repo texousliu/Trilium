@@ -17,10 +17,6 @@ const TPL = /*html*/`
         }
     </style>
 
-    <button data-trigger-command="runActiveNote" class="execute-button floating-button btn" title="${t("code_buttons.execute_button_title")}">
-        <span class="bx bx-play"></span>
-    </button>
-
     <button class="trilium-api-docs-button floating-button btn" title="${t("code_buttons.trilium_api_docs_button_title")}">
         <span class="bx bx-help-circle"></span>
     </button>
@@ -38,7 +34,6 @@ interface SaveSqlConsoleResponse {
 export default class CodeButtonsWidget extends NoteContextAwareWidget {
 
     private $openTriliumApiDocsButton!: JQuery<HTMLElement>;
-    private $executeButton!: JQuery<HTMLElement>;
     private $saveToNoteButton!: JQuery<HTMLElement>;
 
     isEnabled() {
@@ -78,8 +73,6 @@ export default class CodeButtonsWidget extends NoteContextAwareWidget {
     }
 
     async refreshWithNote(note: FNote) {
-        this.$executeButton.toggle(note.mime.startsWith("application/javascript") || note.mime === "text/x-sqlite;schema=trilium");
-
         this.$saveToNoteButton.toggle(note.mime === "text/x-sqlite;schema=trilium" && note.isHiddenCompletely());
 
         this.$openTriliumApiDocsButton.toggle(note.mime.startsWith("application/javascript;env="));

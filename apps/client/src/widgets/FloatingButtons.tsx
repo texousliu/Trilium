@@ -61,6 +61,10 @@ const FLOATING_BUTTON_DEFINITIONS: FloatingButtonDefinition[] = [
         isEnabled: ({ note, noteContext }) => 
             note.type === "text" && noteContext?.viewScope?.viewMode === "default"
             && !!noteContext.viewScope?.highlightsListTemporarilyHidden
+    },
+    {
+        component: RunActiveNoteButton,
+        isEnabled: ({ note }) => note.mime.startsWith("application/javascript") || note.mime === "text/x-sqlite;schema=trilium"
     }
 ];
 
@@ -210,6 +214,14 @@ function ShowHighlightsListWidgetButton({ noteContext }: FloatingButtonContext) 
                 appContext.triggerEvent("showHighlightsListWidget", { noteId: noteContext.noteId });
             }
         }}
+    />
+}
+
+function RunActiveNoteButton() {
+    return <ActionButton
+        icon="bx bx-play"
+        text={t("code_buttons.execute_button_title")}
+        triggerCommand="runActiveNote"
     />
 }
 
