@@ -202,16 +202,9 @@ export function useNoteContext() {
         setNote(noteContext?.note);
     }, [ notePath ]);
 
-    useTriliumEvent("activeContextChanged", ({ noteContext }) => {
+    useTriliumEvents([ "setNoteContext", "activeContextChanged", "noteSwitchedAndActivated", "noteSwitched" ], ({ noteContext }) => {
         setNoteContext(noteContext);
         setNotePath(noteContext.notePath);        
-    });
-    useTriliumEvent("noteSwitchedAndActivated", ({ noteContext }) => {
-        setNoteContext(noteContext);
-    });
-    useTriliumEvent("noteSwitched", ({ notePath, noteContext }) => {
-        setNoteContext(noteContext);
-        setNotePath(notePath);
     });
     useTriliumEvent("frocaReloaded", () => {
         setNote(noteContext?.note);
