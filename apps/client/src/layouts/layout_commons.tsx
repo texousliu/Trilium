@@ -30,7 +30,7 @@ import NoteDetailWidget from "../widgets/note_detail.js";
 import NoteListWidget from "../widgets/note_list.js";
 import CallToActionDialog from "../widgets/dialogs/call_to_action.jsx";
 import NoteTitleWidget from "../widgets/note_title.jsx";
-import FormattingToolbar from "../widgets/ribbon/FormattingToolbar.js";
+import { PopupEditorFormattingToolbar } from "../widgets/ribbon/FormattingToolbar.js";
 
 export function applyModals(rootContainer: RootContainer) {
     rootContainer
@@ -63,7 +63,7 @@ export function applyModals(rootContainer: RootContainer) {
                     .cssBlock(".title-row > * { margin: 5px; }")
                     .child(<NoteIconWidget />)
                     .child(<NoteTitleWidget />))
-                .child(<FormattingToolbar />)
+                .child(<PopupEditorFormattingToolbar />)
                 .child(new PromotedAttributesWidget())
                 .child(new NoteDetailWidget())
                 .child(new NoteListWidget(true)))
