@@ -10,7 +10,7 @@ import { ParentComponent } from "./react/react_utils";
 import Component from "../components/component";
 import { VNode } from "preact";
 import attributes from "../services/attributes";
-import appContext from "../components/app_context";
+import appContext, { EventData, EventNames } from "../components/app_context";
 import protected_session_holder from "../services/protected_session_holder";
 import options from "../services/options";
 import { openInAppHelpFromUrl } from "../services/utils";
@@ -23,6 +23,8 @@ interface FloatingButtonContext {
     parentComponent: Component;
     note: FNote;    
     noteContext: NoteContext;
+    /** Shorthand for triggering an event from the parent component. The `ntxId` is automatically handled for convenience. */
+    triggerEvent<T extends EventNames>(name: T, data?: Omit<EventData<T>, "ntxId">): void;
 }
 
 interface FloatingButtonDefinition {
@@ -81,6 +83,10 @@ const FLOATING_BUTTON_DEFINITIONS: FloatingButtonDefinition[] = [
     {
         component: RelationMapButtons,
         isEnabled: ({ note }) => note.type === "relationMap"
+    },
+    {
+        component: GeoMapButtons,
+        isEnabled: ({ note }) => note?.getLabelValue("viewType") === "geoMap" && !note.hasLabel("readOnly")
     }
 ];
 
@@ -110,7 +116,13 @@ export default function FloatingButtons() {
         return {
             note,
             noteContext,
-            parentComponent
+            parentComponent,
+            triggerEvent<T extends EventNames>(name: T, data?: Omit<EventData<T>, "ntxId">) {
+                parentComponent.triggerEvent(name, {
+                    ntxId: noteContext.ntxId,
+                    ...data
+                } as EventData<T>);
+            }
         };
     }, [ note, noteContext, parentComponent ]);
 
@@ -266,36 +278,46 @@ function SaveToNoteButton({ note }: FloatingButtonContext) {
     />
 }
 
-function RelationMapButtons({ parentComponent, noteContext }: FloatingButtonContext) {
+function RelationMapButtons({ triggerEvent }: FloatingButtonContext) {
     return (
         <>
             <FloatingButton
                 icon="bx bx-folder-plus"
                 text={t("relation_map_buttons.create_child_note_title")}
-                onClick={() => parentComponent.triggerEvent("relationMapCreateChildNote", { ntxId: noteContext.ntxId })}
+                onClick={() => triggerEvent("relationMapCreateChildNote")}
             />
 
             <FloatingButton
                 icon="bx bx-crop"
                 text={t("relation_map_buttons.reset_pan_zoom_title")}
-                onClick={() => parentComponent.triggerEvent("relationMapResetPanZoom", { ntxId: noteContext.ntxId })}
+                onClick={() => triggerEvent("relationMapResetPanZoom")}
             />
 
             <div className="btn-group">
                 <FloatingButton
                     icon="bx bx-zoom-in"
                     text={t("relation_map_buttons.zoom_in_title")}
-                    onClick={() => parentComponent.triggerEvent("relationMapResetZoomIn", { ntxId: noteContext.ntxId })}
+                    onClick={() => triggerEvent("relationMapResetZoomIn")}
                 />
 
                 <FloatingButton
                     icon="bx bx-zoom-out"
                     text={t("relation_map_buttons.zoom_out_title")}
-                    onClick={() => parentComponent.triggerEvent("relationMapResetZoomOut", { ntxId: noteContext.ntxId })}
+                    onClick={() => triggerEvent("relationMapResetZoomOut")}
                 />
             </div>
         </>
     )
+}
+
+function GeoMapButtons({ triggerEvent }) {
+    return (
+        <FloatingButton
+            icon="bx bx-plus-circle"
+            text={t("geo-map.create-child-note-title")}
+            onClick={() => triggerEvent("geoMapCreateChildNote")}
+        />
+    );
 }
 
 function FloatingButton({ className, ...props }: ActionButtonProps) {

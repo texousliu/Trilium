@@ -92,3 +92,9 @@
     border: 1px solid var(--button-border-color);
 }
 /* #endregion */
+
+/* #region Geo map buttons */
+.leaflet-pane {
+    z-index: 50;
+}
+/* #endregion */
