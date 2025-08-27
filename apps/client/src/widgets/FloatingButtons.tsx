@@ -4,12 +4,16 @@ import Button from "./react/Button";
 import ActionButton from "./react/ActionButton";
 import FNote from "../entities/fnote";
 import NoteContext from "../components/note_context";
-import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useTriliumEvent, useTriliumOption, useTriliumOptionBool } from "./react/hooks";
+import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEvent, useTriliumEvents, useTriliumOption, useTriliumOptionBool } from "./react/hooks";
 import { useContext, useEffect, useMemo, useState } from "preact/hooks";
 import { ParentComponent } from "./react/react_utils";
 import Component from "../components/component";
 import { VNode } from "preact";
 import attributes from "../services/attributes";
+import appContext from "../components/app_context";
+import protected_session_holder from "../services/protected_session_holder";
+import options from "../services/options";
+import { AttributeRow } from "../services/load_results";
 
 interface FloatingButtonContext {
     parentComponent: Component;
@@ -19,7 +23,7 @@ interface FloatingButtonContext {
 
 interface FloatingButtonDefinition {
     component: (context: FloatingButtonContext) => VNode;    
-    isEnabled: (context: FloatingButtonContext) => boolean;
+    isEnabled: (context: FloatingButtonContext) => boolean | Promise<boolean>;
 }
 
 const FLOATING_BUTTON_DEFINITIONS: FloatingButtonDefinition[] = [
@@ -37,8 +41,26 @@ const FLOATING_BUTTON_DEFINITIONS: FloatingButtonDefinition[] = [
             (note.type === "mermaid" || note.getLabelValue("viewType") === "geoMap")
             && note.isContentAvailable()
             && noteContext.viewScope?.viewMode === "default"
+    },
+    {
+        component: EditButton,
+        isEnabled: async ({ note, noteContext }) =>
+            noteContext.viewScope?.viewMode === "default"
+            && (!note.isProtected || protected_session_holder.isProtectedSessionAvailable())
+            && !options.is("databaseReadonly")
+            && await noteContext?.isReadOnly()
     }
 ];
+
+async function getFloatingButtonDefinitions(context: FloatingButtonContext) {
+    const defs: FloatingButtonDefinition[] = [];
+    for (const def of FLOATING_BUTTON_DEFINITIONS) {
+        if (await def.isEnabled(context)) {
+            defs.push(def);
+        }
+    }
+    return defs;
+}
 
 /*
  * Note:
@@ -64,15 +86,23 @@ export default function FloatingButtons() {
     const [ refreshCounter, setRefreshCounter ] = useState(0);
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {        
         if (loadResults.getAttributeRows().find(attrRow => attributes.isAffecting(attrRow, note))) {
-            setRefreshCounter(refreshCounter+1);
+            setRefreshCounter(refreshCounter + 1);
         }
     });
-
-    const definitions = useMemo<FloatingButtonDefinition[]>(() => {    
-        if (!context) return [];
-        return FLOATING_BUTTON_DEFINITIONS.filter(def => def.isEnabled(context));
-    }, [ context, refreshCounter ]);
+    useTriliumEvent("readOnlyTemporarilyDisabled", ({ noteContext: eventNoteContext }) => {
+        if (noteContext?.ntxId === eventNoteContext.ntxId) {
+            setRefreshCounter(refreshCounter + 1);
+        }
+    });
     
+    // Manage the list of items
+    const noteMime = useNoteProperty(note, "mime");
+    const [ definitions, setDefinitions ] = useState<FloatingButtonDefinition[]>([]);
+    useEffect(() => {    
+        if (!context) return;
+        getFloatingButtonDefinitions(context).then(setDefinitions);
+    }, [ context, refreshCounter, noteMime ]);
+
     return (
         <div className="floating-buttons no-print">
             <div className="floating-buttons-children">
@@ -112,6 +142,31 @@ function ToggleReadOnlyButton({ note }: FloatingButtonContext) {
         text={isReadOnly ? t("toggle_read_only_button.unlock-editing") : t("toggle_read_only_button.lock-editing")}
         icon={isReadOnly ? "bx bx-lock-open-alt" : "bx bx-lock-alt"}
         onClick={() => setReadOnly(!isReadOnly)}
+    />
+}
+
+function EditButton({ noteContext }: FloatingButtonContext) {
+    const [ animationClass, setAnimationClass ] = useState("");
+
+    // make the edit button stand out on the first display, otherwise
+    // it's difficult to notice that the note is readonly
+    useEffect(() => {
+        setAnimationClass("bx-tada bx-lg");
+        setTimeout(() => {
+            setAnimationClass("");
+        }, 1700);
+    }, []);
+
+    return <ActionButton
+        text={t("edit_button.edit_this_note")}
+        icon="bx bx-pencil"
+        className={animationClass}
+        onClick={() => {
+            if (noteContext.viewScope) {
+                noteContext.viewScope.readOnlyTemporarilyDisabled = true;
+                appContext.triggerEvent("readOnlyTemporarilyDisabled", { noteContext });
+            }
+        }}
     />
 }
 
