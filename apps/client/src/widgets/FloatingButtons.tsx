@@ -53,9 +53,14 @@ const FLOATING_BUTTON_DEFINITIONS: FloatingButtonDefinition[] = [
     {
         component: ShowTocWidgetButton,
         isEnabled: ({ note, noteContext }) => 
-            note.type === "text"
-            && noteContext?.viewScope?.viewMode === "default"
+            note.type === "text" && noteContext?.viewScope?.viewMode === "default"
             && !!noteContext.viewScope?.tocTemporarilyHidden
+    },
+    {
+        component: ShowHighlightsListWidgetButton,
+        isEnabled: ({ note, noteContext }) => 
+            note.type === "text" && noteContext?.viewScope?.viewMode === "default"
+            && !!noteContext.viewScope?.highlightsListTemporarilyHidden
     }
 ];
 
@@ -101,7 +106,7 @@ export default function FloatingButtons() {
             setRefreshCounter(refreshCounter + 1);
         }
     });
-    useTriliumEvent("reEvaluateTocWidgetVisibility", ({ noteId }) => {
+    useTriliumEvents(["reEvaluateTocWidgetVisibility", "reEvaluateHighlightsListWidgetVisibility"], ({ noteId }) => {
         if (noteId === note?.noteId) {
             setRefreshCounter(refreshCounter + 1);
         }
@@ -190,6 +195,19 @@ function ShowTocWidgetButton({ noteContext }: FloatingButtonContext) {
             if (noteContext?.viewScope && noteContext.noteId) {
                 noteContext.viewScope.tocTemporarilyHidden = false;
                 appContext.triggerEvent("showTocWidget", { noteId: noteContext.noteId });
+            }
+        }}
+    />
+}
+
+function ShowHighlightsListWidgetButton({ noteContext }: FloatingButtonContext) {
+    return <ActionButton
+        text={t("show_highlights_list_widget_button.show_highlights_list")}
+        icon="bx bx-bookmarks"
+        onClick={() => {
+            if (noteContext?.viewScope && noteContext.noteId) {
+                noteContext.viewScope.highlightsListTemporarilyHidden = false;
+                appContext.triggerEvent("showHighlightsListWidget", { noteId: noteContext.noteId });
             }
         }}
     />
