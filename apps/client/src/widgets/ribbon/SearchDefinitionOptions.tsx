@@ -21,7 +21,7 @@ export interface SearchOption {
   icon: string;
   label: string;
   tooltip?: string;
-  component?: (props: SearchOptionProps) => VNode;
+  component: (props: SearchOptionProps) => VNode;
   defaultValue?: string;
   additionalAttributesToDelete?: { type: "label" | "relation", name: string }[];
 }

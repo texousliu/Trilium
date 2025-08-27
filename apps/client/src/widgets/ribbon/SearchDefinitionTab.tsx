@@ -95,15 +95,16 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
             </tr>
             <tbody className="search-options">
               {searchOptions?.activeOptions.map(({ attributeType, attributeName, component, additionalAttributesToDelete, defaultValue }) => {
-                return component?.({
-                  attributeName,
-                  attributeType,
-                  note,
-                  refreshResults,
-                  error,
-                  additionalAttributesToDelete,
-                  defaultValue
-                });
+                const Component = component;
+                return <Component
+                  attributeName={attributeName}
+                  attributeType={attributeType}
+                  note={note}
+                  refreshResults={refreshResults}
+                  error={error}
+                  additionalAttributesToDelete={additionalAttributesToDelete}
+                  defaultValue={defaultValue}
+                />;
               })}
             </tbody>
             <BulkActionsList note={note} />
