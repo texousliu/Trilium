@@ -614,6 +614,14 @@ div.quick-search .search-button.show {
     border-radius: 4px;
 }
 
+/* Highlighted search terms */
+:root .quick-search .search-result-title b,
+:root .quick-search .search-result-content b,
+:root .quick-search .search-result-attributes b {
+    color: var(--quick-search-result-highlight-color);
+    font-weight: 600;
+}
+
 /* Divider line */
 .quick-search .dropdown-item::after {
     display: none;
