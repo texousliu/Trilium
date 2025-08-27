@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { t } from "../../services/i18n";
-import { useNoteContext, useStaticTooltip, useTooltip, useTriliumEvent, useTriliumEvents } from "../react/hooks";
+import { useNoteContext, useNoteProperty, useStaticTooltip, useTooltip, useTriliumEvent, useTriliumEvents } from "../react/hooks";
 import "./style.css";
 import { VNode } from "preact";
 import BasicPropertiesTab from "./BasicPropertiesTab";
@@ -161,9 +161,12 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
 
 export default function Ribbon() {
     const { note, ntxId, hoistedNoteId, notePath, noteContext, componentId } = useNoteContext();
+    const noteType = useNoteProperty(note, "type");
     const titleContext: TitleContext = { note };
     const [ activeTabIndex, setActiveTabIndex ] = useState<number | undefined>();
-    const filteredTabs = useMemo(() => TAB_CONFIGURATION.filter(tab => typeof tab.show === "boolean" ? tab.show : tab.show?.(titleContext)), [ titleContext, note ]);
+    const filteredTabs = useMemo(
+        () => TAB_CONFIGURATION.filter(tab => typeof tab.show === "boolean" ? tab.show : tab.show?.(titleContext)),
+        [ titleContext, note, noteType ]);
 
     // Automatically activate the first ribbon tab that needs to be activated whenever a note changes.
     useEffect(() => {
