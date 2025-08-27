@@ -119,7 +119,38 @@ class NoteContentFulltextExp extends Expression {
             return; // Content too large or invalid
         }
         content = processedContent;
+        
+        // Check if this is a large note that needs optimized search strategy
+        const wordCount = content.split(/\s+/).length;
+        const isLargeNote = wordCount > FUZZY_SEARCH_CONFIG.LARGE_NOTE_THRESHOLD;
+        const isFuzzyOperator = this.operator === "~=" || this.operator === "~*";
+        
+        // For large notes with fuzzy operators, switch to optimized strategy
+        if (isLargeNote && isFuzzyOperator) {
+            const note = becca.notes[noteId];
+            const title = note.title || "";
+            
+            log.info(`Note ${noteId} has ${wordCount} words - using optimized search (fuzzy on title, exact on content)`);
+            
+            // Perform fuzzy search on title
+            const titleMatches = this.fuzzyMatchToken(normalizeSearchText(this.tokens[0]), normalizeSearchText(title));
+            
+            // Perform exact match on content for all tokens
+            const contentMatches = this.tokens.every(token => {
+                const normalizedToken = normalizeSearchText(token);
+                const normalizedContent = normalizeSearchText(content);
+                return normalizedContent.includes(normalizedToken);
+            });
+            
+            // Add to results if either title matches with fuzzy or content matches exactly
+            if (titleMatches || contentMatches) {
+                resultNoteSet.add(becca.notes[noteId]);
+            }
+            
+            return content;
+        }
 
+        // Standard search logic for non-large notes or non-fuzzy operators
         if (this.tokens.length === 1) {
             const [token] = this.tokens;
 

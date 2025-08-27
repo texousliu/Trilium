@@ -14,6 +14,8 @@ export const FUZZY_SEARCH_CONFIG = {
     MAX_EDIT_DISTANCE: 2,
     // Maximum proximity distance for phrase matching (in words)
     MAX_PHRASE_PROXIMITY: 10,
+    // Large note threshold - above this, use optimized search strategy
+    LARGE_NOTE_THRESHOLD: 50000, // 50K words - switch to title-only fuzzy for performance
     // Absolute hard limits for extreme cases - only to prevent system crashes
     ABSOLUTE_MAX_CONTENT_SIZE: 100 * 1024 * 1024, // 100MB - extreme upper limit to prevent OOM
     ABSOLUTE_MAX_WORD_COUNT: 2000000, // 2M words - extreme upper limit for word processing
