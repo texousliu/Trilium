@@ -1,8 +1,8 @@
 import { t } from "i18next";
 import "./FloatingButtons.css";
 import Button from "./react/Button";
-import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEvent, useTriliumEvents, useTriliumOption, useTriliumOptionBool } from "./react/hooks";
-import { useContext, useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useNoteContext, useNoteProperty, useTriliumEvent, useTriliumEvents } from "./react/hooks";
+import { useContext, useEffect, useMemo, useState } from "preact/hooks";
 import { ParentComponent } from "./react/react_utils";
 import attributes from "../services/attributes";
 import { EventData, EventNames } from "../components/app_context";

@@ -5,7 +5,7 @@ import NoteContext from "../components/note_context";
 import FNote from "../entities/fnote";
 import ActionButton, { ActionButtonProps } from "./react/ActionButton";
 import { useNoteLabelBoolean, useTriliumOption } from "./react/hooks";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { createImageSrcUrl, openInAppHelpFromUrl } from "../services/utils";
 import server from "../services/server";
 import { SaveSqlConsoleResponse } from "@triliumnext/commons";
@@ -15,6 +15,7 @@ import { copyImageReferenceToClipboard } from "../services/image";
 import tree from "../services/tree";
 import protected_session_holder from "../services/protected_session_holder";
 import options from "../services/options";
+import { getHelpUrlForNote } from "../services/in_app_help";
 
 export interface FloatingButtonDefinition {
     component: (context: FloatingButtonContext) => VNode;
@@ -104,6 +105,10 @@ export const FLOATING_BUTTON_DEFINITIONS: FloatingButtonDefinition[] = [
         isEnabled: ({ note, noteContext }) =>
             ["mermaid", "mindMap"].includes(note?.type ?? "")
             && note?.isContentAvailable() && noteContext?.viewScope?.viewMode === "default"
+    },
+    {
+        component: InAppHelpButton,
+        isEnabled: ({ note }) => !!getHelpUrlForNote(note)
     }
 ];
 
@@ -302,5 +307,17 @@ function ExportImageButtons({ triggerEvent }: FloatingButtonContext) {
                 onClick={() => triggerEvent("exportPng")}
             />
         </>
+    )
+}
+
+function InAppHelpButton({ note }: FloatingButtonContext) {
+    const helpUrl = getHelpUrlForNote(note);
+
+    return (
+        <FloatingButton
+            icon="bx bx-help-circle"
+            text={t("help-button.title")}
+            onClick={() => helpUrl && openInAppHelpFromUrl(helpUrl)}
+        />
     )
 }
