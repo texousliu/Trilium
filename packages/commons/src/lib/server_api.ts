@@ -206,3 +206,5 @@ export interface CloneResponse {
 export interface ConvertToAttachmentResponse {
     attachment: AttachmentRow;
 }
+
+export type SaveSqlConsoleResponse = CloneResponse;

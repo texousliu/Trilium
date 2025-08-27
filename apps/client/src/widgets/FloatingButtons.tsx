@@ -13,8 +13,11 @@ import attributes from "../services/attributes";
 import appContext from "../components/app_context";
 import protected_session_holder from "../services/protected_session_holder";
 import options from "../services/options";
-import { AttributeRow } from "../services/load_results";
 import { openInAppHelpFromUrl } from "../services/utils";
+import toast from "../services/toast";
+import server from "../services/server";
+import { SaveSqlConsoleResponse } from "@triliumnext/commons";
+import tree from "../services/tree";
 
 interface FloatingButtonContext {
     parentComponent: Component;
@@ -70,6 +73,10 @@ const FLOATING_BUTTON_DEFINITIONS: FloatingButtonDefinition[] = [
     {
         component: OpenTriliumApiDocsButton,
         isEnabled: ({ note }) => note.mime.startsWith("application/javascript;env=")
+    },
+    {
+        component: SaveToNoteButton,
+        isEnabled: ({ note }) => note.mime === "text/x-sqlite;schema=trilium" && note.isHiddenCompletely()
     }
 ];
 
@@ -235,6 +242,23 @@ function OpenTriliumApiDocsButton({ note }: FloatingButtonContext) {
         icon="bx bx-help-circle"
         text={t("code_buttons.trilium_api_docs_button_title")}
         onClick={() => openInAppHelpFromUrl(note.mime.endsWith("frontend") ? "Q2z6av6JZVWm" : "MEtfsqa5VwNi")}
+    />
+}
+
+function SaveToNoteButton({ note }: FloatingButtonContext) {
+    return <ActionButton
+        icon="bx bx-save"
+        text={t("code_buttons.save_to_note_button_title")}
+        onClick={async (e) => {
+            e.preventDefault();
+            const { notePath } = await server.post<SaveSqlConsoleResponse>("special-notes/save-sql-console", { sqlConsoleNoteId: note.noteId });
+            if (notePath) {
+                toast.showMessage(t("code_buttons.sql_console_saved_message", { "note_path": await tree.getNotePathTitle(notePath) }));
+                // TODO: This hangs the navigation, for some reason.
+                //await ws.waitForMaxKnownEntityChangeId();
+                await appContext.tabManager.getActiveContext()?.setNote(notePath);
+            }
+        }}
     />
 }
 

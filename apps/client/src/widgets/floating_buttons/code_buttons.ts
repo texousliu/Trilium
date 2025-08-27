@@ -17,15 +17,9 @@ const TPL = /*html*/`
         }
     </style>
 
-    <button class="save-to-note-button floating-button btn" title="${t("code_buttons.save_to_note_button_title")}">
-        <span class="bx bx-save"></span>
+    <button class="save-to-note-button floating-button btn" title="${}">
     </button>
 </div>`;
-
-// TODO: Deduplicate with server.
-interface SaveSqlConsoleResponse {
-    notePath: string;
-}
 
 export default class CodeButtonsWidget extends NoteContextAwareWidget {
 
@@ -42,13 +36,7 @@ export default class CodeButtonsWidget extends NoteContextAwareWidget {
         this.$executeButton = this.$widget.find(".execute-button");
         this.$saveToNoteButton = this.$widget.find(".save-to-note-button");
         this.$saveToNoteButton.on("click", async () => {
-            const { notePath } = await server.post<SaveSqlConsoleResponse>("special-notes/save-sql-console", { sqlConsoleNoteId: this.noteId });
 
-            await ws.waitForMaxKnownEntityChangeId();
-
-            await appContext.tabManager.getActiveContext()?.setNote(notePath);
-
-            toastService.showMessage(t("code_buttons.sql_console_saved_message", { notePath: await treeService.getNotePathTitle(notePath) }));
         });
 
         keyboardActionService.updateDisplayedShortcuts(this.$widget);
@@ -58,13 +46,4 @@ export default class CodeButtonsWidget extends NoteContextAwareWidget {
         super.doRender();
     }
 
-    async refreshWithNote(note: FNote) {
-        this.$saveToNoteButton.toggle(note.mime === "text/x-sqlite;schema=trilium" && note.isHiddenCompletely());
-    }
-
-    async noteTypeMimeChangedEvent({ noteId }: EventData<"noteTypeMimeChanged">) {
-        if (this.isNote(noteId)) {
-            await this.refresh();
-        }
-    }
 }
