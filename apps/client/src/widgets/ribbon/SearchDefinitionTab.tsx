@@ -34,7 +34,7 @@ export default function SearchDefinitionTab({ note, ntxId }: TabContext) {
 
     for (const searchOption of SEARCH_OPTIONS) {
       const attr = note.getAttribute(searchOption.attributeType, searchOption.attributeName);      
-      if (attr && searchOption.component) {
+      if (attr) {
         activeOptions.push(searchOption);
       } else {
         availableOptions.push(searchOption);

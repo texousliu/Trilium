@@ -54,7 +54,8 @@ export default function FormList({ children, onSelect, style, fullHeight }: Form
                     ...builtinStyles,
                     position: "relative",
                 }} onClick={(e) => {
-                    const value = (e.target as HTMLElement).closest("a.dropdown-item")?.dataset?.value;
+                    const dropdownItem = (e.target as HTMLElement).closest(".dropdown-item") as HTMLElement | null;
+                    const value = dropdownItem?.dataset?.value;
                     if (value && onSelect) {
                         onSelect(value);
                     }
