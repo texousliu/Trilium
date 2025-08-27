@@ -105,9 +105,6 @@
 .basic-properties-widget > * {
     margin-top: 9px;
     margin-bottom: 2px;
-}
-
-.basic-properties-widget > * > :last-child {
     margin-right: 30px;
 }
 
