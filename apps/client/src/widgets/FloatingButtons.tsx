@@ -77,6 +77,10 @@ const FLOATING_BUTTON_DEFINITIONS: FloatingButtonDefinition[] = [
     {
         component: SaveToNoteButton,
         isEnabled: ({ note }) => note.mime === "text/x-sqlite;schema=trilium" && note.isHiddenCompletely()
+    },
+    {
+        component: RelationMapButtons,
+        isEnabled: ({ note }) => note.type === "relationMap"
     }
 ];
 
@@ -260,6 +264,38 @@ function SaveToNoteButton({ note }: FloatingButtonContext) {
             }
         }}
     />
+}
+
+function RelationMapButtons({ parentComponent, noteContext }: FloatingButtonContext) {
+    return (
+        <>
+            <ActionButton
+                icon="bx bx-folder-plus"
+                text={t("relation_map_buttons.create_child_note_title")}
+                onClick={() => parentComponent.triggerEvent("relationMapCreateChildNote", { ntxId: noteContext.ntxId })}
+            />
+
+            <ActionButton
+                icon="bx bx-crop"
+                text={t("relation_map_buttons.reset_pan_zoom_title")}
+                onClick={() => parentComponent.triggerEvent("relationMapResetPanZoom", { ntxId: noteContext.ntxId })}
+            />
+
+            <div className="btn-group">
+                <ActionButton
+                    icon="bx bx-zoom-in"
+                    text={t("relation_map_buttons.zoom_in_title")}
+                    onClick={() => parentComponent.triggerEvent("relationMapResetZoomIn", { ntxId: noteContext.ntxId })}
+                />
+
+                <ActionButton
+                    icon="bx bx-zoom-out"
+                    text={t("relation_map_buttons.zoom_out_title")}
+                    onClick={() => parentComponent.triggerEvent("relationMapResetZoomOut", { ntxId: noteContext.ntxId })}
+                />
+            </div>
+        </>
+    )
 }
 
 /**
