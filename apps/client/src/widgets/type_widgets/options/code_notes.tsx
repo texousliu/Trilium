@@ -145,7 +145,7 @@ function CodeMimeTypes() {
             result[initial].push(mimeType);
         }
         return result;
-    }, []);  
+    }, [ codeNotesMimeTypes ]);  
 
     return (
         <OptionsSection title={t("code_mime_types.title")}>

@@ -102,7 +102,7 @@ export function useTriliumOption(name: OptionNames, needsRefresh?: boolean): [st
             const newValue = options.get(name);
             setValue(newValue);
         }
-     }, [ name ]));
+     }, [ name, setValue ]));
 
     useDebugValue(name);
 
