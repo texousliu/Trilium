@@ -118,18 +118,25 @@ function DateSettings() {
 }
 
 function ContentLanguages() {
-    const locales = useMemo(() => getAvailableLocales(), []);
-    const [ languages, setLanguages ] = useTriliumOptionJson<string[]>("languages");
-
     return (
         <OptionsSection title={t("content_language.title")}>
             <FormText>{t("content_language.description")}</FormText>
 
-            <CheckboxList
-                values={locales}
-                keyProperty="id" titleProperty="name"
-                currentValue={languages} onChange={setLanguages}
-            />
+            <ContentLanguagesList />
         </OptionsSection>
+    );
+}
+
+export function ContentLanguagesList() {
+    const locales = useMemo(() => getAvailableLocales(), []);
+    const [ languages, setLanguages ] = useTriliumOptionJson<string[]>("languages");
+
+    return (
+        <CheckboxList
+            values={locales}
+            keyProperty="id" titleProperty="name"
+            currentValue={languages} onChange={setLanguages}
+            columnWidth="300px"
+        />
     );
 }

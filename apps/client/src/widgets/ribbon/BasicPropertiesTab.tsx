@@ -15,11 +15,11 @@ import FormDropdownList from "../react/FormDropdownList";
 import toast from "../../services/toast";
 import branches from "../../services/branches";
 import sync from "../../services/sync";
-import appContext from "../../components/app_context";
 import HelpButton from "../react/HelpButton";
 import { TabContext } from "./ribbon-interface";
 import Modal from "../react/Modal";
 import { CodeMimeTypesList } from "../type_widgets/options/code_notes";
+import { ContentLanguagesList } from "../type_widgets/options/i18n";
 
 export default function BasicPropertiesTab({ note }: TabContext) {
     return (
@@ -292,6 +292,7 @@ function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
     };
 
     const [ currentNoteLanguage, setCurrentNoteLanguage ] = useNoteLabel(note, "language");
+    const [ modalShown, setModalShown ] = useState(false);
 
     const locales = useMemo(() => {
         const enabledLanguages = JSON.parse(languages ?? "[]") as string[];
@@ -348,14 +349,20 @@ function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
                 })}
 
                 <FormListItem
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        appContext.tabManager.openContextWithNote("_optionsLocalization", { activate: true });
-                    }}
+                    onClick={() => setModalShown(true)}
                 >{t("note_language.configure-languages")}</FormListItem>           
             </Dropdown>
 
             <HelpButton helpPage="B0lcI9xz1r8K" style={{ marginLeft: "4px" }} />
+
+            <Modal
+                className="content-languages-modal"
+                title={t("content_language.title")}
+                show={modalShown} onHidden={() => setModalShown(false)}
+                size="lg" scrollable
+            >
+                <ContentLanguagesList />
+            </Modal>
         </div>
     )
 }
