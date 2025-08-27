@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { MutableRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "preact/hooks";
 import { AttributeEditor as CKEditorAttributeEditor, MentionFeed, ModelElement, ModelNode, ModelPosition } from "@triliumnext/ckeditor5";
 import { t } from "../../../services/i18n";
 import server from "../../../services/server";
@@ -15,7 +15,7 @@ import { escapeQuotes, getErrorMessage } from "../../../services/utils";
 import link from "../../../services/link";
 import froca from "../../../services/froca";
 import contextMenu from "../../../menus/context_menu";
-import type { CommandData, CommandListenerData, FilteredCommandNames } from "../../../components/app_context";
+import type { CommandData, FilteredCommandNames } from "../../../components/app_context";
 import { AttributeType } from "@triliumnext/commons";
 import attributes from "../../../services/attributes";
 import note_create from "../../../services/note_create";
@@ -75,6 +75,7 @@ const mentionSetup: MentionFeed[] = [
 
 
 interface AttributeEditorProps {
+    api: MutableRef<AttributeEditorImperativeHandlers | null>;
     note: FNote;
     componentId: string;
     notePath?: string | null;
@@ -82,7 +83,13 @@ interface AttributeEditorProps {
     hidden?: boolean;
 }
 
-export default function AttributeEditor({ note, componentId, notePath, ntxId, hidden }: AttributeEditorProps) {
+export interface AttributeEditorImperativeHandlers {
+    save: () => Promise<void>;
+    refresh: () => void;
+    renderOwnedAttributes: (ownedAttributes: FAttribute[]) => Promise<void>;
+}
+
+export default function AttributeEditor({ api, note, componentId, notePath, ntxId, hidden }: AttributeEditorProps) {
     const [ currentValue, setCurrentValue ] = useState("");
     const [ state, setState ] = useState<"normal" | "showHelpTooltip" | "showAttributeDetail">();
     const [ error, setError ] = useState<unknown>();
@@ -255,14 +262,7 @@ export default function AttributeEditor({ note, componentId, notePath, ntxId, hi
 
             return result?.note?.getBestNotePathString();
         }   
-    }), [ notePath ]));
-
-    // Interaction with the attribute editor.
-    useLegacyImperativeHandlers(useMemo(() => ({
-        saveAttributesCommand: save,
-        reloadAttributesCommand: refresh,
-        updateAttributeListCommand: ({ attributes }: CommandListenerData<"updateAttributeList">) => renderOwnedAttributes(attributes as FAttribute[], false)
-    }), []));
+    }), [ notePath ]));    
 
     // Keyboard shortcuts
     useTriliumEvent("addNewLabel", ({ ntxId: eventNtxId }) => {
@@ -273,6 +273,13 @@ export default function AttributeEditor({ note, componentId, notePath, ntxId, hi
         if (eventNtxId !== ntxId) return;
         handleAddNewAttributeCommand("addNewRelation");
     });
+
+    // Imperative API
+    useImperativeHandle(api, () => ({
+        save,
+        refresh,
+        renderOwnedAttributes: (attributes) => renderOwnedAttributes(attributes as FAttribute[], false)
+    }), [ save, refresh, renderOwnedAttributes ]);
     
     return (
         <>
