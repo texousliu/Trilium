@@ -281,11 +281,6 @@ class NoteContentFulltextExp extends Expression {
             return false;
         }
         
-        // Warn about large word counts but still attempt matching
-        if (words.length > FUZZY_SEARCH_CONFIG.PERFORMANCE_WARNING_WORDS) {
-            console.info(`Large word count for phrase matching: ${words.length} words - may take longer but will attempt full matching`);
-        }
-        
         // Find positions of each token
         const tokenPositions: number[][] = this.tokens.map(token => {
             const normalizedToken = normalizeSearchText(token);
