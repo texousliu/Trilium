@@ -1,7 +1,7 @@
 import { t } from "i18next";
 import "./FloatingButtons.css";
 import Button from "./react/Button";
-import ActionButton from "./react/ActionButton";
+import ActionButton, { ActionButtonProps } from "./react/ActionButton";
 import FNote from "../entities/fnote";
 import NoteContext from "../components/note_context";
 import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useTriliumEvent, useTriliumEvents, useTriliumOption, useTriliumOptionBool } from "./react/hooks";
@@ -154,7 +154,7 @@ export default function FloatingButtons() {
 }
 
 function RefreshBackendLogButton({ parentComponent, noteContext }: FloatingButtonContext) {
-    return <ActionButton
+    return <FloatingButton
         text={t("backend_log.refresh")}
         icon="bx bx-refresh"
         onClick={() => parentComponent.triggerEvent("refreshData", { ntxId: noteContext.ntxId })}
@@ -165,7 +165,7 @@ function SwitchSplitOrientationButton({ }: FloatingButtonContext) {
     const [ splitEditorOrientation, setSplitEditorOrientation ] = useTriliumOption("splitEditorOrientation");
     const upcomingOrientation = splitEditorOrientation === "horizontal" ? "vertical" : "horizontal";
 
-    return <ActionButton
+    return <FloatingButton
         text={upcomingOrientation === "vertical" ? t("switch_layout_button.title_vertical") : t("switch_layout_button.title_horizontal")}
         icon={upcomingOrientation === "vertical" ? "bx bxs-dock-bottom" : "bx bxs-dock-left"}        
         onClick={() => setSplitEditorOrientation(upcomingOrientation)}
@@ -175,7 +175,7 @@ function SwitchSplitOrientationButton({ }: FloatingButtonContext) {
 function ToggleReadOnlyButton({ note }: FloatingButtonContext) {
     const [ isReadOnly, setReadOnly ] = useNoteLabelBoolean(note, "readOnly");
 
-    return <ActionButton
+    return <FloatingButton
         text={isReadOnly ? t("toggle_read_only_button.unlock-editing") : t("toggle_read_only_button.lock-editing")}
         icon={isReadOnly ? "bx bx-lock-open-alt" : "bx bx-lock-alt"}
         onClick={() => setReadOnly(!isReadOnly)}
@@ -194,7 +194,7 @@ function EditButton({ noteContext }: FloatingButtonContext) {
         }, 1700);
     }, []);
 
-    return <ActionButton
+    return <FloatingButton
         text={t("edit_button.edit_this_note")}
         icon="bx bx-pencil"
         className={animationClass}
@@ -208,7 +208,7 @@ function EditButton({ noteContext }: FloatingButtonContext) {
 }
 
 function ShowTocWidgetButton({ noteContext }: FloatingButtonContext) {
-    return <ActionButton
+    return <FloatingButton
         text={t("show_toc_widget_button.show_toc")}
         icon="bx bx-tn-toc"
         onClick={() => {
@@ -221,7 +221,7 @@ function ShowTocWidgetButton({ noteContext }: FloatingButtonContext) {
 }
 
 function ShowHighlightsListWidgetButton({ noteContext }: FloatingButtonContext) {
-    return <ActionButton
+    return <FloatingButton
         text={t("show_highlights_list_widget_button.show_highlights_list")}
         icon="bx bx-bookmarks"
         onClick={() => {
@@ -234,7 +234,7 @@ function ShowHighlightsListWidgetButton({ noteContext }: FloatingButtonContext) 
 }
 
 function RunActiveNoteButton() {
-    return <ActionButton
+    return <FloatingButton
         icon="bx bx-play"
         text={t("code_buttons.execute_button_title")}
         triggerCommand="runActiveNote"
@@ -242,7 +242,7 @@ function RunActiveNoteButton() {
 }
 
 function OpenTriliumApiDocsButton({ note }: FloatingButtonContext) {
-    return <ActionButton
+    return <FloatingButton
         icon="bx bx-help-circle"
         text={t("code_buttons.trilium_api_docs_button_title")}
         onClick={() => openInAppHelpFromUrl(note.mime.endsWith("frontend") ? "Q2z6av6JZVWm" : "MEtfsqa5VwNi")}
@@ -250,7 +250,7 @@ function OpenTriliumApiDocsButton({ note }: FloatingButtonContext) {
 }
 
 function SaveToNoteButton({ note }: FloatingButtonContext) {
-    return <ActionButton
+    return <FloatingButton
         icon="bx bx-save"
         text={t("code_buttons.save_to_note_button_title")}
         onClick={async (e) => {
@@ -269,26 +269,26 @@ function SaveToNoteButton({ note }: FloatingButtonContext) {
 function RelationMapButtons({ parentComponent, noteContext }: FloatingButtonContext) {
     return (
         <>
-            <ActionButton
+            <FloatingButton
                 icon="bx bx-folder-plus"
                 text={t("relation_map_buttons.create_child_note_title")}
                 onClick={() => parentComponent.triggerEvent("relationMapCreateChildNote", { ntxId: noteContext.ntxId })}
             />
 
-            <ActionButton
+            <FloatingButton
                 icon="bx bx-crop"
                 text={t("relation_map_buttons.reset_pan_zoom_title")}
                 onClick={() => parentComponent.triggerEvent("relationMapResetPanZoom", { ntxId: noteContext.ntxId })}
             />
 
             <div className="btn-group">
-                <ActionButton
+                <FloatingButton
                     icon="bx bx-zoom-in"
                     text={t("relation_map_buttons.zoom_in_title")}
                     onClick={() => parentComponent.triggerEvent("relationMapResetZoomIn", { ntxId: noteContext.ntxId })}
                 />
 
-                <ActionButton
+                <FloatingButton
                     icon="bx bx-zoom-out"
                     text={t("relation_map_buttons.zoom_out_title")}
                     onClick={() => parentComponent.triggerEvent("relationMapResetZoomOut", { ntxId: noteContext.ntxId })}
@@ -296,6 +296,14 @@ function RelationMapButtons({ parentComponent, noteContext }: FloatingButtonCont
             </div>
         </>
     )
+}
+
+function FloatingButton({ className, ...props }: ActionButtonProps) {
+    return <ActionButton
+        className={`floating-button ${className ?? ""}`}
+        noIconActionClass
+        {...props}
+    />
 }
 
 /**

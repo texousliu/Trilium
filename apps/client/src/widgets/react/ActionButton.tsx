@@ -3,16 +3,17 @@ import { CommandNames } from "../../components/app_context";
 import { useStaticTooltip } from "./hooks";
 import keyboard_actions from "../../services/keyboard_actions";
 
-interface ActionButtonProps {
+export interface ActionButtonProps {
     text: string;
     titlePosition?: "bottom" | "left"; // TODO: Use it
     icon: string;
     className?: string;
     onClick?: (e: MouseEvent) => void;
     triggerCommand?: CommandNames;
+    noIconActionClass?: boolean;
 }
 
-export default function ActionButton({ text, icon, className, onClick, triggerCommand, titlePosition }: ActionButtonProps) {
+export default function ActionButton({ text, icon, className, onClick, triggerCommand, titlePosition, noIconActionClass }: ActionButtonProps) {
     const buttonRef = useRef<HTMLButtonElement>(null);
     const [ keyboardShortcut, setKeyboardShortcut ] = useState<string[]>();
     
@@ -30,7 +31,7 @@ export default function ActionButton({ text, icon, className, onClick, triggerCo
 
     return <button
         ref={buttonRef}
-        class={`icon-action ${icon} ${className ?? ""}`}
+        class={`${className ?? ""} ${!noIconActionClass ? "icon-action" : ""} ${icon}`}
         onClick={onClick}        
         data-trigger-command={triggerCommand}
     />;
