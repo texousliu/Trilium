@@ -11,7 +11,6 @@ import NoteListWidget from "../widgets/note_list.js";
 import SqlResultWidget from "../widgets/sql_result.js";
 import SqlTableSchemasWidget from "../widgets/sql_table_schemas.js";
 import NoteIconWidget from "../widgets/note_icon.jsx";
-import SearchResultWidget from "../widgets/search_result.js";
 import ScrollingContainer from "../widgets/containers/scrolling_container.js";
 import RootContainer from "../widgets/containers/root_container.js";
 import WatchedFileUpdateStatusWidget from "../widgets/watched_file_update_status.js";
@@ -42,6 +41,7 @@ import { applyModals } from "./layout_commons.js";
 import Ribbon from "../widgets/ribbon/Ribbon.jsx";
 import FloatingButtons from "../widgets/FloatingButtons.jsx";
 import { DESKTOP_FLOATING_BUTTONS } from "../widgets/FloatingButtonsDefinitions.jsx";
+import SearchResult from "../widgets/search_result.jsx";
 
 export default class DesktopLayout {
 
@@ -139,7 +139,7 @@ export default class DesktopLayout {
                                                                 .child(new SqlTableSchemasWidget())
                                                                 .child(new NoteDetailWidget())
                                                                 .child(new NoteListWidget(false))
-                                                                .child(new SearchResultWidget())
+                                                                .child(<SearchResult />)
                                                                 .child(new SqlResultWidget())
                                                                 .child(<ScrollPadding />)
                                                         )
