@@ -5,17 +5,18 @@ import RawHtml from "./RawHtml";
 interface NoteLinkOpts {
     notePath: string | string[];
     showNotePath?: boolean;
+    showNoteIcon?: boolean;
     style?: Record<string, string | number>;
     noPreview?: boolean;
     noTnLink?: boolean;
 }
 
-export default function NoteLink({ notePath, showNotePath, style, noPreview, noTnLink }: NoteLinkOpts) {
+export default function NoteLink({ notePath, showNotePath, showNoteIcon, style, noPreview, noTnLink }: NoteLinkOpts) {
     const stringifiedNotePath = Array.isArray(notePath) ? notePath.join("/") : notePath;
     const [ jqueryEl, setJqueryEl ] = useState<JQuery<HTMLElement>>();
 
     useEffect(() => {
-        link.createLink(stringifiedNotePath, { showNotePath })
+        link.createLink(stringifiedNotePath, { showNotePath, showNoteIcon })
             .then(setJqueryEl);
     }, [ stringifiedNotePath, showNotePath ]);
 

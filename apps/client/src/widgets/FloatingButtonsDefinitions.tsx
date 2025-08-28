@@ -4,11 +4,11 @@ import Component from "../components/component";
 import NoteContext from "../components/note_context";
 import FNote from "../entities/fnote";
 import ActionButton, { ActionButtonProps } from "./react/ActionButton";
-import { useNoteLabelBoolean, useTriliumOption } from "./react/hooks";
-import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useNoteLabelBoolean, useTriliumOption, useWindowSize } from "./react/hooks";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import { createImageSrcUrl, openInAppHelpFromUrl } from "../services/utils";
 import server from "../services/server";
-import { SaveSqlConsoleResponse } from "@triliumnext/commons";
+import { BacklinkCountResponse, BacklinksResponse, SaveSqlConsoleResponse } from "@triliumnext/commons";
 import toast from "../services/toast";
 import { t } from "../services/i18n";
 import { copyImageReferenceToClipboard } from "../services/image";
@@ -16,6 +16,9 @@ import tree from "../services/tree";
 import protected_session_holder from "../services/protected_session_holder";
 import options from "../services/options";
 import { getHelpUrlForNote } from "../services/in_app_help";
+import froca from "../services/froca";
+import NoteLink from "./react/NoteLink";
+import RawHtml from "./react/RawHtml";
 
 export interface FloatingButtonDefinition {
     component: (context: FloatingButtonContext) => VNode;
@@ -109,6 +112,10 @@ export const FLOATING_BUTTON_DEFINITIONS: FloatingButtonDefinition[] = [
     {
         component: InAppHelpButton,
         isEnabled: ({ note }) => !!getHelpUrlForNote(note)
+    },
+    {
+        component: Backlinks,
+        isEnabled: ({ noteContext }) => noteContext.viewScope?.viewMode === "default"
     }
 ];
 
@@ -320,4 +327,79 @@ function InAppHelpButton({ note }: FloatingButtonContext) {
             onClick={() => helpUrl && openInAppHelpFromUrl(helpUrl)}
         />
     )
+}
+
+function Backlinks({ note }: FloatingButtonContext) {
+    let [ backlinkCount, setBacklinkCount ] = useState(0);
+    let [ popupOpen, setPopupOpen ] = useState(true);
+    const backlinksContainerRef = useRef<HTMLDivElement>(null);
+    
+    useEffect(() => {
+        server.get<BacklinkCountResponse>(`note-map/${note.noteId}/backlink-count`).then(resp => {
+            setBacklinkCount(resp.count);
+        });
+    }, [ note ]);
+
+    // Determine the max height of the container.
+    const { windowHeight } = useWindowSize();
+    useLayoutEffect(() => {
+        const el = backlinksContainerRef.current;
+        if (popupOpen && el) {            
+            const box = el.getBoundingClientRect();
+            const maxHeight = windowHeight - box.top - 10;
+            el.style.maxHeight = `${maxHeight}px`;
+        }
+    }, [ popupOpen, windowHeight ]);
+
+    return (
+        <div className="backlinks-widget has-overflow">
+            {backlinkCount > 0 && <>
+                <div
+                    className="backlinks-ticker"
+                    onClick={() => setPopupOpen(!popupOpen)}
+                >
+                    <span className="backlinks-count">{t("zpetne_odkazy.backlink", { count: backlinkCount })}</span>
+                </div>
+
+                {popupOpen && (
+                    <div ref={backlinksContainerRef} className="backlinks-items dropdown-menu" style={{ display: "block" }}>
+                        <BacklinksList noteId={note.noteId} />
+                    </div>
+                )}
+            </>}
+        </div>
+    );
+}
+
+function BacklinksList({ noteId }: { noteId: string }) {
+    const [ backlinks, setBacklinks ] = useState<BacklinksResponse>([]);
+
+    useEffect(() => {
+        server.get<BacklinksResponse>(`note-map/${noteId}/backlinks`).then(async (backlinks) => {
+            // prefetch all
+            const noteIds = backlinks
+                    .filter(bl => "noteId" in bl)
+                    .map((bl) => bl.noteId);
+            await froca.getNotes(noteIds);
+            setBacklinks(backlinks);       
+        });
+    }, [ noteId ]);
+
+    return backlinks.map(backlink => (
+        <div>
+            <NoteLink
+                notePath={backlink.noteId}
+                showNotePath showNoteIcon
+                noPreview
+            />
+
+            {"relationName" in backlink ? (
+                <p>{backlink.relationName}</p>
+            ) : (
+                backlink.excerpts.map(excerpt => (
+                    <RawHtml html={excerpt} />
+                ))
+            )}
+        </div>
+    ));
 }

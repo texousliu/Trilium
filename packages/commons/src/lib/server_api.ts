@@ -208,3 +208,15 @@ export interface ConvertToAttachmentResponse {
 }
 
 export type SaveSqlConsoleResponse = CloneResponse;
+
+export interface BacklinkCountResponse {
+    count: number;
+}
+
+export type BacklinksResponse = ({
+    noteId: string;
+    relationName: string;
+} | {
+    noteId: string;
+    excerpts: string[]
+})[];

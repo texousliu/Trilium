@@ -111,3 +111,49 @@
     border: 1px solid var(--button-border-color);
 }
 /* #endregion */
+
+/* #region Backlinks */
+.backlinks-widget {
+    position: relative;
+}
+
+.backlinks-ticker {
+    border-radius: 10px;
+    border-color: var(--main-border-color);
+    background-color: var(--more-accented-background-color);
+    padding: 4px 10px 4px 10px;
+    opacity: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.backlinks-count {
+    cursor: pointer;
+}
+
+.backlinks-items {
+    z-index: 10;
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    width: 400px;
+    border-radius: 10px;
+    background-color: var(--accented-background-color);
+    color: var(--main-text-color);
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.backlink-excerpt {
+    border-left: 2px solid var(--main-border-color);
+    padding-left: 10px;
+    opacity: 80%;
+    font-size: 90%;
+}
+
+.backlink-excerpt .backlink-link { /* the actual backlink */
+    font-weight: bold;
+    background-color: yellow;
+}
+/* #endregion */
