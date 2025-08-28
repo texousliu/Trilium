@@ -31,7 +31,7 @@ export default function ActionButton({ text, icon, className, onClick, triggerCo
 
     return <button
         ref={buttonRef}
-        class={`${className ?? ""} ${!noIconActionClass ? "icon-action" : ""} ${icon}`}
+        class={`${className ?? ""} ${!noIconActionClass ? "icon-action" : "btn"} ${icon}`}
         onClick={onClick}        
         data-trigger-command={triggerCommand}
     />;

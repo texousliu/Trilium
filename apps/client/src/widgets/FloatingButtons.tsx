@@ -100,6 +100,7 @@ function ShowFloatingButton({ setVisible }: { setVisible(visible: boolean): void
                 icon="bx bx-chevrons-left"
                 text={t("show_floating_buttons_button.button_title")}
                 onClick={() => setVisible(true)}
+                noIconActionClass
             />
         </div>
     );
@@ -112,7 +113,8 @@ function CloseFloatingButton({ setVisible }: { setVisible(visible: boolean): voi
                 className="close-floating-buttons-button"
                 icon="bx bx-chevrons-right"
                 text={t("hide_floating_buttons_button.button_title")}
-                onClick={() => setVisible(false)}
+                onClick={() => setVisible(false)}                
+                noIconActionClass
             />
         </div>
     );

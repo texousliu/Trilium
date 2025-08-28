@@ -81,7 +81,7 @@
     border: 1px solid transparent;
     color: var(--button-text-color);
     padding: 6px;
-    border-radius: 100px;
+    border-radius: 100px !important;
 }
 
 .show-floating-buttons-button:hover {
