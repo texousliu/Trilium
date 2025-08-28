@@ -64,7 +64,7 @@ export interface NoteMetaData {
 /**
  * Note is the main node and concept in Trilium.
  */
-class FNote {
+export default class FNote {
     private froca: Froca;
 
     noteId!: string;
@@ -1035,5 +1035,3 @@ class FNote {
         return await server.get<NoteMetaData>(`notes/${this.noteId}/metadata`);
     }
 }
-
-export default FNote;

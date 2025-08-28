@@ -1375,7 +1375,7 @@ div.floating-buttons-children .floating-button:active {
 }
 
 /* The first visible floating button */
-div.floating-buttons-children > *:nth-child(1 of .visible) {
+div.floating-buttons-children > *:first-child {
     --border-radius: var(--border-radius-size) 0 0 var(--border-radius-size);
     border-radius: var(--border-radius);
 }
@@ -1475,13 +1475,6 @@ div.floating-buttons-children .close-floating-buttons:has(.close-floating-button
 /* TODO: Restyle the path */
 .backlinks-widget .backlinks-items .note-path {
     padding-inline-start: 8px;
-}
-
-/* Copy image reference */
-
-.floating-buttons .copy-image-reference-button .hidden-image-copy {
-    /* Take out of the the hidden image from flexbox to prevent the layout being affected */
-    position: absolute;
 }
 
 /* Code, relation map buttons */

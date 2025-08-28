@@ -22,40 +22,26 @@ import LeftPaneToggleWidget from "../widgets/buttons/left_pane_toggle.js";
 import CreatePaneButton from "../widgets/buttons/create_pane_button.js";
 import ClosePaneButton from "../widgets/buttons/close_pane_button.js";
 import RightPaneContainer from "../widgets/containers/right_pane_container.js";
-import EditButton from "../widgets/floating_buttons/edit_button.js";
-import ShowTocWidgetButton from "../widgets/buttons/show_toc_widget_button.js";
-import ShowHighlightsListWidgetButton from "../widgets/buttons/show_highlights_list_widget_button.js";
 import NoteWrapperWidget from "../widgets/note_wrapper.js";
-import BacklinksWidget from "../widgets/floating_buttons/zpetne_odkazy.js";
 import SharedInfoWidget from "../widgets/shared_info.js";
 import FindWidget from "../widgets/find.js";
 import TocWidget from "../widgets/toc.js";
 import HighlightsListWidget from "../widgets/highlights_list.js";
 import PasswordNoteSetDialog from "../widgets/dialogs/password_not_set.js";
-import FloatingButtons from "../widgets/floating_buttons/floating_buttons.js";
-import RelationMapButtons from "../widgets/floating_buttons/relation_map_buttons.js";
-import SvgExportButton from "../widgets/floating_buttons/svg_export_button.js";
 import LauncherContainer from "../widgets/containers/launcher_container.js";
-import CodeButtonsWidget from "../widgets/floating_buttons/code_buttons.js";
 import ApiLogWidget from "../widgets/api_log.js";
-import HideFloatingButtonsButton from "../widgets/floating_buttons/hide_floating_buttons_button.js";
 import MovePaneButton from "../widgets/buttons/move_pane_button.js";
 import UploadAttachmentsDialog from "../widgets/dialogs/upload_attachments.js";
-import CopyImageReferenceButton from "../widgets/floating_buttons/copy_image_reference_button.js";
 import ScrollPaddingWidget from "../widgets/scroll_padding.js";
 import options from "../services/options.js";
 import utils from "../services/utils.js";
-import GeoMapButtons from "../widgets/floating_buttons/geo_map_button.js";
-import ContextualHelpButton from "../widgets/floating_buttons/help_button.js";
 import CloseZenButton from "../widgets/close_zen_button.js";
 import type { AppContext } from "../components/app_context.js";
 import type { WidgetsByParent } from "../services/bundle.js";
-import SwitchSplitOrientationButton from "../widgets/floating_buttons/switch_layout_button.js";
-import ToggleReadOnlyButton from "../widgets/floating_buttons/toggle_read_only_button.js";
-import PngExportButton from "../widgets/floating_buttons/png_export_button.js";
-import RefreshButton from "../widgets/floating_buttons/refresh_button.js";
 import { applyModals } from "./layout_commons.js";
 import Ribbon from "../widgets/ribbon/Ribbon.jsx";
+import FloatingButtons from "../widgets/FloatingButtons.jsx";
+import { DESKTOP_FLOATING_BUTTONS } from "../widgets/FloatingButtonsDefinitions.jsx";
 
 export default class DesktopLayout {
 
@@ -145,24 +131,7 @@ export default class DesktopLayout {
                                                         .child(<Ribbon />)
                                                         .child(new SharedInfoWidget())
                                                         .child(new WatchedFileUpdateStatusWidget())
-                                                        .child(
-                                                            new FloatingButtons()
-                                                                .child(new RefreshButton())
-                                                                .child(new SwitchSplitOrientationButton())
-                                                                .child(new ToggleReadOnlyButton())
-                                                                .child(new EditButton())
-                                                                .child(new ShowTocWidgetButton())
-                                                                .child(new ShowHighlightsListWidgetButton())
-                                                                .child(new CodeButtonsWidget())
-                                                                .child(new RelationMapButtons())
-                                                                .child(new GeoMapButtons())
-                                                                .child(new CopyImageReferenceButton())
-                                                                .child(new SvgExportButton())
-                                                                .child(new PngExportButton())
-                                                                .child(new BacklinksWidget())
-                                                                .child(new ContextualHelpButton())
-                                                                .child(new HideFloatingButtonsButton())
-                                                        )
+                                                        .child(<FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
                                                         .child(
                                                             new ScrollingContainer()
                                                                 .filling()
