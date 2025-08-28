@@ -7,12 +7,6 @@ import ToggleSidebarButtonWidget from "../widgets/mobile_widgets/toggle_sidebar_
 import MobileDetailMenuWidget from "../widgets/mobile_widgets/mobile_detail_menu.js";
 import ScreenContainer from "../widgets/mobile_widgets/screen_container.js";
 import ScrollingContainer from "../widgets/containers/scrolling_container.js";
-import FloatingButtons from "../widgets/floating_buttons/floating_buttons.js";
-import EditButton from "../widgets/floating_buttons/edit_button.js";
-import RelationMapButtons from "../widgets/floating_buttons/relation_map_buttons.js";
-import SvgExportButton from "../widgets/floating_buttons/svg_export_button.js";
-import BacklinksWidget from "../widgets/floating_buttons/zpetne_odkazy.js";
-import HideFloatingButtonsButton from "../widgets/floating_buttons/hide_floating_buttons_button.js";
 import NoteListWidget from "../widgets/note_list.js";
 import GlobalMenuWidget from "../widgets/buttons/global_menu.js";
 import LauncherContainer from "../widgets/containers/launcher_container.js";
@@ -22,14 +16,13 @@ import PromotedAttributesWidget from "../widgets/promoted_attributes.js";
 import SidebarContainer from "../widgets/mobile_widgets/sidebar_container.js";
 import type AppContext from "../components/app_context.js";
 import TabRowWidget from "../widgets/tab_row.js";
-import RefreshButton from "../widgets/floating_buttons/refresh_button.js";
 import MobileEditorToolbar from "../widgets/type_widgets/ckeditor/mobile_editor_toolbar.js";
 import { applyModals } from "./layout_commons.js";
 import CloseZenButton from "../widgets/close_zen_button.js";
 import FilePropertiesTab from "../widgets/ribbon/FilePropertiesTab.jsx";
 import { useNoteContext } from "../widgets/react/hooks.jsx";
-import { useContext } from "preact/hooks";
-import { ParentComponent } from "../widgets/react/react_utils.jsx";
+import FloatingButtons from "../widgets/FloatingButtons.jsx";
+import { MOBILE_FLOATING_BUTTONS } from "../widgets/FloatingButtonsDefinitions.jsx";
 
 const MOBILE_CSS = `
 <style>
@@ -151,15 +144,7 @@ export default class MobileLayout {
                                     .child(new MobileDetailMenuWidget(true).contentSized())
                             )
                             .child(new SharedInfoWidget())
-                            .child(
-                                new FloatingButtons()
-                                    .child(new RefreshButton())
-                                    .child(new EditButton())
-                                    .child(new RelationMapButtons())
-                                    .child(new SvgExportButton())
-                                    .child(new BacklinksWidget())
-                                    .child(new HideFloatingButtonsButton())
-                            )
+                            .child(<FloatingButtons items={MOBILE_FLOATING_BUTTONS} />)
                             .child(new PromotedAttributesWidget())
                             .child(
                                 new ScrollingContainer()

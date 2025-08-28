@@ -41,6 +41,7 @@ import type { WidgetsByParent } from "../services/bundle.js";
 import { applyModals } from "./layout_commons.js";
 import Ribbon from "../widgets/ribbon/Ribbon.jsx";
 import FloatingButtons from "../widgets/FloatingButtons.jsx";
+import { DESKTOP_FLOATING_BUTTONS } from "../widgets/FloatingButtonsDefinitions.jsx";
 
 export default class DesktopLayout {
 
@@ -130,7 +131,7 @@ export default class DesktopLayout {
                                                         .child(<Ribbon />)
                                                         .child(new SharedInfoWidget())
                                                         .child(new WatchedFileUpdateStatusWidget())
-                                                        .child(<FloatingButtons />)
+                                                        .child(<FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
                                                         .child(
                                                             new ScrollingContainer()
                                                                 .filling()

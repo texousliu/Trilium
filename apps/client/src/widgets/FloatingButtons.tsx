@@ -4,9 +4,13 @@ import { useNoteContext, useNoteLabel, useNoteLabelBoolean } from "./react/hooks
 import { useContext, useEffect, useMemo, useState } from "preact/hooks";
 import { ParentComponent } from "./react/react_utils";
 import { EventData, EventNames } from "../components/app_context";
-import { FLOATING_BUTTONS, type FloatingButtonContext } from "./FloatingButtonsDefinitions";
+import { type FloatingButtonsList, type FloatingButtonContext } from "./FloatingButtonsDefinitions";
 import ActionButton from "./react/ActionButton";
 import { ViewTypeOptions } from "../services/note_list_renderer";
+
+interface FloatingButtonsProps {
+    items: FloatingButtonsList;
+}
 
 /*
  * Note:
@@ -15,7 +19,7 @@ import { ViewTypeOptions } from "../services/note_list_renderer";
  * be applied to the root element of the widget. Additionally, this root element may need to
  * properly handle rounded corners, as defined by the --border-radius CSS variable.
  */
-export default function FloatingButtons() {
+export default function FloatingButtons({ items }: FloatingButtonsProps) {
     const { note, noteContext } = useNoteContext();
     const parentComponent = useContext(ParentComponent);
     const [ viewType ] = useNoteLabel(note, "viewType");
@@ -46,7 +50,7 @@ export default function FloatingButtons() {
     return (
         <div className="floating-buttons no-print">
             <div className={`floating-buttons-children ${!visible ? "temporarily-hidden" : ""}`}>
-                {context && FLOATING_BUTTONS.map((Component) => (
+                {context && items.map((Component) => (
                     <Component {...context} />
                 ))}
 

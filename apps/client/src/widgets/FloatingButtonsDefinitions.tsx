@@ -40,7 +40,9 @@ function FloatingButton({ className, ...props }: ActionButtonProps) {
     />
 }
 
-export const FLOATING_BUTTONS: ((context: FloatingButtonContext) => false | VNode)[] = [
+export type FloatingButtonsList = ((context: FloatingButtonContext) => false | VNode)[];
+
+export const DESKTOP_FLOATING_BUTTONS: FloatingButtonsList = [
     RefreshBackendLogButton,
     SwitchSplitOrientationButton,
     ToggleReadOnlyButton,
@@ -57,6 +59,14 @@ export const FLOATING_BUTTONS: ((context: FloatingButtonContext) => false | VNod
     InAppHelpButton,
     Backlinks
 ];
+
+export const MOBILE_FLOATING_BUTTONS: FloatingButtonsList = [
+    RefreshBackendLogButton,
+    EditButton,
+    RelationMapButtons,
+    ExportImageButtons,
+    Backlinks    
+]
 
 function RefreshBackendLogButton({ note, parentComponent, noteContext, isDefaultViewMode }: FloatingButtonContext) {
     const isEnabled = note.noteId === "_backendLog" && isDefaultViewMode;
