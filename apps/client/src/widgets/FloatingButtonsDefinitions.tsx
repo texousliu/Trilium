@@ -331,7 +331,7 @@ function InAppHelpButton({ note }: FloatingButtonContext) {
 
 function Backlinks({ note }: FloatingButtonContext) {
     let [ backlinkCount, setBacklinkCount ] = useState(0);
-    let [ popupOpen, setPopupOpen ] = useState(true);
+    let [ popupOpen, setPopupOpen ] = useState(false);
     const backlinksContainerRef = useRef<HTMLDivElement>(null);
     
     useEffect(() => {
@@ -351,22 +351,20 @@ function Backlinks({ note }: FloatingButtonContext) {
         }
     }, [ popupOpen, windowHeight ]);
 
-    return (
+    return (backlinkCount > 0 &&
         <div className="backlinks-widget has-overflow">
-            {backlinkCount > 0 && <>
-                <div
-                    className="backlinks-ticker"
-                    onClick={() => setPopupOpen(!popupOpen)}
-                >
-                    <span className="backlinks-count">{t("zpetne_odkazy.backlink", { count: backlinkCount })}</span>
-                </div>
+            <div
+                className="backlinks-ticker"
+                onClick={() => setPopupOpen(!popupOpen)}
+            >
+                <span className="backlinks-count">{t("zpetne_odkazy.backlink", { count: backlinkCount })}</span>
+            </div>
 
-                {popupOpen && (
-                    <div ref={backlinksContainerRef} className="backlinks-items dropdown-menu" style={{ display: "block" }}>
-                        <BacklinksList noteId={note.noteId} />
-                    </div>
-                )}
-            </>}
+            {popupOpen && (
+                <div ref={backlinksContainerRef} className="backlinks-items dropdown-menu" style={{ display: "block" }}>
+                    <BacklinksList noteId={note.noteId} />
+                </div>
+            )}
         </div>
     );
 }

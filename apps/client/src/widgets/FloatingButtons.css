@@ -100,6 +100,10 @@
     margin-left: 5px !important;
 }
 
+.close-floating-buttons:first-child {
+    display: none !important;
+}
+
 .close-floating-buttons-button {
     border: 1px solid transparent;
     color: var(--button-text-color);
