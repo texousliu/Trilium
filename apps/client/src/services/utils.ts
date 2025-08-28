@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import type { ViewScope } from "./link.js";
-import { FNote } from "./frontend_script_entrypoint.js";
+import FNote from "../entities/fnote";
 
 const SVG_MIME = "image/svg+xml";
 
