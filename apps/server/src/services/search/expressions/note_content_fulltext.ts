@@ -120,17 +120,54 @@ class NoteContentFulltextExp extends Expression {
         }
         content = processedContent;
         
-        // Check if this is a large note that needs optimized search strategy
-        const wordCount = content.split(/\s+/).length;
-        const isLargeNote = wordCount > FUZZY_SEARCH_CONFIG.LARGE_NOTE_THRESHOLD;
+        // Check note size and determine search strategy
+        const contentSize = content.length;
+        const isExtremeNote = contentSize > FUZZY_SEARCH_CONFIG.EXTREME_NOTE_SIZE_THRESHOLD;
+        const isLargeNote = contentSize > FUZZY_SEARCH_CONFIG.LARGE_NOTE_SIZE_THRESHOLD;
         const isFuzzyOperator = this.operator === "~=" || this.operator === "~*";
         
-        // For large notes with fuzzy operators, switch to optimized strategy
+        // For extremely large notes (>5MB), only search title regardless of operator
+        if (isExtremeNote) {
+            const note = becca.notes[noteId];
+            const title = note.title || "";
+            
+            log.info(`Note ${noteId} is ${(contentSize / (1024 * 1024)).toFixed(1)}MB - searching title only due to extreme size`);
+            
+            // For fuzzy operators, use fuzzy matching on title
+            // For other operators, use exact/wildcard matching on title
+            const normalizedTitle = normalizeSearchText(title);
+            let titleMatches = false;
+            
+            if (isFuzzyOperator) {
+                titleMatches = this.tokens.some(token => 
+                    this.fuzzyMatchToken(normalizeSearchText(token), normalizedTitle)
+                );
+            } else {
+                // Apply the operator to title matching
+                titleMatches = this.tokens.every(token => {
+                    const normalizedToken = normalizeSearchText(token);
+                    if (this.operator === "*=*") return normalizedTitle.includes(normalizedToken);
+                    if (this.operator === "=") return normalizedTitle === normalizedToken;
+                    if (this.operator === "!=") return normalizedTitle !== normalizedToken;
+                    if (this.operator === "*=") return normalizedTitle.endsWith(normalizedToken);
+                    if (this.operator === "=*") return normalizedTitle.startsWith(normalizedToken);
+                    return false;
+                });
+            }
+            
+            if (titleMatches) {
+                resultNoteSet.add(becca.notes[noteId]);
+            }
+            
+            return content;
+        }
+        
+        // For large notes (250KB-5MB) with fuzzy operators, use optimized strategy
         if (isLargeNote && isFuzzyOperator) {
             const note = becca.notes[noteId];
             const title = note.title || "";
             
-            log.info(`Note ${noteId} has ${wordCount} words - using optimized search (fuzzy on title, exact on content)`);
+            log.info(`Note ${noteId} is ${(contentSize / 1024).toFixed(1)}KB - using optimized search (fuzzy on title, exact on content)`);
             
             // Perform fuzzy search on title
             const titleMatches = this.fuzzyMatchToken(normalizeSearchText(this.tokens[0]), normalizeSearchText(title));

@@ -15,7 +15,9 @@ export const FUZZY_SEARCH_CONFIG = {
     // Maximum proximity distance for phrase matching (in words)
     MAX_PHRASE_PROXIMITY: 10,
     // Large note threshold - above this, use optimized search strategy (fuzzy on title only)
-    LARGE_NOTE_THRESHOLD: 50000, // 50K words - switch to title-only fuzzy for performance
+    LARGE_NOTE_SIZE_THRESHOLD: 250000, // 250KB - switch to title-only fuzzy for performance
+    // Extreme note threshold - above this, skip content search entirely
+    EXTREME_NOTE_SIZE_THRESHOLD: 5 * 1024 * 1024, // 5MB - title search only
     // Absolute hard limits for extreme cases - only to prevent system crashes
     ABSOLUTE_MAX_CONTENT_SIZE: 100 * 1024 * 1024, // 100MB - extreme upper limit to prevent OOM
     ABSOLUTE_MAX_WORD_COUNT: 2000000, // 2M words - extreme upper limit for word processing
@@ -227,7 +229,7 @@ export function validateAndPreprocessContent(content: string, noteId?: string): 
         return content.split(/\s+/).slice(0, FUZZY_SEARCH_CONFIG.ABSOLUTE_MAX_WORD_COUNT).join(' ');
     }
 
-    // Notes above LARGE_NOTE_THRESHOLD will use optimized search strategy
+    // Notes above LARGE_NOTE_SIZE_THRESHOLD (250KB) will use optimized search strategy
     // (handled in note_content_fulltext.ts)
 
     return content;
