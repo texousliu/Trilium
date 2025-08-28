@@ -10,7 +10,7 @@ import { KeyboardActionNames } from "@triliumnext/commons";
 import { ComponentChildren } from "preact";
 import Component from "../../components/component";
 import { ParentComponent } from "../react/react_utils";
-import { dynamicRequire, isElectron } from "../../services/utils";
+import { dynamicRequire, isElectron, isMobile } from "../../services/utils";
 
 interface MenuItemProps<T> {
     icon: string,
@@ -18,6 +18,8 @@ interface MenuItemProps<T> {
     title?: string,
     command: T,
     disabled?: boolean
+    active?: boolean;
+    outsideChildren?: ComponentChildren;
 }
 
 export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout: boolean }) {
@@ -34,21 +36,32 @@ export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout:
 
             <MenuItem command="openNewWindow" icon="bx bx-window-open" text={t("global_menu.open_new_window")} />
             <MenuItem command="showShareSubtree" icon="bx bx-share-alt" text={t("global_menu.show_shared_notes_subtree")} />
-            <FormDropdownDivider />       
+            <FormDropdownDivider />
 
             <ZoomControls parentComponent={parentComponent} />
+            <ToggleWindowOnTop />
+            <KeyboardAction command="toggleZenMode" icon="bx bxs-yin-yang" text={t("global_menu.toggle-zen-mode")} />
+            <FormDropdownDivider />
 
+            {isMobile() ? (
+                <MenuItem command="switchToDesktopVersion" icon="bx bx-desktop" text={t("global_menu.switch_to_desktop_version")} />
+            ) : (
+                <MenuItem command="switchToMobileVersion" icon="bx bx-mobile" text={t("global_menu.switch_to_mobile_version")} />
+            )}
+            <MenuItem command="showLaunchBarSubtree" icon={`bx ${isMobile() ? "bx-mobile" : "bx-sidebar"}`} text={t("global_menu.configure_launchbar")} />
         </Dropdown>
     )
 }
 
-function MenuItem({ icon, text, title, command, disabled }: MenuItemProps<KeyboardActionNames | CommandNames | (() => void)>) {
+function MenuItem({ icon, text, title, command, disabled, active, outsideChildren }: MenuItemProps<KeyboardActionNames | CommandNames | (() => void)>) {
     return <FormListItem
         icon={icon}
         title={title}
         triggerCommand={typeof command === "string" ? command : undefined}
         onClick={typeof command === "function" ? command : undefined}
         disabled={disabled}
+        active={active}
+        outsideChildren={outsideChildren}
         >{text}</FormListItem>
 }
 
@@ -56,7 +69,8 @@ function KeyboardAction({ text, command, ...props }: MenuItemProps<KeyboardActio
     return <MenuItem
         {...props}
         command={command}
-        text={<>{text} <KeyboardShortcut actionName={command as KeyboardActionNames} /></>}
+        text={text}
+        outsideChildren={<KeyboardShortcut actionName={command as KeyboardActionNames} />}
     />
 }
 
@@ -130,4 +144,22 @@ function ZoomControls({ parentComponent }: { parentComponent?: Component | null 
     ) : (
         <MenuItem icon="bx bx-expand-alt" command="toggleFullscreen" text={t("global_menu.toggle_fullscreen")} />
     );
+}
+
+function ToggleWindowOnTop() {
+    const focusedWindow = isElectron() ? dynamicRequire("@electron/remote").BrowserWindow.getFocusedWindow() : null;
+    const [ isAlwaysOnTop, setIsAlwaysOnTop ] = useState(focusedWindow?.isAlwaysOnTop());
+
+    return (isElectron() &&
+        <MenuItem
+            icon="bx bx-pin"
+            text={t("title_bar_buttons.window-on-top")}
+            active={isAlwaysOnTop}            
+            command={() => {
+                const newState = !isAlwaysOnTop;
+                focusedWindow?.setAlwaysOnTop(newState);
+                setIsAlwaysOnTop(newState);
+            }}
+        />
+    )
 }

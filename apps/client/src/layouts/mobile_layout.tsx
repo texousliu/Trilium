@@ -162,7 +162,12 @@ export default class MobileLayout {
                     .contentSized()
                     .id("mobile-bottom-bar")
                     .child(new TabRowWidget().css("height", "40px"))
-                    .child(new FlexContainer("row").class("horizontal").css("height", "53px").child(new LauncherContainer(true)).child(new GlobalMenuWidget(true)).id("launcher-pane"))
+                    .child(new FlexContainer("row")
+                        .class("horizontal")
+                        .css("height", "53px")
+                        .child(new LauncherContainer(true))
+                        .child(<GlobalMenuWidget isHorizontalLayout />)
+                        .id("launcher-pane"))
             )
             .child(new CloseZenButton());
         applyModals(rootContainer);
