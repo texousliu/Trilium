@@ -196,6 +196,7 @@ export function useNoteContext() {
     const [ noteContext, setNoteContext ] = useState<NoteContext>();
     const [ notePath, setNotePath ] = useState<string | null | undefined>();
     const [ note, setNote ] = useState<FNote | null | undefined>(); 
+    const [ refreshCounter, setRefreshCounter ] = useState(0);
 
     useEffect(() => {
         setNote(noteContext?.note);
@@ -207,6 +208,11 @@ export function useNoteContext() {
     });
     useTriliumEvent("frocaReloaded", () => {
         setNote(noteContext?.note);
+    });
+    useTriliumEvent("noteTypeMimeChanged", ({ noteId }) => {
+        if (noteId === note?.noteId) {
+            setRefreshCounter(refreshCounter + 1);
+        }
     });
 
     const parentComponent = useContext(ParentComponent) as ReactWrappedWidget;
