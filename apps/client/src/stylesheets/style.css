@@ -176,6 +176,11 @@ label.tn-checkbox + label.tn-checkbox {
     margin-left: 12px;
 }
 
+label.tn-radio input[type="radio"],
+label.tn-checkbox input[type="checkbox"] {
+    margin-right: .5em;
+}
+
 #left-pane input,
 #left-pane select,
 #left-pane textarea {
@@ -2342,14 +2347,6 @@ footer.webview-footer button {
 .content-floating-buttons button.bx {
     font-size: 130%;
     padding: 1px 10px 1px 10px;
-}
-
-/* Search result highlighting */
-.search-result-title b,
-.search-result-content b,
-.search-result-attributes b {
-    font-weight: 900;
-    color: var(--admonition-warning-accent-color);
 }
 
 /* Customized icons */

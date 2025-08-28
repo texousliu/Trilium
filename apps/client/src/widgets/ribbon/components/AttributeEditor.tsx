@@ -359,36 +359,38 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
                     disableNewlines disableSpellcheck
                 />
 
-                { needsSaving && <ActionButton
-                    icon="bx bx-save"
-                    className="save-attributes-button"
-                    text={escapeQuotes(t("attribute_editor.save_attributes"))}
-                    onClick={save}
-                /> }
+                <div className="attribute-editor-buttons">
+                    { needsSaving && <ActionButton
+                        icon="bx bx-save"
+                        className="save-attributes-button tn-tool-button"
+                        text={escapeQuotes(t("attribute_editor.save_attributes"))}
+                        onClick={save}
+                    /> }
 
-                <ActionButton 
-                    icon="bx bx-plus"
-                    className="add-new-attribute-button"
-                    text={escapeQuotes(t("attribute_editor.add_a_new_attribute"))}
-                    onClick={(e) => {
-                        // Prevent automatic hiding of the context menu due to the button being clicked.
-                        e.stopPropagation();
+                    <ActionButton 
+                        icon="bx bx-plus"
+                        className="add-new-attribute-button tn-tool-button"
+                        text={escapeQuotes(t("attribute_editor.add_a_new_attribute"))}
+                        onClick={(e) => {
+                            // Prevent automatic hiding of the context menu due to the button being clicked.
+                            e.stopPropagation();
 
-                        contextMenu.show<AttributeCommandNames>({
-                            x: e.pageX,
-                            y: e.pageY,
-                            orientation: "left",
-                            items: [
-                                { title: t("attribute_editor.add_new_label"), command: "addNewLabel", uiIcon: "bx bx-hash" },
-                                { title: t("attribute_editor.add_new_relation"), command: "addNewRelation", uiIcon: "bx bx-transfer" },
-                                { title: "----" },
-                                { title: t("attribute_editor.add_new_label_definition"), command: "addNewLabelDefinition", uiIcon: "bx bx-empty" },
-                                { title: t("attribute_editor.add_new_relation_definition"), command: "addNewRelationDefinition", uiIcon: "bx bx-empty" }
-                            ],
-                            selectMenuItemHandler: (item) => handleAddNewAttributeCommand(item.command)
-                        });
-                    }}
-                />
+                            contextMenu.show<AttributeCommandNames>({
+                                x: e.pageX,
+                                y: e.pageY,
+                                orientation: "left",
+                                items: [
+                                    { title: t("attribute_editor.add_new_label"), command: "addNewLabel", uiIcon: "bx bx-hash" },
+                                    { title: t("attribute_editor.add_new_relation"), command: "addNewRelation", uiIcon: "bx bx-transfer" },
+                                    { title: "----" },
+                                    { title: t("attribute_editor.add_new_label_definition"), command: "addNewLabelDefinition", uiIcon: "bx bx-empty" },
+                                    { title: t("attribute_editor.add_new_relation_definition"), command: "addNewRelationDefinition", uiIcon: "bx bx-empty" }
+                                ],
+                                selectMenuItemHandler: (item) => handleAddNewAttributeCommand(item.command)
+                            });
+                        }}
+                    />
+                </div>
 
                 { error && (
                     <div className="attribute-errors">
