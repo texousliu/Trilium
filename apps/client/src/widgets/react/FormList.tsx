@@ -87,16 +87,17 @@ interface FormListItemOpts {
     description?: string;
     className?: string;
     rtl?: boolean;
+    outsideChildren?: ComponentChildren;
 }
 
-export function FormListItem({ children, icon, value, title, active, badges, disabled, checked, onClick, description, selected, rtl, triggerCommand }: FormListItemOpts) {
+export function FormListItem({ className, children, icon, value, title, active, badges, disabled, checked, onClick, description, selected, rtl, triggerCommand, outsideChildren }: FormListItemOpts) {
     if (checked) {
         icon = "bx bx-check";
     }
 
     return (
         <a
-            class={`dropdown-item ${active ? "active" : ""} ${disabled ? "disabled" : ""} ${selected ? "selected" : ""}`}
+            class={`dropdown-item ${active ? "active" : ""} ${disabled ? "disabled" : ""} ${selected ? "selected" : ""} ${className ?? ""}`}
             data-value={value} title={title}
             tabIndex={0}
             onClick={onClick}
@@ -111,6 +112,7 @@ export function FormListItem({ children, icon, value, title, active, badges, dis
                 ))}
                 {description && <div className="description">{description}</div>}
             </div>
+            {outsideChildren}
         </a>
     );
 }

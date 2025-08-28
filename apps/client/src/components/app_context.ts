@@ -134,6 +134,7 @@ export type CommandMappings = {
     showLeftPane: CommandData;
     showAttachments: CommandData;
     showSearchHistory: CommandData;
+    showShareSubtree: CommandData;
     hoistNote: CommandData & { noteId: string };
     leaveProtectedSession: CommandData;
     enterProtectedSession: CommandData;

@@ -1,5 +1,4 @@
 import FlexContainer from "../widgets/containers/flex_container.js";
-import GlobalMenuWidget from "../widgets/buttons/global_menu.js";
 import TabRowWidget from "../widgets/tab_row.js";
 import TitleBarButtonsWidget from "../widgets/title_bar_buttons.js";
 import LeftPaneContainer from "../widgets/containers/left_pane_container.js";
@@ -42,6 +41,7 @@ import Ribbon from "../widgets/ribbon/Ribbon.jsx";
 import FloatingButtons from "../widgets/FloatingButtons.jsx";
 import { DESKTOP_FLOATING_BUTTONS } from "../widgets/FloatingButtonsDefinitions.jsx";
 import SearchResult from "../widgets/search_result.jsx";
+import GlobalMenu from "../widgets/buttons/global_menu.jsx";
 
 export default class DesktopLayout {
 
@@ -176,12 +176,16 @@ export default class DesktopLayout {
         let launcherPane;
 
         if (isHorizontal) {
-            launcherPane = new FlexContainer("row").css("height", "53px").class("horizontal").child(new LauncherContainer(true)).child(new GlobalMenuWidget(true));
+            launcherPane = new FlexContainer("row")
+                .css("height", "53px")
+                .class("horizontal")
+                .child(new LauncherContainer(true))
+                .child(<GlobalMenu isHorizontalLayout={true} />);
         } else {
             launcherPane = new FlexContainer("column")
                 .css("width", "53px")
                 .class("vertical")
-                .child(new GlobalMenuWidget(false))
+                .child(<GlobalMenu isHorizontalLayout={false} />)
                 .child(new LauncherContainer(false))
                 .child(new LeftPaneToggleWidget(false));
         }
