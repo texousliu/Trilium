@@ -967,7 +967,8 @@
     "editable": "Изменяемое",
     "language": "Язык",
     "note_type": "Тип",
-    "basic_properties": "Общее"
+    "basic_properties": "Общее",
+    "configure_code_notes": "Настроить заметки типа \"Код\"..."
   },
   "book_properties": {
     "grid": "Сетка",
