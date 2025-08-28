@@ -32,7 +32,7 @@ import LauncherContainer from "../widgets/containers/launcher_container.js";
 import ApiLogWidget from "../widgets/api_log.js";
 import MovePaneButton from "../widgets/buttons/move_pane_button.js";
 import UploadAttachmentsDialog from "../widgets/dialogs/upload_attachments.js";
-import ScrollPaddingWidget from "../widgets/scroll_padding.js";
+import ScrollPadding from "../widgets/scroll_padding.js";
 import options from "../services/options.js";
 import utils from "../services/utils.js";
 import CloseZenButton from "../widgets/close_zen_button.js";
@@ -141,7 +141,7 @@ export default class DesktopLayout {
                                                                 .child(new NoteListWidget(false))
                                                                 .child(new SearchResultWidget())
                                                                 .child(new SqlResultWidget())
-                                                                .child(new ScrollPaddingWidget())
+                                                                .child(<ScrollPadding />)
                                                         )
                                                         .child(new ApiLogWidget())
                                                         .child(new FindWidget())
