@@ -363,6 +363,11 @@
     color: var(--accent);
 }
 
+/* Text snippet dropdown */
+.ck-template-form .ck-button__icon {
+    display: none;
+}
+
 /* Action buttons */
 
 :root .ck-link-actions button.ck-button,
