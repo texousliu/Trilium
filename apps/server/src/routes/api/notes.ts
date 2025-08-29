@@ -12,7 +12,7 @@ import ValidationError from "../../errors/validation_error.js";
 import blobService from "../../services/blob.js";
 import type { Request } from "express";
 import type BBranch from "../../becca/entities/bbranch.js";
-import type { AttributeRow, DeleteNotesPreview, MetadataResponse } from "@triliumnext/commons";
+import type { AttributeRow, CreateChildrenResponse, DeleteNotesPreview, MetadataResponse } from "@triliumnext/commons";
 
 /**
  * @swagger
@@ -123,7 +123,7 @@ function createNote(req: Request) {
     return {
         note,
         branch
-    };
+    } satisfies CreateChildrenResponse;
 }
 
 function updateNoteData(req: Request) {

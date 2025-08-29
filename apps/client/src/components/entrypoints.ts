@@ -11,21 +11,7 @@ import froca from "../services/froca.js";
 import linkService from "../services/link.js";
 import { t } from "../services/i18n.js";
 import type FNote from "../entities/fnote.js";
-
-// TODO: Move somewhere else nicer.
-export type SqlExecuteResults = string[][][];
-
-// TODO: Deduplicate with server.
-interface SqlExecuteResponse {
-    success: boolean;
-    error?: string;
-    results: SqlExecuteResults;
-}
-
-// TODO: Deduplicate with server.
-interface CreateChildrenResponse {
-    note: FNote;
-}
+import { CreateChildrenResponse, SqlExecuteResponse } from "@triliumnext/commons";
 
 export default class Entrypoints extends Component {
     constructor() {

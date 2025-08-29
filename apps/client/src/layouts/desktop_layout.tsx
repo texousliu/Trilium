@@ -42,6 +42,7 @@ import FloatingButtons from "../widgets/FloatingButtons.jsx";
 import { DESKTOP_FLOATING_BUTTONS } from "../widgets/FloatingButtonsDefinitions.jsx";
 import SearchResult from "../widgets/search_result.jsx";
 import GlobalMenu from "../widgets/buttons/global_menu.jsx";
+import SqlResults from "../widgets/sql_result.js";
 
 export default class DesktopLayout {
 
@@ -140,7 +141,7 @@ export default class DesktopLayout {
                                                                 .child(new NoteDetailWidget())
                                                                 .child(new NoteListWidget(false))
                                                                 .child(<SearchResult />)
-                                                                .child(new SqlResultWidget())
+                                                                .child(<SqlResults />)
                                                                 .child(<ScrollPadding />)
                                                         )
                                                         .child(new ApiLogWidget())
