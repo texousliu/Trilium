@@ -626,6 +626,10 @@ div.quick-search .dropdown-menu {
     font-weight: 600;
 }
 
+.quick-search div.dropdown-divider {
+    margin: 8px 0;
+}
+
 /*
  * TREE PANE
  */
