@@ -197,11 +197,15 @@ html body .dropdown-item[disabled] {
 
 /* Menu item keyboard shortcut */
 .dropdown-item kbd {
-    margin-left: 16px;
     font-family: unset !important;
     font-size: unset !important;
     color: var(--menu-item-keyboard-shortcut-color) !important;
     padding-top: 0;
+}
+
+.dropdown-item span.keyboard-shortcut {
+    color: var(--menu-item-keyboard-shortcut-color) !important;
+    margin-left: 16px;
 }
 
 .dropdown-divider {

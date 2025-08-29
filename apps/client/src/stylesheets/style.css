@@ -437,14 +437,18 @@ body #context-menu-container .dropdown-item > span {
     align-items: center;
 }
 
-.dropdown-menu kbd {
+.dropdown-item span.keyboard-shortcut {
     flex-grow: 1;
     text-align: right;
+}
+
+.dropdown-menu kbd {    
     color: var(--muted-text-color);
     border: none;
     background-color: transparent;
     box-shadow: none;
     padding-bottom: 0;
+    padding: 0;
 }
 
 .dropdown-item,
