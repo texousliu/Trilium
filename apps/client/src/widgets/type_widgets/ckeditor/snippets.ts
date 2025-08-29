@@ -52,7 +52,7 @@ function buildIcon(snippet: FNote) {
     return /*xml*/`\
 <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
   <foreignObject x="0" y="0" width="20" height="20">
-    <span class="note-icon ${snippet.getIcon()}" xmlns="http://www.w3.org/1999/xhtml"></span>
+    <span class="note-icon ${snippet.getIcon()} ${snippet.getColorClass()}" xmlns="http://www.w3.org/1999/xhtml"></span>
   </foreignObject>
 </svg>`
 }
