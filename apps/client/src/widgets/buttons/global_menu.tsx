@@ -3,7 +3,7 @@ import "./global_menu.css";
 import { useStaticTooltip, useStaticTooltipWithKeyboardShortcut } from "../react/hooks";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import { t } from "../../services/i18n";
-import { FormDropdownDivider, FormListItem } from "../react/FormList";
+import { FormDropdownDivider, FormDropdownSubmenu, FormListItem } from "../react/FormList";
 import { CommandNames } from "../../components/app_context";
 import KeyboardShortcut from "../react/KeyboardShortcut";
 import { KeyboardActionNames } from "@triliumnext/commons";
@@ -40,7 +40,7 @@ export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout:
 
             <ZoomControls parentComponent={parentComponent} />
             <ToggleWindowOnTop />
-            <KeyboardAction command="toggleZenMode" icon="bx bxs-yin-yang" text={t("global_menu.toggle-zen-mode")} />
+            <KeyboardActionMenuItem command="toggleZenMode" icon="bx bxs-yin-yang" text={t("global_menu.toggle-zen-mode")} />
             <FormDropdownDivider />
 
             {isMobile() ? (
@@ -49,7 +49,26 @@ export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout:
                 <MenuItem command="switchToMobileVersion" icon="bx bx-mobile" text={t("global_menu.switch_to_mobile_version")} />
             )}
             <MenuItem command="showLaunchBarSubtree" icon={`bx ${isMobile() ? "bx-mobile" : "bx-sidebar"}`} text={t("global_menu.configure_launchbar")} />
+            <AdvancedMenu />
         </Dropdown>
+    )
+}
+
+function AdvancedMenu() {
+    return (
+        <FormDropdownSubmenu icon="bx bx-chip" title={t("global_menu.advanced")}>
+            <MenuItem command="showHiddenSubtree" icon="bx bx-hide" text={t("global_menu.show_hidden_subtree")} />
+            <MenuItem command="showSearchHistory" icon="bx bx-search-alt" text={t("global_menu.open_search_history")} />
+            <FormDropdownDivider />
+
+            <KeyboardActionMenuItem command="showBackendLog" icon="bx bx-detail" text={t("global_menu.show_backend_log")} />
+            <KeyboardActionMenuItem command="showSQLConsole" icon="bx bx-data" text={t("global_menu.open_sql_console")} />
+            <MenuItem command="showSQLConsoleHistory" icon="bx bx-data" text={t("global_menu.open_sql_console_history")} />
+            <FormDropdownDivider />
+
+            <MenuItem command="openDevTools" icon="bx bx-bug-alt" text={t("global_menu.open_dev_tools")} />
+            <KeyboardActionMenuItem command="reloadFrontendApp" icon="bx bx-refresh" text={t("global_menu.reload_frontend")} title={t("global_menu.reload_hint")} />
+        </FormDropdownSubmenu>
     )
 }
 
@@ -65,7 +84,7 @@ function MenuItem({ icon, text, title, command, disabled, active, outsideChildre
         >{text}</FormListItem>
 }
 
-function KeyboardAction({ text, command, ...props }: MenuItemProps<KeyboardActionNames>) {
+function KeyboardActionMenuItem({ text, command, ...props }: MenuItemProps<KeyboardActionNames>) {
     return <MenuItem
         {...props}
         command={command}
