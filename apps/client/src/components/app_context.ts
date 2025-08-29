@@ -89,6 +89,11 @@ export type CommandMappings = {
     closeTocCommand: CommandData;
     closeHlt: CommandData;
     showLaunchBarSubtree: CommandData;
+    showHiddenSubtree: CommandData;
+    showSQLConsoleHistory: CommandData;
+    logout: CommandData;
+    switchToMobileVersion: CommandData;
+    switchToDesktopVersion: CommandData;
     showRevisions: CommandData & {
         noteId?: string | null;
     };
