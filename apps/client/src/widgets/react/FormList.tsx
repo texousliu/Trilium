@@ -89,7 +89,6 @@ interface FormListItemOpts {
     description?: string;
     className?: string;
     rtl?: boolean;
-    outsideChildren?: ComponentChildren;
 }
 
 const TOOLTIP_CONFIG: Partial<Tooltip.Options> = {
@@ -97,7 +96,7 @@ const TOOLTIP_CONFIG: Partial<Tooltip.Options> = {
     fallbackPlacements: [ "right" ]
 }
 
-export function FormListItem({ className, icon, value, title, active, disabled, checked, onClick, selected, rtl, triggerCommand, outsideChildren, description, ...contentProps }: FormListItemOpts) {
+export function FormListItem({ className, icon, value, title, active, disabled, checked, onClick, selected, rtl, triggerCommand, description, ...contentProps }: FormListItemOpts) {
     const itemRef = useRef<HTMLLIElement>(null);
 
     if (checked) {
@@ -124,7 +123,6 @@ export function FormListItem({ className, icon, value, title, active, disabled, 
             ) : (
                 <FormListContent description={description} {...contentProps} />
             )}
-            {outsideChildren}
         </li>
     );
 }

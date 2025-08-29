@@ -99,7 +99,7 @@ function SwitchToOptions() {
     }
 }
 
-function MenuItem({ icon, text, title, command, disabled, active, outsideChildren }: MenuItemProps<KeyboardActionNames | CommandNames | (() => void)>) {
+function MenuItem({ icon, text, title, command, disabled, active }: MenuItemProps<KeyboardActionNames | CommandNames | (() => void)>) {
     return <FormListItem
         icon={icon}
         title={title}
@@ -107,7 +107,6 @@ function MenuItem({ icon, text, title, command, disabled, active, outsideChildre
         onClick={typeof command === "function" ? command : undefined}
         disabled={disabled}
         active={active}
-        outsideChildren={outsideChildren}
         >{text}</FormListItem>
 }
 
@@ -115,8 +114,7 @@ function KeyboardActionMenuItem({ text, command, ...props }: MenuItemProps<Keybo
     return <MenuItem
         {...props}
         command={command}
-        text={text}
-        outsideChildren={<KeyboardShortcut actionName={command as KeyboardActionNames} />}
+        text={<>{text} <KeyboardShortcut actionName={command as KeyboardActionNames} /></>}
     />
 }
 
@@ -177,7 +175,9 @@ function ZoomControls({ parentComponent }: { parentComponent?: Component | null 
         <FormListItem
             icon="bx bx-empty"
             className="zoom-container"
-            outsideChildren={<>
+        >
+            {t("global_menu.zoom")}
+            <>
                 <div className="zoom-buttons">
                     <ZoomControlButton command="toggleFullscreen" title={t("global_menu.toggle_fullscreen")} icon="bx bx-expand-alt" />
                     &nbsp;
@@ -185,8 +185,8 @@ function ZoomControls({ parentComponent }: { parentComponent?: Component | null 
                     <ZoomControlButton command="zoomReset" title={t("global_menu.reset_zoom_level")}>{zoomLevel}{t("units.percentage")}</ZoomControlButton>
                     <ZoomControlButton command="zoomIn" title={t("global_menu.zoom_in")} icon="bx bx-plus" />
                 </div>
-            </>}
-        >{t("global_menu.zoom")}</FormListItem>
+            </>
+        </FormListItem>
     ) : (
         <MenuItem icon="bx bx-expand-alt" command="toggleFullscreen" text={t("global_menu.toggle_fullscreen")} />
     );
