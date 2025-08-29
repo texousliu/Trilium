@@ -594,16 +594,6 @@ div.quick-search .dropdown-menu {
     vertical-align: text-bottom;
 }
 
-/* Note title */
-.quick-search .dropdown-menu .dropdown-item > a {
-    color: var(--menu-text-color);
-}
-
-.quick-search .dropdown-menu .dropdown-item > a:hover {
-    --hover-item-background-color: transparent;
-    text-decoration: underline;
-}
-
 /* Note path */
 .quick-search .dropdown-menu small {
     display: block;
