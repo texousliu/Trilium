@@ -1,6 +1,5 @@
 import FlexContainer from "../widgets/containers/flex_container.js";
 import TabRowWidget from "../widgets/tab_row.js";
-import TitleBarButtonsWidget from "../widgets/title_bar_buttons.js";
 import LeftPaneContainer from "../widgets/containers/left_pane_container.js";
 import NoteTreeWidget from "../widgets/note_tree.js";
 import NoteTitleWidget from "../widgets/note_title.jsx";
@@ -42,6 +41,7 @@ import SearchResult from "../widgets/search_result.jsx";
 import GlobalMenu from "../widgets/buttons/global_menu.jsx";
 import SqlResults from "../widgets/sql_result.js";
 import SqlTableSchemas from "../widgets/sql_table_schemas.js";
+import TitleBarButtons from "../widgets/title_bar_buttons.jsx";
 
 export default class DesktopLayout {
 
@@ -78,7 +78,7 @@ export default class DesktopLayout {
                     .child(new FlexContainer("row").id("tab-row-left-spacer"))
                     .optChild(launcherPaneIsHorizontal, new LeftPaneToggleWidget(true))
                     .child(new TabRowWidget().class("full-width"))
-                    .optChild(customTitleBarButtons, new TitleBarButtonsWidget())
+                    .optChild(customTitleBarButtons, <TitleBarButtons />)
                     .css("height", "40px")
                     .css("background-color", "var(--launcher-pane-background-color)")
                     .setParent(appContext)
@@ -99,7 +99,7 @@ export default class DesktopLayout {
                         new FlexContainer("column")
                             .id("rest-pane")
                             .css("flex-grow", "1")
-                            .optChild(!fullWidthTabBar, new FlexContainer("row").child(new TabRowWidget()).optChild(customTitleBarButtons, new TitleBarButtonsWidget()).css("height", "40px"))
+                            .optChild(!fullWidthTabBar, new FlexContainer("row").child(new TabRowWidget()).optChild(customTitleBarButtons, <TitleBarButtons />).css("height", "40px"))
                             .child(
                                 new FlexContainer("row")
                                     .filling()
