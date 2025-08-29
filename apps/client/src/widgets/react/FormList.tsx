@@ -97,8 +97,8 @@ const TOOLTIP_CONFIG: Partial<Tooltip.Options> = {
     fallbackPlacements: [ "right" ]
 }
 
-export function FormListItem({ className, children, icon, value, title, active, badges, disabled, checked, onClick, description, selected, rtl, triggerCommand, outsideChildren }: FormListItemOpts) {
-    const itemRef = useRef<HTMLAnchorElement>(null);
+export function FormListItem({ className, icon, value, title, active, disabled, checked, onClick, selected, rtl, triggerCommand, outsideChildren, description, ...contentProps }: FormListItemOpts) {
+    const itemRef = useRef<HTMLLIElement>(null);
 
     if (checked) {
         icon = "bx bx-check";
@@ -107,7 +107,7 @@ export function FormListItem({ className, children, icon, value, title, active, 
     useStaticTooltip(itemRef, TOOLTIP_CONFIG);
 
     return (
-        <a
+        <li
             ref={itemRef}
             class={`dropdown-item ${active ? "active" : ""} ${disabled ? "disabled" : ""} ${selected ? "selected" : ""} ${className ?? ""}`}
             data-value={value} title={title}
@@ -117,16 +117,26 @@ export function FormListItem({ className, children, icon, value, title, active, 
             dir={rtl ? "rtl" : undefined}
         >
             <Icon icon={icon} />&nbsp;
-            <div>
-                {children}
-                {badges && badges.map(({ className, text }) => (
-                    <span className={`badge ${className ?? ""}`}>{text}</span>
-                ))}
-                {description && <div className="description">{description}</div>}
-            </div>
+            {description ? (
+                <div>
+                    <FormListContent description={description} {...contentProps} />
+                </div>
+            ) : (
+                <FormListContent description={description} {...contentProps} />
+            )}
             {outsideChildren}
-        </a>
+        </li>
     );
+}
+
+function FormListContent({ children, badges, description }: Pick<FormListItemOpts, "children" | "badges" | "description">) {
+    return <>
+        {children}
+        {badges && badges.map(({ className, text }) => (
+            <span className={`badge ${className ?? ""}`}>{text}</span>
+        ))}
+        {description && <div className="description">{description}</div>}
+    </>;
 }
 
 interface FormListHeaderOpts {

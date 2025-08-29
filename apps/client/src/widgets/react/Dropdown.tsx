@@ -80,13 +80,13 @@ export default function Dropdown({ className, buttonClassName, isStatic, childre
                 <span className="caret"></span>
             </button>
 
-            <div
+            <ul
                 class={`dropdown-menu ${isStatic ? "static" : ""} ${dropdownContainerClassName ?? ""} tn-dropdown-list`}
                 style={dropdownContainerStyle}
                 aria-labelledby={ariaId}
             >
                 {shown && children}
-            </div>
+            </ul>
         </div>
     )
 }
