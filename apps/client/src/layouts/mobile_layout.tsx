@@ -3,7 +3,6 @@ import NoteTitleWidget from "../widgets/note_title.js";
 import NoteDetailWidget from "../widgets/note_detail.js";
 import QuickSearchWidget from "../widgets/quick_search.js";
 import NoteTreeWidget from "../widgets/note_tree.js";
-import ToggleSidebarButtonWidget from "../widgets/mobile_widgets/toggle_sidebar_button.js";
 import MobileDetailMenuWidget from "../widgets/mobile_widgets/mobile_detail_menu.js";
 import ScreenContainer from "../widgets/mobile_widgets/screen_container.js";
 import ScrollingContainer from "../widgets/containers/scrolling_container.js";
@@ -23,6 +22,7 @@ import FilePropertiesTab from "../widgets/ribbon/FilePropertiesTab.jsx";
 import { useNoteContext } from "../widgets/react/hooks.jsx";
 import FloatingButtons from "../widgets/FloatingButtons.jsx";
 import { MOBILE_FLOATING_BUTTONS } from "../widgets/FloatingButtonsDefinitions.jsx";
+import ToggleSidebarButton from "../widgets/mobile_widgets/toggle_sidebar_button.jsx";
 
 const MOBILE_CSS = `
 <style>
@@ -139,7 +139,7 @@ export default class MobileLayout {
                                     .contentSized()
                                     .css("font-size", "larger")
                                     .css("align-items", "center")
-                                    .child(new ToggleSidebarButtonWidget().contentSized())
+                                    .child(<ToggleSidebarButton />)
                                     .child(<NoteTitleWidget />)
                                     .child(new MobileDetailMenuWidget(true).contentSized())
                             )
