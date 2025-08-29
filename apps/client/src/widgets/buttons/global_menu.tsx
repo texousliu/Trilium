@@ -37,7 +37,6 @@ export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout:
                     <span className="bx bx-sync global-menu-button-update-available-button" title={t("update_available.update_available")}></span>    
                 </div>}
             </>}
-            forceShown
         >
 
             <MenuItem command="openNewWindow" icon="bx bx-window-open" text={t("global_menu.open_new_window")} />
