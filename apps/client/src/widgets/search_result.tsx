@@ -5,7 +5,7 @@ import { useNoteContext, useNoteProperty, useTriliumEvent } from "./react/hooks"
 import "./search_result.css";
 import NoteListRenderer from "../services/note_list_renderer";
 
-enum SearchResultState {
+enum SearchResultState {    
     NO_RESULTS,
     NOT_EXECUTED,
     GOT_RESULTS
@@ -19,7 +19,9 @@ export default function SearchResult() {
     function refresh() {
         searchContainerRef.current?.replaceChildren();
 
-        if (!note?.searchResultsLoaded) {
+        if (note?.type !== "search") {
+            setState(undefined);
+        } else if (!note?.searchResultsLoaded) {
             setState(SearchResultState.NOT_EXECUTED);
         } else if (note.getChildNoteIds().length === 0) {
             setState(SearchResultState.NO_RESULTS);
@@ -57,7 +59,7 @@ export default function SearchResult() {
                 <Alert type="info" className="search-no-results">{t("search_result.no_notes_found")}</Alert>
             )}
 
-            <div ref={searchContainerRef} className="search-results" />
+            <div ref={searchContainerRef} className="search-result-widget-content" />
         </div>
     );
 }
