@@ -50,6 +50,15 @@ export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout:
             )}
             <MenuItem command="showLaunchBarSubtree" icon={`bx ${isMobile() ? "bx-mobile" : "bx-sidebar"}`} text={t("global_menu.configure_launchbar")} />
             <AdvancedMenu />
+            <MenuItem command="showOptions" icon="bx bx-cog" text={t("global_menu.options")} />
+            <FormDropdownDivider />
+
+            <KeyboardActionMenuItem command="showHelp" icon="bx bx-help-circle" text={t("global_menu.show_help")} />
+            <KeyboardActionMenuItem command="showCheatsheet" icon="bx bxs-keyboard" text={t("global_menu.show-cheatsheet")} />
+            <MenuItem command="openAboutDialog" icon="bx bx-info-circle" text={t("global_menu.about")} />
+            <FormDropdownDivider />
+
+            <MenuItem command="logout" icon="bx bx-log-out" text={t("global_menu.logout")} />
         </Dropdown>
     )
 }
