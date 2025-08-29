@@ -575,6 +575,10 @@ div.quick-search .search-button.show {
  * Quick search results
  */
 
+div.quick-search .dropdown-menu {
+    --quick-search-item-delimiter-color: transparent;
+}
+
 /* Item */
 .quick-search .dropdown-menu *.dropdown-item {
     padding: 8px 12px !important;
@@ -620,11 +624,6 @@ div.quick-search .search-button.show {
 :root .quick-search .search-result-attributes b {
     color: var(--quick-search-result-highlight-color);
     font-weight: 600;
-}
-
-/* Divider line */
-.quick-search .dropdown-item::after {
-    display: none;
 }
 
 /*

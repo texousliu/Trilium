@@ -15,13 +15,15 @@ const TPL = /*html*/`
         padding: 10px 10px 10px 0px;
         height: 50px;
     }
-
+    
     .quick-search button, .quick-search input {
         border: 0;
         font-size: 100% !important;
     }
-
+        
     .quick-search .dropdown-menu {
+        --quick-search-item-delimiter-color: var(--dropdown-border-color);
+        
         max-height: 80vh;
         min-width: 400px;
         max-width: 720px;
@@ -38,14 +40,14 @@ const TPL = /*html*/`
         position: relative;
     }
     
-    .quick-search .dropdown-item:not(:last-child)::after {
+    .quick-search .dropdown-item + .dropdown-item::after {
         content: '';
         position: absolute;
         left: 0;
-        bottom: 0;
+        top: 0;
         width: 100%;
         height: 1px;
-        background: var(--dropdown-border-color);
+        border-bottom: 1px solid var(--quick-search-item-delimiter-color);
     }
     
     .quick-search .dropdown-item:last-child::after {
