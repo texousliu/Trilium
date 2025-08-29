@@ -732,7 +732,8 @@
     "note_type": "Tipo de nota",
     "editable": "Editable",
     "basic_properties": "Propiedades básicas",
-    "language": "Idioma"
+    "language": "Idioma",
+    "configure_code_notes": "Configurar notas de código..."
   },
   "book_properties": {
     "view_type": "Tipo de vista",
@@ -1253,7 +1254,12 @@
     "selected_provider": "Proveedor seleccionado",
     "selected_provider_description": "Elija el proveedor de IA para el chat y características de completado",
     "select_model": "Seleccionar modelo...",
-    "select_provider": "Seleccionar proveedor..."
+    "select_provider": "Seleccionar proveedor...",
+    "ai_enabled": "Características de IA activadas",
+    "ai_disabled": "Características de IA desactivadas",
+    "no_models_found_online": "No se encontraron modelos. Por favor, comprueba tu clave de API y la configuración.",
+    "no_models_found_ollama": "No se encontraron modelos de Ollama. Por favor, comprueba si Ollama se está ejecutando.",
+    "error_fetching": "Error al obtener los modelos: {{error}}"
   },
   "zoom_factor": {
     "title": "Factor de zoom (solo versión de escritorio)",
@@ -2001,5 +2007,21 @@
     "background_effects_message": "En los dispositivos Windows, los efectos de fondo ya son totalmente estables. Los efectos de fondo añaden un toque de color a la interfaz de usuario difuminando el fondo que hay detrás. Esta técnica también se utiliza en otras aplicaciones como el Explorador de Windows.",
     "background_effects_button": "Activar efectos de fondo",
     "dismiss": "Desestimar"
+  },
+  "ui-performance": {
+    "title": "Rendimiento",
+    "enable-motion": "Habilitar transiciones y animaciones",
+    "enable-shadows": "Activar sombras",
+    "enable-backdrop-effects": "Habilitar efectos de fondo para menús, ventanas emergentes y paneles"
+  },
+  "settings": {
+    "related_settings": "Configuración relacionada"
+  },
+  "settings_appearance": {
+    "related_code_blocks": "Esquema de colores para bloques de código en notas de texto",
+    "related_code_notes": "Esquema de colores para notas de código"
+  },
+  "units": {
+    "percentage": "%"
   }
 }
