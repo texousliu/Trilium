@@ -729,7 +729,8 @@
     "note_type": "筆記類型",
     "editable": "可編輯",
     "basic_properties": "基本屬性",
-    "language": "語言"
+    "language": "語言",
+    "configure_code_notes": "配寘代碼注釋..."
   },
   "book_properties": {
     "view_type": "視圖類型",
