@@ -23,7 +23,7 @@ const TPL = /*html*/`
         
     .quick-search .dropdown-menu {
         --quick-search-item-delimiter-color: var(--dropdown-border-color);
-        
+
         max-height: 80vh;
         min-width: 400px;
         max-width: 720px;
@@ -94,6 +94,8 @@ const TPL = /*html*/`
         background-color: var(--accented-background-color);
         color: var(--main-text-color);
         font-size: .85em;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     /* Search result highlighting */
