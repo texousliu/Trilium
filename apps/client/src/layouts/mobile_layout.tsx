@@ -154,7 +154,7 @@ export default class MobileLayout {
                                     .child(new NoteListWidget(false))
                                     .child(<FilePropertiesWrapper />)
                             )
-                            .child(new MobileEditorToolbar())
+                            .child(<MobileEditorToolbar />)
                     )
             )
             .child(
