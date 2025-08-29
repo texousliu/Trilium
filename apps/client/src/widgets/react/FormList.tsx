@@ -1,10 +1,11 @@
 import { Dropdown as BootstrapDropdown, Tooltip } from "bootstrap";
 import { ComponentChildren } from "preact";
 import Icon from "./Icon";
-import { useEffect, useMemo, useRef, type CSSProperties } from "preact/compat";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "preact/compat";
 import "./FormList.css";
 import { CommandNames } from "../../components/app_context";
 import { useStaticTooltip } from "./hooks";
+import { isMobile } from "../../services/utils";
 
 interface FormListOpts {
     children: ComponentChildren;
@@ -145,14 +146,25 @@ export function FormDropdownDivider() {
 }
 
 export function FormDropdownSubmenu({ icon, title, children }: { icon: string, title: ComponentChildren, children: ComponentChildren }) {
+    const [ openOnMobile, setOpenOnMobile ] = useState(false);
+
     return (
-        <li className="dropdown-item dropdown-submenu">
-            <span class="dropdown-toggle">
+        <li className={`dropdown-item dropdown-submenu ${openOnMobile ? "submenu-open" : ""}`}>
+            <span
+                className="dropdown-toggle"
+                onClick={(e) => {
+                    e.stopPropagation();
+
+                    if (isMobile()) {
+                        setOpenOnMobile(!openOnMobile);
+                    }
+                }}
+            >
                 <Icon icon={icon} />
                 {title}
             </span>
 
-            <ul className="dropdown-menu">
+            <ul className={`dropdown-menu ${openOnMobile ? "show" : ""}`}>
                 {children}
             </ul>
         </li>
