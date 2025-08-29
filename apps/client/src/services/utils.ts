@@ -311,7 +311,13 @@ function copySelectionToClipboard() {
     }
 }
 
-export function dynamicRequire(moduleName: string) {
+const dynamicRequireMappings = {
+    "@electron/remote": import("@electron/remote"),
+    "electron": import("electron"),
+    "child_process": import("child_process")
+};
+
+export function dynamicRequire<T extends keyof typeof dynamicRequireMappings>(moduleName: T): Awaited<typeof dynamicRequireMappings[T]>{
     if (typeof __non_webpack_require__ !== "undefined") {
         return __non_webpack_require__(moduleName);
     } else {

@@ -1,6 +1,6 @@
 import froca from "../services/froca.js";
 import RootCommandExecutor from "./root_command_executor.js";
-import Entrypoints, { type SqlExecuteResults } from "./entrypoints.js";
+import Entrypoints from "./entrypoints.js";
 import options from "../services/options.js";
 import utils, { hasTouchBar } from "../services/utils.js";
 import zoomComponent from "./zoom.js";
@@ -32,6 +32,7 @@ import type { CreateNoteOpts } from "../services/note_create.js";
 import { ColumnComponent } from "tabulator-tables";
 import { ChooseNoteTypeCallback } from "../widgets/dialogs/note_type_chooser.jsx";
 import type RootContainer from "../widgets/containers/root_container.js";
+import { SqlExecuteResults } from "@triliumnext/commons";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootContainer;
