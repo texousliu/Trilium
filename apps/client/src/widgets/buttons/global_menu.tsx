@@ -1,6 +1,6 @@
 import Dropdown from "../react/Dropdown";
 import "./global_menu.css";
-import { useStaticTooltip, useStaticTooltipWithKeyboardShortcut } from "../react/hooks";
+import { useStaticTooltip, useStaticTooltipWithKeyboardShortcut, useTriliumOption, useTriliumOptionBool } from "../react/hooks";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import { t } from "../../services/i18n";
 import { FormDropdownDivider, FormDropdownSubmenu, FormListItem } from "../react/FormList";
@@ -10,7 +10,7 @@ import { KeyboardActionNames } from "@triliumnext/commons";
 import { ComponentChildren } from "preact";
 import Component from "../../components/component";
 import { ParentComponent } from "../react/react_utils";
-import { dynamicRequire, isElectron, isMobile } from "../../services/utils";
+import utils, { dynamicRequire, isElectron, isMobile } from "../../services/utils";
 
 interface MenuItemProps<T> {
     icon: string,
@@ -25,12 +25,18 @@ interface MenuItemProps<T> {
 export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout: boolean }) {
     const isVerticalLayout = !isHorizontalLayout;
     const parentComponent = useContext(ParentComponent);
+    const { isUpdateAvailable, latestVersion } = useTriliumUpdateStatus();
 
     return (
         <Dropdown
             className="global-menu"
             buttonClassName={`global-menu-button ${isHorizontalLayout ? "bx bx-menu" : ""}`} noSelectButtonStyle iconAction hideToggleArrow
-            text={isVerticalLayout && <VerticalLayoutIcon />}
+            text={<>
+                {isVerticalLayout && <VerticalLayoutIcon />}
+                {isUpdateAvailable && <div class="global-menu-button-update-available">
+                    <span className="bx bx-sync global-menu-button-update-available-button" title={t("update_available.update_available")}></span>    
+                </div>}
+            </>}
             forceShown
         >
 
@@ -56,6 +62,7 @@ export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout:
             <KeyboardActionMenuItem command="showHelp" icon="bx bx-help-circle" text={t("global_menu.show_help")} />
             <KeyboardActionMenuItem command="showCheatsheet" icon="bx bxs-keyboard" text={t("global_menu.show-cheatsheet")} />
             <MenuItem command="openAboutDialog" icon="bx bx-info-circle" text={t("global_menu.about")} />
+            {isUpdateAvailable && <MenuItem command={() => window.open("https://github.com/TriliumNext/Trilium/releases/latest")} icon="bx bx-sync" text={`Version ${latestVersion} is available, click to download.`} /> }
             <FormDropdownDivider />
 
             <MenuItem command="logout" icon="bx bx-log-out" text={t("global_menu.logout")} />
@@ -190,4 +197,33 @@ function ToggleWindowOnTop() {
             }}
         />
     )
+}
+
+function useTriliumUpdateStatus() {
+    const [ latestVersion, setLatestVersion ] = useState<string>();
+    const [ checkForUpdates ] = useTriliumOptionBool("checkForUpdates");
+    const isUpdateAvailable = utils.isUpdateAvailable(latestVersion, glob.triliumVersion);
+    
+    async function updateVersionStatus() {    
+        const RELEASES_API_URL = "https://api.github.com/repos/TriliumNext/Trilium/releases/latest";
+
+        const resp = await fetch(RELEASES_API_URL);
+        const data = await resp.json();
+        const latestVersion = data?.tag_name?.substring(1);
+        setLatestVersion(latestVersion);
+    }
+
+    useEffect(() => {
+        if (!checkForUpdates) {
+            setLatestVersion(undefined);
+            return;
+        }
+
+        updateVersionStatus();
+
+        const interval = setInterval(() => updateVersionStatus(), 8 * 60 * 60 * 1000);
+        return () => clearInterval(interval);
+    }, [ checkForUpdates ]);
+
+    return { isUpdateAvailable, latestVersion };
 }
