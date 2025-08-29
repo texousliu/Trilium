@@ -168,7 +168,7 @@ export function FormDropdownSubmenu({ icon, title, children }: { icon: string, t
                     }
                 }}
             >
-                <Icon icon={icon} />
+                <Icon icon={icon} />{" "}
                 {title}
             </span>
 
