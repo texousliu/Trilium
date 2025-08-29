@@ -505,7 +505,8 @@ export function useTooltip(elRef: RefObject<HTMLElement>, config: Partial<Toolti
  */
 export function useStaticTooltip(elRef: RefObject<Element>, config?: Partial<Tooltip.Options>) {
     useEffect(() => {
-        if (!elRef?.current) return;
+        const hasTooltip = config?.title || elRef.current?.getAttribute("title");
+        if (!elRef?.current || !hasTooltip) return;
 
         const $el = $(elRef.current);
         $el.tooltip(config);

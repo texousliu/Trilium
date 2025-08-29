@@ -1,9 +1,10 @@
-import { Dropdown as BootstrapDropdown } from "bootstrap";
+import { Dropdown as BootstrapDropdown, Tooltip } from "bootstrap";
 import { ComponentChildren } from "preact";
 import Icon from "./Icon";
 import { useEffect, useMemo, useRef, type CSSProperties } from "preact/compat";
 import "./FormList.css";
 import { CommandNames } from "../../components/app_context";
+import { useStaticTooltip } from "./hooks";
 
 interface FormListOpts {
     children: ComponentChildren;
@@ -90,13 +91,23 @@ interface FormListItemOpts {
     outsideChildren?: ComponentChildren;
 }
 
+const TOOLTIP_CONFIG: Partial<Tooltip.Options> = {
+    placement: "right",
+    fallbackPlacements: [ "right" ]
+}
+
 export function FormListItem({ className, children, icon, value, title, active, badges, disabled, checked, onClick, description, selected, rtl, triggerCommand, outsideChildren }: FormListItemOpts) {
+    const itemRef = useRef<HTMLAnchorElement>(null);
+
     if (checked) {
         icon = "bx bx-check";
     }
 
+    useStaticTooltip(itemRef, TOOLTIP_CONFIG);
+
     return (
         <a
+            ref={itemRef}
             class={`dropdown-item ${active ? "active" : ""} ${disabled ? "disabled" : ""} ${selected ? "selected" : ""} ${className ?? ""}`}
             data-value={value} title={title}
             tabIndex={0}
@@ -131,4 +142,19 @@ export function FormListHeader({ text }: FormListHeaderOpts) {
 
 export function FormDropdownDivider() {
     return <div className="dropdown-divider" />;
+}
+
+export function FormDropdownSubmenu({ icon, title, children }: { icon: string, title: ComponentChildren, children: ComponentChildren }) {
+    return (
+        <li className="dropdown-item dropdown-submenu">
+            <span class="dropdown-toggle">
+                <Icon icon={icon} />
+                {title}
+            </span>
+
+            <ul className="dropdown-menu">
+                {children}
+            </ul>
+        </li>
+    )
 }
