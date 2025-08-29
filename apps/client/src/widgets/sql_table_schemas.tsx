@@ -14,9 +14,10 @@ export default function SqlTableSchemas() {
         server.get<SchemaResponse[]>("sql/schema").then(setSchemas);
     }, []);
 
+    const isEnabled = note?.mime === "text/x-sqlite;schema=trilium" && schemas;
     return (
-        <div className="sql-table-schemas-widget">
-            {note?.mime === "text/x-sqlite;schema=trilium" && schemas && (
+        <div className={`sql-table-schemas-widget ${!isEnabled ? "hidden-ext" : ""}`}>
+            {isEnabled && (
                 <>
                     {t("sql_table_schemas.tables")}{": "}
 
