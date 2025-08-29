@@ -364,8 +364,50 @@
 }
 
 /* Text snippet dropdown */
-.ck-template-form .ck-button__icon {
-    display: none;
+
+div.ck-template-form {
+    padding: 8px;
+}
+
+div.ck-template-form .ck-labeled-field-view {
+    margin: 8px 0;
+}
+
+:root div.ck-template-form li.ck-list__item button.ck-template-button {
+    padding: 4px 8px;
+}
+
+:root .ck-template-form .ck-button__icon {
+    --ck-spacing-medium: 2px;
+}
+
+:root div.ck-template-form  .note-icon {
+    color: var(--menu-item-icon-color);
+}
+
+:root div.ck-template-form .ck-template-form__description {
+    opacity: .5;
+    font-size: .9em;
+}
+
+div.ck-template-form .ck-template-form__text-part {
+    color: var(--hover-item-text-color);
+    font-size: .9rem;
+}
+
+div.ck-template-form .ck-template-form__text-part mark {
+    background: unset;
+    color: var(--quick-search-result-highlight-color);
+    font-weight: bold;
+}
+
+div.ck-template-form  .ck-search__info span {
+    line-height: initial;
+}
+
+div.ck-template-form  .ck-search__info span:nth-child(2) {
+    font-size: .9em;
+    opacity: .5;
 }
 
 /* Action buttons */
