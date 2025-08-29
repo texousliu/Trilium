@@ -48,12 +48,8 @@ export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout:
             <ToggleWindowOnTop />
             <KeyboardActionMenuItem command="toggleZenMode" icon="bx bxs-yin-yang" text={t("global_menu.toggle-zen-mode")} />
             <FormDropdownDivider />
-
-            {isMobile() ? (
-                <MenuItem command="switchToDesktopVersion" icon="bx bx-desktop" text={t("global_menu.switch_to_desktop_version")} />
-            ) : (
-                <MenuItem command="switchToMobileVersion" icon="bx bx-mobile" text={t("global_menu.switch_to_mobile_version")} />
-            )}
+            
+            <SwitchToOptions />        
             <MenuItem command="showLaunchBarSubtree" icon={`bx ${isMobile() ? "bx-mobile" : "bx-sidebar"}`} text={t("global_menu.configure_launchbar")} />
             <AdvancedMenu />
             <MenuItem command="showOptions" icon="bx bx-cog" text={t("global_menu.options")} />
@@ -63,9 +59,7 @@ export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout:
             <KeyboardActionMenuItem command="showCheatsheet" icon="bx bxs-keyboard" text={t("global_menu.show-cheatsheet")} />
             <MenuItem command="openAboutDialog" icon="bx bx-info-circle" text={t("global_menu.about")} />
             {isUpdateAvailable && <MenuItem command={() => window.open("https://github.com/TriliumNext/Trilium/releases/latest")} icon="bx bx-sync" text={`Version ${latestVersion} is available, click to download.`} /> }
-            <FormDropdownDivider />
-
-            <MenuItem command="logout" icon="bx bx-log-out" text={t("global_menu.logout")} />
+            {!isElectron() && <BrowserOnlyOptions />}
         </Dropdown>
     )
 }
@@ -82,10 +76,27 @@ function AdvancedMenu() {
             <MenuItem command="showSQLConsoleHistory" icon="bx bx-data" text={t("global_menu.open_sql_console_history")} />
             <FormDropdownDivider />
 
-            <MenuItem command="openDevTools" icon="bx bx-bug-alt" text={t("global_menu.open_dev_tools")} />
+            {isElectron() && <MenuItem command="openDevTools" icon="bx bx-bug-alt" text={t("global_menu.open_dev_tools")} />}
             <KeyboardActionMenuItem command="reloadFrontendApp" icon="bx bx-refresh" text={t("global_menu.reload_frontend")} title={t("global_menu.reload_hint")} />
         </FormDropdownSubmenu>
     )
+}
+
+function BrowserOnlyOptions() {
+    return <>
+        <FormDropdownDivider />
+        <MenuItem command="logout" icon="bx bx-log-out" text={t("global_menu.logout")} />
+    </>;
+}
+
+function SwitchToOptions() {
+    if (isElectron()) {
+        return;
+    } else if (!isMobile()) {
+        return <MenuItem command="switchToMobileVersion" icon="bx bx-mobile" text={t("global_menu.switch_to_mobile_version")} />
+    } else {
+        return <MenuItem command="switchToDesktopVersion" icon="bx bx-desktop" text={t("global_menu.switch_to_desktop_version")} />
+    }
 }
 
 function MenuItem({ icon, text, title, command, disabled, active, outsideChildren }: MenuItemProps<KeyboardActionNames | CommandNames | (() => void)>) {
