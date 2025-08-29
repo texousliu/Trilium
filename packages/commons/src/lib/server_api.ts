@@ -234,3 +234,11 @@ export interface CreateChildrenResponse {
     note: NoteRow;
     branch: BranchRow;
 }
+
+export interface SchemaResponse {
+    name: string;
+    columns: {
+        name: string;
+        type: string;
+    }[];
+}

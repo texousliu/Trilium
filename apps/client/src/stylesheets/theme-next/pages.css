@@ -96,7 +96,6 @@
     background: var(--background) !important;
     color: var(--color) !important;
     line-height: unset;
-    cursor: help;
 }
 
 .sql-table-schemas-widget .sql-table-schemas button:hover,
@@ -104,18 +103,6 @@
 .sql-table-schemas-widget .sql-table-schemas button:focus-visible {
     --background: var(--card-background-press-color);
     --color: var(--main-text-color);
-}
-
-/* Tooltip */
-
-.tooltip .table-schema {
-    font-family: var(--monospace-font-family);
-    font-size: .85em;
-}
-
-/* Data type */
-.tooltip .table-schema td:nth-child(2) {
-    color: var(--muted-text-color);
 }
 
 /*

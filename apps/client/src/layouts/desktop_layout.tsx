@@ -7,8 +7,6 @@ import NoteTitleWidget from "../widgets/note_title.jsx";
 import NoteDetailWidget from "../widgets/note_detail.js";
 import PromotedAttributesWidget from "../widgets/promoted_attributes.js";
 import NoteListWidget from "../widgets/note_list.js";
-import SqlResultWidget from "../widgets/sql_result.js";
-import SqlTableSchemasWidget from "../widgets/sql_table_schemas.js";
 import NoteIconWidget from "../widgets/note_icon.jsx";
 import ScrollingContainer from "../widgets/containers/scrolling_container.js";
 import RootContainer from "../widgets/containers/root_container.js";
@@ -43,6 +41,7 @@ import { DESKTOP_FLOATING_BUTTONS } from "../widgets/FloatingButtonsDefinitions.
 import SearchResult from "../widgets/search_result.jsx";
 import GlobalMenu from "../widgets/buttons/global_menu.jsx";
 import SqlResults from "../widgets/sql_result.js";
+import SqlTableSchemas from "../widgets/sql_table_schemas.js";
 
 export default class DesktopLayout {
 
@@ -137,7 +136,7 @@ export default class DesktopLayout {
                                                             new ScrollingContainer()
                                                                 .filling()
                                                                 .child(new PromotedAttributesWidget())
-                                                                .child(new SqlTableSchemasWidget())
+                                                                .child(<SqlTableSchemas />)
                                                                 .child(new NoteDetailWidget())
                                                                 .child(new NoteListWidget(false))
                                                                 .child(<SearchResult />)
