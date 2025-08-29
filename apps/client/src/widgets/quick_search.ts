@@ -110,6 +110,10 @@ const TPL = /*html*/`
         margin: 0;
     }
 
+    .quick-search .bx-loader {
+        margin-inline-end: 4px;
+    }
+
   </style>
 
   <div class="input-group-prepend">
@@ -224,7 +228,11 @@ export default class QuickSearchWidget extends BasicWidget {
         this.isLoadingMore = false;
 
         this.$dropdownMenu.empty();
-        this.$dropdownMenu.append(`<span class="dropdown-item disabled"><span class="bx bx-loader bx-spin"></span>${t("quick-search.searching")}</span>`);
+        this.$dropdownMenu.append(`
+            <span class="dropdown-item disabled">
+                <span class="bx bx-loader bx-spin"></span>
+                ${t("quick-search.searching")}
+            </span>`);
 
         const { searchResultNoteIds, searchResults, error } = await server.get<QuickSearchResponse>(`quick-search/${encodeURIComponent(searchString)}`);
 
