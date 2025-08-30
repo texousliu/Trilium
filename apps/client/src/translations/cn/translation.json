@@ -1440,7 +1440,9 @@
     "open-in-popup": "快速编辑"
   },
   "shared_info": {
-    "help_link": "访问 <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a> 获取帮助。"
+    "help_link": "访问 <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a> 获取帮助。",
+    "shared_publicly": "该笔记已在 {{- link}} 上公开分享。",
+    "shared_locally": "此笔记在本地通过 {{- link}} 进行共享。"
   },
   "note_types": {
     "text": "文本",
@@ -1518,7 +1520,8 @@
     "hoist-this-note-workspace": "聚焦此笔记（工作区）",
     "refresh-saved-search-results": "刷新保存的搜索结果",
     "create-child-note": "创建子笔记",
-    "unhoist": "取消聚焦"
+    "unhoist": "取消聚焦",
+    "toggle-sidebar": "切换侧边栏"
   },
   "title_bar_buttons": {
     "window-on-top": "保持此窗口置顶"
