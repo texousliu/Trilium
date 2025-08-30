@@ -3,7 +3,7 @@ import { t } from "../services/i18n";
 import Alert from "./react/Alert";
 import { useNoteContext, useNoteProperty, useTriliumEvent } from "./react/hooks";
 import "./search_result.css";
-import NoteListRenderer from "../services/note_list_renderer";
+// import NoteListRenderer from "../services/note_list_renderer";
 
 enum SearchResultState {    
     NO_RESULTS,
@@ -28,12 +28,13 @@ export default function SearchResult() {
         } else if (searchContainerRef.current) {
             setState(SearchResultState.GOT_RESULTS);
 
-            const noteListRenderer = new NoteListRenderer({
-                $parent: $(searchContainerRef.current),
-                parentNote: note,
-                showNotePath: true
-            });
-            noteListRenderer.renderList();
+            // TODO: Fix me.
+            // const noteListRenderer = new NoteListRenderer({
+            //     $parent: $(searchContainerRef.current),
+            //     parentNote: note,
+            //     showNotePath: true
+            // });
+            // noteListRenderer.renderList();
         }
     }
 

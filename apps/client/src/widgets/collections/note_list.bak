@@ -1,8 +1,8 @@
-import NoteContextAwareWidget from "./note_context_aware_widget.js";
-import NoteListRenderer from "../services/note_list_renderer.js";
-import type FNote from "../entities/fnote.js";
-import type { CommandListener, CommandListenerData, CommandMappings, CommandNames, EventData, EventNames } from "../components/app_context.js";
-import type ViewMode from "./view_widgets/view_mode.js";
+import NoteContextAwareWidget from "../note_context_aware_widget.js";
+import NoteListRenderer from "./note_list_renderer.ts.bak/index.js";
+import type FNote from "../../entities/fnote.js";
+import type { CommandListener, CommandListenerData, CommandMappings, CommandNames, EventData, EventNames } from "../../components/app_context.js";
+import type ViewMode from "../view_widgets/view_mode.js";
 
 const TPL = /*html*/`
 <div class="note-list-widget">
