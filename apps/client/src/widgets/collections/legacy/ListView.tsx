@@ -76,12 +76,12 @@ function ListNoteCard({ note, parentNote, expand, highlightedTokens }: { note: F
                 <Icon className="note-icon" icon={note.getIcon()} />
                 <NoteLink className="note-book-title" notePath={notePath} noPreview showNotePath={note.type === "search"} highlightedTokens={highlightedTokens} />
                 <NoteAttributes note={note} />
-
-                {isExpanded && <>
-                    <NoteContent note={note} highlightedTokens={highlightedTokens} />
-                    <NoteChildren note={note} parentNote={parentNote} highlightedTokens={highlightedTokens} />
-                </>}
             </h5>
+
+            {isExpanded && <>
+                <NoteContent note={note} highlightedTokens={highlightedTokens} />
+                <NoteChildren note={note} parentNote={parentNote} highlightedTokens={highlightedTokens} />
+            </>}
         </div>
     )
 }
