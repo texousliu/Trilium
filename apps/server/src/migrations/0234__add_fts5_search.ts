@@ -264,20 +264,37 @@ export default function addFTS5SearchAndPerformanceIndexes() {
     // Final cleanup: ensure all eligible notes are indexed
     // This catches any edge cases where notes might have been missed
     log.info("Running final FTS index cleanup...");
-    const cleanupCount = sql.getValue<number>(`
-        WITH missing_notes AS (
-            SELECT n.noteId, n.title, b.content
-            FROM notes n
-            LEFT JOIN blobs b ON n.blobId = b.blobId
-            WHERE n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
-                AND n.isDeleted = 0
-                AND n.isProtected = 0
-                AND b.content IS NOT NULL
-                AND NOT EXISTS (SELECT 1 FROM notes_fts WHERE noteId = n.noteId)
-        )
-        INSERT INTO notes_fts (noteId, title, content)
-        SELECT noteId, title, content FROM missing_notes
-    `);
+    
+    // First check for missing notes
+    const missingCount = sql.getValue<number>(`
+        SELECT COUNT(*) FROM notes n
+        LEFT JOIN blobs b ON n.blobId = b.blobId
+        WHERE n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
+            AND n.isDeleted = 0
+            AND n.isProtected = 0
+            AND b.content IS NOT NULL
+            AND NOT EXISTS (SELECT 1 FROM notes_fts WHERE noteId = n.noteId)
+    `) || 0;
+    
+    if (missingCount > 0) {
+        // Insert missing notes
+        sql.execute(`
+            WITH missing_notes AS (
+                SELECT n.noteId, n.title, b.content
+                FROM notes n
+                LEFT JOIN blobs b ON n.blobId = b.blobId
+                WHERE n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
+                    AND n.isDeleted = 0
+                    AND n.isProtected = 0
+                    AND b.content IS NOT NULL
+                    AND NOT EXISTS (SELECT 1 FROM notes_fts WHERE noteId = n.noteId)
+            )
+            INSERT INTO notes_fts (noteId, title, content)
+            SELECT noteId, title, content FROM missing_notes
+        `);
+    }
+    
+    const cleanupCount = missingCount;
     
     if (cleanupCount && cleanupCount > 0) {
         log.info(`Indexed ${cleanupCount} additional notes during cleanup`);

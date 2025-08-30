@@ -110,7 +110,7 @@ describe('FTS5 Search Service Improvements', () => {
             });
             
             expect(results).toEqual([]);
-            expect(mockLog.debug).toHaveBeenCalledWith(
+            expect(mockLog.info).toHaveBeenCalledWith(
                 'Protected session available - will search protected notes separately'
             );
         });
@@ -151,7 +151,7 @@ describe('FTS5 Search Service Improvements', () => {
             const query = ftsSearchService.convertToFTS5Query(['()""'], '=');
             
             expect(query).toContain('__empty_token__');
-            expect(mockLog.debug).toHaveBeenCalledWith(
+            expect(mockLog.info).toHaveBeenCalledWith(
                 expect.stringContaining('Token became empty after sanitization')
             );
         });
@@ -162,7 +162,7 @@ describe('FTS5 Search Service Improvements', () => {
             const query = ftsSearchService.convertToFTS5Query(['test; DROP TABLE'], '=');
             
             expect(query).toContain('__invalid_token__');
-            expect(mockLog.warn).toHaveBeenCalledWith(
+            expect(mockLog.error).toHaveBeenCalledWith(
                 expect.stringContaining('Potential SQL injection attempt detected')
             );
         });
@@ -208,7 +208,7 @@ describe('FTS5 Search Service Improvements', () => {
             
             expect(stats.dbstatAvailable).toBe(false);
             expect(stats.indexSize).toBe(75000); // 500 * 100 * 1.5
-            expect(mockLog.debug).toHaveBeenCalledWith(
+            expect(mockLog.info).toHaveBeenCalledWith(
                 'dbstat virtual table not available, using fallback for index size estimation'
             );
         });
