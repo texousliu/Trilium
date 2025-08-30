@@ -39,17 +39,7 @@ class ListOrGridView extends ViewMode<{}> {
 
         this.$noteList.show();
 
-        this.renderPager();
-
         return this.$noteList;
-    }
-
-    renderPager() {
-
-
-
-        // no need to distinguish "note" vs "notes" since in case of one result, there's no paging at all
-        $pager.append(`<span class=""></span>`);
     }
 
     async renderNote(note: FNote, expand: boolean = false) {

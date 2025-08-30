@@ -33,10 +33,10 @@ export function Pager({ page, pageSize, setPage, pageCount, totalNotes }: Omit<P
                         title={t("pagination.page_title", { startIndex, endIndex })}
                         onClick={() => setPage(i)}
                     >
-                    {i}    
+                    {i}
                     </a>
                 ))
-            } else {            
+            } else {
                 // Current page
                 children.push(<span className="current-page">{i}</span>)
             }
@@ -52,6 +52,7 @@ export function Pager({ page, pageSize, setPage, pageCount, totalNotes }: Omit<P
         <div class="note-list-pager">
             {children}
 
+            // no need to distinguish "note" vs "notes" since in case of one result, there's no paging at all
             <span className="note-list-pager-total-count">({t("pagination.total_notes", { count: totalNotes })})</span>
         </div>
     )
@@ -59,7 +60,7 @@ export function Pager({ page, pageSize, setPage, pageCount, totalNotes }: Omit<P
 
 export function usePagination(note: FNote, noteIds: string[]): PaginationContext {
     const [ page, setPage ] = useState(1);
-    const [ pageNotes, setPageNotes ] = useState<FNote[]>();    
+    const [ pageNotes, setPageNotes ] = useState<FNote[]>();
 
     // Parse page size.
     const [ pageSize ] = useNoteLabel(note, "pageSize");
@@ -72,7 +73,7 @@ export function usePagination(note: FNote, noteIds: string[]): PaginationContext
     const pageCount = Math.ceil(noteIds.length / normalizedPageSize);
 
     // Obtain notes within the range.
-    const pageNoteIds = noteIds.slice(startIdx, Math.min(endIdx, noteIds.length));    
+    const pageNoteIds = noteIds.slice(startIdx, Math.min(endIdx, noteIds.length));
 
     useEffect(() => {
         froca.getNotes(pageNoteIds).then(setPageNotes);
