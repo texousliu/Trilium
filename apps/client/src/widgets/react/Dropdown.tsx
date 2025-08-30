@@ -18,9 +18,10 @@ export interface DropdownProps {
     noSelectButtonStyle?: boolean;
     disabled?: boolean;
     text?: ComponentChildren;
+    forceShown?: boolean;
 }
 
-export default function Dropdown({ className, buttonClassName, isStatic, children, title, text, dropdownContainerStyle, dropdownContainerClassName, hideToggleArrow, iconAction, disabled, noSelectButtonStyle }: DropdownProps) {
+export default function Dropdown({ className, buttonClassName, isStatic, children, title, text, dropdownContainerStyle, dropdownContainerClassName, hideToggleArrow, iconAction, disabled, noSelectButtonStyle, forceShown }: DropdownProps) {
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
 
@@ -30,8 +31,12 @@ export default function Dropdown({ className, buttonClassName, isStatic, childre
         if (!triggerRef.current) return;
         
         const dropdown = BootstrapDropdown.getOrCreateInstance(triggerRef.current);
+        if (forceShown) {
+            dropdown.show();
+            setShown(true);
+        }
         return () => dropdown.dispose();
-    }, []); // Add dependency array
+    }, []);
 
     const onShown = useCallback(() => {
         setShown(true);
@@ -75,13 +80,13 @@ export default function Dropdown({ className, buttonClassName, isStatic, childre
                 <span className="caret"></span>
             </button>
 
-            <div
+            <ul
                 class={`dropdown-menu ${isStatic ? "static" : ""} ${dropdownContainerClassName ?? ""} tn-dropdown-list`}
                 style={dropdownContainerStyle}
                 aria-labelledby={ariaId}
             >
                 {shown && children}
-            </div>
+            </ul>
         </div>
     )
 }

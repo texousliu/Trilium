@@ -2,7 +2,7 @@ import { useCallback, useContext, useDebugValue, useEffect, useLayoutEffect, use
 import { EventData, EventNames } from "../../components/app_context";
 import { ParentComponent } from "./react_utils";
 import SpacedUpdate from "../../services/spaced_update";
-import { OptionNames } from "@triliumnext/commons";
+import { KeyboardActionNames, OptionNames } from "@triliumnext/commons";
 import options, { type OptionValue } from "../../services/options";
 import utils, { reloadFrontendApp } from "../../services/utils";
 import NoteContext from "../../components/note_context";
@@ -14,6 +14,7 @@ import NoteContextAwareWidget from "../note_context_aware_widget";
 import { RefObject, VNode } from "preact";
 import { Tooltip } from "bootstrap";
 import { CSSProperties } from "preact/compat";
+import keyboard_actions from "../../services/keyboard_actions";
 
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
     const parentComponent = useContext(ParentComponent);
@@ -502,9 +503,10 @@ export function useTooltip(elRef: RefObject<HTMLElement>, config: Partial<Toolti
  * @param elRef the element to bind the tooltip to.
  * @param config optionally, the tooltip configuration.
  */
-export function useStaticTooltip(elRef: RefObject<HTMLElement>, config?: Partial<Tooltip.Options>) {
+export function useStaticTooltip(elRef: RefObject<Element>, config?: Partial<Tooltip.Options>) {
     useEffect(() => {
-        if (!elRef?.current) return;
+        const hasTooltip = config?.title || elRef.current?.getAttribute("title");
+        if (!elRef?.current || !hasTooltip) return;
 
         const $el = $(elRef.current);
         $el.tooltip(config);
@@ -512,6 +514,19 @@ export function useStaticTooltip(elRef: RefObject<HTMLElement>, config?: Partial
             $el.tooltip("dispose");
         }
     }, [ elRef, config ]);
+}
+
+export function useStaticTooltipWithKeyboardShortcut(elRef: RefObject<Element>, title: string, actionName: KeyboardActionNames | undefined) {
+    const [ keyboardShortcut, setKeyboardShortcut ] = useState<string[]>();
+    useStaticTooltip(elRef, {
+        title: keyboardShortcut?.length ? `${title} (${keyboardShortcut?.join(",")})` : title
+    });
+
+    useEffect(() => {
+        if (actionName) {
+            keyboard_actions.getAction(actionName).then(action => setKeyboardShortcut(action?.effectiveShortcuts));
+        }
+    }, [actionName]);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type

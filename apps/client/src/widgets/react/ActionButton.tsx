@@ -5,7 +5,7 @@ import keyboard_actions from "../../services/keyboard_actions";
 
 export interface ActionButtonProps {
     text: string;
-    titlePosition?: "bottom" | "left"; // TODO: Use it
+    titlePosition?: "bottom" | "left";
     icon: string;
     className?: string;
     onClick?: (e: MouseEvent) => void;
@@ -25,7 +25,7 @@ export default function ActionButton({ text, icon, className, onClick, triggerCo
     
     useEffect(() => {
         if (triggerCommand) {
-            keyboard_actions.getAction(triggerCommand).then(action => setKeyboardShortcut(action?.effectiveShortcuts));
+            keyboard_actions.getAction(triggerCommand, true).then(action => setKeyboardShortcut(action?.effectiveShortcuts));
         }
     }, [triggerCommand]);
 

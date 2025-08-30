@@ -55,7 +55,7 @@ export class TypedBasicWidget<T extends TypedComponent<any>> extends TypedCompon
      * @param components the components to be added as children to this component provided the condition is truthy.
      * @returns self for chaining.
      */
-    optChild(condition: boolean, ...components: T[]) {
+    optChild(condition: boolean, ...components: (T | VNode)[]) {
         if (condition) {
             return this.child(...components);
         } else {

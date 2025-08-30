@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { t } from "../../services/i18n";
-import { useNoteContext, useNoteProperty, useStaticTooltip, useTooltip, useTriliumEvent, useTriliumEvents } from "../react/hooks";
+import { useNoteContext, useNoteProperty, useStaticTooltip, useStaticTooltipWithKeyboardShortcut, useTooltip, useTriliumEvent, useTriliumEvents } from "../react/hooks";
 import "./style.css";
 import { VNode } from "preact";
 import BasicPropertiesTab from "./BasicPropertiesTab";
@@ -252,16 +252,7 @@ export default function Ribbon() {
 
 function RibbonTab({ icon, title, active, onClick, toggleCommand }: { icon: string; title: string; active: boolean, onClick: () => void, toggleCommand?: KeyboardActionNames }) {
     const iconRef = useRef<HTMLDivElement>(null);
-    const [ keyboardShortcut, setKeyboardShortcut ] = useState<string[]>();
-    useStaticTooltip(iconRef, {
-        title: keyboardShortcut?.length ? `${title} (${keyboardShortcut?.join(",")})` : title
-    });
-
-    useEffect(() => {
-        if (toggleCommand) {
-            keyboard_actions.getAction(toggleCommand).then(action => setKeyboardShortcut(action?.effectiveShortcuts));
-        }
-    }, [toggleCommand]);
+    useStaticTooltipWithKeyboardShortcut(iconRef, title, toggleCommand);
 
     return (
         <>

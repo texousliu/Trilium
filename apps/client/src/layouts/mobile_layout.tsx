@@ -3,8 +3,6 @@ import NoteTitleWidget from "../widgets/note_title.js";
 import NoteDetailWidget from "../widgets/note_detail.js";
 import QuickSearchWidget from "../widgets/quick_search.js";
 import NoteTreeWidget from "../widgets/note_tree.js";
-import ToggleSidebarButtonWidget from "../widgets/mobile_widgets/toggle_sidebar_button.js";
-import MobileDetailMenuWidget from "../widgets/mobile_widgets/mobile_detail_menu.js";
 import ScreenContainer from "../widgets/mobile_widgets/screen_container.js";
 import ScrollingContainer from "../widgets/containers/scrolling_container.js";
 import NoteListWidget from "../widgets/note_list.js";
@@ -18,11 +16,13 @@ import type AppContext from "../components/app_context.js";
 import TabRowWidget from "../widgets/tab_row.js";
 import MobileEditorToolbar from "../widgets/type_widgets/ckeditor/mobile_editor_toolbar.js";
 import { applyModals } from "./layout_commons.js";
-import CloseZenButton from "../widgets/close_zen_button.js";
 import FilePropertiesTab from "../widgets/ribbon/FilePropertiesTab.jsx";
 import { useNoteContext } from "../widgets/react/hooks.jsx";
 import FloatingButtons from "../widgets/FloatingButtons.jsx";
 import { MOBILE_FLOATING_BUTTONS } from "../widgets/FloatingButtonsDefinitions.jsx";
+import ToggleSidebarButton from "../widgets/mobile_widgets/toggle_sidebar_button.jsx";
+import CloseZenModeButton from "../widgets/close_zen_button.js";
+import MobileDetailMenu from "../widgets/mobile_widgets/mobile_detail_menu.js";
 
 const MOBILE_CSS = `
 <style>
@@ -139,9 +139,9 @@ export default class MobileLayout {
                                     .contentSized()
                                     .css("font-size", "larger")
                                     .css("align-items", "center")
-                                    .child(new ToggleSidebarButtonWidget().contentSized())
+                                    .child(<ToggleSidebarButton />)
                                     .child(<NoteTitleWidget />)
-                                    .child(new MobileDetailMenuWidget(true).contentSized())
+                                    .child(<MobileDetailMenu />)
                             )
                             .child(new SharedInfoWidget())
                             .child(<FloatingButtons items={MOBILE_FLOATING_BUTTONS} />)
@@ -154,7 +154,7 @@ export default class MobileLayout {
                                     .child(new NoteListWidget(false))
                                     .child(<FilePropertiesWrapper />)
                             )
-                            .child(new MobileEditorToolbar())
+                            .child(<MobileEditorToolbar />)
                     )
             )
             .child(
@@ -162,9 +162,14 @@ export default class MobileLayout {
                     .contentSized()
                     .id("mobile-bottom-bar")
                     .child(new TabRowWidget().css("height", "40px"))
-                    .child(new FlexContainer("row").class("horizontal").css("height", "53px").child(new LauncherContainer(true)).child(new GlobalMenuWidget(true)).id("launcher-pane"))
+                    .child(new FlexContainer("row")
+                        .class("horizontal")
+                        .css("height", "53px")
+                        .child(new LauncherContainer(true))
+                        .child(<GlobalMenuWidget isHorizontalLayout />)
+                        .id("launcher-pane"))
             )
-            .child(new CloseZenButton());
+            .child(<CloseZenModeButton />);
         applyModals(rootContainer);
         return rootContainer;
     }

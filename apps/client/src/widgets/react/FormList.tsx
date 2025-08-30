@@ -1,9 +1,11 @@
-import { Dropdown as BootstrapDropdown } from "bootstrap";
+import { Dropdown as BootstrapDropdown, Tooltip } from "bootstrap";
 import { ComponentChildren } from "preact";
 import Icon from "./Icon";
-import { useEffect, useMemo, useRef, type CSSProperties } from "preact/compat";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "preact/compat";
 import "./FormList.css";
 import { CommandNames } from "../../components/app_context";
+import { useStaticTooltip } from "./hooks";
+import { isMobile } from "../../services/utils";
 
 interface FormListOpts {
     children: ComponentChildren;
@@ -89,14 +91,24 @@ interface FormListItemOpts {
     rtl?: boolean;
 }
 
-export function FormListItem({ children, icon, value, title, active, badges, disabled, checked, onClick, description, selected, rtl, triggerCommand }: FormListItemOpts) {
+const TOOLTIP_CONFIG: Partial<Tooltip.Options> = {
+    placement: "right",
+    fallbackPlacements: [ "right" ]
+}
+
+export function FormListItem({ className, icon, value, title, active, disabled, checked, onClick, selected, rtl, triggerCommand, description, ...contentProps }: FormListItemOpts) {
+    const itemRef = useRef<HTMLLIElement>(null);
+
     if (checked) {
         icon = "bx bx-check";
     }
 
+    useStaticTooltip(itemRef, TOOLTIP_CONFIG);
+
     return (
-        <a
-            class={`dropdown-item ${active ? "active" : ""} ${disabled ? "disabled" : ""} ${selected ? "selected" : ""}`}
+        <li
+            ref={itemRef}
+            class={`dropdown-item ${active ? "active" : ""} ${disabled ? "disabled" : ""} ${selected ? "selected" : ""} ${className ?? ""}`}
             data-value={value} title={title}
             tabIndex={0}
             onClick={onClick}
@@ -104,15 +116,25 @@ export function FormListItem({ children, icon, value, title, active, badges, dis
             dir={rtl ? "rtl" : undefined}
         >
             <Icon icon={icon} />&nbsp;
-            <div>
-                {children}
-                {badges && badges.map(({ className, text }) => (
-                    <span className={`badge ${className ?? ""}`}>{text}</span>
-                ))}
-                {description && <div className="description">{description}</div>}
-            </div>
-        </a>
+            {description ? (
+                <div>
+                    <FormListContent description={description} {...contentProps} />
+                </div>
+            ) : (
+                <FormListContent description={description} {...contentProps} />
+            )}
+        </li>
     );
+}
+
+function FormListContent({ children, badges, description }: Pick<FormListItemOpts, "children" | "badges" | "description">) {
+    return <>
+        {children}
+        {badges && badges.map(({ className, text }) => (
+            <span className={`badge ${className ?? ""}`}>{text}</span>
+        ))}
+        {description && <div className="description">{description}</div>}
+    </>;
 }
 
 interface FormListHeaderOpts {
@@ -129,4 +151,30 @@ export function FormListHeader({ text }: FormListHeaderOpts) {
 
 export function FormDropdownDivider() {
     return <div className="dropdown-divider" />;
+}
+
+export function FormDropdownSubmenu({ icon, title, children }: { icon: string, title: ComponentChildren, children: ComponentChildren }) {
+    const [ openOnMobile, setOpenOnMobile ] = useState(false);
+
+    return (
+        <li className={`dropdown-item dropdown-submenu ${openOnMobile ? "submenu-open" : ""}`}>
+            <span
+                className="dropdown-toggle"
+                onClick={(e) => {
+                    e.stopPropagation();
+
+                    if (isMobile()) {
+                        setOpenOnMobile(!openOnMobile);
+                    }
+                }}
+            >
+                <Icon icon={icon} />{" "}
+                {title}
+            </span>
+
+            <ul className={`dropdown-menu ${openOnMobile ? "show" : ""}`}>
+                {children}
+            </ul>
+        </li>
+    )
 }

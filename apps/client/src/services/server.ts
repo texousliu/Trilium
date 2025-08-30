@@ -218,7 +218,7 @@ function ajax(url: string, method: string, data: unknown, headers: Headers, sile
 if (utils.isElectron()) {
     const ipc = utils.dynamicRequire("electron").ipcRenderer;
 
-    ipc.on("server-response", async (event: string, arg: Arg) => {
+    ipc.on("server-response", async (_, arg: Arg) => {
         if (arg.statusCode >= 200 && arg.statusCode < 300) {
             handleSuccessfulResponse(arg);
         } else {

@@ -4,15 +4,7 @@ import treeService from "../../services/tree.js";
 import ButtonFromNoteWidget from "./button_from_note.js";
 import type FNote from "../../entities/fnote.js";
 import type { CommandNames } from "../../components/app_context.js";
-
-interface WebContents {
-    history: string[];
-    getActiveIndex(): number;
-    clearHistory(): void;
-    canGoBack(): boolean;
-    canGoForward(): boolean;
-    goToIndex(index: string): void;
-}
+import type { WebContents } from "electron";
 
 interface ContextMenuItem {
     title: string;
@@ -51,14 +43,14 @@ export default class HistoryNavigationButton extends ButtonFromNoteWidget {
     async showContextMenu(e: JQuery.ContextMenuEvent) {
         e.preventDefault();
 
-        if (!this.webContents || this.webContents.history.length < 2) {
+        if (!this.webContents || this.webContents.navigationHistory.length() < 2) {
             return;
         }
 
         let items: ContextMenuItem[] = [];
 
-        const activeIndex = this.webContents.getActiveIndex();
-        const history = this.webContents.history;
+        const history = this.webContents.navigationHistory;
+        const activeIndex = history.getActiveIndex();
 
         for (const idx in history) {
             const url = history[idx];

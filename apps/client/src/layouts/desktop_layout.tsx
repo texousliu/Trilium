@@ -1,24 +1,18 @@
 import FlexContainer from "../widgets/containers/flex_container.js";
-import GlobalMenuWidget from "../widgets/buttons/global_menu.js";
 import TabRowWidget from "../widgets/tab_row.js";
-import TitleBarButtonsWidget from "../widgets/title_bar_buttons.js";
 import LeftPaneContainer from "../widgets/containers/left_pane_container.js";
 import NoteTreeWidget from "../widgets/note_tree.js";
 import NoteTitleWidget from "../widgets/note_title.jsx";
 import NoteDetailWidget from "../widgets/note_detail.js";
 import PromotedAttributesWidget from "../widgets/promoted_attributes.js";
 import NoteListWidget from "../widgets/note_list.js";
-import SqlResultWidget from "../widgets/sql_result.js";
-import SqlTableSchemasWidget from "../widgets/sql_table_schemas.js";
 import NoteIconWidget from "../widgets/note_icon.jsx";
-import SearchResultWidget from "../widgets/search_result.js";
 import ScrollingContainer from "../widgets/containers/scrolling_container.js";
 import RootContainer from "../widgets/containers/root_container.js";
 import WatchedFileUpdateStatusWidget from "../widgets/watched_file_update_status.js";
 import SpacerWidget from "../widgets/spacer.js";
 import QuickSearchWidget from "../widgets/quick_search.js";
 import SplitNoteContainer from "../widgets/containers/split_note_container.js";
-import LeftPaneToggleWidget from "../widgets/buttons/left_pane_toggle.js";
 import CreatePaneButton from "../widgets/buttons/create_pane_button.js";
 import ClosePaneButton from "../widgets/buttons/close_pane_button.js";
 import RightPaneContainer from "../widgets/containers/right_pane_container.js";
@@ -29,19 +23,25 @@ import TocWidget from "../widgets/toc.js";
 import HighlightsListWidget from "../widgets/highlights_list.js";
 import PasswordNoteSetDialog from "../widgets/dialogs/password_not_set.js";
 import LauncherContainer from "../widgets/containers/launcher_container.js";
-import ApiLogWidget from "../widgets/api_log.js";
 import MovePaneButton from "../widgets/buttons/move_pane_button.js";
 import UploadAttachmentsDialog from "../widgets/dialogs/upload_attachments.js";
-import ScrollPaddingWidget from "../widgets/scroll_padding.js";
+import ScrollPadding from "../widgets/scroll_padding.js";
 import options from "../services/options.js";
 import utils from "../services/utils.js";
-import CloseZenButton from "../widgets/close_zen_button.js";
 import type { AppContext } from "../components/app_context.js";
 import type { WidgetsByParent } from "../services/bundle.js";
 import { applyModals } from "./layout_commons.js";
 import Ribbon from "../widgets/ribbon/Ribbon.jsx";
 import FloatingButtons from "../widgets/FloatingButtons.jsx";
 import { DESKTOP_FLOATING_BUTTONS } from "../widgets/FloatingButtonsDefinitions.jsx";
+import SearchResult from "../widgets/search_result.jsx";
+import GlobalMenu from "../widgets/buttons/global_menu.jsx";
+import SqlResults from "../widgets/sql_result.js";
+import SqlTableSchemas from "../widgets/sql_table_schemas.js";
+import TitleBarButtons from "../widgets/title_bar_buttons.jsx";
+import LeftPaneToggle from "../widgets/buttons/left_pane_toggle.js";
+import ApiLog from "../widgets/api_log.jsx";
+import CloseZenModeButton from "../widgets/close_zen_button.jsx";
 
 export default class DesktopLayout {
 
@@ -76,9 +76,9 @@ export default class DesktopLayout {
                 new FlexContainer("row")
                     .class("tab-row-container")
                     .child(new FlexContainer("row").id("tab-row-left-spacer"))
-                    .optChild(launcherPaneIsHorizontal, new LeftPaneToggleWidget(true))
+                    .optChild(launcherPaneIsHorizontal, <LeftPaneToggle isHorizontalLayout={true} />)
                     .child(new TabRowWidget().class("full-width"))
-                    .optChild(customTitleBarButtons, new TitleBarButtonsWidget())
+                    .optChild(customTitleBarButtons, <TitleBarButtons />)
                     .css("height", "40px")
                     .css("background-color", "var(--launcher-pane-background-color)")
                     .setParent(appContext)
@@ -99,7 +99,7 @@ export default class DesktopLayout {
                         new FlexContainer("column")
                             .id("rest-pane")
                             .css("flex-grow", "1")
-                            .optChild(!fullWidthTabBar, new FlexContainer("row").child(new TabRowWidget()).optChild(customTitleBarButtons, new TitleBarButtonsWidget()).css("height", "40px"))
+                            .optChild(!fullWidthTabBar, new FlexContainer("row").child(new TabRowWidget()).optChild(customTitleBarButtons, <TitleBarButtons />).css("height", "40px"))
                             .child(
                                 new FlexContainer("row")
                                     .filling()
@@ -136,14 +136,14 @@ export default class DesktopLayout {
                                                             new ScrollingContainer()
                                                                 .filling()
                                                                 .child(new PromotedAttributesWidget())
-                                                                .child(new SqlTableSchemasWidget())
+                                                                .child(<SqlTableSchemas />)
                                                                 .child(new NoteDetailWidget())
                                                                 .child(new NoteListWidget(false))
-                                                                .child(new SearchResultWidget())
-                                                                .child(new SqlResultWidget())
-                                                                .child(new ScrollPaddingWidget())
+                                                                .child(<SearchResult />)
+                                                                .child(<SqlResults />)
+                                                                .child(<ScrollPadding />)
                                                         )
-                                                        .child(new ApiLogWidget())
+                                                        .child(<ApiLog />)
                                                         .child(new FindWidget())
                                                         .child(
                                                             ...this.customWidgets.get("node-detail-pane"), // typo, let's keep it for a while as BC
@@ -162,7 +162,7 @@ export default class DesktopLayout {
                             )
                     )
             )
-            .child(new CloseZenButton())
+            .child(<CloseZenModeButton />)
 
             // Desktop-specific dialogs.
             .child(<PasswordNoteSetDialog />)
@@ -176,14 +176,18 @@ export default class DesktopLayout {
         let launcherPane;
 
         if (isHorizontal) {
-            launcherPane = new FlexContainer("row").css("height", "53px").class("horizontal").child(new LauncherContainer(true)).child(new GlobalMenuWidget(true));
+            launcherPane = new FlexContainer("row")
+                .css("height", "53px")
+                .class("horizontal")
+                .child(new LauncherContainer(true))
+                .child(<GlobalMenu isHorizontalLayout={true} />);
         } else {
             launcherPane = new FlexContainer("column")
                 .css("width", "53px")
                 .class("vertical")
-                .child(new GlobalMenuWidget(false))
+                .child(<GlobalMenu isHorizontalLayout={false} />)
                 .child(new LauncherContainer(false))
-                .child(new LeftPaneToggleWidget(false));
+                .child(<LeftPaneToggle isHorizontalLayout={false} />);
         }
 
         launcherPane.id("launcher-pane");
