@@ -17,9 +17,10 @@ export default function NoteList({ note: providedNote, highlightedTokens }: Note
     const viewType = useNoteViewType(note);
     const noteIds = useNoteIds(note, viewType);
     const isEnabled = (note && !!viewType);
+    const isFullHeight = (viewType !== "list" && viewType !== "grid");
 
     return (
-        <div className="note-list-widget">
+        <div className={`note-list-widget ${isFullHeight ? "full-height" : ""}`}>
             {isEnabled && (
                 <div className="note-list-widget-content">
                     {getComponentByViewType(note, noteIds, viewType, highlightedTokens)}
