@@ -17,7 +17,6 @@ import CreatePaneButton from "../widgets/buttons/create_pane_button.js";
 import ClosePaneButton from "../widgets/buttons/close_pane_button.js";
 import RightPaneContainer from "../widgets/containers/right_pane_container.js";
 import NoteWrapperWidget from "../widgets/note_wrapper.js";
-import SharedInfoWidget from "../widgets/shared_info.js";
 import FindWidget from "../widgets/find.js";
 import TocWidget from "../widgets/toc.js";
 import HighlightsListWidget from "../widgets/highlights_list.js";
@@ -42,6 +41,7 @@ import TitleBarButtons from "../widgets/title_bar_buttons.jsx";
 import LeftPaneToggle from "../widgets/buttons/left_pane_toggle.js";
 import ApiLog from "../widgets/api_log.jsx";
 import CloseZenModeButton from "../widgets/close_zen_button.jsx";
+import SharedInfo from "../widgets/shared_info.jsx";
 
 export default class DesktopLayout {
 
@@ -129,7 +129,7 @@ export default class DesktopLayout {
                                                                 .child(new CreatePaneButton())
                                                         )
                                                         .child(<Ribbon />)
-                                                        .child(new SharedInfoWidget())
+                                                        .child(<SharedInfo />)
                                                         .child(new WatchedFileUpdateStatusWidget())
                                                         .child(<FloatingButtons items={DESKTOP_FLOATING_BUTTONS} />)
                                                         .child(

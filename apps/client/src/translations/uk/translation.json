@@ -1909,8 +1909,8 @@
     "open-in-popup": "Швидке редагування"
   },
   "shared_info": {
-    "shared_publicly": "Ця нотатка опублікована на",
-    "shared_locally": "Цю нотатку опубліковано локально на",
+    "shared_publicly": "Ця нотатка опублікована на {{- link}}",
+    "shared_locally": "Цю нотатку опубліковано локально на {{- link}}",
     "help_link": "Щоб отримати допомогу, відвідайте <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">вікі</a>."
   },
   "note_types": {

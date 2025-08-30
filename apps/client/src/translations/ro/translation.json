@@ -1373,8 +1373,8 @@
   },
   "shared_info": {
     "help_link": "Pentru informații vizitați <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki-ul</a>.",
-    "shared_locally": "Această notiță este partajată local la",
-    "shared_publicly": "Această notiță este partajată public la"
+    "shared_locally": "Această notiță este partajată local la {{- link}}",
+    "shared_publicly": "Această notiță este partajată public la {{- link}}"
   },
   "note_types": {
     "book": "Colecție",

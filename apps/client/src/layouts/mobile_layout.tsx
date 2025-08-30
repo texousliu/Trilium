@@ -143,7 +143,7 @@ export default class MobileLayout {
                                     .child(<NoteTitleWidget />)
                                     .child(<MobileDetailMenu />)
                             )
-                            .child(new SharedInfoWidget())
+                            .child(<SharedInfoWidget />)
                             .child(<FloatingButtons items={MOBILE_FLOATING_BUTTONS} />)
                             .child(new PromotedAttributesWidget())
                             .child(

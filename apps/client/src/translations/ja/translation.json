@@ -977,8 +977,8 @@
   },
   "open-help-page": "ヘルプページを開く",
   "shared_info": {
-    "shared_publicly": "このノートは一般公開されています",
-    "shared_locally": "このノートはローカルで共有されています",
+    "shared_publicly": "",
+    "shared_locally": "",
     "help_link": "ヘルプについては、<a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>をご覧ください。"
   },
   "highlights_list_2": {

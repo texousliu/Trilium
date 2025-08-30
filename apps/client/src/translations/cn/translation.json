@@ -1440,8 +1440,8 @@
     "open-in-popup": "快速编辑"
   },
   "shared_info": {
-    "shared_publicly": "此笔记已公开分享于",
-    "shared_locally": "此笔记已在本地分享于",
+    "shared_publicly": "",
+    "shared_locally": "",
     "help_link": "访问 <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a> 获取帮助。"
   },
   "note_types": {

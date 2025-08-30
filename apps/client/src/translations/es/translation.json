@@ -1596,8 +1596,8 @@
     "open-in-popup": "Edición rápida"
   },
   "shared_info": {
-    "shared_publicly": "Esta nota está compartida públicamente en",
-    "shared_locally": "Esta nota está compartida localmente en",
+    "shared_publicly": "Esta nota está compartida públicamente en {{- link}}",
+    "shared_locally": "Esta nota está compartida localmente en {{- link}}",
     "help_link": "Para obtener ayuda visite <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>."
   },
   "note_types": {

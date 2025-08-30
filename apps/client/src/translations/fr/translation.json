@@ -1389,8 +1389,8 @@
     "convert-to-attachment-confirm": "Êtes-vous sûr de vouloir convertir les notes sélectionnées en pièces jointes de leurs notes parentes ?"
   },
   "shared_info": {
-    "shared_publicly": "Cette note est partagée publiquement sur",
-    "shared_locally": "Cette note est partagée localement sur",
+    "shared_publicly": "Cette note est partagée publiquement sur {{- link}}",
+    "shared_locally": "Cette note est partagée localement sur {{- link}}",
     "help_link": "Pour obtenir de l'aide, visitez le <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>."
   },
   "note_types": {
