@@ -49,7 +49,7 @@ class ListOrGridView extends ViewMode<{}> {
 
 
         // no need to distinguish "note" vs "notes" since in case of one result, there's no paging at all
-        $pager.append(`<span class="note-list-pager-total-count">(${this.filteredNoteIds.length} notes)</span>`);
+        $pager.append(`<span class=""></span>`);
     }
 
     async renderNote(note: FNote, expand: boolean = false) {

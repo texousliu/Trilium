@@ -3,6 +3,7 @@ import { Dispatch, StateUpdater, useEffect, useState } from "preact/hooks";
 import FNote from "../../entities/fnote";
 import froca from "../../services/froca";
 import { useNoteLabel } from "../react/hooks";
+import { t } from "../../services/i18n";
 
 interface PaginationContext {
     page: number;
@@ -29,7 +30,7 @@ export function Pager({ page, pageSize, setPage, pageCount, totalNotes }: Omit<P
                 children.push((
                     <a
                         href="javascript:"
-                        title={`Page of ${startIndex} - ${endIndex}`}
+                        title={t("pagination.page_title", { startIndex, endIndex })}
                         onClick={() => setPage(i)}
                     >
                     {i}    
@@ -50,6 +51,8 @@ export function Pager({ page, pageSize, setPage, pageCount, totalNotes }: Omit<P
     return (
         <div class="note-list-pager">
             {children}
+
+            <span className="note-list-pager-total-count">({t("pagination.total_notes", { count: totalNotes })})</span>
         </div>
     )
 }

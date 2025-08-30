@@ -2024,5 +2024,9 @@
   },
   "units": {
     "percentage": "%"
+  },
+  "pagination": {
+    "page_title": "Page of {{startIndex}} - {{endIndex}}",
+    "total_notes": "{{count}} notes"
   }
 }
