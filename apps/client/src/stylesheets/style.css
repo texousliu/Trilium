@@ -449,6 +449,8 @@ body #context-menu-container .dropdown-item > span {
     box-shadow: none;
     padding-bottom: 0;
     padding: 0;
+    flex-grow: 1;
+    text-align: right;
 }
 
 .dropdown-item,
