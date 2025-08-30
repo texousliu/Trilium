@@ -52,7 +52,7 @@ button.btn.btn-primary:focus-visible,
 button.btn.btn-secondary:focus-visible,
 button.btn.btn-sm:not(.select-button):focus-visible,
 button.btn.btn-success:focus-visible,
-button.ck.ck-button.ck-button-action.ck-button_with-text:focus-visible {
+button.ck.ck-button:is(.ck-button-action, .ck-button-save, .ck-button-cancel).ck-button_with-text:focus-visible {
     outline: 2px solid var(--input-focus-outline-color);
 }
 
