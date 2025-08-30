@@ -3,7 +3,7 @@ import { useNoteContext, useNoteLabel, useTriliumEvent } from "../react/hooks";
 import FNote from "../../entities/fnote";
 import "./NoteList.css";
 import { ListView, GridView } from "./legacy/ListOrGridView";
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 
 interface NoteListProps {
     note?: FNote | null;
@@ -12,15 +12,38 @@ interface NoteListProps {
 }
 
 export default function NoteList({ note: providedNote, highlightedTokens }: NoteListProps) {
+    const widgetRef = useRef<HTMLDivElement>(null);
     const { note: contextNote } = useNoteContext();
     const note = providedNote ?? contextNote;
     const viewType = useNoteViewType(note);
     const noteIds = useNoteIds(note, viewType);
-    const isEnabled = (note && !!viewType);
     const isFullHeight = (viewType !== "list" && viewType !== "grid");
+    const [ isIntersecting, setIsIntersecting ] = useState(false);
+    const shouldRender = (isFullHeight || isIntersecting);
+    const isEnabled = (note && !!viewType && shouldRender);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (!isIntersecting) {
+                    setIsIntersecting(entries[0].isIntersecting);
+                }
+                observer.disconnect();
+            },
+            {
+                rootMargin: "50px",
+                threshold: 0.1
+            }
+        );
+
+        // there seems to be a race condition on Firefox which triggers the observer only before the widget is visible
+        // (intersection is false). https://github.com/zadam/trilium/issues/4165
+        setTimeout(() => widgetRef.current && observer.observe(widgetRef.current), 10);
+        return () => observer.disconnect();
+    }, []);
 
     return (
-        <div className={`note-list-widget ${isFullHeight ? "full-height" : ""}`}>
+        <div ref={widgetRef} className={`note-list-widget ${isFullHeight ? "full-height" : ""}`}>
             {isEnabled && (
                 <div className="note-list-widget-content">
                     {getComponentByViewType(note, noteIds, viewType, highlightedTokens)}

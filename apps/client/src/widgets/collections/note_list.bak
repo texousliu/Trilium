@@ -7,7 +7,6 @@ import type ViewMode from "../view_widgets/view_mode.js";
 export default class NoteListWidget extends NoteContextAwareWidget {
 
     private $content!: JQuery<HTMLElement>;
-    private isIntersecting?: boolean;
     private noteIdRefreshed?: string;
     private shownNoteId?: string | null;
     private viewMode?: ViewMode<any> | null;
@@ -31,56 +30,6 @@ export default class NoteListWidget extends NoteContextAwareWidget {
         }
 
         return this.noteContext?.hasNoteList();
-    }
-
-    doRender() {
-        this.$widget = $(TPL);
-        this.contentSized();
-        this.$content = this.$widget.find(".note-list-widget-content");
-
-        const observer = new IntersectionObserver(
-            (entries) => {
-                this.isIntersecting = entries[0].isIntersecting;
-
-                this.checkRenderStatus();
-            },
-            {
-                rootMargin: "50px",
-                threshold: 0.1
-            }
-        );
-
-        // there seems to be a race condition on Firefox which triggers the observer only before the widget is visible
-        // (intersection is false). https://github.com/zadam/trilium/issues/4165
-        setTimeout(() => observer.observe(this.$widget[0]), 10);
-    }
-
-    checkRenderStatus() {
-        // console.log("this.isIntersecting", this.isIntersecting);
-        // console.log(`${this.noteIdRefreshed} === ${this.noteId}`, this.noteIdRefreshed === this.noteId);
-        // console.log("this.shownNoteId !== this.noteId", this.shownNoteId !== this.noteId);
-
-        if (this.note && this.isIntersecting && this.noteIdRefreshed === this.noteId && this.shownNoteId !== this.noteId) {
-            this.shownNoteId = this.noteId;
-            this.renderNoteList(this.note);
-        }
-    }
-
-    async renderNoteList(note: FNote) {
-        const noteListRenderer = new NoteListRenderer({
-            $parent: this.$content,
-            parentNote: note,
-            parentNotePath: this.notePath
-        });
-        this.$widget.toggleClass("full-height", noteListRenderer.isFullHeight);
-        await noteListRenderer.renderList();
-        this.viewMode = noteListRenderer.viewMode;
-    }
-
-    async refresh() {
-        this.shownNoteId = null;
-
-        await super.refresh();
     }
 
     async refreshNoteListEvent({ noteId }: EventData<"refreshNoteList">) {
