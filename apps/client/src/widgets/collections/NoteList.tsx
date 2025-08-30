@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "preact/hooks";
 
 interface NoteListProps {
     note?: FNote | null;
+    /** if set to `true` then only collection-type views are displayed such as geo-map and the calendar. The original book types grid and list will be ignored. */
     displayOnlyCollections?: boolean;
     highlightedTokens?: string[] | null;
 }
@@ -19,12 +20,12 @@ export default function NoteList({ note: providedNote, highlightedTokens, displa
     const noteIds = useNoteIds(note, viewType);
     const isFullHeight = (viewType !== "list" && viewType !== "grid");
     const [ isIntersecting, setIsIntersecting ] = useState(false);
-    const shouldRender = (isFullHeight || isIntersecting);
+    const shouldRender = (isFullHeight || isIntersecting || note?.type === "book");
     const isEnabled = (note && noteContext?.hasNoteList() && !!viewType && shouldRender);
 
     useEffect(() => {
-        if (isFullHeight || displayOnlyCollections) {
-            // Double role: no need to check if the note list is visible if the view is full-height, but also prevent legacy views if `displayOnlyCollections` is true.
+        if (isFullHeight || displayOnlyCollections || note?.type === "book") {
+            // Double role: no need to check if the note list is visible if the view is full-height or book, but also prevent legacy views if `displayOnlyCollections` is true.
             return;
         }
 

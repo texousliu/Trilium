@@ -10,27 +10,6 @@ export default class NoteListWidget extends NoteContextAwareWidget {
     private noteIdRefreshed?: string;
     private shownNoteId?: string | null;
     private viewMode?: ViewMode<any> | null;
-    private displayOnlyCollections: boolean;
-
-    /**
-     * @param displayOnlyCollections if set to `true` then only collection-type views are displayed such as geo-map and the calendar. The original book types grid and list will be ignored.
-     */
-    constructor(displayOnlyCollections: boolean) {
-        super();
-
-        this.displayOnlyCollections = displayOnlyCollections;
-    }
-
-    isEnabled() {
-        if (this.displayOnlyCollections && this.note?.type !== "book") {
-            const viewType = this.note?.getLabelValue("viewType");
-            if (!viewType || ["grid", "list"].includes(viewType)) {
-                return false;
-            }
-        }
-
-        return this.noteContext?.hasNoteList();
-    }
 
     async refreshNoteListEvent({ noteId }: EventData<"refreshNoteList">) {
         if (this.isNote(noteId) && this.note) {
