@@ -59,6 +59,9 @@ function ListNoteCard({ note, parentNote, expand, highlightedTokens }: { note: F
     const [ isExpanded, setExpanded ] = useState(expand);
     const notePath = getNotePath(parentNote, note);
 
+    // Reset expand state if switching to another note.
+    useEffect(() => setExpanded(expand), [ note ]);
+
     return (
         <div
             className={`note-book-card no-tooltip-preview ${isExpanded ? "expanded" : ""}`}
