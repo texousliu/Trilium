@@ -42,6 +42,7 @@ import GlobalMenu from "../widgets/buttons/global_menu.jsx";
 import SqlResults from "../widgets/sql_result.js";
 import SqlTableSchemas from "../widgets/sql_table_schemas.js";
 import TitleBarButtons from "../widgets/title_bar_buttons.jsx";
+import LeftPaneToggle from "../widgets/buttons/left_pane_toggle.js";
 
 export default class DesktopLayout {
 
@@ -76,7 +77,7 @@ export default class DesktopLayout {
                 new FlexContainer("row")
                     .class("tab-row-container")
                     .child(new FlexContainer("row").id("tab-row-left-spacer"))
-                    .optChild(launcherPaneIsHorizontal, new LeftPaneToggleWidget(true))
+                    .optChild(launcherPaneIsHorizontal, <LeftPaneToggle isHorizontalLayout={true} />)
                     .child(new TabRowWidget().class("full-width"))
                     .optChild(customTitleBarButtons, <TitleBarButtons />)
                     .css("height", "40px")
@@ -187,7 +188,7 @@ export default class DesktopLayout {
                 .class("vertical")
                 .child(<GlobalMenu isHorizontalLayout={false} />)
                 .child(new LauncherContainer(false))
-                .child(new LeftPaneToggleWidget(false));
+                .child(<LeftPaneToggle isHorizontalLayout={false} />);
         }
 
         launcherPane.id("launcher-pane");

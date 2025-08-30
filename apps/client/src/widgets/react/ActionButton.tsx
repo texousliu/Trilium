@@ -25,7 +25,7 @@ export default function ActionButton({ text, icon, className, onClick, triggerCo
     
     useEffect(() => {
         if (triggerCommand) {
-            keyboard_actions.getAction(triggerCommand).then(action => setKeyboardShortcut(action?.effectiveShortcuts));
+            keyboard_actions.getAction(triggerCommand, true).then(action => setKeyboardShortcut(action?.effectiveShortcuts));
         }
     }, [triggerCommand]);
 
