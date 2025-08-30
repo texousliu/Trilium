@@ -2022,8 +2022,6 @@
     "handshake_failed": "Falha no handshake com o servidor de sincronização, erro: {{message}}"
   },
   "shared_info": {
-    "shared_publicly": "",
-    "shared_locally": "",
     "help_link": "Para ajuda, visite a <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>."
   }
 }
