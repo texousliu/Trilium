@@ -7,45 +7,60 @@ import NoteLink from "../../react/NoteLink";
 import "./ListOrGridView.css";
 import content_renderer from "../../../services/content_renderer";
 import { Pager, usePagination } from "../Pagination";
+import tree from "../../../services/tree";
+import link from "../../../services/link";
 
-export default function ListView({ note, noteIds }: ViewModeProps) {
+export function ListView({ note, noteIds: unfilteredNoteIds }: ViewModeProps) {
     const [ isExpanded ] = useNoteLabelBoolean(note, "expanded");
-    const filteredNoteIds = useMemo(() => {
-        // Filters the note IDs for the legacy view to filter out subnotes that are already included in the note content such as images, included notes.
-        const includedLinks = note ? note.getRelations().filter((rel) => rel.name === "imageLink" || rel.name === "includeNoteLink") : [];
-        const includedNoteIds = new Set(includedLinks.map((rel) => rel.value));   
-        return noteIds.filter((noteId) => !includedNoteIds.has(noteId) && noteId !== "_hidden");
-    }, noteIds);
-    const { pageNotes, ...pagination } = usePagination(note, filteredNoteIds);
+    const noteIds = useFilteredNoteIds(note, unfilteredNoteIds);
+    const { pageNotes, ...pagination } = usePagination(note, noteIds);
 
     return (
-        <div class="note-list">
+        <div class="note-list list-view">
             <div class="note-list-wrapper">
                 <Pager {...pagination} />
-        
+
                 <div class="note-list-container use-tn-links">
-                    {pageNotes?.map(note => (
-                        <NoteCard note={note} expand={isExpanded} />
+                    {pageNotes?.map(childNote => (
+                        <ListNoteCard note={childNote} parentNote={note} expand={isExpanded} />
                     ))}
                 </div>
-        
+
                 <Pager {...pagination} />
             </div>
         </div>
     );
 }
 
-function NoteCard({ note, expand }: { note: FNote, expand?: boolean }) {
+export function GridView({ note, noteIds: unfilteredNoteIds }: ViewModeProps) {
+    const noteIds = useFilteredNoteIds(note, unfilteredNoteIds);
+    const { pageNotes, ...pagination } = usePagination(note, noteIds);
+
+    return (
+        <div class="note-list grid-view">
+            <div class="note-list-wrapper">
+                <Pager {...pagination} />
+
+                <div class="note-list-container use-tn-links">
+                    {pageNotes?.map(childNote => (
+                        <GridNoteCard note={childNote} parentNote={note} />
+                    ))}
+                </div>
+
+                <Pager {...pagination} />
+            </div>
+        </div>
+    );
+}
+
+function ListNoteCard({ note, parentNote, expand }: { note: FNote, parentNote: FNote, expand?: boolean }) {
     const [ isExpanded, setExpanded ] = useState(expand);
-    const isSearch = note.type === "search";
-    const notePath = isSearch
-        ? note.noteId // for search note parent, we want to display a non-search path
-        : `${note.noteId}/${note.noteId}`;
+    const notePath = getNotePath(parentNote, note);
 
     return (
         <div
             className={`note-book-card no-tooltip-preview ${isExpanded ? "expanded" : ""}`}
-            data-note-id={note.noteId}            
+            data-note-id={note.noteId}
         >
             <h5 className="note-book-header">
                 <span
@@ -54,12 +69,36 @@ function NoteCard({ note, expand }: { note: FNote, expand?: boolean }) {
                 />
 
                 <Icon className="note-icon" icon={note.getIcon()} />
-                <NoteLink className="note-book-title" notePath={notePath} noPreview showNotePath={isSearch} />
+                <NoteLink className="note-book-title" notePath={notePath} noPreview showNotePath={note.type === "search"} />
                 {isExpanded && <>
                     <NoteContent note={note} />
-                    <NoteChildren note={note} />
+                    <NoteChildren note={note} parentNote={parentNote} />
                 </>}
             </h5>
+        </div>
+    )
+}
+
+function GridNoteCard({ note, parentNote }: { note: FNote, parentNote: FNote }) {
+    const [ noteTitle, setNoteTitle ] = useState<string>();
+    const notePath = getNotePath(parentNote, note);
+
+    useEffect(() => {
+        tree.getNoteTitle(note.noteId, parentNote.noteId).then(setNoteTitle);
+    }, [ note ]);
+
+    return (
+        <div
+            className={`note-book-card no-tooltip-preview block-link`}
+            data-href={`#${notePath}`}
+            data-note-id={note.noteId}
+            onClick={(e) => link.goToLink(e)}
+        >
+            <h5 className="note-book-header">
+                <Icon className="note-icon" icon={note.getIcon()} />
+                <span className="note-book-title">{noteTitle}</span>
+            </h5>
+            <NoteContent note={note} trim />
         </div>
     )
 }
@@ -83,7 +122,7 @@ function NoteContent({ note, trim }: { note: FNote, trim?: boolean }) {
     return <div ref={contentRef} className="note-book-content" />;
 }
 
-function NoteChildren({ note }: { note: FNote}) {
+function NoteChildren({ note, parentNote }: { note: FNote, parentNote: FNote }) {
     const imageLinks = note.getRelations("imageLink");
     const [ childNotes, setChildNotes ] = useState<FNote[]>();
 
@@ -94,5 +133,25 @@ function NoteChildren({ note }: { note: FNote}) {
         });
     }, [ note ]);
 
-    return childNotes?.map(childNote => <NoteCard note={childNote} />)
+    return childNotes?.map(childNote => <ListNoteCard note={childNote} parentNote={parentNote} />)
+}
+
+/**
+ * Filters the note IDs for the legacy view to filter out subnotes that are already included in the note content such as images, included notes.
+ */
+function useFilteredNoteIds(note: FNote, noteIds: string[]) {
+    return useMemo(() => {
+        const includedLinks = note ? note.getRelations().filter((rel) => rel.name === "imageLink" || rel.name === "includeNoteLink") : [];
+        const includedNoteIds = new Set(includedLinks.map((rel) => rel.value));
+        return noteIds.filter((noteId) => !includedNoteIds.has(noteId) && noteId !== "_hidden");
+    }, noteIds);
+}
+
+function getNotePath(parentNote: FNote, childNote: FNote) {
+    if (parentNote.type === "search") {
+        // for search note parent, we want to display a non-search path
+        return childNote.noteId;
+    } else {
+        return `${parentNote.noteId}/${childNote.noteId}`
+    }
 }

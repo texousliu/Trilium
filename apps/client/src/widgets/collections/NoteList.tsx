@@ -2,7 +2,7 @@ import { allViewTypes, ViewModeProps, ViewTypeOptions } from "./interface";
 import { useNoteContext, useNoteLabel, useTriliumEvent } from "../react/hooks";
 import FNote from "../../entities/fnote";
 import "./NoteList.css";
-import ListView from "./legacy/ListView";
+import { ListView, GridView } from "./legacy/ListView";
 import { useEffect, useState } from "preact/hooks";
 
 interface NoteListProps {
@@ -30,16 +30,18 @@ export default function NoteList({ }: NoteListProps) {
 
 function getComponentByViewType(note: FNote, noteIds: string[], viewType: ViewTypeOptions) {
     const props: ViewModeProps = { note, noteIds };
-    
+
     switch (viewType) {
         case "list":
             return <ListView {...props} />;
+        case "grid":
+            return <GridView {...props} />;
     }
 }
 
 function useNoteViewType(note?: FNote | null): ViewTypeOptions | undefined {
     const [ viewType ] = useNoteLabel(note, "viewType");
-    
+
     if (!note) {
         return undefined;
     } else if (!(allViewTypes as readonly string[]).includes(viewType || "")) {
@@ -52,7 +54,7 @@ function useNoteViewType(note?: FNote | null): ViewTypeOptions | undefined {
 
 function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOptions | undefined) {
     const [ noteIds, setNoteIds ] = useState<string[]>([]);
-    
+
     async function refreshNoteIds() {
         if (!note) {
             setNoteIds([]);
@@ -73,7 +75,7 @@ function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOptions | 
         if (note && loadResults.getBranchRows().some(branch =>
                 branch.parentNoteId === note.noteId
                 || noteIds.includes(branch.parentNoteId ?? ""))) {
-            refreshNoteIds();    
+            refreshNoteIds();
         }
     })
 

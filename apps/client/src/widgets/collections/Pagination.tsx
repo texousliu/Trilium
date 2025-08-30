@@ -52,7 +52,6 @@ export function Pager({ page, pageSize, setPage, pageCount, totalNotes }: Omit<P
         <div class="note-list-pager">
             {children}
 
-            // no need to distinguish "note" vs "notes" since in case of one result, there's no paging at all
             <span className="note-list-pager-total-count">({t("pagination.total_notes", { count: totalNotes })})</span>
         </div>
     )

@@ -13,7 +13,6 @@ class ListOrGridView extends ViewMode<{}> {
     private filteredNoteIds!: string[];
     private page?: number;
     private pageSize?: number;
-    private showNotePath?: boolean;
     private highlightRegex?: RegExp | null;
 
     constructor(viewType: ViewTypeOptions, args: ViewModeArgs) {
@@ -45,25 +44,6 @@ class ListOrGridView extends ViewMode<{}> {
     async renderNote(note: FNote, expand: boolean = false) {
         const { $renderedAttributes } = await attributeRenderer.renderNormalAttributes(note);
 
-        const $card = $('<div class="note-book-card">')
-            .append(
-                $('<h5 class="note-book-header">')
-                    .append(
-                        this.viewType === "grid"
-                            ? $('<span class="note-book-title">').text(await treeService.getNoteTitle(note.noteId, this.parentNote.noteId))
-                    )
-                    .append($renderedAttributes)
-            );
-
-        if (this.viewType === "grid") {
-            $card
-                .addClass("block-link")
-                .attr("data-href", `#${notePath}`)
-                .on("click", (e) => linkService.goToLink(e));
-        }
-
-        $expander.on("click", () => this.toggleContent($card, note, !$card.hasClass("expanded")));
-
         if (this.highlightRegex) {
             const Mark = new (await import("mark.js")).default($card.find(".note-book-title")[0]);
             Mark.markRegExp(this.highlightRegex, {
@@ -71,26 +51,12 @@ class ListOrGridView extends ViewMode<{}> {
                 className: "ck-find-result"
             });
         }
-
-        await this.toggleContent($card, note, expand);
-
-        return $card;
-    }
-
-    async toggleContent($card: JQuery<HTMLElement>, note: FNote, expand: boolean) {
-        if (this.viewType === "list" && ((expand && $card.hasClass("expanded")) || (!expand && !$card.hasClass("expanded")))) {
-            return;
-        }
-
-        if ((this.viewType === "grid")) {
-            $card.append(await this.renderNoteContent(note));
-        }
     }
 
     async renderNoteContent(note: FNote) {
         try {
             const { $renderedContent, type } = await contentRenderer.getRenderedContent(note, {
-                trim: this.viewType === "grid" // for grid only short content is needed
+                trim: this.viewType === "grid"
             });
 
             if (this.highlightRegex) {

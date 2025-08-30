@@ -17,7 +17,6 @@
 }
 
 .note-book-card:not(.expanded) .note-book-content {
-    display: none !important;
     padding: 10px
 }
 
