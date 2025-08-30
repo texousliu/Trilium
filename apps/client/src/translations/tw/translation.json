@@ -1399,7 +1399,9 @@
     "open-in-popup": "快速編輯"
   },
   "shared_info": {
-    "help_link": "如需幫助，請訪問 <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>。"
+    "help_link": "如需幫助，請訪問 <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>。",
+    "shared_publicly": "此筆記已公開分享於 {{- link}}。",
+    "shared_locally": "此筆記已於本地分享至 {{- link}}。"
   },
   "note_types": {
     "text": "文字",
@@ -1477,7 +1479,8 @@
     "hoist-this-note-workspace": "聚焦此筆記（工作區）",
     "refresh-saved-search-results": "重新整理儲存的搜尋結果",
     "create-child-note": "建立子筆記",
-    "unhoist": "取消聚焦"
+    "unhoist": "取消聚焦",
+    "toggle-sidebar": "切換側邊欄"
   },
   "title_bar_buttons": {
     "window-on-top": "保持此視窗置頂"
