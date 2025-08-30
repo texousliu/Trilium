@@ -127,8 +127,6 @@ class ListOrGridView extends ViewMode<{}> {
             return;
         }
 
-        const $expander = $card.find("> .note-book-header .note-expander");
-
         if ((this.viewType === "grid")) {
             $card.append(await this.renderNoteContent(note));
         }
@@ -148,18 +146,6 @@ class ListOrGridView extends ViewMode<{}> {
                 });
             }
         }
-
-        if (this.viewType === "list") {
-            const imageLinks = note.getRelations("imageLink");
-
-            const childNotes = (await note.getChildNotes()).filter((childNote) => !imageLinks.find((rel) => rel.value === childNote.noteId));
-
-            for (const childNote of childNotes) {
-                $content.append(await this.renderNote(childNote));
-            }
-        }
-
-        return $content;
     }
 }
 

@@ -55,7 +55,10 @@ function NoteCard({ note, expand }: { note: FNote, expand?: boolean }) {
 
                 <Icon className="note-icon" icon={note.getIcon()} />
                 <NoteLink notePath={notePath} noPreview showNotePath={isSearch} />
-                <NoteContent note={note} />
+                {isExpanded && <>
+                    <NoteContent note={note} />
+                    <NoteChildren note={note} />
+                </>}
             </h5>
         </div>
     )
@@ -78,6 +81,20 @@ function NoteContent({ note, trim }: { note: FNote, trim?: boolean }) {
     }, [ note ]);
 
     return <div ref={contentRef} className="note-book-content" />;
+}
+
+function NoteChildren({ note }: { note: FNote}) {
+    const imageLinks = note.getRelations("imageLink");
+    const [ childNotes, setChildNotes ] = useState<FNote[]>();
+
+    useEffect(() => {
+        note.getChildNotes().then(childNotes => {
+            const filteredChildNotes = childNotes.filter((childNote) => !imageLinks.find((rel) => rel.value === childNote.noteId));
+            setChildNotes(filteredChildNotes);
+        });
+    }, [ note ]);
+
+    return childNotes?.map(childNote => <NoteCard note={childNote} />)
 }
 
 function usePagination(note: FNote, noteIds: string[]) {
