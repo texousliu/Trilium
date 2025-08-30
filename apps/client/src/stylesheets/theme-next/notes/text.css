@@ -419,6 +419,12 @@ div.ck-template-form .ck-search__info span:nth-child(2) {
     font-size: .9em;
 }
 
+/* Link dropdown */
+
+:root .ck.ck-form.ck-link-form ul.ck-link-form__providers-list {
+    border-top: none;
+}
+
 /* Bookmark dropdown */
 
 .ck.ck-bookmark-form .ck-form__row_with-submit {
@@ -470,6 +476,10 @@ button.ck.ck-button.ck-button-action.ck-button_with-text {
 /* Forms */
 .ck.ck-form__row_with-submit {
     align-items: flex-end;
+}
+
+.ck.ck-form__header {
+    border-bottom: none;
 }
 
 /*
