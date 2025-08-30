@@ -370,7 +370,7 @@ div.ck-template-form {
 }
 
 div.ck-template-form .ck-labeled-field-view {
-    margin: 8px 0;
+    margin-bottom: 8px;
 }
 
 /* Template item */
@@ -446,6 +446,26 @@ div.ck-template-form .ck-search__info span:nth-child(2) {
 /* "Keep on typing to see the emoji" placeholder */
 #mention-list-item-id\:__EMOJI_HINT {
     background: transparent;
+}
+
+/*
+ * FORMS
+ */
+
+/*
+ * Text boxes
+ */
+
+.ck.ck-labeled-field-view {
+    padding-top: 1.5em !important; /* Create space for the label */
+}
+
+.ck.ck-labeled-field-view > .ck.ck-labeled-field-view__input-wrapper > label.ck.ck-label {
+    transform: translate(0, -1.7em) !important; /* Move the label above the text box regardless of the text box state */
+    padding-left: 0 !important;
+    background: transparent;
+    font-size: .85em;
+    font-weight: 600;
 }
 
 /*
