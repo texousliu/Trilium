@@ -373,10 +373,13 @@ div.ck-template-form .ck-labeled-field-view {
     margin: 8px 0;
 }
 
+/* Template item */
+
 :root div.ck-template-form li.ck-list__item button.ck-template-button {
     padding: 4px 8px;
 }
 
+/* Template icon */
 :root .ck-template-form .ck-button__icon {
     --ck-spacing-medium: 2px;
 }
@@ -385,11 +388,7 @@ div.ck-template-form .ck-labeled-field-view {
     color: var(--menu-item-icon-color);
 }
 
-:root div.ck-template-form .ck-template-form__description {
-    opacity: .5;
-    font-size: .9em;
-}
-
+/* Template name */
 div.ck-template-form .ck-template-form__text-part {
     color: var(--hover-item-text-color);
     font-size: .9rem;
@@ -401,13 +400,23 @@ div.ck-template-form .ck-template-form__text-part mark {
     font-weight: bold;
 }
 
-div.ck-template-form  .ck-search__info span {
-    line-height: initial;
+/* Template description */
+:root div.ck-template-form .ck-template-form__description {
+    opacity: .5;
+    font-size: .9em;
 }
 
-div.ck-template-form  .ck-search__info span:nth-child(2) {
-    font-size: .9em;
+/* Messages */
+div.ck-template-form .ck-search__info > span {
+    line-height: initial;
+    color: var(--muted-text-color);
+}
+
+div.ck-template-form .ck-search__info span:nth-child(2) {
+    display: block;
     opacity: .5;
+    margin-top: 8px;
+    font-size: .9em;
 }
 
 /* Action buttons */
