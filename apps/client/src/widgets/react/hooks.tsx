@@ -550,7 +550,7 @@ export function useSyncedRef<T>(externalRef?: RefObject<T>, initialValue: T | nu
     return ref;
 }
 
-export function useSearchHighlighlighting(ref: RefObject<HTMLElement>, highlightedTokens: string[] | null | undefined) {
+export function useImperativeSearchHighlighlighting(highlightedTokens: string[] | null | undefined) {
     const mark = useRef<Mark>();
     const highlightRegex = useMemo(() => {
         if (!highlightedTokens?.length) return null;
@@ -558,18 +558,17 @@ export function useSearchHighlighlighting(ref: RefObject<HTMLElement>, highlight
         return new RegExp(regex, "gi")
     }, [ highlightedTokens ]);
 
-    useEffect(() => {
-        if (!ref.current || !highlightRegex) return;
+    return (el: HTMLElement) => {
+        if (!el || !highlightRegex) return;
 
         if (!mark.current) {
-            mark.current = new Mark(ref.current);
+            mark.current = new Mark(el);
         }
 
+        mark.current.unmark();
         mark.current.markRegExp(highlightRegex, {
             element: "span",
             className: "ck-find-result"
         });
-
-        return () => mark.current?.unmark();
-    });
+    };
 }

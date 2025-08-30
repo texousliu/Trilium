@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import link from "../../services/link";
-import RawHtml from "./RawHtml";
-import { useSearchHighlighlighting } from "./hooks";
+import { useImperativeSearchHighlighlighting } from "./hooks";
 
 interface NoteLinkOpts {
     className?: string;
@@ -16,14 +15,20 @@ interface NoteLinkOpts {
 
 export default function NoteLink({ className, notePath, showNotePath, showNoteIcon, style, noPreview, noTnLink, highlightedTokens }: NoteLinkOpts) {
     const stringifiedNotePath = Array.isArray(notePath) ? notePath.join("/") : notePath;
+    const ref = useRef<HTMLSpanElement>(null);
     const [ jqueryEl, setJqueryEl ] = useState<JQuery<HTMLElement>>();
-    const containerRef = useRef<HTMLDivElement>(null);
-    useSearchHighlighlighting(containerRef, highlightedTokens);
+    const highlightSearch = useImperativeSearchHighlighlighting(highlightedTokens);
 
     useEffect(() => {
         link.createLink(stringifiedNotePath, { showNotePath, showNoteIcon })
             .then(setJqueryEl);
     }, [ stringifiedNotePath, showNotePath ]);
+
+    useEffect(() => {
+        if (!ref.current || !jqueryEl) return;
+        ref.current.replaceChildren(jqueryEl[0]);
+        highlightSearch(ref.current);
+    }, [ jqueryEl ]);
 
     if (style) {
         jqueryEl?.css(style);
@@ -42,6 +47,6 @@ export default function NoteLink({ className, notePath, showNotePath, showNoteIc
         $linkEl?.addClass(className);
     }
 
-    return <RawHtml containerRef={containerRef} html={jqueryEl} />
+    return <span ref={ref} />
 
 }

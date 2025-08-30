@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import FNote from "../../../entities/fnote";
 import Icon from "../../react/Icon";
 import { ViewModeProps } from "../interface";
-import {  useNoteLabelBoolean, useNoteProperty } from "../../react/hooks";
+import {  useNoteLabelBoolean, useImperativeSearchHighlighlighting } from "../../react/hooks";
 import NoteLink from "../../react/NoteLink";
 import "./ListOrGridView.css";
 import content_renderer from "../../../services/content_renderer";
@@ -75,8 +75,8 @@ function ListNoteCard({ note, parentNote, expand, highlightedTokens }: { note: F
                 <NoteAttributes note={note} />
 
                 {isExpanded && <>
-                    <NoteContent note={note} />
-                    <NoteChildren note={note} parentNote={parentNote} />
+                    <NoteContent note={note} highlightedTokens={highlightedTokens} />
+                    <NoteChildren note={note} parentNote={parentNote} highlightedTokens={highlightedTokens} />
                 </>}
             </h5>
         </div>
@@ -104,7 +104,7 @@ function GridNoteCard({ note, parentNote, highlightedTokens }: { note: FNote, pa
                 <span ref={titleRef} className="note-book-title">{noteTitle}</span>
                 <NoteAttributes note={note} />
             </h5>
-            <NoteContent note={note} trim />
+            <NoteContent note={note} trim highlightedTokens={highlightedTokens} />
         </div>
     )
 }
@@ -120,26 +120,29 @@ function NoteAttributes({ note }: { note: FNote }) {
     return <span className="note-list-attributes" ref={ref} />
 }
 
-function NoteContent({ note, trim }: { note: FNote, trim?: boolean }) {
+function NoteContent({ note, trim, highlightedTokens }: { note: FNote, trim?: boolean, highlightedTokens }) {
     const contentRef = useRef<HTMLDivElement>(null);
+    const highlightSearch = useImperativeSearchHighlighlighting(highlightedTokens);
 
     useEffect(() => {
         content_renderer.getRenderedContent(note, { trim })
             .then(({ $renderedContent, type }) => {
-                contentRef.current?.replaceChildren(...$renderedContent);
-                contentRef.current?.classList.add(`type-${type}`);
+                if (!contentRef.current) return;
+                contentRef.current.replaceChildren(...$renderedContent);
+                contentRef.current.classList.add(`type-${type}`);
+                highlightSearch(contentRef.current);
             })
             .catch(e => {
                 console.warn(`Caught error while rendering note '${note.noteId}' of type '${note.type}'`);
                 console.error(e);
                 contentRef.current?.replaceChildren(t("collections.rendering_error"));
             })
-    }, [ note ]);
+    }, [ note, highlightedTokens ]);
 
     return <div ref={contentRef} className="note-book-content" />;
 }
 
-function NoteChildren({ note, parentNote }: { note: FNote, parentNote: FNote }) {
+function NoteChildren({ note, parentNote, highlightedTokens }: { note: FNote, parentNote: FNote, highlightedTokens: string[] | null | undefined }) {
     const imageLinks = note.getRelations("imageLink");
     const [ childNotes, setChildNotes ] = useState<FNote[]>();
 
@@ -150,7 +153,7 @@ function NoteChildren({ note, parentNote }: { note: FNote, parentNote: FNote }) 
         });
     }, [ note ]);
 
-    return childNotes?.map(childNote => <ListNoteCard note={childNote} parentNote={parentNote} highlightedTokens={null} />)
+    return childNotes?.map(childNote => <ListNoteCard note={childNote} parentNote={parentNote} highlightedTokens={highlightedTokens} />)
 }
 
 /**
