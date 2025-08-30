@@ -50,7 +50,7 @@
 }
 
 .note-book-header .rendered-note-attributes:before {
-    content: "\\00a0\\00a0";
+    content: "\00a0\00a0";
 }
 
 .note-book-header .note-icon {

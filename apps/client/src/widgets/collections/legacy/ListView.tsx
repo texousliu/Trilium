@@ -10,6 +10,7 @@ import { Pager, usePagination } from "../Pagination";
 import tree from "../../../services/tree";
 import link from "../../../services/link";
 import { t } from "../../../services/i18n";
+import attribute_renderer from "../../../services/attribute_renderer";
 
 export function ListView({ note, noteIds: unfilteredNoteIds }: ViewModeProps) {
     const [ isExpanded ] = useNoteLabelBoolean(note, "expanded");
@@ -18,7 +19,7 @@ export function ListView({ note, noteIds: unfilteredNoteIds }: ViewModeProps) {
 
     return (
         <div class="note-list list-view">
-            <div class="note-list-wrapper">
+            { noteIds.length > 0 && <div class="note-list-wrapper">
                 <Pager {...pagination} />
 
                 <div class="note-list-container use-tn-links">
@@ -28,7 +29,7 @@ export function ListView({ note, noteIds: unfilteredNoteIds }: ViewModeProps) {
                 </div>
 
                 <Pager {...pagination} />
-            </div>
+            </div>}
         </div>
     );
 }
@@ -71,6 +72,8 @@ function ListNoteCard({ note, parentNote, expand }: { note: FNote, parentNote: F
 
                 <Icon className="note-icon" icon={note.getIcon()} />
                 <NoteLink className="note-book-title" notePath={notePath} noPreview showNotePath={note.type === "search"} />
+                <NoteAttributes note={note} />
+
                 {isExpanded && <>
                     <NoteContent note={note} />
                     <NoteChildren note={note} parentNote={parentNote} />
@@ -98,10 +101,22 @@ function GridNoteCard({ note, parentNote }: { note: FNote, parentNote: FNote }) 
             <h5 className="note-book-header">
                 <Icon className="note-icon" icon={note.getIcon()} />
                 <span className="note-book-title">{noteTitle}</span>
+                <NoteAttributes note={note} />
             </h5>
             <NoteContent note={note} trim />
         </div>
     )
+}
+
+function NoteAttributes({ note }: { note: FNote }) {
+    const ref = useRef<HTMLSpanElement>(null);
+    useEffect(() => {
+        attribute_renderer.renderNormalAttributes(note).then(({$renderedAttributes}) => {
+            ref.current?.replaceChildren(...$renderedAttributes);
+        });
+    }, [ note ]);
+
+    return <span className="note-list-attributes" ref={ref} />
 }
 
 function NoteContent({ note, trim }: { note: FNote, trim?: boolean }) {

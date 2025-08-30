@@ -15,12 +15,6 @@ class ListOrGridView extends ViewMode<{}> {
     private pageSize?: number;
     private highlightRegex?: RegExp | null;
 
-    constructor(viewType: ViewTypeOptions, args: ViewModeArgs) {
-        super(args, viewType);
-        this.$noteList = $(TPL);
-        this.$noteList.addClass(`${this.viewType}-view`);
-    }
-
     async renderList() {
         if (this.filteredNoteIds.length === 0 || !this.page || !this.pageSize) {
             this.$noteList.hide();
@@ -42,8 +36,6 @@ class ListOrGridView extends ViewMode<{}> {
     }
 
     async renderNote(note: FNote, expand: boolean = false) {
-        const { $renderedAttributes } = await attributeRenderer.renderNormalAttributes(note);
-
         if (this.highlightRegex) {
             const Mark = new (await import("mark.js")).default($card.find(".note-book-title")[0]);
             Mark.markRegExp(this.highlightRegex, {
@@ -55,10 +47,6 @@ class ListOrGridView extends ViewMode<{}> {
 
     async renderNoteContent(note: FNote) {
         try {
-            const { $renderedContent, type } = await contentRenderer.getRenderedContent(note, {
-                trim: this.viewType === "grid"
-            });
-
             if (this.highlightRegex) {
                 const Mark = new (await import("mark.js")).default($renderedContent[0]);
                 Mark.markRegExp(this.highlightRegex, {
