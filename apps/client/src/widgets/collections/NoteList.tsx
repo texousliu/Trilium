@@ -11,18 +11,23 @@ interface NoteListProps {
     highlightedTokens?: string[] | null;
 }
 
-export default function NoteList({ note: providedNote, highlightedTokens }: NoteListProps) {
+export default function NoteList({ note: providedNote, highlightedTokens, displayOnlyCollections }: NoteListProps) {
     const widgetRef = useRef<HTMLDivElement>(null);
-    const { note: contextNote } = useNoteContext();
+    const { note: contextNote, noteContext } = useNoteContext();
     const note = providedNote ?? contextNote;
     const viewType = useNoteViewType(note);
     const noteIds = useNoteIds(note, viewType);
     const isFullHeight = (viewType !== "list" && viewType !== "grid");
     const [ isIntersecting, setIsIntersecting ] = useState(false);
     const shouldRender = (isFullHeight || isIntersecting);
-    const isEnabled = (note && !!viewType && shouldRender);
+    const isEnabled = (note && noteContext?.hasNoteList() && !!viewType && shouldRender);
 
     useEffect(() => {
+        if (isFullHeight || displayOnlyCollections) {
+            // Double role: no need to check if the note list is visible if the view is full-height, but also prevent legacy views if `displayOnlyCollections` is true.
+            return;
+        }
+
         const observer = new IntersectionObserver(
             (entries) => {
                 if (!isIntersecting) {
