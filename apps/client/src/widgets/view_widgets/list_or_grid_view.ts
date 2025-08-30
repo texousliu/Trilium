@@ -61,7 +61,6 @@ class ListOrGridView extends ViewMode<{}> {
                     .append(
                         this.viewType === "grid"
                             ? $('<span class="note-book-title">').text(await treeService.getNoteTitle(note.noteId, this.parentNote.noteId))
-                            : (await linkService.createLink(notePath, { showNotePath: this.showNotePath })).addClass("note-book-title")
                     )
                     .append($renderedAttributes)
             );

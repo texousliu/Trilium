@@ -3,6 +3,7 @@ import link from "../../services/link";
 import RawHtml from "./RawHtml";
 
 interface NoteLinkOpts {
+    className?: string;
     notePath: string | string[];
     showNotePath?: boolean;
     showNoteIcon?: boolean;
@@ -11,7 +12,7 @@ interface NoteLinkOpts {
     noTnLink?: boolean;
 }
 
-export default function NoteLink({ notePath, showNotePath, showNoteIcon, style, noPreview, noTnLink }: NoteLinkOpts) {
+export default function NoteLink({ className, notePath, showNotePath, showNoteIcon, style, noPreview, noTnLink }: NoteLinkOpts) {
     const stringifiedNotePath = Array.isArray(notePath) ? notePath.join("/") : notePath;
     const [ jqueryEl, setJqueryEl ] = useState<JQuery<HTMLElement>>();
 
@@ -31,6 +32,10 @@ export default function NoteLink({ notePath, showNotePath, showNoteIcon, style, 
 
     if (!noTnLink) {
         $linkEl?.addClass("tn-link");
+    }
+
+    if (className) {
+        $linkEl?.addClass(className);
     }
 
     return <RawHtml html={jqueryEl} />

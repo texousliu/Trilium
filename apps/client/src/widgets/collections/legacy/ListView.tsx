@@ -54,7 +54,7 @@ function NoteCard({ note, expand }: { note: FNote, expand?: boolean }) {
                 />
 
                 <Icon className="note-icon" icon={note.getIcon()} />
-                <NoteLink notePath={notePath} noPreview showNotePath={isSearch} />
+                <NoteLink className="note-book-title" notePath={notePath} noPreview showNotePath={isSearch} />
                 {isExpanded && <>
                     <NoteContent note={note} />
                     <NoteChildren note={note} />
