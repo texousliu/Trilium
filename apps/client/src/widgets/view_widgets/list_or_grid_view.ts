@@ -6,7 +6,7 @@ import treeService from "../../services/tree.js";
 import utils from "../../services/utils.js";
 import type FNote from "../../entities/fnote.js";
 import ViewMode, { type ViewModeArgs } from "./view_mode.js";
-import type { ViewTypeOptions } from "../../services/note_list_renderer.js";
+import { ViewTypeOptions } from "../collections/interface.js";
 
 const TPL = /*html*/`
 <div class="note-list">

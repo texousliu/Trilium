@@ -4,12 +4,7 @@ import CalendarView from "../view_widgets/calendar_view.js";
 import GeoView from "../view_widgets/geo_view/index.js";
 import ListOrGridView from "../view_widgets/list_or_grid_view.js";
 import TableView from "../view_widgets/table_view/index.js";
-import type { ViewModeArgs } from "../view_widgets/view_mode.js";
 import type ViewMode from "../view_widgets/view_mode.js";
-
-const allViewTypes = ["list", "grid", "calendar", "table", "geoMap", "board"] as const;
-export type ArgsWithoutNoteId = Omit<ViewModeArgs, "noteIds">;
-export type ViewTypeOptions = typeof allViewTypes[number];
 
 export default class NoteListRenderer {
 

@@ -2,7 +2,7 @@ import type { EventData } from "../../components/app_context.js";
 import appContext from "../../components/app_context.js";
 import Component from "../../components/component.js";
 import type FNote from "../../entities/fnote.js";
-import type { ViewTypeOptions } from "../../services/note_list_renderer.js";
+import { ViewTypeOptions } from "../collections/interface.js";
 import ViewModeStorage from "./view_mode_storage.js";
 
 export interface ViewModeArgs {
