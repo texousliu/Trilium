@@ -1,0 +1,26 @@
+.api-log-widget {
+    padding: 15px;
+    flex-grow: 1;
+    max-height: 40%;
+    position: relative;
+}
+
+.api-log-container {
+    overflow: auto;
+    height: 100%;
+    font-family: var(--monospace-font-family);
+    font-size: 0.8em;
+    white-space: pre;
+}
+
+.close-api-log-button {
+    padding: 5px;
+    border: 1px solid var(--button-border-color);
+    background-color: var(--button-background-color);
+    border-radius: var(--button-border-radius);
+    color: var(--button-text-color);
+    position: absolute;
+    top: 10px;
+    right: 40px;
+    cursor: pointer;
+}

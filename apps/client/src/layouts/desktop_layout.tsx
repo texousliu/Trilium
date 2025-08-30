@@ -13,7 +13,6 @@ import WatchedFileUpdateStatusWidget from "../widgets/watched_file_update_status
 import SpacerWidget from "../widgets/spacer.js";
 import QuickSearchWidget from "../widgets/quick_search.js";
 import SplitNoteContainer from "../widgets/containers/split_note_container.js";
-import LeftPaneToggleWidget from "../widgets/buttons/left_pane_toggle.js";
 import CreatePaneButton from "../widgets/buttons/create_pane_button.js";
 import ClosePaneButton from "../widgets/buttons/close_pane_button.js";
 import RightPaneContainer from "../widgets/containers/right_pane_container.js";
@@ -24,7 +23,6 @@ import TocWidget from "../widgets/toc.js";
 import HighlightsListWidget from "../widgets/highlights_list.js";
 import PasswordNoteSetDialog from "../widgets/dialogs/password_not_set.js";
 import LauncherContainer from "../widgets/containers/launcher_container.js";
-import ApiLogWidget from "../widgets/api_log.js";
 import MovePaneButton from "../widgets/buttons/move_pane_button.js";
 import UploadAttachmentsDialog from "../widgets/dialogs/upload_attachments.js";
 import ScrollPadding from "../widgets/scroll_padding.js";
@@ -43,6 +41,7 @@ import SqlResults from "../widgets/sql_result.js";
 import SqlTableSchemas from "../widgets/sql_table_schemas.js";
 import TitleBarButtons from "../widgets/title_bar_buttons.jsx";
 import LeftPaneToggle from "../widgets/buttons/left_pane_toggle.js";
+import ApiLog from "../widgets/api_log.jsx";
 
 export default class DesktopLayout {
 
@@ -144,7 +143,7 @@ export default class DesktopLayout {
                                                                 .child(<SqlResults />)
                                                                 .child(<ScrollPadding />)
                                                         )
-                                                        .child(new ApiLogWidget())
+                                                        .child(<ApiLog />)
                                                         .child(new FindWidget())
                                                         .child(
                                                             ...this.customWidgets.get("node-detail-pane"), // typo, let's keep it for a while as BC
