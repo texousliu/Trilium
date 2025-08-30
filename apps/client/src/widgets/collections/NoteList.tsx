@@ -6,30 +6,31 @@ import { ListView, GridView } from "./legacy/ListView";
 import { useEffect, useState } from "preact/hooks";
 
 interface NoteListProps {
+    note?: FNote | null;
     displayOnlyCollections?: boolean;
+    highlightedTokens?: string[] | null;
 }
 
-export default function NoteList({ }: NoteListProps) {
-    const { note } = useNoteContext();
+export default function NoteList({ note: providedNote, highlightedTokens }: NoteListProps) {
+    const { note: contextNote } = useNoteContext();
+    const note = providedNote ?? contextNote;
     const viewType = useNoteViewType(note);
     const noteIds = useNoteIds(note, viewType);
     const isEnabled = (note && !!viewType);
-
-    // Refresh note Ids
 
     return (
         <div className="note-list-widget">
             {isEnabled && (
                 <div className="note-list-widget-content">
-                    {getComponentByViewType(note, noteIds, viewType)}
+                    {getComponentByViewType(note, noteIds, viewType, highlightedTokens)}
                 </div>
             )}
         </div>
     );
 }
 
-function getComponentByViewType(note: FNote, noteIds: string[], viewType: ViewTypeOptions) {
-    const props: ViewModeProps = { note, noteIds };
+function getComponentByViewType(note: FNote, noteIds: string[], viewType: ViewTypeOptions, highlightedTokens: string[] | null | undefined) {
+    const props: ViewModeProps = { note, noteIds, highlightedTokens };
 
     switch (viewType) {
         case "list":

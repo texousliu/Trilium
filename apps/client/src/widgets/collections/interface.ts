@@ -11,4 +11,5 @@ export interface ViewModeProps {
      * We're using noteIds so that it's not necessary to load all notes at once when paging.
      */
     noteIds: string[];
+    highlightedTokens: string[] | null | undefined;
 }

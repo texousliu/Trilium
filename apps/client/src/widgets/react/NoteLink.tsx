@@ -1,6 +1,7 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import link from "../../services/link";
 import RawHtml from "./RawHtml";
+import { useSearchHighlighlighting } from "./hooks";
 
 interface NoteLinkOpts {
     className?: string;
@@ -10,11 +11,14 @@ interface NoteLinkOpts {
     style?: Record<string, string | number>;
     noPreview?: boolean;
     noTnLink?: boolean;
+    highlightedTokens?: string[] | null | undefined;
 }
 
-export default function NoteLink({ className, notePath, showNotePath, showNoteIcon, style, noPreview, noTnLink }: NoteLinkOpts) {
+export default function NoteLink({ className, notePath, showNotePath, showNoteIcon, style, noPreview, noTnLink, highlightedTokens }: NoteLinkOpts) {
     const stringifiedNotePath = Array.isArray(notePath) ? notePath.join("/") : notePath;
     const [ jqueryEl, setJqueryEl ] = useState<JQuery<HTMLElement>>();
+    const containerRef = useRef<HTMLDivElement>(null);
+    useSearchHighlighlighting(containerRef, highlightedTokens);
 
     useEffect(() => {
         link.createLink(stringifiedNotePath, { showNotePath, showNoteIcon })
@@ -38,6 +42,6 @@ export default function NoteLink({ className, notePath, showNotePath, showNoteIc
         $linkEl?.addClass(className);
     }
 
-    return <RawHtml html={jqueryEl} />
-    
+    return <RawHtml containerRef={containerRef} html={jqueryEl} />
+
 }

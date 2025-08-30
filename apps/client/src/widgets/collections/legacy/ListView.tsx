@@ -12,7 +12,7 @@ import link from "../../../services/link";
 import { t } from "../../../services/i18n";
 import attribute_renderer from "../../../services/attribute_renderer";
 
-export function ListView({ note, noteIds: unfilteredNoteIds }: ViewModeProps) {
+export function ListView({ note, noteIds: unfilteredNoteIds, highlightedTokens }: ViewModeProps) {
     const [ isExpanded ] = useNoteLabelBoolean(note, "expanded");
     const noteIds = useFilteredNoteIds(note, unfilteredNoteIds);
     const { pageNotes, ...pagination } = usePagination(note, noteIds);
@@ -24,7 +24,7 @@ export function ListView({ note, noteIds: unfilteredNoteIds }: ViewModeProps) {
 
                 <div class="note-list-container use-tn-links">
                     {pageNotes?.map(childNote => (
-                        <ListNoteCard note={childNote} parentNote={note} expand={isExpanded} />
+                        <ListNoteCard note={childNote} parentNote={note} expand={isExpanded} highlightedTokens={highlightedTokens} />
                     ))}
                 </div>
 
@@ -34,7 +34,7 @@ export function ListView({ note, noteIds: unfilteredNoteIds }: ViewModeProps) {
     );
 }
 
-export function GridView({ note, noteIds: unfilteredNoteIds }: ViewModeProps) {
+export function GridView({ note, noteIds: unfilteredNoteIds, highlightedTokens }: ViewModeProps) {
     const noteIds = useFilteredNoteIds(note, unfilteredNoteIds);
     const { pageNotes, ...pagination } = usePagination(note, noteIds);
 
@@ -45,7 +45,7 @@ export function GridView({ note, noteIds: unfilteredNoteIds }: ViewModeProps) {
 
                 <div class="note-list-container use-tn-links">
                     {pageNotes?.map(childNote => (
-                        <GridNoteCard note={childNote} parentNote={note} />
+                        <GridNoteCard note={childNote} parentNote={note} highlightedTokens={highlightedTokens} />
                     ))}
                 </div>
 
@@ -55,7 +55,7 @@ export function GridView({ note, noteIds: unfilteredNoteIds }: ViewModeProps) {
     );
 }
 
-function ListNoteCard({ note, parentNote, expand }: { note: FNote, parentNote: FNote, expand?: boolean }) {
+function ListNoteCard({ note, parentNote, expand, highlightedTokens }: { note: FNote, parentNote: FNote, expand?: boolean, highlightedTokens: string[] | null | undefined }) {
     const [ isExpanded, setExpanded ] = useState(expand);
     const notePath = getNotePath(parentNote, note);
 
@@ -71,7 +71,7 @@ function ListNoteCard({ note, parentNote, expand }: { note: FNote, parentNote: F
                 />
 
                 <Icon className="note-icon" icon={note.getIcon()} />
-                <NoteLink className="note-book-title" notePath={notePath} noPreview showNotePath={note.type === "search"} />
+                <NoteLink className="note-book-title" notePath={notePath} noPreview showNotePath={note.type === "search"} highlightedTokens={highlightedTokens} />
                 <NoteAttributes note={note} />
 
                 {isExpanded && <>
@@ -83,7 +83,8 @@ function ListNoteCard({ note, parentNote, expand }: { note: FNote, parentNote: F
     )
 }
 
-function GridNoteCard({ note, parentNote }: { note: FNote, parentNote: FNote }) {
+function GridNoteCard({ note, parentNote, highlightedTokens }: { note: FNote, parentNote: FNote, highlightedTokens: string[] | null | undefined }) {
+    const titleRef = useRef<HTMLSpanElement>(null);
     const [ noteTitle, setNoteTitle ] = useState<string>();
     const notePath = getNotePath(parentNote, note);
 
@@ -100,7 +101,7 @@ function GridNoteCard({ note, parentNote }: { note: FNote, parentNote: FNote }) 
         >
             <h5 className="note-book-header">
                 <Icon className="note-icon" icon={note.getIcon()} />
-                <span className="note-book-title">{noteTitle}</span>
+                <span ref={titleRef} className="note-book-title">{noteTitle}</span>
                 <NoteAttributes note={note} />
             </h5>
             <NoteContent note={note} trim />
@@ -149,7 +150,7 @@ function NoteChildren({ note, parentNote }: { note: FNote, parentNote: FNote }) 
         });
     }, [ note ]);
 
-    return childNotes?.map(childNote => <ListNoteCard note={childNote} parentNote={parentNote} />)
+    return childNotes?.map(childNote => <ListNoteCard note={childNote} parentNote={parentNote} highlightedTokens={null} />)
 }
 
 /**
