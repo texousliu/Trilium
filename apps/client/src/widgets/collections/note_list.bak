@@ -4,32 +4,6 @@ import type FNote from "../../entities/fnote.js";
 import type { CommandListener, CommandListenerData, CommandMappings, CommandNames, EventData, EventNames } from "../../components/app_context.js";
 import type ViewMode from "../view_widgets/view_mode.js";
 
-const TPL = /*html*/`
-<div class="note-list-widget">
-    <style>
-    .note-list-widget {
-        min-height: 0;
-        overflow: auto;
-    }
-
-    .note-list-widget .note-list {
-        padding: 10px;
-    }
-
-    .note-list-widget.full-height,
-    .note-list-widget.full-height .note-list-widget-content {
-        height: 100%;
-    }
-
-    .note-list-widget video {
-        height: 100%;
-    }
-    </style>
-
-    <div class="note-list-widget-content">
-    </div>
-</div>`;
-
 export default class NoteListWidget extends NoteContextAwareWidget {
 
     private $content!: JQuery<HTMLElement>;
@@ -49,10 +23,6 @@ export default class NoteListWidget extends NoteContextAwareWidget {
     }
 
     isEnabled() {
-        if (!super.isEnabled()) {
-            return false;
-        }
-
         if (this.displayOnlyCollections && this.note?.type !== "book") {
             const viewType = this.note?.getLabelValue("viewType");
             if (!viewType || ["grid", "list"].includes(viewType)) {
