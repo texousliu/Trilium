@@ -17,40 +17,10 @@ class ListOrGridView extends ViewMode<{}> {
     private showNotePath?: boolean;
     private highlightRegex?: RegExp | null;
 
-    /*
-     * We're using noteIds so that it's not necessary to load all notes at once when paging
-     */
     constructor(viewType: ViewTypeOptions, args: ViewModeArgs) {
         super(args, viewType);
         this.$noteList = $(TPL);
-
-
-        args.$parent.append(this.$noteList);
-
-        this.page = 1;
-        this.pageSize = parseInt(args.parentNote.getLabelValue("pageSize") || "");
-
-        if (!this.pageSize || this.pageSize < 1) {
-            this.pageSize = 20;
-        }
-
         this.$noteList.addClass(`${this.viewType}-view`);
-
-        this.showNotePath = args.showNotePath;
-    }
-
-    /** @returns {Set<string>} list of noteIds included (images, included notes) in the parent note and which
-     *                        don't have to be shown in the note list. */
-    getIncludedNoteIds() {
-        const includedLinks = this.parentNote ? this.parentNote.getRelations().filter((rel) => rel.name === "imageLink" || rel.name === "includeNoteLink") : [];
-
-        return new Set(includedLinks.map((rel) => rel.value));
-    }
-
-    async beforeRender() {
-        super.beforeRender();
-        const includedNoteIds = this.getIncludedNoteIds();
-        this.filteredNoteIds = this.noteIds.filter((noteId) => !includedNoteIds.has(noteId) && noteId !== "_hidden");
     }
 
     async renderList() {
@@ -69,20 +39,6 @@ class ListOrGridView extends ViewMode<{}> {
         }
 
         this.$noteList.show();
-
-        const $container = this.$noteList.find(".note-list-container").empty();
-
-        const startIdx = (this.page - 1) * this.pageSize;
-        const endIdx = startIdx + this.pageSize;
-
-        const pageNoteIds = this.filteredNoteIds.slice(startIdx, Math.min(endIdx, this.filteredNoteIds.length));
-        const pageNotes = await froca.getNotes(pageNoteIds);
-
-        for (const note of pageNotes) {
-            const $card = await this.renderNote(note, this.parentNote.isLabelTruthy("expanded"));
-
-            $container.append($card);
-        }
 
         this.renderPager();
 
@@ -132,25 +88,15 @@ class ListOrGridView extends ViewMode<{}> {
     }
 
     async renderNote(note: FNote, expand: boolean = false) {
-        const $expander = $('<span class="note-expander bx bx-chevron-right"></span>');
-
         const { $renderedAttributes } = await attributeRenderer.renderNormalAttributes(note);
-        const notePath =
-            this.parentNote.type === "search"
-                ? note.noteId // for search note parent, we want to display a non-search path
-                : `${this.parentNote.noteId}/${note.noteId}`;
 
         const $card = $('<div class="note-book-card">')
-            .attr("data-note-id", note.noteId)
-            .addClass("no-tooltip-preview")
             .append(
                 $('<h5 class="note-book-header">')
-                    .append($expander)
-                    .append($('<span class="note-icon">').addClass(note.getIcon()))
                     .append(
                         this.viewType === "grid"
                             ? $('<span class="note-book-title">').text(await treeService.getNoteTitle(note.noteId, this.parentNote.noteId))
-                            : (await linkService.createLink(notePath, { showTooltip: false, showNotePath: this.showNotePath })).addClass("note-book-title")
+                            : (await linkService.createLink(notePath, { showNotePath: this.showNotePath })).addClass("note-book-title")
                     )
                     .append($renderedAttributes)
             );

@@ -1,4 +1,4 @@
-import { allViewTypes, ViewTypeOptions } from "./interface";
+import { allViewTypes, ViewModeProps, ViewTypeOptions } from "./interface";
 import { useNoteContext, useNoteLabel, useTriliumEvent } from "../react/hooks";
 import FNote from "../../entities/fnote";
 import "./NoteList.css";
@@ -13,27 +13,27 @@ export default function NoteList({ }: NoteListProps) {
     const { note } = useNoteContext();
     const viewType = useNoteViewType(note);
     const noteIds = useNoteIds(note, viewType);
-    const isEnabled = (!!viewType);
+    const isEnabled = (note && !!viewType);
 
     // Refresh note Ids
-    console.log("Got note ids", noteIds);
 
     return (
         <div className="note-list-widget">
             {isEnabled && (
                 <div className="note-list-widget-content">
-                    {getComponentByViewType(viewType)}
+                    {getComponentByViewType(note, noteIds, viewType)}
                 </div>
             )}
         </div>
     );
 }
 
-function getComponentByViewType(viewType: ViewTypeOptions) {
-    console.log("Got ", viewType);
+function getComponentByViewType(note: FNote, noteIds: string[], viewType: ViewTypeOptions) {
+    const props: ViewModeProps = { note, noteIds };
+    
     switch (viewType) {
         case "list":
-            return <ListView />;
+            return <ListView {...props} />;
     }
 }
 
@@ -54,12 +54,13 @@ function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOptions | 
     const [ noteIds, setNoteIds ] = useState<string[]>([]);
     
     async function refreshNoteIds() {
-        console.log("Refreshed note IDs");
         if (!note) {
             setNoteIds([]);
         } else if (viewType === "list" || viewType === "grid") {
+            console.log("Refreshed note IDs");
             setNoteIds(note.getChildNoteIds());
         } else {
+            console.log("Refreshed note IDs");
             setNoteIds(await note.getSubtreeNoteIds());
         }
     }
