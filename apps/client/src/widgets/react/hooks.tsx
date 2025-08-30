@@ -300,7 +300,11 @@ export function useNoteLabel(note: FNote | undefined | null, labelName: string):
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         for (const attr of loadResults.getAttributeRows()) {
             if (attr.type === "label" && attr.name === labelName && attributes.isAffecting(attr, note)) {
-                setLabelValue(attr.value ?? null);
+                if (!attr.isDeleted) {
+                    setLabelValue(attr.value);
+                } else {
+                    setLabelValue(null);
+                }
             }
         }
     });
