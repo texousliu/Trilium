@@ -9,6 +9,7 @@ import content_renderer from "../../../services/content_renderer";
 import { Pager, usePagination } from "../Pagination";
 import tree from "../../../services/tree";
 import link from "../../../services/link";
+import { t } from "../../../services/i18n";
 
 export function ListView({ note, noteIds: unfilteredNoteIds }: ViewModeProps) {
     const [ isExpanded ] = useNoteLabelBoolean(note, "expanded");
@@ -115,7 +116,7 @@ function NoteContent({ note, trim }: { note: FNote, trim?: boolean }) {
             .catch(e => {
                 console.warn(`Caught error while rendering note '${note.noteId}' of type '${note.type}'`);
                 console.error(e);
-                contentRef.current?.replaceChildren("rendering error");
+                contentRef.current?.replaceChildren(t("collections.rendering_error"));
             })
     }, [ note ]);
 
