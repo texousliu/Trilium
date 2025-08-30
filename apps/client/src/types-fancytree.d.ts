@@ -113,7 +113,7 @@ declare namespace Fancytree {
         generateFormElements(selected?: boolean, active?: boolean): void;
 
         /** Return the currently active node or null.  */
-        getActiveNode(): FancytreeNode;
+        getActiveNode(): FancytreeNode | null;
 
         /** Return the first top level node if any (not the invisible root node). */
         getFirstChild(): FancytreeNode;
