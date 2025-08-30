@@ -1,8 +1,9 @@
 .api-log-widget {
-    padding: 15px;
     flex-grow: 1;
     max-height: 40%;
     position: relative;
+    border-top: 1px solid var(--main-border-color);
+    background-color: var(--accented-background-color);
 }
 
 .api-log-container {
@@ -11,6 +12,7 @@
     font-family: var(--monospace-font-family);
     font-size: 0.8em;
     white-space: pre;
+    padding: 15px;
 }
 
 .close-api-log-button {
@@ -21,6 +23,6 @@
     color: var(--button-text-color);
     position: absolute;
     top: 10px;
-    right: 40px;
+    right: 10px;
     cursor: pointer;
 }
