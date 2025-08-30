@@ -1,13 +1,12 @@
-import { Dispatch, StateUpdater, useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import FNote from "../../../entities/fnote";
 import Icon from "../../react/Icon";
 import { ViewModeProps } from "../interface";
-import { useNoteLabel, useNoteLabelBoolean, useNoteProperty } from "../../react/hooks";
-import froca from "../../../services/froca";
+import {  useNoteLabelBoolean, useNoteProperty } from "../../react/hooks";
 import NoteLink from "../../react/NoteLink";
 import "./ListOrGridView.css";
 import content_renderer from "../../../services/content_renderer";
-import { ComponentChildren, VNode } from "preact";
+import { Pager, usePagination } from "../Pagination";
 
 export default function ListView({ note, noteIds }: ViewModeProps) {
     const [ isExpanded ] = useNoteLabelBoolean(note, "expanded");
@@ -96,82 +95,4 @@ function NoteChildren({ note }: { note: FNote}) {
     }, [ note ]);
 
     return childNotes?.map(childNote => <NoteCard note={childNote} />)
-}
-
-function Pager({ page, pageSize, setPage, pageCount, totalNotes }: Omit<PaginationContext, "pageNotes">) {
-    if (pageCount < 1) return;
-
-    let lastPrinted = false;
-    let children: ComponentChildren[] = [];
-    for (let i = 1; i <= pageCount; i++) {
-        if (pageCount < 20 || i <= 5 || pageCount - i <= 5 || Math.abs(page - i) <= 2) {
-            lastPrinted = true;
-
-            const startIndex = (i - 1) * pageSize + 1;
-            const endIndex = Math.min(totalNotes, i * pageSize);
-
-            if (i !== page) {
-                children.push((
-                    <a
-                        href="javascript:"
-                        title={`Page of ${startIndex} - ${endIndex}`}
-                        onClick={() => setPage(i)}
-                    >
-                    {i}    
-                    </a>
-                ))
-            } else {            
-                // Current page
-                children.push(<span className="current-page">{i}</span>)
-            }
-
-            children.push(<>{" "}&nbsp;{" "}</>);
-        } else if (lastPrinted) {
-            children.push(<>{"... "}&nbsp;{" "}</>);
-            lastPrinted = false;
-        }
-    }
-
-    return (
-        <div class="note-list-pager">
-            {children}
-        </div>
-    )
-}
-
-interface PaginationContext {
-    page: number;
-    setPage: Dispatch<StateUpdater<number>>;
-    pageNotes?: FNote[];
-    pageCount: number;
-    pageSize: number;
-    totalNotes: number;
-}
-
-function usePagination(note: FNote, noteIds: string[]): PaginationContext {
-    const [ page, setPage ] = useState(1);
-    const [ pageNotes, setPageNotes ] = useState<FNote[]>();    
-
-    // Parse page size.
-    const [ pageSize ] = useNoteLabel(note, "pageSize");
-    const pageSizeNum = parseInt(pageSize ?? "", 10);
-    const normalizedPageSize = (pageSizeNum && pageSizeNum > 0 ? pageSizeNum : 20);
-
-    // Calculate start/end index.
-    const startIdx = (page - 1) * normalizedPageSize;
-    const endIdx = startIdx + normalizedPageSize;
-    const pageCount = Math.ceil(noteIds.length / normalizedPageSize);
-
-    // Obtain notes within the range.
-    const pageNoteIds = noteIds.slice(startIdx, Math.min(endIdx, noteIds.length));    
-
-    useEffect(() => {
-        froca.getNotes(pageNoteIds).then(setPageNotes);
-    }, [ note, noteIds, page, pageSize ]);
-
-    return {
-        page, setPage, pageNotes, pageCount,
-        pageSize: normalizedPageSize,
-        totalNotes: noteIds.length
-    };
 }
