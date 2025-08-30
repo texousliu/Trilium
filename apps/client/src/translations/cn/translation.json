@@ -732,7 +732,8 @@
     "note_type": "笔记类型",
     "editable": "可编辑",
     "basic_properties": "基本属性",
-    "language": "语言"
+    "language": "语言",
+    "configure_code_notes": "配置代码注释..."
   },
   "book_properties": {
     "view_type": "视图类型",
