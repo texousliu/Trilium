@@ -28,7 +28,6 @@ import UploadAttachmentsDialog from "../widgets/dialogs/upload_attachments.js";
 import ScrollPadding from "../widgets/scroll_padding.js";
 import options from "../services/options.js";
 import utils from "../services/utils.js";
-import CloseZenButton from "../widgets/close_zen_button.js";
 import type { AppContext } from "../components/app_context.js";
 import type { WidgetsByParent } from "../services/bundle.js";
 import { applyModals } from "./layout_commons.js";
@@ -42,6 +41,7 @@ import SqlTableSchemas from "../widgets/sql_table_schemas.js";
 import TitleBarButtons from "../widgets/title_bar_buttons.jsx";
 import LeftPaneToggle from "../widgets/buttons/left_pane_toggle.js";
 import ApiLog from "../widgets/api_log.jsx";
+import CloseZenModeButton from "../widgets/close_zen_button.jsx";
 
 export default class DesktopLayout {
 
@@ -162,7 +162,7 @@ export default class DesktopLayout {
                             )
                     )
             )
-            .child(new CloseZenButton())
+            .child(<CloseZenModeButton />)
 
             // Desktop-specific dialogs.
             .child(<PasswordNoteSetDialog />)
