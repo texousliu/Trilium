@@ -22,6 +22,7 @@ import FloatingButtons from "../widgets/FloatingButtons.jsx";
 import { MOBILE_FLOATING_BUTTONS } from "../widgets/FloatingButtonsDefinitions.jsx";
 import ToggleSidebarButton from "../widgets/mobile_widgets/toggle_sidebar_button.jsx";
 import CloseZenModeButton from "../widgets/close_zen_button.js";
+import MobileDetailMenu from "../widgets/mobile_widgets/mobile_detail_menu.js";
 
 const MOBILE_CSS = `
 <style>
