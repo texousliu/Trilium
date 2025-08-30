@@ -45,42 +45,8 @@ class ListOrGridView extends ViewMode<{}> {
     }
 
     renderPager() {
-        const $pager = this.$noteList.find(".note-list-pager").empty();
-        if (!this.page || !this.pageSize) {
-            return;
-        }
 
-        const pageCount = Math.ceil(this.filteredNoteIds.length / this.pageSize);
 
-        $pager.toggle(pageCount > 1);
-
-        let lastPrinted;
-
-        for (let i = 1; i <= pageCount; i++) {
-            if (pageCount < 20 || i <= 5 || pageCount - i <= 5 || Math.abs(this.page - i) <= 2) {
-                lastPrinted = true;
-
-                const startIndex = (i - 1) * this.pageSize + 1;
-                const endIndex = Math.min(this.filteredNoteIds.length, i * this.pageSize);
-
-                $pager.append(
-                    i === this.page
-                        ? $("<span>").text(i).css("text-decoration", "underline").css("font-weight", "bold")
-                        : $('<a href="javascript:">')
-                            .text(i)
-                            .attr("title", `Page of ${startIndex} - ${endIndex}`)
-                            .on("click", () => {
-                                this.page = i;
-                                this.renderList();
-                            }),
-                    " &nbsp; "
-                );
-            } else if (lastPrinted) {
-                $pager.append("... &nbsp; ");
-
-                lastPrinted = false;
-            }
-        }
 
         // no need to distinguish "note" vs "notes" since in case of one result, there's no paging at all
         $pager.append(`<span class="note-list-pager-total-count">(${this.filteredNoteIds.length} notes)</span>`);

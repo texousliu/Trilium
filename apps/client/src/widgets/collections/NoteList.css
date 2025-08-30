@@ -16,3 +16,10 @@
 .note-list-widget video {
     height: 100%;
 }
+
+/* #region Pagination */
+.note-list-pager span.current-page {
+    text-decoration: underline;
+    font-weight: bold;
+}
+/* #endregion */
