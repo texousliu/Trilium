@@ -15,7 +15,7 @@ interface PaginationContext {
 }
 
 export function Pager({ page, pageSize, setPage, pageCount, totalNotes }: Omit<PaginationContext, "pageNotes">) {
-    if (pageCount < 1) return;
+    if (pageCount < 2) return;
 
     let lastPrinted = false;
     let children: ComponentChildren[] = [];
