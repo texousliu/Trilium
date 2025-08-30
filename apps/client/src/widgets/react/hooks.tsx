@@ -558,7 +558,7 @@ export function useImperativeSearchHighlighlighting(highlightedTokens: string[] 
         return new RegExp(regex, "gi")
     }, [ highlightedTokens ]);
 
-    return (el: HTMLElement) => {
+    return (el: HTMLElement | null | undefined) => {
         if (!el || !highlightRegex) return;
 
         if (!mark.current) {

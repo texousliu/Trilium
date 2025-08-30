@@ -87,10 +87,13 @@ function GridNoteCard({ note, parentNote, highlightedTokens }: { note: FNote, pa
     const titleRef = useRef<HTMLSpanElement>(null);
     const [ noteTitle, setNoteTitle ] = useState<string>();
     const notePath = getNotePath(parentNote, note);
+    const highlightSearch = useImperativeSearchHighlighlighting(highlightedTokens);
 
     useEffect(() => {
         tree.getNoteTitle(note.noteId, parentNote.noteId).then(setNoteTitle);
     }, [ note ]);
+
+    useEffect(() => highlightSearch(titleRef.current), [ noteTitle, highlightedTokens ]);
 
     return (
         <div
