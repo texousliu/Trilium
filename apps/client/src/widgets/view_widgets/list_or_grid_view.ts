@@ -1,6 +1,5 @@
 import linkService from "../../services/link.js";
 import contentRenderer from "../../services/content_renderer.js";
-import froca from "../../services/froca.js";
 import attributeRenderer from "../../services/attribute_renderer.js";
 import treeService from "../../services/tree.js";
 import utils from "../../services/utils.js";
@@ -130,22 +129,12 @@ class ListOrGridView extends ViewMode<{}> {
 
         const $expander = $card.find("> .note-book-header .note-expander");
 
-        if (expand || this.viewType === "grid") {
-            $card.addClass("expanded");
-            $expander.addClass("bx-chevron-down").removeClass("bx-chevron-right");
-        } else {
-            $card.removeClass("expanded");
-            $expander.addClass("bx-chevron-right").removeClass("bx-chevron-down");
-        }
-
-        if ((expand || this.viewType === "grid") && $card.find(".note-book-content").length === 0) {
+        if ((this.viewType === "grid")) {
             $card.append(await this.renderNoteContent(note));
         }
     }
 
     async renderNoteContent(note: FNote) {
-        const $content = $('<div class="note-book-content">');
-
         try {
             const { $renderedContent, type } = await contentRenderer.getRenderedContent(note, {
                 trim: this.viewType === "grid" // for grid only short content is needed
@@ -158,14 +147,6 @@ class ListOrGridView extends ViewMode<{}> {
                     className: "ck-find-result"
                 });
             }
-
-            $content.append($renderedContent);
-            $content.addClass(`type-${type}`);
-        } catch (e) {
-            console.warn(`Caught error while rendering note '${note.noteId}' of type '${note.type}'`);
-            console.error(e);
-
-            $content.append("rendering error");
         }
 
         if (this.viewType === "list") {

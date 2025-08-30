@@ -117,10 +117,6 @@
     border: 1px solid transparent;
 }
 
-.note-list.grid-view .note-expander {
-    display: none;
-}
-
 .note-list.grid-view .note-book-card {
     max-height: 300px;
 }

@@ -1,10 +1,12 @@
-import { useEffect, useMemo, useState } from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import FNote from "../../../entities/fnote";
 import Icon from "../../react/Icon";
 import { ViewModeProps } from "../interface";
-import { useNoteLabel, useNoteLabelBoolean } from "../../react/hooks";
+import { useNoteLabel, useNoteLabelBoolean, useNoteProperty } from "../../react/hooks";
 import froca from "../../../services/froca";
 import NoteLink from "../../react/NoteLink";
+import "./ListOrGridView.css";
+import content_renderer from "../../../services/content_renderer";
 
 export default function ListView({ note, noteIds }: ViewModeProps) {
     const [ isExpanded ] = useNoteLabelBoolean(note, "expanded");
@@ -34,6 +36,7 @@ export default function ListView({ note, noteIds }: ViewModeProps) {
 }
 
 function NoteCard({ note, expand }: { note: FNote, expand?: boolean }) {
+    const [ isExpanded, setExpanded ] = useState(expand);
     const isSearch = note.type === "search";
     const notePath = isSearch
         ? note.noteId // for search note parent, we want to display a non-search path
@@ -41,15 +44,40 @@ function NoteCard({ note, expand }: { note: FNote, expand?: boolean }) {
 
     return (
         <div
-            className="note-book-card no-tooltip-preview"
-            data-note-id={note.noteId}
+            className={`note-book-card no-tooltip-preview ${isExpanded ? "expanded" : ""}`}
+            data-note-id={note.noteId}            
         >
             <h5 className="note-book-header">
+                <span
+                    className={`note-expander ${isExpanded ? "bx bx-chevron-down" : "bx bx-chevron-right"}`}
+                    onClick={() => setExpanded(!isExpanded)}
+                />
+
                 <Icon className="note-icon" icon={note.getIcon()} />
                 <NoteLink notePath={notePath} noPreview showNotePath={isSearch} />
+                <NoteContent note={note} />
             </h5>
         </div>
     )
+}
+
+function NoteContent({ note, trim }: { note: FNote, trim?: boolean }) {
+    const contentRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        content_renderer.getRenderedContent(note, { trim })
+            .then(({ $renderedContent, type }) => {
+                contentRef.current?.replaceChildren(...$renderedContent);
+                contentRef.current?.classList.add(`type-${type}`);
+            })
+            .catch(e => {
+                console.warn(`Caught error while rendering note '${note.noteId}' of type '${note.type}'`);
+                console.error(e);
+                contentRef.current?.replaceChildren("rendering error");
+            })
+    }, [ note ]);
+
+    return <div ref={contentRef} className="note-book-content" />;
 }
 
 function usePagination(note: FNote, noteIds: string[]) {
