@@ -2,7 +2,7 @@ import { allViewTypes, ViewModeProps, ViewTypeOptions } from "./interface";
 import { useNoteContext, useNoteLabel, useTriliumEvent } from "../react/hooks";
 import FNote from "../../entities/fnote";
 import "./NoteList.css";
-import { ListView, GridView } from "./legacy/ListView";
+import { ListView, GridView } from "./legacy/ListOrGridView";
 import { useEffect, useState } from "preact/hooks";
 
 interface NoteListProps {
