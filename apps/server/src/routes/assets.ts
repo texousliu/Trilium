@@ -23,6 +23,7 @@ async function register(app: express.Application) {
 
     if (isDev) {
         const vite = await createViteServer({
+            cacheDir: path.join(srcRoot, "../../.cache/vite"),
             base: `/${assetUrlFragment}/`,
             root: path.join(srcRoot, "../client"),
             plugins: [
