@@ -1,6 +1,7 @@
 import * as esbuild from "esbuild";
 import { join } from "path";
 import * as fs from "fs-extra";
+import * as child_process from "child_process";
 
 const projectDir = __dirname + "/..";
 const outDir = join(projectDir, "dist");
@@ -51,6 +52,17 @@ function copyAssets() {
     copy("../../packages/share-theme/src/templates", "share-theme/templates/");
 }
 
+function buildAndCopyClient() {
+    // Trigger the build.
+    child_process.execSync("pnpm build", { cwd: clientDir, stdio: "inherit" });
+
+    // Copy the artifacts.
+    copy("../client/dist", "public/");
+
+    // Remove unnecessary files.
+    deleteFromOutput("public/webpack-stats.json");
+}
+
 function copy(projectDirPath: string, outDirPath: string) {
     if (outDirPath.endsWith("/")) {
         fs.mkdirpSync(join(outDirPath));
@@ -58,10 +70,15 @@ function copy(projectDirPath: string, outDirPath: string) {
     fs.copySync(join(projectDir, projectDirPath), join(outDir, outDirPath), { dereference: true });
 }
 
+function deleteFromOutput(path: string) {
+    fs.rmSync(join(outDir, path), { recursive: true });
+}
+
 async function main() {
     fs.emptyDirSync(outDir);
     await build();
     copyAssets();
+    buildAndCopyClient();
 }
 
 main();
