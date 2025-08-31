@@ -1,5 +1,6 @@
 import log from "./log.js";
 import fs from "fs";
+import resourceDir from "./resource_dir.js";
 import sql from "./sql.js";
 import { isElectron, deferred } from "./utils.js";
 import optionService from "./options.js";
@@ -16,7 +17,6 @@ import zipImportService from "./import/zip.js";
 import password from "./encryption/password.js";
 import backup from "./backup.js";
 import eventService from "./events.js";
-import { DB_INIT_DIR } from "./assets.js";
 
 export const dbReady = deferred<void>();
 
@@ -75,8 +75,8 @@ async function createInitialDatabase(skipDemoDb?: boolean) {
         throw new Error("DB is already initialized");
     }
 
-    const schema = fs.readFileSync(`${DB_INIT_DIR}/schema.sql`, "utf-8");
-    const demoFile = (!skipDemoDb ? fs.readFileSync(`${DB_INIT_DIR}/demo.zip`) : null);
+    const schema = fs.readFileSync(`${resourceDir.DB_INIT_DIR}/schema.sql`, "utf-8");
+    const demoFile = (!skipDemoDb ? fs.readFileSync(`${resourceDir.DB_INIT_DIR}/demo.zip`) : null);
 
     let rootNote!: BNote;
 
@@ -153,7 +153,7 @@ async function createDatabaseForSync(options: OptionRow[], syncServerHost = "", 
         throw new Error("DB is already initialized");
     }
 
-    const schema = fs.readFileSync(`${DB_INIT_DIR}/schema.sql`, "utf8");
+    const schema = fs.readFileSync(`${resourceDir.DB_INIT_DIR}/schema.sql`, "utf8");
 
     // We have to import async since options init requires keyboard actions which require translations.
     const optionsInitService = (await import("./options_init.js")).default;
