@@ -5,22 +5,38 @@
     "emitDeclarationOnly": true,
     "importHelpers": true,
     "isolatedModules": true,
-    "lib": ["ES2023"],
+    "lib": [
+      "ES2023"
+    ],
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": false,       // TODO: Re-enable it at some point.
-    "noImplicitOverride": false,  // TODO: Re-enable it at some point.
-    "noImplicitReturns": false,   // TODO: Re-enable it at some point.
-    "noUnusedLocals": false,      // TODO: Re-enable it at some point.
+    "noImplicitAny": false,
+    "noImplicitOverride": false,
+    "noImplicitReturns": false,
+    "noUnusedLocals": false,
     "skipLibCheck": true,
     "strict": true,
     "target": "es2022",
-    "customConditions": ["development"],
-    "verbatimModuleSyntax": false,  // TODO: Re-enable it when migrating back to ESM.
+    "customConditions": [
+      "development"
+    ],
+    "verbatimModuleSyntax": false,
     "resolveJsonModule": true,
     "downlevelIteration": true,
     "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@triliumnext/commons": [
+        "packages/commons/src/index.ts"
+      ],
+      "@triliumnext/turndown-plugin-gfm": [
+        "packages/turndown-plugin-gfm/src/index.js"
+      ],
+      "@triliumnext/express-partial-content": [
+        "packages/express-partial-content/src/index.ts"
+      ]
+    }
   }
 }
