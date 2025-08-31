@@ -127,7 +127,7 @@
         ],
         "continuous": true,
         "options": {
-          "command": "tsx watch {projectRoot}/src/main.ts"
+          "command": "tsx watch --conditions development {projectRoot}/src/main.ts"
         }
       },
       "serve-nodir": {

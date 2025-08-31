@@ -25,18 +25,6 @@
     "verbatimModuleSyntax": false,
     "resolveJsonModule": true,
     "downlevelIteration": true,
-    "esModuleInterop": true,
-    "baseUrl": ".",
-    "paths": {
-      "@triliumnext/commons": [
-        "packages/commons/src/index.ts"
-      ],
-      "@triliumnext/turndown-plugin-gfm": [
-        "packages/turndown-plugin-gfm/src/index.js"
-      ],
-      "@triliumnext/express-partial-content": [
-        "packages/express-partial-content/src/index.ts"
-      ]
-    }
+    "esModuleInterop": true
   }
 }
