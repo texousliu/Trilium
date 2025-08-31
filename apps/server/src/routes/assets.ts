@@ -29,7 +29,11 @@ async function register(app: express.Application) {
             base: `/${assetUrlFragment}/`,
             root: path.join(srcRoot, "../client"),
             plugins: [
-                preact()
+                preact({
+                    babel: {
+                        compact: false
+                    }
+                })
             ],
             define: {
                 "process.env.IS_PREACT": JSON.stringify("true"),
