@@ -37,16 +37,25 @@ async function build() {
 
 function copyAssets() {
     // Copy server assets
-    fs.copySync(join(projectDir, "src/assets"), join(outDir, "assets"));
+    copy("src/assets", "assets/");
 
     // Copy node modules
-    fs.mkdir(join(outDir, "node_modules"));
     for (const module of [ "better-sqlite3", "bindings", "file-uri-to-path" ]) {
-        fs.copySync(join(projectDir, "node_modules", module), join(outDir, "node_modules", module), { dereference: true });
+        copy(`node_modules/${module}`, `node_modules/${module}/`);
     }
 
     // Copy sync worker.
-    fs.copySync(join(projectDir, "node_modules/jsdom/lib/jsdom/living/xhr/xhr-sync-worker.js"), join(outDir, "xhr-sync-worker.js"));
+    copy("node_modules/jsdom/lib/jsdom/living/xhr/xhr-sync-worker.js", "xhr-sync-worker.js");
+
+    // Copy share templates.
+    copy("../../packages/share-theme/src/templates", "share-theme/templates/");
+}
+
+function copy(projectDirPath: string, outDirPath: string) {
+    if (outDirPath.endsWith("/")) {
+        fs.mkdirpSync(join(outDirPath));
+    }
+    fs.copySync(join(projectDir, projectDirPath), join(outDir, outDirPath), { dereference: true });
 }
 
 async function main() {
