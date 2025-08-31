@@ -1,4 +1,4 @@
-import hljs from "../node_modules/highlight.js/es/core.js";
+import hljs from "highlight.js";
 import { normalizeMimeTypeForCKEditor, type MimeType } from "@triliumnext/commons";
 import syntaxDefinitions from "./syntax_highlighting.js";
 import { type Theme } from "./themes.js";
