@@ -284,38 +284,13 @@
           }
         },
         "options": {
-          "main": "apps/server/src/main.ts",
-          "outputPath": "apps/server/dist",
-          "tsConfig": "apps/server/tsconfig.app.json",
-          "platform": "node",
-          "external": [
-            "electron",
-            "@electron/remote",
-            "better-sqlite3",
-            "./xhr-sync-worker.js"
-          ],
-          "format": [
-            "cjs"
-          ],
           "declarationRootDir": "apps/server/src",
           "thirdParty": true,
           "declaration": false,
-          "esbuildOptions": {
-            "splitting": false,
-            "loader": {
-              ".css": "text",
-              ".ejs": "text"
-            }
-          },
           "additionalEntryPoints": [
             "apps/server/src/docker_healthcheck.ts"
           ],
           "assets": [
-            {
-              "glob": "**/*",
-              "input": "apps/server/src/assets",
-              "output": "assets"
-            },
             {
               "glob": "**/*",
               "input": "packages/share-theme/src/templates",
@@ -328,26 +303,6 @@
               "ignore": [
                 "webpack-stats.json"
               ]
-            },
-            {
-              "glob": "**/*",
-              "input": "apps/server/node_modules/better-sqlite3",
-              "output": "node_modules/better-sqlite3"
-            },
-            {
-              "glob": "**/*",
-              "input": "apps/server/node_modules/bindings",
-              "output": "node_modules/bindings"
-            },
-            {
-              "glob": "**/*",
-              "input": "apps/server/node_modules/file-uri-to-path",
-              "output": "node_modules/file-uri-to-path"
-            },
-            {
-              "glob": "xhr-sync-worker.js",
-              "input": "apps/server/node_modules/jsdom/lib/jsdom/living/xhr",
-              "output": ""
             }
           ]
         }
@@ -364,7 +319,8 @@
     }
   },
   "scripts": {
-    "dev": "cross-env TRILIUM_ENV=dev TRILIUM_DATA_DIR=data TRILIUM_RESOURCE_DIR=src tsx watch --ignore '../client/node_modules/.vite-temp' ./src/main.ts"
+    "dev": "cross-env TRILIUM_ENV=dev TRILIUM_DATA_DIR=data TRILIUM_RESOURCE_DIR=src tsx watch --ignore '../client/node_modules/.vite-temp' ./src/main.ts",
+    "build": "tsx scripts/build.ts"
   },
   "main": "./src/main.ts"
 }
