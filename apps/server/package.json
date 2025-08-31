@@ -116,20 +116,18 @@
     ],
     "targets": {
       "serve": {
-        "executor": "@nx/js:node",
+        "executor": "nx:run-commands",
         "dependsOn": [
           {
             "projects": [
               "client"
             ],
             "target": "serve"
-          },
-          "build-without-client"
+          }
         ],
         "continuous": true,
         "options": {
-          "buildTarget": "server:build-without-client:development",
-          "runBuildTargetDependencies": false
+          "command": "tsx watch {projectRoot}/src/main.ts"
         }
       },
       "serve-nodir": {
