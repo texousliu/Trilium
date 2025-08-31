@@ -4,21 +4,7 @@
   "version": "45.0.0",
   "private": true,
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    "./package.json": "./package.json",
-    "./emoji_definitions/": "./src/emoji_definitions/",
-    "./content.css": "./dist/content.css",
-    "./index.css": "./dist/index.css",
-    ".": {
-      "development": "./src/index.ts",
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
-    }
-  },
+  "main": "./src/index.ts",
   "nx": {
     "name": "ckeditor5",
     "targets": {

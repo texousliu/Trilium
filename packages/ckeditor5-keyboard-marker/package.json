@@ -11,18 +11,7 @@
     "ckeditor5-package-generator"
   ],
   "type": "module",
-  "main": "dist/index.ts",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    },
-    "./*": "./dist/*",
-    "./browser/*": null,
-    "./package.json": "./package.json"
-  },
+  "main": "src/index.ts",
   "author": "Marek Lewandowski",
   "license": "GPL-3.0",
   "homepage": "https://github.com/mlewand/ckeditor5-keyboard-marker",
