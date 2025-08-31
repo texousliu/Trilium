@@ -2,7 +2,6 @@
 import { join, resolve } from 'path';
 import { defineConfig, type Plugin } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy'
-import asset_path from './src/asset_path';
 import webpackStatsPlugin from 'rollup-plugin-webpack-stats';
 import preact from "@preact/preset-vite";
 
@@ -11,15 +10,7 @@ const assets = [ "assets", "stylesheets", "fonts", "translations" ];
 export default defineConfig(() => ({
     root: __dirname,
     cacheDir: '../../node_modules/.vite/apps/client',
-    base: process.env.NODE_ENV === "production" ? "" : asset_path,
-    server: {
-        port: 4200,
-        host: 'localhost',
-    },
-    preview: {
-        port: 4300,
-        host: 'localhost',
-    },
+    base: "",
     plugins: [
         preact(),
         viteStaticCopy({
@@ -58,10 +49,6 @@ export default defineConfig(() => ({
             "preact/hooks"
         ]
     },
-    // Uncomment this if you are using workers.
-    // worker: {
-    //  plugins: [ nxViteTsPaths() ],
-    // },
     build: {
         target: "esnext",
         outDir: './dist',
@@ -99,18 +86,6 @@ export default defineConfig(() => ({
         setupFiles: [
             "./src/test/setup.ts"
         ]
-    },
-    optimizeDeps: {
-        exclude: [
-            "@triliumnext/highlightjs"
-        ]
-    },
-    css: {
-        preprocessorOptions: {
-            scss: {
-                quietDeps: true
-            }
-        }
     },
     commonjsOptions: {
         transformMixedEsModules: true,
