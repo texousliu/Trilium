@@ -12,6 +12,7 @@
     "katex"
   ],
   "type": "module",
+  "source": "src/index.ts",
   "main": "dist/index.ts",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
