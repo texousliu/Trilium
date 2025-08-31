@@ -4,6 +4,7 @@
 
  :root {
     --ck-font-face: var(--main-font-family);
+    --ck-input-label-height: 1.5em;
  }
 
 /*
@@ -425,10 +426,16 @@ div.ck-template-form .ck-search__info span:nth-child(2) {
     border-top: none;
 }
 
-/* Bookmark dropdown */
+/* Emoji dropdown */
 
-.ck.ck-bookmark-form .ck-form__row_with-submit {
-    align-items: center;
+.ck-emoji-picker-form .ck-emoji__search .ck-button_with-text {
+    margin-top: var(--ck-input-label-height);
+}
+
+/* Find and replace dialog */
+
+.ck-find-and-replace-form .ck-find-and-replace-form__inputs button {
+    margin-top: var(--ck-input-label-height);
 }
 
 /* Mention list (the autocompletion list for emojis, labels and relations)  */
@@ -462,11 +469,13 @@ button.ck.ck-button.ck-button-action.ck-button_with-text {
  */
 
 .ck.ck-labeled-field-view {
-    padding-top: 1.5em !important; /* Create space for the label */
+    padding-top: var(--ck-input-label-height) !important; /* Create space for the label */
 }
 
 .ck.ck-labeled-field-view > .ck.ck-labeled-field-view__input-wrapper > label.ck.ck-label {
-    transform: translate(0, -1.7em) !important; /* Move the label above the text box regardless of the text box state */
+    /* Move the label above the text box regardless of the text box state */
+    transform: translate(0, calc(-.2em - var(--ck-input-label-height))) !important;
+    
     padding-left: 0 !important;
     background: transparent;
     font-size: .85em;
@@ -474,8 +483,13 @@ button.ck.ck-button.ck-button-action.ck-button_with-text {
 }
 
 /* Forms */
-.ck.ck-form__row_with-submit {
-    align-items: flex-end;
+
+:root .ck.ck-form__row.ck-form__row_with-submit > :not(:first-child) {
+    margin-inline-start: 16px;
+}
+
+.ck.ck-form__row_with-submit button {
+    margin-top: var(--ck-input-label-height);
 }
 
 .ck.ck-form__header {
