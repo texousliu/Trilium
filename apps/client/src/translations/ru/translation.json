@@ -742,7 +742,8 @@
     "save-changes": "Сохранить и применить изменения",
     "saved-search-note-refreshed": "Сохраненная поисковая заметка обновлена.",
     "refresh-saved-search-results": "Обновить сохраненные результаты поиска",
-    "automatically-collapse-notes-title": "Заметки будут свернуты после определенного периода бездействия, чтобы навести порядок в дереве."
+    "automatically-collapse-notes-title": "Заметки будут свернуты после определенного периода бездействия, чтобы навести порядок в дереве.",
+    "toggle-sidebar": "Переключить боковую панель"
   },
   "quick-search": {
     "no-results": "Результаты не найдены",
@@ -1974,8 +1975,8 @@
   },
   "shared_info": {
     "help_link": "Для получения справки посетите <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">вики</a>.",
-    "shared_locally": "Заметка общедоступна локально в {{- link}}",
-    "shared_publicly": "Заметка общедоступна публично в {{- link}}"
+    "shared_locally": "Заметка общедоступна локально в {{- link}}.",
+    "shared_publicly": "Заметка общедоступна публично в {{- link}}."
   },
   "note_create": {
     "duplicated": "Создан дубль заметки \"{{title}}\"."
