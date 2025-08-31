@@ -32,6 +32,7 @@
     "forge": "./electron-forge/forge.config.ts"
   },
   "scripts": {
+    "dev": "cross-env NODE_OPTIONS=\"--import tsx\" TRILIUM_ENV=dev TRILIUM_DATA_DIR=data TRILIUM_RESOURCE_DIR=../server/src electron src/electron-main.ts",
     "start-prod": "nx build desktop && cross-env TRILIUM_DATA_DIR=data TRILIUM_RESOURCE_DIR=dist TRILIUM_PORT=37841 electron dist/main.js"
   },
   "license": "AGPL-3.0-only",
