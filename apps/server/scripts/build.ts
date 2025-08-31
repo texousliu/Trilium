@@ -7,11 +7,17 @@ const outDir = join(projectDir, "dist");
 
 async function build() {
     esbuild.build({
-        entryPoints: [ join(projectDir, "src/main.ts") ],
+        entryPoints: [
+            join(projectDir, "src/main.ts"),
+            join(projectDir, "src/docker_healthcheck.ts")
+        ],
         tsconfig: join(projectDir, "tsconfig.app.json"),
         platform: "node",
         bundle: true,
         outdir: outDir,
+        outExtension: {
+            ".js": ".cjs"
+        },
         format: "cjs",
         external: [
             "electron",
@@ -44,8 +50,7 @@ function copyAssets() {
 }
 
 async function main() {
-    fs.rmSync(outDir, { recursive: true });
-    fs.mkdirSync(outDir);
+    fs.emptyDirSync(outDir);
     await build();
     copyAssets();
 }
