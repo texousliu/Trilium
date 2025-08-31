@@ -32,7 +32,11 @@ async function build() {
         loader: {
             ".css": "text",
             ".ejs": "text"
-        }
+        },
+        define: {
+            "process.env.NODE_ENV": JSON.stringify("production"),
+        },
+        minify: true
     });
 }
 
