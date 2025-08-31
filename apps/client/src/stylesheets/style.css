@@ -1134,6 +1134,7 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
 
 .toast-body {
     white-space: preserve-breaks;
+    overflow: hidden;
 }
 
 .ck-mentions .ck-button {
