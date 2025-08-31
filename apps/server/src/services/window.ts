@@ -224,7 +224,7 @@ function getWindowExtraOpts() {
 }
 
 async function configureWebContents(webContents: WebContents, spellcheckEnabled: boolean) {
-    const remoteMain = (await import("@electron/remote/main/index.js")).default;
+    const remoteMain = (await import("@electron/remote/main"));
     remoteMain.enable(webContents);
 
     webContents.setWindowOpenHandler((details) => {
