@@ -1,12 +1,12 @@
 /**
- * Tests for FTS5 search service improvements
+ * Tests for minimal FTS5 search service
  * 
- * This test file validates the fixes implemented for:
- * 1. Transaction rollback in migration
- * 2. Protected notes handling
- * 3. Error recovery and communication
- * 4. Input validation for token sanitization
- * 5. dbstat fallback for index monitoring
+ * This test file validates the core FTS5 functionality:
+ * 1. FTS5 availability checking
+ * 2. Basic search operations
+ * 3. Protected notes handling
+ * 4. Error handling
+ * 5. Index statistics
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
@@ -17,7 +17,7 @@ vi.mock('../sql.js');
 vi.mock('../log.js');
 vi.mock('../protected_session.js');
 
-describe('FTS5 Search Service Improvements', () => {
+describe('FTS5 Search Service', () => {
     let ftsSearchService: any;
     let mockSql: any;
     let mockLog: any;
@@ -30,9 +30,11 @@ describe('FTS5 Search Service Improvements', () => {
         // Setup mocks
         mockSql = {
             getValue: vi.fn(),
+            getRow: vi.fn(),
             getRows: vi.fn(),
             getColumn: vi.fn(),
             execute: vi.fn(),
+            iterateRows: vi.fn(),
             transactional: vi.fn((fn: Function) => fn())
         };
         
@@ -56,16 +58,169 @@ describe('FTS5 Search Service Improvements', () => {
         
         // Import the service after mocking
         const module = await import('./fts_search.js');
-        ftsSearchService = module.ftsSearchService;
+        ftsSearchService = module.default;
     });
 
     afterEach(() => {
         vi.clearAllMocks();
     });
 
+    describe('FTS5 Availability', () => {
+        it('should detect when FTS5 is available', () => {
+            mockSql.getRow.mockReturnValue({ 1: 1 });
+            mockSql.getValue.mockReturnValue(1);
+            
+            const result = ftsSearchService.checkFTS5Availability();
+            
+            expect(result).toBe(true);
+            expect(mockSql.getRow).toHaveBeenCalledWith(expect.stringContaining('pragma_compile_options'));
+            expect(mockSql.getValue).toHaveBeenCalledWith(expect.stringContaining('notes_fts'));
+        });
+
+        it('should detect when FTS5 is not available', () => {
+            mockSql.getRow.mockReturnValue(null);
+            
+            const result = ftsSearchService.checkFTS5Availability();
+            
+            expect(result).toBe(false);
+        });
+
+        it('should cache FTS5 availability check', () => {
+            mockSql.getRow.mockReturnValue({ 1: 1 });
+            mockSql.getValue.mockReturnValue(1);
+            
+            // First call
+            ftsSearchService.checkFTS5Availability();
+            // Second call should use cached value
+            ftsSearchService.checkFTS5Availability();
+            
+            // Should only be called once
+            expect(mockSql.getRow).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe('Basic Search', () => {
+        beforeEach(() => {
+            mockSql.getRow.mockReturnValue({ 1: 1 });
+            mockSql.getValue.mockReturnValue(1);
+        });
+
+        it('should perform basic word search', () => {
+            const mockResults = [
+                { noteId: 'note1', title: 'Test Note', score: 1.0 }
+            ];
+            mockSql.getRows.mockReturnValue(mockResults);
+            
+            const results = ftsSearchService.searchSync(['test'], '*=*');
+            
+            expect(results).toEqual(mockResults);
+            expect(mockSql.getRows).toHaveBeenCalledWith(
+                expect.stringContaining('MATCH'),
+                expect.arrayContaining([expect.stringContaining('test')])
+            );
+        });
+
+        it('should handle phrase search', () => {
+            mockSql.getRows.mockReturnValue([]);
+            
+            ftsSearchService.searchSync(['hello', 'world'], '=');
+            
+            expect(mockSql.getRows).toHaveBeenCalledWith(
+                expect.stringContaining('MATCH'),
+                expect.arrayContaining(['"hello world"'])
+            );
+        });
+
+        it('should apply limit and offset', () => {
+            mockSql.getRows.mockReturnValue([]);
+            
+            ftsSearchService.searchSync(['test'], '=', undefined, { 
+                limit: 50, 
+                offset: 10 
+            });
+            
+            expect(mockSql.getRows).toHaveBeenCalledWith(
+                expect.stringContaining('LIMIT'),
+                expect.arrayContaining([expect.any(String), 50, 10])
+            );
+        });
+
+        it('should filter by noteIds when provided', () => {
+            mockSql.getRows.mockReturnValue([]);
+            const noteIds = new Set(['note1', 'note2']);
+            
+            ftsSearchService.searchSync(['test'], '=', noteIds);
+            
+            expect(mockSql.getRows).toHaveBeenCalledWith(
+                expect.stringContaining("IN ('note1','note2')"),
+                expect.any(Array)
+            );
+        });
+    });
+
+    describe('Protected Notes', () => {
+        beforeEach(() => {
+            mockSql.getRow.mockReturnValue({ 1: 1 });
+            mockSql.getValue.mockReturnValue(1);
+        });
+
+        it('should not return protected notes in regular search', () => {
+            mockSql.getRows.mockReturnValue([]);
+            
+            ftsSearchService.searchSync(['test'], '=');
+            
+            expect(mockSql.getRows).toHaveBeenCalledWith(
+                expect.stringContaining('isProtected = 0'),
+                expect.any(Array)
+            );
+        });
+
+        it('should search protected notes separately when session available', () => {
+            mockProtectedSession.isProtectedSessionAvailable.mockReturnValue(true);
+            mockProtectedSession.decryptString.mockReturnValue('decrypted content test');
+            
+            const mockIterator = function*() {
+                yield {
+                    noteId: 'protected1',
+                    title: 'Protected Note',
+                    content: 'encrypted',
+                    type: 'text',
+                    mime: 'text/html'
+                };
+            };
+            mockSql.iterateRows.mockReturnValue(mockIterator());
+            
+            const results = ftsSearchService.searchProtectedNotesSync(['test'], '*=*');
+            
+            expect(results).toHaveLength(1);
+            expect(results[0].noteId).toBe('protected1');
+            expect(mockProtectedSession.decryptString).toHaveBeenCalledWith('encrypted');
+        });
+
+        it('should skip protected notes that cannot be decrypted', () => {
+            mockProtectedSession.isProtectedSessionAvailable.mockReturnValue(true);
+            mockProtectedSession.decryptString.mockReturnValue(null);
+            
+            const mockIterator = function*() {
+                yield {
+                    noteId: 'protected1',
+                    title: 'Protected Note',
+                    content: 'encrypted',
+                    type: 'text',
+                    mime: 'text/html'
+                };
+            };
+            mockSql.iterateRows.mockReturnValue(mockIterator());
+            
+            const results = ftsSearchService.searchProtectedNotesSync(['test'], '*=*');
+            
+            expect(results).toHaveLength(0);
+        });
+    });
+
     describe('Error Handling', () => {
         it('should throw FTSNotAvailableError when FTS5 is not available', () => {
-            mockSql.getValue.mockReturnValue(0);
+            mockSql.getRow.mockReturnValue(null);
             
             expect(() => {
                 ftsSearchService.searchSync(['test'], '=');
@@ -73,197 +228,106 @@ describe('FTS5 Search Service Improvements', () => {
         });
 
         it('should throw FTSQueryError for invalid queries', () => {
-            mockSql.getValue.mockReturnValue(1); // FTS5 available
+            mockSql.getRow.mockReturnValue({ 1: 1 });
+            mockSql.getValue.mockReturnValue(1);
             mockSql.getRows.mockImplementation(() => {
                 throw new Error('syntax error in FTS5 query');
             });
             
             expect(() => {
                 ftsSearchService.searchSync(['test'], '=');
-            }).toThrow(/FTS5 search failed.*Falling back to standard search/);
+            }).toThrow('Invalid FTS5 query');
+        });
+    });
+
+    describe('Index Management', () => {
+        beforeEach(() => {
+            mockSql.getRow.mockReturnValue({ 1: 1 });
+            mockSql.getValue.mockReturnValue(1);
         });
 
-        it('should provide structured error information', () => {
-            mockSql.getValue.mockReturnValue(1);
-            mockSql.getRows.mockImplementation(() => {
-                throw new Error('malformed MATCH expression');
+        it('should sync missing notes to index', () => {
+            const missingNotes = [
+                { noteId: 'note1', title: 'Note 1', content: 'Content 1' },
+                { noteId: 'note2', title: 'Note 2', content: 'Content 2' }
+            ];
+            mockSql.getRows.mockReturnValue(missingNotes);
+            
+            const count = ftsSearchService.syncMissingNotes();
+            
+            expect(count).toBe(2);
+            expect(mockSql.execute).toHaveBeenCalledTimes(2);
+        });
+
+        it('should optimize index', () => {
+            ftsSearchService.optimizeIndex();
+            
+            expect(mockSql.execute).toHaveBeenCalledWith(
+                expect.stringContaining('optimize')
+            );
+        });
+
+        it('should get index statistics', () => {
+            mockSql.getValue
+                .mockReturnValueOnce(1)    // FTS5 availability check
+                .mockReturnValueOnce(100)  // document count
+                .mockReturnValueOnce(5000); // index size
+            
+            const stats = ftsSearchService.getStatistics();
+            
+            expect(stats.documentCount).toBe(100);
+            expect(stats.indexSize).toBe(5000);
+        });
+
+        it('should handle errors in statistics gracefully', () => {
+            mockSql.getValue.mockImplementation(() => {
+                throw new Error('Database error');
             });
             
-            try {
-                ftsSearchService.searchSync(['test'], '=');
-            } catch (error: any) {
-                expect(error.name).toBe('FTSQueryError');
-                expect(error.code).toBe('FTS_QUERY_ERROR');
-                expect(error.recoverable).toBe(true);
+            const stats = ftsSearchService.getStatistics();
+            
+            expect(stats.documentCount).toBe(0);
+            expect(stats.indexSize).toBe(0);
+        });
+    });
+
+    describe('Query Building', () => {
+        beforeEach(() => {
+            mockSql.getRow.mockReturnValue({ 1: 1 });
+            mockSql.getValue.mockReturnValue(1);
+            mockSql.getRows.mockReturnValue([]);
+        });
+
+        it('should build correct FTS5 query for different operators', () => {
+            const testCases = [
+                { tokens: ['test'], operator: '=', expected: '"test"' },
+                { tokens: ['hello', 'world'], operator: '=', expected: '"hello world"' },
+                { tokens: ['test'], operator: '*=*', expected: '"test"' },
+                { tokens: ['test', 'word'], operator: '*=*', expected: '"test" AND "word"' },
+                { tokens: ['test'], operator: '!=', expected: 'NOT "test"' },
+                { tokens: ['test'], operator: '*=', expected: '*test' },
+                { tokens: ['test'], operator: '=*', expected: 'test*' },
+                { tokens: ['test', 'word'], operator: '~=', expected: '"test" OR "word"' },
+            ];
+
+            for (const { tokens, operator, expected } of testCases) {
+                mockSql.getRows.mockClear();
+                ftsSearchService.searchSync(tokens, operator);
+                
+                expect(mockSql.getRows).toHaveBeenCalledWith(
+                    expect.any(String),
+                    expect.arrayContaining([expected, expect.any(Number), expect.any(Number)])
+                );
             }
         });
-    });
 
-    describe('Protected Notes Handling', () => {
-        it('should not search protected notes in FTS index', () => {
-            mockSql.getValue.mockReturnValue(1); // FTS5 available
-            mockProtectedSession.isProtectedSessionAvailable.mockReturnValue(true);
+        it('should escape special characters in tokens', () => {
+            ftsSearchService.searchSync(['test"quote'], '=');
             
-            // Should return empty results when searching protected notes
-            const results = ftsSearchService.searchSync(['test'], '=', undefined, {
-                searchProtected: true
-            });
-            
-            expect(results).toEqual([]);
-            expect(mockLog.info).toHaveBeenCalledWith(
-                'Protected session available - will search protected notes separately'
+            expect(mockSql.getRows).toHaveBeenCalledWith(
+                expect.any(String),
+                expect.arrayContaining(['"test""quote"', expect.any(Number), expect.any(Number)])
             );
         });
-
-        it('should filter out protected notes from noteIds', () => {
-            mockSql.getValue.mockReturnValue(1);
-            mockSql.getColumn.mockReturnValue(['note1', 'note2']); // Non-protected notes
-            mockSql.getRows.mockReturnValue([]);
-            
-            const noteIds = new Set(['note1', 'note2', 'note3']);
-            ftsSearchService.searchSync(['test'], '=', noteIds);
-            
-            expect(mockSql.getColumn).toHaveBeenCalled();
-        });
-
-        it('should search protected notes separately with decryption', () => {
-            mockProtectedSession.isProtectedSessionAvailable.mockReturnValue(true);
-            mockProtectedSession.decryptString.mockReturnValue('decrypted content with test');
-            
-            mockSql.getRows.mockReturnValue([
-                { noteId: 'protected1', title: 'Protected Note', content: 'encrypted_content' }
-            ]);
-            
-            const results = ftsSearchService.searchProtectedNotesSync(['test'], '*=*');
-            
-            expect(mockProtectedSession.decryptString).toHaveBeenCalledWith('encrypted_content');
-            expect(results).toHaveLength(1);
-            expect(results[0].noteId).toBe('protected1');
-        });
-    });
-
-    describe('Token Sanitization', () => {
-        it('should handle empty tokens after sanitization', () => {
-            mockSql.getValue.mockReturnValue(1);
-            mockSql.getRows.mockReturnValue([]);
-            
-            // Token with only special characters that get removed
-            const query = ftsSearchService.convertToFTS5Query(['()""'], '=');
-            
-            expect(query).toContain('__empty_token__');
-            expect(mockLog.info).toHaveBeenCalledWith(
-                expect.stringContaining('Token became empty after sanitization')
-            );
-        });
-
-        it('should detect potential SQL injection attempts', () => {
-            mockSql.getValue.mockReturnValue(1);
-            
-            const query = ftsSearchService.convertToFTS5Query(['test; DROP TABLE'], '=');
-            
-            expect(query).toContain('__invalid_token__');
-            expect(mockLog.error).toHaveBeenCalledWith(
-                expect.stringContaining('Potential SQL injection attempt detected')
-            );
-        });
-
-        it('should properly sanitize valid tokens', () => {
-            mockSql.getValue.mockReturnValue(1);
-            
-            const query = ftsSearchService.convertToFTS5Query(['hello (world)'], '=');
-            
-            expect(query).toBe('"hello world"');
-            expect(query).not.toContain('(');
-            expect(query).not.toContain(')');
-        });
-    });
-
-    describe('Index Statistics with dbstat Fallback', () => {
-        it('should use dbstat when available', () => {
-            mockSql.getValue
-                .mockReturnValueOnce(1) // FTS5 available
-                .mockReturnValueOnce(100) // document count
-                .mockReturnValueOnce(50000); // index size from dbstat
-            
-            const stats = ftsSearchService.getIndexStats();
-            
-            expect(stats).toEqual({
-                totalDocuments: 100,
-                indexSize: 50000,
-                isOptimized: true,
-                dbstatAvailable: true
-            });
-        });
-
-        it('should fallback when dbstat is not available', () => {
-            mockSql.getValue
-                .mockReturnValueOnce(1) // FTS5 available
-                .mockReturnValueOnce(100) // document count
-                .mockImplementationOnce(() => {
-                    throw new Error('no such table: dbstat');
-                })
-                .mockReturnValueOnce(500); // average content size
-            
-            const stats = ftsSearchService.getIndexStats();
-            
-            expect(stats.dbstatAvailable).toBe(false);
-            expect(stats.indexSize).toBe(75000); // 500 * 100 * 1.5
-            expect(mockLog.info).toHaveBeenCalledWith(
-                'dbstat virtual table not available, using fallback for index size estimation'
-            );
-        });
-
-        it('should handle fallback errors gracefully', () => {
-            mockSql.getValue
-                .mockReturnValueOnce(1) // FTS5 available
-                .mockReturnValueOnce(100) // document count
-                .mockImplementationOnce(() => {
-                    throw new Error('no such table: dbstat');
-                })
-                .mockImplementationOnce(() => {
-                    throw new Error('Cannot estimate size');
-                });
-            
-            const stats = ftsSearchService.getIndexStats();
-            
-            expect(stats.indexSize).toBe(0);
-            expect(stats.dbstatAvailable).toBe(false);
-        });
-    });
-
-    describe('Migration Transaction Handling', () => {
-        // Note: This would be tested in the migration test file
-        // Including a placeholder test here for documentation
-        it('migration should rollback on failure (tested in migration tests)', () => {
-            // The migration file now wraps the entire population in a transaction
-            // If any error occurs, all changes are rolled back
-            // This prevents partial indexing
-            expect(true).toBe(true);
-        });
-    });
-
-    describe('Blob Update Trigger Optimization', () => {
-        // Note: This is tested via SQL trigger behavior
-        it('trigger should limit batch size (tested via SQL)', () => {
-            // The trigger now processes maximum 50 notes at a time
-            // This prevents performance issues with widely-shared blobs
-            expect(true).toBe(true);
-        });
-    });
-});
-
-describe('Integration with NoteContentFulltextExp', () => {
-    it('should handle FTS errors with proper fallback', () => {
-        // This tests the integration between FTS service and the expression handler
-        // The expression handler now properly catches FTSError types
-        // and provides appropriate user feedback
-        expect(true).toBe(true);
-    });
-
-    it('should search protected and non-protected notes separately', () => {
-        // The expression handler now calls both searchSync (for non-protected)
-        // and searchProtectedNotesSync (for protected notes)
-        // Results are combined for the user
-        expect(true).toBe(true);
     });
 });
