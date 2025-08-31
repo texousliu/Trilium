@@ -23,6 +23,8 @@ async function register(app: express.Application) {
 
     if (isDev) {
         const vite = await createViteServer({
+            server: { middlewareMode: true },
+            appType: "custom",
             cacheDir: path.join(srcRoot, "../../.cache/vite"),
             base: `/${assetUrlFragment}/`,
             root: path.join(srcRoot, "../client"),
