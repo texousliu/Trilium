@@ -41,11 +41,6 @@ export default defineConfig(() => ({
     ] as Plugin[],
     resolve: {
         alias: [
-            // Force the use of dist in development mode because upstream ESM is broken (some hybrid between CJS and ESM, will be improved in upcoming versions).
-            {
-                find: "@triliumnext/highlightjs",
-                replacement: resolve(__dirname, "node_modules/@triliumnext/highlightjs/dist")
-            },
             {
                 find: "react",
                 replacement: "preact/compat"
