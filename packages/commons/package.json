@@ -4,18 +4,7 @@
   "description": "Shared library between the clients (e.g. browser, Electron) and the server, mostly for type definitions and utility methods.",
   "private": true,
   "type": "module",
-  "main": "./dist/main.js",
-  "module": "./dist/main.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "development": "./src/index.ts",
-      "types": "./dist/index.d.ts",
-      "import": "./dist/main.js",
-      "default": "./dist/main.js"
-    }
-  },
+  "main": "./src/index.ts",
   "license": "AGPL-3.0-only",
   "author": {
     "name": "Trilium Notes Team",

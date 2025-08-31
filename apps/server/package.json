@@ -360,17 +360,8 @@
       }
     }
   },
-  "exports": {
-    "./package.json": "./package.json",
-    "./src/*": "./src/*",
-    ".": {
-      "development": "./src/main.ts",
-      "types": "./dist/main.d.ts",
-      "import": "./dist/main.js",
-      "default": "./dist/main.js"
-    }
+  "scripts": {
+    "dev": "cross-env TRILIUM_ENV=dev TRILIUM_DATA_DIR=data TRILIUM_RESOURCE_DIR=src tsx watch ./src/main.ts"
   },
-  "types": "./dist/main.d.ts",
-  "module": "./dist/main.js",
-  "main": "./dist/main.js"
+  "main": "./src/main.ts"
 }

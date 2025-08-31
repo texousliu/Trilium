@@ -5,18 +5,7 @@
   "version": "1.1.0",
   "type": "module",
   "private": true,
-  "main": "./dist/main.js",
-  "module": "./dist/main.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "development": "./src/index.ts",
-      "types": "./dist/index.d.ts",
-      "import": "./dist/main.js",
-      "default": "./dist/main.js"
-    }
-  },
+  "main": "./src/index.ts",
   "keywords": [
     "partial-content",
     "206",
