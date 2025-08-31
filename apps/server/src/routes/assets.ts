@@ -4,8 +4,6 @@ import express from "express";
 import { getResourceDir, isDev } from "../services/utils.js";
 import type serveStatic from "serve-static";
 import { existsSync } from "fs";
-import { createServer as createViteServer } from "vite";
-import preact from "@preact/preset-vite";
 
 const persistentCacheStatic = (root: string, options?: serveStatic.ServeStaticOptions<express.Response<unknown, Record<string, unknown>>>) => {
     if (!isDev) {
@@ -21,7 +19,9 @@ async function register(app: express.Application) {
     const srcRoot = path.join(__dirname, "..", "..");
     const resourceDir = getResourceDir();
 
-    if (isDev) {
+    if (process.env.NODE_ENV === "development") {
+        const { createServer: createViteServer } = await import("vite");
+        const { preact } = await import("@preact/preset-vite");
         const vite = await createViteServer({
             server: { middlewareMode: true },
             appType: "custom",
