@@ -1,6 +1,6 @@
 import { ALLOWED_PROTOCOLS } from "../../../services/link.js";
 import { MIME_TYPE_AUTO } from "@triliumnext/commons";
-import { buildExtraCommands, type EditorConfig, PREMIUM_PLUGINS } from "@triliumnext/ckeditor5";
+import { type EditorConfig, PREMIUM_PLUGINS } from "@triliumnext/ckeditor5";
 import { getHighlightJsNameForMime } from "../../../services/mime_types.js";
 import options from "../../../services/options.js";
 import { ensureMimeTypesForHighlighting, isSyntaxHighlightEnabled } from "../../../services/syntax_highlight.js";
@@ -154,7 +154,7 @@ export async function buildConfig(opts: BuildEditorOptions): Promise<EditorConfi
         slashCommand: {
             removeCommands: [],
             dropdownLimit: Number.MAX_SAFE_INTEGER,
-            extraCommands: buildExtraCommands()
+            // extraCommands: buildExtraCommands()
         },
         template: {
             definitions: await getTemplates()
