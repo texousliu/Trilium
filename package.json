@@ -19,6 +19,7 @@
     "chore:generate-openapi": "tsx ./scripts/generate-openapi.ts",
     "chore:update-build-info": "tsx ./scripts/update-build-info.ts",
     "chore:update-version": "tsx ./scripts/update-version.ts",
+    "stress-test:native": "DATA_DIR=apps/server/data tsx ./scripts/stress-test-native-simple.ts",
     "test:all": "pnpm test:parallel && pnpm test:sequential",
     "test:parallel": "pnpm nx run-many -t test --all --exclude=server,ckeditor5-mermaid,ckeditor5-math --parallel",
     "test:sequential": "pnpm nx run-many -t test --projects=server,ckeditor5-mermaid,ckeditor5-math --parallel=1",

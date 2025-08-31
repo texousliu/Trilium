@@ -219,12 +219,21 @@ CREATE TABLE IF NOT EXISTS sessions (
 );
 
 -- FTS5 Full-Text Search Support
--- Create FTS5 virtual table for full-text searching
+-- Create FTS5 virtual table with porter stemming for word-based searches
 CREATE VIRTUAL TABLE notes_fts USING fts5(
     noteId UNINDEXED,
     title,
     content,
     tokenize = 'porter unicode61'
+);
+
+-- Create FTS5 virtual table with trigram tokenizer for substring searches
+CREATE VIRTUAL TABLE notes_fts_trigram USING fts5(
+    noteId UNINDEXED,
+    title,
+    content,
+    tokenize = 'trigram',
+    detail = 'none'
 );
 
 -- Triggers to keep FTS table synchronized with notes
@@ -242,15 +251,24 @@ WHEN NEW.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
     AND NEW.isDeleted = 0
     AND NEW.isProtected = 0
 BEGIN
-    -- First delete any existing FTS entry (in case of INSERT OR REPLACE)
+    -- First delete any existing FTS entries (in case of INSERT OR REPLACE)
     DELETE FROM notes_fts WHERE noteId = NEW.noteId;
+    DELETE FROM notes_fts_trigram WHERE noteId = NEW.noteId;
     
-    -- Then insert the new entry, using LEFT JOIN to handle missing blobs
+    -- Then insert the new entry into both FTS tables
     INSERT INTO notes_fts (noteId, title, content)
     SELECT 
         NEW.noteId,
         NEW.title,
         COALESCE(b.content, '')  -- Use empty string if blob doesn't exist yet
+    FROM (SELECT NEW.noteId) AS note_select
+    LEFT JOIN blobs b ON b.blobId = NEW.blobId;
+    
+    INSERT INTO notes_fts_trigram (noteId, title, content)
+    SELECT 
+        NEW.noteId,
+        NEW.title,
+        COALESCE(b.content, '')
     FROM (SELECT NEW.noteId) AS note_select
     LEFT JOIN blobs b ON b.blobId = NEW.blobId;
 END;
@@ -263,15 +281,26 @@ AFTER UPDATE ON notes
 WHEN NEW.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
     -- Fire on any change, not just specific columns, to handle all upsert scenarios
 BEGIN
-    -- Always delete the old entry
+    -- Always delete the old entries from both FTS tables
     DELETE FROM notes_fts WHERE noteId = NEW.noteId;
+    DELETE FROM notes_fts_trigram WHERE noteId = NEW.noteId;
     
-    -- Insert new entry if note is not deleted and not protected
+    -- Insert new entries into both FTS tables if note is not deleted and not protected
     INSERT INTO notes_fts (noteId, title, content)
     SELECT 
         NEW.noteId,
         NEW.title,
         COALESCE(b.content, '')  -- Use empty string if blob doesn't exist yet
+    FROM (SELECT NEW.noteId) AS note_select
+    LEFT JOIN blobs b ON b.blobId = NEW.blobId
+    WHERE NEW.isDeleted = 0
+        AND NEW.isProtected = 0;
+    
+    INSERT INTO notes_fts_trigram (noteId, title, content)
+    SELECT 
+        NEW.noteId,
+        NEW.title,
+        COALESCE(b.content, '')
     FROM (SELECT NEW.noteId) AS note_select
     LEFT JOIN blobs b ON b.blobId = NEW.blobId
     WHERE NEW.isDeleted = 0
@@ -284,9 +313,19 @@ END;
 CREATE TRIGGER notes_fts_blob_update 
 AFTER UPDATE ON blobs
 BEGIN
-    -- Use INSERT OR REPLACE for atomic update of all notes sharing this blob
-    -- This is more efficient than DELETE + INSERT when many notes share the same blob
+    -- Update both FTS tables for all notes sharing this blob
     INSERT OR REPLACE INTO notes_fts (noteId, title, content)
+    SELECT 
+        n.noteId,
+        n.title,
+        NEW.content
+    FROM notes n
+    WHERE n.blobId = NEW.blobId
+        AND n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
+        AND n.isDeleted = 0
+        AND n.isProtected = 0;
+    
+    INSERT OR REPLACE INTO notes_fts_trigram (noteId, title, content)
     SELECT 
         n.noteId,
         n.title,
@@ -303,6 +342,7 @@ CREATE TRIGGER notes_fts_delete
 AFTER DELETE ON notes
 BEGIN
     DELETE FROM notes_fts WHERE noteId = OLD.noteId;
+    DELETE FROM notes_fts_trigram WHERE noteId = OLD.noteId;
 END;
 
 -- Trigger for soft delete (isDeleted = 1)
@@ -311,6 +351,7 @@ AFTER UPDATE ON notes
 WHEN OLD.isDeleted = 0 AND NEW.isDeleted = 1
 BEGIN
     DELETE FROM notes_fts WHERE noteId = NEW.noteId;
+    DELETE FROM notes_fts_trigram WHERE noteId = NEW.noteId;
 END;
 
 -- Trigger for notes becoming protected
@@ -320,6 +361,7 @@ AFTER UPDATE ON notes
 WHEN OLD.isProtected = 0 AND NEW.isProtected = 1
 BEGIN
     DELETE FROM notes_fts WHERE noteId = NEW.noteId;
+    DELETE FROM notes_fts_trigram WHERE noteId = NEW.noteId;
 END;
 
 -- Trigger for notes becoming unprotected
@@ -331,8 +373,17 @@ WHEN OLD.isProtected = 1 AND NEW.isProtected = 0
     AND NEW.isDeleted = 0
 BEGIN
     DELETE FROM notes_fts WHERE noteId = NEW.noteId;
+    DELETE FROM notes_fts_trigram WHERE noteId = NEW.noteId;
     
     INSERT INTO notes_fts (noteId, title, content)
+    SELECT 
+        NEW.noteId,
+        NEW.title,
+        COALESCE(b.content, '')
+    FROM (SELECT NEW.noteId) AS note_select
+    LEFT JOIN blobs b ON b.blobId = NEW.blobId;
+    
+    INSERT INTO notes_fts_trigram (noteId, title, content)
     SELECT 
         NEW.noteId,
         NEW.title,
@@ -347,10 +398,19 @@ END;
 CREATE TRIGGER notes_fts_blob_insert 
 AFTER INSERT ON blobs
 BEGIN
-    -- Use INSERT OR REPLACE to handle both new and existing FTS entries
-    -- This is crucial for blob deduplication where multiple notes may already
-    -- exist that reference this blob before the blob itself is created
+    -- Update both FTS tables for all notes that reference this blob
     INSERT OR REPLACE INTO notes_fts (noteId, title, content)
+    SELECT 
+        n.noteId,
+        n.title,
+        NEW.content
+    FROM notes n
+    WHERE n.blobId = NEW.blobId
+        AND n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
+        AND n.isDeleted = 0
+        AND n.isProtected = 0;
+    
+    INSERT OR REPLACE INTO notes_fts_trigram (noteId, title, content)
     SELECT 
         n.noteId,
         n.title,
