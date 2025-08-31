@@ -54,7 +54,7 @@ function copyAssets() {
 
 function buildAndCopyClient() {
     // Trigger the build.
-    child_process.execSync("pnpm build", { cwd: clientDir, stdio: "inherit" });
+    child_process.execSync("pnpm build", { cwd: join(projectDir, "../client"), stdio: "inherit" });
 
     // Copy the artifacts.
     copy("../client/dist", "public/");
