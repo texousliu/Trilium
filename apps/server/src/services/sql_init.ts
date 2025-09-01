@@ -44,6 +44,9 @@ async function initDbConnection() {
 
     await migrationService.migrateIfNecessary();
 
+    // Initialize optimized SQLite pragmas for FTS and large database performance
+    initializeFTSPragmas();
+
     sql.execute('CREATE TEMP TABLE "param_list" (`paramId` TEXT NOT NULL PRIMARY KEY)');
 
     sql.execute(`
@@ -182,6 +185,42 @@ function setDbAsInitialized() {
         eventService.emit(eventService.DB_INITIALIZED);
 
         log.info("Database initialization completed, emitted DB_INITIALIZED event");
+    }
+}
+
+/**
+ * Initialize SQLite pragmas optimized for FTS5 and large databases
+ */
+function initializeFTSPragmas() {
+    if (config.General.readOnly) {
+        return;
+    }
+    
+    try {
+        log.info("Setting SQLite pragmas for FTS5 and large database optimization...");
+        
+        sql.executeScript(`
+            -- Memory Management (Critical for FTS performance with millions of notes)
+            PRAGMA cache_size = -262144;        -- 256MB cache for better query performance
+            PRAGMA temp_store = MEMORY;         -- Use memory for temporary tables and indices
+            PRAGMA mmap_size = 536870912;       -- 512MB memory-mapped I/O for better read performance
+            
+            -- Write Optimization (Better for concurrent operations)
+            PRAGMA synchronous = NORMAL;        -- Balance safety and performance (FULL is too slow for large operations)
+            PRAGMA journal_mode = WAL;          -- Write-Ahead Logging for better concurrency
+            PRAGMA wal_autocheckpoint = 1000;   -- Checkpoint every 1000 pages for memory management
+            
+            -- Query Optimization (Essential for complex FTS queries)
+            PRAGMA automatic_index = ON;        -- Allow SQLite to create automatic indexes when beneficial
+            
+            -- FTS-Specific Optimizations
+            PRAGMA threads = 4;                 -- Use multiple threads for FTS operations if available
+        `);
+        
+        log.info("FTS pragmas initialized successfully");
+    } catch (error) {
+        log.error(`Failed to initialize FTS pragmas: ${error}`);
+        // Don't throw - continue with default settings
     }
 }
 

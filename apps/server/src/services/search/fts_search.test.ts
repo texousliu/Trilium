@@ -34,6 +34,7 @@ describe('FTS5 Search Service', () => {
             getRows: vi.fn(),
             getColumn: vi.fn(),
             execute: vi.fn(),
+            prepare: vi.fn(),
             iterateRows: vi.fn(),
             transactional: vi.fn((fn: Function) => fn())
         };
@@ -253,10 +254,19 @@ describe('FTS5 Search Service', () => {
             ];
             mockSql.getRows.mockReturnValue(missingNotes);
             
+            // Mock prepared statement
+            const mockPreparedStatement = {
+                run: vi.fn(),
+                finalize: vi.fn()
+            };
+            mockSql.prepare.mockReturnValue(mockPreparedStatement);
+            
             const count = ftsSearchService.syncMissingNotes();
             
             expect(count).toBe(2);
-            expect(mockSql.execute).toHaveBeenCalledTimes(2);
+            expect(mockSql.prepare).toHaveBeenCalledTimes(1);
+            expect(mockPreparedStatement.run).toHaveBeenCalledTimes(2);
+            expect(mockPreparedStatement.finalize).toHaveBeenCalledTimes(1);
         });
 
         it('should optimize index', () => {
