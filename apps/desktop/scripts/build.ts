@@ -1,4 +1,7 @@
+import { join } from "path";
 import BuildHelper from "../../../scripts/build-utils";
+import originalPackageJson from "../package.json" with { type: "json" };
+import { writeFileSync } from "fs";
 
 const build = new BuildHelper("apps/desktop");
 
@@ -17,6 +20,24 @@ async function main() {
     // Integrate the client.
     build.triggerBuildAndCopyTo("apps/client", "public/");
     build.deleteFromOutput("public/webpack-stats.json");
+
+    generatePackageJson();
+}
+
+function generatePackageJson() {
+    const { version, author, license, description, dependencies, devDependencies } = originalPackageJson;
+    const packageJson = {
+        name: "trilium",
+        main: "main.cjs",
+        version, author, license, description,
+        dependencies: {
+            "better-sqlite3": dependencies["better-sqlite3"],
+        },
+        devDependencies: {
+            electron: devDependencies.electron
+        }
+    };
+    writeFileSync(join(build.outDir, "package.json"), JSON.stringify(packageJson, null, "\t"), "utf-8");
 }
 
 main();
