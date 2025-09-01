@@ -308,6 +308,11 @@
     fill: black !important;
 }
 
+/* Hex color input box prefix */
+:root .ck.ck-color-selector .ck-color-picker__hash-view {
+    margin-top: var(--ck-input-label-height);
+}
+
 /* Numbered list */
 
 :root .ck.ck-list-properties_with-numbered-properties .ck.ck-list-styles-list {
