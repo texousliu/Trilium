@@ -19,10 +19,17 @@ export default class BuildHelper {
     }
 
     copy(projectDirPath: string, outDirPath: string) {
+        let sourcePath: string;
+        if (projectDirPath.startsWith("/")) {
+            sourcePath = join(this.rootDir, projectDirPath.substring(1));
+        } else {
+            sourcePath = join(this.projectDir, projectDirPath);
+        }
+
         if (outDirPath.endsWith("/")) {
             mkdirpSync(join(outDirPath));
         }
-        copySync(join(this.projectDir, projectDirPath), join(this.outDir, outDirPath), { dereference: true });
+        copySync(sourcePath, join(this.outDir, outDirPath), { dereference: true });
     }
 
     deleteFromOutput(path: string) {
