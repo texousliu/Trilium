@@ -21,7 +21,6 @@ async function register(app: express.Application) {
 
     if (process.env.NODE_ENV === "development") {
         const { createServer: createViteServer } = await import("vite");
-        const { preact } = await import("@preact/preset-vite");
         const vite = await createViteServer({
             server: { middlewareMode: true },
             appType: "custom",

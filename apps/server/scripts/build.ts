@@ -25,7 +25,6 @@ async function build() {
             "@electron/remote",
             "better-sqlite3",
             "./xhr-sync-worker.js",
-            "@preact/preset-vite",
             "vite"
         ],
         splitting: false,
