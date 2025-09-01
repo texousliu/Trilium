@@ -1,14 +1,18 @@
+import { execSync } from "child_process";
+import { build as esbuild } from "esbuild";
 import { rmSync } from "fs";
 import { copySync, emptyDirSync, mkdirpSync } from "fs-extra";
 import { join } from "path";
 
 export default class BuildHelper {
 
+    private rootDir: string;
     private projectDir: string;
     private outDir: string;
 
     constructor(projectPath: string) {
-        this.projectDir = join(__dirname, "..", projectPath);
+        this.rootDir = join(__dirname, "..");
+        this.projectDir = join(this.rootDir, projectPath);
         this.outDir = join(this.projectDir, "dist");
 
         emptyDirSync(this.outDir);
@@ -23,6 +27,48 @@ export default class BuildHelper {
 
     deleteFromOutput(path: string) {
         rmSync(join(this.outDir, path), { recursive: true });
+    }
+
+    async buildBackend(entryPoints: string[]) {
+        await esbuild({
+            entryPoints: entryPoints.map(e => join(this.projectDir, e)),
+            tsconfig: join(this.projectDir, "tsconfig.app.json"),
+            platform: "node",
+            bundle: true,
+            outdir: this.outDir,
+            outExtension: {
+                ".js": ".cjs"
+            },
+            format: "cjs",
+            external: [
+                "electron",
+                "@electron/remote",
+                "better-sqlite3",
+                "./xhr-sync-worker.js",
+                "vite"
+            ],
+            splitting: false,
+            loader: {
+                ".css": "text",
+                ".ejs": "text"
+            },
+            define: {
+                "process.env.NODE_ENV": JSON.stringify("production"),
+            },
+            minify: true
+        });
+    }
+
+    triggerBuildAndCopyTo(projectToBuild: string, destPath: string) {
+        const projectDir = join(this.rootDir, projectToBuild);
+        execSync("pnpm build", { cwd: projectDir, stdio: "inherit" });
+        copySync(join(projectDir, "dist"), join(this.projectDir, "dist", destPath));
+    }
+
+    copyNodeModules(nodeModules: string[]) {
+        for (const module of nodeModules) {
+            this.copy(`node_modules/${module}`, `node_modules/${module}/`);
+        }
     }
 
 }
