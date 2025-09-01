@@ -1,12 +1,13 @@
 import * as esbuild from "esbuild";
 import { join } from "path";
-import * as fs from "fs-extra";
 import * as child_process from "child_process";
+import BuildHelper from "../../../scripts/build-utils";
 
 const projectDir = __dirname + "/..";
 const outDir = join(projectDir, "dist");
+const build = new BuildHelper("apps/server");
 
-async function build() {
+async function runBuild() {
     esbuild.build({
         entryPoints: [
             join(projectDir, "src/main.ts"),
@@ -41,18 +42,18 @@ async function build() {
 
 function copyAssets() {
     // Copy server assets
-    copy("src/assets", "assets/");
+    build.copy("src/assets", "assets/");
 
     // Copy node modules
     for (const module of [ "better-sqlite3", "bindings", "file-uri-to-path" ]) {
-        copy(`node_modules/${module}`, `node_modules/${module}/`);
+        build.copy(`node_modules/${module}`, `node_modules/${module}/`);
     }
 
     // Copy sync worker.
-    copy("node_modules/jsdom/lib/jsdom/living/xhr/xhr-sync-worker.js", "xhr-sync-worker.js");
+    build.copy("node_modules/jsdom/lib/jsdom/living/xhr/xhr-sync-worker.js", "xhr-sync-worker.js");
 
     // Copy share templates.
-    copy("../../packages/share-theme/src/templates", "share-theme/templates/");
+    build.copy("../../packages/share-theme/src/templates", "share-theme/templates/");
 }
 
 function buildAndCopyClient() {
@@ -60,26 +61,14 @@ function buildAndCopyClient() {
     child_process.execSync("pnpm build", { cwd: join(projectDir, "../client"), stdio: "inherit" });
 
     // Copy the artifacts.
-    copy("../client/dist", "public/");
+    build.copy("../client/dist", "public/");
 
     // Remove unnecessary files.
-    deleteFromOutput("public/webpack-stats.json");
-}
-
-function copy(projectDirPath: string, outDirPath: string) {
-    if (outDirPath.endsWith("/")) {
-        fs.mkdirpSync(join(outDirPath));
-    }
-    fs.copySync(join(projectDir, projectDirPath), join(outDir, outDirPath), { dereference: true });
-}
-
-function deleteFromOutput(path: string) {
-    fs.rmSync(join(outDir, path), { recursive: true });
+    build.deleteFromOutput("public/webpack-stats.json");
 }
 
 async function main() {
-    fs.emptyDirSync(outDir);
-    await build();
+    await runBuild();
     copyAssets();
     buildAndCopyClient();
 }
