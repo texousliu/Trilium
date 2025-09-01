@@ -7,12 +7,18 @@ import preact from "@preact/preset-vite";
 
 const assets = [ "assets", "stylesheets", "fonts", "translations" ];
 
-export default defineConfig(() => ({
-    root: __dirname,
-    cacheDir: '../../node_modules/.vite/apps/client',
-    base: "",
-    plugins: [
-        preact(),
+const isDev = process.env.NODE_ENV === "development";
+let plugins: any = [
+    preact({
+        babel: {
+            compact: !isDev
+        }
+    })
+];
+
+if (!isDev) {
+    plugins = [
+        ...plugins,
         viteStaticCopy({
             targets: assets.map((asset) => ({
                 src: `src/${asset}/*`,
@@ -29,7 +35,14 @@ export default defineConfig(() => ({
             ]
         }),
         webpackStatsPlugin()
-    ] as Plugin[],
+    ]
+}
+
+export default defineConfig(() => ({
+    root: __dirname,
+    cacheDir: '../../node_modules/.vite/apps/client',
+    base: "",
+    plugins,
     resolve: {
         alias: [
             {

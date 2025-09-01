@@ -27,17 +27,7 @@ async function register(app: express.Application) {
             appType: "custom",
             cacheDir: path.join(srcRoot, "../../.cache/vite"),
             base: `/${assetUrlFragment}/`,
-            root: path.join(srcRoot, "../client"),
-            plugins: [
-                preact({
-                    babel: {
-                        compact: false
-                    }
-                })
-            ],
-            define: {
-                "process.env.IS_PREACT": JSON.stringify("true"),
-            }
+            root: path.join(srcRoot, "../client")
         });
         app.use(`/${assetUrlFragment}/`, (req, res, next) => {
             req.url = `/${assetUrlFragment}` + req.url;
