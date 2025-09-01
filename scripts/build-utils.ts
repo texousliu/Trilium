@@ -7,8 +7,8 @@ import { join } from "path";
 export default class BuildHelper {
 
     private rootDir: string;
-    private projectDir: string;
-    private outDir: string;
+    projectDir: string;
+    outDir: string;
 
     constructor(projectPath: string) {
         this.rootDir = join(__dirname, "..");
