@@ -257,7 +257,11 @@ async function configureWebContents(webContents: WebContents, spellcheckEnabled:
 }
 
 function getIcon() {
-    return path.join(RESOURCE_DIR, "../public/assets/icon.png");
+    if (process.env.NODE_ENV === "development") {
+        return path.join(__dirname, "../../../desktop/electron-forge/app-icon/png/256x256-dev.png");
+    } else {
+        return path.join(RESOURCE_DIR, "../public/assets/icon.png");
+    }
 }
 
 async function createSetupWindow() {
