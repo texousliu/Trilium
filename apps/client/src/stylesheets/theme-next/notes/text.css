@@ -426,6 +426,14 @@ div.ck-template-form .ck-search__info span:nth-child(2) {
     border-top: none;
 }
 
+/* Math popup */
+
+.ck-math-form .ck-labeled-field-view {
+    --ck-input-label-height: 0;
+    
+    margin-inline-end: 8px;
+}
+
 /* Emoji dropdown */
 
 .ck-emoji-picker-form .ck-emoji__search .ck-button_with-text {
