@@ -141,8 +141,7 @@ function syncFtsIndex(req: Request) {
         
         log.info(`FTS sync requested for ${noteIds?.length || 'all'} notes`);
         
-        // syncMissingNotes doesn't accept parameters - it syncs all missing notes
-        const syncedCount = ftsSearchService.syncMissingNotes();
+        const syncedCount = ftsSearchService.syncMissingNotes(noteIds);
         
         return {
             success: true,
