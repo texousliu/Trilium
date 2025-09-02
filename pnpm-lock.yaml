@@ -289,8 +289,8 @@ importers:
         specifier: 10.27.1
         version: 10.27.1
       react-i18next:
-        specifier: 15.7.2
-        version: 15.7.2(i18next@25.4.2(typescript@5.9.2))(react-dom@19.1.0(react@16.14.0))(react@16.14.0)(typescript@5.9.2)
+        specifier: 15.7.3
+        version: 15.7.3(i18next@25.4.2(typescript@5.9.2))(react-dom@19.1.0(react@16.14.0))(react@16.14.0)(typescript@5.9.2)
       split.js:
         specifier: 1.6.5
         version: 1.6.5
@@ -12909,8 +12909,8 @@ packages:
     peerDependencies:
       react: ^19.1.0
 
-  react-i18next@15.7.2:
-    resolution: {integrity: sha512-xJxq7ibnhUlMvd82lNC4te1GxGUMoM1A05KKyqoqsBXVZtEvZg/fz/fnVzdlY/hhQ3SpP/79qCocZOtICGhd3g==}
+  react-i18next@15.7.3:
+    resolution: {integrity: sha512-AANws4tOE+QSq/IeMF/ncoHlMNZaVLxpa5uUGW1wjike68elVYr0018L9xYoqBr1OFO7G7boDPrbn0HpMCJxTw==}
     peerDependencies:
       i18next: '>= 25.4.1'
       react: '>= 16.8.0'
@@ -17016,8 +17016,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 46.0.2
       '@ckeditor/ckeditor5-watchdog': 46.0.2
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-dev-build-tools@43.1.0(@swc/helpers@0.5.17)(tslib@2.8.1)(typescript@5.9.2)':
     dependencies:
@@ -17191,6 +17189,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 46.0.2
       ckeditor5: 46.0.2(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-editor-decoupled@46.0.2':
     dependencies:
@@ -17258,8 +17258,6 @@ snapshots:
       '@ckeditor/ckeditor5-core': 46.0.2
       '@ckeditor/ckeditor5-engine': 46.0.2
       '@ckeditor/ckeditor5-utils': 46.0.2
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-essentials@46.0.2':
     dependencies:
@@ -30675,7 +30673,7 @@ snapshots:
       react: 16.14.0
       scheduler: 0.26.0
 
-  react-i18next@15.7.2(i18next@25.4.2(typescript@5.9.2))(react-dom@19.1.0(react@16.14.0))(react@16.14.0)(typescript@5.9.2):
+  react-i18next@15.7.3(i18next@25.4.2(typescript@5.9.2))(react-dom@19.1.0(react@16.14.0))(react@16.14.0)(typescript@5.9.2):
     dependencies:
       '@babel/runtime': 7.27.6
       html-parse-stringify: 3.0.1
