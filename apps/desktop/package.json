@@ -30,8 +30,8 @@
     "prebuild-install": "^7.1.1"
   },  
   "scripts": {
-    "dev": "cross-env TRILIUM_DATA_DIR=data tsx scripts/start.mts",
-    "start-no-dir": "cross-env tsx scripts/start.mts",
+    "dev": "cross-env TRILIUM_PORT=37741 TRILIUM_DATA_DIR=data tsx scripts/start.mts",
+    "start-no-dir": "cross-env TRILIUM_PORT=37743 tsx scripts/start.mts",
     "build": "tsx scripts/build.ts",
     "start-prod": "pnpm build && cross-env TRILIUM_DATA_DIR=data TRILIUM_PORT=37841 electron dist",
     "electron-forge:make": "pnpm build && electron-forge make dist",
