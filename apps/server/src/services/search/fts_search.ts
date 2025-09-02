@@ -92,25 +92,18 @@ class FTSSearchService {
         }
 
         try {
-            // Check if both FTS5 tables are available
-            const porterTableExists = sql.getValue<number>(`
+            // Check if FTS5 module is available
+            const result = sql.getValue<number>(`
                 SELECT COUNT(*) 
                 FROM sqlite_master 
                 WHERE type = 'table' 
                 AND name = 'notes_fts'
             `);
             
-            const trigramTableExists = sql.getValue<number>(`
-                SELECT COUNT(*) 
-                FROM sqlite_master 
-                WHERE type = 'table' 
-                AND name = 'notes_fts_trigram'
-            `);
-            
-            this.isFTS5Available = porterTableExists > 0 && trigramTableExists > 0;
+            this.isFTS5Available = result > 0;
             
             if (!this.isFTS5Available) {
-                log.info("FTS5 tables not found. Full-text search will use fallback implementation.");
+                log.info("FTS5 table not found. Full-text search will use fallback implementation.");
             }
         } catch (error) {
             log.error(`Error checking FTS5 availability: ${error}`);
@@ -142,9 +135,6 @@ class FTSSearchService {
                 return `"${sanitizedTokens.join(" ")}"`;
             
             case "*=*": // Contains all tokens (AND)
-                // For substring matching, we'll use the trigram table
-                // which is designed for substring searches
-                // The trigram tokenizer will handle the substring matching
                 return sanitizedTokens.join(" AND ");
             
             case "*=": // Ends with
@@ -216,7 +206,7 @@ class FTSSearchService {
             throw new FTSNotAvailableError();
         }
 
-        let {
+        const {
             limit = FTS_CONFIG.DEFAULT_LIMIT,
             offset = 0,
             includeSnippets = true,
@@ -224,9 +214,6 @@ class FTSSearchService {
             highlightTag = FTS_CONFIG.DEFAULT_HIGHLIGHT_START,
             searchProtected = false
         } = options;
-        
-        // Track if we need post-filtering
-        let needsPostFiltering = false;
 
         try {
             const ftsQuery = this.convertToFTS5Query(tokens, operator);
@@ -248,12 +235,8 @@ class FTSSearchService {
                 return [];
             }
 
-            // Determine which FTS table to use based on operator
-            // Use trigram table for substring searches (*=* operator)
-            const ftsTable = operator === '*=*' ? 'notes_fts_trigram' : 'notes_fts';
-            
             // Build the SQL query
-            let whereConditions = [`${ftsTable} MATCH ?`];
+            let whereConditions = [`notes_fts MATCH ?`];
             const params: any[] = [ftsQuery];
 
             // Filter by noteIds if provided
@@ -264,74 +247,35 @@ class FTSSearchService {
                     // All provided notes are protected, return empty results
                     return [];
                 }
-                
-                // SQLite has a limit on the number of parameters (usually 999 or 32766)
-                // If we have too many noteIds, we need to handle this differently
-                const SQLITE_MAX_PARAMS = 900; // Conservative limit to be safe
-                
-                if (nonProtectedNoteIds.length > SQLITE_MAX_PARAMS) {
-                    // Too many noteIds to filter in SQL - we'll filter in post-processing
-                    // This is less efficient but avoids the SQL variable limit
-                    log.info(`Too many noteIds for SQL filter (${nonProtectedNoteIds.length}), will filter in post-processing`);
-                    // Don't add the noteId filter to the query
-                    // But we need to get ALL results since we'll filter them
-                    needsPostFiltering = true;
-                    // Set limit to -1 to remove limit entirely
-                    limit = -1; // No limit
-                } else {
-                    whereConditions.push(`noteId IN (${nonProtectedNoteIds.map(() => '?').join(',')})`);
-                    params.push(...nonProtectedNoteIds);
-                }
+                whereConditions.push(`noteId IN (${nonProtectedNoteIds.map(() => '?').join(',')})`);
+                params.push(...nonProtectedNoteIds);
             }
 
             // Build snippet extraction if requested
-            // Note: snippet function uses the table name from the query
             const snippetSelect = includeSnippets 
-                ? `, snippet(${ftsTable}, ${FTS_CONFIG.SNIPPET_COLUMN_CONTENT}, '${highlightTag}', '${highlightTag.replace('<', '</')}', '...', ${snippetLength}) as snippet`
+                ? `, snippet(notes_fts, ${FTS_CONFIG.SNIPPET_COLUMN_CONTENT}, '${highlightTag}', '${highlightTag.replace('<', '</')}', '...', ${snippetLength}) as snippet`
                 : '';
 
-            // Build query with or without LIMIT clause
-            let query: string;
-            if (limit === -1) {
-                // No limit - get all results
-                query = `
-                    SELECT 
-                        noteId,
-                        title,
-                        rank as score
-                        ${snippetSelect}
-                    FROM ${ftsTable}
-                    WHERE ${whereConditions.join(' AND ')}
-                    ORDER BY rank
-                `;
-            } else {
-                query = `
-                    SELECT 
-                        noteId,
-                        title,
-                        rank as score
-                        ${snippetSelect}
-                    FROM ${ftsTable}
-                    WHERE ${whereConditions.join(' AND ')}
-                    ORDER BY rank
-                    LIMIT ? OFFSET ?
-                `;
-                params.push(limit, offset);
-            }
+            const query = `
+                SELECT 
+                    noteId,
+                    title,
+                    rank as score
+                    ${snippetSelect}
+                FROM notes_fts
+                WHERE ${whereConditions.join(' AND ')}
+                ORDER BY rank
+                LIMIT ? OFFSET ?
+            `;
 
-            let results = sql.getRows<{
+            params.push(limit, offset);
+
+            const results = sql.getRows<{
                 noteId: string;
                 title: string;
                 score: number;
                 snippet?: string;
             }>(query, params);
-
-            // Post-process filtering if we had too many noteIds for SQL
-            if (needsPostFiltering && noteIds && noteIds.size > 0) {
-                const noteIdSet = new Set(this.filterNonProtectedNoteIds(noteIds));
-                results = results.filter(result => noteIdSet.has(result.noteId));
-                log.info(`Post-filtered FTS results: ${results.length} results after filtering from ${noteIdSet.size} allowed noteIds`);
-            }
 
             return results;
 
@@ -361,40 +305,16 @@ class FTSSearchService {
      */
     private filterNonProtectedNoteIds(noteIds: Set<string>): string[] {
         const noteIdList = Array.from(noteIds);
-        const BATCH_SIZE = 900; // Conservative limit for SQL parameters
+        const placeholders = noteIdList.map(() => '?').join(',');
         
-        if (noteIdList.length <= BATCH_SIZE) {
-            // Small enough to do in one query
-            const placeholders = noteIdList.map(() => '?').join(',');
-            
-            const nonProtectedNotes = sql.getColumn<string>(`
-                SELECT noteId 
-                FROM notes 
-                WHERE noteId IN (${placeholders})
-                    AND isProtected = 0
-            `, noteIdList);
-            
-            return nonProtectedNotes;
-        } else {
-            // Process in batches to avoid SQL parameter limit
-            const nonProtectedNotes: string[] = [];
-            
-            for (let i = 0; i < noteIdList.length; i += BATCH_SIZE) {
-                const batch = noteIdList.slice(i, i + BATCH_SIZE);
-                const placeholders = batch.map(() => '?').join(',');
-                
-                const batchResults = sql.getColumn<string>(`
-                    SELECT noteId 
-                    FROM notes 
-                    WHERE noteId IN (${placeholders})
-                        AND isProtected = 0
-                `, batch);
-                
-                nonProtectedNotes.push(...batchResults);
-            }
-            
-            return nonProtectedNotes;
-        }
+        const nonProtectedNotes = sql.getColumn<string>(`
+            SELECT noteId 
+            FROM notes 
+            WHERE noteId IN (${placeholders})
+                AND isProtected = 0
+        `, noteIdList);
+        
+        return nonProtectedNotes;
     }
 
     /**
@@ -420,26 +340,15 @@ class FTSSearchService {
             // Build query for protected notes only
             let whereConditions = [`n.isProtected = 1`, `n.isDeleted = 0`];
             const params: any[] = [];
-            let needPostFilter = false;
-            let postFilterNoteIds: Set<string> | null = null;
 
             if (noteIds && noteIds.size > 0) {
                 const noteIdList = Array.from(noteIds);
-                const BATCH_SIZE = 900; // Conservative SQL parameter limit
-                
-                if (noteIdList.length > BATCH_SIZE) {
-                    // Too many noteIds, we'll filter in post-processing
-                    needPostFilter = true;
-                    postFilterNoteIds = noteIds;
-                    log.info(`Too many noteIds for protected notes SQL filter (${noteIdList.length}), will filter in post-processing`);
-                } else {
-                    whereConditions.push(`n.noteId IN (${noteIdList.map(() => '?').join(',')})`);  
-                    params.push(...noteIdList);
-                }
+                whereConditions.push(`n.noteId IN (${noteIdList.map(() => '?').join(',')})`);  
+                params.push(...noteIdList);
             }
 
             // Get protected notes
-            let protectedNotes = sql.getRows<{
+            const protectedNotes = sql.getRows<{
                 noteId: string;
                 title: string;
                 content: string | null;
@@ -451,11 +360,6 @@ class FTSSearchService {
                     AND n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
                 LIMIT ? OFFSET ?
             `, [...params, limit, offset]);
-            
-            // Post-filter if needed
-            if (needPostFilter && postFilterNoteIds) {
-                protectedNotes = protectedNotes.filter(note => postFilterNoteIds!.has(note.noteId));
-            }
 
             const results: FTSSearchResult[] = [];
 
@@ -547,18 +451,12 @@ class FTSSearchService {
 
         try {
             sql.transactional(() => {
-                // Delete existing entries from both FTS tables
+                // Delete existing entry
                 sql.execute(`DELETE FROM notes_fts WHERE noteId = ?`, [noteId]);
-                sql.execute(`DELETE FROM notes_fts_trigram WHERE noteId = ?`, [noteId]);
                 
-                // Insert new entries into both FTS tables
+                // Insert new entry
                 sql.execute(`
                     INSERT INTO notes_fts (noteId, title, content)
-                    VALUES (?, ?, ?)
-                `, [noteId, title, content]);
-                
-                sql.execute(`
-                    INSERT INTO notes_fts_trigram (noteId, title, content)
                     VALUES (?, ?, ?)
                 `, [noteId, title, content]);
             });
@@ -579,7 +477,6 @@ class FTSSearchService {
 
         try {
             sql.execute(`DELETE FROM notes_fts WHERE noteId = ?`, [noteId]);
-            sql.execute(`DELETE FROM notes_fts_trigram WHERE noteId = ?`, [noteId]);
         } catch (error) {
             log.error(`Failed to remove note ${noteId} from FTS index: ${error}`);
         }
@@ -602,62 +499,34 @@ class FTSSearchService {
             let syncedCount = 0;
             
             sql.transactional(() => {
-                const BATCH_SIZE = 900; // Conservative SQL parameter limit
+                let query: string;
+                let params: any[] = [];
                 
                 if (noteIds && noteIds.length > 0) {
-                    // Process in batches if too many noteIds
-                    for (let i = 0; i < noteIds.length; i += BATCH_SIZE) {
-                        const batch = noteIds.slice(i, i + BATCH_SIZE);
-                        const placeholders = batch.map(() => '?').join(',');
-                        
-                        // Sync to porter FTS table
-                        const queryPorter = `
-                            WITH missing_notes AS (
-                                SELECT 
-                                    n.noteId,
-                                    n.title,
-                                    b.content
-                                FROM notes n
-                                LEFT JOIN blobs b ON n.blobId = b.blobId
-                                WHERE n.noteId IN (${placeholders})
-                                    AND n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
-                                    AND n.isDeleted = 0
-                                    AND n.isProtected = 0
-                                    AND b.content IS NOT NULL
-                                    AND NOT EXISTS (SELECT 1 FROM notes_fts WHERE noteId = n.noteId)
-                            )
-                            INSERT INTO notes_fts (noteId, title, content)
-                            SELECT noteId, title, content FROM missing_notes
-                        `;
-                        
-                        const resultPorter = sql.execute(queryPorter, batch);
-                        
-                        // Sync to trigram FTS table
-                        const queryTrigram = `
-                            WITH missing_notes_trigram AS (
-                                SELECT 
-                                    n.noteId,
-                                    n.title,
-                                    b.content
-                                FROM notes n
-                                LEFT JOIN blobs b ON n.blobId = b.blobId
-                                WHERE n.noteId IN (${placeholders})
-                                    AND n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
-                                    AND n.isDeleted = 0
-                                    AND n.isProtected = 0
-                                    AND b.content IS NOT NULL
-                                    AND NOT EXISTS (SELECT 1 FROM notes_fts_trigram WHERE noteId = n.noteId)
-                            )
-                            INSERT INTO notes_fts_trigram (noteId, title, content)
-                            SELECT noteId, title, content FROM missing_notes_trigram
-                        `;
-                        
-                        const resultTrigram = sql.execute(queryTrigram, batch);
-                        syncedCount += Math.max(resultPorter.changes, resultTrigram.changes);
-                    }
+                    // Sync specific notes that are missing from FTS
+                    const placeholders = noteIds.map(() => '?').join(',');
+                    query = `
+                        WITH missing_notes AS (
+                            SELECT 
+                                n.noteId,
+                                n.title,
+                                b.content
+                            FROM notes n
+                            LEFT JOIN blobs b ON n.blobId = b.blobId
+                            WHERE n.noteId IN (${placeholders})
+                                AND n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
+                                AND n.isDeleted = 0
+                                AND n.isProtected = 0
+                                AND b.content IS NOT NULL
+                                AND NOT EXISTS (SELECT 1 FROM notes_fts WHERE noteId = n.noteId)
+                        )
+                        INSERT INTO notes_fts (noteId, title, content)
+                        SELECT noteId, title, content FROM missing_notes
+                    `;
+                    params = noteIds;
                 } else {
-                    // Sync all missing notes to porter FTS table
-                    const queryPorter = `
+                    // Sync all missing notes
+                    query = `
                         WITH missing_notes AS (
                             SELECT 
                                 n.noteId,
@@ -674,38 +543,16 @@ class FTSSearchService {
                         INSERT INTO notes_fts (noteId, title, content)
                         SELECT noteId, title, content FROM missing_notes
                     `;
-                    
-                    const resultPorter = sql.execute(queryPorter, []);
-                    
-                    // Sync all missing notes to trigram FTS table
-                    const queryTrigram = `
-                        WITH missing_notes_trigram AS (
-                            SELECT 
-                                n.noteId,
-                                n.title,
-                                b.content
-                            FROM notes n
-                            LEFT JOIN blobs b ON n.blobId = b.blobId
-                            WHERE n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
-                                AND n.isDeleted = 0
-                                AND n.isProtected = 0
-                                AND b.content IS NOT NULL
-                                AND NOT EXISTS (SELECT 1 FROM notes_fts_trigram WHERE noteId = n.noteId)
-                        )
-                        INSERT INTO notes_fts_trigram (noteId, title, content)
-                        SELECT noteId, title, content FROM missing_notes_trigram
-                    `;
-                    
-                    const resultTrigram = sql.execute(queryTrigram, []);
-                    syncedCount = Math.max(resultPorter.changes, resultTrigram.changes);
                 }
+                
+                const result = sql.execute(query, params);
+                syncedCount = result.changes;
                 
                 if (syncedCount > 0) {
                     log.info(`Synced ${syncedCount} missing notes to FTS index`);
-                    // Optimize both FTS tables if we synced a significant number of notes
+                    // Optimize if we synced a significant number of notes
                     if (syncedCount > 100) {
                         sql.execute(`INSERT INTO notes_fts(notes_fts) VALUES('optimize')`);
-                        sql.execute(`INSERT INTO notes_fts_trigram(notes_fts_trigram) VALUES('optimize')`);
                     }
                 }
             });
@@ -731,11 +578,10 @@ class FTSSearchService {
 
         try {
             sql.transactional(() => {
-                // Clear existing indexes
+                // Clear existing index
                 sql.execute(`DELETE FROM notes_fts`);
-                sql.execute(`DELETE FROM notes_fts_trigram`);
 
-                // Rebuild both FTS tables from notes
+                // Rebuild from notes
                 sql.execute(`
                     INSERT INTO notes_fts (noteId, title, content)
                     SELECT 
@@ -748,23 +594,9 @@ class FTSSearchService {
                         AND n.isDeleted = 0
                         AND n.isProtected = 0
                 `);
-                
-                sql.execute(`
-                    INSERT INTO notes_fts_trigram (noteId, title, content)
-                    SELECT 
-                        n.noteId,
-                        n.title,
-                        b.content
-                    FROM notes n
-                    LEFT JOIN blobs b ON n.blobId = b.blobId
-                    WHERE n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
-                        AND n.isDeleted = 0
-                        AND n.isProtected = 0
-                `);
 
-                // Optimize both FTS tables
+                // Optimize the FTS table
                 sql.execute(`INSERT INTO notes_fts(notes_fts) VALUES('optimize')`);
-                sql.execute(`INSERT INTO notes_fts_trigram(notes_fts_trigram) VALUES('optimize')`);
             });
 
             log.info("FTS5 index rebuild completed");
@@ -794,12 +626,7 @@ class FTSSearchService {
         }
 
         const totalDocuments = sql.getValue<number>(`
-            SELECT COUNT(DISTINCT noteId) 
-            FROM (
-                SELECT noteId FROM notes_fts
-                UNION
-                SELECT noteId FROM notes_fts_trigram
-            )
+            SELECT COUNT(*) FROM notes_fts
         `) || 0;
 
         let indexSize = 0;
@@ -808,12 +635,10 @@ class FTSSearchService {
         try {
             // Try to get index size from dbstat
             // dbstat is a virtual table that may not be available in all SQLite builds
-            // Get size for both FTS tables
             indexSize = sql.getValue<number>(`
                 SELECT SUM(pgsize) 
                 FROM dbstat 
-                WHERE name LIKE 'notes_fts%' 
-                   OR name LIKE 'notes_fts_trigram%'
+                WHERE name LIKE 'notes_fts%'
             `) || 0;
             dbstatAvailable = true;
         } catch (error: any) {

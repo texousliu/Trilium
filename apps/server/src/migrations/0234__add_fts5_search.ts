@@ -18,32 +18,19 @@ export default function addFTS5SearchAndPerformanceIndexes() {
     // Part 1: FTS5 Setup
     log.info("Creating FTS5 virtual table for full-text search...");
 
-    // Create FTS5 virtual tables
-    // We create two FTS tables for different search strategies:
-    // 1. notes_fts: Uses porter stemming for word-based searches
-    // 2. notes_fts_trigram: Uses trigram tokenizer for substring searches
-    
+    // Create FTS5 virtual table
+    // We store noteId, title, and content for searching
+    // The 'tokenize' option uses porter stemming for better search results
     sql.executeScript(`
-        -- Drop existing FTS tables if they exist (for re-running migration in dev)
+        -- Drop existing FTS table if it exists (for re-running migration in dev)
         DROP TABLE IF EXISTS notes_fts;
-        DROP TABLE IF EXISTS notes_fts_trigram;
         
-        -- Create FTS5 virtual table with porter stemming for word-based searches
+        -- Create FTS5 virtual table
         CREATE VIRTUAL TABLE IF NOT EXISTS notes_fts USING fts5(
             noteId UNINDEXED,
             title,
             content,
             tokenize = 'porter unicode61'
-        );
-        
-        -- Create FTS5 virtual table with trigram tokenizer for substring searches
-        -- detail='none' reduces storage by ~50% since we don't need snippets for substring search
-        CREATE VIRTUAL TABLE IF NOT EXISTS notes_fts_trigram USING fts5(
-            noteId UNINDEXED,
-            title,
-            content,
-            tokenize = 'trigram',
-            detail = 'none'
         );
     `);
 
@@ -91,19 +78,10 @@ export default function addFTS5SearchAndPerformanceIndexes() {
                         
                         // For HTML content, we'll strip tags in the search service
                         // For now, just insert the raw content
-                        
-                        // Insert into porter FTS for word-based searches
                         sql.execute(`
                             INSERT INTO notes_fts (noteId, title, content)
                             VALUES (?, ?, ?)
                         `, [note.noteId, note.title, processedContent]);
-                        
-                        // Also insert into trigram FTS for substring searches
-                        sql.execute(`
-                            INSERT INTO notes_fts_trigram (noteId, title, content)
-                            VALUES (?, ?, ?)
-                        `, [note.noteId, note.title, processedContent]);
-                        
                         processedCount++;
                     }
                 }
@@ -153,24 +131,15 @@ export default function addFTS5SearchAndPerformanceIndexes() {
             AND NEW.isDeleted = 0
             AND NEW.isProtected = 0
         BEGIN
-            -- First delete any existing FTS entries (in case of INSERT OR REPLACE)
+            -- First delete any existing FTS entry (in case of INSERT OR REPLACE)
             DELETE FROM notes_fts WHERE noteId = NEW.noteId;
-            DELETE FROM notes_fts_trigram WHERE noteId = NEW.noteId;
             
-            -- Then insert the new entry into both FTS tables, using LEFT JOIN to handle missing blobs
+            -- Then insert the new entry, using LEFT JOIN to handle missing blobs
             INSERT INTO notes_fts (noteId, title, content)
             SELECT 
                 NEW.noteId,
                 NEW.title,
                 COALESCE(b.content, '')  -- Use empty string if blob doesn't exist yet
-            FROM (SELECT NEW.noteId) AS note_select
-            LEFT JOIN blobs b ON b.blobId = NEW.blobId;
-            
-            INSERT INTO notes_fts_trigram (noteId, title, content)
-            SELECT 
-                NEW.noteId,
-                NEW.title,
-                COALESCE(b.content, '')
             FROM (SELECT NEW.noteId) AS note_select
             LEFT JOIN blobs b ON b.blobId = NEW.blobId;
         END
@@ -184,26 +153,15 @@ export default function addFTS5SearchAndPerformanceIndexes() {
         WHEN NEW.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
             -- Fire on any change, not just specific columns, to handle all upsert scenarios
         BEGIN
-            -- Always delete the old entries from both FTS tables
+            -- Always delete the old entry
             DELETE FROM notes_fts WHERE noteId = NEW.noteId;
-            DELETE FROM notes_fts_trigram WHERE noteId = NEW.noteId;
             
-            -- Insert new entry into both FTS tables if note is not deleted and not protected
+            -- Insert new entry if note is not deleted and not protected
             INSERT INTO notes_fts (noteId, title, content)
             SELECT 
                 NEW.noteId,
                 NEW.title,
                 COALESCE(b.content, '')  -- Use empty string if blob doesn't exist yet
-            FROM (SELECT NEW.noteId) AS note_select
-            LEFT JOIN blobs b ON b.blobId = NEW.blobId
-            WHERE NEW.isDeleted = 0
-                AND NEW.isProtected = 0;
-                
-            INSERT INTO notes_fts_trigram (noteId, title, content)
-            SELECT 
-                NEW.noteId,
-                NEW.title,
-                COALESCE(b.content, '')
             FROM (SELECT NEW.noteId) AS note_select
             LEFT JOIN blobs b ON b.blobId = NEW.blobId
             WHERE NEW.isDeleted = 0
@@ -217,7 +175,6 @@ export default function addFTS5SearchAndPerformanceIndexes() {
         AFTER DELETE ON notes
         BEGIN
             DELETE FROM notes_fts WHERE noteId = OLD.noteId;
-            DELETE FROM notes_fts_trigram WHERE noteId = OLD.noteId;
         END
     `);
 
@@ -228,7 +185,6 @@ export default function addFTS5SearchAndPerformanceIndexes() {
         WHEN OLD.isDeleted = 0 AND NEW.isDeleted = 1
         BEGIN
             DELETE FROM notes_fts WHERE noteId = NEW.noteId;
-            DELETE FROM notes_fts_trigram WHERE noteId = NEW.noteId;
         END
     `);
 
@@ -239,7 +195,6 @@ export default function addFTS5SearchAndPerformanceIndexes() {
         WHEN OLD.isProtected = 0 AND NEW.isProtected = 1
         BEGIN
             DELETE FROM notes_fts WHERE noteId = NEW.noteId;
-            DELETE FROM notes_fts_trigram WHERE noteId = NEW.noteId;
         END
     `);
 
@@ -252,17 +207,8 @@ export default function addFTS5SearchAndPerformanceIndexes() {
             AND NEW.isDeleted = 0
         BEGIN
             DELETE FROM notes_fts WHERE noteId = NEW.noteId;
-            DELETE FROM notes_fts_trigram WHERE noteId = NEW.noteId;
             
             INSERT INTO notes_fts (noteId, title, content)
-            SELECT 
-                NEW.noteId,
-                NEW.title,
-                COALESCE(b.content, '')
-            FROM (SELECT NEW.noteId) AS note_select
-            LEFT JOIN blobs b ON b.blobId = NEW.blobId;
-            
-            INSERT INTO notes_fts_trigram (noteId, title, content)
             SELECT 
                 NEW.noteId,
                 NEW.title,
@@ -278,20 +224,9 @@ export default function addFTS5SearchAndPerformanceIndexes() {
         CREATE TRIGGER notes_fts_blob_insert 
         AFTER INSERT ON blobs
         BEGIN
-            -- Use INSERT OR REPLACE for atomic update in both FTS tables
+            -- Use INSERT OR REPLACE for atomic update
             -- This handles the case where FTS entries may already exist
             INSERT OR REPLACE INTO notes_fts (noteId, title, content)
-            SELECT 
-                n.noteId,
-                n.title,
-                NEW.content
-            FROM notes n
-            WHERE n.blobId = NEW.blobId
-                AND n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
-                AND n.isDeleted = 0
-                AND n.isProtected = 0;
-                
-            INSERT OR REPLACE INTO notes_fts_trigram (noteId, title, content)
             SELECT 
                 n.noteId,
                 n.title,
@@ -310,19 +245,8 @@ export default function addFTS5SearchAndPerformanceIndexes() {
         CREATE TRIGGER notes_fts_blob_update 
         AFTER UPDATE ON blobs
         BEGIN
-            -- Use INSERT OR REPLACE for atomic update in both FTS tables
+            -- Use INSERT OR REPLACE for atomic update
             INSERT OR REPLACE INTO notes_fts (noteId, title, content)
-            SELECT 
-                n.noteId,
-                n.title,
-                NEW.content
-            FROM notes n
-            WHERE n.blobId = NEW.blobId
-                AND n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
-                AND n.isDeleted = 0
-                AND n.isProtected = 0;
-                
-            INSERT OR REPLACE INTO notes_fts_trigram (noteId, title, content)
             SELECT 
                 n.noteId,
                 n.title,
@@ -337,12 +261,12 @@ export default function addFTS5SearchAndPerformanceIndexes() {
 
     log.info("FTS5 setup completed successfully");
     
-    // Final cleanup: ensure all eligible notes are indexed in both FTS tables
+    // Final cleanup: ensure all eligible notes are indexed
     // This catches any edge cases where notes might have been missed
     log.info("Running final FTS index cleanup...");
     
-    // Check and fix porter FTS table
-    const missingPorterCount = sql.getValue<number>(`
+    // First check for missing notes
+    const missingCount = sql.getValue<number>(`
         SELECT COUNT(*) FROM notes n
         LEFT JOIN blobs b ON n.blobId = b.blobId
         WHERE n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
@@ -352,7 +276,8 @@ export default function addFTS5SearchAndPerformanceIndexes() {
             AND NOT EXISTS (SELECT 1 FROM notes_fts WHERE noteId = n.noteId)
     `) || 0;
     
-    if (missingPorterCount > 0) {
+    if (missingCount > 0) {
+        // Insert missing notes
         sql.execute(`
             WITH missing_notes AS (
                 SELECT n.noteId, n.title, b.content
@@ -367,36 +292,12 @@ export default function addFTS5SearchAndPerformanceIndexes() {
             INSERT INTO notes_fts (noteId, title, content)
             SELECT noteId, title, content FROM missing_notes
         `);
-        log.info(`Indexed ${missingPorterCount} additional notes in porter FTS during cleanup`);
     }
     
-    // Check and fix trigram FTS table
-    const missingTrigramCount = sql.getValue<number>(`
-        SELECT COUNT(*) FROM notes n
-        LEFT JOIN blobs b ON n.blobId = b.blobId
-        WHERE n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
-            AND n.isDeleted = 0
-            AND n.isProtected = 0
-            AND b.content IS NOT NULL
-            AND NOT EXISTS (SELECT 1 FROM notes_fts_trigram WHERE noteId = n.noteId)
-    `) || 0;
+    const cleanupCount = missingCount;
     
-    if (missingTrigramCount > 0) {
-        sql.execute(`
-            WITH missing_notes AS (
-                SELECT n.noteId, n.title, b.content
-                FROM notes n
-                LEFT JOIN blobs b ON n.blobId = b.blobId
-                WHERE n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
-                    AND n.isDeleted = 0
-                    AND n.isProtected = 0
-                    AND b.content IS NOT NULL
-                    AND NOT EXISTS (SELECT 1 FROM notes_fts_trigram WHERE noteId = n.noteId)
-            )
-            INSERT INTO notes_fts_trigram (noteId, title, content)
-            SELECT noteId, title, content FROM missing_notes
-        `);
-        log.info(`Indexed ${missingTrigramCount} additional notes in trigram FTS during cleanup`);
+    if (cleanupCount && cleanupCount > 0) {
+        log.info(`Indexed ${cleanupCount} additional notes during cleanup`);
     }
     
     // ========================================

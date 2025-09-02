@@ -116,13 +116,10 @@ class NoteContentFulltextExp extends Expression {
                 // For quick-search, also run traditional search for comparison
                 if (isQuickSearch) {
                     const traditionalStartTime = Date.now();
+                    const traditionalNoteSet = new NoteSet();
                     
-                    // Log the input set size for debugging
-                    log.info(`[QUICK-SEARCH-COMPARISON] Input set size: ${inputNoteSet.notes.length} notes`);
-                    
-                    // Run traditional search for comparison
-                    // Use the dedicated comparison method that always runs the full search
-                    const traditionalResults = this.executeTraditionalSearch(inputNoteSet, searchContext);
+                    // Run traditional search (use the fallback method)
+                    const traditionalResults = this.executeWithFallback(inputNoteSet, traditionalNoteSet, searchContext);
                     
                     const traditionalEndTime = Date.now();
                     const traditionalTime = traditionalEndTime - traditionalStartTime;
@@ -255,25 +252,6 @@ class NoteContentFulltextExp extends Expression {
                 this.findInText(row, inputNoteSet, resultNoteSet);
             }
         }
-        return resultNoteSet;
-    }
-    
-    /**
-     * Executes traditional search for comparison purposes
-     * This always runs the full traditional search regardless of operator
-     */
-    private executeTraditionalSearch(inputNoteSet: NoteSet, searchContext: SearchContext): NoteSet {
-        const resultNoteSet = new NoteSet();
-        
-        for (const row of sql.iterateRows<SearchRow>(`
-                SELECT noteId, type, mime, content, isProtected
-                FROM notes JOIN blobs USING (blobId)
-                WHERE type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap') 
-                  AND isDeleted = 0 
-                  AND LENGTH(content) < ${MAX_SEARCH_CONTENT_SIZE}`)) {
-            this.findInText(row, inputNoteSet, resultNoteSet);
-        }
-        
         return resultNoteSet;
     }
 
