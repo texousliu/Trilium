@@ -70,29 +70,14 @@ const FTS_CONFIG = {
  */
 class FTSSearchService {
     private isFTS5Available: boolean | null = null;
-    private checkingAvailability = false;
 
     /**
      * Check if FTS5 is available and properly configured
-     * Thread-safe implementation to prevent race conditions
      */
     checkFTS5Availability(): boolean {
-        // Return cached result if available
         if (this.isFTS5Available !== null) {
             return this.isFTS5Available;
         }
-
-        // Prevent concurrent checks
-        if (this.checkingAvailability) {
-            // Wait for ongoing check to complete by checking again after a short delay
-            while (this.checkingAvailability && this.isFTS5Available === null) {
-                // This is a simple spin-wait; in a real async context, you'd use proper synchronization
-                continue;
-            }
-            return this.isFTS5Available ?? false;
-        }
-
-        this.checkingAvailability = true;
 
         try {
             // Check if FTS5 extension is available
@@ -116,8 +101,6 @@ class FTSSearchService {
             
             if (!this.isFTS5Available) {
                 log.info("FTS5 table not found, full-text search not available");
-            } else {
-                log.info("FTS5 full-text search is available and configured");
             }
 
             return this.isFTS5Available;
@@ -125,8 +108,6 @@ class FTSSearchService {
             log.error(`Error checking FTS5 availability: ${error}`);
             this.isFTS5Available = false;
             return false;
-        } finally {
-            this.checkingAvailability = false;
         }
     }
 
@@ -287,19 +268,14 @@ class FTSSearchService {
                 return 0;
             }
 
-            // Insert missing notes using efficient batch processing
+            // Insert missing notes in batches
             sql.transactional(() => {
-                // Use prepared statement for better performance
-                const insertStmt = sql.prepare(`
-                    INSERT OR REPLACE INTO notes_fts (noteId, title, content)
-                    VALUES (?, ?, ?)
-                `);
-                
                 for (const note of missingNotes) {
-                    insertStmt.run(note.noteId, note.title, note.content);
+                    sql.execute(`
+                        INSERT INTO notes_fts (noteId, title, content)
+                        VALUES (?, ?, ?)
+                    `, [note.noteId, note.title, note.content]);
                 }
-                
-                insertStmt.finalize();
             });
 
             log.info(`Synced ${missingNotes.length} missing notes to FTS index`);
