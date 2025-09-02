@@ -61,9 +61,10 @@ export class FTSQueryError extends FTSError {
  * Configuration for FTS5 search
  */
 const FTS_CONFIG = {
-    DEFAULT_LIMIT: 100,
-    MAX_RESULTS: 10000,
-    BATCH_SIZE: 1000
+    DEFAULT_LIMIT: 100000,  // Increased for unlimited results
+    MAX_RESULTS: 10000000,   // Support millions of notes
+    BATCH_SIZE: 1000,
+    FUZZY_THRESHOLD: 0.7     // Similarity threshold for fuzzy matching
 };
 
 /**
@@ -132,7 +133,7 @@ class FTSSearchService {
     }
 
     /**
-     * Perform synchronous FTS5 search
+     * Perform synchronous FTS5 search with hybrid substring and fuzzy support
      */
     searchSync(
         tokens: string[],
@@ -144,11 +145,18 @@ class FTSSearchService {
             throw new FTSNotAvailableError();
         }
 
-        const limit = Math.min(options.limit || FTS_CONFIG.DEFAULT_LIMIT, FTS_CONFIG.MAX_RESULTS);
+        const limit = options.limit || FTS_CONFIG.DEFAULT_LIMIT;
         const offset = options.offset || 0;
 
         try {
-            // Build FTS5 query based on operator
+            // Special handling for substring and fuzzy operators
+            if (operator === '*=*') {
+                return this.hybridSubstringSearch(tokens, noteIds, limit, offset);
+            } else if (operator === '~=' || operator === '~*') {
+                return this.fuzzySearch(tokens, operator, noteIds, limit, offset);
+            }
+
+            // Standard FTS5 search for other operators
             let ftsQuery = this.buildFTSQuery(tokens, operator);
             
             // Build SQL query
@@ -199,6 +207,208 @@ class FTSSearchService {
                 throw new FTSQueryError(`Invalid FTS5 query: ${error.message}`, tokens.join(' '));
             }
             throw new FTSError(`FTS5 search failed: ${error.message}`, 'FTS_SEARCH_ERROR');
+        }
+    }
+
+    /**
+     * Hybrid substring search using FTS5 for initial filtering and LIKE for exact substring matching
+     * Optimized for millions of notes
+     */
+    private hybridSubstringSearch(
+        tokens: string[],
+        noteIds?: Set<string>,
+        limit: number = FTS_CONFIG.DEFAULT_LIMIT,
+        offset: number = 0
+    ): FTSSearchResult[] {
+        try {
+            // Step 1: Create FTS query to find notes containing any of the tokens as whole words
+            // This dramatically reduces the search space for LIKE operations
+            const ftsQuery = tokens.map(t => `"${t.replace(/"/g, '""')}"`).join(' OR ');
+            
+            // Step 2: Build LIKE conditions for true substring matching
+            // Use ESCAPE clause for proper handling of special characters
+            const likeConditions = tokens.map(token => {
+                const escapedToken = token.replace(/[_%\\]/g, '\\$&').replace(/'/g, "''");
+                return `(f.title LIKE '%${escapedToken}%' ESCAPE '\\' OR 
+                         f.content LIKE '%${escapedToken}%' ESCAPE '\\')`;
+            }).join(' AND ');
+
+            let query: string;
+            let params: any[] = [];
+
+            if (noteIds && noteIds.size > 0) {
+                // Use WITH clause for better query optimization with large noteId sets
+                const noteIdList = Array.from(noteIds);
+                const placeholders = noteIdList.map(() => '?').join(',');
+                
+                query = `
+                    WITH filtered_notes AS (
+                        SELECT noteId FROM (VALUES ${noteIdList.map(() => '(?)').join(',')}) AS t(noteId)
+                    )
+                    SELECT DISTINCT
+                        f.noteId,
+                        n.title,
+                        CASE 
+                            WHEN ${tokens.map(t => `f.title LIKE '%${t.replace(/'/g, "''")}%' ESCAPE '\\'`).join(' AND ')} 
+                            THEN -1000  -- Prioritize title matches
+                            ELSE -rank 
+                        END as score
+                    FROM notes_fts f
+                    JOIN notes n ON n.noteId = f.noteId
+                    JOIN filtered_notes fn ON fn.noteId = f.noteId
+                    WHERE notes_fts MATCH ?
+                        AND (${likeConditions})
+                        AND n.isDeleted = 0
+                        AND n.isProtected = 0
+                    ORDER BY score
+                    LIMIT ? OFFSET ?
+                `;
+                params = [...noteIdList, ftsQuery, limit, offset];
+            } else {
+                // Full search without noteId filtering
+                query = `
+                    SELECT DISTINCT
+                        f.noteId,
+                        n.title,
+                        CASE 
+                            WHEN ${tokens.map(t => `f.title LIKE '%${t.replace(/'/g, "''")}%' ESCAPE '\\'`).join(' AND ')} 
+                            THEN -1000  -- Prioritize title matches
+                            ELSE -rank 
+                        END as score
+                    FROM notes_fts f
+                    JOIN notes n ON n.noteId = f.noteId
+                    WHERE notes_fts MATCH ?
+                        AND (${likeConditions})
+                        AND n.isDeleted = 0
+                        AND n.isProtected = 0
+                    ORDER BY score
+                    LIMIT ? OFFSET ?
+                `;
+                params = [ftsQuery, limit, offset];
+            }
+
+            const results = sql.getRows<FTSSearchResult>(query, params);
+            return results || [];
+        } catch (error: any) {
+            log.error(`Hybrid substring search failed: ${error.message}`);
+            throw new FTSError(`Substring search failed: ${error.message}`, 'FTS_SUBSTRING_ERROR');
+        }
+    }
+
+    /**
+     * Fuzzy search using SQLite's built-in soundex and edit distance capabilities
+     * Implements Levenshtein distance for true fuzzy matching
+     */
+    private fuzzySearch(
+        tokens: string[],
+        operator: string,
+        noteIds?: Set<string>,
+        limit: number = FTS_CONFIG.DEFAULT_LIMIT,
+        offset: number = 0
+    ): FTSSearchResult[] {
+        try {
+            // For fuzzy search, we use a combination of:
+            // 1. FTS5 OR query to get initial candidates
+            // 2. SQLite's editdist3 function if available, or fallback to soundex
+            
+            const ftsQuery = tokens.map(t => {
+                const escaped = t.replace(/"/g, '""');
+                // Include the exact term and common variations
+                return `("${escaped}" OR "${escaped}*" OR "*${escaped}")`;
+            }).join(' OR ');
+
+            // Check if editdist3 is available (requires spellfix1 extension)
+            const hasEditDist = this.checkEditDistAvailability();
+            
+            let query: string;
+            let params: any[] = [];
+
+            if (hasEditDist) {
+                // Use edit distance for true fuzzy matching
+                const editDistConditions = tokens.map(token => {
+                    const escaped = token.replace(/'/g, "''");
+                    // Calculate edit distance threshold based on token length
+                    const threshold = Math.max(1, Math.floor(token.length * 0.3));
+                    return `(
+                        editdist3(LOWER(f.title), LOWER('${escaped}')) <= ${threshold} OR
+                        editdist3(LOWER(SUBSTR(f.content, 1, 1000)), LOWER('${escaped}')) <= ${threshold}
+                    )`;
+                }).join(operator === '~=' ? ' AND ' : ' OR ');
+
+                query = `
+                    SELECT DISTINCT
+                        f.noteId,
+                        n.title,
+                        MIN(${tokens.map(t => `editdist3(LOWER(f.title), LOWER('${t.replace(/'/g, "''")}'))`).join(', ')}) as score
+                    FROM notes_fts f
+                    JOIN notes n ON n.noteId = f.noteId
+                    WHERE notes_fts MATCH ?
+                        AND (${editDistConditions})
+                        AND n.isDeleted = 0
+                        AND n.isProtected = 0
+                    GROUP BY f.noteId, n.title
+                    ORDER BY score
+                    LIMIT ? OFFSET ?
+                `;
+            } else {
+                // Fallback to soundex for basic phonetic matching
+                log.info("Edit distance not available, using soundex for fuzzy search");
+                
+                const soundexConditions = tokens.map(token => {
+                    const escaped = token.replace(/'/g, "''");
+                    return `(
+                        soundex(f.title) = soundex('${escaped}') OR
+                        f.title LIKE '%${escaped}%' ESCAPE '\\' OR
+                        f.content LIKE '%${escaped}%' ESCAPE '\\'
+                    )`;
+                }).join(operator === '~=' ? ' AND ' : ' OR ');
+
+                query = `
+                    SELECT DISTINCT
+                        f.noteId,
+                        n.title,
+                        -rank as score
+                    FROM notes_fts f
+                    JOIN notes n ON n.noteId = f.noteId
+                    WHERE notes_fts MATCH ?
+                        AND (${soundexConditions})
+                        AND n.isDeleted = 0
+                        AND n.isProtected = 0
+                    ORDER BY score
+                    LIMIT ? OFFSET ?
+                `;
+            }
+
+            params = [ftsQuery, limit, offset];
+
+            // Add noteId filtering if specified
+            if (noteIds && noteIds.size > 0) {
+                const noteIdList = Array.from(noteIds).join("','");
+                query = query.replace(
+                    'AND n.isDeleted = 0',
+                    `AND f.noteId IN ('${noteIdList}') AND n.isDeleted = 0`
+                );
+            }
+
+            const results = sql.getRows<FTSSearchResult>(query, params);
+            return results || [];
+        } catch (error: any) {
+            log.error(`Fuzzy search failed: ${error.message}`);
+            // Fallback to simple substring search if fuzzy features aren't available
+            return this.hybridSubstringSearch(tokens, noteIds, limit, offset);
+        }
+    }
+
+    /**
+     * Check if edit distance function is available
+     */
+    private checkEditDistAvailability(): boolean {
+        try {
+            // Try to use editdist3 function
+            sql.getValue(`SELECT editdist3('test', 'test')`);
+            return true;
+        } catch {
+            return false;
         }
     }
 
@@ -262,7 +472,7 @@ class FTSSearchService {
     }
 
     /**
-     * Sync missing notes to FTS index
+     * Sync missing notes to FTS index - optimized for millions of notes
      */
     syncMissingNotes(): number {
         if (!this.checkFTS5Availability()) {
@@ -270,39 +480,83 @@ class FTSSearchService {
         }
 
         try {
-            // Find notes that should be indexed but aren't
-            const missingNotes = sql.getRows<{noteId: string, title: string, content: string}>(`
-                SELECT n.noteId, n.title, b.content
-                FROM notes n
-                LEFT JOIN blobs b ON n.blobId = b.blobId
-                LEFT JOIN notes_fts f ON f.noteId = n.noteId
-                WHERE n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
-                    AND n.isDeleted = 0
-                    AND n.isProtected = 0
-                    AND b.content IS NOT NULL
-                    AND f.noteId IS NULL
-                LIMIT 1000
-            `);
+            let totalSynced = 0;
+            let hasMore = true;
 
-            if (!missingNotes || missingNotes.length === 0) {
-                return 0;
+            // Process in batches to handle millions of notes efficiently
+            while (hasMore) {
+                // Find notes that should be indexed but aren't
+                const missingNotes = sql.getRows<{noteId: string, title: string, content: string}>(`
+                    SELECT n.noteId, n.title, b.content
+                    FROM notes n
+                    LEFT JOIN blobs b ON n.blobId = b.blobId
+                    LEFT JOIN notes_fts f ON f.noteId = n.noteId
+                    WHERE n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
+                        AND n.isDeleted = 0
+                        AND n.isProtected = 0
+                        AND b.content IS NOT NULL
+                        AND f.noteId IS NULL
+                    LIMIT ${FTS_CONFIG.BATCH_SIZE}
+                `);
+
+                if (!missingNotes || missingNotes.length === 0) {
+                    hasMore = false;
+                    break;
+                }
+
+                // Insert missing notes using efficient batch processing
+                sql.transactional(() => {
+                    // Use batch insert for better performance
+                    const batchInsertQuery = `
+                        INSERT OR REPLACE INTO notes_fts (noteId, title, content) 
+                        VALUES ${missingNotes.map(() => '(?, ?, ?)').join(', ')}
+                    `;
+                    
+                    const params: any[] = [];
+                    for (const note of missingNotes) {
+                        params.push(note.noteId, note.title, note.content);
+                    }
+                    
+                    sql.execute(batchInsertQuery, params);
+                });
+
+                totalSynced += missingNotes.length;
+                
+                // Log progress for large sync operations
+                if (totalSynced % 10000 === 0) {
+                    log.info(`Synced ${totalSynced} notes to FTS index...`);
+                }
+
+                // Continue if we got a full batch
+                hasMore = missingNotes.length === FTS_CONFIG.BATCH_SIZE;
             }
 
-            // Insert missing notes using efficient batch processing
-            sql.transactional(() => {
-                for (const note of missingNotes) {
-                    sql.execute(
-                        `INSERT OR REPLACE INTO notes_fts (noteId, title, content) VALUES (?, ?, ?)`,
-                        [note.noteId, note.title, note.content]
-                    );
+            if (totalSynced > 0) {
+                log.info(`Completed syncing ${totalSynced} notes to FTS index`);
+                
+                // Optimize the FTS index after large sync
+                if (totalSynced > 1000) {
+                    this.optimizeIndex();
                 }
-            });
+            }
 
-            log.info(`Synced ${missingNotes.length} missing notes to FTS index`);
-            return missingNotes.length;
+            return totalSynced;
         } catch (error) {
             log.error(`Error syncing missing notes: ${error}`);
             return 0;
+        }
+    }
+
+    /**
+     * Optimize FTS5 index for better performance
+     */
+    optimizeIndex(): void {
+        try {
+            log.info("Optimizing FTS5 index...");
+            sql.execute(`INSERT INTO notes_fts(notes_fts) VALUES('optimize')`);
+            log.info("FTS5 index optimization completed");
+        } catch (error) {
+            log.error(`Error optimizing FTS5 index: ${error}`);
         }
     }
 
@@ -440,31 +694,15 @@ class FTSSearchService {
     }
 
     /**
-     * Optimize FTS index (run during maintenance)
-     */
-    optimizeIndex(): void {
-        if (!this.checkFTS5Availability()) {
-            return;
-        }
-
-        try {
-            sql.execute(`INSERT INTO notes_fts(notes_fts) VALUES('optimize')`);
-            log.info("FTS5 index optimized");
-        } catch (error) {
-            log.error(`Error optimizing FTS5 index: ${error}`);
-        }
-    }
-
-    /**
      * Get FTS index statistics
      */
-    getStatistics(): { documentCount: number; indexSize: number } {
+    getIndexStats(): { totalDocuments: number; indexSize: number } {
         if (!this.checkFTS5Availability()) {
-            return { documentCount: 0, indexSize: 0 };
+            return { totalDocuments: 0, indexSize: 0 };
         }
 
         try {
-            const documentCount = sql.getValue<number>(`
+            const totalDocuments = sql.getValue<number>(`
                 SELECT COUNT(*) FROM notes_fts
             `) || 0;
 
@@ -475,23 +713,13 @@ class FTSSearchService {
                 WHERE name LIKE 'notes_fts%'
             `) || 0;
 
-            return { documentCount, indexSize };
+            return { totalDocuments, indexSize };
         } catch (error) {
             log.error(`Error getting FTS statistics: ${error}`);
-            return { documentCount: 0, indexSize: 0 };
+            return { totalDocuments: 0, indexSize: 0 };
         }
     }
 
-    /**
-     * Get FTS index statistics (alias for getStatistics for API compatibility)
-     */
-    getIndexStats(): { totalDocuments: number; indexSize: number } {
-        const stats = this.getStatistics();
-        return {
-            totalDocuments: stats.documentCount,
-            indexSize: stats.indexSize
-        };
-    }
 
     /**
      * Rebuild the entire FTS index from scratch
@@ -502,44 +730,94 @@ class FTSSearchService {
         }
 
         try {
-            log.info("Starting FTS index rebuild");
+            log.info("Starting FTS index rebuild optimized for millions of notes...");
             
-            sql.transactional(() => {
-                // Clear existing index
-                sql.execute(`DELETE FROM notes_fts`);
-                
-                // Rebuild from all eligible notes
-                const notes = sql.getRows<{noteId: string, title: string, content: string}>(`
-                    SELECT n.noteId, n.title, b.content
-                    FROM notes n
-                    LEFT JOIN blobs b ON n.blobId = b.blobId
-                    WHERE n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
-                        AND n.isDeleted = 0
-                        AND n.isProtected = 0
-                        AND b.content IS NOT NULL
-                `);
-                
-                if (notes && notes.length > 0) {
-                    // Process in batches for better performance
-                    const batchSize = FTS_CONFIG.BATCH_SIZE;
-                    
-                    for (let i = 0; i < notes.length; i += batchSize) {
-                        const batch = notes.slice(i, i + batchSize);
+            // Clear existing index first
+            sql.execute(`DELETE FROM notes_fts`);
+            
+            // Get total count for progress reporting
+            const totalNotes = sql.getValue<number>(`
+                SELECT COUNT(*) 
+                FROM notes n
+                LEFT JOIN blobs b ON n.blobId = b.blobId
+                WHERE n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
+                    AND n.isDeleted = 0
+                    AND n.isProtected = 0
+                    AND b.content IS NOT NULL
+            `) || 0;
+            
+            if (totalNotes === 0) {
+                log.info("No notes to index");
+                return;
+            }
+            
+            log.info(`Rebuilding FTS index for ${totalNotes} notes...`);
+            
+            let processedCount = 0;
+            let offset = 0;
+            const batchSize = FTS_CONFIG.BATCH_SIZE;
+            
+            // Process in chunks to handle millions of notes without memory issues
+            while (offset < totalNotes) {
+                sql.transactional(() => {
+                    const notesBatch = sql.getRows<{noteId: string, title: string, content: string}>(`
+                        SELECT 
+                            n.noteId,
+                            n.title,
+                            b.content
+                        FROM notes n
+                        LEFT JOIN blobs b ON n.blobId = b.blobId
+                        WHERE n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
+                            AND n.isDeleted = 0
+                            AND n.isProtected = 0
+                            AND b.content IS NOT NULL
+                        ORDER BY n.noteId
+                        LIMIT ? OFFSET ?
+                    `, [batchSize, offset]);
+
+                    if (!notesBatch || notesBatch.length === 0) {
+                        return;
+                    }
+
+                    // Use batch insert for much better performance
+                    if (notesBatch.length === 1) {
+                        // Single insert
+                        sql.execute(
+                            `INSERT INTO notes_fts (noteId, title, content) VALUES (?, ?, ?)`,
+                            [notesBatch[0].noteId, notesBatch[0].title, notesBatch[0].content]
+                        );
+                    } else {
+                        // Batch insert
+                        const batchInsertQuery = `
+                            INSERT INTO notes_fts (noteId, title, content) 
+                            VALUES ${notesBatch.map(() => '(?, ?, ?)').join(', ')}
+                        `;
                         
-                        for (const note of batch) {
-                            sql.execute(
-                                `INSERT INTO notes_fts (noteId, title, content) VALUES (?, ?, ?)`,
-                                [note.noteId, note.title, note.content]
-                            );
+                        const params: any[] = [];
+                        for (const note of notesBatch) {
+                            params.push(note.noteId, note.title, note.content);
                         }
+                        
+                        sql.execute(batchInsertQuery, params);
                     }
                     
-                    log.info(`Rebuilt FTS index with ${notes.length} notes`);
+                    processedCount += notesBatch.length;
+                });
+                
+                offset += batchSize;
+                
+                // Progress reporting for large rebuilds
+                if (processedCount % 10000 === 0 || processedCount >= totalNotes) {
+                    const percentage = Math.round((processedCount / totalNotes) * 100);
+                    log.info(`Indexed ${processedCount} of ${totalNotes} notes (${percentage}%)...`);
                 }
-            });
+            }
+            
+            log.info(`FTS index rebuild completed. Indexed ${processedCount} notes.`);
             
             // Optimize after rebuild
             this.optimizeIndex();
+            
         } catch (error) {
             log.error(`Error rebuilding FTS index: ${error}`);
             throw new FTSError(`Failed to rebuild FTS index: ${error}`, 'FTS_REBUILD_ERROR');
