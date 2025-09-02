@@ -1,18 +1,11 @@
-import { execSync, spawnSync } from "child_process";
-import { isNixOS, resetPath } from "../../../scripts/utils.mjs";
+import { execSync } from "child_process";
+import { getElectronPath, isNixOS } from "../../../scripts/utils.mjs";
 import { join } from "path";
 
 const projectRoot = join(import.meta.dirname, "..");
+const LD_LIBRARY_PATH = isNixOS() && execSync("nix eval --raw nixpkgs#gcc.cc.lib").toString("utf-8") + "/lib";
 
-let LD_LIBRARY_PATH = undefined;
-let electronPath = "electron";
-if (isNixOS()) {
-    resetPath();    
-    LD_LIBRARY_PATH = execSync("nix eval --raw nixpkgs#gcc.cc.lib").toString("utf-8") + "/lib";
-    electronPath = execSync("nix eval --raw nixpkgs#electron_37").toString("utf-8") + "/bin/electron";
-}
-
-execSync(`${electronPath} ./src/main.ts`, {
+execSync(`${getElectronPath()} ./src/main.ts`, {
     stdio: "inherit",
     cwd: projectRoot,
     env: {

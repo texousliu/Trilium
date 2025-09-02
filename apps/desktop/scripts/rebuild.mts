@@ -1,8 +1,8 @@
 import { join } from "path";
-import { cpSync, existsSync, mkdirSync, readFileSync, rmSync } from "fs";
+import { cpSync, existsSync, mkdirSync, rmSync } from "fs";
 import { execSync } from "child_process";
 import { rebuild } from "@electron/rebuild"
-import { isNixOS, resetPath } from "../../../scripts/utils.mjs";
+import { getElectronPath, isNixOS } from "../../../scripts/utils.mjs";
 import packageJson from "../package.json" with { type: "json" };
 
 const desktopProjectRoot = join(import.meta.dirname, "..");
@@ -33,24 +33,14 @@ function rebuildNativeDependencies() {
         buildPath: desktopProjectRoot,
         electronVersion
     });
-
-    if (isNixOS()) {
-        console.log("Patching ELF...");
-
-        return execSync(`nix-shell -p auto-patchelf gcc.cc.lib --run "auto-patchelf --paths node_modules/better-sqlite3/build/Release/better_sqlite3.node --libs ${libStdPath}"`, {
-            cwd: desktopProjectRoot,
-            stdio: "inherit"
-        });
-    }
 }
 
 function determineElectronVersion() {
     if (isNixOS()) {
         console.log("Detected NixOS, reading Electron version from PATH");
-        resetPath();
 
         try {
-            return execSync("electron --version", { }).toString("utf-8");
+            return execSync(`${getElectronPath()} --version`, { }).toString("utf-8");
         } catch (e) {
             console.error("Got error while trying to read the Electron version from shell. Make sure that an Electron version is in the PATH (e.g. `nix-shell -p electron`)");
             process.exit(1);
