@@ -5,16 +5,6 @@
   "private": true,
   "type": "module",
   "main": "./src/index.ts",
-  "nx": {
-    "name": "ckeditor5",
-    "targets": {
-      "typecheck": {
-        "dependsOn": [
-          "^build"
-        ]
-      }
-    }
-  },
   "dependencies": {
     "@triliumnext/ckeditor5-admonition": "workspace:*",
     "@triliumnext/ckeditor5-footnotes": "workspace:*",

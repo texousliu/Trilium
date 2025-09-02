@@ -10,37 +10,5 @@
     "name": "Trilium Notes Team",
     "email": "contact@eliandoran.me",
     "url": "https://github.com/TriliumNext/Notes"
-  },
-  "nx": {
-    "name": "commons",
-    "sourceRoot": "packages/commons/src",
-    "targets": {
-      "build": {
-        "executor": "@nx/esbuild:esbuild",
-        "outputs": [
-          "{options.outputPath}"
-        ],
-        "defaultConfiguration": "production",
-        "options": {
-          "main": "packages/commons/src/index.ts",
-          "outputPath": "packages/commons/dist",
-          "outputFileName": "main.js",
-          "tsConfig": "packages/commons/tsconfig.lib.json",
-          "platform": "node",
-          "format": [
-            "esm"
-          ],
-          "declarationRootDir": "packages/commons/src"
-        },
-        "configurations": {
-          "development": {
-            "minify": false
-          },
-          "production": {
-            "minify": true
-          }
-        }
-      }
-    }
   }
 }

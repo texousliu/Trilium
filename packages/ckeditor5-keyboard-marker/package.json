@@ -68,13 +68,5 @@
     "**/*.css": [
       "stylelint --quiet --allow-empty-input"
     ]
-  },
-  "nx": {
-    "name": "ckeditor5-keyboard-marker",
-    "targets": {
-      "build": {
-        "cache": "true"
-      }
-    }
   }
 }

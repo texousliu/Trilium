@@ -12,37 +12,6 @@
     "stream",
     "typescript"
   ],
-  "nx": {
-    "name": "express-partial-content",
-    "targets": {
-      "build": {
-        "executor": "@nx/esbuild:esbuild",
-        "outputs": [
-          "{options.outputPath}"
-        ],
-        "defaultConfiguration": "production",
-        "options": {
-          "main": "packages/express-partial-content/src/index.ts",
-          "outputPath": "packages/express-partial-content/dist",
-          "outputFileName": "main.js",
-          "tsConfig": "packages/express-partial-content/tsconfig.lib.json",
-          "platform": "node",
-          "format": [
-            "esm"
-          ],
-          "declarationRootDir": "packages/express-partial-content/src"
-        },
-        "configurations": {
-          "development": {
-            "minify": false
-          },
-          "production": {
-            "minify": true
-          }
-        }
-      }
-    }
-  },
   "dependencies": {
     "tslib": "^2.3.0"
   }

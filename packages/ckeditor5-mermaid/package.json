@@ -72,13 +72,5 @@
   "dependencies": {
     "@types/lodash-es": "4.17.12",
     "lodash-es": "^4.17.21"
-  },
-  "nx": {
-    "name": "ckeditor5-mermaid",
-    "targets": {
-      "build": {
-        "cache": "true"
-      }
-    }
   }
 }
