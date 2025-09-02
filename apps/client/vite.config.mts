@@ -29,7 +29,7 @@ if (!isDev) {
             structured: true,
             targets: [
                 {
-                    src: "node_modules/@excalidraw/excalidraw/dist/prod/fonts/*",
+                    src: "../../node_modules/@excalidraw/excalidraw/dist/prod/fonts/*",
                     dest: "",
                 }
             ]

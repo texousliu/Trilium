@@ -1,6 +1,6 @@
 import { execSync } from "child_process";
 import { build as esbuild } from "esbuild";
-import { rmSync } from "fs";
+import { cpSync, existsSync, rmSync } from "fs";
 import { copySync, emptyDirSync, mkdirpSync } from "fs-extra";
 import { join } from "path";
 
@@ -73,9 +73,27 @@ export default class BuildHelper {
     }
 
     copyNodeModules(nodeModules: string[]) {
-        for (const module of nodeModules) {
-            this.copy(`node_modules/${module}`, `node_modules/${module}/`);
+        for (const moduleName of nodeModules) {
+            const sourceDir = tryPath([
+                join(this.projectDir, "node_modules", moduleName),
+                join(this.rootDir, "node_modules", moduleName)
+            ]);
+
+            const destDir = join(this.outDir, "node_modules", moduleName);
+            mkdirpSync(destDir);
+            cpSync(sourceDir, destDir, { recursive: true, dereference: true });
         }
     }
 
+}
+
+function tryPath(paths: string[]) {
+    for (const path of paths) {
+        if (existsSync(path)) {
+            return path;
+        }
+    }
+
+    console.error("Unable to find any of the paths:", paths);
+    process.exit(1);
 }

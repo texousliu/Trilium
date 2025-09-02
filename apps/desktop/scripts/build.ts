@@ -15,7 +15,7 @@ async function main() {
 
     // Copy node modules dependencies
     build.copyNodeModules([ "better-sqlite3", "bindings", "file-uri-to-path", "@electron/remote" ]);
-    build.copy("/apps/server/node_modules/jsdom/lib/jsdom/living/xhr/xhr-sync-worker.js", "xhr-sync-worker.js");
+    build.copy("/node_modules/jsdom/lib/jsdom/living/xhr/xhr-sync-worker.js", "xhr-sync-worker.js");
 
     // Integrate the client.
     build.triggerBuildAndCopyTo("apps/client", "public/");
@@ -35,6 +35,9 @@ function generatePackageJson() {
         },
         devDependencies: {
             electron: devDependencies.electron
+        },
+        config: {
+            forge: "../electron-forge/forge.config.ts"
         }
     };
     writeFileSync(join(build.outDir, "package.json"), JSON.stringify(packageJson, null, "\t"), "utf-8");

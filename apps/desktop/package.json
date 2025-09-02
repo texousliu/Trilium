@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@types/electron-squirrel-startup": "1.0.2",
+    "@triliumnext/commons": "workspace:*",
     "@triliumnext/server": "workspace:*",
     "copy-webpack-plugin": "13.0.1",
     "electron": "37.4.0",
@@ -27,14 +28,14 @@
     "@electron-forge/maker-zip": "7.8.3",
     "@electron-forge/plugin-auto-unpack-natives": "7.8.3",
     "prebuild-install": "^7.1.1"
-  },
-  "config": {
-    "forge": "./electron-forge/forge.config.ts"
-  },
+  },  
   "scripts": {
     "dev": "tsx scripts/start.mts",
     "build": "tsx scripts/build.ts",
     "start-prod": "pnpm build && cross-env TRILIUM_DATA_DIR=data TRILIUM_PORT=37841 electron dist",
+    "electron-forge:make": "pnpm build && electron-forge make dist",
+    "electron-forge:package": "pnpm build && electron-forge package dist",
+    "electron-forge:start": "pnpm build && electron-forge start dist",
     "postinstall": "tsx scripts/rebuild.mts"
   },
   "license": "AGPL-3.0-only",
@@ -133,27 +134,6 @@
             "forwardAllArgs": false
           }
         }
-      },
-      "electron-forge:make": {
-        "dependsOn": [
-          "build",
-          "rebuild-deps"
-        ],
-        "command": "pnpm -C apps/desktop exec cross-env NODE_INSTALLER=npm electron-forge make dist"
-      },
-      "electron-forge:package": {
-        "dependsOn": [
-          "build",
-          "rebuild-deps"
-        ],
-        "command": "pnpm -C apps/desktop exec cross-env NODE_INSTALLER=npm electron-forge package dist"
-      },
-      "electron-forge:start": {
-        "dependsOn": [
-          "build",
-          "rebuild-deps"
-        ],
-        "command": "pnpm -C apps/desktop exec cross-env NODE_INSTALLER=npm TRILIUM_DATA_DIR=./data electron-forge start dist"
       }
     }
   }
