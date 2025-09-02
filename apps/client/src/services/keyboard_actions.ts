@@ -62,6 +62,10 @@ async function getAction(actionName: string, silent = false) {
     return action;
 }
 
+export function getActionSync(actionName: string) {
+    return keyboardActionRepo[actionName];
+}
+
 function updateDisplayedShortcuts($container: JQuery<HTMLElement>) {
     //@ts-ignore
     //TODO: each() does not support async callbacks.

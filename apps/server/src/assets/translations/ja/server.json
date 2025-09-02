@@ -87,7 +87,7 @@
     "note-clipboard": "ノートクリップボード",
     "duplicate-subtree": "サブツリーの複製",
     "edit-branch-prefix": "「ブランチ接頭辞の編集」ダイアログを表示",
-    "show-revisions": "「ノート変更履歴」ダイアログを表示",
+    "show-revisions": "「ノートの変更履歴」ダイアログを表示",
     "attributes-labels-and-relations": "属性（ラベルと関係）",
     "add-new-label": "新しいラベルを作成する",
     "create-new-relation": "新しい関係を作成する",
@@ -99,8 +99,11 @@
     "toggle-note-hoisting": "ノートホイスト切り替え",
     "unhoist": "すべてのホイストを無効にする",
     "toggle-book-properties": "コレクションプロパティ切り替え",
-    "toggle-zen-mode": "ゼンモード（集中した編集のための最小限のUI）を有効/無効にする",
-    "add-include-note-to-text": "ノートを埋め込むダイアログを開く"
+    "toggle-zen-mode": "禅モード（集中した編集のための最小限のUI）を有効/無効にする",
+    "add-include-note-to-text": "ノートを埋め込むダイアログを開く",
+    "toggle-promoted-attributes": "プロモートされた属性をトグルする",
+    "force-save-revision": "アクティブノートの新しいノートリヴィジョンを強制する",
+    "toggle-classic-editor-toolbar": "固定ツールバーを持ったエディターのフォーマットタブをトグルする"
   },
   "keyboard_action_names": {
     "back-in-note-history": "ノートの履歴を戻る",
@@ -186,7 +189,7 @@
     "toggle-ribbon-tab-book-properties": "リボンタブ切り替え：書籍属性",
     "toggle-ribbon-tab-file-properties": "リボンタブ切り替え：ファイル属性",
     "toggle-ribbon-tab-image-properties": "リボンタブ切り替え：画像属性",
-    "toggle-ribbon-tab-owned-attributes": "リボンタブ切り替え：自有属性",
+    "toggle-ribbon-tab-owned-attributes": "リボンタブ切り替え：所有属性",
     "toggle-ribbon-tab-inherited-attributes": "リボンタブ切り替え：継承属性",
     "toggle-ribbon-tab-note-map": "リボンタブ切り替え：ノートマップ",
     "toggle-ribbon-tab-note-info": "リボンタブ切り替え：ノート情報",

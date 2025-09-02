@@ -475,6 +475,7 @@ export default class TocWidget extends RightPanelWidget {
         if (this.noteId === noteId) {
             await this.refresh();
             this.triggerCommand("reEvaluateRightPaneVisibility");
+            appContext.triggerEvent("reEvaluateTocWidgetVisibility", { noteId: this.noteId });
         }
     }
 

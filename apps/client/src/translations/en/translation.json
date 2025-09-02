@@ -732,7 +732,8 @@
     "note_type": "Note type",
     "editable": "Editable",
     "basic_properties": "Basic Properties",
-    "language": "Language"
+    "language": "Language",
+    "configure_code_notes": "Configure code notes..."
   },
   "book_properties": {
     "view_type": "View type",
@@ -848,7 +849,7 @@
     "debug": "debug",
     "debug_description": "Debug will print extra debugging information into the console to aid in debugging complex queries",
     "action": "action",
-    "search_button": "Search <kbd>enter</kbd>",
+    "search_button": "Search",
     "search_execute": "Search & Execute actions",
     "save_to_note": "Save to note",
     "search_parameters": "Search Parameters",
@@ -1113,6 +1114,12 @@
     "layout-vertical-description": "launcher bar is on the left (default)",
     "layout-horizontal-description": "launcher bar is underneath the tab bar, the tab bar is now full width."
   },
+  "ui-performance": {
+    "title": "Performance",
+    "enable-motion": "Enable transitions and animations",
+    "enable-shadows": "Enable shadows",
+    "enable-backdrop-effects": "Enable background effects for menus, popups and panels"
+  },
   "ai_llm": {
     "not_started": "Not started",
     "title": "AI Settings",
@@ -1253,7 +1260,12 @@
     "selected_provider": "Selected Provider",
     "selected_provider_description": "Choose the AI provider for chat and completion features",
     "select_model": "Select model...",
-    "select_provider": "Select provider..."
+    "select_provider": "Select provider...",
+    "ai_enabled": "AI features enabled",
+    "ai_disabled": "AI features disabled",
+    "no_models_found_online": "No models found. Please check your API key and settings.",
+    "no_models_found_ollama": "No Ollama models found. Please check if Ollama is running.",
+    "error_fetching": "Error fetching models: {{error}}"
   },
   "zoom_factor": {
     "title": "Zoom Factor (desktop build only)",
@@ -1310,7 +1322,7 @@
   },
   "revisions_snapshot_interval": {
     "note_revisions_snapshot_interval_title": "Note Revision Snapshot Interval",
-    "note_revisions_snapshot_description": "The Note revision snapshot interval is the time after which a new note revision will be created for the note. See <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">wiki</a> for more info.",
+    "note_revisions_snapshot_description": "The Note revision snapshot interval is the time after which a new note revision will be created for the note. See <doc>wiki</doc> for more info.",
     "snapshot_time_interval_label": "Note revision snapshot time interval:"
   },
   "revisions_snapshot_limit": {
@@ -1372,7 +1384,7 @@
   },
   "custom_date_time_format": {
     "title": "Custom Date/Time Format",
-    "description": "Customize the format of the date and time inserted via <kbd></kbd> or the toolbar. See <a href=\"https://day.js.org/docs/en/display/format\" target=\"_blank\" rel=\"noopener noreferrer\">Day.js docs</a> for available format tokens.",
+    "description": "Customize the format of the date and time inserted via <shortcut /> or the toolbar. See <doc>Day.js docs</doc> for available format tokens.",
     "format_string": "Format string:",
     "formatted_time": "Formatted date/time:"
   },
@@ -1590,8 +1602,8 @@
     "open-in-popup": "Quick edit"
   },
   "shared_info": {
-    "shared_publicly": "This note is shared publicly on",
-    "shared_locally": "This note is shared locally on",
+    "shared_publicly": "This note is shared publicly on {{- link}}.",
+    "shared_locally": "This note is shared locally on {{- link}}.",
     "help_link": "For help visit <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>."
   },
   "note_types": {
@@ -1670,7 +1682,8 @@
     "hoist-this-note-workspace": "Hoist this note (workspace)",
     "refresh-saved-search-results": "Refresh saved search results",
     "create-child-note": "Create child note",
-    "unhoist": "Unhoist"
+    "unhoist": "Unhoist",
+    "toggle-sidebar": "Toggle sidebar"
   },
   "title_bar_buttons": {
     "window-on-top": "Keep Window on Top"
@@ -2001,5 +2014,15 @@
     "background_effects_message": "On Windows devices, background effects are now fully stable. The background effects adds a touch of color to the user interface by blurring the background behind it. This technique is also used in other applications such as Windows Explorer.",
     "background_effects_button": "Enable background effects",
     "dismiss": "Dismiss"
+  },
+  "settings": {
+    "related_settings": "Related settings"
+  },
+  "settings_appearance": {
+    "related_code_blocks": "Color scheme for code blocks in text notes",
+    "related_code_notes": "Color scheme for code notes"
+  },
+  "units": {
+    "percentage": "%"
   }
 }

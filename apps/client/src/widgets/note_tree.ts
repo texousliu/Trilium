@@ -152,7 +152,7 @@ const TPL = /*html*/`
 const MAX_SEARCH_RESULTS_IN_TREE = 100;
 
 // this has to be hanged on the actual elements to effectively intercept and stop click event
-const cancelClickPropagation: JQuery.TypeEventHandler<unknown, unknown, unknown, unknown, any> = (e) => e.stopPropagation();
+const cancelClickPropagation: (e: JQuery.ClickEvent) => void = (e) => e.stopPropagation();
 
 // TODO: Fix once we remove Node.js API from public
 type Timeout = NodeJS.Timeout | string | number | undefined;
@@ -382,7 +382,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                     if (event.shiftKey && !ctrlKey) {
                         const activeNode = this.getActiveNode();
 
-                        if (activeNode.getParent() !== node.getParent()) {
+                        if (activeNode?.getParent() !== node.getParent()) {
                             return true;
                         }
 
@@ -729,7 +729,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
 
                     shortcutService.bindElShortcut($(this.tree.$container), key, () => {
                         const node = this.tree.getActiveNode();
-                        return handler(node, {} as JQuery.KeyDownEvent);
+                        return node && handler(node, {} as JQuery.KeyDownEvent);
                         // return false from the handler will stop default handling.
                     });
                 }
@@ -921,8 +921,9 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
             nodes.push(node);
         }
 
-        if (nodes.length === 0) {
-            nodes.push(this.getActiveNode());
+        const activeNode = this.getActiveNode();
+        if (nodes.length === 0 && activeNode) {
+            nodes.push(activeNode);
         }
 
         // hidden subtree is hackily hidden via CSS when hoisted to root
@@ -967,9 +968,6 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         this.collapseTree();
     }
 
-    /**
-     * @returns {FancytreeNode|null}
-     */
     getActiveNode() {
         return this.tree.getActiveNode();
     }
@@ -1219,7 +1217,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         }
 
         const activeNode = this.getActiveNode();
-        const activeNodeFocused = activeNode?.hasFocus();
+        const activeNodeFocused = !!activeNode?.hasFocus();
         const activeNotePath = activeNode ? treeService.getNotePath(activeNode) : null;
 
         const refreshCtx: RefreshContext = {
@@ -1531,7 +1529,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
 
             // Automatically expand the hoisted note by default
             const node = this.getActiveNode();
-            if (node.data.noteId === this.noteContext.hoistedNoteId){
+            if (node?.data.noteId === this.noteContext.hoistedNoteId){
                 this.setExpanded(node.data.branchId, true);
             }
         }
@@ -1809,6 +1807,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
     buildTouchBarCommand({ TouchBar, buildIcon }: CommandListenerData<"buildTouchBar">) {
         const triggerCommand = (command: TreeCommandNames) => {
             const node = this.getActiveNode();
+            if (!node) return;
             const notePath = treeService.getNotePath(node);
 
             this.triggerCommand<TreeCommandNames>(command, {
@@ -1825,6 +1824,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
                 icon: buildIcon("NSImageNameTouchBarAddTemplate"),
                 click: () => {
                     const node = this.getActiveNode();
+                    if (!node) return;
                     const notePath = treeService.getNotePath(node);
                     noteCreateService.createNote(notePath, {
                         isProtected: node.data.isProtected

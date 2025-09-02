@@ -5,12 +5,7 @@ import { JSDOM } from "jsdom";
 import type BNote from "../../becca/entities/bnote.js";
 import type BAttribute from "../../becca/entities/battribute.js";
 import type { Request } from "express";
-
-interface Backlink {
-    noteId: string;
-    relationName?: string;
-    excerpts?: string[];
-}
+import { BacklinkCountResponse, BacklinksResponse } from "@triliumnext/commons";
 
 interface TreeLink {
     sourceNoteId: string;
@@ -361,10 +356,10 @@ function getBacklinkCount(req: Request) {
 
     return {
         count: getFilteredBacklinks(note).length
-    };
+    } satisfies BacklinkCountResponse;
 }
 
-function getBacklinks(req: Request): Backlink[] {
+function getBacklinks(req: Request): BacklinksResponse {
     const { noteId } = req.params;
     const note = becca.getNoteOrThrow(noteId);
 
@@ -377,17 +372,16 @@ function getBacklinks(req: Request): Backlink[] {
             return {
                 noteId: sourceNote.noteId,
                 relationName: backlink.name
-            };
+            } satisfies BacklinksResponse[number];
         }
 
         backlinksWithExcerptCount++;
 
         const excerpts = findExcerpts(sourceNote, noteId);
-
         return {
             noteId: sourceNote.noteId,
             excerpts
-        };
+        } satisfies BacklinksResponse[number];
     });
 }
 

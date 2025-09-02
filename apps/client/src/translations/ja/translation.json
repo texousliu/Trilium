@@ -97,7 +97,9 @@
     "cancel": "キャンセル",
     "ok": "OK",
     "close": "閉じる",
-    "delete_notes_preview": "ノートのプレビューを削除"
+    "delete_notes_preview": "ノートのプレビューを削除",
+    "broken_relations_to_be_deleted": "次のリレーション ({{relationCount}})は壊れているので消去されます",
+    "deleted_relation_text": "削除予定のノート{{- note}}は{{- source}}からリレーション{{- relation}}によって参照されています."
   },
   "calendar": {
     "mon": "月",
@@ -183,7 +185,7 @@
     "debug": "デバッグ",
     "debug_description": "デバッグは複雑なクエリのデバッグを支援するために、追加のデバッグ情報をコンソールに出力します",
     "action": "アクション",
-    "search_button": "検索 <kbd>Enter</kbd>",
+    "search_button": "検索",
     "search_execute": "検索とアクションの実行",
     "save_to_note": "ノートに保存",
     "search_parameters": "検索パラメータ",
@@ -208,7 +210,9 @@
     "confirmation": "確認",
     "cancel": "キャンセル",
     "ok": "OK",
-    "also_delete_note": "同時にノートを削除"
+    "also_delete_note": "同時にノートを削除",
+    "are_you_sure_remove_note": "本当に\"{{title}}\"をリレーションマップから除きたいですか？ ",
+    "if_you_dont_check": "これをチェックしないと、このノートはリレーションマップからのみ除かれます。"
   },
   "export": {
     "export_note_title": "ノートをエクスポート",
@@ -278,7 +282,9 @@
     "inPageSearch": "ページ内検索",
     "showJumpToNoteDialog": "<a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">「ジャンプ先」ダイアログ</a>を表示",
     "moveNoteUpDown": "ノートリストでノートを上/下に移動",
-    "notSet": "未設定"
+    "notSet": "未設定",
+    "goUpDown": "ノートのリストで上下する",
+    "editBranchPrefix": "アクティブノートのクローンの <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/tree-concepts.html#prefix\">プレフィックス</a> を編集する"
   },
   "import": {
     "importIntoNote": "ノートにインポート",
@@ -686,7 +692,8 @@
     "placeholder_search": "ノート名で検索",
     "dialog_title": "埋め込みノート",
     "box_size_prompt": "埋め込みノート枠のサイズ：",
-    "button_include": "埋め込みノート"
+    "button_include": "埋め込みノート",
+    "label_note": "ノート"
   },
   "ancestor": {
     "placeholder": "ノート名で検索"
@@ -728,7 +735,12 @@
     "system-default": "システムのデフォルト"
   },
   "max_content_width": {
-    "reload_button": "フロントエンドをリロード"
+    "reload_button": "フロントエンドをリロード",
+    "title": "コンテンツ幅",
+    "default_description": "Triliumは、ワイドスクリーンで最大化された画面での可読性を向上させるために、デフォルトでコンテンツの最大幅を制限しています。",
+    "max_width_label": "最大コンテンツ幅",
+    "max_width_unit": "ピクセル",
+    "apply_changes_description": "コンテンツ幅の変更を適用するには、クリックしてください"
   },
   "theme": {
     "title": "アプリのテーマ",
@@ -824,7 +836,7 @@
   },
   "custom_date_time_format": {
     "title": "日付/時刻フォーマットのカスタム",
-    "description": "<kbd></kbd>またはツールバーから挿入される日付と時刻のフォーマットをカスタマイズする。 利用可能なトークンについては <a href=\"https://day.js.org/docs/en/display/format\" target=\"_blank\" rel=\"noopener noreferrer\">Day.js ドキュメント</a> を参照してください。",
+    "description": "<shortcut />またはツールバーから挿入される日付と時刻のフォーマットをカスタマイズする。 利用可能なトークンについては <doc>Day.js ドキュメント</doc> を参照してください。",
     "format_string": "文字列形式:",
     "formatted_time": "日付/時刻形式:"
   },
@@ -965,8 +977,6 @@
   },
   "open-help-page": "ヘルプページを開く",
   "shared_info": {
-    "shared_publicly": "このノートは一般公開されています",
-    "shared_locally": "このノートはローカルで共有されています",
     "help_link": "ヘルプについては、<a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>をご覧ください。"
   },
   "highlights_list_2": {
@@ -1002,7 +1012,8 @@
     "labels": "ラベル",
     "relations": "関係",
     "notes": "ノート",
-    "other": "その他"
+    "other": "その他",
+    "none_yet": "アクションを上のリストからクリックして追加。"
   },
   "note_title": {
     "placeholder": "ここにノートのタイトルを入力..."
@@ -1363,10 +1374,23 @@
     "rename_note": "ノート名を変更",
     "new_note_title": "新しいノート名",
     "rename_note_title_to": "ノート名を変更",
-    "example_note": "<code>Note</code> - マッチしたノートの名前はすべて'Note'に変更",
+    "example_note": "<code>Note</code> - マッチしたノートの名前をすべて'Note'に変更",
     "example_new_title": "<code>NEW: ${note.title}</code> - 一致したノートの名前の前に 'NEW: ' を付ける",
     "example_date_prefix": "<code>${note.dateCreatedObj.format('MM-DD:')}: ${note.title}</code> - マッチしたノートの前にノートの作成月日を付ける",
     "api_docs": "詳細については、 <a href='https://zadam.github.io/trilium/backend_api/Note.html'>note</a> および <a href='https://day.js.org/docs/en/display/format'>dateCreatedObj / utcDateCreatedObj properties</a> の API ドキュメントを参照してください。",
     "evaluated_as_js_string": "与えられた値はJavaScript文字列として評価されるため、注入された<code>note</code>変数（noteは名前が変更されます）を介して動的なコンテンツで強化できます。例:"
+  },
+  "electron_integration": {
+    "desktop-application": "デスクトップアプリケーション",
+    "native-title-bar": "ネイティブタイトルバー",
+    "native-title-bar-description": "WindowsとmacOSでは、ネイティブタイトルバーをオフにしておくと、アプリケーションがよりコンパクトに見えます。Linuxでは、ネイティブタイトルバーを表示したままの方が、他のシステムとの統一性が高まります。",
+    "background-effects": "背景効果を有効化（Windows 11のみ）",
+    "background-effects-description": "Mica効果は、アプリのウィンドウにぼかされたスタイリッシュな背景を追加し、奥行きとモダンな外観を作り出します。",
+    "restart-app-button": "アプリケーションを再起動して変更を反映",
+    "zoom-factor": "ズーム倍率"
+  },
+  "zoom_factor": {
+    "description": "ズームは CTRL+- と CTRL+= のショートカットでも操作可能。",
+    "title": "ズーム倍率（デスクトップビルドのみ）"
   }
 }

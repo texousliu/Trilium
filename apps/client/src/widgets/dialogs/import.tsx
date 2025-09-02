@@ -4,14 +4,13 @@ import tree from "../../services/tree";
 import Button from "../react/Button";
 import FormCheckbox from "../react/FormCheckbox";
 import FormFileUpload from "../react/FormFileUpload";
-import FormGroup from "../react/FormGroup";
+import FormGroup, { FormMultiGroup } from "../react/FormGroup";
 import Modal from "../react/Modal";
 import RawHtml from "../react/RawHtml";
-import ReactBasicWidget from "../react/ReactBasicWidget";
 import importService, { UploadFilesOptions } from "../../services/import";
-import useTriliumEvent from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
-function ImportDialogComponent() {
+export default function ImportDialog() {
     const [ parentNoteId, setParentNoteId ] = useState<string>();
     const [ noteTitle, setNoteTitle ] = useState<string>();
     const [ files, setFiles ] = useState<FileList | null>(null);
@@ -55,11 +54,11 @@ function ImportDialogComponent() {
             footer={<Button text={t("import.import")} primary disabled={!files} />}
             show={shown}
         >
-            <FormGroup label={t("import.chooseImportFile")} description={<>{t("import.importDescription")} <strong>{ noteTitle }</strong></>}>
+            <FormGroup name="files" label={t("import.chooseImportFile")} description={<>{t("import.importDescription")} <strong>{ noteTitle }</strong></>}>
                 <FormFileUpload multiple onChange={setFiles} />
             </FormGroup>
 
-            <FormGroup label={t("import.options")}>
+            <FormMultiGroup label={t("import.options")}>
                 <FormCheckbox
                     name="safe-import" hint={t("import.safeImportTooltip")} label={t("import.safeImport")}
                     currentValue={safeImport} onChange={setSafeImport}
@@ -84,17 +83,9 @@ function ImportDialogComponent() {
                     name="replace-underscores-with-spaces" label={t("import.replaceUnderscoresWithSpaces")} 
                     currentValue={replaceUnderscoresWithSpaces} onChange={setReplaceUnderscoresWithSpaces}
                 />
-            </FormGroup>
+            </FormMultiGroup>
         </Modal>
     );
-}
-
-export default class ImportDialog extends ReactBasicWidget {
-
-    get component() {
-        return <ImportDialogComponent />
-    }    
-
 }
 
 function boolToString(value: boolean) {

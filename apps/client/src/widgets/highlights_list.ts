@@ -375,6 +375,7 @@ export default class HighlightsListWidget extends RightPanelWidget {
         if (this.noteId === noteId) {
             await this.refresh();
             this.triggerCommand("reEvaluateRightPaneVisibility");
+            appContext.triggerEvent("reEvaluateHighlightsListWidgetVisibility", { noteId: this.noteId });
         }
     }
 

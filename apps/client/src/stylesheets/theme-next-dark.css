@@ -89,6 +89,7 @@
 
     --menu-text-color: #e3e3e3;
     --menu-background-color: #222222d9;
+    --menu-background-color-no-backdrop: #1b1b1b;
     --menu-item-icon-color: #8c8c8c;
     --menu-item-disabled-opacity: 0.5;
     --menu-item-keyboard-shortcut-color: #ffffff8f;
@@ -120,6 +121,8 @@
     --quick-search-focus-border: #80808095;
     --quick-search-focus-background: #ffffff1f;
     --quick-search-focus-color: white;
+    --quick-search-result-content-background: #0000004d;
+    --quick-search-result-highlight-color: #a4d995;
 
     --left-pane-collapsed-border-color: #0009;
     --left-pane-background-color: #1f1f1f;

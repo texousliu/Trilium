@@ -96,7 +96,6 @@
     background: var(--background) !important;
     color: var(--color) !important;
     line-height: unset;
-    cursor: help;
 }
 
 .sql-table-schemas-widget .sql-table-schemas button:hover,
@@ -104,18 +103,6 @@
 .sql-table-schemas-widget .sql-table-schemas button:focus-visible {
     --background: var(--card-background-press-color);
     --color: var(--main-text-color);
-}
-
-/* Tooltip */
-
-.tooltip .table-schema {
-    font-family: var(--monospace-font-family);
-    font-size: .85em;
-}
-
-/* Data type */
-.tooltip .table-schema td:nth-child(2) {
-    color: var(--muted-text-color);
 }
 
 /*
@@ -181,15 +168,18 @@ div.note-detail-empty {
 }
 
 .options-section:not(.tn-no-card) {
-    margin: auto;
-    min-width: var(--options-card-min-width);
-    max-width: var(--options-card-max-width);
+    margin: auto;    
     border-radius: 12px;
     border: 1px solid var(--card-border-color) !important;
     box-shadow: var(--card-box-shadow);
     background: var(--card-background-color);
     padding: var(--options-card-padding);
     margin-bottom: calc(var(--options-title-offset) + 26px) !important;
+}
+
+body.desktop .option-section:not(.tn-no-card) {
+    min-width: var(--options-card-min-width);
+    max-width: var(--options-card-max-width);
 }
 
 .note-detail-content-widget-content.options {
@@ -231,11 +221,6 @@ div.note-detail-empty {
 .options-section h4 + p:last-child,
 .options-section .existing-anonymized-databases {
     margin-bottom: 0;
-}
-
-.options-section .options-mime-types {
-    padding: 0;
-    margin: 0;
 }
 
 .options-section .form-group {

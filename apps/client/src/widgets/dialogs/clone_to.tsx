@@ -2,7 +2,6 @@ import { useRef, useState } from "preact/hooks";
 import appContext from "../../components/app_context";
 import { t } from "../../services/i18n";
 import Modal from "../react/Modal";
-import ReactBasicWidget from "../react/ReactBasicWidget";
 import NoteAutocomplete from "../react/NoteAutocomplete";
 import froca from "../../services/froca";
 import FormGroup from "../react/FormGroup";
@@ -14,9 +13,9 @@ import tree from "../../services/tree";
 import branches from "../../services/branches";
 import toast from "../../services/toast";
 import NoteList from "../react/NoteList";
-import useTriliumEvent from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
-function CloneToDialogComponent() {
+export default function CloneToDialog() {
     const [ clonedNoteIds, setClonedNoteIds ] = useState<string[]>();
     const [ prefix, setPrefix ] = useState("");
     const [ suggestion, setSuggestion ] = useState<Suggestion | null>(null);
@@ -69,26 +68,18 @@ function CloneToDialogComponent() {
         >
             <h5>{t("clone_to.notes_to_clone")}</h5>
             <NoteList style={{ maxHeight: "200px", overflow: "auto" }} noteIds={clonedNoteIds} />
-            <FormGroup label={t("clone_to.target_parent_note")}>
+            <FormGroup name="target-parent-note" label={t("clone_to.target_parent_note")}>
                 <NoteAutocomplete
                     placeholder={t("clone_to.search_for_note_by_its_name")}
                     onChange={setSuggestion}
                     inputRef={autoCompleteRef}
                 />      
             </FormGroup>
-            <FormGroup label={t("clone_to.prefix_optional")} title={t("clone_to.cloned_note_prefix_title")}>
-                <FormTextBox name="clone-prefix" onChange={setPrefix} />
+            <FormGroup name="clone-prefix" label={t("clone_to.prefix_optional")} title={t("clone_to.cloned_note_prefix_title")}>
+                <FormTextBox onChange={setPrefix} />
             </FormGroup>
         </Modal>
     )
-}
-
-export default class CloneToDialog extends ReactBasicWidget {
-
-    get component() {
-        return <CloneToDialogComponent />;
-    }
-
 }
 
 async function cloneNotesTo(notePath: string, clonedNoteIds: string[], prefix?: string) {

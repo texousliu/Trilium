@@ -1,7 +1,11 @@
-import { Dropdown as BootstrapDropdown } from "bootstrap";
+import { Dropdown as BootstrapDropdown, Tooltip } from "bootstrap";
 import { ComponentChildren } from "preact";
 import Icon from "./Icon";
-import { useEffect, useMemo, useRef, type CSSProperties } from "preact/compat";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "preact/compat";
+import "./FormList.css";
+import { CommandNames } from "../../components/app_context";
+import { useStaticTooltip } from "./hooks";
+import { isMobile } from "../../services/utils";
 
 interface FormListOpts {
     children: ComponentChildren;
@@ -33,6 +37,7 @@ export default function FormList({ children, onSelect, style, fullHeight }: Form
         const style: CSSProperties = {};
         if (fullHeight) {
             style.height = "100%";
+            style.overflow = "auto";
         }
         return style;
     }, [ fullHeight ]);
@@ -51,7 +56,8 @@ export default function FormList({ children, onSelect, style, fullHeight }: Form
                     ...builtinStyles,
                     position: "relative",
                 }} onClick={(e) => {
-                    const value = (e.target as HTMLElement)?.dataset?.value;
+                    const dropdownItem = (e.target as HTMLElement).closest(".dropdown-item") as HTMLElement | null;
+                    const value = dropdownItem?.dataset?.value;
                     if (value && onSelect) {
                         onSelect(value);
                     }
@@ -63,25 +69,72 @@ export default function FormList({ children, onSelect, style, fullHeight }: Form
     );
 }
 
+export interface FormListBadge {
+    className?: string;
+    text: string;
+}
+
 interface FormListItemOpts {
     children: ComponentChildren;
     icon?: string;
     value?: string;
     title?: string;
     active?: boolean;
+    badges?: FormListBadge[];
+    disabled?: boolean;
+    checked?: boolean | null;
+    selected?: boolean;
+    onClick?: (e: MouseEvent) => void;
+    triggerCommand?: CommandNames;
+    description?: string;
+    className?: string;
+    rtl?: boolean;
 }
 
-export function FormListItem({ children, icon, value, title, active }: FormListItemOpts) {
+const TOOLTIP_CONFIG: Partial<Tooltip.Options> = {
+    placement: "right",
+    fallbackPlacements: [ "right" ]
+}
+
+export function FormListItem({ className, icon, value, title, active, disabled, checked, onClick, selected, rtl, triggerCommand, description, ...contentProps }: FormListItemOpts) {
+    const itemRef = useRef<HTMLLIElement>(null);
+
+    if (checked) {
+        icon = "bx bx-check";
+    }
+
+    useStaticTooltip(itemRef, TOOLTIP_CONFIG);
+
     return (
-        <a
-            class={`dropdown-item ${active ? "active" : ""}`}
+        <li
+            ref={itemRef}
+            class={`dropdown-item ${active ? "active" : ""} ${disabled ? "disabled" : ""} ${selected ? "selected" : ""} ${className ?? ""}`}
             data-value={value} title={title}
             tabIndex={0}
+            onClick={onClick}
+            data-trigger-command={triggerCommand}
+            dir={rtl ? "rtl" : undefined}
         >
             <Icon icon={icon} />&nbsp;
-            {children}
-        </a>
+            {description ? (
+                <div>
+                    <FormListContent description={description} {...contentProps} />
+                </div>
+            ) : (
+                <FormListContent description={description} {...contentProps} />
+            )}
+        </li>
     );
+}
+
+function FormListContent({ children, badges, description }: Pick<FormListItemOpts, "children" | "badges" | "description">) {
+    return <>
+        {children}
+        {badges && badges.map(({ className, text }) => (
+            <span className={`badge ${className ?? ""}`}>{text}</span>
+        ))}
+        {description && <div className="description">{description}</div>}
+    </>;
 }
 
 interface FormListHeaderOpts {
@@ -92,6 +145,36 @@ export function FormListHeader({ text }: FormListHeaderOpts) {
     return (
         <li>
             <h6 className="dropdown-header">{text}</h6>
+        </li>
+    )
+}
+
+export function FormDropdownDivider() {
+    return <div className="dropdown-divider" />;
+}
+
+export function FormDropdownSubmenu({ icon, title, children }: { icon: string, title: ComponentChildren, children: ComponentChildren }) {
+    const [ openOnMobile, setOpenOnMobile ] = useState(false);
+
+    return (
+        <li className={`dropdown-item dropdown-submenu ${openOnMobile ? "submenu-open" : ""}`}>
+            <span
+                className="dropdown-toggle"
+                onClick={(e) => {
+                    e.stopPropagation();
+
+                    if (isMobile()) {
+                        setOpenOnMobile(!openOnMobile);
+                    }
+                }}
+            >
+                <Icon icon={icon} />{" "}
+                {title}
+            </span>
+
+            <ul className={`dropdown-menu ${openOnMobile ? "show" : ""}`}>
+                {children}
+            </ul>
         </li>
     )
 }

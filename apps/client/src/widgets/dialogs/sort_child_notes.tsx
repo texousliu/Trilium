@@ -5,12 +5,11 @@ import FormCheckbox from "../react/FormCheckbox";
 import FormRadioGroup from "../react/FormRadioGroup";
 import FormTextBox from "../react/FormTextBox";
 import Modal from "../react/Modal";
-import ReactBasicWidget from "../react/ReactBasicWidget";
 import server from "../../services/server";
 import FormGroup from "../react/FormGroup";
-import useTriliumEvent from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
-function SortChildNotesDialogComponent() {
+export default function SortChildNotesDialog() {
     const [ parentNoteId, setParentNoteId ] = useState<string>();
     const [ sortBy, setSortBy ] = useState("title");
     const [ sortDirection, setSortDirection ] = useState("asc");
@@ -83,20 +82,9 @@ function SortChildNotesDialogComponent() {
                 label={t("sort_child_notes.sort_with_respect_to_different_character_sorting")}
                 currentValue={sortNatural} onChange={setSortNatural}
             />
-            <FormGroup className="form-check" label={t("sort_child_notes.natural_sort_language")} description={t("sort_child_notes.the_language_code_for_natural_sort")}>
-                <FormTextBox
-                    name="sort-locale"                                        
-                    currentValue={sortLocale} onChange={setSortLocale}
-                />
+            <FormGroup name="sort-locale" className="form-check" label={t("sort_child_notes.natural_sort_language")} description={t("sort_child_notes.the_language_code_for_natural_sort")}>
+                <FormTextBox currentValue={sortLocale} onChange={setSortLocale} />
             </FormGroup>
         </Modal>
     )
-}
-
-export default class SortChildNotesDialog extends ReactBasicWidget {
-
-    get component() {
-        return <SortChildNotesDialogComponent />;
-    }
-
 }

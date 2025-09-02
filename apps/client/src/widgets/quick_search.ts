@@ -22,8 +22,9 @@ const TPL = /*html*/`
     }
 
     .quick-search .dropdown-menu {
-        max-height: 600px;
-        max-width: 600px;
+        max-height: 80vh;
+        min-width: 400px;
+        max-width: 720px;
         overflow-y: auto;
         overflow-x: hidden;
         text-overflow: ellipsis;
@@ -40,14 +41,11 @@ const TPL = /*html*/`
     .quick-search .dropdown-item:not(:last-child)::after {
         content: '';
         position: absolute;
+        left: 0;
         bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80%;
-        height: 2px;
-        background: var(--main-border-color);
-        border-radius: 1px;
-        opacity: 0.4;
+        width: 100%;
+        height: 1px;
+        background: var(--dropdown-border-color);
     }
     
     .quick-search .dropdown-item:last-child::after {
@@ -62,13 +60,52 @@ const TPL = /*html*/`
         display: none;
     }
     
-    .quick-search .dropdown-item:hover {
+    .quick-search-item.dropdown-item:hover {
         background-color: #f8f9fa;
     }
     
+     .quick-search .quick-search-item {
+        width: 100%;
+    }
+
+    .quick-search .quick-search-item-header {
+        padding: 0 8px;
+    }
+
+    .quick-search .quick-search-item-icon {
+        margin-inline-end: 2px;
+    }
+
+    .quick-search .search-result-title {
+        font-weight: 500;
+    }
+
+    .quick-search .search-result-attributes {
+        opacity: .5;
+        padding: 0 8px;
+        font-size: .75em;
+    }
+
+    .quick-search .search-result-content {
+        margin-top: 8px;
+        padding: 8px;
+        background-color: var(--accented-background-color);
+        color: var(--main-text-color);
+        font-size: .85em;
+    }
+
+    /* Search result highlighting */
+    .quick-search .search-result-title b,
+    .quick-search .search-result-content b,
+    .quick-search .search-result-attributes b {
+        color: var(--admonition-warning-accent-color);
+        text-decoration: underline;
+    }
+
     .quick-search .dropdown-divider {
         margin: 0;
     }
+
   </style>
 
   <div class="input-group-prepend">
@@ -82,6 +119,7 @@ const TPL = /*html*/`
 
 const INITIAL_DISPLAYED_NOTES = 15;
 const LOAD_MORE_BATCH_SIZE = 10;
+
 
 // TODO: Deduplicate with server.
 interface QuickSearchResponse {
@@ -237,20 +275,22 @@ export default class QuickSearchWidget extends BasicWidget {
                 const $item = $('<a class="dropdown-item" tabindex="0" href="javascript:">');
                 
                 // Build the display HTML with content snippet below the title
-                let itemHtml = `<div style="display: flex; flex-direction: column;">
-                    <div style="display: flex; align-items: flex-start; gap: 6px;">
-                        <span class="${result.icon}" style="flex-shrink: 0; margin-top: 1px;"></span>
-                        <span style="flex: 1;" class="search-result-title">${result.highlightedNotePathTitle}</span>
+                let itemHtml = `<div class="quick-search-item">
+                    <div class="quick-search-item-header">
+                        <span class="quick-search-item-icon ${result.icon}"></span>
+                        <span class="search-result-title">${result.highlightedNotePathTitle}</span>
                     </div>`;
                 
                 // Add attribute snippet (tags/attributes) below the title if available
                 if (result.highlightedAttributeSnippet) {
-                    itemHtml += `<div style="font-size: 0.75em; color: var(--muted-text-color); opacity: 0.5; margin-left: 20px; margin-top: 2px; line-height: 1.2;" class="search-result-attributes">${result.highlightedAttributeSnippet}</div>`;
+                    // Replace <br> with a blank space to join the atributes on the same single line
+                    const snippet = (result.highlightedAttributeSnippet as string).replace(/<br\s?\/?>/g, " ");
+                    itemHtml += `<div class="search-result-attributes">${snippet}</div>`;
                 }
                 
                 // Add content snippet below the attributes if available
                 if (result.highlightedContentSnippet) {
-                    itemHtml += `<div style="font-size: 0.85em; color: var(--main-text-color); opacity: 0.7; margin-left: 20px; margin-top: 4px; line-height: 1.3;" class="search-result-content">${result.highlightedContentSnippet}</div>`;
+                    itemHtml += `<div class="search-result-content">${result.highlightedContentSnippet}</div>`;
                 }
                 
                 itemHtml += `</div>`;

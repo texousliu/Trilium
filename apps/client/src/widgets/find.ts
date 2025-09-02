@@ -87,7 +87,7 @@ const TPL = /*html*/`
 
         <div class="find-widget-spacer"></div>
 
-        <div class="find-widget-close-button"><button class="btn icon-action bx bx-x"></button></div>
+        <div class="find-widget-close-button"><button class="icon-action bx bx-x"></button></div>
     </div>
 
     <div class="replace-widget-box" style='display: none'>

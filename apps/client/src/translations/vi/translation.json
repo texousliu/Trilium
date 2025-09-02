@@ -1,7 +1,10 @@
 {
   "about": {
     "homepage": "Trang chủ:",
-    "title": "Về Trilium Notes"
+    "title": "Về Trilium Notes",
+    "app_version": "Phiên bản:",
+    "db_version": "Phiên bản DB:",
+    "sync_version": "Phiên bản liên kết:"
   },
   "add_link": {
     "add_link": "Thêm liên kết",
@@ -26,7 +29,8 @@
     "close": "Đóng"
   },
   "help": {
-    "other": "Khác"
+    "other": "Khác",
+    "notSet": "chưa được đặt"
   },
   "toast": {
     "critical-error": {
@@ -69,9 +73,16 @@
   "add_label": {
     "add_label": "Thêm nhãn",
     "label_name_placeholder": "tên nhãn",
-    "help_text_item2": "hoặc thay đổi giá trị của nhãn có sẵn"
+    "help_text_item2": "hoặc thay đổi giá trị của nhãn có sẵn",
+    "new_value_placeholder": "giá trị mới"
   },
   "rename_label": {
     "rename_label": "Đặt lại tên nhãn"
+  },
+  "call_to_action": {
+    "dismiss": "Bỏ qua"
+  },
+  "abstract_search_option": {
+    "remove_this_search_option": "Xoá lựa chọn tìm kiếm này"
   }
 }

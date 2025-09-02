@@ -729,7 +729,8 @@
     "note_type": "筆記類型",
     "editable": "可編輯",
     "basic_properties": "基本屬性",
-    "language": "語言"
+    "language": "語言",
+    "configure_code_notes": "配寘代碼注釋..."
   },
   "book_properties": {
     "view_type": "視圖類型",
@@ -845,7 +846,7 @@
     "debug": "除錯",
     "debug_description": "除錯將顯示額外的除錯資訊至控制台，以幫助除錯複雜查詢",
     "action": "操作",
-    "search_button": "搜尋 <kbd>Enter</kbd>",
+    "search_button": "搜尋",
     "search_execute": "搜尋並執行操作",
     "save_to_note": "儲存至筆記",
     "search_parameters": "搜尋參數",
@@ -1398,9 +1399,9 @@
     "open-in-popup": "快速編輯"
   },
   "shared_info": {
-    "shared_publicly": "此筆記已公開分享在",
-    "shared_locally": "此筆記已在本地分享在",
-    "help_link": "如需幫助，請訪問 <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>。"
+    "help_link": "如需幫助，請訪問 <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>。",
+    "shared_publicly": "此筆記已公開分享於 {{- link}}。",
+    "shared_locally": "此筆記已於本地分享至 {{- link}}。"
   },
   "note_types": {
     "text": "文字",
@@ -1478,7 +1479,8 @@
     "hoist-this-note-workspace": "聚焦此筆記（工作區）",
     "refresh-saved-search-results": "重新整理儲存的搜尋結果",
     "create-child-note": "建立子筆記",
-    "unhoist": "取消聚焦"
+    "unhoist": "取消聚焦",
+    "toggle-sidebar": "切換側邊欄"
   },
   "title_bar_buttons": {
     "window-on-top": "保持此視窗置頂"
@@ -1643,13 +1645,13 @@
     "failed_notes": "失敗筆記",
     "last_processed": "最後處理時間",
     "refresh_stats": "更新統計資料",
-    "enable_ai_features": "啟用 AI / LLM 功能",
+    "enable_ai_features": "啟用 AI/LLM 功能",
     "enable_ai_description": "啟用筆記摘要、內容生成等 AI 功能及其他 LLM 能力",
     "openai_tab": "OpenAI",
     "anthropic_tab": "Anthropic",
     "voyage_tab": "Voyage AI",
     "ollama_tab": "Ollama",
-    "enable_ai": "啟用 AI / LLM 功能",
+    "enable_ai": "啟用 AI/LLM 功能",
     "enable_ai_desc": "啟用筆記摘要、內容生成等 AI 功能及其他 LLM 能力",
     "provider_configuration": "AI 提供者設定",
     "provider_precedence": "提供者優先級",
@@ -1771,19 +1773,24 @@
     "selected_provider": "已選提供者",
     "selected_provider_description": "選擇用於聊天和補全功能的 AI 提供者",
     "select_model": "選擇模型…",
-    "select_provider": "選擇提供者…"
+    "select_provider": "選擇提供者…",
+    "ai_enabled": "已啟用 AI 功能",
+    "ai_disabled": "已禁用 AI 功能",
+    "no_models_found_online": "找不到模型。請檢查您的 API 金鑰及設定。",
+    "no_models_found_ollama": "找不到 Ollama 模型。請確認 Ollama 是否正在執行。",
+    "error_fetching": "獲取模型失敗：{{error}}"
   },
   "code-editor-options": {
     "title": "編輯器"
   },
   "revisions_snapshot_interval": {
     "note_revisions_snapshot_interval_title": "筆記歷史快照間隔",
-    "note_revisions_snapshot_description": "筆記歷史快照間隔是建立新筆記修訂的時間。如需詳細資訊，請參閱 <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">wiki</a>。",
+    "note_revisions_snapshot_description": "筆記歷史快照間隔是建立新筆記修訂的時間。如需詳細資訊，請參閱 <doc>wiki</doc>。",
     "snapshot_time_interval_label": "筆記歷史快照時間間隔："
   },
   "custom_date_time_format": {
     "title": "自訂日期 / 時間格式",
-    "description": "透過 <kbd></kbd> 或工具列自訂插入日期和時間的格式。有關可用的格式及符號，請參閱 <a href=\"https://day.js.org/docs/en/display/format\" target=\"_blank\" rel=\"noopener noreferrer\">Day.js docs</a>。",
+    "description": "透過 <shortcut /> 或工具列自訂插入日期和時間的格式。有關可用的格式及符號，請參閱 <doc>Day.js docs</doc>。",
     "format_string": "格式化字串：",
     "formatted_time": "格式化日期 / 時間："
   },
@@ -1999,5 +2006,21 @@
     "next_theme_message": "您正在使用舊版主題，要試用新主題嗎？",
     "next_theme_button": "試用新主題",
     "dismiss": "關閉"
+  },
+  "settings": {
+    "related_settings": "相關設定"
+  },
+  "settings_appearance": {
+    "related_code_blocks": "文字筆記中程式碼區塊的配色方案",
+    "related_code_notes": "程式碼筆記的配色方案"
+  },
+  "units": {
+    "percentage": "%"
+  },
+  "ui-performance": {
+    "title": "效能",
+    "enable-motion": "啟用轉場與動畫",
+    "enable-shadows": "啟用陰影",
+    "enable-backdrop-effects": "啟用選單、彈出視窗和面板的背景特效"
   }
 }

@@ -1,0 +1,52 @@
+.classic-toolbar-outer-container {
+    contain: none !important;
+}
+
+.classic-toolbar-outer-container.visible {
+    height: 38px;
+    background-color: var(--main-background-color);
+    position: relative;
+    overflow: visible;
+    flex-shrink: 0;
+}
+
+#root-widget.virtual-keyboard-opened .classic-toolbar-outer-container.ios {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.classic-toolbar-widget {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 38px;
+    overflow: scroll;
+    display: flex;
+    align-items: flex-end;
+    user-select: none;
+}
+
+.classic-toolbar-widget::-webkit-scrollbar {
+    height: 0 !important;
+    width: 0 !important;
+}
+
+.classic-toolbar-widget.dropdown-active {
+    height: 50vh;
+}
+
+.classic-toolbar-widget .ck.ck-toolbar {
+    --ck-color-toolbar-background: transparent;
+    --ck-color-button-default-background: transparent;
+    --ck-color-button-default-disabled-background: transparent;
+    position: absolute;
+    background-color: transparent;
+    border: none;
+}
+
+.classic-toolbar-widget .ck.ck-button.ck-disabled {
+    opacity: 0.3;
+}
