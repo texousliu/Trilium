@@ -11,7 +11,7 @@ async function main() {
 
     // Copy node modules dependencies
     build.copyNodeModules([ "better-sqlite3", "bindings", "file-uri-to-path" ]);
-    build.copy("node_modules/jsdom/lib/jsdom/living/xhr/xhr-sync-worker.js", "xhr-sync-worker.js");
+    build.copy("/node_modules/jsdom/lib/jsdom/living/xhr/xhr-sync-worker.js", "xhr-sync-worker.js");
 
     // Integrate the client.
     build.triggerBuildAndCopyTo("apps/client", "public/");

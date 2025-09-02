@@ -57,7 +57,6 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - uses: nrwl/nx-set-shas@v4
       - name: Update nightly version
         run: npm run chore:ci-update-nightly-version
       - name: Run the build
