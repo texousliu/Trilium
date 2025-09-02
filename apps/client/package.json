@@ -9,6 +9,11 @@
     "email": "contact@eliandoran.me",
     "url": "https://github.com/TriliumNext/Notes"
   },
+  "scripts": {
+    "build": "vite build",
+    "test": "vitest",
+    "circular-deps": "dpdm -T src/**/*.ts --tree=false --warning=false --skip-dynamic-imports=circular"
+  },
   "dependencies": {
     "@eslint/js": "9.34.0",
     "@excalidraw/excalidraw": "0.18.0",
@@ -71,21 +76,5 @@
     "happy-dom": "18.0.1",
     "script-loader": "0.7.2",
     "vite-plugin-static-copy": "3.1.2"
-  },
-  "scripts": {
-    "build": "vite build"
-  },
-  "nx": {
-    "name": "client",
-    "targets": {
-      "serve": {
-        "dependsOn": [
-          "^build"
-        ]
-      },
-      "circular-deps": {
-        "command": "pnpx dpdm -T {projectRoot}/src/**/*.ts --tree=false --warning=false --skip-dynamic-imports=circular"
-      }
-    }
   }
 }

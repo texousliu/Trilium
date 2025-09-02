@@ -3,6 +3,15 @@
   "version": "0.98.1",
   "description": "The server-side component of TriliumNext, which exposes the client via the web, allows for sync and provides a REST API for both internal and external use.",
   "private": true,
+  "main": "./src/main.ts",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development TRILIUM_ENV=dev TRILIUM_DATA_DIR=data TRILIUM_RESOURCE_DIR=src tsx watch --ignore '../client/node_modules/.vite-temp' ./src/main.ts",
+    "build": "tsx scripts/build.ts",
+    "package": "pnpm build && bash scripts/build-server.sh",
+    "test": "vitest",
+    "test-build": "vitest --config vitest.build.config.mts",
+    "circular-deps": "dpdm -T src/**/*.ts --tree=false --warning=false --skip-dynamic-imports=circular"
+  },
   "dependencies": {
     "better-sqlite3": "12.2.0"
   },
@@ -300,22 +309,7 @@
             }
           ]
         }
-      },
-      "test-build": {
-        "dependsOn": [
-          "build"
-        ],
-        "command": "vitest --config {projectRoot}/vitest.build.config.mts"
-      },
-      "circular-deps": {
-        "command": "pnpx dpdm -T {projectRoot}/src/**/*.ts --tree=false --warning=false --skip-dynamic-imports=circular"
       }
     }
-  },
-  "scripts": {
-    "dev": "cross-env NODE_ENV=development TRILIUM_ENV=dev TRILIUM_DATA_DIR=data TRILIUM_RESOURCE_DIR=src tsx watch --ignore '../client/node_modules/.vite-temp' ./src/main.ts",
-    "build": "tsx scripts/build.ts",
-    "package": "pnpm build && bash scripts/build-server.sh"
-  },
-  "main": "./src/main.ts"
+  }
 }
