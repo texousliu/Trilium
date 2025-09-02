@@ -10,6 +10,7 @@
     "package": "pnpm build && bash scripts/build-server.sh",
     "test": "vitest",
     "test-build": "vitest --config vitest.build.config.mts",
+    "start-prod": "pnpm build && node dist/main.cjs",
     "circular-deps": "dpdm -T src/**/*.ts --tree=false --warning=false --skip-dynamic-imports=circular"
   },
   "dependencies": {
@@ -177,12 +178,6 @@
           "buildTarget": "server:build-without-client:development",
           "runBuildTargetDependencies": false
         }
-      },
-      "start-prod": {
-        "dependsOn": [
-          "build"
-        ],
-        "command": "node apps/server/dist/main.cjs"
       },
       "docker-build": {
         "dependsOn": [
