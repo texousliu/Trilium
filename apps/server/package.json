@@ -6,12 +6,22 @@
   "main": "./src/main.ts",
   "scripts": {
     "dev": "cross-env NODE_ENV=development TRILIUM_ENV=dev TRILIUM_DATA_DIR=data TRILIUM_RESOURCE_DIR=src tsx watch --ignore '../client/node_modules/.vite-temp' ./src/main.ts",
+    "dev-no-dir": "cross-env NODE_ENV=development TRILIUM_ENV=dev TRILIUM_RESOURCE_DIR=src tsx watch --ignore '../client/node_modules/.vite-temp' ./src/main.ts",
+    "edit-integration-db": "cross-env NODE_ENV=development TRILIUM_PORT=8086 TRILIUM_ENV=dev TRILIUM_DATA_DIR=spec/db TRILIUM_INTEGRATION_TEST=edit TRILIUM_RESOURCE_DIR=src tsx watch --ignore '../client/node_modules/.vite-temp' ./src/main.ts",
     "build": "tsx scripts/build.ts",
     "package": "pnpm build && bash scripts/build-server.sh",
     "test": "vitest",
     "test-build": "vitest --config vitest.build.config.mts",
-    "start-prod": "pnpm build && node dist/main.cjs",
-    "circular-deps": "dpdm -T src/**/*.ts --tree=false --warning=false --skip-dynamic-imports=circular"
+    "start-prod": "pnpm build && cross-env TRILIUM_ENV=production TRILIUM_DATA_DIR=./apps/server/data TRILIUM_PORT=8082 node dist/main.cjs",
+    "circular-deps": "dpdm -T src/**/*.ts --tree=false --warning=false --skip-dynamic-imports=circular",
+    "docker-build-debian": "pnpm build && docker build . -t triliumnext-debian -f Dockerfile",
+    "docker-build-alpine": "pnpm build && docker build . -t triliumnext-alpine -f Dockerfile.alpine",
+    "docker-build-rootless-debian": "pnpm build && docker build . -t triliumnext-rootless-debian -f Dockerfile.rootless",
+    "docker-build-rootless-alpine": "pnpm build && docker build . -t triliumnext-rootless-alpine -f Dockerfile.alpine.rootless",
+    "docker-start-debian": "pnpm docker-build-debian && docker run -p 8081:8080 triliumnext-debian",
+    "docker-start-alpine": "pnpm docker-build-alpine && docker run -p 8081:8080 triliumnext-alpine",
+    "docker-start-rootless-debian": "pnpm docker-build-rootless-debian && docker run -p 8081:8080 triliumnext-rootless-debian",
+    "docker-start-rootless-alpine": "pnpm docker-build-rootless-alpine && docker run -p 8081:8080 triliumnext-rootless-alpine"
   },
   "dependencies": {
     "better-sqlite3": "12.2.0"
@@ -121,190 +131,5 @@
     "ws": "8.18.3",
     "xml2js": "0.6.2",
     "yauzl": "3.2.0"
-  },
-  "nx": {
-    "name": "server",
-    "implicitDependencies": [
-      "share-theme"
-    ],
-    "targets": {
-      "serve": {
-        "executor": "@nx/js:node",
-        "dependsOn": [
-          {
-            "projects": [
-              "client"
-            ],
-            "target": "serve"
-          },
-          "build-without-client"
-        ],
-        "continuous": true,
-        "options": {
-          "buildTarget": "server:build-without-client:development",
-          "runBuildTargetDependencies": false
-        }
-      },
-      "serve-nodir": {
-        "executor": "@nx/js:node",
-        "dependsOn": [
-          {
-            "projects": [
-              "client"
-            ],
-            "target": "serve"
-          },
-          "build-without-client"
-        ],
-        "continuous": true,
-        "options": {
-          "buildTarget": "server:build-without-client:development",
-          "runBuildTargetDependencies": false
-        }
-      },
-      "edit-integration-db": {
-        "executor": "@nx/js:node",
-        "dependsOn": [
-          {
-            "projects": [
-              "client"
-            ],
-            "target": "serve"
-          },
-          "build-without-client"
-        ],
-        "continuous": true,
-        "options": {
-          "buildTarget": "server:build-without-client:development",
-          "runBuildTargetDependencies": false
-        }
-      },
-      "docker-build": {
-        "dependsOn": [
-          "build"
-        ],
-        "options": {
-          "cwd": "{projectRoot}"
-        },
-        "executor": "nx:run-commands",
-        "defaultConfiguration": "alpine",
-        "configurations": {
-          "debian": {
-            "command": "docker build . -t triliumnext-debian -f Dockerfile"
-          },
-          "alpine": {
-            "command": "docker build . -t triliumnext-alpine -f Dockerfile.alpine"
-          },
-          "rootless-debian": {
-            "command": "docker build . -t triliumnext-rootless-debian -f Dockerfile.rootless"
-          },
-          "rootless-alpine": {
-            "command": "docker build . -t triliumnext-rootless-alpine -f Dockerfile.alpine.rootless"
-          }
-        }
-      },
-      "docker-start": {
-        "dependsOn": [
-          "docker-build"
-        ],
-        "executor": "nx:run-commands",
-        "defaultConfiguration": "alpine",
-        "configurations": {
-          "debian": {
-            "command": "docker run -p 8081:8080 triliumnext-debian"
-          },
-          "alpine": {
-            "command": "docker run -p 8081:8080 triliumnext-alpine"
-          },
-          "rootless-debian": {
-            "command": "docker run -p 8081:8080 triliumnext-rootless-debian"
-          },
-          "rootless-alpine": {
-            "command": "docker run -p 8081:8080 triliumnext-rootless-alpine"
-          }
-        }
-      },
-      "build-without-client": {
-        "executor": "@nx/esbuild:esbuild",
-        "outputs": [
-          "{options.outputPath}"
-        ],
-        "options": {
-          "main": "apps/server/src/main.ts",
-          "outputPath": "apps/server/dist",
-          "outputFileName": "main.js",
-          "tsConfig": "apps/server/tsconfig.app.json",
-          "platform": "node",
-          "format": [
-            "cjs"
-          ],
-          "esbuildOptions": {
-            "loader": {
-              ".css": "text",
-              ".ejs": "text"
-            }
-          },
-          "declarationRootDir": "apps/server/src",
-          "minify": false,
-          "sourcemap": true,
-          "assets": [
-            {
-              "glob": "**/*",
-              "input": "apps/server/src/assets",
-              "output": "assets"
-            },
-            {
-              "glob": "**/*",
-              "input": "packages/share-theme/src/templates",
-              "output": "share-theme/templates"
-            }
-          ]
-        }
-      },
-      "build": {
-        "executor": "@nx/esbuild:esbuild",
-        "outputs": [
-          "{options.outputPath}"
-        ],
-        "dependsOn": [
-          "^build",
-          "client:build"
-        ],
-        "defaultConfiguration": "production",
-        "configurations": {
-          "production": {
-            "minify": true,
-            "sourcemap": false
-          },
-          "development": {
-            "minify": false,
-            "sourcemap": true
-          }
-        },
-        "options": {
-          "declarationRootDir": "apps/server/src",
-          "thirdParty": true,
-          "declaration": false,
-          "additionalEntryPoints": [
-            "apps/server/src/docker_healthcheck.ts"
-          ],
-          "assets": [
-            {
-              "glob": "**/*",
-              "input": "packages/share-theme/src/templates",
-              "output": "share-theme/templates"
-            },
-            {
-              "glob": "**/*",
-              "input": "apps/client/dist",
-              "output": "public",
-              "ignore": [
-                "webpack-stats.json"
-              ]
-            }
-          ]
-        }
-      }
-    }
   }
 }
