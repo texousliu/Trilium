@@ -14,6 +14,7 @@
     "server:coverage": "nx test server --coverage",
     "server:start": "pnpm run --filter server dev",
     "server:start-prod": "nx run server:start-prod",
+    "desktop:start": "pnpm run --filter desktop dev",
     "electron:build": "nx build desktop",
     "chore:ci-update-nightly-version": "tsx ./scripts/update-nightly-version.ts",
     "chore:generate-openapi": "tsx ./scripts/generate-openapi.ts",

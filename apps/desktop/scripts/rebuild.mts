@@ -9,7 +9,7 @@ const workspaceRoot = join(desktopProjectRoot, "../..");
 
 function copyNativeDependencies() {
     const destPath = join(desktopProjectRoot, "node_modules/better-sqlite3");
-
+    
     if (existsSync(destPath)) {
         rmSync(destPath, { recursive: true });
     }
@@ -30,10 +30,7 @@ function rebuildNativeDependencies() {
     rebuild({
         projectRootPath: desktopProjectRoot,
         buildPath: desktopProjectRoot,
-        // on NixOS the prebuilt native fails with "Error: libstdc++.so.6: cannot open shared object file: No such file or directory" so we need to build from source.
-        force: isNixOS(),
-        electronVersion: electronVersion,
-        buildFromSource: true
+        electronVersion
     });
 }
 

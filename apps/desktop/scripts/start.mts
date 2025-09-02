@@ -17,6 +17,7 @@ execSync("electron ./src/main.ts", {
         NODE_ENV: "development",
         TRILIUM_ENV: "dev",
         TRILIUM_DATA_DIR: "data",
-        TRILIUM_RESOURCE_DIR: "../server/src"
+        TRILIUM_RESOURCE_DIR: "../server/src",
+        BETTERSQLITE3_NATIVE_PATH: join(projectRoot, "node_modules/better-sqlite3/build/Release/better_sqlite3.node")
     }
 });
