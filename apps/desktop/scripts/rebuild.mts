@@ -3,6 +3,7 @@ import { cpSync, existsSync, mkdirSync, readFileSync, rmSync } from "fs";
 import { execSync } from "child_process";
 import { rebuild } from "@electron/rebuild"
 import { isNixOS, resetPath } from "../../../scripts/utils.mjs";
+import packageJson from "../package.json" with { type: "json" };
 
 const desktopProjectRoot = join(import.meta.dirname, "..");
 const workspaceRoot = join(desktopProjectRoot, "../..");
@@ -36,8 +37,6 @@ function rebuildNativeDependencies() {
     if (isNixOS()) {
         console.log("Patching ELF...");
 
-        
-
         return execSync(`nix-shell -p auto-patchelf gcc.cc.lib --run "auto-patchelf --paths node_modules/better-sqlite3/build/Release/better_sqlite3.node --libs ${libStdPath}"`, {
             cwd: desktopProjectRoot,
             stdio: "inherit"
@@ -58,6 +57,7 @@ function determineElectronVersion() {
         }
     } else {
         console.log("Using Electron version from package.json");
+        return packageJson.devDependencies.electron;
     }
 }
 
