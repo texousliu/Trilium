@@ -6,24 +6,21 @@
     "doc": "docs"
   },
   "scripts": {
-    "client:test": "nx test client",
-    "client:build": "nx build client",
-    "client:coverage": "nx test client --coverage",
-    "server:test": "nx test server",
-    "server:build": "nx build server",
-    "server:coverage": "nx test server --coverage",
+    "client:test": "pnpm run --filter client test",
+    "client:build": "pnpm run --filter client build",
+    "client:coverage": "pnpm run --filter client test --coverage",
+    "server:test": "pnpm run --filter server test",
+    "server:build": "pnpm run --filter server build",
+    "server:coverage": "pnpm run --filter server test --coverage",
     "server:start": "pnpm run --filter server dev",
-    "server:start-prod": "nx run server:start-prod",
+    "server:start-prod": "pnpm run --filter server start-prod",
     "desktop:start": "pnpm run --filter desktop dev",
-    "electron:build": "nx build desktop",
+    "electron:build": "pnpm run --filter desktop build",
     "chore:ci-update-nightly-version": "tsx ./scripts/update-nightly-version.ts",
     "chore:generate-openapi": "tsx ./scripts/generate-openapi.ts",
     "chore:update-build-info": "tsx ./scripts/update-build-info.ts",
     "chore:update-version": "tsx ./scripts/update-version.ts",
-    "test:all": "pnpm test:parallel && pnpm test:sequential",
-    "test:parallel": "pnpm nx run-many -t test --all --exclude=server,ckeditor5-mermaid,ckeditor5-math --parallel",
-    "test:sequential": "pnpm nx run-many -t test --projects=server,ckeditor5-mermaid,ckeditor5-math --parallel=1",
-    "coverage": "pnpm nx run-many -t coverage"
+    "test:all": "pnpm -r test"
   },
   "private": true,
   "devDependencies": {
