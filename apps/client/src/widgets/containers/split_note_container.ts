@@ -102,8 +102,6 @@ export default class SplitNoteContainer extends FlexContainer<SplitNoteWidget> {
     async closeThisNoteSplitCommand({ ntxId }: CommandListenerData<"closeThisNoteSplit">) {
         if (ntxId) {
             await appContext.tabManager.removeNoteContext(ntxId);
-            
-            splitService.delNoteSplitResizer([ntxId]);
         }
     }
 

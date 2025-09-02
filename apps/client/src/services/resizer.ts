@@ -119,13 +119,15 @@ function setupNoteSplitResizer(ntxIds: string[]) {
 
 function delNoteSplitResizer(ntxIds: string[]) {
     let targetNtxIds = findKeyByNtxId(ntxIds[0]);
-
-    if (targetNtxIds) {
-        noteSplitMap.get(targetNtxIds)?.destroy();
-        noteSplitMap.delete(targetNtxIds);
-        targetNtxIds = targetNtxIds.filter(id => !ntxIds.includes(id));
+    if (!targetNtxIds) {
+        return;
     }
-    if (targetNtxIds && targetNtxIds.length >= 2) {
+
+    noteSplitMap.get(targetNtxIds)?.destroy();
+    noteSplitMap.delete(targetNtxIds);
+    targetNtxIds = targetNtxIds.filter(id => !ntxIds.includes(id));
+
+    if (targetNtxIds.length >= 2) {
         noteSplitMap.set(targetNtxIds, undefined);
         createSplitInstance(targetNtxIds);
     }
@@ -133,15 +135,12 @@ function delNoteSplitResizer(ntxIds: string[]) {
 
 function moveNoteSplitResizer(ntxId: string) {
     const targetNtxIds = findKeyByNtxId(ntxId);
-
-    if (targetNtxIds) {
-        noteSplitMap.get(targetNtxIds)?.destroy();
-        noteSplitMap.set(targetNtxIds, undefined);
+    if (!targetNtxIds) {
+        return;
     }
-
-    if (targetNtxIds) {
-        createSplitInstance(targetNtxIds);
-    }
+    noteSplitMap.get(targetNtxIds)?.destroy();
+    noteSplitMap.set(targetNtxIds, undefined);
+    createSplitInstance(targetNtxIds);
 }
 
 function createSplitInstance(targetNtxIds: string[]) {
