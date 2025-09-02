@@ -30,7 +30,8 @@
     "prebuild-install": "^7.1.1"
   },  
   "scripts": {
-    "dev": "tsx scripts/start.mts",
+    "dev": "cross-env TRILIUM_DATA_DIR=data tsx scripts/start.mts",
+    "start-no-dir": "cross-env tsx scripts/start.mts",
     "build": "tsx scripts/build.ts",
     "start-prod": "pnpm build && cross-env TRILIUM_DATA_DIR=data TRILIUM_PORT=37841 electron dist",
     "electron-forge:make": "pnpm build && electron-forge make dist",
@@ -43,98 +44,5 @@
     "name": "Trilium Notes Team",
     "email": "contact@eliandoran.me",
     "url": "https://github.com/TriliumNext/Notes"
-  },
-  "nx": {
-    "name": "desktop",
-    "targets": {
-      "build": {
-        "executor": "@nx/esbuild:esbuild",
-        "outputs": [
-          "{options.outputPath}"
-        ],
-        "defaultConfiguration": "production",
-        "configurations": {
-          "production": {
-            "minify": true,
-            "sourcemap": false
-          },
-          "development": {
-            "minify": false,
-            "sourcemap": true
-          }
-        },
-        "options": {
-          "main": "apps/desktop/src/electron-main.ts",
-          "outputPath": "apps/desktop/dist",
-          "tsConfig": "apps/desktop/tsconfig.app.json",
-          "external": [
-            "electron",
-            "@electron/remote",
-            "better-sqlite3",
-            "./xhr-sync-worker.js"
-          ],
-          "thirdParty": true,
-          "esbuildOptions": {
-            "splitting": false,
-            "loader": {
-              ".css": "text"
-            }
-          },
-          "declarationRootDir": "apps/desktop/src"
-        }
-      },
-      "rebuild-deps": {
-        "executor": "nx:run-commands",
-        "dependsOn": [
-          "build"
-        ],
-        "defaultConfiguration": "default",
-        "cache": false,
-        "configurations": {
-          "default": {
-            "command": "cross-env DEBUG=* tsx scripts/electron-rebuild.mts {projectRoot}/dist"
-          },
-          "nixos": {
-            "command": "cross-env DEBUG=* tsx scripts/electron-rebuild.mts {projectRoot}/dist $(nix-shell -p electron_35 --run \"electron --version\")"
-          }
-        }
-      },
-      "serve": {
-        "executor": "nx:run-commands",
-        "dependsOn": [
-          "rebuild-deps"
-        ],
-        "defaultConfiguration": "default",
-        "configurations": {
-          "default": {
-            "command": "electron main.cjs",
-            "cwd": "{projectRoot}/dist"
-          },
-          "nixos": {
-            "command": "nix-shell -p electron_35 --run \"electron {projectRoot}/dist/main.cjs\"",
-            "cwd": ".",
-            "forwardAllArgs": false
-          }
-        }
-      },
-      "serve-nodir": {
-        "executor": "nx:run-commands",
-        "dependsOn": [
-          "rebuild-deps"
-        ],
-        "defaultConfiguration": "default",
-        "configurations": {
-          "default": {
-            "command": "electron main.cjs",
-            "cwd": "{projectRoot}/dist"
-          },
-          "nixos": {
-            "command": "nix-shell -p electron_35 --run \"electron {projectRoot}/dist/main.cjs\"",
-            "cwd": ".",
-            "forwardAllArgs": false
-          }
-        }
-      }
-    }
   }
 }
