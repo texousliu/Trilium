@@ -30,6 +30,7 @@ export interface FTSSearchOptions {
     limit?: number;
     offset?: number;
     searchProtected?: boolean;
+    includeSnippets?: boolean;
 }
 
 /**
@@ -289,17 +290,12 @@ class FTSSearchService {
 
             // Insert missing notes using efficient batch processing
             sql.transactional(() => {
-                // Use prepared statement for better performance
-                const insertStmt = sql.prepare(`
-                    INSERT OR REPLACE INTO notes_fts (noteId, title, content)
-                    VALUES (?, ?, ?)
-                `);
-                
                 for (const note of missingNotes) {
-                    insertStmt.run(note.noteId, note.title, note.content);
+                    sql.execute(
+                        `INSERT OR REPLACE INTO notes_fts (noteId, title, content) VALUES (?, ?, ?)`,
+                        [note.noteId, note.title, note.content]
+                    );
                 }
-                
-                insertStmt.finalize();
             });
 
             log.info(`Synced ${missingNotes.length} missing notes to FTS index`);
@@ -483,6 +479,70 @@ class FTSSearchService {
         } catch (error) {
             log.error(`Error getting FTS statistics: ${error}`);
             return { documentCount: 0, indexSize: 0 };
+        }
+    }
+
+    /**
+     * Get FTS index statistics (alias for getStatistics for API compatibility)
+     */
+    getIndexStats(): { totalDocuments: number; indexSize: number } {
+        const stats = this.getStatistics();
+        return {
+            totalDocuments: stats.documentCount,
+            indexSize: stats.indexSize
+        };
+    }
+
+    /**
+     * Rebuild the entire FTS index from scratch
+     */
+    rebuildIndex(): void {
+        if (!this.checkFTS5Availability()) {
+            throw new FTSNotAvailableError();
+        }
+
+        try {
+            log.info("Starting FTS index rebuild");
+            
+            sql.transactional(() => {
+                // Clear existing index
+                sql.execute(`DELETE FROM notes_fts`);
+                
+                // Rebuild from all eligible notes
+                const notes = sql.getRows<{noteId: string, title: string, content: string}>(`
+                    SELECT n.noteId, n.title, b.content
+                    FROM notes n
+                    LEFT JOIN blobs b ON n.blobId = b.blobId
+                    WHERE n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
+                        AND n.isDeleted = 0
+                        AND n.isProtected = 0
+                        AND b.content IS NOT NULL
+                `);
+                
+                if (notes && notes.length > 0) {
+                    // Process in batches for better performance
+                    const batchSize = FTS_CONFIG.BATCH_SIZE;
+                    
+                    for (let i = 0; i < notes.length; i += batchSize) {
+                        const batch = notes.slice(i, i + batchSize);
+                        
+                        for (const note of batch) {
+                            sql.execute(
+                                `INSERT INTO notes_fts (noteId, title, content) VALUES (?, ?, ?)`,
+                                [note.noteId, note.title, note.content]
+                            );
+                        }
+                    }
+                    
+                    log.info(`Rebuilt FTS index with ${notes.length} notes`);
+                }
+            });
+            
+            // Optimize after rebuild
+            this.optimizeIndex();
+        } catch (error) {
+            log.error(`Error rebuilding FTS index: ${error}`);
+            throw new FTSError(`Failed to rebuild FTS index: ${error}`, 'FTS_REBUILD_ERROR');
         }
     }
 }

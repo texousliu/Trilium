@@ -17,18 +17,9 @@ export default function addFTS5SearchAndPerformanceIndexes() {
     // Create FTS5 virtual table with porter tokenizer
     log.info("Creating FTS5 virtual table...");
     
-    // Set optimal SQLite pragmas for FTS5 operations with millions of notes
+    // Note: Transaction-safe pragmas are excluded here.
+    // They should be set at database initialization, not during migration.
     sql.executeScript(`
-        -- Memory and performance pragmas for large-scale FTS operations
-        PRAGMA cache_size = -262144;        -- 256MB cache for better performance
-        PRAGMA temp_store = MEMORY;         -- Use RAM for temporary storage
-        PRAGMA mmap_size = 536870912;       -- 512MB memory-mapped I/O
-        PRAGMA synchronous = NORMAL;        -- Faster writes with good safety
-        PRAGMA journal_mode = WAL;          -- Write-ahead logging for better concurrency
-        PRAGMA wal_autocheckpoint = 1000;   -- Auto-checkpoint every 1000 pages
-        PRAGMA automatic_index = ON;        -- Allow automatic indexes
-        PRAGMA threads = 4;                 -- Use multiple threads for sorting
-        
         -- Drop existing FTS tables if they exist
         DROP TABLE IF EXISTS notes_fts;
         DROP TABLE IF EXISTS notes_fts_trigram;
@@ -70,11 +61,6 @@ export default function addFTS5SearchAndPerformanceIndexes() {
 
         // Process in optimized batches using a prepared statement
         sql.transactional(() => {
-            // Prepare statement for batch inserts
-            const insertStmt = sql.prepare(`
-                INSERT OR REPLACE INTO notes_fts (noteId, title, content)
-                VALUES (?, ?, ?)
-            `);
 
             let offset = 0;
             while (offset < totalNotes) {
@@ -98,9 +84,12 @@ export default function addFTS5SearchAndPerformanceIndexes() {
                     break;
                 }
 
-                // Batch insert using prepared statement
+                // Batch insert
                 for (const note of notesBatch) {
-                    insertStmt.run(note.noteId, note.title, note.content);
+                    sql.execute(
+                        `INSERT OR REPLACE INTO notes_fts (noteId, title, content) VALUES (?, ?, ?)`,
+                        [note.noteId, note.title, note.content]
+                    );
                 }
                 
                 offset += notesBatch.length;
@@ -116,9 +105,6 @@ export default function addFTS5SearchAndPerformanceIndexes() {
                     break;
                 }
             }
-            
-            // Finalize prepared statement
-            insertStmt.finalize();
         });
     } catch (error) {
         log.error(`Failed to populate FTS index: ${error}`);
@@ -243,32 +229,11 @@ export default function addFTS5SearchAndPerformanceIndexes() {
     log.info("Optimizing FTS5 index...");
     sql.execute(`INSERT INTO notes_fts(notes_fts) VALUES('optimize')`);
     
-    // Set comprehensive SQLite pragmas optimized for millions of notes
-    log.info("Configuring SQLite pragmas for large-scale FTS performance...");
-    
-    sql.executeScript(`
-        -- Memory Management (Critical for large databases)
-        PRAGMA cache_size = -262144;     -- 256MB cache (was 50MB) - critical for FTS performance
-        PRAGMA temp_store = MEMORY;      -- Use memory for temporary tables and indices
-        PRAGMA mmap_size = 536870912;    -- 512MB memory-mapped I/O for better read performance
-        
-        -- Write Optimization (Important for batch operations)
-        PRAGMA synchronous = NORMAL;     -- Balance between safety and performance (was FULL)
-        PRAGMA journal_mode = WAL;       -- Write-Ahead Logging for better concurrency
-        PRAGMA wal_autocheckpoint = 1000; -- Checkpoint every 1000 pages for memory management
-        
-        -- Query Optimization (Essential for FTS queries)
-        PRAGMA automatic_index = ON;     -- Allow SQLite to create automatic indexes
-        PRAGMA optimize;                 -- Update query planner statistics
-        
-        -- FTS-Specific Optimizations
-        PRAGMA threads = 4;              -- Use multiple threads for FTS operations (if available)
-        
-        -- Run comprehensive ANALYZE on all FTS-related tables
-        ANALYZE notes_fts;
-        ANALYZE notes;
-        ANALYZE blobs;
-    `);
+    // Run ANALYZE on FTS-related tables (these are safe within transactions)
+    log.info("Analyzing FTS tables for query optimization...");
+    sql.execute(`ANALYZE notes_fts`);
+    sql.execute(`ANALYZE notes`);
+    sql.execute(`ANALYZE blobs`);
     
     log.info("FTS5 migration completed successfully");
 }
