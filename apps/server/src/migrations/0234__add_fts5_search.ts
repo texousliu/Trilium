@@ -1,66 +1,72 @@
 /**
- * Migration to add FTS5 full-text search support
+ * Migration to add FTS5 full-text search support and strategic performance indexes
  * 
- * This migration implements a minimal FTS5 search solution that:
- * 1. Uses a single FTS5 table with porter tokenizer for stemming
- * 2. Implements simple triggers for synchronization
- * 3. Excludes protected notes from indexing
- * 4. Sets essential performance pragmas
+ * This migration:
+ * 1. Creates an FTS5 virtual table for full-text searching
+ * 2. Populates it with existing note content
+ * 3. Creates triggers to keep the FTS table synchronized with note changes
+ * 4. Adds strategic composite and covering indexes for improved query performance
+ * 5. Optimizes common query patterns identified through performance analysis
  */
 
 import sql from "../services/sql.js";
 import log from "../services/log.js";
 
 export default function addFTS5SearchAndPerformanceIndexes() {
-    log.info("Setting up FTS5 search...");
+    log.info("Starting FTS5 and performance optimization migration...");
     
-    // Create FTS5 virtual table with porter tokenizer
-    log.info("Creating FTS5 virtual table...");
+    // Part 1: FTS5 Setup
+    log.info("Creating FTS5 virtual table for full-text search...");
+
+    // Create FTS5 virtual tables
+    // We create two FTS tables for different search strategies:
+    // 1. notes_fts: Uses porter stemming for word-based searches
+    // 2. notes_fts_trigram: Uses trigram tokenizer for substring searches
     
     sql.executeScript(`
-        -- Drop existing FTS tables if they exist
+        -- Drop existing FTS tables if they exist (for re-running migration in dev)
         DROP TABLE IF EXISTS notes_fts;
         DROP TABLE IF EXISTS notes_fts_trigram;
-        DROP TABLE IF EXISTS notes_fts_config;
-        DROP TABLE IF EXISTS notes_fts_stats;
-        DROP TABLE IF EXISTS notes_fts_aux;
         
-        -- Create FTS5 virtual table with porter tokenizer for stemming
+        -- Create FTS5 virtual table with porter stemming for word-based searches
         CREATE VIRTUAL TABLE IF NOT EXISTS notes_fts USING fts5(
             noteId UNINDEXED,
             title,
             content,
-            tokenize = 'porter unicode61',
-            prefix = '2 3'  -- Index prefixes of 2 and 3 characters for faster prefix searches
+            tokenize = 'porter unicode61'
+        );
+        
+        -- Create FTS5 virtual table with trigram tokenizer for substring searches
+        -- detail='none' reduces storage by ~50% since we don't need snippets for substring search
+        CREATE VIRTUAL TABLE IF NOT EXISTS notes_fts_trigram USING fts5(
+            noteId UNINDEXED,
+            title,
+            content,
+            tokenize = 'trigram',
+            detail = 'none'
         );
     `);
 
     log.info("Populating FTS5 table with existing note content...");
 
     // Populate the FTS table with existing notes
-    const batchSize = 1000;
+    // We only index text-based note types that contain searchable content
+    const batchSize = 100;
     let processedCount = 0;
+    let hasError = false;
 
+    // Wrap entire population process in a transaction for consistency
+    // If any error occurs, the entire population will be rolled back
     try {
         sql.transactional(() => {
-            // Count eligible notes
-            const totalNotes = sql.getValue<number>(`
-                SELECT COUNT(*) 
-                FROM notes n
-                LEFT JOIN blobs b ON n.blobId = b.blobId
-                WHERE n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
-                    AND n.isDeleted = 0
-                    AND n.isProtected = 0
-                    AND b.content IS NOT NULL
-            `) || 0;
-            
-            log.info(`Found ${totalNotes} notes to index`);
-            
-            // Insert notes in batches
             let offset = 0;
-            while (offset < totalNotes) {
-                sql.execute(`
-                    INSERT INTO notes_fts (noteId, title, content)
+            
+            while (true) {
+                const notes = sql.getRows<{
+                    noteId: string;
+                    title: string;
+                    content: string | null;
+                }>(`
                     SELECT 
                         n.noteId,
                         n.title,
@@ -69,120 +75,212 @@ export default function addFTS5SearchAndPerformanceIndexes() {
                     LEFT JOIN blobs b ON n.blobId = b.blobId
                     WHERE n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
                         AND n.isDeleted = 0
-                        AND n.isProtected = 0
-                        AND b.content IS NOT NULL
+                        AND n.isProtected = 0  -- Skip protected notes - they require special handling
                     ORDER BY n.noteId
                     LIMIT ? OFFSET ?
                 `, [batchSize, offset]);
-                
+
+                if (notes.length === 0) {
+                    break;
+                }
+
+                for (const note of notes) {
+                    if (note.content) {
+                        // Process content based on type (simplified for migration)
+                        let processedContent = note.content;
+                        
+                        // For HTML content, we'll strip tags in the search service
+                        // For now, just insert the raw content
+                        
+                        // Insert into porter FTS for word-based searches
+                        sql.execute(`
+                            INSERT INTO notes_fts (noteId, title, content)
+                            VALUES (?, ?, ?)
+                        `, [note.noteId, note.title, processedContent]);
+                        
+                        // Also insert into trigram FTS for substring searches
+                        sql.execute(`
+                            INSERT INTO notes_fts_trigram (noteId, title, content)
+                            VALUES (?, ?, ?)
+                        `, [note.noteId, note.title, processedContent]);
+                        
+                        processedCount++;
+                    }
+                }
+
                 offset += batchSize;
-                processedCount = Math.min(offset, totalNotes);
                 
-                if (processedCount % 10000 === 0) {
-                    log.info(`Indexed ${processedCount} of ${totalNotes} notes...`);
+                if (processedCount % 1000 === 0) {
+                    log.info(`Processed ${processedCount} notes for FTS indexing...`);
                 }
             }
         });
     } catch (error) {
-        log.error(`Failed to populate FTS index: ${error}`);
+        hasError = true;
+        log.error(`Failed to populate FTS index. Rolling back... ${error}`);
+        // Clean up partial data if transaction failed
+        try {
+            sql.execute("DELETE FROM notes_fts");
+        } catch (cleanupError) {
+            log.error(`Failed to clean up FTS table after error: ${cleanupError}`);
+        }
         throw new Error(`FTS5 migration failed during population: ${error}`);
     }
 
     log.info(`Completed FTS indexing of ${processedCount} notes`);
 
-    // Create synchronization triggers
+    // Create triggers to keep FTS table synchronized
     log.info("Creating FTS synchronization triggers...");
 
-    // Drop all existing triggers first
-    const existingTriggers = [
-        'notes_fts_insert', 'notes_fts_update', 'notes_fts_delete',
-        'notes_fts_soft_delete', 'notes_fts_blob_insert', 'notes_fts_blob_update',
-        'notes_fts_protect', 'notes_fts_unprotect', 'notes_fts_sync',
-        'notes_fts_update_sync', 'notes_fts_delete_sync', 'blobs_fts_sync',
-        'blobs_fts_insert_sync'
-    ];
-    
-    for (const trigger of existingTriggers) {
-        sql.execute(`DROP TRIGGER IF EXISTS ${trigger}`);
-    }
+    // Drop all existing triggers first to ensure clean state
+    sql.execute(`DROP TRIGGER IF EXISTS notes_fts_insert`);
+    sql.execute(`DROP TRIGGER IF EXISTS notes_fts_update`);
+    sql.execute(`DROP TRIGGER IF EXISTS notes_fts_delete`);
+    sql.execute(`DROP TRIGGER IF EXISTS notes_fts_soft_delete`);
+    sql.execute(`DROP TRIGGER IF EXISTS notes_fts_blob_insert`);
+    sql.execute(`DROP TRIGGER IF EXISTS notes_fts_blob_update`);
+    sql.execute(`DROP TRIGGER IF EXISTS notes_fts_protect`);
+    sql.execute(`DROP TRIGGER IF EXISTS notes_fts_unprotect`);
 
-    // Create triggers for notes table operations
+    // Create improved triggers that handle all SQL operations properly
+    // including INSERT OR REPLACE and INSERT ... ON CONFLICT ... DO UPDATE (upsert)
+    
+    // Trigger for INSERT operations on notes
     sql.execute(`
-        CREATE TRIGGER notes_fts_insert
+        CREATE TRIGGER notes_fts_insert 
         AFTER INSERT ON notes
-        WHEN NEW.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
+        WHEN NEW.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap') 
             AND NEW.isDeleted = 0
             AND NEW.isProtected = 0
         BEGIN
-            INSERT INTO notes_fts (noteId, title, content)
-            SELECT 
-                NEW.noteId,
-                NEW.title,
-                COALESCE(b.content, '')
-            FROM (SELECT NEW.blobId AS blobId) AS note_blob
-            LEFT JOIN blobs b ON b.blobId = note_blob.blobId;
-        END;
-    `);
-
-    sql.execute(`
-        CREATE TRIGGER notes_fts_update
-        AFTER UPDATE ON notes
-        BEGIN
-            -- Delete old entry
-            DELETE FROM notes_fts WHERE noteId = OLD.noteId;
+            -- First delete any existing FTS entries (in case of INSERT OR REPLACE)
+            DELETE FROM notes_fts WHERE noteId = NEW.noteId;
+            DELETE FROM notes_fts_trigram WHERE noteId = NEW.noteId;
             
-            -- Insert new entry if eligible
+            -- Then insert the new entry into both FTS tables, using LEFT JOIN to handle missing blobs
             INSERT INTO notes_fts (noteId, title, content)
             SELECT 
                 NEW.noteId,
                 NEW.title,
+                COALESCE(b.content, '')  -- Use empty string if blob doesn't exist yet
+            FROM (SELECT NEW.noteId) AS note_select
+            LEFT JOIN blobs b ON b.blobId = NEW.blobId;
+            
+            INSERT INTO notes_fts_trigram (noteId, title, content)
+            SELECT 
+                NEW.noteId,
+                NEW.title,
                 COALESCE(b.content, '')
-            FROM (SELECT NEW.blobId AS blobId) AS note_blob
-            LEFT JOIN blobs b ON b.blobId = note_blob.blobId
-            WHERE NEW.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
-                AND NEW.isDeleted = 0
-                AND NEW.isProtected = 0;
-        END;
+            FROM (SELECT NEW.noteId) AS note_select
+            LEFT JOIN blobs b ON b.blobId = NEW.blobId;
+        END
     `);
 
+    // Trigger for UPDATE operations on notes table
+    // Fires for ANY update to searchable notes to ensure FTS stays in sync
     sql.execute(`
-        CREATE TRIGGER notes_fts_delete
+        CREATE TRIGGER notes_fts_update 
+        AFTER UPDATE ON notes
+        WHEN NEW.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
+            -- Fire on any change, not just specific columns, to handle all upsert scenarios
+        BEGIN
+            -- Always delete the old entries from both FTS tables
+            DELETE FROM notes_fts WHERE noteId = NEW.noteId;
+            DELETE FROM notes_fts_trigram WHERE noteId = NEW.noteId;
+            
+            -- Insert new entry into both FTS tables if note is not deleted and not protected
+            INSERT INTO notes_fts (noteId, title, content)
+            SELECT 
+                NEW.noteId,
+                NEW.title,
+                COALESCE(b.content, '')  -- Use empty string if blob doesn't exist yet
+            FROM (SELECT NEW.noteId) AS note_select
+            LEFT JOIN blobs b ON b.blobId = NEW.blobId
+            WHERE NEW.isDeleted = 0
+                AND NEW.isProtected = 0;
+                
+            INSERT INTO notes_fts_trigram (noteId, title, content)
+            SELECT 
+                NEW.noteId,
+                NEW.title,
+                COALESCE(b.content, '')
+            FROM (SELECT NEW.noteId) AS note_select
+            LEFT JOIN blobs b ON b.blobId = NEW.blobId
+            WHERE NEW.isDeleted = 0
+                AND NEW.isProtected = 0;
+        END
+    `);
+
+    // Trigger for DELETE operations on notes
+    sql.execute(`
+        CREATE TRIGGER notes_fts_delete 
         AFTER DELETE ON notes
         BEGIN
             DELETE FROM notes_fts WHERE noteId = OLD.noteId;
-        END;
+            DELETE FROM notes_fts_trigram WHERE noteId = OLD.noteId;
+        END
     `);
 
-    // Create triggers for blob updates
+    // Trigger for soft delete (isDeleted = 1)
     sql.execute(`
-        CREATE TRIGGER blobs_fts_update
-        AFTER UPDATE ON blobs
+        CREATE TRIGGER notes_fts_soft_delete 
+        AFTER UPDATE ON notes
+        WHEN OLD.isDeleted = 0 AND NEW.isDeleted = 1
         BEGIN
-            -- Update all notes that reference this blob
-            DELETE FROM notes_fts 
-            WHERE noteId IN (
-                SELECT noteId FROM notes 
-                WHERE blobId = NEW.blobId
-            );
+            DELETE FROM notes_fts WHERE noteId = NEW.noteId;
+            DELETE FROM notes_fts_trigram WHERE noteId = NEW.noteId;
+        END
+    `);
+
+    // Trigger for notes becoming protected
+    sql.execute(`
+        CREATE TRIGGER notes_fts_protect 
+        AFTER UPDATE ON notes
+        WHEN OLD.isProtected = 0 AND NEW.isProtected = 1
+        BEGIN
+            DELETE FROM notes_fts WHERE noteId = NEW.noteId;
+            DELETE FROM notes_fts_trigram WHERE noteId = NEW.noteId;
+        END
+    `);
+
+    // Trigger for notes becoming unprotected
+    sql.execute(`
+        CREATE TRIGGER notes_fts_unprotect 
+        AFTER UPDATE ON notes
+        WHEN OLD.isProtected = 1 AND NEW.isProtected = 0
+            AND NEW.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
+            AND NEW.isDeleted = 0
+        BEGIN
+            DELETE FROM notes_fts WHERE noteId = NEW.noteId;
+            DELETE FROM notes_fts_trigram WHERE noteId = NEW.noteId;
             
             INSERT INTO notes_fts (noteId, title, content)
             SELECT 
-                n.noteId,
-                n.title,
-                NEW.content
-            FROM notes n
-            WHERE n.blobId = NEW.blobId
-                AND n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
-                AND n.isDeleted = 0
-                AND n.isProtected = 0;
-        END;
+                NEW.noteId,
+                NEW.title,
+                COALESCE(b.content, '')
+            FROM (SELECT NEW.noteId) AS note_select
+            LEFT JOIN blobs b ON b.blobId = NEW.blobId;
+            
+            INSERT INTO notes_fts_trigram (noteId, title, content)
+            SELECT 
+                NEW.noteId,
+                NEW.title,
+                COALESCE(b.content, '')
+            FROM (SELECT NEW.noteId) AS note_select
+            LEFT JOIN blobs b ON b.blobId = NEW.blobId;
+        END
     `);
 
+    // Trigger for INSERT operations on blobs
+    // Uses INSERT OR REPLACE for efficiency with deduplicated blobs
     sql.execute(`
-        CREATE TRIGGER blobs_fts_insert
+        CREATE TRIGGER notes_fts_blob_insert 
         AFTER INSERT ON blobs
         BEGIN
-            INSERT INTO notes_fts (noteId, title, content)
+            -- Use INSERT OR REPLACE for atomic update in both FTS tables
+            -- This handles the case where FTS entries may already exist
+            INSERT OR REPLACE INTO notes_fts (noteId, title, content)
             SELECT 
                 n.noteId,
                 n.title,
@@ -192,26 +290,340 @@ export default function addFTS5SearchAndPerformanceIndexes() {
                 AND n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
                 AND n.isDeleted = 0
                 AND n.isProtected = 0;
-        END;
+                
+            INSERT OR REPLACE INTO notes_fts_trigram (noteId, title, content)
+            SELECT 
+                n.noteId,
+                n.title,
+                NEW.content
+            FROM notes n
+            WHERE n.blobId = NEW.blobId
+                AND n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
+                AND n.isDeleted = 0
+                AND n.isProtected = 0;
+        END
+    `);
+
+    // Trigger for UPDATE operations on blobs
+    // Uses INSERT OR REPLACE for efficiency
+    sql.execute(`
+        CREATE TRIGGER notes_fts_blob_update 
+        AFTER UPDATE ON blobs
+        BEGIN
+            -- Use INSERT OR REPLACE for atomic update in both FTS tables
+            INSERT OR REPLACE INTO notes_fts (noteId, title, content)
+            SELECT 
+                n.noteId,
+                n.title,
+                NEW.content
+            FROM notes n
+            WHERE n.blobId = NEW.blobId
+                AND n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
+                AND n.isDeleted = 0
+                AND n.isProtected = 0;
+                
+            INSERT OR REPLACE INTO notes_fts_trigram (noteId, title, content)
+            SELECT 
+                n.noteId,
+                n.title,
+                NEW.content
+            FROM notes n
+            WHERE n.blobId = NEW.blobId
+                AND n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
+                AND n.isDeleted = 0
+                AND n.isProtected = 0;
+        END
     `);
 
     log.info("FTS5 setup completed successfully");
     
-    // Run optimization
-    log.info("Optimizing FTS5 index...");
-    sql.execute(`INSERT INTO notes_fts(notes_fts) VALUES('optimize')`);
+    // Final cleanup: ensure all eligible notes are indexed in both FTS tables
+    // This catches any edge cases where notes might have been missed
+    log.info("Running final FTS index cleanup...");
     
-    // Set essential SQLite pragmas for better performance
-    sql.executeScript(`
-        -- Increase cache size (50MB)
-        PRAGMA cache_size = -50000;
-        
-        -- Use memory for temp storage
-        PRAGMA temp_store = 2;
-        
-        -- Run ANALYZE on FTS tables
-        ANALYZE notes_fts;
-    `);
+    // Check and fix porter FTS table
+    const missingPorterCount = sql.getValue<number>(`
+        SELECT COUNT(*) FROM notes n
+        LEFT JOIN blobs b ON n.blobId = b.blobId
+        WHERE n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
+            AND n.isDeleted = 0
+            AND n.isProtected = 0
+            AND b.content IS NOT NULL
+            AND NOT EXISTS (SELECT 1 FROM notes_fts WHERE noteId = n.noteId)
+    `) || 0;
     
-    log.info("FTS5 migration completed successfully");
+    if (missingPorterCount > 0) {
+        sql.execute(`
+            WITH missing_notes AS (
+                SELECT n.noteId, n.title, b.content
+                FROM notes n
+                LEFT JOIN blobs b ON n.blobId = b.blobId
+                WHERE n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
+                    AND n.isDeleted = 0
+                    AND n.isProtected = 0
+                    AND b.content IS NOT NULL
+                    AND NOT EXISTS (SELECT 1 FROM notes_fts WHERE noteId = n.noteId)
+            )
+            INSERT INTO notes_fts (noteId, title, content)
+            SELECT noteId, title, content FROM missing_notes
+        `);
+        log.info(`Indexed ${missingPorterCount} additional notes in porter FTS during cleanup`);
+    }
+    
+    // Check and fix trigram FTS table
+    const missingTrigramCount = sql.getValue<number>(`
+        SELECT COUNT(*) FROM notes n
+        LEFT JOIN blobs b ON n.blobId = b.blobId
+        WHERE n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
+            AND n.isDeleted = 0
+            AND n.isProtected = 0
+            AND b.content IS NOT NULL
+            AND NOT EXISTS (SELECT 1 FROM notes_fts_trigram WHERE noteId = n.noteId)
+    `) || 0;
+    
+    if (missingTrigramCount > 0) {
+        sql.execute(`
+            WITH missing_notes AS (
+                SELECT n.noteId, n.title, b.content
+                FROM notes n
+                LEFT JOIN blobs b ON n.blobId = b.blobId
+                WHERE n.type IN ('text', 'code', 'mermaid', 'canvas', 'mindMap')
+                    AND n.isDeleted = 0
+                    AND n.isProtected = 0
+                    AND b.content IS NOT NULL
+                    AND NOT EXISTS (SELECT 1 FROM notes_fts_trigram WHERE noteId = n.noteId)
+            )
+            INSERT INTO notes_fts_trigram (noteId, title, content)
+            SELECT noteId, title, content FROM missing_notes
+        `);
+        log.info(`Indexed ${missingTrigramCount} additional notes in trigram FTS during cleanup`);
+    }
+    
+    // ========================================
+    // Part 2: Strategic Performance Indexes
+    // ========================================
+    
+    log.info("Adding strategic performance indexes...");
+    const startTime = Date.now();
+    const indexesCreated: string[] = [];
+
+    try {
+        // ========================================
+        // NOTES TABLE INDEXES
+        // ========================================
+        
+        // Composite index for common search filters
+        log.info("Creating composite index on notes table for search filters...");
+        sql.executeScript(`
+            DROP INDEX IF EXISTS IDX_notes_search_composite;
+            CREATE INDEX IF NOT EXISTS IDX_notes_search_composite 
+            ON notes (isDeleted, type, mime, dateModified DESC);
+        `);
+        indexesCreated.push("IDX_notes_search_composite");
+
+        // Covering index for note metadata queries
+        log.info("Creating covering index for note metadata...");
+        sql.executeScript(`
+            DROP INDEX IF EXISTS IDX_notes_metadata_covering;
+            CREATE INDEX IF NOT EXISTS IDX_notes_metadata_covering 
+            ON notes (noteId, isDeleted, type, mime, title, dateModified, isProtected);
+        `);
+        indexesCreated.push("IDX_notes_metadata_covering");
+
+        // Index for protected notes filtering
+        log.info("Creating index for protected notes...");
+        sql.executeScript(`
+            DROP INDEX IF EXISTS IDX_notes_protected_deleted;
+            CREATE INDEX IF NOT EXISTS IDX_notes_protected_deleted 
+            ON notes (isProtected, isDeleted) 
+            WHERE isProtected = 1;
+        `);
+        indexesCreated.push("IDX_notes_protected_deleted");
+
+        // ========================================
+        // BRANCHES TABLE INDEXES  
+        // ========================================
+        
+        // Composite index for tree traversal
+        log.info("Creating composite index on branches for tree traversal...");
+        sql.executeScript(`
+            DROP INDEX IF EXISTS IDX_branches_tree_traversal;
+            CREATE INDEX IF NOT EXISTS IDX_branches_tree_traversal 
+            ON branches (parentNoteId, isDeleted, notePosition);
+        `);
+        indexesCreated.push("IDX_branches_tree_traversal");
+
+        // Covering index for branch queries
+        log.info("Creating covering index for branch queries...");
+        sql.executeScript(`
+            DROP INDEX IF EXISTS IDX_branches_covering;
+            CREATE INDEX IF NOT EXISTS IDX_branches_covering 
+            ON branches (noteId, parentNoteId, isDeleted, notePosition, prefix);
+        `);
+        indexesCreated.push("IDX_branches_covering");
+
+        // Index for finding all parents of a note
+        log.info("Creating index for reverse tree lookup...");
+        sql.executeScript(`
+            DROP INDEX IF EXISTS IDX_branches_note_parents;
+            CREATE INDEX IF NOT EXISTS IDX_branches_note_parents 
+            ON branches (noteId, isDeleted) 
+            WHERE isDeleted = 0;
+        `);
+        indexesCreated.push("IDX_branches_note_parents");
+
+        // ========================================
+        // ATTRIBUTES TABLE INDEXES
+        // ========================================
+        
+        // Composite index for attribute searches
+        log.info("Creating composite index on attributes for search...");
+        sql.executeScript(`
+            DROP INDEX IF EXISTS IDX_attributes_search_composite;
+            CREATE INDEX IF NOT EXISTS IDX_attributes_search_composite 
+            ON attributes (name, value, isDeleted);
+        `);
+        indexesCreated.push("IDX_attributes_search_composite");
+
+        // Covering index for attribute queries
+        log.info("Creating covering index for attribute queries...");
+        sql.executeScript(`
+            DROP INDEX IF EXISTS IDX_attributes_covering;
+            CREATE INDEX IF NOT EXISTS IDX_attributes_covering 
+            ON attributes (noteId, name, value, type, isDeleted, position);
+        `);
+        indexesCreated.push("IDX_attributes_covering");
+
+        // Index for inherited attributes
+        log.info("Creating index for inherited attributes...");
+        sql.executeScript(`
+            DROP INDEX IF EXISTS IDX_attributes_inheritable;
+            CREATE INDEX IF NOT EXISTS IDX_attributes_inheritable 
+            ON attributes (isInheritable, isDeleted) 
+            WHERE isInheritable = 1 AND isDeleted = 0;
+        `);
+        indexesCreated.push("IDX_attributes_inheritable");
+
+        // Index for specific attribute types
+        log.info("Creating index for label attributes...");
+        sql.executeScript(`
+            DROP INDEX IF EXISTS IDX_attributes_labels;
+            CREATE INDEX IF NOT EXISTS IDX_attributes_labels 
+            ON attributes (type, name, value) 
+            WHERE type = 'label' AND isDeleted = 0;
+        `);
+        indexesCreated.push("IDX_attributes_labels");
+
+        log.info("Creating index for relation attributes...");
+        sql.executeScript(`
+            DROP INDEX IF EXISTS IDX_attributes_relations;
+            CREATE INDEX IF NOT EXISTS IDX_attributes_relations 
+            ON attributes (type, name, value) 
+            WHERE type = 'relation' AND isDeleted = 0;
+        `);
+        indexesCreated.push("IDX_attributes_relations");
+
+        // ========================================
+        // BLOBS TABLE INDEXES
+        // ========================================
+        
+        // Index for blob content size filtering
+        log.info("Creating index for blob content size...");
+        sql.executeScript(`
+            DROP INDEX IF EXISTS IDX_blobs_content_size;
+            CREATE INDEX IF NOT EXISTS IDX_blobs_content_size 
+            ON blobs (blobId, LENGTH(content));
+        `);
+        indexesCreated.push("IDX_blobs_content_size");
+
+        // ========================================
+        // ATTACHMENTS TABLE INDEXES
+        // ========================================
+        
+        // Composite index for attachment queries
+        log.info("Creating composite index for attachments...");
+        sql.executeScript(`
+            DROP INDEX IF EXISTS IDX_attachments_composite;
+            CREATE INDEX IF NOT EXISTS IDX_attachments_composite 
+            ON attachments (ownerId, role, isDeleted, position);
+        `);
+        indexesCreated.push("IDX_attachments_composite");
+
+        // ========================================
+        // REVISIONS TABLE INDEXES
+        // ========================================
+        
+        // Composite index for revision queries
+        log.info("Creating composite index for revisions...");
+        sql.executeScript(`
+            DROP INDEX IF EXISTS IDX_revisions_note_date;
+            CREATE INDEX IF NOT EXISTS IDX_revisions_note_date 
+            ON revisions (noteId, utcDateCreated DESC);
+        `);
+        indexesCreated.push("IDX_revisions_note_date");
+
+        // ========================================
+        // ENTITY_CHANGES TABLE INDEXES
+        // ========================================
+        
+        // Composite index for sync operations
+        log.info("Creating composite index for entity changes sync...");
+        sql.executeScript(`
+            DROP INDEX IF EXISTS IDX_entity_changes_sync;
+            CREATE INDEX IF NOT EXISTS IDX_entity_changes_sync 
+            ON entity_changes (isSynced, utcDateChanged);
+        `);
+        indexesCreated.push("IDX_entity_changes_sync");
+
+        // Index for component-based queries
+        log.info("Creating index for component-based entity change queries...");
+        sql.executeScript(`
+            DROP INDEX IF EXISTS IDX_entity_changes_component;
+            CREATE INDEX IF NOT EXISTS IDX_entity_changes_component 
+            ON entity_changes (componentId, utcDateChanged DESC);
+        `);
+        indexesCreated.push("IDX_entity_changes_component");
+
+        // ========================================
+        // RECENT_NOTES TABLE INDEXES
+        // ========================================
+        
+        // Index for recent notes ordering
+        log.info("Creating index for recent notes...");
+        sql.executeScript(`
+            DROP INDEX IF EXISTS IDX_recent_notes_date;
+            CREATE INDEX IF NOT EXISTS IDX_recent_notes_date 
+            ON recent_notes (utcDateCreated DESC);
+        `);
+        indexesCreated.push("IDX_recent_notes_date");
+
+        // ========================================
+        // ANALYZE TABLES FOR QUERY PLANNER
+        // ========================================
+        
+        log.info("Running ANALYZE to update SQLite query planner statistics...");
+        sql.executeScript(`
+            ANALYZE notes;
+            ANALYZE branches;
+            ANALYZE attributes;
+            ANALYZE blobs;
+            ANALYZE attachments;
+            ANALYZE revisions;
+            ANALYZE entity_changes;
+            ANALYZE recent_notes;
+            ANALYZE notes_fts;
+        `);
+
+        const endTime = Date.now();
+        const duration = endTime - startTime;
+        
+        log.info(`Performance index creation completed in ${duration}ms`);
+        log.info(`Created ${indexesCreated.length} indexes: ${indexesCreated.join(", ")}`);
+
+    } catch (error) {
+        log.error(`Error creating performance indexes: ${error}`);
+        throw error;
+    }
+    
+    log.info("FTS5 and performance optimization migration completed successfully");
 }
