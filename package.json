@@ -21,8 +21,8 @@
     "chore:update-build-info": "tsx ./scripts/update-build-info.ts",
     "chore:update-version": "tsx ./scripts/update-version.ts",
     "test:all": "pnpm test:parallel && pnpm test:sequential",
-    "test:parallel": "pnpm --filter=!server,ckeditor5-mermaid,ckeditor5-math --parallel test",
-    "test:sequential": "pnpm --filter=server,ckeditor5-mermaid,ckeditor5-math --sequential test"
+    "test:parallel": "pnpm --filter=!server --filter=!ckeditor5-mermaid --filter=!ckeditor5-math --parallel test",
+    "test:sequential": "pnpm --filter=server --filter=ckeditor5-mermaid --filter=ckeditor5-math --sequential test"
   },
   "private": true,
   "devDependencies": {
