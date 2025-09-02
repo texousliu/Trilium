@@ -150,16 +150,9 @@ function createSplitInstance(targetNtxIds: string[]) {
     }
 
     const rafId = requestAnimationFrame(() => {
-        if (!splitNoteContainer){
-            splitNoteContainer =  $("#center-pane").find(".split-note-container-widget")[0];
-        }
-        const splitPanels: HTMLElement[] = [];
-        for (const el of splitNoteContainer.querySelectorAll(':scope > .note-split')) {
-            const dataId = el.getAttribute('data-ntx-id');
-            if (dataId && targetNtxIds.includes(dataId)) {
-                splitPanels.push(el as HTMLElement);
-            }
-        }
+        splitNoteContainer = splitNoteContainer ?? $("#center-pane").find(".split-note-container-widget")[0];
+        const splitPanels = [...splitNoteContainer.querySelectorAll<HTMLElement>(':scope > .note-split')]
+            .filter(el => targetNtxIds.includes(el.getAttribute('data-ntx-id') ?? ""));
         const splitInstance = Split(splitPanels, {
             gutterSize: DEFAULT_GUTTER_SIZE,
             minSize: 150,
