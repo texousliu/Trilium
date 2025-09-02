@@ -32,6 +32,17 @@ function rebuildNativeDependencies() {
         buildPath: desktopProjectRoot,
         electronVersion
     });
+
+    if (isNixOS()) {
+        console.log("Patching ELF...");
+
+        
+
+        return execSync(`nix-shell -p auto-patchelf gcc.cc.lib --run "auto-patchelf --paths node_modules/better-sqlite3/build/Release/better_sqlite3.node --libs ${libStdPath}"`, {
+            cwd: desktopProjectRoot,
+            stdio: "inherit"
+        });
+    }
 }
 
 function determineElectronVersion() {
