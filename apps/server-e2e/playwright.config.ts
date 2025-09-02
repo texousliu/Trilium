@@ -30,6 +30,9 @@ export default defineConfig({
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     cwd: join(__dirname, "../server"),
+    env: {
+        TRILIUM_DATA_DIR: "spec/db"
+    },
     timeout: 5 * 60 * 1000
   } : undefined,
 
