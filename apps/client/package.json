@@ -10,7 +10,7 @@
     "url": "https://github.com/TriliumNext/Notes"
   },
   "scripts": {
-    "build": "vite build",
+    "build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 vite build",
     "test": "vitest",
     "circular-deps": "dpdm -T src/**/*.ts --tree=false --warning=false --skip-dynamic-imports=circular"
   },
