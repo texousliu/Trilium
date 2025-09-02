@@ -13,29 +13,127 @@
     "critical-error": {
       "title": "Błąd krytyczny",
       "message": "Wystąpił krytyczny błąd uniemożliwiający uruchomienie aplikacji:\n\n{{message}}\n\nJest to spowodowane najprawdopodobniej niespodziewanym błędem skryptu. Spróbuj uruchomić aplikację ponownie w trybie bezpiecznym i zaadresuj problem."
+    },
+    "widget-error": {
+      "title": "Nie udało się zainicjować widżetu",
+      "message-custom": "Niestandardowy widżet z notatki o identyfikatorze \"{{id}}\", i tytule \"{{title}}\" nie mógł zostać zainicjowany z powodu:\n\n{{message}}",
+      "message-unknown": "Nieznany widżet nie mógł być zainicjowany z powodu:\n\n{{message}}"
+    },
+    "bundle-error": {
+      "title": "Nie udało się załadować niestandardowego skryptu",
+      "message": "Skrypt z notatki o identyfikatorze \"{{id}}\", tytule \"{{title}}: nie został uruchomiony z powodu:\n\n{{message}}"
     }
   },
   "add_link": {
-    "add_link": "Dodaj link"
+    "add_link": "Dodaj link",
+    "note": "Notatka",
+    "search_note": "Wyszukaj notatkę po nazwie",
+    "link_title_arbitrary": "Tytuł linku można dowolnie zmieniać",
+    "link_title": "Tytuł linku",
+    "button_add_link": "Dodaj link"
   },
   "branch_prefix": {
-    "save": "Zapisz"
+    "save": "Zapisz",
+    "edit_branch_prefix": "Edytuj prefiks gałęzi",
+    "prefix": "Prefiks: ",
+    "branch_prefix_saved": "Zapisano prefiks gałęzi."
   },
   "bulk_actions": {
     "labels": "Etykiety",
     "notes": "Notatki",
     "other": "Inne",
-    "relations": "Powiązania"
+    "relations": "Powiązania",
+    "bulk_actions": "Działania zbiorcze",
+    "include_descendants": "Uwzględnia rozwinięcia wybranych notatek",
+    "available_actions": "Dostępne działania",
+    "chosen_actions": "Wybrane działania",
+    "execute_bulk_actions": "Wykonaj zbiór działań",
+    "bulk_actions_executed": "Zbiór działań został wykonany prawidłowo.",
+    "none_yet": "Brak zaznaczonych działań... dodaj działanie poprzez kliknięcie jednej z dostępnych opcji powyżej."
   },
   "confirm": {
     "ok": "OK",
-    "cancel": "Anuluj"
+    "cancel": "Anuluj",
+    "confirmation": "Potwierdzenie",
+    "are_you_sure_remove_note": "Czy napewno chcesz usunąć notatkę \"{{title}}\" z mapy powiązań? ",
+    "if_you_dont_check": "Jeśli nie zaznaczysz tej opcji, notatka zostanie usunięta jedynie z mapy powiązań.",
+    "also_delete_note": "Usuń dodatkowo notatkę"
   },
   "delete_notes": {
     "cancel": "Anuluj",
-    "close": "Zamknij"
+    "close": "Zamknij",
+    "delete_notes_preview": "Usuń podgląd notatek",
+    "delete_all_clones_description": "Usuń również wszystkie sklonowania (działanie może zostać cofnięte w ostatnich zmianach)",
+    "erase_notes_description": "Normalne (miękkie) usuwanie zaznacza jedynie notatki jako usunięte i można je przywrócić (w oknie dialogowym ostatnich zmian) przez wyznaczony okres czasu. Zaznaczenie tej opcji spowoduje natychmiastowe usunięcie notatek, bez możliwości ich przywrócenia.",
+    "erase_notes_warning": "Usuń notatki permanentnie (bez opcji ich przywrócenia), włączając wszystkie kopie. Działanie to wymaga ponownego uruchomienia aplikacji.",
+    "notes_to_be_deleted": "Następujące notatki zostaną usunięte ({{notesCount}})",
+    "no_note_to_delete": "Żadne notatki nie zostaną usunięte (jedynie kopie).",
+    "broken_relations_to_be_deleted": "Następujące powiązania zostaną uszkodzone i usunięte ({{ relationCount}})",
+    "ok": "OK",
+    "deleted_relation_text": "Notatka {{- note}} (do usunięcia) jest powiązana przez relację {{- relation}} pochodzącą z {{- source}}."
   },
   "export": {
-    "close": "Zamknij"
+    "close": "Zamknij",
+    "export_note_title": "Eksportuj notatkę",
+    "export_type_subtree": "Ta notatka oraz wszystkie podrzędne",
+    "format_html": "HTML - rekomendowany jako zachowujący całość formatowania",
+    "format_html_zip": "HTML w archiwum ZIP - rekomendowany jako zachowujący całość formatowania.",
+    "format_markdown": "Markdown - zachowuje większość formatowania.",
+    "format_opml": "OPML - format wymiany danych dla outlinerów zawierający tylko tekst. Formatowanie, obrazy i pliki nie są uwzględnione.",
+    "opml_version_1": "OPML v1.0 - tylko zwykły tekst",
+    "opml_version_2": "OPML v2.0 - umożliwia również HTML",
+    "export_type_single": "Tylko ta notatka, bez elementów podrzędnych",
+    "export": "Eksportuj",
+    "choose_export_type": "Wybierz najpierw rodzaj pliku do eksportu",
+    "export_status": "Status eksportu",
+    "export_in_progress": "Postęp eksportowania: {{progressCount}}",
+    "export_finished_successfully": "Eksportowanie zakończone.",
+    "format_pdf": "PDF - w celu drukowania lub udostępniania."
+  },
+  "clone_to": {
+    "clone_notes_to": "Sklonuj notatki do...",
+    "notes_to_clone": "Notatki do sklonowania",
+    "search_for_note_by_its_name": "Wyszukaj notatkę po jej nazwie",
+    "cloned_note_prefix_title": "Sklonowana notatka zostanie wyświetlona w drzewie notatki z podanym prefiksem",
+    "prefix_optional": "Prefiks (opcjonalne)",
+    "clone_to_selected_note": "Sklonuj do wybranej notatki",
+    "no_path_to_clone_to": "Brak ścieżki do sklonowania.",
+    "note_cloned": "Notatka \"{{clonedTitle}}\" została sklonowana do \"{{targetTitle}}\""
+  },
+  "help": {
+    "title": "Ściągawka",
+    "noteNavigation": "Nawigacja po notatkach",
+    "goUpDown": "przewijanie w górę/w dół w liście notatek",
+    "collapseExpand": "zwiń/rozwiń zbiór",
+    "notSet": "niezdefiniowany",
+    "goBackForwards": "przewijaj do tyłu/do przodu w historii",
+    "showJumpToNoteDialog": "pokaż <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">\"przejdź do dialogu</a>",
+    "scrollToActiveNote": "przewiń do aktywnej notatki",
+    "jumpToParentNote": "przejdź do głównej notatki",
+    "collapseWholeTree": "zwiń całe drzewko notatki",
+    "collapseSubTree": "zwiń gałąź notatki",
+    "tabShortcuts": "Skóry kart",
+    "newTabNoteLink": "link notatki otwiera notatkę w nowej karcie",
+    "newTabWithActivationNoteLink": "link notatki otwiera i aktywuje notatkę w nowej karcie",
+    "onlyInDesktop": "Tylko na komputerze stacjonarnym (wersja Electron)",
+    "openEmptyTab": "Otwórz pustą kartę",
+    "closeActiveTab": "zamknij aktywną kartę",
+    "activateNextTab": "aktywuj następną kartę",
+    "activatePreviousTab": "aktywuj poprzednią kartę",
+    "creatingNotes": "Tworzenie notatek",
+    "createNoteAfter": "Utwórz nową notatkę obok obecnie aktywnej",
+    "createNoteInto": "Utwórz nową podnotatkę w obecnie otwartej",
+    "editBranchPrefix": "edytuj <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/tree-concepts.html#prefix\">prefiks</a> aktywnej kopii notatki",
+    "movingCloningNotes": "Przenoszenie / kopiowanie notatek",
+    "moveNoteUpDown": "Przenieś notatkę w górę/w dół na liście notatek",
+    "moveNoteUpHierarchy": "Przenieś notatkę w górę w hierarchii",
+    "multiSelectNote": "Zaznacz wiele notatek powyżej/poniżej",
+    "selectAllNotes": "Wybierz wszystkie notatki na obecnym poziomie",
+    "selectNote": "Wybierz notatkę",
+    "copyNotes": "skopiuj obecną notatkę (lub obecną sekcję) do schowka (zastosowanie dla<a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/cloning-notes.html#cloning-notes\">klonowania</a>)",
+    "cutNotes": "przytnij obecną notatkę (lub obecną sekcję) do schowka (zastosowanie dla przenoszenia notatek)",
+    "pasteNotes": "wklej notatkę jako podnotatka w obecnej notatce (rozumiane jako przenieś lub skopiuj, w zależności czy notatka była skopiowana czy wycięta)",
+    "deleteNotes": "usuń notatkę / gałąź",
+    "editingNotes": "Edytowanie notatek"
   }
 }

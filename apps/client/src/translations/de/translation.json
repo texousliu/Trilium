@@ -1404,8 +1404,8 @@
     "open-in-popup": "Schnellbearbeitung"
   },
   "shared_info": {
-    "shared_publicly": "Diese Notiz ist öffentlich geteilt auf {{- link}}",
-    "shared_locally": "Diese Notiz ist lokal geteilt auf {{- link}}",
+    "shared_publicly": "Diese Notiz ist öffentlich geteilt auf {{- link}}.",
+    "shared_locally": "Diese Notiz ist lokal geteilt auf {{- link}}.",
     "help_link": "Für Hilfe besuche <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>."
   },
   "note_types": {
@@ -1484,7 +1484,8 @@
     "hoist-this-note-workspace": "Diese Notiz fokussieren (Arbeitsbereich)",
     "refresh-saved-search-results": "Gespeicherte Suchergebnisse aktualisieren",
     "create-child-note": "Unternotiz anlegen",
-    "unhoist": "Fokus verlassen"
+    "unhoist": "Fokus verlassen",
+    "toggle-sidebar": "Seitenleiste ein-/ausblenden"
   },
   "title_bar_buttons": {
     "window-on-top": "Dieses Fenster immer oben halten"
