@@ -4,6 +4,7 @@ import FNote from "../../entities/fnote";
 import "./NoteList.css";
 import { ListView, GridView } from "./legacy/ListOrGridView";
 import { useEffect, useRef, useState } from "preact/hooks";
+import GeoView from "./geomap";
 
 interface NoteListProps {
     note?: FNote | null;
@@ -67,6 +68,8 @@ function getComponentByViewType(note: FNote, noteIds: string[], viewType: ViewTy
             return <ListView {...props} />;
         case "grid":
             return <GridView {...props} />;
+        case "geoMap":
+            return <GeoView {...props} />;
     }
 }
 
