@@ -59,8 +59,7 @@ body.background-effects.platform-win32.layout-vertical {
 }
 
 body.background-effects.platform-win32,
-body.background-effects.platform-win32 #root-widget,
-body.background-effects.platform-win32 #launcher-pane .launcher-button {
+body.background-effects.platform-win32 #root-widget {
     background: transparent !important;
 }
 

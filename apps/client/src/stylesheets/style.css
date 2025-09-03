@@ -1457,7 +1457,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     cursor: pointer;
     border: none;
     color: var(--launcher-pane-text-color);
-    background-color: var(--launcher-pane-background-color);
+    background: transparent;
     flex-shrink: 0;
 }
 
