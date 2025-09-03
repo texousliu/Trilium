@@ -12,6 +12,7 @@ async function main() {
     // Copy node modules dependencies
     build.copyNodeModules([ "better-sqlite3", "bindings", "file-uri-to-path" ]);
     build.copy("/node_modules/jsdom/lib/jsdom/living/xhr/xhr-sync-worker.js", "xhr-sync-worker.js");
+    build.copy("/node_modules/ckeditor5/dist/ckeditor5-content.css", "ckeditor5-content.css");
 
     // Integrate the client.
     build.triggerBuildAndCopyTo("apps/client", "public/");

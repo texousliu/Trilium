@@ -6,7 +6,7 @@ import path from "path";
 import mimeTypes from "mime-types";
 import mdService from "./markdown.js";
 import packageInfo from "../../../package.json" with { type: "json" };
-import { getContentDisposition, escapeHtml, getResourceDir } from "../utils.js";
+import { getContentDisposition, escapeHtml, getResourceDir, isDev } from "../utils.js";
 import protectedSessionService from "../protected_session.js";
 import sanitize from "sanitize-filename";
 import fs from "fs";
@@ -21,7 +21,6 @@ import type AttributeMeta from "../meta/attribute_meta.js";
 import type BBranch from "../../becca/entities/bbranch.js";
 import type { Response } from "express";
 import type { NoteMetaFile } from "../meta/note_meta.js";
-import cssContent from "@triliumnext/ckeditor5/content.css";
 
 type RewriteLinksFn = (content: string, noteMeta: NoteMeta) => string;
 
@@ -515,7 +514,11 @@ ${markdownContent}`;
             return;
         }
 
-        archive.append(cssContent, { name: cssMeta.dataFileName });
+        const cssFile = isDev
+            ? path.join(__dirname, "../../../../../node_modules/ckeditor5/dist/ckeditor5-content.css")
+            : path.join(getResourceDir(), "ckeditor5-content.css");
+
+        archive.append(fs.readFileSync(cssFile, "utf-8"), { name: cssMeta.dataFileName });
     }
 
     try {
