@@ -21,6 +21,7 @@ import type AttributeMeta from "../meta/attribute_meta.js";
 import type BBranch from "../../becca/entities/bbranch.js";
 import type { Response } from "express";
 import type { NoteMetaFile } from "../meta/note_meta.js";
+import cssContent from "@triliumnext/ckeditor5/content.css";
 
 type RewriteLinksFn = (content: string, noteMeta: NoteMeta) => string;
 
@@ -513,6 +514,8 @@ ${markdownContent}`;
         if (!cssMeta.dataFileName) {
             return;
         }
+
+        archive.append(cssContent, { name: cssMeta.dataFileName });
     }
 
     try {
