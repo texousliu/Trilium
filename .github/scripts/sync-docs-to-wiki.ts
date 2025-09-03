@@ -235,6 +235,85 @@ async function getAllDirectories(dir: string): Promise<string[]> {
 }
 
 /**
+ * Fix image references in markdown files for wiki compatibility
+ * 
+ * The issue: Trilium exports markdown with URL-encoded references (spaces as %20)
+ * but the actual image files have spaces in their names. GitHub wikis need
+ * the references to match the actual filenames exactly.
+ */
+async function fixImageReferences(wikiDir: string): Promise<void> {
+  console.log('Fixing URL-encoded references in markdown files...');
+  const mdFiles = await findFiles(wikiDir, ['.md']);
+  let fixedCount = 0;
+  
+  for (const file of mdFiles) {
+    let content = await fs.readFile(file, 'utf-8');
+    let modified = false;
+    
+    // Fix URL-encoded image references
+    // Convert ![](Name%20With%20Spaces.png) to ![](Name With Spaces.png)
+    // This is needed because file names have actual spaces, not %20
+    const imagePattern = /!\[([^\]]*)\]\(([^)]+)\)/g;
+    const newContent = content.replace(imagePattern, (match, alt, src) => {
+      // Skip external URLs
+      if (src.startsWith('http://') || src.startsWith('https://')) {
+        return match;
+      }
+      
+      // If the path contains URL encoding, decode it
+      if (src.includes('%20') || src.includes('%')) {
+        try {
+          const decodedSrc = decodeURIComponent(src);
+          modified = true;
+          return `![${alt}](${decodedSrc})`;
+        } catch {
+          // If decoding fails, leave it as is
+          return match;
+        }
+      }
+      
+      return match;
+    });
+    
+    // Also fix internal link references with URL encoding
+    const linkPattern = /\[([^\]]+)\]\(([^)]+)\)/g;
+    const finalContent = newContent.replace(linkPattern, (match, text, href) => {
+      // Skip external URLs and image references
+      if (href.startsWith('http://') || href.startsWith('https://') || href.match(/\.(png|jpg|jpeg|gif|svg)$/i)) {
+        return match;
+      }
+      
+      // If the path contains URL encoding, decode it
+      if (href.includes('%20') || href.includes('%')) {
+        try {
+          const decodedHref = decodeURIComponent(href);
+          modified = true;
+          return `[${text}](${decodedHref})`;
+        } catch {
+          // If decoding fails, leave it as is
+          return match;
+        }
+      }
+      
+      return match;
+    });
+    
+    if (modified) {
+      await fs.writeFile(file, finalContent, 'utf-8');
+      const relativePath = path.relative(wikiDir, file);
+      console.log(`  Fixed URL-encoded references in: ${relativePath}`);
+      fixedCount++;
+    }
+  }
+  
+  if (fixedCount > 0) {
+    console.log(`Fixed URL-encoded references in ${fixedCount} files`);
+  } else {
+    console.log('No URL-encoded references needed fixing');
+  }
+}
+
+/**
  * Rename README files to wiki-compatible names
  */
 async function renameReadmeFiles(wikiDir: string): Promise<void> {
@@ -323,6 +402,9 @@ async function syncDocsToWiki(): Promise<void> {
     
     // Copy root README.md as Home.md
     await copyRootReadme(config.mainRepoPath, config.wikiPath);
+    
+    // Fix image and link references for wiki compatibility
+    await fixImageReferences(config.wikiPath);
     
     // Rename README files to wiki-compatible names
     await renameReadmeFiles(config.wikiPath);
