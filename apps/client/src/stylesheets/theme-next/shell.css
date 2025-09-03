@@ -59,8 +59,7 @@ body.background-effects.platform-win32.layout-vertical {
 }
 
 body.background-effects.platform-win32,
-body.background-effects.platform-win32 #root-widget,
-body.background-effects.platform-win32 #launcher-pane .launcher-button {
+body.background-effects.platform-win32 #root-widget {
     background: transparent !important;
 }
 
@@ -575,29 +574,18 @@ div.quick-search .search-button.show {
  * Quick search results
  */
 
+div.quick-search .dropdown-menu {
+    --quick-search-item-delimiter-color: transparent;
+    --menu-item-icon-vert-offset: -.065em;
+}
+
 /* Item */
 .quick-search .dropdown-menu *.dropdown-item {
     padding: 8px 12px !important;
 }
 
-/* Note icon */
-.quick-search .dropdown-menu .dropdown-item > .bx {
-    position: relative;
-    top: 1px;
-}
-
 .quick-search .quick-search-item-icon {
     vertical-align: text-bottom;
-}
-
-/* Note title */
-.quick-search .dropdown-menu .dropdown-item > a {
-    color: var(--menu-text-color);
-}
-
-.quick-search .dropdown-menu .dropdown-item > a:hover {
-    --hover-item-background-color: transparent;
-    text-decoration: underline;
 }
 
 /* Note path */
@@ -622,9 +610,8 @@ div.quick-search .search-button.show {
     font-weight: 600;
 }
 
-/* Divider line */
-.quick-search .dropdown-item::after {
-    display: none;
+.quick-search div.dropdown-divider {
+    margin: 8px 0;
 }
 
 /*

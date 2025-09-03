@@ -1463,7 +1463,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     cursor: pointer;
     border: none;
     color: var(--launcher-pane-text-color);
-    background-color: var(--launcher-pane-background-color);
+    background: transparent;
     flex-shrink: 0;
 }
 
@@ -2365,4 +2365,13 @@ footer.webview-footer button {
 .bx-tn-toc::before {
     content: "\ec24";
     transform: rotate(180deg);
+}
+
+/* CK Edito */
+
+/* Insert text snippet: limit the width of the listed items to avoid overly long names */
+:root body.desktop div.ck-template-form li.ck-list__item .ck-template-form__text-part > span {
+    max-width: 25vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

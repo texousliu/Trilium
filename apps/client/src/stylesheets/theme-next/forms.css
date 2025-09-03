@@ -5,7 +5,8 @@
 button.btn.btn-primary,
 button.btn.btn-secondary,
 button.btn.btn-sm:not(.select-button),
-button.btn.btn-success {
+button.btn.btn-success,
+button.ck.ck-button:is(.ck-button-action, .ck-button-save, .ck-button-cancel, .ck-button-replaceall, .ck-button-replace).ck-button_with-text {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -21,7 +22,8 @@ button.btn.btn-success {
 button.btn.btn-primary:hover,
 button.btn.btn-secondary:hover,
 button.btn.btn-sm:not(.select-button):hover,
-button.btn.btn-success:hover {
+button.btn.btn-success:hover,
+button.ck.ck-button:is(.ck-button-action, .ck-button-save, .ck-button-cancel, .ck-button-replaceall, .ck-button-replace).ck-button_with-text:not(.ck-disabled):hover {
     background: var(--cmd-button-hover-background-color);
     color: var(--cmd-button-hover-text-color);
 }
@@ -29,7 +31,8 @@ button.btn.btn-success:hover {
 button.btn.btn-primary:active,
 button.btn.btn-secondary:active,
 button.btn.btn-sm:not(.select-button):active,
-button.btn.btn-success:active {
+button.btn.btn-success:active,
+button.ck.ck-button:is(.ck-button-action, .ck-button-save, .ck-button-cancel, .ck-button-replaceall, .ck-button-replace).ck-button_with-text:not(.ck-disabled):active {
     opacity: 0.85;
     box-shadow: unset;
     background: var(--cmd-button-background-color) !important;
@@ -40,14 +43,16 @@ button.btn.btn-success:active {
 button.btn.btn-primary:disabled,
 button.btn.btn-secondary:disabled,
 button.btn.btn-sm:not(.select-button):disabled,
-button.btn.btn-success:disabled {
+button.btn.btn-success:disabled,
+button.ck.ck-button:is(.ck-button-action, .ck-button-save, .ck-button-cancel, .ck-button-replaceall, .ck-button-replace).ck-button_with-text.ck-disabled {
     opacity: var(--cmd-button-disabled-opacity);
 }
 
 button.btn.btn-primary:focus-visible,
 button.btn.btn-secondary:focus-visible,
 button.btn.btn-sm:not(.select-button):focus-visible,
-button.btn.btn-success:focus-visible {
+button.btn.btn-success:focus-visible,
+button.ck.ck-button:is(.ck-button-action, .ck-button-save, .ck-button-cancel, .ck-button-replaceall, .ck-button-replace).ck-button_with-text:not(.ck-disabled):focus-visible {
     outline: 2px solid var(--input-focus-outline-color);
 }
 
@@ -149,8 +154,11 @@ input[type="password"],
 input[type="date"],
 input[type="time"],
 input[type="datetime-local"],
+:root input.ck.ck-input-text,
+:root input.ck.ck-input-number,
 textarea.form-control,
 textarea,
+:root textarea.ck.ck-textarea,
 .tn-input-field {
     outline: 3px solid transparent;
     outline-offset: 6px;
@@ -167,8 +175,11 @@ input[type="password"]:hover,
 input[type="date"]:hover,
 input[type="time"]:hover,
 input[type="datetime-local"]:hover,
+:root input.ck.ck-input-text:not([readonly="true"]):hover,
+:root input.ck.ck-input-number:not([readonly="true"]):hover,
 textarea.form-control:hover,
 textarea:hover,
+:root textarea.ck.ck-textarea:hover,
 .tn-input-field:hover {
     background: var(--input-hover-background);
     color: var(--input-hover-color);
@@ -181,8 +192,11 @@ input[type="password"]:focus,
 input[type="date"]:focus,
 input[type="time"]:focus,
 input[type="datetime-local"]:focus,
+:root input.ck.ck-input-text:focus,
+:root input.ck.ck-input-number:focus,
 textarea.form-control:focus,
 textarea:focus,
+:root textarea.ck.ck-textarea:focus,
 .tn-input-field:focus,
 .tn-input-field:focus-within {
     box-shadow: unset;
