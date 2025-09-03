@@ -37,7 +37,7 @@ vite.config.*.timestamp*
 vitest.config.*.timestamp*
 test-output
 
-apps/*/data
+apps/*/data*
 apps/*/out
 upload
 
