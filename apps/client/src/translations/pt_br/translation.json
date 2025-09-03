@@ -994,7 +994,7 @@
     "invalid_view_type": "Tipo de visualização inválido '{{type}}'",
     "calendar": "Calendário",
     "table": "Tabela",
-    "geo-map": "Geo Map",
+    "geo-map": "Mapa geográfico",
     "board": "Quadro"
   },
   "edited_notes": {
@@ -1278,7 +1278,7 @@
     "handwriting-system-fonts": "Fontes de escrita à mão de sistema",
     "serif": "Serifa",
     "sans-serif": "Sem Serifa",
-    "monospace": "Monospace",
+    "monospace": "Monoespaçado",
     "system-default": "Padrão do Sistema",
     "note_tree_and_detail_font_sizing": "Note que o tamanho da fonte da árvore e dos detalhes é relativo à configuração principal do tamanho de fonte."
   },
@@ -1518,7 +1518,7 @@
     "doc": "Documento",
     "widget": "Widget",
     "confirm-change": "Não é recomentado alterar o tipo da nota quando o conteúdo da nota não está vazio. Quer continuar assim mesmo?",
-    "geo-map": "Geo Map",
+    "geo-map": "Mapa geográfico",
     "beta-feature": "Beta",
     "ai-chat": "Chat IA",
     "task-list": "Lista de Tarefas",
@@ -1579,7 +1579,8 @@
     "hoist-this-note-workspace": "Fixar esta nota (workspace)",
     "refresh-saved-search-results": "Atualizar resultados de pesquisa salvos",
     "create-child-note": "Criar nota filha",
-    "unhoist": "Desafixar"
+    "unhoist": "Desafixar",
+    "toggle-sidebar": "Alternar barra lateral"
   },
   "title_bar_buttons": {
     "window-on-top": "Manter Janela no Topo"
@@ -2022,6 +2023,8 @@
     "handshake_failed": "Falha no handshake com o servidor de sincronização, erro: {{message}}"
   },
   "shared_info": {
-    "help_link": "Para ajuda, visite a <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>."
+    "help_link": "Para ajuda, visite a <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>.",
+    "shared_publicly": "Esta nota é compartilhada publicamente em {{- link}}.",
+    "shared_locally": "Esta nota é compartilhada localmente em {{- link}}."
   }
 }

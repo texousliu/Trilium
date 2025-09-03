@@ -844,7 +844,8 @@
     "note_type": "Тип нотатки",
     "editable": "Редагув.",
     "basic_properties": "Основні Властивості",
-    "language": "Мова"
+    "language": "Мова",
+    "configure_code_notes": "Конфігурація нотатки з кодом..."
   },
   "book_properties": {
     "view_type": "Тип перегляду",
@@ -1586,7 +1587,8 @@
     "hoist-this-note-workspace": "Закріпити цю нотатку (робочий простір)",
     "refresh-saved-search-results": "Оновити збережені результати пошуку",
     "create-child-note": "Створити дочірню нотатку",
-    "unhoist": "Відкріпити"
+    "unhoist": "Відкріпити",
+    "toggle-sidebar": "Перемикання бічної панелі"
   },
   "title_bar_buttons": {
     "window-on-top": "Тримати вікно зверху"
@@ -1909,8 +1911,8 @@
     "open-in-popup": "Швидке редагування"
   },
   "shared_info": {
-    "shared_publicly": "Ця нотатка опублікована на {{- link}}",
-    "shared_locally": "Цю нотатку опубліковано локально на {{- link}}",
+    "shared_publicly": "Ця нотатка опублікована на {{- link}}.",
+    "shared_locally": "Цю нотатку опубліковано локально на {{- link}}.",
     "help_link": "Щоб отримати допомогу, відвідайте <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">вікі</a>."
   },
   "note_types": {
@@ -2018,5 +2020,11 @@
   },
   "units": {
     "percentage": "%"
+  },
+  "ui-performance": {
+    "title": "Продуктивність",
+    "enable-motion": "Увімкнути переходи та анімацію",
+    "enable-shadows": "Увімкнути тіні",
+    "enable-backdrop-effects": "Увімкнути фонові ефекти для меню, спливаючих вікон та панелей"
   }
 }

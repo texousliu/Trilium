@@ -4,7 +4,7 @@ import { buildExtraCommands, type EditorConfig, PREMIUM_PLUGINS } from "@trilium
 import { getHighlightJsNameForMime } from "../../../services/mime_types.js";
 import options from "../../../services/options.js";
 import { ensureMimeTypesForHighlighting, isSyntaxHighlightEnabled } from "../../../services/syntax_highlight.js";
-import emojiDefinitionsUrl from "@triliumnext/ckeditor5/emoji_definitions/en.json?url";
+import emojiDefinitionsUrl from "@triliumnext/ckeditor5/src/emoji_definitions/en.json?url";
 import { copyTextWithToast } from "../../../services/clipboard_ext.js";
 import getTemplates from "./snippets.js";
 import { t } from "../../../services/i18n.js";
