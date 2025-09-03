@@ -12,13 +12,6 @@ import { openMapContextMenu } from "./context_menu.js";
 import attributes from "../../../services/attributes.js";
 import { DEFAULT_MAP_LAYER_NAME, MAP_LAYERS } from "./map_layer.js";
 
-interface MapData {
-    view?: {
-        center?: LatLng | [number, number];
-        zoom?: number;
-    };
-}
-
 export const LOCATION_ATTRIBUTE = "geolocation";
 
 enum State {

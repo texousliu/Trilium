@@ -3,17 +3,19 @@ import { useNoteContext, useNoteLabel, useTriliumEvent } from "../react/hooks";
 import FNote from "../../entities/fnote";
 import "./NoteList.css";
 import { ListView, GridView } from "./legacy/ListOrGridView";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import GeoView from "./geomap";
+import ViewModeStorage from "../view_widgets/view_mode_storage";
 
-interface NoteListProps {
+interface NoteListProps<T extends object> {
     note?: FNote | null;
     /** if set to `true` then only collection-type views are displayed such as geo-map and the calendar. The original book types grid and list will be ignored. */
     displayOnlyCollections?: boolean;
     highlightedTokens?: string[] | null;
+    viewStorage: ViewModeStorage<T>;
 }
 
-export default function NoteList({ note: providedNote, highlightedTokens, displayOnlyCollections }: NoteListProps) {
+export default function NoteList<T extends object>({ note: providedNote, highlightedTokens, displayOnlyCollections }: NoteListProps<T>) {
     const widgetRef = useRef<HTMLDivElement>(null);
     const { note: contextNote, noteContext } = useNoteContext();
     const note = providedNote ?? contextNote;
@@ -49,19 +51,24 @@ export default function NoteList({ note: providedNote, highlightedTokens, displa
         return () => observer.disconnect();
     }, []);
 
+    const viewStorage = useMemo(() => {
+        if (!note || !viewType) return;
+        return new ViewModeStorage<T>(note, viewType);
+    }, [ note, viewType ]);
+
     return (
         <div ref={widgetRef} className={`note-list-widget ${isFullHeight ? "full-height" : ""}`}>
-            {isEnabled && (
+            {viewStorage && isEnabled && (
                 <div className="note-list-widget-content">
-                    {getComponentByViewType(note, noteIds, viewType, highlightedTokens)}
+                    {getComponentByViewType(note, noteIds, viewType, highlightedTokens, viewStorage)}
                 </div>
             )}
         </div>
     );
 }
 
-function getComponentByViewType(note: FNote, noteIds: string[], viewType: ViewTypeOptions, highlightedTokens: string[] | null | undefined) {
-    const props: ViewModeProps = { note, noteIds, highlightedTokens };
+function getComponentByViewType(note: FNote, noteIds: string[], viewType: ViewTypeOptions, highlightedTokens: string[] | null | undefined, viewStorage: ViewModeStorage<any>) {
+    const props: ViewModeProps<any> = { note, noteIds, highlightedTokens, viewStorage };
 
     switch (viewType) {
         case "list":
