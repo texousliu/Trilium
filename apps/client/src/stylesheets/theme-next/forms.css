@@ -158,6 +158,7 @@ input[type="datetime-local"],
 :root input.ck.ck-input-number,
 textarea.form-control,
 textarea,
+:root textarea.ck.ck-textarea,
 .tn-input-field {
     outline: 3px solid transparent;
     outline-offset: 6px;
@@ -178,6 +179,7 @@ input[type="datetime-local"]:hover,
 :root input.ck.ck-input-number:not([readonly="true"]):hover,
 textarea.form-control:hover,
 textarea:hover,
+:root textarea.ck.ck-textarea:hover,
 .tn-input-field:hover {
     background: var(--input-hover-background);
     color: var(--input-hover-color);
@@ -194,6 +196,7 @@ input[type="datetime-local"]:focus,
 :root input.ck.ck-input-number:focus,
 textarea.form-control:focus,
 textarea:focus,
+:root textarea.ck.ck-textarea:focus,
 .tn-input-field:focus,
 .tn-input-field:focus-within {
     box-shadow: unset;
