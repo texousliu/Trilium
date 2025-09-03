@@ -276,6 +276,23 @@ async function hasChanges(wikiDir: string): Promise<boolean> {
 }
 
 /**
+ * Copy root README.md to wiki as Home.md if it exists
+ */
+async function copyRootReadme(mainRepoPath: string, wikiPath: string): Promise<void> {
+  const rootReadmePath = path.join(mainRepoPath, 'README.md');
+  const wikiHomePath = path.join(wikiPath, 'Home.md');
+  
+  try {
+    await fs.access(rootReadmePath);
+    await fs.copyFile(rootReadmePath, wikiHomePath);
+    console.log('  Copied root README.md as Home.md');
+  } catch (error) {
+    // Root README doesn't exist or can't be accessed
+    console.log('  No root README.md found to use as Home page');
+  }
+}
+
+/**
  * Get configuration from environment variables
  */
 function getConfig(): SyncConfig {
@@ -303,6 +320,9 @@ async function syncDocsToWiki(): Promise<void> {
     
     // Sync files (copy new/updated, remove orphaned)
     await syncFiles(config.docsPath, config.wikiPath);
+    
+    // Copy root README.md as Home.md
+    await copyRootReadme(config.mainRepoPath, config.wikiPath);
     
     // Rename README files to wiki-compatible names
     await renameReadmeFiles(config.wikiPath);
