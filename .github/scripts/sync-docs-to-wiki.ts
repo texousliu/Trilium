@@ -235,39 +235,37 @@ async function getAllDirectories(dir: string): Promise<string[]> {
 }
 
 /**
- * Fix image references in markdown files for wiki compatibility
+ * Fix references in markdown files for wiki compatibility
  * 
- * The issue: Trilium exports markdown with URL-encoded references (spaces as %20)
- * but the actual image files have spaces in their names. GitHub wikis need
- * the references to match the actual filenames exactly.
+ * Issues fixed:
+ * 1. URL-encoded image references (spaces as %20) need to match actual filenames
+ * 2. Internal markdown links need to be converted to wiki syntax
+ * 3. Images can optionally use wiki syntax [[image.png]] for better compatibility
  */
 async function fixImageReferences(wikiDir: string): Promise<void> {
-  console.log('Fixing URL-encoded references in markdown files...');
+  console.log('Fixing references for GitHub Wiki compatibility...');
   const mdFiles = await findFiles(wikiDir, ['.md']);
   let fixedCount = 0;
   
   for (const file of mdFiles) {
     let content = await fs.readFile(file, 'utf-8');
     let modified = false;
+    const originalContent = content;
     
-    // Fix URL-encoded image references
+    // Step 1: Fix URL-encoded image references
     // Convert ![](Name%20With%20Spaces.png) to ![](Name With Spaces.png)
-    // This is needed because file names have actual spaces, not %20
-    const imagePattern = /!\[([^\]]*)\]\(([^)]+)\)/g;
-    const newContent = content.replace(imagePattern, (match, alt, src) => {
+    content = content.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, alt, src) => {
       // Skip external URLs
       if (src.startsWith('http://') || src.startsWith('https://')) {
         return match;
       }
       
-      // If the path contains URL encoding, decode it
-      if (src.includes('%20') || src.includes('%')) {
+      // Decode URL encoding if present
+      if (src.includes('%')) {
         try {
           const decodedSrc = decodeURIComponent(src);
-          modified = true;
           return `![${alt}](${decodedSrc})`;
         } catch {
-          // If decoding fails, leave it as is
           return match;
         }
       }
@@ -275,22 +273,23 @@ async function fixImageReferences(wikiDir: string): Promise<void> {
       return match;
     });
     
-    // Also fix internal link references with URL encoding
-    const linkPattern = /\[([^\]]+)\]\(([^)]+)\)/g;
-    const finalContent = newContent.replace(linkPattern, (match, text, href) => {
-      // Skip external URLs and image references
-      if (href.startsWith('http://') || href.startsWith('https://') || href.match(/\.(png|jpg|jpeg|gif|svg)$/i)) {
+    // Step 2: Fix internal links - decode URL encoding but keep standard markdown format
+    // GitHub Wiki actually supports standard markdown links with relative paths
+    content = content.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, text, href) => {
+      // Skip external URLs, anchors, and images
+      if (href.startsWith('http://') || 
+          href.startsWith('https://') || 
+          href.startsWith('#') ||
+          href.match(/\.(png|jpg|jpeg|gif|svg)$/i)) {
         return match;
       }
       
-      // If the path contains URL encoding, decode it
-      if (href.includes('%20') || href.includes('%')) {
+      // Decode URL encoding for all internal links
+      if (href.includes('%')) {
         try {
           const decodedHref = decodeURIComponent(href);
-          modified = true;
           return `[${text}](${decodedHref})`;
         } catch {
-          // If decoding fails, leave it as is
           return match;
         }
       }
@@ -298,18 +297,20 @@ async function fixImageReferences(wikiDir: string): Promise<void> {
       return match;
     });
     
-    if (modified) {
-      await fs.writeFile(file, finalContent, 'utf-8');
+    // Check if content was modified
+    if (content !== originalContent) {
+      modified = true;
+      await fs.writeFile(file, content, 'utf-8');
       const relativePath = path.relative(wikiDir, file);
-      console.log(`  Fixed URL-encoded references in: ${relativePath}`);
+      console.log(`  Fixed references in: ${relativePath}`);
       fixedCount++;
     }
   }
   
   if (fixedCount > 0) {
-    console.log(`Fixed URL-encoded references in ${fixedCount} files`);
+    console.log(`Fixed references in ${fixedCount} files`);
   } else {
-    console.log('No URL-encoded references needed fixing');
+    console.log('No references needed fixing');
   }
 }
 
