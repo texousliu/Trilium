@@ -14,6 +14,7 @@ import ws from "./ws.js";
 import becca_loader from "../becca/becca_loader.js";
 import entity_changes from "./entity_changes.js";
 import config from "./config.js";
+import { initializeSqliteFunctions } from "./search/sqlite_functions.js";
 
 let dbConnection: DatabaseType = buildDatabase();
 let statementCache: Record<string, Statement> = {};
@@ -42,10 +43,31 @@ function rebuildIntegrationTestDatabase(dbPath?: string) {
     // This allows a database that is read normally but is kept in memory and discards all modifications.
     dbConnection = buildIntegrationTestDatabase(dbPath);
     statementCache = {};
+    
+    // Re-register custom SQLite functions after rebuilding the database
+    try {
+        initializeSqliteFunctions(dbConnection);
+    } catch (error) {
+        log.error(`Failed to re-initialize SQLite custom functions after rebuild: ${error}`);
+    }
 }
 
 if (!process.env.TRILIUM_INTEGRATION_TEST) {
     dbConnection.pragma("journal_mode = WAL");
+}
+
+// Initialize custom SQLite functions for search operations
+// This must happen after the database connection is established
+try {
+    const functionsRegistered = initializeSqliteFunctions(dbConnection);
+    if (functionsRegistered) {
+        log.info("SQLite custom search functions initialized successfully");
+    } else {
+        log.info("SQLite custom search functions initialization failed - search will use fallback methods");
+    }
+} catch (error) {
+    log.error(`Failed to initialize SQLite custom functions: ${error}`);
+    // Continue without custom functions - triggers will use LOWER() as fallback
 }
 
 const LOG_ALL_QUERIES = false;
@@ -360,6 +382,10 @@ function disableSlowQueryLogging<T>(cb: () => T) {
     }
 }
 
+function getDbConnection(): DatabaseType {
+    return dbConnection;
+}
+
 export default {
     insert,
     replace,
@@ -427,5 +453,6 @@ export default {
     fillParamList,
     copyDatabase,
     disableSlowQueryLogging,
-    rebuildIntegrationTestDatabase
+    rebuildIntegrationTestDatabase,
+    getDbConnection
 };
