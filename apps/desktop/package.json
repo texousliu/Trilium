@@ -30,14 +30,13 @@
     "prebuild-install": "^7.1.1"
   },  
   "scripts": {
-    "dev": "cross-env TRILIUM_PORT=37741 TRILIUM_DATA_DIR=data tsx scripts/start.mts",
-    "start-no-dir": "cross-env TRILIUM_PORT=37743 tsx scripts/start.mts",
+    "dev": "cross-env TRILIUM_PORT=37741 TRILIUM_DATA_DIR=data tsx ../../scripts/electron-start.mts src/main.ts",
+    "start-no-dir": "cross-env TRILIUM_PORT=37743 tsx ../../scripts/electron-start.mts src/main.ts",
     "build": "tsx scripts/build.ts",
     "start-prod": "pnpm build && cross-env TRILIUM_DATA_DIR=data TRILIUM_PORT=37841 electron dist",
     "electron-forge:make": "pnpm build && cross-env electron-forge make dist",
     "electron-forge:package": "pnpm build && electron-forge package dist",
-    "electron-forge:start": "pnpm build && electron-forge start dist",
-    "postinstall": "tsx scripts/rebuild.mts"
+    "electron-forge:start": "pnpm build && electron-forge start dist"
   },
   "license": "AGPL-3.0-only",
   "author": {

@@ -1,15 +1,13 @@
-import { join } from "path";
-import { cpSync, existsSync, mkdirSync, rmSync } from "fs";
+import { join, resolve } from "path";
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync } from "fs";
 import { execSync } from "child_process";
 import { rebuild } from "@electron/rebuild"
-import { getElectronPath, isNixOS } from "../../../scripts/utils.mjs";
-import packageJson from "../package.json" with { type: "json" };
+import { getElectronPath, isNixOS } from "./utils.mjs";
 
-const desktopProjectRoot = join(import.meta.dirname, "..");
-const workspaceRoot = join(desktopProjectRoot, "../..");
+const workspaceRoot = join(import.meta.dirname, "..");
 
-function copyNativeDependencies() {
-    const destPath = join(desktopProjectRoot, "node_modules/better-sqlite3");
+function copyNativeDependencies(projectRoot: string) {
+    const destPath = join(projectRoot, "node_modules/better-sqlite3");
     
     if (existsSync(destPath)) {
         rmSync(destPath, { recursive: true });
@@ -18,24 +16,28 @@ function copyNativeDependencies() {
     cpSync(join(workspaceRoot, "node_modules/better-sqlite3"), destPath, { recursive: true, dereference: true });
 }
 
-function rebuildNativeDependencies() {
-    const electronVersion = determineElectronVersion();
+function rebuildNativeDependencies(projectRoot: string) {
+    const electronVersion = determineElectronVersion(projectRoot);
 
     if (!electronVersion) {
         console.error("Unable to determine Electron version.");
         process.exit(1);
     }
 
-    console.log(`Rebuilding ${desktopProjectRoot} with ${electronVersion}...`);
+    console.log(`Rebuilding ${projectRoot} with ${electronVersion}...`);
 
+    const resolvedPath = resolve(projectRoot);
     rebuild({
-        projectRootPath: desktopProjectRoot,
-        buildPath: desktopProjectRoot,
-        electronVersion
+        projectRootPath: resolvedPath,
+        buildPath: resolvedPath,
+        electronVersion,
+        force: true
     });
 }
 
-function determineElectronVersion() {
+function determineElectronVersion(projectRoot: string) {
+    const packageJson = JSON.parse(readFileSync(join(projectRoot, "package.json"), "utf-8"));
+
     if (isNixOS()) {
         console.log("Detected NixOS, reading Electron version from PATH");
 
@@ -51,5 +53,7 @@ function determineElectronVersion() {
     }
 }
 
-copyNativeDependencies();
-rebuildNativeDependencies();
+for (const projectRoot of [ "apps/desktop", "apps/edit-docs" ]) {
+    copyNativeDependencies(projectRoot);
+    rebuildNativeDependencies(projectRoot);
+}
