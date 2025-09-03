@@ -1,12 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 import { join } from 'path';
 
-require('dotenv').config({
-    path: __dirname + "/" + ".env"
-});
-
 // For CI, you may want to set BASE_URL to the deployed application.
-const port = process.env['TRILIUM_PORT'];
+const port = process.env['TRILIUM_PORT'] ?? "8082";
 const baseURL = process.env['BASE_URL'] || `http://127.0.0.1:${port}`;
 
 /**
@@ -16,6 +12,7 @@ export default defineConfig({
   testDir: "src",
   reporter: [["list"], ["html", { outputFolder: "test-output" }]],
   outputDir: "test-output",
+  retries: 3,
 
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
@@ -31,7 +28,9 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     cwd: join(__dirname, "../server"),
     env: {
-        TRILIUM_DATA_DIR: "spec/db"
+        TRILIUM_DATA_DIR: "spec/db",
+        TRILIUM_PORT: port,
+        TRILIUM_INTEGRATION_TEST: "memory"
     },
     timeout: 5 * 60 * 1000
   } : undefined,
