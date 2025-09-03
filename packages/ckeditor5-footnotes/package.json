@@ -11,18 +11,7 @@
     "ckeditor5-package-generator"
   ],
   "type": "module",
-  "main": "dist/index.ts",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    },
-    "./*": "./dist/*",
-    "./browser/*": null,
-    "./package.json": "./package.json"
-  },
+  "main": "src/index.ts",
   "license": "ISC",
   "engines": {
     "node": ">=18.0.0",
@@ -77,13 +66,5 @@
     "**/*.css": [
       "stylelint --quiet --allow-empty-input"
     ]
-  },
-  "nx": {
-    "name": "ckeditor5-footnotes",
-    "targets": {
-      "build": {
-        "cache": "true"
-      }
-    }
   }
 }

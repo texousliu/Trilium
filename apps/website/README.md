@@ -4,8 +4,8 @@ Landing page for Trilium Notes powered by [Svelte](https://github.com/sveltejs/c
 
 ## Developing
 
-To run a dev server that will hot-reload changes: `pnpm nx run website:dev`
+To run a dev server that will hot-reload changes: `pnpm dev`
 
 ## Building
 
-To create a production build: `pnpm nx run website:build`
+To create a production build: `pnpm build`

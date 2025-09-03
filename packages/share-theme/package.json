@@ -31,8 +31,5 @@
     "eslint": "^9.0.0",
     "highlight.js": "^11.8.0",
     "typescript": "^5.2.2"
-  },
-  "nx": {
-    "name": "share-theme"
   }
 }

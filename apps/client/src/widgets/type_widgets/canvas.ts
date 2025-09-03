@@ -388,7 +388,7 @@ async function setupFonts() {
     if (!glob.isDev) {
         path = `${window.location.pathname}/node_modules/@excalidraw/excalidraw/dist/prod`;
     } else {
-        path = (await import("../../../node_modules/@excalidraw/excalidraw/dist/prod/fonts/Excalifont/Excalifont-Regular-a88b72a24fb54c9f94e3b5fdaa7481c9.woff2?url")).default;
+        path = (await import("../../../../../node_modules/@excalidraw/excalidraw/dist/prod/fonts/Excalifont/Excalifont-Regular-a88b72a24fb54c9f94e3b5fdaa7481c9.woff2?url")).default;
         let pathComponents = path.split("/");
         path = pathComponents.slice(0, pathComponents.length - 2).join("/");
     }

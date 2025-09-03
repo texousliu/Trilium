@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="shortcut icon" href="<% if (note.hasRelation("shareFavicon")) { %>api/notes/<%= note.getRelation("shareFavicon").value %>/download<% } else { %>../favicon.ico<% } %>">
-    <script src="<%= appPath %>/share.js" type="module"></script>
+    <script src="../<%= appPath %>/share.js" type="module"></script>
     <% if (!isDev && !note.isLabelTruthy("shareOmitDefaultCss")) { %>
         <link href="<%= assetPath %>/src/share.css" rel="stylesheet">
         <link href="<%= assetPath %>/src/boxicons.css" rel="stylesheet">

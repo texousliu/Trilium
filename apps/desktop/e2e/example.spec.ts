@@ -60,7 +60,7 @@ test('First setup', async () => {
     // Verify the shared link is valid
     const requestContext = await request.newContext();
     const response = await requestContext.get(linkUrl!);
-    expect(response).toBeOK();
+    await expect(response).toBeOK();
 
     await mainWindow.waitForTimeout(5000);
 });
