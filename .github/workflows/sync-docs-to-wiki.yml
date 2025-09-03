@@ -8,6 +8,13 @@ on:
       - 'docs/**'
   workflow_dispatch: # Allow manual triggering
 
+permissions:
+  contents: read  # Read access to repository contents
+  # Note: Writing to wiki requires a PAT or GITHUB_TOKEN with additional permissions
+  # The default GITHUB_TOKEN cannot write to wikis, so we need to:
+  # 1. Create a Personal Access Token (PAT) with 'repo' scope
+  # 2. Add it as a repository secret named WIKI_TOKEN
+
 jobs:
   sync-wiki:
     runs-on: ubuntu-latest
@@ -23,7 +30,7 @@ jobs:
         with:
           repository: TriliumNext/Trilium.wiki
           path: wiki
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.WIKI_TOKEN }}
           
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -57,4 +64,4 @@ jobs:
           Triggered by: ${{ github.event.head_commit.message }}"
           git push
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.WIKI_TOKEN }}
