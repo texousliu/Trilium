@@ -1,0 +1,60 @@
+name: Sync Docs to Wiki
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  sync-wiki:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout main repository
+        uses: actions/checkout@v4
+        with:
+          path: main-repo
+          
+      - name: Checkout wiki repository
+        uses: actions/checkout@v4
+        with:
+          repository: TriliumNext/Trilium.wiki
+          path: wiki
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install tsx for TypeScript execution
+        run: npm install -g tsx
+          
+      - name: Setup Git
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          
+      - name: Sync documentation to wiki
+        id: sync
+        run: |
+          tsx main-repo/.github/scripts/sync-docs-to-wiki.ts
+        env:
+          MAIN_REPO_PATH: main-repo
+          WIKI_PATH: wiki
+          
+      - name: Commit and push changes
+        if: contains(steps.sync.outputs.changes, 'true')
+        run: |
+          cd wiki
+          git add .
+          git commit -m "Sync documentation from main repository
+          
+          Source commit: ${{ github.sha }}
+          Triggered by: ${{ github.event.head_commit.message }}"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
