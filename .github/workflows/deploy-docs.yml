@@ -86,7 +86,7 @@ jobs:
           test -d site/assets || (echo "ERROR: site/assets directory not found" && exit 1)
           echo "✅ Site validation passed"
       
-      # Setup pnpm
+      # Setup pnpm 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
       
@@ -97,7 +97,12 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
       
-      # Deploy using Wrangler (with pnpm)
+      # Install wrangler globally to avoid workspace issues
+      - name: Install Wrangler
+        run: |
+          npm install -g wrangler
+      
+      # Deploy using Wrangler (use pre-installed wrangler)
       - name: Deploy to Cloudflare Pages
         id: deploy
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
@@ -105,8 +110,8 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy site --project-name=trilium-docs --branch=${{ github.ref_name }}
-          packageManager: pnpm
+          command: pages deploy site --project-name=triliumnext-pages --branch=${{ github.ref_name }}
+          wranglerVersion: ''  # Use pre-installed version
       
       # Deploy preview for PRs
       - name: Deploy Preview to Cloudflare Pages
@@ -116,8 +121,8 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy site --project-name=trilium-docs --branch=pr-${{ github.event.pull_request.number }}
-          packageManager: pnpm
+          command: pages deploy site --project-name=triliumnext-pages --branch=pr-${{ github.event.pull_request.number }}
+          wranglerVersion: ''  # Use pre-installed version
       
       # Post deployment URL as PR comment
       - name: Comment PR with Preview URL
