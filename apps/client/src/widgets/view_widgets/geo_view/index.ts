@@ -54,7 +54,6 @@ export default class GeoView extends ViewMode<MapData> {
         }
 
         const isEditable = !this.isReadOnly;
-        map.on("contextmenu", (e) => openMapContextMenu(this.parentNote.noteId, e, isEditable));
 
         if (isEditable) {
             setupDragging(this.$container, map, this.parentNote.noteId);

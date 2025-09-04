@@ -13,10 +13,11 @@ interface MapProps {
     layerName: string;
     viewportChanged: (coordinates: LatLng, zoom: number) => void;
     children: ComponentChildren;
-    onClick: (e: LeafletMouseEvent) => void;
+    onClick?: (e: LeafletMouseEvent) => void;
+    onContextMenu?: (e: LeafletMouseEvent) => void;
 }
 
-export default function Map({ coordinates, zoom, layerName, viewportChanged, children, onClick }: MapProps) {
+export default function Map({ coordinates, zoom, layerName, viewportChanged, children, onClick, onContextMenu }: MapProps) {
     const mapRef = useRef<L.Map>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -82,7 +83,19 @@ export default function Map({ coordinates, zoom, layerName, viewportChanged, chi
         };
     }, [ mapRef, viewportChanged ]);
 
-    useEffect(() => { mapRef.current && mapRef.current.on("click", onClick) }, [ mapRef, onClick ]);
+    useEffect(() => {
+        if (onClick && mapRef.current) {
+            mapRef.current.on("click", onClick);
+            return () => mapRef.current?.off("click", onClick);
+        }
+    }, [ mapRef, onClick ]);
+
+    useEffect(() => {
+        if (onContextMenu && mapRef.current) {
+            mapRef.current.on("contextmenu", onContextMenu);
+            return () => mapRef.current?.off("contextmenu", onContextMenu);
+        }
+    }, [ mapRef, onContextMenu ]);
 
     return (
         <div

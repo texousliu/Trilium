@@ -12,7 +12,7 @@ import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerIconShadow from "leaflet/dist/images/marker-shadow.png";
 import appContext from "../../../components/app_context";
 import { createNewNote, moveMarker } from "./api";
-import openContextMenu from "./context_menu";
+import openContextMenu, { openMapContextMenu } from "./context_menu";
 import toast from "../../../services/toast";
 import { t } from "../../../services/i18n";
 
@@ -66,6 +66,7 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
         };
         window.addEventListener("keydown", globalKeyListener);
     });
+
     const onClick = useCallback(async (e: LeafletMouseEvent) => {
         if (state === State.NewNote) {
             toast.closePersistent("geo-new-note");
@@ -73,6 +74,10 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
             setState(State.Normal);
         }
     }, [ state ]);
+
+    const onContextMenu = useCallback((e: LeafletMouseEvent) => {
+        openMapContextMenu(note.noteId, e, !isReadOnly);
+    }, [ note.noteId, isReadOnly ]);
 
     return (
         <div className={`geo-view ${state === State.NewNote ? "placing-note" : ""}`}>
@@ -86,6 +91,7 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
                     spacedUpdate.scheduleUpdate();
                 }}
                 onClick={onClick}
+                onContextMenu={onContextMenu}
             >
                 {notes.map(note => <NoteMarker note={note} editable={!isReadOnly} />)}
             </Map>
