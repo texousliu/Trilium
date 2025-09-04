@@ -53,9 +53,13 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
 
 function NoteMarker({ note }: { note: FNote }) {
     const [ location ] = useNoteLabel(note, LOCATION_ATTRIBUTE);
-    const [ colorClass ] = useNoteLabel(note, "colorClass");
-    useNoteLabel(note, "iconClass"); // React to icon changes.
+
+    // React to changes
+    useNoteLabel(note, "color");
+    useNoteLabel(note, "iconClass");
+
     const title = useNoteProperty(note, "title");
+    const colorClass = note.getColorClass();
     const iconClass = note.getIcon();
     const latLng = location?.split(",", 2).map((el) => parseFloat(el)) as [ number, number ] | undefined;
     const icon = useMemo(() => buildIcon(iconClass, colorClass ?? undefined, title, note.noteId), [ iconClass, colorClass, title, note.noteId]);
