@@ -39,26 +39,12 @@ export default class GeoView extends ViewMode<MapData> {
         args.$parent.append(this.$root);
     }
 
-    async renderList() {
-        this.renderMap();
-        return this.$root;
-    }
-
     async renderMap() {
         const layerName = this.parentNote.getLabelValue("map:style") ?? ;
-
 
         if (this.parentNote.hasLabel("map:scale")) {
             L.control.scale().addTo(map);
         }
-
-        this.$container.toggleClass("dark", !!layerData.isDarkTheme);
-
-        layer.addTo(map);
-
-        this.map = map;
-
-        this.#onMapInitialized();
     }
 
     async #onMapInitialized() {
@@ -68,7 +54,6 @@ export default class GeoView extends ViewMode<MapData> {
         }
 
         const isEditable = !this.isReadOnly;
-        map.on("click", (e) => this.#onMapClicked(e))
         map.on("contextmenu", (e) => openMapContextMenu(this.parentNote.noteId, e, isEditable));
 
         if (isEditable) {

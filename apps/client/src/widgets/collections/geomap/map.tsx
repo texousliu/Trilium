@@ -84,9 +84,14 @@ export default function Map({ coordinates, zoom, layerName, viewportChanged, chi
 
     useEffect(() => { mapRef.current && mapRef.current.on("click", onClick) }, [ mapRef, onClick ]);
 
-    return <div ref={containerRef} className="geo-map-container">
-        <ParentMap.Provider value={mapRef.current}>
-            {children}
-        </ParentMap.Provider>
-    </div>;
+    return (
+        <div
+            ref={containerRef}
+            className={`geo-map-container ${MAP_LAYERS[layerName].isDarkTheme ? "dark" : ""}`}
+        >
+            <ParentMap.Provider value={mapRef.current}>
+                {children}
+            </ParentMap.Provider>
+        </div>
+    );
 }
