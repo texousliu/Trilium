@@ -304,7 +304,7 @@ function formatHtml(html: string) {
     let pre: { indent: string; tag: string }[] = [];
 
     html = html
-        .replace(new RegExp("<pre>((.|\\t|\\n|\\r)+)?</pre>"), function (x) {
+        .replace(new RegExp("<pre>([\\s\\S]+?)?</pre>"), function (x) {
             pre.push({ indent: "", tag: x });
             return "<--TEMPPRE" + i++ + "/-->";
         })
