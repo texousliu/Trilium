@@ -86,13 +86,18 @@ jobs:
           test -d site/assets || (echo "ERROR: site/assets directory not found" && exit 1)
           echo "✅ Site validation passed"
       
-      # Setup Node.js for Wrangler
+      # Setup pnpm
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+      
+      # Setup Node.js with pnpm
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'pnpm'
       
-      # Deploy using Wrangler (recommended by Cloudflare)
+      # Deploy using Wrangler (with pnpm)
       - name: Deploy to Cloudflare Pages
         id: deploy
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
@@ -101,7 +106,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy site --project-name=trilium-docs --branch=${{ github.ref_name }}
-          packageManager: npm  # Explicitly use npm instead of pnpm
+          packageManager: pnpm
       
       # Deploy preview for PRs
       - name: Deploy Preview to Cloudflare Pages
@@ -112,7 +117,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy site --project-name=trilium-docs --branch=pr-${{ github.event.pull_request.number }}
-          packageManager: npm  # Explicitly use npm instead of pnpm
+          packageManager: pnpm
       
       # Post deployment URL as PR comment
       - name: Comment PR with Preview URL
