@@ -7,6 +7,7 @@ import { t } from "../../services/i18n";
 import server from "../../services/server";
 import toast from "../../services/toast";
 import Button from "../react/Button";
+import FormToggle from "../react/FormToggle";
 import Modal from "../react/Modal";
 import FormList, { FormListItem } from "../react/FormList";
 import utils from "../../services/utils";
@@ -59,17 +60,36 @@ export default function RevisionsDialog() {
             helpPageId="vZWERwf8U3nx"
             bodyStyle={{ display: "flex", height: "80vh" }}
             header={
-                (!!revisions?.length && <Button text={t("revisions.delete_all_revisions")} size="small" style={{ padding: "0 10px" }}
-                    onClick={async () => {
-                        const text = t("revisions.confirm_delete_all");
+                !!revisions?.length && (
+                    <>
+                        {["text", "code", "mermaid"].includes(currentRevision?.type ?? "") && (
+                            <FormToggle
+                                currentValue={showDiff}
+                                onChange={(newValue) => setShowDiff(newValue)}
+                                switchOnName={t("revisions.diff_on")}
+                                switchOffName={t("revisions.diff_off")}
+                                switchOnTooltip={t("revisions.diff_on_hint")}
+                                switchOffTooltip={t("revisions.diff_off_hint")}
+                            />
+                        )}
+                        &nbsp;
+                        <Button
+                            text={t("revisions.delete_all_revisions")}
+                            size="small"
+                            style={{ padding: "0 10px" }}
+                            onClick={async () => {
+                                const text = t("revisions.confirm_delete_all");
 
-                        if (note && await dialog.confirm(text)) {
-                            await server.remove(`notes/${note.noteId}/revisions`);
-                            setRevisions([]);
-                            setCurrentRevision(undefined);
-                            toast.showMessage(t("revisions.revisions_deleted"));
-                        }
-                    }}/>)
+                                if (note && await dialog.confirm(text)) {
+                                    await server.remove(`notes/${note.noteId}/revisions`);
+                                    setRevisions([]);
+                                    setCurrentRevision(undefined);
+                                    toast.showMessage(t("revisions.revisions_deleted"));
+                                }
+                            }}
+                        />
+                    </>
+                )
             }
             footer={<RevisionFooter note={note} />} 
             footerStyle={{ paddingTop: 0, paddingBottom: 0 }}
@@ -103,10 +123,9 @@ export default function RevisionsDialog() {
                 }}>
                     <RevisionPreview 
                         noteContent={noteContent}
-                        revisionItem={currentRevision} 
+                        revisionItem={currentRevision}
+                        showDiff={showDiff} 
                         setShown={setShown}
-                        showDiff={showDiff}
-                        setShowDiff={setShowDiff}
                         onRevisionDeleted={() => {
                             setRefreshCounter(c => c + 1);
                             setCurrentRevision(undefined);
@@ -131,12 +150,11 @@ function RevisionsList({ revisions, onSelect, currentRevision }: { revisions: Re
         </FormList>);
 }
 
-function RevisionPreview({noteContent, revisionItem, setShown, showDiff, setShowDiff, onRevisionDeleted }: {
+function RevisionPreview({noteContent, revisionItem, showDiff, setShown, onRevisionDeleted }: {
     noteContent?: string,
-    revisionItem?: RevisionItem, 
-    setShown: Dispatch<StateUpdater<boolean>>, 
+    revisionItem?: RevisionItem,  
     showDiff: boolean,
-    setShowDiff: Dispatch<StateUpdater<boolean>>, 
+    setShown: Dispatch<StateUpdater<boolean>>,
     onRevisionDeleted?: () => void
 }) {
     const [ fullRevision, setFullRevision ] = useState<RevisionPojo>();
@@ -156,17 +174,6 @@ function RevisionPreview({noteContent, revisionItem, setShown, showDiff, setShow
                 {(revisionItem && <div className="revision-title-buttons">
                     {(!revisionItem.isProtected || protected_session_holder.isProtectedSessionAvailable()) &&
                         <>
-                            {["text", "code", "mermaid"].includes(revisionItem.type) && (
-                                <Button
-                                    icon={showDiff ? "bx bx-detail" : "bx bx-outline"}
-                                    text={showDiff ? t("revisions.content_button") : t("revisions.diff_button")}
-                                    title={showDiff ? t("revisions.content_button_title") : t("revisions.diff_button_title")}
-                                    onClick={async () => {
-                                        setShowDiff(!showDiff);
-                                    }}
-                                />
-                            )}
-                            &nbsp;
                             <Button
                                 icon="bx bx-history"
                                 text={t("revisions.restore_button")}
@@ -294,32 +301,46 @@ function RevisionContentText({ content }: { content: string | Buffer<ArrayBuffer
     return <div ref={contentRef} className="ck-content" dangerouslySetInnerHTML={{ __html: content as string }}></div>
 }
 
-function RevisionContentDiff({ noteContent, itemContent, itemType }: { noteContent?: string, itemContent: string | Buffer<ArrayBufferLike> | undefined, itemType: string }) {
-    let diffHtml: string;
+function RevisionContentDiff({ noteContent, itemContent, itemType }: {
+    noteContent?: string,
+    itemContent: string | Buffer<ArrayBufferLike> | undefined,
+    itemType: string
+}) {
+    const contentRef = useRef<HTMLDivElement>(null);
 
-    if (noteContent && typeof itemContent === "string") {
-        if (itemType === "text") {
-            noteContent = utils.formatHtml(noteContent);
-            itemContent = utils.formatHtml(itemContent);
+    useEffect(() => {
+        if (!noteContent || typeof itemContent !== "string") {
+            if (contentRef.current) {
+                contentRef.current.textContent = t("revisions.diff_not_available");
+            }
+            return;
         }
-        const diff = diffWords(noteContent, itemContent);
-        diffHtml = diff.map(part => {
+
+        let processedNoteContent = noteContent;
+        let processedItemContent = itemContent;
+
+        if (itemType === "text") {
+            processedNoteContent = utils.formatHtml(noteContent);
+            processedItemContent = utils.formatHtml(itemContent);
+        }
+
+        const diff = diffWords(processedNoteContent, processedItemContent);
+        const diffHtml = diff.map(part => {
             if (part.added) {
-                return `<span style="background:rgba(100, 200, 100, 0.5)">${utils.escapeHtml(part.value)}</span>`;
+                return `<span class="revision-diff-added">${utils.escapeHtml(part.value)}</span>`;
             } else if (part.removed) {
-                return `<span style="background:rgba(255, 100, 100, 0.5);text-decoration:line-through;">${utils.escapeHtml(part.value)}</span>`;
+                return `<span class="revision-diff-removed">${utils.escapeHtml(part.value)}</span>`;
             } else {
                 return utils.escapeHtml(part.value);
             }
         }).join("");
-    } else {
-        return <>{t("revisions.diff_not_available")}</>
-    }
-    
-    return (
-        <div className="ck-content" style={{ whiteSpace: "pre-wrap" }}
-            dangerouslySetInnerHTML={{ __html: diffHtml }}></div>
-    );
+
+        if (contentRef.current) {
+            contentRef.current.innerHTML = diffHtml;
+        }
+    }, [noteContent, itemContent, itemType]);
+
+    return <div ref={contentRef} className="ck-content" style={{ whiteSpace: "pre-wrap" }}></div>;
 }
 
 function RevisionFooter({ note }: { note?: FNote }) {
