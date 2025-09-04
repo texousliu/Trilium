@@ -5,9 +5,10 @@ import { DivIcon, Icon, marker } from "leaflet";
 export interface MarkerProps {
     coordinates: [ number, number ];
     icon?: Icon | DivIcon;
+    mouseDown?: (e: MouseEvent) => void;
 }
 
-export default function Marker({ coordinates, icon }: MarkerProps) {
+export default function Marker({ coordinates, icon, mouseDown }: MarkerProps) {
     const parentMap = useContext(ParentMap);
 
     useEffect(() => {
@@ -16,10 +17,15 @@ export default function Marker({ coordinates, icon }: MarkerProps) {
         const newMarker = marker(coordinates, {
             icon
         });
+
+        if (mouseDown) {
+            newMarker.on("mousedown", e => mouseDown(e.originalEvent));
+        }
+
         newMarker.addTo(parentMap);
 
         return () => newMarker.removeFrom(parentMap);
-    }, [ parentMap, coordinates ]);
+    }, [ parentMap, coordinates, mouseDown ]);
 
     return (<div />)
 }

@@ -4,12 +4,13 @@ import { ViewModeProps } from "../interface";
 import { useNoteLabel, useNoteProperty, useSpacedUpdate } from "../../react/hooks";
 import { DEFAULT_MAP_LAYER_NAME } from "./map_layer";
 import { divIcon, LatLng } from "leaflet";
-import { useEffect, useMemo, useState } from "preact/hooks";
+import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
 import Marker from "./marker";
 import froca from "../../../services/froca";
 import FNote from "../../../entities/fnote";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerIconShadow from "leaflet/dist/images/marker-shadow.png";
+import appContext from "../../../components/app_context";
 
 const DEFAULT_COORDINATES: [number, number] = [3.878638227135724, 446.6630455551659];
 const DEFAULT_ZOOM = 2;
@@ -67,6 +68,14 @@ function NoteMarker({ note }: { note: FNote }) {
     return latLng && <Marker
         coordinates={latLng}
         icon={icon}
+        mouseDown={useCallback((e: MouseEvent) => {
+            // Middle click to open in new tab
+            if (e.button === 1) {
+                const hoistedNoteId = appContext.tabManager.getActiveContext()?.hoistedNoteId;
+                appContext.tabManager.openInNewTab(note.noteId, hoistedNoteId);
+                return true;
+            }
+        }, [ note.noteId ])}
     />
 }
 

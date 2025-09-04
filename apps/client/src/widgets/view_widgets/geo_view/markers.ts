@@ -22,16 +22,6 @@ export default function processNoteWithMarker(map: Map, note: FNote, location: s
         });
     }
 
-    newMarker.on("mousedown", ({ originalEvent }) => {
-        // Middle click to open in new tab
-        if (originalEvent.button === 1) {
-            const hoistedNoteId = appContext.tabManager.getActiveContext()?.hoistedNoteId;
-            //@ts-ignore, fix once tab manager is ported.
-            appContext.tabManager.openInNewTab(note.noteId, hoistedNoteId);
-            return true;
-        }
-    });
-
     newMarker.on("contextmenu", (e) => {
         openContextMenu(note.noteId, e, isEditable);
     });
