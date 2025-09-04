@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import L, { LatLng, Layer, LeafletMouseEvent } from "leaflet";
+import L, { control, LatLng, Layer, LeafletMouseEvent } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { MAP_LAYERS } from "./map_layer";
 import { ComponentChildren, createContext } from "preact";
-import { map } from "jquery";
 
 export const ParentMap = createContext<L.Map | null>(null);
 
@@ -15,9 +14,10 @@ interface MapProps {
     children: ComponentChildren;
     onClick?: (e: LeafletMouseEvent) => void;
     onContextMenu?: (e: LeafletMouseEvent) => void;
+    scale: boolean;
 }
 
-export default function Map({ coordinates, zoom, layerName, viewportChanged, children, onClick, onContextMenu }: MapProps) {
+export default function Map({ coordinates, zoom, layerName, viewportChanged, children, onClick, onContextMenu, scale }: MapProps) {
     const mapRef = useRef<L.Map>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -102,6 +102,15 @@ export default function Map({ coordinates, zoom, layerName, viewportChanged, chi
             return () => mapRef.current?.off("contextmenu", onContextMenu);
         }
     }, [ mapRef, onContextMenu ]);
+
+    // Scale
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!scale || !map) return;
+        const scaleControl  = control.scale();
+        scaleControl.addTo(map);
+        return () => scaleControl.remove();
+    }, [ mapRef, scale ]);
 
     return (
         <div

@@ -35,6 +35,7 @@ enum State {
 export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewModeProps<MapData>) {
     const [ state, setState ] = useState(State.Normal);
     const [ layerName ] = useNoteLabel(note, "map:style");
+    const [ hasScale ] = useNoteLabelBoolean(note, "map:scale");
     const [ isReadOnly ] = useNoteLabelBoolean(note, "readOnly");
     const [ notes, setNotes ] = useState<FNote[]>([]);
     const spacedUpdate = useSpacedUpdate(() => {
@@ -96,6 +97,7 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
                 }}
                 onClick={onClick}
                 onContextMenu={onContextMenu}
+                scale={hasScale}
             >
                 {notes.map(note => <NoteMarker note={note} editable={!isReadOnly} />)}
             </Map>

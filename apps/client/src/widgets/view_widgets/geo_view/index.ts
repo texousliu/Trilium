@@ -39,14 +39,6 @@ export default class GeoView extends ViewMode<MapData> {
         args.$parent.append(this.$root);
     }
 
-    async renderMap() {
-        const layerName = this.parentNote.getLabelValue("map:style") ?? ;
-
-        if (this.parentNote.hasLabel("map:scale")) {
-            L.control.scale().addTo(map);
-        }
-    }
-
     async #onMapInitialized() {
         const map = this.map;
         if (!map) {
