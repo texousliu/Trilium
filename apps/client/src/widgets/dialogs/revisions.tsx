@@ -18,12 +18,15 @@ import open from "../../services/open";
 import ActionButton from "../react/ActionButton";
 import options from "../../services/options";
 import { useTriliumEvent } from "../react/hooks";
+import { diffWords } from "diff";
 
 export default function RevisionsDialog() {
     const [ note, setNote ] = useState<FNote>();
+    const [ noteContent, setNoteContent ] = useState<string>();
     const [ revisions, setRevisions ] = useState<RevisionItem[]>();
     const [ currentRevision, setCurrentRevision ] = useState<RevisionItem>();
     const [ shown, setShown ] = useState(false);
+    const [ showDiff, setShowDiff ] = useState(false);
     const [ refreshCounter, setRefreshCounter ] = useState(0);
 
     useTriliumEvent("showRevisions", async ({ noteId }) => {
@@ -37,8 +40,10 @@ export default function RevisionsDialog() {
     useEffect(() => {
         if (note?.noteId) {
             server.get<RevisionItem[]>(`notes/${note.noteId}/revisions`).then(setRevisions);
+            note.getContent().then(setNoteContent);
         } else {
             setRevisions(undefined);
+            setNoteContent(undefined);
         }
     }, [ note?.noteId, refreshCounter ]);
 
@@ -70,6 +75,7 @@ export default function RevisionsDialog() {
             footerStyle={{ paddingTop: 0, paddingBottom: 0 }}
             onHidden={() => {
                 setShown(false);
+                setShowDiff(false);
                 setNote(undefined);
                 setCurrentRevision(undefined);
                 setRevisions(undefined);
@@ -92,11 +98,15 @@ export default function RevisionsDialog() {
                     marginLeft: "20px",
                     display: "flex",
                     flexDirection: "column",
+                    maxWidth: "calc(100% - 150px)",
                     minWidth: 0                    
                 }}>
                     <RevisionPreview 
+                        noteContent={noteContent}
                         revisionItem={currentRevision} 
                         setShown={setShown}
+                        showDiff={showDiff}
+                        setShowDiff={setShowDiff}
                         onRevisionDeleted={() => {
                             setRefreshCounter(c => c + 1);
                             setCurrentRevision(undefined);
@@ -121,9 +131,12 @@ function RevisionsList({ revisions, onSelect, currentRevision }: { revisions: Re
         </FormList>);
 }
 
-function RevisionPreview({ revisionItem, setShown, onRevisionDeleted }: { 
+function RevisionPreview({noteContent, revisionItem, setShown, showDiff, setShowDiff, onRevisionDeleted }: {
+    noteContent?: string,
     revisionItem?: RevisionItem, 
-    setShown: Dispatch<StateUpdater<boolean>>,
+    setShown: Dispatch<StateUpdater<boolean>>, 
+    showDiff: boolean,
+    setShowDiff: Dispatch<StateUpdater<boolean>>, 
     onRevisionDeleted?: () => void
 }) {
     const [ fullRevision, setFullRevision ] = useState<RevisionPojo>();
@@ -143,6 +156,17 @@ function RevisionPreview({ revisionItem, setShown, onRevisionDeleted }: {
                 {(revisionItem && <div className="revision-title-buttons">
                     {(!revisionItem.isProtected || protected_session_holder.isProtectedSessionAvailable()) &&
                         <>
+                            {["text", "code", "mermaid"].includes(revisionItem.type) && (
+                                <Button
+                                    icon={showDiff ? "bx bx-detail" : "bx bx-outline"}
+                                    text={showDiff ? t("revisions.content_button") : t("revisions.diff_button")}
+                                    title={showDiff ? t("revisions.content_button_title") : t("revisions.diff_button_title")}
+                                    onClick={async () => {
+                                        setShowDiff(!showDiff);
+                                    }}
+                                />
+                            )}
+                            &nbsp;
                             <Button
                                 icon="bx bx-history"
                                 text={t("revisions.restore_button")}
@@ -179,7 +203,7 @@ function RevisionPreview({ revisionItem, setShown, onRevisionDeleted }: {
                 </div>)}
             </div>
             <div className="revision-content use-tn-links" style={{ overflow: "auto", wordBreak: "break-word" }}>
-                <RevisionContent revisionItem={revisionItem} fullRevision={fullRevision} />
+                <RevisionContent noteContent={noteContent} revisionItem={revisionItem} fullRevision={fullRevision} showDiff={showDiff}/>
             </div>
         </>
     );
@@ -197,12 +221,15 @@ const CODE_STYLE: CSSProperties = {
     whiteSpace: "pre-wrap"
 };
 
-function RevisionContent({ revisionItem, fullRevision }: { revisionItem?: RevisionItem, fullRevision?: RevisionPojo }) {
+function RevisionContent({ noteContent, revisionItem, fullRevision, showDiff }: { noteContent?:string, revisionItem?: RevisionItem, fullRevision?: RevisionPojo, showDiff: boolean}) {
     const content = fullRevision?.content;
     if (!revisionItem || !content) {
         return <></>;
     }
 
+    if (showDiff) {
+        return <RevisionContentDiff noteContent={noteContent} itemContent={content} itemType={revisionItem.type}/>
+    }
     switch (revisionItem.type) {
         case "text":
             return <RevisionContentText content={content} />
@@ -265,6 +292,34 @@ function RevisionContentText({ content }: { content: string | Buffer<ArrayBuffer
         }
     }, [content]);
     return <div ref={contentRef} className="ck-content" dangerouslySetInnerHTML={{ __html: content as string }}></div>
+}
+
+function RevisionContentDiff({ noteContent, itemContent, itemType }: { noteContent?: string, itemContent: string | Buffer<ArrayBufferLike> | undefined, itemType: string }) {
+    let diffHtml: string;
+
+    if (noteContent && typeof itemContent === "string") {
+        if (itemType === "text") {
+            noteContent = utils.formatHtml(noteContent);
+            itemContent = utils.formatHtml(itemContent);
+        }
+        const diff = diffWords(noteContent, itemContent);
+        diffHtml = diff.map(part => {
+            if (part.added) {
+                return `<span style="background:#d4fcbc">${utils.escapeHtml(part.value)}</span>`;
+            } else if (part.removed) {
+                return `<span style="background:#ffe6e6;text-decoration:line-through;">${utils.escapeHtml(part.value)}</span>`;
+            } else {
+                return utils.escapeHtml(part.value);
+            }
+        }).join("");
+    } else {
+        return <>{t("revisions.diff_not_available")}</>
+    }
+    
+    return (
+        <div className="ck-content" style={{ whiteSpace: "pre-wrap" }}
+            dangerouslySetInnerHTML={{ __html: diffHtml }}></div>
+    );
 }
 
 function RevisionFooter({ note }: { note?: FNote }) {
