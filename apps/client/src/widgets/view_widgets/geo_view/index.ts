@@ -12,7 +12,6 @@ import { openMapContextMenu } from "./context_menu.js";
 import attributes from "../../../services/attributes.js";
 import { DEFAULT_MAP_LAYER_NAME, MAP_LAYERS } from "./map_layer.js";
 
-export const LOCATION_ATTRIBUTE = "geolocation";
 
 enum State {
     Normal,
@@ -119,7 +118,6 @@ export default class GeoView extends ViewMode<MapData> {
                 continue;
             }
 
-            const latLng = childNote.getAttributeValue("label", LOCATION_ATTRIBUTE);
             if (latLng) {
                 const marker = processNoteWithMarker(this.map, childNote, latLng, draggable);
                 this.currentMarkerData[childNote.noteId] = marker;

@@ -11,7 +11,6 @@ import L from "leaflet";
 let gpxLoaded = false;
 
 export default function processNoteWithMarker(map: Map, note: FNote, location: string, isEditable: boolean) {
-    const [lat, lng] = location.split(",", 2).map((el) => parseFloat(el));
     const icon = buildIcon(note.getIcon(), note.getColorClass(), note.title, note.noteId);
 
     const newMarker = marker(latLng(lat, lng), {
