@@ -18,7 +18,7 @@
   z-index: 997;
 }
 
-.geo-map-container.placing-note {
+.geo-view.placing-note .geo-map-container {
   cursor: crosshair;
 }
 

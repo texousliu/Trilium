@@ -13,10 +13,7 @@ import attributes from "../../../services/attributes.js";
 import { DEFAULT_MAP_LAYER_NAME, MAP_LAYERS } from "./map_layer.js";
 
 
-enum State {
-    Normal,
-    NewNote
-}
+
 
 export default class GeoView extends ViewMode<MapData> {
 
@@ -38,7 +35,6 @@ export default class GeoView extends ViewMode<MapData> {
 
         this.currentMarkerData = {};
         this.currentTrackData = {};
-        this._state = State.Normal;
 
         args.$parent.append(this.$root);
     }
@@ -127,7 +123,6 @@ export default class GeoView extends ViewMode<MapData> {
 
     #changeState(newState: State) {
         this._state = newState;
-        this.$container.toggleClass("placing-note", newState === State.NewNote);
         if (hasTouchBar) {
             this.triggerCommand("refreshTouchBar");
         }
@@ -151,39 +146,6 @@ export default class GeoView extends ViewMode<MapData> {
         if (loadResults.getAttributeRows().some(attr => (attr.name?.startsWith("map:") && attributes.isAffecting(attr, this.parentNote)))) {
             return true;
         }
-    }
-
-    async geoMapCreateChildNoteEvent({ ntxId }: EventData<"geoMapCreateChildNote">) {
-        toast.showPersistent({
-            icon: "plus",
-            id: "geo-new-note",
-            title: "New note",
-            message: t("geo-map.create-child-note-instruction")
-        });
-
-        this.#changeState(State.NewNote);
-
-        const globalKeyListener: (this: Window, ev: KeyboardEvent) => any = (e) => {
-            if (e.key !== "Escape") {
-                return;
-            }
-
-            this.#changeState(State.Normal);
-
-            window.removeEventListener("keydown", globalKeyListener);
-            toast.closePersistent("geo-new-note");
-        };
-        window.addEventListener("keydown", globalKeyListener);
-    }
-
-    async #onMapClicked(e: LeafletMouseEvent) {
-        if (this._state !== State.NewNote) {
-            return;
-        }
-
-        toast.closePersistent("geo-new-note");
-        await createNewNote(this.parentNote.noteId, e);
-        this.#changeState(State.Normal);
     }
 
     deleteFromMapEvent({ noteId }: EventData<"deleteFromMap">) {

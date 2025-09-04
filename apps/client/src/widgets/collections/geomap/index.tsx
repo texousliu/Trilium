@@ -1,7 +1,7 @@
 import Map from "./map";
 import "./index.css";
 import { ViewModeProps } from "../interface";
-import { useNoteLabel, useNoteLabelBoolean, useNoteProperty, useSpacedUpdate } from "../../react/hooks";
+import { useNoteLabel, useNoteLabelBoolean, useNoteProperty, useSpacedUpdate, useTriliumEvent } from "../../react/hooks";
 import { DEFAULT_MAP_LAYER_NAME } from "./map_layer";
 import { divIcon, LatLng, LeafletMouseEvent } from "leaflet";
 import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
@@ -11,8 +11,10 @@ import FNote from "../../../entities/fnote";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerIconShadow from "leaflet/dist/images/marker-shadow.png";
 import appContext from "../../../components/app_context";
-import { moveMarker } from "./api";
+import { createNewNote, moveMarker } from "./api";
 import openContextMenu from "./context_menu";
+import toast from "../../../services/toast";
+import { t } from "../../../services/i18n";
 
 const DEFAULT_COORDINATES: [number, number] = [3.878638227135724, 446.6630455551659];
 const DEFAULT_ZOOM = 2;
@@ -25,7 +27,13 @@ interface MapData {
     };
 }
 
+enum State {
+    Normal,
+    NewNote
+}
+
 export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewModeProps<MapData>) {
+    const [ state, setState ] = useState(State.Normal);
     const [ layerName ] = useNoteLabel(note, "map:style");
     const [ isReadOnly ] = useNoteLabelBoolean(note, "readOnly");
     const [ notes, setNotes ] = useState<FNote[]>([]);
@@ -37,8 +45,37 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
 
     useEffect(() => { froca.getNotes(noteIds).then(setNotes) }, [ noteIds ]);
 
+    // Note creation.
+    useTriliumEvent("geoMapCreateChildNote", () => {
+         toast.showPersistent({
+            icon: "plus",
+            id: "geo-new-note",
+            title: "New note",
+            message: t("geo-map.create-child-note-instruction")
+        });
+
+        setState(State.NewNote);
+
+        const globalKeyListener: (this: Window, ev: KeyboardEvent) => any = (e) => {
+            if (e.key === "Escape") {
+                setState(State.Normal);
+
+                window.removeEventListener("keydown", globalKeyListener);
+                toast.closePersistent("geo-new-note");
+            }
+        };
+        window.addEventListener("keydown", globalKeyListener);
+    });
+    const onClick = useCallback(async (e: LeafletMouseEvent) => {
+        if (state === State.NewNote) {
+            toast.closePersistent("geo-new-note");
+            await createNewNote(note.noteId, e);
+            setState(State.Normal);
+        }
+    }, [ state ]);
+
     return (
-        <div className="geo-view">
+        <div className={`geo-view ${state === State.NewNote ? "placing-note" : ""}`}>
             <Map
                 coordinates={viewConfig?.view?.center ?? DEFAULT_COORDINATES}
                 zoom={viewConfig?.view?.zoom ?? DEFAULT_ZOOM}
@@ -48,6 +85,7 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
                     viewConfig.view = { center: coordinates, zoom };
                     spacedUpdate.scheduleUpdate();
                 }}
+                onClick={onClick}
             >
                 {notes.map(note => <NoteMarker note={note} editable={!isReadOnly} />)}
             </Map>

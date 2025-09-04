@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import L, { LatLng, Layer } from "leaflet";
+import L, { LatLng, Layer, LeafletMouseEvent } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { MAP_LAYERS } from "./map_layer";
 import { ComponentChildren, createContext } from "preact";
+import { map } from "jquery";
 
 export const ParentMap = createContext<L.Map | null>(null);
 
@@ -12,9 +13,10 @@ interface MapProps {
     layerName: string;
     viewportChanged: (coordinates: LatLng, zoom: number) => void;
     children: ComponentChildren;
+    onClick: (e: LeafletMouseEvent) => void;
 }
 
-export default function Map({ coordinates, zoom, layerName, viewportChanged, children }: MapProps) {
+export default function Map({ coordinates, zoom, layerName, viewportChanged, children, onClick }: MapProps) {
     const mapRef = useRef<L.Map>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -79,6 +81,8 @@ export default function Map({ coordinates, zoom, layerName, viewportChanged, chi
             map.off("zoomend", updateFn);
         };
     }, [ mapRef, viewportChanged ]);
+
+    useEffect(() => { mapRef.current && mapRef.current.on("click", onClick) }, [ mapRef, onClick ]);
 
     return <div ref={containerRef} className="geo-map-container">
         <ParentMap.Provider value={mapRef.current}>
