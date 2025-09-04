@@ -1,4 +1,4 @@
-import { useCallback, useContext, useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
+import { MutableRef, useCallback, useContext, useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import { EventData, EventNames } from "../../components/app_context";
 import { ParentComponent } from "./react_utils";
 import SpacedUpdate from "../../services/spaced_update";
@@ -13,9 +13,10 @@ import FBlob from "../../entities/fblob";
 import NoteContextAwareWidget from "../note_context_aware_widget";
 import { RefObject, VNode } from "preact";
 import { Tooltip } from "bootstrap";
-import { CSSProperties } from "preact/compat";
+import { CSSProperties, DragEventHandler } from "preact/compat";
 import keyboard_actions from "../../services/keyboard_actions";
 import Mark from "mark.js";
+import { DragData } from "../note_tree";
 
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
     const parentComponent = useContext(ParentComponent);
@@ -575,4 +576,38 @@ export function useImperativeSearchHighlighlighting(highlightedTokens: string[] 
             className: "ck-find-result"
         });
     };
+}
+
+export function useNoteTreeDrag(containerRef: MutableRef<HTMLElement | null | undefined>, callback: (data: DragData[], e: DragEvent) => void) {
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        function onDragOver(e: DragEvent) {
+            // Allow drag.
+            e.preventDefault();
+        }
+
+        function onDrop(e: DragEvent) {
+            const data = e.dataTransfer?.getData('text');
+            if (!data) {
+                return;
+            }
+
+            const parsedData = JSON.parse(data) as DragData[];
+            if (!parsedData.length) {
+                return;
+            }
+
+            callback(parsedData, e);
+        }
+
+        container.addEventListener("dragover", onDragOver);
+        container.addEventListener("drop", onDrop);
+
+        return () => {
+            container.removeEventListener("dragover", onDragOver);
+            container.removeEventListener("drop", onDrop);
+        };
+    }, [ containerRef, callback ]);
 }

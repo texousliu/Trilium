@@ -2,11 +2,14 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import L, { control, LatLng, Layer, LeafletMouseEvent } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { MAP_LAYERS } from "./map_layer";
-import { ComponentChildren, createContext } from "preact";
+import { ComponentChildren, createContext, RefObject } from "preact";
+import { useSyncedRef } from "../../react/hooks";
 
 export const ParentMap = createContext<L.Map | null>(null);
 
 interface MapProps {
+    apiRef?: RefObject<L.Map>;
+    containerRef?: RefObject<HTMLDivElement>;
     coordinates: LatLng | [number, number];
     zoom: number;
     layerName: string;
@@ -17,9 +20,9 @@ interface MapProps {
     scale: boolean;
 }
 
-export default function Map({ coordinates, zoom, layerName, viewportChanged, children, onClick, onContextMenu, scale }: MapProps) {
-    const mapRef = useRef<L.Map>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
+export default function Map({ coordinates, zoom, layerName, viewportChanged, children, onClick, onContextMenu, scale, apiRef: _apiRef, containerRef: _containerRef }: MapProps) {
+    const mapRef = useSyncedRef<L.Map>(_apiRef);
+    const containerRef = useSyncedRef<HTMLDivElement>(_containerRef);
 
     useEffect(() => {
         if (!containerRef.current) return;

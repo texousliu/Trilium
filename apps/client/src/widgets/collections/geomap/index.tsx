@@ -1,10 +1,10 @@
 import Map from "./map";
 import "./index.css";
 import { ViewModeProps } from "../interface";
-import { useNoteBlob, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useSpacedUpdate, useTriliumEvent } from "../../react/hooks";
+import { useNoteBlob, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useNoteTreeDrag, useSpacedUpdate, useTriliumEvent } from "../../react/hooks";
 import { DEFAULT_MAP_LAYER_NAME } from "./map_layer";
 import { divIcon, GPXOptions, LatLng, LeafletMouseEvent } from "leaflet";
-import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
+import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import Marker, { GpxTrack } from "./marker";
 import froca from "../../../services/froca";
 import FNote from "../../../entities/fnote";
@@ -16,6 +16,7 @@ import openContextMenu, { openMapContextMenu } from "./context_menu";
 import toast from "../../../services/toast";
 import { t } from "../../../services/i18n";
 import server from "../../../services/server";
+import branches from "../../../services/branches";
 
 const DEFAULT_COORDINATES: [number, number] = [3.878638227135724, 446.6630455551659];
 const DEFAULT_ZOOM = 2;
@@ -85,9 +86,34 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
         openMapContextMenu(note.noteId, e, !isReadOnly);
     }, [ note.noteId, isReadOnly ]);
 
+    // Dragging
+    const containerRef = useRef<HTMLDivElement>(null);
+    const apiRef = useRef<L.Map>(null);
+    useNoteTreeDrag(containerRef, async (treeData, e) => {
+        const api = apiRef.current;
+        if (!note || !api) return;
+
+        const { noteId } = treeData[0];
+
+        const offset = containerRef.current?.getBoundingClientRect();
+        const x = e.clientX - (offset?.left ?? 0);
+        const y = e.clientY - (offset?.top ?? 0);
+        const latlng = api.containerPointToLatLng([ x, y ]);
+
+        const targetNote = await froca.getNote(noteId, true);
+        const parents = targetNote?.getParentNoteIds();
+        if (parents?.includes(note.noteId)) {
+            await moveMarker(noteId, latlng);
+        } else {
+            await branches.cloneNoteToParentNote(noteId, noteId);
+            await moveMarker(noteId, latlng);
+        }
+    });
+
     return (
         <div className={`geo-view ${state === State.NewNote ? "placing-note" : ""}`}>
             <Map
+                apiRef={apiRef} containerRef={containerRef}
                 coordinates={viewConfig?.view?.center ?? DEFAULT_COORDINATES}
                 zoom={viewConfig?.view?.zoom ?? DEFAULT_ZOOM}
                 layerName={layerName ?? DEFAULT_MAP_LAYER_NAME}
