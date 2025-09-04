@@ -23,6 +23,15 @@ function resetPath() {
 export function getElectronPath() {
     if (isNixOS()) {
         resetPath();            
+
+        try {
+            const path = execSync("which electron").toString("utf-8").trimEnd();
+            return path;
+        } catch (e) {
+            // Nothing to do, since we have a fallback below.
+        }
+
+        console.log("Using default since no Electron is available in path.");
         return execSync("nix eval --raw nixpkgs#electron_37").toString("utf-8") + "/bin/electron";
     } else {
         return "electron";
