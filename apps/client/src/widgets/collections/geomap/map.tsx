@@ -7,9 +7,10 @@ interface MapProps {
     coordinates: LatLng | [number, number];
     zoom: number;
     layerName: string;
+    viewportChanged: (coordinates: LatLng, zoom: number) => void;
 }
 
-export default function Map({ coordinates, zoom, layerName }: MapProps) {
+export default function Map({ coordinates, zoom, layerName, viewportChanged }: MapProps) {
     const mapRef = useRef<L.Map>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -59,6 +60,21 @@ export default function Map({ coordinates, zoom, layerName }: MapProps) {
         if (!mapRef.current) return;
         mapRef.current.setView(coordinates, zoom);
     }, [ mapRef, coordinates, zoom ]);
+
+    // Viewport callback.
+    useEffect(() => {
+        const map = mapRef.current;
+        if (!map) return;
+
+        const updateFn = () => viewportChanged(map.getBounds().getCenter(), map.getZoom());
+        map.on("moveend", updateFn);
+        map.on("zoomend", updateFn);
+
+        return () => {
+            map.off("moveend", updateFn);
+            map.off("zoomend", updateFn);
+        };
+    }, [ mapRef, viewportChanged ]);
 
     return <div ref={containerRef} className="geo-map-container" />;
 }

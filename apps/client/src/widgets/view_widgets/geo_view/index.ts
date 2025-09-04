@@ -75,9 +75,6 @@ export default class GeoView extends ViewMode<MapData> {
         this.#restoreViewportAndZoom();
 
         const isEditable = !this.isReadOnly;
-        const updateFn = () => this.spacedUpdate.scheduleUpdate();
-        map.on("moveend", updateFn);
-        map.on("zoomend", updateFn);
         map.on("click", (e) => this.#onMapClicked(e))
         map.on("contextmenu", (e) => openMapContextMenu(this.parentNote.noteId, e, isEditable));
 
@@ -117,13 +114,13 @@ export default class GeoView extends ViewMode<MapData> {
         if (map) {
             data = {
                 view: {
-                    center: map.getBounds().getCenter(),
-                    zoom: map.getZoom()
+                    center: ,
+                    zoom:
                 }
             };
         }
 
-        this.viewStorage.store(data);
+
     }
 
     async #reloadMarkers() {
