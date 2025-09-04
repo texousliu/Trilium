@@ -1,0 +1,8 @@
+# Control navigation order for top-level sections
+nav:
+  - index.md
+  - User Guide
+  - Developer Guide
+  - Script API
+  - Release Notes
+  - ...  # Include all other directories/files not explicitly listed

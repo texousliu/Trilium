@@ -78,6 +78,12 @@ plugins:
       separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
       lang:
         - en
+  - awesome-pages:
+      collapse_single_pages: false
+      strict: false
+      order: asc
+      sort_type: natural
+      order_by: title
   - minify:
       minify_html: true
       minify_js: true
@@ -178,94 +184,5 @@ extra:
     provider: mike
     default: stable
 
-# Navigation structure matching actual file paths
-nav:
-  - Home: index.md
-  - Introduction: README.md
-  
-  - Getting Started:
-    - Quick Start: User Guide/User Guide/Quick Start.md
-    - Installation:
-      - Desktop Installation: User Guide/User Guide/Installation & Setup/Desktop Installation.md
-      - Server Installation: User Guide/User Guide/Installation & Setup/Server Installation.md
-      - Docker: User Guide/User Guide/Installation & Setup/Server Installation/1. Installing the server/Using Docker.md
-      - Mobile Frontend: User Guide/User Guide/Installation & Setup/Mobile Frontend.md
-    
-  - User Guide:
-    - Overview: User Guide/User Guide.md
-    - Feature Highlights: User Guide/User Guide/Feature Highlights.md
-    - Basic Concepts:
-      - Notes: User Guide/User Guide/Basic Concepts and Features/Notes.md
-      - Keyboard Shortcuts: User Guide/User Guide/Basic Concepts and Features/Keyboard Shortcuts.md
-      - Themes: User Guide/User Guide/Basic Concepts and Features/Themes.md
-      - Zen Mode: User Guide/User Guide/Basic Concepts and Features/Zen mode.md
-    - Navigation:
-      - Search: User Guide/User Guide/Basic Concepts and Features/Navigation/Search.md
-      - Quick Search: User Guide/User Guide/Basic Concepts and Features/Navigation/Quick search.md
-      - Tree Concepts: User Guide/User Guide/Basic Concepts and Features/Navigation/Tree Concepts.md
-      - Note Navigation: User Guide/User Guide/Basic Concepts and Features/Navigation/Note Navigation.md
-      - Bookmarks: User Guide/User Guide/Basic Concepts and Features/Navigation/Bookmarks.md
-      - Workspaces: User Guide/User Guide/Basic Concepts and Features/Navigation/Workspaces.md
-    - Note Types:
-      - Overview: User Guide/User Guide/Note Types.md
-      - Text: User Guide/User Guide/Note Types/Text.md
-      - Code: User Guide/User Guide/Note Types/Code.md
-      - Canvas: User Guide/User Guide/Note Types/Canvas.md
-      - File: User Guide/User Guide/Note Types/File.md
-      - Mermaid Diagrams: User Guide/User Guide/Note Types/Mermaid Diagrams.md
-      - Mind Map: User Guide/User Guide/Note Types/Mind Map.md
-      - Collections: User Guide/User Guide/Note Types/Collections.md
-    - Advanced Usage:
-      - Attributes: User Guide/User Guide/Advanced Usage/Attributes.md
-      - Templates: User Guide/User Guide/Advanced Usage/Templates.md
-      - Sharing: User Guide/User Guide/Advanced Usage/Sharing.md
-      - Database: User Guide/User Guide/Advanced Usage/Database.md
-      - ETAPI: User Guide/User Guide/Advanced Usage/ETAPI (REST API).md
-    - Installation & Setup:
-      - Backup: User Guide/User Guide/Installation & Setup/Backup.md
-      - Synchronization: User Guide/User Guide/Installation & Setup/Synchronization.md
-      - Web Clipper: User Guide/User Guide/Installation & Setup/Web Clipper.md
-      - Data Directory: User Guide/User Guide/Installation & Setup/Data directory.md
-    - Scripting:
-      - Overview: User Guide/User Guide/Scripting.md
-      - Script API: User Guide/User Guide/Scripting/Script API.md
-      - Custom Widgets: User Guide/User Guide/Scripting/Custom Widgets.md
-      - Events: User Guide/User Guide/Scripting/Events.md
-    - Troubleshooting:
-      - Overview: User Guide/User Guide/Troubleshooting.md
-      - Error Logs: User Guide/User Guide/Troubleshooting/Error logs.md
-      - FAQ: User Guide/User Guide/FAQ.md
-    
-  - Developer Guide:
-    - Environment Setup: Developer Guide/Developer Guide/Environment Setup.md
-    - Project Structure: Developer Guide/Developer Guide/Project Structure.md
-    - Development:
-      - Icons: Developer Guide/Developer Guide/Development and architecture/Icons.md
-      - Options: Developer Guide/Developer Guide/Development and architecture/Options.md
-      - Themes: Developer Guide/Developer Guide/Development and architecture/Themes.md
-      - Database Tables:
-        - Notes: Developer Guide/Developer Guide/Development and architecture/Database/notes.md
-        - Attributes: Developer Guide/Developer Guide/Development and architecture/Database/attributes.md
-        - Branches: Developer Guide/Developer Guide/Development and architecture/Database/branches.md
-    
-  - Script API Documentation:
-    - API Reference: Script API/index.html
-    
-  - Release Notes:
-    - v0.98.1: Release Notes/Release Notes/v0.98.1.md
-    - v0.98.0: Release Notes/Release Notes/v0.98.0.md
-    - v0.97.2: Release Notes/Release Notes/v0.97.2.md
-    - v0.97.1: Release Notes/Release Notes/v0.97.1.md
-    - v0.97.0: Release Notes/Release Notes/v0.97.0.md
-    
-  - Translations:
-    - Español: README.es.md
-    - Italiano: README.it.md
-    - 日本語: README.ja.md
-    - Русский: README.ru.md
-    - 简体中文: README-ZH_CN.md
-    - 繁體中文: README-ZH_TW.md
-    
-  - Support:
-    - GitHub Issues: https://github.com/triliumnext/trilium/issues
-    - Discussions: https://github.com/triliumnext/trilium/discussions
+# Navigation is automatically generated from folder structure by awesome-pages plugin
+# To customize order or titles, create .pages files in directories
