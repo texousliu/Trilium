@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "preact/hooks";
 import { ParentMap } from "./map";
-import { DivIcon, Icon, LatLng, Marker as LeafletMarker, LeafletMouseEvent, marker, MarkerOptions } from "leaflet";
+import { DivIcon, GPX, GPXOptions, Icon, LatLng, Marker as LeafletMarker, LeafletMouseEvent, marker, MarkerOptions } from "leaflet";
+import "leaflet-gpx";
 
 export interface MarkerProps {
     coordinates: [ number, number ];
@@ -52,4 +53,19 @@ export default function Marker({ coordinates, icon, draggable, onClick, onDragge
     }, [ parentMap, coordinates, onMouseDown, onDragged ]);
 
     return (<div />)
+}
+
+export function GpxTrack({ gpxXmlString, options }: { gpxXmlString: string, options: GPXOptions }) {
+    const parentMap = useContext(ParentMap);
+
+    useEffect(() => {
+        if (!parentMap) return;
+
+        const track = new GPX(gpxXmlString, options);
+        track.addTo(parentMap);
+
+        return () => track.removeFrom(parentMap);
+    }, [ parentMap, gpxXmlString, options ]);
+
+    return <div />;
 }

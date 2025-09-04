@@ -1,11 +1,11 @@
 import Map from "./map";
 import "./index.css";
 import { ViewModeProps } from "../interface";
-import { useNoteLabel, useNoteLabelBoolean, useNoteProperty, useSpacedUpdate, useTriliumEvent } from "../../react/hooks";
+import { useNoteBlob, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useSpacedUpdate, useTriliumEvent } from "../../react/hooks";
 import { DEFAULT_MAP_LAYER_NAME } from "./map_layer";
-import { divIcon, LatLng, LeafletMouseEvent } from "leaflet";
+import { divIcon, GPXOptions, LatLng, LeafletMouseEvent } from "leaflet";
 import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
-import Marker from "./marker";
+import Marker, { GpxTrack } from "./marker";
 import froca from "../../../services/froca";
 import FNote from "../../../entities/fnote";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
@@ -15,6 +15,7 @@ import { createNewNote, moveMarker } from "./api";
 import openContextMenu, { openMapContextMenu } from "./context_menu";
 import toast from "../../../services/toast";
 import { t } from "../../../services/i18n";
+import server from "../../../services/server";
 
 const DEFAULT_COORDINATES: [number, number] = [3.878638227135724, 446.6630455551659];
 const DEFAULT_ZOOM = 2;
@@ -99,7 +100,11 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
                 onContextMenu={onContextMenu}
                 scale={hasScale}
             >
-                {notes.map(note => <NoteMarker note={note} editable={!isReadOnly} />)}
+                {notes.map(note => (
+                    note.mime !== "application/gpx+xml"
+                    ? <NoteMarker note={note} editable={!isReadOnly} />
+                    : <NoteGpxTrack note={note} />
+                ))}
             </Map>
         </div>
     );
@@ -146,6 +151,39 @@ function NoteMarker({ note, editable }: { note: FNote, editable: boolean }) {
         onClick={!editable ? onClick : undefined}
         onContextMenu={onContextMenu}
     />
+}
+
+function NoteGpxTrack({ note }: { note: FNote }) {
+    const [ xmlString, setXmlString ] = useState<string>();
+    const blob = useNoteBlob(note);
+
+    useEffect(() => {
+        server.get<string | Uint8Array>(`notes/${note.noteId}/open`, undefined, true).then(xmlResponse => {
+            if (xmlResponse instanceof Uint8Array) {
+                setXmlString(new TextDecoder().decode(xmlResponse));
+            } else {
+                setXmlString(xmlResponse);
+            }
+        });
+    }, [ blob ]);
+
+    // React to changes
+    const color = useNoteLabel(note, "color");
+    const iconClass = useNoteLabel(note, "iconClass");
+
+    const options = useMemo<GPXOptions>(() => ({
+        markers: {
+            startIcon: buildIcon(note.getIcon(), note.getColorClass(), note.title),
+            endIcon: buildIcon("bxs-flag-checkered"),
+            wptIcons: {
+                "": buildIcon("bx bx-pin")
+            }
+        },
+        polyline_options: {
+            color: note.getLabelValue("color") ?? "blue"
+        }
+    }), [ color, iconClass ]);
+    return xmlString && <GpxTrack gpxXmlString={xmlString} options={options} />
 }
 
 function buildIcon(bxIconClass: string, colorClass?: string, title?: string, noteIdLink?: string) {

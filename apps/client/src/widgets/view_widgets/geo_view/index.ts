@@ -83,18 +83,6 @@ export default class GeoView extends ViewMode<MapData> {
         this.currentMarkerData = {};
         const notes = await this.parentNote.getSubtreeNotes();
         const draggable = !this.isReadOnly;
-        for (const childNote of notes) {
-            if (childNote.mime === "application/gpx+xml") {
-                const track = await processNoteWithGpxTrack(this.map, childNote);
-                this.currentTrackData[childNote.noteId] = track;
-                continue;
-            }
-
-            if (latLng) {
-                const marker = processNoteWithMarker(this.map, childNote, latLng, draggable);
-                this.currentMarkerData[childNote.noteId] = marker;
-            }
-        }
     }
 
     #changeState(newState: State) {
