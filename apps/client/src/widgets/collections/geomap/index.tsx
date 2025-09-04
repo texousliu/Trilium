@@ -4,9 +4,10 @@ import { ViewModeProps } from "../interface";
 import { useNoteLabel, useSpacedUpdate } from "../../react/hooks";
 import { DEFAULT_MAP_LAYER_NAME } from "./map_layer";
 import { LatLng } from "leaflet";
-import { useEffect, useRef, useState } from "preact/hooks";
-import Marker, { MarkerProps } from "./marker";
+import { useEffect, useState } from "preact/hooks";
+import Marker from "./marker";
 import froca from "../../../services/froca";
+import FNote from "../../../entities/fnote";
 
 const DEFAULT_COORDINATES: [number, number] = [3.878638227135724, 446.6630455551659];
 const DEFAULT_ZOOM = 2;
@@ -21,33 +22,14 @@ interface MapData {
 
 export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewModeProps<MapData>) {
     const [ layerName ] = useNoteLabel(note, "map:style");
-    const [ markers, setMarkers ] = useState<MarkerProps[]>([]);
+    const [ notes, setNotes ] = useState<FNote[]>([]);
     const spacedUpdate = useSpacedUpdate(() => {
         if (viewConfig) {
             saveConfig(viewConfig);
         }
     }, 5000);
 
-    async function refreshMarkers() {
-        const notes = await froca.getNotes(noteIds);
-        const markers: MarkerProps[] = [];
-        for (const childNote of notes) {
-            const latLng = childNote.getAttributeValue("label", LOCATION_ATTRIBUTE);
-            if (!latLng) continue;
-
-            const [lat, lng] = latLng.split(",", 2).map((el) => parseFloat(el));
-            markers.push({
-                coordinates: [lat, lng]
-            })
-        }
-
-        console.log("Built ", markers);
-        setMarkers(markers);
-    }
-
-    useEffect(() => {
-        refreshMarkers();
-    }, [ note ]);
+    useEffect(() => { froca.getNotes(noteIds).then(setNotes) }, [ noteIds ]);
 
     return (
         <div className="geo-view">
@@ -61,8 +43,15 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
                     spacedUpdate.scheduleUpdate();
                 }}
             >
-                {markers.map(marker => <Marker {...marker} />)}
+                {notes.map(note => <NoteMarker note={note} />)}
             </Map>
         </div>
     );
+}
+
+function NoteMarker({ note }: { note: FNote }) {
+    const [ location ] = useNoteLabel(note, LOCATION_ATTRIBUTE);
+    const latLng = location?.split(",", 2).map((el) => parseFloat(el)) as [ number, number ] | undefined;
+
+    return latLng && <Marker coordinates={latLng} />
 }
