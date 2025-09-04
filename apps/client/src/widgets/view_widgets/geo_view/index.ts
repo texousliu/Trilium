@@ -132,10 +132,6 @@ export default class GeoView extends ViewMode<MapData> {
         }
     }
 
-    deleteFromMapEvent({ noteId }: EventData<"deleteFromMap">) {
-        moveMarker(noteId, null);
-    }
-
     buildTouchBarCommand({ TouchBar }: CommandListenerData<"buildTouchBar">) {
         const map = this.map;
         const that = this;

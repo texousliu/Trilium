@@ -67,6 +67,10 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
         window.addEventListener("keydown", globalKeyListener);
     });
 
+    useTriliumEvent("deleteFromMap", ({ noteId }) => {
+        moveMarker(noteId, null);
+    });
+
     const onClick = useCallback(async (e: LeafletMouseEvent) => {
         if (state === State.NewNote) {
             toast.closePersistent("geo-new-note");
