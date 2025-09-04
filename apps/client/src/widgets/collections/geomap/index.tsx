@@ -1,13 +1,15 @@
 import Map from "./map";
 import "./index.css";
 import { ViewModeProps } from "../interface";
-import { useNoteLabel, useSpacedUpdate } from "../../react/hooks";
+import { useNoteLabel, useNoteProperty, useSpacedUpdate } from "../../react/hooks";
 import { DEFAULT_MAP_LAYER_NAME } from "./map_layer";
-import { LatLng } from "leaflet";
-import { useEffect, useState } from "preact/hooks";
+import { divIcon, LatLng } from "leaflet";
+import { useEffect, useMemo, useState } from "preact/hooks";
 import Marker from "./marker";
 import froca from "../../../services/froca";
 import FNote from "../../../entities/fnote";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerIconShadow from "leaflet/dist/images/marker-shadow.png";
 
 const DEFAULT_COORDINATES: [number, number] = [3.878638227135724, 446.6630455551659];
 const DEFAULT_ZOOM = 2;
@@ -51,7 +53,33 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
 
 function NoteMarker({ note }: { note: FNote }) {
     const [ location ] = useNoteLabel(note, LOCATION_ATTRIBUTE);
+    const [ colorClass ] = useNoteLabel(note, "colorClass");
+    useNoteLabel(note, "iconClass"); // React to icon changes.
+    const title = useNoteProperty(note, "title");
+    const iconClass = note.getIcon();
     const latLng = location?.split(",", 2).map((el) => parseFloat(el)) as [ number, number ] | undefined;
+    const icon = useMemo(() => buildIcon(iconClass, colorClass ?? undefined, title, note.noteId), [ iconClass, colorClass, title, note.noteId]);
 
-    return latLng && <Marker coordinates={latLng} />
+    return latLng && <Marker
+        coordinates={latLng}
+        icon={icon}
+    />
+}
+
+function buildIcon(bxIconClass: string, colorClass?: string, title?: string, noteIdLink?: string) {
+    let html = /*html*/`\
+        <img class="icon" src="${markerIcon}" />
+        <img class="icon-shadow" src="${markerIconShadow}" />
+        <span class="bx ${bxIconClass} ${colorClass ?? ""}"></span>
+        <span class="title-label">${title ?? ""}</span>`;
+
+    if (noteIdLink) {
+        html = `<div data-href="#root/${noteIdLink}">${html}</div>`;
+    }
+
+    return divIcon({
+        html,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41]
+    });
 }

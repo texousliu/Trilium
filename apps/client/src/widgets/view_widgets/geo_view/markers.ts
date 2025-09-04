@@ -1,5 +1,3 @@
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerIconShadow from "leaflet/dist/images/marker-shadow.png";
 import { marker, latLng, divIcon, Map, type Marker } from "leaflet";
 import type FNote from "../../../entities/fnote.js";
 import openContextMenu from "./context_menu.js";
@@ -11,8 +9,6 @@ import L from "leaflet";
 let gpxLoaded = false;
 
 export default function processNoteWithMarker(map: Map, note: FNote, location: string, isEditable: boolean) {
-    const icon = buildIcon(note.getIcon(), note.getColorClass(), note.title, note.noteId);
-
     const newMarker = marker(latLng(lat, lng), {
         icon,
         draggable: isEditable,
@@ -77,22 +73,4 @@ export async function processNoteWithGpxTrack(map: Map, note: FNote) {
     });
     track.addTo(map);
     return track;
-}
-
-function buildIcon(bxIconClass: string, colorClass?: string, title?: string, noteIdLink?: string) {
-    let html = /*html*/`\
-        <img class="icon" src="${markerIcon}" />
-        <img class="icon-shadow" src="${markerIconShadow}" />
-        <span class="bx ${bxIconClass} ${colorClass ?? ""}"></span>
-        <span class="title-label">${title ?? ""}</span>`;
-
-    if (noteIdLink) {
-        html = `<div data-href="#root/${noteIdLink}">${html}</div>`;
-    }
-
-    return divIcon({
-        html,
-        iconSize: [25, 41],
-        iconAnchor: [12, 41]
-    });
 }
