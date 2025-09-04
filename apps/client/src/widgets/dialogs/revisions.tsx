@@ -305,9 +305,9 @@ function RevisionContentDiff({ noteContent, itemContent, itemType }: { noteConte
         const diff = diffWords(noteContent, itemContent);
         diffHtml = diff.map(part => {
             if (part.added) {
-                return `<span style="background:#d4fcbc">${utils.escapeHtml(part.value)}</span>`;
+                return `<span style="background:rgba(100, 200, 100, 0.5)">${utils.escapeHtml(part.value)}</span>`;
             } else if (part.removed) {
-                return `<span style="background:#ffe6e6;text-decoration:line-through;">${utils.escapeHtml(part.value)}</span>`;
+                return `<span style="background:rgba(255, 100, 100, 0.5);text-decoration:line-through;">${utils.escapeHtml(part.value)}</span>`;
             } else {
                 return utils.escapeHtml(part.value);
             }
