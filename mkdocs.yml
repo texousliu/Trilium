@@ -1,0 +1,278 @@
+# MkDocs configuration for Trilium Notes documentation
+site_name: Trilium Notes Documentation
+site_url: https://docs.triliumnext.com
+site_description: Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases
+site_author: Trilium Notes Team
+
+# Repository information
+repo_name: triliumnext/trilium
+repo_url: https://github.com/triliumnext/trilium
+edit_uri: edit/main/docs/
+
+# Copyright
+copyright: Copyright &copy; 2025 Trilium Notes
+
+# Theme configuration
+theme:
+  name: material
+  
+  # Color scheme
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: deep-purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue-grey
+      accent: deep-purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  
+  # Font configuration
+  font:
+    text: Inter
+    code: JetBrains Mono
+  
+  # Features
+  features:
+    - announce.dismiss
+    - content.action.edit
+    - content.action.view
+    - content.code.annotate
+    - content.code.copy
+    - content.tooltips
+    - navigation.footer
+    - navigation.indexes
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.path
+    - navigation.prune
+    - navigation.sections
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+    - toc.integrate
+  
+  # Icons
+  icon:
+    logo: material/note-multiple
+    repo: fontawesome/brands/github
+
+# Plugins
+plugins:
+  - search:
+      separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+      lang:
+        - en
+  - minify:
+      minify_html: true
+      minify_js: true
+      minify_css: true
+      htmlmin_opts:
+        remove_comments: true
+  - git-revision-date-localized:
+      enable_creation_date: true
+      type: iso_datetime
+      fallback_to_build_date: true
+
+# Extensions
+markdown_extensions:
+  # Python Markdown
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+      permalink_title: Anchor link to this section for reference
+  
+  # Python Markdown Extensions
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# Extra CSS and JavaScript (if needed)
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/extra.js
+  # MathJax for mathematical notation
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
+# Extra configuration
+extra:
+  # Social links
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/zadam/trilium
+    - icon: fontawesome/brands/docker
+      link: https://hub.docker.com/r/zadam/trilium
+    - icon: fontawesome/solid/globe
+      link: https://trilium.cc
+  
+  # Analytics (optional - add your own if needed)
+  analytics:
+    provider: google
+    property: G-XXXXXXXXXX  # Replace with your Google Analytics ID
+    feedback:
+      title: Was this page helpful?
+      ratings:
+        - icon: material/emoticon-happy-outline
+          name: This page was helpful
+          data: 1
+          note: >-
+            Thanks for your feedback!
+        - icon: material/emoticon-sad-outline
+          name: This page could be improved
+          data: 0
+          note: >-
+            Thanks for your feedback! Help us improve this page by
+            <a href="https://github.com/zadam/trilium/issues/new/?title=[Feedback]+{title}+-+{url}" target="_blank" rel="noopener">opening an issue</a>.
+  
+  # Version
+  version:
+    provider: mike
+    default: stable
+
+# Navigation structure based on existing documentation
+nav:
+  - Home: index.md
+  
+  - Getting Started:
+    - Introduction: README.md
+    - Installation:
+      - Desktop Installation: User Guide/installation.md
+      - Server Installation: User Guide/server-installation.md
+      - Docker Installation: User Guide/docker.md
+      - Mobile Access: User Guide/mobile-frontend.md
+    - Quick Start Guide: User Guide/quick-start.md
+    
+  - User Guide:
+    - Overview: User Guide/index.md
+    - Basic Concepts:
+      - Notes & Branches: User Guide/notes-and-branches.md
+      - Note Types: User Guide/note-types.md
+      - Attributes: User Guide/attributes.md
+      - Relations: User Guide/relations.md
+    - Features:
+      - Note Editor: User Guide/note-editor.md
+      - Search: User Guide/search.md
+      - Note Map: User Guide/note-map.md
+      - Day Notes: User Guide/day-notes.md
+      - Book Notes: User Guide/book-notes.md
+      - Templates: User Guide/templates.md
+      - Cloning Notes: User Guide/cloning-notes.md
+      - Protected Notes: User Guide/protected-notes.md
+      - Note Revisions: User Guide/note-revisions.md
+      - Synchronization: User Guide/synchronization.md
+    - Advanced Features:
+      - Scripting: User Guide/scripting.md
+      - Themes: User Guide/themes.md
+      - Keyboard Shortcuts: User Guide/keyboard-shortcuts.md
+      - Web Clipper: User Guide/web-clipper.md
+      - Import & Export: User Guide/import-export.md
+      - Backup: User Guide/backup.md
+      - Configuration: User Guide/configuration.md
+    
+  - Script API:
+    - Overview: Script API/index.md
+    - Backend API:
+      - Overview: Script API/backend/index.md
+      - BNote: Script API/backend/BNote.md
+      - BBranch: Script API/backend/BBranch.md
+      - BAttribute: Script API/backend/BAttribute.md
+      - BackendScriptApi: Script API/backend/BackendScriptApi.md
+      - SQL API: Script API/backend/sql.md
+    - Frontend API:
+      - Overview: Script API/frontend/index.md
+      - FNote: Script API/frontend/FNote.md
+      - FBranch: Script API/frontend/FBranch.md
+      - FAttribute: Script API/frontend/FAttribute.md
+      - FrontendScriptApi: Script API/frontend/FrontendScriptApi.md
+    - Examples:
+      - Script Examples: Script API/examples.md
+      - Custom Widgets: Script API/custom-widgets.md
+      - Event Handlers: Script API/event-handlers.md
+    
+  - Developer Guide:
+    - Overview: Developer Guide/index.md
+    - Architecture:
+      - Project Structure: Developer Guide/architecture.md
+      - Database Schema: Developer Guide/database.md
+      - Entity System: Developer Guide/entities.md
+      - Cache System: Developer Guide/cache-system.md
+    - Development Setup:
+      - Local Development: Developer Guide/development.md
+      - Building from Source: Developer Guide/build.md
+      - Testing: Developer Guide/testing.md
+    - Contributing:
+      - Contribution Guide: Developer Guide/contributing.md
+      - Code Style: Developer Guide/code-style.md
+      - Creating Plugins: Developer Guide/plugins.md
+    - API Development:
+      - REST API: Developer Guide/rest-api.md
+      - ETAPI: Developer Guide/etapi.md
+      - WebSocket API: Developer Guide/websocket.md
+    
+  - Release Notes:
+    - Latest Release: Release Notes/latest.md
+    - Version History: Release Notes/history.md
+    - Migration Guides: Release Notes/migration.md
+    
+  - Translations:
+    - Español: README.es.md
+    - Italiano: README.it.md
+    - 日本語: README.ja.md
+    - Русский: README.ru.md
+    - 简体中文: README-ZH_CN.md
+    - 繁體中文: README-ZH_TW.md
+    
+  - Support:
+    - FAQ: support/faq.md
+    - Troubleshooting: support/troubleshooting.md
+    - Community: support/community.md
+    - Issue Tracker: https://github.com/zadam/trilium/issues
