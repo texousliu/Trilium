@@ -16,32 +16,23 @@ interface MapData {
     };
 }
 
-export default function GeoView({ note, viewStorage }: ViewModeProps<MapData>) {
+export default function GeoView({ note, viewConfig, saveConfig }: ViewModeProps<MapData>) {
     const [ layerName ] = useNoteLabel(note, "map:style");
-    const viewOptions = useRef<MapData["view"]>();
     const spacedUpdate = useSpacedUpdate(() => {
-        viewStorage.store({
-            view: viewOptions.current
-        });
+        if (viewConfig) {
+            saveConfig(viewConfig);
+        }
     }, 5000);
-
-    // Clean up on note change.
-    useEffect(() => {
-        viewStorage.restore().then(data => {
-            viewOptions.current = data?.view;
-        });
-    }, [ note ]);
 
     return (
         <div className="geo-view">
             <Map
-                coordinates={DEFAULT_COORDINATES}
-                zoom={DEFAULT_ZOOM}
+                coordinates={viewConfig?.view?.center ?? DEFAULT_COORDINATES}
+                zoom={viewConfig?.view?.zoom ?? DEFAULT_ZOOM}
                 layerName={layerName ?? DEFAULT_MAP_LAYER_NAME}
                 viewportChanged={(coordinates, zoom) => {
-                    if (!viewOptions.current) return;
-                    viewOptions.current.center = coordinates;
-                    viewOptions.current.zoom = zoom;
+                    if (!viewConfig) viewConfig = {};
+                    viewConfig.view = { center: coordinates, zoom };
                     spacedUpdate.scheduleUpdate();
                 }}
             />

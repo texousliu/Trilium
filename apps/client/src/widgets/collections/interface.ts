@@ -1,6 +1,5 @@
 import FNote from "../../entities/fnote";
 import type { ViewModeArgs } from "../view_widgets/view_mode";
-import ViewModeStorage from "../view_widgets/view_mode_storage";
 
 export const allViewTypes = ["list", "grid", "calendar", "table", "geoMap", "board"] as const;
 export type ArgsWithoutNoteId = Omit<ViewModeArgs, "noteIds">;
@@ -13,5 +12,6 @@ export interface ViewModeProps<T extends object> {
      */
     noteIds: string[];
     highlightedTokens: string[] | null | undefined;
-    viewStorage: ViewModeStorage<T>;
+    viewConfig: T | undefined;
+    saveConfig(newConfig: T): void;
 }

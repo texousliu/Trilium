@@ -72,8 +72,6 @@ export default class GeoView extends ViewMode<MapData> {
             throw new Error(t("geo-map.unable-to-load-map"));
         }
 
-        this.#restoreViewportAndZoom();
-
         const isEditable = !this.isReadOnly;
         map.on("click", (e) => this.#onMapClicked(e))
         map.on("contextmenu", (e) => openMapContextMenu(this.parentNote.noteId, e, isEditable));
@@ -93,34 +91,6 @@ export default class GeoView extends ViewMode<MapData> {
                 this.ignoreNextZoomEvent = false;
             });
         }
-    }
-
-    async #restoreViewportAndZoom() {
-        const map = this.map;
-        if (!map) {
-            return;
-        }
-
-        const parsedContent = await this.viewStorage.restore();
-
-        // Restore viewport position & zoom
-        const center = parsedContent?.view?.center ?? DEFAULT_COORDINATES;
-        const zoom = parsedContent?.view?.zoom ?? DEFAULT_ZOOM;
-    }
-
-    private onSave() {
-        const map = this.map;
-        let data: MapData = {};
-        if (map) {
-            data = {
-                view: {
-                    center: ,
-                    zoom:
-                }
-            };
-        }
-
-
     }
 
     async #reloadMarkers() {

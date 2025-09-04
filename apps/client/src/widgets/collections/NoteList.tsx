@@ -51,25 +51,30 @@ export default function NoteList<T extends object>({ note: providedNote, highlig
         return () => observer.disconnect();
     }, []);
 
-    const viewStorage = useMemo(() => {
-        if (!note || !viewType) return;
-        return new ViewModeStorage<T>(note, viewType);
-    }, [ note, viewType ]);
+    // Preload the configuration.
+    let props: ViewModeProps<any> | undefined | null = null;
+    const viewModeConfig = useViewModeConfig(note, viewType);
+    if (note && viewModeConfig) {
+        props = {
+            note, noteIds,
+            highlightedTokens,
+            viewConfig: viewModeConfig[0],
+            saveConfig: viewModeConfig[1]
+        }
+    }
 
     return (
         <div ref={widgetRef} className={`note-list-widget ${isFullHeight ? "full-height" : ""}`}>
-            {viewStorage && isEnabled && (
+            {props && isEnabled && (
                 <div className="note-list-widget-content">
-                    {getComponentByViewType(note, noteIds, viewType, highlightedTokens, viewStorage)}
+                    {getComponentByViewType(viewType, props)}
                 </div>
             )}
         </div>
     );
 }
 
-function getComponentByViewType(note: FNote, noteIds: string[], viewType: ViewTypeOptions, highlightedTokens: string[] | null | undefined, viewStorage: ViewModeStorage<any>) {
-    const props: ViewModeProps<any> = { note, noteIds, highlightedTokens, viewStorage };
-
+function getComponentByViewType(viewType: ViewTypeOptions, props: ViewModeProps<any>) {
     switch (viewType) {
         case "list":
             return <ListView {...props} />;
@@ -121,4 +126,19 @@ function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOptions | 
     })
 
     return noteIds;
+}
+
+function useViewModeConfig<T extends object>(note: FNote | null | undefined, viewType: ViewTypeOptions | undefined) {
+    const [ viewConfig, setViewConfig ] = useState<[T | undefined, (data: T) => void]>();
+
+    useEffect(() => {
+        if (!note || !viewType) return;
+        const viewStorage = new ViewModeStorage<T>(note, viewType);
+        viewStorage.restore().then(config => {
+            const storeFn = (config: T) => viewStorage.store(config);
+            setViewConfig([ config, storeFn ]);
+        });
+    }, [ note, viewType ]);
+
+    return viewConfig;
 }
