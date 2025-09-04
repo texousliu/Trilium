@@ -53,8 +53,4 @@ export default abstract class ViewMode<T extends object> extends Component {
         }
     }
 
-    get isReadOnly() {
-        return this.parentNote.hasLabel("readOnly");
-    }
-
 }

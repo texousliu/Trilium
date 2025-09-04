@@ -18,11 +18,6 @@ interface CreateChildResponse {
     };
 }
 
-export async function moveMarker(noteId: string, latLng: LatLng | null) {
-    const value = latLng ? [latLng.lat, latLng.lng].join(",") : "";
-    await attributes.setLabel(noteId, LOCATION_ATTRIBUTE, value);
-}
-
 export async function createNewNote(noteId: string, e: LeafletMouseEvent) {
     const title = await dialog.prompt({ message: t("relation_map.enter_title_of_new_note"), defaultValue: t("relation_map.default_new_note_title") });
 

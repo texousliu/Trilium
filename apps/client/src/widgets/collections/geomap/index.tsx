@@ -11,6 +11,7 @@ import FNote from "../../../entities/fnote";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerIconShadow from "leaflet/dist/images/marker-shadow.png";
 import appContext from "../../../components/app_context";
+import { moveMarker } from "./api";
 
 const DEFAULT_COORDINATES: [number, number] = [3.878638227135724, 446.6630455551659];
 const DEFAULT_ZOOM = 2;
@@ -25,6 +26,7 @@ interface MapData {
 
 export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewModeProps<MapData>) {
     const [ layerName ] = useNoteLabel(note, "map:style");
+    const [ isReadOnly ] = useNoteLabel(note, "readOnly");
     const [ notes, setNotes ] = useState<FNote[]>([]);
     const spacedUpdate = useSpacedUpdate(() => {
         if (viewConfig) {
@@ -46,13 +48,13 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
                     spacedUpdate.scheduleUpdate();
                 }}
             >
-                {notes.map(note => <NoteMarker note={note} />)}
+                {notes.map(note => <NoteMarker note={note} editable={!isReadOnly} />)}
             </Map>
         </div>
     );
 }
 
-function NoteMarker({ note }: { note: FNote }) {
+function NoteMarker({ note, editable }: { note: FNote, editable: boolean }) {
     const [ location ] = useNoteLabel(note, LOCATION_ATTRIBUTE);
 
     // React to changes
@@ -65,17 +67,25 @@ function NoteMarker({ note }: { note: FNote }) {
     const latLng = location?.split(",", 2).map((el) => parseFloat(el)) as [ number, number ] | undefined;
     const icon = useMemo(() => buildIcon(iconClass, colorClass ?? undefined, title, note.noteId), [ iconClass, colorClass, title, note.noteId]);
 
+    // Middle click to open in new tab
+    const onMouseDown = useCallback((e: MouseEvent) => {
+        if (e.button === 1) {
+            const hoistedNoteId = appContext.tabManager.getActiveContext()?.hoistedNoteId;
+            appContext.tabManager.openInNewTab(note.noteId, hoistedNoteId);
+            return true;
+        }
+    }, [ note.noteId ]);
+
+    const onDragged = useCallback((newCoordinates: LatLng) => {
+        moveMarker(note.noteId, newCoordinates);
+    }, [ note.noteId ]);
+
     return latLng && <Marker
         coordinates={latLng}
         icon={icon}
-        mouseDown={useCallback((e: MouseEvent) => {
-            // Middle click to open in new tab
-            if (e.button === 1) {
-                const hoistedNoteId = appContext.tabManager.getActiveContext()?.hoistedNoteId;
-                appContext.tabManager.openInNewTab(note.noteId, hoistedNoteId);
-                return true;
-            }
-        }, [ note.noteId ])}
+        mouseDown={onMouseDown}
+        draggable={editable}
+        dragged={onDragged}
     />
 }
 

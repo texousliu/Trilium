@@ -9,19 +9,6 @@ import L from "leaflet";
 let gpxLoaded = false;
 
 export default function processNoteWithMarker(map: Map, note: FNote, location: string, isEditable: boolean) {
-    const newMarker = marker(latLng(lat, lng), {
-        icon,
-        draggable: isEditable,
-        autoPan: true,
-        autoPanSpeed: 5
-    }).addTo(map);
-
-    if (isEditable) {
-        newMarker.on("moveend", (e) => {
-            moveMarker(note.noteId, (e.target as Marker).getLatLng());
-        });
-    }
-
     newMarker.on("contextmenu", (e) => {
         openContextMenu(note.noteId, e, isEditable);
     });
