@@ -157,9 +157,9 @@ extra:
   # Social links
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/zadam/trilium
+      link: https://github.com/triliumnext/trilium
     - icon: fontawesome/brands/docker
-      link: https://hub.docker.com/r/zadam/trilium
+      link: https://hub.docker.com/r/triliumnext/trilium
     - icon: fontawesome/solid/globe
       link: https://trilium.cc
   
@@ -180,7 +180,7 @@ extra:
           data: 0
           note: >-
             Thanks for your feedback! Help us improve this page by
-            <a href="https://github.com/zadam/trilium/issues/new/?title=[Feedback]+{title}+-+{url}" target="_blank" rel="noopener">opening an issue</a>.
+            <a href="https://github.com/triliumnext/trilium/issues/new/?title=[Feedback]+{title}+-+{url}" target="_blank" rel="noopener">opening an issue</a>.
   
   # Version
   version:
