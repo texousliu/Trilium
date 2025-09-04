@@ -62,6 +62,11 @@ jobs:
         env:
           PIP_DISABLE_PIP_VERSION_CHECK: 1
       
+      - name: Fix Documentation Structure
+        run: |
+          # Fix duplicate navigation entries by moving overview pages to index.md
+          python scripts/fix-mkdocs-structure.py
+      
       - name: Build MkDocs Site
         run: |
           # Build with strict mode but allow expected warnings
