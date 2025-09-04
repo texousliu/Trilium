@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "preact/hooks";
 import { ParentMap } from "./map";
-import { DivIcon, Icon, LatLng, Marker as LeafletMarker, marker, MarkerOptions } from "leaflet";
+import { DivIcon, Icon, LatLng, Marker as LeafletMarker, LeafletMouseEvent, marker, MarkerOptions } from "leaflet";
 
 export interface MarkerProps {
     coordinates: [ number, number ];
@@ -8,10 +8,11 @@ export interface MarkerProps {
     onClick?: () => void;
     onMouseDown?: (e: MouseEvent) => void;
     onDragged?: ((newCoordinates: LatLng) => void);
+    onContextMenu: (e: LeafletMouseEvent) => void;
     draggable?: boolean;
 }
 
-export default function Marker({ coordinates, icon, draggable, onClick, onDragged, onMouseDown }: MarkerProps) {
+export default function Marker({ coordinates, icon, draggable, onClick, onDragged, onMouseDown, onContextMenu }: MarkerProps) {
     const parentMap = useContext(ParentMap);
 
     useEffect(() => {
@@ -39,6 +40,10 @@ export default function Marker({ coordinates, icon, draggable, onClick, onDragge
                 const coordinates = (e.target as LeafletMarker).getLatLng();
                 onDragged(coordinates);
             });
+        }
+
+        if (onContextMenu) {
+            newMarker.on("contextmenu", e => onContextMenu(e))
         }
 
         newMarker.addTo(parentMap);

@@ -3,7 +3,7 @@ import "./index.css";
 import { ViewModeProps } from "../interface";
 import { useNoteLabel, useNoteLabelBoolean, useNoteProperty, useSpacedUpdate } from "../../react/hooks";
 import { DEFAULT_MAP_LAYER_NAME } from "./map_layer";
-import { divIcon, LatLng } from "leaflet";
+import { divIcon, LatLng, LeafletMouseEvent } from "leaflet";
 import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
 import Marker from "./marker";
 import froca from "../../../services/froca";
@@ -12,6 +12,7 @@ import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerIconShadow from "leaflet/dist/images/marker-shadow.png";
 import appContext from "../../../components/app_context";
 import { moveMarker } from "./api";
+import openContextMenu from "./context_menu";
 
 const DEFAULT_COORDINATES: [number, number] = [3.878638227135724, 446.6630455551659];
 const DEFAULT_ZOOM = 2;
@@ -84,6 +85,8 @@ function NoteMarker({ note, editable }: { note: FNote, editable: boolean }) {
         moveMarker(note.noteId, newCoordinates);
     }, [ note.noteId ]);
 
+    const onContextMenu = useCallback((e: LeafletMouseEvent) => openContextMenu(note.noteId, e, editable), [ note.noteId, editable ]);
+
     return latLng && <Marker
         coordinates={latLng}
         icon={icon}
@@ -91,6 +94,7 @@ function NoteMarker({ note, editable }: { note: FNote, editable: boolean }) {
         onMouseDown={onMouseDown}
         onDragged={editable ? onDragged : undefined}
         onClick={!editable ? onClick : undefined}
+        onContextMenu={onContextMenu}
     />
 }
 

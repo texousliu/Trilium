@@ -7,14 +7,6 @@ import L from "leaflet";
 
 let gpxLoaded = false;
 
-export default function processNoteWithMarker(map: Map, note: FNote, location: string, isEditable: boolean) {
-    newMarker.on("contextmenu", (e) => {
-        openContextMenu(note.noteId, e, isEditable);
-    });
-
-    return newMarker;
-}
-
 export async function processNoteWithGpxTrack(map: Map, note: FNote) {
     if (!gpxLoaded) {
         const GPX = await import("leaflet-gpx");
