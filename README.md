@@ -142,7 +142,7 @@ Download the repository, install dependencies using `pnpm` and then run the envi
 git clone https://github.com/TriliumNext/Trilium.git
 cd Trilium
 pnpm install
-pnpm nx run edit-docs:edit-docs
+pnpm edit-docs:edit-docs
 ```
 
 ### Building the Executable
@@ -151,7 +151,7 @@ Download the repository, install dependencies using `pnpm` and then build the de
 git clone https://github.com/TriliumNext/Trilium.git
 cd Trilium
 pnpm install
-pnpm nx --project=desktop electron-forge:make -- --arch=x64 --platform=win32
+pnpm run --filter desktop electron-forge:make --arch=x64 --platform=win32
 ```
 
 For more details, see the [development docs](https://github.com/TriliumNext/Trilium/tree/main/docs/Developer%20Guide/Developer%20Guide).

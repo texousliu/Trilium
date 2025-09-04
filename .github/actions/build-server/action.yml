@@ -23,7 +23,7 @@ runs:
     shell: bash
     run: |
       pnpm run chore:update-build-info
-      pnpm nx --project=server package
+      pnpm run --filter server package
   - name: Prepare artifacts
     shell: bash
     run: |

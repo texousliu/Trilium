@@ -59,8 +59,7 @@ body.background-effects.platform-win32.layout-vertical {
 }
 
 body.background-effects.platform-win32,
-body.background-effects.platform-win32 #root-widget,
-body.background-effects.platform-win32 #launcher-pane .launcher-button {
+body.background-effects.platform-win32 #root-widget {
     background: transparent !important;
 }
 
@@ -575,29 +574,18 @@ div.quick-search .search-button.show {
  * Quick search results
  */
 
+div.quick-search .dropdown-menu {
+    --quick-search-item-delimiter-color: transparent;
+    --menu-item-icon-vert-offset: -.065em;
+}
+
 /* Item */
 .quick-search .dropdown-menu *.dropdown-item {
     padding: 8px 12px !important;
 }
 
-/* Note icon */
-.quick-search .dropdown-menu .dropdown-item > .bx {
-    position: relative;
-    top: 1px;
-}
-
 .quick-search .quick-search-item-icon {
     vertical-align: text-bottom;
-}
-
-/* Note title */
-.quick-search .dropdown-menu .dropdown-item > a {
-    color: var(--menu-text-color);
-}
-
-.quick-search .dropdown-menu .dropdown-item > a:hover {
-    --hover-item-background-color: transparent;
-    text-decoration: underline;
 }
 
 /* Note path */
@@ -622,9 +610,8 @@ div.quick-search .search-button.show {
     font-weight: 600;
 }
 
-/* Divider line */
-.quick-search .dropdown-item::after {
-    display: none;
+.quick-search div.dropdown-divider {
+    margin: 8px 0;
 }
 
 /*
@@ -896,6 +883,80 @@ body.mobile .fancytree-node > span {
 
 /* Apply a border to the tab bar that avoids the current tab but also allows a transparent active tab. */
 body.layout-horizontal .tab-row-container {
+    border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
+}
+
+body.electron.background-effects.layout-horizontal .tab-row-container {
+    border-bottom: unset !important;
+}
+
+body.electron.background-effects.layout-horizontal .note-tab-wrapper {
+    top: 1px;
+}
+
+body.electron.background-effects.layout-horizontal .tab-row-container .toggle-button {
+    position: relative;
+}
+
+body.electron.background-effects.layout-horizontal .tab-row-container .toggle-button:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -10px;
+    right: -10px;
+    top: 29px;
+    height: 1px;
+    border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
+}
+
+body.electron.background-effects.layout-horizontal .tab-row-container .tab-scroll-button-left,
+body.electron.background-effects.layout-horizontal .tab-row-container .tab-scroll-button-right {
+    position: relative;
+}
+
+body.electron.background-effects.layout-horizontal .tab-row-container .tab-scroll-button-left:after,
+body.electron.background-effects.layout-horizontal .tab-row-container .tab-scroll-button-right:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0px;
+    right: 0px;
+    height: 1px;
+    border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
+}
+
+body.electron.background-effects.layout-horizontal .tab-row-container .note-tab[active]:before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -32768px;
+    top: var(--tab-height);
+    right: calc(100% - 1px);
+    height: 1px;
+    border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
+}
+
+body.electron.background-effects.layout-horizontal .tab-row-container .note-tab[active]:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 100%;
+    top: var(--tab-height);
+    right: 0;
+    width: 100vw;
+    height: 1px;
+    border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
+}
+
+body.electron.background-effects.layout-horizontal .tab-row-container .note-new-tab:before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -4px;
+    top: calc(var(--tab-height), -1);
+    right: 0;
+    width: 100vw;
+    height: 1px;
     border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
 }
 

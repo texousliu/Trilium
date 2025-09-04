@@ -41,7 +41,6 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - uses: nrwl/nx-set-shas@v4
       - name: Run the build
         uses: ./.github/actions/build-electron
         with:

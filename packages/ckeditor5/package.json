@@ -4,31 +4,7 @@
   "version": "45.0.0",
   "private": true,
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    "./package.json": "./package.json",
-    "./emoji_definitions/": "./src/emoji_definitions/",
-    "./content.css": "./dist/content.css",
-    "./index.css": "./dist/index.css",
-    ".": {
-      "development": "./src/index.ts",
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
-    }
-  },
-  "nx": {
-    "name": "ckeditor5",
-    "targets": {
-      "typecheck": {
-        "dependsOn": [
-          "^build"
-        ]
-      }
-    }
-  },
+  "main": "./src/index.ts",
   "dependencies": {
     "@triliumnext/ckeditor5-admonition": "workspace:*",
     "@triliumnext/ckeditor5-footnotes": "workspace:*",
@@ -39,6 +15,7 @@
     "ckeditor5-premium-features": "46.0.2"
   },
   "devDependencies": {
+    "@smithy/middleware-retry": "4.1.20",
     "@types/jquery": "3.5.33"
   }
 }

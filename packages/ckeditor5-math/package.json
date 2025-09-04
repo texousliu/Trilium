@@ -12,18 +12,7 @@
     "katex"
   ],
   "type": "module",
-  "main": "dist/index.ts",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    },
-    "./*": "./dist/*",
-    "./browser/*": null,
-    "./package.json": "./package.json"
-  },
+  "main": "src/index.ts",
   "author": "Sauli Anto",
   "license": "ISC",
   "engines": {
@@ -39,7 +28,7 @@
     "@ckeditor/ckeditor5-dev-utils": "43.1.0",
     "@ckeditor/ckeditor5-inspector": ">=4.1.0",
     "@ckeditor/ckeditor5-package-tools": "^4.0.0",
-    "@typescript-eslint/eslint-plugin": "~8.41.0",
+    "@typescript-eslint/eslint-plugin": "~8.42.0",
     "@typescript-eslint/parser": "^8.0.0",
     "@vitest/browser": "^3.0.5",
     "@vitest/coverage-istanbul": "^3.0.5",
@@ -80,14 +69,6 @@
     "**/*.css": [
       "stylelint --quiet --allow-empty-input"
     ]
-  },
-  "nx": {
-    "name": "ckeditor5-math",
-    "targets": {
-      "build": {
-        "cache": "true"
-      }
-    }
   },
   "dependencies": {
     "@ckeditor/ckeditor5-icons": "46.0.2"

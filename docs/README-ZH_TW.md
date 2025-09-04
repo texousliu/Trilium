@@ -139,7 +139,7 @@ pnpm run server:start
 git clone https://github.com/TriliumNext/Trilium.git
 cd Trilium
 pnpm install
-pnpm nx run edit-docs:edit-docs
+pnpm edit-docs:edit-docs
 ```
 
 ### 建置桌面可執行檔
@@ -149,7 +149,7 @@ pnpm nx run edit-docs:edit-docs
 git clone https://github.com/TriliumNext/Trilium.git
 cd Trilium
 pnpm install
-pnpm nx --project=desktop electron-forge:make -- --arch=x64 --platform=win32
+pnpm --filter=desktop electron-forge:make --arch=x64 --platform=win32
 ```
 
 更多細節請參見[開發文件](https://github.com/TriliumNext/Notes/blob/develop/docs/Developer%20Guide/Developer%20Guide/Building%20and%20deployment/Running%20a%20development%20build.md)。
