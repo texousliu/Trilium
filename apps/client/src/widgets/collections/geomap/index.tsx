@@ -67,6 +67,10 @@ function NoteMarker({ note, editable }: { note: FNote, editable: boolean }) {
     const latLng = location?.split(",", 2).map((el) => parseFloat(el)) as [ number, number ] | undefined;
     const icon = useMemo(() => buildIcon(iconClass, colorClass ?? undefined, title, note.noteId), [ iconClass, colorClass, title, note.noteId]);
 
+    const onClick = useCallback(() => {
+        appContext.triggerCommand("openInPopup", { noteIdOrPath: note.noteId });
+    }, [ note.noteId ]);
+
     // Middle click to open in new tab
     const onMouseDown = useCallback((e: MouseEvent) => {
         if (e.button === 1) {
@@ -83,9 +87,10 @@ function NoteMarker({ note, editable }: { note: FNote, editable: boolean }) {
     return latLng && <Marker
         coordinates={latLng}
         icon={icon}
-        mouseDown={onMouseDown}
         draggable={editable}
-        dragged={editable ? onDragged : undefined}
+        onMouseDown={onMouseDown}
+        onDragged={editable ? onDragged : undefined}
+        onClick={!editable ? onClick : undefined}
     />
 }
 

@@ -3,7 +3,6 @@ import type FNote from "../../../entities/fnote.js";
 import openContextMenu from "./context_menu.js";
 import server from "../../../services/server.js";
 import { moveMarker } from "./editing.js";
-import appContext from "../../../components/app_context.js";
 import L from "leaflet";
 
 let gpxLoaded = false;
@@ -12,12 +11,6 @@ export default function processNoteWithMarker(map: Map, note: FNote, location: s
     newMarker.on("contextmenu", (e) => {
         openContextMenu(note.noteId, e, isEditable);
     });
-
-    if (!isEditable) {
-        newMarker.on("click", (e) => {
-            appContext.triggerCommand("openInPopup", { noteIdOrPath: note.noteId });
-        });
-    }
 
     return newMarker;
 }

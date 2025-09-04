@@ -5,12 +5,13 @@ import { DivIcon, Icon, LatLng, Marker as LeafletMarker, marker, MarkerOptions }
 export interface MarkerProps {
     coordinates: [ number, number ];
     icon?: Icon | DivIcon;
-    mouseDown?: (e: MouseEvent) => void;
-    dragged?: ((newCoordinates: LatLng) => void);
+    onClick?: () => void;
+    onMouseDown?: (e: MouseEvent) => void;
+    onDragged?: ((newCoordinates: LatLng) => void);
     draggable?: boolean;
 }
 
-export default function Marker({ coordinates, icon, draggable, dragged, mouseDown }: MarkerProps) {
+export default function Marker({ coordinates, icon, draggable, onClick, onDragged, onMouseDown }: MarkerProps) {
     const parentMap = useContext(ParentMap);
 
     useEffect(() => {
@@ -25,21 +26,25 @@ export default function Marker({ coordinates, icon, draggable, dragged, mouseDow
 
         const newMarker = marker(coordinates, options);
 
-        if (mouseDown) {
-            newMarker.on("mousedown", e => mouseDown(e.originalEvent));
+        if (onClick) {
+            newMarker.on("click", () => onClick());
         }
 
-        if (dragged) {
+        if (onMouseDown) {
+            newMarker.on("mousedown", e => onMouseDown(e.originalEvent));
+        }
+
+        if (onDragged) {
             newMarker.on("moveend", e => {
                 const coordinates = (e.target as LeafletMarker).getLatLng();
-                dragged(coordinates);
+                onDragged(coordinates);
             });
         }
 
         newMarker.addTo(parentMap);
 
         return () => newMarker.removeFrom(parentMap);
-    }, [ parentMap, coordinates, mouseDown ]);
+    }, [ parentMap, coordinates, onMouseDown, onDragged ]);
 
     return (<div />)
 }
