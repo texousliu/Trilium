@@ -6,7 +6,7 @@ export interface MarkerProps {
     coordinates: [ number, number ];
     icon?: Icon | DivIcon;
     mouseDown?: (e: MouseEvent) => void;
-    dragged: ((newCoordinates: LatLng) => void)
+    dragged?: ((newCoordinates: LatLng) => void);
     draggable?: boolean;
 }
 

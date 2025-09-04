@@ -1,7 +1,7 @@
 import Map from "./map";
 import "./index.css";
 import { ViewModeProps } from "../interface";
-import { useNoteLabel, useNoteProperty, useSpacedUpdate } from "../../react/hooks";
+import { useNoteLabel, useNoteLabelBoolean, useNoteProperty, useSpacedUpdate } from "../../react/hooks";
 import { DEFAULT_MAP_LAYER_NAME } from "./map_layer";
 import { divIcon, LatLng } from "leaflet";
 import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
@@ -26,7 +26,7 @@ interface MapData {
 
 export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewModeProps<MapData>) {
     const [ layerName ] = useNoteLabel(note, "map:style");
-    const [ isReadOnly ] = useNoteLabel(note, "readOnly");
+    const [ isReadOnly ] = useNoteLabelBoolean(note, "readOnly");
     const [ notes, setNotes ] = useState<FNote[]>([]);
     const spacedUpdate = useSpacedUpdate(() => {
         if (viewConfig) {
@@ -85,7 +85,7 @@ function NoteMarker({ note, editable }: { note: FNote, editable: boolean }) {
         icon={icon}
         mouseDown={onMouseDown}
         draggable={editable}
-        dragged={onDragged}
+        dragged={editable ? onDragged : undefined}
     />
 }
 
