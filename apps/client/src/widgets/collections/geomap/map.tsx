@@ -23,9 +23,15 @@ export default function Map({ coordinates, zoom, layerName, viewportChanged, chi
 
     useEffect(() => {
         if (!containerRef.current) return;
-        mapRef.current = L.map(containerRef.current, {
+        const mapInstance = L.map(containerRef.current, {
             worldCopyJump: true
         });
+
+        mapRef.current = mapInstance;
+        return () => {
+            mapInstance.off();
+            mapInstance.remove();
+        };
     }, []);
 
     // Load the layer asynchronously.
