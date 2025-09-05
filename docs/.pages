@@ -5,4 +5,13 @@ nav:
   - Developer Guide
   - Script API
   - Release Notes
-  - ...  # Include all other directories/files not explicitly listed
+
+# Explicitly exclude README translation files from navigation
+hide:
+  - README.md
+  - README.es.md
+  - README.it.md
+  - README.ja.md
+  - README.ru.md
+  - README-ZH_CN.md
+  - README-ZH_TW.md

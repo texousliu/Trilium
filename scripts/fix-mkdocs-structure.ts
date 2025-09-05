@@ -114,7 +114,6 @@ function updateReferences(docsDir: string): FixResult[] {
         }
         
         // Decode URL-encoded paths for processing
-        // Use decodeURIComponent which is equivalent to Python's unquote
         let decodedLink: string;
         try {
             decodedLink = decodeURIComponent(link);
@@ -124,6 +123,7 @@ function updateReferences(docsDir: string): FixResult[] {
         }
         
         // Special case: if we're in index.md and the link starts with the parent directory name
+        // This happens when a file was converted to index.md and had links to siblings
         if (isIndex && decodedLink.includes('/')) {
             const pathParts = decodedLink.split('/');
             const parentDirName = path.basename(currentDir);
@@ -132,49 +132,29 @@ function updateReferences(docsDir: string): FixResult[] {
             if (pathParts[0] === parentDirName) {
                 // This is a self-referential path, strip the first part
                 const fixedLink = pathParts.slice(1).join('/');
-                // Continue processing with the fixed link
-                const decodedFixedLink = fixedLink;
-                
-                // Check if this fixed link points to a directory with index.md
-                if (!decodedFixedLink.startsWith('/')) {
-                    const resolvedPath = path.resolve(currentDir, decodedFixedLink);
-                    
-                    if (resolvedPath.endsWith('.md')) {
-                        const potentialDir = resolvedPath.slice(0, -3);
-                        const potentialIndex = path.join(potentialDir, 'index.md');
-                        
-                        if (fs.existsSync(potentialIndex)) {
-                            // Check if they share the same parent directory
-                            if (path.dirname(potentialDir) === path.dirname(currentDir)) {
-                                // It's a sibling - just use directory name
-                                const dirName = path.basename(potentialDir).replace(/ /g, '%20');
-                                return `[${text}](${dirName}/)`;
-                            }
-                            
-                            // Calculate relative path from current file to the directory
-                            const newPath = path.relative(currentDir, potentialDir).replace(/\\/g, '/').replace(/ /g, '%20');
-                            return `[${text}](${newPath}/)`;
-                        }
-                    }
-                }
-                
-                // If no special handling needed for the fixed link, return it as-is
+                // Re-encode spaces for URL compatibility before recursing
                 const fixedLinkEncoded = fixedLink.replace(/ /g, '%20');
-                return `[${text}](${fixedLinkEncoded})`;
+                // Recursively process the fixed link
+                return fixLink(`[${text}](${fixedLinkEncoded})`, text, fixedLinkEncoded, currentDir, isIndex);
             }
         }
         
         // For any .md link, check if there's a directory with index.md
+        // that should be used instead
         if (!decodedLink.startsWith('/')) {
+            // Resolve relative to current directory
             const resolvedPath = path.resolve(currentDir, decodedLink);
             
             // Check if this points to a file that should be a directory
+            // Remove .md extension to get the potential directory name
             if (resolvedPath.endsWith('.md')) {
                 const potentialDir = resolvedPath.slice(0, -3);
                 const potentialIndex = path.join(potentialDir, 'index.md');
                 
                 // If a directory with index.md exists, update the link
                 if (fs.existsSync(potentialIndex)) {
+                    // If we're in an index.md file and linking to a file that's now
+                    // in a sibling directory, adjust the path
                     if (isIndex) {
                         // Check if they share the same parent directory
                         if (path.dirname(potentialDir) === path.dirname(currentDir)) {
@@ -191,13 +171,13 @@ function updateReferences(docsDir: string): FixResult[] {
             }
         }
         
-        // Also handle local references (same directory) - should be 'if', not 'elif'
-        // This is intentional to handle both absolute and relative paths
+        // Also handle local references (same directory)
         if (!decodedLink.includes('/')) {
-            const basename = decodedLink.slice(0, -3); // Remove .md
+            const basename = decodedLink.slice(0, -3); // Remove .md extension
             const possibleDir = path.join(currentDir, basename);
             
             if (fs.existsSync(possibleDir) && fs.statSync(possibleDir).isDirectory()) {
+                // Re-encode spaces for URL compatibility
                 const encodedBasename = basename.replace(/ /g, '%20');
                 return `[${text}](${encodedBasename}/)`;
             }
