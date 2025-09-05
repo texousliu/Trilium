@@ -66,26 +66,56 @@ def update_references(docs_dir):
                     original_content = content
                 
                 # Update references to moved files
-                # This is a simplified approach - you might need more sophisticated regex
-                # for complex cases
-                
                 # Look for markdown links like [text](path.md)
                 import re
+                from urllib.parse import unquote, quote
                 pattern = r'\[([^\]]*)\]\(([^)]+\.md)\)'
                 
                 def fix_link(match):
                     text = match.group(1)
                     link = match.group(2)
                     
-                    # If the link doesn't contain a slash, it's a local reference
-                    if '/' not in link and not link.startswith('http'):
-                        # Check if this might be a moved file
-                        basename = link[:-3]  # Remove .md
-                        # If there's a directory with this name, update the link
-                        possible_dir = Path(root) / basename
+                    # Skip external links
+                    if link.startswith('http'):
+                        return match.group(0)
+                    
+                    # Decode URL-encoded paths for processing
+                    decoded_link = unquote(link)
+                    
+                    # Resolve the link path relative to current file
+                    current_dir = Path(root)
+                    
+                    # For any .md link, check if there's a directory with index.md
+                    # that should be used instead
+                    if not decoded_link.startswith('/'):
+                        # Resolve relative to current directory
+                        resolved_path = (current_dir / decoded_link).resolve()
+                        
+                        # Check if this points to a file that should be a directory
+                        # Remove .md extension to get the potential directory name
+                        if resolved_path.suffix == '.md':
+                            potential_dir = resolved_path.with_suffix('')
+                            potential_index = potential_dir / 'index.md'
+                            
+                            # If a directory with index.md exists, update the link
+                            if potential_index.exists():
+                                # Calculate relative path from current file to the directory
+                                new_path = os.path.relpath(potential_dir, current_dir)
+                                # Return link pointing to directory (MkDocs will serve index.md)
+                                # Replace backslashes with forward slashes for consistency
+                                new_path = new_path.replace('\\', '/')
+                                # Re-encode spaces in the path for URL compatibility
+                                new_path = new_path.replace(' ', '%20')
+                                return f'[{text}]({new_path}/)'
+                    
+                    # Also handle local references (same directory)
+                    elif '/' not in decoded_link:
+                        basename = decoded_link[:-3]  # Remove .md
+                        possible_dir = current_dir / basename
                         if possible_dir.exists() and possible_dir.is_dir():
-                            # Point to the directory (which will serve index.md)
-                            return f'[{text}]({basename}/)'
+                            # Re-encode spaces for URL compatibility
+                            encoded_basename = basename.replace(' ', '%20')
+                            return f'[{text}]({encoded_basename}/)'
                     
                     return match.group(0)
                 
