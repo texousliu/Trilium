@@ -1,4 +1,4 @@
-import Map from "./map";
+import Map, { MapApi } from "./map";
 import "./index.css";
 import { ViewModeProps } from "../interface";
 import { useNoteBlob, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useNoteTreeDrag, useSpacedUpdate, useTriliumEvent } from "../../react/hooks";
@@ -90,7 +90,7 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
 
     // Dragging
     const containerRef = useRef<HTMLDivElement>(null);
-    const apiRef = useRef<L.Map>(null);
+    const apiRef = useRef<MapApi>(null);
     useNoteTreeDrag(containerRef, async (treeData, e) => {
         const api = apiRef.current;
         if (!note || !api) return;

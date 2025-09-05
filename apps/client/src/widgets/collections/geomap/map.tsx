@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useImperativeHandle, useRef, useState } from "preact/hooks";
 import L, { control, LatLng, Layer, LeafletMouseEvent } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { MAP_LAYERS } from "./map_layer";
@@ -8,7 +8,7 @@ import { useSyncedRef } from "../../react/hooks";
 export const ParentMap = createContext<L.Map | null>(null);
 
 interface MapProps {
-    apiRef?: RefObject<L.Map>;
+    apiRef?: RefObject<MapApi | null>;
     containerRef?: RefObject<HTMLDivElement>;
     coordinates: LatLng | [number, number];
     zoom: number;
@@ -20,9 +20,22 @@ interface MapProps {
     scale: boolean;
 }
 
-export default function Map({ coordinates, zoom, layerName, viewportChanged, children, onClick, onContextMenu, scale, apiRef: _apiRef, containerRef: _containerRef }: MapProps) {
-    const mapRef = useSyncedRef<L.Map>(_apiRef);
+export interface MapApi {
+    containerPointToLatLng: L.Map["containerPointToLatLng"];
+}
+
+export default function Map({ coordinates, zoom, layerName, viewportChanged, children, onClick, onContextMenu, scale, apiRef, containerRef: _containerRef }: MapProps) {
+    const mapRef = useRef<L.Map>(null);
     const containerRef = useSyncedRef<HTMLDivElement>(_containerRef);
+
+    useImperativeHandle(apiRef ?? null, () => {
+        const map = mapRef.current;
+        if (!map) return null;
+
+        return {
+            containerPointToLatLng: (point) => map.containerPointToLatLng(point)
+        } satisfies MapApi;
+    });
 
     useEffect(() => {
         if (!containerRef.current) return;
