@@ -17,21 +17,6 @@ import type { TouchBarItem } from "../../components/touch_bar.js";
 import type { SegmentedControlSegment } from "electron";
 import { LOCALE_IDS } from "@triliumnext/commons";
 
-// Here we hard-code the imports in order to ensure that they are embedded by webpack without having to load all the languages.
-const LOCALE_MAPPINGS: Record<LOCALE_IDS, (() => Promise<{ default: LocaleInput }>) | null> = {
-    de: () => import("@fullcalendar/core/locales/de"),
-    es: () => import("@fullcalendar/core/locales/es"),
-    fr: () => import("@fullcalendar/core/locales/fr"),
-    cn: () => import("@fullcalendar/core/locales/zh-cn"),
-    tw: () => import("@fullcalendar/core/locales/zh-tw"),
-    ro: () => import("@fullcalendar/core/locales/ro"),
-    ru: () => import("@fullcalendar/core/locales/ru"),
-    ja: () => import("@fullcalendar/core/locales/ja"),
-    "pt_br": () => import("@fullcalendar/core/locales/pt-br"),
-    uk: () => import("@fullcalendar/core/locales/uk"),
-    en: null
-};
-
 // TODO: Deduplicate
 interface CreateChildResponse {
     note: {
@@ -91,7 +76,6 @@ export default class CalendarView extends ViewMode<{}> {
             selectable: isEditable,
             select: (e) => this.#onCalendarSelection(e),
             eventChange: (e) => this.#onEventMoved(e),
-            locale: await getFullCalendarLocale(options.get("locale")),
             height: "100%",
             nowIndicator: true,
             handleWindowResize: false,
@@ -574,13 +558,4 @@ export default class CalendarView extends ViewMode<{}> {
         return items;
     }
 
-}
-
-export async function getFullCalendarLocale(locale: LOCALE_IDS) {
-    const correspondingLocale = LOCALE_MAPPINGS[locale];
-    if (correspondingLocale) {
-        return (await correspondingLocale()).default;
-    } else {
-        return undefined;
-    }
 }
