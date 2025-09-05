@@ -98,9 +98,6 @@ const TPL = /*html*/`
         overflow: hidden;
     }
     </style>
-
-    <div class="calendar-container" tabindex="100">
-    </div>
 </div>
 `;
 
@@ -148,14 +145,6 @@ export default class CalendarView extends ViewMode<{}> {
         const isEditable = !this.isCalendarRoot;
 
         const { Calendar } = await import("@fullcalendar/core");
-        const plugins: PluginDef[] = [];
-        plugins.push((await import("@fullcalendar/daygrid")).default);
-        plugins.push((await import("@fullcalendar/timegrid")).default);
-        plugins.push((await import("@fullcalendar/list")).default);
-        plugins.push((await import("@fullcalendar/multimonth")).default);
-        if (isEditable || this.isCalendarRoot) {
-            plugins.push((await import("@fullcalendar/interaction")).default);
-        }
 
         let eventBuilder: EventSourceFunc;
         if (!this.isCalendarRoot) {
@@ -165,7 +154,6 @@ export default class CalendarView extends ViewMode<{}> {
         }
 
         // Parse user's initial view, if valid.
-        let initialView = "dayGridMonth";
         const userInitialView = this.parentNote.getLabelValue("calendar:view");
         if (userInitialView && CALENDAR_VIEWS.includes(userInitialView)) {
             initialView = userInitialView;
@@ -253,8 +241,6 @@ export default class CalendarView extends ViewMode<{}> {
                 end: `${CALENDAR_VIEWS.join(",")} today prev,next`
             }
         });
-        calendar.render();
-        this.calendar = calendar;
 
         new ResizeObserver(() => calendar.updateSize())
             .observe(this.$calendarContainer[0]);

@@ -6,6 +6,7 @@ import { ListView, GridView } from "./legacy/ListOrGridView";
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import GeoView from "./geomap";
 import ViewModeStorage from "../view_widgets/view_mode_storage";
+import CalendarView from "./calendar";
 
 interface NoteListProps<T extends object> {
     note?: FNote | null;
@@ -82,6 +83,8 @@ function getComponentByViewType(viewType: ViewTypeOptions, props: ViewModeProps<
             return <GridView {...props} />;
         case "geoMap":
             return <GeoView {...props} />;
+        case "calendar":
+            return <CalendarView {...props} />
     }
 }
 
