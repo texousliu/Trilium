@@ -46,12 +46,7 @@ interface Event {
     endTime?: string | null
 }
 
-const CALENDAR_VIEWS = [
-    "timeGridWeek",
-    "dayGridMonth",
-    "multiMonthYear",
-    "listMonth"
-]
+
 
 export default class CalendarView extends ViewMode<{}> {
 
@@ -91,14 +86,11 @@ export default class CalendarView extends ViewMode<{}> {
         }
 
         const calendar = new Calendar(this.$calendarContainer[0], {
-            plugins,
-            initialView,
             events: eventBuilder,
             editable: isEditable,
             selectable: isEditable,
             select: (e) => this.#onCalendarSelection(e),
             eventChange: (e) => this.#onEventMoved(e),
-            firstDay: options.getInt("firstDayOfWeek") ?? 0,
             weekends: !this.parentNote.hasAttribute("label", "calendar:hideWeekends"),
             weekNumbers: this.parentNote.hasAttribute("label", "calendar:weekNumbers"),
             locale: await getFullCalendarLocale(options.get("locale")),
@@ -167,10 +159,6 @@ export default class CalendarView extends ViewMode<{}> {
                 }
             },
             datesSet: (e) => this.#onDatesSet(e),
-            headerToolbar: {
-                start: "title",
-                end: `${CALENDAR_VIEWS.join(",")} today prev,next`
-            }
         });
 
         new ResizeObserver(() => calendar.updateSize())

@@ -1,27 +1,22 @@
 import { useEffect, useRef } from "preact/hooks";
-import { Calendar as FullCalendar, PluginDef } from "@fullcalendar/core";
+import { CalendarOptions, Calendar as FullCalendar, PluginDef } from "@fullcalendar/core";
 
-interface CalendarProps {
-    view: string;
+interface CalendarProps extends CalendarOptions {
     tabIndex?: number;
-    plugins: PluginDef[];
 }
 
-export default function Calendar({ tabIndex, view, plugins }: CalendarProps) {
+export default function Calendar({ tabIndex, ...options }: CalendarProps) {
     const calendarRef = useRef<FullCalendar>();
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (!containerRef.current) return;
 
-        const calendar = new FullCalendar(containerRef.current, {
-            initialView: view,
-            plugins: plugins
-        });
+        const calendar = new FullCalendar(containerRef.current, options);
         calendar.render();
 
         return () => calendar.destroy();
-    }, [ containerRef ]);
+    }, [ containerRef, options ]);
 
     return (
         <div ref={containerRef} className="calendar-container" tabIndex={tabIndex} />

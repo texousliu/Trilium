@@ -3,20 +3,34 @@ import { ViewModeProps } from "../interface";
 import Calendar from "./calendar";
 import { useEffect, useState } from "preact/hooks";
 import "./index.css";
+import { useTriliumOption, useTriliumOptionInt } from "../../react/hooks";
 
 interface CalendarViewData {
 
 }
 
+const CALENDAR_VIEWS = [
+    "timeGridWeek",
+    "dayGridMonth",
+    "multiMonthYear",
+    "listMonth"
+]
+
 export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarViewData>) {
     const plugins = usePlugins(false, false);
+    const [ firstDayOfWeek ] = useTriliumOptionInt("firstDayOfWeek");
 
     return (plugins &&
         <div className="calendar-view">
             <Calendar
                 plugins={plugins}
                 tabIndex={100}
-                view="dayGridMonth"
+                initialView="dayGridMonth"
+                headerToolbar={{
+                    start: "title",
+                    end: `${CALENDAR_VIEWS.join(",")} today prev,next`
+                }}
+                firstDay={firstDayOfWeek ?? 0}
             />
         </div>
     );
