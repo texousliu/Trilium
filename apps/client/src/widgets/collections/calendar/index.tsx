@@ -3,7 +3,7 @@ import { ViewModeProps } from "../interface";
 import Calendar from "./calendar";
 import { useEffect, useState } from "preact/hooks";
 import "./index.css";
-import { useTriliumOption, useTriliumOptionInt } from "../../react/hooks";
+import { useNoteLabel, useNoteLabelBoolean, useTriliumOption, useTriliumOptionInt } from "../../react/hooks";
 
 interface CalendarViewData {
 
@@ -19,6 +19,8 @@ const CALENDAR_VIEWS = [
 export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarViewData>) {
     const plugins = usePlugins(false, false);
     const [ firstDayOfWeek ] = useTriliumOptionInt("firstDayOfWeek");
+    const [ hideWeekends ] = useNoteLabelBoolean(note, "calendar:hideWeekends");
+    const [ weekNumbers ] = useNoteLabelBoolean(note, "calendar:weekNumbers");
 
     return (plugins &&
         <div className="calendar-view">
@@ -31,6 +33,8 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
                     end: `${CALENDAR_VIEWS.join(",")} today prev,next`
                 }}
                 firstDay={firstDayOfWeek ?? 0}
+                weekends={!hideWeekends}
+                weekNumbers={weekNumbers}
             />
         </div>
     );

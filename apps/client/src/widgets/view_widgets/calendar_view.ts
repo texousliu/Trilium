@@ -91,8 +91,6 @@ export default class CalendarView extends ViewMode<{}> {
             selectable: isEditable,
             select: (e) => this.#onCalendarSelection(e),
             eventChange: (e) => this.#onEventMoved(e),
-            weekends: !this.parentNote.hasAttribute("label", "calendar:hideWeekends"),
-            weekNumbers: this.parentNote.hasAttribute("label", "calendar:weekNumbers"),
             locale: await getFullCalendarLocale(options.get("locale")),
             height: "100%",
             nowIndicator: true,
