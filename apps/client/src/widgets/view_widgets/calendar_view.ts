@@ -50,9 +50,6 @@ export default class CalendarView extends ViewMode<{}> {
     }
 
     async renderList(): Promise<JQuery<HTMLElement> | undefined> {
-        this.isCalendarRoot = this.parentNote.hasLabel("calendarRoot") || this.parentNote.hasLabel("workspaceCalendarRoot");
-        const isEditable = !this.isCalendarRoot;
-
         const { Calendar } = await import("@fullcalendar/core");
 
         let eventBuilder: EventSourceFunc;
@@ -64,8 +61,6 @@ export default class CalendarView extends ViewMode<{}> {
 
         const calendar = new Calendar(this.$calendarContainer[0], {
             events: eventBuilder,
-            editable: isEditable,
-            selectable: isEditable,
             select: (e) => this.#onCalendarSelection(e),
             eventChange: (e) => this.#onEventMoved(e),
             height: "100%",
@@ -141,67 +136,6 @@ export default class CalendarView extends ViewMode<{}> {
         if (hasTouchBar) {
             appContext.triggerCommand("refreshTouchBar");
         }
-    }
-
-    async #onCalendarSelection(e: DateSelectArg) {
-        // Handle start and end date
-        const { startDate, endDate } = this.#parseStartEndDateFromEvent(e);
-        if (!startDate) {
-            return;
-        }
-
-        // Handle start and end time.
-        const { startTime, endTime } = this.#parseStartEndTimeFromEvent(e);
-
-        // Ask for the title
-        const title = await dialogService.prompt({ message: t("relation_map.enter_title_of_new_note"), defaultValue: t("relation_map.default_new_note_title") });
-        if (!title?.trim()) {
-            return;
-        }
-
-        // Create the note.
-        const { note } = await server.post<CreateChildResponse>(`notes/${this.parentNote.noteId}/children?target=into`, {
-            title,
-            content: "",
-            type: "text"
-        });
-
-        // Set the attributes.
-        attributes.setLabel(note.noteId, "startDate", startDate);
-        if (endDate) {
-            attributes.setLabel(note.noteId, "endDate", endDate);
-        }
-        if (startTime) {
-            attributes.setLabel(note.noteId, "startTime", startTime);
-        }
-        if (endTime) {
-            attributes.setLabel(note.noteId, "endTime", endTime);
-        }
-    }
-
-    #parseStartEndDateFromEvent(e: DateSelectArg | EventImpl) {
-        const startDate = CalendarView.#formatDateToLocalISO(e.start);
-        if (!startDate) {
-            return { startDate: null, endDate: null };
-        }
-        let endDate;
-        if (e.allDay) {
-            endDate = CalendarView.#formatDateToLocalISO(CalendarView.#offsetDate(e.end, -1));
-        } else {
-            endDate = CalendarView.#formatDateToLocalISO(e.end);
-        }
-        return { startDate, endDate };
-    }
-
-    #parseStartEndTimeFromEvent(e: DateSelectArg | EventImpl) {
-        let startTime: string | undefined | null = null;
-        let endTime: string | undefined | null = null;
-        if (!e.allDay) {
-            startTime = CalendarView.#formatTimeToLocalISO(e.start);
-            endTime = CalendarView.#formatTimeToLocalISO(e.end);
-        }
-
-        return { startTime, endTime };
     }
 
     async #onEventMoved(e: EventChangeArg) {
@@ -429,38 +363,6 @@ export default class CalendarView extends ViewMode<{}> {
         }
 
         return [note.title];
-    }
-
-    static #formatDateToLocalISO(date: Date | null | undefined) {
-        if (!date) {
-            return undefined;
-        }
-
-        const offset = date.getTimezoneOffset();
-        const localDate = new Date(date.getTime() - offset * 60 * 1000);
-        return localDate.toISOString().split("T")[0];
-    }
-
-    static #formatTimeToLocalISO(date: Date | null | undefined) {
-        if (!date) {
-            return undefined;
-        }
-
-        const offset = date.getTimezoneOffset();
-        const localDate = new Date(date.getTime() - offset * 60 * 1000);
-        return localDate.toISOString()
-            .split("T")[1]
-            .substring(0, 5);
-    }
-
-    static #offsetDate(date: Date | string | null | undefined, offset: number) {
-        if (!date) {
-            return undefined;
-        }
-
-        const newDate = new Date(date);
-        newDate.setDate(newDate.getDate() + offset);
-        return newDate;
     }
 
     buildTouchBarCommand({ TouchBar, buildIcon }: CommandListenerData<"buildTouchBar">) {

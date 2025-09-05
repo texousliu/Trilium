@@ -1,13 +1,17 @@
-import { LocaleInput, PluginDef } from "@fullcalendar/core/index.js";
+import { DateSelectArg, LocaleInput, PluginDef } from "@fullcalendar/core/index.js";
 import { ViewModeProps } from "../interface";
 import Calendar from "./calendar";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import "./index.css";
 import { useNoteLabel, useNoteLabelBoolean, useResizeObserver, useSpacedUpdate, useTriliumOption, useTriliumOptionInt } from "../../react/hooks";
-import { LOCALE_IDS } from "@triliumnext/commons";
+import { CreateChildrenResponse, LOCALE_IDS } from "@triliumnext/commons";
 import { Calendar as FullCalendar } from "@fullcalendar/core";
 import { setLabel } from "../../../services/attributes";
 import { circle } from "leaflet";
+import server from "../../../services/server";
+import { parseStartEndDateFromEvent, parseStartEndTimeFromEvent } from "./utils";
+import dialog from "../../../services/dialog";
+import { t } from "../../../services/i18n";
 
 interface CalendarViewData {
 
@@ -38,8 +42,9 @@ const LOCALE_MAPPINGS: Record<LOCALE_IDS, (() => Promise<{ default: LocaleInput 
 export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarViewData>) {
     const containerRef = useRef<HTMLDivElement>(null);
     const calendarRef = useRef<FullCalendar>(null);
-    const plugins = usePlugins(false, false);
-    const locale = useLocale();
+
+    const [ calendarRoot ] = useNoteLabelBoolean(note, "calendarRoot");
+    const [ workspaceCalendarRoot ] = useNoteLabelBoolean(note, "workspaceCalendarRoot");
     const [ firstDayOfWeek ] = useTriliumOptionInt("firstDayOfWeek");
     const [ hideWeekends ] = useNoteLabelBoolean(note, "calendar:hideWeekends");
     const [ weekNumbers ] = useNoteLabelBoolean(note, "calendar:weekNumbers");
@@ -47,6 +52,47 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
     const initialView = useRef(calendarView);
     const viewSpacedUpdate = useSpacedUpdate(() => setCalendarView(initialView.current));
     useResizeObserver(containerRef, () => calendarRef.current?.updateSize());
+    const isCalendarRoot = (calendarRoot || workspaceCalendarRoot);
+    const isEditable = !isCalendarRoot;
+
+    const plugins = usePlugins(isEditable, isCalendarRoot);
+    const locale = useLocale();
+
+    const onCalendarSelection = useCallback(async (e: DateSelectArg) => {
+        // Handle start and end date
+        const { startDate, endDate } = parseStartEndDateFromEvent(e);
+        if (!startDate) {
+            return;
+        }
+
+        // Handle start and end time.
+        const { startTime, endTime } = parseStartEndTimeFromEvent(e);
+
+        // Ask for the title
+        const title = await dialog.prompt({ message: t("relation_map.enter_title_of_new_note"), defaultValue: t("relation_map.default_new_note_title") });
+        if (!title?.trim()) {
+            return;
+        }
+
+        // Create the note.
+        const { note: eventNote } = await server.post<CreateChildrenResponse>(`notes/${note.noteId}/children?target=into`, {
+            title,
+            content: "",
+            type: "text"
+        });
+
+        // Set the attributes.
+        setLabel(eventNote.noteId, "startDate", startDate);
+        if (endDate) {
+            setLabel(eventNote.noteId, "endDate", endDate);
+        }
+        if (startTime) {
+            setLabel(eventNote.noteId, "startTime", startTime);
+        }
+        if (endTime) {
+            setLabel(eventNote.noteId, "endTime", endTime);
+        }
+    }, []);
 
     return (plugins &&
         <div className="calendar-view" ref={containerRef}>
@@ -64,6 +110,8 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
                 weekNumbers={weekNumbers}
                 handleWindowResize={false}
                 locale={locale}
+                editable={isEditable} selectable={isEditable}
+                select={onCalendarSelection}
                 viewDidMount={({ view }) => {
                     if (initialView.current !== view.type) {
                         initialView.current = view.type;
