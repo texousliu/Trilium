@@ -93,7 +93,7 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
     const apiRef = useRef<MapApi>(null);
     useNoteTreeDrag(containerRef, async (treeData, e) => {
         const api = apiRef.current;
-        if (!note || !api) return;
+        if (!note || !api || isReadOnly) return;
 
         const { noteId } = treeData[0];
 
