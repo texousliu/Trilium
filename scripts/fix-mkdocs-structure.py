@@ -84,6 +84,24 @@ def update_references(docs_dir):
                     
                     # Resolve the link path relative to current file
                     current_dir = Path(root)
+                    current_file = Path(root) / file
+                    
+                    # Check if the current file is an index.md that was moved
+                    # If so, we need to adjust relative paths
+                    is_index = file == 'index.md'
+                    
+                    # Special case: if we're in index.md and the link starts with the parent directory name
+                    # This happens when a file was converted to index.md and had links to siblings
+                    if is_index and '/' in decoded_link:
+                        path_parts = decoded_link.split('/')
+                        # Check if first part matches the parent directory name
+                        if path_parts[0] == current_dir.name:
+                            # This is a self-referential path, strip the first part
+                            fixed_link = '/'.join(path_parts[1:])
+                            # Re-encode spaces for URL compatibility before recursing
+                            fixed_link_encoded = fixed_link.replace(' ', '%20')
+                            # Recursively process the fixed link
+                            return fix_link(re.match(pattern, f'[{text}]({fixed_link_encoded})'))
                     
                     # For any .md link, check if there's a directory with index.md
                     # that should be used instead
@@ -99,17 +117,26 @@ def update_references(docs_dir):
                             
                             # If a directory with index.md exists, update the link
                             if potential_index.exists():
+                                # If we're in an index.md file and linking to a file that's now
+                                # in a sibling directory, adjust the path
+                                if is_index:
+                                    # Check if they share the same parent directory
+                                    if potential_dir.parent == current_dir.parent:
+                                        # It's a sibling - just use directory name
+                                        dir_name = potential_dir.name
+                                        dir_name = dir_name.replace(' ', '%20')
+                                        return f'[{text}]({dir_name}/)'
+                                
                                 # Calculate relative path from current file to the directory
                                 new_path = os.path.relpath(potential_dir, current_dir)
-                                # Return link pointing to directory (MkDocs will serve index.md)
                                 # Replace backslashes with forward slashes for consistency
                                 new_path = new_path.replace('\\', '/')
                                 # Re-encode spaces in the path for URL compatibility
                                 new_path = new_path.replace(' ', '%20')
                                 return f'[{text}]({new_path}/)'
                     
-                    # Also handle local references (same directory)
-                    elif '/' not in decoded_link:
+                    # Also handle local references (same directory) - should be 'if', not 'elif'
+                    if '/' not in decoded_link:
                         basename = decoded_link[:-3]  # Remove .md
                         possible_dir = current_dir / basename
                         if possible_dir.exists() and possible_dir.is_dir():
