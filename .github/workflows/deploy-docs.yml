@@ -11,6 +11,7 @@ on:
     # Only run when docs files change
     paths:
       - 'docs/**'
+      - 'README.md'  # README is synced to docs/index.md
       - 'mkdocs.yml'
       - 'requirements-docs.txt'
       - '.github/workflows/deploy-docs.yml'
@@ -26,6 +27,7 @@ on:
       - master
     paths:
       - 'docs/**'
+      - 'README.md'  # README is synced to docs/index.md
       - 'mkdocs.yml'
       - 'requirements-docs.txt'
       - '.github/workflows/deploy-docs.yml'
