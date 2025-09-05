@@ -30,7 +30,9 @@
     "search_note": "Wyszukaj notatkę po nazwie",
     "link_title_arbitrary": "Tytuł linku można dowolnie zmieniać",
     "link_title": "Tytuł linku",
-    "button_add_link": "Dodaj link"
+    "button_add_link": "Dodaj link",
+    "help_on_links": "Pomoc dotycząca linków",
+    "link_title_mirrors": "tytuł linku odzwierciedla tytuł obecnej notatki"
   },
   "branch_prefix": {
     "save": "Zapisz",
