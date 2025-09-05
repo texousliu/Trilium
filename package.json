@@ -24,6 +24,7 @@
     "chore:generate-openapi": "tsx ./scripts/generate-openapi.ts",
     "chore:update-build-info": "tsx ./scripts/update-build-info.ts",
     "chore:update-version": "tsx ./scripts/update-version.ts",
+    "chore:fix-mkdocs-structure": "tsx ./scripts/fix-mkdocs-structure.ts",
     "edit-docs:edit-docs": "pnpm run --filter edit-docs edit-docs",
     "edit-docs:edit-demo": "pnpm run --filter edit-docs edit-demo",
     "test:all": "pnpm test:parallel && pnpm test:sequential",
