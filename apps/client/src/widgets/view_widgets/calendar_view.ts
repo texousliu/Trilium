@@ -39,8 +39,6 @@ export default class CalendarView extends ViewMode<{}> {
     private $calendarContainer: JQuery<HTMLElement>;
     private calendar?: Calendar;
     private isCalendarRoot: boolean;
-    private lastView?: string;
-    private debouncedSaveView?: DebouncedFunction<() => void>;
 
     constructor(args: ViewModeArgs) {
         super(args, "calendar");
@@ -62,12 +60,6 @@ export default class CalendarView extends ViewMode<{}> {
             eventBuilder = async () => await CalendarView.buildEvents(this.noteIds)
         } else {
             eventBuilder = async (e: EventSourceFuncArg) => await this.#buildEventsForCalendar(e);
-        }
-
-        // Parse user's initial view, if valid.
-        const userInitialView = this.parentNote.getLabelValue("calendar:view");
-        if (userInitialView && CALENDAR_VIEWS.includes(userInitialView)) {
-            initialView = userInitialView;
         }
 
         const calendar = new Calendar(this.$calendarContainer[0], {
@@ -150,22 +142,6 @@ export default class CalendarView extends ViewMode<{}> {
     }
 
     #onDatesSet(e: DatesSetArg) {
-        const currentView = e.view.type;
-        if (currentView === this.lastView) {
-            return;
-        }
-
-        if (!this.debouncedSaveView) {
-            this.debouncedSaveView = debounce(() => {
-                if (this.lastView) {
-                    attributes.setLabel(this.parentNote.noteId, "calendar:view", this.lastView);
-                }
-            }, 1_000);
-        }
-
-        this.debouncedSaveView();
-        this.lastView = currentView;
-
         if (hasTouchBar) {
             appContext.triggerCommand("refreshTouchBar");
         }

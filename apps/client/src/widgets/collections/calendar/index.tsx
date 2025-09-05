@@ -1,10 +1,13 @@
 import { LocaleInput, PluginDef } from "@fullcalendar/core/index.js";
 import { ViewModeProps } from "../interface";
 import Calendar from "./calendar";
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import "./index.css";
-import { useNoteLabel, useNoteLabelBoolean, useTriliumOption, useTriliumOptionInt } from "../../react/hooks";
+import { useNoteLabel, useNoteLabelBoolean, useSpacedUpdate, useTriliumOption, useTriliumOptionInt } from "../../react/hooks";
 import { LOCALE_IDS } from "@triliumnext/commons";
+import { Calendar as FullCalendar } from "@fullcalendar/core";
+import { setLabel } from "../../../services/attributes";
+import { circle } from "leaflet";
 
 interface CalendarViewData {
 
@@ -33,18 +36,23 @@ const LOCALE_MAPPINGS: Record<LOCALE_IDS, (() => Promise<{ default: LocaleInput 
 };
 
 export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarViewData>) {
+    const calendarRef = useRef<FullCalendar>(null);
     const plugins = usePlugins(false, false);
     const locale = useLocale();
     const [ firstDayOfWeek ] = useTriliumOptionInt("firstDayOfWeek");
     const [ hideWeekends ] = useNoteLabelBoolean(note, "calendar:hideWeekends");
     const [ weekNumbers ] = useNoteLabelBoolean(note, "calendar:weekNumbers");
+    const [ calendarView, setCalendarView ] = useNoteLabel(note, "calendar:view");
+    const initialView = useRef(calendarView);
+    const viewSpacedUpdate = useSpacedUpdate(() => setCalendarView(initialView.current));
 
     return (plugins &&
         <div className="calendar-view">
             <Calendar
+                calendarRef={calendarRef}
                 plugins={plugins}
                 tabIndex={100}
-                initialView="dayGridMonth"
+                initialView={initialView.current && CALENDAR_VIEWS.includes(initialView.current) ? initialView.current : "dayGridMonth"}
                 headerToolbar={{
                     start: "title",
                     end: `${CALENDAR_VIEWS.join(",")} today prev,next`
@@ -53,6 +61,12 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
                 weekends={!hideWeekends}
                 weekNumbers={weekNumbers}
                 locale={locale}
+                viewDidMount={({ view }) => {
+                    if (initialView.current !== view.type) {
+                        initialView.current = view.type;
+                        viewSpacedUpdate.scheduleUpdate();
+                    }
+                }}
             />
         </div>
     );
