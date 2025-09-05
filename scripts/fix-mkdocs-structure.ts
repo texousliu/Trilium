@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
- * Fix MkDocs structure by moving overview pages to index.md inside their directories.
- * This prevents duplicate navigation entries when a file and directory have the same name.
+ * Fix MkDocs structure by:
+ * 1. Syncing README.md to docs/index.md with necessary path adjustments
+ * 2. Moving overview pages to index.md inside their directories to prevent duplicate navigation entries
  */
 
 import * as fs from 'fs';
@@ -235,6 +236,46 @@ function updateReferences(docsDir: string): FixResult[] {
     return updatesMade;
 }
 
+/**
+ * Sync README.md to docs/index.md with necessary path adjustments
+ */
+function syncReadmeToIndex(projectRoot: string, docsDir: string): FixResult[] {
+    const results: FixResult[] = [];
+    const readmePath = path.join(projectRoot, 'README.md');
+    const indexPath = path.join(docsDir, 'index.md');
+    
+    if (!fs.existsSync(readmePath)) {
+        console.warn('README.md not found in project root');
+        return results;
+    }
+    
+    // Read README content
+    let content = fs.readFileSync(readmePath, 'utf-8');
+    
+    // Fix image path (./docs/app.png -> app.png)
+    content = content.replace(/src="\.\/docs\/app\.png"/g, 'src="app.png"');
+    
+    // Fix language links in header
+    content = content.replace(/\[English\]\(\.\/README\.md\)/g, '[English](./index.md)');
+    content = content.replace(/\.\/docs\/README-ZH_CN\.md/g, './README-ZH_CN.md');
+    content = content.replace(/\.\/docs\/README-ZH_TW\.md/g, './README-ZH_TW.md');
+    content = content.replace(/\.\/docs\/README\.ru\.md/g, './README.ru.md');
+    content = content.replace(/\.\/docs\/README\.ja\.md/g, './README.ja.md');
+    content = content.replace(/\.\/docs\/README\.it\.md/g, './README.it.md');
+    content = content.replace(/\.\/docs\/README\.es\.md/g, './README.es.md');
+    
+    // Fix internal documentation links (./docs/User%20Guide -> ./User%20Guide)
+    content = content.replace(/\.\/docs\/User%20Guide/g, './User%20Guide');
+    
+    // Write the adjusted content to docs/index.md
+    fs.writeFileSync(indexPath, content, 'utf-8');
+    results.push({
+        message: `Synced README.md to docs/index.md with path adjustments`
+    });
+    
+    return results;
+}
+
 function main(): number {
     // Get the docs directory
     const scriptDir = path.dirname(new URL(import.meta.url).pathname);
@@ -242,6 +283,9 @@ function main(): number {
     const docsDir = path.join(projectRoot, 'docs');
     
     // Handle Windows paths (remove leading slash if on Windows)
+    const normalizedProjectRoot = process.platform === 'win32' && projectRoot.startsWith('/') 
+        ? projectRoot.substring(1) 
+        : projectRoot;
     const normalizedDocsDir = process.platform === 'win32' && docsDir.startsWith('/') 
         ? docsDir.substring(1) 
         : docsDir;
@@ -253,6 +297,16 @@ function main(): number {
     
     console.log(`Fixing MkDocs structure in ${normalizedDocsDir}`);
     console.log('-'.repeat(50));
+    
+    // Sync README.md to docs/index.md
+    const syncResults = syncReadmeToIndex(normalizedProjectRoot, normalizedDocsDir);
+    if (syncResults.length > 0) {
+        console.log('README sync:');
+        for (const result of syncResults) {
+            console.log(`  - ${result.message}`);
+        }
+        console.log();
+    }
     
     // Fix duplicate entries
     const fixes = fixDuplicateEntries(normalizedDocsDir);
@@ -279,7 +333,7 @@ function main(): number {
     }
     
     console.log('-'.repeat(50));
-    console.log(`Structure fix complete: ${fixes.length} files moved, ${updates.length} files updated`);
+    console.log(`Structure fix complete: ${syncResults.length} README syncs, ${fixes.length} files moved, ${updates.length} files updated`);
     
     return 0;
 }
