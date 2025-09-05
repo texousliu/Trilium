@@ -6,13 +6,14 @@ import "./index.css";
 import { useNoteLabel, useNoteLabelBoolean, useResizeObserver, useSpacedUpdate, useTriliumOption, useTriliumOptionInt } from "../../react/hooks";
 import { CreateChildrenResponse, LOCALE_IDS } from "@triliumnext/commons";
 import { Calendar as FullCalendar } from "@fullcalendar/core";
-import { setLabel } from "../../../services/attributes";
+import { removeOwnedAttributesByNameOrType, setLabel } from "../../../services/attributes";
 import { circle } from "leaflet";
 import server from "../../../services/server";
 import { parseStartEndDateFromEvent, parseStartEndTimeFromEvent } from "./utils";
 import dialog from "../../../services/dialog";
 import { t } from "../../../services/i18n";
 import { buildEvents, buildEventsForCalendar } from "./event_builder";
+import { newEvent } from "./api";
 
 interface CalendarViewData {
 
@@ -67,13 +68,8 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
     const locale = useLocale();
 
     const onCalendarSelection = useCallback(async (e: DateSelectArg) => {
-        // Handle start and end date
         const { startDate, endDate } = parseStartEndDateFromEvent(e);
-        if (!startDate) {
-            return;
-        }
-
-        // Handle start and end time.
+        if (!startDate) return;
         const { startTime, endTime } = parseStartEndTimeFromEvent(e);
 
         // Ask for the title
@@ -82,25 +78,8 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
             return;
         }
 
-        // Create the note.
-        const { note: eventNote } = await server.post<CreateChildrenResponse>(`notes/${note.noteId}/children?target=into`, {
-            title,
-            content: "",
-            type: "text"
-        });
-
-        // Set the attributes.
-        setLabel(eventNote.noteId, "startDate", startDate);
-        if (endDate) {
-            setLabel(eventNote.noteId, "endDate", endDate);
-        }
-        if (startTime) {
-            setLabel(eventNote.noteId, "startTime", startTime);
-        }
-        if (endTime) {
-            setLabel(eventNote.noteId, "endTime", endTime);
-        }
-    }, []);
+        newEvent(note, { title, startDate, endDate, startTime, endTime });
+    }, [ note ]);
 
     return (plugins &&
         <div className="calendar-view" ref={containerRef}>
