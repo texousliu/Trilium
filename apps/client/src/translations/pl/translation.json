@@ -38,7 +38,8 @@
     "save": "Zapisz",
     "edit_branch_prefix": "Edytuj prefiks gałęzi",
     "prefix": "Prefiks: ",
-    "branch_prefix_saved": "Zapisano prefiks gałęzi."
+    "branch_prefix_saved": "Zapisano prefiks gałęzi.",
+    "help_on_tree_prefix": "Pomoc dotycząca prefiksu drzewa"
   },
   "bulk_actions": {
     "labels": "Etykiety",
@@ -100,7 +101,8 @@
     "prefix_optional": "Prefiks (opcjonalne)",
     "clone_to_selected_note": "Sklonuj do wybranej notatki",
     "no_path_to_clone_to": "Brak ścieżki do sklonowania.",
-    "note_cloned": "Notatka \"{{clonedTitle}}\" została sklonowana do \"{{targetTitle}}\""
+    "note_cloned": "Notatka \"{{clonedTitle}}\" została sklonowana do \"{{targetTitle}}\"",
+    "help_on_links": "Pomoc dotycząca linków"
   },
   "help": {
     "title": "Ściągawka",
