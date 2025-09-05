@@ -30,22 +30,11 @@ export default class CalendarView extends ViewMode<{}> {
 
         this.$root = $(TPL);
         this.$calendarContainer = this.$root.find(".calendar-container");
-        this.isCalendarRoot = false;
         args.$parent.append(this.$root);
     }
 
     async renderList(): Promise<JQuery<HTMLElement> | undefined> {
-        const { Calendar } = await import("@fullcalendar/core");
-
-        let eventBuilder: EventSourceFunc;
-        if (!this.isCalendarRoot) {
-            eventBuilder =
-        } else {
-            eventBuilder = async (e: EventSourceFuncArg) => await this.#buildEventsForCalendar(e);
-        }
-
         const calendar = new Calendar(this.$calendarContainer[0], {
-            events: eventBuilder,
             select: (e) => this.#onCalendarSelection(e),
             eventChange: (e) => this.#onEventMoved(e),
             height: "100%",
@@ -181,50 +170,6 @@ export default class CalendarView extends ViewMode<{}> {
         if (loadResults.getAttributeRows().some((a) => this.noteIds.includes(a.noteId ?? ""))) {
             this.calendar?.refetchEvents();
         }
-    }
-
-    async #buildEventsForCalendar(e: EventSourceFuncArg) {
-        const events: EventInput[] = [];
-
-        // Gather all the required date note IDs.
-        const dateRange = utils.getMonthsInDateRange(e.startStr, e.endStr);
-        let allDateNoteIds: string[] = [];
-        for (const month of dateRange) {
-            // TODO: Deduplicate get type.
-            const dateNotesForMonth = await server.get<Record<string, string>>(`special-notes/notes-for-month/${month}?calendarRoot=${this.parentNote.noteId}`);
-            const dateNoteIds = Object.values(dateNotesForMonth);
-            allDateNoteIds = [...allDateNoteIds, ...dateNoteIds];
-        }
-
-        // Request all the date notes.
-        const dateNotes = await froca.getNotes(allDateNoteIds);
-        const childNoteToDateMapping: Record<string, string> = {};
-        for (const dateNote of dateNotes) {
-            const startDate = dateNote.getLabelValue("dateNote");
-            if (!startDate) {
-                continue;
-            }
-
-            events.push(await CalendarView.buildEvent(dateNote, { startDate }));
-
-            if (dateNote.hasChildren()) {
-                const childNoteIds = await dateNote.getSubtreeNoteIds();
-                for (const childNoteId of childNoteIds) {
-                    childNoteToDateMapping[childNoteId] = startDate;
-                }
-            }
-        }
-
-        // Request all child notes of date notes in a single run.
-        const childNoteIds = Object.keys(childNoteToDateMapping);
-        const childNotes = await froca.getNotes(childNoteIds);
-        for (const childNote of childNotes) {
-            const startDate = childNoteToDateMapping[childNote.noteId];
-            const event = await CalendarView.buildEvent(childNote, { startDate });
-            events.push(event);
-        }
-
-        return events.flat();
     }
 
     buildTouchBarCommand({ TouchBar, buildIcon }: CommandListenerData<"buildTouchBar">) {

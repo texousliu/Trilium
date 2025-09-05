@@ -1,4 +1,4 @@
-import { DateSelectArg, LocaleInput, PluginDef } from "@fullcalendar/core/index.js";
+import { DateSelectArg, EventSourceFuncArg, LocaleInput, PluginDef } from "@fullcalendar/core/index.js";
 import { ViewModeProps } from "../interface";
 import Calendar from "./calendar";
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
@@ -12,7 +12,7 @@ import server from "../../../services/server";
 import { parseStartEndDateFromEvent, parseStartEndTimeFromEvent } from "./utils";
 import dialog from "../../../services/dialog";
 import { t } from "../../../services/i18n";
-import { buildEvents } from "./event_builder";
+import { buildEvents, buildEventsForCalendar } from "./event_builder";
 
 interface CalendarViewData {
 
@@ -58,6 +58,8 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
     const eventBuilder = useMemo(() => {
         if (!isCalendarRoot) {
             return async () => await buildEvents(noteIds);
+        } else {
+            return async (e: EventSourceFuncArg) => await buildEventsForCalendar(note, e);
         }
     }, [isCalendarRoot, noteIds]);
 

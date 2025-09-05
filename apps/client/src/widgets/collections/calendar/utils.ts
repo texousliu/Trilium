@@ -1,5 +1,6 @@
 import { DateSelectArg } from "@fullcalendar/core/index.js";
 import { EventImpl } from "@fullcalendar/core/internal";
+import FNote from "../../../entities/fnote";
 
 export function parseStartEndDateFromEvent(e: DateSelectArg | EventImpl) {
     const startDate = formatDateToLocalISO(e.start);
@@ -78,4 +79,25 @@ export function getCustomisableLabel(note: FNote, defaultLabelName: string, cust
     }
 
     return note.getLabelValue(defaultLabelName);
+}
+
+// Source: https://stackoverflow.com/a/30465299/4898894
+export function getMonthsInDateRange(startDate: string, endDate: string) {
+    const start = startDate.split("-");
+    const end = endDate.split("-");
+    const startYear = parseInt(start[0]);
+    const endYear = parseInt(end[0]);
+    const dates: string[] = [];
+
+    for (let i = startYear; i <= endYear; i++) {
+        const endMonth = i != endYear ? 11 : parseInt(end[1]) - 1;
+        const startMon = i === startYear ? parseInt(start[1]) - 1 : 0;
+
+        for (let j = startMon; j <= endMonth; j = j > 12 ? j % 12 || 11 : j + 1) {
+            const month = j + 1;
+            const displayMonth = month < 10 ? "0" + month : month;
+            dates.push([i, displayMonth].join("-"));
+        }
+    }
+    return dates;
 }

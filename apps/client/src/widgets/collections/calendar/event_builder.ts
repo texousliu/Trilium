@@ -1,7 +1,8 @@
-import { EventInput, EventSourceInput } from "@fullcalendar/core/index.js";
+import { EventInput, EventSourceFuncArg, EventSourceInput } from "@fullcalendar/core/index.js";
 import froca from "../../../services/froca";
-import { formatDateToLocalISO, getCustomisableLabel, offsetDate } from "./utils";
+import { formatDateToLocalISO, getCustomisableLabel, getMonthsInDateRange, offsetDate } from "./utils";
 import FNote from "../../../entities/fnote";
+import server from "../../../services/server";
 
 interface Event {
     startDate: string,
@@ -25,6 +26,50 @@ export async function buildEvents(noteIds: string[]) {
         const startTime = getCustomisableLabel(note, "startTime", "calendar:startTime");
         const endTime = getCustomisableLabel(note, "endTime", "calendar:endTime");
         events.push(await buildEvent(note, { startDate, endDate, startTime, endTime }));
+    }
+
+    return events.flat();
+}
+
+export async function buildEventsForCalendar(note: FNote, e: EventSourceFuncArg) {
+    const events: EventInput[] = [];
+
+    // Gather all the required date note IDs.
+    const dateRange = getMonthsInDateRange(e.startStr, e.endStr);
+    let allDateNoteIds: string[] = [];
+    for (const month of dateRange) {
+        // TODO: Deduplicate get type.
+        const dateNotesForMonth = await server.get<Record<string, string>>(`special-notes/notes-for-month/${month}?calendarRoot=${note.noteId}`);
+        const dateNoteIds = Object.values(dateNotesForMonth);
+        allDateNoteIds = [...allDateNoteIds, ...dateNoteIds];
+    }
+
+    // Request all the date notes.
+    const dateNotes = await froca.getNotes(allDateNoteIds);
+    const childNoteToDateMapping: Record<string, string> = {};
+    for (const dateNote of dateNotes) {
+        const startDate = dateNote.getLabelValue("dateNote");
+        if (!startDate) {
+            continue;
+        }
+
+        events.push(await buildEvent(dateNote, { startDate }));
+
+        if (dateNote.hasChildren()) {
+            const childNoteIds = await dateNote.getSubtreeNoteIds();
+            for (const childNoteId of childNoteIds) {
+                childNoteToDateMapping[childNoteId] = startDate;
+            }
+        }
+    }
+
+    // Request all child notes of date notes in a single run.
+    const childNoteIds = Object.keys(childNoteToDateMapping);
+    const childNotes = await froca.getNotes(childNoteIds);
+    for (const childNote of childNotes) {
+        const startDate = childNoteToDateMapping[childNote.noteId];
+        const event = await buildEvent(childNote, { startDate });
+        events.push(event);
     }
 
     return events.flat();
