@@ -14,6 +14,7 @@ on:
       - 'mkdocs.yml'
       - 'requirements-docs.txt'
       - '.github/workflows/deploy-docs.yml'
+      - 'scripts/fix-mkdocs-structure.ts'
   
   # Allow manual triggering from Actions tab
   workflow_dispatch:
@@ -28,6 +29,7 @@ on:
       - 'mkdocs.yml'
       - 'requirements-docs.txt'
       - '.github/workflows/deploy-docs.yml'
+      - 'scripts/fix-mkdocs-structure.ts'
 
 jobs:
   build-and-deploy:
@@ -62,10 +64,26 @@ jobs:
         env:
           PIP_DISABLE_PIP_VERSION_CHECK: 1
       
+      # Setup pnpm before fixing docs structure
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+      
+      # Setup Node.js with pnpm
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      # Install Node.js dependencies for the TypeScript script
+      - name: Install Dependencies
+        run: |
+          pnpm install --frozen-lockfile
+      
       - name: Fix Documentation Structure
         run: |
           # Fix duplicate navigation entries by moving overview pages to index.md
-          python scripts/fix-mkdocs-structure.py
+          pnpm run chore:fix-mkdocs-structure
       
       - name: Build MkDocs Site
         run: |
@@ -91,17 +109,6 @@ jobs:
           test -d site/assets || (echo "ERROR: site/assets directory not found" && exit 1)
           echo "✅ Site validation passed"
       
-      # Setup pnpm 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-      
-      # Setup Node.js with pnpm
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'pnpm'
-      
       # Install wrangler globally to avoid workspace issues
       - name: Install Wrangler
         run: |
@@ -115,7 +122,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy site --project-name=triliumnext-pages --branch=${{ github.ref_name }}
+          command: pages deploy site --project-name=trilium-docs --branch=${{ github.ref_name }}
           wranglerVersion: ''  # Use pre-installed version
       
       # Deploy preview for PRs
@@ -126,7 +133,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy site --project-name=triliumnext-pages --branch=pr-${{ github.event.pull_request.number }}
+          command: pages deploy site --project-name=trilium-docs --branch=pr-${{ github.event.pull_request.number }}
           wranglerVersion: ''  # Use pre-installed version
       
       # Post deployment URL as PR comment
@@ -139,7 +146,7 @@ jobs:
             const prNumber = context.issue.number;
             // Construct preview URL based on Cloudflare Pages pattern
             const previewUrl = `https://pr-${prNumber}.trilium-docs.pages.dev`;
-            const mainUrl = 'https://docs.trilium.app';
+            const mainUrl = 'https://docs.triliumnotes.org';
             
             // Check if we already commented
             const comments = await github.rest.issues.listComments({
