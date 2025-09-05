@@ -2,6 +2,7 @@ import { PluginDef } from "@fullcalendar/core/index.js";
 import { ViewModeProps } from "../interface";
 import Calendar from "./calendar";
 import { useEffect, useState } from "preact/hooks";
+import "./index.css";
 
 interface CalendarViewData {
 
@@ -11,11 +12,13 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
     const plugins = usePlugins(false, false);
 
     return (plugins &&
-        <Calendar
-            plugins={plugins}
-            tabIndex={100}
-            view="dayGridMonth"
-        />
+        <div className="calendar-view">
+            <Calendar
+                plugins={plugins}
+                tabIndex={100}
+                view="dayGridMonth"
+            />
+        </div>
     );
 }
 
