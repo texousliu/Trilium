@@ -46,6 +46,8 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
         }
     }, 5000);
 
+    console.log("Got new notes IDs ", noteIds);
+    console.log("Got notes ", notes);
     useEffect(() => { froca.getNotes(noteIds).then(setNotes) }, [ noteIds ]);
 
     // Note creation.
@@ -126,19 +128,30 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
                 onContextMenu={onContextMenu}
                 scale={hasScale}
             >
-                {notes.map(note => (
-                    note.mime !== "application/gpx+xml"
-                    ? <NoteMarker note={note} editable={!isReadOnly} />
-                    : <NoteGpxTrack note={note} />
-                ))}
+                {notes.map(note => <NoteWrapper note={note} isReadOnly={isReadOnly} />)}
             </Map>
         </div>
     );
 }
 
-function NoteMarker({ note, editable }: { note: FNote, editable: boolean }) {
+function NoteWrapper({ note, isReadOnly }: { note: FNote, isReadOnly: boolean }) {
+    const mime = useNoteProperty(note, "mime");
     const [ location ] = useNoteLabel(note, LOCATION_ATTRIBUTE);
 
+    console.log("Got ", note, mime);
+
+    if (mime === "application/gpx+xml") {
+        return <NoteGpxTrack note={note} />;
+    }
+
+    if (location) {
+        const latLng = location?.split(",", 2).map((el) => parseFloat(el)) as [ number, number ] | undefined;
+        if (!latLng) return;
+        return <NoteMarker note={note} editable={!isReadOnly} latLng={latLng} />;
+    }
+}
+
+function NoteMarker({ note, editable, latLng }: { note: FNote, editable: boolean, latLng: [number, number] }) {
     // React to changes
     useNoteLabel(note, "color");
     useNoteLabel(note, "iconClass");
@@ -146,7 +159,6 @@ function NoteMarker({ note, editable }: { note: FNote, editable: boolean }) {
     const title = useNoteProperty(note, "title");
     const colorClass = note.getColorClass();
     const iconClass = note.getIcon();
-    const latLng = location?.split(",", 2).map((el) => parseFloat(el)) as [ number, number ] | undefined;
     const icon = useMemo(() => buildIcon(iconClass, colorClass ?? undefined, title, note.noteId), [ iconClass, colorClass, title, note.noteId]);
 
     const onClick = useCallback(() => {
@@ -168,6 +180,7 @@ function NoteMarker({ note, editable }: { note: FNote, editable: boolean }) {
 
     const onContextMenu = useCallback((e: LeafletMouseEvent) => openContextMenu(note.noteId, e, editable), [ note.noteId, editable ]);
 
+    console.log("Got ", latLng);
     return latLng && <Marker
         coordinates={latLng}
         icon={icon}
