@@ -46,3 +46,6 @@ upload
 
 /result
 .svelte-kit
+
+# docs
+site/
