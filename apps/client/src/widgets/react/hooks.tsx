@@ -1,5 +1,5 @@
-import { MutableRef, useCallback, useContext, useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
-import { EventData, EventNames } from "../../components/app_context";
+import { Inputs, MutableRef, useCallback, useContext, useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
+import { CommandListenerData, EventData, EventNames } from "../../components/app_context";
 import { ParentComponent } from "./react_utils";
 import SpacedUpdate from "../../services/spaced_update";
 import { KeyboardActionNames, OptionNames } from "@triliumnext/commons";
@@ -17,6 +17,7 @@ import { CSSProperties, DragEventHandler } from "preact/compat";
 import keyboard_actions from "../../services/keyboard_actions";
 import Mark from "mark.js";
 import { DragData } from "../note_tree";
+import Component from "../../components/component";
 
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
     const parentComponent = useContext(ParentComponent);
@@ -610,4 +611,24 @@ export function useNoteTreeDrag(containerRef: MutableRef<HTMLElement | null | un
             container.removeEventListener("drop", onDrop);
         };
     }, [ containerRef, callback ]);
+}
+
+export function useTouchBar(
+    factory: (context: CommandListenerData<"buildTouchBar"> & { parentComponent: Component | null }) => void,
+    inputs: Inputs
+) {
+    const parentComponent = useContext(ParentComponent);
+
+    useLegacyImperativeHandlers({
+        buildTouchBarCommand(context: CommandListenerData<"buildTouchBar">) {
+            return factory({
+                ...context,
+                parentComponent
+            });
+        }
+    });
+
+    useEffect(() => {
+        parentComponent?.triggerCommand("refreshTouchBar");
+    }, inputs);
 }

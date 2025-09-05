@@ -1,7 +1,7 @@
 import Map, { MapApi } from "./map";
 import "./index.css";
 import { ViewModeProps } from "../interface";
-import { useNoteBlob, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useNoteTreeDrag, useSpacedUpdate, useTriliumEvent } from "../../react/hooks";
+import { useNoteBlob, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useNoteTreeDrag, useSpacedUpdate, useTouchBar, useTriliumEvent } from "../../react/hooks";
 import { DEFAULT_MAP_LAYER_NAME } from "./map_layer";
 import { divIcon, GPXOptions, LatLng, LeafletMouseEvent } from "leaflet";
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
@@ -17,6 +17,7 @@ import toast from "../../../services/toast";
 import { t } from "../../../services/i18n";
 import server from "../../../services/server";
 import branches from "../../../services/branches";
+import { hasTouchBar } from "../../../services/utils";
 
 const DEFAULT_COORDINATES: [number, number] = [3.878638227135724, 446.6630455551659];
 const DEFAULT_ZOOM = 2;
@@ -90,7 +91,7 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
 
     // Dragging
     const containerRef = useRef<HTMLDivElement>(null);
-    const apiRef = useRef<MapApi>(null);
+    const apiRef = useRef<L.Map>(null);
     useNoteTreeDrag(containerRef, async (treeData, e) => {
         const api = apiRef.current;
         if (!note || !api || isReadOnly) return;
@@ -112,6 +113,32 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
         }
     });
 
+    // Touch bar.
+    const [ zoomLevel, setZoomLevel ] = useState<number>();
+    const onZoom = useCallback(() => {
+        if (!apiRef.current) return;
+        setZoomLevel(apiRef.current.getZoom());
+    }, []);
+    useTouchBar(({ TouchBar, parentComponent }) => {
+        const map = apiRef.current;
+        if (!note || !map) return;
+
+        return [
+            new TouchBar.TouchBarSlider({
+                label: "Zoom",
+                value: zoomLevel ?? map.getZoom(),
+                minValue: map.getMinZoom(),
+                maxValue: map.getMaxZoom(),
+                change: (newValue) => map.setZoom(newValue)
+            }),
+            new TouchBar.TouchBarButton({
+                label: "New geo note",
+                click: () => parentComponent?.triggerCommand("geoMapCreateChildNote"),
+                enabled: (state === State.Normal)
+            })
+        ];
+    }, [ zoomLevel, state ]);
+
     return (
         <div className={`geo-view ${state === State.NewNote ? "placing-note" : ""}`}>
             <Map
@@ -126,6 +153,7 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
                 }}
                 onClick={onClick}
                 onContextMenu={onContextMenu}
+                onZoom={hasTouchBar ? onZoom : undefined}
                 scale={hasScale}
             >
                 {notes.map(note => <NoteWrapper note={note} isReadOnly={isReadOnly} />)}

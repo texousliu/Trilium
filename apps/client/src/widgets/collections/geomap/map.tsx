@@ -17,25 +17,15 @@ interface MapProps {
     children: ComponentChildren;
     onClick?: (e: LeafletMouseEvent) => void;
     onContextMenu?: (e: LeafletMouseEvent) => void;
+    onZoom?: () => void;
     scale: boolean;
 }
 
-export interface MapApi {
-    containerPointToLatLng: L.Map["containerPointToLatLng"];
-}
-
-export default function Map({ coordinates, zoom, layerName, viewportChanged, children, onClick, onContextMenu, scale, apiRef, containerRef: _containerRef }: MapProps) {
+export default function Map({ coordinates, zoom, layerName, viewportChanged, children, onClick, onContextMenu, scale, apiRef, containerRef: _containerRef, onZoom }: MapProps) {
     const mapRef = useRef<L.Map>(null);
     const containerRef = useSyncedRef<HTMLDivElement>(_containerRef);
 
-    useImperativeHandle(apiRef ?? null, () => {
-        const map = mapRef.current;
-        if (!map) return null;
-
-        return {
-            containerPointToLatLng: (point) => map.containerPointToLatLng(point)
-        } satisfies MapApi;
-    });
+    useImperativeHandle(apiRef ?? null, () => mapRef.current);
 
     useEffect(() => {
         if (!containerRef.current) return;
@@ -118,6 +108,13 @@ export default function Map({ coordinates, zoom, layerName, viewportChanged, chi
             return () => mapRef.current?.off("contextmenu", onContextMenu);
         }
     }, [ mapRef, onContextMenu ]);
+
+    useEffect(() => {
+        if (onZoom && mapRef.current) {
+            mapRef.current.on("zoom", onZoom);
+            return () => mapRef.current?.off("zoom", onZoom);
+        }
+    }, [ mapRef, onZoom ]);
 
     // Scale
     useEffect(() => {
