@@ -70,7 +70,6 @@ export default class CalendarView extends ViewMode<{}> {
             eventChange: (e) => this.#onEventMoved(e),
             height: "100%",
             nowIndicator: true,
-            handleWindowResize: false,
             eventDidMount: (e) => {
                 const { iconClass, promotedAttributes } = e.event.extendedProps;
 
@@ -134,9 +133,6 @@ export default class CalendarView extends ViewMode<{}> {
             },
             datesSet: (e) => this.#onDatesSet(e),
         });
-
-        new ResizeObserver(() => calendar.updateSize())
-            .observe(this.$calendarContainer[0]);
 
         return this.$root;
     }

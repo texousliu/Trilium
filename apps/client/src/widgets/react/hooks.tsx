@@ -627,3 +627,18 @@ export function useTouchBar(
         parentComponent?.triggerCommand("refreshTouchBar");
     }, inputs);
 }
+
+export function useResizeObserver(ref: RefObject<HTMLElement>, callback: () => void) {
+    const resizeObserver = useRef<ResizeObserver>(null);
+    useEffect(() => {
+        resizeObserver.current?.disconnect();
+        const observer = new ResizeObserver(callback);
+        resizeObserver.current = observer;
+
+        if (ref.current) {
+            observer.observe(ref.current);
+        }
+
+        return () => observer.disconnect();
+    }, [ callback, ref ]);
+}

@@ -3,7 +3,7 @@ import { ViewModeProps } from "../interface";
 import Calendar from "./calendar";
 import { useEffect, useRef, useState } from "preact/hooks";
 import "./index.css";
-import { useNoteLabel, useNoteLabelBoolean, useSpacedUpdate, useTriliumOption, useTriliumOptionInt } from "../../react/hooks";
+import { useNoteLabel, useNoteLabelBoolean, useResizeObserver, useSpacedUpdate, useTriliumOption, useTriliumOptionInt } from "../../react/hooks";
 import { LOCALE_IDS } from "@triliumnext/commons";
 import { Calendar as FullCalendar } from "@fullcalendar/core";
 import { setLabel } from "../../../services/attributes";
@@ -36,6 +36,7 @@ const LOCALE_MAPPINGS: Record<LOCALE_IDS, (() => Promise<{ default: LocaleInput 
 };
 
 export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarViewData>) {
+    const containerRef = useRef<HTMLDivElement>(null);
     const calendarRef = useRef<FullCalendar>(null);
     const plugins = usePlugins(false, false);
     const locale = useLocale();
@@ -45,9 +46,10 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
     const [ calendarView, setCalendarView ] = useNoteLabel(note, "calendar:view");
     const initialView = useRef(calendarView);
     const viewSpacedUpdate = useSpacedUpdate(() => setCalendarView(initialView.current));
+    useResizeObserver(containerRef, () => calendarRef.current?.updateSize());
 
     return (plugins &&
-        <div className="calendar-view">
+        <div className="calendar-view" ref={containerRef}>
             <Calendar
                 calendarRef={calendarRef}
                 plugins={plugins}
@@ -60,6 +62,7 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
                 firstDay={firstDayOfWeek ?? 0}
                 weekends={!hideWeekends}
                 weekNumbers={weekNumbers}
+                handleWindowResize={false}
                 locale={locale}
                 viewDidMount={({ view }) => {
                     if (initialView.current !== view.type) {
