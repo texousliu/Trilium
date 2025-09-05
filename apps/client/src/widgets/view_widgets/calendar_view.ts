@@ -17,21 +17,6 @@ import type { TouchBarItem } from "../../components/touch_bar.js";
 import type { SegmentedControlSegment } from "electron";
 import { LOCALE_IDS } from "@triliumnext/commons";
 
-// TODO: Deduplicate
-interface CreateChildResponse {
-    note: {
-        noteId: string;
-    };
-}
-
-interface Event {
-    startDate: string,
-    endDate?: string | null,
-    startTime?: string | null,
-    endTime?: string | null
-}
-
-
 
 export default class CalendarView extends ViewMode<{}> {
 
@@ -54,7 +39,7 @@ export default class CalendarView extends ViewMode<{}> {
 
         let eventBuilder: EventSourceFunc;
         if (!this.isCalendarRoot) {
-            eventBuilder = async () => await CalendarView.buildEvents(this.noteIds)
+            eventBuilder =
         } else {
             eventBuilder = async (e: EventSourceFuncArg) => await this.#buildEventsForCalendar(e);
         }
@@ -240,129 +225,6 @@ export default class CalendarView extends ViewMode<{}> {
         }
 
         return events.flat();
-    }
-
-    static async buildEvents(noteIds: string[]) {
-        const notes = await froca.getNotes(noteIds);
-        const events: EventSourceInput = [];
-
-        for (const note of notes) {
-            const startDate = CalendarView.#getCustomisableLabel(note, "startDate", "calendar:startDate");
-
-            if (!startDate) {
-                continue;
-            }
-
-            const endDate = CalendarView.#getCustomisableLabel(note, "endDate", "calendar:endDate");
-            const startTime = CalendarView.#getCustomisableLabel(note, "startTime", "calendar:startTime");
-            const endTime = CalendarView.#getCustomisableLabel(note, "endTime", "calendar:endTime");
-            events.push(await CalendarView.buildEvent(note, { startDate, endDate, startTime, endTime }));
-        }
-
-        return events.flat();
-    }
-
-    /**
-     * Allows the user to customize the attribute from which to obtain a particular value. For example, if `customLabelNameAttribute` is `calendar:startDate`
-     * and `defaultLabelName` is `startDate` and the note at hand has `#calendar:startDate=myStartDate #myStartDate=2025-02-26` then the value returned will
-     * be `2025-02-26`. If there is no custom attribute value, then the value of the default attribute is returned instead (e.g. `#startDate`).
-     *
-     * @param note the note from which to read the values.
-     * @param defaultLabelName the name of the label in case a custom value is not found.
-     * @param customLabelNameAttribute the name of the label to look for a custom value.
-     * @returns the value of either the custom label or the default label.
-     */
-    static #getCustomisableLabel(note: FNote, defaultLabelName: string, customLabelNameAttribute: string) {
-        const customAttributeName = note.getLabelValue(customLabelNameAttribute);
-        if (customAttributeName) {
-            const customValue = note.getLabelValue(customAttributeName);
-            if (customValue) {
-                return customValue;
-            }
-        }
-
-        return note.getLabelValue(defaultLabelName);
-    }
-
-    static async buildEvent(note: FNote, { startDate, endDate, startTime, endTime }: Event) {
-        const customTitleAttributeName = note.getLabelValue("calendar:title");
-        const titles = await CalendarView.#parseCustomTitle(customTitleAttributeName, note);
-        const color = note.getLabelValue("calendar:color") ?? note.getLabelValue("color");
-        const events: EventInput[] = [];
-
-        const calendarDisplayedAttributes = note.getLabelValue("calendar:displayedAttributes")?.split(",");
-        let displayedAttributesData: Array<[string, string]> | null = null;
-        if (calendarDisplayedAttributes) {
-            displayedAttributesData = await this.#buildDisplayedAttributes(note, calendarDisplayedAttributes);
-        }
-
-        for (const title of titles) {
-            if (startTime && endTime && !endDate) {
-                endDate = startDate;
-            }
-
-            startDate = (startTime ? `${startDate}T${startTime}:00` : startDate);
-            if (!startTime) {
-                const endDateOffset = CalendarView.#offsetDate(endDate ?? startDate, 1);
-                if (endDateOffset) {
-                    endDate = CalendarView.#formatDateToLocalISO(endDateOffset);
-                }
-            }
-
-            endDate = (endTime ? `${endDate}T${endTime}:00` : endDate);
-            const eventData: EventInput = {
-                title: title,
-                start: startDate,
-                url: `#${note.noteId}?popup`,
-                noteId: note.noteId,
-                color: color ?? undefined,
-                iconClass: note.getLabelValue("iconClass"),
-                promotedAttributes: displayedAttributesData
-            };
-            if (endDate) {
-                eventData.end = endDate;
-            }
-            events.push(eventData);
-        }
-        return events;
-    }
-
-    static async #buildDisplayedAttributes(note: FNote, calendarDisplayedAttributes: string[]) {
-        const filteredDisplayedAttributes = note.getAttributes().filter((attr): boolean => calendarDisplayedAttributes.includes(attr.name))
-        const result: Array<[string, string]> = [];
-
-        for (const attribute of filteredDisplayedAttributes) {
-            if (attribute.type === "label") result.push([attribute.name, attribute.value]);
-            else result.push([attribute.name, (await attribute.getTargetNote())?.title || ""])
-        }
-
-        return result;
-    }
-
-    static async #parseCustomTitle(customTitlettributeName: string | null, note: FNote, allowRelations = true): Promise<string[]> {
-        if (customTitlettributeName) {
-            const labelValue = note.getAttributeValue("label", customTitlettributeName);
-            if (labelValue) return [labelValue];
-
-            if (allowRelations) {
-                const relations = note.getRelations(customTitlettributeName);
-                if (relations.length > 0) {
-                    const noteIds = relations.map((r) => r.targetNoteId);
-                    const notesFromRelation = await froca.getNotes(noteIds);
-                    const titles: string[][] = [];
-
-                    for (const targetNote of notesFromRelation) {
-                        const targetCustomTitleValue = targetNote.getAttributeValue("label", "calendar:title");
-                        const targetTitles = await CalendarView.#parseCustomTitle(targetCustomTitleValue, targetNote, false);
-                        titles.push(targetTitles.flat());
-                    }
-
-                    return titles.flat();
-                }
-            }
-        }
-
-        return [note.title];
     }
 
     buildTouchBarCommand({ TouchBar, buildIcon }: CommandListenerData<"buildTouchBar">) {

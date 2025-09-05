@@ -57,3 +57,25 @@ export function formatTimeToLocalISO(date: Date | null | undefined) {
         .split("T")[1]
         .substring(0, 5);
 }
+
+/**
+ * Allows the user to customize the attribute from which to obtain a particular value. For example, if `customLabelNameAttribute` is `calendar:startDate`
+ * and `defaultLabelName` is `startDate` and the note at hand has `#calendar:startDate=myStartDate #myStartDate=2025-02-26` then the value returned will
+ * be `2025-02-26`. If there is no custom attribute value, then the value of the default attribute is returned instead (e.g. `#startDate`).
+ *
+ * @param note the note from which to read the values.
+ * @param defaultLabelName the name of the label in case a custom value is not found.
+ * @param customLabelNameAttribute the name of the label to look for a custom value.
+ * @returns the value of either the custom label or the default label.
+ */
+export function getCustomisableLabel(note: FNote, defaultLabelName: string, customLabelNameAttribute: string) {
+    const customAttributeName = note.getLabelValue(customLabelNameAttribute);
+    if (customAttributeName) {
+        const customValue = note.getLabelValue(customAttributeName);
+        if (customValue) {
+            return customValue;
+        }
+    }
+
+    return note.getLabelValue(defaultLabelName);
+}

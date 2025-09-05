@@ -1,7 +1,7 @@
 import { DateSelectArg, LocaleInput, PluginDef } from "@fullcalendar/core/index.js";
 import { ViewModeProps } from "../interface";
 import Calendar from "./calendar";
-import { useCallback, useEffect, useRef, useState } from "preact/hooks";
+import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import "./index.css";
 import { useNoteLabel, useNoteLabelBoolean, useResizeObserver, useSpacedUpdate, useTriliumOption, useTriliumOptionInt } from "../../react/hooks";
 import { CreateChildrenResponse, LOCALE_IDS } from "@triliumnext/commons";
@@ -12,6 +12,7 @@ import server from "../../../services/server";
 import { parseStartEndDateFromEvent, parseStartEndTimeFromEvent } from "./utils";
 import dialog from "../../../services/dialog";
 import { t } from "../../../services/i18n";
+import { buildEvents } from "./event_builder";
 
 interface CalendarViewData {
 
@@ -54,6 +55,11 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
     useResizeObserver(containerRef, () => calendarRef.current?.updateSize());
     const isCalendarRoot = (calendarRoot || workspaceCalendarRoot);
     const isEditable = !isCalendarRoot;
+    const eventBuilder = useMemo(() => {
+        if (!isCalendarRoot) {
+            return async () => await buildEvents(noteIds);
+        }
+    }, [isCalendarRoot, noteIds]);
 
     const plugins = usePlugins(isEditable, isCalendarRoot);
     const locale = useLocale();
@@ -97,6 +103,7 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
     return (plugins &&
         <div className="calendar-view" ref={containerRef}>
             <Calendar
+                events={eventBuilder}
                 calendarRef={calendarRef}
                 plugins={plugins}
                 tabIndex={100}
