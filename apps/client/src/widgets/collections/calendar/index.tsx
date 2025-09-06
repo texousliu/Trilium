@@ -340,18 +340,13 @@ function CalendarTouchBar({ calendarRef }: { calendarRef: RefObject<FullCalendar
                 label={t("calendar.today")}
                 click={() => calendarRef.current?.today()}
             />
-            <TouchBarSegmentedControl
-                mode="buttons"
-                segments={[
-                    {
-                        icon: "NSImageNameTouchBarGoBackTemplate",
-                        onClick: () => calendarRef.current?.prev()
-                    },
-                    {
-                        icon: "NSImageNameTouchBarGoForwardTemplate",
-                        onClick: () => calendarRef.current?.next()
-                    }
-                ]}
+            <TouchBarButton
+                icon="NSImageNameTouchBarGoBackTemplate"
+                click={() => calendarRef.current?.prev()}
+            />
+            <TouchBarButton
+                icon="NSImageNameTouchBarGoForwardTemplate"
+                click={() => calendarRef.current?.next()}
             />
         </TouchBar>
     );

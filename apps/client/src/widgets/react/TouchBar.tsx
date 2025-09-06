@@ -21,7 +21,8 @@ interface SliderProps {
 }
 
 interface ButtonProps {
-    label: string;
+    label?: string;
+    icon?: string;
     click: () => void;
     enabled?: boolean;
 }
@@ -122,12 +123,13 @@ export function TouchBarSlider({ label, value, minValue, maxValue, onChange }: S
     return <></>;
 }
 
-export function TouchBarButton({ label, click, enabled }: ButtonProps) {
+export function TouchBarButton({ label, icon, click, enabled }: ButtonProps) {
     const api = useContext(TouchBarContext);
 
     if (api) {
         const item = new api.TouchBar.TouchBarButton({
-            label, click, enabled
+            label, click, enabled,
+            icon: icon ? buildIcon(api.nativeImage, icon) : undefined
         });
         api.addItem(item);
     }
