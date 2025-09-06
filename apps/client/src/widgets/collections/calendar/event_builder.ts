@@ -75,7 +75,7 @@ export async function buildEventsForCalendar(note: FNote, e: EventSourceFuncArg)
     return events.flat();
 }
 
-async function buildEvent(note: FNote, { startDate, endDate, startTime, endTime }: Event) {
+export async function buildEvent(note: FNote, { startDate, endDate, startTime, endTime }: Event) {
     const customTitleAttributeName = note.getLabelValue("calendar:title");
     const titles = await parseCustomTitle(customTitleAttributeName, note);
     const color = note.getLabelValue("calendar:color") ?? note.getLabelValue("color");

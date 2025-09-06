@@ -39,28 +39,6 @@ export default class CalendarView extends ViewMode<{}> {
         }
     }
 
-    async onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
-        // Refresh note IDs if they got changed.
-        if (loadResults.getBranchRows().some((branch) => branch.parentNoteId === this.parentNote.noteId)) {
-            this.noteIds = this.parentNote.getChildNoteIds();
-        }
-
-        // Refresh calendar on attribute change.
-        if (loadResults.getAttributeRows().some((attribute) => attribute.noteId === this.parentNote.noteId && attribute.name?.startsWith("calendar:") && attribute.name !== "calendar:view")) {
-            return true;
-        }
-
-        // Refresh on note title change.
-        if (loadResults.getNoteIds().some(noteId => this.noteIds.includes(noteId))) {
-            this.calendar?.refetchEvents();
-        }
-
-        // Refresh dataset on subnote change.
-        if (loadResults.getAttributeRows().some((a) => this.noteIds.includes(a.noteId ?? ""))) {
-            this.calendar?.refetchEvents();
-        }
-    }
-
     buildTouchBarCommand({ TouchBar, buildIcon }: CommandListenerData<"buildTouchBar">) {
         if (!this.calendar) {
             return;

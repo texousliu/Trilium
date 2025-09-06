@@ -3,12 +3,9 @@ import { ViewModeProps } from "../interface";
 import Calendar from "./calendar";
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import "./index.css";
-import { useNoteLabel, useNoteLabelBoolean, useResizeObserver, useSpacedUpdate, useTriliumOption, useTriliumOptionInt } from "../../react/hooks";
-import { CreateChildrenResponse, LOCALE_IDS } from "@triliumnext/commons";
+import { useNoteLabel, useNoteLabelBoolean, useResizeObserver, useSpacedUpdate, useTriliumEvent, useTriliumOption, useTriliumOptionInt } from "../../react/hooks";
+import { LOCALE_IDS } from "@triliumnext/commons";
 import { Calendar as FullCalendar } from "@fullcalendar/core";
-import { removeOwnedAttributesByNameOrType, setLabel } from "../../../services/attributes";
-import { circle } from "leaflet";
-import server from "../../../services/server";
 import { parseStartEndDateFromEvent, parseStartEndTimeFromEvent } from "./utils";
 import dialog from "../../../services/dialog";
 import { t } from "../../../services/i18n";
@@ -32,7 +29,7 @@ const CALENDAR_VIEWS = [
 ]
 
 // Here we hard-code the imports in order to ensure that they are embedded by webpack without having to load all the languages.
-const LOCALE_MAPPINGS: Record<LOCALE_IDS, (() => Promise<{ default: LocaleInput }>) | null> = {
+export const LOCALE_MAPPINGS: Record<LOCALE_IDS, (() => Promise<{ default: LocaleInput }>) | null> = {
     de: () => import("@fullcalendar/core/locales/de"),
     es: () => import("@fullcalendar/core/locales/es"),
     fr: () => import("@fullcalendar/core/locales/fr"),
@@ -74,6 +71,15 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
 
     const { eventDidMount } = useEventDisplayCustomization();
     const editingProps = useEditing(note, isEditable, isCalendarRoot);
+
+    // React to changes.
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        if (loadResults.getNoteIds().some(noteId => noteIds.includes(noteId)) // note title change.
+            || loadResults.getAttributeRows().some((a) => noteIds.includes(a.noteId ?? ""))) // subnote change.
+        {
+            calendarRef.current?.refetchEvents();
+        }
+    });
 
     return (plugins &&
         <div className="calendar-view" ref={containerRef}>
