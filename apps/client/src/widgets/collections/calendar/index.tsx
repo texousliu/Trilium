@@ -147,7 +147,11 @@ function CalendarHeader({ calendarRef }: { calendarRef: RefObject<FullCalendar> 
     const currentViewType = calendarRef.current?.view?.type;
     const currentViewData = CALENDAR_VIEWS.find(v => calendarRef.current && v.type === currentViewType);
 
-    return (
+    // Wait for the calendar ref to become available.
+    const [ ready, setReady ] = useState(false);
+    useEffect(() => setReady(true), []);
+
+    return (ready &&
         <div className="calendar-header">
             <span className="title">{calendarRef.current?.view.title}</span>
             <ButtonGroup>
