@@ -26,25 +26,8 @@
     --fc-list-event-hover-bg-color: var(--left-pane-item-hover-background);
 }
 
-.calendar-container .fc-toolbar.fc-header-toolbar {
-    margin-bottom: 0.5em;
-}
-
 .calendar-container .fc-list-sticky .fc-list-day > * {
     z-index: 50;
-}
-
-body.desktop:not(.zen) .calendar-container .fc-toolbar.fc-header-toolbar {
-    padding-right: 5em;
-}
-
-.search-result-widget-content .calendar-view .fc-toolbar.fc-header-toolbar {
-    padding-right: unset !important;
-}
-
-.calendar-container .fc-toolbar-title {
-    font-size: 1.3rem;
-    font-weight: normal;
 }
 
 .calendar-container a.fc-event {
@@ -62,18 +45,28 @@ body.desktop:not(.zen) .calendar-container .fc-toolbar.fc-header-toolbar {
 }
 
 /* #region Header */
-.calendar-header {
+.calendar-view .calendar-header {
     margin-bottom: 10px;
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.calendar-header .btn {
+.calendar-view .calendar-header .btn {
     min-width: unset !important;
 }
 
-.calendar-header > .title {
+.calendar-view .calendar-header > .title {
     flex-grow: 1;
+    font-size: 1.3rem;
+    font-weight: normal;
+}
+
+body.desktop:not(.zen) .calendar-view .calendar-header {
+    padding-right: 5em;
+}
+
+.search-result-widget-content .calendar-view .calendar-header {
+    padding-right: unset !important;
 }
 /* #endregion */
