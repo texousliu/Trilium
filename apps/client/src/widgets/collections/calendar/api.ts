@@ -1,10 +1,18 @@
 import { CreateChildrenResponse } from "@triliumnext/commons";
 import server from "../../../services/server";
 import FNote from "../../../entities/fnote";
-import { setLabel } from "../../../services/attributes";
+import { setAttribute, setLabel } from "../../../services/attributes";
+import froca from "../../../services/froca";
 
 interface NewEventOpts {
     title: string;
+    startDate: string;
+    endDate?: string | null;
+    startTime?: string | null;
+    endTime?: string | null;
+}
+
+interface ChangeEventOpts {
     startDate: string;
     endDate?: string | null;
     startTime?: string | null;
@@ -29,5 +37,29 @@ export async function newEvent(parentNote: FNote, { title, startDate, endDate, s
     }
     if (endTime) {
         setLabel(note.noteId, "endTime", endTime);
+    }
+}
+
+export async function changeEvent(note: FNote, { startDate, endDate, startTime, endTime }: ChangeEventOpts) {
+    // Don't store the end date if it's empty.
+    if (endDate === startDate) {
+        endDate = undefined;
+    }
+
+    // Since they can be customized via calendar:startDate=$foo and calendar:endDate=$bar we need to determine the
+    // attributes to be effectively updated
+    let startAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:startDate").shift()?.value||"startDate";
+    let endAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:endDate").shift()?.value||"endDate";
+
+    const noteId = note.noteId;
+    setLabel(noteId, startAttribute, startDate);
+    setAttribute(note, "label", endAttribute, endDate);
+
+    startAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:startTime").shift()?.value||"startTime";
+    endAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:endTime").shift()?.value||"endTime";
+
+    if (startTime && endTime) {
+        setAttribute(note, "label", startAttribute, startTime);
+        setAttribute(note, "label", endAttribute, endTime);
     }
 }
