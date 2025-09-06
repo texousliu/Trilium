@@ -66,8 +66,6 @@ export default class TableView extends ViewMode<StateInfo> {
         let opts: Options = {
             layout: "fitDataFill",
             index: "branchId",
-            columns: columnDefs,
-            data: rowData,
             persistence: true,
             movableColumns: true,
             movableRows,
