@@ -1,6 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import { ViewModeProps } from "../interface";
-import "./index.css";
 import { buildColumnDefinitions } from "./columns";
 import getAttributeDefinitionInformation, { buildRowDefinitions, TableData } from "./rows";
 import { useNoteLabelInt } from "../../react/hooks";
@@ -9,6 +8,11 @@ import Tabulator from "./tabulator";
 import { Tabulator as VanillaTabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule} from 'tabulator-tables';
 import { useContextMenu } from "./context_menu";
 import { ParentComponent } from "../../react/react_utils";
+import FNote from "../../../entities/fnote";
+import { t } from "../../../services/i18n";
+import Button from "../../react/Button";
+import "./index.css";
+
 interface TableConfig {
     tableData?: {
         columns?: ColumnDefinition[];
@@ -42,15 +46,31 @@ export default function TableView({ note, viewConfig }: ViewModeProps<TableConfi
     return (
         <div className="table-view">
             {columnDefs && (
-                <Tabulator
-                    tabulatorRef={tabulatorRef}
-                    className="table-view-container"
-                    columns={columnDefs}
-                    data={rowData}
-                    modules={[ SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, DataTreeModule ]}
-                    {...contextMenuEvents}
-                />
+                <>
+                    <Tabulator
+                        tabulatorRef={tabulatorRef}
+                        className="table-view-container"
+                        columns={columnDefs}
+                        data={rowData}
+                        modules={[ SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, DataTreeModule ]}
+                        footerElement={<TableFooter note={note} />}
+                        {...contextMenuEvents}
+                    />
+                    <TableFooter note={note} />
+                </>
             )}
+        </div>
+    )
+}
+
+function TableFooter({ note }: { note: FNote }) {
+    return (note.type !== "search" &&
+        <div className="tabulator-footer">
+            <div className="tabulator-footer-contents">
+                <Button triggerCommand="addNewRow" icon="bx bx-plus" text={t("table_view.new-row")} />
+                {" "}
+                <Button triggerCommand="addNewTableColumn" icon="bx bx-carousel" text={t("table_view.new-column")} />
+            </div>
         </div>
     )
 }

@@ -1,8 +1,9 @@
-import { useEffect, useLayoutEffect, useRef } from "preact/hooks";
+import { useContext, useEffect, useLayoutEffect, useRef } from "preact/hooks";
 import { ColumnDefinition, EventCallBackMethods, Module, Tabulator as VanillaTabulator } from "tabulator-tables";
 import "tabulator-tables/dist/css/tabulator.css";
 import "../../../../src/stylesheets/table.css";
-import { RefObject } from "preact";
+import { ComponentChildren, RefObject } from "preact";
+import { ParentComponent, renderReactWidget } from "../../react/react_utils";
 
 interface TableProps<T> extends Partial<EventCallBackMethods> {
     tabulatorRef: RefObject<VanillaTabulator>;
@@ -10,9 +11,11 @@ interface TableProps<T> extends Partial<EventCallBackMethods> {
     columns: ColumnDefinition[];
     data?: T[];
     modules?: (new (table: VanillaTabulator) => Module)[];
+    footerElement?: ComponentChildren;
 }
 
-export default function Tabulator<T>({ className, columns, data, modules, tabulatorRef: externalTabulatorRef, ...events }: TableProps<T>) {
+export default function Tabulator<T>({ className, columns, data, modules, tabulatorRef: externalTabulatorRef, footerElement, ...events }: TableProps<T>) {
+    const parentComponent = useContext(ParentComponent);
     const containerRef = useRef<HTMLDivElement>(null);
     const tabulatorRef = useRef<VanillaTabulator>(null);
 
@@ -28,7 +31,8 @@ export default function Tabulator<T>({ className, columns, data, modules, tabula
 
         const tabulator = new VanillaTabulator(containerRef.current, {
             columns,
-            data
+            data,
+            footerElement: (parentComponent && footerElement ? renderReactWidget(parentComponent, footerElement)[0] : undefined)
         });
 
         tabulatorRef.current = tabulator;
