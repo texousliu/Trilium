@@ -61,11 +61,6 @@ export default class CalendarView extends ViewMode<{}> {
                     }
                     index++;
 
-                    // Text button.
-                    if (subItem.innerText) {
-                        segments.push({ label: subItem.innerText });
-                        continue;
-                    }
 
                     // Icon button.
                     const iconEl = subItem.querySelector("span.fc-icon");

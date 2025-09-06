@@ -26,6 +26,15 @@ interface ButtonProps {
     enabled?: boolean;
 }
 
+interface SegmentedControlProps {
+    mode: "single" | "buttons";
+    segments: {
+        label: string;
+    }[];
+    selectedIndex?: number;
+    onChange?: (selectedIndex: number, isSelected: boolean) => void;
+}
+
 interface TouchBarContextApi {
     addItem(item: TouchBarItem): void;
     TouchBar: typeof Electron.TouchBar;
@@ -72,6 +81,8 @@ export default function TouchBar({ children }: TouchBarProps) {
         }
     });
 
+    console.log("Touch bar state", isFocused, items);
+
     return (
         <TouchBarContext.Provider value={api}>
             {children}
@@ -113,6 +124,20 @@ export function TouchBarButton({ label, click, enabled }: ButtonProps) {
     if (api) {
         const item = new api.TouchBar.TouchBarButton({
             label, click, enabled
+        });
+        api.addItem(item);
+    }
+
+    return <></>;
+}
+
+export function TouchBarSegmentedControl({ mode, segments, selectedIndex, onChange }: SegmentedControlProps) {
+    const api = useContext(TouchBarContext);
+
+    if (api) {
+        const item = new api.TouchBar.TouchBarSegmentedControl({
+            mode, segments, selectedIndex,
+            change: onChange
         });
         api.addItem(item);
     }

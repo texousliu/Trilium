@@ -19,6 +19,7 @@ import FNote from "../../../entities/fnote";
 import Button, { ButtonGroup } from "../../react/Button";
 import ActionButton from "../../react/ActionButton";
 import { RefObject } from "preact";
+import TouchBar, { TouchBarLabel, TouchBarSegmentedControl } from "../../react/TouchBar";
 
 interface CalendarViewData {
 
@@ -114,13 +115,12 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
     });
 
     return (plugins &&
-        <div className="calendar-view" ref={containerRef}>
+        <div className="calendar-view" ref={containerRef} tabIndex={100}>
             <CalendarHeader calendarRef={calendarRef} />
             <Calendar
                 events={eventBuilder}
                 calendarRef={calendarRef}
                 plugins={plugins}
-                tabIndex={100}
                 initialView={initialView.current && SUPPORTED_CALENDAR_VIEW_TYPE.includes(initialView.current) ? initialView.current : "dayGridMonth"}
                 headerToolbar={false}
                 firstDay={firstDayOfWeek ?? 0}
@@ -139,6 +139,7 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
                     }
                 }}
             />
+            <CalendarTouchBar calendarRef={calendarRef} />
         </div>
     );
 }
@@ -305,8 +306,36 @@ function useEventDisplayCustomization() {
     return { eventDidMount };
 }
 
-function useTouchBarCustomization(api: FullCalendar) {
-    useTouchBar(() => {
+function CalendarTouchBar({ calendarRef }: { calendarRef: RefObject<FullCalendar> }) {
+    // Wait for the calendar ref to become available.
+    const [ ready, setReady ] = useState(false);
+    useEffect(() => setReady(true), []);
+    const [ , setTitle ] = useState<string>();
+    const viewType = calendarRef.current?.view.type;
 
-    }, [ api ]);
+    useEffect(() => {
+        const api = calendarRef.current;
+
+        function onDatesSet() {
+            setTitle(calendarRef.current?.view.title);
+        }
+
+        onDatesSet();
+        api?.on("datesSet", onDatesSet);
+        return () => api?.off("datesSet", onDatesSet)
+    }, [ calendarRef ]);
+
+    return ready && (
+        <TouchBar>
+            <TouchBarLabel label={calendarRef.current?.view.title ?? ""} />
+            <TouchBarSegmentedControl
+                mode="single"
+                segments={CALENDAR_VIEWS.map(({ name }) => ({
+                    label: name,
+                }))}
+                selectedIndex={CALENDAR_VIEWS.findIndex(v => v.type === viewType) ?? 0}
+                onChange={(selectedIndex) => calendarRef.current?.changeView(CALENDAR_VIEWS[selectedIndex].type)}
+            />
+        </TouchBar>
+    );
 }

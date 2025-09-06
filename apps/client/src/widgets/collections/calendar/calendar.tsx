@@ -4,10 +4,9 @@ import { RefObject } from "preact";
 
 interface CalendarProps extends CalendarOptions {
     calendarRef?: RefObject<FullCalendar>;
-    tabIndex?: number;
 }
 
-export default function Calendar({ tabIndex, calendarRef, ...options }: CalendarProps) {
+export default function Calendar({ calendarRef, ...options }: CalendarProps) {
     const containerRef = useRef<HTMLDivElement>(null);
 
     useLayoutEffect(() => {
@@ -24,6 +23,6 @@ export default function Calendar({ tabIndex, calendarRef, ...options }: Calendar
     }, [ containerRef, options ]);
 
     return (
-        <div ref={containerRef} className="calendar-container" tabIndex={tabIndex} />
+        <div ref={containerRef} className="calendar-container" />
     );
 }
