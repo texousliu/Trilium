@@ -8,6 +8,24 @@ interface TouchBarProps {
     children: ComponentChildren;
 }
 
+interface LabelProps {
+    label: string;
+}
+
+interface SliderProps {
+    label: string;
+    value: number;
+    minValue: number;
+    maxValue: number;
+    onChange: (newValue: number) => void;
+}
+
+interface ButtonProps {
+    label: string;
+    click: () => void;
+    enabled?: boolean;
+}
+
 interface TouchBarContextApi {
     addItem(item: TouchBarItem): void;
     TouchBar: typeof Electron.TouchBar;
@@ -61,7 +79,7 @@ export default function TouchBar({ children }: TouchBarProps) {
     );
 }
 
-export function TouchBarLabel({ label }: { label: string }) {
+export function TouchBarLabel({ label }: LabelProps) {
     const api = useContext(TouchBarContext);
 
     if (api) {
@@ -74,14 +92,6 @@ export function TouchBarLabel({ label }: { label: string }) {
     return <></>;
 }
 
-interface SliderProps {
-    label: string;
-    value: number;
-    minValue: number;
-    maxValue: number;
-    onChange: (newValue: number) => void;
-}
-
 export function TouchBarSlider({ label, value, minValue, maxValue, onChange }: SliderProps) {
     const api = useContext(TouchBarContext);
 
@@ -90,6 +100,19 @@ export function TouchBarSlider({ label, value, minValue, maxValue, onChange }: S
             label,
             value, minValue, maxValue,
             change: onChange
+        });
+        api.addItem(item);
+    }
+
+    return <></>;
+}
+
+export function TouchBarButton({ label, click, enabled }: ButtonProps) {
+    const api = useContext(TouchBarContext);
+
+    if (api) {
+        const item = new api.TouchBar.TouchBarButton({
+            label, click, enabled
         });
         api.addItem(item);
     }

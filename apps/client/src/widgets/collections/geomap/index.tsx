@@ -4,7 +4,7 @@ import { ViewModeProps } from "../interface";
 import { useNoteBlob, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useNoteTreeDrag, useSpacedUpdate, useTouchBar, useTriliumEvent } from "../../react/hooks";
 import { DEFAULT_MAP_LAYER_NAME } from "./map_layer";
 import { divIcon, GPXOptions, LatLng, LeafletMouseEvent } from "leaflet";
-import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import Marker, { GpxTrack } from "./marker";
 import froca from "../../../services/froca";
 import FNote from "../../../entities/fnote";
@@ -17,7 +17,8 @@ import toast from "../../../services/toast";
 import { t } from "../../../services/i18n";
 import server from "../../../services/server";
 import branches from "../../../services/branches";
-import TouchBar, { TouchBarLabel, TouchBarSlider } from "../../react/TouchBar";
+import TouchBar, { TouchBarButton, TouchBarLabel, TouchBarSlider } from "../../react/TouchBar";
+import { ParentComponent } from "../../react/react_utils";
 
 const DEFAULT_COORDINATES: [number, number] = [3.878638227135724, 446.6630455551659];
 const DEFAULT_ZOOM = 2;
@@ -130,7 +131,7 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
             >
                 {notes.map(note => <NoteWrapper note={note} isReadOnly={isReadOnly} />)}
             </Map>
-            <GeoMapTouchBar map={apiRef.current} />
+            <GeoMapTouchBar state={state} map={apiRef.current} />
         </div>
     );
 }
@@ -244,8 +245,9 @@ function buildIcon(bxIconClass: string, colorClass?: string, title?: string, not
     });
 }
 
-function GeoMapTouchBar({ map }: { map: L.Map | null | undefined }) {
+function GeoMapTouchBar({ state, map }: { state: State, map: L.Map | null | undefined }) {
     const [ currentZoom, setCurrentZoom ] = useState<number>();
+    const parentComponent = useContext(ParentComponent);
 
     useEffect(() => {
         if (!map) return;
@@ -269,6 +271,11 @@ function GeoMapTouchBar({ map }: { map: L.Map | null | undefined }) {
                     setCurrentZoom(newValue);
                     map.setZoom(newValue);
                 }}
+            />
+            <TouchBarButton
+                label="New geo note"
+                click={() => parentComponent?.triggerCommand("geoMapCreateChildNote")}
+                enabled={state === State.Normal}
             />
         </TouchBar>
     )
