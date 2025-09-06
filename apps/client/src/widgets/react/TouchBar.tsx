@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "preact/hooks";
+import { useContext, useEffect, useMemo, useState } from "preact/hooks";
 import { ParentComponent } from "./react_utils";
 import { ComponentChildren, createContext } from "preact";
 import { TouchBarItem } from "../../components/touch_bar";
@@ -90,8 +90,6 @@ export default function TouchBar({ children }: TouchBarProps) {
         }
     });
 
-    console.log("Touch bar state", isFocused, items);
-
     return (
         <TouchBarContext.Provider value={api}>
             {children}
@@ -129,12 +127,15 @@ export function TouchBarSlider({ label, value, minValue, maxValue, onChange }: S
 
 export function TouchBarButton({ label, icon, click, enabled }: ButtonProps) {
     const api = useContext(TouchBarContext);
-
-    if (api) {
-        const item = new api.TouchBar.TouchBarButton({
+    const item = useMemo(() => {
+        if (!api) return null;
+        return new api.TouchBar.TouchBarButton({
             label, click, enabled,
             icon: icon ? buildIcon(api.nativeImage, icon) : undefined
         });
+    }, [ label, icon ]);
+
+    if (item && api) {
         api.addItem(item);
     }
 
