@@ -3,7 +3,7 @@ import { ViewModeProps } from "../interface";
 import Calendar from "./calendar";
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import "./index.css";
-import { useNoteLabel, useNoteLabelBoolean, useResizeObserver, useSpacedUpdate, useTriliumEvent, useTriliumOption, useTriliumOptionInt } from "../../react/hooks";
+import { useFloatingButtonsWidth, useNoteLabel, useNoteLabelBoolean, useResizeObserver, useSpacedUpdate, useTriliumEvent, useTriliumOption, useTriliumOptionInt } from "../../react/hooks";
 import { LOCALE_IDS } from "@triliumnext/commons";
 import { Calendar as FullCalendar } from "@fullcalendar/core";
 import { parseStartEndDateFromEvent, parseStartEndTimeFromEvent } from "./utils";
@@ -146,13 +146,14 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
 function CalendarHeader({ calendarRef }: { calendarRef: RefObject<FullCalendar> }) {
     const currentViewType = calendarRef.current?.view?.type;
     const currentViewData = CALENDAR_VIEWS.find(v => calendarRef.current && v.type === currentViewType);
+    const floatingButtonsWidth = useFloatingButtonsWidth();
 
     // Wait for the calendar ref to become available.
     const [ ready, setReady ] = useState(false);
     useEffect(() => setReady(true), []);
 
     return (ready &&
-        <div className="calendar-header">
+        <div className="calendar-header" style={{ marginRight: floatingButtonsWidth }}>
             <span className="title">{calendarRef.current?.view.title}</span>
             <ButtonGroup>
                 {CALENDAR_VIEWS.map(viewData => (
