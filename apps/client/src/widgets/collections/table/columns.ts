@@ -1,7 +1,7 @@
-import { RelationEditor } from "./relation_editor.js";
 import { MonospaceFormatter, NoteFormatter, NoteTitleFormatter, RowNumberFormatter } from "./formatters.js";
-import type { ColumnDefinition } from "tabulator-tables";
+import type { ColumnDefinition } from "react-tabulator";
 import { LabelType } from "../../../services/promoted_attribute_definition_parser.js";
+import { RelationEditor } from "./relation_editor.js";
 
 type ColumnType = LabelType | "relation";
 

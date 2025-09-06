@@ -352,6 +352,15 @@ export function useNoteLabelBoolean(note: FNote | undefined | null, labelName: s
     return [ labelValue, setter ] as const;
 }
 
+export function useNoteLabelInt(note: FNote | undefined | null, labelName: string): [ number | undefined, (newValue: number) => void] {
+    const [ value, setValue ] = useNoteLabel(note, labelName);
+    useDebugValue(labelName);
+    return [
+        (value ? parseInt(value, 10) : undefined),
+        (newValue) => setValue(String(newValue))
+    ]
+}
+
 export function useNoteBlob(note: FNote | null | undefined): [ FBlob | null | undefined ] {
     const [ blob, setBlob ] = useState<FBlob | null>();
 

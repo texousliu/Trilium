@@ -7,6 +7,7 @@ import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import GeoView from "./geomap";
 import ViewModeStorage from "../view_widgets/view_mode_storage";
 import CalendarView from "./calendar";
+import TableView from "./table";
 
 interface NoteListProps<T extends object> {
     note?: FNote | null;
@@ -85,6 +86,8 @@ function getComponentByViewType(viewType: ViewTypeOptions, props: ViewModeProps<
             return <GeoView {...props} />;
         case "calendar":
             return <CalendarView {...props} />
+        case "table":
+            return <TableView {...props} />
     }
 }
 

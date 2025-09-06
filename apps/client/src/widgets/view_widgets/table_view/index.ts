@@ -3,8 +3,7 @@ import attributes from "../../../services/attributes.js";
 import SpacedUpdate from "../../../services/spaced_update.js";
 import type { EventData } from "../../../components/app_context.js";
 import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule, Options, RowComponent, ColumnComponent} from 'tabulator-tables';
-import "tabulator-tables/dist/css/tabulator.css";
-import "../../../../src/stylesheets/table.css";
+
 import { canReorderRows, configureReorderingRows } from "./dragging.js";
 import buildFooter from "./footer.js";
 import getAttributeDefinitionInformation, { buildRowDefinitions } from "./rows.js";
@@ -14,85 +13,13 @@ import TableColumnEditing from "./col_editing.js";
 import TableRowEditing from "./row_editing.js";
 
 const TPL = /*html*/`
-<div class="table-view">
     <style>
-    .table-view {
-        overflow: hidden;
-        position: relative;
-        height: 100%;
-        user-select: none;
-        padding: 0 5px 0 10px;
-    }
 
-    .table-view-container {
-        height: 100%;
-    }
-
-    .search-result-widget-content .table-view {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
-
-    .tabulator-cell .autocomplete {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background: transparent;
-        outline: none !important;
-    }
-
-    .tabulator .tabulator-header {
-        border-top: unset;
-        border-bottom-width: 1px;
-    }
-
-    .tabulator .tabulator-header .tabulator-frozen.tabulator-frozen-left,
-    .tabulator-row .tabulator-cell.tabulator-frozen.tabulator-frozen-left {
-        border-right-width: 1px;
-    }
-
-    .tabulator .tabulator-footer {
-        background-color: unset;
-        padding: 5px 0;
-    }
-
-    .tabulator .tabulator-footer .tabulator-footer-contents {
-        justify-content: left;
-        gap: 0.5em;
-    }
-
-    .tabulator button.tree-expand,
-    .tabulator button.tree-collapse {
-        display: inline-block;
-        appearance: none;
-        border: 0;
-        background: transparent;
-        width: 1.5em;
-        position: relative;
-        vertical-align: middle;
-    }
-
-    .tabulator button.tree-expand span,
-    .tabulator button.tree-collapse span {
-        position: absolute;
-        top: 0;
-        left: 0;
-        font-size: 1.5em;
-        transform: translateY(-50%);
-    }
     </style>
-
-    <div class="table-view-container"></div>
-</div>
 `;
 
 export interface StateInfo {
-    tableData?: {
-        columns?: ColumnDefinition[];
-    };
+
 }
 
 export default class TableView extends ViewMode<StateInfo> {
@@ -124,7 +51,6 @@ export default class TableView extends ViewMode<StateInfo> {
     }
 
     private async renderTable(el: HTMLElement) {
-        const info = getAttributeDefinitionInformation(this.parentNote);
         const modules = [ SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, DataTreeModule ];
         for (const module of modules) {
             Tabulator.registerModule(module);
@@ -137,16 +63,6 @@ export default class TableView extends ViewMode<StateInfo> {
         const viewStorage = await this.viewStorage.restore();
         this.persistentData = viewStorage?.tableData || {};
 
-        this.maxDepth = parseInt(this.parentNote.getLabelValue("maxNestingDepth") ?? "-1", 10);
-        const { definitions: rowData, hasSubtree: hasChildren, rowNumber } = await buildRowDefinitions(this.parentNote, info, this.maxDepth);
-        this.rowNumberHint = rowNumber;
-        const movableRows = canReorderRows(this.parentNote) && !hasChildren;
-        const columnDefs = buildColumnDefinitions({
-            info,
-            movableRows,
-            existingColumnData: this.persistentData.columns,
-            rowNumberHint: this.rowNumberHint
-        });
         let opts: Options = {
             layout: "fitDataFill",
             index: "branchId",
