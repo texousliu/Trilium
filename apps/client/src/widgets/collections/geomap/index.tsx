@@ -47,7 +47,6 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
             saveConfig(viewConfig);
         }
     }, 5000);
-    console.log("Repaint!");
 
     useEffect(() => { froca.getNotes(noteIds).then(setNotes) }, [ noteIds ]);
 
@@ -140,8 +139,6 @@ function NoteWrapper({ note, isReadOnly }: { note: FNote, isReadOnly: boolean })
     const mime = useNoteProperty(note, "mime");
     const [ location ] = useNoteLabel(note, LOCATION_ATTRIBUTE);
 
-    console.log("Got ", note, mime);
-
     if (mime === "application/gpx+xml") {
         return <NoteGpxTrack note={note} />;
     }
@@ -182,7 +179,6 @@ function NoteMarker({ note, editable, latLng }: { note: FNote, editable: boolean
 
     const onContextMenu = useCallback((e: LeafletMouseEvent) => openContextMenu(note.noteId, e, editable), [ note.noteId, editable ]);
 
-    console.log("Got ", latLng);
     return latLng && <Marker
         coordinates={latLng}
         icon={icon}
