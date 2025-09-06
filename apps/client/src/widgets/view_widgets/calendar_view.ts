@@ -86,18 +86,6 @@ export default class CalendarView extends ViewMode<{}> {
                     $(mainContainer ?? e.el).append($(promotedAttributesHtml));
                 }
             },
-            // Called upon when clicking the day number in the calendar, opens or creates the day note but only if in a calendar root.
-            dateClick: async (e) => {
-                if (!this.isCalendarRoot) {
-                    return;
-                }
-
-                const note = await date_notes.getDayNote(e.dateStr);
-                if (note) {
-                    appContext.triggerCommand("openInPopup", { noteIdOrPath: note.noteId });
-                    appContext.triggerCommand("refreshNoteList", { noteId: this.parentNote.noteId });
-                }
-            },
             datesSet: (e) => this.#onDatesSet(e),
         });
 

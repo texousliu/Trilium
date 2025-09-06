@@ -15,6 +15,9 @@ import { t } from "../../../services/i18n";
 import { buildEvents, buildEventsForCalendar } from "./event_builder";
 import { changeEvent, newEvent } from "./api";
 import froca from "../../../services/froca";
+import date_notes from "../../../services/date_notes";
+import appContext from "../../../components/app_context";
+import { DateClickArg } from "@fullcalendar/interaction";
 
 interface CalendarViewData {
 
@@ -92,6 +95,16 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
         changeEvent(note, { startDate, endDate, startTime, endTime });
     }, []);
 
+    // Called upon when clicking the day number in the calendar, opens or creates the day note but only if in a calendar root.
+    const onDateClick = useCallback(async (e: DateClickArg) => {
+        if (!isCalendarRoot) return;
+
+        const eventNote = await date_notes.getDayNote(e.dateStr);
+        if (eventNote) {
+            appContext.triggerCommand("openInPopup", { noteIdOrPath: eventNote.noteId });
+        }
+    }, []);
+
     return (plugins &&
         <div className="calendar-view" ref={containerRef}>
             <Calendar
@@ -112,6 +125,7 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
                 editable={isEditable} selectable={isEditable}
                 select={onCalendarSelection}
                 eventChange={onEventChange}
+                dateClick={onDateClick}
                 viewDidMount={({ view }) => {
                     if (initialView.current !== view.type) {
                         initialView.current = view.type;
