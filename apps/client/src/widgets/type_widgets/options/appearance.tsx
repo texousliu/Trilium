@@ -250,7 +250,6 @@ function Performance() {
     const [ motionEnabled, setMotionEnabled ] = useTriliumOptionBool("motionEnabled");
     const [ shadowsEnabled, setShadowsEnabled ] = useTriliumOptionBool("shadowsEnabled");
     const [ backdropEffectsEnabled, setBackdropEffectsEnabled ] = useTriliumOptionBool("backdropEffectsEnabled");
-    const [ smoothScrollEnabled, setSmoothScrollEnabled ] = useTriliumOptionBool("smoothScrollEnabled");
 
     return <OptionsSection title={t("ui-performance.title")}>
         <FormCheckbox
@@ -268,13 +267,19 @@ function Performance() {
             currentValue={backdropEffectsEnabled} onChange={setBackdropEffectsEnabled}
         />
 
-        <FormCheckbox
-            label={`${t("ui-performance.enable-smooth-scroll")} ${t("ui-performance.app-restart-required")}`}
-            currentValue={smoothScrollEnabled} onChange={setSmoothScrollEnabled}
-        />
+        {isElectron() && <SmoothScrollEnabledOption />}
+
     </OptionsSection>
 }
 
+function SmoothScrollEnabledOption() {
+    const [ smoothScrollEnabled, setSmoothScrollEnabled ] = useTriliumOptionBool("smoothScrollEnabled");
+
+    return <FormCheckbox
+        label={`${t("ui-performance.enable-smooth-scroll")} ${t("ui-performance.app-restart-required")}`}
+        currentValue={smoothScrollEnabled} onChange={setSmoothScrollEnabled}
+    />
+}
 
 function MaxContentWidth() {
     const [ maxContentWidth, setMaxContentWidth ] = useTriliumOption("maxContentWidth");
