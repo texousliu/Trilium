@@ -142,7 +142,7 @@
     --launcher-pane-vert-button-hover-background: white;
     --launcher-pane-vert-button-hover-shadow: 4px 4px 4px rgba(0, 0, 0, 0.075);
     --launcher-pane-vert-button-focus-outline-color: var(--input-focus-outline-color);
-    --launcher-pane-vert-background-color-bgfx: #00000011; /* When background effects enabled */
+    --launcher-pane-vert-background-color-bgfx: #0000000f; /* When background effects enabled */
 
     --launcher-pane-horiz-border-color: rgba(0, 0, 0, 0.1);
     --launcher-pane-horiz-background-color: #fafafa;
