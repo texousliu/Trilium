@@ -97,8 +97,6 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
 
     // Called upon when clicking the day number in the calendar, opens or creates the day note but only if in a calendar root.
     const onDateClick = useCallback(async (e: DateClickArg) => {
-        if (!isCalendarRoot) return;
-
         const eventNote = await date_notes.getDayNote(e.dateStr);
         if (eventNote) {
             appContext.triggerCommand("openInPopup", { noteIdOrPath: eventNote.noteId });
@@ -127,7 +125,7 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
                 editable={isEditable} selectable={isEditable}
                 select={onCalendarSelection}
                 eventChange={onEventChange}
-                dateClick={onDateClick}
+                dateClick={isCalendarRoot ? onDateClick : undefined}
                 viewDidMount={({ view }) => {
                     if (initialView.current !== view.type) {
                         initialView.current = view.type;
