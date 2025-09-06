@@ -250,6 +250,7 @@ function Performance() {
     const [ motionEnabled, setMotionEnabled ] = useTriliumOptionBool("motionEnabled");
     const [ shadowsEnabled, setShadowsEnabled ] = useTriliumOptionBool("shadowsEnabled");
     const [ backdropEffectsEnabled, setBackdropEffectsEnabled ] = useTriliumOptionBool("backdropEffectsEnabled");
+    const [ smoothScrollEnabled, setSmoothScrollEnabled ] = useTriliumOptionBool("smoothScrollEnabled");
 
     return <OptionsSection title={t("ui-performance.title")}>
         <FormCheckbox
@@ -265,6 +266,11 @@ function Performance() {
         <FormCheckbox
             label={t("ui-performance.enable-backdrop-effects")}
             currentValue={backdropEffectsEnabled} onChange={setBackdropEffectsEnabled}
+        />
+
+        <FormCheckbox
+            label={t("ui-performance.enable-smooth-scroll")}
+            currentValue={smoothScrollEnabled} onChange={setSmoothScrollEnabled}
         />
     </OptionsSection>
 }
