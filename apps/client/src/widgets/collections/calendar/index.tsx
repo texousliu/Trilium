@@ -1,4 +1,4 @@
-import { DateSelectArg, EventSourceFuncArg, LocaleInput, PluginDef } from "@fullcalendar/core/index.js";
+import { DateSelectArg, EventChangeArg, EventSourceFuncArg, LocaleInput, PluginDef } from "@fullcalendar/core/index.js";
 import { ViewModeProps } from "../interface";
 import Calendar from "./calendar";
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
@@ -14,6 +14,7 @@ import dialog from "../../../services/dialog";
 import { t } from "../../../services/i18n";
 import { buildEvents, buildEventsForCalendar } from "./event_builder";
 import { newEvent } from "./api";
+import froca from "../../../services/froca";
 
 interface CalendarViewData {
 
@@ -81,6 +82,46 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
         newEvent(note, { title, startDate, endDate, startTime, endTime });
     }, [ note ]);
 
+    const onEventChange = useCallback(async (e: EventChangeArg) => {
+        // Handle start and end date
+        let { startDate, endDate } = parseStartEndDateFromEvent(e.event);
+        if (!startDate) {
+            return;
+        }
+        const noteId = e.event.extendedProps.noteId;
+
+        // Don't store the end date if it's empty.
+        if (endDate === startDate) {
+            endDate = undefined;
+        }
+
+        // Update start date
+        const note = await froca.getNote(noteId);
+        if (!note) {
+            return;
+        }
+
+        // Since they can be customized via calendar:startDate=$foo and calendar:endDate=$bar we need to determine the
+        // attributes to be effectively updated
+        const startAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:startDate").shift()?.value||"startDate";
+        const endAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:endDate").shift()?.value||"endDate";
+
+        setLabel(noteId, startAttribute, startDate);
+        setLabel(noteId, endAttribute, endDate);
+
+        // Update start time and end time if needed.
+        if (!e.event.allDay) {
+            const startAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:startTime").shift()?.value||"startTime";
+            const endAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:endTime").shift()?.value||"endTime";
+
+            const { startTime, endTime } = parseStartEndTimeFromEvent(e.event);
+            if (startTime && endTime) {
+                setLabel(noteId, startAttribute, startTime);
+                setLabel(noteId, endAttribute, endTime);
+            }
+        }
+    }, []);
+
     return (plugins &&
         <div className="calendar-view" ref={containerRef}>
             <Calendar
@@ -100,6 +141,7 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
                 locale={locale}
                 editable={isEditable} selectable={isEditable}
                 select={onCalendarSelection}
+                eventChange={onEventChange}
                 viewDidMount={({ view }) => {
                     if (initialView.current !== view.type) {
                         initialView.current = view.type;

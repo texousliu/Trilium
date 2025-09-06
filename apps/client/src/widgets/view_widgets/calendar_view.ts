@@ -35,8 +35,6 @@ export default class CalendarView extends ViewMode<{}> {
 
     async renderList(): Promise<JQuery<HTMLElement> | undefined> {
         const calendar = new Calendar(this.$calendarContainer[0], {
-            select: (e) => this.#onCalendarSelection(e),
-            eventChange: (e) => this.#onEventMoved(e),
             height: "100%",
             nowIndicator: true,
             eventDidMount: (e) => {
@@ -109,44 +107,6 @@ export default class CalendarView extends ViewMode<{}> {
     #onDatesSet(e: DatesSetArg) {
         if (hasTouchBar) {
             appContext.triggerCommand("refreshTouchBar");
-        }
-    }
-
-    async #onEventMoved(e: EventChangeArg) {
-        // Handle start and end date
-        let { startDate, endDate } = this.#parseStartEndDateFromEvent(e.event);
-        if (!startDate) {
-            return;
-        }
-        const noteId = e.event.extendedProps.noteId;
-
-        // Don't store the end date if it's empty.
-        if (endDate === startDate) {
-            endDate = undefined;
-        }
-
-        // Update start date
-        const note = await froca.getNote(noteId);
-        if (!note) {
-            return;
-        }
-
-        // Since they can be customized via calendar:startDate=$foo and calendar:endDate=$bar we need to determine the
-        // attributes to be effectively updated
-        const startAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:startDate").shift()?.value||"startDate";
-        const endAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:endDate").shift()?.value||"endDate";
-
-        attributes.setAttribute(note, "label", startAttribute, startDate);
-        attributes.setAttribute(note, "label", endAttribute, endDate);
-
-        // Update start time and end time if needed.
-        if (!e.event.allDay) {
-            const startAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:startTime").shift()?.value||"startTime";
-            const endAttribute = note.getAttributes("label").filter(attr => attr.name == "calendar:endTime").shift()?.value||"endTime";
-
-            const { startTime, endTime } = this.#parseStartEndTimeFromEvent(e.event);
-            attributes.setAttribute(note, "label", startAttribute, startTime);
-            attributes.setAttribute(note, "label", endAttribute, endTime);
         }
     }
 
