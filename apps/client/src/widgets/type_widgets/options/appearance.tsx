@@ -269,7 +269,7 @@ function Performance() {
         />
 
         <FormCheckbox
-            label={t("ui-performance.enable-smooth-scroll")}
+            label={`${t("ui-performance.enable-smooth-scroll")} ${t("ui-performance.app-restart-required")}`}
             currentValue={smoothScrollEnabled} onChange={setSmoothScrollEnabled}
         />
     </OptionsSection>
