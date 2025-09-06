@@ -19,7 +19,7 @@ import FNote from "../../../entities/fnote";
 import Button, { ButtonGroup } from "../../react/Button";
 import ActionButton from "../../react/ActionButton";
 import { RefObject } from "preact";
-import TouchBar, { TouchBarLabel, TouchBarSegmentedControl } from "../../react/TouchBar";
+import TouchBar, { TouchBarButton, TouchBarLabel, TouchBarSegmentedControl } from "../../react/TouchBar";
 
 interface CalendarViewData {
 
@@ -164,7 +164,7 @@ function CalendarHeader({ calendarRef }: { calendarRef: RefObject<FullCalendar> 
                     />
                 ))}
             </ButtonGroup>
-            <Button text="today" onClick={() => calendarRef.current?.today()} />
+            <Button text={t("calendar.today").toLocaleLowerCase()} onClick={() => calendarRef.current?.today()} />
             <ButtonGroup>
                 <ActionButton icon="bx bx-chevron-left" text={currentViewData?.previousText ?? ""} frame onClick={() => calendarRef.current?.prev()} />
                 <ActionButton icon="bx bx-chevron-right" text={currentViewData?.nextText ?? ""} frame onClick={() => calendarRef.current?.next()} />
@@ -335,6 +335,23 @@ function CalendarTouchBar({ calendarRef }: { calendarRef: RefObject<FullCalendar
                 }))}
                 selectedIndex={CALENDAR_VIEWS.findIndex(v => v.type === viewType) ?? 0}
                 onChange={(selectedIndex) => calendarRef.current?.changeView(CALENDAR_VIEWS[selectedIndex].type)}
+            />
+            <TouchBarButton
+                label={t("calendar.today")}
+                click={() => calendarRef.current?.today()}
+            />
+            <TouchBarSegmentedControl
+                mode="buttons"
+                segments={[
+                    {
+                        icon: "NSImageNameTouchBarGoBackTemplate",
+                        onClick: () => calendarRef.current?.prev()
+                    },
+                    {
+                        icon: "NSImageNameTouchBarGoForwardTemplate",
+                        onClick: () => calendarRef.current?.next()
+                    }
+                ]}
             />
         </TouchBar>
     );

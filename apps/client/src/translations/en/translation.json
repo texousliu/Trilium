@@ -597,7 +597,8 @@
     "year": "Year",
     "year_previous": "Previous year",
     "year_next": "Next year",
-    "list": "List"
+    "list": "List",
+    "today": "Today"
   },
   "close_pane_button": {
     "close_this_pane": "Close this pane"
