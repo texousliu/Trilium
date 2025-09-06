@@ -2,7 +2,6 @@ import ViewMode, { type ViewModeArgs } from "../view_mode.js";
 import attributes from "../../../services/attributes.js";
 import SpacedUpdate from "../../../services/spaced_update.js";
 import type { EventData } from "../../../components/app_context.js";
-import {Tabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule, Options, RowComponent, ColumnComponent} from 'tabulator-tables';
 
 import { canReorderRows, configureReorderingRows } from "./dragging.js";
 import buildFooter from "./footer.js";
@@ -51,7 +50,6 @@ export default class TableView extends ViewMode<StateInfo> {
     }
 
     private async renderTable(el: HTMLElement) {
-        const modules = [ SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, DataTreeModule ];
         for (const module of modules) {
             Tabulator.registerModule(module);
         }

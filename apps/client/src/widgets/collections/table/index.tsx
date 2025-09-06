@@ -1,12 +1,12 @@
 import { useEffect, useState } from "preact/hooks";
 import { ViewModeProps } from "../interface";
 import "./index.css";
-import { ColumnDefinition } from "tabulator-tables";
 import { buildColumnDefinitions } from "./columns";
 import getAttributeDefinitionInformation, { buildRowDefinitions, TableData } from "./rows";
 import { useNoteLabelInt } from "../../react/hooks";
 import { canReorderRows } from "../../view_widgets/table_view/dragging";
 import Tabulator from "./tabulator";
+import {SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule} from 'tabulator-tables';
 
 interface TableConfig {
     tableData?: {
@@ -41,6 +41,7 @@ export default function TableView({ note, viewConfig }: ViewModeProps<TableConfi
                     className="table-view-container"
                     columns={columnDefs}
                     data={rowData}
+                    modules={[ SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, DataTreeModule ]}
                 />
             )}
         </div>

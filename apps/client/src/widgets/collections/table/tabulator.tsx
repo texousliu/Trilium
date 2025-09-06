@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "preact/hooks";
-import { ColumnDefinition, Tabulator as VanillaTabulator } from "tabulator-tables";
+import { ColumnDefinition, Module, Tabulator as VanillaTabulator } from "tabulator-tables";
 import "tabulator-tables/dist/css/tabulator.css";
 import "../../../../src/stylesheets/table.css";
 
@@ -7,11 +7,19 @@ interface TableProps<T> {
     className?: string;
     columns: ColumnDefinition[];
     data?: T[];
+    modules?: (new (table: VanillaTabulator) => Module)[];
 }
 
-export default function Tabulator<T>({ className, columns, data }: TableProps<T>) {
+export default function Tabulator<T>({ className, columns, data, modules }: TableProps<T>) {
     const containerRef = useRef<HTMLDivElement>(null);
     const tabulatorRef = useRef<VanillaTabulator>(null);
+
+    useEffect(() => {
+        if (!modules) return;
+        for (const module of modules) {
+            VanillaTabulator.registerModule(module);
+        }
+    }, [modules]);
 
     useEffect(() => {
         if (!containerRef.current) return;
