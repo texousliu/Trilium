@@ -18,6 +18,7 @@ import froca from "../../../services/froca";
 import date_notes from "../../../services/date_notes";
 import appContext from "../../../components/app_context";
 import { DateClickArg } from "@fullcalendar/interaction";
+import FNote from "../../../entities/fnote";
 
 interface CalendarViewData {
 
@@ -71,39 +72,8 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
     const plugins = usePlugins(isEditable, isCalendarRoot);
     const locale = useLocale();
 
-    const onCalendarSelection = useCallback(async (e: DateSelectArg) => {
-        const { startDate, endDate } = parseStartEndDateFromEvent(e);
-        if (!startDate) return;
-        const { startTime, endTime } = parseStartEndTimeFromEvent(e);
-
-        // Ask for the title
-        const title = await dialog.prompt({ message: t("relation_map.enter_title_of_new_note"), defaultValue: t("relation_map.default_new_note_title") });
-        if (!title?.trim()) {
-            return;
-        }
-
-        newEvent(note, { title, startDate, endDate, startTime, endTime });
-    }, [ note ]);
-
-    const onEventChange = useCallback(async (e: EventChangeArg) => {
-        const { startDate, endDate } = parseStartEndDateFromEvent(e.event);
-        if (!startDate) return;
-
-        const { startTime, endTime } = parseStartEndTimeFromEvent(e.event);
-        const note = await froca.getNote(e.event.extendedProps.noteId);
-        if (!note) return;
-        changeEvent(note, { startDate, endDate, startTime, endTime });
-    }, []);
-
-    // Called upon when clicking the day number in the calendar, opens or creates the day note but only if in a calendar root.
-    const onDateClick = useCallback(async (e: DateClickArg) => {
-        const eventNote = await date_notes.getDayNote(e.dateStr);
-        if (eventNote) {
-            appContext.triggerCommand("openInPopup", { noteIdOrPath: eventNote.noteId });
-        }
-    }, []);
-
     const { eventDidMount } = useEventDisplayCustomization();
+    const editingProps = useEditing(note, isEditable, isCalendarRoot);
 
     return (plugins &&
         <div className="calendar-view" ref={containerRef}>
@@ -124,10 +94,7 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
                 nowIndicator
                 handleWindowResize={false}
                 locale={locale}
-                editable={isEditable} selectable={isEditable}
-                select={onCalendarSelection}
-                eventChange={onEventChange}
-                dateClick={isCalendarRoot ? onDateClick : undefined}
+                {...editingProps}
                 eventDidMount={eventDidMount}
                 viewDidMount={({ view }) => {
                     if (initialView.current !== view.type) {
@@ -176,6 +143,48 @@ function useLocale() {
     });
 
     return calendarLocale;
+}
+
+function useEditing(note: FNote, isEditable: boolean, isCalendarRoot: boolean) {
+    const onCalendarSelection = useCallback(async (e: DateSelectArg) => {
+        const { startDate, endDate } = parseStartEndDateFromEvent(e);
+        if (!startDate) return;
+        const { startTime, endTime } = parseStartEndTimeFromEvent(e);
+
+        // Ask for the title
+        const title = await dialog.prompt({ message: t("relation_map.enter_title_of_new_note"), defaultValue: t("relation_map.default_new_note_title") });
+        if (!title?.trim()) {
+            return;
+        }
+
+        newEvent(note, { title, startDate, endDate, startTime, endTime });
+    }, [ note ]);
+
+    const onEventChange = useCallback(async (e: EventChangeArg) => {
+        const { startDate, endDate } = parseStartEndDateFromEvent(e.event);
+        if (!startDate) return;
+
+        const { startTime, endTime } = parseStartEndTimeFromEvent(e.event);
+        const note = await froca.getNote(e.event.extendedProps.noteId);
+        if (!note) return;
+        changeEvent(note, { startDate, endDate, startTime, endTime });
+    }, []);
+
+    // Called upon when clicking the day number in the calendar, opens or creates the day note but only if in a calendar root.
+    const onDateClick = useCallback(async (e: DateClickArg) => {
+        const eventNote = await date_notes.getDayNote(e.dateStr);
+        if (eventNote) {
+            appContext.triggerCommand("openInPopup", { noteIdOrPath: eventNote.noteId });
+        }
+    }, []);
+
+    return {
+        select: onCalendarSelection,
+        eventChange: onEventChange,
+        dateClick: isCalendarRoot ? onDateClick : undefined,
+        editable: isEditable,
+        selectable: isEditable
+    };
 }
 
 function useEventDisplayCustomization() {

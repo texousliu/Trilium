@@ -33,14 +33,6 @@ export default class CalendarView extends ViewMode<{}> {
         args.$parent.append(this.$root);
     }
 
-    async renderList(): Promise<JQuery<HTMLElement> | undefined> {
-        const calendar = new Calendar(this.$calendarContainer[0], {
-            datesSet: (e) => this.#onDatesSet(e),
-        });
-
-        return this.$root;
-    }
-
     #onDatesSet(e: DatesSetArg) {
         if (hasTouchBar) {
             appContext.triggerCommand("refreshTouchBar");
