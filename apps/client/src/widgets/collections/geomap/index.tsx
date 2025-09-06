@@ -46,7 +46,7 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
             saveConfig(viewConfig);
         }
     }, 5000);
-    const [ currentZoom, setCurrentZoom ] = useState<number>();
+    console.log("Repaint!");
 
     useEffect(() => { froca.getNotes(noteIds).then(setNotes) }, [ noteIds ]);
 
@@ -126,12 +126,11 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
                 }}
                 onClick={onClick}
                 onContextMenu={onContextMenu}
-                onZoom={() => setCurrentZoom(apiRef.current?.getZoom())}
                 scale={hasScale}
             >
                 {notes.map(note => <NoteWrapper note={note} isReadOnly={isReadOnly} />)}
             </Map>
-            <GeoMapTouchBar zoom={currentZoom} map={apiRef.current} />
+            <GeoMapTouchBar map={apiRef.current} />
         </div>
     );
 }
@@ -245,15 +244,31 @@ function buildIcon(bxIconClass: string, colorClass?: string, title?: string, not
     });
 }
 
-function GeoMapTouchBar({ zoom, map }: { zoom: number | undefined, map: L.Map | null | undefined }) {
-    return map && (
+function GeoMapTouchBar({ map }: { map: L.Map | null | undefined }) {
+    const [ currentZoom, setCurrentZoom ] = useState<number>();
+
+    useEffect(() => {
+        if (!map) return;
+
+        function onZoomChanged() {
+            setCurrentZoom(map?.getZoom());
+        }
+
+        map.on("zoom", onZoomChanged);
+        return () => map.off("zoom", onZoomChanged);
+    }, [ map ]);
+
+    return map && currentZoom && (
         <TouchBar>
             <TouchBarSlider
                 label="Zoom"
-                value={zoom ?? map.getZoom()}
+                value={currentZoom}
                 minValue={map.getMinZoom()}
                 maxValue={map.getMaxZoom()}
-                onChange={(newValue) => map.setZoom(newValue)}
+                onChange={(newValue) => {
+                    setCurrentZoom(newValue);
+                    map.setZoom(newValue);
+                }}
             />
         </TouchBar>
     )
