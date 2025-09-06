@@ -73,3 +73,26 @@ export function TouchBarLabel({ label }: { label: string }) {
 
     return <></>;
 }
+
+interface SliderProps {
+    label: string;
+    value: number;
+    minValue: number;
+    maxValue: number;
+    onChange: (newValue: number) => void;
+}
+
+export function TouchBarSlider({ label, value, minValue, maxValue, onChange }: SliderProps) {
+    const api = useContext(TouchBarContext);
+
+    if (api) {
+        const item = new api.TouchBar.TouchBarSlider({
+            label,
+            value, minValue, maxValue,
+            change: onChange
+        });
+        api.addItem(item);
+    }
+
+    return <></>;
+}

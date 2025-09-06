@@ -17,7 +17,7 @@ import toast from "../../../services/toast";
 import { t } from "../../../services/i18n";
 import server from "../../../services/server";
 import branches from "../../../services/branches";
-import TouchBar, { TouchBarLabel } from "../../react/TouchBar";
+import TouchBar, { TouchBarLabel, TouchBarSlider } from "../../react/TouchBar";
 
 const DEFAULT_COORDINATES: [number, number] = [3.878638227135724, 446.6630455551659];
 const DEFAULT_ZOOM = 2;
@@ -48,8 +48,6 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
     }, 5000);
     const [ currentZoom, setCurrentZoom ] = useState<number>();
 
-    console.log("Got new notes IDs ", noteIds);
-    console.log("Got notes ", notes);
     useEffect(() => { froca.getNotes(noteIds).then(setNotes) }, [ noteIds ]);
 
     // Note creation.
@@ -133,7 +131,7 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
             >
                 {notes.map(note => <NoteWrapper note={note} isReadOnly={isReadOnly} />)}
             </Map>
-            <GeoMapTouchBar zoom={currentZoom} />
+            <GeoMapTouchBar zoom={currentZoom} map={apiRef.current} />
         </div>
     );
 }
@@ -247,10 +245,16 @@ function buildIcon(bxIconClass: string, colorClass?: string, title?: string, not
     });
 }
 
-function GeoMapTouchBar({ zoom }: { zoom: number | undefined }) {
-    return (
+function GeoMapTouchBar({ zoom, map }: { zoom: number | undefined, map: L.Map | null | undefined }) {
+    return map && (
         <TouchBar>
-            <TouchBarLabel label={String(zoom)} />
+            <TouchBarSlider
+                label="Zoom"
+                value={zoom ?? map.getZoom()}
+                minValue={map.getMinZoom()}
+                maxValue={map.getMaxZoom()}
+                onChange={(newValue) => map.setZoom(newValue)}
+            />
         </TouchBar>
     )
 }
