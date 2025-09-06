@@ -60,3 +60,20 @@ body.desktop:not(.zen) .calendar-container .fc-toolbar.fc-header-toolbar {
     opacity: 0.85;
     overflow: hidden;
 }
+
+/* #region Header */
+.calendar-header {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.calendar-header .btn {
+    min-width: unset !important;
+}
+
+.calendar-header > .title {
+    flex-grow: 1;
+}
+/* #endregion */

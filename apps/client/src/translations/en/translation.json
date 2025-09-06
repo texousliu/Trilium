@@ -587,7 +587,17 @@
     "september": "September",
     "october": "October",
     "november": "November",
-    "december": "December"
+    "december": "December",
+    "week": "Week",
+    "week_previous": "Previous week",
+    "week_next": "Next week",
+    "month": "Month",
+    "month_previous": "Previous month",
+    "month_next": "Next month",
+    "year": "Year",
+    "year_previous": "Previous year",
+    "year_next": "Next year",
+    "list": "List"
   },
   "close_pane_button": {
     "close_this_pane": "Close this pane"

@@ -16,17 +16,49 @@ import date_notes from "../../../services/date_notes";
 import appContext from "../../../components/app_context";
 import { DateClickArg } from "@fullcalendar/interaction";
 import FNote from "../../../entities/fnote";
+import Button, { ButtonGroup } from "../../react/Button";
+import ActionButton from "../../react/ActionButton";
+import { RefObject } from "preact";
 
 interface CalendarViewData {
 
 }
 
+interface CalendarViewData {
+    type: string;
+    name: string;
+    previousText: string;
+    nextText: string;
+}
+
 const CALENDAR_VIEWS = [
-    "timeGridWeek",
-    "dayGridMonth",
-    "multiMonthYear",
-    "listMonth"
+    {
+        type: "timeGridWeek",
+        name: t("calendar.week"),
+        previousText: t("calendar.week_previous"),
+        nextText: t("calendar.week_next")
+    },
+    {
+        type: "dayGridMonth",
+        name: t("calendar.month"),
+        previousText: t("calendar.month_previous"),
+        nextText: t("calendar.month_next")
+    },
+    {
+        type: "multiMonthYear",
+        name: t("calendar.year"),
+        previousText: t("calendar.year_previous"),
+        nextText: t("calendar.year_next")
+    },
+    {
+        type: "listMonth",
+        name: t("calendar.list"),
+        previousText: t("calendar.month_previous"),
+        nextText: t("calendar.month_next")
+    }
 ]
+
+const SUPPORTED_CALENDAR_VIEW_TYPE = CALENDAR_VIEWS.map(v => v.type);
 
 // Here we hard-code the imports in order to ensure that they are embedded by webpack without having to load all the languages.
 export const LOCALE_MAPPINGS: Record<LOCALE_IDS, (() => Promise<{ default: LocaleInput }>) | null> = {
@@ -83,20 +115,18 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
 
     return (plugins &&
         <div className="calendar-view" ref={containerRef}>
+            <CalendarHeader calendarRef={calendarRef} />
             <Calendar
                 events={eventBuilder}
                 calendarRef={calendarRef}
                 plugins={plugins}
                 tabIndex={100}
-                initialView={initialView.current && CALENDAR_VIEWS.includes(initialView.current) ? initialView.current : "dayGridMonth"}
-                headerToolbar={{
-                    start: "title",
-                    end: `${CALENDAR_VIEWS.join(",")} today prev,next`
-                }}
+                initialView={initialView.current && SUPPORTED_CALENDAR_VIEW_TYPE.includes(initialView.current) ? initialView.current : "dayGridMonth"}
+                headerToolbar={false}
                 firstDay={firstDayOfWeek ?? 0}
                 weekends={!hideWeekends}
                 weekNumbers={weekNumbers}
-                height="100%"
+                height="90%"
                 nowIndicator
                 handleWindowResize={false}
                 locale={locale}
@@ -111,6 +141,31 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
             />
         </div>
     );
+}
+
+function CalendarHeader({ calendarRef }: { calendarRef: RefObject<FullCalendar> }) {
+    const currentViewType = calendarRef.current?.view?.type;
+    const currentViewData = CALENDAR_VIEWS.find(v => calendarRef.current && v.type === currentViewType);
+
+    return (
+        <div className="calendar-header">
+            <span className="title">{calendarRef.current?.view.title}</span>
+            <ButtonGroup>
+                {CALENDAR_VIEWS.map(viewData => (
+                    <Button
+                        text={viewData.name.toLocaleLowerCase()}
+                        className={currentViewType === viewData.type ? "active" : ""}
+                        onClick={() => calendarRef.current?.changeView(viewData.type)}
+                    />
+                ))}
+            </ButtonGroup>
+            <Button text="today" onClick={() => calendarRef.current?.today()} />
+            <ButtonGroup>
+                <ActionButton icon="bx bx-chevron-left" text={currentViewData?.previousText ?? ""} frame onClick={() => calendarRef.current?.prev()} />
+                <ActionButton icon="bx bx-chevron-right" text={currentViewData?.nextText ?? ""} frame onClick={() => calendarRef.current?.next()} />
+            </ButtonGroup>
+        </div>
+    )
 }
 
 function usePlugins(isEditable: boolean, isCalendarRoot: boolean) {
