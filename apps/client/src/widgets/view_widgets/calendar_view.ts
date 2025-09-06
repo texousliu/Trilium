@@ -35,8 +35,6 @@ export default class CalendarView extends ViewMode<{}> {
 
     async renderList(): Promise<JQuery<HTMLElement> | undefined> {
         const calendar = new Calendar(this.$calendarContainer[0], {
-            height: "100%",
-            nowIndicator: true,
             eventDidMount: (e) => {
                 const { iconClass, promotedAttributes } = e.event.extendedProps;
 
