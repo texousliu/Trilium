@@ -1,31 +1,35 @@
-import { ColumnComponent, RowComponent, Tabulator } from "tabulator-tables";
+import { ColumnComponent, EventCallBackMethods, RowComponent, Tabulator } from "tabulator-tables";
 import contextMenu, { MenuItem } from "../../../menus/context_menu.js";
-import { TableData } from "./rows.js";
-import branches from "../../../services/branches.js";
+import FNote from "../../../entities/fnote.js";
 import { t } from "../../../services/i18n.js";
+import { TableData } from "./rows.js";
 import link_context_menu from "../../../menus/link_context_menu.js";
-import type FNote from "../../../entities/fnote.js";
 import froca from "../../../services/froca.js";
-import type Component from "../../../components/component.js";
+import branches from "../../../services/branches.js";
+import Component from "../../../components/component.js";
+import { RefObject } from "preact";
 
-export function setupContextMenu(tabulator: Tabulator, parentNote: FNote) {
-    tabulator.on("rowContext", (e, row) => showRowContextMenu(e, row, parentNote, tabulator));
-    tabulator.on("headerContext", (e, col) => showColumnContextMenu(e, col, parentNote, tabulator));
-    tabulator.on("renderComplete", () => {
-        const headerRow = tabulator.element.querySelector(".tabulator-header-contents");
-        headerRow?.addEventListener("contextmenu", (e) => showHeaderContextMenu(e, tabulator));
-    });
+export function useContextMenu(parentNote: FNote, parentComponent: Component | null | undefined, tabulator: RefObject<Tabulator>): Partial<EventCallBackMethods> {
+    const events: Partial<EventCallBackMethods> = {};
+    if (!tabulator || !parentComponent) return events;
 
-    // Pressing the expand button prevents bubbling and the context menu remains menu when it shouldn't.
-    if (tabulator.options.dataTree) {
-        const dismissContextMenu = () => contextMenu.hide();
-        tabulator.on("dataTreeRowExpanded", dismissContextMenu);
-        tabulator.on("dataTreeRowCollapsed", dismissContextMenu);
+    events["rowContext"] = (e, row) => tabulator.current && showRowContextMenu(parentComponent, e as MouseEvent, row, parentNote, tabulator.current);
+    events["headerContext"] = (e, col) => tabulator.current && showColumnContextMenu(parentComponent, e as MouseEvent, col, parentNote, tabulator.current);
+    events["renderComplete"] = () => {
+        const headerRow = tabulator.current?.element.querySelector(".tabulator-header-contents");
+        headerRow?.addEventListener("contextmenu", (e) => showHeaderContextMenu(parentComponent, e as MouseEvent, tabulator.current!));
     }
+    // Pressing the expand button prevents bubbling and the context menu remains menu when it shouldn't.
+    if (tabulator.current?.options.dataTree) {
+        const dismissContextMenu = () => contextMenu.hide();
+        events["dataTreeRowExpanded"] = dismissContextMenu;
+        events["dataTreeRowCollapsed"] = dismissContextMenu;
+    }
+
+    return events;
 }
 
-function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote: FNote, tabulator: Tabulator) {
-    const e = _e as MouseEvent;
+function showColumnContextMenu(parentComponent: Component, e: MouseEvent, column: ColumnComponent, parentNote: FNote, tabulator: Tabulator) {
     const { title, field } = column.getDefinition();
 
     const sorters = tabulator.getSorters();
@@ -87,16 +91,16 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote:
                 title: t("table_view.add-column-to-the-left"),
                 uiIcon: "bx bx-horizontal-left",
                 enabled: !column.getDefinition().frozen,
-                items: buildInsertSubmenu(e, column, "before"),
-                handler: () => getParentComponent(e)?.triggerCommand("addNewTableColumn", {
+                items: buildInsertSubmenu(parentComponent, column, "before"),
+                handler: () => parentComponent?.triggerCommand("addNewTableColumn", {
                     referenceColumn: column
                 })
             },
             {
                 title: t("table_view.add-column-to-the-right"),
                 uiIcon: "bx bx-horizontal-right",
-                items: buildInsertSubmenu(e, column, "after"),
-                handler: () => getParentComponent(e)?.triggerCommand("addNewTableColumn", {
+                items: buildInsertSubmenu(parentComponent, column, "after"),
+                handler: () => parentComponent?.triggerCommand("addNewTableColumn", {
                     referenceColumn: column,
                     direction: "after"
                 })
@@ -106,7 +110,7 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote:
                 title: t("table_view.edit-column"),
                 uiIcon: "bx bxs-edit-alt",
                 enabled: isUserDefinedColumn,
-                handler: () => getParentComponent(e)?.triggerCommand("addNewTableColumn", {
+                handler: () => parentComponent?.triggerCommand("addNewTableColumn", {
                     referenceColumn: column,
                     columnToEdit: column
                 })
@@ -115,7 +119,7 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote:
                 title: t("table_view.delete-column"),
                 uiIcon: "bx bx-trash",
                 enabled: isUserDefinedColumn,
-                handler: () => getParentComponent(e)?.triggerCommand("deleteTableColumn", {
+                handler: () => parentComponent?.triggerCommand("deleteTableColumn", {
                     columnToDelete: column
                 })
             }
@@ -131,8 +135,7 @@ function showColumnContextMenu(_e: UIEvent, column: ColumnComponent, parentNote:
  * Shows a context menu which has options dedicated to the header area (the part where the columns are, but in the empty space).
  * Provides generic options such as toggling columns.
  */
-function showHeaderContextMenu(_e: Event, tabulator: Tabulator) {
-    const e = _e as MouseEvent;
+function showHeaderContextMenu(parentComponent: Component, e: MouseEvent, tabulator: Tabulator) {
     contextMenu.show({
         items: [
             {
@@ -146,7 +149,7 @@ function showHeaderContextMenu(_e: Event, tabulator: Tabulator) {
                 uiIcon: "bx bx-empty",
                 enabled: false
             },
-            ...buildInsertSubmenu(e)
+            ...buildInsertSubmenu(parentComponent)
         ],
         selectMenuItemHandler() {},
         x: e.pageX,
@@ -155,8 +158,7 @@ function showHeaderContextMenu(_e: Event, tabulator: Tabulator) {
     e.preventDefault();
 }
 
-export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: FNote, tabulator: Tabulator) {
-    const e = _e as MouseEvent;
+export function showRowContextMenu(parentComponent: Component, e: MouseEvent, row: RowComponent, parentNote: FNote, tabulator: Tabulator) {
     const rowData = row.getData() as TableData;
 
     let parentNoteId: string = parentNote.noteId;
@@ -175,7 +177,7 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
             {
                 title: t("table_view.row-insert-above"),
                 uiIcon: "bx bx-horizontal-left bx-rotate-90",
-                handler: () => getParentComponent(e)?.triggerCommand("addNewRow", {
+                handler: () => parentComponent?.triggerCommand("addNewRow", {
                     parentNotePath: parentNoteId,
                     customOpts: {
                         target: "before",
@@ -189,7 +191,7 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
                 handler: async () => {
                     const branchId = row.getData().branchId;
                     const note = await froca.getBranch(branchId)?.getNote();
-                    getParentComponent(e)?.triggerCommand("addNewRow", {
+                    parentComponent?.triggerCommand("addNewRow", {
                         parentNotePath: note?.noteId,
                         customOpts: {
                             target: "after",
@@ -201,7 +203,7 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
             {
                 title: t("table_view.row-insert-below"),
                 uiIcon: "bx bx-horizontal-left bx-rotate-270",
-                handler: () => getParentComponent(e)?.triggerCommand("addNewRow", {
+                handler: () => parentComponent?.triggerCommand("addNewRow", {
                     parentNotePath: parentNoteId,
                     customOpts: {
                         target: "after",
@@ -223,16 +225,6 @@ export function showRowContextMenu(_e: UIEvent, row: RowComponent, parentNote: F
     e.preventDefault();
 }
 
-function getParentComponent(e: MouseEvent) {
-    if (!e.target) {
-        return;
-    }
-
-    return $(e.target)
-        .closest(".component")
-        .prop("component") as Component;
-}
-
 function buildColumnItems(tabulator: Tabulator) {
     const items: MenuItem<unknown>[] = [];
     for (const column of tabulator.getColumns()) {
@@ -249,13 +241,13 @@ function buildColumnItems(tabulator: Tabulator) {
     return items;
 }
 
-function buildInsertSubmenu(e: MouseEvent, referenceColumn?: ColumnComponent, direction?: "before" | "after"): MenuItem<unknown>[] {
+function buildInsertSubmenu(parentComponent: Component, referenceColumn?: ColumnComponent, direction?: "before" | "after"): MenuItem<unknown>[] {
     return [
         {
             title: t("table_view.new-column-label"),
             uiIcon: "bx bx-hash",
             handler: () => {
-                getParentComponent(e)?.triggerCommand("addNewTableColumn", {
+                parentComponent?.triggerCommand("addNewTableColumn", {
                     referenceColumn,
                     type: "label",
                     direction
@@ -266,7 +258,7 @@ function buildInsertSubmenu(e: MouseEvent, referenceColumn?: ColumnComponent, di
             title: t("table_view.new-column-relation"),
             uiIcon: "bx bx-transfer",
             handler: () => {
-                getParentComponent(e)?.triggerCommand("addNewTableColumn", {
+                parentComponent?.triggerCommand("addNewTableColumn", {
                     referenceColumn,
                     type: "relation",
                     direction
