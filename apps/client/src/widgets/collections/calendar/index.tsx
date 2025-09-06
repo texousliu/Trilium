@@ -145,16 +145,12 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
 }
 
 function CalendarHeader({ calendarRef }: { calendarRef: RefObject<FullCalendar> }) {
-    const currentViewType = calendarRef.current?.view?.type;
+    const { title, viewType: currentViewType } = useOnDatesSet(calendarRef);
     const currentViewData = CALENDAR_VIEWS.find(v => calendarRef.current && v.type === currentViewType);
 
-    // Wait for the calendar ref to become available.
-    const [ ready, setReady ] = useState(false);
-    useEffect(() => setReady(true), []);
-
-    return (ready &&
+    return (
         <div className="calendar-header">
-            <span className="title">{calendarRef.current?.view.title}</span>
+            <span className="title">{title}</span>
             <ButtonGroup>
                 {CALENDAR_VIEWS.map(viewData => (
                     <Button
@@ -307,25 +303,9 @@ function useEventDisplayCustomization() {
 }
 
 function CalendarTouchBar({ calendarRef }: { calendarRef: RefObject<FullCalendar> }) {
-    // Wait for the calendar ref to become available.
-    const [ ready, setReady ] = useState(false);
-    useEffect(() => setReady(true), []);
-    const [ , setTitle ] = useState<string>();
-    const viewType = calendarRef.current?.view.type;
+    const { title, viewType } = useOnDatesSet(calendarRef);
 
-    useEffect(() => {
-        const api = calendarRef.current;
-
-        function onDatesSet() {
-            setTitle(calendarRef.current?.view.title);
-        }
-
-        onDatesSet();
-        api?.on("datesSet", onDatesSet);
-        return () => api?.off("datesSet", onDatesSet)
-    }, [ calendarRef ]);
-
-    return ready && (
+    return (
         <TouchBar>
             <TouchBarSegmentedControl
                 mode="single"
@@ -337,7 +317,7 @@ function CalendarTouchBar({ calendarRef }: { calendarRef: RefObject<FullCalendar
             />
 
             <TouchBarSpacer size="flexible" />
-            <TouchBarLabel label={calendarRef.current?.view.title ?? ""} />
+            <TouchBarLabel label={title ?? ""} />
             <TouchBarSpacer size="flexible" />
 
             <TouchBarButton
@@ -354,4 +334,21 @@ function CalendarTouchBar({ calendarRef }: { calendarRef: RefObject<FullCalendar
             />
         </TouchBar>
     );
+}
+
+function useOnDatesSet(calendarRef: RefObject<FullCalendar>) {
+    const [ title, setTitle ] = useState<string>();
+    const [ viewType ,setViewType ] = useState<string>();
+    useEffect(() => {
+        const api = calendarRef.current;
+        if (!api) return;
+        const handler = () => {
+            setTitle(api.view.title);
+            setViewType(api.view.type);
+        };
+        handler();
+        api.on("datesSet", handler);
+        return () => api.off("datesSet", handler);
+    }, [calendarRef]);
+    return { title, viewType };
 }
