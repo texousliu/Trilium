@@ -12,12 +12,17 @@ import path from "path";
 import type NoteMeta from "./meta/note_meta.js";
 import log from "./log.js";
 import { t } from "i18next";
+import { release as osRelease } from "os";
+
+const osVersion = osRelease().split('.').map(Number);
 
 const randtoken = generator({ source: "crypto" });
 
 export const isMac = process.platform === "darwin";
 
 export const isWindows = process.platform === "win32";
+
+export const isWindows11 = isWindows && osVersion[0] === 10 && osVersion[2] >= 22000;
 
 export const isElectron = !!process.versions["electron"];
 
