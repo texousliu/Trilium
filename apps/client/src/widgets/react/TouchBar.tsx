@@ -27,6 +27,10 @@ interface ButtonProps {
     enabled?: boolean;
 }
 
+interface SpacerProps {
+    size: "flexible" | "large" | "small";
+}
+
 interface SegmentedControlProps {
     mode: "single" | "buttons";
     segments: {
@@ -162,6 +166,19 @@ export function TouchBarSegmentedControl({ mode, segments, selectedIndex, onChan
                     onChange(selectedIndex, isSelected);
                 }
             }
+        });
+        api.addItem(item);
+    }
+
+    return <></>;
+}
+
+export function TouchBarSpacer({ size }: SpacerProps) {
+    const api = useContext(TouchBarContext);
+
+    if (api) {
+        const item = new api.TouchBar.TouchBarSpacer({
+            size
         });
         api.addItem(item);
     }

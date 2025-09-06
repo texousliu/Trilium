@@ -19,7 +19,7 @@ import FNote from "../../../entities/fnote";
 import Button, { ButtonGroup } from "../../react/Button";
 import ActionButton from "../../react/ActionButton";
 import { RefObject } from "preact";
-import TouchBar, { TouchBarButton, TouchBarLabel, TouchBarSegmentedControl } from "../../react/TouchBar";
+import TouchBar, { TouchBarButton, TouchBarLabel, TouchBarSegmentedControl, TouchBarSpacer } from "../../react/TouchBar";
 
 interface CalendarViewData {
 
@@ -327,7 +327,6 @@ function CalendarTouchBar({ calendarRef }: { calendarRef: RefObject<FullCalendar
 
     return ready && (
         <TouchBar>
-            <TouchBarLabel label={calendarRef.current?.view.title ?? ""} />
             <TouchBarSegmentedControl
                 mode="single"
                 segments={CALENDAR_VIEWS.map(({ name }) => ({
@@ -336,6 +335,11 @@ function CalendarTouchBar({ calendarRef }: { calendarRef: RefObject<FullCalendar
                 selectedIndex={CALENDAR_VIEWS.findIndex(v => v.type === viewType) ?? 0}
                 onChange={(selectedIndex) => calendarRef.current?.changeView(CALENDAR_VIEWS[selectedIndex].type)}
             />
+
+            <TouchBarSpacer size="flexible" />
+            <TouchBarLabel label={calendarRef.current?.view.title ?? ""} />
+            <TouchBarSpacer size="flexible" />
+
             <TouchBarButton
                 label={t("calendar.today")}
                 click={() => calendarRef.current?.today()}
