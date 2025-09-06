@@ -2,7 +2,7 @@ import { useContext, useEffect, useMemo, useState } from "preact/hooks";
 import { ParentComponent } from "./react_utils";
 import { ComponentChildren, createContext } from "preact";
 import { TouchBarItem } from "../../components/touch_bar";
-import { dynamicRequire } from "../../services/utils";
+import { dynamicRequire, isElectron, isMac } from "../../services/utils";
 
 interface TouchBarProps {
     children: ComponentChildren;
@@ -51,6 +51,10 @@ interface TouchBarContextApi {
 const TouchBarContext = createContext<TouchBarContextApi | null>(null);
 
 export default function TouchBar({ children }: TouchBarProps) {
+    if (!isElectron() || !isMac()) {
+        return;
+    }
+
     const [ isFocused, setIsFocused ] = useState(false);
     const parentComponent = useContext(ParentComponent);
     const remote = dynamicRequire("@electron/remote") as typeof import("@electron/remote");
