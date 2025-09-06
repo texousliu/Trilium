@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "preact/hooks";
+import { useContext, useEffect, useState } from "preact/hooks";
 import { ParentComponent } from "./react_utils";
 import { ComponentChildren, createContext } from "preact";
 import { TouchBarItem } from "../../components/touch_bar";
@@ -16,6 +16,7 @@ interface TouchBarContextApi {
 const TouchBarContext = createContext<TouchBarContextApi | null>(null);
 
 export default function TouchBar({ children }: TouchBarProps) {
+    const [ isFocused, setIsFocused ] = useState(false);
     const parentComponent = useContext(ParentComponent);
     const remote = dynamicRequire("@electron/remote") as typeof import("@electron/remote");
     const items: TouchBarItem[] = [];
@@ -32,12 +33,26 @@ export default function TouchBar({ children }: TouchBarProps) {
         if (!el) return;
 
         function onFocusGained() {
-            remote.getCurrentWindow().setTouchBar(new remote.TouchBar({ items }));
+            setIsFocused(true);
+        }
+
+        function onFocusLost() {
+            setIsFocused(false);
         }
 
         el.addEventListener("focusin", onFocusGained);
-        return () => el.removeEventListener("focusin", onFocusGained);
+        el.addEventListener("focusout", onFocusLost);
+        return () => {
+            el.removeEventListener("focusin", onFocusGained);
+            el.removeEventListener("focusout", onFocusLost);
+        }
     }, []);
+
+    useEffect(() => {
+        if (isFocused) {
+            remote.getCurrentWindow().setTouchBar(new remote.TouchBar({ items }));
+        }
+    });
 
     return (
         <TouchBarContext.Provider value={api}>
@@ -48,7 +63,6 @@ export default function TouchBar({ children }: TouchBarProps) {
 
 export function TouchBarLabel({ label }: { label: string }) {
     const api = useContext(TouchBarContext);
-    console.log("Build label with API ", api);
 
     if (api) {
         const item = new api.TouchBar.TouchBarLabel({

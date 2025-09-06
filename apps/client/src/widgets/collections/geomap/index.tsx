@@ -17,7 +17,7 @@ import toast from "../../../services/toast";
 import { t } from "../../../services/i18n";
 import server from "../../../services/server";
 import branches from "../../../services/branches";
-import { hasTouchBar } from "../../../services/utils";
+import TouchBar, { TouchBarLabel } from "../../react/TouchBar";
 
 const DEFAULT_COORDINATES: [number, number] = [3.878638227135724, 446.6630455551659];
 const DEFAULT_ZOOM = 2;
@@ -46,6 +46,7 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
             saveConfig(viewConfig);
         }
     }, 5000);
+    const [ currentZoom, setCurrentZoom ] = useState<number>();
 
     console.log("Got new notes IDs ", noteIds);
     console.log("Got notes ", notes);
@@ -113,32 +114,6 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
         }
     });
 
-    // Touch bar.
-    const [ zoomLevel, setZoomLevel ] = useState<number>();
-    const onZoom = useCallback(() => {
-        if (!apiRef.current) return;
-        setZoomLevel(apiRef.current.getZoom());
-    }, []);
-    useTouchBar(({ TouchBar, parentComponent }) => {
-        const map = apiRef.current;
-        if (!note || !map) return;
-
-        return [
-            new TouchBar.TouchBarSlider({
-                label: "Zoom",
-                value: zoomLevel ?? map.getZoom(),
-                minValue: map.getMinZoom(),
-                maxValue: map.getMaxZoom(),
-                change: (newValue) => map.setZoom(newValue)
-            }),
-            new TouchBar.TouchBarButton({
-                label: "New geo note",
-                click: () => parentComponent?.triggerCommand("geoMapCreateChildNote"),
-                enabled: (state === State.Normal)
-            })
-        ];
-    }, [ zoomLevel, state ]);
-
     return (
         <div className={`geo-view ${state === State.NewNote ? "placing-note" : ""}`}>
             <Map
@@ -153,11 +128,12 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
                 }}
                 onClick={onClick}
                 onContextMenu={onContextMenu}
-                onZoom={hasTouchBar ? onZoom : undefined}
+                onZoom={() => setCurrentZoom(apiRef.current?.getZoom())}
                 scale={hasScale}
             >
                 {notes.map(note => <NoteWrapper note={note} isReadOnly={isReadOnly} />)}
             </Map>
+            <GeoMapTouchBar zoom={currentZoom} />
         </div>
     );
 }
@@ -269,4 +245,12 @@ function buildIcon(bxIconClass: string, colorClass?: string, title?: string, not
         iconSize: [25, 41],
         iconAnchor: [12, 41]
     });
+}
+
+function GeoMapTouchBar({ zoom }: { zoom: number | undefined }) {
+    return (
+        <TouchBar>
+            <TouchBarLabel label={String(zoom)} />
+        </TouchBar>
+    )
 }
