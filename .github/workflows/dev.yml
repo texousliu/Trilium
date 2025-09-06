@@ -34,6 +34,9 @@ jobs:
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
 
+      - name: Typecheck
+        run: pnpm typecheck
+
       - name: Run the unit tests
         run: pnpm run test:all
 
