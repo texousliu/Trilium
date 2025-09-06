@@ -642,21 +642,3 @@ export function useResizeObserver(ref: RefObject<HTMLElement>, callback: () => v
         return () => observer.disconnect();
     }, [ callback, ref ]);
 }
-
-export function useFloatingButtonsWidth() {
-    const [ width, setWidth ] = useState(0);
-    const parentComponent = useContext(ParentComponent);
-    const containerRef = useRef<HTMLElement>(null);
-    useEffect(() => {
-        const containerEl = parentComponent?.$widget
-            .closest(".note-split")
-            .find(".floating-buttons-children")[0];
-        containerRef.current = (containerEl as HTMLElement | undefined) ?? null;
-    });
-    useResizeObserver(containerRef, () => {
-        console.log("Got width ", containerRef.current?.getBoundingClientRect().width);
-        setWidth(containerRef.current?.getBoundingClientRect().width ?? 0);
-    });
-
-    return width;
-}
