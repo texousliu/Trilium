@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "preact/hooks";
+import { useEffect, useLayoutEffect, useRef } from "preact/hooks";
 import { CalendarOptions, Calendar as FullCalendar, PluginDef } from "@fullcalendar/core";
 import { RefObject } from "preact";
 
@@ -20,7 +20,11 @@ export default function Calendar({ calendarRef, ...options }: CalendarProps) {
         }
 
         return () => calendar.destroy();
-    }, [ containerRef, options ]);
+    }, [ ]);
+
+    useEffect(() => {
+        calendarRef?.current?.resetOptions(options);
+    }, [ options ]);
 
     return (
         <div ref={containerRef} className="calendar-container" />
