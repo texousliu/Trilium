@@ -35,55 +35,6 @@ export default class CalendarView extends ViewMode<{}> {
 
     async renderList(): Promise<JQuery<HTMLElement> | undefined> {
         const calendar = new Calendar(this.$calendarContainer[0], {
-            eventDidMount: (e) => {
-                const { iconClass, promotedAttributes } = e.event.extendedProps;
-
-                // Prepend the icon to the title, if any.
-                if (iconClass) {
-                    let titleContainer;
-                    switch (e.view.type) {
-                        case "timeGridWeek":
-                        case "dayGridMonth":
-                            titleContainer = e.el.querySelector(".fc-event-title");
-                            break;
-                        case "multiMonthYear":
-                            break;
-                        case "listMonth":
-                            titleContainer = e.el.querySelector(".fc-list-event-title a");
-                            break;
-                    }
-
-                    if (titleContainer) {
-                        const icon = /*html*/`<span class="${iconClass}"></span> `;
-                        titleContainer.insertAdjacentHTML("afterbegin", icon);
-                    }
-                }
-
-                // Append promoted attributes to the end of the event container.
-                if (promotedAttributes) {
-                    let promotedAttributesHtml = "";
-                    for (const [name, value] of promotedAttributes) {
-                        promotedAttributesHtml = promotedAttributesHtml + /*html*/`\
-                        <div class="promoted-attribute">
-                            <span class="promoted-attribute-name">${name}</span>: <span class="promoted-attribute-value">${value}</span>
-                        </div>`;
-                    }
-
-                    let mainContainer;
-                    switch (e.view.type) {
-                        case "timeGridWeek":
-                        case "dayGridMonth":
-                            mainContainer = e.el.querySelector(".fc-event-main");
-                            break;
-                        case "multiMonthYear":
-                            break;
-                        case "listMonth":
-                            mainContainer = e.el.querySelector(".fc-list-event-title");
-                            break;
-                    }
-                    $(mainContainer ?? e.el).append($(promotedAttributesHtml));
-                }
-            },
             datesSet: (e) => this.#onDatesSet(e),
         });
 

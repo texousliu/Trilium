@@ -1,4 +1,4 @@
-import { DateSelectArg, EventChangeArg, EventSourceFuncArg, LocaleInput, PluginDef } from "@fullcalendar/core/index.js";
+import { DateSelectArg, EventChangeArg, EventMountArg, EventSourceFuncArg, LocaleInput, PluginDef } from "@fullcalendar/core/index.js";
 import { ViewModeProps } from "../interface";
 import Calendar from "./calendar";
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
@@ -103,6 +103,8 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
         }
     }, []);
 
+    const { eventDidMount } = useEventDisplayCustomization();
+
     return (plugins &&
         <div className="calendar-view" ref={containerRef}>
             <Calendar
@@ -126,6 +128,7 @@ export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarVi
                 select={onCalendarSelection}
                 eventChange={onEventChange}
                 dateClick={isCalendarRoot ? onDateClick : undefined}
+                eventDidMount={eventDidMount}
                 viewDidMount={({ view }) => {
                     if (initialView.current !== view.type) {
                         initialView.current = view.type;
@@ -173,4 +176,57 @@ function useLocale() {
     });
 
     return calendarLocale;
+}
+
+function useEventDisplayCustomization() {
+    const eventDidMount = useCallback((e: EventMountArg) => {
+        const { iconClass, promotedAttributes } = e.event.extendedProps;
+
+        // Prepend the icon to the title, if any.
+        if (iconClass) {
+            let titleContainer;
+            switch (e.view.type) {
+                case "timeGridWeek":
+                case "dayGridMonth":
+                    titleContainer = e.el.querySelector(".fc-event-title");
+                    break;
+                case "multiMonthYear":
+                    break;
+                case "listMonth":
+                    titleContainer = e.el.querySelector(".fc-list-event-title a");
+                    break;
+            }
+
+            if (titleContainer) {
+                const icon = /*html*/`<span class="${iconClass}"></span> `;
+                titleContainer.insertAdjacentHTML("afterbegin", icon);
+            }
+        }
+
+        // Append promoted attributes to the end of the event container.
+        if (promotedAttributes) {
+            let promotedAttributesHtml = "";
+            for (const [name, value] of promotedAttributes) {
+                promotedAttributesHtml = promotedAttributesHtml + /*html*/`\
+                <div class="promoted-attribute">
+                    <span class="promoted-attribute-name">${name}</span>: <span class="promoted-attribute-value">${value}</span>
+                </div>`;
+            }
+
+            let mainContainer;
+            switch (e.view.type) {
+                case "timeGridWeek":
+                case "dayGridMonth":
+                    mainContainer = e.el.querySelector(".fc-event-main");
+                    break;
+                case "multiMonthYear":
+                    break;
+                case "listMonth":
+                    mainContainer = e.el.querySelector(".fc-list-event-title");
+                    break;
+            }
+            $(mainContainer ?? e.el).append($(promotedAttributesHtml));
+        }
+    }, []);
+    return { eventDidMount };
 }
