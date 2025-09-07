@@ -64,7 +64,7 @@ export default function TableView({ note, noteIds, notePath, viewConfig, saveCon
 
     return (
         <div className="table-view">
-            {viewConfig && columnDefs && (
+            {columnDefs && (
                 <>
                     <Tabulator
                         tabulatorRef={tabulatorRef}
