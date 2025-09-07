@@ -11,18 +11,7 @@
     "ckeditor5-package-generator"
   ],
   "type": "module",
-  "main": "dist/index.ts",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    },
-    "./*": "./dist/*",
-    "./browser/*": null,
-    "./package.json": "./package.json"
-  },
+  "main": "src/index.ts",
   "license": "SEE LICENSE IN LICENSE.md",
   "author": "CKSource (https://cksource.com/)",
   "homepage": "https://github.com/ckeditor/ckeditor5-mermaid",
@@ -38,11 +27,11 @@
     "@ckeditor/ckeditor5-dev-build-tools": "43.1.0",
     "@ckeditor/ckeditor5-inspector": ">=4.1.0",
     "@ckeditor/ckeditor5-package-tools": "^4.0.0",
-    "@typescript-eslint/eslint-plugin": "~8.41.0",
+    "@typescript-eslint/eslint-plugin": "~8.42.0",
     "@typescript-eslint/parser": "^8.0.0",
     "@vitest/browser": "^3.0.5",
     "@vitest/coverage-istanbul": "^3.0.5",
-    "ckeditor5": "46.0.2",
+    "ckeditor5": "46.0.3",
     "eslint": "^9.0.0",
     "eslint-config-ckeditor5": ">=9.1.0",
     "http-server": "^14.1.0",
@@ -56,7 +45,7 @@
     "webdriverio": "^9.0.7"
   },
   "peerDependencies": {
-    "ckeditor5": "46.0.2"
+    "ckeditor5": "46.0.3"
   },
   "scripts": {
     "build": "node ./scripts/build-dist.mjs",
@@ -83,13 +72,5 @@
   "dependencies": {
     "@types/lodash-es": "4.17.12",
     "lodash-es": "^4.17.21"
-  },
-  "nx": {
-    "name": "ckeditor5-mermaid",
-    "targets": {
-      "build": {
-        "cache": "true"
-      }
-    }
   }
 }

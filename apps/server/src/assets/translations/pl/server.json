@@ -74,7 +74,10 @@
     "zoom-out": "Pomniejsz",
     "zoom-in": "Powiększ",
     "print-active-note": "Drukuj aktywną notatkę",
-    "toggle-full-screen": "Przełącz pełny ekran"
+    "toggle-full-screen": "Przełącz pełny ekran",
+    "cut-into-note": "Wycina zaznaczony tekst i tworzy podrzędną notatkę z tym tekstem",
+    "edit-readonly-note": "Edytuj notatkę tylko do odczytu",
+    "other": "Inne"
   },
   "keyboard_action_names": {
     "zoom-in": "Powiększ",

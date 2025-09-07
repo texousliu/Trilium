@@ -1,10 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
 
-require('dotenv').config({
-    path: __dirname + "/" + ".env"
-});
-
-
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -14,6 +9,8 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
   },
+  testDir: "e2e",
+  outputDir: "test-output",
   projects: [
     {
       name: "chromium",
