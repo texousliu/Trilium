@@ -1,8 +1,8 @@
-import { useContext, useEffect, useRef, useState } from "preact/hooks";
+import { useCallback, useContext, useEffect, useRef, useState } from "preact/hooks";
 import { ViewModeProps } from "../interface";
 import { buildColumnDefinitions } from "./columns";
 import getAttributeDefinitionInformation, { buildRowDefinitions, TableData } from "./rows";
-import { useNoteLabelInt } from "../../react/hooks";
+import { useNoteLabelInt, useSpacedUpdate } from "../../react/hooks";
 import { canReorderRows } from "../../view_widgets/table_view/dragging";
 import Tabulator from "./tabulator";
 import { Tabulator as VanillaTabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule} from 'tabulator-tables';
@@ -19,7 +19,7 @@ interface TableConfig {
     };
 }
 
-export default function TableView({ note, viewConfig }: ViewModeProps<TableConfig>) {
+export default function TableView({ note, viewConfig, saveConfig }: ViewModeProps<TableConfig>) {
     const [ maxDepth ] = useNoteLabelInt(note, "maxNestingDepth") ?? -1;
     const [ columnDefs, setColumnDefs ] = useState<ColumnDefinition[]>();
     const [ rowData, setRowData ] = useState<TableData[]>();
@@ -42,10 +42,12 @@ export default function TableView({ note, viewConfig }: ViewModeProps<TableConfi
     }, [ note ]);
 
     const contextMenuEvents = useContextMenu(note, parentComponent, tabulatorRef);
+    const persistenceProps = usePersistence(viewConfig, saveConfig);
+    console.log("Render with viewconfig", viewConfig);
 
     return (
         <div className="table-view">
-            {columnDefs && (
+            {viewConfig && columnDefs && (
                 <>
                     <Tabulator
                         tabulatorRef={tabulatorRef}
@@ -55,6 +57,7 @@ export default function TableView({ note, viewConfig }: ViewModeProps<TableConfi
                         modules={[ SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, DataTreeModule ]}
                         footerElement={<TableFooter note={note} />}
                         {...contextMenuEvents}
+                        persistence {...persistenceProps}
                     />
                     <TableFooter note={note} />
                 </>
@@ -73,4 +76,23 @@ function TableFooter({ note }: { note: FNote }) {
             </div>
         </div>
     )
+}
+
+function usePersistence(initialConfig: TableConfig | null | undefined, saveConfig: (newConfig: TableConfig) => void) {
+    const config = useRef<TableConfig | null | undefined>(initialConfig);
+    const spacedUpdate = useSpacedUpdate(() => {
+        if (config.current) {
+            saveConfig(config.current);
+        }
+    }, 5_000);
+    const persistenceWriterFunc = useCallback((_id, type: string, data: object) => {
+        if (!config.current) config.current = {};
+        if (!config.current.tableData) config.current.tableData = {};
+        (config.current.tableData as Record<string, {}>)[type] = data;
+        spacedUpdate.scheduleUpdate();
+    }, []);
+    const persistenceReaderFunc = useCallback((_id, type: string) => {
+        return config.current?.tableData?.[type];
+    }, []);
+    return { persistenceReaderFunc, persistenceWriterFunc };
 }

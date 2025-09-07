@@ -64,15 +64,9 @@ export default class TableView extends ViewMode<StateInfo> {
         let opts: Options = {
             layout: "fitDataFill",
             index: "branchId",
-            persistence: true,
             movableColumns: true,
             movableRows,
             footerElement: buildFooter(this.parentNote),
-            persistenceWriterFunc: (_id, type: string, data: object) => {
-                (this.persistentData as Record<string, {}>)[type] = data;
-                this.spacedUpdate.scheduleUpdate();
-            },
-            persistenceReaderFunc: (_id, type: string) => this.persistentData?.[type],
         };
 
         if (hasChildren) {
@@ -97,12 +91,6 @@ export default class TableView extends ViewMode<StateInfo> {
             configureReorderingRows(this.api);
         }
         setupContextMenu(this.api, this.parentNote);
-    }
-
-    private onSave() {
-        this.viewStorage.store({
-            tableData: this.persistentData,
-        });
     }
 
     async onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {

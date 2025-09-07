@@ -1,11 +1,11 @@
 import { useContext, useEffect, useLayoutEffect, useRef } from "preact/hooks";
-import { ColumnDefinition, EventCallBackMethods, Module, Tabulator as VanillaTabulator } from "tabulator-tables";
+import { ColumnDefinition, EventCallBackMethods, Module, Options, Tabulator as VanillaTabulator } from "tabulator-tables";
 import "tabulator-tables/dist/css/tabulator.css";
 import "../../../../src/stylesheets/table.css";
 import { ComponentChildren, RefObject } from "preact";
 import { ParentComponent, renderReactWidget } from "../../react/react_utils";
 
-interface TableProps<T> extends Partial<EventCallBackMethods> {
+interface TableProps<T> extends Partial<EventCallBackMethods>, Pick<Options, "persistence" | "persistenceReaderFunc" | "persistenceWriterFunc"> {
     tabulatorRef: RefObject<VanillaTabulator>;
     className?: string;
     columns: ColumnDefinition[];
@@ -14,7 +14,7 @@ interface TableProps<T> extends Partial<EventCallBackMethods> {
     footerElement?: ComponentChildren;
 }
 
-export default function Tabulator<T>({ className, columns, data, modules, tabulatorRef: externalTabulatorRef, footerElement, ...events }: TableProps<T>) {
+export default function Tabulator<T>({ className, columns, data, modules, tabulatorRef: externalTabulatorRef, footerElement, persistence, persistenceReaderFunc, persistenceWriterFunc, ...events }: TableProps<T>) {
     const parentComponent = useContext(ParentComponent);
     const containerRef = useRef<HTMLDivElement>(null);
     const tabulatorRef = useRef<VanillaTabulator>(null);
@@ -32,7 +32,8 @@ export default function Tabulator<T>({ className, columns, data, modules, tabula
         const tabulator = new VanillaTabulator(containerRef.current, {
             columns,
             data,
-            footerElement: (parentComponent && footerElement ? renderReactWidget(parentComponent, footerElement)[0] : undefined)
+            footerElement: (parentComponent && footerElement ? renderReactWidget(parentComponent, footerElement)[0] : undefined),
+            persistence, persistenceReaderFunc, persistenceWriterFunc
         });
 
         tabulatorRef.current = tabulator;
