@@ -51,7 +51,7 @@ export default function TableView({ note, noteIds, notePath, viewConfig, saveCon
     const contextMenuEvents = useContextMenu(note, parentComponent, tabulatorRef);
     const persistenceProps = usePersistence(viewConfig, saveConfig);
     const rowEditingEvents = useRowTableEditing(tabulatorRef, attributeDetailWidget, notePath);
-    const colEditingEvents = useColTableEditing(tabulatorRef, attributeDetailWidget);
+    const colEditingEvents = useColTableEditing(tabulatorRef, attributeDetailWidget, note);
     const dataTreeProps = useMemo<Options>(() => {
         if (!hasChildren) return {};
         return {

@@ -10,7 +10,6 @@ import { t } from "../../../services/i18n";
 
 export default class TableColumnEditing extends Component {
 
-    private attributeDetailWidget: AttributeDetailWidget;
     private api: Tabulator;
     private parentNote: FNote;
 
@@ -21,35 +20,6 @@ export default class TableColumnEditing extends Component {
         const parentComponent = glob.getComponentByEl($parent[0]);
         this.api = api;
         this.parentNote = parentNote;
-    }
-
-    async updateAttributeListCommand({ attributes }: CommandListenerData<"updateAttributeList">) {
-        this.newAttribute = attributes[0];
-    }
-
-    async saveAttributesCommand() {
-        if (!this.newAttribute) {
-            return;
-        }
-
-        const { name, value, isInheritable } = this.newAttribute;
-
-        this.api.blockRedraw();
-        const isRename = (this.existingAttributeToEdit && this.existingAttributeToEdit.name !== name);
-        try {
-            if (isRename) {
-                const oldName = this.existingAttributeToEdit!.name.split(":")[1];
-                const [ type, newName ] = name.split(":");
-                await renameColumn(this.parentNote.noteId, type as "label" | "relation", oldName, newName);
-            }
-
-            if (this.existingAttributeToEdit && (isRename || this.existingAttributeToEdit.isInheritable !== isInheritable)) {
-                attributes.removeOwnedLabelByName(this.parentNote, this.existingAttributeToEdit.name);
-            }
-            attributes.setLabel(this.parentNote.noteId, name, value, isInheritable);
-        } finally {
-            this.api.restoreRedraw();
-        }
     }
 
     async deleteTableColumnCommand({ columnToDelete }: CommandListenerData<"deleteTableColumn">) {

@@ -3,12 +3,16 @@ import { Attribute } from "../../../services/attribute_parser";
 import { RefObject } from "preact";
 import { Tabulator } from "tabulator-tables";
 import { useEffect, useState } from "preact/hooks";
-import { EventData } from "../../../components/app_context";
+import { CommandListenerData, EventData } from "../../../components/app_context";
 import AttributeDetailWidget from "../../attribute_widgets/attribute_detail";
+import attributes from "../../../services/attributes";
+import { renameColumn } from "../../view_widgets/table_view/bulk_actions";
+import FNote from "../../../entities/fnote";
 
-export default function useColTableEditing(api: RefObject<Tabulator>, attributeDetailWidget: AttributeDetailWidget) {
+export default function useColTableEditing(api: RefObject<Tabulator>, attributeDetailWidget: AttributeDetailWidget, parentNote: FNote) {
 
     const [ existingAttributeToEdit, setExistingAttributeToEdit ] = useState<Attribute>();
+    const [ newAttribute, setNewAttribute ] = useState<Attribute>();
     const [ newAttributePosition, setNewAttributePosition ] = useState<number>();
 
     useEffect(() => {
@@ -57,6 +61,33 @@ export default function useColTableEditing(api: RefObject<Tabulator>, attributeD
                 focus: "name",
                 hideMultiplicity: true
             });
+        },
+        async updateAttributeListCommand({ attributes }: CommandListenerData<"updateAttributeList">) {
+            setNewAttribute(attributes[0]);
+        },
+        async saveAttributesCommand() {
+            if (!newAttribute || !api.current) {
+                return;
+            }
+
+            const { name, value, isInheritable } = newAttribute;
+
+            api.current.blockRedraw();
+            const isRename = (this.existingAttributeToEdit && this.existingAttributeToEdit.name !== name);
+            try {
+                if (isRename) {
+                    const oldName = this.existingAttributeToEdit!.name.split(":")[1];
+                    const [ type, newName ] = name.split(":");
+                    await renameColumn(parentNote.noteId, type as "label" | "relation", oldName, newName);
+                }
+
+                if (existingAttributeToEdit && (isRename || existingAttributeToEdit.isInheritable !== isInheritable)) {
+                    attributes.removeOwnedLabelByName(parentNote, this.existingAttributeToEdit.name);
+                }
+                attributes.setLabel(parentNote.noteId, name, value, isInheritable);
+            } finally {
+                api.current.restoreRedraw();
+            }
         }
     });
 
