@@ -3,7 +3,6 @@ import { ViewModeProps } from "../interface";
 import { buildColumnDefinitions } from "./columns";
 import getAttributeDefinitionInformation, { buildRowDefinitions, TableData } from "./rows";
 import { useNoteLabelInt, useSpacedUpdate } from "../../react/hooks";
-import { canReorderRows } from "../../view_widgets/table_view/dragging";
 import Tabulator from "./tabulator";
 import { Tabulator as VanillaTabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule, Options} from 'tabulator-tables';
 import { useContextMenu } from "./context_menu";
@@ -12,7 +11,7 @@ import FNote from "../../../entities/fnote";
 import { t } from "../../../services/i18n";
 import Button from "../../react/Button";
 import "./index.css";
-import useTableEditing from "./editing";
+import useTableEditing, { canReorderRows } from "./editing";
 
 interface TableConfig {
     tableData?: {

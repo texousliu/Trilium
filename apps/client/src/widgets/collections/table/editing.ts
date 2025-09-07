@@ -6,6 +6,8 @@ import { RefObject } from "preact";
 import { setAttribute, setLabel } from "../../../services/attributes";
 import froca from "../../../services/froca";
 import server from "../../../services/server";
+import FNote from "../../../entities/fnote";
+import branches from "../../../services/branches";
 
 export default function useTableEditing(api: RefObject<Tabulator>, parentNotePath: string): Partial<EventCallBackMethods> {
     // Adding new rows
@@ -55,6 +57,20 @@ export default function useTableEditing(api: RefObject<Tabulator>, parentNotePat
                     }
                 }
             }
+        },
+        rowMoved(row) {
+            const branchIdsToMove = [ row.getData().branchId ];
+
+            const prevRow = row.getPrevRow();
+            if (prevRow) {
+                branches.moveAfterBranch(branchIdsToMove, prevRow.getData().branchId);
+                return;
+            }
+
+            const nextRow = row.getNextRow();
+            if (nextRow) {
+                branches.moveBeforeBranch(branchIdsToMove, nextRow.getData().branchId);
+            }
         }
     };
 }
@@ -86,4 +102,9 @@ function findRowDataById(rows: RowComponent[], branchId: string): RowComponent |
         if (found) return found;
     }
     return null;
+}
+
+export function canReorderRows(parentNote: FNote) {
+    return !parentNote.hasLabel("sorted")
+        && parentNote.type !== "search";
 }
