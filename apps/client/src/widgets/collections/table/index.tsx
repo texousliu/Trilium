@@ -56,7 +56,7 @@ export default function TableView({ note, viewConfig, saveConfig }: ViewModeProp
                         data={rowData}
                         modules={[ SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, DataTreeModule ]}
                         footerElement={<TableFooter note={note} />}
-                        {...contextMenuEvents}
+                        events={contextMenuEvents}
                         persistence {...persistenceProps}
                     />
                     <TableFooter note={note} />

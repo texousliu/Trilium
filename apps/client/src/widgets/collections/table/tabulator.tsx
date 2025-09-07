@@ -5,16 +5,17 @@ import "../../../../src/stylesheets/table.css";
 import { ComponentChildren, RefObject } from "preact";
 import { ParentComponent, renderReactWidget } from "../../react/react_utils";
 
-interface TableProps<T> extends Partial<EventCallBackMethods>, Pick<Options, "persistence" | "persistenceReaderFunc" | "persistenceWriterFunc"> {
+interface TableProps<T> extends Pick<Options, "persistence" | "persistenceReaderFunc" | "persistenceWriterFunc"> {
     tabulatorRef: RefObject<VanillaTabulator>;
     className?: string;
     columns: ColumnDefinition[];
     data?: T[];
     modules?: (new (table: VanillaTabulator) => Module)[];
     footerElement?: ComponentChildren;
+    events?: Partial<EventCallBackMethods>;
 }
 
-export default function Tabulator<T>({ className, columns, data, modules, tabulatorRef: externalTabulatorRef, footerElement, persistence, persistenceReaderFunc, persistenceWriterFunc, ...events }: TableProps<T>) {
+export default function Tabulator<T>({ className, columns, data, modules, tabulatorRef: externalTabulatorRef, footerElement, events, ...restProps }: TableProps<T>) {
     const parentComponent = useContext(ParentComponent);
     const containerRef = useRef<HTMLDivElement>(null);
     const tabulatorRef = useRef<VanillaTabulator>(null);
@@ -33,7 +34,7 @@ export default function Tabulator<T>({ className, columns, data, modules, tabula
             columns,
             data,
             footerElement: (parentComponent && footerElement ? renderReactWidget(parentComponent, footerElement)[0] : undefined),
-            persistence, persistenceReaderFunc, persistenceWriterFunc
+            ...restProps
         });
 
         tabulatorRef.current = tabulator;
@@ -44,7 +45,7 @@ export default function Tabulator<T>({ className, columns, data, modules, tabula
 
     useEffect(() => {
         const tabulator = tabulatorRef.current;
-        if (!tabulator) return;
+        if (!tabulator || !events) return;
 
         for (const [ eventName, handler ] of Object.entries(events)) {
             tabulator.on(eventName as keyof EventCallBackMethods, handler);
@@ -55,7 +56,7 @@ export default function Tabulator<T>({ className, columns, data, modules, tabula
                 tabulator.off(eventName as keyof EventCallBackMethods, handler);
             }
         }
-    }, Object.values(events));
+    }, Object.values(events ?? {}));
 
     // Change in data.
     useEffect(() => { tabulatorRef.current?.setData(data) }, [ data ]);
