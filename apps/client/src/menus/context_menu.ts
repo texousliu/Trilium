@@ -62,7 +62,7 @@ class ContextMenu {
         if (this.isMobile) {
             this.$cover.on("click", () => this.hide());
         } else {
-            $(document).on("click", (e) => this.hide());
+            $(document).on("mouseup", (e) => this.hide());
         }
     }
 
@@ -225,9 +225,10 @@ class ContextMenu {
                 $item.on("mouseup", (e) => {
                     // Prevent submenu from failing to expand on mobile
                     if (!this.isMobile || !("items" in item && item.items)) {
-                        e.stopPropagation();
                         // Hide the content menu on mouse up to prevent the mouse event from propagating to the elements below.
-                        this.hide();
+                        if (("command" in item) || ("handler" in item)) {
+                            this.hide();
+                        }
                         return false;
                     }
                 });
