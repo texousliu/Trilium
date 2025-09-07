@@ -88,7 +88,7 @@ export default class TableView extends ViewMode<StateInfo> {
             (attr.name?.startsWith("label:") || attr.name?.startsWith("relation:")) &&
             attributes.isAffecting(attr, this.parentNote))) {
             this.#manageColumnUpdate();
-            return await this.#manageRowsUpdate();
+            //return await this.#manageRowsUpdate();
         }
 
         // Refresh max depth

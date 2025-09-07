@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "p
 import { ViewModeProps } from "../interface";
 import { buildColumnDefinitions } from "./columns";
 import getAttributeDefinitionInformation, { buildRowDefinitions, TableData } from "./rows";
-import { useLegacyWidget, useNoteLabelInt, useSpacedUpdate } from "../../react/hooks";
+import { useLegacyWidget, useNoteLabelInt, useSpacedUpdate, useTriliumEvent } from "../../react/hooks";
 import Tabulator from "./tabulator";
 import { Tabulator as VanillaTabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule, Options} from 'tabulator-tables';
 import { useContextMenu } from "./context_menu";
@@ -14,6 +14,8 @@ import "./index.css";
 import useRowTableEditing, { canReorderRows } from "./row_editing";
 import useColTableEditing from "./col_editing";
 import AttributeDetailWidget from "../../attribute_widgets/attribute_detail";
+import attributes from "../../../services/attributes";
+import { refreshTextDimensions } from "@excalidraw/excalidraw/element/newElement";
 
 interface TableConfig {
     tableData?: {
@@ -30,7 +32,7 @@ export default function TableView({ note, noteIds, notePath, viewConfig, saveCon
     const tabulatorRef = useRef<VanillaTabulator>(null);
     const parentComponent = useContext(ParentComponent);
 
-    useEffect(() => {
+    function refresh() {
         const info = getAttributeDefinitionInformation(note);
         buildRowDefinitions(note, info, maxDepth).then(({ definitions: rowData, hasSubtree: hasChildren, rowNumber }) => {
             const movableRows = canReorderRows(note) && !hasChildren;
@@ -45,7 +47,19 @@ export default function TableView({ note, noteIds, notePath, viewConfig, saveCon
             setMovableRows(movableRows);
             setHasChildren(hasChildren);
         });
-    }, [ note, noteIds ]);
+    }
+
+    useEffect(refresh, [ note, noteIds ]);
+
+    // React to column changes.
+    useTriliumEvent("entitiesReloaded", ({ loadResults}) => {
+        if (loadResults.getAttributeRows().find(attr =>
+            attr.type === "label" &&
+            (attr.name?.startsWith("label:") || attr.name?.startsWith("relation:")) &&
+            attributes.isAffecting(attr, note))) {
+            refresh();
+        }
+    });
 
     const [ attributeDetailWidgetEl, attributeDetailWidget ] = useLegacyWidget(() => new AttributeDetailWidget().contentSized());
     const contextMenuEvents = useContextMenu(note, parentComponent, tabulatorRef);
