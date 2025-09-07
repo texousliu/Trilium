@@ -36,31 +36,23 @@ body.mobile {
 
 /* #region Mica */
 body.background-effects.platform-win32 {
-    --launcher-pane-horiz-border-color: rgba(0, 0, 0, 0.15);
-    --launcher-pane-horiz-background-color: rgba(255, 255, 255, 0.7);
-    --launcher-pane-vert-background-color: rgba(255, 255, 255, 0.055);
-    --tab-background-color: transparent;
-    --new-tab-button-background: transparent;
-    --active-tab-background-color: var(--launcher-pane-horiz-background-color);
     --background-material: tabbed;
-}
-
-@media (prefers-color-scheme: dark) {
-    body.background-effects.platform-win32 {
-        --launcher-pane-horiz-border-color: rgba(0, 0, 0, 0.5);
-        --launcher-pane-horiz-background-color: rgba(255, 255, 255, 0.09);
-    }
+    --launcher-pane-horiz-border-color: var(--launcher-pane-horiz-border-color-bgfx);
+    --launcher-pane-horiz-background-color: var(--launcher-pane-horiz-background-color-bgfx);
+    --launcher-pane-vert-background-color: var(--launcher-pane-vert-background-color-bgfx);
+    --tab-background-color: var(--window-background-color-bgfx);
+    --new-tab-button-background: var(--window-background-color-bgfx);
+    --active-tab-background-color: var(--launcher-pane-horiz-background-color);
 }
 
 body.background-effects.platform-win32.layout-vertical {
-    --left-pane-background-color: transparent;
-    --left-pane-item-hover-background: rgba(127, 127, 127, 0.05);
+    --left-pane-background-color: var(--window-background-color-bgfx);
     --background-material: mica;
 }
 
 body.background-effects.platform-win32,
 body.background-effects.platform-win32 #root-widget {
-    background: transparent !important;
+    background: var(--window-background-color-bgfx) !important;
 }
 
 body.background-effects.platform-win32.layout-horizontal #horizontal-main-container,
@@ -89,7 +81,7 @@ body.background-effects.zen #root-widget {
  * Gutter
  */
 
- .gutter {
+.gutter {
     background: var(--gutter-color) !important;
     transition: background 150ms ease-out;
 }
@@ -1175,16 +1167,17 @@ body.layout-vertical .tab-row-widget-is-sorting .note-tab.note-tab-is-dragging .
     /* will-change: opacity; -- causes some weird artifacts to the note menu in split view */
 }
 
+.split-note-container-widget > .gutter {
+    background: var(--root-background) !important;
+    transition: background 150ms ease-out;
+}
+
 /*
  * Ribbon & note header
  */
 
 .ribbon-container {
     margin-bottom: 0 !important;
-}
-
-.note-split:not(.hidden-ext) + .note-split:not(.hidden-ext) {
-    border-left: 4px solid var(--root-background);
 }
 
 @keyframes note-entrance {

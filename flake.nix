@@ -36,6 +36,7 @@
           stdenv
           wrapGAppsHook3
           xcodebuild
+          which
           ;
 
         fullCleanSourceFilter =
@@ -46,8 +47,7 @@
               baseName = baseNameOf (toString name);
             in
             # No need to copy the flake.
-            # Don't copy local development instance of NX cache.
-            baseName != "flake.nix" && baseName != "flake.lock" && baseName != ".nx"
+            baseName != "flake.nix" && baseName != "flake.lock"
           );
         fullCleanSource =
           src:
@@ -93,19 +93,15 @@
 
             postConfigure =
               ''
-                chmod +x node_modules/.pnpm/electron@*/node_modules/electron/install.js
+                chmod +x node_modules/electron/install.js
                 patchShebangs --build node_modules
-              ''
-              + lib.optionalString stdenv.hostPlatform.isLinux ''
-                patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-                  node_modules/.pnpm/sass-embedded-linux-x64@*/node_modules/sass-embedded-linux-x64/dart-sass/src/dart
               '';
 
             extraNativeBuildInputs =
               [
                 moreutils # sponge
                 nodejs.python
-                removeReferencesTo
+                removeReferencesTo                
               ]
               ++ lib.optionals (app == "desktop") [
                 copyDesktopItems
@@ -113,6 +109,10 @@
                 # https://github.com/NixOS/nixpkgs/issues/172583
                 makeShellWrapper
                 wrapGAppsHook3
+
+                # For determining the Electron version to rebuild for:
+                which
+                electron
               ]
               ++ lib.optionals (app == "server") [
                 makeBinaryWrapper
@@ -129,7 +129,7 @@
               ${preBuildCommands}
             '';
 
-            scriptFull = "pnpm nx ${buildTask} --outputStyle stream --verbose";
+            scriptFull = "pnpm run ${buildTask}";
 
             installPhase = ''
               runHook preInstall
@@ -181,12 +181,12 @@
 
         desktop = makeApp {
           app = "desktop";
-          preBuildCommands = "export npm_config_nodedir=${electron.headers}";
-          buildTask = "run desktop:rebuild-deps";
+          preBuildCommands = "export npm_config_nodedir=${electron.headers}; pnpm postinstall";
+          buildTask = "desktop:build";
           mainProgram = "trilium";
           installCommands = ''
-            remove-references-to -t ${electron.headers} apps/desktop/dist/node_modules/better-sqlite3/build/config.gypi
-            remove-references-to -t ${nodejs.python} apps/desktop/dist/node_modules/better-sqlite3/build/config.gypi
+            #remove-references-to -t ${electron.headers} apps/desktop/dist/node_modules/better-sqlite3/build/config.gypi
+            #remove-references-to -t ${nodejs.python} apps/desktop/dist/node_modules/better-sqlite3/build/config.gypi
 
             mkdir -p $out/{bin,share/icons/hicolor/512x512/apps,opt/trilium}
             cp --archive apps/desktop/dist/* $out/opt/trilium
@@ -203,11 +203,11 @@
         server = makeApp {
           app = "server";
           preBuildCommands = "pushd apps/server; pnpm rebuild; popd";
-          buildTask = "--project=server build";
+          buildTask = "server:build";
           mainProgram = "trilium-server";
           installCommands = ''
-            remove-references-to -t ${nodejs.python} apps/server/dist/node_modules/better-sqlite3/build/config.gypi
-            remove-references-to -t ${pnpm} apps/server/dist/node_modules/better-sqlite3/build/config.gypi
+            #remove-references-to -t ${nodejs.python} apps/server/dist/node_modules/better-sqlite3/build/config.gypi
+            #remove-references-to -t ${pnpm} apps/server/dist/node_modules/better-sqlite3/build/config.gypi
 
             pushd apps/server/dist
             rm -rf node_modules/better-sqlite3/build/Release/obj \
