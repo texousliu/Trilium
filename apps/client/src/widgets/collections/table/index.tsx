@@ -23,6 +23,7 @@ export default function TableView({ note, viewConfig, saveConfig }: ViewModeProp
     const [ maxDepth ] = useNoteLabelInt(note, "maxNestingDepth") ?? -1;
     const [ columnDefs, setColumnDefs ] = useState<ColumnDefinition[]>();
     const [ rowData, setRowData ] = useState<TableData[]>();
+    const [ movableRows, setMovableRows ] = useState<boolean>();
     const tabulatorRef = useRef<VanillaTabulator>(null);
     const parentComponent = useContext(ParentComponent);
 
@@ -38,6 +39,7 @@ export default function TableView({ note, viewConfig, saveConfig }: ViewModeProp
             });
             setColumnDefs(columnDefs);
             setRowData(rowData);
+            setMovableRows(movableRows);
         });
     }, [ note ]);
 
@@ -58,6 +60,10 @@ export default function TableView({ note, viewConfig, saveConfig }: ViewModeProp
                         footerElement={<TableFooter note={note} />}
                         events={contextMenuEvents}
                         persistence {...persistenceProps}
+                        layout="fitDataFill"
+                        index="branchId"
+                        movableColumns
+                        movableRows={movableRows}
                     />
                     <TableFooter note={note} />
                 </>

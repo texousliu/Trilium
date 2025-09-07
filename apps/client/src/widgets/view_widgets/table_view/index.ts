@@ -61,14 +61,6 @@ export default class TableView extends ViewMode<StateInfo> {
         const viewStorage = await this.viewStorage.restore();
         this.persistentData = viewStorage?.tableData || {};
 
-        let opts: Options = {
-            layout: "fitDataFill",
-            index: "branchId",
-            movableColumns: true,
-            movableRows,
-            footerElement: buildFooter(this.parentNote),
-        };
-
         if (hasChildren) {
             opts = {
                 ...opts,

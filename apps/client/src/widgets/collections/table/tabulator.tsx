@@ -5,14 +5,13 @@ import "../../../../src/stylesheets/table.css";
 import { ComponentChildren, RefObject } from "preact";
 import { ParentComponent, renderReactWidget } from "../../react/react_utils";
 
-interface TableProps<T> extends Pick<Options, "persistence" | "persistenceReaderFunc" | "persistenceWriterFunc"> {
+interface TableProps<T> extends Omit<Options, "data" | "footerElement" | "index"> {
     tabulatorRef: RefObject<VanillaTabulator>;
     className?: string;
-    columns: ColumnDefinition[];
     data?: T[];
     modules?: (new (table: VanillaTabulator) => Module)[];
-    footerElement?: ComponentChildren;
     events?: Partial<EventCallBackMethods>;
+    index: keyof T;
 }
 
 export default function Tabulator<T>({ className, columns, data, modules, tabulatorRef: externalTabulatorRef, footerElement, events, ...restProps }: TableProps<T>) {
@@ -34,7 +33,7 @@ export default function Tabulator<T>({ className, columns, data, modules, tabula
             columns,
             data,
             footerElement: (parentComponent && footerElement ? renderReactWidget(parentComponent, footerElement)[0] : undefined),
-            ...restProps
+            ...restProps,
         });
 
         tabulatorRef.current = tabulator;
@@ -59,7 +58,7 @@ export default function Tabulator<T>({ className, columns, data, modules, tabula
     }, Object.values(events ?? {}));
 
     // Change in data.
-    useEffect(() => { tabulatorRef.current?.setData(data) }, [ data ]);
+    useEffect(() => { console.log("Got data ", data); tabulatorRef.current?.setData(data) }, [ data ]);
 
     return (
         <div ref={containerRef} className={className} />
