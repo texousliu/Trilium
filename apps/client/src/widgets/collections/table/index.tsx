@@ -1,11 +1,11 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "preact/hooks";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { ViewModeProps } from "../interface";
 import { buildColumnDefinitions } from "./columns";
 import getAttributeDefinitionInformation, { buildRowDefinitions, TableData } from "./rows";
 import { useNoteLabelInt, useSpacedUpdate } from "../../react/hooks";
 import { canReorderRows } from "../../view_widgets/table_view/dragging";
 import Tabulator from "./tabulator";
-import { Tabulator as VanillaTabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule} from 'tabulator-tables';
+import { Tabulator as VanillaTabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule, Options} from 'tabulator-tables';
 import { useContextMenu } from "./context_menu";
 import { ParentComponent } from "../../react/react_utils";
 import FNote from "../../../entities/fnote";
@@ -24,6 +24,7 @@ export default function TableView({ note, viewConfig, saveConfig }: ViewModeProp
     const [ columnDefs, setColumnDefs ] = useState<ColumnDefinition[]>();
     const [ rowData, setRowData ] = useState<TableData[]>();
     const [ movableRows, setMovableRows ] = useState<boolean>();
+    const [ hasChildren, setHasChildren ] = useState<boolean>();
     const tabulatorRef = useRef<VanillaTabulator>(null);
     const parentComponent = useContext(ParentComponent);
 
@@ -40,11 +41,24 @@ export default function TableView({ note, viewConfig, saveConfig }: ViewModeProp
             setColumnDefs(columnDefs);
             setRowData(rowData);
             setMovableRows(movableRows);
+            setHasChildren(hasChildren);
         });
     }, [ note ]);
 
     const contextMenuEvents = useContextMenu(note, parentComponent, tabulatorRef);
     const persistenceProps = usePersistence(viewConfig, saveConfig);
+    const dataTreeProps = useMemo<Options>(() => {
+        if (!hasChildren) return {};
+        return {
+            dataTree: true,
+            dataTreeStartExpanded: true,
+            dataTreeBranchElement: false,
+            dataTreeElementColumn: "title",
+            dataTreeChildIndent: 20,
+            dataTreeExpandElement: `<button class="tree-expand"><span class="bx bx-chevron-right"></span></button>`,
+            dataTreeCollapseElement: `<button class="tree-collapse"><span class="bx bx-chevron-down"></span></button>`
+        }
+    }, [ hasChildren ]);
     console.log("Render with viewconfig", viewConfig);
 
     return (
@@ -64,6 +78,7 @@ export default function TableView({ note, viewConfig, saveConfig }: ViewModeProp
                         index="branchId"
                         movableColumns
                         movableRows={movableRows}
+                        {...dataTreeProps}
                     />
                     <TableFooter note={note} />
                 </>
