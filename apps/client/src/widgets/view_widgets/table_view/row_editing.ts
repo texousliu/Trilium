@@ -42,56 +42,6 @@ export default class TableRowEditing extends Component {
         });
     }
 
-    addNewRowCommand({ customOpts, parentNotePath: customNotePath }: CommandListenerData<"addNewRow">) {
-        const parentNotePath = customNotePath ?? this.parentNotePath;
-        if (parentNotePath) {
-            const opts: CreateNoteOpts = {
-                activate: false,
-                ...customOpts
-            }
-            note_create.createNote(parentNotePath, opts).then(({ branch }) => {
-                if (branch) {
-                    setTimeout(() => {
-                        this.focusOnBranch(branch?.branchId);
-                    });
-                }
-            })
-        }
-    }
-
-    focusOnBranch(branchId: string) {
-        if (!this.api) {
-            return;
-        }
-
-        const row = findRowDataById(this.api.getRows(), branchId);
-        if (!row) {
-            return;
-        }
-
-        // Expand the parent tree if any.
-        if (this.api.options.dataTree) {
-            const parent = row.getTreeParent();
-            if (parent) {
-                parent.treeExpand();
-            }
-        }
-
-        row.getCell("title").edit();
-    }
-
 }
 
-function findRowDataById(rows: RowComponent[], branchId: string): RowComponent | null {
-    for (let row of rows) {
-        const item = row.getIndex() as string;
 
-        if (item === branchId) {
-            return row;
-        }
-
-        let found = findRowDataById(row.getTreeChildren(), branchId);
-        if (found) return found;
-    }
-    return null;
-}

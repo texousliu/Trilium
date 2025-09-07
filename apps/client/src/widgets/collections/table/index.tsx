@@ -12,6 +12,7 @@ import FNote from "../../../entities/fnote";
 import { t } from "../../../services/i18n";
 import Button from "../../react/Button";
 import "./index.css";
+import useTableEditing from "./editing";
 
 interface TableConfig {
     tableData?: {
@@ -19,7 +20,7 @@ interface TableConfig {
     };
 }
 
-export default function TableView({ note, viewConfig, saveConfig }: ViewModeProps<TableConfig>) {
+export default function TableView({ note, noteIds, notePath, viewConfig, saveConfig }: ViewModeProps<TableConfig>) {
     const [ maxDepth ] = useNoteLabelInt(note, "maxNestingDepth") ?? -1;
     const [ columnDefs, setColumnDefs ] = useState<ColumnDefinition[]>();
     const [ rowData, setRowData ] = useState<TableData[]>();
@@ -43,10 +44,11 @@ export default function TableView({ note, viewConfig, saveConfig }: ViewModeProp
             setMovableRows(movableRows);
             setHasChildren(hasChildren);
         });
-    }, [ note ]);
+    }, [ note, noteIds ]);
 
     const contextMenuEvents = useContextMenu(note, parentComponent, tabulatorRef);
     const persistenceProps = usePersistence(viewConfig, saveConfig);
+    useTableEditing(tabulatorRef, notePath);
     const dataTreeProps = useMemo<Options>(() => {
         if (!hasChildren) return {};
         return {
@@ -59,7 +61,6 @@ export default function TableView({ note, viewConfig, saveConfig }: ViewModeProp
             dataTreeCollapseElement: `<button class="tree-collapse"><span class="bx bx-chevron-down"></span></button>`
         }
     }, [ hasChildren ]);
-    console.log("Render with viewconfig", viewConfig);
 
     return (
         <div className="table-view">

@@ -7,6 +7,7 @@ export type ViewTypeOptions = typeof allViewTypes[number];
 
 export interface ViewModeProps<T extends object> {
     note: FNote;
+    notePath: string;
     /**
      * We're using noteIds so that it's not necessary to load all notes at once when paging.
      */

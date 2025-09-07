@@ -19,7 +19,7 @@ interface NoteListProps<T extends object> {
 
 export default function NoteList<T extends object>({ note: providedNote, highlightedTokens, displayOnlyCollections }: NoteListProps<T>) {
     const widgetRef = useRef<HTMLDivElement>(null);
-    const { note: contextNote, noteContext } = useNoteContext();
+    const { note: contextNote, noteContext, notePath } = useNoteContext();
     const note = providedNote ?? contextNote;
     const viewType = useNoteViewType(note);
     const noteIds = useNoteIds(note, viewType);
@@ -56,9 +56,9 @@ export default function NoteList<T extends object>({ note: providedNote, highlig
     // Preload the configuration.
     let props: ViewModeProps<any> | undefined | null = null;
     const viewModeConfig = useViewModeConfig(note, viewType);
-    if (note && viewModeConfig) {
+    if (note && notePath && viewModeConfig) {
         props = {
-            note, noteIds,
+            note, noteIds, notePath,
             highlightedTokens,
             viewConfig: viewModeConfig[0],
             saveConfig: viewModeConfig[1]
@@ -66,7 +66,7 @@ export default function NoteList<T extends object>({ note: providedNote, highlig
     }
 
     return (
-        <div ref={widgetRef} className={`note-list-widget ${isFullHeight ? "full-height" : ""}`}>
+        <div ref={widgetRef} className={`note-list-widget component ${isFullHeight ? "full-height" : ""}`}>
             {props && isEnabled && (
                 <div className="note-list-widget-content">
                     {getComponentByViewType(viewType, props)}
