@@ -1,10 +1,14 @@
-import { RowComponent, Tabulator } from "tabulator-tables";
+import { EventCallBackMethods, RowComponent, Tabulator } from "tabulator-tables";
 import { CommandListenerData } from "../../../components/app_context";
 import note_create, { CreateNoteOpts } from "../../../services/note_create";
 import { useLegacyImperativeHandlers } from "../../react/hooks";
 import { RefObject } from "preact";
+import { setAttribute, setLabel } from "../../../services/attributes";
+import froca from "../../../services/froca";
+import server from "../../../services/server";
 
-export default function useTableEditing(api: RefObject<Tabulator>, parentNotePath: string) {
+export default function useTableEditing(api: RefObject<Tabulator>, parentNotePath: string): Partial<EventCallBackMethods> {
+    // Adding new rows
     useLegacyImperativeHandlers({
         addNewRowCommand({ customOpts, parentNotePath: customNotePath }: CommandListenerData<"addNewRow">) {
             const notePath = customNotePath ?? parentNotePath;
@@ -25,6 +29,34 @@ export default function useTableEditing(api: RefObject<Tabulator>, parentNotePat
         }
     });
 
+    // Editing existing rows.
+    return {
+        cellEdited: async (cell) => {
+            const noteId = cell.getRow().getData().noteId;
+            const field = cell.getField();
+            let newValue = cell.getValue();
+
+            if (field === "title") {
+                server.put(`notes/${noteId}/title`, { title: newValue });
+                return;
+            }
+
+            if (field.includes(".")) {
+                const [ type, name ] = field.split(".", 2);
+                if (type === "labels") {
+                    if (typeof newValue === "boolean") {
+                        newValue = newValue ? "true" : "false";
+                    }
+                    setLabel(noteId, name, newValue);
+                } else if (type === "relations") {
+                    const note = await froca.getNote(noteId);
+                    if (note) {
+                        setAttribute(note, "relation", name, newValue);
+                    }
+                }
+            }
+        }
+    };
 }
 
 function focusOnBranch(api: Tabulator, branchId: string) {

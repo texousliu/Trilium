@@ -48,7 +48,7 @@ export default function TableView({ note, noteIds, notePath, viewConfig, saveCon
 
     const contextMenuEvents = useContextMenu(note, parentComponent, tabulatorRef);
     const persistenceProps = usePersistence(viewConfig, saveConfig);
-    useTableEditing(tabulatorRef, notePath);
+    const editingEvents = useTableEditing(tabulatorRef, notePath);
     const dataTreeProps = useMemo<Options>(() => {
         if (!hasChildren) return {};
         return {
@@ -73,12 +73,16 @@ export default function TableView({ note, noteIds, notePath, viewConfig, saveCon
                         data={rowData}
                         modules={[ SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, DataTreeModule ]}
                         footerElement={<TableFooter note={note} />}
-                        events={contextMenuEvents}
+                        events={{
+                            ...contextMenuEvents,
+                            ...editingEvents
+                        }}
                         persistence {...persistenceProps}
                         layout="fitDataFill"
                         index="branchId"
                         movableColumns
                         movableRows={movableRows}
+
                         {...dataTreeProps}
                     />
                     <TableFooter note={note} />
