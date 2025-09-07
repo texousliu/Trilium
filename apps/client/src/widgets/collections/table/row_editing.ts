@@ -8,8 +8,9 @@ import froca from "../../../services/froca";
 import server from "../../../services/server";
 import FNote from "../../../entities/fnote";
 import branches from "../../../services/branches";
+import AttributeDetailWidget from "../../attribute_widgets/attribute_detail";
 
-export default function useTableEditing(api: RefObject<Tabulator>, parentNotePath: string): Partial<EventCallBackMethods> {
+export default function useRowTableEditing(api: RefObject<Tabulator>, attributeDetailWidget: AttributeDetailWidget, parentNotePath: string): Partial<EventCallBackMethods> {
     // Adding new rows
     useLegacyImperativeHandlers({
         addNewRowCommand({ customOpts, parentNotePath: customNotePath }: CommandListenerData<"addNewRow">) {

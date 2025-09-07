@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "p
 import { ViewModeProps } from "../interface";
 import { buildColumnDefinitions } from "./columns";
 import getAttributeDefinitionInformation, { buildRowDefinitions, TableData } from "./rows";
-import { useNoteLabelInt, useSpacedUpdate } from "../../react/hooks";
+import { useLegacyWidget, useNoteLabelInt, useSpacedUpdate } from "../../react/hooks";
 import Tabulator from "./tabulator";
 import { Tabulator as VanillaTabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule, Options} from 'tabulator-tables';
 import { useContextMenu } from "./context_menu";
@@ -11,7 +11,9 @@ import FNote from "../../../entities/fnote";
 import { t } from "../../../services/i18n";
 import Button from "../../react/Button";
 import "./index.css";
-import useTableEditing, { canReorderRows } from "./editing";
+import useRowTableEditing, { canReorderRows } from "./row_editing";
+import useColTableEditing from "./col_editing";
+import AttributeDetailWidget from "../../attribute_widgets/attribute_detail";
 
 interface TableConfig {
     tableData?: {
@@ -45,9 +47,11 @@ export default function TableView({ note, noteIds, notePath, viewConfig, saveCon
         });
     }, [ note, noteIds ]);
 
+    const [ attributeDetailWidgetEl, attributeDetailWidget ] = useLegacyWidget(() => new AttributeDetailWidget().contentSized());
     const contextMenuEvents = useContextMenu(note, parentComponent, tabulatorRef);
     const persistenceProps = usePersistence(viewConfig, saveConfig);
-    const editingEvents = useTableEditing(tabulatorRef, notePath);
+    const rowEditingEvents = useRowTableEditing(tabulatorRef, attributeDetailWidget, notePath);
+    const colEditingEvents = useColTableEditing(tabulatorRef, attributeDetailWidget);
     const dataTreeProps = useMemo<Options>(() => {
         if (!hasChildren) return {};
         return {
@@ -74,7 +78,8 @@ export default function TableView({ note, noteIds, notePath, viewConfig, saveCon
                         footerElement={<TableFooter note={note} />}
                         events={{
                             ...contextMenuEvents,
-                            ...editingEvents
+                            ...rowEditingEvents,
+                            ...colEditingEvents
                         }}
                         persistence {...persistenceProps}
                         layout="fitDataFill"
@@ -87,6 +92,7 @@ export default function TableView({ note, noteIds, notePath, viewConfig, saveCon
                     <TableFooter note={note} />
                 </>
             )}
+            {attributeDetailWidgetEl}
         </div>
     )
 }
