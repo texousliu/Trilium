@@ -109,8 +109,25 @@ function updateReferences(docsDir: string): FixResult[] {
     const updatesMade: FixResult[] = [];
     
     function fixLink(match: string, text: string, link: string, currentDir: string, isIndex: boolean): string {
-        // Skip external links
-        if (link.startsWith('http')) {
+        // Skip external links, mailto, and special protocols
+        if (link.startsWith('http') || link.startsWith('mailto:') || link.startsWith('xmpp:')) {
+            return match;
+        }
+        
+        // Skip anchor-only links
+        if (link.startsWith('#')) {
+            return match;
+        }
+        
+        // Handle malformed links with nested brackets (e.g., [developers]([url](https://...))
+        if (link.includes('[') || link.includes(']')) {
+            // This is a malformed link, skip it
+            return match;
+        }
+        
+        // Handle links wrapped in angle brackets (e.g., <https://...>)
+        if (link.startsWith('<') && link.endsWith('>')) {
+            // This is likely a literal URL that shouldn't be processed
             return match;
         }
         
@@ -121,6 +138,14 @@ function updateReferences(docsDir: string): FixResult[] {
         } catch (err) {
             // If decoding fails, use the original link
             decodedLink = link;
+        }
+        
+        // Extract anchor if present
+        let anchorPart = '';
+        if (decodedLink.includes('#')) {
+            const parts = decodedLink.split('#');
+            decodedLink = parts[0];
+            anchorPart = '#' + parts.slice(1).join('#');
         }
         
         // Special case: if we're in index.md and the link starts with the parent directory name
@@ -136,7 +161,7 @@ function updateReferences(docsDir: string): FixResult[] {
                 // Re-encode spaces for URL compatibility before recursing
                 const fixedLinkEncoded = fixedLink.replace(/ /g, '%20');
                 // Recursively process the fixed link
-                return fixLink(`[${text}](${fixedLinkEncoded})`, text, fixedLinkEncoded, currentDir, isIndex);
+                return fixLink(`[${text}](${fixedLinkEncoded}${anchorPart})`, text, fixedLinkEncoded + anchorPart, currentDir, isIndex);
             }
         }
         
@@ -161,26 +186,43 @@ function updateReferences(docsDir: string): FixResult[] {
                         if (path.dirname(potentialDir) === path.dirname(currentDir)) {
                             // It's a sibling - just use directory name
                             const dirName = path.basename(potentialDir).replace(/ /g, '%20');
-                            return `[${text}](${dirName}/)`;
+                            return `[${text}](${dirName}/${anchorPart})`;
                         }
                     }
                     
                     // Calculate relative path from current file to the directory
                     const newPath = path.relative(currentDir, potentialDir).replace(/\\/g, '/').replace(/ /g, '%20');
-                    return `[${text}](${newPath}/)`;
+                    return `[${text}](${newPath}/${anchorPart})`;
+                }
+                
+                // Check if the target file exists
+                if (!fs.existsSync(resolvedPath)) {
+                    // Try to find a similar file by removing special characters from the filename
+                    const dirPath = path.dirname(resolvedPath);
+                    const fileName = path.basename(resolvedPath);
+                    
+                    // Remove problematic characters and try to find the file
+                    const cleanFileName = fileName.replace(/[\(\)\\]/g, '');
+                    const cleanPath = path.join(dirPath, cleanFileName);
+                    
+                    if (fs.existsSync(cleanPath)) {
+                        // Calculate relative path from current file to the cleaned file
+                        const newPath = path.relative(currentDir, cleanPath).replace(/\\/g, '/').replace(/ /g, '%20');
+                        return `[${text}](${newPath}${anchorPart})`;
+                    }
                 }
             }
         }
         
         // Also handle local references (same directory)
         if (!decodedLink.includes('/')) {
-            const basename = decodedLink.slice(0, -3); // Remove .md extension
+            const basename = decodedLink.endsWith('.md') ? decodedLink.slice(0, -3) : decodedLink;
             const possibleDir = path.join(currentDir, basename);
             
             if (fs.existsSync(possibleDir) && fs.statSync(possibleDir).isDirectory()) {
                 // Re-encode spaces for URL compatibility
                 const encodedBasename = basename.replace(/ /g, '%20');
-                return `[${text}](${encodedBasename}/)`;
+                return `[${text}](${encodedBasename}/${anchorPart})`;
             }
         }
         
@@ -266,6 +308,20 @@ function syncReadmeToIndex(projectRoot: string, docsDir: string): FixResult[] {
     
     // Fix internal documentation links (./docs/User%20Guide -> ./User%20Guide)
     content = content.replace(/\.\/docs\/User%20Guide/g, './User%20Guide');
+    content = content.replace(/\.\/docs\/Script%20API/g, './Script%20API');
+    content = content.replace(/\.\/docs\/Developer%20Guide/g, './Developer%20Guide');
+    
+    // Fix specific broken links found in index.md
+    // These links point to non-existent files, so we need to fix them
+    content = content.replace(/User%20Guide\/quick-start\.md/g, 'User%20Guide/User%20Guide/');
+    content = content.replace(/User%20Guide\/installation\.md/g, 'User%20Guide/User%20Guide/Installation%20&%20Setup/');
+    content = content.replace(/User%20Guide\/docker\.md/g, 'User%20Guide/User%20Guide/Installation%20&%20Setup/Docker%20installation/');
+    content = content.replace(/User%20Guide\/index\.md/g, 'User%20Guide/User%20Guide/');
+    content = content.replace(/Script%20API\/index\.md/g, 'Script%20API/');
+    content = content.replace(/Developer%20Guide\/index\.md/g, 'Developer%20Guide/Developer%20Guide/');
+    content = content.replace(/Developer%20Guide\/contributing\.md/g, 'Developer%20Guide/Developer%20Guide/');
+    content = content.replace(/support\/faq\.md/g, 'User%20Guide/User%20Guide/FAQ/');
+    content = content.replace(/support\/troubleshooting\.md/g, 'User%20Guide/User%20Guide/');
     
     // Write the adjusted content to docs/index.md
     fs.writeFileSync(indexPath, content, 'utf-8');

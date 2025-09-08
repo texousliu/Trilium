@@ -16,6 +16,7 @@ on:
       - 'requirements-docs.txt'
       - '.github/workflows/deploy-docs.yml'
       - 'scripts/fix-mkdocs-structure.ts'
+      - 'validate-docs-links.ts'
   
   # Allow manual triggering from Actions tab
   workflow_dispatch:
@@ -32,6 +33,7 @@ on:
       - 'requirements-docs.txt'
       - '.github/workflows/deploy-docs.yml'
       - 'scripts/fix-mkdocs-structure.ts'
+      - 'validate-docs-links.ts'
 
 jobs:
   build-and-deploy:
@@ -110,6 +112,11 @@ jobs:
           test -f site/sitemap.xml || (echo "ERROR: site/sitemap.xml not found" && exit 1)
           test -d site/assets || (echo "ERROR: site/assets directory not found" && exit 1)
           echo "✅ Site validation passed"
+      
+      - name: Validate Documentation Links
+        run: |
+          # Run the TypeScript link validation script
+          pnpm tsx validate-docs-links.ts
       
       # Install wrangler globally to avoid workspace issues
       - name: Install Wrangler
