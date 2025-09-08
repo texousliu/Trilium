@@ -276,7 +276,12 @@
     "preview": "Vorschau:",
     "preview_not_available": "Für diesen Notiztyp ist keine Vorschau verfügbar.",
     "restore_button": "Wiederherstellen",
-    "delete_button": "Löschen"
+    "delete_button": "Löschen",
+    "diff_on": "Zeige Differenz",
+    "diff_off": "Zeige Inhalt",
+    "diff_on_hint": "Klicke, um die Differenz des Notiz-Quellcodes zu zeigen",
+    "diff_off_hint": "Klicke, um den Notizinhalt zu zeigen",
+    "diff_not_available": "Differenz-Abgleich ist nicht verfügbar."
   },
   "sort_child_notes": {
     "sort_children_by": "Unternotizen sortieren nach...",
@@ -1839,7 +1844,9 @@
     "title": "Leistung",
     "enable-motion": "Aktiviere Übergänge und Animationen",
     "enable-shadows": "Aktiviere Schatten",
-    "enable-backdrop-effects": "Aktiviere Hintergrundeffekte für Menüs, Pop-up Fenster und Panele"
+    "enable-backdrop-effects": "Aktiviere Hintergrundeffekte für Menüs, Pop-up Fenster und Panele",
+    "enable-smooth-scroll": "Aktiviere sanftes Scrollen",
+    "app-restart-required": "(Ein Neustart der Anwendung ist erforderlich, damit die Änderungen wirksam werden)"
   },
   "code-editor-options": {
     "title": "Editor"
