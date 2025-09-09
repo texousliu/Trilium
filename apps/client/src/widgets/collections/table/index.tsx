@@ -135,13 +135,22 @@ function useData(note: FNote, noteIds: string[], viewConfig: TableConfig | undef
 
     useEffect(refresh, [ note, noteIds, maxDepth, movableRows ]);
 
-    // React to column changes.
     useTriliumEvent("entitiesReloaded", ({ loadResults}) => {
+        // React to column changes.
         if (loadResults.getAttributeRows().find(attr =>
             attr.type === "label" &&
             (attr.name?.startsWith("label:") || attr.name?.startsWith("relation:")) &&
             attributes.isAffecting(attr, note))) {
             refresh();
+            return;
+        }
+
+        // React to external row updates.
+        if (loadResults.getBranchRows().some(branch => branch.parentNoteId === note.noteId || noteIds.includes(branch.parentNoteId ?? ""))
+            || loadResults.getNoteIds().some(noteId => noteIds.includes(noteId))
+            || loadResults.getAttributeRows().some(attr => noteIds.includes(attr.noteId!))) {
+            refresh();
+            return;
         }
     });
 

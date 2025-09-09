@@ -60,16 +60,6 @@ export default class TableView extends ViewMode<StateInfo> {
         setupContextMenu(this.api, this.parentNote);
     }
 
-    async onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
-        if (loadResults.getBranchRows().some(branch => branch.parentNoteId === this.parentNote.noteId || this.noteIds.includes(branch.parentNoteId ?? ""))
-            || loadResults.getNoteIds().some(noteId => this.noteIds.includes(noteId))
-            || loadResults.getAttributeRows().some(attr => this.noteIds.includes(attr.noteId!))) {
-            return await this.#manageRowsUpdate();
-        }
-
-        return false;
-    }
-
     #manageColumnUpdate() {
         if (!this.api) {
             return;

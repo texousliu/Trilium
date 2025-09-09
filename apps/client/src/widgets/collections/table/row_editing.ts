@@ -6,7 +6,6 @@ import { RefObject } from "preact";
 import { setAttribute, setLabel } from "../../../services/attributes";
 import froca from "../../../services/froca";
 import server from "../../../services/server";
-import FNote from "../../../entities/fnote";
 import branches from "../../../services/branches";
 import AttributeDetailWidget from "../../attribute_widgets/attribute_detail";
 
