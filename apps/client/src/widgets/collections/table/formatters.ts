@@ -60,17 +60,6 @@ export function NoteTitleFormatter(cell: CellComponent) {
     return $noteRef[0].outerHTML;
 }
 
-export function RowNumberFormatter(draggableRows: boolean) {
-    return (cell: CellComponent) => {
-        let html = "";
-        if (draggableRows) {
-            html += `<span class="bx bx-dots-vertical-rounded"></span> `;
-        }
-        html += cell.getRow().getPosition(true);
-        return html;
-    };
-}
-
 function buildNoteLink(noteId: string, title: string, iconClass: string, colorClass?: string) {
     const $noteRef = $("<span>");
     const href = `#root/${noteId}`;

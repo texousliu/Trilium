@@ -1,5 +1,5 @@
 import { NoteFormatter, NoteTitleFormatter, RowNumberFormatter } from "./formatters.js";
-import type { CellComponent, ColumnDefinition, EmptyCallback } from "tabulator-tables";
+import type { CellComponent, ColumnDefinition, EmptyCallback, FormatterParams } from "tabulator-tables";
 import { LabelType } from "../../../services/promoted_attribute_definition_parser.js";
 import { RelationEditor } from "./relation_editor.js";
 import { JSX } from "preact";
@@ -60,6 +60,10 @@ interface BuildColumnArgs {
     position?: number;
 }
 
+interface RowNumberFormatterParams {
+    movableRows?: boolean;
+}
+
 export function buildColumnDefinitions({ info, movableRows, existingColumnData, rowNumberHint, position }: BuildColumnArgs) {
     let columnDefs: ColumnDefinition[] = [
         {
@@ -70,7 +74,11 @@ export function buildColumnDefinitions({ info, movableRows, existingColumnData, 
             frozen: true,
             rowHandle: movableRows,
             width: calculateIndexColumnWidth(rowNumberHint, movableRows),
-            formatter: RowNumberFormatter(movableRows)
+            formatter: wrapFormatter(({ cell, formatterParams }) => <div>
+                {(formatterParams as RowNumberFormatterParams).movableRows && <><span class="bx bx-dots-vertical-rounded"></span>{" "}</>}
+                {cell.getRow().getPosition(true)}
+            </div>),
+            formatterParams: { movableRows } satisfies RowNumberFormatterParams
         },
         {
             field: "noteId",
@@ -159,11 +167,12 @@ function calculateIndexColumnWidth(rowNumberHint: number, movableRows: boolean):
 
 interface FormatterOpts {
     cell: CellComponent
+    formatterParams: FormatterParams;
 }
 
 function wrapFormatter(Component: (opts: FormatterOpts) => JSX.Element): ((cell: CellComponent, formatterParams: {}, onRendered: EmptyCallback) => string | HTMLElement) {
     return (cell, formatterParams, onRendered) => {
-        const elWithParams = <Component cell={cell} />;
+        const elWithParams = <Component cell={cell} formatterParams={formatterParams} />;
         return renderReactWidget(null, elWithParams)[0];
     };
 }
