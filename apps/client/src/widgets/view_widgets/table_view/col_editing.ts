@@ -22,26 +22,6 @@ export default class TableColumnEditing extends Component {
         this.parentNote = parentNote;
     }
 
-    async deleteTableColumnCommand({ columnToDelete }: CommandListenerData<"deleteTableColumn">) {
-        if (!columnToDelete || !await dialog.confirm(t("table_view.delete_column_confirmation"))) {
-            return;
-        }
-
-        let [ type, name ] = columnToDelete.getField()?.split(".", 2);
-        if (!type || !name) {
-            return;
-        }
-        type = type.replace("s", "");
-
-        this.api.blockRedraw();
-        try {
-            await deleteColumn(this.parentNote.noteId, type as "label" | "relation", name);
-            attributes.removeOwnedLabelByName(this.parentNote, `${type}:${name}`);
-        } finally {
-            this.api.restoreRedraw();
-        }
-    }
-
     getNewAttributePosition() {
         return this.newAttributePosition;
     }

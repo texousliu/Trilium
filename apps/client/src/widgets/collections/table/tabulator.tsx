@@ -1,8 +1,8 @@
 import { useContext, useEffect, useLayoutEffect, useRef } from "preact/hooks";
-import { ColumnDefinition, EventCallBackMethods, Module, Options, Tabulator as VanillaTabulator } from "tabulator-tables";
+import { EventCallBackMethods, Module, Options, Tabulator as VanillaTabulator } from "tabulator-tables";
 import "tabulator-tables/dist/css/tabulator.css";
 import "../../../../src/stylesheets/table.css";
-import { ComponentChildren, RefObject } from "preact";
+import { RefObject } from "preact";
 import { ParentComponent, renderReactWidget } from "../../react/react_utils";
 
 interface TableProps<T> extends Omit<Options, "data" | "footerElement" | "index"> {

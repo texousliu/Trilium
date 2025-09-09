@@ -6,9 +6,11 @@ import { useRef, useState } from "preact/hooks";
 import { CommandListenerData, EventData } from "../../../components/app_context";
 import AttributeDetailWidget from "../../attribute_widgets/attribute_detail";
 import attributes from "../../../services/attributes";
-import { renameColumn } from "../../view_widgets/table_view/bulk_actions";
 import FNote from "../../../entities/fnote";
 import { getAttributeFromField } from "./utils";
+import dialog from "../../../services/dialog";
+import { t } from "i18next";
+import { executeBulkActions } from "../../../services/bulk_action";
 
 export default function useColTableEditing(api: RefObject<Tabulator>, attributeDetailWidget: AttributeDetailWidget, parentNote: FNote) {
 
@@ -84,8 +86,57 @@ export default function useColTableEditing(api: RefObject<Tabulator>, attributeD
             } finally {
                 api.current.restoreRedraw();
             }
+        },
+        async deleteTableColumnCommand({ columnToDelete }: CommandListenerData<"deleteTableColumn">) {
+            if (!api.current || !columnToDelete || !await dialog.confirm(t("table_view.delete_column_confirmation"))) {
+                return;
+            }
+
+            let [ type, name ] = columnToDelete.getField()?.split(".", 2);
+            if (!type || !name) {
+                return;
+            }
+            type = type.replace("s", "");
+
+            api.current.blockRedraw();
+            try {
+                await deleteColumn(parentNote.noteId, type as "label" | "relation", name);
+                attributes.removeOwnedLabelByName(parentNote, `${type}:${name}`);
+            } finally {
+                api.current.restoreRedraw();
+            }
         }
     });
 
     return { newAttributePosition };
+}
+
+async function deleteColumn(parentNoteId: string, type: "label" | "relation", columnName: string) {
+    if (type === "label") {
+        return executeBulkActions([parentNoteId], [{
+            name: "deleteLabel",
+            labelName: columnName
+        }], true);
+    } else {
+        return executeBulkActions([parentNoteId], [{
+            name: "deleteRelation",
+            relationName: columnName
+        }], true);
+    }
+}
+
+async function renameColumn(parentNoteId: string, type: "label" | "relation", originalName: string, newName: string) {
+    if (type === "label") {
+        return executeBulkActions([parentNoteId], [{
+            name: "renameLabel",
+            oldLabelName: originalName,
+            newLabelName: newName
+        }], true);
+    } else {
+        return executeBulkActions([parentNoteId], [{
+            name: "renameRelation",
+            oldRelationName: originalName,
+            newRelationName: newName
+        }], true);
+    }
 }
