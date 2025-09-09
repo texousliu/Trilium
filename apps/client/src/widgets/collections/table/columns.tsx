@@ -1,7 +1,9 @@
-import { MonospaceFormatter, NoteFormatter, NoteTitleFormatter, RowNumberFormatter } from "./formatters.js";
-import type { ColumnDefinition } from "tabulator-tables";
+import { NoteFormatter, NoteTitleFormatter, RowNumberFormatter } from "./formatters.js";
+import type { CellComponent, ColumnDefinition, EmptyCallback } from "tabulator-tables";
 import { LabelType } from "../../../services/promoted_attribute_definition_parser.js";
 import { RelationEditor } from "./relation_editor.js";
+import { JSX } from "preact";
+import { renderReactWidget } from "../../react/react_utils.jsx";
 
 type ColumnType = LabelType | "relation";
 
@@ -73,7 +75,7 @@ export function buildColumnDefinitions({ info, movableRows, existingColumnData, 
         {
             field: "noteId",
             title: "Note ID",
-            formatter: MonospaceFormatter,
+            formatter: wrapFormatter(({ cell }) => <code>{cell.getValue()}</code>),
             visible: false
         },
         {
@@ -154,3 +156,15 @@ function calculateIndexColumnWidth(rowNumberHint: number, movableRows: boolean):
     }
     return columnWidth;
 }
+
+interface FormatterOpts {
+    cell: CellComponent
+}
+
+function wrapFormatter(Component: (opts: FormatterOpts) => JSX.Element): ((cell: CellComponent, formatterParams: {}, onRendered: EmptyCallback) => string | HTMLElement) {
+    return (cell, formatterParams, onRendered) => {
+        const elWithParams = <Component cell={cell} />;
+        return renderReactWidget(null, elWithParams)[0];
+    };
+}
+
