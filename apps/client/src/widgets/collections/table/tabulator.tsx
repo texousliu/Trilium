@@ -33,11 +33,13 @@ export default function Tabulator<T>({ className, columns, data, modules, tabula
             columns,
             data,
             footerElement: (parentComponent && footerElement ? renderReactWidget(parentComponent, footerElement)[0] : undefined),
-            ...restProps,
+            ...restProps
         });
 
-        tabulatorRef.current = tabulator;
-        externalTabulatorRef.current = tabulator;
+        tabulator.on("tableBuilt", () => {
+            tabulatorRef.current = tabulator;
+            externalTabulatorRef.current = tabulator;
+        });
 
         return () => tabulator.destroy();
     }, []);
