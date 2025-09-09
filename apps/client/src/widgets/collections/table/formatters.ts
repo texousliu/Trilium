@@ -47,28 +47,8 @@ export function NoteFormatter(cell: CellComponent, _formatterParams, onRendered)
     }
 }
 
-/**
- * Custom formatter for the note title that is quite similar to {@link NoteFormatter}, but where the title and icons are read from separate fields.
- */
-export function NoteTitleFormatter(cell: CellComponent) {
-    const { noteId, iconClass, colorClass } = cell.getRow().getData();
-    if (!noteId) {
-        return "";
-    }
-
-    const { $noteRef } = buildNoteLink(noteId, cell.getValue(), iconClass, colorClass);
-    return $noteRef[0].outerHTML;
-}
-
 function buildNoteLink(noteId: string, title: string, iconClass: string, colorClass?: string) {
     const $noteRef = $("<span>");
     const href = `#root/${noteId}`;
-    $noteRef.addClass("reference-link");
-    $noteRef.attr("data-href", href);
-    $noteRef.text(title);
-    $noteRef.prepend($("<span>").addClass(iconClass));
-    if (colorClass) {
-        $noteRef.addClass(colorClass);
-    }
     return { $noteRef, href };
 }

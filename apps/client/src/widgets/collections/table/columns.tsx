@@ -4,6 +4,8 @@ import { LabelType } from "../../../services/promoted_attribute_definition_parse
 import { RelationEditor } from "./relation_editor.js";
 import { JSX } from "preact";
 import { renderReactWidget } from "../../react/react_utils.jsx";
+import NoteTitleWidget from "../../note_title.jsx";
+import Icon from "../../react/Icon.jsx";
 
 type ColumnType = LabelType | "relation";
 
@@ -90,7 +92,16 @@ export function buildColumnDefinitions({ info, movableRows, existingColumnData, 
             field: "title",
             title: "Title",
             editor: "input",
-            formatter: NoteTitleFormatter,
+            formatter: wrapFormatter(({ cell }) => {
+                const { noteId, iconClass, colorClass } = cell.getRow().getData();
+                if (!noteId) {
+                    return "";
+                }
+
+                return <span className={`reference-link ${colorClass}`} data-href={`#root/${noteId}`}>
+                    <Icon icon={iconClass} />{" "}{cell.getValue()}
+                </span>;
+            }),
             width: 400
         }
     ];
