@@ -63,7 +63,7 @@
     "search_for_note_by_its_name": "cerca una nota per nome",
     "cloned_note_prefix_title": "Le note clonate saranno mostrate nell'albero delle note con il dato prefisso",
     "prefix_optional": "Prefisso (opzionale)",
-    "clone_to_selected_note": "Clona sotto la nota selezionata <kbd>invio</kbd>",
+    "clone_to_selected_note": "Clona verso la nota selezionata <kbd>invio</kbd>",
     "no_path_to_clone_to": "Nessun percorso per clonare dentro.",
     "note_cloned": "La nota \"{{clonedTitle}}\" è stata clonata in \"{{targetTitle}}\""
   },
@@ -79,7 +79,7 @@
     "ok": "OK",
     "close": "Chiudi",
     "delete_notes_preview": "Anteprima di eliminazione delle note",
-    "delete_all_clones_description": "Elimina anche tutti i cloni (può essere disfatto tramite i cambiamenti recenti)",
+    "delete_all_clones_description": "Elimina anche tutti i cloni (può essere ripristinato nella sezione cambiamenti recenti)",
     "erase_notes_description": "L'eliminazione normale (soft) marca le note come eliminate e potranno essere recuperate entro un certo lasso di tempo (dalla finestra dei cambiamenti recenti). Selezionando questa opzione le note si elimineranno immediatamente e non sarà possibile recuperarle.",
     "erase_notes_warning": "Elimina le note in modo permanente (non potrà essere disfatto), compresi tutti i cloni. Ciò forzerà un nuovo caricamento dell'applicazione.",
     "cancel": "Annulla",
@@ -105,7 +105,10 @@
     "format_html": "HTML - raccomandato in quanto mantiene tutti i formati",
     "format_html_zip": "HTML in archivio ZIP - questo è raccomandato in quanto conserva tutta la formattazione.",
     "format_markdown": "MArkdown - questo conserva la maggior parte della formattazione.",
-    "export_type_single": "Solo questa nota, senza le sottostanti"
+    "export_type_single": "Solo questa nota, senza le sottostanti",
+    "format_opml": "OPML - formato per scambio informazioni outline. Formattazione, immagini e files non sono inclusi.",
+    "opml_version_1": "OPML v.1.0 - solo testo semplice",
+    "opml_version_2": "OPML v2.0 - supporta anche HTML"
   },
   "password_not_set": {
     "body1": "Le note protette sono crittografate utilizzando una password utente, ma la password non è stata ancora impostata.",
