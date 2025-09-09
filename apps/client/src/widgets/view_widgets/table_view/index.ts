@@ -61,15 +61,6 @@ export default class TableView extends ViewMode<StateInfo> {
     }
 
     async onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
-        if (!this.api) {
-            return;
-        }
-
-        // Force a refresh if sorted is changed since we need to disable reordering.
-        if (loadResults.getAttributeRows().find(a => a.name === "sorted" && attributes.isAffecting(a, this.parentNote))) {
-            return true;
-        }
-
         if (loadResults.getBranchRows().some(branch => branch.parentNoteId === this.parentNote.noteId || this.noteIds.includes(branch.parentNoteId ?? ""))
             || loadResults.getNoteIds().some(noteId => this.noteIds.includes(noteId))
             || loadResults.getAttributeRows().some(attr => this.noteIds.includes(attr.noteId!))) {

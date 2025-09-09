@@ -104,8 +104,3 @@ function findRowDataById(rows: RowComponent[], branchId: string): RowComponent |
     }
     return null;
 }
-
-export function canReorderRows(parentNote: FNote) {
-    return !parentNote.hasLabel("sorted")
-        && parentNote.type !== "search";
-}

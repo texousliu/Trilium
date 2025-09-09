@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "p
 import { ViewModeProps } from "../interface";
 import { buildColumnDefinitions } from "./columns";
 import getAttributeDefinitionInformation, { buildRowDefinitions, TableData } from "./rows";
-import { useLegacyWidget, useNoteLabelInt, useSpacedUpdate, useTriliumEvent } from "../../react/hooks";
+import { useLegacyWidget, useNoteLabel, useNoteLabelBoolean, useNoteLabelInt, useSpacedUpdate, useTriliumEvent } from "../../react/hooks";
 import Tabulator from "./tabulator";
 import { Tabulator as VanillaTabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule, Options} from 'tabulator-tables';
 import { useContextMenu } from "./context_menu";
@@ -11,7 +11,7 @@ import FNote from "../../../entities/fnote";
 import { t } from "../../../services/i18n";
 import Button from "../../react/Button";
 import "./index.css";
-import useRowTableEditing, { canReorderRows } from "./row_editing";
+import useRowTableEditing from "./row_editing";
 import useColTableEditing from "./col_editing";
 import AttributeDetailWidget from "../../attribute_widgets/attribute_detail";
 import attributes from "../../../services/attributes";
@@ -113,13 +113,13 @@ function useData(note: FNote, noteIds: string[], viewConfig: TableConfig | undef
 
     const [ columnDefs, setColumnDefs ] = useState<ColumnDefinition[]>();
     const [ rowData, setRowData ] = useState<TableData[]>();
-    const [ movableRows, setMovableRows ] = useState<boolean>();
     const [ hasChildren, setHasChildren ] = useState<boolean>();
+    const [ isSorted ] = useNoteLabelBoolean(note, "sorted");
+    const [ movableRows, setMovableRows ] = useState(false);
 
     function refresh() {
         const info = getAttributeDefinitionInformation(note);
         buildRowDefinitions(note, info, maxDepth).then(({ definitions: rowData, hasSubtree: hasChildren, rowNumber }) => {
-            const movableRows = canReorderRows(note) && !hasChildren;
             const columnDefs = buildColumnDefinitions({
                 info,
                 movableRows,
@@ -129,12 +129,11 @@ function useData(note: FNote, noteIds: string[], viewConfig: TableConfig | undef
             });
             setColumnDefs(columnDefs);
             setRowData(rowData);
-            setMovableRows(movableRows);
             setHasChildren(hasChildren);
         });
     }
 
-    useEffect(refresh, [ note, noteIds, maxDepth ]);
+    useEffect(refresh, [ note, noteIds, maxDepth, movableRows ]);
 
     // React to column changes.
     useTriliumEvent("entitiesReloaded", ({ loadResults}) => {
@@ -145,6 +144,11 @@ function useData(note: FNote, noteIds: string[], viewConfig: TableConfig | undef
             refresh();
         }
     });
+
+    // Identify if movable rows.
+    useEffect(() => {
+        setMovableRows(!isSorted && note.type !== "search" && !hasChildren);
+    }, [ isSorted, note, hasChildren ]);
 
     return { columnDefs, rowData, movableRows, hasChildren };
 }
