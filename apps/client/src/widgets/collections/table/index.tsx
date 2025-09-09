@@ -15,7 +15,7 @@ import useRowTableEditing, { canReorderRows } from "./row_editing";
 import useColTableEditing from "./col_editing";
 import AttributeDetailWidget from "../../attribute_widgets/attribute_detail";
 import attributes from "../../../services/attributes";
-import { refreshTextDimensions } from "@excalidraw/excalidraw/element/newElement";
+import { RefObject } from "preact";
 
 interface TableConfig {
     tableData?: {
@@ -24,48 +24,15 @@ interface TableConfig {
 }
 
 export default function TableView({ note, noteIds, notePath, viewConfig, saveConfig }: ViewModeProps<TableConfig>) {
-    const [ maxDepth ] = useNoteLabelInt(note, "maxNestingDepth") ?? -1;
-    const [ columnDefs, setColumnDefs ] = useState<ColumnDefinition[]>();
-    const [ rowData, setRowData ] = useState<TableData[]>();
-    const [ movableRows, setMovableRows ] = useState<boolean>();
-    const [ hasChildren, setHasChildren ] = useState<boolean>();
     const tabulatorRef = useRef<VanillaTabulator>(null);
     const parentComponent = useContext(ParentComponent);
-
-    function refresh() {
-        const info = getAttributeDefinitionInformation(note);
-        buildRowDefinitions(note, info, maxDepth).then(({ definitions: rowData, hasSubtree: hasChildren, rowNumber }) => {
-            const movableRows = canReorderRows(note) && !hasChildren;
-            const columnDefs = buildColumnDefinitions({
-                info,
-                movableRows,
-                existingColumnData: viewConfig?.tableData?.columns,
-                rowNumberHint: rowNumber
-            });
-            setColumnDefs(columnDefs);
-            setRowData(rowData);
-            setMovableRows(movableRows);
-            setHasChildren(hasChildren);
-        });
-    }
-
-    useEffect(refresh, [ note, noteIds ]);
-
-    // React to column changes.
-    useTriliumEvent("entitiesReloaded", ({ loadResults}) => {
-        if (loadResults.getAttributeRows().find(attr =>
-            attr.type === "label" &&
-            (attr.name?.startsWith("label:") || attr.name?.startsWith("relation:")) &&
-            attributes.isAffecting(attr, note))) {
-            refresh();
-        }
-    });
 
     const [ attributeDetailWidgetEl, attributeDetailWidget ] = useLegacyWidget(() => new AttributeDetailWidget().contentSized());
     const contextMenuEvents = useContextMenu(note, parentComponent, tabulatorRef);
     const persistenceProps = usePersistence(viewConfig, saveConfig);
     const rowEditingEvents = useRowTableEditing(tabulatorRef, attributeDetailWidget, notePath);
-    const colEditingEvents = useColTableEditing(tabulatorRef, attributeDetailWidget, note);
+    const { newAttributePosition } = useColTableEditing(tabulatorRef, attributeDetailWidget, note);
+    const { columnDefs, rowData, movableRows, hasChildren } = useData(note, noteIds, viewConfig, newAttributePosition);
     const dataTreeProps = useMemo<Options>(() => {
         if (!hasChildren) return {};
         return {
@@ -92,8 +59,7 @@ export default function TableView({ note, noteIds, notePath, viewConfig, saveCon
                         footerElement={<TableFooter note={note} />}
                         events={{
                             ...contextMenuEvents,
-                            ...rowEditingEvents,
-                            ...colEditingEvents
+                            ...rowEditingEvents
                         }}
                         persistence {...persistenceProps}
                         layout="fitDataFill"
@@ -140,4 +106,45 @@ function usePersistence(initialConfig: TableConfig | null | undefined, saveConfi
         return config.current?.tableData?.[type];
     }, []);
     return { persistenceReaderFunc, persistenceWriterFunc };
+}
+
+function useData(note: FNote, noteIds: string[], viewConfig: TableConfig | undefined, newAttributePosition: RefObject<number | undefined>) {
+    const [ maxDepth ] = useNoteLabelInt(note, "maxNestingDepth") ?? -1;
+
+    const [ columnDefs, setColumnDefs ] = useState<ColumnDefinition[]>();
+    const [ rowData, setRowData ] = useState<TableData[]>();
+    const [ movableRows, setMovableRows ] = useState<boolean>();
+    const [ hasChildren, setHasChildren ] = useState<boolean>();
+
+    function refresh() {
+        const info = getAttributeDefinitionInformation(note);
+        buildRowDefinitions(note, info, maxDepth).then(({ definitions: rowData, hasSubtree: hasChildren, rowNumber }) => {
+            const movableRows = canReorderRows(note) && !hasChildren;
+            const columnDefs = buildColumnDefinitions({
+                info,
+                movableRows,
+                existingColumnData: viewConfig?.tableData?.columns,
+                rowNumberHint: rowNumber,
+                position: newAttributePosition.current ?? undefined
+            });
+            setColumnDefs(columnDefs);
+            setRowData(rowData);
+            setMovableRows(movableRows);
+            setHasChildren(hasChildren);
+        });
+    }
+
+    useEffect(refresh, [ note, noteIds ]);
+
+    // React to column changes.
+    useTriliumEvent("entitiesReloaded", ({ loadResults}) => {
+        if (loadResults.getAttributeRows().find(attr =>
+            attr.type === "label" &&
+            (attr.name?.startsWith("label:") || attr.name?.startsWith("relation:")) &&
+            attributes.isAffecting(attr, note))) {
+            refresh();
+        }
+    });
+
+    return { columnDefs, rowData, movableRows, hasChildren };
 }

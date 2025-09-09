@@ -2,31 +2,27 @@ import { useLegacyImperativeHandlers } from "../../react/hooks";
 import { Attribute } from "../../../services/attribute_parser";
 import { RefObject } from "preact";
 import { Tabulator } from "tabulator-tables";
-import { useEffect, useState } from "preact/hooks";
+import { useRef, useState } from "preact/hooks";
 import { CommandListenerData, EventData } from "../../../components/app_context";
 import AttributeDetailWidget from "../../attribute_widgets/attribute_detail";
 import attributes from "../../../services/attributes";
 import { renameColumn } from "../../view_widgets/table_view/bulk_actions";
 import FNote from "../../../entities/fnote";
+import { getAttributeFromField } from "./utils";
 
 export default function useColTableEditing(api: RefObject<Tabulator>, attributeDetailWidget: AttributeDetailWidget, parentNote: FNote) {
 
     const [ existingAttributeToEdit, setExistingAttributeToEdit ] = useState<Attribute>();
-    const [ newAttribute, setNewAttribute ] = useState<Attribute>();
-    const [ newAttributePosition, setNewAttributePosition ] = useState<number>();
-
-    useEffect(() => {
-
-    }, []);
+    const newAttribute = useRef<Attribute>();
+    const newAttributePosition = useRef<number>();
 
     useLegacyImperativeHandlers({
         addNewTableColumnCommand({ referenceColumn, columnToEdit, direction, type }: EventData<"addNewTableColumn">) {
-            console.log("Ding");
             let attr: Attribute | undefined;
 
             setExistingAttributeToEdit(undefined);
             if (columnToEdit) {
-                attr = this.getAttributeFromField(columnToEdit.getField());
+                attr = getAttributeFromField(parentNote, columnToEdit.getField());
                 if (attr) {
                     setExistingAttributeToEdit({ ...attr });
                 }
@@ -47,9 +43,9 @@ export default function useColTableEditing(api: RefObject<Tabulator>, attributeD
                     newPosition++;
                 }
 
-                setNewAttributePosition(newPosition);
+                newAttributePosition.current = newPosition;
             } else {
-                setNewAttributePosition(undefined);
+                newAttributePosition.current = undefined;
             }
 
             attributeDetailWidget.showAttributeDetail({
@@ -63,26 +59,26 @@ export default function useColTableEditing(api: RefObject<Tabulator>, attributeD
             });
         },
         async updateAttributeListCommand({ attributes }: CommandListenerData<"updateAttributeList">) {
-            setNewAttribute(attributes[0]);
+            newAttribute.current = attributes[0];
         },
         async saveAttributesCommand() {
-            if (!newAttribute || !api.current) {
+            if (!newAttribute.current || !api.current) {
                 return;
             }
 
-            const { name, value, isInheritable } = newAttribute;
+            const { name, value, isInheritable } = newAttribute.current;
 
             api.current.blockRedraw();
-            const isRename = (this.existingAttributeToEdit && this.existingAttributeToEdit.name !== name);
+            const isRename = (existingAttributeToEdit && existingAttributeToEdit.name !== name);
             try {
                 if (isRename) {
-                    const oldName = this.existingAttributeToEdit!.name.split(":")[1];
+                    const oldName = existingAttributeToEdit!.name.split(":")[1];
                     const [ type, newName ] = name.split(":");
                     await renameColumn(parentNote.noteId, type as "label" | "relation", oldName, newName);
                 }
 
                 if (existingAttributeToEdit && (isRename || existingAttributeToEdit.isInheritable !== isInheritable)) {
-                    attributes.removeOwnedLabelByName(parentNote, this.existingAttributeToEdit.name);
+                    attributes.removeOwnedLabelByName(parentNote, existingAttributeToEdit.name);
                 }
                 attributes.setLabel(parentNote.noteId, name, value, isInheritable);
             } finally {
@@ -91,5 +87,5 @@ export default function useColTableEditing(api: RefObject<Tabulator>, attributeD
         }
     });
 
-    return {};
+    return { newAttributePosition };
 }

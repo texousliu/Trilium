@@ -123,11 +123,7 @@ export default class TableView extends ViewMode<StateInfo> {
         this.colEditing?.resetNewAttributePosition();
     }
 
-    addNewRowCommand(e) { this.rowEditing?.addNewRowCommand(e); }
-    addNewTableColumnCommand(e) { this.colEditing?.addNewTableColumnCommand(e); }
     deleteTableColumnCommand(e) { this.colEditing?.deleteTableColumnCommand(e); }
-    updateAttributeListCommand(e) { this.colEditing?.updateAttributeListCommand(e); }
-    saveAttributesCommand() { this.colEditing?.saveAttributesCommand(); }
 
     async #manageRowsUpdate() {
         if (!this.api) {

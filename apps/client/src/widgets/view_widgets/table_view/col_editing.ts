@@ -52,23 +52,6 @@ export default class TableColumnEditing extends Component {
         this.existingAttributeToEdit = undefined;
     }
 
-    getFAttributeFromField(field: string) {
-        const [ type, name ] = field.split(".", 2);
-        const attrName = `${type.replace("s", "")}:${name}`;
-        return this.parentNote.getLabel(attrName);
-    }
 
-    getAttributeFromField(field: string): Attribute | undefined {
-        const fAttribute = this.getFAttributeFromField(field);
-        if (fAttribute) {
-            return {
-                name: fAttribute.name,
-                value: fAttribute.value,
-                type: fAttribute.type,
-                isInheritable: fAttribute.isInheritable
-            };
-        }
-        return undefined;
-    }
 
 }
