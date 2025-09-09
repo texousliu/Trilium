@@ -1,11 +1,12 @@
-import { NoteFormatter, NoteTitleFormatter, RowNumberFormatter } from "./formatters.js";
+import { NoteTitleFormatter, RowNumberFormatter } from "./formatters.js";
 import type { CellComponent, ColumnDefinition, EmptyCallback, FormatterParams } from "tabulator-tables";
 import { LabelType } from "../../../services/promoted_attribute_definition_parser.js";
 import { RelationEditor } from "./relation_editor.js";
 import { JSX } from "preact";
 import { renderReactWidget } from "../../react/react_utils.jsx";
-import NoteTitleWidget from "../../note_title.jsx";
 import Icon from "../../react/Icon.jsx";
+import { useEffect, useState } from "preact/hooks";
+import froca from "../../../services/froca.js";
 
 type ColumnType = LabelType | "relation";
 
@@ -50,7 +51,7 @@ const labelTypeMappings: Record<ColumnType, Partial<ColumnDefinition>> = {
     },
     relation: {
         editor: RelationEditor,
-        formatter: NoteFormatter
+        formatter: wrapFormatter(NoteFormatter)
     }
 };
 
@@ -186,5 +187,19 @@ function wrapFormatter(Component: (opts: FormatterOpts) => JSX.Element): ((cell:
         const elWithParams = <Component cell={cell} formatterParams={formatterParams} />;
         return renderReactWidget(null, elWithParams)[0];
     };
+}
+
+function NoteFormatter({ cell }: FormatterOpts) {
+    const noteId = cell.getValue();
+    const [ note, setNote ] = useState(noteId ? froca.getNoteFromCache(noteId) : null)
+
+    useEffect(() => {
+        if (!noteId || note?.noteId === noteId) return;
+        froca.getNote(noteId).then(setNote);
+    }, [ noteId ]);
+
+    return <span className={`reference-link ${note?.getColorClass()}`} data-href={`#root/${noteId}`}>
+        {note && <><Icon icon={note?.getIcon()} />{" "}{note.title}</>}
+    </span>;
 }
 
