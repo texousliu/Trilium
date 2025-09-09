@@ -31,8 +31,8 @@ export default function TableView({ note, noteIds, notePath, viewConfig, saveCon
     const contextMenuEvents = useContextMenu(note, parentComponent, tabulatorRef);
     const persistenceProps = usePersistence(viewConfig, saveConfig);
     const rowEditingEvents = useRowTableEditing(tabulatorRef, attributeDetailWidget, notePath);
-    const { newAttributePosition } = useColTableEditing(tabulatorRef, attributeDetailWidget, note);
-    const { columnDefs, rowData, movableRows, hasChildren } = useData(note, noteIds, viewConfig, newAttributePosition);
+    const { newAttributePosition, resetNewAttributePosition } = useColTableEditing(tabulatorRef, attributeDetailWidget, note);
+    const { columnDefs, rowData, movableRows, hasChildren } = useData(note, noteIds, viewConfig, newAttributePosition, resetNewAttributePosition);
     const dataTreeProps = useMemo<Options>(() => {
         if (!hasChildren) return {};
         return {
@@ -108,7 +108,7 @@ function usePersistence(initialConfig: TableConfig | null | undefined, saveConfi
     return { persistenceReaderFunc, persistenceWriterFunc };
 }
 
-function useData(note: FNote, noteIds: string[], viewConfig: TableConfig | undefined, newAttributePosition: RefObject<number | undefined>) {
+function useData(note: FNote, noteIds: string[], viewConfig: TableConfig | undefined, newAttributePosition: RefObject<number | undefined>, resetNewAttributePosition: () => void) {
     const [ maxDepth ] = useNoteLabelInt(note, "maxNestingDepth") ?? -1;
 
     const [ columnDefs, setColumnDefs ] = useState<ColumnDefinition[]>();
@@ -130,6 +130,7 @@ function useData(note: FNote, noteIds: string[], viewConfig: TableConfig | undef
             setColumnDefs(columnDefs);
             setRowData(rowData);
             setHasChildren(hasChildren);
+            resetNewAttributePosition();
         });
     }
 

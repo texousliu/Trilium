@@ -2,7 +2,7 @@ import { useLegacyImperativeHandlers } from "../../react/hooks";
 import { Attribute } from "../../../services/attribute_parser";
 import { RefObject } from "preact";
 import { Tabulator } from "tabulator-tables";
-import { useRef, useState } from "preact/hooks";
+import { useRef } from "preact/hooks";
 import { CommandListenerData, EventData } from "../../../components/app_context";
 import AttributeDetailWidget from "../../attribute_widgets/attribute_detail";
 import attributes from "../../../services/attributes";
@@ -14,7 +14,7 @@ import { executeBulkActions } from "../../../services/bulk_action";
 
 export default function useColTableEditing(api: RefObject<Tabulator>, attributeDetailWidget: AttributeDetailWidget, parentNote: FNote) {
 
-    const [ existingAttributeToEdit, setExistingAttributeToEdit ] = useState<Attribute>();
+    const existingAttributeToEdit = useRef<Attribute>();
     const newAttribute = useRef<Attribute>();
     const newAttributePosition = useRef<number>();
 
@@ -22,11 +22,11 @@ export default function useColTableEditing(api: RefObject<Tabulator>, attributeD
         addNewTableColumnCommand({ referenceColumn, columnToEdit, direction, type }: EventData<"addNewTableColumn">) {
             let attr: Attribute | undefined;
 
-            setExistingAttributeToEdit(undefined);
+            existingAttributeToEdit.current = undefined;
             if (columnToEdit) {
                 attr = getAttributeFromField(parentNote, columnToEdit.getField());
                 if (attr) {
-                    setExistingAttributeToEdit({ ...attr });
+                    existingAttributeToEdit.current = { ...attr };
                 }
             }
 
@@ -71,16 +71,16 @@ export default function useColTableEditing(api: RefObject<Tabulator>, attributeD
             const { name, value, isInheritable } = newAttribute.current;
 
             api.current.blockRedraw();
-            const isRename = (existingAttributeToEdit && existingAttributeToEdit.name !== name);
+            const isRename = (existingAttributeToEdit.current && existingAttributeToEdit.current.name !== name);
             try {
                 if (isRename) {
-                    const oldName = existingAttributeToEdit!.name.split(":")[1];
+                    const oldName = existingAttributeToEdit.current!.name.split(":")[1];
                     const [ type, newName ] = name.split(":");
                     await renameColumn(parentNote.noteId, type as "label" | "relation", oldName, newName);
                 }
 
-                if (existingAttributeToEdit && (isRename || existingAttributeToEdit.isInheritable !== isInheritable)) {
-                    attributes.removeOwnedLabelByName(parentNote, existingAttributeToEdit.name);
+                if (existingAttributeToEdit.current && (isRename || existingAttributeToEdit.current.isInheritable !== isInheritable)) {
+                    attributes.removeOwnedLabelByName(parentNote, existingAttributeToEdit.current.name);
                 }
                 attributes.setLabel(parentNote.noteId, name, value, isInheritable);
             } finally {
@@ -108,7 +108,13 @@ export default function useColTableEditing(api: RefObject<Tabulator>, attributeD
         }
     });
 
-    return { newAttributePosition };
+    function resetNewAttributePosition() {
+        newAttribute.current = undefined;
+        newAttributePosition.current = undefined;
+        existingAttributeToEdit.current = undefined;
+    }
+
+    return { newAttributePosition, resetNewAttributePosition };
 }
 
 async function deleteColumn(parentNoteId: string, type: "label" | "relation", columnName: string) {
