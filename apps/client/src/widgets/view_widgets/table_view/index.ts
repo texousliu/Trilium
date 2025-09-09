@@ -3,7 +3,6 @@ import attributes from "../../../services/attributes.js";
 import SpacedUpdate from "../../../services/spaced_update.js";
 import type { EventData } from "../../../components/app_context.js";
 
-import { canReorderRows, configureReorderingRows } from "./dragging.js";
 import buildFooter from "./footer.js";
 import getAttributeDefinitionInformation, { buildRowDefinitions } from "./rows.js";
 import { AttributeDefinitionInformation, buildColumnDefinitions } from "./columns.js";
@@ -49,14 +48,6 @@ export default class TableView extends ViewMode<StateInfo> {
         return this.$root;
     }
 
-    private async renderTable(el: HTMLElement) {
-        for (const module of modules) {
-            Tabulator.registerModule(module);
-        }
-
-        this.initialize(el, info);
-    }
-
     private async initialize(el: HTMLElement, info: AttributeDefinitionInformation[]) {
         const viewStorage = await this.viewStorage.restore();
         this.persistentData = viewStorage?.tableData || {};
@@ -66,9 +57,6 @@ export default class TableView extends ViewMode<StateInfo> {
         this.colEditing = new TableColumnEditing(this.args.$parent, this.args.parentNote, this.api);
         this.rowEditing = new TableRowEditing(this.api, this.args.parentNotePath!);
 
-        if (movableRows) {
-            configureReorderingRows(this.api);
-        }
         setupContextMenu(this.api, this.parentNote);
     }
 
@@ -80,21 +68,6 @@ export default class TableView extends ViewMode<StateInfo> {
         // Force a refresh if sorted is changed since we need to disable reordering.
         if (loadResults.getAttributeRows().find(a => a.name === "sorted" && attributes.isAffecting(a, this.parentNote))) {
             return true;
-        }
-
-        // Refresh if promoted attributes get changed.
-        if (loadResults.getAttributeRows().find(attr =>
-            attr.type === "label" &&
-            (attr.name?.startsWith("label:") || attr.name?.startsWith("relation:")) &&
-            attributes.isAffecting(attr, this.parentNote))) {
-            this.#manageColumnUpdate();
-            //return await this.#manageRowsUpdate();
-        }
-
-        // Refresh max depth
-        if (loadResults.getAttributeRows().find(attr => attr.type === "label" && attr.name === "maxNestingDepth" && attributes.isAffecting(attr, this.parentNote))) {
-            this.maxDepth = parseInt(this.parentNote.getLabelValue("maxNestingDepth") ?? "-1", 10);
-            return await this.#manageRowsUpdate();
         }
 
         if (loadResults.getBranchRows().some(branch => branch.parentNoteId === this.parentNote.noteId || this.noteIds.includes(branch.parentNoteId ?? ""))

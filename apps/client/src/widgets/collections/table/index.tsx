@@ -134,7 +134,7 @@ function useData(note: FNote, noteIds: string[], viewConfig: TableConfig | undef
         });
     }
 
-    useEffect(refresh, [ note, noteIds ]);
+    useEffect(refresh, [ note, noteIds, maxDepth ]);
 
     // React to column changes.
     useTriliumEvent("entitiesReloaded", ({ loadResults}) => {
