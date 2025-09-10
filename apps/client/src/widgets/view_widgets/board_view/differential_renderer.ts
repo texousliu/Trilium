@@ -95,8 +95,6 @@ export class DifferentialBoardRenderer {
             const $columnEl = this.createColumn(column, columnItems);
             this.$container.append($columnEl);
         }
-
-        this.addAddColumnButton();
     }
 
     private async differentialRender(oldState: BoardState, newState: BoardState): Promise<void> {
@@ -329,24 +327,6 @@ export class DifferentialBoardRenderer {
     }
 
     private createColumn(column: string, columnItems: { note: any; branch: any }[]): JQuery<HTMLElement> {
-        const $columnEl = $("<div>")
-            .addClass("board-column")
-            .attr("data-column", column);
-
-        // Create header
-        const $titleEl = $("<h3>").attr("data-column-value", column);
-
-        // Create title text
-        const $titleText = $("<span>").text(column);
-
-        // Create edit icon
-        const $editIcon = $("<span>")
-            .addClass("edit-icon icon bx bx-edit-alt")
-            .attr("title", "Click to edit column title");
-
-        $titleEl.append($titleText, $editIcon);
-        $columnEl.append($titleEl);
-
         // Setup column dragging
         this.dragHandler.setupColumnDrag($columnEl, column);
 
@@ -363,47 +343,18 @@ export class DifferentialBoardRenderer {
         this.dragHandler.setupNoteDropZone($columnEl, column);
         this.dragHandler.setupColumnDropZone($columnEl);
 
-        // Add cards
-        for (const item of columnItems) {
-            if (item.note) {
-                const $noteEl = this.createCard(item.note, item.branch, column);
-                $columnEl.append($noteEl);
-            }
-        }
-
         // Add "New item" button
         const $newItemEl = $("<div>")
             .addClass("board-new-item")
             .attr("data-column", column)
-            .html(`<span class="icon bx bx-plus"></span> ${t("board_view.new-item")}`);
+            .html(`<span class="icon bx bx-plus"></span> ${}`);
 
-        $newItemEl.on("click", () => this.onCreateNewItem(column));
         $columnEl.append($newItemEl);
 
         return $columnEl;
     }
 
     private createCard(note: any, branch: any, column: string): JQuery<HTMLElement> {
-        const $iconEl = $("<span>")
-            .addClass("icon")
-            .addClass(note.getIcon());
-
-        const colorClass = note.getColorClass() || '';
-
-        const $noteEl = $("<div>")
-            .addClass("board-note")
-            .attr("data-note-id", note.noteId)
-            .attr("data-branch-id", branch.branchId)
-            .attr("data-current-column", column)
-            .attr("data-icon-class", note.getIcon())
-            .attr("data-color-class", colorClass)
-            .text(note.title);
-
-        // Add color class to the card if it exists
-        if (colorClass) {
-            $noteEl.addClass(colorClass);
-        }
-
         $noteEl.prepend($iconEl);
         $noteEl.on("click", () => appContext.triggerCommand("openInPopup", { noteIdOrPath: note.noteId }));
 
@@ -411,16 +362,6 @@ export class DifferentialBoardRenderer {
         this.dragHandler.setupNoteDrag($noteEl, note, branch);
 
         return $noteEl;
-    }
-
-    private addAddColumnButton(): void {
-        if (this.$container.find('.board-add-column').length === 0) {
-            const $addColumnEl = $("<div>")
-                .addClass("board-add-column")
-                .html(`<span class="icon bx bx-plus"></span> ${t("board_view.add-column")}`);
-
-            this.$container.append($addColumnEl);
-        }
     }
 
     forceFullRender(): void {

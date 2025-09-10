@@ -29,10 +29,6 @@ export default class BoardApi {
         return this.byColumn.get(column);
     }
 
-    async changeColumn(noteId: string, newColumn: string) {
-        await attributes.setLabel(noteId, this._statusAttribute, newColumn);
-    }
-
     openNote(noteId: string) {
         appContext.triggerCommand("openInPopup", { noteIdOrPath: noteId });
     }
@@ -95,21 +91,6 @@ export default class BoardApi {
         this.viewStorage.store(this.persistedData);
     }
 
-    async createColumn(columnValue: string) {
-        // Add the new column to persisted data if it doesn't exist
-        if (!this.persistedData.columns) {
-            this.persistedData.columns = [];
-        }
-
-        const existingColumn = this.persistedData.columns.find(col => col.value === columnValue);
-        if (!existingColumn) {
-            this.persistedData.columns.push({ value: columnValue });
-            await this.viewStorage.store(this.persistedData);
-        }
-
-        return columnValue;
-    }
-
     async reorderColumns(newColumnOrder: string[]) {
         // Update the column order in persisted data
         if (!this.persistedData.columns) {
@@ -135,16 +116,13 @@ export default class BoardApi {
 
     async refresh(parentNote: FNote) {
         // Refresh the API data by re-fetching from the parent note
-        const statusAttribute = parentNote.getLabelValue("board:groupBy") ?? "status";
-        this._statusAttribute = statusAttribute;
 
         // Use the current in-memory persisted data instead of restoring from storage
         // This ensures we don't lose recent updates like column renames
-        const { byColumn, newPersistedData } = await getBoardData(parentNote, statusAttribute, this.persistedData);
-        
+
         // Update internal state
         this.byColumn = byColumn;
-        
+
         if (newPersistedData) {
             this.persistedData = newPersistedData;
             this.viewStorage.store(this.persistedData);
@@ -161,18 +139,6 @@ export default class BoardApi {
         const statusAttribute = parentNote.getLabelValue("board:groupBy") ?? "status";
 
         let persistedData = await viewStorage.restore() ?? {};
-        const { byColumn, newPersistedData } = await getBoardData(parentNote, statusAttribute, persistedData);
-        
-        // Use the order from persistedData.columns, then add any new columns found
-        const orderedColumns = persistedData.columns?.map(col => col.value) || [];
-        const allColumns = Array.from(byColumn.keys());
-        const newColumns = allColumns.filter(col => !orderedColumns.includes(col));
-        const columns = [...orderedColumns, ...newColumns];
-
-        if (newPersistedData) {
-            persistedData = newPersistedData;
-            viewStorage.store(persistedData);
-        }
 
         return new BoardApi(columns, parentNote.noteId, viewStorage, byColumn, persistedData, statusAttribute);
     }

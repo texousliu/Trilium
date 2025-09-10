@@ -1,13 +1,13 @@
 import FBranch from "../../../entities/fbranch";
 import FNote from "../../../entities/fnote";
-import { BoardData } from "./config";
+import { BoardViewData } from "./index";
 
 export type ColumnMap = Map<string, {
     branch: FBranch;
     note: FNote;
 }[]>;
 
-export async function getBoardData(parentNote: FNote, groupByColumn: string, persistedData: BoardData) {
+export async function getBoardData(parentNote: FNote, groupByColumn: string, persistedData: BoardViewData) {
     const byColumn: ColumnMap = new Map();
 
     // First, scan all notes to find what columns actually exist
@@ -43,7 +43,7 @@ export async function getBoardData(parentNote: FNote, groupByColumn: string, per
     }
 
     // Return updated persisted data only if there were changes
-    let newPersistedData: BoardData | undefined;
+    let newPersistedData: BoardViewData | undefined;
     const hasChanges = newColumnValues.length > 0 ||
                       existingPersistedColumns.length !== deduplicatedColumns.length ||
                       !existingPersistedColumns.every((col, idx) => deduplicatedColumns[idx]?.value === col.value);
@@ -65,6 +65,7 @@ async function recursiveGroupBy(branches: FBranch[], byColumn: ColumnMap, groupB
     for (const branch of branches) {
         const note = await branch.getNote();
         if (!note) {
+            console.warn("Not note found");
             continue;
         }
 
