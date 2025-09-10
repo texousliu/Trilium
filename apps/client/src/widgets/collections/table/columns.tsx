@@ -1,12 +1,11 @@
-import { NoteTitleFormatter, RowNumberFormatter } from "./formatters.js";
-import type { CellComponent, ColumnDefinition, EmptyCallback, FormatterParams } from "tabulator-tables";
+import type { CellComponent, ColumnDefinition, EmptyCallback, FormatterParams, ValueBooleanCallback, ValueVoidCallback } from "tabulator-tables";
 import { LabelType } from "../../../services/promoted_attribute_definition_parser.js";
-import { RelationEditor } from "./relation_editor.js";
 import { JSX } from "preact";
 import { renderReactWidget } from "../../react/react_utils.jsx";
 import Icon from "../../react/Icon.jsx";
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import froca from "../../../services/froca.js";
+import NoteAutocomplete from "../../react/NoteAutocomplete.jsx";
 
 type ColumnType = LabelType | "relation";
 
@@ -50,7 +49,7 @@ const labelTypeMappings: Record<ColumnType, Partial<ColumnDefinition>> = {
         }
     },
     relation: {
-        editor: RelationEditor,
+        editor: wrapEditor(RelationEditor),
         formatter: wrapFormatter(NoteFormatter)
     }
 };
@@ -178,9 +177,29 @@ interface FormatterOpts {
     formatterParams: FormatterParams;
 }
 
+interface EditorOpts {
+    cell: CellComponent,
+    onRendered: EmptyCallback,
+    success: ValueBooleanCallback,
+    cancel: ValueVoidCallback,
+    editorParams: {}
+}
+
 function wrapFormatter(Component: (opts: FormatterOpts) => JSX.Element): ((cell: CellComponent, formatterParams: {}, onRendered: EmptyCallback) => string | HTMLElement) {
     return (cell, formatterParams, onRendered) => {
         const elWithParams = <Component cell={cell} formatterParams={formatterParams} />;
+        return renderReactWidget(null, elWithParams)[0];
+    };
+}
+
+function wrapEditor(Component: (opts: EditorOpts) => JSX.Element): ((
+    cell: CellComponent,
+    success: ValueBooleanCallback,
+    cancel: ValueVoidCallback,
+    editorParams: {},
+) => HTMLElement | false) {
+    return (cell, _, success, cancel, editorParams) => {
+        const elWithParams = <Component cell={cell} success={success} cancel={cancel} editorParams={editorParams} />
         return renderReactWidget(null, elWithParams)[0];
     };
 }
@@ -199,3 +218,17 @@ function NoteFormatter({ cell }: FormatterOpts) {
     </span>;
 }
 
+function RelationEditor({ cell, success }: EditorOpts) {
+    const inputRef = useRef<HTMLInputElement>(null);
+    useEffect(() => inputRef.current?.focus());
+
+    return <NoteAutocomplete
+        inputRef={inputRef}
+        noteId={cell.getValue()}
+        opts={{
+            allowCreatingNotes: true,
+            hideAllButtons: true
+        }}
+        noteIdChanged={success}
+    />
+}
