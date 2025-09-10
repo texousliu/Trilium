@@ -29,10 +29,6 @@ export default class BoardApi {
         return this.byColumn.get(column);
     }
 
-    async changeColumn(noteId: string, newColumn: string) {
-        await attributes.setLabel(noteId, this._statusAttribute, newColumn);
-    }
-
     openNote(noteId: string) {
         appContext.triggerCommand("openInPopup", { noteIdOrPath: noteId });
     }

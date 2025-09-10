@@ -349,9 +349,8 @@ export class DifferentialBoardRenderer {
         const $newItemEl = $("<div>")
             .addClass("board-new-item")
             .attr("data-column", column)
-            .html(`<span class="icon bx bx-plus"></span> ${t("board_view.new-item")}`);
+            .html(`<span class="icon bx bx-plus"></span> ${}`);
 
-        $newItemEl.on("click", () => this.onCreateNewItem(column));
         $columnEl.append($newItemEl);
 
         return $columnEl;

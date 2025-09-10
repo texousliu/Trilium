@@ -5,6 +5,9 @@ import { ColumnMap, getBoardData } from "./data";
 import { useNoteLabel } from "../../react/hooks";
 import FNote from "../../../entities/fnote";
 import FBranch from "../../../entities/fbranch";
+import Icon from "../../react/Icon";
+import { t } from "../../../services/i18n";
+import { createNewItem } from "./api";
 
 export interface BoardViewData {
     columns?: BoardColumnData[];
@@ -40,14 +43,18 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
         <div className="board-view">
             <div className="board-view-container">
                 {byColumn && columns?.map(column => (
-                    <Column column={column} columnItems={byColumn.get(column)} />
+                    <Column
+                        column={column}
+                        columnItems={byColumn.get(column)}
+                        parentNote={parentNote}
+                    />
                 ))}
             </div>
         </div>
     )
 }
 
-function Column({ column, columnItems }: { column: string, columnItems?: { note: FNote, branch: FBranch }[] }) {
+function Column({ parentNote, column, columnItems }: { parentNote: FNote, column: string, columnItems?: { note: FNote, branch: FBranch }[] }) {
     return (
         <div className="board-column">
             <h3>
@@ -60,6 +67,11 @@ function Column({ column, columnItems }: { column: string, columnItems?: { note:
             {(columnItems ?? []).map(({ note, branch }) => (
                 <Card note={note} branch={branch} column={column} />
             ))}
+
+            <div className="board-new-item" onClick={() => createNewItem(parentNote, column)}>
+                <Icon icon="bx bx-plus" />{" "}
+                {t("board_view.new-item")}
+            </div>
         </div>
     )
 }

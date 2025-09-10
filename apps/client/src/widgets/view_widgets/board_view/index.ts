@@ -64,7 +64,6 @@ export default class BoardView extends ViewMode<BoardData> {
             this.$container,
             this.api,
             this.dragHandler,
-            (column: string) => this.createNewItem(column),
             this.parentNote,
             this.viewStorage,
             () => this.refreshApi()
@@ -217,32 +216,6 @@ export default class BoardView extends ViewMode<BoardData> {
             await this.api?.renameColumn(oldValue, newValue, noteIds);
         } catch (error) {
             console.error("Failed to rename column:", error);
-        }
-    }
-
-    private async createNewItem(column: string) {
-        try {
-            // Get the parent note path
-            const parentNotePath = this.parentNote.noteId;
-
-            // Create a new note as a child of the parent note
-            const { note: newNote } = await noteCreateService.createNote(parentNotePath, {
-                activate: false,
-                title: "New item"
-            });
-
-            if (newNote) {
-                // Set the status label to place it in the correct column
-                await this.api?.changeColumn(newNote.noteId, column);
-
-                // Refresh the board to show the new item
-                await this.renderList();
-
-                // Start inline editing of the newly created card
-                this.startInlineEditingCard(newNote.noteId);
-            }
-        } catch (error) {
-            console.error("Failed to create new item:", error);
         }
     }
 
