@@ -345,14 +345,6 @@ export class DifferentialBoardRenderer {
         this.dragHandler.setupNoteDropZone($columnEl, column);
         this.dragHandler.setupColumnDropZone($columnEl);
 
-        // Add cards
-        for (const item of columnItems) {
-            if (item.note) {
-                const $noteEl = this.createCard(item.note, item.branch, column);
-                $columnEl.append($noteEl);
-            }
-        }
-
         // Add "New item" button
         const $newItemEl = $("<div>")
             .addClass("board-new-item")
@@ -366,26 +358,6 @@ export class DifferentialBoardRenderer {
     }
 
     private createCard(note: any, branch: any, column: string): JQuery<HTMLElement> {
-        const $iconEl = $("<span>")
-            .addClass("icon")
-            .addClass(note.getIcon());
-
-        const colorClass = note.getColorClass() || '';
-
-        const $noteEl = $("<div>")
-            .addClass("board-note")
-            .attr("data-note-id", note.noteId)
-            .attr("data-branch-id", branch.branchId)
-            .attr("data-current-column", column)
-            .attr("data-icon-class", note.getIcon())
-            .attr("data-color-class", colorClass)
-            .text(note.title);
-
-        // Add color class to the card if it exists
-        if (colorClass) {
-            $noteEl.addClass(colorClass);
-        }
-
         $noteEl.prepend($iconEl);
         $noteEl.on("click", () => appContext.triggerCommand("openInPopup", { noteIdOrPath: note.noteId }));
 

@@ -3,6 +3,8 @@ import { ViewModeProps } from "../interface";
 import "./index.css";
 import { ColumnMap, getBoardData } from "./data";
 import { useNoteLabel } from "../../react/hooks";
+import FNote from "../../../entities/fnote";
+import FBranch from "../../../entities/fbranch";
 
 export interface BoardViewData {
     columns?: BoardColumnData[];
@@ -37,15 +39,15 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     return (
         <div className="board-view">
             <div className="board-view-container">
-                {columns?.map(column => (
-                    <Column column={column} />
+                {byColumn && columns?.map(column => (
+                    <Column column={column} columnItems={byColumn.get(column)} />
                 ))}
             </div>
         </div>
     )
 }
 
-function Column({ column }: { column: string }) {
+function Column({ column, columnItems }: { column: string, columnItems?: { note: FNote, branch: FBranch }[] }) {
     return (
         <div className="board-column">
             <h3>
@@ -54,6 +56,21 @@ function Column({ column }: { column: string }) {
                     className="edit-icon icon bx bx-edit-alt"
                     title="Click to edit column title" />
             </h3>
+
+            {(columnItems ?? []).map(({ note, branch }) => (
+                <Card note={note} branch={branch} column={column} />
+            ))}
+        </div>
+    )
+}
+
+function Card({ note }: { note: FNote, branch: FBranch, column: string }) {
+    const colorClass = note.getColorClass() || '';
+
+    return (
+        <div className={`board-note ${colorClass}`}>
+            <span class={`icon ${note.getIcon()}`} />
+            {note.title}
         </div>
     )
 }
