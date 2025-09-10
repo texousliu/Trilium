@@ -23,7 +23,15 @@
         pkgs = import nixpkgs { inherit system; };
         electron = pkgs."electron_${lib.versions.major packageJsonDesktop.devDependencies.electron}";
         nodejs = pkgs.nodejs_22;
-        pnpm = pkgs.pnpm_10;
+        # pnpm creates an overly long PATH env variable for child processes.
+        # This patch deduplicates entries in PATH, which results in an equivalent but shorter entry.
+        # https://github.com/pnpm/pnpm/issues/6106
+        # https://github.com/pnpm/pnpm/issues/8552
+        pnpm = (pkgs.pnpm_10.overrideAttrs (prev: {
+          postInstall = prev.postInstall + ''
+            patch $out/libexec/pnpm/dist/pnpm.cjs ${./patches/pnpm-PATH-reduction.patch}
+          '';
+        }));
         inherit (pkgs)
           copyDesktopItems
           darwin
@@ -47,7 +55,8 @@
               baseName = baseNameOf (toString name);
             in
             # No need to copy the flake.
-            baseName != "flake.nix" && baseName != "flake.lock"
+            # No need to copy local copy of node_modules.
+            baseName != "flake.nix" && baseName != "flake.lock" && baseName != "node_modules"
           );
         fullCleanSource =
           src:
@@ -139,6 +148,11 @@
               runHook postInstall
             '';
 
+            # This file is a symlink into /build which is not allowed.
+            postFixup = ''
+              rm $out/opt/trilium*/node_modules/better-sqlite3/node_modules/.bin/prebuild-install || true
+            '';
+
             components = [
               "packages/ckeditor5"
               "packages/ckeditor5-admonition"
@@ -181,7 +195,13 @@
 
         desktop = makeApp {
           app = "desktop";
-          preBuildCommands = "export npm_config_nodedir=${electron.headers}; pnpm postinstall";
+          # pnpm throws an error at the end of `pnpm postinstall`, but it doesn't seem to matter:
+          # ENOENT: no such file or directory, lstat
+          # '/build/source/apps/desktop/node_modules/better-sqlite3/build/node_gyp_bins'
+          preBuildCommands = ''
+            export npm_config_nodedir=${electron.headers}
+            pnpm postinstall || true
+          '';
           buildTask = "desktop:build";
           mainProgram = "trilium";
           installCommands = ''
@@ -202,7 +222,16 @@
 
         server = makeApp {
           app = "server";
-          preBuildCommands = "pushd apps/server; pnpm rebuild; popd";
+          # pnpm throws an error at the end of `pnpm rebuild`, but it doesn't seem to matter:
+          # ERR_PNPM_MISSING_HOISTED_LOCATIONS
+          # vite@7.1.5(@types/node@24.3.0)(jiti@2.5.1)(less@4.1.3)(lightningcss@1.30.1)
+          # (sass-embedded@1.91.0)(sass@1.91.0)(terser@5.43.1)(tsx@4.20.5)(yaml@2.8.1)
+          # is not found in hoistedLocations inside node_modules/.modules.yaml
+          preBuildCommands = ''
+            pushd apps/server
+            pnpm rebuild || true
+            popd
+          '';
           buildTask = "server:build";
           mainProgram = "trilium-server";
           installCommands = ''
