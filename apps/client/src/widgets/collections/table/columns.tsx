@@ -95,10 +95,6 @@ export function buildColumnDefinitions({ info, movableRows, existingColumnData, 
             editor: "input",
             formatter: wrapFormatter(({ cell }) => {
                 const { noteId, iconClass, colorClass } = cell.getRow().getData();
-                if (!noteId) {
-                    return "";
-                }
-
                 return <span className={`reference-link ${colorClass}`} data-href={`#root/${noteId}`}>
                     <Icon icon={iconClass} />{" "}{cell.getValue()}
                 </span>;
