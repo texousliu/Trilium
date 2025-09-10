@@ -8,6 +8,7 @@ import GeoView from "./geomap";
 import ViewModeStorage from "../view_widgets/view_mode_storage";
 import CalendarView from "./calendar";
 import TableView from "./table";
+import BoardView from "./board";
 
 interface NoteListProps<T extends object> {
     note?: FNote | null;
@@ -88,6 +89,8 @@ function getComponentByViewType(viewType: ViewTypeOptions, props: ViewModeProps<
             return <CalendarView {...props} />
         case "table":
             return <TableView {...props} />
+        case "board":
+            return <BoardView {...props} />
     }
 }
 

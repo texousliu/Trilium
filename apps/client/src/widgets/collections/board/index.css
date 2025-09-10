@@ -1,0 +1,264 @@
+.board-view {
+  overflow-x: auto;
+  position: relative;
+  height: 100%;
+  user-select: none;
+}
+
+.board-view-container {
+  height: 100%;
+  display: flex;
+  gap: 1em;
+  padding: 1em;
+  padding-bottom: 0;
+  align-items: flex-start;
+}
+
+.board-view-container .board-column {
+  width: 250px;
+  flex-shrink: 0;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 0.5em;
+  background-color: var(--accented-background-color);
+  transition: border-color 0.2s ease;
+  overflow-y: auto;
+  max-height: 100%;
+}
+
+.board-view-container .board-column.drag-over {
+  border-color: var(--main-text-color);
+  background-color: var(--hover-item-background-color);
+}
+
+.board-view-container .board-column h3 {
+  font-size: 1em;
+  margin-bottom: 0.75em;
+  padding: 0.5em 0.5em 0.5em 0.5em;
+  border-bottom: 1px solid var(--main-border-color);
+  cursor: grab;
+  position: relative;
+  transition: background-color 0.2s ease, border-radius 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  background-color: transparent;
+}
+
+.board-view-container .board-column h3:active {
+  cursor: grabbing;
+}
+
+.board-view-container .board-column h3.editing {
+  cursor: default;
+}
+
+.board-view-container .board-column h3:hover {
+  background-color: var(--hover-item-background-color);
+  border-radius: 4px;
+}
+
+.board-view-container .board-column h3.editing {
+  background-color: var(--main-background-color);
+  border: 1px solid var(--main-text-color);
+  border-radius: 4px;
+}
+
+.board-view-container .board-column.column-dragging {
+  opacity: 0.6;
+  transform: scale(0.98);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.board-view-container .board-column h3 input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  width: 100%;
+  font-family: inherit;
+}
+
+.board-view-container .board-column h3 .edit-icon {
+  opacity: 0;
+  margin-left: 0.5em;
+  transition: opacity 0.2s ease;
+  color: var(--muted-text-color);
+}
+
+.board-view-container .board-column h3:hover .edit-icon {
+  opacity: 1;
+}
+
+.board-view-container .board-column h3.editing .edit-icon {
+  display: none;
+}
+
+.board-view-container .board-note {
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+  margin: 0.65em 0;
+  padding: 0.5em;
+  border-radius: 5px;
+  cursor: move;
+  position: relative;
+  background-color: var(--main-background-color);
+  border: 1px solid var(--main-border-color);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.15s ease;
+  opacity: 1;
+}
+
+.board-view-container .board-note.fade-in {
+  animation: fadeIn 0.15s ease-in;
+}
+
+.board-view-container .board-note.fade-out {
+  animation: fadeOut 0.15s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
+.board-view-container .board-note.card-updated {
+  animation: cardUpdate 0.3s ease-in-out;
+}
+
+@keyframes cardUpdate {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
+  100% { transform: scale(1); }
+}
+
+.board-view-container .board-note:hover {
+  transform: translateY(-2px);
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.35);
+}
+
+.board-view-container .board-note.dragging {
+  opacity: 0.8;
+  transform: rotate(5deg);
+  z-index: 1000;
+  box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+.board-view-container .board-note.editing {
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.35);
+  border-color: var(--main-text-color);
+}
+
+.board-view-container .board-note.editing input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  width: 100%;
+  padding: 0;
+}
+
+.board-view-container .board-note .icon {
+  margin-right: 0.25em;
+}
+
+.board-drop-indicator {
+  height: 3px;
+  background-color: var(--main-text-color);
+  border-radius: 2px;
+  margin: 0.25em 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.board-drop-indicator.show {
+  opacity: 1;
+}
+
+.column-drop-indicator {
+  width: 4px;
+  background-color: var(--main-text-color);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  height: 100%;
+  z-index: 1000;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
+}
+
+.column-drop-indicator.show {
+  opacity: 1;
+}
+
+.board-new-item {
+  margin-top: 0.5em;
+  padding: 0.5em;
+  border-radius: 5px;
+  color: var(--muted-text-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: transparent;
+}
+
+.board-new-item:hover {
+  border-color: var(--main-text-color);
+  color: var(--main-text-color);
+  background-color: var(--hover-item-background-color);
+}
+
+.board-new-item .icon {
+  margin-right: 0.25em;
+}
+
+.board-add-column {
+  width: 180px;
+  flex-shrink: 0;
+  height: 60px;
+  border-radius: 8px;
+  padding: 0.5em;
+  background-color: var(--accented-background-color);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--muted-text-color);
+  font-size: 0.9em;
+  align-self: flex-start;
+}
+
+.board-add-column:hover {
+  border-color: var(--main-text-color);
+  color: var(--main-text-color);
+  background-color: var(--hover-item-background-color);
+}
+
+.board-add-column .icon {
+  margin-right: 0.5em;
+  font-size: 1.2em;
+}
+
+.board-drag-preview {
+  position: fixed;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0.8;
+  transform: rotate(5deg);
+  box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.5);
+  background-color: var(--main-background-color);
+  border: 1px solid var(--main-border-color);
+  border-radius: 5px;
+  padding: 0.5em;
+  font-size: 0.9em;
+  max-width: 200px;
+  word-wrap: break-word;
+}

@@ -329,24 +329,6 @@ export class DifferentialBoardRenderer {
     }
 
     private createColumn(column: string, columnItems: { note: any; branch: any }[]): JQuery<HTMLElement> {
-        const $columnEl = $("<div>")
-            .addClass("board-column")
-            .attr("data-column", column);
-
-        // Create header
-        const $titleEl = $("<h3>").attr("data-column-value", column);
-
-        // Create title text
-        const $titleText = $("<span>").text(column);
-
-        // Create edit icon
-        const $editIcon = $("<span>")
-            .addClass("edit-icon icon bx bx-edit-alt")
-            .attr("title", "Click to edit column title");
-
-        $titleEl.append($titleText, $editIcon);
-        $columnEl.append($titleEl);
-
         // Setup column dragging
         this.dragHandler.setupColumnDrag($columnEl, column);
 
