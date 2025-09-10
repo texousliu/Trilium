@@ -95,8 +95,6 @@ export class DifferentialBoardRenderer {
             const $columnEl = this.createColumn(column, columnItems);
             this.$container.append($columnEl);
         }
-
-        this.addAddColumnButton();
     }
 
     private async differentialRender(oldState: BoardState, newState: BoardState): Promise<void> {
@@ -364,16 +362,6 @@ export class DifferentialBoardRenderer {
         this.dragHandler.setupNoteDrag($noteEl, note, branch);
 
         return $noteEl;
-    }
-
-    private addAddColumnButton(): void {
-        if (this.$container.find('.board-add-column').length === 0) {
-            const $addColumnEl = $("<div>")
-                .addClass("board-add-column")
-                .html(`<span class="icon bx bx-plus"></span> ${t("board_view.add-column")}`);
-
-            this.$container.append($addColumnEl);
-        }
     }
 
     forceFullRender(): void {

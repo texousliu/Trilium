@@ -247,6 +247,18 @@
   font-size: 1.2em;
 }
 
+.board-add-column input {
+  background: var(--main-background-color);
+  border: 1px solid var(--main-text-color);
+  border-radius: 4px;
+  padding: 0.5em;
+  color: var(--main-text-color);
+  font-family: inherit;
+  font-size: inherit;
+  width: 100%;
+  text-align: center;
+}
+
 .board-drag-preview {
   position: fixed;
   z-index: 10000;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "preact/hooks";
+import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { ViewModeProps } from "../interface";
 import "./index.css";
 import { ColumnMap, getBoardData } from "./data";
@@ -8,6 +8,7 @@ import FBranch from "../../../entities/fbranch";
 import Icon from "../../react/Icon";
 import { t } from "../../../services/i18n";
 import { createNewItem } from "./api";
+import FormTextBox from "../../react/FormTextBox";
 
 export interface BoardViewData {
     columns?: BoardColumnData[];
@@ -76,6 +77,8 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
                         parentNote={parentNote}
                     />
                 ))}
+
+                <AddNewColumn viewConfig={viewConfig} saveConfig={saveConfig} />
             </div>
         </div>
     )
@@ -110,6 +113,65 @@ function Card({ note }: { note: FNote, branch: FBranch, column: string }) {
         <div className={`board-note ${colorClass}`}>
             <span class={`icon ${note.getIcon()}`} />
             {note.title}
+        </div>
+    )
+}
+
+function AddNewColumn({ viewConfig, saveConfig }: { viewConfig?: BoardViewData, saveConfig: (data: BoardViewData) => void }) {
+    const [ isCreatingNewColumn, setIsCreatingNewColumn ] = useState(false);
+    const columnNameRef = useRef<HTMLInputElement>(null);
+
+    const addColumnCallback = useCallback(() => {
+        setIsCreatingNewColumn(true);
+    }, []);
+
+    const finishEdit = useCallback((save: boolean) => {
+        const columnName = columnNameRef.current?.value;
+        if (!columnName || !save) {
+            setIsCreatingNewColumn(false);
+            return;
+        }
+
+        // Add the new column to persisted data if it doesn't exist
+        if (!viewConfig) {
+            viewConfig = {};
+        }
+
+        if (!viewConfig.columns) {
+            viewConfig.columns = [];
+        }
+
+        const existingColumn = viewConfig.columns.find(col => col.value === columnName);
+        if (!existingColumn) {
+            viewConfig.columns.push({ value: columnName });
+            saveConfig(viewConfig);
+        }
+    }, []);
+
+    return (
+        <div className={`board-add-column ${isCreatingNewColumn ? "editing" : ""}`} onClick={addColumnCallback}>
+            {!isCreatingNewColumn
+            ? <>
+                <Icon icon="bx bx-plus" />{" "}
+                {t("board_view.add-column")}
+            </>
+            : <>
+                <FormTextBox
+                    inputRef={columnNameRef}
+                    type="text"
+                    placeholder="Enter column name..."
+                    onBlur={() => finishEdit(true)}
+                    onKeyDown={(e: KeyboardEvent) => {
+                        if (e.key === "Enter") {
+                            e.preventDefault();
+                            finishEdit(true);
+                        } else if (e.key === "Escape") {
+                            e.preventDefault();
+                            finishEdit(false);
+                        }
+                    }}
+                />
+            </>}
         </div>
     )
 }

@@ -246,27 +246,6 @@ export default class BoardView extends ViewMode<BoardData> {
     }
 
     private startCreatingNewColumn($addColumnEl: JQuery<HTMLElement>) {
-        if ($addColumnEl.hasClass("editing")) {
-            return; // Already editing
-        }
-
-        $addColumnEl.addClass("editing");
-
-        const $input = $("<input>")
-            .attr("type", "text")
-            .attr("placeholder", "Enter column name...")
-            .css({
-                background: "var(--main-background-color)",
-                border: "1px solid var(--main-text-color)",
-                borderRadius: "4px",
-                padding: "0.5em",
-                color: "var(--main-text-color)",
-                fontFamily: "inherit",
-                fontSize: "inherit",
-                width: "100%",
-                textAlign: "center"
-            });
-
         $addColumnEl.empty().append($input);
         $input.focus();
 
@@ -283,21 +262,7 @@ export default class BoardView extends ViewMode<BoardData> {
                     await this.createNewColumn(columnName.trim());
                 }
             }
-
-            // Restore the add button
-            $addColumnEl.html('<span class="icon bx bx-plus"></span>Add Column');
         };
-
-        $input.on("blur", () => finishEdit(true));
-        $input.on("keydown", (e) => {
-            if (e.key === "Enter") {
-                e.preventDefault();
-                finishEdit(true);
-            } else if (e.key === "Escape") {
-                e.preventDefault();
-                finishEdit(false);
-            }
-        });
     }
 
     private async createNewColumn(columnName: string) {
