@@ -318,31 +318,6 @@ export default class BoardView extends ViewMode<BoardData> {
         }
     }
 
-    async onEntitiesReloaded({ loadResults }: EventData<"entitiesReloaded">) {
-        // Check if any changes affect our board
-        const hasRelevantChanges =
-            // React to changes in status attribute for notes in this board
-            loadResults.getAttributeRows().some(attr => attr.name === this.api?.statusAttribute && this.noteIds.includes(attr.noteId!)) ||
-            // React to changes in note title
-            loadResults.getNoteIds().some(noteId => this.noteIds.includes(noteId)) ||
-            // React to changes in branches for subchildren (e.g., moved, added, or removed notes)
-            loadResults.getBranchRows().some(branch => this.noteIds.includes(branch.noteId!)) ||
-            // React to changes in note icon or color.
-            loadResults.getAttributeRows().some(attr => [ "iconClass", "color" ].includes(attr.name ?? "") && this.noteIds.includes(attr.noteId ?? "")) ||
-            // React to attachment change
-            loadResults.getAttachmentRows().some(att => att.ownerId === this.parentNote.noteId && att.title === "board.json") ||
-            // React to changes in "groupBy"
-            loadResults.getAttributeRows().some(attr => attr.name === "board:groupBy" && attr.noteId === this.parentNote.noteId);
-
-        if (hasRelevantChanges && this.renderer) {
-            // Use differential rendering with API refresh
-            await this.renderer.renderBoard(true);
-        }
-
-        // Don't trigger full view refresh - let differential renderer handle it
-        return false;
-    }
-
     private onSave() {
         this.viewStorage.store(this.persistentData);
     }

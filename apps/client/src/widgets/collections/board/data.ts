@@ -65,6 +65,7 @@ async function recursiveGroupBy(branches: FBranch[], byColumn: ColumnMap, groupB
     for (const branch of branches) {
         const note = await branch.getNote();
         if (!note) {
+            console.warn("Not note found");
             continue;
         }
 

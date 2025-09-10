@@ -2,7 +2,7 @@ import { useEffect, useState } from "preact/hooks";
 import { ViewModeProps } from "../interface";
 import "./index.css";
 import { ColumnMap, getBoardData } from "./data";
-import { useNoteLabel } from "../../react/hooks";
+import { useNoteLabel, useTriliumEvent } from "../../react/hooks";
 import FNote from "../../../entities/fnote";
 import FBranch from "../../../entities/fbranch";
 import Icon from "../../react/Icon";
@@ -22,7 +22,7 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     const [ byColumn, setByColumn ] = useState<ColumnMap>();
     const [ columns, setColumns ] = useState<string[]>();
 
-    useEffect(() => {
+    function refresh() {
         getBoardData(parentNote, statusAttribute ?? "status", viewConfig ?? {}).then(({ byColumn, newPersistedData }) => {
             setByColumn(byColumn);
 
@@ -37,7 +37,34 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
             const newColumns = allColumns.filter(col => !orderedColumns.includes(col));
             setColumns([...orderedColumns, ...newColumns]);
         });
-    }, [ parentNote ]);
+    }
+
+    useEffect(refresh, [ parentNote, noteIds ]);
+
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        // TODO: Re-enable
+        return;
+
+        // Check if any changes affect our board
+        const hasRelevantChanges =
+            // React to changes in status attribute for notes in this board
+            loadResults.getAttributeRows().some(attr => attr.name === statusAttribute && noteIds.includes(attr.noteId!)) ||
+            // React to changes in note title
+            loadResults.getNoteIds().some(noteId => noteIds.includes(noteId)) ||
+            // React to changes in branches for subchildren (e.g., moved, added, or removed notes)
+            loadResults.getBranchRows().some(branch => noteIds.includes(branch.noteId!)) ||
+            // React to changes in note icon or color.
+            loadResults.getAttributeRows().some(attr => [ "iconClass", "color" ].includes(attr.name ?? "") && noteIds.includes(attr.noteId ?? "")) ||
+            // React to attachment change
+            loadResults.getAttachmentRows().some(att => att.ownerId === parentNote.noteId && att.title === "board.json") ||
+            // React to changes in "groupBy"
+            loadResults.getAttributeRows().some(attr => attr.name === "board:groupBy" && attr.noteId === parentNote.noteId);
+
+        if (hasRelevantChanges) {
+            console.log("Trigger refresh");
+            refresh();
+        }
+    });
 
     return (
         <div className="board-view">
