@@ -324,6 +324,11 @@ export function useNoteLabel(note: FNote | undefined | null, labelName: string):
     ] as const;
 }
 
+export function useNoteLabelWithDefault(note: FNote | undefined | null, labelName: string, defaultValue: string): [string, (newValue: string | null | undefined) => void] {
+    const [ labelValue, setLabelValue ] = useNoteLabel(note, labelName);
+    return [ labelValue ?? defaultValue, setLabelValue];
+}
+
 export function useNoteLabelBoolean(note: FNote | undefined | null, labelName: string): [ boolean, (newValue: boolean) => void] {
     const [ labelValue, setLabelValue ] = useState<boolean>(!!note?.hasLabel(labelName));
 

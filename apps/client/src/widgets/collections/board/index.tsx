@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from "preact/hooks";
+import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { ViewModeProps } from "../interface";
 import "./index.css";
 import { ColumnMap, getBoardData } from "./data";
-import { useNoteLabel, useTriliumEvent } from "../../react/hooks";
+import { useNoteLabelWithDefault, useTriliumEvent } from "../../react/hooks";
 import FNote from "../../../entities/fnote";
 import FBranch from "../../../entities/fbranch";
 import Icon from "../../react/Icon";
 import { t } from "../../../services/i18n";
-import { createNewItem, changeColumn } from "./api";
+import Api from "./api";
 import FormTextBox from "../../react/FormTextBox";
 import branchService from "../../../services/branches";
 
@@ -20,7 +20,7 @@ export interface BoardColumnData {
 }
 
 export default function BoardView({ note: parentNote, noteIds, viewConfig, saveConfig }: ViewModeProps<BoardViewData>) {
-    const [ statusAttribute ] = useNoteLabel(parentNote, "board:groupBy");
+    const [ statusAttribute ] = useNoteLabelWithDefault(parentNote, "board:groupBy", "status");
     const [ byColumn, setByColumn ] = useState<ColumnMap>();
     const [ columns, setColumns ] = useState<string[]>();
     const [ draggedCard, setDraggedCard ] = useState<{ noteId: string, branchId: string, fromColumn: string, index: number } | null>(null);
@@ -28,9 +28,12 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     const [ dropPosition, setDropPosition ] = useState<{ column: string, index: number } | null>(null);
     const [ draggedColumn, setDraggedColumn ] = useState<{ column: string, index: number } | null>(null);
     const [ columnDropPosition, setColumnDropPosition ] = useState<number | null>(null);
+    const api = useMemo(() => {
+        return new Api(parentNote, statusAttribute);
+    }, [ parentNote, statusAttribute ]);
 
     function refresh() {
-        getBoardData(parentNote, statusAttribute ?? "status", viewConfig ?? {}).then(({ byColumn, newPersistedData }) => {
+        getBoardData(parentNote, statusAttribute, viewConfig ?? {}).then(({ byColumn, newPersistedData }) => {
             setByColumn(byColumn);
 
             if (newPersistedData) {
@@ -132,10 +135,10 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
                             <div className="column-drop-placeholder show" />
                         )}
                         <Column
+                            api={api}
                             column={column}
                             columnIndex={index}
                             columnItems={byColumn.get(column)}
-                            parentNote={parentNote}
                             statusAttribute={statusAttribute ?? "status"}
                             draggedCard={draggedCard}
                             setDraggedCard={setDraggedCard}
@@ -161,7 +164,6 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
 }
 
 function Column({
-    parentNote,
     column,
     columnIndex,
     columnItems,
@@ -175,9 +177,9 @@ function Column({
     onCardDrop,
     draggedColumn,
     setDraggedColumn,
-    isDraggingColumn
+    isDraggingColumn,
+    api
 }: {
-    parentNote: FNote,
     column: string,
     columnIndex: number,
     columnItems?: { note: FNote, branch: FBranch }[],
@@ -191,7 +193,8 @@ function Column({
     onCardDrop: () => void,
     draggedColumn: { column: string, index: number } | null,
     setDraggedColumn: (column: { column: string, index: number } | null) => void,
-    isDraggingColumn: boolean
+    isDraggingColumn: boolean,
+    api: Api
 }) {
     const handleColumnDragStart = useCallback((e: DragEvent) => {
         e.dataTransfer!.effectAllowed = 'move';
@@ -250,7 +253,7 @@ function Column({
 
             if (draggedCard.fromColumn !== column) {
                 // Moving to a different column
-                await changeColumn(draggedCard.noteId, column, statusAttribute);
+                await api.changeColumn(draggedCard.noteId, column);
 
                 // If there are items in the target column, reorder
                 if (targetItems.length > 0 && targetIndex < targetItems.length) {
@@ -323,7 +326,7 @@ function Column({
                 <div className="board-drop-placeholder show" />
             )}
 
-            <div className="board-new-item" onClick={() => createNewItem(parentNote, column)}>
+            <div className="board-new-item" onClick={() => api.createNewItem(column)}>
                 <Icon icon="bx bx-plus" />{" "}
                 {t("board_view.new-item")}
             </div>
