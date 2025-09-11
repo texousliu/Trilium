@@ -53,12 +53,12 @@ export function openNoteContextMenu(api: Api, event: ContextMenuEvent, noteId: s
             {
                 title: t("board_view.insert-above"),
                 uiIcon: "bx bx-list-plus",
-                // handler: () => boardView.insertItemAtPosition(column, branchId, "before")
+                handler: () => api.insertRowAtPosition(column, branchId, "before")
             },
             {
                 title: t("board_view.insert-below"),
                 uiIcon: "bx bx-empty",
-                // handler: () => boardView.insertItemAtPosition(column, branchId, "after")
+                handler: () => api.insertRowAtPosition(column, branchId, "after")
             },
             { title: "----" },
             {

@@ -219,27 +219,6 @@ export default class BoardView extends ViewMode<BoardData> {
         }
     }
 
-    async insertItemAtPosition(column: string, relativeToBranchId: string, direction: "before" | "after"): Promise<void> {
-        try {
-            // Create the note without opening it
-            const newNote = await this.api?.insertRowAtPosition(column, relativeToBranchId, direction, false);
-
-            if (newNote) {
-                // Refresh the board to show the new item
-                await this.renderList();
-
-                // Start inline editing of the newly created card
-                this.startInlineEditingCard(newNote.noteId);
-            }
-        } catch (error) {
-            console.error("Failed to insert new item:", error);
-        }
-    }
-
-    private startInlineEditingCard(noteId: string) {
-        this.renderer?.startInlineEditing(noteId);
-    }
-
     forceFullRefresh() {
         this.renderer?.forceFullRender();
         return this.renderList();

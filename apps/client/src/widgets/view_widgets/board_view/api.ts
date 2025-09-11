@@ -29,35 +29,6 @@ export default class BoardApi {
         return this.byColumn.get(column);
     }
 
-    openNote(noteId: string) {
-        appContext.triggerCommand("openInPopup", { noteIdOrPath: noteId });
-    }
-
-    async insertRowAtPosition(
-            column: string,
-            relativeToBranchId: string,
-            direction: "before" | "after",
-            open: boolean = true) {
-        const { note } = await note_create.createNote(this._parentNoteId, {
-            activate: false,
-            targetBranchId: relativeToBranchId,
-            target: direction,
-            title: "New item"
-        });
-
-        if (!note) {
-            throw new Error("Failed to create note");
-        }
-
-        const { noteId } = note;
-        await this.changeColumn(noteId, column);
-        if (open) {
-            this.openNote(noteId);
-        }
-
-        return note;
-    }
-
     async renameColumn(oldValue: string, newValue: string, noteIds: string[]) {
         // Change the value in the notes.
         await executeBulkActions(noteIds, [
@@ -80,7 +51,7 @@ export default class BoardApi {
 
 
     async reorderColumns(newColumnOrder: string[]) {
-        // Update the column order in persisted data
+        // Update the co    lumn order in persisted data
         if (!this.persistedData.columns) {
             this.persistedData.columns = [];
         }

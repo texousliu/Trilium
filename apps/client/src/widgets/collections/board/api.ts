@@ -1,4 +1,5 @@
 import { BoardViewData } from ".";
+import appContext from "../../../components/app_context";
 import FNote from "../../../entities/fnote";
 import attributes from "../../../services/attributes";
 import { executeBulkActions } from "../../../services/bulk_action";
@@ -29,9 +30,9 @@ export default class BoardApi {
                 title: "New item"
             });
 
-            if (newNote) {
+            if (newNote && newBranch) {
                 await this.changeColumn(newNote.noteId, column);
-                this.setBranchIdToEdit(newBranch?.branchId);
+                this.startEditing(newBranch?.branchId);
             }
         } catch (error) {
             console.error("Failed to create new item:", error);
@@ -54,6 +55,36 @@ export default class BoardApi {
 
         this.viewConfig.columns = (this.viewConfig.columns ?? []).filter(col => col.value !== column);
         this.saveConfig(this.viewConfig);
+    }
+
+    async insertRowAtPosition(
+            column: string,
+            relativeToBranchId: string,
+            direction: "before" | "after") {
+        const { note, branch } = await note_create.createNote(this.parentNote.noteId, {
+            activate: false,
+            targetBranchId: relativeToBranchId,
+            target: direction,
+            title: "New item"
+        });
+
+        if (!note || !branch) {
+            throw new Error("Failed to create note");
+        }
+
+        const { noteId } = note;
+        await this.changeColumn(noteId, column);
+        this.startEditing(branch.branchId);
+
+        return note;
+    }
+
+    openNote(noteId: string) {
+        appContext.triggerCommand("openInPopup", { noteIdOrPath: noteId });
+    }
+
+    startEditing(branchId: string) {
+        this.setBranchIdToEdit(branchId);
     }
 
     dismissEditingTitle() {
