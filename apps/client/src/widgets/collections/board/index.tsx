@@ -375,6 +375,7 @@ function Card({
     const { branchIdToEdit } = useContext(BoardViewContext);
     const isEditing = branch.branchId === branchIdToEdit;
     const colorClass = note.getColorClass() || '';
+    const editorRef = useRef<HTMLInputElement>(null);
 
     const handleDragStart = useCallback((e: DragEvent) => {
         e.dataTransfer!.effectAllowed = 'move';
@@ -390,6 +391,10 @@ function Card({
         openNoteContextMenu(api, e, note.noteId, branch.branchId, column);
     }, [ api, note, branch, column ]);
 
+    useEffect(() => {
+        editorRef.current?.focus();
+    }, []);
+
     return (
         <div
             className={`board-note ${colorClass} ${isDragging ? 'dragging' : ''} ${isEditing ? "editing" : ""}`}
@@ -403,16 +408,26 @@ function Card({
                 <>{note.title}</>
             ) : (
                 <FormTextBox
+                    inputRef={editorRef}
                     value={note.title}
                     onKeyDown={(e) => {
                         if (e.key === "Enter") {
-                            api.renameCard(note.noteId, e.currentTarget.value);
+                            const newTitle = e.currentTarget.value;
+                            if (newTitle !== note.title) {
+                                api.renameCard(note.noteId, newTitle);
+                            }
                             api.dismissEditingTitle();
                         }
 
                         if (e.key === "Escape") {
                             api.dismissEditingTitle();
                         }
+                    }}
+                    onBlur={(newTitle) => {
+                        if (newTitle !== note.title) {
+                            api.renameCard(note.noteId, newTitle);
+                        }
+                        api.dismissEditingTitle();
                     }}
                 />
             )}
