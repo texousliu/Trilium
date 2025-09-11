@@ -7,7 +7,7 @@ import FNote from "../../../entities/fnote";
 import FBranch from "../../../entities/fbranch";
 import Icon from "../../react/Icon";
 import { t } from "../../../services/i18n";
-import { createNewItem } from "./api";
+import { createNewItem, changeColumn } from "./api";
 import FormTextBox from "../../react/FormTextBox";
 
 export interface BoardViewData {
@@ -22,6 +22,8 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     const [ statusAttribute ] = useNoteLabel(parentNote, "board:groupBy");
     const [ byColumn, setByColumn ] = useState<ColumnMap>();
     const [ columns, setColumns ] = useState<string[]>();
+    const [ draggedCard, setDraggedCard ] = useState<{ noteId: string, fromColumn: string } | null>(null);
+    const [ dropTarget, setDropTarget ] = useState<string | null>(null);
 
     function refresh() {
         getBoardData(parentNote, statusAttribute ?? "status", viewConfig ?? {}).then(({ byColumn, newPersistedData }) => {
@@ -75,6 +77,12 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
                         column={column}
                         columnItems={byColumn.get(column)}
                         parentNote={parentNote}
+                        statusAttribute={statusAttribute ?? "status"}
+                        draggedCard={draggedCard}
+                        setDraggedCard={setDraggedCard}
+                        dropTarget={dropTarget}
+                        setDropTarget={setDropTarget}
+                        onCardDrop={refresh}
                     />
                 ))}
 
@@ -84,9 +92,58 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     )
 }
 
-function Column({ parentNote, column, columnItems }: { parentNote: FNote, column: string, columnItems?: { note: FNote, branch: FBranch }[] }) {
+function Column({
+    parentNote,
+    column,
+    columnItems,
+    statusAttribute,
+    draggedCard,
+    setDraggedCard,
+    dropTarget,
+    setDropTarget,
+    onCardDrop
+}: {
+    parentNote: FNote,
+    column: string,
+    columnItems?: { note: FNote, branch: FBranch }[],
+    statusAttribute: string,
+    draggedCard: { noteId: string, fromColumn: string } | null,
+    setDraggedCard: (card: { noteId: string, fromColumn: string } | null) => void,
+    dropTarget: string | null,
+    setDropTarget: (target: string | null) => void,
+    onCardDrop: () => void
+}) {
+    const handleDragOver = useCallback((e: DragEvent) => {
+        e.preventDefault();
+        setDropTarget(column);
+    }, [column, setDropTarget]);
+
+    const handleDragLeave = useCallback((e: DragEvent) => {
+        const relatedTarget = e.relatedTarget as HTMLElement;
+        const currentTarget = e.currentTarget as HTMLElement;
+
+        if (!currentTarget.contains(relatedTarget)) {
+            setDropTarget(null);
+        }
+    }, [setDropTarget]);
+
+    const handleDrop = useCallback(async (e: DragEvent) => {
+        e.preventDefault();
+        setDropTarget(null);
+
+        if (draggedCard && draggedCard.fromColumn !== column) {
+            await changeColumn(draggedCard.noteId, column, statusAttribute);
+            onCardDrop();
+        }
+        setDraggedCard(null);
+    }, [draggedCard, column, statusAttribute, setDraggedCard, setDropTarget, onCardDrop]);
     return (
-        <div className="board-column">
+        <div
+            className={`board-column ${dropTarget === column && draggedCard?.fromColumn !== column ? 'drag-over' : ''}`}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+        >
             <h3>
                 <span>{column}</span>
                 <span
@@ -95,7 +152,13 @@ function Column({ parentNote, column, columnItems }: { parentNote: FNote, column
             </h3>
 
             {(columnItems ?? []).map(({ note, branch }) => (
-                <Card note={note} branch={branch} column={column} />
+                <Card
+                    note={note}
+                    branch={branch}
+                    column={column}
+                    setDraggedCard={setDraggedCard}
+                    isDragging={draggedCard?.noteId === note.noteId}
+                />
             ))}
 
             <div className="board-new-item" onClick={() => createNewItem(parentNote, column)}>
@@ -106,11 +169,37 @@ function Column({ parentNote, column, columnItems }: { parentNote: FNote, column
     )
 }
 
-function Card({ note }: { note: FNote, branch: FBranch, column: string }) {
+function Card({
+    note,
+    column,
+    setDraggedCard,
+    isDragging
+}: {
+    note: FNote,
+    branch: FBranch,
+    column: string,
+    setDraggedCard: (card: { noteId: string, fromColumn: string } | null) => void,
+    isDragging: boolean
+}) {
     const colorClass = note.getColorClass() || '';
 
+    const handleDragStart = useCallback((e: DragEvent) => {
+        e.dataTransfer!.effectAllowed = 'move';
+        e.dataTransfer!.setData('text/plain', note.noteId);
+        setDraggedCard({ noteId: note.noteId, fromColumn: column });
+    }, [note.noteId, column, setDraggedCard]);
+
+    const handleDragEnd = useCallback(() => {
+        setDraggedCard(null);
+    }, [setDraggedCard]);
+
     return (
-        <div className={`board-note ${colorClass}`}>
+        <div
+            className={`board-note ${colorClass} ${isDragging ? 'dragging' : ''}`}
+            draggable="true"
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+        >
             <span class={`icon ${note.getIcon()}`} />
             {note.title}
         </div>

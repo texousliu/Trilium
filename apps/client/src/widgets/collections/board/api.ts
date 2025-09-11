@@ -26,6 +26,6 @@ export async function createNewItem(parentNote: FNote, column: string) {
     }
 }
 
-async function changeColumn(noteId: string, newColumn: string, statusAttribute: string) {
+export async function changeColumn(noteId: string, newColumn: string, statusAttribute: string) {
     await attributes.setLabel(noteId, statusAttribute, newColumn);
 }
