@@ -3,6 +3,7 @@ import FNote from "../../../entities/fnote";
 import attributes from "../../../services/attributes";
 import { executeBulkActions } from "../../../services/bulk_action";
 import note_create from "../../../services/note_create";
+import server from "../../../services/server";
 import { ColumnMap } from "./data";
 
 export default class BoardApi {
@@ -13,7 +14,8 @@ export default class BoardApi {
         private parentNote: FNote,
         private statusAttribute: string,
         private viewConfig: BoardViewData,
-        private saveConfig: (newConfig: BoardViewData) => void
+        private saveConfig: (newConfig: BoardViewData) => void,
+        private setBranchIdToEdit: (branchId: string | undefined) => void
     ) {};
 
     async createNewItem(column: string) {
@@ -22,17 +24,14 @@ export default class BoardApi {
             const parentNotePath = this.parentNote.noteId;
 
             // Create a new note as a child of the parent note
-            const { note: newNote } = await note_create.createNote(parentNotePath, {
+            const { note: newNote, branch: newBranch } = await note_create.createNote(parentNotePath, {
                 activate: false,
                 title: "New item"
             });
 
             if (newNote) {
-                // Set the status label to place it in the correct column
                 await this.changeColumn(newNote.noteId, column);
-
-                // Start inline editing of the newly created card
-                //this.startInlineEditingCard(newNote.noteId);
+                this.setBranchIdToEdit(newBranch?.branchId);
             }
         } catch (error) {
             console.error("Failed to create new item:", error);
@@ -55,6 +54,14 @@ export default class BoardApi {
 
         this.viewConfig.columns = (this.viewConfig.columns ?? []).filter(col => col.value !== column);
         this.saveConfig(this.viewConfig);
+    }
+
+    dismissEditingTitle() {
+        this.setBranchIdToEdit(undefined);
+    }
+
+    renameCard(noteId: string, newTitle: string) {
+        return server.put(`notes/${noteId}/title`, { title: newTitle.trim() });
     }
 
 }

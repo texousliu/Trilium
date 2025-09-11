@@ -447,8 +447,7 @@ export class DifferentialBoardRenderer {
                     try {
                         // Update the note title using the board view's server call
                         import('../../../services/server').then(async ({ default: server }) => {
-                            await server.put(`notes/${noteId}/title`, { title: newTitle.trim() });
-                            finalTitle = newTitle.trim();
+
                         });
                     } catch (error) {
                         console.error("Failed to update note title:", error);

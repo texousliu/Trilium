@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { ViewModeProps } from "../interface";
 import "./index.css";
 import { ColumnMap, getBoardData } from "./data";
@@ -12,6 +12,7 @@ import FormTextBox from "../../react/FormTextBox";
 import branchService from "../../../services/branches";
 import { openColumnContextMenu, openNoteContextMenu } from "./context_menu";
 import { ContextMenuEvent } from "../../../menus/context_menu";
+import { createContext } from "preact";
 
 export interface BoardViewData {
     columns?: BoardColumnData[];
@@ -20,6 +21,12 @@ export interface BoardViewData {
 export interface BoardColumnData {
     value: string;
 }
+
+interface BoardViewContextData {
+    branchIdToEdit?: string;
+}
+
+const BoardViewContext = createContext<BoardViewContextData>({});
 
 export default function BoardView({ note: parentNote, noteIds, viewConfig, saveConfig }: ViewModeProps<BoardViewData>) {
     const [ statusAttribute ] = useNoteLabelWithDefault(parentNote, "board:groupBy", "status");
@@ -30,9 +37,13 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     const [ dropPosition, setDropPosition ] = useState<{ column: string, index: number } | null>(null);
     const [ draggedColumn, setDraggedColumn ] = useState<{ column: string, index: number } | null>(null);
     const [ columnDropPosition, setColumnDropPosition ] = useState<number | null>(null);
+    const [ branchIdToEdit, setBranchIdToEdit ] = useState<string>();
     const api = useMemo(() => {
-        return new Api(byColumn, columns ?? [], parentNote, statusAttribute, viewConfig ?? {}, saveConfig);
-    }, [ byColumn, columns, parentNote, statusAttribute, viewConfig, saveConfig ]);
+        return new Api(byColumn, columns ?? [], parentNote, statusAttribute, viewConfig ?? {}, saveConfig, setBranchIdToEdit );
+    }, [ byColumn, columns, parentNote, statusAttribute, viewConfig, saveConfig, setBranchIdToEdit ]);
+    const boardViewContext = useMemo<BoardViewContextData>(() => ({
+        branchIdToEdit
+    }), [ branchIdToEdit ]);
 
     function refresh() {
         getBoardData(parentNote, statusAttribute, viewConfig ?? {}).then(({ byColumn, newPersistedData }) => {
@@ -126,41 +137,43 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
 
     return (
         <div className="board-view">
-            <div
-                className="board-view-container"
-                onDragOver={handleColumnDragOver}
-                onDrop={handleContainerDrop}
-            >
-                {byColumn && columns?.map((column, index) => (
-                    <>
-                        {columnDropPosition === index && draggedColumn?.column !== column && (
-                            <div className="column-drop-placeholder show" />
-                        )}
-                        <Column
-                            api={api}
-                            column={column}
-                            columnIndex={index}
-                            columnItems={byColumn.get(column)}
-                            statusAttribute={statusAttribute ?? "status"}
-                            draggedCard={draggedCard}
-                            setDraggedCard={setDraggedCard}
-                            dropTarget={dropTarget}
-                            setDropTarget={setDropTarget}
-                            dropPosition={dropPosition}
-                            setDropPosition={setDropPosition}
-                            onCardDrop={refresh}
-                            draggedColumn={draggedColumn}
-                            setDraggedColumn={setDraggedColumn}
-                            isDraggingColumn={draggedColumn?.column === column}
-                        />
-                    </>
-                ))}
-                {columnDropPosition === columns?.length && draggedColumn && (
-                    <div className="column-drop-placeholder show" />
-                )}
+            <BoardViewContext.Provider value={boardViewContext}>
+                <div
+                    className="board-view-container"
+                    onDragOver={handleColumnDragOver}
+                    onDrop={handleContainerDrop}
+                >
+                    {byColumn && columns?.map((column, index) => (
+                        <>
+                            {columnDropPosition === index && draggedColumn?.column !== column && (
+                                <div className="column-drop-placeholder show" />
+                            )}
+                            <Column
+                                api={api}
+                                column={column}
+                                columnIndex={index}
+                                columnItems={byColumn.get(column)}
+                                statusAttribute={statusAttribute ?? "status"}
+                                draggedCard={draggedCard}
+                                setDraggedCard={setDraggedCard}
+                                dropTarget={dropTarget}
+                                setDropTarget={setDropTarget}
+                                dropPosition={dropPosition}
+                                setDropPosition={setDropPosition}
+                                onCardDrop={refresh}
+                                draggedColumn={draggedColumn}
+                                setDraggedColumn={setDraggedColumn}
+                                isDraggingColumn={draggedColumn?.column === column}
+                            />
+                        </>
+                    ))}
+                    {columnDropPosition === columns?.length && draggedColumn && (
+                        <div className="column-drop-placeholder show" />
+                    )}
 
-                <AddNewColumn viewConfig={viewConfig} saveConfig={saveConfig} />
-            </div>
+                    <AddNewColumn viewConfig={viewConfig} saveConfig={saveConfig} />
+                </div>
+            </BoardViewContext.Provider>
         </div>
     )
 }
@@ -359,6 +372,7 @@ function Card({
     setDraggedCard: (card: { noteId: string, branchId: string, fromColumn: string, index: number } | null) => void,
     isDragging: boolean
 }) {
+    const { branchIdToEdit } = useContext(BoardViewContext);
     const colorClass = note.getColorClass() || '';
 
     const handleDragStart = useCallback((e: DragEvent) => {
@@ -383,8 +397,26 @@ function Card({
             onDragEnd={handleDragEnd}
             onContextMenu={handleContextMenu}
         >
-            <span class={`icon ${note.getIcon()}`} />
-            {note.title}
+            {branch.branchId !== branchIdToEdit ? (
+                <>
+                    <span class={`icon ${note.getIcon()}`} />
+                    {note.title}
+                </>
+            ) : (
+                <FormTextBox
+                    value={note.title}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            api.renameCard(note.noteId, e.currentTarget.value);
+                            api.dismissEditingTitle();
+                        }
+
+                        if (e.key === "Escape") {
+                            api.dismissEditingTitle();
+                        }
+                    }}
+                />
+            )}
         </div>
     )
 }
