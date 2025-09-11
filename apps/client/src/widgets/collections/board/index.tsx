@@ -10,7 +10,7 @@ import { t } from "../../../services/i18n";
 import Api from "./api";
 import FormTextBox from "../../react/FormTextBox";
 import branchService from "../../../services/branches";
-import { openColumnContextMenu } from "./context_menu";
+import { openColumnContextMenu, openNoteContextMenu } from "./context_menu";
 import { ContextMenuEvent } from "../../../menus/context_menu";
 
 export interface BoardViewData {
@@ -31,8 +31,8 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     const [ draggedColumn, setDraggedColumn ] = useState<{ column: string, index: number } | null>(null);
     const [ columnDropPosition, setColumnDropPosition ] = useState<number | null>(null);
     const api = useMemo(() => {
-        return new Api(byColumn, parentNote, statusAttribute, viewConfig ?? {}, saveConfig);
-    }, [ parentNote, statusAttribute ]);
+        return new Api(byColumn, columns ?? [], parentNote, statusAttribute, viewConfig ?? {}, saveConfig);
+    }, [ byColumn, columns, parentNote, statusAttribute, viewConfig, saveConfig ]);
 
     function refresh() {
         getBoardData(parentNote, statusAttribute, viewConfig ?? {}).then(({ byColumn, newPersistedData }) => {
@@ -319,6 +319,7 @@ function Column({
                             <div className="board-drop-placeholder show" />
                         )}
                         <Card
+                            api={api}
                             note={note}
                             branch={branch}
                             column={column}
@@ -342,6 +343,7 @@ function Column({
 }
 
 function Card({
+    api,
     note,
     branch,
     column,
@@ -349,6 +351,7 @@ function Card({
     setDraggedCard,
     isDragging
 }: {
+    api: Api,
     note: FNote,
     branch: FBranch,
     column: string,
@@ -368,12 +371,17 @@ function Card({
         setDraggedCard(null);
     }, [setDraggedCard]);
 
+    const handleContextMenu = useCallback((e: ContextMenuEvent) => {
+        openNoteContextMenu(api, e, note.noteId, branch.branchId, column);
+    }, [ api, note, branch, column ]);
+
     return (
         <div
             className={`board-note ${colorClass} ${isDragging ? 'dragging' : ''}`}
             draggable="true"
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
+            onContextMenu={handleContextMenu}
         >
             <span class={`icon ${note.getIcon()}`} />
             {note.title}

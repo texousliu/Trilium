@@ -1,4 +1,6 @@
 import contextMenu, { ContextMenuEvent } from "../../../menus/context_menu";
+import link_context_menu from "../../../menus/link_context_menu";
+import branches from "../../../services/branches";
 import dialog from "../../../services/dialog";
 import { t } from "../../../services/i18n";
 import Api from "./api";
@@ -25,5 +27,46 @@ export function openColumnContextMenu(api: Api, event: ContextMenuEvent, column:
             }
         ],
         selectMenuItemHandler() {}
+    });
+}
+
+export function openNoteContextMenu(api: Api, event: ContextMenuEvent, noteId: string, branchId: string, column: string) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    contextMenu.show({
+        x: event.pageX,
+        y: event.pageY,
+        items: [
+            ...link_context_menu.getItems(),
+            { title: "----" },
+            {
+                title: t("board_view.move-to"),
+                uiIcon: "bx bx-transfer",
+                items: api.columns.map(columnToMoveTo => ({
+                    title: columnToMoveTo,
+                    enabled: columnToMoveTo !== column,
+                    handler: () => api.changeColumn(noteId, columnToMoveTo)
+                }))
+            },
+            { title: "----" },
+            {
+                title: t("board_view.insert-above"),
+                uiIcon: "bx bx-list-plus",
+                // handler: () => boardView.insertItemAtPosition(column, branchId, "before")
+            },
+            {
+                title: t("board_view.insert-below"),
+                uiIcon: "bx bx-empty",
+                // handler: () => boardView.insertItemAtPosition(column, branchId, "after")
+            },
+            { title: "----" },
+            {
+                title: t("board_view.delete-note"),
+                uiIcon: "bx bx-trash",
+                handler: () => branches.deleteNotes([ branchId ], false, false)
+            }
+        ],
+        selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, noteId),
     });
 }

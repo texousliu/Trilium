@@ -9,6 +9,7 @@ export default class BoardApi {
 
     constructor(
         private byColumn: ColumnMap | undefined,
+        public columns: string[],
         private parentNote: FNote,
         private statusAttribute: string,
         private viewConfig: BoardViewData,
