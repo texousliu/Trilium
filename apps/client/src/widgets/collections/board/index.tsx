@@ -13,6 +13,7 @@ import branchService from "../../../services/branches";
 import { openColumnContextMenu, openNoteContextMenu } from "./context_menu";
 import { ContextMenuEvent } from "../../../menus/context_menu";
 import { createContext } from "preact";
+import { onWheelHorizontalScroll } from "../../widget_utils";
 
 export interface BoardViewData {
     columns?: BoardColumnData[];
@@ -79,7 +80,6 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
 
         saveConfig(newViewConfig);
         setColumns(newColumns);
-        console.log("New columns are ", newColumns);
         setDraggedColumn(null);
         setColumnDropPosition(null);
     }, [columns, viewConfig, saveConfig]);
@@ -136,7 +136,10 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     }, [draggedColumn, columnDropPosition, handleColumnDrop]);
 
     return (
-        <div className="board-view">
+        <div
+            className="board-view"
+            onWheel={onWheelHorizontalScroll}
+        >
             <BoardViewContext.Provider value={boardViewContext}>
                 <div
                     className="board-view-container"

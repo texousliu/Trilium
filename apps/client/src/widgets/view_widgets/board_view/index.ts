@@ -24,7 +24,6 @@ export default class BoardView extends ViewMode<BoardData> {
         super(args, "board");
 
         this.$root = $(TPL);
-        setupHorizontalScrollViaWheel(this.$root);
         this.$container = this.$root.find(".board-view-container");
         this.spacedUpdate = new SpacedUpdate(() => this.onSave(), 5_000);
         this.persistentData = {
