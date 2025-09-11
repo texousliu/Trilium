@@ -62,7 +62,7 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
         });
     }
 
-    useEffect(refresh, [ parentNote, noteIds ]);
+    useEffect(refresh, [ parentNote, noteIds, viewConfig ]);
 
     const handleColumnDrop = useCallback((fromIndex: number, toIndex: number) => {
         if (!columns || fromIndex === toIndex) return;
