@@ -25,6 +25,8 @@ export interface BoardColumnData {
 
 interface BoardViewContextData {
     branchIdToEdit?: string;
+    columnNameToEdit?: string;
+    setColumnNameToEdit?: (column: string | undefined) => void;
 }
 
 const BoardViewContext = createContext<BoardViewContextData>({});
@@ -39,12 +41,15 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     const [ draggedColumn, setDraggedColumn ] = useState<{ column: string, index: number } | null>(null);
     const [ columnDropPosition, setColumnDropPosition ] = useState<number | null>(null);
     const [ branchIdToEdit, setBranchIdToEdit ] = useState<string>();
+    const [ columnNameToEdit, setColumnNameToEdit ] = useState<string>();
     const api = useMemo(() => {
         return new Api(byColumn, columns ?? [], parentNote, statusAttribute, viewConfig ?? {}, saveConfig, setBranchIdToEdit );
     }, [ byColumn, columns, parentNote, statusAttribute, viewConfig, saveConfig, setBranchIdToEdit ]);
     const boardViewContext = useMemo<BoardViewContextData>(() => ({
-        branchIdToEdit
-    }), [ branchIdToEdit ]);
+        branchIdToEdit,
+        columnNameToEdit,
+        setColumnNameToEdit
+    }), [ branchIdToEdit, columnNameToEdit, setColumnNameToEdit ]);
 
     function refresh() {
         getBoardData(parentNote, statusAttribute, viewConfig ?? {}).then(({ byColumn, newPersistedData }) => {
@@ -214,6 +219,10 @@ function Column({
     isDraggingColumn: boolean,
     api: Api
 }) {
+    const context = useContext(BoardViewContext);
+    const isEditing = (context.columnNameToEdit === column);
+    const editorRef = useRef<HTMLInputElement>(null);
+
     const handleColumnDragStart = useCallback((e: DragEvent) => {
         e.dataTransfer!.effectAllowed = 'move';
         e.dataTransfer!.setData('text/plain', column);
@@ -301,9 +310,17 @@ function Column({
         setDraggedCard(null);
     }, [draggedCard, draggedColumn, dropPosition, columnItems, column, statusAttribute, setDraggedCard, setDropTarget, setDropPosition, onCardDrop]);
 
+    const handleEdit = useCallback(() => {
+        context.setColumnNameToEdit?.(column);
+    }, [column]);
+
     const handleContextMenu = useCallback((e: ContextMenuEvent) => {
         openColumnContextMenu(api, e, column);
     }, [ api, column ]);
+
+    useEffect(() => {
+        editorRef.current?.focus();
+    }, [ isEditing ]);
 
     return (
         <div
@@ -314,14 +331,47 @@ function Column({
             onContextMenu={handleContextMenu}
         >
             <h3
+                className={`${isEditing ? "editing" : ""}`}
                 draggable="true"
                 onDragStart={handleColumnDragStart}
                 onDragEnd={handleColumnDragEnd}
             >
-                <span>{column}</span>
-                <span
-                    className="edit-icon icon bx bx-edit-alt"
-                    title="Click to edit column title" />
+                {!isEditing ? (
+                    <>
+                        <span>{column}</span>
+                        <span
+                            className="edit-icon icon bx bx-edit-alt"
+                            title="Click to edit column title"
+                            onClick={handleEdit}
+                        />
+                    </>
+                ) : (
+                    <>
+                        <FormTextBox
+                            inputRef={editorRef}
+                            currentValue={column}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    const newTitle = e.currentTarget.value;
+                                    if (newTitle !== column) {
+                                        api.renameColumn(column, newTitle);
+                                    }
+                                    context.setColumnNameToEdit?.(undefined);
+                                }
+
+                                if (e.key === "Escape") {
+                                    context.setColumnNameToEdit?.(undefined);
+                                }
+                            }}
+                            onBlur={(newTitle) => {
+                                if (newTitle !== column) {
+                                    api.renameColumn(column, newTitle);
+                                }
+                                context.setColumnNameToEdit?.(undefined);
+                            }}
+                        />
+                    </>
+                )}
             </h3>
 
             {(columnItems ?? []).map(({ note, branch }, index) => {
@@ -396,7 +446,7 @@ function Card({
 
     useEffect(() => {
         editorRef.current?.focus();
-    }, []);
+    }, [ isEditing ]);
 
     return (
         <div

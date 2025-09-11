@@ -57,6 +57,27 @@ export default class BoardApi {
         this.saveConfig(this.viewConfig);
     }
 
+    async renameColumn(oldValue: string, newValue: string) {
+        const noteIds = this.byColumn?.get(oldValue)?.map(item => item.note.noteId) || [];
+
+        // Change the value in the notes.
+        await executeBulkActions(noteIds, [
+            {
+                name: "updateLabelValue",
+                labelName: this.statusAttribute,
+                labelValue: newValue
+            }
+        ]);
+
+        // Rename the column in the persisted data.
+        for (const column of this.viewConfig.columns || []) {
+            if (column.value === oldValue) {
+                column.value = newValue;
+            }
+        }
+        this.saveConfig(this.viewConfig);
+    }
+
     async insertRowAtPosition(
             column: string,
             relativeToBranchId: string,

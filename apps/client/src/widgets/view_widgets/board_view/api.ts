@@ -29,27 +29,6 @@ export default class BoardApi {
         return this.byColumn.get(column);
     }
 
-    async renameColumn(oldValue: string, newValue: string, noteIds: string[]) {
-        // Change the value in the notes.
-        await executeBulkActions(noteIds, [
-            {
-                name: "updateLabelValue",
-                labelName: this._statusAttribute,
-                labelValue: newValue
-            }
-        ]);
-
-        // Rename the column in the persisted data.
-        for (const column of this.persistedData.columns || []) {
-            if (column.value === oldValue) {
-                column.value = newValue;
-            }
-        }
-        await this.viewStorage.store(this.persistedData);
-    }
-
-
-
     async reorderColumns(newColumnOrder: string[]) {
         // Update the co    lumn order in persisted data
         if (!this.persistedData.columns) {

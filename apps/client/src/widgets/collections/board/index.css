@@ -54,6 +54,10 @@
   cursor: default;
 }
 
+.board-view-container .board-column h3.editing input {
+  padding: 0;
+}
+
 .board-view-container .board-column h3:hover {
   background-color: var(--hover-item-background-color);
   border-radius: 4px;

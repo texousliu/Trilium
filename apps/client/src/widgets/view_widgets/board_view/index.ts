@@ -135,15 +135,6 @@ export default class BoardView extends ViewMode<BoardData> {
         });
     }
 
-    private createTitleStructure(title: string): { $titleText: JQuery<HTMLElement>; $editIcon: JQuery<HTMLElement> } {
-        const $titleText = $("<span>").text(title);
-        const $editIcon = $("<span>")
-            .addClass("edit-icon icon bx bx-edit-alt")
-            .attr("title", "Click to edit column title");
-
-        return { $titleText, $editIcon };
-    }
-
     private startEditingColumnTitle($titleEl: JQuery<HTMLElement>, columnValue: string, columnItems: { branch: any; note: any; }[]) {
         if ($titleEl.hasClass("editing")) {
             return; // Already editing
@@ -261,8 +252,5 @@ export default class BoardView extends ViewMode<BoardData> {
         }
     }
 
-    private onSave() {
-        this.viewStorage.store(this.persistentData);
-    }
 
 }
