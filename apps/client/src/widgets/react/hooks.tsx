@@ -291,7 +291,7 @@ export function useNoteRelation(note: FNote | undefined | null, relationName: st
  * @returns an array where the first element is the getter and the second element is the setter. The setter has a special behaviour for convenience: if the value is undefined, the label is created without a value (e.g. a tag), if the value is null then the label is removed.
  */
 export function useNoteLabel(note: FNote | undefined | null, labelName: string): [string | null | undefined, (newValue: string | null | undefined) => void] {
-    const [ labelValue, setLabelValue ] = useState<string | null | undefined>(note?.getLabelValue(labelName));
+    const [ , setLabelValue ] = useState<string | null | undefined>();
 
     useEffect(() => setLabelValue(note?.getLabelValue(labelName) ?? null), [ note ]);
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
@@ -319,7 +319,7 @@ export function useNoteLabel(note: FNote | undefined | null, labelName: string):
     useDebugValue(labelName);
 
     return [
-        labelValue,
+        note?.getLabelValue(labelName),
         setter
     ] as const;
 }
