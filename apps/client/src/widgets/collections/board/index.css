@@ -150,10 +150,6 @@
   box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.5);
 }
 
-.board-view-container .board-note.shift-down {
-  transform: translateY(100%);
-}
-
 .board-view-container .board-note.editing {
   box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.35);
   border-color: var(--main-text-color);
@@ -174,18 +170,19 @@
   margin-right: 0.25em;
 }
 
-.board-drop-indicator {
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--main-text-color) 20%, var(--main-text-color) 80%, transparent);
-  border-radius: 2px;
-  margin: -1px 0;
+.board-drop-placeholder {
+  height: 40px;
+  margin: 0.65em 0;
+  padding: 0.5em;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.15);
   opacity: 0;
-  transition: opacity 0.15s ease;
-  position: relative;
+  transition: opacity 0.15s ease, height 0.2s ease;
+  box-sizing: border-box;
 }
 
-.board-drop-indicator.show {
-  opacity: 0.8;
+.board-drop-placeholder.show {
+  opacity: 0.6;
 }
 
 .column-drop-indicator {

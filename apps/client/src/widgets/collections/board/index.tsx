@@ -208,15 +208,11 @@ function Column({
                 const showIndicatorBefore = dropPosition?.column === column &&
                                           dropPosition.index === index &&
                                           draggedCard?.noteId !== note.noteId;
-                const shouldShift = dropPosition?.column === column &&
-                                   dropPosition.index <= index &&
-                                   draggedCard?.noteId !== note.noteId &&
-                                   draggedCard !== null;
 
                 return (
                     <>
                         {showIndicatorBefore && (
-                            <div className="board-drop-indicator show" />
+                            <div className="board-drop-placeholder show" />
                         )}
                         <Card
                             note={note}
@@ -225,13 +221,12 @@ function Column({
                             index={index}
                             setDraggedCard={setDraggedCard}
                             isDragging={draggedCard?.noteId === note.noteId}
-                            shouldShift={shouldShift}
                         />
                     </>
                 );
             })}
             {dropPosition?.column === column && dropPosition.index === (columnItems?.length ?? 0) && (
-                <div className="board-drop-indicator show" />
+                <div className="board-drop-placeholder show" />
             )}
 
             <div className="board-new-item" onClick={() => createNewItem(parentNote, column)}>
@@ -248,16 +243,14 @@ function Card({
     column,
     index,
     setDraggedCard,
-    isDragging,
-    shouldShift
+    isDragging
 }: {
     note: FNote,
     branch: FBranch,
     column: string,
     index: number,
     setDraggedCard: (card: { noteId: string, branchId: string, fromColumn: string, index: number } | null) => void,
-    isDragging: boolean,
-    shouldShift?: boolean
+    isDragging: boolean
 }) {
     const colorClass = note.getColorClass() || '';
 
@@ -273,7 +266,7 @@ function Card({
 
     return (
         <div
-            className={`board-note ${colorClass} ${isDragging ? 'dragging' : ''} ${shouldShift ? 'shift-down' : ''}`}
+            className={`board-note ${colorClass} ${isDragging ? 'dragging' : ''}`}
             draggable="true"
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
