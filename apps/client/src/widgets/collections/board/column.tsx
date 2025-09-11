@@ -162,7 +162,7 @@ export default function Column({
             >
                 {!isEditing ? (
                     <>
-                        <span>{column}</span>
+                        <span className="title">{column}</span>
                         <span
                             className="edit-icon icon bx bx-edit-alt"
                             title="Click to edit column title"

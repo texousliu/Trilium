@@ -39,11 +39,19 @@
   cursor: grab;
   position: relative;
   transition: background-color 0.2s ease, border-radius 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   box-sizing: border-box;
   background-color: transparent;
+}
+
+.board-view-container .board-column h3,
+.board-view-container .board-note {
+  display: flex;
+  align-items: center;
+}
+
+.board-view-container .board-column h3 > .title,
+.board-view-container .board-note > .title {
+  flex-grow: 1;
 }
 
 .board-view-container .board-column h3:active {
@@ -87,20 +95,19 @@
   font-family: inherit;
 }
 
-.board-view-container .board-column h3 .edit-icon {
+.board-view-container .board-column .edit-icon {
   opacity: 0;
   margin-left: 0.5em;
   transition: opacity 0.2s ease;
   color: var(--muted-text-color);
+  cursor: pointer;
 }
 
-.board-view-container .board-column h3:hover .edit-icon {
+.board-view-container .board-column h3:hover .edit-icon,
+.board-view-container .board-note:hover .edit-icon {
   opacity: 1;
 }
 
-.board-view-container .board-column h3.editing .edit-icon {
-  display: none;
-}
 
 .board-view-container .board-note {
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);

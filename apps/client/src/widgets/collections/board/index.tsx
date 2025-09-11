@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { Dispatch, StateUpdater, useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { ViewModeProps } from "../interface";
 import "./index.css";
 import { ColumnMap, getBoardData } from "./data";
@@ -22,7 +22,8 @@ export interface BoardColumnData {
 interface BoardViewContextData {
     branchIdToEdit?: string;
     columnNameToEdit?: string;
-    setColumnNameToEdit?: (column: string | undefined) => void;
+    setColumnNameToEdit?: Dispatch<StateUpdater<string | undefined>>;
+    setBranchIdToEdit?: Dispatch<StateUpdater<string | undefined>>;
 }
 
 export const BoardViewContext = createContext<BoardViewContextData>({});
@@ -44,8 +45,9 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     const boardViewContext = useMemo<BoardViewContextData>(() => ({
         branchIdToEdit,
         columnNameToEdit,
-        setColumnNameToEdit
-    }), [ branchIdToEdit, columnNameToEdit, setColumnNameToEdit ]);
+        setColumnNameToEdit,
+        setBranchIdToEdit
+    }), [ branchIdToEdit, columnNameToEdit, setColumnNameToEdit, setBranchIdToEdit ]);
 
     function refresh() {
         getBoardData(parentNote, statusAttribute, viewConfig ?? {}).then(({ byColumn, newPersistedData }) => {

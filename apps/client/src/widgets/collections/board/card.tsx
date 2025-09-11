@@ -23,7 +23,7 @@ export default function Card({
     setDraggedCard: (card: { noteId: string, branchId: string, fromColumn: string, index: number } | null) => void,
     isDragging: boolean
 }) {
-    const { branchIdToEdit } = useContext(BoardViewContext);
+    const { branchIdToEdit, setBranchIdToEdit } = useContext(BoardViewContext);
     const isEditing = branch.branchId === branchIdToEdit;
     const colorClass = note.getColorClass() || '';
     const editorRef = useRef<HTMLInputElement>(null);
@@ -42,6 +42,10 @@ export default function Card({
         openNoteContextMenu(api, e, note.noteId, branch.branchId, column);
     }, [ api, note, branch, column ]);
 
+    const handleEdit = useCallback((e) => {
+        setBranchIdToEdit?.(branch.branchId);
+    }, [ setBranchIdToEdit, branch ]);
+
     useEffect(() => {
         editorRef.current?.focus();
     }, [ isEditing ]);
@@ -56,7 +60,14 @@ export default function Card({
         >
             <span class={`icon ${note.getIcon()}`} />
             {!isEditing ? (
-                <>{note.title}</>
+                <>
+                    <span className="title">{note.title}</span>
+                    <span
+                        className="edit-icon icon bx bx-edit-alt"
+                        title="Click to edit note title"
+                        onClick={handleEdit}
+                    />
+                </>
             ) : (
                 <TitleEditor
                     currentValue={note.title}
