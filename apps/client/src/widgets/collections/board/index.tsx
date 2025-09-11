@@ -9,6 +9,7 @@ import Icon from "../../react/Icon";
 import { t } from "../../../services/i18n";
 import { createNewItem, changeColumn } from "./api";
 import FormTextBox from "../../react/FormTextBox";
+import branchService from "../../../services/branches";
 
 export interface BoardViewData {
     columns?: BoardColumnData[];
@@ -22,7 +23,7 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     const [ statusAttribute ] = useNoteLabel(parentNote, "board:groupBy");
     const [ byColumn, setByColumn ] = useState<ColumnMap>();
     const [ columns, setColumns ] = useState<string[]>();
-    const [ draggedCard, setDraggedCard ] = useState<{ noteId: string, fromColumn: string, index: number } | null>(null);
+    const [ draggedCard, setDraggedCard ] = useState<{ noteId: string, branchId: string, fromColumn: string, index: number } | null>(null);
     const [ dropTarget, setDropTarget ] = useState<string | null>(null);
     const [ dropPosition, setDropPosition ] = useState<{ column: string, index: number } | null>(null);
 
@@ -108,8 +109,8 @@ function Column({
     column: string,
     columnItems?: { note: FNote, branch: FBranch }[],
     statusAttribute: string,
-    draggedCard: { noteId: string, fromColumn: string, index: number } | null,
-    setDraggedCard: (card: { noteId: string, fromColumn: string, index: number } | null) => void,
+    draggedCard: { noteId: string, branchId: string, fromColumn: string, index: number } | null,
+    setDraggedCard: (card: { noteId: string, branchId: string, fromColumn: string, index: number } | null) => void,
     dropTarget: string | null,
     setDropTarget: (target: string | null) => void,
     dropPosition: { column: string, index: number } | null,
@@ -154,16 +155,41 @@ function Column({
         setDropTarget(null);
         setDropPosition(null);
 
-        if (draggedCard) {
-            // For now, just handle column changes
-            // TODO: Add position/order handling
+        if (draggedCard && dropPosition) {
+            const targetIndex = dropPosition.index;
+            const targetItems = columnItems || [];
+
             if (draggedCard.fromColumn !== column) {
+                // Moving to a different column
                 await changeColumn(draggedCard.noteId, column, statusAttribute);
-                onCardDrop();
+
+                // If there are items in the target column, reorder
+                if (targetItems.length > 0 && targetIndex < targetItems.length) {
+                    const targetBranch = targetItems[targetIndex].branch;
+                    await branchService.moveBeforeBranch([ draggedCard.branchId ], targetBranch.branchId);
+                }
+            } else if (draggedCard.index !== targetIndex) {
+                // Reordering within the same column
+                let targetBranchId: string | null = null;
+
+                if (targetIndex < targetItems.length) {
+                    // Moving before an existing item
+                    const adjustedIndex = draggedCard.index < targetIndex ? targetIndex : targetIndex;
+                    if (adjustedIndex < targetItems.length) {
+                        targetBranchId = targetItems[adjustedIndex].branch.branchId;
+                        await branchService.moveBeforeBranch([ draggedCard.branchId ], targetBranchId);
+                    }
+                } else if (targetIndex > 0) {
+                    // Moving to the end - place after the last item
+                    const lastItem = targetItems[targetItems.length - 1];
+                    await branchService.moveAfterBranch([ draggedCard.branchId ], lastItem.branch.branchId);
+                }
             }
+
+            onCardDrop();
         }
         setDraggedCard(null);
-    }, [draggedCard, column, statusAttribute, setDraggedCard, setDropTarget, setDropPosition, onCardDrop]);
+    }, [draggedCard, dropPosition, columnItems, column, statusAttribute, setDraggedCard, setDropTarget, setDropPosition, onCardDrop]);
     return (
         <div
             className={`board-column ${dropTarget === column && draggedCard?.fromColumn !== column ? 'drag-over' : ''}`}
@@ -218,6 +244,7 @@ function Column({
 
 function Card({
     note,
+    branch,
     column,
     index,
     setDraggedCard,
@@ -228,7 +255,7 @@ function Card({
     branch: FBranch,
     column: string,
     index: number,
-    setDraggedCard: (card: { noteId: string, fromColumn: string, index: number } | null) => void,
+    setDraggedCard: (card: { noteId: string, branchId: string, fromColumn: string, index: number } | null) => void,
     isDragging: boolean,
     shouldShift?: boolean
 }) {
@@ -237,8 +264,8 @@ function Card({
     const handleDragStart = useCallback((e: DragEvent) => {
         e.dataTransfer!.effectAllowed = 'move';
         e.dataTransfer!.setData('text/plain', note.noteId);
-        setDraggedCard({ noteId: note.noteId, fromColumn: column, index });
-    }, [note.noteId, column, index, setDraggedCard]);
+        setDraggedCard({ noteId: note.noteId, branchId: branch.branchId, fromColumn: column, index });
+    }, [note.noteId, branch.branchId, column, index, setDraggedCard]);
 
     const handleDragEnd = useCallback(() => {
         setDraggedCard(null);
