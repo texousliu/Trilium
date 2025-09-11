@@ -5,6 +5,7 @@ import BoardApi from "./api";
 import { BoardViewContext, TitleEditor } from ".";
 import { ContextMenuEvent } from "../../../menus/context_menu";
 import { openNoteContextMenu } from "./context_menu";
+import { t } from "../../../services/i18n";
 
 export default function Card({
     api,
@@ -64,7 +65,7 @@ export default function Card({
                     <span className="title">{note.title}</span>
                     <span
                         className="edit-icon icon bx bx-edit-alt"
-                        title="Click to edit note title"
+                        title={t("board_view.edit-note-title")}
                         onClick={handleEdit}
                     />
                 </>

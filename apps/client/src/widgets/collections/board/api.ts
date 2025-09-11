@@ -3,6 +3,7 @@ import appContext from "../../../components/app_context";
 import FNote from "../../../entities/fnote";
 import attributes from "../../../services/attributes";
 import { executeBulkActions } from "../../../services/bulk_action";
+import { t } from "../../../services/i18n";
 import note_create from "../../../services/note_create";
 import server from "../../../services/server";
 import { ColumnMap } from "./data";
@@ -86,7 +87,7 @@ export default class BoardApi {
             activate: false,
             targetBranchId: relativeToBranchId,
             target: direction,
-            title: "New item"
+            title: t("board_view.new-item")
         });
 
         if (!note || !branch) {

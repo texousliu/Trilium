@@ -228,7 +228,7 @@ function AddNewColumn({ viewConfig, saveConfig }: { viewConfig?: BoardViewData, 
                 <FormTextBox
                     inputRef={columnNameRef}
                     type="text"
-                    placeholder="Enter column name..."
+                    placeholder={t("board_view.add-column-placeholder")}
                     onBlur={() => finishEdit(true)}
                     onKeyDown={(e: KeyboardEvent) => {
                         if (e.key === "Enter") {
