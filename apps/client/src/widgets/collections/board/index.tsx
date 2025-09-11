@@ -10,6 +10,8 @@ import { t } from "../../../services/i18n";
 import Api from "./api";
 import FormTextBox from "../../react/FormTextBox";
 import branchService from "../../../services/branches";
+import { openColumnContextMenu } from "./context_menu";
+import { ContextMenuEvent } from "../../../menus/context_menu";
 
 export interface BoardViewData {
     columns?: BoardColumnData[];
@@ -29,7 +31,7 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     const [ draggedColumn, setDraggedColumn ] = useState<{ column: string, index: number } | null>(null);
     const [ columnDropPosition, setColumnDropPosition ] = useState<number | null>(null);
     const api = useMemo(() => {
-        return new Api(parentNote, statusAttribute);
+        return new Api(byColumn, parentNote, statusAttribute, viewConfig ?? {}, saveConfig);
     }, [ parentNote, statusAttribute ]);
 
     function refresh() {
@@ -283,12 +285,17 @@ function Column({
         setDraggedCard(null);
     }, [draggedCard, draggedColumn, dropPosition, columnItems, column, statusAttribute, setDraggedCard, setDropTarget, setDropPosition, onCardDrop]);
 
+    const handleContextMenu = useCallback((e: ContextMenuEvent) => {
+        openColumnContextMenu(api, e, column);
+    }, [ api, column ]);
+
     return (
         <div
             className={`board-column ${dropTarget === column && draggedCard?.fromColumn !== column ? 'drag-over' : ''} ${isDraggingColumn ? 'column-dragging' : ''}`}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
+            onContextMenu={handleContextMenu}
         >
             <h3
                 draggable="true"

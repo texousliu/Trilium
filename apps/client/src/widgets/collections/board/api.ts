@@ -1,12 +1,18 @@
+import { BoardViewData } from ".";
 import FNote from "../../../entities/fnote";
 import attributes from "../../../services/attributes";
+import { executeBulkActions } from "../../../services/bulk_action";
 import note_create from "../../../services/note_create";
+import { ColumnMap } from "./data";
 
 export default class BoardApi {
 
     constructor(
+        private byColumn: ColumnMap | undefined,
         private parentNote: FNote,
-        private statusAttribute: string
+        private statusAttribute: string,
+        private viewConfig: BoardViewData,
+        private saveConfig: (newConfig: BoardViewData) => void
     ) {};
 
     async createNewItem(column: string) {
@@ -34,6 +40,20 @@ export default class BoardApi {
 
     async changeColumn(noteId: string, newColumn: string) {
         await attributes.setLabel(noteId, this.statusAttribute, newColumn);
+    }
+
+    async removeColumn(column: string) {
+        // Remove the value from the notes.
+        const noteIds = this.byColumn?.get(column)?.map(item => item.note.noteId) || [];
+        await executeBulkActions(noteIds, [
+            {
+                name: "deleteLabel",
+                labelName: this.statusAttribute
+            }
+        ]);
+
+        this.viewConfig.columns = (this.viewConfig.columns ?? []).filter(col => col.value !== column);
+        this.saveConfig(this.viewConfig);
     }
 
 }

@@ -77,19 +77,7 @@ export default class BoardApi {
         await this.viewStorage.store(this.persistedData);
     }
 
-    async removeColumn(column: string) {
-        // Remove the value from the notes.
-        const noteIds = this.byColumn.get(column)?.map(item => item.note.noteId) || [];
-        await executeBulkActions(noteIds, [
-            {
-                name: "deleteLabel",
-                labelName: this._statusAttribute
-            }
-        ]);
 
-        this.persistedData.columns = (this.persistedData.columns ?? []).filter(col => col.value !== column);
-        this.viewStorage.store(this.persistedData);
-    }
 
     async reorderColumns(newColumnOrder: string[]) {
         // Update the column order in persisted data

@@ -16,32 +16,7 @@ export function setupContextMenu({ $container, api, boardView }: ShowNoteContext
     $container.on("contextmenu", ".board-note", showNoteContextMenu);
     $container.on("contextmenu", ".board-column h3", showColumnContextMenu);
 
-    function showColumnContextMenu(event: ContextMenuEvent) {
-        event.preventDefault();
-        event.stopPropagation();
 
-        const $el = $(event.currentTarget);
-        const column = $el.closest(".board-column").data("column");
-
-        contextMenu.show({
-            x: event.pageX,
-            y: event.pageY,
-            items: [
-                {
-                    title: t("board_view.delete-column"),
-                    uiIcon: "bx bx-trash",
-                    async handler() {
-                        const confirmed = await dialog.confirm(t("board_view.delete-column-confirmation"));
-                        if (!confirmed) {
-                            return;
-                        }
-
-                        await api.removeColumn(column);
-                    }
-                }
-            ],
-            selectMenuItemHandler() {}
-        });
     }
 
     function showNoteContextMenu(event: ContextMenuEvent) {
