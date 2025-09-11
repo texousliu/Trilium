@@ -46,9 +46,6 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     useEffect(refresh, [ parentNote, noteIds ]);
 
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
-        // TODO: Re-enable
-        return;
-
         // Check if any changes affect our board
         const hasRelevantChanges =
             // React to changes in status attribute for notes in this board
@@ -65,7 +62,6 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
             loadResults.getAttributeRows().some(attr => attr.name === "board:groupBy" && attr.noteId === parentNote.noteId);
 
         if (hasRelevantChanges) {
-            console.log("Trigger refresh");
             refresh();
         }
     });
@@ -123,23 +119,23 @@ function Column({
     const handleDragOver = useCallback((e: DragEvent) => {
         e.preventDefault();
         setDropTarget(column);
-        
+
         // Calculate drop position based on mouse position
         const cards = Array.from(e.currentTarget.querySelectorAll('.board-note'));
         const mouseY = e.clientY;
-        
+
         let newIndex = cards.length;
         for (let i = 0; i < cards.length; i++) {
             const card = cards[i] as HTMLElement;
             const rect = card.getBoundingClientRect();
             const cardMiddle = rect.top + rect.height / 2;
-            
+
             if (mouseY < cardMiddle) {
                 newIndex = i;
                 break;
             }
         }
-        
+
         setDropPosition({ column, index: newIndex });
     }, [column, setDropTarget, setDropPosition]);
 
@@ -183,14 +179,14 @@ function Column({
             </h3>
 
             {(columnItems ?? []).map(({ note, branch }, index) => {
-                const showIndicatorBefore = dropPosition?.column === column && 
-                                          dropPosition.index === index && 
+                const showIndicatorBefore = dropPosition?.column === column &&
+                                          dropPosition.index === index &&
                                           draggedCard?.noteId !== note.noteId;
-                const shouldShift = dropPosition?.column === column && 
-                                   dropPosition.index <= index && 
+                const shouldShift = dropPosition?.column === column &&
+                                   dropPosition.index <= index &&
                                    draggedCard?.noteId !== note.noteId &&
                                    draggedCard !== null;
-                
+
                 return (
                     <>
                         {showIndicatorBefore && (
