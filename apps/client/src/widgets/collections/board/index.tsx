@@ -373,6 +373,7 @@ function Card({
     isDragging: boolean
 }) {
     const { branchIdToEdit } = useContext(BoardViewContext);
+    const isEditing = branch.branchId === branchIdToEdit;
     const colorClass = note.getColorClass() || '';
 
     const handleDragStart = useCallback((e: DragEvent) => {
@@ -391,17 +392,15 @@ function Card({
 
     return (
         <div
-            className={`board-note ${colorClass} ${isDragging ? 'dragging' : ''}`}
+            className={`board-note ${colorClass} ${isDragging ? 'dragging' : ''} ${isEditing ? "editing" : ""}`}
             draggable="true"
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
             onContextMenu={handleContextMenu}
         >
-            {branch.branchId !== branchIdToEdit ? (
-                <>
-                    <span class={`icon ${note.getIcon()}`} />
-                    {note.title}
-                </>
+            <span class={`icon ${note.getIcon()}`} />
+            {!isEditing ? (
+                <>{note.title}</>
             ) : (
                 <FormTextBox
                     value={note.title}

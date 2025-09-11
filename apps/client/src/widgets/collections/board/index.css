@@ -154,6 +154,8 @@
 .board-view-container .board-note.editing {
   box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.35);
   border-color: var(--main-text-color);
+  display: flex;
+  align-items: center;
 }
 
 .board-view-container .board-note.editing input {
