@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useRef } from "preact/hooks";
+import { useCallback, useContext, useEffect, useRef, useState } from "preact/hooks";
 import FBranch from "../../../entities/fbranch";
 import FNote from "../../../entities/fnote";
 import BoardApi from "./api";
@@ -28,6 +28,7 @@ export default function Card({
     const isEditing = branch.branchId === branchIdToEdit;
     const colorClass = note.getColorClass() || '';
     const editorRef = useRef<HTMLInputElement>(null);
+    const [ title, setTitle ] = useState(note.title);
 
     const handleDragStart = useCallback((e: DragEvent) => {
         e.dataTransfer!.effectAllowed = 'move';
@@ -62,7 +63,7 @@ export default function Card({
             <span class={`icon ${note.getIcon()}`} />
             {!isEditing ? (
                 <>
-                    <span className="title">{note.title}</span>
+                    <span className="title">{title}</span>
                     <span
                         className="edit-icon icon bx bx-edit-alt"
                         title={t("board_view.edit-note-title")}
@@ -72,7 +73,10 @@ export default function Card({
             ) : (
                 <TitleEditor
                     currentValue={note.title}
-                    save={newTitle => api.renameCard(note.noteId, newTitle)}
+                    save={newTitle => {
+                        api.renameCard(note.noteId, newTitle);
+                        setTitle(newTitle);
+                    }}
                     dismiss={() => api.dismissEditingTitle()}
                 />
             )}
