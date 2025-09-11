@@ -1,1 +1,5 @@
-{}
+{
+  "keyboard_actions": {
+    "back-in-note-history": "Navigovat na předchozí poznámku v historii"
+  }
+}
