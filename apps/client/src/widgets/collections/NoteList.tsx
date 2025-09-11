@@ -144,7 +144,10 @@ function useViewModeConfig<T extends object>(note: FNote | null | undefined, vie
         if (!note || !viewType) return;
         const viewStorage = new ViewModeStorage<T>(note, viewType);
         viewStorage.restore().then(config => {
-            const storeFn = (config: T) => viewStorage.store(config);
+            const storeFn = (config: T) => {
+                setViewConfig([ config, storeFn ]);
+                viewStorage.store(config);
+            };
             setViewConfig([ config, storeFn ]);
         });
     }, [ note, viewType ]);
