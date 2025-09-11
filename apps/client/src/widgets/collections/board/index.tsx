@@ -22,8 +22,9 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     const [ statusAttribute ] = useNoteLabel(parentNote, "board:groupBy");
     const [ byColumn, setByColumn ] = useState<ColumnMap>();
     const [ columns, setColumns ] = useState<string[]>();
-    const [ draggedCard, setDraggedCard ] = useState<{ noteId: string, fromColumn: string } | null>(null);
+    const [ draggedCard, setDraggedCard ] = useState<{ noteId: string, fromColumn: string, index: number } | null>(null);
     const [ dropTarget, setDropTarget ] = useState<string | null>(null);
+    const [ dropPosition, setDropPosition ] = useState<{ column: string, index: number } | null>(null);
 
     function refresh() {
         getBoardData(parentNote, statusAttribute ?? "status", viewConfig ?? {}).then(({ byColumn, newPersistedData }) => {
@@ -82,6 +83,8 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
                         setDraggedCard={setDraggedCard}
                         dropTarget={dropTarget}
                         setDropTarget={setDropTarget}
+                        dropPosition={dropPosition}
+                        setDropPosition={setDropPosition}
                         onCardDrop={refresh}
                     />
                 ))}
@@ -101,22 +104,44 @@ function Column({
     setDraggedCard,
     dropTarget,
     setDropTarget,
+    dropPosition,
+    setDropPosition,
     onCardDrop
 }: {
     parentNote: FNote,
     column: string,
     columnItems?: { note: FNote, branch: FBranch }[],
     statusAttribute: string,
-    draggedCard: { noteId: string, fromColumn: string } | null,
-    setDraggedCard: (card: { noteId: string, fromColumn: string } | null) => void,
+    draggedCard: { noteId: string, fromColumn: string, index: number } | null,
+    setDraggedCard: (card: { noteId: string, fromColumn: string, index: number } | null) => void,
     dropTarget: string | null,
     setDropTarget: (target: string | null) => void,
+    dropPosition: { column: string, index: number } | null,
+    setDropPosition: (position: { column: string, index: number } | null) => void,
     onCardDrop: () => void
 }) {
     const handleDragOver = useCallback((e: DragEvent) => {
         e.preventDefault();
         setDropTarget(column);
-    }, [column, setDropTarget]);
+        
+        // Calculate drop position based on mouse position
+        const cards = Array.from(e.currentTarget.querySelectorAll('.board-note'));
+        const mouseY = e.clientY;
+        
+        let newIndex = cards.length;
+        for (let i = 0; i < cards.length; i++) {
+            const card = cards[i] as HTMLElement;
+            const rect = card.getBoundingClientRect();
+            const cardMiddle = rect.top + rect.height / 2;
+            
+            if (mouseY < cardMiddle) {
+                newIndex = i;
+                break;
+            }
+        }
+        
+        setDropPosition({ column, index: newIndex });
+    }, [column, setDropTarget, setDropPosition]);
 
     const handleDragLeave = useCallback((e: DragEvent) => {
         const relatedTarget = e.relatedTarget as HTMLElement;
@@ -124,19 +149,25 @@ function Column({
 
         if (!currentTarget.contains(relatedTarget)) {
             setDropTarget(null);
+            setDropPosition(null);
         }
-    }, [setDropTarget]);
+    }, [setDropTarget, setDropPosition]);
 
     const handleDrop = useCallback(async (e: DragEvent) => {
         e.preventDefault();
         setDropTarget(null);
+        setDropPosition(null);
 
-        if (draggedCard && draggedCard.fromColumn !== column) {
-            await changeColumn(draggedCard.noteId, column, statusAttribute);
-            onCardDrop();
+        if (draggedCard) {
+            // For now, just handle column changes
+            // TODO: Add position/order handling
+            if (draggedCard.fromColumn !== column) {
+                await changeColumn(draggedCard.noteId, column, statusAttribute);
+                onCardDrop();
+            }
         }
         setDraggedCard(null);
-    }, [draggedCard, column, statusAttribute, setDraggedCard, setDropTarget, onCardDrop]);
+    }, [draggedCard, column, statusAttribute, setDraggedCard, setDropTarget, setDropPosition, onCardDrop]);
     return (
         <div
             className={`board-column ${dropTarget === column && draggedCard?.fromColumn !== column ? 'drag-over' : ''}`}
@@ -151,15 +182,35 @@ function Column({
                     title="Click to edit column title" />
             </h3>
 
-            {(columnItems ?? []).map(({ note, branch }) => (
-                <Card
-                    note={note}
-                    branch={branch}
-                    column={column}
-                    setDraggedCard={setDraggedCard}
-                    isDragging={draggedCard?.noteId === note.noteId}
-                />
-            ))}
+            {(columnItems ?? []).map(({ note, branch }, index) => {
+                const showIndicatorBefore = dropPosition?.column === column && 
+                                          dropPosition.index === index && 
+                                          draggedCard?.noteId !== note.noteId;
+                const shouldShift = dropPosition?.column === column && 
+                                   dropPosition.index <= index && 
+                                   draggedCard?.noteId !== note.noteId &&
+                                   draggedCard !== null;
+                
+                return (
+                    <>
+                        {showIndicatorBefore && (
+                            <div className="board-drop-indicator show" />
+                        )}
+                        <Card
+                            note={note}
+                            branch={branch}
+                            column={column}
+                            index={index}
+                            setDraggedCard={setDraggedCard}
+                            isDragging={draggedCard?.noteId === note.noteId}
+                            shouldShift={shouldShift}
+                        />
+                    </>
+                );
+            })}
+            {dropPosition?.column === column && dropPosition.index === (columnItems?.length ?? 0) && (
+                <div className="board-drop-indicator show" />
+            )}
 
             <div className="board-new-item" onClick={() => createNewItem(parentNote, column)}>
                 <Icon icon="bx bx-plus" />{" "}
@@ -172,22 +223,26 @@ function Column({
 function Card({
     note,
     column,
+    index,
     setDraggedCard,
-    isDragging
+    isDragging,
+    shouldShift
 }: {
     note: FNote,
     branch: FBranch,
     column: string,
-    setDraggedCard: (card: { noteId: string, fromColumn: string } | null) => void,
-    isDragging: boolean
+    index: number,
+    setDraggedCard: (card: { noteId: string, fromColumn: string, index: number } | null) => void,
+    isDragging: boolean,
+    shouldShift?: boolean
 }) {
     const colorClass = note.getColorClass() || '';
 
     const handleDragStart = useCallback((e: DragEvent) => {
         e.dataTransfer!.effectAllowed = 'move';
         e.dataTransfer!.setData('text/plain', note.noteId);
-        setDraggedCard({ noteId: note.noteId, fromColumn: column });
-    }, [note.noteId, column, setDraggedCard]);
+        setDraggedCard({ noteId: note.noteId, fromColumn: column, index });
+    }, [note.noteId, column, index, setDraggedCard]);
 
     const handleDragEnd = useCallback(() => {
         setDraggedCard(null);
@@ -195,7 +250,7 @@ function Card({
 
     return (
         <div
-            className={`board-note ${colorClass} ${isDragging ? 'dragging' : ''}`}
+            className={`board-note ${colorClass} ${isDragging ? 'dragging' : ''} ${shouldShift ? 'shift-down' : ''}`}
             draggable="true"
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
