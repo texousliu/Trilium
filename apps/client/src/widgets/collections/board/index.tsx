@@ -242,3 +242,42 @@ function AddNewColumn({ viewConfig, saveConfig }: { viewConfig?: BoardViewData, 
         </div>
     )
 }
+
+export function TitleEditor({ currentValue, save, dismiss }: {
+    currentValue: string,
+    save: (newValue: string) => void,
+    dismiss: () => void
+}) {
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        inputRef.current?.focus();
+        inputRef.current?.select();
+    }, [ inputRef ]);
+
+    return (
+        <FormTextBox
+            inputRef={inputRef}
+            currentValue={currentValue}
+            onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                    const newValue = e.currentTarget.value;
+                    if (newValue !== currentValue) {
+                        save(newValue);
+                    }
+                    dismiss();
+                }
+
+                if (e.key === "Escape") {
+                    dismiss();
+                }
+            }}
+            onBlur={(newValue) => {
+                if (newValue !== currentValue) {
+                    save(newValue);
+                }
+                dismiss();
+            }}
+        />
+    )
+}

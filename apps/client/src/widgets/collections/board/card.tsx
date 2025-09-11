@@ -2,10 +2,9 @@ import { useCallback, useContext, useEffect, useRef } from "preact/hooks";
 import FBranch from "../../../entities/fbranch";
 import FNote from "../../../entities/fnote";
 import BoardApi from "./api";
-import { BoardViewContext } from ".";
+import { BoardViewContext, TitleEditor } from ".";
 import { ContextMenuEvent } from "../../../menus/context_menu";
 import { openNoteContextMenu } from "./context_menu";
-import FormTextBox from "../../react/FormTextBox";
 
 export default function Card({
     api,
@@ -59,28 +58,10 @@ export default function Card({
             {!isEditing ? (
                 <>{note.title}</>
             ) : (
-                <FormTextBox
-                    inputRef={editorRef}
+                <TitleEditor
                     currentValue={note.title}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                            const newTitle = e.currentTarget.value;
-                            if (newTitle !== note.title) {
-                                api.renameCard(note.noteId, newTitle);
-                            }
-                            api.dismissEditingTitle();
-                        }
-
-                        if (e.key === "Escape") {
-                            api.dismissEditingTitle();
-                        }
-                    }}
-                    onBlur={(newTitle) => {
-                        if (newTitle !== note.title) {
-                            api.renameCard(note.noteId, newTitle);
-                        }
-                        api.dismissEditingTitle();
-                    }}
+                    save={newTitle => api.renameCard(note.noteId, newTitle)}
+                    dismiss={() => api.dismissEditingTitle()}
                 />
             )}
         </div>

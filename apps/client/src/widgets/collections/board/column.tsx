@@ -1,11 +1,10 @@
 import { useCallback, useContext, useEffect, useRef } from "preact/hooks";
 import FBranch from "../../../entities/fbranch";
 import FNote from "../../../entities/fnote";
-import { BoardViewContext } from ".";
+import { BoardViewContext, TitleEditor } from ".";
 import branches from "../../../services/branches";
 import { openColumnContextMenu } from "./context_menu";
 import { ContextMenuEvent } from "../../../menus/context_menu";
-import FormTextBox from "../../react/FormTextBox";
 import Icon from "../../react/Icon";
 import { t } from "../../../services/i18n";
 import BoardApi from "./api";
@@ -171,31 +170,11 @@ export default function Column({
                         />
                     </>
                 ) : (
-                    <>
-                        <FormTextBox
-                            inputRef={editorRef}
-                            currentValue={column}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                    const newTitle = e.currentTarget.value;
-                                    if (newTitle !== column) {
-                                        api.renameColumn(column, newTitle);
-                                    }
-                                    context.setColumnNameToEdit?.(undefined);
-                                }
-
-                                if (e.key === "Escape") {
-                                    context.setColumnNameToEdit?.(undefined);
-                                }
-                            }}
-                            onBlur={(newTitle) => {
-                                if (newTitle !== column) {
-                                    api.renameColumn(column, newTitle);
-                                }
-                                context.setColumnNameToEdit?.(undefined);
-                            }}
-                        />
-                    </>
+                    <TitleEditor
+                        currentValue={column}
+                        save={newTitle => api.renameColumn(column, newTitle)}
+                        dismiss={() => context.setColumnNameToEdit?.(undefined)}
+                    />
                 )}
             </h3>
 
