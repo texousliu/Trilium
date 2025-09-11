@@ -803,7 +803,7 @@ importers:
         version: 3.12.3(eslint@9.35.0(jiti@2.5.1))(svelte@5.38.9)(ts-node@10.9.2(@swc/core@1.11.29(@swc/helpers@0.5.17))(@types/node@24.3.0)(typescript@5.9.2))
       globals:
         specifier: ^16.0.0
-        version: 16.3.0
+        version: 16.4.0
       mdsvex:
         specifier: ^0.12.3
         version: 0.12.6(svelte@5.38.9)
@@ -8273,10 +8273,6 @@ packages:
     resolution: {integrity: sha512-7ACyT3wmyp3I61S4fG682L0VA2RGD9otkqGJIwNUMF1SWUombIIk+af1unuDYgMm082aHYwD+mzJvv9Iu8dsgg==}
     engines: {node: '>=18'}
 
-  globals@16.3.0:
-    resolution: {integrity: sha512-bqWEnJ1Nt3neqx2q5SFfGS8r/ahumIakg3HcwtNlrVlwXIeNumWn/c7Pn/wKzGhf6SaW6H6uWXLqC30STCMchQ==}
-    engines: {node: '>=18'}
-
   globals@16.4.0:
     resolution: {integrity: sha512-ob/2LcVVaVGCYN+r14cnwnoDPUufjiYgSqRhiFD0Q1iI4Odora5RE8Iv1D24hAz5oMophRGkGz+yuvQmmUMnMw==}
     engines: {node: '>=18'}
@@ -14823,6 +14819,8 @@ snapshots:
       '@ckeditor/ckeditor5-typing': 46.0.3
       '@ckeditor/ckeditor5-utils': 46.0.3
       ckeditor5: 46.0.3(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-autosave@46.0.3':
     dependencies:
@@ -14841,6 +14839,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.0.3
       '@ckeditor/ckeditor5-utils': 46.0.3
       ckeditor5: 46.0.3(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-block-quote@46.0.3':
     dependencies:
@@ -14851,6 +14851,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.0.3
       '@ckeditor/ckeditor5-utils': 46.0.3
       ckeditor5: 46.0.3(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-bookmark@46.0.3':
     dependencies:
@@ -14926,6 +14928,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.0.3
       '@ckeditor/ckeditor5-utils': 46.0.3
       ckeditor5: 46.0.3(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-collaboration-core@46.0.3':
     dependencies:
@@ -15138,6 +15142,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 46.0.3
       ckeditor5: 46.0.3(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-editor-classic@46.0.3':
     dependencies:
@@ -15227,6 +15233,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.0.3
       '@ckeditor/ckeditor5-undo': 46.0.3
       ckeditor5: 46.0.3(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-export-inline-styles@46.0.3':
     dependencies:
@@ -15245,6 +15253,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.0.3
       '@ckeditor/ckeditor5-utils': 46.0.3
       ckeditor5: 46.0.3(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-export-word@46.0.3':
     dependencies:
@@ -15321,6 +15331,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.0.3
       '@ckeditor/ckeditor5-utils': 46.0.3
       ckeditor5: 46.0.3(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-horizontal-line@46.0.3':
     dependencies:
@@ -15339,6 +15351,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 46.0.3
       '@ckeditor/ckeditor5-widget': 46.0.3
       ckeditor5: 46.0.3(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-html-support@46.0.3':
     dependencies:
@@ -15387,6 +15401,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.0.3
       '@ckeditor/ckeditor5-utils': 46.0.3
       ckeditor5: 46.0.3(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-indent@46.0.3':
     dependencies:
@@ -15498,6 +15514,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 46.0.3
       '@ckeditor/ckeditor5-widget': 46.0.3
       ckeditor5: 46.0.3(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-mention@46.0.3(patch_hash=5981fb59ba35829e4dff1d39cf771000f8a8fdfa7a34b51d8af9549541f2d62d)':
     dependencies:
@@ -15521,6 +15539,8 @@ snapshots:
       '@ckeditor/ckeditor5-widget': 46.0.3
       ckeditor5: 46.0.3(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-minimap@46.0.3':
     dependencies:
@@ -15583,6 +15603,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 46.0.3
       '@ckeditor/ckeditor5-widget': 46.0.3
       ckeditor5: 46.0.3(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-pagination@46.0.3':
     dependencies:
@@ -15691,6 +15713,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.0.3
       '@ckeditor/ckeditor5-utils': 46.0.3
       ckeditor5: 46.0.3(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-slash-command@46.0.3':
     dependencies:
@@ -15847,8 +15871,6 @@ snapshots:
     dependencies:
       '@ckeditor/ckeditor5-core': 46.0.3
       '@ckeditor/ckeditor5-utils': 46.0.3
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-uploadcare@46.0.3(bufferutil@4.0.9)(utf-8-validate@6.0.5)':
     dependencies:
@@ -15901,6 +15923,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 46.0.3
       ckeditor5: 46.0.3(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@codemirror/autocomplete@6.18.6':
     dependencies:
@@ -23706,8 +23730,6 @@ snapshots:
   globals@14.0.0: {}
 
   globals@15.15.0: {}
-
-  globals@16.3.0: {}
 
   globals@16.4.0: {}
 
