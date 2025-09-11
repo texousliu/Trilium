@@ -400,7 +400,9 @@ function AddNewColumn({ viewConfig, saveConfig }: { viewConfig?: BoardViewData, 
             viewConfig.columns.push({ value: columnName });
             saveConfig(viewConfig);
         }
-    }, []);
+
+        setIsCreatingNewColumn(false);
+    }, [ viewConfig, saveConfig ]);
 
     return (
         <div className={`board-add-column ${isCreatingNewColumn ? "editing" : ""}`} onClick={addColumnCallback}>
