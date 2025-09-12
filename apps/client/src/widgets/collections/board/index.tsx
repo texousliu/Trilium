@@ -253,7 +253,7 @@ export function TitleEditor({ currentValue, placeholder, save, dismiss, multilin
                 }
             }}
             onBlur={(newValue) => {
-                if (newValue !== currentValue) {
+                if (newValue !== currentValue || isNewItem) {
                     save(newValue);
                 }
                 dismiss();
