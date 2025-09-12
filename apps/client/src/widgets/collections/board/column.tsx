@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useRef } from "preact/hooks";
+import { useCallback, useContext, useEffect, useRef, useState } from "preact/hooks";
 import FBranch from "../../../entities/fbranch";
 import FNote from "../../../entities/fnote";
 import { BoardViewContext, TitleEditor } from ".";
@@ -117,12 +117,35 @@ export default function Column({
                 <div className="board-drop-placeholder show" />
             )}
 
-            <div className="board-new-item" onClick={() => api.createNewItem(column)}>
-                <Icon icon="bx bx-plus" />{" "}
-                {t("board_view.new-item")}
-            </div>
+            <AddNewItem api={api} column={column} />
         </div>
     )
+}
+
+function AddNewItem({ column, api }: { column: string, api: BoardApi }) {
+    const [ isCreatingNewItem, setIsCreatingNewItem ] = useState(false);
+    const addItemCallback = useCallback(() => setIsCreatingNewItem(true), []);
+
+    return (
+        <div
+            className={`board-new-item ${isCreatingNewItem ? "editing" : ""}`}
+            onClick={addItemCallback}
+        >
+            {!isCreatingNewItem ? (
+                <>
+                    <Icon icon="bx bx-plus" />{" "}
+                    {t("board_view.new-item")}
+                </>
+            ) : (
+                <TitleEditor
+                    currentValue={t("board_view.new-item")}
+                    save={(title) => api.createNewItem(column, title)}
+                    dismiss={() => setIsCreatingNewItem(false)}
+                    multiline isNewItem
+                />
+            )}
+        </div>
+    );
 }
 
 function useDragging({ column, columnIndex, columnItems }: DragContext) {

@@ -20,7 +20,7 @@ export default class BoardApi {
         private setBranchIdToEdit: (branchId: string | undefined) => void
     ) {};
 
-    async createNewItem(column: string) {
+    async createNewItem(column: string, title: string) {
         try {
             // Get the parent note path
             const parentNotePath = this.parentNote.noteId;
@@ -28,12 +28,11 @@ export default class BoardApi {
             // Create a new note as a child of the parent note
             const { note: newNote, branch: newBranch } = await note_create.createNote(parentNotePath, {
                 activate: false,
-                title: "New item"
+                title
             });
 
             if (newNote && newBranch) {
                 await this.changeColumn(newNote.noteId, column);
-                this.startEditing(newBranch?.branchId);
             }
         } catch (error) {
             console.error("Failed to create new item:", error);

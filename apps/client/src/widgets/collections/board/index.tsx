@@ -257,11 +257,12 @@ function AddNewColumn({ viewConfig, saveConfig }: { viewConfig?: BoardViewData, 
     )
 }
 
-export function TitleEditor({ currentValue, save, dismiss, multiline }: {
+export function TitleEditor({ currentValue, save, dismiss, multiline, isNewItem }: {
     currentValue: string,
     save: (newValue: string) => void,
     dismiss: () => void,
-    multiline?: boolean
+    multiline?: boolean,
+    isNewItem?: boolean
 }) {
     const inputRef = useRef<any>(null);
 
@@ -280,7 +281,7 @@ export function TitleEditor({ currentValue, save, dismiss, multiline }: {
             onKeyDown={(e) => {
                 if (e.key === "Enter") {
                     const newValue = e.currentTarget.value;
-                    if (newValue !== currentValue) {
+                    if (newValue !== currentValue || isNewItem) {
                         save(newValue);
                     }
                     dismiss();

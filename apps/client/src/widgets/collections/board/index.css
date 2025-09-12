@@ -111,7 +111,8 @@
 }
 
 
-.board-view-container .board-note {
+.board-view-container .board-note,
+.board-view-container .board-new-item.editing {
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
   margin: 0.65em 0;
   padding: var(--card-padding);
@@ -120,12 +121,15 @@
   position: relative;
   background-color: var(--main-background-color);
   border: 1px solid var(--main-border-color);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.15s ease, margin-top 0.2s ease;
   opacity: 1;
   line-height: var(--card-line-height);
   overflow-wrap: break-word;
   overflow: hidden;
   font-size: var(--card-font-size);
+}
+
+.board-view-container .board-note {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.15s ease, margin-top 0.2s ease;
 }
 
 .board-view-container .board-note .icon {
@@ -179,16 +183,17 @@
   box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.5);
 }
 
-.board-view-container .board-note.editing {
-  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.35);
+.board-view-container .board-note.editing,
+.board-view-container .board-new-item.editing {
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
   border-color: var(--main-text-color);
   display: flex;
   align-items: center;
   padding: 0;
 }
 
-.board-view-container .board-note.editing input,
-.board-view-container .board-note.editing textarea {
+.board-view-container .board-note.editing textarea,
+.board-view-container .board-new-item textarea.form-control {
   background: transparent;
   border: none;
   outline: none;
