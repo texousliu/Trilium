@@ -14,6 +14,14 @@ import type { Express } from "express";
 
 const MINIMUM_NODE_VERSION = "20.0.0";
 
+const LOGO = `\
+ _____     _ _ _
+|_   _| __(_) (_)_   _ _ __ ___   | \\ | | ___ | |_ ___  ___
+  | || '__| | | | | | | '_ \` _ \\  |  \\| |/ _ \\| __/ _ \\/ __|
+  | || |  | | | | |_| | | | | | | | |\\  | (_) | ||  __/\\__ \\
+  |_||_|  |_|_|_|\\__,_|_| |_| |_| |_| \\_|\\___/ \\__\\___||___/
+`;
+
 export default async function startTriliumServer() {
     // setup basic error handling even before requiring dependencies, since those can produce errors as well
     process.on("unhandledRejection", (error: Error) => {
@@ -62,6 +70,7 @@ export default async function startTriliumServer() {
         (await import("electron")).app.requestSingleInstanceLock();
     }
 
+    log.info(LOGO);
     log.info(JSON.stringify(appInfo, null, 2));
 
     // for perf. issues it's good to know the rough configuration
