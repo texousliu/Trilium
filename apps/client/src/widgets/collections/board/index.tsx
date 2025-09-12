@@ -12,6 +12,7 @@ import { onWheelHorizontalScroll } from "../../widget_utils";
 import Column from "./column";
 import BoardApi from "./api";
 import FormTextArea from "../../react/FormTextArea";
+import FNote from "../../../entities/fnote";
 
 export interface BoardViewData {
     columns?: BoardColumnData[];
@@ -23,6 +24,7 @@ export interface BoardColumnData {
 
 interface BoardViewContextData {
     api?: BoardApi;
+    parentNote?: FNote;
     branchIdToEdit?: string;
     columnNameToEdit?: string;
     setColumnNameToEdit?: Dispatch<StateUpdater<string | undefined>>;
@@ -31,8 +33,6 @@ interface BoardViewContextData {
     setDraggedColumn: (column: { column: string, index: number } | null) => void;
     dropPosition: { column: string, index: number } | null;
     setDropPosition: (position: { column: string, index: number } | null) => void;
-    draggedCard: { noteId: string, branchId: string, fromColumn: string, index: number } | null;
-    setDraggedCard: (card: { noteId: string, branchId: string, fromColumn: string, index: number } | null) => void;
     setDropTarget: (target: string | null) => void,
     dropTarget: string | null
 }
@@ -56,6 +56,7 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     }, [ byColumn, columns, parentNote, statusAttribute, viewConfig, saveConfig, setBranchIdToEdit ]);
     const boardViewContext = useMemo<BoardViewContextData>(() => ({
         api,
+        parentNote,
         branchIdToEdit, setBranchIdToEdit,
         columnNameToEdit, setColumnNameToEdit,
         draggedColumn, setDraggedColumn,
@@ -64,6 +65,7 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
         dropTarget, setDropTarget
     }), [
         api,
+        parentNote,
         branchIdToEdit, setBranchIdToEdit,
         columnNameToEdit, setColumnNameToEdit,
         draggedColumn, setDraggedColumn,

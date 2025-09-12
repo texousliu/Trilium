@@ -8,8 +8,10 @@ import { ContextMenuEvent } from "../../../menus/context_menu";
 import Icon from "../../react/Icon";
 import { t } from "../../../services/i18n";
 import BoardApi from "./api";
-import Card from "./card";
+import Card, { CardDragData } from "./card";
 import { JSX } from "preact/jsx-runtime";
+import froca from "../../../services/froca";
+import { DragData } from "../../note_tree";
 
 interface DragContext {
     column: string;
@@ -149,7 +151,7 @@ function AddNewItem({ column, api }: { column: string, api: BoardApi }) {
 }
 
 function useDragging({ column, columnIndex, columnItems }: DragContext) {
-    const { api, draggedColumn, setDraggedColumn, setDropTarget, setDropPosition, draggedCard, dropPosition, setDraggedCard } = useContext(BoardViewContext);
+    const { api, parentNote, draggedColumn, setDraggedColumn, setDropTarget, setDropPosition, dropPosition } = useContext(BoardViewContext);
 
     const handleColumnDragStart = useCallback((e: DragEvent) => {
         e.dataTransfer!.effectAllowed = 'move';
@@ -204,39 +206,73 @@ function useDragging({ column, columnIndex, columnItems }: DragContext) {
         setDropTarget(null);
         setDropPosition(null);
 
-        if (draggedCard && dropPosition) {
-            const targetIndex = dropPosition.index;
+        const data = e.dataTransfer?.getData("text");
+        if (!data) return;
+        const draggedCard = JSON.parse(data) as CardDragData | DragData[];
+
+        if (Array.isArray(draggedCard)) {
+            // From note tree.
+            const { noteId, branchId } = draggedCard[0];
+            const targetNote = await froca.getNote(noteId, true);
+            const parentNoteId = parentNote?.noteId;
+            if (!parentNoteId || !dropPosition) return;
+
+            const targetIndex = dropPosition.index - 1;
             const targetItems = columnItems || [];
+            const targetBranch = targetIndex >= 0 ? targetItems[targetIndex].branch : null;
 
-            if (draggedCard.fromColumn !== column) {
-                // Moving to a different column
-                await api?.changeColumn(draggedCard.noteId, column);
+            await api?.changeColumn(noteId, column);
 
-                // If there are items in the target column, reorder
-                if (targetItems.length > 0 && targetIndex < targetItems.length) {
-                    const targetBranch = targetItems[targetIndex].branch;
-                    await branches.moveBeforeBranch([ draggedCard.branchId ], targetBranch.branchId);
+            const parents = targetNote?.getParentNoteIds();
+            if (!parents?.includes(parentNoteId)) {
+                if (!targetBranch) {
+                    // First.
+                    await branches.cloneNoteToParentNote(noteId, parentNoteId);
+                } else {
+                    await branches.cloneNoteAfter(noteId, targetBranch.branchId);
                 }
-            } else if (draggedCard.index !== targetIndex) {
-                // Reordering within the same column
-                let targetBranchId: string | null = null;
+            } else if (targetBranch) {
+                await branches.moveAfterBranch([ branchId ], targetBranch.branchId);
+            }
+        } else {
+            // From within the board.
+            if (draggedCard && dropPosition) {
+                const targetIndex = dropPosition.index;
+                const targetItems = columnItems || [];
 
-                if (targetIndex < targetItems.length) {
-                    // Moving before an existing item
-                    const adjustedIndex = draggedCard.index < targetIndex ? targetIndex : targetIndex;
-                    if (adjustedIndex < targetItems.length) {
-                        targetBranchId = targetItems[adjustedIndex].branch.branchId;
-                        await branches.moveBeforeBranch([ draggedCard.branchId ], targetBranchId);
+                const note = froca.getNoteFromCache(draggedCard.noteId);
+                if (!note) return;
+
+                if (draggedCard.fromColumn !== column || !draggedCard.index) {
+                    // Moving to a different column
+                    await api?.changeColumn(draggedCard.noteId, column);
+
+                    // If there are items in the target column, reorder
+                    if (targetItems.length > 0 && targetIndex < targetItems.length) {
+                        const targetBranch = targetItems[targetIndex].branch;
+                        await branches.moveBeforeBranch([ draggedCard.branchId ], targetBranch.branchId);
                     }
-                } else if (targetIndex > 0) {
-                    // Moving to the end - place after the last item
-                    const lastItem = targetItems[targetItems.length - 1];
-                    await branches.moveAfterBranch([ draggedCard.branchId ], lastItem.branch.branchId);
+                } else if (draggedCard.index !== targetIndex) {
+                    // Reordering within the same column
+                    let targetBranchId: string | null = null;
+
+                    if (targetIndex < targetItems.length) {
+                        // Moving before an existing item
+                        const adjustedIndex = draggedCard.index < targetIndex ? targetIndex : targetIndex;
+                        if (adjustedIndex < targetItems.length) {
+                            targetBranchId = targetItems[adjustedIndex].branch.branchId;
+                            await branches.moveBeforeBranch([ draggedCard.branchId ], targetBranchId);
+                        }
+                    } else if (targetIndex > 0) {
+                        // Moving to the end - place after the last item
+                        const lastItem = targetItems[targetItems.length - 1];
+                        await branches.moveAfterBranch([ draggedCard.branchId ], lastItem.branch.branchId);
+                    }
                 }
             }
         }
-        setDraggedCard(null);
-    }, [ api, draggedCard, draggedColumn, dropPosition, columnItems, column, setDraggedCard, setDropTarget, setDropPosition ]);
+
+    }, [ api, draggedColumn, dropPosition, columnItems, column, setDropTarget, setDropPosition ]);
 
     return { handleColumnDragStart, handleColumnDragEnd, handleDragOver, handleDragLeave, handleDrop };
 }

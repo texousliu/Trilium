@@ -7,6 +7,13 @@ import { ContextMenuEvent } from "../../../menus/context_menu";
 import { openNoteContextMenu } from "./context_menu";
 import { t } from "../../../services/i18n";
 
+export interface CardDragData {
+    noteId: string;
+    branchId: string;
+    index: number;
+    fromColumn: string;
+}
+
 export default function Card({
     api,
     note,
@@ -22,7 +29,7 @@ export default function Card({
     index: number,
     isDragging: boolean
 }) {
-    const { branchIdToEdit, setBranchIdToEdit, setDraggedCard } = useContext(BoardViewContext);
+    const { branchIdToEdit, setBranchIdToEdit } = useContext(BoardViewContext);
     const isEditing = branch.branchId === branchIdToEdit;
     const colorClass = note.getColorClass() || '';
     const editorRef = useRef<HTMLInputElement>(null);
@@ -31,13 +38,9 @@ export default function Card({
 
     const handleDragStart = useCallback((e: DragEvent) => {
         e.dataTransfer!.effectAllowed = 'move';
-        e.dataTransfer!.setData('text/plain', note.noteId);
-        setDraggedCard({ noteId: note.noteId, branchId: branch.branchId, fromColumn: column, index });
-    }, [note.noteId, branch.branchId, column, index, setDraggedCard]);
-
-    const handleDragEnd = useCallback(() => {
-        setDraggedCard(null);
-    }, [setDraggedCard]);
+        const data: CardDragData = { noteId: note.noteId, branchId: branch.branchId, fromColumn: column, index };
+        e.dataTransfer!.setData('text/plain', JSON.stringify(data));
+    }, [note.noteId, branch.branchId, column, index]);
 
     const handleContextMenu = useCallback((e: ContextMenuEvent) => {
         openNoteContextMenu(api, e, note.noteId, branch.branchId, column);
@@ -65,7 +68,6 @@ export default function Card({
             className={`board-note ${colorClass} ${isDragging ? 'dragging' : ''} ${isEditing ? "editing" : ""} ${isArchived ? "archived" : ""}`}
             draggable="true"
             onDragStart={handleDragStart}
-            onDragEnd={handleDragEnd}
             onContextMenu={handleContextMenu}
             onClick={!isEditing ? handleOpen : undefined}
         >
