@@ -1,3 +1,4 @@
+import FNote from "../../../entities/fnote";
 import contextMenu, { ContextMenuEvent } from "../../../menus/context_menu";
 import link_context_menu from "../../../menus/link_context_menu";
 import attributes from "../../../services/attributes";
@@ -31,7 +32,7 @@ export function openColumnContextMenu(api: Api, event: ContextMenuEvent, column:
     });
 }
 
-export function openNoteContextMenu(api: Api, event: ContextMenuEvent, noteId: string, branchId: string, column: string) {
+export function openNoteContextMenu(api: Api, event: ContextMenuEvent, note: FNote, branchId: string, column: string) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -47,7 +48,7 @@ export function openNoteContextMenu(api: Api, event: ContextMenuEvent, noteId: s
                 items: api.columns.map(columnToMoveTo => ({
                     title: columnToMoveTo,
                     enabled: columnToMoveTo !== column,
-                    handler: () => api.changeColumn(noteId, columnToMoveTo)
+                    handler: () => api.changeColumn(note.noteId, columnToMoveTo)
                 }))
             },
             { title: "----" },
@@ -67,12 +68,26 @@ export function openNoteContextMenu(api: Api, event: ContextMenuEvent, noteId: s
                 uiIcon: "bx bx-trash",
                 handler: () => branches.deleteNotes([ branchId ], false, false)
             },
-            {
-                title: t("board_view.archive-note"),
-                uiIcon: "bx bx-archive",
-                handler: () => attributes.addLabel(noteId, "archived")
-            }
+            getArchiveMenuItem(note)
         ],
-        selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, noteId),
+        selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, note.noteId),
     });
+}
+
+function getArchiveMenuItem(note: FNote) {
+    if (!note.isArchived) {
+        return {
+            title: t("board_view.archive-note"),
+            uiIcon: "bx bx-archive",
+            handler: () => attributes.addLabel(note.noteId, "archived")
+        }
+    } else {
+        return {
+            title: t("board_view.unarchive-note"),
+            uiIcon: "bx bx-archive-out",
+            handler: async () => {
+                attributes.removeOwnedLabelByName(note, "archived")
+            }
+        }
+    }
 }

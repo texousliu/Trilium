@@ -43,7 +43,7 @@ export default function Card({
     }, [note.noteId, branch.branchId, column, index]);
 
     const handleContextMenu = useCallback((e: ContextMenuEvent) => {
-        openNoteContextMenu(api, e, note.noteId, branch.branchId, column);
+        openNoteContextMenu(api, e, note, branch.branchId, column);
     }, [ api, note, branch, column ]);
 
     const handleOpen = useCallback(() => {
