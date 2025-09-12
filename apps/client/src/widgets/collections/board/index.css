@@ -175,9 +175,11 @@
   border-color: var(--main-text-color);
   display: flex;
   align-items: center;
+  padding: 0;
 }
 
-.board-view-container .board-note.editing input {
+.board-view-container .board-note.editing input,
+.board-view-container .board-note.editing textarea {
   background: transparent;
   border: none;
   outline: none;
@@ -185,7 +187,13 @@
   font-size: inherit;
   color: inherit;
   width: 100%;
-  padding: 0;
+  padding: 0.5em;
+}
+
+.board-view-container .board-note.editing textarea {
+  height: auto;
+  field-sizing: content;
+  resize: none;
 }
 
 .board-view-container .board-note .icon {

@@ -11,6 +11,7 @@ import { createContext } from "preact";
 import { onWheelHorizontalScroll } from "../../widget_utils";
 import Column from "./column";
 import BoardApi from "./api";
+import FormTextArea from "../../react/FormTextArea";
 
 export interface BoardViewData {
     columns?: BoardColumnData[];
@@ -256,22 +257,26 @@ function AddNewColumn({ viewConfig, saveConfig }: { viewConfig?: BoardViewData, 
     )
 }
 
-export function TitleEditor({ currentValue, save, dismiss }: {
+export function TitleEditor({ currentValue, save, dismiss, multiline }: {
     currentValue: string,
     save: (newValue: string) => void,
-    dismiss: () => void
+    dismiss: () => void,
+    multiline?: boolean
 }) {
-    const inputRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<any>(null);
 
     useEffect(() => {
         inputRef.current?.focus();
         inputRef.current?.select();
     }, [ inputRef ]);
 
+    const Element = multiline ? FormTextArea : FormTextBox;
+
     return (
-        <FormTextBox
+        <Element
             inputRef={inputRef}
             currentValue={currentValue}
+            rows={multiline ? 4 : undefined}
             onKeyDown={(e) => {
                 if (e.key === "Enter") {
                     const newValue = e.currentTarget.value;
