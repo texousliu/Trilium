@@ -24,7 +24,7 @@ const VIEW_TYPE_MAPPINGS: Record<ViewTypeOptions, string> = {
 
 export default function CollectionPropertiesTab({ note }: TabContext) {
   const [ viewType, setViewType ] = useNoteLabel(note, "viewType");
-  const viewTypeWithDefault = viewType ?? "grid";
+  const viewTypeWithDefault = (viewType ?? "grid") as ViewTypeOptions;
   const properties = bookPropertiesConfig[viewTypeWithDefault].properties;
 
   return (
@@ -32,7 +32,7 @@ export default function CollectionPropertiesTab({ note }: TabContext) {
       {note && (
         <>
           <CollectionTypeSwitcher viewType={viewTypeWithDefault} setViewType={setViewType} />
-          <BookProperties note={note} properties={properties} />
+          <BookProperties viewType={viewTypeWithDefault} note={note} properties={properties} />
         </>
       )}
     </div>
@@ -54,7 +54,7 @@ function CollectionTypeSwitcher({ viewType, setViewType }: { viewType: string, s
   )
 }
 
-function BookProperties({ note, properties }: { note: FNote, properties: BookProperty[] }) {
+function BookProperties({ viewType, note, properties }: { viewType: ViewTypeOptions, note: FNote, properties: BookProperty[] }) {
   return (
     <div className="book-properties-container">
       {properties.map(property => (
@@ -62,6 +62,16 @@ function BookProperties({ note, properties }: { note: FNote, properties: BookPro
           {mapPropertyView({ note, property })}
         </div>
       ))}
+
+      {viewType !== "list" && viewType !== "grid" && (
+        <CheckboxPropertyView
+            note={note} property={{
+                bindToLabel: "includeArchived",
+                label: t("book_properties.include_archived_notes"),
+                type: "checkbox"
+            }}
+        />
+      )}
     </div>
   )
 }

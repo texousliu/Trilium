@@ -764,7 +764,8 @@
     "calendar": "Calendar",
     "table": "Table",
     "geo-map": "Geo Map",
-    "board": "Board"
+    "board": "Board",
+    "include_archived_notes": "Include archived notes"
   },
   "edited_notes": {
     "no_edited_notes_found": "No edited notes on this day yet...",
