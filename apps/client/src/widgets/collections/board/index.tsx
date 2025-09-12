@@ -159,7 +159,6 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
                                 column={column}
                                 columnIndex={index}
                                 columnItems={byColumn.get(column)}
-                                statusAttribute={statusAttribute ?? "status"}
                                 draggedCard={draggedCard}
                                 setDraggedCard={setDraggedCard}
                                 dropTarget={dropTarget}

@@ -10,43 +10,123 @@ import { t } from "../../../services/i18n";
 import BoardApi from "./api";
 import Card from "./card";
 
+interface DragContext {
+    api: BoardApi;
+    column: string;
+    draggedColumn: { column: string, index: number } | null;
+    setDraggedColumn: (column: { column: string, index: number } | null) => void;
+    columnIndex: number,
+    setDropTarget: (target: string | null) => void,
+    setDropPosition: (position: { column: string, index: number } | null) => void;
+    onCardDrop: () => void;
+    dropPosition: { column: string, index: number } | null;
+    draggedCard: { noteId: string, branchId: string, fromColumn: string, index: number } | null;
+    setDraggedCard: (card: { noteId: string, branchId: string, fromColumn: string, index: number } | null) => void;
+    columnItems?: { note: FNote, branch: FBranch }[],
+}
+
 export default function Column({
     column,
-    columnIndex,
     columnItems,
-    statusAttribute,
     draggedCard,
     setDraggedCard,
     dropTarget,
-    setDropTarget,
     dropPosition,
-    setDropPosition,
-    onCardDrop,
-    draggedColumn,
-    setDraggedColumn,
     isDraggingColumn,
-    api
+    api,
+    ...restProps
 }: {
     column: string,
-    columnIndex: number,
-    columnItems?: { note: FNote, branch: FBranch }[],
-    statusAttribute: string,
-    draggedCard: { noteId: string, branchId: string, fromColumn: string, index: number } | null,
-    setDraggedCard: (card: { noteId: string, branchId: string, fromColumn: string, index: number } | null) => void,
     dropTarget: string | null,
-    setDropTarget: (target: string | null) => void,
-    dropPosition: { column: string, index: number } | null,
-    setDropPosition: (position: { column: string, index: number } | null) => void,
-    onCardDrop: () => void,
-    draggedColumn: { column: string, index: number } | null,
-    setDraggedColumn: (column: { column: string, index: number } | null) => void,
     isDraggingColumn: boolean,
     api: BoardApi
-}) {
+} & DragContext) {
     const context = useContext(BoardViewContext);
     const isEditing = (context.columnNameToEdit === column);
     const editorRef = useRef<HTMLInputElement>(null);
+    const { handleColumnDragStart, handleColumnDragEnd, handleDragOver, handleDragLeave, handleDrop } = useDragging({
+        api, column, dropPosition, draggedCard, setDraggedCard, columnItems, ...restProps
+    });
 
+    const handleEdit = useCallback(() => {
+        context.setColumnNameToEdit?.(column);
+    }, [column]);
+
+    const handleContextMenu = useCallback((e: ContextMenuEvent) => {
+        openColumnContextMenu(api, e, column);
+    }, [ api, column ]);
+
+    useEffect(() => {
+        editorRef.current?.focus();
+    }, [ isEditing ]);
+
+    return (
+        <div
+            className={`board-column ${dropTarget === column && draggedCard?.fromColumn !== column ? 'drag-over' : ''} ${isDraggingColumn ? 'column-dragging' : ''}`}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+        >
+            <h3
+                className={`${isEditing ? "editing" : ""}`}
+                draggable="true"
+                onDragStart={handleColumnDragStart}
+                onDragEnd={handleColumnDragEnd}
+                onContextMenu={handleContextMenu}
+            >
+                {!isEditing ? (
+                    <>
+                        <span className="title">{column}</span>
+                        <span
+                            className="edit-icon icon bx bx-edit-alt"
+                            title={t("board_view.edit-column-title")}
+                            onClick={handleEdit}
+                        />
+                    </>
+                ) : (
+                    <TitleEditor
+                        currentValue={column}
+                        save={newTitle => api.renameColumn(column, newTitle)}
+                        dismiss={() => context.setColumnNameToEdit?.(undefined)}
+                    />
+                )}
+            </h3>
+
+            {(columnItems ?? []).map(({ note, branch }, index) => {
+                const showIndicatorBefore = dropPosition?.column === column &&
+                                          dropPosition.index === index &&
+                                          draggedCard?.noteId !== note.noteId;
+
+                return (
+                    <>
+                        {showIndicatorBefore && (
+                            <div className="board-drop-placeholder show" />
+                        )}
+                        <Card
+                            api={api}
+                            note={note}
+                            branch={branch}
+                            column={column}
+                            index={index}
+                            setDraggedCard={setDraggedCard}
+                            isDragging={draggedCard?.noteId === note.noteId}
+                        />
+                    </>
+                );
+            })}
+            {dropPosition?.column === column && dropPosition.index === (columnItems?.length ?? 0) && (
+                <div className="board-drop-placeholder show" />
+            )}
+
+            <div className="board-new-item" onClick={() => api.createNewItem(column)}>
+                <Icon icon="bx bx-plus" />{" "}
+                {t("board_view.new-item")}
+            </div>
+        </div>
+    )
+}
+
+function useDragging({ api, column, columnIndex, draggedColumn, setDraggedColumn, setDropTarget, setDropPosition, onCardDrop, draggedCard, dropPosition, setDraggedCard, columnItems }: DragContext) {
     const handleColumnDragStart = useCallback((e: DragEvent) => {
         e.dataTransfer!.effectAllowed = 'move';
         e.dataTransfer!.setData('text/plain', column);
@@ -132,82 +212,7 @@ export default function Column({
             onCardDrop();
         }
         setDraggedCard(null);
-    }, [draggedCard, draggedColumn, dropPosition, columnItems, column, statusAttribute, setDraggedCard, setDropTarget, setDropPosition, onCardDrop]);
+    }, [draggedCard, draggedColumn, dropPosition, columnItems, column, setDraggedCard, setDropTarget, setDropPosition, onCardDrop]);
 
-    const handleEdit = useCallback(() => {
-        context.setColumnNameToEdit?.(column);
-    }, [column]);
-
-    const handleContextMenu = useCallback((e: ContextMenuEvent) => {
-        openColumnContextMenu(api, e, column);
-    }, [ api, column ]);
-
-    useEffect(() => {
-        editorRef.current?.focus();
-    }, [ isEditing ]);
-
-    return (
-        <div
-            className={`board-column ${dropTarget === column && draggedCard?.fromColumn !== column ? 'drag-over' : ''} ${isDraggingColumn ? 'column-dragging' : ''}`}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-        >
-            <h3
-                className={`${isEditing ? "editing" : ""}`}
-                draggable="true"
-                onDragStart={handleColumnDragStart}
-                onDragEnd={handleColumnDragEnd}
-                onContextMenu={handleContextMenu}
-            >
-                {!isEditing ? (
-                    <>
-                        <span className="title">{column}</span>
-                        <span
-                            className="edit-icon icon bx bx-edit-alt"
-                            title={t("board_view.edit-column-title")}
-                            onClick={handleEdit}
-                        />
-                    </>
-                ) : (
-                    <TitleEditor
-                        currentValue={column}
-                        save={newTitle => api.renameColumn(column, newTitle)}
-                        dismiss={() => context.setColumnNameToEdit?.(undefined)}
-                    />
-                )}
-            </h3>
-
-            {(columnItems ?? []).map(({ note, branch }, index) => {
-                const showIndicatorBefore = dropPosition?.column === column &&
-                                          dropPosition.index === index &&
-                                          draggedCard?.noteId !== note.noteId;
-
-                return (
-                    <>
-                        {showIndicatorBefore && (
-                            <div className="board-drop-placeholder show" />
-                        )}
-                        <Card
-                            api={api}
-                            note={note}
-                            branch={branch}
-                            column={column}
-                            index={index}
-                            setDraggedCard={setDraggedCard}
-                            isDragging={draggedCard?.noteId === note.noteId}
-                        />
-                    </>
-                );
-            })}
-            {dropPosition?.column === column && dropPosition.index === (columnItems?.length ?? 0) && (
-                <div className="board-drop-placeholder show" />
-            )}
-
-            <div className="board-new-item" onClick={() => api.createNewItem(column)}>
-                <Icon icon="bx bx-plus" />{" "}
-                {t("board_view.new-item")}
-            </div>
-        </div>
-    )
+    return { handleColumnDragStart, handleColumnDragEnd, handleDragOver, handleDragLeave, handleDrop };
 }
