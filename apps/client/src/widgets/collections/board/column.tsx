@@ -140,7 +140,7 @@ function AddNewItem({ column, api }: { column: string, api: BoardApi }) {
                 </>
             ) : (
                 <TitleEditor
-                    currentValue={t("board_view.new-item")}
+                    placeholder={t("board_view.new-item-placeholder")}
                     save={(title) => api.createNewItem(column, title)}
                     dismiss={() => setIsCreatingNewItem(false)}
                     multiline isNewItem
