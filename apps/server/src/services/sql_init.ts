@@ -17,6 +17,7 @@ import zipImportService from "./import/zip.js";
 import password from "./encryption/password.js";
 import backup from "./backup.js";
 import eventService from "./events.js";
+import { t } from "i18next";
 
 export const dbReady = deferred<void>();
 
@@ -37,7 +38,11 @@ function isDbInitialized() {
 
 async function initDbConnection() {
     if (!isDbInitialized()) {
-        log.info(`DB not initialized, please visit setup page` + (isElectron ? "" : ` - http://[your-server-host]:${port} to see instructions on how to initialize Trilium.`));
+        if (isElectron) {
+            log.info(t("sql_init.db_not_initialized_desktop"));
+        } else {
+            log.info(t("sql_init.db_not_initialized_server", { port }));
+        }
 
         return;
     }
