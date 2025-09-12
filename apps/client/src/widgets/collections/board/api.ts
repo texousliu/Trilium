@@ -43,6 +43,27 @@ export default class BoardApi {
         await attributes.setLabel(noteId, this.statusAttribute, newColumn);
     }
 
+    async addNewColumn(columnName: string) {
+        if (!columnName.trim()) {
+            return;
+        }
+
+        if (!this.viewConfig) {
+            this.viewConfig = {};
+        }
+
+        if (!this.viewConfig.columns) {
+            this.viewConfig.columns = [];
+        }
+
+        // Add the new column to persisted data if it doesn't exist
+        const existingColumn = this.viewConfig.columns.find(col => col.value === columnName);
+        if (!existingColumn) {
+            this.viewConfig.columns.push({ value: columnName });
+            this.saveConfig(this.viewConfig);
+        }
+    }
+
     async removeColumn(column: string) {
         // Remove the value from the notes.
         const noteIds = this.byColumn?.get(column)?.map(item => item.note.noteId) || [];

@@ -189,45 +189,19 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
                         <div className="column-drop-placeholder show" />
                     )}
 
-                    <AddNewColumn viewConfig={viewConfig} saveConfig={saveConfig} />
+                    <AddNewColumn api={api} />
                 </div>
             </BoardViewContext.Provider>
         </div>
     )
 }
 
-function AddNewColumn({ viewConfig, saveConfig }: { viewConfig?: BoardViewData, saveConfig: (data: BoardViewData) => void }) {
+function AddNewColumn({ api }: { api: BoardApi }) {
     const [ isCreatingNewColumn, setIsCreatingNewColumn ] = useState(false);
-    const columnNameRef = useRef<HTMLInputElement>(null);
 
     const addColumnCallback = useCallback(() => {
         setIsCreatingNewColumn(true);
     }, []);
-
-    const finishEdit = useCallback((save: boolean) => {
-        const columnName = columnNameRef.current?.value;
-        if (!columnName || !save) {
-            setIsCreatingNewColumn(false);
-            return;
-        }
-
-        // Add the new column to persisted data if it doesn't exist
-        if (!viewConfig) {
-            viewConfig = {};
-        }
-
-        if (!viewConfig.columns) {
-            viewConfig.columns = [];
-        }
-
-        const existingColumn = viewConfig.columns.find(col => col.value === columnName);
-        if (!existingColumn) {
-            viewConfig.columns.push({ value: columnName });
-            saveConfig(viewConfig);
-        }
-
-        setIsCreatingNewColumn(false);
-    }, [ viewConfig, saveConfig ]);
 
     return (
         <div className={`board-add-column ${isCreatingNewColumn ? "editing" : ""}`} onClick={addColumnCallback}>
@@ -236,33 +210,25 @@ function AddNewColumn({ viewConfig, saveConfig }: { viewConfig?: BoardViewData, 
                 <Icon icon="bx bx-plus" />{" "}
                 {t("board_view.add-column")}
             </>
-            : <>
-                <FormTextBox
-                    inputRef={columnNameRef}
-                    type="text"
+            : (
+                <TitleEditor
                     placeholder={t("board_view.add-column-placeholder")}
-                    onBlur={() => finishEdit(true)}
-                    onKeyDown={(e: KeyboardEvent) => {
-                        if (e.key === "Enter") {
-                            e.preventDefault();
-                            finishEdit(true);
-                        } else if (e.key === "Escape") {
-                            e.preventDefault();
-                            finishEdit(false);
-                        }
-                    }}
+                    save={(columnName) => api.addNewColumn(columnName)}
+                    dismiss={() => setIsCreatingNewColumn(false)}
+                    isNewItem
                 />
-            </>}
+            )}
         </div>
     )
 }
 
-export function TitleEditor({ currentValue, save, dismiss, multiline, isNewItem }: {
-    currentValue: string,
-    save: (newValue: string) => void,
-    dismiss: () => void,
-    multiline?: boolean,
-    isNewItem?: boolean
+export function TitleEditor({ currentValue, placeholder, save, dismiss, multiline, isNewItem }: {
+    currentValue?: string;
+    placeholder?: string;
+    save: (newValue: string) => void;
+    dismiss: () => void;
+    multiline?: boolean;
+    isNewItem?: boolean;
 }) {
     const inputRef = useRef<any>(null);
 
@@ -276,7 +242,8 @@ export function TitleEditor({ currentValue, save, dismiss, multiline, isNewItem 
     return (
         <Element
             inputRef={inputRef}
-            currentValue={currentValue}
+            currentValue={currentValue ?? ""}
+            placeholder={placeholder}
             rows={multiline ? 4 : undefined}
             onKeyDown={(e) => {
                 if (e.key === "Enter") {
@@ -298,5 +265,5 @@ export function TitleEditor({ currentValue, save, dismiss, multiline, isNewItem 
                 dismiss();
             }}
         />
-    )
+    );
 }
