@@ -95,8 +95,11 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
 
     const handleColumnDrop = useCallback((fromIndex: number, toIndex: number) => {
         const newColumns = api.reorderColumn(fromIndex, toIndex);
-        setColumns(newColumns);
+        if (newColumns) {
+            setColumns(newColumns);
+        }
         setDraggedColumn(null);
+        setDraggedCard(null);
         setColumnDropPosition(null);
     }, [api]);
 
