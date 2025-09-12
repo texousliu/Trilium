@@ -61,7 +61,13 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
         dropPosition, setDropPosition,
         draggedCard, setDraggedCard,
         dropTarget, setDropTarget
-    }), [ branchIdToEdit, columnNameToEdit, setColumnNameToEdit, setBranchIdToEdit ]);
+    }), [ branchIdToEdit, setBranchIdToEdit,
+        columnNameToEdit, setColumnNameToEdit,
+        draggedColumn, setDraggedColumn,
+        dropPosition, setDropPosition,
+        draggedCard, setDraggedCard,
+        dropTarget, setDropTarget
+    ]);
 
     function refresh() {
         getBoardData(parentNote, statusAttribute, viewConfig ?? {}).then(({ byColumn, newPersistedData }) => {

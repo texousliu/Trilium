@@ -13,7 +13,6 @@ export default function Card({
     branch,
     column,
     index,
-    setDraggedCard,
     isDragging
 }: {
     api: BoardApi,
@@ -21,10 +20,9 @@ export default function Card({
     branch: FBranch,
     column: string,
     index: number,
-    setDraggedCard: (card: { noteId: string, branchId: string, fromColumn: string, index: number } | null) => void,
     isDragging: boolean
 }) {
-    const { branchIdToEdit, setBranchIdToEdit } = useContext(BoardViewContext);
+    const { branchIdToEdit, setBranchIdToEdit, setDraggedCard } = useContext(BoardViewContext);
     const isEditing = branch.branchId === branchIdToEdit;
     const colorClass = note.getColorClass() || '';
     const editorRef = useRef<HTMLInputElement>(null);

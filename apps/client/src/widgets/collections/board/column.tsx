@@ -27,11 +27,11 @@ export default function Column({
     isDraggingColumn: boolean,
     api: BoardApi
 } & DragContext) {
-    const { columnNameToEdit, setColumnNameToEdit, dropTarget, draggedCard, dropPosition, setDraggedCard} = useContext(BoardViewContext);
+    const { columnNameToEdit, setColumnNameToEdit, dropTarget, draggedCard, dropPosition } = useContext(BoardViewContext);
     const isEditing = (columnNameToEdit === column);
     const editorRef = useRef<HTMLInputElement>(null);
     const { handleColumnDragStart, handleColumnDragEnd, handleDragOver, handleDragLeave, handleDrop } = useDragging({
-        column, columnIndex
+        column, columnIndex, columnItems
     });
 
     const handleEdit = useCallback(() => {
@@ -95,7 +95,6 @@ export default function Column({
                             branch={branch}
                             column={column}
                             index={index}
-                            setDraggedCard={setDraggedCard}
                             isDragging={draggedCard?.noteId === note.noteId}
                         />
                     </>
