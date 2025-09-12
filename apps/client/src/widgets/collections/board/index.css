@@ -140,16 +140,6 @@
   to { opacity: 0; transform: translateY(-10px); }
 }
 
-.board-view-container .board-note.card-updated {
-  animation: cardUpdate 0.3s ease-in-out;
-}
-
-@keyframes cardUpdate {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.02); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
-  100% { transform: scale(1); }
-}
-
 .board-view-container .board-note:hover {
   transform: translateY(-2px);
   box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.35);
