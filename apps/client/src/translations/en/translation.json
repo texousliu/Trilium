@@ -765,7 +765,7 @@
     "table": "Table",
     "geo-map": "Geo Map",
     "board": "Board",
-    "include_archived_notes": "Include archived notes"
+    "include_archived_notes": "Show archived notes"
   },
   "edited_notes": {
     "no_edited_notes_found": "No edited notes on this day yet...",
