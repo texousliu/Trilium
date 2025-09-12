@@ -154,11 +154,12 @@ function NoteMarker({ note, editable, latLng }: { note: FNote, editable: boolean
     // React to changes
     useNoteLabel(note, "color");
     useNoteLabel(note, "iconClass");
+    const [ archived ] = useNoteLabelBoolean(note, "archived");
 
     const title = useNoteProperty(note, "title");
     const colorClass = note.getColorClass();
     const iconClass = note.getIcon();
-    const icon = useMemo(() => buildIcon(iconClass, colorClass ?? undefined, title, note.noteId), [ iconClass, colorClass, title, note.noteId]);
+    const icon = useMemo(() => buildIcon(iconClass, colorClass ?? undefined, title, note.noteId, archived), [ iconClass, colorClass, title, note.noteId, archived]);
 
     const onClick = useCallback(() => {
         appContext.triggerCommand("openInPopup", { noteIdOrPath: note.noteId });
@@ -223,7 +224,7 @@ function NoteGpxTrack({ note }: { note: FNote }) {
     return xmlString && <GpxTrack gpxXmlString={xmlString} options={options} />
 }
 
-function buildIcon(bxIconClass: string, colorClass?: string, title?: string, noteIdLink?: string) {
+function buildIcon(bxIconClass: string, colorClass?: string, title?: string, noteIdLink?: string, archived?: boolean) {
     let html = /*html*/`\
         <img class="icon" src="${markerIcon}" />
         <img class="icon-shadow" src="${markerIconShadow}" />
@@ -231,7 +232,7 @@ function buildIcon(bxIconClass: string, colorClass?: string, title?: string, not
         <span class="title-label">${title ?? ""}</span>`;
 
     if (noteIdLink) {
-        html = `<div data-href="#root/${noteIdLink}">${html}</div>`;
+        html = `<div data-href="#root/${noteIdLink}" class="${archived ? "archived" : ""}">${html}</div>`;
     }
 
     return divIcon({

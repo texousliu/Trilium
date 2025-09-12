@@ -68,6 +68,10 @@
   overflow: hidden;
 }
 
+.geo-map-container .leaflet-div-icon .archived {
+  opacity: 0.5;
+}
+
 .geo-map-container.dark .leaflet-div-icon .title-label {
   color: white;
   text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
