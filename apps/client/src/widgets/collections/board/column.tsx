@@ -103,6 +103,7 @@ export default function Column({
                             <div className="board-drop-placeholder show" />
                         )}
                         <Card
+                            key={note.noteId}
                             api={api}
                             note={note}
                             branch={branch}

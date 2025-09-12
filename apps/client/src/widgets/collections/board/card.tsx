@@ -52,6 +52,10 @@ export default function Card({
         editorRef.current?.focus();
     }, [ isEditing ]);
 
+    useEffect(() => {
+        setTitle(note.title);
+    }, [ note ]);
+
     return (
         <div
             className={`board-note ${colorClass} ${isDragging ? 'dragging' : ''} ${isEditing ? "editing" : ""}`}
