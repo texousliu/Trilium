@@ -62,10 +62,12 @@ export default function Card({
             onDragEnd={handleDragEnd}
             onContextMenu={handleContextMenu}
         >
-            <span class={`icon ${note.getIcon()}`} />
             {!isEditing ? (
                 <>
-                    <span className="title">{title}</span>
+                    <span className="title">
+                        <span class={`icon ${note.getIcon()}`} />
+                        {title}
+                    </span>
                     <span
                         className="edit-icon icon bx bx-edit"
                         title={t("board_view.edit-note-title")}
