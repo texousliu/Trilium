@@ -1,5 +1,5 @@
 import { allViewTypes, ViewModeProps, ViewTypeOptions } from "./interface";
-import { useNoteContext, useNoteLabel, useTriliumEvent } from "../react/hooks";
+import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useTriliumEvent } from "../react/hooks";
 import FNote from "../../entities/fnote";
 import "./NoteList.css";
 import { ListView, GridView } from "./legacy/ListOrGridView";
@@ -109,6 +109,7 @@ function useNoteViewType(note?: FNote | null): ViewTypeOptions | undefined {
 
 function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOptions | undefined) {
     const [ noteIds, setNoteIds ] = useState<string[]>([]);
+    const [ includeArchived ] = useNoteLabelBoolean(note, "includeArchived");
 
     async function refreshNoteIds() {
         if (!note) {
@@ -118,12 +119,12 @@ function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOptions | 
             setNoteIds(note.getChildNoteIds());
         } else {
             console.log("Refreshed note IDs");
-            setNoteIds(await note.getSubtreeNoteIds());
+            setNoteIds(await note.getSubtreeNoteIds(includeArchived));
         }
     }
 
     // Refresh on note switch.
-    useEffect(() => { refreshNoteIds() }, [ note ]);
+    useEffect(() => { refreshNoteIds() }, [ note, includeArchived ]);
 
     // Refresh on alterations to the note subtree.
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
