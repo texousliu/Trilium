@@ -56,7 +56,7 @@ function CollectionTypeSwitcher({ viewType, setViewType }: { viewType: string, s
 
 function BookProperties({ viewType, note, properties }: { viewType: ViewTypeOptions, note: FNote, properties: BookProperty[] }) {
   return (
-    <div className="book-properties-container">
+    <>
       {properties.map(property => (
         <div className={`type-${property}`}>
           {mapPropertyView({ note, property })}
@@ -72,7 +72,7 @@ function BookProperties({ viewType, note, properties }: { viewType: ViewTypeOpti
             }}
         />
       )}
-    </div>
+    </>
   )
 }
 
