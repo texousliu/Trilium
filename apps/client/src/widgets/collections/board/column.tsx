@@ -9,6 +9,7 @@ import Icon from "../../react/Icon";
 import { t } from "../../../services/i18n";
 import BoardApi from "./api";
 import Card from "./card";
+import { JSX } from "preact/jsx-runtime";
 
 interface DragContext {
     column: string;
@@ -42,6 +43,17 @@ export default function Column({
         openColumnContextMenu(api, e, column);
     }, [ api, column ]);
 
+    /** Allow using mouse wheel to scroll inside card, while also maintaining column horizontal scrolling. */
+    const handleScroll = useCallback((event: JSX.TargetedWheelEvent<HTMLDivElement>) => {
+        const el = event.currentTarget;
+        if (!el) return;
+
+        const needsScroll = el.scrollHeight > el.clientHeight;
+        if (needsScroll) {
+            event.stopPropagation();
+        }
+    }, []);
+
     useEffect(() => {
         editorRef.current?.focus();
     }, [ isEditing ]);
@@ -52,6 +64,7 @@ export default function Column({
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
+            onWheel={handleScroll}
         >
             <h3
                 className={`${isEditing ? "editing" : ""}`}
