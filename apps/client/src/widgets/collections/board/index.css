@@ -3,6 +3,9 @@
   position: relative;
   height: 100%;
   user-select: none;
+
+  --card-line-height: 1.1;
+  --card-padding: 0.5em;
 }
 
 .board-view-container {
@@ -110,7 +113,7 @@
 .board-view-container .board-note {
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
   margin: 0.65em 0;
-  padding: 0.5em;
+  padding: var(--card-padding);
   border-radius: 5px;
   cursor: move;
   position: relative;
@@ -118,7 +121,7 @@
   border: 1px solid var(--main-border-color);
   transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.15s ease, margin-top 0.2s ease;
   opacity: 1;
-  line-height: 1.1;
+  line-height: var(--card-line-height);
   overflow-wrap: break-word;
   overflow: hidden;
 }
@@ -192,7 +195,8 @@
   font-size: inherit;
   color: inherit;
   width: 100%;
-  padding: 0.5em;
+  padding: var(--card-padding);
+  line-height: var(--card-line-height);
 }
 
 .board-view-container .board-note.editing textarea {
