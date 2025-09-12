@@ -276,7 +276,12 @@
     "mime": "MIME 类型： ",
     "file_size": "文件大小：",
     "preview": "预览：",
-    "preview_not_available": "无法预览此类型的笔记。"
+    "preview_not_available": "无法预览此类型的笔记。",
+    "diff_on": "显示差异",
+    "diff_off": "显示内容",
+    "diff_on_hint": "点击以显示笔记源代码差异",
+    "diff_off_hint": "点击以显示笔记内容",
+    "diff_not_available": "差异不可用。"
   },
   "sort_child_notes": {
     "sort_children_by": "按...排序子笔记",
@@ -2021,6 +2026,8 @@
     "title": "性能",
     "enable-motion": "启用过渡和动画",
     "enable-shadows": "启用阴影",
-    "enable-backdrop-effects": "启用菜单、弹窗和面板的背景效果"
+    "enable-backdrop-effects": "启用菜单、弹窗和面板的背景效果",
+    "enable-smooth-scroll": "启用平滑滚动",
+    "app-restart-required": "（需重启程序以应用更改）"
   }
 }

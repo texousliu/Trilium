@@ -267,7 +267,8 @@
     "basic_properties": "Proprietăți de bază",
     "editable": "Editabil",
     "note_type": "Tipul notiței",
-    "language": "Limbă"
+    "language": "Limbă",
+    "configure_code_notes": "Configurează notițele de tip cod..."
   },
   "book": {
     "no_children_help": "Această notiță de tip Carte nu are nicio subnotiță așadar nu este nimic de afișat. Vedeți <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> pentru detalii."
@@ -1070,7 +1071,12 @@
     "revisions_deleted": "Notița reviziei a fost ștearsă.",
     "maximum_revisions": "Numărul maxim de revizii pentru notița curentă: {{number}}.",
     "settings": "Setări revizii ale notițelor",
-    "snapshot_interval": "Intervalul de creare a reviziilor pentru notițe: {{seconds}}s."
+    "snapshot_interval": "Intervalul de creare a reviziilor pentru notițe: {{seconds}}s.",
+    "diff_on": "Evidențiază diferențele",
+    "diff_off": "Afișează conținutul",
+    "diff_on_hint": "Clic pentru a afișa diferențele față de revizia anterioară, la nivel de cod sursă",
+    "diff_off_hint": "Clic pentru a afișa întregul conținut al reviziei",
+    "diff_not_available": "Diferențele nu pot fi evidențiate."
   },
   "revisions_button": {
     "note_revisions": "Revizii ale notiței"
@@ -1373,8 +1379,8 @@
   },
   "shared_info": {
     "help_link": "Pentru informații vizitați <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki-ul</a>.",
-    "shared_locally": "Această notiță este partajată local la {{- link}}",
-    "shared_publicly": "Această notiță este partajată public la {{- link}}"
+    "shared_locally": "Această notiță este partajată local la {{- link}}.",
+    "shared_publicly": "Această notiță este partajată public la {{- link}}."
   },
   "note_types": {
     "book": "Colecție",
@@ -1472,7 +1478,8 @@
     "create-child-note": "Crează subnotiță",
     "hoist-this-note-workspace": "Focalizează spațiul de lucru",
     "refresh-saved-search-results": "Reîmprospătează căutarea salvată",
-    "unhoist": "Defocalizează notița"
+    "unhoist": "Defocalizează notița",
+    "toggle-sidebar": "Comută bara laterală"
   },
   "title_bar_buttons": {
     "window-on-top": "Menține fereastra mereu vizibilă"

@@ -17,6 +17,7 @@ import zipImportService from "./import/zip.js";
 import password from "./encryption/password.js";
 import backup from "./backup.js";
 import eventService from "./events.js";
+import { t } from "i18next";
 
 export const dbReady = deferred<void>();
 
@@ -37,7 +38,11 @@ function isDbInitialized() {
 
 async function initDbConnection() {
     if (!isDbInitialized()) {
-        log.info(`DB not initialized, please visit setup page` + (isElectron ? "" : ` - http://[your-server-host]:${port} to see instructions on how to initialize Trilium.`));
+        if (isElectron) {
+            log.info(t("sql_init.db_not_initialized_desktop"));
+        } else {
+            log.info(t("sql_init.db_not_initialized_server", { port }));
+        }
 
         return;
     }
@@ -197,14 +202,12 @@ function optimize() {
     log.info(`Optimization finished in ${Date.now() - start}ms.`);
 }
 
-function getDbSize() {
+export function getDbSize() {
     return sql.getValue<number>("SELECT page_count * page_size / 1000 as size FROM pragma_page_count(), pragma_page_size()");
 }
 
 function initializeDb() {
     cls.init(initDbConnection);
-
-    log.info(`DB size: ${getDbSize()} KB`);
 
     dbReady.then(() => {
         if (config.General && config.General.noBackup === true) {

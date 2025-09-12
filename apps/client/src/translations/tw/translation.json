@@ -276,7 +276,12 @@
     "preview": "預覽：",
     "preview_not_available": "無法預覽此類型的筆記。",
     "restore_button": "還原",
-    "delete_button": "刪除"
+    "delete_button": "刪除",
+    "diff_on": "顯示差異",
+    "diff_off": "顯示內容",
+    "diff_on_hint": "點擊以顯示筆記原始碼差異",
+    "diff_off_hint": "點擊以顯示筆記內容",
+    "diff_not_available": "差異不可用。"
   },
   "sort_child_notes": {
     "sort_children_by": "依…排序子筆記",
@@ -2021,6 +2026,8 @@
     "title": "效能",
     "enable-motion": "啟用轉場與動畫",
     "enable-shadows": "啟用陰影",
-    "enable-backdrop-effects": "啟用選單、彈出視窗和面板的背景特效"
+    "enable-backdrop-effects": "啟用選單、彈出視窗和面板的背景特效",
+    "enable-smooth-scroll": "啟用平滑滾動",
+    "app-restart-required": "（需要重啟程式以套用更改）"
   }
 }

@@ -146,7 +146,7 @@ services:
 
 ### Shell Export Example
 
-```sh
+```
 # Using either format
 export TRILIUM_GENERAL_NOAUTHENTICATION=false
 export TRILIUM_NETWORK_HTTPS=true

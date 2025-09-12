@@ -6,15 +6,26 @@ import config from "./services/config.js";
 import log from "./services/log.js";
 import appInfo from "./services/app_info.js";
 import ws from "./services/ws.js";
-import utils from "./services/utils.js";
+import utils, { formatSize, formatUtcTime } from "./services/utils.js";
 import port from "./services/port.js";
 import host from "./services/host.js";
 import buildApp from "./app.js";
 import type { Express } from "express";
+import { getDbSize } from "./services/sql_init.js";
 
 const MINIMUM_NODE_VERSION = "20.0.0";
 
+const LOGO = `\
+ _____     _ _ _
+|_   _| __(_) (_)_   _ _ __ ___   | \\ | | ___ | |_ ___  ___
+  | || '__| | | | | | | '_ \` _ \\  |  \\| |/ _ \\| __/ _ \\/ __|
+  | || |  | | | | |_| | | | | | | | |\\  | (_) | ||  __/\\__ \\
+  |_||_|  |_|_|_|\\__,_|_| |_| |_| |_| \\_|\\___/ \\__\\___||___/ [version]
+`;
+
 export default async function startTriliumServer() {
+    await displayStartupMessage();
+
     // setup basic error handling even before requiring dependencies, since those can produce errors as well
     process.on("unhandledRejection", (error: Error) => {
         // this makes sure that stacktrace of failed promise is printed out
@@ -62,16 +73,6 @@ export default async function startTriliumServer() {
         (await import("electron")).app.requestSingleInstanceLock();
     }
 
-    log.info(JSON.stringify(appInfo, null, 2));
-
-    // for perf. issues it's good to know the rough configuration
-    const cpuInfos = (await import("os")).cpus();
-    if (cpuInfos && cpuInfos[0] !== undefined) {
-        // https://github.com/zadam/trilium/pull/3957
-        const cpuModel = (cpuInfos[0].model || "").trimEnd();
-        log.info(`CPU model: ${cpuModel}, logical cores: ${cpuInfos.length}, freq: ${cpuInfos[0].speed} Mhz`);
-    }
-
     const httpServer = startHttpServer(app);
 
     const sessionParser = (await import("./routes/session_parser.js")).default;
@@ -81,6 +82,24 @@ export default async function startTriliumServer() {
         const electronRouting = await import("./routes/electron.js");
         electronRouting.default(app);
     }
+}
+
+async function displayStartupMessage() {
+    log.info("\n" + LOGO.replace("[version]", appInfo.appVersion));
+    log.info(`📦 Versions:    app=${appInfo.appVersion} db=${appInfo.dbVersion} sync=${appInfo.syncVersion} clipper=${appInfo.clipperProtocolVersion}`)
+    log.info(`🔧 Build:       ${formatUtcTime(appInfo.buildDate)} (${appInfo.buildRevision.substring(0, 10)})`);
+    log.info(`📂 Data dir:    ${appInfo.dataDirectory}`);
+    log.info(`⏰ UTC time:    ${formatUtcTime(appInfo.utcDateTime)}`);
+
+    // for perf. issues it's good to know the rough configuration
+    const cpuInfos = (await import("os")).cpus();
+    if (cpuInfos && cpuInfos[0] !== undefined) {
+        // https://github.com/zadam/trilium/pull/3957
+        const cpuModel = (cpuInfos[0].model || "").trimEnd();
+        log.info(`💻 CPU:         ${cpuModel} (${cpuInfos.length}-core @ ${cpuInfos[0].speed} Mhz)`);
+    }
+    log.info(`💾 DB size:     ${formatSize(getDbSize() * 1024)}`);
+    log.info("");
 }
 
 function startHttpServer(app: Express) {

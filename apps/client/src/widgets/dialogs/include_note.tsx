@@ -8,7 +8,7 @@ import Button from "../react/Button";
 import { Suggestion, triggerRecentNotes } from "../../services/note_autocomplete";
 import tree from "../../services/tree";
 import froca from "../../services/froca";
-import EditableTextTypeWidget from "../type_widgets/editable_text";
+import EditableTextTypeWidget, { type BoxSize } from "../type_widgets/editable_text";
 import { useTriliumEvent } from "../react/hooks";
 
 export default function IncludeNoteDialog() {
@@ -37,7 +37,7 @@ export default function IncludeNoteDialog() {
                 }
 
                 setShown(false);
-                includeNote(suggestion.notePath, textTypeWidget);
+                includeNote(suggestion.notePath, textTypeWidget, boxSize as BoxSize);
             }}
             footer={<Button text={t("include_note.button_include")} keyboardShortcut="Enter" />}
             show={shown}
@@ -69,13 +69,12 @@ export default function IncludeNoteDialog() {
     )
 }
 
-async function includeNote(notePath: string, textTypeWidget: EditableTextTypeWidget) {
+async function includeNote(notePath: string, textTypeWidget: EditableTextTypeWidget, boxSize: BoxSize) {
     const noteId = tree.getNoteIdFromUrl(notePath);
     if (!noteId) {
         return;
     }
     const note = await froca.getNote(noteId);
-    const boxSize = $("input[name='include-note-box-size']:checked").val() as string;
 
     if (["image", "canvas", "mermaid"].includes(note?.type ?? "")) {
         // there's no benefit to use insert note functionlity for images,

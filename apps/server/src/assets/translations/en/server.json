@@ -424,5 +424,9 @@
     "board_status_todo": "To Do",
     "board_status_progress": "In Progress",
     "board_status_done": "Done"
+  },
+  "sql_init": {
+    "db_not_initialized_desktop": "DB not initialized, please follow on-screen instructions.",
+    "db_not_initialized_server": "DB not initialized, please visit setup page - http://[your-server-host]:{{port}} to see instructions on how to initialize Trilium."
   }
 }
