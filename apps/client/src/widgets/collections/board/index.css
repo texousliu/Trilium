@@ -112,7 +112,7 @@
 
 
 .board-view-container .board-note {
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
   margin: 0.65em 0;
   padding: var(--card-padding);
   border-radius: 5px;
@@ -141,6 +141,10 @@
   background-color: var(--main-background-color);
 }
 
+.board-view-container .board-note:hover {
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 .board-view-container .board-note:hover > .edit-icon {
   position: absolute;
   top: 8px;
@@ -166,11 +170,6 @@
 @keyframes fadeOut {
   from { opacity: 1; transform: translateY(0); }
   to { opacity: 0; transform: translateY(-10px); }
-}
-
-.board-view-container .board-note:hover {
-  transform: translateY(-2px);
-  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.35);
 }
 
 .board-view-container .board-note.dragging {
