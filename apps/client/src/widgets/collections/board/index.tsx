@@ -91,23 +91,11 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     useEffect(refresh, [ parentNote, noteIds, viewConfig ]);
 
     const handleColumnDrop = useCallback((fromIndex: number, toIndex: number) => {
-        if (!columns || fromIndex === toIndex) return;
-
-        const newColumns = [...columns];
-        const [movedColumn] = newColumns.splice(fromIndex, 1);
-        newColumns.splice(toIndex, 0, movedColumn);
-
-        // Update view config with new column order
-        const newViewConfig = {
-            ...viewConfig,
-            columns: newColumns.map(col => ({ value: col }))
-        };
-
-        saveConfig(newViewConfig);
+        const newColumns = api.reorderColumn(fromIndex, toIndex);
         setColumns(newColumns);
         setDraggedColumn(null);
         setColumnDropPosition(null);
-    }, [columns, viewConfig, saveConfig]);
+    }, [api]);
 
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         // Check if any changes affect our board

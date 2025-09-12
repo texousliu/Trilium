@@ -99,6 +99,23 @@ export default class BoardApi {
         this.saveConfig(this.viewConfig);
     }
 
+    reorderColumn(fromIndex: number, toIndex: number) {
+        if (!this.columns || fromIndex === toIndex) return;
+
+        const newColumns = [...this.columns];
+        const [movedColumn] = newColumns.splice(fromIndex, 1);
+        newColumns.splice(toIndex, 0, movedColumn);
+
+        // Update view config with new column order
+        const newViewConfig = {
+            ...this.viewConfig,
+            columns: newColumns.map(col => ({ value: col }))
+        };
+
+        this.saveConfig(newViewConfig);
+        return newColumns;
+    }
+
     async insertRowAtPosition(
             column: string,
             relativeToBranchId: string,
