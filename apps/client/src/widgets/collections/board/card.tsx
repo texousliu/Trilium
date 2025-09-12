@@ -67,7 +67,7 @@ export default function Card({
                 <>
                     <span className="title">{title}</span>
                     <span
-                        className="edit-icon icon bx bx-edit-alt"
+                        className="edit-icon icon bx bx-edit"
                         title={t("board_view.edit-note-title")}
                         onClick={handleEdit}
                     />
