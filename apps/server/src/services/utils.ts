@@ -478,6 +478,9 @@ export function normalizeCustomHandlerPattern(pattern: string | null | undefined
     }
 }
 
+export function formatUtcTime(time: string) {
+    return time.replace("T", " ").substring(0, 19)
+}
 
 export default {
     compareVersions,

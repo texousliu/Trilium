@@ -6,7 +6,7 @@ import config from "./services/config.js";
 import log from "./services/log.js";
 import appInfo from "./services/app_info.js";
 import ws from "./services/ws.js";
-import utils from "./services/utils.js";
+import utils, { formatUtcTime } from "./services/utils.js";
 import port from "./services/port.js";
 import host from "./services/host.js";
 import buildApp from "./app.js";
@@ -19,7 +19,7 @@ const LOGO = `\
 |_   _| __(_) (_)_   _ _ __ ___   | \\ | | ___ | |_ ___  ___
   | || '__| | | | | | | '_ \` _ \\  |  \\| |/ _ \\| __/ _ \\/ __|
   | || |  | | | | |_| | | | | | | | |\\  | (_) | ||  __/\\__ \\
-  |_||_|  |_|_|_|\\__,_|_| |_| |_| |_| \\_|\\___/ \\__\\___||___/
+  |_||_|  |_|_|_|\\__,_|_| |_| |_| |_| \\_|\\___/ \\__\\___||___/ [version]
 `;
 
 export default async function startTriliumServer() {
@@ -70,16 +70,7 @@ export default async function startTriliumServer() {
         (await import("electron")).app.requestSingleInstanceLock();
     }
 
-    log.info(LOGO);
-    log.info(JSON.stringify(appInfo, null, 2));
-
-    // for perf. issues it's good to know the rough configuration
-    const cpuInfos = (await import("os")).cpus();
-    if (cpuInfos && cpuInfos[0] !== undefined) {
-        // https://github.com/zadam/trilium/pull/3957
-        const cpuModel = (cpuInfos[0].model || "").trimEnd();
-        log.info(`CPU model: ${cpuModel}, logical cores: ${cpuInfos.length}, freq: ${cpuInfos[0].speed} Mhz`);
-    }
+    await displayStartupMessage();
 
     const httpServer = startHttpServer(app);
 
@@ -90,6 +81,24 @@ export default async function startTriliumServer() {
         const electronRouting = await import("./routes/electron.js");
         electronRouting.default(app);
     }
+}
+
+async function displayStartupMessage() {
+    log.info("");
+    log.info(LOGO.replace("[version]", appInfo.appVersion));
+    log.info(`📦 Versions:    app=${appInfo.appVersion} db=${appInfo.dbVersion} sync=${appInfo.syncVersion} clipper=${appInfo.clipperProtocolVersion}`)
+    log.info(`🔧 Build:       ${formatUtcTime(appInfo.buildDate)} (${appInfo.buildRevision.substring(0, 10)})`);
+    log.info(`📂 Data dir:    ${appInfo.dataDirectory}`);
+    log.info(`⏰ UTC time:    ${formatUtcTime(appInfo.utcDateTime)}`);
+
+    // for perf. issues it's good to know the rough configuration
+    const cpuInfos = (await import("os")).cpus();
+    if (cpuInfos && cpuInfos[0] !== undefined) {
+        // https://github.com/zadam/trilium/pull/3957
+        const cpuModel = (cpuInfos[0].model || "").trimEnd();
+        log.info(`💻 CPU:         ${cpuModel} (${cpuInfos.length}-core @ ${cpuInfos[0].speed} Mhz)`);
+    }
+    log.info("");
 }
 
 function startHttpServer(app: Express) {
