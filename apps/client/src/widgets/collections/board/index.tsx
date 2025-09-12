@@ -10,6 +10,9 @@ import FormTextBox from "../../react/FormTextBox";
 import { createContext } from "preact";
 import { onWheelHorizontalScroll } from "../../widget_utils";
 import Column from "./column";
+import BoardApi from "./api";
+import FBranch from "../../../entities/fbranch";
+import FNote from "../../../entities/fnote";
 
 export interface BoardViewData {
     columns?: BoardColumnData[];
@@ -20,10 +23,19 @@ export interface BoardColumnData {
 }
 
 interface BoardViewContextData {
+    api?: BoardApi;
     branchIdToEdit?: string;
     columnNameToEdit?: string;
     setColumnNameToEdit?: Dispatch<StateUpdater<string | undefined>>;
     setBranchIdToEdit?: Dispatch<StateUpdater<string | undefined>>;
+    draggedColumn: { column: string, index: number } | null;
+    setDraggedColumn: (column: { column: string, index: number } | null) => void;
+    dropPosition: { column: string, index: number } | null;
+    setDropPosition: (position: { column: string, index: number } | null) => void;
+    draggedCard: { noteId: string, branchId: string, fromColumn: string, index: number } | null;
+    setDraggedCard: (card: { noteId: string, branchId: string, fromColumn: string, index: number } | null) => void;
+    setDropTarget: (target: string | null) => void,
+    dropTarget: string | null
 }
 
 export const BoardViewContext = createContext<BoardViewContextData>({});
@@ -43,10 +55,12 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
         return new Api(byColumn, columns ?? [], parentNote, statusAttribute, viewConfig ?? {}, saveConfig, setBranchIdToEdit );
     }, [ byColumn, columns, parentNote, statusAttribute, viewConfig, saveConfig, setBranchIdToEdit ]);
     const boardViewContext = useMemo<BoardViewContextData>(() => ({
-        branchIdToEdit,
-        columnNameToEdit,
-        setColumnNameToEdit,
-        setBranchIdToEdit
+        branchIdToEdit, setBranchIdToEdit,
+        columnNameToEdit, setColumnNameToEdit,
+        draggedColumn, setDraggedColumn,
+        dropPosition, setDropPosition,
+        draggedCard, setDraggedCard,
+        dropTarget, setDropTarget
     }), [ branchIdToEdit, columnNameToEdit, setColumnNameToEdit, setBranchIdToEdit ]);
 
     function refresh() {
@@ -159,15 +173,6 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
                                 column={column}
                                 columnIndex={index}
                                 columnItems={byColumn.get(column)}
-                                draggedCard={draggedCard}
-                                setDraggedCard={setDraggedCard}
-                                dropTarget={dropTarget}
-                                setDropTarget={setDropTarget}
-                                dropPosition={dropPosition}
-                                setDropPosition={setDropPosition}
-                                onCardDrop={refresh}
-                                draggedColumn={draggedColumn}
-                                setDraggedColumn={setDraggedColumn}
                                 isDraggingColumn={draggedColumn?.column === column}
                             />
                         </>

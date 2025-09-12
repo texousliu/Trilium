@@ -11,45 +11,31 @@ import BoardApi from "./api";
 import Card from "./card";
 
 interface DragContext {
-    api: BoardApi;
     column: string;
-    draggedColumn: { column: string, index: number } | null;
-    setDraggedColumn: (column: { column: string, index: number } | null) => void;
     columnIndex: number,
-    setDropTarget: (target: string | null) => void,
-    setDropPosition: (position: { column: string, index: number } | null) => void;
-    onCardDrop: () => void;
-    dropPosition: { column: string, index: number } | null;
-    draggedCard: { noteId: string, branchId: string, fromColumn: string, index: number } | null;
-    setDraggedCard: (card: { noteId: string, branchId: string, fromColumn: string, index: number } | null) => void;
-    columnItems?: { note: FNote, branch: FBranch }[],
+    columnItems?: { note: FNote, branch: FBranch }[]
 }
 
 export default function Column({
     column,
-    columnItems,
-    draggedCard,
-    setDraggedCard,
-    dropTarget,
-    dropPosition,
+    columnIndex,
     isDraggingColumn,
+    columnItems,
     api,
-    ...restProps
 }: {
-    column: string,
-    dropTarget: string | null,
+    columnItems?: { note: FNote, branch: FBranch }[];
     isDraggingColumn: boolean,
     api: BoardApi
 } & DragContext) {
-    const context = useContext(BoardViewContext);
-    const isEditing = (context.columnNameToEdit === column);
+    const { columnNameToEdit, setColumnNameToEdit, dropTarget, draggedCard, dropPosition, setDraggedCard} = useContext(BoardViewContext);
+    const isEditing = (columnNameToEdit === column);
     const editorRef = useRef<HTMLInputElement>(null);
     const { handleColumnDragStart, handleColumnDragEnd, handleDragOver, handleDragLeave, handleDrop } = useDragging({
-        api, column, dropPosition, draggedCard, setDraggedCard, columnItems, ...restProps
+        column, columnIndex
     });
 
     const handleEdit = useCallback(() => {
-        context.setColumnNameToEdit?.(column);
+        setColumnNameToEdit?.(column);
     }, [column]);
 
     const handleContextMenu = useCallback((e: ContextMenuEvent) => {
@@ -87,7 +73,7 @@ export default function Column({
                     <TitleEditor
                         currentValue={column}
                         save={newTitle => api.renameColumn(column, newTitle)}
-                        dismiss={() => context.setColumnNameToEdit?.(undefined)}
+                        dismiss={() => setColumnNameToEdit?.(undefined)}
                     />
                 )}
             </h3>
@@ -127,7 +113,9 @@ export default function Column({
     )
 }
 
-function useDragging({ api, column, columnIndex, draggedColumn, setDraggedColumn, setDropTarget, setDropPosition, onCardDrop, draggedCard, dropPosition, setDraggedCard, columnItems }: DragContext) {
+function useDragging({ column, columnIndex, columnItems }: DragContext) {
+    const { api, draggedColumn, setDraggedColumn, setDropTarget, setDropPosition, draggedCard, dropPosition, setDraggedCard } = useContext(BoardViewContext);
+
     const handleColumnDragStart = useCallback((e: DragEvent) => {
         e.dataTransfer!.effectAllowed = 'move';
         e.dataTransfer!.setData('text/plain', column);
@@ -185,7 +173,7 @@ function useDragging({ api, column, columnIndex, draggedColumn, setDraggedColumn
 
             if (draggedCard.fromColumn !== column) {
                 // Moving to a different column
-                await api.changeColumn(draggedCard.noteId, column);
+                await api?.changeColumn(draggedCard.noteId, column);
 
                 // If there are items in the target column, reorder
                 if (targetItems.length > 0 && targetIndex < targetItems.length) {
@@ -209,11 +197,9 @@ function useDragging({ api, column, columnIndex, draggedColumn, setDraggedColumn
                     await branches.moveAfterBranch([ draggedCard.branchId ], lastItem.branch.branchId);
                 }
             }
-
-            onCardDrop();
         }
         setDraggedCard(null);
-    }, [draggedCard, draggedColumn, dropPosition, columnItems, column, setDraggedCard, setDropTarget, setDropPosition, onCardDrop]);
+    }, [draggedCard, draggedColumn, dropPosition, columnItems, column, setDraggedCard, setDropTarget, setDropPosition]);
 
     return { handleColumnDragStart, handleColumnDragEnd, handleDragOver, handleDragLeave, handleDrop };
 }
