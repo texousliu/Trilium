@@ -179,6 +179,13 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.note-info-id {
+    font-variant: none;
+    font-family: var(--monospace-font-family);
+    font-size: 0.8em;
+    vertical-align: middle !important;
+}
 /* #endregion */
 
 /* #region Similar Notes */
