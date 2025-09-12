@@ -8,7 +8,8 @@ interface Event {
     startDate: string,
     endDate?: string | null,
     startTime?: string | null,
-    endTime?: string | null
+    endTime?: string | null,
+    isArchived?: boolean;
 }
 
 export async function buildEvents(noteIds: string[]) {
@@ -25,7 +26,8 @@ export async function buildEvents(noteIds: string[]) {
         const endDate = getCustomisableLabel(note, "endDate", "calendar:endDate");
         const startTime = getCustomisableLabel(note, "startTime", "calendar:startTime");
         const endTime = getCustomisableLabel(note, "endTime", "calendar:endTime");
-        events.push(await buildEvent(note, { startDate, endDate, startTime, endTime }));
+        const isArchived = note.hasLabel("archived");
+        events.push(await buildEvent(note, { startDate, endDate, startTime, endTime, isArchived }));
     }
 
     return events.flat();
@@ -75,7 +77,7 @@ export async function buildEventsForCalendar(note: FNote, e: EventSourceFuncArg)
     return events.flat();
 }
 
-export async function buildEvent(note: FNote, { startDate, endDate, startTime, endTime }: Event) {
+export async function buildEvent(note: FNote, { startDate, endDate, startTime, endTime, isArchived }: Event) {
     const customTitleAttributeName = note.getLabelValue("calendar:title");
     const titles = await parseCustomTitle(customTitleAttributeName, note);
     const color = note.getLabelValue("calendar:color") ?? note.getLabelValue("color");
@@ -108,7 +110,8 @@ export async function buildEvent(note: FNote, { startDate, endDate, startTime, e
             noteId: note.noteId,
             color: color ?? undefined,
             iconClass: note.getLabelValue("iconClass"),
-            promotedAttributes: displayedAttributesData
+            promotedAttributes: displayedAttributesData,
+            className: isArchived ? "archived" : ""
         };
         if (endDate) {
             eventData.end = endDate;

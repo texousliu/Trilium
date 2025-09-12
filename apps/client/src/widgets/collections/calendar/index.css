@@ -34,6 +34,10 @@
     text-decoration: none;
 }
 
+.calendar-container a.fc-event.archived {
+    opacity: 0.5;
+}
+
 .calendar-container .fc-button {
     padding: 0.2em 0.5em;
 }
