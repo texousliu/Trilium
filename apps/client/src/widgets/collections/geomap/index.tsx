@@ -91,24 +91,32 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
     // Dragging
     const containerRef = useRef<HTMLDivElement>(null);
     const apiRef = useRef<L.Map>(null);
-    useNoteTreeDrag(containerRef, async (treeData, e) => {
-        const api = apiRef.current;
-        if (!note || !api || isReadOnly) return;
+    useNoteTreeDrag(containerRef, {
+        dragEnabled: !isReadOnly,
+        dragNotEnabledMessage: {
+            icon: "bx bx-lock-alt",
+            title: t("book.drag_locked_title"),
+            message: t("book.drag_locked_message")
+        },
+        async callback(treeData, e) {
+            const api = apiRef.current;
+            if (!note || !api || isReadOnly) return;
 
-        const { noteId } = treeData[0];
+            const { noteId } = treeData[0];
 
-        const offset = containerRef.current?.getBoundingClientRect();
-        const x = e.clientX - (offset?.left ?? 0);
-        const y = e.clientY - (offset?.top ?? 0);
-        const latlng = api.containerPointToLatLng([ x, y ]);
+            const offset = containerRef.current?.getBoundingClientRect();
+            const x = e.clientX - (offset?.left ?? 0);
+            const y = e.clientY - (offset?.top ?? 0);
+            const latlng = api.containerPointToLatLng([ x, y ]);
 
-        const targetNote = await froca.getNote(noteId, true);
-        const parents = targetNote?.getParentNoteIds();
-        if (parents?.includes(note.noteId)) {
-            await moveMarker(noteId, latlng);
-        } else {
-            await branches.cloneNoteToParentNote(noteId, noteId);
-            await moveMarker(noteId, latlng);
+            const targetNote = await froca.getNote(noteId, true);
+            const parents = targetNote?.getParentNoteIds();
+            if (parents?.includes(note.noteId)) {
+                await moveMarker(noteId, latlng);
+            } else {
+                await branches.cloneNoteToParentNote(noteId, noteId);
+                await moveMarker(noteId, latlng);
+            }
         }
     });
 

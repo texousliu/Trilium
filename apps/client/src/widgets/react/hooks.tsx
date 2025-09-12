@@ -18,6 +18,7 @@ import keyboard_actions from "../../services/keyboard_actions";
 import Mark from "mark.js";
 import { DragData } from "../note_tree";
 import Component from "../../components/component";
+import toast, { ToastOptions } from "../../services/toast";
 
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
     const parentComponent = useContext(ParentComponent);
@@ -588,17 +589,35 @@ export function useImperativeSearchHighlighlighting(highlightedTokens: string[] 
     };
 }
 
-export function useNoteTreeDrag(containerRef: MutableRef<HTMLElement | null | undefined>, callback: (data: DragData[], e: DragEvent) => void) {
+export function useNoteTreeDrag(containerRef: MutableRef<HTMLElement | null | undefined>, { dragEnabled, dragNotEnabledMessage, callback }: {
+    dragEnabled: boolean,
+    dragNotEnabledMessage: Omit<ToastOptions, "id" | "closeAfter">;
+    callback: (data: DragData[], e: DragEvent) => void
+}) {
     useEffect(() => {
         const container = containerRef.current;
         if (!container) return;
 
+        function onDragEnter(e: DragEvent) {
+            if (!dragEnabled) {
+                toast.showPersistent({
+                    ...dragNotEnabledMessage,
+                    id: "drag-not-enabled",
+                    closeAfter: 5000
+                });
+            }
+        }
+
         function onDragOver(e: DragEvent) {
-            // Allow drag.
             e.preventDefault();
         }
 
         function onDrop(e: DragEvent) {
+            toast.closePersistent("drag-not-enabled");
+            if (!dragEnabled) {
+                return;
+            }
+
             const data = e.dataTransfer?.getData('text');
             if (!data) {
                 return;
@@ -612,12 +631,20 @@ export function useNoteTreeDrag(containerRef: MutableRef<HTMLElement | null | un
             callback(parsedData, e);
         }
 
+        function onDragLeave() {
+            toast.closePersistent("drag-not-enabled");
+        }
+
+        container.addEventListener("dragenter", onDragEnter);
         container.addEventListener("dragover", onDragOver);
         container.addEventListener("drop", onDrop);
+        container.addEventListener("dragleave", onDragLeave)
 
         return () => {
+            container.removeEventListener("dragenter", onDragEnter);
             container.removeEventListener("dragover", onDragOver);
             container.removeEventListener("drop", onDrop);
+            container.removeEventListener("dragleave", onDragLeave);
         };
     }, [ containerRef, callback ]);
 }
