@@ -424,5 +424,9 @@
     "board_status_todo": "待辦",
     "board_status_progress": "進行中",
     "board_status_done": "已完成"
+  },
+  "sql_init": {
+    "db_not_initialized_desktop": "資料庫尚未初始化，請依螢幕指示操作。",
+    "db_not_initialized_server": "資料庫尚未初始化，請前往設定頁面 http://[your-server-host]:{{port}} 查看如何初始化 Trilium。"
   }
 }
