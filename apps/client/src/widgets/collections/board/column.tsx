@@ -198,7 +198,7 @@ function useDragging({ column, columnIndex, columnItems }: DragContext) {
             }
         }
         setDraggedCard(null);
-    }, [draggedCard, draggedColumn, dropPosition, columnItems, column, setDraggedCard, setDropTarget, setDropPosition]);
+    }, [ api, draggedCard, draggedColumn, dropPosition, columnItems, column, setDraggedCard, setDropTarget, setDropPosition ]);
 
     return { handleColumnDragStart, handleColumnDragEnd, handleDragOver, handleDragLeave, handleDrop };
 }

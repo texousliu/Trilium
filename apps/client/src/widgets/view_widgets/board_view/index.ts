@@ -1,7 +1,4 @@
-import { setupHorizontalScrollViaWheel } from "../../widget_utils";
 import ViewMode, { ViewModeArgs } from "../view_mode";
-import noteCreateService from "../../../services/note_create";
-import { EventData } from "../../../components/app_context";
 import { BoardData } from "./config";
 import SpacedUpdate from "../../../services/spaced_update";
 import { setupContextMenu } from "./context_menu";

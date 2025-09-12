@@ -11,8 +11,6 @@ import { createContext } from "preact";
 import { onWheelHorizontalScroll } from "../../widget_utils";
 import Column from "./column";
 import BoardApi from "./api";
-import FBranch from "../../../entities/fbranch";
-import FNote from "../../../entities/fnote";
 
 export interface BoardViewData {
     columns?: BoardColumnData[];
@@ -55,13 +53,16 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
         return new Api(byColumn, columns ?? [], parentNote, statusAttribute, viewConfig ?? {}, saveConfig, setBranchIdToEdit );
     }, [ byColumn, columns, parentNote, statusAttribute, viewConfig, saveConfig, setBranchIdToEdit ]);
     const boardViewContext = useMemo<BoardViewContextData>(() => ({
+        api,
         branchIdToEdit, setBranchIdToEdit,
         columnNameToEdit, setColumnNameToEdit,
         draggedColumn, setDraggedColumn,
         dropPosition, setDropPosition,
         draggedCard, setDraggedCard,
         dropTarget, setDropTarget
-    }), [ branchIdToEdit, setBranchIdToEdit,
+    }), [
+        api,
+        branchIdToEdit, setBranchIdToEdit,
         columnNameToEdit, setColumnNameToEdit,
         draggedColumn, setDraggedColumn,
         dropPosition, setDropPosition,
