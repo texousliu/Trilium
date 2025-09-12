@@ -4,7 +4,8 @@
   height: 100%;
   user-select: none;
 
-  --card-line-height: 1.1;
+  --card-font-size: 0.9em;
+  --card-line-height: 1.2;
   --card-padding: 0.5em;
 }
 
@@ -124,6 +125,7 @@
   line-height: var(--card-line-height);
   overflow-wrap: break-word;
   overflow: hidden;
+  font-size: var(--card-font-size);
 }
 
 .board-view-container .board-note .icon {
