@@ -242,7 +242,7 @@ export function TitleEditor({ currentValue, placeholder, save, dismiss, multilin
             onKeyDown={(e) => {
                 if (e.key === "Enter") {
                     const newValue = e.currentTarget.value;
-                    if (newValue !== currentValue || isNewItem) {
+                    if (newValue.trim() && (newValue !== currentValue || isNewItem)) {
                         save(newValue);
                     }
                     dismiss();
@@ -253,7 +253,7 @@ export function TitleEditor({ currentValue, placeholder, save, dismiss, multilin
                 }
             }}
             onBlur={(newValue) => {
-                if (newValue !== currentValue || isNewItem) {
+                if (newValue.trim() && (newValue !== currentValue || isNewItem)) {
                     save(newValue);
                 }
                 dismiss();
