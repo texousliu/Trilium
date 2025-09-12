@@ -234,42 +234,8 @@ function useDragging({ column, columnIndex, columnItems }: DragContext) {
             } else if (targetBranch) {
                 await branches.moveAfterBranch([ branchId ], targetBranch.branchId);
             }
-        } else {
-            // From within the board.
-            if (draggedCard && dropPosition) {
-                const targetIndex = dropPosition.index;
-                const targetItems = columnItems || [];
-
-                const note = froca.getNoteFromCache(draggedCard.noteId);
-                if (!note) return;
-
-                if (draggedCard.fromColumn !== column || !draggedCard.index) {
-                    // Moving to a different column
-                    await api?.changeColumn(draggedCard.noteId, column);
-
-                    // If there are items in the target column, reorder
-                    if (targetItems.length > 0 && targetIndex < targetItems.length) {
-                        const targetBranch = targetItems[targetIndex].branch;
-                        await branches.moveBeforeBranch([ draggedCard.branchId ], targetBranch.branchId);
-                    }
-                } else if (draggedCard.index !== targetIndex) {
-                    // Reordering within the same column
-                    let targetBranchId: string | null = null;
-
-                    if (targetIndex < targetItems.length) {
-                        // Moving before an existing item
-                        const adjustedIndex = draggedCard.index < targetIndex ? targetIndex : targetIndex;
-                        if (adjustedIndex < targetItems.length) {
-                            targetBranchId = targetItems[adjustedIndex].branch.branchId;
-                            await branches.moveBeforeBranch([ draggedCard.branchId ], targetBranchId);
-                        }
-                    } else if (targetIndex > 0) {
-                        // Moving to the end - place after the last item
-                        const lastItem = targetItems[targetItems.length - 1];
-                        await branches.moveAfterBranch([ draggedCard.branchId ], lastItem.branch.branchId);
-                    }
-                }
-            }
+        } else if (draggedCard && dropPosition) {
+            api?.moveWithinBoard(draggedCard.noteId, draggedCard.branchId, draggedCard.index, dropPosition.index, draggedCard.fromColumn, column);
         }
 
     }, [ api, draggedColumn, dropPosition, columnItems, column, setDropTarget, setDropPosition ]);

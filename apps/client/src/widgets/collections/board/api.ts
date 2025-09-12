@@ -2,7 +2,9 @@ import { BoardViewData } from ".";
 import appContext from "../../../components/app_context";
 import FNote from "../../../entities/fnote";
 import attributes from "../../../services/attributes";
+import branches from "../../../services/branches";
 import { executeBulkActions } from "../../../services/bulk_action";
+import froca from "../../../services/froca";
 import { t } from "../../../services/i18n";
 import note_create from "../../../services/note_create";
 import server from "../../../services/server";
@@ -152,6 +154,42 @@ export default class BoardApi {
 
     renameCard(noteId: string, newTitle: string) {
         return server.put(`notes/${noteId}/title`, { title: newTitle.trim() });
+    }
+
+    async moveWithinBoard(noteId: string, sourceBranchId: string, sourceIndex: number, targetIndex: number, sourceColumn: string, targetColumn: string) {
+        const targetItems = this.byColumn?.get(targetColumn) ?? [];
+
+        const note = froca.getNoteFromCache(noteId);
+        if (!note) return;
+
+        if (sourceColumn !== targetColumn) {
+            // Moving to a different column
+            await this.changeColumn(noteId, targetColumn);
+
+            // If there are items in the target column, reorder
+            if (targetItems.length > 0 && targetIndex < targetItems.length) {
+                const targetBranch = targetItems[targetIndex].branch;
+                await branches.moveBeforeBranch([ sourceBranchId ], targetBranch.branchId);
+            }
+        } else if (sourceIndex !== targetIndex) {
+            // Reordering within the same column
+            let targetBranchId: string | null = null;
+
+            if (targetIndex < targetItems.length) {
+                // Moving before an existing item
+                const adjustedIndex = sourceIndex < targetIndex ? targetIndex : targetIndex;
+                if (adjustedIndex < targetItems.length) {
+                    targetBranchId = targetItems[adjustedIndex].branch.branchId;
+                    if (targetBranchId) {
+                        await branches.moveBeforeBranch([ sourceBranchId ], targetBranchId);
+                    }
+                }
+            } else if (targetIndex > 0) {
+                // Moving to the end - place after the last item
+                const lastItem = targetItems[targetItems.length - 1];
+                await branches.moveAfterBranch([ sourceBranchId ], lastItem.branch.branchId);
+            }
+        }
     }
 
 }
