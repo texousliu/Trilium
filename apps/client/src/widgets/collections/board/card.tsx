@@ -42,7 +42,12 @@ export default function Card({
         openNoteContextMenu(api, e, note.noteId, branch.branchId, column);
     }, [ api, note, branch, column ]);
 
-    const handleEdit = useCallback((e) => {
+    const handleOpen = useCallback(() => {
+        api.openNote(note.noteId);
+    }, [ api, note ]);
+
+    const handleEdit = useCallback((e: MouseEvent) => {
+        e.stopPropagation(); // don't also open the note
         setBranchIdToEdit?.(branch.branchId);
     }, [ setBranchIdToEdit, branch ]);
 
@@ -61,6 +66,7 @@ export default function Card({
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
             onContextMenu={handleContextMenu}
+            onClick={!isEditing ? handleOpen : undefined}
         >
             {!isEditing ? (
                 <>
