@@ -152,13 +152,13 @@ export default function Column({
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            onContextMenu={handleContextMenu}
         >
             <h3
                 className={`${isEditing ? "editing" : ""}`}
                 draggable="true"
                 onDragStart={handleColumnDragStart}
                 onDragEnd={handleColumnDragEnd}
+                onContextMenu={handleContextMenu}
             >
                 {!isEditing ? (
                     <>
