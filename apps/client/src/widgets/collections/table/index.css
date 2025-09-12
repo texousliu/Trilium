@@ -36,6 +36,10 @@
     border-right-width: 1px;
 }
 
+.tabulator .tabulator-row.archived {
+    opacity: 0.5;
+}
+
 .tabulator .tabulator-footer {
     background-color: unset;
     padding: 5px 0;

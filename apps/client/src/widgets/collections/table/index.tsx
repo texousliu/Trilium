@@ -4,7 +4,7 @@ import { buildColumnDefinitions } from "./columns";
 import getAttributeDefinitionInformation, { buildRowDefinitions, TableData } from "./rows";
 import { useLegacyWidget, useNoteLabel, useNoteLabelBoolean, useNoteLabelInt, useSpacedUpdate, useTriliumEvent } from "../../react/hooks";
 import Tabulator from "./tabulator";
-import { Tabulator as VanillaTabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule, Options} from 'tabulator-tables';
+import { Tabulator as VanillaTabulator, SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, ColumnDefinition, DataTreeModule, Options, RowComponent} from 'tabulator-tables';
 import { useContextMenu } from "./context_menu";
 import { ParentComponent } from "../../react/react_utils";
 import FNote from "../../../entities/fnote";
@@ -46,6 +46,11 @@ export default function TableView({ note, noteIds, notePath, viewConfig, saveCon
         }
     }, [ hasChildren ]);
 
+    const rowFormatter = useCallback((row: RowComponent) => {
+        const data = row.getData() as TableData;
+        row.getElement().classList.toggle("archived", !!data.isArchived);
+    }, []);
+
     return (
         <div className="table-view">
             {columnDefs && (
@@ -66,7 +71,7 @@ export default function TableView({ note, noteIds, notePath, viewConfig, saveCon
                         index="branchId"
                         movableColumns
                         movableRows={movableRows}
-
+                        rowFormatter={rowFormatter}
                         {...dataTreeProps}
                     />
                     <TableFooter note={note} />
@@ -110,6 +115,7 @@ function usePersistence(initialConfig: TableConfig | null | undefined, saveConfi
 
 function useData(note: FNote, noteIds: string[], viewConfig: TableConfig | undefined, newAttributePosition: RefObject<number | undefined>, resetNewAttributePosition: () => void) {
     const [ maxDepth ] = useNoteLabelInt(note, "maxNestingDepth") ?? -1;
+    const [ includeArchived ] = useNoteLabelBoolean(note, "includeArchived");
 
     const [ columnDefs, setColumnDefs ] = useState<ColumnDefinition[]>();
     const [ rowData, setRowData ] = useState<TableData[]>();
@@ -119,7 +125,7 @@ function useData(note: FNote, noteIds: string[], viewConfig: TableConfig | undef
 
     function refresh() {
         const info = getAttributeDefinitionInformation(note);
-        buildRowDefinitions(note, info, maxDepth).then(({ definitions: rowData, hasSubtree: hasChildren, rowNumber }) => {
+        buildRowDefinitions(note, info, includeArchived, maxDepth).then(({ definitions: rowData, hasSubtree: hasChildren, rowNumber }) => {
             const columnDefs = buildColumnDefinitions({
                 info,
                 movableRows,
@@ -149,7 +155,8 @@ function useData(note: FNote, noteIds: string[], viewConfig: TableConfig | undef
         // React to external row updates.
         if (loadResults.getBranchRows().some(branch => branch.parentNoteId === note.noteId || noteIds.includes(branch.parentNoteId ?? ""))
             || loadResults.getNoteIds().some(noteId => noteIds.includes(noteId))
-            || loadResults.getAttributeRows().some(attr => noteIds.includes(attr.noteId!))) {
+            || loadResults.getAttributeRows().some(attr => noteIds.includes(attr.noteId!))
+            || loadResults.getAttributeRows().some(attr => attr.name === "archived" && attr.noteId && noteIds.includes(attr.noteId))) {
             refresh();
             return;
         }

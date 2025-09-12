@@ -10,10 +10,11 @@ export type TableData = {
     relations: Record<string, boolean | string | null>;
     branchId: string;
     colorClass: string | undefined;
+    isArchived: boolean;
     _children?: TableData[];
 };
 
-export async function buildRowDefinitions(parentNote: FNote, infos: AttributeDefinitionInformation[], maxDepth = -1, currentDepth = 0) {
+export async function buildRowDefinitions(parentNote: FNote, infos: AttributeDefinitionInformation[], includeArchived: boolean, maxDepth = -1, currentDepth = 0) {
     const definitions: TableData[] = [];
     const childBranches = parentNote.getChildBranches();
     let hasSubtree = false;
@@ -21,8 +22,8 @@ export async function buildRowDefinitions(parentNote: FNote, infos: AttributeDef
 
     for (const branch of childBranches) {
         const note = await branch.getNote();
-        if (!note) {
-            continue; // Skip if the note is not found
+        if (!note || (!includeArchived && note.isArchived)) {
+            continue;
         }
 
         const labels: typeof definitions[0]["labels"] = {};
@@ -41,12 +42,13 @@ export async function buildRowDefinitions(parentNote: FNote, infos: AttributeDef
             title: note.title,
             labels,
             relations,
+            isArchived: note.isArchived,
             branchId: branch.branchId,
             colorClass: note.getColorClass()
         }
 
         if (note.hasChildren() && (maxDepth < 0 || currentDepth < maxDepth)) {
-            const { definitions, rowNumber: subRowNumber } = (await buildRowDefinitions(note, infos, maxDepth, currentDepth + 1));
+            const { definitions, rowNumber: subRowNumber } = (await buildRowDefinitions(note, infos, includeArchived, maxDepth, currentDepth + 1));
             def._children = definitions;
             hasSubtree = true;
             rowNumber += subRowNumber;
