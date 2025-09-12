@@ -6,11 +6,12 @@ import config from "./services/config.js";
 import log from "./services/log.js";
 import appInfo from "./services/app_info.js";
 import ws from "./services/ws.js";
-import utils, { formatUtcTime } from "./services/utils.js";
+import utils, { formatSize, formatUtcTime } from "./services/utils.js";
 import port from "./services/port.js";
 import host from "./services/host.js";
 import buildApp from "./app.js";
 import type { Express } from "express";
+import { getDbSize } from "./services/sql_init.js";
 
 const MINIMUM_NODE_VERSION = "20.0.0";
 
@@ -84,8 +85,7 @@ export default async function startTriliumServer() {
 }
 
 async function displayStartupMessage() {
-    log.info("");
-    log.info(LOGO.replace("[version]", appInfo.appVersion));
+    log.info("\n" + LOGO.replace("[version]", appInfo.appVersion));
     log.info(`📦 Versions:    app=${appInfo.appVersion} db=${appInfo.dbVersion} sync=${appInfo.syncVersion} clipper=${appInfo.clipperProtocolVersion}`)
     log.info(`🔧 Build:       ${formatUtcTime(appInfo.buildDate)} (${appInfo.buildRevision.substring(0, 10)})`);
     log.info(`📂 Data dir:    ${appInfo.dataDirectory}`);
@@ -98,6 +98,7 @@ async function displayStartupMessage() {
         const cpuModel = (cpuInfos[0].model || "").trimEnd();
         log.info(`💻 CPU:         ${cpuModel} (${cpuInfos.length}-core @ ${cpuInfos[0].speed} Mhz)`);
     }
+    log.info(`💾 DB size:     ${formatSize(getDbSize() * 1024)}`);
     log.info("");
 }
 

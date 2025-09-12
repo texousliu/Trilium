@@ -482,6 +482,21 @@ export function formatUtcTime(time: string) {
     return time.replace("T", " ").substring(0, 19)
 }
 
+// TODO: Deduplicate with client utils
+export function formatSize(size: number | null | undefined) {
+    if (size === null || size === undefined) {
+        return "";
+    }
+
+    size = Math.max(Math.round(size / 1024), 1);
+
+    if (size < 1024) {
+        return `${size} KiB`;
+    } else {
+        return `${Math.round(size / 102.4) / 10} MiB`;
+    }
+}
+
 export default {
     compareVersions,
     crash,

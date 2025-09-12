@@ -197,14 +197,12 @@ function optimize() {
     log.info(`Optimization finished in ${Date.now() - start}ms.`);
 }
 
-function getDbSize() {
+export function getDbSize() {
     return sql.getValue<number>("SELECT page_count * page_size / 1000 as size FROM pragma_page_count(), pragma_page_size()");
 }
 
 function initializeDb() {
     cls.init(initDbConnection);
-
-    log.info(`DB size: ${getDbSize()} KB`);
 
     dbReady.then(() => {
         if (config.General && config.General.noBackup === true) {
