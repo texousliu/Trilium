@@ -152,8 +152,11 @@ function AddNewItem({ column, api }: { column: string, api: BoardApi }) {
 
 function useDragging({ column, columnIndex, columnItems }: DragContext) {
     const { api, parentNote, draggedColumn, setDraggedColumn, setDropTarget, setDropPosition, dropPosition } = useContext(BoardViewContext);
+    /** Needed to track if current column is dragged in real-time, since {@link draggedColumn} is populated one render cycle later.  */
+    const isDraggingRef = useRef(false);
 
     const handleColumnDragStart = useCallback((e: DragEvent) => {
+        isDraggingRef.current = true;
         e.dataTransfer!.effectAllowed = 'move';
         e.dataTransfer!.setData('text/plain', column);
         setDraggedColumn({ column, index: columnIndex });
@@ -161,11 +164,12 @@ function useDragging({ column, columnIndex, columnItems }: DragContext) {
     }, [column, columnIndex, setDraggedColumn]);
 
     const handleColumnDragEnd = useCallback(() => {
+        isDraggingRef.current = false;
         setDraggedColumn(null);
     }, [setDraggedColumn]);
 
     const handleDragOver = useCallback((e: DragEvent) => {
-        if (draggedColumn) return; // Don't handle card drops when dragging columns
+        if (draggedColumn || isDraggingRef.current) return; // Don't handle card drops when dragging columns
         e.preventDefault();
         setDropTarget(column);
 
