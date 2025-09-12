@@ -1,5 +1,6 @@
 import contextMenu, { ContextMenuEvent } from "../../../menus/context_menu";
 import link_context_menu from "../../../menus/link_context_menu";
+import attributes from "../../../services/attributes";
 import branches from "../../../services/branches";
 import dialog from "../../../services/dialog";
 import { t } from "../../../services/i18n";
@@ -65,6 +66,11 @@ export function openNoteContextMenu(api: Api, event: ContextMenuEvent, noteId: s
                 title: t("board_view.delete-note"),
                 uiIcon: "bx bx-trash",
                 handler: () => branches.deleteNotes([ branchId ], false, false)
+            },
+            {
+                title: t("board_view.archive-note"),
+                uiIcon: "bx bx-archive",
+                handler: () => attributes.addLabel(noteId, "archived")
             }
         ],
         selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, noteId),

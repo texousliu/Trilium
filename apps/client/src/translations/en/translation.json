@@ -1994,6 +1994,7 @@
   },
   "board_view": {
     "delete-note": "Delete Note",
+    "archive-note": "Archive Note",
     "move-to": "Move to",
     "insert-above": "Insert above",
     "insert-below": "Insert below",

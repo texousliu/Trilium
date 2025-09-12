@@ -259,6 +259,8 @@ export default class FNote {
     async getSubtreeNoteIds() {
         let noteIds: (string | string[])[] = [];
         for (const child of await this.getChildNotes()) {
+            if (child.isArchived) continue;
+
             noteIds.push(child.noteId);
             noteIds.push(await child.getSubtreeNoteIds());
         }
@@ -267,7 +269,7 @@ export default class FNote {
 
     async getSubtreeNotes() {
         const noteIds = await this.getSubtreeNoteIds();
-        return this.froca.getNotes(noteIds);
+        return (await this.froca.getNotes(noteIds)).filter(note => !note.isArchived)
     }
 
     async getChildNotes() {

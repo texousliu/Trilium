@@ -129,7 +129,9 @@ function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOptions | 
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         if (note && loadResults.getBranchRows().some(branch =>
                 branch.parentNoteId === note.noteId
-                || noteIds.includes(branch.parentNoteId ?? ""))) {
+                || noteIds.includes(branch.parentNoteId ?? ""))
+            || loadResults.getAttributeRows().some(attr => attr.name === "archived" && attr.noteId && noteIds.includes(attr.noteId))
+        ) {
             refreshNoteIds();
         }
     })

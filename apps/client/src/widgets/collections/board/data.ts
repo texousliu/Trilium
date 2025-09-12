@@ -64,9 +64,7 @@ export async function getBoardData(parentNote: FNote, groupByColumn: string, per
 async function recursiveGroupBy(branches: FBranch[], byColumn: ColumnMap, groupByColumn: string) {
     for (const branch of branches) {
         const note = await branch.getNote();
-        if (!note) {
-            continue;
-        }
+        if (!note || note.isArchived) continue;
 
         if (note.hasChildren()) {
             await recursiveGroupBy(note.getChildBranches(), byColumn, groupByColumn);
