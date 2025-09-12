@@ -161,7 +161,8 @@ textarea,
     color: var(--muted-text-color);
 }
 
-.form-group.disabled {
+.form-group.disabled,
+.form-checkbox.disabled {
     opacity: 0.5;
     pointer-events: none;
 }
