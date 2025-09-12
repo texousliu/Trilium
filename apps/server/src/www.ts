@@ -24,6 +24,8 @@ const LOGO = `\
 `;
 
 export default async function startTriliumServer() {
+    await displayStartupMessage();
+
     // setup basic error handling even before requiring dependencies, since those can produce errors as well
     process.on("unhandledRejection", (error: Error) => {
         // this makes sure that stacktrace of failed promise is printed out
@@ -70,8 +72,6 @@ export default async function startTriliumServer() {
     if (utils.isElectron) {
         (await import("electron")).app.requestSingleInstanceLock();
     }
-
-    await displayStartupMessage();
 
     const httpServer = startHttpServer(app);
 
