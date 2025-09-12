@@ -49,8 +49,9 @@ export function openNoteContextMenu(api: Api, event: ContextMenuEvent, note: FNo
                     title: columnToMoveTo,
                     enabled: columnToMoveTo !== column,
                     handler: () => api.changeColumn(note.noteId, columnToMoveTo)
-                }))
+                })),
             },
+            getArchiveMenuItem(note),
             { title: "----" },
             {
                 title: t("board_view.insert-above"),
@@ -64,11 +65,15 @@ export function openNoteContextMenu(api: Api, event: ContextMenuEvent, note: FNo
             },
             { title: "----" },
             {
+                title: t("board_view.remove-from-board"),
+                uiIcon: "bx bx-task-x",
+                handler: () => api.removeFromBoard(note.noteId)
+            },
+            {
                 title: t("board_view.delete-note"),
                 uiIcon: "bx bx-trash",
                 handler: () => branches.deleteNotes([ branchId ], false, false)
             },
-            getArchiveMenuItem(note)
         ],
         selectMenuItemHandler: ({ command }) =>  link_context_menu.handleLinkContextMenuItem(command, note.noteId),
     });

@@ -156,6 +156,12 @@ export default class BoardApi {
         return server.put(`notes/${noteId}/title`, { title: newTitle.trim() });
     }
 
+    removeFromBoard(noteId: string) {
+        const note = froca.getNoteFromCache(noteId);
+        if (!note) return;
+        return attributes.removeOwnedLabelByName(note, this.statusAttribute);
+    }
+
     async moveWithinBoard(noteId: string, sourceBranchId: string, sourceIndex: number, targetIndex: number, sourceColumn: string, targetColumn: string) {
         const targetItems = this.byColumn?.get(targetColumn) ?? [];
 

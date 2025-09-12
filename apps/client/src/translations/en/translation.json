@@ -1996,9 +1996,10 @@
     "delete_row": "Delete row"
   },
   "board_view": {
-    "delete-note": "Delete Note",
-    "archive-note": "Archive Note",
-    "unarchive-note": "Unarchive Note",
+    "delete-note": "Delete note...",
+    "remove-from-board": "Remove from board",
+    "archive-note": "Archive note",
+    "unarchive-note": "Unarchive note",
     "move-to": "Move to",
     "insert-above": "Insert above",
     "insert-below": "Insert below",
