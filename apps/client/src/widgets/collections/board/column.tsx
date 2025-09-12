@@ -147,8 +147,10 @@ function useDragging({ column, columnIndex, columnItems }: DragContext) {
             }
         }
 
-        setDropPosition({ column, index: newIndex });
-    }, [column, setDropTarget, setDropPosition]);
+        if (!(dropPosition?.column === column && dropPosition.index === newIndex)) {
+            setDropPosition({ column, index: newIndex });
+        }
+    }, [column, setDropTarget, dropPosition, setDropPosition]);
 
     const handleDragLeave = useCallback((e: DragEvent) => {
         const relatedTarget = e.relatedTarget as HTMLElement;
