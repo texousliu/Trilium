@@ -26,6 +26,7 @@ export default function Card({
     const isEditing = branch.branchId === branchIdToEdit;
     const colorClass = note.getColorClass() || '';
     const editorRef = useRef<HTMLInputElement>(null);
+    const isArchived = note.isArchived;
     const [ title, setTitle ] = useState(note.title);
 
     const handleDragStart = useCallback((e: DragEvent) => {
@@ -61,7 +62,7 @@ export default function Card({
 
     return (
         <div
-            className={`board-note ${colorClass} ${isDragging ? 'dragging' : ''} ${isEditing ? "editing" : ""}`}
+            className={`board-note ${colorClass} ${isDragging ? 'dragging' : ''} ${isEditing ? "editing" : ""} ${isArchived ? "archived" : ""}`}
             draggable="true"
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}

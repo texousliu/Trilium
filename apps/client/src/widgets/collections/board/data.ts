@@ -7,11 +7,11 @@ export type ColumnMap = Map<string, {
     note: FNote;
 }[]>;
 
-export async function getBoardData(parentNote: FNote, groupByColumn: string, persistedData: BoardViewData) {
+export async function getBoardData(parentNote: FNote, groupByColumn: string, persistedData: BoardViewData, includeArchived: boolean) {
     const byColumn: ColumnMap = new Map();
 
     // First, scan all notes to find what columns actually exist
-    await recursiveGroupBy(parentNote.getChildBranches(), byColumn, groupByColumn);
+    await recursiveGroupBy(parentNote.getChildBranches(), byColumn, groupByColumn, includeArchived);
 
     // Get all columns that exist in the notes
     const columnsFromNotes = [...byColumn.keys()];
@@ -61,13 +61,13 @@ export async function getBoardData(parentNote: FNote, groupByColumn: string, per
     };
 }
 
-async function recursiveGroupBy(branches: FBranch[], byColumn: ColumnMap, groupByColumn: string) {
+async function recursiveGroupBy(branches: FBranch[], byColumn: ColumnMap, groupByColumn: string, includeArchived: boolean) {
     for (const branch of branches) {
         const note = await branch.getNote();
-        if (!note || note.isArchived) continue;
+        if (!note || (!includeArchived && note.isArchived)) continue;
 
         if (note.hasChildren()) {
-            await recursiveGroupBy(note.getChildBranches(), byColumn, groupByColumn);
+            await recursiveGroupBy(note.getChildBranches(), byColumn, groupByColumn, includeArchived);
         }
 
         const group = note.getLabelValue(groupByColumn);

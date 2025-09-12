@@ -2,7 +2,7 @@ import { Dispatch, StateUpdater, useCallback, useEffect, useMemo, useRef, useSta
 import { ViewModeProps } from "../interface";
 import "./index.css";
 import { ColumnMap, getBoardData } from "./data";
-import { useNoteLabelWithDefault, useTriliumEvent } from "../../react/hooks";
+import { useNoteLabelBoolean, useNoteLabelWithDefault, useTriliumEvent } from "../../react/hooks";
 import Icon from "../../react/Icon";
 import { t } from "../../../services/i18n";
 import Api from "./api";
@@ -41,6 +41,7 @@ export const BoardViewContext = createContext<BoardViewContextData>({});
 
 export default function BoardView({ note: parentNote, noteIds, viewConfig, saveConfig }: ViewModeProps<BoardViewData>) {
     const [ statusAttribute ] = useNoteLabelWithDefault(parentNote, "board:groupBy", "status");
+    const [ includeArchived ] = useNoteLabelBoolean(parentNote, "includeArchived");
     const [ byColumn, setByColumn ] = useState<ColumnMap>();
     const [ columns, setColumns ] = useState<string[]>();
     const [ draggedCard, setDraggedCard ] = useState<{ noteId: string, branchId: string, fromColumn: string, index: number } | null>(null);
@@ -72,7 +73,7 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     ]);
 
     function refresh() {
-        getBoardData(parentNote, statusAttribute, viewConfig ?? {}).then(({ byColumn, newPersistedData }) => {
+        getBoardData(parentNote, statusAttribute, viewConfig ?? {}, includeArchived).then(({ byColumn, newPersistedData }) => {
             setByColumn(byColumn);
 
             if (newPersistedData) {
