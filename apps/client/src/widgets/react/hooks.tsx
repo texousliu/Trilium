@@ -367,7 +367,7 @@ export function useNoteLabelInt(note: FNote | undefined | null, labelName: strin
     ]
 }
 
-export function useNoteBlob(note: FNote | null | undefined): [ FBlob | null | undefined ] {
+export function useNoteBlob(note: FNote | null | undefined): FBlob | null | undefined {
     const [ blob, setBlob ] = useState<FBlob | null>();
 
     function refresh() {
@@ -376,14 +376,23 @@ export function useNoteBlob(note: FNote | null | undefined): [ FBlob | null | un
 
     useEffect(refresh, [ note?.noteId ]);
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
-        if (note && loadResults.hasRevisionForNote(note.noteId)) {
+        if (!note) return;
+
+        // Check if the note was deleted.
+        if (loadResults.getEntityRow("notes", note.noteId)?.isDeleted) {
+            setBlob(null);
+            return;
+        }
+
+        // Check if a revision occurred.
+        if (loadResults.hasRevisionForNote(note.noteId)) {
             refresh();
         }
     });
 
     useDebugValue(note?.noteId);
 
-    return [ blob ] as const;
+    return blob;
 }
 
 export function useLegacyWidget<T extends BasicWidget>(widgetFactory: () => T, { noteContext, containerClassName, containerStyle }: {

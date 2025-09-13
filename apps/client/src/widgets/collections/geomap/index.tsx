@@ -212,6 +212,7 @@ function NoteGpxTrack({ note }: { note: FNote }) {
     const blob = useNoteBlob(note);
 
     useEffect(() => {
+        if (!blob) return;
         server.get<string | Uint8Array>(`notes/${note.noteId}/open`, undefined, true).then(xmlResponse => {
             if (xmlResponse instanceof Uint8Array) {
                 setXmlString(new TextDecoder().decode(xmlResponse));
