@@ -215,7 +215,13 @@ function useDragging({ column, columnIndex, columnItems, isEditing }: DragContex
 
         const data = e.dataTransfer?.getData("text");
         if (!data) return;
-        const draggedCard = JSON.parse(data) as CardDragData | DragData[];
+
+        let draggedCard: CardDragData | DragData[];
+        try {
+            draggedCard = JSON.parse(data);
+        } catch (e) {
+            return;
+        }
 
         if (Array.isArray(draggedCard)) {
             // From note tree.
