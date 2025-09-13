@@ -13,6 +13,7 @@ import type NoteTreeWidget from "../widgets/note_tree.js";
 import type FAttachment from "../entities/fattachment.js";
 import type { SelectMenuItemEventListener } from "../components/events.js";
 import utils from "../services/utils.js";
+import attributes from "../services/attributes.js";
 
 // TODO: Deduplicate once client/server is well split.
 interface ConvertToAttachmentResponse {
@@ -55,6 +56,7 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
         const branch = froca.getBranch(this.node.data.branchId);
         const isNotRoot = note?.noteId !== "root";
         const isHoisted = note?.noteId === appContext.tabManager.getActiveContext()?.hoistedNoteId;
+        const isArchived = note?.isArchived;
         const parentNote = isNotRoot && branch ? await froca.getNote(branch.parentNoteId) : null;
 
         // some actions don't support multi-note, so they are disabled when notes are selected,
@@ -189,6 +191,19 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 enabled: parentNotSearch && isNotRoot && !isHoisted && notOptionsOrHelp
             },
 
+            {
+                title: !isArchived ? t("tree-context-menu.archive") : t("tree-context-menu.unarchive"),
+                uiIcon: !isArchived ? "bx bx-archive" : "bx bx-archive-out",
+                handler: () => {
+                    if (!note) return;
+                    if (!isArchived) {
+                        attributes.addLabel(note.noteId, "archived");
+                    } else {
+                        attributes.removeOwnedLabelByName(note, "archived");
+                    }
+                },
+                enabled: noSelectedNotes
+            },
             {
                 title: `${t("tree-context-menu.delete")} <kbd data-command="deleteNotes"></kbd>`,
                 command: "deleteNotes",
