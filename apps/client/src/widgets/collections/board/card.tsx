@@ -31,7 +31,7 @@ export default function Card({
     index: number,
     isDragging: boolean
 }) {
-    const { branchIdToEdit, setBranchIdToEdit } = useContext(BoardViewContext);
+    const { branchIdToEdit, setBranchIdToEdit, setDraggedCard } = useContext(BoardViewContext);
     const isEditing = branch.branchId === branchIdToEdit;
     const colorClass = note.getColorClass() || '';
     const editorRef = useRef<HTMLInputElement>(null);
@@ -41,8 +41,13 @@ export default function Card({
     const handleDragStart = useCallback((e: DragEvent) => {
         e.dataTransfer!.effectAllowed = 'move';
         const data: CardDragData = { noteId: note.noteId, branchId: branch.branchId, fromColumn: column, index };
+        setDraggedCard(data);
         e.dataTransfer!.setData(CARD_CLIPBOARD_TYPE, JSON.stringify(data));
     }, [note.noteId, branch.branchId, column, index]);
+
+    const handleDragEnd = useCallback((e: DragEvent) => {
+        setDraggedCard(null);
+    }, [setDraggedCard]);
 
     const handleContextMenu = useCallback((e: ContextMenuEvent) => {
         openNoteContextMenu(api, e, note, branch.branchId, column);
@@ -70,6 +75,7 @@ export default function Card({
             className={`board-note ${colorClass} ${isDragging ? 'dragging' : ''} ${isEditing ? "editing" : ""} ${isArchived ? "archived" : ""}`}
             draggable="true"
             onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
             onContextMenu={handleContextMenu}
             onClick={!isEditing ? handleOpen : undefined}
         >

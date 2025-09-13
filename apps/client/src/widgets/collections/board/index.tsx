@@ -34,10 +34,12 @@ interface BoardViewContextData {
     dropPosition: { column: string, index: number } | null;
     setDropPosition: (position: { column: string, index: number } | null) => void;
     setDropTarget: (target: string | null) => void,
-    dropTarget: string | null
+    dropTarget: string | null;
+    draggedCard: { noteId: string, branchId: string, fromColumn: string, index: number } | null;
+    setDraggedCard: Dispatch<StateUpdater<{ noteId: string; branchId: string; fromColumn: string; index: number; } | null>>;
 }
 
-export const BoardViewContext = createContext<BoardViewContextData>({});
+export const BoardViewContext = createContext<BoardViewContextData | undefined>(undefined);
 
 export default function BoardView({ note: parentNote, noteIds, viewConfig, saveConfig }: ViewModeProps<BoardViewData>) {
     const [ statusAttribute ] = useNoteLabelWithDefault(parentNote, "board:groupBy", "status");
