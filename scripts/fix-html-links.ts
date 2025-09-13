@@ -11,8 +11,16 @@ import * as path from 'path';
  */
 function fixHtmlLinks(content: string): string {
     // Replace .md extensions in href attributes
-    // This regex matches href="...something.md" or href="...something.md#anchor"
-    return content.replace(/href="([^"]*?)\.md(#[^"]*)?"/g, 'href="$1$2"');
+    // Handle both quoted and unquoted href attributes
+
+    // First, handle quoted hrefs: href="...something.md" or href="...something.md#anchor"
+    content = content.replace(/href="([^"]*?)\.md(#[^"]*)?"/g, 'href="$1$2"');
+
+    // Then, handle unquoted hrefs: href=...something.md or href=...something.md#anchor
+    // This matches href= followed by a non-whitespace URL ending in .md
+    content = content.replace(/href=([^\s>]*?)\.md(#[^\s>]*)?(?=[\s>])/g, 'href=$1$2');
+
+    return content;
 }
 
 /**
