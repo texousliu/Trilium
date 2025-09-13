@@ -36,6 +36,7 @@ export default function Card({
     const colorClass = note.getColorClass() || '';
     const editorRef = useRef<HTMLInputElement>(null);
     const isArchived = note.isArchived;
+    const [ isVisible, setVisible ] = useState(true);
     const [ title, setTitle ] = useState(note.title);
 
     const handleDragStart = useCallback((e: DragEvent) => {
@@ -70,6 +71,10 @@ export default function Card({
         setTitle(note.title);
     }, [ note ]);
 
+    useEffect(() => {
+        setVisible(!isDragging);
+    }, [ isDragging ]);
+
     return (
         <div
             className={`board-note ${colorClass} ${isDragging ? 'dragging' : ''} ${isEditing ? "editing" : ""} ${isArchived ? "archived" : ""}`}
@@ -78,6 +83,9 @@ export default function Card({
             onDragEnd={handleDragEnd}
             onContextMenu={handleContextMenu}
             onClick={!isEditing ? handleOpen : undefined}
+            style={{
+                display: !isVisible ? "none" : undefined
+            }}
         >
             {!isEditing ? (
                 <>
