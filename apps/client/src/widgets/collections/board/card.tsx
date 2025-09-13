@@ -7,6 +7,8 @@ import { ContextMenuEvent } from "../../../menus/context_menu";
 import { openNoteContextMenu } from "./context_menu";
 import { t } from "../../../services/i18n";
 
+export const CARD_CLIPBOARD_TYPE = "trilium/board-card";
+
 export interface CardDragData {
     noteId: string;
     branchId: string;
@@ -39,7 +41,7 @@ export default function Card({
     const handleDragStart = useCallback((e: DragEvent) => {
         e.dataTransfer!.effectAllowed = 'move';
         const data: CardDragData = { noteId: note.noteId, branchId: branch.branchId, fromColumn: column, index };
-        e.dataTransfer!.setData('text/plain', JSON.stringify(data));
+        e.dataTransfer!.setData(CARD_CLIPBOARD_TYPE, JSON.stringify(data));
     }, [note.noteId, branch.branchId, column, index]);
 
     const handleContextMenu = useCallback((e: ContextMenuEvent) => {

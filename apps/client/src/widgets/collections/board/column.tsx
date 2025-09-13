@@ -8,7 +8,7 @@ import { ContextMenuEvent } from "../../../menus/context_menu";
 import Icon from "../../react/Icon";
 import { t } from "../../../services/i18n";
 import BoardApi from "./api";
-import Card, { CardDragData } from "./card";
+import Card, { CARD_CLIPBOARD_TYPE, CardDragData } from "./card";
 import { JSX } from "preact/jsx-runtime";
 import froca from "../../../services/froca";
 import { DragData } from "../../note_tree";
@@ -173,6 +173,8 @@ function useDragging({ column, columnIndex, columnItems, isEditing }: DragContex
 
     const handleDragOver = useCallback((e: DragEvent) => {
         if (isEditing || draggedColumn || isDraggingRef.current) return; // Don't handle card drops when dragging columns
+        if (!e.dataTransfer?.types.includes(CARD_CLIPBOARD_TYPE)) return;
+
         e.preventDefault();
         setDropTarget(column);
 
@@ -213,7 +215,7 @@ function useDragging({ column, columnIndex, columnItems, isEditing }: DragContex
         setDropTarget(null);
         setDropPosition(null);
 
-        const data = e.dataTransfer?.getData("text");
+        const data = e.dataTransfer?.getData(CARD_CLIPBOARD_TYPE);
         if (!data) return;
 
         let draggedCard: CardDragData | DragData[];
