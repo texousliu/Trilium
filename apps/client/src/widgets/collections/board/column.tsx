@@ -26,10 +26,14 @@ export default function Column({
     isDraggingColumn,
     columnItems,
     api,
+    onColumnHover,
+    isAnyColumnDragging,
 }: {
     columnItems?: { note: FNote, branch: FBranch }[];
     isDraggingColumn: boolean,
-    api: BoardApi
+    api: BoardApi,
+    onColumnHover?: (index: number, mouseX: number, rect: DOMRect) => void,
+    isAnyColumnDragging?: boolean
 } & DragContext) {
     const [ isVisible, setVisible ] = useState(true);
     const { columnNameToEdit, setColumnNameToEdit, dropTarget, draggedCard, dropPosition } = useContext(BoardViewContext);
@@ -66,10 +70,17 @@ export default function Column({
         setVisible(!isDraggingColumn);
     }, [ isDraggingColumn ]);
 
+    const handleColumnDragOver = useCallback((e: DragEvent) => {
+        if (!isAnyColumnDragging || !onColumnHover) return;
+        e.preventDefault();
+        const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+        onColumnHover(columnIndex, e.clientX, rect);
+    }, [isAnyColumnDragging, onColumnHover, columnIndex]);
+
     return (
         <div
             className={`board-column ${dropTarget === column && draggedCard?.fromColumn !== column ? 'drag-over' : ''}`}
-            onDragOver={handleDragOver}
+            onDragOver={isAnyColumnDragging ? handleColumnDragOver : handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             onWheel={handleScroll}

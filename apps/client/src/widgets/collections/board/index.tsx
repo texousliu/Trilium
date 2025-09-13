@@ -51,6 +51,7 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     const [ dropPosition, setDropPosition ] = useState<{ column: string, index: number } | null>(null);
     const [ draggedColumn, setDraggedColumn ] = useState<{ column: string, index: number } | null>(null);
     const [ columnDropPosition, setColumnDropPosition ] = useState<number | null>(null);
+    const [ columnHoverIndex, setColumnHoverIndex ] = useState<number | null>(null);
     const [ branchIdToEdit, setBranchIdToEdit ] = useState<string>();
     const [ columnNameToEdit, setColumnNameToEdit ] = useState<string>();
     const api = useMemo(() => {
@@ -129,32 +130,31 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     const handleColumnDragOver = useCallback((e: DragEvent) => {
         if (!draggedColumn) return;
         e.preventDefault();
+    }, [draggedColumn]);
 
-        const container = e.currentTarget as HTMLElement;
-        const columns = Array.from(container.querySelectorAll('.board-column'));
-        const mouseX = e.clientX;
+    const handleColumnHover = useCallback((visualIndex: number, mouseX: number, columnRect: DOMRect) => {
+        if (!draggedColumn) return;
 
-        let newIndex = columns.length;
-        for (let i = 0; i < columns.length; i++) {
-            const col = columns[i] as HTMLElement;
-            const rect = col.getBoundingClientRect();
-            const colMiddle = rect.left + rect.width / 2;
+        const columnMiddle = columnRect.left + columnRect.width / 2;
 
-            if (mouseX < colMiddle) {
-                newIndex = i;
-                break;
-            }
+        // Determine drop position based on mouse position relative to column center
+        let dropIndex = mouseX < columnMiddle ? visualIndex : visualIndex + 1;
+
+        // Convert visual index back to actual array index
+        if (draggedColumn.index <= visualIndex) {
+            // Add 1 because the dragged column (which is hidden) comes before this position
+            dropIndex += 1;
         }
 
-        setColumnDropPosition(newIndex);
+        setColumnDropPosition(dropIndex);
     }, [draggedColumn]);
 
     const handleContainerDrop = useCallback((e: DragEvent) => {
         e.preventDefault();
         if (draggedColumn && columnDropPosition !== null) {
-            console.log("Move ", draggedColumn.index, "at", columnDropPosition);
             handleColumnDrop(draggedColumn.index, columnDropPosition);
         }
+        setColumnHoverIndex(null);
     }, [draggedColumn, columnDropPosition, handleColumnDrop]);
 
     return (
@@ -168,20 +168,30 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
                     onDragOver={handleColumnDragOver}
                     onDrop={handleContainerDrop}
                 >
-                    {byColumn && columns?.map((column, index) => (
-                        <>
-                            {columnDropPosition === index && (
-                                <div className="column-drop-placeholder show" />
-                            )}
-                            <Column
-                                api={api}
-                                column={column}
-                                columnIndex={index}
-                                columnItems={byColumn.get(column)}
-                                isDraggingColumn={draggedColumn?.column === column}
-                            />
-                        </>
-                    ))}
+                    {byColumn && columns?.map((column, index) => {
+                        // Calculate visual index (skipping hidden dragged column)
+                        let visualIndex = index;
+                        if (draggedColumn && draggedColumn.index < index) {
+                            visualIndex = index - 1;
+                        }
+
+                        return (
+                            <>
+                                {columnDropPosition === index && (
+                                    <div className="column-drop-placeholder show" />
+                                )}
+                                <Column
+                                    api={api}
+                                    column={column}
+                                    columnIndex={index}
+                                    columnItems={byColumn.get(column)}
+                                    isDraggingColumn={draggedColumn?.column === column}
+                                    onColumnHover={(_, mouseX, rect) => handleColumnHover(visualIndex, mouseX, rect)}
+                                    isAnyColumnDragging={!!draggedColumn}
+                                />
+                            </>
+                        );
+                    })}
                     {columnDropPosition === columns?.length && draggedColumn && (
                         <div className="column-drop-placeholder show" />
                     )}

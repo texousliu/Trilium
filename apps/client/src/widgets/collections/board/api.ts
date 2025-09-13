@@ -106,7 +106,15 @@ export default class BoardApi {
 
         const newColumns = [...this.columns];
         const [movedColumn] = newColumns.splice(fromIndex, 1);
-        newColumns.splice(toIndex, 0, movedColumn);
+
+        // Adjust toIndex after removing the element
+        // When moving forward (right), the removal shifts indices left
+        let adjustedToIndex = toIndex;
+        if (fromIndex < toIndex) {
+            adjustedToIndex = toIndex - 1;
+        }
+
+        newColumns.splice(adjustedToIndex, 0, movedColumn);
 
         // Update view config with new column order
         const newViewConfig = {
