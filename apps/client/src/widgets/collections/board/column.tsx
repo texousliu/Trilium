@@ -31,6 +31,7 @@ export default function Column({
     isDraggingColumn: boolean,
     api: BoardApi
 } & DragContext) {
+    const [ isVisible, setVisible ] = useState(true);
     const { columnNameToEdit, setColumnNameToEdit, dropTarget, draggedCard, dropPosition } = useContext(BoardViewContext);
     const isEditing = (columnNameToEdit === column);
     const editorRef = useRef<HTMLInputElement>(null);
@@ -61,13 +62,20 @@ export default function Column({
         editorRef.current?.focus();
     }, [ isEditing ]);
 
+    useEffect(() => {
+        setVisible(!isDraggingColumn);
+    }, [ isDraggingColumn ]);
+
     return (
         <div
-            className={`board-column ${dropTarget === column && draggedCard?.fromColumn !== column ? 'drag-over' : ''} ${isDraggingColumn ? 'column-dragging' : ''}`}
+            className={`board-column ${dropTarget === column && draggedCard?.fromColumn !== column ? 'drag-over' : ''}`}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             onWheel={handleScroll}
+            style={{
+                display: !isVisible ? "none" : undefined
+            }}
         >
             <h3
                 className={`${isEditing ? "editing" : ""}`}

@@ -79,13 +79,6 @@
   border-radius: 4px;
 }
 
-.board-view-container .board-column.column-dragging {
-  opacity: 0.5;
-  transform: scale(0.98) rotate(2deg);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.3);
-}
-
 .board-view-container .board-column h3 input {
   background: transparent;
   border: none;

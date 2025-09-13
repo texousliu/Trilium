@@ -152,6 +152,7 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
     const handleContainerDrop = useCallback((e: DragEvent) => {
         e.preventDefault();
         if (draggedColumn && columnDropPosition !== null) {
+            console.log("Move ", draggedColumn.index, "at", columnDropPosition);
             handleColumnDrop(draggedColumn.index, columnDropPosition);
         }
     }, [draggedColumn, columnDropPosition, handleColumnDrop]);
@@ -169,7 +170,7 @@ export default function BoardView({ note: parentNote, noteIds, viewConfig, saveC
                 >
                     {byColumn && columns?.map((column, index) => (
                         <>
-                            {columnDropPosition === index && draggedColumn?.column !== column && (
+                            {columnDropPosition === index && (
                                 <div className="column-drop-placeholder show" />
                             )}
                             <Column
