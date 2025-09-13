@@ -111,7 +111,7 @@ ws.subscribeToMessages(async (message) => {
         return;
     }
 
-    const isProtecting = message.data.protect;
+    const isProtecting = message.data?.protect;
     const title = isProtecting ? t("protected_session.protecting-title") : t("protected_session.unprotecting-title");
 
     if (message.type === "taskError") {

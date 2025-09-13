@@ -1,20 +1,20 @@
 "use strict";
 
-import type { TaskType } from "@triliumnext/commons";
+import type { TaskData, TaskResult, TaskType, WebSocketMessage } from "@triliumnext/commons";
 import ws from "./ws.js";
 
 // taskId => TaskContext
-const taskContexts: Record<string, TaskContext<TaskType>> = {};
+const taskContexts: Record<string, TaskContext<any>> = {};
 
-class TaskContext<TaskTypeT extends TaskType> {
+class TaskContext<T extends TaskType> {
     private taskId: string;
     private taskType: TaskType;
     private progressCount: number;
     private lastSentCountTs: number;
-    data: TaskData | null;
+    data: TaskData<T>;
     noteDeletionHandlerTriggered: boolean;
 
-    constructor(taskId: string, taskType: TaskTypeT, data: {} | null = {}) {
+    constructor(taskId: string, taskType: T, data: TaskData<T>) {
         this.taskId = taskId;
         this.taskType = taskType;
         this.data = data;
@@ -31,7 +31,7 @@ class TaskContext<TaskTypeT extends TaskType> {
         this.increaseProgressCount();
     }
 
-    static getInstance<TaskTypeT extends TaskType>(taskId: string, taskType: TaskTypeT, data: {} | null = null): TaskContext<TaskTypeT> {
+    static getInstance<T extends TaskType>(taskId: string, taskType: T, data: TaskData<T>): TaskContext<T> {
         if (!taskContexts[taskId]) {
             taskContexts[taskId] = new TaskContext(taskId, taskType, data);
         }
@@ -51,7 +51,7 @@ class TaskContext<TaskTypeT extends TaskType> {
                 taskType: this.taskType,
                 data: this.data,
                 progressCount: this.progressCount
-            });
+            } as WebSocketMessage);
         }
     }
 
@@ -62,17 +62,17 @@ class TaskContext<TaskTypeT extends TaskType> {
             taskType: this.taskType,
             data: this.data,
             message
-        });
+        } as WebSocketMessage);
     }
 
-    taskSucceeded(result?: string | Record<string, string | undefined>) {
+    taskSucceeded(result: TaskResult<T>) {
         ws.sendMessageToAllClients({
             type: "taskSucceeded",
             taskId: this.taskId,
             taskType: this.taskType,
             data: this.data,
             result
-        });
+        } as WebSocketMessage);
     }
 }
 

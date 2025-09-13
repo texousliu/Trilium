@@ -26,36 +26,63 @@ export interface EntityChangeRecord {
     entity?: EntityRow;
 }
 
-type TaskStatus<TypeT, DataT, ResultT> = {
+type TaskDataDefinitions = {
+    empty: null,
+    deleteNotes: null,
+    undeleteNotes: null,
+    export: null,
+    protectNotes: {
+        protect: boolean;
+    }
+    importNotes: {
+        textImportedAsText?: boolean;
+        codeImportedAsCode?: boolean;
+        replaceUnderscoresWithSpaces?: boolean;
+        shrinkImages?: boolean;
+        safeImport?: boolean;
+    } | null,
+    importAttachments: null
+}
+
+type TaskResultDefinitions = {
+    empty: null,
+    deleteNotes: null,
+    undeleteNotes: null,
+    export: null,
+    protectNotes: null,
+    importNotes: {
+        parentNoteId?: string;
+        importedNoteId?: string
+    };
+    importAttachments: {
+        parentNoteId?: string;
+        importedNoteId?: string
+    };
+}
+
+export type TaskType = keyof TaskDataDefinitions | keyof TaskResultDefinitions;
+export type TaskData<T extends TaskType> = TaskDataDefinitions[T];
+export type TaskResult<T extends TaskType> = TaskResultDefinitions[T];
+
+type TaskDefinition<T extends TaskType> = {
     type: "taskProgressCount",
     taskId: string;
-    taskType: TypeT;
-    data: DataT,
+    taskType: T;
+    data: TaskData<T>,
     progressCount: number
 } | {
     type: "taskError",
     taskId: string;
-    taskType: TypeT;
-    data: DataT;
+    taskType: T;
+    data: TaskData<T>,
     message: string;
 } | {
     type: "taskSucceeded",
     taskId: string;
-    taskType: TypeT;
-    data: DataT;
-    result: ResultT;
+    taskType: T;
+    data: TaskData<T>,
+    result: TaskResult<T>;
 }
-
-type TaskDefinitions =
-    TaskStatus<"protectNotes", { protect: boolean; }, null>
-    | TaskStatus<"importNotes", null, { importedNoteId: string }>
-    | TaskStatus<"importAttachments", null, { parentNoteId?: string; importedNoteId: string }>
-    | TaskStatus<"deleteNotes", null, null>
-    | TaskStatus<"undeleteNotes", null, null>
-    | TaskStatus<"export", null, null>
-;
-
-export type TaskType = TaskDefinitions["taskType"];
 
 export interface OpenedFileUpdateStatus {
     entityType: string;
@@ -64,7 +91,16 @@ export interface OpenedFileUpdateStatus {
     filePath: string;
 }
 
-export type WebSocketMessage = TaskDefinitions | {
+type AllTaskDefinitions =
+    | TaskDefinition<"empty">
+    | TaskDefinition<"deleteNotes">
+    | TaskDefinition<"undeleteNotes">
+    | TaskDefinition<"export">
+    | TaskDefinition<"protectNotes">
+    | TaskDefinition<"importNotes">
+    | TaskDefinition<"importAttachments">;
+
+export type WebSocketMessage = AllTaskDefinitions | {
     type: "ping"
 } | {
     type: "frontend-update",

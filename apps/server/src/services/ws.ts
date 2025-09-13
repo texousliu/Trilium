@@ -13,7 +13,7 @@ import type { IncomingMessage, Server as HttpServer } from "http";
 import { WebSocketMessage, type EntityChange } from "@triliumnext/commons";
 
 let webSocketServer!: WebSocketServer;
-let lastSyncedPush: number | null = null;
+let lastSyncedPush: number;
 
 type SessionParser = (req: IncomingMessage, params: {}, cb: () => void) => void;
 function init(httpServer: HttpServer, sessionParser: SessionParser) {
