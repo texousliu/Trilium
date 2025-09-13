@@ -10,7 +10,7 @@ import becca from "../becca/becca.js";
 import AbstractBeccaEntity from "../becca/entities/abstract_becca_entity.js";
 
 import type { IncomingMessage, Server as HttpServer } from "http";
-import type { EntityChange } from "./entity_changes_interface.js";
+import { WebSocketMessage, type EntityChange } from "@triliumnext/commons";
 
 let webSocketServer!: WebSocketServer;
 let lastSyncedPush: number | null = null;
