@@ -160,6 +160,7 @@ function showHeaderContextMenu(parentComponent: Component, e: MouseEvent, tabula
 
 export function showRowContextMenu(parentComponent: Component, e: MouseEvent, row: RowComponent, parentNote: FNote, tabulator: Tabulator) {
     const rowData = row.getData() as TableData;
+    const sorters = tabulator.getSorters();
 
     let parentNoteId: string = parentNote.noteId;
 
@@ -177,6 +178,7 @@ export function showRowContextMenu(parentComponent: Component, e: MouseEvent, ro
             {
                 title: t("table_view.row-insert-above"),
                 uiIcon: "bx bx-horizontal-left bx-rotate-90",
+                enabled: !sorters.length,
                 handler: () => parentComponent?.triggerCommand("addNewRow", {
                     parentNotePath: parentNoteId,
                     customOpts: {
@@ -203,6 +205,7 @@ export function showRowContextMenu(parentComponent: Component, e: MouseEvent, ro
             {
                 title: t("table_view.row-insert-below"),
                 uiIcon: "bx bx-horizontal-left bx-rotate-270",
+                enabled: !sorters.length,
                 handler: () => parentComponent?.triggerCommand("addNewRow", {
                     parentNotePath: parentNoteId,
                     customOpts: {
