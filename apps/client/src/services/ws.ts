@@ -9,7 +9,7 @@ import type { EntityChange } from "../server_types.js";
 import { WebSocketMessage } from "@triliumnext/commons";
 
 type MessageHandler = (message: WebSocketMessage) => void;
-const messageHandlers: MessageHandler[] = [];
+let messageHandlers: MessageHandler[] = [];
 
 let ws: WebSocket;
 let lastAcceptedEntityChangeId = window.glob.maxEntityChangeIdAtLoad;
@@ -48,8 +48,12 @@ function logInfo(message: string) {
 window.logError = logError;
 window.logInfo = logInfo;
 
-function subscribeToMessages(messageHandler: MessageHandler) {
+export function subscribeToMessages(messageHandler: MessageHandler) {
     messageHandlers.push(messageHandler);
+}
+
+export function unsubscribeToMessage(messageHandler: MessageHandler) {
+    messageHandlers = messageHandlers.filter(handler => handler !== messageHandler);
 }
 
 // used to serialize frontend update operations

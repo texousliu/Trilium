@@ -9,6 +9,8 @@ import ViewModeStorage from "../view_widgets/view_mode_storage";
 import CalendarView from "./calendar";
 import TableView from "./table";
 import BoardView from "./board";
+import { subscribeToMessages, unsubscribeToMessage as unsubscribeFromMessage } from "../../services/ws";
+import { WebSocketMessage } from "@triliumnext/commons";
 
 interface NoteListProps<T extends object> {
     note?: FNote | null;
@@ -136,6 +138,23 @@ function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOptions | 
             refreshNoteIds();
         }
     })
+
+    // Refresh on import.
+    useEffect(() => {
+        function onImport(message: WebSocketMessage) {
+            if (!("taskType" in message) || message.taskType !== "importNotes" || message.type !== "taskSucceeded") return;
+            const { parentNoteId, importedNoteId } = message.result;
+            if (parentNoteId && importedNoteId && (parentNoteId === note?.noteId || noteIds.includes(parentNoteId))) {
+                setNoteIds([
+                    ...noteIds,
+                    importedNoteId
+                ])
+            }
+        }
+
+        subscribeToMessages(onImport);
+        return () => unsubscribeFromMessage(onImport);
+    }, [ note, noteIds, setNoteIds ])
 
     return noteIds;
 }
