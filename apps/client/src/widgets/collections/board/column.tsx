@@ -16,7 +16,8 @@ import { DragData } from "../../note_tree";
 interface DragContext {
     column: string;
     columnIndex: number,
-    columnItems?: { note: FNote, branch: FBranch }[]
+    columnItems?: { note: FNote, branch: FBranch }[];
+    isEditing: boolean;
 }
 
 export default function Column({
@@ -34,7 +35,7 @@ export default function Column({
     const isEditing = (columnNameToEdit === column);
     const editorRef = useRef<HTMLInputElement>(null);
     const { handleColumnDragStart, handleColumnDragEnd, handleDragOver, handleDragLeave, handleDrop } = useDragging({
-        column, columnIndex, columnItems
+        column, columnIndex, columnItems, isEditing
     });
 
     const handleEdit = useCallback(() => {
@@ -150,18 +151,20 @@ function AddNewItem({ column, api }: { column: string, api: BoardApi }) {
     );
 }
 
-function useDragging({ column, columnIndex, columnItems }: DragContext) {
+function useDragging({ column, columnIndex, columnItems, isEditing }: DragContext) {
     const { api, parentNote, draggedColumn, setDraggedColumn, setDropTarget, setDropPosition, dropPosition } = useContext(BoardViewContext);
     /** Needed to track if current column is dragged in real-time, since {@link draggedColumn} is populated one render cycle later.  */
     const isDraggingRef = useRef(false);
 
     const handleColumnDragStart = useCallback((e: DragEvent) => {
+        if (isEditing) return;
+
         isDraggingRef.current = true;
         e.dataTransfer!.effectAllowed = 'move';
         e.dataTransfer!.setData('text/plain', column);
         setDraggedColumn({ column, index: columnIndex });
         e.stopPropagation(); // Prevent card drag from interfering
-    }, [column, columnIndex, setDraggedColumn]);
+    }, [column, columnIndex, setDraggedColumn, isEditing]);
 
     const handleColumnDragEnd = useCallback(() => {
         isDraggingRef.current = false;
@@ -169,7 +172,7 @@ function useDragging({ column, columnIndex, columnItems }: DragContext) {
     }, [setDraggedColumn]);
 
     const handleDragOver = useCallback((e: DragEvent) => {
-        if (draggedColumn || isDraggingRef.current) return; // Don't handle card drops when dragging columns
+        if (isEditing || draggedColumn || isDraggingRef.current) return; // Don't handle card drops when dragging columns
         e.preventDefault();
         setDropTarget(column);
 
@@ -192,7 +195,7 @@ function useDragging({ column, columnIndex, columnItems }: DragContext) {
         if (!(dropPosition?.column === column && dropPosition.index === newIndex)) {
             setDropPosition({ column, index: newIndex });
         }
-    }, [column, setDropTarget, dropPosition, setDropPosition]);
+    }, [column, setDropTarget, dropPosition, setDropPosition, isEditing]);
 
     const handleDragLeave = useCallback((e: DragEvent) => {
         const relatedTarget = e.relatedTarget as HTMLElement;
