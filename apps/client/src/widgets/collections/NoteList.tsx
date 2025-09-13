@@ -11,6 +11,7 @@ import TableView from "./table";
 import BoardView from "./board";
 import { subscribeToMessages, unsubscribeToMessage as unsubscribeFromMessage } from "../../services/ws";
 import { WebSocketMessage } from "@triliumnext/commons";
+import froca from "../../services/froca";
 
 interface NoteListProps<T extends object> {
     note?: FNote | null;
@@ -116,12 +117,17 @@ function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOptions | 
     async function refreshNoteIds() {
         if (!note) {
             setNoteIds([]);
-        } else if (viewType === "list" || viewType === "grid") {
-            console.log("Refreshed note IDs");
-            setNoteIds(note.getChildNoteIds());
         } else {
-            console.log("Refreshed note IDs");
-            setNoteIds(await note.getSubtreeNoteIds(includeArchived));
+            setNoteIds(await getNoteIds(note));
+        }
+    }
+
+    async function getNoteIds(note: FNote) {
+        console.log("Refreshed note IDs");
+        if (viewType === "list" || viewType === "grid") {
+            return note.getChildNoteIds();
+        } else {
+            return await note.getSubtreeNoteIds(includeArchived);
         }
     }
 
@@ -141,12 +147,16 @@ function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOptions | 
 
     // Refresh on import.
     useEffect(() => {
-        function onImport(message: WebSocketMessage) {
+        async function onImport(message: WebSocketMessage) {
             if (!("taskType" in message) || message.taskType !== "importNotes" || message.type !== "taskSucceeded") return;
             const { parentNoteId, importedNoteId } = message.result;
-            if (parentNoteId && importedNoteId && (parentNoteId === note?.noteId || noteIds.includes(parentNoteId))) {
+            if (!parentNoteId || !importedNoteId) return;
+            if (importedNoteId && (parentNoteId === note?.noteId || noteIds.includes(parentNoteId))) {
+                const importedNote = await froca.getNote(importedNoteId);
+                if (!importedNote) return;
                 setNoteIds([
                     ...noteIds,
+                    ...await getNoteIds(importedNote),
                     importedNoteId
                 ])
             }
