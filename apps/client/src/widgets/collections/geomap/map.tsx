@@ -3,7 +3,7 @@ import L, { control, LatLng, Layer, LeafletMouseEvent } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { MAP_LAYERS } from "./map_layer";
 import { ComponentChildren, createContext, RefObject } from "preact";
-import { useSyncedRef } from "../../react/hooks";
+import { useElementSize, useSyncedRef } from "../../react/hooks";
 
 export const ParentMap = createContext<L.Map | null>(null);
 
@@ -124,6 +124,12 @@ export default function Map({ coordinates, zoom, layerName, viewportChanged, chi
         scaleControl.addTo(map);
         return () => scaleControl.remove();
     }, [ mapRef, scale ]);
+
+    // Adapt to container size changes.
+    const size = useElementSize(containerRef);
+    useEffect(() => {
+        mapRef.current?.invalidateSize();
+    }, [ size?.width, size?.height ]);
 
     return (
         <div
