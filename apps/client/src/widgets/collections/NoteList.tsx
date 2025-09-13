@@ -24,7 +24,7 @@ export default function NoteList<T extends object>({ note: providedNote, highlig
     const note = providedNote ?? contextNote;
     const viewType = useNoteViewType(note);
     const noteIds = useNoteIds(note, viewType);
-    const isFullHeight = (viewType !== "list" && viewType !== "grid");
+    const isFullHeight = (viewType && viewType !== "list" && viewType !== "grid");
     const [ isIntersecting, setIsIntersecting ] = useState(false);
     const shouldRender = (isFullHeight || isIntersecting || note?.type === "book");
     const isEnabled = (note && noteContext?.hasNoteList() && !!viewType && shouldRender);
@@ -39,8 +39,8 @@ export default function NoteList<T extends object>({ note: providedNote, highlig
             (entries) => {
                 if (!isIntersecting) {
                     setIsIntersecting(entries[0].isIntersecting);
+                    observer.disconnect();
                 }
-                observer.disconnect();
             },
             {
                 rootMargin: "50px",
@@ -52,7 +52,7 @@ export default function NoteList<T extends object>({ note: providedNote, highlig
         // (intersection is false). https://github.com/zadam/trilium/issues/4165
         setTimeout(() => widgetRef.current && observer.observe(widgetRef.current), 10);
         return () => observer.disconnect();
-    }, []);
+    }, [ widgetRef, isFullHeight, displayOnlyCollections, note ]);
 
     // Preload the configuration.
     let props: ViewModeProps<any> | undefined | null = null;
