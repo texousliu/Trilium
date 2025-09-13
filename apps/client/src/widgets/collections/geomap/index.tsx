@@ -38,6 +38,8 @@ enum State {
 
 export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewModeProps<MapData>) {
     const [ state, setState ] = useState(State.Normal);
+    const [ coordinates, setCoordinates ] = useState(viewConfig?.view?.center);
+    const [ zoom, setZoom ] = useState(viewConfig?.view?.zoom);
     const [ layerName ] = useNoteLabel(note, "map:style");
     const [ hasScale ] = useNoteLabelBoolean(note, "map:scale");
     const [ isReadOnly ] = useNoteLabelBoolean(note, "readOnly");
@@ -49,6 +51,12 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
     }, 5000);
 
     useEffect(() => { froca.getNotes(noteIds).then(setNotes) }, [ noteIds ]);
+
+    useEffect(() => {
+        if (!note) return;
+        setCoordinates(viewConfig?.view?.center ?? DEFAULT_COORDINATES);
+        setZoom(viewConfig?.view?.zoom ?? DEFAULT_ZOOM);
+    }, [ note, viewConfig ]);
 
     // Note creation.
     useTriliumEvent("geoMapCreateChildNote", () => {
@@ -122,10 +130,10 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
 
     return (
         <div className={`geo-view ${state === State.NewNote ? "placing-note" : ""}`}>
-            <Map
+            { coordinates && zoom && <Map
                 apiRef={apiRef} containerRef={containerRef}
-                coordinates={viewConfig?.view?.center ?? DEFAULT_COORDINATES}
-                zoom={viewConfig?.view?.zoom ?? DEFAULT_ZOOM}
+                coordinates={coordinates}
+                zoom={zoom}
                 layerName={layerName ?? DEFAULT_MAP_LAYER_NAME}
                 viewportChanged={(coordinates, zoom) => {
                     if (!viewConfig) viewConfig = {};
@@ -137,7 +145,7 @@ export default function GeoView({ note, noteIds, viewConfig, saveConfig }: ViewM
                 scale={hasScale}
             >
                 {notes.map(note => <NoteWrapper note={note} isReadOnly={isReadOnly} />)}
-            </Map>
+            </Map>}
             <GeoMapTouchBar state={state} map={apiRef.current} />
         </div>
     );
