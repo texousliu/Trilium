@@ -265,6 +265,8 @@ export function TitleEditor({ currentValue, placeholder, save, dismiss, multilin
                 if (newValue.trim() && (newValue !== currentValue || isNewItem)) {
                     save(newValue);
                     dismissOnNextRefreshRef.current = true;
+                } else {
+                    dismiss();
                 }
             }}
         />
