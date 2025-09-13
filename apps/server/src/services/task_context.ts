@@ -1,20 +1,20 @@
 "use strict";
 
-import type { TaskData } from "@triliumnext/commons";
+import type { TaskType } from "@triliumnext/commons";
 import ws from "./ws.js";
 
 // taskId => TaskContext
-const taskContexts: Record<string, TaskContext> = {};
+const taskContexts: Record<string, TaskContext<TaskType>> = {};
 
-class TaskContext {
+class TaskContext<TaskTypeT extends TaskType> {
     private taskId: string;
-    private taskType: string | null;
+    private taskType: TaskType;
     private progressCount: number;
     private lastSentCountTs: number;
     data: TaskData | null;
     noteDeletionHandlerTriggered: boolean;
 
-    constructor(taskId: string, taskType: string | null = null, data: {} | null = {}) {
+    constructor(taskId: string, taskType: TaskTypeT, data: {} | null = {}) {
         this.taskId = taskId;
         this.taskType = taskType;
         this.data = data;
@@ -31,7 +31,7 @@ class TaskContext {
         this.increaseProgressCount();
     }
 
-    static getInstance(taskId: string, taskType: string, data: {} | null = null): TaskContext {
+    static getInstance<TaskTypeT extends TaskType>(taskId: string, taskType: TaskTypeT, data: {} | null = null): TaskContext<TaskTypeT> {
         if (!taskContexts[taskId]) {
             taskContexts[taskId] = new TaskContext(taskId, taskType, data);
         }

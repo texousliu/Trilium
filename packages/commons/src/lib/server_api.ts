@@ -271,7 +271,7 @@ export interface EntityChangeRecord {
     entity?: EntityRow;
 }
 
-type TaskStatus<TypeT, DataT> = {
+type TaskStatus<TypeT, DataT, ResultT> = {
     type: "taskProgressCount",
     taskId: string;
     taskType: TypeT;
@@ -288,17 +288,19 @@ type TaskStatus<TypeT, DataT> = {
     taskId: string;
     taskType: TypeT;
     data: DataT;
-    result?: string | Record<string, string | undefined>
+    result: ResultT;
 }
 
 type TaskDefinitions =
-    TaskStatus<"protectNotes", { protect: boolean; }>
-    | TaskStatus<"importNotes", null>
-    | TaskStatus<"importAttachments", null>
-    | TaskStatus<"deleteNotes", null>
-    | TaskStatus<"undeleteNotes", null>
-    | TaskStatus<"export", null>
+    TaskStatus<"protectNotes", { protect: boolean; }, null>
+    | TaskStatus<"importNotes", null, { importedNoteId: string }>
+    | TaskStatus<"importAttachments", null, { parentNoteId?: string; importedNoteId: string }>
+    | TaskStatus<"deleteNotes", null, null>
+    | TaskStatus<"undeleteNotes", null, null>
+    | TaskStatus<"export", null, null>
 ;
+
+export type TaskType = TaskDefinitions["taskType"];
 
 export interface OpenedFileUpdateStatus {
     entityType: string;

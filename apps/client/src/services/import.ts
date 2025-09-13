@@ -82,7 +82,7 @@ ws.subscribeToMessages(async (message) => {
 
         toastService.showPersistent(toast);
 
-        if (typeof message.result === "object" && message.result.importedNoteId) {
+        if (message.result.importedNoteId) {
             await appContext.tabManager.getActiveContext()?.setNote(message.result.importedNoteId);
         }
     }
@@ -104,7 +104,7 @@ ws.subscribeToMessages(async (message: WebSocketMessage) => {
 
         toastService.showPersistent(toast);
 
-        if (typeof message.result === "object" && message.result.parentNoteId) {
+        if (message.result.parentNoteId) {
             await appContext.tabManager.getActiveContext()?.setNote(message.result.importedNoteId, {
                 viewScope: {
                     viewMode: "attachments"
