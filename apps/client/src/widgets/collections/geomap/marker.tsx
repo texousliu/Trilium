@@ -50,7 +50,7 @@ export default function Marker({ coordinates, icon, draggable, onClick, onDragge
         newMarker.addTo(parentMap);
 
         return () => newMarker.removeFrom(parentMap);
-    }, [ parentMap, coordinates, onMouseDown, onDragged ]);
+    }, [ parentMap, coordinates, onMouseDown, onDragged, icon ]);
 
     return (<div />)
 }

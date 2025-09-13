@@ -168,14 +168,14 @@ function NoteWrapper({ note, isReadOnly }: { note: FNote, isReadOnly: boolean })
 
 function NoteMarker({ note, editable, latLng }: { note: FNote, editable: boolean, latLng: [number, number] }) {
     // React to changes
-    useNoteLabel(note, "color");
-    useNoteLabel(note, "iconClass");
+    const [ color ] = useNoteLabel(note, "color");
+    const [ iconClass ] = useNoteLabel(note, "iconClass");
     const [ archived ] = useNoteLabelBoolean(note, "archived");
 
     const title = useNoteProperty(note, "title");
-    const colorClass = note.getColorClass();
-    const iconClass = note.getIcon();
-    const icon = useMemo(() => buildIcon(iconClass, colorClass ?? undefined, title, note.noteId, archived), [ iconClass, colorClass, title, note.noteId, archived]);
+    const icon = useMemo(() => {
+        return buildIcon(note.getIcon(), note.getColorClass() ?? undefined, title, note.noteId, archived);
+    }, [ iconClass, color, title, note.noteId, archived]);
 
     const onClick = useCallback(() => {
         appContext.triggerCommand("openInPopup", { noteIdOrPath: note.noteId });
