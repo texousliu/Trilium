@@ -116,7 +116,7 @@ export type CommandMappings = {
     openedFileUpdated: CommandData & {
         entityType: string;
         entityId: string;
-        lastModifiedMs: number;
+        lastModifiedMs?: number;
         filePath: string;
     };
     focusAndSelectTitle: CommandData & {

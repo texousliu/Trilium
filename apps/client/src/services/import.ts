@@ -4,6 +4,7 @@ import ws from "./ws.js";
 import utils from "./utils.js";
 import appContext from "../components/app_context.js";
 import { t } from "./i18n.js";
+import { WebSocketMessage } from "@triliumnext/commons";
 
 type BooleanLike = boolean | "true" | "false";
 
@@ -66,7 +67,7 @@ function makeToast(id: string, message: string): ToastOptions {
 }
 
 ws.subscribeToMessages(async (message) => {
-    if (message.taskType !== "importNotes") {
+    if (!("taskType" in message) || message.taskType !== "importNotes") {
         return;
     }
 
@@ -81,14 +82,14 @@ ws.subscribeToMessages(async (message) => {
 
         toastService.showPersistent(toast);
 
-        if (message.result.importedNoteId) {
+        if (typeof message.result === "object" && message.result.importedNoteId) {
             await appContext.tabManager.getActiveContext()?.setNote(message.result.importedNoteId);
         }
     }
 });
 
-ws.subscribeToMessages(async (message) => {
-    if (message.taskType !== "importAttachments") {
+ws.subscribeToMessages(async (message: WebSocketMessage) => {
+    if (!("taskType" in message) || message.taskType !== "importAttachments") {
         return;
     }
 
@@ -103,7 +104,7 @@ ws.subscribeToMessages(async (message) => {
 
         toastService.showPersistent(toast);
 
-        if (message.result.parentNoteId) {
+        if (typeof message.result === "object" && message.result.parentNoteId) {
             await appContext.tabManager.getActiveContext()?.setNote(message.result.importedNoteId, {
                 viewScope: {
                     viewMode: "attachments"

@@ -1,5 +1,5 @@
 import { WebSocketServer as WebSocketServer, WebSocket } from "ws";
-import { isDev, isElectron, randomString } from "./utils.js";
+import { isElectron, randomString } from "./utils.js";
 import log from "./log.js";
 import sql from "./sql.js";
 import cls from "./cls.js";
@@ -14,52 +14,6 @@ import { WebSocketMessage, type EntityChange } from "@triliumnext/commons";
 
 let webSocketServer!: WebSocketServer;
 let lastSyncedPush: number | null = null;
-
-interface Message {
-    type: string;
-    data?: {
-        lastSyncedPush?: number | null;
-        entityChanges?: any[];
-        shrinkImages?: boolean;
-    } | null;
-    lastSyncedPush?: number | null;
-
-    progressCount?: number;
-    taskId?: string;
-    taskType?: string | null;
-    message?: string;
-    reason?: string;
-    result?: string | Record<string, string | undefined>;
-
-    script?: string;
-    params?: any[];
-    noteId?: string;
-    messages?: string[];
-    startNoteId?: string;
-    currentNoteId?: string;
-    entityType?: string;
-    entityId?: string;
-    originEntityName?: "notes";
-    originEntityId?: string | null;
-    lastModifiedMs?: number;
-    filePath?: string;
-
-    // LLM streaming specific fields
-    chatNoteId?: string;
-    content?: string;
-    thinking?: string;
-    toolExecution?: {
-        action?: string;
-        tool?: string;
-        toolCallId?: string;
-        result?: string | Record<string, any>;
-        error?: string;
-        args?: Record<string, unknown>;
-    };
-    done?: boolean;
-    error?: string;
-    raw?: unknown;
-}
 
 type SessionParser = (req: IncomingMessage, params: {}, cb: () => void) => void;
 function init(httpServer: HttpServer, sessionParser: SessionParser) {
@@ -106,7 +60,7 @@ Stack: ${message.stack}`);
     });
 }
 
-function sendMessage(client: WebSocket, message: Message) {
+function sendMessage(client: WebSocket, message: WebSocketMessage) {
     const jsonStr = JSON.stringify(message);
 
     if (client.readyState === WebSocket.OPEN) {
@@ -114,7 +68,7 @@ function sendMessage(client: WebSocket, message: Message) {
     }
 }
 
-function sendMessageToAllClients(message: Message) {
+function sendMessageToAllClients(message: WebSocketMessage) {
     const jsonStr = JSON.stringify(message);
 
     if (webSocketServer) {

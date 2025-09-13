@@ -107,7 +107,7 @@ function makeToast(message: Message, title: string, text: string): ToastOptions 
 }
 
 ws.subscribeToMessages(async (message) => {
-    if (message.taskType !== "protectNotes") {
+    if (!("taskType" in message) || message.taskType !== "protectNotes") {
         return;
     }
 

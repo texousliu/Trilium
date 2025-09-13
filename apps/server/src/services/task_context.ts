@@ -1,6 +1,6 @@
 "use strict";
 
-import type { TaskData } from "./task_context_interface.js";
+import type { TaskData } from "@triliumnext/commons";
 import ws from "./ws.js";
 
 // taskId => TaskContext
@@ -61,7 +61,7 @@ class TaskContext {
             taskId: this.taskId,
             taskType: this.taskType,
             data: this.data,
-            message: message
+            message
         });
     }
 
@@ -71,7 +71,7 @@ class TaskContext {
             taskId: this.taskId,
             taskType: this.taskType,
             data: this.data,
-            result: result
+            result
         });
     }
 }
