@@ -140,7 +140,7 @@ function ComboBoxPropertyView({ note, property }: { note: FNote, property: Combo
             <FormSelectWithGroups
                 values={property.options}
                 keyProperty="value" titleProperty="label"
-                currentValue={value ?? ""} onChange={setValue}
+                currentValue={value ?? property.defaultValue} onChange={setValue}
             />
         </LabelledEntry>
     )
