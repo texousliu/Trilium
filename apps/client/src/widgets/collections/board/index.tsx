@@ -7,7 +7,7 @@ import Icon from "../../react/Icon";
 import { t } from "../../../services/i18n";
 import Api from "./api";
 import FormTextBox from "../../react/FormTextBox";
-import { createContext } from "preact";
+import { createContext, JSX } from "preact";
 import { onWheelHorizontalScroll } from "../../widget_utils";
 import Column from "./column";
 import BoardApi from "./api";
@@ -225,6 +225,7 @@ export function TitleEditor({ currentValue, placeholder, save, dismiss, multilin
     isNewItem?: boolean;
 }) {
     const inputRef = useRef<any>(null);
+    const dismissOnNextRefreshRef = useRef(false);
 
     useEffect(() => {
         inputRef.current?.focus();
@@ -233,19 +234,26 @@ export function TitleEditor({ currentValue, placeholder, save, dismiss, multilin
 
     const Element = multiline ? FormTextArea : FormTextBox;
 
+    useEffect(() => {
+        if (dismissOnNextRefreshRef.current) {
+            dismiss();
+            dismissOnNextRefreshRef.current = false;
+        }
+    });
+
     return (
         <Element
             inputRef={inputRef}
             currentValue={currentValue ?? ""}
             placeholder={placeholder}
             rows={multiline ? 4 : undefined}
-            onKeyDown={(e) => {
+            onKeyDown={(e: JSX.TargetedKeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
                 if (e.key === "Enter") {
-                    const newValue = e.currentTarget.value;
+                    const newValue = e.currentTarget?.value;
                     if (newValue.trim() && (newValue !== currentValue || isNewItem)) {
                         save(newValue);
+                        dismissOnNextRefreshRef.current = true;
                     }
-                    dismiss();
                 }
 
                 if (e.key === "Escape") {
@@ -255,8 +263,8 @@ export function TitleEditor({ currentValue, placeholder, save, dismiss, multilin
             onBlur={(newValue) => {
                 if (newValue.trim() && (newValue !== currentValue || isNewItem)) {
                     save(newValue);
+                    dismissOnNextRefreshRef.current = true;
                 }
-                dismiss();
             }}
         />
     );
