@@ -203,13 +203,10 @@
   outline: none;
   font-family: inherit;
   font-size: inherit;
-  color: inherit;
+  color: var(--main-text-color);
   width: 100%;
   padding: var(--card-padding);
   line-height: var(--card-line-height);
-}
-
-.board-view-container .board-note.editing textarea {
   height: auto;
   field-sizing: content;
   resize: none;
