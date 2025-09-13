@@ -246,6 +246,7 @@ export function TitleEditor({ currentValue, placeholder, save, dismiss, multilin
             inputRef={inputRef}
             currentValue={currentValue ?? ""}
             placeholder={placeholder}
+            autoComplete="trilium-title-entry" // forces the auto-fill off better than the "off" value.
             rows={multiline ? 4 : undefined}
             onKeyDown={(e: JSX.TargetedKeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
                 if (e.key === "Enter") {
