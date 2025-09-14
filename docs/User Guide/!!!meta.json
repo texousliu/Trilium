@@ -1728,6 +1728,13 @@
                                                     "value": "bx bx-menu",
                                                     "isInheritable": false,
                                                     "position": 10
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "MKmLg5x6xkor",
+                                                    "isInheritable": false,
+                                                    "position": 200
                                                 }
                                             ],
                                             "format": "markdown",

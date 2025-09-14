@@ -47,6 +47,12 @@ By default, collections come with a default configuration and sometimes even sam
 3.  Still in the ribbon, go to _Collection Properties_ and select the desired view type.
 4.  Consult the help page of the corresponding view type in order to understand how to configure them.
 
+## Archived notes
+
+By default, archived notes will not be shown in collections. This behaviour can be changed by going to _Collection Properties_ in the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/UI%20Elements/Ribbon.md">Ribbon</a> and checking _Show archived notes_.
+
+Archived notes will be generally indicated by being greyed out as opposed to the normal ones.
+
 ## Under the hood
 
 Collections by themselves are simply notes with no content that rely on the <a class="reference-link" href="../Basic%20Concepts%20and%20Features/Notes/Note%20List.md">Note List</a> mechanism (the one that lists the children notes at the bottom of a note) to display information.
