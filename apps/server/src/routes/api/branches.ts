@@ -163,6 +163,7 @@ function setExpandedForSubtree(req: Request) {
             SELECT branches.branchId, branches.noteId FROM branches
                 JOIN tree ON branches.parentNoteId = tree.noteId
             WHERE branches.isDeleted = 0
+                AND branches.isExpanded = 1
         )
         SELECT branchId FROM tree`,
         [branchId]
