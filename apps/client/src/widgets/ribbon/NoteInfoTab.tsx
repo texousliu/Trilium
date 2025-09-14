@@ -40,7 +40,7 @@ export default function NoteInfoTab({ note }: TabContext) {
                     <tbody>
                         <tr>
                             <th>{t("note_info_widget.note_id")}:</th>
-                            <td>{note.noteId}</td>
+                            <td class="note-info-id">{note.noteId}</td>
                             <th>{t("note_info_widget.created")}:</th>
                             <td>{formatDateTime(metadata?.dateCreated)}</td>
                             <th>{t("note_info_widget.modified")}:</th>
@@ -64,11 +64,11 @@ export default function NoteInfoTab({ note }: TabContext) {
                                         text={t("note_info_widget.calculate")}
                                         onClick={() => {
                                             setIsLoading(true);
-                                            setTimeout(async () => {                      
+                                            setTimeout(async () => {
                                                 await Promise.allSettled([
                                                     server.get<NoteSizeResponse>(`stats/note-size/${note.noteId}`).then(setNoteSizeResponse),
                                                     server.get<SubtreeSizeResponse>(`stats/subtree-size/${note.noteId}`).then(setSubtreeSizeResponse)
-                                                ]);  
+                                                ]);
                                                 setIsLoading(false);
                                             }, 0);
                                         }}
@@ -87,7 +87,7 @@ export default function NoteInfoTab({ note }: TabContext) {
                         </tr>
                     </tbody>
                 </table>
-            )}            
+            )}
         </div>
     )
 }
