@@ -148,19 +148,12 @@ export function TouchBarButton({ label, icon, click, enabled }: ButtonProps) {
 
 export function TouchBarSegmentedControl({ mode, segments, selectedIndex, onChange }: SegmentedControlProps) {
     const api = useContext(TouchBarContext);
-    const processedSegments = segments.map((segment) => {
-        if (segment.icon) {
-            if (!api) return undefined;
-            return {
-                ...segment,
-                icon: buildIcon(api?.nativeImage, segment.icon)
-            }
-        } else {
-            return segment;
-        }
-    });
 
     if (api) {
+        const processedSegments: Electron.SegmentedControlSegment[] = segments.map(({icon, ...restProps}) => ({
+            ...restProps,
+            icon: icon ? buildIcon(api.nativeImage, icon) : undefined
+        }));
         const item = new api.TouchBar.TouchBarSegmentedControl({
             mode, selectedIndex,
             segments: processedSegments,

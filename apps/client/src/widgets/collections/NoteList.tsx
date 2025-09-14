@@ -3,9 +3,9 @@ import { useNoteContext, useNoteLabel, useNoteLabelBoolean, useTriliumEvent } fr
 import FNote from "../../entities/fnote";
 import "./NoteList.css";
 import { ListView, GridView } from "./legacy/ListOrGridView";
-import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import GeoView from "./geomap";
-import ViewModeStorage from "../view_widgets/view_mode_storage";
+import ViewModeStorage from "./view_mode_storage";
 import CalendarView from "./calendar";
 import TableView from "./table";
 import BoardView from "./board";
