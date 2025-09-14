@@ -12,7 +12,7 @@ Notes are displayed recursively, so even the child notes of the child notes will
 ## Interaction with columns
 
 *   Create a new column by pressing _Add Column_ near the last column.
-    *   Once pressed, a text box will be displayed to set the name of the column. Press Enter to confirm.
+    *   Once pressed, a text box will be displayed to set the name of the column. Press <kbd>Enter</kbd> to confirm, or <kbd>Escape</kbd> to dismiss.
 *   To reorder a column, simply hold the mouse over the title and drag it to the desired position.
 *   To delete a column, right click on its title and select _Delete column_.
 *   To rename a column, click on the note title.
@@ -23,8 +23,10 @@ Notes are displayed recursively, so even the child notes of the child notes will
 ## Interaction with notes
 
 *   Create a new note in any column by pressing _New item_
-    *   Enter the name of the note and press _Enter_.
-    *   Doing so will create a new note. The new note will have an attribute (`status` label by default) set to the name of the column.
+    *   Enter the name of the note and press <kbd>Enter</kbd> or click away. To dismiss the creation of a new note, simply press <kbd>Escape</kbd> or leave the name empty.
+    *   Once created, the new note will have an attribute (`status` label by default) set to the name of the column.
+*   To open the note, simply click on it.
+*   To change the title of the note directly from the board, hover the mouse over its card and press the edit button on the right.
 *   To change the state of a note, simply drag a note from one column to the other to change its state.
 *   The order of the notes in each column corresponds to their position in the tree.
     *   It's possible to reorder notes simply by dragging them to the desired position within the same columns.
@@ -33,6 +35,7 @@ Notes are displayed recursively, so even the child notes of the child notes will
     *   Open the note in a new tab/split/window or quick edit.
     *   Move the note to any column.
     *   Insert a new note above/below the current one.
+    *   Archive/unarchive the current note.
     *   Delete the current note.
 *   If there are many notes within the column, move the mouse over the column and use the mouse wheel to scroll.
 

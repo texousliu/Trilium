@@ -65,7 +65,8 @@ There are multiple menus:
     *   Adding new columns.
 *   Right clicking on a row, allows:
     *   Opening the corresponding note of the row in a new tab, split, window or quick editing it.
-    *   Inserting rows above, below or as a child note.
+    *   Inserting a new note above or below the selected row. These options are only enabled if the table is not sorted.
+    *   Inserting a new child note for the selected row.
     *   Deleting the row.
 
 ### Editing data
