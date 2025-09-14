@@ -132,7 +132,7 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
 
         if (htmlAttrs.length > 0) {
             htmlAttrs += "&nbsp;";
-        }        
+        }
 
         editorRef.current?.setText(htmlAttrs);
         setCurrentValue(htmlAttrs);
@@ -233,7 +233,6 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
     useEffect(() => refresh(), [ note ]);
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         if (loadResults.getAttributeRows(componentId).find((attr) => attributes.isAffecting(attr, note))) {
-            console.log("Trigger due to entities reloaded");
             refresh();
         }
     });
@@ -262,8 +261,8 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
             }
 
             return result?.note?.getBestNotePathString();
-        }   
-    }), [ notePath ]));    
+        }
+    }), [ notePath ]));
 
     // Keyboard shortcuts
     useTriliumEvent("addNewLabel", ({ ntxId: eventNtxId }) => {
@@ -281,7 +280,7 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
         refresh,
         renderOwnedAttributes: (attributes) => renderOwnedAttributes(attributes as FAttribute[], false)
     }), [ save, refresh, renderOwnedAttributes ]);
-    
+
     return (
         <>
             {!hidden && <div
@@ -292,7 +291,7 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
                     if (isIMEComposing(e)) {
                         return;
                     }
-                    
+
                     if (e.key === "Enter") {
                         // allow autocomplete to fill the result textarea
                         setTimeout(() => save(), 100);
@@ -313,9 +312,9 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
                     }}
                     onChange={(currentValue) => {
                         currentValueRef.current = currentValue ?? "";
-                        
+
                         const oldValue = getPreprocessedData(lastSavedContent.current ?? "").trimEnd();
-                        const newValue = getPreprocessedData(currentValue ?? "").trimEnd();                
+                        const newValue = getPreprocessedData(currentValue ?? "").trimEnd();
                         setNeedsSaving(oldValue !== newValue);
                         setError(undefined);
                     }}
@@ -351,7 +350,7 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
                                         x: e.pageX,
                                         y: e.pageY
                                     });
-                                    setState("showAttributeDetail");                                    
+                                    setState("showAttributeDetail");
                                 } else {
                                     setState("showHelpTooltip");
                                 }
@@ -373,7 +372,7 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
                         onClick={save}
                     /> }
 
-                    <ActionButton 
+                    <ActionButton
                         icon="bx bx-plus"
                         className="add-new-attribute-button tn-tool-button"
                         text={escapeQuotes(t("attribute_editor.add_a_new_attribute"))}
@@ -407,7 +406,7 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
 
             {attributeDetailWidgetEl}
         </>
-    )   
+    )
 }
 
 function getPreprocessedData(currentValue: string) {

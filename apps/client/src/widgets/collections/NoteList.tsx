@@ -123,7 +123,6 @@ function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOptions | 
     }
 
     async function getNoteIds(note: FNote) {
-        console.log("Refreshed note IDs");
         if (viewType === "list" || viewType === "grid") {
             return note.getChildNoteIds();
         } else {

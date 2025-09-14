@@ -68,7 +68,6 @@ export default function Map({ coordinates, zoom, layerName, viewportChanged, chi
     useEffect(() => {
         const map = mapRef.current;
         const layerToAdd = layer;
-        console.log("Add layer ", map, layerToAdd);
         if (!map || !layerToAdd) return;
         layerToAdd.addTo(map);
         return () => layerToAdd.removeFrom(map);
