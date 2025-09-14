@@ -2,7 +2,7 @@ import { useContext, useEffect, useLayoutEffect, useRef } from "preact/hooks";
 import { EventCallBackMethods, Module, Options, Tabulator as VanillaTabulator } from "tabulator-tables";
 import "tabulator-tables/dist/css/tabulator.css";
 import "../../../../src/stylesheets/table.css";
-import { RefObject } from "preact";
+import { JSX, RefObject, VNode } from "preact";
 import { ParentComponent, renderReactWidget } from "../../react/react_utils";
 
 interface TableProps<T> extends Omit<Options, "data" | "footerElement" | "index"> {
@@ -12,9 +12,10 @@ interface TableProps<T> extends Omit<Options, "data" | "footerElement" | "index"
     modules?: (new (table: VanillaTabulator) => Module)[];
     events?: Partial<EventCallBackMethods>;
     index: keyof T;
+    footerElement?: JSX.Element;
 }
 
-export default function Tabulator<T>({ className, columns, data, modules, tabulatorRef: externalTabulatorRef, footerElement, events, ...restProps }: TableProps<T>) {
+export default function Tabulator<T>({ className, columns, data, modules, tabulatorRef: externalTabulatorRef, footerElement, events, index, ...restProps }: TableProps<T>) {
     const parentComponent = useContext(ParentComponent);
     const containerRef = useRef<HTMLDivElement>(null);
     const tabulatorRef = useRef<VanillaTabulator>(null);
@@ -33,6 +34,7 @@ export default function Tabulator<T>({ className, columns, data, modules, tabula
             columns,
             data,
             footerElement: (parentComponent && footerElement ? renderReactWidget(parentComponent, footerElement)[0] : undefined),
+            index: index as string | number | undefined,
             ...restProps
         });
 

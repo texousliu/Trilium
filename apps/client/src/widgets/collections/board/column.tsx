@@ -17,7 +17,6 @@ interface DragContext {
     column: string;
     columnIndex: number,
     columnItems?: { note: FNote, branch: FBranch }[];
-    isEditing: boolean;
 }
 
 export default function Column({
@@ -36,7 +35,7 @@ export default function Column({
     isAnyColumnDragging?: boolean
 } & DragContext) {
     const [ isVisible, setVisible ] = useState(true);
-    const { columnNameToEdit, setColumnNameToEdit, dropTarget, draggedCard, dropPosition } = useContext(BoardViewContext);
+    const { columnNameToEdit, setColumnNameToEdit, dropTarget, draggedCard, dropPosition } = useContext(BoardViewContext)!;
     const isEditing = (columnNameToEdit === column);
     const editorRef = useRef<HTMLInputElement>(null);
     const { handleColumnDragStart, handleColumnDragEnd, handleDragOver, handleDragLeave, handleDrop } = useDragging({
@@ -90,7 +89,7 @@ export default function Column({
         >
             <h3
                 className={`${isEditing ? "editing" : ""}`}
-                draggable="true"
+                draggable
                 onDragStart={handleColumnDragStart}
                 onDragEnd={handleColumnDragEnd}
                 onContextMenu={handleContextMenu}
@@ -170,8 +169,8 @@ function AddNewItem({ column, api }: { column: string, api: BoardApi }) {
     );
 }
 
-function useDragging({ column, columnIndex, columnItems, isEditing }: DragContext) {
-    const { api, parentNote, draggedColumn, setDraggedColumn, setDropTarget, setDropPosition, dropPosition } = useContext(BoardViewContext);
+function useDragging({ column, columnIndex, columnItems, isEditing }: DragContext & { isEditing: boolean }) {
+    const { api, parentNote, draggedColumn, setDraggedColumn, setDropTarget, setDropPosition, dropPosition } = useContext(BoardViewContext)!;
     /** Needed to track if current column is dragged in real-time, since {@link draggedColumn} is populated one render cycle later.  */
     const isDraggingRef = useRef(false);
 
@@ -192,13 +191,13 @@ function useDragging({ column, columnIndex, columnItems, isEditing }: DragContex
 
     const handleDragOver = useCallback((e: DragEvent) => {
         if (isEditing || draggedColumn || isDraggingRef.current) return; // Don't handle card drops when dragging columns
-        if (!e.dataTransfer?.types.includes(CARD_CLIPBOARD_TYPE) && !e.dataTransfer.types.includes(TREE_CLIPBOARD_TYPE)) return;
+        if (!e.dataTransfer?.types.includes(CARD_CLIPBOARD_TYPE) && !e.dataTransfer?.types.includes(TREE_CLIPBOARD_TYPE)) return;
 
         e.preventDefault();
         setDropTarget(column);
 
         // Calculate drop position based on mouse position
-        const cards = Array.from(e.currentTarget.querySelectorAll('.board-note'));
+        const cards = Array.from((e.currentTarget as HTMLElement)?.querySelectorAll('.board-note'));
         const mouseY = e.clientY;
 
         let newIndex = cards.length;

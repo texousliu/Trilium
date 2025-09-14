@@ -1,4 +1,4 @@
-import { LatLng } from "leaflet";
+import type { LatLng, LeafletMouseEvent } from "leaflet";
 import { LOCATION_ATTRIBUTE } from ".";
 import attributes from "../../../services/attributes";
 import { prompt } from "../../../services/dialog";

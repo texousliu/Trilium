@@ -179,7 +179,6 @@ interface FormatterOpts {
 
 interface EditorOpts {
     cell: CellComponent,
-    onRendered: EmptyCallback,
     success: ValueBooleanCallback,
     cancel: ValueVoidCallback,
     editorParams: {}
@@ -194,6 +193,7 @@ function wrapFormatter(Component: (opts: FormatterOpts) => JSX.Element): ((cell:
 
 function wrapEditor(Component: (opts: EditorOpts) => JSX.Element): ((
     cell: CellComponent,
+    onRendered: EmptyCallback,
     success: ValueBooleanCallback,
     cancel: ValueVoidCallback,
     editorParams: {},

@@ -1,4 +1,4 @@
-import Map, { MapApi } from "./map";
+import Map from "./map";
 import "./index.css";
 import { ViewModeProps } from "../interface";
 import { useNoteBlob, useNoteLabel, useNoteLabelBoolean, useNoteProperty, useNoteTreeDrag, useSpacedUpdate, useTouchBar, useTriliumEvent } from "../../react/hooks";

@@ -18,7 +18,7 @@ interface NoteListProps<T extends object> {
     /** if set to `true` then only collection-type views are displayed such as geo-map and the calendar. The original book types grid and list will be ignored. */
     displayOnlyCollections?: boolean;
     highlightedTokens?: string[] | null;
-    viewStorage: ViewModeStorage<T>;
+    viewStorage?: ViewModeStorage<T>;
 }
 
 export default function NoteList<T extends object>({ note: providedNote, highlightedTokens, displayOnlyCollections }: NoteListProps<T>) {

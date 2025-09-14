@@ -8,7 +8,7 @@ import { useElementSize, useSyncedRef } from "../../react/hooks";
 export const ParentMap = createContext<L.Map | null>(null);
 
 interface MapProps {
-    apiRef?: RefObject<MapApi | null>;
+    apiRef?: RefObject<L.Map | null>;
     containerRef?: RefObject<HTMLDivElement>;
     coordinates: LatLng | [number, number];
     zoom: number;

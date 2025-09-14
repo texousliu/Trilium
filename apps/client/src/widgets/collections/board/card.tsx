@@ -31,7 +31,7 @@ export default function Card({
     index: number,
     isDragging: boolean
 }) {
-    const { branchIdToEdit, setBranchIdToEdit, setDraggedCard } = useContext(BoardViewContext);
+    const { branchIdToEdit, setBranchIdToEdit, setDraggedCard } = useContext(BoardViewContext)!;
     const isEditing = branch.branchId === branchIdToEdit;
     const colorClass = note.getColorClass() || '';
     const editorRef = useRef<HTMLInputElement>(null);
@@ -78,7 +78,7 @@ export default function Card({
     return (
         <div
             className={`board-note ${colorClass} ${isDragging ? 'dragging' : ''} ${isEditing ? "editing" : ""} ${isArchived ? "archived" : ""}`}
-            draggable="true"
+            draggable
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
             onContextMenu={handleContextMenu}

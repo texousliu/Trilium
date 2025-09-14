@@ -12,7 +12,7 @@ import link from "../../../services/link";
 import { t } from "../../../services/i18n";
 import attribute_renderer from "../../../services/attribute_renderer";
 
-export function ListView({ note, noteIds: unfilteredNoteIds, highlightedTokens }: ViewModeProps) {
+export function ListView({ note, noteIds: unfilteredNoteIds, highlightedTokens }: ViewModeProps<{}>) {
     const [ isExpanded ] = useNoteLabelBoolean(note, "expanded");
     const noteIds = useFilteredNoteIds(note, unfilteredNoteIds);
     const { pageNotes, ...pagination } = usePagination(note, noteIds);
@@ -34,7 +34,7 @@ export function ListView({ note, noteIds: unfilteredNoteIds, highlightedTokens }
     );
 }
 
-export function GridView({ note, noteIds: unfilteredNoteIds, highlightedTokens }: ViewModeProps) {
+export function GridView({ note, noteIds: unfilteredNoteIds, highlightedTokens }: ViewModeProps<{}>) {
     const noteIds = useFilteredNoteIds(note, unfilteredNoteIds);
     const { pageNotes, ...pagination } = usePagination(note, noteIds);
 
