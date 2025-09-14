@@ -2,7 +2,7 @@ import { Inputs, MutableRef, useCallback, useContext, useDebugValue, useEffect, 
 import { CommandListenerData, EventData, EventNames } from "../../components/app_context";
 import { ParentComponent } from "./react_utils";
 import SpacedUpdate from "../../services/spaced_update";
-import { FilterLabelsByType, KeyboardActionNames, OptionNames } from "@triliumnext/commons";
+import { FilterLabelsByType, KeyboardActionNames, OptionNames, RelationNames } from "@triliumnext/commons";
 import options, { type OptionValue } from "../../services/options";
 import utils, { escapeRegExp, reloadFrontendApp } from "../../services/utils";
 import NoteContext from "../../components/note_context";
@@ -258,7 +258,7 @@ export function useNoteProperty<T extends keyof FNote>(note: FNote | null | unde
     return note?.[property];
 }
 
-export function useNoteRelation(note: FNote | undefined | null, relationName: string): [string | null | undefined, (newValue: string) => void] {
+export function useNoteRelation(note: FNote | undefined | null, relationName: RelationNames): [string | null | undefined, (newValue: string) => void] {
     const [ relationValue, setRelationValue ] = useState<string | null | undefined>(note?.getRelationValue(relationName));
 
     useEffect(() => setRelationValue(note?.getRelationValue(relationName) ?? null), [ note ]);

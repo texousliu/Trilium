@@ -1,3 +1,6 @@
+/**
+ * A listing of all the labels used by the system (i.e. not user-defined). Labels defined here have a data type which is not enforced, but offers type safety.
+ */
 type Labels = {
     color: string;
     iconClass: string;
@@ -38,7 +41,17 @@ type Labels = {
     includeArchived: boolean;
 }
 
+/**
+ * A listing of all relations used by the system (i.e. not user-defined). Unlike labels, relations
+ * always point to a note ID, so no specific data type is necessary.
+ */
+type Relations = [
+    "searchScript",
+    "ancestor"
+];
+
 export type LabelNames = keyof Labels;
+export type RelationNames = Relations[number];
 
 export type FilterLabelsByType<U> = {
     [K in keyof Labels]: Labels[K] extends U ? K : never;
