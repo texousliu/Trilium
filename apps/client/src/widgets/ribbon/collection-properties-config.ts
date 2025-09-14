@@ -4,6 +4,7 @@ import attributes from "../../services/attributes";
 import NoteContextAwareWidget from "../note_context_aware_widget";
 import { DEFAULT_MAP_LAYER_NAME, MAP_LAYERS, type MapLayer } from "../collections/geomap/map_layer";
 import { ViewTypeOptions } from "../collections/interface";
+import { FilterLabelsByType } from "@triliumnext/commons";
 
 interface BookConfig {
     properties: BookProperty[];
@@ -12,7 +13,7 @@ interface BookConfig {
 export interface CheckBoxProperty {
     type: "checkbox",
     label: string;
-    bindToLabel: string
+    bindToLabel: FilterLabelsByType<boolean>
 }
 
 export interface ButtonProperty {
@@ -26,7 +27,7 @@ export interface ButtonProperty {
 export interface NumberProperty {
     type: "number",
     label: string;
-    bindToLabel: string;
+    bindToLabel: FilterLabelsByType<number>;
     width?: number;
     min?: number;
 }
@@ -44,7 +45,7 @@ interface ComboBoxGroup {
 export interface ComboBoxProperty {
     type: "combobox",
     label: string;
-    bindToLabel: string;
+    bindToLabel: FilterLabelsByType<string>;
     /**
      * The default value is used when the label is not set.
      */

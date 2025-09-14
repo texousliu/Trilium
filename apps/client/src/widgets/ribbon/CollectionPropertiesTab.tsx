@@ -118,6 +118,7 @@ function CheckboxPropertyView({ note, property }: { note: FNote, property: Check
 }
 
 function NumberPropertyView({ note, property }: { note: FNote, property: NumberProperty }) {
+    //@ts-expect-error Interop with text box which takes in string values even for numbers.
     const [ value, setValue ] = useNoteLabel(note, property.bindToLabel);
 
     return (

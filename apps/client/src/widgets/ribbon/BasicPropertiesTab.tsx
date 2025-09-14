@@ -23,7 +23,7 @@ import { ContentLanguagesList } from "../type_widgets/options/i18n";
 
 export default function BasicPropertiesTab({ note }: TabContext) {
     return (
-        <div className="basic-properties-widget">        
+        <div className="basic-properties-widget">
             <NoteTypeWidget note={note} />
             <ProtectedNoteSwitch note={note} />
             <EditabilitySelect note={note} />
@@ -43,7 +43,7 @@ function NoteTypeWidget({ note }: { note?: FNote | null }) {
         return mime_types.getMimeTypes().filter(mimeType => mimeType.enabled)
     }, [ codeNotesMimeTypes ]);
     const notSelectableNoteTypes = useMemo(() => NOTE_TYPES.filter((nt) => nt.reserved || nt.static).map((nt) => nt.type), []);
-    
+
     const currentNoteType = useNoteProperty(note, "type") ?? undefined;
     const currentNoteMime = useNoteProperty(note, "mime");
     const [ modalShown, setModalShown ] = useState(false);
@@ -95,7 +95,7 @@ function NoteTypeWidget({ note }: { note?: FNote | null }) {
                                 checked={checked}
                                 badges={badges}
                                 onClick={() => changeNoteType(type, mime)}
-                            >{title}</FormListItem>    
+                            >{title}</FormListItem>
                         );
                     } else {
                         return (
@@ -103,7 +103,7 @@ function NoteTypeWidget({ note }: { note?: FNote | null }) {
                                 <FormDropdownDivider />
                                 <FormListItem
                                     checked={checked}
-                                    disabled                                    
+                                    disabled
                                 >
                                     <strong>{title}</strong>
                                 </FormListItem>
@@ -131,7 +131,7 @@ function NoteTypeWidget({ note }: { note?: FNote | null }) {
                 <CodeMimeTypesList />
             </Modal>
         </div>
-    )   
+    )
 }
 
 function ProtectedNoteSwitch({ note }: { note?: FNote | null }) {
@@ -151,7 +151,7 @@ function ProtectedNoteSwitch({ note }: { note?: FNote | null }) {
 
 function EditabilitySelect({ note }: { note?: FNote | null }) {
     const [ readOnly, setReadOnly ] = useNoteLabelBoolean(note, "readOnly");
-    const [ autoReadOnlyDisabled, setAutoReadOnlyDisabled ] = useNoteLabelBoolean(note, "autoReadOnlyDisabled");    
+    const [ autoReadOnlyDisabled, setAutoReadOnlyDisabled ] = useNoteLabelBoolean(note, "autoReadOnlyDisabled");
 
     const options = useMemo(() => ([
         {
@@ -208,7 +208,7 @@ function BookmarkSwitch({ note }: { note?: FNote | null }) {
             <FormToggle
                 switchOnName={t("bookmark_switch.bookmark")} switchOnTooltip={t("bookmark_switch.bookmark_this_note")}
                 switchOffName={t("bookmark_switch.bookmark")} switchOffTooltip={t("bookmark_switch.remove_bookmark")}
-                currentValue={isBookmarked}                
+                currentValue={isBookmarked}
                 onChange={async (shouldBookmark) => {
                     if (!note) return;
                     const resp = await server.put<ToggleInParentResponse>(`notes/${note.noteId}/toggle-in-parent/_lbBookmarks/${shouldBookmark}`);
@@ -260,11 +260,11 @@ function SharedSwitch({ note }: { note?: FNote | null }) {
         } else {
             if (note?.getParentBranches().length === 1 && !(await dialog.confirm(t("shared_switch.shared-branch")))) {
                 return;
-            }            
+            }
 
             const shareBranch = note?.getParentBranches().find((b) => b.parentNoteId === "_share");
             if (!shareBranch?.branchId) return;
-            await server.remove(`branches/${shareBranch.branchId}?taskId=no-progress-reporting`);            
+            await server.remove(`branches/${shareBranch.branchId}?taskId=no-progress-reporting`);
         }
 
         sync.syncNow(true);
@@ -330,7 +330,7 @@ function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
         return locales.find(locale => typeof locale === "object" && locale.id === currentNoteLanguage) as Locale | undefined;
     }, [ currentNoteLanguage ]);
 
-    return (        
+    return (
         <div className="note-language-container">
             <span>{t("basic_properties.language")}:</span>
             &nbsp;
@@ -350,7 +350,7 @@ function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
 
                 <FormListItem
                     onClick={() => setModalShown(true)}
-                >{t("note_language.configure-languages")}</FormListItem>           
+                >{t("note_language.configure-languages")}</FormListItem>
             </Dropdown>
 
             <HelpButton helpPage="B0lcI9xz1r8K" style={{ marginLeft: "4px" }} />

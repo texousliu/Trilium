@@ -2,7 +2,7 @@ import { ComponentChildren } from "preact";
 import { Dispatch, StateUpdater, useEffect, useState } from "preact/hooks";
 import FNote from "../../entities/fnote";
 import froca from "../../services/froca";
-import { useNoteLabel } from "../react/hooks";
+import { useNoteLabelInt } from "../react/hooks";
 import { t } from "../../services/i18n";
 
 interface PaginationContext {
@@ -62,9 +62,8 @@ export function usePagination(note: FNote, noteIds: string[]): PaginationContext
     const [ pageNotes, setPageNotes ] = useState<FNote[]>();
 
     // Parse page size.
-    const [ pageSize ] = useNoteLabel(note, "pageSize");
-    const pageSizeNum = parseInt(pageSize ?? "", 10);
-    const normalizedPageSize = (pageSizeNum && pageSizeNum > 0 ? pageSizeNum : 20);
+    const [ pageSize ] = useNoteLabelInt(note, "pageSize");
+    const normalizedPageSize = (pageSize && pageSize > 0 ? pageSize : 20);
 
     // Calculate start/end index.
     const startIdx = (page - 1) * normalizedPageSize;

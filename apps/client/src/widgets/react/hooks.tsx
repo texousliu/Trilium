@@ -2,7 +2,7 @@ import { Inputs, MutableRef, useCallback, useContext, useDebugValue, useEffect, 
 import { CommandListenerData, EventData, EventNames } from "../../components/app_context";
 import { ParentComponent } from "./react_utils";
 import SpacedUpdate from "../../services/spaced_update";
-import { KeyboardActionNames, OptionNames } from "@triliumnext/commons";
+import { FilterLabelsByType, KeyboardActionNames, OptionNames } from "@triliumnext/commons";
 import options, { type OptionValue } from "../../services/options";
 import utils, { escapeRegExp, reloadFrontendApp } from "../../services/utils";
 import NoteContext from "../../components/note_context";
@@ -13,7 +13,7 @@ import FBlob from "../../entities/fblob";
 import NoteContextAwareWidget from "../note_context_aware_widget";
 import { RefObject, VNode } from "preact";
 import { Tooltip } from "bootstrap";
-import { CSSProperties, DragEventHandler } from "preact/compat";
+import { CSSProperties } from "preact/compat";
 import keyboard_actions from "../../services/keyboard_actions";
 import Mark from "mark.js";
 import { DragData } from "../note_tree";
@@ -291,7 +291,7 @@ export function useNoteRelation(note: FNote | undefined | null, relationName: st
  * @param labelName the name of the label to read/write.
  * @returns an array where the first element is the getter and the second element is the setter. The setter has a special behaviour for convenience: if the value is undefined, the label is created without a value (e.g. a tag), if the value is null then the label is removed.
  */
-export function useNoteLabel(note: FNote | undefined | null, labelName: string): [string | null | undefined, (newValue: string | null | undefined) => void] {
+export function useNoteLabel(note: FNote | undefined | null, labelName: FilterLabelsByType<string>): [string | null | undefined, (newValue: string | null | undefined) => void] {
     const [ , setLabelValue ] = useState<string | null | undefined>();
 
     useEffect(() => setLabelValue(note?.getLabelValue(labelName) ?? null), [ note ]);
@@ -325,12 +325,12 @@ export function useNoteLabel(note: FNote | undefined | null, labelName: string):
     ] as const;
 }
 
-export function useNoteLabelWithDefault(note: FNote | undefined | null, labelName: string, defaultValue: string): [string, (newValue: string | null | undefined) => void] {
+export function useNoteLabelWithDefault(note: FNote | undefined | null, labelName: FilterLabelsByType<string>, defaultValue: string): [string, (newValue: string | null | undefined) => void] {
     const [ labelValue, setLabelValue ] = useNoteLabel(note, labelName);
     return [ labelValue ?? defaultValue, setLabelValue];
 }
 
-export function useNoteLabelBoolean(note: FNote | undefined | null, labelName: string): [ boolean, (newValue: boolean) => void] {
+export function useNoteLabelBoolean(note: FNote | undefined | null, labelName: FilterLabelsByType<boolean>): [ boolean, (newValue: boolean) => void] {
     const [ labelValue, setLabelValue ] = useState<boolean>(!!note?.hasLabel(labelName));
 
     useEffect(() => setLabelValue(!!note?.hasLabel(labelName)), [ note ]);
@@ -358,7 +358,8 @@ export function useNoteLabelBoolean(note: FNote | undefined | null, labelName: s
     return [ labelValue, setter ] as const;
 }
 
-export function useNoteLabelInt(note: FNote | undefined | null, labelName: string): [ number | undefined, (newValue: number) => void] {
+export function useNoteLabelInt(note: FNote | undefined | null, labelName: FilterLabelsByType<number>): [ number | undefined, (newValue: number) => void] {
+    //@ts-expect-error `useNoteLabel` only accepts string properties but we need to be able to read number ones.
     const [ value, setValue ] = useNoteLabel(note, labelName);
     useDebugValue(labelName);
     return [
