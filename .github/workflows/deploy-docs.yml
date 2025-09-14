@@ -102,7 +102,12 @@ jobs:
               exit $EXIT_CODE
             fi
           }
-      
+
+      - name: Fix HTML Links
+        run: |
+          # Remove .md extensions from links in generated HTML
+          pnpm tsx ./scripts/fix-html-links.ts site
+
       - name: Validate Built Site
         run: |
           # Basic validation that important files exist
