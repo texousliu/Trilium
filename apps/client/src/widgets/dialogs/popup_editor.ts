@@ -151,7 +151,7 @@ export default class PopupEditorDialog extends Container<BasicWidget> {
 
     handleEventInChildren<T extends EventNames>(name: T, data: EventData<T>): Promise<unknown[] | unknown> | null {
         // Avoid events related to the current tab interfere with our popup.
-        if (["noteSwitched", "noteSwitchedAndActivated"].includes(name)) {
+        if (["noteSwitched", "noteSwitchedAndActivated", "exportAsPdf", "printActiveNote"].includes(name)) {
             return Promise.resolve();
         }
 
