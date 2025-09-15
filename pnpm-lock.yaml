@@ -772,7 +772,7 @@ importers:
     dependencies:
       '@inlang/paraglide-js':
         specifier: ^2.0.0
-        version: 2.3.0(babel-plugin-macros@3.1.0)
+        version: 2.3.2(babel-plugin-macros@3.1.0)
     devDependencies:
       '@eslint/compat':
         specifier: ^1.2.5
@@ -2781,8 +2781,8 @@ packages:
   '@iconify/utils@3.0.1':
     resolution: {integrity: sha512-A78CUEnFGX8I/WlILxJCuIJXloL0j/OJ9PSchPAfCargEIKmUBWvvEMmKWB5oONwiUqlNt+5eRufdkLxeHIWYw==}
 
-  '@inlang/paraglide-js@2.3.0':
-    resolution: {integrity: sha512-BXrQ77UL04zs5lRhfNW+DmTNbCcH1xBt5eDxntq+or5YHbJP1Srf57mRUHybX1A0XOQFThd+pvtkzcrnBvlc1w==}
+  '@inlang/paraglide-js@2.3.2':
+    resolution: {integrity: sha512-mF7ku1AaXQxa6fnbBczXiEAM7lxhYzaAH7FnDVvAbpzNtgRJESi11KN0bzpCH0YhsKLdimFrQlzjaSVlo9Uh+Q==}
     hasBin: true
 
   '@inlang/recommend-sherlock@0.2.1':
@@ -16926,7 +16926,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@inlang/paraglide-js@2.3.0(babel-plugin-macros@3.1.0)':
+  '@inlang/paraglide-js@2.3.2(babel-plugin-macros@3.1.0)':
     dependencies:
       '@inlang/recommend-sherlock': 0.2.1
       '@inlang/sdk': 2.4.9(babel-plugin-macros@3.1.0)
