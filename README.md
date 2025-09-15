@@ -13,6 +13,23 @@ See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for q
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
+## 📚 Documentation
+
+**Visit our comprehensive documentation at [docs.triliumnotes.org](https://docs.triliumnotes.org/)**
+
+Our documentation is available in multiple formats:
+- **Online Documentation**: Browse the full documentation at [docs.triliumnotes.org](https://docs.triliumnotes.org/)
+- **In-App Help**: Press `F1` within Trilium to access the same documentation directly in the application
+- **GitHub**: Navigate through the [User Guide](./docs/User%20Guide/User%20Guide/) in this repository
+
+### Quick Links
+- [Getting Started Guide](https://docs.triliumnotes.org/)
+- [Installation Instructions](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+- [Docker Setup](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+- [Upgrading TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+- [Basic Concepts and Features](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+- [Patterns of Personal Knowledge Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
+
 ## 🎁 Features
 
 * Notes can be arranged into arbitrarily deep tree. Single note can be placed into multiple places in the tree (see [cloning](https://triliumnext.github.io/Docs/Wiki/cloning-notes))
@@ -55,19 +72,6 @@ The original Trilium developer ([Zadam](https://github.com/zadam)) has graciousl
 There are no special migration steps to migrate from a zadam/Trilium instance to a TriliumNext/Trilium instance. Simply [install TriliumNext/Trilium](#-installation) as usual and it will use your existing database.
 
 Versions up to and including [v0.90.4](https://github.com/TriliumNext/Trilium/releases/tag/v0.90.4) are compatible with the latest zadam/trilium version of [v0.63.7](https://github.com/zadam/trilium/releases/tag/v0.63.7). Any later versions of TriliumNext/Trilium have their sync versions incremented which prevents direct migration.
-
-## 📖 Documentation
-
-We're currently in the progress of moving the documentation to in-app (hit the `F1` key within Trilium). As a result, there may be some missing parts until we've completed the migration. If you'd prefer to navigate through the documentation within GitHub, you can navigate the [User Guide](./docs/User%20Guide/User%20Guide/) documentation. 
-
-Below are some quick links for your convenience to navigate the documentation:
-- [Server installation](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
-  - [Docker installation](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
-- [Upgrading TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
-- [Concepts and Features - Note](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
-- [Patterns of personal knowledge base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
-
-Until we finish reorganizing the documentation, you may also want to [browse the old documentation](https://triliumnext.github.io/Docs).
 
 ## 💬 Discuss with us
 
