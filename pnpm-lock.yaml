@@ -1180,8 +1180,8 @@ importers:
         specifier: 6.3.1
         version: 6.3.1
       '@codemirror/lang-html':
-        specifier: 6.4.9
-        version: 6.4.9
+        specifier: 6.4.10
+        version: 6.4.10
       '@codemirror/lang-javascript':
         specifier: 6.2.4
         version: 6.2.4
@@ -1993,8 +1993,8 @@ packages:
   '@codemirror/lang-css@6.3.1':
     resolution: {integrity: sha512-kr5fwBGiGtmz6l0LSJIbno9QrifNMUusivHbnA1H6Dmqy4HZFte3UAICix1VuKo0lMPKQr2rqB+0BkKi/S3Ejg==}
 
-  '@codemirror/lang-html@6.4.9':
-    resolution: {integrity: sha512-aQv37pIMSlueybId/2PVSP6NPnmurFDVmZwzc7jszd2KAF8qd4VBbvNYPXWQq90WIARjsdVkPbw29pszmHws3Q==}
+  '@codemirror/lang-html@6.4.10':
+    resolution: {integrity: sha512-h/SceTVsN5r+WE+TVP2g3KDvNoSzbSrtZXCKo4vkKdbfT5t4otuVgngGdFukOO/rwRD2++pCxoh6xD4TEVMkQA==}
 
   '@codemirror/lang-javascript@6.2.4':
     resolution: {integrity: sha512-0WVmhp1QOqZ4Rt6GlVGwKJN3KW7Xh4H2q8ZZNGZaP6lRdxXJzmjm4FqvmOojVj6khWJHIb9sp7U/72W7xQgqAA==}
@@ -15667,7 +15667,7 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 46.1.0
       '@codemirror/autocomplete': 6.18.6
       '@codemirror/commands': 6.8.1
-      '@codemirror/lang-html': 6.4.9
+      '@codemirror/lang-html': 6.4.10
       '@codemirror/lang-markdown': 6.3.2
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
@@ -15876,7 +15876,7 @@ snapshots:
       '@lezer/common': 1.2.3
       '@lezer/css': 1.1.11
 
-  '@codemirror/lang-html@6.4.9':
+  '@codemirror/lang-html@6.4.10':
     dependencies:
       '@codemirror/autocomplete': 6.18.6
       '@codemirror/lang-css': 6.3.1
@@ -15906,7 +15906,7 @@ snapshots:
   '@codemirror/lang-markdown@6.3.2':
     dependencies:
       '@codemirror/autocomplete': 6.18.6
-      '@codemirror/lang-html': 6.4.9
+      '@codemirror/lang-html': 6.4.10
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
       '@codemirror/view': 6.38.2
@@ -15916,7 +15916,7 @@ snapshots:
   '@codemirror/lang-markdown@6.3.4':
     dependencies:
       '@codemirror/autocomplete': 6.18.6
-      '@codemirror/lang-html': 6.4.9
+      '@codemirror/lang-html': 6.4.10
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
       '@codemirror/view': 6.38.2
@@ -15925,7 +15925,7 @@ snapshots:
 
   '@codemirror/lang-php@6.0.2':
     dependencies:
-      '@codemirror/lang-html': 6.4.9
+      '@codemirror/lang-html': 6.4.10
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
       '@lezer/common': 1.2.3
@@ -15933,7 +15933,7 @@ snapshots:
 
   '@codemirror/lang-vue@0.1.3':
     dependencies:
-      '@codemirror/lang-html': 6.4.9
+      '@codemirror/lang-html': 6.4.10
       '@codemirror/lang-javascript': 6.2.4
       '@codemirror/language': 6.11.0
       '@lezer/common': 1.2.3
