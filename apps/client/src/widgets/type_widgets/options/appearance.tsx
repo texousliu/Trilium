@@ -79,7 +79,7 @@ const FONT_FAMILIES: FontGroup[] = [
     }
 ];
 
-export default function AppearanceSettings() {    
+export default function AppearanceSettings() {
     const [ overrideThemeFonts ] = useTriliumOption("overrideThemeFonts");
 
     return (
@@ -106,7 +106,7 @@ export default function AppearanceSettings() {
 
 function LayoutOrientation() {
     const [ layoutOrientation, setLayoutOrientation ] = useTriliumOption("layoutOrientation", true);
-    
+
     return (
         <OptionsSection title={t("theme.layout")}>
             <FormRadioGroup
@@ -155,7 +155,7 @@ function ApplicationTheme() {
                 </FormGroup>
 
                 <FormGroup className="side-checkbox col-md-6" name="override-theme-fonts">
-                    <FormCheckbox                        
+                    <FormCheckbox
                         label={t("theme.override_theme_fonts_label")}
                         currentValue={overrideThemeFonts} onChange={setOverrideThemeFonts} />
                 </FormGroup>
@@ -164,7 +164,7 @@ function ApplicationTheme() {
     )
 }
 
-function Fonts() {    
+function Fonts() {
     return (
         <OptionsSection title={t("fonts.fonts")}>
             <Font title={t("fonts.main_font")} fontFamilyOption="mainFontFamily" fontSizeOption="mainFontSize" />
@@ -182,8 +182,8 @@ function Fonts() {
     );
 }
 
-function Font({ title, fontFamilyOption, fontSizeOption }: { title: string, fontFamilyOption: OptionNames, fontSizeOption: OptionNames }) {    
-    const [ fontFamily, setFontFamily ] = useTriliumOption(fontFamilyOption);    
+function Font({ title, fontFamilyOption, fontSizeOption }: { title: string, fontFamilyOption: OptionNames, fontSizeOption: OptionNames }) {
+    const [ fontFamily, setFontFamily ] = useTriliumOption(fontFamilyOption);
     const [ fontSize, setFontSize ] = useTriliumOption(fontSizeOption);
 
     return (
@@ -194,7 +194,7 @@ function Font({ title, fontFamilyOption, fontSizeOption }: { title: string, font
                     <FormSelectWithGroups
                         values={FONT_FAMILIES}
                         currentValue={fontFamily} onChange={setFontFamily}
-                        keyProperty="value" titleProperty="label"                    
+                        keyProperty="value" titleProperty="label"
                     />
                 </FormGroup>
 
@@ -206,7 +206,7 @@ function Font({ title, fontFamilyOption, fontSizeOption }: { title: string, font
                         unit={t("units.percentage")}
                     />
                 </FormGroup>
-            </div>            
+            </div>
         </>
     );
 }
@@ -221,7 +221,7 @@ function ElectronIntegration() {
             <FormGroup name="zoom-factor" label={t("electron_integration.zoom-factor")} description={t("zoom_factor.description")}>
                 <FormTextBox
                     type="number"
-                    min="0.3" max="2.0" step="0.1"                    
+                    min="0.3" max="2.0" step="0.1"
                     currentValue={zoomFactor} onChange={setZoomFactor}
                 />
             </FormGroup>
@@ -238,6 +238,7 @@ function ElectronIntegration() {
                 <FormCheckbox
                     label={t("electron_integration.background-effects")}
                     currentValue={backgroundEffects} onChange={setBackgroundEffects}
+                    disabled={nativeTitleBarVisible}
                 />
             </FormGroup>
 
@@ -290,8 +291,8 @@ function MaxContentWidth() {
 
             <Column md={6}>
                 <FormGroup name="max-content-width" label={t("max_content_width.max_width_label")}>
-                    <FormTextBoxWithUnit                        
-                        type="number" min={MIN_CONTENT_WIDTH} step="10" 
+                    <FormTextBoxWithUnit
+                        type="number" min={MIN_CONTENT_WIDTH} step="10"
                         currentValue={maxContentWidth} onChange={setMaxContentWidth}
                         unit={t("max_content_width.max_width_unit")}
                     />
