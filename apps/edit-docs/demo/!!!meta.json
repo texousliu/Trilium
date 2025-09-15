@@ -1,6 +1,6 @@
 {
 	"formatVersion": 2,
-	"appVersion": "0.94.0",
+	"appVersion": "0.98.1",
 	"files": [
 		{
 			"isClone": false,
@@ -3164,9 +3164,16 @@
 									"notePosition": 40,
 									"prefix": null,
 									"isExpanded": false,
-									"type": "geoMap",
-									"mime": "application/json",
+									"type": "book",
+									"mime": "",
 									"attributes": [
+										{
+											"type": "relation",
+											"name": "template",
+											"value": "_template_geo_map",
+											"isInheritable": false,
+											"position": 10
+										},
 										{
 											"type": "label",
 											"name": "label:geolocation",
@@ -3182,8 +3189,16 @@
 											"position": 20
 										}
 									],
-									"dataFileName": "Geo Map (The Seven Wonders of .json",
-									"attachments": [],
+									"attachments": [
+										{
+											"attachmentId": "jPOilfLdSmbX",
+											"title": "geoMap.json",
+											"role": "viewConfig",
+											"mime": "application/json",
+											"position": 0,
+											"dataFileName": "Geo Map (The Seven Wonder.json"
+										}
+									],
 									"dirFileName": "Geo Map (The Seven Wonders of the World)",
 									"children": [
 										{

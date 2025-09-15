@@ -18,6 +18,7 @@ import password from "./encryption/password.js";
 import backup from "./backup.js";
 import eventService from "./events.js";
 import { t } from "i18next";
+import hidden_subtree from "./hidden_subtree.js";
 
 export const dbReady = deferred<void>();
 
@@ -120,7 +121,13 @@ async function createInitialDatabase(skipDemoDb?: boolean) {
         password.resetPassword();
     });
 
-    log.info("Importing demo content ...");
+    // Check hidden subtree.
+    // This ensures the existence of system templates, for the demo content.
+    console.log("Checking hidden subtree at first start.");
+    cls.init(() => hidden_subtree.checkHiddenSubtree());
+
+    // Import demo content.
+    log.info("Importing demo content...");
 
     const dummyTaskContext = new TaskContext("no-progress-reporting", "importNotes", null);
 
@@ -128,6 +135,7 @@ async function createInitialDatabase(skipDemoDb?: boolean) {
         await zipImportService.importZip(dummyTaskContext, demoFile, rootNote);
     }
 
+    // Post-demo.
     sql.transactional(() => {
         // this needs to happen after ZIP import,
         // the previous solution was to move option initialization here, but then the important parts of initialization
