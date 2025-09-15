@@ -256,7 +256,10 @@ function renderFile(entity: FNote | FAttachment, type: string, $renderedContent:
             </button>
         `);
 
-        $downloadButton.on("click", () => openService.downloadFileNote(entity.noteId));
+        $downloadButton.on("click", (e) => {
+            e.stopPropagation();
+            openService.downloadFileNote(entity.noteId)
+        });
         $openButton.on("click", async (e) => {
             const iconEl = $openButton.find("> .bx");
             iconEl.removeClass("bx bx-link-external");
