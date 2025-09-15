@@ -31,6 +31,7 @@ function index(req: Request, res: Response) {
 
     const theme = options.theme;
     const themeNote = attributeService.getNoteWithLabel("appTheme", theme);
+    const nativeTitleBarVisible = options.nativeTitleBarVisible === "true";
 
     res.render(view, {
         device: view,
@@ -41,8 +42,8 @@ function index(req: Request, res: Response) {
         layoutOrientation: options.layoutOrientation,
         platform: process.platform,
         isElectron,
-        hasNativeTitleBar: isElectron && options.nativeTitleBarVisible === "true",
-        hasBackgroundEffects: isElectron && isWindows11 && options.backgroundEffects === "true",
+        hasNativeTitleBar: isElectron && nativeTitleBarVisible,
+        hasBackgroundEffects: isElectron && isWindows11 && !nativeTitleBarVisible,
         mainFontSize: parseInt(options.mainFontSize),
         treeFontSize: parseInt(options.treeFontSize),
         detailFontSize: parseInt(options.detailFontSize),
