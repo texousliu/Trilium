@@ -257,7 +257,15 @@ function renderFile(entity: FNote | FAttachment, type: string, $renderedContent:
         `);
 
         $downloadButton.on("click", () => openService.downloadFileNote(entity.noteId));
-        $openButton.on("click", () => openService.openNoteExternally(entity.noteId, entity.mime));
+        $openButton.on("click", async (e) => {
+            const iconEl = $openButton.find("> .bx");
+            iconEl.removeClass("bx bx-link-external");
+            iconEl.addClass("bx bx-loader spin");
+            e.stopPropagation();
+            await openService.openNoteExternally(entity.noteId, entity.mime)
+            iconEl.removeClass("bx bx-loader spin");
+            iconEl.addClass("bx bx-link-external");
+        });
         // open doesn't work for protected notes since it works through a browser which isn't in protected session
         $openButton.toggle(!entity.isProtected);
 
