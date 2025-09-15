@@ -297,7 +297,8 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
             return;
         }
 
-        window.print();
+        // Trigger in timeout to dismiss the menu while printing.
+        setTimeout(window.print, 0);
     }
 
     async exportAsPdfEvent() {
