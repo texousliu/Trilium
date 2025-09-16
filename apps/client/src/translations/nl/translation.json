@@ -11,7 +11,8 @@
   },
   "toast": {
     "critical-error": {
-      "title": "Kritische Error"
+      "title": "Kritische Error",
+      "message": "Een kritieke fout heeft plaatsgevonden waardoor de cliënt zich aanmeldt vanaf het begin:\n\n84X\n\nDit is waarschijnlijk veroorzaakt door een script dat op een onverwachte manier faalt. Probeer de sollicitatie in veilige modus te starten en de kwestie aan te spreken."
     }
   },
   "add_link": {
@@ -26,7 +27,9 @@
   "branch_prefix": {
     "edit_branch_prefix": "Bewerk branch prefix",
     "save": "Opslaan",
-    "branch_prefix_saved": "Branch prefix is opgeslagen."
+    "branch_prefix_saved": "Branch prefix is opgeslagen.",
+    "help_on_tree_prefix": "Help bij boomvoorvoegsel",
+    "prefix": "Voorvoegsel: "
   },
   "bulk_actions": {
     "bulk_actions": "Bulk acties",

@@ -560,7 +560,14 @@
     "insert-below": "Вставить ниже",
     "insert-above": "Вставить выше",
     "move-to": "Переместить",
-    "delete-note": "Удалить заметку"
+    "delete-note": "Удалить заметку...",
+    "remove-from-board": "Удалить из доски",
+    "archive-note": "Архивировать заметку",
+    "unarchive-note": "Разархивировать заметку",
+    "edit-column-title": "Нажмите, чтобы изменить заголовок столбца",
+    "edit-note-title": "Нажмите, чтобы изменить название заметки",
+    "add-column-placeholder": "Введите имя столбца...",
+    "new-item-placeholder": "Введите название заметки..."
   },
   "table_context_menu": {
     "delete_row": "Удалить строку"
@@ -826,7 +833,9 @@
     "recent-changes-in-subtree": "Последние изменения в поддереве",
     "copy-note-path-to-clipboard": "Копировать путь к заметке в буфер обмена",
     "convert-to-attachment-confirm": "Вы уверены, что хотите преобразовать выбранные заметки во вложения их родительских заметок?",
-    "converted-to-attachments": "{{count}} заметок были преобразованы во вложения."
+    "converted-to-attachments": "{{count}} заметок были преобразованы во вложения.",
+    "archive": "Архивировать",
+    "unarchive": "Разархивировать"
   },
   "info": {
     "closeButton": "Закрыть",
@@ -928,7 +937,18 @@
     "november": "Ноябрь",
     "december": "Декабрь",
     "cannot_find_week_note": "Не удалось найти заметку недели",
-    "cannot_find_day_note": "Не удалось найти заметку дня"
+    "cannot_find_day_note": "Не удалось найти заметку дня",
+    "week": "Неделя",
+    "week_previous": "Прошлая неделя",
+    "week_next": "Следующая неделя",
+    "month": "Месяц",
+    "month_previous": "Предыдущий месяц",
+    "month_next": "Следующий месяц",
+    "year": "Год",
+    "year_previous": "Предыдущий год",
+    "year_next": "Следующий год",
+    "list": "Список",
+    "today": "Сегодня"
   },
   "global_menu": {
     "menu": "Меню",
@@ -989,7 +1009,8 @@
     "geo-map": "Карта",
     "invalid_view_type": "Недопустимый тип представления '{{type}}'",
     "expand_all_children": "Развернуть все дочерние элементы",
-    "collapse_all_notes": "Свернуть все заметки"
+    "collapse_all_notes": "Свернуть все заметки",
+    "include_archived_notes": "Показать заархивированные заметки"
   },
   "edited_notes": {
     "deleted": "(удалено)",
@@ -2024,7 +2045,9 @@
     "could_not_find_typewidget": "Не удалось найти typeWidget для типа '{{type}}'"
   },
   "book": {
-    "no_children_help": "В этой коллекции нет дочерних заметок, поэтому отображать нечего. Подробности см. на <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a>."
+    "no_children_help": "В этой коллекции нет дочерних заметок, поэтому отображать нечего. Подробности см. на <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a>.",
+    "drag_locked_title": "Защищено от изменения",
+    "drag_locked_message": "Перетаскивание не допускается, так как коллекция защищена от редактирования."
   },
   "ui-performance": {
     "title": "Производительность",
@@ -2033,5 +2056,12 @@
     "enable-backdrop-effects": "Включить эффекты размытия фона меню, всплывающих окон и панелей",
     "enable-smooth-scroll": "Включить плавную прокрутку",
     "app-restart-required": "(для вступления изменений в силу требуется перезапуск приложения)"
+  },
+  "collections": {
+    "rendering_error": "Невозможно отобразить содержимое из-за ошибки."
+  },
+  "pagination": {
+    "total_notes": "{{count}} заметок",
+    "page_title": "Страница {{startIndex}} - {{endIndex}}"
   }
 }
