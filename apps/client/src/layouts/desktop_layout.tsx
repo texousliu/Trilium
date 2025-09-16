@@ -126,7 +126,7 @@ export default class DesktopLayout {
                                                                 .child(<MovePaneButton direction="left" />)
                                                                 .child(<MovePaneButton direction="right" />)
                                                                 .child(<ClosePaneButton />)
-                                                                .child(new CreatePaneButton())
+                                                                .child(<CreatePaneButton />)
                                                         )
                                                         .child(<Ribbon />)
                                                         .child(<SharedInfo />)
