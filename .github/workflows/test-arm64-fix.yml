@@ -33,10 +33,10 @@ jobs:
       
       - name: Check better-sqlite3 in package
         run: |
-          echo "Checking built packages:"
-          find apps/desktop/out -name "*.deb" -o -name "*.rpm" -o -name "*.tar.gz" -o -name "*.AppImage" | head -5
+          echo "=== Checking built packages ==="
+          find apps/desktop/out -type f | head -10
           
-          echo "\nExtracting and checking better-sqlite3:"
+          echo "\n=== Extracting and checking better-sqlite3 ==="
           cd apps/desktop/out
           
           # Find the built package
@@ -44,17 +44,31 @@ jobs:
           if [ -n "$PACKAGE" ]; then
             echo "Found DEB package: $PACKAGE"
             dpkg-deb -x "$PACKAGE" extracted/
-            echo "Checking for better-sqlite3 files:"
-            find extracted/ -name "*sqlite*" -type f
-            echo "\nChecking architecture of better-sqlite3.node:"
-            find extracted/ -name "better_sqlite3.node" -exec file {} \;
+            
+            echo "\n=== Checking target path ==="
+            TARGET_PATH="extracted/opt/Trilium Notes/resources/app.asar.unpacked/node_modules/better-sqlite3/build/Release/better_sqlite3.node"
+            if [ -f "$TARGET_PATH" ]; then
+              echo "✅ Found better_sqlite3.node at expected path"
+              echo "File info:"
+              file "$TARGET_PATH"
+              ls -la "$TARGET_PATH"
+            else
+              echo "❌ better_sqlite3.node NOT found at expected path"
+              echo "Searching for better-sqlite3 files:"
+              find extracted/ -name "*sqlite*" -type f
+              echo "\nSearching for .node files:"
+              find extracted/ -name "*.node" -type f
+            fi
           else
-            echo "No DEB package found, checking other formats..."
-            ls -la
+            echo "No DEB package found, checking dist directory:"
+            find ../dist -name "better_sqlite3.node" -exec file {} \; 2>/dev/null || echo "No .node files in dist"
           fi
       
       - name: Upload built package
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: trilium-arm64-linux-test
-          path: apps/desktop/out/*
+          path: |
+            apps/desktop/out/*
+            apps/desktop/dist/*
