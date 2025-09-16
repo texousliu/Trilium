@@ -31,8 +31,6 @@ export default function MovePaneButton({ direction }: MovePaneButtonProps) {
         setRefreshCounter(refreshCounter + 1);
     });
 
-    console.log("Refresh with ", isEnabled());
-
     return (
         <ActionButton
             icon={direction === "left" ? "bx bx-chevron-left" : "bx bx-chevron-right"}

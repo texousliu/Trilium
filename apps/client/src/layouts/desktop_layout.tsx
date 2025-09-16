@@ -125,7 +125,7 @@ export default class DesktopLayout {
                                                                 .child(new SpacerWidget(0, 1))
                                                                 .child(<MovePaneButton direction="left" />)
                                                                 .child(<MovePaneButton direction="right" />)
-                                                                .child(new ClosePaneButton())
+                                                                .child(<ClosePaneButton />)
                                                                 .child(new CreatePaneButton())
                                                         )
                                                         .child(<Ribbon />)
