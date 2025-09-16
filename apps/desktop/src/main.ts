@@ -25,7 +25,7 @@ async function main() {
     // needed for excalidraw export https://github.com/zadam/trilium/issues/4271
     electron.app.commandLine.appendSwitch("enable-experimental-web-platform-features");
     electron.app.commandLine.appendSwitch("lang", options.getOptionOrNull("formattingLocale") ?? "en");
-    
+
     // Disable smooth scroll if the option is set
     const smoothScrollEnabled = options.getOptionOrNull("smoothScrollEnabled");
     if (smoothScrollEnabled === "false") {
@@ -57,6 +57,27 @@ async function main() {
     electron.app.on("will-quit", () => {
         electron.globalShortcut.unregisterAll();
     });
+
+    electron.app.on("second-instance", (event, commandLine) => {
+        const lastFocusedWindow = windowService.getLastFocusedWindow();
+        if (commandLine.includes("--new-window")) {
+            windowService.createExtraWindow("");
+        } else if (lastFocusedWindow) {
+            // Someone tried to run a second instance, we should focus our window.
+            // see www.ts "requestSingleInstanceLock" for the rest of this logic with explanation
+            if (lastFocusedWindow.isMinimized()) {
+                lastFocusedWindow.restore();
+            }
+            lastFocusedWindow.show();
+            lastFocusedWindow.focus();
+        }
+    });
+
+    const isPrimaryInstance = (await import("electron")).app.requestSingleInstanceLock();
+    if (!isPrimaryInstance) {
+        console.info("There's already an instance running, focusing that instance instead.");
+        process.exit(0);
+    }
 
     // this is to disable electron warning spam in the dev console (local development only)
     process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";

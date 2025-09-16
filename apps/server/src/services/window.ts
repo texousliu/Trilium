@@ -173,22 +173,6 @@ async function createMainWindow(app: App) {
     mainWindow.on("closed", () => (mainWindow = null));
 
     configureWebContents(mainWindow.webContents, spellcheckEnabled);
-
-    app.on("second-instance", (event, commandLine) => {
-        const lastFocusedWindow = getLastFocusedWindow();
-        if (commandLine.includes("--new-window")) {
-            createExtraWindow("");
-        } else if (lastFocusedWindow) {
-            // Someone tried to run a second instance, we should focus our window.
-            // see www.ts "requestSingleInstanceLock" for the rest of this logic with explanation
-            if (lastFocusedWindow.isMinimized()) {
-                lastFocusedWindow.restore();
-            }
-            lastFocusedWindow.show();
-            lastFocusedWindow.focus();
-        }
-    });
-
     trackWindowFocus(mainWindow);
 }
 
@@ -345,6 +329,7 @@ function getAllWindows() {
 
 export default {
     createMainWindow,
+    createExtraWindow,
     createSetupWindow,
     closeSetupWindow,
     registerGlobalShortcuts,
