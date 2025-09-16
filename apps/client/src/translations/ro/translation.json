@@ -271,7 +271,9 @@
     "configure_code_notes": "Configurează notițele de tip cod..."
   },
   "book": {
-    "no_children_help": "Această notiță de tip Carte nu are nicio subnotiță așadar nu este nimic de afișat. Vedeți <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> pentru detalii."
+    "no_children_help": "Această notiță de tip Carte nu are nicio subnotiță așadar nu este nimic de afișat. Vedeți <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> pentru detalii.",
+    "drag_locked_title": "Blocat pentru editare",
+    "drag_locked_message": "Glisarea notițelor nu este permisă deoarece colecția este blocată pentru editare."
   },
   "book_properties": {
     "collapse": "Minimizează",
@@ -286,7 +288,8 @@
     "book_properties": "Proprietăți colecție",
     "table": "Tabel",
     "geo-map": "Hartă geografică",
-    "board": "Tablă Kanban"
+    "board": "Tablă Kanban",
+    "include_archived_notes": "Afișează notițele arhivate"
   },
   "bookmark_switch": {
     "bookmark": "Semn de carte",
@@ -335,7 +338,18 @@
     "thu": "Joi",
     "tue": "Mar",
     "wed": "Mie",
-    "cannot_find_week_note": "Nu s-a putut găsi notița săptămânală"
+    "cannot_find_week_note": "Nu s-a putut găsi notița săptămânală",
+    "week": "Săptămână",
+    "week_previous": "Săptămâna trecută",
+    "week_next": "Următoarea săptămână",
+    "month": "Lună",
+    "month_previous": "Luna anterioară",
+    "month_next": "Următoarea lună",
+    "year": "An",
+    "year_previous": "Anul trecut",
+    "year_next": "Anul următor",
+    "list": "Agendă",
+    "today": "Astăzi"
   },
   "clone_to": {
     "clone_notes_to": "Clonează notițele către...",
@@ -1375,7 +1389,9 @@
     "unhoist-note": "Defocalizează notița",
     "converted-to-attachments": "{{count}} notițe au fost convertite în atașamente.",
     "convert-to-attachment-confirm": "Doriți convertirea notițelor selectate în atașamente ale notiței părinte?",
-    "open-in-popup": "Editare rapidă"
+    "open-in-popup": "Editare rapidă",
+    "archive": "Arhivează",
+    "unarchive": "Dezarhivează"
   },
   "shared_info": {
     "help_link": "Pentru informații vizitați <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki-ul</a>.",
@@ -1976,14 +1992,21 @@
     "delete_row": "Șterge rândul"
   },
   "board_view": {
-    "delete-note": "Șterge notița",
+    "delete-note": "Șterge notița...",
     "move-to": "Mută la",
     "insert-above": "Inserează deasupra",
     "insert-below": "Inserează dedesubt",
     "delete-column": "Șterge coloana",
     "delete-column-confirmation": "Doriți ștergerea acestei coloane? Atributul corespunzător va fi șters din notițele din acest tabel.",
     "new-item": "Intrare nouă",
-    "add-column": "Adaugă coloană"
+    "add-column": "Adaugă coloană",
+    "remove-from-board": "Înlătură de pe tablă",
+    "archive-note": "Arhivează notița",
+    "unarchive-note": "Dezarhivează notița",
+    "new-item-placeholder": "Introduceți titlul notiței...",
+    "add-column-placeholder": "Introduceți denumirea coloanei...",
+    "edit-note-title": "Clic pentru a edita titlul notiței",
+    "edit-column-title": "Clic pentru a edita titlul coloanei"
   },
   "command_palette": {
     "tree-action-name": "Listă de notițe: {{name}}",
@@ -2033,5 +2056,12 @@
   },
   "units": {
     "percentage": "%"
+  },
+  "pagination": {
+    "page_title": "Pagina pentru {{startIndex}} - {{endIndex}}",
+    "total_notes": "{{count}} notițe"
+  },
+  "collections": {
+    "rendering_error": "Nu a putut fi afișat conținutul din cauza unei erori."
   }
 }

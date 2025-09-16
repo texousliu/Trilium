@@ -592,7 +592,18 @@
     "september": "九月",
     "october": "十月",
     "november": "十一月",
-    "december": "十二月"
+    "december": "十二月",
+    "week_previous": "上周",
+    "week_next": "下周",
+    "month_previous": "上个月",
+    "month_next": "下个月",
+    "year": "年",
+    "year_previous": "上一年",
+    "year_next": "明年",
+    "today": "今天",
+    "week": "周",
+    "month": "月",
+    "list": "列表"
   },
   "close_pane_button": {
     "close_this_pane": "关闭此面板"
@@ -753,7 +764,8 @@
     "book_properties": "集合属性",
     "table": "表格",
     "geo-map": "地理地图",
-    "board": "看板"
+    "board": "看板",
+    "include_archived_notes": "展示归档笔记"
   },
   "edited_notes": {
     "no_edited_notes_found": "今天还没有编辑过的笔记...",
@@ -954,7 +966,9 @@
     "no_attachments": "此笔记没有附件。"
   },
   "book": {
-    "no_children_help": "此类型为书籍的笔记没有任何子笔记，因此没有内容显示。请参阅 <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> 了解详情。"
+    "no_children_help": "此类型为书籍的笔记没有任何子笔记，因此没有内容显示。请参阅 <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> 了解详情。",
+    "drag_locked_title": "锁定编辑",
+    "drag_locked_message": "无法拖拽，因为集合已被锁定编辑。"
   },
   "editable_code": {
     "placeholder": "在这里输入您的代码笔记内容..."
@@ -1442,7 +1456,9 @@
     "converted-to-attachments": "{{count}} 个笔记已被转换为附件。",
     "convert-to-attachment-confirm": "确定要将选中的笔记转换为其父笔记的附件吗？",
     "duplicate": "复制",
-    "open-in-popup": "快速编辑"
+    "open-in-popup": "快速编辑",
+    "archive": "归档",
+    "unarchive": "解压"
   },
   "shared_info": {
     "help_link": "访问 <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a> 获取帮助。",
@@ -1683,7 +1699,7 @@
     "native-title-bar": "原生标题栏",
     "native-title-bar-description": "对于 Windows 和 macOS，关闭原生标题栏可使应用程序看起来更紧凑。在 Linux 上，保留原生标题栏可以更好地与系统集成。",
     "background-effects": "启用背景效果（仅适用于 Windows 11）",
-    "background-effects-description": "Mica 效果为应用窗口添加模糊且时尚的背景，营造出深度感和现代外观。",
+    "background-effects-description": "Mica 效果为应用窗口添加模糊且时尚的背景，营造出深度感和现代外观。「原生标题栏」必須被禁用。",
     "restart-app-button": "重启应用程序以查看更改",
     "zoom-factor": "缩放系数"
   },
@@ -1972,14 +1988,21 @@
     "delete_row": "删除行"
   },
   "board_view": {
-    "delete-note": "删除笔记",
+    "delete-note": "删除笔记...",
     "move-to": "移动到",
     "insert-above": "在上方插入",
     "insert-below": "在下方插入",
     "delete-column": "删除列",
     "delete-column-confirmation": "确定要删除此列吗？此列下所有笔记中对应的属性也将被删除。",
     "new-item": "新增项目",
-    "add-column": "添加列"
+    "add-column": "添加列",
+    "archive-note": "存档笔记",
+    "unarchive-note": "解压笔记",
+    "new-item-placeholder": "输入笔记标题...",
+    "add-column-placeholder": "请输入列名...",
+    "edit-note-title": "点击编辑笔记标题",
+    "edit-column-title": "点击编辑列标题",
+    "remove-from-board": "从看板上移除"
   },
   "command_palette": {
     "tree-action-name": "树形：{{name}}",
@@ -2029,5 +2052,12 @@
     "enable-backdrop-effects": "启用菜单、弹窗和面板的背景效果",
     "enable-smooth-scroll": "启用平滑滚动",
     "app-restart-required": "（需重启程序以应用更改）"
+  },
+  "pagination": {
+    "page_title": "第 {{startIndex}} 页 - 第 {{endIndex}} 页",
+    "total_notes": "{{count}} 笔记"
+  },
+  "collections": {
+    "rendering_error": "出现错误无法显示内容。"
   }
 }
