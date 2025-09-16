@@ -11,7 +11,7 @@
     "url": "https://github.com/TriliumNext/Notes"
   },
   "scripts": {
-    "dev": "cross-env TRILIUM_PORT=37741 TRILIUM_DATA_DIR=data tsx ../../scripts/electron-start.mts src/main.ts",
+    "dev": "cross-env TRILIUM_PORT=37742 TRILIUM_DATA_DIR=data tsx ../../scripts/electron-start.mts src/main.ts",
     "start-no-dir": "cross-env TRILIUM_PORT=37743 tsx ../../scripts/electron-start.mts src/main.ts",
     "build": "tsx scripts/build.ts",
     "start-prod": "pnpm build && cross-env TRILIUM_DATA_DIR=data TRILIUM_PORT=37841 ELECTRON_IS_DEV=0 electron dist",

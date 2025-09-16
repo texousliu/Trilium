@@ -10,8 +10,13 @@ import electronDebug from "electron-debug";
 import electronDl from "electron-dl";
 import { deferred } from "@triliumnext/server/src/services/utils.js";
 import { PRODUCT_NAME } from "./app-info";
+import port from "@triliumnext/server/src/services/port.js";
+import { join } from "path";
 
 async function main() {
+    const userDataPath = getUserData();
+    app.setPath("userData", userDataPath);
+
     const serverInitializedPromise = deferred<void>();
 
     // Prevent Trilium starting twice on first install and on uninstall for the Windows installer.
@@ -87,6 +92,14 @@ async function main() {
     await startTriliumServer();
     console.log("Server loaded");
     serverInitializedPromise.resolve();
+}
+
+/**
+ * Returns a unique user data directory for Electron so that single instance locks between legitimately different instances such as different port or data directory can still act independently, but we are focusing the main window otherwise.
+ */
+function getUserData() {
+    const name = `${app.getName()}-${port}`;
+    return join(app.getPath("appData"), name);
 }
 
 async function onReady() {
