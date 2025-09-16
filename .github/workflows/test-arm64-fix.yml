@@ -14,6 +14,14 @@ jobs:
         with:
           node-version: 22
           cache: 'pnpm'
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update && sudo apt-get install -y flatpak-builder elfutils
+          flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          FLATPAK_ARCH="aarch64"
+          FLATPAK_VERSION="24.08"
+          flatpak install --user --no-deps --arch $FLATPAK_ARCH --assumeyes runtime/org.freedesktop.Platform/$FLATPAK_ARCH/$FLATPAK_VERSION runtime/org.freedesktop.Sdk/$FLATPAK_ARCH/$FLATPAK_VERSION org.electronjs.Electron2.BaseApp/$FLATPAK_ARCH/$FLATPAK_VERSION
+      
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Test rebuild with TARGET_ARCH
