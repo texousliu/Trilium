@@ -1,4 +1,5 @@
 import { initializeTranslations } from "@triliumnext/server/src/services/i18n.js";
+import { t } from "i18next";
 
 import electron from "electron";
 import sqlInit from "@triliumnext/server/src/services/sql_init.js";
@@ -73,16 +74,17 @@ async function main() {
         }
     });
 
+    await initializeTranslations();
+
     const isPrimaryInstance = (await import("electron")).app.requestSingleInstanceLock();
     if (!isPrimaryInstance) {
-        console.info("There's already an instance running, focusing that instance instead.");
+        console.info(t("desktop.instance_already_running"));
         process.exit(0);
     }
 
     // this is to disable electron warning spam in the dev console (local development only)
     process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
-    await initializeTranslations();
     const startTriliumServer = (await import("@triliumnext/server/src/www.js")).default;
     await startTriliumServer();
     console.log("Server loaded");
