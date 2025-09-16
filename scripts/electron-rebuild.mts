@@ -24,13 +24,15 @@ function rebuildNativeDependencies(projectRoot: string) {
         process.exit(1);
     }
 
-    console.log(`Rebuilding ${projectRoot} with ${electronVersion}...`);
+    const targetArch = process.env.TARGET_ARCH || process.arch;
+    console.log(`Rebuilding ${projectRoot} with ${electronVersion} for ${targetArch}...`);
 
     const resolvedPath = resolve(projectRoot);
     rebuild({
         projectRootPath: resolvedPath,
         buildPath: resolvedPath,
         electronVersion,
+        arch: targetArch,
         force: true
     });
 }

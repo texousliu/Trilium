@@ -30,6 +30,17 @@ jobs:
             image: win-signing
             shell: cmd
             forge_platform: win32
+        exclude:
+          - arch: arm64
+            os:
+              name: linux
+        include:
+          - arch: arm64
+            os:
+              name: linux
+              image: ubuntu-24.04-arm
+              shell: bash
+              forge_platform: linux
     runs-on: ${{ matrix.os.image }}
     steps:
       - uses: actions/checkout@v5
