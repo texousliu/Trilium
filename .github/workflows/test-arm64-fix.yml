@@ -24,9 +24,37 @@ jobs:
           pnpm postinstall
           echo "Checking better-sqlite3 architecture:"
           file apps/desktop/node_modules/better-sqlite3/build/Release/better_sqlite3.node || echo "File not found"
-      - name: Test desktop build
+      - name: Build desktop package
         env:
           TARGET_ARCH: arm64
         run: |
-          echo "Testing desktop build"
-          pnpm run --filter desktop build
+          echo "Building desktop package for ARM64"
+          pnpm run --filter desktop electron-forge:make --arch=arm64 --platform=linux
+      
+      - name: Check better-sqlite3 in package
+        run: |
+          echo "Checking built packages:"
+          find apps/desktop/out -name "*.deb" -o -name "*.rpm" -o -name "*.tar.gz" -o -name "*.AppImage" | head -5
+          
+          echo "\nExtracting and checking better-sqlite3:"
+          cd apps/desktop/out
+          
+          # Find the built package
+          PACKAGE=$(find . -name "*.deb" | head -1)
+          if [ -n "$PACKAGE" ]; then
+            echo "Found DEB package: $PACKAGE"
+            dpkg-deb -x "$PACKAGE" extracted/
+            echo "Checking for better-sqlite3 files:"
+            find extracted/ -name "*sqlite*" -type f
+            echo "\nChecking architecture of better-sqlite3.node:"
+            find extracted/ -name "better_sqlite3.node" -exec file {} \;
+          else
+            echo "No DEB package found, checking other formats..."
+            ls -la
+          fi
+      
+      - name: Upload built package
+        uses: actions/upload-artifact@v4
+        with:
+          name: trilium-arm64-linux-test
+          path: apps/desktop/out/*
