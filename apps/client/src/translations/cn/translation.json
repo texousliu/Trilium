@@ -765,7 +765,7 @@
     "table": "表格",
     "geo-map": "地理地图",
     "board": "看板",
-    "include_archived_notes": "展示存档笔记"
+    "include_archived_notes": "展示归档笔记"
   },
   "edited_notes": {
     "no_edited_notes_found": "今天还没有编辑过的笔记...",
@@ -967,7 +967,7 @@
   },
   "book": {
     "no_children_help": "此类型为书籍的笔记没有任何子笔记，因此没有内容显示。请参阅 <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> 了解详情。",
-    "drag_locked_title": "锁定以编辑",
+    "drag_locked_title": "锁定编辑",
     "drag_locked_message": "无法拖拽，因为集合已被锁定编辑。"
   },
   "editable_code": {
@@ -1457,7 +1457,7 @@
     "convert-to-attachment-confirm": "确定要将选中的笔记转换为其父笔记的附件吗？",
     "duplicate": "复制",
     "open-in-popup": "快速编辑",
-    "archive": "存档",
+    "archive": "归档",
     "unarchive": "解压"
   },
   "shared_info": {
@@ -1699,7 +1699,7 @@
     "native-title-bar": "原生标题栏",
     "native-title-bar-description": "对于 Windows 和 macOS，关闭原生标题栏可使应用程序看起来更紧凑。在 Linux 上，保留原生标题栏可以更好地与系统集成。",
     "background-effects": "启用背景效果（仅适用于 Windows 11）",
-    "background-effects-description": "Mica 效果为应用窗口添加模糊且时尚的背景，营造出深度感和现代外观。",
+    "background-effects-description": "Mica 效果为应用窗口添加模糊且时尚的背景，营造出深度感和现代外观。「原生标题栏」必須被禁用。",
     "restart-app-button": "重启应用程序以查看更改",
     "zoom-factor": "缩放系数"
   },
