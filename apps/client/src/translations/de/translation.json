@@ -592,7 +592,18 @@
     "october": "Oktober",
     "november": "November",
     "december": "Dezember",
-    "cannot_find_week_note": "Wochennotiz kann nicht gefunden werden"
+    "cannot_find_week_note": "Wochennotiz kann nicht gefunden werden",
+    "week": "Woche",
+    "week_previous": "vorherige Woche",
+    "week_next": "nächste Woche",
+    "month": "Monat",
+    "month_previous": "vorheriger Monat",
+    "month_next": "nächster Monat",
+    "year": "Jahr",
+    "year_previous": "vorheriges Jahr",
+    "year_next": "nächstes Jahr",
+    "list": "Liste",
+    "today": "Heute"
   },
   "close_pane_button": {
     "close_this_pane": "Schließe diesen Bereich"
@@ -750,7 +761,8 @@
     "book_properties": "Sammlungseigenschaften",
     "table": "Tabelle",
     "geo-map": "Weltkarte",
-    "board": "Tafel"
+    "board": "Tafel",
+    "include_archived_notes": "Zeige archivierte Notizen"
   },
   "edited_notes": {
     "no_edited_notes_found": "An diesem Tag wurden noch keine Notizen bearbeitet...",
@@ -951,7 +963,9 @@
     "no_attachments": "Diese Notiz enthält keine Anhänge."
   },
   "book": {
-    "no_children_help": "Diese Notiz mit dem Notiztyp Buch besitzt keine Unternotizen, deshalb ist nichts zum Anzeigen vorhanden. Siehe <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">Wiki</a> für mehr Details."
+    "no_children_help": "Diese Notiz mit dem Notiztyp Buch besitzt keine Unternotizen, deshalb ist nichts zum Anzeigen vorhanden. Siehe <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">Wiki</a> für mehr Details.",
+    "drag_locked_title": "Für Bearbeitung gesperrt",
+    "drag_locked_message": "Das Ziehen ist nicht möglich, da die Sammlung für die Bearbeitung gesperrt ist."
   },
   "editable_code": {
     "placeholder": "Gebe hier den Inhalt deiner Codenotiz ein..."
@@ -1406,7 +1420,9 @@
     "apply-bulk-actions": "Massenaktionen anwenden",
     "converted-to-attachments": "{{count}} Notizen wurden als Anhang konvertiert.",
     "convert-to-attachment-confirm": "Bist du sicher, dass du die ausgewählten Notizen in Anhänge ihrer übergeordneten Notizen umwandeln möchtest?",
-    "open-in-popup": "Schnellbearbeitung"
+    "open-in-popup": "Schnellbearbeitung",
+    "archive": "Archiviere",
+    "unarchive": "Entarchivieren"
   },
   "shared_info": {
     "shared_publicly": "Diese Notiz ist öffentlich geteilt auf {{- link}}.",
@@ -1647,7 +1663,7 @@
     "native-title-bar": "Native Anwendungsleiste",
     "native-title-bar-description": "In Windows und macOS, sorgt das Deaktivieren der nativen Anwendungsleiste für ein kompakteres Aussehen. Unter Linux, sorgt das Aktivieren der nativen Anwendungsleiste für eine bessere Integration mit anderen Teilen des Systems.",
     "background-effects": "Hintergrundeffekte aktivieren (nur Windows 11)",
-    "background-effects-description": "Der Mica Effekt fügt einen unscharfen, stylischen Hintergrund in Anwendungsfenstern ein. Dieser erzeugt Tiefe und ein modernes Auftreten.",
+    "background-effects-description": "Der Mica Effekt fügt einen unscharfen, stylischen Hintergrund in Anwendungsfenstern ein. Dieser erzeugt Tiefe und ein modernes Auftreten. \"Native Titelleiste\" muss deaktiviert sein.",
     "restart-app-button": "Anwendung neustarten um Änderungen anzuwenden",
     "zoom-factor": "Zoomfaktor"
   },
@@ -1986,14 +2002,21 @@
     "delete_row": "Zeile entfernen"
   },
   "board_view": {
-    "delete-note": "Lösche Notiz",
+    "delete-note": "Lösche Notiz...",
     "move-to": "Verschiebe zu",
     "insert-above": "Oberhalb einfügen",
     "insert-below": "Unterhalb einfügen",
     "delete-column": "Spalte entfernen",
     "delete-column-confirmation": "Soll die Spalte wirklich gelöscht werden? Abhängige Attribute werden auch in den Notizen unter dieser Spalte gelöscht.",
     "new-item": "Neuer Artikel",
-    "add-column": "Spalte hinzufügen"
+    "add-column": "Spalte hinzufügen",
+    "remove-from-board": "Entferne von Tafel",
+    "archive-note": "archiviere Notiz",
+    "unarchive-note": "entarchiviere Notiz",
+    "new-item-placeholder": "Notiz Titel eingeben...",
+    "add-column-placeholder": "Spaltenname eingeben...",
+    "edit-note-title": "Klicke zum Editieren des Notiz-Titels",
+    "edit-column-title": "Klicke zum Editieren des Spalten-Titels"
   },
   "command_palette": {
     "tree-action-name": "Struktur: {{name}}",
@@ -2031,5 +2054,12 @@
   },
   "units": {
     "percentage": "%"
+  },
+  "pagination": {
+    "page_title": "Seite {{startIndex}} von {{endIndex}}",
+    "total_notes": "{{count}} Notizen"
+  },
+  "collections": {
+    "rendering_error": "Aufgrund eines Fehlers können keine Inhalte angezeigt werden."
   }
 }
