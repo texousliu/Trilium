@@ -7,7 +7,7 @@ import Icon from "../../react/Icon";
 import { t } from "../../../services/i18n";
 import Api from "./api";
 import FormTextBox from "../../react/FormTextBox";
-import { createContext, JSX } from "preact";
+import { createContext, TargetedKeyboardEvent } from "preact";
 import { onWheelHorizontalScroll } from "../../widget_utils";
 import Column from "./column";
 import BoardApi from "./api";
@@ -251,7 +251,7 @@ export function TitleEditor({ currentValue, placeholder, save, dismiss, multilin
             placeholder={placeholder}
             autoComplete="trilium-title-entry" // forces the auto-fill off better than the "off" value.
             rows={multiline ? 4 : undefined}
-            onKeyDown={(e: JSX.TargetedKeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+            onKeyDown={(e: TargetedKeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
                 if (e.key === "Enter" || e.key === "Escape") {
                     e.preventDefault();
                     shouldSave.current = (e.key === "Enter");
