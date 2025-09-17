@@ -535,11 +535,8 @@ export function useStaticTooltip(elRef: RefObject<Element>, config?: Partial<Too
         const hasTooltip = config?.title || elRef.current?.getAttribute("title");
         if (!elRef?.current || !hasTooltip) return;
 
-        const $el = $(elRef.current);
-        $el.tooltip(config);
-        return () => {
-            $el.tooltip("dispose");
-        }
+        const tooltip = Tooltip.getOrCreateInstance(elRef.current, config);
+        return () => tooltip.dispose();
     }, [ elRef, config ]);
 }
 
