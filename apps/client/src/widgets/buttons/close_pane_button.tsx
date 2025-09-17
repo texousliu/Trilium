@@ -1,10 +1,10 @@
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import { t } from "../../services/i18n";
 import ActionButton from "../react/ActionButton";
 import { useNoteContext, useTriliumEvent } from "../react/hooks";
 
 export default function ClosePaneButton() {
-    const { noteContext, parentComponent } = useNoteContext();
+    const { noteContext, ntxId, parentComponent } = useNoteContext();
     const [ isEnabled, setIsEnabled ] = useState(false);
 
     function refresh() {
@@ -12,6 +12,7 @@ export default function ClosePaneButton() {
     }
 
     useTriliumEvent("noteContextReorder", refresh);
+    useEffect(refresh, [ ntxId ]);
 
     return (
         <ActionButton
