@@ -536,7 +536,12 @@ export function useStaticTooltip(elRef: RefObject<Element>, config?: Partial<Too
         if (!elRef?.current || !hasTooltip) return;
 
         const tooltip = Tooltip.getOrCreateInstance(elRef.current, config);
-        return () => tooltip.dispose();
+        return () => {
+            tooltip.dispose();
+            // workaround for https://github.com/twbs/bootstrap/issues/37474
+            (tooltip as any)._activeTrigger = {};
+            (tooltip as any)._element = document.createElement('noscript'); // placeholder with no behavior
+        }
     }, [ elRef, config ]);
 }
 
