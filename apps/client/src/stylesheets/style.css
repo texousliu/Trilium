@@ -252,10 +252,6 @@ button.close:hover {
     color: var(--main-text-color) !important;
 }
 
-.note-title[readonly] {
-    background: inherit;
-}
-
 .tdialog {
     display: none;
 }
