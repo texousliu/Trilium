@@ -228,6 +228,7 @@ export function TitleEditor({ currentValue, placeholder, save, dismiss, multilin
 }) {
     const inputRef = useRef<any>(null);
     const dismissOnNextRefreshRef = useRef(false);
+    const shouldSave = useRef(false);
 
     useEffect(() => {
         inputRef.current?.focus();
@@ -251,20 +252,14 @@ export function TitleEditor({ currentValue, placeholder, save, dismiss, multilin
             autoComplete="trilium-title-entry" // forces the auto-fill off better than the "off" value.
             rows={multiline ? 4 : undefined}
             onKeyDown={(e: JSX.TargetedKeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-                if (e.key === "Enter") {
-                    const newValue = e.currentTarget?.value;
-                    if (newValue.trim() && (newValue !== currentValue || isNewItem)) {
-                        save(newValue);
-                        dismissOnNextRefreshRef.current = true;
-                    }
-                }
-
-                if (e.key === "Escape") {
-                    dismiss();
+                if (e.key === "Enter" || e.key === "Escape") {
+                    e.preventDefault();
+                    shouldSave.current = (e.key === "Enter");
+                    e.currentTarget.blur();
                 }
             }}
             onBlur={(newValue) => {
-                if (newValue.trim() && (newValue !== currentValue || isNewItem)) {
+                if (shouldSave.current && newValue.trim() && (newValue !== currentValue || isNewItem)) {
                     save(newValue);
                     dismissOnNextRefreshRef.current = true;
                 } else {
