@@ -53,7 +53,7 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
         content: FormattingToolbar,
         stayInDom: true
     },
-    {        
+    {
         title: ({ note }) => note?.isTriliumSqlite() ? t("script_executor.query") : t("script_executor.script"),
         icon: "bx bx-play",
         content: ScriptTab,
@@ -164,22 +164,26 @@ export default function Ribbon() {
     const noteType = useNoteProperty(note, "type");
     const titleContext: TitleContext = { note };
     const [ activeTabIndex, setActiveTabIndex ] = useState<number | undefined>();
-    const filteredTabs = useMemo(
-        () => TAB_CONFIGURATION.filter(tab => typeof tab.show === "boolean" ? tab.show : tab.show?.(titleContext)),
+    const computedTabs = useMemo(
+        () => TAB_CONFIGURATION.map(tab => {
+            const shouldShow = typeof tab.show === "boolean" ? tab.show : tab.show?.(titleContext);
+            return {
+                ...tab,
+                shouldShow
+            }
+        }),
         [ titleContext, note, noteType ]);
 
     // Automatically activate the first ribbon tab that needs to be activated whenever a note changes.
     useEffect(() => {
-        const tabToActivate = filteredTabs.find(tab => typeof tab.activate === "boolean" ? tab.activate : tab.activate?.(titleContext));
-        if (tabToActivate) {
-            setActiveTabIndex(tabToActivate.index);
-        }
+        const tabToActivate = computedTabs.find(tab => tab.shouldShow && (typeof tab.activate === "boolean" ? tab.activate : tab.activate?.(titleContext)));
+        setActiveTabIndex(tabToActivate?.index);
     }, [ note?.noteId ]);
 
     // Register keyboard shortcuts.
     const eventsToListenTo = useMemo(() => TAB_CONFIGURATION.filter(config => config.toggleCommand).map(config => config.toggleCommand) as EventNames[], []);
     useTriliumEvents(eventsToListenTo, useCallback((e, toggleCommand) => {
-        const correspondingTab = filteredTabs.find(tab => tab.toggleCommand === toggleCommand);
+        const correspondingTab = computedTabs.find(tab => tab.toggleCommand === toggleCommand);
         if (correspondingTab) {
             if (activeTabIndex !== correspondingTab.index) {
                 setActiveTabIndex(correspondingTab.index);
@@ -187,7 +191,7 @@ export default function Ribbon() {
                 setActiveTabIndex(undefined);
             }
         }
-    }, [ filteredTabs, activeTabIndex ]));
+    }, [ computedTabs, activeTabIndex ]));
 
     return (
         <div className="ribbon-container" style={{ contain: "none" }}>
@@ -195,8 +199,8 @@ export default function Ribbon() {
                 <>
                     <div className="ribbon-top-row">
                         <div className="ribbon-tab-container">
-                            {filteredTabs.map(({ title, icon, index, toggleCommand }) => (
-                                <RibbonTab
+                            {computedTabs.map(({ title, icon, index, toggleCommand, shouldShow }) => (
+                                shouldShow && <RibbonTab
                                     icon={icon}
                                     title={typeof title === "string" ? title : title(titleContext)}
                                     active={index === activeTabIndex}
@@ -216,9 +220,9 @@ export default function Ribbon() {
                             { note && <NoteActions note={note} noteContext={noteContext} /> }
                         </div>
                     </div>
-                
-                    <div className="ribbon-body-container">                        
-                        {filteredTabs.map(tab => {
+
+                    <div className="ribbon-body-container">
+                        {computedTabs.map(tab => {
                             const isActive = tab.index === activeTabIndex;
                             if (!isActive && !tab.stayInDom) {
                                 return;
