@@ -13,6 +13,8 @@ export { default as buildExtraCommands } from "./extra_slash_commands.js";
 import "@triliumnext/ckeditor5-math";
 import "@triliumnext/ckeditor5-mermaid";
 
+window[Symbol.for("cke distribution")] = "trilium";
+
 /**
  * Short-hand for the CKEditor classes supported by Trilium for text editing.
  * Specialized editors such as the {@link AttributeEditor} are not included.
