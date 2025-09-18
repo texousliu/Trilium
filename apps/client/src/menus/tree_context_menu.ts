@@ -76,27 +76,29 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
         const insertNoteAfterEnabled = isNotRoot && !isHoisted && parentNotSearch;
 
         const items: (MenuItem<TreeCommandNames> | null)[] = [
-            { title: `${t("tree-context-menu.open-in-a-new-tab")}`, command: "openInTab", uiIcon: "bx bx-link-external", enabled: noSelectedNotes },
+            { title: t("tree-context-menu.open-in-a-new-tab"), command: "openInTab", shortcut: "Ctrl+Click", uiIcon: "bx bx-link-external", enabled: noSelectedNotes },
             { title: t("tree-context-menu.open-in-a-new-split"), command: "openNoteInSplit", uiIcon: "bx bx-dock-right", enabled: noSelectedNotes },
             { title: t("tree-context-menu.open-in-popup"), command: "openNoteInPopup", uiIcon: "bx bx-edit", enabled: noSelectedNotes },
 
             isHoisted
                 ? null
                 : {
-                      title: `${t("tree-context-menu.hoist-note")} <kbd data-command="toggleNoteHoisting"></kbd>`,
+                      title: `${t("tree-context-menu.hoist-note")}`,
                       command: "toggleNoteHoisting",
+                      keyboardShortcut: "toggleNoteHoisting",
                       uiIcon: "bx bxs-chevrons-up",
                       enabled: noSelectedNotes && notSearch
                   },
             !isHoisted || !isNotRoot
                 ? null
-                : { title: `${t("tree-context-menu.unhoist-note")} <kbd data-command="toggleNoteHoisting"></kbd>`, command: "toggleNoteHoisting", uiIcon: "bx bx-door-open" },
+                : { title: t("tree-context-menu.unhoist-note"), command: "toggleNoteHoisting", keyboardShortcut: "toggleNoteHoisting", uiIcon: "bx bx-door-open" },
 
             { title: "----" },
 
             {
-                title: `${t("tree-context-menu.insert-note-after")}<kbd data-command="createNoteAfter"></kbd>`,
+                title: t("tree-context-menu.insert-note-after"),
                 command: "insertNoteAfter",
+                keyboardShortcut: "createNoteAfter",
                 uiIcon: "bx bx-plus",
                 items: insertNoteAfterEnabled ? await noteTypesService.getNoteTypeItems("insertNoteAfter") : null,
                 enabled: insertNoteAfterEnabled && noSelectedNotes && notOptionsOrHelp,
@@ -104,8 +106,9 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
             },
 
             {
-                title: `${t("tree-context-menu.insert-child-note")}<kbd data-command="createNoteInto"></kbd>`,
+                title: t("tree-context-menu.insert-child-note"),
                 command: "insertChildNote",
+                keyboardShortcut: "createNoteInto",
                 uiIcon: "bx bx-plus",
                 items: notSearch ? await noteTypesService.getNoteTypeItems("insertChildNote") : null,
                 enabled: notSearch && noSelectedNotes && notOptionsOrHelp,
@@ -130,8 +133,9 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                     { title: "----" },
 
                     {
-                        title: `${t("tree-context-menu.edit-branch-prefix")} <kbd data-command="editBranchPrefix"></kbd>`,
+                        title: t("tree-context-menu.edit-branch-prefix"),
                         command: "editBranchPrefix",
+                        keyboardShortcut: "editBranchPrefix",
                         uiIcon: "bx bx-rename",
                         enabled: isNotRoot && parentNotSearch && noSelectedNotes && notOptionsOrHelp
                     },
@@ -139,11 +143,12 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
 
                     { title: "----" },
 
-                    { title: `${t("tree-context-menu.expand-subtree")} <kbd data-command="expandSubtree"></kbd>`, command: "expandSubtree", uiIcon: "bx bx-expand", enabled: noSelectedNotes },
-                    { title: `${t("tree-context-menu.collapse-subtree")} <kbd data-command="collapseSubtree"></kbd>`, command: "collapseSubtree", uiIcon: "bx bx-collapse", enabled: noSelectedNotes },
+                    { title: t("tree-context-menu.expand-subtree"), command: "expandSubtree", keyboardShortcut: "expandSubtree", uiIcon: "bx bx-expand", enabled: noSelectedNotes },
+                    { title: t("tree-context-menu.collapse-subtree"), command: "collapseSubtree", keyboardShortcut: "collapseSubtree", uiIcon: "bx bx-collapse", enabled: noSelectedNotes },
                     {
-                        title: `${t("tree-context-menu.sort-by")} <kbd data-command="sortChildNotes"></kbd>`,
+                        title: t("tree-context-menu.sort-by"),
                         command: "sortChildNotes",
+                        keyboardShortcut: "sortChildNotes",
                         uiIcon: "bx bx-sort-down",
                         enabled: noSelectedNotes && notSearch
                     },
@@ -158,17 +163,19 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
             { title: "----" },
 
             {
-                title: `${t("tree-context-menu.cut")} <kbd data-command="cutNotesToClipboard"></kbd>`,
+                title: t("tree-context-menu.cut"),
                 command: "cutNotesToClipboard",
+                keyboardShortcut: "cutNotesToClipboard",
                 uiIcon: "bx bx-cut",
                 enabled: isNotRoot && !isHoisted && parentNotSearch
             },
 
-            { title: `${t("tree-context-menu.copy-clone")} <kbd data-command="copyNotesToClipboard"></kbd>`, command: "copyNotesToClipboard", uiIcon: "bx bx-copy", enabled: isNotRoot && !isHoisted },
+            { title: t("tree-context-menu.copy-clone"), command: "copyNotesToClipboard", keyboardShortcut: "copyNotesToClipboard", uiIcon: "bx bx-copy", enabled: isNotRoot && !isHoisted },
 
             {
-                title: `${t("tree-context-menu.paste-into")} <kbd data-command="pasteNotesFromClipboard"></kbd>`,
+                title: t("tree-context-menu.paste-into"),
                 command: "pasteNotesFromClipboard",
+                keyboardShortcut: "pasteNotesFromClipboard",
                 uiIcon: "bx bx-paste",
                 enabled: !clipboard.isClipboardEmpty() && notSearch && noSelectedNotes
             },
@@ -181,17 +188,19 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
             },
 
             {
-                title: `${t("tree-context-menu.move-to")} <kbd data-command="moveNotesTo"></kbd>`,
+                title: t("tree-context-menu.move-to"),
                 command: "moveNotesTo",
+                keyboardShortcut: "moveNotesTo",
                 uiIcon: "bx bx-transfer",
                 enabled: isNotRoot && !isHoisted && parentNotSearch
             },
 
-            { title: `${t("tree-context-menu.clone-to")} <kbd data-command="cloneNotesTo"></kbd>`, command: "cloneNotesTo", uiIcon: "bx bx-duplicate", enabled: isNotRoot && !isHoisted },
+            { title: t("tree-context-menu.clone-to"), command: "cloneNotesTo", keyboardShortcut: "cloneNotesTo", uiIcon: "bx bx-duplicate", enabled: isNotRoot && !isHoisted },
 
             {
-                title: `${t("tree-context-menu.duplicate")} <kbd data-command="duplicateSubtree">`,
+                title: t("tree-context-menu.duplicate"),
                 command: "duplicateSubtree",
+                keyboardShortcut: "duplicateSubtree",
                 uiIcon: "bx bx-outline",
                 enabled: parentNotSearch && isNotRoot && !isHoisted && notOptionsOrHelp
             },
@@ -225,8 +234,9 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 }
             },
             {
-                title: `${t("tree-context-menu.delete")} <kbd data-command="deleteNotes"></kbd>`,
+                title: t("tree-context-menu.delete"),
                 command: "deleteNotes",
+                keyboardShortcut: "deleteNotes",
                 uiIcon: "bx bx-trash destructive-action-icon",
                 enabled: isNotRoot && !isHoisted && parentNotSearch && notOptionsOrHelp
             },
@@ -240,8 +250,9 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
             { title: "----" },
 
             {
-                title: `${t("tree-context-menu.search-in-subtree")} <kbd data-command="searchInSubtree"></kbd>`,
+                title: t("tree-context-menu.search-in-subtree"),
                 command: "searchInSubtree",
+                keyboardShortcut: "searchInSubtree",
                 uiIcon: "bx bx-search",
                 enabled: notSearch && noSelectedNotes
             }

@@ -365,7 +365,7 @@
   },
   "tree-context-menu": {
     "advanced": "高度",
-    "open-in-a-new-tab": "新しいタブで開く <kbd>Ctrl+Click</kbd>",
+    "open-in-a-new-tab": "新しいタブで開く",
     "open-in-a-new-split": "新しく分割して開く",
     "insert-note-after": "ノートを後ろに挿入",
     "insert-child-note": "子ノートを挿入",

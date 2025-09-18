@@ -1897,7 +1897,7 @@
     "button-tree-map": "Карта дерева"
   },
   "tree-context-menu": {
-    "open-in-a-new-tab": "Відкрити в новій вкладці <kbd>Ctrl+Клік</kbd>",
+    "open-in-a-new-tab": "Відкрити в новій вкладці",
     "open-in-a-new-split": "Відкрити в новому розділі",
     "insert-note-after": "Вставити нотатку після",
     "insert-child-note": "Вставити дочірню нотатку",

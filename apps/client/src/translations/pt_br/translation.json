@@ -744,7 +744,7 @@
     "button-tree-map": "Mapa em Árvore"
   },
   "tree-context-menu": {
-    "open-in-a-new-tab": "Abrir em uma nova aba <kbd>Ctrl+Click</kbd>",
+    "open-in-a-new-tab": "Abrir em uma nova aba",
     "open-in-a-new-split": "Abrir em um novo painel dividido",
     "insert-note-after": "Inserir nota após",
     "insert-child-note": "Inserir nota filha",
