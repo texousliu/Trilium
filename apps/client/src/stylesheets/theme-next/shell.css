@@ -223,7 +223,7 @@ body.layout-horizontal > .horizontal {
 }
 
 #launcher-pane .launcher-button:focus,
-#launcher-pane .global-menu button:focus {
+#launcher-pane .global-menu :focus {
     outline: none;
 }
 
