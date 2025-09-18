@@ -16,12 +16,13 @@ export interface DropdownProps {
     /** If set to true, then the dropdown button will be considered an icon action (without normal border and sized for icons only). */
     iconAction?: boolean;
     noSelectButtonStyle?: boolean;
+    noDropdownListStyle?: boolean;
     disabled?: boolean;
     text?: ComponentChildren;
     forceShown?: boolean;
 }
 
-export default function Dropdown({ className, buttonClassName, isStatic, children, title, text, dropdownContainerStyle, dropdownContainerClassName, hideToggleArrow, iconAction, disabled, noSelectButtonStyle, forceShown }: DropdownProps) {
+export default function Dropdown({ className, buttonClassName, isStatic, children, title, text, dropdownContainerStyle, dropdownContainerClassName, hideToggleArrow, iconAction, disabled, noSelectButtonStyle, noDropdownListStyle, forceShown }: DropdownProps) {
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement | null>(null);
 
@@ -29,7 +30,7 @@ export default function Dropdown({ className, buttonClassName, isStatic, childre
 
     useEffect(() => {
         if (!triggerRef.current) return;
-        
+
         const dropdown = BootstrapDropdown.getOrCreateInstance(triggerRef.current);
         if (forceShown) {
             dropdown.show();
@@ -48,11 +49,11 @@ export default function Dropdown({ className, buttonClassName, isStatic, childre
 
     useEffect(() => {
         if (!dropdownRef.current) return;
-        
+
         const $dropdown = $(dropdownRef.current);
         $dropdown.on("show.bs.dropdown", onShown);
         $dropdown.on("hide.bs.dropdown", onHidden);
-        
+
         // Add proper cleanup
         return () => {
             $dropdown.off("show.bs.dropdown", onShown);
@@ -81,7 +82,7 @@ export default function Dropdown({ className, buttonClassName, isStatic, childre
             </button>
 
             <ul
-                class={`dropdown-menu ${isStatic ? "static" : ""} ${dropdownContainerClassName ?? ""} tn-dropdown-list`}
+                class={`dropdown-menu ${isStatic ? "static" : ""} ${dropdownContainerClassName ?? ""} ${!noDropdownListStyle ? "tn-dropdown-list" : ""}`}
                 style={dropdownContainerStyle}
                 aria-labelledby={ariaId}
             >

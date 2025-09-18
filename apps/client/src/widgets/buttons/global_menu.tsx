@@ -34,9 +34,10 @@ export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout:
             text={<>
                 {isVerticalLayout && <VerticalLayoutIcon />}
                 {isUpdateAvailable && <div class="global-menu-button-update-available">
-                    <span className="bx bx-sync global-menu-button-update-available-button" title={t("update_available.update_available")}></span>    
+                    <span className="bx bx-sync global-menu-button-update-available-button" title={t("update_available.update_available")}></span>
                 </div>}
             </>}
+            noDropdownListStyle
         >
 
             <MenuItem command="openNewWindow" icon="bx bx-window-open" text={t("global_menu.open_new_window")} />
@@ -47,8 +48,8 @@ export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout:
             <ToggleWindowOnTop />
             <KeyboardActionMenuItem command="toggleZenMode" icon="bx bxs-yin-yang" text={t("global_menu.toggle-zen-mode")} />
             <FormDropdownDivider />
-            
-            <SwitchToOptions />        
+
+            <SwitchToOptions />
             <MenuItem command="showLaunchBarSubtree" icon={`bx ${isMobile() ? "bx-mobile" : "bx-sidebar"}`} text={t("global_menu.configure_launchbar")} />
             <AdvancedMenu />
             <MenuItem command="showOptions" icon="bx bx-cog" text={t("global_menu.options")} />
@@ -117,7 +118,7 @@ function KeyboardActionMenuItem({ text, command, ...props }: MenuItemProps<Keybo
     />
 }
 
-function VerticalLayoutIcon() {    
+function VerticalLayoutIcon() {
     const logoRef = useRef<SVGSVGElement>(null);
     useStaticTooltip(logoRef);
 
@@ -140,7 +141,7 @@ function VerticalLayoutIcon() {
     )
 }
 
-function ZoomControls({ parentComponent }: { parentComponent?: Component | null }) {   
+function ZoomControls({ parentComponent }: { parentComponent?: Component | null }) {
     const [ zoomLevel, setZoomLevel ] = useState(100);
 
     function updateZoomState() {
@@ -169,7 +170,7 @@ function ZoomControls({ parentComponent }: { parentComponent?: Component | null 
             >{children}</a>
         )
     }
-    
+
     return isElectron() ? (
         <FormListItem
             icon="bx bx-empty"
@@ -199,7 +200,7 @@ function ToggleWindowOnTop() {
         <MenuItem
             icon="bx bx-pin"
             text={t("title_bar_buttons.window-on-top")}
-            active={isAlwaysOnTop}            
+            active={isAlwaysOnTop}
             command={() => {
                 const newState = !isAlwaysOnTop;
                 focusedWindow?.setAlwaysOnTop(newState);
@@ -213,8 +214,8 @@ function useTriliumUpdateStatus() {
     const [ latestVersion, setLatestVersion ] = useState<string>();
     const [ checkForUpdates ] = useTriliumOptionBool("checkForUpdates");
     const isUpdateAvailable = utils.isUpdateAvailable(latestVersion, glob.triliumVersion);
-    
-    async function updateVersionStatus() {    
+
+    async function updateVersionStatus() {
         const RELEASES_API_URL = "https://api.github.com/repos/TriliumNext/Trilium/releases/latest";
 
         const resp = await fetch(RELEASES_API_URL);
