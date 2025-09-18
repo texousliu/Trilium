@@ -433,6 +433,9 @@ export default class TabManager extends Component {
                 $autocompleteEl.autocomplete("close");
             }
 
+            // close dangling tooltips
+            $("body > div.tooltip").remove();
+
             const noteContextsToRemove = noteContextToRemove.getSubContexts();
             const ntxIdsToRemove = noteContextsToRemove.map((nc) => nc.ntxId);
 
