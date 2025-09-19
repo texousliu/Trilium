@@ -76,21 +76,6 @@ const typeWidgetClasses = {
     mermaid: MermaidTypeWidget
 };
 
-/**
- * A `NoteType` altered by the note detail widget, taking into consideration whether the note is editable or not and adding special note types such as an empty one,
- * for protected session or attachment information.
- */
-type ExtendedNoteType =
-    | Exclude<NoteType, "launcher" | "text" | "code">
-    | "empty"
-    | "readOnlyCode"
-    | "readOnlyText"
-    | "editableText"
-    | "editableCode"
-    | "attachmentDetail"
-    | "attachmentList"
-    | "protectedSession"
-    | "aiChat";
 
 export default class NoteDetailWidget extends NoteContextAwareWidget {
 
@@ -211,40 +196,7 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
         return this.typeWidgets[this.type];
     }
 
-    async getWidgetType(): Promise<ExtendedNoteType> {
-        const note = this.note;
-        if (!note) {
-            return "empty";
-        }
 
-        const type = note.type;
-        let resultingType: ExtendedNoteType;
-        const viewScope = this.noteContext?.viewScope;
-
-        if (viewScope?.viewMode === "source") {
-            resultingType = "readOnlyCode";
-        } else if (viewScope && viewScope.viewMode === "attachments") {
-            resultingType = viewScope.attachmentId ? "attachmentDetail" : "attachmentList";
-        } else if (type === "text" && (await this.noteContext?.isReadOnly())) {
-            resultingType = "readOnlyText";
-        } else if ((type === "code" || type === "mermaid") && (await this.noteContext?.isReadOnly())) {
-            resultingType = "readOnlyCode";
-        } else if (type === "text") {
-            resultingType = "editableText";
-        } else if (type === "code") {
-            resultingType = "editableCode";
-        } else if (type === "launcher") {
-            resultingType = "doc";
-        } else {
-            resultingType = type;
-        }
-
-        if (note.isProtected && !protectedSessionHolder.isProtectedSessionAvailable()) {
-            resultingType = "protectedSession";
-        }
-
-        return resultingType;
-    }
 
     async focusOnDetailEvent({ ntxId }: EventData<"focusOnDetail">) {
         if (this.noteContext?.ntxId !== ntxId) {
