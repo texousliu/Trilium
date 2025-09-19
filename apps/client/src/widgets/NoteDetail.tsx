@@ -6,6 +6,8 @@ import { useEffect, useState } from "preact/hooks";
 import NoteContext from "../components/note_context";
 import Empty from "./type_widgets/Empty";
 import { VNode } from "preact";
+import Doc from "./type_widgets/Doc";
+import { TypeWidgetProps } from "./type_widgets/type_widget";
 
 /**
  * A `NoteType` altered by the note detail widget, taking into consideration whether the note is editable or not and adding special note types such as an empty one,
@@ -18,9 +20,15 @@ type ExtendedNoteType = Exclude<NoteType, "launcher" | "text" | "code"> | "empty
  */
 export default function NoteDetail() {
     const { note, type } = useNoteInfo();
+    const { viewScope, ntxId } = useNoteContext();
     const [ correspondingWidget, setCorrespondingWidget ] = useState<VNode>();
 
-    useEffect(() => setCorrespondingWidget(getCorrespondingWidget(type)), [ type ]);
+    const props: TypeWidgetProps = {
+        note: note!,
+        viewScope,
+        ntxId
+    };
+    useEffect(() => setCorrespondingWidget(getCorrespondingWidget(type, props)), [ note, viewScope, type ]);
 
     return (
         <div>
@@ -45,10 +53,12 @@ function useNoteInfo() {
     return { note, type };
 }
 
-function getCorrespondingWidget(noteType: ExtendedNoteType | undefined) {
+function getCorrespondingWidget(noteType: ExtendedNoteType | undefined, props: TypeWidgetProps) {
     switch (noteType) {
         case "empty":
             return <Empty />
+        case "doc":
+            return <Doc {...props} />
         default:
             break;
     }
