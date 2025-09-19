@@ -378,6 +378,7 @@ button kbd {
 body.desktop .dropdown-menu,
 body.desktop .tabulator-popup-container {
     border: 1px solid var(--dropdown-border-color);
+    column-rule: 1px solid var(--dropdown-border-color);
     box-shadow: 0px 10px 20px rgba(0, 0, 0, var(--dropdown-shadow-opacity));
     animation: dropdown-menu-opening 100ms ease-in;
 }
@@ -464,6 +465,11 @@ body #context-menu-container .dropdown-item > span {
 .dropdown-header {
     color: var(--menu-text-color) !important;
     border: 1px solid transparent !important;
+}
+
+.dropdown-header {
+    break-after: avoid;
+    break-inside: avoid;
 }
 
 .dropdown-item.disabled,
