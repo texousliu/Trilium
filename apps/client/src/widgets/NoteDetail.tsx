@@ -59,6 +59,8 @@ function getCorrespondingWidget(noteType: ExtendedNoteType | undefined, props: T
             return <Empty />
         case "doc":
             return <Doc {...props} />
+        case "search":
+            return <div className="note-detail-none note-detail-printable" />
         default:
             break;
     }
