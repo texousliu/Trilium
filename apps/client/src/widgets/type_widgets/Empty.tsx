@@ -1,17 +1,18 @@
-import { useEffect, useRef } from "preact/hooks";
+import { useCallback, useContext, useEffect, useRef, useState } from "preact/hooks";
 import { t } from "../../services/i18n";
 import FormGroup from "../react/FormGroup";
 import NoteAutocomplete from "../react/NoteAutocomplete";
 import "./Empty.css";
-import { refToJQuerySelector } from "../react/react_utils";
+import { ParentComponent, refToJQuerySelector } from "../react/react_utils";
 import note_autocomplete from "../../services/note_autocomplete";
 import appContext from "../../components/app_context";
+import FNote from "../../entities/fnote";
+import search from "../../services/search";
 
 export default function Empty() {
     return (
         <div class="note-detail-empty note-detail-printable">
-            <div class="workspace-notes"></div>
-
+            <WorkspaceSwitcher />
             <NoteSearch />
         </div>
     )
@@ -53,5 +54,31 @@ function NoteSearch() {
             </FormGroup>
             <div ref={resultsContainerRef} className="note-detail-empty-results" />
         </>
+    );
+}
+
+function WorkspaceSwitcher() {
+    const [ workspaceNotes, setWorkspaceNotes ] = useState<FNote[]>();
+    const parentComponent = useContext(ParentComponent);
+
+    function refresh() {
+        search.searchForNotes("#workspace #!template").then(setWorkspaceNotes);
+    }
+
+    useEffect(refresh, []);
+
+    return (
+        <div class="workspace-notes">
+            {workspaceNotes?.map(workspaceNote => (
+                <div
+                    className="workspace-note"
+                    title={t("empty.enter_workspace", { title: workspaceNote.title })}
+                    onClick={() => parentComponent?.triggerCommand("hoistNote", { noteId: workspaceNote.noteId })}
+                >
+                    <div className={`${workspaceNote.getIcon()} workspace-icon`} />
+                    <div>{workspaceNote.title}</div>
+                </div>
+            ))}
+        </div>
     );
 }
