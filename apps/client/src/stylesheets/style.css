@@ -444,9 +444,11 @@ body #context-menu-container .dropdown-item > span {
     align-items: center;
 }
 
-.dropdown-item span.keyboard-shortcut {
+.dropdown-item span.keyboard-shortcut,
+.dropdown-item *:not(.keyboard-shortcut) > kbd {
     flex-grow: 1;
     text-align: right;
+    padding-inline-start: 12px;
 }
 
 .dropdown-menu kbd {    
@@ -456,8 +458,6 @@ body #context-menu-container .dropdown-item > span {
     box-shadow: none;
     padding-bottom: 0;
     padding: 0;
-    flex-grow: 1;
-    text-align: right;
 }
 
 .dropdown-item,
