@@ -13,6 +13,7 @@ import Book from "./type_widgets/Book";
 import ContentWidget from "./type_widgets/ContentWidget";
 import WebView from "./type_widgets/WebView";
 import "./NoteDetail.css";
+import File from "./type_widgets/File";
 
 /**
  * A `NoteType` altered by the note detail widget, taking into consideration whether the note is editable or not and adding special note types such as an empty one,
@@ -68,6 +69,7 @@ function getCorrespondingWidget(noteType: ExtendedNoteType | undefined, props: T
         case "book": return <Book {...props} />
         case "contentWidget": return <ContentWidget {...props} />
         case "webView": return <WebView {...props} />
+        case "file": return <File {...props} />
         default: break;
     }
 }
