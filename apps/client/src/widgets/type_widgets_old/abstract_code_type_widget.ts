@@ -5,7 +5,6 @@ import TypeWidget from "./type_widget.js";
 import CodeMirror, { type EditorConfig } from "@triliumnext/codemirror";
 import type { EventData } from "../../components/app_context.js";
 
-export const DEFAULT_PREFIX = "default:";
 
 /**
  * An abstract {@link TypeWidget} which implements the CodeMirror editor, meant to be used as a parent for
