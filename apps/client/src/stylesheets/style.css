@@ -472,6 +472,10 @@ body #context-menu-container .dropdown-item > span {
     break-inside: avoid;
 }
 
+.dropdown-no-break {
+    break-inside: avoid;
+}
+
 .dropdown-item.disabled,
 .dropdown-item.disabled kbd {
     color: #aaa !important;

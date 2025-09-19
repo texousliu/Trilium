@@ -156,15 +156,32 @@ class ContextMenu {
     }
 
     addItems($parent: JQuery<HTMLElement>, items: MenuItem<any>[]) {
-        for (const item of items) {
+        let $group = $parent;
+        let shouldResetGroup = false; // If true, the next item will be the last one from the group
+
+        for (let index = 0; index < items.length; index++) {
+            const item = items[index];
             if (!item) {
                 continue;
             }
 
+            // If the next item is a separator or header, create a new group to avoid column breaks
+            // before and after the seaparator/header.
+            // This is a workaround for Firefox not supporting break-after: avoid on columns.
+            const nextItem = (index < items.length - 1) ? items[index + 1] : null;
+            if (!shouldResetGroup && nextItem && "kind" in nextItem) {
+                if (nextItem.kind === "separator" || nextItem.kind === "header") {
+                    $group = $("<div class='dropdown-no-break'>");
+                    $parent.append($group);
+                }
+            }
+
             if ("kind" in item && item.kind === "separator") {
-                $parent.append($("<div>").addClass("dropdown-divider"));
+                $group.append($("<div>").addClass("dropdown-divider"));
+                shouldResetGroup = true;
             } else if ("kind" in item && item.kind === "header") {
-                $parent.append($("<h6>").addClass("dropdown-header").text(item.title));
+                $group.append($("<h6>").addClass("dropdown-header").text(item.title));
+                shouldResetGroup = true;
             } else {
                 const $icon = $("<span>");
 
@@ -275,7 +292,14 @@ class ContextMenu {
                     $item.append($subMenu);
                 }
 
-                $parent.append($item);
+                $group.append($item);
+                
+                // After adding a menu item, if the previous item was a separator or header,
+                // reset the group so that the next item will be appended directly to the parent.
+                if (shouldResetGroup) {
+                    $group = $parent;
+                    shouldResetGroup = false;
+                };
             }
         }
     }
