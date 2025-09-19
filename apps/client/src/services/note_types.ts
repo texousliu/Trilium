@@ -157,9 +157,8 @@ async function getBuiltInTemplates(title: string | null, command: TreeCommandNam
     const items: MenuItem<TreeCommandNames>[] = [];
     if (title) {
         items.push({
-            title: title,
-            enabled: false,
-            uiIcon: "bx bx-empty"
+            title: "title",
+            kind: "header"
         });
     } else {
         items.push(SEPARATOR);

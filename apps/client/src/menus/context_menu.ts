@@ -18,6 +18,11 @@ interface MenuSeparatorItem {
     title: "----";
 }
 
+interface MenuHeader {
+    title: string;
+    kind: "header";
+}
+
 export interface MenuItemBadge {
     title: string;
     className?: string;
@@ -45,7 +50,7 @@ export interface MenuCommandItem<T> {
     columns?: number;
 }
 
-export type MenuItem<T> = MenuCommandItem<T> | MenuSeparatorItem;
+export type MenuItem<T> = MenuCommandItem<T> | MenuSeparatorItem | MenuHeader;
 export type MenuHandler<T> = (item: MenuCommandItem<T>, e: JQuery.MouseDownEvent<HTMLElement, undefined, HTMLElement, HTMLElement>) => void;
 export type ContextMenuEvent = PointerEvent | MouseEvent | JQuery.ContextMenuEvent;
 
@@ -158,6 +163,8 @@ class ContextMenu {
 
             if (item.title === "----") {
                 $parent.append($("<div>").addClass("dropdown-divider"));
+            } else if ("kind" in item && item.kind === "header") {
+                $parent.append($("<h6>").addClass("dropdown-header").text(item.title));
             } else {
                 const $icon = $("<span>");
 
