@@ -7,6 +7,8 @@ import type { Theme } from "@excalidraw/excalidraw/element/types";
 import type Canvas from "./canvas_el.js";
 import { CanvasContent } from "./canvas_el.js";
 import { renderReactWidget } from "../react/react_utils.jsx";
+import SpacedUpdate from "../../services/spaced_update.js";
+import protected_session_holder from "../../services/protected_session_holder.js";
 
 const TPL = /*html*/`
     <div class="canvas-widget note-detail-canvas note-detail-printable note-detail">
@@ -128,6 +130,25 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         //every libraryitem is saved on its own json file in the attachments of the note.
         this.librarycache = [];
         this.attachmentMetadata = [];
+
+        // TODO: We are duplicating the logic of note_detail.ts because it switches note ID mid-save, causing overwrites.
+        // This problem will get solved by itself once type widgets will be rewritten in React without the use of dangerous singletons.
+        this.spacedUpdate = new SpacedUpdate(async () => {
+            if (!this.noteContext) return;
+
+            const { note } = this.noteContext;
+            if (!note) return;
+
+            const { noteId } = note;
+            const data = await this.getData();
+
+            // for read only notes
+            if (data === undefined) return;
+
+            protected_session_holder.touchProtectedSessionIfNecessary(note);
+            await server.put(`notes/${noteId}/data`, data, this.componentId);
+            this.dataSaved();
+        });
     }
 
     static getType() {
