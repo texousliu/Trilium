@@ -81,8 +81,8 @@ let rootCreationDate: Date | undefined;
 async function getNoteTypeItems(command?: TreeCommandNames) {
     const items: MenuItem<TreeCommandNames>[] = [
         ...getBlankNoteTypes(command),
-        ...await getBuiltInTemplates(t("note_types.collections"), command, true),
         ...await getBuiltInTemplates(null, command, false),
+        ...await getBuiltInTemplates(t("note_types.collections"), command, true),
         ...await getUserTemplates(command)
     ];
 
@@ -121,7 +121,10 @@ async function getUserTemplates(command?: TreeCommandNames) {
     }
 
     const items: MenuItem<TreeCommandNames>[] = [
-        SEPARATOR
+        {
+            title: t("note_type_chooser.templates"),
+            kind: "header"
+        }
     ];
 
     for (const templateNote of templateNotes) {
