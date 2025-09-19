@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { createImageSrcUrl } from "../../services/utils";
-import { useTriliumEvent, useUniqueName } from "../react/hooks";
+import { useNoteBlob, useTriliumEvent, useUniqueName } from "../react/hooks";
 import "./Image.css";
 import { TypeWidgetProps } from "./type_widget";
 import WheelZoom from 'vanilla-js-wheel-zoom';
@@ -11,6 +11,7 @@ import { copyImageReferenceToClipboard } from "../../services/image";
 export default function Image({ note, ntxId }: TypeWidgetProps) {
     const uniqueId = useUniqueName("image");
     const containerRef = useRef<HTMLDivElement>(null);
+    const [ refreshCounter, setRefreshCounter ] = useState(0);
 
     // Set up pan & zoom
     useEffect(() => {
@@ -30,6 +31,13 @@ export default function Image({ note, ntxId }: TypeWidgetProps) {
     useTriliumEvent("copyImageReferenceToClipboard", ({ ntxId: eventNtxId }) => {
         if (eventNtxId !== ntxId) return;
         copyImageReferenceToClipboard(refToJQuerySelector(containerRef));
+    });
+
+    // React to new revisions.
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        if (loadResults.isNoteReloaded(note.noteId)) {
+            setRefreshCounter(refreshCounter + 1);
+        }
     });
 
     return (
