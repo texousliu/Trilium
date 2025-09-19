@@ -4,6 +4,8 @@ import FNote from "../entities/fnote";
 import protected_session_holder from "../services/protected_session_holder";
 import { useEffect, useState } from "preact/hooks";
 import NoteContext from "../components/note_context";
+import Empty from "./type_widgets/Empty";
+import { VNode } from "preact";
 
 /**
  * A `NoteType` altered by the note detail widget, taking into consideration whether the note is editable or not and adding special note types such as an empty one,
@@ -16,8 +18,15 @@ type ExtendedNoteType = Exclude<NoteType, "launcher" | "text" | "code"> | "empty
  */
 export default function NoteDetail() {
     const { note, type } = useNoteInfo();
+    const [ correspondingWidget, setCorrespondingWidget ] = useState<VNode>();
 
-    return <p>Note detail goes here! {note?.title} of {type}</p>
+    useEffect(() => setCorrespondingWidget(getCorrespondingWidget(type)), [ type ]);
+
+    return (
+        <div>
+            {correspondingWidget || <p>Note detail goes here! {note?.title} of {type}</p>}
+        </div>
+    );
 }
 
 /** Manages both note changes and changes to the widget type, which are asynchronous. */
@@ -34,6 +43,15 @@ function useNoteInfo() {
     }, [ actualNote, noteContext ]);
 
     return { note, type };
+}
+
+function getCorrespondingWidget(noteType: ExtendedNoteType | undefined) {
+    switch (noteType) {
+        case "empty":
+            return <Empty />
+        default:
+            break;
+    }
 }
 
 async function getWidgetType(note: FNote | null | undefined, noteContext: NoteContext | undefined): Promise<ExtendedNoteType> {
