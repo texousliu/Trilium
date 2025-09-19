@@ -11,6 +11,9 @@ import NoteContext from "../components/note_context";
  */
 type ExtendedNoteType = Exclude<NoteType, "launcher" | "text" | "code"> | "empty" | "readOnlyCode" | "readOnlyText" | "editableText" | "editableCode" | "attachmentDetail" | "attachmentList" |  "protectedSession" | "aiChat";
 
+/**
+ * The note detail is in charge of rendering the content of a note, by determining its type (e.g. text, code) and using the appropriate view widget.
+ */
 export default function NoteDetail() {
     const { note, type } = useNoteInfo();
 

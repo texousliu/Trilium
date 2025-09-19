@@ -18,8 +18,8 @@ import sync from "../../services/sync";
 import HelpButton from "../react/HelpButton";
 import { TabContext } from "./ribbon-interface";
 import Modal from "../react/Modal";
-import { CodeMimeTypesList } from "../type_widgets/options/code_notes";
-import { ContentLanguagesList } from "../type_widgets/options/i18n";
+import { CodeMimeTypesList } from "../type_widgets_old/options/code_notes";
+import { ContentLanguagesList } from "../type_widgets_old/options/i18n";
 
 export default function BasicPropertiesTab({ note }: TabContext) {
     return (

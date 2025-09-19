@@ -8,7 +8,7 @@ import Button from "../react/Button";
 import { Suggestion, triggerRecentNotes } from "../../services/note_autocomplete";
 import tree from "../../services/tree";
 import froca from "../../services/froca";
-import EditableTextTypeWidget, { type BoxSize } from "../type_widgets/editable_text";
+import EditableTextTypeWidget, { type BoxSize } from "../type_widgets_old/editable_text";
 import { useTriliumEvent } from "../react/hooks";
 
 export default function IncludeNoteDialog() {

@@ -6,7 +6,7 @@ import NoteAutocomplete from "../react/NoteAutocomplete";
 import { useRef, useState, useEffect } from "preact/hooks";
 import tree from "../../services/tree";
 import note_autocomplete, { Suggestion } from "../../services/note_autocomplete";
-import { default as TextTypeWidget } from "../type_widgets/editable_text.js";
+import { default as TextTypeWidget } from "../type_widgets_old/editable_text.js";
 import { logError } from "../../services/ws";
 import FormGroup from "../react/FormGroup.js";
 import { refToJQuerySelector } from "../react/react_utils";
