@@ -357,6 +357,9 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         if (options.is("databaseReadonly")) {
             return;
         }
+
+        if (!this.canvasInstance.isInitialized()) return;
+
         // changeHandler is called upon any tiny change in excalidraw. button clicked, hover, etc.
         // make sure only when a new element is added, we actually save something.
         const isNewSceneVersion = this.canvasInstance.isNewSceneVersion();
