@@ -39,6 +39,9 @@ type Labels = {
     "board:groupBy": string;
     maxNestingDepth: number;
     includeArchived: boolean;
+
+    // Note-type specific
+    webViewSrc: string;
 }
 
 /**
