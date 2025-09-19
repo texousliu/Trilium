@@ -9,6 +9,7 @@ import { VNode } from "preact";
 import Doc from "./type_widgets/Doc";
 import { TypeWidgetProps } from "./type_widgets/type_widget";
 import ProtectedSession from "./type_widgets/ProtectedSession";
+import Book from "./type_widgets/Book";
 
 /**
  * A `NoteType` altered by the note detail widget, taking into consideration whether the note is editable or not and adding special note types such as an empty one,
@@ -60,6 +61,7 @@ function getCorrespondingWidget(noteType: ExtendedNoteType | undefined, props: T
         case "doc": return <Doc {...props} />
         case "search": return <div className="note-detail-none note-detail-printable" />
         case "protectedSession": return <ProtectedSession />
+        case "book": return <Book {...props} />
         default: break;
     }
 }
