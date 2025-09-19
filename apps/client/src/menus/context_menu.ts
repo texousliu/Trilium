@@ -14,11 +14,11 @@ export interface ContextMenuOptions<T> {
     onHide?: () => void;
 }
 
-interface MenuSeparatorItem {
+export interface MenuSeparatorItem {
     kind: "separator";
 }
 
-interface MenuHeader {
+export interface MenuHeader {
     title: string;
     kind: "header";
 }

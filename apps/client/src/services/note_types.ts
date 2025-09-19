@@ -1,7 +1,7 @@
 import { t } from "./i18n.js";
 import froca from "./froca.js";
 import server from "./server.js";
-import type { MenuCommandItem, MenuItem, MenuItemBadge } from "../menus/context_menu.js";
+import type { MenuCommandItem, MenuItem, MenuItemBadge, MenuSeparatorItem } from "../menus/context_menu.js";
 import type { NoteType } from "../entities/fnote.js";
 import type { TreeCommandNames } from "../menus/tree_context_menu.js";
 
@@ -73,7 +73,7 @@ const BETA_BADGE = {
     title: t("note_types.beta-feature")
 };
 
-const SEPARATOR = { kind: "separator" };
+const SEPARATOR: MenuSeparatorItem = { kind: "separator" };
 
 const creationDateCache = new Map<string, Date>();
 let rootCreationDate: Date | undefined;
