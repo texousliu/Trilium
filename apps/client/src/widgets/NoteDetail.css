@@ -1,0 +1,9 @@
+.note-detail {
+    font-family: var(--detail-font-family);
+    font-size: var(--detail-font-size);
+}
+
+.note-detail.full-height {
+    contain: none;
+    height: 100%;
+}

@@ -12,6 +12,7 @@ import ProtectedSession from "./type_widgets/ProtectedSession";
 import Book from "./type_widgets/Book";
 import ContentWidget from "./type_widgets/ContentWidget";
 import WebView from "./type_widgets/WebView";
+import "./NoteDetail.css";
 
 /**
  * A `NoteType` altered by the note detail widget, taking into consideration whether the note is editable or not and adding special note types such as an empty one,
@@ -23,9 +24,10 @@ type ExtendedNoteType = Exclude<NoteType, "launcher" | "text" | "code"> | "empty
  * The note detail is in charge of rendering the content of a note, by determining its type (e.g. text, code) and using the appropriate view widget.
  */
 export default function NoteDetail() {
-    const { note, type } = useNoteInfo();
-    const { viewScope, ntxId } = useNoteContext();
+    const { note, type, noteContext } = useNoteInfo();
+    const { ntxId, viewScope } = noteContext ?? {};
     const [ correspondingWidget, setCorrespondingWidget ] = useState<VNode>();
+    const isFullHeight = checkFullHeight(noteContext, type);
 
     const props: TypeWidgetProps = {
         note: note!,
@@ -35,7 +37,7 @@ export default function NoteDetail() {
     useEffect(() => setCorrespondingWidget(getCorrespondingWidget(type, props)), [ note, viewScope, type ]);
 
     return (
-        <div>
+        <div class={`note-detail ${isFullHeight ? "full-height" : ""}`}>
             {correspondingWidget || <p>Note detail goes here! {note?.title} of {type}</p>}
         </div>
     );
@@ -54,7 +56,7 @@ function useNoteInfo() {
         });
     }, [ actualNote, noteContext ]);
 
-    return { note, type };
+    return { note, type, noteContext };
 }
 
 function getCorrespondingWidget(noteType: ExtendedNoteType | undefined, props: TypeWidgetProps) {
@@ -101,4 +103,16 @@ async function getWidgetType(note: FNote | null | undefined, noteContext: NoteCo
     }
 
     return resultingType;
+}
+
+function checkFullHeight(noteContext: NoteContext | undefined, type: ExtendedNoteType | undefined) {
+    if (!noteContext) return false;
+
+    // https://github.com/zadam/trilium/issues/2522
+    const isBackendNote = noteContext?.noteId === "_backendLog";
+    const isSqlNote = noteContext.note?.mime === "text/x-sqlite;schema=trilium";
+    const isFullHeightNoteType = ["canvas", "webView", "noteMap", "mindMap", "mermaid", "file"].includes(type ?? "");
+    return (!noteContext?.hasNoteList() && isFullHeightNoteType && !isSqlNote)
+        || noteContext?.viewScope?.viewMode === "attachments"
+        || isBackendNote;
 }

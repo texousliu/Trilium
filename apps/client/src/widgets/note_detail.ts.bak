@@ -34,21 +34,6 @@ import type TypeWidget from "./type_widgets/type_widget.js";
 import { MermaidTypeWidget } from "./type_widgets/mermaid.js";
 import AiChatTypeWidget from "./type_widgets/ai_chat.js";
 
-const TPL = /*html*/`
-<div class="note-detail">
-    <style>
-    .note-detail {
-        font-family: var(--detail-font-family);
-        font-size: var(--detail-font-size);
-    }
-
-    .note-detail.full-height {
-        height: 100%;
-    }
-    </style>
-</div>
-`;
-
 const typeWidgetClasses = {
     empty: EmptyTypeWidget,
     editableText: EditableTextTypeWidget,
@@ -176,18 +161,6 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
     /**
      * sets full height of container that contains note content for a subset of note-types
      */
-    checkFullHeight() {
-        // https://github.com/zadam/trilium/issues/2522
-        const isBackendNote = this.noteContext?.noteId === "_backendLog";
-        const isSqlNote = this.mime === "text/x-sqlite;schema=trilium";
-        const isFullHeightNoteType = ["canvas", "webView", "noteMap", "mindMap", "mermaid", "file"].includes(this.type ?? "");
-        const isFullHeight = (!this.noteContext?.hasNoteList() && isFullHeightNoteType && !isSqlNote)
-            || this.noteContext?.viewScope?.viewMode === "attachments"
-            || isBackendNote;
-
-        this.$widget.toggleClass("full-height", isFullHeight);
-    }
-
     getTypeWidget() {
         if (!this.type || !this.typeWidgets[this.type]) {
             throw new Error(t(`note_detail.could_not_find_typewidget`, { type: this.type }));
@@ -195,8 +168,6 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
 
         return this.typeWidgets[this.type];
     }
-
-
 
     async focusOnDetailEvent({ ntxId }: EventData<"focusOnDetail">) {
         if (this.noteContext?.ntxId !== ntxId) {

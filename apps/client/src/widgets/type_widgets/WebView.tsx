@@ -3,6 +3,7 @@ import utils from "../../services/utils";
 import Alert from "../react/Alert";
 import { useNoteLabel } from "../react/hooks";
 import { TypeWidgetProps } from "./type_widget";
+import "./WebView.css";
 
 const isElectron = utils.isElectron();
 
@@ -10,7 +11,7 @@ export default function WebView({ note }: TypeWidgetProps) {
     const [ webViewSrc ] = useNoteLabel(note, "webViewSrc");
 
     return (
-        <div className="note-detail-web-view note-detail-printable" style={{ height: "100%" }}>
+        <div className="note-detail-web-view note-detail-printable">
             {webViewSrc
                 ? <WebViewContent src={webViewSrc} />
                 : <WebViewHelp />}
