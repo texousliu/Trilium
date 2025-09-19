@@ -41,7 +41,7 @@ export default function NoteTypeChooserDialogComponent() {
             let index = -1;
 
             setNoteTypes((noteTypes ?? []).map((item) => {
-                if (item.title === "----") {
+                if ("kind" in item && item.kind === "separator") {
                     index++;
                     return {
                         title: SEPARATOR_TITLE_REPLACEMENTS[index],
@@ -95,7 +95,7 @@ export default function NoteTypeChooserDialogComponent() {
             <FormGroup name="note-type" label={t("note_type_chooser.modal_body")}>
                 <FormList onSelect={onNoteTypeSelected}>
                     {noteTypes.map((_item) => {
-                        if (_item.title === "----") {     
+                        if ("kind" in _item && _item.kind === "separator") {     
                             return;                       
                         }
 

@@ -73,7 +73,7 @@ const BETA_BADGE = {
     title: t("note_types.beta-feature")
 };
 
-const SEPARATOR = { title: "----" };
+const SEPARATOR = { kind: "separator" };
 
 const creationDateCache = new Map<string, Date>();
 let rootCreationDate: Date | undefined;
@@ -157,7 +157,7 @@ async function getBuiltInTemplates(title: string | null, command: TreeCommandNam
     const items: MenuItem<TreeCommandNames>[] = [];
     if (title) {
         items.push({
-            title: "title",
+            title: title,
             kind: "header"
         });
     } else {

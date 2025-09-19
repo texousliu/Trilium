@@ -74,7 +74,7 @@ function showColumnContextMenu(parentComponent: Component, e: MouseEvent, column
                 handler: () => tabulator.clearSort()
             },
             {
-                title: "----"
+                kind: "separator"
             },
             {
                 title: t("table_view.hide-column", { title }),
@@ -86,7 +86,7 @@ function showColumnContextMenu(parentComponent: Component, e: MouseEvent, column
                 uiIcon: "bx bx-columns",
                 items: buildColumnItems(tabulator)
             },
-            { title: "----" },
+            { kind: "separator" },
             {
                 title: t("table_view.add-column-to-the-left"),
                 uiIcon: "bx bx-horizontal-left",
@@ -105,7 +105,7 @@ function showColumnContextMenu(parentComponent: Component, e: MouseEvent, column
                     direction: "after"
                 })
             },
-            { title: "----" },
+            { kind: "separator" },
             {
                 title: t("table_view.edit-column"),
                 uiIcon: "bx bxs-edit-alt",
@@ -143,7 +143,7 @@ function showHeaderContextMenu(parentComponent: Component, e: MouseEvent, tabula
                 uiIcon: "bx bx-columns",
                 items: buildColumnItems(tabulator)
             },
-            { title: "----" },
+            { kind: "separator" },
             {
                 title: t("table_view.new-column"),
                 uiIcon: "bx bx-empty",
@@ -174,7 +174,7 @@ export function showRowContextMenu(parentComponent: Component, e: MouseEvent, ro
     contextMenu.show({
         items: [
             ...link_context_menu.getItems(),
-            { title: "----" },
+            { kind: "separator" },
             {
                 title: t("table_view.row-insert-above"),
                 uiIcon: "bx bx-horizontal-left bx-rotate-90",
@@ -214,7 +214,7 @@ export function showRowContextMenu(parentComponent: Component, e: MouseEvent, ro
                     }
                 })
             },
-            { title: "----" },
+            { kind: "separator" },
             {
                 title: t("table_context_menu.delete_row"),
                 uiIcon: "bx bx-trash",

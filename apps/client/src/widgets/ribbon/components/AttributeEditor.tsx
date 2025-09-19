@@ -387,7 +387,7 @@ export default function AttributeEditor({ api, note, componentId, notePath, ntxI
                                 items: [
                                     { title: t("attribute_editor.add_new_label"), command: "addNewLabel", uiIcon: "bx bx-hash" },
                                     { title: t("attribute_editor.add_new_relation"), command: "addNewRelation", uiIcon: "bx bx-transfer" },
-                                    { title: "----" },
+                                    { kind: "separator" },
                                     { title: t("attribute_editor.add_new_label_definition"), command: "addNewLabelDefinition", uiIcon: "bx bx-empty" },
                                     { title: t("attribute_editor.add_new_relation_definition"), command: "addNewRelationDefinition", uiIcon: "bx bx-empty" }
                                 ],

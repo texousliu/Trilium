@@ -15,7 +15,7 @@ export interface ContextMenuOptions<T> {
 }
 
 interface MenuSeparatorItem {
-    title: "----";
+    kind: "separator";
 }
 
 interface MenuHeader {
@@ -161,7 +161,7 @@ class ContextMenu {
                 continue;
             }
 
-            if (item.title === "----") {
+            if ("kind" in item && item.kind === "separator") {
                 $parent.append($("<div>").addClass("dropdown-divider"));
             } else if ("kind" in item && item.kind === "header") {
                 $parent.append($("<h6>").addClass("dropdown-header").text(item.title));

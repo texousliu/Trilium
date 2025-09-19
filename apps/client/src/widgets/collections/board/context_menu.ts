@@ -41,7 +41,7 @@ export function openNoteContextMenu(api: Api, event: ContextMenuEvent, note: FNo
         y: event.pageY,
         items: [
             ...link_context_menu.getItems(),
-            { title: "----" },
+            { kind: "separator" },
             {
                 title: t("board_view.move-to"),
                 uiIcon: "bx bx-transfer",
@@ -52,7 +52,7 @@ export function openNoteContextMenu(api: Api, event: ContextMenuEvent, note: FNo
                 })),
             },
             getArchiveMenuItem(note),
-            { title: "----" },
+            { kind: "separator" },
             {
                 title: t("board_view.insert-above"),
                 uiIcon: "bx bx-list-plus",
@@ -63,7 +63,7 @@ export function openNoteContextMenu(api: Api, event: ContextMenuEvent, note: FNo
                 uiIcon: "bx bx-empty",
                 handler: () => api.insertRowAtPosition(column, branchId, "after")
             },
-            { title: "----" },
+            { kind: "separator" },
             {
                 title: t("board_view.remove-from-board"),
                 uiIcon: "bx bx-task-x",

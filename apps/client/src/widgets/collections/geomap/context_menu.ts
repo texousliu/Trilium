@@ -10,14 +10,14 @@ import link from "../../../services/link.js";
 export default function openContextMenu(noteId: string, e: LeafletMouseEvent, isEditable: boolean) {
     let items: MenuItem<keyof CommandMappings>[] = [
         ...buildGeoLocationItem(e),
-        { title: "----" },
+        { kind: "separator" },
         ...linkContextMenu.getItems(),
     ];
 
     if (isEditable) {
         items = [
             ...items,
-            { title: "----" },
+            { kind: "separator" },
             { title: t("geo-map-context.remove-from-map"), command: "deleteFromMap", uiIcon: "bx bx-trash" }
         ];
     }
@@ -46,7 +46,7 @@ export function openMapContextMenu(noteId: string, e: LeafletMouseEvent, isEdita
     if (isEditable) {
         items = [
             ...items,
-            { title: "----" },
+            { kind: "separator" },
             {
                 title: t("geo-map-context.add-note"),
                 handler: () => createNewNote(noteId, e),
