@@ -6,11 +6,14 @@ import { TypeWidgetProps } from "../type_widget";
 import "./SplitEditor.css";
 import Split from "split.js";
 import { DEFAULT_GUTTER_SIZE } from "../../../services/resizer";
-import { CodeEditor, EditableCode } from "../code/Code";
+import { EditableCode } from "../code/Code";
+import { ComponentChildren } from "preact";
+import ActionButton, { ActionButtonProps } from "../../react/ActionButton";
 
-interface SplitEditorProps extends TypeWidgetProps {
+export interface SplitEditorProps extends TypeWidgetProps {
     error?: string | null;
     splitOptions?: Split.Options;
+    previewButtons?: ComponentChildren;
 }
 
 /**
@@ -22,7 +25,7 @@ interface SplitEditorProps extends TypeWidgetProps {
  * - Can display errors to the user via {@link setError}.
  * - Horizontal or vertical orientation for the editor/preview split, adjustable via the switch split orientation button floating button.
  */
-export default function SplitEditor({ note, error, splitOptions, ...editorProps }: SplitEditorProps) {
+export default function SplitEditor({ note, error, splitOptions, previewButtons, ...editorProps }: SplitEditorProps) {
     const splitEditorOrientation = useSplitOrientation();
     const [ readOnly ] = useNoteLabelBoolean(note, "readOnly");
     const containerRef = useRef<HTMLDivElement>(null);
@@ -46,7 +49,9 @@ export default function SplitEditor({ note, error, splitOptions, ...editorProps 
     const preview = (
         <div className={`note-detail-split-preview-col ${error ? "on-error" : ""}`}>
             <div className="note-detail-split-preview">Preview goes here</div>
-            <div className="btn-group btn-group-sm map-type-switcher content-floating-buttons preview-buttons bottom-right" role="group">Buttons go here</div>
+            <div className="btn-group btn-group-sm map-type-switcher content-floating-buttons preview-buttons bottom-right" role="group">
+                {previewButtons}
+            </div>
         </div>
     );
 
@@ -70,6 +75,15 @@ export default function SplitEditor({ note, error, splitOptions, ...editorProps 
             : <>{preview}{editor}</>}
         </div>
     )
+}
+
+export function PreviewButton(props: Omit<ActionButtonProps, "titlePosition">) {
+    return <ActionButton
+        {...props}
+        className="tn-tool-button"
+        noIconActionClass
+        titlePosition="top"
+    />
 }
 
 function useSplitOrientation() {

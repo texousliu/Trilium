@@ -186,19 +186,11 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
     buildPreviewButtons(): OnClickButtonWidget[] {
         return [
             new OnClickButtonWidget()
-                .icon("bx-zoom-in")
-                .title(t("relation_map_buttons.zoom_in_title"))
-                .titlePlacement("top")
                 .onClick(() => this.zoomInstance?.zoomIn())
             , new OnClickButtonWidget()
-                .icon("bx-zoom-out")
-                .title(t("relation_map_buttons.zoom_out_title"))
                 .titlePlacement("top")
                 .onClick(() => this.zoomInstance?.zoomOut())
             , new OnClickButtonWidget()
-                .icon("bx-crop")
-                .title(t("relation_map_buttons.reset_pan_zoom_title"))
-                .titlePlacement("top")
                 .onClick(() => this.zoomHandler())
         ];
     }
