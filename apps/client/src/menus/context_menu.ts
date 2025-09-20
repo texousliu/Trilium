@@ -2,6 +2,7 @@ import { KeyboardActionNames } from "@triliumnext/commons";
 import keyboardActionService, { getActionSync } from "../services/keyboard_actions.js";
 import note_tooltip from "../services/note_tooltip.js";
 import utils from "../services/utils.js";
+import { should } from "vitest";
 
 export interface ContextMenuOptions<T> {
     x: number;
@@ -170,9 +171,13 @@ class ContextMenu {
             // This is a workaround for Firefox not supporting break-after: avoid on columns.
             const nextItem = (index < items.length - 1) ? items[index + 1] : null;
             if (multicolumn && nextItem && "kind" in nextItem) {
-                if (!shouldResetGroup && (nextItem.kind === "separator" || nextItem.kind === "header")) {
-                    $group = $("<div class='dropdown-no-break'>");
-                    $parent.append($group);
+                if (nextItem.kind === "separator" || nextItem.kind === "header") {
+                    if (!shouldResetGroup) {
+                        $group = $("<div class='dropdown-no-break'>");
+                        $parent.append($group);
+                    } else {
+                        shouldResetGroup = false; // Continue the current group
+                    }
                 }
             }
 
