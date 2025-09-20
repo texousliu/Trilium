@@ -157,7 +157,8 @@ class ContextMenu {
     }
 
     addItems($parent: JQuery<HTMLElement>, items: MenuItem<any>[], multicolumn = false) {
-        let $group = $parent;
+        let $group = $parent; // The current group or parent element to which items are being appended
+        let shouldStartNewGroup = false; // If true, the next item will start a new group
         let shouldResetGroup = false; // If true, the next item will be the last one from the group
 
         for (let index = 0; index < items.length; index++) {
@@ -166,24 +167,37 @@ class ContextMenu {
                 continue;
             }
 
-            // If the next item is a separator or header, create a new group to avoid column breaks
-            // before and after the seaparator/header.
-            // This is a workaround for Firefox not supporting break-after: avoid on columns.
-            const nextItem = (index < items.length - 1) ? items[index + 1] : null;
-            if (multicolumn && nextItem && "kind" in nextItem) {
-                if (nextItem.kind === "separator" || nextItem.kind === "header") {
-                    if (!shouldResetGroup) {
-                        $group = $("<div class='dropdown-no-break'>");
-                        $parent.append($group);
-                    } else {
-                        shouldResetGroup = false; // Continue the current group
-                    }
+            // If the current item is a header, start a new group. This group will contain the
+            // header and the next item that follows the header.
+            if ("kind" in item && item.kind === "header") {
+                if (multicolumn && !shouldResetGroup) {
+                    shouldStartNewGroup = true;
                 }
+            }
+
+            // If the next item is a separator, start a new group. This group will contain the
+            // current item, the separator, and the next item after the separator.
+            const nextItem = (index < items.length - 1) ? items[index + 1] : null;
+            if (multicolumn && nextItem && "kind" in nextItem && nextItem.kind === "separator") {
+                if (!shouldResetGroup) {
+                    shouldStartNewGroup = true;
+                } else {
+                    shouldResetGroup = true; // Continue the current group
+                }
+            }
+
+            // Create a new group to avoid column breaks before and after the seaparator / header.
+            // This is a workaround for Firefox not supporting break-before / break-after: avoid 
+            // for columns.
+            if (shouldStartNewGroup) {
+                $group = $("<div class='dropdown-no-break'>");
+                $parent.append($group);
+                shouldStartNewGroup = false;
             }
 
             if ("kind" in item && item.kind === "separator") {
                 $group.append($("<div>").addClass("dropdown-divider"));
-                shouldResetGroup = true;
+                shouldResetGroup = true; // End the group after the next item
             } else if ("kind" in item && item.kind === "header") {
                 $group.append($("<h6>").addClass("dropdown-header").text(item.title));
                 shouldResetGroup = true;
