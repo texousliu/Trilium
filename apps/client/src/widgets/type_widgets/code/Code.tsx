@@ -53,10 +53,21 @@ export function EditableCode({ note, ntxId, debounceUpdate, parentComponent }: T
         }
     });
 
+    // Set up keyboard shortcuts.
     useEffect(() => {
         if (!parentComponent) return;
         keyboard_actions.setupActionsForElement("code-detail", refToJQuerySelector(containerRef), parentComponent);
     }, []);
+
+    // React to background color.
+    const [ backgroundColor, setBackgroundColor ] = useState<string>();
+    useEffect(() => {
+        if (!backgroundColor) return;
+        parentComponent?.$widget.closest(".scrolling-container").css("background-color", backgroundColor);
+        return () => {
+            parentComponent?.$widget.closest(".scrolling-container").css("background-color", "unset");
+        };
+    }, [ backgroundColor ]);
 
     return (
         <div className="note-detail-code note-detail-printable">
@@ -73,6 +84,12 @@ export function EditableCode({ note, ntxId, debounceUpdate, parentComponent }: T
                     }
                     spacedUpdate.scheduleUpdate();
                 }}
+                onThemeChange={note?.mime !== "text/x-sqlite;schema=trilium" ? () => {
+                    const editor = containerRef.current?.querySelector(".cm-editor");
+                    if (!editor) return;
+                    const style = window.getComputedStyle(editor);
+                    setBackgroundColor(style.backgroundColor);
+                } : undefined}
             />
 
             <TouchBar>

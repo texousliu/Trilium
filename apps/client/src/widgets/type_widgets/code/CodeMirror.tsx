@@ -12,9 +12,10 @@ interface CodeMirrorProps extends Omit<EditorConfig, "parent"> {
     ntxId: string | null | undefined;
     editorRef?: RefObject<VanillaCodeMirror>;
     containerRef?: RefObject<HTMLPreElement>;
+    onThemeChange?: () => void;
 }
 
-export default function CodeMirror({ className, content, mime, ntxId, editorRef: externalEditorRef, containerRef: externalContainerRef, ...extraOpts }: CodeMirrorProps) {
+export default function CodeMirror({ className, content, mime, ntxId, editorRef: externalEditorRef, containerRef: externalContainerRef, onThemeChange, ...extraOpts }: CodeMirrorProps) {
     const parentRef = useSyncedRef(externalContainerRef);
     const codeEditorRef = useRef<VanillaCodeMirror>();
     const [ codeLineWrapEnabled ] = useTriliumOptionBool("codeLineWrapEnabled");
@@ -57,7 +58,9 @@ export default function CodeMirror({ className, content, mime, ntxId, editorRef:
         if (codeEditorRef.current && codeNoteTheme.startsWith(DEFAULT_PREFIX)) {
             const theme = getThemeById(codeNoteTheme.substring(DEFAULT_PREFIX.length));
             if (theme) {
-                codeEditorRef.current.setTheme(theme);
+                codeEditorRef.current.setTheme(theme).then(() => {
+                    onThemeChange?.();
+                });
             }
         }
     }, [ codeEditorRef, codeNoteTheme ]);

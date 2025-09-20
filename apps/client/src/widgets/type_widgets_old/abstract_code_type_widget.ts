@@ -67,15 +67,6 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
         this.codeEditor.focus();
     }
 
-    cleanup() {
-        if (this.codeEditor) {
-            this.spacedUpdate.allowUpdateWithoutChange(() => {
-                this.codeEditor.setText("");
-            });
-        }
-        this.updateBackgroundColor("unset");
-    }
-
     async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         if (loadResults.isOptionReloaded("codeNoteTheme")) {
             const themeId = options.get("codeNoteTheme");
@@ -91,16 +82,6 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
         if (loadResults.isOptionReloaded("codeLineWrapEnabled")) {
             this.codeEditor.setLineWrapping(options.is("codeLineWrapEnabled"));
         }
-    }
-
-    updateBackgroundColor(color?: string) {
-        if (this.note?.mime === "text/x-sqlite;schema=trilium") {
-            // Don't apply a background color for SQL console notes.
-            return;
-        }
-
-        const $editorEl = $(this.codeEditor.dom);
-        this.$widget.closest(".scrolling-container").css("background-color", color ?? $editorEl.css("background-color"));
     }
 
 }

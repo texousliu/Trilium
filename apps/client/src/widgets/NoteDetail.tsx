@@ -2,7 +2,7 @@ import { NoteType } from "@triliumnext/commons";
 import { useNoteContext } from "./react/hooks"
 import FNote from "../entities/fnote";
 import protected_session_holder from "../services/protected_session_holder";
-import { useEffect, useMemo, useState } from "preact/hooks";
+import { useContext, useEffect, useMemo, useState } from "preact/hooks";
 import NoteContext from "../components/note_context";
 import Empty from "./type_widgets/Empty";
 import { VNode } from "preact";
@@ -27,8 +27,8 @@ type ExtendedNoteType = Exclude<NoteType, "launcher" | "text" | "code"> | "empty
  * The note detail is in charge of rendering the content of a note, by determining its type (e.g. text, code) and using the appropriate view widget.
  */
 export default function NoteDetail() {
-    const { note, type, noteContext } = useNoteInfo();
-    const { ntxId, viewScope, parent } = noteContext ?? {};
+    const { note, type, noteContext, parentComponent } = useNoteInfo();
+    const { ntxId, viewScope } = noteContext ?? {};
     const [ correspondingWidget, setCorrespondingWidget ] = useState<VNode>();
     const isFullHeight = checkFullHeight(noteContext, type);
 
@@ -36,7 +36,7 @@ export default function NoteDetail() {
         note: note!,
         viewScope,
         ntxId,
-        parentComponent: parent
+        parentComponent
     };
     useEffect(() => setCorrespondingWidget(getCorrespondingWidget(type, props)), [ note, viewScope, type ]);
 
@@ -49,7 +49,7 @@ export default function NoteDetail() {
 
 /** Manages both note changes and changes to the widget type, which are asynchronous. */
 function useNoteInfo() {
-    const { note: actualNote, noteContext } = useNoteContext();
+    const { note: actualNote, noteContext, parentComponent } = useNoteContext();
     const [ note, setNote ] = useState<FNote | null | undefined>();
     const [ type, setType ] = useState<ExtendedNoteType>();
 
@@ -60,7 +60,7 @@ function useNoteInfo() {
         });
     }, [ actualNote, noteContext ]);
 
-    return { note, type, noteContext };
+    return { note, type, noteContext, parentComponent };
 }
 
 function getCorrespondingWidget(noteType: ExtendedNoteType | undefined, props: TypeWidgetProps) {
