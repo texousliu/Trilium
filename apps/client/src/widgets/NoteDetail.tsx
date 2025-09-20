@@ -65,12 +65,18 @@ function useNoteInfo() {
     const [ note, setNote ] = useState<FNote | null | undefined>();
     const [ type, setType ] = useState<ExtendedNoteType>();
 
-    useEffect(() => {
+    function refresh() {
         getWidgetType(actualNote, noteContext).then(type => {
             setNote(actualNote);
             setType(type);
         });
-    }, [ actualNote, noteContext ]);
+    }
+
+    useEffect(refresh, [ actualNote, noteContext]);
+    useTriliumEvent("readOnlyTemporarilyDisabled", ({ noteContext: eventNoteContext }) => {
+        if (eventNoteContext?.ntxId !== noteContext?.ntxId) return;
+        refresh();
+    });
 
     return { note, type, noteContext, parentComponent };
 }

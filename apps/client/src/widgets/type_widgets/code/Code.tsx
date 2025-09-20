@@ -139,7 +139,6 @@ function CodeEditor({ note, parentComponent, ntxId, containerRef: externalContai
     });
 
     useTriliumEvent("focusOnDetail", ({ ntxId: eventNtxId }) => {
-        console.log("Focus on ", ntxId, eventNtxId)
         if (eventNtxId !== ntxId) return;
         codeEditorRef.current?.focus();
     });

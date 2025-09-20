@@ -61,14 +61,6 @@ export default abstract class TypeWidget extends NoteContextAwareWidget {
         // Do nothing by default.
     }
 
-    async readOnlyTemporarilyDisabledEvent({ noteContext }: EventData<"readOnlyTemporarilyDisabled">) {
-        if (this.isNoteContext(noteContext.ntxId)) {
-            await this.refresh();
-
-            this.focus();
-        }
-    }
-
     /**
      * {@inheritdoc}
      *
