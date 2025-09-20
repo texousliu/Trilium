@@ -424,5 +424,12 @@
     "board_status_todo": "A fazer",
     "board_status_progress": "Em andamento",
     "board_status_done": "Concluído"
+  },
+  "sql_init": {
+    "db_not_initialized_desktop": "DB não inicializada, por favor siga as instruções na tela.",
+    "db_not_initialized_server": "DB não inicializada, por favor visite a página de configuração - http://[your-server-host]:{{port}} para ver instruções de como inicializar o Trillium."
+  },
+  "desktop": {
+    "instance_already_running": "Já existe uma instância sendo executada, em vez disso focando nesta."
   }
 }
