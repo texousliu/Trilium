@@ -5,7 +5,7 @@ import { refToJQuerySelector } from "../../react/react_utils";
 import { RefObject } from "preact";
 import { CODE_THEME_DEFAULT_PREFIX as DEFAULT_PREFIX } from "../constants";
 
-interface CodeMirrorProps extends Omit<EditorConfig, "parent"> {
+export interface CodeMirrorProps extends Omit<EditorConfig, "parent"> {
     content: string;
     mime: string;
     className?: string;

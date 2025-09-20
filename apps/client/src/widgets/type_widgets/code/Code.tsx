@@ -2,16 +2,16 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import { default as VanillaCodeMirror } from "@triliumnext/codemirror";
 import { TypeWidgetProps } from "../type_widget";
 import "./code.css";
-import CodeMirror from "./CodeMirror";
+import CodeMirror, { CodeMirrorProps } from "./CodeMirror";
 import utils from "../../../services/utils";
-import { useEditorSpacedUpdate, useNoteBlob, useTriliumOptionBool } from "../../react/hooks";
+import { useEditorSpacedUpdate, useNoteBlob, useSyncedRef, useTriliumOptionBool } from "../../react/hooks";
 import { t } from "../../../services/i18n";
 import appContext from "../../../components/app_context";
 import TouchBar, { TouchBarButton } from "../../react/TouchBar";
 import keyboard_actions from "../../../services/keyboard_actions";
 import { refToJQuerySelector } from "../../react/react_utils";
 
-export function ReadOnlyCode({ note, viewScope, ntxId }: TypeWidgetProps) {
+export function ReadOnlyCode({ note, viewScope, ntxId, parentComponent }: TypeWidgetProps) {
     const [ content, setContent ] = useState("");
     const blob = useNoteBlob(note);
 
@@ -23,7 +23,8 @@ export function ReadOnlyCode({ note, viewScope, ntxId }: TypeWidgetProps) {
 
     return (
         <div className="note-detail-readonly-code note-detail-printable">
-            <CodeMirror
+            <CodeEditor
+                note={note} parentComponent={parentComponent}
                 className="note-detail-readonly-code-content"
                 content={content}
                 mime={note.mime}
@@ -59,19 +60,10 @@ export function EditableCode({ note, ntxId, debounceUpdate, parentComponent }: T
         keyboard_actions.setupActionsForElement("code-detail", refToJQuerySelector(containerRef), parentComponent);
     }, []);
 
-    // React to background color.
-    const [ backgroundColor, setBackgroundColor ] = useState<string>();
-    useEffect(() => {
-        if (!backgroundColor) return;
-        parentComponent?.$widget.closest(".scrolling-container").css("background-color", backgroundColor);
-        return () => {
-            parentComponent?.$widget.closest(".scrolling-container").css("background-color", "unset");
-        };
-    }, [ backgroundColor ]);
-
     return (
         <div className="note-detail-code note-detail-printable">
-            <CodeMirror
+            <CodeEditor
+                note={note} parentComponent={parentComponent}
                 editorRef={editorRef} containerRef={containerRef}
                 className="note-detail-code-editor"
                 ntxId={ntxId}
@@ -84,12 +76,6 @@ export function EditableCode({ note, ntxId, debounceUpdate, parentComponent }: T
                     }
                     spacedUpdate.scheduleUpdate();
                 }}
-                onThemeChange={note?.mime !== "text/x-sqlite;schema=trilium" ? () => {
-                    const editor = containerRef.current?.querySelector(".cm-editor");
-                    if (!editor) return;
-                    const style = window.getComputedStyle(editor);
-                    setBackgroundColor(style.backgroundColor);
-                } : undefined}
             />
 
             <TouchBar>
@@ -99,4 +85,29 @@ export function EditableCode({ note, ntxId, debounceUpdate, parentComponent }: T
             </TouchBar>
         </div>
     )
+}
+
+function CodeEditor({ note, parentComponent, containerRef: externalContainerRef, ...editorProps }: Omit<CodeMirrorProps, "onThemeChange"> & Pick<TypeWidgetProps, "note" | "parentComponent">) {
+    const containerRef = useSyncedRef(externalContainerRef);
+
+    // React to background color.
+    const [ backgroundColor, setBackgroundColor ] = useState<string>();
+    useEffect(() => {
+        if (!backgroundColor) return;
+        parentComponent?.$widget.closest(".scrolling-container").css("background-color", backgroundColor);
+        return () => {
+            parentComponent?.$widget.closest(".scrolling-container").css("background-color", "unset");
+        };
+    }, [ backgroundColor ]);
+
+    return <CodeMirror
+        {...editorProps}
+        containerRef={containerRef}
+        onThemeChange={note?.mime !== "text/x-sqlite;schema=trilium" ? () => {
+            const editor = containerRef.current?.querySelector(".cm-editor");
+            if (!editor) return;
+            const style = window.getComputedStyle(editor);
+            setBackgroundColor(style.backgroundColor);
+        } : undefined}
+    />
 }
