@@ -35,9 +35,10 @@ export function ReadOnlyCode({ note, viewScope, ntxId, parentComponent }: TypeWi
     )
 }
 
-export function EditableCode({ note, ntxId, debounceUpdate, parentComponent }: TypeWidgetProps & {
+export function EditableCode({ note, ntxId, debounceUpdate, parentComponent, ...editorProps }: TypeWidgetProps & {
     // if true, the update will be debounced to prevent excessive updates. Especially useful if the editor is linked to a live preview.
     debounceUpdate?: boolean;
+    lineWrapping?: boolean;
 }) {
     const editorRef = useRef<VanillaCodeMirror>(null);
     const containerRef = useRef<HTMLPreElement>(null);
@@ -76,6 +77,7 @@ export function EditableCode({ note, ntxId, debounceUpdate, parentComponent }: T
                     }
                     spacedUpdate.scheduleUpdate();
                 }}
+                {...editorProps}
             />
 
             <TouchBar>
@@ -87,7 +89,7 @@ export function EditableCode({ note, ntxId, debounceUpdate, parentComponent }: T
     )
 }
 
-export function CodeEditor({ parentComponent, ntxId, containerRef: externalContainerRef, editorRef: externalEditorRef, mime, onInitialized, ...editorProps }: Omit<CodeMirrorProps, "onThemeChange" | "lineWrapping"> & Pick<TypeWidgetProps, "parentComponent" | "ntxId">) {
+export function CodeEditor({ parentComponent, ntxId, containerRef: externalContainerRef, editorRef: externalEditorRef, mime, onInitialized, lineWrapping, ...editorProps }: Omit<CodeMirrorProps, "onThemeChange"> & Pick<TypeWidgetProps, "parentComponent" | "ntxId">) {
     const codeEditorRef = useRef<VanillaCodeMirror>(null);
     const containerRef = useSyncedRef(externalContainerRef);
     const initialized = useRef($.Deferred());
@@ -149,7 +151,7 @@ export function CodeEditor({ parentComponent, ntxId, containerRef: externalConta
         mime={mime}
         editorRef={codeEditorRef}
         containerRef={containerRef}
-        lineWrapping={codeLineWrapEnabled}
+        lineWrapping={lineWrapping ?? codeLineWrapEnabled}
         onInitialized={() => {
             if (externalContainerRef && containerRef.current) {
                 externalContainerRef.current = containerRef.current;

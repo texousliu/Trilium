@@ -84,15 +84,6 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
         }
     }
 
-    /**
-     * Called upon when the code editor is being initialized. Can be used to add additional options to the editor.
-     */
-    buildEditorExtraOptions(): Partial<EditorConfig> {
-        return {
-            lineWrapping: false
-        };
-    }
-
     buildPreviewButtons(): OnClickButtonWidget[] {
         return [];
     }

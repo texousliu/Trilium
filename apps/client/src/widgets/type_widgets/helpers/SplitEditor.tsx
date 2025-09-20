@@ -6,6 +6,7 @@ import { TypeWidgetProps } from "../type_widget";
 import "./SplitEditor.css";
 import Split from "split.js";
 import { DEFAULT_GUTTER_SIZE } from "../../../services/resizer";
+import { CodeEditor, EditableCode } from "../code/Code";
 
 interface SplitEditorProps extends TypeWidgetProps {
     error?: string | null;
@@ -21,14 +22,20 @@ interface SplitEditorProps extends TypeWidgetProps {
  * - Can display errors to the user via {@link setError}.
  * - Horizontal or vertical orientation for the editor/preview split, adjustable via the switch split orientation button floating button.
  */
-export default function SplitEditor({ note, error, splitOptions }: SplitEditorProps) {
+export default function SplitEditor({ note, error, splitOptions, ...editorProps }: SplitEditorProps) {
     const splitEditorOrientation = useSplitOrientation();
     const [ readOnly ] = useNoteLabelBoolean(note, "readOnly");
     const containerRef = useRef<HTMLDivElement>(null);
 
     const editor = (!readOnly &&
         <div className="note-detail-split-editor-col">
-            <div className="note-detail-split-editor">Detail goes here.</div>
+            <div className="note-detail-split-editor">
+                <EditableCode
+                    note={note}
+                    lineWrapping={false}
+                    {...editorProps}
+                />
+            </div>
             {error && <Admonition type="caution" className="note-detail-error-container">
                 {error}
             </Admonition>}
