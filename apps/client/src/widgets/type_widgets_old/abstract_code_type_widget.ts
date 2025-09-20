@@ -57,9 +57,4 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
         this.codeEditor.focus();
     }
 
-    scrollToEnd() {
-        this.codeEditor.scrollToEnd();
-        this.codeEditor.focus();
-    }
-
 }

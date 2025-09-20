@@ -149,20 +149,6 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
         widget.focus();
     }
 
-    async scrollToEndEvent({ ntxId }: EventData<"scrollToEnd">) {
-        if (this.noteContext?.ntxId !== ntxId) {
-            return;
-        }
-
-        await this.refresh();
-        const widget = this.getTypeWidget();
-        await widget.initialized;
-
-        if (widget.scrollToEnd) {
-            widget.scrollToEnd();
-        }
-    }
-
     async beforeNoteSwitchEvent({ noteContext }: EventData<"beforeNoteSwitch">) {
         if (this.isNoteContext(noteContext.ntxId)) {
             await this.spacedUpdate.updateNowIfNecessary();

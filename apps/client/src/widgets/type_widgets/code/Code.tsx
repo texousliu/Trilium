@@ -131,6 +131,13 @@ function CodeEditor({ note, parentComponent, ntxId, containerRef: externalContai
         resolve(refToJQuerySelector(containerRef));
     });
 
+    useTriliumEvent("scrollToEnd", () => {
+        const editor = codeEditorRef.current;
+        if (!editor) return;
+        editor.scrollToEnd();
+        editor.focus();
+    });
+
     return <CodeMirror
         {...editorProps}
         editorRef={codeEditorRef}
