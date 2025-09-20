@@ -23,6 +23,7 @@ export default function SvgSplitEditor({ note, attachmentName, renderSvg, ...pro
     const [ svg, setSvg ] = useState<string>();
     const [ error, setError ] = useState<string | null | undefined>();
 
+    // Render the SVG.
     async function onContentChanged(content: string) {
         try {
             const svg = await renderSvg(content);
@@ -36,6 +37,7 @@ export default function SvgSplitEditor({ note, attachmentName, renderSvg, ...pro
         }
     }
 
+    // Save as attachment.
     function onSave() {
         const payload = {
             role: "image",
