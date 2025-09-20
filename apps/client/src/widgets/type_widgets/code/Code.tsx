@@ -12,7 +12,12 @@ import keyboard_actions from "../../../services/keyboard_actions";
 import { refToJQuerySelector } from "../../react/react_utils";
 import { CODE_THEME_DEFAULT_PREFIX as DEFAULT_PREFIX } from "../constants";
 
-export interface EditableCodeProps extends TypeWidgetProps {
+interface CodeEditorProps {
+    /** By default, the code editor will try to match the color of the scrolling container to match the one from the theme for a full-screen experience. If the editor is embedded, it makes sense not to have this behaviour. */
+    noBackgroundChange?: boolean;
+}
+
+export interface EditableCodeProps extends TypeWidgetProps, Omit<CodeEditorProps, "onContentChanged"> {
     // if true, the update will be debounced to prevent excessive updates. Especially useful if the editor is linked to a live preview.
     debounceUpdate?: boolean;
     lineWrapping?: boolean;
@@ -101,7 +106,7 @@ export function EditableCode({ note, ntxId, debounceUpdate, parentComponent, upd
     )
 }
 
-export function CodeEditor({ parentComponent, ntxId, containerRef: externalContainerRef, editorRef: externalEditorRef, mime, onInitialized, lineWrapping, ...editorProps }: Omit<CodeMirrorProps, "onThemeChange"> & Pick<TypeWidgetProps, "parentComponent" | "ntxId">) {
+export function CodeEditor({ parentComponent, ntxId, containerRef: externalContainerRef, editorRef: externalEditorRef, mime, onInitialized, lineWrapping, noBackgroundChange, ...editorProps }: CodeEditorProps & CodeMirrorProps & Pick<TypeWidgetProps, "parentComponent" | "ntxId">) {
     const codeEditorRef = useRef<VanillaCodeMirror>(null);
     const containerRef = useSyncedRef(externalContainerRef);
     const initialized = useRef($.Deferred());
@@ -111,7 +116,7 @@ export function CodeEditor({ parentComponent, ntxId, containerRef: externalConta
     // React to background color.
     const [ backgroundColor, setBackgroundColor ] = useState<string>();
     useEffect(() => {
-        if (!backgroundColor) return;
+        if (!backgroundColor || noBackgroundChange) return;
         parentComponent?.$widget.closest(".scrolling-container").css("background-color", backgroundColor);
         return () => {
             parentComponent?.$widget.closest(".scrolling-container").css("background-color", "unset");
