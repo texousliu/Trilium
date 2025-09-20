@@ -10,6 +10,7 @@ import { ComponentChildren } from "preact";
 import ActionButton, { ActionButtonProps } from "../../react/ActionButton";
 
 export interface SplitEditorProps extends EditableCodeProps {
+    className?: string;
     error?: string | null;
     splitOptions?: Split.Options;
     previewContent: ComponentChildren;
@@ -25,7 +26,7 @@ export interface SplitEditorProps extends EditableCodeProps {
  * - Can display errors to the user via {@link setError}.
  * - Horizontal or vertical orientation for the editor/preview split, adjustable via the switch split orientation button floating button.
  */
-export default function SplitEditor({ note, error, splitOptions, previewContent, previewButtons, ...editorProps }: SplitEditorProps) {
+export default function SplitEditor({ note, error, splitOptions, previewContent, previewButtons, className, ...editorProps }: SplitEditorProps) {
     const splitEditorOrientation = useSplitOrientation();
     const [ readOnly ] = useNoteLabelBoolean(note, "readOnly");
     const containerRef = useRef<HTMLDivElement>(null);
@@ -72,7 +73,7 @@ export default function SplitEditor({ note, error, splitOptions, previewContent,
     }, [ readOnly, splitEditorOrientation ]);
 
     return (
-        <div ref={containerRef} className={`note-detail-split note-detail-printable ${"split-" + splitEditorOrientation} ${readOnly ? "split-read-only" : ""}`}>
+        <div ref={containerRef} className={`note-detail-split note-detail-printable ${"split-" + splitEditorOrientation} ${readOnly ? "split-read-only" : ""} ${className ?? ""}`}>
             {splitEditorOrientation === "horizontal"
             ? <>{editor}{preview}</>
             : <>{preview}{editor}</>}

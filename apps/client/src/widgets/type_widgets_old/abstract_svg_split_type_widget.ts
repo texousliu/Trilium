@@ -106,51 +106,6 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
 
     abstract get attachmentName(): string;
 
-    /**
-     * @param preservePanZoom `true` to keep the pan/zoom settings of the previous image, or `false` to re-center it.
-     */
-    async #setupPanZoom(preservePanZoom: boolean) {
-        // Clean up
-        let pan: SvgPanZoom.Point | null = null;
-        let zoom: number | null = null;
-        if (preservePanZoom && this.zoomInstance) {
-            // Store pan and zoom for same note, when the user is editing the note.
-            pan = this.zoomInstance.getPan();
-            zoom = this.zoomInstance.getZoom();
-            this.#cleanUpZoom();
-        }
-
-        const $svgEl = this.$renderContainer.find("svg");
-
-        // Fit the image to bounds
-        $svgEl.attr("width", "100%")
-            .attr("height", "100%")
-            .css("max-width", "100%");
-
-        if (!$svgEl.length) {
-            return;
-        }
-
-        const svgPanZoom = (await import("svg-pan-zoom")).default;
-        const zoomInstance = svgPanZoom($svgEl[0], {
-            zoomEnabled: true,
-            controlIconsEnabled: false
-        });
-
-        if (preservePanZoom && pan && zoom) {
-            // Restore the pan and zoom.
-            zoomInstance.zoom(zoom);
-            zoomInstance.pan(pan);
-        } else {
-            // New instance, reposition properly.
-            zoomInstance.resize();
-            zoomInstance.center();
-            zoomInstance.fit();
-        }
-
-        this.zoomInstance = zoomInstance;
-    }
-
     buildSplitExtraOptions(): Split.Options {
         return {
             onDrag: () => this.zoomHandler?.()

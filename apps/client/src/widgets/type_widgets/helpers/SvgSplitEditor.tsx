@@ -1,8 +1,9 @@
-import { useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { t } from "../../../services/i18n";
 import SplitEditor, { PreviewButton, SplitEditorProps } from "./SplitEditor";
 import { RawHtmlBlock } from "../../react/RawHtml";
 import server from "../../../services/server";
+import svgPanZoom from "svg-pan-zoom";
 
 interface SvgSplitEditorProps extends Omit<SplitEditorProps, "previewContent"> {
     /**
@@ -22,6 +23,7 @@ interface SvgSplitEditorProps extends Omit<SplitEditorProps, "previewContent"> {
 export default function SvgSplitEditor({ note, attachmentName, renderSvg, ...props }: SvgSplitEditorProps) {
     const [ svg, setSvg ] = useState<string>();
     const [ error, setError ] = useState<string | null | undefined>();
+    const containerRef = useRef<HTMLDivElement>(null);
 
     // Render the SVG.
     async function onContentChanged(content: string) {
@@ -50,14 +52,49 @@ export default function SvgSplitEditor({ note, attachmentName, renderSvg, ...pro
         server.post(`notes/${note.noteId}/attachments?matchBy=title`, payload);
     }
 
+    // Pan & zoom.
+    const lastPanZoom = useRef<{ pan: SvgPanZoom.Point, zoom: number }>();
+    const lastNoteId = useRef<string>();
+    useEffect(() => {
+        const shouldPreservePanZoom = (lastNoteId.current === note.noteId);
+        const svgEl = containerRef.current?.querySelector("svg");
+        if (!svgEl) return;
+        const zoomInstance = svgPanZoom(svgEl, {
+            zoomEnabled: true,
+            controlIconsEnabled: false
+        });
+
+        // Restore the previous pan/zoom if the user updates same note.
+        if (shouldPreservePanZoom && lastPanZoom.current) {
+            zoomInstance.zoom(lastPanZoom.current.zoom);
+            zoomInstance.pan(lastPanZoom.current.pan);
+        } else {
+            zoomInstance.resize().center().fit();
+        }
+
+        lastNoteId.current = note.noteId;
+        return () => {
+            lastPanZoom.current = {
+                pan: zoomInstance.getPan(),
+                zoom: zoomInstance.getZoom()
+            }
+            zoomInstance.destroy();
+        };
+    }, [ svg ]);
+
     return (
         <SplitEditor
+            className="svg-editor"
             note={note}
             error={error}
             onContentChanged={onContentChanged}
             dataSaved={onSave}
             previewContent={(
-                <RawHtmlBlock className="render-container" html={svg} />
+                <RawHtmlBlock
+                    className="render-container"
+                    containerRef={containerRef}
+                    html={svg}
+                />
             )}
             previewButtons={
                 <>
