@@ -43,14 +43,14 @@ button.global-menu-button {
 }
 
 .global-menu-button:is(:hover, .show) svg path.st0 { fill:#95C980; transition-delay: 0ms; }
-.global-menu-button:is(:hover, .show) svg path.st1 { fill:#72B755; transition-delay: 75ms; }
-.global-menu-button:is(:hover, .show) svg path.st2 { fill:#4FA52B; transition-delay: 150ms; }
-.global-menu-button:is(:hover, .show) svg path.st3 { fill:#EE8C89; transition-delay: 225ms; }
-.global-menu-button:is(:hover, .show) svg path.st4 { fill:#E96562; transition-delay: 300ms; }
-.global-menu-button:is(:hover, .show) svg path.st5 { fill:#E33F3B; transition-delay: 375ms; }
-.global-menu-button:is(:hover, .show) svg path.st6 { fill:#EFB075; transition-delay: 450ms; }
-.global-menu-button:is(:hover, .show) svg path.st7 { fill:#E99547; transition-delay: 525ms; }
-.global-menu-button:is(:hover, .show) svg path.st8 { fill:#E47B19; transition-delay: 600ms; }
+.global-menu-button:is(:hover, .show) svg path.st1 { fill:#72B755; transition-delay: 50ms; }
+.global-menu-button:is(:hover, .show) svg path.st2 { fill:#4FA52B; transition-delay: 100ms; }
+.global-menu-button:is(:hover, .show) svg path.st3 { fill:#EE8C89; transition-delay: 200ms; }
+.global-menu-button:is(:hover, .show) svg path.st4 { fill:#E96562; transition-delay: 250ms; }
+.global-menu-button:is(:hover, .show) svg path.st5 { fill:#E33F3B; transition-delay: 300ms; }
+.global-menu-button:is(:hover, .show) svg path.st6 { fill:#EFB075; transition-delay: 400ms; }
+.global-menu-button:is(:hover, .show) svg path.st7 { fill:#E99547; transition-delay: 450ms; }
+.global-menu-button:is(:hover, .show) svg path.st8 { fill:#E47B19; transition-delay: 500ms; }
 
 .global-menu-button-update-available {
     position: absolute;
