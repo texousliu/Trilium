@@ -5,7 +5,7 @@ import CodeMirror from "./CodeMirror";
 import utils from "../../../services/utils";
 import { useNoteBlob } from "../../react/hooks";
 
-export default function ReadOnlyCode({ note, viewScope }: TypeWidgetProps) {
+export default function ReadOnlyCode({ note, viewScope, ntxId }: TypeWidgetProps) {
     const [ content, setContent ] = useState("");
     const blob = useNoteBlob(note);
 
@@ -22,6 +22,7 @@ export default function ReadOnlyCode({ note, viewScope }: TypeWidgetProps) {
                 content={content}
                 mime={note.mime}
                 readOnly
+                ntxId={ntxId}
             />
         </div>
     )

@@ -82,16 +82,6 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
         this.updateBackgroundColor("unset");
     }
 
-    async executeWithCodeEditorEvent({ resolve, ntxId }: EventData<"executeWithCodeEditor">) {
-        if (!this.isNoteContext(ntxId)) {
-            return;
-        }
-
-        await this.initialized;
-
-        resolve(this.codeEditor);
-    }
-
     async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
         if (loadResults.isOptionReloaded("codeNoteTheme")) {
             const themeId = options.get("codeNoteTheme");
