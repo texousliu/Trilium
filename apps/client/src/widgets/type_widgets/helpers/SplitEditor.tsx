@@ -47,8 +47,8 @@ export default function SplitEditor({ note, error, splitOptions, previewContent,
     );
 
     const preview = (
-        <div className={`note-detail-split-preview-col ${error ? "on-error" : ""}`}>
-            <div className="note-detail-split-preview">
+        <div className="note-detail-split-preview-col">
+            <div className={`note-detail-split-preview ${error ? "on-error" : ""}`}>
                 {previewContent}
             </div>
             <div className="btn-group btn-group-sm map-type-switcher content-floating-buttons preview-buttons bottom-right" role="group">

@@ -33,7 +33,7 @@ export default function SvgSplitEditor({ renderSvg, ...props }: SvgSplitEditorPr
 
     return (
         <SplitEditor
-            error="Hi there"
+            error={error}
             onContentChanged={onContentChanged}
             previewContent={(
                 <RawHtmlBlock className="render-container" html={svg} />
