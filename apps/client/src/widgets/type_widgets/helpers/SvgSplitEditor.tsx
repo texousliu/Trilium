@@ -4,6 +4,8 @@ import SplitEditor, { PreviewButton, SplitEditorProps } from "./SplitEditor";
 import { RawHtmlBlock } from "../../react/RawHtml";
 import server from "../../../services/server";
 import svgPanZoom, { zoomIn } from "svg-pan-zoom";
+import { RefObject } from "preact";
+import { useElementSize } from "../../react/hooks";
 
 interface SvgSplitEditorProps extends Omit<SplitEditorProps, "previewContent"> {
     /**
@@ -53,37 +55,7 @@ export default function SvgSplitEditor({ note, attachmentName, renderSvg, ...pro
     }
 
     // Pan & zoom.
-    const lastPanZoom = useRef<{ pan: SvgPanZoom.Point, zoom: number }>();
-    const lastNoteId = useRef<string>();
-    const zoomRef = useRef<SvgPanZoom.Instance>();
-    useEffect(() => {
-        const shouldPreservePanZoom = (lastNoteId.current === note.noteId);
-        const svgEl = containerRef.current?.querySelector("svg");
-        if (!svgEl) return;
-        const zoomInstance = svgPanZoom(svgEl, {
-            zoomEnabled: true,
-            controlIconsEnabled: false
-        });
-
-        // Restore the previous pan/zoom if the user updates same note.
-        if (shouldPreservePanZoom && lastPanZoom.current) {
-            zoomInstance.zoom(lastPanZoom.current.zoom);
-            zoomInstance.pan(lastPanZoom.current.pan);
-        } else {
-            zoomInstance.resize().center().fit();
-        }
-
-        lastNoteId.current = note.noteId;
-        zoomRef.current = zoomInstance;
-
-        return () => {
-            lastPanZoom.current = {
-                pan: zoomInstance.getPan(),
-                zoom: zoomInstance.getZoom()
-            }
-            zoomInstance.destroy();
-        };
-    }, [ svg ]);
+    useResizer(containerRef, note.noteId, svg);
 
     return (
         <SplitEditor
@@ -92,12 +64,6 @@ export default function SvgSplitEditor({ note, attachmentName, renderSvg, ...pro
             error={error}
             onContentChanged={onContentChanged}
             dataSaved={onSave}
-            splitOptions={{
-                onDrag: () => {
-                    if (!zoomRef.current) return;
-                    zoomRef.current.resize().fit().center();
-                }
-            }}
             previewContent={(
                 <RawHtmlBlock
                     className="render-container"
@@ -125,4 +91,47 @@ export default function SvgSplitEditor({ note, attachmentName, renderSvg, ...pro
             {...props}
         />
     )
+}
+
+function useResizer(containerRef: RefObject<HTMLDivElement>, noteId: string, svg: string | undefined) {
+    const lastPanZoom = useRef<{ pan: SvgPanZoom.Point, zoom: number }>();
+    const lastNoteId = useRef<string>();
+    const zoomRef = useRef<SvgPanZoom.Instance>();
+
+    // Set up pan & zoom.
+    useEffect(() => {
+        const shouldPreservePanZoom = (lastNoteId.current === noteId);
+        const svgEl = containerRef.current?.querySelector("svg");
+        if (!svgEl) return;
+        const zoomInstance = svgPanZoom(svgEl, {
+            zoomEnabled: true,
+            controlIconsEnabled: false
+        });
+
+        // Restore the previous pan/zoom if the user updates same note.
+        if (shouldPreservePanZoom && lastPanZoom.current) {
+            zoomInstance.zoom(lastPanZoom.current.zoom);
+            zoomInstance.pan(lastPanZoom.current.pan);
+        } else {
+            zoomInstance.resize().center().fit();
+        }
+
+        lastNoteId.current = noteId;
+        zoomRef.current = zoomInstance;
+
+        return () => {
+            lastPanZoom.current = {
+                pan: zoomInstance.getPan(),
+                zoom: zoomInstance.getZoom()
+            }
+            zoomInstance.destroy();
+        };
+    }, [ svg ]);
+
+    // React to container changes.
+    const width = useElementSize(containerRef);
+    useEffect(() => {
+        if (!zoomRef.current) return;
+        zoomRef.current.resize().fit().center();
+    }, [ width ]);
 }
