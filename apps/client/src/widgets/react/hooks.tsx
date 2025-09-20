@@ -19,6 +19,8 @@ import Mark from "mark.js";
 import { DragData } from "../note_tree";
 import Component from "../../components/component";
 import toast, { ToastOptions } from "../../services/toast";
+import protected_session_holder from "../../services/protected_session_holder";
+import server from "../../services/server";
 
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
     const parentComponent = useContext(ParentComponent);
@@ -71,6 +73,29 @@ export function useSpacedUpdate(callback: () => void | Promise<void>, interval =
     }, [interval]);
 
     return spacedUpdateRef.current;
+}
+
+export function useEditorSpacedUpdate({ note, getData, dataSaved }: {
+    note: FNote,
+    getData: () => Promise<object | undefined> | object | undefined,
+    dataSaved?: () => void
+}) {
+    const parentComponent = useContext(ParentComponent);
+    const callback = useMemo(() => {
+        return async () => {
+            const data = await getData();
+
+            // for read only notes
+            if (data === undefined) return;
+
+            protected_session_holder.touchProtectedSessionIfNecessary(note);
+            await server.put(`notes/${note.noteId}/data`, data, parentComponent?.componentId);
+
+            dataSaved?.();
+        }
+    }, [ note, getData, dataSaved ])
+    const spacedUpdate = useSpacedUpdate(callback);
+    return spacedUpdate;
 }
 
 /**

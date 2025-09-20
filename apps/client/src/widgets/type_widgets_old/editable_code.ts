@@ -10,21 +10,7 @@ import { hasTouchBar } from "../../services/utils.js";
 import type { EditorConfig } from "@triliumnext/codemirror";
 
 const TPL = /*html*/`
-<div class="note-detail-code note-detail-printable">
-    <style>
-    .note-detail-code {
-        position: relative;
-        height: 100%;
-    }
-
-    .note-detail-code-editor {
-        min-height: 50px;
-        height: 100%;
-    }
-    </style>
-
-    <div class="note-detail-code-editor"></div>
-</div>`;
+`;
 
 export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
 
@@ -60,8 +46,6 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
                 if (this.debounceUpdate) {
                     this.spacedUpdate.resetUpdateTimer();
                 }
-
-                this.spacedUpdate.scheduleUpdate();
             },
             tabIndex: 300
         }
@@ -71,7 +55,7 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
         const blob = await this.note?.getBlob();
 
         await this.spacedUpdate.allowUpdateWithoutChange(() => {
-            this._update(note, blob?.content ?? "");
+        this._update(note, blob?.content ?? "");
         });
 
         this.show();
@@ -79,12 +63,6 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
         if (this.parent && hasTouchBar) {
             this.triggerCommand("refreshTouchBar");
         }
-    }
-
-    getData() {
-        return {
-            content: this.codeEditor.getText()
-        };
     }
 
     buildTouchBarCommand({ TouchBar, buildIcon }: CommandListenerData<"buildTouchBar">) {

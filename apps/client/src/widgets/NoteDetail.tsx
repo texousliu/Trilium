@@ -2,7 +2,7 @@ import { NoteType } from "@triliumnext/commons";
 import { useNoteContext } from "./react/hooks"
 import FNote from "../entities/fnote";
 import protected_session_holder from "../services/protected_session_holder";
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useMemo, useState } from "preact/hooks";
 import NoteContext from "../components/note_context";
 import Empty from "./type_widgets/Empty";
 import { VNode } from "preact";
@@ -15,7 +15,9 @@ import WebView from "./type_widgets/WebView";
 import "./NoteDetail.css";
 import File from "./type_widgets/File";
 import Image from "./type_widgets/Image";
-import ReadOnlyCode from "./type_widgets/code/ReadOnlyCode";
+import { ReadOnlyCode, EditableCode } from "./type_widgets/code/Code";
+import SpacedUpdate from "../services/spaced_update";
+import server from "../services/server";
 
 /**
  * A `NoteType` altered by the note detail widget, taking into consideration whether the note is editable or not and adding special note types such as an empty one,
@@ -74,6 +76,7 @@ function getCorrespondingWidget(noteType: ExtendedNoteType | undefined, props: T
         case "file": return <File {...props} />
         case "image": return <Image {...props} />
         case "readOnlyCode": return <ReadOnlyCode {...props} />
+        case "editableCode": return <EditableCode {...props} />
         default: break;
     }
 }

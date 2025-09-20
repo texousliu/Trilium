@@ -1,18 +1,20 @@
 import { useEffect, useRef } from "preact/hooks";
 import { EditorConfig, default as VanillaCodeMirror } from "@triliumnext/codemirror";
-import { useTriliumEvent, useTriliumOptionBool } from "../../react/hooks";
+import { useSyncedRef, useTriliumEvent, useTriliumOptionBool } from "../../react/hooks";
 import { refToJQuerySelector } from "../../react/react_utils";
+import { RefObject } from "preact";
 
 interface CodeMirrorProps extends Omit<EditorConfig, "parent"> {
     content: string;
     mime: string;
     className?: string;
     ntxId: string | null | undefined;
+    editorRef?: RefObject<VanillaCodeMirror>;
 }
 
-export default function CodeMirror({ className, content, mime, ntxId, ...extraOpts }: CodeMirrorProps) {
+export default function CodeMirror({ className, content, mime, ntxId, editorRef: externalEditorRef, ...extraOpts }: CodeMirrorProps) {
     const parentRef = useRef<HTMLPreElement>(null);
-    const codeEditorRef = useRef<VanillaCodeMirror>(null);
+    const codeEditorRef = useRef<VanillaCodeMirror>();
     const [ codeLineWrapEnabled ] = useTriliumOptionBool("codeLineWrapEnabled");
     const initialized = $.Deferred();
 
@@ -39,6 +41,9 @@ export default function CodeMirror({ className, content, mime, ntxId, ...extraOp
             ...extraOpts
         });
         codeEditorRef.current = codeEditor;
+        if (externalEditorRef) {
+            externalEditorRef.current = codeEditor;
+        }
         initialized.resolve();
 
         return () => codeEditor.destroy();

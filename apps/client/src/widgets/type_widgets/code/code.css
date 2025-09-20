@@ -1,4 +1,18 @@
+/* #region Read-only code */
 .note-detail-readonly-code {
     min-height: 50px;
     position: relative;
 }
+/* #endregion */
+
+/* #region Editable code */
+.note-detail-code {
+    position: relative;
+    height: 100%;
+}
+
+.note-detail-code-editor {
+    min-height: 50px;
+    height: 100%;
+}
+/* #endregion */

@@ -74,32 +74,6 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
 
         this.typeWidgets = {};
 
-        this.spacedUpdate = new SpacedUpdate(async () => {
-            if (!this.noteContext) {
-                return;
-            }
-
-            const { note } = this.noteContext;
-            if (!note) {
-                return;
-            }
-
-            const { noteId } = note;
-
-            const data = await this.getTypeWidget().getData();
-
-            // for read only notes
-            if (data === undefined) {
-                return;
-            }
-
-            protectedSessionHolder.touchProtectedSessionIfNecessary(note);
-
-            await server.put(`notes/${noteId}/data`, data, this.componentId);
-
-            this.getTypeWidget().dataSaved();
-        });
-
         appContext.addBeforeUnloadListener(this);
     }
 
