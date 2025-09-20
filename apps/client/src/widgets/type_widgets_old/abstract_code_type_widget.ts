@@ -30,13 +30,7 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
 
     async #initEditor() {
         // Load the theme.
-        const themeId = options.get("codeNoteTheme");
-        if (themeId?.startsWith(DEFAULT_PREFIX)) {
-            const theme = getThemeById(themeId.substring(DEFAULT_PREFIX.length));
-            if (theme) {
-                await this.codeEditor.setTheme(theme);
-            }
-        }
+
     }
 
     /**
