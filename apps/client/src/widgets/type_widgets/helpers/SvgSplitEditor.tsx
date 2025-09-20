@@ -55,7 +55,7 @@ export default function SvgSplitEditor({ note, attachmentName, renderSvg, ...pro
     }
 
     // Pan & zoom.
-    useResizer(containerRef, note.noteId, svg);
+    const zoomRef = useResizer(containerRef, note.noteId, svg);
 
     return (
         <SplitEditor
@@ -76,15 +76,17 @@ export default function SvgSplitEditor({ note, attachmentName, renderSvg, ...pro
                     <PreviewButton
                         icon="bx bx-zoom-in"
                         text={t("relation_map_buttons.zoom_in_title")}
-                        onClick={() => {}}
+                        onClick={() => zoomRef.current?.zoomIn()}
                     />
                     <PreviewButton
                         icon="bx bx-zoom-out"
                         text={t("relation_map_buttons.zoom_out_title")}
+                        onClick={() => zoomRef.current?.zoomOut()}
                     />
                     <PreviewButton
                         icon="bx bx-crop"
                         text={t("relation_map_buttons.reset_pan_zoom_title")}
+                        onClick={() => zoomRef.current?.fit().center()}
                     />
                 </>
             }
@@ -134,4 +136,6 @@ function useResizer(containerRef: RefObject<HTMLDivElement>, noteId: string, svg
         if (!zoomRef.current) return;
         zoomRef.current.resize().fit().center();
     }, [ width ]);
+
+    return zoomRef;
 }
