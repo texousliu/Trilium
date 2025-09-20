@@ -29,26 +29,4 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
         super.doRender();
     }
 
-    async doRefresh(note: FNote) {
-        const blob = await this.note?.getBlob();
-
-        if (this.parent && hasTouchBar) {
-            this.triggerCommand("refreshTouchBar");
-        }
-    }
-
-    buildTouchBarCommand({ TouchBar, buildIcon }: CommandListenerData<"buildTouchBar">) {
-        const items: TouchBarItem[] = [];
-        const note = this.note;
-
-        if (note?.mime.startsWith("application/javascript") || note?.mime === "text/x-sqlite;schema=trilium") {
-            items.push(new TouchBar.TouchBarButton({
-                icon: buildIcon("NSImageNameTouchBarPlayTemplate"),
-                click: () => appContext.triggerCommand("runActiveNote")
-            }));
-        }
-
-        return items;
-    }
-
 }

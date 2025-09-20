@@ -700,26 +700,6 @@ export function useNoteTreeDrag(containerRef: MutableRef<HTMLElement | null | un
     }, [ containerRef, callback ]);
 }
 
-export function useTouchBar(
-    factory: (context: CommandListenerData<"buildTouchBar"> & { parentComponent: Component | null }) => void,
-    inputs: Inputs
-) {
-    const parentComponent = useContext(ParentComponent);
-
-    useLegacyImperativeHandlers({
-        buildTouchBarCommand(context: CommandListenerData<"buildTouchBar">) {
-            return factory({
-                ...context,
-                parentComponent
-            });
-        }
-    });
-
-    useEffect(() => {
-        parentComponent?.triggerCommand("refreshTouchBar");
-    }, inputs);
-}
-
 export function useResizeObserver(ref: RefObject<HTMLElement>, callback: () => void) {
     const resizeObserver = useRef<ResizeObserver>(null);
     useEffect(() => {

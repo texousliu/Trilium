@@ -6,6 +6,8 @@ import CodeMirror from "./CodeMirror";
 import utils from "../../../services/utils";
 import { useEditorSpacedUpdate, useNoteBlob, useTriliumOptionBool } from "../../react/hooks";
 import { t } from "../../../services/i18n";
+import appContext from "../../../components/app_context";
+import TouchBar, { TouchBarButton } from "../../react/TouchBar";
 
 export function ReadOnlyCode({ note, viewScope, ntxId }: TypeWidgetProps) {
     const [ content, setContent ] = useState("");
@@ -64,6 +66,12 @@ export function EditableCode({ note, ntxId, debounceUpdate }: TypeWidgetProps & 
                     spacedUpdate.scheduleUpdate();
                 }}
             />
+
+            <TouchBar>
+                {(note?.mime.startsWith("application/javascript") || note?.mime === "text/x-sqlite;schema=trilium") && (
+                    <TouchBarButton icon="NSImageNameTouchBarPlayTemplate" click={() => appContext.triggerCommand("runActiveNote")} />
+                )}
+            </TouchBar>
         </div>
     )
 }
