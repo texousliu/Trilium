@@ -92,11 +92,8 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
         }
 
         // Vertical vs horizontal layout
-        const layoutOrientation = (!utils.isMobile() ? options.get("splitEditorOrientation") ?? "horizontal" : "vertical");
         if (this.layoutOrientation !== layoutOrientation || this.isReadOnly !== isReadOnly) {
             this.$widget
-                .toggleClass("split-horizontal", !isReadOnly && layoutOrientation === "horizontal")
-                .toggleClass("split-vertical", !isReadOnly && layoutOrientation === "vertical")
                 .toggleClass("split-read-only", isReadOnly);
             this.layoutOrientation = layoutOrientation as ("horizontal" | "vertical");
             this.isReadOnly = isReadOnly;

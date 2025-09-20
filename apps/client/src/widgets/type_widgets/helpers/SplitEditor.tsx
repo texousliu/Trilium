@@ -1,3 +1,5 @@
+import { isMobile } from "../../../services/utils";
+import { useTriliumOption } from "../../react/hooks";
 import { TypeWidgetProps } from "../type_widget";
 import "./SplitEditor.css";
 
@@ -11,16 +13,24 @@ import "./SplitEditor.css";
  * - Horizontal or vertical orientation for the editor/preview split, adjustable via the switch split orientation button floating button.
  */
 export default function SplitEditor({ }: TypeWidgetProps) {
+    const splitEditorOrientation = useSplitOrientation();
     return (
-        <div className="note-detail-split note-detail-printable">
+        <div className={`note-detail-split note-detail-printable ${"split-" + splitEditorOrientation}`}>
             <div className="note-detail-split-editor-col">
-                <div className="note-detail-split-editor"></div>
-                <div className="admonition caution note-detail-error-container hidden-ext"></div>
+                <div className="note-detail-split-editor">Detail goes here.</div>
+                <div className="admonition caution note-detail-error-container hidden-ext">Errors go here.</div>
             </div>
             <div className="note-detail-split-preview-col">
-                <div className="note-detail-split-preview"></div>
-                <div className="btn-group btn-group-sm map-type-switcher content-floating-buttons preview-buttons bottom-right" role="group"></div>
+                <div className="note-detail-split-preview">Preview goes here</div>
+                <div className="btn-group btn-group-sm map-type-switcher content-floating-buttons preview-buttons bottom-right" role="group">Buttons go here</div>
             </div>
         </div>
     )
+}
+
+function useSplitOrientation() {
+    const [ splitEditorOrientation ] = useTriliumOption("splitEditorOrientation");
+    if (isMobile()) return "vertical";
+    if (!splitEditorOrientation) return "horizontal";
+    return splitEditorOrientation;
 }
