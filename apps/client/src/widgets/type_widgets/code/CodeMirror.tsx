@@ -10,10 +10,11 @@ interface CodeMirrorProps extends Omit<EditorConfig, "parent"> {
     className?: string;
     ntxId: string | null | undefined;
     editorRef?: RefObject<VanillaCodeMirror>;
+    containerRef?: RefObject<HTMLPreElement>;
 }
 
-export default function CodeMirror({ className, content, mime, ntxId, editorRef: externalEditorRef, ...extraOpts }: CodeMirrorProps) {
-    const parentRef = useRef<HTMLPreElement>(null);
+export default function CodeMirror({ className, content, mime, ntxId, editorRef: externalEditorRef, containerRef: externalContainerRef, ...extraOpts }: CodeMirrorProps) {
+    const parentRef = useSyncedRef(externalContainerRef);
     const codeEditorRef = useRef<VanillaCodeMirror>();
     const [ codeLineWrapEnabled ] = useTriliumOptionBool("codeLineWrapEnabled");
     const initialized = $.Deferred();

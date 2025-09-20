@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { default as VanillaCodeMirror } from "@triliumnext/codemirror";
 import { TypeWidgetProps } from "../type_widget";
 import "./code.css";
@@ -8,6 +8,8 @@ import { useEditorSpacedUpdate, useNoteBlob, useTriliumOptionBool } from "../../
 import { t } from "../../../services/i18n";
 import appContext from "../../../components/app_context";
 import TouchBar, { TouchBarButton } from "../../react/TouchBar";
+import keyboard_actions from "../../../services/keyboard_actions";
+import { refToJQuerySelector } from "../../react/react_utils";
 
 export function ReadOnlyCode({ note, viewScope, ntxId }: TypeWidgetProps) {
     const [ content, setContent ] = useState("");
@@ -32,11 +34,12 @@ export function ReadOnlyCode({ note, viewScope, ntxId }: TypeWidgetProps) {
     )
 }
 
-export function EditableCode({ note, ntxId, debounceUpdate }: TypeWidgetProps & {
+export function EditableCode({ note, ntxId, debounceUpdate, parentComponent }: TypeWidgetProps & {
     // if true, the update will be debounced to prevent excessive updates. Especially useful if the editor is linked to a live preview.
     debounceUpdate?: boolean;
 }) {
     const editorRef = useRef<VanillaCodeMirror>(null);
+    const containerRef = useRef<HTMLPreElement>(null);
     const [ vimKeymapEnabled ] = useTriliumOptionBool("vimKeymapEnabled");
     const spacedUpdate = useEditorSpacedUpdate({
         note,
@@ -50,10 +53,15 @@ export function EditableCode({ note, ntxId, debounceUpdate }: TypeWidgetProps & 
         }
     });
 
+    useEffect(() => {
+        if (!parentComponent) return;
+        keyboard_actions.setupActionsForElement("code-detail", refToJQuerySelector(containerRef), parentComponent);
+    }, []);
+
     return (
         <div className="note-detail-code note-detail-printable">
             <CodeMirror
-                editorRef={editorRef}
+                editorRef={editorRef} containerRef={containerRef}
                 className="note-detail-code-editor"
                 ntxId={ntxId}
                 placeholder={t("editable_code.placeholder")}

@@ -16,8 +16,6 @@ import "./NoteDetail.css";
 import File from "./type_widgets/File";
 import Image from "./type_widgets/Image";
 import { ReadOnlyCode, EditableCode } from "./type_widgets/code/Code";
-import SpacedUpdate from "../services/spaced_update";
-import server from "../services/server";
 
 /**
  * A `NoteType` altered by the note detail widget, taking into consideration whether the note is editable or not and adding special note types such as an empty one,
@@ -30,14 +28,15 @@ type ExtendedNoteType = Exclude<NoteType, "launcher" | "text" | "code"> | "empty
  */
 export default function NoteDetail() {
     const { note, type, noteContext } = useNoteInfo();
-    const { ntxId, viewScope } = noteContext ?? {};
+    const { ntxId, viewScope, parent } = noteContext ?? {};
     const [ correspondingWidget, setCorrespondingWidget ] = useState<VNode>();
     const isFullHeight = checkFullHeight(noteContext, type);
 
     const props: TypeWidgetProps = {
         note: note!,
         viewScope,
-        ntxId
+        ntxId,
+        parentComponent: parent
     };
     useEffect(() => setCorrespondingWidget(getCorrespondingWidget(type, props)), [ note, viewScope, type ]);
 
