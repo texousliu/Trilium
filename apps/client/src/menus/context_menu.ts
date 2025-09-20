@@ -155,7 +155,7 @@ class ContextMenu {
             .addClass("show");
     }
 
-    addItems($parent: JQuery<HTMLElement>, items: MenuItem<any>[]) {
+    addItems($parent: JQuery<HTMLElement>, items: MenuItem<any>[], multicolumn = false) {
         let $group = $parent;
         let shouldResetGroup = false; // If true, the next item will be the last one from the group
 
@@ -169,8 +169,8 @@ class ContextMenu {
             // before and after the seaparator/header.
             // This is a workaround for Firefox not supporting break-after: avoid on columns.
             const nextItem = (index < items.length - 1) ? items[index + 1] : null;
-            if (!shouldResetGroup && nextItem && "kind" in nextItem) {
-                if (nextItem.kind === "separator" || nextItem.kind === "header") {
+            if (multicolumn && nextItem && "kind" in nextItem) {
+                if (!shouldResetGroup && (nextItem.kind === "separator" || nextItem.kind === "header")) {
                     $group = $("<div class='dropdown-no-break'>");
                     $parent.append($group);
                 }
@@ -283,11 +283,12 @@ class ContextMenu {
                     $link.addClass("dropdown-toggle");
 
                     const $subMenu = $("<ul>").addClass("dropdown-menu");
-                    if (!this.isMobile && item.columns) {
-                        $subMenu.css("column-count", item.columns);
+                    const hasColumns = !!item.columns && item.columns > 1;
+                    if (!this.isMobile && hasColumns) {
+                        $subMenu.css("column-count", item.columns!);
                     }
 
-                    this.addItems($subMenu, item.items);
+                    this.addItems($subMenu, item.items, hasColumns);
 
                     $item.append($subMenu);
                 }
