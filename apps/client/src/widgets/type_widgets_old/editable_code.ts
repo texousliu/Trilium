@@ -14,15 +14,6 @@ const TPL = /*html*/`
 
 export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
 
-    private debounceUpdate: boolean;
-
-    /**
-     * @param debounceUpdate if true, the update will be debounced to prevent excessive updates. Especially useful if the editor is linked to a live preview.
-     */
-    constructor(debounceUpdate: boolean = false) {
-        super();
-        this.debounceUpdate = debounceUpdate;
-    }
 
     static getType() {
         return "editableCode";
@@ -38,27 +29,8 @@ export default class EditableCodeTypeWidget extends AbstractCodeTypeWidget {
         super.doRender();
     }
 
-    getExtraOpts(): Partial<EditorConfig> {
-        return {
-            placeholder: t("editable_code.placeholder"),
-            vimKeybindings: options.is("vimKeymapEnabled"),
-            onContentChanged: () => {
-                if (this.debounceUpdate) {
-                    this.spacedUpdate.resetUpdateTimer();
-                }
-            },
-            tabIndex: 300
-        }
-    }
-
     async doRefresh(note: FNote) {
         const blob = await this.note?.getBlob();
-
-        await this.spacedUpdate.allowUpdateWithoutChange(() => {
-        this._update(note, blob?.content ?? "");
-        });
-
-        this.show();
 
         if (this.parent && hasTouchBar) {
             this.triggerCommand("refreshTouchBar");

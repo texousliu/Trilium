@@ -4,7 +4,8 @@ import { TypeWidgetProps } from "../type_widget";
 import "./code.css";
 import CodeMirror from "./CodeMirror";
 import utils from "../../../services/utils";
-import { useEditorSpacedUpdate, useNoteBlob } from "../../react/hooks";
+import { useEditorSpacedUpdate, useNoteBlob, useTriliumOptionBool } from "../../react/hooks";
+import { t } from "../../../services/i18n";
 
 export function ReadOnlyCode({ note, viewScope, ntxId }: TypeWidgetProps) {
     const [ content, setContent ] = useState("");
@@ -29,8 +30,12 @@ export function ReadOnlyCode({ note, viewScope, ntxId }: TypeWidgetProps) {
     )
 }
 
-export function EditableCode({ note, ntxId }: TypeWidgetProps) {
+export function EditableCode({ note, ntxId, debounceUpdate }: TypeWidgetProps & {
+    // if true, the update will be debounced to prevent excessive updates. Especially useful if the editor is linked to a live preview.
+    debounceUpdate?: boolean;
+}) {
     const editorRef = useRef<VanillaCodeMirror>(null);
+    const [ vimKeymapEnabled ] = useTriliumOptionBool("vimKeymapEnabled");
     const spacedUpdate = useEditorSpacedUpdate({
         note,
         getData: () => ({ content: editorRef.current?.getText() }),
@@ -49,7 +54,13 @@ export function EditableCode({ note, ntxId }: TypeWidgetProps) {
                 editorRef={editorRef}
                 className="note-detail-code-editor"
                 ntxId={ntxId}
+                placeholder={t("editable_code.placeholder")}
+                vimKeybindings={vimKeymapEnabled}
+                tabIndex={300}
                 onContentChanged={() => {
+                    if (debounceUpdate) {
+                        spacedUpdate.resetUpdateTimer();
+                    }
                     spacedUpdate.scheduleUpdate();
                 }}
             />
