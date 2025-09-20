@@ -17,7 +17,10 @@ export interface EditableCodeProps extends TypeWidgetProps {
     debounceUpdate?: boolean;
     lineWrapping?: boolean;
     updateInterval?: number;
+    /** Invoked when the content of the note is changed, such as a different revision or a note switch. */
     onContentChanged?: (content: string) => void;
+    /** Invoked after the content of the note has been uploaded to the server, using a spaced update. */
+    dataSaved?: () => void;
 }
 
 export function ReadOnlyCode({ note, viewScope, ntxId, parentComponent }: TypeWidgetProps) {
@@ -43,7 +46,7 @@ export function ReadOnlyCode({ note, viewScope, ntxId, parentComponent }: TypeWi
     )
 }
 
-export function EditableCode({ note, ntxId, debounceUpdate, parentComponent, updateInterval, onContentChanged, ...editorProps }: EditableCodeProps) {
+export function EditableCode({ note, ntxId, debounceUpdate, parentComponent, updateInterval, onContentChanged, dataSaved, ...editorProps }: EditableCodeProps) {
     const editorRef = useRef<VanillaCodeMirror>(null);
     const containerRef = useRef<HTMLPreElement>(null);
     const [ vimKeymapEnabled ] = useTriliumOptionBool("vimKeymapEnabled");
@@ -57,6 +60,7 @@ export function EditableCode({ note, ntxId, debounceUpdate, parentComponent, upd
             codeEditor.setMimeType(note.mime);
             codeEditor.clearHistory();
         },
+        dataSaved,
         updateInterval
     });
 

@@ -95,15 +95,7 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
     }
 
     #saveSvg() {
-        const payload = {
-            role: "image",
-            title: `${this.attachmentName}.svg`,
-            mime: "image/svg+xml",
-            content: this.svg,
-            position: 0
-        };
 
-        server.post(`notes/${this.noteId}/attachments?matchBy=title`, payload);
     }
 
     cleanup(): void {
@@ -112,9 +104,6 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
         super.cleanup();
     }
 
-    /**
-     * Called to obtain the name of the note attachment (without .svg extension) that will be used for storing the preview.
-     */
     abstract get attachmentName(): string;
 
     /**

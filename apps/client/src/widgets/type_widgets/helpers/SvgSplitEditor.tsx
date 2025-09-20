@@ -2,8 +2,13 @@ import { useState } from "preact/hooks";
 import { t } from "../../../services/i18n";
 import SplitEditor, { PreviewButton, SplitEditorProps } from "./SplitEditor";
 import { RawHtmlBlock } from "../../react/RawHtml";
+import server from "../../../services/server";
 
 interface SvgSplitEditorProps extends Omit<SplitEditorProps, "previewContent"> {
+    /**
+     * The name of the note attachment (without .svg extension) that will be used for storing the preview.
+     */
+    attachmentName: string;
     /**
      * Called upon when the SVG preview needs refreshing, such as when the editor has switched to a new note or the content has switched.
      *
@@ -14,7 +19,7 @@ interface SvgSplitEditorProps extends Omit<SplitEditorProps, "previewContent"> {
     renderSvg(content: string): string | Promise<string>;
 }
 
-export default function SvgSplitEditor({ renderSvg, ...props }: SvgSplitEditorProps) {
+export default function SvgSplitEditor({ note, attachmentName, renderSvg, ...props }: SvgSplitEditorProps) {
     const [ svg, setSvg ] = useState<string>();
     const [ error, setError ] = useState<string | null | undefined>();
 
@@ -31,10 +36,24 @@ export default function SvgSplitEditor({ renderSvg, ...props }: SvgSplitEditorPr
         }
     }
 
+    function onSave() {
+        const payload = {
+            role: "image",
+            title: `${attachmentName}.svg`,
+            mime: "image/svg+xml",
+            content: svg,
+            position: 0
+        };
+
+        server.post(`notes/${note.noteId}/attachments?matchBy=title`, payload);
+    }
+
     return (
         <SplitEditor
+            note={note}
             error={error}
             onContentChanged={onContentChanged}
+            dataSaved={onSave}
             previewContent={(
                 <RawHtmlBlock className="render-container" html={svg} />
             )}
