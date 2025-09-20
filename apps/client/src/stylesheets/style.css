@@ -370,14 +370,10 @@ button kbd {
     --bs-dropdown-link-active-bg: var(--active-item-background-color) !important;
 }
 
-.dropdown-menu .dropdown-divider {
-    break-before: avoid;
-    break-after: avoid;
-}
-
 body.desktop .dropdown-menu,
 body.desktop .tabulator-popup-container {
     border: 1px solid var(--dropdown-border-color);
+    column-rule: 1px solid var(--dropdown-border-color);
     box-shadow: 0px 10px 20px rgba(0, 0, 0, var(--dropdown-shadow-opacity));
     animation: dropdown-menu-opening 100ms ease-in;
 }
@@ -444,9 +440,11 @@ body #context-menu-container .dropdown-item > span {
     align-items: center;
 }
 
-.dropdown-item span.keyboard-shortcut {
+.dropdown-item span.keyboard-shortcut,
+.dropdown-item *:not(.keyboard-shortcut) > kbd {
     flex-grow: 1;
     text-align: right;
+    padding-inline-start: 12px;
 }
 
 .dropdown-menu kbd {    
@@ -456,14 +454,18 @@ body #context-menu-container .dropdown-item > span {
     box-shadow: none;
     padding-bottom: 0;
     padding: 0;
-    flex-grow: 1;
-    text-align: right;
 }
 
 .dropdown-item,
 .dropdown-header {
     color: var(--menu-text-color) !important;
     border: 1px solid transparent !important;
+}
+
+/*  This is a workaround for Firefox not supporting break-before / break-after: avoid on columns. 
+ *  It usually wraps a menu item followed by a separator / header and another menu item. */
+.dropdown-no-break {
+    break-inside: avoid;
 }
 
 .dropdown-item.disabled,

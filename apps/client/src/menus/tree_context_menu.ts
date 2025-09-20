@@ -93,7 +93,7 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 ? null
                 : { title: t("tree-context-menu.unhoist-note"), command: "toggleNoteHoisting", keyboardShortcut: "toggleNoteHoisting", uiIcon: "bx bx-door-open" },
 
-            { title: "----" },
+            { kind: "separator" },
 
             {
                 title: t("tree-context-menu.insert-note-after"),
@@ -115,13 +115,13 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 columns: 2
             },
 
-            { title: "----" },
+            { kind: "separator" },
 
             { title: t("tree-context-menu.protect-subtree"), command: "protectSubtree", uiIcon: "bx bx-check-shield", enabled: noSelectedNotes },
 
             { title: t("tree-context-menu.unprotect-subtree"), command: "unprotectSubtree", uiIcon: "bx bx-shield", enabled: noSelectedNotes },
 
-            { title: "----" },
+            { kind: "separator" },
 
             {
                 title: t("tree-context-menu.advanced"),
@@ -130,7 +130,7 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 items: [
                     { title: t("tree-context-menu.apply-bulk-actions"), command: "openBulkActionsDialog", uiIcon: "bx bx-list-plus", enabled: true },
 
-                    { title: "----" },
+                    { kind: "separator" },
 
                     {
                         title: t("tree-context-menu.edit-branch-prefix"),
@@ -141,7 +141,7 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                     },
                     { title: t("tree-context-menu.convert-to-attachment"), command: "convertNoteToAttachment", uiIcon: "bx bx-paperclip", enabled: isNotRoot && !isHoisted && notOptionsOrHelp },
 
-                    { title: "----" },
+                    { kind: "separator" },
 
                     { title: t("tree-context-menu.expand-subtree"), command: "expandSubtree", keyboardShortcut: "expandSubtree", uiIcon: "bx bx-expand", enabled: noSelectedNotes },
                     { title: t("tree-context-menu.collapse-subtree"), command: "collapseSubtree", keyboardShortcut: "collapseSubtree", uiIcon: "bx bx-collapse", enabled: noSelectedNotes },
@@ -153,14 +153,14 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                         enabled: noSelectedNotes && notSearch
                     },
 
-                    { title: "----" },
+                    { kind: "separator" },
 
                     { title: t("tree-context-menu.copy-note-path-to-clipboard"), command: "copyNotePathToClipboard", uiIcon: "bx bx-directions", enabled: true },
                     { title: t("tree-context-menu.recent-changes-in-subtree"), command: "recentChangesInSubtree", uiIcon: "bx bx-history", enabled: noSelectedNotes && notOptionsOrHelp }
                 ]
             },
 
-            { title: "----" },
+            { kind: "separator" },
 
             {
                 title: t("tree-context-menu.cut"),
@@ -241,13 +241,13 @@ export default class TreeContextMenu implements SelectMenuItemEventListener<Tree
                 enabled: isNotRoot && !isHoisted && parentNotSearch && notOptionsOrHelp
             },
 
-            { title: "----" },
+            { kind: "separator" },
 
             { title: t("tree-context-menu.import-into-note"), command: "importIntoNote", uiIcon: "bx bx-import", enabled: notSearch && noSelectedNotes && notOptionsOrHelp },
 
             { title: t("tree-context-menu.export"), command: "exportNote", uiIcon: "bx bx-export", enabled: notSearch && noSelectedNotes && notOptionsOrHelp },
 
-            { title: "----" },
+            { kind: "separator" },
 
             {
                 title: t("tree-context-menu.search-in-subtree"),

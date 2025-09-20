@@ -112,7 +112,7 @@ function setupContextMenu() {
             // Replace the placeholder with the real search keyword.
             let searchUrl = searchEngineUrl.replace("{keyword}", encodeURIComponent(params.selectionText));
 
-            items.push({ title: "----" });
+            items.push({ kind: "separator" });
 
             items.push({
                 title: t("electron_context_menu.search_online", { term: shortenedSelection, searchEngine: searchEngineName }),
