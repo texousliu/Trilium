@@ -370,11 +370,6 @@ button kbd {
     --bs-dropdown-link-active-bg: var(--active-item-background-color) !important;
 }
 
-.dropdown-menu .dropdown-divider {
-    break-before: avoid;
-    break-after: avoid;
-}
-
 body.desktop .dropdown-menu,
 body.desktop .tabulator-popup-container {
     border: 1px solid var(--dropdown-border-color);
@@ -465,11 +460,6 @@ body #context-menu-container .dropdown-item > span {
 .dropdown-header {
     color: var(--menu-text-color) !important;
     border: 1px solid transparent !important;
-}
-
-.dropdown-header {
-    break-after: avoid;
-    break-inside: avoid;
 }
 
 .dropdown-no-break {
