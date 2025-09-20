@@ -107,7 +107,10 @@ export function useEditorSpacedUpdate({ note, getData, onContentChange, dataSave
     }, [ blob ]);
 
     // React to update interval changes.
-    useEffect(() => spacedUpdate.setUpdateInterval(updateInterval), [ updateInterval ]);
+    useEffect(() => {
+        if (!updateInterval) return;
+        spacedUpdate.setUpdateInterval(updateInterval);
+    }, [ updateInterval ]);
 
     return spacedUpdate;
 }

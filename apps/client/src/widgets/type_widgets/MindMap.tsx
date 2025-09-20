@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useRef } from "preact/hooks";
 import { TypeWidgetProps } from "./type_widget";
-import { MindElixirData, default as VanillaMindElixir } from "mind-elixir";
-import { HTMLAttributes } from "preact";
+import { MindElixirData, MindElixirInstance, Operation, default as VanillaMindElixir } from "mind-elixir";
+import { HTMLAttributes, RefObject } from "preact";
 // allow node-menu plugin css to be bundled by webpack
 import nodeMenu from "@mind-elixir/node-menu";
 import "mind-elixir/style";
 import "@mind-elixir/node-menu/dist/style.css";
 import "./MindMap.css";
+import { useEditorSpacedUpdate } from "../react/hooks";
 
 const NEW_TOPIC_NAME = "";
 
@@ -15,13 +16,34 @@ interface MindmapModel extends MindElixirData {
 }
 
 interface MindElixirProps {
+    apiRef?: RefObject<MindElixirInstance>;
     direction: number;
     containerProps?: Omit<HTMLAttributes<HTMLDivElement>, "ref">;
     content: MindElixirData;
+    onChange?: () => void;
 }
 
-export default function MindMap({ }: TypeWidgetProps) {
+export default function MindMap({ note }: TypeWidgetProps) {
     const content = VanillaMindElixir.new(NEW_TOPIC_NAME);
+    const apiRef = useRef<MindElixirInstance>(null);
+    const spacedUpdate = useEditorSpacedUpdate({
+        note,
+        getData: () => ({ content: apiRef.current?.getDataString() }),
+        onContentChange: (content) => {
+            let newContent: MindElixirData;
+            if (content) {
+                try {
+                    newContent = JSON.parse(content) as MindmapModel;
+                } catch (e) {
+                    console.warn(e);
+                    console.debug("Wrong JSON content: ", content);
+                }
+            } else {
+                newContent = VanillaMindElixir.new(NEW_TOPIC_NAME)
+            }
+            apiRef.current?.init(newContent!);
+        }
+    });
 
     const onKeyDown = useCallback((e: KeyboardEvent) => {
         /*
@@ -42,7 +64,9 @@ export default function MindMap({ }: TypeWidgetProps) {
     return (
         <div className="note-detail-mind-map note-detail-printable">
             <MindElixir
+                apiRef={apiRef}
                 content={content}
+                onChange={() => spacedUpdate.scheduleUpdate()}
                 containerProps={{
                     className: "mind-map-container",
                     onKeyDown
@@ -52,8 +76,9 @@ export default function MindMap({ }: TypeWidgetProps) {
     )
 }
 
-function MindElixir({ content, containerProps, direction }: MindElixirProps) {
+function MindElixir({ content, containerProps, direction, apiRef: externalApiRef, onChange }: MindElixirProps) {
     const containerRef = useRef<HTMLDivElement>(null);
+    const apiRef = useRef<MindElixirInstance>(null);
 
     useEffect(() => {
         if (!containerRef.current) return;
@@ -66,12 +91,28 @@ function MindElixir({ content, containerProps, direction }: MindElixirProps) {
         mind.install(nodeMenu);
         mind.init(content);
 
+        apiRef.current = mind;
+        if (externalApiRef) {
+            externalApiRef.current = mind;
+        }
+
         return () => mind.destroy();
     }, []);
 
-    return (
-        <div ref={containerRef} {...containerProps}>
+    // On change listener.
+    useEffect(() => {
+        if (!onChange) return;
 
-        </div>
+        const listener = (operation: Operation) => {
+            if (operation.name !== "beginEdit") {
+                onChange();
+            }
+        }
+        apiRef.current?.bus.addListener("operation", listener);
+        return () => apiRef.current?.bus?.removeListener("operation", listener);
+    }, [ onChange ]);
+
+    return (
+        <div ref={containerRef} {...containerProps} />
     )
 }

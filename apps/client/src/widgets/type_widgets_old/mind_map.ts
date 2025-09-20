@@ -55,14 +55,6 @@ export default class MindMapWidget extends TypeWidget {
         });
 
         this.mind = mind;
-        mind.init(this.MindElixir.new(NEW_TOPIC_NAME));
-        // TODO: See why the typeof mindmap is not correct.
-        mind.bus.addListener("operation", (operation: { name: string }) => {
-            this.triggeredByUserOperation = true;
-            if (operation.name !== "beginEdit") {
-                this.spacedUpdate.scheduleUpdate();
-            }
-        });
     }
 
     async getData() {
