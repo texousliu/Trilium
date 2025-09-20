@@ -462,6 +462,8 @@ body #context-menu-container .dropdown-item > span {
     border: 1px solid transparent !important;
 }
 
+/*  This is a workaround for Firefox not supporting break-before / break-after: avoid on columns. 
+ *  It usually wraps a menu item followed by a separator / header and another menu item. */
 .dropdown-no-break {
     break-inside: avoid;
 }
