@@ -29,12 +29,6 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
     }
 
     async #initEditor() {
-        this.codeEditor = new CodeMirror({
-            parent: this.$editor[0],
-            lineWrapping: options.is("codeLineWrapEnabled"),
-            ...this.getExtraOpts()
-        });
-
         // Load the theme.
         const themeId = options.get("codeNoteTheme");
         if (themeId?.startsWith(DEFAULT_PREFIX)) {
@@ -63,18 +57,6 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
      */
     onEditorInitialized() {
         // Do nothing by default.
-    }
-
-    /**
-     * Must be called by the derived classes in `#doRefresh(note)` in order to react to changes.
-     *
-     * @param the note that was changed.
-     * @param new content of the note.
-     */
-    _update(note: { mime: string }, content: string) {
-        this.codeEditor.setText(content);
-        this.codeEditor.setMimeType(note.mime);
-        this.codeEditor.clearHistory();
     }
 
     show() {
