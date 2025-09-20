@@ -1,6 +1,5 @@
 import FlexContainer from "../widgets/containers/flex_container.js";
 import NoteTitleWidget from "../widgets/note_title.js";
-import NoteDetailWidget from "../widgets/note_detail.js";
 import QuickSearchWidget from "../widgets/quick_search.js";
 import NoteTreeWidget from "../widgets/note_tree.js";
 import ScreenContainer from "../widgets/mobile_widgets/screen_container.js";
@@ -24,6 +23,7 @@ import CloseZenModeButton from "../widgets/close_zen_button.js";
 import NoteWrapperWidget from "../widgets/note_wrapper.js";
 import MobileDetailMenu from "../widgets/mobile_widgets/mobile_detail_menu.js";
 import NoteList from "../widgets/collections/NoteList.jsx";
+import NoteDetail from "../widgets/NoteDetail.jsx";
 
 const MOBILE_CSS = `
 <style>
@@ -153,7 +153,7 @@ export default class MobileLayout {
                                         new ScrollingContainer()
                                             .filling()
                                             .contentSized()
-                                            .child(new NoteDetailWidget())
+                                            .child(<NoteDetail />)
                                             .child(<NoteList />)
                                             .child(<FilePropertiesWrapper />)
                                     )

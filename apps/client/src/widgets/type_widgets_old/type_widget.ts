@@ -16,8 +16,6 @@ export default abstract class TypeWidget extends NoteContextAwareWidget {
     static getType() {}
 
     doRender() {
-        this.contentSized();
-
         return super.doRender();
     }
 

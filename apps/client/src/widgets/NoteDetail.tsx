@@ -25,6 +25,9 @@ type ExtendedNoteType = Exclude<NoteType, "launcher" | "text" | "code"> | "empty
 
 /**
  * The note detail is in charge of rendering the content of a note, by determining its type (e.g. text, code) and using the appropriate view widget.
+ *
+ * Apart from that:
+ * - It applies a full-height style depending on the content type (e.g. canvas notes).
  */
 export default function NoteDetail() {
     const { note, type, noteContext, parentComponent } = useNoteInfo();
