@@ -82,7 +82,7 @@ export function useEditorSpacedUpdate({ note, getData, onContentChange, dataSave
     dataSaved?: () => void
 }) {
     const parentComponent = useContext(ParentComponent);
-    const blob = useNoteBlob(note);
+    const blob = useNoteBlob(note, parentComponent?.componentId);
 
     const callback = useMemo(() => {
         return async () => {
@@ -99,6 +99,7 @@ export function useEditorSpacedUpdate({ note, getData, onContentChange, dataSave
     }, [ note, getData, dataSaved ])
     const spacedUpdate = useSpacedUpdate(callback);
 
+    // React to note/blob changes.
     useEffect(() => {
         if (!blob) return;
         spacedUpdate.allowUpdateWithoutChange(() => onContentChange(blob.content));
@@ -402,7 +403,7 @@ export function useNoteLabelInt(note: FNote | undefined | null, labelName: Filte
     ]
 }
 
-export function useNoteBlob(note: FNote | null | undefined): FBlob | null | undefined {
+export function useNoteBlob(note: FNote | null | undefined, componentId?: string): FBlob | null | undefined {
     const [ blob, setBlob ] = useState<FBlob | null>();
 
     function refresh() {
@@ -421,6 +422,10 @@ export function useNoteBlob(note: FNote | null | undefined): FBlob | null | unde
 
         // Check if a revision occurred.
         if (loadResults.hasRevisionForNote(note.noteId)) {
+            refresh();
+        }
+
+        if (loadResults.isNoteContentReloaded(note.noteId, componentId)) {
             refresh();
         }
     });
