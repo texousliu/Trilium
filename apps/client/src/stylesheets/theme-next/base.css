@@ -160,6 +160,16 @@ body.mobile .dropdown-submenu .dropdown-toggle {
     cursor: default !important;
 }
 
+:root .dropdown-item:focus-visible {
+    outline: 2px solid var(--input-focus-outline-color) !important;
+    background-color: transparent;
+    color: unset;
+}
+
+:root .dropdown-item:active {
+    background: unset;
+}
+
 body.mobile .dropdown-submenu {
     padding: 0 !important;
 }

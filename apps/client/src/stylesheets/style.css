@@ -475,9 +475,9 @@ body #context-menu-container .dropdown-item > span {
 
 .dropdown-item.active,
 .dropdown-item:focus {
-    color: var(--active-item-text-color) !important;
-    background-color: var(--active-item-background-color) !important;
-    border-color: var(--active-item-border-color) !important;
+    color: var(--active-item-text-color);
+    background-color: var(--active-item-background-color);
+    border-color: var(--active-item-border-color);
     outline: none;
 }
 
