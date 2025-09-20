@@ -67,6 +67,15 @@ export default function SvgSplitEditor({ ntxId, note, attachmentName, renderSvg,
         server.post(`notes/${note.noteId}/attachments?matchBy=title`, payload);
     }
 
+    // Save the SVG when entering a note only when it does not have an attachment.
+    useEffect(() => {
+        note?.getAttachments().then((attachments) => {
+            if (!attachments.find((a) => a.title === `${attachmentName}.svg`)) {
+                onSave();
+            }
+        });
+    }, [ note ]);
+
     // Import/export
     useTriliumEvent("exportSvg", ({ ntxId: eventNtxId }) => {
         if (eventNtxId !== ntxId || !svg) return;
