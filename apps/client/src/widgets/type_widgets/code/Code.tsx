@@ -12,6 +12,14 @@ import keyboard_actions from "../../../services/keyboard_actions";
 import { refToJQuerySelector } from "../../react/react_utils";
 import { CODE_THEME_DEFAULT_PREFIX as DEFAULT_PREFIX } from "../constants";
 
+export interface EditableCodeProps extends TypeWidgetProps {
+    // if true, the update will be debounced to prevent excessive updates. Especially useful if the editor is linked to a live preview.
+    debounceUpdate?: boolean;
+    lineWrapping?: boolean;
+    updateInterval?: number;
+    onContentChanged?: (content: string) => void;
+}
+
 export function ReadOnlyCode({ note, viewScope, ntxId, parentComponent }: TypeWidgetProps) {
     const [ content, setContent ] = useState("");
     const blob = useNoteBlob(note);
@@ -35,12 +43,7 @@ export function ReadOnlyCode({ note, viewScope, ntxId, parentComponent }: TypeWi
     )
 }
 
-export function EditableCode({ note, ntxId, debounceUpdate, parentComponent, updateInterval, ...editorProps }: TypeWidgetProps & {
-    // if true, the update will be debounced to prevent excessive updates. Especially useful if the editor is linked to a live preview.
-    debounceUpdate?: boolean;
-    lineWrapping?: boolean;
-    updateInterval?: number;
-}) {
+export function EditableCode({ note, ntxId, debounceUpdate, parentComponent, updateInterval, onContentChanged, ...editorProps }: EditableCodeProps) {
     const editorRef = useRef<VanillaCodeMirror>(null);
     const containerRef = useRef<HTMLPreElement>(null);
     const [ vimKeymapEnabled ] = useTriliumOptionBool("vimKeymapEnabled");
@@ -78,6 +81,9 @@ export function EditableCode({ note, ntxId, debounceUpdate, parentComponent, upd
                         spacedUpdate.resetUpdateTimer();
                     }
                     spacedUpdate.scheduleUpdate();
+                    if (editorRef.current && onContentChanged) {
+                        onContentChanged(editorRef.current.getText());
+                    }
                 }}
                 {...editorProps}
             />

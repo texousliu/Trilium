@@ -2,17 +2,17 @@ import { useEffect, useRef } from "preact/hooks";
 import utils, { isMobile } from "../../../services/utils";
 import Admonition from "../../react/Admonition";
 import { useNoteLabelBoolean, useTriliumOption } from "../../react/hooks";
-import { TypeWidgetProps } from "../type_widget";
 import "./SplitEditor.css";
 import Split from "split.js";
 import { DEFAULT_GUTTER_SIZE } from "../../../services/resizer";
-import { EditableCode } from "../code/Code";
+import { EditableCode, EditableCodeProps } from "../code/Code";
 import { ComponentChildren } from "preact";
 import ActionButton, { ActionButtonProps } from "../../react/ActionButton";
 
-export interface SplitEditorProps extends TypeWidgetProps {
+export interface SplitEditorProps extends EditableCodeProps {
     error?: string | null;
     splitOptions?: Split.Options;
+    previewContent: ComponentChildren;
     previewButtons?: ComponentChildren;
 }
 
@@ -25,7 +25,7 @@ export interface SplitEditorProps extends TypeWidgetProps {
  * - Can display errors to the user via {@link setError}.
  * - Horizontal or vertical orientation for the editor/preview split, adjustable via the switch split orientation button floating button.
  */
-export default function SplitEditor({ note, error, splitOptions, previewButtons, ...editorProps }: SplitEditorProps) {
+export default function SplitEditor({ note, error, splitOptions, previewContent, previewButtons, ...editorProps }: SplitEditorProps) {
     const splitEditorOrientation = useSplitOrientation();
     const [ readOnly ] = useNoteLabelBoolean(note, "readOnly");
     const containerRef = useRef<HTMLDivElement>(null);
@@ -48,7 +48,9 @@ export default function SplitEditor({ note, error, splitOptions, previewButtons,
 
     const preview = (
         <div className={`note-detail-split-preview-col ${error ? "on-error" : ""}`}>
-            <div className="note-detail-split-preview">Preview goes here</div>
+            <div className="note-detail-split-preview">
+                {previewContent}
+            </div>
             <div className="btn-group btn-group-sm map-type-switcher content-floating-buttons preview-buttons bottom-right" role="group">
                 {previewButtons}
             </div>

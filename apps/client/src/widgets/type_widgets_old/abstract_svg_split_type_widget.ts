@@ -83,18 +83,12 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
         try {
             svg = await this.renderSvg(content);
 
-            // Rendering was succesful.
-            this.setError(null);
-
             if (svg === this.svg) {
                 return;
             }
 
             this.svg = svg;
             this.$renderContainer.html(svg);
-        } catch (e: unknown) {
-            // Rendering failed.
-            this.setError((e as Error)?.message);
         }
 
         await this.#setupPanZoom(!recenter);
@@ -117,15 +111,6 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
         $(window).off("resize", this.zoomHandler);
         super.cleanup();
     }
-
-    /**
-     * Called upon when the SVG preview needs refreshing, such as when the editor has switched to a new note or the content has switched.
-     *
-     * The method must return a valid SVG string that will be automatically displayed in the preview.
-     *
-     * @param content the content of the note, in plain text.
-     */
-    abstract renderSvg(content: string): Promise<string>;
 
     /**
      * Called to obtain the name of the note attachment (without .svg extension) that will be used for storing the preview.
