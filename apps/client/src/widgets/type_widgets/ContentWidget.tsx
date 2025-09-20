@@ -18,10 +18,11 @@ import InternationalizationOptions from "./options/i18n";
 import AdvancedSettings from "./options/advanced";
 import "./ContentWidget.css";
 import { t } from "../../services/i18n";
+import BackendLog from "./code/BackendLog";
 
 export type OptionPages = "_optionsAppearance" | "_optionsShortcuts" | "_optionsTextNotes" | "_optionsCodeNotes" | "_optionsImages" | "_optionsSpellcheck" | "_optionsPassword" | "_optionsMFA" | "_optionsEtapi" | "_optionsBackup" | "_optionsSync" | "_optionsAi" | "_optionsOther" | "_optionsLocalization" | "_optionsAdvanced";
 
-const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", () => JSX.Element> = {
+const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", (props: TypeWidgetProps) => JSX.Element> = {
     _optionsAppearance: AppearanceSettings,
     _optionsShortcuts: ShortcutSettings,
     _optionsTextNotes: TextNoteSettings,
@@ -37,7 +38,7 @@ const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", () => JSX.Element> = 
     _optionsOther: OtherSettings,
     _optionsLocalization: InternationalizationOptions,
     _optionsAdvanced: AdvancedSettings,
-    _backendLog: () => <></> // FIXME
+    _backendLog: BackendLog
 }
 
 /**
@@ -46,13 +47,13 @@ const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", () => JSX.Element> = 
  * @param param0
  * @returns
  */
-export default function ContentWidget({ note }: TypeWidgetProps) {
+export default function ContentWidget({ note, ...restProps }: TypeWidgetProps) {
     const Content = CONTENT_WIDGETS[note.noteId];
     return (
         <div className="note-detail-content-widget note-detail-printable">
             <div className={`note-detail-content-widget-content ${note.noteId.startsWith("_options") ? "options" : ""}`}>
                 {Content
-                    ? <Content />
+                    ? <Content note={note} {...restProps} />
                     : (t("content_widget.unknown_widget", { id: note.noteId }))}
             </div>
         </div>

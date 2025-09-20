@@ -4,7 +4,7 @@ import { useSyncedRef } from "../../react/hooks";
 import { RefObject } from "preact";
 
 export interface CodeMirrorProps extends Omit<EditorConfig, "parent"> {
-    content: string;
+    content?: string;
     mime: string;
     className?: string;
     editorRef?: RefObject<VanillaCodeMirror>;

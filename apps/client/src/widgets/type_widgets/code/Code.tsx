@@ -25,7 +25,7 @@ export function ReadOnlyCode({ note, viewScope, ntxId, parentComponent }: TypeWi
     return (
         <div className="note-detail-readonly-code note-detail-printable">
             <CodeEditor
-                ntxId={ntxId} note={note} parentComponent={parentComponent}
+                ntxId={ntxId} parentComponent={parentComponent}
                 className="note-detail-readonly-code-content"
                 content={content}
                 mime={note.mime}
@@ -63,8 +63,9 @@ export function EditableCode({ note, ntxId, debounceUpdate, parentComponent }: T
     return (
         <div className="note-detail-code note-detail-printable">
             <CodeEditor
-                ntxId={ntxId} note={note} parentComponent={parentComponent}
+                ntxId={ntxId} parentComponent={parentComponent}
                 editorRef={editorRef} containerRef={containerRef}
+                mime={note.mime}
                 className="note-detail-code-editor"
                 placeholder={t("editable_code.placeholder")}
                 vimKeybindings={vimKeymapEnabled}
@@ -86,7 +87,7 @@ export function EditableCode({ note, ntxId, debounceUpdate, parentComponent }: T
     )
 }
 
-function CodeEditor({ note, parentComponent, ntxId, containerRef: externalContainerRef, editorRef: externalEditorRef, ...editorProps }: Omit<CodeMirrorProps, "onThemeChange" | "lineWrapping"> & Pick<TypeWidgetProps, "note" | "parentComponent" | "ntxId">) {
+export function CodeEditor({ parentComponent, ntxId, containerRef: externalContainerRef, editorRef: externalEditorRef, mime, onInitialized, ...editorProps }: Omit<CodeMirrorProps, "onThemeChange" | "lineWrapping"> & Pick<TypeWidgetProps, "parentComponent" | "ntxId">) {
     const codeEditorRef = useRef<VanillaCodeMirror>(null);
     const containerRef = useSyncedRef(externalContainerRef);
     const initialized = useRef($.Deferred());
@@ -109,7 +110,7 @@ function CodeEditor({ note, parentComponent, ntxId, containerRef: externalContai
             const theme = getThemeById(codeNoteTheme.substring(DEFAULT_PREFIX.length));
             if (theme) {
                 codeEditorRef.current.setTheme(theme).then(() => {
-                    if (note?.mime === "text/x-sqlite;schema=trilium") return;
+                    if (mime === "text/x-sqlite;schema=trilium") return;
                     const editor = containerRef.current?.querySelector(".cm-editor");
                     if (!editor) return;
                     const style = window.getComputedStyle(editor);
@@ -145,6 +146,7 @@ function CodeEditor({ note, parentComponent, ntxId, containerRef: externalContai
 
     return <CodeMirror
         {...editorProps}
+        mime={mime}
         editorRef={codeEditorRef}
         containerRef={containerRef}
         lineWrapping={codeLineWrapEnabled}
@@ -156,6 +158,7 @@ function CodeEditor({ note, parentComponent, ntxId, containerRef: externalContai
                 externalEditorRef.current = codeEditorRef.current;
             }
             initialized.current.resolve();
+            onInitialized?.();
         }}
     />
 }
