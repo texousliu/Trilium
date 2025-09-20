@@ -75,12 +75,15 @@ export function useSpacedUpdate(callback: () => void | Promise<void>, interval =
     return spacedUpdateRef.current;
 }
 
-export function useEditorSpacedUpdate({ note, getData, dataSaved }: {
+export function useEditorSpacedUpdate({ note, getData, onContentChange, dataSaved }: {
     note: FNote,
     getData: () => Promise<object | undefined> | object | undefined,
+    onContentChange: (newContent: string) => void,
     dataSaved?: () => void
 }) {
     const parentComponent = useContext(ParentComponent);
+    const blob = useNoteBlob(note);
+
     const callback = useMemo(() => {
         return async () => {
             const data = await getData();
@@ -95,6 +98,12 @@ export function useEditorSpacedUpdate({ note, getData, dataSaved }: {
         }
     }, [ note, getData, dataSaved ])
     const spacedUpdate = useSpacedUpdate(callback);
+
+    useEffect(() => {
+        if (!blob) return;
+        spacedUpdate.allowUpdateWithoutChange(() => onContentChange(blob.content));
+    }, [ blob ]);
+
     return spacedUpdate;
 }
 

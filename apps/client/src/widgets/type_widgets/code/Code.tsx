@@ -31,21 +31,17 @@ export function ReadOnlyCode({ note, viewScope, ntxId }: TypeWidgetProps) {
 
 export function EditableCode({ note, ntxId }: TypeWidgetProps) {
     const editorRef = useRef<VanillaCodeMirror>(null);
-    const blob = useNoteBlob(note);
     const spacedUpdate = useEditorSpacedUpdate({
         note,
-        getData: () => ({ content: editorRef.current?.getText() })
-    });
-
-    useEffect(() => {
-        spacedUpdate.allowUpdateWithoutChange(() => {
+        getData: () => ({ content: editorRef.current?.getText() }),
+        onContentChange: (content) => {
             const codeEditor = editorRef.current;
             if (!codeEditor) return;
-            codeEditor.setText(blob?.content ?? "");
+            codeEditor.setText(content ?? "");
             codeEditor.setMimeType(note.mime);
             codeEditor.clearHistory();
-        });
-    }, [ blob ]);
+        }
+    });
 
     return (
         <div className="note-detail-code note-detail-printable">
