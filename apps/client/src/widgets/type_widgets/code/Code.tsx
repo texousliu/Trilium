@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import { default as VanillaCodeMirror } from "@triliumnext/codemirror";
+import { getThemeById, default as VanillaCodeMirror } from "@triliumnext/codemirror";
 import { TypeWidgetProps } from "../type_widget";
 import "./code.css";
 import CodeMirror, { CodeMirrorProps } from "./CodeMirror";
 import utils from "../../../services/utils";
-import { useEditorSpacedUpdate, useNoteBlob, useSyncedRef, useTriliumOptionBool } from "../../react/hooks";
+import { useEditorSpacedUpdate, useNoteBlob, useSyncedRef, useTriliumEvent, useTriliumOption, useTriliumOptionBool } from "../../react/hooks";
 import { t } from "../../../services/i18n";
 import appContext from "../../../components/app_context";
 import TouchBar, { TouchBarButton } from "../../react/TouchBar";
 import keyboard_actions from "../../../services/keyboard_actions";
 import { refToJQuerySelector } from "../../react/react_utils";
+import { CODE_THEME_DEFAULT_PREFIX as DEFAULT_PREFIX } from "../constants";
 
 export function ReadOnlyCode({ note, viewScope, ntxId, parentComponent }: TypeWidgetProps) {
     const [ content, setContent ] = useState("");
@@ -24,12 +25,11 @@ export function ReadOnlyCode({ note, viewScope, ntxId, parentComponent }: TypeWi
     return (
         <div className="note-detail-readonly-code note-detail-printable">
             <CodeEditor
-                note={note} parentComponent={parentComponent}
+                ntxId={ntxId} note={note} parentComponent={parentComponent}
                 className="note-detail-readonly-code-content"
                 content={content}
                 mime={note.mime}
                 readOnly
-                ntxId={ntxId}
             />
         </div>
     )
@@ -63,10 +63,9 @@ export function EditableCode({ note, ntxId, debounceUpdate, parentComponent }: T
     return (
         <div className="note-detail-code note-detail-printable">
             <CodeEditor
-                note={note} parentComponent={parentComponent}
+                ntxId={ntxId} note={note} parentComponent={parentComponent}
                 editorRef={editorRef} containerRef={containerRef}
                 className="note-detail-code-editor"
-                ntxId={ntxId}
                 placeholder={t("editable_code.placeholder")}
                 vimKeybindings={vimKeymapEnabled}
                 tabIndex={300}
@@ -87,8 +86,12 @@ export function EditableCode({ note, ntxId, debounceUpdate, parentComponent }: T
     )
 }
 
-function CodeEditor({ note, parentComponent, containerRef: externalContainerRef, ...editorProps }: Omit<CodeMirrorProps, "onThemeChange"> & Pick<TypeWidgetProps, "note" | "parentComponent">) {
+function CodeEditor({ note, parentComponent, ntxId, containerRef: externalContainerRef, editorRef: externalEditorRef, ...editorProps }: Omit<CodeMirrorProps, "onThemeChange" | "lineWrapping"> & Pick<TypeWidgetProps, "note" | "parentComponent" | "ntxId">) {
+    const codeEditorRef = useRef<VanillaCodeMirror>(null);
     const containerRef = useSyncedRef(externalContainerRef);
+    const initialized = useRef($.Deferred());
+    const [ codeLineWrapEnabled ] = useTriliumOptionBool("codeLineWrapEnabled");
+    const [ codeNoteTheme ] = useTriliumOption("codeNoteTheme");
 
     // React to background color.
     const [ backgroundColor, setBackgroundColor ] = useState<string>();
@@ -100,14 +103,47 @@ function CodeEditor({ note, parentComponent, containerRef: externalContainerRef,
         };
     }, [ backgroundColor ]);
 
+    // React to theme changes.
+    useEffect(() => {
+        if (codeEditorRef.current && codeNoteTheme.startsWith(DEFAULT_PREFIX)) {
+            const theme = getThemeById(codeNoteTheme.substring(DEFAULT_PREFIX.length));
+            if (theme) {
+                codeEditorRef.current.setTheme(theme).then(() => {
+                    if (note?.mime === "text/x-sqlite;schema=trilium") return;
+                    const editor = containerRef.current?.querySelector(".cm-editor");
+                    if (!editor) return;
+                    const style = window.getComputedStyle(editor);
+                    setBackgroundColor(style.backgroundColor);
+                });
+            }
+        }
+    }, [ codeEditorRef, codeNoteTheme ]);
+
+    useTriliumEvent("executeWithCodeEditor", async ({ resolve, ntxId: eventNtxId }) => {
+        if (eventNtxId !== ntxId) return;
+        await initialized.current.promise();
+        resolve(codeEditorRef.current!);
+    });
+
+    useTriliumEvent("executeWithContentElement", async ({ resolve, ntxId: eventNtxId}) => {
+        if (eventNtxId !== ntxId) return;
+        await initialized.current.promise();
+        resolve(refToJQuerySelector(containerRef));
+    });
+
     return <CodeMirror
         {...editorProps}
+        editorRef={codeEditorRef}
         containerRef={containerRef}
-        onThemeChange={note?.mime !== "text/x-sqlite;schema=trilium" ? () => {
-            const editor = containerRef.current?.querySelector(".cm-editor");
-            if (!editor) return;
-            const style = window.getComputedStyle(editor);
-            setBackgroundColor(style.backgroundColor);
-        } : undefined}
+        lineWrapping={codeLineWrapEnabled}
+        onInitialized={() => {
+            if (externalContainerRef && containerRef.current) {
+                externalContainerRef.current = containerRef.current;
+            }
+            if (externalEditorRef && codeEditorRef.current) {
+                externalEditorRef.current = codeEditorRef.current;
+            }
+            initialized.current.resolve();
+        }}
     />
 }
