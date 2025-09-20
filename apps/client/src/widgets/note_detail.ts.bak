@@ -138,17 +138,6 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
         return this.typeWidgets[this.type];
     }
 
-    async focusOnDetailEvent({ ntxId }: EventData<"focusOnDetail">) {
-        if (this.noteContext?.ntxId !== ntxId) {
-            return;
-        }
-
-        await this.refresh();
-        const widget = this.getTypeWidget();
-        await widget.initialized;
-        widget.focus();
-    }
-
     async beforeNoteSwitchEvent({ noteContext }: EventData<"beforeNoteSwitch">) {
         if (this.isNoteContext(noteContext.ntxId)) {
             await this.spacedUpdate.updateNowIfNecessary();

@@ -1,8 +1,8 @@
 import { NoteType } from "@triliumnext/commons";
-import { useNoteContext } from "./react/hooks"
+import { useNoteContext, useTriliumEvent } from "./react/hooks"
 import FNote from "../entities/fnote";
 import protected_session_holder from "../services/protected_session_holder";
-import { useContext, useEffect, useMemo, useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import NoteContext from "../components/note_context";
 import Empty from "./type_widgets/Empty";
 import { VNode } from "preact";
@@ -28,6 +28,7 @@ type ExtendedNoteType = Exclude<NoteType, "launcher" | "text" | "code"> | "empty
  *
  * Apart from that:
  * - It applies a full-height style depending on the content type (e.g. canvas notes).
+ * - Focuses the content when switching tabs.
  */
 export default function NoteDetail() {
     const { note, type, noteContext, parentComponent } = useNoteInfo();
@@ -42,6 +43,14 @@ export default function NoteDetail() {
         parentComponent
     };
     useEffect(() => setCorrespondingWidget(getCorrespondingWidget(type, props)), [ note, viewScope, type ]);
+
+    // Automatically focus the editor.
+    useTriliumEvent("activeNoteChanged", () => {
+        // Restore focus to the editor when switching tabs, but only if the note tree is not already focused.
+        if (!document.activeElement?.classList.contains("fancytree-title")) {
+            parentComponent.triggerCommand("focusOnDetail", { ntxId });
+        }
+    });
 
     return (
         <div class={`note-detail ${isFullHeight ? "full-height" : ""}`}>
