@@ -1,11 +1,15 @@
-import { isMobile } from "../../../services/utils";
+import { useEffect, useRef } from "preact/hooks";
+import utils, { isMobile } from "../../../services/utils";
 import Admonition from "../../react/Admonition";
 import { useNoteLabelBoolean, useTriliumOption } from "../../react/hooks";
 import { TypeWidgetProps } from "../type_widget";
 import "./SplitEditor.css";
+import Split from "split.js";
+import { DEFAULT_GUTTER_SIZE } from "../../../services/resizer";
 
 interface SplitEditorProps extends TypeWidgetProps {
     error?: string | null;
+    splitOptions?: Split.Options;
 }
 
 /**
@@ -17,9 +21,10 @@ interface SplitEditorProps extends TypeWidgetProps {
  * - Can display errors to the user via {@link setError}.
  * - Horizontal or vertical orientation for the editor/preview split, adjustable via the switch split orientation button floating button.
  */
-export default function SplitEditor({ note, error }: SplitEditorProps) {
+export default function SplitEditor({ note, error, splitOptions }: SplitEditorProps) {
     const splitEditorOrientation = useSplitOrientation();
     const [ readOnly ] = useNoteLabelBoolean(note, "readOnly");
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const editor = (!readOnly &&
         <div className="note-detail-split-editor-col">
@@ -37,8 +42,21 @@ export default function SplitEditor({ note, error }: SplitEditorProps) {
         </div>
     );
 
+    useEffect(() => {
+        if (!utils.isDesktop() || !containerRef.current || readOnly) return;
+        const elements = Array.from(containerRef.current?.children) as HTMLElement[];
+        const splitInstance = Split(elements, {
+            sizes: [ 50, 50],
+            direction: splitEditorOrientation,
+            gutterSize: DEFAULT_GUTTER_SIZE,
+            ...splitOptions
+        });
+
+        return () => splitInstance.destroy();
+    }, [ readOnly, splitEditorOrientation ]);
+
     return (
-        <div className={`note-detail-split note-detail-printable ${"split-" + splitEditorOrientation} ${readOnly ? "split-read-only" : ""}`}>
+        <div ref={containerRef} className={`note-detail-split note-detail-printable ${"split-" + splitEditorOrientation} ${readOnly ? "split-read-only" : ""}`}>
             {splitEditorOrientation === "horizontal"
             ? <>{editor}{preview}</>
             : <>{preview}{editor}</>}
@@ -50,5 +68,5 @@ function useSplitOrientation() {
     const [ splitEditorOrientation ] = useTriliumOption("splitEditorOrientation");
     if (isMobile()) return "vertical";
     if (!splitEditorOrientation) return "horizontal";
-    return splitEditorOrientation;
+    return splitEditorOrientation as "horizontal" | "vertical";
 }

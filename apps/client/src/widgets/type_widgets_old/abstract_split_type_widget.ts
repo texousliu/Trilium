@@ -84,52 +84,6 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
         }
     }
 
-    #adjustLayoutOrientation() {
-        // Vertical vs horizontal layout
-        if (this.layoutOrientation !== layoutOrientation || this.isReadOnly !== isReadOnly) {
-            this.$widget
-                .toggleClass("split-read-only", isReadOnly);
-            this.layoutOrientation = layoutOrientation as ("horizontal" | "vertical");
-            this.isReadOnly = isReadOnly;
-            this.#destroyResizer();
-        }
-
-        if (!this.splitInstance) {
-            this.#setupResizer();
-        }
-    }
-
-    #setupResizer() {
-        if (!utils.isDesktop()) {
-            return;
-        }
-
-        this.splitInstance?.destroy();
-
-        if (!this.isReadOnly) {
-            this.splitInstance = Split(elements, {
-                sizes: [ 50, 50 ],
-                direction: this.layoutOrientation,
-                gutterSize: DEFAULT_GUTTER_SIZE,
-                ...this.buildSplitExtraOptions()
-            });
-        } else {
-            this.splitInstance = undefined;
-        }
-    }
-
-    #destroyResizer() {
-        this.splitInstance?.destroy();
-        this.splitInstance = undefined;
-    }
-
-    /**
-     * Called upon when the split between the preview and content pane is initialized. Can be used to add additional listeners if needed.
-     */
-    buildSplitExtraOptions(): Split.Options {
-        return {};
-    }
-
     /**
      * Called upon when the code editor is being initialized. Can be used to add additional options to the editor.
      */
