@@ -33,6 +33,7 @@ export default function SplitEditor({ note, error, splitOptions, ...editorProps 
                 <EditableCode
                     note={note}
                     lineWrapping={false}
+                    updateInterval={750} debounceUpdate
                     {...editorProps}
                 />
             </div>

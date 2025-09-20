@@ -35,10 +35,11 @@ export function ReadOnlyCode({ note, viewScope, ntxId, parentComponent }: TypeWi
     )
 }
 
-export function EditableCode({ note, ntxId, debounceUpdate, parentComponent, ...editorProps }: TypeWidgetProps & {
+export function EditableCode({ note, ntxId, debounceUpdate, parentComponent, updateInterval, ...editorProps }: TypeWidgetProps & {
     // if true, the update will be debounced to prevent excessive updates. Especially useful if the editor is linked to a live preview.
     debounceUpdate?: boolean;
     lineWrapping?: boolean;
+    updateInterval?: number;
 }) {
     const editorRef = useRef<VanillaCodeMirror>(null);
     const containerRef = useRef<HTMLPreElement>(null);
@@ -52,7 +53,8 @@ export function EditableCode({ note, ntxId, debounceUpdate, parentComponent, ...
             codeEditor.setText(content ?? "");
             codeEditor.setMimeType(note.mime);
             codeEditor.clearHistory();
-        }
+        },
+        updateInterval
     });
 
     // Set up keyboard shortcuts.
