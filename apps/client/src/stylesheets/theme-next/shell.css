@@ -589,7 +589,9 @@ div.quick-search .dropdown-menu {
  * vertical layout.
  */
 body.layout-vertical.background-effects div.quick-search .dropdown-menu {
-    --menu-background-color: var(--menu-background-color-no-backdrop);
+    --scrollbar-background-color: var(--menu-background-color-no-backdrop);
+    
+    background: var(--menu-background-color-no-backdrop) !important;
 }
 
 /* Item */
