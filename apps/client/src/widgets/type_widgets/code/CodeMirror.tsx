@@ -12,7 +12,7 @@ export interface CodeMirrorProps extends Omit<EditorConfig, "parent"> {
     onInitialized?: () => void;
 }
 
-export default function CodeMirror({ className, content, mime, editorRef: externalEditorRef, containerRef: externalContainerRef, onInitialized, ...extraOpts }: CodeMirrorProps) {
+export default function CodeMirror({ className, content, mime, editorRef: externalEditorRef, containerRef: externalContainerRef, onInitialized, lineWrapping, ...extraOpts }: CodeMirrorProps) {
     const parentRef = useSyncedRef(externalContainerRef);
     const codeEditorRef = useRef<VanillaCodeMirror>();
 
@@ -40,6 +40,9 @@ export default function CodeMirror({ className, content, mime, editorRef: extern
         codeEditor?.setMimeType(mime);
         codeEditor?.clearHistory();
     }, [content]);
+
+    // React to line wrapping.
+    useEffect(() => codeEditorRef.current?.setLineWrapping(!!lineWrapping), [ lineWrapping ]);
 
     return (
         <pre ref={parentRef} className={className} />

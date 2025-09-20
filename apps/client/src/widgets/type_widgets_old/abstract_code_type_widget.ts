@@ -53,11 +53,6 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
         // Do nothing by default.
     }
 
-    show() {
-        this.$widget.show();
-        this.updateBackgroundColor();
-    }
-
     focus() {
         this.codeEditor.focus();
     }
@@ -65,23 +60,6 @@ export default class AbstractCodeTypeWidget extends TypeWidget {
     scrollToEnd() {
         this.codeEditor.scrollToEnd();
         this.codeEditor.focus();
-    }
-
-    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        if (loadResults.isOptionReloaded("codeNoteTheme")) {
-            const themeId = options.get("codeNoteTheme");
-            if (themeId?.startsWith(DEFAULT_PREFIX)) {
-                const theme = getThemeById(themeId.substring(DEFAULT_PREFIX.length));
-                if (theme) {
-                    await this.codeEditor.setTheme(theme);
-                }
-                this.updateBackgroundColor();
-            }
-        }
-
-        if (loadResults.isOptionReloaded("codeLineWrapEnabled")) {
-            this.codeEditor.setLineWrapping(options.is("codeLineWrapEnabled"));
-        }
     }
 
 }
