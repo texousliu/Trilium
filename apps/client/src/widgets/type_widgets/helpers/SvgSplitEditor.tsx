@@ -3,6 +3,9 @@ import SplitEditor from "./SplitEditor";
 
 export default function SvgSplitEditor(props: TypeWidgetProps) {
     return (
-        <SplitEditor {...props} />
+        <SplitEditor
+            error="Hi there"
+            {...props}
+        />
     )
 }

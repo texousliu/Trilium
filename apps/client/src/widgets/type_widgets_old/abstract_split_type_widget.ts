@@ -143,12 +143,6 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
         return [];
     }
 
-    setError(message: string | null | undefined) {
-        this.$errorContainer.toggleClass("hidden-ext", !message);
-        this.$preview.toggleClass("on-error", !!message);
-        this.$errorContainer.text(message ?? "");
-    }
-
     getData() {
         return this.editorTypeWidget.getData();
     }
