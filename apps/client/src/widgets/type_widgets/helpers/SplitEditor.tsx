@@ -16,19 +16,25 @@ export default function SplitEditor({ note }: TypeWidgetProps) {
     const splitEditorOrientation = useSplitOrientation();
     const [ readOnly ] = useNoteLabelBoolean(note, "readOnly");
 
+    const editor = (!readOnly &&
+        <div className="note-detail-split-editor-col">
+            <div className="note-detail-split-editor">Detail goes here.</div>
+            <div className="admonition caution note-detail-error-container hidden-ext">Errors go here.</div>
+        </div>
+    );
+
+    const preview = (
+        <div className="note-detail-split-preview-col">
+            <div className="note-detail-split-preview">Preview goes here</div>
+            <div className="btn-group btn-group-sm map-type-switcher content-floating-buttons preview-buttons bottom-right" role="group">Buttons go here</div>
+        </div>
+    );
+
     return (
         <div className={`note-detail-split note-detail-printable ${"split-" + splitEditorOrientation} ${readOnly ? "split-read-only" : ""}`}>
-            {!readOnly && (
-                <div className="note-detail-split-editor-col">
-                    <div className="note-detail-split-editor">Detail goes here.</div>
-                    <div className="admonition caution note-detail-error-container hidden-ext">Errors go here.</div>
-                </div>
-            )}
-
-            <div className="note-detail-split-preview-col">
-                <div className="note-detail-split-preview">Preview goes here</div>
-                <div className="btn-group btn-group-sm map-type-switcher content-floating-buttons preview-buttons bottom-right" role="group">Buttons go here</div>
-            </div>
+            {splitEditorOrientation === "horizontal"
+            ? <>{editor}{preview}</>
+            : <>{preview}{editor}</>}
         </div>
     )
 }

@@ -104,11 +104,6 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
             return;
         }
 
-        let elements = [ this.$editorCol[0], this.$previewCol[0] ];
-        if (this.layoutOrientation === "vertical") {
-            elements.reverse();
-        }
-
         this.splitInstance?.destroy();
 
         if (!this.isReadOnly) {
@@ -156,12 +151,6 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 
     getData() {
         return this.editorTypeWidget.getData();
-    }
-
-    entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        if (loadResults.isOptionReloaded("splitEditorOrientation")) {
-            this.refresh();
-        }
     }
 
 }
