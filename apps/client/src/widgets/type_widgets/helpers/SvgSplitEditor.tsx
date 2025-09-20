@@ -5,7 +5,9 @@ import { RawHtmlBlock } from "../../react/RawHtml";
 import server from "../../../services/server";
 import svgPanZoom, { zoomIn } from "svg-pan-zoom";
 import { RefObject } from "preact";
-import { useElementSize } from "../../react/hooks";
+import { useElementSize, useTriliumEvent } from "../../react/hooks";
+import utils from "../../../services/utils";
+import toast from "../../../services/toast";
 
 interface SvgSplitEditorProps extends Omit<SplitEditorProps, "previewContent"> {
     /**
@@ -22,7 +24,18 @@ interface SvgSplitEditorProps extends Omit<SplitEditorProps, "previewContent"> {
     renderSvg(content: string): string | Promise<string>;
 }
 
-export default function SvgSplitEditor({ note, attachmentName, renderSvg, ...props }: SvgSplitEditorProps) {
+/**
+ * A specialization of `SplitTypeWidget` meant for note types that have a SVG preview.
+ *
+ * This adds the following functionality:
+ *
+ * - Automatic handling of the preview when content or the note changes via {@link renderSvg}.
+ * - Built-in pan and zoom functionality with automatic re-centering.
+ * - Automatically displays errors to the user if {@link renderSvg} failed.
+ * - Automatically saves the SVG attachment.
+ *
+ */
+export default function SvgSplitEditor({ ntxId, note, attachmentName, renderSvg, ...props }: SvgSplitEditorProps) {
     const [ svg, setSvg ] = useState<string>();
     const [ error, setError ] = useState<string | null | undefined>();
     const containerRef = useRef<HTMLDivElement>(null);
@@ -54,13 +67,28 @@ export default function SvgSplitEditor({ note, attachmentName, renderSvg, ...pro
         server.post(`notes/${note.noteId}/attachments?matchBy=title`, payload);
     }
 
+    // Import/export
+    useTriliumEvent("exportSvg", ({ ntxId: eventNtxId }) => {
+        if (eventNtxId !== ntxId || !svg) return;
+        utils.downloadSvg(note.title, svg);
+    });
+    useTriliumEvent("exportPng", async ({ ntxId: eventNtxId }) => {
+        if (eventNtxId !== ntxId || !svg) return;
+        try {
+            await utils.downloadSvgAsPng(note.title, svg);
+        } catch (e) {
+            console.warn(e);
+            toast.showError(t("svg.export_to_png"));
+        }
+    });
+
     // Pan & zoom.
     const zoomRef = useResizer(containerRef, note.noteId, svg);
 
     return (
         <SplitEditor
             className="svg-editor"
-            note={note}
+            note={note} ntxId={ntxId}
             error={error}
             onContentChanged={onContentChanged}
             dataSaved={onSave}
