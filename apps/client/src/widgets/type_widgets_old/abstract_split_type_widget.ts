@@ -9,111 +9,6 @@ import type { EventData } from "../../components/app_context.js";
 import type OnClickButtonWidget from "../buttons/onclick_button.js";
 import type { EditorConfig } from "@triliumnext/codemirror";
 
-const TPL = /*html*/`\
-<div class="note-detail-split note-detail-printable">
-    <div class="note-detail-split-editor-col">
-        <div class="note-detail-split-editor"></div>
-        <div class="admonition caution note-detail-error-container hidden-ext"></div>
-    </div>
-    <div class="note-detail-split-preview-col">
-        <div class="note-detail-split-preview"></div>
-        <div class="btn-group btn-group-sm map-type-switcher content-floating-buttons preview-buttons bottom-right" role="group"></div>
-    </div>
-
-    <style>
-        .note-detail-split {
-            display: flex;
-            height: 100%;
-        }
-
-        .note-detail-split-editor-col {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .note-detail-split-preview-col {
-            position: relative;
-        }
-
-        .note-detail-split .note-detail-split-editor {
-            width: 100%;
-            flex-grow: 1;
-        }
-
-        .note-detail-split .note-detail-split-editor .note-detail-code {
-            contain: size !important;
-        }
-
-        .note-detail-split .note-detail-error-container {
-            font-family: var(--monospace-font-family);
-            margin: 5px;
-            white-space: pre-wrap;
-            font-size: 0.85em;
-        }
-
-        .note-detail-split .note-detail-split-preview {
-            transition: opacity 250ms ease-in-out;
-            height: 100%;
-        }
-
-        .note-detail-split .note-detail-split-preview.on-error {
-            opacity: 0.5;
-        }
-
-        /* Horizontal layout */
-
-        .note-detail-split.split-horizontal > .note-detail-split-preview-col {
-            border-left: 1px solid var(--main-border-color);
-        }
-
-        .note-detail-split.split-horizontal > .note-detail-split-editor-col,
-        .note-detail-split.split-horizontal > .note-detail-split-preview-col {
-            height: 100%;
-            width: 50%;
-        }
-
-        .note-detail-split.split-horizontal .note-detail-split-preview {
-            height: 100%;
-        }
-
-        /* Vertical layout */
-
-        .note-detail-split.split-vertical {
-            flex-direction: column;
-        }
-
-        .note-detail-split.split-vertical > .note-detail-split-editor-col,
-        .note-detail-split.split-vertical > .note-detail-split-preview-col {
-            width: 100%;
-            height: 50%;
-        }
-
-        .note-detail-split.split-vertical > .note-detail-split-editor-col {
-            border-top: 1px solid var(--main-border-color);
-        }
-
-        .note-detail-split.split-vertical .note-detail-split-preview-col {
-            order: -1;
-        }
-
-        /* Read-only view */
-
-        .note-detail-split.split-read-only .note-detail-split-preview-col {
-            width: 100%;
-        }
-    </style>
-</div>
-`;
-
-/**
- * Abstract `TypeWidget` which contains a preview and editor pane, each displayed on half of the available screen.
- *
- * Features:
- *
- * - The two panes are resizeable via a split, on desktop. The split can be optionally customized via {@link buildSplitExtraOptions}.
- * - Can display errors to the user via {@link setError}.
- * - Horizontal or vertical orientation for the editor/preview split, adjustable via the switch split orientation button floating button.
- */
 export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 
     private splitInstance?: Split.Instance;
@@ -144,8 +39,6 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
     }
 
     doRender(): void {
-        this.$widget = $(TPL);
-
         this.spacedUpdate.setUpdateInterval(750);
 
         // Preview pane

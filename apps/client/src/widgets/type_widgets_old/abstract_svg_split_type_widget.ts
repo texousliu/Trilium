@@ -4,7 +4,6 @@ import { t } from "../../services/i18n.js";
 import server from "../../services/server.js";
 import toast from "../../services/toast.js";
 import utils from "../../services/utils.js";
-import ws from "../../services/ws.js";
 import OnClickButtonWidget from "../buttons/onclick_button.js";
 import AbstractSplitTypeWidget from "./abstract_split_type_widget.js";
 
