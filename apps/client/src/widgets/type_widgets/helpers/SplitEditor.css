@@ -84,7 +84,10 @@
 }
 
 /* #region SVG */
-.note-detail-split.svg-editor .render-container,
+.note-detail-split.svg-editor .render-container {
+    height: 100%;
+}
+
 .note-detail-split.svg-editor .render-container svg {
     width: 100%;
     height: 100%;

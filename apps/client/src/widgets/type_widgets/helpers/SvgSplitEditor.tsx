@@ -3,7 +3,7 @@ import { t } from "../../../services/i18n";
 import SplitEditor, { PreviewButton, SplitEditorProps } from "./SplitEditor";
 import { RawHtmlBlock } from "../../react/RawHtml";
 import server from "../../../services/server";
-import svgPanZoom from "svg-pan-zoom";
+import svgPanZoom, { zoomIn } from "svg-pan-zoom";
 
 interface SvgSplitEditorProps extends Omit<SplitEditorProps, "previewContent"> {
     /**
@@ -55,6 +55,7 @@ export default function SvgSplitEditor({ note, attachmentName, renderSvg, ...pro
     // Pan & zoom.
     const lastPanZoom = useRef<{ pan: SvgPanZoom.Point, zoom: number }>();
     const lastNoteId = useRef<string>();
+    const zoomRef = useRef<SvgPanZoom.Instance>();
     useEffect(() => {
         const shouldPreservePanZoom = (lastNoteId.current === note.noteId);
         const svgEl = containerRef.current?.querySelector("svg");
@@ -73,6 +74,8 @@ export default function SvgSplitEditor({ note, attachmentName, renderSvg, ...pro
         }
 
         lastNoteId.current = note.noteId;
+        zoomRef.current = zoomInstance;
+
         return () => {
             lastPanZoom.current = {
                 pan: zoomInstance.getPan(),
@@ -89,6 +92,12 @@ export default function SvgSplitEditor({ note, attachmentName, renderSvg, ...pro
             error={error}
             onContentChanged={onContentChanged}
             dataSaved={onSave}
+            splitOptions={{
+                onDrag: () => {
+                    if (!zoomRef.current) return;
+                    zoomRef.current.resize().fit().center();
+                }
+            }}
             previewContent={(
                 <RawHtmlBlock
                     className="render-container"

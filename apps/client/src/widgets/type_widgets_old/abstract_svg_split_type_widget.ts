@@ -25,22 +25,9 @@ export default abstract class AbstractSvgSplitTypeWidget extends AbstractSplitTy
     private zoomInstance?: SvgPanZoom.Instance;
     private svg?: string;
 
-    constructor() {
-        super();
-        this.zoomHandler = () => {
-            if (this.zoomInstance) {
-                this.zoomInstance.resize();
-                this.zoomInstance.fit();
-                this.zoomInstance.center();
-            }
-        }
-    }
 
     doRender(): void {
         super.doRender();
-        this.$renderContainer = $(`<div>`)
-            .addClass("render-container")
-            .css("height", "100%");
         this.$preview.append(this.$renderContainer);
         $(window).on("resize", this.zoomHandler);
     }
