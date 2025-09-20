@@ -85,12 +85,6 @@ export default abstract class AbstractSplitTypeWidget extends TypeWidget {
     }
 
     #adjustLayoutOrientation() {
-        // Read-only
-        const isReadOnly = this.note?.hasLabel("readOnly");
-        if (this.isReadOnly !== isReadOnly) {
-            this.$editorCol.toggle(!isReadOnly);
-        }
-
         // Vertical vs horizontal layout
         if (this.layoutOrientation !== layoutOrientation || this.isReadOnly !== isReadOnly) {
             this.$widget

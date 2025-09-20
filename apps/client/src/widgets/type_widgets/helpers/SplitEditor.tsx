@@ -1,5 +1,5 @@
 import { isMobile } from "../../../services/utils";
-import { useTriliumOption } from "../../react/hooks";
+import { useNoteLabel, useNoteLabelBoolean, useTriliumOption } from "../../react/hooks";
 import { TypeWidgetProps } from "../type_widget";
 import "./SplitEditor.css";
 
@@ -12,14 +12,19 @@ import "./SplitEditor.css";
  * - Can display errors to the user via {@link setError}.
  * - Horizontal or vertical orientation for the editor/preview split, adjustable via the switch split orientation button floating button.
  */
-export default function SplitEditor({ }: TypeWidgetProps) {
+export default function SplitEditor({ note }: TypeWidgetProps) {
     const splitEditorOrientation = useSplitOrientation();
+    const [ readOnly ] = useNoteLabelBoolean(note, "readOnly");
+
     return (
-        <div className={`note-detail-split note-detail-printable ${"split-" + splitEditorOrientation}`}>
-            <div className="note-detail-split-editor-col">
-                <div className="note-detail-split-editor">Detail goes here.</div>
-                <div className="admonition caution note-detail-error-container hidden-ext">Errors go here.</div>
-            </div>
+        <div className={`note-detail-split note-detail-printable ${"split-" + splitEditorOrientation} ${readOnly ? "split-read-only" : ""}`}>
+            {!readOnly && (
+                <div className="note-detail-split-editor-col">
+                    <div className="note-detail-split-editor">Detail goes here.</div>
+                    <div className="admonition caution note-detail-error-container hidden-ext">Errors go here.</div>
+                </div>
+            )}
+
             <div className="note-detail-split-preview-col">
                 <div className="note-detail-split-preview">Preview goes here</div>
                 <div className="btn-group btn-group-sm map-type-switcher content-floating-buttons preview-buttons bottom-right" role="group">Buttons go here</div>
