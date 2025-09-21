@@ -32,12 +32,6 @@ export default class RenderTypeWidget extends TypeWidget {
         this.$noteDetailRenderContent.empty();
     }
 
-    renderActiveNoteEvent() {
-        if (this.noteContext?.isActive()) {
-            this.refresh();
-        }
-    }
-
     async executeWithContentElementEvent({ resolve, ntxId }: EventData<"executeWithContentElement">) {
         if (!this.isNoteContext(ntxId)) {
             return;

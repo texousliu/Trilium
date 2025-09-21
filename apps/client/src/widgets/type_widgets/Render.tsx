@@ -6,15 +6,22 @@ import Alert from "../react/Alert";
 import "./Render.css";
 import { t } from "../../services/i18n";
 import RawHtml from "../react/RawHtml";
+import { useTriliumEvent } from "../react/hooks";
 
-export default function Render({ note }: TypeWidgetProps) {
+export default function Render({ note, noteContext }: TypeWidgetProps) {
     const contentRef = useRef<HTMLDivElement>(null);
     const [ renderNotesFound, setRenderNotesFound ] = useState(false);
 
-    useEffect(() => {
+    function refresh() {
         if (!contentRef) return;
         render.render(note, refToJQuerySelector(contentRef)).then(setRenderNotesFound);
-    }, [ note ]);
+    }
+
+    useEffect(refresh, [ note ]);
+    useTriliumEvent("renderActiveNote", () => {
+        if (noteContext?.isActive()) return;
+        refresh();
+    });
 
     return (
         <div className="note-detail-render note-detail-printable">
