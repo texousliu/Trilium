@@ -37,10 +37,6 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
             this.loadReferenceLinkTitle($(el));
         });
 
-        if (this.$content.find("span.math-tex").length > 0) {
-            renderMathInElement(this.$content[0], { trust: true });
-        }
-
         await formatCodeBlocks(this.$content);
     }
 

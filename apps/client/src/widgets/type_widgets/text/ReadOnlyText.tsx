@@ -12,6 +12,7 @@ import FNote from "../../../entities/fnote";
 import { getLocaleById } from "../../../services/i18n";
 import { getMermaidConfig } from "../../../services/mermaid";
 import { loadIncludedNote, refreshIncludedNote } from "./utils";
+import { renderMathInElement } from "../../../services/math";
 
 export default function ReadOnlyText({ note }: TypeWidgetProps) {
     const blob = useNoteBlob(note);
@@ -25,6 +26,7 @@ export default function ReadOnlyText({ note }: TypeWidgetProps) {
 
         applyInlineMermaid(container);
         applyIncludedNotes(container);
+        applyMath(container);
     }, [ blob ]);
 
     // React to included note changes.
@@ -86,3 +88,9 @@ function applyIncludedNotes(container: HTMLDivElement) {
     }
 }
 
+function applyMath(container: HTMLDivElement) {
+    const equations = container.querySelectorAll("span.math-tex");
+    for (const equation of equations) {
+        renderMathInElement(equation, { trust: true });
+    }
+}
