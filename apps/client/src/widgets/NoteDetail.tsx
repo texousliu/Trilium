@@ -33,6 +33,7 @@ const TYPE_MAPPINGS: Record<ExtendedNoteType, () => Promise<{ default: TypeWidge
     "attachmentList": async () => (await import("./type_widgets/Attachment")).AttachmentList,
     "attachmentDetail": async () => (await import("./type_widgets/Attachment")).AttachmentDetail,
     "readOnlyText": () => import("./type_widgets/text/ReadOnlyText"),
+    "render": () => import("./type_widgets/Render")
     // TODO: finalize the record.
 };
 
@@ -148,7 +149,6 @@ async function getCorrespondingWidget(type: ExtendedNoteType, props: TypeWidgetP
     if (!correspondingType) return null;
 
     const result = await correspondingType();
-    console.log("For type ", type, " got ", result);
 
     if ("default" in result) {
         const Component = result.default;

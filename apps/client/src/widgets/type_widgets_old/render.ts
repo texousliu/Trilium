@@ -1,25 +1,8 @@
 import renderService from "../../services/render.js";
 import TypeWidget from "./type_widget.js";
-import { t } from "../../services/i18n.js";
 import type FNote from "../../entities/fnote.js";
 import type { EventData } from "../../components/app_context.js";
 
-const TPL = /*html*/`
-<div class="note-detail-render note-detail-printable">
-    <style>
-        .note-detail-render {
-            position: relative;
-        }
-    </style>
-
-    <div class="note-detail-render-help alert alert-warning" style="margin: 50px; padding: 20px;">
-        <p><strong>${t("render.note_detail_render_help_1")}</strong></p>
-
-        <p>${t("render.note_detail_render_help_2")}</p>
-    </div>
-
-    <div class="note-detail-render-content"></div>
-</div>`;
 
 export default class RenderTypeWidget extends TypeWidget {
 
@@ -43,10 +26,6 @@ export default class RenderTypeWidget extends TypeWidget {
         this.$noteDetailRenderHelp.hide();
 
         const renderNotesFound = await renderService.render(note, this.$noteDetailRenderContent);
-
-        if (!renderNotesFound) {
-            this.$noteDetailRenderHelp.show();
-        }
     }
 
     cleanup() {
