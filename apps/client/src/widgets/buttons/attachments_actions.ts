@@ -15,9 +15,6 @@ import type { NoteRow } from "@triliumnext/commons";
 const TPL = /*html*/`
 <div class="dropdown">
     <div class="dropdown-menu dropdown-menu-right">
-        <li data-trigger-command="openAttachmentCustom" class="dropdown-item"
-            title="${t("attachments_actions.open_custom_title")}"><span class="bx bx-customize"></span> ${t("attachments_actions.open_custom")}</li>
-
         <li data-trigger-command="downloadAttachment" class="dropdown-item">
             <span class="bx bx-download"></span> ${t("attachments_actions.download")}</li>
 
@@ -84,24 +81,6 @@ export default class AttachmentActionsWidget extends BasicWidget {
                 }
             }
         });
-
-        const isElectron = utils.isElectron();
-        if (!this.isFullDetail) {
-            const $openAttachmentButton = this.$widget.find("[data-trigger-command='openAttachment']");
-            $openAttachmentButton.addClass("disabled").append($('<span class="bx bx-info-circle disabled-tooltip" />').attr("title", t("attachments_actions.open_externally_detail_page")));
-            if (isElectron) {
-                const $openAttachmentCustomButton = this.$widget.find("[data-trigger-command='openAttachmentCustom']");
-                $openAttachmentCustomButton.addClass("disabled").append($('<span class="bx bx-info-circle disabled-tooltip" />').attr("title", t("attachments_actions.open_externally_detail_page")));
-            }
-        }
-        if (!isElectron) {
-            const $openAttachmentCustomButton = this.$widget.find("[data-trigger-command='openAttachmentCustom']");
-            $openAttachmentCustomButton.addClass("disabled").append($('<span class="bx bx-info-circle disabled-tooltip" />').attr("title", t("attachments_actions.open_custom_client_only")));
-        }
-    }
-
-    async openAttachmentCustomCommand() {
-        await openService.openAttachmentCustom(this.attachmentId, this.attachment.mime);
     }
 
     async downloadAttachmentCommand() {

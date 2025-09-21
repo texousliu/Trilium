@@ -156,6 +156,8 @@ function AttachmentInfo({ attachment, isFullDetail }: { attachment: FAttachment,
 }
 
 function AttachmentActions({ attachment }: { attachment: FAttachment }) {
+    const isElectron = utils.isElectron();
+
     return (
         <div className="attachment-actions-container">
             <Dropdown
@@ -169,6 +171,14 @@ function AttachmentActions({ attachment }: { attachment: FAttachment }) {
                     title={t("attachments_actions.open_externally_title")}
                     onClick={(e) => open.openAttachmentExternally(attachment.attachmentId, attachment.mime)}
                 >{t("attachments_actions.open_externally")}</FormListItem>
+
+                <FormListItem
+                    icon="bx bx-customize"
+                    title={t("attachments_actions.open_custom_title")}
+                    onClick={(e) => open.openAttachmentCustom(attachment.attachmentId, attachment.mime)}
+                    disabled={!isElectron}
+                    disabledTooltip={!isElectron ? t("attachments_actions.open_custom_client_only") : t("attachments_actions.open_externally_detail_page")}
+                >{t("attachments_actions.open_custom")}</FormListItem>
             </Dropdown>
         </div>
     )
