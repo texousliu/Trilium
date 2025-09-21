@@ -21,7 +21,7 @@ export default function Render({ note, noteContext, ntxId }: TypeWidgetProps) {
 
     // Keyboard shortcut.
     useTriliumEvent("renderActiveNote", () => {
-        if (noteContext?.isActive()) return;
+        if (!noteContext?.isActive()) return;
         refresh();
     });
 
