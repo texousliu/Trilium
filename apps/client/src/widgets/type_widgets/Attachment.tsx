@@ -10,15 +10,22 @@ import FAttachment from "../../entities/fattachment";
 import Alert from "../react/Alert";
 import utils from "../../services/utils";
 import content_renderer from "../../services/content_renderer";
+import { useTriliumEvent } from "../react/hooks";
 
 export function AttachmentList({ note }: TypeWidgetProps) {
     const [ attachments, setAttachments ] = useState<FAttachment[]>([]);
 
     function refresh() {
-        note.getAttachments().then(setAttachments);
+        note.getAttachments().then(attachments => setAttachments(Array.from(attachments)));
     }
 
     useEffect(refresh, [ note ]);
+
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        if (loadResults.getAttachmentRows().some((att) => att.attachmentId && att.ownerId === note.noteId)) {
+            refresh();
+        }
+    });
 
     return (
         <div className="attachment-list note-detail-printable">
@@ -26,7 +33,7 @@ export function AttachmentList({ note }: TypeWidgetProps) {
 
             <div className="attachment-list-wrapper">
                 {attachments.length ? (
-                    attachments.map(attachment => <AttachmentDetail attachment={attachment} />)
+                    attachments.map(attachment => <AttachmentDetail key={attachment.attachmentId} attachment={attachment} />)
                 ) : (
                     <Alert type="info">
                         {t("attachment_list.no_attachments")}
@@ -62,7 +69,7 @@ function AttachmentListHeader({ noteId }: { noteId: string }) {
     )
 }
 
-function AttachmentDetail({ attachment, isFullDetail }: { attachment: FAttachment, isFullDetail: boolean }) {
+function AttachmentDetail({ attachment, isFullDetail }: { attachment: FAttachment, isFullDetail?: boolean }) {
     const contentWrapper = useRef<HTMLDivElement>(null);
 
     useEffect(() => {

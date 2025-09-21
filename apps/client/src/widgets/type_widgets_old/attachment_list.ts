@@ -42,13 +42,4 @@ export default class AttachmentListTypeWidget extends TypeWidget {
             this.$list.append(attachmentDetailWidget.render());
         }
     }
-
-    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        // updates and deletions are handled by the detail, for new attachments the whole list has to be refreshed
-        const attachmentsAdded = loadResults.getAttachmentRows().some((att) => att.attachmentId && !this.renderedAttachmentIds.has(att.attachmentId));
-
-        if (attachmentsAdded) {
-            this.refresh();
-        }
-    }
 }
