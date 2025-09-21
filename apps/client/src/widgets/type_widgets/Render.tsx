@@ -18,13 +18,23 @@ export default function Render({ note, noteContext, ntxId }: TypeWidgetProps) {
     }
 
     useEffect(refresh, [ note ]);
+
+    // Keyboard shortcut.
     useTriliumEvent("renderActiveNote", () => {
         if (noteContext?.isActive()) return;
         refresh();
     });
+
+    // Refresh on floating buttons.
     useTriliumEvent("refreshData", ({ ntxId: eventNtxId }) => {
         if (eventNtxId !== ntxId) return;
         refresh();
+    });
+
+    // Integration with search.
+    useTriliumEvent("executeWithContentElement", ({ resolve, ntxId: eventNtxId }) => {
+        if (eventNtxId !== ntxId) return;
+        resolve(refToJQuerySelector(contentRef));
     });
 
     return (
