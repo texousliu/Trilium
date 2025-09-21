@@ -7,14 +7,14 @@ import nodeMenu from "@mind-elixir/node-menu";
 import "mind-elixir/style";
 import "@mind-elixir/node-menu/dist/style.css";
 import "./MindMap.css";
-import { useEditorSpacedUpdate, useTriliumEvent } from "../react/hooks";
+import { useEditorSpacedUpdate, useTriliumEvent, useTriliumEvents } from "../react/hooks";
 import { refToJQuerySelector } from "../react/react_utils";
+import utils from "../../services/utils";
 
 const NEW_TOPIC_NAME = "";
 
 interface MindElixirProps {
     apiRef?: RefObject<MindElixirInstance>;
-    direction: number;
     containerProps?: Omit<HTMLAttributes<HTMLDivElement>, "ref">;
     content: MindElixirData;
     onChange?: () => void;
@@ -61,6 +61,18 @@ export default function MindMap({ note, ntxId }: TypeWidgetProps) {
     useTriliumEvent("executeWithContentElement", ({ resolve, ntxId: eventNtxId }) => {
         if (eventNtxId !== ntxId) return;
         resolve(refToJQuerySelector(containerRef).find(".map-canvas"));
+    });
+
+    // Export as PNG or SVG.
+    useTriliumEvents([ "exportSvg", "exportPng" ], async ({ ntxId: eventNtxId }, eventName) => {
+        if (eventNtxId !== ntxId || !apiRef.current) return;
+        const title = note.title;
+        const svg = await apiRef.current.exportSvg().text();
+        if (eventName === "exportSvg") {
+            utils.downloadSvg(title, svg);
+        } else {
+            utils.downloadSvgAsPng(title, svg);
+        }
     });
 
     const onKeyDown = useCallback((e: KeyboardEvent) => {
