@@ -168,7 +168,6 @@ const TAB_ROW_TPL = `
 
     .tab-row-widget .note-tab .note-tab-icon {
         position: relative;
-        top: -1px;
         padding-right: 3px;
     }
 
