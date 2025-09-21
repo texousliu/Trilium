@@ -15,15 +15,6 @@ export default class MindMapWidget extends TypeWidget {
         return "mindMap";
     }
 
-    doRender() {
-        // Save the mind map if the user changes the layout direction.
-        this.$content.on("click", ".mind-elixir-toolbar.lt", () => {
-            this.spacedUpdate.scheduleUpdate();
-        });
-
-        super.doRender();
-    }
-
     async doRefresh(note: FNote) {
         if (this.triggeredByUserOperation) {
             this.triggeredByUserOperation = false;

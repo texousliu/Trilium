@@ -8,12 +8,9 @@ import "mind-elixir/style";
 import "@mind-elixir/node-menu/dist/style.css";
 import "./MindMap.css";
 import { useEditorSpacedUpdate } from "../react/hooks";
+import { refToJQuerySelector } from "../react/react_utils";
 
 const NEW_TOPIC_NAME = "";
-
-interface MindmapModel extends MindElixirData {
-    direction: number;
-}
 
 interface MindElixirProps {
     apiRef?: RefObject<MindElixirInstance>;
@@ -33,7 +30,7 @@ export default function MindMap({ note }: TypeWidgetProps) {
             let newContent: MindElixirData;
             if (content) {
                 try {
-                    newContent = JSON.parse(content) as MindmapModel;
+                    newContent = JSON.parse(content) as MindElixirData;
                 } catch (e) {
                     console.warn(e);
                     console.debug("Wrong JSON content: ", content);
@@ -76,7 +73,7 @@ export default function MindMap({ note }: TypeWidgetProps) {
     )
 }
 
-function MindElixir({ content, containerProps, direction, apiRef: externalApiRef, onChange }: MindElixirProps) {
+function MindElixir({ content, containerProps, apiRef: externalApiRef, onChange }: MindElixirProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const apiRef = useRef<MindElixirInstance>(null);
 
@@ -84,8 +81,7 @@ function MindElixir({ content, containerProps, direction, apiRef: externalApiRef
         if (!containerRef.current) return;
 
         const mind = new VanillaMindElixir({
-            el: containerRef.current,
-            direction
+            el: containerRef.current
         });
 
         mind.install(nodeMenu);
@@ -109,7 +105,15 @@ function MindElixir({ content, containerProps, direction, apiRef: externalApiRef
             }
         }
         apiRef.current?.bus.addListener("operation", listener);
-        return () => apiRef.current?.bus?.removeListener("operation", listener);
+
+        // Direction change buttons don't report change, so we have to hook in manually.
+        const $container = refToJQuerySelector(containerRef);
+        $container.on("click", ".mind-elixir-toolbar.lt", onChange);
+
+        return () => {
+            $container.off("click", ".mind-elixir-toolbar.lt", onChange);
+            apiRef.current?.bus?.removeListener("operation", listener);
+        };
     }, [ onChange ]);
 
     return (
