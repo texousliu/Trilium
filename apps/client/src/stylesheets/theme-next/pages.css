@@ -109,7 +109,8 @@
  * NOTE MAP
  */
 
-.note-detail-note-map .fixnodes-type-switcher .tn-tool-button {
+.note-detail-note-map .fixnodes-type-switcher .tn-tool-button,
+.note-map-widget .fixnodes-type-switcher .tn-tool-button {
     padding: unset;
 }
 
