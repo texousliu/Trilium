@@ -44,7 +44,8 @@ export default function NoteDetail() {
         note: note!,
         viewScope,
         ntxId,
-        parentComponent
+        parentComponent,
+        noteContext
     };
     useEffect(() => setCorrespondingWidget(getCorrespondingWidget(type, props)), [ note, viewScope, type ]);
 

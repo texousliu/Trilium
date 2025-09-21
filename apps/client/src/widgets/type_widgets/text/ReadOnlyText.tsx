@@ -15,8 +15,10 @@ import { loadIncludedNote, refreshIncludedNote, setupImageOpening } from "./util
 import { renderMathInElement } from "../../../services/math";
 import link from "../../../services/link";
 import { formatCodeBlocks } from "../../../services/syntax_highlight";
+import TouchBar, { TouchBarButton, TouchBarSpacer } from "../../react/TouchBar";
+import appContext from "../../../components/app_context";
 
-export default function ReadOnlyText({ note, ntxId }: TypeWidgetProps) {
+export default function ReadOnlyText({ note, noteContext, ntxId }: TypeWidgetProps) {
     const blob = useNoteBlob(note);
     const contentRef = useRef<HTMLDivElement>(null);
     const { isRtl } = useNoteLanguage(note);
@@ -57,6 +59,19 @@ export default function ReadOnlyText({ note, ntxId }: TypeWidgetProps) {
                 className="note-detail-readonly-text-content ck-content use-tn-links"
                 html={blob?.content}
             />
+
+            <TouchBar>
+                <TouchBarSpacer size="flexible" />
+                <TouchBarButton
+                    icon="NSLockUnlockedTemplate"
+                    click={() => {
+                        if (noteContext?.viewScope) {
+                            noteContext.viewScope.readOnlyTemporarilyDisabled = true;
+                            appContext.triggerEvent("readOnlyTemporarilyDisabled", { noteContext });
+                        }
+                    }}
+                />
+            </TouchBar>
         </div>
     )
 }
