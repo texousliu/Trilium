@@ -8,7 +8,7 @@ import { t } from "../../services/i18n";
 import RawHtml from "../react/RawHtml";
 import { useTriliumEvent } from "../react/hooks";
 
-export default function Render({ note, noteContext }: TypeWidgetProps) {
+export default function Render({ note, noteContext, ntxId }: TypeWidgetProps) {
     const contentRef = useRef<HTMLDivElement>(null);
     const [ renderNotesFound, setRenderNotesFound ] = useState(false);
 
@@ -20,6 +20,10 @@ export default function Render({ note, noteContext }: TypeWidgetProps) {
     useEffect(refresh, [ note ]);
     useTriliumEvent("renderActiveNote", () => {
         if (noteContext?.isActive()) return;
+        refresh();
+    });
+    useTriliumEvent("refreshData", ({ ntxId: eventNtxId }) => {
+        if (eventNtxId !== ntxId) return;
         refresh();
     });
 

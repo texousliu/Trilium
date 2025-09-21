@@ -69,7 +69,7 @@ export const MOBILE_FLOATING_BUTTONS: FloatingButtonsList = [
 ]
 
 function RefreshBackendLogButton({ note, parentComponent, noteContext, isDefaultViewMode }: FloatingButtonContext) {
-    const isEnabled = note.noteId === "_backendLog" && isDefaultViewMode;
+    const isEnabled = (note.noteId === "_backendLog" || note.type === "render") && isDefaultViewMode;
     return isEnabled && <FloatingButton
         text={t("backend_log.refresh")}
         icon="bx bx-refresh"
