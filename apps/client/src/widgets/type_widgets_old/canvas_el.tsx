@@ -1,4 +1,3 @@
-import "@excalidraw/excalidraw/index.css";
 import { Excalidraw, getSceneVersion, exportToSvg } from "@excalidraw/excalidraw";
 import { AppState, BinaryFileData, ExcalidrawImperativeAPI, ExcalidrawProps, LibraryItem } from "@excalidraw/excalidraw/types";
 import { ExcalidrawElement, NonDeletedExcalidrawElement, Theme } from "@excalidraw/excalidraw/element/types";
@@ -19,7 +18,6 @@ export default class Canvas {
     private currentSceneVersion: number;
     private opts: ExcalidrawProps;
     private excalidrawApi!: ExcalidrawImperativeAPI;
-    private initializedPromise: JQuery.Deferred<void>;
 
     constructor(opts: ExcalidrawProps) {
         this.opts = opts;
@@ -27,19 +25,9 @@ export default class Canvas {
         this.initializedPromise = $.Deferred();
     }
 
-    async waitForApiToBecomeAvailable() {
-        while (!this.excalidrawApi) {
-            await this.initializedPromise;
-        }
-    }
-
     createCanvasElement() {
         return <CanvasElement
             {...this.opts}
-            excalidrawAPI={api => {
-                this.excalidrawApi = api;
-                this.initializedPromise.resolve();
-            }}
         />
     }
 
@@ -78,15 +66,6 @@ export default class Canvas {
 
     isInitialized() {
         return !!this.excalidrawApi;
-    }
-
-    resetScene(theme: Theme) {
-        this.excalidrawApi.updateScene({
-            elements: [],
-            appState: {
-                theme
-            }
-        });
     }
 
     loadData(content: CanvasContent, theme: Theme) {
@@ -178,7 +157,6 @@ export default class Canvas {
 
 function CanvasElement(opts: ExcalidrawProps) {
     return (
-        <div className="excalidraw-wrapper">
             <Excalidraw
                 {...opts}
                 onLinkOpen={useCallback((element: NonDeletedExcalidrawElement, event: CustomEvent) => {
@@ -196,6 +174,5 @@ function CanvasElement(opts: ExcalidrawProps) {
                     return linkService.goToLinkExt(nativeEvent, link, null);
                 }, [])}
             />
-        </div>
     );
 }

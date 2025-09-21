@@ -3,54 +3,11 @@ import server from "../../services/server.js";
 import type FNote from "../../entities/fnote.js";
 import options from "../../services/options.js";
 import type { LibraryItem } from "@excalidraw/excalidraw/types";
-import type { Theme } from "@excalidraw/excalidraw/element/types";
 import type Canvas from "./canvas_el.js";
 import { CanvasContent } from "./canvas_el.js";
 import { renderReactWidget } from "../react/react_utils.jsx";
 import SpacedUpdate from "../../services/spaced_update.js";
 import protected_session_holder from "../../services/protected_session_holder.js";
-
-const TPL = /*html*/`
-    <div class="canvas-widget note-detail-canvas note-detail-printable note-detail">
-        <style>
-        .excalidraw .App-menu_top .buttonList {
-            display: flex;
-        }
-
-        /* Conflict between excalidraw and bootstrap classes keeps the menu hidden */
-        /* https://github.com/zadam/trilium/issues/3780 */
-        /* https://github.com/excalidraw/excalidraw/issues/6567 */
-        .excalidraw .dropdown-menu {
-            display: block;
-        }
-
-        .excalidraw-wrapper {
-            height: 100%;
-        }
-
-        :root[dir="ltr"]
-        .excalidraw
-        .layer-ui__wrapper
-        .zen-mode-transition.App-menu_bottom--transition-left {
-            transform: none;
-        }
-
-        /* collaboration not possible so hide the button */
-        .CollabButton {
-            display: none !important;
-        }
-
-        .library-button {
-            display: none !important; /* library won't work without extra support which isn't currently implemented */
-        }
-
-        </style>
-        <!-- height here necessary. otherwise excalidraw not shown -->
-        <div class="canvas-render" style="height: 100%"></div>
-    </div>
-`;
-
-
 
 interface AttachmentMetadata {
     title: string;
@@ -151,10 +108,6 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         });
     }
 
-    static getType() {
-        return "canvas";
-    }
-
     doRender() {
         this.$widget = $(TPL);
         this.$widget.bind("mousewheel DOMMouseScroll", (event) => {
@@ -165,10 +118,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
             }
         });
 
-        this.$widget.toggleClass("full-height", true);
         this.$render = this.$widget.find(".canvas-render");
-        const documentStyle = window.getComputedStyle(document.documentElement);
-        this.themeStyle = documentStyle.getPropertyValue("--theme-style")?.trim() as Theme;
 
         this.#init();
 
@@ -229,9 +179,6 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         // get note from backend and put into canvas
         const blob = await note.getBlob();
 
-        // before we load content into excalidraw, make sure excalidraw has loaded
-        await this.canvasInstance.waitForApiToBecomeAvailable();
-
         /**
          * new and empty note - make sure that canvas is empty.
          * If we do not set it manually, we occasionally get some "bleeding" from another
@@ -239,7 +186,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
          * newly instantiated?
          */
         if (!blob?.content?.trim()) {
-            this.canvasInstance.resetScene(this.themeStyle);
+
         } else if (blob.content) {
             let content: CanvasContent;
 
