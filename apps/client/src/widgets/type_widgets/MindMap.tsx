@@ -7,7 +7,7 @@ import nodeMenu from "@mind-elixir/node-menu";
 import "mind-elixir/style";
 import "@mind-elixir/node-menu/dist/style.css";
 import "./MindMap.css";
-import { useEditorSpacedUpdate } from "../react/hooks";
+import { useEditorSpacedUpdate, useTriliumEvent } from "../react/hooks";
 import { refToJQuerySelector } from "../react/react_utils";
 
 const NEW_TOPIC_NAME = "";
@@ -20,9 +20,10 @@ interface MindElixirProps {
     onChange?: () => void;
 }
 
-export default function MindMap({ note }: TypeWidgetProps) {
+export default function MindMap({ note, ntxId }: TypeWidgetProps) {
     const content = VanillaMindElixir.new(NEW_TOPIC_NAME);
     const apiRef = useRef<MindElixirInstance>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
     const spacedUpdate = useEditorSpacedUpdate({
         note,
         getData: () => {
@@ -56,6 +57,12 @@ export default function MindMap({ note }: TypeWidgetProps) {
         }
     });
 
+    // Allow search.
+    useTriliumEvent("executeWithContentElement", ({ resolve, ntxId: eventNtxId }) => {
+        if (eventNtxId !== ntxId) return;
+        resolve(refToJQuerySelector(containerRef).find(".map-canvas"));
+    });
+
     const onKeyDown = useCallback((e: KeyboardEvent) => {
         /*
         * Some global shortcuts interfere with the default shortcuts of the mind map,
@@ -73,7 +80,7 @@ export default function MindMap({ note }: TypeWidgetProps) {
     }, []);
 
     return (
-        <div className="note-detail-mind-map note-detail-printable">
+        <div ref={containerRef} className="note-detail-mind-map note-detail-printable">
             <MindElixir
                 apiRef={apiRef}
                 content={content}
