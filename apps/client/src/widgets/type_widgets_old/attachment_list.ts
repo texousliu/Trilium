@@ -6,26 +6,8 @@ import { t } from "../../services/i18n.js";
 import type { EventData } from "../../components/app_context.js";
 
 const TPL = /*html*/`
-<div class="attachment-list note-detail-printable">
-    <style>
-        .attachment-list {
-            padding-left: 15px;
-            padding-right: 15px;
-        }
-
-        .attachment-list .links-wrapper {
-            font-size: larger;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-        }
-    </style>
-
-    <div class="links-wrapper"></div>
-
     <div class="attachment-list-wrapper"></div>
-</div>`;
+`;
 
 export default class AttachmentListTypeWidget extends TypeWidget {
     $list!: JQuery<HTMLElement>;
@@ -48,31 +30,13 @@ export default class AttachmentListTypeWidget extends TypeWidget {
         const $helpButton = $(`
             <button class="attachment-help-button icon-action bx bx-help-circle"
                      type="button" data-help-page="attachments.html"
-                     title="${t("attachment_list.open_help_page")}">
+                     title="${}">
             </button>
         `);
         utils.initHelpButtons($helpButton);
 
         const noteLink = await linkService.createLink(this.noteId); // do separately to avoid race condition between empty() and .append()
         noteLink.addClass("use-tn-links");
-
-        const $uploadButton = $(`
-            <button class="btn btn-sm">
-                <span class="bx bx-folder-open"></span>
-                ${t("attachment_list.upload_attachments")}
-            </button>
-        `);
-
-        $uploadButton.on("click", () => {
-            if (this.noteId) {
-                this.triggerCommand("showUploadAttachmentsDialog", { noteId: this.noteId });
-            }
-        })
-
-        this.$linksWrapper.empty().append(
-            $("<div>").append(t("attachment_list.owning_note"), noteLink),
-            $(`<div class="attachment-actions-toolbar">`).append($uploadButton, $helpButton)
-        );
 
         this.$list.empty();
         this.children = [];

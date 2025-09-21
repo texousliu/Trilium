@@ -1,0 +1,14 @@
+/* #region Attachment list */
+.attachment-list {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.attachment-list .links-wrapper {
+    font-size: larger;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+/* #endregion */
