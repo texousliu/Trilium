@@ -305,18 +305,6 @@ body.layout-horizontal > .horizontal {
 }
 
 /*
- * Global menu
- */
-
- .global-menu div.zoom-buttons a {
-    border: unset;
-}
-
-.global-menu div.zoom-buttons a.bx {
-    color: var(--menu-text-color) !important;
-}
-
-/*
  * Calendar
  */
 

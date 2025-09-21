@@ -295,6 +295,20 @@ body.mobile .dropdown-menu .dropdown-item.submenu-open .dropdown-toggle::after {
     transform: rotate(270deg);
 }
 
+/* Dropdown item button (used in zoom buttons in global menu) */
+
+li.dropdown-item a.dropdown-item-button {
+    border: unset;
+}
+
+li.dropdown-item a.dropdown-item-button.bx {
+    color: var(--menu-text-color) !important;
+}
+
+li.dropdown-item a.dropdown-item-button:focus-visible {
+    outline: 2px solid var(--input-focus-outline-color) !important;
+}
+
 /*
  * TOASTS
  */

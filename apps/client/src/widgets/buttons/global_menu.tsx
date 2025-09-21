@@ -161,12 +161,13 @@ function ZoomControls({ parentComponent }: { parentComponent?: Component | null 
         return (
             <a
                 ref={linkRef}
+                tabIndex={0}
                 onClick={(e) => {
                     parentComponent?.triggerCommand(command);
                     setTimeout(() => updateZoomState(), 300)
                     e.stopPropagation();
                 }}
-                className={icon}
+                className={`dropdown-item-button ${icon}`}
             >{children}</a>
         )
     }
@@ -174,6 +175,7 @@ function ZoomControls({ parentComponent }: { parentComponent?: Component | null 
     return isElectron() ? (
         <FormListItem
             icon="bx bx-empty"
+            container
             className="zoom-container"
         >
             {t("global_menu.zoom")}

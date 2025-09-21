@@ -415,7 +415,7 @@ body.desktop .tabulator-popup-container {
 }
 
 .dropdown-menu a:hover:not(.disabled),
-.dropdown-item:hover:not(.disabled, .dropdown-item-container),
+.dropdown-item:hover:not(.disabled, .dropdown-container-item),
 .tabulator-menu-item:hover {
     color: var(--hover-item-text-color) !important;
     background-color: var(--hover-item-background-color) !important;
@@ -423,9 +423,9 @@ body.desktop .tabulator-popup-container {
     cursor: pointer;
 }
 
-.dropdown-item-container,
-.dropdown-item-container:hover,
-.dropdown-item-container:active {
+.dropdown-container-item,
+.dropdown-item.dropdown-container-item:hover,
+.dropdown-container-item:active {
     background: transparent;
     cursor: default;
 }
