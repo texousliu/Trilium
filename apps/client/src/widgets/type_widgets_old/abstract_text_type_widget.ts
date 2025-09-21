@@ -79,36 +79,8 @@ export default class AbstractTextTypeWidget extends TypeWidget {
         return null;
     }
 
-    async loadIncludedNote(noteId: string, $el: JQuery<HTMLElement>) {
-        const note = await froca.getNote(noteId);
-
-        if (note) {
-            const $wrapper = $('<div class="include-note-wrapper">');
-
-            const $link = await linkService.createLink(note.noteId, {
-                showTooltip: false
-            });
-
-            $wrapper.empty().append($('<h4 class="include-note-title">').append($link));
-
-            const { $renderedContent, type } = await contentRenderer.getRenderedContent(note);
-
-            $wrapper.append($(`<div class="include-note-content type-${type}">`).append($renderedContent));
-
-            $el.empty().append($wrapper);
-        }
-    }
-
     async loadReferenceLinkTitle($el: JQuery<HTMLElement>, href: string | null = null) {
         await linkService.loadReferenceLinkTitle($el, href);
-    }
-
-    refreshIncludedNote($container: JQuery<HTMLElement>, noteId: string) {
-        if ($container) {
-            $container.find(`section[data-note-id="${noteId}"]`).each((_, el) => {
-                this.loadIncludedNote(noteId, $(el));
-            });
-        }
     }
 
     refreshCodeBlockOptions() {

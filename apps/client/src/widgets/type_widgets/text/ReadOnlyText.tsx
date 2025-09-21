@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from "preact/hooks";
 import { TypeWidgetProps } from "../type_widget";
 import "./ReadOnlyText.css";
-import { useNoteBlob, useNoteLabel } from "../../react/hooks";
+import { useNoteBlob, useNoteLabel, useTriliumEvent } from "../../react/hooks";
 import RawHtml from "../../react/RawHtml";
 
 // we load CKEditor also for read only notes because they contain content styles required for correct rendering of even read only notes
@@ -11,18 +11,27 @@ import "@triliumnext/ckeditor5";
 import FNote from "../../../entities/fnote";
 import { getLocaleById } from "../../../services/i18n";
 import { getMermaidConfig } from "../../../services/mermaid";
+import { loadIncludedNote, refreshIncludedNote } from "./utils";
 
 export default function ReadOnlyText({ note }: TypeWidgetProps) {
     const blob = useNoteBlob(note);
     const contentRef = useRef<HTMLDivElement>(null);
     const { isRtl } = useNoteLanguage(note);
 
+    // Apply necessary transforms.
     useEffect(() => {
         const container = contentRef.current;
         if (!container) return;
 
         applyInlineMermaid(container);
+        applyIncludedNotes(container);
     }, [ blob ]);
+
+    // React to included note changes.
+    useTriliumEvent("refreshIncludedNote", ({ noteId }) => {
+        if (!contentRef.current) return;
+        refreshIncludedNote(contentRef.current, noteId);
+    });
 
     return (
         <div
@@ -67,3 +76,13 @@ async function applyInlineMermaid(container: HTMLDivElement) {
     mermaid.initialize(getMermaidConfig());
     mermaid.run({ nodes });
 }
+
+function applyIncludedNotes(container: HTMLDivElement) {
+    const includedNotes = container.querySelectorAll("section.include-note");
+    for (const includedNote of includedNotes) {
+        const noteId = (includedNote as HTMLElement).dataset.noteId;
+        if (!noteId) continue;
+        loadIncludedNote(noteId, $(includedNote as HTMLElement));
+    }
+}
+

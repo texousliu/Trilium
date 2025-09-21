@@ -37,24 +37,11 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
             this.loadReferenceLinkTitle($(el));
         });
 
-        this.$content.find("section").each((_, el) => {
-            const noteId = $(el).attr("data-note-id");
-
-            if (noteId) {
-                this.loadIncludedNote(noteId, $(el));
-            }
-        });
-
         if (this.$content.find("span.math-tex").length > 0) {
             renderMathInElement(this.$content[0], { trust: true });
         }
 
-        await this.#applyInlineMermaid();
         await formatCodeBlocks(this.$content);
-    }
-
-    async refreshIncludedNoteEvent({ noteId }: EventData<"refreshIncludedNote">) {
-        this.refreshIncludedNote(this.$content, noteId);
     }
 
     async executeWithContentElementEvent({ resolve, ntxId }: EventData<"executeWithContentElement">) {
