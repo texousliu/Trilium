@@ -26,7 +26,7 @@ export default function MindMap({ note, ntxId }: TypeWidgetProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const spacedUpdate = useEditorSpacedUpdate({
         note,
-        getData: () => {
+        getData: async () => {
             if (!apiRef.current) return;
             return {
                 content: apiRef.current.getDataString(),
@@ -35,7 +35,7 @@ export default function MindMap({ note, ntxId }: TypeWidgetProps) {
                         role: "image",
                         title: "mindmap-export.svg",
                         mime: "image/svg+xml",
-                        content: apiRef.current.exportSvg().text(),
+                        content: await apiRef.current.exportSvg().text(),
                         position: 0
                     }
                 ]
