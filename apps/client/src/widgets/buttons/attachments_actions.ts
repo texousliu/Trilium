@@ -13,40 +13,8 @@ import type AttachmentDetailWidget from "../attachment_detail.js";
 import type { NoteRow } from "@triliumnext/commons";
 
 const TPL = /*html*/`
-<div class="dropdown attachment-actions">
-    <style>
-    .attachment-actions {
-        width: 35px;
-        height: 35px;
-    }
-
-    .attachment-actions .dropdown-menu {
-        width: 20em;
-    }
-
-    .attachment-actions .dropdown-item .bx {
-        position: relative;
-        top: 3px;
-        font-size: 120%;
-        margin-right: 5px;
-    }
-
-    .attachment-actions .dropdown-item[disabled], .attachment-actions .dropdown-item[disabled]:hover {
-        color: var(--muted-text-color) !important;
-        background-color: transparent !important;
-        pointer-events: none; /* makes it unclickable */
-    }
-    </style>
-
-    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true"
-        aria-expanded="false" class="icon-action icon-action-always-border bx bx-dots-vertical-rounded"
-        style="position: relative; top: 3px;"></button>
-
+<div class="dropdown">
     <div class="dropdown-menu dropdown-menu-right">
-
-        <li data-trigger-command="openAttachment" class="dropdown-item"
-            title="${t("attachments_actions.open_externally_title")}"><span class="bx bx-file-find"></span> ${t("attachments_actions.open_externally")}</li>
-
         <li data-trigger-command="openAttachmentCustom" class="dropdown-item"
             title="${t("attachments_actions.open_custom_title")}"><span class="bx bx-customize"></span> ${t("attachments_actions.open_custom")}</li>
 
@@ -56,9 +24,7 @@ const TPL = /*html*/`
         <li data-trigger-command="copyAttachmentLinkToClipboard" class="dropdown-item"><span class="bx bx-link">
             </span> ${t("attachments_actions.copy_link_to_clipboard")}</li>
 
-
         <div class="dropdown-divider"></div>
-
 
         <li data-trigger-command="uploadNewAttachmentRevision" class="dropdown-item"><span class="bx bx-upload">
             </span> ${t("attachments_actions.upload_new_revision")}</li>
@@ -69,13 +35,10 @@ const TPL = /*html*/`
         <li data-trigger-command="deleteAttachment" class="dropdown-item">
             <span class="bx bx-trash destructive-action-icon"></span> ${t("attachments_actions.delete_attachment")}</li>
 
-
         <div class="dropdown-divider"></div>
-
 
         <li data-trigger-command="convertAttachmentIntoNote" class="dropdown-item"><span class="bx bx-note">
             </span> ${t("attachments_actions.convert_attachment_into_note")}</li>
-
     </div>
 
     <input type="file" class="attachment-upload-new-revision-input" style="display: none">
@@ -135,10 +98,6 @@ export default class AttachmentActionsWidget extends BasicWidget {
             const $openAttachmentCustomButton = this.$widget.find("[data-trigger-command='openAttachmentCustom']");
             $openAttachmentCustomButton.addClass("disabled").append($('<span class="bx bx-info-circle disabled-tooltip" />').attr("title", t("attachments_actions.open_custom_client_only")));
         }
-    }
-
-    async openAttachmentCommand() {
-        await openService.openAttachmentExternally(this.attachmentId, this.attachment.mime);
     }
 
     async openAttachmentCustomCommand() {

@@ -12,6 +12,10 @@ import utils from "../../services/utils";
 import content_renderer from "../../services/content_renderer";
 import { useTriliumEvent } from "../react/hooks";
 import froca from "../../services/froca";
+import Dropdown from "../react/Dropdown";
+import Icon from "../react/Icon";
+import { FormListItem } from "../react/FormList";
+import open from "../../services/open";
 
 /**
  * Displays the full list of attachments of a note and allows the user to interact with them.
@@ -126,7 +130,7 @@ function AttachmentInfo({ attachment, isFullDetail }: { attachment: FAttachment,
         <div className="attachment-detail-widget">
             <div className="attachment-detail-wrapper">
                 <div className="attachment-title-line">
-                    <div className="attachment-actions-container"></div>
+                    <AttachmentActions attachment={attachment} />
                     <h4 className="attachment-title">
                         {!isFullDetail ? (
                             <NoteLink
@@ -147,6 +151,25 @@ function AttachmentInfo({ attachment, isFullDetail }: { attachment: FAttachment,
 
                 <div ref={contentWrapper} className="attachment-content-wrapper" />
             </div>
+        </div>
+    )
+}
+
+function AttachmentActions({ attachment }: { attachment: FAttachment }) {
+    return (
+        <div className="attachment-actions-container">
+            <Dropdown
+                className="attachment-actions"
+                text={<Icon icon="bx bx-dots-vertical-rounded" />}
+                buttonClassName="icon-action-always-border"
+                iconAction
+            >
+                <FormListItem
+                    icon="bx bx-file-find"
+                    title={t("attachments_actions.open_externally_title")}
+                    onClick={(e) => open.openAttachmentExternally(attachment.attachmentId, attachment.mime)}
+                >{t("attachments_actions.open_externally")}</FormListItem>
+            </Dropdown>
         </div>
     )
 }
