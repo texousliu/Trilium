@@ -102,10 +102,6 @@ body.backdrop-effects-disabled {
     font-size: 0.9rem !important;
 }
 
-.dropdown-menu {
-    --scrollbar-background-color: var(--menu-background-color);
-}
-
 body.mobile .dropdown-menu {
     backdrop-filter: var(--dropdown-backdrop-filter);
     border-radius: var(--dropdown-border-radius);

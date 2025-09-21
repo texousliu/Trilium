@@ -363,7 +363,7 @@ button kbd {
 .tabulator-popup-container {
     color: var(--menu-text-color) !important;
     font-size: inherit;
-    background-color: var(--menu-background-color) !important;
+    background: var(--menu-background-color) !important;
     user-select: none;
     -webkit-user-select: none;
     --bs-dropdown-zindex: 999;

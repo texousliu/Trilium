@@ -588,10 +588,8 @@ div.quick-search .dropdown-menu {
  * As a temporary workaround, the backdrop and transparency are disabled for the
  * vertical layout.
  */
-body.layout-vertical.background-effects div.quick-search .dropdown-menu {
-    --scrollbar-background-color: var(--menu-background-color-no-backdrop);
-    
-    background: var(--menu-background-color-no-backdrop) !important;
+body.layout-vertical.background-effects div.quick-search .dropdown-menu {    
+    --menu-background-color: var(--menu-background-color-no-backdrop) !important;
 }
 
 /* Item */
