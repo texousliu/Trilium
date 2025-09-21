@@ -4,7 +4,7 @@ import "./Attachment.css";
 import NoteLink from "../react/NoteLink";
 import Button from "../react/Button";
 import { useContext, useEffect, useRef, useState } from "preact/hooks";
-import { ParentComponent } from "../react/react_utils";
+import { ParentComponent, refToJQuerySelector } from "../react/react_utils";
 import HelpButton from "../react/HelpButton";
 import FAttachment from "../../entities/fattachment";
 import Alert from "../react/Alert";
@@ -14,8 +14,17 @@ import { useTriliumEvent } from "../react/hooks";
 import froca from "../../services/froca";
 import Dropdown from "../react/Dropdown";
 import Icon from "../react/Icon";
-import { FormListItem } from "../react/FormList";
+import { FormDropdownDivider, FormListItem } from "../react/FormList";
 import open from "../../services/open";
+import toast from "../../services/toast";
+import link from "../../services/link";
+import image from "../../services/image";
+import FormFileUpload from "../react/FormFileUpload";
+import server from "../../services/server";
+import dialog from "../../services/dialog";
+import ws from "../../services/ws";
+import appContext from "../../components/app_context";
+import { ConvertAttachmentToNoteResponse } from "@triliumnext/commons";
 
 /**
  * Displays the full list of attachments of a note and allows the user to interact with them.
@@ -126,11 +135,32 @@ function AttachmentInfo({ attachment, isFullDetail }: { attachment: FAttachment,
             })
     }, [ attachment ]);
 
+    async function copyAttachmentLinkToClipboard() {
+        if (attachment.role === "image") {
+            const $contentWrapper = refToJQuerySelector(contentWrapper);
+            image.copyImageReferenceToClipboard($contentWrapper);
+        } else if (attachment.role === "file") {
+            const $link = await link.createLink(attachment.ownerId, {
+                referenceLink: true,
+                viewScope: {
+                    viewMode: "attachments",
+                    attachmentId: attachment.attachmentId
+                }
+            });
+
+            utils.copyHtmlToClipboard($link[0].outerHTML);
+
+            toast.showMessage(t("attachment_detail_2.link_copied"));
+        } else {
+            throw new Error(t("attachment_detail_2.unrecognized_role", { role: attachment.role }));
+        }
+    }
+
     return (
         <div className="attachment-detail-widget">
             <div className="attachment-detail-wrapper">
                 <div className="attachment-title-line">
-                    <AttachmentActions attachment={attachment} />
+                    <AttachmentActions attachment={attachment} copyAttachmentLinkToClipboard={copyAttachmentLinkToClipboard} />
                     <h4 className="attachment-title">
                         {!isFullDetail ? (
                             <NoteLink
@@ -155,8 +185,9 @@ function AttachmentInfo({ attachment, isFullDetail }: { attachment: FAttachment,
     )
 }
 
-function AttachmentActions({ attachment }: { attachment: FAttachment }) {
+function AttachmentActions({ attachment, copyAttachmentLinkToClipboard }: { attachment: FAttachment, copyAttachmentLinkToClipboard: () => void }) {
     const isElectron = utils.isElectron();
+    const fileUploadRef = useRef<HTMLInputElement>(null);
 
     return (
         <div className="attachment-actions-container">
@@ -169,16 +200,84 @@ function AttachmentActions({ attachment }: { attachment: FAttachment }) {
                 <FormListItem
                     icon="bx bx-file-find"
                     title={t("attachments_actions.open_externally_title")}
-                    onClick={(e) => open.openAttachmentExternally(attachment.attachmentId, attachment.mime)}
+                    onClick={() => open.openAttachmentExternally(attachment.attachmentId, attachment.mime)}
                 >{t("attachments_actions.open_externally")}</FormListItem>
-
                 <FormListItem
                     icon="bx bx-customize"
                     title={t("attachments_actions.open_custom_title")}
-                    onClick={(e) => open.openAttachmentCustom(attachment.attachmentId, attachment.mime)}
+                    onClick={() => open.openAttachmentCustom(attachment.attachmentId, attachment.mime)}
                     disabled={!isElectron}
                     disabledTooltip={!isElectron ? t("attachments_actions.open_custom_client_only") : t("attachments_actions.open_externally_detail_page")}
                 >{t("attachments_actions.open_custom")}</FormListItem>
+                <FormListItem
+                    icon="bx bx-download"
+                    onClick={() => open.downloadAttachment(attachment.attachmentId)}
+                >{t("attachments_actions.download")}</FormListItem>
+                <FormListItem
+                    icon="bx bx-link"
+                    onClick={copyAttachmentLinkToClipboard}
+                >{t("attachments_actions.copy_link_to_clipboard")}</FormListItem>
+                <FormDropdownDivider />
+
+                <FormListItem
+                    icon="bx bx-upload"
+                    onClick={() => fileUploadRef.current?.click()}
+                >{t("attachments_actions.upload_new_revision")}</FormListItem>
+                <FormListItem
+                    icon="bx bx-rename"
+                    onClick={async () => {
+                        const attachmentTitle = await dialog.prompt({
+                            title: t("attachments_actions.rename_attachment"),
+                            message: t("attachments_actions.enter_new_name"),
+                            defaultValue: attachment.title
+                        });
+
+                        if (!attachmentTitle?.trim()) return;
+                        await server.put(`attachments/${attachment.attachmentId}/rename`, { title: attachmentTitle });
+                    }}
+                >{t("attachments_actions.rename_attachment")}</FormListItem>
+                <FormListItem
+                    icon="bx bx-trash destructive-action-icon"
+                    onClick={async () => {
+                        if (!(await dialog.confirm(t("attachments_actions.delete_confirm", { title: attachment.title })))) {
+                            return;
+                        }
+
+                        await server.remove(`attachments/${attachment.attachmentId}`);
+                        toast.showMessage(t("attachments_actions.delete_success", { title: attachment.title }));
+                    }}
+                >{t("attachments_actions.delete_attachment")}</FormListItem>
+                <FormDropdownDivider />
+
+                <FormListItem
+                    icon="bx bx-note"
+                    onClick={async () => {
+                        if (!(await dialog.confirm(t("attachments_actions.convert_confirm", { title: attachment.title })))) {
+                            return;
+                        }
+
+                        const { note: newNote } = await server.post<ConvertAttachmentToNoteResponse>(`attachments/${attachment.attachmentId}/convert-to-note`);
+                        toast.showMessage(t("attachments_actions.convert_success", { title: attachment.title }));
+                        await ws.waitForMaxKnownEntityChangeId();
+                        await appContext.tabManager.getActiveContext()?.setNote(newNote.noteId);
+                    }}
+                >{t("attachments_actions.convert_attachment_into_note")}</FormListItem>
+
+                <FormFileUpload
+                    inputRef={fileUploadRef}
+                    hidden
+                    onChange={async files => {
+                        const fileToUpload = files?.item(0);
+                        if (fileToUpload) {
+                            const result = await server.upload(`attachments/${attachment.attachmentId}/file`, fileToUpload);
+                            if (result.uploaded) {
+                                toast.showMessage(t("attachments_actions.upload_success"));
+                            } else {
+                                toast.showError(t("attachments_actions.upload_failed"));
+                            }
+                        }
+                    }}
+                />
             </Dropdown>
         </div>
     )

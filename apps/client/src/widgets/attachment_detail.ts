@@ -76,23 +76,4 @@ export default class AttachmentDetailWidget extends BasicWidget {
         this.$wrapper.find(".attachment-content-wrapper").append($renderedContent);
     }
 
-    async copyAttachmentLinkToClipboard() {
-        if (this.attachment.role === "image") {
-            imageService.copyImageReferenceToClipboard(this.$wrapper.find(".attachment-content-wrapper"));
-        } else if (this.attachment.role === "file") {
-            const $link = await linkService.createLink(this.attachment.ownerId, {
-                referenceLink: true,
-                viewScope: {
-                    viewMode: "attachments",
-                    attachmentId: this.attachment.attachmentId
-                }
-            });
-
-            utils.copyHtmlToClipboard($link[0].outerHTML);
-
-            toastService.showMessage(t("attachment_detail_2.link_copied"));
-        } else {
-            throw new Error(t("attachment_detail_2.unrecognized_role", { role: this.attachment.role }));
-        }
-    }
 }
