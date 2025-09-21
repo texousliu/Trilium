@@ -95,16 +95,4 @@ export default class AttachmentDetailWidget extends BasicWidget {
             throw new Error(t("attachment_detail_2.unrecognized_role", { role: this.attachment.role }));
         }
     }
-
-    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        const attachmentRow = loadResults.getAttachmentRows().find((att) => att.attachmentId === this.attachment.attachmentId);
-
-        if (attachmentRow) {
-            if (attachmentRow.isDeleted) {
-                this.toggleInt(false);
-            } else {
-                this.refresh();
-            }
-        }
-    }
 }

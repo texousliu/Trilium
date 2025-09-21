@@ -13,7 +13,7 @@
 }
 /* #endregion */
 
-/* #region Attachment detail */
+/* #region Attachment info */
 .attachment-detail-widget {
     height: 100%;
 }
@@ -81,5 +81,24 @@
 
 .attachment-detail-wrapper.scheduled-for-deletion .attachment-content-wrapper img {
     filter: contrast(10%);
+}
+/* #endregion */
+
+/* #region Attachment detail */
+.attachment-detail {
+    padding-left: 15px;
+    padding-right: 15px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.attachment-detail .links-wrapper {
+    font-size: larger;
+    padding: 0 0 16px 0;
+}
+
+.attachment-detail .attachment-wrapper {
+    flex-grow: 1;
 }
 /* #endregion */

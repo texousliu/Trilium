@@ -11,7 +11,11 @@ import Alert from "../react/Alert";
 import utils from "../../services/utils";
 import content_renderer from "../../services/content_renderer";
 import { useTriliumEvent } from "../react/hooks";
+import froca from "../../services/froca";
 
+/**
+ * Displays the full list of attachments of a note and allows the user to interact with them.
+ */
 export function AttachmentList({ note }: TypeWidgetProps) {
     const [ attachments, setAttachments ] = useState<FAttachment[]>([]);
 
@@ -33,7 +37,7 @@ export function AttachmentList({ note }: TypeWidgetProps) {
 
             <div className="attachment-list-wrapper">
                 {attachments.length ? (
-                    attachments.map(attachment => <AttachmentDetail key={attachment.attachmentId} attachment={attachment} />)
+                    attachments.map(attachment => <AttachmentInfo key={attachment.attachmentId} attachment={attachment} />)
                 ) : (
                     <Alert type="info">
                         {t("attachment_list.no_attachments")}
@@ -69,7 +73,46 @@ function AttachmentListHeader({ noteId }: { noteId: string }) {
     )
 }
 
-function AttachmentDetail({ attachment, isFullDetail }: { attachment: FAttachment, isFullDetail?: boolean }) {
+/**
+ * Displays information about a single attachment.
+ */
+export function AttachmentDetail({ note, viewScope }: TypeWidgetProps) {
+    const [ attachment, setAttachment ] = useState<FAttachment | null | undefined>(undefined);
+
+    useEffect(() => {
+        if (!viewScope?.attachmentId) return;
+        froca.getAttachment(viewScope.attachmentId).then(setAttachment);
+    }, [ viewScope ]);
+
+    return (
+        <div className="attachment-detail note-detail-printable">
+            <div className="links-wrapper use-tn-links">
+                {t("attachment_detail.owning_note")}{" "}
+                <NoteLink notePath={note.noteId} />
+                {t("attachment_detail.you_can_also_open")}{" "}
+                <NoteLink
+                    notePath={note.noteId}
+                    viewScope={{ viewMode: "attachments" }}
+                    title={t("attachment_detail.list_of_all_attachments")}
+                />
+                <HelpButton
+                    helpPage="0vhv7lsOLy82"
+                    title={t("attachment_list.open_help_page")}
+                />
+            </div>
+
+            <div className="attachment-wrapper">
+                {attachment !== null ? (
+                    attachment && <AttachmentInfo attachment={attachment} isFullDetail />
+                ) : (
+                    <strong>{t("attachment_detail.attachment_deleted")}</strong>
+                )}
+            </div>
+        </div>
+    )
+}
+
+function AttachmentInfo({ attachment, isFullDetail }: { attachment: FAttachment, isFullDetail?: boolean }) {
     const contentWrapper = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
