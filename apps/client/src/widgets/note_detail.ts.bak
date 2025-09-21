@@ -186,43 +186,7 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
             this.refresh();
         }
     }
-
-    async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        // we're detecting note type change on the note_detail level, but triggering the noteTypeMimeChanged
-        // globally, so it gets also to e.g. ribbon components. But this means that the event can be generated multiple
-        // times if the same note is open in several tabs.
-
-        if (this.noteId && loadResults.isNoteContentReloaded(this.noteId, this.componentId)) {
-            // probably incorrect event
-            // calling this.refresh() is not enough since the event needs to be propagated to children as well
-            // FIXME: create a separate event to force hierarchical refresh
-
-            // this uses handleEvent to make sure that the ordinary content updates are propagated only in the subtree
-            // to avoid the problem in #3365
-            this.handleEvent("noteTypeMimeChanged", { noteId: this.noteId });
-        } else if (this.noteId && loadResults.isNoteReloaded(this.noteId, this.componentId) && (this.type !== (await this.getWidgetType()) || this.mime !== this.note?.mime)) {
-            // this needs to have a triggerEvent so that e.g., note type (not in the component subtree) is updated
-            this.triggerEvent("noteTypeMimeChanged", { noteId: this.noteId });
-        } else {
-            const attrs = loadResults.getAttributeRows();
-
-            const label = attrs.find(
-                (attr) =>
-                    attr.type === "label" &&
-                    ["readOnly", "autoReadOnlyDisabled", "cssClass", "displayRelations", "hideRelations"].includes(attr.name ?? "") &&
-                    attributeService.isAffecting(attr, this.note)
-            );
-
-            const relation = attrs.find((attr) => attr.type === "relation" && ["template", "inherit", "renderNote"].includes(attr.name ?? "") && attributeService.isAffecting(attr, this.note));
-
-            if (this.noteId && (label || relation)) {
-                // probably incorrect event
-                // calling this.refresh() is not enough since the event needs to be propagated to children as well
-                this.triggerEvent("noteTypeMimeChanged", { noteId: this.noteId });
-            }
-        }
-    }
-
+    
     beforeUnloadEvent() {
         return this.spacedUpdate.isAllSavedAndTriggerUpdate();
     }

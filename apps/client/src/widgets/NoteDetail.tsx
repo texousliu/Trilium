@@ -20,6 +20,7 @@ import Mermaid from "./type_widgets/Mermaid";
 import MindMap from "./type_widgets/MindMap";
 import { AttachmentDetail, AttachmentList } from "./type_widgets/Attachment";
 import ReadOnlyText from "./type_widgets/text/ReadOnlyText";
+import attributes from "../services/attributes";
 
 /**
  * A `NoteType` altered by the note detail widget, taking into consideration whether the note is editable or not and adding special note types such as an empty one,
@@ -35,7 +36,7 @@ type ExtendedNoteType = Exclude<NoteType, "launcher" | "text" | "code"> | "empty
  * - Focuses the content when switching tabs.
  */
 export default function NoteDetail() {
-    const { note, type, noteContext, parentComponent } = useNoteInfo();
+    const { note, type, mime, noteContext, parentComponent } = useNoteInfo();
     const { ntxId, viewScope } = noteContext ?? {};
     const [ correspondingWidget, setCorrespondingWidget ] = useState<VNode>();
     const isFullHeight = checkFullHeight(noteContext, type);
@@ -48,6 +49,48 @@ export default function NoteDetail() {
         noteContext
     };
     useEffect(() => setCorrespondingWidget(getCorrespondingWidget(type, props)), [ note, viewScope, type ]);
+
+    // Detect note type changes.
+    useTriliumEvent("entitiesReloaded", async ({ loadResults }) => {
+        if (!note) return;
+
+        // we're detecting note type change on the note_detail level, but triggering the noteTypeMimeChanged
+        // globally, so it gets also to e.g. ribbon components. But this means that the event can be generated multiple
+        // times if the same note is open in several tabs.
+
+        if (note.noteId && loadResults.isNoteContentReloaded(note.noteId, parentComponent.componentId)) {
+            // probably incorrect event
+            // calling this.refresh() is not enough since the event needs to be propagated to children as well
+            // FIXME: create a separate event to force hierarchical refresh
+
+            // this uses handleEvent to make sure that the ordinary content updates are propagated only in the subtree
+            // to avoid the problem in #3365
+            parentComponent.handleEvent("noteTypeMimeChanged", { noteId: note.noteId });
+        } else if (note.noteId
+            && loadResults.isNoteReloaded(note.noteId, parentComponent.componentId)
+            && (type !== (await getWidgetType(note, noteContext)) || mime !== note?.mime)) {
+            // this needs to have a triggerEvent so that e.g., note type (not in the component subtree) is updated
+            parentComponent.triggerEvent("noteTypeMimeChanged", { noteId: note.noteId });
+        } else {
+            const attrs = loadResults.getAttributeRows();
+
+            const label = attrs.find(
+                (attr) =>
+                    attr.type === "label" &&
+                    ["readOnly", "autoReadOnlyDisabled", "cssClass", "displayRelations", "hideRelations"].includes(attr.name ?? "") &&
+                    attributes.isAffecting(attr, note)
+            );
+
+            const relation = attrs.find((attr) => attr.type === "relation" && ["template", "inherit", "renderNote"]
+                .includes(attr.name ?? "") && attributes.isAffecting(attr, note));
+
+            if (note.noteId && (label || relation)) {
+                // probably incorrect event
+                // calling this.refresh() is not enough since the event needs to be propagated to children as well
+                parentComponent.triggerEvent("noteTypeMimeChanged", { noteId: note.noteId });
+            }
+        }
+    });
 
     // Automatically focus the editor.
     useTriliumEvent("activeNoteChanged", () => {
@@ -69,11 +112,13 @@ function useNoteInfo() {
     const { note: actualNote, noteContext, parentComponent } = useNoteContext();
     const [ note, setNote ] = useState<FNote | null | undefined>();
     const [ type, setType ] = useState<ExtendedNoteType>();
+    const [ mime, setMime ] = useState<string>();
 
     function refresh() {
         getWidgetType(actualNote, noteContext).then(type => {
             setNote(actualNote);
             setType(type);
+            setMime(actualNote?.mime);
         });
     }
 
@@ -82,8 +127,9 @@ function useNoteInfo() {
         if (eventNoteContext?.ntxId !== noteContext?.ntxId) return;
         refresh();
     });
+    useTriliumEvent("noteTypeMimeChanged", refresh);
 
-    return { note, type, noteContext, parentComponent };
+    return { note, type, mime, noteContext, parentComponent };
 }
 
 function getCorrespondingWidget(noteType: ExtendedNoteType | undefined, props: TypeWidgetProps) {
