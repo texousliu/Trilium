@@ -4,22 +4,9 @@ import FNote from "../entities/fnote";
 import protected_session_holder from "../services/protected_session_holder";
 import { useEffect, useState } from "preact/hooks";
 import NoteContext from "../components/note_context";
-import Empty from "./type_widgets/Empty";
-import { VNode } from "preact";
-import Doc from "./type_widgets/Doc";
+import { isValidElement, VNode } from "preact";
 import { TypeWidgetProps } from "./type_widgets/type_widget";
-import ProtectedSession from "./type_widgets/ProtectedSession";
-import Book from "./type_widgets/Book";
-import ContentWidget from "./type_widgets/ContentWidget";
-import WebView from "./type_widgets/WebView";
 import "./NoteDetail.css";
-import File from "./type_widgets/File";
-import Image from "./type_widgets/Image";
-import { ReadOnlyCode, EditableCode } from "./type_widgets/code/Code";
-import Mermaid from "./type_widgets/Mermaid";
-import MindMap from "./type_widgets/MindMap";
-import { AttachmentDetail, AttachmentList } from "./type_widgets/Attachment";
-import ReadOnlyText from "./type_widgets/text/ReadOnlyText";
 import attributes from "../services/attributes";
 
 /**
@@ -27,6 +14,27 @@ import attributes from "../services/attributes";
  * for protected session or attachment information.
  */
 type ExtendedNoteType = Exclude<NoteType, "launcher" | "text" | "code"> | "empty" | "readOnlyCode" | "readOnlyText" | "editableText" | "editableCode" | "attachmentDetail" | "attachmentList" |  "protectedSession" | "aiChat";
+type TypeWidget = (props: TypeWidgetProps) => VNode;
+
+const TYPE_MAPPINGS: Record<ExtendedNoteType, () => Promise<{ default: TypeWidget } | TypeWidget> | VNode> = {
+    "empty": () => import("./type_widgets/Empty"),
+    "doc": () => import("./type_widgets/Doc"),
+    "search": () => <div className="note-detail-none note-detail-printable" />,
+    "protectedSession": () => import("./type_widgets/ProtectedSession"),
+    "book": () => import("./type_widgets/Book"),
+    "contentWidget": () => import("./type_widgets/ContentWidget"),
+    "webView": () => import("./type_widgets/WebView"),
+    "file": () => import("./type_widgets/File"),
+    "image": () => import("./type_widgets/Image"),
+    "readOnlyCode": async () => (await import("./type_widgets/code/Code")).ReadOnlyCode,
+    "editableCode": async () => (await import("./type_widgets/code/Code")).EditableCode,
+    "mermaid": () => import("./type_widgets/Mermaid"),
+    "mindMap": () => import("./type_widgets/MindMap"),
+    "attachmentList": async () => (await import("./type_widgets/Attachment")).AttachmentList,
+    "attachmentDetail": async () => (await import("./type_widgets/Attachment")).AttachmentDetail,
+    "readOnlyText": () => import("./type_widgets/text/ReadOnlyText"),
+    // TODO: finalize the record.
+};
 
 /**
  * The note detail is in charge of rendering the content of a note, by determining its type (e.g. text, code) and using the appropriate view widget.
@@ -38,7 +46,7 @@ type ExtendedNoteType = Exclude<NoteType, "launcher" | "text" | "code"> | "empty
 export default function NoteDetail() {
     const { note, type, mime, noteContext, parentComponent } = useNoteInfo();
     const { ntxId, viewScope } = noteContext ?? {};
-    const [ correspondingWidget, setCorrespondingWidget ] = useState<VNode>();
+    const [ correspondingWidget, setCorrespondingWidget ] = useState<VNode | null>(null);
     const isFullHeight = checkFullHeight(noteContext, type);
 
     const props: TypeWidgetProps = {
@@ -48,7 +56,10 @@ export default function NoteDetail() {
         parentComponent,
         noteContext
     };
-    useEffect(() => setCorrespondingWidget(getCorrespondingWidget(type, props)), [ note, viewScope, type ]);
+    useEffect(() => {
+        if (!type) return;
+        getCorrespondingWidget(type, props).then(correspondingWidget => setCorrespondingWidget(correspondingWidget));
+    }, [ note, viewScope, type ]);
 
     // Detect note type changes.
     useTriliumEvent("entitiesReloaded", async ({ loadResults }) => {
@@ -132,30 +143,28 @@ function useNoteInfo() {
     return { note, type, mime, noteContext, parentComponent };
 }
 
-function getCorrespondingWidget(noteType: ExtendedNoteType | undefined, props: TypeWidgetProps) {
-    switch (noteType) {
-        case "empty": return <Empty />
-        case "doc": return <Doc {...props} />
-        case "search": return <div className="note-detail-none note-detail-printable" />
-        case "protectedSession": return <ProtectedSession />
-        case "book": return <Book {...props} />
-        case "contentWidget": return <ContentWidget {...props} />
-        case "webView": return <WebView {...props} />
-        case "file": return <File {...props} />
-        case "image": return <Image {...props} />
-        case "readOnlyCode": return <ReadOnlyCode {...props} />
-        case "editableCode": return <EditableCode {...props} />
-        case "mermaid": return <Mermaid {...props} />
-        case "mindMap": return <MindMap {...props} />
-        case "attachmentList": return <AttachmentList {...props} />
-        case "attachmentDetail": return <AttachmentDetail {...props} />
-        case "readOnlyText": return <ReadOnlyText {...props} />
-        default: break;
+async function getCorrespondingWidget(type: ExtendedNoteType, props: TypeWidgetProps): Promise<VNode | null> {
+    const correspondingType = TYPE_MAPPINGS[type];
+    if (!correspondingType) return null;
+
+    const result = await correspondingType();
+    console.log("For type ", type, " got ", result);
+
+    if ("default" in result) {
+        const Component = result.default;
+        return <Component {...props} />
+    } else if (isValidElement(result)) {
+        // Direct VNode provided.
+        return result;
+    } else {
+        const Component = result;
+        return <Component {...props} />
     }
 }
 
 async function getWidgetType(note: FNote | null | undefined, noteContext: NoteContext | undefined): Promise<ExtendedNoteType> {
     if (!note) {
+        console.log("Returning empty because no note.");
         return "empty";
     }
 

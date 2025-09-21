@@ -8,8 +8,9 @@ import note_autocomplete from "../../services/note_autocomplete";
 import appContext from "../../components/app_context";
 import FNote from "../../entities/fnote";
 import search from "../../services/search";
+import { TypeWidgetProps } from "./type_widget";
 
-export default function Empty() {
+export default function Empty({ }: TypeWidgetProps) {
     return (
         <div class="note-detail-empty note-detail-printable">
             <WorkspaceSwitcher />
