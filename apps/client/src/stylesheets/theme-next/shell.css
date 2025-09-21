@@ -1067,6 +1067,14 @@ body.layout-horizontal .tab-row-widget .note-tab .note-tab-wrapper {
     transform: translate3d(var(--tab-first-item-horiz-offset), 0, 0);
 }
 
+:root .tab-row-widget .note-tab .note-tab-icon {
+    padding-right: 5px; /* The gap between the icon and the title */
+}
+
+.tab-row-widget .note-tab[active] .note-tab-icon {
+    color: var(--active-tab-icon-color);
+}
+
 .tab-row-widget .note-tab .note-tab-title {
     text-overflow: ellipsis;
 }
