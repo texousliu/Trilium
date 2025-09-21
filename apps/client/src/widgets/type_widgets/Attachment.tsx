@@ -25,6 +25,7 @@ import dialog from "../../services/dialog";
 import ws from "../../services/ws";
 import appContext from "../../components/app_context";
 import { ConvertAttachmentToNoteResponse } from "@triliumnext/commons";
+import options from "../../services/options";
 
 /**
  * Displays the full list of attachments of a note and allows the user to interact with them.
@@ -158,7 +159,7 @@ function AttachmentInfo({ attachment, isFullDetail }: { attachment: FAttachment,
 
     return (
         <div className="attachment-detail-widget">
-            <div className="attachment-detail-wrapper">
+            <div className={`attachment-detail-wrapper ${isFullDetail ? "full-detail" : "list-view"} ${attachment.utcDateScheduledForErasureSince ? "scheduled-for-deletion" : ""}`}>
                 <div className="attachment-title-line">
                     <AttachmentActions attachment={attachment} copyAttachmentLinkToClipboard={copyAttachmentLinkToClipboard} />
                     <h4 className="attachment-title">
@@ -179,9 +180,27 @@ function AttachmentInfo({ attachment, isFullDetail }: { attachment: FAttachment,
                     <div style="flex: 1 1;"></div>
                 </div>
 
+                {attachment.utcDateScheduledForErasureSince && <DeletionAlert utcDateScheduledForErasureSince={attachment.utcDateScheduledForErasureSince} />}
                 <div ref={contentWrapper} className="attachment-content-wrapper" />
             </div>
         </div>
+    )
+}
+
+function DeletionAlert({ utcDateScheduledForErasureSince }: { utcDateScheduledForErasureSince: string }) {
+    const scheduledSinceTimestamp = utils.parseDate(utcDateScheduledForErasureSince)?.getTime();
+    // use default value (30 days in seconds) from options_init as fallback, in case getInt returns null
+    const intervalMs = options.getInt("eraseUnusedAttachmentsAfterSeconds") || 2592000 * 1000;
+    const deletionTimestamp = scheduledSinceTimestamp + intervalMs;
+    const willBeDeletedInMs = deletionTimestamp - Date.now();
+
+    return (
+        <Alert className="attachment-deletion-warning" type="info">
+            { willBeDeletedInMs >= 60000
+            ? t("attachment_detail_2.will_be_deleted_in", { time: utils.formatTimeInterval(willBeDeletedInMs) })
+            : t("attachment_detail_2.will_be_deleted_soon")}
+            {t("attachment_detail_2.deletion_reason")}
+        </Alert>
     )
 }
 

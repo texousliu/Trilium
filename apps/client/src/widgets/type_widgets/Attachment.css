@@ -82,6 +82,10 @@
 .attachment-detail-wrapper.scheduled-for-deletion .attachment-content-wrapper img {
     filter: contrast(10%);
 }
+
+.attachment-detail-wrapper .attachment-deletion-warning {
+    margin-top: 15px;
+}
 /* #endregion */
 
 /* #region Attachment detail */
