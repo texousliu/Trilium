@@ -53,25 +53,6 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
         await formatCodeBlocks(this.$content);
     }
 
-    async #applyInlineMermaid() {
-        const $el = this.$content.find('code[class="language-mermaid"]').closest("pre");
-        if (!$el.length) {
-            return;
-        }
-
-        // Rewrite the code block from <pre><code> to <div> in order not to apply a codeblock style to it.
-        $el.replaceWith((i, content) => {
-            return $('<div class="mermaid-diagram">').text($(content).text());
-        });
-
-        // Initialize mermaid
-        const mermaid = (await import("mermaid")).default;
-        mermaid.initialize(getMermaidConfig());
-        mermaid.run({
-            nodes: this.$content.find(".mermaid-diagram")
-        });
-    }
-
     async refreshIncludedNoteEvent({ noteId }: EventData<"refreshIncludedNote">) {
         this.refreshIncludedNote(this.$content, noteId);
     }

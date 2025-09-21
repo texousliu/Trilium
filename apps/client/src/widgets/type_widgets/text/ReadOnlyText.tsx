@@ -10,11 +10,19 @@ import RawHtml from "../../react/RawHtml";
 import "@triliumnext/ckeditor5";
 import FNote from "../../../entities/fnote";
 import { getLocaleById } from "../../../services/i18n";
+import { getMermaidConfig } from "../../../services/mermaid";
 
 export default function ReadOnlyText({ note }: TypeWidgetProps) {
     const blob = useNoteBlob(note);
     const contentRef = useRef<HTMLDivElement>(null);
     const { isRtl } = useNoteLanguage(note);
+
+    useEffect(() => {
+        const container = contentRef.current;
+        if (!container) return;
+
+        applyInlineMermaid(container);
+    }, [ blob ]);
 
     return (
         <div
@@ -38,4 +46,24 @@ function useNoteLanguage(note: FNote) {
         return correspondingLocale?.rtl;
     }, [ language ]);
     return { isRtl };
+}
+
+async function applyInlineMermaid(container: HTMLDivElement) {
+    const mermaidBlocks = container.querySelectorAll('pre:has(code[class="language-mermaid"])');
+    if (!mermaidBlocks.length) return;
+    const nodes: HTMLElement[] = [];
+
+    // Rewrite the code block from <pre><code> to <div> in order not to apply a codeblock style to it.
+    for (const mermaidBlock of mermaidBlocks) {
+        const div = document.createElement("div");
+        div.classList.add("mermaid-diagram");
+        div.innerHTML = mermaidBlock.querySelector("code")?.innerHTML ?? "";
+        mermaidBlock.replaceWith(div);
+        nodes.push(div);
+    }
+
+    // Initialize mermaid
+    const mermaid = (await import("mermaid")).default;
+    mermaid.initialize(getMermaidConfig());
+    mermaid.run({ nodes });
 }
