@@ -13,6 +13,7 @@ import { getLocaleById } from "../../../services/i18n";
 import { getMermaidConfig } from "../../../services/mermaid";
 import { loadIncludedNote, refreshIncludedNote } from "./utils";
 import { renderMathInElement } from "../../../services/math";
+import link from "../../../services/link";
 
 export default function ReadOnlyText({ note }: TypeWidgetProps) {
     const blob = useNoteBlob(note);
@@ -27,6 +28,7 @@ export default function ReadOnlyText({ note }: TypeWidgetProps) {
         applyInlineMermaid(container);
         applyIncludedNotes(container);
         applyMath(container);
+        applyReferenceLinks(container);
     }, [ blob ]);
 
     // React to included note changes.
@@ -80,11 +82,11 @@ async function applyInlineMermaid(container: HTMLDivElement) {
 }
 
 function applyIncludedNotes(container: HTMLDivElement) {
-    const includedNotes = container.querySelectorAll("section.include-note");
+    const includedNotes = container.querySelectorAll<HTMLElement>("section.include-note");
     for (const includedNote of includedNotes) {
-        const noteId = (includedNote as HTMLElement).dataset.noteId;
+        const noteId = includedNote.dataset.noteId;
         if (!noteId) continue;
-        loadIncludedNote(noteId, $(includedNote as HTMLElement));
+        loadIncludedNote(noteId, $(includedNote));
     }
 }
 
@@ -92,5 +94,12 @@ function applyMath(container: HTMLDivElement) {
     const equations = container.querySelectorAll("span.math-tex");
     for (const equation of equations) {
         renderMathInElement(equation, { trust: true });
+    }
+}
+
+function applyReferenceLinks(container: HTMLDivElement) {
+    const referenceLinks = container.querySelectorAll<HTMLDivElement>("a.reference-link");
+    for (const referenceLink of referenceLinks) {
+        link.loadReferenceLinkTitle($(referenceLink));
     }
 }

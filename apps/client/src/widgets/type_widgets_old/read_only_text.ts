@@ -3,8 +3,6 @@ import { formatCodeBlocks } from "../../services/syntax_highlight.js";
 import type FNote from "../../entities/fnote.js";
 import type { CommandListenerData, EventData } from "../../components/app_context.js";
 import appContext from "../../components/app_context.js";
-import { getMermaidConfig } from "../../services/mermaid.js";
-import { renderMathInElement } from "../../services/math.js";
 
 export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
 
@@ -27,16 +25,6 @@ export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
     }
 
     async doRefresh(note: FNote) {
-        this.onLanguageChanged();
-
-        const blob = await note.getBlob();
-
-        this.$content.html(blob?.content ?? "");
-
-        this.$content.find("a.reference-link").each((_, el) => {
-            this.loadReferenceLinkTitle($(el));
-        });
-
         await formatCodeBlocks(this.$content);
     }
 
