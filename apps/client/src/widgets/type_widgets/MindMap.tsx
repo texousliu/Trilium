@@ -25,7 +25,21 @@ export default function MindMap({ note }: TypeWidgetProps) {
     const apiRef = useRef<MindElixirInstance>(null);
     const spacedUpdate = useEditorSpacedUpdate({
         note,
-        getData: () => ({ content: apiRef.current?.getDataString() }),
+        getData: () => {
+            if (!apiRef.current) return;
+            return {
+                content: apiRef.current.getDataString(),
+                attachments: [
+                    {
+                        role: "image",
+                        title: "mindmap-export.svg",
+                        mime: "image/svg+xml",
+                        content: apiRef.current.exportSvg().text(),
+                        position: 0
+                    }
+                ]
+            }
+        },
         onContentChange: (content) => {
             let newContent: MindElixirData;
             if (content) {

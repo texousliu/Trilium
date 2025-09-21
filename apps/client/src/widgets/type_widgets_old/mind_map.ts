@@ -48,27 +48,6 @@ export default class MindMapWidget extends TypeWidget {
         this.mind = mind;
     }
 
-    async getData() {
-        const mind = this.mind;
-        if (!mind) {
-            return;
-        }
-
-        const svgContent = await this.renderSvg();
-        return {
-            content: mind.getDataString(),
-            attachments: [
-                {
-                    role: "image",
-                    title: "mindmap-export.svg",
-                    mime: "image/svg+xml",
-                    content: svgContent,
-                    position: 0
-                }
-            ]
-        };
-    }
-
     async renderSvg() {
         return await this.mind!.exportSvg().text();
     }
