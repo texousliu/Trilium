@@ -11,11 +11,12 @@ import "@triliumnext/ckeditor5";
 import FNote from "../../../entities/fnote";
 import { getLocaleById } from "../../../services/i18n";
 import { getMermaidConfig } from "../../../services/mermaid";
-import { loadIncludedNote, refreshIncludedNote } from "./utils";
+import { loadIncludedNote, refreshIncludedNote, setupImageOpening } from "./utils";
 import { renderMathInElement } from "../../../services/math";
 import link from "../../../services/link";
+import { formatCodeBlocks } from "../../../services/syntax_highlight";
 
-export default function ReadOnlyText({ note }: TypeWidgetProps) {
+export default function ReadOnlyText({ note, ntxId }: TypeWidgetProps) {
     const blob = useNoteBlob(note);
     const contentRef = useRef<HTMLDivElement>(null);
     const { isRtl } = useNoteLanguage(note);
@@ -29,12 +30,20 @@ export default function ReadOnlyText({ note }: TypeWidgetProps) {
         applyIncludedNotes(container);
         applyMath(container);
         applyReferenceLinks(container);
+        formatCodeBlocks($(container));
+        setupImageOpening(container, true);
     }, [ blob ]);
 
     // React to included note changes.
     useTriliumEvent("refreshIncludedNote", ({ noteId }) => {
         if (!contentRef.current) return;
         refreshIncludedNote(contentRef.current, noteId);
+    });
+
+    // Search integration.
+    useTriliumEvent("executeWithContentElement", ({ resolve, ntxId: eventNtxId }) => {
+        if (eventNtxId !== ntxId || !contentRef.current) return;
+        resolve($(contentRef.current));
     });
 
     return (

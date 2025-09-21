@@ -5,39 +5,6 @@ import type { CommandListenerData, EventData } from "../../components/app_contex
 import appContext from "../../components/app_context.js";
 
 export default class ReadOnlyTextTypeWidget extends AbstractTextTypeWidget {
-
-    private $content!: JQuery<HTMLElement>;
-
-    static getType() {
-        return "readOnlyText";
-    }
-
-    doRender() {
-        this.$content = this.$widget.find(".note-detail-readonly-text-content");
-
-        this.setupImageOpening(true);
-
-        super.doRender();
-    }
-
-    cleanup() {
-        this.$content.html("");
-    }
-
-    async doRefresh(note: FNote) {
-        await formatCodeBlocks(this.$content);
-    }
-
-    async executeWithContentElementEvent({ resolve, ntxId }: EventData<"executeWithContentElement">) {
-        if (!this.isNoteContext(ntxId)) {
-            return;
-        }
-
-        await this.initialized;
-
-        resolve(this.$content);
-    }
-
     buildTouchBarCommand({ TouchBar, buildIcon }: CommandListenerData<"buildTouchBar">) {
         return [
             new TouchBar.TouchBarSpacer({ size: "flexible" }),
