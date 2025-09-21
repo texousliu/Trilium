@@ -577,13 +577,19 @@ div.quick-search .search-button.show {
     transition: background-color 100ms ease-out !important;
 }
 
-/*
- * Quick search results
- */
-
 div.quick-search .dropdown-menu {
     --quick-search-item-delimiter-color: transparent;
     --menu-item-icon-vert-offset: -.065em;
+}
+
+/*
+ * TO FIX: The quick search results dropdown has a backdrop issue with the tree panel
+ * when background effects are enabled in Electron.
+ * As a temporary workaround, the backdrop and transparency are disabled for the
+ * vertical layout.
+ */
+body.layout-vertical.background-effects div.quick-search .dropdown-menu {    
+    --menu-background-color: var(--menu-background-color-no-backdrop) !important;
 }
 
 /* Item */
@@ -881,7 +887,10 @@ body.mobile .fancytree-node > span {
 }
 
 .tab-row-container .toggle-button {
-    margin: 6px 10px !important;
+    --icon-button-size: 30px;
+    --icon-button-icon-ratio: .6;
+
+    margin: 3px 6px auto 8px !important;
 }
 
 .tab-row-container {
@@ -911,7 +920,7 @@ body.electron.background-effects.layout-horizontal .tab-row-container .toggle-bu
     bottom: 0;
     left: -10px;
     right: -10px;
-    top: 29px;
+    top: 32px;
     height: 1px;
     border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
 }

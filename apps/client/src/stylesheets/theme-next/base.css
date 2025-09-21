@@ -102,10 +102,6 @@ body.backdrop-effects-disabled {
     font-size: 0.9rem !important;
 }
 
-.dropdown-menu {
-    --scrollbar-background-color: var(--menu-background-color);
-}
-
 body.mobile .dropdown-menu {
     backdrop-filter: var(--dropdown-backdrop-filter);
     border-radius: var(--dropdown-border-radius);
@@ -158,6 +154,16 @@ body.mobile .dropdown-submenu .dropdown-toggle {
     /* Note: the right padding should also accommodate the submenu arrow. */
     border-radius: 6px;
     cursor: default !important;
+}
+
+:root .dropdown-item:focus-visible {
+    outline: 2px solid var(--input-focus-outline-color) !important;
+    background-color: transparent;
+    color: unset;
+}
+
+:root .dropdown-item:active {
+    background: unset;
 }
 
 body.mobile .dropdown-submenu {
