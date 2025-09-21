@@ -6,7 +6,6 @@ import { t } from "../../services/i18n.js";
 import type { EventData } from "../../components/app_context.js";
 
 const TPL = /*html*/`
-    <div class="attachment-list-wrapper"></div>
 `;
 
 export default class AttachmentListTypeWidget extends TypeWidget {
@@ -27,27 +26,11 @@ export default class AttachmentListTypeWidget extends TypeWidget {
     }
 
     async doRefresh(note: Parameters<TypeWidget["doRefresh"]>[0]) {
-        const $helpButton = $(`
-            <button class="attachment-help-button icon-action bx bx-help-circle"
-                     type="button" data-help-page="attachments.html"
-                     title="${}">
-            </button>
-        `);
-        utils.initHelpButtons($helpButton);
-
-        const noteLink = await linkService.createLink(this.noteId); // do separately to avoid race condition between empty() and .append()
-        noteLink.addClass("use-tn-links");
-
         this.$list.empty();
         this.children = [];
         this.renderedAttachmentIds = new Set();
 
         const attachments = await note.getAttachments();
-
-        if (attachments.length === 0) {
-            this.$list.html('<div class="alert alert-info">' + t("attachment_list.no_attachments") + "</div>");
-            return;
-        }
 
         for (const attachment of attachments) {
             const attachmentDetailWidget = new AttachmentDetailWidget(attachment, false);

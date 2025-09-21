@@ -11,89 +11,8 @@ import type FAttachment from "../entities/fattachment.js";
 import type { EventData } from "../components/app_context.js";
 
 const TPL = /*html*/`
-<div class="attachment-detail-widget">
-    <style>
-        .attachment-detail-widget {
-            height: 100%;
-        }
-
-        .attachment-detail-wrapper {
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .attachment-title-line {
-            display: flex;
-            align-items: baseline;
-            gap: 1em;
-        }
-
-        .attachment-details {
-            margin-left: 10px;
-        }
-
-        .attachment-content-wrapper {
-            flex-grow: 1;
-        }
-
-        .attachment-content-wrapper .rendered-content {
-            height: 100%;
-        }
-
-        .attachment-content-wrapper pre {
-            padding: 10px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        .attachment-detail-wrapper.list-view .attachment-content-wrapper {
-            max-height: 300px;
-        }
-
-        .attachment-detail-wrapper.full-detail {
-            height: 100%;
-        }
-
-        .attachment-detail-wrapper.full-detail .attachment-content-wrapper {
-            height: 100%;
-        }
-
-        .attachment-detail-wrapper.list-view .attachment-content-wrapper pre {
-            max-height: 400px;
-        }
-
-        .attachment-content-wrapper img {
-            margin: 10px;
-        }
-
-        .attachment-detail-wrapper.list-view .attachment-content-wrapper img, .attachment-detail-wrapper.list-view .attachment-content-wrapper video {
-            max-height: 300px;
-            max-width: 90%;
-            object-fit: contain;
-        }
-
-        .attachment-detail-wrapper.full-detail .attachment-content-wrapper img {
-            max-width: 90%;
-            object-fit: contain;
-        }
-
-        .attachment-detail-wrapper.scheduled-for-deletion .attachment-content-wrapper img {
-            filter: contrast(10%);
-        }
-    </style>
-
-    <div class="attachment-detail-wrapper">
-        <div class="attachment-title-line">
-            <div class="attachment-actions-container"></div>
-            <h4 class="attachment-title"></h4>
-            <div class="attachment-details"></div>
-            <div style="flex: 1 1;"></div>
-        </div>
-
         <div class="attachment-deletion-warning alert alert-info" style="margin-top: 15px;"></div>
 
-        <div class="attachment-content-wrapper"></div>
     </div>
 </div>`;
 
@@ -125,21 +44,6 @@ export default class AttachmentDetailWidget extends BasicWidget {
         this.$wrapper = this.$widget.find(".attachment-detail-wrapper");
         this.$wrapper.addClass(this.isFullDetail ? "full-detail" : "list-view");
 
-        if (!this.isFullDetail) {
-            const $link = await linkService.createLink(this.attachment.ownerId, {
-                title: this.attachment.title,
-                viewScope: {
-                    viewMode: "attachments",
-                    attachmentId: this.attachment.attachmentId
-                }
-            });
-            $link.addClass("use-tn-links");
-
-            this.$wrapper.find(".attachment-title").append($link);
-        } else {
-            this.$wrapper.find(".attachment-title").text(this.attachment.title);
-        }
-
         const $deletionWarning = this.$wrapper.find(".attachment-deletion-warning");
         const { utcDateScheduledForErasureSince } = this.attachment;
 
@@ -166,10 +70,9 @@ export default class AttachmentDetailWidget extends BasicWidget {
             $deletionWarning.hide();
         }
 
-        this.$wrapper.find(".attachment-details").text(t("attachment_detail_2.role_and_size", { role: this.attachment.role, size: utils.formatSize(this.attachment.contentLength) }));
         this.$wrapper.find(".attachment-actions-container").append(this.attachmentActionsWidget.render());
 
-        const { $renderedContent } = await contentRenderer.getRenderedContent(this.attachment, { imageHasZoom: this.isFullDetail });
+        const { $renderedContent } = await );
         this.$wrapper.find(".attachment-content-wrapper").append($renderedContent);
     }
 
