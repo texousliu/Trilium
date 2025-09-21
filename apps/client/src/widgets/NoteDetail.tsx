@@ -19,6 +19,7 @@ import { ReadOnlyCode, EditableCode } from "./type_widgets/code/Code";
 import Mermaid from "./type_widgets/Mermaid";
 import MindMap from "./type_widgets/MindMap";
 import { AttachmentDetail, AttachmentList } from "./type_widgets/Attachment";
+import ReadOnlyText from "./type_widgets/text/ReadOnlyText";
 
 /**
  * A `NoteType` altered by the note detail widget, taking into consideration whether the note is editable or not and adding special note types such as an empty one,
@@ -101,6 +102,7 @@ function getCorrespondingWidget(noteType: ExtendedNoteType | undefined, props: T
         case "mindMap": return <MindMap {...props} />
         case "attachmentList": return <AttachmentList {...props} />
         case "attachmentDetail": return <AttachmentDetail {...props} />
+        case "readOnlyText": return <ReadOnlyText {...props} />
         default: break;
     }
 }
