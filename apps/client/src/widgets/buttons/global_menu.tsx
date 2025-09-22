@@ -155,7 +155,7 @@ function ZoomControls({ parentComponent }: { parentComponent?: Component | null 
 
     useEffect(updateZoomState, []);
 
-    function ZoomControlButton({ command, title, icon, children }: { command: KeyboardActionNames, title: string, icon?: string, children?: ComponentChildren }) {
+    function ZoomControlButton({ command, title, icon, children, dismiss }: { command: KeyboardActionNames, title: string, icon?: string, children?: ComponentChildren, dismiss?: boolean }) {
         const linkRef = useRef<HTMLAnchorElement>(null);
         useStaticTooltipWithKeyboardShortcut(linkRef, title, command, {
             placement: "bottom",
@@ -167,8 +167,10 @@ function ZoomControls({ parentComponent }: { parentComponent?: Component | null 
                 tabIndex={0}
                 onClick={(e) => {
                     parentComponent?.triggerCommand(command);
-                    setTimeout(() => updateZoomState(), 300)
-                    e.stopPropagation();
+                    setTimeout(() => updateZoomState(), 300);
+                    if (!dismiss) {
+                        e.stopPropagation();
+                    }
                 }}
                 className={`dropdown-item-button ${icon}`}
             >{children}</a>
@@ -184,7 +186,7 @@ function ZoomControls({ parentComponent }: { parentComponent?: Component | null 
             {t("global_menu.zoom")}
             <>
                 <div className="zoom-buttons">
-                    <ZoomControlButton command="toggleFullscreen" title={t("global_menu.toggle_fullscreen")} icon="bx bx-expand-alt" />
+                    <ZoomControlButton command="toggleFullscreen" title={t("global_menu.toggle_fullscreen")} icon="bx bx-expand-alt" dismiss />
                     &nbsp;
                     <ZoomControlButton command="zoomOut" title={t("global_menu.zoom_out")} icon="bx bx-minus" />
                     <ZoomControlButton command="zoomReset" title={t("global_menu.reset_zoom_level")}>{zoomLevel}{t("units.percentage")}</ZoomControlButton>
