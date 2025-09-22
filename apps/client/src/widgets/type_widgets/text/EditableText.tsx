@@ -1,3 +1,4 @@
+import toast from "../../../services/toast";
 import { isMobile } from "../../../services/utils";
 import { useNoteLabel, useTriliumOption } from "../../react/hooks";
 import { TypeWidgetProps } from "../type_widget";
@@ -32,7 +33,21 @@ export default function EditableText({ note }: TypeWidgetProps) {
                     contentLanguage: language ?? null,
                     forceGplLicense: false,
                 }}
+                onNotificationWarning={onNotificationWarning}
             />
         </div>
     )
+}
+
+function onNotificationWarning(data, evt) {
+    const title = data.title;
+    const message = data.message.message;
+
+    if (title && message) {
+        toast.showErrorTitleAndMessage(data.title, data.message.message);
+    } else if (title) {
+        toast.showError(title || message);
+    }
+
+    evt.stop();
 }

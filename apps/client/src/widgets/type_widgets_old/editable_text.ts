@@ -57,20 +57,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.watchdog.setCreator(async (_, editorConfig) => {
             logInfo("Creating new CKEditor");
 
-            const notificationsPlugin = editor.plugins.get("Notification");
-            notificationsPlugin.on("show:warning", (evt, data) => {
-                const title = data.title;
-                const message = data.message.message;
-
-                if (title && message) {
-                    toast.showErrorTitleAndMessage(data.title, data.message.message);
-                } else if (title) {
-                    toast.showError(title || message);
-                }
-
-                evt.stop();
-            });
-
             if (isClassicEditor) {
                 const $classicToolbarWidget = this.findClassicToolbar();
 
