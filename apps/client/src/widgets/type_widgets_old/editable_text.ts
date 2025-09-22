@@ -16,84 +16,12 @@ import { updateTemplateCache } from "./ckeditor/snippets.js";
 
 export type BoxSize = "small" | "medium" | "full";
 
-const TPL = /*html*/`
-<div class="note-detail-editable-text note-detail-printable">
-    <style>
-    .note-detail-editable-text {
-        font-family: var(--detail-font-family);
-        padding-left: 14px;
-        padding-top: 10px;
-        height: 100%;
-    }
-
-    /* Workaround for #1327 */
-    body.desktop.electron .note-detail-editable-text {
-        letter-spacing: -0.01px;
-    }
-
-    body.mobile .note-detail-editable-text {
-        padding-left: 4px;
-    }
-
-    .note-detail-editable-text a:hover {
-        cursor: pointer;
-    }
-
-    .note-detail-editable-text a[href^="http://"], .note-detail-editable-text a[href^="https://"] {
-        cursor: text !important;
-    }
-
-    .note-detail-editable-text *:not(figure, .include-note, hr):first-child {
-        margin-top: 0 !important;
-    }
-
-    .note-detail-editable-text h2 { font-size: 1.6em; }
-    .note-detail-editable-text h3 { font-size: 1.4em; }
-    .note-detail-editable-text h4 { font-size: 1.2em; }
-    .note-detail-editable-text h5 { font-size: 1.1em; }
-    .note-detail-editable-text h6 { font-size: 1.0em; }
-
-    body.heading-style-markdown .note-detail-editable-text h2::before { content: "##\\2004"; color: var(--muted-text-color); }
-    body.heading-style-markdown .note-detail-editable-text h3::before { content: "###\\2004"; color: var(--muted-text-color); }
-    body.heading-style-markdown .note-detail-editable-text h4:not(.include-note-title)::before { content: "####\\2004"; color: var(--muted-text-color); }
-    body.heading-style-markdown .note-detail-editable-text h5::before { content: "#####\\2004"; color: var(--muted-text-color); }
-    body.heading-style-markdown .note-detail-editable-text h6::before { content: "######\\2004"; color: var(--muted-text-color); }
-
-    body.heading-style-underline .note-detail-editable-text h2 { border-bottom: 1px solid var(--main-border-color); }
-    body.heading-style-underline .note-detail-editable-text h3 { border-bottom: 1px solid var(--main-border-color); }
-    body.heading-style-underline .note-detail-editable-text h4:not(.include-note-title) { border-bottom: 1px solid var(--main-border-color); }
-    body.heading-style-underline .note-detail-editable-text h5 { border-bottom: 1px solid var(--main-border-color); }
-    body.heading-style-underline .note-detail-editable-text h6 { border-bottom: 1px solid var(--main-border-color); }
-
-    .note-detail-editable-text-editor {
-        padding-top: 10px;
-        border: 0 !important;
-        box-shadow: none !important;
-        min-height: 50px;
-        height: 100%;
-    }
-    </style>
-
-    <div class="note-detail-editable-text-editor use-tn-links" tabindex="300"></div>
-</div>
-`;
-
-/**
- * The editor can operate into two distinct modes:
- *
- * - Ballon block mode, in which there is a floating toolbar for the selected text, but another floating button for the entire block (i.e. paragraph).
- * - Decoupled mode, in which the editing toolbar is actually added on the client side (in {@link ClassicEditorToolbar}), see https://ckeditor.com/docs/ckeditor5/latest/examples/framework/bottom-toolbar-editor.html for an example on how the decoupled editor works.
- */
 export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     private contentLanguage?: string | null;
     private watchdog!: EditorWatchdog<ClassicEditor | PopupEditor>;
 
     private $editor!: JQuery<HTMLElement>;
-
-    static getType() {
-        return "editableText";
-    }
 
     doRender() {
         this.$widget = $(TPL);
@@ -109,31 +37,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     }
 
     async initEditor() {
-        const isClassicEditor = utils.isMobile() || options.get("textNoteEditorType") === "ckeditor-classic";
-
-        // CKEditor since version 12 needs the element to be visible before initialization. At the same time,
-        // we want to avoid flicker - i.e., show editor only once everything is ready. That's why we have separate
-        // display of $widget in both branches.
-        this.$widget.show();
-
-        const config: WatchdogConfig = {
-            // An average number of milliseconds between the last editor errors (defaults to 5000).
-            // When the period of time between errors is lower than that and the crashNumberLimit
-            // is also reached, the watchdog changes its state to crashedPermanently, and it stops
-            // restarting the editor. This prevents an infinite restart loop.
-            minimumNonErrorTimePeriod: 5000,
-            // A threshold specifying the number of errors (defaults to 3).
-            // After this limit is reached and the time between last errors
-            // is shorter than minimumNonErrorTimePeriod, the watchdog changes
-            // its state to crashedPermanently, and it stops restarting the editor.
-            // This prevents an infinite restart loop.
-            crashNumberLimit: 10,
-            // A minimum number of milliseconds between saving the editor data internally (defaults to 5000).
-            // Note that for large documents, this might impact the editor performance.
-            saveInterval: 5000
-        };
-        this.watchdog = isClassicEditor ? new EditorWatchdog(ClassicEditor, config) : new EditorWatchdog(PopupEditor, config);
-
         this.watchdog.on("stateChange", () => {
             const currentState = this.watchdog.state;
             logInfo(`CKEditor state changed to ${currentState}`);
@@ -153,16 +56,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
         this.watchdog.setCreator(async (_, editorConfig) => {
             logInfo("Creating new CKEditor");
-
-            const contentLanguage = this.note?.getLabelValue("language");
-            this.contentLanguage = contentLanguage ?? null;
-
-            const opts: BuildEditorOptions = {
-                contentLanguage: this.contentLanguage,
-                forceGplLicense: false,
-                isClassicEditor
-            };
-            const editor = await buildEditor(this.$editor[0], isClassicEditor, opts);
 
             const notificationsPlugin = editor.plugins.get("Notification");
             notificationsPlugin.on("show:warning", (evt, data) => {
@@ -230,10 +123,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         });
 
         await this.createEditor();
-    }
-
-    async createEditor() {
-        await this.watchdog.create(this.$editor[0]);
     }
 
     async doRefresh(note: FNote) {
@@ -590,21 +479,5 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             })
         ];
     }
-
-}
-
-async function buildEditor(element: HTMLElement, isClassicEditor: boolean, opts: BuildEditorOptions) {
-    const editorClass = isClassicEditor ? ClassicEditor : PopupEditor;
-    let config = await buildConfig(opts);
-    let editor = await editorClass.create(element, config);
-
-    if (editor.isReadOnly) {
-        editor.destroy();
-
-        opts.forceGplLicense = true;
-        config = await buildConfig(opts);
-        editor = await editorClass.create(element, config);
-    }
-    return editor;
 
 }

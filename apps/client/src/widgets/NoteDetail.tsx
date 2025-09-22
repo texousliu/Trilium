@@ -33,6 +33,7 @@ const TYPE_MAPPINGS: Record<ExtendedNoteType, () => Promise<{ default: TypeWidge
     "attachmentList": async () => (await import("./type_widgets/Attachment")).AttachmentList,
     "attachmentDetail": async () => (await import("./type_widgets/Attachment")).AttachmentDetail,
     "readOnlyText": () => import("./type_widgets/text/ReadOnlyText"),
+    "editableText": () => import("./type_widgets/text/EditableText"),
     "render": () => import("./type_widgets/Render"),
     "canvas": () => import("./type_widgets/Canvas")
     // TODO: finalize the record.
