@@ -4,11 +4,10 @@ import { TypeWidgetProps } from "../type_widget";
 import "./code.css";
 import CodeMirror, { CodeMirrorProps } from "./CodeMirror";
 import utils from "../../../services/utils";
-import { useEditorSpacedUpdate, useNoteBlob, useSyncedRef, useTriliumEvent, useTriliumOption, useTriliumOptionBool } from "../../react/hooks";
+import { useEditorSpacedUpdate, useKeyboardShortcuts, useNoteBlob, useSyncedRef, useTriliumEvent, useTriliumOption, useTriliumOptionBool } from "../../react/hooks";
 import { t } from "../../../services/i18n";
 import appContext from "../../../components/app_context";
 import TouchBar, { TouchBarButton } from "../../react/TouchBar";
-import keyboard_actions from "../../../services/keyboard_actions";
 import { refToJQuerySelector } from "../../react/react_utils";
 import { CODE_THEME_DEFAULT_PREFIX as DEFAULT_PREFIX } from "../constants";
 
@@ -69,11 +68,7 @@ export function EditableCode({ note, ntxId, debounceUpdate, parentComponent, upd
         updateInterval
     });
 
-    // Set up keyboard shortcuts.
-    useEffect(() => {
-        if (!parentComponent) return;
-        keyboard_actions.setupActionsForElement("code-detail", refToJQuerySelector(containerRef), parentComponent);
-    }, []);
+    useKeyboardShortcuts("code-detail", containerRef, parentComponent);
 
     return (
         <div className="note-detail-code note-detail-printable">

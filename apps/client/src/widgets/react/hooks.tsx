@@ -1,6 +1,6 @@
-import { Inputs, MutableRef, useCallback, useContext, useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
-import { CommandListenerData, EventData, EventNames } from "../../components/app_context";
-import { ParentComponent } from "./react_utils";
+import { MutableRef, useCallback, useContext, useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
+import { EventData, EventNames } from "../../components/app_context";
+import { ParentComponent, refToJQuerySelector } from "./react_utils";
 import SpacedUpdate from "../../services/spaced_update";
 import { FilterLabelsByType, KeyboardActionNames, OptionNames, RelationNames } from "@triliumnext/commons";
 import options, { type OptionValue } from "../../services/options";
@@ -21,6 +21,7 @@ import Component from "../../components/component";
 import toast, { ToastOptions } from "../../services/toast";
 import protected_session_holder from "../../services/protected_session_holder";
 import server from "../../services/server";
+import { removeIndividualBinding } from "../../services/shortcuts";
 
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
     const parentComponent = useContext(ParentComponent);
@@ -720,4 +721,18 @@ export function useResizeObserver(ref: RefObject<HTMLElement>, callback: () => v
 
         return () => observer.disconnect();
     }, [ callback, ref ]);
+}
+
+export function useKeyboardShortcuts(scope: "code-detail" | "text-detail", containerRef: RefObject<HTMLElement>, parentComponent: Component | undefined) {
+    useEffect(() => {
+        if (!parentComponent) return;
+        const $container = refToJQuerySelector(containerRef);
+        const bindingPromise = keyboard_actions.setupActionsForElement(scope, $container, parentComponent);
+        return async () => {
+            const bindings = await bindingPromise;
+            for (const binding of bindings) {
+                removeIndividualBinding(binding);
+            }
+        }
+    }, []);
 }
