@@ -1,8 +1,8 @@
 import { Excalidraw, exportToSvg, getSceneVersion } from "@excalidraw/excalidraw";
 import { TypeWidgetProps } from "./type_widget";
 import "@excalidraw/excalidraw/index.css";
-import { useEditorSpacedUpdate, useNoteBlob } from "../react/hooks";
-import { useEffect, useMemo, useRef } from "preact/hooks";
+import { useEditorSpacedUpdate } from "../react/hooks";
+import { useMemo, useRef } from "preact/hooks";
 import { type ExcalidrawImperativeAPI, type AppState, type BinaryFileData, LibraryItem, ExcalidrawProps } from "@excalidraw/excalidraw/types";
 import options from "../../services/options";
 import "./Canvas.css";
@@ -12,6 +12,10 @@ import server from "../../services/server";
 import { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
 import { CanvasContent } from "../type_widgets_old/canvas_el";
 
+// currently required by excalidraw, in order to allows self-hosting fonts locally.
+// this avoids making excalidraw load the fonts from an external CDN.
+window.EXCALIDRAW_ASSET_PATH = `${window.location.pathname}/node_modules/@excalidraw/excalidraw/dist/prod`;
+
 interface AttachmentMetadata {
     title: string;
     attachmentId: string;
@@ -19,12 +23,12 @@ interface AttachmentMetadata {
 
 export default function Canvas({ note }: TypeWidgetProps) {
     const apiRef = useRef<ExcalidrawImperativeAPI>(null);
-    const viewModeEnabled = options.is("databaseReadonly");
+    const isReadOnly = options.is("databaseReadonly");
     const themeStyle = useMemo(() => {
         const documentStyle = window.getComputedStyle(document.documentElement);
         return documentStyle.getPropertyValue("--theme-style")?.trim() as AppState["theme"];
     }, []);
-    const persistence = usePersistence(note, apiRef, themeStyle);
+    const persistence = usePersistence(note, apiRef, themeStyle, isReadOnly);
 
     return (
         <div className="canvas-widget note-detail-canvas note-detail-printable note-detail full-height">
@@ -33,7 +37,7 @@ export default function Canvas({ note }: TypeWidgetProps) {
                     <Excalidraw
                         excalidrawAPI={api => apiRef.current = api}
                         theme={themeStyle}
-                        viewModeEnabled={viewModeEnabled}
+                        viewModeEnabled={isReadOnly}
                         zenModeEnabled={false}
                         isCollaborating={false}
                         detectScroll={false}
@@ -53,7 +57,7 @@ export default function Canvas({ note }: TypeWidgetProps) {
     )
 }
 
-function usePersistence(note: FNote, apiRef: RefObject<ExcalidrawImperativeAPI>, theme: AppState["theme"]): Partial<ExcalidrawProps> {
+function usePersistence(note: FNote, apiRef: RefObject<ExcalidrawImperativeAPI>, theme: AppState["theme"], isReadOnly: boolean): Partial<ExcalidrawProps> {
     const libraryChanged = useRef(false);
     const currentSceneVersion = useRef(0);
 
@@ -169,7 +173,7 @@ function usePersistence(note: FNote, apiRef: RefObject<ExcalidrawImperativeAPI>,
 
     return {
         onChange: () => {
-            if (!apiRef.current) return;
+            if (!apiRef.current || isReadOnly) return;
             const oldSceneVersion = currentSceneVersion.current;
             const newSceneVersion = getSceneVersion(apiRef.current.getSceneElements());
 
