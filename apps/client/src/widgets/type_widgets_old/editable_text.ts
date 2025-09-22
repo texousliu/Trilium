@@ -37,23 +37,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
     }
 
     async initEditor() {
-        this.watchdog.on("stateChange", () => {
-            const currentState = this.watchdog.state;
-            logInfo(`CKEditor state changed to ${currentState}`);
-
-            if (!["crashed", "crashedPermanently"].includes(currentState)) {
-                return;
-            }
-
-            logError(`CKEditor crash logs: ${JSON.stringify(this.watchdog.crashes, null, 4)}`);
-
-            if (currentState === "crashedPermanently") {
-                dialogService.info(`Editing component keeps crashing. Please try restarting Trilium. If problem persists, consider creating a bug report.`);
-
-                this.watchdog.editor?.enableReadOnlyMode("crashed-editor");
-            }
-        });
-
         this.watchdog.setCreator(async (_, editorConfig) => {
             logInfo("Creating new CKEditor");
 

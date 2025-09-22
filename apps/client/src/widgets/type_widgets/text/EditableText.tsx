@@ -1,9 +1,11 @@
+import dialog from "../../../services/dialog";
 import toast from "../../../services/toast";
 import { isMobile } from "../../../services/utils";
 import { useNoteLabel, useTriliumOption } from "../../react/hooks";
 import { TypeWidgetProps } from "../type_widget";
 import CKEditorWithWatchdog from "./CKEditorWithWatchdog";
 import "./EditableText.css";
+import type { EditorWatchdog } from "@triliumnext/ckeditor5";
 
 /**
  * The editor can operate into two distinct modes:
@@ -34,9 +36,26 @@ export default function EditableText({ note }: TypeWidgetProps) {
                     forceGplLicense: false,
                 }}
                 onNotificationWarning={onNotificationWarning}
+                onWatchdogStateChange={onWatchdogStateChange}
             />
         </div>
     )
+}
+
+function onWatchdogStateChange(watchdog: EditorWatchdog) {
+    const currentState = watchdog.state;
+    logInfo(`CKEditor state changed to ${currentState}`);
+
+    if (!["crashed", "crashedPermanently"].includes(currentState)) {
+        return;
+    }
+
+    logError(`CKEditor crash logs: ${JSON.stringify(watchdog.crashes, null, 4)}`);
+
+    if (currentState === "crashedPermanently") {
+        dialog.info(`Editing component keeps crashing. Please try restarting Trilium. If problem persists, consider creating a bug report.`);
+        watchdog.editor?.enableReadOnlyMode("crashed-editor");
+    }
 }
 
 function onNotificationWarning(data, evt) {

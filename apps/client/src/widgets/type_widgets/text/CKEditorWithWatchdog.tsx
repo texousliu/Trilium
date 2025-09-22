@@ -7,9 +7,10 @@ interface CKEditorWithWatchdogProps extends Pick<HTMLProps<HTMLDivElement>, "cla
     watchdogConfig?: WatchdogConfig;
     buildEditorOpts: Omit<BuildEditorOptions, "isClassicEditor">;
     onNotificationWarning?: (evt: any, data: any) => void;
+    onWatchdogStateChange?: (watchdog: EditorWatchdog<any>) => void;
 }
 
-export default function CKEditorWithWatchdog({ className, tabIndex, isClassicEditor, watchdogConfig, buildEditorOpts, onNotificationWarning }: CKEditorWithWatchdogProps) {
+export default function CKEditorWithWatchdog({ className, tabIndex, isClassicEditor, watchdogConfig, buildEditorOpts, onNotificationWarning, onWatchdogStateChange }: CKEditorWithWatchdogProps) {
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -28,6 +29,10 @@ export default function CKEditorWithWatchdog({ className, tabIndex, isClassicEdi
 
             return editor;
         });
+
+        if (onWatchdogStateChange) {
+            watchdog.on("stateChange", () => onWatchdogStateChange(watchdog));
+        }
 
         watchdog.create(container);
 
