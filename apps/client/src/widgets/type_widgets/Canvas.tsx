@@ -2,7 +2,7 @@ import { Excalidraw, exportToSvg, getSceneVersion } from "@excalidraw/excalidraw
 import { TypeWidgetProps } from "./type_widget";
 import "@excalidraw/excalidraw/index.css";
 import { useEditorSpacedUpdate } from "../react/hooks";
-import { useMemo, useRef } from "preact/hooks";
+import { useCallback, useMemo, useRef } from "preact/hooks";
 import { type ExcalidrawImperativeAPI, type AppState, type BinaryFileData, LibraryItem, ExcalidrawProps } from "@excalidraw/excalidraw/types";
 import options from "../../services/options";
 import "./Canvas.css";
@@ -11,6 +11,7 @@ import { RefObject } from "preact";
 import server from "../../services/server";
 import { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
 import { CanvasContent } from "../type_widgets_old/canvas_el";
+import { goToLinkExt } from "../../services/link";
 
 // currently required by excalidraw, in order to allows self-hosting fonts locally.
 // this avoids making excalidraw load the fonts from an external CDN.
@@ -30,8 +31,31 @@ export default function Canvas({ note }: TypeWidgetProps) {
     }, []);
     const persistence = usePersistence(note, apiRef, themeStyle, isReadOnly);
 
+    /** Use excalidraw's native zoom instead of the global zoom. */
+    const onWheel = useCallback((e: MouseEvent) => {
+        if (e.ctrlKey) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }, []);
+
+    const onLinkOpen = useCallback((element: NonDeletedExcalidrawElement, event: CustomEvent) => {
+        let link = element.link;
+        if (!link) {
+            return false;
+        }
+
+        if (link.startsWith("root/")) {
+            link = "#" + link;
+        }
+
+        const { nativeEvent } = event.detail;
+        event.preventDefault();
+        return goToLinkExt(nativeEvent, link, null);
+    }, []);
+
     return (
-        <div className="canvas-widget note-detail-canvas note-detail-printable note-detail full-height">
+        <div className="canvas-widget note-detail-canvas note-detail-printable note-detail full-height" onWheel={onWheel}>
             <div className="canvas-render">
                 <div className="excalidraw-wrapper">
                     <Excalidraw
@@ -49,6 +73,7 @@ export default function Canvas({ note }: TypeWidgetProps) {
                                 export: false
                             }
                         }}
+                        onLinkOpen={onLinkOpen}
                         {...persistence}
                     />
                 </div>
@@ -59,6 +84,14 @@ export default function Canvas({ note }: TypeWidgetProps) {
 
 function usePersistence(note: FNote, apiRef: RefObject<ExcalidrawImperativeAPI>, theme: AppState["theme"], isReadOnly: boolean): Partial<ExcalidrawProps> {
     const libraryChanged = useRef(false);
+
+    /**
+     * needed to ensure, that multipleOnChangeHandler calls do not trigger a save.
+     * we compare the scene version as suggested in:
+     * https://github.com/excalidraw/excalidraw/issues/3014#issuecomment-778115329
+     *
+     * info: sceneVersions are not incrementing. it seems to be a pseudo-random number
+     */
     const currentSceneVersion = useRef(0);
 
     // these 2 variables are needed to compare the library state (all library items) after loading to the state when the library changed. So we can find attachments to be deleted.
