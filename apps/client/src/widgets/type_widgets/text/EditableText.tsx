@@ -2,12 +2,14 @@ import { useRef, useState } from "preact/hooks";
 import dialog from "../../../services/dialog";
 import toast from "../../../services/toast";
 import utils, { deferred, isMobile } from "../../../services/utils";
-import { useEditorSpacedUpdate, useNoteLabel, useTriliumEvent, useTriliumOption } from "../../react/hooks";
+import { useEditorSpacedUpdate, useKeyboardShortcuts, useNoteLabel, useTriliumEvent, useTriliumOption } from "../../react/hooks";
 import { TypeWidgetProps } from "../type_widget";
 import CKEditorWithWatchdog from "./CKEditorWithWatchdog";
 import "./EditableText.css";
 import { CKTextEditor, ClassicEditor, EditorWatchdog } from "@triliumnext/ckeditor5";
 import Component from "../../../components/component";
+import { RefObject } from "preact";
+import options from "../../../services/options";
 
 /**
  * The editor can operate into two distinct modes:
@@ -15,7 +17,8 @@ import Component from "../../../components/component";
  * - Ballon block mode, in which there is a floating toolbar for the selected text, but another floating button for the entire block (i.e. paragraph).
  * - Decoupled mode, in which the editing toolbar is actually added on the client side (in {@link ClassicEditorToolbar}), see https://ckeditor.com/docs/ckeditor5/latest/examples/framework/bottom-toolbar-editor.html for an example on how the decoupled editor works.
  */
-export default function EditableText({ note, parentComponent, ntxId }: TypeWidgetProps) {
+export default function EditableText({ note, parentComponent, ntxId, noteContext }: TypeWidgetProps) {
+    const containerRef = useRef<HTMLDivElement>(null);
     const [ content, setContent ] = useState<string>();
     const watchdogRef = useRef<EditorWatchdog>(null);
     const [ language ] = useNoteLabel(note, "language");
@@ -59,14 +62,43 @@ export default function EditableText({ note, parentComponent, ntxId }: TypeWidge
 
     useTriliumEvent("focusOnDetail", async ({ ntxId: eventNtxId }) => {
         if (eventNtxId !== ntxId) return;
+        const editor = await waitForEditor();
+        editor?.editing.view.focus();
+    });
+
+    async function waitForEditor() {
         await initialized.current;
         const editor = watchdogRef.current?.editor;
         if (!editor) return;
-        editor.editing.view.focus();
+        return editor;
+    }
+
+    async function addTextToEditor(text: string) {
+        const editor = await waitForEditor();
+        editor?.model.change((writer) => {
+            const insertPosition = editor.model.document.selection.getLastPosition();
+            if (insertPosition) {
+                writer.insertText(text, insertPosition);
+            }
+        });
+    }
+
+    useKeyboardShortcuts("text-detail", containerRef, parentComponent);
+    useTriliumEvent("insertDateTimeToText", ({ ntxId: eventNtxId }) => {
+        if (eventNtxId !== ntxId) return;
+        const date = new Date();
+        const customDateTimeFormat = options.get("customDateTimeFormat");
+        const dateString = utils.formatDateTime(date, customDateTimeFormat);
+
+        addTextToEditor(dateString);
+    });
+    useTriliumEvent("addTextToActiveEditor", ({ text }) => {
+        if (!noteContext?.isActive()) return;
+        addTextToEditor(text);
     });
 
     return (
-        <div class="note-detail-editable-text note-detail-printable">
+        <div ref={containerRef} class="note-detail-editable-text note-detail-printable">
             {note && <CKEditorWithWatchdog
                 className="note-detail-editable-text-editor use-tn-links" tabIndex={300}
                 content={content}

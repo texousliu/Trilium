@@ -29,8 +29,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
         this.initialized = this.initEditor();
 
-        keyboardActionService.setupActionsForElement("text-detail", this.$widget, this);
-
         this.setupImageOpening(false);
 
         super.doRender();
@@ -57,14 +55,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         return this.watchdog?.editor;
     }
 
-    insertDateTimeToTextCommand() {
-        const date = new Date();
-        const customDateTimeFormat = options.get("customDateTimeFormat");
-        const dateString = utils.formatDateTime(date, customDateTimeFormat);
-
-        this.addTextToEditor(dateString);
-    }
-
     async addLinkToEditor(linkHref: string, linkTitle: string) {
         await this.initialized;
 
@@ -74,25 +64,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 writer.insertText(linkTitle, { linkHref: linkHref }, insertPosition);
             }
         });
-    }
-
-    async addTextToEditor(text: string) {
-        await this.initialized;
-
-        this.watchdog.editor?.model.change((writer) => {
-            const insertPosition = this.watchdog.editor?.model.document.selection.getLastPosition();
-            if (insertPosition) {
-                writer.insertText(text, insertPosition);
-            }
-        });
-    }
-
-    addTextToActiveEditorEvent({ text }: EventData<"addTextToActiveEditor">) {
-        if (!this.isActive()) {
-            return;
-        }
-
-        this.addTextToEditor(text);
     }
 
     async addLink(notePath: string, linkTitle: string | null, externalLink: boolean = false) {
