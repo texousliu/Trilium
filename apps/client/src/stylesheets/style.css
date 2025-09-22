@@ -1876,11 +1876,6 @@ textarea {
     width: 100%;
 }
 
-.jump-to-note-results .aa-dropdown-menu .aa-suggestion:hover,
-.jump-to-note-results .aa-dropdown-menu .aa-cursor {
-    background-color: var(--hover-item-background-color, #f8f9fa);
-}
-
 /* Command palette styling */
 .jump-to-note-dialog .command-suggestion {
     display: flex;
