@@ -1,8 +1,8 @@
 import { useRef, useState } from "preact/hooks";
 import dialog from "../../../services/dialog";
 import toast from "../../../services/toast";
-import utils, { isMobile } from "../../../services/utils";
-import { useEditorSpacedUpdate, useNoteLabel, useTriliumOption } from "../../react/hooks";
+import utils, { deferred, isMobile } from "../../../services/utils";
+import { useEditorSpacedUpdate, useNoteLabel, useTriliumEvent, useTriliumOption } from "../../react/hooks";
 import { TypeWidgetProps } from "../type_widget";
 import CKEditorWithWatchdog from "./CKEditorWithWatchdog";
 import "./EditableText.css";
@@ -15,12 +15,13 @@ import Component from "../../../components/component";
  * - Ballon block mode, in which there is a floating toolbar for the selected text, but another floating button for the entire block (i.e. paragraph).
  * - Decoupled mode, in which the editing toolbar is actually added on the client side (in {@link ClassicEditorToolbar}), see https://ckeditor.com/docs/ckeditor5/latest/examples/framework/bottom-toolbar-editor.html for an example on how the decoupled editor works.
  */
-export default function EditableText({ note, parentComponent }: TypeWidgetProps) {
+export default function EditableText({ note, parentComponent, ntxId }: TypeWidgetProps) {
     const [ content, setContent ] = useState<string>();
     const watchdogRef = useRef<EditorWatchdog>(null);
     const [ language ] = useNoteLabel(note, "language");
     const [ textNoteEditorType ] = useTriliumOption("textNoteEditorType");
     const isClassicEditor = isMobile() || textNoteEditorType === "ckeditor-classic";
+    const initialized = useRef(deferred<void>());
     const spacedUpdate = useEditorSpacedUpdate({
         note,
         getData() {
@@ -42,6 +43,27 @@ export default function EditableText({ note, parentComponent }: TypeWidgetProps)
             setContent(newContent);
         }
     })
+
+    useTriliumEvent("scrollToEnd", () => {
+        const editor = watchdogRef.current?.editor;
+        if (!editor) return;
+
+        editor.model.change((writer) => {
+            const rootItem = editor.model.document.getRoot();
+            if (rootItem) {
+                writer.setSelection(writer.createPositionAt(rootItem, "end"));
+            }
+        });
+        editor.editing.view.focus();
+    });
+
+    useTriliumEvent("focusOnDetail", async ({ ntxId: eventNtxId }) => {
+        if (eventNtxId !== ntxId) return;
+        await initialized.current;
+        const editor = watchdogRef.current?.editor;
+        if (!editor) return;
+        editor.editing.view.focus();
+    });
 
     return (
         <div class="note-detail-editable-text note-detail-printable">
@@ -68,6 +90,8 @@ export default function EditableText({ note, parentComponent }: TypeWidgetProps)
                     if (isClassicEditor) {
                         setupClassicEditor(editor, parentComponent);
                     }
+
+                    initialized.current.resolve();
                 }}
             />}
         </div>
@@ -106,7 +130,6 @@ function onNotificationWarning(data, evt) {
 function setupClassicEditor(editor: CKTextEditor, parentComponent: Component | undefined) {
     if (!parentComponent) return;
     const $classicToolbarWidget = findClassicToolbar(parentComponent);
-    console.log("Found ", $classicToolbarWidget);
 
     $classicToolbarWidget.empty();
     if ($classicToolbarWidget.length) {
@@ -140,7 +163,6 @@ function findClassicToolbar(parentComponent: Component): JQuery<HTMLElement> {
 
     if (!utils.isMobile()) {
         const $parentSplit = $widget.parents(".note-split.type-text");
-        console.log("Got split ", $parentSplit)
 
         if ($parentSplit.length) {
             // The editor is in a normal tab.

@@ -51,26 +51,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         await this.createEditor();
     }
 
-    focus() {
-        const editor = this.watchdog.editor;
-        if (editor) {
-            editor.editing.view.focus();
-        } else {
-            this.$editor.trigger("focus");
-        }
-    }
-
-    scrollToEnd() {
-        this.watchdog?.editor?.model.change((writer) => {
-            const rootItem = this.watchdog?.editor?.model.document.getRoot();
-            if (rootItem) {
-                writer.setSelection(writer.createPositionAt(rootItem, "end"));
-            }
-        });
-
-        this.watchdog?.editor?.editing.view.focus();
-    }
-
     show() { }
 
     getEditor() {
