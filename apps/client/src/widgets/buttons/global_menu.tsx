@@ -182,6 +182,7 @@ function ZoomControls({ parentComponent }: { parentComponent?: Component | null 
             icon="bx bx-empty"
             container
             className="zoom-container"
+            onClick={(e) => e.stopPropagation()}
         >
             {t("global_menu.zoom")}
             <>
