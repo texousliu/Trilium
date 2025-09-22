@@ -1,11 +1,12 @@
+import { useRef, useState } from "preact/hooks";
 import dialog from "../../../services/dialog";
 import toast from "../../../services/toast";
-import { isMobile } from "../../../services/utils";
-import { useNoteLabel, useTriliumOption } from "../../react/hooks";
+import utils, { isMobile } from "../../../services/utils";
+import { useEditorSpacedUpdate, useNoteLabel, useTriliumOption } from "../../react/hooks";
 import { TypeWidgetProps } from "../type_widget";
 import CKEditorWithWatchdog from "./CKEditorWithWatchdog";
 import "./EditableText.css";
-import type { EditorWatchdog } from "@triliumnext/ckeditor5";
+import { EditorWatchdog } from "@triliumnext/ckeditor5";
 
 /**
  * The editor can operate into two distinct modes:
@@ -14,15 +15,40 @@ import type { EditorWatchdog } from "@triliumnext/ckeditor5";
  * - Decoupled mode, in which the editing toolbar is actually added on the client side (in {@link ClassicEditorToolbar}), see https://ckeditor.com/docs/ckeditor5/latest/examples/framework/bottom-toolbar-editor.html for an example on how the decoupled editor works.
  */
 export default function EditableText({ note }: TypeWidgetProps) {
+    const [ content, setContent ] = useState<string>();
+    const watchdogRef = useRef<EditorWatchdog>(null);
     const [ language ] = useNoteLabel(note, "language");
     const [ textNoteEditorType ] = useTriliumOption("textNoteEditorType");
     const isClassicEditor = isMobile() || textNoteEditorType === "ckeditor-classic";
+    const spacedUpdate = useEditorSpacedUpdate({
+        note,
+        getData() {
+            const editor = watchdogRef.current?.editor;
+            if (!editor) {
+                // There is nothing to save, most likely a result of the editor crashing and reinitializing.
+                return;
+            }
+
+            const content = editor.getData() ?? "";
+
+            // if content is only tags/whitespace (typically <p>&nbsp;</p>), then just make it empty,
+            // this is important when setting a new note to code
+            return {
+                content: utils.isHtmlEmpty(content) ? "" : content
+            };
+        },
+        onContentChange(newContent) {
+            setContent(newContent);
+        }
+    })
 
     return (
         <div class="note-detail-editable-text note-detail-printable">
-            <CKEditorWithWatchdog
+            {note && <CKEditorWithWatchdog
                 className="note-detail-editable-text-editor use-tn-links" tabIndex={300}
+                content={content}
                 isClassicEditor={isClassicEditor}
+                watchdogRef={watchdogRef}
                 watchdogConfig={{
                     // An average number of milliseconds between the last editor errors (defaults to 5000). When the period of time between errors is lower than that and the crashNumberLimit is also reached, the watchdog changes its state to crashedPermanently, and it stops restarting the editor. This prevents an infinite restart loop.
                     minimumNonErrorTimePeriod: 5000,
@@ -37,7 +63,8 @@ export default function EditableText({ note }: TypeWidgetProps) {
                 }}
                 onNotificationWarning={onNotificationWarning}
                 onWatchdogStateChange={onWatchdogStateChange}
-            />
+                onChange={() => spacedUpdate.scheduleUpdate()}
+            />}
         </div>
     )
 }

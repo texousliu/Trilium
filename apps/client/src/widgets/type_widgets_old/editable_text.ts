@@ -74,8 +74,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
                 }
             }
 
-            editor.model.document.on("change:data", () => this.spacedUpdate.scheduleUpdate());
-
             if (import.meta.env.VITE_CKEDITOR_ENABLE_INSPECTOR === "true") {
                 const CKEditorInspector = (await import("@ckeditor/ckeditor5-inspector")).default;
                 CKEditorInspector.attach(editor);
@@ -102,25 +100,8 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
             const newContentLanguage = this.note?.getLabelValue("language");
             if (this.contentLanguage !== newContentLanguage) {
                 await this.reinitializeWithData(data);
-            } else {
-                this.watchdog.editor?.setData(data);
             }
         });
-    }
-
-    getData() {
-        if (!this.watchdog.editor) {
-            // There is nothing to save, most likely a result of the editor crashing and reinitializing.
-            return;
-        }
-
-        const content = this.watchdog.editor?.getData() ?? "";
-
-        // if content is only tags/whitespace (typically <p>&nbsp;</p>), then just make it empty,
-        // this is important when setting a new note to code
-        return {
-            content: utils.isHtmlEmpty(content) ? "" : content
-        };
     }
 
     focus() {
