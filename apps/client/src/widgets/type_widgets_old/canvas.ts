@@ -9,11 +9,6 @@ import { renderReactWidget } from "../react/react_utils.jsx";
 import SpacedUpdate from "../../services/spaced_update.js";
 import protected_session_holder from "../../services/protected_session_holder.js";
 
-interface AttachmentMetadata {
-    title: string;
-    attachmentId: string;
-}
-
 /**
  * # Canvas note with excalidraw
  * @author thfrei 2022-05-11
@@ -80,13 +75,6 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         this.$render;
         this.$widget;
         this.reactHandlers; // used to control react state
-
-        this.libraryChanged = false;
-
-        // these 2 variables are needed to compare the library state (all library items) after loading to the state when the library changed. So we can find attachments to be deleted.
-        //every libraryitem is saved on its own json file in the attachments of the note.
-        this.librarycache = [];
-        this.attachmentMetadata = [];
 
         // TODO: We are duplicating the logic of note_detail.ts because it switches note ID mid-save, causing overwrites.
         // This problem will get solved by itself once type widgets will be rewritten in React without the use of dangerous singletons.
@@ -155,144 +143,10 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
             await this.#init();
         }
 
-        // see if the note changed, since we do not get a new class for a new note
-        const noteChanged = this.currentNoteId !== note.noteId;
-        if (noteChanged) {
-            // reset the scene to omit unnecessary onchange handler
-            this.canvasInstance.resetSceneVersion();
-        }
         this.currentNoteId = note.noteId;
 
         // get note from backend and put into canvas
         const blob = await note.getBlob();
-
-        /**
-         * new and empty note - make sure that canvas is empty.
-         * If we do not set it manually, we occasionally get some "bleeding" from another
-         * note into this fresh note. Probably due to that this note-instance does not get
-         * newly instantiated?
-         */
-        if (!blob?.content?.trim()) {
-
-        } else if (blob.content) {
-            let content: CanvasContent;
-
-            // load saved content into excalidraw canvas
-            try {
-                content = blob.getJsonContent() as CanvasContent;
-            } catch (err) {
-                console.error("Error parsing content. Probably note.type changed. Starting with empty canvas", note, blob, err);
-
-                content = {
-                    elements: [],
-                    files: [],
-                    appState: {}
-                };
-            }
-
-            this.canvasInstance.loadData(content, this.themeStyle);
-
-            Promise.all(
-                (await note.getAttachmentsByRole("canvasLibraryItem")).map(async (attachment) => {
-                    const blob = await attachment.getBlob();
-                    return {
-                        blob, // Save the blob for libraryItems
-                        metadata: {
-                            // metadata to use in the cache variables for comparing old library state and new one. We delete unnecessary items later, calling the server directly
-                            attachmentId: attachment.attachmentId,
-                            title: attachment.title
-                        }
-                    };
-                })
-            ).then((results) => {
-                if (note.noteId !== this.currentNoteId) {
-                    // current note changed in the course of the async operation
-                    return;
-                }
-
-                // Extract libraryItems from the blobs
-                const libraryItems = results.map((result) => result?.blob?.getJsonContentSafely()).filter((item) => !!item) as LibraryItem[];
-
-                // Extract metadata for each attachment
-                const metadata = results.map((result) => result.metadata);
-
-                // Update the library and save to independent variables
-                this.canvasInstance.updateLibrary(libraryItems);
-
-                // save state of library to compare it to the new state later.
-                this.librarycache = libraryItems;
-                this.attachmentMetadata = metadata;
-            });
-
-
-        }
-
-        // set initial scene version
-        if (this.canvasInstance.isInitialScene()) {
-            this.canvasInstance.updateSceneVersion();
-        }
-    }
-
-    /**
-     * gets data from widget container that will be sent via spacedUpdate.scheduleUpdate();
-     * this is automatically called after this.saveData();
-     */
-    async getData() {
-        const { content, svg } = await this.canvasInstance.getData();
-        const attachments = [{ role: "image", title: "canvas-export.svg", mime: "image/svg+xml", content: svg, position: 0 }];
-
-        if (this.libraryChanged) {
-            // this.libraryChanged is unset in dataSaved()
-
-            // there's no separate method to get library items, so have to abuse this one
-            const libraryItems = await this.canvasInstance.getLibraryItems();
-
-            // excalidraw saves the library as a own state. the items are saved to libraryItems. then we compare the library right now with a libraryitemcache. The cache is filled when we first load the Library into the note.
-            //We need the cache to delete old attachments later in the server.
-
-            const libraryItemsMissmatch = this.librarycache.filter((obj1) => !libraryItems.some((obj2: LibraryItem) => obj1.id === obj2.id));
-
-            // before we saved the metadata of the attachments in a cache. the title of the attachment is a combination of libraryitem  ´s ID und it´s name.
-            // we compare the library items in the libraryitemmissmatch variable (this one saves all libraryitems that are different to the state right now. E.g. you delete 1 item, this item is saved as mismatch)
-            // then we combine its id and title and search the according attachmentID.
-
-            const matchingItems = this.attachmentMetadata.filter((meta) => {
-                // Loop through the second array and check for a match
-                return libraryItemsMissmatch.some((item) => {
-                    // Combine the `name` and `id` from the second array
-                    const combinedTitle = `${item.id}${item.name}`;
-                    return meta.title === combinedTitle;
-                });
-            });
-
-            // we save the attachment ID`s in a variable and delete every attachmentID. Now the items that the user deleted will be deleted.
-            const attachmentIds = matchingItems.map((item) => item.attachmentId);
-
-            //delete old attachments that are no longer used
-            for (const item of attachmentIds) {
-                await server.remove(`attachments/${item}`);
-            }
-
-            let position = 10;
-
-            // prepare data to save to server e.g. new library items.
-            for (const libraryItem of libraryItems) {
-                attachments.push({
-                    role: "canvasLibraryItem",
-                    title: libraryItem.id + libraryItem.name,
-                    mime: "application/json",
-                    content: JSON.stringify(libraryItem),
-                    position: position
-                });
-
-                position += 10;
-            }
-        }
-
-        return {
-            content: JSON.stringify(content),
-            attachments
-        };
     }
 
     /**
@@ -302,10 +156,6 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         // Since Excalidraw sends an enormous amount of events, wait for them to stop before actually saving.
         this.spacedUpdate.resetUpdateTimer();
         this.spacedUpdate.scheduleUpdate();
-    }
-
-    dataSaved() {
-        this.libraryChanged = false;
     }
 
     onChangeHandler() {
