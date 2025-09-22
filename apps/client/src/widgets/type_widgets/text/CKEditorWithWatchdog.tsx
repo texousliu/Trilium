@@ -31,10 +31,6 @@ export default function CKEditorWithWatchdog({ content, className, tabIndex, isC
                 isClassicEditor: !!isClassicEditor
             });
 
-            if (onNotificationWarning) {
-                editor.plugins.get("Notification").on("show:warning", onNotificationWarning);
-            }
-
             setEditor(editor);
 
             return editor;
@@ -52,6 +48,14 @@ export default function CKEditorWithWatchdog({ content, className, tabIndex, isC
     // React to content changes.
     useEffect(() => editor?.setData(content ?? ""), [ editor, content ]);
 
+    // React to notification warning callback.
+    useEffect(() => {
+        if (!onNotificationWarning || !editor) return;
+        const notificationPlugin = editor.plugins.get("Notification");
+        notificationPlugin.on("show:warning", onNotificationWarning);
+        return () => notificationPlugin.off("show:warning", onNotificationWarning);
+    }, [ editor, onNotificationWarning ]);
+
     // React to on change listener.
     useEffect(() => {
         if (!editor) return;
@@ -60,9 +64,7 @@ export default function CKEditorWithWatchdog({ content, className, tabIndex, isC
     }, [ editor, onChange ]);
 
     return (
-        <div ref={containerRef} className={className} tabIndex={tabIndex}>
-
-        </div>
+        <div ref={containerRef} className={className} tabIndex={tabIndex} />
     );
 }
 
