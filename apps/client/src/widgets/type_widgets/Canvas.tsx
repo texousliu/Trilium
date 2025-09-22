@@ -9,8 +9,7 @@ import "./Canvas.css";
 import FNote from "../../entities/fnote";
 import { RefObject } from "preact";
 import server from "../../services/server";
-import { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
-import { CanvasContent } from "../type_widgets_old/canvas_el";
+import { ExcalidrawElement, NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
 import { goToLinkExt } from "../../services/link";
 
 // currently required by excalidraw, in order to allows self-hosting fonts locally.
@@ -20,6 +19,12 @@ window.EXCALIDRAW_ASSET_PATH = `${window.location.pathname}/node_modules/@excali
 interface AttachmentMetadata {
     title: string;
     attachmentId: string;
+}
+
+interface CanvasContent {
+    elements: ExcalidrawElement[];
+    files: BinaryFileData[];
+    appState: Partial<AppState>;
 }
 
 export default function Canvas({ note }: TypeWidgetProps) {
@@ -141,9 +146,8 @@ function usePersistence(note: FNote, apiRef: RefObject<ExcalidrawImperativeAPI>,
             const { content, svg } = await getData(api);
             const attachments = [{ role: "image", title: "canvas-export.svg", mime: "image/svg+xml", content: svg, position: 0 }];
 
+            // libraryChanged is unset in dataSaved()
             if (libraryChanged.current) {
-                // this.libraryChanged is unset in dataSaved()
-
                 // there's no separate method to get library items, so have to abuse this one
                 const libraryItems = await api.updateLibrary({
                     libraryItems() {
