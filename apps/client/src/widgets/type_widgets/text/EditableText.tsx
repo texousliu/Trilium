@@ -6,7 +6,8 @@ import { useEditorSpacedUpdate, useNoteLabel, useTriliumOption } from "../../rea
 import { TypeWidgetProps } from "../type_widget";
 import CKEditorWithWatchdog from "./CKEditorWithWatchdog";
 import "./EditableText.css";
-import { EditorWatchdog } from "@triliumnext/ckeditor5";
+import { CKTextEditor, ClassicEditor, EditorWatchdog } from "@triliumnext/ckeditor5";
+import Component from "../../../components/component";
 
 /**
  * The editor can operate into two distinct modes:
@@ -14,7 +15,7 @@ import { EditorWatchdog } from "@triliumnext/ckeditor5";
  * - Ballon block mode, in which there is a floating toolbar for the selected text, but another floating button for the entire block (i.e. paragraph).
  * - Decoupled mode, in which the editing toolbar is actually added on the client side (in {@link ClassicEditorToolbar}), see https://ckeditor.com/docs/ckeditor5/latest/examples/framework/bottom-toolbar-editor.html for an example on how the decoupled editor works.
  */
-export default function EditableText({ note }: TypeWidgetProps) {
+export default function EditableText({ note, parentComponent }: TypeWidgetProps) {
     const [ content, setContent ] = useState<string>();
     const watchdogRef = useRef<EditorWatchdog>(null);
     const [ language ] = useNoteLabel(note, "language");
@@ -61,6 +62,13 @@ export default function EditableText({ note }: TypeWidgetProps) {
                 onNotificationWarning={onNotificationWarning}
                 onWatchdogStateChange={onWatchdogStateChange}
                 onChange={() => spacedUpdate.scheduleUpdate()}
+                onEditorInitialized={(editor) => {
+                    console.log("Editor has been initialized!", parentComponent, editor);
+
+                    if (isClassicEditor) {
+                        setupClassicEditor(editor, parentComponent);
+                    }
+                }}
             />}
         </div>
     )
@@ -93,4 +101,55 @@ function onNotificationWarning(data, evt) {
     }
 
     evt.stop();
+}
+
+function setupClassicEditor(editor: CKTextEditor, parentComponent: Component | undefined) {
+    if (!parentComponent) return;
+    const $classicToolbarWidget = findClassicToolbar(parentComponent);
+    console.log("Found ", $classicToolbarWidget);
+
+    $classicToolbarWidget.empty();
+    if ($classicToolbarWidget.length) {
+        const toolbarView = (editor as ClassicEditor).ui.view.toolbar;
+        if (toolbarView.element) {
+            $classicToolbarWidget[0].appendChild(toolbarView.element);
+        }
+    }
+
+    if (utils.isMobile()) {
+        $classicToolbarWidget.addClass("visible");
+
+        // Reposition all dropdowns to point upwards instead of downwards.
+        // See https://ckeditor.com/docs/ckeditor5/latest/examples/framework/bottom-toolbar-editor.html for more info.
+        const toolbarView = (editor as ClassicEditor).ui.view.toolbar;
+        for (const item of toolbarView.items) {
+            if (!("panelView" in item)) continue;
+
+            item.on("change:isOpen", () => {
+                if (!("isOpen" in item) || !item.isOpen) return;
+
+                // @ts-ignore
+                item.panelView.position = item.panelView.position.replace("s", "n");
+            });
+        }
+    }
+}
+
+function findClassicToolbar(parentComponent: Component): JQuery<HTMLElement> {
+    const $widget = $(parentComponent.$widget);
+
+    if (!utils.isMobile()) {
+        const $parentSplit = $widget.parents(".note-split.type-text");
+        console.log("Got split ", $parentSplit)
+
+        if ($parentSplit.length) {
+            // The editor is in a normal tab.
+            return $parentSplit.find("> .ribbon-container .classic-toolbar-widget");
+        } else {
+            // The editor is in a popup.
+            return $widget.closest(".modal-body").find(".classic-toolbar-widget");
+        }
+    } else {
+        return $("body").find(".classic-toolbar-widget");
+    }
 }

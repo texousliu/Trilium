@@ -11,9 +11,11 @@ interface CKEditorWithWatchdogProps extends Pick<HTMLProps<HTMLDivElement>, "cla
     onNotificationWarning?: (evt: any, data: any) => void;
     onWatchdogStateChange?: (watchdog: EditorWatchdog<any>) => void;
     onChange: () => void;
+    /** Called upon whenever a new CKEditor instance is initialized, whether it's the first initialization, after a crash or after a config change that requires it (e.g. content language). */
+    onEditorInitialized?: (editor: CKTextEditor) => void;
 }
 
-export default function CKEditorWithWatchdog({ content, contentLanguage, className, tabIndex, isClassicEditor, watchdogRef: externalWatchdogRef, watchdogConfig, buildEditorOpts, onNotificationWarning, onWatchdogStateChange, onChange }: CKEditorWithWatchdogProps) {
+export default function CKEditorWithWatchdog({ content, contentLanguage, className, tabIndex, isClassicEditor, watchdogRef: externalWatchdogRef, watchdogConfig, onNotificationWarning, onWatchdogStateChange, onChange, onEditorInitialized }: CKEditorWithWatchdogProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const watchdogRef = useRef<EditorWatchdog>(null);
     const [ editor, setEditor ] = useState<CKTextEditor>();
@@ -32,6 +34,14 @@ export default function CKEditorWithWatchdog({ content, contentLanguage, classNa
             });
 
             setEditor(editor);
+
+            // Inspector integration.
+            if (import.meta.env.VITE_CKEDITOR_ENABLE_INSPECTOR === "true") {
+                const CKEditorInspector = (await import("@ckeditor/ckeditor5-inspector")).default;
+                CKEditorInspector.attach(editor);
+            }
+
+            onEditorInitialized?.(editor);
 
             return editor;
         });

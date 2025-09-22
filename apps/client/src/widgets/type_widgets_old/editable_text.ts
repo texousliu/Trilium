@@ -38,47 +38,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     async initEditor() {
         this.watchdog.setCreator(async (_, editorConfig) => {
-            logInfo("Creating new CKEditor");
-
-            if (isClassicEditor) {
-                const $classicToolbarWidget = this.findClassicToolbar();
-
-                $classicToolbarWidget.empty();
-                if ($classicToolbarWidget.length) {
-                    const toolbarView = (editor as ClassicEditor).ui.view.toolbar;
-                    if (toolbarView.element) {
-                        $classicToolbarWidget[0].appendChild(toolbarView.element);
-                    }
-                }
-
-                if (utils.isMobile()) {
-                    $classicToolbarWidget.addClass("visible");
-
-                    // Reposition all dropdowns to point upwards instead of downwards.
-                    // See https://ckeditor.com/docs/ckeditor5/latest/examples/framework/bottom-toolbar-editor.html for more info.
-                    const toolbarView = (editor as ClassicEditor).ui.view.toolbar;
-                    for (const item of toolbarView.items) {
-                        if (!("panelView" in item)) {
-                            continue;
-                        }
-
-                        item.on("change:isOpen", () => {
-                            if (!("isOpen" in item) || !item.isOpen) {
-                                return;
-                            }
-
-                            // @ts-ignore
-                            item.panelView.position = item.panelView.position.replace("s", "n");
-                        });
-                    }
-                }
-            }
-
-            if (import.meta.env.VITE_CKEDITOR_ENABLE_INSPECTOR === "true") {
-                const CKEditorInspector = (await import("@ckeditor/ckeditor5-inspector")).default;
-                CKEditorInspector.attach(editor);
-            }
-
             // Touch bar integration
             if (hasTouchBar) {
                 for (const event of [ "bold", "italic", "underline", "paragraph", "heading" ]) {
@@ -317,22 +276,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
         if (updateTemplateCache(e.loadResults)) {
             await this.reinitialize();
-        }
-    }
-
-    findClassicToolbar(): JQuery<HTMLElement> {
-        if (!utils.isMobile()) {
-            const $parentSplit = this.$widget.parents(".note-split.type-text");
-
-            if ($parentSplit.length) {
-                // The editor is in a normal tab.
-                return $parentSplit.find("> .ribbon-container .classic-toolbar-widget");
-            } else {
-                // The editor is in a popup.
-                return this.$widget.closest(".modal-body").find(".classic-toolbar-widget");
-            }
-        } else {
-            return $("body").find(".classic-toolbar-widget");
         }
     }
 
