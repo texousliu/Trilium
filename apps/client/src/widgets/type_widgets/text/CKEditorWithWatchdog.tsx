@@ -1,20 +1,19 @@
 import { HTMLProps, RefObject, useEffect, useRef, useState } from "preact/compat";
 import { PopupEditor, ClassicEditor, EditorWatchdog, type WatchdogConfig, CKTextEditor } from "@triliumnext/ckeditor5";
 import { buildConfig, BuildEditorOptions } from "./config";
-import { Editor } from "tabulator-tables";
 
 interface CKEditorWithWatchdogProps extends Pick<HTMLProps<HTMLDivElement>, "className" | "tabIndex"> {
-    content?: string;
+    content: string | undefined;
+    contentLanguage: string | null | undefined;
     isClassicEditor?: boolean;
     watchdogRef: RefObject<EditorWatchdog>;
     watchdogConfig?: WatchdogConfig;
-    buildEditorOpts: Omit<BuildEditorOptions, "isClassicEditor">;
     onNotificationWarning?: (evt: any, data: any) => void;
     onWatchdogStateChange?: (watchdog: EditorWatchdog<any>) => void;
     onChange: () => void;
 }
 
-export default function CKEditorWithWatchdog({ content, className, tabIndex, isClassicEditor, watchdogRef: externalWatchdogRef, watchdogConfig, buildEditorOpts, onNotificationWarning, onWatchdogStateChange, onChange }: CKEditorWithWatchdogProps) {
+export default function CKEditorWithWatchdog({ content, contentLanguage, className, tabIndex, isClassicEditor, watchdogRef: externalWatchdogRef, watchdogConfig, buildEditorOpts, onNotificationWarning, onWatchdogStateChange, onChange }: CKEditorWithWatchdogProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const watchdogRef = useRef<EditorWatchdog>(null);
     const [ editor, setEditor ] = useState<CKTextEditor>();
@@ -27,8 +26,9 @@ export default function CKEditorWithWatchdog({ content, className, tabIndex, isC
         externalWatchdogRef.current = watchdog;
         watchdog.setCreator(async () => {
             const editor = await buildEditor(container, !!isClassicEditor, {
-                ...buildEditorOpts,
-                isClassicEditor: !!isClassicEditor
+                forceGplLicense: false,
+                isClassicEditor: !!isClassicEditor,
+                contentLanguage: contentLanguage ?? null
             });
 
             setEditor(editor);
@@ -43,7 +43,7 @@ export default function CKEditorWithWatchdog({ content, className, tabIndex, isC
         watchdog.create(container);
 
         return () => watchdog.destroy();
-    }, []);
+    }, [ contentLanguage ]);
 
     // React to content changes.
     useEffect(() => editor?.setData(content ?? ""), [ editor, content ]);

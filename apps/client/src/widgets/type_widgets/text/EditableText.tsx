@@ -47,6 +47,7 @@ export default function EditableText({ note }: TypeWidgetProps) {
             {note && <CKEditorWithWatchdog
                 className="note-detail-editable-text-editor use-tn-links" tabIndex={300}
                 content={content}
+                contentLanguage={language}
                 isClassicEditor={isClassicEditor}
                 watchdogRef={watchdogRef}
                 watchdogConfig={{
@@ -56,10 +57,6 @@ export default function EditableText({ note }: TypeWidgetProps) {
                     crashNumberLimit: 10,
                     // A minimum number of milliseconds between saving the editor data internally (defaults to 5000). Note that for large documents, this might impact the editor performance.
                     saveInterval: 5000
-                }}
-                buildEditorOpts={{
-                    contentLanguage: language ?? null,
-                    forceGplLicense: false,
                 }}
                 onNotificationWarning={onNotificationWarning}
                 onWatchdogStateChange={onWatchdogStateChange}

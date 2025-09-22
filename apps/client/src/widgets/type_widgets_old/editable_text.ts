@@ -92,18 +92,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         await this.createEditor();
     }
 
-    async doRefresh(note: FNote) {
-        const blob = await note.getBlob();
-
-        await this.spacedUpdate.allowUpdateWithoutChange(async () => {
-            const data = blob?.content || "";
-            const newContentLanguage = this.note?.getLabelValue("language");
-            if (this.contentLanguage !== newContentLanguage) {
-                await this.reinitializeWithData(data);
-            }
-        });
-    }
-
     focus() {
         const editor = this.watchdog.editor;
         if (editor) {
@@ -128,14 +116,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     getEditor() {
         return this.watchdog?.editor;
-    }
-
-    cleanup() {
-        if (this.watchdog?.editor) {
-            this.spacedUpdate.allowUpdateWithoutChange(() => {
-                this.watchdog.editor?.setData("");
-            });
-        }
     }
 
     insertDateTimeToTextCommand() {
@@ -323,26 +303,12 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         this.refreshIncludedNote(this.$editor, noteId);
     }
 
-    async reinitializeWithData(data: string) {
-        if (!this.watchdog) {
-            return;
-        }
-
-        this.watchdog.destroy();
-        await this.createEditor();
-        this.watchdog.editor?.setData(data);
-    }
-
     async reinitialize() {
         const data = this.watchdog.editor?.getData();
         await this.reinitializeWithData(data ?? "");
     }
 
     async reloadTextEditorEvent() {
-        await this.reinitialize();
-    }
-
-    async onLanguageChanged() {
         await this.reinitialize();
     }
 
