@@ -134,20 +134,7 @@ export default class ExcalidrawTypeWidget extends TypeWidget {
         const Canvas = (await import("./canvas_el.js")).default;
         this.canvasInstance = new Canvas({
             // this makes sure that 1) manual theme switch button is hidden 2) theme stays as it should after opening menu
-            theme: this.themeStyle,
             onChange: () => this.onChangeHandler(),
-            viewModeEnabled: options.is("databaseReadonly"),
-            zenModeEnabled: false,
-            isCollaborating: false,
-            detectScroll: false,
-            handleKeyboardGlobally: false,
-            autoFocus: false,
-            UIOptions: {
-                canvasActions: {
-                    saveToActiveFile: false,
-                    export: false
-                }
-            },
             onLibraryChange: () => {
                 this.libraryChanged = true;
 
