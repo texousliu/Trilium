@@ -194,7 +194,8 @@
     "search_parameters": "検索パラメータ",
     "unknown_search_option": "不明な検索オプション {{searchOptionName}}",
     "search_note_saved": "検索ノートが {{- notePathTitle}} に保存されました",
-    "actions_executed": "アクションが実行されました。"
+    "actions_executed": "アクションが実行されました。",
+    "ancestor": "祖先:"
   },
   "shortcuts": {
     "multiple_shortcuts": "同じアクションに対して複数のショートカットを設定する場合、カンマで区切ることができます。",
@@ -395,7 +396,10 @@
     "converted-to-attachments": "{{count}}ノートが添付ファイルに変換されました。",
     "convert-to-attachment": "添付ファイルに変換",
     "convert-to-attachment-confirm": "選択したノートを親ノートの添付ファイルに変換しますか？",
-    "open-in-popup": "クイックエディット"
+    "open-in-popup": "クイックエディット",
+    "hoist-note": "ホイストノート",
+    "unhoist-note": "ノートをホイストしない",
+    "edit-branch-prefix": "ブランチの接頭辞を編集"
   },
   "zen_mode": {
     "button_exit": "禅モードを退出"
@@ -436,7 +440,11 @@
     "search_notes_description": "高度な検索を開く",
     "search_subtree_description": "現在のサブツリー内を検索",
     "search_history_title": "検索履歴を表示",
-    "search_history_description": "過去の検索結果を見る"
+    "search_history_description": "過去の検索結果を見る",
+    "show_attachments_title": "添付ファイルを表示",
+    "show_attachments_description": "ノートの添付ファイルを表示",
+    "configure_launch_bar_title": "ランチャーバーの設定",
+    "configure_launch_bar_description": "ランチャーバーの構成を開き、項目を追加または削除します。"
   },
   "delete_note": {
     "delete_note": "ノートを削除",
@@ -450,7 +458,15 @@
     "delete-column": "列を削除",
     "delete-column-confirmation": "本当にこの列を削除しますか？対応する属性は、この列の下のノートでも削除されます。",
     "new-item": "新しいアイテム",
-    "add-column": "列を追加"
+    "add-column": "列を追加",
+    "remove-from-board": "ボードから削除",
+    "archive-note": "アーカイブノート",
+    "unarchive-note": "ノートのアーカイブを解除",
+    "move-to": "移動先",
+    "new-item-placeholder": "ノートのタイトルを入力...",
+    "add-column-placeholder": "列名を入力...",
+    "edit-note-title": "クリックしてノートのタイトルを編集",
+    "edit-column-title": "クリックして列のタイトルを編集"
   },
   "code_buttons": {
     "execute_button_title": "スクリプトを実行",
@@ -492,7 +508,8 @@
     "calendar": "カレンダー",
     "table": "テーブル",
     "geo-map": "ジオマップ",
-    "board": "ボード"
+    "board": "ボード",
+    "include_archived_notes": "アーカイブされたノートを表示"
   },
   "note_types": {
     "geo-map": "ジオマップ",
@@ -501,7 +518,7 @@
     "text": "テキスト",
     "code": "コード",
     "saved-search": "検索の保存",
-    "relation-map": "関係マップ",
+    "relation-map": "リレーションマップ",
     "note-map": "ノートマップ",
     "render-note": "レンダリングノート",
     "book": "コレクション",
@@ -628,7 +645,8 @@
     "intro_placed": "このノートは以下のパスに置かれる:",
     "intro_not_placed": "このノートはまだノートツリーに配置されていません。",
     "archived": "アーカイブされた",
-    "search": "検索"
+    "search": "検索",
+    "outside_hoisted": "このパスはホイストされたノートの外側にあるため、ホイストを解除する必要があります。"
   },
   "note_properties": {
     "info": "情報"
@@ -714,7 +732,14 @@
     "box_size_full": "フル (ボックスに全文が表示されます)"
   },
   "ancestor": {
-    "placeholder": "ノート名で検索"
+    "placeholder": "ノート名で検索",
+    "label": "祖先",
+    "depth_label": "深さ",
+    "depth_doesnt_matter": "関係ない",
+    "depth_eq": "ちょうど {{count}} つ下の階層",
+    "direct_children": "直接の子",
+    "depth_gt": "{{count}} より下の階層",
+    "depth_lt": "{{count}} より上の階層"
   },
   "move_to": {
     "search_placeholder": "ノート名で検索",
@@ -764,7 +789,8 @@
     "default_description": "Triliumは、ワイドスクリーンで最大化された画面での可読性を向上させるために、デフォルトでコンテンツの最大幅を制限しています。",
     "max_width_label": "最大コンテンツ幅",
     "max_width_unit": "ピクセル",
-    "apply_changes_description": "コンテンツ幅の変更を適用するには、クリックしてください"
+    "apply_changes_description": "コンテンツ幅の変更を適用するには、クリックしてください",
+    "reload_description": "外観オプションからの変更"
   },
   "theme": {
     "title": "アプリのテーマ",
@@ -1060,7 +1086,8 @@
     "open_note_in_new_window": "新しいウィンドウでノートを開く"
   },
   "note_tooltip": {
-    "quick-edit": "クイックエディット"
+    "quick-edit": "クイックエディット",
+    "note-has-been-deleted": "ノートは削除されました。"
   },
   "protect_note": {
     "toggle-on": "ノートを保護",
@@ -1103,7 +1130,9 @@
     "automatically-collapse-notes-title": "一定期間使用されないと、ツリーを整理するためにノートは折りたたまれます。",
     "save-changes": "変更を保存して適用",
     "auto-collapsing-notes-after-inactivity": "非アクティブ状態が続いたためノートが自動で折りたたまれます...",
-    "create-child-note": "子ノートを作成"
+    "create-child-note": "子ノートを作成",
+    "hoist-this-note-workspace": "このノートをホイストする（ワークスペース）",
+    "unhoist": "ホイスト解除"
   },
   "bulk_actions": {
     "bulk_actions": "一括操作",
@@ -1153,7 +1182,8 @@
     "reset": "リセット",
     "move-to-visible-launchers": "可視ランチャーに移動",
     "move-to-available-launchers": "利用可能なランチャーに移動",
-    "duplicate-launcher": "ランチャーの複製 <kbd data-command=\"duplicateSubtree\">"
+    "duplicate-launcher": "ランチャーの複製 <kbd data-command=\"duplicateSubtree\">",
+    "reset_launcher_confirm": "本当に「{{title}}」をリセットしますか？ このノート（およびその子ノート）のすべてのデータと設定が失われ、ランチャーは元の場所に戻ります。"
   },
   "editable-text": {
     "auto-detect-language": "自動検出"
@@ -1177,7 +1207,8 @@
     "editor_type": {
       "label": "書式設定ツールバー",
       "floating": {
-        "description": "編集ツールがカーソル付近に表示されます;"
+        "description": "編集ツールがカーソル付近に表示されます;",
+        "title": "フローティング"
       },
       "fixed": {
         "title": "固定",
@@ -1208,7 +1239,9 @@
     "show_login_link_description": "共有ページの下部にログインリンクを追加",
     "share_root_found": "共有ルートノート '{{noteTitle}}' の準備が完了",
     "share_root_not_found": "#shareRoot のラベルが付いたノートが見つかりません",
-    "share_root_not_shared": "ノート '{{noteTitle}}' は #shareRoot のラベルを持っていますが、共有されていません"
+    "share_root_not_shared": "ノート '{{noteTitle}}' は #shareRoot のラベルを持っていますが、共有されていません",
+    "show_login_link": "共有テーマにログインリンクを表示する",
+    "check_share_root": "共有ルートのステータスを確認"
   },
   "time_selector": {
     "invalid_input": "入力された時間値が有効な数値ではありません。",
@@ -1236,7 +1269,10 @@
   "cpu_arch_warning": {
     "title": "ARM64版をダウンロードしてください",
     "dont_show_again": "この警告を二度と表示しない",
-    "continue_anyway": "とにかく続ける"
+    "continue_anyway": "とにかく続ける",
+    "message_windows": "TriliumNext は現在エミュレーションを実行しています。つまり、ARM版WindowsデバイスでIntel（x64）版を使用していることになります。これはパフォーマンスとバッテリー寿命に重大な影響を及ぼします。",
+    "recommendation": "最適なエクスペリエンスを得るには、リリース ページから TriliumNext のネイティブ ARM64 バージョンをダウンロードしてください。",
+    "download_link": "ネイティブ版をダウンロード"
   },
   "editorfeatures": {
     "emoji_completion_enabled": "絵文字のオートコンプリートを有効",
@@ -1430,7 +1466,9 @@
     "specify_new_relation_name": "新しい関係の名前（使用可能な文字: 英数字、コロン、アンダースコア）を指定:",
     "note_not_found": "ノート {{noteId}} が見つかりません！",
     "enter_title_of_new_note": "新しいノートのタイトルを入力",
-    "default_new_note_title": "新しいノート"
+    "default_new_note_title": "新しいノート",
+    "cannot_match_transform": "変換を一致させることができません: {{transform}}",
+    "click_on_canvas_to_place_new_note": "キャンバスをクリックして新しいノートを配置"
   },
   "database_anonymization": {
     "title": "データベースの匿名化",
@@ -1473,7 +1511,8 @@
     "label_year_comparison": "数値比較（>、>=、<も含む）。",
     "label_date_created": "過去1ヶ月以内に作成されたノート",
     "error": "検索エラー: {{error}}",
-    "search_prefix": "検索:"
+    "search_prefix": "検索:",
+    "placeholder": "全文 キーワード、#tag = value..."
   },
   "delete_revisions": {
     "delete_note_revisions": "ノートの変更履歴を削除",
@@ -1542,5 +1581,203 @@
   },
   "move_note": {
     "on_all_matched_notes": "一致したすべてのノートに"
+  },
+  "onclick_button": {
+    "no_click_handler": "ボタン ウィジェット '{{componentId}}' にはクリック ハンドラーが定義されていません"
+  },
+  "protected_session_status": {
+    "active": "保護されたセッションが有効です。クリックして保護されたセッションを終了します。",
+    "inactive": "クリックして保護されたセッションに入る"
+  },
+  "editable_code": {
+    "placeholder": "ここにコードノートの内容を入力..."
+  },
+  "editable_text": {
+    "placeholder": "ここにノートの内容を入力..."
+  },
+  "empty": {
+    "open_note_instruction": "以下の入力欄にノートのタイトルを入力するか、ツリー内のノートを選択してノートを開きます。"
+  },
+  "file": {
+    "too_big": "パフォーマンス上の理由により、プレビューではファイルの最初の {{maxNumChars}} 文字のみが表示されます。ファイル全体を表示するには、ファイルをダウンロードして外部で開いてください。"
+  },
+  "protected_session": {
+    "enter_password_instruction": "保護されたノートを表示するにはパスワードを入力する必要があります:"
+  },
+  "render": {
+    "note_detail_render_help_1": "このヘルプノートが表示されるのは、このノートの「HTML のレンダリング」タイプには、正常に機能するために必要なリレーションがないためです。"
+  },
+  "consistency_checks": {
+    "find_and_fix_button": "一貫性の問題を見つけて修正する",
+    "finding_and_fixing_message": "一貫性の問題を見つけて修正中…"
+  },
+  "vacuum_database": {
+    "title": "データベースのバキューム",
+    "description": "これによりデータベースが再構築され、通常はデータベースファイルのサイズが小さくなります。実際のデータは変更されません。",
+    "button_text": "データベースをバキューム",
+    "vacuuming_database": "データベースのバキュームを実行中...",
+    "database_vacuumed": "データベースのバキューム処理が完了しました"
+  },
+  "ribbon": {
+    "promoted_attributes_message": "プロモート属性がノートに存在する場合、プロモート属性のリボンタブが自動的に開きます",
+    "edited_notes_message": "編集したノートのリボンタブは、dayノートで自動的に開きます"
+  },
+  "ui-performance": {
+    "enable-motion": "トランジションとアニメーションを有効にする",
+    "enable-shadows": "影を有効にする",
+    "enable-backdrop-effects": "メニュー、ポップアップ、パネルの背景効果を有効にする"
+  },
+  "code_mime_types": {
+    "title": "ドロップダウンで利用可能なMIMEタイプ"
+  },
+  "attachment_erasure_timeout": {
+    "attachment_erasure_timeout": "添付ファイル消去のタイムアウト",
+    "attachment_auto_deletion_description": "定義されたタイムアウト後にノートによって参照されなくなった場合、添付ファイルは自動的に削除 (および消去) されます。",
+    "erase_attachments_after": "使用されていない添付ファイルを消去する期間:",
+    "manual_erasing_description": "手動で消去をトリガーすることもできます (上記で定義したタイムアウトを考慮せずに):",
+    "erase_unused_attachments_now": "使用されていない添付ノートを今すぐ消去",
+    "unused_attachments_erased": "使用されていない添付ファイルは削除されました。"
+  },
+  "network_connections": {
+    "network_connections_title": "ネットワーク接続",
+    "check_for_updates": "アップデートを自動的に確認する"
+  },
+  "note_erasure_timeout": {
+    "note_erasure_timeout_title": "ノート消去のタイムアウト",
+    "note_erasure_description": "削除されたノート（および属性、変更履歴など）最初は削除済みとしてマークされるだけで、「最近の変更」ダイアログから復元できます。一定期間が経過すると、削除されたノートは「消去」され、内容は復元できなくなります。この設定では、ノートを削除してから消去するまでの期間を設定できます。",
+    "erase_notes_after": "ノートを消去する間隔:",
+    "manual_erasing_description": "手動で消去をトリガーすることもできます (上記で定義したタイムアウトを考慮せずに):",
+    "erase_deleted_notes_now": "削除したノートを今すぐ消去",
+    "deleted_notes_erased": "削除されたノートは消去されました。"
+  },
+  "revisions_snapshot_interval": {
+    "note_revisions_snapshot_interval_title": "ノートの変更履歴の記録間隔",
+    "note_revisions_snapshot_description": "ノートの変更履歴の記録間隔は、そのノートに対して新しい変更が作成されるまでの時間です。詳細については、<doc>wiki</doc> をご覧ください。",
+    "snapshot_time_interval_label": "ノートの変更履歴が記憶される時間:"
+  },
+  "revisions_snapshot_limit": {
+    "note_revisions_snapshot_limit_title": "ノートの変更履歴の記録制限",
+    "note_revisions_snapshot_limit_description": "ノートの変更履歴の記録制限とは、各ノートに保存できる変更履歴の最大数を指します。-1 は制限なし、0 はすべての変更履歴を削除することを意味します。#versioningLimit ラベルを使用して、1 つのノートの最大変更数を設定できます。",
+    "snapshot_number_limit_label": "ノートの変更履歴の記録数の制限:",
+    "snapshot_number_limit_unit": "スナップショット",
+    "erase_excess_revision_snapshots": "余分な変更履歴を今すぐ消去",
+    "erase_excess_revision_snapshots_prompt": "余分な変更履歴が消去されました。"
+  },
+  "editability_select": {
+    "note_is_read_only": "ノートは読み取り専用ですが、ボタンをクリックすると編集できます。"
+  },
+  "find": {
+    "case_sensitive": "大文字と小文字を区別",
+    "match_words": "単語が一致",
+    "find_placeholder": "テキスト内を検索...",
+    "replace_placeholder": "置換対象...",
+    "replace": "置換",
+    "replace_all": "すべて置換"
+  },
+  "title_bar_buttons": {
+    "window-on-top": "ウィンドウを最前面に維持"
+  },
+  "note_detail": {
+    "could_not_find_typewidget": "タイプ {{type}} の typeWidget が見つかりませんでした"
+  },
+  "watched_file_update_status": {
+    "ignore_this_change": "この変更を無視する"
+  },
+  "image": {
+    "copied-to-clipboard": "画像への参照がクリップボードにコピーされました。これは任意のテキストノートに貼り付けることができます。",
+    "cannot-copy": "画像参照をクリップボードにコピーできませんでした。"
+  },
+  "entrypoints": {
+    "note-revision-created": "ノートの改訂版が作成されました。",
+    "sql-error": "SQL クエリの実行中にエラーが発生しました: {{message}}"
+  },
+  "branches": {
+    "cannot-move-notes-here": "ここにノートを移動することはできません。",
+    "delete-status": "ステータスを削除",
+    "delete-notes-in-progress": "削除進行中のノート: {{count}}",
+    "delete-finished-successfully": "削除が正常に完了しました。",
+    "undeleting-notes-in-progress": "削除済みのノートを復元中: {{count}}",
+    "undeleting-notes-finished-successfully": "ノートの復元が正常に完了しました。"
+  },
+  "frontend_script_api": {
+    "async_warning": "`api.runOnBackend()` に非同期関数を渡していますが、これは意図したとおりに動作しない可能性があります。\\n関数を同期させる(`async` キーワードを削除する)か、`api.runAsyncOnBackendWithManualTransactionHandling()` を使用してください。",
+    "sync_warning": "`api.runAsyncOnBackendWithManualTransactionHandling()` に同期関数を渡していますが、\\n代わりに `api.runOnBackend()` を使用する必要がある可能性があります。"
+  },
+  "ws": {
+    "sync-check-failed": "同期チェックに失敗しました！",
+    "consistency-checks-failed": "整合性チェックに失敗しました！ 詳細はログを参照してください。",
+    "encountered-error": "エラー「{{message}}」が発生しました。コンソールを確認してください。"
+  },
+  "hoisted_note": {
+    "confirm_unhoisting": "要求されたノート「{{requestedNote}}」は、ホイストされたノート「{{hoistedNote}}」サブツリーの外部にあるため、ノートにアクセスするにはホイストを解除する必要があります。ホイスト解除を続行しますか？"
+  },
+  "image_context_menu": {
+    "copy_reference_to_clipboard": "参照をクリップボードにコピー",
+    "copy_image_to_clipboard": "画像をクリップボードにコピー"
+  },
+  "note_autocomplete": {
+    "search-for": "「{{term}}」を検索",
+    "create-note": "子ノート「{{term}}」を作成してリンクする",
+    "insert-external-link": "「{{term}}」への外部リンクを挿入",
+    "clear-text-field": "テキストフィールドを消去",
+    "show-recent-notes": "最近のノートを表示",
+    "full-text-search": "全文検索"
+  },
+  "geo-map": {
+    "create-child-note-title": "新しい子ノートを作成し、マップに追加する",
+    "create-child-note-instruction": "地図をクリックしてその場所に新しいノートを作成するか、Esc キーを押して閉じます。",
+    "unable-to-load-map": "マップを読み込めません。"
+  },
+  "geo-map-context": {
+    "open-location": "現在位置を表示",
+    "remove-from-map": "マップから削除",
+    "add-note": "この場所にマーカーを追加"
+  },
+  "help-button": {
+    "title": "関連するヘルプページを開く"
+  },
+  "content_widget": {
+    "unknown_widget": "「{{id}}」のウィジェットは不明です。"
+  },
+  "switch_layout_button": {
+    "title_vertical": "編集パネルを下に移動",
+    "title_horizontal": "編集パネルを左に移動"
+  },
+  "toggle_read_only_button": {
+    "unlock-editing": "編集のロックを解除",
+    "lock-editing": "編集をロック"
+  },
+  "book_properties_config": {
+    "hide-weekends": "週末を非表示",
+    "display-week-numbers": "週番号を表示",
+    "map-style": "マップスタイル:",
+    "max-nesting-depth": "最大階層の深さ:",
+    "show-scale": "スケールを表示"
+  },
+  "call_to_action": {
+    "next_theme_title": "新しいTriliumテーマをお試しください",
+    "next_theme_message": "現在、レガシーテーマを使用しています。新しいテーマを試してみませんか?",
+    "next_theme_button": "新しいテーマを試す",
+    "background_effects_title": "背景効果が安定しました",
+    "background_effects_message": "Windowsデバイスでは、背景効果が完全に安定しました。背景効果は、背景をぼかすことでユーザーインターフェースに彩りを添えます。この技術は、Windowsエクスプローラーなどの他のアプリケーションでも使用されています。",
+    "background_effects_button": "背景効果を有効にする",
+    "dismiss": "却下"
+  },
+  "settings": {
+    "related_settings": "関連設定"
+  },
+  "settings_appearance": {
+    "related_code_blocks": "テキストノート内のコードブロックの配色",
+    "related_code_notes": "コードノートの配色"
+  },
+  "units": {
+    "percentage": "%"
+  },
+  "pagination": {
+    "page_title": "{{startIndex}} - {{endIndex}} ページ",
+    "total_notes": "{{count}} ノート"
+  },
+  "collections": {
+    "rendering_error": "エラーのためコンテンツを表示できません。"
   }
 }
