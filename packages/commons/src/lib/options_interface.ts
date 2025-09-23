@@ -127,6 +127,8 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     textNoteEmojiCompletionEnabled: boolean;
     /** Whether keyboard auto-completion for notes is triggered when typing `@` in text notes (attribute editing is not affected). */
     textNoteCompletionEnabled: boolean;
+    /** Whether keyboard auto-completion for editing commands is triggered when typing `/`. */
+    textNoteSlashCommandsEnabled: boolean;
     backgroundEffects: boolean;
 
     // Share settings

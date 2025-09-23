@@ -73,6 +73,7 @@ function EditorFeatures() {
         <OptionsSection title={t("editorfeatures.title")}>
             <EditorFeature name="emoji-completion-enabled" optionName="textNoteEmojiCompletionEnabled" label={t("editorfeatures.emoji_completion_enabled")} />
             <EditorFeature name="note-completion-enabled" optionName="textNoteCompletionEnabled" label={t("editorfeatures.note_completion_enabled")} />
+            <EditorFeature name="slash-commands-enabled" optionName="textNoteSlashCommandsEnabled" label={t("editorfeatures.slash_commands_enabled")} />
         </OptionsSection>
     );
 }
