@@ -57,6 +57,7 @@ export default function SearchResult() {
                     note={note}
                     notePath={notePath}
                     highlightedTokens={highlightedTokens}
+                    ntxId={ntxId}
                 />
             )}
         </div>

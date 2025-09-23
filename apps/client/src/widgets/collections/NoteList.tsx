@@ -20,22 +20,23 @@ interface NoteListProps<T extends object> {
     /** if set to `true` then only collection-type views are displayed such as geo-map and the calendar. The original book types grid and list will be ignored. */
     displayOnlyCollections?: boolean;
     isEnabled: boolean;
+    ntxId: string | null | undefined;
 }
 
 export default function NoteList<T extends object>(props: Pick<NoteListProps<T>, "displayOnlyCollections">) {
-    const { note, noteContext, notePath } = useNoteContext();
+    const { note, noteContext, notePath, ntxId } = useNoteContext();
     const isEnabled = noteContext?.hasNoteList();
-    return <CustomNoteList note={note} isEnabled={!!isEnabled} notePath={notePath} {...props} />
+    return <CustomNoteList note={note} isEnabled={!!isEnabled} notePath={notePath} ntxId={ntxId} {...props} />
 }
 
 export function SearchNoteList<T extends object>(props: Omit<NoteListProps<T>, "isEnabled">) {
     return <CustomNoteList {...props} isEnabled={true} />
 }
 
-function CustomNoteList<T extends object>({ note, isEnabled: shouldEnable, notePath, highlightedTokens, displayOnlyCollections }: NoteListProps<T>) {
+function CustomNoteList<T extends object>({ note, isEnabled: shouldEnable, notePath, highlightedTokens, displayOnlyCollections, ntxId }: NoteListProps<T>) {
     const widgetRef = useRef<HTMLDivElement>(null);
     const viewType = useNoteViewType(note);
-    const noteIds = useNoteIds(note, viewType);
+    const noteIds = useNoteIds(note, viewType, ntxId);
     const isFullHeight = (viewType && viewType !== "list" && viewType !== "grid");
     const [ isIntersecting, setIsIntersecting ] = useState(false);
     const shouldRender = (isFullHeight || isIntersecting || note?.type === "book");
@@ -119,7 +120,7 @@ function useNoteViewType(note?: FNote | null): ViewTypeOptions | undefined {
     }
 }
 
-function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOptions | undefined) {
+function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOptions | undefined, ntxId: string | null | undefined) {
     const [ noteIds, setNoteIds ] = useState<string[]>([]);
     const [ includeArchived ] = useNoteLabelBoolean(note, "includeArchived");
 
@@ -152,6 +153,12 @@ function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOptions | 
             refreshNoteIds();
         }
     })
+
+    // Refresh on search.
+    useTriliumEvent("searchRefreshed", ({ ntxId: eventNtxId }) => {
+        if (eventNtxId !== ntxId) return;
+        refreshNoteIds();
+    });
 
     // Refresh on import.
     useEffect(() => {
