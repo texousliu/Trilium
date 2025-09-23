@@ -34,7 +34,7 @@ export default function NoteTitleWidget() {
         if (isReadOnly) {
             noteContext?.getNavigationTitle().then(setNavigationTitle);
         }
-    }, [noteContext, isReadOnly]);
+    }, [note, isReadOnly]);
 
     // Save changes to title.
     const spacedUpdate = useSpacedUpdate(async () => {
