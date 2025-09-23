@@ -66,7 +66,8 @@
     "toggle-zen-mode": "禅モード",
     "switch_to_mobile_version": "モバイル版に切り替え",
     "switch_to_desktop_version": "デスクトップ版に切り替え",
-    "configure_launchbar": "ランチャーバーの設定"
+    "configure_launchbar": "ランチャーバーの設定",
+    "show_shared_notes_subtree": "共有ノートのサブツリーを表示"
   },
   "left_pane_toggle": {
     "show_panel": "パネルを表示",
@@ -120,7 +121,9 @@
     "september": "9月",
     "october": "10月",
     "november": "11月",
-    "december": "12月"
+    "december": "12月",
+    "cannot_find_day_note": "dayノートが見つかりません",
+    "cannot_find_week_note": "weekノートが見つかりません"
   },
   "note_icon": {
     "change_note_icon": "ノートアイコンの変更",
@@ -309,7 +312,8 @@
     },
     "import-status": "インポート状況",
     "in-progress": "インポート中: {{progress}}",
-    "successful": "インポートは正常に終了しました。"
+    "successful": "インポートは正常に終了しました。",
+    "explodeArchives": "<code>.zip</code>, <code>.enex</code> および <code>.opml</code> アーカイブの内容を読み取ります。"
   },
   "password_not_set": {
     "title": "パスワードが設定されていない",
@@ -435,7 +439,9 @@
     "search_history_description": "過去の検索結果を見る"
   },
   "delete_note": {
-    "delete_note": "ノートを削除"
+    "delete_note": "ノートを削除",
+    "delete_matched_notes": "一致したノートを削除",
+    "delete_matched_notes_description": "これにより、一致したノートが削除されます。"
   },
   "board_view": {
     "delete-note": "ノートを削除",
@@ -454,7 +460,9 @@
     "sql_console_saved_message": "SQLコンソールが {{note_path}} に保存されました"
   },
   "execute_script": {
-    "execute_script": "スクリプトを実行"
+    "execute_script": "スクリプトを実行",
+    "help_text": "一致したノートに対して簡単なスクリプトを実行できます。",
+    "example_2": "より複雑な例としては、一致したノートの属性をすべて削除することが挙げられます:"
   },
   "script_executor": {
     "execute_script": "スクリプトを実行",
@@ -563,7 +571,14 @@
     "settings": "ノートの変更履歴の設定",
     "file_size": "ファイルサイズ:",
     "preview": "プレビュー:",
-    "preview_not_available": "このノートタイプではプレビューは利用できません。"
+    "preview_not_available": "このノートタイプではプレビューは利用できません。",
+    "diff_on": "差分を表示",
+    "diff_off": "内容を表示",
+    "diff_on_hint": "クリックしてノートソースとの差分を表示",
+    "diff_off_hint": "クリックしてノートの内容を表示",
+    "diff_not_available": "差分は利用できません。",
+    "snapshot_interval": "ノートの変更履歴の記録間隔: {{seconds}} 秒。",
+    "maximum_revisions": "ノートの変更履歴の記録制限: {{number}}."
   },
   "attachments_actions": {
     "download": "ダウンロード",
@@ -693,13 +708,22 @@
     "dialog_title": "埋め込みノート",
     "box_size_prompt": "埋め込みノート枠のサイズ：",
     "button_include": "埋め込みノート",
-    "label_note": "ノート"
+    "label_note": "ノート",
+    "box_size_small": "スモール (~ 10 行)",
+    "box_size_medium": "ミディアム (~ 30 行)",
+    "box_size_full": "フル (ボックスに全文が表示されます)"
   },
   "ancestor": {
     "placeholder": "ノート名で検索"
   },
   "move_to": {
-    "search_placeholder": "ノート名で検索"
+    "search_placeholder": "ノート名で検索",
+    "dialog_title": "ノートを移動...",
+    "notes_to_move": "移動させるノート",
+    "target_parent_note": "対象の親ノート",
+    "move_button": "選択したノートに移動",
+    "error_no_path": "移動するパスがありません。",
+    "move_success_message": "選択したノートは以下に移動されました "
   },
   "web_view": {
     "web_view": "Web ビュー",
@@ -906,10 +930,16 @@
     "close": "閉じる"
   },
   "info": {
-    "closeButton": "閉じる"
+    "closeButton": "閉じる",
+    "modalTitle": "情報メッセージ",
+    "okButton": "OK"
   },
   "protected_session_password": {
-    "close_label": "閉じる"
+    "close_label": "閉じる",
+    "modal_title": "保護されたセッション",
+    "help_title": "保護されたノートに関するヘルプ",
+    "form_label": "リクエストされたアクションを続行するには、パスワードを入力して保護されたセッションを開始する必要があります:",
+    "start_button": "保護されたセッションを開始"
   },
   "modal": {
     "close": "閉じる",
@@ -947,7 +977,81 @@
     "digits": "桁",
     "inheritable_title": "継承属性は、このツリー配下のすべての子孫に継承されます。",
     "inheritable": "継承",
-    "related_notes_title": "このラベルが付いた他のノート"
+    "related_notes_title": "このラベルが付いた他のノート",
+    "attr_detail_title": "属性の詳細なタイトル",
+    "target_note_title": "リレーションは、ソースノートとターゲットノート間の名前付き接続です。",
+    "target_note": "対象のノート",
+    "promoted_title": "プロモート属性はノートに目立つように表示されます。",
+    "promoted": "プロモート",
+    "promoted_alias_title": "プロモート属性のUIに表示される名前。",
+    "inverse_relation_title": "このリレーションがどのリレーションの反対であるかを定義するオプション設定。例：父と息子は互いに逆のリレーションです。",
+    "inverse_relation": "逆リレーション",
+    "more_notes": "その他のノート",
+    "label": "ラベルの詳細",
+    "label_definition": "ラベル定義の詳細",
+    "relation": "リレーションの詳細",
+    "relation_definition": "リレーション定義の詳細",
+    "disable_versioning": "自動バージョン管理を無効にします。例えば、スクリプト用の大きなJSライブラリなど、重要ではない大きなノートに便利です",
+    "calendar_root": "dayノートのルートとして使用するノートをマークします。このようにマークできるのは 1 つだけです。",
+    "archived": "このラベルの付いたノートは、デフォルトでは検索結果に表示されません (ジャンプ先、リンクの追加ダイアログなどにも表示されません)。",
+    "exclude_from_export": "ノート（サブツリーを含む）はノートのエクスポートには含まれません",
+    "run": "どのイベントでスクリプトを実行するかを定義します。可能な値は次の通り:\n<ul>\n<li>frontendStartup - Trilium フロントエンドが起動（または更新）されたとき。モバイルは除く</li>\n<li>mobileStartup - モバイルで Trilium フロントエンドが起動（または更新）されたとき。</li>\n<li>backendStartup - Trilium バックエンドが起動したとき</li>\n<li>hourly - 1時間に1回実行します。 <code>runAtHour</code> というラベルを追加して、実行時刻を指定できます。</li>\n<li>daily - 1日に1回実行</li>\n</ul>",
+    "run_on_instance": "どの Trilium インスタンスでこれを実行するかを定義します。デフォルトはすべてのインスタンスです。",
+    "run_at_hour": "何時に実行するかを指定します。 <code>#run=hourly</code> と併用してください。1日に複数回実行したい場合は、複数回定義できます。",
+    "disable_inclusion": "このラベルが付いたスクリプトは親スクリプトの実行には含まれません。",
+    "sorted": "子ノートをアルファベット順に並べ替える",
+    "sort_direction": "ASC（デフォルト）または DESC",
+    "sort_folders_first": "フォルダ（子を持つノート）を上にして並べる",
+    "top": "指定されたノートをその親ノートの一番上に表示します（ソートされた親ノートにのみ適用されます）",
+    "hide_promoted_attributes": "このノートのプロモート属性を非表示にする",
+    "read_only": "エディターは読み取り専用モードです。テキストとコードノートのみ機能します。",
+    "auto_read_only_disabled": "テキスト/コードノートは、サイズが大きすぎる場合、自動的に読み取りモードに設定されます。このラベルをノートに追加することで、ノートごとにこの動作を無効にすることができます",
+    "app_css": "Trilium アプリケーションに読み込まれ、Trilium の外観を変更するために使用できる CSS ノートをマークします。",
+    "app_theme": "Trilium のフルテーマである CSS ノートをマークし、Trilium オプションで利用できるようにします。",
+    "app_theme_base": "「next」、「next-light」、または「next-dark」に設定すると、従来のテーマではなく、対応する TriliumNext テーマ (auto、light、または dark) がカスタム テーマのベースとして使用されます。",
+    "css_class": "このラベルの値は、ツリー内の特定のノートを表すノードにCSSクラスとして追加されます。これは高度なテーマ設定に役立ちます。テンプレートノートで使用できます。",
+    "icon_class": "このラベルの値は、ツリー上のアイコンにCSSクラスとして追加され、ツリー内のノートを視覚的に区別するのに役立ちます。例えば、bx bx-home のように、アイコンは boxicons から取得されます。テンプレートノートで使用できます。",
+    "page_size": "ノートリストの1ページあたりの項目数",
+    "custom_request_handler": "<a href=\"javascript:\" data-help-page=\"custom-request-handler.html\">カスタムリクエストハンドラー</a>を参照してください",
+    "custom_resource_provider": "<a href=\"javascript:\" data-help-page=\"custom-request-handler.html\">カスタムリクエストハンドラー</a>を参照してください",
+    "widget": "このノートをカスタムウィジェットとしてマークし、Trilium コンポーネントツリーに追加します",
+    "workspace": "このノートをワークスペースとしてマークし、簡単にホイストできるようにします",
+    "workspace_icon_class": "このノートにホイストされたときにタブで使用されるボックスアイコンのCSSクラスを定義します",
+    "workspace_tab_background_color": "このノートにホイストされたときにノートタブで使用されるCSSでの色",
+    "workspace_calendar_root": "ワークスペースごとのカレンダールートを定義する",
+    "workspace_template": "このノートは、新しいノートを作成するときに利用可能なテンプレートの選択肢に表示されますが、このテンプレートを含むワークスペースにホイストされた場合にのみ表示されます",
+    "search_home": "新しい検索ノートはこのノートの子として作成されます",
+    "workspace_search_home": "このワークスペースノートの祖先にホイストされた新しい検索ノートは、このノートの子として作成されます",
+    "inbox": "新しいノートのデフォルトのinboxの場所 - サイドバーの「新しいノート」ボタンを使用してノートを作成すると、ノートは <code>#inbox</code> ラベルでマークされたノートの子ノートとして作成されます。",
+    "workspace_inbox": "このワークスペースノートの祖先にホイストされた場合、新規ノートのデフォルトのinboxの場所",
+    "sql_console_home": "SQLコンソールノートのデフォルトの場所",
+    "bookmark_folder": "このラベルの付いたノートは、ブックマークにフォルダとして表示されます（子フォルダへのアクセスを許可します）",
+    "share_hidden_from_tree": "このノートは左側のナビゲーションツリーには表示されていませんが、URL からアクセスできます",
+    "share_external_link": "ノートは共有ツリー内で外部ウェブサイトへのリンクとして機能します",
+    "share_alias": "https://your_trilium_host/share/[your_alias] でノートを利用できるようにエイリアスを定義します",
+    "share_omit_default_css": "デフォルトの共有ページのCSSは省略されます。スタイルを大幅に変更する場合に使用してください。",
+    "share_root": "/share root で提供されるノートをマークする。",
+    "share_raw": "ノートはHTMLラッパーなしでそのままの形式で提供されます",
+    "share_disallow_robot_indexing": "<code>X-Robots-Tag: noindex</code> ヘッダーにより、このノートのロボットによるインデックス作成を禁止します",
+    "share_credentials": "この共有ノートにアクセスするには認証情報が必要です。値は「ユーザー名:パスワード」の形式である必要があります。子ノート/画像に適用するには、これを継承可能にすることを忘れないでください。",
+    "share_index": "このラベルの付いたノートには、共有ノートのルートがすべてリストされます",
+    "display_relations": "表示するリレーション名をカンマで区切って指定します。それ以外のリレーション名は非表示になります。",
+    "hide_relations": "非表示にするリレーション名をカンマで区切って指定します。それ以外のリレーションは表示されます。",
+    "template": "このノートは、新しいノートを作成するときに利用可能なテンプレートの選択肢に表示されます",
+    "toc": "<code>#toc</code> または <code>#toc=show</code><code> は目次を強制的に表示し、<code>#toc=hide</code> は目次を強制的に非表示にします。ラベルが存在しない場合は、グローバル設定が適用されます",
+    "color": "ノートツリー、リンクなどのノートの色を定義します。 'red' や #a13d5f などの有効な CSS カラー値を使用します",
+    "keyboard_shortcut": "このノートにすぐにジャンプするキーボードショートカットを定義します。例: 「ctrl+alt+e」。変更を有効にするには、フロントエンドをリロードする必要があります。",
+    "keep_current_hoisting": "このリンクを開いても、ノートが現在のホイストされたサブツリーに表示できない場合でも、ホイストは変更されません。",
+    "execute_button": "現在のコードノートを実行するボタンのタイトル",
+    "execute_description": "実行ボタンと一緒に表示される現在のコードノートの詳細な説明",
+    "exclude_from_note_map": "このラベルの付いたノートはノートマップから非表示になります",
+    "new_notes_on_top": "新しいノートは親ノートの下部ではなく上部に作成されます。",
+    "hide_highlight_widget": "ハイライトリスト ウィジェットを非表示にする",
+    "run_on_note_creation": "バックエンドでノートが作成された際に実行されます。特定のサブツリー配下に作成されたすべてのノートに対してスクリプトを実行したい場合は、このリレーションを使用してください。その場合は、サブツリーのルートノートにスクリプトを作成し、継承可能にしてください。サブツリー内（任意の深さ）に新しいノートが作成されると、スクリプトが実行されます。",
+    "run_on_child_note_creation": "このリレーションが定義されているノートの下に新しいノートが作成されたときに実行されます",
+    "render_note": "「HTMLノートをレンダリング」タイプのノートは、コードノート（HTMLまたはスクリプト）を使用してレンダリングされます。このリレーションを使用して、どのノートをレンダリングするかを指定する必要があります",
+    "other_notes_with_name": "{{attributeType}} の名前が「{{attributeName}}」であるその他のノート",
+    "color_type": "色"
   },
   "link_context_menu": {
     "open_note_in_popup": "クイックエディット",
@@ -1228,7 +1332,9 @@
     "add_label": "ラベルを追加",
     "label_name_placeholder": "ラベル名",
     "label_name_title": "英数字、アンダーバー、コロンが使用可能な文字です。",
-    "new_value_placeholder": "新しい値"
+    "new_value_placeholder": "新しい値",
+    "help_text": "一致したすべてのノートに:",
+    "help_text_note": "このメソッドを値なしで呼び出すこともできます。その場合、ラベルは値なしでノートに割り当てられます。"
   },
   "delete_label": {
     "delete_label": "ラベルを削除",
@@ -1248,12 +1354,14 @@
     "label_name_placeholder": "ラベル名",
     "label_name_title": "英数字、アンダーバー、コロンが使用可能な文字です。",
     "new_value_placeholder": "新しい値",
-    "help_text_note": "このメソッドは値なしで呼び出すこともできます。その場合、値なしでラベルがノートに割り当てられます。"
+    "help_text_note": "このメソッドは値なしで呼び出すこともできます。その場合、値なしでラベルがノートに割り当てられます。",
+    "help_text": "一致したすべてのノートで、既存のラベルの値を変更する。"
   },
   "add_relation": {
     "add_relation": "関係を追加",
     "relation_name": "関係の名前",
-    "allowed_characters": "英数字、アンダーバー、コロンが使用可能な文字です。"
+    "allowed_characters": "英数字、アンダーバー、コロンが使用可能な文字です。",
+    "create_relation_on_all_matched_notes": "一致したすべてのノートに対して、指定されたリレーションを作成します。"
   },
   "delete_relation": {
     "delete_relation": "関係を削除",
@@ -1271,7 +1379,8 @@
   "update_relation_target": {
     "update_relation": "関係の更新",
     "relation_name": "関係の名前",
-    "allowed_characters": "英数字、アンダーバー、コロンが使用可能な文字です。"
+    "allowed_characters": "英数字、アンダーバー、コロンが使用可能な文字です。",
+    "on_all_matched_notes": "一致したすべてのノートに"
   },
   "revisions_button": {
     "note_revisions": "ノートの変更履歴"
@@ -1378,7 +1487,8 @@
     "example_new_title": "<code>NEW: ${note.title}</code> - 一致したノートの名前の前に 'NEW: ' を付ける",
     "example_date_prefix": "<code>${note.dateCreatedObj.format('MM-DD:')}: ${note.title}</code> - マッチしたノートの前にノートの作成月日を付ける",
     "api_docs": "詳細については、 <a href='https://zadam.github.io/trilium/backend_api/Note.html'>note</a> および <a href='https://day.js.org/docs/en/display/format'>dateCreatedObj / utcDateCreatedObj properties</a> の API ドキュメントを参照してください。",
-    "evaluated_as_js_string": "与えられた値はJavaScript文字列として評価されるため、注入された<code>note</code>変数（noteは名前が変更されます）を介して動的なコンテンツで強化できます。例:"
+    "evaluated_as_js_string": "与えられた値はJavaScript文字列として評価されるため、注入された<code>note</code>変数（noteは名前が変更されます）を介して動的なコンテンツで強化できます。例:",
+    "click_help_icon": "右側のヘルプアイコンをクリックすると、すべてのオプションが表示されます"
   },
   "electron_integration": {
     "desktop-application": "デスクトップアプリケーション",
@@ -1392,5 +1502,45 @@
   "zoom_factor": {
     "description": "ズームは CTRL+- と CTRL+= のショートカットでも操作可能。",
     "title": "ズーム倍率（デスクトップビルドのみ）"
+  },
+  "jump_to_note": {
+    "search_placeholder": "名前またはタイプでノートを検索 > コマンドを検索...",
+    "search_button": "全文検索"
+  },
+  "markdown_import": {
+    "dialog_title": "Markdownをインポート",
+    "modal_body_text": "ブラウザサンドボックスのため、JavaScriptからクリップボードの内容を直接読み込むことはできません。インポートするMarkdownを以下のテキストエリアに貼り付け、インポートボタンをクリックしてください",
+    "import_button": "インポート",
+    "import_success": "Markdown コンテンツがドキュメントにインポートされました。"
+  },
+  "note_type_chooser": {
+    "change_path_prompt": "新しいノートを作成する場所を変更する:",
+    "search_placeholder": "名前によるパスの検索 （空の場合はデフォルト）",
+    "modal_title": "ノートタイプを選択",
+    "modal_body": "新しいノートのノートタイプ / テンプレートを選択してください:",
+    "templates": "テンプレート",
+    "builtin_templates": "組み込みテンプレート"
+  },
+  "prompt": {
+    "title": "プロンプト",
+    "ok": "OK",
+    "defaultTitle": "プロンプト"
+  },
+  "upload_attachments": {
+    "upload_attachments_to_note": "ノートに添付ファイルをアップロード",
+    "choose_files": "ファイルを選択",
+    "files_will_be_uploaded": "ファイルは {{noteTitle}} に添付ファイルとしてアップロードされます",
+    "options": "オプション",
+    "shrink_images": "画像を縮小",
+    "upload": "アップロード",
+    "tooltip": "このオプションにチェックを入れると、Trilium はアップロードされた画像をスケーリングと最適化によって縮小しようとします。これにより、画質が多少変化する可能性があります。チェックを外すと、画像は変更されずにアップロードされます。"
+  },
+  "attribute_editor": {
+    "help_text_body1": "ラベルを追加するには、例 <code>#rock</code> と入力します。値も追加したい場合は、例 <code>#year = 2020</code> と入力します",
+    "help_text_body2": "リレーションについては、<code>~author = @</code> と入力すると、オートコンプリートが表示され、目的のノートを検索できるようになります。",
+    "placeholder": "ここにラベルとリレーションを入力"
+  },
+  "move_note": {
+    "on_all_matched_notes": "一致したすべてのノートに"
   }
 }
