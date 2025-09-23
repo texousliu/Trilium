@@ -10,7 +10,7 @@ import Column from "../../react/Column";
 import { FormSelectGroup, FormSelectWithGroups } from "../../react/FormSelect";
 import { Themes } from "@triliumnext/highlightjs";
 import { ensureMimeTypesForHighlighting, loadHighlightingTheme } from "../../../services/syntax_highlight";
-import { normalizeMimeTypeForCKEditor } from "@triliumnext/commons";
+import { normalizeMimeTypeForCKEditor, type OptionNames } from "@triliumnext/commons";
 import { getHtml } from "../../react/RawHtml";
 import type { CSSProperties } from "preact/compat";
 import FormText from "../../react/FormText";
@@ -69,23 +69,22 @@ function FormattingToolbar() {
 }
 
 function EditorFeatures() {
-    const [ textNoteEmojiCompletionEnabled, setTextNoteEmojiCompletionEnabled] = useTriliumOptionBool("textNoteEmojiCompletionEnabled");
-    const [ textNoteCompletionEnabled, setTextNoteCompletionEnabled ] = useTriliumOptionBool("textNoteCompletionEnabled");
-
     return (
         <OptionsSection title={t("editorfeatures.title")}>
-            <FormCheckbox
-                name="emoji-completion-enabled"
-                label={t("editorfeatures.emoji_completion_enabled")}
-                currentValue={textNoteEmojiCompletionEnabled} onChange={setTextNoteEmojiCompletionEnabled}
-            /> 
-
-            <FormCheckbox
-                name="note-completion-enabled"
-                label={t("editorfeatures.note_completion_enabled")}
-                currentValue={textNoteCompletionEnabled} onChange={setTextNoteCompletionEnabled}
-            />
+            <EditorFeature name="emoji-completion-enabled" optionName="textNoteEmojiCompletionEnabled" label={t("editorfeatures.emoji_completion_enabled")} />
+            <EditorFeature name="note-completion-enabled" optionName="textNoteCompletionEnabled" label={t("editorfeatures.note_completion_enabled")} />
         </OptionsSection>
+    );
+}
+
+function EditorFeature({ optionName, name, label }: { optionName: OptionNames, name: string, label: string }) {
+    const [ featureEnabled, setFeatureEnabled ] = useTriliumOptionBool(optionName);
+
+    return (
+        <FormCheckbox
+            name={name} label={label}
+            currentValue={featureEnabled} onChange={setFeatureEnabled}
+        />
     );
 }
 
@@ -152,7 +151,7 @@ function CodeBlockStyle() {
     const [ codeBlockWordWrap, setCodeBlockWordWrap ] = useTriliumOptionBool("codeBlockWordWrap");
 
     return (
-        <OptionsSection title={t("highlighting.title")}>            
+        <OptionsSection title={t("highlighting.title")}>
             <div className="row" style={{ marginBottom: "15px" }}>
                 <FormGroup name="theme" className="col-md-6" label={t("highlighting.color-scheme")} style={{ marginBottom: 0 }}>
                     <FormSelectWithGroups
@@ -173,7 +172,7 @@ function CodeBlockStyle() {
                     />
                 </Column>
             </div>
-            
+
             <CodeBlockPreview theme={codeBlockTheme} wordWrap={codeBlockWordWrap} />
         </OptionsSection>
     )
@@ -299,10 +298,10 @@ function DateTimeFormatOptions() {
                     }}
                 />
             </FormText>
-            
+
             <div className="row align-items-center">
               <FormGroup name="custom-date-time-format" className="col-md-6" label={t("custom_date_time_format.format_string")}>
-                  <FormTextBox                        
+                  <FormTextBox
                         placeholder="YYYY-MM-DD HH:mm"
                         currentValue={customDateTimeFormat || "YYYY-MM-DD HH:mm"} onChange={setCustomDateTimeFormat}
                   />
