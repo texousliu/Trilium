@@ -100,6 +100,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     codeNoteTheme: string;
 
     initialized: boolean;
+    databaseReadonly: boolean;
     isPasswordSet: boolean;
     overrideThemeFonts: boolean;
     spellCheckEnabled: boolean;
@@ -138,6 +139,7 @@ export interface OptionDefinitions extends KeyboardShortcutsOptions<KeyboardActi
     // AI/LLM integration options
     aiEnabled: boolean;
     aiProvider: string;
+    aiProviderPrecedence: string; // TODO: Is this still supported?
     aiSystemPrompt: string;
     aiTemperature: string;
     openaiApiKey: string;
