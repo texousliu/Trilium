@@ -122,26 +122,6 @@ jobs:
           - dockerfile: Dockerfile
             platform: linux/arm/v8
             image: ubuntu-24.04-arm
-          - dockerfile: Dockerfile.alpine.rootless
-            platform: linux/amd64
-            image: ubuntu-latest
-            flavor: rootless
-          - dockerfile: Dockerfile.rootless
-            platform: linux/amd64
-            image: ubuntu-latest
-            flavor: rootless
-          - dockerfile: Dockerfile.rootless
-            platform: linux/arm64
-            image: ubuntu-24.04-arm
-            flavor: rootless
-          - dockerfile: Dockerfile.rootless
-            platform: linux/arm/v7
-            image: ubuntu-24.04-arm
-            flavor: rootless
-          - dockerfile: Dockerfile.rootless
-            platform: linux/arm/v8
-            image: ubuntu-24.04-arm
-            flavor: rootless
     runs-on: ${{ matrix.image }}
     needs:
       - test_docker
@@ -280,45 +260,37 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Create multi-arch manifest lists
-        if: startsWith(github.ref, 'refs/tags/') # only on releases
+      - name: Create manifest list and push
         working-directory: /tmp/digests
         run: |
+          # Extract the branch or tag name from the ref
           REF_NAME=$(echo "${GITHUB_REF}" | sed 's/refs\/heads\///' | sed 's/refs\/tags\///')
 
-          # Normal images: tag manifest lists with branch/tag name
-          docker buildx imagetools create \
-            $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+          # Create and push the manifest list with both the branch/tag name and the commit SHA
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
             -t ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${REF_NAME} \
             $(printf '${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
 
-          docker buildx imagetools create \
-            $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
             -t ${{ env.DOCKERHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:${REF_NAME} \
             $(printf '${{ env.DOCKERHUB_REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
 
-          # Rootless multi-arch manifest
-          ROOTLESS_IMAGES=$(printf '${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
-          docker buildx imagetools create \
-            -t ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:rootless \
-            $ROOTLESS_IMAGES
-
-          docker buildx imagetools create \
-            -t ${{ env.DOCKERHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:rootless \
-            $ROOTLESS_IMAGES
-
-          # Only tag stable/latest for normal images
-          if [[ ! "${REF_NAME}" =~ - ]]; then
-            docker buildx imagetools create \
+          # If the ref is a tag, also tag the image as stable as this is part of a 'release'
+          # and only go in the `if` if there is NOT a `-` in the tag's name, due to tagging of `-alpha`, `-beta`, etc...
+          if [[ "${GITHUB_REF}" == refs/tags/* && ! "${REF_NAME}" =~ - ]]; then
+            # First create stable tags
+            docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
               -t ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:stable \
-              ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${REF_NAME}
+              $(printf '${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
 
-            docker buildx imagetools create \
+            docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
               -t ${{ env.DOCKERHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:stable \
-              ${{ env.DOCKERHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:${REF_NAME}
+              $(printf '${{ env.DOCKERHUB_REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
 
+            # Small delay to ensure stable tag is fully propagated
             sleep 5
 
+            # Now update latest tags
             docker buildx imagetools create \
               -t ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
               ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:stable
@@ -326,6 +298,7 @@ jobs:
             docker buildx imagetools create \
               -t ${{ env.DOCKERHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
               ${{ env.DOCKERHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:stable
+
           fi
 
       - name: Inspect image
