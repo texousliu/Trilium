@@ -1,5 +1,15 @@
 {
   "keyboard_actions": {
-    "back-in-note-history": "Navigovat na předchozí poznámku v historii"
+    "back-in-note-history": "Navigovat na předchozí poznámku v historii",
+    "forward-in-note-history": "Navigovat na následující poznámku v historii",
+    "open-jump-to-note-dialog": "Otevřít dialog \"Přejít na poznámku\"",
+    "open-command-palette": "Otevřít paletu příkazů",
+    "scroll-to-active-note": "Posunout strom poznámek na aktivní položku",
+    "quick-search": "Zobrazit pole pro rychlé hledání",
+    "search-in-subtree": "Hledat poznámky pod aktuálně zvolenou",
+    "expand-subtree": "Rozbalit podstrom aktivní poznámky",
+    "collapse-tree": "Sbalit celý strom poznámek",
+    "collapse-subtree": "Sbalí podstrom aktivní poznámky",
+    "sort-child-notes": "Seřadit podřízené poznámky"
   }
 }

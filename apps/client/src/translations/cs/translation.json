@@ -1,1 +1,21 @@
-{}
+{
+  "about": {
+    "title": "O Trilium Notes",
+    "homepage": "Domovská stránka:",
+    "app_version": "Verze aplikace:",
+    "db_version": "Verze DB:",
+    "sync_version": "Verze sync:",
+    "build_date": "Datum sestavení:",
+    "build_revision": "Revize sestavení:",
+    "data_directory": "Datový adresář:"
+  },
+  "toast": {
+    "critical-error": {
+      "title": "Kritická chyba",
+      "message": "Nastala kritická chyba která aplikaci brání ve spuštění:\n\n{{message}}\n\nPravděpodobně neočekávaným způsobem selhal skript. Pokuste se restartovat aplikaci v safe módu a problém napravit."
+    },
+    "widget-error": {
+      "title": "Nepodařilo se inicializovat widget"
+    }
+  }
+}
