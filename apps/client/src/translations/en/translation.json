@@ -1787,7 +1787,9 @@
   "ws": {
     "sync-check-failed": "Sync check failed!",
     "consistency-checks-failed": "Consistency checks failed! See logs for details.",
-    "encountered-error": "Encountered error \"{{message}}\", check out the console."
+    "encountered-error": "Encountered error \"{{message}}\", check out the console.",
+    "lost-websocket-connection-title": "Lost connection to the server",
+    "lost-websocket-connection-message": "Check your reverse proxy (e.g. nginx or Apache) configuration to ensure WebSocket connections are properly allowed and not being blocked."
   },
   "hoisted_note": {
     "confirm_unhoisting": "Requested note '{{requestedNote}}' is outside of hoisted note '{{hoistedNote}}' subtree and you must unhoist to access the note. Do you want to proceed with unhoisting?"
