@@ -1410,6 +1410,13 @@ div.promoted-attribute-cell .multiplicity:has(span) {
     margin-left: 8px;
     margin-right: calc(var(--pa-card-padding-left) - var(--pa-card-padding-right));
     font-size: 0; /* Prevent whitespaces creating a gap between buttons */
+    display: flex;
+}
+
+div.promoted-attribute-cell .multiplicity:has(span) span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /*
