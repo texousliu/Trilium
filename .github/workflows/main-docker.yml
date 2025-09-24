@@ -152,11 +152,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run the TypeScript build
-        run: pnpm run server:build
-
       - name: Update build info
         run: pnpm run chore:update-build-info
+
+      - name: Run the TypeScript build
+        run: pnpm run server:build
 
       - name: Docker meta
         id: meta

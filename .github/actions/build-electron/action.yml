@@ -74,7 +74,7 @@ runs:
 
   - name: Update build info
     shell: ${{ inputs.shell }}
-    run: npm run chore:update-build-info
+    run: pnpm run chore:update-build-info
 
   # Critical debugging configuration
   - name: Run electron-forge build with enhanced logging
