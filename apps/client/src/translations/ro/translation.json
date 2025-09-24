@@ -1931,7 +1931,7 @@
     "oauth_title": "OAuth/OpenID",
     "oauth_description": "OpenID este o cale standardizată ce permite autentificarea într-un site folosind un cont dintr-un alt serviciu, precum Google, pentru a verifica identitatea. În mod implicit furnizorul este Google, dar se poate schimba cu orice furnizor OpenID. Pentru mai multe informații, consultați <a href=\"#root/_hidden/_help/_help_Otzi9La2YAUX/_help_WOcw2SLH6tbX/_help_7DAiwaf8Z7Rz\">ghidul</a>. Urmați <a href=\"https://developers.google.com/identity/openid-connect/openid-connect\">aceste instrucțiuni</a> pentru a putea configura OpenID prin Google.",
     "oauth_description_warning": "Pentru a activa OAuth sau OpenID, trebuie să configurați URL-ul de bază, ID-ul de client și secretul de client în fișierul config.ini și să reporniți aplicația. Dacă doriți să utilizați variabile de environment, puteți seta TRILIUM_OAUTH_BASE_URL, TRILIUM_OAUTH_CLIENT_ID și TRILIUM_OAUTH_CLIENT_SECRET.",
-    "oauth_missing_vars": "Setări lipsă: {{variables}}",
+    "oauth_missing_vars": "Setări lipsă: {{-variables}}",
     "oauth_user_account": "Cont: ",
     "oauth_user_email": "Email: ",
     "oauth_user_not_logged_in": "Neautentificat!"

@@ -560,7 +560,7 @@
     "oauth_title": "OAuth/OpenID",
     "oauth_description": "OpenID – це стандартизований спосіб входу на веб-сайти за допомогою облікового запису з іншого сервісу, такого як Google, для підтвердження вашої особи. Емітентом за замовчуванням є Google, але ви можете змінити його на будь-якого іншого постачальника OpenID. Перегляньте <a href=\"#root/_hidden/_help/_help_Otzi9La2YAUX/_help_WOcw2SLH6tbX/_help_7DAiwaf8Z7Rz\">тут</a> для отримання додаткової інформації. Дотримуйтесь цих <a href=\"https://developers.google.com/identity/openid-connect/openid-connect\">інструкцій</a>, щоб налаштувати сервіс OpenID через Google.",
     "oauth_description_warning": "Щоб увімкнути OAuth/OpenID, потрібно встановити базову URL-адресу OAuth/OpenID, ідентифікатор клієнта та секрет клієнта у файлі config.ini та перезапустити програму. Якщо ви хочете встановити зі змінних середовища, встановіть TRILIUM_OAUTH_BASE_URL, TRILIUM_OAUTH_CLIENT_ID та TRILIUM_OAUTH_CLIENT_SECRET.",
-    "oauth_missing_vars": "Відсутні налаштування: {{variables}}",
+    "oauth_missing_vars": "Відсутні налаштування: {{-variables}}",
     "oauth_user_account": "Обліковий запис користувача: ",
     "oauth_user_email": "Електронна пошта користувача: ",
     "oauth_user_not_logged_in": "Ви не ввійшли в систему!"

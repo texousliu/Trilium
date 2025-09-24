@@ -1475,7 +1475,7 @@
     "totp_secret_generated": "Создан секрет TOTP",
     "recovery_keys_generate": "Генерация кодов восстановления",
     "recovery_keys_regenerate": "Регенерация кодов восстановления",
-    "oauth_missing_vars": "Отсутствуют настройки: {{variables}}",
+    "oauth_missing_vars": "Отсутствуют настройки: {{-variables}}",
     "oauth_user_not_logged_in": "Не выполнен вход!",
     "totp_title": "Одноразовый пароль с ограничением по времени (TOTP)",
     "recovery_keys_title": "Ключи восстановления единого входа",
