@@ -1141,6 +1141,26 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
     overflow: hidden;
 }
 
+.toast.no-title {
+    display: flex;
+    flex-direction: row;
+}
+
+.toast.no-title .toast-icon {
+    display: flex;
+    align-items: center;
+    padding: var(--bs-toast-padding-y) var(--bs-toast-padding-x);
+}
+
+.toast.no-title .toast-body {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.toast.no-title .toast-header {
+    background-color: unset !important;
+}
+
 .ck-mentions .ck-button {
     font-size: var(--detail-font-size) !important;
     padding: 5px;

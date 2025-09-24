@@ -342,7 +342,10 @@ li.dropdown-item a.dropdown-item-button:focus-visible {
 
 #toast-container .toast .toast-header .btn-close {
     margin: 0 0 0 12px;
+}
 
+#toast-container .toast.no-title {
+    flex-direction: row;
 }
 
 #toast-container .toast .toast-body {
@@ -350,6 +353,22 @@ li.dropdown-item a.dropdown-item-button:focus-visible {
     overflow: hidden;
     text-overflow: ellipsis;
     padding-top: 0;
+    color: var(--muted-text-color);
+}
+
+#toast-container .toast:not(.no-title) .bx {
+    margin-right: 0.5em;
+    font-size: 1.1em;
+}
+
+#toast-container .toast.no-title .bx {
+    margin-right: 0;
+    font-size: 1.3em;
+}
+
+#toast-container .toast.no-title .toast-body {
+    padding-top: var(--bs-toast-padding-x);
+    color: var(--toast-text-color);
 }
 
 /*

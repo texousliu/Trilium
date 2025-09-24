@@ -4,7 +4,7 @@ import utils from "./utils.js";
 export interface ToastOptions {
     id?: string;
     icon: string;
-    title: string;
+    title?: string;
     message: string;
     delay?: number;
     autohide?: boolean;
@@ -12,20 +12,32 @@ export interface ToastOptions {
 }
 
 function toast(options: ToastOptions) {
-    const $toast = $(
-        `<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <strong class="me-auto">
+    const $toast = $(options.title
+        ? `\
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto">
+                        <span class="bx bx-${options.icon}"></span>
+                        <span class="toast-title"></span>
+                    </strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body"></div>
+            </div>`
+        : `
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-icon">
                     <span class="bx bx-${options.icon}"></span>
-                    <span class="toast-title"></span>
-                </strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body"></div>
-        </div>`
+                </div>
+                <div class="toast-body"></div>
+                <div class="toast-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>`
     );
 
-    $toast.find(".toast-title").text(options.title);
+    $toast.toggleClass("no-title", !options.title);
+    $toast.find(".toast-title").text(options.title ?? "");
     $toast.find(".toast-body").html(options.message);
 
     if (options.id) {
