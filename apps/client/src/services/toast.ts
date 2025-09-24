@@ -1,4 +1,3 @@
-import ws from "./ws.js";
 import utils from "./utils.js";
 
 export interface ToastOptions {
@@ -82,7 +81,6 @@ function showMessage(message: string, delay = 2000) {
     console.debug(utils.now(), "message:", message);
 
     toast({
-        title: "Info",
         icon: "check",
         message: message,
         autohide: true,
@@ -94,7 +92,6 @@ export function showError(message: string, delay = 10000) {
     console.log(utils.now(), "error: ", message);
 
     toast({
-        title: "Error",
         icon: "alert",
         message: message,
         autohide: true,
