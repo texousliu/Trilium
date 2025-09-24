@@ -173,7 +173,15 @@
     "back-in-note-history": "Powrót do historii notatek",
     "forward-in-note-history": "Przewiń historię notatek",
     "command-palette": "Paleta komend",
-    "edit-branch-prefix": "Edytuj prefiks gałęzi"
+    "edit-branch-prefix": "Edytuj prefiks gałęzi",
+    "paste-markdown-into-text": "Wklej Markdown do tekstu",
+    "cut-into-note": "Wytnij do notatki",
+    "edit-read-only-note": "Edytuj notatkę tylko do odczytu",
+    "add-new-label": "Dodaj nową etykietę",
+    "add-new-relation": "Dodaj nowe powiązanie",
+    "print-active-note": "Wydrukuj aktywną notatkę",
+    "toggle-left-pane": "Włącz lewy panel",
+    "toggle-full-screen": "Włącz pełny ekran"
   },
   "login": {
     "password": "Hasło",
