@@ -15,7 +15,7 @@
     "ckeditor5-premium-features": "46.1.1"
   },
   "devDependencies": {
-    "@smithy/middleware-retry": "4.2.4",
+    "@smithy/middleware-retry": "4.3.0",
     "@types/jquery": "3.5.33"
   }
 }
