@@ -34,6 +34,7 @@ import { ChooseNoteTypeCallback } from "../widgets/dialogs/note_type_chooser.jsx
 import type RootContainer from "../widgets/containers/root_container.js";
 import { SqlExecuteResults } from "@triliumnext/commons";
 import { AddLinkOpts } from "../widgets/dialogs/add_link.jsx";
+import { IncludeNoteOpts } from "../widgets/dialogs/include_note.jsx";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootContainer;
@@ -223,7 +224,7 @@ export type CommandMappings = {
     showPasswordNotSet: CommandData;
     showProtectedSessionPasswordDialog: CommandData;
     showUploadAttachmentsDialog: CommandData & { noteId: string };
-    showIncludeNoteDialog: CommandData & { textTypeWidget: EditableTextTypeWidget };
+    showIncludeNoteDialog: CommandData & IncludeNoteOpts;
     showAddLinkDialog: CommandData & AddLinkOpts;
     closeProtectedSessionPasswordDialog: CommandData;
     copyImageReferenceToClipboard: CommandData;

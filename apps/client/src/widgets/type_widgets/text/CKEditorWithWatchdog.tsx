@@ -3,6 +3,9 @@ import { PopupEditor, ClassicEditor, EditorWatchdog, type WatchdogConfig, CKText
 import { buildConfig, BuildEditorOptions } from "./config";
 import { useLegacyImperativeHandlers } from "../../react/hooks";
 import link from "../../../services/link";
+import froca from "../../../services/froca";
+
+export type BoxSize = "small" | "medium" | "full";
 
 export interface CKEditorApi {
     /** returns true if user selected some text, false if there's no selection */
@@ -10,6 +13,8 @@ export interface CKEditorApi {
     getSelectedText(): string;
     addLink(notePath: string, linkTitle: string | null, externalLink?: boolean): void;
     addLinkToEditor(linkHref: string, linkTitle: string): void;
+    addIncludeNote(noteId: string, boxSize?: BoxSize): void;
+    addImage(noteId: string): Promise<void>;
 }
 
 interface CKEditorWithWatchdogProps extends Pick<HTMLProps<HTMLDivElement>, "className" | "tabIndex"> {
@@ -76,6 +81,35 @@ export default function CKEditorWithWatchdog({ content, contentLanguage, classNa
                 if (insertPosition) {
                     writer.insertText(linkTitle, { linkHref: linkHref }, insertPosition);
                 }
+            });
+        },
+        addIncludeNote(noteId, boxSize) {
+            const editor = watchdogRef.current?.editor;
+            if (!editor) return;
+
+            editor?.model.change((writer) => {
+                // Insert <includeNote>*</includeNote> at the current selection position
+                // in a way that will result in creating a valid model structure
+                editor?.model.insertContent(
+                    writer.createElement("includeNote", {
+                        noteId: noteId,
+                        boxSize: boxSize
+                    })
+                );
+            });
+        },
+        async addImage(noteId) {
+            const editor = watchdogRef.current?.editor;
+            if (!editor) return;
+
+            const note = await froca.getNote(noteId);
+            if (!note) return;
+
+            editor.model.change(() => {
+                const encodedTitle = encodeURIComponent(note.title);
+                const src = `api/images/${note.noteId}/${encodedTitle}`;
+
+                editor?.execute("insertImage", { source: src });
             });
         },
     }));

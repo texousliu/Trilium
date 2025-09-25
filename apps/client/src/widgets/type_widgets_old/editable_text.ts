@@ -14,7 +14,6 @@ import type FNote from "../../entities/fnote.js";
 import { PopupEditor, ClassicEditor, EditorWatchdog, type CKTextEditor, type MentionFeed, type WatchdogConfig, EditorConfig } from "@triliumnext/ckeditor5";
 import { updateTemplateCache } from "./ckeditor/snippets.js";
 
-export type BoxSize = "small" | "medium" | "full";
 
 export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
@@ -105,37 +104,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         }
     }
 
-    addIncludeNoteToTextCommand() {
-        this.triggerCommand("showIncludeNoteDialog", { textTypeWidget: this });
-    }
-
-    addIncludeNote(noteId: string, boxSize?: BoxSize) {
-        this.watchdog.editor?.model.change((writer) => {
-            // Insert <includeNote>*</includeNote> at the current selection position
-            // in a way that will result in creating a valid model structure
-            this.watchdog.editor?.model.insertContent(
-                writer.createElement("includeNote", {
-                    noteId: noteId,
-                    boxSize: boxSize
-                })
-            );
-        });
-    }
-
-    async addImage(noteId: string) {
-        const note = await froca.getNote(noteId);
-        if (!note || !this.watchdog.editor) {
-            return;
-        }
-
-        this.watchdog.editor.model.change((writer) => {
-            const encodedTitle = encodeURIComponent(note.title);
-            const src = `api/images/${note.noteId}/${encodedTitle}`;
-
-            this.watchdog.editor?.execute("insertImage", { source: src });
-        });
-    }
-
     async createNoteForReferenceLink(title: string) {
         if (!this.notePath) {
             return;
@@ -151,10 +119,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         }
 
         return resp.note.getBestNotePathString();
-    }
-
-    async refreshIncludedNoteEvent({ noteId }: EventData<"refreshIncludedNote">) {
-        this.refreshIncludedNote(this.$editor, noteId);
     }
 
     async reinitialize() {

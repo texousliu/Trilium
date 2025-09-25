@@ -2,13 +2,14 @@ import { useRef, useState } from "preact/hooks";
 import dialog from "../../../services/dialog";
 import toast from "../../../services/toast";
 import utils, { deferred, isMobile } from "../../../services/utils";
-import { useEditorSpacedUpdate, useKeyboardShortcuts, useNoteLabel, useTriliumEvent, useTriliumOption, useTriliumOptionBool } from "../../react/hooks";
+import { useEditorSpacedUpdate, useKeyboardShortcuts, useLegacyImperativeHandlers, useNoteLabel, useTriliumEvent, useTriliumOption, useTriliumOptionBool } from "../../react/hooks";
 import { TypeWidgetProps } from "../type_widget";
 import CKEditorWithWatchdog, { CKEditorApi } from "./CKEditorWithWatchdog";
 import "./EditableText.css";
 import { CKTextEditor, ClassicEditor, EditorWatchdog } from "@triliumnext/ckeditor5";
 import Component from "../../../components/component";
 import options from "../../../services/options";
+import { loadIncludedNote, refreshIncludedNote } from "./utils";
 
 /**
  * The editor can operate into two distinct modes:
@@ -67,16 +68,30 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
         editor?.editing.view.focus();
     });
 
-    useTriliumEvent("addLinkToText", ({ ntxId: eventNtxId }) => {
-        if (eventNtxId !== ntxId || !editorApiRef.current) return;
-        parentComponent?.triggerCommand("showAddLinkDialog", {
-            text: editorApiRef.current.getSelectedText(),
-            hasSelection: editorApiRef.current.hasSelection(),
-            async addLink(notePath, linkTitle, externalLink) {
-                await waitForEditor();
-                return editorApiRef.current?.addLink(notePath, linkTitle, externalLink);
-            }
-        });
+    useLegacyImperativeHandlers({
+        addLinkToTextCommand() {
+            if (!editorApiRef.current) return;
+            parentComponent?.triggerCommand("showAddLinkDialog", {
+                text: editorApiRef.current.getSelectedText(),
+                hasSelection: editorApiRef.current.hasSelection(),
+                async addLink(notePath, linkTitle, externalLink) {
+                    await waitForEditor();
+                    return editorApiRef.current?.addLink(notePath, linkTitle, externalLink);
+                }
+            });
+        },
+        addIncludeNoteToTextCommand() {
+            if (!editorApiRef.current) return;
+            parentComponent?.triggerCommand("showIncludeNoteDialog", {
+                editorApi: editorApiRef.current,
+            });
+        },
+        loadIncludedNote
+    });
+
+    useTriliumEvent("refreshIncludedNote", ({ noteId }) => {
+        if (!containerRef.current) return;
+        refreshIncludedNote(containerRef.current, noteId);
     });
 
     async function waitForEditor() {
