@@ -239,6 +239,7 @@ export function useNoteContext() {
     const [ noteContext, setNoteContext ] = useState<NoteContext>();
     const [ notePath, setNotePath ] = useState<string | null | undefined>();
     const [ note, setNote ] = useState<FNote | null | undefined>();
+    const [ , setViewMode ] = useState<string>();
     const [ refreshCounter, setRefreshCounter ] = useState(0);
 
     useEffect(() => {
@@ -248,6 +249,7 @@ export function useNoteContext() {
     useTriliumEvents([ "setNoteContext", "activeContextChanged", "noteSwitchedAndActivated", "noteSwitched" ], ({ noteContext }) => {
         setNoteContext(noteContext);
         setNotePath(noteContext.notePath);
+        setViewMode(noteContext.viewScope?.viewMode);
     });
     useTriliumEvent("frocaReloaded", () => {
         setNote(noteContext?.note);
