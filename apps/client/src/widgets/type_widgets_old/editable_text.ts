@@ -36,24 +36,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         return this.watchdog?.editor;
     }
 
-    async executeWithTextEditorEvent({ callback, resolve, ntxId }: EventData<"executeWithTextEditor">) {
-        if (!this.isNoteContext(ntxId)) {
-            return;
-        }
-
-        await this.initialized;
-
-        if (!this.watchdog.editor) {
-            return;
-        }
-
-        if (callback) {
-            callback(this.watchdog.editor as CKTextEditor);
-        }
-
-        resolve(this.watchdog.editor as CKTextEditor);
-    }
-
     async reinitialize() {
         const data = this.watchdog.editor?.getData();
         await this.reinitializeWithData(data ?? "");

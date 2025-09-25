@@ -145,6 +145,14 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
         refreshIncludedNote(containerRef.current, noteId);
     });
 
+    useTriliumEvent("executeWithTextEditor", async ({ callback, resolve, ntxId: eventNtxId }) => {
+        if (eventNtxId !== ntxId) return;
+        const editor = await waitForEditor() as CKTextEditor | undefined;
+        if (!editor) return;
+        if (callback) callback(editor);
+        resolve(editor);
+    });
+
     async function waitForEditor() {
         await initialized.current;
         const editor = watchdogRef.current?.editor;
