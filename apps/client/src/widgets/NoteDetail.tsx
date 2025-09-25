@@ -136,7 +136,7 @@ function useNoteInfo() {
         });
     }
 
-    useEffect(refresh, [ actualNote, noteContext, noteContext?.viewScope?.viewMode ]);
+    useEffect(refresh, [ actualNote, noteContext, noteContext?.viewScope ]);
     useTriliumEvent("readOnlyTemporarilyDisabled", ({ noteContext: eventNoteContext }) => {
         if (eventNoteContext?.ntxId !== noteContext?.ntxId) return;
         refresh();

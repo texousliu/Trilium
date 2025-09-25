@@ -22,6 +22,7 @@ import toast, { ToastOptions } from "../../services/toast";
 import protected_session_holder from "../../services/protected_session_holder";
 import server from "../../services/server";
 import { removeIndividualBinding } from "../../services/shortcuts";
+import { ViewScope } from "../../services/link";
 
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
     const parentComponent = useContext(ParentComponent);
@@ -239,7 +240,7 @@ export function useNoteContext() {
     const [ noteContext, setNoteContext ] = useState<NoteContext>();
     const [ notePath, setNotePath ] = useState<string | null | undefined>();
     const [ note, setNote ] = useState<FNote | null | undefined>();
-    const [ , setViewMode ] = useState<string>();
+    const [ , setViewScope ] = useState<ViewScope>();
     const [ refreshCounter, setRefreshCounter ] = useState(0);
 
     useEffect(() => {
@@ -249,7 +250,7 @@ export function useNoteContext() {
     useTriliumEvents([ "setNoteContext", "activeContextChanged", "noteSwitchedAndActivated", "noteSwitched" ], ({ noteContext }) => {
         setNoteContext(noteContext);
         setNotePath(noteContext.notePath);
-        setViewMode(noteContext.viewScope?.viewMode);
+        setViewScope(noteContext.viewScope);
     });
     useTriliumEvent("frocaReloaded", () => {
         setNote(noteContext?.note);
