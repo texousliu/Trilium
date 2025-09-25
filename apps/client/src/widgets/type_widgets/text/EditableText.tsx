@@ -241,12 +241,7 @@ function useTemplates() {
     }, []);
 
     useTriliumEvent("entitiesReloaded", async ({ loadResults }) => {
-        console.log("Reloaded ", loadResults);
-        const newTemplates = await updateTemplateCache(loadResults);
-        if (newTemplates) {
-            console.log("Got new templates!", newTemplates);
-            setTemplates(newTemplates);
-        }
+        await updateTemplateCache(loadResults, setTemplates);
     });
 
     return templates;

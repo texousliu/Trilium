@@ -57,12 +57,7 @@ function buildIcon(snippet: FNote) {
 </svg>`
 }
 
-function handleFullReload() {
-    console.warn("Full text editor reload needed");
-    appContext.triggerCommand("reloadTextEditor");
-}
-
-async function handleContentUpdate(affectedNoteIds: string[]) {
+async function handleContentUpdate(affectedNoteIds: string[], setTemplates: (value: TemplateDefinition[]) => void) {
     const updatedNoteIds = new Set(affectedNoteIds);
     const templateNoteIds = new Set(templateCache.keys());
     const affectedTemplateNoteIds = templateNoteIds.intersection(updatedNoteIds);
@@ -92,11 +87,11 @@ async function handleContentUpdate(affectedNoteIds: string[]) {
     }
 
     if (fullReloadNeeded) {
-        handleFullReload();
+        setTemplates(await getTemplates());
     }
 }
 
-export async function updateTemplateCache(loadResults: LoadResults): Promise<TemplateDefinition[] | null> {
+export async function updateTemplateCache(loadResults: LoadResults, setTemplates: (value: TemplateDefinition[]) => void) {
     const affectedNoteIds = loadResults.getNoteIds();
 
     // React to creation or deletion of text snippets.
@@ -107,11 +102,9 @@ export async function updateTemplateCache(loadResults: LoadResults): Promise<Tem
             return (attr.value === "_template_text_snippet");
         }
     })) {
-        return await getTemplates();
+        setTemplates(await getTemplates());
     } else if (affectedNoteIds.length > 0) {
         // Update content and titles if one of the template notes were updated.
-        debouncedHandleContentUpdate(affectedNoteIds);
+        debouncedHandleContentUpdate(affectedNoteIds, setTemplates);
     }
-
-    return null;
 }
