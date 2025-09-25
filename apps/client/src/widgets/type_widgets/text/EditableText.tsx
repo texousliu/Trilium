@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import dialog from "../../../services/dialog";
 import toast from "../../../services/toast";
-import utils, { deferred, isMobile } from "../../../services/utils";
+import utils, { deferred, hasTouchBar, isMobile } from "../../../services/utils";
 import { useEditorSpacedUpdate, useKeyboardShortcuts, useLegacyImperativeHandlers, useNoteLabel, useTriliumEvent, useTriliumOption, useTriliumOptionBool } from "../../react/hooks";
 import { TypeWidgetProps } from "../type_widget";
 import CKEditorWithWatchdog, { CKEditorApi } from "./CKEditorWithWatchdog";
@@ -14,6 +14,9 @@ import getTemplates, { updateTemplateCache } from "./snippets.js";
 import appContext from "../../../components/app_context";
 import link, { parseNavigationStateFromUrl } from "../../../services/link";
 import note_create from "../../../services/note_create";
+import TouchBar, { TouchBarButton, TouchBarGroup, TouchBarSegmentedControl } from "../../react/TouchBar";
+import { RefObject } from "preact";
+import { buildSelectedBackgroundColor } from "../../../components/touch_bar";
 
 /**
  * The editor can operate into two distinct modes:
@@ -26,6 +29,7 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
     const [ content, setContent ] = useState<string>();
     const watchdogRef = useRef<EditorWatchdog>(null);
     const editorApiRef = useRef<CKEditorApi>(null);
+    const refreshTouchBarRef = useRef<() => void>(null);
     const [ language ] = useNoteLabel(note, "language");
     const [ textNoteEditorType ] = useTriliumOption("textNoteEditorType");
     const [ codeBlockWordWrap ] = useTriliumOptionBool("codeBlockWordWrap");
@@ -201,9 +205,18 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
                         setupClassicEditor(editor, parentComponent);
                     }
 
+                    if (hasTouchBar) {
+                        const handler = () => refreshTouchBarRef.current?.();
+                        for (const event of [ "bold", "italic", "underline", "paragraph", "heading" ]) {
+                            editor.commands.get(event)?.on("change", handler);
+                        }
+                    }
+
                     initialized.current.resolve();
                 }}
             />}
+
+            <EditableTextTouchBar watchdogRef={watchdogRef} refreshTouchBarRef={refreshTouchBarRef} />
         </div>
     )
 }
@@ -303,4 +316,69 @@ function findClassicToolbar(parentComponent: Component): JQuery<HTMLElement> {
     } else {
         return $("body").find(".classic-toolbar-widget");
     }
+}
+
+function EditableTextTouchBar({ watchdogRef, refreshTouchBarRef }: { watchdogRef: RefObject<EditorWatchdog | null>, refreshTouchBarRef: RefObject<() => void> }) {
+    const [ headingSelectedIndex, setHeadingSelectedIndex ] = useState<number>();
+
+    function refresh() {
+        let headingSelectedIndex: number | undefined = undefined;
+        const editor = watchdogRef.current?.editor;
+        const headingCommand = editor?.commands.get("heading");
+        const paragraphCommand = editor?.commands.get("paragraph");
+        if (paragraphCommand?.value) {
+            headingSelectedIndex = 0;
+        } else if (headingCommand?.value === "heading2") {
+            headingSelectedIndex = 1;
+        } else if (headingCommand?.value === "heading3") {
+            headingSelectedIndex = 2;
+        }
+        setHeadingSelectedIndex(headingSelectedIndex);
+    }
+
+    useEffect(refresh, []);
+    refreshTouchBarRef.current = refresh;
+
+    return (
+        <TouchBar>
+            <TouchBarSegmentedControl
+                segments={[
+                    { label: "P" },
+                    { label: "H2" },
+                    { label: "H3" }
+                ]}
+                onChange={(selectedIndex) => {
+                    const editor = watchdogRef.current?.editor;
+                    switch (selectedIndex) {
+                        case 0:
+                            editor?.execute("paragraph")
+                            break;
+                        case 1:
+                            editor?.execute("heading", { value: "heading2" });
+                            break;
+                        case 2:
+                            editor?.execute("heading", { value: "heading3" });
+                            break;
+                    }
+                }}
+                selectedIndex={headingSelectedIndex}
+                mode="buttons"
+            />
+
+            <TouchBarGroup>
+                <TouchBarCommandButton watchdogRef={watchdogRef} command="bold" icon="NSTouchBarTextBoldTemplate" />
+                <TouchBarCommandButton watchdogRef={watchdogRef} command="italic" icon="NSTouchBarTextItalicTemplate" />
+                <TouchBarCommandButton watchdogRef={watchdogRef} command="underline" icon="NSTouchBarTextUnderlineTemplate" />
+            </TouchBarGroup>
+        </TouchBar>
+    )
+}
+
+function TouchBarCommandButton({ watchdogRef, icon, command }: { watchdogRef: RefObject<EditorWatchdog | null>, icon: string, command: string }) {
+    const editor = watchdogRef.current?.editor;
+    return (<TouchBarButton
+        icon={icon}
+        click={() => editor?.execute(command)}
+        backgroundColor={buildSelectedBackgroundColor(editor?.commands.get(command)?.value as boolean)}
+    />);
 }

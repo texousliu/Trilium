@@ -32,23 +32,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         super.doRender();
     }
 
-    async initEditor() {
-        this.watchdog.setCreator(async (_, editorConfig) => {
-            // Touch bar integration
-            if (hasTouchBar) {
-                for (const event of [ "bold", "italic", "underline", "paragraph", "heading" ]) {
-                    editor.commands.get(event)?.on("change", () => this.triggerCommand("refreshTouchBar"));
-                }
-            }
-
-            return editor;
-        });
-
-        await this.createEditor();
-    }
-
-    show() { }
-
     getEditor() {
         return this.watchdog?.editor;
     }
@@ -80,64 +63,5 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         await this.reinitialize();
     }
 
-    buildTouchBarCommand(data: CommandListenerData<"buildTouchBar">) {
-        const { TouchBar, buildIcon } = data;
-        const { TouchBarSegmentedControl, TouchBarGroup, TouchBarButton } = TouchBar;
-        const { editor } = this.watchdog;
-
-        if (!editor) {
-            return;
-        }
-
-        const commandButton = (icon: string, command: string) => new TouchBarButton({
-            icon: buildIcon(icon),
-            click: () => editor.execute(command),
-            backgroundColor: buildSelectedBackgroundColor(editor.commands.get(command)?.value as boolean)
-        });
-
-        let headingSelectedIndex: number | undefined = undefined;
-        const headingCommand = editor.commands.get("heading");
-        const paragraphCommand = editor.commands.get("paragraph");
-        if (paragraphCommand?.value) {
-            headingSelectedIndex = 0;
-        } else if (headingCommand?.value === "heading2") {
-            headingSelectedIndex = 1;
-        } else if (headingCommand?.value === "heading3") {
-            headingSelectedIndex = 2;
-        }
-
-        return [
-            new TouchBarSegmentedControl({
-                segments: [
-                    { label: "P" },
-                    { label: "H2" },
-                    { label: "H3" }
-                ],
-                change(selectedIndex: number, isSelected: boolean) {
-                    switch (selectedIndex) {
-                        case 0:
-                            editor.execute("paragraph")
-                            break;
-                        case 1:
-                            editor.execute("heading", { value: "heading2" });
-                            break;
-                        case 2:
-                            editor.execute("heading", { value: "heading3" });
-                            break;
-                    }
-                },
-                selectedIndex: headingSelectedIndex
-            }),
-            new TouchBarGroup({
-                items: new TouchBar({
-                    items: [
-                        commandButton("NSTouchBarTextBoldTemplate", "bold"),
-                        commandButton("NSTouchBarTextItalicTemplate", "italic"),
-                        commandButton("NSTouchBarTextUnderlineTemplate", "underline")
-                    ]
-                })
-            })
-        ];
-    }
 
 }
