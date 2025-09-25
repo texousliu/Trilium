@@ -33,6 +33,7 @@ import { ColumnComponent } from "tabulator-tables";
 import { ChooseNoteTypeCallback } from "../widgets/dialogs/note_type_chooser.jsx";
 import type RootContainer from "../widgets/containers/root_container.js";
 import { SqlExecuteResults } from "@triliumnext/commons";
+import { AddLinkOpts } from "../widgets/dialogs/add_link.jsx";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootContainer;
@@ -223,7 +224,7 @@ export type CommandMappings = {
     showProtectedSessionPasswordDialog: CommandData;
     showUploadAttachmentsDialog: CommandData & { noteId: string };
     showIncludeNoteDialog: CommandData & { textTypeWidget: EditableTextTypeWidget };
-    showAddLinkDialog: CommandData & { textTypeWidget: EditableTextTypeWidget, text: string };
+    showAddLinkDialog: CommandData & AddLinkOpts;
     closeProtectedSessionPasswordDialog: CommandData;
     copyImageReferenceToClipboard: CommandData;
     copyImageToClipboard: CommandData;

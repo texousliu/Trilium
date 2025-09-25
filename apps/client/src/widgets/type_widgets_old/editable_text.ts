@@ -55,39 +55,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         return this.watchdog?.editor;
     }
 
-    async addLinkToEditor(linkHref: string, linkTitle: string) {
-        await this.initialized;
-
-        this.watchdog.editor?.model.change((writer) => {
-            const insertPosition = this.watchdog.editor?.model.document.selection.getFirstPosition();
-            if (insertPosition) {
-                writer.insertText(linkTitle, { linkHref: linkHref }, insertPosition);
-            }
-        });
-    }
-
-    async addLink(notePath: string, linkTitle: string | null, externalLink: boolean = false) {
-        await this.initialized;
-
-        if (linkTitle) {
-            if (this.hasSelection()) {
-                this.watchdog.editor?.execute("link", externalLink ? `${notePath}` : `#${notePath}`);
-            } else {
-                await this.addLinkToEditor(externalLink ? `${notePath}` : `#${notePath}`, linkTitle);
-            }
-        } else {
-            this.watchdog.editor?.execute("referenceLink", { href: "#" + notePath });
-        }
-
-        this.watchdog.editor?.editing.view.focus();
-    }
-
-    // returns true if user selected some text, false if there's no selection
-    hasSelection() {
-        const model = this.watchdog.editor?.model;
-        const selection = model?.document.selection;
-
-        return !selection?.isCollapsed;
     }
 
     async executeWithTextEditorEvent({ callback, resolve, ntxId }: EventData<"executeWithTextEditor">) {
@@ -106,29 +73,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         }
 
         resolve(this.watchdog.editor as CKTextEditor);
-    }
-
-    addLinkToTextCommand() {
-        const selectedText = this.getSelectedText();
-
-        this.triggerCommand("showAddLinkDialog", { textTypeWidget: this, text: selectedText });
-    }
-
-    getSelectedText() {
-        const range = this.watchdog.editor?.model.document.selection.getFirstRange();
-        let text = "";
-
-        if (!range) {
-            return text;
-        }
-
-        for (const item of range.getItems()) {
-            if ("data" in item && item.data) {
-                text += item.data;
-            }
-        }
-
-        return text;
     }
 
     async followLinkUnderCursorCommand() {

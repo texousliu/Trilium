@@ -1,6 +1,16 @@
-import { HTMLProps, RefObject, useEffect, useRef, useState } from "preact/compat";
+import { HTMLProps, RefObject, useEffect, useImperativeHandle, useRef, useState } from "preact/compat";
 import { PopupEditor, ClassicEditor, EditorWatchdog, type WatchdogConfig, CKTextEditor } from "@triliumnext/ckeditor5";
 import { buildConfig, BuildEditorOptions } from "./config";
+import { useLegacyImperativeHandlers } from "../../react/hooks";
+import link from "../../../services/link";
+
+export interface CKEditorApi {
+    /** returns true if user selected some text, false if there's no selection */
+    hasSelection(): boolean;
+    getSelectedText(): string;
+    addLink(notePath: string, linkTitle: string | null, externalLink?: boolean): void;
+    addLinkToEditor(linkHref: string, linkTitle: string): void;
+}
 
 interface CKEditorWithWatchdogProps extends Pick<HTMLProps<HTMLDivElement>, "className" | "tabIndex"> {
     content: string | undefined;
@@ -13,12 +23,68 @@ interface CKEditorWithWatchdogProps extends Pick<HTMLProps<HTMLDivElement>, "cla
     onChange: () => void;
     /** Called upon whenever a new CKEditor instance is initialized, whether it's the first initialization, after a crash or after a config change that requires it (e.g. content language). */
     onEditorInitialized?: (editor: CKTextEditor) => void;
+    editorApi: RefObject<CKEditorApi>;
 }
 
-export default function CKEditorWithWatchdog({ content, contentLanguage, className, tabIndex, isClassicEditor, watchdogRef: externalWatchdogRef, watchdogConfig, onNotificationWarning, onWatchdogStateChange, onChange, onEditorInitialized }: CKEditorWithWatchdogProps) {
+export default function CKEditorWithWatchdog({ content, contentLanguage, className, tabIndex, isClassicEditor, watchdogRef: externalWatchdogRef, watchdogConfig, onNotificationWarning, onWatchdogStateChange, onChange, onEditorInitialized, editorApi }: CKEditorWithWatchdogProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const watchdogRef = useRef<EditorWatchdog>(null);
     const [ editor, setEditor ] = useState<CKTextEditor>();
+
+    useImperativeHandle(editorApi, () => ({
+        hasSelection() {
+            const model = watchdogRef.current?.editor?.model;
+            const selection = model?.document.selection;
+
+            return !selection?.isCollapsed;
+        },
+        getSelectedText() {
+            const range = watchdogRef.current?.editor?.model.document.selection.getFirstRange();
+            let text = "";
+
+            if (!range) {
+                return text;
+            }
+
+            for (const item of range.getItems()) {
+                if ("data" in item && item.data) {
+                    text += item.data;
+                }
+            }
+
+            return text;
+        },
+        addLink(notePath, linkTitle, externalLink) {
+            const editor = watchdogRef.current?.editor;
+            if (!editor) return;
+
+            if (linkTitle) {
+                if (this.hasSelection()) {
+                    editor.execute("link", externalLink ? `${notePath}` : `#${notePath}`);
+                } else {
+                    this.addLinkToEditor(externalLink ? `${notePath}` : `#${notePath}`, linkTitle);
+                }
+            } else {
+                editor.execute("referenceLink", { href: "#" + notePath });
+            }
+
+            editor.editing.view.focus();
+        },
+        addLinkToEditor(linkHref, linkTitle) {
+            watchdogRef.current?.editor?.model.change((writer) => {
+                const insertPosition = watchdogRef.current?.editor?.model.document.selection.getFirstPosition();
+                if (insertPosition) {
+                    writer.insertText(linkTitle, { linkHref: linkHref }, insertPosition);
+                }
+            });
+        },
+    }));
+
+    useLegacyImperativeHandlers({
+        async loadReferenceLinkTitle($el: JQuery<HTMLElement>, href: string | null = null) {
+            await link.loadReferenceLinkTitle($el, href);
+        }
+    })
 
     useEffect(() => {
         const container = containerRef.current;

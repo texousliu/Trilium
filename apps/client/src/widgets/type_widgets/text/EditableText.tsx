@@ -4,11 +4,10 @@ import toast from "../../../services/toast";
 import utils, { deferred, isMobile } from "../../../services/utils";
 import { useEditorSpacedUpdate, useKeyboardShortcuts, useNoteLabel, useTriliumEvent, useTriliumOption } from "../../react/hooks";
 import { TypeWidgetProps } from "../type_widget";
-import CKEditorWithWatchdog from "./CKEditorWithWatchdog";
+import CKEditorWithWatchdog, { CKEditorApi } from "./CKEditorWithWatchdog";
 import "./EditableText.css";
 import { CKTextEditor, ClassicEditor, EditorWatchdog } from "@triliumnext/ckeditor5";
 import Component from "../../../components/component";
-import { RefObject } from "preact";
 import options from "../../../services/options";
 
 /**
@@ -21,6 +20,7 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
     const containerRef = useRef<HTMLDivElement>(null);
     const [ content, setContent ] = useState<string>();
     const watchdogRef = useRef<EditorWatchdog>(null);
+    const editorApiRef = useRef<CKEditorApi>(null);
     const [ language ] = useNoteLabel(note, "language");
     const [ textNoteEditorType ] = useTriliumOption("textNoteEditorType");
     const isClassicEditor = isMobile() || textNoteEditorType === "ckeditor-classic";
@@ -66,6 +66,18 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
         editor?.editing.view.focus();
     });
 
+    useTriliumEvent("addLinkToText", ({ ntxId: eventNtxId }) => {
+        if (eventNtxId !== ntxId || !editorApiRef.current) return;
+        parentComponent?.triggerCommand("showAddLinkDialog", {
+            text: editorApiRef.current.getSelectedText(),
+            hasSelection: editorApiRef.current.hasSelection(),
+            async addLink(notePath, linkTitle, externalLink) {
+                await waitForEditor();
+                return editorApiRef.current?.addLink(notePath, linkTitle, externalLink);
+            }
+        });
+    });
+
     async function waitForEditor() {
         await initialized.current;
         const editor = watchdogRef.current?.editor;
@@ -104,6 +116,7 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
                 content={content}
                 contentLanguage={language}
                 isClassicEditor={isClassicEditor}
+                editorApi={editorApiRef}
                 watchdogRef={watchdogRef}
                 watchdogConfig={{
                     // An average number of milliseconds between the last editor errors (defaults to 5000). When the period of time between errors is lower than that and the crashNumberLimit is also reached, the watchdog changes its state to crashedPermanently, and it stops restarting the editor. This prevents an infinite restart loop.

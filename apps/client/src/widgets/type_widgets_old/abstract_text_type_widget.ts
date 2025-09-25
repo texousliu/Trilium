@@ -13,11 +13,6 @@ export default class AbstractTextTypeWidget extends TypeWidget {
         this.refreshCodeBlockOptions();
     }
 
-
-    async loadReferenceLinkTitle($el: JQuery<HTMLElement>, href: string | null = null) {
-        await linkService.loadReferenceLinkTitle($el, href);
-    }
-
     refreshCodeBlockOptions() {
         const wordWrap = options.is("codeBlockWordWrap");
         this.$widget.toggleClass("word-wrap", wordWrap);
