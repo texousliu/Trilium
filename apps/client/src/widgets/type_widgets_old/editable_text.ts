@@ -71,23 +71,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         resolve(this.watchdog.editor as CKTextEditor);
     }
 
-    async createNoteForReferenceLink(title: string) {
-        if (!this.notePath) {
-            return;
-        }
-
-        const resp = await noteCreateService.createNoteWithTypePrompt(this.notePath, {
-            activate: false,
-            title: title
-        });
-
-        if (!resp || !resp.note) {
-            return;
-        }
-
-        return resp.note.getBestNotePathString();
-    }
-
     async reinitialize() {
         const data = this.watchdog.editor?.getData();
         await this.reinitializeWithData(data ?? "");

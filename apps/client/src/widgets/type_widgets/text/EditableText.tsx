@@ -13,6 +13,7 @@ import { loadIncludedNote, refreshIncludedNote } from "./utils";
 import getTemplates, { updateTemplateCache } from "./snippets.js";
 import appContext from "../../../components/app_context";
 import link, { parseNavigationStateFromUrl } from "../../../services/link";
+import note_create from "../../../services/note_create";
 
 /**
  * The editor can operate into two distinct modes:
@@ -84,6 +85,7 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
                 }
             });
         },
+        // Include note functionality note
         addIncludeNoteToTextCommand() {
             if (!editorApiRef.current) return;
             parentComponent?.triggerCommand("showIncludeNoteDialog", {
@@ -91,6 +93,20 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
             });
         },
         loadIncludedNote,
+        // Creating notes in @-completion
+        async createNoteForReferenceLink(title: string) {
+            const notePath = noteContext?.notePath;
+            if (!notePath) return;
+
+            const resp = await note_create.createNoteWithTypePrompt(notePath, {
+                activate: false,
+                title: title
+            });
+
+            if (!resp || !resp.note) return;
+            return resp.note.getBestNotePathString();
+        },
+        // Keyboard shortcut
         async followLinkUnderCursorCommand() {
             const editor = await waitForEditor();
             const selection = editor?.model.document.selection;
