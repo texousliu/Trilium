@@ -7,7 +7,7 @@ import nodeMenu from "@mind-elixir/node-menu";
 import "mind-elixir/style";
 import "@mind-elixir/node-menu/dist/style.css";
 import "./MindMap.css";
-import { useEditorSpacedUpdate, useTriliumEvent, useTriliumEvents } from "../react/hooks";
+import { useEditorSpacedUpdate, useNoteLabelBoolean, useTriliumEvent, useTriliumEvents, useTriliumOptionBool } from "../react/hooks";
 import { refToJQuerySelector } from "../react/react_utils";
 import utils from "../../services/utils";
 
@@ -16,6 +16,7 @@ const NEW_TOPIC_NAME = "";
 interface MindElixirProps {
     apiRef?: RefObject<MindElixirInstance>;
     containerProps?: Omit<HTMLAttributes<HTMLDivElement>, "ref">;
+    editable: boolean;
     content: MindElixirData;
     onChange?: () => void;
 }
@@ -24,6 +25,7 @@ export default function MindMap({ note, ntxId }: TypeWidgetProps) {
     const content = VanillaMindElixir.new(NEW_TOPIC_NAME);
     const apiRef = useRef<MindElixirInstance>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const [ isReadOnly ] = useNoteLabelBoolean(note, "readOnly");
     const spacedUpdate = useEditorSpacedUpdate({
         note,
         getData: async () => {
@@ -97,6 +99,7 @@ export default function MindMap({ note, ntxId }: TypeWidgetProps) {
                 apiRef={apiRef}
                 content={content}
                 onChange={() => spacedUpdate.scheduleUpdate()}
+                editable={!isReadOnly}
                 containerProps={{
                     className: "mind-map-container",
                     onKeyDown
@@ -106,7 +109,7 @@ export default function MindMap({ note, ntxId }: TypeWidgetProps) {
     )
 }
 
-function MindElixir({ content, containerProps, apiRef: externalApiRef, onChange }: MindElixirProps) {
+function MindElixir({ content, containerProps, apiRef: externalApiRef, onChange, editable }: MindElixirProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const apiRef = useRef<MindElixirInstance>(null);
 
@@ -114,10 +117,13 @@ function MindElixir({ content, containerProps, apiRef: externalApiRef, onChange 
         if (!containerRef.current) return;
 
         const mind = new VanillaMindElixir({
-            el: containerRef.current
+            el: containerRef.current,
+            editable
         });
 
-        mind.install(nodeMenu);
+        if (editable) {
+            mind.install(nodeMenu);
+        }
         mind.init(content);
 
         apiRef.current = mind;
@@ -126,7 +132,7 @@ function MindElixir({ content, containerProps, apiRef: externalApiRef, onChange 
         }
 
         return () => mind.destroy();
-    }, []);
+    }, [ editable ]);
 
     // On change listener.
     useEffect(() => {
