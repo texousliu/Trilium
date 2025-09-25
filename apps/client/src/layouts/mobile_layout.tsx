@@ -12,7 +12,7 @@ import PromotedAttributesWidget from "../widgets/promoted_attributes.js";
 import SidebarContainer from "../widgets/mobile_widgets/sidebar_container.js";
 import type AppContext from "../components/app_context.js";
 import TabRowWidget from "../widgets/tab_row.js";
-import MobileEditorToolbar from "../widgets/type_widgets_old/ckeditor/mobile_editor_toolbar.js";
+import MobileEditorToolbar from "../widgets/type_widgets/text/mobile_editor_toolbar.js";
 import { applyModals } from "./layout_commons.js";
 import FilePropertiesTab from "../widgets/ribbon/FilePropertiesTab.jsx";
 import { useNoteContext } from "../widgets/react/hooks.jsx";
