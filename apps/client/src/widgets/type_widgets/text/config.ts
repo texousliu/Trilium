@@ -1,12 +1,11 @@
 import { ALLOWED_PROTOCOLS } from "../../../services/link.js";
 import { MIME_TYPE_AUTO } from "@triliumnext/commons";
-import { buildExtraCommands, type EditorConfig, PREMIUM_PLUGINS } from "@triliumnext/ckeditor5";
+import { buildExtraCommands, type EditorConfig, PREMIUM_PLUGINS, TemplateDefinition } from "@triliumnext/ckeditor5";
 import { getHighlightJsNameForMime } from "../../../services/mime_types.js";
 import options from "../../../services/options.js";
 import { ensureMimeTypesForHighlighting, isSyntaxHighlightEnabled } from "../../../services/syntax_highlight.js";
 import emojiDefinitionsUrl from "@triliumnext/ckeditor5/src/emoji_definitions/en.json?url";
 import { copyTextWithToast } from "../../../services/clipboard_ext.js";
-import getTemplates from "./snippets.js";
 import { t } from "../../../services/i18n.js";
 import { getMermaidConfig } from "../../../services/mermaid.js";
 import noteAutocompleteService, { type Suggestion } from "../../../services/note_autocomplete.js";
@@ -20,6 +19,7 @@ export interface BuildEditorOptions {
     forceGplLicense: boolean;
     isClassicEditor: boolean;
     contentLanguage: string | null;
+    templates: TemplateDefinition[];
 }
 
 export async function buildConfig(opts: BuildEditorOptions): Promise<EditorConfig> {
@@ -157,7 +157,7 @@ export async function buildConfig(opts: BuildEditorOptions): Promise<EditorConfi
             extraCommands: buildExtraCommands()
         },
         template: {
-            definitions: await getTemplates()
+            definitions: opts.templates
         },
         htmlSupport: {
             allow: JSON.parse(options.get("allowedHtmlTags"))

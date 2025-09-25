@@ -12,7 +12,6 @@ import { buildSelectedBackgroundColor } from "../../components/touch_bar.js";
 import { buildConfig, BuildEditorOptions, OPEN_SOURCE_LICENSE_KEY } from "./ckeditor/config.js";
 import type FNote from "../../entities/fnote.js";
 import { PopupEditor, ClassicEditor, EditorWatchdog, type CKTextEditor, type MentionFeed, type WatchdogConfig, EditorConfig } from "@triliumnext/ckeditor5";
-import { updateTemplateCache } from "./ckeditor/snippets.js";
 
 
 export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
@@ -52,8 +51,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     getEditor() {
         return this.watchdog?.editor;
-    }
-
     }
 
     async executeWithTextEditorEvent({ callback, resolve, ntxId }: EventData<"executeWithTextEditor">) {
@@ -128,14 +125,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
 
     async reloadTextEditorEvent() {
         await this.reinitialize();
-    }
-
-    async entitiesReloadedEvent(e: EventData<"entitiesReloaded">) {
-        await super.entitiesReloadedEvent(e);
-
-        if (updateTemplateCache(e.loadResults)) {
-            await this.reinitialize();
-        }
     }
 
     buildTouchBarCommand(data: CommandListenerData<"buildTouchBar">) {

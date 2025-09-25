@@ -1,4 +1,4 @@
-import { useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import dialog from "../../../services/dialog";
 import toast from "../../../services/toast";
 import utils, { deferred, isMobile } from "../../../services/utils";
@@ -6,10 +6,11 @@ import { useEditorSpacedUpdate, useKeyboardShortcuts, useLegacyImperativeHandler
 import { TypeWidgetProps } from "../type_widget";
 import CKEditorWithWatchdog, { CKEditorApi } from "./CKEditorWithWatchdog";
 import "./EditableText.css";
-import { CKTextEditor, ClassicEditor, EditorWatchdog } from "@triliumnext/ckeditor5";
+import { CKTextEditor, ClassicEditor, EditorWatchdog, TemplateDefinition } from "@triliumnext/ckeditor5";
 import Component from "../../../components/component";
 import options from "../../../services/options";
 import { loadIncludedNote, refreshIncludedNote } from "./utils";
+import getTemplates, { updateTemplateCache } from "./snippets.js";
 
 /**
  * The editor can operate into two distinct modes:
@@ -47,7 +48,8 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
         onContentChange(newContent) {
             setContent(newContent);
         }
-    })
+    });
+    const templates = useTemplates();
 
     useTriliumEvent("scrollToEnd", () => {
         const editor = watchdogRef.current?.editor;
@@ -127,7 +129,7 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
 
     return (
         <div ref={containerRef} class={`note-detail-editable-text note-detail-printable ${codeBlockWordWrap ? "word-wrap" : ""}`}>
-            {note && <CKEditorWithWatchdog
+            {note && !!templates && <CKEditorWithWatchdog
                 className="note-detail-editable-text-editor use-tn-links"
                 tabIndex={300}
                 content={content}
@@ -143,6 +145,7 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
                     // A minimum number of milliseconds between saving the editor data internally (defaults to 5000). Note that for large documents, this might impact the editor performance.
                     saveInterval: 5000
                 }}
+                templates={templates}
                 onNotificationWarning={onNotificationWarning}
                 onWatchdogStateChange={onWatchdogStateChange}
                 onChange={() => spacedUpdate.scheduleUpdate()}
@@ -158,6 +161,25 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
             />}
         </div>
     )
+}
+
+function useTemplates() {
+    const [ templates, setTemplates ] = useState<TemplateDefinition[]>();
+
+    useEffect(() => {
+        getTemplates().then(setTemplates);
+    }, []);
+
+    useTriliumEvent("entitiesReloaded", async ({ loadResults }) => {
+        console.log("Reloaded ", loadResults);
+        const newTemplates = await updateTemplateCache(loadResults);
+        if (newTemplates) {
+            console.log("Got new templates!", newTemplates);
+            setTemplates(newTemplates);
+        }
+    });
+
+    return templates;
 }
 
 function onWatchdogStateChange(watchdog: EditorWatchdog) {

@@ -96,18 +96,22 @@ async function handleContentUpdate(affectedNoteIds: string[]) {
     }
 }
 
-export function updateTemplateCache(loadResults: LoadResults): boolean {
+export async function updateTemplateCache(loadResults: LoadResults): Promise<TemplateDefinition[] | null> {
     const affectedNoteIds = loadResults.getNoteIds();
 
     // React to creation or deletion of text snippets.
-    if (loadResults.getAttributeRows().find((attr) =>
-            attr.type === "label" &&
-            (attr.name === "textSnippet" || attr.name === "textSnippetDescription"))) {
-        handleFullReload();
+    if (loadResults.getAttributeRows().find((attr) => {
+        if (attr.type === "label") {
+            return (attr.name === "textSnippet" || attr.name === "textSnippetDescription");
+        } else if (attr.type === "relation") {
+            return (attr.value === "_template_text_snippet");
+        }
+    })) {
+        return await getTemplates();
     } else if (affectedNoteIds.length > 0) {
         // Update content and titles if one of the template notes were updated.
         debouncedHandleContentUpdate(affectedNoteIds);
     }
 
-    return false;
+    return null;
 }
