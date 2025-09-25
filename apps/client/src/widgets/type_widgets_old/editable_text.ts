@@ -71,36 +71,6 @@ export default class EditableTextTypeWidget extends AbstractTextTypeWidget {
         resolve(this.watchdog.editor as CKTextEditor);
     }
 
-    async followLinkUnderCursorCommand() {
-        await this.initialized;
-
-        const selection = this.watchdog.editor?.model.document.selection;
-        const selectedElement = selection?.getSelectedElement();
-
-        if (selectedElement?.name === "reference") {
-            // reference link
-            const notePath = selectedElement.getAttribute("notePath") as string | undefined;
-
-            if (notePath) {
-                await appContext.tabManager.getActiveContext()?.setNote(notePath);
-                return;
-            }
-        }
-
-        if (!selection?.hasAttribute("linkHref")) {
-            return;
-        }
-
-        const selectedLinkUrl = selection.getAttribute("linkHref") as string;
-        const notePath = link.getNotePathFromUrl(selectedLinkUrl);
-
-        if (notePath) {
-            await appContext.tabManager.getActiveContext()?.setNote(notePath);
-        } else {
-            window.open(selectedLinkUrl, "_blank");
-        }
-    }
-
     async createNoteForReferenceLink(title: string) {
         if (!this.notePath) {
             return;

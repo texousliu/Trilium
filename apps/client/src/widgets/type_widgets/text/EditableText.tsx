@@ -11,6 +11,8 @@ import Component from "../../../components/component";
 import options from "../../../services/options";
 import { loadIncludedNote, refreshIncludedNote } from "./utils";
 import getTemplates, { updateTemplateCache } from "./snippets.js";
+import appContext from "../../../components/app_context";
+import link, { parseNavigationStateFromUrl } from "../../../services/link";
 
 /**
  * The editor can operate into two distinct modes:
@@ -88,7 +90,34 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
                 editorApi: editorApiRef.current,
             });
         },
-        loadIncludedNote
+        loadIncludedNote,
+        async followLinkUnderCursorCommand() {
+            const editor = await waitForEditor();
+            const selection = editor?.model.document.selection;
+            const selectedElement = selection?.getSelectedElement();
+
+            if (selectedElement?.name === "reference") {
+                const { notePath } = parseNavigationStateFromUrl(selectedElement.getAttribute("href") as string | undefined);
+
+                if (notePath) {
+                    await appContext.tabManager.getActiveContext()?.setNote(notePath);
+                    return;
+                }
+            }
+
+            if (!selection?.hasAttribute("linkHref")) {
+                return;
+            }
+
+            const selectedLinkUrl = selection.getAttribute("linkHref") as string;
+            const notePath = link.getNotePathFromUrl(selectedLinkUrl);
+
+            if (notePath) {
+                await appContext.tabManager.getActiveContext()?.setNote(notePath);
+            } else {
+                window.open(selectedLinkUrl, "_blank");
+            }
+        }
     });
 
     useTriliumEvent("refreshIncludedNote", ({ noteId }) => {
