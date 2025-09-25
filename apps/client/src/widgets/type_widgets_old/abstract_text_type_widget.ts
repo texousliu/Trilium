@@ -10,19 +10,9 @@ import attributes from "../../services/attributes.js";
 export default class AbstractTextTypeWidget extends TypeWidget {
     doRender() {
         super.doRender();
-        this.refreshCodeBlockOptions();
-    }
-
-    refreshCodeBlockOptions() {
-        const wordWrap = options.is("codeBlockWordWrap");
-        this.$widget.toggleClass("word-wrap", wordWrap);
     }
 
     async entitiesReloadedEvent({ loadResults }: EventData<"entitiesReloaded">) {
-        if (loadResults.isOptionReloaded("codeBlockWordWrap")) {
-            this.refreshCodeBlockOptions();
-        }
-
         if (loadResults.getAttributeRows().find((attr) =>
             attr.type === "label" &&
             attr.name === "language" &&

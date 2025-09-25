@@ -2,7 +2,7 @@ import { useRef, useState } from "preact/hooks";
 import dialog from "../../../services/dialog";
 import toast from "../../../services/toast";
 import utils, { deferred, isMobile } from "../../../services/utils";
-import { useEditorSpacedUpdate, useKeyboardShortcuts, useNoteLabel, useTriliumEvent, useTriliumOption } from "../../react/hooks";
+import { useEditorSpacedUpdate, useKeyboardShortcuts, useNoteLabel, useTriliumEvent, useTriliumOption, useTriliumOptionBool } from "../../react/hooks";
 import { TypeWidgetProps } from "../type_widget";
 import CKEditorWithWatchdog, { CKEditorApi } from "./CKEditorWithWatchdog";
 import "./EditableText.css";
@@ -23,6 +23,7 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
     const editorApiRef = useRef<CKEditorApi>(null);
     const [ language ] = useNoteLabel(note, "language");
     const [ textNoteEditorType ] = useTriliumOption("textNoteEditorType");
+    const [ codeBlockWordWrap ] = useTriliumOptionBool("codeBlockWordWrap");
     const isClassicEditor = isMobile() || textNoteEditorType === "ckeditor-classic";
     const initialized = useRef(deferred<void>());
     const spacedUpdate = useEditorSpacedUpdate({
@@ -110,9 +111,10 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
     });
 
     return (
-        <div ref={containerRef} class="note-detail-editable-text note-detail-printable">
+        <div ref={containerRef} class={`note-detail-editable-text note-detail-printable ${codeBlockWordWrap ? "word-wrap" : ""}`}>
             {note && <CKEditorWithWatchdog
-                className="note-detail-editable-text-editor use-tn-links" tabIndex={300}
+                className="note-detail-editable-text-editor use-tn-links"
+                tabIndex={300}
                 content={content}
                 contentLanguage={language}
                 isClassicEditor={isClassicEditor}
