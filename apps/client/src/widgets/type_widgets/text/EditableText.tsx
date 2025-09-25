@@ -9,7 +9,7 @@ import "./EditableText.css";
 import { CKTextEditor, ClassicEditor, EditorWatchdog, TemplateDefinition } from "@triliumnext/ckeditor5";
 import Component from "../../../components/component";
 import options from "../../../services/options";
-import { loadIncludedNote, refreshIncludedNote } from "./utils";
+import { loadIncludedNote, refreshIncludedNote, setupImageOpening } from "./utils";
 import getTemplates, { updateTemplateCache } from "./snippets.js";
 import appContext from "../../../components/app_context";
 import link, { parseNavigationStateFromUrl } from "../../../services/link";
@@ -218,6 +218,10 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
                         for (const event of [ "bold", "italic", "underline", "paragraph", "heading" ]) {
                             editor.commands.get(event)?.on("change", handler);
                         }
+                    }
+
+                    if (containerRef.current) {
+                        setupImageOpening(containerRef.current, false);
                     }
 
                     initialized.current.resolve();
