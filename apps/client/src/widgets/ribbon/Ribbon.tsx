@@ -96,7 +96,7 @@ const TAB_CONFIGURATION = numberObjectsInPlace<TabConfiguration>([
         content: FilePropertiesTab,
         show: ({ note }) => note?.type === "file",
         toggleCommand: "toggleRibbonTabFileProperties",
-        activate: true
+        activate: ({ note }) => note?.mime !== "application/pdf"
     },
     {
         title: t("image_properties.title"),

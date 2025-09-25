@@ -32,7 +32,7 @@ export default function SimilarNotesTab({ note }: TabContext) {
                                 notePath={notePath}
                                 noTnLink
                                 style={{
-                                    "font-size": 24 * (1 - 1 / (1 + score))
+                                    "font-size": 20 * (1 - 1 / (1 + score))
                                 }}
                             />
                         ))}

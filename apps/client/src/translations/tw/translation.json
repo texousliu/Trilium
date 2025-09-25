@@ -1843,7 +1843,7 @@
     "oauth_title": "OAuth / OpenID 驗證",
     "oauth_description": "OpenID 是一種標準化的方式，可讓您使用其他服務（如 Google）的帳號登入網站，以驗證您的身份。預設的提供者是 Google，但您可以將其變更為任何其他 OpenID 提供者。查看<a href=\"#root/_hidden/_help/_help_Otzi9La2YAUX/_help_WOcw2SLH6tbX/_help_7DAiwaf8Z7Rz\">此處</a>以瞭解更多資訊。依照這些 <a href=\"https://developers.google.com/identity/openid-connect/openid-connect\">指示</a>以透過 Google 設定 OpenID 服務。",
     "oauth_description_warning": "要啟用 OAuth / OpenID，您需要設定 config.ini 文件中的 OAuth / OpenID 基礎 URL、客戶端 ID 和客戶端金鑰，並重新啟動應用程式。如果要從環境變數設置，請設定 TRILIUM_OAUTH_BASE_URL、TRILIUM_OAUTH_CLIENT_ID 和 TRILIUM_OAUTH_CLIENT_SECRET 環境變數。",
-    "oauth_missing_vars": "缺少以下設定：{{variables}}",
+    "oauth_missing_vars": "缺少以下設定：{{-variables}}",
     "oauth_user_account": "用戶帳號： ",
     "oauth_user_email": "用戶信箱： ",
     "oauth_user_not_logged_in": "尚未登入！"

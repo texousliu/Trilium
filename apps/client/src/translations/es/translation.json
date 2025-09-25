@@ -1490,7 +1490,7 @@
     "oauth_title": "OAuth/OpenID",
     "oauth_description": "OpenID es una forma estandarizada de permitirle iniciar sesión en sitios web utilizando una cuenta de otro servicio, como Google, para verificar su identidad. Siga estas <a href = \"https://developers.google.com/identity/openid-connect/openid-connect\">instrucciones</a> para configurar un servicio OpenID a través de Google.",
     "oauth_description_warning": "Para habilitar OAuth/OpenID, necesita establecer la URL base de OAuth/OpenID, ID de cliente y secreto de cliente en el archivo config.ini y reiniciar la aplicación. Si desea establecerlas desde variables de ambiente, por favor establezca TRILIUM_OAUTH_BASE_URL, TRILIUM_OAUTH_CLIENT_ID y TRILIUM_OAUTH_CLIENT_SECRET.",
-    "oauth_missing_vars": "Ajustes faltantes: {{variables}}",
+    "oauth_missing_vars": "Ajustes faltantes: {{-variables}}",
     "oauth_user_account": "Cuenta de usuario: ",
     "oauth_user_email": "Correo electrónico de usuario: ",
     "oauth_user_not_logged_in": "¡No ha iniciado sesión!"

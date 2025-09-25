@@ -28,8 +28,8 @@ const SEPARATOR_TITLE_REPLACEMENTS = [
 export default function NoteTypeChooserDialogComponent() {
     const [ callback, setCallback ] = useState<ChooseNoteTypeCallback>();
     const [ shown, setShown ] = useState(false);
-    const [ parentNote, setParentNote ] = useState<Suggestion | null>(); 
-    const [ noteTypes, setNoteTypes ] = useState<MenuItem<TreeCommandNames>[]>([]);    
+    const [ parentNote, setParentNote ] = useState<Suggestion | null>();
+    const [ noteTypes, setNoteTypes ] = useState<MenuItem<TreeCommandNames>[]>([]);
 
     useTriliumEvent("chooseNoteType", ({ callback }) => {
         setCallback(() => callback);
@@ -41,11 +41,11 @@ export default function NoteTypeChooserDialogComponent() {
             let index = -1;
 
             setNoteTypes((noteTypes ?? []).map((item) => {
-                if (item.title === "----") {
+                if ("kind" in item && item.kind === "separator") {
                     index++;
                     return {
-                        title: SEPARATOR_TITLE_REPLACEMENTS[index],
-                        enabled: false
+                        kind: "header",
+                        title: SEPARATOR_TITLE_REPLACEMENTS[index]
                     }
                 }
 
@@ -56,7 +56,7 @@ export default function NoteTypeChooserDialogComponent() {
 
     function onNoteTypeSelected(value: string) {
         const [ noteType, templateNoteId ] = value.split(",");
-        
+
         callback?.({
             success: true,
             noteType,
@@ -95,21 +95,21 @@ export default function NoteTypeChooserDialogComponent() {
             <FormGroup name="note-type" label={t("note_type_chooser.modal_body")}>
                 <FormList onSelect={onNoteTypeSelected}>
                     {noteTypes.map((_item) => {
-                        if (_item.title === "----") {     
-                            return;                       
+                        if ("kind" in _item && _item.kind === "separator") {
+                            return;
                         }
 
                         const item = _item as MenuCommandItem<TreeCommandNames>;
 
-                        if (item.enabled === false) {
+                        if ("kind" in item && item.kind === "header") {
                             return <FormListHeader text={item.title} />
                         } else {
                             return <FormListItem
                                 value={[ item.type, item.templateNoteId ].join(",") }
                                 icon={item.uiIcon}>
-                                    {item.title}
-                                    {item.badges && item.badges.map((badge) => <Badge {...badge} />)}
-                                </FormListItem>;                            
+                                {item.title}
+                                {item.badges && item.badges.map((badge) => <Badge {...badge} />)}
+                            </FormListItem>;
                         }
                     })}
                 </FormList>

@@ -3,7 +3,7 @@ import { t } from "../services/i18n";
 import Alert from "./react/Alert";
 import { useNoteContext,  useTriliumEvent } from "./react/hooks";
 import "./search_result.css";
-import NoteList from "./collections/NoteList";
+import { SearchNoteList } from "./collections/NoteList";
 // import NoteListRenderer from "../services/note_list_renderer";
 
 enum SearchResultState {
@@ -13,7 +13,7 @@ enum SearchResultState {
 }
 
 export default function SearchResult() {
-    const { note, ntxId } = useNoteContext();
+    const { note, notePath, ntxId } = useNoteContext();
     const [ state, setState ] = useState<SearchResultState>();
     const [ highlightedTokens, setHighlightedTokens ] = useState<string[]>();
 
@@ -53,7 +53,12 @@ export default function SearchResult() {
             )}
 
             {state === SearchResultState.GOT_RESULTS && (
-                <NoteList note={note} highlightedTokens={highlightedTokens} />
+                <SearchNoteList
+                    note={note}
+                    notePath={notePath}
+                    highlightedTokens={highlightedTokens}
+                    ntxId={ntxId}
+                />
             )}
         </div>
     );

@@ -35,7 +35,7 @@ export default function NoteLink({ className, notePath, showNotePath, showNoteIc
         if (!ref.current || !jqueryEl) return;
         ref.current.replaceChildren(jqueryEl[0]);
         highlightSearch(ref.current);
-    }, [ jqueryEl ]);
+    }, [ jqueryEl, highlightedTokens ]);
 
     if (style) {
         jqueryEl?.css(style);

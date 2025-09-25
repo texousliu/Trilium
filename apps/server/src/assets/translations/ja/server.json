@@ -198,7 +198,9 @@
     "toggle-note-hoisting": "ノートホイスト切り替え",
     "unhoist-note": "ノートホイストを無効にする",
     "force-save-revision": "強制保存リビジョン",
-    "add-include-note-to-text": "埋め込みノートを追加"
+    "add-include-note-to-text": "埋め込みノートを追加",
+    "toggle-ribbon-tab-classic-editor": "リボンタブのクラシックエディターに切り替える",
+    "toggle-ribbon-tab-promoted-attributes": "リボンタブのプロモート属性を切り替える"
   },
   "login": {
     "title": "ログイン",
@@ -337,7 +339,9 @@
     "llm-chat-title": "ノートとチャット",
     "options-title": "オプション",
     "multi-factor-authentication-title": "多要素認証",
-    "etapi-title": "ETAPI"
+    "etapi-title": "ETAPI",
+    "visible-launchers-title": "可視化されたランチャー",
+    "inbox-title": "Inbox"
   },
   "notes": {
     "new-note": "新しいノート",
@@ -415,5 +419,6 @@
     "clipped-from": "このノートは元々{{- url}}から切り取られたものです",
     "no-content": "このノートには内容がありません。"
   },
-  "weekdayNumber": "第{weekNumber}週"
+  "weekdayNumber": "第{weekNumber}週",
+  "quarterNumber": "四半期 {quarterNumber}"
 }

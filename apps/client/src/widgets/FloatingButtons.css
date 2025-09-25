@@ -6,8 +6,8 @@
 .floating-buttons-children,
 .show-floating-buttons {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: var(--floating-buttons-vert-offset, 10px);
+    right: var(--floating-buttons-horiz-offset, 10px);
     display: flex;
     flex-direction: row;
     z-index: 100;
@@ -28,8 +28,8 @@
     transform: rotate(180deg);
 }
 
-.type-canvas .floating-buttons-children {
-    top: 70px;
+.type-canvas {
+    --floating-buttons-vert-offset: 70px;
 }
 
 .type-canvas .floating-buttons-children > * {

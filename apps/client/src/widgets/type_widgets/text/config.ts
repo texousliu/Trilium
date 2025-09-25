@@ -244,5 +244,9 @@ function getDisabledPlugins() {
         disabledPlugins.push("EmojiMention");
     }
 
+    if (options.get("textNoteSlashCommandsEnabled") !== "true") {
+        disabledPlugins.push("SlashCommand");
+    }
+
     return disabledPlugins;
 }

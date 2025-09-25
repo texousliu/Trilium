@@ -43,7 +43,7 @@ function index(req: Request, res: Response) {
         platform: process.platform,
         isElectron,
         hasNativeTitleBar: isElectron && nativeTitleBarVisible,
-        hasBackgroundEffects: isElectron && isWindows11 && !nativeTitleBarVisible,
+        hasBackgroundEffects: isElectron && isWindows11 && !nativeTitleBarVisible && options.backgroundEffects === "true",
         mainFontSize: parseInt(options.mainFontSize),
         treeFontSize: parseInt(options.treeFontSize),
         detailFontSize: parseInt(options.detailFontSize),

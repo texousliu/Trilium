@@ -332,7 +332,9 @@ export function useNoteRelation(note: FNote | undefined | null, relationName: Re
  *
  * @param note the note whose label to read/write.
  * @param labelName the name of the label to read/write.
- * @returns an array where the first element is the getter and the second element is the setter. The setter has a special behaviour for convenience: if the value is undefined, the label is created without a value (e.g. a tag), if the value is null then the label is removed.
+ * @returns an array where the first element is the getter and the second element is the setter. The setter has a special behaviour for convenience:
+ * - if the value is undefined, the label is created without a value (e.g. a tag)
+ * - if the value is null then the label is removed.
  */
 export function useNoteLabel(note: FNote | undefined | null, labelName: FilterLabelsByType<string>): [string | null | undefined, (newValue: string | null | undefined) => void] {
     const [ , setLabelValue ] = useState<string | null | undefined>();
@@ -352,9 +354,9 @@ export function useNoteLabel(note: FNote | undefined | null, labelName: FilterLa
 
     const setter = useCallback((value: string | null | undefined) => {
         if (note) {
-            if (value || value === undefined) {
+            if (value !== null) {
                 attributes.setLabel(note.noteId, labelName, value)
-            } else if (value === null) {
+            } else {
                 attributes.removeOwnedLabelByName(note, labelName);
             }
         }
@@ -592,10 +594,11 @@ export function useStaticTooltip(elRef: RefObject<Element>, config?: Partial<Too
     }, [ elRef, config ]);
 }
 
-export function useStaticTooltipWithKeyboardShortcut(elRef: RefObject<Element>, title: string, actionName: KeyboardActionNames | undefined) {
+export function useStaticTooltipWithKeyboardShortcut(elRef: RefObject<Element>, title: string, actionName: KeyboardActionNames | undefined, opts?: Omit<Partial<Tooltip.Options>, "title">) {
     const [ keyboardShortcut, setKeyboardShortcut ] = useState<string[]>();
     useStaticTooltip(elRef, {
-        title: keyboardShortcut?.length ? `${title} (${keyboardShortcut?.join(",")})` : title
+        title: keyboardShortcut?.length ? `${title} (${keyboardShortcut?.join(",")})` : title,
+        ...opts
     });
 
     useEffect(() => {

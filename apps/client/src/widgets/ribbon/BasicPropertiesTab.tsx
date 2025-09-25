@@ -341,7 +341,7 @@ function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
                         return <FormListItem
                             rtl={locale.rtl}
                             checked={checked}
-                            onClick={() => setCurrentNoteLanguage(locale.id)}
+                            onClick={() => setCurrentNoteLanguage(locale.id || null)}
                         >{locale.name}</FormListItem>
                     } else {
                         return <FormDropdownDivider />

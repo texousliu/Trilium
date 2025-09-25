@@ -152,7 +152,7 @@
 
     --launcher-pane-horiz-border-color: rgb(22, 22, 22);
     --launcher-pane-horiz-background-color: #282828;
-    --launcher-pane-horiz-text-color: #909090;
+    --launcher-pane-horiz-text-color: #b8b8b8;
     --launcher-pane-horiz-button-hover-color: #ffffff;
     --launcher-pane-horiz-button-hover-background: #ffffff1c;
     --launcher-pane-horiz-button-hover-shadow: unset;
@@ -172,9 +172,10 @@
 
     --tab-close-button-hover-background: #a45353;
     --tab-close-button-hover-color: white;
-
+    
     --active-tab-background-color: #ffffff1c;
     --active-tab-hover-background-color: var(--active-tab-background-color);
+    --active-tab-icon-color: #a9a9a9;
     --active-tab-text-color: #ffffffcd;
     --active-tab-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2), -1px -1px 3px rgba(0, 0, 0, 0.4);
     --active-tab-dragging-shadow: var(--active-tab-shadow), 0 0 20px rgba(0, 0, 0, 0.4);

@@ -1,4 +1,4 @@
-import type { AttachmentRow, EtapiTokenRow } from "@triliumnext/commons";
+import type { AttachmentRow, EtapiTokenRow, OptionNames } from "@triliumnext/commons";
 import type { AttributeType } from "../entities/fattribute.js";
 import type { EntityChange } from "../server_types.js";
 
@@ -67,7 +67,7 @@ export default class LoadResults {
     private revisionRows: RevisionRow[];
     private noteReorderings: string[];
     private contentNoteIdToComponentId: ContentNoteIdToComponentIdRow[];
-    private optionNames: string[];
+    private optionNames: OptionNames[];
     private attachmentRows: AttachmentRow[];
     public hasEtapiTokenChanges: boolean = false;
 
@@ -180,11 +180,11 @@ export default class LoadResults {
         return this.contentNoteIdToComponentId.find((l) => l.noteId === noteId && l.componentId !== componentId);
     }
 
-    addOption(name: string) {
+    addOption(name: OptionNames) {
         this.optionNames.push(name);
     }
 
-    isOptionReloaded(name: string) {
+    isOptionReloaded(name: OptionNames) {
         return this.optionNames.includes(name);
     }
 

@@ -84,7 +84,7 @@ button.btn.btn-success kbd {
  */
 
 :root .icon-action:not(.global-menu-button),
-:root .btn.tn-tool-button,
+:root .tn-tool-button,
 :root .btn-group .tn-tool-button:not(:last-child),
 :root .btn-group .tn-tool-button:last-child {
     width: var(--icon-button-size);
@@ -197,8 +197,8 @@ input[type="password"]:focus,
 input[type="date"]:focus,
 input[type="time"]:focus,
 input[type="datetime-local"]:focus,
-:root input.ck.ck-input-text:focus,
-:root input.ck.ck-input-number:focus,
+:root input.ck.ck-input-text:not([readonly="true"]):focus,
+:root input.ck.ck-input-number:not([readonly="true"]):focus,
 textarea.form-control:focus,
 textarea:focus,
 :root textarea.ck.ck-textarea:focus,

@@ -432,7 +432,12 @@
     "mime": "MIME: ",
     "file_size": "Tamanho do arquivo:",
     "preview": "Visualizar:",
-    "preview_not_available": "A visualização não está disponível para este tipo de nota."
+    "preview_not_available": "A visualização não está disponível para este tipo de nota.",
+    "diff_on": "Exibir diferença",
+    "diff_off": "Exibir conteúdo",
+    "diff_on_hint": "Clique para exibir a diferença de fonte da nota",
+    "diff_off_hint": "Clique para exibir o conteúdo da nota",
+    "diff_not_available": "A diferença não está disponível."
   },
   "sort_child_notes": {
     "sort_children_by": "Ordenar notas filhas por...",
@@ -774,7 +779,9 @@
     "apply-bulk-actions": "Aplicar ações em massa",
     "converted-to-attachments": "{{count}} notas foram convertidas em anexos.",
     "convert-to-attachment-confirm": "Tem certeza de que deseja converter as notas selecionadas em anexos de suas notas-pai?",
-    "open-in-popup": "Edição rápida"
+    "open-in-popup": "Edição rápida",
+    "archive": "Ficheiro",
+    "unarchive": "Desarquivar"
   },
   "command_palette": {
     "search_subtree_title": "Buscar na Subárvore",
@@ -843,7 +850,18 @@
     "september": "Setembro",
     "october": "Outubro",
     "november": "Novembro",
-    "december": "Dezembro"
+    "december": "Dezembro",
+    "week": "Semana",
+    "week_previous": "Semana passada",
+    "week_next": "Próxima semana",
+    "month": "Mês",
+    "month_previous": "Mês passado",
+    "month_next": "Próximo mês",
+    "year": "Ano",
+    "year_previous": "Ano passado",
+    "year_next": "Próximo ano",
+    "list": "Lista",
+    "today": "Hoje"
   },
   "close_pane_button": {
     "close_this_pane": "Fechar este painel"
@@ -995,7 +1013,8 @@
     "calendar": "Calendário",
     "table": "Tabela",
     "geo-map": "Mapa geográfico",
-    "board": "Quadro"
+    "board": "Quadro",
+    "include_archived_notes": "Exibir notas arquivadas"
   },
   "edited_notes": {
     "no_edited_notes_found": "Ainda não há nenhuma nota editada neste dia…",
@@ -1350,7 +1369,9 @@
     "title": "Desempenho",
     "enable-motion": "Habilitar transições e animações",
     "enable-shadows": "Habilitar sombras",
-    "enable-backdrop-effects": "Habilitar efeitos de fundo para menus, popups e painéis"
+    "enable-backdrop-effects": "Habilitar efeitos de fundo para menus, popups e painéis",
+    "enable-smooth-scroll": "Habilitar rolagem suave",
+    "app-restart-required": "(é necessário reiniciar o programa para que a mudança tenha efeito)"
   },
   "zoom_factor": {
     "title": "Fator do Zoom (apenas versão de área de trabalho)",
@@ -1730,7 +1751,7 @@
     "native-title-bar": "Barra de título nativa",
     "native-title-bar-description": "Para Windows e macOS, manter a barra de título nativa desabilitada faz a aplicação parecer mais compacta. No Linux, manter a barra de título nativa habilitada faz a aplicação se integrar melhor com o restante do sistema.",
     "background-effects": "Habilitar efeitos de fundo (apenas Windows 11)",
-    "background-effects-description": "O efeito Mica adicionar um fundo borrado e estilizado às janelas da aplicação, criando profundidade e um visual moderno.",
+    "background-effects-description": "O efeito Mica adiciona um fundo borrado e estilizado às janelas da aplicação, criando profundidade e um visual moderno. \"Barra de título nativa\" precisa ser desativada.",
     "restart-app-button": "Reiniciar a aplicação para ver as alterações",
     "zoom-factor": "Fator de Zoom"
   },
@@ -1865,14 +1886,21 @@
     "delete_row": "Excluir linha"
   },
   "board_view": {
-    "delete-note": "Excluir Nota",
+    "delete-note": "Deletar nota...",
     "move-to": "Mover para",
     "insert-above": "Inserir acima",
     "insert-below": "Inserir abaixo",
     "delete-column": "Excluir coluna",
     "delete-column-confirmation": "Tem certeza de que deseja excluir esta coluna? O atributo correspondente também será removido de todas as notas abaixo desta coluna.",
     "new-item": "Novo item",
-    "add-column": "Adicionar Coluna"
+    "add-column": "Adicionar Coluna",
+    "remove-from-board": "Remover do quadro",
+    "archive-note": "Arquivar nota",
+    "unarchive-note": "Desarquivar nota",
+    "new-item-placeholder": "Escreva o título da nota...",
+    "add-column-placeholder": "Escreva o nome da coluna...",
+    "edit-note-title": "Clique para editar o título da nota",
+    "edit-column-title": "Clique para editar o título da coluna"
   },
   "call_to_action": {
     "next_theme_title": "Testar no novo tema do Trilium",
@@ -1894,7 +1922,9 @@
     "percentage": "%"
   },
   "book": {
-    "no_children_help": "Esta coleção não possui nenhum nota filha, então não há nada para exibir. Veja <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> para detalhes."
+    "no_children_help": "Esta coleção não possui nenhum nota filha, então não há nada para exibir. Veja <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> para detalhes.",
+    "drag_locked_title": "Bloqueado para edição",
+    "drag_locked_message": "Arrastar não é permitido pois a coleção está bloqueada para edição."
   },
   "render": {
     "note_detail_render_help_1": "Esta nota de ajuda é mostrada porque esta nota do tipo Renderizar HTML não possui a relação necessária para funcionar corretamente.",
@@ -1978,7 +2008,7 @@
     "oauth_title": "OAuth/OpenID",
     "oauth_description": "OpenID é uma forma padronizada de permitir que você faça login em sites usando uma conta de outro serviço, como o Google, para verificar sua identidade. O emissor padrão é o Google, mas você pode alterá-lo para qualquer outro provedor OpenID. Consulte <a href=\"#root/_hidden/_help/_help_Otzi9La2YAUX/_help_WOcw2SLH6tbX/_help_7DAiwaf8Z7Rz\">aqui</a> para mais informações. Siga estas <a href=\"https://developers.google.com/identity/openid-connect/openid-connect\">instruções</a> para configurar um serviço OpenID através do Google.",
     "oauth_description_warning": "Para habilitar o OAuth/OpenID, você precisa definir a URL base do OAuth/OpenID, o client ID e o client secret no arquivo config.ini e reiniciar a aplicação. Se quiser configurar via variáveis de ambiente, defina TRILIUM_OAUTH_BASE_URL, TRILIUM_OAUTH_CLIENT_ID e TRILIUM_OAUTH_CLIENT_SECRET.",
-    "oauth_missing_vars": "Configurações ausentes: {{variables}}",
+    "oauth_missing_vars": "Configurações ausentes: {{-variables}}",
     "oauth_user_account": "Conta do Usuário: ",
     "oauth_user_email": "E-mail do Usuário: ",
     "oauth_user_not_logged_in": "Não está logado!"
@@ -2026,5 +2056,12 @@
     "help_link": "Para ajuda, visite a <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>.",
     "shared_publicly": "Esta nota é compartilhada publicamente em {{- link}}.",
     "shared_locally": "Esta nota é compartilhada localmente em {{- link}}."
+  },
+  "pagination": {
+    "page_title": "Página de {{startIndex}} - {{endIndex}}",
+    "total_notes": "{{count}} notas"
+  },
+  "collections": {
+    "rendering_error": "Não foi possível exibir o conteúdo devido a um erro."
   }
 }

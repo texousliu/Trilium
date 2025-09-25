@@ -165,9 +165,10 @@
 
     --tab-close-button-hover-background: #c95a5a;
     --tab-close-button-hover-color: white;
-
+    
     --active-tab-background-color: white;
     --active-tab-hover-background-color: var(--active-tab-background-color);
+    --active-tab-icon-color: gray;
     --active-tab-text-color: black;
     --active-tab-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1), -1px -1px 3px rgba(0, 0, 0, 0.05);
     --active-tab-dragging-shadow: var(--active-tab-shadow), 0 0 20px rgba(0, 0, 0, 0.1);

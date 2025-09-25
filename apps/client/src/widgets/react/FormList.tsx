@@ -86,6 +86,7 @@ interface FormListItemOpts {
     disabledTooltip?: string;
     checked?: boolean | null;
     selected?: boolean;
+    container?: boolean;
     onClick?: (e: MouseEvent) => void;
     triggerCommand?: CommandNames;
     description?: string;
@@ -98,7 +99,7 @@ const TOOLTIP_CONFIG: Partial<Tooltip.Options> = {
     fallbackPlacements: [ "right" ]
 }
 
-export function FormListItem({ className, icon, value, title, active, disabled, checked, onClick, selected, rtl, triggerCommand, description, ...contentProps }: FormListItemOpts) {
+export function FormListItem({ className, icon, value, title, active, disabled, checked, container, onClick, selected, rtl, triggerCommand, description, ...contentProps }: FormListItemOpts) {
     const itemRef = useRef<HTMLLIElement>(null);
 
     if (checked) {
@@ -110,9 +111,9 @@ export function FormListItem({ className, icon, value, title, active, disabled, 
     return (
         <li
             ref={itemRef}
-            class={`dropdown-item ${active ? "active" : ""} ${disabled ? "disabled" : ""} ${selected ? "selected" : ""} ${className ?? ""}`}
+            class={`dropdown-item ${active ? "active" : ""} ${disabled ? "disabled" : ""} ${selected ? "selected" : ""} ${container ? "dropdown-container-item": ""} ${className ?? ""}`}
             data-value={value} title={title}
-            tabIndex={0}
+            tabIndex={container ? -1 : 0}
             onClick={onClick}
             data-trigger-command={triggerCommand}
             dir={rtl ? "rtl" : undefined}
