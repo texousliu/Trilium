@@ -91,7 +91,7 @@ function SwitchSplitOrientationButton({ note, isReadOnly, isDefaultViewMode }: F
 
 function ToggleReadOnlyButton({ note, viewType, isDefaultViewMode }: FloatingButtonContext) {
     const [ isReadOnly, setReadOnly ] = useNoteLabelBoolean(note, "readOnly");
-    const isEnabled = ([ "mermaid", "mindMap" ].includes(note.type) || viewType === "geoMap")
+    const isEnabled = ([ "mermaid", "mindMap", "canvas" ].includes(note.type) || viewType === "geoMap")
             && note.isContentAvailable() && isDefaultViewMode;
 
     return isEnabled && <FloatingButton

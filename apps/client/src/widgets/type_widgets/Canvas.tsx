@@ -1,7 +1,7 @@
 import { Excalidraw, exportToSvg, getSceneVersion } from "@excalidraw/excalidraw";
 import { TypeWidgetProps } from "./type_widget";
 import "@excalidraw/excalidraw/index.css";
-import { useEditorSpacedUpdate } from "../react/hooks";
+import { useEditorSpacedUpdate, useNoteLabelBoolean } from "../react/hooks";
 import { useCallback, useMemo, useRef } from "preact/hooks";
 import { type ExcalidrawImperativeAPI, type AppState, type BinaryFileData, LibraryItem, ExcalidrawProps } from "@excalidraw/excalidraw/types";
 import options from "../../services/options";
@@ -29,7 +29,7 @@ interface CanvasContent {
 
 export default function Canvas({ note }: TypeWidgetProps) {
     const apiRef = useRef<ExcalidrawImperativeAPI>(null);
-    const isReadOnly = options.is("databaseReadonly");
+    const [ isReadOnly ] = useNoteLabelBoolean(note, "readOnly");
     const themeStyle = useMemo(() => {
         const documentStyle = window.getComputedStyle(document.documentElement);
         return documentStyle.getPropertyValue("--theme-style")?.trim() as AppState["theme"];
@@ -66,7 +66,7 @@ export default function Canvas({ note }: TypeWidgetProps) {
                     <Excalidraw
                         excalidrawAPI={api => apiRef.current = api}
                         theme={themeStyle}
-                        viewModeEnabled={isReadOnly}
+                        viewModeEnabled={isReadOnly || options.is("databaseReadonly")}
                         zenModeEnabled={false}
                         isCollaborating={false}
                         detectScroll={false}
