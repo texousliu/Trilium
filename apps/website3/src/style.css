@@ -20,6 +20,10 @@ body {
     color: black;
 }
 
+a {
+    color: var(--brand-3);
+}
+
 /* #region Header */
 header {
     padding: 1em;
