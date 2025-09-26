@@ -15,6 +15,14 @@ header .content-wrapper {
     gap: 1em;
 }
 
+header a.banner {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    text-decoration: none;
+    color: inherit;
+}
+
 header > .content-wrapper,
 section.hero-section > .content-wrapper {
     min-width: 80vw;

@@ -8,12 +8,11 @@ export function Header() {
 	return (
 		<header>
             <div class="content-wrapper">
-                <img src="./src/assets/icon-color.svg" width="300" height="300" />&nbsp;<span>Trilium Notes</span>
+                <a class="banner" href="/">
+                    <img src="./src/assets/icon-color.svg" width="300" height="300" />&nbsp;<span>Trilium Notes</span>
+                </a>
 
                 <nav>
-                    <a href="/" class={url == '/' && 'active'}>
-                        Home
-                    </a>
                     <a href="/404" class={url == '/404' && 'active'}>
                         404
                     </a>
