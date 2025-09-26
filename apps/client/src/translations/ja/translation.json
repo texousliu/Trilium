@@ -336,7 +336,7 @@
   },
   "recent_changes": {
     "title": "最近の変更",
-    "erase_notes_button": "削除したメモを今すぐ消去",
+    "erase_notes_button": "削除したノートを今すぐ消去",
     "deleted_notes_message": "削除されたノートは完全に消去されました。",
     "no_changes_message": "変更はまだありません...",
     "undelete_link": "削除を取り消す",
@@ -554,7 +554,7 @@
     "collections": "コレクション"
   },
   "edited_notes": {
-    "no_edited_notes_found": "この日の編集されたメモはまだありません...",
+    "no_edited_notes_found": "この日の編集されたノートはまだありません...",
     "title": "編集されたノート",
     "deleted": "（削除済み）"
   },
@@ -619,7 +619,8 @@
     "diff_off_hint": "クリックしてノートの内容を表示",
     "diff_not_available": "差分は利用できません。",
     "snapshot_interval": "ノートの変更履歴の記録間隔: {{seconds}} 秒。",
-    "maximum_revisions": "ノートの変更履歴の記録制限: {{number}}."
+    "maximum_revisions": "ノートの変更履歴の記録制限: {{number}}.",
+    "mime": "MIME: "
   },
   "attachments_actions": {
     "download": "ダウンロード",
@@ -720,7 +721,7 @@
     "content_and_attachments_and_revisions_size": "添付ファイルと編集履歴を含むノート内容のサイズ",
     "revision_count": "編集履歴の回数",
     "owned_label_count": "ラベルの数",
-    "owned_relation_count": "関係の数",
+    "owned_relation_count": "リレーションの数",
     "target_relation_count": "ノートを対象とするリレーションの数"
   },
   "table_view": {
@@ -741,7 +742,7 @@
     "delete_column_confirmation": "この列を本当に削除してもよろしいですか？対応する属性はすべてのノートから削除されます。",
     "delete-column": "列を削除",
     "new-column-label": "ラベル",
-    "new-column-relation": "関係"
+    "new-column-relation": "リレーション"
   },
   "search_script": {
     "title": "検索スクリプト:",
@@ -1121,7 +1122,7 @@
     "title_template": "このノートの子として作成されるノートのデフォルトのタイトルです。値は JavaScript 文字列として評価されるため、\n                        挿入された <code>now</code> および <code>parentNote</code> 変数を介して動的なコンテンツを追加できます。例: \n                         \n                        <ul> \n                            <li><code>${parentNote.getLabelValue('authorName')} の文学作品</code></li> \n                            <li><code>${now.format('YYYY-MM-DD HH:mm:ss')} のログ</code></li> \n                        </ul> \n                        \n                        詳細については <a href=\"https://triliumnext.github.io/Docs/Wiki/default-note-title.html\"> Wiki の詳細 </a> 、および <a href=\"https://zadam.github.io/trilium/backend_api/Note.html\">parentNote</a> と <a href=\"https://day.js.org/docs/en/display/format\">now</a> の API ドキュメントを参照してください。",
     "run_on_note_title_change": "ノートのタイトルが変更されたときに実行されます（ノートの作成も含む）",
     "run_on_note_content_change": "ノートの内容が変更されたときに実行されます（ノートの作成も含む）。",
-    "run_on_note_change": "ノートが変更されたときに実行されます（メモの作成も含む）。内容の変更は含まれません",
+    "run_on_note_change": "ノートが変更されたときに実行されます（ノートの作成も含む）。内容の変更は含まれません",
     "run_on_note_deletion": "ノートが削除されたときに実行されます",
     "run_on_branch_creation": "ブランチが作成されたときに実行されます。ブランチは親ノートと子ノート間のリンクであり、例えばノートの複製や移動の際に作成されます。",
     "run_on_branch_change": "ブランチが更新されたときに実行されます。",
@@ -1171,7 +1172,8 @@
   "open-help-page": "ヘルプページを開く",
   "shared_info": {
     "help_link": "ヘルプについては、<a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a>をご覧ください。",
-    "shared_locally": "このノートは {{- link}} でローカルに共有されています。"
+    "shared_locally": "このノートは {{- link}} でローカルに共有されています。",
+    "shared_publicly": "このノートは {{- link}} で一般公開されています。"
   },
   "highlights_list_2": {
     "title": "ハイライトリスト",
@@ -1209,7 +1211,7 @@
     "execute_bulk_actions": "一括操作を実行",
     "bulk_actions_executed": "一括操作が成功に実行されました。",
     "labels": "ラベル",
-    "relations": "関係",
+    "relations": "リレーション",
     "notes": "ノート",
     "other": "その他",
     "none_yet": "アクションを上のリストからクリックして追加。"
@@ -1346,7 +1348,8 @@
     "emoji_completion_description": "有効にすると、「:」に続けて絵文字の名前を入力することで、テキストに絵文字を簡単に挿入できます。",
     "note_completion_description": "有効にすると、「@」 に続けてノートのタイトルを入力することで、ノートへのリンクを作成できます。",
     "slash_commands_enabled": "スラッシュコマンドを有効",
-    "slash_commands_description": "有効にすると、改行や見出しの挿入などの編集コマンドは、「/」 と入力して切り替えることができます。"
+    "slash_commands_description": "有効にすると、改行や見出しの挿入などの編集コマンドは、「/」 と入力して切り替えることができます。",
+    "title": "機能"
   },
   "table_context_menu": {
     "delete_row": "行を削除"
@@ -1414,7 +1417,8 @@
     "agent": {
       "processing": "処理中...",
       "loading": "読み込み中...",
-      "generating": "生成中..."
+      "generating": "生成中...",
+      "thinking": "考え中..."
     },
     "name": "AI",
     "openai": "OpenAI",
@@ -1422,7 +1426,7 @@
     "ollama_no_url": "Ollamaは設定されていません。有効なURLを入力してください。",
     "chat": {
       "root_note_title": "AIチャット",
-      "root_note_content": "このメモには、保存されたAIチャットの会話が含まれています。",
+      "root_note_content": "このノートには、保存されたAIチャットの会話が含まれています。",
       "new_chat_title": "新しいチャット",
       "create_new_ai_chat": "新しいAIチャットを作成"
     },
@@ -1432,7 +1436,71 @@
     "selected_provider_description": "チャットおよび補完機能のAIプロバイダーを選択する",
     "selected_provider": "プロバイダーを選択",
     "select_model": "モデルを選択...",
-    "select_provider": "プロバイダーを選択..."
+    "select_provider": "プロバイダーを選択...",
+    "not_started": "開始されていません",
+    "processed_notes": "処理済みノート",
+    "total_notes": "ノートの総数",
+    "progress": "進行状況",
+    "queued_notes": "キューに登録されたノート",
+    "failed_notes": "失敗したノート",
+    "last_processed": "最終処理日時",
+    "refresh_stats": "統計情報を更新",
+    "temperature": "Temperature（温度）",
+    "url": "ベースURL",
+    "base_url": "ベースURL",
+    "enable_automatic_indexing": "自動インデックス作成を有効にする",
+    "rebuild_index": "インデックスの再構築",
+    "rebuild_index_error": "インデックスの再構築開始時にエラーが発生しました。詳細はログをご確認ください。",
+    "note_title": "ノートのタイトル",
+    "last_attempt": "最終試行日時",
+    "actions": "アクション",
+    "retry_queued": "ノートが再試行キューに追加されました",
+    "retry_failed": "ノートを再試行キューに追加できませんでした",
+    "max_notes_per_llm_query": "クエリあたりの最大ノート数",
+    "max_notes_per_llm_query_description": "AIコンテキストに含める類似ノートの最大数",
+    "active_providers": "アクティブなプロバイダー",
+    "disabled_providers": "無効なプロバイダー",
+    "remove_provider": "検索からプロバイダーを削除",
+    "restore_provider": "検索にプロバイダーを復元",
+    "similarity_threshold": "類似度のしきい値",
+    "similarity_threshold_description": "LLMクエリのコンテキストに含めるノートの最小類似度スコア（0～1）",
+    "reprocess_index": "検索インデックスを再構築",
+    "reprocessing_index": "再構築中...",
+    "reprocess_index_started": "検索インデックスの最適化がバックグラウンドで開始されました",
+    "reprocess_index_error": "検索インデックスの再構築中にエラーが発生しました",
+    "index_rebuild_progress": "インデックスの再構築の進行状況",
+    "index_rebuilding": "インデックスの最適化中（{{percentage}}%）",
+    "index_rebuild_complete": "インデックスの最適化が完了しました",
+    "index_rebuild_status_error": "インデックスの再構築ステータスの確認中にエラーが発生しました",
+    "never": "なし",
+    "incomplete": "未完了 ({{percentage}}%)",
+    "note_queued_for_retry": "ノートが再試行キューに追加されました",
+    "failed_to_retry_note": "ノートの再試行に失敗しました",
+    "all_notes_queued_for_retry": "失敗したすべてのノートは再試行のためにキューに入れられました",
+    "failed_to_retry_all": "ノートの再試行に失敗しました",
+    "use_enhanced_context": "拡張されたコンテキストを使用する",
+    "enhanced_context_description": "ノートとその関連ノートからより多くのコンテキストをAIに提供し、より良い応答を実現します",
+    "show_thinking": "思考を表示",
+    "show_thinking_description": "AIの思考プロセスをチェーン表示",
+    "enter_message": "メッセージを入力...",
+    "error_generating_response": "AI応答の生成中にエラーが発生しました",
+    "index_all_notes": "すべてのノートをインデックスに登録",
+    "index_status": "インデックスのステータス",
+    "indexed_notes": "インデックス登録済みのノート",
+    "indexing_stopped": "インデックス登録を停止しました",
+    "indexing_in_progress": "インデックス登録中です...",
+    "last_indexed": "最終インデックス作成日時",
+    "n_notes_queued_0": "{{ count }} 件のノートがインデックス作成待ちです",
+    "note_chat": "ノートチャット",
+    "notes_indexed_0": "{{ count }} 件のノートをインデックスしました",
+    "sources": "ソース",
+    "start_indexing": "インデックス作成を開始",
+    "use_advanced_context": "高度なコンテキストを使用",
+    "ai_enabled": "AI 機能が有効",
+    "ai_disabled": "AI 機能が無効",
+    "no_models_found_online": "モデルが見つかりません。API キーと設定を確認してください。",
+    "no_models_found_ollama": "Ollama モデルが見つかりません。Ollama が実行中かどうかを確認してください。",
+    "error_fetching": "モデルの取得エラー: {{error}}"
   },
   "add_label": {
     "add_label": "ラベルを追加",
@@ -1468,28 +1536,28 @@
     "to_value": "値"
   },
   "add_relation": {
-    "add_relation": "関係を追加",
-    "relation_name": "関係の名前",
+    "add_relation": "リレーションを追加",
+    "relation_name": "リレーションの名前",
     "allowed_characters": "英数字、アンダーバー、コロンが使用可能な文字です。",
     "create_relation_on_all_matched_notes": "一致したすべてのノートに対して、指定されたリレーションを作成します。",
     "target_note": "対象のノート"
   },
   "delete_relation": {
-    "delete_relation": "関係を削除",
-    "relation_name": "関係の名前",
+    "delete_relation": "リレーションを削除",
+    "relation_name": "リレーションの名前",
     "allowed_characters": "英数字、アンダーバー、コロンが使用可能な文字です。"
   },
   "rename_relation": {
-    "rename_relation": "関係の名前を変更",
-    "rename_relation_from": "関係の名前を",
+    "rename_relation": "リレーションの名前を変更",
+    "rename_relation_from": "リレーションの名前を",
     "old_name": "古い名前",
     "to": "から",
     "new_name": "新しい名前",
     "allowed_characters": "英数字、アンダーバー、コロンが使用可能な文字です。"
   },
   "update_relation_target": {
-    "update_relation": "関係の更新",
-    "relation_name": "関係の名前",
+    "update_relation": "リレーションの更新",
+    "relation_name": "リレーションの名前",
     "allowed_characters": "英数字、アンダーバー、コロンが使用可能な文字です。",
     "on_all_matched_notes": "一致したすべてのノートに",
     "target_note": "対象のノート",
@@ -1505,7 +1573,7 @@
   "zpetne_odkazy": {
     "backlink": "{{count}} バックリンク",
     "backlinks": "{{count}} バックリンク",
-    "relation": "関係"
+    "relation": "リレーション"
   },
   "mobile_detail_menu": {
     "delete_this_note": "このノートを削除",
@@ -1535,7 +1603,8 @@
     "add_new_attribute": "新しい属性を追加",
     "remove_this_attribute": "この属性を削除",
     "remove_color": "このカラーラベルを削除",
-    "promoted_attributes": "プロモート属性"
+    "promoted_attributes": "プロモート属性",
+    "url_placeholder": "http://ウェブサイト..."
   },
   "relation_map": {
     "open_in_new_tab": "新しいタブで開く",
@@ -1543,9 +1612,9 @@
     "edit_title": "タイトルを編集",
     "rename_note": "ノート名を変更",
     "enter_new_title": "新しいノート名を入力:",
-    "remove_relation": "関係を削除",
-    "confirm_remove_relation": "本当にこの関係を削除しますか？",
-    "specify_new_relation_name": "新しい関係の名前（使用可能な文字: 英数字、コロン、アンダースコア）を指定:",
+    "remove_relation": "リレーションを削除",
+    "confirm_remove_relation": "本当にこのリレーションを削除しますか？",
+    "specify_new_relation_name": "新しいリレーションの名前（使用可能な文字: 英数字、コロン、アンダースコア）を指定:",
     "note_not_found": "ノート {{noteId}} が見つかりません！",
     "enter_title_of_new_note": "新しいノートのタイトルを入力",
     "default_new_note_title": "新しいノート",
@@ -1619,7 +1688,7 @@
     "native-title-bar": "ネイティブタイトルバー",
     "native-title-bar-description": "WindowsとmacOSでは、ネイティブタイトルバーをオフにしておくと、アプリケーションがよりコンパクトに見えます。Linuxでは、ネイティブタイトルバーを表示したままの方が、他のシステムとの統一性が高まります。",
     "background-effects": "背景効果を有効化（Windows 11のみ）",
-    "background-effects-description": "Mica効果は、アプリのウィンドウにぼかされたスタイリッシュな背景を追加し、奥行きとモダンな外観を作り出します。",
+    "background-effects-description": "Mica効果は、アプリのウィンドウにぼかされたスタイリッシュな背景を追加し、奥行きとモダンな外観を演出します。「ネイティブタイトルバー」を無効にする必要があります。",
     "restart-app-button": "アプリケーションを再起動して変更を反映",
     "zoom-factor": "ズーム倍率"
   },
@@ -1830,7 +1899,9 @@
   "ws": {
     "sync-check-failed": "同期チェックに失敗しました！",
     "consistency-checks-failed": "整合性チェックに失敗しました！ 詳細はログを参照してください。",
-    "encountered-error": "エラー「{{message}}」が発生しました。コンソールを確認してください。"
+    "encountered-error": "エラー「{{message}}」が発生しました。コンソールを確認してください。",
+    "lost-websocket-connection-title": "サーバーへの接続が失われました",
+    "lost-websocket-connection-message": "リバースプロキシ（例: nginx や Apache など）の設定を確認し、WebSocket 接続が適切に許可され、ブロックされていないことを確認してください。"
   },
   "hoisted_note": {
     "confirm_unhoisting": "要求されたノート「{{requestedNote}}」は、ホイストされたノート「{{hoistedNote}}」サブツリーの外部にあるため、ノートにアクセスするにはホイストを解除する必要があります。ホイスト解除を続行しますか？"
@@ -1940,12 +2011,41 @@
     "disabled": "無効"
   },
   "options_widget": {
-    "options_change_saved": "オプションの変更が保存されました。"
+    "options_change_saved": "オプションの変更が保存されました。",
+    "options_status": "オプションステータス"
   },
   "multi_factor_authentication": {
     "title": "多要素認証",
     "description": "多要素認証（MFA）は、アカウントのセキュリティをさらに強化します。ログイン時にパスワードを入力するだけでなく、MFAでは本人確認のために1つ以上の追加情報の入力を求められます。これにより、たとえ誰かがパスワードを入手したとしても、2つ目の情報がなければアカウントにアクセスできません。まるでドアに鍵を追加したようなもので、他人が侵入するのがはるかに困難になります。<br><br>MFAを有効にするには、以下の手順に従ってください。正しく設定しないと、ログインはパスワードのみで行われます。",
-    "mfa_enabled": "多要素認証を有効にする"
+    "mfa_enabled": "多要素認証を有効にする",
+    "mfa_method": "MFAメソッド",
+    "electron_disabled": "現在、デスクトップ ビルドでは多要素認証はサポートされていません。",
+    "totp_title": "時間ベースのワンタイムパスワード (TOTP)",
+    "totp_description": "TOTP（時間ベースのワンタイムパスワード）は、30秒ごとに変化する一意の一時的なコードを生成するセキュリティ機能です。このコードとパスワードを使用してアカウントにログインすることで、他人がアクセスするのを大幅に困難にします。",
+    "totp_secret_title": "TOTPシークレットを生成する",
+    "totp_secret_generate": "TOTPシークレットを生成する",
+    "totp_secret_regenerate": "TOTPシークレットを再生成する",
+    "no_totp_secret_warning": "TOTP を有効にするには、まず TOTP シークレットを生成する必要があります。",
+    "totp_secret_description_warning": "新しい TOTP シークレットを生成したら、新しい TOTP シークレットを使用して再度ログインする必要があります。",
+    "totp_secret_generated": "TOTPシークレットが生成されました",
+    "totp_secret_warning": "生成されたシークレットは安全な場所に保存してください。再度表示されることはありません。",
+    "totp_secret_regenerate_confirm": "OTP シークレットを再生成してもよろしいですか？これにより、以前の TOTP シークレットと既存のすべての回復コードが無効になります。",
+    "recovery_keys_title": "シングルサインオン回復キー",
+    "recovery_keys_description": "シングル サインオン回復キーは、認証コードにアクセスできない場合でもログインするために使用されます。",
+    "recovery_keys_description_warning": "回復キーはページを離れた後は再度表示されませんので、安全な場所に保管してください。<br>回復キーは一度使用すると再度使用できなくなります。",
+    "recovery_keys_error": "回復コードの生成中にエラーが発生しました",
+    "recovery_keys_no_key_set": "回復コードが設定されていません",
+    "recovery_keys_generate": "回復コードを生成する",
+    "recovery_keys_regenerate": "回復コードの再生成",
+    "recovery_keys_used": "使用日: {{date}}",
+    "recovery_keys_unused": "回復コード {{index}} は未使用です",
+    "oauth_title": "OAuth/OpenID",
+    "oauth_description": "OpenIDは、Googleなどの他のサービスのアカウントを使用してウェブサイトにログインし、本人確認を行うための標準化された方法です。デフォルトの発行者はGoogleですが、他のOpenIDプロバイダに変更できます。詳しくは<a href=\"#root/_hidden/_help/_help_Otzi9La2YAUX/_help_WOcw2SLH6tbX/_help_7DAiwaf8Z7Rz\">こちら</a>をご覧ください。Google経由でOpenIDサービスを設定するには、<a href=\"https://developers.google.com/identity/openid-connect/openid-connect\">こちらの手順</a>に従ってください。",
+    "oauth_description_warning": "OAuth/OpenIDを有効にするには、config.iniファイルにOAuth/OpenIDのベースURL、クライアントID、クライアントシークレットを設定し、アプリケーションを再起動する必要があります。環境変数から設定する場合は、TRILIUM_OAUTH_BASE_URL, TRILIUM_OAUTH_CLIENT_ID and TRILIUM_OAUTH_CLIENT_SECRET を設定してください。",
+    "oauth_missing_vars": "設定がありません: {{-variables}}",
+    "oauth_user_account": "ユーザーアカウント: ",
+    "oauth_user_email": "ユーザーEメール: ",
+    "oauth_user_not_logged_in": "ログインしていません！"
   },
   "note-map": {
     "button-link-map": "リンクマップ",
@@ -1953,5 +2053,13 @@
   },
   "spacer": {
     "configure_launchbar": "ランチャーバーを設定"
+  },
+  "attachment_detail_2": {
+    "will_be_deleted_in": "この添付ファイルは {{time}} 後に自動的に削除されます",
+    "will_be_deleted_soon": "この添付ファイルはすぐに自動的に削除されます",
+    "deletion_reason": "、添付ファイルがノートのコンテンツにリンクされていないためです。削除されないようにするには、添付ファイルのリンクをコンテンツに再度追加するか、添付ファイルをノートに変換してください。",
+    "role_and_size": "ロール: {{role}},サイズ: {{size}}",
+    "link_copied": "添付ファイルのリンクをクリップボードにコピーしました。",
+    "unrecognized_role": "添付ファイルのロール「{{role}}」は認識されません。"
   }
 }
