@@ -1,3 +1,4 @@
+import { ComponentChildren } from 'preact';
 import Card from '../../components/Card';
 import Section from '../../components/Section';
 
@@ -46,6 +47,24 @@ export function Home() {
                     <Card title="Geomap" imageUrl="./src/assets/collection_geomap.png">Plan your vacations or mark your points of interest directly on a geographical map using customizable markers. Display recorded GPX tracks to track itineraries.</Card>
                 </div>
             </Section>
+
+            <Section className="faq" title="Frequently Asked Questions">
+                <FaqItem question="Where is the data stored?">All your notes will be stored in an SQLite database in an application folder. The reasoning why Trilium uses a database instead of plain text files is both performance and some features would be much more difficult to implement such as clones (same note in multiple places in the tree). To find the application folder, simply go to the About window.</FaqItem>
+                <FaqItem question="Do I need a server to use Trilium?">No, the server allows access via a web browser and manages the synchronization if you have multiple devices. To get started, it's enough to download the desktop application and start using it.</FaqItem>
+                <FaqItem question="Can I share my database over a network drive?">No, it's generally not a good idea to share a SQLite database over a network drive. Although sometimes it might work, there are chances that the database will get corrupted due to imperfect file locks over a network.</FaqItem>
+                <FaqItem question="How is my data protected?">By default, notes are not encrypted and can be read directly from the database. Once a note is marked as encrypted, the note is encrypted using AES-128-CBC.</FaqItem>
+                <FaqItem question="Is there a mobile application?">Currently there is no official mobile application. However, if you have a server instance you can access it using a web browser and even install it as a PWA. For Android, there is an unofficial application called TriliumDroid that even works offline (same as a desktop client).</FaqItem>
+                <FaqItem question="How well does the application scale with a large amount of notes?">Depending on usage, the application should be able to handle at least 100.000 notes without an issue. Do note that the sync process can sometimes fail if uploading many large files (&gt; 1 GB per file) since Trilium is meant more as a knowledge base application rather than a file store (like NextCloud, for example).</FaqItem>
+            </Section>
         </>
 	);
+}
+
+function FaqItem({ question, children }: { question: string; children: ComponentChildren }) {
+    return (
+        <details>
+            <summary>{question}</summary>
+            <p>{children}</p>
+        </details>
+    )
 }

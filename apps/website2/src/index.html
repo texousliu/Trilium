@@ -34,36 +34,6 @@
         </div>
     </section>
 
-    <section class="faq">
-        <div class="content-wrapper">
-            <h2> FAQ </h2>
-            <details>
-                <summary> Where is the data stored? </summary>
-                <p>All your notes will be stored in an SQLite database in an application folder. The reasoning why Trilium uses a database instead of plain text files is both performance and some features would be much more difficult to implement such as clones (same note in multiple places in the tree). To find the application folder, simply go to the About window. </p>
-            </details>
-            <details>
-                <summary> Do I need a server to use Trilium? </summary>
-                <p>No, the server allows access via a web browser and manages the synchronization if you have multiple devices. To get started, it's enough to download the desktop application and start using it. </p>
-            </details>
-            <details>
-                <summary> Can I share my database over a network drive? </summary>
-                <p>No, it's generally not a good idea to share a SQLite database over a network drive. Although sometimes it might work, there are chances that the database will get corrupted due to imperfect file locks over a network. </p>
-            </details>
-            <details>
-                <summary> How is my data protected? </summary>
-                <p>By default, notes are not encrypted and can be read directly from the database. Once a note is marked as encrypted, the note is encrypted using AES-128-CBC.</p>
-            </details>
-            <details>
-                <summary> Is there a mobile application? </summary>
-                <p>Currently there is no official mobile application. However, if you have a server instance you can access it using a web browser and even install it as a PWA. For Android, there is an unofficial application called TriliumDroid that even works offline (same as a desktop client).</p>
-            </details>
-            <details>
-                <summary> How well does the application scale with a large amount of notes? </summary>
-                <p>Depending on usage, the application should be able to handle at least 100.000 notes without an issue. Do note that the sync process can sometimes fail if uploading many large files (&gt; 1 GB per file) since Trilium is meant more as a knowledge base application rather than a file store (like NextCloud, for example).</p>
-            </details>
-        </div>
-    </section>    
-
     <footer>
         <div class="content-wrapper">
             <p>
