@@ -68,6 +68,21 @@ function renderIndex(result: Result) {
 function renderText(result: Result, note: SNote) {
     const document = new JSDOM(result.content || "").window.document;
 
+    // Process include notes.
+    for (const includeNoteEl of document.querySelectorAll("section.include-note")) {
+        const noteId = includeNoteEl.getAttribute("data-note-id");
+        if (!noteId) continue;
+
+        const note = shaca.getNote(noteId);
+        if (!note) continue;
+
+        const includedResult = getContent(note);
+        if (typeof includedResult.content !== "string") continue;
+
+        const includedDocument = new JSDOM(includedResult.content).window.document;
+        includeNoteEl.replaceWith(includedDocument.body);
+    }
+
     result.isEmpty = document.body.textContent?.trim().length === 0 && document.querySelectorAll("img").length === 0;
 
     if (!result.isEmpty) {
