@@ -1,5 +1,6 @@
 {
 	"private": true,
+	"name": "@triliumnext/website",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
