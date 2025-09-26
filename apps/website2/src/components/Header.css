@@ -2,7 +2,7 @@ header {
     padding: 1em;
     position: sticky;
     top: 0;
-    background: rgba(255, 255, 255, 0.75);
+    background: var(--header-background-color);
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(20px);
     z-index: 1000;
