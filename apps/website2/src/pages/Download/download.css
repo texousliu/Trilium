@@ -38,3 +38,31 @@
     width: 75%;
     margin: auto;
 }
+
+.architecture-switch {
+    display: flex;
+    gap: 1em;
+    justify-content: center;
+    align-items: center;
+    margin: 1em 0;
+}
+
+.architecture-switch a {
+    display: inline-block;
+    background: var(--card-background-color);
+    padding: 0.25em 0.5em;
+    text-decoration: none;
+    text-align: center;
+    min-width: 3em;
+    color: inherit;
+}
+
+.architecture-switch .toggle-wrapper {
+    border-radius: calc(infinity * 1px);
+    overflow: hidden;
+}
+
+.architecture-switch a.active {
+    background-color: var(--brand-1);
+    color: inherit;
+}

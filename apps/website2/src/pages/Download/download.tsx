@@ -5,19 +5,33 @@ import { App, Architecture, buildDownloadUrl, downloadMatrix, DownloadMatrixEntr
 import "./download.css";
 
 export default function DownloadPage() {
-    const [ arch, setArch ] = useState(getArchitecture());
+    const [ currentArch, setCurrentArch ] = useState(getArchitecture());
 
     return (
         <>
             <Section title="Download the desktop application">
+                <div className="architecture-switch">
+                    <span>Architecture:</span>
+
+                    <div class="toggle-wrapper">
+                        {(["x64", "arm64"] as const).map(arch => (
+                            <a
+                                href="#"
+                                className={`arch ${arch === currentArch ? "active" : ""}`}
+                                onClick={() => setCurrentArch(arch)}
+                            >{arch}</a>
+                        ))}
+                    </div>
+                </div>
+
                 <div className="grid-3-cols download-desktop">
-                    {Object.entries(downloadMatrix.desktop).map(entry => <DownloadCard app="desktop" arch={arch} entry={entry} />)}
+                    {Object.entries(downloadMatrix.desktop).map(entry => <DownloadCard app="desktop" arch={currentArch} entry={entry} />)}
                 </div>
             </Section>
 
             <Section title="Set up a server for access on multiple devices">
                 <div className="grid-2-cols download-server">
-                    {Object.entries(downloadMatrix.server).map(entry => <DownloadCard app="server" arch={arch} entry={entry} />)}
+                    {Object.entries(downloadMatrix.server).map(entry => <DownloadCard app="server" arch={currentArch} entry={entry} />)}
                 </div>
             </Section>
         </>
