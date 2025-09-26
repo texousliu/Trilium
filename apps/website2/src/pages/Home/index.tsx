@@ -22,7 +22,11 @@ function HeroSection() {
             <div class="title-section">
                 <h1>Organize your thoughts. Build your personal knowledge base.</h1>
                 <p>Trilium is an open-source solution for note-taking and organizing a personal knowledge base. Use it locally on your desktop, or sync it with your self-hosted server to keep your notes everywhere you go.</p>
-                <DownloadButton big />
+
+                <div className="download-wrapper">
+                    <DownloadButton big />
+                    <a class="more-download-options" href="./download">more options</a>
+                </div>
             </div>
 
             <figure class="image"><img src="./src/assets/screenshot_desktop_win.png" /></figure>

@@ -63,11 +63,13 @@ section.hero-section > .content-wrapper {
 
 section.hero-section .title-section {
     flex-basis: 40%;
+    color: var(--muted-color);
 }
 
 section.hero-section .title-section h1 {
     line-height: 1.1;
     font-weight: 100;
+    color: var(--foreground-color);
 }
 
 section.hero-section .image,
@@ -75,6 +77,22 @@ section.hero-section .image img {
     width: 100%;
     height: auto;
     position: relative;
+}
+
+section.hero-section .download-wrapper {
+    display: inline-flex;
+    flex-direction: column;
+}
+
+section.hero-section .download-button {
+    margin-bottom: 0.25em;
+}
+
+section.hero-section .more-download-options {
+    display: inline-block;
+    color: var(--brand-1);
+    font-size: 0.8em;
+    text-align: center;
 }
 
 section:nth-of-type(2n+1) {
