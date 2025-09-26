@@ -88,9 +88,9 @@
     "duplicate-subtree": "サブツリーの複製",
     "edit-branch-prefix": "「ブランチ接頭辞の編集」ダイアログを表示",
     "show-revisions": "「ノートの変更履歴」ダイアログを表示",
-    "attributes-labels-and-relations": "属性（ラベルと関係）",
+    "attributes-labels-and-relations": "属性（ラベルとリレーション）",
     "add-new-label": "新しいラベルを作成する",
-    "create-new-relation": "新しい関係を作成する",
+    "create-new-relation": "新しいリレーションを作成する",
     "toggle-basic-properties": "基本属性切り替え",
     "toggle-file-properties": "ファイル属性切り替え",
     "toggle-image-properties": "画像属性切り替え",
@@ -184,7 +184,7 @@
     "edit-branch-prefix": "ブランチ接頭辞の編集",
     "show-revisions": "変更履歴を表示",
     "add-new-label": "ラベルを追加",
-    "add-new-relation": "関係を追加",
+    "add-new-relation": "リレーションを追加",
     "toggle-ribbon-tab-basic-properties": "リボンタブ切り替え：基本属性",
     "toggle-ribbon-tab-book-properties": "リボンタブ切り替え：書籍属性",
     "toggle-ribbon-tab-file-properties": "リボンタブ切り替え：ファイル属性",
@@ -253,7 +253,8 @@
     "password": "パスワード",
     "password-placeholder": "パスワード",
     "finish-setup": "セットアップ完了",
-    "back": "戻る"
+    "back": "戻る",
+    "note": "ノート:"
   },
   "setup_sync-in-progress": {
     "heading": "同期中",
@@ -417,7 +418,9 @@
   },
   "share_page": {
     "clipped-from": "このノートは元々{{- url}}から切り取られたものです",
-    "no-content": "このノートには内容がありません。"
+    "no-content": "このノートには内容がありません。",
+    "parent": "親:",
+    "child-notes": "子ノート:"
   },
   "weekdayNumber": "第{weekNumber}週",
   "quarterNumber": "四半期 {quarterNumber}",
