@@ -1,18 +1,20 @@
-type App = "desktop" | "server";
+import rootPackageJson from '../../../package.json';
 
-type Architecture = 'x64' | 'arm64';
+export type App = "desktop" | "server";
 
-type Platform = "macos" | "windows" | "linux" | "pikapod";
+export type Architecture = 'x64' | 'arm64';
 
-const version = "0.99.0";
+export type Platform = "macos" | "windows" | "linux" | "pikapod";
 
-interface DownloadInfo {
+const version = rootPackageJson.version;
+
+export interface DownloadInfo {
     recommended?: boolean;
     name: string;
     url?: string;
 }
 
-interface DownloadMatrixEntry {
+export interface DownloadMatrixEntry {
     title: Record<Architecture, string> | string;
     description: Record<Architecture, string> | string;
     downloads: Record<string, DownloadInfo>;
@@ -21,7 +23,7 @@ interface DownloadMatrixEntry {
 type DownloadMatrix = Record<App, { [ P in Platform ]?: DownloadMatrixEntry }>;
 
 // Keep compatibility info inline with https://github.com/electron/electron/blob/main/README.md#platform-support.
-const downloadMatrix: DownloadMatrix = {
+export const downloadMatrix: DownloadMatrix = {
     desktop: {
         windows: {
             title: {
@@ -145,7 +147,7 @@ const downloadMatrix: DownloadMatrix = {
     }
 };
 
-function buildDownloadUrl(app: App, platform: Platform, format: string, architecture: Architecture): string {
+export function buildDownloadUrl(app: App, platform: Platform, format: string, architecture: Architecture): string {
     if (app === "desktop") {
         return downloadMatrix.desktop[platform]?.downloads[format].url ??
             `https://github.com/TriliumNext/Trilium/releases/download/v${version}/TriliumNotes-v${version}-${platform}-${architecture}.${format}`;
@@ -156,7 +158,7 @@ function buildDownloadUrl(app: App, platform: Platform, format: string, architec
     }
 }
 
-function getArchitecture(): Architecture {
+export function getArchitecture(): Architecture {
     const userAgent = navigator.userAgent.toLowerCase();
     if (userAgent.includes('arm64') || userAgent.includes('aarch64')) {
         return 'arm64';
@@ -176,7 +178,7 @@ function getPlatform(): Platform {
     }
 }
 
-function getRecommendedDownload() {
+export function getRecommendedDownload() {
     const architecture = getArchitecture();
     const platform = getPlatform();
 
@@ -191,18 +193,3 @@ function getRecommendedDownload() {
         url
     }
 }
-
-function applyAutomaticDownloadButtons() {
-    const buttons = document.querySelectorAll<HTMLLinkElement>(".download-button");
-    const { url, architecture, platform } = getRecommendedDownload();
-
-    for (const button of buttons) {
-        button.href = url;
-
-        const platformEl = button.querySelector(".platform");
-        if (!platformEl) continue;
-        platformEl.textContent = [ architecture, platform ].join(" ");
-    }
-}
-
-applyAutomaticDownloadButtons();

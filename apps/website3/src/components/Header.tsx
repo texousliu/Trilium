@@ -1,4 +1,5 @@
 import { useLocation } from 'preact-iso';
+import DownloadButton from './DownloadButton';
 
 export function Header() {
 	const { url } = useLocation();
@@ -16,6 +17,8 @@ export function Header() {
                         404
                     </a>
                 </nav>
+
+                <DownloadButton />
             </div>
 		</header>
 	);

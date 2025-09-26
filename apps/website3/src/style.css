@@ -229,7 +229,7 @@ span.text-big {
     opacity: 0.75;
 }
 
-.hero-section .download-button {
+.download-button.big {
     padding: 1em 2em;
     margin: 1em 0;
 }
