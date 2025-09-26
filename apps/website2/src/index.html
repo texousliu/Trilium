@@ -1,1 +1,1105 @@
-Pure HTML
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			:root {
+                --card-bg: #fff;
+                --brand-1: #e47b19;
+                --brand-2: #4fa52b;
+                --brand-3: #e33f3b;
+                --bg-dark: #0a0e14;
+                --text-on-dark: #ffffff;
+            }
+			
+            html,
+            body {
+                margin: 0;
+                line-height: 1.5;
+                font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            }
+            
+			body {
+                font-family: sans-serif;   
+                background: white;
+                color: black;
+            }
+
+            header {
+                padding: 1em;
+                position: sticky;
+                top: 0;
+                background: rgba(255, 255, 255, 0.75);
+                box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+                backdrop-filter: blur(20px);
+                z-index: 1000;
+            }
+            
+            header .content-wrapper {
+                display: flex;
+                align-items: center;
+                justify-items: center;
+            }
+            
+            header img {
+                width: 48px;
+                height: 48px;
+            }				
+
+            header img + span {
+                font-size: 1.1em;
+            }
+			
+            .content-wrapper {
+                max-width: 920px;
+                margin: auto;
+            }
+
+            section {
+                padding: 2em 0;
+            }
+
+            section h2 {
+                text-align: center;
+                font-weight: 100;
+            }
+
+            section.hero-section {
+                position: relative;                
+                background: linear-gradient(135deg, var(--light-bg-start), var(--light-bg-end));
+            }            
+
+            section.hero-section.dark {
+                color: var(--text-on-dark);
+                background: radial-gradient(circle at top left, #0e141b, var(--bg-dark) 70%), linear-gradient(135deg, #0a0e14, #141c24);
+            }
+
+            /* Extra colored spots */
+            section.hero-section::before{
+              content:"";
+              position:absolute;
+              inset:0;              
+              pointer-events:none;
+              background:
+    radial-gradient(40vmax 40vmax at 15% 25%, rgba(228,123,25,0.25), transparent 70%),
+    radial-gradient(35vmax 35vmax at 75% 20%, rgba(79,165,43,0.22), transparent 70%),
+    radial-gradient(28vmax 28vmax at 60% 75%, rgba(227,63,59,0.22), transparent 70%),
+    radial-gradient(20vmax 20vmax at 85% 65%, rgba(228,123,25,0.18), transparent 70%),
+    radial-gradient(15vmax 15vmax at 40% 50%, rgba(79,165,43,0.15), transparent 70%);
+            }
+
+            section.hero-section.dark::before {
+                background:
+                radial-gradient(40vmax 40vmax at 20% 30%, rgba(228,123,25,0.25), transparent 70%),
+                radial-gradient(30vmax 30vmax at 75% 25%, rgba(79,165,43,0.25), transparent 70%),
+                radial-gradient(25vmax 25vmax at 60% 75%, rgba(227,63,59,0.25), transparent 70%),
+                radial-gradient(20vmax 20vmax at 85% 65%, rgba(228,123,25,0.15), transparent 70%);
+            }
+
+            /* Soft vignette for focus */
+            section.hero-section::after {
+              content:"";
+              position:absolute;
+              inset:0;
+              background: radial-gradient(circle, rgba(255,255,255,0) 60%, rgba(0,0,0,0.06) 100%);
+              pointer-events:none;
+            }
+            
+            /* Optional subtle noise for depth */
+            section.hero-section.dark::after{
+              content:"";
+              position:absolute;
+              inset:0;
+              background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+              opacity:0.04;
+              pointer-events:none;
+            }
+            
+            section.hero-section > .content-wrapper {
+                display: flex;
+                padding: 3em;
+                align-items: center;
+                justify-content: center;
+                min-height: 60vh;
+                min-width: 80vw;
+            }
+
+            section.hero-section .title-section {
+                flex-basis: 40%;                
+            }
+
+            section.hero-section .title-section h1 {
+                line-height: 1.1;
+                font-weight: 100;
+            }
+
+            section.hero-section .image,
+            section.hero-section .image img {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            section:nth-of-type(2n+1) {
+                background: linear-gradient(135deg, rgba(228,123,25,0.08), rgba(79,165,43,0.08));
+            }
+            
+            .benefits-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 1em;
+            }
+
+            .benefits-container .card {
+                padding: 1em;
+            }
+
+            .note-types-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 1em;
+            }
+
+            .collections-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1em;
+            }
+
+            .columns-2 > div {
+                flex: 50%;
+                flex-shrink: 0;
+                flex-grow: 0;
+            }
+
+            img {
+                width: 100%;
+                height: auto;
+            }
+		
+    		footer {
+                margin: 0;
+                padding: 1em 0;
+                box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+            }
+
+            .card {
+                border: 0;
+                box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+                background-color: var(--card-bg);
+                border-radius: 16px;
+                overflow: hidden;
+            }
+
+            .card p {
+                margin: 0;
+                padding: 1em;
+            }
+
+            span.text-big {
+                font-size: 1.25em;
+            }
+		
+		
+		
+		
+		
+		
+		
+		
+		</style>
+		
+		
+		
+		
+		
+		
+		
+			
+	
+	
+	
+	
+	
+	
+	
+	
+	</head>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<body>
+		
+		
+		<header>
+			
+			
+			<div class="content-wrapper">
+				
+				
+				<img src="api/attachments/1lkpAqzZVPxF/image/Trilium%20Notes.svg" width="300" height="300">&nbsp;
+				
+				<span>
+					
+					 Trilium Notes&nbsp;
+				
+				</span>
+				
+			
+			</div>
+			
+		
+		</header>
+		
+		
+		<section class="hero-section no-wrap">
+			
+			
+			<div class="content-wrapper">
+				
+				
+				<div class="title-section">
+					
+					
+					<h1>
+						
+						Organize your thoughts. Build your personal knowledge base.
+					
+					</h1>
+					
+					
+					<p>
+						
+						Trilium is an open-source solution for note-taking and organizing a personal knowledge base. Use it locally on your desktop, or sync it with your self-hosted server to keep your notes everywhere you go.
+					
+					</p>
+					
+				
+				</div>
+				
+				
+				<p>
+					
+					&nbsp;
+				
+				</p>
+				
+				
+				<figure class="image">
+					
+					
+					<img style="aspect-ratio:1399/858;" src="api/attachments/PFTOWM5a64xa/image/desktop-win.png" width="1399" height="858">
+				
+				</figure>
+				
+			
+			</div>
+			
+		
+		</section>
+		
+		
+		<section class="benefits">
+			
+			
+			<div class="content-wrapper">
+				
+				
+				<h2>
+					
+					Benefits
+				
+				</h2>
+				
+				
+				<div class="benefits-container">
+					
+					
+					<div class="card">
+						
+						
+						<span class="text-big">
+							
+							Note structure&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						
+						</span>
+						
+						 &nbsp;
+						
+						<br>Notes can be arranged hierarchically. There's no need for folders, since each note can contain sub-notes. A single note can be added in multiple places in the hierarchy.
+					
+					</div>
+					
+					
+					<div class="card">
+						
+						
+						<span class="text-big">
+							
+							Labels and relationships between notes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						
+						</span>
+						
+						 &nbsp;
+						
+						<br>Define 
+						
+						<em>
+							
+							relations 
+						
+						</em>
+						
+						between notes or add 
+						
+						<em>
+							
+							labels 
+						
+						</em>
+						
+						for easy categorization. Using promoted attributes, there's an easy way to enter structured information about the notes which can later be displayed in other formats such as a table.
+					
+					</div>
+					
+					
+					<div class="card">
+						
+						
+						<span class="text-big">
+							
+							Note revisions&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						
+						</span>
+						
+						 &nbsp;
+						
+						<br>Notes are periodically saved in the background and revisions can be used to check the old content of a note or delete accidental changes. Revisions can also be created on-demand.
+					
+					</div>
+					
+					
+					<div class="card">
+						
+						
+						<span class="text-big">
+							
+							Quick search and commands&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						
+						</span>
+						
+						 &nbsp;
+						
+						<br>Jump quickly to notes across the hierarchy by searching for their title, with fuzzy matching to account for typos or slight differences. Or search through all the various commands of the application.
+					
+					</div>
+					
+					
+					<div class="card">
+						
+						
+						<span class="text-big">
+							
+							Powerful search&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						
+						</span>
+						
+						 &nbsp;
+						
+						<br>Or search for text inside notes and narrow down the search by filtering by the parent note, or by depth.
+					
+					</div>
+					
+					
+					<div class="card">
+						
+						
+						<span class="text-big">
+							
+							Protected notes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						
+						</span>
+						
+						 &nbsp;
+						
+						<br>Protect sensitive personal information by encrypting the notes and locking them behind a password-protected session.
+					
+					</div>
+					
+					
+					<div class="card">
+						
+						
+						<span class="text-big">
+							
+							Import/export&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						
+						</span>
+						
+						 &nbsp;
+						
+						<br>Easily import Markdown and ENEX formats from other note-taking applications, or export to Markdown or HTML.
+					
+					</div>
+					
+					
+					<div class="card">
+						
+						
+						<span class="text-big">
+							
+							Workspaces and hoisting&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						
+						</span>
+						
+						 &nbsp;
+						
+						<br>Easily separate your personal and work notes by grouping them under a workspace, which focuses your note tree to only show a specific set of notes.
+					
+					</div>
+					
+					
+					<div class="card">
+						
+						
+						<span class="text-big">
+							
+							Web clipper&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						
+						</span>
+						
+						 &nbsp;
+						
+						<br>Grab web pages (or screenshots) and place them directly into Trilium using the web clipper browser extension.
+					
+					</div>
+					
+					
+					<div class="card">
+						
+						
+						<span class="text-big">
+							
+							Synchronization&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						
+						</span>
+						
+						 &nbsp;
+						
+						<br>Use a self-hosted or cloud instance to easily synchronize your notes across multiple devices, and to access it from your mobile phone using a PWA (progressive web application).
+					
+					</div>
+					
+					
+					<div class="card">
+						
+						
+						<span class="text-big">
+							
+							Share notes on the web&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						
+						</span>
+						
+						 &nbsp;
+						
+						<br>If you have a server instance, you can easily use it to share a subset of your notes with other people.
+					
+					</div>
+					
+					
+					<div class="card">
+						
+						
+						<span class="text-big">
+							
+							Advanced scripting and REST API&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						
+						</span>
+						
+						 &nbsp;
+						
+						<br>Create your own integrations within Trilium by writing custom widgets, or custom-server side logic. Interact externally with the Trilium database by using the built-in REST API.
+					
+					</div>
+					
+				
+				</div>
+				
+			
+			</div>
+			
+		
+		</section>
+		
+		
+		<section class="note-types">
+			
+			
+			<div class="content-wrapper">
+				
+				
+				<h2>
+					
+					Note types
+				
+				</h2>
+				
+				
+				<div class="note-types-container">
+					
+					
+					<div class="card">
+						
+						
+						<p>
+							
+							
+							<img class="image" src="api/attachments/zbc0MjZY5TID/image/10_Content_image.png" width="1320" height="757">
+						
+						</p>
+						
+						
+						<p>
+							
+							
+							<span class="text-big">
+								
+								Text notes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							
+							</span>
+							
+							
+							<br>The notes are edited using a visual (WYSIWYG) editor, with support for tables, images, math expressions, code blocks with syntax highlighting. Quickly format the text using Markdown-like syntax or using slash commands.
+						
+						</p>
+						
+					
+					</div>
+					
+					
+					<div class="card">
+						
+						
+						<p>
+							
+							
+							<img class="image" src="api/attachments/Xeb66MNX1E1m/image/9_Content_image.png" width="1441" height="946">
+						
+						</p>
+						
+						
+						<p>
+							
+							
+							<span class="text-big">
+								
+								Code notes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							
+							</span>
+							
+							
+							<br>Large samples of source code or scripts use a dedicated editor, with syntax highlighting for many programming languages and with various color themes
+						
+						</p>
+						
+					
+					</div>
+					
+					
+					<div class="card">
+						
+						
+						<p>
+							
+							
+							<img class="image" src="api/attachments/safrk4HUPpP1/image/12_Content_image.png" width="1522" height="942">
+						
+						</p>
+						
+						
+						<p>
+							
+							
+							<span class="text-big">
+								
+								File notes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							
+							</span>
+							
+							
+							<br>Embed multimedia files such as PDFs, images, videos with an in-application preview.&nbsp;
+						
+						</p>
+						
+					
+					</div>
+					
+					
+					<div class="card">
+						
+						
+						<p>
+							
+							
+							<img class="image" src="api/attachments/Q3pAeR5Qaxy3/image/Content_canvas.png" width="835" height="627">
+						
+						</p>
+						
+						
+						<p>
+							
+							
+							<span class="text-big">
+								
+								Canvas&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							
+							</span>
+							
+							
+							<br>Arrange shapes, images and text across an infinite canvas, using the same technology behind 
+							
+							<a href="https://excalidraw.com">
+								
+								excalidraw.com 
+							
+							</a>
+							
+							. Ideal for diagrams, sketches and visual planning.
+						
+						</p>
+						
+					
+					</div>
+					
+					
+					<div class="card">
+						
+						
+						<p>
+							
+							
+							<img class="image" src="api/attachments/KVKYvkZawtFs/image/Content_mermaid.png" width="831" height="640">
+						
+						</p>
+						
+						
+						<p>
+							
+							
+							<span class="text-big">
+								
+								Mermaid diagrams&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							
+							</span>
+							
+							
+							<br>Create diagrams such as flowcharts, class &amp; sequence diagrams, Gantt charts and many more, using the Mermaid syntax.
+						
+						</p>
+						
+					
+					</div>
+					
+					
+					<div class="card">
+						
+						
+						<p>
+							
+							
+							<img class="image" src="api/attachments/BPrHgo5VI6mh/image/Content_mind-map.png" width="832" height="631">
+						
+						</p>
+						
+						
+						<p>
+							
+							
+							<span class="text-big">
+								
+								Mind maps&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							
+							</span>
+							
+							 &nbsp;
+							
+							<br>Organize your thoughts visually or do a brainstorming session by using 
+							
+							<a href="https://en.wikipedia.org/wiki/Mind_map">
+								
+								mind map diagrams&nbsp;&nbsp;&nbsp;&nbsp;
+							
+							</a>
+							
+						
+						</p>
+						
+					
+					</div>
+					
+				
+				</div>
+				
+				
+				<p>
+					
+					and others: note map, relation map, saved searches, render note, web views.
+				
+				</p>
+				
+			
+			</div>
+			
+		
+		</section>
+		
+		
+		<section class="collections">
+			
+			
+			<div class="content-wrapper">
+				
+				
+				<h2>
+					
+					Collections
+				
+				</h2>
+				
+				
+				<div class="collections-container">
+					
+					
+					<div class="card">
+						
+						
+						<p>
+							
+							
+							<img class="image" src="api/attachments/hD37lsoODKr9/image/image.png" width="1651" height="810">
+						
+						</p>
+						
+						
+						<p>
+							
+							
+							<span class="text-big">
+								
+								Calendar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							
+							</span>
+							
+							
+							<br>Organize your personal or professional events using a calendar, with support for all-day and multi-day events. See your events at a glance with the week, month and year views. Easy interaction to add or drag events.
+						
+						</p>
+						
+					
+					</div>
+					
+					
+					<div class="card">
+						
+						
+						<p>
+							
+							
+							<img src="api/attachments/rBWdy4op6kRW/image/image.png" width="1643" height="647">
+						
+						</p>
+						
+						
+						<p>
+							
+							
+							<span class="text-big">
+								
+								Table&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							
+							</span>
+							
+							
+							<br>Display and edit information about notes in a tabular structure, with various column types such as text, number, check boxes, date &amp; time, links and colors and support for relations. Optionally, display the notes within a tree hierarchy inside the table.
+						
+						</p>
+						
+					
+					</div>
+					
+					
+					<div class="card">
+						
+						
+						<p>
+							
+							
+							<img src="api/attachments/wRmQeXJyYQd5/image/image.png" width="1174" height="850">
+						
+						</p>
+						
+						
+						<p>
+							
+							
+							<span class="text-big">
+								
+								Board&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							
+							</span>
+							
+							
+							<br>Organize your tasks or project status into a Kanban board with an easy way to create new items and columns and simply changing their status by dragging across the board.
+						
+						</p>
+						
+					
+					</div>
+					
+					
+					<div class="card">
+						
+						
+						<p>
+							
+							
+							<img class="image" src="api/attachments/qMaHODYKElmQ/image/image.png" width="844" height="639">
+						
+						</p>
+						
+						
+						<p>
+							
+							
+							<span class="text-big">
+								
+								Geomap&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							
+							</span>
+							
+							
+							<br>Plan your vacations or mark your points of interest directly on a geographical map using customizable markers. Display recorded GPX tracks to track itineraries.
+						
+						</p>
+						
+					
+					</div>
+					
+				
+				</div>
+				
+				
+				<p>
+					
+					&nbsp;
+				
+				</p>
+				
+			
+			</div>
+			
+		
+		</section>
+		
+		
+		<section class="faq">
+			
+			
+			<div class="content-wrapper">
+				
+				
+				<h2>
+					
+					FAQ
+				
+				</h2>
+				
+				
+				<details>
+					
+					
+					<summary>
+						
+						Where is the data stored?
+					
+					</summary>
+					
+					
+					<p>
+						
+						All your notes will be stored in an SQLite database in an application folder. The reasoning why Trilium uses a database instead of plain text files is both performance and some features would be much more difficult to implement such as clones (same note in multiple places in the tree). To find the application folder, simply go to the About window.
+					
+					</p>
+					
+				
+				</details>
+				
+				
+				<details>
+					
+					
+					<summary>
+						
+						Do I need a server to use Trilium?
+					
+					</summary>
+					
+					
+					<p>
+						
+						No, the server allows access via a web browser and manages the synchronization if you have multiple devices. To get started, it's enough to download the desktop application and start using it.
+					
+					</p>
+					
+				
+				</details>
+				
+				
+				<details>
+					
+					
+					<summary>
+						
+						Can I share my database over a network drive?&nbsp;&nbsp;
+					
+					</summary>
+					
+					
+					<p>
+						
+						No, it's generally not a good idea to share a SQLite database over a network drive. Although sometimes it might work, there are chances that the database will get corrupted due to imperfect file locks over a network.
+					
+					</p>
+					
+				
+				</details>
+				
+				
+				<details>
+					
+					
+					<summary>
+						
+						How is my data protected?
+					
+					</summary>
+					
+					
+					<p>
+						
+						By default, notes are not encrypted and can be read directly from the database. Once a note is marked as encrypted, the note is encrypted using AES-128-CBC.
+					
+					</p>
+					
+				
+				</details>
+				
+				
+				<details>
+					
+					
+					<summary>
+						
+						Is there a mobile application?
+					
+					</summary>
+					
+					
+					<p>
+						
+						Currently there is no official mobile application. However, if you have a server instance you can access it using a web browser and even install it as a PWA. For Android, there is an unofficial application called TriliumDroid that even works offline (same as a desktop client)
+					
+					</p>
+					
+				
+				</details>
+				
+				
+				<details>
+					
+					
+					<summary>
+						
+						How well does the application scale with a large amount of notes?
+					
+					</summary>
+					
+					
+					<p>
+						
+						Depending on usage, the application should be able to handle at least 100.000 notes without an issue. Do note that the sync process can sometimes fail if uploading many large files (&gt; 1 GB per file) since Trilium is meant more as a knowledge base application rather than a file store (like NextCloud, for example).
+					
+					</p>
+					
+				
+				</details>
+				
+			
+			</div>
+			
+		
+		</section>
+		
+		
+		<footer>
+			
+			
+			<div class="content-wrapper">
+				
+				
+				<p>
+					
+					© 2024-2025 
+					
+					<a href="https://github.com/eliandoran">
+						
+						Elian Doran 
+					
+					</a>
+					
+					and the 
+					
+					<a href="https://github.com/TriliumNext/Notes/graphs/contributors">
+						
+						team 
+					
+					</a>
+					
+					.&nbsp;&nbsp;
+					
+					<br>© 2017-2024 
+					
+					<a href="https://github.com/zadam">
+						
+						zadam 
+					
+					</a>
+					
+					.
+				
+				</p>
+				
+			
+			</div>
+			
+		
+		</footer>
+		
+	
+	</body>
+	
+
+</html>
