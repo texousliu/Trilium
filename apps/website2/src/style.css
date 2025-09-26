@@ -26,6 +26,13 @@ body {
     margin: 0;
     line-height: 1.5;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    min-height: 100vh;
+}
+
+main {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
 }
 
 body {
@@ -40,11 +47,16 @@ a {
 
 .content-wrapper {
     max-width: 1200px;
+    width: 100%;
     margin: auto;
 }
 
 section {
     padding: 3em 0;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
 }
 
 section h2 {
