@@ -12,6 +12,7 @@ header .content-wrapper {
     display: flex;
     align-items: center;
     justify-items: center;
+    gap: 1em;
 }
 
 header > .content-wrapper,
@@ -32,4 +33,13 @@ header nav {
     flex-grow: 1;
     display: flex;
     justify-content: flex-end;
+    gap: 1em;
+}
+
+header nav a {
+    text-decoration: none;
+}
+
+header nav a.active {
+    font-weight: bold;
 }
