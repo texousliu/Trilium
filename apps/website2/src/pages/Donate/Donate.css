@@ -1,0 +1,20 @@
+section.donate {
+    background: var(--background-color);
+}
+
+section.donate ul {
+    list-style-type: none;
+    display: flex;
+    gap: 0 1em;
+    padding: 0;
+}
+
+section.donate ul a {
+    display: block;
+    background: var(--brand-1);
+    padding: 0.5em 1em;
+    border-radius: 6px;
+    color: var(--foreground-color);
+    text-decoration: none;
+    text-align: center;
+}

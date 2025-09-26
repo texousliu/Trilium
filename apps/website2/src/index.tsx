@@ -6,6 +6,7 @@ import { NotFound } from './pages/_404.jsx';
 import './style.css';
 import Footer from './components/Footer.js';
 import Download from './pages/Download/download.js';
+import Donate from './pages/Donate/Donate.js';
 
 export function App() {
 	return (
@@ -16,6 +17,7 @@ export function App() {
 					<Route path="/" component={Home} />
 					<Route default component={NotFound} />
                     <Route path="/download" component={Download} />
+                    <Route path="/donate" component={Donate} />
 				</Router>
 			</main>
             <Footer />

@@ -4,15 +4,16 @@ header {
     top: 0;
     background: var(--header-background-color);
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);    
     z-index: 1000;
+    --gap: 1.25em;
 }
 
 header .content-wrapper {
     display: flex;
     align-items: center;
     justify-items: center;
-    gap: 1em;
+    gap: var(--gap);
 }
 
 header a.banner {
@@ -41,11 +42,12 @@ header nav {
     flex-grow: 1;
     display: flex;
     justify-content: flex-end;
-    gap: 1em;
+    gap: var(--gap);
 }
 
 header nav a {
     text-decoration: none;
+    color: inherit;
 }
 
 header nav a.active {

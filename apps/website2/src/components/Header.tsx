@@ -9,7 +9,8 @@ interface HeaderLink {
 }
 
 const HEADER_LINKS: HeaderLink[] = [
-    { url: "https://docs.triliumnotes.org/", text: "Documentation", external: true }
+    { url: "https://docs.triliumnotes.org/", text: "Documentation", external: true },
+    { url: "/donate", text: "Support us" }
 ]
 
 export function Header() {
