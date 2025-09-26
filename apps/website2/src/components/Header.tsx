@@ -2,6 +2,16 @@ import "./Header.css";
 import { useLocation } from 'preact-iso';
 import DownloadButton from './DownloadButton';
 
+interface HeaderLink {
+    url: string;
+    text: string;
+    external?: boolean;
+}
+
+const HEADER_LINKS: HeaderLink[] = [
+    { url: "https://docs.triliumnotes.org/", text: "Documentation", external: true }
+]
+
 export function Header() {
 	const { url } = useLocation();
 
@@ -13,9 +23,13 @@ export function Header() {
                 </a>
 
                 <nav>
-                    <a href="/404" class={url == '/404' && 'active'}>
-                        404
-                    </a>
+                    {HEADER_LINKS.map(link => (
+                        <a
+                            href={link.url}
+                            className={url === link.url && 'active'}
+                            target={link.external && "_blank"}
+                        >{link.text}</a>
+                    ))}
                 </nav>
 
                 <DownloadButton />
