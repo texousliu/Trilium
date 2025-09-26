@@ -1,5 +1,5 @@
-import { useLayoutEffect } from "preact/hooks";
 import { getRecommendedDownload } from "../download-helper";
+import "./DownloadButton.css";
 
 interface DownloadButtonProps {
     big?: boolean;

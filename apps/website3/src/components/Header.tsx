@@ -1,3 +1,4 @@
+import "./Header.css";
 import { useLocation } from 'preact-iso';
 import DownloadButton from './DownloadButton';
 

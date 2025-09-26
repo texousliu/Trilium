@@ -1,0 +1,19 @@
+.download-button {
+    text-decoration: none;
+    background: var(--brand-1);
+    padding: 0.5em 1em;
+    border-radius: 6px;
+    color: white;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    display: inline-block;
+}
+
+.download-button .platform {
+    font-size: 0.75em;
+    opacity: 0.75;
+}
+
+.download-button.big {
+    padding: 1em 2em;
+    margin: 1em 0;
+}

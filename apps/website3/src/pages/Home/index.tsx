@@ -2,6 +2,7 @@ import { ComponentChildren } from 'preact';
 import Card from '../../components/Card';
 import Section from '../../components/Section';
 import DownloadButton from '../../components/DownloadButton';
+import "./index.css";
 
 export function Home() {
 	return (

@@ -1,0 +1,35 @@
+header {
+    padding: 1em;
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.75);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px);
+    z-index: 1000;
+}
+
+header .content-wrapper {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+}
+
+header > .content-wrapper,
+section.hero-section > .content-wrapper {
+    min-width: 80vw;
+}
+
+header img {
+    width: 48px;
+    height: 48px;
+}
+
+header img+span {
+    font-size: 1.1em;
+}
+
+header nav {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+}
