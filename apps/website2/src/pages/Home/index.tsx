@@ -37,7 +37,7 @@ function HeroSection() {
 function BenefitsSection() {
     return (
          <Section className="benefits" title="Benefits">
-            <div className="benefits-container">
+            <div className="benefits-container grid-3-cols">
                 <Card title="Note structure">Notes can be arranged hierarchically. There's no need for folders, since each note can contain sub-notes. A single note can be added in multiple places in the hierarchy.</Card>
                 <Card title="Labels and relationships between notes">Define <em> relations </em> between notes
                     or add <em> labels </em> for easy categorization. Using promoted attributes, there's an easy way to
@@ -63,7 +63,7 @@ function BenefitsSection() {
 function NoteTypesSection() {
     return (
         <Section className="note-types" title="Note types">
-            <div class="note-types-container">
+            <div class="note-types-container grid-3-cols">
                 <Card title="Text notes" imageUrl="./src/assets/type_text.png">The notes are edited using a visual (WYSIWYG) editor, with support for tables, images, math expressions, code blocks with syntax highlighting. Quickly format the text using Markdown-like syntax or using slash commands.</Card>
                 <Card title="Code notes" imageUrl="./src/assets/type_code.png">Large samples of source code or scripts use a dedicated editor, with syntax highlighting for many programming languages and with various color themes.</Card>
                 <Card title="File notes" imageUrl="./src/assets/type_file.png">Embed multimedia files such as PDFs, images, videos with an in-application preview.</Card>
@@ -79,7 +79,7 @@ function NoteTypesSection() {
 function CollectionsSection() {
     return (
         <Section className="collections" title="Collections">
-            <div className="collections-container">
+            <div className="collections-container grid-2-cols">
                 <Card title="Calendar" imageUrl="./src/assets/collection_calendar.png">Organize your personal or professional events using a calendar, with support for all-day and multi-day events. See your events at a glance with the week, month and year views. Easy interaction to add or drag events.</Card>
                 <Card title="Table" imageUrl="./src/assets/collection_table.png">Display and edit information about notes in a tabular structure, with various column types such as text, number, check boxes, date &amp; time, links and colors and support for relations. Optionally, display the notes within a tree hierarchy inside the table.</Card>
                 <Card title="Board" imageUrl="./src/assets/collection_board.png">Organize your tasks or project status into a Kanban board with an easy way to create new items and columns and simply changing their status by dragging across the board.</Card>

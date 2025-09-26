@@ -90,3 +90,15 @@ footer {
     height: 200px;
     object-fit: cover;
 }
+
+.grid-3-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1em;
+}
+
+.grid-2-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1em;
+}

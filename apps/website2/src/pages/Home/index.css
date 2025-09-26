@@ -99,24 +99,6 @@ section:nth-of-type(2n+1) {
     background: linear-gradient(135deg, rgba(228, 123, 25, 0.08), rgba(79, 165, 43, 0.08));
 }
 
-.benefits-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1em;
-}
-
 .benefits-container .card {
     padding: 1em;
-}
-
-.note-types-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1em;
-}
-
-.collections-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1em;
 }

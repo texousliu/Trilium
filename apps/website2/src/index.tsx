@@ -5,6 +5,7 @@ import { Home } from './pages/Home/index.jsx';
 import { NotFound } from './pages/_404.jsx';
 import './style.css';
 import Footer from './components/Footer.js';
+import Download from './pages/Download/download.js';
 
 export function App() {
 	return (
@@ -14,6 +15,7 @@ export function App() {
 				<Router>
 					<Route path="/" component={Home} />
 					<Route default component={NotFound} />
+                    <Route path="/download" component={Download} />
 				</Router>
 			</main>
             <Footer />

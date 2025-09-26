@@ -1,0 +1,40 @@
+.download-card {
+    padding: 1em;
+}
+
+.download-card h3 {
+    color: var(--accent-color);
+    font-size: 1.5em;
+}
+
+.download-options {
+    margin-top: 2em;
+}
+
+.download-options a.recommended {
+    display: block;
+    background: var(--accent-color);
+    padding: 0.5em 1em;
+    border-radius: calc(infinity * 1px);
+    color: var(--foreground-color);
+    margin: 1em 0;
+    text-decoration: none;
+    text-align: center;
+}
+
+.download-options .other-options {
+    display: flex;
+    gap: 0.5em 1em;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.download-desktop .download-card:first-of-type { --accent-color: var(--brand-1); }
+.download-desktop .download-card:nth-of-type(2) { --accent-color: var(--brand-2); }
+.download-desktop .download-card:last-of-type { --accent-color: var(--brand-3); }
+
+.download-server .download-card:first-of-type { --accent-color: var(--brand-1); }
+.download-server {
+    width: 75%;
+    margin: auto;
+}
