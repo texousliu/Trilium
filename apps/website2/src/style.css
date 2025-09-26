@@ -1,6 +1,8 @@
 :root {
     --background-color: #fff;
     --foreground-color: black;
+    --card-background-color: white;
+    --card-box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
     --header-background-color: rgba(255, 255, 255, 0.75);
     --brand-1: #e47b19;
     --brand-2: #4fa52b;
@@ -12,6 +14,8 @@
         --foreground-color: #fff;
         --background-color: #0a0e14;
         --header-background-color: rgba(0, 0, 0, 0.75);
+        --card-background-color: #ffffff12;
+        --card-box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
     }
 }
 
@@ -61,8 +65,8 @@ footer {
 
 .card {
     border: 0;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
-    background-color: var(--card-bg);
+    box-shadow: var(--card-box-shadow);
+    background-color: var(--card-background-color);
     border-radius: 16px;
     overflow: hidden;
 }
