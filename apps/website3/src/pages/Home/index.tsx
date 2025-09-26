@@ -5,6 +5,19 @@ import Section from '../../components/Section';
 export function Home() {
 	return (
         <>
+            <Section className="hero-section">
+                <div class="title-section">
+                    <h1>Organize your thoughts. Build your personal knowledge base.</h1>
+                    <p>Trilium is an open-source solution for note-taking and organizing a personal knowledge base. Use it locally on your desktop, or sync it with your self-hosted server to keep your notes everywhere you go.</p>
+                    <a class="download-button" href="https://github.com/TriliumNext/Trilium/releases/latest">
+                        Download now
+                        <span class="platform"></span>
+                    </a>
+                </div>
+
+                <figure class="image"><img src="./src/assets/screenshot_desktop_win.png" /></figure>
+            </Section>
+
             <Section className="benefits" title="Benefits">
                 <div className="benefits-container">
                     <Card title="Note structure">Notes can be arranged hierarchically. There's no need for folders, since each note can contain sub-notes. A single note can be added in multiple places in the hierarchy.</Card>

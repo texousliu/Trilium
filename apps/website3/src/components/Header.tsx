@@ -5,14 +5,18 @@ export function Header() {
 
 	return (
 		<header>
-			<nav>
-				<a href="/" class={url == '/' && 'active'}>
-					Home
-				</a>
-				<a href="/404" class={url == '/404' && 'active'}>
-					404
-				</a>
-			</nav>
+            <div class="content-wrapper">
+                <img src="./src/assets/icon-color.svg" width="300" height="300" />&nbsp;<span>Trilium Notes</span>
+
+                <nav>
+                    <a href="/" class={url == '/' && 'active'}>
+                        Home
+                    </a>
+                    <a href="/404" class={url == '/404' && 'active'}>
+                        404
+                    </a>
+                </nav>
+            </div>
 		</header>
 	);
 }
