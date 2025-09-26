@@ -1,6 +1,7 @@
 :root {
     --background-color: #fff;
     --foreground-color: black;
+    --muted-color: #353535;
     --card-background-color: white;
     --card-box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
     --header-background-color: rgba(255, 255, 255, 0.75);
@@ -13,6 +14,7 @@
     :root {
         --foreground-color: #fff;
         --background-color: #0a0e14;
+        --muted-color: #cacaca;
         --header-background-color: rgba(0, 0, 0, 0.75);
         --card-background-color: #ffffff12;
         --card-box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
@@ -71,11 +73,20 @@ footer {
     overflow: hidden;
 }
 
-.card p {
+.card-content {
     margin: 0;
     padding: 1em;
+    color: var(--muted-color);
 }
 
-span.text-big {
-    font-size: 1.25em;
+.card h3 {
+    font-size: 1.1rem;
+    font-weight: 300;
+    margin: 0;
+    color: var(--foreground-color);
+}
+
+.card > .image {
+    height: 200px;
+    object-fit: cover;
 }

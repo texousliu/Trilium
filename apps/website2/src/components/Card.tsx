@@ -10,10 +10,11 @@ export default function Card({ title, children, imageUrl }: CardProps) {
     return (
         <div className="card">
             {imageUrl && <img class="image" src={imageUrl} />}
-            <p>
-                <span class="text-big">{title}</span><br />
+
+            <div className="card-content">
+                <h3>{title}</h3>
                 {children}
-            </p>
+            </div>
         </div>
     )
 }
