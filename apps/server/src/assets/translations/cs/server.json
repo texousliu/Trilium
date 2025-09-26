@@ -10,6 +10,15 @@
     "expand-subtree": "Rozbalit podstrom aktivní poznámky",
     "collapse-tree": "Sbalit celý strom poznámek",
     "collapse-subtree": "Sbalí podstrom aktivní poznámky",
-    "sort-child-notes": "Seřadit podřízené poznámky"
+    "sort-child-notes": "Seřadit podřízené poznámky",
+    "creating-and-moving-notes": "Vytváření a přesouvání poznámek",
+    "create-note-after": "Vytvořit poznámku za aktivní poznámkou",
+    "create-note-into": "Vytvořit poznámku jako potomka aktivní poznámky",
+    "create-note-into-inbox": "Vytvořit poznámku v inboxu (pokud je definován) nebo denní poznámku",
+    "delete-note": "Smazat poznámku",
+    "move-note-up": "Posunout poznámku nahoru",
+    "move-note-down": "Posunout poznámku dolů",
+    "move-note-up-in-hierarchy": "Přesunout poznámku o úroveň výše",
+    "move-note-down-in-hierarchy": "Přesunout poznámku ve struktuře níže"
   }
 }

@@ -46,7 +46,7 @@
     "last-tab": "最後のタブをアクティブにする",
     "dialogs": "ダイアログ",
     "show-note-source": "「ノートのソース」ダイアログを表示",
-    "show-options": "「オプション」ページを開く",
+    "show-options": "「設定」ページを開く",
     "show-recent-changes": "「最近の変更」ダイアログを表示",
     "show-sql-console": "「SQLコンソール」ページを開く",
     "show-backend-log": "「バックエンドログ」ページを開く",
@@ -420,5 +420,12 @@
     "no-content": "このノートには内容がありません。"
   },
   "weekdayNumber": "第{weekNumber}週",
-  "quarterNumber": "四半期 {quarterNumber}"
+  "quarterNumber": "四半期 {quarterNumber}",
+  "sql_init": {
+    "db_not_initialized_desktop": "DB が初期化されていません。画面の指示に従ってください。",
+    "db_not_initialized_server": "DB が初期化されていません。セットアップ ページ 「http://[your-server-host]:{{port}}」 にアクセスして、Trilium を初期化する方法の説明を確認してください。"
+  },
+  "desktop": {
+    "instance_already_running": "すでにインスタンスが実行されているので、代わりにそのインスタンスにフォーカスします。"
+  }
 }
