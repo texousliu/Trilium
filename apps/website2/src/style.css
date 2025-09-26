@@ -59,17 +59,19 @@ header nav {
 /* #endregion */
 
 .content-wrapper {
-    max-width: 920px;
+    max-width: 1200px;
     margin: auto;
 }
 
 section {
-    padding: 2em 0;
+    padding: 3em 0;
 }
 
 section h2 {
     text-align: center;
     font-weight: 100;
+    margin-top: 0;
+    margin-bottom: 2em;
 }
 
 section.hero-section {
