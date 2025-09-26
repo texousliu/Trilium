@@ -37,6 +37,15 @@ export function Home() {
                 </div>
                 <p>and others: note map, relation map, saved searches, render note, web views.</p>
             </Section>
+
+            <Section className="collections" title="Collections">
+                <div className="collections-container">
+                    <Card title="Calendar" imageUrl="./src/assets/collection_calendar.png">Organize your personal or professional events using a calendar, with support for all-day and multi-day events. See your events at a glance with the week, month and year views. Easy interaction to add or drag events.</Card>
+                    <Card title="Table" imageUrl="./src/assets/collection_table.png">Display and edit information about notes in a tabular structure, with various column types such as text, number, check boxes, date &amp; time, links and colors and support for relations. Optionally, display the notes within a tree hierarchy inside the table.</Card>
+                    <Card title="Board" imageUrl="./src/assets/collection_board.png">Organize your tasks or project status into a Kanban board with an easy way to create new items and columns and simply changing their status by dragging across the board.</Card>
+                    <Card title="Geomap" imageUrl="./src/assets/collection_geomap.png">Plan your vacations or mark your points of interest directly on a geographical map using customizable markers. Display recorded GPX tracks to track itineraries.</Card>
+                </div>
+            </Section>
         </>
 	);
 }
