@@ -1,8 +1,9 @@
+import Section from "../components/Section";
+
 export function NotFound() {
 	return (
-		<section>
-			<h1>404: Not Found</h1>
+		<Section title="404: Not Found">
 			<p>It's gone :(</p>
-		</section>
+		</Section>
 	);
 }
