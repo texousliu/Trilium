@@ -20,6 +20,7 @@ body {
     color: black;
 }
 
+/* #region Header */
 header {
     padding: 1em;
     position: sticky;
@@ -36,6 +37,11 @@ header .content-wrapper {
     justify-items: center;
 }
 
+header > .content-wrapper,
+section.hero-section > .content-wrapper {
+    min-width: 80vw;
+}
+
 header img {
     width: 48px;
     height: 48px;
@@ -44,6 +50,13 @@ header img {
 header img+span {
     font-size: 1.1em;
 }
+
+header nav {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+/* #endregion */
 
 .content-wrapper {
     max-width: 920px;
@@ -110,13 +123,12 @@ section.hero-section.dark::after {
     pointer-events: none;
 }
 
-section.hero-section>.content-wrapper {
+section.hero-section > .content-wrapper {
     display: flex;
     padding: 3em;
     align-items: center;
     justify-content: center;
     min-height: 60vh;
-    min-width: 80vw;
 }
 
 section.hero-section .title-section {
@@ -199,9 +211,8 @@ span.text-big {
 .download-button {
     text-decoration: none;
     background: var(--brand-1);
-    padding: 1em 2em;
+    padding: 0.5em 1em;
     border-radius: 6px;
-    margin: 1em 0;
     color: white;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
     display: inline-block;
@@ -210,5 +221,10 @@ span.text-big {
 .download-button .platform {
     font-size: 0.75em;
     opacity: 0.75;
+}
+
+.hero-section .download-button {
+    padding: 1em 2em;
+    margin: 1em 0;
 }
 /* #endregion */
