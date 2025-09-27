@@ -219,13 +219,18 @@ export function getRecommendedDownload(): RecommendedDownload | null {
     const platform = getPlatform();
     if (!platform || !architecture) return null;
 
-    const downloadInfo = downloadMatrix.desktop[platform]?.downloads;
+    const platformInfo = downloadMatrix.desktop[platform];
+    if (!platformInfo) return null;
+
+    const downloadInfo = platformInfo.downloads;
     const recommendedDownload = Object.entries(downloadInfo || {}).find(d => d[1].recommended);
-    const format = recommendedDownload?.[0];
+    if (!recommendedDownload) return null;
+
+    const format = recommendedDownload[0];
     const url = buildDownloadUrl("desktop", platform, format || 'zip', architecture);
 
-    const platformTitle = downloadMatrix.desktop[platform]?.title;
-    const name = typeof platformTitle === "string" ? platformTitle : platformTitle?.[architecture];
+    const platformTitle = platformInfo.title;
+    const name = typeof platformTitle === "string" ? platformTitle : platformTitle[architecture] as string;
 
     return {
         architecture,
