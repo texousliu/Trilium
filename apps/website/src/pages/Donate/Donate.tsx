@@ -9,7 +9,7 @@ import Card from "../../components/Card";
 export default function Donate() {
     return (
         <>
-            <Section title="Support us" className="donate">
+            <Section title="Support us" className="donate fill">
                 <div class="grid-2-cols">
                     <Card title="Financial donations">
                         <p>
