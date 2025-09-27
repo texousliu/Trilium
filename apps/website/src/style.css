@@ -44,6 +44,11 @@ body {
 
 a {
     color: var(--brand-3);
+    text-decoration: none;
+}
+
+a:not(.button):hover {
+    text-decoration: underline;
 }
 
 .content-wrapper {

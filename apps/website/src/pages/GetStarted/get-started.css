@@ -32,10 +32,6 @@
     text-decoration: none;
 }
 
-.download-card a:not(.button):hover {
-    text-decoration: underline;
-}
-
 .download-options {
     justify-content: flex-end;
     align-items: stretch;

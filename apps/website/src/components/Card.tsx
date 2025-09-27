@@ -1,5 +1,5 @@
 import { ComponentChildren, HTMLAttributes } from "preact";
-import Button, { Link } from "./Button";
+import { Link } from "./Button";
 import Icon from "./Icon";
 
 interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
@@ -28,7 +28,7 @@ export default function Card({ title, children, imageUrl, iconSvg, className, mo
 
                 {moreInfoUrl && (
                     <div className="more-info-container">
-                        <Link href={moreInfoUrl} className="more-info" openExternally>More info</Link>
+                        <Link href={moreInfoUrl} className="more-info" openExternally>Learn more...</Link>
                     </div>
                 )}
             </div>
