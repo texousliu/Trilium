@@ -32,12 +32,11 @@ function HeroSection() {
         case "macos":
             screenshotUrl = `./src/assets/screenshot_desktop_mac_${colorScheme}.png`;
             break;
-
         case "linux":
             break;
         case "windows":
         default:
-            screenshotUrl = "./src/assets/screenshot_desktop_win.png";
+            screenshotUrl = `./src/assets/screenshot_desktop_win_${colorScheme}.png`;
             break;
     }
 
