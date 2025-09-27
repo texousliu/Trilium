@@ -7,6 +7,7 @@ import Button, { Link } from "../../components/Button";
 import Icon from "../../components/Icon";
 import helpIcon from "../../assets/boxicons/bx-help-circle.svg?raw";
 import "./get-started.css";
+import packageJson from "../../../../../package.json" with { type: "json" };
 
 export default function DownloadPage() {
     const [ currentArch, setCurrentArch ] = useState(getArchitecture());
@@ -14,7 +15,7 @@ export default function DownloadPage() {
 
     return (
         <>
-            <Section title="Download the desktop application" className="fill accented">
+            <Section title={`Download the desktop application (v${packageJson.version})`} className="fill accented">
                 <div className="architecture-switch">
                     <span>Architecture:</span>
 

@@ -2,6 +2,7 @@ import { getRecommendedDownload } from "../download-helper";
 import "./DownloadButton.css";
 import Button from "./Button";
 import downloadIcon from "../assets/boxicons/bx-arrow-in-down-square-half.svg?raw";
+import packageJson from "../../../../package.json" with { type: "json" };
 
 interface DownloadButtonProps {
     big?: boolean;
@@ -17,7 +18,10 @@ export default function DownloadButton({ big }: DownloadButtonProps) {
            iconSvg={downloadIcon}
            text={<>
                 Download now{" "}
-                <span class="platform">for {name}</span>
+                {big
+                ? <span class="platform">v{packageJson.version} for {name}</span>
+                : <span class="platform">for {name}</span>
+                }
            </>}
         />
     )
