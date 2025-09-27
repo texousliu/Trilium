@@ -4,6 +4,9 @@ import Section from '../../components/Section';
 import DownloadButton from '../../components/DownloadButton';
 import "./index.css";
 import { usePageTitle } from '../../hooks';
+import Button from '../../components/Button';
+import gitHubIcon from "../../assets/boxicons/bx-github.svg?raw";
+import dockerIcon from "../../assets/boxicons/bx-docker.svg?raw";
 
 export function Home() {
     usePageTitle("");
@@ -29,7 +32,12 @@ function HeroSection() {
                 <div className="download-wrapper">
                     <DownloadButton big />
                     <a class="more-download-options" href="./download">See all download options</a>
+                    <div className="additional-options">
+                        <Button iconSvg={gitHubIcon} outline text="GitHub" href="https://github.com/TriliumNext/Trilium/" openExternally />
+                        <Button iconSvg={dockerIcon} outline text="Docker Hub" href="https://hub.docker.com/r/triliumnext/trilium" openExternally />
+                    </div>
                 </div>
+
             </div>
 
             <img class="screenshot" src="./src/assets/screenshot_desktop_win.png" />

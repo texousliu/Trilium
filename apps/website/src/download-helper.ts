@@ -113,7 +113,7 @@ export const downloadMatrix: DownloadMatrix = {
                 docker: {
                     recommended: true,
                     name: "View on Docker Hub",
-                    url: "https://hub.docker.com/r/triliumnext/notes"
+                    url: "https://hub.docker.com/r/triliumnext/trilium"
                 },
                 tarX64: {
                     name: "x86 (.tar.xz)",

@@ -95,6 +95,18 @@ section.hero-section .more-download-options {
     text-align: center;
 }
 
+section.hero-section .additional-options {
+    margin-top: 1em;
+    display: flex;
+    gap: 1em;
+    font-size: 0.85em;
+    align-items: center;
+}
+
+section.hero-section .additional-options a {
+    flex-grow: 1;
+}
+
 @media (max-width: 719px) {
     section.hero-section {
         padding-bottom: 0;        
