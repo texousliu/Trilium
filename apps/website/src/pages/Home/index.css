@@ -72,8 +72,7 @@ section.hero-section .title-section h1 {
     color: var(--foreground-color);
 }
 
-section.hero-section .image,
-section.hero-section .image img {
+section.hero-section .screenshot {
     position: relative;
     width: 100%;
     height: auto;
@@ -107,6 +106,10 @@ section.hero-section .more-download-options {
 
     section.hero-section .title-section {
         max-width: 90%;
+    }
+
+    section.hero-section .screenshot {
+        margin-top: 2em;
     }
 }
 

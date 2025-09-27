@@ -29,7 +29,7 @@ function HeroSection() {
                 </div>
             </div>
 
-            <figure class="image"><img src="./src/assets/screenshot_desktop_win.png" /></figure>
+            <img class="screenshot" src="./src/assets/screenshot_desktop_win.png" />
         </Section>
     )
 }
