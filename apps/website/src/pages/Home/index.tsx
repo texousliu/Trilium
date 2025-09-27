@@ -84,7 +84,7 @@ function HeroSection() {
 
             </div>
 
-            {screenshotUrl && <img class="screenshot" src={screenshotUrl} />}
+            {screenshotUrl && <img class="screenshot" src={screenshotUrl} alt="Screenshot of the Trilium Notes desktop application" />}
         </Section>
     )
 }
@@ -258,7 +258,7 @@ function ListWithScreenshot({ items, horizontal, cardExtra }: {
             <div className="details">
                 {selectedItem && (
                     <>
-                        <img src={selectedItem.imageUrl} />
+                        <img src={selectedItem.imageUrl} alt="Screenshot of the feature being selected" loading="lazy" />
                     </>
                 )}
             </div>

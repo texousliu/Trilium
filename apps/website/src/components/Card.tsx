@@ -14,7 +14,7 @@ interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
 export default function Card({ title, children, imageUrl, iconSvg, className, moreInfoUrl, ...restProps }: CardProps) {
     return (
         <div className={`card ${className}`} {...restProps}>
-            {imageUrl && <img class="image" src={imageUrl} />}
+            {imageUrl && <img class="image" src={imageUrl} loading="lazy" />}
 
             <div className="card-content">
                 <h3>

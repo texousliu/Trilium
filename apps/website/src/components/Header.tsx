@@ -29,7 +29,7 @@ export function Header() {
             <div class="content-wrapper">
                 <div class="first-row">
                     <a class="banner" href="/">
-                        <img src={logoPath} width="300" height="300" />&nbsp;<span>Trilium Notes</span>
+                        <img src={logoPath} width="300" height="300" alt="Trilium Notes logo" />&nbsp;<span>Trilium Notes</span>
                     </a>
 
                     <Link
