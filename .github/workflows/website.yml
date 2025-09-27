@@ -14,6 +14,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    name: Build & deploy website
 
     permissions:
       contents: read
@@ -24,10 +25,11 @@ jobs:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
 
+      - name: Install dependencies
+        run: pnpm install --filter website... --frozen-lockfile
+
       - name: Build the website
-        run: |
-          pnpm i
-          pnpm website:build
+        run: pnpm website:build
 
       - name: Deploy
         uses: ./.github/actions/deploy-to-cloudflare-pages
