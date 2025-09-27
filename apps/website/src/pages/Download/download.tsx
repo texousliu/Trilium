@@ -4,6 +4,7 @@ import Section from "../../components/Section";
 import { App, Architecture, buildDownloadUrl, downloadMatrix, DownloadMatrixEntry, getArchitecture, Platform } from "../../download-helper";
 import "./download.css";
 import { usePageTitle } from "../../hooks";
+import Button, { Link } from "../../components/Button";
 
 export default function DownloadPage() {
     const [ currentArch, setCurrentArch ] = useState(getArchitecture());
@@ -54,11 +55,19 @@ export function DownloadCard({ app, arch, entry: [ platform, entry ] }: { app: A
             {unwrapText(entry.description)}
 
             <div class="download-options">
-                <a className="recommended" href={buildDownloadUrl(app, platform as Platform, recommendedDownload[0], arch)}>{recommendedDownload[1].name}</a>
+                <Button
+                    className="recommended"
+                    href={buildDownloadUrl(app, platform as Platform, recommendedDownload[0], arch)}
+                    text={recommendedDownload[1].name}
+                />
 
                 <div class="other-options">
                     {restDownloads.map(download => (
-                        <a href={buildDownloadUrl(app, platform as Platform, download[0], arch)}>{download[1].name}</a>
+                        <Link
+                            href={buildDownloadUrl(app, platform as Platform, download[0], arch)}
+                        >
+                            {download[1].name}
+                        </Link>
                     ))}
                 </div>
             </div>

@@ -14,12 +14,9 @@
 .download-options a.recommended {
     display: block;
     background: var(--accent-color);
-    padding: 0.5em 1em;
-    border-radius: calc(infinity * 1px);
     color: var(--brand-foreground-color);
+    border-radius: calc(infinity * 1px);
     margin: 1em 0;
-    text-decoration: none;
-    text-align: center;
 }
 
 .download-options .other-options {
