@@ -1,5 +1,5 @@
 import { ComponentChildren } from "preact";
-import Icon from "./Icon";
+import Icon from "./Icon.js";
 import "./Button.css";
 
 interface LinkProps {

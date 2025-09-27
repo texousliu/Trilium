@@ -1,5 +1,5 @@
-import Section from "../components/Section";
-import { usePageTitle } from "../hooks";
+import Section from "../components/Section.js";
+import { usePageTitle } from "../hooks.js";
 import "./_404.css";
 
 export function NotFound() {

@@ -1,4 +1,4 @@
-import rootPackageJson from '../../../package.json';
+import rootPackageJson from '../../../package.json' with { type: "json" };
 
 export type App = "desktop" | "server";
 
@@ -210,8 +210,8 @@ export function getRecommendedDownload() {
     const format = recommendedDownload?.[0];
     const url = buildDownloadUrl("desktop", platform, format || 'zip', architecture);
 
-    const platformTitle = downloadMatrix.desktop[platform].title;
-    const name = typeof platformTitle === "string" ? platformTitle : platformTitle[architecture];
+    const platformTitle = downloadMatrix.desktop[platform]?.title;
+    const name = typeof platformTitle === "string" ? platformTitle : platformTitle?.[architecture];
 
     return {
         architecture,

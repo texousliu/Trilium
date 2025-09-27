@@ -1,10 +1,10 @@
 import { ComponentChildren } from 'preact';
-import Card from '../../components/Card';
-import Section from '../../components/Section';
-import DownloadButton from '../../components/DownloadButton';
+import Card from '../../components/Card.js';
+import Section from '../../components/Section.js';
+import DownloadButton from '../../components/DownloadButton.js';
 import "./index.css";
-import { useColorScheme, usePageTitle } from '../../hooks';
-import Button, { Link } from '../../components/Button';
+import { useColorScheme, usePageTitle } from '../../hooks.js';
+import Button, { Link } from '../../components/Button.js';
 import gitHubIcon from "../../assets/boxicons/bx-github.svg?raw";
 import dockerIcon from "../../assets/boxicons/bx-docker.svg?raw";
 import noteStructureIcon from "../../assets/boxicons/bx-folder.svg?raw";
@@ -29,7 +29,7 @@ import calendarIcon from "../../assets/boxicons/bx-calendar.svg?raw";
 import tableIcon from "../../assets/boxicons/bx-table.svg?raw";
 import boardIcon from "../../assets/boxicons/bx-columns-3.svg?raw";
 import geomapIcon from "../../assets/boxicons/bx-map.svg?raw";
-import { getPlatform } from '../../download-helper';
+import { getPlatform } from '../../download-helper.js';
 import { useState } from 'preact/hooks';
 
 export function Home() {
@@ -51,7 +51,7 @@ export function Home() {
 
 function HeroSection() {
     const platform = getPlatform();
-    let screenshotUrl: string;
+    let screenshotUrl: string | null = null;
     const colorScheme = useColorScheme();
 
     switch (platform) {

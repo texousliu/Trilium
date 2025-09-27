@@ -1,10 +1,10 @@
 import "./Footer.css";
-import Icon from "./Icon";
+import Icon from "./Icon.js";
 import githubIcon from "../assets/boxicons/bx-github.svg?raw";
 import githubDiscussionsIcon from "../assets/boxicons/bx-discussion.svg?raw";
 import matrixIcon from "../assets/boxicons/bx-message-dots.svg?raw";
 import redditIcon from "../assets/boxicons/bx-reddit.svg?raw";
-import { Link } from "./Button";
+import { Link } from "./Button.js";
 
 export default function Footer() {
     return (
@@ -55,7 +55,7 @@ export function SocialButtons({ className, withText }: { className?: string, wit
     )
 }
 
-function SocialButton({ name, iconSvg, url, withText }: { name: string, iconSvg: string, url: string, withText: boolean }) {
+function SocialButton({ name, iconSvg, url, withText }: { name: string, iconSvg: string, url: string, withText?: boolean }) {
     return (
         <Link
             className="social-button"

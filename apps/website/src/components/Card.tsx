@@ -1,6 +1,6 @@
 import { ComponentChildren, HTMLAttributes } from "preact";
-import { Link } from "./Button";
-import Icon from "./Icon";
+import { Link } from "./Button.js";
+import Icon from "./Icon.js";
 
 interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
     title: ComponentChildren;

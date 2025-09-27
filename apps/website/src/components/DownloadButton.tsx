@@ -1,6 +1,6 @@
-import { getRecommendedDownload } from "../download-helper";
+import { getRecommendedDownload } from "../download-helper.js";
 import "./DownloadButton.css";
-import Button from "./Button";
+import Button from "./Button.js";
 import downloadIcon from "../assets/boxicons/bx-arrow-in-down-square-half.svg?raw";
 import packageJson from "../../../../package.json" with { type: "json" };
 

@@ -1,12 +1,12 @@
 import "./Header.css";
 import { useLocation } from 'preact-iso';
-import DownloadButton from './DownloadButton';
-import { Link } from "./Button";
-import Icon from "./Icon";
+import DownloadButton from './DownloadButton.js';
+import { Link } from "./Button.js";
+import Icon from "./Icon.js";
 import logoPath from "../assets/icon-color.svg";
 import menuIcon from "../assets/boxicons/bx-menu.svg?raw";
 import { useState } from "preact/hooks";
-import { SocialButtons } from "./Footer";
+import { SocialButtons } from "./Footer.js";
 
 interface HeaderLink {
     url: string;

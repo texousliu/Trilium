@@ -1,11 +1,11 @@
-import Section from "../../components/Section";
+import Section from "../../components/Section.js";
 import "./SupportUs.css";
 import githubIcon from "../../assets/boxicons/bx-github.svg?raw";
 import paypalIcon from "../../assets/boxicons/bx-paypal.svg?raw";
 import buyMeACoffeeIcon from "../../assets/boxicons/bx-buy-me-a-coffee.svg?raw";
-import Button, { Link } from "../../components/Button";
-import Card from "../../components/Card";
-import { usePageTitle } from "../../hooks";
+import Button, { Link } from "../../components/Button.js";
+import Card from "../../components/Card.js";
+import { usePageTitle } from "../../hooks.js";
 
 export default function Donate() {
     usePageTitle("Support us");

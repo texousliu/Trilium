@@ -1,10 +1,10 @@
 import { useState } from "preact/hooks";
-import Card from "../../components/Card";
-import Section from "../../components/Section";
-import { App, Architecture, buildDownloadUrl, downloadMatrix, DownloadMatrixEntry, getArchitecture, Platform } from "../../download-helper";
-import { usePageTitle } from "../../hooks";
-import Button, { Link } from "../../components/Button";
-import Icon from "../../components/Icon";
+import Card from "../../components/Card.js";
+import Section from "../../components/Section.js";
+import { App, Architecture, buildDownloadUrl, downloadMatrix, DownloadMatrixEntry, getArchitecture, Platform } from "../../download-helper.js";
+import { usePageTitle } from "../../hooks.js";
+import Button, { Link } from "../../components/Button.js";
+import Icon from "../../components/Icon.js";
 import helpIcon from "../../assets/boxicons/bx-help-circle.svg?raw";
 import "./get-started.css";
 import packageJson from "../../../../../package.json" with { type: "json" };
