@@ -2,12 +2,17 @@ section.donate {
     background: var(--background-color);
 }
 
-section.donate ul {
+section.donate ul.donate-buttons {
     list-style-type: none;
     display: flex;
     gap: 1em;
     padding: 0;
     flex-direction: column;
+}
+
+section.donate h3 {
+    font-size: 1.5em;
+    color: var(--brand-1);
 }
 
 @media (min-width: 720px) {

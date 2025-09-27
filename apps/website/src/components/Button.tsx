@@ -17,6 +17,7 @@ export default function Button({ href, iconSvg, openExternally, text, className,
             className={`button ${className} ${outline ? "outline" : ""}`}
             href={href}
             target={openExternally ? "_blank" : undefined}
+            rel={openExternally ? "noopener noreferrer" : undefined}
         >
             {iconSvg && <><Icon svg={iconSvg} />{" "}</>}
             {text}
