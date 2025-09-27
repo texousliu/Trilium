@@ -2,11 +2,11 @@ import { useState } from "preact/hooks";
 import Card from "../../components/Card";
 import Section from "../../components/Section";
 import { App, Architecture, buildDownloadUrl, downloadMatrix, DownloadMatrixEntry, getArchitecture, Platform } from "../../download-helper";
-import "./download.css";
 import { usePageTitle } from "../../hooks";
 import Button, { Link } from "../../components/Button";
 import Icon from "../../components/Icon";
 import helpIcon from "../../assets/boxicons/bx-help-circle.svg?raw";
+import "./get-started.css";
 
 export default function DownloadPage() {
     const [ currentArch, setCurrentArch ] = useState(getArchitecture());

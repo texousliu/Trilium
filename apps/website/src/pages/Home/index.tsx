@@ -48,8 +48,8 @@ function HeroSection() {
 
                 <div className="download-wrapper">
                     <DownloadButton big />
-                    <a class="more-download-options desktop-only" href="./download">See all download options</a>
-                    <Button href="./download" className="mobile-only" text="See download options" />
+                    <a class="more-download-options desktop-only" href="./get-started/">See all download options</a>
+                    <Button href="./get-started/" className="mobile-only" text="See download options" />
                     <div className="additional-options">
                         <Button iconSvg={gitHubIcon} outline text="GitHub" href="https://github.com/TriliumNext/Trilium/" openExternally />
                         <Button iconSvg={dockerIcon} outline text="Docker Hub" href="https://hub.docker.com/r/triliumnext/trilium" openExternally />

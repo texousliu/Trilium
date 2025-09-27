@@ -5,7 +5,7 @@ import { Home } from './pages/Home/index.jsx';
 import { NotFound } from './pages/_404.jsx';
 import './style.css';
 import Footer from './components/Footer.js';
-import Download from './pages/Download/download.js';
+import GetStarted from './pages/GetStarted/get-started.js';
 import Donate from './pages/Donate/Donate.js';
 
 export function App() {
@@ -16,7 +16,7 @@ export function App() {
 				<Router>
 					<Route path="/" component={Home} />
 					<Route default component={NotFound} />
-                    <Route path="/download" component={Download} />
+                    <Route path="/get-started" component={GetStarted} />
                     <Route path="/donate" component={Donate} />
 				</Router>
 			</main>
