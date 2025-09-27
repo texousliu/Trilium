@@ -1,4 +1,4 @@
-import { useEffect } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 
 export function usePageTitle(title: string) {
     useEffect(() => {
@@ -8,4 +8,18 @@ export function usePageTitle(title: string) {
             document.title = "Trilium Notes";
         }
     }, [ title ]);
+}
+
+export function useColorScheme() {
+    const [ prefersDark, setPrefersDark ] = useState((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches));
+
+    useEffect(() => {
+        const mediaQueryList = window.matchMedia("(prefers-color-scheme: dark)");
+        const listener = () => setPrefersDark((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches));
+
+        mediaQueryList.addEventListener("change", listener);
+        return () => mediaQueryList.removeEventListener("change", listener);
+    }, []);
+
+    return prefersDark ? "dark" : "light";
 }

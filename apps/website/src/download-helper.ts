@@ -167,7 +167,7 @@ export function getArchitecture(): Architecture {
     return "x64";
 }
 
-function getPlatform(): Platform {
+export function getPlatform(): Platform {
     const userAgent = navigator.userAgent.toLowerCase();
     if (userAgent.includes('macintosh') || userAgent.includes('mac os x')) {
         return "macos";

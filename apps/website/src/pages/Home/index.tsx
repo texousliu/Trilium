@@ -3,10 +3,11 @@ import Card from '../../components/Card';
 import Section from '../../components/Section';
 import DownloadButton from '../../components/DownloadButton';
 import "./index.css";
-import { usePageTitle } from '../../hooks';
+import { useColorScheme, usePageTitle } from '../../hooks';
 import Button from '../../components/Button';
 import gitHubIcon from "../../assets/boxicons/bx-github.svg?raw";
 import dockerIcon from "../../assets/boxicons/bx-docker.svg?raw";
+import { getPlatform } from '../../download-helper';
 
 export function Home() {
     usePageTitle("");
@@ -23,6 +24,23 @@ export function Home() {
 }
 
 function HeroSection() {
+    const platform = getPlatform();
+    let screenshotUrl: string;
+    const colorScheme = useColorScheme();
+
+    switch (platform) {
+        case "macos":
+            screenshotUrl = `./src/assets/screenshot_desktop_mac_${colorScheme}.png`;
+            break;
+
+        case "linux":
+            break;
+        case "windows":
+        default:
+            screenshotUrl = "./src/assets/screenshot_desktop_win.png";
+            break;
+    }
+
     return (
         <Section className="hero-section">
             <div class="title-section">
@@ -41,7 +59,7 @@ function HeroSection() {
 
             </div>
 
-            <img class="screenshot" src="./src/assets/screenshot_desktop_win.png" />
+            {screenshotUrl && <img class="screenshot" src={screenshotUrl} />}
         </Section>
     )
 }
