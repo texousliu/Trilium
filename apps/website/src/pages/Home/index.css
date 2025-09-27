@@ -58,7 +58,6 @@ section.hero-section > .content-wrapper {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    min-height: 60vh;
 }
 
 section.hero-section .title-section {
@@ -129,6 +128,7 @@ section.hero-section .additional-options a {
 @media (min-width: 720px) {
     section.hero-section > .content-wrapper {
         flex-direction: row;
+        gap: 3em;
         padding: 3em;
     }
 
