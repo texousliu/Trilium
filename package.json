@@ -17,6 +17,7 @@
     "desktop:start": "pnpm run --filter desktop dev",
     "desktop:build": "pnpm run --filter desktop build",
     "desktop:start-prod": "pnpm run --filter desktop start-prod",
+    "website:build": "pnpm run --filter website build",
     "electron:build": "pnpm desktop:build",
     "electron:start": "pnpm desktop:start",
     "electron:start-prod": "pnpm desktop:start-prod",

@@ -1,0 +1,38 @@
+name: Deploy website
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/website/**"
+
+  pull_request:
+    paths:
+      - "apps/website/**"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      deployments: write
+      pull-requests: write # For PR preview comments
+
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+
+      - name: Build the website
+        run: |
+          pnpm i
+          pnpm website:build
+
+      - name: Deploy
+        uses: ./.github/actions/deploy-to-cloudflare-pages
+        with:
+          project_name: "trilium-homepage"
+          comment_body: "📚 Website preview is ready"
+          production_url: "https://triliumnotes.org"
+          deploy_dir: "apps/website/dist"
