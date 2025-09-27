@@ -6,30 +6,42 @@
     grid-column: 1 / 4;
 }
 
-.download-card h3 {
-    color: var(--accent-color);
-    font-size: 1.5em;
-    position: relative;
-}
+.download-card {
+    h3 {
+        color: var(--accent-color);
+        font-size: 1.5em;
+        position: relative;
 
-.download-card h3 a.more-info {
-    margin-left: 0.5em;
-    right: 0;
-}
+        a.more-info {
+            margin-left: 0.5em;
+            right: 0;
 
-.download-card h3 a.more-info .bx {
-    vertical-align: sub;
-}
+            .bx {
+                vertical-align: sub;
+            }
+        }
+    }
 
-.download-card .card-content-inner {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-}
+    .card-content-inner {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
 
-.download-card a:not(.button) {
-    color: var(--accent-color);
-    text-decoration: none;
+    a:not(.button) {
+        color: var(--accent-color);
+    }
+
+    .quick-start {
+        border: 1px solid var(--muted-color);
+        padding: 0.5em;
+        border-radius: 6px;
+
+        code {
+            text-wrap: wrap;
+            color: var(--muted-color);
+        }
+    }
 }
 
 .download-options {
@@ -39,48 +51,39 @@
     align-items: center;
     display: flex;
     flex-direction: column;
+
+    .recommended-options {
+        align-self: stretch;
+        display: flex;
+        gap: 1em;
+
+        a.recommended {
+            display: block;
+            background: var(--accent-color);
+            color: var(--brand-foreground-color);
+            border-radius: calc(infinity * 1px);
+            margin: 1em 0;
+            flex-grow: 1;
+        }
+    }
+
+    .other-options {
+        display: flex;
+        gap: 0.5em 1em;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
 }
 
-.download-options .recommended-options {
-    align-self: stretch;
-    display: flex;
-    gap: 1em;
+.download-desktop {
+    .download-card:first-of-type { --accent-color: var(--brand-1); }
+    .download-card:nth-of-type(2) { --accent-color: var(--brand-2); }
+    .download-card:last-of-type { --accent-color: var(--brand-3); }
 }
-
-.download-options a.recommended {
-    display: block;
-    background: var(--accent-color);
-    color: var(--brand-foreground-color);
-    border-radius: calc(infinity * 1px);
-    margin: 1em 0;
-    flex-grow: 1;
-}
-
-.download-options .other-options {
-    display: flex;
-    gap: 0.5em 1em;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.download-desktop .download-card:first-of-type { --accent-color: var(--brand-1); }
-.download-desktop .download-card:nth-of-type(2) { --accent-color: var(--brand-2); }
-.download-desktop .download-card:last-of-type { --accent-color: var(--brand-3); }
 
 .download-server .download-card {
     --accent-color: var(--foreground-color);
     --brand-foreground-color: var(--background-color);
-}
-
-.download-card .quick-start {
-    border: 1px solid var(--muted-color);
-    padding: 0.5em;
-    border-radius: 6px;
-}
-
-.download-card .quick-start code {
-    text-wrap: wrap;
-    color: var(--muted-color);
 }
 
 .architecture-switch {
@@ -89,24 +92,28 @@
     justify-content: center;
     align-items: center;
     margin: 1em 0;
-}
 
-.architecture-switch a {
-    display: inline-block;
-    background: var(--card-background-color);
-    padding: 0.25em 0.5em;
-    text-decoration: none;
-    text-align: center;
-    min-width: 3em;
-    color: inherit;
-}
+    a {
+        display: inline-block;
+        background: var(--card-background-color);
+        padding: 0.25em 0.5em;
+        text-decoration: none;
+        text-align: center;
+        min-width: 3em;
+        color: inherit;
 
-.architecture-switch .toggle-wrapper {
-    border-radius: calc(infinity * 1px);
-    overflow: hidden;
-}
+        &.active {
+            background-color: var(--brand-1);
+            color: var(--brand-foreground-color);
+        }
 
-.architecture-switch a.active {
-    background-color: var(--brand-1);
-    color: var(--brand-foreground-color);
+        &:hover {
+            text-decoration: none;
+        }
+    }
+
+    .toggle-wrapper {
+        border-radius: calc(infinity * 1px);
+        overflow: hidden;
+    }
 }

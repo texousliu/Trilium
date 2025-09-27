@@ -1,23 +1,21 @@
 section.donate {
     background: var(--background-color);
-}
 
-section.donate ul.donate-buttons {
-    list-style-type: none;
-    display: flex;
-    gap: 1em;
-    padding: 0;
-    flex-direction: column;
-}
+    ul.donate-buttons {
+        list-style-type: none;
+        display: flex;
+        gap: 1em;
+        padding: 0;
+        flex-direction: column;
 
-section.donate h3 {
-    font-size: 1.5em;
-    color: var(--brand-1);
-}
+        @media (min-width: 720px) {
+            gap: 0 1em;
+            flex-direction: row;
+        }
+    }
 
-@media (min-width: 720px) {
-    section.donate ul {
-        gap: 0 1em;
-        flex-direction: row;
+    h3 {
+        font-size: 1.5em;
+        color: var(--brand-1);
     }
 }
