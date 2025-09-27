@@ -29,8 +29,10 @@ export function Home() {
 	return (
         <>
             <HeroSection />
-            <BenefitsSection />
+            <OrganizationBenefitsSection />
+            <ProductivityBenefitsSection />
             <NoteTypesSection />
+            <ExtensibilityBenefitsSection />
             <CollectionsSection />
             <FaqSection />
             <FinalCta />
@@ -78,7 +80,7 @@ function HeroSection() {
     )
 }
 
-function BenefitsSection() {
+function OrganizationBenefitsSection() {
     return (
         <>
             <Section className="benefits" title="Organization">
@@ -88,7 +90,13 @@ function BenefitsSection() {
                     <Card iconSvg={hoistingIcon} title="Workspaces and hoisting" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Navigation/Note%20Hoisting.html">Easily separate your personal and work notes by grouping them under a workspace, which focuses your note tree to only show a specific set of notes.</Card>
                 </div>
             </Section>
+        </>
+    );
+}
 
+function ProductivityBenefitsSection() {
+    return (
+        <>
             <Section className="benefits accented" title="Productivity and safety">
                 <div className="benefits-container grid-3-cols">
                     <Card iconSvg={revisionsIcon} title="Note revisions" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes/Note%20Revisions.html">Notes are periodically saved in the background and revisions can be used for review or to undo accidental changes. Revisions can also be created on-demand.</Card>
@@ -99,22 +107,13 @@ function BenefitsSection() {
                     <Card iconSvg={webClipperIcon} title="Web clipper" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Installation%20%26%20Setup/Web%20Clipper.html">Grab web pages (or screenshots) and place them directly into Trilium using the web clipper browser extension.</Card>
                 </div>
             </Section>
-
-            <Section className="benefits" title="Sharing & extensibility">
-                <div className="benefits-container grid-4-cols">
-                    <Card iconSvg={importExportIcon} title="Import/export" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Import%20%26%20Export/Markdown/index.html">Easily interact with other applications using Markdown, ENEX, OML formats.</Card>
-                    <Card iconSvg={shareIcon} title="Share notes on the web" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Advanced%20Usage/Sharing/Serving%20directly%20the%20content%20o.html">If you have a server, it can be used to share a subset of your notes with other people.</Card>
-                    <Card iconSvg={scriptingIcon} title="Advanced scripting" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Scripting/Custom%20Widgets/index.html">Build your own integrations within Trilium with custom widgets, or server-side logic.</Card>
-                    <Card iconSvg={restApiIcon} title="REST API" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Advanced%20Usage/ETAPI%20%28REST%20API%29/index.html">Interact with Trilium programatically using its builtin REST API.</Card>
-                </div>
-            </Section>
         </>
     );
 }
 
 function NoteTypesSection() {
     return (
-        <Section className="note-types accented" title="Multiple ways to represent your information">
+        <Section className="note-types" title="Multiple ways to represent your information">
             <ListWithScreenshot horizontal items={[
                 {
                     title: "Text notes",
@@ -162,6 +161,21 @@ function NoteTypesSection() {
                 <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Web%20View.html" openExternally>web views</Link>.
             </p>
         </Section>
+    );
+}
+
+function ExtensibilityBenefitsSection() {
+    return (
+        <>
+            <Section className="benefits accented" title="Sharing & extensibility">
+                <div className="benefits-container grid-4-cols">
+                    <Card iconSvg={importExportIcon} title="Import/export" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Import%20%26%20Export/Markdown/index.html">Easily interact with other applications using Markdown, ENEX, OML formats.</Card>
+                    <Card iconSvg={shareIcon} title="Share notes on the web" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Advanced%20Usage/Sharing/Serving%20directly%20the%20content%20o.html">If you have a server, it can be used to share a subset of your notes with other people.</Card>
+                    <Card iconSvg={scriptingIcon} title="Advanced scripting" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Scripting/Custom%20Widgets/index.html">Build your own integrations within Trilium with custom widgets, or server-side logic.</Card>
+                    <Card iconSvg={restApiIcon} title="REST API" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Advanced%20Usage/ETAPI%20%28REST%20API%29/index.html">Interact with Trilium programatically using its builtin REST API.</Card>
+                </div>
+            </Section>
+        </>
     );
 }
 
