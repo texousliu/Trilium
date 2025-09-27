@@ -143,8 +143,7 @@ export const downloadMatrix: DownloadMatrix = {
             quickStartCode: "docker pull triliumnext/trilium\ndocker run -p 8080:8080 -d ./data:/home/node/trilium-data triliumnext/trilium",
             downloads: {
                 dockerhub: {
-                    recommended: true,
-                    name: "View on Docker Hub",
+                    name: "Docker Hub",
                     url: "https://hub.docker.com/r/triliumnext/trilium"
                 },
                 ghcr: {
@@ -155,7 +154,7 @@ export const downloadMatrix: DownloadMatrix = {
         },
         pikapod: {
             title: "Paid hosting",
-            description: "Trilium Notes hosted on PikaPods, a paid service for easy access and management.",
+            description: "Trilium Notes hosted on PikaPods, a paid service for easy access and management. Not directly affiliated with the Trilium team.",
             downloads: {
                 pikapod: {
                     recommended: true,
