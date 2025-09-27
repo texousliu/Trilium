@@ -56,6 +56,23 @@ header nav a.active {
 }
 
 @media (max-width: 719px) {
+    :root {
+        --header-height: 35px;
+    }
+
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        min-height: var(--header-height);
+        display: flex;
+    }
+
+    header + main {
+        margin-top: var(--header-height);
+    }
+
     header .content-wrapper {
         display: block;
     }
