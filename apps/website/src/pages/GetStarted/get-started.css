@@ -33,9 +33,14 @@
     }
 
     .quick-start {
-        border: 1px solid var(--muted-color);
-        padding: 0.5em;
+        border: 1px solid var(--muted-color);    
+        padding: 0.75em;
         border-radius: 6px;
+
+        @media (prefers-color-scheme: dark) {
+            border: none;
+            background-color: black;
+        }
 
         code {
             text-wrap: wrap;

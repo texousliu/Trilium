@@ -138,7 +138,7 @@ export const downloadMatrix: DownloadMatrix = {
             downloads: {
                 tarX64: {
                     recommended: true,
-                    name: "x86 (.tar.xz)",
+                    name: "x64 (.tar.xz)",
                     url: `https://github.com/TriliumNext/Trilium/releases/download/v${version}/TriliumNotes-Server-v${version}-linux-x64.tar.xz`,
                 },
                 tarArm64: {
