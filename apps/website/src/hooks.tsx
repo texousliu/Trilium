@@ -11,6 +11,8 @@ export function usePageTitle(title: string) {
 }
 
 export function useColorScheme() {
+    if (typeof window === "undefined") return;
+
     const [ prefersDark, setPrefersDark ] = useState((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches));
 
     useEffect(() => {
