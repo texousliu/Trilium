@@ -115,7 +115,7 @@ img {
     font-size: 1.1rem;
     font-weight: 300;
     margin: 0;
-    color: var(--foreground-color);
+    color: var(--brand-1);
 }
 
 .card > .image {
