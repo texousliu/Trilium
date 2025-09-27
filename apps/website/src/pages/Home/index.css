@@ -145,6 +145,10 @@ section.accented {
     padding: 1em;
 }
 
+.benefits-container .card h3 {
+    color: var(--brand-1);
+}
+
 section.final-cta {
     text-align: center;
     padding: 6em 0;
