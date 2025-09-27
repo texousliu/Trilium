@@ -4,7 +4,7 @@ import Section from '../../components/Section';
 import DownloadButton from '../../components/DownloadButton';
 import "./index.css";
 import { useColorScheme, usePageTitle } from '../../hooks';
-import Button from '../../components/Button';
+import Button, { Link } from '../../components/Button';
 import gitHubIcon from "../../assets/boxicons/bx-github.svg?raw";
 import dockerIcon from "../../assets/boxicons/bx-docker.svg?raw";
 import { getPlatform } from '../../download-helper';
@@ -93,14 +93,21 @@ function NoteTypesSection() {
     return (
         <Section className="note-types" title="Note types">
             <div class="note-types-container grid-3-cols">
-                <Card title="Text notes" imageUrl="./src/assets/type_text.png">The notes are edited using a visual (WYSIWYG) editor, with support for tables, images, math expressions, code blocks with syntax highlighting. Quickly format the text using Markdown-like syntax or using slash commands.</Card>
-                <Card title="Code notes" imageUrl="./src/assets/type_code.png">Large samples of source code or scripts use a dedicated editor, with syntax highlighting for many programming languages and with various color themes.</Card>
-                <Card title="File notes" imageUrl="./src/assets/type_file.png">Embed multimedia files such as PDFs, images, videos with an in-application preview.</Card>
-                <Card title="Canvas" imageUrl="./src/assets/type_canvas.png">Arrange shapes, images and text across an infinite canvas, using the same technology behind <a href="https://excalidraw.com">excalidraw.com</a>. Ideal for diagrams, sketches and visual planning.</Card>
-                <Card title="Mermaid diagrams" imageUrl="./src/assets/type_mermaid.png">Create diagrams such as flowcharts, class &amp; sequence diagrams, Gantt charts and many more, using the Mermaid syntax.</Card>
-                <Card title="Mindmap" imageUrl="./src/assets/type_mindmap.png">Organize your thoughts visually or do a brainstorming session by using <a href="https://en.wikipedia.org/wiki/Mind_map">mind map diagrams</a>.</Card>
+                <Card title="Text notes" imageUrl="./src/assets/type_text.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Text/index.html">The notes are edited using a visual (WYSIWYG) editor, with support for tables, images, math expressions, code blocks with syntax highlighting. Quickly format the text using Markdown-like syntax or using slash commands.</Card>
+                <Card title="Code notes" imageUrl="./src/assets/type_code.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Code.html">Large samples of source code or scripts use a dedicated editor, with syntax highlighting for many programming languages and with various color themes.</Card>
+                <Card title="File notes" imageUrl="./src/assets/type_file.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/File.html">Embed multimedia files such as PDFs, images, videos with an in-application preview.</Card>
+                <Card title="Canvas" imageUrl="./src/assets/type_canvas.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Canvas.html">Arrange shapes, images and text across an infinite canvas, using the same technology behind <a href="https://excalidraw.com">excalidraw.com</a>. Ideal for diagrams, sketches and visual planning.</Card>
+                <Card title="Mermaid diagrams" imageUrl="./src/assets/type_mermaid.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Mermaid%20Diagrams/index.html">Create diagrams such as flowcharts, class &amp; sequence diagrams, Gantt charts and many more, using the Mermaid syntax.</Card>
+                <Card title="Mindmap" imageUrl="./src/assets/type_mindmap.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Mind%20Map.html">Organize your thoughts visually or do a brainstorming session by using <a href="https://en.wikipedia.org/wiki/Mind_map">mind map diagrams</a>.</Card>
             </div>
-            <p>and others: note map, relation map, saved searches, render note, web views.</p>
+            <p>
+                and others:{" "}
+                <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Note%20Map.html" openExternally>note map</Link>,{" "}
+                <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Relation%20Map.html" openExternally>relation map</Link>,{" "}
+                <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Saved%20Search.html" openExternally>saved searches</Link>,{" "}
+                <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Render%20Note.html" openExternally>render note</Link>,{" "}
+                <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Web%20View.html" openExternally>web views</Link>.
+            </p>
         </Section>
     );
 }
@@ -109,10 +116,10 @@ function CollectionsSection() {
     return (
         <Section className="collections" title="Collections">
             <div className="collections-container grid-2-cols">
-                <Card title="Calendar" imageUrl="./src/assets/collection_calendar.png">Organize your personal or professional events using a calendar, with support for all-day and multi-day events. See your events at a glance with the week, month and year views. Easy interaction to add or drag events.</Card>
-                <Card title="Table" imageUrl="./src/assets/collection_table.png">Display and edit information about notes in a tabular structure, with various column types such as text, number, check boxes, date &amp; time, links and colors and support for relations. Optionally, display the notes within a tree hierarchy inside the table.</Card>
-                <Card title="Board" imageUrl="./src/assets/collection_board.png">Organize your tasks or project status into a Kanban board with an easy way to create new items and columns and simply changing their status by dragging across the board.</Card>
-                <Card title="Geomap" imageUrl="./src/assets/collection_geomap.png">Plan your vacations or mark your points of interest directly on a geographical map using customizable markers. Display recorded GPX tracks to track itineraries.</Card>
+                <Card title="Calendar" imageUrl="./src/assets/collection_calendar.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Calendar%20View.html">Organize your personal or professional events using a calendar, with support for all-day and multi-day events. See your events at a glance with the week, month and year views. Easy interaction to add or drag events.</Card>
+                <Card title="Table" imageUrl="./src/assets/collection_table.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Table%20View.html">Display and edit information about notes in a tabular structure, with various column types such as text, number, check boxes, date &amp; time, links and colors and support for relations. Optionally, display the notes within a tree hierarchy inside the table.</Card>
+                <Card title="Board" imageUrl="./src/assets/collection_board.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Board%20View.html">Organize your tasks or project status into a Kanban board with an easy way to create new items and columns and simply changing their status by dragging across the board.</Card>
+                <Card title="Geomap" imageUrl="./src/assets/collection_geomap.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Geo%20Map%20View.html">Plan your vacations or mark your points of interest directly on a geographical map using customizable markers. Display recorded GPX tracks to track itineraries.</Card>
             </div>
         </Section>
     );
