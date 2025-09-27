@@ -1,6 +1,6 @@
 section.hero-section {
     position: relative;
-    background: linear-gradient(135deg, var(--light-bg-start), var(--light-bg-end));
+    background: linear-gradient(135deg, var(--light-bg-start), var(--light-bg-end));    
 }
 
 section.hero-section.dark {
@@ -55,9 +55,9 @@ section.hero-section::before {
 
 section.hero-section > .content-wrapper {
     display: flex;
-    padding: 3em;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     min-height: 60vh;
 }
 
@@ -74,9 +74,10 @@ section.hero-section .title-section h1 {
 
 section.hero-section .image,
 section.hero-section .image img {
+    position: relative;
     width: 100%;
     height: auto;
-    position: relative;
+    margin-bottom: 0;
 }
 
 section.hero-section .download-wrapper {
@@ -93,6 +94,27 @@ section.hero-section .more-download-options {
     color: var(--brand-1);
     font-size: 0.8em;
     text-align: center;
+}
+
+@media (max-width: 719px) {
+    section.hero-section {
+        padding-bottom: 0;        
+    }
+
+    section.hero-section .content-wrapper {
+        width: 100%;
+    }
+
+    section.hero-section .title-section {
+        max-width: 90%;
+    }
+}
+
+@media (min-width: 720px) {
+    section.hero-section > .content-wrapper {
+        flex-direction: row;
+        padding: 3em;
+    }
 }
 
 section:nth-of-type(2n+1) {
