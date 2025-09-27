@@ -14,3 +14,7 @@ a.button.outline {
     color: var(--brand-1);
     background-color: transparent;
 }
+
+a.button .text {
+    vertical-align: middle;
+}

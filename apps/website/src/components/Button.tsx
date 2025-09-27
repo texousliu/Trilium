@@ -26,7 +26,7 @@ export default function Button({ iconSvg, text, className, outline, ...restProps
             {...restProps}
         >
             {iconSvg && <><Icon svg={iconSvg} />{" "}</>}
-            {text}
+            <span class="text">{text}</span>
         </Link>
     )
 }
