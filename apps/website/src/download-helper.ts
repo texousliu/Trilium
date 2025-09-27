@@ -97,10 +97,15 @@ export const downloadMatrix: DownloadMatrix = {
                 x64: "For Intel-based Macs running macOS Big Sur or later.",
                 arm64: "For Apple Silicon Macs such as those with M1 and M2 chips.",
             },
+            quickStartCode: "brew install --cask trilium-notes",
             downloads: {
                 dmg: {
                     recommended: true,
                     name: "Download Installer (.dmg)"
+                },
+                homebrew: {
+                    name: "Homebrew Cask",
+                    url: "https://formulae.brew.sh/cask/trilium-notes#default"
                 },
                 zip: {
                     name: "Portable (.zip)"
