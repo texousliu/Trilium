@@ -27,7 +27,7 @@ export function Header() {
                     {HEADER_LINKS.map(link => (
                         <a
                             href={link.url}
-                            className={url === link.url && 'active'}
+                            className={url === link.url ? "active" : ""}
                             target={link.external && "_blank"}
                         >{link.text}</a>
                     ))}
