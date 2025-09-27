@@ -9,11 +9,12 @@ header {
     --gap: 1.25em;
     font-size: 0.8em;
 
-    .content-wrapper {
+    &>.content-wrapper {
         display: flex;
         align-items: center;
         justify-items: center;
         gap: var(--gap);
+        min-width: 80vw;
     }
 
     a.banner {
@@ -52,15 +53,9 @@ header {
     }
 }
 
-
-header > .content-wrapper,
-section.hero-section > .content-wrapper {
-    min-width: 80vw;
-}
-
 @media (max-width: 719px) {
     :root {
-        --header-height: 35px;
+        --header-height: 60px;
     }
 
     header {
@@ -69,6 +64,7 @@ section.hero-section > .content-wrapper {
         left: 0;
         right: 0;
         min-height: var(--header-height);
+        box-sizing: border-box;
         display: flex;
 
         .content-wrapper {

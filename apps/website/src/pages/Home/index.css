@@ -43,6 +43,7 @@ section.hero-section {
         align-items: center;
         justify-content: center;
         flex-direction: column;
+        min-width: 80vw;    
     }
 
     .title-section {
@@ -166,8 +167,11 @@ section.final-cta .buttons {
 }
 
 .list-with-screenshot {
-    display: flex;
     gap: 2em;
+
+    @media (min-width: 720px) {
+        display: flex;
+    }
 
     ul {
         list-style-type: none;
@@ -200,9 +204,12 @@ section.final-cta .buttons {
         flex-direction: column-reverse;
 
         ul {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
             gap: 1em;
+            display: grid;
+            
+            @media (min-width: 720px) {
+                grid-template-columns: 1fr 1fr 1fr;                
+            }
         }
 
         li {

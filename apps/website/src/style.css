@@ -140,6 +140,7 @@ img {
 }
 
 @media (max-width: 719px) {
+    .grid-4-cols > *,
     .grid-3-cols > *,
     .grid-2-cols > * {
         margin-bottom: 1em;

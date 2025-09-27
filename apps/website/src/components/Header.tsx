@@ -46,11 +46,14 @@ export function Header() {
 
                 <nav className={`${mobileMenuShown ? "mobile-shown" : ""}`}>
                     {HEADER_LINKS.map(link => (
-                        <a
+                        <Link
                             href={link.url}
                             className={url === link.url ? "active" : ""}
-                            target={link.external && "_blank"}
-                        >{link.text}</a>
+                            openExternally={link.external}
+                            onClick={() => {
+                                setMobileMenuShown(false);
+                            }}
+                        >{link.text}</Link>
                     ))}
 
                     <SocialButtons className="mobile-only" withText />
