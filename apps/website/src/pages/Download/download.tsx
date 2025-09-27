@@ -11,7 +11,7 @@ export default function DownloadPage() {
 
     return (
         <>
-            <Section title="Download the desktop application">
+            <Section title="Download the desktop application" className="fill">
                 <div className="architecture-switch">
                     <span>Architecture:</span>
 
