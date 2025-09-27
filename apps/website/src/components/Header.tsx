@@ -6,6 +6,7 @@ import Icon from "./Icon";
 import logoPath from "../assets/icon-color.svg";
 import menuIcon from "../assets/boxicons/bx-menu.svg?raw";
 import { useState } from "preact/hooks";
+import { SocialButtons } from "./Footer";
 
 interface HeaderLink {
     url: string;
@@ -51,6 +52,8 @@ export function Header() {
                             target={link.external && "_blank"}
                         >{link.text}</a>
                     ))}
+
+                    <SocialButtons className="mobile-only" withText />
                 </nav>
 
                 <DownloadButton />

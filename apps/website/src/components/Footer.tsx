@@ -15,40 +15,55 @@ export default function Footer() {
                     © 2017-2024 <Link href="https://github.com/zadam" openExternally>zadam</Link>.
                 </div>
 
-                <div className="social-buttons">
-                    <SocialButton
-                        name="GitHub"
-                        iconSvg={githubIcon}
-                        url="https://github.com/TriliumNext/Trilium"
-                    />
-
-                    <SocialButton
-                        name="GitHub Discussions"
-                        iconSvg={githubDiscussionsIcon}
-                        url="https://github.com/orgs/TriliumNext/discussions"
-                    />
-
-                    <SocialButton
-                        name="Matrix"
-                        iconSvg={matrixIcon}
-                        url="https://matrix.to/#/#triliumnext:matrix.org"
-                    />
-
-                    <SocialButton
-                        name="Reddit"
-                        iconSvg={redditIcon}
-                        url="https://www.reddit.com/r/Trilium/"
-                    />
-                </div>
+                <SocialButtons />
             </div>
         </footer>
     )
 }
 
-function SocialButton({ name, iconSvg, url }: { name: string, iconSvg: string, url: string }) {
+export function SocialButtons({ className, withText }: { className?: string, withText?: boolean }) {
     return (
-        <Link className="social-button" href={url} openExternally title={name}>
+        <div className={`social-buttons ${className}`}>
+            <SocialButton
+                name="GitHub"
+                iconSvg={githubIcon}
+                url="https://github.com/TriliumNext/Trilium"
+                withText={withText}
+            />
+
+            <SocialButton
+                name="GitHub Discussions"
+                iconSvg={githubDiscussionsIcon}
+                url="https://github.com/orgs/TriliumNext/discussions"
+                withText={withText}
+            />
+
+            <SocialButton
+                name="Matrix"
+                iconSvg={matrixIcon}
+                url="https://matrix.to/#/#triliumnext:matrix.org"
+                withText={withText}
+            />
+
+            <SocialButton
+                name="Reddit"
+                iconSvg={redditIcon}
+                url="https://www.reddit.com/r/Trilium/"
+                withText={withText}
+            />
+        </div>
+    )
+}
+
+function SocialButton({ name, iconSvg, url, withText }: { name: string, iconSvg: string, url: string, withText: boolean }) {
+    return (
+        <Link
+            className="social-button"
+            href={url} openExternally
+            title={!withText ? name : undefined}
+        >
             <Icon svg={iconSvg} />
+            {withText && name}
         </Link>
     )
 }

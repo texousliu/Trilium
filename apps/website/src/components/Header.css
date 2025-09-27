@@ -76,7 +76,7 @@ header nav a.active {
         flex-direction: column;
         max-height: 0;
         overflow: hidden;
-        transition: max-height 200ms ease-in-out;        
+        transition: max-height 200ms ease-in;        
     }
 
     header nav.mobile-shown {
@@ -91,8 +91,17 @@ header nav a.active {
         border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     }
 
-    header nav a:last-of-type {
+    header .social-buttons {
+        justify-content: space-between;
+        padding-top: 1em;
+    }
+
+    header .social-buttons a {
         border-bottom: unset;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 1em;
     }
 
 }
