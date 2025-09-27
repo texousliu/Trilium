@@ -4,7 +4,7 @@ export type App = "desktop" | "server";
 
 export type Architecture = 'x64' | 'arm64';
 
-export type Platform = "macos" | "windows" | "linux" | "pikapod";
+export type Platform = "macos" | "windows" | "linux" | "pikapod" | "docker";
 
 const version = rootPackageJson.version;
 
@@ -107,17 +107,13 @@ export const downloadMatrix: DownloadMatrix = {
     },
     server: {
         linux: {
-            title: "Self-hosted (Linux)",
-            description: "Deploy Trilium Notes on your own server or VPS, compatible with most Linux distributions.",
+            title: "Self-hosted on Linux",
+            description: "Deploy Trilium Notes on your own server or VPS, compatible with most distributions.",
             downloads: {
-                docker: {
-                    recommended: true,
-                    name: "View on Docker Hub",
-                    url: "https://hub.docker.com/r/triliumnext/trilium"
-                },
                 tarX64: {
+                    recommended: true,
                     name: "x86 (.tar.xz)",
-                    url: `https://github.com/TriliumNext/Trilium/releases/download/v${version}/TriliumNotes-Server-v${version}-linux-x64.tar.xz`
+                    url: `https://github.com/TriliumNext/Trilium/releases/download/v${version}/TriliumNotes-Server-v${version}-linux-x64.tar.xz`,
                 },
                 tarArm64: {
                     name: "ARM (.tar.xz)",
@@ -126,6 +122,21 @@ export const downloadMatrix: DownloadMatrix = {
                 nixos: {
                     name: "NixOS module",
                     url: "https://search.nixos.org/options?query=trilium-server"
+                }
+            }
+        },
+        docker: {
+            title: "Self-hosted using Docker",
+            description: "Easily deploy on Windows, Linux or macOS using a Docker container.",
+            downloads: {
+                dockerhub: {
+                    recommended: true,
+                    name: "View on Docker Hub",
+                    url: "https://hub.docker.com/r/triliumnext/trilium"
+                },
+                ghcr: {
+                    name: "ghcr.io",
+                    url: "https://github.com/TriliumNext/Trilium/pkgs/container/trilium"
                 }
             }
         },

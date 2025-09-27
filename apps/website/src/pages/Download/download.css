@@ -33,8 +33,10 @@
 .download-desktop .download-card:nth-of-type(2) { --accent-color: var(--brand-2); }
 .download-desktop .download-card:last-of-type { --accent-color: var(--brand-3); }
 
-.download-server .download-card:first-of-type { --accent-color: var(--brand-1); }
-.download-server .download-card:last-of-type { --accent-color: var(--brand-3); }
+.download-server .download-card {
+    --accent-color: var(--foreground-color);
+    --brand-foreground-color: var(--background-color);
+}
 
 .architecture-switch {
     display: flex;
@@ -62,11 +64,4 @@
 .architecture-switch a.active {
     background-color: var(--brand-1);
     color: var(--brand-foreground-color);
-}
-
-@media (min-width: 720px) {
-    .download-server {
-        width: 75%;
-        margin: auto;
-    }
 }
