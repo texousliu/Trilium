@@ -19,6 +19,7 @@ export function Home() {
             <NoteTypesSection />
             <CollectionsSection />
             <FaqSection />
+            <FinalCta />
         </>
 	);
 }
@@ -48,8 +49,8 @@ function HeroSection() {
 
                 <div className="download-wrapper">
                     <DownloadButton big />
-                    <a class="more-download-options desktop-only" href="./get-started/">See all download options</a>
-                    <Button href="./get-started/" className="mobile-only" text="See download options" />
+                    <a class="more-download-options desktop-only" href="./get-started/">More platforms & server setup</a>
+                    <Button href="./get-started/" className="mobile-only" text="Get started" />
                     <div className="additional-options">
                         <Button iconSvg={gitHubIcon} outline text="GitHub" href="https://github.com/TriliumNext/Trilium/" openExternally />
                         <Button iconSvg={dockerIcon} outline text="Docker Hub" href="https://hub.docker.com/r/triliumnext/trilium" openExternally />
@@ -91,7 +92,7 @@ function BenefitsSection() {
 
 function NoteTypesSection() {
     return (
-        <Section className="note-types" title="Note types">
+        <Section className="note-types accented" title="Note types">
             <div class="note-types-container grid-3-cols">
                 <Card title="Text notes" imageUrl="./src/assets/type_text.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Text/index.html">The notes are edited using a visual (WYSIWYG) editor, with support for tables, images, math expressions, code blocks with syntax highlighting. Quickly format the text using Markdown-like syntax or using slash commands.</Card>
                 <Card title="Code notes" imageUrl="./src/assets/type_code.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Code.html">Large samples of source code or scripts use a dedicated editor, with syntax highlighting for many programming languages and with various color themes.</Card>
@@ -144,5 +145,17 @@ function FaqItem({ question, children }: { question: string; children: Component
             <summary>{question}</summary>
             <p>{children}</p>
         </details>
+    )
+}
+
+function FinalCta() {
+    return (
+        <Section className="final-cta accented" title="Ready to get started with Trilium Notes?">
+            <p>Build your personal knowledge base with powerful features and full privacy.</p>
+
+            <div class="buttons">
+                <Button href="./get-started/" text="Get started" />
+            </div>
+        </Section>
     )
 }
