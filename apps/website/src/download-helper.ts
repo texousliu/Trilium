@@ -187,9 +187,13 @@ export function getRecommendedDownload() {
     const format = recommendedDownload?.[0];
     const url = buildDownloadUrl("desktop", platform, format || 'zip', architecture);
 
+    const platformTitle = downloadMatrix.desktop[platform].title;
+    const name = typeof platformTitle === "string" ? platformTitle : platformTitle[architecture];
+
     return {
         architecture,
         platform,
-        url
+        url,
+        name
     }
 }

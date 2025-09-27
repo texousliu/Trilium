@@ -7,12 +7,13 @@ interface ButtonProps {
     iconSvg?: string;
     text: ComponentChildren;
     openExternally?: boolean;
+    className?: string;
 }
 
-export default function Button({ href, iconSvg, openExternally, text }: ButtonProps) {
+export default function Button({ href, iconSvg, openExternally, text, className }: ButtonProps) {
     return (
         <a
-            className="button"
+            className={`button ${className}`}
             href={href}
             target={openExternally ? "_blank" : undefined}
         >
