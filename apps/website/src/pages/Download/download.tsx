@@ -59,12 +59,14 @@ export function DownloadCard({ app, arch, entry: [ platform, entry ] }: { app: A
                     className="recommended"
                     href={buildDownloadUrl(app, platform as Platform, recommendedDownload[0], arch)}
                     text={recommendedDownload[1].name}
+                    openExternally={!!recommendedDownload[1].url}
                 />
 
                 <div class="other-options">
                     {restDownloads.map(download => (
                         <Link
                             href={buildDownloadUrl(app, platform as Platform, download[0], arch)}
+                            openExternally={!!download[1].url}
                         >
                             {download[1].name}
                         </Link>
