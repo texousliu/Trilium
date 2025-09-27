@@ -3,8 +3,11 @@ import Card from '../../components/Card';
 import Section from '../../components/Section';
 import DownloadButton from '../../components/DownloadButton';
 import "./index.css";
+import { usePageTitle } from '../../hooks';
 
 export function Home() {
+    usePageTitle("");
+
 	return (
         <>
             <HeroSection />

@@ -3,9 +3,11 @@ import Card from "../../components/Card";
 import Section from "../../components/Section";
 import { App, Architecture, buildDownloadUrl, downloadMatrix, DownloadMatrixEntry, getArchitecture, Platform } from "../../download-helper";
 import "./download.css";
+import { usePageTitle } from "../../hooks";
 
 export default function DownloadPage() {
     const [ currentArch, setCurrentArch ] = useState(getArchitecture());
+    usePageTitle("Download");
 
     return (
         <>

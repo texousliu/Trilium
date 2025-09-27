@@ -5,8 +5,11 @@ import paypalIcon from "../../assets/boxicons/bx-paypal.svg?raw";
 import buyMeACoffeeIcon from "../../assets/boxicons/bx-buy-me-a-coffee.svg?raw";
 import Button from "../../components/Button";
 import Card from "../../components/Card";
+import { usePageTitle } from "../../hooks";
 
 export default function Donate() {
+    usePageTitle("Support us");
+
     return (
         <>
             <Section title="Support us" className="donate fill">
