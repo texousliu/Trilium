@@ -11,7 +11,7 @@ export default function Footer() {
         <footer>
             <div class="content-wrapper">
                 <div class="footer-text">
-                    © 2024-2025 <Link href="https://github.com/eliandoran" openExternally>Elian Doran</Link> and the <Link href="https://github.com/TriliumNext/Notes/graphs/contributors" openExternally>team</Link>.<br />
+                    © 2024-2025 <Link href="https://github.com/eliandoran" openExternally>Elian Doran</Link> and the <Link href="https://github.com/TriliumNext/Trilium/graphs/contributors" openExternally>community</Link>.<br />
                     © 2017-2024 <Link href="https://github.com/zadam" openExternally>zadam</Link>.
                 </div>
 
