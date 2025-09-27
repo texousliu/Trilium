@@ -7,6 +7,18 @@ import { useColorScheme, usePageTitle } from '../../hooks';
 import Button, { Link } from '../../components/Button';
 import gitHubIcon from "../../assets/boxicons/bx-github.svg?raw";
 import dockerIcon from "../../assets/boxicons/bx-docker.svg?raw";
+import noteStructureIcon from "../../assets/boxicons/bx-folder.svg?raw";
+import attributesIcon from "../../assets/boxicons/bx-tag.svg?raw";
+import hoistingIcon from "../../assets/boxicons/bx-chevrons-up.svg?raw";
+import revisionsIcon from "../../assets/boxicons/bx-history.svg?raw";
+import syncIcon from "../../assets/boxicons/bx-refresh-cw.svg?raw";
+import protectedNotesIcon from "../../assets/boxicons/bx-shield.svg?raw";
+import jumpToIcon from "../../assets/boxicons/bx-send-alt.svg?raw";
+import searchIcon from "../../assets/boxicons/bx-search.svg?raw";
+import webClipperIcon from "../../assets/boxicons/bx-paperclip.svg?raw";
+import importExportIcon from "../../assets/boxicons/bx-swap-horizontal.svg?raw";
+import shareIcon from "../../assets/boxicons/bx-globe.svg?raw";
+import scriptingAndApiIcon from "../../assets/boxicons/bx-extension.svg?raw";
 import { getPlatform } from '../../download-helper';
 import { useState } from 'preact/hooks';
 
@@ -70,28 +82,28 @@ function BenefitsSection() {
         <>
             <Section className="benefits" title="Organization">
                 <div className="benefits-container grid-3-cols">
-                    <Card title="Note structure">Notes can be arranged hierarchically. There's no need for folders, since each note can contain sub-notes. A single note can be added in multiple places in the hierarchy.</Card>
-                    <Card title="Labels and relationships between notes">Define <em> relations </em> between notes or add <em> labels </em> for easy categorization. Using promoted attributes, there's an easy way to enter structured information about the notes which can later be displayed in other formats such as a table.</Card>
-                    <Card title="Workspaces and hoisting">Easily separate your personal and work notes by grouping them under a workspace, which focuses your note tree to only show a specific set of notes.</Card>
+                    <Card iconSvg={noteStructureIcon} title="Note structure">Notes can be arranged hierarchically. There's no need for folders, since each note can contain sub-notes. A single note can be added in multiple places in the hierarchy.</Card>
+                    <Card iconSvg={attributesIcon} title="Note labels and relationships">Define <em> relations </em> between notes or add <em> labels </em> for easy categorization. Using promoted attributes, there's an easy way to enter structured information about the notes which can later be displayed in other formats such as a table.</Card>
+                    <Card iconSvg={hoistingIcon} title="Workspaces and hoisting">Easily separate your personal and work notes by grouping them under a workspace, which focuses your note tree to only show a specific set of notes.</Card>
                 </div>
             </Section>
 
             <Section className="benefits accented" title="Productivity and safety">
                 <div className="benefits-container grid-3-cols">
-                    <Card title="Note revisions">Notes are periodically saved in the background and revisions can be used to check the old content of a note or delete accidental changes. Revisions can also be created on-demand.</Card>
-                    <Card title="Synchronization">Use a self-hosted or cloud instance to easily synchronize your notes across multiple devices, and to access it from your mobile phone using a PWA (progressive web application).</Card>
-                    <Card title="Protected notes">Protect sensitive personal information by encrypting the notes and locking them behind a password-protected session.</Card>
-                    <Card title="Quick search and commands">Jump quickly to notes across the hierarchy by searching for their title, with fuzzy matching to account for typos or slight differences. Or search through all the various commands of the application.</Card>
-                    <Card title="Powerful search">Or search for text inside notes and narrow down the search by filtering by the parent note, or by depth.</Card>
-                    <Card title="Web clipper">Grab web pages (or screenshots) and place them directly into Trilium using the web clipper browser extension.</Card>
+                    <Card iconSvg={revisionsIcon} title="Note revisions">Notes are periodically saved in the background and revisions can be used to check the old content of a note or delete accidental changes. Revisions can also be created on-demand.</Card>
+                    <Card iconSvg={syncIcon} title="Synchronization">Use a self-hosted or cloud instance to easily synchronize your notes across multiple devices, and to access it from your mobile phone using a PWA (progressive web application).</Card>
+                    <Card iconSvg={protectedNotesIcon} title="Protected notes">Protect sensitive personal information by encrypting the notes and locking them behind a password-protected session.</Card>
+                    <Card iconSvg={jumpToIcon} title="Quick search and commands">Jump quickly to notes across the hierarchy by searching for their title, with fuzzy matching to account for typos or slight differences. Or search through all the various commands of the application.</Card>
+                    <Card iconSvg={searchIcon} title="Powerful search">Or search for text inside notes and narrow down the search by filtering by the parent note, or by depth.</Card>
+                    <Card iconSvg={webClipperIcon} title="Web clipper">Grab web pages (or screenshots) and place them directly into Trilium using the web clipper browser extension.</Card>
                 </div>
             </Section>
 
             <Section className="benefits" title="Sharing & extensibility">
                 <div className="benefits-container grid-3-cols">
-                    <Card title="Import/export">Easily import Markdown and ENEX formats from other note-taking applications, or export to Markdown or HTML.</Card>
-                    <Card title="Share notes on the web">If you have a server instance, you can easily use it to share a subset of your notes with other people.</Card>
-                    <Card title="Advanced scripting and REST API">Create your own integrations within Trilium by writing custom widgets, or custom-server side logic. Interact externally with the Trilium database by using the built-in REST API.</Card>
+                    <Card iconSvg={importExportIcon} title="Import/export">Easily import Markdown and ENEX formats from other note-taking applications, or export to Markdown or HTML.</Card>
+                    <Card iconSvg={shareIcon} title="Share notes on the web">If you have a server instance, you can easily use it to share a subset of your notes with other people.</Card>
+                    <Card iconSvg={scriptingAndApiIcon} title="Advanced scripting and REST API">Create your own integrations within Trilium by writing custom widgets, or custom-server side logic. Interact externally with the Trilium database by using the built-in REST API.</Card>
                 </div>
             </Section>
         </>
