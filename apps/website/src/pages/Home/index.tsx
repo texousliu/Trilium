@@ -25,6 +25,10 @@ import fileIcon from "../../assets/boxicons/bx-file.svg?raw";
 import canvasIcon from "../../assets/boxicons/bx-pen.svg?raw";
 import mermaidIcon from "../../assets/boxicons/bx-vector-square.svg?raw";
 import mindmapIcon from "../../assets/boxicons/bx-network-chart.svg?raw";
+import calendarIcon from "../../assets/boxicons/bx-calendar.svg?raw";
+import tableIcon from "../../assets/boxicons/bx-table.svg?raw";
+import boardIcon from "../../assets/boxicons/bx-columns-3.svg?raw";
+import geomapIcon from "../../assets/boxicons/bx-map.svg?raw";
 import { getPlatform } from '../../download-helper';
 import { useState } from 'preact/hooks';
 
@@ -197,22 +201,26 @@ function CollectionsSection() {
                 {
                     title: "Calendar",
                     imageUrl: "./src/assets/collection_calendar.png",
+                    iconSvg: calendarIcon,
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Calendar%20View.html",
                     description: "Organize your personal or professional events using a calendar, with support for all-day and multi-day events. See your events at a glance with the week, month and year views. Easy interaction to add or drag events."
                 },
                 {
                     title: "Table",
+                    iconSvg: tableIcon,
                     imageUrl: "./src/assets/collection_table.png",
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Table%20View.html",
                     description: "Display and edit information about notes in a tabular structure, with various column types such as text, number, check boxes, date & time, links and colors and support for relations. Optionally, display the notes within a tree hierarchy inside the table." },
                 {
                     title: "Board",
+                    iconSvg: boardIcon,
                     imageUrl: "./src/assets/collection_board.png",
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Board%20View.html",
                     description: "Organize your tasks or project status into a Kanban board with an easy way to create new items and columns and simply changing their status by dragging across the board."
                 },
                 {
                     title: "Geomap",
+                    iconSvg: geomapIcon,
                     imageUrl: "./src/assets/collection_geomap.png",
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Geo%20Map%20View.html",
                     description: "Plan your vacations or mark your points of interest directly on a geographical map using customizable markers. Display recorded GPX tracks to track itineraries."
