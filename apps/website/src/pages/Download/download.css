@@ -16,7 +16,7 @@
     background: var(--accent-color);
     padding: 0.5em 1em;
     border-radius: calc(infinity * 1px);
-    color: var(--foreground-color);
+    color: var(--brand-foreground-color);
     margin: 1em 0;
     text-decoration: none;
     text-align: center;
@@ -34,6 +34,8 @@
 .download-desktop .download-card:last-of-type { --accent-color: var(--brand-3); }
 
 .download-server .download-card:first-of-type { --accent-color: var(--brand-1); }
+.download-server .download-card:last-of-type { --accent-color: var(--brand-3); }
+
 .download-server {
     width: 75%;
     margin: auto;
@@ -64,5 +66,5 @@
 
 .architecture-switch a.active {
     background-color: var(--brand-1);
-    color: inherit;
+    color: var(--brand-foreground-color);
 }

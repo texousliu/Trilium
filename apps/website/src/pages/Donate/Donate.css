@@ -14,7 +14,7 @@ section.donate ul a {
     background: var(--brand-1);
     padding: 0.5em 1em;
     border-radius: 6px;
-    color: var(--foreground-color);
+    color: var(--brand-foreground-color);
     text-decoration: none;
-    text-align: center;
+    text-align: center;    
 }

@@ -8,6 +8,7 @@
     --brand-1: #e47b19;
     --brand-2: #4fa52b;
     --brand-3: #e33f3b;
+    --brand-foreground-color: white;
 }
 
 @media (prefers-color-scheme: dark) {
