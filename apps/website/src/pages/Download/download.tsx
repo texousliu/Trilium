@@ -49,7 +49,7 @@ export function DownloadCard({ app, arch, entry: [ platform, entry ] }: { app: A
     }
 
     const allDownloads = Object.entries(entry.downloads);
-    const recommendedDownload = allDownloads.find(download => download[1].recommended);
+    const recommendedDownloads = allDownloads.filter(download => download[1].recommended);
     const restDownloads = allDownloads.filter(download => !download[1].recommended);
 
     return (
@@ -74,12 +74,16 @@ export function DownloadCard({ app, arch, entry: [ platform, entry ] }: { app: A
             )}
 
             <div class="download-options">
-                <Button
-                    className="recommended"
-                    href={buildDownloadUrl(app, platform as Platform, recommendedDownload[0], arch)}
-                    text={recommendedDownload[1].name}
-                    openExternally={!!recommendedDownload[1].url}
-                />
+                <div className="recommended-options">
+                    {recommendedDownloads.map(recommendedDownload => (
+                        <Button
+                            className="recommended"
+                            href={buildDownloadUrl(app, platform as Platform, recommendedDownload[0], arch)}
+                            text={recommendedDownload[1].name}
+                            openExternally={!!recommendedDownload[1].url}
+                        />
+                    ))}
+                </div>
 
                 <div class="other-options">
                     {restDownloads.map(download => (

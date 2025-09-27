@@ -70,7 +70,8 @@ export const downloadMatrix: DownloadMatrix = {
                     name: "Download .deb"
                 },
                 rpm: {
-                    name: ".rpm"
+                    recommended: true,
+                    name: "Download .rpm"
                 },
                 flatpak: {
                     name: ".flatpak"
@@ -125,6 +126,7 @@ export const downloadMatrix: DownloadMatrix = {
                     url: `https://github.com/TriliumNext/Trilium/releases/download/v${version}/TriliumNotes-Server-v${version}-linux-x64.tar.xz`,
                 },
                 tarArm64: {
+                    recommended: true,
                     name: "ARM (.tar.xz)",
                     url: `https://github.com/TriliumNext/Trilium/releases/download/v${version}/TriliumNotes-Server-v${version}-linux-arm64.tar.xz`
                 },
