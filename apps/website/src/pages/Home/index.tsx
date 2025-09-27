@@ -18,8 +18,13 @@ import searchIcon from "../../assets/boxicons/bx-search.svg?raw";
 import webClipperIcon from "../../assets/boxicons/bx-paperclip.svg?raw";
 import importExportIcon from "../../assets/boxicons/bx-swap-horizontal.svg?raw";
 import shareIcon from "../../assets/boxicons/bx-globe.svg?raw";
-import scriptingIcon from "../../assets/boxicons/bx-code.svg?raw";
+import codeIcon from "../../assets/boxicons/bx-code.svg?raw";
 import restApiIcon from "../../assets/boxicons/bx-extension.svg?raw";
+import textNoteIcon from "../../assets/boxicons/bx-note.svg?raw";
+import fileIcon from "../../assets/boxicons/bx-file.svg?raw";
+import canvasIcon from "../../assets/boxicons/bx-pen.svg?raw";
+import mermaidIcon from "../../assets/boxicons/bx-vector-square.svg?raw";
+import mindmapIcon from "../../assets/boxicons/bx-network-chart.svg?raw";
 import { getPlatform } from '../../download-helper';
 import { useState } from 'preact/hooks';
 
@@ -118,36 +123,42 @@ function NoteTypesSection() {
                 {
                     title: "Text notes",
                     imageUrl: "./src/assets/type_text.png",
+                    iconSvg: textNoteIcon,
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Text/index.html",
                     description: "The notes are edited using a visual (WYSIWYG) editor, with support for tables, images, math expressions, code blocks with syntax highlighting. Quickly format the text using Markdown-like syntax or using slash commands."
                 },
                 {
                     title: "Code notes",
                     imageUrl: "./src/assets/type_code.png",
+                    iconSvg: codeIcon,
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Code.html",
                     description: "Large samples of source code or scripts use a dedicated editor, with syntax highlighting for many programming languages and with various color themes."
                 },
                 {
                     title: "File notes",
                     imageUrl: "./src/assets/type_file.png",
+                    iconSvg: fileIcon,
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/File.html",
                     description: "Embed multimedia files such as PDFs, images, videos with an in-application preview."
                 },
                 {
                     title: "Canvas",
                     imageUrl: "./src/assets/type_canvas.png",
+                    iconSvg: canvasIcon,
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Canvas.html",
                     description: "Arrange shapes, images and text across an infinite canvas, using the same technology behind excalidraw.com. Ideal for diagrams, sketches and visual planning."
                 },
                 {
                     title: "Mermaid diagrams",
                     imageUrl: "./src/assets/type_mermaid.png",
+                    iconSvg: mermaidIcon,
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Mermaid%20Diagrams/index.html",
                     description: "Create diagrams such as flowcharts, class & sequence diagrams, Gantt charts and many more, using the Mermaid syntax."
                 },
                 {
                     title: "Mindmap",
                     imageUrl: "./src/assets/type_mindmap.png",
+                    iconSvg: mindmapIcon,
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Mind%20Map.html",
                     description: "Organize your thoughts visually or do a brainstorming session."
                 }
@@ -171,7 +182,7 @@ function ExtensibilityBenefitsSection() {
                 <div className="benefits-container grid-4-cols">
                     <Card iconSvg={importExportIcon} title="Import/export" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Import%20%26%20Export/Markdown/index.html">Easily interact with other applications using Markdown, ENEX, OML formats.</Card>
                     <Card iconSvg={shareIcon} title="Share notes on the web" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Advanced%20Usage/Sharing/Serving%20directly%20the%20content%20o.html">If you have a server, it can be used to share a subset of your notes with other people.</Card>
-                    <Card iconSvg={scriptingIcon} title="Advanced scripting" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Scripting/Custom%20Widgets/index.html">Build your own integrations within Trilium with custom widgets, or server-side logic.</Card>
+                    <Card iconSvg={codeIcon} title="Advanced scripting" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Scripting/Custom%20Widgets/index.html">Build your own integrations within Trilium with custom widgets, or server-side logic.</Card>
                     <Card iconSvg={restApiIcon} title="REST API" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Advanced%20Usage/ETAPI%20%28REST%20API%29/index.html">Interact with Trilium programatically using its builtin REST API.</Card>
                 </div>
             </Section>
@@ -212,7 +223,7 @@ function CollectionsSection() {
 }
 
 function ListWithScreenshot({ items, horizontal, cardExtra }: {
-    items: { title: string, imageUrl: string, description: string, moreInfo: string }[];
+    items: { title: string, imageUrl: string, description: string, moreInfo: string, iconSvg?: string }[];
     horizontal?: boolean;
     cardExtra?: ComponentChildren;
 }) {
@@ -228,6 +239,7 @@ function ListWithScreenshot({ items, horizontal, cardExtra }: {
                             onMouseEnter={() => setSelectedItem(item)}
                             onClick={() => setSelectedItem(item)}
                             moreInfoUrl={item.moreInfo}
+                            iconSvg={item.iconSvg}
                         >
                             {item.description}
                         </Card>
