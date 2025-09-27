@@ -190,7 +190,9 @@ export function getArchitecture(): Architecture {
     return "x64";
 }
 
-export function getPlatform(): Platform {
+export function getPlatform(): Platform | null {
+    if (typeof window === "undefined") return null;
+
     const userAgent = navigator.userAgent.toLowerCase();
     if (userAgent.includes('macintosh') || userAgent.includes('mac os x')) {
         return "macos";
@@ -206,6 +208,7 @@ export function getRecommendedDownload() {
 
     const architecture = getArchitecture();
     const platform = getPlatform();
+    if (!platform) return null;
 
     const downloadInfo = downloadMatrix.desktop[platform]?.downloads;
     const recommendedDownload = Object.entries(downloadInfo || {}).find(d => d[1].recommended);
