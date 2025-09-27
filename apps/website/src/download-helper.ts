@@ -47,7 +47,7 @@ export const downloadMatrix: DownloadMatrix = {
                 },
                 scoop: {
                     name: "Scoop",
-                    url: "https://scoop.sh/#/apps?q=triliumnext"
+                    url: "https://scoop.sh/#/apps?q=trilium&id=7c08bc3c105b9ee5c00dd4245efdea0f091b8a5c"
                 },
                 winget: {
                     name: "Winget",
