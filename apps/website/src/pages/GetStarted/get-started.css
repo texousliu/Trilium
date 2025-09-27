@@ -33,12 +33,11 @@
     }
 
     .quick-start {
-        border: 1px solid var(--muted-color);    
+        background-color: #ececec;
         padding: 0.75em;
         border-radius: 6px;
 
         @media (prefers-color-scheme: dark) {
-            border: none;
             background-color: black;
         }
 

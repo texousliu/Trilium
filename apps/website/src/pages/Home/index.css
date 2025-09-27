@@ -128,10 +128,6 @@ section.accented {
     background: linear-gradient(135deg, rgba(228, 123, 25, 0.08), rgba(79, 165, 43, 0.08));
 }
 
-section:not(.accented) + section:not(.accented) {
-    box-shadow: 0 0 6px black inset;    
-}
-
 .benefits-container .card {
     padding: 1em;
 }
@@ -161,9 +157,13 @@ section.final-cta {
     }
 }
 
-section.final-cta .buttons {
-    display: flex;
-    gap: 2em;
+section.faq {
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+
+    @media (prefers-color-scheme: dark) {
+        box-shadow: unset;
+        border-top: 1px solid var(--brand-1);
+    }
 }
 
 .list-with-screenshot {
