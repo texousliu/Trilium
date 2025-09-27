@@ -149,6 +149,12 @@ img {
         margin-bottom: 2em;
     }
 
+    .grid-4-cols {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: 1em;
+    }
+
     .grid-3-cols {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
