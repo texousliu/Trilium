@@ -24,4 +24,5 @@ dist-ssr
 *.sw?
 
 *.d.ts
+!types-assets.d.ts
 *.map
