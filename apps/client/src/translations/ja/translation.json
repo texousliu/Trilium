@@ -1340,7 +1340,8 @@
     "continue_anyway": "とにかく続ける",
     "message_windows": "TriliumNext は現在エミュレーションを実行しています。つまり、ARM版WindowsデバイスでIntel（x64）版を使用していることになります。これはパフォーマンスとバッテリー寿命に重大な影響を及ぼします。",
     "recommendation": "最適なエクスペリエンスを得るには、リリース ページから TriliumNext のネイティブ ARM64 バージョンをダウンロードしてください。",
-    "download_link": "ネイティブ版をダウンロード"
+    "download_link": "ネイティブ版をダウンロード",
+    "message_macos": "TriliumNext は現在、Rosetta 2による翻訳環境で実行されています。つまり、Apple Silicon MacではIntel (x64)バージョンを使用していることになります。これはパフォーマンスとバッテリー寿命に重大な影響を及ぼします。"
   },
   "editorfeatures": {
     "emoji_completion_enabled": "絵文字のオートコンプリートを有効",
@@ -1540,7 +1541,8 @@
     "relation_name": "リレーションの名前",
     "allowed_characters": "英数字、アンダーバー、コロンが使用可能な文字です。",
     "create_relation_on_all_matched_notes": "一致したすべてのノートに対して、指定されたリレーションを作成します。",
-    "target_note": "対象のノート"
+    "target_note": "対象のノート",
+    "to": "を"
   },
   "delete_relation": {
     "delete_relation": "リレーションを削除",
@@ -1562,7 +1564,8 @@
     "on_all_matched_notes": "一致したすべてのノートに",
     "target_note": "対象のノート",
     "change_target_note": "既存のリレーション対象のノートを変更する",
-    "update_relation_target": "リレーション対象の更新"
+    "update_relation_target": "リレーション対象の更新",
+    "to": "を"
   },
   "revisions_button": {
     "note_revisions": "ノートの変更履歴"
@@ -1746,7 +1749,8 @@
     "target_parent_note": "対象の親ノート",
     "move_note_new_parent": "ノートに親が 1 つしかない場合は、ノートを新しい親に移動します (つまり、古いブランチが削除され、新しい親に新しいブランチが作成されます)",
     "clone_note_new_parent": "ノートに複数のクローン/ブランチがある場合、ノートを新しい親にクローンします（どのブランチを削除すべきか不明なため）",
-    "nothing_will_happen": "ノートをターゲットノートに移動できない場合は何も起こりません（つまり、ツリーサイクルが生じるため）"
+    "nothing_will_happen": "ノートをターゲットノートに移動できない場合は何も起こりません（つまり、ツリーサイクルが生じるため）",
+    "to": "次へ"
   },
   "onclick_button": {
     "no_click_handler": "ボタン ウィジェット '{{componentId}}' にはクリック ハンドラーが定義されていません"
