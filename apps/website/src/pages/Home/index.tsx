@@ -54,16 +54,18 @@ function HeroSection() {
     let screenshotUrl: string | null = null;
     const colorScheme = useColorScheme();
 
-    switch (platform) {
-        case "macos":
-            screenshotUrl = `/screenshot_desktop_mac_${colorScheme}.webp`;
-            break;
-        case "linux":
-            break;
-        case "windows":
-        default:
-            screenshotUrl = `/screenshot_desktop_win_${colorScheme}.webp`;
-            break;
+    if (colorScheme) {
+        switch (platform) {
+            case "macos":
+                screenshotUrl = `/screenshot_desktop_mac_${colorScheme}.webp`;
+                break;
+            case "linux":
+                break;
+            case "windows":
+            default:
+                screenshotUrl = `/screenshot_desktop_win_${colorScheme}.webp`;
+                break;
+        }
     }
 
     return (
