@@ -82,28 +82,28 @@ function BenefitsSection() {
         <>
             <Section className="benefits" title="Organization">
                 <div className="benefits-container grid-3-cols">
-                    <Card iconSvg={noteStructureIcon} title="Note structure">Notes can be arranged hierarchically. There's no need for folders, since each note can contain sub-notes. A single note can be added in multiple places in the hierarchy.</Card>
-                    <Card iconSvg={attributesIcon} title="Note labels and relationships">Define <em> relations </em> between notes or add <em> labels </em> for easy categorization. Using promoted attributes, there's an easy way to enter structured information about the notes which can later be displayed in other formats such as a table.</Card>
-                    <Card iconSvg={hoistingIcon} title="Workspaces and hoisting">Easily separate your personal and work notes by grouping them under a workspace, which focuses your note tree to only show a specific set of notes.</Card>
+                    <Card iconSvg={noteStructureIcon} title="Note structure" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes/index.html">Notes can be arranged hierarchically. There's no need for folders, since each note can contain sub-notes. A single note can be added in multiple places in the hierarchy.</Card>
+                    <Card iconSvg={attributesIcon} title="Note labels and relationships" moreInfoUrl="https://docs.triliumnotes.org/User Guide/User Guide/Advanced Usage/Attributes/index.html">Define <em> relations </em> between notes or add <em> labels </em> for easy categorization. Using promoted attributes, there's an easy way to enter structured information about the notes which can later be displayed in other formats such as a table.</Card>
+                    <Card iconSvg={hoistingIcon} title="Workspaces and hoisting" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Navigation/Note%20Hoisting.html">Easily separate your personal and work notes by grouping them under a workspace, which focuses your note tree to only show a specific set of notes.</Card>
                 </div>
             </Section>
 
             <Section className="benefits accented" title="Productivity and safety">
                 <div className="benefits-container grid-3-cols">
-                    <Card iconSvg={revisionsIcon} title="Note revisions">Notes are periodically saved in the background and revisions can be used to check the old content of a note or delete accidental changes. Revisions can also be created on-demand.</Card>
-                    <Card iconSvg={syncIcon} title="Synchronization">Use a self-hosted or cloud instance to easily synchronize your notes across multiple devices, and to access it from your mobile phone using a PWA (progressive web application).</Card>
-                    <Card iconSvg={protectedNotesIcon} title="Protected notes">Protect sensitive personal information by encrypting the notes and locking them behind a password-protected session.</Card>
-                    <Card iconSvg={jumpToIcon} title="Quick search and commands">Jump quickly to notes across the hierarchy by searching for their title, with fuzzy matching to account for typos or slight differences. Or search through all the various commands of the application.</Card>
-                    <Card iconSvg={searchIcon} title="Powerful search">Or search for text inside notes and narrow down the search by filtering by the parent note, or by depth.</Card>
-                    <Card iconSvg={webClipperIcon} title="Web clipper">Grab web pages (or screenshots) and place them directly into Trilium using the web clipper browser extension.</Card>
+                    <Card iconSvg={revisionsIcon} title="Note revisions" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes/Note%20Revisions.html">Notes are periodically saved in the background and revisions can be used to check the old content of a note or delete accidental changes. Revisions can also be created on-demand.</Card>
+                    <Card iconSvg={syncIcon} title="Synchronization" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Installation%20%26%20Setup/Synchronization.html">Use a self-hosted or cloud instance to easily synchronize your notes across multiple devices, and to access it from your mobile phone using a PWA (progressive web application).</Card>
+                    <Card iconSvg={protectedNotesIcon} title="Protected notes" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes/Protected%20Notes.html">Protect sensitive personal information by encrypting the notes and locking them behind a password-protected session.</Card>
+                    <Card iconSvg={jumpToIcon} title="Quick search and commands" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Navigation/Jump%20to.html">Jump quickly to notes across the hierarchy by searching for their title, with fuzzy matching to account for typos or slight differences. Or search through all the various commands of the application.</Card>
+                    <Card iconSvg={searchIcon} title="Powerful search" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Navigation/Search.html">Or search for text inside notes and narrow down the search by filtering by the parent note, or by depth.</Card>
+                    <Card iconSvg={webClipperIcon} title="Web clipper" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Installation%20%26%20Setup/Web%20Clipper.html">Grab web pages (or screenshots) and place them directly into Trilium using the web clipper browser extension.</Card>
                 </div>
             </Section>
 
             <Section className="benefits" title="Sharing & extensibility">
                 <div className="benefits-container grid-3-cols">
-                    <Card iconSvg={importExportIcon} title="Import/export">Easily import Markdown and ENEX formats from other note-taking applications, or export to Markdown or HTML.</Card>
-                    <Card iconSvg={shareIcon} title="Share notes on the web">If you have a server instance, you can easily use it to share a subset of your notes with other people.</Card>
-                    <Card iconSvg={scriptingAndApiIcon} title="Advanced scripting and REST API">Create your own integrations within Trilium by writing custom widgets, or custom-server side logic. Interact externally with the Trilium database by using the built-in REST API.</Card>
+                    <Card iconSvg={importExportIcon} title="Import/export" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Import%20%26%20Export/Markdown/index.html">Easily import Markdown and ENEX formats from other note-taking applications, or export to Markdown or HTML.</Card>
+                    <Card iconSvg={shareIcon} title="Share notes on the web" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Advanced%20Usage/Sharing/Serving%20directly%20the%20content%20o.html">If you have a server instance, you can easily use it to share a subset of your notes with other people.</Card>
+                    <Card iconSvg={scriptingAndApiIcon} title="Advanced scripting and REST API" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Scripting/Custom%20Widgets/index.html">Create your own integrations within Trilium by writing custom widgets, or custom-server side logic. Interact externally with the Trilium database by using the built-in REST API.</Card>
                 </div>
             </Section>
         </>
