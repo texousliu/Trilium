@@ -1973,7 +1973,9 @@
   "ws": {
     "sync-check-failed": "Проверка синхронизации не удалась!",
     "encountered-error": "Обнаружена ошибка \"{{message}}\", проверьте консоль.",
-    "consistency-checks-failed": "Проверка целостности не пройдена! Подробности смотрите в логах."
+    "consistency-checks-failed": "Проверка целостности не пройдена! Подробности смотрите в логах.",
+    "lost-websocket-connection-title": "Потеряно соединение с сервером",
+    "lost-websocket-connection-message": "Проверьте конфигурацию обратного прокси (например, nginx или Apache), чтобы убедиться, что соединения WebSocket должным образом разрешены и не заблокированы."
   },
   "attachment_detail_2": {
     "role_and_size": "Роль: {{role}}, Размер: {{size}}",

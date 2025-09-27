@@ -342,7 +342,8 @@
     "multi-factor-authentication-title": "多要素認証",
     "etapi-title": "ETAPI",
     "visible-launchers-title": "可視化されたランチャー",
-    "inbox-title": "Inbox"
+    "inbox-title": "Inbox",
+    "base-abstract-launcher-title": "ベース アブストラクトランチャー"
   },
   "notes": {
     "new-note": "新しいノート",
