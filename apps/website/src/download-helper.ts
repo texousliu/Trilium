@@ -181,7 +181,9 @@ export function buildDownloadUrl(app: App, platform: Platform, format: string, a
     }
 }
 
-export function getArchitecture(): Architecture {
+export function getArchitecture(): Architecture | null {
+    if (typeof window === "undefined") return null;
+
     const userAgent = navigator.userAgent.toLowerCase();
     if (userAgent.includes('arm64') || userAgent.includes('aarch64')) {
         return 'arm64';
@@ -208,7 +210,7 @@ export function getRecommendedDownload() {
 
     const architecture = getArchitecture();
     const platform = getPlatform();
-    if (!platform) return null;
+    if (!platform || !architecture) return null;
 
     const downloadInfo = downloadMatrix.desktop[platform]?.downloads;
     const recommendedDownload = Object.entries(downloadInfo || {}).find(d => d[1].recommended);
