@@ -101,6 +101,17 @@ img {
     object-fit: cover;
 }
 
+.bx {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+}
+
+.bx svg {
+    fill: currentColor;
+}
+
 
 @media (max-width: 719px) {
     .grid-3-cols > *,

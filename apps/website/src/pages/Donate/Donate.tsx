@@ -1,5 +1,9 @@
 import Section from "../../components/Section";
 import "./Donate.css";
+import githubIcon from "../../assets/boxicons/bx-github.svg?raw";
+import paypalIcon from "../../assets/boxicons/bx-paypal.svg?raw";
+import buyMeACoffeeIcon from "../../assets/boxicons/bx-buy-me-a-coffee.svg?raw";
+import Button from "../../components/Button";
 
 export default function Donate() {
     return (
@@ -10,9 +14,32 @@ export default function Donate() {
                 <p>Consider supporting the main developer of the application via:</p>
 
                 <ul>
-                    <li><a href="https://github.com/sponsors/eliandoran" target="_blank">GitHub Sponsors</a></li>
-                    <li><a href="https://paypal.me/eliandoran" target="_blank">PayPal</a></li>
-                    <li><a href="https://buymeacoffee.com/eliandoran" target="_blank">Buy Me A Coffee</a></li>
+                    <li>
+                        <Button
+                            iconSvg={githubIcon}
+                            href="https://github.com/sponsors/eliandoran"
+                            text="GitHub Sponsors"
+                            openExternally
+                        />
+                    </li>
+
+                    <li>
+                        <Button
+                            iconSvg={paypalIcon}
+                            href="https://paypal.me/eliandoran"
+                            text="PayPal"
+                            openExternally
+                        />
+                    </li>
+
+                    <li>
+                        <Button
+                            iconSvg={buyMeACoffeeIcon}
+                            href="https://buymeacoffee.com/eliandoran"
+                            text="Buy Me A Coffee"
+                            openExternally
+                        />
+                    </li>
                 </ul>
             </Section>
 
