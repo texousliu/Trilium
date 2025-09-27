@@ -211,12 +211,9 @@ function ListWithScreenshot({ items, horizontal, cardExtra }: {
                             title={item.title}
                             onMouseEnter={() => setSelectedItem(item)}
                             onClick={() => setSelectedItem(item)}
+                            moreInfoUrl={item.moreInfo}
                         >
                             {item.description}
-
-                            <div class="card-footer">
-                                <Link href={selectedItem.moreInfo}>More info</Link>
-                            </div>
                         </Card>
                     </li>
                 ))}
