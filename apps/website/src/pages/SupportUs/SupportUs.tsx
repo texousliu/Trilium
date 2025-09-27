@@ -1,5 +1,5 @@
 import Section from "../../components/Section";
-import "./Donate.css";
+import "./SupportUs.css";
 import githubIcon from "../../assets/boxicons/bx-github.svg?raw";
 import paypalIcon from "../../assets/boxicons/bx-paypal.svg?raw";
 import buyMeACoffeeIcon from "../../assets/boxicons/bx-buy-me-a-coffee.svg?raw";
