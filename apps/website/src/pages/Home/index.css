@@ -169,3 +169,35 @@ section.final-cta .buttons {
 section.final-cta .buttons .button {
     padding: 0.75em 2em;
 }
+
+.list-with-screenshot {
+    display: flex;
+    gap: 2em;
+}
+
+.list-with-screenshot ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.list-with-screenshot ul li {
+    margin-bottom: 1em;
+}
+
+.list-with-screenshot ul li .card {
+    border: 1px solid transparent;
+}
+
+.list-with-screenshot ul li.selected .card {
+    border: 1px solid var(--brand-1);
+}
+
+.list-with-screenshot ul li:last-of-type {
+    margin-bottom: 0;
+}
+
+.list-with-screenshot .details {
+    flex-basis: 50%;
+    flex-shrink: 0;
+}

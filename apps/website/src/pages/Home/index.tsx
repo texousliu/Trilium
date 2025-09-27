@@ -8,6 +8,7 @@ import Button, { Link } from '../../components/Button';
 import gitHubIcon from "../../assets/boxicons/bx-github.svg?raw";
 import dockerIcon from "../../assets/boxicons/bx-docker.svg?raw";
 import { getPlatform } from '../../download-helper';
+import { useState } from 'preact/hooks';
 
 export function Home() {
     usePageTitle("");
@@ -116,14 +117,67 @@ function NoteTypesSection() {
 function CollectionsSection() {
     return (
         <Section className="collections" title="Collections">
-            <div className="collections-container grid-2-cols">
-                <Card title="Calendar" imageUrl="./src/assets/collection_calendar.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Calendar%20View.html">Organize your personal or professional events using a calendar, with support for all-day and multi-day events. See your events at a glance with the week, month and year views. Easy interaction to add or drag events.</Card>
-                <Card title="Table" imageUrl="./src/assets/collection_table.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Table%20View.html">Display and edit information about notes in a tabular structure, with various column types such as text, number, check boxes, date &amp; time, links and colors and support for relations. Optionally, display the notes within a tree hierarchy inside the table.</Card>
-                <Card title="Board" imageUrl="./src/assets/collection_board.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Board%20View.html">Organize your tasks or project status into a Kanban board with an easy way to create new items and columns and simply changing their status by dragging across the board.</Card>
-                <Card title="Geomap" imageUrl="./src/assets/collection_geomap.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Geo%20Map%20View.html">Plan your vacations or mark your points of interest directly on a geographical map using customizable markers. Display recorded GPX tracks to track itineraries.</Card>
-            </div>
+            <ListWithScreenshot items={[
+                {
+                    title: "Calendar",
+                    imageUrl: "./src/assets/collection_calendar.png",
+                    moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Calendar%20View.html",
+                    description: "Organize your personal or professional events using a calendar, with support for all-day and multi-day events. See your events at a glance with the week, month and year views. Easy interaction to add or drag events."
+                },
+                {
+                    title: "Table",
+                    imageUrl: "./src/assets/collection_table.png",
+                    moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Table%20View.html",
+                    description: "Display and edit information about notes in a tabular structure, with various column types such as text, number, check boxes, date & time, links and colors and support for relations. Optionally, display the notes within a tree hierarchy inside the table." },
+                {
+                    title: "Board",
+                    imageUrl: "./src/assets/collection_board.png",
+                    moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Board%20View.html",
+                    description: "Organize your tasks or project status into a Kanban board with an easy way to create new items and columns and simply changing their status by dragging across the board."
+                },
+                {
+                    title: "Geomap",
+                    imageUrl: "./src/assets/collection_geomap.png",
+                    moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Geo%20Map%20View.html",
+                    description: "Plan your vacations or mark your points of interest directly on a geographical map using customizable markers. Display recorded GPX tracks to track itineraries."
+                }
+            ]} />
         </Section>
     );
+}
+
+function ListWithScreenshot({ items }: {
+    items: { title: string, imageUrl: string, description: string, moreInfo: string }[];
+}) {
+    const [ selectedItem, setSelectedItem ] = useState(items[0]);
+
+    return (
+        <div className="list-with-screenshot">
+            <ul>
+                {items.map(item => (
+                    <li className={`${item === selectedItem ? "selected" : ""}`}>
+                        <Card
+                            title={item.title}
+                            onMouseEnter={() => setSelectedItem(item)}
+                            onClick={() => setSelectedItem(item)}
+                        >
+                            {item.description}
+
+                            <div class="card-footer">
+                                <Link href={selectedItem.moreInfo}>More info</Link>
+                            </div>
+                        </Card>
+                    </li>
+                ))}
+            </ul>
+
+            <div className="details">
+                <h3>{selectedItem.title}</h3>
+
+                <img src={selectedItem.imageUrl} />
+            </div>
+        </div>
+    )
 }
 
 function FaqSection() {

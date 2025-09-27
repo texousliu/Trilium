@@ -1,7 +1,7 @@
-import { ComponentChildren } from "preact";
+import { ComponentChildren, HTMLAttributes } from "preact";
 import Button from "./Button";
 
-interface CardProps {
+interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
     title: ComponentChildren;
     imageUrl?: string;
     className?: string;
@@ -9,9 +9,9 @@ interface CardProps {
     children: ComponentChildren;
 }
 
-export default function Card({ title, children, imageUrl, className, moreInfoUrl }: CardProps) {
+export default function Card({ title, children, imageUrl, className, moreInfoUrl, ...restProps }: CardProps) {
     return (
-        <div className={`card ${className}`}>
+        <div className={`card ${className}`} {...restProps}>
             {imageUrl && <img class="image" src={imageUrl} />}
 
             <div className="card-content">
