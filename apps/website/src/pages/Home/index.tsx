@@ -112,15 +112,45 @@ function BenefitsSection() {
 
 function NoteTypesSection() {
     return (
-        <Section className="note-types accented" title="Note types">
-            <div class="note-types-container grid-3-cols">
-                <Card title="Text notes" imageUrl="./src/assets/type_text.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Text/index.html">The notes are edited using a visual (WYSIWYG) editor, with support for tables, images, math expressions, code blocks with syntax highlighting. Quickly format the text using Markdown-like syntax or using slash commands.</Card>
-                <Card title="Code notes" imageUrl="./src/assets/type_code.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Code.html">Large samples of source code or scripts use a dedicated editor, with syntax highlighting for many programming languages and with various color themes.</Card>
-                <Card title="File notes" imageUrl="./src/assets/type_file.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/File.html">Embed multimedia files such as PDFs, images, videos with an in-application preview.</Card>
-                <Card title="Canvas" imageUrl="./src/assets/type_canvas.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Canvas.html">Arrange shapes, images and text across an infinite canvas, using the same technology behind <a href="https://excalidraw.com">excalidraw.com</a>. Ideal for diagrams, sketches and visual planning.</Card>
-                <Card title="Mermaid diagrams" imageUrl="./src/assets/type_mermaid.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Mermaid%20Diagrams/index.html">Create diagrams such as flowcharts, class &amp; sequence diagrams, Gantt charts and many more, using the Mermaid syntax.</Card>
-                <Card title="Mindmap" imageUrl="./src/assets/type_mindmap.png" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Mind%20Map.html">Organize your thoughts visually or do a brainstorming session by using <a href="https://en.wikipedia.org/wiki/Mind_map">mind map diagrams</a>.</Card>
-            </div>
+        <Section className="note-types accented" title="Various ways to represent your information">
+            <ListWithScreenshot items={[
+                {
+                    title: "Text notes",
+                    imageUrl: "./src/assets/type_text.png",
+                    moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Text/index.html",
+                    description: "The notes are edited using a visual (WYSIWYG) editor, with support for tables, images, math expressions, code blocks with syntax highlighting. Quickly format the text using Markdown-like syntax or using slash commands."
+                },
+                {
+                    title: "Code notes",
+                    imageUrl: "./src/assets/type_code.png",
+                    moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Code.html",
+                    description: "Large samples of source code or scripts use a dedicated editor, with syntax highlighting for many programming languages and with various color themes."
+                },
+                {
+                    title: "File notes",
+                    imageUrl: "./src/assets/type_file.png",
+                    moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/File.html",
+                    description: "Embed multimedia files such as PDFs, images, videos with an in-application preview."
+                },
+                {
+                    title: "Canvas",
+                    imageUrl: "./src/assets/type_canvas.png",
+                    moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Canvas.html",
+                    description: "Arrange shapes, images and text across an infinite canvas, using the same technology behind excalidraw.com. Ideal for diagrams, sketches and visual planning."
+                },
+                {
+                    title: "Mermaid diagrams",
+                    imageUrl: "./src/assets/type_mermaid.png",
+                    moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Mermaid%20Diagrams/index.html",
+                    description: "Create diagrams such as flowcharts, class &amp; sequence diagrams, Gantt charts and many more, using the Mermaid syntax."
+                },
+                {
+                    title: "Mindmap",
+                    imageUrl: "./src/assets/type_mindmap.png",
+                    moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Mind%20Map.html",
+                    description: "Organize your thoughts visually or do a brainstorming session."
+                }
+            ]} />
             <p>
                 and others:{" "}
                 <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Note%20Map.html" openExternally>note map</Link>,{" "}
@@ -191,9 +221,12 @@ function ListWithScreenshot({ items }: {
             </ul>
 
             <div className="details">
-                <h3>{selectedItem.title}</h3>
-
-                <img src={selectedItem.imageUrl} />
+                {selectedItem && (
+                    <>
+                        <h3>{selectedItem.title}</h3>
+                        <img src={selectedItem.imageUrl} />
+                    </>
+                )}
             </div>
         </div>
     )
