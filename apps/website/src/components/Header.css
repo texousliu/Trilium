@@ -52,7 +52,7 @@ header nav a {
 }
 
 header nav a.active {
-    font-weight: bold;
+    color: var(--brand-1);
 }
 
 @media (max-width: 719px) {
