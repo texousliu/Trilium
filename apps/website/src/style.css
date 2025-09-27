@@ -31,7 +31,7 @@ body {
 }
 
 main {
-    min-height: calc(100vh - 80px);
+    min-height: calc(100vh - 80px - 90px);
     display: flex;
     flex-direction: column;
 }
@@ -53,18 +53,21 @@ a {
 }
 
 section {
-    padding: 3em 0;
-    flex-grow: 1;
-    display: flex;
+    padding: 1em 0;
     justify-content: center;
     align-items: stretch;
+}
+
+section.fill {
+    flex-grow: 1;
+    display: flex;
 }
 
 section h2 {
     text-align: center;
     font-weight: 100;
     margin-top: 0;
-    margin-bottom: 2em;
+    margin-bottom: 1em;
 }
 
 img {
@@ -107,6 +110,14 @@ img {
 }
 
 @media (min-width: 720px) {
+    section {
+        padding: 3em 0;
+    }
+
+    section h2 {
+        margin-bottom: 2em;
+    }
+
     .grid-3-cols {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;

@@ -36,11 +36,6 @@
 .download-server .download-card:first-of-type { --accent-color: var(--brand-1); }
 .download-server .download-card:last-of-type { --accent-color: var(--brand-3); }
 
-.download-server {
-    width: 75%;
-    margin: auto;
-}
-
 .architecture-switch {
     display: flex;
     gap: 1em;
@@ -67,4 +62,11 @@
 .architecture-switch a.active {
     background-color: var(--brand-1);
     color: var(--brand-foreground-color);
+}
+
+@media (min-width: 720px) {
+    .download-server {
+        width: 75%;
+        margin: auto;
+    }
 }

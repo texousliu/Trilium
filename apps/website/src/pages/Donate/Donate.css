@@ -5,8 +5,16 @@ section.donate {
 section.donate ul {
     list-style-type: none;
     display: flex;
-    gap: 0 1em;
+    gap: 1em;
     padding: 0;
+    flex-direction: column;
+}
+
+@media (min-width: 720px) {
+    section.donate ul {
+        gap: 0 1em;
+        flex-direction: row;
+    }
 }
 
 section.donate ul a {
