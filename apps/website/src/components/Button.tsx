@@ -8,6 +8,7 @@ interface LinkProps {
     openExternally?: boolean;
     children: ComponentChildren;
     title?: string;
+    onClick?: (e: MouseEvent) => void;
 }
 
 interface ButtonProps extends Omit<LinkProps, "children"> {

@@ -36,7 +36,7 @@ header img {
 }
 
 header img+span {
-    font-size: 1.1em;
+    font-size: 1.3em;
 }
 
 header nav {
@@ -53,6 +53,48 @@ header nav a {
 
 header nav a.active {
     font-weight: bold;
+}
+
+@media (max-width: 719px) {
+    header .content-wrapper {
+        display: block;
+    }
+    
+    header .first-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-grow: 1;
+        align-self: stretch;
+    }
+
+    header .menu-toggle {
+        color: inherit;
+    }
+
+    header nav {
+        flex-direction: column;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 200ms ease-in-out;        
+    }
+
+    header nav.mobile-shown {
+        display: flex;
+        max-height: 100vh;
+        padding: 2em 0;
+    }
+
+    header nav a {
+        font-size: 1.25em;
+        padding: 0.5em 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    header nav a:last-of-type {
+        border-bottom: unset;
+    }
+
 }
 
 @media (min-width: 720px) {

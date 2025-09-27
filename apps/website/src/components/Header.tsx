@@ -1,7 +1,11 @@
 import "./Header.css";
 import { useLocation } from 'preact-iso';
 import DownloadButton from './DownloadButton';
+import { Link } from "./Button";
+import Icon from "./Icon";
 import logoPath from "../assets/icon-color.svg";
+import menuIcon from "../assets/boxicons/bx-menu.svg?raw";
+import { useState } from "preact/hooks";
 
 interface HeaderLink {
     url: string;
@@ -10,21 +14,36 @@ interface HeaderLink {
 }
 
 const HEADER_LINKS: HeaderLink[] = [
+    { url: "/get-started/", text: "Get started" },
     { url: "https://docs.triliumnotes.org/", text: "Documentation", external: true },
     { url: "/support-us/", text: "Support us" }
 ]
 
 export function Header() {
 	const { url } = useLocation();
+    const [ mobileMenuShown, setMobileMenuShown ] = useState(false);
 
 	return (
 		<header>
             <div class="content-wrapper">
-                <a class="banner" href="/">
-                    <img src={logoPath} width="300" height="300" />&nbsp;<span>Trilium Notes</span>
-                </a>
+                <div class="first-row">
+                    <a class="banner" href="/">
+                        <img src={logoPath} width="300" height="300" />&nbsp;<span>Trilium Notes</span>
+                    </a>
 
-                <nav>
+                    <Link
+                        href="#"
+                        className="mobile-only menu-toggle"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setMobileMenuShown(!mobileMenuShown)
+                        }}
+                    >
+                        <Icon svg={menuIcon} />
+                    </Link>
+                </div>
+
+                <nav className={`${mobileMenuShown ? "mobile-shown" : ""}`}>
                     {HEADER_LINKS.map(link => (
                         <a
                             href={link.url}
