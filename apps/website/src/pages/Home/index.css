@@ -205,3 +205,40 @@ section.final-cta .buttons .button {
     flex-basis: 50%;
     flex-shrink: 0;
 }
+
+.list-with-screenshot.horizontal {
+    flex-direction: column-reverse;
+}
+
+.list-with-screenshot.horizontal ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1em;
+}
+
+.list-with-screenshot.horizontal li {
+    margin: 0;
+}
+
+.list-with-screenshot.horizontal .card {    
+    height: 100%;    
+}
+
+
+.list-with-screenshot.horizontal h3 {
+    color: var(--brand-1);
+}
+
+
+.list-with-screenshot.horizontal .details {
+    max-height: 35vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.list-with-screenshot.horizontal .details img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+}

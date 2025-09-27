@@ -112,8 +112,8 @@ function BenefitsSection() {
 
 function NoteTypesSection() {
     return (
-        <Section className="note-types accented" title="Various ways to represent your information">
-            <ListWithScreenshot items={[
+        <Section className="note-types accented" title="Multiple ways to represent your information">
+            <ListWithScreenshot horizontal items={[
                 {
                     title: "Text notes",
                     imageUrl: "./src/assets/type_text.png",
@@ -142,7 +142,7 @@ function NoteTypesSection() {
                     title: "Mermaid diagrams",
                     imageUrl: "./src/assets/type_mermaid.png",
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Mermaid%20Diagrams/index.html",
-                    description: "Create diagrams such as flowcharts, class &amp; sequence diagrams, Gantt charts and many more, using the Mermaid syntax."
+                    description: "Create diagrams such as flowcharts, class & sequence diagrams, Gantt charts and many more, using the Mermaid syntax."
                 },
                 {
                     title: "Mindmap",
@@ -195,13 +195,15 @@ function CollectionsSection() {
     );
 }
 
-function ListWithScreenshot({ items }: {
+function ListWithScreenshot({ items, horizontal, cardExtra }: {
     items: { title: string, imageUrl: string, description: string, moreInfo: string }[];
+    horizontal?: boolean;
+    cardExtra?: ComponentChildren;
 }) {
     const [ selectedItem, setSelectedItem ] = useState(items[0]);
 
     return (
-        <div className="list-with-screenshot">
+        <div className={`list-with-screenshot ${horizontal ? "horizontal" : ""}`}>
             <ul>
                 {items.map(item => (
                     <li className={`${item === selectedItem ? "selected" : ""}`}>
@@ -223,7 +225,6 @@ function ListWithScreenshot({ items }: {
             <div className="details">
                 {selectedItem && (
                     <>
-                        <h3>{selectedItem.title}</h3>
                         <img src={selectedItem.imageUrl} />
                     </>
                 )}
