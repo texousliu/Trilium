@@ -83,6 +83,16 @@
     .download-card:first-of-type { --accent-color: var(--brand-1); }
     .download-card:nth-of-type(2) { --accent-color: var(--brand-2); }
     .download-card:last-of-type { --accent-color: var(--brand-3); }
+
+    .download-footer {
+        text-align: center;
+        margin-top: 1em;
+        font-size: 0.9em;
+
+        a {
+            color: var(--muted-color);
+        }
+    }
 }
 
 .download-server .download-card {

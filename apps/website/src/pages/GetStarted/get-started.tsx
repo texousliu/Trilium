@@ -15,7 +15,7 @@ export default function DownloadPage() {
 
     return (
         <>
-            <Section title={`Download the desktop application (v${packageJson.version})`} className="fill accented">
+            <Section title={`Download the desktop application (v${packageJson.version})`} className="fill accented download-desktop">
                 <div className="architecture-switch">
                     <span>Architecture:</span>
 
@@ -32,6 +32,10 @@ export default function DownloadPage() {
 
                 <div className="grid-3-cols download-desktop">
                     {Object.entries(downloadMatrix.desktop).map(entry => <DownloadCard app="desktop" arch={currentArch} entry={entry} />)}
+                </div>
+
+                <div class="download-footer">
+                    <Link href="https://github.com/TriliumNext/Trilium/releases/" openExternally>See older releases</Link>
                 </div>
             </Section>
 
