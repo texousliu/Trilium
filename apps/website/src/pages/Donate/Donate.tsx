@@ -29,6 +29,7 @@ export default function Donate() {
                             href="https://paypal.me/eliandoran"
                             text="PayPal"
                             openExternally
+                            outline
                         />
                     </li>
 
@@ -38,6 +39,7 @@ export default function Donate() {
                             href="https://buymeacoffee.com/eliandoran"
                             text="Buy Me A Coffee"
                             openExternally
+                            outline
                         />
                     </li>
                 </ul>
