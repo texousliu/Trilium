@@ -18,6 +18,7 @@ export interface DownloadMatrixEntry {
     title: Record<Architecture, string> | string;
     description: Record<Architecture, string> | string;
     downloads: Record<string, DownloadInfo>;
+    helpUrl?: string;
 }
 
 type DownloadMatrix = Record<App, { [ P in Platform ]?: DownloadMatrixEntry }>;
@@ -109,6 +110,7 @@ export const downloadMatrix: DownloadMatrix = {
         linux: {
             title: "Self-hosted on Linux",
             description: "Deploy Trilium Notes on your own server or VPS, compatible with most distributions.",
+            helpUrl: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/1.%20Installing%20the%20server/Packaged%20version%20for%20Linux.html",
             downloads: {
                 tarX64: {
                     recommended: true,
@@ -128,6 +130,7 @@ export const downloadMatrix: DownloadMatrix = {
         docker: {
             title: "Self-hosted using Docker",
             description: "Easily deploy on Windows, Linux or macOS using a Docker container.",
+            helpUrl: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.html",
             downloads: {
                 dockerhub: {
                     recommended: true,

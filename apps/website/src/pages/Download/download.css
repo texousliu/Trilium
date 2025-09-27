@@ -5,6 +5,16 @@
 .download-card h3 {
     color: var(--accent-color);
     font-size: 1.5em;
+    position: relative;
+}
+
+.download-card h3 a.more-info {
+    margin-left: 0.5em;
+    right: 0;
+}
+
+.download-card h3 a.more-info .bx {
+    vertical-align: sub;
 }
 
 .download-options {

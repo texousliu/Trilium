@@ -5,6 +5,8 @@ import { App, Architecture, buildDownloadUrl, downloadMatrix, DownloadMatrixEntr
 import "./download.css";
 import { usePageTitle } from "../../hooks";
 import Button, { Link } from "../../components/Button";
+import Icon from "../../components/Icon";
+import helpIcon from "../../assets/boxicons/bx-help-circle.svg?raw";
 
 export default function DownloadPage() {
     const [ currentArch, setCurrentArch ] = useState(getArchitecture());
@@ -51,7 +53,18 @@ export function DownloadCard({ app, arch, entry: [ platform, entry ] }: { app: A
     const restDownloads = allDownloads.filter(download => !download[1].recommended);
 
     return (
-        <Card title={unwrapText(entry.title)} className="download-card">
+        <Card title={<>
+            {unwrapText(entry.title)}
+            {entry.helpUrl && (
+                <Link
+                    className="more-info"
+                    href={entry.helpUrl}
+                    openExternally
+                >
+                    <Icon svg={helpIcon} />
+                </Link>
+            )}
+        </>} className="download-card">
             {unwrapText(entry.description)}
 
             <div class="download-options">

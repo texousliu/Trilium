@@ -2,7 +2,7 @@ import { ComponentChildren } from "preact";
 import Button from "./Button";
 
 interface CardProps {
-    title: string;
+    title: ComponentChildren;
     imageUrl?: string;
     className?: string;
     moreInfoUrl?: string;
