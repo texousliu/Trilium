@@ -8,19 +8,19 @@ interface DownloadButtonProps {
     big?: boolean;
 }
 
-const { name, url } = getRecommendedDownload();
+const recommendedDownload = getRecommendedDownload();
 
 export default function DownloadButton({ big }: DownloadButtonProps) {
-    return (
+    return (recommendedDownload &&
         <Button
            className={`download-button desktop-only ${big ? "big" : ""}`}
-           href={url}
+           href={recommendedDownload.url}
            iconSvg={downloadIcon}
            text={<>
                 Download now{" "}
                 {big
-                ? <span class="platform">v{packageJson.version} for {name}</span>
-                : <span class="platform">for {name}</span>
+                ? <span class="platform">v{packageJson.version} for {recommendedDownload.name}</span>
+                : <span class="platform">for {recommendedDownload.name}</span>
                 }
            </>}
         />

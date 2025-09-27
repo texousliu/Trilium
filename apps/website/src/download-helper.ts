@@ -202,6 +202,8 @@ export function getPlatform(): Platform {
 }
 
 export function getRecommendedDownload() {
+    if (typeof window === "undefined") return null;
+
     const architecture = getArchitecture();
     const platform = getPlatform();
 
