@@ -27,12 +27,12 @@
     flex-direction: column;
 }
 
-.download-card a {
+.download-card a:not(.button) {
     color: var(--accent-color);
     text-decoration: none;
 }
 
-.download-card a:hover {
+.download-card a:not(.button):hover {
     text-decoration: underline;
 }
 
