@@ -13,6 +13,15 @@ inputs:
   deploy_dir:
     description: "The directory from which to deploy."
     required: true
+  cloudflare_api_token:
+    description: "The Cloudflare API token to use for deployment."
+    required: true
+  cloudflare_account_id:
+    description: "The Cloudflare account ID to use for deployment."
+    required: true
+  github_token:
+    description: "The GitHub token to use for posting PR comments."
+    required: true
 runs:
   using: composite
   steps:
@@ -27,8 +36,8 @@ runs:
       if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
       uses: cloudflare/wrangler-action@v3
       with:
-        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        apiToken: ${{ inputs.cloudflare_api_token }}
+        accountId: ${{ inputs.cloudflare_account_id }}
         command: pages deploy ${{ inputs.deploy_dir }} --project-name=${{ inputs.project_name}} --branch=${{ github.ref_name }}
         wranglerVersion: ''  # Use pre-installed version
 
@@ -38,8 +47,8 @@ runs:
       if: github.event_name == 'pull_request'
       uses: cloudflare/wrangler-action@v3
       with:
-        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        apiToken: ${{ inputs.cloudflare_api_token }}
+        accountId: ${{ inputs.cloudflare_account_id }}
         command: pages deploy ${{ inputs.deploy_dir }} --project-name=${{ inputs.project_name}} --branch=pr-${{ github.event.pull_request.number }}
         wranglerVersion: ''  # Use pre-installed version
 
@@ -52,7 +61,7 @@ runs:
         PRODUCTION_URL: ${{ inputs.production_url }}
         PROJECT_NAME: ${{ inputs.project_name }}
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ inputs.github_token }}
         script: |
           const prNumber = context.issue.number;
           // Construct preview URL based on Cloudflare Pages pattern

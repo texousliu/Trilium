@@ -38,3 +38,6 @@ jobs:
           comment_body: "📚 Website preview is ready"
           production_url: "https://triliumnotes.org"
           deploy_dir: "apps/website/dist"
+          cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          cloudflare_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
