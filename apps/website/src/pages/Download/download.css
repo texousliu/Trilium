@@ -45,6 +45,17 @@
     --brand-foreground-color: var(--background-color);
 }
 
+.download-card .quick-start {
+    border: 1px solid var(--muted-color);
+    padding: 0.5em;
+    border-radius: 6px;
+}
+
+.download-card .quick-start code {
+    text-wrap: wrap;
+    color: var(--muted-color);
+}
+
 .architecture-switch {
     display: flex;
     gap: 1em;

@@ -67,6 +67,12 @@ export function DownloadCard({ app, arch, entry: [ platform, entry ] }: { app: A
         </>} className="download-card">
             {unwrapText(entry.description)}
 
+            {entry.quickStartCode && (
+                <pre className="quick-start">
+                    <code>{entry.quickStartCode}</code>
+                </pre>
+            )}
+
             <div class="download-options">
                 <Button
                     className="recommended"

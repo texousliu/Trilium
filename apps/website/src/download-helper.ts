@@ -19,6 +19,7 @@ export interface DownloadMatrixEntry {
     description: Record<Architecture, string> | string;
     downloads: Record<string, DownloadInfo>;
     helpUrl?: string;
+    quickStartCode?: string;
 }
 
 type DownloadMatrix = Record<App, { [ P in Platform ]?: DownloadMatrixEntry }>;
@@ -35,6 +36,7 @@ export const downloadMatrix: DownloadMatrix = {
                 x64: "Compatible with Intel or AMD devices running Windows 10 and 11.",
                 arm64: "Compatible with ARM devices (e.g. with Qualcomm Snapdragon).",
             },
+            quickStartCode: "winget install TriliumNext.Notes",
             downloads: {
                 exe: {
                     recommended: true,
@@ -131,6 +133,7 @@ export const downloadMatrix: DownloadMatrix = {
             title: "Self-hosted using Docker",
             description: "Easily deploy on Windows, Linux or macOS using a Docker container.",
             helpUrl: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.html",
+            quickStartCode: "docker pull triliumnext/trilium\ndocker run -p 8080:8080 -d ./data:/home/node/trilium-data triliumnext/trilium",
             downloads: {
                 dockerhub: {
                     recommended: true,
