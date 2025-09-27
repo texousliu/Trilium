@@ -27,6 +27,15 @@
     flex-direction: column;
 }
 
+.download-card a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.download-card a:hover {
+    text-decoration: underline;
+}
+
 .download-options {
     justify-content: flex-end;
     align-items: stretch;
