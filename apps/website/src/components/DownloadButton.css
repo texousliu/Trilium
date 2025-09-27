@@ -5,7 +5,7 @@
     border-radius: 6px;
     color: white;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-    display: inline-block;
+    display: none;
 }
 
 .download-button .platform {
@@ -16,4 +16,10 @@
 .download-button.big {
     padding: 1em 2em;
     margin: 1em 0;
+}
+
+@media (min-width: 720px) {
+    .download-button {
+        display: inline-block;
+    }
 }

@@ -25,7 +25,7 @@ function HeroSection() {
 
                 <div className="download-wrapper">
                     <DownloadButton big />
-                    <a class="more-download-options" href="./download">see all download options</a>
+                    <a class="more-download-options" href="./download">See all download options</a>
                 </div>
             </div>
 
