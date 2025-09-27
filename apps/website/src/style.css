@@ -48,7 +48,7 @@ a {
 
 .content-wrapper {
     max-width: 1200px;
-    width: 100%;
+    width: 90%;
     margin: auto;
 }
 
@@ -98,14 +98,24 @@ img {
     object-fit: cover;
 }
 
-.grid-3-cols {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1em;
+
+@media (max-width: 719px) {
+    .grid-3-cols > *,
+    .grid-2-cols > * {
+        margin-bottom: 1em;
+    }
 }
 
-.grid-2-cols {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1em;
+@media (min-width: 720px) {
+    .grid-3-cols {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1em;
+    }
+
+    .grid-2-cols {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1em;
+    }
 }
