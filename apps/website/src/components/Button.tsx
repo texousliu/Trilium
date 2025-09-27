@@ -2,25 +2,42 @@ import { ComponentChildren } from "preact";
 import Icon from "./Icon";
 import "./Button.css";
 
-interface ButtonProps {
+interface LinkProps {
+    className?: string;
+    href?: string;
+    openExternally?: boolean;
+    children: ComponentChildren;
+    title?: string;
+}
+
+interface ButtonProps extends Omit<LinkProps, "children"> {
     href?: string;
     iconSvg?: string;
     text: ComponentChildren;
     openExternally?: boolean;
-    className?: string;
     outline?: boolean;
 }
 
-export default function Button({ href, iconSvg, openExternally, text, className, outline }: ButtonProps) {
+export default function Button({ iconSvg, text, className, outline, ...restProps }: ButtonProps) {
     return (
-        <a
+        <Link
             className={`button ${className} ${outline ? "outline" : ""}`}
-            href={href}
-            target={openExternally ? "_blank" : undefined}
-            rel={openExternally ? "noopener noreferrer" : undefined}
+            {...restProps}
         >
             {iconSvg && <><Icon svg={iconSvg} />{" "}</>}
             {text}
+        </Link>
+    )
+}
+
+export function Link({ openExternally, children, ...restProps }: LinkProps) {
+    return (
+        <a
+            {...restProps}
+            target={openExternally ? "_blank" : undefined}
+            rel={openExternally ? "noopener noreferrer" : undefined}
+        >
+            {children}
         </a>
     )
 }

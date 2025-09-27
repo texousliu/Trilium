@@ -4,14 +4,15 @@ import githubIcon from "../assets/boxicons/bx-github.svg?raw";
 import githubDiscussionsIcon from "../assets/boxicons/bx-discussion.svg?raw";
 import matrixIcon from "../assets/boxicons/bx-message-dots.svg?raw";
 import redditIcon from "../assets/boxicons/bx-reddit.svg?raw";
+import { Link } from "./Button";
 
 export default function Footer() {
     return (
         <footer>
             <div class="content-wrapper">
                 <div class="footer-text">
-                    © 2024-2025 <a href="https://github.com/eliandoran">Elian Doran</a> and the <a href="https://github.com/TriliumNext/Notes/graphs/contributors">team</a>.<br />
-                    © 2017-2024 <a href="https://github.com/zadam">zadam</a>.
+                    © 2024-2025 <Link href="https://github.com/eliandoran" openExternally>Elian Doran</Link> and the <Link href="https://github.com/TriliumNext/Notes/graphs/contributors" openExternally>team</Link>.<br />
+                    © 2017-2024 <Link href="https://github.com/zadam" openExternally>zadam</Link>.
                 </div>
 
                 <div className="social-buttons">
@@ -46,8 +47,8 @@ export default function Footer() {
 
 function SocialButton({ name, iconSvg, url }: { name: string, iconSvg: string, url: string }) {
     return (
-        <a className="social-button" href={url} target="_blank" title={name}>
+        <Link className="social-button" href={url} openExternally title={name}>
             <Icon svg={iconSvg} />
-        </a>
+        </Link>
     )
 }

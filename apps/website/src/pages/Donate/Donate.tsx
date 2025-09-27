@@ -3,7 +3,7 @@ import "./Donate.css";
 import githubIcon from "../../assets/boxicons/bx-github.svg?raw";
 import paypalIcon from "../../assets/boxicons/bx-paypal.svg?raw";
 import buyMeACoffeeIcon from "../../assets/boxicons/bx-buy-me-a-coffee.svg?raw";
-import Button from "../../components/Button";
+import Button, { Link } from "../../components/Button";
 import Card from "../../components/Card";
 import { usePageTitle } from "../../hooks";
 
@@ -16,11 +16,11 @@ export default function Donate() {
                 <div class="grid-2-cols">
                     <Card title="Financial donations">
                         <p>
-                            Trilium is built and maintained with <a href="https://github.com/TriliumNext/Trilium/graphs/commit-activity" target="_blank">hundreds of hours of work</a>.
+                            Trilium is built and maintained with <Link href="https://github.com/TriliumNext/Trilium/graphs/commit-activity" openExternally>hundreds of hours of work</Link>.
                             Your support keeps it open-source, improves features, and covers costs such as hosting.
                         </p>
 
-                        <p>Consider supporting the main developer (<a href="https://github.com/eliandoran">eliandoran</a>) of the application via:</p>
+                        <p>Consider supporting the main developer (<Link href="https://github.com/eliandoran" openExternally>eliandoran</Link>) of the application via:</p>
 
                         <ul class="donate-buttons">
                             <li>
@@ -56,9 +56,9 @@ export default function Donate() {
 
                     <Card title="Other ways to contribute">
                         <ul>
-                            <li>Translate the application into your native language via <a href="https://hosted.weblate.org/engage/trilium/" target="_blank">Weblate</a>.</li>
-                            <li>Interact with the community on <a href="https://github.com/orgs/TriliumNext/discussions" target="_blank">GitHub Discussions</a> or on <a href="https://matrix.to/#/#triliumnext:matrix.org">Matrix</a>.</li>
-                            <li>Report bugs via <a href="https://github.com/TriliumNext/Trilium/issues" target="_blank">GitHub issues</a>.</li>
+                            <li>Translate the application into your native language via <Link href="https://hosted.weblate.org/engage/trilium/" openExternally>Weblate</Link>.</li>
+                            <li>Interact with the community on <Link href="https://github.com/orgs/TriliumNext/discussions" openExternally>GitHub Discussions</Link> or on <Link href="https://matrix.to/#/#triliumnext:matrix.org" openExternally>Matrix</Link>.</li>
+                            <li>Report bugs via <Link href="https://github.com/TriliumNext/Trilium/issues" openExternally>GitHub issues</Link>.</li>
                             <li>Improve the documentation by informing us on gaps in the documentation or contributing guides, FAQs or tutorials.</li>
                             <li>Spread the word: Share Trilium Notes with friends, or on blogs and social media.</li>
                         </ul>
