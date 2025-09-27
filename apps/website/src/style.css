@@ -116,6 +116,11 @@ img {
     font-weight: 300;
     margin: 0;
     color: var(--brand-1);
+    margin-bottom: 0.5em;
+}
+
+.card-content h3 > span {
+    vertical-align: middle;
 }
 
 .card > .image {

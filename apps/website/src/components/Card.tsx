@@ -18,8 +18,8 @@ export default function Card({ title, children, imageUrl, iconSvg, className, mo
 
             <div className="card-content">
                 <h3>
-                    {iconSvg && <><Icon svg={iconSvg} />{" "}</> }
-                    {title}
+                    {iconSvg && <Icon svg={iconSvg} />}{" "}
+                    <span>{title}</span>
                 </h3>
 
                 <div className="card-content-inner">
