@@ -35,7 +35,7 @@ export default function DownloadPage() {
             </Section>
 
             <Section title="Set up a server for access on multiple devices">
-                <div className="grid-3-cols download-server">
+                <div className="grid-2-cols download-server">
                     {Object.entries(downloadMatrix.server).map(entry => <DownloadCard app="server" arch={currentArch} entry={entry} />)}
                 </div>
             </Section>

@@ -115,6 +115,22 @@ export const downloadMatrix: DownloadMatrix = {
         }
     },
     server: {
+        docker: {
+            title: "Self-hosted using Docker",
+            description: "Easily deploy on Windows, Linux or macOS using a Docker container.",
+            helpUrl: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.html",
+            quickStartCode: "docker pull triliumnext/trilium\ndocker run -p 8080:8080 -d ./data:/home/node/trilium-data triliumnext/trilium",
+            downloads: {
+                dockerhub: {
+                    name: "Docker Hub",
+                    url: "https://hub.docker.com/r/triliumnext/trilium"
+                },
+                ghcr: {
+                    name: "ghcr.io",
+                    url: "https://github.com/TriliumNext/Trilium/pkgs/container/trilium"
+                }
+            }
+        },
         linux: {
             title: "Self-hosted on Linux",
             description: "Deploy Trilium Notes on your own server or VPS, compatible with most distributions.",
@@ -133,22 +149,6 @@ export const downloadMatrix: DownloadMatrix = {
                 nixos: {
                     name: "NixOS module",
                     url: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/On%20NixOS"
-                }
-            }
-        },
-        docker: {
-            title: "Self-hosted using Docker",
-            description: "Easily deploy on Windows, Linux or macOS using a Docker container.",
-            helpUrl: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.html",
-            quickStartCode: "docker pull triliumnext/trilium\ndocker run -p 8080:8080 -d ./data:/home/node/trilium-data triliumnext/trilium",
-            downloads: {
-                dockerhub: {
-                    name: "Docker Hub",
-                    url: "https://hub.docker.com/r/triliumnext/trilium"
-                },
-                ghcr: {
-                    name: "ghcr.io",
-                    url: "https://github.com/TriliumNext/Trilium/pkgs/container/trilium"
                 }
             }
         },

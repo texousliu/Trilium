@@ -2,6 +2,10 @@
     padding: 1em;
 }
 
+.download-server .download-card:first-of-type {
+    grid-column: 1 / 4;
+}
+
 .download-card h3 {
     color: var(--accent-color);
     font-size: 1.5em;
