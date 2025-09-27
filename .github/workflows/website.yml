@@ -24,6 +24,11 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
+      - name: Set up node & dependencies
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --filter website --frozen-lockfile
