@@ -30,7 +30,7 @@ import tableIcon from "../../assets/boxicons/bx-table.svg?raw";
 import boardIcon from "../../assets/boxicons/bx-columns-3.svg?raw";
 import geomapIcon from "../../assets/boxicons/bx-map.svg?raw";
 import { getPlatform } from '../../download-helper.js';
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 
 export function Home() {
     usePageTitle("");
@@ -51,22 +51,22 @@ export function Home() {
 
 function HeroSection() {
     const platform = getPlatform();
-    let screenshotUrl: string | null = null;
     const colorScheme = useColorScheme();
+    const [ screenshotUrl, setScreenshotUrl ] = useState<string>();
 
-    if (colorScheme) {
+    useEffect(() => {
         switch (platform) {
             case "macos":
-                screenshotUrl = `/screenshot_desktop_mac_${colorScheme}.webp`;
+                setScreenshotUrl(`/screenshot_desktop_mac_${colorScheme}.webp`);
                 break;
             case "linux":
                 break;
             case "windows":
             default:
-                screenshotUrl = `/screenshot_desktop_win_${colorScheme}.webp`;
+                setScreenshotUrl(`/screenshot_desktop_win_${colorScheme}.webp`);
                 break;
         }
-    }
+    }, [ colorScheme ]);
 
     return (
         <Section className="hero-section">

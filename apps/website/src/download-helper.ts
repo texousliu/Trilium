@@ -22,6 +22,13 @@ export interface DownloadMatrixEntry {
     quickStartCode?: string;
 }
 
+export interface RecommendedDownload {
+    architecture: Architecture;
+    platform: Platform;
+    url: string;
+    name: string;
+}
+
 type DownloadMatrix = Record<App, { [ P in Platform ]?: DownloadMatrixEntry }>;
 
 // Keep compatibility info inline with https://github.com/electron/electron/blob/main/README.md#platform-support.
@@ -205,7 +212,7 @@ export function getPlatform(): Platform | null {
     }
 }
 
-export function getRecommendedDownload() {
+export function getRecommendedDownload(): RecommendedDownload | null {
     if (typeof window === "undefined") return null;
 
     const architecture = getArchitecture();

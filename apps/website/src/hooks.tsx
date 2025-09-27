@@ -11,11 +11,11 @@ export function usePageTitle(title: string) {
 }
 
 export function useColorScheme() {
-    if (typeof window === "undefined") return;
-
-    const [ prefersDark, setPrefersDark ] = useState((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches));
+    const defaultValue = (typeof window !== "undefined" && (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches));
+    const [ prefersDark, setPrefersDark ] = useState(defaultValue);
 
     useEffect(() => {
+        if (typeof window === "undefined") return;
         const mediaQueryList = window.matchMedia("(prefers-color-scheme: dark)");
         const listener = () => setPrefersDark((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches));
 
