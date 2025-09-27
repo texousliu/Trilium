@@ -26,7 +26,7 @@ jobs:
       - uses: pnpm/action-setup@v4
 
       - name: Install dependencies
-        run: pnpm install --filter website... --frozen-lockfile
+        run: pnpm install --filter website --frozen-lockfile
 
       - name: Build the website
         run: pnpm website:build
