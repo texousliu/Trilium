@@ -12,7 +12,7 @@ const { name, url } = getRecommendedDownload();
 export default function DownloadButton({ big }: DownloadButtonProps) {
     return (
         <Button
-           className={`download-button ${big ? "big" : ""}`}
+           className={`download-button desktop-only ${big ? "big" : ""}`}
            href={url}
            iconSvg={downloadIcon}
            text={<>

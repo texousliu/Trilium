@@ -112,11 +112,14 @@ img {
     fill: currentColor;
 }
 
-
 @media (max-width: 719px) {
     .grid-3-cols > *,
     .grid-2-cols > * {
         margin-bottom: 1em;
+    }
+
+    .desktop-only {
+        display: none !important;
     }
 }
 
@@ -139,5 +142,9 @@ img {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 1em;
+    }
+
+    .mobile-only {
+        display: none !important;
     }
 }
