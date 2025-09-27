@@ -1,6 +1,7 @@
 import "./Header.css";
 import { useLocation } from 'preact-iso';
 import DownloadButton from './DownloadButton';
+import logoPath from "../assets/icon-color.svg";
 
 interface HeaderLink {
     url: string;
@@ -20,7 +21,7 @@ export function Header() {
 		<header>
             <div class="content-wrapper">
                 <a class="banner" href="/">
-                    <img src="./src/assets/icon-color.svg" width="300" height="300" />&nbsp;<span>Trilium Notes</span>
+                    <img src={logoPath} width="300" height="300" />&nbsp;<span>Trilium Notes</span>
                 </a>
 
                 <nav>
