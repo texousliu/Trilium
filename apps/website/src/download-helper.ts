@@ -130,7 +130,7 @@ export const downloadMatrix: DownloadMatrix = {
                 },
                 nixos: {
                     name: "NixOS module",
-                    url: "https://search.nixos.org/options?query=trilium-server"
+                    url: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/On%20NixOS"
                 }
             }
         },
