@@ -80,7 +80,7 @@ export function renderText(result: Result, note: SNote) {
         if (typeof includedResult.content !== "string") continue;
 
         const includedDocument = new JSDOM(includedResult.content).window.document;
-        includeNoteEl.replaceWith(includedDocument.body);
+        includeNoteEl.replaceWith(...includedDocument.body.childNodes);
     }
 
     result.isEmpty = document.body.textContent?.trim().length === 0 && document.querySelectorAll("img").length === 0;

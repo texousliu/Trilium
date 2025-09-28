@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { getContent, renderCode, renderText, type Result } from "./content_renderer.js";
 import { trimIndentation } from "@triliumnext/commons";
-import { buildShareNote } from "../test/shaca_mocking.js";
+import { buildShareNote, buildShareNotes } from "../test/shaca_mocking.js";
 
 describe("content_renderer", () => {
     it("Reports protected notes not being renderable", () => {
@@ -27,6 +27,29 @@ describe("content_renderer", () => {
             });
             const result = getContent(note);
             expect(result.content).toStrictEqual(content);
+        });
+
+        it("renders included notes", () => {
+            buildShareNotes([
+                { id: "subnote1", content: `<p>Foo</p><div>Bar</div>` },
+                { id: "subnote2", content: `<strong>Baz</strong>` }
+            ]);
+            const note = buildShareNote({
+                id: "note1",
+                content: trimIndentation`\
+                    <p>Before</p>
+                    <section class="include-note" data-note-id="subnote1" data-box-size="small">&nbsp;</section>
+                    <section class="include-note" data-note-id="subnote2" data-box-size="small">&nbsp;</section>
+                    <p>After</p>
+                `
+            });
+            const result = getContent(note);
+            expect(result.content).toStrictEqual(trimIndentation`\
+                <p>Before</p>
+                <p>Foo</p><div>Bar</div>
+                <strong>Baz</strong>
+                <p>After</p>
+            `);
         });
     });
 

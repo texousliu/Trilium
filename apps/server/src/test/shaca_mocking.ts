@@ -10,6 +10,7 @@ interface NoteDefinition extends AttributeDefinitions, RelationDefinitions {
     id?: string | undefined;
     title?: string;
     content?: string | Buffer<ArrayBufferLike>;
+    children?: NoteDefinition[];
     isProtected?: boolean;
 }
 
@@ -57,6 +58,15 @@ export function buildShareNote(noteDef: NoteDefinition) {
             if (noteDef.isProtected) return undefined;
             return noteDef.content;
         };
+    }
+
+    // Handle children.
+    if (noteDef.children) {
+        for (const childDef of noteDef.children) {
+            const childNote = buildShareNote(childDef);
+
+            // TODO: Create corresponding SBranch.
+        }
     }
 
     // Handle labels & relations
