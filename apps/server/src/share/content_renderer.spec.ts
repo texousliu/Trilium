@@ -4,7 +4,13 @@ import { trimIndentation } from "@triliumnext/commons";
 import { buildShareNote } from "../test/shaca_mocking.js";
 
 describe("content_renderer", () => {
-    describe("renderText", () => {
+    it("Reports protected notes not being renderable", () => {
+        const note = buildShareNote({ isProtected: true });
+        const result = getContent(note);
+        expect(result.content).toStrictEqual("<p>Protected note cannot be displayed</p>");
+    });
+
+    describe("Text note", () => {
         it("parses simple note", () => {
             const content = trimIndentation`\
                 <figure class="image image-style-align-right image_resized" style="width:29.84%;">

@@ -8,8 +8,9 @@ type RelationDefinitions = { [key in `~${string}`]: string; };
 
 interface NoteDefinition extends AttributeDefinitions, RelationDefinitions {
     id?: string | undefined;
-    title: string;
+    title?: string;
     content?: string | Buffer<ArrayBufferLike>;
+    isProtected?: boolean;
 }
 
 /**
@@ -41,18 +42,21 @@ export function buildShareNote(noteDef: NoteDefinition) {
     const blobId = "foo";
     const note = new SNote([
         noteDef.id ?? utils.randomString(12),
-        noteDef.title,
+        noteDef.title ?? "New note",
         "text",
         "text/html",
         blobId,
         new Date().toUTCString(),   // utcDateModified
-        false // is protected
+        !!noteDef.isProtected
     ]);
     shaca.notes[note.noteId] = note;
 
     // Handle content
     if (noteDef.content) {
-        note.getContent = () => noteDef.content;
+        note.getContent = () => {
+            if (noteDef.isProtected) return undefined;
+            return noteDef.content;
+        };
     }
 
     // Handle labels & relations
