@@ -251,7 +251,7 @@ function removeImages(document: Document) {
 const EXCERPT_CHAR_LIMIT = 200;
 type ElementOrText = Element | Text;
 
-function findExcerpts(sourceNote: BNote, referencedNoteId: string) {
+export function findExcerpts(sourceNote: BNote, referencedNoteId: string) {
     const html = sourceNote.getContent();
     const document = new JSDOM(html).window.document;
 
