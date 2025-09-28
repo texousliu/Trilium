@@ -86,7 +86,7 @@
     "clone_to_selected_note": "選択したノートにクローン",
     "no_path_to_clone_to": "クローン先のパスが存在しません。",
     "note_cloned": "ノート \"{{clonedTitle}}\" は \"{{targetTitle}}\" にクローンされました",
-    "clone_notes_to": "ノートをクローンして...",
+    "clone_notes_to": "ノートをクローン...",
     "help_on_links": "ヘルプへのリンク"
   },
   "delete_notes": {
@@ -396,9 +396,9 @@
     "protect-subtree": "サブツリーを保護",
     "unprotect-subtree": "サブツリーの保護を解除",
     "copy-clone": "コピー/クローン",
-    "clone-to": "クローンして...",
+    "clone-to": "クローン先...",
     "cut": "カット",
-    "move-to": "移動して...",
+    "move-to": "移動先...",
     "paste-into": "貼り付け",
     "paste-after": "後ろに貼り付け",
     "duplicate": "複製",
@@ -671,7 +671,7 @@
   "note_paths": {
     "title": "ノートパス",
     "clone_button": "ノートを新しい場所にクローン...",
-    "intro_placed": "このノートは以下のパスに置かれる:",
+    "intro_placed": "このノートは以下のパスに置かれています:",
     "intro_not_placed": "このノートはまだノートツリーに配置されていません。",
     "archived": "アーカイブされた",
     "search": "検索",
@@ -1586,7 +1586,7 @@
   },
   "inherited_attribute_list": {
     "title": "継承属性",
-    "no_inherited_attributes": "継承属性ではありません。"
+    "no_inherited_attributes": "継承属性はありません。"
   },
   "note_map": {
     "open_full": "拡大表示",
