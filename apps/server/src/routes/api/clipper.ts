@@ -1,5 +1,5 @@
 import type { Request } from "express";
-import jsdom from "jsdom";
+import { parse } from "node-html-parser";
 import path from "path";
 
 import type BNote from "../../becca/entities/bnote.js";
@@ -16,7 +16,6 @@ import log from "../../services/log.js";
 import noteService from "../../services/notes.js";
 import utils from "../../services/utils.js";
 import ws from "../../services/ws.js";
-const { JSDOM } = jsdom;
 
 interface Image {
     src: string;
@@ -181,10 +180,10 @@ export function processContent(images: Image[], note: BNote, content: string) {
         rewrittenContent = `<p>${rewrittenContent}</p>`;
     }
     // Create a JSDOM object from the existing HTML content
-    const dom = new JSDOM(rewrittenContent);
+    const dom = parse(rewrittenContent);
 
     // Get the content inside the body tag and serialize it
-    rewrittenContent = dom.window.document.body.innerHTML;
+    rewrittenContent = dom.querySelector("body")?.innerHTML ?? "";
 
     return rewrittenContent;
 }
