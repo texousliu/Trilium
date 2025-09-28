@@ -44,7 +44,7 @@ function filterUrlValue(value: string) {
         .replace(/(\.net|\.com|\.org|\.info|\.edu)/gi, "");
 }
 
-function buildRewardMap(note: BNote) {
+export function buildRewardMap(note: BNote) {
     // Need to use Map instead of object: https://github.com/zadam/trilium/issues/1895
     const map = new Map();
 
