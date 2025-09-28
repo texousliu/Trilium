@@ -7,7 +7,7 @@ type RelationDefinitions = { [key in `~${string}`]: string; };
 
 interface NoteDefinition extends AttributeDefinitions, RelationDefinitions {
     id?: string | undefined;
-    title: string;
+    title?: string;
     content?: string;
 }
 
@@ -39,7 +39,7 @@ export function buildNotes(notes: NoteDefinition[]) {
 export function buildNote(noteDef: NoteDefinition) {
     const note = new BNote({
         noteId: noteDef.id ?? utils.randomString(12),
-        title: noteDef.title,
+        title: noteDef.title ?? "New note",
         type: "text",
         mime: "text/html",
         isProtected: false,

@@ -147,7 +147,7 @@ async function createNote(req: Request) {
     };
 }
 
-function processContent(images: Image[], note: BNote, content: string) {
+export function processContent(images: Image[], note: BNote, content: string) {
     let rewrittenContent = htmlSanitizer.sanitize(content);
 
     if (images) {
