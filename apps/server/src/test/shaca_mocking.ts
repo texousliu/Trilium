@@ -1,4 +1,5 @@
 import utils from "../services/utils.js";
+import SAttachment from "../share/shaca/entities/sattachment.js";
 import SAttribute from "../share/shaca/entities/sattribute.js";
 import SNote from "../share/shaca/entities/snote.js";
 import shaca from "../share/shaca/shaca.js";
@@ -6,11 +7,19 @@ import shaca from "../share/shaca/shaca.js";
 type AttributeDefinitions = { [key in `#${string}`]: string; };
 type RelationDefinitions = { [key in `~${string}`]: string; };
 
+interface AttachementDefinition {
+    id?: string;
+    role?: string;
+    mime?: string;
+    title?: string;
+}
+
 interface NoteDefinition extends AttributeDefinitions, RelationDefinitions {
     id?: string | undefined;
     title?: string;
     content?: string | Buffer<ArrayBufferLike>;
     children?: NoteDefinition[];
+    attachments?: AttachementDefinition[];
     isProtected?: boolean;
 }
 
@@ -58,6 +67,21 @@ export function buildShareNote(noteDef: NoteDefinition) {
             if (noteDef.isProtected) return undefined;
             return noteDef.content;
         };
+    }
+
+    // Handle attachments.
+    if (noteDef.attachments) {
+        for (const attachmentDef of noteDef.attachments) {
+            new SAttachment([
+                attachmentDef.id ?? utils.randomString(12),
+                note.noteId,
+                attachmentDef.role ?? "file",
+                attachmentDef.mime ?? "application/blob",
+                attachmentDef.title ?? "New attachment",
+                blobId,
+                new Date().toUTCString(),   // utcDateModified
+            ]);
+        }
     }
 
     // Handle children.

@@ -21,12 +21,35 @@ describe("content_renderer", () => {
                         Welcome to Trilium Notes!
                     </strong>
                 </p>`;
-            const note = buildShareNote({
-                title: "Note",
-                content
-            });
+            const note = buildShareNote({ content });
             const result = getContent(note);
             expect(result.content).toStrictEqual(content);
+        });
+
+        it("handles attachment link", () => {
+            const content = trimIndentation`\
+                <h1>Test</h1>
+                <p>
+                    <a class="reference-link" href="#root/iwTmeWnqBG5Q?viewMode=attachments&amp;attachmentId=q14s2Id7V6pp">
+                        5863845791835102555.mp4
+                    </a>
+                    &nbsp;
+                </p>
+            `;
+            const note = buildShareNote({
+                content,
+                attachments: [ { id: "q14s2Id7V6pp" } ]
+            });
+            const result = getContent(note);
+            expect(result.content).toStrictEqual(trimIndentation`\
+                <h1>Test</h1>
+                <p>
+                    <a class="reference-link attachment-link role-file" href="api/attachments/q14s2Id7V6pp/download">
+                        5863845791835102555.mp4
+                    </a>
+                    &nbsp;
+                </p>
+            `);
         });
 
         it("renders included notes", () => {
