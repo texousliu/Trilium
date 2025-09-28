@@ -1,9 +1,18 @@
 import { describe, it, expect } from "vitest";
-import { getContent, renderCode, renderText, type Result } from "./content_renderer.js";
+import { getContent, renderCode, type Result } from "./content_renderer.js";
 import { trimIndentation } from "@triliumnext/commons";
 import { buildShareNote, buildShareNotes } from "../test/shaca_mocking.js";
 
 describe("content_renderer", () => {
+    beforeAll(() => {
+        vi.mock("../becca/becca_loader.js", () => ({
+            default: {
+                load: vi.fn(),
+                loaded: Promise.resolve()
+            }
+        }));
+    });
+
     it("Reports protected notes not being renderable", () => {
         const note = buildShareNote({ isProtected: true });
         const result = getContent(note);
