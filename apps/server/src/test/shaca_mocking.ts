@@ -1,0 +1,97 @@
+import utils from "../services/utils.js";
+import SAttribute from "../share/shaca/entities/sattribute.js";
+import SNote from "../share/shaca/entities/snote.js";
+import shaca from "../share/shaca/shaca.js";
+
+type AttributeDefinitions = { [key in `#${string}`]: string; };
+type RelationDefinitions = { [key in `~${string}`]: string; };
+
+interface NoteDefinition extends AttributeDefinitions, RelationDefinitions {
+    id?: string | undefined;
+    title: string;
+    content?: string | Buffer<ArrayBufferLike>;
+}
+
+/**
+ * Creates the given notes with the given title and optionally one or more attributes.
+ *
+ * For a label to be created, simply pass on a key prefixed with `#` and any desired value.
+ *
+ * The notes and attributes will be injected in the froca.
+ *
+ * @param notes
+ * @returns an array containing the IDs of the created notes.
+ * @example
+ * buildShareNotes([
+ *  { title: "A", "#startDate": "2025-05-05" },
+ *  { title: "B", "#startDate": "2025-05-07" }
+ * ]);
+ */
+export function buildShareNotes(notes: NoteDefinition[]) {
+    const ids: string[] = [];
+
+    for (const noteDef of notes) {
+        ids.push(buildShareNote(noteDef).noteId);
+    }
+
+    return ids;
+}
+
+export function buildShareNote(noteDef: NoteDefinition) {
+    const blobId = "foo";
+    const note = new SNote([
+        noteDef.id ?? utils.randomString(12),
+        noteDef.title,
+        "text",
+        "text/html",
+        blobId,
+        new Date().toUTCString(),   // utcDateModified
+        false // is protected
+    ]);
+    shaca.notes[note.noteId] = note;
+
+    // Handle content
+    if (noteDef.content) {
+        note.getContent = () => noteDef.content;
+    }
+
+    // Handle labels & relations
+    let position = 0;
+    for (const [ key, value ] of Object.entries(noteDef)) {
+        const attributeId = utils.randomString(12);
+        const name = key.substring(1);
+
+        let attribute: SAttribute | null = null;
+        if (key.startsWith("#")) {
+            attribute = new SAttribute([
+                attributeId,
+                note.noteId,
+                "label",
+                name,
+                value,
+                false,   // isInheritable
+                position // position
+            ]);
+        }
+
+        if (key.startsWith("~")) {
+            attribute = new SAttribute([
+                attributeId,
+                note.noteId,
+                "relation",
+                name,
+                value,
+                false,   // isInheritable
+                position // position
+            ]);
+        }
+
+        if (!attribute) {
+            continue;
+        }
+
+        shaca.attributes[attributeId] = attribute;
+        position++;
+    }
+    return note;
+}

@@ -16,7 +16,7 @@ export interface Result {
     isEmpty?: boolean;
 }
 
-function getContent(note: SNote) {
+export function getContent(note: SNote) {
     if (note.isProtected) {
         return {
             header: "",
@@ -65,7 +65,7 @@ function renderIndex(result: Result) {
     result.content += "</ul>";
 }
 
-function renderText(result: Result, note: SNote) {
+export function renderText(result: Result, note: SNote) {
     const document = new JSDOM(result.content || "").window.document;
 
     // Process include notes.
