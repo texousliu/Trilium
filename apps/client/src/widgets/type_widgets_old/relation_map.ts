@@ -173,31 +173,6 @@ export default class RelationMapTypeWidget extends TypeWidget {
         const $title = $noteBox.find(".title a");
         const noteId = this.idToNoteId($noteBox.prop("id"));
 
-        if (command === "openInNewTab") {
-        } else if (command === "remove") {
-            const result = await dialogService.confirmDeleteNoteBoxWithNote($title.text());
-
-            if (typeof result !== "object" || !result.confirmed) {
-                return;
-            }
-
-            this.jsPlumbInstance?.remove(this.noteIdToId(noteId));
-
-            if (result.isDeleteNoteChecked) {
-                const taskId = utils.randomString(10);
-
-                await server.remove(`notes/${noteId}?taskId=${taskId}&last=true`);
-            }
-
-            if (this.mapData) {
-                this.mapData.notes = this.mapData.notes.filter((note) => note.noteId !== noteId);
-            }
-
-            if (this.relations) {
-                this.relations = this.relations.filter((relation) => relation.sourceNoteId !== noteId && relation.targetNoteId !== noteId);
-            }
-
-            this.saveData();
         } else if (command === "editTitle") {
             const title = await dialogService.prompt({
                 title: t("relation_map.rename_note"),

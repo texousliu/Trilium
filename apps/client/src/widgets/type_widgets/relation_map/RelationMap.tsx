@@ -15,19 +15,7 @@ import toast from "../../../services/toast";
 import { CreateChildrenResponse } from "@triliumnext/commons";
 import contextMenu from "../../../menus/context_menu";
 import appContext from "../../../components/app_context";
-
-interface MapData {
-    notes: {
-        noteId: string;
-        x: number;
-        y: number;
-    }[];
-    transform: {
-        x: number,
-        y: number,
-        scale: number
-    }
-}
+import RelationMapApi, { MapData, MapDataNoteEntry } from "./api";
 
 interface Clipboard {
     noteId: string;
@@ -50,7 +38,9 @@ const uniDirectionalOverlays: OverlaySpec[] = [
 export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
     const [ data, setData ] = useState<MapData>();
     const containerRef = useRef<HTMLDivElement>(null);
-    const apiRef = useRef<jsPlumbInstance>(null);
+    const mapApiRef = useRef<RelationMapApi>(null);
+    const pbApiRef = useRef<jsPlumbInstance>(null);
+
     const spacedUpdate = useEditorSpacedUpdate({
         note,
         getData() {
@@ -61,7 +51,14 @@ export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
         onContentChange(content) {
             if (content) {
                 try {
-                    setData(JSON.parse(content));
+                    const data = JSON.parse(content);
+                    setData(data);
+                    mapApiRef.current = new RelationMapApi(note, data, (newData, refreshUi) => {
+                        if (refreshUi) {
+                            setData(newData);
+                        }
+                        spacedUpdate.scheduleUpdate();
+                    });
                     return;
                 } catch (e) {
                     console.log("Could not parse content: ", e);
@@ -87,24 +84,17 @@ export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
     });
 
     const onTransform = useCallback((pzInstance: PanZoom) => {
-        if (!containerRef.current || !apiRef.current || !data) return;
+        if (!containerRef.current || !mapApiRef.current || !pbApiRef.current || !data) return;
         const zoom = getZoom(containerRef.current);
-        apiRef.current.setZoom(zoom);
-        data.transform = JSON.parse(JSON.stringify(pzInstance.getTransform()));
-        spacedUpdate.scheduleUpdate();
+        mapApiRef.current.setTransform(pzInstance.getTransform());
+        pbApiRef.current.setZoom(zoom);
     }, [ data ]);
 
-    const onNewItem = useCallback((newNote: MapData["notes"][number]) => {
-        if (!data) return;
-        data.notes.push(newNote);
-        setData({ ...data });
-        spacedUpdate.scheduleUpdate();
-    }, [ data, spacedUpdate ]);
     const clickCallback = useNoteCreation({
         containerRef,
         note,
         ntxId,
-        onCreate: onNewItem
+        mapApiRef
     });
 
     usePanZoom({
@@ -129,7 +119,7 @@ export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
         <div className="note-detail-relation-map note-detail-printable">
             <div className="relation-map-wrapper" onClick={clickCallback}>
                 <JsPlumb
-                    apiRef={apiRef}
+                    apiRef={pbApiRef}
                     containerRef={containerRef}
                     className="relation-map-container"
                     props={{
@@ -140,7 +130,7 @@ export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
                     }}
                 >
                     {data?.notes.map(note => (
-                        <NoteBox {...note} />
+                        <NoteBox {...note} mapApiRef={mapApiRef} />
                     ))}
                 </JsPlumb>
             </div>
@@ -193,11 +183,11 @@ function usePanZoom({ ntxId, containerRef, options, transformData, onTransform }
     });
 }
 
-function useNoteCreation({ ntxId, note, containerRef, onCreate }: {
+function useNoteCreation({ ntxId, note, containerRef, mapApiRef }: {
     ntxId: string | null | undefined;
     note: FNote;
     containerRef: RefObject<HTMLDivElement>;
-    onCreate: (newNote: MapData["notes"][number]) => void;
+    mapApiRef: RefObject<RelationMapApi>;
 }) {
     const clipboardRef = useRef<Clipboard>(null);
     useTriliumEvent("relationMapCreateChildNote", async ({ ntxId: eventNtxId }) => {
@@ -227,10 +217,10 @@ function useNoteCreation({ ntxId, note, containerRef, onCreate }: {
             x -= 80;
             y -= 15;
 
-            onCreate({ noteId: clipboard.noteId, x, y });
+            mapApiRef.current?.createItem({ noteId: clipboard.noteId, x, y });
             clipboardRef.current = null;
         }
-    }, [ onCreate ]);
+    }, []);
     return onClickHandler;
 }
 
@@ -267,7 +257,7 @@ function JsPlumb({ className, props, children, containerRef: externalContainerRe
     )
 }
 
-function NoteBox({ noteId, x, y }: MapData["notes"][number]) {
+function NoteBox({ noteId, x, y, mapApiRef }: MapDataNoteEntry & { mapApiRef: RefObject<RelationMapApi> }) {
     const [ note, setNote ] = useState<FNote | null>();
     useEffect(() => {
         froca.getNote(noteId).then(setNote);
@@ -286,12 +276,19 @@ function NoteBox({ noteId, x, y }: MapData["notes"][number]) {
                 },
                 {
                     title: t("relation_map.remove_note"),
-                    uiIcon: "bx bx-trash"
+                    uiIcon: "bx bx-trash",
+                    handler: async () => {
+                        if (!note) return;
+                        const result = await dialog.confirmDeleteNoteBoxWithNote(note.title);
+                        if (typeof result !== "object" || !result.confirmed) return;
+
+                        mapApiRef.current?.removeItem(noteId, result.isDeleteNoteChecked);
+                    }
                 }
             ],
             selectMenuItemHandler() {}
         })
-    }, [ noteId ]);
+    }, [ note ]);
 
     return note && (
         <div
