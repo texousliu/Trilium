@@ -13,6 +13,8 @@ import dialog from "../../services/dialog";
 import server from "../../services/server";
 import toast from "../../services/toast";
 import { CreateChildrenResponse } from "@triliumnext/commons";
+import contextMenu, { ContextMenuEvent } from "../../menus/context_menu";
+import appContext from "../../components/app_context";
 
 interface MapData {
     notes: {
@@ -82,7 +84,7 @@ export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
         dataSaved() {
 
         }
-    })
+    });
 
     const onTransform = useCallback((pzInstance: PanZoom) => {
         if (!containerRef.current || !apiRef.current || !data) return;
@@ -271,16 +273,37 @@ function NoteBox({ noteId, x, y }: MapData["notes"][number]) {
         froca.getNote(noteId).then(setNote);
     }, [ noteId ]);
 
+    const contextMenuHandler = useCallback((e: MouseEvent) => {
+        e.preventDefault();
+        contextMenu.show({
+            x: e.pageX,
+            y: e.pageY,
+            items: [
+                {
+                    title: t("relation_map.open_in_new_tab"),
+                    uiIcon: "bx bx-empty",
+                    handler: () => appContext.tabManager.openTabWithNoteWithHoisting(noteId)
+                },
+                {
+                    title: t("relation_map.remove_note"),
+                    uiIcon: "bx bx-trash"
+                }
+            ],
+            selectMenuItemHandler() {}
+        })
+    }, [ noteId ]);
+
     return note && (
         <div
             id={noteIdToId(noteId)}
             className={`note-box ${note?.getCssClass()}`}
+            onContextMenu={contextMenuHandler}
             style={{
                 left: x,
                 top: y
             }}
         >
-            <NoteLink className="title" notePath={noteId} noTnLink />
+            <NoteLink className="title" notePath={noteId} noTnLink noContextMenu />
             <div className="endpoint" title={t("relation_map.start_dragging_relations")} />
         </div>
     )

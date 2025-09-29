@@ -14,9 +14,10 @@ interface NoteLinkOpts {
     // Override the text of the link, otherwise the note title is used.
     title?: string;
     viewScope?: ViewScope;
+    noContextMenu?: boolean;
 }
 
-export default function NoteLink({ className, notePath, showNotePath, showNoteIcon, style, noPreview, noTnLink, highlightedTokens, title, viewScope }: NoteLinkOpts) {
+export default function NoteLink({ className, notePath, showNotePath, showNoteIcon, style, noPreview, noTnLink, highlightedTokens, title, viewScope, noContextMenu }: NoteLinkOpts) {
     const stringifiedNotePath = Array.isArray(notePath) ? notePath.join("/") : notePath;
     const ref = useRef<HTMLSpanElement>(null);
     const [ jqueryEl, setJqueryEl ] = useState<JQuery<HTMLElement>>();
@@ -48,6 +49,10 @@ export default function NoteLink({ className, notePath, showNotePath, showNoteIc
 
     if (!noTnLink) {
         $linkEl?.addClass("tn-link");
+    }
+
+    if (noContextMenu) {
+        $linkEl?.attr("data-no-context-menu", "true");
     }
 
     if (className) {

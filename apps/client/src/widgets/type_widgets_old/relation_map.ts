@@ -148,14 +148,10 @@ export default class RelationMapTypeWidget extends TypeWidget {
                 x: e.pageX,
                 y: e.pageY,
                 items: [
-                    { title: t("relation_map.open_in_new_tab"), command: "openInNewTab", uiIcon: "bx bx-empty" },
-                    { title: t("relation_map.remove_note"), command: "remove", uiIcon: "bx bx-trash" },
                     { title: t("relation_map.edit_title"), command: "editTitle", uiIcon: "bx bx-pencil" }
                 ],
                 selectMenuItemHandler: ({ command }) => this.contextMenuHandler(command, e.target)
             });
-
-            return false; // blocks default browser right click menu
         });
 
         this.clipboard = null;
@@ -178,7 +174,6 @@ export default class RelationMapTypeWidget extends TypeWidget {
         const noteId = this.idToNoteId($noteBox.prop("id"));
 
         if (command === "openInNewTab") {
-            appContext.tabManager.openTabWithNoteWithHoisting(noteId);
         } else if (command === "remove") {
             const result = await dialogService.confirmDeleteNoteBoxWithNote($title.text());
 
