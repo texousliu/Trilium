@@ -83,8 +83,8 @@ importers:
         specifier: 5.2.0
         version: 5.2.0(eslint@9.36.0(jiti@2.6.0))
       happy-dom:
-        specifier: ~18.0.0
-        version: 18.0.1
+        specifier: ~19.0.0
+        version: 19.0.1
       jiti:
         specifier: 2.6.0
         version: 2.6.0
@@ -98,8 +98,8 @@ importers:
         specifier: ^0.17.0
         version: 0.17.0
       rollup-plugin-webpack-stats:
-        specifier: 2.1.4
-        version: 2.1.4(rolldown@1.0.0-beta.29)(rollup@4.52.0)(vite@7.1.7(@types/node@22.18.6)(jiti@2.6.0)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
+        specifier: 2.1.5
+        version: 2.1.5(rolldown@1.0.0-beta.29)(rollup@4.52.0)(vite@7.1.7(@types/node@22.18.6)(jiti@2.6.0)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
       tslib:
         specifier: ^2.3.0
         version: 2.8.1
@@ -123,7 +123,7 @@ importers:
         version: 4.5.4(@types/node@22.18.6)(rollup@4.52.0)(typescript@5.9.2)(vite@7.1.7(@types/node@22.18.6)(jiti@2.6.0)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
       vitest:
         specifier: ^3.0.0
-        version: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@18.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
+        version: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@19.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
 
   apps/client:
     dependencies:
@@ -297,8 +297,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1(webpack@5.101.3(esbuild@0.25.10))
       happy-dom:
-        specifier: 18.0.1
-        version: 18.0.1
+        specifier: 19.0.1
+        version: 19.0.1
       script-loader:
         specifier: 0.7.2
         version: 0.7.2
@@ -325,7 +325,7 @@ importers:
     dependencies:
       '@electron/remote':
         specifier: 2.1.3
-        version: 2.1.3(electron@38.1.2)
+        version: 2.1.3(electron@38.2.0)
       better-sqlite3:
         specifier: 12.4.1
         version: 12.4.1
@@ -382,8 +382,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1(webpack@5.101.3(esbuild@0.25.10))
       electron:
-        specifier: 38.1.2
-        version: 38.1.2
+        specifier: 38.2.0
+        version: 38.2.0
       prebuild-install:
         specifier: ^7.1.1
         version: 7.1.3
@@ -438,8 +438,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1(webpack@5.101.3(esbuild@0.25.10))
       electron:
-        specifier: 38.1.2
-        version: 38.1.2
+        specifier: 38.2.0
+        version: 38.2.0
       fs-extra:
         specifier: 11.3.2
         version: 11.3.2
@@ -461,7 +461,7 @@ importers:
         version: 7.1.1
       '@electron/remote':
         specifier: 2.1.3
-        version: 2.1.3(electron@38.1.2)
+        version: 2.1.3(electron@38.2.0)
       '@preact/preset-vite':
         specifier: 2.10.2
         version: 2.10.2(@babel/core@7.28.0)(preact@10.27.2)(vite@7.1.7(@types/node@24.5.2)(jiti@2.6.0)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
@@ -610,8 +610,8 @@ importers:
         specifier: 3.1.10
         version: 3.1.10
       electron:
-        specifier: 38.1.2
-        version: 38.1.2
+        specifier: 38.2.0
+        version: 38.2.0
       electron-debug:
         specifier: 4.1.0
         version: 4.1.0
@@ -773,7 +773,7 @@ importers:
         version: 10.27.2
       preact-iso:
         specifier: ^2.10.0
-        version: 2.10.0(preact-render-to-string@6.6.1(preact@10.27.2))(preact@10.27.2)
+        version: 2.11.0(preact-render-to-string@6.6.1(preact@10.27.2))(preact@10.27.2)
       preact-render-to-string:
         specifier: ^6.6.1
         version: 6.6.1(preact@10.27.2)
@@ -862,7 +862,7 @@ importers:
         version: 14.1.1
       lint-staged:
         specifier: ^16.0.0
-        version: 16.2.1
+        version: 16.2.3
       stylelint:
         specifier: ^16.0.0
         version: 16.24.0(typescript@5.9.2)
@@ -880,7 +880,7 @@ importers:
         version: 2.0.0(typescript@5.9.2)(vite@7.1.7(@types/node@22.18.6)(jiti@2.6.0)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
       vitest:
         specifier: ^3.0.5
-        version: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@18.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
+        version: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@19.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
       webdriverio:
         specifier: ^9.0.7
         version: 9.20.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -922,7 +922,7 @@ importers:
         version: 14.1.1
       lint-staged:
         specifier: ^16.0.0
-        version: 16.2.1
+        version: 16.2.3
       stylelint:
         specifier: ^16.0.0
         version: 16.24.0(typescript@5.9.2)
@@ -940,7 +940,7 @@ importers:
         version: 2.0.0(typescript@5.9.2)(vite@7.1.7(@types/node@22.18.6)(jiti@2.6.0)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
       vitest:
         specifier: ^3.0.5
-        version: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@18.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
+        version: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@19.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
       webdriverio:
         specifier: ^9.0.7
         version: 9.20.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -982,7 +982,7 @@ importers:
         version: 14.1.1
       lint-staged:
         specifier: ^16.0.0
-        version: 16.2.1
+        version: 16.2.3
       stylelint:
         specifier: ^16.0.0
         version: 16.24.0(typescript@5.9.2)
@@ -1000,7 +1000,7 @@ importers:
         version: 2.0.0(typescript@5.9.2)(vite@7.1.7(@types/node@22.18.6)(jiti@2.6.0)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
       vitest:
         specifier: ^3.0.5
-        version: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@18.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
+        version: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@19.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
       webdriverio:
         specifier: ^9.0.7
         version: 9.20.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -1049,7 +1049,7 @@ importers:
         version: 14.1.1
       lint-staged:
         specifier: ^16.0.0
-        version: 16.2.1
+        version: 16.2.3
       stylelint:
         specifier: ^16.0.0
         version: 16.24.0(typescript@5.9.2)
@@ -1067,7 +1067,7 @@ importers:
         version: 2.0.0(typescript@5.9.2)(vite@7.1.7(@types/node@22.18.6)(jiti@2.6.0)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
       vitest:
         specifier: ^3.0.5
-        version: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@18.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
+        version: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@19.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
       webdriverio:
         specifier: ^9.0.7
         version: 9.20.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -1116,7 +1116,7 @@ importers:
         version: 14.1.1
       lint-staged:
         specifier: ^16.0.0
-        version: 16.2.1
+        version: 16.2.3
       stylelint:
         specifier: ^16.0.0
         version: 16.24.0(typescript@5.9.2)
@@ -1134,7 +1134,7 @@ importers:
         version: 2.0.0(typescript@5.9.2)(vite@7.1.7(@types/node@22.18.6)(jiti@2.6.0)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
       vitest:
         specifier: ^3.0.5
-        version: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@18.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
+        version: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@19.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
       webdriverio:
         specifier: ^9.0.7
         version: 9.20.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -1175,89 +1175,89 @@ importers:
         specifier: 6.5.11
         version: 6.5.11
       '@codemirror/view':
-        specifier: 6.38.3
-        version: 6.38.3
+        specifier: 6.38.4
+        version: 6.38.4
       '@fsegurai/codemirror-theme-abcdef':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-abyss':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-android-studio':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-andromeda':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-basic-dark':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-basic-light':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-cobalt2':
         specifier: 6.0.2
-        version: 6.0.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.0.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-forest':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-github-dark':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-github-light':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-gruvbox-dark':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-gruvbox-light':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-material-dark':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-material-light':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-monokai':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-nord':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-palenight':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-solarized-dark':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-solarized-light':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-tokyo-night-day':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-tokyo-night-storm':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-volcano':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-vscode-dark':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@fsegurai/codemirror-theme-vscode-light':
         specifier: 6.2.2
-        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)
+        version: 6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)
       '@replit/codemirror-indentation-markers':
         specifier: 6.5.3
-        version: 6.5.3(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)
+        version: 6.5.3(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)
       '@replit/codemirror-lang-nix':
         specifier: 6.0.1
-        version: 6.0.1(@codemirror/autocomplete@6.18.6)(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/common@1.2.3)(@lezer/highlight@1.2.1)(@lezer/lr@1.4.2)
+        version: 6.0.1(@codemirror/autocomplete@6.18.6)(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/common@1.2.3)(@lezer/highlight@1.2.1)(@lezer/lr@1.4.2)
       '@replit/codemirror-vim':
         specifier: 6.3.0
-        version: 6.3.0(@codemirror/commands@6.8.1)(@codemirror/language@6.11.0)(@codemirror/search@6.5.11)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)
+        version: 6.3.0(@codemirror/commands@6.8.1)(@codemirror/language@6.11.0)(@codemirror/search@6.5.11)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)
       '@ssddanbrown/codemirror-lang-smarty':
         specifier: 1.0.0
         version: 1.0.0
@@ -2037,8 +2037,8 @@ packages:
   '@codemirror/theme-one-dark@6.1.2':
     resolution: {integrity: sha512-F+sH0X16j/qFLMAfbciKTxVOwkdAS336b7AXTKOZhy8BR3eH/RelsnLgLFINrpST63mmN2OuwUt0W2ndUgYwUA==}
 
-  '@codemirror/view@6.38.3':
-    resolution: {integrity: sha512-x2t87+oqwB1mduiQZ6huIghjMt4uZKFEdj66IcXw7+a5iBEvv9lh7EWDRHI7crnD4BMGpnyq/RzmCGbiEZLcvQ==}
+  '@codemirror/view@6.38.4':
+    resolution: {integrity: sha512-hduz0suCcUSC/kM8Fq3A9iLwInJDl8fD1xLpTIk+5xkNm8z/FT7UsIa9sOXrkpChh+XXc18RzswE8QqELsVl+g==}
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -4869,9 +4869,6 @@ packages:
   '@types/node@16.9.1':
     resolution: {integrity: sha512-QpLcX9ZSsq3YYUUnD3nFDY8H7wctAhQj/TFKL8Ya8v5fMm3CFXxo8zStsLAl780ltoYoo1WvKUVGBQK+1ifr7g==}
 
-  '@types/node@20.17.32':
-    resolution: {integrity: sha512-zeMXFn8zQ+UkjK4ws0RiOC9EWByyW1CcVmLe+2rQocXRsGEDxUCwPEIVgpsGcLHS/P8JkT0oa3839BRABS0oPw==}
-
   '@types/node@20.19.17':
     resolution: {integrity: sha512-gfehUI8N1z92kygssiuWvLiwcbOB3IRktR6hTDgJlXMYh5OvkPSRmgfoBUmfZt+vhwJtX7v1Yw4KvvAf7c5QKQ==}
 
@@ -5545,8 +5542,8 @@ packages:
     resolution: {integrity: sha512-4Dj6M28JB+oAH8kFkTLUo+a2jwOFkuqb3yucU0CANcRRUbxS0cP0nZYCGjcc3BNXwRIsUVmDGgzawme7zvJHvg==}
     engines: {node: '>=12'}
 
-  ansis@4.1.0:
-    resolution: {integrity: sha512-BGcItUBWSMRgOCe+SVZJ+S7yTRG0eGt9cXAHev72yuGcY23hnLA7Bky5L/xLyPINoSN95geovfBkqoTlNZYa7w==}
+  ansis@4.2.0:
+    resolution: {integrity: sha512-HqZ5rWlFjGiV0tDm3UxxgNRqsOTniqoKZu0pIAfh7TZQMGuZK+hH0drySty0si0QXj1ieop4+SkSfPZBPPkHig==}
     engines: {node: '>=14'}
 
   any-base@1.1.0:
@@ -7210,8 +7207,8 @@ packages:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
 
-  electron@38.1.2:
-    resolution: {integrity: sha512-WXUcN3W8h8NTTZViA3KNX0rV2YBU0X0mEUM3ubupXTDY4QtIN7tmiqYVOKSKpR2LckTmBWGuEeY4D6xVoffwKQ==}
+  electron@38.2.0:
+    resolution: {integrity: sha512-Cw5Mb+N5NxsG0Hc1qr8I65Kt5APRrbgTtEEn3zTod30UNJRnAE1xbGk/1NOaDn3ODzI/MYn6BzT9T9zreP7xWA==}
     engines: {node: '>= 12.20.55'}
     hasBin: true
 
@@ -8149,8 +8146,8 @@ packages:
   handle-thing@2.0.1:
     resolution: {integrity: sha512-9Qn4yBxelxoh2Ow62nP+Ka/kMnOXRi8BXnRaUwezLNhqelnN49xKz4F/dPP8OYLxLxq6JDtZb2i9XznUQbNPTg==}
 
-  happy-dom@18.0.1:
-    resolution: {integrity: sha512-qn+rKOW7KWpVTtgIUi6RVmTBZJSe2k0Db0vh1f7CWrWclkkc7/Q+FrOfkZIb2eiErLyqu5AXEzE7XthO9JVxRA==}
+  happy-dom@19.0.1:
+    resolution: {integrity: sha512-Rr1H/mvgdCGoIq+jjaGxE/y+ZB+O2DhUBXk9vqoRVc5zsZ/Ne6Fssb8fXaAjPFh3Ajmbx+kfDDf946PHiUbC6Q==}
     engines: {node: '>=20.0.0'}
 
   has-bigints@1.1.0:
@@ -9194,8 +9191,8 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  lint-staged@16.2.1:
-    resolution: {integrity: sha512-KMeYmH9wKvHsXdUp+z6w7HN3fHKHXwT1pSTQTYxB9kI6ekK1rlL3kLZEoXZCppRPXFK9PFW/wfQctV7XUqMrPQ==}
+  lint-staged@16.2.3:
+    resolution: {integrity: sha512-1OnJEESB9zZqsp61XHH2fvpS1es3hRCxMplF/AJUDa8Ho8VrscYDIuxGrj3m8KPXbcWZ8fT9XTMUhEQmOVKpKw==}
     engines: {node: '>=20.17'}
     hasBin: true
 
@@ -11311,8 +11308,8 @@ packages:
   potpack@2.1.0:
     resolution: {integrity: sha512-pcaShQc1Shq0y+E7GqJqvZj8DTthWV1KeHGdi0Z6IAin2Oi3JnLCOfwnCo84qc+HAp52wT9nK9H7FAJp5a44GQ==}
 
-  preact-iso@2.10.0:
-    resolution: {integrity: sha512-zQ0dZdgdZ+L+WmD0IgbPrgSajahbrbkNSuCbXG5ZDHaT6vDSaRRlvt3NIP5+w8iltMCBqj8YPROM3El/qIKjvA==}
+  preact-iso@2.11.0:
+    resolution: {integrity: sha512-oThWJQcgcnaWh6UKy1qrBkxIWp5CkqvnHiFdLiDUxfNkGdpQ5veGQw9wOVS0NDp7X8xo98wxE4wng5jLv1e9Ug==}
     peerDependencies:
       preact: 10.27.2
       preact-render-to-string: '>=6.4.0'
@@ -11784,8 +11781,8 @@ packages:
     resolution: {integrity: sha512-EsoOi8moHN6CAYyTZipxDDVTJn0j2nBCWor4wRU45RQ8ER2qREDykXLr3Ulz6hBh6oBKCFTQIjo21i0FXNo/IA==}
     hasBin: true
 
-  rollup-plugin-stats@1.5.0:
-    resolution: {integrity: sha512-TsWaV7ulwPA9JhqGJemrDJkvXNeNQb60lB13gIcT2kVDXlBM/PQD3GqVyhCJpvn43Y4YT5+VmWDRsbIAbuilBA==}
+  rollup-plugin-stats@1.5.1:
+    resolution: {integrity: sha512-WXx9F3i57DLKkB8mt6Zw3jN9sS8YOqTsfvuOG8RW0D95Wn5KHt2e9POh8sYWODgmTsiKK0Nm54ZjxLnp7yeCDw==}
     engines: {node: '>=18'}
     peerDependencies:
       rolldown: ^1.0.0-beta.0
@@ -11811,8 +11808,8 @@ packages:
     peerDependencies:
       rollup: ^3.0.0||^4.0.0
 
-  rollup-plugin-webpack-stats@2.1.4:
-    resolution: {integrity: sha512-kv9W0rK9Qy1Q8/vkxEPGOwJvq7zVERnHD13At5Jv15FPPOXwxm1LblXtpuASeoM1ALhOPD0sJSDz64qgtSgh7g==}
+  rollup-plugin-webpack-stats@2.1.5:
+    resolution: {integrity: sha512-dUYAd/7B7zNxosBQFK0xa2uNeBS1ESoWo8cYYeRX9kYYkI9ciHIBf2jGwAOQNg0V2KJjMmwkJEvqXfE1MColjg==}
     engines: {node: '>=18'}
     peerDependencies:
       rolldown: ^1.0.0-beta.0
@@ -13112,9 +13109,6 @@ packages:
   unbox-primitive@1.1.0:
     resolution: {integrity: sha512-nWJ91DjeOkej/TA8pXQ3myruKpKEYgqvpw9lz4OPHj/NWFNluYrjbz9j01CJ8yKQd2g4jFoOkINCTW2I5LEEyw==}
     engines: {node: '>= 0.4'}
-
-  undici-types@6.19.8:
-    resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
 
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
@@ -14731,8 +14725,6 @@ snapshots:
       '@ckeditor/ckeditor5-core': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-code-block@46.1.1(patch_hash=2361d8caad7d6b5bddacc3a3b4aa37dbfba260b1c1b22a450413a79c1bb1ce95)':
     dependencies:
@@ -15478,8 +15470,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-restricted-editing@46.1.1':
     dependencies:
@@ -15555,7 +15545,7 @@ snapshots:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
       '@codemirror/theme-one-dark': 6.1.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       ckeditor5: 46.1.1(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
 
   '@ckeditor/ckeditor5-source-editing@46.1.1':
@@ -15566,6 +15556,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-special-characters@46.1.1':
     dependencies:
@@ -15741,14 +15733,14 @@ snapshots:
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/common': 1.2.3
 
   '@codemirror/commands@6.8.1':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/common': 1.2.3
 
   '@codemirror/lang-css@6.3.1':
@@ -15766,7 +15758,7 @@ snapshots:
       '@codemirror/lang-javascript': 6.2.4
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/common': 1.2.3
       '@lezer/css': 1.1.11
       '@lezer/html': 1.3.10
@@ -15777,7 +15769,7 @@ snapshots:
       '@codemirror/language': 6.11.0
       '@codemirror/lint': 6.8.5
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/common': 1.2.3
       '@lezer/javascript': 1.5.1
 
@@ -15792,7 +15784,7 @@ snapshots:
       '@codemirror/lang-html': 6.4.10
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/common': 1.2.3
       '@lezer/markdown': 1.4.3
 
@@ -15802,7 +15794,7 @@ snapshots:
       '@codemirror/lang-html': 6.4.10
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/common': 1.2.3
       '@lezer/markdown': 1.4.3
 
@@ -15828,14 +15820,14 @@ snapshots:
       '@codemirror/autocomplete': 6.18.6
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/common': 1.2.3
       '@lezer/xml': 1.0.6
 
   '@codemirror/language@6.11.0':
     dependencies:
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/common': 1.2.3
       '@lezer/highlight': 1.2.1
       '@lezer/lr': 1.4.2
@@ -15848,13 +15840,13 @@ snapshots:
   '@codemirror/lint@6.8.5':
     dependencies:
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       crelt: 1.0.6
 
   '@codemirror/search@6.5.11':
     dependencies:
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       crelt: 1.0.6
 
   '@codemirror/state@6.5.2':
@@ -15865,10 +15857,10 @@ snapshots:
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@codemirror/view@6.38.3':
+  '@codemirror/view@6.38.4':
     dependencies:
       '@codemirror/state': 6.5.2
       crelt: 1.0.6
@@ -16297,9 +16289,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@electron/remote@2.1.3(electron@38.1.2)':
+  '@electron/remote@2.1.3(electron@38.2.0)':
     dependencies:
-      electron: 38.1.2
+      electron: 38.2.0
 
   '@electron/universal@2.0.2':
     dependencies:
@@ -16567,172 +16559,172 @@ snapshots:
 
   '@floating-ui/utils@0.2.9': {}
 
-  '@fsegurai/codemirror-theme-abcdef@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-abcdef@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-abyss@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-abyss@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-android-studio@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-android-studio@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-andromeda@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-andromeda@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-basic-dark@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-basic-dark@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-basic-light@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-basic-light@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-cobalt2@6.0.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-cobalt2@6.0.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-forest@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-forest@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-github-dark@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-github-dark@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-github-light@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-github-light@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-gruvbox-dark@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-gruvbox-dark@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-gruvbox-light@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-gruvbox-light@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-material-dark@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-material-dark@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-material-light@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-material-light@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-monokai@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-monokai@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-nord@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-nord@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-palenight@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-palenight@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-solarized-dark@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-solarized-dark@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-solarized-light@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-solarized-light@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-tokyo-night-day@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-tokyo-night-day@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-tokyo-night-storm@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-tokyo-night-storm@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-volcano@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-volcano@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-vscode-dark@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-vscode-dark@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
-  '@fsegurai/codemirror-theme-vscode-light@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/highlight@1.2.1)':
+  '@fsegurai/codemirror-theme-vscode-light@6.2.2(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/highlight@1.2.1)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/highlight': 1.2.1
 
   '@fullcalendar/core@6.1.19':
@@ -17992,29 +17984,29 @@ snapshots:
 
   '@radix-ui/rect@1.1.0': {}
 
-  '@replit/codemirror-indentation-markers@6.5.3(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)':
+  '@replit/codemirror-indentation-markers@6.5.3(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)':
     dependencies:
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
 
-  '@replit/codemirror-lang-nix@6.0.1(@codemirror/autocomplete@6.18.6)(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)(@lezer/common@1.2.3)(@lezer/highlight@1.2.1)(@lezer/lr@1.4.2)':
+  '@replit/codemirror-lang-nix@6.0.1(@codemirror/autocomplete@6.18.6)(@codemirror/language@6.11.0)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)(@lezer/common@1.2.3)(@lezer/highlight@1.2.1)(@lezer/lr@1.4.2)':
     dependencies:
       '@codemirror/autocomplete': 6.18.6
       '@codemirror/language': 6.11.0
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
       '@lezer/common': 1.2.3
       '@lezer/highlight': 1.2.1
       '@lezer/lr': 1.4.2
 
-  '@replit/codemirror-vim@6.3.0(@codemirror/commands@6.8.1)(@codemirror/language@6.11.0)(@codemirror/search@6.5.11)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)':
+  '@replit/codemirror-vim@6.3.0(@codemirror/commands@6.8.1)(@codemirror/language@6.11.0)(@codemirror/search@6.5.11)(@codemirror/state@6.5.2)(@codemirror/view@6.38.4)':
     dependencies:
       '@codemirror/commands': 6.8.1
       '@codemirror/language': 6.11.0
       '@codemirror/search': 6.5.11
       '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.38.3
+      '@codemirror/view': 6.38.4
 
   '@rolldown/binding-android-arm64@1.0.0-beta.29':
     optional: true
@@ -18832,7 +18824,7 @@ snapshots:
 
   '@types/appdmg@0.5.5':
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
     optional: true
 
   '@types/archiver@6.0.3':
@@ -18854,7 +18846,7 @@ snapshots:
 
   '@types/bonjour@3.5.13':
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
 
   '@types/bootstrap@5.2.10':
     dependencies:
@@ -18864,7 +18856,7 @@ snapshots:
     dependencies:
       '@types/http-cache-semantics': 4.0.4
       '@types/keyv': 3.1.4
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
       '@types/responselike': 1.0.3
 
   '@types/chai@5.2.2':
@@ -18889,7 +18881,7 @@ snapshots:
   '@types/connect-history-api-fallback@1.5.4':
     dependencies:
       '@types/express-serve-static-core': 5.0.7
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
 
   '@types/connect@3.4.38':
     dependencies:
@@ -19090,7 +19082,7 @@ snapshots:
 
   '@types/fs-extra@9.0.13':
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
     optional: true
 
   '@types/geojson-vt@3.2.5':
@@ -19102,7 +19094,7 @@ snapshots:
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
 
   '@types/hast@3.0.4':
     dependencies:
@@ -19116,7 +19108,7 @@ snapshots:
 
   '@types/http-proxy@1.17.16':
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
 
   '@types/ini@4.1.1': {}
 
@@ -19134,7 +19126,7 @@ snapshots:
 
   '@types/keyv@3.1.4':
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
 
   '@types/leaflet-gpx@1.3.8':
     dependencies:
@@ -19188,13 +19180,9 @@ snapshots:
 
   '@types/node-forge@1.3.14':
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
 
   '@types/node@16.9.1': {}
-
-  '@types/node@20.17.32':
-    dependencies:
-      undici-types: 6.19.8
 
   '@types/node@20.19.17':
     dependencies:
@@ -19215,6 +19203,7 @@ snapshots:
   '@types/node@24.5.2':
     dependencies:
       undici-types: 7.12.0
+    optional: true
 
   '@types/parse-json@4.0.2': {}
 
@@ -19246,7 +19235,7 @@ snapshots:
 
   '@types/responselike@1.0.3':
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
 
   '@types/retry@0.12.2': {}
 
@@ -19295,7 +19284,7 @@ snapshots:
 
   '@types/sockjs@0.3.36':
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
 
   '@types/statuses@2.0.6':
     optional: true
@@ -19331,7 +19320,7 @@ snapshots:
 
   '@types/through2@2.0.41':
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
 
   '@types/tmp@0.2.6': {}
 
@@ -19602,7 +19591,7 @@ snapshots:
       magic-string: 0.30.17
       sirv: 3.0.1
       tinyrainbow: 2.0.0
-      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@18.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
+      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@19.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
       ws: 8.18.3(bufferutil@4.0.9)(utf-8-validate@6.0.5)
     optionalDependencies:
       playwright: 1.55.1
@@ -19625,7 +19614,7 @@ snapshots:
       magicast: 0.3.5
       test-exclude: 7.0.1
       tinyrainbow: 2.0.0
-      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@18.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
+      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@19.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -19644,7 +19633,7 @@ snapshots:
       std-env: 3.9.0
       test-exclude: 7.0.1
       tinyrainbow: 2.0.0
-      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@18.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
+      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@19.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
     optionalDependencies:
       '@vitest/browser': 3.2.4(bufferutil@4.0.9)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(playwright@1.55.1)(utf-8-validate@6.0.5)(vite@7.1.7(@types/node@22.18.6)(jiti@2.6.0)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))(vitest@3.2.4)(webdriverio@9.20.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))
     transitivePeerDependencies:
@@ -19696,7 +19685,7 @@ snapshots:
       sirv: 3.0.1
       tinyglobby: 0.2.14
       tinyrainbow: 2.0.0
-      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@18.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
+      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@19.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
 
   '@vitest/utils@3.2.4':
     dependencies:
@@ -20049,7 +20038,7 @@ snapshots:
 
   ansi-styles@6.2.3: {}
 
-  ansis@4.1.0: {}
+  ansis@4.2.0: {}
 
   any-base@1.1.0: {}
 
@@ -22163,7 +22152,7 @@ snapshots:
       - supports-color
     optional: true
 
-  electron@38.1.2:
+  electron@38.2.0:
     dependencies:
       '@electron/get': 2.0.3
       '@types/node': 22.18.6
@@ -23493,9 +23482,9 @@ snapshots:
 
   handle-thing@2.0.1: {}
 
-  happy-dom@18.0.1:
+  happy-dom@19.0.1:
     dependencies:
-      '@types/node': 20.17.32
+      '@types/node': 20.19.17
       '@types/whatwg-mimetype': 3.0.2
       whatwg-mimetype: 3.0.0
 
@@ -24270,13 +24259,13 @@ snapshots:
 
   jest-worker@26.6.2:
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
       merge-stream: 2.0.0
       supports-color: 7.2.0
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -24635,7 +24624,7 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
-  lint-staged@16.2.1:
+  lint-staged@16.2.3:
     dependencies:
       commander: 14.0.1
       listr2: 9.0.4
@@ -27128,7 +27117,7 @@ snapshots:
 
   potpack@2.1.0: {}
 
-  preact-iso@2.10.0(preact-render-to-string@6.6.1(preact@10.27.2))(preact@10.27.2):
+  preact-iso@2.11.0(preact-render-to-string@6.6.1(preact@10.27.2))(preact@10.27.2):
     dependencies:
       preact: 10.27.2
       preact-render-to-string: 6.6.1(preact@10.27.2)
@@ -27201,7 +27190,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
       long: 5.3.2
 
   protocol-buffers-schema@3.6.0: {}
@@ -27685,7 +27674,7 @@ snapshots:
       '@oxc-project/runtime': 0.77.3
       '@oxc-project/types': 0.77.3
       '@rolldown/pluginutils': 1.0.0-beta.29
-      ansis: 4.1.0
+      ansis: 4.2.0
     optionalDependencies:
       '@rolldown/binding-android-arm64': 1.0.0-beta.29
       '@rolldown/binding-darwin-arm64': 1.0.0-beta.29
@@ -27702,7 +27691,7 @@ snapshots:
       '@rolldown/binding-win32-ia32-msvc': 1.0.0-beta.29
       '@rolldown/binding-win32-x64-msvc': 1.0.0-beta.29
 
-  rollup-plugin-stats@1.5.0(rolldown@1.0.0-beta.29)(rollup@4.52.0)(vite@7.1.7(@types/node@22.18.6)(jiti@2.6.0)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)):
+  rollup-plugin-stats@1.5.1(rolldown@1.0.0-beta.29)(rollup@4.52.0)(vite@7.1.7(@types/node@22.18.6)(jiti@2.6.0)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)):
     optionalDependencies:
       rolldown: 1.0.0-beta.29
       rollup: 4.52.0
@@ -27735,10 +27724,10 @@ snapshots:
       '@rollup/pluginutils': 5.1.4(rollup@4.40.0)
       rollup: 4.40.0
 
-  rollup-plugin-webpack-stats@2.1.4(rolldown@1.0.0-beta.29)(rollup@4.52.0)(vite@7.1.7(@types/node@22.18.6)(jiti@2.6.0)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)):
+  rollup-plugin-webpack-stats@2.1.5(rolldown@1.0.0-beta.29)(rollup@4.52.0)(vite@7.1.7(@types/node@22.18.6)(jiti@2.6.0)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)):
     dependencies:
       rolldown: 1.0.0-beta.29
-      rollup-plugin-stats: 1.5.0(rolldown@1.0.0-beta.29)(rollup@4.52.0)(vite@7.1.7(@types/node@22.18.6)(jiti@2.6.0)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
+      rollup-plugin-stats: 1.5.1(rolldown@1.0.0-beta.29)(rollup@4.52.0)(vite@7.1.7(@types/node@22.18.6)(jiti@2.6.0)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
     optionalDependencies:
       rollup: 4.52.0
       vite: 7.1.7(@types/node@22.18.6)(jiti@2.6.0)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
@@ -29419,11 +29408,10 @@ snapshots:
       has-symbols: 1.1.0
       which-boxed-primitive: 1.1.1
 
-  undici-types@6.19.8: {}
-
   undici-types@6.21.0: {}
 
-  undici-types@7.12.0: {}
+  undici-types@7.12.0:
+    optional: true
 
   undici@6.21.3: {}
 
@@ -29730,7 +29718,7 @@ snapshots:
       tsx: 4.20.6
       yaml: 2.8.1
 
-  vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@18.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1):
+  vitest@3.2.4(@types/debug@4.1.12)(@types/node@22.18.6)(@vitest/browser@3.2.4)(@vitest/ui@3.2.4)(happy-dom@19.0.1)(jiti@2.6.0)(jsdom@26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))(less@4.1.3)(lightningcss@1.30.1)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1):
     dependencies:
       '@types/chai': 5.2.2
       '@vitest/expect': 3.2.4
@@ -29760,7 +29748,7 @@ snapshots:
       '@types/node': 22.18.6
       '@vitest/browser': 3.2.4(bufferutil@4.0.9)(msw@2.7.5(@types/node@22.18.6)(typescript@5.9.2))(playwright@1.55.1)(utf-8-validate@6.0.5)(vite@7.1.7(@types/node@22.18.6)(jiti@2.6.0)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))(vitest@3.2.4)(webdriverio@9.20.0(bufferutil@4.0.9)(utf-8-validate@6.0.5))
       '@vitest/ui': 3.2.4(vitest@3.2.4)
-      happy-dom: 18.0.1
+      happy-dom: 19.0.1
       jsdom: 26.1.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)
     transitivePeerDependencies:
       - jiti
