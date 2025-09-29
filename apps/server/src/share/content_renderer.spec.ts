@@ -47,15 +47,13 @@ describe("content_renderer", () => {
             `;
             const note = buildShareNote({
                 content,
-                attachments: [ { id: "q14s2Id7V6pp" } ]
+                attachments: [ { id: "q14s2Id7V6pp", title: "5863845791835102555.mp4" } ]
             });
             const result = getContent(note);
             expect(result.content).toStrictEqual(trimIndentation`\
                 <h1>Test</h1>
                 <p>
-                    <a class="reference-link attachment-link role-file" href="api/attachments/q14s2Id7V6pp/download">
-                        5863845791835102555.mp4
-                    </a>
+                    <a class="reference-link attachment-link role-file" href="api/attachments/q14s2Id7V6pp/download">5863845791835102555.mp4</a>
                     &nbsp;
                 </p>
             `);
