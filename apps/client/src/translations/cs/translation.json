@@ -15,7 +15,27 @@
       "message": "Nastala kritická chyba která aplikaci brání ve spuštění:\n\n{{message}}\n\nPravděpodobně neočekávaným způsobem selhal skript. Pokuste se restartovat aplikaci v safe módu a problém napravit."
     },
     "widget-error": {
-      "title": "Nepodařilo se inicializovat widget"
+      "title": "Nepodařilo se inicializovat widget",
+      "message-custom": "Uživatelský widget z poznámky s ID \"{{id}}\" a názvem \"{{title}}\" nemohl být inicializován z důvodu: \n\n{{message}}",
+      "message-unknown": "Neznámý widget nemohl být inicializován z důvodu:\n\n{{message}}"
+    },
+    "bundle-error": {
+      "title": "Načtení uživatelského skriptu selhalo",
+      "message": "Uživatelský skript z poznámky s ID \"{{id}}\" a názvem \"{{title}}\" nemohl být spuštěn z důvodu: \n\n{{message}}"
     }
+  },
+  "ai_llm": {
+    "n_notes_queued_0": "{{ count }} poznámka ve frontě k indexaci",
+    "n_notes_queued_1": "{{ count }} poznámky ve frontě k indexaci",
+    "n_notes_queued_2": "{{ count }} poznámek ve frontě k indexaci",
+    "notes_indexed_0": "{{ count }} poznámka indexována",
+    "notes_indexed_1": "{{ count }} poznámky indexovány",
+    "notes_indexed_2": "{{ count }} poznámek indexováno"
+  },
+  "add_link": {
+    "add_link": "Přidat odkaz",
+    "help_on_links": "Nápověda k odkazům",
+    "note": "Poznámka",
+    "search_note": "hledat poznámku podle názvu"
   }
 }

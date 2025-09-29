@@ -276,7 +276,10 @@
     "mime": "MIME: ",
     "file_size": "Tamaño del archivo:",
     "preview": "Vista previa:",
-    "preview_not_available": "La vista previa no está disponible para este tipo de notas."
+    "preview_not_available": "La vista previa no está disponible para este tipo de notas.",
+    "diff_off": "Mostrar contenido",
+    "diff_on": "Mostrar diferencia",
+    "diff_off_hint": "Haga clic para mostrar el contenido de la nota"
   },
   "sort_child_notes": {
     "sort_children_by": "Ordenar hijos por...",
@@ -577,7 +580,7 @@
     "cannot_find_day_note": "No se puede encontrar la nota del día",
     "cannot_find_week_note": "No se puede encontrar la nota de la semana",
     "january": "Enero",
-    "febuary": "Febrero",
+    "february": "Febrero",
     "march": "Marzo",
     "april": "Abril",
     "may": "Mayo",
@@ -949,7 +952,9 @@
     "no_attachments": "Esta nota no tiene archivos adjuntos."
   },
   "book": {
-    "no_children_help": "Esta nota de tipo libro no tiene ninguna subnota así que no hay nada que mostrar. Véa la <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> para más detalles."
+    "no_children_help": "Esta nota de tipo libro no tiene ninguna subnota así que no hay nada que mostrar. Véa la <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> para más detalles.",
+    "drag_locked_title": "Bloqueado para edición",
+    "drag_locked_message": "No se permite Arrastrar pues la colección está bloqueada para edición."
   },
   "editable_code": {
     "placeholder": "Escriba el contenido de su nota de código aquí..."
@@ -1593,7 +1598,9 @@
     "apply-bulk-actions": "Aplicar acciones en lote",
     "converted-to-attachments": "{{count}} notas han sido convertidas en archivos adjuntos.",
     "convert-to-attachment-confirm": "¿Está seguro que desea convertir las notas seleccionadas en archivos adjuntos de sus notas padres?",
-    "open-in-popup": "Edición rápida"
+    "open-in-popup": "Edición rápida",
+    "archive": "Archivar",
+    "unarchive": "Desarchivar"
   },
   "shared_info": {
     "shared_publicly": "Esta nota está compartida públicamente en {{- link}}",
@@ -1676,7 +1683,8 @@
     "hoist-this-note-workspace": "Anclar esta nota (espacio de trabajo)",
     "refresh-saved-search-results": "Refrescar resultados de búsqueda guardados",
     "create-child-note": "Crear subnota",
-    "unhoist": "Desanclar"
+    "unhoist": "Desanclar",
+    "toggle-sidebar": "Alternar barra lateral"
   },
   "title_bar_buttons": {
     "window-on-top": "Mantener esta ventana en la parte superior"
@@ -1751,13 +1759,15 @@
     "undeleting-notes-finished-successfully": "La recuperación de notas finalizó exitosamente."
   },
   "frontend_script_api": {
-    "async_warning": "Está pasando una función asíncrona a `api.runOnBackend ()` que probablemente no funcionará como pretendía.",
-    "sync_warning": "Estás pasando una función sincrónica a `api.runasynconbackendwithmanualTransactionHandling ()`, \\ n while debería usar `api.runonbackend ()` en su lugar."
+    "async_warning": "Está pasando una función asíncrona a `api.runOnBackend ()` que probablemente no funcionará como pretendía.\\nO haga la función sincrónica (removiendo la palabra `async`), o use `api.runAsyncOnBackendWithManualTransactionHandling()`.",
+    "sync_warning": "Estás pasando una función sincrónica a `api.runasynconbackendwithmanualTransactionHandling ()`, \\n while debería usar `api.runonbackend ()` en su lugar."
   },
   "ws": {
     "sync-check-failed": "¡La comprobación de sincronización falló!",
     "consistency-checks-failed": "¡Las comprobaciones de consistencia fallaron! Vea los registros para más detalles.",
-    "encountered-error": "Error encontrado \"{{message}}\", compruebe la consola."
+    "encountered-error": "Error encontrado \"{{message}}\", compruebe la consola.",
+    "lost-websocket-connection-title": "Se ha perdido la conexión con el servidor",
+    "lost-websocket-connection-message": "Compruebe la configuración de su proxy inverso (por ejemplo, nginx o Apache) para asegurarse de que las conexiones WebSocket están correctamente permitidas y no están bloqueadas."
   },
   "hoisted_note": {
     "confirm_unhoisting": "La nota requerida '{{requestedNote}}' está fuera del subárbol de la nota anclada '{{hoistedNote}}' y debe desanclarla para acceder a la nota. ¿Desea proceder con el desanclaje?"
@@ -1833,7 +1843,7 @@
     "native-title-bar": "Barra de título nativa",
     "native-title-bar-description": "Para Windows y macOS, quitar la barra de título nativa hace que la aplicación se vea más compacta. En Linux, mantener la barra de título nativa hace que se integre mejor con el resto del sistema.",
     "background-effects": "Habilitar efectos de fondo (sólo en Windows 11)",
-    "background-effects-description": "El efecto Mica agrega un fondo borroso y elegante a las ventanas de aplicaciones, creando profundidad y un aspecto moderno.",
+    "background-effects-description": "El efecto Mica agrega un fondo borroso y elegante a las ventanas de la aplicación, creando profundidad y un aspecto moderno. \"Título nativo de la barra\" debe deshabilitarse.",
     "restart-app-button": "Reiniciar la aplicación para ver los cambios",
     "zoom-factor": "Factor de zoom"
   },
@@ -1943,14 +1953,20 @@
     "delete_row": "Eliminar fila"
   },
   "board_view": {
-    "delete-note": "Eliminar nota",
+    "delete-note": "Eliminar nota...",
     "move-to": "Mover a",
     "insert-above": "Insertar arriba",
     "insert-below": "Insertar abajo",
     "delete-column": "Eliminar columna",
     "delete-column-confirmation": "¿Seguro que desea eliminar esta columna? El atributo correspondiente también se eliminará de las notas de esta columna.",
     "add-column": "Añadir columna",
-    "new-item": "Nuevo elemento"
+    "new-item": "Nuevo elemento",
+    "archive-note": "Archivar nota",
+    "unarchive-note": "Desarchivar nota",
+    "new-item-placeholder": "Ingresar título de la nota...",
+    "add-column-placeholder": "Ingresar título de la columna...",
+    "edit-note-title": "Haga clic para editar el título de la nota",
+    "edit-column-title": "Haga clic para editar el título de la columna"
   },
   "content_renderer": {
     "open_externally": "Abrir externamente"
@@ -1978,7 +1994,11 @@
   "editorfeatures": {
     "note_completion_enabled": "Activar autocompletado de notas",
     "emoji_completion_enabled": "Activar autocompletado de emojis",
-    "title": "Funciones"
+    "title": "Funciones",
+    "emoji_completion_description": "Si está habilitado, los emojis pueden fácilmente insertarse en el texto escribiendo `:`, seguido del nombre de un emoji.",
+    "note_completion_description": "Si está habilitado, los vínculos a notas pueden crearse escribiendo `@` seguido del título de una nota.",
+    "slash_commands_enabled": "Habilitar comandos de barra",
+    "slash_commands_description": "Si está habilitado, editar comandos como insertar saltos de línea o títulos, puede alternarse escribiendo `/`."
   },
   "command_palette": {
     "tree-action-name": "Árbol:{{name}}",
@@ -2012,7 +2032,9 @@
     "title": "Rendimiento",
     "enable-motion": "Habilitar transiciones y animaciones",
     "enable-shadows": "Activar sombras",
-    "enable-backdrop-effects": "Habilitar efectos de fondo para menús, ventanas emergentes y paneles"
+    "enable-backdrop-effects": "Habilitar efectos de fondo para menús, ventanas emergentes y paneles",
+    "enable-smooth-scroll": "Habilitar desplazamiento suave",
+    "app-restart-required": "(es necesario reiniciar la aplicación para que el cambio surta efecto)"
   },
   "settings": {
     "related_settings": "Configuración relacionada"
@@ -2023,5 +2045,9 @@
   },
   "units": {
     "percentage": "%"
+  },
+  "pagination": {
+    "total_notes": "{{count}} notas",
+    "page_title": "Página de {{startIndex}} - {{endIndex}}"
   }
 }

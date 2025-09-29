@@ -7,7 +7,7 @@
   "author": {
     "name": "Trilium Notes Team",
     "email": "contact@eliandoran.me",
-    "url": "https://github.com/TriliumNext/Notes"
+    "url": "https://github.com/TriliumNext/Trilium"
   },
   "scripts": {
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 vite build",
@@ -57,7 +57,7 @@
     "normalize.css": "8.0.1",
     "panzoom": "9.4.3",
     "preact": "10.27.2",
-    "react-i18next": "15.7.3",
+    "react-i18next": "16.0.0",
     "split.js": "1.6.5",
     "svg-pan-zoom": "3.6.2",
     "tabulator-tables": "6.3.1",
@@ -73,7 +73,7 @@
     "@types/mark.js": "8.11.12",
     "@types/tabulator-tables": "6.2.11",
     "copy-webpack-plugin": "13.0.1",
-    "happy-dom": "18.0.1",
+    "happy-dom": "19.0.1",
     "script-loader": "0.7.2",
     "vite-plugin-static-copy": "3.1.2"
   }

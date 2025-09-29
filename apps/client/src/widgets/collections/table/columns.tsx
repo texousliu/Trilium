@@ -30,7 +30,8 @@ const labelTypeMappings: Record<ColumnType, Partial<ColumnDefinition>> = {
         editor: "datetime"
     },
     number: {
-        editor: "number"
+        editor: "number",
+        sorter: "number"
     },
     time: {
         editor: "input"

@@ -2025,10 +2025,14 @@ body.zen .ribbon-container:not(:has(.classic-toolbar-widget.visible)),
 body.zen .ribbon-container:has(.classic-toolbar-widget.visible) .ribbon-top-row,
 body.zen .ribbon-container .ribbon-body:not(:has(.classic-toolbar-widget.visible)),
 body.zen .note-icon-widget,
-body.zen .title-row .button-widget,
+body.zen .title-row .icon-action,
 body.zen .floating-buttons-children > *:not(.bx-edit-alt),
 body.zen .action-button {
     display: none !important;
+}
+
+body.zen .split-note-container-widget > .gutter {
+    display: unset !important;
 }
 
 body.zen #launcher-pane {

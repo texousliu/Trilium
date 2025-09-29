@@ -46,7 +46,7 @@
     "last-tab": "最後のタブをアクティブにする",
     "dialogs": "ダイアログ",
     "show-note-source": "「ノートのソース」ダイアログを表示",
-    "show-options": "「オプション」ページを開く",
+    "show-options": "「設定」ページを開く",
     "show-recent-changes": "「最近の変更」ダイアログを表示",
     "show-sql-console": "「SQLコンソール」ページを開く",
     "show-backend-log": "「バックエンドログ」ページを開く",
@@ -88,9 +88,9 @@
     "duplicate-subtree": "サブツリーの複製",
     "edit-branch-prefix": "「ブランチ接頭辞の編集」ダイアログを表示",
     "show-revisions": "「ノートの変更履歴」ダイアログを表示",
-    "attributes-labels-and-relations": "属性（ラベルと関係）",
+    "attributes-labels-and-relations": "属性（ラベルとリレーション）",
     "add-new-label": "新しいラベルを作成する",
-    "create-new-relation": "新しい関係を作成する",
+    "create-new-relation": "新しいリレーションを作成する",
     "toggle-basic-properties": "基本属性切り替え",
     "toggle-file-properties": "ファイル属性切り替え",
     "toggle-image-properties": "画像属性切り替え",
@@ -184,7 +184,7 @@
     "edit-branch-prefix": "ブランチ接頭辞の編集",
     "show-revisions": "変更履歴を表示",
     "add-new-label": "ラベルを追加",
-    "add-new-relation": "関係を追加",
+    "add-new-relation": "リレーションを追加",
     "toggle-ribbon-tab-basic-properties": "リボンタブ切り替え：基本属性",
     "toggle-ribbon-tab-book-properties": "リボンタブ切り替え：書籍属性",
     "toggle-ribbon-tab-file-properties": "リボンタブ切り替え：ファイル属性",
@@ -253,7 +253,8 @@
     "password": "パスワード",
     "password-placeholder": "パスワード",
     "finish-setup": "セットアップ完了",
-    "back": "戻る"
+    "back": "戻る",
+    "note": "ノート:"
   },
   "setup_sync-in-progress": {
     "heading": "同期中",
@@ -341,7 +342,8 @@
     "multi-factor-authentication-title": "多要素認証",
     "etapi-title": "ETAPI",
     "visible-launchers-title": "可視化されたランチャー",
-    "inbox-title": "Inbox"
+    "inbox-title": "Inbox",
+    "base-abstract-launcher-title": "ベース アブストラクトランチャー"
   },
   "notes": {
     "new-note": "新しいノート",
@@ -417,8 +419,17 @@
   },
   "share_page": {
     "clipped-from": "このノートは元々{{- url}}から切り取られたものです",
-    "no-content": "このノートには内容がありません。"
+    "no-content": "このノートには内容がありません。",
+    "parent": "親:",
+    "child-notes": "子ノート:"
   },
   "weekdayNumber": "第{weekNumber}週",
-  "quarterNumber": "四半期 {quarterNumber}"
+  "quarterNumber": "四半期 {quarterNumber}",
+  "sql_init": {
+    "db_not_initialized_desktop": "DB が初期化されていません。画面の指示に従ってください。",
+    "db_not_initialized_server": "DB が初期化されていません。セットアップ ページ 「http://[your-server-host]:{{port}}」 にアクセスして、Trilium を初期化する方法の説明を確認してください。"
+  },
+  "desktop": {
+    "instance_already_running": "すでにインスタンスが実行されているので、代わりにそのインスタンスにフォーカスします。"
+  }
 }

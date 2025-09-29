@@ -1,5 +1,5 @@
 import { join, resolve } from "path";
-import { cpSync, existsSync, mkdirSync, readFileSync, rmSync } from "fs";
+import { cpSync, exists, existsSync, mkdirSync, readFileSync, rmSync } from "fs";
 import { execSync } from "child_process";
 import { rebuild } from "@electron/rebuild"
 import { getElectronPath, isNixOS } from "./utils.mjs";
@@ -12,8 +12,15 @@ function copyNativeDependencies(projectRoot: string) {
     if (existsSync(destPath)) {
         rmSync(destPath, { recursive: true });
     }
-    mkdirSync(destPath);
-    cpSync(join(workspaceRoot, "node_modules/better-sqlite3"), destPath, { recursive: true, dereference: true });
+    mkdirSync(destPath, { recursive: true });
+
+    const sourcePath = join(workspaceRoot, "node_modules/better-sqlite3");
+    if (!existsSync(sourcePath)) {
+        console.warn("Nothing to rebuild as source path is missing:", sourcePath);
+        console.info("For CI builds with filtered package installs, this is normal. For normal development, it's not.");
+        process.exit(0);
+    }
+    cpSync(sourcePath, destPath, { recursive: true, dereference: true });
 }
 
 function rebuildNativeDependencies(projectRoot: string) {

@@ -581,7 +581,7 @@
     "sun": "日",
     "cannot_find_day_note": "無法找到日記",
     "january": "一月",
-    "febuary": "二月",
+    "february": "二月",
     "march": "三月",
     "april": "四月",
     "may": "五月",
@@ -1582,7 +1582,9 @@
   "ws": {
     "sync-check-failed": "同步檢查失敗！",
     "consistency-checks-failed": "一致性檢查失敗！請查看日誌以了解詳細資訊。",
-    "encountered-error": "遇到錯誤 \"{{message}}\"，請查看控制台。"
+    "encountered-error": "遇到錯誤 \"{{message}}\"，請查看控制台。",
+    "lost-websocket-connection-title": "與伺服器的連線中斷",
+    "lost-websocket-connection-message": "檢查您的反向代理（如 nginx 或 Apache）設定以確保 Websocket 連線沒有被阻擋。"
   },
   "hoisted_note": {
     "confirm_unhoisting": "請求的筆記 '{{requestedNote}}' 位於聚焦的筆記 '{{hoistedNote}}' 的子階層之外，您必須取消聚焦才能訪問該筆記。是否繼續取消聚焦？"
@@ -1952,7 +1954,11 @@
   "editorfeatures": {
     "title": "功能",
     "emoji_completion_enabled": "啟用 Emoji 自動完成",
-    "note_completion_enabled": "啟用筆記自動完成"
+    "note_completion_enabled": "啟用筆記自動完成",
+    "emoji_completion_description": "如果啟用，emoji 可以輕易地經由輸入 `:` 加上 emoji 名稱來插入。",
+    "note_completion_description": "如果啟用，導向筆記的連結可以經由輸入 `@` 加上筆記標題來建立。",
+    "slash_commands_enabled": "啟用斜線命令",
+    "slash_commands_description": "如果啟用，可以經由輸入 `/` 來觸發命令，如插入換行符或標題。"
   },
   "table_view": {
     "new-row": "新增列",

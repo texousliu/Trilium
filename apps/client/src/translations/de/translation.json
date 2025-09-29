@@ -581,7 +581,7 @@
     "sun": "So",
     "cannot_find_day_note": "Tagesnotiz kann nicht gefunden werden",
     "january": "Januar",
-    "febuary": "Februar",
+    "february": "Februar",
     "march": "März",
     "april": "April",
     "may": "Mai",
@@ -1587,7 +1587,9 @@
   "ws": {
     "sync-check-failed": "Synchronisationsprüfung fehlgeschlagen!",
     "consistency-checks-failed": "Konsistenzprüfung fehlgeschlagen! Siehe Logs für Details.",
-    "encountered-error": "Fehler „{{message}}“ aufgetreten, siehe Konsole für Details."
+    "encountered-error": "Fehler „{{message}}“ aufgetreten, siehe Konsole für Details.",
+    "lost-websocket-connection-title": "Verbindung zum Server verloren",
+    "lost-websocket-connection-message": "Überprüfe die Konfiguration des Reverse-Proxys (z. B. nginx oder Apache), um sicherzustellen, dass WebSocket-Verbindungen zugelassen und nicht blockiert werden."
   },
   "hoisted_note": {
     "confirm_unhoisting": "Die angeforderte Notiz ‚{{requestedNote}}‘ befindet sich außerhalb des hoisted Bereichs der Notiz ‚{{hoistedNote}}‘. Du musst sie unhoisten, um auf die Notiz zuzugreifen. Möchtest du mit dem Unhoisting fortfahren?"
@@ -1966,7 +1968,11 @@
   "editorfeatures": {
     "title": "Funktionen",
     "emoji_completion_enabled": "Emoji-Autovervollständigung aktivieren",
-    "note_completion_enabled": "Automatisches Vervollständigen von Notizen aktivieren"
+    "note_completion_enabled": "Automatisches Vervollständigen von Notizen aktivieren",
+    "emoji_completion_description": "Wenn aktiviert, können Emojis ganz einfach in den Text eingefügt werden, indem man \":\" gefolgt vom Namen eines Emojis eingibt.",
+    "note_completion_description": "Wenn aktiviert, können Links zu Notizen erstellt werden, indem man \"@\" gefolgt vom Titel einer Notiz eingibt.",
+    "slash_commands_enabled": "Aktiviere Slash-Befehle",
+    "slash_commands_description": "Wenn aktiviert, können Bearbeitungsbefehle wie das Einfügen von Zeilenumbrüchen oder Überschriften durch Eingabe von \"/\" aktiviert werden."
   },
   "table_view": {
     "new-row": "Neue Zeile",

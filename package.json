@@ -17,6 +17,7 @@
     "desktop:start": "pnpm run --filter desktop dev",
     "desktop:build": "pnpm run --filter desktop build",
     "desktop:start-prod": "pnpm run --filter desktop start-prod",
+    "website:build": "pnpm run --filter website build",
     "electron:build": "pnpm desktop:build",
     "electron:start": "pnpm desktop:start",
     "electron:start-prod": "pnpm desktop:start-prod",
@@ -50,14 +51,13 @@
     "eslint-config-prettier": "^10.0.0",
     "eslint-plugin-playwright": "^2.0.0",
     "eslint-plugin-react-hooks": "5.2.0",
-    "happy-dom": "~18.0.0",
+    "happy-dom": "~19.0.0",
     "jiti": "2.6.0",
-    "jsdom": "~26.1.0",
     "jsonc-eslint-parser": "^2.1.0",
     "react-refresh": "^0.17.0",
-    "rollup-plugin-webpack-stats": "2.1.4",
+    "rollup-plugin-webpack-stats": "2.1.5",
     "tslib": "^2.3.0",
-    "tsx": "4.20.5",
+    "tsx": "4.20.6",
     "typescript": "~5.9.0",
     "typescript-eslint": "^8.19.0",
     "upath": "2.0.1",
@@ -69,16 +69,16 @@
   "author": {
     "name": "Trilium Notes Team",
     "email": "contact@eliandoran.me",
-    "url": "https://github.com/TriliumNext/Notes"
+    "url": "https://triliumnotes.org"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TriliumNext/Notes.git"
+    "url": "git+https://github.com/TriliumNext/Trilium.git"
   },
   "bugs": {
-    "url": "https://github.com/TriliumNext/Notes/issues"
+    "url": "https://github.com/TriliumNext/Trilium/issues"
   },
-  "homepage": "https://github.com/TriliumNext/Notes#readme",
+  "homepage": "https://triliumnotes.org",
   "packageManager": "pnpm@10.17.1",
   "pnpm": {
     "patchedDependencies": {

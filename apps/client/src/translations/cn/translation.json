@@ -582,7 +582,7 @@
     "cannot_find_day_note": "无法找到日记",
     "cannot_find_week_note": "无法找到周记",
     "january": "一月",
-    "febuary": "二月",
+    "february": "二月",
     "march": "三月",
     "april": "四月",
     "may": "五月",
@@ -1623,7 +1623,9 @@
   "ws": {
     "sync-check-failed": "同步检查失败！",
     "consistency-checks-failed": "一致性检查失败！请查看日志了解详细信息。",
-    "encountered-error": "遇到错误 \"{{message}}\"，请查看控制台。"
+    "encountered-error": "遇到错误 \"{{message}}\"，请查看控制台。",
+    "lost-websocket-connection-title": "与服务器的连线中断",
+    "lost-websocket-connection-message": "检查您的反向代理（如 nginx 或 Apache）设置以确保 Websocket 连线没有被阻挡。"
   },
   "hoisted_note": {
     "confirm_unhoisting": "请求的笔记 '{{requestedNote}}' 位于聚焦的笔记 '{{hoistedNote}}' 的子树之外，您必须取消聚焦才能访问该笔记。是否继续取消聚焦？"
@@ -1952,7 +1954,11 @@
   "editorfeatures": {
     "title": "功能",
     "emoji_completion_enabled": "启用表情自动补全",
-    "note_completion_enabled": "启用笔记自动补全"
+    "note_completion_enabled": "启用笔记自动补全",
+    "emoji_completion_description": "如果启用，表情可以轻易地经由输入 `:` 加上表情名称来插入。",
+    "note_completion_description": "如果启用，导向笔记的链接可以经由输入 `@` 加上笔记标题来创建。",
+    "slash_commands_enabled": "启用斜杠命令",
+    "slash_commands_description": "如果启用，可以经由输入 `/` 来触发命令，如插入换行符或标题。"
   },
   "table_view": {
     "new-row": "新增行",
