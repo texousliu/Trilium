@@ -66,7 +66,8 @@ function renderIndex(result: Result) {
 }
 
 function renderText(result: Result, note: SNote) {
-    const document = parse(result.content?.toString() || "");
+    if (typeof result.content !== "string") return;
+    const document = parse(result.content || "");
 
     // Process include notes.
     for (const includeNoteEl of document.querySelectorAll("section.include-note")) {

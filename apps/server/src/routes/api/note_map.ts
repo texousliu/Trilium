@@ -257,10 +257,7 @@ export function findExcerpts(sourceNote: BNote, referencedNoteId: string) {
 
     const excerpts: string[] = [];
 
-    console.log("Removing images")
     removeImages(document);
-
-    console.log("Querying links");
 
     for (const linkEl of document.querySelectorAll("a")) {
         console.log("Got ", linkEl.innerHTML);
@@ -275,7 +272,6 @@ export function findExcerpts(sourceNote: BNote, referencedNoteId: string) {
         let centerEl: HTMLElement = linkEl;
 
         while (centerEl.tagName !== "BODY" && centerEl.parentNode && (centerEl.parentNode?.textContent?.length || 0) <= EXCERPT_CHAR_LIMIT) {
-            console.log("Got ", centerEl.tagName, centerEl.parentNode);
             centerEl = centerEl.parentNode;
         }
 
@@ -371,7 +367,6 @@ function getBacklinks(req: Request): BacklinksResponse {
     let backlinksWithExcerptCount = 0;
 
     return getFilteredBacklinks(note).map((backlink) => {
-        console.log("Processing ", backlink);
         const sourceNote = backlink.note;
 
         if (sourceNote.type !== "text" || backlinksWithExcerptCount > 50) {

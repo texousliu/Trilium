@@ -123,7 +123,9 @@ export function buildRewardMap(note: BNote) {
 
     if (note.type === "text" && note.isDecrypted) {
         const content = note.getContent();
-        const dom = parse(content.toString());
+        if (typeof content !== "string") return map;
+
+        const dom = parse(content);
 
         const addHeadingsToRewardMap = (elName: string, rewardFactor: number) => {
             for (const el of dom.querySelectorAll(elName)) {
