@@ -12,7 +12,7 @@ import panzoom, { PanZoomOptions } from "panzoom";
 import dialog from "../../../services/dialog";
 import server from "../../../services/server";
 import toast from "../../../services/toast";
-import { CreateChildrenResponse } from "@triliumnext/commons";
+import { CreateChildrenResponse, RelationMapPostResponse, RelationMapRelation } from "@triliumnext/commons";
 import contextMenu from "../../../menus/context_menu";
 import appContext from "../../../components/app_context";
 import RelationMapApi, { MapData, MapDataNoteEntry } from "./api";
@@ -21,6 +21,13 @@ import setupOverlays, { uniDirectionalOverlays } from "./overlays";
 interface Clipboard {
     noteId: string;
     title: string;
+}
+
+type RelationType = "uniDirectional" | "biDirectional" | "inverse";
+
+interface ClientRelation extends RelationMapRelation {
+    type: RelationType;
+    render: boolean;
 }
 
 export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
@@ -103,6 +110,8 @@ export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
         onTransform
     });
 
+    useRelationData(note.noteId, data, mapApiRef, pbApiRef);
+
     return (
         <div className="note-detail-relation-map note-detail-printable">
             <div className="relation-map-wrapper" onClick={clickCallback}>
@@ -172,6 +181,84 @@ function usePanZoom({ ntxId, containerRef, options, transformData, onTransform }
     });
 }
 
+async function useRelationData(noteId: string, mapData: MapData | undefined, mapApiRef: RefObject<RelationMapApi>, jsPlumbRef: RefObject<jsPlumbInstance>) {
+    const noteIds = mapData?.notes.map((note) => note.noteId);
+    const [ relations, setRelations ] = useState<ClientRelation[]>();
+    const [ inverseRelations, setInverseRelations ] = useState<RelationMapPostResponse["inverseRelations"]>();
+
+    async function refresh() {
+        const data = await server.post<RelationMapPostResponse>("relation-map", { noteIds, relationMapNoteId: noteId });
+        const relations: ClientRelation[] = [];
+
+        for (const _relation of data.relations) {
+            const relation = _relation as ClientRelation;   // we inject a few variables.
+            const match = relations.find(
+                (rel) =>
+                    rel.name === data.inverseRelations[relation.name] &&
+                    ((rel.sourceNoteId === relation.sourceNoteId && rel.targetNoteId === relation.targetNoteId) ||
+                        (rel.sourceNoteId === relation.targetNoteId && rel.targetNoteId === relation.sourceNoteId))
+            );
+
+            if (match) {
+                match.type = relation.type = relation.name === data.inverseRelations[relation.name] ? "biDirectional" : "inverse";
+                relation.render = false; // don't render second relation
+            } else {
+                relation.type = "uniDirectional";
+                relation.render = true;
+            }
+
+            relations.push(relation);
+            setInverseRelations(data.inverseRelations);
+        }
+
+        setRelations(relations);
+        mapApiRef.current?.cleanupOtherNotes(Object.keys(data.noteTitles));
+    }
+
+    useEffect(() => {
+        refresh();
+    }, [ noteId, mapData, jsPlumbInstance ]);
+
+    // Refresh on the canvas.
+    useEffect(() => {
+        const jsPlumbInstance = jsPlumbRef.current;
+        if (!jsPlumbInstance) return;
+
+        jsPlumbInstance.batch(async () => {
+            if (!mapData || !relations) {
+                return;
+            }
+
+            jsPlumbInstance.deleteEveryEndpoint();
+
+            for (const relation of relations) {
+                if (!relation.render) {
+                    continue;
+                }
+
+                const connection = jsPlumbInstance.connect({
+                    source: noteIdToId(relation.sourceNoteId),
+                    target: noteIdToId(relation.targetNoteId),
+                    type: relation.type
+                });
+
+                // TODO: Does this actually do anything.
+                //@ts-expect-error
+                connection.id = relation.attributeId;
+
+                if (relation.type === "inverse") {
+                    connection.getOverlay("label-source").setLabel(relation.name);
+                    connection.getOverlay("label-target").setLabel(inverseRelations?.[relation.name] ?? "");
+                } else {
+                    connection.getOverlay("label").setLabel(relation.name);
+                }
+
+                connection.canvas.setAttribute("data-connection-id", connection.id);
+            }
+        });
+    }, [ relations, mapData ]);
+}
+
 function useNoteCreation({ ntxId, note, containerRef, mapApiRef }: {
     ntxId: string | null | undefined;
     note: FNote;
@@ -238,7 +325,10 @@ function JsPlumb({ className, props, children, containerRef: externalContainerRe
         }
 
         onInstanceCreated?.(jsPlumbInstance);
-        return () => jsPlumbInstance.cleanupListeners();
+        return () => {
+            jsPlumbInstance.deleteEveryEndpoint();
+            jsPlumbInstance.cleanupListeners()
+        };
     }, [ apiRef ]);
 
     return (

@@ -31,24 +31,6 @@ declare module "jsplumb" {
 
 let containerCounter = 1;
 
-export type RelationType = "uniDirectional" | "biDirectional" | "inverse";
-
-interface Relation {
-    name: string;
-    attributeId: string;
-    sourceNoteId: string;
-    targetNoteId: string;
-    type: RelationType;
-    render: boolean;
-}
-
-// TODO: Deduplicate.
-interface RelationMapPostResponse {
-    relations: Relation[];
-    inverseRelations: Record<string, string>;
-    noteTitles: Record<string, string>;
-}
-
 type MenuCommands = "openInNewTab" | "remove" | "editTitle";
 
 export default class RelationMapTypeWidget extends TypeWidget {
@@ -111,77 +93,6 @@ export default class RelationMapTypeWidget extends TypeWidget {
 
         // without this, we still end up with note boxes remaining in the canvas
         this.$relationMapContainer.empty();
-    }
-
-    async loadNotesAndRelations() {
-        if (!this.mapData || !this.jsPlumbInstance) {
-            return;
-        }
-
-        const noteIds = this.mapData.notes.map((note) => note.noteId);
-        const data = await server.post<RelationMapPostResponse>("relation-map", { noteIds, relationMapNoteId: this.noteId });
-
-        this.relations = [];
-
-        for (const relation of data.relations) {
-            const match = this.relations.find(
-                (rel) =>
-                    rel.name === data.inverseRelations[relation.name] &&
-                    ((rel.sourceNoteId === relation.sourceNoteId && rel.targetNoteId === relation.targetNoteId) ||
-                        (rel.sourceNoteId === relation.targetNoteId && rel.targetNoteId === relation.sourceNoteId))
-            );
-
-            if (match) {
-                match.type = relation.type = relation.name === data.inverseRelations[relation.name] ? "biDirectional" : "inverse";
-                relation.render = false; // don't render second relation
-            } else {
-                relation.type = "uniDirectional";
-                relation.render = true;
-            }
-
-            this.relations.push(relation);
-        }
-
-        this.mapData.notes = this.mapData.notes.filter((note) => note.noteId in data.noteTitles);
-
-        this.jsPlumbInstance.batch(async () => {
-            if (!this.jsPlumbInstance || !this.mapData || !this.relations) {
-                return;
-            }
-
-            this.clearMap();
-
-            for (const note of this.mapData.notes) {
-                const title = data.noteTitles[note.noteId];
-
-                await this.createNoteBox(note.noteId, title, note.x, note.y);
-            }
-
-            for (const relation of this.relations) {
-                if (!relation.render) {
-                    continue;
-                }
-
-                const connection = this.jsPlumbInstance.connect({
-                    source: this.noteIdToId(relation.sourceNoteId),
-                    target: this.noteIdToId(relation.targetNoteId),
-                    type: relation.type
-                });
-
-                // TODO: Does this actually do anything.
-                //@ts-expect-error
-                connection.id = relation.attributeId;
-
-                if (relation.type === "inverse") {
-                    connection.getOverlay("label-source").setLabel(relation.name);
-                    connection.getOverlay("label-target").setLabel(data.inverseRelations[relation.name]);
-                } else {
-                    connection.getOverlay("label").setLabel(relation.name);
-                }
-
-                connection.canvas.setAttribute("data-connection-id", connection.id);
-            }
-        });
     }
 
     cleanup() {

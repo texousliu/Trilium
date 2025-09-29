@@ -247,3 +247,16 @@ export interface SchemaResponse {
         type: string;
     }[];
 }
+
+export interface RelationMapRelation {
+    name: string;
+    attributeId: string;
+    sourceNoteId: string;
+    targetNoteId: string;
+}
+
+export interface RelationMapPostResponse {
+    noteTitles: Record<string, string>;
+    relations: RelationMapRelation[];
+    inverseRelations: Record<string, string>;
+}

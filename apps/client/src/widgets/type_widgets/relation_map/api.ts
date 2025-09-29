@@ -49,6 +49,13 @@ export default class RelationMapApi {
         this.onDataChange(true);
     }
 
+    cleanupOtherNotes(noteIds: string[]) {
+        const filteredNotes = this.data.notes.filter((note) => noteIds.includes(note.noteId));
+        if (filteredNotes.length === this.data.notes.length) return;
+        this.data.notes = filteredNotes;
+        this.onDataChange(true);
+    }
+
     setTransform(transform: PanZoomTransform) {
         if (this.data.transform.scale - transform.scale > DELTA
             || this.data.transform.x - transform.x > DELTA
