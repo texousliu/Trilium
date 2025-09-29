@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { TypeWidgetProps } from "./type_widget";
 import { Defaults, jsPlumb, jsPlumbInstance, OverlaySpec } from "jsplumb";
-import { useEditorSpacedUpdate, useNoteBlob, useTriliumEvent } from "../react/hooks";
+import { useEditorSpacedUpdate, useNoteBlob, useTriliumEvent, useTriliumEvents } from "../react/hooks";
 import FNote from "../../entities/fnote";
 import { ComponentChildren, RefObject } from "preact";
 import froca from "../../services/froca";
@@ -106,6 +106,7 @@ export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
     });
 
     usePanZoom({
+        ntxId,
         containerRef,
         options: {
             maxZoom: 2,
@@ -145,8 +146,9 @@ export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
     )
 }
 
-function usePanZoom({ containerRef, options, transformData, onTransform }: {
-    containerRef: RefObject<HTMLElement>;
+function usePanZoom({ ntxId, containerRef, options, transformData, onTransform }: {
+    ntxId: string | null | undefined;
+    containerRef: RefObject<HTMLDivElement>;
     options: PanZoomOptions;
     transformData: MapData["transform"] | undefined;
     onTransform: (pzInstance: PanZoom) => void
@@ -172,6 +174,21 @@ function usePanZoom({ containerRef, options, transformData, onTransform }: {
 
         return () => pzInstance.dispose();
     }, [ containerRef, onTransform ]);
+
+    useTriliumEvents([ "relationMapResetPanZoom", "relationMapResetZoomIn", "relationMapResetZoomOut" ], ({ ntxId: eventNtxId }, eventName) => {
+        const pzInstance = apiRef.current;
+        if (eventNtxId !== ntxId || !pzInstance) return;
+
+        if (eventName === "relationMapResetPanZoom" && containerRef.current) {
+            const zoom = getZoom(containerRef.current);
+            pzInstance.zoomTo(0, 0, 1 / zoom);
+            pzInstance.moveTo(0, 0);
+        } else if (eventName === "relationMapResetZoomIn") {
+            pzInstance.zoomTo(0, 0, 1.2);
+        } else if (eventName === "relationMapResetZoomOut") {
+            pzInstance.zoomTo(0, 0, 0.8);
+        }
+    });
 }
 
 function useNoteCreation({ ntxId, note, containerRef, onCreate }: {

@@ -527,29 +527,4 @@ export default class RelationMapTypeWidget extends TypeWidget {
         this.loadNotesAndRelations();
     }
 
-    relationMapResetPanZoomEvent({ ntxId }: EventData<"relationMapResetPanZoom">) {
-        if (!this.isNoteContext(ntxId)) {
-            return;
-        }
-
-        // reset to initial pan & zoom state
-        this.pzInstance?.zoomTo(0, 0, 1 / this.getZoom());
-        this.pzInstance?.moveTo(0, 0);
-    }
-
-    relationMapResetZoomInEvent({ ntxId }: EventData<"relationMapResetZoomIn">) {
-        if (!this.isNoteContext(ntxId)) {
-            return;
-        }
-
-        this.pzInstance?.zoomTo(0, 0, 1.2);
-    }
-
-    relationMapResetZoomOutEvent({ ntxId }: EventData<"relationMapResetZoomOut">) {
-        if (!this.isNoteContext(ntxId)) {
-            return;
-        }
-
-        this.pzInstance?.zoomTo(0, 0, 0.8);
-    }
 }
