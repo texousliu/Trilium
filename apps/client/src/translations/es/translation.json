@@ -279,7 +279,9 @@
     "preview_not_available": "La vista previa no está disponible para este tipo de notas.",
     "diff_off": "Mostrar contenido",
     "diff_on": "Mostrar diferencia",
-    "diff_off_hint": "Haga clic para mostrar el contenido de la nota"
+    "diff_off_hint": "Haga clic para mostrar el contenido de la nota",
+    "diff_not_available": "Diferencias no disponibles.",
+    "diff_on_hint": "Haga clic para ver las diferencias"
   },
   "sort_child_notes": {
     "sort_children_by": "Ordenar hijos por...",
