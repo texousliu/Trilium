@@ -189,6 +189,7 @@ function useViewModeConfig<T extends object>(note: FNote | null | undefined, vie
 
     useEffect(() => {
         if (!note || !viewType) return;
+        setViewConfig(undefined);
         const viewStorage = new ViewModeStorage<T>(note, viewType);
         viewStorage.restore().then(config => {
             const storeFn = (config: T) => {
