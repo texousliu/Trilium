@@ -143,16 +143,6 @@ export default class RelationMapTypeWidget extends TypeWidget {
         });
 
         this.$relationMapContainer.attr("id", "relation-map-container-" + containerCounter++);
-        this.$relationMapContainer.on("contextmenu", ".note-box", (e) => {
-            contextMenu.show<MenuCommands>({
-                x: e.pageX,
-                y: e.pageY,
-                items: [
-                    { title: t("relation_map.edit_title"), command: "editTitle", uiIcon: "bx bx-pencil" }
-                ],
-                selectMenuItemHandler: ({ command }) => this.contextMenuHandler(command, e.target)
-            });
-        });
 
         this.clipboard = null;
 
@@ -167,30 +157,6 @@ export default class RelationMapTypeWidget extends TypeWidget {
 
         super.doRender();
     }
-
-    async contextMenuHandler(command: MenuCommands | undefined, originalTarget: HTMLElement) {
-        const $noteBox = $(originalTarget).closest(".note-box");
-        const $title = $noteBox.find(".title a");
-        const noteId = this.idToNoteId($noteBox.prop("id"));
-
-        } else if (command === "editTitle") {
-            const title = await dialogService.prompt({
-                title: t("relation_map.rename_note"),
-                message: t("relation_map.enter_new_title"),
-                defaultValue: $title.text()
-            });
-
-            if (!title) {
-                return;
-            }
-
-            await server.put(`notes/${noteId}/title`, { title });
-
-            $title.text(title);
-        }
-    }
-
-
 
     async doRefresh(note: FNote) {
         await this.initJsPlumbInstance();

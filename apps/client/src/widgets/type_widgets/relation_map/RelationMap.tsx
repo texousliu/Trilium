@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { TypeWidgetProps } from "../type_widget";
 import { Defaults, jsPlumb, jsPlumbInstance, OverlaySpec } from "jsplumb";
-import { useEditorSpacedUpdate, useNoteBlob, useTriliumEvent, useTriliumEvents } from "../../react/hooks";
+import { useEditorSpacedUpdate, useNoteBlob, useNoteProperty, useTriliumEvent, useTriliumEvents } from "../../react/hooks";
 import FNote from "../../../entities/fnote";
 import { ComponentChildren, RefObject } from "preact";
 import froca from "../../../services/froca";
@@ -259,6 +259,7 @@ function JsPlumb({ className, props, children, containerRef: externalContainerRe
 
 function NoteBox({ noteId, x, y, mapApiRef }: MapDataNoteEntry & { mapApiRef: RefObject<RelationMapApi> }) {
     const [ note, setNote ] = useState<FNote | null>();
+    const title = useNoteProperty(note, "title");
     useEffect(() => {
         froca.getNote(noteId).then(setNote);
     }, [ noteId ]);
@@ -284,6 +285,23 @@ function NoteBox({ noteId, x, y, mapApiRef }: MapDataNoteEntry & { mapApiRef: Re
 
                         mapApiRef.current?.removeItem(noteId, result.isDeleteNoteChecked);
                     }
+                },
+                {
+                    title: t("relation_map.edit_title"),
+                    uiIcon: "bx bx-pencil",
+                    handler: async () => {
+                        const title = await dialog.prompt({
+                            title: t("relation_map.rename_note"),
+                            message: t("relation_map.enter_new_title"),
+                            defaultValue: note?.title,
+                        });
+
+                        if (!title) {
+                            return;
+                        }
+
+                        await server.put(`notes/${noteId}/title`, { title });
+                    }
                 }
             ],
             selectMenuItemHandler() {}
@@ -300,7 +318,7 @@ function NoteBox({ noteId, x, y, mapApiRef }: MapDataNoteEntry & { mapApiRef: Re
                 top: y
             }}
         >
-            <NoteLink className="title" notePath={noteId} noTnLink noContextMenu />
+            <NoteLink className="title" title={title} notePath={noteId} noTnLink noContextMenu />
             <div className="endpoint" title={t("relation_map.start_dragging_relations")} />
         </div>
     )
