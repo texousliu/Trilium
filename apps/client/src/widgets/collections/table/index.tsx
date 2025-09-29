@@ -16,9 +16,10 @@ import useColTableEditing from "./col_editing";
 import AttributeDetailWidget from "../../attribute_widgets/attribute_detail";
 import attributes from "../../../services/attributes";
 import { RefObject } from "preact";
+import SpacedUpdate from "../../../services/spaced_update";
 
 interface TableConfig {
-    tableData?: {
+    tableData: {
         columns?: ColumnDefinition[];
     };
 }
@@ -53,12 +54,12 @@ export default function TableView({ note, noteIds, notePath, viewConfig, saveCon
 
     return (
         <div className="table-view">
-            {columnDefs && (
+            {persistenceProps &&  (
                 <>
                     <Tabulator
                         tabulatorRef={tabulatorRef}
                         className="table-view-container"
-                        columns={columnDefs}
+                        columns={columnDefs ?? []}
                         data={rowData}
                         modules={[ SortModule, FormatModule, InteractionModule, EditModule, ResizeColumnsModule, FrozenColumnsModule, PersistenceModule, MoveColumnsModule, MoveRowsModule, DataTreeModule ]}
                         footerElement={<TableFooter note={note} />}
@@ -94,23 +95,31 @@ function TableFooter({ note }: { note: FNote }) {
     )
 }
 
-function usePersistence(initialConfig: TableConfig | null | undefined, saveConfig: (newConfig: TableConfig) => void) {
-    const config = useRef<TableConfig | null | undefined>(initialConfig);
-    const spacedUpdate = useSpacedUpdate(() => {
-        if (config.current) {
-            saveConfig(config.current);
-        }
-    }, 5_000);
-    const persistenceWriterFunc = useCallback((_id, type: string, data: object) => {
-        if (!config.current) config.current = {};
-        if (!config.current.tableData) config.current.tableData = {};
-        (config.current.tableData as Record<string, {}>)[type] = data;
-        spacedUpdate.scheduleUpdate();
-    }, []);
-    const persistenceReaderFunc = useCallback((_id, type: string) => {
-        return config.current?.tableData?.[type];
-    }, []);
-    return { persistenceReaderFunc, persistenceWriterFunc };
+function usePersistence(viewConfig: TableConfig | null | undefined, saveConfig: (newConfig: TableConfig) => void) {
+    const [ persistenceProps, setPersistenceProps ] = useState<Pick<Options, "persistenceReaderFunc" | "persistenceWriterFunc">>();
+
+    useEffect(() => {
+        const viewConfigLocal = viewConfig ?? { tableData: {} };
+        const spacedUpdate = new SpacedUpdate(() => {
+            saveConfig(viewConfigLocal);
+        }, 5_000);
+
+        setPersistenceProps({
+            persistenceReaderFunc(_, type) {
+                return viewConfigLocal.tableData?.[type];
+            },
+            persistenceWriterFunc(_, type, data) {
+                (viewConfigLocal.tableData as Record<string, {}>)[type] = data;
+                spacedUpdate.scheduleUpdate();
+            },
+        });
+
+        return () => {
+            spacedUpdate.updateNowIfNecessary();
+        };
+    }, [ viewConfig, saveConfig ])
+
+    return persistenceProps;
 }
 
 function useData(note: FNote, noteIds: string[], viewConfig: TableConfig | undefined, newAttributePosition: RefObject<number | undefined>, resetNewAttributePosition: () => void) {
@@ -125,6 +134,7 @@ function useData(note: FNote, noteIds: string[], viewConfig: TableConfig | undef
 
     function refresh() {
         const info = getAttributeDefinitionInformation(note);
+
         buildRowDefinitions(note, info, includeArchived, maxDepth).then(({ definitions: rowData, hasSubtree: hasChildren, rowNumber }) => {
             const columnDefs = buildColumnDefinitions({
                 info,
