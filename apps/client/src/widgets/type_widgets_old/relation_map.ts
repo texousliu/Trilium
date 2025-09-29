@@ -339,43 +339,11 @@ export default class RelationMapTypeWidget extends TypeWidget {
     }
 
     async initPanZoom() {
-        if (this.pzInstance) {
-            return;
-        }
-
         const panzoom = (await import("panzoom")).default;
-        this.pzInstance = panzoom(this.$relationMapContainer[0], {
-            maxZoom: 2,
-            minZoom: 0.3,
-            smoothScroll: false,
-
-            //@ts-expect-error Upstream incorrectly mentions no arguments.
-            filterKey: function (e: KeyboardEvent) {
-                // if ALT is pressed, then panzoom should bubble the event up
-                // this is to preserve ALT-LEFT, ALT-RIGHT navigation working
-                return e.altKey;
-            }
-        });
-
-        if (!this.pzInstance) {
-            return;
-        }
 
         this.pzInstance.on("transform", () => {
-            // gets triggered on any transform change
-            this.jsPlumbInstance?.setZoom(this.getZoom());
-
             this.saveCurrentTransform();
         });
-
-        if (this.mapData?.transform) {
-            this.pzInstance.zoomTo(0, 0, this.mapData.transform.scale);
-
-            this.pzInstance.moveTo(this.mapData.transform.x, this.mapData.transform.y);
-        } else {
-            // set to initial coordinates
-            this.pzInstance.moveTo(0, 0);
-        }
     }
 
     saveCurrentTransform() {
@@ -562,24 +530,6 @@ export default class RelationMapTypeWidget extends TypeWidget {
             anchor: "Continuous",
             allowLoopback: true
         });
-    }
-
-    getZoom() {
-        const matrixRegex = /matrix\((-?\d*\.?\d+),\s*0,\s*0,\s*-?\d*\.?\d+,\s*-?\d*\.?\d+,\s*-?\d*\.?\d+\)/;
-
-        const transform = this.$relationMapContainer.css("transform");
-
-        if (transform === "none") {
-            return 1;
-        }
-
-        const matches = transform.match(matrixRegex);
-
-        if (!matches) {
-            throw new Error(t("relation_map.cannot_match_transform", { transform }));
-        }
-
-        return parseFloat(matches[1]);
     }
 
     async dropNoteOntoRelationMapHandler(ev: JQuery.DropEvent) {
