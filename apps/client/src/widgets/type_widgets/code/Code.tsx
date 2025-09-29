@@ -10,6 +10,7 @@ import appContext from "../../../components/app_context";
 import TouchBar, { TouchBarButton } from "../../react/TouchBar";
 import { refToJQuerySelector } from "../../react/react_utils";
 import { CODE_THEME_DEFAULT_PREFIX as DEFAULT_PREFIX } from "../constants";
+import FNote from "../../../entities/fnote";
 
 interface CodeEditorProps {
     /** By default, the code editor will try to match the color of the scrolling container to match the one from the theme for a full-screen experience. If the editor is embedded, it makes sense not to have this behaviour. */
@@ -33,8 +34,13 @@ export function ReadOnlyCode({ note, viewScope, ntxId, parentComponent }: TypeWi
 
     useEffect(() => {
         if (!blob) return;
-        const isFormattable = note.type === "text" && viewScope?.viewMode === "source";
-        setContent(isFormattable ? utils.formatHtml(blob.content) : blob.content);
+
+        let newContent = blob.content;
+        if (viewScope?.viewMode === "source") {
+            newContent = formatViewSource(note, newContent);
+        }
+
+        setContent(newContent);
     }, [ blob ]);
 
     return (
@@ -48,6 +54,22 @@ export function ReadOnlyCode({ note, viewScope, ntxId, parentComponent }: TypeWi
             />
         </div>
     )
+}
+
+function formatViewSource(note: FNote, content: string) {
+    if (note.type === "text") {
+        return utils.formatHtml(content);
+    }
+
+    if (note.type !== "code" && note.mime === "application/json" && content.length < 512_000) {
+        try {
+            return JSON.stringify(JSON.parse(content), null, 4);
+        } catch (e) {
+            // Fallback to content.
+        }
+    }
+
+    return content;
 }
 
 export function EditableCode({ note, ntxId, debounceUpdate, parentComponent, updateInterval, onContentChanged, dataSaved, ...editorProps }: EditableCodeProps) {
