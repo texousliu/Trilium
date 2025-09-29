@@ -37,9 +37,40 @@ const uniDirectionalOverlays: OverlaySpec[] = [
 ];
 
 export default function RelationMap({ note }: TypeWidgetProps) {
-    const data = useData(note);
+    const [ data, setData ] = useState<MapData>();
     const containerRef = useRef<HTMLDivElement>(null);
     const apiRef = useRef<jsPlumbInstance>(null);
+    const spacedUpdate = useEditorSpacedUpdate({
+        note,
+        getData() {
+        },
+        onContentChange(content) {
+            if (content) {
+                try {
+                    setData(JSON.parse(content));
+                    return;
+                } catch (e) {
+                    console.log("Could not parse content: ", e);
+                }
+            }
+
+            setData({
+                notes: [],
+                // it is important to have this exact value here so that initial transform is the same as this
+                // which will guarantee note won't be saved on first conversion to the relation map note type
+                // this keeps the principle that note type change doesn't destroy note content unless user
+                // does some actual change
+                transform: {
+                    x: 0,
+                    y: 0,
+                    scale: 1
+                }
+            });
+        },
+        dataSaved() {
+
+        }
+    })
 
     const onTransform = useCallback(() => {
         if (!containerRef.current || !apiRef.current) return;
@@ -60,7 +91,7 @@ export default function RelationMap({ note }: TypeWidgetProps) {
                 return e.altKey;
             }
         },
-        transformData: data.transform,
+        transformData: data?.transform,
         onTransform
     });
 
@@ -78,43 +109,13 @@ export default function RelationMap({ note }: TypeWidgetProps) {
                         HoverPaintStyle: { stroke: "#777", strokeWidth: 1 },
                     }}
                 >
-                    {data.notes.map(note => (
+                    {data?.notes.map(note => (
                         <NoteBox {...note} />
                     ))}
                 </JsPlumb>
             </div>
         </div>
     )
-}
-
-function useData(note: FNote) {
-    const blob = useNoteBlob(note);
-    let content: MapData | null = null;
-
-    if (blob?.content) {
-        try {
-            content = JSON.parse(blob.content);
-        } catch (e) {
-            console.log("Could not parse content: ", e);
-        }
-    }
-
-    if (!content) {
-        content = {
-            notes: [],
-            // it is important to have this exact value here so that initial transform is the same as this
-            // which will guarantee note won't be saved on first conversion to the relation map note type
-            // this keeps the principle that note type change doesn't destroy note content unless user
-            // does some actual change
-            transform: {
-                x: 0,
-                y: 0,
-                scale: 1
-            }
-        };
-    }
-
-    return content;
 }
 
 function usePanZoom({ containerRef, options, transformData, onTransform }: {
