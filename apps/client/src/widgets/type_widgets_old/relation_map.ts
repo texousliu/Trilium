@@ -11,7 +11,6 @@ import dialogService from "../../services/dialog.js";
 import { t } from "../../services/i18n.js";
 import type FNote from "../../entities/fnote.js";
 import type { ConnectionMadeEventInfo, jsPlumbInstance, OverlaySpec } from "jsplumb";
-import "../../stylesheets/relation_map.css";
 
 declare module "jsplumb" {
 
@@ -247,13 +246,7 @@ export default class RelationMapTypeWidget extends TypeWidget {
         }
     }
 
-    noteIdToId(noteId: string) {
-        return `rel-map-note-${noteId}`;
-    }
 
-    idToNoteId(id: string) {
-        return id.substr(13);
-    }
 
     async doRefresh(note: FNote) {
         await this.loadMapData();
@@ -531,23 +524,6 @@ export default class RelationMapTypeWidget extends TypeWidget {
         if (!this.jsPlumbInstance) {
             return;
         }
-
-        const $link = await linkService.createLink(noteId, { title });
-        $link.mousedown((e) => linkService.goToLink(e));
-
-        const note = await froca.getNote(noteId);
-        if (!note) {
-            return;
-        }
-
-        const $noteBox = $("<div>")
-            .addClass("note-box")
-            .addClass(note.getCssClass())
-            .prop("id", this.noteIdToId(noteId))
-            .append($("<span>").addClass("title").append($link))
-            .append($("<div>").addClass("endpoint").attr("title", t("relation_map.start_dragging_relations")))
-            .css("left", `${x}px`)
-            .css("top", `${y}px`);
 
         this.jsPlumbInstance.getContainer().appendChild($noteBox[0]);
 

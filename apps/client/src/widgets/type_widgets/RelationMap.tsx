@@ -3,6 +3,11 @@ import { TypeWidgetProps } from "./type_widget";
 import { Defaults, jsPlumb, OverlaySpec } from "jsplumb";
 import { useNoteBlob } from "../react/hooks";
 import FNote from "../../entities/fnote";
+import { ComponentChildren } from "preact";
+import froca from "../../services/froca";
+import NoteLink from "../react/NoteLink";
+import "./RelationMap.css";
+import { t } from "../../services/i18n";
 
 interface MapData {
     notes: {
@@ -32,7 +37,6 @@ const uniDirectionalOverlays: OverlaySpec[] = [
 
 export default function RelationMap({ note }: TypeWidgetProps) {
     const data = useData(note);
-    console.log("Got data", data);
 
     return (
         <div className="note-detail-relation-map note-detail-printable">
@@ -45,7 +49,11 @@ export default function RelationMap({ note }: TypeWidgetProps) {
                         ConnectionOverlays: uniDirectionalOverlays,
                         HoverPaintStyle: { stroke: "#777", strokeWidth: 1 },
                     }}
-                />
+                >
+                    {data.notes.map(note => (
+                        <NoteBox {...note} />
+                    ))}
+                </JsPlumb>
             </div>
         </div>
     )
@@ -81,9 +89,10 @@ function useData(note: FNote) {
     return content;
 }
 
-function JsPlumb({ className, props }: {
+function JsPlumb({ className, props, children }: {
     className?: string;
     props: Omit<Defaults, "container">;
+    children: ComponentChildren;
 }) {
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -100,7 +109,36 @@ function JsPlumb({ className, props }: {
 
     return (
         <div ref={containerRef} className={className}>
-
+            {children}
         </div>
     )
+}
+
+function NoteBox({ noteId, x, y }: MapData["notes"][number]) {
+    const [ note, setNote ] = useState<FNote | null>();
+    useEffect(() => {
+        froca.getNote(noteId).then(setNote);
+    }, [ noteId ]);
+
+    return note && (
+        <div
+            id={noteIdToId(noteId)}
+            className={`note-box ${note?.getCssClass()}`}
+            style={{
+                left: x,
+                top: y
+            }}
+        >
+            <NoteLink className="title" notePath={noteId} noTnLink />
+            <div className="endpoint" title={t("relation_map.start_dragging_relations")} />
+        </div>
+    )
+}
+
+function noteIdToId(noteId: string) {
+    return `rel-map-note-${noteId}`;
+}
+
+function idToNoteId(id: string) {
+    return id.substr(13);
 }
