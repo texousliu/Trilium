@@ -1,6 +1,6 @@
 {
     "formatVersion": 2,
-    "appVersion": "0.98.1",
+    "appVersion": "0.99.0",
     "files": [
         {
             "isClone": false,
@@ -6713,23 +6713,23 @@
                                     "dataFileName": "Lists.md",
                                     "attachments": [
                                         {
-                                            "attachmentId": "5cmICTYfg13g",
+                                            "attachmentId": "1d3z8mz0JANE",
                                             "title": "image.png",
                                             "role": "image",
-                                            "mime": "image/jpg",
+                                            "mime": "image/png",
                                             "position": 10,
                                             "dataFileName": "Lists_image.png"
                                         },
                                         {
-                                            "attachmentId": "6jl7tboJfutt",
+                                            "attachmentId": "7YtO7boIQcSu",
                                             "title": "image.png",
                                             "role": "image",
-                                            "mime": "image/jpg",
+                                            "mime": "image/png",
                                             "position": 10,
                                             "dataFileName": "1_Lists_image.png"
                                         },
                                         {
-                                            "attachmentId": "7Ledf67P1S1b",
+                                            "attachmentId": "eCftcYsVKdAI",
                                             "title": "image.png",
                                             "role": "image",
                                             "mime": "image/png",
@@ -6737,7 +6737,7 @@
                                             "dataFileName": "2_Lists_image.png"
                                         },
                                         {
-                                            "attachmentId": "d4XfLoK5srYZ",
+                                            "attachmentId": "fB3ZhdfysYC3",
                                             "title": "image.png",
                                             "role": "image",
                                             "mime": "image/jpg",
@@ -6745,15 +6745,15 @@
                                             "dataFileName": "3_Lists_image.png"
                                         },
                                         {
-                                            "attachmentId": "eL11eZMPwpmH",
+                                            "attachmentId": "IZewdPx4evIx",
                                             "title": "image.png",
                                             "role": "image",
-                                            "mime": "image/jpg",
+                                            "mime": "image/png",
                                             "position": 10,
                                             "dataFileName": "4_Lists_image.png"
                                         },
                                         {
-                                            "attachmentId": "EnkTpdeLJ6Ft",
+                                            "attachmentId": "JopMc0iA0dqA",
                                             "title": "image.png",
                                             "role": "image",
                                             "mime": "image/jpg",
@@ -6761,7 +6761,7 @@
                                             "dataFileName": "5_Lists_image.png"
                                         },
                                         {
-                                            "attachmentId": "If3k6Tt5cPBt",
+                                            "attachmentId": "kZMYrJubac6T",
                                             "title": "image.png",
                                             "role": "image",
                                             "mime": "image/jpg",
@@ -6769,7 +6769,7 @@
                                             "dataFileName": "6_Lists_image.png"
                                         },
                                         {
-                                            "attachmentId": "MxgVFEyXwRxo",
+                                            "attachmentId": "PGeVq8YAQBFA",
                                             "title": "image.png",
                                             "role": "image",
                                             "mime": "image/png",
@@ -6777,26 +6777,26 @@
                                             "dataFileName": "7_Lists_image.png"
                                         },
                                         {
-                                            "attachmentId": "Te4LNZWv4ovM",
+                                            "attachmentId": "VgoG6BtlLYn7",
                                             "title": "image.png",
                                             "role": "image",
-                                            "mime": "image/png",
+                                            "mime": "image/jpg",
                                             "position": 10,
                                             "dataFileName": "8_Lists_image.png"
                                         },
                                         {
-                                            "attachmentId": "tqeIwudL5QEY",
+                                            "attachmentId": "y0zFP6x0IRRf",
                                             "title": "image.png",
                                             "role": "image",
-                                            "mime": "image/png",
+                                            "mime": "image/jpg",
                                             "position": 10,
                                             "dataFileName": "9_Lists_image.png"
                                         },
                                         {
-                                            "attachmentId": "zZGT8pbt2myS",
+                                            "attachmentId": "z8eVlXe2WKqr",
                                             "title": "image.png",
                                             "role": "image",
-                                            "mime": "image/png",
+                                            "mime": "image/jpg",
                                             "position": 10,
                                             "dataFileName": "10_Lists_image.png"
                                         }
@@ -10451,23 +10451,30 @@
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
-                                    "value": "bwZpz2ajCEwO",
+                                    "value": "x3i7MxGccDuM",
                                     "isInheritable": false,
                                     "position": 150
                                 },
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
-                                    "value": "Wy267RK4M69c",
+                                    "value": "bwZpz2ajCEwO",
                                     "isInheritable": false,
                                     "position": 160
                                 },
                                 {
                                     "type": "relation",
                                     "name": "internalLink",
-                                    "value": "Qjt68inQ2bRj",
+                                    "value": "Wy267RK4M69c",
                                     "isInheritable": false,
                                     "position": 170
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "Qjt68inQ2bRj",
+                                    "isInheritable": false,
+                                    "position": 180
                                 },
                                 {
                                     "type": "label",
@@ -10487,14 +10494,6 @@
                             "format": "markdown",
                             "dataFileName": "Sharing.md",
                             "attachments": [
-                                {
-                                    "attachmentId": "2kLFcH6hel9i",
-                                    "title": "shared-list.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "Sharing_shared-list.png"
-                                },
                                 {
                                     "attachmentId": "ibqWQUOCMhIE",
                                     "title": "image.png",
@@ -11385,6 +11384,13 @@
                             "type": "text",
                             "mime": "text/markdown",
                             "attributes": [
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "tAassRL4RSQL",
+                                    "isInheritable": false,
+                                    "position": 10
+                                },
                                 {
                                     "type": "label",
                                     "name": "shareAlias",

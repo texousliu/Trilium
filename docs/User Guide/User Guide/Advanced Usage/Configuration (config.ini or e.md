@@ -1,6 +1,10 @@
 # Configuration (config.ini or environment variables)
 Trilium supports configuration via a file named `config.ini` and environment variables. This document provides a comprehensive reference for all configuration options.
 
+## Location of the configuration file
+
+The configuration file is not located in the same directory as the application. Instead, the `config.ini` is located in the <a class="reference-link" href="../Installation%20%26%20Setup/Data%20directory.md">Data directory</a>. As such, the configuration file is only available after starting the application and creating a database.
+
 ## Configuration Precedence
 
 Configuration values are loaded in the following order of precedence (highest to lowest):
