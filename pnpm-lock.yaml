@@ -776,7 +776,7 @@ importers:
         version: 10.27.2
       preact-iso:
         specifier: ^2.10.0
-        version: 2.10.0(preact-render-to-string@6.6.1(preact@10.27.2))(preact@10.27.2)
+        version: 2.11.0(preact-render-to-string@6.6.1(preact@10.27.2))(preact@10.27.2)
       preact-render-to-string:
         specifier: ^6.6.1
         version: 6.6.1(preact@10.27.2)
@@ -5548,8 +5548,8 @@ packages:
     resolution: {integrity: sha512-4Dj6M28JB+oAH8kFkTLUo+a2jwOFkuqb3yucU0CANcRRUbxS0cP0nZYCGjcc3BNXwRIsUVmDGgzawme7zvJHvg==}
     engines: {node: '>=12'}
 
-  ansis@4.1.0:
-    resolution: {integrity: sha512-BGcItUBWSMRgOCe+SVZJ+S7yTRG0eGt9cXAHev72yuGcY23hnLA7Bky5L/xLyPINoSN95geovfBkqoTlNZYa7w==}
+  ansis@4.2.0:
+    resolution: {integrity: sha512-HqZ5rWlFjGiV0tDm3UxxgNRqsOTniqoKZu0pIAfh7TZQMGuZK+hH0drySty0si0QXj1ieop4+SkSfPZBPPkHig==}
     engines: {node: '>=14'}
 
   any-base@1.1.0:
@@ -11311,8 +11311,8 @@ packages:
   potpack@2.1.0:
     resolution: {integrity: sha512-pcaShQc1Shq0y+E7GqJqvZj8DTthWV1KeHGdi0Z6IAin2Oi3JnLCOfwnCo84qc+HAp52wT9nK9H7FAJp5a44GQ==}
 
-  preact-iso@2.10.0:
-    resolution: {integrity: sha512-zQ0dZdgdZ+L+WmD0IgbPrgSajahbrbkNSuCbXG5ZDHaT6vDSaRRlvt3NIP5+w8iltMCBqj8YPROM3El/qIKjvA==}
+  preact-iso@2.11.0:
+    resolution: {integrity: sha512-oThWJQcgcnaWh6UKy1qrBkxIWp5CkqvnHiFdLiDUxfNkGdpQ5veGQw9wOVS0NDp7X8xo98wxE4wng5jLv1e9Ug==}
     peerDependencies:
       preact: 10.27.2
       preact-render-to-string: '>=6.4.0'
@@ -14728,8 +14728,6 @@ snapshots:
       '@ckeditor/ckeditor5-core': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-code-block@46.1.1(patch_hash=2361d8caad7d6b5bddacc3a3b4aa37dbfba260b1c1b22a450413a79c1bb1ce95)':
     dependencies:
@@ -14980,8 +14978,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-editor-multi-root@46.1.1':
     dependencies:
@@ -20052,7 +20048,7 @@ snapshots:
 
   ansi-styles@6.2.3: {}
 
-  ansis@4.1.0: {}
+  ansis@4.2.0: {}
 
   any-base@1.1.0: {}
 
@@ -27126,7 +27122,7 @@ snapshots:
 
   potpack@2.1.0: {}
 
-  preact-iso@2.10.0(preact-render-to-string@6.6.1(preact@10.27.2))(preact@10.27.2):
+  preact-iso@2.11.0(preact-render-to-string@6.6.1(preact@10.27.2))(preact@10.27.2):
     dependencies:
       preact: 10.27.2
       preact-render-to-string: 6.6.1(preact@10.27.2)
@@ -27683,7 +27679,7 @@ snapshots:
       '@oxc-project/runtime': 0.77.3
       '@oxc-project/types': 0.77.3
       '@rolldown/pluginutils': 1.0.0-beta.29
-      ansis: 4.1.0
+      ansis: 4.2.0
     optionalDependencies:
       '@rolldown/binding-android-arm64': 1.0.0-beta.29
       '@rolldown/binding-darwin-arm64': 1.0.0-beta.29
