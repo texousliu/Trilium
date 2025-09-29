@@ -90,11 +90,6 @@ const linkOverlays = [
 
 let containerCounter = 1;
 
-interface Clipboard {
-    noteId: string;
-    title: string;
-}
-
 export type RelationType = "uniDirectional" | "biDirectional" | "inverse";
 
 interface Relation {
@@ -104,13 +99,6 @@ interface Relation {
     targetNoteId: string;
     type: RelationType;
     render: boolean;
-}
-
-// TODO: Deduplicate.
-interface PostNoteResponse {
-    note: {
-        noteId: string;
-    };
 }
 
 // TODO: Deduplicate.
@@ -149,21 +137,7 @@ export default class RelationMapTypeWidget extends TypeWidget {
 
         this.$relationMapWrapper = this.$widget.find(".relation-map-wrapper");
         this.$relationMapWrapper.on("click", (event) => {
-            if (this.clipboard && this.mapData) {
-                let { x, y } = this.getMousePosition(event);
 
-                // modifying position so that the cursor is on the top-center of the box
-                x -= 80;
-                y -= 15;
-
-                this.createNoteBox(this.clipboard.noteId, this.clipboard.title, x, y);
-
-                this.mapData.notes.push({ noteId: this.clipboard.noteId, x, y });
-
-                this.saveData();
-
-                this.clipboard = null;
-            }
 
             return true;
         });
@@ -249,12 +223,7 @@ export default class RelationMapTypeWidget extends TypeWidget {
 
 
     async doRefresh(note: FNote) {
-        await this.loadMapData();
-
         await this.initJsPlumbInstance();
-
-        await this.initPanZoom();
-
         this.loadNotesAndRelations();
     }
 
@@ -556,39 +525,6 @@ export default class RelationMapTypeWidget extends TypeWidget {
         this.saveData();
 
         this.loadNotesAndRelations();
-    }
-
-    getMousePosition(evt: JQuery.ClickEvent | JQuery.DropEvent) {
-        const rect = this.$relationMapContainer[0].getBoundingClientRect();
-
-        const zoom = this.getZoom();
-
-        return {
-            x: ((evt.clientX ?? 0) - rect.left) / zoom,
-            y: ((evt.clientY ?? 0) - rect.top) / zoom
-        };
-    }
-
-    async relationMapCreateChildNoteEvent({ ntxId }: EventData<"relationMapCreateChildNote">) {
-        if (!this.isNoteContext(ntxId)) {
-            return;
-        }
-
-        const title = await dialogService.prompt({ message: t("relation_map.enter_title_of_new_note"), defaultValue: t("relation_map.default_new_note_title") });
-
-        if (!title?.trim()) {
-            return;
-        }
-
-        const { note } = await server.post<PostNoteResponse>(`notes/${this.noteId}/children?target=into`, {
-            title,
-            content: "",
-            type: "text"
-        });
-
-        toastService.showMessage(t("relation_map.click_on_canvas_to_place_new_note"));
-
-        this.clipboard = { noteId: note.noteId, title };
     }
 
     relationMapResetPanZoomEvent({ ntxId }: EventData<"relationMapResetPanZoom">) {

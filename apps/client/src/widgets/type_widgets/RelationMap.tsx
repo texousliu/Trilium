@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { TypeWidgetProps } from "./type_widget";
 import { Defaults, jsPlumb, jsPlumbInstance, OverlaySpec } from "jsplumb";
-import { useEditorSpacedUpdate, useNoteBlob } from "../react/hooks";
+import { useEditorSpacedUpdate, useNoteBlob, useTriliumEvent } from "../react/hooks";
 import FNote from "../../entities/fnote";
 import { ComponentChildren, RefObject } from "preact";
 import froca from "../../services/froca";
@@ -9,6 +9,10 @@ import NoteLink from "../react/NoteLink";
 import "./RelationMap.css";
 import { t } from "../../services/i18n";
 import panzoom, { PanZoomOptions } from "panzoom";
+import dialog from "../../services/dialog";
+import server from "../../services/server";
+import toast from "../../services/toast";
+import { CreateChildrenResponse } from "@triliumnext/commons";
 
 interface MapData {
     notes: {
@@ -21,6 +25,11 @@ interface MapData {
         y: number,
         scale: number
     }
+}
+
+interface Clipboard {
+    noteId: string;
+    title: string;
 }
 
 const uniDirectionalOverlays: OverlaySpec[] = [
@@ -36,7 +45,7 @@ const uniDirectionalOverlays: OverlaySpec[] = [
     ["Label", { label: "", id: "label", cssClass: "connection-label" }]
 ];
 
-export default function RelationMap({ note }: TypeWidgetProps) {
+export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
     const [ data, setData ] = useState<MapData>();
     const containerRef = useRef<HTMLDivElement>(null);
     const apiRef = useRef<jsPlumbInstance>(null);
@@ -83,12 +92,25 @@ export default function RelationMap({ note }: TypeWidgetProps) {
         spacedUpdate.scheduleUpdate();
     }, [ data ]);
 
+    const onNewItem = useCallback((newNote: MapData["notes"][number]) => {
+        if (!data) return;
+        data.notes.push(newNote);
+        setData({ ...data });
+        spacedUpdate.scheduleUpdate();
+    }, [ data, spacedUpdate ]);
+    const clickCallback = useNoteCreation({
+        containerRef,
+        note,
+        ntxId,
+        onCreate: onNewItem
+    });
+
     usePanZoom({
         containerRef,
         options: {
             maxZoom: 2,
             minZoom: 0.3,
-            smoothScroll: false,
+        smoothScroll: false,
             //@ts-expect-error Upstream incorrectly mentions no arguments.
             filterKey: function (e: KeyboardEvent) {
                 // if ALT is pressed, then panzoom should bubble the event up
@@ -102,7 +124,7 @@ export default function RelationMap({ note }: TypeWidgetProps) {
 
     return (
         <div className="note-detail-relation-map note-detail-printable">
-            <div className="relation-map-wrapper">
+            <div className="relation-map-wrapper" onClick={clickCallback}>
                 <JsPlumb
                     apiRef={apiRef}
                     containerRef={containerRef}
@@ -150,6 +172,47 @@ function usePanZoom({ containerRef, options, transformData, onTransform }: {
 
         return () => pzInstance.dispose();
     }, [ containerRef, onTransform ]);
+}
+
+function useNoteCreation({ ntxId, note, containerRef, onCreate }: {
+    ntxId: string | null | undefined;
+    note: FNote;
+    containerRef: RefObject<HTMLDivElement>;
+    onCreate: (newNote: MapData["notes"][number]) => void;
+}) {
+    const clipboardRef = useRef<Clipboard>(null);
+    useTriliumEvent("relationMapCreateChildNote", async ({ ntxId: eventNtxId }) => {
+        if (eventNtxId !== ntxId) return;
+        const title = await dialog.prompt({ message: t("relation_map.enter_title_of_new_note"), defaultValue: t("relation_map.default_new_note_title") });
+        if (!title?.trim()) return;
+
+        const { note: createdNote } = await server.post<CreateChildrenResponse>(`notes/${note.noteId}/children?target=into`, {
+            title,
+            content: "",
+            type: "text"
+        });
+
+        toast.showMessage(t("relation_map.click_on_canvas_to_place_new_note"));
+        clipboardRef.current = {
+            noteId: createdNote.noteId,
+            title
+        };
+    });
+    const onClickHandler = useCallback((e: MouseEvent) => {
+        const clipboard = clipboardRef.current;
+        if (clipboard && containerRef.current) {
+            const zoom = getZoom(containerRef.current);
+            let { x, y } = getMousePosition(e, containerRef.current, zoom);
+
+            // modifying position so that the cursor is on the top-center of the box
+            x -= 80;
+            y -= 15;
+
+            onCreate({ noteId: clipboard.noteId, x, y });
+            clipboardRef.current = null;
+        }
+    }, [ onCreate ]);
+    return onClickHandler;
 }
 
 function JsPlumb({ className, props, children, containerRef: externalContainerRef, apiRef }: {
@@ -228,4 +291,13 @@ function getZoom(container: HTMLDivElement) {
     }
 
     return parseFloat(matches[1]);
+}
+
+function getMousePosition(evt: MouseEvent, container: HTMLDivElement, zoom: number) {
+    const rect = container.getBoundingClientRect();
+
+    return {
+        x: ((evt.clientX ?? 0) - rect.left) / zoom,
+        y: ((evt.clientY ?? 0) - rect.top) / zoom
+    };
 }
