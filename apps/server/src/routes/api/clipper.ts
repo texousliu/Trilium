@@ -183,7 +183,7 @@ export function processContent(images: Image[], note: BNote, content: string) {
     const dom = parse(rewrittenContent);
 
     // Get the content inside the body tag and serialize it
-    rewrittenContent = dom.querySelector("body")?.innerHTML ?? "";
+    rewrittenContent = dom.innerHTML ?? "";
 
     return rewrittenContent;
 }

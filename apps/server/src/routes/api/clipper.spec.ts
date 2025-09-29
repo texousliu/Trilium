@@ -35,7 +35,7 @@ describe("processContent", () => {
             [{"imageId":"OKZxZA3MonZJkwFcEhId","src":"inline.png","dataUrl":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAQCAYAAADESFVDAAAAF0lEQVQoU2P8DwQMBADjqKLRIGAgKggAzHs/0SoYCGwAAAAASUVORK5CYII="}],
             note, `<img src="OKZxZA3MonZJkwFcEhId">`
         );
-        expect(processed).toStrictEqual(`<img src="api/attachments/foo/image/encodedTitle">`);
+        expect(processed).toStrictEqual(`<img src="api/attachments/foo/image/encodedTitle" >`);
     });
 
     it("skips over non-data images", () => {
@@ -44,7 +44,7 @@ describe("processContent", () => {
                 [{"imageId":"OKZxZA3MonZJkwFcEhId","src":"inline.png","dataUrl": url}],
                 note, `<img src="OKZxZA3MonZJkwFcEhId">`
             );
-            expect(processed).toStrictEqual(`<img src="OKZxZA3MonZJkwFcEhId">`);
+            expect(processed).toStrictEqual(`<img src="OKZxZA3MonZJkwFcEhId" >`);
         }
     });
 });
