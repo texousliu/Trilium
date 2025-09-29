@@ -43,6 +43,9 @@ export default function RelationMap({ note }: TypeWidgetProps) {
     const spacedUpdate = useEditorSpacedUpdate({
         note,
         getData() {
+            return {
+                content: JSON.stringify(data),
+            };
         },
         onContentChange(content) {
             if (content) {
@@ -72,11 +75,13 @@ export default function RelationMap({ note }: TypeWidgetProps) {
         }
     })
 
-    const onTransform = useCallback(() => {
-        if (!containerRef.current || !apiRef.current) return;
+    const onTransform = useCallback((pzInstance: PanZoom) => {
+        if (!containerRef.current || !apiRef.current || !data) return;
         const zoom = getZoom(containerRef.current);
         apiRef.current.setZoom(zoom);
-    }, [ ]);
+        data.transform = JSON.parse(JSON.stringify(pzInstance.getTransform()));
+        spacedUpdate.scheduleUpdate();
+    }, [ data ]);
 
     usePanZoom({
         containerRef,
@@ -122,7 +127,7 @@ function usePanZoom({ containerRef, options, transformData, onTransform }: {
     containerRef: RefObject<HTMLElement>;
     options: PanZoomOptions;
     transformData: MapData["transform"] | undefined;
-    onTransform: () => void
+    onTransform: (pzInstance: PanZoom) => void
 }) {
     const apiRef = useRef<PanZoom>(null);
 
@@ -140,7 +145,7 @@ function usePanZoom({ containerRef, options, transformData, onTransform }: {
         }
 
         if (onTransform) {
-            apiRef.current!.on("transform", onTransform);
+            apiRef.current!.on("transform", () => onTransform(pzInstance));
         }
 
         return () => pzInstance.dispose();

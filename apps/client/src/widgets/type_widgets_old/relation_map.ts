@@ -338,14 +338,6 @@ export default class RelationMapTypeWidget extends TypeWidget {
         });
     }
 
-    async initPanZoom() {
-        const panzoom = (await import("panzoom")).default;
-
-        this.pzInstance.on("transform", () => {
-            this.saveCurrentTransform();
-        });
-    }
-
     saveCurrentTransform() {
         if (!this.pzInstance) {
             return;
@@ -574,12 +566,6 @@ export default class RelationMapTypeWidget extends TypeWidget {
         return {
             x: ((evt.clientX ?? 0) - rect.left) / zoom,
             y: ((evt.clientY ?? 0) - rect.top) / zoom
-        };
-    }
-
-    getData() {
-        return {
-            content: JSON.stringify(this.mapData)
         };
     }
 
