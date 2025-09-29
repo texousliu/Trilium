@@ -29,65 +29,6 @@ declare module "jsplumb" {
     }
 }
 
-const biDirectionalOverlays = [
-    [
-        "Arrow",
-        {
-            location: 1,
-            id: "arrow",
-            length: 14,
-            foldback: 0.8
-        }
-    ],
-    ["Label", { label: "", id: "label", cssClass: "connection-label" }],
-    [
-        "Arrow",
-        {
-            location: 0,
-            id: "arrow2",
-            length: 14,
-            direction: -1,
-            foldback: 0.8
-        }
-    ]
-];
-
-const inverseRelationsOverlays = [
-    [
-        "Arrow",
-        {
-            location: 1,
-            id: "arrow",
-            length: 14,
-            foldback: 0.8
-        }
-    ],
-    ["Label", { label: "", location: 0.2, id: "label-source", cssClass: "connection-label" }],
-    ["Label", { label: "", location: 0.8, id: "label-target", cssClass: "connection-label" }],
-    [
-        "Arrow",
-        {
-            location: 0,
-            id: "arrow2",
-            length: 14,
-            direction: -1,
-            foldback: 0.8
-        }
-    ]
-];
-
-const linkOverlays = [
-    [
-        "Arrow",
-        {
-            location: 1,
-            id: "arrow",
-            length: 14,
-            foldback: 0.8
-        }
-    ]
-];
-
 let containerCounter = 1;
 
 export type RelationType = "uniDirectional" | "biDirectional" | "inverse";
@@ -243,21 +184,6 @@ export default class RelationMapTypeWidget extends TypeWidget {
         });
     }
 
-    saveCurrentTransform() {
-        if (!this.pzInstance) {
-            return;
-        }
-
-        const newTransform = this.pzInstance.getTransform();
-
-        if (this.mapData && JSON.stringify(newTransform) !== JSON.stringify(this.mapData.transform)) {
-            // clone transform object
-            this.mapData.transform = JSON.parse(JSON.stringify(newTransform));
-
-            this.saveData();
-        }
-    }
-
     cleanup() {
         if (this.jsPlumbInstance) {
             this.clearMap();
@@ -279,14 +205,6 @@ export default class RelationMapTypeWidget extends TypeWidget {
         if (!this.jsPlumbInstance) {
             return;
         }
-
-        this.jsPlumbInstance.registerConnectionType("uniDirectional", { anchor: "Continuous", connector: "StateMachine", overlays: uniDirectionalOverlays });
-
-        this.jsPlumbInstance.registerConnectionType("biDirectional", { anchor: "Continuous", connector: "StateMachine", overlays: biDirectionalOverlays });
-
-        this.jsPlumbInstance.registerConnectionType("inverse", { anchor: "Continuous", connector: "StateMachine", overlays: inverseRelationsOverlays });
-
-        this.jsPlumbInstance.registerConnectionType("link", { anchor: "Continuous", connector: "StateMachine", overlays: linkOverlays });
 
         this.jsPlumbInstance.bind("connection", (info, originalEvent) => this.connectionCreatedHandler(info, originalEvent));
     }

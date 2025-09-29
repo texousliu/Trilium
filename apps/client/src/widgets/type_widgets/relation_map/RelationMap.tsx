@@ -16,24 +16,12 @@ import { CreateChildrenResponse } from "@triliumnext/commons";
 import contextMenu from "../../../menus/context_menu";
 import appContext from "../../../components/app_context";
 import RelationMapApi, { MapData, MapDataNoteEntry } from "./api";
+import setupOverlays, { uniDirectionalOverlays } from "./overlays";
 
 interface Clipboard {
     noteId: string;
     title: string;
 }
-
-const uniDirectionalOverlays: OverlaySpec[] = [
-    [
-        "Arrow",
-        {
-            location: 1,
-            id: "arrow",
-            length: 14,
-            foldback: 0.8
-        }
-    ],
-    ["Label", { label: "", id: "label", cssClass: "connection-label" }]
-];
 
 export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
     const [ data, setData ] = useState<MapData>();
@@ -128,6 +116,7 @@ export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
                         ConnectionOverlays: uniDirectionalOverlays,
                         HoverPaintStyle: { stroke: "#777", strokeWidth: 1 },
                     }}
+                    onInstanceCreated={setupOverlays}
                 >
                     {data?.notes.map(note => (
                         <NoteBox {...note} mapApiRef={mapApiRef} />
@@ -224,12 +213,13 @@ function useNoteCreation({ ntxId, note, containerRef, mapApiRef }: {
     return onClickHandler;
 }
 
-function JsPlumb({ className, props, children, containerRef: externalContainerRef, apiRef }: {
+function JsPlumb({ className, props, children, containerRef: externalContainerRef, apiRef, onInstanceCreated }: {
     className?: string;
     props: Omit<Defaults, "container">;
     children: ComponentChildren;
     containerRef?: RefObject<HTMLElement>;
     apiRef?: RefObject<jsPlumbInstance>;
+    onInstanceCreated?: (jsPlumbInstance: jsPlumbInstance) => void;
 }) {
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -247,6 +237,7 @@ function JsPlumb({ className, props, children, containerRef: externalContainerRe
             apiRef.current = jsPlumbInstance;
         }
 
+        onInstanceCreated?.(jsPlumbInstance);
         return () => jsPlumbInstance.cleanupListeners();
     }, [ apiRef ]);
 
