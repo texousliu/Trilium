@@ -30,19 +30,6 @@ declare module "jsplumb" {
     }
 }
 
-const uniDirectionalOverlays: OverlaySpec[] = [
-    [
-        "Arrow",
-        {
-            location: 1,
-            id: "arrow",
-            length: 14,
-            foldback: 0.8
-        }
-    ],
-    ["Label", { label: "", id: "label", cssClass: "connection-label" }]
-];
-
 const biDirectionalOverlays = [
     [
         "Arrow",
@@ -102,31 +89,11 @@ const linkOverlays = [
     ]
 ];
 
-const TPL = /*html*/`
-<div class="note-detail-relation-map note-detail-printable">
-    <div class="relation-map-wrapper">
-       <div class="relation-map-container"></div>
-    </div>
-</div>`;
-
 let containerCounter = 1;
 
 interface Clipboard {
     noteId: string;
     title: string;
-}
-
-interface MapData {
-    notes: {
-        noteId: string;
-        x: number;
-        y: number;
-    }[];
-    transform: {
-        x: number,
-        y: number,
-        scale: number
-    }
 }
 
 export type RelationType = "uniDirectional" | "biDirectional" | "inverse";
@@ -277,31 +244,6 @@ export default class RelationMapTypeWidget extends TypeWidget {
             await server.put(`notes/${noteId}/title`, { title });
 
             $title.text(title);
-        }
-    }
-
-    async loadMapData() {
-        this.mapData = {
-            notes: [],
-            // it is important to have this exact value here so that initial transform is the same as this
-            // which will guarantee note won't be saved on first conversion to the relation map note type
-            // this keeps the principle that note type change doesn't destroy note content unless user
-            // does some actual change
-            transform: {
-                x: 0,
-                y: 0,
-                scale: 1
-            }
-        };
-
-        const blob = await this.note?.getBlob();
-
-        if (blob?.content) {
-            try {
-                this.mapData = JSON.parse(blob.content);
-            } catch (e) {
-                console.log("Could not parse content: ", e);
-            }
         }
     }
 
@@ -475,15 +417,6 @@ export default class RelationMapTypeWidget extends TypeWidget {
 
             return;
         }
-
-        const jsPlumb = (await import("jsplumb")).default.jsPlumb;
-        this.jsPlumbInstance = jsPlumb.getInstance({
-            Endpoint: ["Dot", { radius: 2 }],
-            Connector: "StateMachine",
-            ConnectionOverlays: uniDirectionalOverlays,
-            HoverPaintStyle: { stroke: "#777", strokeWidth: 1 },
-            Container: this.$relationMapContainer.attr("id")
-        });
 
         if (!this.jsPlumbInstance) {
             return;
