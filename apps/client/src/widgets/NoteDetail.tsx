@@ -36,7 +36,7 @@ const TYPE_MAPPINGS: Record<ExtendedNoteType, () => Promise<{ default: TypeWidge
     "editableText": () => import("./type_widgets/text/EditableText"),
     "render": () => import("./type_widgets/Render"),
     "canvas": () => import("./type_widgets/Canvas"),
-    "relationMap": () => import("./type_widgets/RelationMap")
+    "relationMap": () => import("./type_widgets/relation_map/RelationMap")
     // TODO: finalize the record.
 };
 

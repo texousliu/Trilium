@@ -1,20 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
-import { TypeWidgetProps } from "./type_widget";
+import { TypeWidgetProps } from "../type_widget";
 import { Defaults, jsPlumb, jsPlumbInstance, OverlaySpec } from "jsplumb";
-import { useEditorSpacedUpdate, useNoteBlob, useTriliumEvent, useTriliumEvents } from "../react/hooks";
-import FNote from "../../entities/fnote";
+import { useEditorSpacedUpdate, useNoteBlob, useTriliumEvent, useTriliumEvents } from "../../react/hooks";
+import FNote from "../../../entities/fnote";
 import { ComponentChildren, RefObject } from "preact";
-import froca from "../../services/froca";
-import NoteLink from "../react/NoteLink";
+import froca from "../../../services/froca";
+import NoteLink from "../../react/NoteLink";
 import "./RelationMap.css";
-import { t } from "../../services/i18n";
+import { t } from "../../../services/i18n";
 import panzoom, { PanZoomOptions } from "panzoom";
-import dialog from "../../services/dialog";
-import server from "../../services/server";
-import toast from "../../services/toast";
+import dialog from "../../../services/dialog";
+import server from "../../../services/server";
+import toast from "../../../services/toast";
 import { CreateChildrenResponse } from "@triliumnext/commons";
-import contextMenu, { ContextMenuEvent } from "../../menus/context_menu";
-import appContext from "../../components/app_context";
+import contextMenu from "../../../menus/context_menu";
+import appContext from "../../../components/app_context";
 
 interface MapData {
     notes: {
