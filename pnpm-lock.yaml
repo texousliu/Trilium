@@ -325,7 +325,7 @@ importers:
     dependencies:
       '@electron/remote':
         specifier: 2.1.3
-        version: 2.1.3(electron@38.1.2)
+        version: 2.1.3(electron@38.2.0)
       better-sqlite3:
         specifier: 12.4.1
         version: 12.4.1
@@ -382,8 +382,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1(webpack@5.101.3(esbuild@0.25.10))
       electron:
-        specifier: 38.1.2
-        version: 38.1.2
+        specifier: 38.2.0
+        version: 38.2.0
       prebuild-install:
         specifier: ^7.1.1
         version: 7.1.3
@@ -438,8 +438,8 @@ importers:
         specifier: 13.0.1
         version: 13.0.1(webpack@5.101.3(esbuild@0.25.10))
       electron:
-        specifier: 38.1.2
-        version: 38.1.2
+        specifier: 38.2.0
+        version: 38.2.0
       fs-extra:
         specifier: 11.3.2
         version: 11.3.2
@@ -458,7 +458,7 @@ importers:
         version: 7.1.1
       '@electron/remote':
         specifier: 2.1.3
-        version: 2.1.3(electron@38.1.2)
+        version: 2.1.3(electron@38.2.0)
       '@preact/preset-vite':
         specifier: 2.10.2
         version: 2.10.2(@babel/core@7.28.0)(preact@10.27.2)(vite@7.1.7(@types/node@24.5.2)(jiti@2.6.0)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.91.0)(sass@1.91.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))
@@ -610,8 +610,8 @@ importers:
         specifier: 3.1.10
         version: 3.1.10
       electron:
-        specifier: 38.1.2
-        version: 38.1.2
+        specifier: 38.2.0
+        version: 38.2.0
       electron-debug:
         specifier: 4.1.0
         version: 4.1.0
@@ -7216,8 +7216,8 @@ packages:
     resolution: {integrity: sha512-bO3y10YikuUwUuDUQRM4KfwNkKhnpVO7IPdbsrejwN9/AABJzzTQ4GeHwyzNSrVO+tEH3/Np255a3sVZpZDjvg==}
     engines: {node: '>=8.0.0'}
 
-  electron@38.1.2:
-    resolution: {integrity: sha512-WXUcN3W8h8NTTZViA3KNX0rV2YBU0X0mEUM3ubupXTDY4QtIN7tmiqYVOKSKpR2LckTmBWGuEeY4D6xVoffwKQ==}
+  electron@38.2.0:
+    resolution: {integrity: sha512-Cw5Mb+N5NxsG0Hc1qr8I65Kt5APRrbgTtEEn3zTod30UNJRnAE1xbGk/1NOaDn3ODzI/MYn6BzT9T9zreP7xWA==}
     engines: {node: '>= 12.20.55'}
     hasBin: true
 
@@ -14795,8 +14795,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 46.1.1
       '@ckeditor/ckeditor5-watchdog': 46.1.1
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-dev-build-tools@43.1.0(@swc/helpers@0.5.17)(tslib@2.8.1)(typescript@5.9.2)':
     dependencies:
@@ -15012,6 +15010,8 @@ snapshots:
       '@ckeditor/ckeditor5-table': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-emoji@46.1.1':
     dependencies:
@@ -15571,6 +15571,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-special-characters@46.1.1':
     dependencies:
@@ -16302,9 +16304,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@electron/remote@2.1.3(electron@38.1.2)':
+  '@electron/remote@2.1.3(electron@38.2.0)':
     dependencies:
-      electron: 38.1.2
+      electron: 38.2.0
 
   '@electron/universal@2.0.2':
     dependencies:
@@ -18837,7 +18839,7 @@ snapshots:
 
   '@types/appdmg@0.5.5':
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
     optional: true
 
   '@types/archiver@6.0.3':
@@ -18859,7 +18861,7 @@ snapshots:
 
   '@types/bonjour@3.5.13':
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
 
   '@types/bootstrap@5.2.10':
     dependencies:
@@ -18869,7 +18871,7 @@ snapshots:
     dependencies:
       '@types/http-cache-semantics': 4.0.4
       '@types/keyv': 3.1.4
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
       '@types/responselike': 1.0.3
 
   '@types/chai@5.2.2':
@@ -18894,7 +18896,7 @@ snapshots:
   '@types/connect-history-api-fallback@1.5.4':
     dependencies:
       '@types/express-serve-static-core': 5.0.7
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
 
   '@types/connect@3.4.38':
     dependencies:
@@ -19095,7 +19097,7 @@ snapshots:
 
   '@types/fs-extra@9.0.13':
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
     optional: true
 
   '@types/geojson-vt@3.2.5':
@@ -19107,7 +19109,7 @@ snapshots:
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
 
   '@types/hast@3.0.4':
     dependencies:
@@ -19121,7 +19123,7 @@ snapshots:
 
   '@types/http-proxy@1.17.16':
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
 
   '@types/ini@4.1.1': {}
 
@@ -19145,7 +19147,7 @@ snapshots:
 
   '@types/keyv@3.1.4':
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
 
   '@types/leaflet-gpx@1.3.8':
     dependencies:
@@ -19199,7 +19201,7 @@ snapshots:
 
   '@types/node-forge@1.3.14':
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
 
   '@types/node@16.9.1': {}
 
@@ -19226,6 +19228,7 @@ snapshots:
   '@types/node@24.5.2':
     dependencies:
       undici-types: 7.12.0
+    optional: true
 
   '@types/parse-json@4.0.2': {}
 
@@ -19257,7 +19260,7 @@ snapshots:
 
   '@types/responselike@1.0.3':
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
 
   '@types/retry@0.12.2': {}
 
@@ -19306,7 +19309,7 @@ snapshots:
 
   '@types/sockjs@0.3.36':
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
 
   '@types/statuses@2.0.6':
     optional: true
@@ -19342,7 +19345,7 @@ snapshots:
 
   '@types/through2@2.0.41':
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
 
   '@types/tmp@0.2.6': {}
 
@@ -22173,7 +22176,7 @@ snapshots:
       - supports-color
     optional: true
 
-  electron@38.1.2:
+  electron@38.2.0:
     dependencies:
       '@electron/get': 2.0.3
       '@types/node': 22.18.6
@@ -24280,13 +24283,13 @@ snapshots:
 
   jest-worker@26.6.2:
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
       merge-stream: 2.0.0
       supports-color: 7.2.0
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -27206,7 +27209,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/node': 24.5.2
+      '@types/node': 22.18.6
       long: 5.3.2
 
   protocol-buffers-schema@3.6.0: {}
@@ -29428,7 +29431,8 @@ snapshots:
 
   undici-types@6.21.0: {}
 
-  undici-types@7.12.0: {}
+  undici-types@7.12.0:
+    optional: true
 
   undici@6.21.3: {}
 
