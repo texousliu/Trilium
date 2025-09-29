@@ -57,7 +57,7 @@ describe("Note map service", () => {
             {
                 excerpts: [
                     trimIndentation`\
-                    <div class="ck-content backlink-excerpt"><head></head><body><p>
+                    <div class="ck-content backlink-excerpt"><p>
                         The quick brownie
                     </p>
                     <p>
@@ -68,14 +68,14 @@ describe("Note map service", () => {
                     <figure class="image">
                     ${"    "}
                     </figure>
-                    </body></div>`
+                    </div>`
                 ],
                 noteId: "first",
             },
             {
                 excerpts: [
                     trimIndentation`\
-                    <div class="ck-content backlink-excerpt"><head></head><body><p>
+                    <div class="ck-content backlink-excerpt"><p>
                         <a class="reference-link backlink-link" href="#root/dUtgloZIckax">
                             Backlink text
                         </a>
@@ -90,7 +90,7 @@ describe("Note map service", () => {
                             Second
                         </a>
                     </p>
-                    </body></div>`
+                    </div>`
                 ],
                 noteId: "second"
             }
