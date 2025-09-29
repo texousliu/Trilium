@@ -1,6 +1,6 @@
 import { execSync } from "child_process";
 import { build as esbuild } from "esbuild";
-import { cpSync, existsSync, rmSync } from "fs";
+import { cpSync, existsSync, rmSync, writeFileSync } from "fs";
 import { copySync, emptyDirSync, mkdirpSync } from "fs-extra";
 import { join } from "path";
 
@@ -37,7 +37,7 @@ export default class BuildHelper {
     }
 
     async buildBackend(entryPoints: string[]) {
-        await esbuild({
+        const result = await esbuild({
             entryPoints: entryPoints.map(e => join(this.projectDir, e)),
             tsconfig: join(this.projectDir, "tsconfig.app.json"),
             platform: "node",
@@ -54,6 +54,7 @@ export default class BuildHelper {
                 "./xhr-sync-worker.js",
                 "vite"
             ],
+            metafile: true,
             splitting: false,
             loader: {
                 ".css": "text",
@@ -64,6 +65,7 @@ export default class BuildHelper {
             },
             minify: true
         });
+        writeFileSync(join(this.outDir, "meta.json"), JSON.stringify(result.metafile));
     }
 
     triggerBuildAndCopyTo(projectToBuild: string, destPath: string) {

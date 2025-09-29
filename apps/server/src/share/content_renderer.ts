@@ -1,4 +1,4 @@
-import { JSDOM } from "jsdom";
+import { parse, HTMLElement, TextNode } from "node-html-parser";
 import shaca from "./shaca/shaca.js";
 import assetPath from "../services/asset_path.js";
 import shareRoot from "./share_root.js";
@@ -16,7 +16,7 @@ export interface Result {
     isEmpty?: boolean;
 }
 
-function getContent(note: SNote) {
+export function getContent(note: SNote) {
     if (note.isProtected) {
         return {
             header: "",
@@ -66,7 +66,8 @@ function renderIndex(result: Result) {
 }
 
 function renderText(result: Result, note: SNote) {
-    const document = new JSDOM(result.content || "").window.document;
+    if (typeof result.content !== "string") return;
+    const document = parse(result.content || "");
 
     // Process include notes.
     for (const includeNoteEl of document.querySelectorAll("section.include-note")) {
@@ -79,11 +80,13 @@ function renderText(result: Result, note: SNote) {
         const includedResult = getContent(note);
         if (typeof includedResult.content !== "string") continue;
 
-        const includedDocument = new JSDOM(includedResult.content).window.document;
-        includeNoteEl.replaceWith(includedDocument.body);
+        const includedDocument = parse(includedResult.content).childNodes;
+        if (includedDocument) {
+            includeNoteEl.replaceWith(...includedDocument);
+        }
     }
 
-    result.isEmpty = document.body.textContent?.trim().length === 0 && document.querySelectorAll("img").length === 0;
+    result.isEmpty = document.textContent?.trim().length === 0 && document.querySelectorAll("img").length === 0;
 
     if (!result.isEmpty) {
         for (const linkEl of document.querySelectorAll("a")) {
@@ -99,7 +102,7 @@ function renderText(result: Result, note: SNote) {
             }
         }
 
-        result.content = document.body.innerHTML;
+        result.content = document.innerHTML ?? "";
 
         if (result.content.includes(`<span class="math-tex">`)) {
             result.header += `
@@ -120,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 }
 
-function handleAttachmentLink(linkEl: HTMLAnchorElement, href: string) {
+function handleAttachmentLink(linkEl: HTMLElement, href: string) {
     const linkRegExp = /attachmentId=([a-zA-Z0-9_]+)/g;
     let attachmentMatch;
     if ((attachmentMatch = linkRegExp.exec(href))) {
@@ -131,7 +134,8 @@ function handleAttachmentLink(linkEl: HTMLAnchorElement, href: string) {
             linkEl.setAttribute("href", `api/attachments/${attachmentId}/download`);
             linkEl.classList.add(`attachment-link`);
             linkEl.classList.add(`role-${attachment.role}`);
-            linkEl.innerText = attachment.title;
+            linkEl.childNodes.length = 0;
+            linkEl.appendChild(new TextNode(attachment.title));
         } else {
             linkEl.removeAttribute("href");
         }
@@ -164,11 +168,8 @@ export function renderCode(result: Result) {
     if (typeof result.content !== "string" || !result.content?.trim()) {
         result.isEmpty = true;
     } else {
-        const document = new JSDOM().window.document;
-
-        const preEl = document.createElement("pre");
-        preEl.appendChild(document.createTextNode(result.content));
-
+        const preEl = new HTMLElement("pre", {});
+        preEl.appendChild(new TextNode(result.content));
         result.content = preEl.outerHTML;
     }
 }

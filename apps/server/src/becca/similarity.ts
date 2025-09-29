@@ -2,7 +2,7 @@ import becca from "./becca.js";
 import log from "../services/log.js";
 import beccaService from "./becca_service.js";
 import dateUtils from "../services/date_utils.js";
-import { JSDOM } from "jsdom";
+import { parse } from "node-html-parser";
 import type BNote from "./entities/bnote.js";
 import { SimilarNote } from "@triliumnext/commons";
 
@@ -44,7 +44,7 @@ function filterUrlValue(value: string) {
         .replace(/(\.net|\.com|\.org|\.info|\.edu)/gi, "");
 }
 
-function buildRewardMap(note: BNote) {
+export function buildRewardMap(note: BNote) {
     // Need to use Map instead of object: https://github.com/zadam/trilium/issues/1895
     const map = new Map();
 
@@ -123,10 +123,12 @@ function buildRewardMap(note: BNote) {
 
     if (note.type === "text" && note.isDecrypted) {
         const content = note.getContent();
-        const dom = new JSDOM(content);
+        if (typeof content !== "string") return map;
+
+        const dom = parse(content);
 
         const addHeadingsToRewardMap = (elName: string, rewardFactor: number) => {
-            for (const el of dom.window.document.querySelectorAll(elName)) {
+            for (const el of dom.querySelectorAll(elName)) {
                 addToRewardMap(el.textContent, rewardFactor);
             }
         };
