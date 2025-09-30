@@ -77,7 +77,6 @@ function HeroSection() {
 
                 <div className="download-wrapper">
                     <DownloadButton big />
-                    <a class="more-download-options desktop-only" href="./get-started/">More platforms & server setup</a>
                     <Button href="./get-started/" className="mobile-only" text="Get started" />
                     <div className="additional-options">
                         <Button iconSvg={gitHubIcon} outline text="GitHub" href="https://github.com/TriliumNext/Trilium/" openExternally />
