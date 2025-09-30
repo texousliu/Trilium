@@ -94,9 +94,9 @@
             transform: scale(1);
         }
 
-        &:first-of-type { --accent-color: var(--brand-1); }
-        &:nth-of-type(2) { --accent-color: var(--brand-2); }
-        &:last-of-type { --accent-color: var(--brand-3); }
+        &.windows { --accent-color: var(--brand-1); }
+        &.linux { --accent-color: var(--brand-2); }
+        &.macos { --accent-color: var(--brand-3); }
     }
 
     .download-footer {

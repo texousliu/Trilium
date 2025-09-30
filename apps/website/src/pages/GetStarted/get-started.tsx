@@ -90,7 +90,7 @@ export function DownloadCard({ app, arch, entry: [ platform, entry ], isRecommen
                     )}
                     </>
             }
-            className={`download-card ${isRecommended ? "recommended" : ""}`}
+            className={`download-card ${platform} ${isRecommended ? "recommended" : ""}`}
         >
             {unwrapText(entry.description)}
 
