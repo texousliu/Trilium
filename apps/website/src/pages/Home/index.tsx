@@ -60,6 +60,7 @@ function HeroSection() {
                 setScreenshotUrl(`/screenshot_desktop_mac_${colorScheme}.webp`);
                 break;
             case "linux":
+                setScreenshotUrl(`/screenshot_desktop_linux_${colorScheme}.webp`);
                 break;
             case "windows":
             default:
