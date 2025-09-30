@@ -11,7 +11,9 @@ interface DownloadButtonProps {
 
 export default function DownloadButton({ big }: DownloadButtonProps) {
     const [ recommendedDownload, setRecommendedDownload ] = useState<RecommendedDownload | null>();
-    useEffect(() => setRecommendedDownload(getRecommendedDownload()), []);
+    useEffect(() => {
+        getRecommendedDownload()?.then(setRecommendedDownload);
+    }, []);
 
     return (recommendedDownload &&
         <>

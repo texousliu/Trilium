@@ -188,8 +188,13 @@ export function buildDownloadUrl(app: App, platform: Platform, format: string, a
     }
 }
 
-export function getArchitecture(): Architecture | null {
+export async function getArchitecture(): Promise<Architecture | null> {
     if (typeof window === "undefined") return null;
+
+    if (navigator.userAgentData) {
+        const { architecture } = await navigator.userAgentData.getHighEntropyValues(["architecture"]);
+        return architecture?.startsWith("arm") ? "arm64" : "x64";
+    }
 
     const userAgent = navigator.userAgent.toLowerCase();
     if (userAgent.includes('arm64') || userAgent.includes('aarch64')) {
@@ -212,10 +217,10 @@ export function getPlatform(): Platform | null {
     }
 }
 
-export function getRecommendedDownload(): RecommendedDownload | null {
+export async function getRecommendedDownload(): Promise<RecommendedDownload | null> {
     if (typeof window === "undefined") return null;
 
-    const architecture = getArchitecture();
+    const architecture = await getArchitecture();
     const platform = getPlatform();
     if (!platform || !architecture) return null;
 

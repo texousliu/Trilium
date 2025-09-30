@@ -14,7 +14,7 @@ export default function DownloadPage() {
     const [ userPlatform, setUserPlatform ] = useState<Platform>();
 
     useLayoutEffect(() => {
-        setCurrentArch(getArchitecture() ?? "x64");
+        getArchitecture().then((arch) => setCurrentArch(arch ?? "x64"));
         setUserPlatform(getPlatform() ?? "windows");
     }, []);
 
