@@ -88,10 +88,12 @@
 
 .download-desktop {
     .download-card {
-        transform: scale(0.9);
-    
-        &.recommended {
-            transform: scale(1);
+        @media (min-width: 720px) {
+            transform: scale(0.9);
+        
+            &.recommended {
+                transform: scale(1);
+            }
         }
 
         &.windows { --accent-color: var(--brand-1); }
