@@ -86,7 +86,9 @@ function HeroSection() {
 
             </div>
 
-            {screenshotUrl && <img class="screenshot" src={screenshotUrl} alt="Screenshot of the Trilium Notes desktop application" />}
+            <div className="screenshot-container">
+                {screenshotUrl && <img class="screenshot" src={screenshotUrl} alt="Screenshot of the Trilium Notes desktop application" />}
+            </div>
         </Section>
     )
 }
