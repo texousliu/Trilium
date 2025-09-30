@@ -11,7 +11,7 @@ import packageJson from "../../../../../package.json" with { type: "json" };
 
 export default function DownloadPage() {
     const [ currentArch, setCurrentArch ] = useState(getArchitecture() ?? "x64");
-    usePageTitle("Download");
+    usePageTitle("Get started");
 
     return (
         <>
