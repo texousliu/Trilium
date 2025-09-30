@@ -6,7 +6,7 @@
     grid-column: 1 / 4;
 }
 
-.download-card {
+.download-card {    
     h3 {
         color: var(--accent-color);
         font-size: 1.5em;
@@ -87,9 +87,17 @@
 }
 
 .download-desktop {
-    .download-card:first-of-type { --accent-color: var(--brand-1); }
-    .download-card:nth-of-type(2) { --accent-color: var(--brand-2); }
-    .download-card:last-of-type { --accent-color: var(--brand-3); }
+    .download-card {
+        transform: scale(0.9);
+    
+        &.recommended {
+            transform: scale(1);
+        }
+
+        &:first-of-type { --accent-color: var(--brand-1); }
+        &:nth-of-type(2) { --accent-color: var(--brand-2); }
+        &:last-of-type { --accent-color: var(--brand-3); }
+    }
 
     .download-footer {
         text-align: center;
