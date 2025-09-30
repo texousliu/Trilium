@@ -38,7 +38,8 @@ export default function DownloadPage() {
                 </div>
 
                 <div className="grid-3-cols download-desktop">
-                    {Object.entries(downloadMatrix.desktop).map(entry => (
+                    {reorderPlatforms(Object.entries(downloadMatrix.desktop), userPlatform ?? "")
+                        .map(entry => (
                         <DownloadCard app="desktop" arch={currentArch} entry={entry} isRecommended={userPlatform === entry[0]} />
                     ))}
                 </div>
@@ -125,4 +126,14 @@ export function DownloadCard({ app, arch, entry: [ platform, entry ], isRecommen
             </div>
         </Card>
     )
+}
+
+function reorderPlatforms(entries: [string, DownloadMatrixEntry][], platformToCenter: Platform | "") {
+    const entryToCenter = entries.find(x => x[0] === platformToCenter);
+    if (!entryToCenter) return entries;
+
+    const others = entries.filter(x => x !== entryToCenter);
+    const mid = Math.floor(others.length / 2);
+    others.splice(mid, 0, entryToCenter);
+    return others;
 }
