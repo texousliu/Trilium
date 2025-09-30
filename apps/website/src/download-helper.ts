@@ -19,6 +19,7 @@ export interface DownloadMatrixEntry {
     description: Record<Architecture, string> | string;
     downloads: Record<string, DownloadInfo>;
     helpUrl?: string;
+    quickStartTitle?: string;
     quickStartCode?: string;
 }
 
@@ -43,6 +44,7 @@ export const downloadMatrix: DownloadMatrix = {
                 x64: "Compatible with Intel or AMD devices running Windows 10 and 11.",
                 arm64: "Compatible with ARM devices (e.g. with Qualcomm Snapdragon).",
             },
+            quickStartTitle: "To install via Winget:",
             quickStartCode: "winget install TriliumNext.Notes",
             downloads: {
                 exe: {
@@ -71,14 +73,15 @@ export const downloadMatrix: DownloadMatrix = {
                 x64: "For most Linux distributions, compatible with x86_64 architecture.",
                 arm64: "For ARM-based Linux distributions, compatible with aarch64 architecture.",
             },
+            quickStartTitle: "Select an appropriate package format, depending on your distribution:",
             downloads: {
                 deb: {
                     recommended: true,
-                    name: "Download .deb"
+                    name: ".deb"
                 },
                 rpm: {
                     recommended: true,
-                    name: "Download .rpm"
+                    name: ".rpm"
                 },
                 flatpak: {
                     name: ".flatpak"
@@ -105,6 +108,7 @@ export const downloadMatrix: DownloadMatrix = {
                 x64: "For Intel-based Macs running macOS Big Sur or later.",
                 arm64: "For Apple Silicon Macs such as those with M1 and M2 chips.",
             },
+            quickStartTitle: "To install via Homebrew:",
             quickStartCode: "brew install --cask trilium-notes",
             downloads: {
                 dmg: {

@@ -32,10 +32,17 @@
         color: var(--accent-color);
     }
 
+    .quick-start-title {
+        margin-bottom: 0;
+        font-size: 0.9em;
+        color: var(--muted-color);
+    }
+
     .quick-start {
         background-color: #ececec;
         padding: 0.75em;
         border-radius: 6px;
+        margin-top: 0.5em;
 
         @media (prefers-color-scheme: dark) {
             background-color: black;
