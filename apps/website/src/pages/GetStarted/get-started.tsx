@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks";
+import { useLayoutEffect, useState } from "preact/hooks";
 import Card from "../../components/Card.js";
 import Section from "../../components/Section.js";
 import { App, Architecture, buildDownloadUrl, downloadMatrix, DownloadMatrixEntry, getArchitecture, getPlatform, Platform } from "../../download-helper.js";
@@ -10,8 +10,13 @@ import "./get-started.css";
 import packageJson from "../../../../../package.json" with { type: "json" };
 
 export default function DownloadPage() {
-    const [ currentArch, setCurrentArch ] = useState(getArchitecture() ?? "x64");
-    const userPlatform = getPlatform();
+    const [ currentArch, setCurrentArch ] = useState<Architecture>("x64");
+    const [ userPlatform, setUserPlatform ] = useState<Platform>();
+
+    useLayoutEffect(() => {
+        setCurrentArch(getArchitecture() ?? "x64");
+        setUserPlatform(getPlatform() ?? "windows");
+    }, []);
 
     usePageTitle("Get started");
 
