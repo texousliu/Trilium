@@ -6,10 +6,10 @@
 
     // Collect HTML snippets by location
     const htmlSnippetsByLocation = {};
-    for (const htmlRelation of note.getRelations("shareHTML")) {
+    for (const htmlRelation of note.getRelations("shareHtml")) {
         const htmlNote = htmlRelation.targetNote;
         if (htmlNote) {
-            let location = htmlNote.getLabelValue("shareHTMLLocation") || "content:end";
+            let location = htmlNote.getLabelValue("shareHtmlLocation") || "content:end";
             // Default to :end if no position specified
             if (!location.includes(":")) {
                 location = location + ":end";

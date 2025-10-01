@@ -66,7 +66,7 @@ export default [
     { type: "label", name: "shareDisallowRobotIndexing" },
     { type: "label", name: "shareCredentials" },
     { type: "label", name: "shareIndex" },
-    { type: "label", name: "shareHTMLLocation" },
+    { type: "label", name: "shareHtmlLocation" },
     { type: "label", name: "displayRelations" },
     { type: "label", name: "hideRelations" },
     { type: "label", name: "titleTemplate", isDangerous: true },
@@ -106,7 +106,7 @@ export default [
     { type: "relation", name: "renderNote", isDangerous: true },
     { type: "relation", name: "shareCss" },
     { type: "relation", name: "shareJs" },
-    { type: "relation", name: "shareHTML" },
+    { type: "relation", name: "shareHtml" },
     { type: "relation", name: "shareTemplate" },
     { type: "relation", name: "shareFavicon" }
 ];
