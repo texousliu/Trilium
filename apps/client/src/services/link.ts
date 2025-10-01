@@ -36,7 +36,7 @@ async function getLinkIcon(noteId: string, viewMode: ViewMode | undefined) {
 }
 
 // TODO: Remove `string` once all the view modes have been mapped.
-type ViewMode = "default" | "source" | "attachments" | "contextual-help" | string;
+export type ViewMode = "default" | "source" | "attachments" | "contextual-help" | string;
 
 export interface ViewScope {
     /**
