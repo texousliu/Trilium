@@ -119,11 +119,6 @@ describe("shortcuts", () => {
             metaKey: options.metaKey || false
         } as KeyboardEvent);
 
-        it("should match simple key shortcuts", () => {
-            const event = createKeyboardEvent({ key: "a", code: "KeyA" });
-            expect(matchesShortcut(event, "a")).toBe(true);
-        });
-
         it("should match shortcuts with modifiers", () => {
             const event = createKeyboardEvent({ key: "a", code: "KeyA", ctrlKey: true });
             expect(matchesShortcut(event, "ctrl+a")).toBe(true);
@@ -145,6 +140,11 @@ describe("shortcuts", () => {
         it("should not match when modifiers don't match", () => {
             const event = createKeyboardEvent({ key: "a", code: "KeyA", ctrlKey: true });
             expect(matchesShortcut(event, "alt+a")).toBe(false);
+            expect(matchesShortcut(event, "a")).toBe(false);
+        });
+
+        it("should not match when no modifiers are used", () => {
+            const event = createKeyboardEvent({ key: "a", code: "KeyA" });
             expect(matchesShortcut(event, "a")).toBe(false);
         });
 
