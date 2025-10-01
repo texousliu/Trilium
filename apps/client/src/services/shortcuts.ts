@@ -163,7 +163,8 @@ export function matchesShortcut(e: KeyboardEvent, shortcut: string): boolean {
     const expectedMeta = modifiers.includes('meta') || modifiers.includes('cmd') || modifiers.includes('command');
 
     // Refuse key combinations that don't include modifiers because they interfere with the normal usage of the application.
-    if (!(expectedCtrl || expectedAlt || expectedShift || expectedMeta)) {
+    // Function keys are an exception.
+    if (!(expectedCtrl || expectedAlt || expectedShift || expectedMeta) && !/f\d+/.test(key)) {
         return false;
     }
 

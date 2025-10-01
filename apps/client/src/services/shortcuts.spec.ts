@@ -148,6 +148,15 @@ describe("shortcuts", () => {
             expect(matchesShortcut(event, "a")).toBe(false);
         });
 
+        it("should match function keys even with no modifiers", () => {
+            let event = createKeyboardEvent({ key: "F1", code: "F1" });
+            expect(matchesShortcut(event, "F1")).toBeTruthy();
+            expect(matchesShortcut(event, "f1")).toBeTruthy();
+
+            event = createKeyboardEvent({ key: "F1", code: "F1", shiftKey: true });
+            expect(matchesShortcut(event, "Shift+F1")).toBeTruthy();
+        });
+
         it("should handle alternative modifier names", () => {
             const ctrlEvent = createKeyboardEvent({ key: "a", code: "KeyA", ctrlKey: true });
             expect(matchesShortcut(ctrlEvent, "control+a")).toBe(true);
