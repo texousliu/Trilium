@@ -52,7 +52,7 @@
     "eslint-plugin-playwright": "2.2.2",
     "eslint-plugin-react-hooks": "6.1.0",
     "happy-dom": "~19.0.0",
-    "jiti": "2.6.0",
+    "jiti": "2.6.1",
     "jsonc-eslint-parser": "2.4.1",
     "react-refresh": "0.18.0",
     "rollup-plugin-webpack-stats": "2.1.5",
