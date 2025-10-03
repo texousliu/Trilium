@@ -279,7 +279,9 @@
     "preview_not_available": "La vista previa no está disponible para este tipo de notas.",
     "diff_off": "Mostrar contenido",
     "diff_on": "Mostrar diferencia",
-    "diff_off_hint": "Haga clic para mostrar el contenido de la nota"
+    "diff_off_hint": "Haga clic para mostrar el contenido de la nota",
+    "diff_not_available": "Diferencias no disponibles.",
+    "diff_on_hint": "Haga clic para ver las diferencias"
   },
   "sort_child_notes": {
     "sort_children_by": "Ordenar hijos por...",
@@ -590,7 +592,18 @@
     "september": "Septiembre",
     "october": "Octubre",
     "november": "Noviembre",
-    "december": "Diciembre"
+    "december": "Diciembre",
+    "week": "Semana",
+    "week_previous": "Semana anterior",
+    "week_next": "Semana siguiente",
+    "month": "Mes",
+    "month_previous": "Mes anterior",
+    "month_next": "Mes siguiente",
+    "year": "Año",
+    "year_previous": "Año anterior",
+    "year_next": "Año siguiente",
+    "list": "Lista",
+    "today": "Hoy"
   },
   "close_pane_button": {
     "close_this_pane": "Cerrar este panel"
@@ -751,7 +764,8 @@
     "book_properties": "Propiedades de colección",
     "table": "Tabla",
     "geo-map": "Mapa Geo",
-    "board": "Tablero"
+    "board": "Tablero",
+    "include_archived_notes": "Mostrar notas archivadas"
   },
   "edited_notes": {
     "no_edited_notes_found": "Aún no hay notas editadas en este día...",
