@@ -49,9 +49,7 @@ export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
 
             if (content) {
                 try {
-                    const data = JSON.parse(content);
-                    setData(data);
-                    return;
+                    newData = JSON.parse(content);
                 } catch (e) {
                     console.log("Could not parse content: ", e);
                 }
