@@ -158,9 +158,11 @@ describe("shortcuts", () => {
             event = createKeyboardEvent({ key: "F1", code: "F1", shiftKey: true });
             expect(matchesShortcut(event, "Shift+F1")).toBeTruthy();
 
-            // Delete
-            event = createKeyboardEvent({ key: "Delete", code: "Delete" });
-            expect(matchesShortcut(event, "Delete")).toBeTruthy();
+            // Special keys
+            for (const keyCode of [ "Delete", "Enter" ]) {
+                event = createKeyboardEvent({ key: keyCode, code: keyCode });
+                expect(matchesShortcut(event, keyCode), `Key ${keyCode}`).toBeTruthy();
+            }
         });
 
         it("should handle alternative modifier names", () => {
