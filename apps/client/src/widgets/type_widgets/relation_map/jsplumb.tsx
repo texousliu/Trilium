@@ -1,7 +1,9 @@
-import { jsPlumb, Defaults, jsPlumbInstance } from "jsplumb";
-import { ComponentChildren, RefObject } from "preact";
+import { jsPlumb, Defaults, jsPlumbInstance, DragOptions } from "jsplumb";
+import { ComponentChildren, createContext, RefObject } from "preact";
 import { HTMLProps } from "preact/compat";
-import { useEffect, useRef } from "preact/hooks";
+import { useContext, useEffect, useRef } from "preact/hooks";
+
+const JsPlumbInstance = createContext<RefObject<jsPlumbInstance> | undefined>(undefined);
 
 export function JsPlumb({ className, props, children, containerRef: externalContainerRef, apiRef, onInstanceCreated }: {
     className?: string;
@@ -36,18 +38,30 @@ export function JsPlumb({ className, props, children, containerRef: externalCont
 
     return (
         <div ref={containerRef} className={className}>
-            {children}
+            <JsPlumbInstance.Provider value={apiRef}>
+                {children}
+            </JsPlumbInstance.Provider>
         </div>
     )
 }
 
-export function JsPlumbItem({ x, y, children, ...restProps }: {
+export function JsPlumbItem({ x, y, children, draggable, ...restProps }: {
     x: number;
     y: number;
     children: ComponentChildren;
-} & Pick<HTMLProps<HTMLDivElement>, "className" | "onContextMenu">) {
+    draggable?: DragOptions;
+} & Pick<HTMLProps<HTMLDivElement>, "id" | "className" | "onContextMenu">) {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const apiRef = useContext(JsPlumbInstance);
+
+    useEffect(() => {
+        if (!draggable || !apiRef?.current || !containerRef.current) return;
+        apiRef.current.draggable(containerRef.current, draggable);
+    }, [ draggable ]);
+
     return (
         <div
+            ref={containerRef}
             {...restProps}
             style={{ left: x, top: y }}
         >

@@ -358,9 +358,17 @@ function NoteBox({ noteId, x, y, mapApiRef }: MapDataNoteEntry & { mapApiRef: Re
 
     return note && (
         <JsPlumbItem
+            id={idToNoteId(note.noteId)}
             className={`note-box ${note?.getCssClass()}`}
             onContextMenu={contextMenuHandler}
             x={x} y={y}
+            draggable={{
+                start() {},
+                drag() {},
+                stop(params) {
+
+                },
+            }}
         >
             <NoteLink className="title" title={title} notePath={noteId} noTnLink noContextMenu />
             <div className="endpoint" title={t("relation_map.start_dragging_relations")} />
