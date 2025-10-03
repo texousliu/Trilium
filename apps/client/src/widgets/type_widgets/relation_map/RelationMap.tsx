@@ -192,6 +192,8 @@ async function useRelationData(noteId: string, mapData: MapData | undefined, map
     const [ inverseRelations, setInverseRelations ] = useState<RelationMapPostResponse["inverseRelations"]>();
 
     async function refresh() {
+        if (!noteIds) return;
+
         const data = await server.post<RelationMapPostResponse>("relation-map", { noteIds, relationMapNoteId: noteId });
         const relations: ClientRelation[] = [];
 
