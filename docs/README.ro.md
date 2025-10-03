@@ -1,75 +1,77 @@
 # Trilium Notes
 
-![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
-![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran)\
-![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/trilium)
-![GitHub Downloads (all assets, all
-releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
+![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran) ![Donatori
+pe LiberaPay](https://img.shields.io/liberapay/patrons/ElianDoran)\
+![Descărcări pe Docker](https://img.shields.io/docker/pulls/triliumnext/trilium)
+![Descărcări pe GitHub (toate variantele, toate
+release-urile)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
-[![Translation
-status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
+[![Starea
+traducerilor](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
 [English](./README.md) | [Chinese (Simplified)](./docs/README-ZH_CN.md) |
 [Chinese (Traditional)](./docs/README-ZH_TW.md) | [Russian](./docs/README.ru.md)
 | [Japanese](./docs/README.ja.md) | [Italian](./docs/README.it.md) |
 [Spanish](./docs/README.es.md)
 
-Trilium Notes is a free and open-source, cross-platform hierarchical note taking
-application with focus on building large personal knowledge bases.
+Trilium Notes este o aplicație gratuită și open-source pentru notițe structurate
+ierarhic cu scopul de a crea o bază de date de cunoștințe personală, de mari
+dimensiuni.
 
-See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for
-quick overview:
+Prezentare generală prin [capturi de
+ecran](https://triliumnext.github.io/Docs/Wiki/screenshot-tour):
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
-## 📚 Documentation
+## 📚 Documentație
 
-**Visit our comprehensive documentation at
+**Vizitați documentația noastră detaliată la
 [docs.triliumnotes.org](https://docs.triliumnotes.org/)**
 
-Our documentation is available in multiple formats:
-- **Online Documentation**: Browse the full documentation at
+Documentația este disponibilă în mai multe formate:
+- **Documentație online**: vizualizați întreaga documentație la
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
-- **In-App Help**: Press `F1` within Trilium to access the same documentation
-  directly in the application
-- **GitHub**: Navigate through the [User
-  Guide](./docs/User%20Guide/User%20Guide/) in this repository
+- **Ghid în aplicație**: Apăsați `F1` în Trilium pentru a accesa aceeași
+  documentație local, direct din aplicație
+- **GitHub**: Navigați [ghidul de utilizator](./docs/User%20Guide/User%20Guide/)
+  direct din acest repository
 
-### Quick Links
-- [Getting Started Guide](https://docs.triliumnotes.org/)
-- [Installation
-  Instructions](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
-- [Docker
-  Setup](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
-- [Upgrading
-  TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
-- [Basic Concepts and
-  Features](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
-- [Patterns of Personal Knowledge
-  Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
+### Linkuri rapide
+- [Ghid rapid](https://docs.triliumnotes.org/)
+- [Instrucțiuni de
+  instalare](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+- [Instalare prin
+  Docker](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+- [Procesul de
+  actualizare](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+- [Concepte de bază și
+  funcții](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+- [Concepte pentru o bază de date de cunoștințe
+  personală](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
-## 🎁 Features
+## 🎁 Funcții
 
-* Notes can be arranged into arbitrarily deep tree. Single note can be placed
-  into multiple places in the tree (see
-  [cloning](https://triliumnext.github.io/Docs/Wiki/cloning-notes))
-* Rich WYSIWYG note editor including e.g. tables, images and
-  [math](https://triliumnext.github.io/Docs/Wiki/text-notes) with markdown
-  [autoformat](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat)
-* Support for editing [notes with source
-  code](https://triliumnext.github.io/Docs/Wiki/code-notes), including syntax
-  highlighting
-* Fast and easy [navigation between
-  notes](https://triliumnext.github.io/Docs/Wiki/note-navigation), full text
-  search and [note
-  hoisting](https://triliumnext.github.io/Docs/Wiki/note-hoisting)
-* Seamless [note
-  versioning](https://triliumnext.github.io/Docs/Wiki/note-revisions)
-* Note [attributes](https://triliumnext.github.io/Docs/Wiki/attributes) can be
-  used for note organization, querying and advanced
-  [scripting](https://triliumnext.github.io/Docs/Wiki/scripts)
-* UI available in English, German, Spanish, French, Romanian, and Chinese
-  (simplified and traditional)
+* Notițele pot fi aranjate într-o structură ierarhică cu o adâncime nelimitată.
+  O singură notiță poate fi plasată în mai multe locuri în abore (vedeți
+  [procesul de clonare](https://triliumnext.github.io/Docs/Wiki/cloning-notes))
+* Editor vizual de notițe cu suport de tabele, imagini și [ecuații
+  matematice](https://triliumnext.github.io/Docs/Wiki/text-notes) și
+  [autoformatare în stil
+  Markdown](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat)
+* Suport pentru editarea [notițelor de tip cod
+  sursă](https://triliumnext.github.io/Docs/Wiki/code-notes), inclusiv cu
+  evidențierea sintaxei
+* [Navigare rapidă printre
+  notițe](https://triliumnext.github.io/Docs/Wiki/note-navigation), căutare în
+  conținutul notițelor și [focalizarea
+  notițelor](https://triliumnext.github.io/Docs/Wiki/note-hoisting)
+* Salvarea transparentă a [reviziilor
+  notițelor](https://triliumnext.github.io/Docs/Wiki/note-revisions)
+* [Atribute](https://triliumnext.github.io/Docs/Wiki/attributes) pentru
+  organizarea și căutarea notițelor, dar și posibilitatea
+  [script-uri](https://triliumnext.github.io/Docs/Wiki/scripts) avansate
+* Interfața grafică este disponibilă în mai multe limbi, dintre care și limba
+  română
 * Direct [OpenID and TOTP
   integration](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
   for more secure login
