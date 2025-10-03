@@ -17,6 +17,7 @@ import contextMenu from "../../../menus/context_menu";
 import appContext from "../../../components/app_context";
 import RelationMapApi, { MapData, MapDataNoteEntry } from "./api";
 import setupOverlays, { uniDirectionalOverlays } from "./overlays";
+import { JsPlumb } from "./jsplumb";
 
 interface Clipboard {
     noteId: string;
@@ -304,44 +305,6 @@ function useNoteCreation({ ntxId, note, containerRef, mapApiRef }: {
         }
     }, []);
     return onClickHandler;
-}
-
-function JsPlumb({ className, props, children, containerRef: externalContainerRef, apiRef, onInstanceCreated }: {
-    className?: string;
-    props: Omit<Defaults, "container">;
-    children: ComponentChildren;
-    containerRef?: RefObject<HTMLElement>;
-    apiRef?: RefObject<jsPlumbInstance>;
-    onInstanceCreated?: (jsPlumbInstance: jsPlumbInstance) => void;
-}) {
-    const containerRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        if (!containerRef.current) return;
-        if (externalContainerRef) {
-            externalContainerRef.current = containerRef.current;
-        }
-
-        const jsPlumbInstance = jsPlumb.getInstance({
-            Container: containerRef.current,
-            ...props
-        });
-        if (apiRef) {
-            apiRef.current = jsPlumbInstance;
-        }
-
-        onInstanceCreated?.(jsPlumbInstance);
-        return () => {
-            jsPlumbInstance.deleteEveryEndpoint();
-            jsPlumbInstance.cleanupListeners()
-        };
-    }, [ apiRef ]);
-
-    return (
-        <div ref={containerRef} className={className}>
-            {children}
-        </div>
-    )
 }
 
 function NoteBox({ noteId, x, y, mapApiRef }: MapDataNoteEntry & { mapApiRef: RefObject<RelationMapApi> }) {
