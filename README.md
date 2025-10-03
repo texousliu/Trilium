@@ -187,9 +187,13 @@ Trilium would not be possible without the technologies behind it:
 
 ## 🤝 Support
 
-Support for the TriliumNext organization will be possible in the near future. For now, you can:
-- Support continued development on TriliumNext by supporting our developers: [eliandoran](https://github.com/sponsors/eliandoran) (See the [repository insights]([developers]([url](https://github.com/TriliumNext/trilium/graphs/contributors))) for a full list)
-- Show a token of gratitude to the original Trilium developer ([zadam](https://github.com/sponsors/zadam)) via [PayPal](https://paypal.me/za4am) or Bitcoin (bitcoin:bc1qv3svjn40v89mnkre5vyvs2xw6y8phaltl385d2).
+Trilium is built and maintained with [hundreds of hours of work](https://github.com/TriliumNext/Trilium/graphs/commit-activity). Your support keeps it open-source, improves features, and covers costs such as hosting.
+
+Consider supporting the main developer ([eliandoran](https://github.com/eliandoran)) of the application via:
+
+- [GitHub Sponsors](https://github.com/sponsors/eliandoran)
+- [PayPal](https://paypal.me/eliandoran)
+- [Buy Me a Coffee](https://buymeacoffee.com/eliandoran)
 
 
 ## 🔑 License
