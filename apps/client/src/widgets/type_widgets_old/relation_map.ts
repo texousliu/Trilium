@@ -215,32 +215,6 @@ export default class RelationMapTypeWidget extends TypeWidget {
     }
 
     async createNoteBox(noteId: string, title: string, x: number, y: number) {
-        if (!this.jsPlumbInstance) {
-            return;
-        }
-
-        this.jsPlumbInstance.getContainer().appendChild($noteBox[0]);
-
-        this.jsPlumbInstance.draggable($noteBox[0], {
-            start: (params) => {},
-            drag: (params) => {},
-            stop: (params) => {
-                const noteId = this.idToNoteId(params.el.id);
-
-                const note = this.mapData?.notes.find((note) => note.noteId === noteId);
-
-                if (!note) {
-                    logError(t("relation_map.note_not_found", { noteId }));
-                    return;
-                }
-
-                //@ts-expect-error TODO: Check if this is still valid.
-                [note.x, note.y] = params.finalPos;
-
-                this.saveData();
-            }
-        });
-
         this.jsPlumbInstance.makeSource($noteBox[0], {
             filter: ".endpoint",
             anchor: "Continuous",

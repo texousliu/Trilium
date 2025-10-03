@@ -1,4 +1,5 @@
 import FNote from "../../../entities/fnote";
+import { t } from "../../../services/i18n";
 import server from "../../../services/server";
 import utils from "../../../services/utils";
 
@@ -63,6 +64,19 @@ export default class RelationMapApi {
             this.data.transform = { ...transform };
             this.onDataChange(false);
         }
+    }
+
+    moveNote(noteId: string, x: number, y: number) {
+        const note = this.data?.notes.find((note) => note.noteId === noteId);
+
+        if (!note) {
+            logError(t("relation_map.note_not_found", { noteId }));
+            return;
+        }
+
+        note.x = x;
+        note.y = y;
+        this.onDataChange(false);
     }
 
 }

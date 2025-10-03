@@ -360,7 +360,7 @@ function NoteBox({ noteId, x, y, mapApiRef }: MapDataNoteEntry & { mapApiRef: Re
 
     return note && (
         <JsPlumbItem
-            id={idToNoteId(note.noteId)}
+            id={noteIdToId(noteId)}
             className={`note-box ${note?.getCssClass()}`}
             onContextMenu={contextMenuHandler}
             x={x} y={y}
@@ -368,7 +368,9 @@ function NoteBox({ noteId, x, y, mapApiRef }: MapDataNoteEntry & { mapApiRef: Re
                 start() {},
                 drag() {},
                 stop(params) {
-
+                    const noteId = idToNoteId(params.el.id);
+                    const [ x, y ] = params.pos;
+                    mapApiRef.current?.moveNote(noteId, x, y);
                 },
             }}
         >
