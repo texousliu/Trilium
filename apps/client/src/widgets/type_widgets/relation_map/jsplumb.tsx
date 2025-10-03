@@ -1,5 +1,6 @@
 import { jsPlumb, Defaults, jsPlumbInstance } from "jsplumb";
 import { ComponentChildren, RefObject } from "preact";
+import { HTMLProps } from "preact/compat";
 import { useEffect, useRef } from "preact/hooks";
 
 export function JsPlumb({ className, props, children, containerRef: externalContainerRef, apiRef, onInstanceCreated }: {
@@ -35,6 +36,21 @@ export function JsPlumb({ className, props, children, containerRef: externalCont
 
     return (
         <div ref={containerRef} className={className}>
+            {children}
+        </div>
+    )
+}
+
+export function JsPlumbItem({ x, y, children, ...restProps }: {
+    x: number;
+    y: number;
+    children: ComponentChildren;
+} & Pick<HTMLProps<HTMLDivElement>, "className" | "onContextMenu">) {
+    return (
+        <div
+            {...restProps}
+            style={{ left: x, top: y }}
+        >
             {children}
         </div>
     )

@@ -17,7 +17,7 @@ import contextMenu from "../../../menus/context_menu";
 import appContext from "../../../components/app_context";
 import RelationMapApi, { MapData, MapDataNoteEntry } from "./api";
 import setupOverlays, { uniDirectionalOverlays } from "./overlays";
-import { JsPlumb } from "./jsplumb";
+import { JsPlumb, JsPlumbItem } from "./jsplumb";
 
 interface Clipboard {
     noteId: string;
@@ -359,18 +359,14 @@ function NoteBox({ noteId, x, y, mapApiRef }: MapDataNoteEntry & { mapApiRef: Re
     }, [ note ]);
 
     return note && (
-        <div
-            id={noteIdToId(noteId)}
+        <JsPlumbItem
             className={`note-box ${note?.getCssClass()}`}
             onContextMenu={contextMenuHandler}
-            style={{
-                left: x,
-                top: y
-            }}
+            x={x} y={y}
         >
             <NoteLink className="title" title={title} notePath={noteId} noTnLink noContextMenu />
             <div className="endpoint" title={t("relation_map.start_dragging_relations")} />
-        </div>
+        </JsPlumbItem>
     )
 }
 
