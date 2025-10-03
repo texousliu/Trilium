@@ -44,33 +44,39 @@ export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
             };
         },
         onContentChange(content) {
+            let newData: MapData | null = null;
+
             if (content) {
                 try {
                     const data = JSON.parse(content);
                     setData(data);
-                    mapApiRef.current = new RelationMapApi(note, data, (newData, refreshUi) => {
-                        if (refreshUi) {
-                            setData(newData);
-                        }
-                        spacedUpdate.scheduleUpdate();
-                    });
                     return;
                 } catch (e) {
                     console.log("Could not parse content: ", e);
                 }
             }
 
-            setData({
-                notes: [],
-                // it is important to have this exact value here so that initial transform is the same as this
-                // which will guarantee note won't be saved on first conversion to the relation map note type
-                // this keeps the principle that note type change doesn't destroy note content unless user
-                // does some actual change
-                transform: {
-                    x: 0,
-                    y: 0,
-                    scale: 1
+            if (!newData) {
+                newData = {
+                    notes: [],
+                    // it is important to have this exact value here so that initial transform is the same as this
+                    // which will guarantee note won't be saved on first conversion to the relation map note type
+                    // this keeps the principle that note type change doesn't destroy note content unless user
+                    // does some actual change
+                    transform: {
+                        x: 0,
+                        y: 0,
+                        scale: 1
+                    }
+                };
+            }
+
+            setData(newData);
+            mapApiRef.current = new RelationMapApi(note, newData, (newData, refreshUi) => {
+                if (refreshUi) {
+                    setData(newData);
                 }
+                spacedUpdate.scheduleUpdate();
             });
         },
         dataSaved() {
@@ -285,7 +291,7 @@ function useNoteCreation({ ntxId, note, containerRef, mapApiRef }: {
     });
     const onClickHandler = useCallback((e: MouseEvent) => {
         const clipboard = clipboardRef.current;
-        if (clipboard && containerRef.current) {
+        if (clipboard && containerRef.current && mapApiRef.current) {
             const zoom = getZoom(containerRef.current);
             let { x, y } = getMousePosition(e, containerRef.current, zoom);
 
@@ -293,7 +299,7 @@ function useNoteCreation({ ntxId, note, containerRef, mapApiRef }: {
             x -= 80;
             y -= 15;
 
-            mapApiRef.current?.createItem({ noteId: clipboard.noteId, x, y });
+            mapApiRef.current.createItem({ noteId: clipboard.noteId, x, y });
             clipboardRef.current = null;
         }
     }, []);
