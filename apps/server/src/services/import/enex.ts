@@ -3,6 +3,7 @@ import stream from "stream";
 import { Throttle } from "stream-throttle";
 import log from "../log.js";
 import { md5, escapeHtml, fromBase64 } from "../utils.js";
+import date_utils from "../date_utils.js";
 import sql from "../sql.js";
 import noteService from "../notes.js";
 import imageService from "../image.js";
@@ -235,6 +236,8 @@ function importEnex(taskContext: TaskContext<"importNotes">, file: File, parentN
 
     function updateDates(note: BNote, utcDateCreated?: string, utcDateModified?: string) {
         // it's difficult to force custom dateCreated and dateModified to Note entity, so we do it post-creation with SQL
+        const dateCreated = date_utils.formatDateTimeToLocalISO(utcDateCreated);
+        const dateModified = date_utils.formatDateTimeToLocalISO(utcDateModified);
         sql.execute(
             `
                 UPDATE notes
@@ -243,7 +246,7 @@ function importEnex(taskContext: TaskContext<"importNotes">, file: File, parentN
                     dateModified = ?,
                     utcDateModified = ?
                 WHERE noteId = ?`,
-            [utcDateCreated, utcDateCreated, utcDateModified, utcDateModified, note.noteId]
+            [dateCreated, utcDateCreated, dateModified, utcDateModified, note.noteId]
         );
 
         sql.execute(
