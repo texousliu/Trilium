@@ -1,5 +1,5 @@
 import './style.css';
-import { getRepoStargazersCount } from './github-utils.js';
+import { FALLBACK_STARGAZERS_COUNT, getRepoStargazersCount } from './github-utils.js';
 import { Header } from './components/Header.jsx';
 import { Home } from './pages/Home/index.jsx';
 import { LocationProvider, Router, Route, hydrate, prerender as ssr } from 'preact-iso';
@@ -26,7 +26,7 @@ export function App(props: {repoStargazersCount: number}) {
 }
 
 if (typeof window !== 'undefined') {
-	hydrate(<App repoStargazersCount={1000} />, document.getElementById('app')!);
+	hydrate(<App repoStargazersCount={FALLBACK_STARGAZERS_COUNT} />, document.getElementById('app')!);
 }
 
 export async function prerender(data) {

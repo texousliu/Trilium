@@ -1,3 +1,5 @@
+export const FALLBACK_STARGAZERS_COUNT = 31862; // The count as of 2025-10-03
+
 const API_URL = "https://api.github.com/repos/TriliumNext/Trilium";
 
 /** Returns the number of stargazers of the Trilium's GitHub repository. */
@@ -11,5 +13,5 @@ export async function getRepoStargazersCount() {
 		}
 	}
 
-	return 31862; // The count as of 2025-10-03
+	return FALLBACK_STARGAZERS_COUNT;
 }
