@@ -1,5 +1,5 @@
 import type ForceGraph from "force-graph";
-import { Link, Node, NotesAndRelationsData } from "./data";
+import { NoteMapLinkObject, NoteMapNodeObject, NotesAndRelationsData } from "./data";
 import { LinkObject, NodeObject } from "force-graph";
 import { generateColorFromString, MapType, NoteMapWidgetMode } from "./utils";
 import { escapeHtml } from "../../services/utils";
@@ -22,14 +22,14 @@ interface RenderData {
     mapType: MapType;
 }
 
-export function setupRendering(graph: ForceGraph, { note, noteId, themeStyle, widgetMode, noteIdToSizeMap, notesAndRelations, cssData, mapType }: RenderData) {
+export function setupRendering(graph: ForceGraph<NoteMapNodeObject, NoteMapLinkObject>, { note, noteId, themeStyle, widgetMode, noteIdToSizeMap, notesAndRelations, cssData, mapType }: RenderData) {
     // variables for the hover effect. We have to save the neighbours of a hovered node in a set. Also we need to save the links as well as the hovered node itself
     const neighbours = new Set();
     const highlightLinks = new Set();
     let hoverNode: NodeObject | null = null;
     let zoomLevel: number;
 
-    function getColorForNode(node: Node) {
+    function getColorForNode(node: NoteMapNodeObject) {
         if (node.color) {
             return node.color;
         } else if (widgetMode === "ribbon" && node.id === noteId) {
@@ -39,7 +39,7 @@ export function setupRendering(graph: ForceGraph, { note, noteId, themeStyle, wi
         }
     }
 
-    function paintNode(node: Node, color: string, ctx: CanvasRenderingContext2D) {
+    function paintNode(node: NoteMapNodeObject, color: string, ctx: CanvasRenderingContext2D) {
         const { x, y } = node;
         if (!x || !y) {
             return;
@@ -72,7 +72,7 @@ export function setupRendering(graph: ForceGraph, { note, noteId, themeStyle, wi
     }
 
 
-    function paintLink(link: Link, ctx: CanvasRenderingContext2D) {
+    function paintLink(link: NoteMapLinkObject, ctx: CanvasRenderingContext2D) {
         if (zoomLevel < 5) {
             return;
         }
@@ -117,16 +117,17 @@ export function setupRendering(graph: ForceGraph, { note, noteId, themeStyle, wi
         .d3VelocityDecay(0.08)
         .maxZoom(7)
         .warmupTicks(30)
-        .nodeCanvasObject((_node, ctx) => {
-            const node: Node = _node as Node;
+        .nodeCanvasObject((node, ctx) => {
             if (hoverNode == node) {
                 //paint only hovered node
                 paintNode(node, "#661822", ctx);
                 neighbours.clear(); //clearing neighbours or the effect would be maintained after hovering is over
-                for (const _link of notesAndRelations.links) {
-                    const link = _link as unknown as Link;
+                for (const link of notesAndRelations.links) {
+                    const { source, target } = link;
+                    if (typeof source !== "object" || typeof target !== "object") continue;
+
                     //check if node is part of a link in the canvas, if so add it´s neighbours and related links to the previous defined variables to paint the nodes
-                    if (link.source.id == node.id || link.target.id == node.id) {
+                    if (source.id == node.id || target.id == node.id) {
                         neighbours.add(link.source);
                         neighbours.add(link.target);
                         highlightLinks.add(link);
@@ -145,7 +146,7 @@ export function setupRendering(graph: ForceGraph, { note, noteId, themeStyle, wi
             hoverNode = node || null;
             highlightLinks.clear();
         })
-        .nodePointerAreaPaint((node, _, ctx) => paintNode(node as Node, getColorForNode(node as Node), ctx))
+        .nodePointerAreaPaint((node, _, ctx) => paintNode(node, getColorForNode(node), ctx))
         .nodePointerAreaPaint((node, color, ctx) => {
             if (!node.id) {
                 return;
@@ -158,7 +159,7 @@ export function setupRendering(graph: ForceGraph, { note, noteId, themeStyle, wi
             }
             ctx.fill();
         })
-        .nodeLabel((node) => escapeHtml((node as Node).name))
+        .nodeLabel((node) => escapeHtml(node.name))
         .onZoom((zoom) => zoomLevel = zoom.k);
 
     // set link width to immitate a highlight effect. Checking the condition if any links are saved in the previous defined set highlightlinks
@@ -171,8 +172,12 @@ export function setupRendering(graph: ForceGraph, { note, noteId, themeStyle, wi
     // Link-specific config
     if (mapType) {
         graph
-            .linkLabel((l) => `${escapeHtml((l as Link).source.name)} - <strong>${escapeHtml((l as Link).name)}</strong> - ${escapeHtml((l as Link).target.name)}`)
-            .linkCanvasObject((link, ctx) => paintLink(link as Link, ctx))
+            .linkLabel((link) => {
+                const { source, target } = link;
+                if (typeof source !== "object" || typeof target !== "object") return escapeHtml(link.name);
+                return `${escapeHtml(source.name)} - <strong>${escapeHtml(link.name)}</strong> - ${escapeHtml(target.name)}`;
+            })
+            .linkCanvasObject((link, ctx) => paintLink(link, ctx))
             .linkCanvasObjectMode(() => "after");
     }
 

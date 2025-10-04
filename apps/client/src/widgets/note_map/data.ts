@@ -11,28 +11,26 @@ interface GroupedLink {
     names: string[];
 }
 
-export interface Node extends NodeObject {
+export interface NoteMapNodeObject extends NodeObject {
     id: string;
     name: string;
     type: string;
     color: string;
 }
 
-export interface Link extends LinkObject<NodeObject> {
+export interface NoteMapLinkObject extends LinkObject<NoteMapNodeObject> {
     id: string;
     name: string;
-    x: number;
-    y: number;
-    source: Node;
-    target: Node;
+    x?: number;
+    y?: number;
 }
 
 export interface NotesAndRelationsData {
-    nodes: Node[];
+    nodes: NoteMapNodeObject[];
     links: {
         id: string;
-        source: string;
-        target: string;
+        source: string | NoteMapNodeObject;
+        target: string | NoteMapNodeObject;
         name: string;
     }[];
     noteIdToSizeMap: Record<string, number>;

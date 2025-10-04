@@ -3,9 +3,9 @@ import "./NoteMap.css";
 import { getThemeStyle, MapType, NoteMapWidgetMode, rgb2hex } from "./utils";
 import { RefObject } from "preact";
 import FNote from "../../entities/fnote";
-import { useElementSize, useNoteContext, useNoteLabel } from "../react/hooks";
-import ForceGraph, { LinkObject, NodeObject } from "force-graph";
-import { loadNotesAndRelations, Node, NotesAndRelationsData } from "./data";
+import { useElementSize, useNoteLabel } from "../react/hooks";
+import ForceGraph from "force-graph";
+import { loadNotesAndRelations, NoteMapLinkObject, NoteMapNodeObject, NotesAndRelationsData } from "./data";
 import { CssData, setupRendering } from "./rendering";
 import ActionButton from "../react/ActionButton";
 import { t } from "../../services/i18n";
@@ -27,7 +27,7 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
     const [ mapRootIdLabel ] = useNoteLabel(note, "mapRootNoteId");
     const mapType: MapType = mapTypeRaw === "tree" ? "tree" : "link";
 
-    const graphRef = useRef<ForceGraph<NodeObject, LinkObject<NodeObject>>>();
+    const graphRef = useRef<ForceGraph<NoteMapNodeObject, NoteMapLinkObject>>();
     const containerSize = useElementSize(parentRef);
     const [ fixNodes, setFixNodes ] = useState(false);
     const [ linkDistance, setLinkDistance ] = useState(40);
@@ -49,7 +49,7 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
     useEffect(() => {
         const container = containerRef.current;
         if (!container || !mapRootId) return;
-        const graph = new ForceGraph(container);
+        const graph = new ForceGraph<NoteMapNodeObject, NoteMapLinkObject>(container);
 
         graphRef.current = graph;
 
@@ -76,11 +76,11 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
             graph
                 .onNodeClick((node) => {
                     if (!node.id) return;
-                    appContext.tabManager.getActiveContext()?.setNote((node as Node).id);
+                    appContext.tabManager.getActiveContext()?.setNote(node.id);
                 })
                 .onNodeRightClick((node, e) => {
                     if (!node.id) return;
-                    link_context_menu.openContextMenu((node as Node).id, e);
+                    link_context_menu.openContextMenu(node.id, e);
                 });
 
             // Set data
