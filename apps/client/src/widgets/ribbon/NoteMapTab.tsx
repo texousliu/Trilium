@@ -7,7 +7,7 @@ import NoteMap from "../note_map/NoteMap";
 
 const SMALL_SIZE_HEIGHT = "300px";
 
-export default function NoteMapTab({ noteContext }: TabContext) {
+export default function NoteMapTab({ note }: TabContext) {
     const [ isExpanded, setExpanded ] = useState(false);
     const [ height, setHeight ] = useState(SMALL_SIZE_HEIGHT);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -26,7 +26,7 @@ export default function NoteMapTab({ noteContext }: TabContext) {
 
     return (
         <div className="note-map-ribbon-widget" style={{ height }} ref={containerRef}>
-            <NoteMap />
+            {note && <NoteMap note={note} widgetMode="ribbon" />}
 
             {!isExpanded ? (
                 <ActionButton

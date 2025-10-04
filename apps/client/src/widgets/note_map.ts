@@ -30,15 +30,7 @@ const TPL = /*html*/`<div class="note-map-widget">
 </div>`;
 
 type WidgetMode = "type" | "ribbon";
-type MapType = "tree" | "link";
 type Data = GraphData<NodeObject, LinkObject<NodeObject>>;
-
-interface Node extends NodeObject {
-    id: string;
-    name: string;
-    type: string;
-    color: string;
-}
 
 interface Link extends LinkObject<NodeObject> {
     id: string;
@@ -50,43 +42,10 @@ interface Link extends LinkObject<NodeObject> {
     target: Node;
 }
 
-interface NotesAndRelationsData {
-    nodes: Node[];
-    links: {
-        id: string;
-        source: string;
-        target: string;
-        name: string;
-    }[];
-}
-
-// Replace
-interface ResponseLink {
-    key: string;
-    sourceNoteId: string;
-    targetNoteId: string;
-    name: string;
-}
-
-interface PostNotesMapResponse {
-    notes: string[];
-    links: ResponseLink[];
-    noteIdToDescendantCountMap: Record<string, number>;
-}
-
-interface GroupedLink {
-    id: string;
-    sourceNoteId: string;
-    targetNoteId: string;
-    names: string[];
-}
-
 export default class NoteMapWidget extends NoteContextAwareWidget {
 
     private fixNodes: boolean;
     private widgetMode: WidgetMode;
-    private mapType?: MapType;
-    private cssData!: CssData;
 
     private themeStyle!: string;
     private $container!: JQuery<HTMLElement>;
@@ -147,8 +106,6 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
     async refreshWithNote(note: FNote) {
         this.$widget.show();
 
-        this.mapType = note.getLabelValue("mapType") === "tree" ? "tree" : "link";
-
         //variables for the hover effekt. We have to save the neighbours of a hovered node in a set. Also we need to save the links as well as the hovered node itself
 
         let hoverNode: NodeObject | null = null;
@@ -157,8 +114,6 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
 
         const ForceGraph = (await import("force-graph")).default;
         this.graph = new ForceGraph(this.$container[0])
-            .width(this.$container.width() || 0)
-            .height(this.$container.height() || 0)
             .onZoom((zoom) => this.setZoomLevel(zoom.k))
             .d3AlphaDecay(0.01)
             .d3VelocityDecay(0.08)
@@ -244,15 +199,6 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
                 .linkCanvasObjectMode(() => "after");
         }
 
-        const mapRootNoteId = this.getMapRootNoteId();
-
-        const labelValues = (name: string) => this.note?.getLabels(name).map(l => l.value) ?? [];
-
-        const excludeRelations = labelValues("mapExcludeRelation");
-        const includeRelations = labelValues("mapIncludeRelation");
-
-        const data = await this.loadNotesAndRelations(mapRootNoteId, excludeRelations, includeRelations);
-
         const nodeLinkRatio = data.nodes.length / data.links.length;
         const magnifiedRatio = Math.pow(nodeLinkRatio, 1.5);
         const charge = -20 / magnifiedRatio;
@@ -271,22 +217,6 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
         this.graph.d3Force("charge")?.distanceMax(1000);
 
         this.renderData(data);
-    }
-
-    getMapRootNoteId(): string {
-        if (this.noteId && this.widgetMode === "ribbon") {
-            return this.noteId;
-        }
-
-        let mapRootNoteId = this.note?.getLabelValue("mapRootNoteId");
-
-        if (mapRootNoteId === "hoisted") {
-            mapRootNoteId = hoistedNoteService.getHoistedNoteId();
-        } else if (!mapRootNoteId) {
-            mapRootNoteId = appContext.tabManager.getActiveContext()?.parentNoteId;
-        }
-
-        return mapRootNoteId ?? "";
     }
 
     getColorForNode(node: Node) {
@@ -393,91 +323,7 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
         ctx.restore();
     }
 
-    async loadNotesAndRelations(mapRootNoteId: string, excludeRelations: string[], includeRelations: string[]): Promise<NotesAndRelationsData> {
-        const resp = await server.post<PostNotesMapResponse>(`note-map/${mapRootNoteId}/${this.mapType}`, {
-            excludeRelations, includeRelations
-        });
-
-        this.calculateNodeSizes(resp);
-
-        const links = this.getGroupedLinks(resp.links);
-
-        this.nodes = resp.notes.map(([noteId, title, type, color]) => ({
-            id: noteId,
-            name: title,
-            type: type,
-            color: color
-        }));
-
-        return {
-            nodes: this.nodes,
-            links: links.map((link) => ({
-                id: `${link.sourceNoteId}-${link.targetNoteId}`,
-                source: link.sourceNoteId,
-                target: link.targetNoteId,
-                name: link.names.join(", ")
-            }))
-        };
-    }
-
-    getGroupedLinks(links: ResponseLink[]): GroupedLink[] {
-        const linksGroupedBySourceTarget: Record<string, GroupedLink> = {};
-
-        for (const link of links) {
-            const key = `${link.sourceNoteId}-${link.targetNoteId}`;
-
-            if (key in linksGroupedBySourceTarget) {
-                if (!linksGroupedBySourceTarget[key].names.includes(link.name)) {
-                    linksGroupedBySourceTarget[key].names.push(link.name);
-                }
-            } else {
-                linksGroupedBySourceTarget[key] = {
-                    id: key,
-                    sourceNoteId: link.sourceNoteId,
-                    targetNoteId: link.targetNoteId,
-                    names: [link.name]
-                };
-            }
-        }
-
-        return Object.values(linksGroupedBySourceTarget);
-    }
-
-    calculateNodeSizes(resp: PostNotesMapResponse) {
-        this.noteIdToSizeMap = {};
-
-        if (this.mapType === "tree") {
-            const { noteIdToDescendantCountMap } = resp;
-
-            for (const noteId in noteIdToDescendantCountMap) {
-                this.noteIdToSizeMap[noteId] = 4;
-
-                const count = noteIdToDescendantCountMap[noteId];
-
-                if (count > 0) {
-                    this.noteIdToSizeMap[noteId] += 1 + Math.round(Math.log(count) / Math.log(1.5));
-                }
-            }
-        } else if (this.mapType === "link") {
-            const noteIdToLinkCount: Record<string, number> = {};
-
-            for (const link of resp.links) {
-                noteIdToLinkCount[link.targetNoteId] = 1 + (noteIdToLinkCount[link.targetNoteId] || 0);
-            }
-
-            for (const [noteId] of resp.notes) {
-                this.noteIdToSizeMap[noteId] = 4;
-
-                if (noteId in noteIdToLinkCount) {
-                    this.noteIdToSizeMap[noteId] += Math.min(Math.pow(noteIdToLinkCount[noteId], 0.5), 15);
-                }
-            }
-        }
-    }
-
     renderData(data: Data) {
-        this.graph.graphData(data);
-
         if (this.widgetMode === "ribbon" && this.note?.type !== "search") {
             setTimeout(() => {
                 this.setDimensions();

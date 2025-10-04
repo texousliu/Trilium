@@ -42,6 +42,7 @@ type Labels = {
     // Note-type specific
     webViewSrc: string;
     readOnly: boolean;
+    mapType: string;
 }
 
 /**
