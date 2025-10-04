@@ -11,24 +11,18 @@ import dialog from "../../../services/dialog";
 import server from "../../../services/server";
 import toast from "../../../services/toast";
 import { CreateChildrenResponse, RelationMapPostResponse, RelationMapRelation } from "@triliumnext/commons";
-import RelationMapApi, { MapData, MapDataNoteEntry } from "./api";
+import RelationMapApi, { ClientRelation, MapData, MapDataNoteEntry } from "./api";
 import setupOverlays, { uniDirectionalOverlays } from "./overlays";
 import { JsPlumb } from "./jsplumb";
 import { getMousePosition, getZoom, idToNoteId, noteIdToId } from "./utils";
 import { NoteBox } from "./NoteBox";
 import utils from "../../../services/utils";
 import attribute_autocomplete from "../../../services/attribute_autocomplete";
+import { buildRelationContextMenuHandler } from "./context_menu";
 
 interface Clipboard {
     noteId: string;
     title: string;
-}
-
-type RelationType = "uniDirectional" | "biDirectional" | "inverse";
-
-interface ClientRelation extends RelationMapRelation {
-    type: RelationType;
-    render: boolean;
 }
 
 export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
@@ -222,6 +216,7 @@ async function useRelationData(noteId: string, mapData: MapData | undefined, map
         }
 
         setRelations(relations);
+        mapApiRef.current?.loadRelations(relations);
         mapApiRef.current?.cleanupOtherNotes(Object.keys(data.noteTitles));
     }
 
@@ -312,10 +307,15 @@ function useNoteCreation({ ntxId, note, containerRef, mapApiRef }: {
 
 function useRelationCreation({ mapApiRef, jsPlumbApiRef }: { mapApiRef: RefObject<RelationMapApi>, jsPlumbApiRef: RefObject<jsPlumbInstance> }) {
     const connectionCallback = useCallback(async (info: OnConnectionBindInfo, originalEvent: Event) => {
+        const connection = info.connection;
+
+        // Called whenever a connection is created, either initially or manually when added by the user.
+        const handler = buildRelationContextMenuHandler(connection, mapApiRef);
+        connection.bind("contextmenu", handler);
+
         // if there's no event, then this has been triggered programmatically
         if (!originalEvent || !mapApiRef.current) return;
 
-        const connection = info.connection;
         let name = await dialog.prompt({
             message: t("relation_map.specify_new_relation_name"),
             shown: ({ $answer }) => {

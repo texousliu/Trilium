@@ -1,7 +1,9 @@
+import { Connection } from "jsplumb";
 import FNote from "../../../entities/fnote";
 import { t } from "../../../services/i18n";
 import server from "../../../services/server";
 import utils from "../../../services/utils";
+import { RelationMapRelation } from "@triliumnext/commons";
 
 export interface MapDataNoteEntry {
     noteId: string;
@@ -14,17 +16,29 @@ export interface MapData {
     transform: PanZoomTransform;
 }
 
+export type RelationType = "uniDirectional" | "biDirectional" | "inverse";
+
+export interface ClientRelation extends RelationMapRelation {
+    type: RelationType;
+    render: boolean;
+}
+
 const DELTA = 0.0001;
 
 export default class RelationMapApi {
 
     private data: MapData;
-    private relations: any[];
+    private relations: ClientRelation[];
     private onDataChange: (refreshUi: boolean) => void;
 
     constructor(note: FNote, initialMapData: MapData, onDataChange: (newData: MapData, refreshUi: boolean) => void) {
         this.data = initialMapData;
         this.onDataChange = (refreshUi) => onDataChange({ ...this.data }, refreshUi);
+        this.relations = [];
+    }
+
+    loadRelations(relations: ClientRelation[]) {
+        this.relations = relations;
     }
 
     createItem(newNote: MapDataNoteEntry) {
@@ -45,6 +59,16 @@ export default class RelationMapApi {
 
         if (this.relations) {
             this.relations = this.relations.filter((relation) => relation.sourceNoteId !== noteId && relation.targetNoteId !== noteId);
+        }
+
+        this.onDataChange(true);
+    }
+
+    async removeRelation(connection: Connection) {
+        const relation = this.relations.find((rel) => rel.attributeId === connection.id);
+
+        if (relation) {
+            await server.remove(`notes/${relation.sourceNoteId}/relations/${relation.name}/to/${relation.targetNoteId}`);
         }
 
         this.onDataChange(true);

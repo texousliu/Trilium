@@ -118,43 +118,6 @@ export default class RelationMapTypeWidget extends TypeWidget {
         }
     }
 
-    async connectionCreatedHandler(info: ConnectionMadeEventInfo, originalEvent: Event) {
-
-        connection.bind("contextmenu", (obj: unknown, event: MouseEvent) => {
-            if (connection.getType().includes("link")) {
-                // don't create context menu if it's a link since there's nothing to do with link from relation map
-                // (don't open browser menu either)
-                event.preventDefault();
-            } else {
-                event.preventDefault();
-                event.stopPropagation();
-
-                contextMenu.show({
-                    x: event.pageX,
-                    y: event.pageY,
-                    items: [{ title: t("relation_map.remove_relation"), command: "remove", uiIcon: "bx bx-trash" }],
-                    selectMenuItemHandler: async ({ command }) => {
-                        if (command === "remove") {
-                            if (!(await dialogService.confirm(t("relation_map.confirm_remove_relation"))) || !this.relations) {
-                                return;
-                            }
-
-                            const relation = this.relations.find((rel) => rel.attributeId === connection.id);
-
-                            if (relation) {
-                                await server.remove(`notes/${relation.sourceNoteId}/relations/${relation.name}/to/${relation.targetNoteId}`);
-                            }
-
-                            this.jsPlumbInstance?.deleteConnection(connection);
-
-                            this.relations = this.relations.filter((relation) => relation.attributeId !== connection.id);
-                        }
-                    }
-                });
-            }
-        });
-    }
-
     saveData() {
         this.spacedUpdate.scheduleUpdate();
     }
