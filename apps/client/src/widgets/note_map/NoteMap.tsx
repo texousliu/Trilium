@@ -11,6 +11,7 @@ import ActionButton from "../react/ActionButton";
 import { t } from "../../services/i18n";
 import link_context_menu from "../../menus/link_context_menu";
 import appContext from "../../components/app_context";
+import Slider from "../react/Slider";
 
 interface NoteMapProps {
     note: FNote;
@@ -27,6 +28,8 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
     const graphRef = useRef<ForceGraph<NodeObject, LinkObject<NodeObject>>>();
     const containerSize = useElementSize(parentRef);
     const [ fixNodes, setFixNodes ] = useState(false);
+    const [ linkDistance, setLinkDistance ] = useState(40);
+    const notesAndRelationsRef = useRef<NotesAndRelationsData>();
 
     // Build the note graph instance.
     useEffect(() => {
@@ -71,10 +74,17 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
 
             // Set data
             graph.graphData(notesAndRelations);
+            notesAndRelationsRef.current = notesAndRelations;
         });
 
         return () => container.replaceChildren();
     }, [ note, mapType ]);
+
+    useEffect(() => {
+        if (!graphRef.current || !notesAndRelationsRef.current) return;
+        graphRef.current.d3Force("link")?.distance(linkDistance);
+        graphRef.current.graphData(notesAndRelationsRef.current);
+    }, [ linkDistance ]);
 
     // React to container size
     useEffect(() => {
@@ -109,6 +119,12 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
                     className={fixNodes ? "active" : ""}
                     onClick={() => setFixNodes(!fixNodes)}
                     frame
+                />
+
+                <Slider
+                    min={1} max={100}
+                    value={linkDistance} onChange={setLinkDistance}
+                    title={t("note_map.link-distance")}
                 />
             </div>
 
