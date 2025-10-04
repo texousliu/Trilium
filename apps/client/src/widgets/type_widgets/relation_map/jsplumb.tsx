@@ -45,11 +45,13 @@ export function JsPlumb({ className, props, children, containerRef: externalCont
     )
 }
 
-export function JsPlumbItem({ x, y, children, draggable, ...restProps }: {
+export function JsPlumbItem({ x, y, children, draggable, sourceConfig, targetConfig, ...restProps }: {
     x: number;
     y: number;
     children: ComponentChildren;
     draggable?: DragOptions;
+    sourceConfig?: object;
+    targetConfig?: object;
 } & Pick<HTMLProps<HTMLDivElement>, "id" | "className" | "onContextMenu">) {
     const containerRef = useRef<HTMLDivElement>(null);
     const apiRef = useContext(JsPlumbInstance);
@@ -58,6 +60,16 @@ export function JsPlumbItem({ x, y, children, draggable, ...restProps }: {
         if (!draggable || !apiRef?.current || !containerRef.current) return;
         apiRef.current.draggable(containerRef.current, draggable);
     }, [ draggable ]);
+
+    useEffect(() => {
+        if (!sourceConfig || !apiRef?.current || !containerRef.current) return;
+        apiRef.current.makeSource(containerRef.current, sourceConfig);
+    }, [ sourceConfig ]);
+
+    useEffect(() => {
+        if (!targetConfig || !apiRef?.current || !containerRef.current) return;
+        apiRef.current.makeSource(containerRef.current, targetConfig);
+    }, [ targetConfig ]);
 
     return (
         <div

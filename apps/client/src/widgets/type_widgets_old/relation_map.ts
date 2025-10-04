@@ -214,24 +214,6 @@ export default class RelationMapTypeWidget extends TypeWidget {
         this.spacedUpdate.scheduleUpdate();
     }
 
-    async createNoteBox(noteId: string, title: string, x: number, y: number) {
-        this.jsPlumbInstance.makeSource($noteBox[0], {
-            filter: ".endpoint",
-            anchor: "Continuous",
-            connectorStyle: { stroke: "#000", strokeWidth: 1 },
-            connectionType: "basic",
-            extract: {
-                action: "the-action"
-            }
-        });
-
-        this.jsPlumbInstance.makeTarget($noteBox[0], {
-            dropOptions: { hoverClass: "dragHover" },
-            anchor: "Continuous",
-            allowLoopback: true
-        });
-    }
-
     async dropNoteOntoRelationMapHandler(ev: JQuery.DropEvent) {
         ev.preventDefault();
 

@@ -307,6 +307,22 @@ function useNoteCreation({ ntxId, note, containerRef, mapApiRef }: {
     return onClickHandler;
 }
 
+const NOTE_BOX_SOURCE_CONFIG = {
+    filter: ".endpoint",
+    anchor: "Continuous",
+    connectorStyle: { stroke: "#000", strokeWidth: 1 },
+    connectionType: "basic",
+    extract: {
+        action: "the-action"
+    }
+};
+
+const NOTE_BOX_TARGET_CONFIG = {
+    dropOptions: { hoverClass: "dragHover" },
+    anchor: "Continuous",
+    allowLoopback: true
+};
+
 function NoteBox({ noteId, x, y, mapApiRef }: MapDataNoteEntry & { mapApiRef: RefObject<RelationMapApi> }) {
     const [ note, setNote ] = useState<FNote | null>();
     const title = useNoteProperty(note, "title");
@@ -373,6 +389,8 @@ function NoteBox({ noteId, x, y, mapApiRef }: MapDataNoteEntry & { mapApiRef: Re
                     mapApiRef.current?.moveNote(noteId, x, y);
                 },
             }}
+            sourceConfig={NOTE_BOX_SOURCE_CONFIG}
+            targetConfig={NOTE_BOX_TARGET_CONFIG}
         >
             <NoteLink className="title" title={title} notePath={noteId} noTnLink noContextMenu />
             <div className="endpoint" title={t("relation_map.start_dragging_relations")} />
