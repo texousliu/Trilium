@@ -1,7 +1,8 @@
 import type ForceGraph from "force-graph";
 import { Link, Node, NotesAndRelationsData } from "./data";
 import { NodeObject } from "force-graph";
-import { getColorForNode, NoteMapWidgetMode } from "./utils";
+import { getColorForNode, MapType, NoteMapWidgetMode } from "./utils";
+import { escapeHtml } from "../../services/utils";
 
 export interface CssData {
     fontFamily: string;
@@ -16,9 +17,10 @@ interface RenderData {
     themeStyle: "light" | "dark";
     widgetMode: NoteMapWidgetMode;
     notesAndRelations: NotesAndRelationsData;
+    mapType: MapType;
 }
 
-export function setupRendering(graph: ForceGraph, { noteId, themeStyle, widgetMode, noteIdToSizeMap, notesAndRelations, cssData }: RenderData) {
+export function setupRendering(graph: ForceGraph, { noteId, themeStyle, widgetMode, noteIdToSizeMap, notesAndRelations, cssData, mapType }: RenderData) {
     // variables for the hover effect. We have to save the neighbours of a hovered node in a set. Also we need to save the links as well as the hovered node itself
     const neighbours = new Set();
     const highlightLinks = new Set();
@@ -57,6 +59,46 @@ export function setupRendering(graph: ForceGraph, { noteId, themeStyle, widgetMo
         ctx.fillText(title, x, y + Math.round(size * 1.5));
     }
 
+
+    function paintLink(link: Link, ctx: CanvasRenderingContext2D) {
+        if (zoomLevel < 5) {
+            return;
+        }
+
+        ctx.font = `3px ${cssData.fontFamily}`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = cssData.mutedTextColor;
+
+        const { source, target } = link;
+        if (typeof source !== "object" || typeof target !== "object") {
+            return;
+        }
+
+        if (source.x && source.y && target.x && target.y) {
+            const x = (source.x + target.x) / 2;
+            const y = (source.y + target.y) / 2;
+            ctx.save();
+            ctx.translate(x, y);
+
+            const deltaY = source.y - target.y;
+            const deltaX = source.x - target.x;
+
+            let angle = Math.atan2(deltaY, deltaX);
+            let moveY = 2;
+
+            if (angle < -Math.PI / 2 || angle > Math.PI / 2) {
+                angle += Math.PI;
+                moveY = -2;
+            }
+
+            ctx.rotate(angle);
+            ctx.fillText(link.name, 0, moveY);
+        }
+
+        ctx.restore();
+    }
+
     // main code for highlighting hovered nodes and neighbours. here we "style" the nodes. the nodes are rendered several hundred times per second.
     graph
         .d3AlphaDecay(0.01)
@@ -92,5 +134,13 @@ export function setupRendering(graph: ForceGraph, { noteId, themeStyle, widgetMo
             highlightLinks.clear();
         })
         .onZoom((zoom) => zoomLevel = zoom.k);
+
+    // Link-specific config
+    if (mapType) {
+        graph
+            .linkLabel((l) => `${escapeHtml((l as Link).source.name)} - <strong>${escapeHtml((l as Link).name)}</strong> - ${escapeHtml((l as Link).target.name)}`)
+            .linkCanvasObject((link, ctx) => paintLink(link as Link, ctx))
+            .linkCanvasObjectMode(() => "after");
+    }
 }
 

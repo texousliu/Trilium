@@ -4,6 +4,7 @@ import hoisted_note from "../../services/hoisted_note";
 import { Node } from "./data";
 
 export type NoteMapWidgetMode = "ribbon" | "hoisted";
+export type MapType = "tree" | "link";
 
 export function rgb2hex(rgb: string) {
     return `#${(rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/) || [])

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import "./NoteMap.css";
-import { getMapRootNoteId, getThemeStyle, NoteMapWidgetMode, rgb2hex } from "./utils";
+import { getMapRootNoteId, getThemeStyle, MapType, NoteMapWidgetMode, rgb2hex } from "./utils";
 import { RefObject } from "preact";
 import FNote from "../../entities/fnote";
 import { useElementSize, useNoteContext, useNoteLabel } from "../react/hooks";
@@ -15,8 +15,6 @@ interface NoteMapProps {
     widgetMode: NoteMapWidgetMode;
     parentRef: RefObject<HTMLElement>;
 }
-
-type MapType = "tree" | "link";
 
 export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -50,7 +48,8 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
                 noteIdToSizeMap: notesAndRelations.noteIdToSizeMap,
                 notesAndRelations,
                 themeStyle: getThemeStyle(),
-                widgetMode
+                widgetMode,
+                mapType
             });
             graph.graphData(notesAndRelations);
         });

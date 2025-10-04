@@ -34,14 +34,10 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
     private fixNodes: boolean;
     private widgetMode: WidgetMode;
 
-    private themeStyle!: string;
     private $container!: JQuery<HTMLElement>;
-    private $styleResolver!: JQuery<HTMLElement>;
     private $fixNodesButton!: JQuery<HTMLElement>;
     graph!: ForceGraph;
     private noteIdToSizeMap!: Record<string, number>;
-    private zoomLevel!: number;
-    private nodes!: Node[];
 
     constructor(widgetMode: WidgetMode) {
         super();
@@ -117,13 +113,6 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
                 }
             });
 
-        if (this.mapType === "link") {
-            this.graph
-                .linkLabel((l) => `${esc((l as Link).source.name)} - <strong>${esc((l as Link).name)}</strong> - ${esc((l as Link).target.name)}`)
-                .linkCanvasObject((link, ctx) => this.paintLink(link as Link, ctx))
-                .linkCanvasObjectMode(() => "after");
-        }
-
         const nodeLinkRatio = data.nodes.length / data.links.length;
         const magnifiedRatio = Math.pow(nodeLinkRatio, 1.5);
         const charge = -20 / magnifiedRatio;
@@ -146,45 +135,6 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
 
     setZoomLevel(level: number) {
         this.zoomLevel = level;
-    }
-
-    paintLink(link: Link, ctx: CanvasRenderingContext2D) {
-        if (this.zoomLevel < 5) {
-            return;
-        }
-
-        ctx.font = `3px ${this.cssData.fontFamily}`;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = this.cssData.mutedTextColor;
-
-        const { source, target } = link;
-        if (typeof source !== "object" || typeof target !== "object") {
-            return;
-        }
-
-        if (source.x && source.y && target.x && target.y) {
-            const x = (source.x + target.x) / 2;
-            const y = (source.y + target.y) / 2;
-            ctx.save();
-            ctx.translate(x, y);
-
-            const deltaY = source.y - target.y;
-            const deltaX = source.x - target.x;
-
-            let angle = Math.atan2(deltaY, deltaX);
-            let moveY = 2;
-
-            if (angle < -Math.PI / 2 || angle > Math.PI / 2) {
-                angle += Math.PI;
-                moveY = -2;
-            }
-
-            ctx.rotate(angle);
-            ctx.fillText(link.name, 0, moveY);
-        }
-
-        ctx.restore();
     }
 
     renderData(data: Data) {
