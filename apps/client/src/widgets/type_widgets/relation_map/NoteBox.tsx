@@ -1,17 +1,14 @@
-import { useCallback, useEffect, useState } from "preact/hooks";
+import { useEffect, useMemo, useState } from "preact/hooks";
 import { useNoteProperty } from "../../react/hooks";
 import froca from "../../../services/froca";
-import contextMenu from "../../../menus/context_menu";
 import { t } from "../../../services/i18n";
-import appContext from "../../../components/app_context";
-import dialog from "../../../services/dialog";
-import server from "../../../services/server";
 import { JsPlumbItem } from "./jsplumb";
 import FNote from "../../../entities/fnote";
 import RelationMapApi, { MapDataNoteEntry } from "./api";
 import { RefObject } from "preact";
 import NoteLink from "../../react/NoteLink";
 import { idToNoteId, noteIdToId } from "./utils";
+import { buildNoteContextMenuHandler } from "./context_menu";
 
 const NOTE_BOX_SOURCE_CONFIG = {
     filter: ".endpoint",
@@ -40,48 +37,8 @@ export function NoteBox({ noteId, x, y, mapApiRef }: NoteBoxProps) {
         froca.getNote(noteId).then(setNote);
     }, [ noteId ]);
 
-    const contextMenuHandler = useCallback((e: MouseEvent) => {
-        e.preventDefault();
-        contextMenu.show({
-            x: e.pageX,
-            y: e.pageY,
-            items: [
-                {
-                    title: t("relation_map.open_in_new_tab"),
-                    uiIcon: "bx bx-empty",
-                    handler: () => appContext.tabManager.openTabWithNoteWithHoisting(noteId)
-                },
-                {
-                    title: t("relation_map.remove_note"),
-                    uiIcon: "bx bx-trash",
-                    handler: async () => {
-                        if (!note) return;
-                        const result = await dialog.confirmDeleteNoteBoxWithNote(note.title);
-                        if (typeof result !== "object" || !result.confirmed) return;
-
-                        mapApiRef.current?.removeItem(noteId, result.isDeleteNoteChecked);
-                    }
-                },
-                {
-                    title: t("relation_map.edit_title"),
-                    uiIcon: "bx bx-pencil",
-                    handler: async () => {
-                        const title = await dialog.prompt({
-                            title: t("relation_map.rename_note"),
-                            message: t("relation_map.enter_new_title"),
-                            defaultValue: note?.title,
-                        });
-
-                        if (!title) {
-                            return;
-                        }
-
-                        await server.put(`notes/${noteId}/title`, { title });
-                    }
-                }
-            ],
-            selectMenuItemHandler() {}
-        })
+    const contextMenuHandler = useMemo(() => {
+        return buildNoteContextMenuHandler(note, mapApiRef);
     }, [ note ]);
 
     return note && (
