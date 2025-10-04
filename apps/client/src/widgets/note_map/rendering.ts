@@ -176,6 +176,15 @@ export function setupRendering(graph: ForceGraph, { note, noteId, themeStyle, wi
             .linkCanvasObjectMode(() => "after");
     }
 
+    // Forces
+    const nodeLinkRatio = notesAndRelations.nodes.length / notesAndRelations.links.length;
+    const magnifiedRatio = Math.pow(nodeLinkRatio, 1.5);
+    const charge = -20 / magnifiedRatio;
+    const boundedCharge = Math.min(-3, charge);
+    graph.d3Force("center")?.strength(0.2);
+    graph.d3Force("charge")?.strength(boundedCharge);
+    graph.d3Force("charge")?.distanceMax(1000);
+
     // Zoom to notes
     if (widgetMode === "ribbon" && note?.type !== "search") {
         setTimeout(() => {
