@@ -11,7 +11,7 @@ import dialog from "../../../services/dialog";
 import server from "../../../services/server";
 import toast from "../../../services/toast";
 import { CreateChildrenResponse, RelationMapPostResponse, RelationMapRelation } from "@triliumnext/commons";
-import RelationMapApi, { ClientRelation, MapData, MapDataNoteEntry } from "./api";
+import RelationMapApi, { ClientRelation, MapData, MapDataNoteEntry, RelationType } from "./api";
 import setupOverlays, { uniDirectionalOverlays } from "./overlays";
 import { JsPlumb } from "./jsplumb";
 import { getMousePosition, getZoom, idToNoteId, noteIdToId } from "./utils";
@@ -24,6 +24,23 @@ import { HTMLProps } from "preact/compat";
 interface Clipboard {
     noteId: string;
     title: string;
+}
+
+declare module "jsplumb" {
+
+    interface Connection {
+        canvas: HTMLCanvasElement;
+        getType(): string;
+        bind(event: string, callback: (obj: unknown, event: MouseEvent) => void): void;
+    }
+
+    interface Overlay {
+        setLabel(label: string): void;
+    }
+
+    interface ConnectParams {
+        type: RelationType;
+    }
 }
 
 export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
