@@ -48,9 +48,10 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
 
             // Configure rendering properties.
             setupRendering(graph, {
-                cssData,
+                note,
                 noteId: note.noteId,
                 noteIdToSizeMap: notesAndRelations.noteIdToSizeMap,
+                cssData,
                 notesAndRelations,
                 themeStyle: getThemeStyle(),
                 widgetMode,

@@ -1,8 +1,9 @@
 import type ForceGraph from "force-graph";
 import { Link, Node, NotesAndRelationsData } from "./data";
-import { NodeObject } from "force-graph";
+import { LinkObject, NodeObject } from "force-graph";
 import { generateColorFromString, MapType, NoteMapWidgetMode } from "./utils";
 import { escapeHtml } from "../../services/utils";
+import FNote from "../../entities/fnote";
 
 export interface CssData {
     fontFamily: string;
@@ -11,6 +12,7 @@ export interface CssData {
 }
 
 interface RenderData {
+    note: FNote;
     noteIdToSizeMap: Record<string, number>;
     cssData: CssData;
     noteId: string;
@@ -20,7 +22,7 @@ interface RenderData {
     mapType: MapType;
 }
 
-export function setupRendering(graph: ForceGraph, { noteId, themeStyle, widgetMode, noteIdToSizeMap, notesAndRelations, cssData, mapType }: RenderData) {
+export function setupRendering(graph: ForceGraph, { note, noteId, themeStyle, widgetMode, noteIdToSizeMap, notesAndRelations, cssData, mapType }: RenderData) {
     // variables for the hover effect. We have to save the neighbours of a hovered node in a set. Also we need to save the links as well as the hovered node itself
     const neighbours = new Set();
     const highlightLinks = new Set();
@@ -173,5 +175,94 @@ export function setupRendering(graph: ForceGraph, { noteId, themeStyle, widgetMo
             .linkCanvasObject((link, ctx) => paintLink(link as Link, ctx))
             .linkCanvasObjectMode(() => "after");
     }
+
+    // Zoom to notes
+    if (widgetMode === "ribbon" && note?.type !== "search") {
+        setTimeout(() => {
+            const subGraphNoteIds = getSubGraphConnectedToCurrentNote(noteId, notesAndRelations);
+
+            graph.zoomToFit(400, 50, (node) => subGraphNoteIds.has(node.id));
+
+            if (subGraphNoteIds.size < 30) {
+                graph.d3VelocityDecay(0.4);
+            }
+        }, 1000);
+    } else {
+        if (notesAndRelations.nodes.length > 1) {
+            setTimeout(() => {
+                const noteIdsWithLinks = getNoteIdsWithLinks(notesAndRelations);
+
+                if (noteIdsWithLinks.size > 0) {
+                    graph.zoomToFit(400, 30, (node) => noteIdsWithLinks.has(node.id ?? ""));
+                }
+
+                if (noteIdsWithLinks.size < 30) {
+                    graph.d3VelocityDecay(0.4);
+                }
+            }, 1000);
+        }
+    }
 }
 
+function getNoteIdsWithLinks(data: NotesAndRelationsData) {
+    const noteIds = new Set<string | number>();
+
+    for (const link of data.links) {
+        if (typeof link.source === "object" && link.source.id) {
+            noteIds.add(link.source.id);
+        }
+        if (typeof link.target === "object" && link.target.id) {
+            noteIds.add(link.target.id);
+        }
+    }
+
+    return noteIds;
+}
+
+function getSubGraphConnectedToCurrentNote(noteId: string, data: NotesAndRelationsData) {
+    function getGroupedLinks(links: LinkObject<NodeObject>[], type: "source" | "target") {
+        const map: Record<string | number, LinkObject<NodeObject>[]> = {};
+
+        for (const link of links) {
+            if (typeof link[type] !== "object") {
+                continue;
+            }
+
+            const key = link[type].id;
+            if (key) {
+                map[key] = map[key] || [];
+                map[key].push(link);
+            }
+        }
+
+        return map;
+    }
+
+    const linksBySource = getGroupedLinks(data.links, "source");
+    const linksByTarget = getGroupedLinks(data.links, "target");
+
+    const subGraphNoteIds = new Set();
+
+    function traverseGraph(noteId?: string | number) {
+        if (!noteId || subGraphNoteIds.has(noteId)) {
+            return;
+        }
+
+        subGraphNoteIds.add(noteId);
+
+        for (const link of linksBySource[noteId] || []) {
+            if (typeof link.target === "object") {
+                traverseGraph(link.target?.id);
+            }
+        }
+
+        for (const link of linksByTarget[noteId] || []) {
+            if (typeof link.source === "object") {
+                traverseGraph(link.source?.id);
+            }
+        }
+    }
+
+    traverseGraph(noteId);
+    return subGraphNoteIds;
+}
