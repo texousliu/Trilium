@@ -26,7 +26,7 @@ export default function NoteMapTab({ note }: TabContext) {
 
     return (
         <div className="note-map-ribbon-widget" style={{ height }} ref={containerRef}>
-            {note && <NoteMap note={note} widgetMode="ribbon" />}
+            {note && <NoteMap note={note} widgetMode="ribbon" parentRef={containerRef} />}
 
             {!isExpanded ? (
                 <ActionButton

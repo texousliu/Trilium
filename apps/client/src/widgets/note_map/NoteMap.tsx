@@ -1,27 +1,22 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import "./NoteMap.css";
-import { getMapRootNoteId, NoteMapWidgetMode, rgb2hex } from "./utils";
+import { getMapRootNoteId, getThemeStyle, NoteMapWidgetMode, rgb2hex } from "./utils";
 import { RefObject } from "preact";
 import FNote from "../../entities/fnote";
-import { useNoteContext, useNoteLabel } from "../react/hooks";
+import { useElementSize, useNoteContext, useNoteLabel } from "../react/hooks";
 import ForceGraph, { LinkObject, NodeObject } from "force-graph";
 import { loadNotesAndRelations, NotesAndRelationsData } from "./data";
-
-interface CssData {
-    fontFamily: string;
-    textColor: string;
-    mutedTextColor: string;
-}
+import { CssData, setupRendering } from "./rendering";
 
 interface NoteMapProps {
     note: FNote;
     widgetMode: NoteMapWidgetMode;
+    parentRef: RefObject<HTMLElement>;
 }
 
 type MapType = "tree" | "link";
 
-export default function NoteMap({ note, widgetMode }: NoteMapProps) {
-    console.log("Got note", note);
+export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const styleResolverRef = useRef<HTMLDivElement>(null);
     const [ cssData, setCssData ] = useState<CssData>();
@@ -36,50 +31,57 @@ export default function NoteMap({ note, widgetMode }: NoteMapProps) {
     return (
         <div className="note-map-widget">
             <div ref={styleResolverRef} class="style-resolver" />
-            <NoteGraph containerRef={containerRef} note={note} widgetMode={widgetMode} mapType={mapType} />
+            <NoteGraph parentRef={parentRef} containerRef={containerRef} note={note} widgetMode={widgetMode} mapType={mapType} cssData={cssData} />
         </div>
     )
 }
 
-function NoteGraph({ containerRef, note, widgetMode, mapType }: {
+function NoteGraph({ containerRef, parentRef, note, widgetMode, mapType, cssData }: {
     containerRef: RefObject<HTMLDivElement>;
+    parentRef: RefObject<HTMLElement>;
     note: FNote;
     widgetMode: NoteMapWidgetMode;
     mapType: MapType;
+    cssData: CssData;
 }) {
     const graphRef = useRef<ForceGraph<NodeObject, LinkObject<NodeObject>>>();
-    const [ data, setData ] = useState<NotesAndRelationsData>();
-    console.log("Got data ", data);
+    const containerSize = useElementSize(parentRef);
 
     // Build the note graph instance.
     useEffect(() => {
         const container = containerRef.current;
         if (!container) return;
-        const { width, height } = container.getBoundingClientRect();
-        const graph = new ForceGraph(container)
-            .width(width)
-            .height(height);
+        const graph = new ForceGraph(container);
+
         graphRef.current = graph;
 
         const mapRootId = getMapRootNoteId(note.noteId, note, widgetMode);
+        console.log("Map root ID ", mapRootId);
         if (!mapRootId) return;
 
         const labelValues = (name: string) => note.getLabels(name).map(l => l.value) ?? [];
         const excludeRelations = labelValues("mapExcludeRelation");
         const includeRelations = labelValues("mapIncludeRelation");
-        loadNotesAndRelations(mapRootId, excludeRelations, includeRelations, mapType).then((data) => {
-            console.log("Got data ", data);
+        loadNotesAndRelations(mapRootId, excludeRelations, includeRelations, mapType).then((notesAndRelations) => {
+            setupRendering(graph, {
+                cssData,
+                noteId: note.noteId,
+                noteIdToSizeMap: notesAndRelations.noteIdToSizeMap,
+                notesAndRelations,
+                themeStyle: getThemeStyle(),
+                widgetMode
+            });
+            graph.graphData(notesAndRelations);
         });
 
         return () => container.replaceChildren();
     }, [ note ]);
 
-    // Render the data.
+    // React to container size
     useEffect(() => {
-        if (!graphRef.current || !data) return;
-        graphRef.current.graphData(data);
-    }, [ data ]);
-
+        if (!containerSize || !graphRef.current) return;
+        graphRef.current.width(containerSize.width).height(containerSize.height);
+    }, [ containerSize?.width, containerSize?.height ]);
 
     return <div ref={containerRef} className="note-map-container" />;
 }

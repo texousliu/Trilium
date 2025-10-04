@@ -1,6 +1,7 @@
 import appContext from "../../components/app_context";
 import FNote from "../../entities/fnote";
 import hoisted_note from "../../services/hoisted_note";
+import { Node } from "./data";
 
 export type NoteMapWidgetMode = "ribbon" | "hoisted";
 
@@ -25,4 +26,38 @@ export function getMapRootNoteId(noteId: string, note: FNote, widgetMode: NoteMa
     }
 
     return mapRootNoteId;
+}
+
+export function getColorForNode(node: Node, noteId: string, themeStyle: "light" | "dark", widgetMode: NoteMapWidgetMode) {
+    if (node.color) {
+        return node.color;
+    } else if (widgetMode === "ribbon" && node.id === noteId) {
+        return "red"; // subtree root mark as red
+    } else {
+        return generateColorFromString(node.type, themeStyle);
+    }
+}
+
+function generateColorFromString(str: string, themeStyle: "light" | "dark") {
+    if (themeStyle === "dark") {
+        str = `0${str}`; // magic lightning modifier
+    }
+
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    let color = "#";
+    for (let i = 0; i < 3; i++) {
+        const value = (hash >> (i * 8)) & 0xff;
+
+        color += `00${value.toString(16)}`.substr(-2);
+    }
+    return color;
+}
+
+export function getThemeStyle() {
+    const documentStyle = window.getComputedStyle(document.documentElement);
+    return documentStyle.getPropertyValue("--theme-style")?.trim() as "light" | "dark";
 }

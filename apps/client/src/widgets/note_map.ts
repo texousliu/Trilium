@@ -32,15 +32,7 @@ const TPL = /*html*/`<div class="note-map-widget">
 type WidgetMode = "type" | "ribbon";
 type Data = GraphData<NodeObject, LinkObject<NodeObject>>;
 
-interface Link extends LinkObject<NodeObject> {
-    id: string;
-    name: string;
 
-    x: number;
-    y: number;
-    source: Node;
-    target: Node;
-}
 
 export default class NoteMapWidget extends NoteContextAwareWidget {
 
@@ -65,9 +57,6 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
     doRender() {
         this.$widget = $(TPL);
 
-        const documentStyle = window.getComputedStyle(document.documentElement);
-        this.themeStyle = documentStyle.getPropertyValue("--theme-style")?.trim();
-
         this.$container = this.$widget.find(".note-map-container");
         this.$styleResolver = this.$widget.find(".style-resolver");
         this.$fixNodesButton = this.$widget.find(".fixnodes-type-switcher > button");
@@ -90,34 +79,11 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
         super.doRender();
     }
 
-    setDimensions() {
-        if (!this.graph) {
-            // no graph has been even rendered
-            return;
-        }
-
-        const $parent = this.$widget.parent();
-
-        this.graph
-            .height($parent.height() || 0)
-            .width($parent.width() || 0);
-    }
-
     async refreshWithNote(note: FNote) {
         this.$widget.show();
 
-        //variables for the hover effekt. We have to save the neighbours of a hovered node in a set. Also we need to save the links as well as the hovered node itself
-
-        let hoverNode: NodeObject | null = null;
-        const highlightLinks = new Set();
-        const neighbours = new Set();
-
         const ForceGraph = (await import("force-graph")).default;
         this.graph = new ForceGraph(this.$container[0])
-            .onZoom((zoom) => this.setZoomLevel(zoom.k))
-            .d3AlphaDecay(0.01)
-            .d3VelocityDecay(0.08)
-
             //Code to fixate nodes when dragged
             .onNodeDragEnd((node) => {
                 if (this.fixNodes) {
@@ -128,11 +94,6 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
                     node.fy = undefined;
                 }
             })
-            //check if hovered and set the hovernode variable, saving the hovered node object into it. Clear links variable everytime you hover. Without clearing links will stay highlighted
-            .onNodeHover((node) => {
-                hoverNode = node || null;
-                highlightLinks.clear();
-            })
 
             // set link width to immitate a highlight effekt. Checking the condition if any links are saved in the previous defined set highlightlinks
             .linkWidth((link) => (highlightLinks.has(link) ? 3 : 0.4))
@@ -140,30 +101,7 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
             .linkDirectionalArrowLength(4)
             .linkDirectionalArrowRelPos(0.95)
 
-            // main code for highlighting hovered nodes and neighbours. here we "style" the nodes. the nodes are rendered several hundred times per second.
-            .nodeCanvasObject((_node, ctx) => {
-                const node = _node as Node;
-                if (hoverNode == node) {
-                    //paint only hovered node
-                    this.paintNode(node, "#661822", ctx);
-                    neighbours.clear(); //clearing neighbours or the effect would be maintained after hovering is over
-                    for (const _link of data.links) {
-                        const link = _link as unknown as Link;
-                        //check if node is part of a link in the canvas, if so add it´s neighbours and related links to the previous defined variables to paint the nodes
-                        if (link.source.id == node.id || link.target.id == node.id) {
-                            neighbours.add(link.source);
-                            neighbours.add(link.target);
-                            highlightLinks.add(link);
-                            neighbours.delete(node);
-                        }
-                    }
-                } else if (neighbours.has(node) && hoverNode != null) {
-                    //paint neighbours
-                    this.paintNode(node, "#9d6363", ctx);
-                } else {
-                    this.paintNode(node, this.getColorForNode(node), ctx); //paint rest of nodes in canvas
-                }
-            })
+            // Rendering code was here
 
             .nodePointerAreaPaint((node, _, ctx) => this.paintNode(node as Node, this.getColorForNode(node as Node), ctx))
             .nodePointerAreaPaint((node, color, ctx) => {
@@ -179,8 +117,6 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
                 ctx.fill();
             })
             .nodeLabel((node) => esc((node as Node).name))
-            .maxZoom(7)
-            .warmupTicks(30)
             .onNodeClick((node) => {
                 if (node.id) {
                     appContext.tabManager.getActiveContext()?.setNote((node as Node).id);
@@ -219,69 +155,8 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
         this.renderData(data);
     }
 
-    getColorForNode(node: Node) {
-        if (node.color) {
-            return node.color;
-        } else if (this.widgetMode === "ribbon" && node.id === this.noteId) {
-            return "red"; // subtree root mark as red
-        } else {
-            return this.generateColorFromString(node.type);
-        }
-    }
-
-    generateColorFromString(str: string) {
-        if (this.themeStyle === "dark") {
-            str = `0${str}`; // magic lightning modifier
-        }
-
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-            hash = str.charCodeAt(i) + ((hash << 5) - hash);
-        }
-
-        let color = "#";
-        for (let i = 0; i < 3; i++) {
-            const value = (hash >> (i * 8)) & 0xff;
-
-            color += `00${value.toString(16)}`.substr(-2);
-        }
-        return color;
-    }
-
     setZoomLevel(level: number) {
         this.zoomLevel = level;
-    }
-
-    paintNode(node: Node, color: string, ctx: CanvasRenderingContext2D) {
-        const { x, y } = node;
-        if (!x || !y) {
-            return;
-        }
-        const size = this.noteIdToSizeMap[node.id];
-
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(x, y, size * 0.8, 0, 2 * Math.PI, false);
-        ctx.fill();
-
-        const toRender = this.zoomLevel > 2 || (this.zoomLevel > 1 && size > 6) || (this.zoomLevel > 0.3 && size > 10);
-
-        if (!toRender) {
-            return;
-        }
-
-        ctx.fillStyle = this.cssData.textColor;
-        ctx.font = `${size}px ${this.cssData.fontFamily}`;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-
-        let title = node.name;
-
-        if (title.length > 15) {
-            title = `${title.substr(0, 15)}...`;
-        }
-
-        ctx.fillText(title, x, y + Math.round(size * 1.5));
     }
 
     paintLink(link: Link, ctx: CanvasRenderingContext2D) {

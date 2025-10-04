@@ -1,6 +1,6 @@
 import { NoteMapLink, NoteMapPostResponse } from "@triliumnext/commons";
 import server from "../../services/server";
-import { NodeObject } from "force-graph";
+import { LinkObject, NodeObject } from "force-graph";
 
 type MapType = "tree" | "link";
 
@@ -11,11 +11,20 @@ interface GroupedLink {
     names: string[];
 }
 
-interface Node extends NodeObject {
+export interface Node extends NodeObject {
     id: string;
     name: string;
     type: string;
     color: string;
+}
+
+export interface Link extends LinkObject<NodeObject> {
+    id: string;
+    name: string;
+    x: number;
+    y: number;
+    source: Node;
+    target: Node;
 }
 
 export interface NotesAndRelationsData {
