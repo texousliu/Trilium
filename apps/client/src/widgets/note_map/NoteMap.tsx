@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import "./NoteMap.css";
-import { getMapRootNoteId, getThemeStyle, MapType, NoteMapWidgetMode, rgb2hex } from "./utils";
+import { getThemeStyle, MapType, NoteMapWidgetMode, rgb2hex } from "./utils";
 import { RefObject } from "preact";
 import FNote from "../../entities/fnote";
 import { useElementSize, useNoteContext, useNoteLabel } from "../react/hooks";
@@ -12,6 +12,7 @@ import { t } from "../../services/i18n";
 import link_context_menu from "../../menus/link_context_menu";
 import appContext from "../../components/app_context";
 import Slider from "../react/Slider";
+import hoisted_note from "../../services/hoisted_note";
 
 interface NoteMapProps {
     note: FNote;
@@ -23,6 +24,7 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const styleResolverRef = useRef<HTMLDivElement>(null);
     const [ mapTypeRaw, setMapType ] = useNoteLabel(note, "mapType");
+    const [ mapRootIdLabel ] = useNoteLabel(note, "mapRootNoteId");
     const mapType: MapType = mapTypeRaw === "tree" ? "tree" : "link";
 
     const graphRef = useRef<ForceGraph<NodeObject, LinkObject<NodeObject>>>();
@@ -31,16 +33,25 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
     const [ linkDistance, setLinkDistance ] = useState(40);
     const notesAndRelationsRef = useRef<NotesAndRelationsData>();
 
+    const mapRootId = useMemo(() => {
+        if (note.noteId && widgetMode === "ribbon") {
+            return note.noteId;
+        } else if (mapRootIdLabel === "hoisted") {
+            return hoisted_note.getHoistedNoteId();
+        } else if (mapRootIdLabel) {
+            return mapRootIdLabel;
+        } else {
+            return appContext.tabManager.getActiveContext()?.parentNoteId ?? null;
+        }
+    }, [ note ]);
+
     // Build the note graph instance.
     useEffect(() => {
         const container = containerRef.current;
-        if (!container) return;
+        if (!container || !mapRootId) return;
         const graph = new ForceGraph(container);
 
         graphRef.current = graph;
-
-        const mapRootId = getMapRootNoteId(note.noteId, note, widgetMode);
-        if (!mapRootId) return;
 
         const labelValues = (name: string) => note.getLabels(name).map(l => l.value) ?? [];
         const excludeRelations = labelValues("mapExcludeRelation");

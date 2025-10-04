@@ -43,6 +43,7 @@ type Labels = {
     webViewSrc: string;
     readOnly: boolean;
     mapType: string;
+    mapRootNoteId: string;
 }
 
 /**
