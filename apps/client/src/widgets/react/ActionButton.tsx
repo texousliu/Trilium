@@ -12,10 +12,11 @@ export interface ActionButtonProps {
     triggerCommand?: CommandNames;
     noIconActionClass?: boolean;
     frame?: boolean;
+    active?: boolean;
     disabled?: boolean;
 }
 
-export default function ActionButton({ text, icon, className, onClick, triggerCommand, titlePosition, noIconActionClass, frame, disabled }: ActionButtonProps) {
+export default function ActionButton({ text, icon, className, onClick, triggerCommand, titlePosition, noIconActionClass, frame, active, disabled }: ActionButtonProps) {
     const buttonRef = useRef<HTMLButtonElement>(null);
     const [ keyboardShortcut, setKeyboardShortcut ] = useState<string[]>();
 
@@ -33,7 +34,7 @@ export default function ActionButton({ text, icon, className, onClick, triggerCo
 
     return <button
         ref={buttonRef}
-        class={`${className ?? ""} ${!noIconActionClass ? "icon-action" : "btn"} ${icon} ${frame ? "btn btn-primary" : ""} ${disabled ? "disabled" : ""}`}
+        class={`${className ?? ""} ${!noIconActionClass ? "icon-action" : "btn"} ${icon} ${frame ? "btn btn-primary" : ""} ${disabled ? "disabled" : ""} ${active ? "active" : ""}`}
         onClick={onClick}
         data-trigger-command={triggerCommand}
         disabled={disabled}

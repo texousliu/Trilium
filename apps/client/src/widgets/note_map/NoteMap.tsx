@@ -105,8 +105,9 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
                 <ActionButton
                     icon="bx bx-lock-alt"
                     text={t("note_map.fix-nodes")}
-                    className={fixNodes ? "toggled" : ""}
+                    className={fixNodes ? "active" : ""}
                     onClick={() => setFixNodes(!fixNodes)}
+                    frame
                 />
             </div>
 
@@ -126,7 +127,7 @@ function MapTypeSwitcher({ icon, text, type, currentMapType, setMapType }: {
     return (
         <ActionButton
             icon={icon} text={text}
-            disabled={currentMapType === type}
+            active={currentMapType === type}
             onClick={() => setMapType(type)}
             frame
         />

@@ -53,15 +53,6 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
         this.$fixNodesButton = this.$widget.find(".fixnodes-type-switcher > button");
 
         new ResizeObserver(() => this.setDimensions()).observe(this.$container[0]);
-
-        // Reading the status of the Drag nodes Ui element. Changing it´s color when activated.
-        // Reading Force value of the link distance.
-        this.$fixNodesButton.on("click", async (event) => {
-            this.fixNodes = !this.fixNodes;
-            this.$fixNodesButton.toggleClass("toggled", this.fixNodes);
-        });
-
-        super.doRender();
     }
 
     async refreshWithNote(note: FNote) {
