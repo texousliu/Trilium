@@ -136,22 +136,21 @@ function MindElixir({ content, containerProps, apiRef: externalApiRef, onChange,
 
     // On change listener.
     useEffect(() => {
-        if (!onChange) return;
+        const bus = apiRef.current?.bus;
+        if (!onChange || !bus) return;
 
-        const listener = (operation: Operation) => {
+        const operationListener = (operation: Operation) => {
             if (operation.name !== "beginEdit") {
                 onChange();
             }
         }
-        apiRef.current?.bus.addListener("operation", listener);
 
-        // Direction change buttons don't report change, so we have to hook in manually.
-        const $container = refToJQuerySelector(containerRef);
-        $container.on("click", ".mind-elixir-toolbar.lt", onChange);
+        bus.addListener("operation", operationListener);
+        bus.addListener("changeDirection", onChange);
 
         return () => {
-            $container.off("click", ".mind-elixir-toolbar.lt", onChange);
-            apiRef.current?.bus?.removeListener("operation", listener);
+            bus.removeListener("operation", operationListener);
+            bus.removeListener("changeDirection", onChange);
         };
     }, [ onChange ]);
 
