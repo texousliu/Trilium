@@ -1,5 +1,5 @@
 import { TabContext } from "./ribbon-interface";
-import { useElementSize, useLegacyWidget, useWindowSize } from "../react/hooks";
+import { useElementSize, useWindowSize } from "../react/hooks";
 import ActionButton from "../react/ActionButton";
 import { t } from "../../services/i18n";
 import { useEffect, useRef, useState } from "preact/hooks";

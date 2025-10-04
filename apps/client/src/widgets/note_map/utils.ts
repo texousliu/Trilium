@@ -1,4 +1,4 @@
-export type NoteMapWidgetMode = "ribbon" | "hoisted";
+export type NoteMapWidgetMode = "ribbon" | "hoisted" | "type";
 export type MapType = "tree" | "link";
 
 export function rgb2hex(rgb: string) {
