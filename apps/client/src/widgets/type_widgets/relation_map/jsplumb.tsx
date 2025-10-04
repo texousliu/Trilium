@@ -1,19 +1,21 @@
-import { jsPlumb, Defaults, jsPlumbInstance, DragOptions } from "jsplumb";
+import { jsPlumb, Defaults, jsPlumbInstance, DragOptions, OnConnectionBindInfo } from "jsplumb";
 import { ComponentChildren, createContext, RefObject } from "preact";
 import { HTMLProps } from "preact/compat";
 import { useContext, useEffect, useRef } from "preact/hooks";
 
 const JsPlumbInstance = createContext<RefObject<jsPlumbInstance> | undefined>(undefined);
 
-export function JsPlumb({ className, props, children, containerRef: externalContainerRef, apiRef, onInstanceCreated }: {
+export function JsPlumb({ className, props, children, containerRef: externalContainerRef, apiRef, onInstanceCreated, onConnection }: {
     className?: string;
     props: Omit<Defaults, "container">;
     children: ComponentChildren;
     containerRef?: RefObject<HTMLElement>;
     apiRef?: RefObject<jsPlumbInstance>;
     onInstanceCreated?: (jsPlumbInstance: jsPlumbInstance) => void;
+    onConnection?: (info: OnConnectionBindInfo, originalEvent: Event) => void;
 }) {
     const containerRef = useRef<HTMLDivElement>(null);
+    const jsPlumbRef = useRef<jsPlumbInstance>();
 
     useEffect(() => {
         if (!containerRef.current) return;
@@ -28,6 +30,7 @@ export function JsPlumb({ className, props, children, containerRef: externalCont
         if (apiRef) {
             apiRef.current = jsPlumbInstance;
         }
+        jsPlumbRef.current = jsPlumbInstance;
 
         onInstanceCreated?.(jsPlumbInstance);
         return () => {
@@ -35,6 +38,14 @@ export function JsPlumb({ className, props, children, containerRef: externalCont
             jsPlumbInstance.cleanupListeners()
         };
     }, [ apiRef ]);
+
+    useEffect(() => {
+        const jsPlumbInstance = jsPlumbRef.current;
+        if (!jsPlumbInstance || !onConnection) return;
+
+        jsPlumbInstance.bind("connection", onConnection);
+        return () => jsPlumbInstance.unbind("connection", onConnection);
+    }, [ onConnection ]);
 
     return (
         <div ref={containerRef} className={className}>

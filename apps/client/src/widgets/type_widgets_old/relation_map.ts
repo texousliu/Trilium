@@ -116,12 +116,9 @@ export default class RelationMapTypeWidget extends TypeWidget {
         if (!this.jsPlumbInstance) {
             return;
         }
-
-        this.jsPlumbInstance.bind("connection", (info, originalEvent) => this.connectionCreatedHandler(info, originalEvent));
     }
 
     async connectionCreatedHandler(info: ConnectionMadeEventInfo, originalEvent: Event) {
-        const connection = info.connection;
 
         connection.bind("contextmenu", (obj: unknown, event: MouseEvent) => {
             if (connection.getType().includes("link")) {
@@ -156,58 +153,6 @@ export default class RelationMapTypeWidget extends TypeWidget {
                 });
             }
         });
-
-        // if there's no event, then this has been triggered programmatically
-        if (!originalEvent || !this.jsPlumbInstance) {
-            return;
-        }
-
-        let name = await dialogService.prompt({
-            message: t("relation_map.specify_new_relation_name"),
-            shown: ({ $answer }) => {
-                if (!$answer) {
-                    return;
-                }
-
-                $answer.on("keyup", () => {
-                    // invalid characters are simply ignored (from user perspective they are not even entered)
-                    const attrName = utils.filterAttributeName($answer.val() as string);
-
-                    $answer.val(attrName);
-                });
-
-                attributeAutocompleteService.initAttributeNameAutocomplete({
-                    $el: $answer,
-                    attributeType: "relation",
-                    open: true
-                });
-            }
-        });
-
-        if (!name || !name.trim()) {
-            this.jsPlumbInstance.deleteConnection(connection);
-
-            return;
-        }
-
-        name = utils.filterAttributeName(name);
-
-        const targetNoteId = this.idToNoteId(connection.target.id);
-        const sourceNoteId = this.idToNoteId(connection.source.id);
-
-        const relationExists = this.relations?.some((rel) => rel.targetNoteId === targetNoteId && rel.sourceNoteId === sourceNoteId && rel.name === name);
-
-        if (relationExists) {
-            await dialogService.info(t("relation_map.connection_exists", { name }));
-
-            this.jsPlumbInstance.deleteConnection(connection);
-
-            return;
-        }
-
-        await server.put(`notes/${sourceNoteId}/relations/${name}/to/${targetNoteId}`);
-
-        this.loadNotesAndRelations();
     }
 
     saveData() {

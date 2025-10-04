@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { TypeWidgetProps } from "../type_widget";
-import { jsPlumbInstance } from "jsplumb";
+import { jsPlumbInstance, OnConnectionBindInfo } from "jsplumb";
 import { useEditorSpacedUpdate, useTriliumEvent, useTriliumEvents } from "../../react/hooks";
 import FNote from "../../../entities/fnote";
 import { RefObject } from "preact";
@@ -14,8 +14,10 @@ import { CreateChildrenResponse, RelationMapPostResponse, RelationMapRelation } 
 import RelationMapApi, { MapData, MapDataNoteEntry } from "./api";
 import setupOverlays, { uniDirectionalOverlays } from "./overlays";
 import { JsPlumb } from "./jsplumb";
-import { getMousePosition, getZoom, noteIdToId } from "./utils";
+import { getMousePosition, getZoom, idToNoteId, noteIdToId } from "./utils";
 import { NoteBox } from "./NoteBox";
+import utils from "../../../services/utils";
+import attribute_autocomplete from "../../../services/attribute_autocomplete";
 
 interface Clipboard {
     noteId: string;
@@ -95,6 +97,8 @@ export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
         mapApiRef
     });
 
+    const connectionCallback = useRelationCreation({ mapApiRef, jsPlumbApiRef: pbApiRef });
+
     usePanZoom({
         ntxId,
         containerRef,
@@ -129,6 +133,7 @@ export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
                         HoverPaintStyle: { stroke: "#777", strokeWidth: 1 },
                     }}
                     onInstanceCreated={setupOverlays}
+                    onConnection={connectionCallback}
                 >
                     {data?.notes.map(note => (
                         <NoteBox {...note} mapApiRef={mapApiRef} />
@@ -303,4 +308,50 @@ function useNoteCreation({ ntxId, note, containerRef, mapApiRef }: {
         }
     }, []);
     return onClickHandler;
+}
+
+function useRelationCreation({ mapApiRef, jsPlumbApiRef }: { mapApiRef: RefObject<RelationMapApi>, jsPlumbApiRef: RefObject<jsPlumbInstance> }) {
+    const connectionCallback = useCallback(async (info: OnConnectionBindInfo, originalEvent: Event) => {
+        // if there's no event, then this has been triggered programmatically
+        if (!originalEvent || !mapApiRef.current) return;
+
+        const connection = info.connection;
+        let name = await dialog.prompt({
+            message: t("relation_map.specify_new_relation_name"),
+            shown: ({ $answer }) => {
+                if (!$answer) {
+                    return;
+                }
+
+                $answer.on("keyup", () => {
+                    // invalid characters are simply ignored (from user perspective they are not even entered)
+                    const attrName = utils.filterAttributeName($answer.val() as string);
+
+                    $answer.val(attrName);
+                });
+
+                attribute_autocomplete.initAttributeNameAutocomplete({
+                    $el: $answer,
+                    attributeType: "relation",
+                    open: true
+                });
+            }
+        });
+
+        // Delete the newly created connection if the dialog was dismissed.
+        if (!name || !name.trim()) {
+            jsPlumbApiRef.current?.deleteConnection(connection);
+            return;
+        }
+
+        const targetNoteId = idToNoteId(connection.target.id);
+        const sourceNoteId = idToNoteId(connection.source.id);
+        const result = await mapApiRef.current.connect(name, sourceNoteId, targetNoteId);
+        if (!result) {
+            await dialog.info(t("relation_map.connection_exists", { name }));
+            jsPlumbApiRef.current?.deleteConnection(connection);
+        }
+    }, []);
+
+    return connectionCallback;
 }

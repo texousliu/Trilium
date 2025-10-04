@@ -79,4 +79,14 @@ export default class RelationMapApi {
         this.onDataChange(false);
     }
 
+    async connect(name: string, sourceNoteId: string, targetNoteId: string) {
+        name = utils.filterAttributeName(name);
+        const relationExists = this.relations?.some((rel) => rel.targetNoteId === targetNoteId && rel.sourceNoteId === sourceNoteId && rel.name === name);
+
+        if (relationExists) return false;
+        await server.put(`notes/${sourceNoteId}/relations/${name}/to/${targetNoteId}`);
+        this.onDataChange(true);
+        return true;
+    }
+
 }
