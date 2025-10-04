@@ -22,7 +22,6 @@ export default function NoteMapTab({ note }: TabContext) {
             setHeight(SMALL_SIZE_HEIGHT);
         }
     }, [ isExpanded, containerRef, windowHeight, containerSize?.top ]);
-    // useEffect(() => noteMapWidget.setDimensions(), [ containerSize?.width, height ]);
 
     return (
         <div className="note-map-ribbon-widget" style={{ height }} ref={containerRef}>

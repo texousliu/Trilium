@@ -164,7 +164,7 @@ export function setupRendering(graph: ForceGraph, { note, noteId, themeStyle, wi
     // set link width to immitate a highlight effect. Checking the condition if any links are saved in the previous defined set highlightlinks
     graph
         .linkWidth((link) => (highlightLinks.has(link) ? 3 : 0.4))
-        .linkColor((link) => (highlightLinks.has(link) ? "white" : cssData.mutedTextColor))
+        .linkColor((link) => (highlightLinks.has(link) ? cssData.textColor : cssData.mutedTextColor))
         .linkDirectionalArrowLength(4)
         .linkDirectionalArrowRelPos(0.95)
 
