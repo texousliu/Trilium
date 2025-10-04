@@ -43,6 +43,11 @@
   },
   "bulk_actions": {
     "bulk_actions": "대량 작업",
-    "affected_notes": "영향을 받은 노트들"
+    "affected_notes": "영향을 받은 노트들",
+    "include_descendants": "선택한 노트의 자손 포함",
+    "available_actions": "가능한 액션들",
+    "chosen_actions": "선택한 액션들",
+    "execute_bulk_actions": "대량 액션들 실행",
+    "bulk_actions_executed": "대량 액션들이 성공적으로 실행되었습니다."
   }
 }
