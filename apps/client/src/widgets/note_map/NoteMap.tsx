@@ -23,27 +23,6 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
     const [ mapTypeRaw ] = useNoteLabel(note, "mapType");
     const mapType: MapType = mapTypeRaw === "tree" ? "tree" : "link";
 
-    useEffect(() => {
-        if (!containerRef.current || !styleResolverRef.current) return;
-        setCssData(getCssData(containerRef.current, styleResolverRef.current));
-    }, []);
-
-    return (
-        <div className="note-map-widget">
-            <div ref={styleResolverRef} class="style-resolver" />
-            <NoteGraph parentRef={parentRef} containerRef={containerRef} note={note} widgetMode={widgetMode} mapType={mapType} cssData={cssData} />
-        </div>
-    )
-}
-
-function NoteGraph({ containerRef, parentRef, note, widgetMode, mapType, cssData }: {
-    containerRef: RefObject<HTMLDivElement>;
-    parentRef: RefObject<HTMLElement>;
-    note: FNote;
-    widgetMode: NoteMapWidgetMode;
-    mapType: MapType;
-    cssData: CssData;
-}) {
     const graphRef = useRef<ForceGraph<NodeObject, LinkObject<NodeObject>>>();
     const containerSize = useElementSize(parentRef);
 
@@ -63,6 +42,8 @@ function NoteGraph({ containerRef, parentRef, note, widgetMode, mapType, cssData
         const excludeRelations = labelValues("mapExcludeRelation");
         const includeRelations = labelValues("mapIncludeRelation");
         loadNotesAndRelations(mapRootId, excludeRelations, includeRelations, mapType).then((notesAndRelations) => {
+            if (!containerRef.current || !styleResolverRef.current) return;
+            const cssData = getCssData(containerRef.current, styleResolverRef.current);
             setupRendering(graph, {
                 cssData,
                 noteId: note.noteId,
@@ -83,7 +64,12 @@ function NoteGraph({ containerRef, parentRef, note, widgetMode, mapType, cssData
         graphRef.current.width(containerSize.width).height(containerSize.height);
     }, [ containerSize?.width, containerSize?.height ]);
 
-    return <div ref={containerRef} className="note-map-container" />;
+    return (
+        <div className="note-map-widget">
+            <div ref={styleResolverRef} class="style-resolver" />
+            <div ref={containerRef} className="note-map-container" />
+        </div>
+    )
 }
 
 function getCssData(container: HTMLElement, styleResolver: HTMLElement): CssData {
