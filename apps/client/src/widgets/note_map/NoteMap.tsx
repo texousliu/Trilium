@@ -26,6 +26,7 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
 
     const graphRef = useRef<ForceGraph<NodeObject, LinkObject<NodeObject>>>();
     const containerSize = useElementSize(parentRef);
+    const [ fixNodes, setFixNodes ] = useState(false);
 
     // Build the note graph instance.
     useEffect(() => {
@@ -80,11 +81,33 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
         graphRef.current.width(containerSize.width).height(containerSize.height);
     }, [ containerSize?.width, containerSize?.height ]);
 
+    // Fixing nodes when dragged.
+    useEffect(() => {
+        graphRef.current?.onNodeDragEnd((node) => {
+            if (fixNodes) {
+                node.fx = node.x;
+                node.fy = node.y;
+            } else {
+                node.fx = undefined;
+                node.fy = undefined;
+            }
+        })
+    }, [ fixNodes ]);
+
     return (
         <div className="note-map-widget">
             <div className="btn-group btn-group-sm map-type-switcher content-floating-buttons top-left" role="group">
                 <MapTypeSwitcher type="link" icon="bx bx-network-chart" text={t("note-map.button-link-map")} currentMapType={mapType} setMapType={setMapType} />
                 <MapTypeSwitcher type="tree" icon="bx bx-sitemap" text={t("note-map.button-tree-map")} currentMapType={mapType} setMapType={setMapType} />
+            </div>
+
+            <div class="btn-group-sm fixnodes-type-switcher content-floating-buttons bottom-left" role="group">
+                <ActionButton
+                    icon="bx bx-lock-alt"
+                    text={t("note_map.fix-nodes")}
+                    className={fixNodes ? "toggled" : ""}
+                    onClick={() => setFixNodes(!fixNodes)}
+                />
             </div>
 
             <div ref={styleResolverRef} class="style-resolver" />

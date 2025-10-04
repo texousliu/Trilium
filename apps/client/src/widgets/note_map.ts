@@ -15,8 +15,7 @@ const esc = utils.escapeHtml;
 const TPL = /*html*/`<div class="note-map-widget">
     <!-- UI for dragging Notes and link force -->
 
-    <div class="btn-group-sm fixnodes-type-switcher content-floating-buttons bottom-left" role="group">
-      <button type="button" data-toggle="button" class="btn bx bx-lock-alt tn-tool-button" title="${t("note_map.fix-nodes")}" data-type="moveable"></button>
+      <button type="button" data-toggle="button" class="btn  tn-tool-button" title="${}" data-type="moveable"></button>
       <input type="range" class="slider" min="1" title="${t("note_map.link-distance")}" max="100" value="40" >
     </div>
 
@@ -70,21 +69,7 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
 
         const ForceGraph = (await import("force-graph")).default;
         this.graph = new ForceGraph(this.$container[0])
-            //Code to fixate nodes when dragged
-            .onNodeDragEnd((node) => {
-                if (this.fixNodes) {
-                    node.fx = node.x;
-                    node.fy = node.y;
-                } else {
-                    node.fx = undefined;
-                    node.fy = undefined;
-                }
-            })
-
             // Rendering code was here
-
-
-
 
         const nodeLinkRatio = data.nodes.length / data.links.length;
         const magnifiedRatio = Math.pow(nodeLinkRatio, 1.5);
