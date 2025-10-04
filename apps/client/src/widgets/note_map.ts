@@ -13,85 +13,18 @@ import type FNote from "../entities/fnote.js";
 const esc = utils.escapeHtml;
 
 const TPL = /*html*/`<div class="note-map-widget">
-    <style>
-        .note-detail-note-map {
-            height: 100%;
-            overflow: hidden;
-        }
-
-        /* Style Ui Element to Drag Nodes */
-        .fixnodes-type-switcher {
-            display: flex;
-            align-items: center;
-            z-index: 10; /* should be below dropdown (note actions) */
-            border-radius: .2rem;
-        }
-
-        .fixnodes-type-switcher button.toggled {
-            background: var(--active-item-background-color);
-            color: var(--active-item-text-color);
-        }
-
-        /* Start of styling the slider */
-        .fixnodes-type-switcher input[type="range"] {
-
-            /* removing default appearance */
-            -webkit-appearance: none;
-            appearance: none;
-            margin-left: 15px;
-            width: 150px;
-        }
-
-        /* Changing slider tracker */
-        .fixnodes-type-switcher input[type="range"]::-webkit-slider-runnable-track {
-            height: 4px;
-            background-color: var(--main-border-color);
-            border-radius: 4px;
-        }
-
-        /* Changing Slider Thumb */
-        .fixnodes-type-switcher input[type="range"]::-webkit-slider-thumb {
-            /* removing default appearance */
-            -webkit-appearance: none;
-            appearance: none;
-            /* creating a custom design */
-            height: 15px;
-            width: 15px;
-            margin-top:-5px;
-            background-color: var(--accented-background-color);
-            border: 1px solid var(--main-text-color);
-            border-radius: 50%;
-        }
-
-        .fixnodes-type-switcher input[type="range"]::-moz-range-track {
-            background-color: var(--main-border-color);
-            border-radius: 4px;
-        }
-
-        .fixnodes-type-switcher input[type="range"]::-moz-range-thumb {
-            background-color: var(--accented-background-color);
-            border-color: var(--main-text-color);
-            height: 10px;
-            width: 10px;
-        }
-
-        /* End of styling the slider */
-
-    </style>
-
     <div class="btn-group btn-group-sm map-type-switcher content-floating-buttons top-left" role="group">
       <button type="button" class="btn bx bx-network-chart tn-tool-button" title="${t("note-map.button-link-map")}" data-type="link"></button>
       <button type="button" class="btn bx bx-sitemap tn-tool-button" title="${t("note-map.button-tree-map")}" data-type="tree"></button>
     </div>
 
-    <! UI for dragging Notes and link force >
+    <!-- UI for dragging Notes and link force -->
 
     <div class="btn-group-sm fixnodes-type-switcher content-floating-buttons bottom-left" role="group">
       <button type="button" data-toggle="button" class="btn bx bx-lock-alt tn-tool-button" title="${t("note_map.fix-nodes")}" data-type="moveable"></button>
       <input type="range" class="slider" min="1" title="${t("note_map.link-distance")}" max="100" value="40" >
     </div>
 
-    <div class="style-resolver"></div>
 
     <div class="note-map-container"></div>
 </div>`;
@@ -146,12 +79,6 @@ interface GroupedLink {
     sourceNoteId: string;
     targetNoteId: string;
     names: string[];
-}
-
-interface CssData {
-    fontFamily: string;
-    textColor: string;
-    mutedTextColor: string;
 }
 
 export default class NoteMapWidget extends NoteContextAwareWidget {
@@ -219,12 +146,6 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
 
     async refreshWithNote(note: FNote) {
         this.$widget.show();
-
-        this.cssData = {
-            fontFamily: this.$container.css("font-family"),
-            textColor: this.rgb2hex(this.$container.css("color")),
-            mutedTextColor: this.rgb2hex(this.$styleResolver.css("color"))
-        };
 
         this.mapType = note.getLabelValue("mapType") === "tree" ? "tree" : "link";
 
@@ -395,13 +316,6 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
             color += `00${value.toString(16)}`.substr(-2);
         }
         return color;
-    }
-
-    rgb2hex(rgb: string) {
-        return `#${(rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/) || [])
-            .slice(1)
-            .map((n) => parseInt(n, 10).toString(16).padStart(2, "0"))
-            .join("")}`;
     }
 
     setZoomLevel(level: number) {
