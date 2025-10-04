@@ -1,7 +1,7 @@
 import type ForceGraph from "force-graph";
 import { Link, Node, NotesAndRelationsData } from "./data";
 import { NodeObject } from "force-graph";
-import { getColorForNode, MapType, NoteMapWidgetMode } from "./utils";
+import { generateColorFromString, MapType, NoteMapWidgetMode } from "./utils";
 import { escapeHtml } from "../../services/utils";
 
 export interface CssData {
@@ -26,6 +26,16 @@ export function setupRendering(graph: ForceGraph, { noteId, themeStyle, widgetMo
     const highlightLinks = new Set();
     let hoverNode: NodeObject | null = null;
     let zoomLevel: number;
+
+    function getColorForNode(node: Node) {
+        if (node.color) {
+            return node.color;
+        } else if (widgetMode === "ribbon" && node.id === noteId) {
+            return "red"; // subtree root mark as red
+        } else {
+            return generateColorFromString(node.type, themeStyle);
+        }
+    }
 
     function paintNode(node: Node, color: string, ctx: CanvasRenderingContext2D) {
         const { x, y } = node;
@@ -125,7 +135,7 @@ export function setupRendering(graph: ForceGraph, { noteId, themeStyle, widgetMo
                 //paint neighbours
                 paintNode(node, "#9d6363", ctx);
             } else {
-                paintNode(node, getColorForNode(node, noteId, themeStyle, widgetMode), ctx); //paint rest of nodes in canvas
+                paintNode(node, getColorForNode(node), ctx); //paint rest of nodes in canvas
             }
         })
         //check if hovered and set the hovernode variable, saving the hovered node object into it. Clear links variable everytime you hover. Without clearing links will stay highlighted
@@ -133,7 +143,7 @@ export function setupRendering(graph: ForceGraph, { noteId, themeStyle, widgetMo
             hoverNode = node || null;
             highlightLinks.clear();
         })
-        .nodePointerAreaPaint((node, _, ctx) => paintNode(node as Node, getColorForNode(node as Node, noteId, themeStyle, widgetMode), ctx))
+        .nodePointerAreaPaint((node, _, ctx) => paintNode(node as Node, getColorForNode(node as Node), ctx))
         .nodePointerAreaPaint((node, color, ctx) => {
             if (!node.id) {
                 return;

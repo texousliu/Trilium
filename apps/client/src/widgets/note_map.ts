@@ -115,10 +115,6 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
         this.renderData(data);
     }
 
-    setZoomLevel(level: number) {
-        this.zoomLevel = level;
-    }
-
     renderData(data: Data) {
         if (this.widgetMode === "ribbon" && this.note?.type !== "search") {
             setTimeout(() => {
