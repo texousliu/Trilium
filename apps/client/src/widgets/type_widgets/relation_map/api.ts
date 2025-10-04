@@ -4,6 +4,7 @@ import { t } from "../../../services/i18n";
 import server from "../../../services/server";
 import utils from "../../../services/utils";
 import { RelationMapRelation } from "@triliumnext/commons";
+import toast from "../../../services/toast";
 
 export interface MapDataNoteEntry {
     noteId: string;
@@ -101,6 +102,23 @@ export default class RelationMapApi {
         note.x = x;
         note.y = y;
         this.onDataChange(false);
+    }
+
+    addMultipleNotes(entries: (MapDataNoteEntry & { title: string })[]) {
+        if (!entries.length) return;
+
+        for (const entry of entries) {
+            const exists = this.data.notes.some((n) => n.noteId === entry.noteId);
+
+            if (exists) {
+                toast.showError(t("relation_map.note_already_in_diagram", { title: entry.title }));
+                continue;
+            }
+
+            this.data.notes.push(entry);
+        }
+
+        this.onDataChange(true);
     }
 
     async connect(name: string, sourceNoteId: string, targetNoteId: string) {

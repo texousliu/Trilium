@@ -70,7 +70,6 @@ export default class RelationMapTypeWidget extends TypeWidget {
         this.clipboard = null;
 
         this.$widget.on("drop", (ev) => this.dropNoteOntoRelationMapHandler(ev));
-        this.$widget.on("dragover", (ev) => ev.preventDefault());
 
         this.initialized = new Promise(async (res) => {
             // Weird typecast is needed probably due to bad typings in the module itself.
@@ -120,40 +119,6 @@ export default class RelationMapTypeWidget extends TypeWidget {
 
     saveData() {
         this.spacedUpdate.scheduleUpdate();
-    }
-
-    async dropNoteOntoRelationMapHandler(ev: JQuery.DropEvent) {
-        ev.preventDefault();
-
-        const dragData = ev.originalEvent?.dataTransfer?.getData("text");
-        if (!dragData) {
-            return;
-        }
-        const notes = JSON.parse(dragData);
-
-        let { x, y } = this.getMousePosition(ev);
-
-        for (const note of notes) {
-            const exists = this.mapData?.notes.some((n) => n.noteId === note.noteId);
-
-            if (exists) {
-                toastService.showError(t("relation_map.note_already_in_diagram", { title: note.title }));
-                continue;
-            }
-
-            this.mapData?.notes.push({ noteId: note.noteId, x, y });
-
-            if (x > 1000) {
-                y += 100;
-                x = 0;
-            } else {
-                x += 200;
-            }
-        }
-
-        this.saveData();
-
-        this.loadNotesAndRelations();
     }
 
 }

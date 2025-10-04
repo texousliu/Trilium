@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "preact/hooks";
+import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { TypeWidgetProps } from "../type_widget";
 import { jsPlumbInstance, OnConnectionBindInfo } from "jsplumb";
 import { useEditorSpacedUpdate, useTriliumEvent, useTriliumEvents } from "../../react/hooks";
@@ -19,6 +19,7 @@ import { NoteBox } from "./NoteBox";
 import utils from "../../../services/utils";
 import attribute_autocomplete from "../../../services/attribute_autocomplete";
 import { buildRelationContextMenuHandler } from "./context_menu";
+import { HTMLProps } from "preact/compat";
 
 interface Clipboard {
     noteId: string;
@@ -90,6 +91,7 @@ export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
         ntxId,
         mapApiRef
     });
+    const dragProps = useNoteDragging({ containerRef, mapApiRef });
 
     const connectionCallback = useRelationCreation({ mapApiRef, jsPlumbApiRef: pbApiRef });
 
@@ -115,7 +117,11 @@ export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
 
     return (
         <div className="note-detail-relation-map note-detail-printable">
-            <div className="relation-map-wrapper" onClick={clickCallback}>
+            <div
+                className="relation-map-wrapper"
+                onClick={clickCallback}
+                {...dragProps}
+            >
                 <JsPlumb
                     apiRef={pbApiRef}
                     containerRef={containerRef}
@@ -303,6 +309,46 @@ function useNoteCreation({ ntxId, note, containerRef, mapApiRef }: {
         }
     }, []);
     return onClickHandler;
+}
+
+function useNoteDragging({ containerRef, mapApiRef }: {
+    containerRef: RefObject<HTMLDivElement>;
+    mapApiRef: RefObject<RelationMapApi>;
+}): Pick<HTMLProps<HTMLDivElement>, "onDrop" | "onDragOver"> {
+    const dragProps = useMemo(() => ({
+        onDrop(ev: DragEvent) {
+            const container = containerRef.current;
+            if (!container) return;
+
+            const dragData = ev.dataTransfer?.getData("text");
+            if (!dragData) return;
+            const notes = JSON.parse(dragData);
+
+            let { x, y } = getMousePosition(ev, container, getZoom(container));
+            const entries: (MapDataNoteEntry & { title: string })[] = [];
+
+            for (const note of notes) {
+                entries.push({
+                    ...note,
+                    x, y
+                });
+
+                if (x > 1000) {
+                    y += 100;
+                    x = 0;
+                } else {
+                    x += 200;
+                }
+            }
+
+            mapApiRef.current?.addMultipleNotes(entries);
+        },
+        onDragOver(ev) {
+            ev.preventDefault();
+        }
+    }), [ containerRef, mapApiRef ]);
+
+    return dragProps;
 }
 
 function useRelationCreation({ mapApiRef, jsPlumbApiRef }: { mapApiRef: RefObject<RelationMapApi>, jsPlumbApiRef: RefObject<jsPlumbInstance> }) {
