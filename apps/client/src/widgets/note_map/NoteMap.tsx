@@ -67,26 +67,30 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
     return (
         <div className="note-map-widget">
             <div className="btn-group btn-group-sm map-type-switcher content-floating-buttons top-left" role="group">
-                <ActionButton
-                    icon="bx bx-network-chart"
-                    text={t("note-map.button-link-map")}
-                    disabled={mapType === "link"}
-                    onClick={() => setMapType("link")}
-                    frame
-                />
-
-                <ActionButton
-                    icon="bx bx-sitemap"
-                    text={t("note-map.button-tree-map")}
-                    disabled={mapType === "tree"}
-                    onClick={() => setMapType("tree")}
-                    frame
-                />
+                <MapTypeSwitcher type="link" icon="bx bx-network-chart" text={t("note-map.button-link-map")} currentMapType={mapType} setMapType={setMapType} />
+                <MapTypeSwitcher type="tree" icon="bx bx-sitemap" text={t("note-map.button-tree-map")} currentMapType={mapType} setMapType={setMapType} />
             </div>
 
             <div ref={styleResolverRef} class="style-resolver" />
             <div ref={containerRef} className="note-map-container" />
         </div>
+    )
+}
+
+function MapTypeSwitcher({ icon, text, type, currentMapType, setMapType }: {
+    icon: string;
+    text: string;
+    type: MapType;
+    currentMapType: MapType;
+    setMapType: (type: MapType) => void;
+}) {
+    return (
+        <ActionButton
+            icon={icon} text={text}
+            disabled={currentMapType === type}
+            onClick={() => setMapType(type)}
+            frame
+        />
     )
 }
 
