@@ -84,16 +84,7 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
             // Rendering code was here
 
 
-            .onNodeClick((node) => {
-                if (node.id) {
-                    appContext.tabManager.getActiveContext()?.setNote((node as Node).id);
-                }
-            })
-            .onNodeRightClick((node, e) => {
-                if (node.id) {
-                    linkContextMenuService.openContextMenu((node as Node).id, e);
-                }
-            });
+
 
         const nodeLinkRatio = data.nodes.length / data.links.length;
         const magnifiedRatio = Math.pow(nodeLinkRatio, 1.5);

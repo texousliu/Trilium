@@ -5,10 +5,12 @@ import { RefObject } from "preact";
 import FNote from "../../entities/fnote";
 import { useElementSize, useNoteContext, useNoteLabel } from "../react/hooks";
 import ForceGraph, { LinkObject, NodeObject } from "force-graph";
-import { loadNotesAndRelations, NotesAndRelationsData } from "./data";
+import { loadNotesAndRelations, Node, NotesAndRelationsData } from "./data";
 import { CssData, setupRendering } from "./rendering";
 import ActionButton from "../react/ActionButton";
 import { t } from "../../services/i18n";
+import link_context_menu from "../../menus/link_context_menu";
+import appContext from "../../components/app_context";
 
 interface NoteMapProps {
     note: FNote;
@@ -42,6 +44,8 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
         loadNotesAndRelations(mapRootId, excludeRelations, includeRelations, mapType).then((notesAndRelations) => {
             if (!containerRef.current || !styleResolverRef.current) return;
             const cssData = getCssData(containerRef.current, styleResolverRef.current);
+
+            // Configure rendering properties.
             setupRendering(graph, {
                 cssData,
                 noteId: note.noteId,
@@ -51,6 +55,19 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
                 widgetMode,
                 mapType
             });
+
+            // Interaction
+            graph
+                .onNodeClick((node) => {
+                    if (!node.id) return;
+                    appContext.tabManager.getActiveContext()?.setNote((node as Node).id);
+                })
+                .onNodeRightClick((node, e) => {
+                    if (!node.id) return;
+                    link_context_menu.openContextMenu((node as Node).id, e);
+                });
+
+            // Set data
             graph.graphData(notesAndRelations);
         });
 
