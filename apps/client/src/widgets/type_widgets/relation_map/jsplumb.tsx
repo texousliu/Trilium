@@ -68,7 +68,7 @@ export function JsPlumbItem({ x, y, children, draggable, sourceConfig, targetCon
 
     useEffect(() => {
         if (!targetConfig || !apiRef?.current || !containerRef.current) return;
-        apiRef.current.makeSource(containerRef.current, targetConfig);
+        apiRef.current.makeTarget(containerRef.current, targetConfig);
     }, [ targetConfig ]);
 
     return (
