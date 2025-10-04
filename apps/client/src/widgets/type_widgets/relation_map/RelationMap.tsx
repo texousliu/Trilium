@@ -269,6 +269,7 @@ async function useRelationData(noteId: string, mapData: MapData | undefined, map
                     target: noteIdToId(relation.targetNoteId),
                     type: relation.type
                 });
+                if (!connection) return;
 
                 // TODO: Does this actually do anything.
                 //@ts-expect-error
