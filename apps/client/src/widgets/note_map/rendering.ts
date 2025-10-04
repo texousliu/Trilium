@@ -133,7 +133,28 @@ export function setupRendering(graph: ForceGraph, { noteId, themeStyle, widgetMo
             hoverNode = node || null;
             highlightLinks.clear();
         })
+        .nodePointerAreaPaint((node, _, ctx) => paintNode(node as Node, getColorForNode(node as Node, noteId, themeStyle, widgetMode), ctx))
+        .nodePointerAreaPaint((node, color, ctx) => {
+            if (!node.id) {
+                return;
+            }
+
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            if (node.x && node.y) {
+                ctx.arc(node.x, node.y, noteIdToSizeMap[node.id], 0, 2 * Math.PI, false);
+            }
+            ctx.fill();
+        })
+        .nodeLabel((node) => escapeHtml((node as Node).name))
         .onZoom((zoom) => zoomLevel = zoom.k);
+
+    // set link width to immitate a highlight effect. Checking the condition if any links are saved in the previous defined set highlightlinks
+    graph
+        .linkWidth((link) => (highlightLinks.has(link) ? 3 : 0.4))
+        .linkColor((link) => (highlightLinks.has(link) ? "white" : cssData.mutedTextColor))
+        .linkDirectionalArrowLength(4)
+        .linkDirectionalArrowRelPos(0.95)
 
     // Link-specific config
     if (mapType) {

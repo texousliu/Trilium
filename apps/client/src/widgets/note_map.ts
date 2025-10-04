@@ -34,6 +34,7 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
     private fixNodes: boolean;
     private widgetMode: WidgetMode;
 
+    private themeStyle!: string;
     private $container!: JQuery<HTMLElement>;
     private $fixNodesButton!: JQuery<HTMLElement>;
     graph!: ForceGraph;
@@ -80,28 +81,9 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
                 }
             })
 
-            // set link width to immitate a highlight effekt. Checking the condition if any links are saved in the previous defined set highlightlinks
-            .linkWidth((link) => (highlightLinks.has(link) ? 3 : 0.4))
-            .linkColor((link) => (highlightLinks.has(link) ? "white" : this.cssData.mutedTextColor))
-            .linkDirectionalArrowLength(4)
-            .linkDirectionalArrowRelPos(0.95)
-
             // Rendering code was here
 
-            .nodePointerAreaPaint((node, _, ctx) => this.paintNode(node as Node, this.getColorForNode(node as Node), ctx))
-            .nodePointerAreaPaint((node, color, ctx) => {
-                if (!node.id) {
-                    return;
-                }
 
-                ctx.fillStyle = color;
-                ctx.beginPath();
-                if (node.x && node.y) {
-                    ctx.arc(node.x, node.y, this.noteIdToSizeMap[node.id], 0, 2 * Math.PI, false);
-                }
-                ctx.fill();
-            })
-            .nodeLabel((node) => esc((node as Node).name))
             .onNodeClick((node) => {
                 if (node.id) {
                     appContext.tabManager.getActiveContext()?.setNote((node as Node).id);
