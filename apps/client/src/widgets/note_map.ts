@@ -13,11 +13,6 @@ import type FNote from "../entities/fnote.js";
 const esc = utils.escapeHtml;
 
 const TPL = /*html*/`<div class="note-map-widget">
-    <div class="btn-group btn-group-sm map-type-switcher content-floating-buttons top-left" role="group">
-      <button type="button" class="btn bx bx-network-chart tn-tool-button" title="${t("note-map.button-link-map")}" data-type="link"></button>
-      <button type="button" class="btn bx bx-sitemap tn-tool-button" title="${t("note-map.button-tree-map")}" data-type="tree"></button>
-    </div>
-
     <!-- UI for dragging Notes and link force -->
 
     <div class="btn-group-sm fixnodes-type-switcher content-floating-buttons bottom-left" role="group">
@@ -62,12 +57,6 @@ export default class NoteMapWidget extends NoteContextAwareWidget {
         this.$fixNodesButton = this.$widget.find(".fixnodes-type-switcher > button");
 
         new ResizeObserver(() => this.setDimensions()).observe(this.$container[0]);
-
-        this.$widget.find(".map-type-switcher button").on("click", async (e) => {
-            const type = $(e.target).closest("button").attr("data-type");
-
-            await attributeService.setLabel(this.noteId ?? "", "mapType", type);
-        });
 
         // Reading the status of the Drag nodes Ui element. Changing it´s color when activated.
         // Reading Force value of the link distance.

@@ -7,6 +7,8 @@ import { useElementSize, useNoteContext, useNoteLabel } from "../react/hooks";
 import ForceGraph, { LinkObject, NodeObject } from "force-graph";
 import { loadNotesAndRelations, NotesAndRelationsData } from "./data";
 import { CssData, setupRendering } from "./rendering";
+import ActionButton from "../react/ActionButton";
+import { t } from "../../services/i18n";
 
 interface NoteMapProps {
     note: FNote;
@@ -19,8 +21,7 @@ type MapType = "tree" | "link";
 export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const styleResolverRef = useRef<HTMLDivElement>(null);
-    const [ cssData, setCssData ] = useState<CssData>();
-    const [ mapTypeRaw ] = useNoteLabel(note, "mapType");
+    const [ mapTypeRaw, setMapType ] = useNoteLabel(note, "mapType");
     const mapType: MapType = mapTypeRaw === "tree" ? "tree" : "link";
 
     const graphRef = useRef<ForceGraph<NodeObject, LinkObject<NodeObject>>>();
@@ -35,7 +36,6 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
         graphRef.current = graph;
 
         const mapRootId = getMapRootNoteId(note.noteId, note, widgetMode);
-        console.log("Map root ID ", mapRootId);
         if (!mapRootId) return;
 
         const labelValues = (name: string) => note.getLabels(name).map(l => l.value) ?? [];
@@ -56,7 +56,7 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
         });
 
         return () => container.replaceChildren();
-    }, [ note ]);
+    }, [ note, mapType ]);
 
     // React to container size
     useEffect(() => {
@@ -66,6 +66,24 @@ export default function NoteMap({ note, widgetMode, parentRef }: NoteMapProps) {
 
     return (
         <div className="note-map-widget">
+            <div className="btn-group btn-group-sm map-type-switcher content-floating-buttons top-left" role="group">
+                <ActionButton
+                    icon="bx bx-network-chart"
+                    text={t("note-map.button-link-map")}
+                    disabled={mapType === "link"}
+                    onClick={() => setMapType("link")}
+                    frame
+                />
+
+                <ActionButton
+                    icon="bx bx-sitemap"
+                    text={t("note-map.button-tree-map")}
+                    disabled={mapType === "tree"}
+                    onClick={() => setMapType("tree")}
+                    frame
+                />
+            </div>
+
             <div ref={styleResolverRef} class="style-resolver" />
             <div ref={containerRef} className="note-map-container" />
         </div>
