@@ -1,45 +1,13 @@
-import { NoteType } from "@triliumnext/commons";
-import { useLegacyImperativeHandlers, useNoteContext, useTriliumEvent } from "./react/hooks"
+import { useNoteContext, useTriliumEvent } from "./react/hooks"
 import FNote from "../entities/fnote";
 import protected_session_holder from "../services/protected_session_holder";
-import { useContext, useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import NoteContext from "../components/note_context";
-import { ComponentChildren, isValidElement, VNode } from "preact";
+import { isValidElement, VNode } from "preact";
 import { TypeWidgetProps } from "./type_widgets/type_widget";
 import "./NoteDetail.css";
 import attributes from "../services/attributes";
-
-/**
- * A `NoteType` altered by the note detail widget, taking into consideration whether the note is editable or not and adding special note types such as an empty one,
- * for protected session or attachment information.
- */
-type ExtendedNoteType = Exclude<NoteType, "launcher" | "text" | "code"> | "empty" | "readOnlyCode" | "readOnlyText" | "editableText" | "editableCode" | "attachmentDetail" | "attachmentList" |  "protectedSession" | "aiChat";
-type TypeWidget = (props: TypeWidgetProps) => VNode;
-
-const TYPE_MAPPINGS: Record<ExtendedNoteType, () => Promise<{ default: TypeWidget } | TypeWidget> | ((props: TypeWidgetProps) => VNode)> = {
-    "empty": () => import("./type_widgets/Empty"),
-    "doc": () => import("./type_widgets/Doc"),
-    "search": () => <div className="note-detail-none note-detail-printable" />,
-    "protectedSession": () => import("./type_widgets/ProtectedSession"),
-    "book": () => import("./type_widgets/Book"),
-    "contentWidget": () => import("./type_widgets/ContentWidget"),
-    "webView": () => import("./type_widgets/WebView"),
-    "file": () => import("./type_widgets/File"),
-    "image": () => import("./type_widgets/Image"),
-    "readOnlyCode": async () => (await import("./type_widgets/code/Code")).ReadOnlyCode,
-    "editableCode": async () => (await import("./type_widgets/code/Code")).EditableCode,
-    "mermaid": () => import("./type_widgets/Mermaid"),
-    "mindMap": () => import("./type_widgets/MindMap"),
-    "attachmentList": async () => (await import("./type_widgets/Attachment")).AttachmentList,
-    "attachmentDetail": async () => (await import("./type_widgets/Attachment")).AttachmentDetail,
-    "readOnlyText": () => import("./type_widgets/text/ReadOnlyText"),
-    "editableText": () => import("./type_widgets/text/EditableText"),
-    "render": () => import("./type_widgets/Render"),
-    "canvas": () => import("./type_widgets/Canvas"),
-    "relationMap": () => import("./type_widgets/relation_map/RelationMap"),
-    "noteMap": () => import("./type_widgets/NoteMap"),
-    "aiChat": () => import("./type_widgets/AiChat")
-};
+import { ExtendedNoteType, TYPE_MAPPINGS } from "./note_types";
 
 /**
  * The note detail is in charge of rendering the content of a note, by determining its type (e.g. text, code) and using the appropriate view widget.
@@ -192,7 +160,7 @@ function useNoteInfo() {
 }
 
 async function getCorrespondingWidget(type: ExtendedNoteType): Promise<null | ((props: TypeWidgetProps) => VNode)> {
-    const correspondingType = TYPE_MAPPINGS[type];
+    const correspondingType = TYPE_MAPPINGS[type].view;
     if (!correspondingType) return null;
 
     const result = await correspondingType();
