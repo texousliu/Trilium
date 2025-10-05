@@ -668,6 +668,10 @@ export class AppContext extends Component {
             this.beforeUnloadListeners.push(obj);
         }
     }
+
+    removeBeforeUnloadListener(listener: (() => boolean)) {
+        this.beforeUnloadListeners = this.beforeUnloadListeners.filter(l => l === listener);
+    }
 }
 
 const appContext = new AppContext(window.glob.isMainWindow);

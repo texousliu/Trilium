@@ -1,5 +1,5 @@
 import { MutableRef, useCallback, useContext, useDebugValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
-import { EventData, EventNames } from "../../components/app_context";
+import appContext, { EventData, EventNames } from "../../components/app_context";
 import { ParentComponent, refToJQuerySelector } from "./react_utils";
 import SpacedUpdate from "../../services/spaced_update";
 import { FilterLabelsByType, KeyboardActionNames, OptionNames, RelationNames } from "@triliumnext/commons";
@@ -23,7 +23,6 @@ import protected_session_holder from "../../services/protected_session_holder";
 import server from "../../services/server";
 import { removeIndividualBinding } from "../../services/shortcuts";
 import { ViewScope } from "../../services/link";
-import { VirtualConsolePrinter } from "happy-dom";
 
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
     const parentComponent = useContext(ParentComponent);
@@ -127,6 +126,13 @@ export function useEditorSpacedUpdate({ note, noteContext, getData, onContentCha
         if (!noteContext?.ntxId || !ntxIds.includes(noteContext.ntxId)) return;
         await spacedUpdate.updateNowIfNecessary();
     })
+
+    // Save if needed upon window/browser closing.
+    useEffect(() => {
+        const listener = () => spacedUpdate.isAllSavedAndTriggerUpdate();
+        appContext.addBeforeUnloadListener(listener);
+        return () => appContext.removeBeforeUnloadListener(listener);
+    }, []);
 
     return spacedUpdate;
 }
