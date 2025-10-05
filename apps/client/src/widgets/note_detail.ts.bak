@@ -44,37 +44,9 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
 
         return await this.parent?.triggerCommand("runActiveNote", params);
     }
-
-    async printActiveNoteEvent() {
-        if (!this.noteContext?.isActive()) {
-            return;
-        }
-
-        // Trigger in timeout to dismiss the menu while printing.
-        setTimeout(window.print, 0);
-    }
-
-    async exportAsPdfEvent() {
-        if (!this.noteContext?.isActive() || !this.note) {
-            return;
-        }
-
-        const { ipcRenderer } = utils.dynamicRequire("electron");
-        ipcRenderer.send("export-as-pdf", {
-            title: this.note.title,
-            pageSize: this.note.getAttributeValue("label", "printPageSize") ?? "Letter",
-            landscape: this.note.hasAttribute("label", "printLandscape")
-        });
-    }
     
     beforeUnloadEvent() {
         return this.spacedUpdate.isAllSavedAndTriggerUpdate();
-    }
-
-    readOnlyTemporarilyDisabledEvent({ noteContext }: EventData<"readOnlyTemporarilyDisabled">) {
-        if (this.isNoteContext(noteContext.ntxId)) {
-            this.refresh();
-        }
     }
 
     async executeInActiveNoteDetailWidgetEvent({ callback }: EventData<"executeInActiveNoteDetailWidget">) {

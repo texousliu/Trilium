@@ -8,7 +8,7 @@ import { TypeWidgetProps } from "./type_widgets/type_widget";
 import "./NoteDetail.css";
 import attributes from "../services/attributes";
 import { ExtendedNoteType, TYPE_MAPPINGS } from "./note_types";
-import { isMobile } from "../services/utils";
+import { dynamicRequire, isMobile } from "../services/utils";
 
 /**
  * The note detail is in charge of rendering the content of a note, by determining its type (e.g. text, code) and using the appropriate view widget.
@@ -113,6 +113,23 @@ export default function NoteDetail() {
 
         const component = glob.getComponentByEl(componentEl);
         resolve(component);
+    });
+
+    useTriliumEvent("printActiveNote", () => {
+        if (!noteContext?.isActive() || !note) return;
+
+        // Trigger in timeout to dismiss the menu while printing.
+        setTimeout(window.print, 0);
+    });
+
+    useTriliumEvent("exportAsPdf", () => {
+        if (!noteContext?.isActive() || !note) return;
+        const { ipcRenderer } = dynamicRequire("electron");
+        ipcRenderer.send("export-as-pdf", {
+            title: note.title,
+            pageSize: note.getAttributeValue("label", "printPageSize") ?? "Letter",
+            landscape: note.hasAttribute("label", "printLandscape")
+        });
     });
 
     return (
