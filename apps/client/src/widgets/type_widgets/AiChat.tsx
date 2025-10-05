@@ -4,14 +4,30 @@ import { type TypeWidgetProps } from "./type_widget";
 import LlmChatPanel from "../llm_chat";
 
 export default function AiChat({ note, noteContext }: TypeWidgetProps) {
-    const dataRef = useRef<string>();
+    const dataRef = useRef<object>();
     const spacedUpdate = useEditorSpacedUpdate({
         note,
-        getData: async () => dataRef.current,
-        onContentChange: (newContent) => dataRef.current = newContent
+        getData: async () => ({
+            content: JSON.stringify(dataRef.current)
+        }),
+        onContentChange: (newContent) => {
+            try {
+                dataRef.current = JSON.parse(newContent);
+            } catch (e) {
+                dataRef.current = {};
+            }
+        }
     });
     const [ ChatWidget, llmChatPanel ] = useLegacyWidget(() => {
-        return new LlmChatPanel();
+        const llmChatPanel = new LlmChatPanel();
+        llmChatPanel.setDataCallbacks(
+            async (data) => {
+                dataRef.current = data;
+                spacedUpdate.scheduleUpdate();
+            },
+            async () => dataRef.current
+        );
+        return llmChatPanel;
     }, {
         noteContext,
         containerClassName: "ai-chat-widget-container",
@@ -21,17 +37,9 @@ export default function AiChat({ note, noteContext }: TypeWidgetProps) {
     });
 
     useEffect(() => {
-        llmChatPanel.setDataCallbacks(
-            async (data) => {
-                dataRef.current = data;
-                spacedUpdate.scheduleUpdate();
-            },
-            async () => dataRef.current
-        );
-    }, []);
-
-    useEffect(() => {
+        llmChatPanel.setNoteId(note.noteId);
         llmChatPanel.setCurrentNoteId(note.noteId);
+        llmChatPanel.refresh();
     }, [ note ]);
 
     return ChatWidget;
