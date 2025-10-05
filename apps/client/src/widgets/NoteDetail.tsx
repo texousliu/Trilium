@@ -19,6 +19,7 @@ import { isMobile } from "../services/utils";
  * - Caches the note type elements based on what the user has accessed, in order to quickly load it again.
  */
 export default function NoteDetail() {
+    const containerRef = useRef<HTMLDivElement>(null);
     const { note, type, mime, noteContext, parentComponent } = useNoteInfo();
     const { ntxId, viewScope } = noteContext ?? {};
     const isFullHeight = checkFullHeight(noteContext, type);
@@ -103,8 +104,22 @@ export default function NoteDetail() {
         document.body.classList.toggle("force-fixed-tree", hasFixedTree);
     }, [ note ]);
 
+    useTriliumEvent("executeWithTypeWidget", ({ resolve, ntxId: eventNtxId }) => {
+        if (eventNtxId !== ntxId || !activeNoteType || !containerRef.current) return;
+
+        const classNameToSearch = TYPE_MAPPINGS[activeNoteType].className;
+        const componentEl = containerRef.current.querySelector<HTMLElement>(`.${classNameToSearch}`);
+        if (!componentEl) return;
+
+        const component = glob.getComponentByEl(componentEl);
+        resolve(component);
+    });
+
     return (
-        <div class={`note-detail ${isFullHeight ? "full-height" : ""}`}>
+        <div
+            ref={containerRef}
+            class={`note-detail ${isFullHeight ? "full-height" : ""}`}
+        >
             {Object.entries(noteTypesToRender.current).map(([ type, Element ]) => {
                 return <NoteDetailWrapper
                     Element={Element}
