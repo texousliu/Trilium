@@ -13,10 +13,13 @@ import { dynamicRequire, isMobile } from "../services/utils";
 /**
  * The note detail is in charge of rendering the content of a note, by determining its type (e.g. text, code) and using the appropriate view widget.
  *
- * Apart from that:
- * - It applies a full-height style depending on the content type (e.g. canvas notes).
+ * Apart from that, it:
+ * - Applies a full-height style depending on the content type (e.g. canvas notes).
  * - Focuses the content when switching tabs.
  * - Caches the note type elements based on what the user has accessed, in order to quickly load it again.
+ * - Fixes the tree for launch bar configurations on mobile.
+ * - Provides scripting events such as obtaining the active note detail widget, or note type widget.
+ * - Printing and exporting to PDF.
  */
 export default function NoteDetail() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -103,6 +106,11 @@ export default function NoteDetail() {
         const hasFixedTree = noteContext?.hoistedNoteId === "_lbMobileRoot";
         document.body.classList.toggle("force-fixed-tree", hasFixedTree);
     }, [ note ]);
+
+    useTriliumEvent("executeInActiveNoteDetailWidget", ({ callback }) => {
+        if (!noteContext?.isActive()) return;
+        callback(parentComponent);
+    });
 
     useTriliumEvent("executeWithTypeWidget", ({ resolve, ntxId: eventNtxId }) => {
         if (eventNtxId !== ntxId || !activeNoteType || !containerRef.current) return;

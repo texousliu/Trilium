@@ -13,17 +13,6 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
         appContext.addBeforeUnloadListener(this);
     }
 
-    /**
-     * sets full height of container that contains note content for a subset of note-types
-     */
-    getTypeWidget() {
-        if (!this.type || !this.typeWidgets[this.type]) {
-            throw new Error(t(`note_detail.could_not_find_typewidget`, { type: this.type }));
-        }
-
-        return this.typeWidgets[this.type];
-    }
-
     async beforeNoteSwitchEvent({ noteContext }: EventData<"beforeNoteSwitch">) {
         if (this.isNoteContext(noteContext.ntxId)) {
             await this.spacedUpdate.updateNowIfNecessary();
@@ -47,22 +36,6 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
     
     beforeUnloadEvent() {
         return this.spacedUpdate.isAllSavedAndTriggerUpdate();
-    }
-
-    async executeInActiveNoteDetailWidgetEvent({ callback }: EventData<"executeInActiveNoteDetailWidget">) {
-        if (!this.isActiveNoteContext()) {
-            return;
-        }
-
-        await this.initialized;
-
-        callback(this);
-    }
-
-    renderActiveNoteEvent() {
-        if (this.noteContext?.isActive()) {
-            this.refresh();
-        }
     }
 
 }

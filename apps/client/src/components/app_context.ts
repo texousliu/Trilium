@@ -35,6 +35,7 @@ import type RootContainer from "../widgets/containers/root_container.js";
 import { SqlExecuteResults } from "@triliumnext/commons";
 import { AddLinkOpts } from "../widgets/dialogs/add_link.jsx";
 import { IncludeNoteOpts } from "../widgets/dialogs/include_note.jsx";
+import { ReactWrappedWidget } from "../widgets/basic_widget.js";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootContainer;
@@ -201,7 +202,7 @@ export type CommandMappings = {
     resetLauncher: ContextMenuCommandData;
 
     executeInActiveNoteDetailWidget: CommandData & {
-        callback: (value: NoteDetailWidget | PromiseLike<NoteDetailWidget>) => void;
+        callback: (value: ReactWrappedWidget) => void;
     };
     executeWithTextEditor: CommandData &
     ExecuteCommandData<CKTextEditor> & {
