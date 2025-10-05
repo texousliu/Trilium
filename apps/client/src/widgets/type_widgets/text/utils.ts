@@ -1,7 +1,7 @@
 import appContext from "../../../components/app_context";
 import content_renderer from "../../../services/content_renderer";
 import froca from "../../../services/froca";
-import link from "../../../services/link";
+import link, { ViewScope } from "../../../services/link";
 import utils from "../../../services/utils";
 
 export async function loadIncludedNote(noteId: string, $el: JQuery<HTMLElement>) {
@@ -66,7 +66,7 @@ async function openImageInNewTab($img: JQuery<HTMLElement>, activate: boolean = 
     }
 }
 
-async function parseFromImage($img: JQuery<HTMLElement>) {
+async function parseFromImage($img: JQuery<HTMLElement>): Promise<{ noteId: string; viewScope: ViewScope } | null> {
     const imgSrc = $img.prop("src");
 
     const imageNoteMatch = imgSrc.match(/\/api\/images\/([A-Za-z0-9_]+)\//);
@@ -81,9 +81,10 @@ async function parseFromImage($img: JQuery<HTMLElement>) {
     if (attachmentMatch) {
         const attachmentId = attachmentMatch[1];
         const attachment = await froca.getAttachment(attachmentId);
+        if (!attachment) return null;
 
         return {
-            noteId: attachment?.ownerId,
+            noteId: attachment.ownerId,
             viewScope: {
                 viewMode: "attachments",
                 attachmentId: attachmentId

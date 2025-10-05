@@ -4,9 +4,8 @@
  */
 
 import { NoteType } from "@triliumnext/commons";
-import TypeWidget from "./type_widgets_old/type_widget";
+import { VNode, type JSX } from "preact";
 import { TypeWidgetProps } from "./type_widgets/type_widget";
-import { VNode } from "preact";
 
 /**
  * A `NoteType` altered by the note detail widget, taking into consideration whether the note is editable or not and adding special note types such as an empty one,
@@ -14,7 +13,8 @@ import { VNode } from "preact";
  */
 export type ExtendedNoteType = Exclude<NoteType, "launcher" | "text" | "code"> | "empty" | "readOnlyCode" | "readOnlyText" | "editableText" | "editableCode" | "attachmentDetail" | "attachmentList" |  "protectedSession" | "aiChat";
 
-type NoteTypeView = () => Promise<{ default: TypeWidget } | TypeWidget> | ((props: TypeWidgetProps) => VNode);
+export type TypeWidget = ((props: TypeWidgetProps) => VNode | JSX.Element);
+type NoteTypeView = () => (Promise<{ default: TypeWidget } | TypeWidget> | TypeWidget);
 
 interface NoteTypeMapping {
     view: NoteTypeView;
@@ -36,7 +36,7 @@ export const TYPE_MAPPINGS: Record<ExtendedNoteType, NoteTypeMapping> = {
         printable: true
     },
     search: {
-        view: () => <></>,
+        view: () => (props: TypeWidgetProps) => <></>,
         className: "note-detail-none",
         printable: true
     },

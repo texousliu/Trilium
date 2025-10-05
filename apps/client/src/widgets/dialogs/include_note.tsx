@@ -8,9 +8,8 @@ import Button from "../react/Button";
 import { Suggestion, triggerRecentNotes } from "../../services/note_autocomplete";
 import tree from "../../services/tree";
 import froca from "../../services/froca";
-import EditableTextTypeWidget, { type BoxSize } from "../type_widgets_old/editable_text";
 import { useTriliumEvent } from "../react/hooks";
-import { CKEditorApi } from "../type_widgets/text/CKEditorWithWatchdog";
+import { type BoxSize, CKEditorApi } from "../type_widgets/text/CKEditorWithWatchdog";
 
 export interface IncludeNoteOpts {
     editorApi: CKEditorApi;
@@ -19,7 +18,7 @@ export interface IncludeNoteOpts {
 export default function IncludeNoteDialog() {
     const editorApiRef = useRef<CKEditorApi>(null);
     const [suggestion, setSuggestion] = useState<Suggestion | null>(null);
-    const [boxSize, setBoxSize] = useState("medium");
+    const [boxSize, setBoxSize] = useState<string>("medium");
     const [shown, setShown] = useState(false);
 
     useTriliumEvent("showIncludeNoteDialog", ({ editorApi }) => {

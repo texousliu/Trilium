@@ -86,7 +86,7 @@ export default function Canvas({ note, noteContext }: TypeWidgetProps) {
     )
 }
 
-function usePersistence(note: FNote, noteContext: NoteContext, apiRef: RefObject<ExcalidrawImperativeAPI>, theme: AppState["theme"], isReadOnly: boolean): Partial<ExcalidrawProps> {
+function usePersistence(note: FNote, noteContext: NoteContext | null | undefined, apiRef: RefObject<ExcalidrawImperativeAPI>, theme: AppState["theme"], isReadOnly: boolean): Partial<ExcalidrawProps> {
     const libraryChanged = useRef(false);
 
     /**

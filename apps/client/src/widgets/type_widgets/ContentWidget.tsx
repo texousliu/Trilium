@@ -1,6 +1,5 @@
 import { TypeWidgetProps } from "./type_widget";
 import { JSX } from "preact/jsx-runtime";
-import { OptionPages } from "../type_widgets_old/content_widget";
 import AppearanceSettings from "./options/appearance";
 import ShortcutSettings from "./options/shortcuts";
 import TextNoteSettings from "./options/text_notes";

@@ -7,9 +7,8 @@ import { isValidElement, VNode } from "preact";
 import { TypeWidgetProps } from "./type_widgets/type_widget";
 import "./NoteDetail.css";
 import attributes from "../services/attributes";
-import { ExtendedNoteType, TYPE_MAPPINGS } from "./note_types";
+import { ExtendedNoteType, TYPE_MAPPINGS, TypeWidget } from "./note_types";
 import { dynamicRequire, isMobile } from "../services/utils";
-import { ReactWrappedWidget } from "./basic_widget";
 
 /**
  * The note detail is in charge of rendering the content of a note, by determining its type (e.g. text, code) and using the appropriate view widget.
@@ -214,7 +213,7 @@ function useNoteInfo() {
     return { note, type, mime, noteContext, parentComponent };
 }
 
-async function getCorrespondingWidget(type: ExtendedNoteType): Promise<null | ((props: TypeWidgetProps) => VNode)> {
+async function getCorrespondingWidget(type: ExtendedNoteType): Promise<null | TypeWidget> {
     const correspondingType = TYPE_MAPPINGS[type].view;
     if (!correspondingType) return null;
 

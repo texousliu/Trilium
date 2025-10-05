@@ -181,7 +181,7 @@ export default function CKEditorWithWatchdog({ containerRef: externalContainerRe
     );
 }
 
-function buildWatchdog(isClassicEditor: boolean, watchdogConfig?: WatchdogConfig) {
+function buildWatchdog(isClassicEditor: boolean, watchdogConfig?: WatchdogConfig): EditorWatchdog<CKTextEditor> {
     if (isClassicEditor) {
         return new EditorWatchdog(ClassicEditor, watchdogConfig);
     } else {

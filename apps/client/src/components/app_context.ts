@@ -13,7 +13,6 @@ import MainTreeExecutors from "./main_tree_executors.js";
 import toast from "../services/toast.js";
 import ShortcutComponent from "./shortcut_component.js";
 import { t, initLocale } from "../services/i18n.js";
-import type NoteDetailWidget from "../widgets/note_detail.js";
 import type { ResolveOptions } from "../widgets/dialogs/delete_notes.js";
 import type { PromptDialogOptions } from "../widgets/dialogs/prompt.js";
 import type { ConfirmWithMessageOptions, ConfirmWithTitleOptions } from "../widgets/dialogs/confirm.js";
@@ -21,8 +20,6 @@ import type LoadResults from "../services/load_results.js";
 import type { Attribute } from "../services/attribute_parser.js";
 import type NoteTreeWidget from "../widgets/note_tree.js";
 import type { default as NoteContext, GetTextEditorCallback } from "./note_context.js";
-import type TypeWidget from "../widgets/type_widgets_old/type_widget.js";
-import type EditableTextTypeWidget from "../widgets/type_widgets_old/editable_text.js";
 import type { NativeImage, TouchBar } from "electron";
 import TouchBarComponent from "./touch_bar.js";
 import type { CKTextEditor } from "@triliumnext/ckeditor5";
@@ -36,6 +33,7 @@ import { SqlExecuteResults } from "@triliumnext/commons";
 import { AddLinkOpts } from "../widgets/dialogs/add_link.jsx";
 import { IncludeNoteOpts } from "../widgets/dialogs/include_note.jsx";
 import { ReactWrappedWidget } from "../widgets/basic_widget.js";
+import { TypeWidget } from "../widgets/note_types.jsx";
 
 interface Layout {
     getRootWidget: (appContext: AppContext) => RootContainer;
@@ -214,7 +212,7 @@ export type CommandMappings = {
      * Generally should not be invoked manually, as it is used by {@link NoteContext.getContentElement}.
      */
     executeWithContentElement: CommandData & ExecuteCommandData<JQuery<HTMLElement>>;
-    executeWithTypeWidget: CommandData & ExecuteCommandData<TypeWidget | null>;
+    executeWithTypeWidget: CommandData & ExecuteCommandData<ReactWrappedWidget | null>;
     addTextToActiveEditor: CommandData & {
         text: string;
     };
@@ -487,13 +485,8 @@ type EventMappings = {
     relationMapResetZoomIn: { ntxId: string | null | undefined };
     relationMapResetZoomOut: { ntxId: string | null | undefined };
     activeNoteChanged: {};
-    showAddLinkDialog: {
-        textTypeWidget: EditableTextTypeWidget;
-        text: string;
-    };
-    showIncludeDialog: {
-        textTypeWidget: EditableTextTypeWidget;
-    };
+    showAddLinkDialog: AddLinkOpts;
+    showIncludeDialog: IncludeNoteOpts;
     openBulkActionsDialog: {
         selectedOrActiveNoteIds: string[];
     };
