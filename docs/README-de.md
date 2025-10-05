@@ -9,10 +9,10 @@ releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![Translation
 status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[English](./README.md) | [Chinese (Simplified)](./docs/README-ZH_CN.md) |
-[Chinese (Traditional)](./docs/README-ZH_TW.md) | [Russian](./docs/README-ru.md)
-| [Japanese](./docs/README-ja.md) | [Italian](./docs/README-it.md) |
-[Spanish](./docs/README-es.md)
+[Englisch](./README.md) | [Chinesisch (Vereinfacht)](./docs/README-ZH_CN.md) |
+[Chinesisch (Traditionell)](./docs/README-ZH_TW.md) |
+[Russisch](./docs/README-ru.md) | [Japanisch](./docs/README-ja.md) |
+[Italienisch](./docs/README-it.md) | [Spanisch](./docs/README-es.md)
 
 Trilium Notes is a free and open-source, cross-platform hierarchical note taking
 application with focus on building large personal knowledge bases.
@@ -22,12 +22,12 @@ quick overview:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
-## 📚 Documentation
+## 📚 Dokumentation
 
 **Visit our comprehensive documentation at
 [docs.triliumnotes.org](https://docs.triliumnotes.org/)**
 
-Our documentation is available in multiple formats:
+Unsere Dokumentation ist verfügbar in mehreren Formaten:
 - **Online Documentation**: Browse the full documentation at
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
 - **In-App Help**: Press `F1` within Trilium to access the same documentation
@@ -121,7 +121,7 @@ The original Trilium developer ([Zadam](https://github.com/zadam)) has
 graciously given the Trilium repository to the community project which resides
 at https://github.com/TriliumNext
 
-### ⬆️Migrating from Zadam/Trilium?
+### Migration von Zadam/Trilium?
 
 There are no special migration steps to migrate from a zadam/Trilium instance to
 a TriliumNext/Trilium instance. Simply [install
@@ -210,8 +210,8 @@ If you are a native speaker, help us translate Trilium by heading over to our
 
 Here's the language coverage we have so far:
 
-[![Translation
-status](https://hosted.weblate.org/widget/trilium/multi-auto.svg)](https://hosted.weblate.org/engage/trilium/)
+[![Status der
+Übersetzung](https://hosted.weblate.org/widget/trilium/multi-auto.svg)](https://hosted.weblate.org/engage/trilium/)
 
 ### Code
 
