@@ -13,49 +13,6 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
         appContext.addBeforeUnloadListener(this);
     }
 
-    isEnabled() {
-        return true;
-    }
-
-    async refresh() {
-        this.type = await this.getWidgetType();
-        this.mime = this.note?.mime;
-
-        if (!(this.type in this.typeWidgets)) {
-            const clazz = typeWidgetClasses[this.type];
-
-            if (!clazz) {
-                throw new Error(`Cannot find type widget for type '${this.type}'`);
-            }
-
-            const typeWidget = (this.typeWidgets[this.type] = new clazz());
-            typeWidget.spacedUpdate = this.spacedUpdate;
-            typeWidget.setParent(this);
-
-            if (this.noteContext) {
-                typeWidget.setNoteContextEvent({ noteContext: this.noteContext });
-            }
-            const $renderedWidget = typeWidget.render();
-            keyboardActionsService.updateDisplayedShortcuts($renderedWidget);
-
-            this.$widget.append($renderedWidget);
-
-            if (this.noteContext) {
-                await typeWidget.handleEvent("setNoteContext", { noteContext: this.noteContext });
-            }
-
-            // this is happening in update(), so note has been already set, and we need to reflect this
-            if (this.noteContext) {
-                await typeWidget.handleEvent("noteSwitched", {
-                    noteContext: this.noteContext,
-                    notePath: this.noteContext.notePath
-                });
-            }
-
-            this.child(typeWidget);
-        }
-    }
-
     /**
      * sets full height of container that contains note content for a subset of note-types
      */
@@ -109,12 +66,6 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
             landscape: this.note.hasAttribute("label", "printLandscape")
         });
     }
-
-    hoistedNoteChangedEvent({ ntxId }: EventData<"hoistedNoteChanged">) {
-        if (this.isNoteContext(ntxId)) {
-            this.refresh();
-        }
-    }
     
     beforeUnloadEvent() {
         return this.spacedUpdate.isAllSavedAndTriggerUpdate();
@@ -134,29 +85,6 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
         await this.initialized;
 
         callback(this);
-    }
-
-    async cutIntoNoteCommand() {
-        const note = appContext.tabManager.getActiveContextNote();
-
-        if (!note) {
-            return;
-        }
-
-        // without await as this otherwise causes deadlock through component mutex
-        const parentNotePath = appContext.tabManager.getActiveContextNotePath();
-        if (this.noteContext && parentNotePath) {
-            noteCreateService.createNote(parentNotePath, {
-                isProtected: note.isProtected,
-                saveSelection: true,
-                textEditor: await this.noteContext.getTextEditor()
-            });
-        }
-    }
-
-    // used by cutToNote in CKEditor build
-    async saveNoteDetailNowCommand() {
-        await this.spacedUpdate.updateNowIfNecessary();
     }
 
     renderActiveNoteEvent() {
