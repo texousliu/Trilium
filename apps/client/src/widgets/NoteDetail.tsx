@@ -1,4 +1,4 @@
-import { useNoteContext, useTriliumEvent } from "./react/hooks"
+import { useNoteContext, useTriliumEvent, useTriliumEvents } from "./react/hooks"
 import FNote from "../entities/fnote";
 import protected_session_holder from "../services/protected_session_holder";
 import { useEffect, useRef, useState } from "preact/hooks";
@@ -9,6 +9,7 @@ import "./NoteDetail.css";
 import attributes from "../services/attributes";
 import { ExtendedNoteType, TYPE_MAPPINGS } from "./note_types";
 import { dynamicRequire, isMobile } from "../services/utils";
+import { ReactWrappedWidget } from "./basic_widget";
 
 /**
  * The note detail is in charge of rendering the content of a note, by determining its type (e.g. text, code) and using the appropriate view widget.

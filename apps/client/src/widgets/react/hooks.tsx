@@ -23,6 +23,7 @@ import protected_session_holder from "../../services/protected_session_holder";
 import server from "../../services/server";
 import { removeIndividualBinding } from "../../services/shortcuts";
 import { ViewScope } from "../../services/link";
+import { VirtualConsolePrinter } from "happy-dom";
 
 export function useTriliumEvent<T extends EventNames>(eventName: T, handler: (data: EventData<T>) => void) {
     const parentComponent = useContext(ParentComponent);
@@ -77,8 +78,9 @@ export function useSpacedUpdate(callback: () => void | Promise<void>, interval =
     return spacedUpdateRef.current;
 }
 
-export function useEditorSpacedUpdate({ note, getData, onContentChange, dataSaved, updateInterval }: {
+export function useEditorSpacedUpdate({ note, noteContext, getData, onContentChange, dataSaved, updateInterval }: {
     note: FNote,
+    noteContext: NoteContext | null | undefined,
     getData: () => Promise<object | undefined> | object | undefined,
     onContentChange: (newContent: string) => void,
     dataSaved?: () => void,
@@ -113,6 +115,18 @@ export function useEditorSpacedUpdate({ note, getData, onContentChange, dataSave
         if (!updateInterval) return;
         spacedUpdate.setUpdateInterval(updateInterval);
     }, [ updateInterval ]);
+
+    // Save if needed upon switching tabs.
+    useTriliumEvent("beforeNoteSwitch", async ({ noteContext: eventNoteContext }) => {
+        if (eventNoteContext.ntxId !== noteContext?.ntxId) return;
+        await spacedUpdate.updateNowIfNecessary();
+    });
+
+    // Save if needed upon tab closing.
+    useTriliumEvent("beforeNoteContextRemove", async ({ ntxIds }) => {
+        if (!noteContext?.ntxId || !ntxIds.includes(noteContext.ntxId)) return;
+        await spacedUpdate.updateNowIfNecessary();
+    })
 
     return spacedUpdate;
 }

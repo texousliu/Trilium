@@ -43,7 +43,7 @@ declare module "jsplumb" {
     }
 }
 
-export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
+export default function RelationMap({ note, noteContext, ntxId }: TypeWidgetProps) {
     const [ data, setData ] = useState<MapData>();
     const containerRef = useRef<HTMLDivElement>(null);
     const mapApiRef = useRef<RelationMapApi>(null);
@@ -51,6 +51,7 @@ export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
 
     const spacedUpdate = useEditorSpacedUpdate({
         note,
+        noteContext,
         getData() {
             return {
                 content: JSON.stringify(data),

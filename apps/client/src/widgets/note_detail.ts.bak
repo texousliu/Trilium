@@ -13,18 +13,6 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
         appContext.addBeforeUnloadListener(this);
     }
 
-    async beforeNoteSwitchEvent({ noteContext }: EventData<"beforeNoteSwitch">) {
-        if (this.isNoteContext(noteContext.ntxId)) {
-            await this.spacedUpdate.updateNowIfNecessary();
-        }
-    }
-
-    async beforeNoteContextRemoveEvent({ ntxIds }: EventData<"beforeNoteContextRemove">) {
-        if (this.isNoteContext(ntxIds)) {
-            await this.spacedUpdate.updateNowIfNecessary();
-        }
-    }
-
     async runActiveNoteCommand(params: CommandListenerData<"runActiveNote">) {
         if (this.isNoteContext(params.ntxId)) {
             // make sure that script is saved before running it #4028

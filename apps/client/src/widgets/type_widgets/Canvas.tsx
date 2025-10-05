@@ -11,6 +11,7 @@ import { RefObject } from "preact";
 import server from "../../services/server";
 import { ExcalidrawElement, NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
 import { goToLinkExt } from "../../services/link";
+import NoteContext from "../../components/note_context";
 
 // currently required by excalidraw, in order to allows self-hosting fonts locally.
 // this avoids making excalidraw load the fonts from an external CDN.
@@ -27,14 +28,14 @@ interface CanvasContent {
     appState: Partial<AppState>;
 }
 
-export default function Canvas({ note }: TypeWidgetProps) {
+export default function Canvas({ note, noteContext }: TypeWidgetProps) {
     const apiRef = useRef<ExcalidrawImperativeAPI>(null);
     const [ isReadOnly ] = useNoteLabelBoolean(note, "readOnly");
     const themeStyle = useMemo(() => {
         const documentStyle = window.getComputedStyle(document.documentElement);
         return documentStyle.getPropertyValue("--theme-style")?.trim() as AppState["theme"];
     }, []);
-    const persistence = usePersistence(note, apiRef, themeStyle, isReadOnly);
+    const persistence = usePersistence(note, noteContext, apiRef, themeStyle, isReadOnly);
 
     /** Use excalidraw's native zoom instead of the global zoom. */
     const onWheel = useCallback((e: MouseEvent) => {
@@ -85,7 +86,7 @@ export default function Canvas({ note }: TypeWidgetProps) {
     )
 }
 
-function usePersistence(note: FNote, apiRef: RefObject<ExcalidrawImperativeAPI>, theme: AppState["theme"], isReadOnly: boolean): Partial<ExcalidrawProps> {
+function usePersistence(note: FNote, noteContext: NoteContext, apiRef: RefObject<ExcalidrawImperativeAPI>, theme: AppState["theme"], isReadOnly: boolean): Partial<ExcalidrawProps> {
     const libraryChanged = useRef(false);
 
     /**
@@ -104,6 +105,7 @@ function usePersistence(note: FNote, apiRef: RefObject<ExcalidrawImperativeAPI>,
 
     const spacedUpdate = useEditorSpacedUpdate({
         note,
+        noteContext,
         onContentChange(newContent) {
             const api = apiRef.current;
             if (!api) return;

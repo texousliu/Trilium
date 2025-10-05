@@ -22,13 +22,14 @@ interface MindElixirProps {
     onChange?: () => void;
 }
 
-export default function MindMap({ note, ntxId }: TypeWidgetProps) {
+export default function MindMap({ note, ntxId, noteContext }: TypeWidgetProps) {
     const content = VanillaMindElixir.new(NEW_TOPIC_NAME);
     const apiRef = useRef<MindElixirInstance>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const [ isReadOnly ] = useNoteLabelBoolean(note, "readOnly");
     const spacedUpdate = useEditorSpacedUpdate({
         note,
+        noteContext,
         getData: async () => {
             if (!apiRef.current) return;
             return {

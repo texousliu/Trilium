@@ -7,6 +7,7 @@ export default function AiChat({ note, noteContext }: TypeWidgetProps) {
     const dataRef = useRef<object>();
     const spacedUpdate = useEditorSpacedUpdate({
         note,
+        noteContext,
         getData: async () => ({
             content: JSON.stringify(dataRef.current)
         }),

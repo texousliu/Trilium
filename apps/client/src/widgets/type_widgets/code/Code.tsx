@@ -70,12 +70,13 @@ function formatViewSource(note: FNote, content: string) {
     return content;
 }
 
-export function EditableCode({ note, ntxId, debounceUpdate, parentComponent, updateInterval, onContentChanged, dataSaved, ...editorProps }: EditableCodeProps) {
+export function EditableCode({ note, ntxId, noteContext, debounceUpdate, parentComponent, updateInterval, onContentChanged, dataSaved, ...editorProps }: EditableCodeProps) {
     const editorRef = useRef<VanillaCodeMirror>(null);
     const containerRef = useRef<HTMLPreElement>(null);
     const [ vimKeymapEnabled ] = useTriliumOptionBool("vimKeymapEnabled");
     const spacedUpdate = useEditorSpacedUpdate({
         note,
+        noteContext,
         getData: () => ({ content: editorRef.current?.getText() }),
         onContentChange: (content) => {
             const codeEditor = editorRef.current;

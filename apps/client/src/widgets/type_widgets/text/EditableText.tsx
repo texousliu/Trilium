@@ -37,6 +37,7 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
     const initialized = useRef(deferred<void>());
     const spacedUpdate = useEditorSpacedUpdate({
         note,
+        noteContext,
         getData() {
             const editor = watchdogRef.current?.editor;
             if (!editor) {
