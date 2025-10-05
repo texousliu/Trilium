@@ -21,6 +21,7 @@ interface NoteTypeMapping {
     printable?: boolean;
     /** The class name to assign to the note type wrapper */
     className: string;
+    isFullHeight?: boolean;
 }
 
 export const TYPE_MAPPINGS: Record<ExtendedNoteType, NoteTypeMapping> = {
@@ -56,12 +57,14 @@ export const TYPE_MAPPINGS: Record<ExtendedNoteType, NoteTypeMapping> = {
     webView: {
         view: () => import("./type_widgets/WebView"),
         className: "note-detail-web-view",
-        printable: true
+        printable: true,
+        isFullHeight: true
     },
     file: {
         view: () => import("./type_widgets/File"),
         className: "note-detail-file",
-        printable: true
+        printable: true,
+        isFullHeight: true
     },
     image: {
         view: () => import("./type_widgets/Image"),
@@ -81,12 +84,14 @@ export const TYPE_MAPPINGS: Record<ExtendedNoteType, NoteTypeMapping> = {
     mermaid: {
         view: () => import("./type_widgets/Mermaid"),
         className: "note-detail-mermaid",
-        printable: true
+        printable: true,
+        isFullHeight: true
     },
     mindMap: {
         view: () => import("./type_widgets/MindMap"),
         className: "note-detail-mind-map",
-        printable: true
+        printable: true,
+        isFullHeight: true
     },
     attachmentList: {
         view: async () => (await import("./type_widgets/Attachment")).AttachmentList,
@@ -115,7 +120,8 @@ export const TYPE_MAPPINGS: Record<ExtendedNoteType, NoteTypeMapping> = {
     canvas: {
         view: () => import("./type_widgets/Canvas"),
         className: "note-detail-canvas",
-        printable: true
+        printable: true,
+        isFullHeight: true
     },
     relationMap: {
         view: () => import("./type_widgets/relation_map/RelationMap"),
@@ -125,10 +131,12 @@ export const TYPE_MAPPINGS: Record<ExtendedNoteType, NoteTypeMapping> = {
     noteMap: {
         view: () => import("./type_widgets/NoteMap"),
         className: "note-detail-note-map",
-        printable: true
+        printable: true,
+        isFullHeight: true
     },
     aiChat: {
         view: () => import("./type_widgets/AiChat"),
-        className: "ai-chat-widget-container"
+        className: "ai-chat-widget-container",
+        isFullHeight: true
     }
 };
