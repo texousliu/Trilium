@@ -103,6 +103,7 @@ export default function NoteDetail() {
                     key={type}
                     type={type as ExtendedNoteType}
                     isVisible={activeNoteType === type}
+                    isFullHeight={isFullHeight}
                     props={props}
                 />
             })}
@@ -114,7 +115,7 @@ export default function NoteDetail() {
  * Wraps a single note type widget, in order to keep it in the DOM even after the user has switched away to another note type. This allows faster loading of the same note type again. The properties are cached, so that they are updated only
  * while the widget is visible, to avoid rendering in the background. When not visible, the DOM element is simply hidden.
  */
-function NoteDetailWrapper({ Element, type, isVisible, props }: { Element: (props: TypeWidgetProps) => VNode, type: ExtendedNoteType, isVisible: boolean, props: TypeWidgetProps }) {
+function NoteDetailWrapper({ Element, type, isVisible, isFullHeight, props }: { Element: (props: TypeWidgetProps) => VNode, type: ExtendedNoteType, isVisible: boolean, isFullHeight: boolean, props: TypeWidgetProps }) {
     const [ cachedProps, setCachedProps ] = useState(props);
 
     useEffect(() => {
@@ -125,10 +126,15 @@ function NoteDetailWrapper({ Element, type, isVisible, props }: { Element: (prop
         }
     }, [ isVisible ]);
 
+    const typeMapping = TYPE_MAPPINGS[type];
     return (
-        <div className={`note-detail-${type}`} style={{
-            display: !isVisible ? "none" : ""
-        }}>
+        <div
+            className={`${typeMapping.className} ${typeMapping.printable ? "note-detail-printable" : ""}`}
+            style={{
+                display: !isVisible ? "none" : "",
+                height: isFullHeight ? "100%" : ""
+            }}
+        >
             { <Element {...cachedProps} /> }
         </div>
     );

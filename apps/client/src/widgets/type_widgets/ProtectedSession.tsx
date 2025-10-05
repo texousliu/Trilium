@@ -20,23 +20,21 @@ export default function ProtectedSession() {
     }, [ passwordRef ]);
 
     return (
-        <div className="protected-session-password-component note-detail-printable">
-            <form class="protected-session-password-form" onSubmit={submitCallback}>
-                <FormGroup name="protected-session-password-in-detail" label={t("protected_session.enter_password_instruction")}>
-                    <FormTextBox
-                        type="password"
-                        className="protected-session-password"
-                        autocomplete="current-password"
-                        inputRef={passwordRef}
-                    />
-                </FormGroup>
-
-                <Button
-                    text={t("protected_session.start_session_button")}
-                    primary
-                    keyboardShortcut="Enter"
+        <form class="protected-session-password-form" onSubmit={submitCallback}>
+            <FormGroup name="protected-session-password-in-detail" label={t("protected_session.enter_password_instruction")}>
+                <FormTextBox
+                    type="password"
+                    className="protected-session-password"
+                    autocomplete="current-password"
+                    inputRef={passwordRef}
                 />
-            </form>
-        </div>
+            </FormGroup>
+
+            <Button
+                text={t("protected_session.start_session_button")}
+                primary
+                keyboardShortcut="Enter"
+            />
+        </form>
     )
 }

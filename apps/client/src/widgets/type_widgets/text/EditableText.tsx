@@ -185,9 +185,10 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
     });
 
     return (
-        <div ref={containerRef} class={`note-detail-editable-text note-detail-printable ${codeBlockWordWrap ? "word-wrap" : ""}`}>
+        <>
             {note && !!templates && <CKEditorWithWatchdog
-                className="note-detail-editable-text-editor use-tn-links"
+                containerRef={containerRef}
+                className={`note-detail-editable-text-editor use-tn-links ${codeBlockWordWrap ? "word-wrap" : ""}`}
                 tabIndex={300}
                 content={content}
                 contentLanguage={language}
@@ -229,7 +230,7 @@ export default function EditableText({ note, parentComponent, ntxId, noteContext
             />}
 
             <EditableTextTouchBar watchdogRef={watchdogRef} refreshTouchBarRef={refreshTouchBarRef} />
-        </div>
+        </>
     )
 }
 

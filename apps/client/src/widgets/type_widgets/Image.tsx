@@ -41,14 +41,12 @@ export default function Image({ note, ntxId }: TypeWidgetProps) {
     });
 
     return (
-        <div className="note-detail-image note-detail-printable">
-            <div ref={containerRef} className="note-detail-image-wrapper">
-                <img
-                    id={uniqueId}
-                    className="note-detail-image-view"
-                    src={createImageSrcUrl(note)}
-                />
-            </div>
+        <div ref={containerRef} className="note-detail-image-wrapper">
+            <img
+                id={uniqueId}
+                className="note-detail-image-view"
+                src={createImageSrcUrl(note)}
+            />
         </div>
     )
 }

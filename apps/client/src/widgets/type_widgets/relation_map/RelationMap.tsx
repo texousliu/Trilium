@@ -133,30 +133,28 @@ export default function RelationMap({ note, ntxId }: TypeWidgetProps) {
     useRelationData(note.noteId, data, mapApiRef, pbApiRef);
 
     return (
-        <div className="note-detail-relation-map note-detail-printable">
-            <div
-                className="relation-map-wrapper"
-                onClick={clickCallback}
-                {...dragProps}
+        <div
+            className="relation-map-wrapper"
+            onClick={clickCallback}
+            {...dragProps}
+        >
+            <JsPlumb
+                apiRef={pbApiRef}
+                containerRef={containerRef}
+                className="relation-map-container"
+                props={{
+                    Endpoint: ["Dot", { radius: 2 }],
+                    Connector: "StateMachine",
+                    ConnectionOverlays: uniDirectionalOverlays,
+                    HoverPaintStyle: { stroke: "#777", strokeWidth: 1 },
+                }}
+                onInstanceCreated={setupOverlays}
+                onConnection={connectionCallback}
             >
-                <JsPlumb
-                    apiRef={pbApiRef}
-                    containerRef={containerRef}
-                    className="relation-map-container"
-                    props={{
-                        Endpoint: ["Dot", { radius: 2 }],
-                        Connector: "StateMachine",
-                        ConnectionOverlays: uniDirectionalOverlays,
-                        HoverPaintStyle: { stroke: "#777", strokeWidth: 1 },
-                    }}
-                    onInstanceCreated={setupOverlays}
-                    onConnection={connectionCallback}
-                >
-                    {data?.notes.map(note => (
-                        <NoteBox {...note} mapApiRef={mapApiRef} />
-                    ))}
-                </JsPlumb>
-            </div>
+                {data?.notes.map(note => (
+                    <NoteBox {...note} mapApiRef={mapApiRef} />
+                ))}
+            </JsPlumb>
         </div>
     )
 }

@@ -10,13 +10,10 @@ const isElectron = utils.isElectron();
 export default function WebView({ note }: TypeWidgetProps) {
     const [ webViewSrc ] = useNoteLabel(note, "webViewSrc");
 
-    return (
-        <div className="note-detail-web-view note-detail-printable">
-            {webViewSrc
-                ? <WebViewContent src={webViewSrc} />
-                : <WebViewHelp />}
-        </div>
-    )
+    return (webViewSrc
+        ? <WebViewContent src={webViewSrc} />
+        : <WebViewHelp />
+    );
 }
 
 function WebViewContent({ src }: { src: string }) {

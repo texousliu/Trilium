@@ -50,12 +50,10 @@ const CONTENT_WIDGETS: Record<OptionPages | "_backendLog", (props: TypeWidgetPro
 export default function ContentWidget({ note, ...restProps }: TypeWidgetProps) {
     const Content = CONTENT_WIDGETS[note.noteId];
     return (
-        <div className="note-detail-content-widget note-detail-printable">
-            <div className={`note-detail-content-widget-content ${note.noteId.startsWith("_options") ? "options" : ""}`}>
-                {Content
-                    ? <Content note={note} {...restProps} />
-                    : (t("content_widget.unknown_widget", { id: note.noteId }))}
-            </div>
+        <div className={`note-detail-content-widget-content ${note.noteId.startsWith("_options") ? "options" : ""}`}>
+            {Content
+                ? <Content note={note} {...restProps} />
+                : (t("content_widget.unknown_widget", { id: note.noteId }))}
         </div>
     )
 }

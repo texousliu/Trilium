@@ -44,15 +44,13 @@ export function ReadOnlyCode({ note, viewScope, ntxId, parentComponent }: TypeWi
     }, [ blob ]);
 
     return (
-        <div className="note-detail-readonly-code note-detail-printable">
-            <CodeEditor
-                ntxId={ntxId} parentComponent={parentComponent}
-                className="note-detail-readonly-code-content"
-                content={content}
-                mime={note.mime}
-                readOnly
-            />
-        </div>
+        <CodeEditor
+            ntxId={ntxId} parentComponent={parentComponent}
+            className="note-detail-readonly-code-content"
+            content={content}
+            mime={note.mime}
+            readOnly
+        />
     )
 }
 
@@ -93,7 +91,7 @@ export function EditableCode({ note, ntxId, debounceUpdate, parentComponent, upd
     useKeyboardShortcuts("code-detail", containerRef, parentComponent);
 
     return (
-        <div className="note-detail-code note-detail-printable">
+        <>
             <CodeEditor
                 ntxId={ntxId} parentComponent={parentComponent}
                 editorRef={editorRef} containerRef={containerRef}
@@ -119,7 +117,7 @@ export function EditableCode({ note, ntxId, debounceUpdate, parentComponent, upd
                     <TouchBarButton icon="NSImageNameTouchBarPlayTemplate" click={() => appContext.triggerCommand("runActiveNote")} />
                 )}
             </TouchBar>
-        </div>
+        </>
     )
 }
 

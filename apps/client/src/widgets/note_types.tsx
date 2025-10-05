@@ -18,73 +18,117 @@ type NoteTypeView = () => Promise<{ default: TypeWidget } | TypeWidget> | ((prop
 
 interface NoteTypeMapping {
     view: NoteTypeView;
+    printable?: boolean;
+    /** The class name to assign to the note type wrapper */
+    className: string;
 }
 
 export const TYPE_MAPPINGS: Record<ExtendedNoteType, NoteTypeMapping> = {
     empty: {
         view: () => import("./type_widgets/Empty"),
+        className: "note-detail-empty",
+        printable: true
     },
     doc: {
-        view: () => import("./type_widgets/Doc")
+        view: () => import("./type_widgets/Doc"),
+        className: "note-detail-doc",
+        printable: true
     },
     search: {
-        view: () => <div className="note-detail-none note-detail-printable" />
+        view: () => <></>,
+        className: "note-detail-none",
+        printable: true
     },
     protectedSession: {
-        view: () => import("./type_widgets/ProtectedSession")
+        view: () => import("./type_widgets/ProtectedSession"),
+        className: "protected-session-password-component"
     },
     book: {
-        view: () => import("./type_widgets/Book")
+        view: () => import("./type_widgets/Book"),
+        className: "note-detail-book",
+        printable: true,
     },
     contentWidget: {
-        view: () => import("./type_widgets/ContentWidget")
+        view: () => import("./type_widgets/ContentWidget"),
+        className: "note-detail-content-widget",
+        printable: true
     },
     webView: {
-        view: () => import("./type_widgets/WebView")
+        view: () => import("./type_widgets/WebView"),
+        className: "note-detail-web-view",
+        printable: true
     },
     file: {
-        view: () => import("./type_widgets/File")
+        view: () => import("./type_widgets/File"),
+        className: "note-detail-file",
+        printable: true
     },
     image: {
-        view: () => import("./type_widgets/Image")
+        view: () => import("./type_widgets/Image"),
+        className: "note-detail-image",
+        printable: true
     },
     readOnlyCode: {
-        view: async () => (await import("./type_widgets/code/Code")).ReadOnlyCode
+        view: async () => (await import("./type_widgets/code/Code")).ReadOnlyCode,
+        className: "note-detail-readonly-code",
+        printable: true
     },
     editableCode: {
-        view: async () => (await import("./type_widgets/code/Code")).EditableCode
+        view: async () => (await import("./type_widgets/code/Code")).EditableCode,
+        className: "note-detail-code",
+        printable: true
     },
     mermaid: {
-        view: () => import("./type_widgets/Mermaid")
+        view: () => import("./type_widgets/Mermaid"),
+        className: "note-detail-mermaid",
+        printable: true
     },
     mindMap: {
-        view: () => import("./type_widgets/MindMap")
+        view: () => import("./type_widgets/MindMap"),
+        className: "note-detail-mind-map",
+        printable: true
     },
     attachmentList: {
-        view: async () => (await import("./type_widgets/Attachment")).AttachmentList
+        view: async () => (await import("./type_widgets/Attachment")).AttachmentList,
+        className: "attachment-list",
+        printable: true
     },
     attachmentDetail: {
-        view: async () => (await import("./type_widgets/Attachment")).AttachmentDetail
+        view: async () => (await import("./type_widgets/Attachment")).AttachmentDetail,
+        className: "attachment-detail",
+        printable: true
     },
     readOnlyText: {
-        view: () => import("./type_widgets/text/ReadOnlyText")
+        view: () => import("./type_widgets/text/ReadOnlyText"),
+        className: "note-detail-readonly-text"
     },
     editableText: {
-        view: () => import("./type_widgets/text/EditableText")
+        view: () => import("./type_widgets/text/EditableText"),
+        className: "note-detail-editable-text",
+        printable: true
     },
     render: {
-        view: () => import("./type_widgets/Render")
+        view: () => import("./type_widgets/Render"),
+        className: "note-detail-render",
+        printable: true
     },
     canvas: {
-        view: () => import("./type_widgets/Canvas")
+        view: () => import("./type_widgets/Canvas"),
+        className: "note-detail-canvas",
+        printable: true
     },
     relationMap: {
-        view: () => import("./type_widgets/relation_map/RelationMap")
+        view: () => import("./type_widgets/relation_map/RelationMap"),
+        className: "note-detail-relation-map",
+        printable: true
     },
     noteMap: {
-        view: () => import("./type_widgets/NoteMap")
+        view: () => import("./type_widgets/NoteMap"),
+        className: "note-detail-note-map",
+        printable: true
     },
     aiChat: {
-        view: () => import("./type_widgets/AiChat")
+        view: () => import("./type_widgets/AiChat"),
+        className: "ai-chat-widget-container"
     }
 };

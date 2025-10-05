@@ -38,7 +38,7 @@ export default function Render({ note, noteContext, ntxId }: TypeWidgetProps) {
     });
 
     return (
-        <div className="note-detail-render note-detail-printable">
+        <>
             {!renderNotesFound && (
                 <Alert className="note-detail-render-help" type="warning">
                     <p><strong>{t("render.note_detail_render_help_1")}</strong></p>
@@ -47,6 +47,6 @@ export default function Render({ note, noteContext, ntxId }: TypeWidgetProps) {
             )}
 
             <div ref={contentRef} className="note-detail-render-content" />
-        </div>
+        </>
     );
 }

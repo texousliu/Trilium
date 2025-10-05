@@ -31,7 +31,6 @@ export default function AiChat({ note, noteContext }: TypeWidgetProps) {
         return llmChatPanel;
     }, {
         noteContext,
-        containerClassName: "ai-chat-widget-container",
         containerStyle: {
             height: "100%"
         }

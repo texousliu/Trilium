@@ -7,7 +7,7 @@ import nodeMenu from "@mind-elixir/node-menu";
 import "mind-elixir/style";
 import "@mind-elixir/node-menu/dist/style.css";
 import "./MindMap.css";
-import { useEditorSpacedUpdate, useNoteLabelBoolean, useTriliumEvent, useTriliumEvents, useTriliumOptionBool } from "../react/hooks";
+import { useEditorSpacedUpdate, useNoteLabelBoolean, useSyncedRef, useTriliumEvent, useTriliumEvents, useTriliumOptionBool } from "../react/hooks";
 import { refToJQuerySelector } from "../react/react_utils";
 import utils from "../../services/utils";
 
@@ -16,6 +16,7 @@ const NEW_TOPIC_NAME = "";
 interface MindElixirProps {
     apiRef?: RefObject<MindElixirInstance>;
     containerProps?: Omit<HTMLAttributes<HTMLDivElement>, "ref">;
+    containerRef?: RefObject<HTMLDivElement>;
     editable: boolean;
     content: MindElixirData;
     onChange?: () => void;
@@ -94,23 +95,22 @@ export default function MindMap({ note, ntxId }: TypeWidgetProps) {
     }, []);
 
     return (
-        <div ref={containerRef} className="note-detail-mind-map note-detail-printable">
-            <MindElixir
-                apiRef={apiRef}
-                content={content}
-                onChange={() => spacedUpdate.scheduleUpdate()}
-                editable={!isReadOnly}
-                containerProps={{
-                    className: "mind-map-container",
-                    onKeyDown
-                }}
-            />
-        </div>
+        <MindElixir
+            containerRef={containerRef}
+            apiRef={apiRef}
+            content={content}
+            onChange={() => spacedUpdate.scheduleUpdate()}
+            editable={!isReadOnly}
+            containerProps={{
+                className: "mind-map-container",
+                onKeyDown
+            }}
+        />
     )
 }
 
-function MindElixir({ content, containerProps, apiRef: externalApiRef, onChange, editable }: MindElixirProps) {
-    const containerRef = useRef<HTMLDivElement>(null);
+function MindElixir({ content, containerRef: externalContainerRef, containerProps, apiRef: externalApiRef, onChange, editable }: MindElixirProps) {
+    const containerRef = useSyncedRef<HTMLDivElement>(externalContainerRef, null);
     const apiRef = useRef<MindElixirInstance>(null);
 
     useEffect(() => {

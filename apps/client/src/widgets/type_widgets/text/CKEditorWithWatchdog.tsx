@@ -1,7 +1,7 @@
 import { HTMLProps, RefObject, useEffect, useImperativeHandle, useRef, useState } from "preact/compat";
 import { PopupEditor, ClassicEditor, EditorWatchdog, type WatchdogConfig, CKTextEditor, TemplateDefinition } from "@triliumnext/ckeditor5";
 import { buildConfig, BuildEditorOptions } from "./config";
-import { useLegacyImperativeHandlers } from "../../react/hooks";
+import { useLegacyImperativeHandlers, useSyncedRef } from "../../react/hooks";
 import link from "../../../services/link";
 import froca from "../../../services/froca";
 
@@ -30,10 +30,11 @@ interface CKEditorWithWatchdogProps extends Pick<HTMLProps<HTMLDivElement>, "cla
     onEditorInitialized?: (editor: CKTextEditor) => void;
     editorApi: RefObject<CKEditorApi>;
     templates: TemplateDefinition[];
+    containerRef?: RefObject<HTMLDivElement>;
 }
 
-export default function CKEditorWithWatchdog({ content, contentLanguage, className, tabIndex, isClassicEditor, watchdogRef: externalWatchdogRef, watchdogConfig, onNotificationWarning, onWatchdogStateChange, onChange, onEditorInitialized, editorApi, templates }: CKEditorWithWatchdogProps) {
-    const containerRef = useRef<HTMLDivElement>(null);
+export default function CKEditorWithWatchdog({ containerRef: externalContainerRef, content, contentLanguage, className, tabIndex, isClassicEditor, watchdogRef: externalWatchdogRef, watchdogConfig, onNotificationWarning, onWatchdogStateChange, onChange, onEditorInitialized, editorApi, templates }: CKEditorWithWatchdogProps) {
+    const containerRef = useSyncedRef<HTMLDivElement>(externalContainerRef, null);
     const watchdogRef = useRef<EditorWatchdog>(null);
     const [ editor, setEditor ] = useState<CKTextEditor>();
 

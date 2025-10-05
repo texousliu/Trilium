@@ -46,7 +46,7 @@ export function AttachmentList({ note }: TypeWidgetProps) {
     });
 
     return (
-        <div className="attachment-list note-detail-printable">
+        <>
             <AttachmentListHeader noteId={note.noteId} />
 
             <div className="attachment-list-wrapper">
@@ -58,7 +58,7 @@ export function AttachmentList({ note }: TypeWidgetProps) {
                     </Alert>
                 )}
             </div>
-        </div>
+        </>
     )
 }
 
@@ -99,7 +99,7 @@ export function AttachmentDetail({ note, viewScope }: TypeWidgetProps) {
     }, [ viewScope ]);
 
     return (
-        <div className="attachment-detail note-detail-printable">
+        <>
             <div className="links-wrapper use-tn-links">
                 {t("attachment_detail.owning_note")}{" "}
                 <NoteLink notePath={note.noteId} />
@@ -122,7 +122,7 @@ export function AttachmentDetail({ note, viewScope }: TypeWidgetProps) {
                     <strong>{t("attachment_detail.attachment_deleted")}</strong>
                 )}
             </div>
-        </div>
+        </>
     )
 }
 

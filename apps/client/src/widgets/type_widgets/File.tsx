@@ -12,24 +12,17 @@ const TEXT_MAX_NUM_CHARS = 5000;
 export default function File({ note }: TypeWidgetProps) {
     const blob = useNoteBlob(note);
 
-    let preview: VNode | null = null;
     if (blob?.content) {
-        preview = <TextPreview content={blob.content} />
+        return <TextPreview content={blob.content} />
     } else if (note.mime === "application/pdf") {
-        preview = <PdfPreview note={note} />
+        return <PdfPreview note={note} />
     } else if (note.mime.startsWith("video/")) {
-        preview = <VideoPreview note={note} />
+        return <VideoPreview note={note} />
     } else if (note.mime.startsWith("audio/")) {
-        preview = <AudioPreview note={note} />
+        return <AudioPreview note={note} />
     } else {
-        preview = <NoPreview />
+        return <NoPreview />
     }
-
-    return (
-        <div className="note-detail-file note-detail-printable">
-            {preview}
-        </div>
-    );
 }
 
 function TextPreview({ content }: { content: string }) {

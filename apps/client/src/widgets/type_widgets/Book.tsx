@@ -23,13 +23,9 @@ export default function Book({ note }: TypeWidgetProps) {
         }
     });
 
-    return (
-        <div className="note-detail-book note-detail-printable">
-            {(shouldDisplayNoChildrenWarning && (
-                <Alert type="warning" className="note-detail-book-empty-help">
-                    <RawHtml html={t("book.no_children_help")} />
-                </Alert>
-            ))}
-        </div>
+    return (shouldDisplayNoChildrenWarning &&
+        <Alert type="warning" className="note-detail-book-empty-help">
+            <RawHtml html={t("book.no_children_help")} />
+        </Alert>
     )
 }

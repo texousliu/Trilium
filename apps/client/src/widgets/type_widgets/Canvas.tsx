@@ -60,28 +60,26 @@ export default function Canvas({ note }: TypeWidgetProps) {
     }, []);
 
     return (
-        <div className="canvas-widget note-detail-canvas note-detail-printable note-detail full-height" onWheel={onWheel}>
-            <div className="canvas-render">
-                <div className="excalidraw-wrapper">
-                    <Excalidraw
-                        excalidrawAPI={api => apiRef.current = api}
-                        theme={themeStyle}
-                        viewModeEnabled={isReadOnly || options.is("databaseReadonly")}
-                        zenModeEnabled={false}
-                        isCollaborating={false}
-                        detectScroll={false}
-                        handleKeyboardGlobally={false}
-                        autoFocus={false}
-                        UIOptions={{
-                            canvasActions: {
-                                saveToActiveFile: false,
-                                export: false
-                            }
-                        }}
-                        onLinkOpen={onLinkOpen}
-                        {...persistence}
-                    />
-                </div>
+        <div className="canvas-render" onWheel={onWheel}>
+            <div className="excalidraw-wrapper">
+                <Excalidraw
+                    excalidrawAPI={api => apiRef.current = api}
+                    theme={themeStyle}
+                    viewModeEnabled={isReadOnly || options.is("databaseReadonly")}
+                    zenModeEnabled={false}
+                    isCollaborating={false}
+                    detectScroll={false}
+                    handleKeyboardGlobally={false}
+                    autoFocus={false}
+                    UIOptions={{
+                        canvasActions: {
+                            saveToActiveFile: false,
+                            export: false
+                        }
+                    }}
+                    onLinkOpen={onLinkOpen}
+                    {...persistence}
+                />
             </div>
         </div>
     )

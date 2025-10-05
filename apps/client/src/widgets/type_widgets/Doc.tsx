@@ -27,12 +27,10 @@ export default function Doc({ note, viewScope, ntxId }: TypeWidgetProps) {
     });
 
     return (
-        <div className={`note-detail-doc note-detail-printable ${viewScope?.viewMode === "contextual-help" ? "contextual-help" : ""}`}>
-            <RawHtmlBlock
-                containerRef={containerRef}
-                className="note-detail-doc-content ck-content"
-                html={html}
-            />
-        </div>
+        <RawHtmlBlock
+            containerRef={containerRef}
+            className={`note-detail-doc-content ck-content ${viewScope?.viewMode === "contextual-help" ? "contextual-help" : ""}`}
+            html={html}
+        />
     );
 }

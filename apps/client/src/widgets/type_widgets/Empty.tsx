@@ -12,10 +12,10 @@ import { TypeWidgetProps } from "./type_widget";
 
 export default function Empty({ }: TypeWidgetProps) {
     return (
-        <div class="note-detail-empty note-detail-printable">
+        <>
             <WorkspaceSwitcher />
             <NoteSearch />
-        </div>
+        </>
     )
 }
 

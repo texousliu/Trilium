@@ -6,7 +6,7 @@ export default function NoteMap({ note }: TypeWidgetProps) {
     const containerRef = useRef<HTMLDivElement>(null);
 
     return (
-        <div ref={containerRef} className="note-detail-note-map note-detail-printable">
+        <div ref={containerRef}>
             <NoteMapEl parentRef={containerRef} note={note} widgetMode="type" />
         </div>
     );
