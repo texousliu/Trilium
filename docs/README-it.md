@@ -14,15 +14,16 @@ status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted
 | [Japanese](./docs/README-ja.md) | [Italian](./docs/README-it.md) |
 [Spanish](./docs/README-es.md)
 
-Trilium Notes is a free and open-source, cross-platform hierarchical note taking
-application with focus on building large personal knowledge bases.
+Trilium Notes è un'applicazione per appunti ad organizzazione gerarchica,
+studiata per la costruzione di archivi di conoscenza personali di grandi
+dimensioni.
 
-See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for
-quick overview:
+Vedi [fotografie](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) per
+una panoramica veloce:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
-## 📚 Documentation
+## 📚 Documentazione
 
 **Visit our comprehensive documentation at
 [docs.triliumnotes.org](https://docs.triliumnotes.org/)**
@@ -201,7 +202,7 @@ To install TriliumNext on your own server (including via Docker from
 installation docs](https://triliumnext.github.io/Docs/Wiki/server-installation).
 
 
-## 💻 Contribute
+## 💻 Contribuire
 
 ### Translations
 
@@ -255,7 +256,7 @@ guide](https://github.com/TriliumNext/Trilium/blob/main/docs/Developer%20Guide/D
 for details. If you have more questions, feel free to reach out via the links
 described in the "Discuss with us" section above.
 
-## 👏 Shoutouts
+## 👏 Riconoscimenti
 
 * [zadam](https://github.com/zadam) for the original concept and implementation
   of the application.
@@ -289,7 +290,7 @@ Trilium would not be possible without the technologies behind it:
   maps](https://triliumnext.github.io/Docs/Wiki/relation-map.html) and [link
   maps](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)
 
-## 🤝 Support
+## 🤝 Supporto
 
 Trilium is built and maintained with [hundreds of hours of
 work](https://github.com/TriliumNext/Trilium/graphs/commit-activity). Your
@@ -303,11 +304,11 @@ Consider supporting the main developer
 - [PayPal](https://paypal.me/eliandoran)
 - [Buy Me a Coffee](https://buymeacoffee.com/eliandoran)
 
-## 🔑 License
+## 🔑 Licenza
 
 Copyright 2017-2025 zadam, Elian Doran, and other contributors
 
-This program is free software: you can redistribute it and/or modify it under
-the terms of the GNU Affero General Public License as published by the Free
-Software Foundation, either version 3 of the License, or (at your option) any
-later version.
+Questo programma è software libero: è possibile redistribuirlo e/o modificarlo
+nei termini della GNU Affero General Public License come pubblicata dalla Free
+Software Foundation, sia la versione 3 della Licenza, o (a propria scelta)
+qualsiasi versione successiva.
