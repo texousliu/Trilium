@@ -3,181 +3,145 @@
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
 ![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran)\
 ![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/trilium)
-![GitHub Downloads (all assets, all
-releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
+![GitHub ダウンロード
+(全アセット、全リリース)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
-[![Translation
-status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
+[![翻訳状況](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[English](./README.md) | [Chinese (Simplified)](./docs/README-ZH_CN.md) |
-[Chinese (Traditional)](./docs/README-ZH_TW.md) | [Russian](./docs/README-ru.md)
-| [Japanese](./docs/README-ja.md) | [Italian](./docs/README-it.md) |
-[Spanish](./docs/README-es.md)
+[英語](./README.md) | [中国語（簡体）](./docs/README-ZH_CN.md) |
+[中国語（繁体）](./docs/README-ZH_TW.md) | [ロシア語](./docs/README-ru.md) |
+[日本語](./docs/README-ja.md) | [イタリア語](./docs/README-it.md) |
+[スペイン語](./docs/README-es.md)
 
-Trilium Notes is a free and open-source, cross-platform hierarchical note taking
-application with focus on building large personal knowledge bases.
+Trilium Notes
+は、大規模な個人知識ベースの構築に重点を置いた、無料かつオープンソースのクロスプラットフォームの階層型ノート作成アプリケーションです。
 
-See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for
-quick overview:
+概要については [スクリーンショット](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)
+を参照してください:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
-## 📚 Documentation
+## 📚 ドキュメント
 
-**Visit our comprehensive documentation at
-[docs.triliumnotes.org](https://docs.triliumnotes.org/)**
+**包括的なドキュメントは [docs.triliumnotes.org](https://docs.triliumnotes.org/) でご覧ください**
 
-Our documentation is available in multiple formats:
-- **Online Documentation**: Browse the full documentation at
-  [docs.triliumnotes.org](https://docs.triliumnotes.org/)
-- **In-App Help**: Press `F1` within Trilium to access the same documentation
-  directly in the application
-- **GitHub**: Navigate through the [User
-  Guide](./docs/User%20Guide/User%20Guide/) in this repository
+当社のドキュメントは複数の形式でご利用いただけます:
+- **オンラインドキュメント**: [docs.triliumnotes.org](https://docs.triliumnotes.org/)
+  で完全なドキュメントを参照してください
+- **アプリ内ヘルプ**: Trilium内で `F1` キーを押すと、アプリケーション内で同じドキュメントに直接アクセスできます
+- **GitHub**: このリポジトリの [ユーザーガイド](./docs/User%20Guide/User%20Guide/) を参照してください
 
-### Quick Links
-- [Getting Started Guide](https://docs.triliumnotes.org/)
-- [Installation
-  Instructions](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+### クイックリンク
+- [スタートガイド](https://docs.triliumnotes.org/)
+- [インストール手順](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
 - [Docker
-  Setup](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
-- [Upgrading
-  TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
-- [Basic Concepts and
-  Features](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
-- [Patterns of Personal Knowledge
-  Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
+  のセットアップ](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+- [TriliumNext
+  のアップグレード](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+- [基本概念と機能](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+- [個人ナレッジベースのパターン](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
-## 🎁 Features
+## 🎁 機能
 
-* Notes can be arranged into arbitrarily deep tree. Single note can be placed
-  into multiple places in the tree (see
-  [cloning](https://triliumnext.github.io/Docs/Wiki/cloning-notes))
-* Rich WYSIWYG note editor including e.g. tables, images and
-  [math](https://triliumnext.github.io/Docs/Wiki/text-notes) with markdown
-  [autoformat](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat)
-* Support for editing [notes with source
-  code](https://triliumnext.github.io/Docs/Wiki/code-notes), including syntax
-  highlighting
-* Fast and easy [navigation between
-  notes](https://triliumnext.github.io/Docs/Wiki/note-navigation), full text
-  search and [note
-  hoisting](https://triliumnext.github.io/Docs/Wiki/note-hoisting)
-* Seamless [note
-  versioning](https://triliumnext.github.io/Docs/Wiki/note-revisions)
-* Note [attributes](https://triliumnext.github.io/Docs/Wiki/attributes) can be
-  used for note organization, querying and advanced
-  [scripting](https://triliumnext.github.io/Docs/Wiki/scripts)
-* UI available in English, German, Spanish, French, Romanian, and Chinese
-  (simplified and traditional)
-* Direct [OpenID and TOTP
-  integration](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
-  for more secure login
-* [Synchronization](https://triliumnext.github.io/Docs/Wiki/synchronization)
-  with self-hosted sync server
-  * there's a [3rd party service for hosting synchronisation
-    server](https://trilium.cc/paid-hosting)
-* [Sharing](https://triliumnext.github.io/Docs/Wiki/sharing) (publishing) notes
-  to public internet
-* Strong [note
-  encryption](https://triliumnext.github.io/Docs/Wiki/protected-notes) with
-  per-note granularity
-* Sketching diagrams, based on [Excalidraw](https://excalidraw.com/) (note type
-  "canvas")
-* [Relation maps](https://triliumnext.github.io/Docs/Wiki/relation-map) and
-  [link maps](https://triliumnext.github.io/Docs/Wiki/link-map) for visualizing
-  notes and their relations
-* Mind maps, based on [Mind Elixir](https://docs.mind-elixir.com/)
-* [Geo maps](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) with
-  location pins and GPX tracks
-* [Scripting](https://triliumnext.github.io/Docs/Wiki/scripts) - see [Advanced
-  showcases](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
-* [REST API](https://triliumnext.github.io/Docs/Wiki/etapi) for automation
-* Scales well in both usability and performance upwards of 100 000 notes
-* Touch optimized [mobile
-  frontend](https://triliumnext.github.io/Docs/Wiki/mobile-frontend) for
-  smartphones and tablets
-* Built-in [dark theme](https://triliumnext.github.io/Docs/Wiki/themes), support
-  for user themes
-* [Evernote](https://triliumnext.github.io/Docs/Wiki/evernote-import) and
-  [Markdown import & export](https://triliumnext.github.io/Docs/Wiki/markdown)
-* [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper) for easy
-  saving of web content
-* Customizable UI (sidebar buttons, user-defined widgets, ...)
-* [Metrics](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md), along
-  with a [Grafana
-  Dashboard](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
+* ノートは任意の深さのツリーに配置できます。1つのノートをツリー内の複数の場所に配置できます（[クローン](https://triliumnext.github.io/Docs/Wiki/cloning-notes)を参照）
+* 豊富な WYSIWYG ノートエディター 例:
+  表、画像、[数式](https://triliumnext.github.io/Docs/Wiki/text-notes) とマークダウン
+  [自動フォーマット](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat) など
+* 構文の強調表示を含む [ソースコード付きノート](https://triliumnext.github.io/Docs/Wiki/code-notes)
+  の編集をサポート
+* [ノート間のナビゲーション](https://triliumnext.github.io/Docs/Wiki/note-navigation)、全文検索、[ノートのホイスト](https://triliumnext.github.io/Docs/Wiki/note-hoisting)
+  が高速かつ簡単に行えます
+* シームレスな [ノートのバージョン管理](https://triliumnext.github.io/Docs/Wiki/note-revisions)
+* ノート[属性](https://triliumnext.github.io/Docs/Wiki/attributes) は、ノートの整理、クエリ、高度な
+  [スクリプト](https://triliumnext.github.io/Docs/Wiki/scripts) に使用できます
+* UI は英語、ドイツ語、スペイン語、フランス語、ルーマニア語、中国語（簡体字および繁体字）でご利用いただけます
+* より安全なログインのための直接的な
+  [OpenIDとTOTPの統合](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
+* セルフホスト同期サーバーとの [同期](https://triliumnext.github.io/Docs/Wiki/synchronization)
+  * [同期サーバーをホストするためのサードパーティサービス](https://trilium.cc/paid-hosting) があります
+* インターネット上でノートの [共有](https://triliumnext.github.io/Docs/Wiki/sharing)（公開）
+* ノートごとに調整可能で強力な
+  [ノート暗号化](https://triliumnext.github.io/Docs/Wiki/protected-notes)
+* [Excalidraw](https://excalidraw.com/) をベースにした図のスケッチ（ノートタイプ「キャンバス」）
+* ノートとそのリレーションを視覚化するための
+  [リレーションマップ](https://triliumnext.github.io/Docs/Wiki/relation-map) と
+  [リンクマップ](https://triliumnext.github.io/Docs/Wiki/link-map)
+* [Mind Elixir](https://docs.mind-elixir.com/) をベースとしたマインドマップ
+* 位置ピンと GPX トラック付きの
+  [ジオマップ](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md)
+* [スクリプト](https://triliumnext.github.io/Docs/Wiki/scripts) -
+  [高度なショーケース](https://triliumnext.github.io/Docs/Wiki/advanced-showcases) を参照
+* 自動化のための [REST API](https://triliumnext.github.io/Docs/Wiki/etapi)
+* 10万件以上のノートでも、使いやすさとパフォーマンスの両面に優れた拡張性を実現
+* スマートフォンとタブレット向けにタッチ操作に最適化された
+  [モバイルフロントエンド](https://triliumnext.github.io/Docs/Wiki/mobile-frontend)
+* 組み込みの [ダークテーマ](https://triliumnext.github.io/Docs/Wiki/themes)、ユーザーテーマのサポート
+* [Evernote](https://triliumnext.github.io/Docs/Wiki/evernote-import) と
+  [Markdown のインポートとエクスポート](https://triliumnext.github.io/Docs/Wiki/markdown)
+* [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper)
+  でWebコンテンツを簡単に保存
+* カスタマイズ可能な UI (サイドバー ボタン、ユーザー定義のウィジェットなど)
+* [メトリクス(Metrics)](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md)
+  と [Grafana
+  ダッシュボード](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
 
-✨ Check out the following third-party resources/communities for more TriliumNext
-related goodies:
+✨ TriliumNext 関連のその他の情報については、次のサードパーティのリソース/コミュニティをご覧ください:
 
-- [awesome-trilium](https://github.com/Nriver/awesome-trilium) for 3rd party
-  themes, scripts, plugins and more.
-- [TriliumRocks!](https://trilium.rocks/) for tutorials, guides, and much more.
+- [awesome-trilium](https://github.com/Nriver/awesome-trilium)
+  サードパーティのテーマ、スクリプト、プラグインなど。
+- [TriliumRocks!](https://trilium.rocks/) ではチュートリアルやガイドなど、その他多数。
 
-## ❓Why TriliumNext?
+## ❓なぜTriliumNext なのか？
 
-The original Trilium developer ([Zadam](https://github.com/zadam)) has
-graciously given the Trilium repository to the community project which resides
-at https://github.com/TriliumNext
+オリジナルの Trilium 開発者 ([Zadam](https://github.com/zadam))
+は、https://github.com/TriliumNext にあるコミュニティプロジェクトに Trilium リポジトリを快く提供してくれました
 
-### ⬆️Migrating from Zadam/Trilium?
+### ⬆️Zadam/Trilium から移行しますか?
 
-There are no special migration steps to migrate from a zadam/Trilium instance to
-a TriliumNext/Trilium instance. Simply [install
-TriliumNext/Trilium](#-installation) as usual and it will use your existing
-database.
+zadam/Trilium インスタンスから TriliumNext/Trilium インスタンスへの移行には特別な手順はありません。通常通り
+[TriliumNext/Triliumをインストール](#-installation) するだけで、既存のデータベースが使用されます。
 
-Versions up to and including
-[v0.90.4](https://github.com/TriliumNext/Trilium/releases/tag/v0.90.4) are
-compatible with the latest zadam/trilium version of
-[v0.63.7](https://github.com/zadam/trilium/releases/tag/v0.63.7). Any later
-versions of TriliumNext/Trilium have their sync versions incremented which
-prevents direct migration.
+[v0.90.4](https://github.com/TriliumNext/Trilium/releases/tag/v0.90.4)
+までのバージョンは、最新の zadam/trilium バージョン
+[v0.63.7](https://github.com/zadam/trilium/releases/tag/v0.63.7)
+と互換性があります。それ以降のバージョンの TriliumNext/Trilium では同期バージョンがインクリメントされるため、直接移行することはできません。
 
-## 💬 Discuss with us
+## 💬 私たちと議論しましょう
 
-Feel free to join our official conversations. We would love to hear what
-features, suggestions, or issues you may have!
+ぜひ公式の会話にご参加ください。機能に関するご意見、ご提案、問題など、ぜひお聞かせください！
 
-- [Matrix](https://matrix.to/#/#triliumnext:matrix.org) (For synchronous
-  discussions.)
-  - The `General` Matrix room is also bridged to
-    [XMPP](xmpp:discuss@trilium.thisgreat.party?join)
-- [Github Discussions](https://github.com/TriliumNext/Trilium/discussions) (For
-  asynchronous discussions.)
-- [Github Issues](https://github.com/TriliumNext/Trilium/issues) (For bug
-  reports and feature requests.)
+- [Matrix](https://matrix.to/#/#triliumnext:matrix.org) （同期ディスカッション用）
+  - `General`マトリックスルームも [XMPP](xmpp:discuss@trilium.thisgreat.party?join)
+    にブリッジされています
+- [Github Discussions](https://github.com/TriliumNext/Trilium/discussions)
+  (非同期ディスカッション用)
+- [Github Issues](https://github.com/TriliumNext/Trilium/issues)
+  (バグレポートや機能リクエスト用)
 
-## 🏗 Installation
+## 🏗 インストール
 
 ### Windows / MacOS
 
-Download the binary release for your platform from the [latest release
-page](https://github.com/TriliumNext/Trilium/releases/latest), unzip the package
-and run the `trilium` executable.
+[最新リリース ページ](https://github.com/TriliumNext/Trilium/releases/latest)
+からプラットフォーム用のバイナリ リリースをダウンロードし、パッケージを解凍して `trilium` 実行可能ファイルを実行します。
 
 ### Linux
 
-If your distribution is listed in the table below, use your distribution's
-package.
+ディストリビューションが以下の表に記載されている場合は、ディストリビューションのパッケージを使用してください。
 
 [![Packaging
 status](https://repology.org/badge/vertical-allrepos/triliumnext.svg)](https://repology.org/project/triliumnext/versions)
 
-You may also download the binary release for your platform from the [latest
-release page](https://github.com/TriliumNext/Trilium/releases/latest), unzip the
-package and run the `trilium` executable.
+[最新リリース ページ](https://github.com/TriliumNext/Trilium/releases/latest)
+からプラットフォーム用のバイナリ リリースをダウンロードし、パッケージを解凍して `trilium` 実行可能ファイルを実行することもできます。
 
-TriliumNext is also provided as a Flatpak, but not yet published on FlatHub.
+TriliumNext は Flatpak としても提供されていますが、FlatHub ではまだ公開されていません。
 
-### Browser (any OS)
+### ブラウザ（どのOSでも）
 
-If you use a server installation (see below), you can directly access the web
-interface (which is almost identical to the desktop app).
+サーバーインストール (下記参照) を使用する場合は、Web インターフェイス (デスクトップアプリとほぼ同じ) に直接アクセスできます。
 
-Currently only the latest versions of Chrome & Firefox are supported (and
-tested).
+現在、Chrome と Firefox の最新バージョンのみがサポート (およびテスト) されています。
 
 ### Mobile
 
