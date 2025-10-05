@@ -1,10 +1,10 @@
 import { NoteType } from "@triliumnext/commons";
-import { useNoteContext, useTriliumEvent } from "./react/hooks"
+import { useLegacyImperativeHandlers, useNoteContext, useTriliumEvent } from "./react/hooks"
 import FNote from "../entities/fnote";
 import protected_session_holder from "../services/protected_session_holder";
-import { useEffect, useState } from "preact/hooks";
+import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import NoteContext from "../components/note_context";
-import { isValidElement, VNode } from "preact";
+import { ComponentChildren, isValidElement, VNode } from "preact";
 import { TypeWidgetProps } from "./type_widgets/type_widget";
 import "./NoteDetail.css";
 import attributes from "../services/attributes";
@@ -16,7 +16,7 @@ import attributes from "../services/attributes";
 type ExtendedNoteType = Exclude<NoteType, "launcher" | "text" | "code"> | "empty" | "readOnlyCode" | "readOnlyText" | "editableText" | "editableCode" | "attachmentDetail" | "attachmentList" |  "protectedSession" | "aiChat";
 type TypeWidget = (props: TypeWidgetProps) => VNode;
 
-const TYPE_MAPPINGS: Record<ExtendedNoteType, () => Promise<{ default: TypeWidget } | TypeWidget> | VNode> = {
+const TYPE_MAPPINGS: Record<ExtendedNoteType, () => Promise<{ default: TypeWidget } | TypeWidget> | ((props: TypeWidgetProps) => VNode)> = {
     "empty": () => import("./type_widgets/Empty"),
     "doc": () => import("./type_widgets/Doc"),
     "search": () => <div className="note-detail-none note-detail-printable" />,
@@ -39,7 +39,6 @@ const TYPE_MAPPINGS: Record<ExtendedNoteType, () => Promise<{ default: TypeWidge
     "relationMap": () => import("./type_widgets/relation_map/RelationMap"),
     "noteMap": () => import("./type_widgets/NoteMap"),
     "aiChat": () => import("./type_widgets/AiChat")
-    // TODO: finalize the record.
 };
 
 /**
@@ -48,12 +47,14 @@ const TYPE_MAPPINGS: Record<ExtendedNoteType, () => Promise<{ default: TypeWidge
  * Apart from that:
  * - It applies a full-height style depending on the content type (e.g. canvas notes).
  * - Focuses the content when switching tabs.
+ * - Caches the note type elements based on what the user has accessed, in order to quickly load it again.
  */
 export default function NoteDetail() {
     const { note, type, mime, noteContext, parentComponent } = useNoteInfo();
     const { ntxId, viewScope } = noteContext ?? {};
-    const [ correspondingWidget, setCorrespondingWidget ] = useState<VNode | null>(null);
     const isFullHeight = checkFullHeight(noteContext, type);
+    const noteTypesToRender = useRef<{ [ key in ExtendedNoteType ]?: (props: TypeWidgetProps) => VNode }>({});
+    const [ activeNoteType, setActiveNoteType ] = useState<ExtendedNoteType>();
 
     const props: TypeWidgetProps = {
         note: note!,
@@ -64,7 +65,16 @@ export default function NoteDetail() {
     };
     useEffect(() => {
         if (!type) return;
-        getCorrespondingWidget(type, props).then(correspondingWidget => setCorrespondingWidget(correspondingWidget));
+
+        if (!noteTypesToRender.current[type]) {
+            getCorrespondingWidget(type).then((el) => {
+                if (!el) return;
+                noteTypesToRender.current[type] = el;
+                setActiveNoteType(type);
+            });
+        } else {
+            setActiveNoteType(type);
+        }
     }, [ note, viewScope, type ]);
 
     // Detect note type changes.
@@ -119,7 +129,39 @@ export default function NoteDetail() {
 
     return (
         <div class={`note-detail ${isFullHeight ? "full-height" : ""}`}>
-            {correspondingWidget || <p>Note detail goes here! {note?.title} of {type}</p>}
+            {Object.entries(noteTypesToRender.current).map(([ type, Element ]) => {
+                return <NoteDetailWrapper
+                    Element={Element}
+                    key={type}
+                    type={type as ExtendedNoteType}
+                    isVisible={activeNoteType === type}
+                    props={props}
+                />
+            })}
+        </div>
+    );
+}
+
+/**
+ * Wraps a single note type widget, in order to keep it in the DOM even after the user has switched away to another note type. This allows faster loading of the same note type again. The properties are cached, so that they are updated only
+ * while the widget is visible, to avoid rendering in the background. When not visible, the DOM element is simply hidden.
+ */
+function NoteDetailWrapper({ Element, type, isVisible, props }: { Element: (props: TypeWidgetProps) => VNode, type: ExtendedNoteType, isVisible: boolean, props: TypeWidgetProps }) {
+    const [ cachedProps, setCachedProps ] = useState(props);
+
+    useEffect(() => {
+        if (isVisible) {
+            setCachedProps(props);
+        } else {
+            // Do nothing, keep the old props.
+        }
+    }, [ isVisible ]);
+
+    return (
+        <div className={`note-detail-${type}`} style={{
+            display: !isVisible ? "none" : ""
+        }}>
+            { <Element {...cachedProps} /> }
         </div>
     );
 }
@@ -149,21 +191,19 @@ function useNoteInfo() {
     return { note, type, mime, noteContext, parentComponent };
 }
 
-async function getCorrespondingWidget(type: ExtendedNoteType, props: TypeWidgetProps): Promise<VNode | null> {
+async function getCorrespondingWidget(type: ExtendedNoteType): Promise<null | ((props: TypeWidgetProps) => VNode)> {
     const correspondingType = TYPE_MAPPINGS[type];
     if (!correspondingType) return null;
 
     const result = await correspondingType();
 
     if ("default" in result) {
-        const Component = result.default;
-        return <Component {...props} />
+        return result.default;
     } else if (isValidElement(result)) {
         // Direct VNode provided.
         return result;
     } else {
-        const Component = result;
-        return <Component {...props} />
+        return result;
     }
 }
 
