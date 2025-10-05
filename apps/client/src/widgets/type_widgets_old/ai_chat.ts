@@ -10,48 +10,6 @@ export default class AiChatTypeWidget extends TypeWidget {
     private isInitialized: boolean = false;
     private initPromise: Promise<void> | null = null;
 
-    constructor() {
-        super();
-        this.llmChatPanel = new LlmChatPanel();
-
-        // Connect the data callbacks
-        this.llmChatPanel.setDataCallbacks(
-            (data) => this.saveData(data),
-            () => this.getData()
-        );
-    }
-
-    static getType() {
-        return "aiChat";
-    }
-
-    doRender() {
-        this.$widget = $('<div class="ai-chat-widget-container" style="height: 100%;"></div>');
-        this.$widget.append(this.llmChatPanel.render());
-
-        return this.$widget;
-    }
-
-    // Override the refreshWithNote method to ensure we get note changes
-    async refreshWithNote(note: FNote | null | undefined) {
-        console.log("refreshWithNote called for note:", note?.noteId);
-
-        // Always force a refresh when the note changes
-        if (this.note?.noteId !== note?.noteId) {
-            console.log(`Note ID changed from ${this.note?.noteId} to ${note?.noteId}, forcing reset`);
-            this.isInitialized = false;
-            this.initPromise = null;
-
-            // Force refresh the chat panel with the new note
-            if (note) {
-                this.llmChatPanel.setCurrentNoteId(note.noteId);
-            }
-        }
-
-        // Continue with regular doRefresh
-        await this.doRefresh(note);
-    }
-
     async doRefresh(note: FNote | null | undefined) {
         try {
             console.log("doRefresh called for note:", note?.noteId);
@@ -185,10 +143,10 @@ export default class AiChatTypeWidget extends TypeWidget {
         // If we have a noteId in the data, that's the AI Chat note we should save to
         // This happens when the chat panel is saving its conversation
         const targetNoteId = data.noteId;
-        
+
         // If no noteId in data, use the current note (for new chats)
         const noteIdToUse = targetNoteId || this.note?.noteId;
-        
+
         if (!noteIdToUse) {
             console.warn("Cannot save AI Chat data: no note ID available");
             return;

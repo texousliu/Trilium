@@ -37,7 +37,8 @@ const TYPE_MAPPINGS: Record<ExtendedNoteType, () => Promise<{ default: TypeWidge
     "render": () => import("./type_widgets/Render"),
     "canvas": () => import("./type_widgets/Canvas"),
     "relationMap": () => import("./type_widgets/relation_map/RelationMap"),
-    "noteMap": () => import("./type_widgets/NoteMap")
+    "noteMap": () => import("./type_widgets/NoteMap"),
+    "aiChat": () => import("./type_widgets/AiChat")
     // TODO: finalize the record.
 };
 
