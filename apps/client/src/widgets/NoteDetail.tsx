@@ -207,7 +207,7 @@ function checkFullHeight(noteContext: NoteContext | undefined, type: ExtendedNot
     // https://github.com/zadam/trilium/issues/2522
     const isBackendNote = noteContext?.noteId === "_backendLog";
     const isSqlNote = noteContext.note?.mime === "text/x-sqlite;schema=trilium";
-    const isFullHeightNoteType = ["canvas", "webView", "noteMap", "mindMap", "mermaid", "file"].includes(type ?? "");
+    const isFullHeightNoteType = ["canvas", "webView", "noteMap", "mindMap", "mermaid", "file", "aiChat"].includes(type ?? "");
     return (!noteContext?.hasNoteList() && isFullHeightNoteType && !isSqlNote)
         || noteContext?.viewScope?.viewMode === "attachments"
         || isBackendNote;

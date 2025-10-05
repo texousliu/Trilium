@@ -1,6 +1,6 @@
 {
   "name": "@triliumnext/client",
-  "version": "0.99.0",
+  "version": "0.99.1",
   "description": "JQuery-based client for TriliumNext, used for both web and desktop (via Electron)",
   "private": true,
   "license": "AGPL-3.0-only",
@@ -53,7 +53,7 @@
     "mark.js": "8.11.1",
     "marked": "16.3.0",
     "mermaid": "11.12.0",
-    "mind-elixir": "5.3.1",
+    "mind-elixir": "5.1.1",
     "normalize.css": "8.0.1",
     "panzoom": "9.4.3",
     "preact": "10.27.2",
