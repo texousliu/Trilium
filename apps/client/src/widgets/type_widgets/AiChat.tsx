@@ -13,6 +13,7 @@ export default function AiChat({ note, noteContext }: TypeWidgetProps) {
         onContentChange: (newContent) => {
             try {
                 dataRef.current = JSON.parse(newContent);
+                llmChatPanel.refresh();
             } catch (e) {
                 dataRef.current = {};
             }
@@ -39,7 +40,7 @@ export default function AiChat({ note, noteContext }: TypeWidgetProps) {
     useEffect(() => {
         llmChatPanel.setNoteId(note.noteId);
         llmChatPanel.setCurrentNoteId(note.noteId);
-        llmChatPanel.refresh();
+        console.log("Refresh!");
     }, [ note ]);
 
     return ChatWidget;
