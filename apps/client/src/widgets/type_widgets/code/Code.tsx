@@ -4,9 +4,9 @@ import { TypeWidgetProps } from "../type_widget";
 import "./code.css";
 import CodeMirror, { CodeMirrorProps } from "./CodeMirror";
 import utils from "../../../services/utils";
-import { useEditorSpacedUpdate, useKeyboardShortcuts, useNoteBlob, useSyncedRef, useTriliumEvent, useTriliumOption, useTriliumOptionBool } from "../../react/hooks";
+import { useEditorSpacedUpdate, useKeyboardShortcuts, useLegacyImperativeHandlers, useNoteBlob, useSyncedRef, useTriliumEvent, useTriliumOption, useTriliumOptionBool } from "../../react/hooks";
 import { t } from "../../../services/i18n";
-import appContext from "../../../components/app_context";
+import appContext, { CommandListenerData } from "../../../components/app_context";
 import TouchBar, { TouchBarButton } from "../../react/TouchBar";
 import { refToJQuerySelector } from "../../react/react_utils";
 import { CODE_THEME_DEFAULT_PREFIX as DEFAULT_PREFIX } from "../constants";
@@ -87,6 +87,17 @@ export function EditableCode({ note, ntxId, noteContext, debounceUpdate, parentC
         },
         dataSaved,
         updateInterval
+    });
+
+    // make sure that script is saved before running it #4028
+    useLegacyImperativeHandlers({
+        async runActiveNoteCommand(params: CommandListenerData<"runActiveNote">) {
+            if (params.ntxId === ntxId) {
+                await spacedUpdate.updateNowIfNecessary();
+            }
+
+            return await parentComponent?.parent?.triggerCommand("runActiveNote", params);
+        }
     });
 
     useKeyboardShortcuts("code-detail", containerRef, parentComponent);
