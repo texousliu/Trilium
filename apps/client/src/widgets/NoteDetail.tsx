@@ -8,6 +8,7 @@ import { TypeWidgetProps } from "./type_widgets/type_widget";
 import "./NoteDetail.css";
 import attributes from "../services/attributes";
 import { ExtendedNoteType, TYPE_MAPPINGS } from "./note_types";
+import { isMobile } from "../services/utils";
 
 /**
  * The note detail is in charge of rendering the content of a note, by determining its type (e.g. text, code) and using the appropriate view widget.
@@ -94,6 +95,13 @@ export default function NoteDetail() {
             parentComponent.triggerCommand("focusOnDetail", { ntxId });
         }
     });
+
+    // Fixed tree for launch bar config on mobile.
+    useEffect(() => {
+        if (!isMobile) return;
+        const hasFixedTree = noteContext?.hoistedNoteId === "_lbMobileRoot";
+        document.body.classList.toggle("force-fixed-tree", hasFixedTree);
+    }, [ note ]);
 
     return (
         <div class={`note-detail ${isFullHeight ? "full-height" : ""}`}>
