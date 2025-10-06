@@ -153,7 +153,7 @@ sugestii sau probleme aveți!
 
 ## 🏗 Procesul de instalare
 
-### Windows / MacOS
+### Windows / macOS
 
 Descărcați release-ul binar pentru platforma dvs. de pe pagina [ultimului
 release](https://github.com/TriliumNext/Trilium/releases/latest), dezarhivați și
