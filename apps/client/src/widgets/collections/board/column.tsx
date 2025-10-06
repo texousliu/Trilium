@@ -146,11 +146,18 @@ export default function Column({
 function AddNewItem({ column, api }: { column: string, api: BoardApi }) {
     const [ isCreatingNewItem, setIsCreatingNewItem ] = useState(false);
     const addItemCallback = useCallback(() => setIsCreatingNewItem(true), []);
+    const handleKeyDown = useCallback((e: KeyboardEvent) => {
+        if (!isCreatingNewItem && e.key === "Enter") {
+            setIsCreatingNewItem(true);
+        }
+    }, []);
 
     return (
         <div
             className={`board-new-item ${isCreatingNewItem ? "editing" : ""}`}
             onClick={addItemCallback}
+            onKeyDown={handleKeyDown}
+            tabIndex={300}
         >
             {!isCreatingNewItem ? (
                 <>

@@ -121,6 +121,12 @@
   font-size: var(--card-font-size);
 }
 
+.board-view-container .board-note:focus,
+.board-view-container .board-new-item:focus {
+  outline: 3px solid var(--input-focus-outline-color);
+  outline-offset: 0;
+}
+
 .board-view-container .board-note {
   transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.15s ease, margin-top 0.2s ease;
 }
