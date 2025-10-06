@@ -143,44 +143,41 @@ TriliumNext は Flatpak としても提供されていますが、FlatHub では
 
 現在、Chrome と Firefox の最新バージョンのみがサポート (およびテスト) されています。
 
-### Mobile
+### モバイル
 
-To use TriliumNext on a mobile device, you can use a mobile web browser to
-access the mobile interface of a server installation (see below).
+モバイルデバイスで TriliumNext を使用するには、モバイル Web
+ブラウザーを使用して、サーバーインストールのモバイルインターフェイスにアクセスできます (以下を参照)。
 
-See issue https://github.com/TriliumNext/Trilium/issues/4962 for more
-information on mobile app support.
+モバイルアプリのサポートの詳細については、issue https://github.com/TriliumNext/Trilium/issues/4962
+を参照してください。
 
-If you prefer a native Android app, you can use
-[TriliumDroid](https://apt.izzysoft.de/fdroid/index/apk/eu.fliegendewurst.triliumdroid).
-Report bugs and missing features at [their
-repository](https://github.com/FliegendeWurst/TriliumDroid). Note: It is best to
-disable automatic updates on your server installation (see below) when using
-TriliumDroid since the sync version must match between Trilium and TriliumDroid.
+ネイティブAndroidアプリをご希望の場合は、[TriliumDroid](https://apt.izzysoft.de/fdroid/index/apk/eu.fliegendewurst.triliumdroid)
+をご利用いただけます。バグや不足している機能は [リポジトリ](https://github.com/FliegendeWurst/TriliumDroid)
+でご報告ください。注：TriliumDroidを使用する場合は、TriliumとTriliumDroidの同期バージョンが一致している必要があるため、サーバーインストールで自動更新を無効にすることをお勧めします（下記参照）。
 
-### Server
+### サーバー
 
-To install TriliumNext on your own server (including via Docker from
-[Dockerhub](https://hub.docker.com/r/triliumnext/trilium)) follow [the server
-installation docs](https://triliumnext.github.io/Docs/Wiki/server-installation).
+独自のサーバーに TriliumNext をインストールするには
+([Dockerhub](https://hub.docker.com/r/triliumnext/trilium) から Docker
+経由でも含む)、[サーバーのインストール
+ドキュメント](https://triliumnext.github.io/Docs/Wiki/server-installation) に従ってください。
 
 
-## 💻 Contribute
+## 💻 貢献する
 
-### Translations
+### 翻訳
 
-If you are a native speaker, help us translate Trilium by heading over to our
-[Weblate page](https://hosted.weblate.org/engage/trilium/).
+ネイティブスピーカーの方は、[Weblate ページ](https://hosted.weblate.org/engage/trilium/)
+にアクセスして、Trilium の翻訳にご協力ください。
 
-Here's the language coverage we have so far:
+これまでにカバーされている言語は次のとおりです:
 
-[![Translation
-status](https://hosted.weblate.org/widget/trilium/multi-auto.svg)](https://hosted.weblate.org/engage/trilium/)
+[![翻訳状況](https://hosted.weblate.org/widget/trilium/multi-auto.svg)](https://hosted.weblate.org/engage/trilium/)
 
-### Code
+### コード
 
-Download the repository, install dependencies using `pnpm` and then run the
-server (available at http://localhost:8080):
+リポジトリをダウンロードし、`pnpm` を使用して依存関係をインストールしてから、サーバーを実行します (http://localhost:8080
+で利用可能):
 ```shell
 git clone https://github.com/TriliumNext/Trilium.git
 cd Trilium
@@ -188,10 +185,9 @@ pnpm install
 pnpm run server:start
 ```
 
-### Documentation
+### ドキュメント
 
-Download the repository, install dependencies using `pnpm` and then run the
-environment required to edit the documentation:
+リポジトリをダウンロードし、`pnpm` を使用して依存関係をインストールし、ドキュメントを編集するために必要な環境を実行します:
 ```shell
 git clone https://github.com/TriliumNext/Trilium.git
 cd Trilium
@@ -199,9 +195,8 @@ pnpm install
 pnpm edit-docs:edit-docs
 ```
 
-### Building the Executable
-Download the repository, install dependencies using `pnpm` and then build the
-desktop app for Windows:
+### 実行ファイルの構築
+リポジトリをダウンロードし、`pnpm` を使用して依存関係をインストールし、Windows 用のデスクトップアプリをビルドします:
 ```shell
 git clone https://github.com/TriliumNext/Trilium.git
 cd Trilium
@@ -209,69 +204,60 @@ pnpm install
 pnpm run --filter desktop electron-forge:make --arch=x64 --platform=win32
 ```
 
-For more details, see the [development
-docs](https://github.com/TriliumNext/Trilium/tree/main/docs/Developer%20Guide/Developer%20Guide).
+詳細については、[開発ドキュメント](https://github.com/TriliumNext/Trilium/tree/main/docs/Developer%20Guide/Developer%20Guide)
+を参照してください。
 
-### Developer Documentation
+### 開発者向けドキュメント
 
-Please view the [documentation
-guide](https://github.com/TriliumNext/Trilium/blob/main/docs/Developer%20Guide/Developer%20Guide/Environment%20Setup.md)
-for details. If you have more questions, feel free to reach out via the links
-described in the "Discuss with us" section above.
+詳細については、[ドキュメントガイド](https://github.com/TriliumNext/Trilium/blob/main/docs/Developer%20Guide/Developer%20Guide/Environment%20Setup.md)
+をご覧ください。ご質問がございましたら、上記の「私たちと議論しましょう」セクションに記載されているリンクからお気軽にお問い合わせください。
 
-## 👏 Shoutouts
+## 👏 シャウトアウト
 
-* [zadam](https://github.com/zadam) for the original concept and implementation
-  of the application.
-* [Larsa](https://github.com/LarsaSara) for designing the application icon.
-* [nriver](https://github.com/nriver) for his work on internationalization.
-* [Thomas Frei](https://github.com/thfrei) for his original work on the Canvas.
-* [antoniotejada](https://github.com/nriver) for the original syntax highlight
-  widget.
-* [Dosu](https://dosu.dev/) for providing us with the automated responses to
-  GitHub issues and discussions.
-* [Tabler Icons](https://tabler.io/icons) for the system tray icons.
+* [zadam](https://github.com/zadam) アプリケーションのオリジナルのコンセプトと実装に対して感謝します。
+* [Larsa](https://github.com/LarsaSara) アプリケーションアイコンをデザイン。
+* [nriver](https://github.com/nriver) 国際化への取り組み。
+* [Thomas Frei](https://github.com/thfrei) Canvasへのオリジナルな取り組み。
+* [antoniotejada](https://github.com/nriver) オリジナルの構文ハイライトウィジェット。
+* [Dosu](https://dosu.dev/) GitHub の問題やディスカッションに対する自動応答を提供してくれました。
+* [Tabler Icons](https://tabler.io/icons) システムトレイアイコン。
 
-Trilium would not be possible without the technologies behind it:
+Trilium は、その基盤となる技術なしには実現できませんでした:
 
-* [CKEditor 5](https://github.com/ckeditor/ckeditor5) - the visual editor behind
-  text notes. We are grateful for being offered a set of the premium features.
-* [CodeMirror](https://github.com/codemirror/CodeMirror) - code editor with
-  support for huge amount of languages.
-* [Excalidraw](https://github.com/excalidraw/excalidraw) - the infinite
-  whiteboard used in Canvas notes.
-* [Mind Elixir](https://github.com/SSShooter/mind-elixir-core) - providing the
-  mind map functionality.
-* [Leaflet](https://github.com/Leaflet/Leaflet) - for rendering geographical
-  maps.
-* [Tabulator](https://github.com/olifolkerd/tabulator) - for the interactive
-  table used in collections.
-* [FancyTree](https://github.com/mar10/fancytree) - feature-rich tree library
-  without real competition.
-* [jsPlumb](https://github.com/jsplumb/jsplumb) - visual connectivity library.
-  Used in [relation
-  maps](https://triliumnext.github.io/Docs/Wiki/relation-map.html) and [link
-  maps](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)
+* [CKEditor 5](https://github.com/ckeditor/ckeditor5) -
+  テキストノートを補完するビジュアルエディタ。プレミアム機能を提供していただき、感謝いたします。
+* [CodeMirror](https://github.com/codemirror/CodeMirror) -
+  膨大な数の言語をサポートするコードエディター。
+* [Excalidraw](https://github.com/excalidraw/excalidraw) - Canvas
+  ノートで使用される無限のホワイトボード。
+* [Mind Elixir](https://github.com/SSShooter/mind-elixir-core) -
+  マインドマップ機能を提供します。
+* [Leaflet](https://github.com/Leaflet/Leaflet) - 地理マップをレンダリングします。
+* Tabulator](https://github.com/olifolkerd/tabulator) -
+  コレクションで使用されるインタラクティブなテーブル。
+* [FancyTree](https://github.com/mar10/fancytree) - 他に類を見ない機能豊富なツリーライブラリ。
+* [jsPlumb](https://github.com/jsplumb/jsplumb) -
+  視覚的な接続ライブラリ。[リレーションマップ](https://triliumnext.github.io/Docs/Wiki/relation-map.html)
+  と [リンクマップ](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)
+  で使用されます
 
-## 🤝 Support
+## 🤝 サポート
 
-Trilium is built and maintained with [hundreds of hours of
-work](https://github.com/TriliumNext/Trilium/graphs/commit-activity). Your
-support keeps it open-source, improves features, and covers costs such as
-hosting.
+Triliumは
+[数百時間もの作業](https://github.com/TriliumNext/Trilium/graphs/commit-activity)
+によって構築・維持されています。皆様のご支援により、オープンソースとしての維持、機能の向上、ホスティングなどの費用を賄うことができます。
 
-Consider supporting the main developer
-([eliandoran](https://github.com/eliandoran)) of the application via:
+次の方法で、アプリケーションの主な開発者 ([eliandoran](https://github.com/eliandoran))
+をサポートすることを検討してください:
 
 - [GitHub Sponsors](https://github.com/sponsors/eliandoran)
 - [PayPal](https://paypal.me/eliandoran)
 - [Buy Me a Coffee](https://buymeacoffee.com/eliandoran)
 
-## 🔑 License
+## 🔑 ライセンス
 
-Copyright 2017-2025 zadam, Elian Doran, and other contributors
+著作権 2017-2025 zadam、Elian Doran、その他寄稿者
 
-This program is free software: you can redistribute it and/or modify it under
-the terms of the GNU Affero General Public License as published by the Free
-Software Foundation, either version 3 of the License, or (at your option) any
-later version.
+このプログラムはフリーソフトウェアです: フリーソフトウェア財団(Software Foundation) が発行する GNU Affero
+一般公衆利用許諾書(GNU Affero General Public License) のバージョン 3、または (選択により)
+それ以降のバージョンの規約に従って、このプログラムを再配布および/または改変することができます。
