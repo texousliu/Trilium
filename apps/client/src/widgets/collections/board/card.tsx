@@ -63,7 +63,7 @@ export default function Card({
         setBranchIdToEdit?.(branch.branchId);
     }, [ setBranchIdToEdit, branch ]);
 
-    const handleKeyUp = useCallback((e: KeyboardEvent) => {
+    const handleKeyDown = useCallback((e: KeyboardEvent) => {
         if (e.key === "Enter") {
             api.openNote(note.noteId);
         } else if (e.key === "F2") {
@@ -91,7 +91,7 @@ export default function Card({
             onDragEnd={handleDragEnd}
             onContextMenu={handleContextMenu}
             onClick={!isEditing ? handleOpen : undefined}
-            onKeyUp={handleKeyUp}
+            onKeyDown={handleKeyDown}
             style={{
                 display: !isVisible ? "none" : undefined
             }}
