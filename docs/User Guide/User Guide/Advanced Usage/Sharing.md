@@ -72,15 +72,17 @@ You can inject custom JavaScript into the shared note using the `~shareJs` relat
 You can inject custom HTML snippets into specific locations of the shared page using the `~shareHtml` relation. The HTML note should contain the raw HTML content you want to inject, and you can control where it appears by adding the `#shareHtmlLocation` label to the HTML snippet note itself.
 
 The `#shareHtmlLocation` label accepts values in the format `location:position`:
-- **Locations**: `head`, `body`, `content`
-- **Positions**: `start`, `end`
+
+*   **Locations**: `head`, `body`, `content`
+*   **Positions**: `start`, `end`
 
 For example:
-- `#shareHtmlLocation=head:start` - Injects HTML at the beginning of the `<head>` section
-- `#shareHtmlLocation=head:end` - Injects HTML at the end of the `<head>` section (default)
-- `#shareHtmlLocation=body:start` - Injects HTML at the beginning of the `<body>` section
-- `#shareHtmlLocation=content:start` - Injects HTML at the beginning of the content area
-- `#shareHtmlLocation=content:end` - Injects HTML at the end of the content area
+
+*   `#shareHtmlLocation=head:start` - Injects HTML at the beginning of the `<head>` section
+*   `#shareHtmlLocation=head:end` - Injects HTML at the end of the `<head>` section (default)
+*   `#shareHtmlLocation=body:start` - Injects HTML at the beginning of the `<body>` section
+*   `#shareHtmlLocation=content:start` - Injects HTML at the beginning of the content area
+*   `#shareHtmlLocation=content:end` - Injects HTML at the end of the content area
 
 If no location is specified, the HTML will be injected at `content:end` by default.
 
