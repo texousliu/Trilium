@@ -88,7 +88,6 @@ export default function Column({
             onDragOver={isAnyColumnDragging ? handleColumnDragOver : handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            onWheel={handleScroll}
             style={{
                 display: !isVisible ? "none" : undefined
             }}
@@ -120,33 +119,35 @@ export default function Column({
                 )}
             </h3>
 
-            {(columnItems ?? []).map(({ note, branch }, index) => {
-                const showIndicatorBefore = dropPosition?.column === column &&
-                                          dropPosition.index === index &&
-                                          draggedCard?.noteId !== note.noteId;
+            <div className="board-column-content" onWheel={handleScroll}>
+                {(columnItems ?? []).map(({ note, branch }, index) => {
+                    const showIndicatorBefore = dropPosition?.column === column &&
+                                            dropPosition.index === index &&
+                                            draggedCard?.noteId !== note.noteId;
 
-                return (
-                    <>
-                        {showIndicatorBefore && (
-                            <div className="board-drop-placeholder show" />
-                        )}
-                        <Card
-                            key={note.noteId}
-                            api={api}
-                            note={note}
-                            branch={branch}
-                            column={column}
-                            index={index}
-                            isDragging={draggedCard?.noteId === note.noteId}
-                        />
-                    </>
-                );
-            })}
-            {dropPosition?.column === column && dropPosition.index === (columnItems?.length ?? 0) && (
-                <div className="board-drop-placeholder show" />
-            )}
+                    return (
+                        <>
+                            {showIndicatorBefore && (
+                                <div className="board-drop-placeholder show" />
+                            )}
+                            <Card
+                                key={note.noteId}
+                                api={api}
+                                note={note}
+                                branch={branch}
+                                column={column}
+                                index={index}
+                                isDragging={draggedCard?.noteId === note.noteId}
+                            />
+                        </>
+                    );
+                })}
+                {dropPosition?.column === column && dropPosition.index === (columnItems?.length ?? 0) && (
+                    <div className="board-drop-placeholder show" />
+                )}
 
-            <AddNewItem api={api} column={column} />
+                <AddNewItem api={api} column={column} />
+            </div>
         </div>
     )
 }
