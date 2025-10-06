@@ -121,8 +121,7 @@
   font-size: var(--card-font-size);
 }
 
-.board-view-container .board-note:focus,
-.board-view-container .board-new-item:focus {
+.board-view-container :focus {
   outline: 3px solid var(--input-focus-outline-color);
   outline-offset: 0;
 }

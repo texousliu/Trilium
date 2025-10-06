@@ -50,6 +50,12 @@ export default function Column({
         openColumnContextMenu(api, e, column);
     }, [ api, column ]);
 
+    const handleTitleKeyDown = useCallback((e: KeyboardEvent) => {
+        if (e.key === "F2") {
+            setColumnNameToEdit?.(column);
+        }
+    }, [ column ]);
+
     /** Allow using mouse wheel to scroll inside card, while also maintaining column horizontal scrolling. */
     const handleScroll = useCallback((event: JSX.TargetedWheelEvent<HTMLDivElement>) => {
         const el = event.currentTarget;
@@ -93,6 +99,8 @@ export default function Column({
                 onDragStart={handleColumnDragStart}
                 onDragEnd={handleColumnDragEnd}
                 onContextMenu={handleContextMenu}
+                onKeyDown={handleTitleKeyDown}
+                tabIndex={300}
             >
                 {!isEditing ? (
                     <>
