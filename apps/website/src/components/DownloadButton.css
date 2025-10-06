@@ -3,6 +3,7 @@ a.download-button {
     align-items: center;
     justify-content: center;
     gap: 1em;
+    font-weight: 500;
 
     @media (min-width: 720px) {
         display: flex !important;
@@ -11,12 +12,12 @@ a.download-button {
     .platform {
         font-size: 0.75em;
         opacity: 0.75;
+        font-weight: 400;
     }
 
     &.big {
         padding: 0.5em 3.5em;
         margin: 1em 0;
-        gap: m;
         text-align: left;
 
         .platform {

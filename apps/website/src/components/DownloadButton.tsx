@@ -27,7 +27,7 @@ export default function DownloadButton({ big }: DownloadButtonProps) {
                             Download now{" "}
                             {big
                             ? <span class="platform">v{packageJson.version} for {recommendedDownload.name}</span>
-                            : <span class="platform">for {recommendedDownload.name}</span>
+                            : null
                             }
                     </>}
                 />
@@ -40,7 +40,7 @@ export default function DownloadButton({ big }: DownloadButtonProps) {
                             Download now{" "}
                             {big
                             ? <span class="platform">v{packageJson.version} for Linux</span>
-                            : <span class="platform">for Linux</span>
+                            : null
                             }
                     </>}
                 />
