@@ -37,7 +37,7 @@
   "private": true,
   "devDependencies": {
     "@electron/rebuild": "4.0.1",
-    "@playwright/test": "1.55.1",
+    "@playwright/test": "1.56.0",
     "@triliumnext/server": "workspace:*",
     "@types/express": "5.0.3",
     "@types/node": "22.18.8",
