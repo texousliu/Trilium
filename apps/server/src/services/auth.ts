@@ -26,20 +26,8 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
     if (isElectron || noAuthentication) {
         next();
         return;
-    } else if (currentTotpStatus !== lastAuthState.totpEnabled || currentSsoStatus !== lastAuthState.ssoEnabled) {
-        req.session.destroy((err) => {
-            if (err) console.error('Error destroying session:', err);
-            res.redirect('login');
-        });
-        return;
-    } else if (currentSsoStatus) {
-        if (req.oidc?.isAuthenticated() && req.session.loggedIn) {
-            next();
-            return;
-        }
-        res.redirect('login');
-        return;
     } else if (!req.session.loggedIn && !noAuthentication) {
+        // check redirectBareDomain option first
 
         // cannot use options.getOptionBool currently => it will throw an error on new installations
         // TriliumNextTODO: look into potentially creating an getOptionBoolOrNull instead
@@ -70,18 +58,20 @@ function checkAuth(req: Request, res: Response, next: NextFunction) {
         } else {
             res.redirect("login");
         }
-    } else {
-        next();
-    }
-}
-
-
-/**
- * Middleware for API authentication - works for both sync and normal API
- */
-function checkApiAuth(req: Request, res: Response, next: NextFunction) {
-    if (!req.session.loggedIn && !noAuthentication) {
-        reject(req, res, "Logged in session not found");
+        res.redirect(hasRedirectBareDomain ? "share" : "login");
+    } else if (currentTotpStatus !== lastAuthState.totpEnabled || currentSsoStatus !== lastAuthState.ssoEnabled) {
+        req.session.destroy((err) => {
+            if (err) console.error('Error destroying session:', err);
+            res.redirect('login');
+        });
+        return;
+    } else if (currentSsoStatus) {
+        if (req.oidc?.isAuthenticated() && req.session.loggedIn) {
+            next();
+            return;
+        }
+        res.redirect('login');
+        return;
     } else {
         next();
     }
@@ -178,6 +168,7 @@ function checkCredentials(req: Request, res: Response, next: NextFunction) {
 
     if (!passwordEncryptionService.verifyPassword(password)) {
         res.setHeader("Content-Type", "text/plain").status(401).send("Incorrect password");
+        log.info(`WARNING: Wrong password from ${req.ip}, rejecting.`);
     } else {
         next();
     }

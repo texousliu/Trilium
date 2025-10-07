@@ -1,11 +1,12 @@
 import dayjs from "dayjs";
 import type { ViewScope } from "./link.js";
+import FNote from "../entities/fnote";
 
 const SVG_MIME = "image/svg+xml";
 
 export const isShare = !window.glob;
 
-function reloadFrontendApp(reason?: string) {
+export function reloadFrontendApp(reason?: string) {
     if (reason) {
         logInfo(`Frontend app reload: ${reason}`);
     }
@@ -13,7 +14,7 @@ function reloadFrontendApp(reason?: string) {
     window.location.reload();
 }
 
-function restartDesktopApp() {
+export function restartDesktopApp() {
     if (!isElectron()) {
         reloadFrontendApp();
         return;
@@ -44,27 +45,6 @@ function parseDate(str: string) {
     } catch (e: any) {
         throw new Error(`Can't parse date from '${str}': ${e.message} ${e.stack}`);
     }
-}
-
-// Source: https://stackoverflow.com/a/30465299/4898894
-function getMonthsInDateRange(startDate: string, endDate: string) {
-    const start = startDate.split("-");
-    const end = endDate.split("-");
-    const startYear = parseInt(start[0]);
-    const endYear = parseInt(end[0]);
-    const dates: string[] = [];
-
-    for (let i = startYear; i <= endYear; i++) {
-        const endMonth = i != endYear ? 11 : parseInt(end[1]) - 1;
-        const startMon = i === startYear ? parseInt(start[1]) - 1 : 0;
-
-        for (let j = startMon; j <= endMonth; j = j > 12 ? j % 12 || 11 : j + 1) {
-            const month = j + 1;
-            const displayMonth = month < 10 ? "0" + month : month;
-            dates.push([i, displayMonth].join("-"));
-        }
-    }
-    return dates;
 }
 
 function padNum(num: number) {
@@ -125,7 +105,7 @@ function formatDateISO(date: Date) {
     return `${date.getFullYear()}-${padNum(date.getMonth() + 1)}-${padNum(date.getDate())}`;
 }
 
-function formatDateTime(date: Date, userSuppliedFormat?: string): string {
+export function formatDateTime(date: Date, userSuppliedFormat?: string): string {
     if (userSuppliedFormat?.trim()) {
         return dayjs(date).format(userSuppliedFormat);
     } else {
@@ -144,11 +124,23 @@ function now() {
 /**
  * Returns `true` if the client is currently running under Electron, or `false` if running in a web browser.
  */
-function isElectron() {
+export function isElectron() {
     return !!(window && window.process && window.process.type);
 }
 
-function isMac() {
+/**
+ * Returns `true` if the client is running as a PWA, otherwise `false`.
+ */
+export function isPWA() {
+    return (
+        window.matchMedia('(display-mode: standalone)').matches
+        || window.matchMedia('(display-mode: window-controls-overlay)').matches
+        || window.navigator.standalone
+        || window.navigator.windowControlsOverlay
+    );
+}
+
+export function isMac() {
     return navigator.platform.indexOf("Mac") > -1;
 }
 
@@ -185,7 +177,11 @@ export function escapeQuotes(value: string) {
     return value.replaceAll('"', "&quot;");
 }
 
-function formatSize(size: number) {
+export function formatSize(size: number | null | undefined) {
+    if (size === null || size === undefined) {
+        return "";
+    }
+
     size = Math.max(Math.round(size / 1024), 1);
 
     if (size < 1024) {
@@ -218,7 +214,7 @@ function randomString(len: number) {
     return text;
 }
 
-function isMobile() {
+export function isMobile() {
     return (
         window.glob?.device === "mobile" ||
         // window.glob.device is not available in setup
@@ -292,7 +288,55 @@ function isHtmlEmpty(html: string) {
     );
 }
 
-async function clearBrowserCache() {
+function formatHtml(html: string) {
+    let indent = "\n";
+    const tab = "\t";
+    let i = 0;
+    let pre: { indent: string; tag: string }[] = [];
+
+    html = html
+        .replace(new RegExp("<pre>([\\s\\S]+?)?</pre>"), function (x) {
+            pre.push({ indent: "", tag: x });
+            return "<--TEMPPRE" + i++ + "/-->";
+        })
+        .replace(new RegExp("<[^<>]+>[^<]?", "g"), function (x) {
+            let ret;
+            const tagRegEx = /<\/?([^\s/>]+)/.exec(x);
+            let tag = tagRegEx ? tagRegEx[1] : "";
+            let p = new RegExp("<--TEMPPRE(\\d+)/-->").exec(x);
+
+            if (p) {
+                const pInd = parseInt(p[1]);
+                pre[pInd].indent = indent;
+            }
+
+            if (["area", "base", "br", "col", "command", "embed", "hr", "img", "input", "keygen", "link", "menuitem", "meta", "param", "source", "track", "wbr"].indexOf(tag) >= 0) {
+                // self closing tag
+                ret = indent + x;
+            } else {
+                if (x.indexOf("</") < 0) {
+                    //open tag
+                    if (x.charAt(x.length - 1) !== ">") ret = indent + x.substr(0, x.length - 1) + indent + tab + x.substr(x.length - 1, x.length);
+                    else ret = indent + x;
+                    !p && (indent += tab);
+                } else {
+                    //close tag
+                    indent = indent.substr(0, indent.length - 1);
+                    if (x.charAt(x.length - 1) !== ">") ret = indent + x.substr(0, x.length - 1) + indent + x.substr(x.length - 1, x.length);
+                    else ret = indent + x;
+                }
+            }
+            return ret;
+        });
+
+    for (i = pre.length; i--;) {
+        html = html.replace("<--TEMPPRE" + i + "/-->", pre[i].tag.replace("<pre>", "<pre>\n").replace("</pre>", pre[i].indent + "</pre>"));
+    }
+
+    return html.charAt(0) === "\n" ? html.substr(1, html.length - 1) : html;
+}
+
+export async function clearBrowserCache() {
     if (isElectron()) {
         const win = dynamicRequire("@electron/remote").getCurrentWindow();
         await win.webContents.session.clearCache();
@@ -306,7 +350,13 @@ function copySelectionToClipboard() {
     }
 }
 
-function dynamicRequire(moduleName: string) {
+type dynamicRequireMappings = {
+    "@electron/remote": typeof import("@electron/remote"),
+    "electron": typeof import("electron"),
+    "child_process": typeof import("child_process")
+};
+
+export function dynamicRequire<T extends keyof dynamicRequireMappings>(moduleName: T): Awaited<dynamicRequireMappings[T]>{
     if (typeof __non_webpack_require__ !== "undefined") {
         return __non_webpack_require__(moduleName);
     } else {
@@ -374,32 +424,41 @@ async function openInAppHelp($button: JQuery<HTMLElement>) {
 
     const inAppHelpPage = $button.attr("data-in-app-help");
     if (inAppHelpPage) {
-        // Dynamic import to avoid import issues in tests.
-        const appContext = (await import("../components/app_context.js")).default;
-        const activeContext = appContext.tabManager.getActiveContext();
-        if (!activeContext) {
-            return;
-        }
-        const subContexts = activeContext.getSubContexts();
-        const targetNote = `_help_${inAppHelpPage}`;
-        const helpSubcontext = subContexts.find((s) => s.viewScope?.viewMode === "contextual-help");
-        const viewScope: ViewScope = {
-            viewMode: "contextual-help",
-        };
-        if (!helpSubcontext) {
-            // The help is not already open, open a new split with it.
-            const { ntxId } = subContexts[subContexts.length - 1];
-            appContext.triggerCommand("openNewNoteSplit", {
-                ntxId,
-                notePath: targetNote,
-                hoistedNoteId: "_help",
-                viewScope
-            })
-        } else {
-            // There is already a help window open, make sure it opens on the right note.
-            helpSubcontext.setNote(targetNote, { viewScope });
-        }
+        openInAppHelpFromUrl(inAppHelpPage);
+    }
+}
+
+/**
+ * Opens the in-app help at the given page in a split note. If there already is a split note open with a help page, it will be replaced by this one.
+ *
+ * @param inAppHelpPage the ID of the help note (excluding the `_help_` prefix).
+ * @returns a promise that resolves once the help has been opened.
+ */
+export async function openInAppHelpFromUrl(inAppHelpPage: string) {
+    // Dynamic import to avoid import issues in tests.
+    const appContext = (await import("../components/app_context.js")).default;
+    const activeContext = appContext.tabManager.getActiveContext();
+    if (!activeContext) {
         return;
+    }
+    const subContexts = activeContext.getSubContexts();
+    const targetNote = `_help_${inAppHelpPage}`;
+    const helpSubcontext = subContexts.find((s) => s.viewScope?.viewMode === "contextual-help");
+    const viewScope: ViewScope = {
+        viewMode: "contextual-help",
+    };
+    if (!helpSubcontext) {
+        // The help is not already open, open a new split with it.
+        const { ntxId } = subContexts[subContexts.length - 1];
+        appContext.triggerCommand("openNewNoteSplit", {
+            ntxId,
+            notePath: targetNote,
+            hoistedNoteId: "_help",
+            viewScope
+        })
+    } else {
+        // There is already a help window open, make sure it opens on the right note.
+        helpSubcontext.setNote(targetNote, { viewScope });
     }
 }
 
@@ -428,7 +487,7 @@ function sleep(time_ms: number) {
     });
 }
 
-function escapeRegExp(str: string) {
+export function escapeRegExp(str: string) {
     return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
 }
 
@@ -561,8 +620,7 @@ function copyHtmlToClipboard(content: string) {
     document.removeEventListener("copy", listener);
 }
 
-// TODO: Set to FNote once the file is ported.
-function createImageSrcUrl(note: { noteId: string; title: string }) {
+export function createImageSrcUrl(note: FNote) {
     return `api/images/${note.noteId}/${encodeURIComponent(note.title)}?timestamp=${Date.now()}`;
 }
 
@@ -731,8 +789,84 @@ function isUpdateAvailable(latestVersion: string | null | undefined, currentVers
     return compareVersions(latestVersion, currentVersion) > 0;
 }
 
-function isLaunchBarConfig(noteId: string) {
+export function isLaunchBarConfig(noteId: string) {
     return ["_lbRoot", "_lbAvailableLaunchers", "_lbVisibleLaunchers", "_lbMobileRoot", "_lbMobileAvailableLaunchers", "_lbMobileVisibleLaunchers"].includes(noteId);
+}
+
+/**
+ * Adds a class to the <body> of the page, where the class name is formed via a prefix and a value.
+ * Useful for configurable options such as `heading-style-markdown`, where `heading-style` is the prefix and `markdown` is the dynamic value.
+ * There is no separator between the prefix and the value, if needed it has to be supplied manually to the prefix.
+ *
+ * @param prefix the prefix.
+ * @param value the value to be appended to the prefix.
+ */
+export function toggleBodyClass(prefix: string, value: string) {
+    const $body = $("body");
+    for (const clazz of Array.from($body[0].classList)) {
+        // create copy to safely iterate over while removing classes
+        if (clazz.startsWith(prefix)) {
+            $body.removeClass(clazz);
+        }
+    }
+
+    $body.addClass(prefix + value);
+}
+
+/**
+ * Basic comparison for equality between the two arrays. The values are strictly checked via `===`.
+ *
+ * @param a the first array to compare.
+ * @param b the second array to compare.
+ * @returns `true` if both arrays are equals, `false` otherwise.
+ */
+export function arrayEqual<T>(a: T[], b: T[]) {
+    if (a === b) {
+        return true;
+    }
+    if (a.length !== b.length) {
+        return false;
+    }
+
+    for (let i=0; i < a.length; i++) {
+        if (a[i] !== b[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+type Indexed<T extends object> = T & { index: number };
+
+/**
+ * Given an object array, alters every object in the array to have an index field assigned to it.
+ *
+ * @param items the objects to be numbered.
+ * @returns the same object for convenience, with the type changed to indicate the new index field.
+ */
+export function numberObjectsInPlace<T extends object>(items: T[]): Indexed<T>[] {
+    let index = 0;
+    for (const item of items) {
+        (item as Indexed<T>).index = index++;
+    }
+    return items as Indexed<T>[];
+}
+
+export function mapToKeyValueArray<K extends string | number | symbol, V>(map: Record<K, V>) {
+    const values: { key: K, value: V }[] = [];
+    for (const [ key, value ] of Object.entries(map)) {
+        values.push({ key: key as K, value: value as V });
+    }
+    return values;
+}
+
+export function getErrorMessage(e: unknown) {
+    if (e && typeof e === "object" && "message" in e && typeof e.message === "string") {
+        return e.message;
+    } else {
+        return "Unknown error";
+    }
 }
 
 export default {
@@ -740,7 +874,6 @@ export default {
     restartDesktopApp,
     reloadTray,
     parseDate,
-    getMonthsInDateRange,
     formatDateISO,
     formatDateTime,
     formatTimeInterval,
@@ -748,6 +881,7 @@ export default {
     localNowDateTime,
     now,
     isElectron,
+    isPWA,
     isMac,
     isCtrlKey,
     assertArguments,
@@ -760,6 +894,7 @@ export default {
     getNoteTypeClass,
     getMimeTypeClass,
     isHtmlEmpty,
+    formatHtml,
     clearBrowserCache,
     copySelectionToClipboard,
     dynamicRequire,

@@ -17,8 +17,15 @@
 }
 
 .bulk-actions-dialog .bulk-existing-action-list .button-column {
-    /* minimal width so that table remains static sized and most space remains for middle column with settings */
     width: 50px;
     white-space: nowrap;
     text-align: right;
+}
+
+.bulk-actions-dialog .bulk-existing-action-list .button-column > * {
+    vertical-align: middle;
+}
+
+.bulk-actions-dialog .bulk-existing-action-list .button-column .help-dropdown {
+    display: inline-block !important;
 }

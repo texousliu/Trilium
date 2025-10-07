@@ -1,11 +1,12 @@
-import { useRef } from "preact/hooks";
 import { t } from "../../services/i18n";
 import { useEffect } from "preact/hooks";
 import note_autocomplete, { Options, type Suggestion } from "../../services/note_autocomplete";
 import type { RefObject } from "preact";
 import type { CSSProperties } from "preact/compat";
+import { useSyncedRef } from "./hooks";
 
 interface NoteAutocompleteProps {    
+    id?: string;
     inputRef?: RefObject<HTMLInputElement>;
     text?: string;
     placeholder?: string;
@@ -18,8 +19,8 @@ interface NoteAutocompleteProps {
     noteId?: string;
 }
 
-export default function NoteAutocomplete({ inputRef: _ref, text, placeholder, onChange, onTextChange, container, containerStyle, opts, noteId, noteIdChanged }: NoteAutocompleteProps) {
-    const ref = _ref ?? useRef<HTMLInputElement>(null);
+export default function NoteAutocomplete({ id, inputRef: externalInputRef, text, placeholder, onChange, onTextChange, container, containerStyle, opts, noteId, noteIdChanged }: NoteAutocompleteProps) {
+    const ref = useSyncedRef<HTMLInputElement>(externalInputRef);
     
     useEffect(() => {
         if (!ref.current) return;
@@ -74,6 +75,7 @@ export default function NoteAutocomplete({ inputRef: _ref, text, placeholder, on
     return (
         <div className="input-group" style={containerStyle}>
             <input
+                id={id}
                 ref={ref}
                 className="note-autocomplete form-control"
                 placeholder={placeholder ?? t("add_link.search_note")} />

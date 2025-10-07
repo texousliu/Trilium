@@ -231,23 +231,17 @@
   first, then adds fuzzy matching when needed.</p>
 <h3>How Progressive Search Works</h3>
 <ol>
-  <li>
-    <p><strong>Phase 1 - Exact Matching</strong>: When you search, Trilium first
-      looks for exact matches of your search terms. This handles the vast majority
-      of searches (90%+) and returns results almost instantly.</p>
-  </li>
-  <li>
-    <p><strong>Phase 2 - Fuzzy Fallback</strong>: If Phase 1 doesn't find enough
-      high-quality results (fewer than 5 results with good relevance scores),
-      Trilium automatically adds fuzzy matching to find results with typos or
-      spelling variations.</p>
-  </li>
-  <li>
-    <p><strong>Result Ordering</strong>: Exact matches always appear before fuzzy
-      matches, regardless of individual scores. This ensures that when you search
-      for "project", notes containing the exact word "project" will appear before
-      notes containing similar words like "projects" or "projection".</p>
-  </li>
+  <li><strong>Phase 1 - Exact Matching</strong>: When you search, Trilium first
+    looks for exact matches of your search terms. This handles the vast majority
+    of searches (90%+) and returns results almost instantly.</li>
+  <li><strong>Phase 2 - Fuzzy Fallback</strong>: If Phase 1 doesn't find enough
+    high-quality results (fewer than 5 results with good relevance scores),
+    Trilium automatically adds fuzzy matching to find results with typos or
+    spelling variations.</li>
+  <li><strong>Result Ordering</strong>: Exact matches always appear before fuzzy
+    matches, regardless of individual scores. This ensures that when you search
+    for "project", notes containing the exact word "project" will appear before
+    notes containing similar words like "projects" or "projection".</li>
 </ol>
 <h3>Progressive Search Behavior</h3>
 <ul>

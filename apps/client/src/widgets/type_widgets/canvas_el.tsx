@@ -76,6 +76,10 @@ export default class Canvas {
         return this.currentSceneVersion === SCENE_VERSION_INITIAL;
     }
 
+    isInitialized() {
+        return !!this.excalidrawApi;
+    }
+
     resetScene(theme: Theme) {
         this.excalidrawApi.updateScene({
             elements: [],

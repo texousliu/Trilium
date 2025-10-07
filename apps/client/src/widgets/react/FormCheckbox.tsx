@@ -2,10 +2,11 @@ import { Tooltip } from "bootstrap";
 import { useEffect, useRef, useMemo, useCallback } from "preact/hooks";
 import { escapeQuotes } from "../../services/utils";
 import { ComponentChildren } from "preact";
-import { memo } from "preact/compat";
+import { CSSProperties, memo } from "preact/compat";
+import { useUniqueName } from "./hooks";
 
 interface FormCheckboxProps {
-    name: string;
+    name?: string;
     label: string | ComponentChildren;
     /**
      * If set, the checkbox label will be underlined and dotted, indicating a hint. When hovered, it will show the hint text.
@@ -14,12 +15,13 @@ interface FormCheckboxProps {
     currentValue: boolean;
     disabled?: boolean;
     onChange(newValue: boolean): void;
+    containerStyle?: CSSProperties;
 }
 
-const FormCheckbox = memo(({ name, disabled, label, currentValue, onChange, hint }: FormCheckboxProps) => {
+const FormCheckbox = memo(({ name, disabled, label, currentValue, onChange, hint, containerStyle }: FormCheckboxProps) => {    
     const labelRef = useRef<HTMLLabelElement>(null);
+    const id = useUniqueName(name);
 
-    // Fix: Move useEffect outside conditional
     useEffect(() => {
         if (!hint || !labelRef.current) return;
         
@@ -31,22 +33,19 @@ const FormCheckbox = memo(({ name, disabled, label, currentValue, onChange, hint
         return () => tooltipInstance?.dispose();
     }, [hint]); // Proper dependency
 
-    // Memoize style object
     const labelStyle = useMemo(() => 
         hint ? { textDecoration: "underline dotted var(--main-text-color)" } : undefined,
         [hint]
     );
     
-    // Memoize onChange handler
     const handleChange = useCallback((e: Event) => {
         onChange((e.target as HTMLInputElement).checked);
     }, [onChange]);
     
-    // Memoize title attribute
     const titleText = useMemo(() => hint ? escapeQuotes(hint) : undefined, [hint]);
 
     return (
-        <div className="form-checkbox">
+        <div className={`form-checkbox ${disabled ? "disabled" : ""}`} style={containerStyle}>
             <label
                 className="form-check-label tn-checkbox"
                 style={labelStyle}
@@ -54,9 +53,10 @@ const FormCheckbox = memo(({ name, disabled, label, currentValue, onChange, hint
                 ref={labelRef}
             >
                 <input
+                    id={id}
                     className="form-check-input"
                     type="checkbox"
-                    name={name}
+                    name={id}
                     checked={currentValue || false}
                     value="1"
                     disabled={disabled}

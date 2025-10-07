@@ -1,115 +1,7 @@
 import sanitizeHtml from "sanitize-html";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import optionService from "./options.js";
-
-// Be consistent with `ALLOWED_PROTOCOLS` in `src\public\app\services\link.js`
-// TODO: Deduplicate with client once we can.
-export const ALLOWED_PROTOCOLS = [
-    'http', 'https', 'ftp', 'ftps', 'mailto', 'data', 'evernote', 'file', 'facetime', 'gemini', 'git',
-    'gopher', 'imap', 'irc', 'irc6', 'jabber', 'jar', 'lastfm', 'ldap', 'ldaps', 'magnet', 'message',
-    'mumble', 'nfs', 'onenote', 'pop', 'rmi', 's3', 'sftp', 'skype', 'sms', 'spotify', 'steam', 'svn', 'udp',
-    'view-source', 'vlc', 'vnc', 'ws', 'wss', 'xmpp', 'jdbc', 'slack', 'tel', 'smb', 'zotero', 'geo',
-    'mid'
-];
-
-// Default list of allowed HTML tags
-export const DEFAULT_ALLOWED_TAGS = [
-    "h1",
-    "h2",
-    "h3",
-    "h4",
-    "h5",
-    "h6",
-    "blockquote",
-    "p",
-    "a",
-    "ul",
-    "ol",
-    "li",
-    "b",
-    "i",
-    "strong",
-    "em",
-    "strike",
-    "s",
-    "del",
-    "abbr",
-    "code",
-    "hr",
-    "br",
-    "div",
-    "table",
-    "thead",
-    "caption",
-    "tbody",
-    "tfoot",
-    "tr",
-    "th",
-    "td",
-    "pre",
-    "section",
-    "img",
-    "figure",
-    "figcaption",
-    "span",
-    "label",
-    "input",
-    "details",
-    "summary",
-    "address",
-    "aside",
-    "footer",
-    "header",
-    "hgroup",
-    "main",
-    "nav",
-    "dl",
-    "dt",
-    "menu",
-    "bdi",
-    "bdo",
-    "dfn",
-    "kbd",
-    "mark",
-    "q",
-    "time",
-    "var",
-    "wbr",
-    "area",
-    "map",
-    "track",
-    "video",
-    "audio",
-    "picture",
-    "del",
-    "ins",
-    "en-media", // for ENEX import
-    // Additional tags (https://github.com/TriliumNext/Trilium/issues/567)
-    "acronym",
-    "article",
-    "big",
-    "button",
-    "cite",
-    "col",
-    "colgroup",
-    "data",
-    "dd",
-    "fieldset",
-    "form",
-    "legend",
-    "meter",
-    "noscript",
-    "option",
-    "progress",
-    "rp",
-    "samp",
-    "small",
-    "sub",
-    "sup",
-    "template",
-    "textarea",
-    "tt"
-] as const;
+import { ALLOWED_PROTOCOLS, SANITIZER_DEFAULT_ALLOWED_TAGS } from "@triliumnext/commons";
 
 // intended mainly as protection against XSS via import
 // secondarily, it (partly) protects against "CSS takeover"
@@ -138,7 +30,7 @@ function sanitize(dirtyHtml: string) {
         allowedTags = JSON.parse(optionService.getOption("allowedHtmlTags"));
     } catch (e) {
         // Fallback to default list if option doesn't exist or is invalid
-        allowedTags = DEFAULT_ALLOWED_TAGS;
+        allowedTags = SANITIZER_DEFAULT_ALLOWED_TAGS;
     }
 
     const colorRegex = [/^#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/, /^hsl\(\s*(\d{1,3})\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*\)$/];

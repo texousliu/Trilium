@@ -8,6 +8,7 @@ import FAttribute, { type FAttributeRow } from "../entities/fattribute.js";
 import FAttachment, { type FAttachmentRow } from "../entities/fattachment.js";
 import type { default as FNote, FNoteRow } from "../entities/fnote.js";
 import type { EntityChange } from "../server_types.js";
+import type { OptionNames } from "@triliumnext/commons";
 
 async function processEntityChanges(entityChanges: EntityChange[]) {
     const loadResults = new LoadResults(entityChanges);
@@ -30,13 +31,14 @@ async function processEntityChanges(entityChanges: EntityChange[]) {
                     continue; // only noise
                 }
 
-                options.set(attributeEntity.name, attributeEntity.value);
-
-                loadResults.addOption(attributeEntity.name);
+                options.set(attributeEntity.name as OptionNames, attributeEntity.value);
+                loadResults.addOption(attributeEntity.name as OptionNames);
             } else if (ec.entityName === "attachments") {
                 processAttachment(loadResults, ec);
-            } else if (ec.entityName === "blobs" || ec.entityName === "etapi_tokens") {
+            } else if (ec.entityName === "blobs") {
                 // NOOP - these entities are handled at the backend level and don't require frontend processing
+            } else if (ec.entityName === "etapi_tokens") {
+                loadResults.hasEtapiTokenChanges = true;
             } else {
                 throw new Error(`Unknown entityName '${ec.entityName}'`);
             }
@@ -77,9 +79,7 @@ async function processEntityChanges(entityChanges: EntityChange[]) {
             noteAttributeCache.invalidate();
         }
 
-        // TODO: Remove after porting the file
-        // @ts-ignore
-        const appContext = (await import("../components/app_context.js")).default as any;
+        const appContext = (await import("../components/app_context.js")).default;
         await appContext.triggerEvent("entitiesReloaded", { loadResults });
     }
 }

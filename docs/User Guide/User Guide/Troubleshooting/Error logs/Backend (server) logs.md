@@ -24,5 +24,11 @@ retentionDays=7
 
 Or via the environment variable `TRILIUM_LOGGING_RETENTION_DAYS`.
 
+Special cases:
+
+*   Positive values indicate the number of days worth of logs to keep
+*   A value of 0 results with the default value (90 days) to be used
+*   Negative values (e.g. `-1`) result with all logs to be kept, irrespective how ancient and numerous (and
+
 > [!NOTE]
 > If you set the retention days to a low number, you might notice that not all the log files are being deleted. This is because a minimum number of logs (7 at the time of writing) is maintained at all times.

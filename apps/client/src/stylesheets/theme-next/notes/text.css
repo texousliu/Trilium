@@ -4,6 +4,7 @@
 
  :root {
     --ck-font-face: var(--main-font-family);
+    --ck-input-label-height: 1.5em;
  }
 
 /*
@@ -307,6 +308,11 @@
     fill: black !important;
 }
 
+/* Hex color input box prefix */
+:root .ck.ck-color-selector .ck-color-picker__hash-view {
+    margin-top: var(--ck-input-label-height);
+}
+
 /* Numbered list */
 
 :root .ck.ck-list-properties_with-numbered-properties .ck.ck-list-styles-list {
@@ -363,19 +369,86 @@
     color: var(--accent);
 }
 
-/* Action buttons */
+/* Text snippet dropdown */
 
-:root .ck-link-actions button.ck-button,
-:root .ck-link-form button.ck-button {
-    --ck-border-radius: 6px;
-    
-    background: transparent;
-    box-shadow: unset;
+div.ck-template-form {
+    padding: 8px;
 }
 
-:root .ck-link-actions button.ck-button:hover,
-:root .ck-link-form button.ck-button:hover {
-    background: var(--hover-item-background-color);
+div.ck-template-form .ck-labeled-field-view {
+    margin-bottom: 8px;
+}
+
+/* Template item */
+
+:root div.ck-template-form li.ck-list__item button.ck-template-button {
+    padding: 4px 8px;
+}
+
+/* Template icon */
+:root .ck-template-form .ck-button__icon {
+    --ck-spacing-medium: 2px;
+}
+
+:root div.ck-template-form  .note-icon {
+    color: var(--menu-item-icon-color);
+}
+
+/* Template name */
+div.ck-template-form .ck-template-form__text-part {
+    color: var(--hover-item-text-color);
+    font-size: .9rem;
+}
+
+div.ck-template-form .ck-template-form__text-part mark {
+    background: unset;
+    color: var(--quick-search-result-highlight-color);
+    font-weight: bold;
+}
+
+/* Template description */
+:root div.ck-template-form .ck-template-form__description {
+    opacity: .5;
+    font-size: .9em;
+}
+
+/* Messages */
+div.ck-template-form .ck-search__info > span {
+    line-height: initial;
+    color: var(--muted-text-color);
+}
+
+div.ck-template-form .ck-search__info span:nth-child(2) {
+    display: block;
+    opacity: .5;
+    margin-top: 8px;
+    font-size: .9em;
+}
+
+/* Link dropdown */
+
+:root .ck.ck-form.ck-link-form ul.ck-link-form__providers-list {
+    border-top: none;
+}
+
+/* Math popup */
+
+.ck-math-form .ck-labeled-field-view {
+    --ck-input-label-height: 0;
+
+    margin-inline-end: 8px;
+}
+
+/* Emoji dropdown */
+
+.ck-emoji-picker-form .ck-emoji__search .ck-button_with-text:not(.ck-list-item-button) {
+    margin-top: var(--ck-input-label-height);
+}
+
+/* Find and replace dialog */
+
+.ck-find-and-replace-form .ck-find-and-replace-form__inputs button {
+    margin-top: var(--ck-input-label-height);
 }
 
 /* Mention list (the autocompletion list for emojis, labels and relations)  */
@@ -390,6 +463,58 @@
 /* "Keep on typing to see the emoji" placeholder */
 #mention-list-item-id\:__EMOJI_HINT {
     background: transparent;
+}
+
+/*
+ * FORMS
+ */
+
+/*
+ * Buttons
+ */
+
+button.ck.ck-button:is(.ck-button-action, .ck-button-save, .ck-button-cancel).ck-button_with-text {
+    --ck-color-text: var(--cmd-button-text-color);
+
+    min-width: 60px;
+    font-weight: 500;
+}
+
+/*
+ * Text boxes
+ */
+
+.ck.ck-labeled-field-view {
+    padding-top: var(--ck-input-label-height) !important; /* Create space for the label */
+}
+
+.ck.ck-labeled-field-view > .ck.ck-labeled-field-view__input-wrapper > label.ck.ck-label {
+    /* Move the label above the text box regardless of the text box state */
+    transform: translate(0, calc(-.2em - var(--ck-input-label-height))) !important;
+    
+    padding-left: 0 !important;
+    background: transparent;
+    font-size: .85em;
+    font-weight: 600;
+}
+
+:root input.ck.ck-input-text[readonly="true"] {
+    cursor: not-allowed;
+    background: var(--input-background-color);
+}
+
+/* Forms */
+
+:root .ck.ck-form__row.ck-form__row_with-submit > :not(:first-child) {
+    margin-inline-start: 16px;
+}
+
+.ck.ck-form__row_with-submit button {
+    margin-top: var(--ck-input-label-height);
+}
+
+.ck.ck-form__header {
+    border-bottom: none;
 }
 
 /*

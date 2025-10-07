@@ -33,11 +33,15 @@ function runNotesWithLabel(runAttrValue: string) {
     }
 }
 
-sqlInit.dbReady.then(() => {
-    cls.init(() => {
-        hiddenSubtreeService.checkHiddenSubtree();
-    });
+// If the database is already initialized, we need to check the hidden subtree. Otherwise, hidden subtree
+// is also checked before importing the demo.zip, so no need to do it again.
+if (sqlInit.isDbInitialized()) {
+    console.log("Checking hidden subtree.");
+    sqlInit.dbReady.then(() => cls.init(() => hiddenSubtreeService.checkHiddenSubtree()));
+}
 
+// Periodic checks.
+sqlInit.dbReady.then(() => {
     if (!process.env.TRILIUM_SAFE_MODE) {
         setTimeout(
             cls.wrap(() => runNotesWithLabel("backendStartup")),

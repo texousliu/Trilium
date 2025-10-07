@@ -1,11 +1,11 @@
-import { useContext, useEffect, useRef, useMemo, useCallback } from "preact/hooks";
+import { useEffect, useRef, useMemo } from "preact/hooks";
 import { t } from "../../services/i18n";
 import { ComponentChildren } from "preact";
 import type { CSSProperties, RefObject } from "preact/compat";
 import { openDialog } from "../../services/dialog";
-import { ParentComponent } from "./ReactBasicWidget";
 import { Modal as BootstrapModal } from "bootstrap";
 import { memo } from "preact/compat";
+import { useSyncedRef } from "./hooks";
 
 interface ModalProps {
     className: string;
@@ -36,9 +36,9 @@ interface ModalProps {
     onSubmit?: () => void;
     /** Called when the modal is shown. */
     onShown?: () => void;
-    /** 
+    /**
      * Called when the modal is hidden, either via close button, backdrop click or submit.
-     * 
+     *
      * Here it's generally a good idea to set `show` to false to reflect the actual state of the modal.
      */
     onHidden: () => void;
@@ -64,50 +64,45 @@ interface ModalProps {
     stackable?: boolean;
 }
 
-export default function Modal({ children, className, size, title, header, footer, footerStyle, footerAlignment, onShown, onSubmit, helpPageId, minWidth, maxWidth, zIndex, scrollable, onHidden: onHidden, modalRef: _modalRef, formRef: _formRef, bodyStyle, show, stackable }: ModalProps) {
-    const modalRef = _modalRef ?? useRef<HTMLDivElement>(null);
+export default function Modal({ children, className, size, title, header, footer, footerStyle, footerAlignment, onShown, onSubmit, helpPageId, minWidth, maxWidth, zIndex, scrollable, onHidden: onHidden, modalRef: externalModalRef, formRef, bodyStyle, show, stackable }: ModalProps) {
+    const modalRef = useSyncedRef<HTMLDivElement>(externalModalRef);
     const modalInstanceRef = useRef<BootstrapModal>();
-    const formRef = _formRef ?? useRef<HTMLFormElement>(null);
-    const parentWidget = useContext(ParentComponent);
     const elementToFocus = useRef<Element | null>();
 
-    if (onShown || onHidden) {
-        useEffect(() => {
-            const modalElement = modalRef.current;
-            if (!modalElement) {
-                return;
+    useEffect(() => {
+        const modalElement = modalRef.current;
+        if (!modalElement) return;
+
+        if (onShown) {
+            modalElement.addEventListener("shown.bs.modal", onShown);
+        }
+
+        function onModalHidden() {
+            onHidden();
+            if (elementToFocus.current && "focus" in elementToFocus.current) {
+                (elementToFocus.current as HTMLElement).focus();
             }
+        }
+
+        modalElement.addEventListener("hidden.bs.modal", onModalHidden);
+        return () => {
             if (onShown) {
-                modalElement.addEventListener("shown.bs.modal", onShown);
+                modalElement.removeEventListener("shown.bs.modal", onShown);
             }
-            modalElement.addEventListener("hidden.bs.modal", () => {
-                onHidden();
-                if (elementToFocus.current && "focus" in elementToFocus.current) {
-                    (elementToFocus.current as HTMLElement).focus();
-                }
-            });
-            return () => {
-                if (onShown) {
-                    modalElement.removeEventListener("shown.bs.modal", onShown);
-                }
-                modalElement.removeEventListener("hidden.bs.modal", onHidden);
-            };
-        }, [ ]);
-    }    
+            modalElement.removeEventListener("hidden.bs.modal", onModalHidden);
+        };
+    }, [ onShown, onHidden ]);
 
     useEffect(() => {
-        if (!parentWidget) {
-            return;
-        }
-        if (show) {
+        if (show && modalRef.current) {
             elementToFocus.current = document.activeElement;
-            openDialog(parentWidget.$widget, !stackable).then(($widget) => {
+            openDialog($(modalRef.current), !stackable).then(($widget) => {
                 modalInstanceRef.current = BootstrapModal.getOrCreateInstance($widget[0]);
             })
         } else {
             modalInstanceRef.current?.hide();
         }
-    }, [ show ]);
+    }, [ show, modalRef.current ]);
 
     // Memoize styles to prevent recreation on every render
     const dialogStyle = useMemo<CSSProperties>(() => {
@@ -147,10 +142,10 @@ export default function Modal({ children, className, size, title, header, footer
                     </div>
 
                     {onSubmit ? (
-                        <form ref={formRef} onSubmit={useCallback((e) => {
+                        <form ref={formRef} onSubmit={(e) => {
                             e.preventDefault();
                             onSubmit();
-                        }, [onSubmit])}>
+                        }}>
                             <ModalInner footer={footer} bodyStyle={bodyStyle} footerStyle={footerStyle} footerAlignment={footerAlignment}>{children}</ModalInner>
                         </form>
                     ) : (

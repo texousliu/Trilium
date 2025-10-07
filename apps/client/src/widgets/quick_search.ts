@@ -4,7 +4,7 @@ import linkService from "../services/link.js";
 import froca from "../services/froca.js";
 import utils from "../services/utils.js";
 import appContext from "../components/app_context.js";
-import shortcutService from "../services/shortcuts.js";
+import shortcutService, { isIMEComposing } from "../services/shortcuts.js";
 import { t } from "../services/i18n.js";
 import { Dropdown, Tooltip } from "bootstrap";
 
@@ -15,15 +15,18 @@ const TPL = /*html*/`
         padding: 10px 10px 10px 0px;
         height: 50px;
     }
-
+    
     .quick-search button, .quick-search input {
         border: 0;
         font-size: 100% !important;
     }
-
+        
     .quick-search .dropdown-menu {
-        max-height: 600px;
-        max-width: 600px;
+        --quick-search-item-delimiter-color: var(--dropdown-border-color);
+
+        max-height: 80vh;
+        min-width: 400px;
+        max-width: 720px;
         overflow-y: auto;
         overflow-x: hidden;
         text-overflow: ellipsis;
@@ -37,17 +40,14 @@ const TPL = /*html*/`
         position: relative;
     }
     
-    .quick-search .dropdown-item:not(:last-child)::after {
+    .quick-search .dropdown-item + .dropdown-item::after {
         content: '';
         position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80%;
-        height: 2px;
-        background: var(--main-border-color);
-        border-radius: 1px;
-        opacity: 0.4;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 1px;
+        border-bottom: 1px solid var(--quick-search-item-delimiter-color);
     }
     
     .quick-search .dropdown-item:last-child::after {
@@ -62,13 +62,58 @@ const TPL = /*html*/`
         display: none;
     }
     
-    .quick-search .dropdown-item:hover {
+    .quick-search-item.dropdown-item:hover {
         background-color: #f8f9fa;
     }
     
+     .quick-search .quick-search-item {
+        width: 100%;
+    }
+
+    .quick-search .quick-search-item-header {
+        padding: 0 8px;
+    }
+
+    .quick-search .quick-search-item-icon {
+        margin-inline-end: 2px;
+    }
+
+    .quick-search .search-result-title {
+        font-weight: 500;
+    }
+
+    .quick-search .search-result-attributes {
+        opacity: .5;
+        padding: 0 8px;
+        font-size: .75em;
+    }
+
+    .quick-search .search-result-content {
+        margin-top: 8px;
+        padding: 8px;
+        background-color: var(--accented-background-color);
+        color: var(--main-text-color);
+        font-size: .85em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Search result highlighting */
+    .quick-search .search-result-title b,
+    .quick-search .search-result-content b,
+    .quick-search .search-result-attributes b {
+        color: var(--admonition-warning-accent-color);
+        text-decoration: underline;
+    }
+
     .quick-search .dropdown-divider {
         margin: 0;
     }
+
+    .quick-search .bx-loader {
+        margin-inline-end: 4px;
+    }
+
   </style>
 
   <div class="input-group-prepend">
@@ -83,6 +128,7 @@ const TPL = /*html*/`
 const INITIAL_DISPLAYED_NOTES = 15;
 const LOAD_MORE_BATCH_SIZE = 10;
 
+
 // TODO: Deduplicate with server.
 interface QuickSearchResponse {
     searchResultNoteIds: string[];
@@ -93,6 +139,8 @@ interface QuickSearchResponse {
         highlightedNotePathTitle: string;
         contentSnippet?: string;
         highlightedContentSnippet?: string;
+        attributeSnippet?: string;
+        highlightedAttributeSnippet?: string;
         icon: string;
     }>;
     error: string;
@@ -132,6 +180,14 @@ export default class QuickSearchWidget extends BasicWidget {
 
         if (utils.isMobile()) {
             this.$searchString.keydown((e) => {
+                // Skip processing if IME is composing to prevent interference
+                // with text input in CJK languages
+                // Note: jQuery wraps the native event, so we access originalEvent
+                const originalEvent = e.originalEvent as KeyboardEvent;
+                if (originalEvent && isIMEComposing(originalEvent)) {
+                    return;
+                }
+                
                 if (e.which === 13) {
                     if (this.$dropdownMenu.is(":visible")) {
                         this.search(); // just update already visible dropdown
@@ -180,7 +236,11 @@ export default class QuickSearchWidget extends BasicWidget {
         this.isLoadingMore = false;
 
         this.$dropdownMenu.empty();
-        this.$dropdownMenu.append(`<span class="dropdown-item disabled"><span class="bx bx-loader bx-spin"></span>${t("quick-search.searching")}</span>`);
+        this.$dropdownMenu.append(`
+            <span class="dropdown-item disabled">
+                <span class="bx bx-loader bx-spin"></span>
+                ${t("quick-search.searching")}
+            </span>`);
 
         const { searchResultNoteIds, searchResults, error } = await server.get<QuickSearchResponse>(`quick-search/${encodeURIComponent(searchString)}`);
 
@@ -235,15 +295,22 @@ export default class QuickSearchWidget extends BasicWidget {
                 const $item = $('<a class="dropdown-item" tabindex="0" href="javascript:">');
                 
                 // Build the display HTML with content snippet below the title
-                let itemHtml = `<div style="display: flex; flex-direction: column;">
-                    <div style="display: flex; align-items: flex-start; gap: 6px;">
-                        <span class="${result.icon}" style="flex-shrink: 0; margin-top: 1px;"></span>
-                        <span style="flex: 1;" class="search-result-title">${result.highlightedNotePathTitle}</span>
+                let itemHtml = `<div class="quick-search-item">
+                    <div class="quick-search-item-header">
+                        <span class="quick-search-item-icon ${result.icon}"></span>
+                        <span class="search-result-title">${result.highlightedNotePathTitle}</span>
                     </div>`;
                 
-                // Add content snippet below the title if available
+                // Add attribute snippet (tags/attributes) below the title if available
+                if (result.highlightedAttributeSnippet) {
+                    // Replace <br> with a blank space to join the atributes on the same single line
+                    const snippet = (result.highlightedAttributeSnippet as string).replace(/<br\s?\/?>/g, " ");
+                    itemHtml += `<div class="search-result-attributes">${snippet}</div>`;
+                }
+                
+                // Add content snippet below the attributes if available
                 if (result.highlightedContentSnippet) {
-                    itemHtml += `<div style="font-size: 0.85em; color: var(--main-text-color); opacity: 0.7; margin-left: 20px; margin-top: 4px; line-height: 1.3;" class="search-result-content">${result.highlightedContentSnippet}</div>`;
+                    itemHtml += `<div class="search-result-content">${result.highlightedContentSnippet}</div>`;
                 }
                 
                 itemHtml += `</div>`;

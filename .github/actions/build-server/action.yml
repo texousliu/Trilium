@@ -10,7 +10,7 @@ runs:
   steps:
   - uses: pnpm/action-setup@v4
   - name: Set up node & dependencies
-    uses: actions/setup-node@v4
+    uses: actions/setup-node@v5
     with:
       node-version: 22
       cache: "pnpm"
@@ -23,7 +23,7 @@ runs:
     shell: bash
     run: |
       pnpm run chore:update-build-info
-      pnpm nx --project=server package
+      pnpm run --filter server package
   - name: Prepare artifacts
     shell: bash
     run: |

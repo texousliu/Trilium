@@ -1,14 +1,11 @@
-import { useState } from "preact/hooks";
+import { useMemo, useState } from "preact/hooks";
 import Button from "../react/Button";
 import Modal from "../react/Modal";
-import ReactBasicWidget from "../react/ReactBasicWidget";
-import { CallToAction, dismissCallToAction, getCallToActions } from "./call_to_action_definitions";
+import { dismissCallToAction, getCallToActions } from "./call_to_action_definitions";
+import { t } from "../../services/i18n";
 
-function CallToActionDialogComponent({ activeCallToActions }: { activeCallToActions: CallToAction[] }) {
-    if (!activeCallToActions.length) {
-        return <></>;
-    }
-    
+export default function CallToActionDialog() {
+    const activeCallToActions = useMemo(() => getCallToActions(), []);        
     const [ activeIndex, setActiveIndex ] = useState(0);
     const [ shown, setShown ] = useState(true);
     const activeItem = activeCallToActions[activeIndex];
@@ -21,16 +18,16 @@ function CallToActionDialogComponent({ activeCallToActions }: { activeCallToActi
         }
     }
 
-    return (
+    return (activeCallToActions.length &&
         <Modal
             className="call-to-action"
             size="md"
-            title="New features"
+            title={activeItem.title}
             show={shown}
             onHidden={() => setShown(false)}
             footerAlignment="between"
             footer={<>
-                <Button text="Dismiss" onClick={async () => {
+                <Button text={t("call_to_action.dismiss")} onClick={async () => {
                     await dismissCallToAction(activeItem.id);
                     goToNext();
                 }} />
@@ -43,16 +40,7 @@ function CallToActionDialogComponent({ activeCallToActions }: { activeCallToActi
                 )}
             </>}
         >
-            <h4>{activeItem.title}</h4>
             <p>{activeItem.message}</p>
         </Modal>
     )
-}
-
-export class CallToActionDialog extends ReactBasicWidget {
-
-    get component() {
-        return <CallToActionDialogComponent activeCallToActions={getCallToActions()} /> 
-    }
-
 }

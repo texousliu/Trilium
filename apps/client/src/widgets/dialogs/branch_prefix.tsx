@@ -4,18 +4,17 @@ import { t } from "../../services/i18n.js";
 import server from "../../services/server.js";
 import toast from "../../services/toast.js";
 import Modal from "../react/Modal.jsx";
-import ReactBasicWidget from "../react/ReactBasicWidget.js";
 import froca from "../../services/froca.js";
 import tree from "../../services/tree.js";
 import Button from "../react/Button.jsx";
 import FormGroup from "../react/FormGroup.js";
-import useTriliumEvent from "../react/hooks.jsx";
+import { useTriliumEvent } from "../react/hooks.jsx";
 import FBranch from "../../entities/fbranch.js";
 
-function BranchPrefixDialogComponent() {
+export default function BranchPrefixDialog() {
     const [ shown, setShown ] = useState(false);
     const [ branch, setBranch ] = useState<FBranch>();
-    const [ prefix, setPrefix ] = useState(branch?.prefix ?? "");
+    const [ prefix, setPrefix ] = useState("");
     const branchInput = useRef<HTMLInputElement>(null);
 
     useTriliumEvent("editBranchPrefix", async () => {
@@ -33,13 +32,15 @@ function BranchPrefixDialogComponent() {
         const newBranchId = await froca.getBranchId(parentNoteId, noteId);
         if (!newBranchId) {
             return;
-        }    
+        }
         const parentNote = await froca.getNote(parentNoteId);
         if (!parentNote || parentNote.type === "search") {
             return;
         }
 
-        setBranch(froca.getBranch(newBranchId));
+        const newBranch = froca.getBranch(newBranchId);
+        setBranch(newBranch);
+        setPrefix(newBranch?.prefix ?? "");
         setShown(true);
     });
 
@@ -64,7 +65,7 @@ function BranchPrefixDialogComponent() {
             footer={<Button text={t("branch_prefix.save")} />}
             show={shown}
         >
-            <FormGroup label={t("branch_prefix.prefix")}>
+            <FormGroup label={t("branch_prefix.prefix")} name="prefix">
                 <div class="input-group">
                     <input class="branch-prefix-input form-control" value={prefix} ref={branchInput}
                         onChange={(e) => setPrefix((e.target as HTMLInputElement).value)} />
@@ -73,14 +74,6 @@ function BranchPrefixDialogComponent() {
             </FormGroup>
         </Modal>
     );
-}
-
-export default class BranchPrefixDialog extends ReactBasicWidget {
-
-    get component() {
-        return <BranchPrefixDialogComponent />;
-    }
-
 }
 
 async function savePrefix(branchId: string, prefix: string) {

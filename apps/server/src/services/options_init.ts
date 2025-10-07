@@ -4,8 +4,7 @@ import { randomSecureToken, isWindows } from "./utils.js";
 import log from "./log.js";
 import dateUtils from "./date_utils.js";
 import keyboardActions from "./keyboard_actions.js";
-import type { KeyboardShortcutWithRequiredActionName, OptionMap, OptionNames } from "@triliumnext/commons";
-import { DEFAULT_ALLOWED_TAGS } from "./html_sanitizer.js";
+import { SANITIZER_DEFAULT_ALLOWED_TAGS, type KeyboardShortcutWithRequiredActionName, type OptionMap, type OptionNames } from "@triliumnext/commons";
 
 function initDocumentOptions() {
     optionService.createOption("documentId", randomSecureToken(16), false);
@@ -121,7 +120,7 @@ const defaultOptions: DefaultOption[] = [
     { name: "compressImages", value: "true", isSynced: true },
     { name: "downloadImagesAutomatically", value: "true", isSynced: true },
     { name: "minTocHeadings", value: "5", isSynced: true },
-    { name: "highlightsList", value: '["bold","italic","underline","color","bgColor"]', isSynced: true },
+    { name: "highlightsList", value: '["underline","color","bgColor"]', isSynced: true },
     { name: "checkForUpdates", value: "true", isSynced: true },
     { name: "disableTray", value: "false", isSynced: false },
     { name: "eraseUnusedAttachmentsAfterSeconds", value: "2592000", isSynced: true }, // default 30 days
@@ -153,6 +152,10 @@ const defaultOptions: DefaultOption[] = [
         },
         isSynced: false
     },
+    { name: "motionEnabled", value: "true", isSynced: false },
+    { name: "shadowsEnabled", value: "true", isSynced: false },
+    { name: "backdropEffectsEnabled", value: "true", isSynced: false },
+    { name: "smoothScrollEnabled", value: "true", isSynced: false },
 
     // Internationalization
     { name: "locale", value: "en", isSynced: true },
@@ -181,13 +184,14 @@ const defaultOptions: DefaultOption[] = [
     { name: "textNoteEditorMultilineToolbar", value: "false", isSynced: true },
     { name: "textNoteEmojiCompletionEnabled", value: "true", isSynced: true },
     { name: "textNoteCompletionEnabled", value: "true", isSynced: true },
+    { name: "textNoteSlashCommandsEnabled", value: "true", isSynced: true },
 
     // HTML import configuration
     { name: "layoutOrientation", value: "vertical", isSynced: false },
     { name: "backgroundEffects", value: "true", isSynced: false },
     {
         name: "allowedHtmlTags",
-        value: JSON.stringify(DEFAULT_ALLOWED_TAGS),
+        value: JSON.stringify(SANITIZER_DEFAULT_ALLOWED_TAGS),
         isSynced: true
     },
 

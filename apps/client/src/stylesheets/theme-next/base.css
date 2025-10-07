@@ -26,7 +26,7 @@
     --detail-font-family: var(--main-font-family);
     --detail-font-size: normal;
 
-    --monospace-font-family: JetBrainsLight;
+    --monospace-font-family: JetBrainsLight, monospace;
     --monospace-font-size: normal;
 
     --left-pane-item-selected-shadow-size: 2px;
@@ -83,6 +83,12 @@
     --tab-note-icons: true;
 }
 
+body.backdrop-effects-disabled {
+    /* Backdrop effects are disabled, replace the menu background color with the
+     * no-backdrop fallback color */
+    --menu-background-color: var(--menu-background-color-no-backdrop);
+}
+
 /*
  * MENUS
  *
@@ -94,10 +100,6 @@
     border-radius: var(--dropdown-border-radius);
     padding: var(--menu-padding-size) !important;
     font-size: 0.9rem !important;
-}
-
-.dropdown-menu {
-    --scrollbar-background-color: var(--menu-background-color);
 }
 
 body.mobile .dropdown-menu {
@@ -148,10 +150,20 @@ body.desktop .dropdown-submenu .dropdown-menu {
 .dropdown-item,
 body.mobile .dropdown-submenu .dropdown-toggle {
     padding: 2px 2px 2px 8px !important;
-    padding-inline-end: 16px !important;
+    padding-inline-end: 22px !important;
     /* Note: the right padding should also accommodate the submenu arrow. */
     border-radius: 6px;
     cursor: default !important;
+}
+
+:root .dropdown-item:focus-visible {
+    outline: 2px solid var(--input-focus-outline-color) !important;
+    background-color: transparent;
+    color: unset;
+}
+
+:root .dropdown-item:active {
+    background: unset;
 }
 
 body.mobile .dropdown-submenu {
@@ -191,11 +203,15 @@ html body .dropdown-item[disabled] {
 
 /* Menu item keyboard shortcut */
 .dropdown-item kbd {
-    margin-left: 16px;
     font-family: unset !important;
     font-size: unset !important;
     color: var(--menu-item-keyboard-shortcut-color) !important;
     padding-top: 0;
+}
+
+.dropdown-item span.keyboard-shortcut {
+    color: var(--menu-item-keyboard-shortcut-color) !important;
+    margin-left: 16px;
 }
 
 .dropdown-divider {
@@ -279,6 +295,20 @@ body.mobile .dropdown-menu .dropdown-item.submenu-open .dropdown-toggle::after {
     transform: rotate(270deg);
 }
 
+/* Dropdown item button (used in zoom buttons in global menu) */
+
+li.dropdown-item a.dropdown-item-button {
+    border: unset;
+}
+
+li.dropdown-item a.dropdown-item-button.bx {
+    color: var(--menu-text-color) !important;
+}
+
+li.dropdown-item a.dropdown-item-button:focus-visible {
+    outline: 2px solid var(--input-focus-outline-color) !important;
+}
+
 /*
  * TOASTS
  */
@@ -297,28 +327,49 @@ body.mobile .dropdown-menu .dropdown-item.submenu-open .dropdown-toggle::after {
     --modal-control-button-color: var(--bs-toast-color);
 
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: column;
     backdrop-filter: blur(6px);
 }
 
 #toast-container .toast .toast-header {
-    padding: 0 !important;
     background: transparent !important;
     border-bottom: none;
+    color: var(--toast-text-color) !important;
 }
 
-#toast-container .toast .toast-header strong {
-    /* The title of the toast is no longer displayed */
-    display: none;
+#toast-container .toast .toast-header strong > * {
+    vertical-align: middle;
 }
 
 #toast-container .toast .toast-header .btn-close {
-    margin: 0 var(--bs-toast-padding-x) 0 12px;
+    margin: 0 0 0 12px;
+}
 
+#toast-container .toast.no-title {
+    flex-direction: row;
 }
 
 #toast-container .toast .toast-body {
     flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-top: 0;
+}
+
+#toast-container .toast:not(.no-title) .bx {
+    margin-right: 0.5em;
+    font-size: 1.1em;
+    opacity: 0.85;
+}
+
+#toast-container .toast.no-title .bx {
+    margin-right: 0;
+    font-size: 1.3em;
+}
+
+#toast-container .toast.no-title .toast-body {
+    padding-top: var(--bs-toast-padding-x);
+    color: var(--toast-text-color);
 }
 
 /*
@@ -530,10 +581,9 @@ body.mobile .dropdown-menu .dropdown-item.submenu-open .dropdown-toggle::after {
 }
 
 /* List item */
-.jump-to-note-dialog .aa-suggestions div,
-.note-detail-empty .aa-suggestions div {
+.jump-to-note-dialog .aa-suggestion,
+.note-detail-empty .aa-suggestion {
     border-radius: 6px;
-    padding: 6px 12px;
     color: var(--menu-text-color);
     cursor: default;
 }

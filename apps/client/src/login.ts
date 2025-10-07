@@ -1,4 +1,4 @@
-import "./stylesheets/bootstrap.scss";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 // @ts-ignore - module = undefined
 // Required for correct loading of scripts in Electron

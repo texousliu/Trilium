@@ -14,6 +14,59 @@ interface ShortcutBinding {
 // Store all active shortcut bindings for management
 const activeBindings: Map<string, ShortcutBinding[]> = new Map();
 
+// Handle special key mappings and aliases
+const keyMap: { [key: string]: string[] } = {
+    'return': ['Enter'],
+    'enter': ['Enter'],  // alias for return
+    'del': ['Delete'],
+    'delete': ['Delete'], // alias for del
+    'esc': ['Escape'],
+    'escape': ['Escape'], // alias for esc
+    'space': [' ', 'Space'],
+    'tab': ['Tab'],
+    'backspace': ['Backspace'],
+    'home': ['Home'],
+    'end': ['End'],
+    'pageup': ['PageUp'],
+    'pagedown': ['PageDown'],
+    'up': ['ArrowUp'],
+    'down': ['ArrowDown'],
+    'left': ['ArrowLeft'],
+    'right': ['ArrowRight']
+};
+
+// Function keys
+const functionKeyCodes: string[] = [];
+for (let i = 1; i <= 19; i++) {
+    const keyCode = `F${i}`;
+    functionKeyCodes.push(keyCode);
+    keyMap[`f${i}`] = [ keyCode ];
+}
+
+const KEYCODES_WITH_NO_MODIFIER = new Set([
+    "Delete",
+    "Enter",
+    ...functionKeyCodes
+]);
+
+/**
+ * Check if IME (Input Method Editor) is composing
+ * This is used to prevent keyboard shortcuts from firing during IME composition
+ * @param e - The keyboard event to check
+ * @returns true if IME is currently composing, false otherwise
+ */
+export function isIMEComposing(e: KeyboardEvent): boolean {
+    // Handle null/undefined events gracefully
+    if (!e) {
+        return false;
+    }
+
+    // Standard check for composition state
+    // e.isComposing is true when IME is actively composing
+    // e.keyCode === 229 is a fallback for older browsers where 229 indicates IME processing
+    return e.isComposing || e.keyCode === 229;
+}
+
 function removeGlobalShortcut(namespace: string) {
     bindGlobalShortcut("", null, namespace);
 }
@@ -42,6 +95,13 @@ function bindElShortcut($el: JQuery<ElementType | Element>, keyboardShortcut: st
                 }
 
                 const e = evt as KeyboardEvent;
+
+                // Skip processing if IME is composing to prevent shortcuts from
+                // interfering with text input in CJK languages
+                if (isIMEComposing(e)) {
+                    return;
+                }
+
                 if (matchesShortcut(e, keyboardShortcut)) {
                     e.preventDefault();
                     e.stopPropagation();
@@ -111,6 +171,12 @@ export function matchesShortcut(e: KeyboardEvent, shortcut: string): boolean {
     const expectedShift = modifiers.includes('shift');
     const expectedMeta = modifiers.includes('meta') || modifiers.includes('cmd') || modifiers.includes('command');
 
+    // Refuse key combinations that don't include modifiers because they interfere with the normal usage of the application.
+    // Some keys such as function keys are an exception.
+    if (!(expectedCtrl || expectedAlt || expectedShift || expectedMeta) && !KEYCODES_WITH_NO_MODIFIER.has(e.code)) {
+        return false;
+    }
+
     return e.ctrlKey === expectedCtrl &&
            e.altKey === expectedAlt &&
            e.shiftKey === expectedShift &&
@@ -122,32 +188,6 @@ export function keyMatches(e: KeyboardEvent, key: string): boolean {
     if (!key) {
         console.warn('keyMatches called with undefined/null key');
         return false;
-    }
-
-    // Handle special key mappings and aliases
-    const keyMap: { [key: string]: string[] } = {
-        'return': ['Enter'],
-        'enter': ['Enter'],  // alias for return
-        'del': ['Delete'],
-        'delete': ['Delete'], // alias for del
-        'esc': ['Escape'],
-        'escape': ['Escape'], // alias for esc
-        'space': [' ', 'Space'],
-        'tab': ['Tab'],
-        'backspace': ['Backspace'],
-        'home': ['Home'],
-        'end': ['End'],
-        'pageup': ['PageUp'],
-        'pagedown': ['PageDown'],
-        'up': ['ArrowUp'],
-        'down': ['ArrowDown'],
-        'left': ['ArrowLeft'],
-        'right': ['ArrowRight']
-    };
-
-    // Function keys
-    for (let i = 1; i <= 19; i++) {
-        keyMap[`f${i}`] = [`F${i}`];
     }
 
     const mappedKeys = keyMap[key.toLowerCase()];
@@ -163,7 +203,7 @@ export function keyMatches(e: KeyboardEvent, key: string): boolean {
 
     // For letter keys, use the physical key code for consistency
     if (key.length === 1 && key >= 'a' && key <= 'z') {
-        return e.code === `Key${key.toUpperCase()}`;
+        return e.key.toLowerCase() === key.toLowerCase();
     }
 
     // For regular keys, check both key and code as fallback

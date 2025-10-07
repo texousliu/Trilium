@@ -65,7 +65,7 @@ const CALL_TO_ACTIONS: CallToAction[] = [
         id: "background_effects",
         title: t("call_to_action.background_effects_title"),
         message: t("call_to_action.background_effects_message"),
-        enabled: () => utils.isElectron() && window.glob.platform === "win32" && isNextTheme() && !options.is("backgroundEffects"),
+        enabled: () => false,
         buttons: [
             {
                 text: t("call_to_action.background_effects_button"),

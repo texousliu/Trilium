@@ -173,22 +173,6 @@ async function createMainWindow(app: App) {
     mainWindow.on("closed", () => (mainWindow = null));
 
     configureWebContents(mainWindow.webContents, spellcheckEnabled);
-
-    app.on("second-instance", (event, commandLine) => {
-        const lastFocusedWindow = getLastFocusedWindow();
-        if (commandLine.includes("--new-window")) {
-            createExtraWindow("");
-        } else if (lastFocusedWindow) {
-            // Someone tried to run a second instance, we should focus our window.
-            // see www.ts "requestSingleInstanceLock" for the rest of this logic with explanation
-            if (lastFocusedWindow.isMinimized()) {
-                lastFocusedWindow.restore();
-            }
-            lastFocusedWindow.show();
-            lastFocusedWindow.focus();
-        }
-    });
-
     trackWindowFocus(mainWindow);
 }
 
@@ -224,7 +208,7 @@ function getWindowExtraOpts() {
 }
 
 async function configureWebContents(webContents: WebContents, spellcheckEnabled: boolean) {
-    const remoteMain = (await import("@electron/remote/main/index.js")).default;
+    const remoteMain = (await import("@electron/remote/main/index.js"));
     remoteMain.enable(webContents);
 
     webContents.setWindowOpenHandler((details) => {
@@ -257,7 +241,11 @@ async function configureWebContents(webContents: WebContents, spellcheckEnabled:
 }
 
 function getIcon() {
-    return path.join(RESOURCE_DIR, "../public/assets/icon.png");
+    if (process.env.NODE_ENV === "development") {
+        return path.join(__dirname, "../../../desktop/electron-forge/app-icon/png/256x256-dev.png");
+    } else {
+        return path.join(RESOURCE_DIR, "../public/assets/icon.png");
+    }
 }
 
 async function createSetupWindow() {
@@ -341,6 +329,7 @@ function getAllWindows() {
 
 export default {
     createMainWindow,
+    createExtraWindow,
     createSetupWindow,
     closeSetupWindow,
     registerGlobalShortcuts,

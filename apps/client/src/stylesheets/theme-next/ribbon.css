@@ -94,18 +94,17 @@ div.promoted-attributes-container {
 
 /* Note type dropdown */
 
-div.note-type-dropdown .check {
+ul.note-type-dropdown .check {
     margin-right: 6px;
+}
+
+ul.note-type-dropdown li.dropdown-item {
+    --menu-item-icon-vert-offset: 0;
 }
 
 /* Editability dropdown */
 
-div.editability-dropdown a.dropdown-item {
-    padding: 4px 16px 4px 0;
-    align-items: start !important;
-}
-
-.editability-dropdown .dropdown-item .check {
+ul.editability-dropdown li.dropdown-item > div {
     margin-left: 4px;
 }
 

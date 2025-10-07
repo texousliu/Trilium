@@ -276,7 +276,12 @@
     "mime": "MIME 类型： ",
     "file_size": "文件大小：",
     "preview": "预览：",
-    "preview_not_available": "无法预览此类型的笔记。"
+    "preview_not_available": "无法预览此类型的笔记。",
+    "diff_on": "显示差异",
+    "diff_off": "显示内容",
+    "diff_on_hint": "点击以显示笔记源代码差异",
+    "diff_off_hint": "点击以显示笔记内容",
+    "diff_not_available": "差异不可用。"
   },
   "sort_child_notes": {
     "sort_children_by": "按...排序子笔记",
@@ -577,7 +582,7 @@
     "cannot_find_day_note": "无法找到日记",
     "cannot_find_week_note": "无法找到周记",
     "january": "一月",
-    "febuary": "二月",
+    "february": "二月",
     "march": "三月",
     "april": "四月",
     "may": "五月",
@@ -587,7 +592,18 @@
     "september": "九月",
     "october": "十月",
     "november": "十一月",
-    "december": "十二月"
+    "december": "十二月",
+    "week_previous": "上周",
+    "week_next": "下周",
+    "month_previous": "上个月",
+    "month_next": "下个月",
+    "year": "年",
+    "year_previous": "上一年",
+    "year_next": "明年",
+    "today": "今天",
+    "week": "周",
+    "month": "月",
+    "list": "列表"
   },
   "close_pane_button": {
     "close_this_pane": "关闭此面板"
@@ -732,7 +748,8 @@
     "note_type": "笔记类型",
     "editable": "可编辑",
     "basic_properties": "基本属性",
-    "language": "语言"
+    "language": "语言",
+    "configure_code_notes": "配置代码注释..."
   },
   "book_properties": {
     "view_type": "视图类型",
@@ -747,7 +764,8 @@
     "book_properties": "集合属性",
     "table": "表格",
     "geo-map": "地理地图",
-    "board": "看板"
+    "board": "看板",
+    "include_archived_notes": "展示归档笔记"
   },
   "edited_notes": {
     "no_edited_notes_found": "今天还没有编辑过的笔记...",
@@ -848,7 +866,7 @@
     "debug": "调试",
     "debug_description": "调试将打印额外的调试信息到控制台，以帮助调试复杂查询",
     "action": "操作",
-    "search_button": "搜索 <kbd>回车</kbd>",
+    "search_button": "搜索",
     "search_execute": "搜索并执行操作",
     "save_to_note": "保存到笔记",
     "search_parameters": "搜索参数",
@@ -948,7 +966,9 @@
     "no_attachments": "此笔记没有附件。"
   },
   "book": {
-    "no_children_help": "此类型为书籍的笔记没有任何子笔记，因此没有内容显示。请参阅 <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> 了解详情。"
+    "no_children_help": "此类型为书籍的笔记没有任何子笔记，因此没有内容显示。请参阅 <a href=\"https://triliumnext.github.io/Docs/Wiki/book-note.html\">wiki</a> 了解详情。",
+    "drag_locked_title": "锁定编辑",
+    "drag_locked_message": "无法拖拽，因为集合已被锁定编辑。"
   },
   "editable_code": {
     "placeholder": "在这里输入您的代码笔记内容..."
@@ -967,7 +987,7 @@
   },
   "protected_session": {
     "enter_password_instruction": "显示受保护的笔记需要输入您的密码：",
-    "start_session_button": "开始受保护的会话",
+    "start_session_button": "开始受保护的会话 <kbd>Enter</kbd>",
     "started": "受保护的会话已启动。",
     "wrong_password": "密码错误。",
     "protecting-finished-successfully": "保护操作已成功完成。",
@@ -1028,7 +1048,7 @@
     "error_creating_anonymized_database": "无法创建匿名化数据库，请检查后端日志以获取详细信息",
     "successfully_created_fully_anonymized_database": "成功创建完全匿名化的数据库，路径为 {{anonymizedFilePath}}",
     "successfully_created_lightly_anonymized_database": "成功创建轻度匿名化的数据库，路径为 {{anonymizedFilePath}}",
-    "no_anonymized_database_yet": "尚无匿名化数据库"
+    "no_anonymized_database_yet": "尚无匿名化数据库。"
   },
   "database_integrity_check": {
     "title": "数据库完整性检查",
@@ -1165,7 +1185,7 @@
   },
   "revisions_snapshot_interval": {
     "note_revisions_snapshot_interval_title": "笔记修订快照间隔",
-    "note_revisions_snapshot_description": "笔记修订快照间隔是创建新笔记修订的时间。有关更多信息，请参见 <a href=\"https://triliumnext.github.io/Docs/Wiki/note-revisions.html\" class=\"external\">wiki</a>。",
+    "note_revisions_snapshot_description": "笔记修订快照间隔是创建新笔记修订的时间。有关更多信息，请参见 <doc>wiki</doc>。",
     "snapshot_time_interval_label": "笔记修订快照时间间隔："
   },
   "revisions_snapshot_limit": {
@@ -1333,9 +1353,9 @@
     "oauth_title": "OAuth/OpenID 认证",
     "oauth_description": "OpenID 是一种标准化方式，允许您使用其他服务（如 Google）的账号登录网站来验证您的身份。默认的身份提供者是 Google，但您可以更改为任何其他 OpenID 提供者。点击<a href=\"#root/_hidden/_help/_help_Otzi9La2YAUX/_help_WOcw2SLH6tbX/_help_7DAiwaf8Z7Rz\">这里</a>了解更多信息。请参阅这些 <a href=\"https://developers.google.com/identity/openid-connect/openid-connect\">指南</a> 通过 Google 设置 OpenID 服务。",
     "oauth_description_warning": "要启用 OAuth/OpenID，您需要设置 config.ini 文件中的 OAuth/OpenID 基础 URL、客户端 ID 和客户端密钥，并重新启动应用程序。如果要从环境变量设置，请设置 TRILIUM_OAUTH_BASE_URL、TRILIUM_OAUTH_CLIENT_ID 和 TRILIUM_OAUTH_CLIENT_SECRET 环境变量。",
-    "oauth_missing_vars": "缺少以下设置项: {{missingVars}}",
-    "oauth_user_account": "用户账号：",
-    "oauth_user_email": "用户邮箱：",
+    "oauth_missing_vars": "缺少以下设置项：{{-variables}}",
+    "oauth_user_account": "用户账号： ",
+    "oauth_user_email": "用户邮箱： ",
     "oauth_user_not_logged_in": "未登录！"
   },
   "shortcuts": {
@@ -1357,7 +1377,7 @@
     "enable": "启用拼写检查",
     "language_code_label": "语言代码",
     "language_code_placeholder": "例如 \"en-US\", \"de-AT\"",
-    "multiple_languages_info": "多种语言可以用逗号分隔，例如 \"en-US, de-DE, cs\"。",
+    "multiple_languages_info": "多种语言可以用逗号分隔，例如 \"en-US, de-DE, cs\"。 ",
     "available_language_codes_label": "可用的语言代码：",
     "restart-required": "拼写检查选项的更改将在应用重启后生效。"
   },
@@ -1406,7 +1426,7 @@
     "button-tree-map": "树形地图"
   },
   "tree-context-menu": {
-    "open-in-a-new-tab": "在新标签页中打开 <kbd>Ctrl+Click</kbd>",
+    "open-in-a-new-tab": "在新标签页中打开",
     "open-in-a-new-split": "在新分栏中打开",
     "insert-note-after": "在后面插入笔记",
     "insert-child-note": "插入子笔记",
@@ -1436,12 +1456,14 @@
     "converted-to-attachments": "{{count}} 个笔记已被转换为附件。",
     "convert-to-attachment-confirm": "确定要将选中的笔记转换为其父笔记的附件吗？",
     "duplicate": "复制",
-    "open-in-popup": "快速编辑"
+    "open-in-popup": "快速编辑",
+    "archive": "归档",
+    "unarchive": "解压"
   },
   "shared_info": {
-    "shared_publicly": "此笔记已公开分享于",
-    "shared_locally": "此笔记已在本地分享于",
-    "help_link": "访问 <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a> 获取帮助。"
+    "help_link": "访问 <a href=\"https://triliumnext.github.io/Docs/Wiki/sharing.html\">wiki</a> 获取帮助。",
+    "shared_publicly": "该笔记已在 {{- link}} 上公开分享。",
+    "shared_locally": "此笔记在本地通过 {{- link}} 进行共享。"
   },
   "note_types": {
     "text": "文本",
@@ -1519,7 +1541,8 @@
     "hoist-this-note-workspace": "聚焦此笔记（工作区）",
     "refresh-saved-search-results": "刷新保存的搜索结果",
     "create-child-note": "创建子笔记",
-    "unhoist": "取消聚焦"
+    "unhoist": "取消聚焦",
+    "toggle-sidebar": "切换侧边栏"
   },
   "title_bar_buttons": {
     "window-on-top": "保持此窗口置顶"
@@ -1600,7 +1623,9 @@
   "ws": {
     "sync-check-failed": "同步检查失败！",
     "consistency-checks-failed": "一致性检查失败！请查看日志了解详细信息。",
-    "encountered-error": "遇到错误 \"{{message}}\"，请查看控制台。"
+    "encountered-error": "遇到错误 \"{{message}}\"，请查看控制台。",
+    "lost-websocket-connection-title": "与服务器的连线中断",
+    "lost-websocket-connection-message": "检查您的反向代理（如 nginx 或 Apache）设置以确保 Websocket 连线没有被阻挡。"
   },
   "hoisted_note": {
     "confirm_unhoisting": "请求的笔记 '{{requestedNote}}' 位于聚焦的笔记 '{{hoistedNote}}' 的子树之外，您必须取消聚焦才能访问该笔记。是否继续取消聚焦？"
@@ -1676,7 +1701,7 @@
     "native-title-bar": "原生标题栏",
     "native-title-bar-description": "对于 Windows 和 macOS，关闭原生标题栏可使应用程序看起来更紧凑。在 Linux 上，保留原生标题栏可以更好地与系统集成。",
     "background-effects": "启用背景效果（仅适用于 Windows 11）",
-    "background-effects-description": "Mica 效果为应用窗口添加模糊且时尚的背景，营造出深度感和现代外观。",
+    "background-effects-description": "Mica 效果为应用窗口添加模糊且时尚的背景，营造出深度感和现代外观。「原生标题栏」必須被禁用。",
     "restart-app-button": "重启应用程序以查看更改",
     "zoom-factor": "缩放系数"
   },
@@ -1879,14 +1904,19 @@
     "selected_provider": "已选提供商",
     "selected_provider_description": "选择用于聊天和补全功能的AI提供商",
     "select_model": "选择模型...",
-    "select_provider": "选择提供商..."
+    "select_provider": "选择提供商...",
+    "ai_enabled": "已启用 AI 功能",
+    "ai_disabled": "已禁用 AI 功能",
+    "no_models_found_online": "找不到模型。请检查您的 API 密钥及设置。",
+    "no_models_found_ollama": "找不到 Ollama 模型。请确认 Ollama 是否正在运行。",
+    "error_fetching": "获取模型失败：{{error}}"
   },
   "code-editor-options": {
     "title": "编辑器"
   },
   "custom_date_time_format": {
     "title": "自定义日期/时间格式",
-    "description": "通过<kbd></kbd>或工具栏的方式可自定义日期和时间格式，有关日期/时间格式字符串中各个字符的含义，请参阅<a href=\"https://day.js.org/docs/en/display/format\" target=\"_blank\" rel=\"noopener noreferrer\">Day.js docs</a>。",
+    "description": "通过<shortcut />或工具栏的方式可自定义日期和时间格式，有关日期/时间格式字符串中各个字符的含义，请参阅<doc>Day.js docs</doc>。",
     "format_string": "日期/时间格式字符串：",
     "formatted_time": "格式化后日期/时间："
   },
@@ -1932,7 +1962,11 @@
   "editorfeatures": {
     "title": "功能",
     "emoji_completion_enabled": "启用表情自动补全",
-    "note_completion_enabled": "启用笔记自动补全"
+    "note_completion_enabled": "启用笔记自动补全",
+    "emoji_completion_description": "如果启用，表情可以轻易地经由输入 `:` 加上表情名称来插入。",
+    "note_completion_description": "如果启用，导向笔记的链接可以经由输入 `@` 加上笔记标题来创建。",
+    "slash_commands_enabled": "启用斜杠命令",
+    "slash_commands_description": "如果启用，可以经由输入 `/` 来触发命令，如插入换行符或标题。"
   },
   "table_view": {
     "new-row": "新增行",
@@ -1968,14 +2002,21 @@
     "delete_row": "删除行"
   },
   "board_view": {
-    "delete-note": "删除笔记",
+    "delete-note": "删除笔记...",
     "move-to": "移动到",
     "insert-above": "在上方插入",
     "insert-below": "在下方插入",
     "delete-column": "删除列",
     "delete-column-confirmation": "确定要删除此列吗？此列下所有笔记中对应的属性也将被删除。",
     "new-item": "新增项目",
-    "add-column": "添加列"
+    "add-column": "添加列",
+    "archive-note": "存档笔记",
+    "unarchive-note": "解压笔记",
+    "new-item-placeholder": "输入笔记标题...",
+    "add-column-placeholder": "请输入列名...",
+    "edit-note-title": "点击编辑笔记标题",
+    "edit-column-title": "点击编辑列标题",
+    "remove-from-board": "从看板上移除"
   },
   "command_palette": {
     "tree-action-name": "树形：{{name}}",
@@ -2000,11 +2041,37 @@
     "help_title": "显示关于此画面的更多信息"
   },
   "call_to_action": {
-    "next_theme_title": "新的 Trilium 主题已进入稳定版",
-    "next_theme_message": "有一段时间，我们一直在设计新的主题，为了让应用程序看起来更加现代。",
-    "next_theme_button": "切换至新的 Trilium 主题",
     "background_effects_title": "背景效果现已推出稳定版本",
     "background_effects_message": "在 Windows 装置上，背景效果现在已完全稳定。背景效果通过模糊背后的背景，为使用者界面增添一抹色彩。此技术也用于其他应用程序，例如 Windows 资源管理器。",
-    "background_effects_button": "启用背景效果"
+    "background_effects_button": "启用背景效果",
+    "next_theme_title": "试用新 Trilium 主题",
+    "next_theme_message": "当前使用旧版主题，要试用新主题吗？",
+    "next_theme_button": "试用新主题",
+    "dismiss": "关闭"
+  },
+  "settings": {
+    "related_settings": "相关设置"
+  },
+  "settings_appearance": {
+    "related_code_blocks": "文本笔记中代码块的色彩方案",
+    "related_code_notes": "代码笔记的色彩方案"
+  },
+  "units": {
+    "percentage": "%"
+  },
+  "ui-performance": {
+    "title": "性能",
+    "enable-motion": "启用过渡和动画",
+    "enable-shadows": "启用阴影",
+    "enable-backdrop-effects": "启用菜单、弹窗和面板的背景效果",
+    "enable-smooth-scroll": "启用平滑滚动",
+    "app-restart-required": "（需重启程序以应用更改）"
+  },
+  "pagination": {
+    "page_title": "第 {{startIndex}} 页 - 第 {{endIndex}} 页",
+    "total_notes": "{{count}} 笔记"
+  },
+  "collections": {
+    "rendering_error": "出现错误无法显示内容。"
   }
 }

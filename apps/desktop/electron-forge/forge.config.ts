@@ -90,6 +90,10 @@ const config: ForgeConfig = {
                     base: "org.electronjs.Electron2.BaseApp",
                     baseVersion: "24.08",
                     baseFlatpakref: "https://flathub.org/repo/flathub.flatpakrepo",
+                    finishArgs: [
+                        "--socket=fallback-x11",
+                        "--socket=wayland"
+                    ],
                     modules: [
                         {
                             name: "zypak",
@@ -114,7 +118,7 @@ const config: ForgeConfig = {
             config: {
                 name: EXECUTABLE_NAME,
                 productName: PRODUCT_NAME,
-                iconUrl: "https://raw.githubusercontent.com/TriliumNext/Notes/develop/images/app-icons/icon.ico",
+                iconUrl: "https://raw.githubusercontent.com/TriliumNext/Trilium/refs/heads/main/apps/desktop/electron-forge/app-icon/icon.ico",
                 setupIcon: path.join(ELECTRON_FORGE_DIR, "setup-icon/setup.ico"),
                 loadingGif: path.join(ELECTRON_FORGE_DIR, "setup-icon/setup-banner.gif"),
                 windowsSign: windowsSignConfiguration
@@ -130,7 +134,7 @@ const config: ForgeConfig = {
             name: "@electron-forge/maker-zip",
             config: {
                 options: {
-                    iconUrl: "https://raw.githubusercontent.com/TriliumNext/Notes/develop/images/app-icons/icon.ico",
+                    iconUrl: "https://raw.githubusercontent.com/TriliumNext/Trilium/refs/heads/main/apps/desktop/electron-forge/app-icon/icon.ico",
                     icon: path.join(APP_ICON_PATH, "icon.ico")
                 }
             }

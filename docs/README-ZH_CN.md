@@ -1,97 +1,263 @@
 # Trilium Notes
 
-[English](../README.md) | [Chinese](./README-ZH_CN.md) | [Russian](./README.ru.md) | [Japanese](./README.ja.md) | [Italian](./README.it.md) | [Spanish](./README.es.md)
+![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
+![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran)\
+![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/trilium)
+![GitHub Downloads (all assets, all
+releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
+[![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
+[![Translation
+status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-Trilium Notes 是一个层次化的笔记应用程序，专注于建立大型个人知识库。请参阅[屏幕截图](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)以快速了解：
+[英文](./README.md) | [简体中文](./docs/README-ZH_CN.md) |
+[正体中文](./docs/README-ZH_TW.md) | [俄文](./docs/README-ru.md) |
+[日文](./docs/README-ja.md) | [意大利文](./docs/README-it.md) |
+[西班牙文](./docs/README-es.md)
 
-<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./app.png" alt="Trilium Screenshot" width="1000"></a>
+Trilium Notes 是一款免费且开源、跨平台的阶层式笔记应用程序，专注于建立大型个人知识库。
 
-## ⚠️ 为什么选择TriliumNext？
+想快速了解，请查看[screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour):
 
-[原始的Trilium项目目前处于维护模式](https://github.com/zadam/trilium/issues/4620)
+<a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
-## 🗭 与我们讨论
+## 📖 文件
 
-欢迎加入我们的官方讨论和社区。我们专注于Trilium的开发，乐于听取您对功能、建议或问题的意见！
+**Visit our comprehensive documentation at
+[docs.triliumnotes.org](https://docs.triliumnotes.org/)**
 
-- [Matrix](https://matrix.to/#/#triliumnext:matrix.org)（用于同步讨论）
-- [Github Discussions](https://github.com/TriliumNext/Trilium/discussions)（用于异步讨论）
-- [Wiki](https://triliumnext.github.io/Docs/)（用于常见操作问题和用户指南）
+Our documentation is available in multiple formats:
+- **Online Documentation**: Browse the full documentation at
+  [docs.triliumnotes.org](https://docs.triliumnotes.org/)
+- **In-App Help**: Press `F1` within Trilium to access the same documentation
+  directly in the application
+- **GitHub**: Navigate through the [User
+  Guide](./docs/User%20Guide/User%20Guide/) in this repository
 
-上面链接的两个房间是镜像的，所以您可以在任意平台上使用XMPP或者Matrix来和我们交流。
+### Quick Links
+- [Getting Started Guide](https://docs.triliumnotes.org/)
+- [Installation
+  Instructions](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+- [Docker
+  Setup](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+- [Upgrading
+  TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+- [Basic Concepts and
+  Features](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+- [Patterns of Personal Knowledge
+  Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
-### 非官方社区
+## 🎁 功能
 
-[Trilium Rocks](https://discord.gg/aqdX9mXX4r)
+* 笔记可组织成任意深度的树形结构。单一笔记可放在树中的多个位置（参见
+  [笔记复制/克隆](https://triliumnext.github.io/Docs/Wiki/cloning-notes))
+* 丰富的所见即所得（WYSIWYG）笔记编辑器，支持表格、图片与[数学公式](https://triliumnext.github.io/Docs/Wiki/text-notes)，并具备
+  Markdown
+  的[自动格式](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat)
+* 支持编辑[程序代码笔记](https://triliumnext.github.io/Docs/Wiki/code-notes), ，包含语法高亮
+* 快速、轻松地在笔记间[导航](https://triliumnext.github.io/Docs/Wiki/note-navigation)、全文搜索，以及[笔记聚焦（hoisting）](https://triliumnext.github.io/Docs/Wiki/note-hoisting)
+* 无缝的[笔记版本管理](https://triliumnext.github.io/Docs/Wiki/note-revisions)
+* 笔记[属性](https://triliumnext.github.io/Docs/Wiki/attributes)可用于笔记的组织、查询与高级[脚本](https://triliumnext.github.io/Docs/Wiki/scripts)
+* 接口提供英文、德文、西班牙文、法文、罗马尼亚文与中文（简体与正体）
+* 直接整合[OpenID 与
+  TOTP](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
+  以实现更安全的登录
+* 与自架的同步服务器进行[同步](https://triliumnext.github.io/Docs/Wiki/synchronization)
+  * 另有[3rd party service for hosting synchronisation
+    server](https://trilium.cc/paid-hosting)
+* 将笔记[分享](https://triliumnext.github.io/Docs/Wiki/sharing)（公开发布）到互联网
+* 以每则笔记为粒度的强大 [笔记加密](https://triliumnext.github.io/Docs/Wiki/protected-notes)
+* 手绘/示意图：基于 [Excalidraw](https://excalidraw.com/) （笔记类型为「canvas」）
+* 用于可视化笔记及其关系的[关系图](https://triliumnext.github.io/Docs/Wiki/relation-map)与[链接图](https://triliumnext.github.io/Docs/Wiki/link-map)
+* 思维导图：基于[Mind Elixir](https://docs.mind-elixir.com/)
+* 具有定位钉与 GPX 轨迹的[地图](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md)
+* [脚本](https://triliumnext.github.io/Docs/Wiki/scripts) - 参见
+  [高级展示](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
+* 用于自动化的 [REST API](https://triliumnext.github.io/Docs/Wiki/etapi)
+* 在可用性与效能上均可良好扩展，支持超过 100,000 笔笔记
+* 为手机与平板优化的[移动前端](https://triliumnext.github.io/Docs/Wiki/mobile-frontend)
+* 内置[深色主题](https://triliumnext.github.io/Docs/Wiki/themes)
+* [Evernote 导入](https://triliumnext.github.io/Docs/Wiki/evernote-import)与
+  [Markdown 导入与导出](https://triliumnext.github.io/Docs/Wiki/markdown)
+* 用于快速保存网页内容的 [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper)
+* 可自定义的 UI（侧边栏按钮、用户自定义小组件等）
+* [度量指标（Metrics）](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md)，并附有
+  [Grafana
+  仪表板](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
 
-## 🎁 特性
+✨ 想要更多 TriliumNext 的主题、脚本、外挂与资源，亦可参考以下第三方资源／社群：
 
-* 笔记可以排列成任意深的树。单个笔记可以放在树中的多个位置（请参阅[克隆](https://triliumnext.github.io/Docs/Wiki/cloning-notes)）
-* 丰富的所见即所得笔记编辑功能，包括带有 Markdown [自动格式化功能的](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat)表格，图像和[数学公式](https://triliumnext.github.io/Docs/Wiki/text-notes#math-support)
-* 支持编辑[使用源代码的笔记](https://triliumnext.github.io/Docs/Wiki/code-notes)，包括语法高亮显示
-* 笔记之间快速[导航](https://triliumnext.github.io/Docs/Wiki/note-navigation)，全文搜索和[提升笔记](https://triliumnext.github.io/Docs/Wiki/note-hoisting)
-* 无缝[笔记版本控制](https://triliumnext.github.io/Docs/Wiki/note-revisions)
-* 笔记[属性](https://triliumnext.github.io/Docs/Wiki/attributes)可用于笔记组织，查询和高级[脚本编写](https://triliumnext.github.io/Docs/Wiki/scripts)
-* [同步](https://triliumnext.github.io/Docs/Wiki/synchronization)与自托管同步服务器
-  * 有一个[第三方提供的同步服务器托管服务](https://trilium.cc/paid-hosting)
-* 公开地[分享](https://triliumnext.github.io/Docs/Wiki/sharing)（发布）笔记到互联网
-* 具有按笔记粒度的强大的[笔记加密](https://triliumnext.github.io/Docs/Wiki/protected-notes)
-* 使用自带的 Excalidraw 来绘制图表（笔记类型“画布”）
-* [关系图](https://triliumnext.github.io/Docs/Wiki/relation-map)和[链接图](https://triliumnext.github.io/Docs/Wiki/link-map)，用于可视化笔记及其关系
-* [脚本](https://triliumnext.github.io/Docs/Wiki/scripts) - 请参阅[高级功能展示](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
-* 可用于自动化的 [REST API](https://triliumnext.github.io/Docs/Wiki/etapi)
-* 在拥有超过 10 万条笔记时仍能保持良好的可用性和性能
-* 针对智能手机和平板电脑进行优化的[用于移动设备的前端](https://triliumnext.github.io/Docs/Wiki/mobile-frontend)
-* [夜间主题](https://triliumnext.github.io/Docs/Wiki/themes)
-* [Evernote](https://triliumnext.github.io/Docs/Wiki/evernote-import) 和 [Markdown 导入导出](https://triliumnext.github.io/Docs/Wiki/markdown)功能
-* 使用[网页剪藏](https://triliumnext.github.io/Docs/Wiki/web-clipper)轻松保存互联网上的内容
+- [awesome-trilium](https://github.com/Nriver/awesome-trilium) （第三方主题、脚本、外挂与更多）。
+- [TriliumRocks!](https://trilium.rocks/) （教学、指南等等）。
 
-✨ 查看以下第三方资源，获取更多关于TriliumNext的好东西：
+## ⚠️ 为什么是 TriliumNext？
 
-- [awesome-trilium](https://github.com/Nriver/awesome-trilium)：提供第三方主题、脚本、插件等资源的列表。
-- [TriliumRocks!](https://trilium.rocks/)：提供教程、指南等更多内容。
+The original Trilium developer ([Zadam](https://github.com/zadam)) has
+graciously given the Trilium repository to the community project which resides
+at https://github.com/TriliumNext
 
-## 🏗 构建
+### ⬆️ 从 Trilium 迁移？
 
-Trilium 可以用作桌面应用程序（Linux 和 Windows）或服务器（Linux）上托管的 Web 应用程序。虽然有 macOS 版本的桌面应用程序，但它[不受支持](https://triliumnext.github.io/Docs/Wiki/faq#mac-os-support)。
+从既有的 zadam/Trilium 例项迁移到 TriliumNext/Notes 不需要特别的迁移步骤。只要[照一般方式安装
+TriliumNext/Notes](#-installation)(#-安装)，它就会直接使用你现有的数据库。
 
-* 如果要在桌面上使用 Trilium，请从[最新版本](https://github.com/TriliumNext/Trilium/releases/latest)下载适用于您平台的二进制版本，解压缩该软件包并运行`trilium`可执行文件。
-* 如果要在服务器上安装 Trilium，请参考[此页面](https://triliumnext.github.io/Docs/Wiki/server-installation)。
-  * 当前仅支持（测试过）最近发布的 Chrome 和 Firefox 浏览器。
+版本至多至 [v0.90.4](https://github.com/TriliumNext/Trilium/releases/tag/v0.90.4) 与
+zadam/trilium 最新版本
+[v0.63.7](https://github.com/zadam/trilium/releases/tag/v0.63.7)兼容。之后的
+TriliumNext 版本已提升同步版本号（与上述不再兼容）。
 
-Trilium 也提供 Flatpak：
+## 💬 与我们交流
 
-[<img width="240" src="https://flathub.org/assets/badges/flathub-badge-en.png">](https://flathub.org/apps/details/com.github.zadam.trilium)
+欢迎加入官方社群。我们很乐意听到你对功能、建议或问题的想法！
 
-## 📝 文档
+- [Matrix](https://matrix.to/#/#triliumnext:matrix.org)（同步讨论）
+  - `General` Matrix 房间也桥接到 [XMPP](xmpp:discuss@trilium.thisgreat.party?join)
+- [GitHub
+  Discussions](https://github.com/TriliumNext/Trilium/discussions)（异步讨论）。
+- [GitHub Issues](https://github.com/TriliumNext/Trilium/issues)（回报错误与提出功能需求）。
 
-[有关文档页面的完整列表，请参见 Wiki。](https://triliumnext.github.io/Docs/)
+## 🏗 安装
 
-* [Wiki 的中文翻译版本](https://github.com/baddate/trilium/wiki/)
+### Windows / macOS
 
-您还可以阅读[个人知识库模式](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)，以获取有关如何使用 Trilium 的灵感。
+从[最新释出页面](https://github.com/TriliumNext/Trilium/releases/latest)下载你平台的二进制文件，解压缩后执行
+`trilium` 可执行文件。
+
+### Linux
+
+如果你的发行版如下表所列，请使用该发行版的套件。
+
+[![Packaging
+status](https://repology.org/badge/vertical-allrepos/triliumnext.svg)](https://repology.org/project/triliumnext/versions)
+
+你也可以从[最新释出页面](https://github.com/TriliumNext/Trilium/releases/latest)下载对应平台的二进制文件，解压缩后执行
+`trilium` 可执行文件。
+
+TriliumNext 也提供 Flatpak，惟尚未发布到 FlatHub。
+
+### 查看器（任何操作系统）
+
+若你有（如下所述的）服务器安装，便可直接存取网页界面（其与桌面应用几乎相同）。
+
+目前仅支持（并实测）最新版的 Chrome 与 Firefox。
+
+### 移动装置
+
+若要在行动装置上使用 TriliumNext，你可以透过移动查看器存取服务器安装的移动版接口（见下）。
+
+See issue https://github.com/TriliumNext/Trilium/issues/4962 for more
+information on mobile app support.
+
+如果你偏好原生 Android 应用，可使用
+[TriliumDroid](https://apt.izzysoft.de/fdroid/index/apk/eu.fliegendewurst.triliumdroid)。回报问题或缺少的功能，请至[其储存库](https://github.com/FliegendeWurst/TriliumDroid)。
+
+### 服务器
+
+若要在你自己的服务器上安装 TriliumNext（包括从 [Docker
+Hub](https://hub.docker.com/r/triliumnext/trilium) 使用 Docker
+部署），请遵循[服务器安装文件](https://triliumnext.github.io/Docs/Wiki/server-installation)。
+
 
 ## 💻 贡献
 
+### 翻译
 
-或者克隆本仓库到本地，并运行
+如果你是母语人士，欢迎前往我们的 [Weblate 页面](https://hosted.weblate.org/engage/trilium/)协助翻译
+Trilium。
 
+以下是目前的语言覆盖状态：
+
+[![Translation
+status](https://hosted.weblate.org/widget/trilium/multi-auto.svg)](https://hosted.weblate.org/engage/trilium/)
+
+### 程序代码
+
+下载储存库，使用 `pnpm` 安装相依套件，接着启动服务器（于 http://localhost:8080 提供服务）：
 ```shell
-npm install
-npm run server:start
+git clone https://github.com/TriliumNext/Trilium.git
+cd Trilium
+pnpm install
+pnpm run server:start
 ```
 
-## 👏 致谢
+### 文件
 
-* [CKEditor 5](https://github.com/ckeditor/ckeditor5) - 市面上最好的所见即所得编辑器，拥有互动性强且聆听能力强的团队
-* [FancyTree](https://github.com/mar10/fancytree) - 一个非常丰富的关于树的库，强大到没有对手。没有它，Trilium Notes 将不会如此。
-* [CodeMirror](https://github.com/codemirror/CodeMirror) - 支持大量语言的代码编辑器
-* [jsPlumb](https://github.com/jsplumb/jsplumb) - 强大的可视化连接库。用于[关系图](https://triliumnext.github.io/Docs/Wiki/relation-map)和[链接图](https://triliumnext.github.io/Docs/Wiki/link-map)
+下载储存库，使用 `pnpm` 安装相依套件，接着启动编辑文件所需的环境：
+```shell
+git clone https://github.com/TriliumNext/Trilium.git
+cd Trilium
+pnpm install
+pnpm edit-docs:edit-docs
+```
 
-## 🤝 捐赠
+### 建置桌面可执行文件
+下载储存库，使用 `pnpm` 安装相依套件，然后为 Windows 建置桌面应用：
+```shell
+git clone https://github.com/TriliumNext/Trilium.git
+cd Trilium
+pnpm install
+pnpm run --filter desktop electron-forge:make --arch=x64 --platform=win32
+```
 
-你可以通过 GitHub Sponsors，[PayPal](https://paypal.me/za4am) 或者比特币 (bitcoin:bc1qv3svjn40v89mnkre5vyvs2xw6y8phaltl385d2) 来捐赠。
+更多细节请参见[开发文件](https://github.com/TriliumNext/Trilium/tree/main/docs/Developer%20Guide/Developer%20Guide)。
 
-## 🔑 许可证
+### Developer Documentation
 
-本程序是自由软件：你可以再发布本软件和/或修改本软件，只要你遵循 Free Software Foundation 发布的 GNU Affero General Public License 的第三版或者任何（由你选择）更晚的版本。
+Please view the [documentation
+guide](https://github.com/TriliumNext/Trilium/blob/main/docs/Developer%20Guide/Developer%20Guide/Environment%20Setup.md)
+for details. If you have more questions, feel free to reach out via the links
+described in the "Discuss with us" section above.
+
+## 👏 鸣谢
+
+* [zadam](https://github.com/zadam) for the original concept and implementation
+  of the application.
+* [Larsa](https://github.com/LarsaSara) for designing the application icon.
+* [nriver](https://github.com/nriver) for his work on internationalization.
+* [Thomas Frei](https://github.com/thfrei) for his original work on the Canvas.
+* [antoniotejada](https://github.com/nriver) for the original syntax highlight
+  widget.
+* [Dosu](https://dosu.dev/) for providing us with the automated responses to
+  GitHub issues and discussions.
+* [Tabler Icons](https://tabler.io/icons) for the system tray icons.
+
+Trilium would not be possible without the technologies behind it:
+
+* [CKEditor 5](https://github.com/ckeditor/ckeditor5) - the visual editor behind
+  text notes. We are grateful for being offered a set of the premium features.
+* [CodeMirror](https://github.com/codemirror/CodeMirror) - code editor with
+  support for huge amount of languages.
+* [Excalidraw](https://github.com/excalidraw/excalidraw) - the infinite
+  whiteboard used in Canvas notes.
+* [Mind Elixir](https://github.com/SSShooter/mind-elixir-core) - providing the
+  mind map functionality.
+* [Leaflet](https://github.com/Leaflet/Leaflet) - for rendering geographical
+  maps.
+* [Tabulator](https://github.com/olifolkerd/tabulator) - for the interactive
+  table used in collections.
+* [FancyTree](https://github.com/mar10/fancytree) - feature-rich tree library
+  without real competition.
+* [jsPlumb](https://github.com/jsplumb/jsplumb) - visual connectivity library.
+  Used in [relation
+  maps](https://triliumnext.github.io/Docs/Wiki/relation-map.html) and [link
+  maps](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)
+
+## 🤝 支持我们
+
+Trilium is built and maintained with [hundreds of hours of
+work](https://github.com/TriliumNext/Trilium/graphs/commit-activity). Your
+support keeps it open-source, improves features, and covers costs such as
+hosting.
+
+Consider supporting the main developer
+([eliandoran](https://github.com/eliandoran)) of the application via:
+
+- [GitHub Sponsors](https://github.com/sponsors/eliandoran)
+- [PayPal](https://paypal.me/eliandoran)
+- [Buy Me a Coffee](https://buymeacoffee.com/eliandoran)
+
+## 🔑 授权条款
+
+Copyright 2017–2025 zadam、Elian Doran 与其他贡献者
+
+本程序系自由软件：你可以在自由软件基金会（Free Software Foundation）所发布的 GNU Affero 通用公众授权条款（GNU
+AGPL）第 3 版或（由你选择）任何后续版本之条款下重新散布或修改本程序。

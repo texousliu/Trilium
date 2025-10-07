@@ -40,8 +40,8 @@ function buildHiddenSubtreeDefinition(helpSubtree: HiddenSubtreeItem[]): HiddenS
         // we want to keep the hidden subtree always last, otherwise there will be problems with e.g., keyboard navigation
         // over tree when it's in the middle
         notePosition: 999_999_999,
+        enforceAttributes: true,
         attributes: [
-            { type: "label", name: "excludeFromNoteMap", isInheritable: true },
             { type: "label", name: "docName", value: "hidden" }
         ],
         children: [
@@ -441,6 +441,15 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
         }
     }
 
+    // Enforce attribute structure if needed.
+    if (item.enforceAttributes) {
+        for (const attribute of note.getAttributes()) {
+            if (!attrs.some(a => a.name === attribute.name)) {
+                attribute.markAsDeleted();
+            }
+        }
+    }
+
     for (const attr of attrs) {
         const attrId = note.noteId + "_" + attr.type.charAt(0) + attr.name;
 
@@ -457,8 +466,8 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
             }).save();
         } else if (attr.name === "docName" || (existingAttribute.noteId.startsWith("_help") && attr.name === "iconClass")) {
             if (existingAttribute.value !== attr.value) {
+                console.log(`Updating attribute ${attrId} from "${existingAttribute.value}" to "${attr.value}"`);
                 existingAttribute.value = attr.value ?? "";
-                console.log("Updating attribute ", attrId);
                 existingAttribute.save();
             }
         }

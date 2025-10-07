@@ -64,7 +64,7 @@ export interface NoteMetaData {
 /**
  * Note is the main node and concept in Trilium.
  */
-class FNote {
+export default class FNote {
     private froca: Froca;
 
     noteId!: string;
@@ -256,18 +256,20 @@ class FNote {
         return this.children;
     }
 
-    async getSubtreeNoteIds() {
+    async getSubtreeNoteIds(includeArchived = false) {
         let noteIds: (string | string[])[] = [];
         for (const child of await this.getChildNotes()) {
+            if (child.isArchived && !includeArchived) continue;
+
             noteIds.push(child.noteId);
-            noteIds.push(await child.getSubtreeNoteIds());
+            noteIds.push(await child.getSubtreeNoteIds(includeArchived));
         }
         return noteIds.flat();
     }
 
     async getSubtreeNotes() {
         const noteIds = await this.getSubtreeNoteIds();
-        return this.froca.getNotes(noteIds);
+        return (await this.froca.getNotes(noteIds));
     }
 
     async getChildNotes() {
@@ -905,8 +907,8 @@ class FNote {
         return this.getBlob();
     }
 
-    async getBlob() {
-        return await this.froca.getBlob("notes", this.noteId);
+    getBlob() {
+        return this.froca.getBlob("notes", this.noteId);
     }
 
     toString() {
@@ -1020,6 +1022,14 @@ class FNote {
         return this.noteId.startsWith("_options");
     }
 
+    isTriliumSqlite() {
+        return this.mime === "text/x-sqlite;schema=trilium";
+    }
+
+    isTriliumScript() {
+        return this.mime.startsWith("application/javascript");
+    }
+
     /**
      * Provides note's date metadata.
      */
@@ -1027,5 +1037,3 @@ class FNote {
         return await server.get<NoteMetaData>(`notes/${this.noteId}/metadata`);
     }
 }
-
-export default FNote;

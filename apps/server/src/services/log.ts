@@ -12,7 +12,7 @@ if (!fs.existsSync(dataDir.LOG_DIR)) {
     fs.mkdirSync(dataDir.LOG_DIR, 0o700);
 }
 
-let logFile!: fs.WriteStream;
+let logFile: fs.WriteStream | undefined;
 
 const SECOND = 1000;
 const MINUTE = 60 * SECOND;
@@ -38,6 +38,9 @@ async function cleanupOldLogFiles() {
         const customRetentionDays = config.Logging.retentionDays;
         if (customRetentionDays > 0) {
             retentionDays = customRetentionDays;
+        } else if (customRetentionDays <= -1){
+            info(`Log cleanup: keeping all log files, as specified by configuration.`);
+            return
         }
 
         const cutoffDate = new Date();
@@ -104,17 +107,20 @@ function initLogFile() {
     todaysMidnight = getTodaysMidnight();
 
     const logPath = `${dataDir.LOG_DIR}/trilium-${formatDate()}.log`;
+    const isRotating = !!logFile;
 
-    if (logFile) {
-        logFile.end();
+    if (isRotating) {
+        logFile!.end();
+    }
 
-        // Clean up old log files when rotating to a new file
+    logFile = fs.createWriteStream(logPath, { flags: "a" });
+
+    // Clean up old log files when rotating to a new file
+    if (isRotating) {
         cleanupOldLogFiles().catch(() => {
             // Ignore cleanup errors
         });
     }
-
-    logFile = fs.createWriteStream(logPath, { flags: "a" });
 }
 
 function checkDate(millisSinceMidnight: number) {
@@ -138,7 +144,7 @@ function log(str: string | Error) {
 
     millisSinceMidnight = checkDate(millisSinceMidnight);
 
-    logFile.write(`${formatTime(millisSinceMidnight)} ${str}${EOL}`);
+    logFile!.write(`${formatTime(millisSinceMidnight)} ${str}${EOL}`);
 
     console.log(str);
 }

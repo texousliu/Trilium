@@ -1,6 +1,5 @@
 import { t } from "../../services/i18n";
 import Modal from "../react/Modal";
-import ReactBasicWidget from "../react/ReactBasicWidget";
 import Button from "../react/Button";
 import FormRadioGroup from "../react/FormRadioGroup";
 import NoteAutocomplete from "../react/NoteAutocomplete";
@@ -11,11 +10,11 @@ import { default as TextTypeWidget } from "../type_widgets/editable_text.js";
 import { logError } from "../../services/ws";
 import FormGroup from "../react/FormGroup.js";
 import { refToJQuerySelector } from "../react/react_utils";
-import useTriliumEvent from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
 type LinkType = "reference-link" | "external-link" | "hyper-link";
 
-function AddLinkDialogComponent() {
+export default function AddLinkDialog() {
     const [ textTypeWidget, setTextTypeWidget ] = useState<TextTypeWidget>();
     const initialText = useRef<string>();
     const [ linkTitle, setLinkTitle ] = useState("");
@@ -23,12 +22,21 @@ function AddLinkDialogComponent() {
     const [ linkType, setLinkType ] = useState<LinkType>(hasSelection ? "hyper-link" : "reference-link");
     const [ suggestion, setSuggestion ] = useState<Suggestion | null>(null);
     const [ shown, setShown ] = useState(false);
+    const hasSubmittedRef = useRef(false);
 
     useTriliumEvent("showAddLinkDialog", ( { textTypeWidget, text }) => {
         setTextTypeWidget(textTypeWidget);
         initialText.current = text;
         setShown(true);
     });
+
+    useEffect(() => {
+        if (hasSelection) {
+            setLinkType("hyper-link");
+        } else {
+            setLinkType("reference-link");
+        }
+    }, [ hasSelection ])
 
     async function setDefaultLinkTitle(noteId: string) {
         const noteTitle = await tree.getNoteTitle(noteId);
@@ -76,14 +84,11 @@ function AddLinkDialogComponent() {
     }
 
     function onSubmit() {
-        if (suggestion?.notePath) {
-            // Handle note link
+        hasSubmittedRef.current = true;
+
+        if (suggestion) {
+            // Insertion logic in onHidden because it needs focus.
             setShown(false);
-            textTypeWidget?.addLink(suggestion.notePath, linkType === "reference-link" ? null : linkTitle);
-        } else if (suggestion?.externalLink) {
-            // Handle external link
-            setShown(false);
-            textTypeWidget?.addLink(suggestion.externalLink, linkTitle, true);
         } else {
             logError("No link to add.");
         }
@@ -102,12 +107,25 @@ function AddLinkDialogComponent() {
             onSubmit={onSubmit}
             onShown={onShown}
             onHidden={() => {
+                // Insert the link.
+                if (hasSubmittedRef.current && suggestion && textTypeWidget) {
+                    hasSubmittedRef.current = false;
+
+                    if (suggestion.notePath) {
+                        // Handle note link
+                        textTypeWidget.addLink(suggestion.notePath, linkType === "reference-link" ? null : linkTitle);
+                    } else if (suggestion.externalLink) {
+                        // Handle external link
+                        textTypeWidget.addLink(suggestion.externalLink, linkTitle, true);
+                    }
+                }
+
                 setSuggestion(null);
                 setShown(false);
             }}
             show={shown}
         >
-            <FormGroup label={t("add_link.note")}>
+            <FormGroup label={t("add_link.note")} name="note">
                 <NoteAutocomplete
                     inputRef={autocompleteRef}
                     onChange={setSuggestion}
@@ -151,12 +169,4 @@ function AddLinkDialogComponent() {
             )}
         </Modal>
     );
-}
-
-export default class AddLinkDialog extends ReactBasicWidget {
-    
-    get component() {
-        return <AddLinkDialogComponent />;
-    }
-
 }

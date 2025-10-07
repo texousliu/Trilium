@@ -1,7 +1,7 @@
 import "jquery";
 import utils from "./services/utils.js";
 import ko from "knockout";
-import "./stylesheets/bootstrap.scss";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 // TriliumNextTODO: properly make use of below types
 // type SetupModelSetupType = "new-document" | "sync-from-desktop" | "sync-from-server" | "";

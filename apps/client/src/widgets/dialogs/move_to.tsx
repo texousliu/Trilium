@@ -1,4 +1,3 @@
-import ReactBasicWidget from "../react/ReactBasicWidget";
 import Modal from "../react/Modal";
 import { t } from "../../services/i18n";
 import NoteList from "../react/NoteList";
@@ -11,9 +10,9 @@ import tree from "../../services/tree";
 import froca from "../../services/froca";
 import branches from "../../services/branches";
 import toast from "../../services/toast";
-import useTriliumEvent from "../react/hooks";
+import { useTriliumEvent } from "../react/hooks";
 
-function MoveToDialogComponent() {
+export default function MoveToDialog() {
     const [ movedBranchIds, setMovedBranchIds ] = useState<string[]>();
     const [ suggestion, setSuggestion ] = useState<Suggestion | null>(null);
     const [ shown, setShown ] = useState(false);
@@ -57,7 +56,7 @@ function MoveToDialogComponent() {
             <h5>{t("move_to.notes_to_move")}</h5>
             <NoteList branchIds={movedBranchIds} />
 
-            <FormGroup label={t("move_to.target_parent_note")}>
+            <FormGroup name="parent-note" label={t("move_to.target_parent_note")}>
                 <NoteAutocomplete
                     onChange={setSuggestion}
                     inputRef={autoCompleteRef}
@@ -65,14 +64,6 @@ function MoveToDialogComponent() {
             </FormGroup>
         </Modal>
     )
-}
-
-export default class MoveToDialog extends ReactBasicWidget {
-
-    get component() {
-        return <MoveToDialogComponent />;
-    }
-
 }
 
 async function moveNotesTo(movedBranchIds: string[] | undefined, parentBranchId: string) {

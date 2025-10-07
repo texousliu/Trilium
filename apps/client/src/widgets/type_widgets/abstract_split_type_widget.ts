@@ -5,7 +5,6 @@ import TypeWidget from "./type_widget.js";
 import Split from "split.js";
 import { DEFAULT_GUTTER_SIZE } from "../../services/resizer.js";
 import options from "../../services/options.js";
-import type SwitchSplitOrientationButton from "../floating_buttons/switch_layout_button.js";
 import type { EventData } from "../../components/app_context.js";
 import type OnClickButtonWidget from "../buttons/onclick_button.js";
 import type { EditorConfig } from "@triliumnext/codemirror";
@@ -113,7 +112,7 @@ const TPL = /*html*/`\
  *
  * - The two panes are resizeable via a split, on desktop. The split can be optionally customized via {@link buildSplitExtraOptions}.
  * - Can display errors to the user via {@link setError}.
- * - Horizontal or vertical orientation for the editor/preview split, adjustable via {@link SwitchSplitOrientationButton}.
+ * - Horizontal or vertical orientation for the editor/preview split, adjustable via the switch split orientation button floating button.
  */
 export default abstract class AbstractSplitTypeWidget extends TypeWidget {
 

@@ -5,7 +5,7 @@ import attributeService from "../services/attributes.js";
 import config from "../services/config.js";
 import optionService from "../services/options.js";
 import log from "../services/log.js";
-import { isDev, isElectron } from "../services/utils.js";
+import { isDev, isElectron, isWindows11 } from "../services/utils.js";
 import protectedSessionService from "../services/protected_session.js";
 import packageJson from "../../package.json" with { type: "json" };
 import assetPath from "../services/asset_path.js";
@@ -31,6 +31,7 @@ function index(req: Request, res: Response) {
 
     const theme = options.theme;
     const themeNote = attributeService.getNoteWithLabel("appTheme", theme);
+    const nativeTitleBarVisible = options.nativeTitleBarVisible === "true";
 
     res.render(view, {
         device: view,
@@ -41,8 +42,8 @@ function index(req: Request, res: Response) {
         layoutOrientation: options.layoutOrientation,
         platform: process.platform,
         isElectron,
-        hasNativeTitleBar: isElectron && options.nativeTitleBarVisible === "true",
-        hasBackgroundEffects: isElectron && options.backgroundEffects === "true",
+        hasNativeTitleBar: isElectron && nativeTitleBarVisible,
+        hasBackgroundEffects: isElectron && isWindows11 && !nativeTitleBarVisible && options.backgroundEffects === "true",
         mainFontSize: parseInt(options.mainFontSize),
         treeFontSize: parseInt(options.treeFontSize),
         detailFontSize: parseInt(options.detailFontSize),

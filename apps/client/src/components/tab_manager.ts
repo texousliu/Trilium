@@ -433,6 +433,9 @@ export default class TabManager extends Component {
                 $autocompleteEl.autocomplete("close");
             }
 
+            // close dangling tooltips
+            $("body > div.tooltip").remove();
+
             const noteContextsToRemove = noteContextToRemove.getSubContexts();
             const ntxIdsToRemove = noteContextsToRemove.map((nc) => nc.ntxId);
 
@@ -600,18 +603,18 @@ export default class TabManager extends Component {
     }
 
     async moveTabToNewWindowCommand({ ntxId }: { ntxId: string }) {
-        const { notePath, hoistedNoteId } = this.getNoteContextById(ntxId);
+        const { notePath, hoistedNoteId, viewScope } = this.getNoteContextById(ntxId);
 
         const removed = await this.removeNoteContext(ntxId);
 
         if (removed) {
-            this.triggerCommand("openInWindow", { notePath, hoistedNoteId });
+            this.triggerCommand("openInWindow", { notePath, hoistedNoteId, viewScope });
         }
     }
 
     async copyTabToNewWindowCommand({ ntxId }: { ntxId: string }) {
-        const { notePath, hoistedNoteId } = this.getNoteContextById(ntxId);
-        this.triggerCommand("openInWindow", { notePath, hoistedNoteId });
+        const { notePath, hoistedNoteId, viewScope } = this.getNoteContextById(ntxId);
+        this.triggerCommand("openInWindow", { notePath, hoistedNoteId, viewScope });
     }
 
     async reopenLastTabCommand() {

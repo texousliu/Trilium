@@ -36,32 +36,23 @@ body.mobile {
 
 /* #region Mica */
 body.background-effects.platform-win32 {
-    --launcher-pane-horiz-border-color: rgba(0, 0, 0, 0.15);
-    --launcher-pane-horiz-background-color: rgba(255, 255, 255, 0.7);
-    --launcher-pane-vert-background-color: rgba(255, 255, 255, 0.055);
-    --tab-background-color: transparent;
-    --new-tab-button-background: transparent;
-    --active-tab-background-color: var(--launcher-pane-horiz-background-color);
     --background-material: tabbed;
-}
-
-@media (prefers-color-scheme: dark) {
-    body.background-effects.platform-win32 {
-        --launcher-pane-horiz-border-color: rgba(0, 0, 0, 0.5);
-        --launcher-pane-horiz-background-color: rgba(255, 255, 255, 0.09);
-    }
+    --launcher-pane-horiz-border-color: var(--launcher-pane-horiz-border-color-bgfx);
+    --launcher-pane-horiz-background-color: var(--launcher-pane-horiz-background-color-bgfx);
+    --launcher-pane-vert-background-color: var(--launcher-pane-vert-background-color-bgfx);
+    --tab-background-color: var(--window-background-color-bgfx);
+    --new-tab-button-background: var(--window-background-color-bgfx);
+    --active-tab-background-color: var(--launcher-pane-horiz-background-color);
 }
 
 body.background-effects.platform-win32.layout-vertical {
-    --left-pane-background-color: transparent;
-    --left-pane-item-hover-background: rgba(127, 127, 127, 0.05);
+    --left-pane-background-color: var(--window-background-color-bgfx);
     --background-material: mica;
 }
 
 body.background-effects.platform-win32,
-body.background-effects.platform-win32 #root-widget,
-body.background-effects.platform-win32 #launcher-pane .launcher-button {
-    background: transparent !important;
+body.background-effects.platform-win32 #root-widget {
+    background: var(--window-background-color-bgfx) !important;
 }
 
 body.background-effects.platform-win32.layout-horizontal #horizontal-main-container,
@@ -90,7 +81,7 @@ body.background-effects.zen #root-widget {
  * Gutter
  */
 
- .gutter {
+.gutter {
     background: var(--gutter-color) !important;
     transition: background 150ms ease-out;
 }
@@ -232,7 +223,7 @@ body.layout-horizontal > .horizontal {
 }
 
 #launcher-pane .launcher-button:focus,
-#launcher-pane .global-menu button:focus {
+#launcher-pane .global-menu :focus {
     outline: none;
 }
 
@@ -314,23 +305,10 @@ body.layout-horizontal > .horizontal {
 }
 
 /*
- * Global menu
- */
-
- .global-menu div.zoom-buttons a {
-    border: unset;
-}
-
-.global-menu div.zoom-buttons a.bx {
-    color: var(--menu-text-color) !important;
-}
-
-/*
  * Calendar
  */
 
  .calendar-dropdown-widget {
-    width: unset !important;
     padding: 12px;
     color: var(--calendar-color);
     user-select: none;
@@ -356,6 +334,21 @@ body.layout-horizontal > .horizontal {
 
 .calendar-dropdown-widget .calendar-header .calendar-month-selector .select-button {
     --select-arrow-svg: initial; /* Disable the dropdown arrow */
+}
+
+/* Week number column */
+.calendar-dropdown-widget .calendar-week-number {
+    transform: rotate(270deg);
+    justify-content: center;
+    padding: 0;
+    opacity: 0.5;
+    font-size: 1em;
+    font-weight: 700;
+    letter-spacing: .5pt;
+}
+
+.calendar-dropdown-widget .calendar-week-number::after {
+    display: none;
 }
 
 @media (max-width: 992px) {
@@ -572,29 +565,28 @@ div.quick-search .search-button.show {
     transition: background-color 100ms ease-out !important;
 }
 
+div.quick-search .dropdown-menu {
+    --quick-search-item-delimiter-color: transparent;
+    --menu-item-icon-vert-offset: -.065em;
+}
+
 /*
- * Quick search results
+ * TO FIX: The quick search results dropdown has a backdrop issue with the tree panel
+ * when background effects are enabled in Electron.
+ * As a temporary workaround, the backdrop and transparency are disabled for the
+ * vertical layout.
  */
+body.layout-vertical.background-effects div.quick-search .dropdown-menu {    
+    --menu-background-color: var(--menu-background-color-no-backdrop) !important;
+}
 
 /* Item */
 .quick-search .dropdown-menu *.dropdown-item {
     padding: 8px 12px !important;
 }
 
-/* Note icon */
-.quick-search .dropdown-menu .dropdown-item > .bx {
-    position: relative;
-    top: 1px;
-}
-
-/* Note title */
-.quick-search .dropdown-menu .dropdown-item > a {
-    color: var(--menu-text-color);
-}
-
-.quick-search .dropdown-menu .dropdown-item > a:hover {
-    --hover-item-background-color: transparent;
-    text-decoration: underline;
+.quick-search .quick-search-item-icon {
+    vertical-align: text-bottom;
 }
 
 /* Note path */
@@ -603,6 +595,24 @@ div.quick-search .search-button.show {
     opacity: 0.5;
     font-size: 0.75em;
     overflow: hidden;
+}
+
+/* Note content snippet */
+:root .quick-search .search-result-content {
+    background-color: var(--quick-search-result-content-background);
+    border-radius: 4px;
+}
+
+/* Highlighted search terms */
+:root .quick-search .search-result-title b,
+:root .quick-search .search-result-content b,
+:root .quick-search .search-result-attributes b {
+    color: var(--quick-search-result-highlight-color);
+    font-weight: 600;
+}
+
+.quick-search div.dropdown-divider {
+    margin: 8px 0;
 }
 
 /*
@@ -865,7 +875,10 @@ body.mobile .fancytree-node > span {
 }
 
 .tab-row-container .toggle-button {
-    margin: 6px 10px !important;
+    --icon-button-size: 30px;
+    --icon-button-icon-ratio: .6;
+
+    margin: 3px 6px auto 8px !important;
 }
 
 .tab-row-container {
@@ -874,6 +887,80 @@ body.mobile .fancytree-node > span {
 
 /* Apply a border to the tab bar that avoids the current tab but also allows a transparent active tab. */
 body.layout-horizontal .tab-row-container {
+    border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
+}
+
+body.electron.background-effects.layout-horizontal .tab-row-container {
+    border-bottom: unset !important;
+}
+
+body.electron.background-effects.layout-horizontal .note-tab-wrapper {
+    top: 1px;
+}
+
+body.electron.background-effects.layout-horizontal .tab-row-container .toggle-button {
+    position: relative;
+}
+
+body.electron.background-effects.layout-horizontal .tab-row-container .toggle-button:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -10px;
+    right: -10px;
+    top: 32px;
+    height: 1px;
+    border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
+}
+
+body.electron.background-effects.layout-horizontal .tab-row-container .tab-scroll-button-left,
+body.electron.background-effects.layout-horizontal .tab-row-container .tab-scroll-button-right {
+    position: relative;
+}
+
+body.electron.background-effects.layout-horizontal .tab-row-container .tab-scroll-button-left:after,
+body.electron.background-effects.layout-horizontal .tab-row-container .tab-scroll-button-right:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0px;
+    right: 0px;
+    height: 1px;
+    border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
+}
+
+body.electron.background-effects.layout-horizontal .tab-row-container .note-tab[active]:before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -32768px;
+    top: var(--tab-height);
+    right: calc(100% - 1px);
+    height: 1px;
+    border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
+}
+
+body.electron.background-effects.layout-horizontal .tab-row-container .note-tab[active]:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 100%;
+    top: var(--tab-height);
+    right: 0;
+    width: 100vw;
+    height: 1px;
+    border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
+}
+
+body.electron.background-effects.layout-horizontal .tab-row-container .note-new-tab:before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -4px;
+    top: calc(var(--tab-height), -1);
+    right: 0;
+    width: 100vw;
+    height: 1px;
     border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
 }
 
@@ -966,6 +1053,14 @@ body.layout-horizontal .tab-row-widget .note-tab .note-tab-wrapper {
 
 .tab-row-widget .note-tab:nth-child(1) {
     transform: translate3d(var(--tab-first-item-horiz-offset), 0, 0);
+}
+
+:root .tab-row-widget .note-tab .note-tab-icon {
+    padding-right: 5px; /* The gap between the icon and the title */
+}
+
+.tab-row-widget .note-tab[active] .note-tab-icon {
+    color: var(--active-tab-icon-color);
 }
 
 .tab-row-widget .note-tab .note-tab-title {
@@ -1092,16 +1187,17 @@ body.layout-vertical .tab-row-widget-is-sorting .note-tab.note-tab-is-dragging .
     /* will-change: opacity; -- causes some weird artifacts to the note menu in split view */
 }
 
+.split-note-container-widget > .gutter {
+    background: var(--root-background) !important;
+    transition: background 150ms ease-out;
+}
+
 /*
  * Ribbon & note header
  */
 
 .ribbon-container {
     margin-bottom: 0 !important;
-}
-
-.note-split:not(.hidden-ext) + .note-split:not(.hidden-ext) {
-    border-left: 4px solid var(--root-background);
 }
 
 @keyframes note-entrance {
@@ -1314,6 +1410,13 @@ div.promoted-attribute-cell .multiplicity:has(span) {
     margin-left: 8px;
     margin-right: calc(var(--pa-card-padding-left) - var(--pa-card-padding-right));
     font-size: 0; /* Prevent whitespaces creating a gap between buttons */
+    display: flex;
+}
+
+div.promoted-attribute-cell .multiplicity:has(span) span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /*
@@ -1375,7 +1478,7 @@ div.floating-buttons-children .floating-button:active {
 }
 
 /* The first visible floating button */
-div.floating-buttons-children > *:nth-child(1 of .visible) {
+div.floating-buttons-children > *:first-child {
     --border-radius: var(--border-radius-size) 0 0 var(--border-radius-size);
     border-radius: var(--border-radius);
 }
@@ -1475,13 +1578,6 @@ div.floating-buttons-children .close-floating-buttons:has(.close-floating-button
 /* TODO: Restyle the path */
 .backlinks-widget .backlinks-items .note-path {
     padding-inline-start: 8px;
-}
-
-/* Copy image reference */
-
-.floating-buttons .copy-image-reference-button .hidden-image-copy {
-    /* Take out of the the hidden image from flexbox to prevent the layout being affected */
-    position: absolute;
 }
 
 /* Code, relation map buttons */

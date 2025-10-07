@@ -1,6 +1,8 @@
-import keyboardActionService from "../services/keyboard_actions.js";
+import { KeyboardActionNames } from "@triliumnext/commons";
+import keyboardActionService, { getActionSync } from "../services/keyboard_actions.js";
 import note_tooltip from "../services/note_tooltip.js";
 import utils from "../services/utils.js";
+import { should } from "vitest";
 
 export interface ContextMenuOptions<T> {
     x: number;
@@ -13,8 +15,13 @@ export interface ContextMenuOptions<T> {
     onHide?: () => void;
 }
 
-interface MenuSeparatorItem {
-    title: "----";
+export interface MenuSeparatorItem {
+    kind: "separator";
+}
+
+export interface MenuHeader {
+    title: string;
+    kind: "header";
 }
 
 export interface MenuItemBadge {
@@ -38,12 +45,13 @@ export interface MenuCommandItem<T> {
     handler?: MenuHandler<T>;
     items?: MenuItem<T>[] | null;
     shortcut?: string;
+    keyboardShortcut?: KeyboardActionNames;
     spellingSuggestion?: string;
     checked?: boolean;
     columns?: number;
 }
 
-export type MenuItem<T> = MenuCommandItem<T> | MenuSeparatorItem;
+export type MenuItem<T> = MenuCommandItem<T> | MenuSeparatorItem | MenuHeader;
 export type MenuHandler<T> = (item: MenuCommandItem<T>, e: JQuery.MouseDownEvent<HTMLElement, undefined, HTMLElement, HTMLElement>) => void;
 export type ContextMenuEvent = PointerEvent | MouseEvent | JQuery.ContextMenuEvent;
 
@@ -148,14 +156,51 @@ class ContextMenu {
             .addClass("show");
     }
 
-    addItems($parent: JQuery<HTMLElement>, items: MenuItem<any>[]) {
-        for (const item of items) {
+    addItems($parent: JQuery<HTMLElement>, items: MenuItem<any>[], multicolumn = false) {
+        let $group = $parent; // The current group or parent element to which items are being appended
+        let shouldStartNewGroup = false; // If true, the next item will start a new group
+        let shouldResetGroup = false; // If true, the next item will be the last one from the group
+
+        for (let index = 0; index < items.length; index++) {
+            const item = items[index];
             if (!item) {
                 continue;
             }
 
-            if (item.title === "----") {
-                $parent.append($("<div>").addClass("dropdown-divider"));
+            // If the current item is a header, start a new group. This group will contain the
+            // header and the next item that follows the header.
+            if ("kind" in item && item.kind === "header") {
+                if (multicolumn && !shouldResetGroup) {
+                    shouldStartNewGroup = true;
+                }
+            }
+
+            // If the next item is a separator, start a new group. This group will contain the
+            // current item, the separator, and the next item after the separator.
+            const nextItem = (index < items.length - 1) ? items[index + 1] : null;
+            if (multicolumn && nextItem && "kind" in nextItem && nextItem.kind === "separator") {
+                if (!shouldResetGroup) {
+                    shouldStartNewGroup = true;
+                } else {
+                    shouldResetGroup = true; // Continue the current group
+                }
+            }
+
+            // Create a new group to avoid column breaks before and after the seaparator / header.
+            // This is a workaround for Firefox not supporting break-before / break-after: avoid 
+            // for columns.
+            if (shouldStartNewGroup) {
+                $group = $("<div class='dropdown-no-break'>");
+                $parent.append($group);
+                shouldStartNewGroup = false;
+            }
+
+            if ("kind" in item && item.kind === "separator") {
+                $group.append($("<div>").addClass("dropdown-divider"));
+                shouldResetGroup = true; // End the group after the next item
+            } else if ("kind" in item && item.kind === "header") {
+                $group.append($("<h6>").addClass("dropdown-header").text(item.title));
+                shouldResetGroup = true;
             } else {
                 const $icon = $("<span>");
 
@@ -185,7 +230,23 @@ class ContextMenu {
                     }
                 }
 
-                if ("shortcut" in item && item.shortcut) {
+                if ("keyboardShortcut" in item && item.keyboardShortcut) {
+                    const shortcuts = getActionSync(item.keyboardShortcut).effectiveShortcuts;
+                    if (shortcuts) {
+                        const allShortcuts: string[] = [];
+                        for (const effectiveShortcut of shortcuts) {
+                            allShortcuts.push(effectiveShortcut.split("+")
+                                .map(key => `<kbd>${key}</kbd>`)
+                                .join("+"));
+                        }
+
+                        if (allShortcuts.length) {
+                            const container = $("<span>").addClass("keyboard-shortcut");
+                            container.append($(allShortcuts.join(",")));
+                            $link.append(container);
+                        }
+                    }
+                } else if ("shortcut" in item && item.shortcut) {
                     $link.append($("<kbd>").text(item.shortcut));
                 }
 
@@ -241,16 +302,24 @@ class ContextMenu {
                     $link.addClass("dropdown-toggle");
 
                     const $subMenu = $("<ul>").addClass("dropdown-menu");
-                    if (!this.isMobile && item.columns) {
-                        $subMenu.css("column-count", item.columns);
+                    const hasColumns = !!item.columns && item.columns > 1;
+                    if (!this.isMobile && hasColumns) {
+                        $subMenu.css("column-count", item.columns!);
                     }
 
-                    this.addItems($subMenu, item.items);
+                    this.addItems($subMenu, item.items, hasColumns);
 
                     $item.append($subMenu);
                 }
 
-                $parent.append($item);
+                $group.append($item);
+                
+                // After adding a menu item, if the previous item was a separator or header,
+                // reset the group so that the next item will be appended directly to the parent.
+                if (shouldResetGroup) {
+                    $group = $parent;
+                    shouldResetGroup = false;
+                };
             }
         }
     }

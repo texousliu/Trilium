@@ -12,12 +12,12 @@ import syncOptions from "../../services/sync_options.js";
 import utils, { safeExtractMessageAndStackFromError } from "../../services/utils.js";
 import ws from "../../services/ws.js";
 import type { Request } from "express";
-import type { EntityChange } from "../../services/entity_changes_interface.js";
 import ValidationError from "../../errors/validation_error.js";
 import consistencyChecksService from "../../services/consistency_checks.js";
 import { t } from "i18next";
+import { SyncTestResponse, type EntityChange } from "@triliumnext/commons";
 
-async function testSync() {
+async function testSync(): Promise<SyncTestResponse> {
     try {
         if (!syncOptions.isSyncSetup()) {
             return { success: false, message: t("test_sync.not-configured") };
@@ -34,7 +34,7 @@ async function testSync() {
         const [errMessage] = safeExtractMessageAndStackFromError(e);
         return {
             success: false,
-            error: errMessage
+            message: errMessage
         };
     }
 }
