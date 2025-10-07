@@ -694,8 +694,8 @@ importers:
         specifier: 0.6.0
         version: 0.6.0
       openai:
-        specifier: 6.1.0
-        version: 6.1.0(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@6.0.5))(zod@3.24.4)
+        specifier: 6.2.0
+        version: 6.2.0(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@6.0.5))(zod@3.24.4)
       rand-token:
         specifier: 1.0.1
         version: 1.0.1
@@ -10096,8 +10096,8 @@ packages:
     resolution: {integrity: sha512-YgBpdJHPyQ2UE5x+hlSXcnejzAvD0b22U2OuAP+8OnlJT+PjWPxtgmGqKKc+RgTM63U9gN0YzrYc71R2WT/hTA==}
     engines: {node: '>=18'}
 
-  openai@6.1.0:
-    resolution: {integrity: sha512-5sqb1wK67HoVgGlsPwcH2bUbkg66nnoIYKoyV9zi5pZPqh7EWlmSrSDjAh4O5jaIg/0rIlcDKBtWvZBuacmGZg==}
+  openai@6.2.0:
+    resolution: {integrity: sha512-qqjzHls7F5xkXNGy9P1Ei1rorI5LWupUUFWP66zPU8FlZbiITX8SFcHMKNZg/NATJ0LpIZcMUFxSwQmdeQPwSw==}
     hasBin: true
     peerDependencies:
       ws: ^8.18.0
@@ -14905,6 +14905,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.0.0
       ckeditor5: 47.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-editor-multi-root@47.0.0':
     dependencies:
@@ -14927,6 +14929,8 @@ snapshots:
       '@ckeditor/ckeditor5-table': 47.0.0
       '@ckeditor/ckeditor5-utils': 47.0.0
       ckeditor5: 47.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-emoji@47.0.0':
     dependencies:
@@ -15098,6 +15102,8 @@ snapshots:
       '@ckeditor/ckeditor5-widget': 47.0.0
       ckeditor5: 47.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-icons@47.0.0': {}
 
@@ -15484,8 +15490,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.0.0
       '@ckeditor/ckeditor5-utils': 47.0.0
       ckeditor5: 47.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-special-characters@47.0.0':
     dependencies:
@@ -25917,7 +25921,7 @@ snapshots:
       is-inside-container: 1.0.0
       wsl-utils: 0.1.0
 
-  openai@6.1.0(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@6.0.5))(zod@3.24.4):
+  openai@6.2.0(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@6.0.5))(zod@3.24.4):
     optionalDependencies:
       ws: 8.18.3(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       zod: 3.24.4
