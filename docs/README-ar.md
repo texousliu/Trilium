@@ -1,4 +1,4 @@
-# Trilium Notes
+# ملاحظات تريليوم
 
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
 ![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran)\
@@ -22,12 +22,12 @@ quick overview:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
-## 📚 Documentation
+## 📚توثيق
 
 **Visit our comprehensive documentation at
 [docs.triliumnotes.org](https://docs.triliumnotes.org/)**
 
-Our documentation is available in multiple formats:
+يتوفر التوثيق لدينا بصيغ متعددة:
 - **Online Documentation**: Browse the full documentation at
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
 - **In-App Help**: Press `F1` within Trilium to access the same documentation
@@ -35,8 +35,8 @@ Our documentation is available in multiple formats:
 - **GitHub**: Navigate through the [User
   Guide](./docs/User%20Guide/User%20Guide/) in this repository
 
-### Quick Links
-- [Getting Started Guide](https://docs.triliumnotes.org/)
+### روابط سريعة
+- [دليل البدء السريع](https://docs.triliumnotes.org/)
 - [Installation
   Instructions](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
 - [Docker
@@ -48,7 +48,7 @@ Our documentation is available in multiple formats:
 - [Patterns of Personal Knowledge
   Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
-## 🎁 Features
+## 🎁الميزات
 
 * Notes can be arranged into arbitrarily deep tree. Single note can be placed
   into multiple places in the tree (see
@@ -135,7 +135,7 @@ compatible with the latest zadam/trilium version of
 versions of TriliumNext/Trilium have their sync versions incremented which
 prevents direct migration.
 
-## 💬 Discuss with us
+## تحدث معنا
 
 Feel free to join our official conversations. We would love to hear what
 features, suggestions, or issues you may have!
