@@ -47,7 +47,7 @@ const TPL = /*html*/`\
             position: sticky;
             top: 0;
             inset-inline-start: 0;
-            right: 0;
+            inset-inline-end: 0;
             background: var(--modal-background-color);
             z-index: 998;
         }

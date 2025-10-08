@@ -96,7 +96,7 @@ const TPL = /*html*/`
         position: absolute;
         top: 10px;
         inset-inline-start: 0px;
-        right: 0;
+        inset-inline-end: 0;
         height: 2px;
         background: rgba(0, 0, 0, 0.5);
         transform: rotate(45deg);
