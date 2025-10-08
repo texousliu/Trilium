@@ -29,13 +29,13 @@ const TPL = /*html*/`<div class="toc-widget">
             contain: none;
             overflow: auto;
             position: relative;
-            padding-left:0px !important;
+            padding-inline-start:0px !important;
         }
 
         .toc ol {
             position: relative;
             overflow: hidden;
-            padding-left: 0px;
+            padding-inline-start: 0px;
             transition: max-height 0.3s ease;
         }
 
@@ -56,7 +56,7 @@ const TPL = /*html*/`<div class="toc-widget">
             position: relative;
             list-style: none;
             align-items: center;
-            padding-left: 7px;
+            padding-inline-start: 7px;
             cursor: pointer;
             text-align: justify;
             word-wrap: break-word;
@@ -84,7 +84,7 @@ const TPL = /*html*/`<div class="toc-widget">
         }
 
         .toc li {
-            padding-left: calc((var(--toc-depth-level) - 1) * 20px + 4px);
+            padding-inline-start: calc((var(--toc-depth-level) - 1) * 20px + 4px);
         }
 
         .toc li .collapse-button {

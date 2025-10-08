@@ -151,7 +151,7 @@
 
 .backlink-excerpt {
     border-left: 2px solid var(--main-border-color);
-    padding-left: 10px;
+    padding-inline-start: 10px;
     opacity: 80%;
     font-size: 90%;
 }

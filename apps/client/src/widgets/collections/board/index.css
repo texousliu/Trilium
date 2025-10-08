@@ -168,7 +168,7 @@
   right: 4px;
   color: var(--main-text-color);
   background-color: var(--main-background-color);
-  padding-left: 6px;
+  padding-inline-start: 6px;
 }
 
 .board-view-container .board-note.fade-in {

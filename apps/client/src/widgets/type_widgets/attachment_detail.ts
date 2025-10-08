@@ -11,7 +11,7 @@ const TPL = /*html*/`
 <div class="attachment-detail note-detail-printable">
     <style>
         .attachment-detail {
-            padding-left: 15px;
+            padding-inline-start: 15px;
             padding-right: 15px;
             height: 100%;
             display: flex;

@@ -36,7 +36,7 @@ const TPL = /*html*/`
         }
 
         .related-notes-list {
-            padding-left: 20px;
+            padding-inline-start: 20px;
             margin-top: 10px;
             margin-bottom: 10px;
         }

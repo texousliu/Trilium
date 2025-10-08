@@ -49,7 +49,7 @@
 }
 
 .ribbon-tab-title:first-of-type {
-    padding-left: 10px;
+    padding-inline-start: 10px;
 }
 
 .ribbon-tab-spacer {

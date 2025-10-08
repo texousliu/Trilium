@@ -492,7 +492,7 @@ button.ck.ck-button:is(.ck-button-action, .ck-button-save, .ck-button-cancel).ck
     /* Move the label above the text box regardless of the text box state */
     transform: translate(0, calc(-.2em - var(--ck-input-label-height))) !important;
     
-    padding-left: 0 !important;
+    padding-inline-start: 0 !important;
     background: transparent;
     font-size: .85em;
     font-weight: 600;

@@ -41,7 +41,7 @@ const TPL = /*html*/`
     }
 
     body.mobile .note-detail-readonly-text {
-        padding-left: 10px;
+        padding-inline-start: 10px;
     }
 
     .note-detail-readonly-text p:first-child, .note-detail-readonly-text::before {

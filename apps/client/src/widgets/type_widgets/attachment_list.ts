@@ -9,7 +9,7 @@ const TPL = /*html*/`
 <div class="attachment-list note-detail-printable">
     <style>
         .attachment-list {
-            padding-left: 15px;
+            padding-inline-start: 15px;
             padding-right: 15px;
         }
 

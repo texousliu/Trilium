@@ -462,7 +462,7 @@ optgroup {
         --box-label-gap: 0.5em;
 
         position: relative;
-        padding-left: calc(var(--box-size) + var(--box-label-gap)) !important;
+        padding-inline-start: calc(var(--box-size) + var(--box-label-gap)) !important;
         user-select: none;
     }
 

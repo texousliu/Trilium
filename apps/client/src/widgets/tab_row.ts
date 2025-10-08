@@ -155,7 +155,7 @@ const TAB_ROW_TPL = `
     }
 
     .tab-row-widget .note-tab[is-mini] .note-tab-wrapper {
-        padding-left: 2px;
+        padding-inline-start: 2px;
         padding-right: 2px;
     }
 
