@@ -33,7 +33,7 @@
 
 .tabulator .tabulator-header .tabulator-frozen.tabulator-frozen-left,
 .tabulator-row .tabulator-cell.tabulator-frozen.tabulator-frozen-left {
-    border-right-width: 1px;
+    border-inline-end-width: 1px;
 }
 
 .tabulator .tabulator-row.archived {

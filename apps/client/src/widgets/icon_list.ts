@@ -2090,8 +2090,8 @@ const icons: Icon[] = [
         term: ["keypad"]
     },
     {
-        name: "border-right",
-        slug: "border-right-regular",
+        name: "border-inline-end",
+        slug: "border-inline-end-regular",
         category_id: 111,
         type_of_icon: "REGULAR"
     },

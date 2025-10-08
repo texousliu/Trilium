@@ -504,7 +504,7 @@ body #context-menu-container .dropdown-item > span {
 
 body .cm-editor .cm-gutters {
     background-color: inherit !important;
-    border-right: none;
+    border-inline-end: none;
 }
 
 body .cm-editor .cm-placeholder {
@@ -671,7 +671,7 @@ pre > button.copy-button:active {
 
 .note-autocomplete-input {
     /* this is for seamless integration of "input clearer" button */
-    border-right: 0;
+    border-inline-end: 0;
 }
 
 table.promoted-attributes-in-tooltip {
@@ -707,7 +707,7 @@ table.promoted-attributes-in-tooltip th {
     border-inline-start-color: var(--main-border-color) !important;
 }
 .bs-tooltip-right .tooltip-arrow::before {
-    border-right-color: var(--main-border-color) !important;
+    border-inline-end-color: var(--main-border-color) !important;
 }
 
 .bs-tooltip-bottom .tooltip-arrow::after {
@@ -720,7 +720,7 @@ table.promoted-attributes-in-tooltip th {
     border-inline-start-color: var(--tooltip-background-color) !important;
 }
 .bs-tooltip-right .tooltip-arrow::after {
-    border-right-color: var(--tooltip-background-color) !important;
+    border-inline-end-color: var(--tooltip-background-color) !important;
 }
 
 .bs-tooltip-auto[data-popper-placement^="left"] .tooltip-arrow::before,
@@ -741,7 +741,7 @@ table.promoted-attributes-in-tooltip th {
 .bs-tooltip-right .tooltip-arrow::before {
     right: -1px;
     border-width: 0.4rem 0.4rem 0.4rem 0;
-    border-right-color: var(--main-border-color) !important;
+    border-inline-end-color: var(--main-border-color) !important;
 }
 
 .bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow::before,
@@ -769,7 +769,7 @@ table.promoted-attributes-in-tooltip th {
 .bs-tooltip-right .tooltip-arrow::after {
     right: -1px;
     border-width: 0.4rem 0.4rem 0.4rem 0;
-    border-right-color: var(--tooltip-background-color) !important;
+    border-inline-end-color: var(--tooltip-background-color) !important;
 }
 
 .bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow::after,

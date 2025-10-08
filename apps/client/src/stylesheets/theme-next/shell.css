@@ -69,7 +69,7 @@ body.background-effects.platform-win32.layout-vertical #vertical-main-container 
 
 /* Add a border to the vertical launch bar if collapsed. */
 body.layout-vertical #horizontal-main-container.left-pane-hidden #launcher-pane.vertical {
-    border-right: 2px solid var(--left-pane-collapsed-border-color);
+    border-inline-end: 2px solid var(--left-pane-collapsed-border-color);
 }
 
 body.background-effects.zen #root-widget {
@@ -699,7 +699,7 @@ body.mobile .fancytree-node > span {
     body.mobile:not(.force-fixed-tree) #mobile-sidebar-wrapper {
         border-top-right-radius: 12px;
         border-bottom-right-radius: 12px;
-        border-right: 1px solid var(--subtle-border-color);
+        border-inline-end: 1px solid var(--subtle-border-color);
     }
 }
 
