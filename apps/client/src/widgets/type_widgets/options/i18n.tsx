@@ -24,9 +24,13 @@ export default function InternationalizationOptions() {
 
 function LocalizationOptions() {
     const { uiLocales, formattingLocales: contentLocales } = useMemo(() => {
-        const allLocales = getAvailableLocales();        
+        const allLocales = getAvailableLocales();
         return {
-            uiLocales: allLocales.filter(locale => !locale.contentOnly),
+            uiLocales: allLocales.filter(locale => {
+                if (locale.contentOnly) return false;
+                if (locale.devOnly && !glob.isDev) return false;
+                return true;
+            }),
             formattingLocales: allLocales.filter(locale => locale.electronLocale),
         }
     }, []);
@@ -53,7 +57,7 @@ function LocaleSelector({ id, locales, currentValue, onChange }: { id?: string; 
     return <FormSelect
         id={id}
         values={locales}
-        keyProperty="id" titleProperty="name"                
+        keyProperty="id" titleProperty="name"
         currentValue={currentValue} onChange={onChange}
     />;
 }
@@ -74,7 +78,7 @@ function DateSettings() {
                     ]}
                     currentValue={firstDayOfWeek} onChange={setFirstDayOfWeek}
                 />
-            </OptionsRow>  
+            </OptionsRow>
 
             <OptionsRow name="first-week-of-year" label={t("i18n.first-week-of-the-year")}>
                 <FormRadioGroup
@@ -93,7 +97,7 @@ function DateSettings() {
                     keyProperty="days"
                     currentValue={minDaysInFirstWeek} onChange={setMinDaysInFirstWeek}
                     values={Array.from(
-                        { length: 7 }, 
+                        { length: 7 },
                         (_, i) => ({ days: String(i + 1) }))} />
             </OptionsRow>}
 
