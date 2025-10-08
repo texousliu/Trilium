@@ -85,14 +85,14 @@ export default class SidebarContainer extends FlexContainer<BasicWidget> {
             }
         } else if (this.dragState === DRAG_STATE_DRAGGING) {
             const width = this.sidebarEl.offsetWidth;
-            const translatePercentage = Math.min(0, Math.max(this.currentTranslate + (deltaX / width) * 100, -100));
-            this.translatePercentage = translatePercentage;
+            let translatePercentage = Math.min(0, Math.max(this.currentTranslate + (deltaX / width) * 100, -100));
+            const backdropOpacity = Math.max(0, 1 + translatePercentage / 100);
             if (glob.isRtl) {
-                this.sidebarEl.style.transform = `translateX(${-translatePercentage}%)`;
-            } else {
-                this.sidebarEl.style.transform = `translateX(${translatePercentage}%)`;
+                translatePercentage *= -1;
             }
-            this.backdropEl.style.opacity = String(Math.max(0, 1 + translatePercentage / 100));
+            this.translatePercentage = translatePercentage;
+            this.sidebarEl.style.transform = `translateX(${translatePercentage}%)`;
+            this.backdropEl.style.opacity = String(backdropOpacity);
         }
 
         // Consume the event to prevent the user from doing the back to previous page gesture on iOS.
