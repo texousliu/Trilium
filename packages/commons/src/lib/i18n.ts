@@ -23,6 +23,13 @@ const UNSORTED_LOCALES: Locale[] = [
     { id: "tw", name: "繁體中文", electronLocale: "zh_TW" },
     { id: "uk", name: "Українська", electronLocale: "uk" },
 
+    /**
+     * Development-only languages.
+     *
+     * These are only displayed while in dev mode, to test some language particularities (such as RTL) more easily.
+     */
+    { id: "en_rtl", name: "English (right-to-left) [dev]", electronLocale: "en", rtl: true },
+
     /*
      * Right to left languages
      *

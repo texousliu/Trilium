@@ -12,6 +12,7 @@ export const DAYJS_LOADER: Record<LOCALE_IDS, () => Promise<typeof import("dayjs
     "cn": () => import("dayjs/locale/zh-cn.js"),
     "de": () => import("dayjs/locale/de.js"),
     "en": () => import("dayjs/locale/en.js"),
+    "en_rtl": () => import("dayjs/locale/en.js"),
     "es": () => import("dayjs/locale/es.js"),
     "fa": () => import("dayjs/locale/fa.js"),
     "fr": () => import("dayjs/locale/fr.js"),

@@ -74,7 +74,8 @@ export const LOCALE_MAPPINGS: Record<LOCALE_IDS, (() => Promise<{ default: Local
     pt: () => import("@fullcalendar/core/locales/pt"),
     "pt_br": () => import("@fullcalendar/core/locales/pt-br"),
     uk: () => import("@fullcalendar/core/locales/uk"),
-    en: null
+    en: null,
+    "en_rtl": null,
 };
 
 export default function CalendarView({ note, noteIds }: ViewModeProps<CalendarViewData>) {
