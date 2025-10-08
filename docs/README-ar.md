@@ -302,7 +302,7 @@ Consider supporting the main developer
 
 - [GitHub Sponsors](https://github.com/sponsors/eliandoran)
 - [PayPal](https://paypal.me/eliandoran)
-- ][Buy Me a Coffee](https://buymeacoffee.com/eliandoran)
+- [Buy Me a Coffee](https://buymeacoffee.com/eliandoran)
 
 ## 🔑 License
 
