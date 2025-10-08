@@ -19,7 +19,7 @@
 }
 
 .chat-message.user-message {
-    margin-left: auto;
+    margin-inline-start: auto;
 }
 
 .chat-message.assistant-message {

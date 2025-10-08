@@ -174,7 +174,7 @@ textarea,
 /* Add a gap between consecutive radios / check boxes */
 label.tn-radio + label.tn-radio,
 label.tn-checkbox + label.tn-checkbox {
-    margin-left: 12px;
+    margin-inline-start: 12px;
 }
 
 label.tn-radio input[type="radio"],
@@ -226,7 +226,7 @@ samp {
 .badge {
     --bs-badge-color: var(--muted-text-color);
 
-    margin-left: 8px;
+    margin-inline-start: 8px;
     background: var(--accented-background-color);
 }
 
@@ -338,7 +338,7 @@ button kbd {
 }
 
 .ui-menu kbd {
-    margin-left: 30px;
+    margin-inline-start: 30px;
     float: right;
 }
 
@@ -392,7 +392,7 @@ body.desktop .tabulator-popup-container {
 }
 
 .dropend .dropdown-toggle::after {
-    margin-left: 0.5em;
+    margin-inline-start: 0.5em;
     color: var(--muted-text-color);
 }
 
@@ -403,7 +403,7 @@ body.desktop .tabulator-popup-container {
 
 .dropdown-menu .disabled .disabled-tooltip {
     pointer-events: all;
-    margin-left: 8px;
+    margin-inline-start: 8px;
     font-size: 0.5em;
     color: var(--disabled-tooltip-icon-color);
     cursor: help;
@@ -1033,7 +1033,7 @@ svg.ck-icon .note-icon {
     counter-increment: footnote-counter;
     display: flex;
     list-style: none;
-    margin-left: 0.5em;
+    margin-inline-start: 0.5em;
 }
 
 .ck-content .footnote-item > * {
@@ -1414,7 +1414,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 
 .ck.ck-slash-command-button__text-part,
 .ck.ck-template-form__text-part {
-    margin-left: 0.5em;
+    margin-inline-start: 0.5em;
     line-height: 1.2em !important;
 }
 
@@ -1748,7 +1748,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     display: flex;
     flex-shrink: 0;
     flex-direction: column;
-    margin-left: 10px;
+    margin-inline-start: 10px;
     margin-right: 5px;
 }
 
@@ -1800,7 +1800,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 }
 
 .note-split {
-    margin-left: auto;
+    margin-inline-start: auto;
     margin-right: auto;
 }
 
@@ -1858,7 +1858,7 @@ textarea {
 
 .attachment-help-button {
     display: inline-block;
-    margin-left: 10px;
+    margin-inline-start: 10px;
     vertical-align: middle;
     font-size: 1em;
 }

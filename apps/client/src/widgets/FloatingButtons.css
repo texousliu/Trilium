@@ -74,7 +74,7 @@
 
 .show-floating-buttons {
     /* display: none;*/
-    margin-left: 5px !important;
+    margin-inline-start: 5px !important;
 }
 
 .show-floating-buttons-button {
@@ -97,7 +97,7 @@
 
 /* #region Close floating buttons */
 .close-floating-buttons {
-    margin-left: 5px !important;
+    margin-inline-start: 5px !important;
 }
 
 .close-floating-buttons:first-child {

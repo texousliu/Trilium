@@ -45,7 +45,7 @@ const TPL = /*html*/`
     }
 
     .promoted-attribute-cell div.input-group {
-        margin-left: 10px;
+        margin-inline-start: 10px;
         display: flex;
         min-height: 40px;
     }

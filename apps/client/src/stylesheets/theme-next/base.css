@@ -211,7 +211,7 @@ html body .dropdown-item[disabled] {
 
 .dropdown-item span.keyboard-shortcut {
     color: var(--menu-item-keyboard-shortcut-color) !important;
-    margin-left: 16px;
+    margin-inline-start: 16px;
 }
 
 .dropdown-divider {

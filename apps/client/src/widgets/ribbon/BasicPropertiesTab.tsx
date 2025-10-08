@@ -353,7 +353,7 @@ function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
                 >{t("note_language.configure-languages")}</FormListItem>
             </Dropdown>
 
-            <HelpButton helpPage="B0lcI9xz1r8K" style={{ marginLeft: "4px" }} />
+            <HelpButton helpPage="B0lcI9xz1r8K" style={{ marginInlineStart: "4px" }} />
 
             <Modal
                 className="content-languages-modal"

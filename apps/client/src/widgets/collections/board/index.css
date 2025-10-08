@@ -93,7 +93,7 @@
 
 .board-view-container .board-column .edit-icon {
   opacity: 0;
-  margin-left: 0.5em;
+  margin-inline-start: 0.5em;
   transition: opacity 0.2s ease;
   color: var(--muted-text-color);
   cursor: pointer;

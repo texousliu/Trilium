@@ -68,7 +68,7 @@ const FANCYTREE_CSS = `
 
 .fancytree-title {
     font-size: 1.5em;
-    margin-left: 0.6em !important;
+    margin-inline-start: 0.6em !important;
 }
 
 .fancytree-node {

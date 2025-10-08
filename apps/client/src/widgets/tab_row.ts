@@ -172,7 +172,7 @@ const TAB_ROW_TPL = `
     }
 
     .tab-row-widget .note-tab[is-small] .note-tab-title {
-        margin-left: 0;
+        margin-inline-start: 0;
     }
 
     .tab-row-widget .note-tab .note-tab-drag-handle {
@@ -240,13 +240,13 @@ const TAB_ROW_TPL = `
     }
 
     .tab-row-widget .note-tab[is-smaller] .note-tab-close {
-        margin-left: auto;
+        margin-inline-start: auto;
     }
     .tab-row-widget .note-tab[is-mini]:not([active]) .note-tab-close {
         display: none;
     }
     .tab-row-widget .note-tab[is-mini][active] .note-tab-close {
-        margin-left: auto;
+        margin-inline-start: auto;
         margin-right: auto;
     }
     @-moz-keyframes note-tab-was-just-added {

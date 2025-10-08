@@ -1101,7 +1101,7 @@ body.layout-vertical .tab-row-widget-is-sorting .note-tab.note-tab-is-dragging .
 
 .tab-row-widget .note-new-tab {
     position: relative;
-    margin-left: 3px;
+    margin-inline-start: 3px;
     color: transparent; /* Prevent the original "+" from being displayed */
 }
 
@@ -1225,7 +1225,7 @@ body.mobile .note-title {
 }
 
 .title-row > *:nth-child(2) {
-    margin-left: 0;
+    margin-inline-start: 0;
 }
 
 .title-row {
@@ -1407,7 +1407,7 @@ div.promoted-attribute-cell.promoted-attribute-label-boolean > div:first-of-type
 div.promoted-attribute-cell .multiplicity:has(span) {
     --icon-button-size: 24px;
 
-    margin-left: 8px;
+    margin-inline-start: 8px;
     margin-right: calc(var(--pa-card-padding-left) - var(--pa-card-padding-right));
     font-size: 0; /* Prevent whitespaces creating a gap between buttons */
     display: flex;
@@ -1547,7 +1547,7 @@ div.floating-buttons-children .close-floating-buttons {
 }
 
 div.floating-buttons-children .close-floating-buttons {
-    margin-left: 0 !important;
+    margin-inline-start: 0 !important;
     background: var(--floating-button-hide-button-background);
     color: var(--floating-button-hide-button-color);
 }
@@ -1642,7 +1642,7 @@ div.find-replace-widget div.find-widget-found-wrapper > span {
 }
 
 .find-replace-widget .form-check .form-check-input {
-    margin-left: 0;
+    margin-inline-start: 0;
 }
 
 /* Narrow version */
@@ -1806,7 +1806,7 @@ div.find-replace-widget div.find-widget-found-wrapper > span {
 }
 
 .excalidraw .dropdown-menu .dropdown-menu-container > div:not([class]):not(:last-child) {
-    margin-left: calc(var(--padding) * var(--space-factor) * -1) !important;
+    margin-inline-start: calc(var(--padding) * var(--space-factor) * -1) !important;
     margin-right: calc(var(--padding) * var(--space-factor) * -1) !important;
 }
 

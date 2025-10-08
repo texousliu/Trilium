@@ -71,7 +71,7 @@ button.btn.btn-primary kbd,
 button.btn.btn-secondary kbd,
 button.btn.btn-sm kbd,
 button.btn.btn-success kbd {
-    margin-left: 0.5em;
+    margin-inline-start: 0.5em;
     background: var(--cmd-button-keyboard-shortcut-background);
     color: var(--cmd-button-keyboard-shortcut-color);
     font-size: 0.6em;
@@ -102,7 +102,7 @@ button.btn.btn-success kbd {
 }
 
 .btn-group .tn-tool-button + .tn-tool-button {
-    margin-left: 4px !important;
+    margin-inline-start: 4px !important;
 }
 
 /* The "x" icon button */

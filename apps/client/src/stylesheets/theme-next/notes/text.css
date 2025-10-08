@@ -210,7 +210,7 @@
 /* Separator */
 :root .ck .ck-list__separator {
     margin: .5em 0;
-    margin-left: calc(0px - var(--ck-editor-popup-padding));
+    margin-inline-start: calc(0px - var(--ck-editor-popup-padding));
     width: calc(100% + (var(--ck-editor-popup-padding) * 2));
     background: var(--menu-item-delimiter-color);
 }

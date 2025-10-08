@@ -67,7 +67,7 @@
 }
 
 .tabulator div.tabulator-header .tabulator-frozen.tabulator-frozen-left {
-    margin-left: var(--cell-editing-border-width);
+    margin-inline-start: var(--cell-editing-border-width);
 }
 
 .tabulator div.tabulator-header .tabulator-col,

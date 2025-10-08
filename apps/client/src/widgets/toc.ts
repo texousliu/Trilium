@@ -103,12 +103,12 @@ const TPL = /*html*/`<div class="toc-widget">
         }
 
         .toc li .item-content {
-            margin-left: 25px;
+            margin-inline-start: 25px;
             flex: 1;
         }
 
         .toc li .collapse-button + .item-content {
-            margin-left: 4px;
+            margin-inline-start: 4px;
         }
 
         .toc li:hover {
