@@ -62,6 +62,10 @@ body[dir=rtl] .switch-widget .switch-button:after {
                 background 100ms ease-in;
 }
 
+body[dir=rtl] .switch-widget .switch-button.on:after {
+    --x: calc((var(--switch-track-width) - var(--switch-thumb-width) - var(--y)) * -1);
+}
+
 
 .switch-widget .switch-button input[type="checkbox"] {
     /* A hidden check box for accesibility purposes */
