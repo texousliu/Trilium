@@ -7,7 +7,7 @@
 .show-floating-buttons {
     position: absolute;
     top: var(--floating-buttons-vert-offset, 10px);
-    right: var(--floating-buttons-horiz-offset, 10px);
+    inset-inline-end: var(--floating-buttons-horiz-offset, 10px);
     display: flex;
     flex-direction: row;
     z-index: 100;
@@ -15,7 +15,7 @@
 
 .note-split.rtl .floating-buttons-children,
 .note-split.rtl .show-floating-buttons {
-    right: unset;
+    inset-inline-end: unset;
     inset-inline-end: 10px;
 }
 
@@ -140,7 +140,7 @@
     z-index: 10;
     position: absolute;
     top: 50px;
-    right: 10px;
+    inset-inline-end: 10px;
     width: 400px;
     border-radius: 10px;
     background-color: var(--accented-background-color);

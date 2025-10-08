@@ -117,7 +117,7 @@
     content: "";
     position: absolute;
     top: var(--negative-padding);
-    right: var(--negative-padding);
+    inset-inline-end: var(--negative-padding);
     bottom: var(--negative-padding);
     inset-inline-start: var(--negative-padding);
     border-radius: var(--dropdown-border-radius);
@@ -234,7 +234,7 @@
     top: 0;
     bottom: var(--negative-padding);
     inset-inline-start: var(--negative-padding);
-    right: var(--negative-padding);
+    inset-inline-end: var(--negative-padding);
     border-top: 1px solid var(--ck-editor-popup-border-color);
     background: var(--menu-section-background-color);
 }
@@ -620,7 +620,7 @@ html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
 
 .ck-content blockquote:after {
     content: "”";
-    right: 0.35em;
+    inset-inline-end: 0.35em;
 }
 
 .ck-content h2,

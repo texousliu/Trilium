@@ -153,7 +153,7 @@
 .board-view-container .board-note > .edit-icon {
   position: absolute;
   top: 8px;
-  right: 4px;
+  inset-inline-end: 4px;
   padding: 2px;
   background-color: var(--main-background-color);
 }
@@ -165,7 +165,7 @@
 .board-view-container .board-note:hover > .edit-icon {
   position: absolute;
   top: 8px;
-  right: 4px;
+  inset-inline-end: 4px;
   color: var(--main-text-color);
   background-color: var(--main-background-color);
   padding-inline-start: 6px;

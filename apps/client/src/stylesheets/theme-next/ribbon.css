@@ -142,7 +142,7 @@ ul.editability-dropdown li.dropdown-item > div {
 }
 
 .attribute-list .save-attributes-button {
-    right: 30px;
+    inset-inline-end: 30px;
 }
 
 /* Note path in attribute detail dialog */

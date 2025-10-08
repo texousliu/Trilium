@@ -121,7 +121,7 @@ body.desktop .dropdown-menu::before,
     position: absolute;
     top: 0;
     inset-inline-start: 0;
-    right: 0;
+    inset-inline-end: 0;
     bottom: 0;
     z-index: -1;
 }
@@ -225,7 +225,7 @@ html body .dropdown-item[disabled] {
     content: "";
     top: -1px;
     inset-inline-start: calc(0px - var(--menu-padding-size));
-    right: calc(0px - var(--menu-padding-size));
+    inset-inline-end: calc(0px - var(--menu-padding-size));
     border-top: 1px solid var(--menu-item-delimiter-color);
 }
 
@@ -237,7 +237,7 @@ html body .dropdown-item[disabled] {
     align-items: center;
     justify-content: center;
     top: 0;
-    right: 0;
+    inset-inline-end: 0;
     margin: unset !important;
     border: unset !important;
     padding: 0 4px;
@@ -265,7 +265,7 @@ html body .dropdown-item[disabled] {
     position: absolute;
     bottom: 8px;
     inset-inline-start: calc(0px - var(--menu-padding-size));
-    right: calc(0px - var(--menu-padding-size));
+    inset-inline-end: calc(0px - var(--menu-padding-size));
     border-top: 1px solid var(--menu-item-delimiter-color);
 }
 

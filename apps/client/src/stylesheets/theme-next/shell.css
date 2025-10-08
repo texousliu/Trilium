@@ -284,7 +284,7 @@ body.layout-horizontal > .horizontal {
 }
 
 #launcher-pane.horizontal .global-menu-button .global-menu-button-update-available {
-    right: -23px;
+    inset-inline-end: -23px;
     bottom: -22px;
     transform: scale(0.85);
 }
@@ -400,7 +400,7 @@ body.layout-horizontal > .horizontal {
     content: "";
     position: absolute;
     top: var(--vertical-margin);
-    right: var(--horiz-margin);
+    inset-inline-end: var(--horiz-margin);
     bottom: var(--vertical-margin);
     inset-inline-start: var(--horiz-margin);
     border-radius: 6px;
@@ -498,7 +498,7 @@ div.quick-search::before {
     top: var(--padding-top);
     inset-inline-start: var(--padding-inline-start);
     bottom: var(--padding-bottom);
-    right: var(--padding-inline-end);
+    inset-inline-end: var(--padding-inline-end);
     z-index: 0;
     border: 2px solid transparent;
     border-radius: 6px;
@@ -660,7 +660,7 @@ body.layout-vertical.background-effects div.quick-search .dropdown-menu {
     top: var(--left-pane-item-selected-shadow-size);
     inset-inline-start: var(--left-pane-item-selected-shadow-size);
     bottom: var(--left-pane-item-selected-shadow-size);
-    right: var(--left-pane-item-selected-shadow-size);
+    inset-inline-end: var(--left-pane-item-selected-shadow-size);
     background: var(--left-pane-item-selected-background) !important;
     box-shadow: var(--left-pane-item-selected-shadow);
     border-radius: 6px;
@@ -676,7 +676,7 @@ body.layout-vertical.background-effects div.quick-search .dropdown-menu {
 #left-pane span.fancytree-node.protected > span.fancytree-custom-icon:after {
     position: absolute;
     bottom: 0;
-    right: 0;
+    inset-inline-end: 0;
     font-size: 14px;
     content: "\eb4a";
     font-family: "boxicons";
@@ -772,7 +772,7 @@ body.mobile .fancytree-node > span {
 /* Toolbar container (collapsed state) */
 #left-pane .tree-actions {
     max-width: var(--tree-actions-toolbar-collapsed-width);
-    right: var(--tree-actions-toolbar-horizontal-margin);
+    inset-inline-end: var(--tree-actions-toolbar-horizontal-margin);
     bottom: var(--tree-actions-toolbar-vertical-margin);
     overflow: hidden;
     border: 1px solid transparent;
@@ -821,7 +821,7 @@ body.mobile .fancytree-node > span {
     justify-content: center;
     align-items: center;
     top: 50%;
-    right: calc((var(--tree-actions-toolbar-collapsed-width) - var(--tree-actions-toolbar-expand-button-size)) / 2);
+    inset-inline-end: calc((var(--tree-actions-toolbar-collapsed-width) - var(--tree-actions-toolbar-expand-button-size)) / 2);
     width: var(--tree-actions-toolbar-expand-button-size);
     height: var(--tree-actions-toolbar-expand-button-size);
     box-shadow: 2px 2px 6px var(--left-pane-background-color);
@@ -911,7 +911,7 @@ body.electron.background-effects.layout-horizontal .tab-row-container .toggle-bu
     position: absolute;
     bottom: 0;
     inset-inline-start: -10px;
-    right: -10px;
+    inset-inline-end: -10px;
     top: 32px;
     height: 1px;
     border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
@@ -923,12 +923,12 @@ body.electron.background-effects.layout-horizontal .tab-row-container .tab-scrol
 }
 
 body.electron.background-effects.layout-horizontal .tab-row-container .tab-scroll-button-inset-inline-start:after,
-body.electron.background-effects.layout-horizontal .tab-row-container .tab-scroll-button-right:after {
+body.electron.background-effects.layout-horizontal .tab-row-container .tab-scroll-button-inset-inline-end:after {
     content: "";
     position: absolute;
     bottom: 0;
     inset-inline-start: 0px;
-    right: 0px;
+    inset-inline-end: 0px;
     height: 1px;
     border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
 }
@@ -939,7 +939,7 @@ body.electron.background-effects.layout-horizontal .tab-row-container .note-tab[
     bottom: 0;
     inset-inline-start: -32768px;
     top: var(--tab-height);
-    right: calc(100% - 1px);
+    inset-inline-end: calc(100% - 1px);
     height: 1px;
     border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
 }
@@ -950,7 +950,7 @@ body.electron.background-effects.layout-horizontal .tab-row-container .note-tab[
     bottom: 0;
     inset-inline-start: 100%;
     top: var(--tab-height);
-    right: 0;
+    inset-inline-end: 0;
     width: 100vw;
     height: 1px;
     border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
@@ -962,7 +962,7 @@ body.electron.background-effects.layout-horizontal .tab-row-container .note-new-
     bottom: 0;
     inset-inline-start: -4px;
     top: calc(var(--tab-height), -1);
-    right: 0;
+    inset-inline-end: 0;
     width: 100vw;
     height: 1px;
     border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
@@ -1050,7 +1050,7 @@ body.layout-horizontal .tab-row-widget .note-tab .note-tab-wrapper {
     position: absolute;
     top: 0;
     inset-inline-start: 0;
-    right: 0;
+    inset-inline-end: 0;
     height: 3px;
     background-color: var(--workspace-tab-background-color);
 }
@@ -1676,7 +1676,7 @@ div.find-replace-widget div.find-widget-found-wrapper > span {
     .find-widget-close-button {
         position: absolute;
         top: .85em;
-        right: .5em;
+        inset-inline-end: .5em;
     }
 
     .find-widget-box > * {

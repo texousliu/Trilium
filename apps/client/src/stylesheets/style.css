@@ -608,7 +608,7 @@ pre:not(.hljs) {
 pre > button.copy-button {
     position: absolute;
     top: var(--copy-button-margin-size);
-    right: var(--copy-button-margin-size);
+    inset-inline-end: var(--copy-button-margin-size);
 }
 
 :root pre:has(> button.copy-button) {
@@ -743,7 +743,7 @@ table.promoted-attributes-in-tooltip th {
 
 .bs-tooltip-auto[data-popper-placement^="right"] .tooltip-arrow::before,
 .bs-tooltip-right .tooltip-arrow::before {
-    right: -1px;
+    inset-inline-end: -1px;
     border-width: 0.4rem 0.4rem 0.4rem 0;
     border-inline-end-color: var(--main-border-color) !important;
 }
@@ -771,7 +771,7 @@ table.promoted-attributes-in-tooltip th {
 
 .bs-tooltip-auto[data-popper-placement^="right"] .tooltip-arrow::after,
 .bs-tooltip-right .tooltip-arrow::after {
-    right: -1px;
+    inset-inline-end: -1px;
     border-width: 0.4rem 0.4rem 0.4rem 0;
     border-inline-end-color: var(--tooltip-background-color) !important;
 }
@@ -825,7 +825,7 @@ table.promoted-attributes-in-tooltip th {
 
 .note-tooltip-content .open-popup-button {
     position: absolute;
-    right: 15px;
+    inset-inline-end: 15px;
     bottom: 8px;
     font-size: 1.2em;
     color: inherit;
@@ -1059,7 +1059,7 @@ svg.ck-icon .note-icon {
     display: inline-block;
     min-width: fit-content;
     position: relative;
-    right: 0.2em;
+    inset-inline-end: 0.2em;
     text-align: end;
 }
 
@@ -1279,7 +1279,7 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
     position: fixed;
     top: 0;
     inset-inline-start: 0;
-    right: 0;
+    inset-inline-end: 0;
     bottom: 0;
     z-index: 1000;
     background: rgba(0, 0, 0, 0.1);
@@ -1293,7 +1293,7 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
 body.mobile #context-menu-container.mobile-bottom-menu {
     position: fixed !important;
     inset-inline-start: 0 !important;
-    right: 0 !important;
+    inset-inline-end: 0 !important;
     bottom: 0 !important;
     top: unset !important;
     max-height: 70vh;
@@ -1538,7 +1538,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
         bottom: calc(var(--mobile-bottom-offset) + var(--launcher-pane-size)) !important;
         top: unset !important;
         inset-inline-start: 0 !important;
-        right: 0 !important;
+        inset-inline-end: 0 !important;
         transform: unset !important;
     }
 
@@ -1546,7 +1546,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
         position: fixed;
         top: 0;
         inset-inline-start: 0;
-        right: 0;
+        inset-inline-end: 0;
         bottom: 0;
         z-index: 1000;
         transition: background-color 250ms ease-in-out;
@@ -1594,7 +1594,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
         position: fixed;
         bottom: 0;
         inset-inline-start: 0;
-        right: 0;
+        inset-inline-end: 0;
         margin: 0 !important;
         max-height: 85vh;        
         display: flex;
@@ -2042,7 +2042,7 @@ body.zen .split-note-container-widget > .gutter {
 body.zen #launcher-pane {
     position: absolute !important;
     top: 0 !important;
-    right: 0 !important;
+    inset-inline-end: 0 !important;
     width: 64px !important;
     height: 64px !important;
     background: transparent !important;
@@ -2062,7 +2062,7 @@ body.zen .floating-buttons {
 }
 
 body.zen .floating-buttons-children {
-    right: 0;
+    inset-inline-end: 0;
 }
 
 body.zen .floating-buttons-children .button-widget {
@@ -2383,7 +2383,7 @@ footer.webview-footer button {
 
 .content-floating-buttons.bottom-right {
     bottom: 10px;
-    right: 10px;
+    inset-inline-end: 10px;
 }
 
 .content-floating-buttons button.bx {

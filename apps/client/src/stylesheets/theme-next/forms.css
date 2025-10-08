@@ -451,7 +451,7 @@ optgroup {
     content: "\eae1";
     width: 2em;
     height: 100%;
-    right: 0;
+    inset-inline-end: 0;
     top: 0;
     font-size: 1.2em;
     font-family: boxicons;

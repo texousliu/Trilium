@@ -55,7 +55,7 @@ button.global-menu-button {
 
 .global-menu-button-update-available {
     position: absolute;
-    right: -30px;
+    inset-inline-end: -30px;
     bottom: -30px;
     width: 100%;
     height: 100%;

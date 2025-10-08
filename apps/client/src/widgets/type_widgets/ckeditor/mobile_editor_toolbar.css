@@ -13,7 +13,7 @@
 #root-widget.virtual-keyboard-opened .classic-toolbar-outer-container.ios {
     position: absolute;
     inset-inline-start: 0;
-    right: 0;
+    inset-inline-end: 0;
     bottom: 0;
 }
 
@@ -21,7 +21,7 @@
     position: absolute;
     bottom: 0;
     inset-inline-start: 0;
-    right: 0;
+    inset-inline-end: 0;
     height: 38px;
     overflow: scroll;
     display: flex;
