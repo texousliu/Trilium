@@ -2,7 +2,7 @@ import BasicWidget from "./basic_widget.js";
 import server from "../services/server.js";
 import linkService from "../services/link.js";
 import froca from "../services/froca.js";
-import utils from "../services/utils.js";
+import utils, { handleRightToLeftPlacement } from "../services/utils.js";
 import appContext from "../components/app_context.js";
 import shortcutService, { isIMEComposing } from "../services/shortcuts.js";
 import { t } from "../services/i18n.js";
@@ -248,7 +248,7 @@ export default class QuickSearchWidget extends BasicWidget {
             let tooltip = new Tooltip(this.$searchString[0], {
                 trigger: "manual",
                 title: `Search error: ${error}`,
-                placement: "right"
+                placement: handleRightToLeftPlacement("right")
             });
 
             tooltip.show();

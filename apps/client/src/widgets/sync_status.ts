@@ -3,7 +3,7 @@ import BasicWidget from "./basic_widget.js";
 import ws from "../services/ws.js";
 import options from "../services/options.js";
 import syncService from "../services/sync.js";
-import { escapeQuotes } from "../services/utils.js";
+import { escapeQuotes, handleRightToLeftPlacement } from "../services/utils.js";
 import { Tooltip } from "bootstrap";
 import { WebSocketMessage } from "@triliumnext/commons";
 
@@ -109,8 +109,8 @@ export default class SyncStatusWidget extends BasicWidget {
 
         Tooltip.getOrCreateInstance(this.$widget.find(`.sync-status-${className}`)[0], {
             html: true,
-            placement: this.settings.titlePlacement,
-            fallbackPlacements: [this.settings.titlePlacement]
+            placement: handleRightToLeftPlacement(this.settings.titlePlacement),
+            fallbackPlacements: [ handleRightToLeftPlacement(this.settings.titlePlacement) ]
         });
 
         this.$widget.show();
