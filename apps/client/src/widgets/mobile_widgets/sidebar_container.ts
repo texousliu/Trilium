@@ -87,11 +87,12 @@ export default class SidebarContainer extends FlexContainer<BasicWidget> {
             const width = this.sidebarEl.offsetWidth;
             let translatePercentage = Math.min(0, Math.max(this.currentTranslate + (deltaX / width) * 100, -100));
             const backdropOpacity = Math.max(0, 1 + translatePercentage / 100);
-            if (glob.isRtl) {
-                translatePercentage *= -1;
-            }
             this.translatePercentage = translatePercentage;
-            this.sidebarEl.style.transform = `translateX(${translatePercentage}%)`;
+            if (glob.isRtl) {
+                this.sidebarEl.style.transform = `translateX(${-translatePercentage}%)`;
+            } else {
+                this.sidebarEl.style.transform = `translateX(${translatePercentage}%)`;
+            }
             this.backdropEl.style.opacity = String(backdropOpacity);
         }
 
