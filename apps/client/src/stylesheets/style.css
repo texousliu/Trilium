@@ -704,7 +704,7 @@ table.promoted-attributes-in-tooltip th {
     border-top-color: var(--main-border-color) !important;
 }
 .bs-tooltip-left .tooltip-arrow::before {
-    border-left-color: var(--main-border-color) !important;
+    border-inline-start-color: var(--main-border-color) !important;
 }
 .bs-tooltip-right .tooltip-arrow::before {
     border-right-color: var(--main-border-color) !important;
@@ -717,7 +717,7 @@ table.promoted-attributes-in-tooltip th {
     border-top-color: var(--tooltip-background-color) !important;
 }
 .bs-tooltip-left .tooltip-arrow::after {
-    border-left-color: var(--tooltip-background-color) !important;
+    border-inline-start-color: var(--tooltip-background-color) !important;
 }
 .bs-tooltip-right .tooltip-arrow::after {
     border-right-color: var(--tooltip-background-color) !important;
@@ -727,7 +727,7 @@ table.promoted-attributes-in-tooltip th {
 .bs-tooltip-left .tooltip-arrow::before {
     left: -1px;
     border-width: 0.4rem 0 0.4rem 0.4rem;
-    border-left-color: var(--main-border-color) !important;
+    border-inline-start-color: var(--main-border-color) !important;
 }
 
 .bs-tooltip-auto[data-popper-placement^="bottom"] .tooltip-arrow::before,
@@ -755,7 +755,7 @@ table.promoted-attributes-in-tooltip th {
 .bs-tooltip-left .tooltip-arrow::after {
     left: -1px;
     border-width: 0.4rem 0 0.4rem 0.4rem;
-    border-left-color: var(--tooltip-background-color) !important;
+    border-inline-start-color: var(--tooltip-background-color) !important;
 }
 
 .bs-tooltip-auto[data-popper-placement^="bottom"] .tooltip-arrow::after,
@@ -2330,7 +2330,7 @@ footer.webview-footer button {
 /* Style for thinking process in chat responses */
 .thinking-process {
     background-color: rgba(0, 0, 0, 0.05);
-    border-left: 3px solid var(--main-text-color);
+    border-inline-start: 3px solid var(--main-text-color);
     padding: 10px;
     margin: 10px 0;
     border-radius: 4px;
@@ -2342,19 +2342,19 @@ footer.webview-footer button {
 }
 
 .thinking-step.observation {
-    border-left: 2px solid #69c7ff;
+    border-inline-start: 2px solid #69c7ff;
 }
 
 .thinking-step.hypothesis {
-    border-left: 2px solid #9839f7;
+    border-inline-start: 2px solid #9839f7;
 }
 
 .thinking-step.evidence {
-    border-left: 2px solid #40c025;
+    border-inline-start: 2px solid #40c025;
 }
 
 .thinking-step.conclusion {
-    border-left: 2px solid #e2aa03;
+    border-inline-start: 2px solid #e2aa03;
     font-weight: bold;
 }
 

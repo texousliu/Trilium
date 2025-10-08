@@ -47,7 +47,7 @@ const TPL = /*html*/`<div class="toc-widget">
             content: "";
             position: absolute;
             height: 100%;
-            border-left: 1px solid var(--main-border-color);
+            border-inline-start: 1px solid var(--main-border-color);
             z-index: 10;
         }
 

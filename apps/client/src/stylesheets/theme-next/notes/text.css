@@ -255,7 +255,7 @@
 
 :root .ck.ck-toolbar .ck.ck-toolbar__separator {
     background: transparent;
-    border-left: 1px solid var(--ck-color-toolbar-border);
+    border-inline-start: 1px solid var(--ck-color-toolbar-border);
 }
 
 /* The last separator of the toolbar */

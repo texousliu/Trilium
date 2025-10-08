@@ -2096,8 +2096,8 @@ const icons: Icon[] = [
         type_of_icon: "REGULAR"
     },
     {
-        name: "border-left",
-        slug: "border-left-regular",
+        name: "border-inline-start",
+        slug: "border-inline-start-regular",
         category_id: 111,
         type_of_icon: "REGULAR"
     },
