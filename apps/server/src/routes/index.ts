@@ -59,7 +59,7 @@ function index(req: Request, res: Response) {
         triliumVersion: packageJson.version,
         assetPath: assetPath,
         appPath: appPath,
-        isRtl: LOCALES.find(l => l.id === options.locale)?.rtl
+        isRtl: !!LOCALES.find(l => l.id === options.locale)?.rtl
     });
 }
 
