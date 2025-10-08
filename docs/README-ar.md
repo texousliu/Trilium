@@ -135,7 +135,7 @@ compatible with the latest zadam/trilium version of
 versions of TriliumNext/Trilium have their sync versions incremented which
 prevents direct migration.
 
-## تحدث معنا
+## 💬تحدث معنا
 
 Feel free to join our official conversations. We would love to hear what
 features, suggestions, or issues you may have!
@@ -157,7 +157,7 @@ Download the binary release for your platform from the [latest release
 page](https://github.com/TriliumNext/Trilium/releases/latest), unzip the package
 and run the `trilium` executable.
 
-### Linux
+### لينكس
 
 If your distribution is listed in the table below, use your distribution's
 package.
@@ -194,7 +194,7 @@ repository](https://github.com/FliegendeWurst/TriliumDroid). Note: It is best to
 disable automatic updates on your server installation (see below) when using
 TriliumDroid since the sync version must match between Trilium and TriliumDroid.
 
-### Server
+### الخادم
 
 To install TriliumNext on your own server (including via Docker from
 [Dockerhub](https://hub.docker.com/r/triliumnext/trilium)) follow [the server
@@ -259,7 +259,8 @@ described in the "Discuss with us" section above.
 
 * [zadam](https://github.com/zadam) for the original concept and implementation
   of the application.
-* [Larsa](https://github.com/LarsaSara) for designing the application icon.
+* [Sarah Hussein](https://github.com/Sarah-Hussein) for designing the
+  application icon.
 * [nriver](https://github.com/nriver) for his work on internationalization.
 * [Thomas Frei](https://github.com/thfrei) for his original work on the Canvas.
 * [antoniotejada](https://github.com/nriver) for the original syntax highlight
