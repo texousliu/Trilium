@@ -14,6 +14,7 @@ import { generateToken as generateCsrfToken } from "./csrf_protection.js";
 
 import type { Request, Response } from "express";
 import type BNote from "../becca/entities/bnote.js";
+import { LOCALES } from "@triliumnext/commons";
 
 function index(req: Request, res: Response) {
     const options = optionService.getOptionMap();
@@ -57,7 +58,8 @@ function index(req: Request, res: Response) {
         maxContentWidth: Math.max(640, parseInt(options.maxContentWidth)),
         triliumVersion: packageJson.version,
         assetPath: assetPath,
-        appPath: appPath
+        appPath: appPath,
+        isRtl: LOCALES.find(l => l.id === options.locale)?.rtl
     });
 }
 
