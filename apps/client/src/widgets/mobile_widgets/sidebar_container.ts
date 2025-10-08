@@ -149,7 +149,15 @@ export default class SidebarContainer extends FlexContainer<BasicWidget> {
         }
 
         this.sidebarEl.classList.toggle("show", isOpen);
-        this.sidebarEl.style.transform = isOpen ? "translateX(0)" : "translateX(-100%)";
+        if (isOpen) {
+            this.sidebarEl.style.transform = "translateX(0)";
+        } else {
+            if (glob.isRtl) {
+                this.sidebarEl.style.transform = "translateX(100%)"
+            } else {
+                this.sidebarEl.style.transform = "translateX(-100%)";
+            }
+        }
         this.sidebarEl.style.transition = this.originalSidebarTransition;
 
         this.backdropEl.classList.toggle("show", isOpen);
