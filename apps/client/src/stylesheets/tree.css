@@ -62,6 +62,10 @@ span.fancytree-node.fancytree-hide {
     margin-inline-end: 5px;
 }
 
+body[dir=rtl] .fancytree-node:not(.fancytree-loading):not(.fancytree-expanded) .fancytree-expander:before {
+    content: "\ea4d";   /* bx bx-chevron-left */
+}
+
 .fancytree-loading span.fancytree-expander {
     background-image: none;
     display: inline-block;
