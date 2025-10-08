@@ -66,7 +66,7 @@ export default class SidebarContainer extends FlexContainer<BasicWidget> {
         }
 
         const x = "touches" in e ? e.touches[0].clientX : e.clientX;
-        const deltaX = x - this.startX;
+        const deltaX = glob.isRtl ? this.startX - x : x - this.startX;
         if (this.dragState === DRAG_STATE_INITIAL_DRAG) {
             if (this.currentTranslate === -100 ? deltaX > DRAG_CLOSED_START_THRESHOLD : deltaX < -DRAG_OPENED_START_THRESHOLD) {
                 /* Disable the transitions since they affect performance, they are going to reenabled once drag ends. */
@@ -87,7 +87,11 @@ export default class SidebarContainer extends FlexContainer<BasicWidget> {
             const width = this.sidebarEl.offsetWidth;
             const translatePercentage = Math.min(0, Math.max(this.currentTranslate + (deltaX / width) * 100, -100));
             this.translatePercentage = translatePercentage;
-            this.sidebarEl.style.transform = `translateX(${translatePercentage}%)`;
+            if (glob.isRtl) {
+                this.sidebarEl.style.transform = `translateX(${-translatePercentage}%)`;
+            } else {
+                this.sidebarEl.style.transform = `translateX(${translatePercentage}%)`;
+            }
             this.backdropEl.style.opacity = String(Math.max(0, 1 + translatePercentage / 100));
         }
 
