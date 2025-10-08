@@ -33,7 +33,7 @@ export default class RootContainer extends FlexContainer<BasicWidget> {
         this.#setMotion(options.is("motionEnabled"));
         this.#setShadows(options.is("shadowsEnabled"));
         this.#setBackdropEffects(options.is("backdropEffectsEnabled"));
-        this.#setRightToLeft(options.get("locale"));
+        this.#setLocaleAndDirection(options.get("locale"));
 
         return super.render();
     }
@@ -71,8 +71,9 @@ export default class RootContainer extends FlexContainer<BasicWidget> {
         document.body.classList.toggle("backdrop-effects-disabled", !enabled);
     }
 
-    #setRightToLeft(locale: string) {
+    #setLocaleAndDirection(locale: string) {
         const correspondingLocale = LOCALES.find(l => l.id === locale);
+        document.body.lang = locale;
         document.body.dir = correspondingLocale?.rtl ? "rtl" : "ltr";
     }
 }
