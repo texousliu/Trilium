@@ -150,8 +150,8 @@ class ContextMenu {
         this.$widget
             .css({
                 display: "block",
-                top: top,
-                "inset-inline-start": left
+                top,
+                left
             })
             .addClass("show");
     }
