@@ -10,7 +10,7 @@ const TPL = /*html*/`
     <style>
         .attachment-list {
             padding-inline-start: 15px;
-            padding-right: 15px;
+            padding-inline-end: 15px;
         }
 
         .attachment-list .links-wrapper {

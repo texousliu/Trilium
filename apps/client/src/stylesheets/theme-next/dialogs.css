@@ -198,7 +198,7 @@ div.tn-tool-dialog {
     padding-top: var(--timeline-item-top-padding);
     padding-bottom: var(--timeline-item-bottom-padding);
     padding-inline-start: calc(var(--timeline-left-gap) + var(--timeline-right-gap));
-    padding-right: var(--timeline-left-gap);
+    padding-inline-end: var(--timeline-left-gap);
     color: var(--active-item-text-color);
 }
 
@@ -401,7 +401,7 @@ div.tn-tool-dialog {
 
 /* Labels */
 .attr-edit-table th {
-    padding-right: 12px;
+    padding-inline-end: 12px;
     font-weight: normal;
     white-space: nowrap;
 }

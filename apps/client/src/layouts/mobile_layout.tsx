@@ -41,7 +41,7 @@ kbd {
     cursor: pointer;
     font-size: 1.25em;
     padding-inline-start: 0.5em;
-    padding-right: 0.5em;
+    padding-inline-end: 0.5em;
     color: var(--main-text-color);
 }
 .quick-search {
@@ -127,7 +127,7 @@ export default class MobileLayout {
                             .id("mobile-sidebar-wrapper")
                             .css("max-height", "100%")
                             .css("padding-inline-start", "0")
-                            .css("padding-right", "0")
+                            .css("padding-inline-end", "0")
                             .css("contain", "content")
                             .child(new FlexContainer("column").filling().id("mobile-sidebar-wrapper").child(new QuickSearchWidget()).child(new NoteTreeWidget().cssBlock(FANCYTREE_CSS)))
                     )

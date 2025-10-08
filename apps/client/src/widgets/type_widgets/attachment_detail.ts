@@ -12,7 +12,7 @@ const TPL = /*html*/`
     <style>
         .attachment-detail {
             padding-inline-start: 15px;
-            padding-right: 15px;
+            padding-inline-end: 15px;
             height: 100%;
             display: flex;
             flex-direction: column;

@@ -156,7 +156,7 @@ const TAB_ROW_TPL = `
 
     .tab-row-widget .note-tab[is-mini] .note-tab-wrapper {
         padding-inline-start: 2px;
-        padding-right: 2px;
+        padding-inline-end: 2px;
     }
 
     .tab-row-widget .note-tab .note-tab-title {
@@ -168,7 +168,7 @@ const TAB_ROW_TPL = `
 
     .tab-row-widget .note-tab .note-tab-icon {
         position: relative;
-        padding-right: 3px;
+        padding-inline-end: 3px;
     }
 
     .tab-row-widget .note-tab[is-small] .note-tab-title {

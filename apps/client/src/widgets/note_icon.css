@@ -29,7 +29,7 @@
 .note-icon-widget .filter-row {
     padding-top: 10px;
     padding-bottom: 10px;
-    padding-right: 20px;
+    padding-inline-end: 20px;
     display: flex;
     align-items: baseline;
 }
@@ -37,7 +37,7 @@
 .note-icon-widget .filter-row span {
     display: block;
     padding-inline-start: 15px;
-    padding-right: 15px;
+    padding-inline-end: 15px;
     font-weight: bold;
 }
 

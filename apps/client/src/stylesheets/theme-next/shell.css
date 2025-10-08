@@ -472,7 +472,7 @@ div.bookmark-folder-widget .note-link .bx {
 div.quick-search {
     --padding-top: 8px;
     --padding-inline-start: 8px;
-    --padding-right: 8px;
+    --padding-inline-end: 8px;
     --padding-bottom: 8px;
 
     position: relative;
@@ -480,7 +480,7 @@ div.quick-search {
     align-items: center;
     height: unset;
     contain: unset;
-    padding: var(--padding-top) var(--padding-right) var(--padding-bottom) var(--padding-inline-start);
+    padding: var(--padding-top) var(--padding-inline-end) var(--padding-bottom) var(--padding-inline-start);
 }
 
 div.quick-search,
@@ -498,7 +498,7 @@ div.quick-search::before {
     top: var(--padding-top);
     left: var(--padding-inline-start);
     bottom: var(--padding-bottom);
-    right: var(--padding-right);
+    right: var(--padding-inline-end);
     z-index: 0;
     border: 2px solid transparent;
     border-radius: 6px;
@@ -773,7 +773,7 @@ body.mobile .fancytree-node > span {
     overflow: hidden;
     border: 1px solid transparent;
     padding: var(--tree-actions-toolbar-padding-size);
-    padding-right: var(--tree-actions-toolbar-collapsed-width);
+    padding-inline-end: var(--tree-actions-toolbar-collapsed-width);
     background: transparent;
     transition:
         max-width 400ms ease-out,
@@ -1056,7 +1056,7 @@ body.layout-horizontal .tab-row-widget .note-tab .note-tab-wrapper {
 }
 
 :root .tab-row-widget .note-tab .note-tab-icon {
-    padding-right: 5px; /* The gap between the icon and the title */
+    padding-inline-end: 5px; /* The gap between the icon and the title */
 }
 
 .tab-row-widget .note-tab[active] .note-tab-icon {
@@ -1230,7 +1230,7 @@ body.mobile .note-title {
 
 .title-row {
     /* Aligns the "Create new split" button with the note menu button (the three dots button) */
-    padding-right: 3px;
+    padding-inline-end: 3px;
 }
 
 .note-title-widget input {
@@ -1327,7 +1327,7 @@ div.promoted-attributes-container input {
 /* A promoted attribute card */
 div.promoted-attribute-cell {
     --pa-card-padding-inline-start: 16px;
-    --pa-card-padding-right: 2px;
+    --pa-card-padding-inline-end: 2px;
     --input-background-color: transparent;
 
     box-shadow: 1px 1px 2px var(--promoted-attribute-card-shadow-color);
@@ -1335,7 +1335,7 @@ div.promoted-attribute-cell {
     display: inline-flex;
     margin: 0;
     border-radius: 8px;
-    padding: 2px var(--pa-card-padding-right) 2px var(--pa-card-padding-inline-start);
+    padding: 2px var(--pa-card-padding-inline-end) 2px var(--pa-card-padding-inline-start);
     background: var(--promoted-attribute-card-background-color);
     overflow-y: visible;
 }
@@ -1350,7 +1350,7 @@ div.promoted-attribute-cell {
 /* A promoted attribute card (boolean attribute) */
 div.promoted-attribute-cell:has(input[type="checkbox"]):not(:has(.multiplicity > span)) {
     /* Checbox attribute, without multiplicity */
-    padding-right: var(--pa-card-padding-inline-start);
+    padding-inline-end: var(--pa-card-padding-inline-start);
 }
 
 div.promoted-attribute-cell > * {
@@ -1408,7 +1408,7 @@ div.promoted-attribute-cell .multiplicity:has(span) {
     --icon-button-size: 24px;
 
     margin-inline-start: 8px;
-    margin-inline-end: calc(var(--pa-card-padding-inline-start) - var(--pa-card-padding-right));
+    margin-inline-end: calc(var(--pa-card-padding-inline-start) - var(--pa-card-padding-inline-end));
     font-size: 0; /* Prevent whitespaces creating a gap between buttons */
     display: flex;
 }
@@ -1662,7 +1662,7 @@ div.find-replace-widget div.find-widget-found-wrapper > span {
 
     .find-widget-box,
     .replace-widget-box {
-        padding-right: 3em !important;
+        padding-inline-end: 3em !important;
     }
 
     .find-widget-close-button {
@@ -1743,7 +1743,7 @@ div.find-replace-widget div.find-widget-found-wrapper > span {
 #right-pane .toc li,
 #right-pane .highlights-list li {
     padding-top: 2px;
-    padding-right: 8px;
+    padding-inline-end: 8px;
     padding-bottom: 2px;
     border-radius: 4px;
     text-align: unset;

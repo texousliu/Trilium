@@ -354,7 +354,7 @@
     align-items: center;
     width: 100%;
     margin: 4px;
-    padding-right: 2em;
+    padding-inline-end: 2em;
     border: 1px solid var(--accent);
     border-radius: 6px;
 }
@@ -556,7 +556,7 @@ pre button.copy-button.icon-action {
 }
 
 :root pre:has(> button.copy-button) {
-    padding-right: calc(var(--icon-button-size) + (var(--copy-button-margin-size) * 2));
+    padding-inline-end: calc(var(--icon-button-size) + (var(--copy-button-margin-size) * 2));
 }
 
 html .note-detail-editable-text :not(figure, .include-note, hr):first-child {

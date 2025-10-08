@@ -91,7 +91,7 @@
 
 .tabulator-row .tabulator-cell input {
     padding-inline-start: var(--cell-horiz-padding-size) !important;
-    padding-right: var(--cell-horiz-padding-size) !important;
+    padding-inline-end: var(--cell-horiz-padding-size) !important;
 }
 
 .tabulator-row {

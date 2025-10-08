@@ -62,7 +62,7 @@ button.btn.btn-secondary span.bx,
 button.btn.btn-sm span.bx,
 button.btn.btn-success span.bx {
     color: var(--cmd-button-icon-color);
-    padding-right: 0.35em;
+    padding-inline-end: 0.35em;
     font-size: 1.2em;
 }
 
@@ -237,7 +237,7 @@ input::selection,
     outline-offset: 6px;
     background: var(--input-background-color);
     border-radius: 6px;
-    padding-right: 8px;
+    padding-inline-end: 8px;
     color: var(--quick-search-color);
     flex-wrap: nowrap;
 }
@@ -357,7 +357,7 @@ select.form-control,
 
     outline: 3px solid transparent;
     outline-offset: 6px;
-    padding-right: calc(15px + 1.5rem);
+    padding-inline-end: calc(15px + 1.5rem);
     background: var(--input-background-color) var(--dropdown-arrow);
     color: var(--input-text-color);
     border: unset;
