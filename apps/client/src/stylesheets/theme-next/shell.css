@@ -685,6 +685,10 @@ body.layout-vertical.background-effects div.quick-search .dropdown-menu {
     border-radius: 50%;
 }
 
+body[dir=rtl] #left-pane span.fancytree-node.protected > span.fancytree-custom-icon:after {
+    transform: translateX(-25%);
+}
+
 body.mobile .fancytree-expander::before,
 body.mobile .fancytree-title,
 body.mobile .fancytree-node > span {

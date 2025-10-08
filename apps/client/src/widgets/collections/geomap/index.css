@@ -68,6 +68,10 @@
   overflow: hidden;
 }
 
+body[dir=rtl] .geo-map-container .leaflet-div-icon .title-label {
+  transform: translateX(50%);
+}
+
 .geo-map-container .leaflet-div-icon .archived {
   opacity: 0.5;
 }

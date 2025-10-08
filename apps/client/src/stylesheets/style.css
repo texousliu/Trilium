@@ -586,6 +586,10 @@ button.btn-sm {
     z-index: 1000;
 }
 
+body[dir=rtl] .ck.ck-block-toolbar-button {
+    transform: translateX(-7px);
+}
+
 pre:not(.hljs) {
     color: var(--main-text-color) !important;
     white-space: pre-wrap;
