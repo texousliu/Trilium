@@ -52,7 +52,7 @@
     background-color: #f5f5f5;
 }
 .google-login-btn img {
-    margin-right: 10px;
+    margin-inline-end: 10px;
     width: 18px;
     height: 18px;
 }
@@ -217,7 +217,7 @@ body.desktop .option-section:not(.tn-no-card) {
     --bs-border-width: 2px;
 
     margin-inline-start: calc(var(--options-card-padding) * -1);
-    margin-right: calc(var(--options-card-padding) * -1);
+    margin-inline-end: calc(var(--options-card-padding) * -1);
     opacity: 1;
     color: var(--root-background);
 }

@@ -176,7 +176,7 @@ const TPL = /*html*/`
 
     <div class="attr-save-delete-button-container">
         <button class="btn btn-primary btn-sm attr-save-changes-and-close-button"
-            style="flex-grow: 1; margin-right: 20px">
+            style="flex-grow: 1; margin-inline-end: 20px">
             ${t("attribute_detail.save_and_close")}</button>
 
         <button class="btn btn-secondary btn-sm attr-delete-button">

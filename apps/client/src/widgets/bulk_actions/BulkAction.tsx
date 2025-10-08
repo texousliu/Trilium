@@ -12,8 +12,8 @@ interface BulkActionProps {
 
 // Define styles as constants to prevent recreation
 const flexContainerStyle = { display: "flex", alignItems: "center" } as const;
-const labelStyle = { marginRight: "10px" } as const;
-const textStyle = { marginRight: "10px", marginInlineStart: "10px" } as const;
+const labelStyle = { marginInlineEnd: "10px" } as const;
+const textStyle = { marginInlineEnd: "10px", marginInlineStart: "10px" } as const;
 
 const BulkAction = memo(({ label, children, helpText, bulkAction }: BulkActionProps) => {
     return (

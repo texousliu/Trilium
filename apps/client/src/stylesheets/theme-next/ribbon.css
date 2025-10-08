@@ -95,7 +95,7 @@ div.promoted-attributes-container {
 /* Note type dropdown */
 
 ul.note-type-dropdown .check {
-    margin-right: 6px;
+    margin-inline-end: 6px;
 }
 
 ul.note-type-dropdown li.dropdown-item {

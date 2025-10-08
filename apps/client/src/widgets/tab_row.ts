@@ -247,7 +247,7 @@ const TAB_ROW_TPL = `
     }
     .tab-row-widget .note-tab[is-mini][active] .note-tab-close {
         margin-inline-start: auto;
-        margin-right: auto;
+        margin-inline-end: auto;
     }
     @-moz-keyframes note-tab-was-just-added {
         to {

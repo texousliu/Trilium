@@ -357,13 +357,13 @@ li.dropdown-item a.dropdown-item-button:focus-visible {
 }
 
 #toast-container .toast:not(.no-title) .bx {
-    margin-right: 0.5em;
+    margin-inline-end: 0.5em;
     font-size: 1.1em;
     opacity: 0.85;
 }
 
 #toast-container .toast.no-title .bx {
-    margin-right: 0;
+    margin-inline-end: 0;
     font-size: 1.3em;
 }
 

@@ -89,14 +89,14 @@ button.global-menu-button {
 
 .global-menu .zoom-state {
     margin-inline-start: 5px;
-    margin-right: 5px;
+    margin-inline-end: 5px;
 }
 
 .global-menu .dropdown-item .bx {
     position: relative;
     top: 3px;
     font-size: 120%;
-    margin-right: 6px;
+    margin-inline-end: 6px;
 }
 
 /* #region Update available */

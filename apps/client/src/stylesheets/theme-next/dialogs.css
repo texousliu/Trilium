@@ -56,7 +56,7 @@
 }
 
 .modal .modal-header .help-button {
-    margin-right: 0;
+    margin-inline-end: 0;
     font-size: calc(var(--modal-control-button-size) * .75);
     font-family: unset;
     font-weight: bold;
@@ -141,7 +141,7 @@ div.tn-tool-dialog {
 
 /* Search box wrapper */
 .jump-to-note-dialog .input-group {
-    margin-right: 16px;
+    margin-inline-end: 16px;
 }
 
 .jump-to-note-dialog .input-group:hover {
@@ -419,5 +419,5 @@ div.tn-tool-dialog {
 }
 
 .note-type-chooser-dialog div.note-type-dropdown .dropdown-item span.bx {
-    margin-right: .25em;
+    margin-inline-end: .25em;
 }

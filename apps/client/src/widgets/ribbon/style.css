@@ -70,7 +70,7 @@
 .ribbon-button-container {
     display: flex;
     border-bottom: 1px solid var(--main-border-color);
-    margin-right: 5px;
+    margin-inline-end: 5px;
 }
 
 .ribbon-button-container > * {
@@ -82,7 +82,7 @@
 .ribbon-body {
     border-bottom: 1px solid var(--main-border-color);
     margin-inline-start: 10px;
-    margin-right: 5px; /* needs to have this value so that the bottom border is the same width as the top one */
+    margin-inline-end: 5px; /* needs to have this value so that the bottom border is the same width as the top one */
 }
 
 .ribbon-body.active {
@@ -105,7 +105,7 @@
 .basic-properties-widget > * {
     margin-top: 9px;
     margin-bottom: 2px;
-    margin-right: 30px;
+    margin-inline-end: 30px;
 }
 
 .note-type-container,
@@ -309,7 +309,7 @@
 /* #region Owned Attributes */
 .attribute-list {
     margin-inline-start: 7px;
-    margin-right: 7px;
+    margin-inline-end: 7px;
     margin-top: 5px;
     margin-bottom: 2px;
     position: relative;
@@ -359,7 +359,7 @@
 }
 
 .book-properties-widget input[type="checkbox"] {
-    margin-right: 5px;
+    margin-inline-end: 5px;
 }
 
 .book-properties-widget label {
@@ -446,7 +446,7 @@
     position: relative;
     top: 3px;
     font-size: 120%;
-    margin-right: 5px;
+    margin-inline-end: 5px;
 }
 
 .note-actions .dropdown-item[disabled], .note-actions .dropdown-item[disabled]:hover {

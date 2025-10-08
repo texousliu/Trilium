@@ -146,7 +146,7 @@
 }
 
 .board-view-container .board-note .icon {
-  margin-right: 0.25em;
+  margin-inline-end: 0.25em;
   display: inline;
 }
 
@@ -269,7 +269,7 @@
 }
 
 .board-new-item .icon {
-  margin-right: 0.25em;
+  margin-inline-end: 0.25em;
 }
 
 .board-add-column {
@@ -296,7 +296,7 @@
 }
 
 .board-add-column .icon {
-  margin-right: 0.5em;
+  margin-inline-end: 0.5em;
   font-size: 1.2em;
 }
 

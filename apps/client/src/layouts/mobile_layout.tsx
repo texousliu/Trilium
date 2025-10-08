@@ -81,7 +81,7 @@ const FANCYTREE_CSS = `
 
 span.fancytree-expander {
     width: 24px !important;
-    margin-right: 5px;
+    margin-inline-end: 5px;
 }
 
 .fancytree-loading span.fancytree-expander {
@@ -101,7 +101,7 @@ span.fancytree-expander {
 .tree-wrapper .scroll-to-active-note-button,
 .tree-wrapper .tree-settings-button {
     position: fixed;
-    margin-right: 16px;
+    margin-inline-end: 16px;
     display: none;
 }
 

@@ -179,7 +179,7 @@ label.tn-checkbox + label.tn-checkbox {
 
 label.tn-radio input[type="radio"],
 label.tn-checkbox input[type="checkbox"] {
-    margin-right: .5em;
+    margin-inline-end: .5em;
 }
 
 #left-pane input,
@@ -1041,13 +1041,13 @@ svg.ck-icon .note-icon {
 }
 
 .ck-content .footnote-back-link {
-    margin-right: 0.1em;
+    margin-inline-end: 0.1em;
     position: relative;
     top: -0.2em;
 }
 
 .ck-content .footnotes .footnote-back-link > sup {
-    margin-right: 0;
+    margin-inline-end: 0;
 }
 
 .ck-content .footnote-item:before {
@@ -1749,7 +1749,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     flex-shrink: 0;
     flex-direction: column;
     margin-inline-start: 10px;
-    margin-right: 5px;
+    margin-inline-end: 5px;
 }
 
 #right-pane .card-header {
@@ -1801,7 +1801,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 
 .note-split {
     margin-inline-start: auto;
-    margin-right: auto;
+    margin-inline-end: auto;
 }
 
 .note-split.full-content-width {
@@ -1820,7 +1820,7 @@ button.close:hover {
 .reference-link .bx {
     position: relative;
     top: 1px;
-    margin-right: 3px;
+    margin-inline-end: 3px;
 }
 
 .options-section:first-of-type h4 {
@@ -2319,12 +2319,12 @@ footer.webview-footer button {
     display: flex;
     align-items: center;
     font-size: 0.9em;
-    margin-right: 15px;
+    margin-inline-end: 15px;
     cursor: pointer;
 }
 
 .chat-option input[type="checkbox"] {
-    margin-right: 5px;
+    margin-inline-end: 5px;
 }
 
 /* Style for thinking process in chat responses */
