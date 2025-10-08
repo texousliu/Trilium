@@ -27,6 +27,7 @@ export default class SidebarContainer extends FlexContainer<BasicWidget> {
     private backdropEl!: HTMLElement;
     private originalSidebarTransition: string;
     private originalBackdropTransition: string;
+    private screenWidth: number;
 
     constructor(screenName: Screen, direction: FlexDirection) {
         super(direction);
@@ -37,6 +38,7 @@ export default class SidebarContainer extends FlexContainer<BasicWidget> {
         this.dragState = DRAG_STATE_NONE;
         this.originalSidebarTransition = "";
         this.originalBackdropTransition = "";
+        this.screenWidth = document.body.getBoundingClientRect().width;
     }
 
     doRender() {
@@ -51,7 +53,9 @@ export default class SidebarContainer extends FlexContainer<BasicWidget> {
         const x = "touches" in e ? e.touches[0].clientX : e.clientX;
         this.startX = x;
 
-        if (x > 30 && this.currentTranslate === -100) {
+        // Prevent dragging if too far from the edge of the screen and the menu is closed.
+        let dragRefX = glob.isRtl ? this.screenWidth - x : x;
+        if (dragRefX > 30 && this.currentTranslate === -100) {
             return;
         }
 
