@@ -471,7 +471,7 @@ optgroup {
     label.tn-checkbox > input[type="checkbox"] {
         position: absolute;
         top: 0;
-        left: 0;
+        inset-inline-start: 0;
         width: var(--box-size);
         height: 100%;
         margin: unset;
@@ -485,7 +485,7 @@ optgroup {
         content: "";
         position: absolute;
         top: 50%;
-        left: 0;
+        inset-inline-start: 0;
         translate: 0 -50%;
         width: var(--box-size);
         height: var(--box-size);

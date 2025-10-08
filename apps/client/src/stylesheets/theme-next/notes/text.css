@@ -119,7 +119,7 @@
     top: var(--negative-padding);
     right: var(--negative-padding);
     bottom: var(--negative-padding);
-    left: var(--negative-padding);
+    inset-inline-start: var(--negative-padding);
     border-radius: var(--dropdown-border-radius);
     backdrop-filter: var(--dropdown-backdrop-filter);
     z-index: -1;
@@ -233,7 +233,7 @@
     position: absolute;
     top: 0;
     bottom: var(--negative-padding);
-    left: var(--negative-padding);
+    inset-inline-start: var(--negative-padding);
     right: var(--negative-padding);
     border-top: 1px solid var(--ck-editor-popup-border-color);
     background: var(--menu-section-background-color);
@@ -615,7 +615,7 @@ html .note-detail-editable-text :not(figure, .include-note, hr):first-child {
 
 .ck-content blockquote:before {
     content: "“";
-    left: 0.2em;
+    inset-inline-start: 0.2em;
 }
 
 .ck-content blockquote:after {

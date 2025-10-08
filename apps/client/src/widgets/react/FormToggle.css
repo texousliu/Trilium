@@ -40,7 +40,7 @@
     content: "";
     position: absolute;
     top: 0;
-    left: 0;
+    inset-inline-start: 0;
     width: var(--switch-thumb-width);
     height: var(--switch-thumb-height);
     background-color: var(--switch-off-thumb-background);
@@ -63,7 +63,7 @@
     /* A hidden check box for accesibility purposes */
     position: absolute;
     top: 0;
-    left: 0;
+    inset-inline-start: 0;
     width: 100%;
     height: 100%;
     opacity: 0;

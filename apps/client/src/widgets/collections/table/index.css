@@ -13,7 +13,7 @@
 .search-result-widget-content .table-view {
     position: absolute;
     top: 0;
-    left: 0;
+    inset-inline-start: 0;
     right: 0;
     bottom: 0;
 }
@@ -65,7 +65,7 @@
 .tabulator button.tree-collapse span {
     position: absolute;
     top: 0;
-    left: 0;
+    inset-inline-start: 0;
     font-size: 1.5em;
     transform: translateY(-50%);
 }

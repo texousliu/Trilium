@@ -259,7 +259,7 @@ div.tn-tool-dialog {
     position: absolute;
     content: "";
     top: var(--connector-top, 0);
-    left: calc(var(--timeline-left-gap) + ((var(--timeline-bullet-size) - var(--timeline-connector-size)) / 2));
+    inset-inline-start: calc(var(--timeline-left-gap) + ((var(--timeline-bullet-size) - var(--timeline-connector-size)) / 2));
     bottom: var(--connector-bottom, 0);
     width: var(--timeline-connector-size);
     border-radius: var(--connector-radius, 0) var(--connector-radius, 0) 0 0;
@@ -291,7 +291,7 @@ div.tn-tool-dialog {
     position: absolute;
     content: "";
     top: calc(var(--timeline-item-top-padding) + var(--timeline-bullet-vertical-pos));
-    left: var(--timeline-left-gap);
+    inset-inline-start: var(--timeline-left-gap);
     width: var(--timeline-bullet-size);
     height: var(--timeline-bullet-size);
     border-radius: 50%;

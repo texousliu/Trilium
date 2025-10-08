@@ -80,7 +80,7 @@ const TPL = /*html*/`<div class="toc-widget">
         }
 
         .toc > ol ol::before {
-            left: calc((var(--toc-depth-level) - 2) * 20px + 14px);
+            inset-inline-start: calc((var(--toc-depth-level) - 2) * 20px + 14px);
         }
 
         .toc li {

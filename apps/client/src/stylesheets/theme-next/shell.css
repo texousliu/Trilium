@@ -402,7 +402,7 @@ body.layout-horizontal > .horizontal {
     top: var(--vertical-margin);
     right: var(--horiz-margin);
     bottom: var(--vertical-margin);
-    left: var(--horiz-margin);
+    inset-inline-start: var(--horiz-margin);
     border-radius: 6px;
     background: var(--calendar-day-highlight-background);
     z-index: -1;
@@ -496,7 +496,7 @@ div.quick-search::before {
     position: absolute;
     content: "";
     top: var(--padding-top);
-    left: var(--padding-inline-start);
+    inset-inline-start: var(--padding-inline-start);
     bottom: var(--padding-bottom);
     right: var(--padding-inline-end);
     z-index: 0;
@@ -658,7 +658,7 @@ body.layout-vertical.background-effects div.quick-search .dropdown-menu {
     position: absolute;
     content: "";
     top: var(--left-pane-item-selected-shadow-size);
-    left: var(--left-pane-item-selected-shadow-size);
+    inset-inline-start: var(--left-pane-item-selected-shadow-size);
     bottom: var(--left-pane-item-selected-shadow-size);
     right: var(--left-pane-item-selected-shadow-size);
     background: var(--left-pane-item-selected-background) !important;
@@ -906,7 +906,7 @@ body.electron.background-effects.layout-horizontal .tab-row-container .toggle-bu
     content: "";
     position: absolute;
     bottom: 0;
-    left: -10px;
+    inset-inline-start: -10px;
     right: -10px;
     top: 32px;
     height: 1px;
@@ -918,12 +918,12 @@ body.electron.background-effects.layout-horizontal .tab-row-container .tab-scrol
     position: relative;
 }
 
-body.electron.background-effects.layout-horizontal .tab-row-container .tab-scroll-button-left:after,
+body.electron.background-effects.layout-horizontal .tab-row-container .tab-scroll-button-inset-inline-start:after,
 body.electron.background-effects.layout-horizontal .tab-row-container .tab-scroll-button-right:after {
     content: "";
     position: absolute;
     bottom: 0;
-    left: 0px;
+    inset-inline-start: 0px;
     right: 0px;
     height: 1px;
     border-bottom: 1px solid var(--launcher-pane-horiz-border-color);
@@ -933,7 +933,7 @@ body.electron.background-effects.layout-horizontal .tab-row-container .note-tab[
     content: "";
     position: absolute;
     bottom: 0;
-    left: -32768px;
+    inset-inline-start: -32768px;
     top: var(--tab-height);
     right: calc(100% - 1px);
     height: 1px;
@@ -944,7 +944,7 @@ body.electron.background-effects.layout-horizontal .tab-row-container .note-tab[
     content: "";
     position: absolute;
     bottom: 0;
-    left: 100%;
+    inset-inline-start: 100%;
     top: var(--tab-height);
     right: 0;
     width: 100vw;
@@ -956,7 +956,7 @@ body.electron.background-effects.layout-horizontal .tab-row-container .note-new-
     content: "";
     position: absolute;
     bottom: 0;
-    left: -4px;
+    inset-inline-start: -4px;
     top: calc(var(--tab-height), -1);
     right: 0;
     width: 100vw;
@@ -1045,7 +1045,7 @@ body.layout-horizontal .tab-row-widget .note-tab .note-tab-wrapper {
     content: "";
     position: absolute;
     top: 0;
-    left: 0;
+    inset-inline-start: 0;
     right: 0;
     height: 3px;
     background-color: var(--workspace-tab-background-color);
@@ -1114,7 +1114,7 @@ body.layout-vertical .tab-row-widget-is-sorting .note-tab.note-tab-is-dragging .
     position: absolute;
     content: "";
     top: calc((var(--tab-height) - var(--new-tab-button-size)) / 2);
-    left: calc((var(--tab-height) - var(--new-tab-button-size)) / 2);
+    inset-inline-start: calc((var(--tab-height) - var(--new-tab-button-size)) / 2);
     width: var(--new-tab-button-size);
     height: var(--new-tab-button-size);
     background: var(--new-tab-button-background);
@@ -1139,7 +1139,7 @@ body.layout-vertical .tab-row-widget-is-sorting .note-tab.note-tab-is-dragging .
     display: flex;
     position: absolute;
     content: "\ebc0";
-    left: 0;
+    inset-inline-start: 0;
     top: 0;
     width: 100%;
     height: 100%;

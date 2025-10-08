@@ -725,7 +725,7 @@ table.promoted-attributes-in-tooltip th {
 
 .bs-tooltip-auto[data-popper-placement^="left"] .tooltip-arrow::before,
 .bs-tooltip-left .tooltip-arrow::before {
-    left: -1px;
+    inset-inline-start: -1px;
     border-width: 0.4rem 0 0.4rem 0.4rem;
     border-inline-start-color: var(--main-border-color) !important;
 }
@@ -753,7 +753,7 @@ table.promoted-attributes-in-tooltip th {
 
 .bs-tooltip-auto[data-popper-placement^="left"] .tooltip-arrow::after,
 .bs-tooltip-left .tooltip-arrow::after {
-    left: -1px;
+    inset-inline-start: -1px;
     border-width: 0.4rem 0 0.4rem 0.4rem;
     border-inline-start-color: var(--tooltip-background-color) !important;
 }
@@ -1274,7 +1274,7 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
 #context-menu-cover.show {
     position: fixed;
     top: 0;
-    left: 0;
+    inset-inline-start: 0;
     right: 0;
     bottom: 0;
     z-index: 1000;
@@ -1288,7 +1288,7 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
 
 body.mobile #context-menu-container.mobile-bottom-menu {
     position: fixed !important;
-    left: 0 !important;
+    inset-inline-start: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
     top: unset !important;
@@ -1339,7 +1339,7 @@ body.desktop li.dropdown-submenu:hover > ul.dropdown-menu {
 
 .dropdown-submenu > .dropdown-menu {
     top: 0;
-    left: calc(100% - 2px); /* -2px, otherwise there's a small gap between menu and submenu where the hover can disappear */
+    inset-inline-start: calc(100% - 2px); /* -2px, otherwise there's a small gap between menu and submenu where the hover can disappear */
     margin-top: -10px;
     min-width: 15rem;
     /* to make submenu scrollable https://github.com/zadam/trilium/issues/3136 */
@@ -1348,7 +1348,7 @@ body.desktop li.dropdown-submenu:hover > ul.dropdown-menu {
 }
 
 body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
-    left: calc(-100% + 10px);
+    inset-inline-start: calc(-100% + 10px);
 }
 
 .right-dropdown-widget {
@@ -1533,7 +1533,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
         position: fixed !important;
         bottom: calc(var(--mobile-bottom-offset) + var(--launcher-pane-size)) !important;
         top: unset !important;
-        left: 0 !important;
+        inset-inline-start: 0 !important;
         right: 0 !important;
         transform: unset !important;
     }
@@ -1541,7 +1541,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     #mobile-sidebar-container {
         position: fixed;
         top: 0;
-        left: 0;
+        inset-inline-start: 0;
         right: 0;
         bottom: 0;
         z-index: 1000;
@@ -1557,7 +1557,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     #mobile-sidebar-wrapper {
         position: absolute;
         top: 0;
-        left: 0;
+        inset-inline-start: 0;
         bottom: 0;
         width: 85vw;
         padding-top: env(safe-area-inset-top);
@@ -1589,7 +1589,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     body.mobile .modal-dialog {
         position: fixed;
         bottom: 0;
-        left: 0;
+        inset-inline-start: 0;
         right: 0;
         margin: 0 !important;
         max-height: 85vh;        
@@ -2293,7 +2293,7 @@ footer.webview-footer button {
     font-family: boxicons !important;
     position: absolute;
     top: 1em;
-    left: 1em;
+    inset-inline-start: 1em;
 }
 
 .admonition.note { --accent-color: var(--admonition-note-accent-color); }
@@ -2369,12 +2369,12 @@ footer.webview-footer button {
 
 .content-floating-buttons.top-left {
     top: 10px;
-    left: 10px;
+    inset-inline-start: 10px;
 }
 
 .content-floating-buttons.bottom-left {
     bottom: 10px;
-    left: 10px;
+    inset-inline-start: 10px;
 }
 
 .content-floating-buttons.bottom-right {
