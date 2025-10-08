@@ -443,7 +443,7 @@ body #context-menu-container .dropdown-item > span {
 .dropdown-item span.keyboard-shortcut,
 .dropdown-item *:not(.keyboard-shortcut) > kbd {
     flex-grow: 1;
-    text-align: right;
+    text-align: end;
     padding-inline-start: 12px;
 }
 
@@ -788,7 +788,7 @@ table.promoted-attributes-in-tooltip th {
     background-color: var(--tooltip-background-color) !important;
     border: 1px solid var(--main-border-color);
     border-radius: 5px;
-    text-align: left;
+    text-align: start;
     color: var(--main-text-color) !important;
     max-width: 500px;
     box-shadow: 10px 10px 93px -25px #aaaaaa;
@@ -1056,7 +1056,7 @@ svg.ck-icon .note-icon {
     min-width: fit-content;
     position: relative;
     right: 0.2em;
-    text-align: right;
+    text-align: end;
 }
 
 .ck-content .footnote-content {
@@ -1072,7 +1072,7 @@ svg.ck-icon .note-icon {
 }
 
 #options-dialog input[type="number"] {
-    text-align: right;
+    text-align: end;
 }
 
 .help-cards ul {

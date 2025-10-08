@@ -394,7 +394,7 @@
     /* minimal width so that table remains static sized and most space remains for middle column with settings */
     width: 50px;
     white-space: nowrap;
-    text-align: right;
+    text-align: end;
     vertical-align: middle;
 }
 

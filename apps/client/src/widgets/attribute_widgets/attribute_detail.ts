@@ -46,7 +46,7 @@ const TPL = /*html*/`
         }
 
         .attr-edit-table th {
-            text-align: left;
+            text-align: start;
         }
 
         .attr-edit-table td input[not(type="checkbox")] {
@@ -150,7 +150,7 @@ const TPL = /*html*/`
             <th title="${t("attribute_detail.precision_title")}">${t("attribute_detail.precision")}</th>
             <td>
                 <div class="input-group">
-                    <input type="number" class="form-control attr-input-number-precision" style="text-align: right">
+                    <input type="number" class="form-control attr-input-number-precision" style="text-align: end">
                     <span class="input-group-text">${t("attribute_detail.digits")}</span>
                 </div>
             </td>

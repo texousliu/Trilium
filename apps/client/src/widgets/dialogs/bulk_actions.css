@@ -19,7 +19,7 @@
 .bulk-actions-dialog .bulk-existing-action-list .button-column {
     width: 50px;
     white-space: nowrap;
-    text-align: right;
+    text-align: end;
 }
 
 .bulk-actions-dialog .bulk-existing-action-list .button-column > * {
