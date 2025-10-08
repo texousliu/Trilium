@@ -1436,6 +1436,10 @@ div#center-pane .floating-buttons-children {
                 opacity 250ms ease-out;
 }
 
+body[dir=rtl] div#center-pane .floating-buttons-children {
+    transform-origin: left;
+}
+
  /* Floating buttons container (collapsed) */
  div#center-pane .floating-buttons-children.temporarily-hidden {
     display: flex !important;
