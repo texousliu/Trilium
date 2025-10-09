@@ -6,7 +6,8 @@
     "sync_version": "اصدار المزامنه:",
     "build_date": "تاريخ الانشاء:",
     "build_revision": "مراجعة الاصدار:",
-    "data_directory": "مجلد البيانات:"
+    "data_directory": "مجلد البيانات:",
+    "db_version": "اصدار قاعدة البيانات:"
   },
   "toast": {
     "critical-error": {
@@ -34,7 +35,8 @@
     "none_yet": "لايوجد أجراء بعد... اضف اجراء بالنقر على احد الأجراءات المتاحة اعلاه.",
     "relations": "العلاقات",
     "notes": "الملاحظات",
-    "other": "أخرى"
+    "other": "أخرى",
+    "affected_notes": "الملاحظات المتأثرة"
   },
   "upload_attachments": {
     "options": "خيارات",
@@ -198,12 +200,21 @@
   },
   "export": {
     "close": "غلق",
-    "export": "تصدير"
+    "export": "تصدير",
+    "export_note_title": "تصدير الملاحظة",
+    "export_status": "حالة التصدير"
   },
   "help": {
     "troubleshooting": "أستكشاف الاخطاء واصلاحها",
     "other": "أخرى",
-    "title": "ورقة المراجعة السريعة"
+    "title": "ورقة المراجعة السريعة",
+    "noteNavigation": "التنقل بين الملاحظات",
+    "collapseExpand": "طي/توسيع العقدة",
+    "notSet": "غير محدد",
+    "collapseSubTree": "طي الشجرة الفرعية",
+    "tabShortcuts": "أختصارات التبويب",
+    "creatingNotes": "انشاء الملاحظات",
+    "selectNote": "تحديد الملاحظة"
   },
   "import": {
     "options": "خيارات",
@@ -349,5 +360,36 @@
   "editability_select": {
     "auto": "تلقائي",
     "read_only": "قراءة-فقط"
+  },
+  "tab_row": {
+    "close": "اغلاق"
+  },
+  "toc": {
+    "options": "خيارات"
+  },
+  "tasks": {
+    "due": {
+      "yesterday": "أمس"
+    }
+  },
+  "code_theme": {
+    "title": "المظهر"
+  },
+  "table_view": {
+    "sort-column-ascending": "تصاعدي",
+    "sort-column-descending": "تنازلي",
+    "new-column-relation": "العلاقة"
+  },
+  "modal": {
+    "close": "اغلاق"
+  },
+  "call_to_action": {
+    "dismiss": "تجاهل"
+  },
+  "units": {
+    "percentage": "%"
+  },
+  "clone_to": {
+    "prefix_optional": "بادئة (اختياري)"
   }
 }
