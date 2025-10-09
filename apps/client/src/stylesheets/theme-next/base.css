@@ -246,7 +246,7 @@ html body .dropdown-item[disabled] {
     color: var(--menu-item-arrow-color) !important;
 }
 
-body[dir=rtl] .dropdown-menu .dropdown-toggle::after {
+body[dir=rtl] .dropdown-menu:not([data-popper-placement="bottom-start"]) .dropdown-toggle::after {
     content: "\ea4d" !important;
 }
 
