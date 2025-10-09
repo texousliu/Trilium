@@ -214,7 +214,8 @@
     "collapseSubTree": "طي الشجرة الفرعية",
     "tabShortcuts": "أختصارات التبويب",
     "creatingNotes": "انشاء الملاحظات",
-    "selectNote": "تحديد الملاحظة"
+    "selectNote": "تحديد الملاحظة",
+    "editingNotes": "تحرير الملاحظات"
   },
   "import": {
     "options": "خيارات",
@@ -377,7 +378,9 @@
   },
   "tasks": {
     "due": {
-      "yesterday": "أمس"
+      "yesterday": "أمس",
+      "today": "اليوم",
+      "tomorrow": "غدٱ"
     }
   },
   "code_theme": {
@@ -472,5 +475,20 @@
     "cut": "قص",
     "copy": "نسخ",
     "paste": "لصق"
+  },
+  "promoted_attributes": {
+    "url_placeholder": "http://website..."
+  },
+  "duration": {
+    "seconds": "ثواني",
+    "minutes": "دقائق",
+    "hours": "ساعات",
+    "days": "أيام"
+  },
+  "editorfeatures": {
+    "title": "مميزات"
+  },
+  "book_properties_config": {
+    "raster": "نقطي"
   }
 }
