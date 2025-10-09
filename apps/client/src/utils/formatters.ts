@@ -10,7 +10,7 @@ export function formatDateTime(date: string | Date | number | null | undefined, 
         return "";
     }
 
-    const locale = options.get("formattingLocale") ?? options.get("locale") ?? navigator.language;
+    const locale = options.get("formattingLocale") || options.get("locale") || navigator.language;
 
     let parsedDate;
     if (typeof date === "string" || typeof date === "number") {

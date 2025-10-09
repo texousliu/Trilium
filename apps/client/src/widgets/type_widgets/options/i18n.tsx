@@ -23,7 +23,7 @@ export default function InternationalizationOptions() {
 }
 
 function LocalizationOptions() {
-    const { uiLocales, formattingLocales: contentLocales } = useMemo(() => {
+    const { uiLocales, formattingLocales: contentLocales } = useMemo<{ uiLocales: Locale[], formattingLocales: Locale[] }>(() => {
         const allLocales = getAvailableLocales();
         return {
             uiLocales: allLocales.filter(locale => {
@@ -31,7 +31,10 @@ function LocalizationOptions() {
                 if (locale.devOnly && !glob.isDev) return false;
                 return true;
             }),
-            formattingLocales: allLocales.filter(locale => locale.electronLocale),
+            formattingLocales: [
+                { id: "", name: t("i18n.formatting-locale-auto") },
+                ...allLocales.filter(locale => locale.electronLocale)
+            ]
         }
     }, []);
 
