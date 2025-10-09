@@ -7,6 +7,10 @@
     <title><%= t("setup.title") %></title>
 
     <style>
+        body {
+            /* Prevent the content from being rendered before the main stylesheet loads */
+            display: none;
+        }
         .lds-ring {
             display: inline-block;
             position: relative;
