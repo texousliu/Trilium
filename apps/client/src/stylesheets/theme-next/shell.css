@@ -1055,7 +1055,7 @@ body.layout-horizontal .tab-row-widget .note-tab .note-tab-wrapper {
     background-color: var(--workspace-tab-background-color);
 }
 
-.tab-row-widget .note-tab:nth-child(1) {
+body:not([dir=rtl]) .tab-row-widget .note-tab:nth-child(1) {
     transform: translate3d(var(--tab-first-item-horiz-offset), 0, 0);
 }
 

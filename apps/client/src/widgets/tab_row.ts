@@ -500,6 +500,9 @@ export default class TabRowWidget extends BasicWidget {
         position -= MARGIN_WIDTH; // the last margin should not be applied
 
         const anchorPosition = position;
+        if (glob.isRtl) {
+            tabPositions.reverse();
+        }
 
         return { tabPositions, anchorPosition };
     }
