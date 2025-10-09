@@ -1,46 +1,47 @@
-# ملاحظات تريليوم
+# Trilium Notes
 
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
 ![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran)\
 ![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/trilium)
-![GitHub Downloads (all assets, all
-releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
+![Unduhan GitHub (semua aset, semua
+rilis)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
-[![Translation
-status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
+[![Status
+terjemahan](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
 [English](./README.md) | [Chinese (Simplified)](./docs/README-ZH_CN.md) |
 [Chinese (Traditional)](./docs/README-ZH_TW.md) | [Russian](./docs/README-ru.md)
 | [Japanese](./docs/README-ja.md) | [Italian](./docs/README-it.md) |
 [Spanish](./docs/README-es.md)
 
-Trilium Notes is a free and open-source, cross-platform hierarchical note taking
-application with focus on building large personal knowledge bases.
+Trilium Notes adalah aplikasi pencatatan hierarkis lintas platform yang gratis
+dan sumber terbuka dengan fokus untuk mengembangkan pengetahuan pribadi yang
+luas.
 
 See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for
 quick overview:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
-## 📚توثيق
+## 📚 Dokumentasi
 
-**Visit our comprehensive documentation at
+**Kunjungi dokumentasi lengkap kami di
 [docs.triliumnotes.org](https://docs.triliumnotes.org/)**
 
-يتوفر التوثيق لدينا بصيغ متعددة:
-- **Online Documentation**: Browse the full documentation at
+Dokumentasi kami tersedia dalam berbagai format:
+- **Dokumentasi Online**: Telusuri dokumentasi lengkap di
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
-- **In-App Help**: Press `F1` within Trilium to access the same documentation
-  directly in the application
-- **GitHub**: Navigate through the [User
-  Guide](./docs/User%20Guide/User%20Guide/) in this repository
+- **Bantuan Dalam Aplikasi**: Tekan `F1` di dalam Trilium untuk mengakses
+  dokumentasi yang sama langsung di aplikasi
+- **GitHub**: Navigasi melalui [Panduan
+  Pengguna](./docs/User%20Guide/User%20Guide/) di repositori ini
 
-### روابط سريعة
-- [دليل البدء السريع](https://docs.triliumnotes.org/)
-- [Installation
-  Instructions](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
-- [Docker
-  Setup](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+### Tautan Cepat
+- [Panduan Memulai](https://docs.triliumnotes.org/)
+- [Petunjuk
+  Instalasi](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+- [Pengaturan
+  Docker](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
 - [Upgrading
   TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
 - [Basic Concepts and
@@ -48,7 +49,7 @@ quick overview:
 - [Patterns of Personal Knowledge
   Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
-## 🎁الميزات
+## 🎁 Features
 
 * Notes can be arranged into arbitrarily deep tree. Single note can be placed
   into multiple places in the tree (see
@@ -135,7 +136,7 @@ compatible with the latest zadam/trilium version of
 versions of TriliumNext/Trilium have their sync versions incremented which
 prevents direct migration.
 
-## 💬تحدث معنا
+## 💬 Discuss with us
 
 Feel free to join our official conversations. We would love to hear what
 features, suggestions, or issues you may have!
@@ -157,7 +158,7 @@ Download the binary release for your platform from the [latest release
 page](https://github.com/TriliumNext/Trilium/releases/latest), unzip the package
 and run the `trilium` executable.
 
-### لينكس
+### Linux
 
 If your distribution is listed in the table below, use your distribution's
 package.
@@ -179,7 +180,7 @@ interface (which is almost identical to the desktop app).
 Currently only the latest versions of Chrome & Firefox are supported (and
 tested).
 
-### هاتف المحمول
+### Mobile
 
 To use TriliumNext on a mobile device, you can use a mobile web browser to
 access the mobile interface of a server installation (see below).
@@ -194,7 +195,7 @@ repository](https://github.com/FliegendeWurst/TriliumDroid). Note: It is best to
 disable automatic updates on your server installation (see below) when using
 TriliumDroid since the sync version must match between Trilium and TriliumDroid.
 
-### الخادم
+### Server
 
 To install TriliumNext on your own server (including via Docker from
 [Dockerhub](https://hub.docker.com/r/triliumnext/trilium)) follow [the server
@@ -203,7 +204,7 @@ installation docs](https://triliumnext.github.io/Docs/Wiki/server-installation).
 
 ## 💻 Contribute
 
-### ترجمات
+### Translations
 
 If you are a native speaker, help us translate Trilium by heading over to our
 [Weblate page](https://hosted.weblate.org/engage/trilium/).
@@ -213,7 +214,7 @@ Here's the language coverage we have so far:
 [![Translation
 status](https://hosted.weblate.org/widget/trilium/multi-auto.svg)](https://hosted.weblate.org/engage/trilium/)
 
-### كود
+### Code
 
 Download the repository, install dependencies using `pnpm` and then run the
 server (available at http://localhost:8080):
@@ -224,7 +225,7 @@ pnpm install
 pnpm run server:start
 ```
 
-### التوثيق
+### Documentation
 
 Download the repository, install dependencies using `pnpm` and then run the
 environment required to edit the documentation:

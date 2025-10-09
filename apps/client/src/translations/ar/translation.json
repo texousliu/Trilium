@@ -6,7 +6,8 @@
     "sync_version": "اصدار المزامنه:",
     "build_date": "تاريخ الانشاء:",
     "build_revision": "مراجعة الاصدار:",
-    "data_directory": "مجلد البيانات:"
+    "data_directory": "مجلد البيانات:",
+    "db_version": "اصدار قاعدة البيانات:"
   },
   "toast": {
     "critical-error": {
@@ -26,6 +27,369 @@
     "save": "حفظ"
   },
   "bulk_actions": {
-    "bulk_actions": "اجراءات جماعية"
+    "bulk_actions": "اجراءات جماعية",
+    "available_actions": "الاجراءات المتاحة",
+    "chosen_actions": "الأجراءات المختارة",
+    "execute_bulk_actions": "تنفيذ الأجراءات الجماعية",
+    "bulk_actions_executed": "تم تنفيذ الاجراءات الجماعية بنجاح،",
+    "none_yet": "لايوجد أجراء بعد... اضف اجراء بالنقر على احد الأجراءات المتاحة اعلاه.",
+    "relations": "العلاقات",
+    "notes": "الملاحظات",
+    "other": "أخرى",
+    "affected_notes": "الملاحظات المتأثرة"
+  },
+  "upload_attachments": {
+    "options": "خيارات",
+    "upload": "تحميل"
+  },
+  "attribute_detail": {
+    "name": "الاسم",
+    "value": "قيمة",
+    "promoted": "تمت ترقيته",
+    "promoted_alias": "اسم مستعار",
+    "label_type": "نوع",
+    "text": "نص",
+    "date": "تاريخ",
+    "time": "وقت",
+    "precision": "دفة",
+    "digits": "رقم",
+    "delete": "حذف",
+    "color_type": "لون",
+    "multiplicity": "تعددية",
+    "number": "عدد",
+    "boolean": "منطقي",
+    "url": "عنوان الويب",
+    "inheritable": "قابل للوراثة"
+  },
+  "rename_label": {
+    "to": "الى"
+  },
+  "move_note": {
+    "to": "الى"
+  },
+  "add_relation": {
+    "to": "الى"
+  },
+  "rename_relation": {
+    "to": "الى"
+  },
+  "update_relation_target": {
+    "to": "الى"
+  },
+  "attachments_actions": {
+    "download": "تنزيل"
+  },
+  "calendar": {
+    "week": "أسبوع",
+    "month": "شهر",
+    "year": "سنة",
+    "list": "قائمة",
+    "today": "اليوم",
+    "mon": "الأثنين",
+    "tue": "الثلاثاء",
+    "wed": "الأربعاء",
+    "thu": "الخميس",
+    "fri": "الجمعة",
+    "sat": "السبت",
+    "sun": "الأحد",
+    "january": "يناير",
+    "march": "مارس",
+    "april": "ابريل",
+    "may": "مايو",
+    "june": "يونيو",
+    "july": "يوليو",
+    "august": "أغسطس",
+    "september": "سبتمبر",
+    "october": "اكتوبر",
+    "november": "نوفمبر",
+    "december": "ديسمبر"
+  },
+  "global_menu": {
+    "menu": "القائمة",
+    "options": "خيارات",
+    "advanced": "متقدمة",
+    "logout": "تسجيل خروج",
+    "zoom": "تكبير/تصغير"
+  },
+  "zpetne_odkazy": {
+    "relation": "العلاقة"
+  },
+  "note_icon": {
+    "category": "الفئة:",
+    "search": "بحث:"
+  },
+  "basic_properties": {
+    "language": "اللغة",
+    "editable": "قابل للتعديل"
+  },
+  "book_properties": {
+    "list": "قائمة",
+    "expand": "توسيع",
+    "calendar": "التقويم",
+    "table": "جدول",
+    "board": "لوحة",
+    "grid": "خطوط شبكة",
+    "collapse": "طي"
+  },
+  "file_properties": {
+    "download": "تنزيل",
+    "open": "فتح",
+    "title": "ملف"
+  },
+  "image_properties": {
+    "download": "تنزيل",
+    "open": "فتح",
+    "title": "صورة"
+  },
+  "note_info_widget": {
+    "created": "انشاء",
+    "type": "نوع",
+    "modified": "معدل",
+    "calculate": "حساب"
+  },
+  "note_paths": {
+    "search": "بحث",
+    "archived": "مؤرشف"
+  },
+  "script_executor": {
+    "query": "استعلام",
+    "script": "برنامج نصي"
+  },
+  "search_definition": {
+    "ancestor": "السلف",
+    "limit": "الحد الاقصى",
+    "action": "أجراء",
+    "search_button": "بحث",
+    "debug": "تصحيح الاخطاء"
+  },
+  "ancestor": {
+    "label": "السلف",
+    "depth_label": "العمق"
+  },
+  "limit": {
+    "limit": "الحد الاقصى"
+  },
+  "debug": {
+    "debug": "تصحيح الاخطاء"
+  },
+  "order_by": {
+    "title": "عنوان",
+    "desc": "تنازلي"
+  },
+  "search_string": {
+    "search_prefix": "بحث:"
+  },
+  "sync": {
+    "title": "مزامنة"
+  },
+  "fonts": {
+    "fonts": "خطوط",
+    "size": "حجم",
+    "serif": "خط ومزخرف",
+    "monospace": "خط بعرض ثابت"
+  },
+  "confirm": {
+    "confirmation": "تأكيد",
+    "cancel": "الغاء",
+    "ok": "نعم"
+  },
+  "delete_notes": {
+    "close": "غلق",
+    "cancel": "الغاء",
+    "ok": "نعم"
+  },
+  "export": {
+    "close": "غلق",
+    "export": "تصدير",
+    "export_note_title": "تصدير الملاحظة",
+    "export_status": "حالة التصدير"
+  },
+  "help": {
+    "troubleshooting": "أستكشاف الاخطاء واصلاحها",
+    "other": "أخرى",
+    "title": "ورقة المراجعة السريعة",
+    "noteNavigation": "التنقل بين الملاحظات",
+    "collapseExpand": "طي/توسيع العقدة",
+    "notSet": "غير محدد",
+    "collapseSubTree": "طي الشجرة الفرعية",
+    "tabShortcuts": "أختصارات التبويب",
+    "creatingNotes": "انشاء الملاحظات",
+    "selectNote": "تحديد الملاحظة"
+  },
+  "import": {
+    "options": "خيارات",
+    "import": "استيراد"
+  },
+  "include_note": {
+    "label_note": "ملاحظة"
+  },
+  "info": {
+    "closeButton": "أغلاق",
+    "okButton": "نعم"
+  },
+  "markdown_import": {
+    "import_button": "أستيراد"
+  },
+  "note_type_chooser": {
+    "templates": "قوالب"
+  },
+  "prompt": {
+    "title": "ترقية",
+    "ok": "نعم",
+    "defaultTitle": "ترقية"
+  },
+  "protected_session_password": {
+    "close_label": "أغلاق"
+  },
+  "revisions": {
+    "delete_button": "حذف",
+    "download_button": "تنزيل",
+    "restore_button": "أستعادة",
+    "preview": "معاينة:"
+  },
+  "sort_child_notes": {
+    "title": "عنوان",
+    "ascending": "تصاعدي",
+    "descending": "تنازلي",
+    "folders": "مجلدات",
+    "sort": "فرز"
+  },
+  "recent_changes": {
+    "undelete_link": "الغاء الحذف"
+  },
+  "edited_notes": {
+    "deleted": "(حذف)"
+  },
+  "note_properties": {
+    "info": "معلومات"
+  },
+  "backend_log": {
+    "refresh": "تحديث"
+  },
+  "max_content_width": {
+    "max_width_unit": "بكسل"
+  },
+  "native_title_bar": {
+    "enabled": "مفعل",
+    "disabled": "معطل"
+  },
+  "theme": {
+    "theme_label": "السمة",
+    "layout": "تخطيط",
+    "layout-vertical-title": "عمودي",
+    "layout-horizontal-title": "أفقي"
+  },
+  "ui-performance": {
+    "title": "أداء"
+  },
+  "ai_llm": {
+    "progress": "تقدم",
+    "openai_tab": "OpenAI",
+    "actions": "أجراءات",
+    "retry": "أعد المحاولة",
+    "reprocessing_index": "جار اعادة البناء...",
+    "never": "ابدٱ",
+    "agent": {
+      "processing": "جار المعالجة...",
+      "thinking": "جار التفكير...",
+      "loading": "جار التحميل...",
+      "generating": "جار الانشاء..."
+    },
+    "name": "الذكاء الأصطناعي",
+    "openai": "OpenAI",
+    "sources": "مصادر"
+  },
+  "code_auto_read_only_size": {
+    "unit": "حروف"
+  },
+  "code-editor-options": {
+    "title": "محرر"
+  },
+  "images": {
+    "images_section_title": "صور",
+    "max_image_dimensions_unit": "بكسل"
+  },
+  "revisions_snapshot_limit": {
+    "snapshot_number_limit_unit": "لقطات"
+  },
+  "search_engine": {
+    "bing": "Bing",
+    "duckduckgo": "DuckDuckGo",
+    "google": "جوجل",
+    "save_button": "حفظ"
+  },
+  "heading_style": {
+    "plain": "بسيط"
+  },
+  "text_auto_read_only_size": {
+    "unit": "حروف"
+  },
+  "i18n": {
+    "language": "لغة",
+    "sunday": "الأحد",
+    "monday": "الأثنين"
+  },
+  "backup": {
+    "path": "مسار"
+  },
+  "etapi": {
+    "wiki": "ويكي",
+    "created": "تم الأنشاء",
+    "actions": "أجراءات"
+  },
+  "password": {
+    "heading": "كلمة السر",
+    "wiki": "ويكي"
+  },
+  "shortcuts": {
+    "shortcuts": "أختصارات",
+    "description": "الوصف"
+  },
+  "sync_2": {
+    "timeout_unit": "ميلي ثانية",
+    "note": "ملاحظة",
+    "save": "حفظ",
+    "help": "المساعدة"
+  },
+  "api_log": {
+    "close": "أغلاق"
+  },
+  "bookmark_switch": {
+    "bookmark": "علامة مرجعية"
+  },
+  "editability_select": {
+    "auto": "تلقائي",
+    "read_only": "قراءة-فقط"
+  },
+  "tab_row": {
+    "close": "اغلاق"
+  },
+  "toc": {
+    "options": "خيارات"
+  },
+  "tasks": {
+    "due": {
+      "yesterday": "أمس"
+    }
+  },
+  "code_theme": {
+    "title": "المظهر"
+  },
+  "table_view": {
+    "sort-column-ascending": "تصاعدي",
+    "sort-column-descending": "تنازلي",
+    "new-column-relation": "العلاقة"
+  },
+  "modal": {
+    "close": "اغلاق"
+  },
+  "call_to_action": {
+    "dismiss": "تجاهل"
+  },
+  "units": {
+    "percentage": "%"
+  },
+  "clone_to": {
+    "prefix_optional": "بادئة (اختياري)"
   }
 }
