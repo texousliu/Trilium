@@ -14,7 +14,7 @@ import openIDEncryption from '../services/encryption/open_id_encryption.js';
 import { getCurrentLocale } from "../services/i18n.js";
 
 function loginPage(req: Request, res: Response) {
-    // Login page is triggered twice. Once here, and another time if the password is failed.
+    // Login page is triggered twice. Once here, and another time (see sendLoginError) if the password is failed.
     res.render('login', {
         wrongPassword: false,
         wrongTotp: false,
@@ -177,6 +177,7 @@ function sendLoginError(req: Request, res: Response, errorType: 'password' | 'to
         assetPath: assetPath,
         assetPathFragment: assetUrlFragment,
         appPath: appPath,
+        currentLocale: getCurrentLocale()
     });
 }
 
