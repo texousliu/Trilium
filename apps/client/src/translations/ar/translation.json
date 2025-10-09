@@ -297,7 +297,12 @@
     },
     "name": "الذكاء الأصطناعي",
     "openai": "OpenAI",
-    "sources": "مصادر"
+    "sources": "مصادر",
+    "temperature": "درجة الحرارة",
+    "model": "نموذج",
+    "refreshing_models": "جار التحديث...",
+    "error": "خطأ",
+    "refreshing": "جا ر التحديث..."
   },
   "code_auto_read_only_size": {
     "unit": "حروف"
@@ -316,10 +321,12 @@
     "bing": "Bing",
     "duckduckgo": "DuckDuckGo",
     "google": "جوجل",
-    "save_button": "حفظ"
+    "save_button": "حفظ",
+    "baidu": "Baidu"
   },
   "heading_style": {
-    "plain": "بسيط"
+    "plain": "بسيط",
+    "underline": "تسطير"
   },
   "text_auto_read_only_size": {
     "unit": "حروف"
@@ -327,7 +334,8 @@
   "i18n": {
     "language": "لغة",
     "sunday": "الأحد",
-    "monday": "الأثنين"
+    "monday": "الأثنين",
+    "title": "تعريب"
   },
   "backup": {
     "path": "مسار"
@@ -391,5 +399,78 @@
   },
   "clone_to": {
     "prefix_optional": "بادئة (اختياري)"
+  },
+  "table_of_contents": {
+    "unit": "عناوين"
+  },
+  "tree-context-menu": {
+    "archive": "أرشفة",
+    "unarchive": "الغاء الارشفة",
+    "delete": "حذف",
+    "advanced": "متقدمة",
+    "cut": "قص",
+    "duplicate": "استنساخ",
+    "export": "تصدير"
+  },
+  "note_types": {
+    "text": "نص",
+    "code": "كود",
+    "book": "مجموعة",
+    "canvas": "مساحة العمل",
+    "file": "ملف",
+    "image": "صورة",
+    "launcher": "مشغل",
+    "doc": "مستند",
+    "widget": "عنصر واجهه",
+    "new-feature": "جديد",
+    "collections": "مجاميع"
+  },
+  "shared_switch": {
+    "shared": "مشترك"
+  },
+  "template_switch": {
+    "template": "قالب"
+  },
+  "find": {
+    "replace": "أستبدال"
+  },
+  "highlights_list_2": {
+    "options": "خيارات"
+  },
+  "quick-search": {
+    "searching": "جار البحث..."
+  },
+  "note_tree": {
+    "unhoist": "ارجاع الى الترتيب الطبيعي"
+  },
+  "sql_table_schemas": {
+    "tables": "جداول"
+  },
+  "launcher_context_menu": {
+    "reset": "اعادة ضبط"
+  },
+  "editable-text": {
+    "auto-detect-language": "تم اكتشافة تلقائيا"
+  },
+  "classic_editor_toolbar": {
+    "title": "تنسيق"
+  },
+  "editor": {
+    "title": "محرر"
+  },
+  "editing": {
+    "editor_type": {
+      "floating": {
+        "title": "عائم"
+      },
+      "fixed": {
+        "title": "مثبت"
+      }
+    }
+  },
+  "electron_context_menu": {
+    "cut": "قص",
+    "copy": "نسخ",
+    "paste": "لصق"
   }
 }
