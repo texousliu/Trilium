@@ -72,7 +72,11 @@ vi.mock("../../services/options.js", () => ({
         getOptionMap: vi.fn(() => new Map()),
         createOption: vi.fn(),
         getOption: vi.fn(() => '0'),
-        getOptionOrNull: vi.fn(() => null)
+        getOptionOrNull: vi.fn(() => null),
+        getOptionInt: vi.fn(name => {
+            if (name === "protectedSessionTimeout") return Number.MAX_SAFE_INTEGER;
+            return 0;
+        })
     }
 }));
 
