@@ -285,6 +285,11 @@
     transition: opacity .1s linear;
 }
 
+body[dir=rtl] .attribute-list-editor {
+    padding: 0 5px 0 100px !important;
+    text-align: right !important;
+}
+
 .attribute-list-editor.ck-content .mention {
     color: var(--muted-text-color) !important;
     background: transparent !important;
