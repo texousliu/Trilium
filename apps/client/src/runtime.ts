@@ -1,7 +1,7 @@
 import $ from "jquery";
 
 async function loadBootstrap() {
-    if (glob.isRtl) {
+    if (document.body.dir === "rtl") {
         await import("bootstrap/dist/css/bootstrap.rtl.min.css");
     } else {
         await import("bootstrap/dist/css/bootstrap.min.css");

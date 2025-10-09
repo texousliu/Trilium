@@ -76,3 +76,10 @@ export async function changeLanguage(locale: string) {
     await i18next.changeLanguage(locale);
     hidden_subtree.checkHiddenSubtree(true, { restoreNames: true });
 }
+
+export function getCurrentLocale() {
+    const localeId = options.getOptionOrNull("locale") ?? "en";
+    const currentLocale = LOCALES.find(l => l.id === localeId);
+    if (!currentLocale) return LOCALES.find(l => l.id === "en")!;
+    return currentLocale;
+}

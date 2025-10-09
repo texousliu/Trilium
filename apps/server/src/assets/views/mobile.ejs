@@ -97,7 +97,10 @@
         }
     </style>
 </head>
-<body class="mobile heading-style-<%= headingStyle %>">
+<body
+    class="mobile heading-style-<%= headingStyle %>"
+    lang="<%= currentLocale.id %>" dir="<%= currentLocale.rtl ? 'rtl' : 'ltr' %>"
+>
 <noscript><%= t("javascript-required") %></noscript>
 
 <div id="toast-container" class="d-flex flex-column justify-content-center align-items-center"></div>

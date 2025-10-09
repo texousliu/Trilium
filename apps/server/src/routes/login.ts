@@ -11,6 +11,7 @@ import totp from '../services/totp.js';
 import recoveryCodeService from '../services/encryption/recovery_codes.js';
 import openID from '../services/open_id.js';
 import openIDEncryption from '../services/encryption/open_id_encryption.js';
+import { getCurrentLocale } from "../services/i18n.js";
 
 function loginPage(req: Request, res: Response) {
     // Login page is triggered twice. Once here, and another time if the password is failed.
@@ -24,6 +25,7 @@ function loginPage(req: Request, res: Response) {
         assetPath: assetPath,
         assetPathFragment: assetUrlFragment,
         appPath: appPath,
+        currentLocale: getCurrentLocale()
     });
 }
 

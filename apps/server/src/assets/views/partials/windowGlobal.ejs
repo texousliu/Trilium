@@ -19,6 +19,6 @@
         platform: "<%= platform %>",
         hasNativeTitleBar: <%= hasNativeTitleBar %>,
         TRILIUM_SAFE_MODE: <%= !!process.env.TRILIUM_SAFE_MODE %>,
-        isRtl: <%= isRtl %>
+        isRtl: <%= !!currentLocale.isRtl %>
     };
 </script>
