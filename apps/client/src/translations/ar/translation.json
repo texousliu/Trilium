@@ -215,11 +215,13 @@
     "tabShortcuts": "أختصارات التبويب",
     "creatingNotes": "انشاء الملاحظات",
     "selectNote": "تحديد الملاحظة",
-    "editingNotes": "تحرير الملاحظات"
+    "editingNotes": "تحرير الملاحظات",
+    "inPageSearch": "البحث داخل الصفحة"
   },
   "import": {
     "options": "خيارات",
-    "import": "استيراد"
+    "import": "استيراد",
+    "safeImport": "أستيراد آمن"
   },
   "include_note": {
     "label_note": "ملاحظة"
