@@ -33,7 +33,8 @@ function setPasswordPage(req: Request, res: Response) {
     res.render("set_password", {
         error: false,
         assetPath,
-        appPath
+        appPath,
+        currentLocale: getCurrentLocale()
     });
 }
 
@@ -58,7 +59,8 @@ function setPassword(req: Request, res: Response) {
         res.render("set_password", {
             error,
             assetPath,
-            appPath
+            appPath,
+            currentLocale: getCurrentLocale()
         });
         return;
     }

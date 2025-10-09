@@ -45,7 +45,7 @@
     </style>
     <script src="<%= appPath %>/runtime.js" crossorigin type="module"></script>
 </head>
-<body>
+<body lang="<%= currentLocale.id %>" dir="<%= currentLocale.rtl ? 'rtl' : 'ltr' %>">
 <noscript><%= t("javascript-required") %></noscript>
 <div class="container">
     <div id="setup-dialog" class="col-md-12 col-lg-8 col-xl-6 mx-auto" style="padding-top: 25px; font-size: larger; display: none;">
