@@ -47,7 +47,8 @@ const UNSORTED_LOCALES: Locale[] = [
         id: "ar",
         name: "اَلْعَرَبِيَّةُ",
         rtl: true,
-        devOnly: true
+        devOnly: true,
+        electronLocale: "ar"
     },
     { // Hebrew
         id: "he",
