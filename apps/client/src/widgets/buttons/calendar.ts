@@ -8,6 +8,7 @@ import options from "../../services/options.js";
 import { Dropdown } from "bootstrap";
 import type { EventData } from "../../components/app_context.js";
 import dayjs, { Dayjs } from "dayjs";
+import isoWeek from "dayjs/plugin/isoWeek.js";
 import utc from "dayjs/plugin/utc.js";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter.js";
 import "../../stylesheets/calendar.css";
@@ -15,6 +16,7 @@ import type { AttributeRow } from "@triliumnext/commons";
 
 dayjs.extend(utc);
 dayjs.extend(isSameOrAfter);
+dayjs.extend(isoWeek);
 
 const MONTHS = [
     t("calendar.january"),
@@ -246,71 +248,7 @@ export default class CalendarWidget extends RightDropdownButtonWidget {
     }
 
     getWeekNumber(date: Dayjs): number {
-        const year = date.year();
-        const dayOfWeek = (day: number) => (day - this.firstDayOfWeek + 7) % 7;
-
-        // Get first day of the year and adjust to first week start
-        const jan1 = date.clone().year(year).month(0).date(1);
-        const jan1Weekday = jan1.day();
-        const dayOffset = dayOfWeek(jan1Weekday);
-        let firstWeekStart = jan1.clone().subtract(dayOffset, 'day');
-
-        // Adjust based on week rule
-        switch (this.weekCalculationOptions.firstWeekType) {
-            case 1: { // ISO 8601: first week contains Thursday
-                const thursday = firstWeekStart.clone().add(3, 'day'); // Monday + 3 = Thursday
-                if (thursday.year() < year) {
-                    firstWeekStart = firstWeekStart.add(7, 'day');
-                }
-                break;
-            }
-            case 2: { // minDaysInFirstWeek rule
-                const daysInFirstWeek = 7 - dayOffset;
-                if (daysInFirstWeek < this.weekCalculationOptions.minDaysInFirstWeek) {
-                    firstWeekStart = firstWeekStart.add(7, 'day');
-                }
-                break;
-            }
-            // default case 0: week containing Jan 1 → already handled
-        }
-
-        const diffDays = date.startOf('day').diff(firstWeekStart.startOf('day'), 'day');
-        const weekNumber = Math.floor(diffDays / 7) + 1;
-
-        // Handle case when date is before first week start → belongs to last week of previous year
-        if (weekNumber <= 0) {
-            return this.getWeekNumber(date.subtract(1, 'day'));
-        }
-
-        // Handle case when date belongs to first week of next year
-        const nextYear = year + 1;
-        const jan1Next = date.clone().year(nextYear).month(0).date(1);
-        const jan1WeekdayNext = jan1Next.day();
-        const offsetNext = dayOfWeek(jan1WeekdayNext);
-        let nextYearWeekStart = jan1Next.clone().subtract(offsetNext, 'day');
-
-        switch (this.weekCalculationOptions.firstWeekType) {
-            case 1: {
-                const thursday = nextYearWeekStart.clone().add(3, 'day');
-                if (thursday.year() < nextYear) {
-                    nextYearWeekStart = nextYearWeekStart.add(7, 'day');
-                }
-                break;
-            }
-            case 2: {
-                const daysInFirstWeek = 7 - offsetNext;
-                if (daysInFirstWeek < this.weekCalculationOptions.minDaysInFirstWeek) {
-                    nextYearWeekStart = nextYearWeekStart.add(7, 'day');
-                }
-                break;
-            }
-        }
-
-        if (date.isSameOrAfter(nextYearWeekStart)) {
-            return 1;
-        }
-
-        return weekNumber;
+        return date.isoWeek();
     }
 
     async dropdownShown() {
