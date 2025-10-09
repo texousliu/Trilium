@@ -246,6 +246,10 @@ html body .dropdown-item[disabled] {
     color: var(--menu-item-arrow-color) !important;
 }
 
+body[dir=rtl] .dropdown-menu .dropdown-toggle::after {
+    content: "\ea4d" !important;
+}
+
 /* Menu item group heading */
 
 /* The heading body */
