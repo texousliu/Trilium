@@ -23,11 +23,18 @@ export default function InternationalizationOptions() {
 }
 
 function LocalizationOptions() {
-    const { uiLocales, formattingLocales: contentLocales } = useMemo(() => {
-        const allLocales = getAvailableLocales();        
+    const { uiLocales, formattingLocales: contentLocales } = useMemo<{ uiLocales: Locale[], formattingLocales: Locale[] }>(() => {
+        const allLocales = getAvailableLocales();
         return {
-            uiLocales: allLocales.filter(locale => !locale.contentOnly),
-            formattingLocales: allLocales.filter(locale => locale.electronLocale),
+            uiLocales: allLocales.filter(locale => {
+                if (locale.contentOnly) return false;
+                if (locale.devOnly && !glob.isDev) return false;
+                return true;
+            }),
+            formattingLocales: [
+                { id: "", name: t("i18n.formatting-locale-auto") },
+                ...allLocales.filter(locale => locale.electronLocale)
+            ]
         }
     }, []);
 
@@ -40,7 +47,7 @@ function LocalizationOptions() {
                 <LocaleSelector locales={uiLocales} currentValue={locale} onChange={setLocale} />
             </OptionsRow>
 
-            {isElectron() && <OptionsRow name="formatting-locale" label={t("i18n.formatting-locale")}>
+            {<OptionsRow name="formatting-locale" label={t("i18n.formatting-locale")}>
                 <LocaleSelector locales={contentLocales} currentValue={formattingLocale} onChange={setFormattingLocale} />
             </OptionsRow>}
 
@@ -53,7 +60,7 @@ function LocaleSelector({ id, locales, currentValue, onChange }: { id?: string; 
     return <FormSelect
         id={id}
         values={locales}
-        keyProperty="id" titleProperty="name"                
+        keyProperty="id" titleProperty="name"
         currentValue={currentValue} onChange={onChange}
     />;
 }
@@ -74,7 +81,7 @@ function DateSettings() {
                     ]}
                     currentValue={firstDayOfWeek} onChange={setFirstDayOfWeek}
                 />
-            </OptionsRow>  
+            </OptionsRow>
 
             <OptionsRow name="first-week-of-year" label={t("i18n.first-week-of-the-year")}>
                 <FormRadioGroup
@@ -93,7 +100,7 @@ function DateSettings() {
                     keyProperty="days"
                     currentValue={minDaysInFirstWeek} onChange={setMinDaysInFirstWeek}
                     values={Array.from(
-                        { length: 7 }, 
+                        { length: 7 },
                         (_, i) => ({ days: String(i + 1) }))} />
             </OptionsRow>}
 

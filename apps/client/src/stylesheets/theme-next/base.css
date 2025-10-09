@@ -120,8 +120,8 @@ body.desktop .dropdown-menu::before,
     border-radius: var(--dropdown-border-radius);
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
     bottom: 0;
     z-index: -1;
 }
@@ -211,7 +211,7 @@ html body .dropdown-item[disabled] {
 
 .dropdown-item span.keyboard-shortcut {
     color: var(--menu-item-keyboard-shortcut-color) !important;
-    margin-left: 16px;
+    margin-inline-start: 16px;
 }
 
 .dropdown-divider {
@@ -224,8 +224,8 @@ html body .dropdown-item[disabled] {
     position: absolute;
     content: "";
     top: -1px;
-    left: calc(0px - var(--menu-padding-size));
-    right: calc(0px - var(--menu-padding-size));
+    inset-inline-start: calc(0px - var(--menu-padding-size));
+    inset-inline-end: calc(0px - var(--menu-padding-size));
     border-top: 1px solid var(--menu-item-delimiter-color);
 }
 
@@ -237,13 +237,17 @@ html body .dropdown-item[disabled] {
     align-items: center;
     justify-content: center;
     top: 0;
-    right: 0;
+    inset-inline-end: 0;
     margin: unset !important;
     border: unset !important;
     padding: 0 4px;
     font-family: boxicons;
     font-size: 1.2em;
     color: var(--menu-item-arrow-color) !important;
+}
+
+body[dir=rtl] .dropdown-menu:not([data-popper-placement="bottom-start"]) .dropdown-toggle::after {
+    content: "\ea4d" !important;
 }
 
 /* Menu item group heading */
@@ -264,8 +268,8 @@ html body .dropdown-item[disabled] {
     content: "";
     position: absolute;
     bottom: 8px;
-    left: calc(0px - var(--menu-padding-size));
-    right: calc(0px - var(--menu-padding-size));
+    inset-inline-start: calc(0px - var(--menu-padding-size));
+    inset-inline-end: calc(0px - var(--menu-padding-size));
     border-top: 1px solid var(--menu-item-delimiter-color);
 }
 
@@ -357,13 +361,13 @@ li.dropdown-item a.dropdown-item-button:focus-visible {
 }
 
 #toast-container .toast:not(.no-title) .bx {
-    margin-right: 0.5em;
+    margin-inline-end: 0.5em;
     font-size: 1.1em;
     opacity: 0.85;
 }
 
 #toast-container .toast.no-title .bx {
-    margin-right: 0;
+    margin-inline-end: 0;
     font-size: 1.3em;
 }
 
