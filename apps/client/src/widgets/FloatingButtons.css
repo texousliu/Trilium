@@ -15,7 +15,6 @@
 
 .note-split.rtl .floating-buttons-children,
 .note-split.rtl .show-floating-buttons {
-    inset-inline-end: unset;
     inset-inline-end: 10px;
 }
 
