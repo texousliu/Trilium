@@ -3,44 +3,45 @@
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
 ![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran)\
 ![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/trilium)
-![GitHub Downloads (all assets, all
-releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
+![Unduhan GitHub (semua aset, semua
+rilis)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
-[![Translation
-status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
+[![Status
+terjemahan](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
 [English](./README.md) | [Chinese (Simplified)](./docs/README-ZH_CN.md) |
 [Chinese (Traditional)](./docs/README-ZH_TW.md) | [Russian](./docs/README-ru.md)
 | [Japanese](./docs/README-ja.md) | [Italian](./docs/README-it.md) |
 [Spanish](./docs/README-es.md)
 
-Trilium Notes is a free and open-source, cross-platform hierarchical note taking
-application with focus on building large personal knowledge bases.
+Trilium Notes adalah aplikasi pencatatan hierarkis lintas platform yang gratis
+dan sumber terbuka dengan fokus untuk mengembangkan pengetahuan pribadi yang
+luas.
 
 See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for
 quick overview:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
-## 📚 Documentation
+## 📚 Dokumentasi
 
-**Visit our comprehensive documentation at
+**Kunjungi dokumentasi lengkap kami di
 [docs.triliumnotes.org](https://docs.triliumnotes.org/)**
 
-Our documentation is available in multiple formats:
-- **Online Documentation**: Browse the full documentation at
+Dokumentasi kami tersedia dalam berbagai format:
+- **Dokumentasi Online**: Telusuri dokumentasi lengkap di
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
-- **In-App Help**: Press `F1` within Trilium to access the same documentation
-  directly in the application
-- **GitHub**: Navigate through the [User
-  Guide](./docs/User%20Guide/User%20Guide/) in this repository
+- **Bantuan Dalam Aplikasi**: Tekan `F1` di dalam Trilium untuk mengakses
+  dokumentasi yang sama langsung di aplikasi
+- **GitHub**: Navigasi melalui [Panduan
+  Pengguna](./docs/User%20Guide/User%20Guide/) di repositori ini
 
-### Quick Links
-- [Getting Started Guide](https://docs.triliumnotes.org/)
-- [Installation
-  Instructions](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
-- [Docker
-  Setup](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+### Tautan Cepat
+- [Panduan Memulai](https://docs.triliumnotes.org/)
+- [Petunjuk
+  Instalasi](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+- [Pengaturan
+  Docker](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
 - [Upgrading
   TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
 - [Basic Concepts and
