@@ -1291,7 +1291,7 @@
     "cut": "カット",
     "copy": "コピー",
     "copy-link": "リンクをコピー",
-    "paste": "ペースト",
+    "paste": "貼り付け",
     "paste-as-plain-text": "プレーンテキストで貼り付け",
     "search_online": "{{searchEngine}} で \"{{term}}\" を検索"
   },
