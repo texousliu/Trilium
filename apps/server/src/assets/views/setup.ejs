@@ -43,6 +43,7 @@
             }
         }
     </style>
+    <script src="<%= appPath %>/runtime.js" crossorigin type="module"></script>
 </head>
 <body>
 <noscript><%= t("javascript-required") %></noscript>
@@ -165,7 +166,6 @@
 <!-- Required for correct loading of scripts in Electron -->
 <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 
-<script src="<%= appPath %>/runtime.js" crossorigin type="module"></script>
 <script src="<%= appPath %>/setup.js" crossorigin type="module"></script>
 <link href="<%= assetPath %>/stylesheets/theme-light.css" rel="stylesheet" />
 <link href="<%= assetPath %>/stylesheets/theme-next.css" rel="stylesheet" />
