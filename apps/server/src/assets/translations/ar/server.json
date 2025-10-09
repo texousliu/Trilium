@@ -18,6 +18,134 @@
     "copy-notes-to-clipboard": "نسخ الملاحظات المحددة الى الحافظة",
     "paste-notes-from-clipboard": "لصق الملاحظا من الحافظة الى الملاحظة الحالية",
     "cut-notes-to-clipboard": "قص الملاحظات المحددة الى الحافظة",
-    "select-all-notes-in-parent": "تحديد جميع الملاحظات من مستوى الملاحظة الحالي"
+    "select-all-notes-in-parent": "تحديد جميع الملاحظات من مستوى الملاحظة الحالي",
+    "back-in-note-history": "الانتقال الى الملاحظة السابقة في السجل",
+    "forward-in-note-history": "الانتقال الى الملاحظة التالية في السجل",
+    "scroll-to-active-note": "تمرير شجرة الملاحظات الى الملاحظة النشطة",
+    "search-in-subtree": "البحث عن الملاحظات في الشجرة الفرعية للملاحظة النشطة",
+    "expand-subtree": "توسيع الشجرة الفرعية للملاحظة الحالية",
+    "create-note-into-inbox": "انشاء ملاحظة في صندوق الوارد (اذا كان معرفا) او في ملاحظة اليوم",
+    "move-note-up-in-hierarchy": "نقل الملاحظة للاعلى في التسلسل الهرمي",
+    "move-note-down-in-hierarchy": "نقل الملاحظة للاسفل في التسلسل الهرمي",
+    "edit-note-title": "الانتقال من شجرة الملاحظات إلى تفاصيل الملاحظة وتحرير العنوان",
+    "edit-branch-prefix": "عرض مربع حوار \"تعديل بادئة الفرع\"",
+    "add-note-above-to-the-selection": "اضافة ملاحظة فوق الملاحظة المحددة",
+    "add-note-below-to-selection": "اضافة ملاحظة اسفل الملاحظة المحددة",
+    "duplicate-subtree": "استنساخ الشجرة الفرعية",
+    "tabs-and-windows": "التبويبات والنوافذ",
+    "open-new-tab": "فتح تبويب جديد",
+    "close-active-tab": "غلق التبويب النشط",
+    "reopen-last-tab": "اعادة فتح اخر تبويب مغلق",
+    "activate-next-tab": "تنشيط التبويب الموجود على اليمين",
+    "activate-previous-tab": "تنشيط التبويب الموجود على اليسار",
+    "open-new-window": "فتح  نافذة جديدة فارغة",
+    "first-tab": "تنشيط التبويب الاول في القائمة",
+    "second-tab": "تنشيط التبويب الثاني في القائمة",
+    "third-tab": "تنشيط التبويب الثالث في الثائمة",
+    "fourth-tab": "تنشيط التبويب الرابع في القائمة",
+    "fifth-tab": "تنشيط التبويب الخامس في القائمة",
+    "sixth-tab": "تنشيط التبويب السادس في القائمة",
+    "seventh-tab": "تنشيط التبويب السابع في القائمة",
+    "eight-tab": "تنشيط التبويب الثامن في القائمة",
+    "ninth-tab": "تنشيط التبويب التاسع في القائمة",
+    "last-tab": "تنشيط التبويب الاخير في القائمة",
+    "other": "أخرى",
+    "dialogs": "مربعات الحوار"
+  },
+  "setup_sync-from-server": {
+    "note": "ملاحظة:",
+    "password": "كلمة السر",
+    "password-placeholder": "كلمة السر",
+    "back": "رجوع",
+    "server-host-placeholder": "https://<hostname>:<port>",
+    "proxy-server-placeholder": "https://<hostname>:<port>"
+  },
+  "weekdays": {
+    "monday": "الأثنين",
+    "tuesday": "الثلاثاء",
+    "wednesday": "الاربعاء",
+    "thursday": "الخميس",
+    "friday": "الجمعة",
+    "saturday": "السبت",
+    "sunday": "الأحد"
+  },
+  "months": {
+    "january": "يناير",
+    "february": "فبراير",
+    "march": "مارس",
+    "april": "ابريل",
+    "may": "مايو",
+    "june": "يونيو",
+    "july": "يوليو",
+    "august": "أغسطس",
+    "september": "سبتمبر",
+    "october": "أكتوبر",
+    "november": "نوفمبر",
+    "december": "ديسمبر"
+  },
+  "special_notes": {
+    "search_prefix": "بحث:"
+  },
+  "hidden-subtree": {
+    "calendar-title": "تقويم",
+    "bookmarks-title": "العلامات المرجعية",
+    "settings-title": "أعدادات",
+    "options-title": "خيارات",
+    "appearance-title": "المظهر",
+    "shortcuts-title": "أختصارات",
+    "images-title": "صور",
+    "password-title": "كلمة السر",
+    "backup-title": "نسخة أحتياطية",
+    "sync-title": "مزامنة",
+    "other": "أخرى",
+    "advanced-title": "متقدم",
+    "inbox-title": "صندوق الوارد",
+    "spacer-title": "فاصل",
+    "spellcheck-title": "التدقيق الاملائي",
+    "multi-factor-authentication-title": "المصادقة متعددة العوامل"
+  },
+  "tray": {
+    "bookmarks": "العلامات المرجعية"
+  },
+  "modals": {
+    "error_title": "خطأ"
+  },
+  "share_theme": {
+    "search_placeholder": "بحث...",
+    "subpages": "الصفحات الفرعية:",
+    "expand": "توسيع"
+  },
+  "hidden_subtree_templates": {
+    "description": "الوصف",
+    "calendar": "التقويم",
+    "table": "جدول",
+    "geolocation": "الموقع الجغرافي",
+    "board": "لوحة",
+    "status": "الحالة",
+    "board_status_done": "تمت"
+  },
+  "login": {
+    "title": "تسجيل الدخول",
+    "password": "كلمة السر",
+    "button": "تسجيل الدخول"
+  },
+  "set_password": {
+    "password": "كلمة السر"
+  },
+  "setup": {
+    "next": "التالي",
+    "title": "تثبيت"
+  },
+  "setup_sync-from-desktop": {
+    "step6-here": "هنا"
+  },
+  "setup_sync-in-progress": {
+    "outstanding-items-default": "غير متوفر"
+  },
+  "share_page": {
+    "parent": "الأصل:"
+  },
+  "notes": {
+    "duplicate-note-suffix": "(مكرر)"
   }
 }

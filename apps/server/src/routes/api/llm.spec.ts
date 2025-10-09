@@ -3,7 +3,7 @@ import { beforeAll, describe, expect, it, vi, beforeEach, afterEach } from "vite
 import supertest from "supertest";
 import config from "../../services/config.js";
 import { refreshAuth } from "../../services/auth.js";
-import type { WebSocket } from 'ws';
+import { sleepFor } from "@triliumnext/commons";
 
 // Mock the CSRF protection middleware to allow tests to pass
 vi.mock("../csrf_protection.js", () => ({
@@ -72,7 +72,11 @@ vi.mock("../../services/options.js", () => ({
         getOptionMap: vi.fn(() => new Map()),
         createOption: vi.fn(),
         getOption: vi.fn(() => '0'),
-        getOptionOrNull: vi.fn(() => null)
+        getOptionOrNull: vi.fn(() => null),
+        getOptionInt: vi.fn(name => {
+            if (name === "protectedSessionTimeout") return Number.MAX_SAFE_INTEGER;
+            return 0;
+        })
     }
 }));
 
@@ -499,6 +503,7 @@ describe("LLM API Tests", () => {
             const ws = (await import("../../services/ws.js")).default;
 
             // Verify thinking message was sent
+            await sleepFor(1_000);
             expect(ws.sendMessageToAllClients).toHaveBeenCalledWith({
                 type: 'llm-stream',
                 chatNoteId: testChatId,

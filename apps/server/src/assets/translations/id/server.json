@@ -1,0 +1,8 @@
+{
+  "keyboard_actions": {
+    "back-in-note-history": "Navigasi ke catatan sebelumnya di history",
+    "forward-in-note-history": "Navigasi ke catatan selanjutnya di history",
+    "open-jump-to-note-dialog": "Buka dialog \"Menuju ke catatan\"",
+    "open-command-palette": "Buka palet perintah"
+  }
+}
