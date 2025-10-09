@@ -44,7 +44,7 @@
     "eslint": "9.37.0",
     "eslint-plugin-simple-import-sort": "12.1.1",
     "esm": "3.2.25",
-    "jsdoc": "4.0.4",
+    "jsdoc": "4.0.5",
     "lorem-ipsum": "2.0.8",    
     "rcedit": "4.0.1",
     "rimraf": "6.0.1",    
