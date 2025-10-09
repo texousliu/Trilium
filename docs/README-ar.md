@@ -179,7 +179,7 @@ interface (which is almost identical to the desktop app).
 Currently only the latest versions of Chrome & Firefox are supported (and
 tested).
 
-### Mobile
+### هاتف المحمول
 
 To use TriliumNext on a mobile device, you can use a mobile web browser to
 access the mobile interface of a server installation (see below).
@@ -203,7 +203,7 @@ installation docs](https://triliumnext.github.io/Docs/Wiki/server-installation).
 
 ## 💻 Contribute
 
-### Translations
+### ترجمات
 
 If you are a native speaker, help us translate Trilium by heading over to our
 [Weblate page](https://hosted.weblate.org/engage/trilium/).
@@ -213,7 +213,7 @@ Here's the language coverage we have so far:
 [![Translation
 status](https://hosted.weblate.org/widget/trilium/multi-auto.svg)](https://hosted.weblate.org/engage/trilium/)
 
-### Code
+### كود
 
 Download the repository, install dependencies using `pnpm` and then run the
 server (available at http://localhost:8080):
@@ -224,7 +224,7 @@ pnpm install
 pnpm run server:start
 ```
 
-### Documentation
+### التوثيق
 
 Download the repository, install dependencies using `pnpm` and then run the
 environment required to edit the documentation:
