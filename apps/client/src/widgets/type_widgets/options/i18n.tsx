@@ -44,7 +44,7 @@ function LocalizationOptions() {
                 <LocaleSelector locales={uiLocales} currentValue={locale} onChange={setLocale} />
             </OptionsRow>
 
-            {isElectron() && <OptionsRow name="formatting-locale" label={t("i18n.formatting-locale")}>
+            {<OptionsRow name="formatting-locale" label={t("i18n.formatting-locale")}>
                 <LocaleSelector locales={contentLocales} currentValue={formattingLocale} onChange={setFormattingLocale} />
             </OptionsRow>}
 
