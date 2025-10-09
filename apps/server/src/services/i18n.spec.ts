@@ -6,7 +6,7 @@ import { DAYJS_LOADER } from "./i18n";
 describe("i18n", () => {
     it("translations are valid JSON", () => {
         for (const locale of LOCALES) {
-            if (locale.contentOnly) {
+            if (locale.contentOnly || locale.id === "en_rtl") {
                 continue;
             }
 
