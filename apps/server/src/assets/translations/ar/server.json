@@ -133,11 +133,16 @@
     "text-notes": "ملاحظات نصية",
     "code-notes-title": "ملاحظات برمجية",
     "visible-launchers-title": "المشغلات المرئية",
-    "user-guide": "دليل المستخدم"
+    "user-guide": "دليل المستخدم",
+    "ai-llm-title": "AI/LLM"
   },
   "tray": {
     "bookmarks": "العلامات المرجعية",
-    "tooltip": "ملاحظات تريليوم"
+    "tooltip": "ملاحظات تريليوم",
+    "close": "انهاء تريليوم",
+    "recents": "الملاحظات الحديثة",
+    "new-note": "ملاحظة جديدة",
+    "show-windows": "اظهار النوافذ"
   },
   "modals": {
     "error_title": "خطأ"
@@ -145,7 +150,9 @@
   "share_theme": {
     "search_placeholder": "بحث...",
     "subpages": "الصفحات الفرعية:",
-    "expand": "توسيع"
+    "expand": "توسيع",
+    "site-theme": "المظهر العام للموقع",
+    "image_alt": "صورة المقال"
   },
   "hidden_subtree_templates": {
     "description": "الوصف",
@@ -154,7 +161,21 @@
     "geolocation": "الموقع الجغرافي",
     "board": "لوحة",
     "status": "الحالة",
-    "board_status_done": "تمت"
+    "board_status_done": "تمت",
+    "start-time": "وقت البدء",
+    "end-time": "وقت الانتهاء",
+    "built-in-templates": "القوالب المدمجة",
+    "board_note_first": "الملاحظة الاولى",
+    "board_note_second": "الملاحظة الثانية",
+    "board_note_third": "الملاحظة الرابعة",
+    "board_status_todo": "قائمة المهام",
+    "board_status_progress": "قيد التنفيذ",
+    "text-snippet": "مقتطف نصي",
+    "list-view": "عرض القائمة",
+    "grid-view": "عرض شبكي",
+    "geo-map": "خريطة جغرافية",
+    "start-date": "تاريخ البدء",
+    "end-date": "تاريخ الانتهاء"
   },
   "login": {
     "title": "تسجيل الدخول",

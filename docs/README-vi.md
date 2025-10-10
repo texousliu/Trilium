@@ -141,30 +141,30 @@ trực tiếp không còn khả thi.
 Hãy thoải mái tham gia các cuộc trò chuyện chính thức. Chúng tôi luôn muốn lắng
 nghe các tính năng, đề xuất hoặc vấn đề mà bạn đưa ra!
 
-- [Matrix](https://matrix.to/#/#triliumnext:matrix.org) (For synchronous
-  discussions.)
-  - The `General` Matrix room is also bridged to
+- [Matrix](https://matrix.to/#/#triliumnext:matrix.org) (Cho những thảo luận
+  đồng bộ thời gian thực.)
+  - Phòng `General` trong Matrix cũng được kết nối tới
     [XMPP](xmpp:discuss@trilium.thisgreat.party?join)
-- [Github Discussions](https://github.com/TriliumNext/Trilium/discussions) (For
-  asynchronous discussions.)
-- [Github Issues](https://github.com/TriliumNext/Trilium/issues) (For bug
-  reports and feature requests.)
+- [Github Discussions](https://github.com/TriliumNext/Trilium/discussions) (Cho
+  những thảo luận không đồng bộ.)
+- [Github Issues](https://github.com/TriliumNext/Trilium/issues) (Cho việc báo
+  cáo lỗi và yêu cầu tính năng.)
 
-## 🏗 Installation
+## 🏗 Cài Đặt
 
 ### Windows / MacOS
 
-Download the binary release for your platform from the [latest release
-page](https://github.com/TriliumNext/Trilium/releases/latest), unzip the package
-and run the `trilium` executable.
+Tải bản phát hành nhị phân cho nền tảng của bạn từ [trang phát hành mới
+nhất](https://github.com/TriliumNext/Trilium/releases/latest), giải nén gói và
+chạy tệp thực thi `trilium`.
 
 ### Linux
 
-If your distribution is listed in the table below, use your distribution's
-package.
+Nếu bản phân phối của bạn được liệt kê trong bảng dưới đấy, hãy dùng gói cài đặt
+của nó.
 
-[![Packaging
-status](https://repology.org/badge/vertical-allrepos/triliumnext.svg)](https://repology.org/project/triliumnext/versions)
+[![Tình trạng đóng
+gói](https://repology.org/badge/vertical-allrepos/triliumnext.svg)](https://repology.org/project/triliumnext/versions)
 
 You may also download the binary release for your platform from the [latest
 release page](https://github.com/TriliumNext/Trilium/releases/latest), unzip the
