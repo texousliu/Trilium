@@ -41,7 +41,9 @@
   },
   "upload_attachments": {
     "options": "خيارات",
-    "upload": "تحميل"
+    "upload": "تحميل",
+    "choose_files": "اختر الملفات",
+    "shrink_images": "تصغير الصور"
   },
   "attribute_detail": {
     "name": "الاسم",
@@ -60,7 +62,14 @@
     "number": "عدد",
     "boolean": "منطقي",
     "url": "عنوان الويب",
-    "inheritable": "قابل للوراثة"
+    "inheritable": "قابل للوراثة",
+    "target_note": "الملاحظة الهدف",
+    "single_value": "قيمة واحدة",
+    "multi_value": "قيم متعددة",
+    "inverse_relation": "العلاقة العكسية",
+    "more_notes": "مزيد من الملاحظات",
+    "label": "تفاصيل التسمية",
+    "relation": "تفاصيل العلاقة"
   },
   "rename_label": {
     "to": "الى"
@@ -270,7 +279,12 @@
     "ascending": "تصاعدي",
     "descending": "تنازلي",
     "folders": "مجلدات",
-    "sort": "فرز"
+    "sort": "ترتيب",
+    "sorting_criteria": "معايير الترتيب",
+    "date_created": "تاريخ الانشاء",
+    "date_modified": "تاريخ التعديل",
+    "sorting_direction": "اتجاه الترتيب",
+    "natural_sort": "الترتيب الطبيعي"
   },
   "recent_changes": {
     "undelete_link": "الغاء الحذف",
