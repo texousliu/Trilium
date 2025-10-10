@@ -201,7 +201,7 @@ To install TriliumNext on your own server (including via Docker from
 installation docs](https://triliumnext.github.io/Docs/Wiki/server-installation).
 
 
-## 💻 Contribute
+## 💻 المساهمة
 
 ### ترجمات
 
@@ -248,14 +248,14 @@ pnpm run --filter desktop electron-forge:make --arch=x64 --platform=win32
 For more details, see the [development
 docs](https://github.com/TriliumNext/Trilium/tree/main/docs/Developer%20Guide/Developer%20Guide).
 
-### Developer Documentation
+### توثيق المطور
 
 Please view the [documentation
 guide](https://github.com/TriliumNext/Trilium/blob/main/docs/Developer%20Guide/Developer%20Guide/Environment%20Setup.md)
 for details. If you have more questions, feel free to reach out via the links
 described in the "Discuss with us" section above.
 
-## 👏 Shoutouts
+## 👏 اختصارات
 
 * [zadam](https://github.com/zadam) for the original concept and implementation
   of the application.
@@ -290,7 +290,7 @@ Trilium would not be possible without the technologies behind it:
   maps](https://triliumnext.github.io/Docs/Wiki/relation-map.html) and [link
   maps](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)
 
-## 🤝 Support
+## 🤝 الدعم
 
 Trilium is built and maintained with [hundreds of hours of
 work](https://github.com/TriliumNext/Trilium/graphs/commit-activity). Your
@@ -304,7 +304,7 @@ Consider supporting the main developer
 - [PayPal](https://paypal.me/eliandoran)
 - [Buy Me a Coffee](https://buymeacoffee.com/eliandoran)
 
-## 🔑 License
+## 🔑 الترخيص
 
 Copyright 2017-2025 zadam, Elian Doran, and other contributors
 

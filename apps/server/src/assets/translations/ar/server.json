@@ -134,7 +134,8 @@
     "code-notes-title": "ملاحظات برمجية",
     "visible-launchers-title": "المشغلات المرئية",
     "user-guide": "دليل المستخدم",
-    "ai-llm-title": "AI/LLM"
+    "ai-llm-title": "AI/LLM",
+    "etapi-title": "ETAPI"
   },
   "tray": {
     "bookmarks": "العلامات المرجعية",
