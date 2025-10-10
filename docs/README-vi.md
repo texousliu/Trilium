@@ -24,14 +24,14 @@ Xem [ảnh chụp màn hình](https://triliumnext.github.io/Docs/Wiki/screenshot
 
 ## 📚 Tài liệu
 
-**Visit our comprehensive documentation at
+**Truy cập tài liệu toàn diện của chúng tôi tại
 [docs.triliumnotes.org](https://docs.triliumnotes.org/)**
 
-Our documentation is available in multiple formats:
-- **Online Documentation**: Browse the full documentation at
+Tài liệu của chúng tôi có sẵn ở nhiều định dạng:
+- **Tài liệu trực tuyến**: Xem tài liệu đầy đủ tại
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
-- **In-App Help**: Press `F1` within Trilium to access the same documentation
-  directly in the application
+- **Trợ giúp trong ứng dụng**: Nhấn `F1` trong Trilium để truy cập tài liệu
+  tương tự trực tiếp trong ứng dụng
 - **GitHub**: Navigate through the [User
   Guide](./docs/User%20Guide/User%20Guide/) in this repository
 
