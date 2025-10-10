@@ -163,7 +163,8 @@
     "min-days-in-first-week": "最初の週の最低日数",
     "first-week-info": "最初の週は、その年の最初の木曜日を含む週を指し、<a href=\"https://en.wikipedia.org/wiki/ISO_week_date#First_week\">ISO 8601</a>規格に基づいています。",
     "first-week-warning": "最初の週のオプションを変更すると、既存のウィークノートと重複する可能性があり、既存のウィークノートはそれに応じて更新されません。",
-    "formatting-locale": "日付と数値のフォーマット"
+    "formatting-locale": "日付と数値のフォーマット",
+    "formatting-locale-auto": "アプリケーションの言語に基づいて"
   },
   "tab_row": {
     "close_tab": "タブを閉じる",
@@ -1583,7 +1584,8 @@
     "delete_this_note": "このノートを削除",
     "error_unrecognized_command": "認識されないコマンド {{command}}",
     "insert_child_note": "子ノートを挿入",
-    "error_cannot_get_branch_id": "ノートパス 「{{notePath}} のbranchIdを取得できません"
+    "error_cannot_get_branch_id": "ノートパス 「{{notePath}} のbranchIdを取得できません",
+    "note_revisions": "ノートの変更履歴"
   },
   "inherited_attribute_list": {
     "title": "継承属性",
