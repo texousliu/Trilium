@@ -5,7 +5,7 @@
     "quick-search": "تفعيل شريط البحث السريع",
     "collapse-tree": "طي جميع الملاحظات",
     "collapse-subtree": "طي الفروع التابعة للملاحظة الحالية",
-    "sort-child-notes": "فرز الملاحظات الفرعية",
+    "sort-child-notes": "ترتيب الملاحظات الفرعية",
     "creating-and-moving-notes": "انشاء الملاحظات ونقلها",
     "create-note-after": "انشاء ملاحظة بعد الملاحظة الحالية",
     "create-note-into": "انشاء ملاحظة فرعية تابعة للملاحظة الحالية",
@@ -63,7 +63,8 @@
     "password-placeholder": "كلمة المرور",
     "back": "رجوع",
     "server-host-placeholder": "https://<hostname>:<port>",
-    "proxy-server-placeholder": "https://<hostname>:<port>"
+    "proxy-server-placeholder": "https://<hostname>:<port>",
+    "finish-setup": "اكمال التثبيت"
   },
   "weekdays": {
     "monday": "الاثنين",
@@ -107,10 +108,36 @@
     "inbox-title": "صندوق الوارد",
     "spacer-title": "فاصل",
     "spellcheck-title": "التدقيق الاملائي",
-    "multi-factor-authentication-title": "المصادقة متعددة العوامل"
+    "multi-factor-authentication-title": "المصادقة متعددة العوامل",
+    "root-title": "الملاحظات المخفية",
+    "search-history-title": "سجل البحث",
+    "note-map-title": "خريطة الملاحظات",
+    "shared-notes-title": "الملاحظات المشتركة",
+    "bulk-action-title": "اجراء جماعي",
+    "backend-log-title": "سجل الخادم",
+    "user-hidden-title": "مخفي عن المستخدم",
+    "command-launcher-title": "مشغل الاوامر",
+    "note-launcher-title": "مشغل الملاحظة",
+    "script-launcher-title": "مشغل السكربت",
+    "built-in-widget-title": "عنصر واجهة مدمج",
+    "custom-widget-title": "عنصر واجهة مخصص",
+    "launch-bar-title": "شريط التشغيل",
+    "available-launchers-title": "المشغلات المتاحة",
+    "new-note-title": "ملاحظة جديدة",
+    "search-notes-title": "البحث في الملاحظات",
+    "jump-to-note-title": "انتقل الى...",
+    "recent-changes-title": "التغيرات الاخيرة",
+    "quick-search-title": "البحث السريع",
+    "protected-session-title": "الجلسة المحمية",
+    "sync-status-title": "حالة المزامنة",
+    "text-notes": "ملاحظات نصية",
+    "code-notes-title": "ملاحظات برمجية",
+    "visible-launchers-title": "المشغلات المرئية",
+    "user-guide": "دليل المستخدم"
   },
   "tray": {
-    "bookmarks": "العلامات المرجعية"
+    "bookmarks": "العلامات المرجعية",
+    "tooltip": "ملاحظات تريليوم"
   },
   "modals": {
     "error_title": "خطأ"
@@ -138,7 +165,10 @@
   },
   "set_password": {
     "password": "كلمة المرور",
-    "title": "تعين كلمة المرور"
+    "title": "تعين كلمة المرور",
+    "heading": "تعين كلمة المرور",
+    "password-confirmation": "تاكيد كلمة المرور",
+    "button": "تعين كلمة المرور"
   },
   "setup": {
     "next": "التالي",
@@ -151,10 +181,12 @@
     "outstanding-items-default": "غير متوفر"
   },
   "share_page": {
-    "parent": "الأصل:"
+    "parent": "الأصل:",
+    "child-notes": "الملاحظات الفرعية:"
   },
   "notes": {
-    "duplicate-note-suffix": "(مكرر)"
+    "duplicate-note-suffix": "(مكرر)",
+    "new-note": "ملاحظة جديدة"
   },
   "keyboard_action_names": {
     "jump-to-note": "انتقل الى ...",
@@ -172,5 +204,11 @@
     "unhoist-note": "الغاء تثبيت الملاحظة",
     "zoom-out": "تصغير العرض",
     "zoom-in": "تكبير العرض"
-  }
+  },
+  "share_404": {
+    "title": "غير موجود",
+    "heading": "غير موجود"
+  },
+  "weekdayNumber": "الاسبوع{رقم الاسيوع}",
+  "quarterNumber": "الربع {رقم الربع}"
 }
