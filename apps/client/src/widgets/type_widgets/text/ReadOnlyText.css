@@ -29,7 +29,7 @@ body.heading-style-underline .note-detail-readonly-text h6 { border-bottom: 1px 
 }
 
 body.mobile .note-detail-readonly-text {
-    padding-left: 10px;
+    padding-inline-start: 10px;
 }
 
 .note-detail-readonly-text p:first-child, .note-detail-readonly-text::before {
@@ -44,7 +44,7 @@ body.mobile .note-detail-readonly-text {
 .edit-text-note-button {
     position: absolute;
     top: 5px;
-    right: 10px;
+    inset-inline-end: 10px;
     font-size: 150%;
     padding: 5px;
     cursor: pointer;

@@ -1,7 +1,7 @@
 /* #region Attachment list */
 .attachment-list {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-inline-start: 15px;
+    padding-inline-end: 15px;
 }
 
 .attachment-list .links-wrapper {
@@ -31,7 +31,7 @@
 }
 
 .attachment-details {
-    margin-left: 10px;
+    margin-inline-start: 10px;
 }
 
 .attachment-content-wrapper {
@@ -126,7 +126,7 @@
     position: relative;
     top: 3px;
     font-size: 120%;
-    margin-right: 5px;
+    margin-inline-end: 5px;
 }
 
 .attachment-actions .dropdown-item[disabled], .attachment-actions .dropdown-item[disabled]:hover {

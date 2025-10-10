@@ -1,6 +1,7 @@
 {
-    "keyboard_actions": {
-        "delete-note": "Xoá ghi chép",
-        "move-notes-to": "Di chuyển ghi chép được chọn"
-    }
+  "keyboard_actions": {
+    "delete-note": "Xoá ghi chép",
+    "move-notes-to": "Di chuyển ghi chép được chọn",
+    "back-in-note-history": "Điều hướng đến ghi chú trước đó trong lịch sử"
+  }
 }

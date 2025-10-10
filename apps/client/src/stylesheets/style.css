@@ -174,12 +174,12 @@ textarea,
 /* Add a gap between consecutive radios / check boxes */
 label.tn-radio + label.tn-radio,
 label.tn-checkbox + label.tn-checkbox {
-    margin-left: 12px;
+    margin-inline-start: 12px;
 }
 
 label.tn-radio input[type="radio"],
 label.tn-checkbox input[type="checkbox"] {
-    margin-right: .5em;
+    margin-inline-end: .5em;
 }
 
 #left-pane input,
@@ -226,7 +226,7 @@ samp {
 .badge {
     --bs-badge-color: var(--muted-text-color);
 
-    margin-left: 8px;
+    margin-inline-start: 8px;
     background: var(--accented-background-color);
 }
 
@@ -338,8 +338,8 @@ button kbd {
 }
 
 .ui-menu kbd {
-    margin-left: 30px;
-    float: right;
+    margin-inline-start: 30px;
+    float: inline-end;
 }
 
 .suppressed {
@@ -392,7 +392,7 @@ body.desktop .tabulator-popup-container {
 }
 
 .dropend .dropdown-toggle::after {
-    margin-left: 0.5em;
+    margin-inline-start: 0.5em;
     color: var(--muted-text-color);
 }
 
@@ -403,7 +403,7 @@ body.desktop .tabulator-popup-container {
 
 .dropdown-menu .disabled .disabled-tooltip {
     pointer-events: all;
-    margin-left: 8px;
+    margin-inline-start: 8px;
     font-size: 0.75rem;
     color: var(--disabled-tooltip-icon-color);
     cursor: help;
@@ -443,7 +443,7 @@ body #context-menu-container .dropdown-item > span {
 .dropdown-item span.keyboard-shortcut,
 .dropdown-item *:not(.keyboard-shortcut) > kbd {
     flex-grow: 1;
-    text-align: right;
+    text-align: end;
     padding-inline-start: 12px;
 }
 
@@ -504,7 +504,7 @@ body #context-menu-container .dropdown-item > span {
 
 body .cm-editor .cm-gutters {
     background-color: inherit !important;
-    border-right: none;
+    border-inline-end: none;
 }
 
 body .cm-editor .cm-placeholder {
@@ -586,6 +586,10 @@ button.btn-sm {
     z-index: 1000;
 }
 
+body[dir=rtl] .ck.ck-block-toolbar-button {
+    transform: translateX(-7px);
+}
+
 pre:not(.hljs) {
     color: var(--main-text-color) !important;
     white-space: pre-wrap;
@@ -604,11 +608,11 @@ pre:not(.hljs) {
 pre > button.copy-button {
     position: absolute;
     top: var(--copy-button-margin-size);
-    right: var(--copy-button-margin-size);
+    inset-inline-end: var(--copy-button-margin-size);
 }
 
 :root pre:has(> button.copy-button) {
-    padding-right: calc(var(--copy-button-width) + (var(--copy-button-margin-size) * 2));
+    padding-inline-end: calc(var(--copy-button-width) + (var(--copy-button-margin-size) * 2));
 }
 
 pre > button.copy-button:hover {
@@ -634,31 +638,31 @@ pre > button.copy-button:active {
 .full-text-search-button {
     cursor: pointer;
     font-size: 1.3em;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-inline-start: 5px;
+    padding-inline-end: 5px;
 }
 
 .input-clearer-button {
     cursor: pointer;
     font-size: 1.3em;
     background: inherit !important;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-inline-start: 5px;
+    padding-inline-end: 5px;
 }
 
 .open-external-link-button {
     cursor: pointer;
     font-size: 1.3em;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-inline-start: 5px;
+    padding-inline-end: 5px;
     padding-top: 8px;
 }
 
 .go-to-selected-note-button {
     cursor: pointer;
     font-size: 1.3em;
-    padding-left: 4px;
-    padding-right: 3px;
+    padding-inline-start: 4px;
+    padding-inline-end: 3px;
 }
 
 .go-to-selected-note-button.disabled,
@@ -671,7 +675,7 @@ pre > button.copy-button:active {
 
 .note-autocomplete-input {
     /* this is for seamless integration of "input clearer" button */
-    border-right: 0;
+    border-inline-end: 0;
 }
 
 table.promoted-attributes-in-tooltip {
@@ -704,10 +708,10 @@ table.promoted-attributes-in-tooltip th {
     border-top-color: var(--main-border-color) !important;
 }
 .bs-tooltip-left .tooltip-arrow::before {
-    border-left-color: var(--main-border-color) !important;
+    border-inline-start-color: var(--main-border-color) !important;
 }
 .bs-tooltip-right .tooltip-arrow::before {
-    border-right-color: var(--main-border-color) !important;
+    border-inline-end-color: var(--main-border-color) !important;
 }
 
 .bs-tooltip-bottom .tooltip-arrow::after {
@@ -717,17 +721,17 @@ table.promoted-attributes-in-tooltip th {
     border-top-color: var(--tooltip-background-color) !important;
 }
 .bs-tooltip-left .tooltip-arrow::after {
-    border-left-color: var(--tooltip-background-color) !important;
+    border-inline-start-color: var(--tooltip-background-color) !important;
 }
 .bs-tooltip-right .tooltip-arrow::after {
-    border-right-color: var(--tooltip-background-color) !important;
+    border-inline-end-color: var(--tooltip-background-color) !important;
 }
 
 .bs-tooltip-auto[data-popper-placement^="left"] .tooltip-arrow::before,
 .bs-tooltip-left .tooltip-arrow::before {
-    left: -1px;
+    inset-inline-start: -1px;
     border-width: 0.4rem 0 0.4rem 0.4rem;
-    border-left-color: var(--main-border-color) !important;
+    border-inline-start-color: var(--main-border-color) !important;
 }
 
 .bs-tooltip-auto[data-popper-placement^="bottom"] .tooltip-arrow::before,
@@ -739,9 +743,9 @@ table.promoted-attributes-in-tooltip th {
 
 .bs-tooltip-auto[data-popper-placement^="right"] .tooltip-arrow::before,
 .bs-tooltip-right .tooltip-arrow::before {
-    right: -1px;
+    inset-inline-end: -1px;
     border-width: 0.4rem 0.4rem 0.4rem 0;
-    border-right-color: var(--main-border-color) !important;
+    border-inline-end-color: var(--main-border-color) !important;
 }
 
 .bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow::before,
@@ -753,9 +757,9 @@ table.promoted-attributes-in-tooltip th {
 
 .bs-tooltip-auto[data-popper-placement^="left"] .tooltip-arrow::after,
 .bs-tooltip-left .tooltip-arrow::after {
-    left: -1px;
+    inset-inline-start: -1px;
     border-width: 0.4rem 0 0.4rem 0.4rem;
-    border-left-color: var(--tooltip-background-color) !important;
+    border-inline-start-color: var(--tooltip-background-color) !important;
 }
 
 .bs-tooltip-auto[data-popper-placement^="bottom"] .tooltip-arrow::after,
@@ -767,9 +771,9 @@ table.promoted-attributes-in-tooltip th {
 
 .bs-tooltip-auto[data-popper-placement^="right"] .tooltip-arrow::after,
 .bs-tooltip-right .tooltip-arrow::after {
-    right: -1px;
+    inset-inline-end: -1px;
     border-width: 0.4rem 0.4rem 0.4rem 0;
-    border-right-color: var(--tooltip-background-color) !important;
+    border-inline-end-color: var(--tooltip-background-color) !important;
 }
 
 .bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow::after,
@@ -788,7 +792,7 @@ table.promoted-attributes-in-tooltip th {
     background-color: var(--tooltip-background-color) !important;
     border: 1px solid var(--main-border-color);
     border-radius: 5px;
-    text-align: left;
+    text-align: start;
     color: var(--main-text-color) !important;
     max-width: 500px;
     box-shadow: 10px 10px 93px -25px #aaaaaa;
@@ -821,7 +825,7 @@ table.promoted-attributes-in-tooltip th {
 
 .note-tooltip-content .open-popup-button {
     position: absolute;
-    right: 15px;
+    inset-inline-end: 15px;
     bottom: 8px;
     font-size: 1.2em;
     color: inherit;
@@ -841,7 +845,7 @@ table.promoted-attributes-in-tooltip th {
 }
 
 .tooltip-inner figure.image-style-side {
-    float: right;
+    float: inline-end;
 }
 
 .tooltip.show {
@@ -890,7 +894,7 @@ table.promoted-attributes-in-tooltip th {
 .aa-dropdown-menu .aa-suggestion .text {
     display: inline-block;
     width: calc(100% - 20px);
-    padding-left: 4px;
+    padding-inline-start: 4px;
 }
 
 .aa-dropdown-menu .aa-suggestion .search-result-title {
@@ -916,7 +920,7 @@ table.promoted-attributes-in-tooltip th {
 }
 
 .help-button {
-    float: right;
+    float: inline-end;
     background: none;
     font-weight: 900;
     color: orange;
@@ -1033,7 +1037,7 @@ svg.ck-icon .note-icon {
     counter-increment: footnote-counter;
     display: flex;
     list-style: none;
-    margin-left: 0.5em;
+    margin-inline-start: 0.5em;
 }
 
 .ck-content .footnote-item > * {
@@ -1041,13 +1045,13 @@ svg.ck-icon .note-icon {
 }
 
 .ck-content .footnote-back-link {
-    margin-right: 0.1em;
+    margin-inline-end: 0.1em;
     position: relative;
     top: -0.2em;
 }
 
 .ck-content .footnotes .footnote-back-link > sup {
-    margin-right: 0;
+    margin-inline-end: 0;
 }
 
 .ck-content .footnote-item:before {
@@ -1055,8 +1059,8 @@ svg.ck-icon .note-icon {
     display: inline-block;
     min-width: fit-content;
     position: relative;
-    right: 0.2em;
-    text-align: right;
+    inset-inline-end: 0.2em;
+    text-align: end;
 }
 
 .ck-content .footnote-content {
@@ -1072,11 +1076,11 @@ svg.ck-icon .note-icon {
 }
 
 #options-dialog input[type="number"] {
-    text-align: right;
+    text-align: end;
 }
 
 .help-cards ul {
-    padding-left: 20px;
+    padding-inline-start: 20px;
 }
 
 .help-cards kbd {
@@ -1153,8 +1157,8 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
 }
 
 .toast.no-title .toast-body {
-    padding-left: 0;
-    padding-right: 0;
+    padding-inline-start: 0;
+    padding-inline-end: 0;
 }
 
 .toast.no-title .toast-header {
@@ -1274,8 +1278,8 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
 #context-menu-cover.show {
     position: fixed;
     top: 0;
-    left: 0;
-    right: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
     bottom: 0;
     z-index: 1000;
     background: rgba(0, 0, 0, 0.1);
@@ -1288,8 +1292,8 @@ a.external:not(.no-arrow):after, a[href^="http://"]:not(.no-arrow):after, a[href
 
 body.mobile #context-menu-container.mobile-bottom-menu {
     position: fixed !important;
-    left: 0 !important;
-    right: 0 !important;
+    inset-inline-start: 0 !important;
+    inset-inline-end: 0 !important;
     bottom: 0 !important;
     top: unset !important;
     max-height: 70vh;
@@ -1339,7 +1343,7 @@ body.desktop li.dropdown-submenu:hover > ul.dropdown-menu {
 
 .dropdown-submenu > .dropdown-menu {
     top: 0;
-    left: calc(100% - 2px); /* -2px, otherwise there's a small gap between menu and submenu where the hover can disappear */
+    inset-inline-start: calc(100% - 2px); /* -2px, otherwise there's a small gap between menu and submenu where the hover can disappear */
     margin-top: -10px;
     min-width: 15rem;
     /* to make submenu scrollable https://github.com/zadam/trilium/issues/3136 */
@@ -1348,7 +1352,7 @@ body.desktop li.dropdown-submenu:hover > ul.dropdown-menu {
 }
 
 body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
-    left: calc(-100% + 10px);
+    inset-inline-start: calc(-100% + 10px);
 }
 
 .right-dropdown-widget {
@@ -1414,7 +1418,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 
 .ck.ck-slash-command-button__text-part,
 .ck.ck-template-form__text-part {
-    margin-left: 0.5em;
+    margin-inline-start: 0.5em;
     line-height: 1.2em !important;
 }
 
@@ -1445,8 +1449,8 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 }
 
 .area-expander-text {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-inline-start: 20px;
+    padding-inline-end: 20px;
     white-space: nowrap;
 }
 
@@ -1492,7 +1496,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     cursor: pointer;
     border: none;
     color: var(--launcher-pane-text-color);
-    background: transparent;
+    background-color: transparent;
     flex-shrink: 0;
 }
 
@@ -1533,16 +1537,16 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
         position: fixed !important;
         bottom: calc(var(--mobile-bottom-offset) + var(--launcher-pane-size)) !important;
         top: unset !important;
-        left: 0 !important;
-        right: 0 !important;
+        inset-inline-start: 0 !important;
+        inset-inline-end: 0 !important;
         transform: unset !important;
     }
 
     #mobile-sidebar-container {
         position: fixed;
         top: 0;
-        left: 0;
-        right: 0;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
         bottom: 0;
         z-index: 1000;
         transition: background-color 250ms ease-in-out;
@@ -1557,7 +1561,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     #mobile-sidebar-wrapper {
         position: absolute;
         top: 0;
-        left: 0;
+        inset-inline-start: 0;
         bottom: 0;
         width: 85vw;
         padding-top: env(safe-area-inset-top);
@@ -1589,8 +1593,8 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     body.mobile .modal-dialog {
         position: fixed;
         bottom: 0;
-        left: 0;
-        right: 0;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
         margin: 0 !important;
         max-height: 85vh;        
         display: flex;
@@ -1748,8 +1752,8 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
     display: flex;
     flex-shrink: 0;
     flex-direction: column;
-    margin-left: 10px;
-    margin-right: 5px;
+    margin-inline-start: 10px;
+    margin-inline-end: 5px;
 }
 
 #right-pane .card-header {
@@ -1789,7 +1793,7 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 }
 
 #right-pane .card-body ul {
-    padding-left: 25px;
+    padding-inline-start: 25px;
     margin-bottom: 5px;
 }
 
@@ -1800,8 +1804,8 @@ body:not(.mobile) #launcher-pane.horizontal .dropdown-submenu > .dropdown-menu {
 }
 
 .note-split {
-    margin-left: auto;
-    margin-right: auto;
+    margin-inline-start: auto;
+    margin-inline-end: auto;
 }
 
 .note-split.full-content-width {
@@ -1820,7 +1824,7 @@ button.close:hover {
 .reference-link .bx {
     position: relative;
     top: 1px;
-    margin-right: 3px;
+    margin-inline-end: 3px;
 }
 
 .options-section:first-of-type h4 {
@@ -1858,7 +1862,7 @@ textarea {
 
 .attachment-help-button {
     display: inline-block;
-    margin-left: 10px;
+    margin-inline-start: 10px;
     vertical-align: middle;
     font-size: 1em;
 }
@@ -1966,7 +1970,7 @@ textarea {
 }
 
 body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
-    padding-left: 1em;
+    padding-inline-start: 1em;
 }
 
 #tab-row-left-spacer {
@@ -1975,7 +1979,7 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
 }
 
 .tab-row-widget {
-    padding-right: calc(100vw - env(titlebar-area-width, 100vw));
+    padding-inline-end: calc(100vw - env(titlebar-area-width, 100vw));
 }
 
 .tab-row-container .toggle-button {
@@ -2038,7 +2042,7 @@ body.zen .split-note-container-widget > .gutter {
 body.zen #launcher-pane {
     position: absolute !important;
     top: 0 !important;
-    right: 0 !important;
+    inset-inline-end: 0 !important;
     width: 64px !important;
     height: 64px !important;
     background: transparent !important;
@@ -2049,8 +2053,8 @@ body.zen .title-row {
     display: block !important;
     height: unset !important;
     -webkit-app-region: drag;
-    padding-left: env(titlebar-area-x);
-    padding-right: calc(100vw - env(titlebar-area-width, 100vw) + 2.5em);
+    padding-inline-start: env(titlebar-area-x);
+    padding-inline-end: calc(100vw - env(titlebar-area-width, 100vw) + 2.5em);
 }
 
 body.zen .floating-buttons {
@@ -2058,7 +2062,7 @@ body.zen .floating-buttons {
 }
 
 body.zen .floating-buttons-children {
-    right: 0;
+    inset-inline-end: 0;
 }
 
 body.zen .floating-buttons-children .button-widget {
@@ -2217,7 +2221,7 @@ footer.webview-footer button {
 .chat-input {
     width: 100%;
     resize: none;
-    padding-right: 40px;
+    padding-inline-end: 40px;
 }
 
 .chat-buttons {
@@ -2280,7 +2284,7 @@ footer.webview-footer button {
     padding: 1em;
     margin: 1.25em 0;
     position: relative;
-    padding-left: 2.5em;
+    padding-inline-start: 2.5em;
     overflow: hidden;
 }
 
@@ -2293,7 +2297,7 @@ footer.webview-footer button {
     font-family: boxicons !important;
     position: absolute;
     top: 1em;
-    left: 1em;
+    inset-inline-start: 1em;
 }
 
 .admonition.note { --accent-color: var(--admonition-note-accent-color); }
@@ -2319,18 +2323,18 @@ footer.webview-footer button {
     display: flex;
     align-items: center;
     font-size: 0.9em;
-    margin-right: 15px;
+    margin-inline-end: 15px;
     cursor: pointer;
 }
 
 .chat-option input[type="checkbox"] {
-    margin-right: 5px;
+    margin-inline-end: 5px;
 }
 
 /* Style for thinking process in chat responses */
 .thinking-process {
     background-color: rgba(0, 0, 0, 0.05);
-    border-left: 3px solid var(--main-text-color);
+    border-inline-start: 3px solid var(--main-text-color);
     padding: 10px;
     margin: 10px 0;
     border-radius: 4px;
@@ -2338,23 +2342,23 @@ footer.webview-footer button {
 
 .thinking-step {
     margin-bottom: 8px;
-    padding-left: 10px;
+    padding-inline-start: 10px;
 }
 
 .thinking-step.observation {
-    border-left: 2px solid #69c7ff;
+    border-inline-start: 2px solid #69c7ff;
 }
 
 .thinking-step.hypothesis {
-    border-left: 2px solid #9839f7;
+    border-inline-start: 2px solid #9839f7;
 }
 
 .thinking-step.evidence {
-    border-left: 2px solid #40c025;
+    border-inline-start: 2px solid #40c025;
 }
 
 .thinking-step.conclusion {
-    border-left: 2px solid #e2aa03;
+    border-inline-start: 2px solid #e2aa03;
     font-weight: bold;
 }
 
@@ -2369,17 +2373,17 @@ footer.webview-footer button {
 
 .content-floating-buttons.top-left {
     top: 10px;
-    left: 10px;
+    inset-inline-start: 10px;
 }
 
 .content-floating-buttons.bottom-left {
     bottom: 10px;
-    left: 10px;
+    inset-inline-start: 10px;
 }
 
 .content-floating-buttons.bottom-right {
     bottom: 10px;
-    right: 10px;
+    inset-inline-end: 10px;
 }
 
 .content-floating-buttons button.bx {

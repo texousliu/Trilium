@@ -30,7 +30,7 @@ async function main() {
 
     // needed for excalidraw export https://github.com/zadam/trilium/issues/4271
     app.commandLine.appendSwitch("enable-experimental-web-platform-features");
-    app.commandLine.appendSwitch("lang", options.getOptionOrNull("formattingLocale") ?? "en");
+    app.commandLine.appendSwitch("lang", options.getOptionOrNull("formattingLocale") || options.getOptionOrNull("locale") || "en");
 
     // Disable smooth scroll if the option is set
     const smoothScrollEnabled = options.getOptionOrNull("smoothScrollEnabled");

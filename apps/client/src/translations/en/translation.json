@@ -646,7 +646,8 @@
     "about": "About Trilium Notes",
     "logout": "Logout",
     "show-cheatsheet": "Show Cheatsheet",
-    "toggle-zen-mode": "Zen Mode"
+    "toggle-zen-mode": "Zen Mode",
+    "update_available": "Version {{latestVersion}} is available, click to download."
   },
   "zen_mode": {
     "button_exit": "Exit Zen Mode"
@@ -735,6 +736,7 @@
   "mobile_detail_menu": {
     "insert_child_note": "Insert child note",
     "delete_this_note": "Delete this note",
+    "note_revisions": "Note revisions",
     "error_cannot_get_branch_id": "Cannot get branchId for notePath '{{notePath}}'",
     "error_unrecognized_command": "Unrecognized command {{command}}"
   },
@@ -1413,8 +1415,13 @@
     "title": "Localization",
     "language": "Language",
     "first-day-of-the-week": "First day of the week",
-    "sunday": "Sunday",
     "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday",
     "first-week-of-the-year": "First week of the year",
     "first-week-contains-first-day": "First week contains first day of the year",
     "first-week-contains-first-thursday": "First week contains first Thursday of the year",
@@ -1422,7 +1429,8 @@
     "min-days-in-first-week": "Minimum days in first week",
     "first-week-info": "First week contains first Thursday of the year is based on <a href=\"https://en.wikipedia.org/wiki/ISO_week_date#First_week\">ISO 8601</a> standard.",
     "first-week-warning": "Changing first week options may cause duplicate with existing Week Notes and the existing Week Notes will not be updated accordingly.",
-    "formatting-locale": "Date & number format"
+    "formatting-locale": "Date & number format",
+    "formatting-locale-auto": "Based on the application's language"
   },
   "backup": {
     "automatic_backup": "Automatic backup",
