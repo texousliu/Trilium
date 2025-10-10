@@ -3,142 +3,143 @@
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
 ![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran)\
 ![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/trilium)
-![GitHub Downloads (all assets, all
-releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
+![GitHub Downloads (mọi tài nguyên, mọi bản phát
+hành)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
-[![Translation
-status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
+[![Tình trạng dịch
+thuật](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[English](./README.md) | [Chinese (Simplified)](./docs/README-ZH_CN.md) |
-[Chinese (Traditional)](./docs/README-ZH_TW.md) | [Russian](./docs/README-ru.md)
-| [Japanese](./docs/README-ja.md) | [Italian](./docs/README-it.md) |
-[Spanish](./docs/README-es.md)
+[Tiếng Anh](./README.md) | [Tiếng Trung (Giản thể)](./docs/README-ZH_CN.md) |
+[Tiếng Trung (Phồn thể)](./docs/README-ZH_TW.md) | [Tiếng
+Nga](./docs/README-ru.md) | [Tiếng Nhật](./docs/README-ja.md) | [Tiếng
+Ý](./docs/README-it.md) | [Tiếng Tây Ban Nha](./docs/README-es.md)
 
-Trilium Notes is a free and open-source, cross-platform hierarchical note taking
-application with focus on building large personal knowledge bases.
+Trilium Notes là một ứng dụng ghi chú phân cấp miễn phí, mã nguồn mở, đa nền
+tảng tập trung vào việc xây dựng cơ sở tri thức cá nhân lớn.
 
-See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for
-quick overview:
+Xem [ảnh chụp màn hình](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)
+để tổng quan nhanh:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
-## 📚 Documentation
+## 📚 Tài Liệu
 
-**Visit our comprehensive documentation at
+**Truy cập tài liệu toàn diện của chúng tôi tại
 [docs.triliumnotes.org](https://docs.triliumnotes.org/)**
 
-Our documentation is available in multiple formats:
-- **Online Documentation**: Browse the full documentation at
+Tài liệu của chúng tôi có sẵn ở nhiều định dạng:
+- **Tài liệu trực tuyến**: Xem tài liệu đầy đủ tại
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
-- **In-App Help**: Press `F1` within Trilium to access the same documentation
-  directly in the application
-- **GitHub**: Navigate through the [User
-  Guide](./docs/User%20Guide/User%20Guide/) in this repository
+- **Trợ giúp trong ứng dụng**: Nhấn `F1` trong Trilium để truy cập tài liệu
+  tương tự trực tiếp trong ứng dụng
+- **Github**: Đi đến [Hướng dẫn sử dụng] trong kho lưu trữ này
 
-### Quick Links
-- [Getting Started Guide](https://docs.triliumnotes.org/)
-- [Installation
-  Instructions](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
-- [Docker
-  Setup](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
-- [Upgrading
+### Liên Kết Nhanh
+- [Hướng Dẫn Bắt Đầu](https://docs.triliumnotes.org/)
+- [Hướng Dẫn Cài
+  Đặt](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+- [Thiết Lập
+  Docker](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
+- [Cập Nhật
   TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
-- [Basic Concepts and
-  Features](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
-- [Patterns of Personal Knowledge
-  Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
+- [Khái Niệm Và Chức Năng Cơ
+  Bản](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+- [Các Mẫu Cơ Sở Tri Thức Cá
+  Nhân](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
-## 🎁 Features
+## 🎁 Chức Năng
 
-* Notes can be arranged into arbitrarily deep tree. Single note can be placed
-  into multiple places in the tree (see
+* Các ghi chú có thể được sắp xếp thành cây có độ sâu bất kỳ. Một ghi chú có thể
+  được đặt vào nhiều nơi trong cây (xem
   [cloning](https://triliumnext.github.io/Docs/Wiki/cloning-notes))
-* Rich WYSIWYG note editor including e.g. tables, images and
-  [math](https://triliumnext.github.io/Docs/Wiki/text-notes) with markdown
-  [autoformat](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat)
-* Support for editing [notes with source
-  code](https://triliumnext.github.io/Docs/Wiki/code-notes), including syntax
-  highlighting
-* Fast and easy [navigation between
-  notes](https://triliumnext.github.io/Docs/Wiki/note-navigation), full text
-  search and [note
+* Trình soạn thảo ghi chú WYSIWYG đầy đủ tính năng, hỗ trợ bảng, hình ảnh, và
+  [toán học](https://triliumnext.github.io/Docs/Wiki/text-notes); đồng thời [tự
+  động định dạng](https://triliumnext.github.io/Docs/Wiki/text-notes) sang
+  markdown
+* Hỗ trợ chỉnh sửa [ghi chú chứa mã
+  nguồn](https://triliumnext.github.io/Docs/Wiki/code-notes), kèm tô sáng cú
+  pháp
+* [Điều hướng giữa các ghi
+  chú](https://triliumnext.github.io/Docs/Wiki/note-navigation) nhanh và dễ
+  dàng, tìm kiếm toàn văn và [note
   hoisting](https://triliumnext.github.io/Docs/Wiki/note-hoisting)
-* Seamless [note
-  versioning](https://triliumnext.github.io/Docs/Wiki/note-revisions)
-* Note [attributes](https://triliumnext.github.io/Docs/Wiki/attributes) can be
-  used for note organization, querying and advanced
-  [scripting](https://triliumnext.github.io/Docs/Wiki/scripts)
-* UI available in English, German, Spanish, French, Romanian, and Chinese
-  (simplified and traditional)
-* Direct [OpenID and TOTP
-  integration](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
-  for more secure login
-* [Synchronization](https://triliumnext.github.io/Docs/Wiki/synchronization)
-  with self-hosted sync server
-  * there's a [3rd party service for hosting synchronisation
-    server](https://trilium.cc/paid-hosting)
-* [Sharing](https://triliumnext.github.io/Docs/Wiki/sharing) (publishing) notes
-  to public internet
-* Strong [note
-  encryption](https://triliumnext.github.io/Docs/Wiki/protected-notes) with
-  per-note granularity
-* Sketching diagrams, based on [Excalidraw](https://excalidraw.com/) (note type
+* Quản lý [phiên bản ghi
+  chú](https://triliumnext.github.io/Docs/Wiki/note-revisions) mượt mà
+* [Các thuộc tính](https://triliumnext.github.io/Docs/Wiki/attributes) ghi chú
+  có thể được dùng cho việc tổ chức, truy xuất và [viết
+  script](https://triliumnext.github.io/Docs/Wiki/scripts) nâng cao
+* Giao diện sẵn có cho Tiếng Anh, Tiếng Đức, Tiếng Tây Ban Nha, Tiếng Pháp,
+  Tiếng Rumani, và Tiếng Trung (giản thể và phồn thể)
+* [Tích hợp OpenID và
+  TOTP](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
+  trực tiếp để đăng nhập bảo mật hơn
+* [Đồng bộ hóa](https://triliumnext.github.io/Docs/Wiki/synchronization) với máy
+  chủ đồng bộ tự triển khai
+  * có một [dịch vụ bên thứ ba để lưu trữ máy chủ đồng bộ
+    hóa](https://trilium.cc/paid-hosting)
+* [Chia sẻ](https://triliumnext.github.io/Docs/Wiki/sharing) (công bố) các ghi
+  chú lên mạng Internet công cộng
+* [Mã hóa ghi chú](https://triliumnext.github.io/Docs/Wiki/protected-notes) mạnh
+  mẽ với mức chi tiết đến từng ghi chú
+* Phác thảo sơ đồ, dựa trên [Excalidraw](https://excalidraw.com/) (loại ghi chú
   "canvas")
-* [Relation maps](https://triliumnext.github.io/Docs/Wiki/relation-map) and
-  [link maps](https://triliumnext.github.io/Docs/Wiki/link-map) for visualizing
-  notes and their relations
-* Mind maps, based on [Mind Elixir](https://docs.mind-elixir.com/)
-* [Geo maps](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md) with
-  location pins and GPX tracks
-* [Scripting](https://triliumnext.github.io/Docs/Wiki/scripts) - see [Advanced
-  showcases](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
-* [REST API](https://triliumnext.github.io/Docs/Wiki/etapi) for automation
-* Scales well in both usability and performance upwards of 100 000 notes
-* Touch optimized [mobile
-  frontend](https://triliumnext.github.io/Docs/Wiki/mobile-frontend) for
-  smartphones and tablets
-* Built-in [dark theme](https://triliumnext.github.io/Docs/Wiki/themes), support
-  for user themes
-* [Evernote](https://triliumnext.github.io/Docs/Wiki/evernote-import) and
-  [Markdown import & export](https://triliumnext.github.io/Docs/Wiki/markdown)
-* [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper) for easy
-  saving of web content
-* Customizable UI (sidebar buttons, user-defined widgets, ...)
-* [Metrics](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md), along
-  with a [Grafana
-  Dashboard](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
+* [Bản đồ quan hệ](https://triliumnext.github.io/Docs/Wiki/relation-map) và [bản
+  đồ liên kết](https://triliumnext.github.io/Docs/Wiki/link-map) để trực quan
+  hóa các ghi chú và mối quan hệ giữa chúng
+* Sơ đồ tư duy, dựa trên [Mind Elixir](https://docs.mind-elixir.com/)
+* [Bản đồ địa lý](./docs/User%20Guide/User%20Guide/Note%20Types/Geo%20Map.md)
+  với các chấm chỉ vị trí và các đường GPX
+* [Viết script](https://triliumnext.github.io/Docs/Wiki/scripts) - xem [Mục
+  trưng bày nâng
+  cao](https://triliumnext.github.io/Docs/Wiki/advanced-showcases)
+* [REST API](https://triliumnext.github.io/Docs/Wiki/etapi) cho tự động hóa
+* Mở rộng tốt về cả khả năng sử dụng và hiệu năng lên đến 100.000 ghi chú
+* Tối ưu hóa cảm ứng [mobile
+  frontend](https://triliumnext.github.io/Docs/Wiki/mobile-frontend) cho điện
+  thoại thông minh và máy tính bảng
+* Tích hợp sẵn [giao diện tối](https://triliumnext.github.io/Docs/Wiki/themes),
+  hỗ trợ giao diện do người dùng tùy chỉnh
+* Hỗ trợ nhập, xuất cho
+  [Evernote](https://triliumnext.github.io/Docs/Wiki/evernote-import) và
+  [Markdown](https://triliumnext.github.io/Docs/Wiki/markdown)
+* [Web Clipper](https://triliumnext.github.io/Docs/Wiki/web-clipper) để lưu trữ
+  nội dung web dễ dàng
+* Giao diện tùy biến (nút thanh bên, widget do người dùng tự tạo,...)
+* [Các thông số](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics.md),
+  cùng với một [Bảng điều khiển
+  Grafana](./docs/User%20Guide/User%20Guide/Advanced%20Usage/Metrics/grafana-dashboard.json)
 
-✨ Check out the following third-party resources/communities for more TriliumNext
-related goodies:
+✨ Hãy xem thử các nguồn tài nguyên/cộng đồng bên thứ ba dưới đây để tìm thêm
+nhiều tiện ích liên quan đến TriliumNext:
 
-- [awesome-trilium](https://github.com/Nriver/awesome-trilium) for 3rd party
-  themes, scripts, plugins and more.
-- [TriliumRocks!](https://trilium.rocks/) for tutorials, guides, and much more.
+- [awesome-trilium](https://github.com/Nriver/awesome-trilium) cho các chủ đề,
+  script, plugin và nhiều hơn nữa.
+- [TriliumRocks!](https://trilium.rocks/) cho những hướng dẫn, và nhiều hơn.
 
-## ❓Why TriliumNext?
+## ❓Tại sao là TriliumNext?
 
-The original Trilium developer ([Zadam](https://github.com/zadam)) has
-graciously given the Trilium repository to the community project which resides
-at https://github.com/TriliumNext
+Người phát triển ban đầu của Trilium ([Zadam](https://github.com/zadam)) đã hào
+phóng tặng kho lưu trữ Trilium cho dự án cộng đồng, hiện đang đặt tại
+https://github.com/TriliumNext
 
-### ⬆️Migrating from Zadam/Trilium?
+### ⬆️ Chuyển từ Zadam/Trilium?
 
-There are no special migration steps to migrate from a zadam/Trilium instance to
-a TriliumNext/Trilium instance. Simply [install
-TriliumNext/Trilium](#-installation) as usual and it will use your existing
-database.
+Không cần những bước chuyển đặc biệt nào để chuyển từ zadam/Trilium sang
+TriliumNext/Trilium. Đơn giản chỉ cần [cài đặt
+TriliumNext/Trilium](#-installation) như thông thường và nó sẽ sử dụng cơ sở dữ
+liệu sẵn có của bạn.
 
-Versions up to and including
-[v0.90.4](https://github.com/TriliumNext/Trilium/releases/tag/v0.90.4) are
-compatible with the latest zadam/trilium version of
-[v0.63.7](https://github.com/zadam/trilium/releases/tag/v0.63.7). Any later
-versions of TriliumNext/Trilium have their sync versions incremented which
-prevents direct migration.
+Các phiên bản trước và bao gồm
+[v0.90.4](https://github.com/TriliumNext/Trilium/releases/tag/v0.90.4) đều tương
+thích với phiên bản mới nhất của zadam/trilium
+[v0.63.7](https://github.com/zadam/trilium/releases/tag/v0.63.7). Các phiên bản
+sau đó của TriliumNext/Trilium đã tăng phiên bản đồng bộ, khiến việc chuyển sang
+trực tiếp không còn khả thi.
 
-## 💬 Discuss with us
+## 💬 Thảo luận cùng chúng tôi
 
-Feel free to join our official conversations. We would love to hear what
-features, suggestions, or issues you may have!
+Hãy thoải mái tham gia các cuộc trò chuyện chính thức. Chúng tôi luôn muốn lắng
+nghe các tính năng, đề xuất hoặc vấn đề mà bạn đưa ra!
 
 - [Matrix](https://matrix.to/#/#triliumnext:matrix.org) (For synchronous
   discussions.)

@@ -2,7 +2,7 @@
   "about": {
     "title": "حول تريليوم للملاحظات",
     "homepage": "الصفحة الرئيسية:",
-    "app_version": "نسخة التطبيق:",
+    "app_version": "اصدار التطبيق:",
     "sync_version": "اصدار المزامنه:",
     "build_date": "تاريخ الانشاء:",
     "build_revision": "مراجعة الاصدار:",
@@ -36,11 +36,14 @@
     "relations": "العلاقات",
     "notes": "الملاحظات",
     "other": "أخرى",
-    "affected_notes": "الملاحظات المتأثرة"
+    "affected_notes": "الملاحظات المتأثرة",
+    "labels": "التسميات"
   },
   "upload_attachments": {
     "options": "خيارات",
-    "upload": "تحميل"
+    "upload": "تحميل",
+    "choose_files": "اختر الملفات",
+    "shrink_images": "تصغير الصور"
   },
   "attribute_detail": {
     "name": "الاسم",
@@ -59,7 +62,14 @@
     "number": "عدد",
     "boolean": "منطقي",
     "url": "عنوان الويب",
-    "inheritable": "قابل للوراثة"
+    "inheritable": "قابل للوراثة",
+    "target_note": "الملاحظة الهدف",
+    "single_value": "قيمة واحدة",
+    "multi_value": "قيم متعددة",
+    "inverse_relation": "العلاقة العكسية",
+    "more_notes": "مزيد من الملاحظات",
+    "label": "تفاصيل التسمية",
+    "relation": "تفاصيل العلاقة"
   },
   "rename_label": {
     "to": "الى"
@@ -85,13 +95,13 @@
     "year": "سنة",
     "list": "قائمة",
     "today": "اليوم",
-    "mon": "الأثنين",
+    "mon": "الاثنين",
     "tue": "الثلاثاء",
     "wed": "الأربعاء",
     "thu": "الخميس",
     "fri": "الجمعة",
     "sat": "السبت",
-    "sun": "الأحد",
+    "sun": "الاحد",
     "january": "يناير",
     "march": "مارس",
     "april": "ابريل",
@@ -102,7 +112,8 @@
     "september": "سبتمبر",
     "october": "اكتوبر",
     "november": "نوفمبر",
-    "december": "ديسمبر"
+    "december": "ديسمبر",
+    "february": "فبراير"
   },
   "global_menu": {
     "menu": "القائمة",
@@ -214,24 +225,35 @@
     "collapseSubTree": "طي الشجرة الفرعية",
     "tabShortcuts": "أختصارات التبويب",
     "creatingNotes": "انشاء الملاحظات",
-    "selectNote": "تحديد الملاحظة"
+    "selectNote": "تحديد الملاحظة",
+    "editingNotes": "تحرير الملاحظات",
+    "inPageSearch": "البحث داخل الصفحة",
+    "markdownAutoformat": "التنسيق التلقائي باسلوب Markdown"
   },
   "import": {
     "options": "خيارات",
-    "import": "استيراد"
+    "import": "استيراد",
+    "safeImport": "أستيراد آمن",
+    "shrinkImages": "تقليل حجم الصور",
+    "import-status": "حالة الاستبراد"
   },
   "include_note": {
-    "label_note": "ملاحظة"
+    "label_note": "ملاحظة",
+    "dialog_title": "تضمين ملاحظة",
+    "button_include": "تضمين ملاحظة"
   },
   "info": {
     "closeButton": "أغلاق",
-    "okButton": "نعم"
+    "okButton": "نعم",
+    "modalTitle": "رسالة معلومات"
   },
   "markdown_import": {
-    "import_button": "أستيراد"
+    "import_button": "أستيراد",
+    "dialog_title": "استيراد Markdown"
   },
   "note_type_chooser": {
-    "templates": "قوالب"
+    "templates": "قوالب",
+    "builtin_templates": "القوالب المدمجة"
   },
   "prompt": {
     "title": "ترقية",
@@ -239,23 +261,34 @@
     "defaultTitle": "ترقية"
   },
   "protected_session_password": {
-    "close_label": "أغلاق"
+    "close_label": "أغلاق",
+    "modal_title": "جلسة محمية"
   },
   "revisions": {
     "delete_button": "حذف",
     "download_button": "تنزيل",
     "restore_button": "أستعادة",
-    "preview": "معاينة:"
+    "preview": "معاينة:",
+    "note_revisions": "مراجعات الملاحظة",
+    "diff_on": "عرض الفروقات",
+    "diff_off": "عرض المحتوى",
+    "file_size": "حجم الملف:"
   },
   "sort_child_notes": {
     "title": "عنوان",
     "ascending": "تصاعدي",
     "descending": "تنازلي",
     "folders": "مجلدات",
-    "sort": "فرز"
+    "sort": "ترتيب",
+    "sorting_criteria": "معايير الترتيب",
+    "date_created": "تاريخ الانشاء",
+    "date_modified": "تاريخ التعديل",
+    "sorting_direction": "اتجاه الترتيب",
+    "natural_sort": "الترتيب الطبيعي"
   },
   "recent_changes": {
-    "undelete_link": "الغاء الحذف"
+    "undelete_link": "الغاء الحذف",
+    "title": "التغيرات الاخيرة"
   },
   "edited_notes": {
     "deleted": "(حذف)"
@@ -297,7 +330,13 @@
     },
     "name": "الذكاء الأصطناعي",
     "openai": "OpenAI",
-    "sources": "مصادر"
+    "sources": "مصادر",
+    "temperature": "درجة الحرارة",
+    "model": "نموذج",
+    "refreshing_models": "جار التحديث...",
+    "error": "خطأ",
+    "refreshing": "جار التحديث...",
+    "ollama_tab": "Ollama"
   },
   "code_auto_read_only_size": {
     "unit": "حروف"
@@ -316,18 +355,22 @@
     "bing": "Bing",
     "duckduckgo": "DuckDuckGo",
     "google": "جوجل",
-    "save_button": "حفظ"
+    "save_button": "حفظ",
+    "baidu": "Baidu"
   },
   "heading_style": {
-    "plain": "بسيط"
+    "plain": "بسيط",
+    "underline": "تسطير",
+    "markdown": "نمط-Markdown"
   },
   "text_auto_read_only_size": {
     "unit": "حروف"
   },
   "i18n": {
     "language": "لغة",
-    "sunday": "الأحد",
-    "monday": "الأثنين"
+    "sunday": "الاحد",
+    "monday": "الاثنين",
+    "title": "تعريب"
   },
   "backup": {
     "path": "مسار"
@@ -335,10 +378,11 @@
   "etapi": {
     "wiki": "ويكي",
     "created": "تم الأنشاء",
-    "actions": "أجراءات"
+    "actions": "أجراءات",
+    "title": "ETAPI"
   },
   "password": {
-    "heading": "كلمة السر",
+    "heading": "كلمة المرور",
     "wiki": "ويكي"
   },
   "shortcuts": {
@@ -369,7 +413,9 @@
   },
   "tasks": {
     "due": {
-      "yesterday": "أمس"
+      "yesterday": "أمس",
+      "today": "اليوم",
+      "tomorrow": "غدٱ"
     }
   },
   "code_theme": {
@@ -378,7 +424,8 @@
   "table_view": {
     "sort-column-ascending": "تصاعدي",
     "sort-column-descending": "تنازلي",
-    "new-column-relation": "العلاقة"
+    "new-column-relation": "العلاقة",
+    "new-column-label": "تسمية"
   },
   "modal": {
     "close": "اغلاق"
@@ -391,5 +438,97 @@
   },
   "clone_to": {
     "prefix_optional": "بادئة (اختياري)"
+  },
+  "table_of_contents": {
+    "unit": "عناوين"
+  },
+  "tree-context-menu": {
+    "archive": "أرشفة",
+    "unarchive": "الغاء الارشفة",
+    "delete": "حذف",
+    "advanced": "متقدمة",
+    "cut": "قص",
+    "duplicate": "استنساخ",
+    "export": "تصدير"
+  },
+  "note_types": {
+    "text": "نص",
+    "code": "كود",
+    "book": "مجموعة",
+    "canvas": "مساحة العمل",
+    "file": "ملف",
+    "image": "صورة",
+    "launcher": "مشغل",
+    "doc": "مستند",
+    "widget": "عنصر واجهة",
+    "new-feature": "جديد",
+    "collections": "مجاميع",
+    "beta-feature": "اصدار تجريبي"
+  },
+  "shared_switch": {
+    "shared": "مشترك"
+  },
+  "template_switch": {
+    "template": "قالب"
+  },
+  "find": {
+    "replace": "استبدال"
+  },
+  "highlights_list_2": {
+    "options": "خيارات"
+  },
+  "quick-search": {
+    "searching": "جار البحث..."
+  },
+  "note_tree": {
+    "unhoist": "ارجاع الى الترتيب الطبيعي"
+  },
+  "sql_table_schemas": {
+    "tables": "جداول"
+  },
+  "launcher_context_menu": {
+    "reset": "اعادة ضبط"
+  },
+  "editable-text": {
+    "auto-detect-language": "تم اكتشافه تلقائيا"
+  },
+  "classic_editor_toolbar": {
+    "title": "تنسيق"
+  },
+  "editor": {
+    "title": "محرر"
+  },
+  "editing": {
+    "editor_type": {
+      "floating": {
+        "title": "عائم"
+      },
+      "fixed": {
+        "title": "مثبت"
+      }
+    }
+  },
+  "electron_context_menu": {
+    "cut": "قص",
+    "copy": "نسخ",
+    "paste": "لصق"
+  },
+  "promoted_attributes": {
+    "url_placeholder": "http://website..."
+  },
+  "duration": {
+    "seconds": "ثواني",
+    "minutes": "دقائق",
+    "hours": "ساعات",
+    "days": "أيام"
+  },
+  "editorfeatures": {
+    "title": "مميزات"
+  },
+  "book_properties_config": {
+    "raster": "نقطي"
+  },
+  "multi_factor_authentication": {
+    "oauth_title": "OAuth/OpenID"
   }
 }
