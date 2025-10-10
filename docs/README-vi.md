@@ -22,7 +22,7 @@ Xem [ảnh chụp màn hình](https://triliumnext.github.io/Docs/Wiki/screenshot
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
-## 📚 Documentation
+## 📚 Tài liệu
 
 **Visit our comprehensive documentation at
 [docs.triliumnotes.org](https://docs.triliumnotes.org/)**
