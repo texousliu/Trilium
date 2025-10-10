@@ -1,12 +1,12 @@
 # Trilium Notes
 
-![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
+![GitHub Sponsoren](https://img.shields.io/github/sponsors/eliandoran)
 ![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran)\
 ![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/trilium)
 ![GitHub Downloads (all assets, all
 releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
-[![Translation
+[![Vertaling
 status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
 [English](./README.md) | [Chinese (Simplified)](./docs/README-ZH_CN.md) |
@@ -22,42 +22,42 @@ quick overview:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
-## 📚 Documentation
+## 📚 Documentatie
 
-**Visit our comprehensive documentation at
+**Bekijk onze beknopte documentatie op
 [docs.triliumnotes.org](https://docs.triliumnotes.org/)**
 
-Our documentation is available in multiple formats:
-- **Online Documentation**: Browse the full documentation at
+Onze documentatie is beschikbaar in meerdere formaten:
+- **Online Documentatie**: Blader door de volledige documentatie op
   [docs.triliumnotes.org](https://docs.triliumnotes.org/)
-- **In-App Help**: Press `F1` within Trilium to access the same documentation
-  directly in the application
-- **GitHub**: Navigate through the [User
-  Guide](./docs/User%20Guide/User%20Guide/) in this repository
+- **In-App Help**: Toets`F1` binnen Trilium om dezelfde documentatie direct in
+  de applicatie te bekijken
+- **GitHub**: Navigeer door de [User Guide](./docs/User%20Guide/User%20Guide/)
+  in deze repository
 
 ### Quick Links
-- [Getting Started Guide](https://docs.triliumnotes.org/)
-- [Installation
-  Instructions](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
+- [Getting Started Gids](https://docs.triliumnotes.org/)
+- [Vertaal
+  Instructies](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
 - [Docker
   Setup](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
-- [Upgrading
-  TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
-- [Basic Concepts and
+- [TriliumNext
+  Upgraden](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+- [Basis Concepten en
   Features](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
-- [Patterns of Personal Knowledge
+- [Patronen van Personal Knowledge
   Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
 ## 🎁 Features
 
-* Notes can be arranged into arbitrarily deep tree. Single note can be placed
-  into multiple places in the tree (see
+* Notes kunnen in een diepe boomstructuur geplaatst worden. Een enkele note kan
+  op meerdere plekken in de boom geplaatst worden. (zie
   [cloning](https://triliumnext.github.io/Docs/Wiki/cloning-notes))
-* Rich WYSIWYG note editor including e.g. tables, images and
-  [math](https://triliumnext.github.io/Docs/Wiki/text-notes) with markdown
+* Rijke WYSIWYG note editor inclusief e.g. tabellen, afbeeldingen en
+  [math](https://triliumnext.github.io/Docs/Wiki/text-notes) met markdown
   [autoformat](https://triliumnext.github.io/Docs/Wiki/text-notes#autoformat)
-* Support for editing [notes with source
-  code](https://triliumnext.github.io/Docs/Wiki/code-notes), including syntax
+* Ondersteuning voor bewerken van [notes met source
+  code](https://triliumnext.github.io/Docs/Wiki/code-notes), inclusief syntax
   highlighting
 * Fast and easy [navigation between
   notes](https://triliumnext.github.io/Docs/Wiki/note-navigation), full text
