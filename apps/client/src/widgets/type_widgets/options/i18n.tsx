@@ -73,13 +73,21 @@ function DateSettings() {
     return (
         <>
             <OptionsRow name="first-day-of-week" label={t("i18n.first-day-of-the-week")}>
-                <FormInlineRadioGroup
+                <FormSelect
                     name="first-day-of-week"
+                    currentValue={firstDayOfWeek}
+                    onChange={setFirstDayOfWeek}
+                    keyProperty="value"
+                    titleProperty="label"
                     values={[
-                        { value: "0", label: t("i18n.sunday") },
-                        { value: "1", label: t("i18n.monday") }
+                        { value: "1", label: t("i18n.monday") },
+                        { value: "2", label: t("i18n.tuesday") },
+                        { value: "3", label: t("i18n.wednesday") },
+                        { value: "4", label: t("i18n.thursday") },
+                        { value: "5", label: t("i18n.friday") },
+                        { value: "6", label: t("i18n.saturday") },
+                        { value: "7", label: t("i18n.sunday") },
                     ]}
-                    currentValue={firstDayOfWeek} onChange={setFirstDayOfWeek}
                 />
             </OptionsRow>
 
