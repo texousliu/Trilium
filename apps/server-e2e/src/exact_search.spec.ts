@@ -322,4 +322,181 @@ test.describe("Exact Search with Leading = Operator", () => {
         // Should find both uppercase and lowercase versions
         expect(ourTestNotes.length).toBe(2);
     });
+
+    test("Exact phrase matching with multi-word searches", async ({ page }) => {
+        // Create notes with various phrase patterns
+        const note1 = await page.request.post(`${BASE_URL}/api/notes/root/children?target=into&targetBranchId=`, {
+            headers: { "x-csrf-token": csrfToken },
+            data: {
+                title: "exact phrase",
+                content: "This note contains the exact phrase.",
+                type: "text"
+            }
+        });
+        expect(note1.ok()).toBeTruthy();
+        const note1Data = await note1.json();
+        createdNoteIds.push(note1Data.note.noteId);
+
+        const note2 = await page.request.post(`${BASE_URL}/api/notes/root/children?target=into&targetBranchId=`, {
+            headers: { "x-csrf-token": csrfToken },
+            data: {
+                title: "exact phrase match",
+                content: "This note has exact phrase followed by more words.",
+                type: "text"
+            }
+        });
+        expect(note2.ok()).toBeTruthy();
+        const note2Data = await note2.json();
+        createdNoteIds.push(note2Data.note.noteId);
+
+        const note3 = await page.request.post(`${BASE_URL}/api/notes/root/children?target=into&targetBranchId=`, {
+            headers: { "x-csrf-token": csrfToken },
+            data: {
+                title: "phrase exact",
+                content: "This note has the words in reverse order.",
+                type: "text"
+            }
+        });
+        expect(note3.ok()).toBeTruthy();
+        const note3Data = await note3.json();
+        createdNoteIds.push(note3Data.note.noteId);
+
+        const note4 = await page.request.post(`${BASE_URL}/api/notes/root/children?target=into&targetBranchId=`, {
+            headers: { "x-csrf-token": csrfToken },
+            data: {
+                title: "this exact and that phrase",
+                content: "Words are separated but both present.",
+                type: "text"
+            }
+        });
+        expect(note4.ok()).toBeTruthy();
+        const note4Data = await note4.json();
+        createdNoteIds.push(note4Data.note.noteId);
+
+        await page.waitForTimeout(500);
+
+        // Search for exact phrase "exact phrase"
+        const response = await page.request.get(`${BASE_URL}/api/quick-search/='exact phrase'`, {
+            headers: { "x-csrf-token": csrfToken }
+        });
+
+        expect(response.ok()).toBeTruthy();
+        const data = await response.json();
+
+        const ourTestNotes = data.searchResults.filter((result: any) => {
+            const noteId = result.notePath.split("/").pop();
+            return [note1Data.note.noteId, note2Data.note.noteId, note3Data.note.noteId, note4Data.note.noteId].includes(noteId || "");
+        });
+
+        console.log("Exact phrase search '=\"exact phrase\"' found:", ourTestNotes.length, "notes");
+        console.log("Note titles:", ourTestNotes.map((r: any) => r.noteTitle));
+
+        // Should find only notes 1 and 2 (consecutive "exact phrase")
+        // Should NOT find note 3 (reversed order) or note 4 (words separated)
+        expect(ourTestNotes.length).toBe(2);
+
+        const foundTitles = ourTestNotes.map((r: any) => r.noteTitle);
+        expect(foundTitles).toContain("exact phrase");
+        expect(foundTitles).toContain("exact phrase match");
+        expect(foundTitles).not.toContain("phrase exact");
+        expect(foundTitles).not.toContain("this exact and that phrase");
+    });
+
+    test("Exact phrase matching respects word order", async ({ page }) => {
+        // Create notes to test word order sensitivity
+        const noteForward = await page.request.post(`${BASE_URL}/api/notes/root/children?target=into&targetBranchId=`, {
+            headers: { "x-csrf-token": csrfToken },
+            data: {
+                title: "Testing Order",
+                content: "This is a test sentence for verification.",
+                type: "text"
+            }
+        });
+        expect(noteForward.ok()).toBeTruthy();
+        const noteForwardData = await noteForward.json();
+        createdNoteIds.push(noteForwardData.note.noteId);
+
+        const noteReverse = await page.request.post(`${BASE_URL}/api/notes/root/children?target=into&targetBranchId=`, {
+            headers: { "x-csrf-token": csrfToken },
+            data: {
+                title: "Order Testing",
+                content: "A sentence test is this for verification.",
+                type: "text"
+            }
+        });
+        expect(noteReverse.ok()).toBeTruthy();
+        const noteReverseData = await noteReverse.json();
+        createdNoteIds.push(noteReverseData.note.noteId);
+
+        await page.waitForTimeout(500);
+
+        // Search for exact phrase "test sentence"
+        const response = await page.request.get(`${BASE_URL}/api/quick-search/='test sentence'`, {
+            headers: { "x-csrf-token": csrfToken }
+        });
+
+        expect(response.ok()).toBeTruthy();
+        const data = await response.json();
+
+        const ourTestNotes = data.searchResults.filter((result: any) => {
+            const noteId = result.notePath.split("/").pop();
+            return noteId === noteForwardData.note.noteId || noteId === noteReverseData.note.noteId;
+        });
+
+        console.log("Exact phrase search '=\"test sentence\"' found:", ourTestNotes.length, "notes");
+        console.log("Note titles:", ourTestNotes.map((r: any) => r.noteTitle));
+
+        // Should find only the forward order note
+        expect(ourTestNotes.length).toBe(1);
+        expect(ourTestNotes[0].noteTitle).toBe("Testing Order");
+    });
+
+    test("Multi-word exact search without quotes", async ({ page }) => {
+        // Test that multi-word search with = but without quotes also does exact phrase matching
+        const notePhrase = await page.request.post(`${BASE_URL}/api/notes/root/children?target=into&targetBranchId=`, {
+            headers: { "x-csrf-token": csrfToken },
+            data: {
+                title: "Quick Test Note",
+                content: "A simple note for multi word testing.",
+                type: "text"
+            }
+        });
+        expect(notePhrase.ok()).toBeTruthy();
+        const notePhraseData = await notePhrase.json();
+        createdNoteIds.push(notePhraseData.note.noteId);
+
+        const noteScattered = await page.request.post(`${BASE_URL}/api/notes/root/children?target=into&targetBranchId=`, {
+            headers: { "x-csrf-token": csrfToken },
+            data: {
+                title: "Word Multi Testing",
+                content: "Words are multi scattered in this testing example.",
+                type: "text"
+            }
+        });
+        expect(noteScattered.ok()).toBeTruthy();
+        const noteScatteredData = await noteScattered.json();
+        createdNoteIds.push(noteScatteredData.note.noteId);
+
+        await page.waitForTimeout(500);
+
+        // Search for "=multi word" without quotes (parser tokenizes as two words)
+        const response = await page.request.get(`${BASE_URL}/api/quick-search/=multi word`, {
+            headers: { "x-csrf-token": csrfToken }
+        });
+
+        expect(response.ok()).toBeTruthy();
+        const data = await response.json();
+
+        const ourTestNotes = data.searchResults.filter((result: any) => {
+            const noteId = result.notePath.split("/").pop();
+            return noteId === notePhraseData.note.noteId || noteId === noteScatteredData.note.noteId;
+        });
+
+        console.log("Multi-word exact search '=multi word' found:", ourTestNotes.length, "notes");
+        console.log("Note titles:", ourTestNotes.map((r: any) => r.noteTitle));
+
+        // Should find only the note with consecutive "multi word" phrase
+        expect(ourTestNotes.length).toBe(1);
+        expect(ourTestNotes[0].noteTitle).toBe("Quick Test Note");
+    });
 });

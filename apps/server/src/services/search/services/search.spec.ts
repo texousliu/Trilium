@@ -304,10 +304,13 @@ describe("Search", () => {
 
         const searchContext = new SearchContext();
 
-        // Test 1: With = and quotes, treat as multi-word exact match (both words must match)
+        // Test 1: With = and quotes, treat as exact phrase match (consecutive words in order)
         let searchResults = searchService.findResultsWithQuery("='exact phrase'", searchContext);
-        // With current implementation, this searches for notes containing both "exact" and "phrase" words
-        expect(searchResults.length).toEqual(4); // All notes with both words
+        // Should match only notes containing the exact phrase "exact phrase"
+        expect(searchResults.length).toEqual(3); // Only notes with consecutive "exact phrase"
+        expect(findNoteByTitle(searchResults, "exact phrase")).toBeTruthy();
+        expect(findNoteByTitle(searchResults, "exact phrase match")).toBeTruthy();
+        expect(findNoteByTitle(searchResults, "this exact phrase here")).toBeTruthy();
 
         // Test 2: Without =, quoted phrase should find substring/contains matches
         searchResults = searchService.findResultsWithQuery("'exact phrase'", searchContext);
@@ -316,9 +319,10 @@ describe("Search", () => {
         expect(findNoteByTitle(searchResults, "exact phrase match")).toBeTruthy();
         expect(findNoteByTitle(searchResults, "this exact phrase here")).toBeTruthy();
 
-        // Test 3: Verify word order doesn't matter with exact word matching
+        // Test 3: Verify word order matters with exact phrase matching
         searchResults = searchService.findResultsWithQuery("='phrase exact'", searchContext);
-        expect(searchResults.length).toEqual(4); // All notes with both words
+        expect(searchResults.length).toEqual(1); // Only "phrase exact" matches
+        expect(findNoteByTitle(searchResults, "phrase exact")).toBeTruthy();
     });
 
     it("leading = operator case sensitivity", () => {
@@ -368,15 +372,15 @@ describe("Search", () => {
         expect(findNoteByTitle(searchResults, "test.note")).toBeTruthy();
 
         // For phrases with spaces, use quotes to keep them together
-        // With word-boundary matching, this finds all notes with both words
+        // With exact phrase matching, this finds notes with the consecutive phrase
         searchResults = searchService.findResultsWithQuery("='test note'", searchContext);
-        expect(searchResults.length).toEqual(1); // Only "test note" has both words as separate tokens
+        expect(searchResults.length).toEqual(1); // Only "test note" has the exact phrase
         expect(findNoteByTitle(searchResults, "test note")).toBeTruthy();
 
-        // Without quotes, "test note" is tokenized as two separate words
-        // and will match all notes containing both "test" AND "note" words
+        // Without quotes, "test note" is tokenized as two separate tokens
+        // and will be treated as an exact phrase search with = operator
         searchResults = searchService.findResultsWithQuery("=test note", searchContext);
-        expect(searchResults.length).toEqual(1); // Only "test note" has both as separate words
+        expect(searchResults.length).toEqual(1); // Only "test note" has the exact phrase
 
         // Without =, should find all matches containing "test" substring
         searchResults = searchService.findResultsWithQuery("test", searchContext);
