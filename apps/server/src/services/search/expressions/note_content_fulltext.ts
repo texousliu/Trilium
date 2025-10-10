@@ -89,6 +89,20 @@ class NoteContentFulltextExp extends Expression {
         return resultNoteSet;
     }
 
+    /**
+     * Checks if content contains the exact word (with word boundaries)
+     * This is case-insensitive since content and token are already normalized
+     */
+    private containsExactWord(token: string, content: string): boolean {
+        // Normalize both for case-insensitive comparison
+        const normalizedToken = normalizeSearchText(token);
+        const normalizedContent = normalizeSearchText(content);
+
+        // Split content into words and check for exact match
+        const words = normalizedContent.split(/\s+/);
+        return words.some(word => word === normalizedToken);
+    }
+
     findInText({ noteId, isProtected, content, type, mime }: SearchRow, inputNoteSet: NoteSet, resultNoteSet: NoteSet) {
         if (!inputNoteSet.hasNoteId(noteId) || !(noteId in becca.notes)) {
             return;
@@ -112,7 +126,7 @@ class NoteContentFulltextExp extends Expression {
         }
 
         content = this.preprocessContent(content, type, mime);
-        
+
         // Apply content size validation and preprocessing
         const processedContent = validateAndPreprocessContent(content, noteId);
         if (!processedContent) {
@@ -124,8 +138,8 @@ class NoteContentFulltextExp extends Expression {
             const [token] = this.tokens;
 
             if (
-                (this.operator === "=" && token === content) ||
-                (this.operator === "!=" && token !== content) ||
+                (this.operator === "=" && this.containsExactWord(token, content)) ||
+                (this.operator === "!=" && !this.containsExactWord(token, content)) ||
                 (this.operator === "*=" && content.endsWith(token)) ||
                 (this.operator === "=*" && content.startsWith(token)) ||
                 (this.operator === "*=*" && content.includes(token)) ||

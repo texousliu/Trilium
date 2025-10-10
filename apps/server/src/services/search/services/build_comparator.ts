@@ -13,8 +13,28 @@ function getRegex(str: string) {
 type Comparator<T> = (comparedValue: T) => (val: string) => boolean;
 
 const stringComparators: Record<string, Comparator<string>> = {
-    "=": (comparedValue) => (val) => val === comparedValue,
-    "!=": (comparedValue) => (val) => val !== comparedValue,
+    "=": (comparedValue) => (val) => {
+        // For the = operator, check if the value contains the exact word (word-boundary matching)
+        // This is case-insensitive since both values are already lowercased
+        if (!val) return false;
+
+        const normalizedVal = normalizeSearchText(val);
+        const normalizedCompared = normalizeSearchText(comparedValue);
+
+        // Split into words and check for exact match
+        const words = normalizedVal.split(/\s+/);
+        return words.some(word => word === normalizedCompared);
+    },
+    "!=": (comparedValue) => (val) => {
+        // Negation of exact word match
+        if (!val) return true;
+
+        const normalizedVal = normalizeSearchText(val);
+        const normalizedCompared = normalizeSearchText(comparedValue);
+
+        const words = normalizedVal.split(/\s+/);
+        return !words.some(word => word === normalizedCompared);
+    },
     ">": (comparedValue) => (val) => val > comparedValue,
     ">=": (comparedValue) => (val) => val >= comparedValue,
     "<": (comparedValue) => (val) => val < comparedValue,
