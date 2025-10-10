@@ -17,8 +17,8 @@ Nga](./docs/README-ru.md) | [Tiếng Nhật](./docs/README-ja.md) | [Tiếng
 Trilium Notes là một ứng dụng ghi chú phân cấp miễn phí, mã nguồn mở, đa nền
 tảng tập trung vào việc xây dựng cơ sở tri thức cá nhân lớn.
 
-See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for
-quick overview:
+Xem [ảnh chụp màn hình](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)
+để tổng quan nhanh:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
