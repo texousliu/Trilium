@@ -141,8 +141,8 @@ trực tiếp không còn khả thi.
 Hãy thoải mái tham gia các cuộc trò chuyện chính thức. Chúng tôi luôn muốn lắng
 nghe các tính năng, đề xuất hoặc vấn đề mà bạn đưa ra!
 
-- [Matrix](https://matrix.to/#/#triliumnext:matrix.org) (For synchronous
-  discussions.)
+- [Matrix](https://matrix.to/#/#triliumnext:matrix.org) (Để thảo luận trực
+  tuyến.)
   - The `General` Matrix room is also bridged to
     [XMPP](xmpp:discuss@trilium.thisgreat.party?join)
 - [Github Discussions](https://github.com/TriliumNext/Trilium/discussions) (For
