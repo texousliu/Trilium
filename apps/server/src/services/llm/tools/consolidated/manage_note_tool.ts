@@ -18,6 +18,7 @@ import log from '../../../log.js';
 import becca from '../../../../becca/becca.js';
 import notes from '../../../notes.js';
 import attributes from '../../../attributes.js';
+import cloningService from '../../../cloning.js';
 import type { BNote } from '../../../backend_script_entrypoint.js';
 
 /**
@@ -28,6 +29,8 @@ type NoteAction =
     | 'create'
     | 'update'
     | 'delete'
+    | 'move'
+    | 'clone'
     | 'add_attribute'
     | 'remove_attribute'
     | 'add_relation'
@@ -59,14 +62,14 @@ export const manageNoteToolDefinition: Tool = {
     type: 'function',
     function: {
         name: 'manage_note',
-        description: 'Unified interface for all note operations: read, create, update, and manage attributes/relations. Replaces separate read, create, update, attribute, and relationship tools.',
+        description: 'Unified interface for all note operations: read, create, update, delete, move, clone, and manage attributes/relations. Replaces separate read, create, update, attribute, and relationship tools.',
         parameters: {
             type: 'object',
             properties: {
                 action: {
                     type: 'string',
                     description: 'Operation to perform',
-                    enum: ['read', 'create', 'update', 'delete', 'add_attribute', 'remove_attribute', 'add_relation', 'remove_relation', 'list_attributes', 'list_relations']
+                    enum: ['read', 'create', 'update', 'delete', 'move', 'clone', 'add_attribute', 'remove_attribute', 'add_relation', 'remove_relation', 'list_attributes', 'list_relations']
                 },
                 note_id: {
                     type: 'string',
@@ -86,8 +89,9 @@ export const manageNoteToolDefinition: Tool = {
                 },
                 note_type: {
                     type: 'string',
-                    description: 'Note type: text, code, file, image, etc.',
-                    enum: ['text', 'code', 'file', 'image', 'search', 'relation-map', 'book', 'mermaid', 'canvas']
+                    description: 'Note type (default: text). User-creatable: text, code, book, canvas, mermaid, mindMap, relationMap, webView, render. System types: file, image, search, noteMap, launcher, doc, contentWidget, aiChat.',
+                    enum: ['text', 'code', 'book', 'canvas', 'mermaid', 'mindMap', 'relationMap', 'webView', 'render', 'file', 'image', 'search', 'noteMap', 'launcher', 'doc', 'contentWidget', 'aiChat'],
+                    default: 'text'
                 },
                 mime: {
                     type: 'string',
@@ -95,8 +99,9 @@ export const manageNoteToolDefinition: Tool = {
                 },
                 update_mode: {
                     type: 'string',
-                    description: 'Content update mode: replace, append, or prepend',
-                    enum: ['replace', 'append', 'prepend']
+                    description: 'Content update mode (default: replace)',
+                    enum: ['replace', 'append', 'prepend'],
+                    default: 'replace'
                 },
                 attribute_name: {
                     type: 'string',
@@ -169,6 +174,10 @@ export class ManageNoteTool implements ToolHandler {
                     return await this.updateNote(args);
                 case 'delete':
                     return await this.deleteNote(args);
+                case 'move':
+                    return await this.moveNote(args);
+                case 'clone':
+                    return await this.cloneNote(args);
                 case 'add_attribute':
                     return await this.addAttribute(args);
                 case 'remove_attribute':
@@ -252,12 +261,23 @@ export class ManageNoteTool implements ToolHandler {
             return 'Error: content is required for create action';
         }
 
-        // Validate parent note
+        // Business logic validations (not schema validations - those are enforced by LLM provider)
+        const MAX_CONTENT_SIZE = 10_000_000; // 10MB
+        if (content.length > MAX_CONTENT_SIZE) {
+            return `Error: Content exceeds maximum size of 10MB (${content.length} bytes). Consider splitting into multiple notes.`;
+        }
+
+        const MAX_TITLE_LENGTH = 200;
+        if (title.length > MAX_TITLE_LENGTH) {
+            return `Error: Title exceeds maximum length of 200 characters. Current length: ${title.length}. Please shorten the title.`;
+        }
+
+        // Validate parent note exists (business logic constraint)
         let parent: BNote | null = null;
         if (parent_note_id) {
             parent = becca.notes[parent_note_id];
             if (!parent) {
-                return `Error: Parent note with ID ${parent_note_id} not found`;
+                return `Error: Parent note ${parent_note_id} not found. Use smart_search to find valid parent notes.`;
             }
         } else {
             parent = becca.getNote('root');
@@ -389,6 +409,95 @@ export class ManageNoteTool implements ToolHandler {
             noteId: note_id,
             title: noteTitle,
             message: `Note "${noteTitle}" deleted successfully`
+        };
+    }
+
+    /**
+     * Move a note to a new parent (creates a new branch)
+     * In Trilium, notes can have multiple parents, so "moving" means creating a new branch
+     */
+    private async moveNote(args: { note_id?: string; parent_note_id?: string }): Promise<string | object> {
+        const { note_id, parent_note_id } = args;
+
+        if (!note_id) {
+            return 'Error: note_id is required for move action';
+        }
+
+        if (!parent_note_id) {
+            return 'Error: parent_note_id is required for move action';
+        }
+
+        const note = becca.notes[note_id];
+        if (!note) {
+            return `Error: Note with ID ${note_id} not found`;
+        }
+
+        const parentNote = becca.notes[parent_note_id];
+        if (!parentNote) {
+            return `Error: Parent note with ID ${parent_note_id} not found`;
+        }
+
+        log.info(`Moving note "${note.title}" to parent "${parentNote.title}"`);
+
+        // Clone note to new parent (this creates a new branch)
+        const startTime = Date.now();
+        const cloneResult = cloningService.cloneNoteToParentNote(note_id, parent_note_id);
+        const duration = Date.now() - startTime;
+
+        log.info(`Note moved in ${duration}ms - new branch ID: ${cloneResult.branchId}`);
+
+        return {
+            success: true,
+            noteId: note.noteId,
+            title: note.title,
+            newParentId: parent_note_id,
+            newParentTitle: parentNote.title,
+            branchId: cloneResult.branchId,
+            message: `Note "${note.title}" moved to "${parentNote.title}" (notes can have multiple parents in Trilium)`
+        };
+    }
+
+    /**
+     * Clone a note (deep copy with all children)
+     */
+    private async cloneNote(args: { note_id?: string; parent_note_id?: string }): Promise<string | object> {
+        const { note_id, parent_note_id } = args;
+
+        if (!note_id) {
+            return 'Error: note_id is required for clone action';
+        }
+
+        if (!parent_note_id) {
+            return 'Error: parent_note_id is required for clone action';
+        }
+
+        const note = becca.notes[note_id];
+        if (!note) {
+            return `Error: Note with ID ${note_id} not found`;
+        }
+
+        const parentNote = becca.notes[parent_note_id];
+        if (!parentNote) {
+            return `Error: Parent note with ID ${parent_note_id} not found`;
+        }
+
+        log.info(`Cloning note "${note.title}" to parent "${parentNote.title}"`);
+
+        // Clone note to new parent
+        const startTime = Date.now();
+        const cloneResult = cloningService.cloneNoteToParentNote(note_id, parent_note_id);
+        const duration = Date.now() - startTime;
+
+        log.info(`Note cloned in ${duration}ms - new branch ID: ${cloneResult.branchId}`);
+
+        return {
+            success: true,
+            sourceNoteId: note.noteId,
+            sourceTitle: note.title,
+            parentNoteId: parent_note_id,
+            parentTitle: parentNote.title,
+            branchId: cloneResult.branchId,
+            message: `Note "${note.title}" cloned to "${parentNote.title}"`
         };
     }
 
@@ -749,10 +858,18 @@ export class ManageNoteTool implements ToolHandler {
             'file': 'application/octet-stream',
             'image': 'image/png',
             'search': 'application/json',
-            'relation-map': 'application/json',
-            'book': 'text/html',
+            'noteMap': '',
+            'relationMap': 'application/json',
+            'launcher': '',
+            'doc': '',
+            'contentWidget': '',
+            'render': '',
+            'canvas': 'application/json',
             'mermaid': 'text/mermaid',
-            'canvas': 'application/json'
+            'book': 'text/html',
+            'webView': '',
+            'mindMap': 'application/json',
+            'aiChat': 'application/json'
         };
 
         return mimeMap[noteType] || 'text/html';

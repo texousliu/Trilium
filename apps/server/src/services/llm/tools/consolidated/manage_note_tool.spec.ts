@@ -31,6 +31,12 @@ vi.mock('../../../attributes.js', () => ({
     }
 }));
 
+vi.mock('../../../cloning.js', () => ({
+    default: {
+        cloneNoteToParentNote: vi.fn()
+    }
+}));
+
 describe('ManageNoteTool', () => {
     let tool: ManageNoteTool;
 
@@ -58,6 +64,8 @@ describe('ManageNoteTool', () => {
             expect(action.enum).toContain('create');
             expect(action.enum).toContain('update');
             expect(action.enum).toContain('delete');
+            expect(action.enum).toContain('move');
+            expect(action.enum).toContain('clone');
             expect(action.enum).toContain('add_attribute');
             expect(action.enum).toContain('remove_attribute');
             expect(action.enum).toContain('add_relation');
@@ -66,6 +74,34 @@ describe('ManageNoteTool', () => {
 
         it('should require action parameter', () => {
             expect(tool.definition.function.parameters.required).toContain('action');
+        });
+
+        it('should have all 17 Trilium note types in note_type enum', () => {
+            const noteType = tool.definition.function.parameters.properties.note_type;
+            expect(noteType).toBeDefined();
+            expect(noteType.enum).toBeDefined();
+            expect(noteType.enum).toHaveLength(17);
+
+            // Verify all official Trilium note types are present
+            const expectedTypes = [
+                'text', 'code', 'file', 'image', 'search', 'noteMap',
+                'relationMap', 'launcher', 'doc', 'contentWidget', 'render',
+                'canvas', 'mermaid', 'book', 'webView', 'mindMap', 'aiChat'
+            ];
+
+            for (const type of expectedTypes) {
+                expect(noteType.enum).toContain(type);
+            }
+        });
+
+        it('should have default values for optional enum parameters', () => {
+            const noteType = tool.definition.function.parameters.properties.note_type;
+            expect(noteType.default).toBe('text');
+            expect(noteType.enum).toContain(noteType.default);
+
+            const updateMode = tool.definition.function.parameters.properties.update_mode;
+            expect(updateMode.default).toBe('replace');
+            expect(updateMode.enum).toContain(updateMode.default);
         });
     });
 
@@ -213,6 +249,62 @@ describe('ManageNoteTool', () => {
             expect(notes.default.createNewNote).toHaveBeenCalledWith(
                 expect.objectContaining({ parentNoteId: 'root' })
             );
+        });
+
+        it('should validate content size limit', async () => {
+            const result = await tool.execute({
+                action: 'create',
+                title: 'Test Note',
+                content: 'x'.repeat(10_000_001) // Exceeds 10MB limit
+            });
+
+            expect(typeof result).toBe('string');
+            expect(result).toContain('exceeds maximum size of 10MB');
+            expect(result).toContain('Consider splitting into multiple notes');
+        });
+
+        it('should validate title length limit', async () => {
+            const result = await tool.execute({
+                action: 'create',
+                title: 'x'.repeat(201), // Exceeds 200 char limit
+                content: 'Test content'
+            });
+
+            expect(typeof result).toBe('string');
+            expect(result).toContain('exceeds maximum length of 200 characters');
+            expect(result).toContain('Please shorten the title');
+        });
+
+        it('should accept all valid note types', async () => {
+            const notes = await import('../../../notes.js');
+            const becca = await import('../../../../becca/becca.js');
+
+            const mockRoot = {
+                noteId: 'root',
+                title: 'Root'
+            };
+            vi.mocked(becca.default.getNote).mockReturnValue(mockRoot as any);
+
+            const mockNewNote = { noteId: 'new123', title: 'New Note' };
+            vi.mocked(notes.default.createNewNote).mockReturnValue({ note: mockNewNote } as any);
+
+            const validTypes = [
+                'text', 'code', 'file', 'image', 'search', 'noteMap',
+                'relationMap', 'launcher', 'doc', 'contentWidget', 'render',
+                'canvas', 'mermaid', 'book', 'webView', 'mindMap', 'aiChat'
+            ];
+
+            for (const noteType of validTypes) {
+                const result = await tool.execute({
+                    action: 'create',
+                    title: `Note of type ${noteType}`,
+                    content: 'Test content',
+                    note_type: noteType
+                }) as any;
+
+                expect(result.success).toBe(true);
+                expect(result.type).toBe(noteType);
+            }
         });
     });
 
@@ -426,6 +518,192 @@ describe('ManageNoteTool', () => {
 
             expect(typeof result).toBe('string');
             expect(result).toContain('target_note_id is required');
+        });
+    });
+
+    describe('move action', () => {
+        it('should move note successfully', async () => {
+            const mockNote = {
+                noteId: 'note123',
+                title: 'Note to Move'
+            };
+
+            const mockParent = {
+                noteId: 'parent123',
+                title: 'New Parent'
+            };
+
+            const becca = await import('../../../../becca/becca.js');
+            const cloningService = await import('../../../cloning.js');
+
+            vi.mocked(becca.default.notes)['note123'] = mockNote as any;
+            vi.mocked(becca.default.notes)['parent123'] = mockParent as any;
+            vi.mocked(cloningService.default.cloneNoteToParentNote).mockReturnValue({
+                branchId: 'branch123'
+            } as any);
+
+            const result = await tool.execute({
+                action: 'move',
+                note_id: 'note123',
+                parent_note_id: 'parent123'
+            }) as any;
+
+            expect(result.success).toBe(true);
+            expect(result.noteId).toBe('note123');
+            expect(result.newParentId).toBe('parent123');
+            expect(result.branchId).toBe('branch123');
+            expect(cloningService.default.cloneNoteToParentNote).toHaveBeenCalledWith(
+                'note123',
+                'parent123'
+            );
+        });
+
+        it('should require note_id for move', async () => {
+            const result = await tool.execute({
+                action: 'move',
+                parent_note_id: 'parent123'
+            });
+
+            expect(typeof result).toBe('string');
+            expect(result).toContain('note_id is required');
+        });
+
+        it('should require parent_note_id for move', async () => {
+            const result = await tool.execute({
+                action: 'move',
+                note_id: 'note123'
+            });
+
+            expect(typeof result).toBe('string');
+            expect(result).toContain('parent_note_id is required');
+        });
+
+        it('should return error for non-existent note in move', async () => {
+            const becca = await import('../../../../becca/becca.js');
+            vi.mocked(becca.default.notes)['note123'] = undefined as any;
+
+            const result = await tool.execute({
+                action: 'move',
+                note_id: 'note123',
+                parent_note_id: 'parent123'
+            });
+
+            expect(typeof result).toBe('string');
+            expect(result).toContain('not found');
+        });
+
+        it('should return error for non-existent parent in move', async () => {
+            const mockNote = {
+                noteId: 'note123',
+                title: 'Note to Move'
+            };
+
+            const becca = await import('../../../../becca/becca.js');
+            vi.mocked(becca.default.notes)['note123'] = mockNote as any;
+            vi.mocked(becca.default.notes)['parent123'] = undefined as any;
+
+            const result = await tool.execute({
+                action: 'move',
+                note_id: 'note123',
+                parent_note_id: 'parent123'
+            });
+
+            expect(typeof result).toBe('string');
+            expect(result).toContain('Parent note');
+            expect(result).toContain('not found');
+        });
+    });
+
+    describe('clone action', () => {
+        it('should clone note successfully', async () => {
+            const mockNote = {
+                noteId: 'note123',
+                title: 'Note to Clone'
+            };
+
+            const mockParent = {
+                noteId: 'parent123',
+                title: 'Target Parent'
+            };
+
+            const becca = await import('../../../../becca/becca.js');
+            const cloningService = await import('../../../cloning.js');
+
+            vi.mocked(becca.default.notes)['note123'] = mockNote as any;
+            vi.mocked(becca.default.notes)['parent123'] = mockParent as any;
+            vi.mocked(cloningService.default.cloneNoteToParentNote).mockReturnValue({
+                branchId: 'branch456'
+            } as any);
+
+            const result = await tool.execute({
+                action: 'clone',
+                note_id: 'note123',
+                parent_note_id: 'parent123'
+            }) as any;
+
+            expect(result.success).toBe(true);
+            expect(result.sourceNoteId).toBe('note123');
+            expect(result.parentNoteId).toBe('parent123');
+            expect(result.branchId).toBe('branch456');
+            expect(cloningService.default.cloneNoteToParentNote).toHaveBeenCalledWith(
+                'note123',
+                'parent123'
+            );
+        });
+
+        it('should require note_id for clone', async () => {
+            const result = await tool.execute({
+                action: 'clone',
+                parent_note_id: 'parent123'
+            });
+
+            expect(typeof result).toBe('string');
+            expect(result).toContain('note_id is required');
+        });
+
+        it('should require parent_note_id for clone', async () => {
+            const result = await tool.execute({
+                action: 'clone',
+                note_id: 'note123'
+            });
+
+            expect(typeof result).toBe('string');
+            expect(result).toContain('parent_note_id is required');
+        });
+
+        it('should return error for non-existent note in clone', async () => {
+            const becca = await import('../../../../becca/becca.js');
+            vi.mocked(becca.default.notes)['note123'] = undefined as any;
+
+            const result = await tool.execute({
+                action: 'clone',
+                note_id: 'note123',
+                parent_note_id: 'parent123'
+            });
+
+            expect(typeof result).toBe('string');
+            expect(result).toContain('not found');
+        });
+
+        it('should return error for non-existent parent in clone', async () => {
+            const mockNote = {
+                noteId: 'note123',
+                title: 'Note to Clone'
+            };
+
+            const becca = await import('../../../../becca/becca.js');
+            vi.mocked(becca.default.notes)['note123'] = mockNote as any;
+            vi.mocked(becca.default.notes)['parent123'] = undefined as any;
+
+            const result = await tool.execute({
+                action: 'clone',
+                note_id: 'note123',
+                parent_note_id: 'parent123'
+            });
+
+            expect(typeof result).toBe('string');
+            expect(result).toContain('Parent note');
+            expect(result).toContain('not found');
         });
     });
 

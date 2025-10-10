@@ -505,7 +505,7 @@ export class ChatService {
     async generateChatCompletion(messages: Message[], options: ChatCompletionOptions = {}): Promise<ChatResponse> {
         log.info(`========== CHAT SERVICE FLOW CHECK ==========`);
         log.info(`Entered generateChatCompletion in ChatService`);
-        log.info(`Using pipeline for chat completion: ${this.getPipeline(options.pipeline).constructor.name}`);
+        log.info(`Using pipeline for chat completion: pipelineV2`);
         log.info(`Tool support enabled: ${options.enableTools !== false}`);
 
         try {

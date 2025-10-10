@@ -25,7 +25,6 @@ import toolRegistry from './tool_registry.js';
 import { SmartSearchTool } from './consolidated/smart_search_tool.js';
 import { ManageNoteTool } from './consolidated/manage_note_tool.js';
 import { NavigateHierarchyTool } from './consolidated/navigate_hierarchy_tool.js';
-import { CalendarIntegrationTool } from './calendar_integration_tool.js';
 import log from '../../log.js';
 
 /**
@@ -43,18 +42,17 @@ export async function initializeConsolidatedTools(): Promise<void> {
     try {
         log.info('Initializing consolidated LLM tools (V2)...');
 
-        // Register the 4 consolidated tools
+        // Register the 3 consolidated tools
         toolRegistry.registerTool(new SmartSearchTool());           // Replaces: search_notes, keyword_search, attribute_search, search_suggestion
-        toolRegistry.registerTool(new ManageNoteTool());            // Replaces: read_note, note_creation, note_update, attribute_manager, relationship
+        toolRegistry.registerTool(new ManageNoteTool());            // Replaces: read_note, note_creation, note_update, attribute_manager, relationship, calendar (via attributes)
         toolRegistry.registerTool(new NavigateHierarchyTool());     // New: tree navigation capability
-        toolRegistry.registerTool(new CalendarIntegrationTool());   // Enhanced: calendar operations
 
         // Log registered tools
         const toolCount = toolRegistry.getAllTools().length;
         const toolNames = toolRegistry.getAllTools().map(tool => tool.definition.function.name).join(', ');
 
         log.info(`Successfully registered ${toolCount} consolidated LLM tools: ${toolNames}`);
-        log.info('Tool consolidation: 12 tools → 4 tools (67% reduction, ~600 tokens saved)');
+        log.info('Tool consolidation: 12 tools → 3 tools (75% reduction, ~725 tokens saved)');
     } catch (error: unknown) {
         const errorMessage = isError(error) ? error.message : String(error);
         log.error(`Error initializing consolidated LLM tools: ${errorMessage}`);
@@ -77,9 +75,9 @@ export function getConsolidationInfo(): {
 } {
     return {
         version: 'v2',
-        toolCount: 4,
+        toolCount: 3,
         consolidatedFrom: 12,
-        tokenSavings: 600, // Estimated
+        tokenSavings: 725, // Estimated (increased from 600 with calendar removal)
         tools: [
             {
                 name: 'smart_search',
@@ -87,15 +85,11 @@ export function getConsolidationInfo(): {
             },
             {
                 name: 'manage_note',
-                replaces: ['read_note', 'create_note', 'update_note', 'manage_attributes', 'manage_relationships', 'note_summarization', 'content_extraction']
+                replaces: ['read_note', 'create_note', 'update_note', 'delete_note', 'move_note', 'clone_note', 'manage_attributes', 'manage_relationships', 'note_summarization', 'content_extraction', 'calendar_integration (via attributes)']
             },
             {
                 name: 'navigate_hierarchy',
                 replaces: ['(new capability - no replacement)']
-            },
-            {
-                name: 'calendar_integration',
-                replaces: ['calendar_integration (enhanced)']
             }
         ]
     };
