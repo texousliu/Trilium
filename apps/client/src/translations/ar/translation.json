@@ -74,7 +74,8 @@
   "rename_label": {
     "to": "الى",
     "old_name_placeholder": "الاسم القديم",
-    "new_name_placeholder": "الاسم الجديد"
+    "new_name_placeholder": "الاسم الجديد",
+    "rename_label": "اعادة تسمية التسمية"
   },
   "move_note": {
     "to": "الى",
@@ -341,7 +342,8 @@
     "note_revisions": "مراجعات الملاحظة",
     "diff_on": "عرض الفروقات",
     "diff_off": "عرض المحتوى",
-    "file_size": "حجم الملف:"
+    "file_size": "حجم الملف:",
+    "mime": "MIME: "
   },
   "sort_child_notes": {
     "title": "عنوان",
@@ -439,7 +441,33 @@
     "anthropic_configuration": "تهيئة انتروبيك",
     "voyage_url_description": "افتراضيا: https://api.voyageai.com/v1",
     "ollama_configuration": "تهيئة Ollama",
-    "enable_ollama": "تمكين Ollama"
+    "enable_ollama": "تمكين Ollama",
+    "last_attempt": "اخر محاولة",
+    "active_providers": "المزودون النشطون",
+    "disabled_providers": "المزودون المعطلون",
+    "similarity_threshold": "عتبة التشابه",
+    "complete": "اكتمل (100%)",
+    "ai_settings": "اعدادات AI",
+    "show_thinking": "عرض التفكير",
+    "index_status": "حالة الفهرس",
+    "indexed_notes": "الملاحظات المفهرسة",
+    "indexing_stopped": "تم ايقاف الفهرسة",
+    "last_indexed": "اخر فهرسة",
+    "note_chat": "دردشة الملاحظة",
+    "start_indexing": "بدء الفهرسة",
+    "chat": {
+      "root_note_title": "دردشات AI",
+      "new_chat_title": "دردشة جديدة"
+    },
+    "selected_provider": "المزود المحدد",
+    "select_model": "اختر النموذج...",
+    "select_provider": "اختى المزود...",
+    "ollama_model": "نموذج Ollama",
+    "refresh_models": "تحديث النماذج",
+    "rebuild_index": "اعادة بناء الفهرس",
+    "note_title": "عنوان الملاحظة",
+    "processing": "جاري المعالجة ({{percentage}}%)",
+    "incomplete": "غير مكتمل ({{percentage}}%)"
   },
   "code_auto_read_only_size": {
     "unit": "حروف"
@@ -459,12 +487,14 @@
     "duckduckgo": "DuckDuckGo",
     "google": "جوجل",
     "save_button": "حفظ",
-    "baidu": "Baidu"
+    "baidu": "Baidu",
+    "title": "محرك البحث"
   },
   "heading_style": {
     "plain": "بسيط",
     "underline": "تسطير",
-    "markdown": "نمط-Markdown"
+    "markdown": "نمط-Markdown",
+    "title": "نمط العنوان"
   },
   "text_auto_read_only_size": {
     "unit": "حروف"
@@ -476,40 +506,64 @@
     "title": "تعريب"
   },
   "backup": {
-    "path": "مسار"
+    "path": "مسار",
+    "automatic_backup": "النسخ الاحتياطي التلقائي",
+    "backup_now": "نسخ احتياطي الان",
+    "existing_backups": "النسخ الاحتياطية الموجودة"
   },
   "etapi": {
     "wiki": "ويكي",
     "created": "تم الأنشاء",
     "actions": "أجراءات",
-    "title": "ETAPI"
+    "title": "ETAPI",
+    "existing_tokens": "الرموز الموجوده",
+    "token_name": "اسم الرمز",
+    "default_token_name": "رمز جديد",
+    "rename_token_title": "اعادة تسمية الرمز"
   },
   "password": {
     "heading": "كلمة المرور",
-    "wiki": "ويكي"
+    "wiki": "ويكي",
+    "old_password": "كلمة المرور القديمة",
+    "new_password": "كلمة مرور جديدة",
+    "change_password": "تغيير كلمة المرور",
+    "change_password_heading": "تغيير كلمة المرور",
+    "set_password_heading": "تعيين كلمة المرور",
+    "set_password": "تعيين كلمة المرور"
   },
   "shortcuts": {
     "shortcuts": "أختصارات",
-    "description": "الوصف"
+    "description": "الوصف",
+    "keyboard_shortcuts": "اختصارات لوحة المفاتيح",
+    "action_name": "اسم الاجراء",
+    "default_shortcuts": "اختصارات افتراضية"
   },
   "sync_2": {
     "timeout_unit": "ميلي ثانية",
     "note": "ملاحظة",
     "save": "حفظ",
-    "help": "المساعدة"
+    "help": "المساعدة",
+    "config_title": "تهيئة المزامنة",
+    "timeout": "انتهاء مهلة المزامنة",
+    "test_title": "اختبار المزامنة",
+    "test_button": "اختبار المزامنة"
   },
   "api_log": {
     "close": "أغلاق"
   },
   "bookmark_switch": {
-    "bookmark": "علامة مرجعية"
+    "bookmark": "علامة مرجعية",
+    "remove_bookmark": "ازالة الاشارة المرجعية"
   },
   "editability_select": {
     "auto": "تلقائي",
-    "read_only": "قراءة-فقط"
+    "read_only": "قراءة-فقط",
+    "always_editable": "قابل للتعديل دائما"
   },
   "tab_row": {
-    "close": "اغلاق"
+    "close": "اغلاق",
+    "close_tab": "اغلاق التبويب",
+    "new_tab": "تبويب جديد"
   },
   "toc": {
     "options": "خيارات"
@@ -522,13 +576,21 @@
     }
   },
   "code_theme": {
-    "title": "المظهر"
+    "title": "المظهر",
+    "word_wrapping": "التفاف النص",
+    "color-scheme": "نظام الالوان"
   },
   "table_view": {
     "sort-column-ascending": "تصاعدي",
     "sort-column-descending": "تنازلي",
     "new-column-relation": "العلاقة",
-    "new-column-label": "تسمية"
+    "new-column-label": "تسمية",
+    "new-row": "صف جديد",
+    "new-column": "عمود جديد",
+    "sort-column-clear": "ازالة الترتيب",
+    "show-hide-columns": "اظهار/اخفاء الاعمدة",
+    "edit-column": "تحرير العمود",
+    "delete-column": "حذف العمود"
   },
   "modal": {
     "close": "اغلاق"
@@ -552,7 +614,17 @@
     "advanced": "متقدمة",
     "cut": "قص",
     "duplicate": "استنساخ",
-    "export": "تصدير"
+    "export": "تصدير",
+    "expand-subtree": "توسيع الشجرة الفرعية",
+    "collapse-subtree": "طي الشجرة الفرعية",
+    "sort-by": "ترتيب بواسطة...",
+    "protect-subtree": "الشجرة الفرعية المحمية",
+    "unprotect-subtree": "الجرةةالفرعية الغير محمية",
+    "clone-to": "‍استنساخ الى...",
+    "move-to": "نقل الى...",
+    "paste-into": "لصق في",
+    "paste-after": "لصق بعد",
+    "open-in-popup": "تحرير سريع"
   },
   "note_types": {
     "text": "نص",
@@ -566,7 +638,17 @@
     "widget": "عنصر واجهة",
     "new-feature": "جديد",
     "collections": "مجاميع",
-    "beta-feature": "اصدار تجريبي"
+    "beta-feature": "اصدار تجريبي",
+    "saved-search": "بحث محفوظ",
+    "relation-map": "خريطة العلاقة",
+    "note-map": "خريطة الملاحظة",
+    "render-note": "عرض الملاحظة",
+    "mermaid-diagram": "مخطط Mermaid",
+    "web-view": "عرض الويب",
+    "mind-map": "خريطة ذهنية",
+    "geo-map": "خريطة جغرافية",
+    "ai-chat": "دردشة AI",
+    "task-list": "قائمة المهام"
   },
   "shared_switch": {
     "shared": "مشترك"
@@ -575,22 +657,31 @@
     "template": "قالب"
   },
   "find": {
-    "replace": "استبدال"
+    "replace": "استبدال",
+    "case_sensitive": "حساسة لحالة الاحرف",
+    "match_words": "مطابقة الكلمات",
+    "replace_placeholder": "استبدال ب...",
+    "replace_all": "استبدال الكل"
   },
   "highlights_list_2": {
-    "options": "خيارات"
+    "options": "خيارات",
+    "title": "قائمة التمييزات"
   },
   "quick-search": {
-    "searching": "جار البحث..."
+    "searching": "جار البحث...",
+    "placeholder": "البحث السريع"
   },
   "note_tree": {
-    "unhoist": "ارجاع الى الترتيب الطبيعي"
+    "unhoist": "ارجاع الى الترتيب الطبيعي",
+    "tree-settings-title": "اعدادات الشجرة",
+    "toggle-sidebar": "اظهار/اخفاء الشريط الجانبي"
   },
   "sql_table_schemas": {
     "tables": "جداول"
   },
   "launcher_context_menu": {
-    "reset": "اعادة ضبط"
+    "reset": "اعادة ضبط",
+    "add-spacer": "اضافة فاصل"
   },
   "editable-text": {
     "auto-detect-language": "تم اكتشافه تلقائيا"
@@ -608,13 +699,15 @@
       },
       "fixed": {
         "title": "مثبت"
-      }
+      },
+      "label": "شريط ادوات التنسيق"
     }
   },
   "electron_context_menu": {
     "cut": "قص",
     "copy": "نسخ",
-    "paste": "لصق"
+    "paste": "لصق",
+    "copy-link": "نسخ الرابط"
   },
   "promoted_attributes": {
     "url_placeholder": "http://website...",
@@ -631,10 +724,19 @@
     "title": "مميزات"
   },
   "book_properties_config": {
-    "raster": "نقطي"
+    "raster": "نقطي",
+    "hide-weekends": "اخفاء عطلات نهايات الاسبوع",
+    "map-style": "نمط الخريطة:",
+    "vector_light": "متجه (فاتح)",
+    "vector_dark": "متجه (داكن)",
+    "show-scale": "اظهار المقياس"
   },
   "multi_factor_authentication": {
-    "oauth_title": "OAuth/OpenID"
+    "oauth_title": "OAuth/OpenID",
+    "title": "المصادقة متعددة العوامل",
+    "mfa_method": "طريقة المصادقة متعددة العوامل",
+    "oauth_user_account": "حساب المستخدم: ",
+    "oauth_user_email": "البريد الإلكتروني للمستخدم: "
   },
   "execute_script": {
     "execute_script": "تنفيذ السكريبت"
@@ -642,14 +744,17 @@
   "add_label": {
     "add_label": "اضافة تسمية",
     "to_value": "الى القيمة",
-    "new_value_placeholder": "قيمة جديدة"
+    "new_value_placeholder": "قيمة جديدة",
+    "label_name_placeholder": "اسم التسمية"
   },
   "delete_label": {
-    "delete_label": "حذف التسمية"
+    "delete_label": "حذف التسمية",
+    "label_name_placeholder": "اسم التسمية"
   },
   "update_label_value": {
     "to_value": "الى القيمة",
-    "new_value_placeholder": "قيمة جديدة"
+    "new_value_placeholder": "قيمة جديدة",
+    "label_name_placeholder": "اسم التسمية"
   },
   "delete_note": {
     "delete_note": "حذف الملاحظة"
@@ -676,7 +781,8 @@
     "import_files": "استيراد الملفات",
     "export_note": "تصدير الملاحظة",
     "delete_note": "حذف الملاحظة",
-    "print_note": "طباعة الملاحظة"
+    "print_note": "طباعة الملاحظة",
+    "save_revision": "حفظ المراجعة"
   },
   "update_available": {
     "update_available": "تحديث متوفر"
@@ -751,5 +857,112 @@
   },
   "ribbon": {
     "widgets": "ادوات الشريط"
+  },
+  "vim_key_bindings": {
+    "use_vim_keybindings_in_code_notes": "اختصارات لوحة المفاتيح باسلوب Vim"
+  },
+  "network_connections": {
+    "network_connections_title": "اتصالات الشبكة"
+  },
+  "tray": {
+    "title": "شريط النظام"
+  },
+  "highlights_list": {
+    "title": "قائمة النقاط المميزة",
+    "bold": "نص عربض",
+    "italic": "نص مائل",
+    "underline": "خط تحت النص",
+    "color": "نص ملون"
+  },
+  "revisions_button": {
+    "note_revisions": "مراجعات الملاحظة"
+  },
+  "custom_date_time_format": {
+    "format_string": "سلسلة التنسيق:",
+    "formatted_time": "التاريخ/الوقت المنسق:"
+  },
+  "options_widget": {
+    "options_status": "حالة الخيارات"
+  },
+  "spellcheck": {
+    "title": "التدقيق الاملائي",
+    "enable": "تفعيل التدقيق الاملائي"
+  },
+  "note-map": {
+    "button-link-map": "خريطة الروابط",
+    "button-tree-map": "خريطة الشجرة"
+  },
+  "spacer": {
+    "configure_launchbar": "تهيئة شريط الاطلاق"
+  },
+  "entrypoints": {
+    "note-executed": "تم تنفيذ الملاحظة."
+  },
+  "branches": {
+    "delete-status": "حالة الحذف"
+  },
+  "highlighting": {
+    "title": "كتل الكود",
+    "color-scheme": "نظام الالوان"
+  },
+  "code_block": {
+    "word_wrapping": "التفاف النص",
+    "theme_group_light": "الثيمات الفاتحة",
+    "theme_group_dark": "الثيمات الغامقة"
+  },
+  "link_context_menu": {
+    "open_note_in_popup": "تحرير سريع"
+  },
+  "electron_integration": {
+    "desktop-application": "تطبيقات سطح المكتبة",
+    "zoom-factor": "عامل التكبير"
+  },
+  "note_tooltip": {
+    "quick-edit": "التحرير السريع"
+  },
+  "geo-map-context": {
+    "open-location": "فتح الموقع"
+  },
+  "share": {
+    "title": "اعدادات المشاركة"
+  },
+  "note_language": {
+    "not_set": "غير محدد",
+    "configure-languages": "لغات التهيئة"
+  },
+  "content_language": {
+    "title": "لغات المحتوى"
+  },
+  "toggle_read_only_button": {
+    "unlock-editing": "الغاء قفل التحرير",
+    "lock-editing": "قفل التحرير"
+  },
+  "cpu_arch_warning": {
+    "continue_anyway": "المتابعة على اي حال"
+  },
+  "table_context_menu": {
+    "delete_row": "حذف الصف"
+  },
+  "board_view": {
+    "delete-note": "حذف الملاحظة...",
+    "archive-note": "ارشفة الملاحظة",
+    "unarchive-note": "الغاء ارشفة الملاحظة",
+    "move-to": "نقل الى",
+    "insert-above": "ادراج اعلاه",
+    "insert-below": "ادراج ادناه",
+    "delete-column": "حذف العمود",
+    "new-item": "عنصر جديد",
+    "add-column": "اضافة عمود"
+  },
+  "command_palette": {
+    "export_note_title": "تصدير ملاحظة",
+    "show_attachments_title": "عرض المرفقات",
+    "search_notes_title": "البحث في الملاحظات"
+  },
+  "content_renderer": {
+    "open_externally": "فتح خارجيا"
+  },
+  "settings": {
+    "related_settings": "اعدادات متعلقة"
   }
 }
