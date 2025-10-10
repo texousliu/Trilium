@@ -301,7 +301,7 @@ Consider supporting the main developer
 ([eliandoran](https://github.com/eliandoran)) of the application via:
 
 - [GitHub Sponsors](https://github.com/sponsors/eliandoran)
-- [PayPal](https://paypal.me/eliandoran)
+- (https://paypal.me/eliandoran)[PayPal]
 - [Buy Me a Coffee](https://buymeacoffee.com/eliandoran)
 
 ## 🔑 License
