@@ -2,6 +2,7 @@
  * Tool Initializer
  *
  * This module initializes all available tools for the LLM to use.
+ * Supports both legacy (v1) and consolidated (v2) tool sets.
  */
 
 import toolRegistry from './tool_registry.js';
@@ -17,7 +18,9 @@ import { RelationshipTool } from './relationship_tool.js';
 import { AttributeManagerTool } from './attribute_manager_tool.js';
 import { CalendarIntegrationTool } from './calendar_integration_tool.js';
 import { NoteSummarizationTool } from './note_summarization_tool.js';
+import { initializeConsolidatedTools } from './tool_initializer_v2.js';
 import log from '../../log.js';
+import options from '../../options.js';
 
 // Error type guard
 function isError(error: unknown): error is Error {
@@ -26,11 +29,32 @@ function isError(error: unknown): error is Error {
 }
 
 /**
- * Initialize all tools for the LLM
+ * Check if consolidated tools should be used
  */
-export async function initializeTools(): Promise<void> {
+function shouldUseConsolidatedTools(): boolean {
     try {
-        log.info('Initializing LLM tools...');
+        // Check for feature flag in options
+        const useConsolidated = options.getOption('llm.useConsolidatedTools');
+
+        // Default to true (use consolidated tools by default)
+        if (useConsolidated === undefined || useConsolidated === null) {
+            return true;
+        }
+
+        return useConsolidated === 'true' || useConsolidated === true;
+    } catch (error) {
+        // If option doesn't exist or error reading, default to true (consolidated)
+        log.info('LLM consolidated tools option not found, defaulting to true (consolidated tools)');
+        return true;
+    }
+}
+
+/**
+ * Initialize all tools for the LLM (legacy v1)
+ */
+export async function initializeLegacyTools(): Promise<void> {
+    try {
+        log.info('Initializing LLM tools (legacy v1)...');
 
         // Register search and discovery tools
         toolRegistry.registerTool(new SearchNotesTool());        // Semantic search
@@ -55,7 +79,29 @@ export async function initializeTools(): Promise<void> {
         // Log registered tools
         const toolCount = toolRegistry.getAllTools().length;
         const toolNames = toolRegistry.getAllTools().map(tool => tool.definition.function.name).join(', ');
-        log.info(`Successfully registered ${toolCount} LLM tools: ${toolNames}`);
+        log.info(`Successfully registered ${toolCount} LLM tools (legacy): ${toolNames}`);
+    } catch (error: unknown) {
+        const errorMessage = isError(error) ? error.message : String(error);
+        log.error(`Error initializing LLM tools: ${errorMessage}`);
+        // Don't throw, just log the error to prevent breaking the pipeline
+    }
+}
+
+/**
+ * Initialize all tools for the LLM
+ * Routes to either consolidated (v2) or legacy (v1) based on feature flag
+ */
+export async function initializeTools(): Promise<void> {
+    try {
+        const useConsolidated = shouldUseConsolidatedTools();
+
+        if (useConsolidated) {
+            log.info('Using consolidated tools (v2) - 4 tools, ~600 tokens saved');
+            await initializeConsolidatedTools();
+        } else {
+            log.info('Using legacy tools (v1) - 12 tools');
+            await initializeLegacyTools();
+        }
     } catch (error: unknown) {
         const errorMessage = isError(error) ? error.message : String(error);
         log.error(`Error initializing LLM tools: ${errorMessage}`);
@@ -64,5 +110,7 @@ export async function initializeTools(): Promise<void> {
 }
 
 export default {
-    initializeTools
+    initializeTools,
+    initializeLegacyTools,
+    shouldUseConsolidatedTools
 };

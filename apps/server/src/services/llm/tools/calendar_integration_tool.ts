@@ -18,7 +18,7 @@ export const calendarIntegrationToolDefinition: Tool = {
     type: 'function',
     function: {
         name: 'calendar_integration',
-        description: 'Find date-related notes or create date-based entries',
+        description: 'Manage date-based notes: find notes by date/range, create dated entries, or get daily notes. Supports YYYY-MM-DD format.',
         parameters: {
             type: 'object',
             properties: {
