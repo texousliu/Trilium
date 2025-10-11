@@ -37,5 +37,26 @@
     "search_content": "Or search for text inside notes and narrow down the search by filtering by the parent note, or by depth.",
     "web_clipper_title": "Web clipper",
     "web_clipper_content": "Grab web pages (or screenshots) and place them directly into Trilium using the web clipper browser extension."
+  },
+  "note_types": {
+    "text_title": "Text notes",
+    "text_description": "The notes are edited using a visual (WYSIWYG) editor, with support for tables, images, math expressions, code blocks with syntax highlighting. Quickly format the text using Markdown-like syntax or using slash commands.",
+    "code_title": "Code notes",
+    "code_description": "Large samples of source code or scripts use a dedicated editor, with syntax highlighting for many programming languages and with various color themes.",
+    "file_title": "File notes",
+    "file_description": "Embed multimedia files such as PDFs, images, videos with an in-application preview.",
+    "canvas_title": "Canvas",
+    "canvas_description": "Arrange shapes, images and text across an infinite canvas, using the same technology behind excalidraw.com. Ideal for diagrams, sketches and visual planning.",
+    "mermaid_title": "Mermaid diagrams",
+    "mermaid_description": "Create diagrams such as flowcharts, class & sequence diagrams, Gantt charts and many more, using the Mermaid syntax.",
+    "mindmap_title": "Mindmap",
+    "mindmap_description": "Organize your thoughts visually or do a brainstorming session.",
+    "others_prefix": "and others: ",
+    "others_separator": ", ",
+    "others_note_map": "note map",
+    "others_relation_map": "relation map",
+    "others_saved_searches": "saved searches",
+    "others_render_note": "render note",
+    "others_webview": "web views"
   }
 }

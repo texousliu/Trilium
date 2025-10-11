@@ -130,55 +130,55 @@ function NoteTypesSection() {
         <Section className="note-types" title="Multiple ways to represent your information">
             <ListWithScreenshot horizontal items={[
                 {
-                    title: "Text notes",
+                    title: t("note_types.text_title"),
                     imageUrl: "/type_text.webp",
                     iconSvg: textNoteIcon,
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Text/index.html",
-                    description: "The notes are edited using a visual (WYSIWYG) editor, with support for tables, images, math expressions, code blocks with syntax highlighting. Quickly format the text using Markdown-like syntax or using slash commands."
+                    description: t("note_types.text_description")
                 },
                 {
-                    title: "Code notes",
+                    title: t("note_types.code_title"),
                     imageUrl: "/type_code.webp",
                     iconSvg: codeIcon,
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Code.html",
-                    description: "Large samples of source code or scripts use a dedicated editor, with syntax highlighting for many programming languages and with various color themes."
+                    description: t("note_types.code_description")
                 },
                 {
-                    title: "File notes",
+                    title: t("note_types.file_title"),
                     imageUrl: "/type_file.webp",
                     iconSvg: fileIcon,
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/File.html",
-                    description: "Embed multimedia files such as PDFs, images, videos with an in-application preview."
+                    description: t("note_types.file_description")
                 },
                 {
-                    title: "Canvas",
+                    title: t("note_types.canvas_title"),
                     imageUrl: "/type_canvas.webp",
                     iconSvg: canvasIcon,
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Canvas.html",
-                    description: "Arrange shapes, images and text across an infinite canvas, using the same technology behind excalidraw.com. Ideal for diagrams, sketches and visual planning."
+                    description: t("note_types.canvas_description")
                 },
                 {
-                    title: "Mermaid diagrams",
+                    title: t("note_types.mermaid_title"),
                     imageUrl: "/type_mermaid.webp",
                     iconSvg: mermaidIcon,
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Mermaid%20Diagrams/index.html",
-                    description: "Create diagrams such as flowcharts, class & sequence diagrams, Gantt charts and many more, using the Mermaid syntax."
+                    description: t("note_types.mermaid_description")
                 },
                 {
-                    title: "Mindmap",
+                    title: t("note_types.mindmap_title"),
                     imageUrl: "/type_mindmap.webp",
                     iconSvg: mindmapIcon,
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Mind%20Map.html",
-                    description: "Organize your thoughts visually or do a brainstorming session."
+                    description: t("note_types.mindmap_description")
                 }
             ]} />
             <p>
-                and others:{" "}
-                <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Note%20Map.html" openExternally>note map</Link>,{" "}
-                <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Relation%20Map.html" openExternally>relation map</Link>,{" "}
-                <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Saved%20Search.html" openExternally>saved searches</Link>,{" "}
-                <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Render%20Note.html" openExternally>render note</Link>,{" "}
-                <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Web%20View.html" openExternally>web views</Link>.
+                {t("note_types.others_prefix")}
+                <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Note%20Map.html" openExternally>{t("note_types.others_note_map")}</Link>{t("note_types.others_separator")}
+                <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Relation%20Map.html" openExternally>{t("note_types.others_relation_map")}</Link>{t("note_types.others_separator")}
+                <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Saved%20Search.html" openExternally>{t("note_types.others_saved_searches")}</Link>{t("note_types.others_separator")}
+                <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Render%20Note.html" openExternally>{t("note_types.others_render_note")}</Link>{t("note_types.others_separator")}
+                <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Web%20View.html" openExternally>{t("note_types.others_webview")}</Link>.
             </p>
         </Section>
     );
