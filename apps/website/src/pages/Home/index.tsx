@@ -204,31 +204,32 @@ function CollectionsSection() {
         <Section className="collections" title="Collections">
             <ListWithScreenshot items={[
                 {
-                    title: "Calendar",
+                    title: t("collections.calendar_title"),
                     imageUrl: "/collection_calendar.webp",
                     iconSvg: calendarIcon,
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Calendar%20View.html",
-                    description: "Organize your personal or professional events using a calendar, with support for all-day and multi-day events. See your events at a glance with the week, month and year views. Easy interaction to add or drag events."
+                    description: t("collections.calendar_description")
                 },
                 {
-                    title: "Table",
+                    title: t("collections.table_title"),
                     iconSvg: tableIcon,
                     imageUrl: "/collection_table.webp",
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Table%20View.html",
-                    description: "Display and edit information about notes in a tabular structure, with various column types such as text, number, check boxes, date & time, links and colors and support for relations. Optionally, display the notes within a tree hierarchy inside the table." },
+                    description: t("collections.calendar_description")
+                },
                 {
-                    title: "Board",
+                    title: t("collections.board_title"),
                     iconSvg: boardIcon,
                     imageUrl: "/collection_board.webp",
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Board%20View.html",
-                    description: "Organize your tasks or project status into a Kanban board with an easy way to create new items and columns and simply changing their status by dragging across the board."
+                    description: t("collections.board_description")
                 },
                 {
-                    title: "Geomap",
+                    title: t("collections.geomap_title"),
                     iconSvg: geomapIcon,
                     imageUrl: "/collection_geomap.webp",
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Geo%20Map%20View.html",
-                    description: "Plan your vacations or mark your points of interest directly on a geographical map using customizable markers. Display recorded GPX tracks to track itineraries."
+                    description: t("collections.geomap_description")
                 }
             ]} />
         </Section>
