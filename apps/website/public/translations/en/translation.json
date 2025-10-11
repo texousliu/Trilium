@@ -5,5 +5,37 @@
     "architecture": "Architecture:",
     "older_releases": "See older releases",
     "server_title": "Set up a server for access on multiple devices"
+  },
+  "hero_section": {
+    "title": "Organize your thoughts. Build your personal knowledge base.",
+    "subtitle": "Trilium is an open-source solution for note-taking and organizing a personal knowledge base. Use it locally on your desktop, or sync it with your self-hosted server to keep your notes everywhere you go.",
+    "get_started": "Get started",
+    "github": "GitHub",
+    "dockerhub": "Docker Hub",
+    "screenshot_alt": "Screenshot of the Trilium Notes desktop application"
+  },
+  "organization_benefits": {
+    "title": "Organization",
+    "note_structure_title": "Note structure",
+    "note_structure_description": "Notes can be arranged hierarchically. There's no need for folders, since each note can contain sub-notes. A single note can be added in multiple places in the hierarchy.",
+    "attributes_title": "Note labels and relationships",
+    "attributes_description": "Use relations between notes or add labels for easy categorization. Use promoted attributes to enter structured information which can be used in tables, boards.",
+    "hoisting_title": "Workspaces and hoisting",
+    "hoisting_description": "Easily separate your personal and work notes by grouping them under a workspace, which focuses your note tree to only show a specific set of notes."
+  },
+  "productivity_benefits": {
+    "title": "Productivity and safety",
+    "revisions_title": "Note revisions",
+    "revisions_content": "Notes are periodically saved in the background and revisions can be used for review or to undo accidental changes. Revisions can also be created on-demand.",
+    "sync_title": "Synchronization",
+    "sync_content": "Use a self-hosted or cloud instance to easily synchronize your notes across multiple devices, and to access it from your mobile phone using a PWA.",
+    "protected_notes_title": "Protected notes",
+    "protected_notes_content": "Protect sensitive personal information by encrypting the notes and locking them behind a password-protected session.",
+    "jump_to_title": "Quick search and commands",
+    "jump_to_content": "Jump quickly to notes or UI commands across the hierarchy by searching for their title, with fuzzy matching to account for typos or slight differences.",
+    "search_title": "Powerful search",
+    "search_content": "Or search for text inside notes and narrow down the search by filtering by the parent note, or by depth.",
+    "web_clipper_title": "Web clipper",
+    "web_clipper_content": "Grab web pages (or screenshots) and place them directly into Trilium using the web clipper browser extension."
   }
 }

@@ -31,6 +31,7 @@ import boardIcon from "../../assets/boxicons/bx-columns-3.svg?raw";
 import geomapIcon from "../../assets/boxicons/bx-map.svg?raw";
 import { getPlatform } from '../../download-helper.js';
 import { useEffect, useState } from 'preact/hooks';
+import { t } from '../../i18n.js';
 
 export function Home() {
     usePageTitle("");
@@ -72,22 +73,22 @@ function HeroSection() {
     return (
         <Section className="hero-section">
             <div class="title-section">
-                <h1>Organize your thoughts. Build your personal knowledge base.</h1>
-                <p>Trilium is an open-source solution for note-taking and organizing a personal knowledge base. Use it locally on your desktop, or sync it with your self-hosted server to keep your notes everywhere you go.</p>
+                <h1>{t("hero_section.title")}</h1>
+                <p>{t("hero_section.subtitle")}</p>
 
                 <div className="download-wrapper">
                     <DownloadButton big />
-                    <Button href="./get-started/" className="mobile-only" text="Get started" />
+                    <Button href="./get-started/" className="mobile-only" text={t("hero_section.get_started")} />
                     <div className="additional-options">
-                        <Button iconSvg={gitHubIcon} outline text="GitHub" href="https://github.com/TriliumNext/Trilium/" openExternally />
-                        <Button iconSvg={dockerIcon} outline text="Docker Hub" href="https://hub.docker.com/r/triliumnext/trilium" openExternally />
+                        <Button iconSvg={gitHubIcon} outline text={t("hero_section.github")} href="https://github.com/TriliumNext/Trilium/" openExternally />
+                        <Button iconSvg={dockerIcon} outline text={t("hero_section.dockerhub")} href="https://hub.docker.com/r/triliumnext/trilium" openExternally />
                     </div>
                 </div>
 
             </div>
 
             <div className="screenshot-container">
-                {screenshotUrl && <img class="screenshot" src={screenshotUrl} alt="Screenshot of the Trilium Notes desktop application" />}
+                {screenshotUrl && <img class="screenshot" src={screenshotUrl} alt={t("hero_section.screenshot_alt")} />}
             </div>
         </Section>
     )
@@ -96,11 +97,11 @@ function HeroSection() {
 function OrganizationBenefitsSection() {
     return (
         <>
-            <Section className="benefits" title="Organization">
+            <Section className="benefits" title={t("organization_benefits.title")}>
                 <div className="benefits-container grid-3-cols">
-                    <Card iconSvg={noteStructureIcon} title="Note structure" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes/index.html">Notes can be arranged hierarchically. There's no need for folders, since each note can contain sub-notes. A single note can be added in multiple places in the hierarchy.</Card>
-                    <Card iconSvg={attributesIcon} title="Note labels and relationships" moreInfoUrl="https://docs.triliumnotes.org/User Guide/User Guide/Advanced Usage/Attributes/index.html">Use <em>relations</em> between notes or add <em>labels</em> for easy categorization. Use promoted attributes to enter structured information which can be used in tables, boards.</Card>
-                    <Card iconSvg={hoistingIcon} title="Workspaces and hoisting" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Navigation/Note%20Hoisting.html">Easily separate your personal and work notes by grouping them under a workspace, which focuses your note tree to only show a specific set of notes.</Card>
+                    <Card iconSvg={noteStructureIcon} title={t("organization_benefits.note_structure_title")} moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes/index.html">{t("organization_benefits.note_structure_description")}</Card>
+                    <Card iconSvg={attributesIcon} title={t("organization_benefits.attributes_title")} moreInfoUrl="https://docs.triliumnotes.org/User Guide/User Guide/Advanced Usage/Attributes/index.html">{t("organization_benefits.attributes_description")}</Card>
+                    <Card iconSvg={hoistingIcon} title={t("organization_benefits.hoisting_title")} moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Navigation/Note%20Hoisting.html">{t("organization_benefits.hoisting_description")}</Card>
                 </div>
             </Section>
         </>
@@ -110,14 +111,14 @@ function OrganizationBenefitsSection() {
 function ProductivityBenefitsSection() {
     return (
         <>
-            <Section className="benefits accented" title="Productivity and safety">
+            <Section className="benefits accented" title={t("productivity_benefits.title")}>
                 <div className="benefits-container grid-3-cols">
-                    <Card iconSvg={revisionsIcon} title="Note revisions" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes/Note%20Revisions.html">Notes are periodically saved in the background and revisions can be used for review or to undo accidental changes. Revisions can also be created on-demand.</Card>
-                    <Card iconSvg={syncIcon} title="Synchronization" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Installation%20%26%20Setup/Synchronization.html">Use a self-hosted or cloud instance to easily synchronize your notes across multiple devices, and to access it from your mobile phone using a PWA.</Card>
-                    <Card iconSvg={protectedNotesIcon} title="Protected notes" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes/Protected%20Notes.html">Protect sensitive personal information by encrypting the notes and locking them behind a password-protected session.</Card>
-                    <Card iconSvg={jumpToIcon} title="Quick search and commands" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Navigation/Jump%20to.html">Jump quickly to notes or UI commands across the hierarchy by searching for their title, with fuzzy matching to account for typos or slight differences.</Card>
-                    <Card iconSvg={searchIcon} title="Powerful search" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Navigation/Search.html">Or search for text inside notes and narrow down the search by filtering by the parent note, or by depth.</Card>
-                    <Card iconSvg={webClipperIcon} title="Web clipper" moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Installation%20%26%20Setup/Web%20Clipper.html">Grab web pages (or screenshots) and place them directly into Trilium using the web clipper browser extension.</Card>
+                    <Card iconSvg={revisionsIcon} title={t("productivity_benefits.revisions_title")} moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes/Note%20Revisions.html">{t("productivity_benefits.revisions_content")}</Card>
+                    <Card iconSvg={syncIcon} title={t("productivity_benefits.sync_title")} moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Installation%20%26%20Setup/Synchronization.html">{t("productivity_benefits.sync_content")}</Card>
+                    <Card iconSvg={protectedNotesIcon} title={t("productivity_benefits.protected_notes_title")} moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes/Protected%20Notes.html">{t("productivity_benefits.protected_notes_content")}</Card>
+                    <Card iconSvg={jumpToIcon} title={t("productivity_benefits.jump_to_title")} moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Navigation/Jump%20to.html">{t("productivity_benefits.jump_to_content")}</Card>
+                    <Card iconSvg={searchIcon} title={t("productivity_benefits.search_title")} moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Navigation/Search.html">{t("productivity_benefits.search_content")}</Card>
+                    <Card iconSvg={webClipperIcon} title={t("productivity_benefits.web_clipper_title")} moreInfoUrl="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Installation%20%26%20Setup/Web%20Clipper.html">{t("productivity_benefits.web_clipper_content")}</Card>
                 </div>
             </Section>
         </>
