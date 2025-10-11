@@ -255,7 +255,7 @@ guide](https://github.com/TriliumNext/Trilium/blob/main/docs/Developer%20Guide/D
 for details. If you have more questions, feel free to reach out via the links
 described in the "Discuss with us" section above.
 
-## 👏 اختصارات
+## 👏 اشادات
 
 * [zadam](https://github.com/zadam) for the original concept and implementation
   of the application.
