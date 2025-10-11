@@ -58,5 +58,16 @@
     "others_saved_searches": "saved searches",
     "others_render_note": "render note",
     "others_webview": "web views"
+  },
+  "extensibility_benefits": {
+    "title": "Sharing & extensibility",
+    "import_export_title": "Import/export",
+    "import_export_description": "Easily interact with other applications using Markdown, ENEX, OML formats.",
+    "share_title": "Share notes on the web",
+    "share_description": "If you have a server, it can be used to share a subset of your notes with other people.",
+    "scripting_title": "Advanced scripting",
+    "scripting_description": "Build your own integrations within Trilium with custom widgets, or server-side logic.",
+    "api_title": "REST API",
+    "api_description": "Interact with Trilium programatically using its builtin REST API."
   }
 }
