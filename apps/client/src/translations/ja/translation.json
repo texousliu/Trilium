@@ -164,7 +164,12 @@
     "first-week-info": "最初の週は、その年の最初の木曜日を含む週を指し、<a href=\"https://en.wikipedia.org/wiki/ISO_week_date#First_week\">ISO 8601</a>規格に基づいています。",
     "first-week-warning": "最初の週のオプションを変更すると、既存のウィークノートと重複する可能性があり、既存のウィークノートはそれに応じて更新されません。",
     "formatting-locale": "日付と数値のフォーマット",
-    "formatting-locale-auto": "アプリケーションの言語に基づいて"
+    "formatting-locale-auto": "アプリケーションの言語に基づいて",
+    "tuesday": "火曜日",
+    "wednesday": "水曜日",
+    "thursday": "木曜日",
+    "friday": "金曜日",
+    "saturday": "土曜日"
   },
   "tab_row": {
     "close_tab": "タブを閉じる",
