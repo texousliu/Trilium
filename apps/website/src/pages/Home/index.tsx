@@ -264,7 +264,7 @@ function ListWithScreenshot({ items, horizontal, cardExtra }: {
             <div className="details">
                 {selectedItem && (
                     <>
-                        <img src={selectedItem.imageUrl} alt="Screenshot of the feature being selected" loading="lazy" />
+                        <img src={selectedItem.imageUrl} alt={t("components.list_with_screenshot_alt")} loading="lazy" />
                     </>
                 )}
             </div>
@@ -274,14 +274,14 @@ function ListWithScreenshot({ items, horizontal, cardExtra }: {
 
 function FaqSection() {
     return (
-        <Section className="faq" title="Frequently Asked Questions">
+        <Section className="faq" title={t("faq.title")}>
             <div class="grid-2-cols">
-                <FaqItem question="Is there a mobile application?">Currently there is no official mobile application. However, if you have a server instance you can access it using a web browser and even install it as a PWA. For Android, there is an unofficial application called TriliumDroid that even works offline (same as a desktop client).</FaqItem>
-                <FaqItem question="Where is the data stored?">All your notes will be stored in an SQLite database in an application folder. The reasoning why Trilium uses a database instead of plain text files is both performance and some features would be much more difficult to implement such as clones (same note in multiple places in the tree). To find the application folder, simply go to the About window.</FaqItem>
-                <FaqItem question="Do I need a server to use Trilium?">No, the server allows access via a web browser and manages the synchronization if you have multiple devices. To get started, it's enough to download the desktop application and start using it.</FaqItem>
-                <FaqItem question="How well does the application scale with a large amount of notes?">Depending on usage, the application should be able to handle at least 100.000 notes without an issue. Do note that the sync process can sometimes fail if uploading many large files (&gt; 1 GB per file) since Trilium is meant more as a knowledge base application rather than a file store (like NextCloud, for example).</FaqItem>
-                <FaqItem question="Can I share my database over a network drive?">No, it's generally not a good idea to share a SQLite database over a network drive. Although sometimes it might work, there are chances that the database will get corrupted due to imperfect file locks over a network.</FaqItem>
-                <FaqItem question="How is my data protected?">By default, notes are not encrypted and can be read directly from the database. Once a note is marked as encrypted, the note is encrypted using AES-128-CBC.</FaqItem>
+                <FaqItem question={t("faq.mobile_title")}>{t("faq.mobile_answer")}</FaqItem>
+                <FaqItem question={t("faq.database_question")}>{t("faq.database_answer")}</FaqItem>
+                <FaqItem question={t("faq.server_question")}>{t("faq.server_answer")}</FaqItem>
+                <FaqItem question={t("faq.scaling_question")}>{t("faq.scaling_answer")}</FaqItem>
+                <FaqItem question={t("faq.network_share_question")}>{t("faq.network_share_answer")}</FaqItem>
+                <FaqItem question={t("faq.security_question")}>{t("faq.security_answer")}</FaqItem>
             </div>
         </Section>
     );
