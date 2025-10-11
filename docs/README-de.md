@@ -14,8 +14,9 @@ status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted
 [Russisch](./docs/README-ru.md) | [Japanisch](./docs/README-ja.md) |
 [Italienisch](./docs/README-it.md) | [Spanisch](./docs/README-es.md)
 
-Trilium Notes is a free and open-source, cross-platform hierarchical note taking
-application with focus on building large personal knowledge bases.
+Trilium Notes ist eine freie, open-source, plattformfreie, hierarchische
+Notiz-Anwendung mit Fokus auf die Erstellung großer persönlicher
+Wissenssammlungen.
 
 See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for
 quick overview:
@@ -300,13 +301,13 @@ hosting.
 Consider supporting the main developer
 ([eliandoran](https://github.com/eliandoran)) of the application via:
 
-- [GitHub Sponsors](https://github.com/sponsors/eliandoran)
+- [GitHub Unterstützer](https://github.com/sponsors/eliandoran)
 - [PayPal](https://paypal.me/eliandoran)
 - [Buy Me a Coffee](https://buymeacoffee.com/eliandoran)
 
-## 🔑 License
+## 🔑 Lizenz
 
-Copyright 2017-2025 zadam, Elian Doran, and other contributors
+Copyright 2017-2025 zadam, Elian Doran, und andere Unterstützer
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU Affero General Public License as published by the Free
