@@ -1,0 +1,9 @@
+{
+  "get-started": {
+    "title": "Get started",
+    "desktop_title": "Download the desktop application (v{{version}})",
+    "architecture": "Architecture:",
+    "older_releases": "See older releases",
+    "server_title": "Set up a server for access on multiple devices"
+  }
+}

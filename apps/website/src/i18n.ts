@@ -1,7 +1,6 @@
 import { default as i18next } from "i18next";
 import HttpApi from 'i18next-http-backend';
 
-console.log("INIT I18NEXT");
 i18next.use(HttpApi)
 await i18next.init({
     debug: true,
