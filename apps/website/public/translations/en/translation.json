@@ -89,7 +89,7 @@
     "server_question": "Do I need a server to use Trilium?",
     "server_answer": "No, the server allows access via a web browser and manages the synchronization if you have multiple devices. To get started, it's enough to download the desktop application and start using it.",
     "scaling_question": "How well does the application scale with a large amount of notes?",
-    "scaling_answer": "Depending on usage, the application should be able to handle at least 100.000 notes without an issue. Do note that the sync process can sometimes fail if uploading many large files (&gt; 1 GB per file) since Trilium is meant more as a knowledge base application rather than a file store (like NextCloud, for example).",
+    "scaling_answer": "Depending on usage, the application should be able to handle at least 100.000 notes without an issue. Do note that the sync process can sometimes fail if uploading many large files (1 GB per file) since Trilium is meant more as a knowledge base application rather than a file store (like NextCloud, for example).",
     "network_share_question": "Can I share my database over a network drive?",
     "network_share_answer": "No, it's generally not a good idea to share a SQLite database over a network drive. Although sometimes it might work, there are chances that the database will get corrupted due to imperfect file locks over a network.",
     "security_question": "How is my data protected?",
@@ -111,5 +111,15 @@
     "linux_big": "v{{version}} for Linux",
     "linux_small": "for Linux",
     "more_platforms": "More platforms & server setup"
+  },
+  "footer": {
+    "copyright_and_the": " and the ",
+    "copyright_community": "community"
+  },
+  "social_buttons": {
+    "github": "GitHub",
+    "github_discussions": "GitHub Discussions",
+    "matrix": "Matrix",
+    "reddit": "Reddit"
   }
 }
