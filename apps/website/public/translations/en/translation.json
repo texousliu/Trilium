@@ -95,6 +95,11 @@
     "security_question": "How is my data protected?",
     "security_answer": "By default, notes are not encrypted and can be read directly from the database. Once a note is marked as encrypted, the note is encrypted using AES-128-CBC."
   },
+  "final_cta": {
+    "title": "Ready to get started with Trilium Notes?",
+    "description": "Build your personal knowledge base with powerful features and full privacy.",
+    "get_started": "Get started"
+  },
   "components": {
     "link_learn_more": "Learn more...",
     "list_with_screenshot_alt": "Screenshot of the feature being selected"

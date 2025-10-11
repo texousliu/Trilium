@@ -297,11 +297,11 @@ function FaqItem({ question, children }: { question: string; children: Component
 
 function FinalCta() {
     return (
-        <Section className="final-cta accented" title="Ready to get started with Trilium Notes?">
-            <p>Build your personal knowledge base with powerful features and full privacy.</p>
+        <Section className="final-cta accented" title={t("final_cta.title")}>
+            <p>{t("final_cta.description")}</p>
 
             <div class="buttons">
-                <Button href="./get-started/" text="Get started" />
+                <Button href="./get-started/" text={t("final_cta.get_started")} />
             </div>
         </Section>
     )
