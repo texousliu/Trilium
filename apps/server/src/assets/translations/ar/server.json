@@ -55,7 +55,28 @@
     "reload-frontend-app": "اعادة تحميل الواجهة",
     "zoom-out": "تصغير العرض",
     "zoom-in": "تكبير العرض",
-    "note-navigation": "التنقل بين الملاحظات"
+    "note-navigation": "التنقل بين الملاحظات",
+    "show-options": "افتح صفحة \"الخيارات\"",
+    "text-note-operations": "عمليات الملاحظة النصية",
+    "add-new-label": "انشاء تسمية جديدة",
+    "create-new-relation": "انشاء علاقة جديدة",
+    "toggle-basic-properties": "اظهار/اخفاء الخصائص الاساسية",
+    "toggle-file-properties": "اظهار/اخفاء خصائص الملف",
+    "toggle-image-properties": "اظهار/اخفاء خصائص الصورة",
+    "toggle-owned-attributes": "اظهار/اخفاء السمات المملوكة",
+    "toggle-inherited-attributes": "اظهار/اخفاء السمات المتوارثه",
+    "toggle-promoted-attributes": "اظخار/اخفاء السمات المروجة",
+    "toggle-link-map": "اظهار/اخفاء خريطة الرابط",
+    "toggle-note-info": "اظهار/اخفاء معلومات الملاحظة",
+    "toggle-note-paths": "اظها/اخفاء مسارات الملاحظة",
+    "toggle-similar-notes": "اظهار/اخفاء الملاحظات المشابهة",
+    "print-active-note": "طباعة الملاحظة‍ النشطة",
+    "unhoist": "الغاء التركيز من اي مكان",
+    "open-dev-tools": "فتح ادوات المطور",
+    "find-in-text": "اظهار/اخفاء لوحة الفتح",
+    "toggle-full-screen": "اظهار/اخفاء وضع ملء الشاشة",
+    "reset-zoom-level": "اعادة ضبط مستوى التكبير",
+    "toggle-book-properties": "اظهار/اخفاء خصائص المجموعة"
   },
   "setup_sync-from-server": {
     "note": "ملاحظة:",
@@ -64,7 +85,9 @@
     "back": "رجوع",
     "server-host-placeholder": "https://<hostname>:<port>",
     "proxy-server-placeholder": "https://<hostname>:<port>",
-    "finish-setup": "اكمال التثبيت"
+    "finish-setup": "اكمال التثبيت",
+    "heading": "مزامنة من الخادم",
+    "server-host": "عنوان خادم تريليوم"
   },
   "weekdays": {
     "monday": "الاثنين",
@@ -135,7 +158,12 @@
     "visible-launchers-title": "المشغلات المرئية",
     "user-guide": "دليل المستخدم",
     "ai-llm-title": "AI/LLM",
-    "etapi-title": "ETAPI"
+    "etapi-title": "ETAPI",
+    "sql-console-history-title": "سجل وحدة تحكم SQL",
+    "launch-bar-templates-title": "قوالب شريط التشغيل",
+    "base-abstract-launcher-title": "المشغل الاساسي المجرد",
+    "llm-chat-title": "الدردشة مع الملاحظات",
+    "localization": "اللغة والمنطقة"
   },
   "tray": {
     "bookmarks": "العلامات المرجعية",
@@ -143,7 +171,8 @@
     "close": "انهاء تريليوم",
     "recents": "الملاحظات الحديثة",
     "new-note": "ملاحظة جديدة",
-    "show-windows": "اظهار النوافذ"
+    "show-windows": "اظهار النوافذ",
+    "open_new_window": "فتح نافذة جديدة"
   },
   "modals": {
     "error_title": "خطأ"
@@ -153,7 +182,8 @@
     "subpages": "الصفحات الفرعية:",
     "expand": "توسيع",
     "site-theme": "المظهر العام للموقع",
-    "image_alt": "صورة المقال"
+    "image_alt": "صورة المقال",
+    "on-this-page": "في هذه السفحة"
   },
   "hidden_subtree_templates": {
     "description": "الوصف",
@@ -194,13 +224,16 @@
   },
   "setup": {
     "next": "التالي",
-    "title": "تثبيت"
+    "title": "تثبيت",
+    "heading": "تثبيت تريليوم للملاحظات"
   },
   "setup_sync-from-desktop": {
-    "step6-here": "هنا"
+    "step6-here": "هنا",
+    "heading": "مزامنة من سطح المكتب"
   },
   "setup_sync-in-progress": {
-    "outstanding-items-default": "غير متوفر"
+    "outstanding-items-default": "غير متوفر",
+    "heading": "المزامنة جارية"
   },
   "share_page": {
     "parent": "الأصل:",
@@ -225,7 +258,44 @@
     "show-cheatsheet": "عرض دليل الاختصارات",
     "unhoist-note": "الغاء تثبيت الملاحظة",
     "zoom-out": "تصغير العرض",
-    "zoom-in": "تكبير العرض"
+    "zoom-in": "تكبير العرض",
+    "search-in-subtree": "البحث في الشجرة الفرعية",
+    "sort-child-notes": "ترتيب الملاحظات الفرعية",
+    "create-note-after": "انشاء ملاحظة بعد",
+    "create-note-into": "انشاء معلومات الملاحظة",
+    "move-note-up": "انقل الملاحظة للاعلى",
+    "move-note-down": "انقل الملاحظة للاسفل",
+    "edit-note-title": "تحرير عنوان الملاحظة",
+    "clone-notes-to": "نسخ الملاحظة الى",
+    "move-notes-to": "نقل الملاحظات الى",
+    "open-new-tab": "فتح علامة تبويب جديدة",
+    "close-active-tab": "اغلاق التبويب النشط",
+    "reopen-last-tab": "اعادة فتح اخر تبويب",
+    "activate-next-tab": "تنشيط علامة التبويب اللاحقة",
+    "activate-previous-tab": "تنشيط علامة التبويب السابقة",
+    "open-new-window": "فتح نافذة جديدة",
+    "print-active-note": "طباعة الملاحظة النشطة",
+    "open-note-externally": "افتح الملاحظة خارجيا",
+    "render-active-note": "عرض الملاحظة النشطة",
+    "run-active-note": "تشغيل الملاحظة النشطة",
+    "open-developer-tools": "فتح ادوات المطور",
+    "find-in-text": "البحث في النص",
+    "toggle-left-pane": "اظهار/اخفاء اللوحة اليسرى",
+    "toggle-full-screen": "اظهار/اخفاء وضع ملء الشاشة",
+    "reset-zoom-level": "اعادة ضبط مستوى التكبير",
+    "copy-without-formatting": "نسخ بدون تنسيق",
+    "add-new-relation": "اضافة علاقة جديدة",
+    "toggle-right-pane": "اظهار/اخفاء اللوحة اليمنى",
+    "switch-to-second-tab": "الانتقال الى التبويب الثاني",
+    "switch-to-third-tab": "الانتقال الى التبويب الثالث",
+    "switch-to-fourth-tab": "الانتقال الى التبويب الرابع",
+    "switch-to-fifth-tab": "الانتقال الى التبويب الخامس",
+    "switch-to-sixth-tab": "الانتقال الى التبويب السادس",
+    "switch-to-seventh-tab": "الانتقال الى التبويب السابع",
+    "switch-to-eighth-tab": "الانتقال الى التبويب الثامن",
+    "switch-to-ninth-tab": "الانتقال الى التبويب التاسع",
+    "switch-to-last-tab": "الانتقال الى اخر تبويب",
+    "add-link-to-text": "اضافة رابط الى النص"
   },
   "share_404": {
     "title": "غير موجود",
