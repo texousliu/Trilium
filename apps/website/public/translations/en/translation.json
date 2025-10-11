@@ -103,5 +103,13 @@
   "components": {
     "link_learn_more": "Learn more...",
     "list_with_screenshot_alt": "Screenshot of the feature being selected"
+  },
+  "download_now": {
+    "text": "Download now ",
+    "platform_big": "v{{version}} for {{platform}}",
+    "platform_small": "for {{platform}}",
+    "linux_big": "v{{version}} for Linux",
+    "linux_small": "for Linux",
+    "more_platforms": "More platforms & server setup"
   }
 }
