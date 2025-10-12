@@ -18,7 +18,7 @@
 
 body {
     --native-titlebar-darwin-x-offset: 10;
-    --native-titlebar-darwin-y-offset: 17 !important;
+    --native-titlebar-darwin-y-offset: 12 !important;
 }
 
 body.layout-horizontal {
