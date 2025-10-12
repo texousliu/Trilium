@@ -150,7 +150,7 @@ importers:
         version: 6.1.19(@fullcalendar/core@6.1.19)
       '@maplibre/maplibre-gl-leaflet':
         specifier: 0.1.3
-        version: 0.1.3(@types/leaflet@1.9.20)(leaflet@1.9.4)(maplibre-gl@5.6.1)
+        version: 0.1.3(@types/leaflet@1.9.21)(leaflet@1.9.4)(maplibre-gl@5.6.1)
       '@mermaid-js/layout-elk':
         specifier: 0.2.0
         version: 0.2.0(mermaid@11.12.0)
@@ -279,8 +279,8 @@ importers:
         specifier: 3.5.33
         version: 3.5.33
       '@types/leaflet':
-        specifier: 1.9.20
-        version: 1.9.20
+        specifier: 1.9.21
+        version: 1.9.21
       '@types/leaflet-gpx':
         specifier: 1.3.8
         version: 1.3.8
@@ -4798,8 +4798,8 @@ packages:
   '@types/leaflet-gpx@1.3.8':
     resolution: {integrity: sha512-woIh3APM4FbrEQ+go3yaa4k5j4yn49YLVa1xfSB+T5aYwJn+O3pYhBBQvuxQJW68jpjcaAX/PTJRJLFJ+XT6ow==}
 
-  '@types/leaflet@1.9.20':
-    resolution: {integrity: sha512-rooalPMlk61LCaLOvBF2VIf9M47HgMQqi5xQ9QRi7c8PkdIe0WrIi5IxXUXQjAdL0c+vcQ01mYWbthzmp9GHWw==}
+  '@types/leaflet@1.9.21':
+    resolution: {integrity: sha512-TbAd9DaPGSnzp6QvtYngntMZgcRk+igFELwR2N99XZn7RXUdKgsXMR+28bUO0rPsWp8MIu/f47luLIQuSLYv/w==}
 
   '@types/lodash-es@4.17.12':
     resolution: {integrity: sha512-0NgftHUcV4v34VhXm8QBSftKVXtbkBG3ViCjs6+eJ5a6y6Mi/jiFGPc1sC7QK+9BFhWrURE3EOggmWaSxL9OzQ==}
@@ -14969,8 +14969,6 @@ snapshots:
       '@ckeditor/ckeditor5-table': 47.0.0
       '@ckeditor/ckeditor5-utils': 47.0.0
       ckeditor5: 47.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-emoji@47.0.0':
     dependencies:
@@ -14996,6 +14994,8 @@ snapshots:
       '@ckeditor/ckeditor5-core': 47.0.0
       '@ckeditor/ckeditor5-engine': 47.0.0
       '@ckeditor/ckeditor5-utils': 47.0.0
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-essentials@47.0.0':
     dependencies:
@@ -15639,8 +15639,6 @@ snapshots:
       '@ckeditor/ckeditor5-icons': 47.0.0
       '@ckeditor/ckeditor5-ui': 47.0.0
       '@ckeditor/ckeditor5-utils': 47.0.0
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-upload@47.0.0':
     dependencies:
@@ -15698,6 +15696,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.0.0
       ckeditor5: 47.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@codemirror/autocomplete@6.18.6':
     dependencies:
@@ -17327,9 +17327,9 @@ snapshots:
 
   '@mapbox/whoots-js@3.1.0': {}
 
-  '@maplibre/maplibre-gl-leaflet@0.1.3(@types/leaflet@1.9.20)(leaflet@1.9.4)(maplibre-gl@5.6.1)':
+  '@maplibre/maplibre-gl-leaflet@0.1.3(@types/leaflet@1.9.21)(leaflet@1.9.4)(maplibre-gl@5.6.1)':
     dependencies:
-      '@types/leaflet': 1.9.20
+      '@types/leaflet': 1.9.21
       leaflet: 1.9.4
       maplibre-gl: 5.6.1
 
@@ -19146,9 +19146,9 @@ snapshots:
 
   '@types/leaflet-gpx@1.3.8':
     dependencies:
-      '@types/leaflet': 1.9.20
+      '@types/leaflet': 1.9.21
 
-  '@types/leaflet@1.9.20':
+  '@types/leaflet@1.9.21':
     dependencies:
       '@types/geojson': 7946.0.16
 
