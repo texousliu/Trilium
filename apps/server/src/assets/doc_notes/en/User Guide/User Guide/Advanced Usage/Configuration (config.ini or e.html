@@ -10,11 +10,10 @@
 <p>Configuration values are loaded in the following order of precedence (highest
   to lowest):</p>
 <ol>
-  <li data-list-item-id="e01b36dcd8ce9822628619499dbccd6f6"><strong>Environment variables</strong> (checked first)</li>
-  <li class="ck-list-marker-bold"
-  data-list-item-id="e4c20596fe72e848364b4486754e0b4fc"><strong>config.ini file values</strong>
+  <li><strong>Environment variables</strong> (checked first)</li>
+  <li><strong>config.ini file values</strong>
   </li>
-  <li class="ck-list-marker-bold" data-list-item-id="e815dca908c8526179f622710252ea82f"><strong>Default values</strong>
+  <li><strong>Default values</strong>
   </li>
 </ol>
 <h2>Environment Variable Patterns</h2>
@@ -23,333 +22,317 @@
 </p>
 <p>Where:</p>
 <ul>
-  <li data-list-item-id="e056ab96ed6aedc3039100cbe0519c28d"><code>SECTION</code> is the INI section name in UPPERCASE</li>
-  <li data-list-item-id="edabbb90cc5cd6f0f372446174925bf97"><code>KEY</code> is the camelCase configuration key converted to UPPERCASE
+  <li><code>SECTION</code> is the INI section name in UPPERCASE</li>
+  <li><code>KEY</code> is the camelCase configuration key converted to UPPERCASE
     (e.g., <code>instanceName</code> → <code>INSTANCENAME</code>)</li>
 </ul>
 <p>Additionally, shorter aliases are available for common configurations
   (see Alternative Variables section below).</p>
 <h2>Environment Variable Reference</h2>
 <h3>General Section</h3>
-<figure class="table">
-  <table>
-    <thead>
-      <tr>
-        <th>Environment Variable</th>
-        <th>Type</th>
-        <th>Default</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><code>TRILIUM_GENERAL_INSTANCENAME</code>
-        </td>
-        <td>string</td>
-        <td>""</td>
-        <td>Instance name for API identification</td>
-      </tr>
-      <tr>
-        <td><code>TRILIUM_GENERAL_NOAUTHENTICATION</code>
-        </td>
-        <td>boolean</td>
-        <td>false</td>
-        <td>Disable authentication (server only)</td>
-      </tr>
-      <tr>
-        <td><code>TRILIUM_GENERAL_NOBACKUP</code>
-        </td>
-        <td>boolean</td>
-        <td>false</td>
-        <td>Disable automatic backups</td>
-      </tr>
-      <tr>
-        <td><code>TRILIUM_GENERAL_NODESKTOPICON</code>
-        </td>
-        <td>boolean</td>
-        <td>false</td>
-        <td>Disable desktop icon creation</td>
-      </tr>
-      <tr>
-        <td><code>TRILIUM_GENERAL_READONLY</code>
-        </td>
-        <td>boolean</td>
-        <td>false</td>
-        <td>Enable read-only mode</td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
+<table>
+  <thead>
+    <tr>
+      <th>Environment Variable</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>TRILIUM_GENERAL_INSTANCENAME</code>
+      </td>
+      <td>string</td>
+      <td>""</td>
+      <td>Instance name for API identification</td>
+    </tr>
+    <tr>
+      <td><code>TRILIUM_GENERAL_NOAUTHENTICATION</code>
+      </td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>Disable authentication (server only)</td>
+    </tr>
+    <tr>
+      <td><code>TRILIUM_GENERAL_NOBACKUP</code>
+      </td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>Disable automatic backups</td>
+    </tr>
+    <tr>
+      <td><code>TRILIUM_GENERAL_NODESKTOPICON</code>
+      </td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>Disable desktop icon creation</td>
+    </tr>
+    <tr>
+      <td><code>TRILIUM_GENERAL_READONLY</code>
+      </td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>Enable read-only mode</td>
+    </tr>
+  </tbody>
+</table>
+
 <h3>Network Section</h3>
-<figure class="table">
-  <table>
-    <thead>
-      <tr>
-        <th>Environment Variable</th>
-        <th>Type</th>
-        <th>Default</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><code>TRILIUM_NETWORK_HOST</code>
-        </td>
-        <td>string</td>
-        <td>"0.0.0.0"</td>
-        <td>Server host binding</td>
-      </tr>
-      <tr>
-        <td><code>TRILIUM_NETWORK_PORT</code>
-        </td>
-        <td>string</td>
-        <td>"3000"</td>
-        <td>Server port</td>
-      </tr>
-      <tr>
-        <td><code>TRILIUM_NETWORK_HTTPS</code>
-        </td>
-        <td>boolean</td>
-        <td>false</td>
-        <td>Enable HTTPS</td>
-      </tr>
-      <tr>
-        <td><code>TRILIUM_NETWORK_CERTPATH</code>
-        </td>
-        <td>string</td>
-        <td>""</td>
-        <td>SSL certificate path</td>
-      </tr>
-      <tr>
-        <td><code>TRILIUM_NETWORK_KEYPATH</code>
-        </td>
-        <td>string</td>
-        <td>""</td>
-        <td>SSL key path</td>
-      </tr>
-      <tr>
-        <td><code>TRILIUM_NETWORK_TRUSTEDREVERSEPROXY</code>
-        </td>
-        <td>boolean/string</td>
-        <td>false</td>
-        <td>Reverse proxy trust settings</td>
-      </tr>
-      <tr>
-        <td><code>TRILIUM_NETWORK_CORSALLOWORIGIN</code>
-        </td>
-        <td>string</td>
-        <td>""</td>
-        <td>CORS allowed origins</td>
-      </tr>
-      <tr>
-        <td><code>TRILIUM_NETWORK_CORSALLOWMETHODS</code>
-        </td>
-        <td>string</td>
-        <td>""</td>
-        <td>CORS allowed methods</td>
-      </tr>
-      <tr>
-        <td><code>TRILIUM_NETWORK_CORSALLOWHEADERS</code>
-        </td>
-        <td>string</td>
-        <td>""</td>
-        <td>CORS allowed headers</td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
+<table>
+  <thead>
+    <tr>
+      <th>Environment Variable</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>TRILIUM_NETWORK_HOST</code>
+      </td>
+      <td>string</td>
+      <td>"0.0.0.0"</td>
+      <td>Server host binding</td>
+    </tr>
+    <tr>
+      <td><code>TRILIUM_NETWORK_PORT</code>
+      </td>
+      <td>string</td>
+      <td>"3000"</td>
+      <td>Server port</td>
+    </tr>
+    <tr>
+      <td><code>TRILIUM_NETWORK_HTTPS</code>
+      </td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>Enable HTTPS</td>
+    </tr>
+    <tr>
+      <td><code>TRILIUM_NETWORK_CERTPATH</code>
+      </td>
+      <td>string</td>
+      <td>""</td>
+      <td>SSL certificate path</td>
+    </tr>
+    <tr>
+      <td><code>TRILIUM_NETWORK_KEYPATH</code>
+      </td>
+      <td>string</td>
+      <td>""</td>
+      <td>SSL key path</td>
+    </tr>
+    <tr>
+      <td><code>TRILIUM_NETWORK_TRUSTEDREVERSEPROXY</code>
+      </td>
+      <td>boolean/string</td>
+      <td>false</td>
+      <td>Reverse proxy trust settings</td>
+    </tr>
+    <tr>
+      <td><code>TRILIUM_NETWORK_CORSALLOWORIGIN</code>
+      </td>
+      <td>string</td>
+      <td>""</td>
+      <td>CORS allowed origins</td>
+    </tr>
+    <tr>
+      <td><code>TRILIUM_NETWORK_CORSALLOWMETHODS</code>
+      </td>
+      <td>string</td>
+      <td>""</td>
+      <td>CORS allowed methods</td>
+    </tr>
+    <tr>
+      <td><code>TRILIUM_NETWORK_CORSALLOWHEADERS</code>
+      </td>
+      <td>string</td>
+      <td>""</td>
+      <td>CORS allowed headers</td>
+    </tr>
+  </tbody>
+</table>
+
 <h3>Session Section</h3>
-<figure class="table">
-  <table>
-    <thead>
-      <tr>
-        <th>Environment Variable</th>
-        <th>Type</th>
-        <th>Default</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><code>TRILIUM_SESSION_COOKIEMAXAGE</code>
-        </td>
-        <td>integer</td>
-        <td>1814400</td>
-        <td>Session cookie max age in seconds (21 days)</td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
+<table>
+  <thead>
+    <tr>
+      <th>Environment Variable</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>TRILIUM_SESSION_COOKIEMAXAGE</code>
+      </td>
+      <td>integer</td>
+      <td>1814400</td>
+      <td>Session cookie max age in seconds (21 days)</td>
+    </tr>
+  </tbody>
+</table>
+
 <h3>Sync Section</h3>
-<figure class="table">
-  <table>
-    <thead>
-      <tr>
-        <th>Environment Variable</th>
-        <th>Type</th>
-        <th>Default</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><code>TRILIUM_SYNC_SYNCSERVERHOST</code>
-        </td>
-        <td>string</td>
-        <td>""</td>
-        <td>Sync server host URL</td>
-      </tr>
-      <tr>
-        <td><code>TRILIUM_SYNC_SYNCSERVERTIMEOUT</code>
-        </td>
-        <td>string</td>
-        <td>"120000"</td>
-        <td>Sync server timeout in milliseconds</td>
-      </tr>
-      <tr>
-        <td><code>TRILIUM_SYNC_SYNCPROXY</code>
-        </td>
-        <td>string</td>
-        <td>""</td>
-        <td>Sync proxy URL</td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
+<table>
+  <thead>
+    <tr>
+      <th>Environment Variable</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>TRILIUM_SYNC_SYNCSERVERHOST</code>
+      </td>
+      <td>string</td>
+      <td>""</td>
+      <td>Sync server host URL</td>
+    </tr>
+    <tr>
+      <td><code>TRILIUM_SYNC_SYNCSERVERTIMEOUT</code>
+      </td>
+      <td>string</td>
+      <td>"120000"</td>
+      <td>Sync server timeout in milliseconds</td>
+    </tr>
+    <tr>
+      <td><code>TRILIUM_SYNC_SYNCPROXY</code>
+      </td>
+      <td>string</td>
+      <td>""</td>
+      <td>Sync proxy URL</td>
+    </tr>
+  </tbody>
+</table>
+
 <h3>MultiFactorAuthentication Section</h3>
-<figure class="table">
-  <table>
-    <thead>
-      <tr>
-        <th>Environment Variable</th>
-        <th>Type</th>
-        <th>Default</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHBASEURL</code>
-        </td>
-        <td>string</td>
-        <td>""</td>
-        <td>OAuth/OpenID base URL</td>
-      </tr>
-      <tr>
-        <td><code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHCLIENTID</code>
-        </td>
-        <td>string</td>
-        <td>""</td>
-        <td>OAuth client ID</td>
-      </tr>
-      <tr>
-        <td><code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHCLIENTSECRET</code>
-        </td>
-        <td>string</td>
-        <td>""</td>
-        <td>OAuth client secret</td>
-      </tr>
-      <tr>
-        <td><code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHISSUERBASEURL</code>
-        </td>
-        <td>string</td>
-        <td>"<a href="https://accounts.google.com">https://accounts.google.com</a>"</td>
-        <td>OAuth issuer base URL</td>
-      </tr>
-      <tr>
-        <td><code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHISSUERNAME</code>
-        </td>
-        <td>string</td>
-        <td>"Google"</td>
-        <td>OAuth issuer display name</td>
-      </tr>
-      <tr>
-        <td><code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHISSUERICON</code>
-        </td>
-        <td>string</td>
-        <td>""</td>
-        <td>OAuth issuer icon URL</td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
+<table>
+  <thead>
+    <tr>
+      <th>Environment Variable</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHBASEURL</code>
+      </td>
+      <td>string</td>
+      <td>""</td>
+      <td>OAuth/OpenID base URL</td>
+    </tr>
+    <tr>
+      <td><code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHCLIENTID</code>
+      </td>
+      <td>string</td>
+      <td>""</td>
+      <td>OAuth client ID</td>
+    </tr>
+    <tr>
+      <td><code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHCLIENTSECRET</code>
+      </td>
+      <td>string</td>
+      <td>""</td>
+      <td>OAuth client secret</td>
+    </tr>
+    <tr>
+      <td><code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHISSUERBASEURL</code>
+      </td>
+      <td>string</td>
+      <td>"<a href="https://accounts.google.com">https://accounts.google.com</a>"</td>
+      <td>OAuth issuer base URL</td>
+    </tr>
+    <tr>
+      <td><code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHISSUERNAME</code>
+      </td>
+      <td>string</td>
+      <td>"Google"</td>
+      <td>OAuth issuer display name</td>
+    </tr>
+    <tr>
+      <td><code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHISSUERICON</code>
+      </td>
+      <td>string</td>
+      <td>""</td>
+      <td>OAuth issuer icon URL</td>
+    </tr>
+  </tbody>
+</table>
+
 <h3>Logging Section</h3>
-<figure class="table">
-  <table>
-    <thead>
-      <tr>
-        <th>Environment Variable</th>
-        <th>Type</th>
-        <th>Default</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><code>TRILIUM_LOGGING_RETENTIONDAYS</code>
-        </td>
-        <td>integer</td>
-        <td>90</td>
-        <td>Number of days to retain log files</td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
+<table>
+  <thead>
+    <tr>
+      <th>Environment Variable</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>TRILIUM_LOGGING_RETENTIONDAYS</code>
+      </td>
+      <td>integer</td>
+      <td>90</td>
+      <td>Number of days to retain log files</td>
+    </tr>
+  </tbody>
+</table>
+
 <h2>Alternative Environment Variables</h2>
 <p>The following alternative environment variable names are also supported
   and work identically to their longer counterparts:</p>
 <h3>Network CORS Variables</h3>
 <ul>
-  <li data-list-item-id="eb8b1f15b023c10a1eb3ba027d85e3800"><code>TRILIUM_NETWORK_CORS_ALLOW_ORIGIN</code> (alternative to <code>TRILIUM_NETWORK_CORSALLOWORIGIN</code>)</li>
-  <li
-  data-list-item-id="eae54f70c5191760092234efa58ef5e74"><code>TRILIUM_NETWORK_CORS_ALLOW_METHODS</code> (alternative to <code>TRILIUM_NETWORK_CORSALLOWMETHODS</code>)</li>
-    <li
-    data-list-item-id="ec86f6932632ef8375f57ad544027ee3a"><code>TRILIUM_NETWORK_CORS_ALLOW_HEADERS</code> (alternative to <code>TRILIUM_NETWORK_CORSALLOWHEADERS</code>)</li>
+  <li><code>TRILIUM_NETWORK_CORS_ALLOW_ORIGIN</code> (alternative to <code>TRILIUM_NETWORK_CORSALLOWORIGIN</code>)</li>
+  <li><code>TRILIUM_NETWORK_CORS_ALLOW_METHODS</code> (alternative to <code>TRILIUM_NETWORK_CORSALLOWMETHODS</code>)</li>
+  <li><code>TRILIUM_NETWORK_CORS_ALLOW_HEADERS</code> (alternative to <code>TRILIUM_NETWORK_CORSALLOWHEADERS</code>)</li>
 </ul>
 <h3>Sync Variables</h3>
 <ul>
-  <li data-list-item-id="e43ba356f96a86ec4fda045063a8c7688"><code>TRILIUM_SYNC_SERVER_HOST</code> (alternative to <code>TRILIUM_SYNC_SYNCSERVERHOST</code>)</li>
-  <li
-  data-list-item-id="ecaf5873ff53f77deeb6775e196e14343"><code>TRILIUM_SYNC_SERVER_TIMEOUT</code> (alternative to <code>TRILIUM_SYNC_SYNCSERVERTIMEOUT</code>)</li>
-    <li
-    data-list-item-id="e66a1ceb165464c39720072764f62ddd6"><code>TRILIUM_SYNC_SERVER_PROXY</code> (alternative to <code>TRILIUM_SYNC_SYNCPROXY</code>)</li>
+  <li><code>TRILIUM_SYNC_SERVER_HOST</code> (alternative to <code>TRILIUM_SYNC_SYNCSERVERHOST</code>)</li>
+  <li><code>TRILIUM_SYNC_SERVER_TIMEOUT</code> (alternative to <code>TRILIUM_SYNC_SYNCSERVERTIMEOUT</code>)</li>
+  <li><code>TRILIUM_SYNC_SERVER_PROXY</code> (alternative to <code>TRILIUM_SYNC_SYNCPROXY</code>)</li>
 </ul>
 <h3>OAuth/MFA Variables</h3>
 <ul>
-  <li data-list-item-id="e8c2c2b37159644a4d220edb9918f9d0a"><code>TRILIUM_OAUTH_BASE_URL</code> (alternative to <code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHBASEURL</code>)</li>
-  <li
-  data-list-item-id="e1cf27f36963616e929aa9fbcd75d63f5"><code>TRILIUM_OAUTH_CLIENT_ID</code> (alternative to <code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHCLIENTID</code>)</li>
-    <li
-    data-list-item-id="eb6dd8d8c0177da4d0a467bb1527e7a9a"><code>TRILIUM_OAUTH_CLIENT_SECRET</code> (alternative to <code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHCLIENTSECRET</code>)</li>
-      <li
-      data-list-item-id="e07df03aef9e3b4630b5ed1edadadd6fb"><code>TRILIUM_OAUTH_ISSUER_BASE_URL</code> (alternative to <code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHISSUERBASEURL</code>)</li>
-        <li
-        data-list-item-id="e2a8099088f69823eb5f1797f85cb29a1"><code>TRILIUM_OAUTH_ISSUER_NAME</code> (alternative to <code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHISSUERNAME</code>)</li>
-          <li
-          data-list-item-id="edd9461cdb7f96371335413e17548dbed"><code>TRILIUM_OAUTH_ISSUER_ICON</code> (alternative to <code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHISSUERICON</code>)</li>
+  <li><code>TRILIUM_OAUTH_BASE_URL</code> (alternative to <code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHBASEURL</code>)</li>
+  <li><code>TRILIUM_OAUTH_CLIENT_ID</code> (alternative to <code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHCLIENTID</code>)</li>
+  <li><code>TRILIUM_OAUTH_CLIENT_SECRET</code> (alternative to <code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHCLIENTSECRET</code>)</li>
+  <li><code>TRILIUM_OAUTH_ISSUER_BASE_URL</code> (alternative to <code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHISSUERBASEURL</code>)</li>
+  <li><code>TRILIUM_OAUTH_ISSUER_NAME</code> (alternative to <code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHISSUERNAME</code>)</li>
+  <li><code>TRILIUM_OAUTH_ISSUER_ICON</code> (alternative to <code>TRILIUM_MULTIFACTORAUTHENTICATION_OAUTHISSUERICON</code>)</li>
 </ul>
 <h3>Logging Variables</h3>
 <ul>
-  <li data-list-item-id="ed3b4ee1ac943a37c729d973738cf5c76"><code>TRILIUM_LOGGING_RETENTION_DAYS</code> (alternative to <code>TRILIUM_LOGGING_RETENTIONDAYS</code>)</li>
+  <li><code>TRILIUM_LOGGING_RETENTION_DAYS</code> (alternative to <code>TRILIUM_LOGGING_RETENTIONDAYS</code>)</li>
 </ul>
 <h2>Boolean Values</h2>
 <p>Boolean environment variables accept the following values:</p>
 <ul>
-  <li data-list-item-id="e7f2f6e6929d2dc30570666cc1df6fdb1"><strong>True</strong>: <code>"true"</code>, <code>"1"</code>, <code>1</code>
+  <li><strong>True</strong>: <code>"true"</code>, <code>"1"</code>, <code>1</code>
   </li>
-  <li data-list-item-id="ea03e6536d3055634d536f429683efdc6"><strong>False</strong>: <code>"false"</code>, <code>"0"</code>, <code>0</code>
+  <li><strong>False</strong>: <code>"false"</code>, <code>"0"</code>, <code>0</code>
   </li>
-  <li data-list-item-id="e7b0f5806a421c801401712940730961e">Any other value defaults to <code>false</code>
+  <li>Any other value defaults to <code>false</code>
   </li>
 </ul>
 <h2>Using Environment Variables</h2>
 <p>Both naming patterns are fully supported and can be used interchangeably:</p>
 <ul>
-  <li data-list-item-id="e4be74ec58603a4ea748a13065ce0b965">The longer format follows the section/key pattern for consistency with
+  <li>The longer format follows the section/key pattern for consistency with
     the INI file structure</li>
-  <li data-list-item-id="e4f6aa6d54fce77025d4349f9569723de">The shorter alternatives provide convenience for common configurations</li>
-  <li
-  data-list-item-id="eafaaefcfe88288f4e3faef8130cb12c0">You can use whichever format you prefer - both are equally valid</li>
+  <li>The shorter alternatives provide convenience for common configurations</li>
+  <li>You can use whichever format you prefer - both are equally valid</li>
 </ul>
 <h2>Examples</h2>
 <h3>Docker Compose Example</h3><pre><code class="language-text-x-yaml">services:

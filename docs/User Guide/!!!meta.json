@@ -755,7 +755,7 @@
                                         "WOcw2SLH6tbX",
                                         "l2VkvOwUNfZj"
                                     ],
-                                    "title": "TLS Configuration",
+                                    "title": "HTTPS (TLS)",
                                     "notePosition": 100,
                                     "prefix": null,
                                     "isExpanded": false,
@@ -789,10 +789,24 @@
                                             "value": "tls-configuration",
                                             "isInheritable": false,
                                             "position": 20
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "vcjrb3VVYPZI",
+                                            "isInheritable": false,
+                                            "position": 40
+                                        },
+                                        {
+                                            "type": "label",
+                                            "name": "iconClass",
+                                            "value": "bx bx-lock-alt",
+                                            "isInheritable": false,
+                                            "position": 50
                                         }
                                     ],
                                     "format": "markdown",
-                                    "dataFileName": "TLS Configuration.md",
+                                    "dataFileName": "HTTPS (TLS).md",
                                     "attachments": []
                                 },
                                 {
@@ -835,7 +849,7 @@
                                         {
                                             "type": "label",
                                             "name": "iconClass",
-                                            "value": "bx bx-lock-alt",
+                                            "value": "bx bx-user",
                                             "isInheritable": false,
                                             "position": 10
                                         }

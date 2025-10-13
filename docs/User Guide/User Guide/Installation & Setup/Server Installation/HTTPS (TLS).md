@@ -1,7 +1,8 @@
-# TLS Configuration
+# HTTPS (TLS)
 Configuring TLS is essential for [server installation](../Server%20Installation.md) in Trilium. This guide details the steps to set up TLS within Trilium itself.
 
-For a more robust solution, consider using TLS termination with a reverse proxy (recommended, e.g., Nginx). You can follow a [guide like this](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-20-04) for such setups.
+> [!TIP]
+> While Trilium supports HTTPS on its own, it's generally a good idea to use a [reverse proxy](2.%20Reverse%20proxy) instead with TLS termination. You can follow a [guide like this](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-20-04) for such setups.
 
 ## Obtaining a TLS Certificate
 
