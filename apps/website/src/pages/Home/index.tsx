@@ -32,6 +32,7 @@ import geomapIcon from "../../assets/boxicons/bx-map.svg?raw";
 import { getPlatform } from '../../download-helper.js';
 import { useEffect, useState } from 'preact/hooks';
 import { t } from '../../i18n.js';
+import { Trans } from 'react-i18next';
 
 export function Home() {
     usePageTitle("");
@@ -173,12 +174,16 @@ function NoteTypesSection() {
                 }
             ]} />
             <p>
-                {t("note_types.others_prefix")}
-                <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Note%20Map.html" openExternally>{t("note_types.others_note_map")}</Link>{t("note_types.others_separator")}
-                <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Relation%20Map.html" openExternally>{t("note_types.others_relation_map")}</Link>{t("note_types.others_separator")}
-                <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Saved%20Search.html" openExternally>{t("note_types.others_saved_searches")}</Link>{t("note_types.others_separator")}
-                <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Render%20Note.html" openExternally>{t("note_types.others_render_note")}</Link>{t("note_types.others_separator")}
-                <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Web%20View.html" openExternally>{t("note_types.others_webview")}</Link>.
+                <Trans
+                    i18nKey="note_types.others_list"
+                    components={[
+                        <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Note%20Map.html" openExternally />,
+                        <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Relation%20Map.html" openExternally />,
+                        <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Saved%20Search.html" openExternally />,
+                        <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Render%20Note.html" openExternally />,
+                        <Link href="https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Web%20View.html" openExternally />
+                    ]}
+                />
             </p>
         </Section>
     );
@@ -215,7 +220,7 @@ function CollectionsSection() {
                     iconSvg: tableIcon,
                     imageUrl: "/collection_table.webp",
                     moreInfo: "https://docs.triliumnotes.org/User%20Guide/User%20Guide/Note%20Types/Collections/Table%20View.html",
-                    description: t("collections.calendar_description")
+                    description: t("collections.table_description")
                 },
                 {
                     title: t("collections.board_title"),

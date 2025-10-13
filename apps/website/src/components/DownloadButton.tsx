@@ -40,7 +40,7 @@ export default function DownloadButton({ big }: DownloadButtonProps) {
                     text={<>
                             {t("download_now.text")}
                             {big
-                            ? <span class="platform">{t("download_now.linux_big")}</span>
+                            ? <span class="platform">{t("download_now.linux_big", { version: packageJson.version })}</span>
                             : <span class="platform">{t("download_now.linux_small")}</span>
                             }
                     </>}
