@@ -124,9 +124,19 @@
   },
   "support_us": {
     "title": "Support us",
+    "financial_donations_title": "Financial donations",
+    "financial_donations_description": "Trilium is built and maintained with <Link>hundreds of hours of work</Link>. Your support keeps it open-source, improves features, and covers costs such as hosting.",
+    "financial_donations_cta": "Consider supporting the main developer (<Link>eliandoran</Link>) of the application via:",
     "github_sponsors": "GitHub Sponsors",
     "paypal": "PayPal",
-    "buy_me_a_coffee": "Buy Me A Coffee",
-    "other_ways_to_contribute": "Other ways to contribute"
+    "buy_me_a_coffee": "Buy Me A Coffee"
+  },
+  "contribute": {
+    "title": "Other ways to contribute",
+    "way_translate": "Translate the application into your native language via <Link>Weblate</Link>.",
+    "way_community": "Interact with the community on <Discussions>GitHub Discussions</Discussions> or on <Matrix>Matrix</Matrix>.",
+    "way_reports": "Report bugs via <Link>GitHub issues</Link>.",
+    "way_document": "Improve the documentation by informing us on gaps in the documentation or contributing guides, FAQs or tutorials.",
+    "way_market": "Spread the word: Share Trilium Notes with friends, or on blogs and social media."
   }
 }
