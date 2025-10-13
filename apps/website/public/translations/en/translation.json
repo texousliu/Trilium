@@ -121,5 +121,12 @@
     "github_discussions": "GitHub Discussions",
     "matrix": "Matrix",
     "reddit": "Reddit"
+  },
+  "support_us": {
+    "title": "Support us",
+    "github_sponsors": "GitHub Sponsors",
+    "paypal": "PayPal",
+    "buy_me_a_coffee": "Buy Me A Coffee",
+    "other_ways_to_contribute": "Other ways to contribute"
   }
 }

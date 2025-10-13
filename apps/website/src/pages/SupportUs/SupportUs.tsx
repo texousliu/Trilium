@@ -6,13 +6,14 @@ import buyMeACoffeeIcon from "../../assets/boxicons/bx-buy-me-a-coffee.svg?raw";
 import Button, { Link } from "../../components/Button.js";
 import Card from "../../components/Card.js";
 import { usePageTitle } from "../../hooks.js";
+import { t } from "../../i18n.js";
 
 export default function Donate() {
-    usePageTitle("Support us");
+    usePageTitle(t("support_us.title"));
 
     return (
         <>
-            <Section title="Support us" className="donate fill">
+            <Section title={t("support_us.title")} className="donate fill">
                 <div class="grid-2-cols">
                     <Card title="Financial donations">
                         <p>
@@ -27,7 +28,7 @@ export default function Donate() {
                                 <Button
                                     iconSvg={githubIcon}
                                     href="https://github.com/sponsors/eliandoran"
-                                    text="GitHub Sponsors"
+                                    text={t("support_us.github_sponsors")}
                                     openExternally
                                 />
                             </li>
@@ -36,7 +37,7 @@ export default function Donate() {
                                 <Button
                                     iconSvg={paypalIcon}
                                     href="https://paypal.me/eliandoran"
-                                    text="PayPal"
+                                    text={t("support_us.paypal")}
                                     openExternally
                                     outline
                                 />
@@ -46,7 +47,7 @@ export default function Donate() {
                                 <Button
                                     iconSvg={buyMeACoffeeIcon}
                                     href="https://buymeacoffee.com/eliandoran"
-                                    text="Buy Me A Coffee"
+                                    text={t("support_us.buy_me_a_coffee")}
                                     openExternally
                                     outline
                                 />
@@ -54,7 +55,7 @@ export default function Donate() {
                         </ul>
                     </Card>
 
-                    <Card title="Other ways to contribute">
+                    <Card title={t("support_us.other_ways_to_contribute")}>
                         <ul>
                             <li>Translate the application into your native language via <Link href="https://hosted.weblate.org/engage/trilium/" openExternally>Weblate</Link>.</li>
                             <li>Interact with the community on <Link href="https://github.com/orgs/TriliumNext/discussions" openExternally>GitHub Discussions</Link> or on <Link href="https://matrix.to/#/#triliumnext:matrix.org" openExternally>Matrix</Link>.</li>
