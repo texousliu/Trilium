@@ -1,7 +1,7 @@
 {
     "get-started": {
         "title": "Primii pași",
-        "desktop_title": "Descărcați aplicația desktop (v{{version}})",
+        "desktop_title": "Descărcați aplicația desktop (v{{version}}){{version}}",
         "architecture": "Arhitectură:",
         "older_releases": "Versiuni mai vechi",
         "server_title": "Versiunea server, pentru acces pe mai multe dispozitive"
@@ -84,6 +84,95 @@
         "server_answer": "Nu, server-ul permite accesarea printr-un browser web și coordonează sincronizarea dacă aveți dispozitive multiple. Pentru început este suficient să descărcați aplicația de desktop și s-o folosiți.",
         "scaling_question": "Cât de bine suportă aplicația un număr mare de notițe?",
         "scaling_answer": "În funcție de modul de utilizare, aplicația ar trebui să suporte cel puțin 100.000 de notițe fără probleme. De avut în vedere faptul că procesul de sincronizare poate eșua dacă se încarcă prea multe fișiere mari (ex. 1 GB per fișier) deoarece Trilium este prevăzut mai mult ca o aplicație de bază de cunoștințe decât de stocare a fișierelor (precum NextCloud, spre exemplu).",
-        "network_share_question": "Pot partaja baza mea de date pe rețea?"
+        "network_share_question": "Pot partaja baza mea de date pe rețea?",
+        "network_share_answer": "Nu, nu este o idee bună să partajați o bază de date SQLite pe rețea. Deși uneori poate funcționa, sunt șanse mari ca baza de date să se corupă din cauza sistemului de blocare al fișierului la nivel de rețea.",
+        "security_question": "Cum sunt datele mele protejate?",
+        "security_answer": "În mod implicit, notițele nu sunt criptate și pot fi citite direct din baza de date. Odată ce o notiță este marcată drept protejată, conținutul este criptat folosind AES-128-CBC."
+    },
+    "final_cta": {
+        "title": "Gata de a folosi Trilium Notes?",
+        "description": "Construiți-vă baza de cunoștințe personală cu funcții puternice și intimitate maximă.",
+        "get_started": "Începe"
+    },
+    "components": {
+        "link_learn_more": "Mai multe detalii...",
+        "list_with_screenshot_alt": "Captură de ecran a funcției selectate"
+    },
+    "download_now": {
+        "text": "Descărcați acum ",
+        "platform_big": "v{{version}} pentru {{platform}}",
+        "platform_small": "pentru {{platform}}",
+        "linux_big": "v{{version}} pentru Linux",
+        "linux_small": "pentru Linux",
+        "more_platforms": "Mai multe platforme și instalarea server-ului"
+    },
+    "footer": {
+        "copyright_and_the": " și ",
+        "copyright_community": "comunitatea"
+    },
+    "support_us": {
+        "title": "Sprijină-ne",
+        "financial_donations_title": "Donații financiare",
+        "financial_donations_description": "Trilium este construit și menținut prin <Link>sute de ore de muncă</Link>. Sprijinul dvs. ne ajută să-l menținem open-source, să îmbunătățim funcțiile și să acoperim costuri precum găzduirea.",
+        "financial_donations_cta": "Considerați sprijinirea dezvoltatorului principal al aplicației (<Link>eliandoran</Link>) prin:",
+        "github_sponsors": "Sponsori GitHub"
+    },
+    "contribute": {
+        "title": "Alte modalități de a contribui",
+        "way_translate": "Traduceți aplicația într-o limbă străină prin <Link>Weblate</Link>.",
+        "way_community": "Interacționați cu comunitatea pe <Discussions>Discuții GitHub</Discussions> sau pe <Matrix>Matrix</Matrix>.",
+        "way_reports": "Raportați bug-uri prin <Link>GitHub Issues</Link>.",
+        "way_document": "Îmbunătățiți documentația prin a ne informa de lacune în documentație sau prin a contribui ghiduri, întrebări frecvente și tutoriale.",
+        "way_market": "Informații prietenii, colegii despre Trilium Notes sau prin blog-uri și social media."
+    },
+    "404": {
+        "title": "404: Nu s-a găsit pagina",
+        "description": "Pagina pe care ați căutat-o nu a putut fi găsită. Posibil să fi fost ștearsă sau URL-ul să fie incorect."
+    },
+    "download_helper_desktop_windows": {
+        "title_x64": "Windows 64 biți",
+        "title_arm64": "Windows pe ARM",
+        "description_x64": "Compatibil cu dispozitive Intel sau AMD ce rulează Windows 10 și 11.",
+        "description_arm64": "Compatibil cu dispozitive ARM (ex. cu Qualcomm Snapdragon).",
+        "quick_start": "Instalare prin Winget:",
+        "download_exe": "Descarcă Installer (.exe)",
+        "download_zip": "Portabil (.zip)",
+        "download_scoop": "Scoop"
+    },
+    "download_helper_desktop_linux": {
+        "title_x64": "Linux 64 biți",
+        "title_arm64": "Linux pe ARM",
+        "description_x64": "Pentru majoritatea distribuțiilor, compatibilă cu arhitectura x86_64.",
+        "description_arm64": "Pentru distribuțiile bazate pe ARM, compatibilă cu arhitectura aarch64.",
+        "quick_start": "Selectați un format de împachetare potrivit pentru distribuția dvs.:",
+        "download_deb": ".deb",
+        "download_zip": "Portabil (.zip)"
+    },
+    "download_helper_desktop_macos": {
+        "title_x64": "macOS pentru Intel",
+        "title_arm64": "macOS pentru Apple Silicon",
+        "description_x64": "Pentru Mac-uri bazate pe Intel ce rulează macOS Big Sur sau mai nou.",
+        "description_arm64": "Pentru Mac-uri bazate pe Apple Silicon, precum cele cu chip-uri M1, M2.",
+        "quick_start": "Instalați prin Homebrew:",
+        "download_dmg": "Descarcă instalatorul (.dmg)",
+        "download_homebrew_cask": "Homebrew Cask",
+        "download_zip": "Portabil (.zip)"
+    },
+    "download_helper_server_docker": {
+        "title": "Găzduit în regim propriu prin Docker",
+        "description": "Lansați rapid o instanță pe Windows , Linux sau macOS folosind un container Docker.",
+        "download_dockerhub": "Docker Hub"
+    },
+    "download_helper_server_linux": {
+        "title": "Găzduit în regim propriu pe Linux",
+        "description": "Rulați Trilium Notes pe propriul server sau VPS, compatibil cu majoritatea distribuțiilor.",
+        "download_tar_x64": "x64 (.tar.xz)",
+        "download_nixos": "Modul NixOS"
+    },
+    "download_helper_server_hosted": {
+        "title": "Găzduire contra cost",
+        "description": "Trilium Notes găzduit pe PikaPods, un serviciu plătit pentru acces facil. Nu este direct afiliat cu echipa Trilium.",
+        "download_pikapod": "Folosește PikaPods",
+        "download_triliumcc": "Alternativ, trilium.cc"
     }
 }
