@@ -9,17 +9,17 @@ rilis)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![Status
 terjemahan](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[English](./README.md) | [Chinese (Simplified)](./docs/README-ZH_CN.md) |
-[Chinese (Traditional)](./docs/README-ZH_TW.md) | [Russian](./docs/README-ru.md)
-| [Japanese](./docs/README-ja.md) | [Italian](./docs/README-it.md) |
-[Spanish](./docs/README-es.md)
+[Inggris](./README.md) | [Tiongkok (Sederhana)](./docs/README-ZH_CN.md) |
+[Tiongkok (Tradisional)](./docs/README-ZH_TW.md) | [Rusia](./docs/README-ru.md)
+| [Jepang](./docs/README-ja.md) | [Italia](./docs/README-it.md) |
+[Spanyol](./docs/README-es.md)
 
 Trilium Notes adalah aplikasi pencatatan hierarkis lintas platform yang gratis
 dan sumber terbuka dengan fokus untuk mengembangkan pengetahuan pribadi yang
 luas.
 
-See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for
-quick overview:
+Lihat [tangkapan layar](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)
+untuk ikhtisar cepat:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
@@ -42,14 +42,14 @@ Dokumentasi kami tersedia dalam berbagai format:
   Instalasi](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
 - [Pengaturan
   Docker](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
-- [Upgrading
+- [Pembaharuan
   TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
-- [Basic Concepts and
-  Features](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
-- [Patterns of Personal Knowledge
-  Base](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
+- [Konsep dan Fitur
+  Dasar](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
+- [Pola Basis Pengetahuan
+  Pribadi](https://triliumnext.github.io/Docs/Wiki/patterns-of-personal-knowledge)
 
-## 🎁 Features
+## 🎁 Fitur
 
 * Notes can be arranged into arbitrarily deep tree. Single note can be placed
   into multiple places in the tree (see
