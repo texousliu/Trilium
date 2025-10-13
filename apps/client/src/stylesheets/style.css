@@ -1008,7 +1008,7 @@ svg.ck-icon .note-icon {
     --ck-content-line-height: var(--bs-body-line-height);
 }
 
-.ck-content .table table th {
+:root .ck-content .table table:not(.layout-table) th {
     background-color: var(--accented-background-color);
 }
 
