@@ -51,13 +51,6 @@
     "mermaid_description": "Create diagrams such as flowcharts, class & sequence diagrams, Gantt charts and many more, using the Mermaid syntax.",
     "mindmap_title": "Mindmap",
     "mindmap_description": "Organize your thoughts visually or do a brainstorming session.",
-    "others_prefix": "and others: ",
-    "others_separator": ", ",
-    "others_note_map": "note map",
-    "others_relation_map": "relation map",
-    "others_saved_searches": "saved searches",
-    "others_render_note": "render note",
-    "others_webview": "web views",
     "others_list": "and others: <0>note map</0>, <1>relation map</1>, <2>saved searches</2>, <3>render note</3>, and <4>web views</4>."
   },
   "extensibility_benefits": {
