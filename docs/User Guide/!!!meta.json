@@ -230,7 +230,45 @@
                             ],
                             "format": "markdown",
                             "dataFileName": "Desktop Installation.md",
-                            "attachments": []
+                            "attachments": [],
+                            "dirFileName": "Desktop Installation",
+                            "children": [
+                                {
+                                    "isClone": false,
+                                    "noteId": "nRqcgfTb97uV",
+                                    "notePath": [
+                                        "pOsGYCXsbNQG",
+                                        "Otzi9La2YAUX",
+                                        "poXkQfguuA0U",
+                                        "nRqcgfTb97uV"
+                                    ],
+                                    "title": "Using the desktop application as a server",
+                                    "notePosition": 10,
+                                    "prefix": null,
+                                    "isExpanded": false,
+                                    "type": "text",
+                                    "mime": "text/html",
+                                    "attributes": [
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "WOcw2SLH6tbX",
+                                            "isInheritable": false,
+                                            "position": 10
+                                        },
+                                        {
+                                            "type": "relation",
+                                            "name": "internalLink",
+                                            "value": "x3i7MxGccDuM",
+                                            "isInheritable": false,
+                                            "position": 20
+                                        }
+                                    ],
+                                    "format": "markdown",
+                                    "dataFileName": "Using the desktop application .md",
+                                    "attachments": []
+                                }
+                            ]
                         },
                         {
                             "isClone": false,
@@ -1039,28 +1077,18 @@
                                     "value": "bx bx-mobile-alt",
                                     "isInheritable": false,
                                     "position": 60
+                                },
+                                {
+                                    "type": "relation",
+                                    "name": "internalLink",
+                                    "value": "nRqcgfTb97uV",
+                                    "isInheritable": false,
+                                    "position": 70
                                 }
                             ],
                             "format": "markdown",
                             "dataFileName": "Mobile Frontend.md",
-                            "attachments": [
-                                {
-                                    "attachmentId": "CyswsZZ3GwtQ",
-                                    "title": "mobile-tablet.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "Mobile Frontend_mobile-tab.png"
-                                },
-                                {
-                                    "attachmentId": "txzBbmMtgsrx",
-                                    "title": "mobile-smartphone.png",
-                                    "role": "image",
-                                    "mime": "image/png",
-                                    "position": 10,
-                                    "dataFileName": "Mobile Frontend_mobile-sma.png"
-                                }
-                            ]
+                            "attachments": []
                         },
                         {
                             "isClone": false,
