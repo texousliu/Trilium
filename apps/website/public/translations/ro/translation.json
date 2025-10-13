@@ -1,1 +1,55 @@
-{}
+{
+    "get-started": {
+        "title": "Primii pași",
+        "desktop_title": "Descărcați aplicația desktop (v{{version}})",
+        "architecture": "Arhitectură:",
+        "older_releases": "Versiuni mai vechi",
+        "server_title": "Versiunea server, pentru acces pe mai multe dispozitive"
+    },
+    "hero_section": {
+        "title": "Organizați-vă gândurile. Construiți-vă propria bază de cunoștințe digitală.",
+        "subtitle": "Trilium este o aplicație open-source pentru notițe și pentru organizarea unei baze de cunoștințe personală. Se poate folosi local pe desktop sau se poate sincroniza cu un server găzduit de dvs. pentru a putea accesa notițele de oriunde.",
+        "get_started": "Primii pași",
+        "github": "GitHub",
+        "dockerhub": "Docker Hub",
+        "screenshot_alt": "Captură de ecran a aplicației de desktop Trilium Notes"
+    },
+    "organization_benefits": {
+        "title": "Funcții de organizare",
+        "note_structure_title": "Structura notițelor",
+        "note_structure_description": "Notițele pot fi aranjate ierarhic. Nu este nevoie de dosare, deoarece fiecare notiță poate conține sub-notițe. O singură notiță poate fi adăugată în mai multe locuri în ierarhie.",
+        "attributes_title": "Etichete și relații pentru notițe",
+        "attributes_description": "Folosiți relațiile dintre notițe sau adăugați etichete pentru o categorizare ușoară. Folosiți atribute promovate pentru a introduce informații structurate ce pot fi utilizate ulterior în tabele sau table Kanban.",
+        "hoisting_title": "Spații de lucru și focalizare",
+        "hoisting_description": "Separați cu ușurință notițele personale și de muncă prin gruparea lor într-un spațiu de lucru, ce focalizează arborele de notițe astfel încât afișează un anumit set de notițe."
+    },
+    "productivity_benefits": {
+        "title": "Productivitate și siguranță",
+        "revisions_title": "Revizii ale notițelor",
+        "revisions_content": "Notițele sunt salvate periodic în fundal, iar reviziile acestora pot fi utilizate pentru comparație sau pentru a anula modificări accidentale. Reviziile pot fi create și manual.",
+        "sync_title": "Sincronizare",
+        "sync_content": "Folosiți o instanță găzduită de dvs. sau în cloud pentru a putea sincroniza rapid notițele între mai multe dispozitive și pentru a putea să le accesați utilizând telefonul mobil (prin PWA).",
+        "protected_notes_title": "Notițe protejate",
+        "protected_notes_content": "Protejați informațiile personale prin criptarea acestora în spatele unei sesiuni protejate prin parolă.",
+        "jump_to_title": "Căutare și comenzi rapide",
+        "jump_to_content": "Navigați rapid printre notițe sau comenzi căutând după numele acestora, având căutare de tip fuzzy pentru a ignora greșeli de tastare sau diferențe minore.",
+        "search_title": "Căutare performantă",
+        "search_content": "Căutați în interiorul notițelor și reduceți numărul de rezultate prin filtrarea după notița părinte, sau după adâncime.",
+        "web_clipper_title": "Clipper web",
+        "web_clipper_content": "Preluați pagini web (sau capturi de ecran), care vor apărea direct în Trilium utilizând extensia de browser „Clipper web”."
+    },
+    "note_types": {
+        "text_title": "Notițe de tip text",
+        "text_description": "Aceste notițe sunt editate printr-un editor vizual (WYSIWYG), cu suport pentru tabele, imagini, expresii matematice și blocuri de cod cu evidențierea sintaxei. Formatați rapid textul folosind sintaxă similară cu Markdown sau folosind comenzi la tasta slash.",
+        "code_title": "Notițe de tip cod",
+        "code_description": "Stocați secvențe mari de cod sau script-uri utilizând un editor dedicat, cu evidențierea sintaxei pentru multe limbaje de programare și multiple teme de culori.",
+        "file_title": "Notițe de tip fișier",
+        "file_description": "Adăugați fișiere multimedia precum PDF-uri, imagini și video-uri cu previzualizare direct în aplicație.",
+        "canvas_title": "Schițe",
+        "canvas_description": "Aranjați forme geometrice, imagini și text pe o schiță infinită, utilizând aceeași tehnologie din spatele excalidraw.com. Ideală pentru diagrame, desene și planificare vizuală.",
+        "mermaid_title": "Diagrame Mermaid",
+        "mermaid_description": "Creați diagrame precum flowchart-uri, diagrame de secvență sau de clase, Gantt și multe altele, folosind sintaxa Mermaid.",
+        "mindmap_title": "Hartă mentală",
+        "mindmap_description": "Organizați-vă gândurile vizual sau organizați o sesiune de brainstorming."
+    }
+}
