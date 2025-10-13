@@ -14,6 +14,10 @@
     }
 }
 
+.layout-vertical .left-pane-toggle-button::before {
+    display: block;
+}
+
 .layout-vertical .left-pane-toggle-button.action-collapse::before {
     transform: rotate(360deg);
     animation: left-pane-toggle-button-collapse 600ms ease-in-out;
