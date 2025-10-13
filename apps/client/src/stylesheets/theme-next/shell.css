@@ -279,14 +279,11 @@ body.layout-horizontal > .horizontal {
     animation: sync-status-pulse 1s ease-in-out alternate-reverse infinite;
 }
 
-#launcher-pane .global-menu-button {
-    --hover-item-background-color: transparent;
-}
+#launcher-pane button.global-menu-button {
+    --update-badge-x-offset: 3%;
+    --update-badge-y-offset: -12%;
 
-#launcher-pane.horizontal .global-menu-button .global-menu-button-update-available {
-    inset-inline-end: -23px;
-    bottom: -22px;
-    transform: scale(0.85);
+    --hover-item-background-color: transparent;
 }
 
 .tooltip .tooltip-arrow {

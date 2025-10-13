@@ -153,6 +153,9 @@
     --launcher-pane-horiz-background-color-bgfx: #ffffffb3; /* When background effects enabled */
     --launcher-pane-horiz-border-color-bgfx: #00000026; /* When background effects enabled */
 
+    --global-menu-update-available-badge-background-color: #4fa450;
+    --global-menu-update-available-badge-color: white;
+
     --protected-session-active-icon-color: #16b516;
     --sync-status-error-pulse-color: #ff5528;
 

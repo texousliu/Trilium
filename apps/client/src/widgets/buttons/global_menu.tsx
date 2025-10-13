@@ -26,7 +26,7 @@ export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout:
     const isVerticalLayout = !isHorizontalLayout;
     const parentComponent = useContext(ParentComponent);
     const { isUpdateAvailable, latestVersion } = useTriliumUpdateStatus();
-
+    
     return (
         <Dropdown
             className="global-menu"
@@ -34,7 +34,7 @@ export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout:
             text={<>
                 {isVerticalLayout && <VerticalLayoutIcon />}
                 {isUpdateAvailable && <div class="global-menu-button-update-available">
-                    <span className="bx bx-sync global-menu-button-update-available-button" title={t("update_available.update_available")}></span>
+                    <span className="bx bxs-down-arrow-alt global-menu-button-update-available-button" title={t("update_available.update_available")}></span>
                 </div>}
             </>}
             noDropdownListStyle
@@ -58,7 +58,10 @@ export default function GlobalMenu({ isHorizontalLayout }: { isHorizontalLayout:
             <KeyboardActionMenuItem command="showHelp" icon="bx bx-help-circle" text={t("global_menu.show_help")} />
             <KeyboardActionMenuItem command="showCheatsheet" icon="bx bxs-keyboard" text={t("global_menu.show-cheatsheet")} />
             <MenuItem command="openAboutDialog" icon="bx bx-info-circle" text={t("global_menu.about")} />
-            {isUpdateAvailable && <MenuItem command={() => window.open("https://github.com/TriliumNext/Trilium/releases/latest")} icon="bx bx-sync" text={t("global_menu.update_available", { latestVersion })} /> }
+            {isUpdateAvailable &&  <>
+                <FormDropdownDivider />
+                <MenuItem command={() => window.open("https://github.com/TriliumNext/Trilium/releases/latest")} icon="bx bx-download" text={t("global_menu.update_available", { latestVersion })} />
+            </>}
             {!isElectron() && <BrowserOnlyOptions />}
         </Dropdown>
     )
