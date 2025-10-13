@@ -138,5 +138,9 @@
     "way_reports": "Report bugs via <Link>GitHub issues</Link>.",
     "way_document": "Improve the documentation by informing us on gaps in the documentation or contributing guides, FAQs or tutorials.",
     "way_market": "Spread the word: Share Trilium Notes with friends, or on blogs and social media."
+  },
+  "404": {
+    "title": "404: Not Found",
+    "description": "The page you were looking for could not be found. Maybe it was deleted or the URL is incorrect."
   }
 }
