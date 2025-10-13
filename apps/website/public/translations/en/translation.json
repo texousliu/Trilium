@@ -142,5 +142,57 @@
   "404": {
     "title": "404: Not Found",
     "description": "The page you were looking for could not be found. Maybe it was deleted or the URL is incorrect."
+  },
+  "download_helper_desktop_windows": {
+    "title_x64": "Windows 64-bit",
+    "title_arm64": "Windows on ARM",
+    "description_x64": "Compatible with Intel or AMD devices running Windows 10 and 11.",
+    "description_arm64": "Compatible with ARM devices (e.g. with Qualcomm Snapdragon).",
+    "quick_start": "To install via Winget:",
+    "download_exe": "Download Installer (.exe)",
+    "download_zip": "Portable (.zip)",
+    "download_scoop": "Scoop"
+  },
+  "download_helper_desktop_linux": {
+    "title_x64": "Linux 64-bit",
+    "title_arm64": "Linux on ARM",
+    "description_x64": "For most Linux distributions, compatible with x86_64 architecture.",
+    "description_arm64": "For ARM-based Linux distributions, compatible with aarch64 architecture.",
+    "quick_start": "Select an appropriate package format, depending on your distribution:",
+    "download_deb": ".deb",
+    "download_rpm": ".rpm",
+    "download_flatpak": ".flatpak",
+    "download_zip": "Portable (.zip)",
+    "download_nixpkgs": "nixpkgs",
+    "download_aur": "AUR"
+  },
+  "download_helper_desktop_macos": {
+    "title_x64": "macOS for Intel",
+    "title_arm64": "macOS for Apple Silicon",
+    "description_x64": "For Intel-based Macs running macOS Big Sur or later.",
+    "description_arm64": "For Apple Silicon Macs such as those with M1 and M2 chips.",
+    "quick_start": "To install via Homebrew:",
+    "download_dmg": "Download Installer (.dmg)",
+    "download_homebrew_cask": "Homebrew Cask",
+    "download_zip": "Portable (.zip)"
+  },
+  "download_helper_server_docker": {
+    "title": "Self-hosted using Docker",
+    "description": "Easily deploy on Windows, Linux or macOS using a Docker container.",
+    "download_dockerhub": "Docker Hub",
+    "download_ghcr": "ghcr.io"
+  },
+  "download_helper_server_linux": {
+    "title": "Self-hosted on Linux",
+    "description": "Deploy Trilium Notes on your own server or VPS, compatible with most distributions.",
+    "download_tar_x64": "x64 (.tar.xz)",
+    "download_tar_arm64": "ARM (.tar.xz)",
+    "download_nixos": "NixOS module"
+  },
+  "download_helper_server_hosted": {
+    "title": "Paid hosting",
+    "description": "Trilium Notes hosted on PikaPods, a paid service for easy access and management. Not directly affiliated with the Trilium team.",
+    "download_pikapod": "Set up on PikaPods",
+    "download_triliumcc": "Alternatively see trilium.cc"
   }
 }
