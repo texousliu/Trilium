@@ -181,7 +181,8 @@
     "language": "اللغة",
     "editable": "قابل للتعديل",
     "note_type": "نوع الملاحظة",
-    "basic_properties": "الخصائص الاساسية"
+    "basic_properties": "الخصائص الاساسية",
+    "configure_code_notes": "اعداد ملاحظات الكود..."
   },
   "book_properties": {
     "list": "قائمة",
@@ -256,7 +257,8 @@
     "label": "السلف",
     "depth_label": "العمق",
     "depth_doesnt_matter": "لايهم",
-    "direct_children": "العقد الفرعية المباشرة"
+    "direct_children": "العقد الفرعية المباشرة",
+    "depth_eq": "يساوي تماما {{count}}"
   },
   "limit": {
     "limit": "الحد الاقصى"
@@ -282,12 +284,15 @@
     "search_prefix": "بحث:",
     "title_column": "سلسلة البحث:",
     "search_syntax": "صياغة البحث",
-    "also_see": "انظر ايضا"
+    "also_see": "انظر ايضا",
+    "error": "خطأ في البحث: {{error}}"
   },
   "sync": {
     "title": "مزامنة",
     "force_full_sync_button": "فرض مزامنة كاملة",
-    "finished-successfully": "تم انتهاء المزامنة بنجاح."
+    "finished-successfully": "تم انتهاء المزامنة بنجاح.",
+    "full_sync_triggered": "تم تشغيل المزامنة الكاملة",
+    "failed": "فشل في المزامنة: {{message}}"
   },
   "fonts": {
     "fonts": "خطوط",
@@ -301,7 +306,13 @@
     "generic-fonts": "الخطوط العامة",
     "sans-serif": "خطوط بدون زوائد",
     "system-default": "الاعداد الافتراضي للنظام",
-    "note_detail_font": "خط تفاصيل الملاحظة"
+    "note_detail_font": "خط تفاصيل الملاحظة",
+    "note_tree_font": "خط شجرة الملاحظات",
+    "monospace_font": "خط احادي المسافة (للكود)",
+    "serif-system-fonts": "خطوط النظام المزخرفة",
+    "sans-serif-system-fonts": "خطوط النظام بدون زخرفة",
+    "monospace-system-fonts": "خطوط النظام احادية المسافة",
+    "handwriting-system-fonts": "خطوط النظام باسلوب الكتابة اليدوية"
   },
   "confirm": {
     "confirmation": "تأكيد",
@@ -546,7 +557,9 @@
     "indexing_in_progress": "جار فهرسة الملاحظات...",
     "use_advanced_context": "استخدم السياق المتقدم",
     "ai_enabled": "تمكين مميزات AI",
-    "ai_disabled": "الغاء تمكين مميزات AI"
+    "ai_disabled": "الغاء تمكين مميزات AI",
+    "enable_ai_features": "تمكين خصائص AI/LLM",
+    "enable_ai": "تمكين خصائص AI/LLM"
   },
   "code_auto_read_only_size": {
     "unit": "حروف"
@@ -621,7 +634,8 @@
     "set_password_heading": "تعيين كلمة المرور",
     "set_password": "تعيين كلمة المرور",
     "for_more_info": "لمزيد من المعلومات.",
-    "protected_session_timeout_label": "انتهت مدة الجلسة المحمية:"
+    "protected_session_timeout_label": "انتهت مدة الجلسة المحمية:",
+    "protected_session_timeout": "انتهاء مهلة الجلسة المحمية"
   },
   "shortcuts": {
     "shortcuts": "أختصارات",
@@ -858,7 +872,10 @@
     "mfa_method": "طريقة المصادقة متعددة العوامل",
     "oauth_user_account": "حساب المستخدم: ",
     "oauth_user_email": "البريد الإلكتروني للمستخدم: ",
-    "recovery_keys_used": "مستخدم: {{date}}"
+    "recovery_keys_used": "مستخدم: {{date}}",
+    "mfa_enabled": "تمكين المصادقة متعددة العوامل",
+    "recovery_keys_generate": "انشاء رموز الاسترداد",
+    "recovery_keys_regenerate": "اعادة انشاء رموز الاسترداد"
   },
   "execute_script": {
     "execute_script": "تنفيذ السكريبت"
@@ -984,7 +1001,8 @@
   "database_anonymization": {
     "title": "اخفاء هوية البيانات",
     "full_anonymization": "الاخفاء الكامل للهوية",
-    "light_anonymization": "الاخفاء الجزئي للهوية"
+    "light_anonymization": "الاخفاء الجزئي للهوية",
+    "existing_anonymized_databases": "قواعد البيانات المجهولة الحالية"
   },
   "vacuum_database": {
     "title": "تحرير مساحة قاعدة البيانات",
@@ -1165,5 +1183,8 @@
     "toggle-off": "ازالة الحماية عن الملاحظة",
     "toggle-on": "حماية الملاحظة"
   },
-  "open-help-page": "فتح صفحة المساعدة"
+  "open-help-page": "فتح صفحة المساعدة",
+  "empty": {
+    "enter_workspace": "ادخل مساحة العمل {{title}}"
+  }
 }
