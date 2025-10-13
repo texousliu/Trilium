@@ -50,6 +50,40 @@
         "mermaid_title": "Diagrame Mermaid",
         "mermaid_description": "Creați diagrame precum flowchart-uri, diagrame de secvență sau de clase, Gantt și multe altele, folosind sintaxa Mermaid.",
         "mindmap_title": "Hartă mentală",
-        "mindmap_description": "Organizați-vă gândurile vizual sau organizați o sesiune de brainstorming."
+        "mindmap_description": "Organizați-vă gândurile vizual sau organizați o sesiune de brainstorming.",
+        "others_list": "și altele: <0>hartă a notițelor</0>, <1>hartă a relațiilor</1>, <2>căutări salvate</2>, <3>randare a notițelor</3>, and <4>vizualizări web</4>."
+    },
+    "extensibility_benefits": {
+        "title": "Partajare și extensibilitate",
+        "import_export_title": "Import/export",
+        "import_export_description": "Interacționați rapid cu alte aplicații utilizând formatele Markdown, ENEX și OML.",
+        "share_title": "Publicați notițe pe Internet",
+        "share_description": "Dacă aveți o instanță de server, puteți să partajați pe Internet un set de notițe.",
+        "scripting_title": "Script-are avansată",
+        "scripting_description": "Construiți-vă propriile integrări cu Trilium utilizând widget-uri personalizate sau logică la nivel de server.",
+        "api_title": "API REST",
+        "api_description": "Interacționați cu Trilium programatic folosind API-ul REST integrat."
+    },
+    "collections": {
+        "calendar_title": "Calendar",
+        "calendar_description": "Organizați-vă evenimentele personale sau profesionale folosind un calendar, cu suport pentru evenimente pe toată ziua sau chiar pe mai multe zile. Vedeți evenimentele cu ușurință la nivel de săptămână, lună sau an. Interacțiune ușoară pentru a adăuga sau muta evenimente.",
+        "table_title": "Tabel",
+        "table_description": "Afișați și editați informații despre notițe într-o structură tabelară, cu multiple tipuri de coloane precum text, număr, bife, dată și timp, link-uri, culori și suport pentru relații. Opțional se poate afișa și structura ierarhică a notițelor în interiorul tabelului.",
+        "board_title": "Tabelă Kanban",
+        "board_description": "Organizați-vă sarcinile sau proiectele într-o tabelă Kanban cu o modalitate ușoară de a adăuga elemente și coloane noi și schimbarea stării acestora prin glisare cu mouse-ul.",
+        "geomap_title": "Hartă geografică",
+        "geomap_description": "Planificați-vă vacanțele sau marcați-vă punctele de interes direct pe o hartă geografică. Afișați traseele GPX înregistrate pentru a putea urmări itinerarii."
+    },
+    "faq": {
+        "title": "Întrebări frecvente",
+        "mobile_question": "Există o aplicație de mobil?",
+        "mobile_answer": "În momentul de față nu există o aplicație de mobil oficială. Totuși, dacă aveți o instanță de server o puteți accesa folosind un navigator web și o puteți instala ca un PWA. Pentru Android, există o aplicație neoficială denumită TriliumDroid care poate funcționa chiar și offline (similar cu aplicația de desktop).",
+        "database_question": "Unde sunt stocate datele?",
+        "database_answer": "Toate notițele sunt stocate într-o bază de date SQLite la nivelul unui dosar al aplicației. Motivul pentru care Trilium folosește o bază de date în locul de fișiere text este legat de performanță și deoarece unele funcții ar fi fost mult mai greu de replicat precum clone (aceeași notițe în mai multe locuri). Pentru a găsi folder-ul aplicației, mergeți în fereastra „Despre”.",
+        "server_question": "Am nevoie de un server să folosesc Trilium?",
+        "server_answer": "Nu, server-ul permite accesarea printr-un browser web și coordonează sincronizarea dacă aveți dispozitive multiple. Pentru început este suficient să descărcați aplicația de desktop și s-o folosiți.",
+        "scaling_question": "Cât de bine suportă aplicația un număr mare de notițe?",
+        "scaling_answer": "În funcție de modul de utilizare, aplicația ar trebui să suporte cel puțin 100.000 de notițe fără probleme. De avut în vedere faptul că procesul de sincronizare poate eșua dacă se încarcă prea multe fișiere mari (ex. 1 GB per fișier) deoarece Trilium este prevăzut mai mult ca o aplicație de bază de cunoștințe decât de stocare a fișierelor (precum NextCloud, spre exemplu).",
+        "network_share_question": "Pot partaja baza mea de date pe rețea?"
     }
 }
