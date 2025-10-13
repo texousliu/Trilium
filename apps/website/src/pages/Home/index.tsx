@@ -276,7 +276,7 @@ function FaqSection() {
     return (
         <Section className="faq" title={t("faq.title")}>
             <div class="grid-2-cols">
-                <FaqItem question={t("faq.mobile_title")}>{t("faq.mobile_answer")}</FaqItem>
+                <FaqItem question={t("faq.mobile_question")}>{t("faq.mobile_answer")}</FaqItem>
                 <FaqItem question={t("faq.database_question")}>{t("faq.database_answer")}</FaqItem>
                 <FaqItem question={t("faq.server_question")}>{t("faq.server_answer")}</FaqItem>
                 <FaqItem question={t("faq.scaling_question")}>{t("faq.scaling_answer")}</FaqItem>
