@@ -41,8 +41,8 @@ quick overview:
   التثبيت](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation.md)
 - [اعداد
   Docker](./docs/User%20Guide/User%20Guide/Installation%20&%20Setup/Server%20Installation/1.%20Installing%20the%20server/Using%20Docker.md)
-- [Upgrading
-  TriliumNext](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
+- [ترقية تريليوم
+  للملاحظات](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Upgrading%20TriliumNext.md)
 - [Basic Concepts and
   Features](./docs/User%20Guide/User%20Guide/Basic%20Concepts%20and%20Features/Notes.md)
 - [Patterns of Personal Knowledge
