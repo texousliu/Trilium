@@ -747,6 +747,13 @@
                                                     "value": "nginx-proxy-setup",
                                                     "isInheritable": false,
                                                     "position": 10
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "LLzSMXACKhUs",
+                                                    "isInheritable": false,
+                                                    "position": 20
                                                 }
                                             ],
                                             "format": "markdown",
@@ -763,7 +770,7 @@
                                                 "vcjrb3VVYPZI",
                                                 "fDLvzOx29Pfg"
                                             ],
-                                            "title": "Apache",
+                                            "title": "Apache using Docker",
                                             "notePosition": 20,
                                             "prefix": null,
                                             "isExpanded": false,
@@ -776,10 +783,53 @@
                                                     "value": "apache-proxy-setup",
                                                     "isInheritable": false,
                                                     "position": 10
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "LLzSMXACKhUs",
+                                                    "isInheritable": false,
+                                                    "position": 20
                                                 }
                                             ],
                                             "format": "markdown",
-                                            "dataFileName": "Apache.md",
+                                            "dataFileName": "Apache using Docker.md",
+                                            "attachments": []
+                                        },
+                                        {
+                                            "isClone": false,
+                                            "noteId": "LLzSMXACKhUs",
+                                            "notePath": [
+                                                "pOsGYCXsbNQG",
+                                                "Otzi9La2YAUX",
+                                                "WOcw2SLH6tbX",
+                                                "vcjrb3VVYPZI",
+                                                "LLzSMXACKhUs"
+                                            ],
+                                            "title": "Trusted proxy",
+                                            "notePosition": 30,
+                                            "prefix": null,
+                                            "isExpanded": false,
+                                            "type": "text",
+                                            "mime": "text/html",
+                                            "attributes": [
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "vcjrb3VVYPZI",
+                                                    "isInheritable": false,
+                                                    "position": 10
+                                                },
+                                                {
+                                                    "type": "relation",
+                                                    "name": "internalLink",
+                                                    "value": "Gzjqa934BdH4",
+                                                    "isInheritable": false,
+                                                    "position": 20
+                                                }
+                                            ],
+                                            "format": "markdown",
+                                            "dataFileName": "Trusted proxy.md",
                                             "attachments": []
                                         }
                                     ]

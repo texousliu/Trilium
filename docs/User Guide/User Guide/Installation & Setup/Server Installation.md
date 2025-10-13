@@ -76,4 +76,4 @@ client_max_body_size 0;
 
 ### Apache
 
-For an Apache setup, refer to the [Apache proxy setup](Server%20Installation/2.%20Reverse%20proxy/Apache.md) guide.
+For an Apache setup, refer to the [Apache proxy setup](Server%20Installation/2.%20Reverse%20proxy/Apache%20using%20Docker.md) guide.
