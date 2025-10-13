@@ -354,6 +354,7 @@
     align-items: center;
     width: 100%;
     margin: 4px;
+    background: color-mix(in srgb, var(--accent) 15%, var(--main-background-color));
     padding-inline-end: 2em;
     border: 1px solid var(--accent);
     border-radius: 6px;

@@ -2277,9 +2277,8 @@ footer.webview-footer button {
 
 .admonition {
     --accent-color: var(--card-border-color);
+    background: color-mix(in srgb, var(--accent-color) 15%, transparent);
     border: 1px solid var(--accent-color);
-    box-shadow: var(--card-box-shadow);
-    background: var(--card-background-color);
     border-radius: 0.5em;
     padding: 1em;
     margin: 1.25em 0;
