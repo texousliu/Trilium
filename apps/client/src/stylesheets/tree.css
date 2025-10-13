@@ -17,8 +17,6 @@ span.fancytree-node.fancytree-hide {
     overflow: hidden;
     margin-inline-start: 7px;
     outline: none;
-    position: relative;
-    top: 2px;
 }
 
 .fancytree-expander {
