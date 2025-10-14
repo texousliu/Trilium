@@ -73,7 +73,8 @@
     "relation": "تفاصيل العلاقة",
     "date_time": "التاريخ والوقت",
     "label_definition": "تفاصيل تعريف التصنيف",
-    "relation_definition": "تفاصيل تعريف العلاقة"
+    "relation_definition": "تفاصيل تعريف العلاقة",
+    "attr_detail_title": "عنوان تفاصيل السمة"
   },
   "rename_label": {
     "to": "الى",
@@ -165,7 +166,9 @@
     "open_sql_console": "فتح لوحة تحكم SQL",
     "open_search_history": "فتح سجل البحث",
     "show_hidden_subtree": "اظهار الشجرة الفرعية المخفية",
-    "about": "حول تريليوم للملاحظات"
+    "about": "حول تريليوم للملاحظات",
+    "open_dev_tools": "فتح ادوات المطور",
+    "show_backend_log": "اظهار سجل الخلفية"
   },
   "zpetne_odkazy": {
     "relation": "العلاقة",
@@ -415,7 +418,8 @@
     "file_size": "حجم الملف:",
     "mime": "MIME: ",
     "delete_all_button": "حذف كل المراجعات",
-    "settings": "اعدادات مراجعة الملاحظة"
+    "settings": "اعدادات مراجعة الملاحظة",
+    "diff_not_available": "المقارنة غير متوفرة."
   },
   "sort_child_notes": {
     "title": "عنوان",
@@ -428,7 +432,8 @@
     "date_modified": "تاريخ التعديل",
     "sorting_direction": "اتجاه الترتيب",
     "natural_sort": "الترتيب الطبيعي",
-    "natural_sort_language": "لغات الترتيب الطبيعي"
+    "natural_sort_language": "لغات الترتيب الطبيعي",
+    "sort_children_by": "ترتيب العناصر الفرعية حسب..."
   },
   "recent_changes": {
     "undelete_link": "الغاء الحذف",
@@ -559,10 +564,13 @@
     "ai_enabled": "تمكين مميزات AI",
     "ai_disabled": "الغاء تمكين مميزات AI",
     "enable_ai_features": "تمكين خصائص AI/LLM",
-    "enable_ai": "تمكين خصائص AI/LLM"
+    "enable_ai": "تمكين خصائص AI/LLM",
+    "reprocess_index": "اعادة بناء فهرس البحث",
+    "index_rebuilding": "جار تحسين الفهرس {{percentage}}"
   },
   "code_auto_read_only_size": {
-    "unit": "حروف"
+    "unit": "حروف",
+    "title": "الحجم التلقائي للقراءه فقط"
   },
   "code-editor-options": {
     "title": "محرر"
@@ -590,7 +598,8 @@
     "title": "نمط العنوان"
   },
   "text_auto_read_only_size": {
-    "unit": "حروف"
+    "unit": "حروف",
+    "title": "الحجم التلقائي للقراءة فقط"
   },
   "i18n": {
     "language": "لغة",
@@ -936,7 +945,8 @@
   },
   "code_buttons": {
     "execute_button_title": "تنفيذ السكريبت",
-    "save_to_note_button_title": "حفظ في الملاحظا"
+    "save_to_note_button_title": "حفظ في الملاحظا",
+    "opening_api_docs_message": "جاري فتح مستدات API..."
   },
   "hide_floating_buttons_button": {
     "button_title": "اخفاء الازرار"
@@ -1138,7 +1148,8 @@
   "mobile_detail_menu": {
     "note_revisions": "مراجعات الملاحظة",
     "insert_child_note": "ادراج ملاحظة فرعية",
-    "delete_this_note": "حذف هذه الملاحظة"
+    "delete_this_note": "حذف هذه الملاحظة",
+    "error_unrecognized_command": "امر غير معروف {{command}}"
   },
   "move_to": {
     "notes_to_move": "الملاحظات المراد نقلها",
@@ -1186,5 +1197,18 @@
   "open-help-page": "فتح صفحة المساعدة",
   "empty": {
     "enter_workspace": "ادخل مساحة العمل {{title}}"
+  },
+  "attribute_editor": {
+    "save_attributes": "حفظ السمات <enter>"
+  },
+  "zen_mode": {
+    "button_exit": "الخروج من وضع Zen"
+  },
+  "attachment_erasure_timeout": {
+    "attachment_erasure_timeout": "مهلة مسح المرفقات"
+  },
+  "note_erasure_timeout": {
+    "note_erasure_timeout_title": "مهلة مسح الملاحظة",
+    "erase_notes_after": "مسح الملاحظات بعد:"
   }
 }

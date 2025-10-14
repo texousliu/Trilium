@@ -269,8 +269,10 @@
     "date-and-time": "Data e ora",
     "path": "Percorso",
     "database_backed_up_to": "Il database è stato archiviato in {{backupFilePath}}",
-    "enable_daily_backup": "Abilita le archiviazioni giornaliere",
-    "no_backup_yet": "Ancora nessuna archiviazione"
+    "enable_daily_backup": "Abilita i backup giornalieri",
+    "no_backup_yet": "Ancora nessuna archiviazione",
+    "automatic_backup": "Backup Automatico",
+    "automatic_backup_description": "Trilium può eseguire automaticamente il backup del database:"
   },
   "backend_log": {
     "refresh": "Aggiorna"
@@ -352,5 +354,18 @@
     "notSet": "non impostato",
     "goBackForwards": "indietro/avanti nella cronologia",
     "showJumpToNoteDialog": "mostra <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">la finestra di dialogo \"Salta alla nota\"<a>"
+  },
+  "i18n": {
+    "saturday": "Sabato",
+    "sunday": "Domenica",
+    "first-week-of-the-year": "Prima settimana dell'anno",
+    "first-week-contains-first-day": "La prima settimana contiene il primo giorno dell'anno",
+    "first-week-contains-first-thursday": "La prima settimana contiene il primo giovedì dell'anno",
+    "first-week-has-minimum-days": "La prima settimana ha giorni ridotti",
+    "min-days-in-first-week": "Giorni minimi nella prima settimana",
+    "first-week-info": "La prima settimana che contiene il primo giovedì dell'anno si basa su <a href=\"https://en.wikipedia.org/wiki/ISO_week_date#First_week\">ISO 8601</a> standard.",
+    "first-week-warning": "La modifica delle opzioni della prima settimana può causare duplicati con le note settimanali esistenti e queste ultime non verranno aggiornate di conseguenza.",
+    "formatting-locale": "Formato data e numero",
+    "formatting-locale-auto": "In base alla lingua dell'applicazione"
   }
 }
