@@ -115,7 +115,9 @@
         "financial_donations_title": "Donații financiare",
         "financial_donations_description": "Trilium este construit și menținut prin <Link>sute de ore de muncă</Link>. Sprijinul dvs. ne ajută să-l menținem open-source, să îmbunătățim funcțiile și să acoperim costuri precum găzduirea.",
         "financial_donations_cta": "Considerați sprijinirea dezvoltatorului principal al aplicației (<Link>eliandoran</Link>) prin:",
-        "github_sponsors": "Sponsori GitHub"
+        "github_sponsors": "Sponsori GitHub",
+        "paypal": "PayPal",
+        "buy_me_a_coffee": "Buy Me A Coffee"
     },
     "contribute": {
         "title": "Alte modalități de a contribui",
@@ -174,5 +176,11 @@
         "description": "Trilium Notes găzduit pe PikaPods, un serviciu plătit pentru acces facil. Nu este direct afiliat cu echipa Trilium.",
         "download_pikapod": "Folosește PikaPods",
         "download_triliumcc": "Alternativ, trilium.cc"
+    },
+    "social_buttons": {
+        "github": "GitHub",
+        "github_discussions": "GitHub Discussions",
+        "matrix": "Matrix",
+        "reddit": "Reddit"
     }
 }
