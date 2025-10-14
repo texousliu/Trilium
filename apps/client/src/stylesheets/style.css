@@ -1978,6 +1978,10 @@ body.electron.platform-darwin:not(.native-titlebar) .tab-row-container {
     -webkit-app-region: drag;
 }
 
+body.electron.platform-darwin:not(.native-titlebar) #tab-row-left-spacer {
+    width: 80px;
+}
+
 .tab-row-widget {
     padding-inline-end: calc(100vw - env(titlebar-area-width, 100vw));
 }
