@@ -310,6 +310,7 @@ function NoteLanguageSwitch({ note }: { note?: FNote | null }) {
                 extraChildren={(
                     <FormListItem
                         onClick={() => setModalShown(true)}
+                        icon="bx bx-cog"
                     >{t("note_language.configure-languages")}</FormListItem>
                 )}
             >
