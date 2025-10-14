@@ -1,0 +1,48 @@
+:root .excalidraw {
+    --ui-font: var(--main-font-family);
+
+
+    /* Button hover background color */
+    --button-hover-bg: var(--hover-item-background-color);
+    --color-surface-high: var(--hover-item-background-color);
+
+
+    --button-active-border: transparent;
+    --color-brand-active: transparent;
+
+    --color-surface-mid: transparent;
+    --color-surface-low: transparent;
+
+    /* Selected button icon fill color */
+    --color-on-primary-container: var(--ck-editor-toolbar-button-on-color);
+    --color-primary: var(--ck-editor-toolbar-button-on-color);
+
+    /* Selected button icon background color */
+    --color-surface-primary-container: var(--ck-editor-toolbar-button-on-background);
+    --color-primary-light: var(--ck-editor-toolbar-button-on-background);
+
+    --island-bg-color: var(--floating-button-background-color);
+
+}
+
+.excalidraw .Island,
+.excalidraw .zoom-actions,
+.undo-redo-buttons {
+    box-shadow: 1px 1px 1px var(--floating-button-shadow-color);
+    backdrop-filter: blur(10px) saturate(6);
+}
+
+:root .excalidraw .main-menu-trigger,
+:root .excalidraw .sidebar-trigger,
+:root .excalidraw .help-icon  {
+    box-shadow: none;
+}
+
+/* Selected color outline */
+:root .excalidraw .color-picker__button.active .color-picker__button-outline {
+    box-shadow: 0 0 0 2px var(--input-focus-outline-color)
+}
+
+:root .excalidraw .buttonList label.active {
+    border-color: transparent;
+}

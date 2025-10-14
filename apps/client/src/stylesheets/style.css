@@ -371,7 +371,8 @@ button kbd {
 }
 
 body.desktop .dropdown-menu,
-body.desktop .tabulator-popup-container {
+body.desktop .tabulator-popup-container,
+:root .excalidraw .dropdown-menu .dropdown-menu-container {
     border: 1px solid var(--dropdown-border-color);
     column-rule: 1px solid var(--dropdown-border-color);
     box-shadow: 0px 10px 20px rgba(0, 0, 0, var(--dropdown-shadow-opacity));
