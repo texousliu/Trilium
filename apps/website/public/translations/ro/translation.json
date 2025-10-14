@@ -1,7 +1,7 @@
 {
     "get-started": {
         "title": "Primii pași",
-        "desktop_title": "Descărcați aplicația desktop (v{{version}}){{version}}",
+        "desktop_title": "Descărcați aplicația desktop (v{{version}})",
         "architecture": "Arhitectură:",
         "older_releases": "Versiuni mai vechi",
         "server_title": "Versiunea server, pentru acces pe mai multe dispozitive"
@@ -51,7 +51,7 @@
         "mermaid_description": "Creați diagrame precum flowchart-uri, diagrame de secvență sau de clase, Gantt și multe altele, folosind sintaxa Mermaid.",
         "mindmap_title": "Hartă mentală",
         "mindmap_description": "Organizați-vă gândurile vizual sau organizați o sesiune de brainstorming.",
-        "others_list": "și altele: <0>hartă a notițelor</0>, <1>hartă a relațiilor</1>, <2>căutări salvate</2>, <3>randare a notițelor</3>, and <4>vizualizări web</4>."
+        "others_list": "și altele: <0>hartă a notițelor</0>, <1>hartă a relațiilor</1>, <2>căutări salvate</2>, <3>randare a notițelor</3>, și <4>vizualizări web</4>."
     },
     "extensibility_benefits": {
         "title": "Partajare și extensibilitate",
@@ -123,7 +123,7 @@
         "way_community": "Interacționați cu comunitatea pe <Discussions>Discuții GitHub</Discussions> sau pe <Matrix>Matrix</Matrix>.",
         "way_reports": "Raportați bug-uri prin <Link>GitHub Issues</Link>.",
         "way_document": "Îmbunătățiți documentația prin a ne informa de lacune în documentație sau prin a contribui ghiduri, întrebări frecvente și tutoriale.",
-        "way_market": "Informații prietenii, colegii despre Trilium Notes sau prin blog-uri și social media."
+        "way_market": "Informați-vă prietenii, colegii despre Trilium Notes sau prin blog-uri și social media."
     },
     "404": {
         "title": "404: Nu s-a găsit pagina",
@@ -160,7 +160,7 @@
     },
     "download_helper_server_docker": {
         "title": "Găzduit în regim propriu prin Docker",
-        "description": "Lansați rapid o instanță pe Windows , Linux sau macOS folosind un container Docker.",
+        "description": "Lansați rapid o instanță pe Windows, Linux sau macOS folosind un container Docker.",
         "download_dockerhub": "Docker Hub"
     },
     "download_helper_server_linux": {
