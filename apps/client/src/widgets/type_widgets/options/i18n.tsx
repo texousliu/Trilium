@@ -1,4 +1,4 @@
-import { useMemo } from "preact/hooks";
+import { useMemo, useState } from "preact/hooks";
 import { getAvailableLocales, t } from "../../../services/i18n";
 import FormSelect from "../../react/FormSelect";
 import OptionsRow from "./components/OptionsRow";
@@ -12,6 +12,9 @@ import RawHtml from "../../react/RawHtml";
 import Admonition from "../../react/Admonition";
 import Button from "../../react/Button";
 import CheckboxList from "./components/CheckboxList";
+import FormDropdownList from "../../react/FormDropdownList";
+import Dropdown from "../../react/Dropdown";
+import { FormListItem } from "../../react/FormList";
 
 export default function InternationalizationOptions() {
     return (
@@ -57,12 +60,20 @@ function LocalizationOptions() {
 }
 
 function LocaleSelector({ id, locales, currentValue, onChange }: { id?: string; locales: Locale[], currentValue: string, onChange: (newLocale: string) => void }) {
-    return <FormSelect
-        id={id}
-        values={locales}
-        keyProperty="id" titleProperty="name"
-        currentValue={currentValue} onChange={onChange}
-    />;
+    const [ activeLocale, setActiveLocale ] = useState(locales.find(l => l.id === currentValue));
+    return (
+        <Dropdown text={activeLocale?.name}>
+            {locales.map(locale => (
+                <FormListItem
+                    checked={locale === activeLocale }
+                    onClick={() => {
+                        setActiveLocale(locale);
+                        onChange(locale.id);
+                    }}
+                >{locale.name}</FormListItem>
+            ))}
+        </Dropdown>
+    )
 }
 
 function DateSettings() {
