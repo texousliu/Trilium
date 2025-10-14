@@ -1,3 +1,14 @@
+<div align="center">
+	<sup>Special thanks to:</sup><br />
+	<a href="https://go.warp.dev/Trilium" target="_blank">		
+		<img alt="Warp sponsorship" width="400" src="https://github.com/warpdotdev/brand-assets/blob/main/Github/Sponsor/Warp-Github-LG-03.png"><br />
+		Warp, built for coding with multiple AI agents<br />
+	</a>
+  <sup>Available for macOS, Linux and Windows</sup>
+</div>
+
+<hr />
+
 # Trilium Notes
 
 ![Sponsori prin GitHub](https://img.shields.io/github/sponsors/eliandoran)
