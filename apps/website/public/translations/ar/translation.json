@@ -1,1 +1,9 @@
-{}
+{
+    "download_helper_server_linux": {
+        "download_tar_arm64": "بصيغة ARM (.tar.xz)",
+        "download_nixos": "مكون NixOS"
+    },
+    "download_helper_server_hosted": {
+        "title": "استضافة مدفوعة"
+    }
+}
