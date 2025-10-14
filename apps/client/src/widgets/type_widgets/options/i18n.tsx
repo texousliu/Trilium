@@ -62,7 +62,7 @@ function LocalizationOptions() {
 function LocaleSelector({ id, locales, currentValue, onChange }: { id?: string; locales: Locale[], currentValue: string, onChange: (newLocale: string) => void }) {
     const [ activeLocale, setActiveLocale ] = useState(locales.find(l => l.id === currentValue));
     return (
-        <Dropdown text={activeLocale?.name}>
+        <Dropdown id={id} text={activeLocale?.name}>
             {locales.map(locale => (
                 <FormListItem
                     checked={locale === activeLocale }
