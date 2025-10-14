@@ -47,7 +47,6 @@ const UNSORTED_LOCALES = [
         id: "ar",
         name: "اَلْعَرَبِيَّةُ",
         rtl: true,
-        devOnly: true,
         electronLocale: "ar"
     },
     { // Hebrew
