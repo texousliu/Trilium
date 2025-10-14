@@ -1,20 +1,18 @@
-import { useMemo, useState } from "preact/hooks";
+import { useMemo } from "preact/hooks";
 import { getAvailableLocales, t } from "../../../services/i18n";
 import FormSelect from "../../react/FormSelect";
 import OptionsRow from "./components/OptionsRow";
 import OptionsSection from "./components/OptionsSection";
 import { useTriliumOption, useTriliumOptionJson } from "../../react/hooks";
 import type { Locale } from "@triliumnext/commons";
-import { isElectron, restartDesktopApp } from "../../../services/utils";
-import FormRadioGroup, { FormInlineRadioGroup } from "../../react/FormRadioGroup";
+import { restartDesktopApp } from "../../../services/utils";
+import FormRadioGroup from "../../react/FormRadioGroup";
 import FormText from "../../react/FormText";
 import RawHtml from "../../react/RawHtml";
 import Admonition from "../../react/Admonition";
 import Button from "../../react/Button";
 import CheckboxList from "./components/CheckboxList";
-import FormDropdownList from "../../react/FormDropdownList";
-import Dropdown from "../../react/Dropdown";
-import { FormListItem } from "../../react/FormList";
+import { LocaleSelector } from "./components/LocaleSelector";
 
 export default function InternationalizationOptions() {
     return (
@@ -35,7 +33,6 @@ function LocalizationOptions() {
                 return true;
             }),
             formattingLocales: [
-                { id: "", name: t("i18n.formatting-locale-auto") },
                 ...allLocales.filter(locale => locale.electronLocale)
             ]
         }
@@ -51,28 +48,11 @@ function LocalizationOptions() {
             </OptionsRow>
 
             {<OptionsRow name="formatting-locale" label={t("i18n.formatting-locale")}>
-                <LocaleSelector locales={contentLocales} currentValue={formattingLocale} onChange={setFormattingLocale} />
+                <LocaleSelector locales={contentLocales} currentValue={formattingLocale} onChange={setFormattingLocale} defaultLocale={{ id: "", name: t("i18n.formatting-locale-auto") }} />
             </OptionsRow>}
 
             <DateSettings />
         </OptionsSection>
-    )
-}
-
-function LocaleSelector({ id, locales, currentValue, onChange }: { id?: string; locales: Locale[], currentValue: string, onChange: (newLocale: string) => void }) {
-    const [ activeLocale, setActiveLocale ] = useState(locales.find(l => l.id === currentValue));
-    return (
-        <Dropdown id={id} text={activeLocale?.name}>
-            {locales.map(locale => (
-                <FormListItem
-                    checked={locale === activeLocale }
-                    onClick={() => {
-                        setActiveLocale(locale);
-                        onChange(locale.id);
-                    }}
-                >{locale.name}</FormListItem>
-            ))}
-        </Dropdown>
     )
 }
 
