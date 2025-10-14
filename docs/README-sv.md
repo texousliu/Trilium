@@ -9,10 +9,10 @@ releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![Translation
 status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
-[English](./README.md) | [Chinese (Simplified)](./docs/README-ZH_CN.md) |
-[Chinese (Traditional)](./docs/README-ZH_TW.md) | [Russian](./docs/README-ru.md)
-| [Japanese](./docs/README-ja.md) | [Italian](./docs/README-it.md) |
-[Spanish](./docs/README-es.md)
+[Engelska](./README.md) | [Kinesiska (Förenklad)](./docs/README-ZH_CN.md) |
+[Kinesiska (Traditionell)](./docs/README-ZH_TW.md) |
+[Ryska](./docs/README-ru.md) | [Japanska](./docs/README-ja.md) |
+[Italienska](./docs/README-it.md) | [Spanska](./docs/README-es.md)
 
 Trilium Notes is a free and open-source, cross-platform hierarchical note taking
 application with focus on building large personal knowledge bases.
