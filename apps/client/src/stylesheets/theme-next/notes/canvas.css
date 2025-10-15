@@ -25,7 +25,7 @@
 
 }
 
-.excalidraw .Island,
+.excalidraw .Island:not(.App-menu__left),
 .excalidraw .zoom-actions,
 .undo-redo-buttons {
     box-shadow: 1px 1px 1px var(--floating-button-shadow-color);
@@ -49,10 +49,48 @@
 
 /* Options panel */
 
+.excalidraw .Island.App-menu__left {
+    box-shadow: none;
+    background: transparent;
+    backdrop-filter: none;
+    width: 13.2em;
+}
+
 body[dir=ltr] .excalidraw .Island.App-menu__left {
     right: 0;
 }
 
 body[dir=rtl] .excalidraw .Island.App-menu__left {
     left: 0;
+}
+
+:root .App-menu__left > .panelColumn {
+    row-gap: 5px;
+}
+
+/* Options panel card */
+:root .App-menu__left > .panelColumn > fieldset,
+:root .App-menu__left > .panelColumn > label,
+:root .App-menu__left > .panelColumn > div:has(> *) {
+    margin: 0;
+    border-radius: 4px;
+    box-shadow: 1px 1px 1px var(--floating-button-shadow-color);
+    background: var(--floating-button-background-color);
+    padding: 8px 12px;
+    backdrop-filter: blur(10px) saturate(6);
+}
+
+/* Options panel card title */
+:root .App-menu__left fieldset > legend,
+:root .App-menu__left div > h3,
+:root .App-menu__left > .panelColumn > label {
+    text-transform: uppercase;
+    font-size: .65rem;
+    letter-spacing: 1pt;
+    color: var(--muted-text-color);
+}
+
+/* Options panel button bar */
+:root .excalidraw .App-menu__left .buttonList {
+    padding: 0;
 }
