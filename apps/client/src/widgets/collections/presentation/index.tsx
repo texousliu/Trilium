@@ -7,8 +7,9 @@ export default function PresentationView({ note }: ViewModeProps<{}>) {
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const presentationEl = buildPresentation(note.noteId);
-        containerRef.current?.replaceChildren(presentationEl);
+        buildPresentation(note).then(presentationEl => {
+            containerRef.current?.replaceChildren(presentationEl);
+        });
     }, [ note ]);
 
     return <div ref={containerRef} className="presentation" />;

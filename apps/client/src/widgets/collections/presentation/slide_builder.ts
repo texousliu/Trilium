@@ -1,5 +1,13 @@
-export function buildPresentation(parentNoteId: string) {
-    const p = document.createElement("p");
-    p.innerHTML = "Hello world";
-    return p;
+import FNote from "../../../entities/fnote";
+
+export async function buildPresentation(parentNote: FNote) {
+    const slides = await parentNote.getChildNotes();
+    const rootElement = new DocumentFragment();
+
+    for (const slide of slides) {
+        const slideEl = document.createElement("div");
+
+    }
+
+    return rootElement;
 }
