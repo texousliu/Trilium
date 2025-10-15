@@ -164,6 +164,12 @@
     "toggle-similar-notes": "Attiva Note Simili",
     "other": "Altro",
     "toggle-right-pane": "Attiva/disattiva la visualizzazione del riquadro destro, che include l'indice e gli elementi evidenziati",
-    "print-active-note": "Stampa nota attiva"
+    "print-active-note": "Stampa nota attiva",
+    "open-note-externally": "Apri nota come file con l'applicazione predefinita",
+    "reload-frontend-app": "Ricarica frontend",
+    "open-dev-tools": "Apri strumenti di svilippo",
+    "toggle-full-screen": "Attiva la modalità a schermo intero",
+    "zoom-out": "Rimpicciolisci",
+    "zoom-in": "Ingrandisci"
   }
 }
