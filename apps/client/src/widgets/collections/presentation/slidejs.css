@@ -3,6 +3,6 @@ figure img {
     height: auto !important;
 }
 
-[aria-hidden=true] {
+span.katex-html {
     display: none !important;
 }
