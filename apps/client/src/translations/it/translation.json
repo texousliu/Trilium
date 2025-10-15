@@ -90,7 +90,8 @@
   },
   "info": {
     "okButton": "OK",
-    "closeButton": "Chiudi"
+    "closeButton": "Chiudi",
+    "modalTitle": "Messaggio informativo"
   },
   "export": {
     "close": "Chiudi",
@@ -430,6 +431,43 @@
     "options": "Opzioni",
     "safeImportTooltip": "I file di esportazione Trilium <code>.zip</code> possono contenere script eseguibili che potrebbero avere comportamenti dannosi. L'importazione sicura disattiverà l'esecuzione automatica di tutti gli script importati. Deseleziona “Importazione sicura” solo se l'archivio importato dovrebbe contenere script eseguibili e ti fidi completamente del contenuto del file di importazione.",
     "safeImport": "Importazione sicura",
-    "explodeArchivesTooltip": "Se questa opzione è selezionata, Trilium leggerà i file <code>.zip</code>, <code>.enex</code> e <code>.opml</code> e creerà delle note dai file contenuti in tali archivi. Se l'opzione non è selezionata, Trilium allegherà gli archivi stessi alla nota."
+    "explodeArchivesTooltip": "Se questa opzione è selezionata, Trilium leggerà i file <code>.zip</code>, <code>.enex</code> e <code>.opml</code> e creerà delle note dai file contenuti in tali archivi. Se l'opzione non è selezionata, Trilium allegherà gli archivi stessi alla nota.",
+    "shrinkImages": "Riduci immagini",
+    "explodeArchives": "Leggi il contenuto degli archivi <code>.zip</code>, <code>.enex</code> e <code>.opml</code> .",
+    "html_import_tags": {
+      "title": "Tag di importazione HTML",
+      "description": "Configura quali tag HTML devono essere mantenuti durante l'importazione delle note. I tag che non sono presenti in questo elenco verranno rimossi durante l'importazione. Alcuni tag (come 'script') vengono sempre rimossi per motivi di sicurezza.",
+      "placeholder": "Inserisci i tag HTML, uno per riga",
+      "reset_button": "Ripristina elenco predefinito"
+    },
+    "import-status": "Stato importazione",
+    "in-progress": "Importazione in corso: {{progress}}",
+    "successful": "Importazione completata con successo."
+  },
+  "include_note": {
+    "dialog_title": "Includi nota",
+    "label_note": "Note",
+    "placeholder_search": "cerca una nota per nome",
+    "box_size_prompt": "Dimensione della casella della nota inclusa:",
+    "box_size_small": "piccola (~ 10 righe)",
+    "box_size_medium": "media (~ 30 righe)",
+    "box_size_full": "completa (la casella mostra il testo completo)",
+    "button_include": "Includi nota"
+  },
+  "jump_to_note": {
+    "search_placeholder": "Cerca una nota per nome oppure digita > per i comandi...",
+    "search_button": "Cerca nel testo completo"
+  },
+  "markdown_import": {
+    "dialog_title": "Importazione Markdown",
+    "modal_body_text": "A causa del sandbox del browser non è possibile leggere direttamente gli appunti tramite JavaScript. Incolla il Markdown da importare nell'area di testo sottostante e clicca sul pulsante Importa",
+    "import_button": "Importa",
+    "import_success": "Il contenuto Markdown è stato importato nel documento."
+  },
+  "move_to": {
+    "target_parent_note": "Nota principale di destinazione",
+    "dialog_title": "Sposta note in ...",
+    "notes_to_move": "Note da spostare",
+    "search_placeholder": "cerca una nota per nome"
   }
 }
