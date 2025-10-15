@@ -83,8 +83,8 @@ La documentación está disponible en varios formatos:
 * Los [atributos](https://triliumnext.github.io/Docs/Wiki/attributes) de las
   notas se pueden usar para organización, consultas y
   [scripting](https://triliumnext.github.io/Docs/Wiki/scripts) avanzado
-* UI available in English, German, Spanish, French, Romanian, and Chinese
-  (simplified and traditional)
+* Interfaz disponible en inglés, alemán, español, francés, rumano y chino
+  (simplificado y tradicional)
 * Direct [OpenID and TOTP
   integration](./docs/User%20Guide/User%20Guide/Installation%20%26%20Setup/Server%20Installation/Multi-Factor%20Authentication.md)
   for more secure login
