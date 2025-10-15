@@ -159,6 +159,9 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
     },
     board: {
         properties: []
+    },
+    presentation: {
+        properties: []
     }
 };
 

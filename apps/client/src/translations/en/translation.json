@@ -767,6 +767,7 @@
     "table": "Table",
     "geo-map": "Geo Map",
     "board": "Board",
+    "presentation": "Presentation",
     "include_archived_notes": "Show archived notes"
   },
   "edited_notes": {
