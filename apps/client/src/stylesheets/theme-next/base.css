@@ -100,7 +100,7 @@ body.backdrop-effects-disabled {
  .dropdown-menu:not(.static),
  :root .excalidraw .popover {
     border-radius: var(--dropdown-border-radius);
-    padding: var(--menu-padding-size) !important;
+    padding: var(--padding, var(--menu-padding-size)) !important;
     font-size: 0.9rem !important;
 }
 
@@ -152,9 +152,16 @@ body.desktop .dropdown-submenu .dropdown-menu {
 
 .dropdown-item,
 body.mobile .dropdown-submenu .dropdown-toggle,
-:root .excalidraw .context-menu .context-menu-item {
-    padding: 2px 2px 2px 8px !important;
-    padding-inline-end: 22px !important;
+.excalidraw .context-menu .context-menu-item {
+    --menu-item-start-padding: 8px;
+    --menu-item-end-padding: 22px;
+    --menu-item-vertical-padding: 2px;
+    
+    padding-top: var(--menu-item-vertical-padding) !important;
+    padding-bottom: var(--menu-item-vertical-padding) !important;
+    padding-inline-start: var(--menu-item-start-padding) !important;
+    padding-inline-end: var(--menu-item-end-padding) !important;
+
     /* Note: the right padding should also accommodate the submenu arrow. */
     border-radius: 6px;
     cursor: default !important;
