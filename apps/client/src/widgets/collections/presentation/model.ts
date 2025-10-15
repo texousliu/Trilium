@@ -4,12 +4,12 @@ import contentRenderer from "../../../services/content_renderer";
 type DangerouslySetInnerHTML = { __html: string; };
 
 /** A top-level slide with optional vertical slides. */
-export interface PresentationSlideModel extends PresentationSlideBaseModel {
+interface PresentationSlideModel extends PresentationSlideBaseModel {
     verticalSlides: PresentationSlideBaseModel[] | undefined;
 }
 
 /** Either a top-level slide or a vertical slide. */
-interface PresentationSlideBaseModel {
+export interface PresentationSlideBaseModel {
     noteId: string;
     content: DangerouslySetInnerHTML;
 }

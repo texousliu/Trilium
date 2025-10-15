@@ -4,7 +4,7 @@ import Reveal from "reveal.js";
 import slideBaseStylesheet from "reveal.js/dist/reveal.css?raw";
 import slideThemeStylesheet from "reveal.js/dist/theme/black.css?raw";
 import slideCustomStylesheet from "./slidejs.css?raw";
-import { buildPresentationModel, PresentationModel, PresentationSlideModel } from "./model";
+import { buildPresentationModel, PresentationModel, PresentationSlideBaseModel } from "./model";
 import ShadowDom from "../../react/ShadowDom";
 import ActionButton from "../../react/ActionButton";
 import "./index.css";
@@ -116,30 +116,26 @@ function Presentation({ presentation, apiRef: externalApiRef } : { presentation:
     return (
         <div ref={containerRef} className="reveal">
             <div className="slides">
-                {presentation.slides?.map(slide => (
-                    <Slide key={slide.noteId} slide={slide} />
-                ))}
+                {presentation.slides?.map(slide => {
+                    if (!slide.verticalSlides) {
+                        return <Slide key={slide.noteId} slide={slide} />
+                    } else {
+                        return (
+                            <section>
+                                <Slide key={slide.noteId} slide={slide} />
+                                {slide.verticalSlides.map(slide => <Slide key={slide.noteId} slide={slide} /> )}
+                            </section>
+                        );
+                    }
+                })}
             </div>
         </div>
     )
 
 }
 
-function Slide({ slide }: { slide: PresentationSlideModel }) {
-    if (!slide.verticalSlides) {
-        // Normal slide.
-        return <section data-note-id={slide.noteId} dangerouslySetInnerHTML={slide.content} />;
-    } else {
-        // Slide with sub notes (show as vertical slides).
-        return (
-            <section>
-                <section data-note-id={slide.noteId} dangerouslySetInnerHTML={slide.content} />
-                {slide.verticalSlides.map((slide) => (
-                    <section data-note-id={slide.noteId} dangerouslySetInnerHTML={slide.content} />
-                ))}
-            </section>
-        )
-    }
+function Slide({ slide }: { slide: PresentationSlideBaseModel }) {
+    return <section data-note-id={slide.noteId} dangerouslySetInnerHTML={slide.content} />;
 }
 
 function getNoteIdFromSlide(slide: HTMLElement | undefined) {
