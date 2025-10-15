@@ -85,7 +85,7 @@
     "cancel": "Annulla",
     "notes_to_be_deleted": "Le seguenti note saranno eliminate ({{notesCount}})",
     "no_note_to_delete": "Nessuna nota sarà eliminata (solo i cloni).",
-    "broken_relations_to_be_deleted": "Le seguenti relazioni saranno interrotte ed eliminate ({{ relationCount}})",
+    "broken_relations_to_be_deleted": "Le seguenti relazioni saranno interrotte ed eliminate ({{relationCount}})",
     "deleted_relation_text": "La nota {{- note}} (da eliminare) è referenziata dalla relazione {{- relation}} originata da {{- source}}."
   },
   "info": {
