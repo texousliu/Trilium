@@ -60,7 +60,15 @@ function Presentation({ presentation } : { presentation: PresentationModel }) {
 
         apiRef.current = new Reveal(containerRef.current, {
             transition: "slide",
-            embedded: true
+            embedded: true,
+            keyboardCondition(event) {
+                // Full-screen requests sometimes fail, we rely on the UI button instead.
+                if (event.key === "f") {
+                    return false;
+                }
+
+                return true;
+            },
         });
         apiRef.current.initialize().then(() => {
             console.log("Slide.js initialized.");
