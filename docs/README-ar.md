@@ -160,7 +160,7 @@ features, suggestions, or issues you may have!
 - [Github Issues](https://github.com/TriliumNext/Trilium/issues) (For bug
   reports and feature requests.)
 
-## 🏗 Installation
+## 🏗️ تثبيت
 
 ### Windows / MacOS
 
@@ -182,7 +182,7 @@ package and run the `trilium` executable.
 
 TriliumNext is also provided as a Flatpak, but not yet published on FlatHub.
 
-### Browser (any OS)
+### مستعرض( اي نظام تشغيل)
 
 If you use a server installation (see below), you can directly access the web
 interface (which is almost identical to the desktop app).

@@ -20,7 +20,7 @@
     },
     "widget-error": {
       "title": "Impossibile inizializzare un widget",
-      "message-custom": "Il widget personalizzato della nota con ID \"{{id}}\", dal titolo \"{{title}}\" non è stato inizializzato a causa di:\n\n{{message}}",
+      "message-custom": "Il widget personalizzato dalla nota con ID “{{id}}”, intitolato “{{title}}”, non è stato possibile inizializzare a causa di:\n\n{{message}}",
       "message-unknown": "Un widget sconosciuto non è stato inizializzato a causa di:\n\n{{message}}"
     }
   },
@@ -83,9 +83,9 @@
     "erase_notes_description": "L'eliminazione normale (soft) marca le note come eliminate e potranno essere recuperate entro un certo lasso di tempo (dalla finestra dei cambiamenti recenti). Selezionando questa opzione le note si elimineranno immediatamente e non sarà possibile recuperarle.",
     "erase_notes_warning": "Elimina le note in modo permanente (non potrà essere disfatto), compresi tutti i cloni. Ciò forzerà un nuovo caricamento dell'applicazione.",
     "cancel": "Annulla",
-    "notes_to_be_deleted": "Le seguenti note saranno eliminate ({{- noteCount}})",
+    "notes_to_be_deleted": "Le seguenti note saranno eliminate ({{notesCount}})",
     "no_note_to_delete": "Nessuna nota sarà eliminata (solo i cloni).",
-    "broken_relations_to_be_deleted": "Le seguenti relazioni saranno interrotte ed eliminate ({{- relationCount}})",
+    "broken_relations_to_be_deleted": "Le seguenti relazioni saranno interrotte ed eliminate ({{relationCount}})",
     "deleted_relation_text": "La nota {{- note}} (da eliminare) è referenziata dalla relazione {{- relation}} originata da {{- source}}."
   },
   "info": {
@@ -112,7 +112,7 @@
   },
   "password_not_set": {
     "body1": "Le note protette sono crittografate utilizzando una password utente, ma la password non è stata ancora impostata.",
-    "body2": "Per proteggere le note, fare clic su <a class=\"open-password-options-button\" href=\"javascript:\">qui</a> per aprire la finestra di dialogo Opzioni e impostare la password."
+    "body2": "Per proteggere le note, clicca sul pulsante sottostante per aprire la finestra di dialogo Opzioni e impostare la tua password."
   },
   "protected_session_password": {
     "close_label": "Chiudi"
@@ -122,7 +122,7 @@
   },
   "etapi": {
     "new_token_title": "Nuovo token ETAPI",
-    "new_token_message": "Inserire il nuovo nome del token"
+    "new_token_message": "Inserisci il nome del nuovo token"
   },
   "electron_integration": {
     "zoom-factor": "Fattore di ingrandimento",
@@ -130,7 +130,7 @@
   },
   "note_autocomplete": {
     "search-for": "Cerca \"{{term}}\"",
-    "create-note": "Crea e collega la nota figlia \"{{term}}\"",
+    "create-note": "Crea e collega la nota secondaria “{{term}}”",
     "insert-external-link": "Inserisci il collegamento esterno a \"{{term}}\"",
     "clear-text-field": "Pulisci il campo di testo",
     "show-recent-notes": "Mostra le note recenti",
@@ -155,20 +155,20 @@
   },
   "database_anonymization": {
     "light_anonymization": "Anonimizzazione parziale",
-    "title": "Anonimizzazione del Database",
+    "title": "Anonimizzazione dei database",
     "full_anonymization": "Anonimizzazione completa",
-    "full_anonymization_description": "Questa azione creerà una nuova copia del database e lo anonimizzerà (rimuove tutti i contenuti delle note, lasciando solo la struttura e qualche metadato non sensibile) per condividerlo online allo scopo di debugging, senza paura di far trapelare i tuoi dati personali.",
-    "save_fully_anonymized_database": "Salva il database completamente anonimizzato",
+    "full_anonymization_description": "Questa azione creerà una nuova copia del database e la renderà anonima (rimuovendo tutto il contenuto delle note e lasciando solo la struttura e alcuni metadati non sensibili) per poterla condividere online a scopo di debug senza timore di divulgare i tuoi dati personali.",
+    "save_fully_anonymized_database": "Salva database completamente anonimizzato",
     "light_anonymization_description": "Questa azione creerà una nuova copia del database e lo anonimizzerà in parzialmente — in particolare, solo il contenuto delle note sarà rimosso, ma i titoli e gli attributi rimarranno. Inoltre, note con script personalizzati JS di frontend/backend e widget personalizzati lasciando rimarranno. Ciò mette a disposizione più contesto per il debug dei problemi.",
     "choose_anonymization": "Puoi decidere da solo se fornire un database completamente o parzialmente anonimizzato. Anche un database completamente anonimizzato è molto utile, sebbene in alcuni casi i database parzialmente anonimizzati possono accelerare il processo di identificazione dei bug e la loro correzione.",
-    "no_anonymized_database_yet": "Nessun database ancora anonimizzato.",
-    "save_lightly_anonymized_database": "Salva il database parzialmente anonimizzato",
+    "no_anonymized_database_yet": "Ancora nessun database anonimizzato.",
+    "save_lightly_anonymized_database": "Salva database leggermente anonimizzato",
     "successfully_created_fully_anonymized_database": "Database completamente anonimizzato creato in {{anonymizedFilePath}}",
     "successfully_created_lightly_anonymized_database": "Database parzialmente anonimizzato creato in {{anonymizedFilePath}}"
   },
   "cpu_arch_warning": {
     "title": "Per favore scarica la versione ARM64",
-    "continue_anyway": "Continua Comunque",
+    "continue_anyway": "Continua comunque",
     "dont_show_again": "Non mostrare più questo avviso",
     "download_link": "Scarica la Versione Nativa"
   },
@@ -248,7 +248,7 @@
     "debug": "debug",
     "action": "azione",
     "add_search_option": "Aggiungi un opzione di ricerca:",
-    "search_string": "cerca la stringa",
+    "search_string": "stringa di ricerca",
     "limit": "limite"
   },
   "modal": {
@@ -333,12 +333,12 @@
   },
   "heading_style": {
     "title": "Stile dell'Intestazione",
-    "plain": "Normale",
+    "plain": "Semplice",
     "underline": "Sottolineato",
     "markdown": "Stile Markdown"
   },
   "highlights_list": {
-    "title": "Punti salienti"
+    "title": "Elenco dei punti salienti"
   },
   "highlights_list_2": {
     "title": "Punti salienti",
@@ -353,7 +353,8 @@
     "collapseExpand": "collassa/espande il nodo",
     "notSet": "non impostato",
     "goBackForwards": "indietro/avanti nella cronologia",
-    "showJumpToNoteDialog": "mostra <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">la finestra di dialogo \"Salta alla nota\"<a>"
+    "showJumpToNoteDialog": "mostra <a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">finestra di dialogo “Vai a”</a>",
+    "title": "Scheda riassuntiva"
   },
   "i18n": {
     "saturday": "Sabato",
@@ -367,5 +368,13 @@
     "first-week-warning": "La modifica delle opzioni della prima settimana può causare duplicati con le note settimanali esistenti e queste ultime non verranno aggiornate di conseguenza.",
     "formatting-locale": "Formato data e numero",
     "formatting-locale-auto": "In base alla lingua dell'applicazione"
+  },
+  "ai_llm": {
+    "n_notes_queued_0": "{{ count }} nota in coda per l'indicizzazione",
+    "n_notes_queued_1": "{{ count }} note in coda per l'indicizzazione",
+    "n_notes_queued_2": "{{ count }} note in coda per l'indicizzazione",
+    "notes_indexed_0": "{{ count }} nota indicizzata",
+    "notes_indexed_1": "{{ count }} note indicizzate",
+    "notes_indexed_2": "{{ count }} note indicizzate"
   }
 }
