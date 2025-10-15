@@ -1,5 +1,15 @@
+import { useEffect, useRef, useState } from "preact/hooks";
 import { ViewModeProps } from "../interface";
+import { buildPresentation } from "./slide_builder";
 
-export default function PresentationView({ }: ViewModeProps<{}>) {
-    return <p>Presentation goes here.</p>;
+export default function PresentationView({ note }: ViewModeProps<{}>) {
+
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const presentationEl = buildPresentation(note.noteId);
+        containerRef.current?.replaceChildren(presentationEl);
+    }, [ note ]);
+
+    return <div ref={containerRef} className="presentation" />;
 }
