@@ -30,34 +30,46 @@
 }
 
 /* Context menus */
+
+/* Context menu - outer wrapper */
 :root .excalidraw .popover {
-    padding: 0;
     max-width: unset;
-    font-family: var(--main-font-family);
     overflow: hidden !important;
+    padding: 0;
+    font-family: var(--main-font-family);
 }
 
-:root .excalidraw .popover > * {
-    height: 100%;
+/* Context menu - inner wrapper */
+:root .excalidraw .popover > .context-menu {
     margin: 0;
-    border: none;
-    padding: 0;
-    background: transparent;
-    box-shadow: none;
     overflow-y: auto;
     overflow-x: hidden;
+    height: 100%;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+    background: transparent;
 }
 
-:root .excalidraw .popover .context-menu-item {
+/* Context menu item */
+:root .excalidraw .context-menu .context-menu-item {
     border: 1px solid transparent;
     padding-left: 16px !important;
 }
 
+/* Context menu item keyboard shortcut */
+:root .excalidraw .context-menu-item__shortcut {
+    padding: 0;
+    opacity: 1;
+}
+
+/* Context menu separator */
 .excalidraw .context-menu .context-menu-item-separator {
     margin: 8px 0;
     opacity: 1;
 }
 
+/* Panels */
 
 .excalidraw .Island:not(.App-menu__left),
 .excalidraw .zoom-actions,

@@ -420,7 +420,7 @@ body.desktop .tabulator-popup-container,
 .dropdown-menu a:hover:not(.disabled),
 .dropdown-item:hover:not(.disabled, .dropdown-container-item),
 .tabulator-menu-item:hover,
-:root .excalidraw .popover .context-menu-item:hover {
+:root .excalidraw .context-menu .context-menu-item:hover {
     color: var(--hover-item-text-color) !important;
     background-color: var(--hover-item-background-color) !important;
     border-color: var(--hover-item-border-color) !important;
@@ -462,7 +462,7 @@ body #context-menu-container .dropdown-item > span {
 
 .dropdown-item,
 .dropdown-header,
-:root .excalidraw .popover .context-menu-item:hover {
+:root .excalidraw .context-menu .context-menu-item:hover {
     color: var(--menu-text-color) !important;
     border: 1px solid transparent !important;
 }
