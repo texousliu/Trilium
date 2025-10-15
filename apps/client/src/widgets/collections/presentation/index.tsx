@@ -96,9 +96,9 @@ function Presentation({ presentation, apiRef: externalApiRef } : { presentation:
                 return true;
             },
         });
-        externalApiRef.current = apiRef.current;
         api.initialize().then(() => {
             apiRef.current = api;
+            externalApiRef.current = api;
         });
 
         return () => {
