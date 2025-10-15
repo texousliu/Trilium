@@ -5,6 +5,9 @@ import slideBaseStylesheet from "reveal.js/dist/reveal.css?raw";
 import slideThemeStylesheet from "reveal.js/dist/theme/black.css?raw";
 import { buildPresentationModel, PresentationModel, PresentationSlideModel } from "./model";
 import ShadowDom from "../../react/ShadowDom";
+import ActionButton from "../../react/ActionButton";
+import "./index.css";
+import { RefObject } from "preact";
 
 const stylesheets = [
     slideBaseStylesheet,
@@ -13,16 +16,37 @@ const stylesheets = [
 
 export default function PresentationView({ note }: ViewModeProps<{}>) {
     const [ presentation, setPresentation ] = useState<PresentationModel>();
+    const containerRef = useRef<HTMLDivElement>(null);
 
     useLayoutEffect(() => {
         buildPresentationModel(note).then(setPresentation);
     }, [ note ]);
 
     return presentation && (
-        <ShadowDom className="presentation-container" style={{ width: "100%", height: "100%" }}>
-            {stylesheets.map(stylesheet => <style>{stylesheet}</style>)}
-            <Presentation presentation={presentation} />
-        </ShadowDom>
+        <>
+            <ShadowDom
+                className="presentation-container"
+                style={{ width: "100%", height: "100%" }}
+                containerRef={containerRef}
+            >
+                {stylesheets.map(stylesheet => <style>{stylesheet}</style>)}
+                <Presentation presentation={presentation} />
+            </ShadowDom>
+            <ButtonOverlay containerRef={containerRef} />
+        </>
+    )
+}
+
+function ButtonOverlay({ containerRef }: { containerRef: RefObject<HTMLDivElement> }) {
+    return (
+        <div className="presentation-button-bar">
+            <ActionButton
+                icon="bx bx-fullscreen" text="Start presentation"
+                onClick={() => {
+                    containerRef.current?.requestFullscreen();
+                }}
+            />
+        </div>
     )
 }
 

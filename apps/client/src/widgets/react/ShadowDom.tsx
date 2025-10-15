@@ -1,12 +1,14 @@
-import { ComponentChildren, HTMLAttributes, JSX, render } from "preact";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { ComponentChildren, HTMLAttributes, JSX, RefObject, render } from "preact";
+import { useEffect, useState } from "preact/hooks";
+import { useSyncedRef } from "./hooks";
 
-interface ShadowDomProps extends HTMLAttributes<HTMLDivElement> {
+interface ShadowDomProps extends Omit<HTMLAttributes<HTMLDivElement>, "ref"> {
     children: ComponentChildren;
+    containerRef?: RefObject<HTMLDivElement>;
 }
 
-export default function ShadowDom({ children, ...containerProps }: ShadowDomProps) {
-    const containerRef = useRef<HTMLDivElement>(null);
+export default function ShadowDom({ children, containerRef: externalContainerRef, ...containerProps }: ShadowDomProps) {
+    const containerRef = useSyncedRef<HTMLDivElement>(externalContainerRef, null);
     const [ shadowRoot, setShadowRoot ] = useState<ShadowRoot | null>(null);
 
     // Create the shadow root.
