@@ -1,10 +1,10 @@
 import { ViewModeProps } from "../interface";
-import FNote from "../../../entities/fnote";
 import { useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 import Reveal from "reveal.js";
-import "reveal.js/dist/reveal.css";
-import "reveal.js/dist/theme/black.css";
+import slideBaseStylesheet from "reveal.js/dist/reveal.css?raw";
+import slideThemeStylesheet from "reveal.js/dist/theme/black.css?raw";
 import { buildPresentationModel, PresentationModel, PresentationSlideModel } from "./model";
+import ShadowDom from "../../react/ShadowDom";
 
 export default function PresentationView({ note }: ViewModeProps<{}>) {
     const [ presentation, setPresentation ] = useState<PresentationModel>();
@@ -14,7 +14,11 @@ export default function PresentationView({ note }: ViewModeProps<{}>) {
     }, [ note ]);
 
     return presentation && (
-        <Presentation presentation={presentation} />
+        <ShadowDom className="presentation-container" style={{ width: "100%", height: "100%" }}>
+            <style>{slideBaseStylesheet}</style>
+            <style>{slideThemeStylesheet}</style>
+            <Presentation presentation={presentation} />
+        </ShadowDom>
     )
 }
 
