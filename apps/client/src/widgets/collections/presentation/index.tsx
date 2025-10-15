@@ -72,7 +72,7 @@ function Presentation({ presentation, apiRef: externalApiRef } : { presentation:
     useEffect(() => {
         if (apiRef.current || !containerRef.current) return;
 
-        apiRef.current = new Reveal(containerRef.current, {
+        const api = new Reveal(containerRef.current, {
             transition: "slide",
             embedded: true,
             keyboardCondition(event) {
@@ -85,16 +85,18 @@ function Presentation({ presentation, apiRef: externalApiRef } : { presentation:
             },
         });
         externalApiRef.current = apiRef.current;
-        apiRef.current.initialize().then(() => {
-            // Initialization logic.
+        api.initialize().then(() => {
+            apiRef.current = api;
         });
 
         return () => {
-            if (apiRef.current) {
-                apiRef.current.destroy();
-                apiRef.current = null;
-            }
+            api.destroy();
+            apiRef.current = null;
         }
+    }, [ ]);
+
+    useEffect(() => {
+        apiRef.current?.sync();
     }, [ presentation ]);
 
     return (
