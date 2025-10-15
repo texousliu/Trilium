@@ -2029,6 +2029,10 @@
     "edit-note-title": "Click to edit note title",
     "edit-column-title": "Click to edit column title"
   },
+  "presentation_view": {
+    "edit-slide": "Edit this slide",
+    "start-presentation": "Start presentation"
+  },
   "command_palette": {
     "tree-action-name": "Tree: {{name}}",
     "export_note_title": "Export Note",

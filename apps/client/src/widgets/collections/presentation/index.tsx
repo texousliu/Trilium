@@ -11,6 +11,7 @@ import "./index.css";
 import { RefObject } from "preact";
 import { openInCurrentNoteContext } from "../../../components/note_context";
 import { useTriliumEvent } from "../../react/hooks";
+import { t } from "../../../services/i18n";
 
 const stylesheets = [
     slideBaseStylesheet,
@@ -55,7 +56,7 @@ function ButtonOverlay({ containerRef, apiRef }: { containerRef: RefObject<HTMLD
         <div className="presentation-button-bar">
             <ActionButton
                 icon="bx bx-edit"
-                text="Edit this slide"
+                text={t("presentation_view.edit-slide")}
                 onClick={e => {
                     const currentSlide = apiRef.current?.getCurrentSlide();
                     const noteId = getNoteIdFromSlide(currentSlide);
@@ -68,7 +69,7 @@ function ButtonOverlay({ containerRef, apiRef }: { containerRef: RefObject<HTMLD
 
             <ActionButton
                 icon="bx bx-fullscreen"
-                text="Start presentation"
+                text={t("presentation_view.start-presentation")}
                 onClick={() => containerRef.current?.requestFullscreen()}
             />
         </div>
