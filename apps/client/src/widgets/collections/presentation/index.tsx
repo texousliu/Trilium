@@ -3,6 +3,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 import Reveal from "reveal.js";
 import slideBaseStylesheet from "reveal.js/dist/reveal.css?raw";
 import slideThemeStylesheet from "reveal.js/dist/theme/black.css?raw";
+import slideCustomStylesheet from "./slidejs.css?raw";
 import { buildPresentationModel, PresentationModel, PresentationSlideModel } from "./model";
 import ShadowDom from "../../react/ShadowDom";
 import ActionButton from "../../react/ActionButton";
@@ -11,7 +12,8 @@ import { RefObject } from "preact";
 
 const stylesheets = [
     slideBaseStylesheet,
-    slideThemeStylesheet
+    slideThemeStylesheet,
+    slideCustomStylesheet
 ].map(stylesheet => stylesheet.replace(/:root/g, ":host"));
 
 export default function PresentationView({ note }: ViewModeProps<{}>) {
