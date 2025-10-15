@@ -1,4 +1,5 @@
 import FNote from "../../../entities/fnote";
+import contentRenderer from "../../../services/content_renderer";
 
 type DangerouslySetInnerHTML = { __html: string; };
 
@@ -25,7 +26,7 @@ export async function buildPresentationModel(note: FNote): Promise<PresentationM
     for (const slideNote of slideNotes) {
         slides.push({
             noteId: slideNote.noteId,
-            content: processContent(await slideNote.getContent() ?? ""),
+            content: await processContent(slideNote),
             verticalSlides: await buildVerticalSlides(slideNote)
         })
     }
@@ -38,15 +39,18 @@ async function buildVerticalSlides(parentSlideNote: FNote): Promise<undefined | 
     if (!children.length) return;
 
     const slides: PresentationSlideBaseModel[] = [];
-    for (const child of children) {
+    for (const childNote of children) {
         slides.push({
-            noteId: child.noteId,
-            content: processContent(await child.getContent())
+            noteId: childNote.noteId,
+            content: await processContent(childNote)
         });
     }
     return slides;
 }
 
-function processContent(content: string | undefined): DangerouslySetInnerHTML {
-    return { __html: content ?? "" };
+async function processContent(note: FNote): Promise<DangerouslySetInnerHTML> {
+    const { $renderedContent } = await contentRenderer.getRenderedContent(note, {
+
+    });
+    return { __html: $renderedContent.html() };
 }
