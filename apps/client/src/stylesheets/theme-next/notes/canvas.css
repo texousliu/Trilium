@@ -61,7 +61,8 @@
 }
 
 /* Context menu label */
-:root .excalidraw .context-menu-item__label {
+:root .excalidraw .context-menu-item__label,
+:root .excalidraw .context-menu-item.dangerous .context-menu-item__label {
     color: var(--menu-text-color);
 }
 
