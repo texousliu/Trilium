@@ -2,3 +2,7 @@ figure img {
     aspect-ratio: unset !important;
     height: auto !important;
 }
+
+[aria-hidden=true] {
+    display: none !important;
+}

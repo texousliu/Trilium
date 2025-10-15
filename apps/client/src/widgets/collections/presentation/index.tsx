@@ -10,6 +10,7 @@ import ActionButton from "../../react/ActionButton";
 import "./index.css";
 import { RefObject } from "preact";
 import { openInCurrentNoteContext } from "../../../components/note_context";
+import { useTriliumEvent } from "../../react/hooks";
 
 const stylesheets = [
     slideBaseStylesheet,
@@ -22,9 +23,18 @@ export default function PresentationView({ note, noteIds }: ViewModeProps<{}>) {
     const containerRef = useRef<HTMLDivElement>(null);
     const apiRef = useRef<Reveal.Api>(null);
 
-    useLayoutEffect(() => {
+    function refresh() {
         buildPresentationModel(note).then(setPresentation);
-    }, [ note, noteIds ]);
+    }
+
+    useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
+        if (loadResults.getNoteIds().find(noteId => noteIds.includes(noteId))) {
+            console.log("Needs reload!");
+            refresh();
+        }
+    });
+
+    useLayoutEffect(refresh, [ note, noteIds ]);
 
     return presentation && (
         <>
