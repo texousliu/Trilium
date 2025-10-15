@@ -256,7 +256,7 @@ pnpm install
 pnpm edit-docs:edit-docs
 ```
 
-### Building the Executable
+### Compilare l'eseguibile
 Scarica la repository, installa le dipendenze eseguendo `pnpm` e compila
 l'applicazione desktop per Windows:
 ```shell
@@ -271,10 +271,10 @@ sviluppo](https://github.com/TriliumNext/Trilium/tree/main/docs/Developer%20Guid
 
 ### Documentazione per sviluppatori
 
-Please view the [documentation
-guide](https://github.com/TriliumNext/Trilium/blob/main/docs/Developer%20Guide/Developer%20Guide/Environment%20Setup.md)
-for details. If you have more questions, feel free to reach out via the links
-described in the "Discuss with us" section above.
+Visualizza la [guida sulla
+documentazione](https://github.com/TriliumNext/Trilium/blob/main/docs/Developer%20Guide/Developer%20Guide/Environment%20Setup.md)
+per i dettagli. Se hai altre domande, sentiti libero di contattarci tramite i
+collegamenti presenti nella precedente sezione "Discuti con noi".
 
 ## 👏 Riconoscimenti
 
@@ -292,7 +292,7 @@ described in the "Discuss with us" section above.
   GitHub issues and discussions.
 * [Tabler Icons](https://tabler.io/icons) for the system tray icons.
 
-Trilium would not be possible without the technologies behind it:
+Trilium non sarebbe possibile senza le tecnologie che lo supportano:
 
 * [CKEditor 5](https://github.com/ckeditor/ckeditor5) - the visual editor behind
   text notes. We are grateful for being offered a set of the premium features.
