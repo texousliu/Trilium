@@ -46,3 +46,13 @@
 :root .excalidraw .buttonList label.active {
     border-color: transparent;
 }
+
+/* Options panel */
+
+body[dir=ltr] .excalidraw .Island.App-menu__left {
+    right: 0;
+}
+
+body[dir=rtl] .excalidraw .Island.App-menu__left {
+    left: 0;
+}
