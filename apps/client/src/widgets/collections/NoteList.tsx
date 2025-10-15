@@ -12,6 +12,7 @@ import BoardView from "./board";
 import { subscribeToMessages, unsubscribeToMessage as unsubscribeFromMessage } from "../../services/ws";
 import { WebSocketMessage } from "@triliumnext/commons";
 import froca from "../../services/froca";
+import PresentationView from "./presentation";
 
 interface NoteListProps {
     note: FNote | null | undefined;
@@ -104,6 +105,8 @@ function getComponentByViewType(viewType: ViewTypeOptions, props: ViewModeProps<
             return <TableView {...props} />
         case "board":
             return <BoardView {...props} />
+        case "presentation":
+            return <PresentationView {...props} />
     }
 }
 
