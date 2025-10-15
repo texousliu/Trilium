@@ -52,6 +52,23 @@ export default function PresentationView({ note, noteIds }: ViewModeProps<{}>) {
 }
 
 function ButtonOverlay({ containerRef, apiRef }: { containerRef: RefObject<HTMLDivElement>, apiRef: RefObject<Reveal.Api> }) {
+    const [ isOverviewActive, setIsOverviewActive ] = useState(false);
+    useEffect(() => {
+        const api = apiRef.current;
+        if (!api) return;
+        setIsOverviewActive(api.isOverview());
+        const onEnabled = () => setIsOverviewActive(true);
+        const onDisabled = () => setIsOverviewActive(false);
+        api.on("overviewshown", onEnabled);
+        api.on("overviewhidden", onDisabled);
+        return () => {
+            api.off("overviewshown", onEnabled);
+            api.off("overviewhidden", onDisabled);
+        };
+    }, [ apiRef ]);
+
+    console.log("Active ", isOverviewActive);
+
     return (
         <div className="presentation-button-bar">
             <ActionButton
@@ -64,6 +81,15 @@ function ButtonOverlay({ containerRef, apiRef }: { containerRef: RefObject<HTMLD
                     if (noteId) {
                         openInCurrentNoteContext(e, noteId);
                     }
+                }}
+            />
+
+            <ActionButton
+                icon="bx bx-grid-horizontal"
+                text={t("presentation_view.slide-overview")}
+                active={isOverviewActive}
+                onClick={() => {
+                    apiRef.current?.toggleOverview();
                 }}
             />
 

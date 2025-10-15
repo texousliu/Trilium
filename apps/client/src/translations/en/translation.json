@@ -2031,7 +2031,8 @@
   },
   "presentation_view": {
     "edit-slide": "Edit this slide",
-    "start-presentation": "Start presentation"
+    "start-presentation": "Start presentation",
+    "slide-overview": "Toggle an overview of the slides"
   },
   "command_palette": {
     "tree-action-name": "Tree: {{name}}",
