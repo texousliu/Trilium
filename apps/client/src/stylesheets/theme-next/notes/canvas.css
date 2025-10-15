@@ -25,6 +25,24 @@
 
 }
 
+/* Dark theme tweaks */
+
+:root body .excalidraw.theme--dark {
+    --color-surface-high: transparent;
+    --color-brand-hover: transparent;
+}
+
+:root .excalidraw.theme--dark.excalidraw .App-mobile-menu,
+:root .excalidraw.theme--dark.excalidraw .App-menu__left {
+    --button-hover-bg: var(--hover-item-background-color);
+}
+
+:root .excalidraw.theme--dark.excalidraw .dropdown-menu-button:hover {
+    --background: var(--hover-item-background-color);
+}
+
+/* Note's root */
+
 :root .type-canvas {
     --floating-buttons-vert-offset: 20px;
 }
