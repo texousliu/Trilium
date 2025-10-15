@@ -83,7 +83,12 @@
     border: 1px solid transparent;
 }
 
-/* Context menu label */
+/* Context menu item icon */
+:root .excalidraw .dropdown-menu-item__icon {
+    color: var(--menu-item-icon-color);
+}
+
+/* Context menu item label */
 :root .excalidraw .context-menu-item__label,
 :root .excalidraw .context-menu-item.dangerous .context-menu-item__label {
     color: var(--menu-text-color);
