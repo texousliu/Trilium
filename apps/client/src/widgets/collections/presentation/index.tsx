@@ -68,6 +68,7 @@ function ButtonOverlay({ containerRef, apiRef }: { containerRef: RefObject<HTMLD
 function Presentation({ presentation, apiRef: externalApiRef } : { presentation: PresentationModel, apiRef: RefObject<Reveal.Api> }) {
     const containerRef = useRef<HTMLDivElement>(null);
     const apiRef = useRef<Reveal.Api>(null);
+    const isFirstRenderRef = useRef(true);
 
     useEffect(() => {
         if (apiRef.current || !containerRef.current) return;
@@ -96,7 +97,10 @@ function Presentation({ presentation, apiRef: externalApiRef } : { presentation:
     }, [ ]);
 
     useEffect(() => {
-        apiRef.current?.sync();
+        if (!isFirstRenderRef.current) {
+            apiRef.current?.sync();
+        }
+        isFirstRenderRef.current = false;
     }, [ presentation ]);
 
     return (
