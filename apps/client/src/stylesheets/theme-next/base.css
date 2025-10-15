@@ -97,7 +97,8 @@ body.backdrop-effects-disabled {
  * supported when this class is used.
  */
 
- .dropdown-menu:not(.static) {
+ .dropdown-menu:not(.static),
+ :root .excalidraw .popover {
     border-radius: var(--dropdown-border-radius);
     padding: var(--menu-padding-size) !important;
     font-size: 0.9rem !important;
@@ -115,7 +116,8 @@ body.mobile .dropdown-menu .dropdown-menu {
 }
 
 body.desktop .dropdown-menu::before,
-:root .ck.ck-dropdown__panel::before {
+:root .ck.ck-dropdown__panel::before,
+:root .excalidraw .popover::before {
     content: "";
     backdrop-filter: var(--dropdown-backdrop-filter);
     border-radius: var(--dropdown-border-radius);
@@ -149,7 +151,8 @@ body.desktop .dropdown-submenu .dropdown-menu {
 }
 
 .dropdown-item,
-body.mobile .dropdown-submenu .dropdown-toggle {
+body.mobile .dropdown-submenu .dropdown-toggle,
+:root .excalidraw .popover .context-menu-item {
     padding: 2px 2px 2px 8px !important;
     padding-inline-end: 22px !important;
     /* Note: the right padding should also accommodate the submenu arrow. */
@@ -215,13 +218,15 @@ html body .dropdown-item[disabled] {
     margin-inline-start: 16px;
 }
 
-.dropdown-divider {
+.dropdown-divider,
+.excalidraw .context-menu hr {
     position: relative;
     border-color: transparent !important;
     overflow: visible;
 }
 
-.dropdown-divider::after {
+.dropdown-divider::after,
+.excalidraw .context-menu hr::before {
     position: absolute;
     content: "";
     top: -1px;

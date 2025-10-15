@@ -29,6 +29,36 @@
     --floating-buttons-vert-offset: 48px;
 }
 
+/* Context menus */
+:root .excalidraw .popover {
+    padding: 0;
+    max-width: unset;
+    font-family: var(--main-font-family);
+    overflow: hidden !important;
+}
+
+:root .excalidraw .popover > * {
+    height: 100%;
+    margin: 0;
+    border: none;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+:root .excalidraw .popover .context-menu-item {
+    border: 1px solid transparent;
+    padding-left: 16px !important;
+}
+
+.excalidraw .context-menu .context-menu-item-separator {
+    margin: 8px 0;
+    opacity: 1;
+}
+
+
 .excalidraw .Island:not(.App-menu__left),
 .excalidraw .zoom-actions,
 .undo-redo-buttons {
