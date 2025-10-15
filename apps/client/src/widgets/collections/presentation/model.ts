@@ -1,7 +1,7 @@
 import FNote from "../../../entities/fnote";
 
 export interface PresentationSlideModel {
-    content: string;
+    content: { __html: string; };
 }
 
 export interface PresentationModel {
@@ -15,7 +15,9 @@ export async function buildPresentationModel(note: FNote): Promise<PresentationM
 
     for (const slideNote of slideNotes) {
         slides.push({
-            content: await slideNote.getContent() ?? ""
+            content: {
+                __html: await slideNote.getContent() ?? ""
+            }
         })
     }
 

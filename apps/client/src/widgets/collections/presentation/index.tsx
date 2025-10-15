@@ -53,10 +53,8 @@ function Presentation({ presentation } : { presentation: PresentationModel }) {
 }
 
 function Slide({ slide }: { slide: PresentationSlideModel }) {
-    const containerRef = useRef<HTMLDivElement>(null);
-
     return (
-        <section ref={containerRef}>
+        <section dangerouslySetInnerHTML={slide.content}>
             {slide.content}
         </section>
     );
