@@ -101,9 +101,9 @@
     align-items: center;
 }
 
-.excalidraw .App-menu.App-menu_top > .selected-shape-actions {
+.excalidraw .App-menu.App-menu_top .App-menu_top__left {
     /* Fixes a layout glitch with the header when the options panel is visbile */
-    gap: 0;
+    --gap: 0 !important;
 }
 
 /* The parent element of the "Library" button  */
