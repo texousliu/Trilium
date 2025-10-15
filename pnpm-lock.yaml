@@ -290,6 +290,9 @@ importers:
       '@types/mark.js':
         specifier: 8.11.12
         version: 8.11.12
+      '@types/reveal.js':
+        specifier: 5.2.1
+        version: 5.2.1
       '@types/tabulator-tables':
         specifier: 6.2.11
         version: 6.2.11
@@ -5008,6 +5011,9 @@ packages:
 
   '@types/retry@0.12.2':
     resolution: {integrity: sha512-XISRgDJ2Tc5q4TRqvgJtzsRkFYNJzZrhTdtMoGVBttwzzQJkPnS3WWTFc7kuDRoPtPakl+T+OfdEUjYJj7Jbow==}
+
+  '@types/reveal.js@5.2.1':
+    resolution: {integrity: sha512-egr+amW5iilXo94kEGyJv24bJozsu/XAOHnhMHLnaJkHVxoui2gsWqzByaltA5zfXDTH2F4WyWnAkhHRcpytIQ==}
 
   '@types/safe-compare@1.1.2':
     resolution: {integrity: sha512-kK/IM1+pvwCMom+Kezt/UlP8LMEwm8rP6UgGbRc6zUnhU/csoBQ5rWgmD2CJuHxiMiX+H1VqPGpo0kDluJGXYA==}
@@ -15007,8 +15013,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.0.0
       ckeditor5: 47.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-editor-decoupled@47.0.0':
     dependencies:
@@ -15027,6 +15031,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.0.0
       ckeditor5: 47.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-editor-multi-root@47.0.0':
     dependencies:
@@ -15525,6 +15531,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.0.0
       '@ckeditor/ckeditor5-utils': 47.0.0
       ckeditor5: 47.0.0(patch_hash=8331a09d41443b39ea1c784daaccfeb0da4f9065ed556e7de92e9c77edd9eb41)
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-restricted-editing@47.0.0':
     dependencies:
@@ -19473,6 +19481,8 @@ snapshots:
       '@types/node': 24.7.2
 
   '@types/retry@0.12.2': {}
+
+  '@types/reveal.js@5.2.1': {}
 
   '@types/safe-compare@1.1.2': {}
 
