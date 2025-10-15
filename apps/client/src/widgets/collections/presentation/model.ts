@@ -2,12 +2,14 @@ import FNote from "../../../entities/fnote";
 
 type DangerouslySetInnerHTML = { __html: string; };
 
-export interface PresentationSlideModel {
-    content: DangerouslySetInnerHTML;
-    verticalSlides: PresentationVerticalSlideModel[] | undefined;
+/** A top-level slide with optional vertical slides. */
+export interface PresentationSlideModel extends PresentationSlideBaseModel {
+    verticalSlides: PresentationSlideBaseModel[] | undefined;
 }
 
-interface PresentationVerticalSlideModel {
+/** Either a top-level slide or a vertical slide. */
+interface PresentationSlideBaseModel {
+    noteId: string;
     content: DangerouslySetInnerHTML;
 }
 
@@ -22,6 +24,7 @@ export async function buildPresentationModel(note: FNote): Promise<PresentationM
 
     for (const slideNote of slideNotes) {
         slides.push({
+            noteId: slideNote.noteId,
             content: processContent(await slideNote.getContent() ?? ""),
             verticalSlides: await buildVerticalSlides(slideNote)
         })
@@ -30,13 +33,14 @@ export async function buildPresentationModel(note: FNote): Promise<PresentationM
     return { slides };
 }
 
-async function buildVerticalSlides(parentSlideNote: FNote): Promise<undefined | PresentationVerticalSlideModel[]> {
+async function buildVerticalSlides(parentSlideNote: FNote): Promise<undefined | PresentationSlideBaseModel[]> {
     const children = await parentSlideNote.getChildNotes();
     if (!children.length) return;
 
-    const slides: PresentationVerticalSlideModel[] = [];
+    const slides: PresentationSlideBaseModel[] = [];
     for (const child of children) {
         slides.push({
+            noteId: child.noteId,
             content: processContent(await child.getContent())
         });
     }

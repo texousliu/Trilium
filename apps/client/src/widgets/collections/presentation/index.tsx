@@ -9,6 +9,7 @@ import ShadowDom from "../../react/ShadowDom";
 import ActionButton from "../../react/ActionButton";
 import "./index.css";
 import { RefObject } from "preact";
+import { openInCurrentNoteContext } from "../../../components/note_context";
 
 const stylesheets = [
     slideBaseStylesheet,
@@ -19,6 +20,7 @@ const stylesheets = [
 export default function PresentationView({ note }: ViewModeProps<{}>) {
     const [ presentation, setPresentation ] = useState<PresentationModel>();
     const containerRef = useRef<HTMLDivElement>(null);
+    const apiRef = useRef<Reveal.Api>(null);
 
     useLayoutEffect(() => {
         buildPresentationModel(note).then(setPresentation);
@@ -31,29 +33,41 @@ export default function PresentationView({ note }: ViewModeProps<{}>) {
                 containerRef={containerRef}
             >
                 {stylesheets.map(stylesheet => <style>{stylesheet}</style>)}
-                <Presentation presentation={presentation} />
+                <Presentation presentation={presentation} apiRef={apiRef} />
             </ShadowDom>
-            <ButtonOverlay containerRef={containerRef} />
+            <ButtonOverlay containerRef={containerRef} apiRef={apiRef} />
         </>
     )
 }
 
-function ButtonOverlay({ containerRef }: { containerRef: RefObject<HTMLDivElement> }) {
+function ButtonOverlay({ containerRef, apiRef }: { containerRef: RefObject<HTMLDivElement>, apiRef: RefObject<Reveal.Api> }) {
     return (
         <div className="presentation-button-bar">
             <ActionButton
-                icon="bx bx-fullscreen" text="Start presentation"
-                onClick={() => {
-                    containerRef.current?.requestFullscreen();
+                icon="bx bx-edit"
+                text="Edit this slide"
+                onClick={e => {
+                    const currentSlide = apiRef.current?.getCurrentSlide();
+                    const noteId = getNoteIdFromSlide(currentSlide);
+
+                    if (noteId) {
+                        openInCurrentNoteContext(e, noteId);
+                    }
                 }}
+            />
+
+            <ActionButton
+                icon="bx bx-fullscreen"
+                text="Start presentation"
+                onClick={() => containerRef.current?.requestFullscreen()}
             />
         </div>
     )
 }
 
-function Presentation({ presentation } : { presentation: PresentationModel }) {
+function Presentation({ presentation, apiRef: externalApiRef } : { presentation: PresentationModel, apiRef: RefObject<Reveal.Api> }) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const apiRef = useRef<Reveal.Api | null>(null);
+    const apiRef = useRef<Reveal.Api>(null);
 
     useEffect(() => {
         if (apiRef.current || !containerRef.current) return;
@@ -70,8 +84,9 @@ function Presentation({ presentation } : { presentation: PresentationModel }) {
                 return true;
             },
         });
+        externalApiRef.current = apiRef.current;
         apiRef.current.initialize().then(() => {
-            console.log("Slide.js initialized.");
+            // Initialization logic.
         });
 
         return () => {
@@ -97,16 +112,21 @@ function Presentation({ presentation } : { presentation: PresentationModel }) {
 function Slide({ slide }: { slide: PresentationSlideModel }) {
     if (!slide.verticalSlides) {
         // Normal slide.
-        return <section dangerouslySetInnerHTML={slide.content} />;
+        return <section data-note-id={slide.noteId} dangerouslySetInnerHTML={slide.content} />;
     } else {
         // Slide with sub notes (show as vertical slides).
         return (
             <section>
-                <section dangerouslySetInnerHTML={slide.content} />
+                <section data-note-id={slide.noteId} dangerouslySetInnerHTML={slide.content} />
                 {slide.verticalSlides.map((slide) => (
-                    <section dangerouslySetInnerHTML={slide.content} />
+                    <section data-note-id={slide.noteId} dangerouslySetInnerHTML={slide.content} />
                 ))}
             </section>
         )
     }
+}
+
+function getNoteIdFromSlide(slide: HTMLElement | undefined) {
+    if (!slide) return;
+    return slide.dataset.noteId;
 }
