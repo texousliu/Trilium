@@ -1,8 +1,8 @@
 import { ViewModeProps } from "../interface";
 import { useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 import Reveal from "reveal.js";
-import slideBaseStylesheet from "reveal.js/dist/reveal.css?raw";
-import slideThemeStylesheet from "reveal.js/dist/theme/black.css?raw";
+import slideBaseStylesheetUrl from "reveal.js/dist/reveal.css?url";
+import slideThemeStylesheetUrl from "reveal.js/dist/theme/black.css?url";
 import { buildPresentationModel, PresentationModel, PresentationSlideModel } from "./model";
 import ShadowDom from "../../react/ShadowDom";
 
@@ -15,8 +15,8 @@ export default function PresentationView({ note }: ViewModeProps<{}>) {
 
     return presentation && (
         <ShadowDom className="presentation-container" style={{ width: "100%", height: "100%" }}>
-            <style>{slideBaseStylesheet}</style>
-            <style>{slideThemeStylesheet}</style>
+            <link rel="stylesheet" href={slideBaseStylesheetUrl} />
+            <link rel="stylesheet" href={slideThemeStylesheetUrl} />
             <Presentation presentation={presentation} />
         </ShadowDom>
     )
@@ -30,7 +30,8 @@ function Presentation({ presentation } : { presentation: PresentationModel }) {
         if (apiRef.current || !containerRef.current) return;
 
         apiRef.current = new Reveal(containerRef.current, {
-            transition: "slide"
+            transition: "slide",
+            embedded: true
         });
         apiRef.current.initialize().then(() => {
             console.log("Slide.js initialized.");
