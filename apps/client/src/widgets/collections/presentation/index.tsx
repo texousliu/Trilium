@@ -95,13 +95,13 @@ function Presentation({ presentation, apiRef: externalApiRef } : { presentation:
                 apiRef.current = null;
             }
         }
-    }, []);
+    }, [ presentation ]);
 
     return (
         <div ref={containerRef} className="reveal">
             <div className="slides">
                 {presentation.slides?.map(slide => (
-                    <Slide slide={slide} />
+                    <Slide key={slide.noteId} slide={slide} />
                 ))}
             </div>
         </div>
