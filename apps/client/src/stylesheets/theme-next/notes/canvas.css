@@ -82,6 +82,19 @@
     opacity: 1;
 }
 
+/* Main menu */
+
+/* Hide separators - no longer needed as the menu group headers feature a delimiter line */
+.excalidraw .Island.dropdown-menu-container>div:not(:has(>*)) {
+    display: none;
+}
+
+/* Menu group header */
+.excalidraw .dropdown-menu-container .dropdown-menu-group-title,
+.excalidraw .Island.dropdown-menu-container div[data-testid="canvas-background-label"] {
+    margin: 0 !important;
+}
+
 /* Panels */
 
 .excalidraw .Island:not(.App-menu__left),

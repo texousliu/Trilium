@@ -267,7 +267,9 @@ body[dir=rtl] .dropdown-menu:not([data-popper-placement="bottom-start"]) .dropdo
 /* Menu item group heading */
 
 /* The heading body */
-.dropdown-menu h6 {
+.dropdown-menu h6,
+.excalidraw .dropdown-menu-container .dropdown-menu-group-title,
+.excalidraw .dropdown-menu-container div[data-testid="canvas-background-label"] {
     position: relative;
     background: transparent;
     padding: 1em 8px 14px 8px;
@@ -278,7 +280,9 @@ body[dir=rtl] .dropdown-menu:not([data-popper-placement="bottom-start"]) .dropdo
 }
 
 /* The delimiter line */
-.dropdown-menu h6::before {
+.dropdown-menu h6::before,
+.excalidraw .dropdown-menu-container .dropdown-menu-group-title::before,
+.excalidraw .dropdown-menu-container div[data-testid="canvas-background-label"]::before {
     content: "";
     position: absolute;
     bottom: 8px;
