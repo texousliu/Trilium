@@ -60,6 +60,15 @@
     border: 1px solid transparent;
 }
 
+/* Context menu label */
+:root .excalidraw .context-menu-item__label {
+    color: var(--menu-text-color);
+}
+
+:root .excalidraw .context-menu-item:hover .context-menu-item__label {
+    color: var(--hover-item-text-color);
+}
+
 /* Context menu item keyboard shortcut */
 :root .excalidraw .context-menu-item__shortcut {
     padding: 0;
