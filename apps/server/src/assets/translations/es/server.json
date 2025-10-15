@@ -381,7 +381,7 @@
     "run-active-note": "Ejecutar nota activa",
     "render-active-note": "Generar nota activa",
     "back-in-note-history": "Atrás en historial de notas",
-    "forward-in-note-history": "Posterior en el historial de notas",
+    "forward-in-note-history": "Adelante en historial de notas",
     "cut-notes-to-clipboard": "Cortar notas al portapapeles",
     "select-all-notes-in-parent": "Seleccionar todas las notas en padre",
     "show-backend-log": "Mostrar registro del servidor",
