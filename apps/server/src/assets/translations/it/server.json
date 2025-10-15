@@ -17,7 +17,7 @@
     "export-active-note-as-pdf": "Esporta la nota attiva come PDF",
     "open-note-externally": "Apri Esternamente la Nota",
     "run-active-note": "Esegui la Nota Attiva",
-    "render-active-note": "Presenta la Nota Attiva"
+    "render-active-note": "Renderizza nota attiva"
   },
   "hidden-subtree": {
     "options-title": "Opzioni",
@@ -30,7 +30,7 @@
     "password-title": "Password",
     "multi-factor-authentication-title": "MFA",
     "etapi-title": "ETAPI",
-    "backup-title": "Archiviazione",
+    "backup-title": "Backup",
     "sync-title": "Sincronizza",
     "ai-llm-title": "IA/LLM",
     "other": "Altro",
@@ -77,7 +77,7 @@
     "error_title": "Errore"
   },
   "share_theme": {
-    "site-theme": "Tema del Sito",
+    "site-theme": "Tema del sito",
     "search_placeholder": "Cerca..."
   },
   "keyboard_actions": {
@@ -162,6 +162,8 @@
     "toggle-note-info": "Attiva Informazioni Nota",
     "toggle-note-paths": "Attiva Percorsi Note",
     "toggle-similar-notes": "Attiva Note Simili",
-    "other": "Altro"
+    "other": "Altro",
+    "toggle-right-pane": "Attiva/disattiva la visualizzazione del riquadro destro, che include l'indice e gli elementi evidenziati",
+    "print-active-note": "Stampa nota attiva"
   }
 }
