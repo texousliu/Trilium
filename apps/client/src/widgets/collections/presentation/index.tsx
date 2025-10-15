@@ -26,7 +26,6 @@ export default function PresentationView({ note }: ViewModeProps<{}>) {
         <>
             <ShadowDom
                 className="presentation-container"
-                style={{ width: "100%", height: "100%" }}
                 containerRef={containerRef}
             >
                 {stylesheets.map(stylesheet => <style>{stylesheet}</style>)}

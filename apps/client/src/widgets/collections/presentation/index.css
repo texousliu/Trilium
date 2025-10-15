@@ -3,3 +3,8 @@
     top: 1em;
     right: 1em;
 }
+
+.presentation-container {
+    width: 100%;
+    height: 100%;
+}
