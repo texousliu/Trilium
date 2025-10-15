@@ -26,7 +26,7 @@
 }
 
 :root .type-canvas {
-    --floating-buttons-vert-offset: 48px;
+    --floating-buttons-vert-offset: 20px;
 }
 
 /* Context menus */
@@ -93,6 +93,17 @@
 .excalidraw .dropdown-menu-container .dropdown-menu-group-title,
 .excalidraw .Island.dropdown-menu-container div[data-testid="canvas-background-label"] {
     margin: 0 !important;
+}
+
+/* Header */
+
+.excalidraw .App-menu.App-menu_top {
+    align-items: center;
+}
+
+/* The parent element of the "Library" button  */
+.excalidraw .App-menu.App-menu_top > div:nth-child(3) {
+    flex-direction: row-reverse;
 }
 
 /* Panels */
@@ -175,4 +186,11 @@ body[dir=ltr] .excalidraw .exc-stats {
 
 body[dir=ltr] .excalidraw .exc-stats {
     right: 0;
+}
+
+/* Sidebar */
+
+.split-note-container-widget > .component.type-canvas:has(.excalidraw-container > .Island.default-sidebar) > .floating-buttons {
+    /* Hide the floating buttons when the sidebar is open */
+    display: none;
 }
