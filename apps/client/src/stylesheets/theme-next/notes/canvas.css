@@ -98,3 +98,13 @@ body[dir=rtl] .excalidraw .Island.App-menu__left {
 :root .excalidraw .App-menu__left .buttonList {
     padding: 0;
 }
+
+/* Properties panel */
+
+body[dir=ltr] .excalidraw .exc-stats {
+    left: 0;
+}
+
+body[dir=ltr] .excalidraw .exc-stats {
+    right: 0;
+}
