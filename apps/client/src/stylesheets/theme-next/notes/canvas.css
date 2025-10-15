@@ -156,7 +156,7 @@
 
 /* Selected color outline */
 :root .excalidraw .color-picker__button.active .color-picker__button-outline {
-    box-shadow: 0 0 0 2px var(--input-focus-outline-color)
+    box-shadow: 0 0 0 2px var(--input-focus-outline-color);
 }
 
 :root .excalidraw .buttonList label.active {
@@ -217,7 +217,7 @@ body[dir=ltr] .excalidraw .exc-stats {
     left: 0;
 }
 
-body[dir=ltr] .excalidraw .exc-stats {
+body[dir=rtl] .excalidraw .exc-stats {
     right: 0;
 }
 
