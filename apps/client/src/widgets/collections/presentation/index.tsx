@@ -1,10 +1,15 @@
 import { ViewModeProps } from "../interface";
 import { useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 import Reveal from "reveal.js";
-import slideBaseStylesheetUrl from "reveal.js/dist/reveal.css?url";
-import slideThemeStylesheetUrl from "reveal.js/dist/theme/black.css?url";
+import slideBaseStylesheet from "reveal.js/dist/reveal.css?raw";
+import slideThemeStylesheet from "reveal.js/dist/theme/black.css?raw";
 import { buildPresentationModel, PresentationModel, PresentationSlideModel } from "./model";
 import ShadowDom from "../../react/ShadowDom";
+
+const stylesheets = [
+    slideBaseStylesheet,
+    slideThemeStylesheet
+].map(stylesheet => stylesheet.replace(/:root/g, ":host"));
 
 export default function PresentationView({ note }: ViewModeProps<{}>) {
     const [ presentation, setPresentation ] = useState<PresentationModel>();
@@ -15,8 +20,7 @@ export default function PresentationView({ note }: ViewModeProps<{}>) {
 
     return presentation && (
         <ShadowDom className="presentation-container" style={{ width: "100%", height: "100%" }}>
-            <link rel="stylesheet" href={slideBaseStylesheetUrl} />
-            <link rel="stylesheet" href={slideThemeStylesheetUrl} />
+            {stylesheets.map(stylesheet => <style>{stylesheet}</style>)}
             <Presentation presentation={presentation} />
         </ShadowDom>
     )
