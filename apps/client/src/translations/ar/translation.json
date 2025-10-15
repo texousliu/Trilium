@@ -661,7 +661,8 @@
     "config_title": "تهيئة المزامنة",
     "timeout": "انتهاء مهلة المزامنة",
     "test_title": "اختبار المزامنة",
-    "test_button": "اختبار المزامنة"
+    "test_button": "اختبار المزامنة",
+    "server_address": "عنوان نسخة الخادم"
   },
   "api_log": {
     "close": "أغلاق"
@@ -712,13 +713,16 @@
     "delete-column": "حذف العمود",
     "row-insert-above": "ادراج صف للاعلى",
     "row-insert-below": "ادراج صف للاسفل",
-    "row-insert-child": "ادراج ملاحظة فرعية"
+    "row-insert-child": "ادراج ملاحظة فرعية",
+    "sort-column-by": "ترتيب بواسط \" {{title}}\"",
+    "hide-column": "اخفاء العمود \"{{title}}\""
   },
   "modal": {
     "close": "اغلاق"
   },
   "call_to_action": {
-    "dismiss": "تجاهل"
+    "dismiss": "تجاهل",
+    "background_effects_button": "تفعيل مؤثرات الخلفية"
   },
   "units": {
     "percentage": "%"
@@ -756,7 +760,13 @@
     "hoist-note": "ابراز الملاحظة",
     "unhoist-note": "الغاء ابراز الملاحظة",
     "copy-clone": "نسخ / استنساخ",
-    "import-into-note": "استيراد الى الملاحظة"
+    "import-into-note": "استيراد الى الملاحظة",
+    "insert-note-after": "ادراج ملاحظة بعد",
+    "insert-child-note": "ادراج ملاحظة فرعية",
+    "search-in-subtree": "‍البحث في الشجرة الفرعية",
+    "edit-branch-prefix": "تعديل بادئة الفرع",
+    "convert-to-attachment": "التحويل الى مرفق",
+    "apply-bulk-actions": "‌تطبيق الاجراءات الجماعية"
   },
   "note_types": {
     "text": "نص",
@@ -865,7 +875,8 @@
   },
   "editorfeatures": {
     "title": "مميزات",
-    "note_completion_enabled": "تمكين الاكمال التلقائي للملاحظة"
+    "note_completion_enabled": "تمكين الاكمال التلقائي للملاحظة",
+    "emoji_completion_enabled": "تفعيل الاكمال التلقائي للرموز التعبيرية"
   },
   "book_properties_config": {
     "raster": "نقطي",
@@ -873,7 +884,9 @@
     "map-style": "نمط الخريطة:",
     "vector_light": "متجه (فاتح)",
     "vector_dark": "متجه (داكن)",
-    "show-scale": "اظهار المقياس"
+    "show-scale": "اظهار المقياس",
+    "display-week-numbers": "اظهار ارقام الاسابيع",
+    "max-nesting-depth": "العمق الاقصى للتداخل:"
   },
   "multi_factor_authentication": {
     "oauth_title": "OAuth/OpenID",
@@ -884,7 +897,8 @@
     "recovery_keys_used": "مستخدم: {{date}}",
     "mfa_enabled": "تمكين المصادقة متعددة العوامل",
     "recovery_keys_generate": "انشاء رموز الاسترداد",
-    "recovery_keys_regenerate": "اعادة انشاء رموز الاسترداد"
+    "recovery_keys_regenerate": "اعادة انشاء رموز الاسترداد",
+    "oauth_user_not_logged_in": "لم يتم تسجيل الدخول!"
   },
   "execute_script": {
     "execute_script": "تنفيذ السكريبت"
@@ -1052,7 +1066,8 @@
   "spellcheck": {
     "title": "التدقيق الاملائي",
     "enable": "تفعيل التدقيق الاملائي",
-    "language_code_label": "رمز اللغة او رموز اللغات"
+    "language_code_label": "رمز اللغة او رموز اللغات",
+    "available_language_codes_label": "رموز اللغات المتاحة:"
   },
   "note-map": {
     "button-link-map": "خريطة الروابط",
@@ -1076,14 +1091,16 @@
     "word_wrapping": "التفاف النص",
     "theme_group_light": "الثيمات الفاتحة",
     "theme_group_dark": "الثيمات الغامقة",
-    "copy_title": "نسخ الى الحافظة"
+    "copy_title": "نسخ الى الحافظة",
+    "theme_none": "بدون تمييز الصياغة"
   },
   "link_context_menu": {
     "open_note_in_popup": "تحرير سريع"
   },
   "electron_integration": {
     "desktop-application": "تطبيقات سطح المكتب",
-    "zoom-factor": "عامل التكبير"
+    "zoom-factor": "عامل التكبير",
+    "native-title-bar": "شريط العنوان الاصلي"
   },
   "note_tooltip": {
     "quick-edit": "التحرير السريع"
@@ -1107,7 +1124,8 @@
     "lock-editing": "قفل التحرير"
   },
   "cpu_arch_warning": {
-    "continue_anyway": "المتابعة على اي حال"
+    "continue_anyway": "المتابعة على اي حال",
+    "download_link": "تنزيل النسخة الاصلية"
   },
   "table_context_menu": {
     "delete_row": "حذف الصف"
@@ -1123,7 +1141,8 @@
     "new-item": "عنصر جديد",
     "add-column": "اضافة عمود",
     "new-item-placeholder": "ادخل عنوان الملاحظة...",
-    "add-column-placeholder": "ادخل اسم العمود..."
+    "add-column-placeholder": "ادخل اسم العمود...",
+    "remove-from-board": "ازالة من اللوحة"
   },
   "command_palette": {
     "export_note_title": "تصدير ملاحظة",
@@ -1134,7 +1153,9 @@
     "show_attachments_description": "عرض مرفقات الملاحظة",
     "search_notes_description": "فتح البحث المتقدم",
     "search_subtree_title": "بحث في الشجرة الفرعية",
-    "search_history_title": "عرص سجل البحث"
+    "search_history_title": "عرص سجل البحث",
+    "search_history_description": "عرض البحث السابق",
+    "configure_launch_bar_title": "تكوين شريط الاطلاق"
   },
   "content_renderer": {
     "open_externally": "فتح خارجيا"
@@ -1188,7 +1209,8 @@
   "note_autocomplete": {
     "clear-text-field": "مسح حقل النص",
     "show-recent-notes": "عرض الملاحظات الاخيرة",
-    "full-text-search": "البحث بالنص الكامل"
+    "full-text-search": "البحث بالنص الكامل",
+    "search-for": "بحث ل \"{{term}}\""
   },
   "protect_note": {
     "toggle-off": "ازالة الحماية عن الملاحظة",
@@ -1210,5 +1232,8 @@
   "note_erasure_timeout": {
     "note_erasure_timeout_title": "مهلة مسح الملاحظة",
     "erase_notes_after": "مسح الملاحظات بعد:"
+  },
+  "ws": {
+    "sync-check-failed": "فشل التحقق من المزامنة!"
   }
 }
