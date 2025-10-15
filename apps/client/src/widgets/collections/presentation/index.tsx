@@ -17,14 +17,14 @@ const stylesheets = [
     slideCustomStylesheet
 ].map(stylesheet => stylesheet.replace(/:root/g, ":host"));
 
-export default function PresentationView({ note }: ViewModeProps<{}>) {
+export default function PresentationView({ note, noteIds }: ViewModeProps<{}>) {
     const [ presentation, setPresentation ] = useState<PresentationModel>();
     const containerRef = useRef<HTMLDivElement>(null);
     const apiRef = useRef<Reveal.Api>(null);
 
     useLayoutEffect(() => {
         buildPresentationModel(note).then(setPresentation);
-    }, [ note ]);
+    }, [ note, noteIds ]);
 
     return presentation && (
         <>
