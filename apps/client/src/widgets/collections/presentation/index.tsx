@@ -85,9 +85,18 @@ function Presentation({ presentation } : { presentation: PresentationModel }) {
 }
 
 function Slide({ slide }: { slide: PresentationSlideModel }) {
-    return (
-        <section dangerouslySetInnerHTML={slide.content}>
-            {slide.content}
-        </section>
-    );
+    if (!slide.verticalSlides) {
+        // Normal slide.
+        return <section dangerouslySetInnerHTML={slide.content} />;
+    } else {
+        // Slide with sub notes (show as vertical slides).
+        return (
+            <section>
+                <section dangerouslySetInnerHTML={slide.content} />
+                {slide.verticalSlides.map((slide) => (
+                    <section dangerouslySetInnerHTML={slide.content} />
+                ))}
+            </section>
+        )
+    }
 }
