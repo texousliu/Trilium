@@ -1,16 +1,25 @@
-import { useEffect, useRef, useState } from "preact/hooks";
 import { ViewModeProps } from "../interface";
-import { buildPresentation } from "./slide_builder";
+import FNote from "../../../entities/fnote";
+import { useLayoutEffect, useState } from "preact/hooks";
 
 export default function PresentationView({ note }: ViewModeProps<{}>) {
+    return note && (
+        <Presentation note={note} />
+    )
+}
 
-    const containerRef = useRef<HTMLDivElement>(null);
+function Presentation({ note }: { note: FNote }) {
+    const [ slides, setSlides ] = useState<FNote[]>();
 
-    useEffect(() => {
-        buildPresentation(note).then(presentationEl => {
-            containerRef.current?.replaceChildren(presentationEl);
-        });
+    useLayoutEffect(() => {
+        note.getChildNotes().then(setSlides);
     }, [ note ]);
 
-    return <div ref={containerRef} className="presentation" />;
+    return (slides && slides?.map(slide => (
+        <Slide note={slide} />
+    )));
+}
+
+function Slide({ note }: { note: FNote }) {
+    return <p>{note.title}</p>
 }
