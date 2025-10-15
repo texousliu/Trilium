@@ -33,15 +33,17 @@
 
 /* Context menu - outer wrapper */
 :root .excalidraw .popover {
+    --padding: 0;
+
     max-width: unset;
-    overflow: hidden !important;
-    padding: 0;
+    overflow: hidden;
     font-family: var(--main-font-family);
 }
 
 /* Context menu - inner wrapper */
 :root .excalidraw .popover > .context-menu {
     margin: 0;
+    padding: 8px !important;
     overflow-y: auto;
     overflow-x: hidden;
     height: 100%;
@@ -53,8 +55,9 @@
 
 /* Context menu item */
 :root .excalidraw .context-menu .context-menu-item {
+    --menu-item-start-padding: 22px;
+
     border: 1px solid transparent;
-    padding-left: 16px !important;
 }
 
 /* Context menu item keyboard shortcut */
