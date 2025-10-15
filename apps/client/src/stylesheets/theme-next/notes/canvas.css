@@ -25,6 +25,10 @@
 
 }
 
+:root .type-canvas {
+    --floating-buttons-vert-offset: 48px;
+}
+
 .excalidraw .Island:not(.App-menu__left),
 .excalidraw .zoom-actions,
 .undo-redo-buttons {
