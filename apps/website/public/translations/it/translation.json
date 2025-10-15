@@ -104,5 +104,17 @@
         "platform_small": "per {{platform}}",
         "linux_big": "v{{version}} per Linux",
         "linux_small": "per Linux"
+    },
+    "social_buttons": {
+        "github": "GitHub",
+        "github_discussions": "GitHub Discussions",
+        "matrix": "Matrix",
+        "reddit": "Reddit"
+    },
+    "support_us": {
+        "title": "Supportaci",
+        "financial_donations_title": "Donazioni pecuniarie",
+        "financial_donations_description": "Trilium è costruito e mantenuto con <Link>centinaia di ore di lavoro</Link>. Il tuo supporto permette di mantenerlo open-source, di migliorare le funzionalità e di coprire i costi (ad esempio dell'hosting).",
+        "financial_donations_cta": "Considera di supportare lo sviluppatore principale dell'applicazione (<Link>eliandoran</Link>) attraverso:"
     }
 }
