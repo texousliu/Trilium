@@ -15,11 +15,22 @@ function Presentation({ note }: { note: FNote }) {
         note.getChildNotes().then(setSlides);
     }, [ note ]);
 
-    return (slides && slides?.map(slide => (
-        <Slide note={slide} />
-    )));
+    return (
+        <div className="reveal">
+            <div className="slides">
+                {slides && slides?.map(slide => (
+                    <Slide note={slide} />
+                ))}
+            </div>
+        </div>
+    )
+
 }
 
 function Slide({ note }: { note: FNote }) {
-    return <p>{note.title}</p>
+    return (
+        <section>
+            <p>{note.title}</p>
+        </section>
+    );
 }
