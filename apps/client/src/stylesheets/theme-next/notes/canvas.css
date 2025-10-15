@@ -13,6 +13,10 @@
     --color-surface-mid: transparent;
     --color-surface-low: transparent;
 
+    /* Slider colors */
+    --color-slider-track: var(--menu-item-delimiter-color);
+    --color-slider-thumb: var(--muted-text-color);
+
     /* Selected button icon fill color */
     --color-on-primary-container: var(--ck-editor-toolbar-button-on-color);
     --color-primary: var(--ck-editor-toolbar-button-on-color);
@@ -40,6 +44,7 @@
 :root .excalidraw.theme--dark.excalidraw .dropdown-menu-button:hover {
     --background: var(--hover-item-background-color);
 }
+
 
 /* Note's root */
 
