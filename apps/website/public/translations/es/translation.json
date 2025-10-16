@@ -1,1 +1,54 @@
-{}
+{
+    "get-started": {
+        "title": "Comenzar",
+        "desktop_title": "Descarga la aplicación de escritorio (v{{version}})",
+        "architecture": "Arquitectura:",
+        "older_releases": "Ver versiones anteriores",
+        "server_title": "Configura un servidor para acceder desde múltiples dispositivos"
+    },
+    "hero_section": {
+        "title": "Organiza tus ideas. Construye tu propia base de conocimiento personal.",
+        "subtitle": "Trilium es una aplicación de código abierto para tomar notas y organizar tu base de conocimiento personal. Puedes usarla localmente en tu escritorio o sincronizarla con tu propio servidor para tener tus notas disponibles en cualquier lugar.",
+        "get_started": "Comenzar",
+        "github": "GitHub",
+        "dockerhub": "Docker Hub",
+        "screenshot_alt": "Captura de pantalla de la aplicación de escritorio Trilium Notes"
+    },
+    "organization_benefits": {
+        "title": "Organización",
+        "note_structure_title": "Estructura de notas",
+        "note_structure_description": "Las notas se pueden organizar de forma jerárquica. No necesitas carpetas, ya que cada nota puede contener subnotas. Una misma nota puede añadirse en varios lugares de la jerarquía.",
+        "attributes_title": "Etiquetas de notas y relaciones",
+        "attributes_description": "Puedes establecer relaciones entre notas o añadir etiquetas para categorizarlas más fácilmente. Los atributos promovidos te permiten ingresar información estructurada, que luego puedes usar en tablas o tableros.",
+        "hoisting_title": "Espacios de trabajo y organización jerárquica",
+        "hoisting_description": "Se pueden separar fácilmente tus notas personales y de trabajo agrupándolas en un espacio de trabajo, lo que centra el árbol de notas en mostrar únicamente un conjunto específico de ellas."
+    },
+    "productivity_benefits": {
+        "title": "Productividad y seguridad",
+        "revisions_title": "Revisiones de notas",
+        "revisions_content": "Las notas se guardan automáticamente en segundo plano y las revisiones te permiten revisarlas o deshacer cambios accidentales. También se pueden crear revisiones manualmente cuando se necesite.",
+        "sync_title": "Sincronización",
+        "sync_content": "Usa una instancia propia o en la nube para sincronizar fácilmente tus notas entre varios dispositivos y acceder a ellas desde el móvil mediante una PWA.",
+        "protected_notes_title": "Notas protegidas",
+        "protected_notes_content": "Protege información personal sensible cifrando las notas y bloqueándolas dentro de una sesión protegida con contraseña.",
+        "jump_to_title": "Búsqueda rápida y comandos",
+        "jump_to_content": "Accede rápidamente a notas o comandos de la interfaz en toda la jerarquía buscando por su título, con búsqueda aproximada que corrige errores tipográficos o variaciones mínimas.",
+        "search_title": "Búsqueda potente",
+        "search_content": "O busca texto dentro de las notas y acota la búsqueda filtrando por la nota principal o por nivel de profundidad.",
+        "web_clipper_title": "Clipper web",
+        "web_clipper_content": "Captura páginas web (o capturas de pantalla) y agrégalas directamente a Trilium usando la extensión del \"Clipper web\" para el navegador."
+    },
+    "note_types": {
+        "text_title": "Notas tipo texto",
+        "text_description": "Las notas se editan con un editor visual (WYSIWYG), con soporte para tablas, imágenes, expresiones matemáticas y bloques de código con resaltado de sintaxis. Puedes formatear rápidamente el texto usando una sintaxis similar a Markdown o mediante comandos con barra (/).",
+        "code_title": "Notas tipo código",
+        "code_description": "Fragmentos extensos de código fuente o scripts se manejan en un editor dedicado, con resaltado de sintaxis para múltiples lenguajes de programación y distintos temas de color.",
+        "file_title": "Notas tipo archivo",
+        "file_description": "Incorpora archivos multimedia, como PDFs, imágenes o videos, con vista previa directamente en la aplicación.",
+        "canvas_title": "Lienzo",
+        "canvas_description": "Organiza formas, imágenes y texto en un lienzo infinito, usando la misma tecnología de excalidraw.com. Perfecto para diagramas, bocetos y planificación visual.",
+        "mermaid_title": "Diagramas Mermaid",
+        "mermaid_description": "Crea diagramas de flujo, de clases, de secuencia, de Gantt y muchos más con la sintaxis de Mermaid.",
+        "mindmap_title": "Mapa mental"
+    }
+}
