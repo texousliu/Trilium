@@ -439,7 +439,7 @@ class NoteContext extends Component implements EventListener<"entitiesReloaded">
 }
 
 export function openInCurrentNoteContext(evt: MouseEvent | JQuery.ClickEvent | JQuery.MouseDownEvent | React.PointerEvent<HTMLCanvasElement> | null, notePath: string, viewScope?: ViewScope) {
-    const ntxId = $(evt?.target as any)
+    const ntxId = $(evt?.target as Element)
         .closest("[data-ntx-id]")
         .attr("data-ntx-id");
 

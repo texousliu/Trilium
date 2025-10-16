@@ -119,11 +119,10 @@ function ButtonOverlay({ containerRef, api }: { containerRef: RefObject<HTMLDivE
 
 function Presentation({ presentation, setApi } : { presentation: PresentationModel, setApi: (api: Reveal.Api | undefined) => void }) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const apiRef = useRef<Reveal.Api>(null);
-    const isFirstRenderRef = useRef(true);
+    const [revealApi, setRevealApi] = useState<Reveal.Api>();
 
     useEffect(() => {
-        if (apiRef.current || !containerRef.current) return;
+        if (!containerRef.current) return;
 
         const api = new Reveal(containerRef.current, {
             transition: "slide",
@@ -138,23 +137,20 @@ function Presentation({ presentation, setApi } : { presentation: PresentationMod
             },
         });
         api.initialize().then(() => {
-            apiRef.current = api;
+            setRevealApi(revealApi);
             setApi(api);
         });
 
         return () => {
             api.destroy();
-            apiRef.current = null;
+            setRevealApi(undefined);
             setApi(undefined);
         }
-    }, [ ]);
+    }, []);
 
     useEffect(() => {
-        if (!isFirstRenderRef.current) {
-            apiRef.current?.sync();
-        }
-        isFirstRenderRef.current = false;
-    }, [ presentation ]);
+        revealApi?.sync();
+    }, [ presentation, revealApi ]);
 
     return (
         <div ref={containerRef} className="reveal">

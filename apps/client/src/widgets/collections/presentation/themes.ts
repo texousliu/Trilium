@@ -1,11 +1,6 @@
 export const DEFAULT_THEME = "white";
 
-interface ThemeDefinition {
-    name: string;
-    loadTheme: () => Promise<typeof import("*.css?raw")>;
-}
-
-const themes: Record<string, ThemeDefinition> = {
+const themes = {
     black: {
         name: "Black",
         loadTheme: () => import("reveal.js/dist/theme/black.css?raw")
