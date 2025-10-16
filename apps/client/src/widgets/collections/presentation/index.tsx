@@ -22,7 +22,7 @@ const stylesheets = [
 export default function PresentationView({ note, noteIds }: ViewModeProps<{}>) {
     const [ presentation, setPresentation ] = useState<PresentationModel>();
     const containerRef = useRef<HTMLDivElement>(null);
-    const apiRef = useRef<Reveal.Api>(null);
+    const [ api, setApi ] = useState<Reveal.Api>();
 
     function refresh() {
         buildPresentationModel(note).then(setPresentation);
@@ -44,17 +44,16 @@ export default function PresentationView({ note, noteIds }: ViewModeProps<{}>) {
                 containerRef={containerRef}
             >
                 {stylesheets.map(stylesheet => <style>{stylesheet}</style>)}
-                <Presentation presentation={presentation} apiRef={apiRef} />
+                <Presentation presentation={presentation} setApi={setApi} />
             </ShadowDom>
-            <ButtonOverlay containerRef={containerRef} apiRef={apiRef} />
+            <ButtonOverlay containerRef={containerRef} api={api} />
         </>
     )
 }
 
-function ButtonOverlay({ containerRef, apiRef }: { containerRef: RefObject<HTMLDivElement>, apiRef: RefObject<Reveal.Api> }) {
+function ButtonOverlay({ containerRef, api }: { containerRef: RefObject<HTMLDivElement>, api: Reveal.Api | undefined }) {
     const [ isOverviewActive, setIsOverviewActive ] = useState(false);
     useEffect(() => {
-        const api = apiRef.current;
         if (!api) return;
         setIsOverviewActive(api.isOverview());
         const onEnabled = () => setIsOverviewActive(true);
@@ -65,9 +64,7 @@ function ButtonOverlay({ containerRef, apiRef }: { containerRef: RefObject<HTMLD
             api.off("overviewshown", onEnabled);
             api.off("overviewhidden", onDisabled);
         };
-    }, [ apiRef ]);
-
-    console.log("Active ", isOverviewActive);
+    }, [ api ]);
 
     return (
         <div className="presentation-button-bar">
@@ -75,7 +72,7 @@ function ButtonOverlay({ containerRef, apiRef }: { containerRef: RefObject<HTMLD
                 icon="bx bx-edit"
                 text={t("presentation_view.edit-slide")}
                 onClick={e => {
-                    const currentSlide = apiRef.current?.getCurrentSlide();
+                    const currentSlide = api?.getCurrentSlide();
                     const noteId = getNoteIdFromSlide(currentSlide);
 
                     if (noteId) {
@@ -89,7 +86,7 @@ function ButtonOverlay({ containerRef, apiRef }: { containerRef: RefObject<HTMLD
                 text={t("presentation_view.slide-overview")}
                 active={isOverviewActive}
                 onClick={() => {
-                    apiRef.current?.toggleOverview();
+                    api?.toggleOverview();
                 }}
             />
 
@@ -102,7 +99,7 @@ function ButtonOverlay({ containerRef, apiRef }: { containerRef: RefObject<HTMLD
     )
 }
 
-function Presentation({ presentation, apiRef: externalApiRef } : { presentation: PresentationModel, apiRef: RefObject<Reveal.Api> }) {
+function Presentation({ presentation, setApi } : { presentation: PresentationModel, setApi: (api: Reveal.Api) => void }) {
     const containerRef = useRef<HTMLDivElement>(null);
     const apiRef = useRef<Reveal.Api>(null);
     const isFirstRenderRef = useRef(true);
@@ -124,7 +121,7 @@ function Presentation({ presentation, apiRef: externalApiRef } : { presentation:
         });
         api.initialize().then(() => {
             apiRef.current = api;
-            externalApiRef.current = api;
+            setApi(api);
         });
 
         return () => {
