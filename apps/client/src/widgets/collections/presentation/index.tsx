@@ -2,7 +2,6 @@ import { ViewModeProps } from "../interface";
 import { useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 import Reveal from "reveal.js";
 import slideBaseStylesheet from "reveal.js/dist/reveal.css?raw";
-import slideThemeStylesheet from "reveal.js/dist/theme/black.css?raw";
 import slideCustomStylesheet from "./slidejs.css?raw";
 import { buildPresentationModel, PresentationModel, PresentationSlideBaseModel } from "./model";
 import ShadowDom from "../../react/ShadowDom";
@@ -10,19 +9,16 @@ import ActionButton from "../../react/ActionButton";
 import "./index.css";
 import { RefObject } from "preact";
 import { openInCurrentNoteContext } from "../../../components/note_context";
-import { useTriliumEvent } from "../../react/hooks";
+import { useNoteLabelWithDefault, useTriliumEvent } from "../../react/hooks";
 import { t } from "../../../services/i18n";
-
-const stylesheets = [
-    slideBaseStylesheet,
-    slideThemeStylesheet,
-    slideCustomStylesheet
-].map(stylesheet => stylesheet.replace(/:root/g, ":host"));
+import { DEFAULT_THEME, loadPresentationTheme } from "./themes";
+import FNote from "../../../entities/fnote";
 
 export default function PresentationView({ note, noteIds }: ViewModeProps<{}>) {
     const [ presentation, setPresentation ] = useState<PresentationModel>();
     const containerRef = useRef<HTMLDivElement>(null);
     const [ api, setApi ] = useState<Reveal.Api>();
+    const stylesheets = usePresentationStylesheets(note);
 
     function refresh() {
         buildPresentationModel(note).then(setPresentation);
@@ -36,7 +32,7 @@ export default function PresentationView({ note, noteIds }: ViewModeProps<{}>) {
 
     useLayoutEffect(refresh, [ note, noteIds ]);
 
-    return presentation && (
+    return presentation && stylesheets && (
         <>
             <ShadowDom
                 className="presentation-container"
@@ -48,6 +44,23 @@ export default function PresentationView({ note, noteIds }: ViewModeProps<{}>) {
             <ButtonOverlay containerRef={containerRef} api={api} />
         </>
     )
+}
+
+function usePresentationStylesheets(note: FNote) {
+    const [ themeName ] = useNoteLabelWithDefault(note, "presentation:theme", DEFAULT_THEME);
+    const [ stylesheets, setStylesheets ] = useState<string[]>();
+
+    useLayoutEffect(() => {
+        loadPresentationTheme(themeName).then((themeStylesheet) => {
+            setStylesheets([
+                slideBaseStylesheet,
+                themeStylesheet,
+                slideCustomStylesheet
+            ].map(stylesheet => stylesheet.replace(/:root/g, ":host")));
+        });
+    }, [ themeName ]);
+
+    return stylesheets;
 }
 
 function ButtonOverlay({ containerRef, api }: { containerRef: RefObject<HTMLDivElement>, api: Reveal.Api | undefined }) {
