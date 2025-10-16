@@ -423,7 +423,11 @@
     "built-in-templates": "Plantillas predefinidas",
     "board_status_todo": "Por hacer",
     "board_status_done": "Hecho",
-    "board": "Tablero"
+    "board": "Tablero",
+    "presentation": "Presentación",
+    "presentation_slide": "Slide de presentación",
+    "presentation_slide_first": "Primer slide",
+    "presentation_slide_second": "Segundo slide"
   },
   "sql_init": {
     "db_not_initialized_desktop": "Base de datos no inicializada, por favor, siga las instrucciones en pantalla.",
