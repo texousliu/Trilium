@@ -426,7 +426,11 @@
     "board_note_third": "Terza nota",
     "board_status_todo": "Da fare",
     "board_status_progress": "In avanzamento",
-    "board_status_done": "Conclusi"
+    "board_status_done": "Conclusi",
+    "presentation": "Presentazione",
+    "presentation_slide": "Diapositiva di presentazione",
+    "presentation_slide_first": "Prima diapositiva",
+    "presentation_slide_second": "Seconda diapositiva"
   },
   "sql_init": {
     "db_not_initialized_desktop": "Database non inizializzato, seguire le istruzioni a schermo.",
