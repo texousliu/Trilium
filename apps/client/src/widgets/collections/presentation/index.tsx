@@ -30,7 +30,6 @@ export default function PresentationView({ note, noteIds }: ViewModeProps<{}>) {
 
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
         if (loadResults.getNoteIds().find(noteId => noteIds.includes(noteId))) {
-            console.log("Needs reload!");
             refresh();
         }
     });
@@ -105,7 +104,7 @@ function ButtonOverlay({ containerRef, api }: { containerRef: RefObject<HTMLDivE
     )
 }
 
-function Presentation({ presentation, setApi } : { presentation: PresentationModel, setApi: (api: Reveal.Api) => void }) {
+function Presentation({ presentation, setApi } : { presentation: PresentationModel, setApi: (api: Reveal.Api | undefined) => void }) {
     const containerRef = useRef<HTMLDivElement>(null);
     const apiRef = useRef<Reveal.Api>(null);
     const isFirstRenderRef = useRef(true);
@@ -133,6 +132,7 @@ function Presentation({ presentation, setApi } : { presentation: PresentationMod
         return () => {
             api.destroy();
             apiRef.current = null;
+            setApi(undefined);
         }
     }, [ ]);
 

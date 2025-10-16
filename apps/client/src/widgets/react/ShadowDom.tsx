@@ -13,10 +13,10 @@ export default function ShadowDom({ children, containerRef: externalContainerRef
 
     // Create the shadow root.
     useEffect(() => {
-        if (!containerRef.current || shadowRoot) return;
+        if (!containerRef.current) return;
         const shadow = containerRef.current.attachShadow({ mode: "open" });
         setShadowRoot(shadow);
-    }, [ shadowRoot ]);
+    }, []);
 
     // Render the child elements.
     useEffect(() => {
