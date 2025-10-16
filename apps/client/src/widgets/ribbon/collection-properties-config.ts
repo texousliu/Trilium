@@ -5,7 +5,7 @@ import NoteContextAwareWidget from "../note_context_aware_widget";
 import { DEFAULT_MAP_LAYER_NAME, MAP_LAYERS, type MapLayer } from "../collections/geomap/map_layer";
 import { ViewTypeOptions } from "../collections/interface";
 import { FilterLabelsByType } from "@triliumnext/commons";
-import { getPresentationThemes } from "../collections/presentation/themes";
+import { DEFAULT_THEME, getPresentationThemes } from "../collections/presentation/themes";
 
 interface BookConfig {
     properties: BookProperty[];
@@ -167,6 +167,7 @@ export const bookPropertiesConfig: Record<ViewTypeOptions, BookConfig> = {
                 label: "Theme",
                 type: "combobox",
                 bindToLabel: "presentation:theme",
+                defaultValue: DEFAULT_THEME,
                 options: getPresentationThemes().map(theme => ({
                     value: theme.id,
                     label: theme.name
