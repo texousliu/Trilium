@@ -154,7 +154,7 @@ Participați la canalele noastre oficiale. Ne-ar plăcea să știm ce funcții,
 sugestii sau probleme aveți!
 
 - [Matrix](https://matrix.to/#/#triliumnext:matrix.org) (pentru discuții în timp
-  real).
+  real.)
   - Camera de chat `General` se partajează și prin
     [XMPP](xmpp:discuss@trilium.thisgreat.party?join)
 - [Discuții pe GitHub](https://github.com/TriliumNext/Trilium/discussions)
@@ -274,8 +274,8 @@ legăturile descrise în secțiunea „Discutați cu noi” de mai sus.
 
 * [zadam](https://github.com/zadam) pentru conceptul și implementarea originală
   a aplicației.
-* [Sarah Hussein](https://github.com/Sarah-Hussein) for designing the
-  application icon.
+* [Sarah Hussein](https://github.com/Sarah-Hussein) pentru proiectarea
+  pictogramei aplicației.
 * [nriver](https://github.com/nriver) pentru sistemul de internaționalizare.
 * [Thomas Frei](https://github.com/thfrei) pentru munca sa originală pentru
   notițele de tip schiță.
