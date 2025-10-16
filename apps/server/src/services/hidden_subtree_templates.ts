@@ -264,6 +264,7 @@ export default function buildHiddenSubtreeTemplates() {
                         id: "_template_presentation_first",
                         type: "text",
                         title: t("hidden_subtree_templates.presentation_slide_first"),
+                        content: t("hidden_subtree_templates.presentation_slide_first"),
                         attributes: [
                             {
                                 name: "template",
@@ -276,6 +277,7 @@ export default function buildHiddenSubtreeTemplates() {
                         id: "_template_presentation_second",
                         type: "text",
                         title: t("hidden_subtree_templates.presentation_slide_second"),
+                        content: t("hidden_subtree_templates.presentation_slide_second"),
                         attributes: [
                             {
                                 name: "template",

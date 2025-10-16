@@ -345,16 +345,23 @@ function checkHiddenSubtreeRecursively(parentNoteId: string, item: HiddenSubtree
     let branch;
 
     if (!note) {
+        // Missing item, add it.
         ({ note, branch } = noteService.createNewNote({
             noteId: item.id,
             title: item.title,
             type: item.type,
             parentNoteId: parentNoteId,
-            content: "",
+            content: item.content ?? "",
             ignoreForbiddenParents: true
         }));
     } else {
+        // Existing item, check if it's in the right state.
         branch = note.getParentBranches().find((branch) => branch.parentNoteId === parentNoteId);
+
+        if (item.content && note.getContent() !== item.content) {
+            console.log(`Updating content of ${item.id}.`);
+            note.setContent(item.content);
+        }
 
         // Clean up any branches that shouldn't exist according to the meta definition
         // For hidden subtree notes, we want to ensure they only exist in their designated locations
