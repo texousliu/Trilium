@@ -162,7 +162,7 @@ features, suggestions, or issues you may have!
 
 ## 🏗️ تثبيت
 
-### Windows / MacOS
+### ويندوز / نظام تشغيل ماك
 
 Download the binary release for your platform from the [latest release
 page](https://github.com/TriliumNext/Trilium/releases/latest), unzip the package
@@ -246,7 +246,7 @@ pnpm install
 pnpm edit-docs:edit-docs
 ```
 
-### Building the Executable
+### بناء الملف التنفيذي
 Download the repository, install dependencies using `pnpm` and then build the
 desktop app for Windows:
 ```shell
