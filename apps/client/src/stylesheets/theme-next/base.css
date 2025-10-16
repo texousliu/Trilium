@@ -4,6 +4,7 @@
 @import url(./pages.css);
 @import url(./ribbon.css);
 @import url(./notes/text.css);
+@import url(./notes/canvas.css);
 @import url(./notes/collections/table.css);
 
 @font-face {
@@ -96,9 +97,10 @@ body.backdrop-effects-disabled {
  * supported when this class is used.
  */
 
- .dropdown-menu:not(.static) {
+ .dropdown-menu:not(.static),
+ :root .excalidraw .popover {
     border-radius: var(--dropdown-border-radius);
-    padding: var(--menu-padding-size) !important;
+    padding: var(--padding, var(--menu-padding-size)) !important;
     font-size: 0.9rem !important;
 }
 
@@ -114,7 +116,8 @@ body.mobile .dropdown-menu .dropdown-menu {
 }
 
 body.desktop .dropdown-menu::before,
-:root .ck.ck-dropdown__panel::before {
+:root .ck.ck-dropdown__panel::before,
+:root .excalidraw .popover::before {
     content: "";
     backdrop-filter: var(--dropdown-backdrop-filter);
     border-radius: var(--dropdown-border-radius);
@@ -148,9 +151,17 @@ body.desktop .dropdown-submenu .dropdown-menu {
 }
 
 .dropdown-item,
-body.mobile .dropdown-submenu .dropdown-toggle {
-    padding: 2px 2px 2px 8px !important;
-    padding-inline-end: 22px !important;
+body.mobile .dropdown-submenu .dropdown-toggle,
+.excalidraw .context-menu .context-menu-item {
+    --menu-item-start-padding: 8px;
+    --menu-item-end-padding: 22px;
+    --menu-item-vertical-padding: 2px;
+    
+    padding-top: var(--menu-item-vertical-padding) !important;
+    padding-bottom: var(--menu-item-vertical-padding) !important;
+    padding-inline-start: var(--menu-item-start-padding) !important;
+    padding-inline-end: var(--menu-item-end-padding) !important;
+
     /* Note: the right padding should also accommodate the submenu arrow. */
     border-radius: 6px;
     cursor: default !important;
@@ -202,7 +213,8 @@ html body .dropdown-item[disabled] {
 }
 
 /* Menu item keyboard shortcut */
-.dropdown-item kbd {
+.dropdown-item kbd,
+.excalidraw .context-menu-item__shortcut {
     font-family: unset !important;
     font-size: unset !important;
     color: var(--menu-item-keyboard-shortcut-color) !important;
@@ -214,13 +226,15 @@ html body .dropdown-item[disabled] {
     margin-inline-start: 16px;
 }
 
-.dropdown-divider {
+.dropdown-divider,
+.excalidraw .context-menu hr {
     position: relative;
     border-color: transparent !important;
     overflow: visible;
 }
 
-.dropdown-divider::after {
+.dropdown-divider::after,
+.excalidraw .context-menu hr::before {
     position: absolute;
     content: "";
     top: -1px;
@@ -253,7 +267,9 @@ body[dir=rtl] .dropdown-menu:not([data-popper-placement="bottom-start"]) .dropdo
 /* Menu item group heading */
 
 /* The heading body */
-.dropdown-menu h6 {
+.dropdown-menu h6,
+.excalidraw .dropdown-menu-container .dropdown-menu-group-title,
+.excalidraw .dropdown-menu-container div[data-testid="canvas-background-label"] {
     position: relative;
     background: transparent;
     padding: 1em 8px 14px 8px;
@@ -264,7 +280,9 @@ body[dir=rtl] .dropdown-menu:not([data-popper-placement="bottom-start"]) .dropdo
 }
 
 /* The delimiter line */
-.dropdown-menu h6::before {
+.dropdown-menu h6::before,
+.excalidraw .dropdown-menu-container .dropdown-menu-group-title::before,
+.excalidraw .dropdown-menu-container div[data-testid="canvas-background-label"]::before {
     content: "";
     position: absolute;
     bottom: 8px;
