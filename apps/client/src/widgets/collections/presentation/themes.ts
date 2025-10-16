@@ -50,7 +50,7 @@ export function getPresentationThemes() {
     }));
 }
 
-export async function loadPresentationTheme(name: keyof typeof themes) {
+export async function loadPresentationTheme(name: keyof typeof themes | string) {
     let theme = themes[name];
     if (!theme) theme = themes[DEFAULT_THEME];
 
