@@ -197,7 +197,7 @@ all'interfaccia web (che è quasi identica all'applicazione desktop).
 Attualmente sono supportate (e testate) solo le ultime versioni di Chrome e
 Firefox.
 
-### Mobile
+### Cellulare
 
 Per utilizzare TriliumNext su un dispositivo mobile, è possibile utilizzare un
 browser web mobile per accedere all'interfaccia mobile di un'installazione
@@ -288,40 +288,42 @@ collegamenti presenti nella precedente sezione "Discuti con noi".
   canvas.
 * [antoniotejada](https://github.com/nriver) per lo strumento originale di
   colorazione della sintassi.
-* [Dosu](https://dosu.dev/) for providing us with the automated responses to
-  GitHub issues and discussions.
-* [Tabler Icons](https://tabler.io/icons) for the system tray icons.
+* [Dosu](https://dosu.dev/) per averci fornito le risposte automatiche alle
+  questioni e alle discussioni su GitHub.
+* [Tabler Icons](https://tabler.io/icons) per le icone della barra delle
+  applicazioni.
 
 Trilium non sarebbe possibile senza le tecnologie che lo supportano:
 
-* [CKEditor 5](https://github.com/ckeditor/ckeditor5) - the visual editor behind
-  text notes. We are grateful for being offered a set of the premium features.
-* [CodeMirror](https://github.com/codemirror/CodeMirror) - code editor with
-  support for huge amount of languages.
-* [Excalidraw](https://github.com/excalidraw/excalidraw) - the infinite
-  whiteboard used in Canvas notes.
-* [Mind Elixir](https://github.com/SSShooter/mind-elixir-core) - providing the
-  mind map functionality.
-* [Leaflet](https://github.com/Leaflet/Leaflet) - for rendering geographical
-  maps.
-* [Tabulator](https://github.com/olifolkerd/tabulator) - for the interactive
-  table used in collections.
-* [FancyTree](https://github.com/mar10/fancytree) - feature-rich tree library
-  without real competition.
-* [jsPlumb](https://github.com/jsplumb/jsplumb) - visual connectivity library.
-  Used in [relation
-  maps](https://triliumnext.github.io/Docs/Wiki/relation-map.html) and [link
+* [CKEditor 5](https://github.com/ckeditor/ckeditor5) - l'editor visivo dietro
+  le note di testo. Siamo grati per averci offerto una serie di funzionalità
+  premium.
+* [CodeMirror](https://github.com/codemirror/CodeMirror) - editor di codice con
+  supporto per un'ampia gamma di linguaggi.
+* [Excalidraw](https://github.com/excalidraw/excalidraw) - la lavagna infinita
+  utilizzata nelle note di Canvas.
+* [Mind Elixir](https://github.com/SSShooter/mind-elixir-core) - fornendo la
+  funzionalità di mappa mentale.
+* [Leaflet](https://github.com/Leaflet/Leaflet) - per la rappresentazione di
+  mappe geografiche.
+* [Tabulator](https://github.com/olifolkerd/tabulator) - per la tabella
+  interattiva utilizzata nelle raccolte.
+* [FancyTree](https://github.com/mar10/fancytree) - libreria ad albero ricca di
+  funzionalità senza reale concorrenza.
+* [jsPlumb](https://github.com/jsplumb/jsplumb) - libreria di connettività
+  visiva. Utilizzata in [relation
+  maps](https://triliumnext.github.io/Docs/Wiki/relation-map.html) e [link
   maps](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)
 
 ## 🤝 Supporto
 
-Trilium is built and maintained with [hundreds of hours of
-work](https://github.com/TriliumNext/Trilium/graphs/commit-activity). Your
-support keeps it open-source, improves features, and covers costs such as
-hosting.
+Trilium è realizzato e gestito con [hundreds of hours of
+work](https://github.com/TriliumNext/Trilium/graphs/commit-activity). Il tuo
+sostegno contribuisce a mantenerlo open source, a migliorarne le funzionalità e
+a coprire i costi, come quelli di hosting.
 
-Consider supporting the main developer
-([eliandoran](https://github.com/eliandoran)) of the application via:
+Considera la possibilità di sostenere lo sviluppatore principale
+([eliandoran](https://github.com/eliandoran)) dell'applicazione tramite:
 
 - [GitHub Sponsors](https://github.com/sponsors/eliandoran)
 - [PayPal](https://paypal.me/eliandoran)
@@ -329,7 +331,7 @@ Consider supporting the main developer
 
 ## 🔑 Licenza
 
-Copyright 2017-2025 zadam, Elian Doran, and other contributors
+Copyright 2017-2025 zadam, Elian Doran, e altri collaboratori
 
 Questo programma è software libero: è possibile redistribuirlo e/o modificarlo
 nei termini della GNU Affero General Public License come pubblicata dalla Free
