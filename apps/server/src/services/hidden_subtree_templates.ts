@@ -235,6 +235,18 @@ export default function buildHiddenSubtreeTemplates() {
                 ]
             },
             {
+                id: "_template_presentation_slide",
+                type: "text",
+                title: t("hidden_subtree_templates.presentation_slide"),
+                icon: "bx bx-rectangle",
+                attributes: [
+                    {
+                        name: "slide",
+                        type: "label"
+                    }
+                ]
+            },
+            {
                 id: "_template_presentation",
                 type: "book",
                 title: t("hidden_subtree_templates.presentation"),
@@ -285,18 +297,6 @@ export default function buildHiddenSubtreeTemplates() {
                                 value: "_template_presentation_slide"
                             }
                         ]
-                    }
-                ]
-            },
-            {
-                id: "_template_presentation_slide",
-                type: "text",
-                title: t("hidden_subtree_templates.presentation_slide"),
-                icon: "bx bx-rectangle",
-                attributes: [
-                    {
-                        name: "slide",
-                        type: "label"
                     }
                 ]
             }
