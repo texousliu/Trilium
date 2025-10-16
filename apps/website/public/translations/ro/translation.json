@@ -148,7 +148,11 @@
         "description_arm64": "Pentru distribuțiile bazate pe ARM, compatibilă cu arhitectura aarch64.",
         "quick_start": "Selectați un format de împachetare potrivit pentru distribuția dvs.:",
         "download_deb": ".deb",
-        "download_zip": "Portabil (.zip)"
+        "download_zip": "Portabil (.zip)",
+        "download_rpm": ".rpm",
+        "download_flatpak": ".flatpak",
+        "download_nixpkgs": "nixpkgs",
+        "download_aur": "AUR"
     },
     "download_helper_desktop_macos": {
         "title_x64": "macOS pentru Intel",
@@ -163,13 +167,15 @@
     "download_helper_server_docker": {
         "title": "Găzduit în regim propriu prin Docker",
         "description": "Lansați rapid o instanță pe Windows, Linux sau macOS folosind un container Docker.",
-        "download_dockerhub": "Docker Hub"
+        "download_dockerhub": "Docker Hub",
+        "download_ghcr": "ghcr.io"
     },
     "download_helper_server_linux": {
         "title": "Găzduit în regim propriu pe Linux",
         "description": "Rulați Trilium Notes pe propriul server sau VPS, compatibil cu majoritatea distribuțiilor.",
         "download_tar_x64": "x64 (.tar.xz)",
-        "download_nixos": "Modul NixOS"
+        "download_nixos": "Modul NixOS",
+        "download_tar_arm64": "ARM (.tar.xz)"
     },
     "download_helper_server_hosted": {
         "title": "Găzduire contra cost",
