@@ -113,10 +113,16 @@
   },
   "password_not_set": {
     "body1": "Le note protette sono crittografate utilizzando una password utente, ma la password non è stata ancora impostata.",
-    "body2": "Per proteggere le note, clicca sul pulsante sottostante per aprire la finestra di dialogo Opzioni e impostare la tua password."
+    "body2": "Per proteggere le note, clicca sul pulsante sottostante per aprire la finestra di dialogo Opzioni e impostare la tua password.",
+    "title": "La password non è impostata",
+    "go_to_password_options": "Vai alle opzioni della password"
   },
   "protected_session_password": {
-    "close_label": "Chiudi"
+    "close_label": "Chiudi",
+    "modal_title": "Sessione protetta",
+    "help_title": "Aiuto sulle note protette",
+    "form_label": "Per procedere con l’azione richiesta, è necessario avviare una sessione protetta inserendo la password:",
+    "start_button": "Avvia sessione protetta"
   },
   "abstract_bulk_action": {
     "remove_this_search_action": "Rimuovi questa azione di ricerca"
@@ -442,7 +448,13 @@
     },
     "import-status": "Stato importazione",
     "in-progress": "Importazione in corso: {{progress}}",
-    "successful": "Importazione completata con successo."
+    "successful": "Importazione completata con successo.",
+    "shrinkImagesTooltip": "<p>Se selezioni questa opzione, Trilium tenterà di ridurre le immagini importate tramite ridimensionamento e ottimizzazione, il che potrebbe influire sulla qualità percepita dell’immagine. Se non selezionata, le immagini verranno importate senza modifiche.</p><p>Questo non si applica alle importazioni <code>.zip</code> con metadati, poiché si presume che questi file siano già ottimizzati.</p>",
+    "textImportedAsText": "Importa HTML, Markdown e TXT come note di testo se non è chiaro dai metadati",
+    "codeImportedAsCode": "Importa i file di codice riconosciuti (ad esempio <code>.json</code>) come note di codice se non è chiaro dai metadati",
+    "replaceUnderscoresWithSpaces": "Sostituisci i trattini bassi con spazi nei nomi delle note importate",
+    "import": "Importa",
+    "failed": "Importazione fallita: {{message}}."
   },
   "include_note": {
     "dialog_title": "Includi nota",
@@ -468,6 +480,108 @@
     "target_parent_note": "Nota principale di destinazione",
     "dialog_title": "Sposta note in ...",
     "notes_to_move": "Note da spostare",
-    "search_placeholder": "cerca una nota per nome"
+    "search_placeholder": "cerca una nota per nome",
+    "move_button": "Sposta nella nota selezionata",
+    "error_no_path": "Nessun percorso in cui spostarsi.",
+    "move_success_message": "Le note selezionate sono state spostate in "
+  },
+  "note_type_chooser": {
+    "change_path_prompt": "Cambia dove creare la nuova nota:",
+    "search_placeholder": "cerca percorso per nome (predefinito se vuoto)",
+    "modal_title": "Scegli il tipo di nota",
+    "modal_body": "Scegli il tipo / modello della nuova nota:",
+    "templates": "Modelli",
+    "builtin_templates": "Modelli incorporati"
+  },
+  "prompt": {
+    "title": "Richiesta",
+    "ok": "OK",
+    "defaultTitle": "Richiesta"
+  },
+  "recent_changes": {
+    "title": "Modifiche recenti",
+    "erase_notes_button": "Cancella ora le note eliminate",
+    "deleted_notes_message": "Le note eliminate sono state cancellate.",
+    "no_changes_message": "Nessuna modifica ancora...",
+    "undelete_link": "ripristinare",
+    "confirm_undelete": "Vuoi ripristinare questa nota e le sue sotto-note?"
+  },
+  "revisions": {
+    "note_revisions": "Note Revisioni",
+    "delete_all_revisions": "Elimina tutte le revisioni di questa nota",
+    "delete_all_button": "Elimina tutte le revisioni",
+    "help_title": "Aiuto sulle revisioni delle note",
+    "revision_last_edited": "Questa revisione è stata modificata l'ultima volta il {{date}}",
+    "confirm_delete_all": "Vuoi eliminare tutte le revisioni di questa nota?",
+    "no_revisions": "Ancora nessuna revisione per questa nota...",
+    "restore_button": "Ripristina",
+    "diff_on": "Mostra differenze",
+    "diff_off": "Mostra contenuto",
+    "diff_on_hint": "Clicca per mostrare la fonte della nota diff",
+    "diff_off_hint": "Clicca per visualizzare il contenuto della nota",
+    "diff_not_available": "Diff non è disponibile.",
+    "confirm_restore": "Vuoi ripristinare questa revisione? Questo sovrascriverà il titolo e il contenuto attuali della nota con questa revisione.",
+    "delete_button": "Elimina",
+    "confirm_delete": "Vuoi eliminare questa revisione?",
+    "revisions_deleted": "Le revisioni delle note sono state eliminate.",
+    "revision_restored": "La revisione della nota è stata ripristinata.",
+    "revision_deleted": "La revisione della nota è stata eliminata.",
+    "snapshot_interval": "Nota Intervallo di revisione istantanea: {{seconds}}.",
+    "maximum_revisions": "Nota Limite istantaneo di revisione: {{number}}.",
+    "settings": "Nota Impostazioni di revisione",
+    "download_button": "Scarica",
+    "mime": "MIME: ",
+    "file_size": "Dimensione del file:",
+    "preview": "Anteprima:",
+    "preview_not_available": "L'anteprima non è disponibile per questo tipo di nota."
+  },
+  "sort_child_notes": {
+    "sort_children_by": "Ordina i bambini per...",
+    "sorting_criteria": "Criteri di ordinamento",
+    "title": "titolo",
+    "date_created": "data di creazione",
+    "date_modified": "data di modifica",
+    "sorting_direction": "Direzione",
+    "ascending": "ascendente",
+    "descending": "discendente",
+    "folders": "Cartelle",
+    "sort_folders_at_top": "ordina le cartelle in alto",
+    "natural_sort": "Ordinamento naturale",
+    "sort_with_respect_to_different_character_sorting": "ordinare in base alle diverse regole di ordinamento e collazione dei caratteri nelle diverse lingue o regioni.",
+    "natural_sort_language": "Linguaggio di ordinamento naturale",
+    "the_language_code_for_natural_sort": "Il codice lingua per l'ordinamento naturale, ad esempio \"zh-CN\" per il cinese.",
+    "sort": "Ordina"
+  },
+  "upload_attachments": {
+    "upload_attachments_to_note": "Carica allegati alla nota",
+    "choose_files": "Scegli i file",
+    "files_will_be_uploaded": "I file saranno caricati come allegati in {{noteTitle}}",
+    "options": "Opzioni",
+    "shrink_images": "Riduci immagini",
+    "upload": "Carica",
+    "tooltip": "Se selezioni questa opzione, Trilium tenterà di ridurre le immagini caricate tramite ridimensionamento e ottimizzazione, il che potrebbe influire sulla qualità percepita delle immagini. Se non selezionata, le immagini verranno caricate senza modifiche."
+  },
+  "attribute_detail": {
+    "attr_detail_title": "Titolo dettagli attributo",
+    "close_button_title": "Annulla modifiche e chiudi",
+    "attr_is_owned_by": "L'attributo è di proprietà di",
+    "attr_name_title": "Il nome dell'attributo può essere composto solo da caratteri alfanumerici, due punti e trattino basso",
+    "name": "Nome",
+    "app_theme_base": "impostare su \"next\", \"next-light\" o \"next-dark\" per utilizzare il tema TriliumNext corrispondente (automatico, chiaro o scuro) come base per un tema personalizzato, invece di quello precedente.",
+    "css_class": "Il valore di questa etichetta viene quindi aggiunto come classe CSS al nodo che rappresenta una determinata nota nell'albero. Ciò può essere utile per la personalizzazione avanzata dei temi. Può essere utilizzato nelle note dei modelli.",
+    "icon_class": "Il valore di questa etichetta viene aggiunto come classe CSS all'icona sull'albero, il che può aiutare a distinguere visivamente le note nell'albero. Un esempio potrebbe essere bx bx-home - le icone sono prese da boxicons. Può essere utilizzato nelle note del modello.",
+    "page_size": "numero di elementi per pagina nell'elenco delle note",
+    "custom_request_handler": "vedi <a href=\"javascript:\" data-help-page=\"custom-request-handler.html\">Gestore richieste personalizzato</a>",
+    "custom_resource_provider": "vedi <a href=\"javascript:\" data-help-page=\"custom-request-handler.html\">Gestore richieste personalizzato</a>",
+    "widget": "contrassegna questa nota come widget personalizzato che verrà aggiunto all'albero dei componenti Trilium",
+    "workspace": "contrassegna questa nota come area di lavoro che consente un facile ancoraggio",
+    "workspace_icon_class": "definisce la classe CSS dell'icona della casella che verrà utilizzata nella scheda quando viene sollevata su questa nota",
+    "workspace_tab_background_color": "Colore CSS utilizzato nella scheda delle note quando viene sollevato su questa nota",
+    "workspace_calendar_root": "Definisce la radice del calendario per ogni area di lavoro",
+    "workspace_template": "Questa nota apparirà nella selezione dei modelli disponibili quando si crea una nuova nota, ma solo se inserita in un'area di lavoro che contiene questo modello",
+    "search_home": "verranno create nuove note di ricerca come sottovoci di questa nota",
+    "value": "Valore",
+    "target_note_title": "La relazione è una connessione denominata tra la nota di origine e la nota di destinazione.",
+    "target_note": "Nota obiettivo"
   }
 }
