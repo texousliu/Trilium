@@ -45,11 +45,34 @@
     --background: var(--hover-item-background-color);
 }
 
+/* Backdrop blur pseudo-element */
+.Island:not(.App-menu__left)::before,
+.excalidraw .picker::before,
+:root .App-menu__left > .panelColumn > fieldset::before,
+:root .App-menu__left > .panelColumn > label::before,
+:root .App-menu__left > .panelColumn > div:has(> *)::before {
+    display: block;
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    backdrop-filter: blur(10px) saturate(6);
+    z-index: -1;
+}
 
 /* Note's root */
 
 :root .type-canvas {
     --floating-buttons-vert-offset: 20px;
+}
+
+/* Islands (main menu, toolbar, panel, sidebar) */
+
+.Island {
+    backdrop-filter: none;
 }
 
 /* Context menus */
@@ -141,7 +164,6 @@
 
 /* Panels */
 
-.excalidraw .Island:not(.App-menu__left),
 .excalidraw .zoom-actions,
 .undo-redo-buttons {
     box-shadow: 1px 1px 1px var(--floating-button-shadow-color);
@@ -194,23 +216,10 @@ body[dir=rtl] .excalidraw .Island.App-menu__left {
     box-shadow: 1px 1px 1px var(--floating-button-shadow-color);
     background: var(--floating-button-background-color);
     padding: 8px 12px;
-}
 
-:root .App-menu__left > .panelColumn > fieldset::before,
-:root .App-menu__left > .panelColumn > label::before,
-:root .App-menu__left > .panelColumn > div:has(> *)::before {
     /* backdrop: blur() creates a new stacking context that prevents some popovers like the
      * arrowheads picker from being positioned correctly. To workaround this, the backdrop blur
      * effect is applyed using a pseudo-element instead. */
-    display: block;
-    position: absolute;
-    content: "";
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    backdrop-filter: blur(10px) saturate(6);
-    z-index: -1;
 }
 
 /* Options panel card title */
@@ -243,4 +252,10 @@ body[dir=rtl] .excalidraw .exc-stats {
 .split-note-container-widget > .component.type-canvas:has(.excalidraw-container > .Island.default-sidebar) > .floating-buttons {
     /* Hide the floating buttons when the sidebar is open */
     display: none;
+}
+
+/* Pickers */
+
+.excalidraw .picker {
+    position: relative;
 }

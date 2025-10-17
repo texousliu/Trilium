@@ -1784,10 +1784,6 @@ div.find-replace-widget div.find-widget-found-wrapper > span {
     --border-radius-lg: 6px;
 }
 
-.excalidraw .Island {
-    backdrop-filter: var(--dropdown-backdrop-filter);
-}
-
 .excalidraw .Island.App-toolbar {
     --island-bg-color: var(--floating-button-background-color);
     --shadow-island: 1px 1px 1px var(--floating-button-shadow-color);
