@@ -13,6 +13,7 @@ export interface PresentationSlideBaseModel {
     noteId: string;
     content: DangerouslySetInnerHTML;
     backgroundColor?: string;
+    backgroundGradient?: string;
 }
 
 export interface PresentationModel {
@@ -39,10 +40,14 @@ async function buildVerticalSlides(parentSlideNote: FNote): Promise<undefined | 
 }
 
 async function buildSlideModel(note: FNote): Promise<PresentationSlideBaseModel> {
+    const slideBackground = note.getLabelValue("slide:background") ?? undefined;
+    const isGradient = slideBackground?.includes("gradient(");
+
     return {
         noteId: note.noteId,
         content: await processContent(note),
-        backgroundColor: note.getLabelValue("slide:background") ?? undefined
+        backgroundColor: !isGradient ? slideBackground : undefined,
+        backgroundGradient: isGradient ? slideBackground : undefined
     }
 }
 

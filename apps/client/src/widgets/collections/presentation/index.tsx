@@ -178,6 +178,7 @@ function Slide({ slide }: { slide: PresentationSlideBaseModel }) {
         <section
             data-note-id={slide.noteId}
             data-background-color={slide.backgroundColor}
+            data-background-gradient={slide.backgroundGradient}
             dangerouslySetInnerHTML={slide.content}
         />
     );
