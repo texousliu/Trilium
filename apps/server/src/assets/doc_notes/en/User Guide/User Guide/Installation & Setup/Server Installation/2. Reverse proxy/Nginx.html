@@ -4,11 +4,11 @@
 sudo apt-get remove apache2</code></pre>
 <h2>Build the configuration file</h2>
 <ol>
-  <li data-list-item-id="e13e11a7fc322c075930e523e2c7aa4d9">
+  <li>
     <p>First, create the configuration file:</p><pre><code class="language-text-x-trilium-auto">cd /etc/nginx/conf.d
 vim default.conf</code></pre>
   </li>
-  <li data-list-item-id="e4f78909eb8e972cb53763daa3fc69333">
+  <li>
     <p>Fill the file with the context shown below, part of the setting show be
       changed. Then you can enjoy your web with HTTPS forced and proxy.</p><pre><code class="language-text-x-trilium-auto"># This part configures, where your Trilium server is running
 upstream trilium {
@@ -54,10 +54,9 @@ server {
   (useful e.g. if you want to serve multiple instances), update the location
   block like so:</p>
 <ul>
-  <li data-list-item-id="e332fd2d3d68c160e471759fa76c542c9">update the location with your desired path (make sure to not leave a trailing
+  <li>update the location with your desired path (make sure to not leave a trailing
     slash "/", if your <code>proxy_pass</code> does not end on a slash as well)</li>
-  <li
-  data-list-item-id="e48363402721bba6392ba9ff3f45b16b6">add the <code>proxy_cookie_path</code> directive with the same path: this
+  <li>add the <code>proxy_cookie_path</code> directive with the same path: this
     allows you to stay logged in at multiple instances at the same time.</li>
 </ul><pre><code class="language-text-x-trilium-auto">    location /trilium/instance-one {
         rewrite /trilium/instance-one/(.*) /$1  break;
@@ -73,4 +72,4 @@ server {
     }</code></pre>
 <h2>Configuring the trusted proxy</h2>
 <p>After setting up a reverse proxy, make sure to configure the&nbsp;<a class="reference-link"
-  href="#root/vcjrb3VVYPZI/_help_LLzSMXACKhUs">Trusted proxy</a>.</p>
+  href="#root/_help_LLzSMXACKhUs">Trusted proxy</a>.</p>

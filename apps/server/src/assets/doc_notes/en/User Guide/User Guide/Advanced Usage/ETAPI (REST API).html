@@ -5,7 +5,7 @@
 <p>As an alternative to calling the API directly, there are client libraries
   to simplify this</p>
 <ul>
-  <li data-list-item-id="ee7b0cc154e457f4bd579cec38dd49695"><a href="https://github.com/Nriver/trilium-py">trilium-py</a>, you can
+  <li><a href="https://github.com/Nriver/trilium-py">trilium-py</a>, you can
     use Python to communicate with Trilium.</li>
 </ul>
 <h2>Obtaining a token</h2>
@@ -23,10 +23,10 @@ Authorization: ETAPITOKEN</code></pre>
 <p>Since v0.56 you can also use basic auth format:</p><pre><code class="language-text-x-trilium-auto">GET https://myserver.com/etapi/app-info
 Authorization: Basic BATOKEN</code></pre>
 <ul>
-  <li data-list-item-id="e86aabb1609179bc22edcb308bb84ebf8">Where <code>BATOKEN = BASE64(username + ':' + password)</code> - this is
+  <li>Where <code>BATOKEN = BASE64(username + ':' + password)</code> - this is
     a standard Basic Auth serialization</li>
-  <li data-list-item-id="e5837f08379443a09a7ea8a4237bf2909">Where <code>username</code> is "etapi"</li>
-  <li data-list-item-id="e137dc99a1b1c5a308bc5dc4b450cadda">And <code>password</code> is the generated ETAPI token described above.</li>
+  <li>Where <code>username</code> is "etapi"</li>
+  <li>And <code>password</code> is the generated ETAPI token described above.</li>
 </ul>
 <p>Basic Auth is meant to be used with tools which support only basic auth.</p>
 <h2>Interaction using Bash scripts</h2>
@@ -42,14 +42,13 @@ NOTE_ID="i6ra4ZshJhgN"
 curl "$SERVER/etapi/notes/$NOTE_ID/content" -H "Authorization: $TOKEN" </code></pre>
 <p>Make sure to replace the values of:</p>
 <ul>
-  <li data-list-item-id="e9707bf9bba8c058b72a64034deaaf5e1"><code>TOKEN</code> with your ETAPI token.</li>
-  <li data-list-item-id="e479cb73c11d13a63d7d54cb6f35c3cd7"><code>SERVER</code> with the correct protocol, host name and port to your
+  <li><code>TOKEN</code> with your ETAPI token.</li>
+  <li><code>SERVER</code> with the correct protocol, host name and port to your
     Trilium instance.</li>
-  <li data-list-item-id="e51a5af5ecb3055bd3d6c93bbc9cde2af"><code>NOTE_ID</code> with an existing note ID to download.</li>
+  <li><code>NOTE_ID</code> with an existing note ID to download.</li>
 </ul>
 <p>As another example, to obtain a .zip export of a note and place it in
   a directory called <code>out</code>, simply replace the last statement in
   the script with:</p><pre><code class="language-text-x-trilium-auto">curl -H "Authorization: $TOKEN" \
 	-X GET "$SERVER/etapi/notes/$NOTE_ID/export" \
-
     --output "out/$NOTE_ID.zip"</code></pre>

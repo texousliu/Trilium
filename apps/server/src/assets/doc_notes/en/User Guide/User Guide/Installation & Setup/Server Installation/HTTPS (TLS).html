@@ -3,18 +3,18 @@
 <aside
 class="admonition tip">
   <p>While Trilium supports HTTPS on its own, it's generally a good idea to
-    use a <a href="#root/pOsGYCXsbNQG/Otzi9La2YAUX/WOcw2SLH6tbX/_help_vcjrb3VVYPZI">reverse proxy</a> instead
-    with TLS termination. You can follow a <a href="https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-20-04">guide like this</a> for
+    use a <a href="#root/_help_vcjrb3VVYPZI">reverse proxy</a> instead with TLS
+    termination. You can follow a <a href="https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-20-04">guide like this</a> for
     such setups.</p>
   </aside>
   <h2>Obtaining a TLS Certificate</h2>
   <p>You have two options for obtaining a TLS certificate:</p>
   <ul>
-    <li data-list-item-id="ef9eca3746191ab88f8ac5b9bbf0819b5"><strong>Recommended</strong>: Obtain a TLS certificate signed by a root
+    <li><strong>Recommended</strong>: Obtain a TLS certificate signed by a root
       certificate authority. For personal use, <a href="https://letsencrypt.org">Let's Encrypt</a> is
       an excellent choice. It is free, automated, and straightforward. Certbot
       can facilitate automatic TLS setup.</li>
-    <li data-list-item-id="e2f48af26cc62a095be59dccbf1e44db6">Generate a self-signed certificate. This option is not recommended due
+    <li>Generate a self-signed certificate. This option is not recommended due
       to the additional complexity of importing the certificate into all machines
       connecting to the server.</li>
   </ul>
