@@ -14,11 +14,10 @@
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/eliandoran)
 ![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran)\
 ![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/trilium)
-![GitHub Downloads (all assets, all
-releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
+![GitHub Downloads
+(所有资产，所有历史版本)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
-[![Translation
-status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
+[![翻译状态](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted.weblate.org/engage/trilium/)
 
 [英文](./README.md) | [简体中文](./docs/README-ZH_CN.md) |
 [正体中文](./docs/README-ZH_TW.md) | [俄文](./docs/README-ru.md) |
@@ -33,12 +32,10 @@ Trilium Notes 是一款免费且开源、跨平台的阶层式笔记应用程序
 
 ## 📖 文件
 
-**Visit our comprehensive documentation at
-[docs.triliumnotes.org](https://docs.triliumnotes.org/)**
+**请访问我们完整的文档：[docs.triliumnotes.org](https://docs.triliumnotes.org/)**
 
-Our documentation is available in multiple formats:
-- **Online Documentation**: Browse the full documentation at
-  [docs.triliumnotes.org](https://docs.triliumnotes.org/)
+我们的文档有多种格式可供使用：
+- **在线文档**：请访问我们完整的文档：[docs.triliumnotes.org](https://docs.triliumnotes.org/)
 - **In-App Help**: Press `F1` within Trilium to access the same documentation
   directly in the application
 - **GitHub**: Navigate through the [User
