@@ -129,40 +129,14 @@
   },
   "etapi": {
     "new_token_title": "Nuovo token ETAPI",
-    "new_token_message": "Inserisci il nome del nuovo token",
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1164,\"\"en\"\",\"\"it\"\")\"),\"ETAPI\")",
-    "description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1165,\"\"en\"\",\"\"it\"\")\"),\"ETAPI è un'API REST utilizzata per accedere alle istanze di Trilium in modo programmatico, senza interfaccia utente.\")",
-    "see_more": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1166,\"\"en\"\",\"\"it\"\")\"),\"Per maggiori dettagli consulta {{- link_to_wiki}} e {{- link_to_openapi_spec}} o {{- link_to_swagger_ui}}.\")",
-    "wiki": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1167,\"\"en\"\",\"\"it\"\")\"),\"wiki\")",
-    "openapi_spec": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1168,\"\"en\"\",\"\"it\"\")\"),\"Specifiche ETAPI OpenAPI\")",
-    "swagger_ui": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1169,\"\"en\"\",\"\"it\"\")\"),\"Interfaccia utente ETAPI Swagger\")",
-    "create_token": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1170,\"\"en\"\",\"\"it\"\")\"),\"Crea un nuovo token ETAPI\")",
-    "existing_tokens": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1171,\"\"en\"\",\"\"it\"\")\"),\"Token esistenti\")",
-    "no_tokens_yet": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1172,\"\"en\"\",\"\"it\"\")\"),\"Non ci sono ancora token. Clicca sul pulsante qui sopra per crearne uno.\")",
-    "token_name": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1173,\"\"en\"\",\"\"it\"\")\"),\"Nome del token\")",
-    "created": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1174,\"\"en\"\",\"\"it\"\")\"),\"Creato\")",
-    "actions": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1175,\"\"en\"\",\"\"it\"\")\"),\"Azioni\")",
-    "default_token_name": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1178,\"\"en\"\",\"\"it\"\")\"),\"nuovo token\")",
-    "error_empty_name": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1179,\"\"en\"\",\"\"it\"\")\"),\"Il nome del token non può essere vuoto\")",
-    "token_created_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1180,\"\"en\"\",\"\"it\"\")\"),\"Token ETAPI creato\")",
-    "token_created_message": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1181,\"\"en\"\",\"\"it\"\")\"),\"Copia il token creato negli appunti. Trilium memorizza l'hash del token e questa è l'ultima volta che lo vedi.\")",
-    "rename_token": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1182,\"\"en\"\",\"\"it\"\")\"),\"Rinomina questo token\")",
-    "delete_token": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1183,\"\"en\"\",\"\"it\"\")\"),\"Elimina/disattiva questo token\")",
-    "rename_token_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1184,\"\"en\"\",\"\"it\"\")\"),\"Rinomina token\")",
-    "rename_token_message": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1185,\"\"en\"\",\"\"it\"\")\"),\"Inserisci il nome del nuovo token\")",
-    "delete_token_confirmation": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1186,\"\"en\"\",\"\"it\"\")\"),\"Sei sicuro di voler eliminare il token ETAPI \"\"{{name}}\"\"?\")"
+    "new_token_message": "Inserisci il nome del nuovo token"
   },
   "electron_integration": {
     "zoom-factor": "Fattore di ingrandimento",
-    "desktop-application": "Applicazione Desktop",
-    "native-title-bar": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1478,\"\"en\"\",\"\"it\"\")\"),\"Barra del titolo nativa\")",
-    "native-title-bar-description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1479,\"\"en\"\",\"\"it\"\")\"),\"Su Windows e macOS, disattivare la barra del titolo nativa rende l'applicazione più compatta. Su Linux, attivarla si integra meglio con il resto del sistema.\")",
-    "background-effects": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1480,\"\"en\"\",\"\"it\"\")\"),\"Abilita effetti di sfondo (solo Windows 11)\")",
-    "background-effects-description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1481,\"\"en\"\",\"\"it\"\")\"),\"L'effetto Mica aggiunge uno sfondo sfocato ed elegante alle finestre delle app, creando profondità e un aspetto moderno. La \"\"Barra del titolo nativa\"\" deve essere disattivata.\")",
-    "restart-app-button": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1482,\"\"en\"\",\"\"it\"\")\"),\"Riavviare l'applicazione per visualizzare le modifiche\")"
+    "desktop-application": "Applicazione Desktop"
   },
   "note_autocomplete": {
-    "search-for": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1484,\"\"en\"\",\"\"it\"\")\"),\"Cerca \"\"{{term}}\"\"\")",
+    "search-for": "Cerca \"{{term}}\"",
     "create-note": "Crea e collega la nota secondaria “{{term}}”",
     "insert-external-link": "Inserisci il collegamento esterno a \"{{term}}\"",
     "clear-text-field": "Pulisci il campo di testo",
@@ -184,9 +158,7 @@
     "add-note": "Aggiungi un marcatore in questa posizione"
   },
   "debug": {
-    "debug": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A723,\"\"en\"\",\"\"it\"\")\"),\"Debug\")",
-    "debug_info": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A724,\"\"en\"\",\"\"it\"\")\"),\"Debug stamperà informazioni di debug aggiuntive nella console per facilitare il debug di query complesse.\")",
-    "access_info": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A725,\"\"en\"\",\"\"it\"\")\"),\"Per accedere alle informazioni di debug, eseguire la query e fare clic su \"\"Mostra registro backend\"\" nell'angolo in alto a sinistra.\")"
+    "debug": "Debug"
   },
   "database_anonymization": {
     "light_anonymization": "Anonimizzazione parziale",
@@ -199,29 +171,18 @@
     "no_anonymized_database_yet": "Ancora nessun database anonimizzato.",
     "save_lightly_anonymized_database": "Salva database leggermente anonimizzato",
     "successfully_created_fully_anonymized_database": "Database completamente anonimizzato creato in {{anonymizedFilePath}}",
-    "successfully_created_lightly_anonymized_database": "Database parzialmente anonimizzato creato in {{anonymizedFilePath}}",
-    "existing_anonymized_databases": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A832,\"\"en\"\",\"\"it\"\")\"),\"Database anonimizzati esistenti\")",
-    "creating_fully_anonymized_database": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A833,\"\"en\"\",\"\"it\"\")\"),\"Creazione di un database completamente anonimizzato...\")",
-    "creating_lightly_anonymized_database": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A834,\"\"en\"\",\"\"it\"\")\"),\"Creazione di un database leggermente anonimizzato...\")",
-    "error_creating_anonymized_database": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A835,\"\"en\"\",\"\"it\"\")\"),\"Impossibile creare un database anonimo, controllare i log del backend per i dettagli\")"
+    "successfully_created_lightly_anonymized_database": "Database parzialmente anonimizzato creato in {{anonymizedFilePath}}"
   },
   "cpu_arch_warning": {
     "title": "Per favore scarica la versione ARM64",
     "continue_anyway": "Continua comunque",
     "dont_show_again": "Non mostrare più questo avviso",
-    "download_link": "Scarica la Versione Nativa",
-    "message_macos": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1532,\"\"en\"\",\"\"it\"\")\"),\"Al momento TriliumNext è in esecuzione con la traduzione Rosetta 2, il che significa che stai utilizzando la versione Intel (x64) su Mac con Apple Silicon. Ciò avrà un impatto significativo sulle prestazioni e sulla durata della batteria.\")",
-    "message_windows": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1533,\"\"en\"\",\"\"it\"\")\"),\"TriliumNext è attualmente in emulazione, il che significa che stai utilizzando la versione Intel (x64) su un dispositivo Windows su ARM. Ciò avrà un impatto significativo sulle prestazioni e sulla durata della batteria.\")",
-    "recommendation": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1534,\"\"en\"\",\"\"it\"\")\"),\"Per un'esperienza ottimale, scarica la versione nativa ARM64 di TriliumNext dalla nostra pagina delle versioni.\")"
+    "download_link": "Scarica la Versione Nativa"
   },
   "editorfeatures": {
     "title": "Caratteristiche",
     "emoji_completion_enabled": "Abilita il completamento automatico delle Emoji",
-    "note_completion_enabled": "Abilita il completamento automatico delle note",
-    "emoji_completion_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1540,\"\"en\"\",\"\"it\"\")\"),\"Se abilitata, è possibile inserire facilmente gli emoji nel testo digitando `:`, seguito dal nome dell'emoji.\")",
-    "note_completion_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1542,\"\"en\"\",\"\"it\"\")\"),\"Se abilitato, è possibile creare collegamenti alle note digitando `@` seguito dal titolo di una nota.\")",
-    "slash_commands_enabled": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1543,\"\"en\"\",\"\"it\"\")\"),\"Abilita i comandi slash\")",
-    "slash_commands_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1544,\"\"en\"\",\"\"it\"\")\"),\"Se abilitato, i comandi di modifica come l'inserimento di interruzioni di riga o intestazioni possono essere attivati digitando `/`.\")"
+    "note_completion_enabled": "Abilita il completamento automatico delle note"
   },
   "table_view": {
     "new-row": "Nuova riga",
@@ -233,49 +194,24 @@
     "hide-column": "Nascondi la colonna \"{{title}}\"",
     "show-hide-columns": "Mostra/nascondi le colonne",
     "row-insert-above": "Inserisci una riga sopra",
-    "row-insert-below": "Inserisci una riga sotto",
-    "row-insert-child": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1555,\"\"en\"\",\"\"it\"\")\"),\"Inserisci nota secondaria\")",
-    "add-column-to-the-left": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1556,\"\"en\"\",\"\"it\"\")\"),\"Aggiungi colonna a sinistra\")",
-    "add-column-to-the-right": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1557,\"\"en\"\",\"\"it\"\")\"),\"Aggiungi colonna a destra\")",
-    "edit-column": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1558,\"\"en\"\",\"\"it\"\")\"),\"Modifica colonna\")",
-    "delete_column_confirmation": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1559,\"\"en\"\",\"\"it\"\")\"),\"Vuoi davvero eliminare questa colonna? L'attributo corrispondente verrà rimosso da tutte le note.\")",
-    "delete-column": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1560,\"\"en\"\",\"\"it\"\")\"),\"Elimina colonna\")",
-    "new-column-label": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1561,\"\"en\"\",\"\"it\"\")\"),\"Etichetta\")",
-    "new-column-relation": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1562,\"\"en\"\",\"\"it\"\")\"),\"Relazione\")"
+    "row-insert-below": "Inserisci una riga sotto"
   },
   "abstract_search_option": {
     "remove_this_search_option": "Rimuovi questa opzione di ricerca",
     "failed_rendering": "Opzione di ricerca di rendering non riuscita: {{dto}} con errore: {{error}} {{stack}}"
   },
   "ancestor": {
-    "label": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A715,\"\"en\"\",\"\"it\"\")\"),\"Antenato\")",
-    "placeholder": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A716,\"\"en\"\",\"\"it\"\")\"),\"cerca la nota per nome\")",
-    "depth_label": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A717,\"\"en\"\",\"\"it\"\")\"),\"profondità\")",
-    "depth_doesnt_matter": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A718,\"\"en\"\",\"\"it\"\")\"),\"non importa\")",
-    "depth_eq": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A719,\"\"en\"\",\"\"it\"\")\"),\"è esattamente {{count}}\")",
-    "direct_children": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A720,\"\"en\"\",\"\"it\"\")\"),\"figli diretti\")",
-    "depth_gt": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A721,\"\"en\"\",\"\"it\"\")\"),\"è maggiore di {{count}}\")",
-    "depth_lt": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A722,\"\"en\"\",\"\"it\"\")\"),\"è inferiore a {{count}}\")"
+    "label": "Antenato"
   },
   "add_label": {
     "add_label": "Aggiungi etichetta",
     "label_name_placeholder": "nome dell'etichetta",
     "new_value_placeholder": "nuovo valore",
-    "to_value": "al valore",
-    "label_name_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A396,\"\"en\"\",\"\"it\"\")\"),\"Sono consentiti caratteri alfanumerici, trattino basso e due punti.\")",
-    "help_text": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A399,\"\"en\"\",\"\"it\"\")\"),\"Su tutte le note abbinate:\")",
-    "help_text_item1": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A400,\"\"en\"\",\"\"it\"\")\"),\"crea l'etichetta data se la nota non ne ha ancora una\")",
-    "help_text_item2": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A401,\"\"en\"\",\"\"it\"\")\"),\"o modificare il valore dell'etichetta esistente\")",
-    "help_text_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A402,\"\"en\"\",\"\"it\"\")\"),\"È possibile chiamare questo metodo anche senza valore, in tal caso l'etichetta verrà assegnata alla nota senza valore.\")"
+    "to_value": "al valore"
   },
   "update_label_value": {
     "to_value": "al valore",
-    "label_name_placeholder": "nome dell'etichetta",
-    "update_label_value": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A412,\"\"en\"\",\"\"it\"\")\"),\"Aggiorna il valore dell'etichetta\")",
-    "label_name_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A414,\"\"en\"\",\"\"it\"\")\"),\"Sono consentiti caratteri alfanumerici, trattino basso e due punti.\")",
-    "new_value_placeholder": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A416,\"\"en\"\",\"\"it\"\")\"),\"nuovo valore\")",
-    "help_text": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A417,\"\"en\"\",\"\"it\"\")\"),\"Su tutte le note corrispondenti, modifica il valore dell'etichetta esistente.\")",
-    "help_text_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A418,\"\"en\"\",\"\"it\"\")\"),\"È possibile chiamare questo metodo anche senza valore, in tal caso l'etichetta verrà assegnata alla nota senza valore.\")"
+    "label_name_placeholder": "nome dell'etichetta"
   },
   "delete_label": {
     "delete_label": "Elimina etichetta",
@@ -284,151 +220,51 @@
   },
   "tree-context-menu": {
     "move-to": "Muovi in...",
-    "cut": "Taglia",
-    "open-in-a-new-tab": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1290,\"\"en\"\",\"\"it\"\")\"),\"Apri in una nuova scheda\")",
-    "open-in-a-new-split": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1291,\"\"en\"\",\"\"it\"\")\"),\"Apri in una nuova divisione\")",
-    "insert-note-after": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1292,\"\"en\"\",\"\"it\"\")\"),\"Inserisci nota dopo\")",
-    "insert-child-note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1293,\"\"en\"\",\"\"it\"\")\"),\"Inserisci nota secondaria\")",
-    "archive": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1294,\"\"en\"\",\"\"it\"\")\"),\"Archivio\")",
-    "unarchive": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1295,\"\"en\"\",\"\"it\"\")\"),\"Disarchiviare\")",
-    "delete": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1296,\"\"en\"\",\"\"it\"\")\"),\"Eliminare\")",
-    "search-in-subtree": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1297,\"\"en\"\",\"\"it\"\")\"),\"Cerca nel sottoalbero\")",
-    "hoist-note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1298,\"\"en\"\",\"\"it\"\")\"),\"Nota di sollevamento\")",
-    "unhoist-note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1299,\"\"en\"\",\"\"it\"\")\"),\"Nota di sgancio\")",
-    "edit-branch-prefix": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1300,\"\"en\"\",\"\"it\"\")\"),\"Modifica prefisso ramo\")",
-    "advanced": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1301,\"\"en\"\",\"\"it\"\")\"),\"Avanzato\")",
-    "expand-subtree": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1302,\"\"en\"\",\"\"it\"\")\"),\"Espandi sottoalbero\")",
-    "collapse-subtree": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1303,\"\"en\"\",\"\"it\"\")\"),\"Comprimi sottoalbero\")",
-    "sort-by": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1304,\"\"en\"\",\"\"it\"\")\"),\"Ordina per...\")",
-    "recent-changes-in-subtree": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1305,\"\"en\"\",\"\"it\"\")\"),\"Modifiche recenti nel sottoalbero\")",
-    "convert-to-attachment": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1306,\"\"en\"\",\"\"it\"\")\"),\"Converti in allegato\")",
-    "copy-note-path-to-clipboard": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1307,\"\"en\"\",\"\"it\"\")\"),\"Copia il percorso della nota negli appunti\")",
-    "protect-subtree": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1308,\"\"en\"\",\"\"it\"\")\"),\"Proteggi sottoalbero\")",
-    "unprotect-subtree": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1309,\"\"en\"\",\"\"it\"\")\"),\"Rimuovi protezione dal sottoalbero\")",
-    "copy-clone": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1310,\"\"en\"\",\"\"it\"\")\"),\"Copia / clona\")",
-    "clone-to": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1311,\"\"en\"\",\"\"it\"\")\"),\"Clona in...\")",
-    "paste-into": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1314,\"\"en\"\",\"\"it\"\")\"),\"Incolla in\")",
-    "paste-after": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1315,\"\"en\"\",\"\"it\"\")\"),\"Incolla dopo\")",
-    "duplicate": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1316,\"\"en\"\",\"\"it\"\")\"),\"Duplicato\")",
-    "export": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1317,\"\"en\"\",\"\"it\"\")\"),\"Esportare\")",
-    "import-into-note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1318,\"\"en\"\",\"\"it\"\")\"),\"Importa nella nota\")",
-    "apply-bulk-actions": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1319,\"\"en\"\",\"\"it\"\")\"),\"Applica azioni in blocco\")",
-    "converted-to-attachments": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1320,\"\"en\"\",\"\"it\"\")\"),\"{{count}} note sono state convertite in allegati.\")",
-    "convert-to-attachment-confirm": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1321,\"\"en\"\",\"\"it\"\")\"),\"Sei sicuro di voler convertire le note selezionate in allegati delle note padre?\")",
-    "open-in-popup": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1322,\"\"en\"\",\"\"it\"\")\"),\"Modifica rapida\")"
+    "cut": "Taglia"
   },
   "electron_context_menu": {
     "cut": "Taglia",
     "copy": "Copia",
     "paste": "Incolla",
     "copy-link": "Copia collegamento",
-    "paste-as-plain-text": "Incolla come testo semplice",
-    "add-term-to-dictionary": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1464,\"\"en\"\",\"\"it\"\")\"),\"Aggiungi \"\"{{term}}\"\" al dizionario\")",
-    "search_online": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1470,\"\"en\"\",\"\"it\"\")\"),\"Cerca \"\"{{term}}\"\" con {{searchEngine}}\")"
+    "paste-as-plain-text": "Incolla come testo semplice"
   },
   "editing": {
     "editor_type": {
-      "multiline-toolbar": "Mostra la barra degli strumenti su più linee se non entra.",
-      "label": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1458,\"\"en\"\",\"\"it\"\")\"),\"Barra degli strumenti di formattazione\")",
-      "floating": {
-        "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1459,\"\"en\"\",\"\"it\"\")\"),\"Galleggiante\")",
-        "description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1460,\"\"en\"\",\"\"it\"\")\"),\"gli strumenti di modifica appaiono vicino al cursore;\")"
-      },
-      "fixed": {
-        "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1461,\"\"en\"\",\"\"it\"\")\"),\"Fisso\")",
-        "description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1462,\"\"en\"\",\"\"it\"\")\"),\"gli strumenti di modifica vengono visualizzati nella scheda \"\"Formattazione\"\" della barra multifunzione.\")"
-      }
+      "multiline-toolbar": "Mostra la barra degli strumenti su più linee se non entra."
     }
   },
   "edit_button": {
-    "edit_this_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A518,\"\"en\"\",\"\"it\"\")\"),\"Modifica questa nota\")"
+    "edit_this_note": "Modifica questa nota"
   },
   "shortcuts": {
-    "shortcuts": "Scorciatoie",
-    "keyboard_shortcuts": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1239,\"\"en\"\",\"\"it\"\")\"),\"Scorciatoie da tastiera\")",
-    "multiple_shortcuts": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1240,\"\"en\"\",\"\"it\"\")\"),\"Più scorciatoie per la stessa azione possono essere separate da virgola.\")",
-    "electron_documentation": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1241,\"\"en\"\",\"\"it\"\")\"),\"Consultare la <a href=\"\"https://www.electronjs.org/docs/latest/api/accelerator\"\">documentazione di Electron</a> per i modificatori e i codici chiave disponibili.\")",
-    "type_text_to_filter": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1242,\"\"en\"\",\"\"it\"\")\"),\"Digita il testo per filtrare le scorciatoie...\")",
-    "action_name": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1243,\"\"en\"\",\"\"it\"\")\"),\"Nome dell'azione\")",
-    "default_shortcuts": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1245,\"\"en\"\",\"\"it\"\")\"),\"Scorciatoie predefinite\")",
-    "description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1246,\"\"en\"\",\"\"it\"\")\"),\"Descrizione\")",
-    "reload_app": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1247,\"\"en\"\",\"\"it\"\")\"),\"Ricarica l'app per applicare le modifiche\")",
-    "set_all_to_default": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1248,\"\"en\"\",\"\"it\"\")\"),\"Imposta tutte le scorciatoie sui valori predefiniti\")",
-    "confirm_reset": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1249,\"\"en\"\",\"\"it\"\")\"),\"Vuoi davvero ripristinare tutte le scorciatoie da tastiera ai valori predefiniti?\")"
+    "shortcuts": "Scorciatoie"
   },
   "shared_switch": {
     "toggle-on-title": "Condividi la nota",
-    "toggle-off-title": "Non condividere la nota",
-    "shared": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1353,\"\"en\"\",\"\"it\"\")\"),\"Condiviso\")",
-    "shared-branch": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1356,\"\"en\"\",\"\"it\"\")\"),\"Questa nota esiste solo come nota condivisa; annullando la condivisione verrebbe eliminata. Vuoi continuare ed eliminare questa nota?\")",
-    "inherited": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1357,\"\"en\"\",\"\"it\"\")\"),\"Non è possibile annullare la condivisione della nota in questo caso perché è condivisa tramite eredità da un antenato.\")"
+    "toggle-off-title": "Non condividere la nota"
   },
   "search_string": {
-    "search_prefix": "Cerca:",
-    "title_column": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A755,\"\"en\"\",\"\"it\"\")\"),\"Stringa di ricerca:\")",
-    "placeholder": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A756,\"\"en\"\",\"\"it\"\")\"),\"parole chiave a testo completo, #tag = valore...\")",
-    "search_syntax": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A757,\"\"en\"\",\"\"it\"\")\"),\"Sintassi di ricerca\")",
-    "also_see": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A758,\"\"en\"\",\"\"it\"\")\"),\"vedi anche\")",
-    "complete_help": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A759,\"\"en\"\",\"\"it\"\")\"),\"aiuto completo sulla sintassi di ricerca\")",
-    "full_text_search": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A760,\"\"en\"\",\"\"it\"\")\"),\"Basta inserire un testo qualsiasi per la ricerca full text\")",
-    "label_abc": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A761,\"\"en\"\",\"\"it\"\")\"),\"restituisce note con etichetta abc\")",
-    "label_year": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A762,\"\"en\"\",\"\"it\"\")\"),\"corrisponde alle note con l'anno dell'etichetta avente valore 2019\")",
-    "label_rock_pop": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A763,\"\"en\"\",\"\"it\"\")\"),\"corrisponde alle note che hanno sia etichette rock che pop\")",
-    "label_rock_or_pop": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A764,\"\"en\"\",\"\"it\"\")\"),\"deve essere presente solo una delle etichette\")",
-    "label_year_comparison": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A765,\"\"en\"\",\"\"it\"\")\"),\"confronto numerico (anche >, >=, <).\")",
-    "label_date_created": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A766,\"\"en\"\",\"\"it\"\")\"),\"note create nell'ultimo mese\")",
-    "error": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A767,\"\"en\"\",\"\"it\"\")\"),\"Errore di ricerca: {{error}}\")"
+    "search_prefix": "Cerca:"
   },
   "attachment_detail": {
-    "open_help_page": "Apri la pagina di aiuto sugli allegati",
-    "owning_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A770,\"\"en\"\",\"\"it\"\")\"),\"Nota di proprietà:\") ",
-    "you_can_also_open": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A771,\"\"en\"\",\"\"it\"\")\"),\", puoi anche aprire il\") ",
-    "list_of_all_attachments": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A772,\"\"en\"\",\"\"it\"\")\"),\"Elenco di tutti gli allegati\")",
-    "attachment_deleted": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A773,\"\"en\"\",\"\"it\"\")\"),\"Questo allegato è stato eliminato.\")"
+    "open_help_page": "Apri la pagina di aiuto sugli allegati"
   },
   "search_definition": {
     "ancestor": "antenato",
     "debug": "debug",
     "action": "azione",
-    "add_search_option": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A690,\"\"en\"\",\"\"it\"\")\"),\"Aggiungi opzione di ricerca:\")",
+    "add_search_option": "Aggiungi un opzione di ricerca:",
     "search_string": "stringa di ricerca",
-    "limit": "limite",
-    "search_script": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A692,\"\"en\"\",\"\"it\"\")\"),\"script di ricerca\")",
-    "fast_search": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A694,\"\"en\"\",\"\"it\"\")\"),\"ricerca veloce\")",
-    "fast_search_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A695,\"\"en\"\",\"\"it\"\")\"),\"L'opzione di ricerca rapida disattiva la ricerca del testo completo del contenuto delle note, il che potrebbe velocizzare la ricerca in database di grandi dimensioni.\")",
-    "include_archived": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A696,\"\"en\"\",\"\"it\"\")\"),\"includere archiviato\")",
-    "include_archived_notes_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A697,\"\"en\"\",\"\"it\"\")\"),\"Per impostazione predefinita, le note archiviate sono escluse dai risultati della ricerca; con questa opzione verranno incluse.\")",
-    "order_by": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A698,\"\"en\"\",\"\"it\"\")\"),\"ordina per\")",
-    "limit_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A700,\"\"en\"\",\"\"it\"\")\"),\"Limita il numero di risultati\")",
-    "debug_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A702,\"\"en\"\",\"\"it\"\")\"),\"Debug stamperà informazioni di debug aggiuntive nella console per facilitare il debug di query complesse\")",
-    "search_button": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A704,\"\"en\"\",\"\"it\"\")\"),\"Ricerca\")",
-    "search_execute": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A705,\"\"en\"\",\"\"it\"\")\"),\"Cerca ed esegui azioni\")",
-    "save_to_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A706,\"\"en\"\",\"\"it\"\")\"),\"Salva per annotare\")",
-    "search_parameters": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A707,\"\"en\"\",\"\"it\"\")\"),\"Parametri di ricerca\")",
-    "unknown_search_option": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A708,\"\"en\"\",\"\"it\"\")\"),\"Opzione di ricerca sconosciuta {{searchOptionName}}\")",
-    "search_note_saved": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A709,\"\"en\"\",\"\"it\"\")\"),\"La nota di ricerca è stata salvata in {{- notePathTitle}}\")",
-    "actions_executed": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A710,\"\"en\"\",\"\"it\"\")\"),\"Le azioni sono state eseguite.\")"
+    "limit": "limite"
   },
   "modal": {
-    "close": "Chiudi",
-    "help_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1605,\"\"en\"\",\"\"it\"\")\"),\"Visualizza maggiori informazioni su questa schermata\")"
+    "close": "Chiudi"
   },
   "board_view": {
     "insert-below": "Inserisci sotto",
     "delete-column": "Elimina la colonna",
-    "delete-column-confirmation": "Sei sicuro di vole eliminare questa colonna? Il corrispondente attributo sarà eliminato anche nelle note sotto questa colonna.",
-    "delete-note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1572,\"\"en\"\",\"\"it\"\")\"),\"Elimina nota...\")",
-    "remove-from-board": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1573,\"\"en\"\",\"\"it\"\")\"),\"Rimuovi dalla bacheca\")",
-    "archive-note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1574,\"\"en\"\",\"\"it\"\")\"),\"Nota d'archivio\")",
-    "unarchive-note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1575,\"\"en\"\",\"\"it\"\")\"),\"Decomprimi nota\")",
-    "move-to": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1576,\"\"en\"\",\"\"it\"\")\"),\"Spostarsi a\")",
-    "insert-above": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1577,\"\"en\"\",\"\"it\"\")\"),\"Inserisci sopra\")",
-    "new-item": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1581,\"\"en\"\",\"\"it\"\")\"),\"Nuovo articolo\")",
-    "new-item-placeholder": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1582,\"\"en\"\",\"\"it\"\")\"),\"Inserisci il titolo della nota...\")",
-    "add-column": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1583,\"\"en\"\",\"\"it\"\")\"),\"Aggiungi colonna\")",
-    "add-column-placeholder": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1584,\"\"en\"\",\"\"it\"\")\"),\"Inserisci il nome della colonna...\")",
-    "edit-note-title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1585,\"\"en\"\",\"\"it\"\")\"),\"Fare clic per modificare il titolo della nota\")",
-    "edit-column-title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1586,\"\"en\"\",\"\"it\"\")\"),\"Fare clic per modificare il titolo della colonna\")"
+    "delete-column-confirmation": "Sei sicuro di vole eliminare questa colonna? Il corrispondente attributo sarà eliminato anche nelle note sotto questa colonna."
   },
   "backup": {
     "enable_weekly_backup": "Abilita le archiviazioni settimanali",
@@ -451,26 +287,19 @@
   "consistency_checks": {
     "find_and_fix_button": "Trova e correggi i problemi di coerenza",
     "finding_and_fixing_message": "In cerca e correzione dei problemi di coerenza...",
-    "issues_fixed_message": "Qualsiasi problema di coerenza che possa essere stato trovato ora è corretto.",
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A820,\"\"en\"\",\"\"it\"\")\"),\"Controlli di coerenza\")"
+    "issues_fixed_message": "Qualsiasi problema di coerenza che possa essere stato trovato ora è corretto."
   },
   "database_integrity_check": {
     "check_button": "Controllo dell'integrità del database",
     "checking_integrity": "Controllo dell'integrità del database in corso...",
     "title": "Controllo di Integrità del database",
     "description": "Controllerà che il database non sia corrotto a livello SQLite. Può durare un po' di tempo, a seconda della grandezza del DB.",
-    "integrity_check_failed": "Controllo di integrità fallito: {{results}}",
-    "integrity_check_succeeded": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A843,\"\"en\"\",\"\"it\"\")\"),\"Controllo di integrità riuscito: nessun problema riscontrato.\")"
+    "integrity_check_failed": "Controllo di integrità fallito: {{results}}"
   },
   "sync": {
     "title": "Sincronizza",
     "force_full_sync_button": "Forza una sincronizzazione completa",
-    "failed": "Sincronizzazione fallita: {{message}}",
-    "fill_entity_changes_button": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A847,\"\"en\"\",\"\"it\"\")\"),\"Compila i record delle modifiche dell'entità\")",
-    "full_sync_triggered": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A848,\"\"en\"\",\"\"it\"\")\"),\"Sincronizzazione completa attivata\")",
-    "filling_entity_changes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A849,\"\"en\"\",\"\"it\"\")\"),\"Il riempimento delle righe modifica l'entità...\")",
-    "sync_rows_filled_successfully": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A850,\"\"en\"\",\"\"it\"\")\"),\"Sincronizzazione righe compilate correttamente\")",
-    "finished-successfully": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A851,\"\"en\"\",\"\"it\"\")\"),\"Sincronizzazione completata con successo.\")"
+    "failed": "Sincronizzazione fallita: {{message}}"
   },
   "sync_2": {
     "config_title": "Configurazione per la Sincronizzazione",
@@ -479,28 +308,10 @@
     "timeout": "Timeout per la sincronizzazione",
     "timeout_unit": "millisecondi",
     "save": "Salva",
-    "help": "Aiuto",
-    "server_address": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1259,\"\"en\"\",\"\"it\"\")\"),\"Indirizzo dell'istanza del server\")",
-    "note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1263,\"\"en\"\",\"\"it\"\")\"),\"Nota\")",
-    "note_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1264,\"\"en\"\",\"\"it\"\")\"),\"Se si lascia vuota l'impostazione del proxy, verrà utilizzato il proxy di sistema (valido solo per le build desktop/electron).\")",
-    "special_value_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1265,\"\"en\"\",\"\"it\"\")\"),\"Un altro valore speciale è <code>noproxy</code> che forza l'ignoramento anche del proxy di sistema e rispetta <code>NODE_TLS_REJECT_UNAUTHORIZED</code>.\")",
-    "test_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1269,\"\"en\"\",\"\"it\"\")\"),\"Questo testerà la connessione e l'handshake con il server di sincronizzazione. Se il server di sincronizzazione non è inizializzato, questo lo imposterà per la sincronizzazione con il documento locale.\")",
-    "test_button": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1270,\"\"en\"\",\"\"it\"\")\"),\"Test di sincronizzazione\")",
-    "handshake_failed": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1271,\"\"en\"\",\"\"it\"\")\"),\"Handshake del server di sincronizzazione non riuscito, errore: {{message}}\")"
+    "help": "Aiuto"
   },
   "search_engine": {
-    "save_button": "Salva",
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1091,\"\"en\"\",\"\"it\"\")\"),\"Motore di ricerca\")",
-    "custom_search_engine_info": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1092,\"\"en\"\",\"\"it\"\")\"),\"Il motore di ricerca personalizzato richiede l'impostazione sia di un nome che di un URL. Se uno di questi non viene impostato, DuckDuckGo verrà utilizzato come motore di ricerca predefinito.\")",
-    "predefined_templates_label": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1093,\"\"en\"\",\"\"it\"\")\"),\"Modelli predefiniti per motori di ricerca\")",
-    "bing": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1094,\"\"en\"\",\"\"it\"\")\"),\"Bing\")",
-    "baidu": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1095,\"\"en\"\",\"\"it\"\")\"),\"Baidu\")",
-    "duckduckgo": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1096,\"\"en\"\",\"\"it\"\")\"),\"DuckDuckGo\")",
-    "google": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1097,\"\"en\"\",\"\"it\"\")\"),\"Google\")",
-    "custom_name_label": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1098,\"\"en\"\",\"\"it\"\")\"),\"Nome del motore di ricerca personalizzato\")",
-    "custom_name_placeholder": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1099,\"\"en\"\",\"\"it\"\")\"),\"Personalizza il nome del motore di ricerca\")",
-    "custom_url_label": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1100,\"\"en\"\",\"\"it\"\")\"),\"L'URL del motore di ricerca personalizzato deve includere {keyword} come segnaposto per il termine di ricerca.\")",
-    "custom_url_placeholder": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1101,\"\"en\"\",\"\"it\"\")\"),\"Personalizza l'URL del motore di ricerca\")"
+    "save_button": "Salva"
   },
   "sql_table_schemas": {
     "tables": "Tabelle"
@@ -518,15 +329,10 @@
     "new_tab": "Nuova scheda"
   },
   "toc": {
-    "table_of_contents": "Sommario",
-    "options": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1408,\"\"en\"\",\"\"it\"\")\"),\"Opzioni\")"
+    "table_of_contents": "Sommario"
   },
   "table_of_contents": {
-    "title": "Sommario",
-    "description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1120,\"\"en\"\",\"\"it\"\")\"),\"L'indice apparirà nelle note di testo quando la nota contiene più di un numero definito di titoli. È possibile personalizzare questo numero:\")",
-    "unit": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1121,\"\"en\"\",\"\"it\"\")\"),\"titoli\")",
-    "disable_info": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1122,\"\"en\"\",\"\"it\"\")\"),\"È anche possibile utilizzare questa opzione per disattivare efficacemente l'indice impostando un numero molto alto.\")",
-    "shortcut_info": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1123,\"\"en\"\",\"\"it\"\")\"),\"È possibile configurare una scorciatoia da tastiera per alternare rapidamente il riquadro destro (incluso il sommario) in Opzioni -> Scorciatoie (nome 'toggleRightPane').\")"
+    "title": "Sommario"
   },
   "tray": {
     "title": "Vassoio di Sistema",
@@ -539,16 +345,7 @@
     "markdown": "Stile Markdown"
   },
   "highlights_list": {
-    "title": "Elenco dei punti salienti",
-    "description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1110,\"\"en\"\",\"\"it\"\")\"),\"È possibile personalizzare l'elenco delle evidenziazioni visualizzato nel pannello di destra:\")",
-    "bold": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1111,\"\"en\"\",\"\"it\"\")\"),\"Testo in grassetto\")",
-    "italic": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1112,\"\"en\"\",\"\"it\"\")\"),\"Testo in corsivo\")",
-    "underline": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1113,\"\"en\"\",\"\"it\"\")\"),\"Testo sottolineato\")",
-    "color": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1114,\"\"en\"\",\"\"it\"\")\"),\"Testo colorato\")",
-    "bg_color": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1115,\"\"en\"\",\"\"it\"\")\"),\"Testo con colore di sfondo\")",
-    "visibility_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1116,\"\"en\"\",\"\"it\"\")\"),\"Visibilità dell'elenco dei punti salienti\")",
-    "visibility_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1117,\"\"en\"\",\"\"it\"\")\"),\"È possibile nascondere il widget delle evidenziazioni per nota aggiungendo un'etichetta #hideHighlightWidget.\")",
-    "shortcut_info": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1118,\"\"en\"\",\"\"it\"\")\"),\"È possibile configurare una scorciatoia da tastiera per alternare rapidamente il riquadro destro (inclusi i punti salienti) in Opzioni -> Scorciatoie (nome 'toggleRightPane').\")"
+    "title": "Elenco dei punti salienti"
   },
   "highlights_list_2": {
     "title": "Punti salienti",
@@ -556,10 +353,7 @@
   },
   "quick-search": {
     "placeholder": "Ricerca rapida",
-    "searching": "Ricerca in corso...",
-    "no-results": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1372,\"\"en\"\",\"\"it\"\")\"),\"Nessun risultato trovato\")",
-    "more-results": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1373,\"\"en\"\",\"\"it\"\")\"),\"... e altri {{number}} risultati.\")",
-    "show-in-full-search": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1374,\"\"en\"\",\"\"it\"\")\"),\"Mostra nella ricerca completa\")"
+    "searching": "Ricerca in corso..."
   },
   "help": {
     "goUpDown": "su/giù nella lista delle note",
@@ -626,15 +420,7 @@
     "first-week-info": "La prima settimana che contiene il primo giovedì dell'anno si basa su <a href=\"https://en.wikipedia.org/wiki/ISO_week_date#First_week\">ISO 8601</a> standard.",
     "first-week-warning": "La modifica delle opzioni della prima settimana può causare duplicati con le note settimanali esistenti e queste ultime non verranno aggiornate di conseguenza.",
     "formatting-locale": "Formato data e numero",
-    "formatting-locale-auto": "In base alla lingua dell'applicazione",
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1132,\"\"en\"\",\"\"it\"\")\"),\"Localizzazione\")",
-    "language": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1133,\"\"en\"\",\"\"it\"\")\"),\"Lingua\")",
-    "first-day-of-the-week": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1134,\"\"en\"\",\"\"it\"\")\"),\"Primo giorno della settimana\")",
-    "monday": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1135,\"\"en\"\",\"\"it\"\")\"),\"Lunedi\")",
-    "tuesday": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1136,\"\"en\"\",\"\"it\"\")\"),\"Martedì\")",
-    "wednesday": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1137,\"\"en\"\",\"\"it\"\")\"),\"Mercoledì\")",
-    "thursday": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1138,\"\"en\"\",\"\"it\"\")\"),\"Giovedì\")",
-    "friday": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1139,\"\"en\"\",\"\"it\"\")\"),\"Venerdì\")"
+    "formatting-locale-auto": "In base alla lingua dell'applicazione"
   },
   "ai_llm": {
     "n_notes_queued_0": "{{ count }} nota in coda per l'indicizzazione",
@@ -642,148 +428,7 @@
     "n_notes_queued_2": "{{ count }} note in coda per l'indicizzazione",
     "notes_indexed_0": "{{ count }} nota indicizzata",
     "notes_indexed_1": "{{ count }} note indicizzate",
-    "notes_indexed_2": "{{ count }} note indicizzate",
-    "not_started": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A912,\"\"en\"\",\"\"it\"\")\"),\"Non iniziato\")",
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A913,\"\"en\"\",\"\"it\"\")\"),\"Impostazioni AI\")",
-    "processed_notes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A914,\"\"en\"\",\"\"it\"\")\"),\"Note elaborate\")",
-    "total_notes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A915,\"\"en\"\",\"\"it\"\")\"),\"Note totali\")",
-    "progress": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A916,\"\"en\"\",\"\"it\"\")\"),\"Progressi\")",
-    "queued_notes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A917,\"\"en\"\",\"\"it\"\")\"),\"Note in coda\")",
-    "failed_notes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A918,\"\"en\"\",\"\"it\"\")\"),\"Note non riuscite\")",
-    "last_processed": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A919,\"\"en\"\",\"\"it\"\")\"),\"Ultimo elaborato\")",
-    "refresh_stats": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A920,\"\"en\"\",\"\"it\"\")\"),\"Aggiorna statistiche\")",
-    "enable_ai_features": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A921,\"\"en\"\",\"\"it\"\")\"),\"Abilita le funzionalità AI/LLM\")",
-    "enable_ai_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A922,\"\"en\"\",\"\"it\"\")\"),\"Abilita funzionalità di intelligenza artificiale come il riepilogo delle note, la generazione di contenuti e altre funzionalità LLM\")",
-    "openai_tab": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A923,\"\"en\"\",\"\"it\"\")\"),\"OpenAI\")",
-    "anthropic_tab": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A924,\"\"en\"\",\"\"it\"\")\"),\"Antropico\")",
-    "voyage_tab": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A925,\"\"en\"\",\"\"it\"\")\"),\"Viaggio AI\")",
-    "ollama_tab": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A926,\"\"en\"\",\"\"it\"\")\"),\"Ollama\")",
-    "enable_ai": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A927,\"\"en\"\",\"\"it\"\")\"),\"Abilita le funzionalità AI/LLM\")",
-    "enable_ai_desc": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A928,\"\"en\"\",\"\"it\"\")\"),\"Abilita funzionalità di intelligenza artificiale come il riepilogo delle note, la generazione di contenuti e altre funzionalità LLM\")",
-    "provider_configuration": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A929,\"\"en\"\",\"\"it\"\")\"),\"Configurazione del fornitore di intelligenza artificiale\")",
-    "provider_precedence": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A930,\"\"en\"\",\"\"it\"\")\"),\"Precedenza del fornitore\")",
-    "provider_precedence_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A931,\"\"en\"\",\"\"it\"\")\"),\"Elenco dei provider separati da virgole in ordine di precedenza (ad esempio, 'openai,anthropic,ollama')\")",
-    "temperature": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A932,\"\"en\"\",\"\"it\"\")\"),\"Temperatura\")",
-    "temperature_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A933,\"\"en\"\",\"\"it\"\")\"),\"Controlla la casualità nelle risposte (0 = deterministico, 2 = casualità massima)\")",
-    "system_prompt": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A934,\"\"en\"\",\"\"it\"\")\"),\"Prompt di sistema\")",
-    "system_prompt_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A935,\"\"en\"\",\"\"it\"\")\"),\"Prompt di sistema predefinito utilizzato per tutte le interazioni con l'IA\")",
-    "openai_configuration": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A936,\"\"en\"\",\"\"it\"\")\"),\"Configurazione OpenAI\")",
-    "openai_settings": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A937,\"\"en\"\",\"\"it\"\")\"),\"Impostazioni OpenAI\")",
-    "api_key": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A938,\"\"en\"\",\"\"it\"\")\"),\"Chiave API\")",
-    "url": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A939,\"\"en\"\",\"\"it\"\")\"),\"URL di base\")",
-    "model": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A940,\"\"en\"\",\"\"it\"\")\"),\"Modello\")",
-    "openai_api_key_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A941,\"\"en\"\",\"\"it\"\")\"),\"La tua chiave API OpenAI per accedere ai loro servizi di intelligenza artificiale\")",
-    "anthropic_api_key_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A942,\"\"en\"\",\"\"it\"\")\"),\"La tua chiave API Anthropic per accedere ai modelli Claude\")",
-    "default_model": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A943,\"\"en\"\",\"\"it\"\")\"),\"Modello predefinito\")",
-    "openai_model_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A944,\"\"en\"\",\"\"it\"\")\"),\"Esempi: gpt-4o, gpt-4-turbo, gpt-3.5-turbo\")",
-    "base_url": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A945,\"\"en\"\",\"\"it\"\")\"),\"URL di base\")",
-    "openai_url_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A946,\"\"en\"\",\"\"it\"\")\"),\"Predefinito: https://api.openai.com/v1\")",
-    "anthropic_settings": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A947,\"\"en\"\",\"\"it\"\")\"),\"Ambientazioni antropiche\")",
-    "anthropic_url_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A948,\"\"en\"\",\"\"it\"\")\"),\"URL di base per l'API Anthropic (predefinito: https://api.anthropic.com)\")",
-    "anthropic_model_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A949,\"\"en\"\",\"\"it\"\")\"),\"Modelli di Anthropic Claude per il completamento della chat\")",
-    "voyage_settings": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A950,\"\"en\"\",\"\"it\"\")\"),\"Impostazioni AI di Voyage\")",
-    "ollama_settings": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A951,\"\"en\"\",\"\"it\"\")\"),\"Impostazioni Ollama\")",
-    "ollama_url_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A952,\"\"en\"\",\"\"it\"\")\"),\"URL per l'API Ollama (predefinito: http://localhost:11434)\")",
-    "ollama_model_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A953,\"\"en\"\",\"\"it\"\")\"),\"Modello Ollama da utilizzare per il completamento della chat\")",
-    "anthropic_configuration": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A954,\"\"en\"\",\"\"it\"\")\"),\"Configurazione antropica\")",
-    "voyage_configuration": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A955,\"\"en\"\",\"\"it\"\")\"),\"Configurazione AI di viaggio\")",
-    "voyage_url_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A956,\"\"en\"\",\"\"it\"\")\"),\"Predefinito: https://api.voyageai.com/v1\")",
-    "ollama_configuration": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A957,\"\"en\"\",\"\"it\"\")\"),\"Configurazione Ollama\")",
-    "enable_ollama": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A958,\"\"en\"\",\"\"it\"\")\"),\"Abilita Ollama\")",
-    "enable_ollama_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A959,\"\"en\"\",\"\"it\"\")\"),\"Abilita Ollama per l'utilizzo del modello AI locale\")",
-    "ollama_url": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A960,\"\"en\"\",\"\"it\"\")\"),\"URL di Ollama\")",
-    "ollama_model": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A961,\"\"en\"\",\"\"it\"\")\"),\"Modello Ollama\")",
-    "refresh_models": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A962,\"\"en\"\",\"\"it\"\")\"),\"Aggiorna modelli\")",
-    "refreshing_models": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A963,\"\"en\"\",\"\"it\"\")\"),\"Rinfrescante...\")",
-    "enable_automatic_indexing": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A964,\"\"en\"\",\"\"it\"\")\"),\"Abilita l'indicizzazione automatica\")",
-    "rebuild_index": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A965,\"\"en\"\",\"\"it\"\")\"),\"Ricostruisci indice\")",
-    "rebuild_index_error": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A966,\"\"en\"\",\"\"it\"\")\"),\"Errore durante l'avvio della ricostruzione dell'indice. Controllare i log per i dettagli.\")",
-    "note_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A967,\"\"en\"\",\"\"it\"\")\"),\"Titolo della nota\")",
-    "error": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A968,\"\"en\"\",\"\"it\"\")\"),\"Errore\")",
-    "last_attempt": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A969,\"\"en\"\",\"\"it\"\")\"),\"Ultimo tentativo\")",
-    "actions": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A970,\"\"en\"\",\"\"it\"\")\"),\"Azioni\")",
-    "retry": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A971,\"\"en\"\",\"\"it\"\")\"),\"Riprova\")",
-    "partial": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A972,\"\"en\"\",\"\"it\"\")\"),\"{{ percentuale }}% completato\")",
-    "retry_queued": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A973,\"\"en\"\",\"\"it\"\")\"),\"Nota in coda per un nuovo tentativo\")",
-    "retry_failed": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A974,\"\"en\"\",\"\"it\"\")\"),\"Impossibile mettere in coda la nota per un nuovo tentativo\")",
-    "max_notes_per_llm_query": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A975,\"\"en\"\",\"\"it\"\")\"),\"Numero massimo di note per query\")",
-    "max_notes_per_llm_query_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A976,\"\"en\"\",\"\"it\"\")\"),\"Numero massimo di note simili da includere nel contesto AI\")",
-    "active_providers": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A977,\"\"en\"\",\"\"it\"\")\"),\"Fornitori attivi\")",
-    "disabled_providers": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A978,\"\"en\"\",\"\"it\"\")\"),\"Fornitori disabili\")",
-    "remove_provider": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A979,\"\"en\"\",\"\"it\"\")\"),\"Rimuovi il fornitore dalla ricerca\")",
-    "restore_provider": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A980,\"\"en\"\",\"\"it\"\")\"),\"Ripristina il provider per la ricerca\")",
-    "similarity_threshold": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A981,\"\"en\"\",\"\"it\"\")\"),\"Soglia di similarità\")",
-    "similarity_threshold_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A982,\"\"en\"\",\"\"it\"\")\"),\"Punteggio minimo di similarità (0-1) per le note da includere nel contesto per le query LLM\")",
-    "reprocess_index": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A983,\"\"en\"\",\"\"it\"\")\"),\"Ricostruisci l'indice di ricerca\")",
-    "reprocessing_index": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A984,\"\"en\"\",\"\"it\"\")\"),\"Ricostruzione...\")",
-    "reprocess_index_started": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A985,\"\"en\"\",\"\"it\"\")\"),\"Ottimizzazione dell'indice di ricerca avviata in background\")",
-    "reprocess_index_error": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A986,\"\"en\"\",\"\"it\"\")\"),\"Errore durante la ricostruzione dell'indice di ricerca\")",
-    "index_rebuild_progress": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A987,\"\"en\"\",\"\"it\"\")\"),\"Progresso nella ricostruzione dell'indice\")",
-    "index_rebuilding": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A988,\"\"en\"\",\"\"it\"\")\"),\"Indice di ottimizzazione ({{percentuale}}%)\")",
-    "index_rebuild_complete": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A989,\"\"en\"\",\"\"it\"\")\"),\"Ottimizzazione dell'indice completata\")",
-    "index_rebuild_status_error": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A990,\"\"en\"\",\"\"it\"\")\"),\"Errore durante il controllo dello stato di ricostruzione dell'indice\")",
-    "never": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A991,\"\"en\"\",\"\"it\"\")\"),\"Mai\")",
-    "processing": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A992,\"\"en\"\",\"\"it\"\")\"),\"Elaborazione ({{percentuale}}%)\")",
-    "incomplete": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A993,\"\"en\"\",\"\"it\"\")\"),\"Incompleto ({{percentuale}}%)\")",
-    "complete": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A994,\"\"en\"\",\"\"it\"\")\"),\"Completato (100%)\")",
-    "refreshing": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A995,\"\"en\"\",\"\"it\"\")\"),\"Rinfrescante...\")",
-    "auto_refresh_notice": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A996,\"\"en\"\",\"\"it\"\")\"),\"Si aggiorna automaticamente ogni {{seconds}} secondi\")",
-    "note_queued_for_retry": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A997,\"\"en\"\",\"\"it\"\")\"),\"Nota in coda per un nuovo tentativo\")",
-    "failed_to_retry_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A998,\"\"en\"\",\"\"it\"\")\"),\"Impossibile riprovare nota\")",
-    "all_notes_queued_for_retry": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A999,\"\"en\"\",\"\"it\"\")\"),\"Tutte le note non riuscite sono in coda per un nuovo tentativo\")",
-    "failed_to_retry_all": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1000,\"\"en\"\",\"\"it\"\")\"),\"Impossibile riprovare le note\")",
-    "ai_settings": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1001,\"\"en\"\",\"\"it\"\")\"),\"Impostazioni AI\")",
-    "api_key_tooltip": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1002,\"\"en\"\",\"\"it\"\")\"),\"Chiave API per accedere al servizio\")",
-    "empty_key_warning": {
-      "anthropic": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1003,\"\"en\"\",\"\"it\"\")\"),\"La chiave API di Anthropic è vuota. Inserisci una chiave API valida.\")",
-      "openai": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1004,\"\"en\"\",\"\"it\"\")\"),\"La chiave API di OpenAI è vuota. Inserisci una chiave API valida.\")",
-      "voyage": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1005,\"\"en\"\",\"\"it\"\")\"),\"La chiave API di Voyage è vuota. Inserisci una chiave API valida.\")",
-      "ollama": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1006,\"\"en\"\",\"\"it\"\")\"),\"La chiave API di Ollama è vuota. Inserisci una chiave API valida.\")"
-    },
-    "agent": {
-      "processing": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1007,\"\"en\"\",\"\"it\"\")\"),\"Elaborazione in corso...\")",
-      "thinking": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1008,\"\"en\"\",\"\"it\"\")\"),\"Pensiero...\")",
-      "loading": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1009,\"\"en\"\",\"\"it\"\")\"),\"Caricamento...\")",
-      "generating": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1010,\"\"en\"\",\"\"it\"\")\"),\"Generazione in corso...\")"
-    },
-    "name": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1011,\"\"en\"\",\"\"it\"\")\"),\"intelligenza artificiale\")",
-    "openai": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1012,\"\"en\"\",\"\"it\"\")\"),\"OpenAI\")",
-    "use_enhanced_context": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1013,\"\"en\"\",\"\"it\"\")\"),\"Utilizzare il contesto avanzato\")",
-    "enhanced_context_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1014,\"\"en\"\",\"\"it\"\")\"),\"Fornisce all'IA più contesto dalla nota e dalle note correlate per risposte migliori\")",
-    "show_thinking": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1015,\"\"en\"\",\"\"it\"\")\"),\"Mostra il pensiero\")",
-    "show_thinking_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1016,\"\"en\"\",\"\"it\"\")\"),\"Mostra la catena del processo di pensiero dell'IA\")",
-    "enter_message": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1017,\"\"en\"\",\"\"it\"\")\"),\"Inserisci il tuo messaggio...\")",
-    "error_contacting_provider": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1018,\"\"en\"\",\"\"it\"\")\"),\"Errore durante la connessione al fornitore dell'IA. Controlla le impostazioni e la connessione Internet.\")",
-    "error_generating_response": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1019,\"\"en\"\",\"\"it\"\")\"),\"Errore durante la generazione della risposta AI\")",
-    "index_all_notes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1020,\"\"en\"\",\"\"it\"\")\"),\"Indice Tutte le note\")",
-    "index_status": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1021,\"\"en\"\",\"\"it\"\")\"),\"Stato dell'indice\")",
-    "indexed_notes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1022,\"\"en\"\",\"\"it\"\")\"),\"Note indicizzate\")",
-    "indexing_stopped": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1023,\"\"en\"\",\"\"it\"\")\"),\"Indicizzazione interrotta\")",
-    "indexing_in_progress": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1024,\"\"en\"\",\"\"it\"\")\"),\"Indicizzazione in corso...\")",
-    "last_indexed": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1025,\"\"en\"\",\"\"it\"\")\"),\"Ultimo indicizzato\")",
-    "note_chat": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1027,\"\"en\"\",\"\"it\"\")\"),\"Nota Chat\")",
-    "sources": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1029,\"\"en\"\",\"\"it\"\")\"),\"Fonti\")",
-    "start_indexing": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1030,\"\"en\"\",\"\"it\"\")\"),\"Avvia l'indicizzazione\")",
-    "use_advanced_context": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1031,\"\"en\"\",\"\"it\"\")\"),\"Usa contesto avanzato\")",
-    "ollama_no_url": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1032,\"\"en\"\",\"\"it\"\")\"),\"Ollama non è configurato. Inserisci un URL valido.\")",
-    "chat": {
-      "root_note_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1033,\"\"en\"\",\"\"it\"\")\"),\"Chat AI\")",
-      "root_note_content": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1034,\"\"en\"\",\"\"it\"\")\"),\"Questa nota contiene le conversazioni della chat AI salvate.\")",
-      "new_chat_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1035,\"\"en\"\",\"\"it\"\")\"),\"Nuova chat\")",
-      "create_new_ai_chat": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1036,\"\"en\"\",\"\"it\"\")\"),\"Crea una nuova chat AI\")"
-    },
-    "create_new_ai_chat": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1037,\"\"en\"\",\"\"it\"\")\"),\"Crea una nuova chat AI\")",
-    "configuration_warnings": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1038,\"\"en\"\",\"\"it\"\")\"),\"Ci sono alcuni problemi con la configurazione dell'IA. Controlla le impostazioni.\")",
-    "experimental_warning": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1039,\"\"en\"\",\"\"it\"\")\"),\"La funzionalità LLM è attualmente sperimentale: sei stato avvisato.\")",
-    "selected_provider": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1040,\"\"en\"\",\"\"it\"\")\"),\"Fornitore selezionato\")",
-    "selected_provider_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1041,\"\"en\"\",\"\"it\"\")\"),\"Scegli il fornitore di intelligenza artificiale per le funzionalità di chat e completamento\")",
-    "select_model": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1042,\"\"en\"\",\"\"it\"\")\"),\"Seleziona il modello...\")",
-    "select_provider": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1043,\"\"en\"\",\"\"it\"\")\"),\"Seleziona il fornitore...\")",
-    "ai_enabled": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1044,\"\"en\"\",\"\"it\"\")\"),\"Funzionalità AI abilitate\")",
-    "ai_disabled": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1045,\"\"en\"\",\"\"it\"\")\"),\"Funzionalità AI disabilitate\")",
-    "no_models_found_online": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1046,\"\"en\"\",\"\"it\"\")\"),\"Nessun modello trovato. Controlla la tua chiave API e le impostazioni.\")",
-    "no_models_found_ollama": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1047,\"\"en\"\",\"\"it\"\")\"),\"Nessun modello Ollama trovato. Controlla se Ollama è in esecuzione.\")",
-    "error_fetching": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1048,\"\"en\"\",\"\"it\"\")\"),\"Errore durante il recupero dei modelli: {{error}}\")"
+    "notes_indexed_2": "{{ count }} note indicizzate"
   },
   "import": {
     "importIntoNote": "Importa nella nota",
@@ -1047,1042 +692,6 @@
     "help_text_body3": "In alternativa, è possibile aggiungere etichette e relazioni utilizzando il pulsante <code>+</code> sul lato destro.",
     "save_attributes": "Salva attributi <enter>",
     "add_a_new_attribute": "Aggiungi un nuovo attributo",
-    "add_new_label": "Aggiungi nuova etichetta <kbd data-command=\"addNewLabel\"></kbd>",
-    "add_new_relation": "Aggiungi nuova relazione <kbd data-command=\"\"addNewRelation\"\"></kbd>",
-    "add_new_label_definition": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A386,\"\"en\"\",\"\"it\"\")\"),\"Aggiungi nuova definizione di etichetta\")",
-    "add_new_relation_definition": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A387,\"\"en\"\",\"\"it\"\")\"),\"Aggiungi una nuova definizione di relazione\")",
-    "placeholder": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A388,\"\"en\"\",\"\"it\"\")\"),\"Digitare qui le etichette e le relazioni\")"
-  },
-  "execute_script": {
-    "execute_script": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A390,\"\"en\"\",\"\"it\"\")\"),\"Esegui script\")",
-    "help_text": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A391,\"\"en\"\",\"\"it\"\")\"),\"È possibile eseguire semplici script sulle note abbinate.\")",
-    "example_1": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A392,\"\"en\"\",\"\"it\"\")\"),\"Ad esempio, per aggiungere una stringa al titolo di una nota, utilizzare questo piccolo script:\")",
-    "example_2": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A393,\"\"en\"\",\"\"it\"\")\"),\"Un esempio più complesso sarebbe l'eliminazione di tutti gli attributi delle note corrispondenti:\")"
-  },
-  "rename_label": {
-    "rename_label": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A406,\"\"en\"\",\"\"it\"\")\"),\"Rinomina etichetta\")",
-    "rename_label_from": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A407,\"\"en\"\",\"\"it\"\")\"),\"Rinomina etichetta da\")",
-    "old_name_placeholder": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A408,\"\"en\"\",\"\"it\"\")\"),\"vecchio nome\")",
-    "to": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A409,\"\"en\"\",\"\"it\"\")\"),\"A\")",
-    "new_name_placeholder": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A410,\"\"en\"\",\"\"it\"\")\"),\"nuovo nome\")",
-    "name_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A411,\"\"en\"\",\"\"it\"\")\"),\"Sono consentiti caratteri alfanumerici, trattino basso e due punti.\")"
-  },
-  "delete_note": {
-    "delete_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A419,\"\"en\"\",\"\"it\"\")\"),\"Elimina nota\")",
-    "delete_matched_notes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A420,\"\"en\"\",\"\"it\"\")\"),\"Elimina le note corrispondenti\")",
-    "delete_matched_notes_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A421,\"\"en\"\",\"\"it\"\")\"),\"In questo modo verranno eliminate le note corrispondenti.\")",
-    "undelete_notes_instruction": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A422,\"\"en\"\",\"\"it\"\")\"),\"Dopo l'eliminazione, è possibile ripristinarli dalla finestra di dialogo Modifiche recenti.\")",
-    "erase_notes_instruction": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A423,\"\"en\"\",\"\"it\"\")\"),\"Per cancellare definitivamente le note, dopo l'eliminazione puoi andare su Opzioni -> Altro e cliccare sul pulsante \"\"Cancella note eliminate ora\"\".\")"
-  },
-  "delete_revisions": {
-    "delete_note_revisions": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A424,\"\"en\"\",\"\"it\"\")\"),\"Elimina le revisioni delle note\")",
-    "all_past_note_revisions": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A425,\"\"en\"\",\"\"it\"\")\"),\"Tutte le revisioni passate delle note corrispondenti verranno eliminate. La nota stessa verrà conservata integralmente. In altri termini, la cronologia della nota verrà rimossa.\")"
-  },
-  "move_note": {
-    "move_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A426,\"\"en\"\",\"\"it\"\")\"),\"Sposta nota\")",
-    "to": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A427,\"\"en\"\",\"\"it\"\")\"),\"A\")",
-    "target_parent_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A428,\"\"en\"\",\"\"it\"\")\"),\"nota del genitore di destinazione\")",
-    "on_all_matched_notes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A429,\"\"en\"\",\"\"it\"\")\"),\"Su tutte le note abbinate\")",
-    "move_note_new_parent": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A430,\"\"en\"\",\"\"it\"\")\"),\"sposta la nota al nuovo genitore se la nota ha un solo genitore (ad esempio, il vecchio ramo viene rimosso e viene creato un nuovo ramo nel nuovo genitore)\")",
-    "clone_note_new_parent": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A431,\"\"en\"\",\"\"it\"\")\"),\"clona la nota sul nuovo genitore se la nota ha più cloni/rami (non è chiaro quale ramo debba essere rimosso)\")",
-    "nothing_will_happen": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A432,\"\"en\"\",\"\"it\"\")\"),\"non accadrà nulla se la nota non può essere spostata sulla nota di destinazione (cioè ciò creerebbe un ciclo ad albero)\")"
-  },
-  "rename_note": {
-    "rename_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A433,\"\"en\"\",\"\"it\"\")\"),\"Rinomina nota\")",
-    "rename_note_title_to": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A434,\"\"en\"\",\"\"it\"\")\"),\"Rinomina il titolo della nota in\")",
-    "new_note_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A435,\"\"en\"\",\"\"it\"\")\"),\"nuovo titolo della nota\")",
-    "click_help_icon": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A436,\"\"en\"\",\"\"it\"\")\"),\"Fare clic sull'icona della guida a destra per vedere tutte le opzioni\")",
-    "evaluated_as_js_string": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A437,\"\"en\"\",\"\"it\"\")\"),\"Il valore specificato viene valutato come stringa JavaScript e può quindi essere arricchito con contenuto dinamico tramite la variabile <code>note</code> inserita (la nota viene rinominata). Esempi:\")",
-    "example_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A438,\"\"en\"\",\"\"it\"\")\"),\"<code>Nota</code> - tutte le note corrispondenti vengono rinominate in 'Nota'\")",
-    "example_new_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A439,\"\"en\"\",\"\"it\"\")\"),\"<code>NEW: ${note.title}</code> - i titoli delle note corrispondenti sono preceduti dal prefisso 'NEW:'\")",
-    "example_date_prefix": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A440,\"\"en\"\",\"\"it\"\")\"),\"<code>${note.dateCreatedObj.format('MM-DD:')}: ${note.title}</code> - le note corrispondenti sono precedute dal mese e dalla data di creazione della nota\")",
-    "api_docs": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A441,\"\"en\"\",\"\"it\"\")\"),\"Per i dettagli, consultare la documentazione API per <a href='https://zadam.github.io/trilium/backend_api/Note.html'>nota</a> e le sue <a href='https://day.js.org/docs/en/display/format'>proprietà dateCreatedObj / utcDateCreatedObj</a>.\")"
-  },
-  "add_relation": {
-    "add_relation": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A442,\"\"en\"\",\"\"it\"\")\"),\"Aggiungi relazione\")",
-    "relation_name": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A443,\"\"en\"\",\"\"it\"\")\"),\"nome della relazione\")",
-    "allowed_characters": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A444,\"\"en\"\",\"\"it\"\")\"),\"Sono consentiti caratteri alfanumerici, trattino basso e due punti.\")",
-    "to": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A445,\"\"en\"\",\"\"it\"\")\"),\"A\")",
-    "target_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A446,\"\"en\"\",\"\"it\"\")\"),\"nota di destinazione\")",
-    "create_relation_on_all_matched_notes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A447,\"\"en\"\",\"\"it\"\")\"),\"Su tutte le note corrispondenti crea la relazione data.\")"
-  },
-  "delete_relation": {
-    "delete_relation": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A448,\"\"en\"\",\"\"it\"\")\"),\"Elimina relazione\")",
-    "relation_name": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A449,\"\"en\"\",\"\"it\"\")\"),\"nome della relazione\")",
-    "allowed_characters": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A450,\"\"en\"\",\"\"it\"\")\"),\"Sono consentiti caratteri alfanumerici, trattino basso e due punti.\")"
-  },
-  "rename_relation": {
-    "rename_relation": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A451,\"\"en\"\",\"\"it\"\")\"),\"Rinomina relazione\")",
-    "rename_relation_from": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A452,\"\"en\"\",\"\"it\"\")\"),\"Rinomina la relazione da\")",
-    "old_name": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A453,\"\"en\"\",\"\"it\"\")\"),\"vecchio nome\")",
-    "to": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A454,\"\"en\"\",\"\"it\"\")\"),\"A\")",
-    "new_name": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A455,\"\"en\"\",\"\"it\"\")\"),\"nuovo nome\")",
-    "allowed_characters": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A456,\"\"en\"\",\"\"it\"\")\"),\"Sono consentiti caratteri alfanumerici, trattino basso e due punti.\")"
-  },
-  "update_relation_target": {
-    "update_relation": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A457,\"\"en\"\",\"\"it\"\")\"),\"Aggiorna relazione\")",
-    "relation_name": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A458,\"\"en\"\",\"\"it\"\")\"),\"nome della relazione\")",
-    "allowed_characters": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A459,\"\"en\"\",\"\"it\"\")\"),\"Sono consentiti caratteri alfanumerici, trattino basso e due punti.\")",
-    "to": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A460,\"\"en\"\",\"\"it\"\")\"),\"A\")",
-    "target_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A461,\"\"en\"\",\"\"it\"\")\"),\"nota di destinazione\")",
-    "on_all_matched_notes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A462,\"\"en\"\",\"\"it\"\")\"),\"Su tutte le note abbinate\")",
-    "change_target_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A463,\"\"en\"\",\"\"it\"\")\"),\"cambia la nota di destinazione della relazione esistente\")",
-    "update_relation_target": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A464,\"\"en\"\",\"\"it\"\")\"),\"Aggiorna la destinazione della relazione\")"
-  },
-  "attachments_actions": {
-    "open_externally": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A465,\"\"en\"\",\"\"it\"\")\"),\"Aperto esternamente\")",
-    "open_externally_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A466,\"\"en\"\",\"\"it\"\")\"),\"Il file verrà aperto in un'applicazione esterna e monitorato per eventuali modifiche. Potrai quindi caricare la versione modificata su Trilium.\")",
-    "open_custom": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A467,\"\"en\"\",\"\"it\"\")\"),\"Apri personalizzato\")",
-    "open_custom_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A468,\"\"en\"\",\"\"it\"\")\"),\"Il file verrà aperto in un'applicazione esterna e monitorato per eventuali modifiche. Potrai quindi caricare la versione modificata su Trilium.\")",
-    "download": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A469,\"\"en\"\",\"\"it\"\")\"),\"Scaricamento\")",
-    "rename_attachment": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A470,\"\"en\"\",\"\"it\"\")\"),\"Rinomina allegato\")",
-    "upload_new_revision": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A471,\"\"en\"\",\"\"it\"\")\"),\"Carica nuova revisione\")",
-    "copy_link_to_clipboard": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A472,\"\"en\"\",\"\"it\"\")\"),\"Copia il collegamento negli appunti\")",
-    "convert_attachment_into_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A473,\"\"en\"\",\"\"it\"\")\"),\"Convertire l'allegato in nota\")",
-    "delete_attachment": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A474,\"\"en\"\",\"\"it\"\")\"),\"Elimina allegato\")",
-    "upload_success": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A475,\"\"en\"\",\"\"it\"\")\"),\"È stata caricata una nuova revisione dell'allegato.\")",
-    "upload_failed": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A476,\"\"en\"\",\"\"it\"\")\"),\"Caricamento di una nuova revisione dell'allegato non riuscito.\")",
-    "open_externally_detail_page": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A477,\"\"en\"\",\"\"it\"\")\"),\"L'apertura esterna dell'allegato è disponibile solo dalla pagina dei dettagli. Per prima cosa, fare clic sui dettagli dell'allegato e ripetere l'operazione.\")",
-    "open_custom_client_only": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A478,\"\"en\"\",\"\"it\"\")\"),\"L'apertura personalizzata degli allegati può essere effettuata solo dal client desktop.\")",
-    "delete_confirm": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A479,\"\"en\"\",\"\"it\"\")\"),\"Sei sicuro di voler eliminare l'allegato '{{title}}'?\")",
-    "delete_success": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A480,\"\"en\"\",\"\"it\"\")\"),\"L'allegato '{{title}}' è stato eliminato.\")",
-    "convert_confirm": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A481,\"\"en\"\",\"\"it\"\")\"),\"Sei sicuro di voler convertire l'allegato '{{title}}' in una nota separata?\")",
-    "convert_success": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A482,\"\"en\"\",\"\"it\"\")\"),\"L'allegato '{{title}}' è stato convertito in nota.\")",
-    "enter_new_name": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A483,\"\"en\"\",\"\"it\"\")\"),\"Inserisci il nome del nuovo allegato\")"
-  },
-  "calendar": {
-    "mon": "Lun",
-    "tue": "Mar",
-    "wed": "Mer",
-    "thu": "Gio",
-    "fri": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A488,\"\"en\"\",\"\"it\"\")\"),\"Ven\")",
-    "sat": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A489,\"\"en\"\",\"\"it\"\")\"),\"Sab\")",
-    "sun": "Dom",
-    "cannot_find_day_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A491,\"\"en\"\",\"\"it\"\")\"),\"Impossibile trovare la nota del giorno\")",
-    "cannot_find_week_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A492,\"\"en\"\",\"\"it\"\")\"),\"Impossibile trovare la nota della settimana\")",
-    "january": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A493,\"\"en\"\",\"\"it\"\")\"),\"Gennaio\")",
-    "february": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A494,\"\"en\"\",\"\"it\"\")\"),\"Febbraio\")",
-    "march": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A495,\"\"en\"\",\"\"it\"\")\"),\"Marzo\")",
-    "april": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A496,\"\"en\"\",\"\"it\"\")\"),\"aprile\")",
-    "may": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A497,\"\"en\"\",\"\"it\"\")\"),\"Maggio\")",
-    "june": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A498,\"\"en\"\",\"\"it\"\")\"),\"Giugno\")",
-    "july": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A499,\"\"en\"\",\"\"it\"\")\"),\"Luglio\")",
-    "august": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A500,\"\"en\"\",\"\"it\"\")\"),\"agosto\")",
-    "september": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A501,\"\"en\"\",\"\"it\"\")\"),\"settembre\")",
-    "october": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A502,\"\"en\"\",\"\"it\"\")\"),\"ottobre\")",
-    "november": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A503,\"\"en\"\",\"\"it\"\")\"),\"novembre\")",
-    "december": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A504,\"\"en\"\",\"\"it\"\")\"),\"Dicembre\")",
-    "week": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A505,\"\"en\"\",\"\"it\"\")\"),\"Settimana\")",
-    "week_previous": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A506,\"\"en\"\",\"\"it\"\")\"),\"Settimana precedente\")",
-    "week_next": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A507,\"\"en\"\",\"\"it\"\")\"),\"La prossima settimana\")",
-    "month": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A508,\"\"en\"\",\"\"it\"\")\"),\"Mese\")",
-    "month_previous": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A509,\"\"en\"\",\"\"it\"\")\"),\"Mese precedente\")",
-    "month_next": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A510,\"\"en\"\",\"\"it\"\")\"),\"Il mese prossimo\")",
-    "year": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A511,\"\"en\"\",\"\"it\"\")\"),\"Anno\")",
-    "year_previous": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A512,\"\"en\"\",\"\"it\"\")\"),\"Anno precedente\")",
-    "year_next": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A513,\"\"en\"\",\"\"it\"\")\"),\"L'anno prossimo\")",
-    "list": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A514,\"\"en\"\",\"\"it\"\")\"),\"Lista\")",
-    "today": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A515,\"\"en\"\",\"\"it\"\")\"),\"Oggi\")"
-  },
-  "close_pane_button": {
-    "close_this_pane": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A516,\"\"en\"\",\"\"it\"\")\"),\"Chiudi questo riquadro\")"
-  },
-  "create_pane_button": {
-    "create_new_split": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A517,\"\"en\"\",\"\"it\"\")\"),\"Crea una nuova divisione\")"
-  },
-  "show_toc_widget_button": {
-    "show_toc": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A519,\"\"en\"\",\"\"it\"\")\"),\"Mostra indice\")"
-  },
-  "show_highlights_list_widget_button": {
-    "show_highlights_list": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A520,\"\"en\"\",\"\"it\"\")\"),\"Mostra elenco punti salienti\")"
-  },
-  "global_menu": {
-    "menu": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A521,\"\"en\"\",\"\"it\"\")\"),\"Menu\")",
-    "options": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A522,\"\"en\"\",\"\"it\"\")\"),\"Opzioni\")",
-    "open_new_window": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A523,\"\"en\"\",\"\"it\"\")\"),\"Apri una nuova finestra\")",
-    "switch_to_mobile_version": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A524,\"\"en\"\",\"\"it\"\")\"),\"Passa alla versione mobile\")",
-    "switch_to_desktop_version": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A525,\"\"en\"\",\"\"it\"\")\"),\"Passa alla versione desktop\")",
-    "zoom": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A526,\"\"en\"\",\"\"it\"\")\"),\"Zoom\")",
-    "toggle_fullscreen": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A527,\"\"en\"\",\"\"it\"\")\"),\"Attiva schermo intero\")",
-    "zoom_out": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A528,\"\"en\"\",\"\"it\"\")\"),\"Rimpicciolisci\")",
-    "reset_zoom_level": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A529,\"\"en\"\",\"\"it\"\")\"),\"Ripristina livello di zoom\")",
-    "zoom_in": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A530,\"\"en\"\",\"\"it\"\")\"),\"Ingrandisci\")",
-    "configure_launchbar": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A531,\"\"en\"\",\"\"it\"\")\"),\"Configura Launchbar\")",
-    "show_shared_notes_subtree": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A532,\"\"en\"\",\"\"it\"\")\"),\"Mostra sottoalbero note condivise\")",
-    "advanced": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A533,\"\"en\"\",\"\"it\"\")\"),\"Avanzato\")",
-    "open_dev_tools": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A534,\"\"en\"\",\"\"it\"\")\"),\"Strumenti di sviluppo aperti\")",
-    "open_sql_console": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A535,\"\"en\"\",\"\"it\"\")\"),\"Apri la console SQL\")",
-    "open_sql_console_history": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A536,\"\"en\"\",\"\"it\"\")\"),\"Apri la cronologia della console SQL\")",
-    "open_search_history": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A537,\"\"en\"\",\"\"it\"\")\"),\"Apri cronologia ricerche\")",
-    "show_backend_log": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A538,\"\"en\"\",\"\"it\"\")\"),\"Mostra registro backend\")",
-    "reload_hint": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A539,\"\"en\"\",\"\"it\"\")\"),\"Ricarica può aiutare a risolvere alcuni problemi visivi senza dover riavviare l'intera app.\")",
-    "reload_frontend": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A540,\"\"en\"\",\"\"it\"\")\"),\"Ricarica Frontend\")",
-    "show_hidden_subtree": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A541,\"\"en\"\",\"\"it\"\")\"),\"Mostra sottoalbero nascosto\")",
-    "show_help": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A542,\"\"en\"\",\"\"it\"\")\"),\"Mostra aiuto\")",
-    "about": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A543,\"\"en\"\",\"\"it\"\")\"),\"Informazioni su Trilium Notes\")",
-    "logout": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A544,\"\"en\"\",\"\"it\"\")\"),\"Esci\")",
-    "show-cheatsheet": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A545,\"\"en\"\",\"\"it\"\")\"),\"Mostra il foglietto illustrativo\")",
-    "toggle-zen-mode": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A546,\"\"en\"\",\"\"it\"\")\"),\"Modalità Zen\")",
-    "new-version-available": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A547,\"\"en\"\",\"\"it\"\")\"),\"Nuovo aggiornamento disponibile\")",
-    "download-update": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A548,\"\"en\"\",\"\"it\"\")\"),\"Ottieni la versione {{latestVersion}}\")"
-  },
-  "zen_mode": {
-    "button_exit": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A549,\"\"en\"\",\"\"it\"\")\"),\"Esci dalla modalità Zen\")"
-  },
-  "sync_status": {
-    "unknown": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A550,\"\"en\"\",\"\"it\"\")\"),\"<p>Lo stato della sincronizzazione sarà noto una volta avviato il prossimo tentativo di sincronizzazione.</p><p>Fai clic per avviare la sincronizzazione ora.</p>\")",
-    "connected_with_changes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A551,\"\"en\"\",\"\"it\"\")\"),\"<p>Connesso al server di sincronizzazione. <br>Ci sono ancora alcune modifiche in sospeso da sincronizzare.</p><p>Fai clic per avviare la sincronizzazione.</p>\")",
-    "connected_no_changes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A552,\"\"en\"\",\"\"it\"\")\"),\"<p>Connesso al server di sincronizzazione.<br>Tutte le modifiche sono già state sincronizzate.</p><p>Fai clic per avviare la sincronizzazione.</p>\")",
-    "disconnected_with_changes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A553,\"\"en\"\",\"\"it\"\")\"),\"<p>La connessione al server di sincronizzazione non è riuscita.<br>Ci sono alcune modifiche in sospeso che devono ancora essere sincronizzate.</p><p>Fai clic per avviare la sincronizzazione.</p>\")",
-    "disconnected_no_changes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A554,\"\"en\"\",\"\"it\"\")\"),\"<p>La connessione al server di sincronizzazione non è riuscita.<br>Tutte le modifiche note sono state sincronizzate.</p><p>Fai clic per avviare la sincronizzazione.</p>\")",
-    "in_progress": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A555,\"\"en\"\",\"\"it\"\")\"),\"La sincronizzazione con il server è in corso.\")"
-  },
-  "left_pane_toggle": {
-    "show_panel": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A556,\"\"en\"\",\"\"it\"\")\"),\"Mostra pannello\")",
-    "hide_panel": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A557,\"\"en\"\",\"\"it\"\")\"),\"Nascondi pannello\")"
-  },
-  "move_pane_button": {
-    "move_left": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A558,\"\"en\"\",\"\"it\"\")\"),\"Spostati a sinistra\")",
-    "move_right": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A559,\"\"en\"\",\"\"it\"\")\"),\"Spostati a destra\")"
-  },
-  "note_actions": {
-    "convert_into_attachment": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A560,\"\"en\"\",\"\"it\"\")\"),\"Convertire in allegato\")",
-    "re_render_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A561,\"\"en\"\",\"\"it\"\")\"),\"Nota di ri-renderizzazione\")",
-    "search_in_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A562,\"\"en\"\",\"\"it\"\")\"),\"Cerca nella nota\")",
-    "note_source": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A563,\"\"en\"\",\"\"it\"\")\"),\"Nota fonte\")",
-    "note_attachments": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A564,\"\"en\"\",\"\"it\"\")\"),\"Allegati di note\")",
-    "open_note_externally": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A565,\"\"en\"\",\"\"it\"\")\"),\"Apri nota esternamente\")",
-    "open_note_externally_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A566,\"\"en\"\",\"\"it\"\")\"),\"Il file verrà aperto in un'applicazione esterna e monitorato per eventuali modifiche. Potrai quindi caricare la versione modificata su Trilium.\")",
-    "open_note_custom": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A567,\"\"en\"\",\"\"it\"\")\"),\"Apri nota personalizzata\")",
-    "import_files": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A568,\"\"en\"\",\"\"it\"\")\"),\"Importa file\")",
-    "export_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A569,\"\"en\"\",\"\"it\"\")\"),\"Nota di esportazione\")",
-    "delete_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A570,\"\"en\"\",\"\"it\"\")\"),\"Elimina nota\")",
-    "print_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A571,\"\"en\"\",\"\"it\"\")\"),\"Stampa nota\")",
-    "save_revision": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A572,\"\"en\"\",\"\"it\"\")\"),\"Salva la revisione\")",
-    "convert_into_attachment_failed": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A573,\"\"en\"\",\"\"it\"\")\"),\"Conversione della nota '{{title}}' fallita.\")",
-    "convert_into_attachment_successful": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A574,\"\"en\"\",\"\"it\"\")\"),\"Nota '{{title}}' è stato convertito in allegato.\")",
-    "convert_into_attachment_prompt": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A575,\"\"en\"\",\"\"it\"\")\"),\"Sei sicuro di voler convertire la nota '{{title}}' in un allegato della nota padre?\")",
-    "print_pdf": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A576,\"\"en\"\",\"\"it\"\")\"),\"Esporta come PDF...\")"
-  },
-  "onclick_button": {
-    "no_click_handler": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A577,\"\"en\"\",\"\"it\"\")\"),\"Il widget pulsante '{{componentId}}' non ha un gestore di clic definito\")"
-  },
-  "protected_session_status": {
-    "active": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A578,\"\"en\"\",\"\"it\"\")\"),\"La sessione protetta è attiva. Clicca per uscire dalla sessione protetta.\")",
-    "inactive": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A579,\"\"en\"\",\"\"it\"\")\"),\"Clicca per entrare nella sessione protetta\")"
-  },
-  "revisions_button": {
-    "note_revisions": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A580,\"\"en\"\",\"\"it\"\")\"),\"Revisioni delle note\")"
-  },
-  "update_available": {
-    "update_available": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A581,\"\"en\"\",\"\"it\"\")\"),\"Aggiornamento disponibile\")"
-  },
-  "note_launcher": {
-    "this_launcher_doesnt_define_target_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A582,\"\"en\"\",\"\"it\"\")\"),\"Questo launcher non definisce la nota di destinazione.\")"
-  },
-  "code_buttons": {
-    "execute_button_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A583,\"\"en\"\",\"\"it\"\")\"),\"Esegui script\")",
-    "trilium_api_docs_button_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A584,\"\"en\"\",\"\"it\"\")\"),\"Apri la documentazione API di Trilium\")",
-    "save_to_note_button_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A585,\"\"en\"\",\"\"it\"\")\"),\"Salva per annotare\")",
-    "opening_api_docs_message": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A586,\"\"en\"\",\"\"it\"\")\"),\"Apertura dei documenti API...\")",
-    "sql_console_saved_message": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A587,\"\"en\"\",\"\"it\"\")\"),\"La nota della console SQL è stata salvata in {{note_path}}\")"
-  },
-  "copy_image_reference_button": {
-    "button_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A588,\"\"en\"\",\"\"it\"\")\"),\"Copia il riferimento all'immagine negli appunti, può essere incollato in una nota di testo.\")"
-  },
-  "hide_floating_buttons_button": {
-    "button_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A589,\"\"en\"\",\"\"it\"\")\"),\"Nascondi pulsanti\")"
-  },
-  "show_floating_buttons_button": {
-    "button_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A590,\"\"en\"\",\"\"it\"\")\"),\"Mostra pulsanti\")"
-  },
-  "svg_export_button": {
-    "button_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A591,\"\"en\"\",\"\"it\"\")\"),\"Esporta diagramma come SVG\")"
-  },
-  "relation_map_buttons": {
-    "create_child_note_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A592,\"\"en\"\",\"\"it\"\")\"),\"Crea una nuova nota secondaria e aggiungila a questa mappa delle relazioni\")",
-    "reset_pan_zoom_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A593,\"\"en\"\",\"\"it\"\")\"),\"Ripristina panoramica e zoom alle coordinate e all'ingrandimento iniziali\")",
-    "zoom_in_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A594,\"\"en\"\",\"\"it\"\")\"),\"Ingrandisci\")",
-    "zoom_out_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A595,\"\"en\"\",\"\"it\"\")\"),\"Rimpicciolisci\")"
-  },
-  "zpetne_odkazy": {
-    "backlink": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A596,\"\"en\"\",\"\"it\"\")\"),\"{{count}} Backlink\")",
-    "backlinks": "{{count}} Backlinks",
-    "relation": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A598,\"\"en\"\",\"\"it\"\")\"),\"relazione\")"
-  },
-  "mobile_detail_menu": {
-    "insert_child_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A599,\"\"en\"\",\"\"it\"\")\"),\"Inserisci nota secondaria\")",
-    "delete_this_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A600,\"\"en\"\",\"\"it\"\")\"),\"Elimina questa nota\")",
-    "note_revisions": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A601,\"\"en\"\",\"\"it\"\")\"),\"Revisioni delle note\")",
-    "error_cannot_get_branch_id": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A602,\"\"en\"\",\"\"it\"\")\"),\"Impossibile ottenere branchId per notePath '{{notePath}}'\")",
-    "error_unrecognized_command": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A603,\"\"en\"\",\"\"it\"\")\"),\"Comando non riconosciuto {{command}}\")"
-  },
-  "note_icon": {
-    "change_note_icon": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A604,\"\"en\"\",\"\"it\"\")\"),\"Cambia icona nota\")",
-    "category": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A605,\"\"en\"\",\"\"it\"\")\"),\"Categoria:\")",
-    "search": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A606,\"\"en\"\",\"\"it\"\")\"),\"Ricerca:\")",
-    "reset-default": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A607,\"\"en\"\",\"\"it\"\")\"),\"Ripristina l'icona predefinita\")"
-  },
-  "basic_properties": {
-    "note_type": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A608,\"\"en\"\",\"\"it\"\")\"),\"Tipo di nota\")",
-    "editable": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A609,\"\"en\"\",\"\"it\"\")\"),\"Modificabile\")",
-    "basic_properties": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A610,\"\"en\"\",\"\"it\"\")\"),\"Proprietà di base\")",
-    "language": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A611,\"\"en\"\",\"\"it\"\")\"),\"Lingua\")",
-    "configure_code_notes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A612,\"\"en\"\",\"\"it\"\")\"),\"Configura le note del codice...\")"
-  },
-  "book_properties": {
-    "view_type": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A613,\"\"en\"\",\"\"it\"\")\"),\"Tipo di visualizzazione\")",
-    "grid": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A614,\"\"en\"\",\"\"it\"\")\"),\"Griglia\")",
-    "list": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A615,\"\"en\"\",\"\"it\"\")\"),\"Lista\")",
-    "collapse_all_notes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A616,\"\"en\"\",\"\"it\"\")\"),\"Comprimi tutte le note\")",
-    "expand_all_children": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A617,\"\"en\"\",\"\"it\"\")\"),\"Espandi tutti i bambini\")",
-    "collapse": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A618,\"\"en\"\",\"\"it\"\")\"),\"Crollo\")",
-    "expand": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A619,\"\"en\"\",\"\"it\"\")\"),\"Espandere\")",
-    "book_properties": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A620,\"\"en\"\",\"\"it\"\")\"),\"Proprietà della raccolta\")",
-    "invalid_view_type": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A621,\"\"en\"\",\"\"it\"\")\"),\"Tipo di visualizzazione non valido '{{type}}'\")",
-    "calendar": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A622,\"\"en\"\",\"\"it\"\")\"),\"Calendario\")",
-    "table": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A623,\"\"en\"\",\"\"it\"\")\"),\"Tavolo\")",
-    "geo-map": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A624,\"\"en\"\",\"\"it\"\")\"),\"Mappa geografica\")",
-    "board": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A625,\"\"en\"\",\"\"it\"\")\"),\"Asse\")",
-    "presentation": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A626,\"\"en\"\",\"\"it\"\")\"),\"Presentazione\")",
-    "include_archived_notes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A627,\"\"en\"\",\"\"it\"\")\"),\"Mostra note archiviate\")"
-  },
-  "edited_notes": {
-    "no_edited_notes_found": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A628,\"\"en\"\",\"\"it\"\")\"),\"Nessuna nota modificata per questo giorno...\")",
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A629,\"\"en\"\",\"\"it\"\")\"),\"Note modificate\")",
-    "deleted": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A630,\"\"en\"\",\"\"it\"\")\"),\"(eliminato)\")"
-  },
-  "file_properties": {
-    "note_id": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A631,\"\"en\"\",\"\"it\"\")\"),\"ID nota\")",
-    "original_file_name": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A632,\"\"en\"\",\"\"it\"\")\"),\"Nome del file originale\")",
-    "file_type": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A633,\"\"en\"\",\"\"it\"\")\"),\"Tipo di file\")",
-    "file_size": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A634,\"\"en\"\",\"\"it\"\")\"),\"Dimensione del file\")",
-    "download": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A635,\"\"en\"\",\"\"it\"\")\"),\"Scaricamento\")",
-    "open": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A636,\"\"en\"\",\"\"it\"\")\"),\"Aprire\")",
-    "upload_new_revision": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A637,\"\"en\"\",\"\"it\"\")\"),\"Carica nuova revisione\")",
-    "upload_success": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A638,\"\"en\"\",\"\"it\"\")\"),\"È stata caricata una nuova revisione del file.\")",
-    "upload_failed": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A639,\"\"en\"\",\"\"it\"\")\"),\"Caricamento di una nuova revisione del file non riuscito.\")",
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A640,\"\"en\"\",\"\"it\"\")\"),\"File\")"
-  },
-  "image_properties": {
-    "original_file_name": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A641,\"\"en\"\",\"\"it\"\")\"),\"Nome del file originale\")",
-    "file_type": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A642,\"\"en\"\",\"\"it\"\")\"),\"Tipo di file\")",
-    "file_size": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A643,\"\"en\"\",\"\"it\"\")\"),\"Dimensione del file\")",
-    "download": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A644,\"\"en\"\",\"\"it\"\")\"),\"Scaricamento\")",
-    "open": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A645,\"\"en\"\",\"\"it\"\")\"),\"Aprire\")",
-    "copy_reference_to_clipboard": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A646,\"\"en\"\",\"\"it\"\")\"),\"Copia il riferimento negli appunti\")",
-    "upload_new_revision": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A647,\"\"en\"\",\"\"it\"\")\"),\"Carica nuova revisione\")",
-    "upload_success": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A648,\"\"en\"\",\"\"it\"\")\"),\"È stata caricata una nuova revisione dell'immagine.\")",
-    "upload_failed": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A649,\"\"en\"\",\"\"it\"\")\"),\"Caricamento di una nuova revisione dell'immagine non riuscito: {{message}}\")",
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A650,\"\"en\"\",\"\"it\"\")\"),\"Immagine\")"
-  },
-  "inherited_attribute_list": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A651,\"\"en\"\",\"\"it\"\")\"),\"Attributi ereditati\")",
-    "no_inherited_attributes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A652,\"\"en\"\",\"\"it\"\")\"),\"Nessun attributo ereditato.\")"
-  },
-  "note_info_widget": {
-    "note_id": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A653,\"\"en\"\",\"\"it\"\")\"),\"ID nota\")",
-    "created": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A654,\"\"en\"\",\"\"it\"\")\"),\"Creato\")",
-    "modified": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A655,\"\"en\"\",\"\"it\"\")\"),\"Modificato\")",
-    "type": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A656,\"\"en\"\",\"\"it\"\")\"),\"Tipo\")",
-    "note_size": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A657,\"\"en\"\",\"\"it\"\")\"),\"Dimensione della nota\")",
-    "note_size_info": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A658,\"\"en\"\",\"\"it\"\")\"),\"La dimensione della nota fornisce una stima approssimativa dei requisiti di archiviazione per questa nota. Tiene conto del contenuto della nota e del contenuto delle sue revisioni.\")",
-    "calculate": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A659,\"\"en\"\",\"\"it\"\")\"),\"calcolare\")",
-    "subtree_size": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A660,\"\"en\"\",\"\"it\"\")\"),\"(dimensione del sottoalbero: {{size}} in {{count}} note)\")",
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A661,\"\"en\"\",\"\"it\"\")\"),\"Nota informativa\")"
-  },
-  "note_map": {
-    "open_full": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A662,\"\"en\"\",\"\"it\"\")\"),\"Espandi completamente\")",
-    "collapse": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A663,\"\"en\"\",\"\"it\"\")\"),\"Ritorna alle dimensioni normali\")",
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A664,\"\"en\"\",\"\"it\"\")\"),\"Nota Mappa\")",
-    "fix-nodes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A665,\"\"en\"\",\"\"it\"\")\"),\"Fissare i nodi\")",
-    "link-distance": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A666,\"\"en\"\",\"\"it\"\")\"),\"Distanza del collegamento\")"
-  },
-  "note_paths": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A667,\"\"en\"\",\"\"it\"\")\"),\"Percorsi delle note\")",
-    "clone_button": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A668,\"\"en\"\",\"\"it\"\")\"),\"Clona la nota nella nuova posizione...\")",
-    "intro_placed": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A669,\"\"en\"\",\"\"it\"\")\"),\"Questa nota è inserita nei seguenti percorsi:\")",
-    "intro_not_placed": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A670,\"\"en\"\",\"\"it\"\")\"),\"Questa nota non è ancora stata inserita nell'albero delle note.\")",
-    "outside_hoisted": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A671,\"\"en\"\",\"\"it\"\")\"),\"Questo percorso è al di fuori della nota sollevata e dovresti sganciarla.\")",
-    "archived": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A672,\"\"en\"\",\"\"it\"\")\"),\"Archiviato\")",
-    "search": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A673,\"\"en\"\",\"\"it\"\")\"),\"Ricerca\")"
-  },
-  "note_properties": {
-    "this_note_was_originally_taken_from": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A674,\"\"en\"\",\"\"it\"\")\"),\"Questa nota è stata originariamente tratta da:\")",
-    "info": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A675,\"\"en\"\",\"\"it\"\")\"),\"Informazioni\")"
-  },
-  "owned_attribute_list": {
-    "owned_attributes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A676,\"\"en\"\",\"\"it\"\")\"),\"Attributi posseduti\")"
-  },
-  "promoted_attributes": {
-    "promoted_attributes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A677,\"\"en\"\",\"\"it\"\")\"),\"Attributi promossi\")",
-    "unset-field-placeholder": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A678,\"\"en\"\",\"\"it\"\")\"),\"non impostato\")",
-    "url_placeholder": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A679,\"\"en\"\",\"\"it\"\")\"),\"http://sito web...\")",
-    "open_external_link": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A680,\"\"en\"\",\"\"it\"\")\"),\"Apri collegamento esterno\")",
-    "unknown_label_type": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A681,\"\"en\"\",\"\"it\"\")\"),\"Tipo di etichetta sconosciuto '{{type}}'\")",
-    "unknown_attribute_type": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A682,\"\"en\"\",\"\"it\"\")\"),\"Tipo di attributo sconosciuto '{{type}}'\")",
-    "add_new_attribute": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A683,\"\"en\"\",\"\"it\"\")\"),\"Aggiungi nuovo attributo\")",
-    "remove_this_attribute": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A684,\"\"en\"\",\"\"it\"\")\"),\"Rimuovi questo attributo\")",
-    "remove_color": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A685,\"\"en\"\",\"\"it\"\")\"),\"Rimuovere l'etichetta colorata\")"
-  },
-  "script_executor": {
-    "query": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A686,\"\"en\"\",\"\"it\"\")\"),\"Domanda\")",
-    "script": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A687,\"\"en\"\",\"\"it\"\")\"),\"Sceneggiatura\")",
-    "execute_query": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A688,\"\"en\"\",\"\"it\"\")\"),\"Esegui query\")",
-    "execute_script": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A689,\"\"en\"\",\"\"it\"\")\"),\"Esegui script\")"
-  },
-  "similar_notes": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A711,\"\"en\"\",\"\"it\"\")\"),\"Note simili\")",
-    "no_similar_notes_found": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A712,\"\"en\"\",\"\"it\"\")\"),\"Nessuna nota simile trovata.\")"
-  },
-  "fast_search": {
-    "fast_search": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A726,\"\"en\"\",\"\"it\"\")\"),\"Ricerca veloce\")",
-    "description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A727,\"\"en\"\",\"\"it\"\")\"),\"L'opzione di ricerca rapida disattiva la ricerca del testo completo del contenuto delle note, il che potrebbe velocizzare la ricerca in database di grandi dimensioni.\")"
-  },
-  "include_archived_notes": {
-    "include_archived_notes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A728,\"\"en\"\",\"\"it\"\")\"),\"Includi note archiviate\")"
-  },
-  "limit": {
-    "limit": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A729,\"\"en\"\",\"\"it\"\")\"),\"Limite\")",
-    "take_first_x_results": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A730,\"\"en\"\",\"\"it\"\")\"),\"Prendi solo i primi X risultati specificati.\")"
-  },
-  "order_by": {
-    "order_by": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A731,\"\"en\"\",\"\"it\"\")\"),\"Ordina per\")",
-    "relevancy": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A732,\"\"en\"\",\"\"it\"\")\"),\"Rilevanza (predefinita)\")",
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A733,\"\"en\"\",\"\"it\"\")\"),\"Titolo\")",
-    "date_created": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A734,\"\"en\"\",\"\"it\"\")\"),\"Data di creazione\")",
-    "date_modified": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A735,\"\"en\"\",\"\"it\"\")\"),\"Data dell'ultima modifica\")",
-    "content_size": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A736,\"\"en\"\",\"\"it\"\")\"),\"Nota la dimensione del contenuto\")",
-    "content_and_attachments_size": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A737,\"\"en\"\",\"\"it\"\")\"),\"Nota le dimensioni del contenuto, inclusi gli allegati\")",
-    "content_and_attachments_and_revisions_size": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A738,\"\"en\"\",\"\"it\"\")\"),\"Nota la dimensione del contenuto, inclusi allegati e revisioni\")",
-    "revision_count": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A739,\"\"en\"\",\"\"it\"\")\"),\"Numero di revisioni\")",
-    "children_count": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A740,\"\"en\"\",\"\"it\"\")\"),\"Numero di note sui bambini\")",
-    "parent_count": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A741,\"\"en\"\",\"\"it\"\")\"),\"Numero di cloni\")",
-    "owned_label_count": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A742,\"\"en\"\",\"\"it\"\")\"),\"Numero di etichette\")",
-    "owned_relation_count": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A743,\"\"en\"\",\"\"it\"\")\"),\"Numero di relazioni\")",
-    "target_relation_count": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A744,\"\"en\"\",\"\"it\"\")\"),\"Numero di relazioni che hanno come target la nota\")",
-    "random": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A745,\"\"en\"\",\"\"it\"\")\"),\"Ordine casuale\")",
-    "asc": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A746,\"\"en\"\",\"\"it\"\")\"),\"Crescente (predefinito)\")",
-    "desc": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A747,\"\"en\"\",\"\"it\"\")\"),\"Discendente\")"
-  },
-  "search_script": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A748,\"\"en\"\",\"\"it\"\")\"),\"Cerca script:\")",
-    "placeholder": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A749,\"\"en\"\",\"\"it\"\")\"),\"cerca la nota per nome\")",
-    "description1": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A750,\"\"en\"\",\"\"it\"\")\"),\"Lo script di ricerca consente di definire i risultati di ricerca eseguendo uno script. Ciò offre la massima flessibilità quando la ricerca standard non è sufficiente.\")",
-    "description2": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A751,\"\"en\"\",\"\"it\"\")\"),\"Lo script di ricerca deve essere di tipo \"\"codice\"\" e sottotipo \"\"backend JavaScript\"\". Lo script deve restituire un array di noteId o note.\")",
-    "example_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A752,\"\"en\"\",\"\"it\"\")\"),\"Guarda questo esempio:\")",
-    "example_code": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A753,\"\"en\"\",\"\"it\"\")\"),\"// 1. Prefiltraggio tramite ricerca standard\nconst candidateNotes = api.searchForNotes(\"\"#journal\"\"); \n\n// 2. Applicazione di criteri di ricerca personalizzati\nconst matchedNotes = candidateNotes\n.filter(note => note.title.match(/[0-9]{1,2}\\. ?[0-9]{1,2}\\\"&\". ?[0-9]{4}/));\n\nreturn matchedNotes;\")",
-    "note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A754,\"\"en\"\",\"\"it\"\")\"),\"Si noti che lo script di ricerca e la stringa di ricerca non possono essere combinati tra loro.\")"
-  },
-  "attachment_list": {
-    "open_help_page": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A774,\"\"en\"\",\"\"it\"\")\"),\"Apri la pagina di aiuto sugli allegati\")",
-    "owning_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A775,\"\"en\"\",\"\"it\"\")\"),\"Nota di proprietà:\") ",
-    "upload_attachments": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A776,\"\"en\"\",\"\"it\"\")\"),\"Carica allegati\")",
-    "no_attachments": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A777,\"\"en\"\",\"\"it\"\")\"),\"Questa nota non ha allegati.\")"
-  },
-  "book": {
-    "no_children_help": "Questa raccolta non ha note secondarie, quindi non c'è nulla da visualizzare. Consulta la <a href=\"\"https://triliumnext.github.io/Docs/Wiki/book-note.html\"\">wiki</a> per i dettagli.",
-    "drag_locked_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A779,\"\"en\"\",\"\"it\"\")\"),\"Bloccato per la modifica\")",
-    "drag_locked_message": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A780,\"\"en\"\",\"\"it\"\")\"),\"Trascinamento non consentito poiché la raccolta è bloccata per la modifica.\")"
-  },
-  "editable_code": {
-    "placeholder": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A781,\"\"en\"\",\"\"it\"\")\"),\"Digita qui il contenuto della tua nota di codice...\")"
-  },
-  "editable_text": {
-    "placeholder": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A782,\"\"en\"\",\"\"it\"\")\"),\"Digita qui il contenuto della tua nota...\")"
-  },
-  "empty": {
-    "open_note_instruction": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A783,\"\"en\"\",\"\"it\"\")\"),\"Apri una nota digitandone il titolo nel campo sottostante oppure scegli una nota nell'albero.\")",
-    "search_placeholder": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A784,\"\"en\"\",\"\"it\"\")\"),\"cerca una nota per nome\")",
-    "enter_workspace": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A785,\"\"en\"\",\"\"it\"\")\"),\"Accedi all'area di lavoro {{title}}\")"
-  },
-  "file": {
-    "file_preview_not_available": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A786,\"\"en\"\",\"\"it\"\")\"),\"L'anteprima del file non è disponibile per questo formato di file.\")",
-    "too_big": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A787,\"\"en\"\",\"\"it\"\")\"),\"Per motivi di prestazioni, l'anteprima mostra solo i primi {{maxNumChars}} caratteri del file. Scarica il file e aprilo esternamente per poterne visualizzare l'intero contenuto.\")"
-  },
-  "protected_session": {
-    "enter_password_instruction": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A788,\"\"en\"\",\"\"it\"\")\"),\"Per visualizzare la nota protetta è necessario inserire la password:\")",
-    "start_session_button": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A789,\"\"en\"\",\"\"it\"\")\"),\"Avvia sessione protetta <kbd>invio</kbd>\")",
-    "started": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A790,\"\"en\"\",\"\"it\"\")\"),\"La sessione protetta è stata avviata.\")",
-    "wrong_password": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A791,\"\"en\"\",\"\"it\"\")\"),\"Password errata.\")",
-    "protecting-finished-successfully": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A792,\"\"en\"\",\"\"it\"\")\"),\"Protezione completata con successo.\")",
-    "unprotecting-finished-successfully": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A793,\"\"en\"\",\"\"it\"\")\"),\"Rimozione della protezione completata con successo.\")",
-    "protecting-in-progress": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A794,\"\"en\"\",\"\"it\"\")\"),\"Protezione in corso: {{count}}\")",
-    "unprotecting-in-progress-count": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A795,\"\"en\"\",\"\"it\"\")\"),\"Rimozione della protezione in corso: {{count}}\")",
-    "protecting-title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A796,\"\"en\"\",\"\"it\"\")\"),\"Stato di protezione\")",
-    "unprotecting-title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A797,\"\"en\"\",\"\"it\"\")\"),\"Stato non protetto\")"
-  },
-  "relation_map": {
-    "open_in_new_tab": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A798,\"\"en\"\",\"\"it\"\")\"),\"Apri in una nuova scheda\")",
-    "remove_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A799,\"\"en\"\",\"\"it\"\")\"),\"Rimuovi nota\")",
-    "edit_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A800,\"\"en\"\",\"\"it\"\")\"),\"Modifica titolo\")",
-    "rename_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A801,\"\"en\"\",\"\"it\"\")\"),\"Rinomina nota\")",
-    "enter_new_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A802,\"\"en\"\",\"\"it\"\")\"),\"Inserisci il titolo della nuova nota:\")",
-    "remove_relation": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A803,\"\"en\"\",\"\"it\"\")\"),\"Rimuovi relazione\")",
-    "confirm_remove_relation": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A804,\"\"en\"\",\"\"it\"\")\"),\"Sei sicuro di voler rimuovere la relazione?\")",
-    "specify_new_relation_name": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A805,\"\"en\"\",\"\"it\"\")\"),\"Specificare il nome della nuova relazione (caratteri consentiti: alfanumerici, due punti e trattino basso):\")",
-    "connection_exists": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A806,\"\"en\"\",\"\"it\"\")\"),\"La connessione '{{name}}' tra queste note esiste già.\")",
-    "start_dragging_relations": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A807,\"\"en\"\",\"\"it\"\")\"),\"Inizia a trascinare le relazioni da qui e rilasciale su un'altra nota.\")",
-    "note_not_found": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A808,\"\"en\"\",\"\"it\"\")\"),\"Nota {{noteId}} non trovata!\")",
-    "cannot_match_transform": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A809,\"\"en\"\",\"\"it\"\")\"),\"Impossibile abbinare la trasformazione: {{transform}}\")",
-    "note_already_in_diagram": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A810,\"\"en\"\",\"\"it\"\")\"),\"Nota che \"\"{{title}}\"\" è già presente nel diagramma.\")",
-    "enter_title_of_new_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A811,\"\"en\"\",\"\"it\"\")\"),\"Inserisci il titolo della nuova nota\")",
-    "default_new_note_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A812,\"\"en\"\",\"\"it\"\")\"),\"nuova nota\")",
-    "click_on_canvas_to_place_new_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A813,\"\"en\"\",\"\"it\"\")\"),\"Clicca sulla tela per inserire una nuova nota\")"
-  },
-  "render": {
-    "note_detail_render_help_1": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A814,\"\"en\"\",\"\"it\"\")\"),\"Questa nota di aiuto viene visualizzata perché questa nota di tipo Render HTML non ha la relazione richiesta per funzionare correttamente.\")",
-    "note_detail_render_help_2": "Il tipo di nota HTML Render viene utilizzato per lo <a class=\"\"external\"\" href=\"\"https://triliumnext.github.io/Docs/Wiki/scripts.html\"\">scripting</a>. In breve, si ottiene una nota in codice HTML (opzionalmente con un po' di JavaScript) che verrà visualizzata. Per farla funzionare, è necessario definire una <a class=\"\"external\"\" href=\"\"https://triliumnext.github.io/Docs/Wiki/attributes.html\"\">relazione</a> denominata \"\"renderNote\"\" che punti alla nota HTML da visualizzare."
-  },
-  "web_view": {
-    "web_view": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A816,\"\"en\"\",\"\"it\"\")\"),\"Visualizzazione Web\")",
-    "embed_websites": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A817,\"\"en\"\",\"\"it\"\")\"),\"La nota di tipo Web View consente di incorporare siti web in Trilium.\")",
-    "create_label": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A818,\"\"en\"\",\"\"it\"\")\"),\"Per iniziare, crea un'etichetta con l'indirizzo URL che desideri incorporare, ad esempio #webViewSrc=\"\"https://www.google.com\"\"\")"
-  },
-  "vacuum_database": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A853,\"\"en\"\",\"\"it\"\")\"),\"Database del vuoto\")",
-    "description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A854,\"\"en\"\",\"\"it\"\")\"),\"Questa operazione ricostruirà il database, generando in genere un file di dimensioni inferiori. In realtà, nessun dato verrà modificato.\")",
-    "button_text": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A855,\"\"en\"\",\"\"it\"\")\"),\"Database del vuoto\")",
-    "vacuuming_database": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A856,\"\"en\"\",\"\"it\"\")\"),\"Aspirazione del database...\")",
-    "database_vacuumed": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A857,\"\"en\"\",\"\"it\"\")\"),\"Il database è stato svuotato\")"
-  },
-  "fonts": {
-    "theme_defined": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A858,\"\"en\"\",\"\"it\"\")\"),\"Tema definito\")",
-    "fonts": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A859,\"\"en\"\",\"\"it\"\")\"),\"Caratteri\")",
-    "main_font": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A860,\"\"en\"\",\"\"it\"\")\"),\"Carattere principale\")",
-    "font_family": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A861,\"\"en\"\",\"\"it\"\")\"),\"Famiglia di caratteri\")",
-    "size": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A862,\"\"en\"\",\"\"it\"\")\"),\"Misurare\")",
-    "note_tree_font": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A863,\"\"en\"\",\"\"it\"\")\"),\"Carattere dell'albero delle note\")",
-    "note_detail_font": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A864,\"\"en\"\",\"\"it\"\")\"),\"Nota Dettaglio Carattere\")",
-    "monospace_font": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A865,\"\"en\"\",\"\"it\"\")\"),\"Monospace (codice) Font\")",
-    "note_tree_and_detail_font_sizing": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A866,\"\"en\"\",\"\"it\"\")\"),\"Si noti che le dimensioni dei caratteri dell'albero e dei dettagli sono relative all'impostazione della dimensione del carattere principale.\")",
-    "not_all_fonts_available": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A867,\"\"en\"\",\"\"it\"\")\"),\"Non tutti i font elencati potrebbero essere disponibili sul tuo sistema.\")",
-    "apply_font_changes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A868,\"\"en\"\",\"\"it\"\")\"),\"Per applicare le modifiche al carattere, fare clic su\")",
-    "reload_frontend": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A869,\"\"en\"\",\"\"it\"\")\"),\"ricarica frontend\")",
-    "generic-fonts": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A870,\"\"en\"\",\"\"it\"\")\"),\"Caratteri generici\")",
-    "sans-serif-system-fonts": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A871,\"\"en\"\",\"\"it\"\")\"),\"Caratteri di sistema sans-serif\")",
-    "serif-system-fonts": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A872,\"\"en\"\",\"\"it\"\")\"),\"Caratteri di sistema Serif\")",
-    "monospace-system-fonts": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A873,\"\"en\"\",\"\"it\"\")\"),\"Caratteri di sistema a spaziatura fissa\")",
-    "handwriting-system-fonts": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A874,\"\"en\"\",\"\"it\"\")\"),\"Caratteri del sistema di scrittura a mano\")",
-    "serif": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A875,\"\"en\"\",\"\"it\"\")\"),\"Serif\")",
-    "sans-serif": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A876,\"\"en\"\",\"\"it\"\")\"),\"Sans Serif\")",
-    "monospace": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A877,\"\"en\"\",\"\"it\"\")\"),\"Monospaziatura\")",
-    "system-default": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A878,\"\"en\"\",\"\"it\"\")\"),\"Predefinito del sistema\")"
-  },
-  "max_content_width": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A879,\"\"en\"\",\"\"it\"\")\"),\"Larghezza del contenuto\")",
-    "default_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A880,\"\"en\"\",\"\"it\"\")\"),\"Per impostazione predefinita, Trilium limita la larghezza massima del contenuto per migliorare la leggibilità sugli schermi più grandi.\")",
-    "max_width_label": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A881,\"\"en\"\",\"\"it\"\")\"),\"Larghezza massima del contenuto\")",
-    "max_width_unit": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A882,\"\"en\"\",\"\"it\"\")\"),\"pixel\")",
-    "apply_changes_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A883,\"\"en\"\",\"\"it\"\")\"),\"Per applicare le modifiche alla larghezza del contenuto, fare clic su\")",
-    "reload_button": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A884,\"\"en\"\",\"\"it\"\")\"),\"ricarica frontend\")",
-    "reload_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A885,\"\"en\"\",\"\"it\"\")\"),\"modifiche dalle opzioni di aspetto\")"
-  },
-  "native_title_bar": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A886,\"\"en\"\",\"\"it\"\")\"),\"Barra del titolo nativa (richiede il riavvio dell'app)\")",
-    "enabled": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A887,\"\"en\"\",\"\"it\"\")\"),\"abilitato\")",
-    "disabled": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A888,\"\"en\"\",\"\"it\"\")\"),\"disabile\")"
-  },
-  "ribbon": {
-    "widgets": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A889,\"\"en\"\",\"\"it\"\")\"),\"Widget della barra multifunzione\")",
-    "promoted_attributes_message": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A890,\"\"en\"\",\"\"it\"\")\"),\"La scheda della barra multifunzione Attributi promossi si aprirà automaticamente se gli attributi promossi sono presenti nella nota\")",
-    "edited_notes_message": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A891,\"\"en\"\",\"\"it\"\")\"),\"La scheda della barra multifunzione Note modificate si aprirà automaticamente nelle note giornaliere\")"
-  },
-  "theme": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A892,\"\"en\"\",\"\"it\"\")\"),\"Tema dell'applicazione\")",
-    "theme_label": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A893,\"\"en\"\",\"\"it\"\")\"),\"Tema\")",
-    "override_theme_fonts_label": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A894,\"\"en\"\",\"\"it\"\")\"),\"Ignora i font del tema\")",
-    "auto_theme": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A895,\"\"en\"\",\"\"it\"\")\"),\"Legacy (seguire lo schema dei colori del sistema)\")",
-    "light_theme": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A896,\"\"en\"\",\"\"it\"\")\"),\"Eredità (Luce)\")",
-    "dark_theme": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A897,\"\"en\"\",\"\"it\"\")\"),\"Eredità (Oscuro)\")",
-    "triliumnext": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A898,\"\"en\"\",\"\"it\"\")\"),\"Trilium (seguire lo schema dei colori del sistema)\")",
-    "triliumnext-light": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A899,\"\"en\"\",\"\"it\"\")\"),\"Trilium (Luce)\")",
-    "triliumnext-dark": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A900,\"\"en\"\",\"\"it\"\")\"),\"Trilium (scuro)\")",
-    "layout": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A901,\"\"en\"\",\"\"it\"\")\"),\"Disposizione\")",
-    "layout-vertical-title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A902,\"\"en\"\",\"\"it\"\")\"),\"Verticale\")",
-    "layout-horizontal-title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A903,\"\"en\"\",\"\"it\"\")\"),\"Orizzontale\")",
-    "layout-vertical-description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A904,\"\"en\"\",\"\"it\"\")\"),\"la barra di avvio è a sinistra (impostazione predefinita)\")",
-    "layout-horizontal-description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A905,\"\"en\"\",\"\"it\"\")\"),\"la barra di avvio si trova sotto la barra delle schede, che ora è a larghezza intera.\")"
-  },
-  "ui-performance": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A906,\"\"en\"\",\"\"it\"\")\"),\"Prestazione\")",
-    "enable-motion": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A907,\"\"en\"\",\"\"it\"\")\"),\"Abilita transizioni e animazioni\")",
-    "enable-shadows": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A908,\"\"en\"\",\"\"it\"\")\"),\"Abilita le ombre\")",
-    "enable-backdrop-effects": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A909,\"\"en\"\",\"\"it\"\")\"),\"Abilita gli effetti di sfondo per menu, popup e pannelli\")",
-    "enable-smooth-scroll": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A910,\"\"en\"\",\"\"it\"\")\"),\"Abilita lo scorrimento fluido\")",
-    "app-restart-required": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A911,\"\"en\"\",\"\"it\"\")\"),\"(per rendere effettiva la modifica è necessario riavviare l'applicazione)\")"
-  },
-  "zoom_factor": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1049,\"\"en\"\",\"\"it\"\")\"),\"Fattore di zoom (solo versione desktop)\")",
-    "description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1050,\"\"en\"\",\"\"it\"\")\"),\"Lo zoom può essere controllato anche con le scorciatoie CTRL+- e CTRL+=.\")"
-  },
-  "code_auto_read_only_size": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1051,\"\"en\"\",\"\"it\"\")\"),\"Dimensione automatica di sola lettura\")",
-    "description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1052,\"\"en\"\",\"\"it\"\")\"),\"La dimensione automatica delle note in sola lettura è la dimensione dopo la quale le note verranno visualizzate in modalità di sola lettura (per motivi di prestazioni).\")",
-    "label": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1053,\"\"en\"\",\"\"it\"\")\"),\"Dimensione automatica di sola lettura (note sul codice)\")",
-    "unit": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1054,\"\"en\"\",\"\"it\"\")\"),\"caratteri\")"
-  },
-  "code-editor-options": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1055,\"\"en\"\",\"\"it\"\")\"),\"Redattore\")"
-  },
-  "code_mime_types": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1056,\"\"en\"\",\"\"it\"\")\"),\"Tipi MIME disponibili nel menu a discesa\")"
-  },
-  "vim_key_bindings": {
-    "use_vim_keybindings_in_code_notes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1057,\"\"en\"\",\"\"it\"\")\"),\"Combinazioni di tasti di Vim\")",
-    "enable_vim_keybindings": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1058,\"\"en\"\",\"\"it\"\")\"),\"Abilita le combinazioni di tasti di Vim nelle note del codice (nessuna modalità ex)\")"
-  },
-  "wrap_lines": {
-    "wrap_lines_in_code_notes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1059,\"\"en\"\",\"\"it\"\")\"),\"Righe di avvolgimento nelle note del codice\")",
-    "enable_line_wrap": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1060,\"\"en\"\",\"\"it\"\")\"),\"Abilita Line Wrap (la modifica potrebbe richiedere un ricaricamento del frontend per avere effetto)\")"
-  },
-  "images": {
-    "images_section_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1061,\"\"en\"\",\"\"it\"\")\"),\"Immagini\")",
-    "download_images_automatically": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1062,\"\"en\"\",\"\"it\"\")\"),\"Scarica automaticamente le immagini per l'utilizzo offline.\")",
-    "download_images_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1063,\"\"en\"\",\"\"it\"\")\"),\"L'HTML incollato può contenere riferimenti a immagini online; Trilium troverà tali riferimenti e scaricherà le immagini in modo che siano disponibili offline.\")",
-    "enable_image_compression": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1064,\"\"en\"\",\"\"it\"\")\"),\"Abilita la compressione delle immagini\")",
-    "max_image_dimensions": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1065,\"\"en\"\",\"\"it\"\")\"),\"Larghezza/altezza massima di un'immagine (l'immagine verrà ridimensionata se supera questa impostazione).\")",
-    "max_image_dimensions_unit": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1066,\"\"en\"\",\"\"it\"\")\"),\"pixel\")",
-    "jpeg_quality_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1067,\"\"en\"\",\"\"it\"\")\"),\"Qualità JPEG (10 - qualità peggiore, 100 - qualità migliore, 50 - 85 è consigliato)\")"
-  },
-  "attachment_erasure_timeout": {
-    "attachment_erasure_timeout": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1068,\"\"en\"\",\"\"it\"\")\"),\"Timeout cancellazione allegato\")",
-    "attachment_auto_deletion_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1069,\"\"en\"\",\"\"it\"\")\"),\"Gli allegati vengono eliminati (e cancellati) automaticamente se non vengono più menzionati nella nota dopo un timeout definito.\")",
-    "erase_attachments_after": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1070,\"\"en\"\",\"\"it\"\")\"),\"Cancella gli allegati non utilizzati dopo:\")",
-    "manual_erasing_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1071,\"\"en\"\",\"\"it\"\")\"),\"È anche possibile attivare la cancellazione manualmente (senza considerare il timeout definito sopra):\")",
-    "erase_unused_attachments_now": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1072,\"\"en\"\",\"\"it\"\")\"),\"Cancella subito le note degli allegati non utilizzati\")",
-    "unused_attachments_erased": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1073,\"\"en\"\",\"\"it\"\")\"),\"Gli allegati non utilizzati sono stati cancellati.\")"
-  },
-  "network_connections": {
-    "network_connections_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1074,\"\"en\"\",\"\"it\"\")\"),\"Connessioni di rete\")",
-    "check_for_updates": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1075,\"\"en\"\",\"\"it\"\")\"),\"Controlla automaticamente gli aggiornamenti\")"
-  },
-  "note_erasure_timeout": {
-    "note_erasure_timeout_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1076,\"\"en\"\",\"\"it\"\")\"),\"Timeout cancellazione nota\")",
-    "note_erasure_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1077,\"\"en\"\",\"\"it\"\")\"),\"Le note eliminate (e gli attributi, le revisioni...) vengono inizialmente contrassegnate come eliminate ed è possibile recuperarle dalla finestra di dialogo Note recenti. Dopo un certo periodo di tempo, le note eliminate vengono \"\"cancellate\"\", il che sig\"&\"nifica che il loro contenuto non è più recuperabile. Questa impostazione consente di configurare l'intervallo di tempo tra l'eliminazione e la cancellazione definitiva della nota.\")",
-    "erase_notes_after": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1078,\"\"en\"\",\"\"it\"\")\"),\"Cancella le note dopo:\")",
-    "manual_erasing_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1079,\"\"en\"\",\"\"it\"\")\"),\"È anche possibile attivare la cancellazione manualmente (senza considerare il timeout definito sopra):\")",
-    "erase_deleted_notes_now": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1080,\"\"en\"\",\"\"it\"\")\"),\"Cancella subito le note eliminate\")",
-    "deleted_notes_erased": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1081,\"\"en\"\",\"\"it\"\")\"),\"Le note eliminate sono state eliminate.\")"
-  },
-  "revisions_snapshot_interval": {
-    "note_revisions_snapshot_interval_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1082,\"\"en\"\",\"\"it\"\")\"),\"Nota Intervallo di istantanea della revisione\")",
-    "note_revisions_snapshot_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1083,\"\"en\"\",\"\"it\"\")\"),\"L'intervallo di snapshot della revisione della nota è il tempo dopo il quale verrà creata una nuova revisione per la nota. Per maggiori informazioni, consultare <doc>wiki</doc>.\")",
-    "snapshot_time_interval_label": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1084,\"\"en\"\",\"\"it\"\")\"),\"Nota intervallo di tempo per l'istantanea della revisione:\")"
-  },
-  "revisions_snapshot_limit": {
-    "note_revisions_snapshot_limit_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1085,\"\"en\"\",\"\"it\"\")\"),\"Nota Limite di Snapshot di Revisione\")",
-    "note_revisions_snapshot_limit_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1086,\"\"en\"\",\"\"it\"\")\"),\"Il limite del numero di snapshot di revisione della nota si riferisce al numero massimo di revisioni che possono essere salvate per ciascuna nota. Dove -1 significa nessun limite, 0 significa eliminare tutte le revisioni. È possibile impostare il numero m\"&\"assimo di revisioni per una singola nota tramite l'etichetta #versioningLimit.\")",
-    "snapshot_number_limit_label": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1087,\"\"en\"\",\"\"it\"\")\"),\"Nota limite del numero di istantanee di revisione:\")",
-    "snapshot_number_limit_unit": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1088,\"\"en\"\",\"\"it\"\")\"),\"istantanee\")",
-    "erase_excess_revision_snapshots": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1089,\"\"en\"\",\"\"it\"\")\"),\"Cancella subito gli snapshot di revisione in eccesso\")",
-    "erase_excess_revision_snapshots_prompt": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1090,\"\"en\"\",\"\"it\"\")\"),\"Gli snapshot di revisione in eccesso sono stati cancellati.\")"
-  },
-  "text_auto_read_only_size": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1124,\"\"en\"\",\"\"it\"\")\"),\"Dimensione automatica di sola lettura\")",
-    "description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1125,\"\"en\"\",\"\"it\"\")\"),\"La dimensione automatica delle note in sola lettura è la dimensione dopo la quale le note verranno visualizzate in modalità di sola lettura (per motivi di prestazioni).\")",
-    "label": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1126,\"\"en\"\",\"\"it\"\")\"),\"Dimensione automatica di sola lettura (note di testo)\")",
-    "unit": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1127,\"\"en\"\",\"\"it\"\")\"),\"caratteri\")"
-  },
-  "custom_date_time_format": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1128,\"\"en\"\",\"\"it\"\")\"),\"Formato data/ora personalizzato\")",
-    "description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1129,\"\"en\"\",\"\"it\"\")\"),\"Personalizza il formato della data e dell'ora inserite tramite <shortcut /> o la barra degli strumenti. Consulta la <doc>documentazione Day.js</doc> per i token di formato disponibili.\")",
-    "format_string": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1130,\"\"en\"\",\"\"it\"\")\"),\"Stringa di formato:\")",
-    "formatted_time": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1131,\"\"en\"\",\"\"it\"\")\"),\"Data/ora formattata:\")"
-  },
-  "options_widget": {
-    "options_status": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1187,\"\"en\"\",\"\"it\"\")\"),\"Stato delle opzioni\")",
-    "options_change_saved": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1188,\"\"en\"\",\"\"it\"\")\"),\"Le modifiche alle opzioni sono state salvate.\")"
-  },
-  "password": {
-    "heading": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1189,\"\"en\"\",\"\"it\"\")\"),\"Password\")",
-    "alert_message": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1190,\"\"en\"\",\"\"it\"\")\"),\"Ricordati di ricordare la nuova password. La password serve per accedere all'interfaccia web e per crittografare le note protette. Se dimentichi la password, tutte le tue note protette andranno perse per sempre.\")",
-    "reset_link": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1191,\"\"en\"\",\"\"it\"\")\"),\"Clicca qui per reimpostarlo.\")",
-    "old_password": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1192,\"\"en\"\",\"\"it\"\")\"),\"Vecchia password\")",
-    "new_password": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1193,\"\"en\"\",\"\"it\"\")\"),\"Nuova password\")",
-    "new_password_confirmation": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1194,\"\"en\"\",\"\"it\"\")\"),\"Conferma della nuova password\")",
-    "change_password": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1195,\"\"en\"\",\"\"it\"\")\"),\"Cambiare la password\")",
-    "protected_session_timeout": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1196,\"\"en\"\",\"\"it\"\")\"),\"Timeout della sessione protetta\")",
-    "protected_session_timeout_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1197,\"\"en\"\",\"\"it\"\")\"),\"Il timeout della sessione protetta è un periodo di tempo dopo il quale la sessione protetta viene cancellata dalla memoria del browser. Questo periodo viene calcolato a partire dall'ultima interazione con le note protette. Vedi\")",
-    "wiki": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1198,\"\"en\"\",\"\"it\"\")\"),\"wiki\")",
-    "for_more_info": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1199,\"\"en\"\",\"\"it\"\")\"),\"per maggiori informazioni.\")",
-    "protected_session_timeout_label": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1200,\"\"en\"\",\"\"it\"\")\"),\"Timeout della sessione protetta:\")",
-    "reset_confirmation": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1201,\"\"en\"\",\"\"it\"\")\"),\"Reimpostando la password perderai per sempre l'accesso a tutte le tue note protette. Vuoi davvero reimpostare la password?\")",
-    "reset_success_message": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1202,\"\"en\"\",\"\"it\"\")\"),\"La password è stata reimpostata. Imposta una nuova password.\")",
-    "change_password_heading": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1203,\"\"en\"\",\"\"it\"\")\"),\"Cambiare la password\")",
-    "set_password_heading": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1204,\"\"en\"\",\"\"it\"\")\"),\"Imposta password\")",
-    "set_password": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1205,\"\"en\"\",\"\"it\"\")\"),\"Imposta password\")",
-    "password_mismatch": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1206,\"\"en\"\",\"\"it\"\")\"),\"Le nuove password non sono tutte uguali.\")",
-    "password_changed_success": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1207,\"\"en\"\",\"\"it\"\")\"),\"La password è stata modificata. Trilium verrà ricaricato dopo aver premuto OK.\")"
-  },
-  "multi_factor_authentication": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1208,\"\"en\"\",\"\"it\"\")\"),\"Autenticazione a più fattori\")",
-    "description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1209,\"\"en\"\",\"\"it\"\")\"),\"L'autenticazione a più fattori (MFA) aggiunge un ulteriore livello di sicurezza al tuo account. Invece di inserire semplicemente una password per accedere, l'MFA richiede di fornire una o più prove aggiuntive per verificare la tua identità. In questo modo\"&\", anche se qualcuno dovesse entrare in possesso della tua password, non potrà comunque accedere al tuo account senza la seconda informazione. È come aggiungere una serratura extra alla tua porta, rendendo molto più difficile l'accesso per chiunque altro.<\"&\"br><br>Segui le istruzioni seguenti per abilitare l'MFA. Se la configurazione non è corretta, l'accesso verrà effettuato solo tramite password.\")",
-    "mfa_enabled": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1210,\"\"en\"\",\"\"it\"\")\"),\"Abilita l'autenticazione a più fattori\")",
-    "mfa_method": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1211,\"\"en\"\",\"\"it\"\")\"),\"Metodo MFA\")",
-    "electron_disabled": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1212,\"\"en\"\",\"\"it\"\")\"),\"L'autenticazione a più fattori non è attualmente supportata nella versione desktop.\")",
-    "totp_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1213,\"\"en\"\",\"\"it\"\")\"),\"Password monouso basata sul tempo (TOTP)\")",
-    "totp_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1214,\"\"en\"\",\"\"it\"\")\"),\"TOTP (Time-Based One-Time Password) è una funzione di sicurezza che genera un codice temporaneo univoco che cambia ogni 30 secondi. Questo codice, insieme alla password, viene utilizzato per accedere al proprio account, rendendolo molto più difficile da a\"&\"ccedere per chiunque altro.\")",
-    "totp_secret_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1215,\"\"en\"\",\"\"it\"\")\"),\"Genera il segreto TOTP\")",
-    "totp_secret_generate": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1216,\"\"en\"\",\"\"it\"\")\"),\"Genera il segreto TOTP\")",
-    "totp_secret_regenerate": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1217,\"\"en\"\",\"\"it\"\")\"),\"Rigenera il segreto TOTP\")",
-    "no_totp_secret_warning": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1218,\"\"en\"\",\"\"it\"\")\"),\"Per abilitare TOTP, è necessario prima generare un segreto TOTP.\")",
-    "totp_secret_description_warning": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1219,\"\"en\"\",\"\"it\"\")\"),\"Dopo aver generato un nuovo segreto TOTP, ti verrà richiesto di effettuare nuovamente l'accesso con il nuovo segreto TOTP.\")",
-    "totp_secret_generated": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1220,\"\"en\"\",\"\"it\"\")\"),\"TOTP Segreto Generato\")",
-    "totp_secret_warning": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1221,\"\"en\"\",\"\"it\"\")\"),\"Si prega di salvare il segreto generato in un luogo sicuro. Non verrà più visualizzato.\")",
-    "totp_secret_regenerate_confirm": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1222,\"\"en\"\",\"\"it\"\")\"),\"Vuoi davvero rigenerare il segreto TOTP? Questo invaliderà il segreto TOTP precedente e tutti i codici di recupero esistenti.\")",
-    "recovery_keys_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1223,\"\"en\"\",\"\"it\"\")\"),\"Chiavi di ripristino Single Sign-on\")",
-    "recovery_keys_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1224,\"\"en\"\",\"\"it\"\")\"),\"Le chiavi di recupero Single Sign-On vengono utilizzate per effettuare l'accesso anche se non è possibile accedere ai codici Authenticator.\")",
-    "recovery_keys_description_warning": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1225,\"\"en\"\",\"\"it\"\")\"),\"Le chiavi di recupero non verranno più visualizzate dopo aver abbandonato la pagina: conservale in un luogo sicuro e protetto.<br>Una volta utilizzata, una chiave di recupero non potrà più essere utilizzata.\")",
-    "recovery_keys_error": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1226,\"\"en\"\",\"\"it\"\")\"),\"Errore durante la generazione dei codici di ripristino\")",
-    "recovery_keys_no_key_set": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1227,\"\"en\"\",\"\"it\"\")\"),\"Nessun codice di ripristino impostato\")",
-    "recovery_keys_generate": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1228,\"\"en\"\",\"\"it\"\")\"),\"Genera codici di recupero\")",
-    "recovery_keys_regenerate": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1229,\"\"en\"\",\"\"it\"\")\"),\"Rigenera i codici di recupero\")",
-    "recovery_keys_used": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1230,\"\"en\"\",\"\"it\"\")\"),\"Utilizzato: {{data}}\")",
-    "recovery_keys_unused": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1231,\"\"en\"\",\"\"it\"\")\"),\"Il codice di ripristino {{index}} non è utilizzato\")",
-    "oauth_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1232,\"\"en\"\",\"\"it\"\")\"),\"OAuth/OpenID\")",
-    "oauth_description": "OpenID è un metodo standardizzato che ti consente di accedere ai siti web utilizzando un account di un altro servizio, come Google, per verificare la tua identità. L'emittente predefinito è Google, ma puoi cambiarlo con qualsiasi altro provider OpenID. Per ulteriori informazioni, consulta <a href=\"\"#root/_hidden/_help/_help_Otzi9La2YAUX/_help_WOcw2SLH6tbX/_help_7DAiwaf8Z7Rz\"\">qui</a>. Segui queste <a href=\"\"https://developers.google.com/identity/openid-connect/openid-connect\"\">istruzioni</a> per configurare un servizio OpenID tramite Google.",
-    "oauth_description_warning": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1234,\"\"en\"\",\"\"it\"\")\"),\"Per abilitare OAuth/OpenID, è necessario impostare l'URL di base di OAuth/OpenID, l'ID client e il segreto client nel file config.ini e riavviare l'applicazione. Per impostare le variabili d'ambiente, impostare TRILIUM_OAUTH_BASE_URL, TRILIUM_OAUTH_CLIENT\"&\"_ID e TRILIUM_OAUTH_CLIENT_SECRET.\")",
-    "oauth_missing_vars": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1235,\"\"en\"\",\"\"it\"\")\"),\"Impostazioni mancanti: {{-variabili}}\")",
-    "oauth_user_account": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1236,\"\"en\"\",\"\"it\"\")\"),\"Account utente:\") ",
-    "oauth_user_email": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1237,\"\"en\"\",\"\"it\"\")\"),\"Email utente:\") ",
-    "oauth_user_not_logged_in": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1238,\"\"en\"\",\"\"it\"\")\"),\"Non hai effettuato l'accesso!\")"
-  },
-  "spellcheck": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1250,\"\"en\"\",\"\"it\"\")\"),\"Controllo ortografico\")",
-    "description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1251,\"\"en\"\",\"\"it\"\")\"),\"Queste opzioni sono valide solo per le versioni desktop; i browser utilizzeranno il proprio controllo ortografico nativo.\")",
-    "enable": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1252,\"\"en\"\",\"\"it\"\")\"),\"Abilita il controllo ortografico\")",
-    "language_code_label": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1253,\"\"en\"\",\"\"it\"\")\"),\"Codice/i della lingua\")",
-    "language_code_placeholder": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1254,\"\"en\"\",\"\"it\"\")\"),\"ad esempio \"\"en-US\"\", \"\"de-AT\"\"\")",
-    "multiple_languages_info": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1255,\"\"en\"\",\"\"it\"\")\"),\"È possibile separare più lingue con una virgola, ad esempio \"\"en-US, de-DE, cs\"\".\") ",
-    "available_language_codes_label": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1256,\"\"en\"\",\"\"it\"\")\"),\"Codici lingua disponibili:\")",
-    "restart-required": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1257,\"\"en\"\",\"\"it\"\")\"),\"Le modifiche alle opzioni di controllo ortografico avranno effetto dopo il riavvio dell'applicazione.\")"
-  },
-  "api_log": {
-    "close": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1272,\"\"en\"\",\"\"it\"\")\"),\"Vicino\")"
-  },
-  "attachment_detail_2": {
-    "will_be_deleted_in": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1273,\"\"en\"\",\"\"it\"\")\"),\"Questo allegato verrà eliminato automaticamente tra {{time}}\")",
-    "will_be_deleted_soon": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1274,\"\"en\"\",\"\"it\"\")\"),\"Questo allegato verrà eliminato automaticamente a breve\")",
-    "deletion_reason": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1275,\"\"en\"\",\"\"it\"\")\"),\", perché l'allegato non è collegato al contenuto della nota. Per impedirne l'eliminazione, aggiungi nuovamente il collegamento all'allegato nel contenuto o converti l'allegato in nota.\")",
-    "role_and_size": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1276,\"\"en\"\",\"\"it\"\")\"),\"Ruolo: {{role}}, Dimensione: {{size}}\")",
-    "link_copied": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1277,\"\"en\"\",\"\"it\"\")\"),\"Link all'allegato copiato negli appunti.\")",
-    "unrecognized_role": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1278,\"\"en\"\",\"\"it\"\")\"),\"Ruolo di allegato non riconosciuto '{{role}}'.\")"
-  },
-  "bookmark_switch": {
-    "bookmark": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1279,\"\"en\"\",\"\"it\"\")\"),\"Segnalibro\")",
-    "bookmark_this_note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1280,\"\"en\"\",\"\"it\"\")\"),\"Aggiungi questa nota ai segnalibri nel pannello laterale sinistro\")",
-    "remove_bookmark": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1281,\"\"en\"\",\"\"it\"\")\"),\"Rimuovi segnalibro\")"
-  },
-  "editability_select": {
-    "auto": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1282,\"\"en\"\",\"\"it\"\")\"),\"Auto\")",
-    "read_only": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1283,\"\"en\"\",\"\"it\"\")\"),\"Sola lettura\")",
-    "always_editable": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1284,\"\"en\"\",\"\"it\"\")\"),\"Sempre modificabile\")",
-    "note_is_editable": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1285,\"\"en\"\",\"\"it\"\")\"),\"La nota è modificabile se non è troppo lunga.\")",
-    "note_is_read_only": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1286,\"\"en\"\",\"\"it\"\")\"),\"La nota è di sola lettura, ma può essere modificata cliccando su un pulsante.\")",
-    "note_is_always_editable": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1287,\"\"en\"\",\"\"it\"\")\"),\"La nota è sempre modificabile, indipendentemente dalla sua lunghezza.\")"
-  },
-  "note-map": {
-    "button-link-map": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1288,\"\"en\"\",\"\"it\"\")\"),\"Mappa dei collegamenti\")",
-    "button-tree-map": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1289,\"\"en\"\",\"\"it\"\")\"),\"Mappa degli alberi\")"
-  },
-  "shared_info": {
-    "shared_publicly": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1323,\"\"en\"\",\"\"it\"\")\"),\"Questa nota è condivisa pubblicamente su {{- link}}.\")",
-    "shared_locally": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1324,\"\"en\"\",\"\"it\"\")\"),\"Questa nota è condivisa localmente su {{- link}}.\")",
-    "help_link": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1325,\"\"en\"\",\"\"it\"\")\"),\"Per assistenza visita <a href=\"\"https://triliumnext.github.io/Docs/Wiki/sharing.html\"\">wiki</a>.\")"
-  },
-  "note_types": {
-    "text": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1326,\"\"en\"\",\"\"it\"\")\"),\"Testo\")",
-    "code": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1327,\"\"en\"\",\"\"it\"\")\"),\"Codice\")",
-    "saved-search": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1328,\"\"en\"\",\"\"it\"\")\"),\"Ricerca salvata\")",
-    "relation-map": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1329,\"\"en\"\",\"\"it\"\")\"),\"Mappa delle relazioni\")",
-    "note-map": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1330,\"\"en\"\",\"\"it\"\")\"),\"Nota Mappa\")",
-    "render-note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1331,\"\"en\"\",\"\"it\"\")\"),\"Nota di rendering\")",
-    "book": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1332,\"\"en\"\",\"\"it\"\")\"),\"Collezione\")",
-    "mermaid-diagram": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1333,\"\"en\"\",\"\"it\"\")\"),\"Diagramma della sirena\")",
-    "canvas": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1334,\"\"en\"\",\"\"it\"\")\"),\"Tela\")",
-    "web-view": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1335,\"\"en\"\",\"\"it\"\")\"),\"Visualizzazione Web\")",
-    "mind-map": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1336,\"\"en\"\",\"\"it\"\")\"),\"Mappa mentale\")",
-    "file": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1337,\"\"en\"\",\"\"it\"\")\"),\"File\")",
-    "image": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1338,\"\"en\"\",\"\"it\"\")\"),\"Immagine\")",
-    "launcher": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1339,\"\"en\"\",\"\"it\"\")\"),\"Lanciatore\")",
-    "doc": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1340,\"\"en\"\",\"\"it\"\")\"),\"Dottore\")",
-    "widget": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1341,\"\"en\"\",\"\"it\"\")\"),\"Oggetto\")",
-    "confirm-change": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1342,\"\"en\"\",\"\"it\"\")\"),\"Si sconsiglia di cambiare tipo di nota quando il contenuto della nota non è vuoto. Vuoi continuare comunque?\")",
-    "geo-map": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1343,\"\"en\"\",\"\"it\"\")\"),\"Mappa geografica\")",
-    "beta-feature": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1344,\"\"en\"\",\"\"it\"\")\"),\"Beta\")",
-    "ai-chat": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1345,\"\"en\"\",\"\"it\"\")\"),\"Chat AI\")",
-    "task-list": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1346,\"\"en\"\",\"\"it\"\")\"),\"Elenco delle attività\")",
-    "new-feature": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1347,\"\"en\"\",\"\"it\"\")\"),\"Nuovo\")",
-    "collections": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1348,\"\"en\"\",\"\"it\"\")\"),\"Collezioni\")"
-  },
-  "protect_note": {
-    "toggle-on": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1349,\"\"en\"\",\"\"it\"\")\"),\"Proteggi la nota\")",
-    "toggle-off": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1350,\"\"en\"\",\"\"it\"\")\"),\"Rimuovere la protezione dalla nota\")",
-    "toggle-on-hint": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1351,\"\"en\"\",\"\"it\"\")\"),\"La nota non è protetta, clicca per proteggerla\")",
-    "toggle-off-hint": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1352,\"\"en\"\",\"\"it\"\")\"),\"La nota è protetta, clicca per renderla non protetta\")"
-  },
-  "template_switch": {
-    "template": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1358,\"\"en\"\",\"\"it\"\")\"),\"Modello\")",
-    "toggle-on-hint": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1359,\"\"en\"\",\"\"it\"\")\"),\"Trasforma la nota in un modello\")",
-    "toggle-off-hint": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1360,\"\"en\"\",\"\"it\"\")\"),\"Rimuovi la nota come modello\")"
-  },
-  "open-help-page": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1361,\"\"en\"\",\"\"it\"\")\"),\"Apri la pagina di aiuto\")",
-  "find": {
-    "case_sensitive": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1362,\"\"en\"\",\"\"it\"\")\"),\"Maiuscole e minuscole\")",
-    "match_words": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1363,\"\"en\"\",\"\"it\"\")\"),\"Abbina le parole\")",
-    "find_placeholder": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1364,\"\"en\"\",\"\"it\"\")\"),\"Trova nel testo...\")",
-    "replace_placeholder": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1365,\"\"en\"\",\"\"it\"\")\"),\"Sostituisci con...\")",
-    "replace": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1366,\"\"en\"\",\"\"it\"\")\"),\"Sostituire\")",
-    "replace_all": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1367,\"\"en\"\",\"\"it\"\")\"),\"Sostituisci tutto\")"
-  },
-  "note_tree": {
-    "collapse-title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1375,\"\"en\"\",\"\"it\"\")\"),\"Comprimi l'albero delle note\")",
-    "scroll-active-title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1376,\"\"en\"\",\"\"it\"\")\"),\"Scorri fino alla nota attiva\")",
-    "tree-settings-title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1377,\"\"en\"\",\"\"it\"\")\"),\"Impostazioni dell'albero\")",
-    "hide-archived-notes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1378,\"\"en\"\",\"\"it\"\")\"),\"Nascondi le note archiviate\")",
-    "automatically-collapse-notes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1379,\"\"en\"\",\"\"it\"\")\"),\"Comprimi automaticamente le note\")",
-    "automatically-collapse-notes-title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1380,\"\"en\"\",\"\"it\"\")\"),\"Dopo un periodo di inattività, le note verranno compresse per riordinare l'albero.\")",
-    "save-changes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1381,\"\"en\"\",\"\"it\"\")\"),\"Salva e applica le modifiche\")",
-    "auto-collapsing-notes-after-inactivity": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1382,\"\"en\"\",\"\"it\"\")\"),\"Compressione automatica delle note dopo inattività...\")",
-    "saved-search-note-refreshed": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1383,\"\"en\"\",\"\"it\"\")\"),\"Nota di ricerca salvata aggiornata.\")",
-    "hoist-this-note-workspace": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1384,\"\"en\"\",\"\"it\"\")\"),\"Solleva questa nota (area di lavoro)\")",
-    "refresh-saved-search-results": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1385,\"\"en\"\",\"\"it\"\")\"),\"Aggiorna i risultati della ricerca salvati\")",
-    "create-child-note": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1386,\"\"en\"\",\"\"it\"\")\"),\"Crea nota figlio\")",
-    "unhoist": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1387,\"\"en\"\",\"\"it\"\")\"),\"Sganciare\")",
-    "toggle-sidebar": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1388,\"\"en\"\",\"\"it\"\")\"),\"Attiva/disattiva la barra laterale\")"
-  },
-  "title_bar_buttons": {
-    "window-on-top": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1389,\"\"en\"\",\"\"it\"\")\"),\"Mantieni la finestra in primo piano\")"
-  },
-  "note_detail": {
-    "could_not_find_typewidget": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1390,\"\"en\"\",\"\"it\"\")\"),\"Impossibile trovare typeWidget per il tipo '{{type}}'\")"
-  },
-  "note_title": {
-    "placeholder": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1391,\"\"en\"\",\"\"it\"\")\"),\"scrivi qui il titolo della nota...\")"
-  },
-  "search_result": {
-    "no_notes_found": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1392,\"\"en\"\",\"\"it\"\")\"),\"Non sono state trovate note per i parametri di ricerca specificati.\")",
-    "search_not_executed": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1393,\"\"en\"\",\"\"it\"\")\"),\"La ricerca non è stata ancora eseguita. Clicca sul pulsante \"\"Cerca\"\" qui sopra per visualizzare i risultati.\")"
-  },
-  "spacer": {
-    "configure_launchbar": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1394,\"\"en\"\",\"\"it\"\")\"),\"Configura Launchbar\")"
-  },
-  "sql_result": {
-    "no_rows": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1395,\"\"en\"\",\"\"it\"\")\"),\"Nessuna riga è stata restituita per questa query\")"
-  },
-  "watched_file_update_status": {
-    "file_last_modified": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1409,\"\"en\"\",\"\"it\"\")\"),\"Il file <code class=\"\"file-path\"\"></code> è stato modificato l'ultima volta il <span class=\"\"file-last-modified\"\"></span>.\")",
-    "upload_modified_file": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1410,\"\"en\"\",\"\"it\"\")\"),\"Carica il file modificato\")",
-    "ignore_this_change": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1411,\"\"en\"\",\"\"it\"\")\"),\"Ignora questa modifica\")"
-  },
-  "app_context": {
-    "please_wait_for_save": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1412,\"\"en\"\",\"\"it\"\")\"),\"Attendi qualche secondo affinché il salvataggio venga completato, quindi potrai riprovare.\")"
-  },
-  "note_create": {
-    "duplicated": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1413,\"\"en\"\",\"\"it\"\")\"),\"Nota: \"\"{{title}}\"\" è stato duplicato.\")"
-  },
-  "image": {
-    "copied-to-clipboard": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1414,\"\"en\"\",\"\"it\"\")\"),\"Un riferimento all'immagine è stato copiato negli appunti. Può essere incollato in qualsiasi nota di testo.\")",
-    "cannot-copy": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1415,\"\"en\"\",\"\"it\"\")\"),\"Impossibile copiare il riferimento all'immagine negli appunti.\")"
-  },
-  "clipboard": {
-    "cut": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1416,\"\"en\"\",\"\"it\"\")\"),\"Le note sono state tagliate negli appunti.\")",
-    "copied": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1417,\"\"en\"\",\"\"it\"\")\"),\"Le note sono state copiate negli appunti.\")",
-    "copy_failed": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1418,\"\"en\"\",\"\"it\"\")\"),\"Impossibile copiare negli appunti a causa di problemi di autorizzazione.\")",
-    "copy_success": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1419,\"\"en\"\",\"\"it\"\")\"),\"Copiato negli appunti.\")"
-  },
-  "entrypoints": {
-    "note-revision-created": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1420,\"\"en\"\",\"\"it\"\")\"),\"La revisione della nota è stata creata.\")",
-    "note-executed": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1421,\"\"en\"\",\"\"it\"\")\"),\"Nota eseguita.\")",
-    "sql-error": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1422,\"\"en\"\",\"\"it\"\")\"),\"Si è verificato un errore durante l'esecuzione della query SQL: {{message}}\")"
-  },
-  "branches": {
-    "cannot-move-notes-here": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1423,\"\"en\"\",\"\"it\"\")\"),\"Impossibile spostare le note qui.\")",
-    "delete-status": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1424,\"\"en\"\",\"\"it\"\")\"),\"Elimina stato\")",
-    "delete-notes-in-progress": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1425,\"\"en\"\",\"\"it\"\")\"),\"Eliminazione note in corso: {{count}}\")",
-    "delete-finished-successfully": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1426,\"\"en\"\",\"\"it\"\")\"),\"Eliminazione completata con successo.\")",
-    "undeleting-notes-in-progress": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1427,\"\"en\"\",\"\"it\"\")\"),\"Ripristino delle note in corso: {{count}}\")",
-    "undeleting-notes-finished-successfully": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1428,\"\"en\"\",\"\"it\"\")\"),\"Recupero note completato con successo.\")"
-  },
-  "frontend_script_api": {
-    "async_warning": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1429,\"\"en\"\",\"\"it\"\")\"),\"Stai passando una funzione asincrona a `api.runOnBackend()` che probabilmente non funzionerà come previsto.\\nRendi la funzione sincrona (rimuovendo la parola chiave `async`) oppure usa `api.runAsyncOnBackendWithManualTransactionHandling()`.\")",
-    "sync_warning": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1430,\"\"en\"\",\"\"it\"\")\"),\"Stai passando una funzione sincrona a `api.runAsyncOnBackendWithManualTransactionHandling()`, mentre probabilmente dovresti usare `api.runOnBackend()`.\")"
-  },
-  "ws": {
-    "sync-check-failed": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1431,\"\"en\"\",\"\"it\"\")\"),\"Controllo di sincronizzazione fallito!\")",
-    "consistency-checks-failed": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1432,\"\"en\"\",\"\"it\"\")\"),\"Controlli di coerenza falliti! Vedi i log per i dettagli.\")",
-    "encountered-error": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1433,\"\"en\"\",\"\"it\"\")\"),\"Si è verificato l'errore \"\"{{message}}\"\", controlla la console.\")",
-    "lost-websocket-connection-title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1434,\"\"en\"\",\"\"it\"\")\"),\"Connessione al server persa\")",
-    "lost-websocket-connection-message": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1435,\"\"en\"\",\"\"it\"\")\"),\"Controlla la configurazione del proxy inverso (ad esempio nginx o Apache) per assicurarti che le connessioni WebSocket siano correttamente consentite e non bloccate.\")"
-  },
-  "hoisted_note": {
-    "confirm_unhoisting": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1436,\"\"en\"\",\"\"it\"\")\"),\"La nota richiesta '{{requestedNote}}' è esterna al sottoalbero della nota sollevata '{{hoistedNote}}' e devi rimuoverla per accedervi. Vuoi procedere con la rimozione?\")"
-  },
-  "launcher_context_menu": {
-    "reset_launcher_confirm": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1437,\"\"en\"\",\"\"it\"\")\"),\"Vuoi davvero reimpostare \"\"{{title}}\"\"? Tutti i dati/le impostazioni in questa nota (e nelle relative note secondarie) andranno persi e il launcher tornerà alla sua posizione originale.\")",
-    "add-note-launcher": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1438,\"\"en\"\",\"\"it\"\")\"),\"Aggiungi un launcher di note\")",
-    "add-script-launcher": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1439,\"\"en\"\",\"\"it\"\")\"),\"Aggiungi un launcher di script\")",
-    "add-custom-widget": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1440,\"\"en\"\",\"\"it\"\")\"),\"Aggiungi un widget personalizzato\")",
-    "add-spacer": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1441,\"\"en\"\",\"\"it\"\")\"),\"Aggiungi distanziatore\")",
-    "delete": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1442,\"\"en\"\",\"\"it\"\")\"),\"Elimina <kbd data-command=\"\"deleteNotes\"\"></kbd>\")",
-    "reset": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1443,\"\"en\"\",\"\"it\"\")\"),\"Reset\")",
-    "move-to-visible-launchers": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1444,\"\"en\"\",\"\"it\"\")\"),\"Passa ai launcher visibili\")",
-    "move-to-available-launchers": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1445,\"\"en\"\",\"\"it\"\")\"),\"Passa ai launcher disponibili\")",
-    "duplicate-launcher": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1446,\"\"en\"\",\"\"it\"\")\"),\"Duplica il launcher <kbd data-command=\"\"duplicateSubtree\"\">\")"
-  },
-  "editable-text": {
-    "auto-detect-language": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1447,\"\"en\"\",\"\"it\"\")\"),\"Rilevato automaticamente\")"
-  },
-  "highlighting": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1448,\"\"en\"\",\"\"it\"\")\"),\"Blocchi di codice\")",
-    "description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1449,\"\"en\"\",\"\"it\"\")\"),\"Controlla l'evidenziazione della sintassi per i blocchi di codice all'interno delle note di testo; le note di codice non saranno interessate.\")",
-    "color-scheme": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1450,\"\"en\"\",\"\"it\"\")\"),\"Schema di colori\")"
-  },
-  "code_block": {
-    "word_wrapping": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1451,\"\"en\"\",\"\"it\"\")\"),\"A capo automatico\")",
-    "theme_none": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1452,\"\"en\"\",\"\"it\"\")\"),\"Nessuna evidenziazione della sintassi\")",
-    "theme_group_light": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1453,\"\"en\"\",\"\"it\"\")\"),\"Temi chiari\")",
-    "theme_group_dark": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1454,\"\"en\"\",\"\"it\"\")\"),\"Temi scuri\")",
-    "copy_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1455,\"\"en\"\",\"\"it\"\")\"),\"Copia negli appunti\")"
-  },
-  "classic_editor_toolbar": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1456,\"\"en\"\",\"\"it\"\")\"),\"Formattazione\")"
-  },
-  "editor": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1457,\"\"en\"\",\"\"it\"\")\"),\"Redattore\")"
-  },
-  "image_context_menu": {
-    "copy_reference_to_clipboard": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1471,\"\"en\"\",\"\"it\"\")\"),\"Copia il riferimento negli appunti\")",
-    "copy_image_to_clipboard": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1472,\"\"en\"\",\"\"it\"\")\"),\"Copia l'immagine negli appunti\")"
-  },
-  "link_context_menu": {
-    "open_note_in_new_tab": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1473,\"\"en\"\",\"\"it\"\")\"),\"Apri la nota in una nuova scheda\")",
-    "open_note_in_new_split": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1474,\"\"en\"\",\"\"it\"\")\"),\"Apri nota in una nuova divisione\")",
-    "open_note_in_new_window": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1475,\"\"en\"\",\"\"it\"\")\"),\"Apri la nota in una nuova finestra\")",
-    "open_note_in_popup": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1476,\"\"en\"\",\"\"it\"\")\"),\"Modifica rapida\")"
-  },
-  "help-button": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1498,\"\"en\"\",\"\"it\"\")\"),\"Apri la pagina di aiuto pertinente\")"
-  },
-  "duration": {
-    "seconds": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1499,\"\"en\"\",\"\"it\"\")\"),\"Secondi\")",
-    "minutes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1500,\"\"en\"\",\"\"it\"\")\"),\"Minuti\")",
-    "hours": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1501,\"\"en\"\",\"\"it\"\")\"),\"Ore\")",
-    "days": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1502,\"\"en\"\",\"\"it\"\")\"),\"Giorni\")"
-  },
-  "share": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1503,\"\"en\"\",\"\"it\"\")\"),\"Impostazioni di condivisione\")",
-    "redirect_bare_domain": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1504,\"\"en\"\",\"\"it\"\")\"),\"Reindirizza il dominio nudo alla pagina di condivisione\")",
-    "redirect_bare_domain_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1505,\"\"en\"\",\"\"it\"\")\"),\"Reindirizza gli utenti anonimi alla pagina Condividi invece di mostrare l'accesso\")",
-    "show_login_link": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1506,\"\"en\"\",\"\"it\"\")\"),\"Mostra il collegamento di accesso nel tema Condividi\")",
-    "show_login_link_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1507,\"\"en\"\",\"\"it\"\")\"),\"Aggiungi un collegamento di accesso al piè di pagina della pagina Condividi\")",
-    "check_share_root": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1508,\"\"en\"\",\"\"it\"\")\"),\"Controlla lo stato della radice condivisa\")",
-    "share_root_found": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1509,\"\"en\"\",\"\"it\"\")\"),\"La nota radice condivisa '{{noteTitle}}' è pronta\")",
-    "share_root_not_found": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1510,\"\"en\"\",\"\"it\"\")\"),\"Nessuna nota con etichetta #shareRoot trovata\")",
-    "share_root_not_shared": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1511,\"\"en\"\",\"\"it\"\")\"),\"Nota '{{noteTitle}}' ha l'etichetta #shareRoot ma non è condiviso\")"
-  },
-  "time_selector": {
-    "invalid_input": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1512,\"\"en\"\",\"\"it\"\")\"),\"Il valore temporale immesso non è un numero valido.\")",
-    "minimum_input": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1513,\"\"en\"\",\"\"it\"\")\"),\"Il valore temporale immesso deve essere di almeno {{minimumSeconds}} secondi.\")"
-  },
-  "tasks": {
-    "due": {
-      "today": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1514,\"\"en\"\",\"\"it\"\")\"),\"Oggi\")",
-      "tomorrow": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1515,\"\"en\"\",\"\"it\"\")\"),\"Domani\")",
-      "yesterday": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1516,\"\"en\"\",\"\"it\"\")\"),\"Ieri\")"
-    }
-  },
-  "content_widget": {
-    "unknown_widget": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1517,\"\"en\"\",\"\"it\"\")\"),\"Widget sconosciuto per \"\"{{id}}\"\".\")"
-  },
-  "note_language": {
-    "not_set": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1518,\"\"en\"\",\"\"it\"\")\"),\"Non impostato\")",
-    "configure-languages": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1519,\"\"en\"\",\"\"it\"\")\"),\"Configura le lingue...\")"
-  },
-  "content_language": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1520,\"\"en\"\",\"\"it\"\")\"),\"Lingue dei contenuti\")",
-    "description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1521,\"\"en\"\",\"\"it\"\")\"),\"Seleziona una o più lingue che desideri visualizzare nella sezione \"\"Proprietà di base\"\" di una nota di testo di sola lettura o modificabile. Ciò consentirà funzionalità come il controllo ortografico o il supporto per la scrittura da destra a sinistra.\")"
-  },
-  "switch_layout_button": {
-    "title_vertical": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1522,\"\"en\"\",\"\"it\"\")\"),\"Sposta il riquadro di modifica in basso\")",
-    "title_horizontal": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1523,\"\"en\"\",\"\"it\"\")\"),\"Sposta il riquadro di modifica a sinistra\")"
-  },
-  "toggle_read_only_button": {
-    "unlock-editing": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1524,\"\"en\"\",\"\"it\"\")\"),\"Sblocca la modifica\")",
-    "lock-editing": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1525,\"\"en\"\",\"\"it\"\")\"),\"Modifica blocco\")"
-  },
-  "png_export_button": {
-    "button_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1526,\"\"en\"\",\"\"it\"\")\"),\"Esporta diagramma come PNG\")"
-  },
-  "svg": {
-    "export_to_png": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1527,\"\"en\"\",\"\"it\"\")\"),\"Non è stato possibile esportare il diagramma in formato PNG.\")"
-  },
-  "code_theme": {
-    "title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1528,\"\"en\"\",\"\"it\"\")\"),\"Aspetto\")",
-    "word_wrapping": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1529,\"\"en\"\",\"\"it\"\")\"),\"A capo automatico\")",
-    "color-scheme": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1530,\"\"en\"\",\"\"it\"\")\"),\"Schema dei colori\")"
-  },
-  "book_properties_config": {
-    "hide-weekends": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1563,\"\"en\"\",\"\"it\"\")\"),\"Nascondi i fine settimana\")",
-    "display-week-numbers": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1564,\"\"en\"\",\"\"it\"\")\"),\"Visualizza i numeri delle settimane\")",
-    "map-style": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1565,\"\"en\"\",\"\"it\"\")\"),\"Stile mappa:\")",
-    "max-nesting-depth": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1566,\"\"en\"\",\"\"it\"\")\"),\"Profondità massima di nidificazione:\")",
-    "raster": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1567,\"\"en\"\",\"\"it\"\")\"),\"Trama\")",
-    "vector_light": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1568,\"\"en\"\",\"\"it\"\")\"),\"Vettore (Luce)\")",
-    "vector_dark": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1569,\"\"en\"\",\"\"it\"\")\"),\"Vettore (scuro)\")",
-    "show-scale": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1570,\"\"en\"\",\"\"it\"\")\"),\"Mostra scala\")"
-  },
-  "table_context_menu": {
-    "delete_row": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1571,\"\"en\"\",\"\"it\"\")\"),\"Elimina riga\")"
-  },
-  "presentation_view": {
-    "edit-slide": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1587,\"\"en\"\",\"\"it\"\")\"),\"Modifica questa diapositiva\")",
-    "start-presentation": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1588,\"\"en\"\",\"\"it\"\")\"),\"Inizia la presentazione\")",
-    "slide-overview": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1589,\"\"en\"\",\"\"it\"\")\"),\"Attiva/disattiva una panoramica delle diapositive\")"
-  },
-  "command_palette": {
-    "tree-action-name": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1590,\"\"en\"\",\"\"it\"\")\"),\"Albero: {{nome}}\")",
-    "export_note_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1591,\"\"en\"\",\"\"it\"\")\"),\"Nota di esportazione\")",
-    "export_note_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1592,\"\"en\"\",\"\"it\"\")\"),\"Esporta la nota corrente\")",
-    "show_attachments_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1593,\"\"en\"\",\"\"it\"\")\"),\"Mostra allegati\")",
-    "show_attachments_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1594,\"\"en\"\",\"\"it\"\")\"),\"Visualizza gli allegati delle note\")",
-    "search_notes_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1595,\"\"en\"\",\"\"it\"\")\"),\"Cerca note\")",
-    "search_notes_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1596,\"\"en\"\",\"\"it\"\")\"),\"Apri la ricerca avanzata\")",
-    "search_subtree_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1597,\"\"en\"\",\"\"it\"\")\"),\"Cerca nel sottoalbero\")",
-    "search_subtree_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1598,\"\"en\"\",\"\"it\"\")\"),\"Cerca all'interno del sottoalbero corrente\")",
-    "search_history_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1599,\"\"en\"\",\"\"it\"\")\"),\"Mostra cronologia delle ricerche\")",
-    "search_history_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1600,\"\"en\"\",\"\"it\"\")\"),\"Visualizza le ricerche precedenti\")",
-    "configure_launch_bar_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1601,\"\"en\"\",\"\"it\"\")\"),\"Configura la barra di avvio\")",
-    "configure_launch_bar_description": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1602,\"\"en\"\",\"\"it\"\")\"),\"Aprire la configurazione della barra di avvio per aggiungere o rimuovere elementi.\")"
-  },
-  "content_renderer": {
-    "open_externally": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1603,\"\"en\"\",\"\"it\"\")\"),\"Aperto esternamente\")"
-  },
-  "call_to_action": {
-    "next_theme_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1606,\"\"en\"\",\"\"it\"\")\"),\"Prova il nuovo tema Trilium\")",
-    "next_theme_message": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1607,\"\"en\"\",\"\"it\"\")\"),\"Al momento stai utilizzando il tema legacy. Vuoi provare il nuovo tema?\")",
-    "next_theme_button": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1608,\"\"en\"\",\"\"it\"\")\"),\"Prova il nuovo tema\")",
-    "background_effects_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1609,\"\"en\"\",\"\"it\"\")\"),\"Gli effetti di sfondo sono ora stabili\")",
-    "background_effects_message": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1610,\"\"en\"\",\"\"it\"\")\"),\"Sui dispositivi Windows, gli effetti di sfondo sono ora completamente stabili. Gli effetti di sfondo aggiungono un tocco di colore all'interfaccia utente sfocando lo sfondo retrostante. Questa tecnica è utilizzata anche in altre applicazioni come Esplora \"&\"risorse di Windows.\")",
-    "background_effects_button": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1611,\"\"en\"\",\"\"it\"\")\"),\"Abilita gli effetti di sfondo\")",
-    "dismiss": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1612,\"\"en\"\",\"\"it\"\")\"),\"Congedare\")"
-  },
-  "settings": {
-    "related_settings": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1613,\"\"en\"\",\"\"it\"\")\"),\"Impostazioni correlate\")"
-  },
-  "settings_appearance": {
-    "related_code_blocks": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1614,\"\"en\"\",\"\"it\"\")\"),\"Schema di colori per i blocchi di codice nelle note di testo\")",
-    "related_code_notes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1615,\"\"en\"\",\"\"it\"\")\"),\"Schema di colori per le note del codice\")"
-  },
-  "units": {
-    "percentage": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1616,\"\"en\"\",\"\"it\"\")\"),\"%\")"
-  },
-  "pagination": {
-    "page_title": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1617,\"\"en\"\",\"\"it\"\")\"),\"Pagina di {{startIndex}} - {{endIndex}}\")",
-    "total_notes": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1618,\"\"en\"\",\"\"it\"\")\"),\"{{count}} note\")"
-  },
-  "collections": {
-    "rendering_error": "=IFERROR(__xludf.DUMMYFUNCTION(\"GOOGLETRANSLATE(A1619,\"\"en\"\",\"\"it\"\")\"),\"Impossibile mostrare il contenuto a causa di un errore.\")"
+    "add_new_label": "Aggiungi nuova etichetta <kbd data-command=\"addNewLabel\"></kbd>"
   }
 }
