@@ -21,8 +21,7 @@ export interface PresentationModel {
 export async function buildPresentationModel(note: FNote): Promise<PresentationModel> {
     const slideNotes = await note.getChildNotes();
     const slides: PresentationSlideModel[] = await Promise.all(slideNotes.map(async slideNote => ({
-        noteId: slideNote.noteId,
-        content: await processContent(slideNote),
+        ...(await buildSlideModel(slideNote)),
         verticalSlides: await buildVerticalSlides(slideNote)
     })))
 
@@ -33,12 +32,16 @@ async function buildVerticalSlides(parentSlideNote: FNote): Promise<undefined | 
     const children = await parentSlideNote.getChildNotes();
     if (!children.length) return;
 
-    const slides: PresentationSlideBaseModel[] = await Promise.all(children.map(async childNote => ({
-        noteId: childNote.noteId,
-        content: await processContent(childNote)
-    })));
+    const slides: PresentationSlideBaseModel[] = await Promise.all(children.map(buildSlideModel));
 
     return slides;
+}
+
+async function buildSlideModel(note: FNote): Promise<PresentationSlideBaseModel> {
+    return {
+        noteId: note.noteId,
+        content: await processContent(note)
+    }
 }
 
 async function processContent(note: FNote): Promise<DangerouslySetInnerHTML> {
