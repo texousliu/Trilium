@@ -137,7 +137,7 @@ function Presentation({ presentation, setApi } : { presentation: PresentationMod
             },
         });
         api.initialize().then(() => {
-            setRevealApi(revealApi);
+            setRevealApi(api);
             setApi(api);
         });
 
