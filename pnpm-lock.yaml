@@ -700,8 +700,8 @@ importers:
         specifier: 0.6.0
         version: 0.6.0
       openai:
-        specifier: 6.3.0
-        version: 6.3.0(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@6.0.5))(zod@3.24.4)
+        specifier: 6.4.0
+        version: 6.4.0(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@6.0.5))(zod@3.24.4)
       rand-token:
         specifier: 1.0.1
         version: 1.0.1
@@ -10262,8 +10262,8 @@ packages:
     resolution: {integrity: sha512-YgBpdJHPyQ2UE5x+hlSXcnejzAvD0b22U2OuAP+8OnlJT+PjWPxtgmGqKKc+RgTM63U9gN0YzrYc71R2WT/hTA==}
     engines: {node: '>=18'}
 
-  openai@6.3.0:
-    resolution: {integrity: sha512-E6vOGtZvdcb4yXQ5jXvDlUG599OhIkb/GjBLZXS+qk0HF+PJReIldEc9hM8Ft81vn+N6dRdFRb7BZNK8bbvXrw==}
+  openai@6.4.0:
+    resolution: {integrity: sha512-vSoVBRTPMgg3oSaoHIGfbYM2zwGN0D4F2aiNHMeu1lZHFOwfJMAF0X110HDdedYvcsIo578ujQ11WL5kP687Cw==}
     hasBin: true
     peerDependencies:
       ws: ^8.18.0
@@ -26162,7 +26162,7 @@ snapshots:
       is-inside-container: 1.0.0
       wsl-utils: 0.1.0
 
-  openai@6.3.0(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@6.0.5))(zod@3.24.4):
+  openai@6.4.0(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@6.0.5))(zod@3.24.4):
     optionalDependencies:
       ws: 8.18.3(bufferutil@4.0.9)(utf-8-validate@6.0.5)
       zod: 3.24.4
