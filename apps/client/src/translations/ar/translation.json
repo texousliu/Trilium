@@ -80,7 +80,8 @@
     "to": "الى",
     "old_name_placeholder": "الاسم القديم",
     "new_name_placeholder": "الاسم الجديد",
-    "rename_label": "اعادة تسمية التسمية"
+    "rename_label": "اعادة تسمية التسمية",
+    "rename_label_from": "اعادة تسمية التسمية من"
   },
   "move_note": {
     "to": "الى",
@@ -168,7 +169,9 @@
     "show_hidden_subtree": "اظهار الشجرة الفرعية المخفية",
     "about": "حول تريليوم للملاحظات",
     "open_dev_tools": "فتح ادوات المطور",
-    "show_backend_log": "اظهار سجل الخلفية"
+    "show_backend_log": "اظهار سجل الخلفية",
+    "new-version-available": "متوفر تحديث جديد",
+    "download-update": "احصل على الاصدار{{latestVersion}}"
   },
   "zpetne_odkazy": {
     "relation": "العلاقة",
@@ -200,7 +203,8 @@
     "geo-map": "الخريطة الجغرافية",
     "collapse_all_notes": "طي كل الملاحظات",
     "include_archived_notes": "عرض الملاحظات المؤرشفة",
-    "expand_all_children": "توسيع جميع العناصر الفرعية"
+    "expand_all_children": "توسيع جميع العناصر الفرعية",
+    "presentation": "عرض تقديمي"
   },
   "file_properties": {
     "download": "تنزيل",
@@ -566,7 +570,8 @@
     "enable_ai_features": "تمكين خصائص AI/LLM",
     "enable_ai": "تمكين خصائص AI/LLM",
     "reprocess_index": "اعادة بناء فهرس البحث",
-    "index_rebuilding": "جار تحسين الفهرس {{percentage}}"
+    "index_rebuilding": "جار تحسين الفهرس {{percentage}}",
+    "voyage_configuration": "اعدادت Voyage AI"
   },
   "code_auto_read_only_size": {
     "unit": "حروف",
@@ -621,7 +626,8 @@
     "enable_monthly_backup": "تمكين النسخ الاحتياطي الشهري",
     "date-and-time": "التاريخ والوقت",
     "no_backup_yet": "لايوجد نسخة احتياطية لحد الان",
-    "enable_daily_backup": "تمكين النسخ الاحتياطي اليومي"
+    "enable_daily_backup": "تمكين النسخ الاحتياطي اليومي",
+    "backup_database_now": "نسخ اختياطي لقاعدة البيانات الان"
   },
   "etapi": {
     "wiki": "ويكي",
@@ -631,7 +637,8 @@
     "existing_tokens": "الرموز الموجودة",
     "token_name": "اسم الرمز",
     "default_token_name": "رمز جديد",
-    "rename_token_title": "اعادة تسمية الرمز"
+    "rename_token_title": "اعادة تسمية الرمز",
+    "rename_token": "اعادة تسمية هذا الرمز"
   },
   "password": {
     "heading": "كلمة المرور",
@@ -644,7 +651,8 @@
     "set_password": "تعيين كلمة المرور",
     "for_more_info": "لمزيد من المعلومات.",
     "protected_session_timeout_label": "انتهت مدة الجلسة المحمية:",
-    "protected_session_timeout": "انتهاء مهلة الجلسة المحمية"
+    "protected_session_timeout": "انتهاء مهلة الجلسة المحمية",
+    "new_password_confirmation": "تاكيد كلمة المرور الجديدة"
   },
   "shortcuts": {
     "shortcuts": "أختصارات",
@@ -751,7 +759,7 @@
     "collapse-subtree": "طي الشجرة الفرعية",
     "sort-by": "ترتيب بواسطة...",
     "protect-subtree": "الشجرة الفرعية المحمية",
-    "unprotect-subtree": "الشجرة لفرعية الغير محمية",
+    "unprotect-subtree": "الشجرة الفرعية الغير محمية",
     "clone-to": "‍استنساخ الى...",
     "move-to": "نقل الى...",
     "paste-into": "لصق في",
@@ -810,7 +818,7 @@
   },
   "highlights_list_2": {
     "options": "خيارات",
-    "title": "قائمة التمييزات"
+    "title": "قائمة التضليلات"
   },
   "quick-search": {
     "searching": "جار البحث...",
@@ -831,7 +839,8 @@
   },
   "launcher_context_menu": {
     "reset": "اعادة ضبط",
-    "add-spacer": "اضافة فاصل"
+    "add-spacer": "اضافة فاصل",
+    "delete": "حذف\n<kbd data-command=\"deleteNotes\">"
   },
   "editable-text": {
     "auto-detect-language": "تم اكتشافه تلقائيا"
@@ -898,7 +907,12 @@
     "mfa_enabled": "تمكين المصادقة متعددة العوامل",
     "recovery_keys_generate": "انشاء رموز الاسترداد",
     "recovery_keys_regenerate": "اعادة انشاء رموز الاسترداد",
-    "oauth_user_not_logged_in": "لم يتم تسجيل الدخول!"
+    "oauth_user_not_logged_in": "لم يتم تسجيل الدخول!",
+    "totp_secret_generate": "توليد TOTP السري",
+    "totp_secret_regenerate": "اعادة توليد TOTP السري",
+    "totp_secret_generated": "تم انشاء TOTP السري",
+    "oauth_missing_vars": "اعدادات مفقودة: {{-variables}}",
+    "totp_secret_title": "توليد TOTP سري"
   },
   "execute_script": {
     "execute_script": "تنفيذ السكريبت"
@@ -1050,7 +1064,8 @@
     "bold": "نص عريض",
     "italic": "نص مائل",
     "underline": "خط تحت النص",
-    "color": "نص ملون"
+    "color": "نص ملون",
+    "visibility_title": "اظهار قائمة التضليلات"
   },
   "revisions_button": {
     "note_revisions": "مراجعات الملاحظة"
@@ -1235,5 +1250,12 @@
   },
   "ws": {
     "sync-check-failed": "فشل التحقق من المزامنة!"
+  },
+  "show_highlights_list_widget_button": {
+    "show_highlights_list": "عرض قائمة التضليلات"
+  },
+  "presentation_view": {
+    "start-presentation": "بدء العرض التقديمي",
+    "edit-slide": "تعديل هذه الشريحة"
   }
 }

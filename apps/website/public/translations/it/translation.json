@@ -122,11 +122,71 @@
         "buy_me_a_coffee": "Offrimi un caffè"
     },
     "footer": {
-        "copyright_community": "comunità"
+        "copyright_community": "comunità",
+        "copyright_and_the": " e il "
     },
     "contribute": {
         "title": "Altre possibilità di contribuzione",
         "way_translate": "Traduci l'applicazione nella tua madrelingua su <Link>Weblate</Link>.",
-        "way_community": "Interagisci con la comunità su <Discussions>GitHub Discussions</Discussions> o su <Matrix>Matrix</Matrix>."
+        "way_community": "Interagisci con la comunità su <Discussions>GitHub Discussions</Discussions> o su <Matrix>Matrix</Matrix>.",
+        "way_reports": "Segnalare i bug tramite <Link>GitHub issues</Link>.",
+        "way_document": "Migliora la documentazione segnalandoci eventuali lacune o contribuendo con guide, domande frequenti o tutorial.",
+        "way_market": "Spargi la voce: condividi Trilium Notes con gli amici, sui blog e sui social media."
+    },
+    "404": {
+        "title": "404: Non trovato",
+        "description": "La pagina che stavi cercando non è stata trovata. Forse è stata cancellata o l'URL non è corretto."
+    },
+    "download_helper_desktop_windows": {
+        "title_x64": "Windows 64-bit",
+        "title_arm64": "Windows on ARM",
+        "description_x64": "Compatibile con dispositivi Intel o AMD con sistema operativo Windows 10 e 11.",
+        "description_arm64": "Compatibile con dispositivi ARM (ad esempio con Qualcomm Snapdragon).",
+        "quick_start": "Per installare tramite Winget:",
+        "download_exe": "Scarica il programma di installazione (.exe)",
+        "download_zip": "Portatile (.zip)",
+        "download_scoop": "Scoop"
+    },
+    "download_helper_desktop_linux": {
+        "title_x64": "Linux 64-bit",
+        "title_arm64": "Linux on ARM",
+        "description_x64": "Per la maggior parte delle distribuzioni Linux, compatibile con l'architettura x86_64.",
+        "description_arm64": "Per distribuzioni Linux basate su ARM, compatibili con l'architettura aarch64.",
+        "quick_start": "Seleziona un formato pacchetto appropriato, a seconda della tua distribuzione:",
+        "download_deb": ".deb",
+        "download_rpm": ".rpm",
+        "download_flatpak": ".flatpak",
+        "download_zip": "Portatile (.zip)",
+        "download_nixpkgs": "nixpkgs",
+        "download_aur": "AUR"
+    },
+    "download_helper_desktop_macos": {
+        "title_x64": "macOS per Intel",
+        "title_arm64": "macOS per Apple Silicon",
+        "description_x64": "Per Mac basati su Intel con macOS Big Sur o versioni successive.",
+        "description_arm64": "Per i Mac Apple Silicon, come quelli con chip M1 e M2.",
+        "quick_start": "Per installare tramite Homebrew:",
+        "download_dmg": "Scarica il programma di installazione (.dmg)",
+        "download_homebrew_cask": "Homebrew Cask",
+        "download_zip": "Portatile (.zip)"
+    },
+    "download_helper_server_docker": {
+        "title": "Self-hosted utilizzando Docker",
+        "description": "Facile da implementare su Windows, Linux o macOS utilizzando un container Docker.",
+        "download_dockerhub": "Docker Hub",
+        "download_ghcr": "ghcr.io"
+    },
+    "download_helper_server_linux": {
+        "title": "Self-hosted utilizzando Linux",
+        "description": "Distribuisci Trilium Notes sul tuo server o VPS, compatibile con la maggior parte delle distribuzioni.",
+        "download_nixos": "Modulo NixOS",
+        "download_tar_x64": "x64 (.tar.xz)",
+        "download_tar_arm64": "ARM (.tar.xz)"
+    },
+    "download_helper_server_hosted": {
+        "title": "Hosting a pagamento",
+        "description": "Trilium Notes è ospitato su PikaPods, un servizio a pagamento che consente un facile accesso e una semplice gestione. Non è direttamente affiliato al team Trilium.",
+        "download_pikapod": "Configurazione su PikaPods",
+        "download_triliumcc": "In alternativa, consultare trilium.cc"
     }
 }

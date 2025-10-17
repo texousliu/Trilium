@@ -207,7 +207,11 @@
     "grid-view": "عرض شبكي",
     "geo-map": "خريطة جغرافية",
     "start-date": "تاريخ البدء",
-    "end-date": "تاريخ الانتهاء"
+    "end-date": "تاريخ الانتهاء",
+    "presentation": "عرض تقديمي",
+    "presentation_slide": "شريحة العرض التقديمي",
+    "presentation_slide_first": "الشريحة الاولى",
+    "presentation_slide_second": "الشريحة الثانية"
   },
   "login": {
     "title": "تسجيل الدخول",

@@ -163,77 +163,83 @@ mucho conocer tus funciones favoritas, sugerencias o posibles incidencias!
     [XMPP](xmpp:discuss@trilium.thisgreat.party?join)
 - [Discusiones de GitHub](https://github.com/TriliumNext/Trilium/discussions)
   (para discusiones asincrónicas.)
-- [Problemas de GitHub](https://github.com/TriliumNext/Trilium/issues) (para
-  reportes de errores y solicitudes de funciones.)
+- [Github Issues](https://github.com/TriliumNext/Trilium/issues) (para reportes
+  de errores y solicitudes de funciones.)
 
 ## 🏗 Instalación
 
 ### Windows / macOS
 
-Download the binary release for your platform from the [latest release
-page](https://github.com/TriliumNext/Trilium/releases/latest), unzip the package
-and run the `trilium` executable.
+Descarga la versión binaria para tu plataforma desde la [página de la última
+versión](https://github.com/TriliumNext/Trilium/releases/latest), descomprime el
+paquete y ejecuta el archivo `trilium`.
 
 ### Linux
 
-If your distribution is listed in the table below, use your distribution's
-package.
+Si tu distribución aparece en la siguiente tabla, utiliza el paquete
+correspondiente a tu distribución.
 
-[![Packaging
-status](https://repology.org/badge/vertical-allrepos/triliumnext.svg)](https://repology.org/project/triliumnext/versions)
+[![Estado del
+paquete](https://repology.org/badge/vertical-allrepos/triliumnext.svg)](https://repology.org/project/triliumnext/versions)
 
-You may also download the binary release for your platform from the [latest
-release page](https://github.com/TriliumNext/Trilium/releases/latest), unzip the
-package and run the `trilium` executable.
+También puedes descargar la versión binaria para la plataforma correspondiente
+desde la [página de la última
+versión](https://github.com/TriliumNext/Trilium/releases/latest), descomprimir
+el paquete y ejecutar el archivo `trilium`.
 
-TriliumNext is also provided as a Flatpak, but not yet published on FlatHub.
+TriliumNext también está disponible como paquete Flatpak, aunque aún no se ha
+publicado en FlatHub.
 
-### Browser (any OS)
+### Navegador (cualquier sistema operativo)
 
-If you use a server installation (see below), you can directly access the web
-interface (which is almost identical to the desktop app).
+Si utilizas una instalación en servidor (ver más abajo), puedes acceder
+directamente a la interfaz web (que es prácticamente idéntica a la aplicación de
+escritorio).
 
-Currently only the latest versions of Chrome & Firefox are supported (and
-tested).
+Actualmente, solo se soportan (y han sido probadas) las últimas versiones de
+Chrome y Firefox.
 
-### Mobile
+### Móvil
 
-To use TriliumNext on a mobile device, you can use a mobile web browser to
-access the mobile interface of a server installation (see below).
+Para usar TriliumNext en un dispositivo móvil, puedes utilizar un navegador web
+móvil para acceder a la interfaz móvil de una instalación en servidor (ver más
+abajo).
 
-See issue https://github.com/TriliumNext/Trilium/issues/4962 for more
-information on mobile app support.
+Consulta el issue https://github.com/TriliumNext/Trilium/issues/4962 para más
+información sobre el soporte de la aplicación móvil.
 
-If you prefer a native Android app, you can use
+Si prefieres una aplicación nativa para Android, puedes usar
 [TriliumDroid](https://apt.izzysoft.de/fdroid/index/apk/eu.fliegendewurst.triliumdroid).
-Report bugs and missing features at [their
-repository](https://github.com/FliegendeWurst/TriliumDroid). Note: It is best to
-disable automatic updates on your server installation (see below) when using
-TriliumDroid since the sync version must match between Trilium and TriliumDroid.
+Puedes reportar errores y funciones faltantes en [su
+repositorio](https://github.com/FliegendeWurst/TriliumDroid). Nota: al usar
+TriliumDroid, es recomendable desactivar las actualizaciones automáticas en la
+instalación del servidor (ver más abajo), ya que la versión de sincronización
+debe coincidir entre Trilium y TriliumDroid.
 
-### Server
+### Servidor
 
-To install TriliumNext on your own server (including via Docker from
-[Dockerhub](https://hub.docker.com/r/triliumnext/trilium)) follow [the server
-installation docs](https://triliumnext.github.io/Docs/Wiki/server-installation).
+Para instalar TriliumNext en tu propio servidor (incluido mediante Docker desde
+[Dockerhub](https://hub.docker.com/r/triliumnext/trilium)), sigue las
+[instrucciones de instalación del
+servidor](https://triliumnext.github.io/Docs/Wiki/server-installation).
 
 
-## 💻 Contribute
+## 💻 Contribuir
 
-### Translations
+### Traducciones
 
-If you are a native speaker, help us translate Trilium by heading over to our
-[Weblate page](https://hosted.weblate.org/engage/trilium/).
+Si eres hablante nativo, puedes ayudar a traducir Trilium visitando nuestra
+[página de Weblate](https://hosted.weblate.org/engage/trilium/).
 
-Here's the language coverage we have so far:
+Cobertura de idiomas hasta el momento:
 
-[![Translation
-status](https://hosted.weblate.org/widget/trilium/multi-auto.svg)](https://hosted.weblate.org/engage/trilium/)
+[![Estado de la
+traducción](https://hosted.weblate.org/widget/trilium/multi-auto.svg)](https://hosted.weblate.org/engage/trilium/)
 
-### Code
+### Código
 
-Download the repository, install dependencies using `pnpm` and then run the
-server (available at http://localhost:8080):
+Descarga el repositorio, instala las dependencias usando `pnpm` y luego ejecuta
+el servidor (disponible en http://localhost:8080):
 ```shell
 git clone https://github.com/TriliumNext/Trilium.git
 cd Trilium
@@ -241,10 +247,10 @@ pnpm install
 pnpm run server:start
 ```
 
-### Documentation
+### Documentación
 
-Download the repository, install dependencies using `pnpm` and then run the
-environment required to edit the documentation:
+Descarga el repositorio, instala las dependencias usando `pnpm` y luego ejecuta
+el entorno necesario para editar la documentación:
 ```shell
 git clone https://github.com/TriliumNext/Trilium.git
 cd Trilium
@@ -252,9 +258,9 @@ pnpm install
 pnpm edit-docs:edit-docs
 ```
 
-### Building the Executable
-Download the repository, install dependencies using `pnpm` and then build the
-desktop app for Windows:
+### Compilación del ejecutable
+Descarga el repositorio, instala las dependencias usando `pnpm` y luego compila
+la aplicación de escritorio para Windows:
 ```shell
 git clone https://github.com/TriliumNext/Trilium.git
 cd Trilium
@@ -262,70 +268,73 @@ pnpm install
 pnpm run --filter desktop electron-forge:make --arch=x64 --platform=win32
 ```
 
-For more details, see the [development
-docs](https://github.com/TriliumNext/Trilium/tree/main/docs/Developer%20Guide/Developer%20Guide).
+Para más información, consulta la [documentación de
+desarrollo](https://github.com/TriliumNext/Trilium/tree/main/docs/Developer%20Guide/Developer%20Guide).
 
-### Developer Documentation
+### Documentación para desarrolladores
 
-Please view the [documentation
-guide](https://github.com/TriliumNext/Trilium/blob/main/docs/Developer%20Guide/Developer%20Guide/Environment%20Setup.md)
-for details. If you have more questions, feel free to reach out via the links
-described in the "Discuss with us" section above.
+Consulta la [guía de
+documentación](https://github.com/TriliumNext/Trilium/blob/main/docs/Developer%20Guide/Developer%20Guide/Environment%20Setup.md)
+para más información. Si tienes más preguntas, siéntete libre de contactarnos a
+través de los enlaces de la sección "Únete a la conversación" más arriba.
 
-## 👏 Shoutouts
+## 👏 Reconocimientos
 
-* [zadam](https://github.com/zadam) for the original concept and implementation
-  of the application.
-* [Sarah Hussein](https://github.com/Sarah-Hussein) for designing the
-  application icon.
-* [nriver](https://github.com/nriver) for his work on internationalization.
-* [Thomas Frei](https://github.com/thfrei) for his original work on the Canvas.
-* [antoniotejada](https://github.com/nriver) for the original syntax highlight
-  widget.
-* [Dosu](https://dosu.dev/) for providing us with the automated responses to
-  GitHub issues and discussions.
-* [Tabler Icons](https://tabler.io/icons) for the system tray icons.
+* [Zadam](https://github.com/zadam) por la idea original y la implementación de
+  la aplicación.
+* [Sarah Hussein](https://github.com/Sarah-Hussein) por diseñar el icono de la
+  aplicación.
+* [nriver](https://github.com/nriver) por su trabajo en la internacionalización.
+* [Thomas Frei](https://github.com/thfrei) por su trabajo original en el Canvas.
+* [antoniotejada](https://github.com/nriver) por el widget original de resaltado
+  de sintaxis.
+* [Dosu](https://dosu.dev/) por ofrecernos las respuestas automáticas para los
+  issues y discusiones de GitHub.
+* [Tabler Icons](https://tabler.io/icons) por los iconos de la bandeja del
+  sistema.
 
-Trilium would not be possible without the technologies behind it:
+Trilium no sería posible sin las tecnologías que lo sustentan:
 
-* [CKEditor 5](https://github.com/ckeditor/ckeditor5) - the visual editor behind
-  text notes. We are grateful for being offered a set of the premium features.
-* [CodeMirror](https://github.com/codemirror/CodeMirror) - code editor with
-  support for huge amount of languages.
-* [Excalidraw](https://github.com/excalidraw/excalidraw) - the infinite
-  whiteboard used in Canvas notes.
-* [Mind Elixir](https://github.com/SSShooter/mind-elixir-core) - providing the
-  mind map functionality.
-* [Leaflet](https://github.com/Leaflet/Leaflet) - for rendering geographical
-  maps.
-* [Tabulator](https://github.com/olifolkerd/tabulator) - for the interactive
-  table used in collections.
-* [FancyTree](https://github.com/mar10/fancytree) - feature-rich tree library
-  without real competition.
-* [jsPlumb](https://github.com/jsplumb/jsplumb) - visual connectivity library.
-  Used in [relation
-  maps](https://triliumnext.github.io/Docs/Wiki/relation-map.html) and [link
-  maps](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)
+* [CKEditor 5](https://github.com/ckeditor/ckeditor5) - el editor visual detrás
+  de las notas de texto. Agradecemos que se nos haya ofrecido un conjunto de
+  funciones premium.
+* [CodeMirror](https://github.com/codemirror/CodeMirror) - editor de código con
+  soporte para numerosos lenguajes.
+* [Excalidraw](https://github.com/excalidraw/excalidraw) - la pizarra infinita
+  utilizada en las notas tipo Canvas.
+* [Mind Elixir](https://github.com/SSShooter/mind-elixir-core) - proporciona la
+  funcionalidad de mapas mentales.
+* [Leaflet](https://github.com/Leaflet/Leaflet) - para mostrar mapas
+  geográficos.
+* [Tabulator](https://github.com/olifolkerd/tabulator) - para la tabla
+  interactiva utilizada en las colecciones.
+* [FancyTree](https://github.com/mar10/fancytree) - biblioteca de árboles con
+  muchas funcionalidades y sin competencia destacable.
+* [jsPlumb](https://github.com/jsplumb/jsplumb) - biblioteca de conectividad
+  visual. Usada en [mapas de
+  relaciones](https://triliumnext.github.io/Docs/Wiki/relation-map.html) y
+  [mapas de
+  enlaces](https://triliumnext.github.io/Docs/Wiki/note-map.html#link-map)
 
-## 🤝 Support
+## 🤝 Soporte
 
-Trilium is built and maintained with [hundreds of hours of
-work](https://github.com/TriliumNext/Trilium/graphs/commit-activity). Your
-support keeps it open-source, improves features, and covers costs such as
-hosting.
+Trilium se desarrolla y mantiene con [cientos de horas de
+trabajo](https://github.com/TriliumNext/Trilium/graphs/commit-activity). Tu
+apoyo ayuda a mantenerlo de código abierto, mejorar sus funciones y cubrir
+gastos como el alojamiento.
 
-Consider supporting the main developer
-([eliandoran](https://github.com/eliandoran)) of the application via:
+Considera apoyar al desarrollador principal
+([eliandoran](https://github.com/eliandoran)) de la aplicación a través de:
 
-- [GitHub Sponsors](https://github.com/sponsors/eliandoran)
+- [Patrocinadores de GitHub](https://github.com/sponsors/eliandoran)
 - [PayPal](https://paypal.me/eliandoran)
-- [Buy Me a Coffee](https://buymeacoffee.com/eliandoran)
+- [Compra un café](https://buymeacoffee.com/eliandoran)
 
-## 🔑 License
+## 🔑 Licencia
 
-Copyright 2017-2025 zadam, Elian Doran, and other contributors
+Copyright 2017-2025 zadam, Elian Doran y otros colaboradores
 
-This program is free software: you can redistribute it and/or modify it under
-the terms of the GNU Affero General Public License as published by the Free
-Software Foundation, either version 3 of the License, or (at your option) any
-later version.
+Este programa es software libre: puede redistribuirse, modificarse o ambas
+acciones bajo los términos de la Licencia Pública General Affero de GNU,
+publicada por la Free Software Foundation, ya sea la versión 3 de la licencia o,
+a elección del usuario, cualquier versión posterior.

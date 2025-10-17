@@ -646,7 +646,9 @@
     "about": "關於 TriliumNext 筆記",
     "logout": "登出",
     "show-cheatsheet": "顯示快捷鍵說明",
-    "toggle-zen-mode": "禪模式"
+    "toggle-zen-mode": "禪模式",
+    "new-version-available": "發現新更新",
+    "download-update": "取得版本 {{latestVersion}}"
   },
   "sync_status": {
     "unknown": "<p>同步狀態將在下一次同步嘗試開始後顯示。</p><p>點擊以立即觸發同步。</p>",
@@ -747,7 +749,7 @@
     "editable": "可編輯",
     "basic_properties": "基本屬性",
     "language": "語言",
-    "configure_code_notes": "配寘代碼注釋..."
+    "configure_code_notes": "設定程式碼筆記…"
   },
   "book_properties": {
     "view_type": "視圖類型",
@@ -1634,7 +1636,7 @@
       "label": "格式工具欄",
       "floating": {
         "title": "浮動",
-        "description": "編輯工具出現在遊標附近;"
+        "description": "編輯工具出現在游標附近；"
       },
       "fixed": {
         "title": "固定",

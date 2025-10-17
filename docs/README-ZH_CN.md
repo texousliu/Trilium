@@ -145,7 +145,7 @@ status](https://repology.org/badge/vertical-allrepos/triliumnext.svg)](https://r
 
 TriliumNext 也提供 Flatpak，惟尚未发布到 FlatHub。
 
-### 查看器（任何操作系统）
+### 浏览器（任何操作系统）
 
 若你有（如下所述的）服务器安装，便可直接存取网页界面（其与桌面应用几乎相同）。
 
