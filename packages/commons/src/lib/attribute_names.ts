@@ -40,6 +40,7 @@ type Labels = {
     maxNestingDepth: number;
     includeArchived: boolean;
     "presentation:theme": string;
+    "slide:background": string;
 }
 
 /**

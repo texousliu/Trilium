@@ -174,7 +174,13 @@ function Presentation({ presentation, setApi } : { presentation: PresentationMod
 }
 
 function Slide({ slide }: { slide: PresentationSlideBaseModel }) {
-    return <section data-note-id={slide.noteId} dangerouslySetInnerHTML={slide.content} />;
+    return (
+        <section
+            data-note-id={slide.noteId}
+            data-background-color={slide.backgroundColor}
+            dangerouslySetInnerHTML={slide.content}
+        />
+    );
 }
 
 function getNoteIdFromSlide(slide: HTMLElement | undefined) {

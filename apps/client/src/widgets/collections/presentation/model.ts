@@ -12,6 +12,7 @@ interface PresentationSlideModel extends PresentationSlideBaseModel {
 export interface PresentationSlideBaseModel {
     noteId: string;
     content: DangerouslySetInnerHTML;
+    backgroundColor?: string;
 }
 
 export interface PresentationModel {
@@ -40,7 +41,8 @@ async function buildVerticalSlides(parentSlideNote: FNote): Promise<undefined | 
 async function buildSlideModel(note: FNote): Promise<PresentationSlideBaseModel> {
     return {
         noteId: note.noteId,
-        content: await processContent(note)
+        content: await processContent(note),
+        backgroundColor: note.getLabelValue("slide:background") ?? undefined
     }
 }
 
