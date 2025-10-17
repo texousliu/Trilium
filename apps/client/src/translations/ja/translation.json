@@ -534,7 +534,8 @@
     "table": "テーブル",
     "geo-map": "ジオマップ",
     "board": "ボード",
-    "include_archived_notes": "アーカイブされたノートを表示"
+    "include_archived_notes": "アーカイブされたノートを表示",
+    "presentation": "プレゼンテーション"
   },
   "note_types": {
     "geo-map": "ジオマップ",
@@ -2074,5 +2075,10 @@
     "role_and_size": "ロール: {{role}},サイズ: {{size}}",
     "link_copied": "添付ファイルのリンクをクリップボードにコピーしました。",
     "unrecognized_role": "添付ファイルのロール「{{role}}」は認識されません。"
+  },
+  "presentation_view": {
+    "edit-slide": "このスライドを編集",
+    "start-presentation": "プレゼンテーションを開始",
+    "slide-overview": "スライドの概要を切り替え"
   }
 }
