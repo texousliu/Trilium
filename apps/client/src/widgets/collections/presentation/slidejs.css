@@ -18,3 +18,7 @@ span.text-tiny { font-size: 0.5em; }
 span.text-small { font-size: 0.75em; }
 span.text-big { font-size: 1.5em; }
 span.text-huge { font-size: 2em; }
+
+footer.file-footer {
+    display: none !important;
+}
