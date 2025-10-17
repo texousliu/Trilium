@@ -2,10 +2,12 @@
     "download_helper_server_linux": {
         "download_tar_arm64": "بصيغة ARM (.tar.xz)",
         "download_nixos": "مكون NixOS",
-        "download_tar_x64": "x64 (.tar.xz)"
+        "download_tar_x64": "x64 (.tar.xz)",
+        "title": "الاستضافة الذاتية على نظام لينكس"
     },
     "download_helper_server_hosted": {
-        "title": "استضافة مدفوعة"
+        "title": "استضافة مدفوعة",
+        "download_triliumcc": "بدلا من ذلك، راجع trillum. cc"
     },
     "get-started": {
         "architecture": "المعمارية:",
@@ -19,7 +21,8 @@
     },
     "organization_benefits": {
         "title": "تنظيم",
-        "note_structure_title": "هيكيلية الملاحظة"
+        "note_structure_title": "هيكيلية الملاحظة",
+        "hoisting_title": "مساحات العمل والتركيز على الملاحظة"
     },
     "productivity_benefits": {
         "sync_title": "‎المزامنة",
@@ -82,7 +85,8 @@
     },
     "download_helper_server_docker": {
         "download_ghcr": "ghcr.io",
-        "download_dockerhub": "مستودع Docker"
+        "download_dockerhub": "مستودع Docker",
+        "title": "الاستضافة الذاتية باستخدام الDocker"
     },
     "final_cta": {
         "get_started": "ابدأ الان"
@@ -104,6 +108,7 @@
     "download_helper_desktop_macos": {
         "download_dmg": "تحميل ملف التثبيت (dmg.)",
         "download_homebrew_cask": "Homebrew Cask",
-        "download_zip": "النسخة المحمولة بصيغة zip"
+        "download_zip": "النسخة المحمولة بصيغة zip",
+        "title_x64": "نظام macOS لاصدار intel"
     }
 }
