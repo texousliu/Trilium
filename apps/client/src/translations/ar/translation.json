@@ -169,7 +169,9 @@
     "show_hidden_subtree": "اظهار الشجرة الفرعية المخفية",
     "about": "حول تريليوم للملاحظات",
     "open_dev_tools": "فتح ادوات المطور",
-    "show_backend_log": "اظهار سجل الخلفية"
+    "show_backend_log": "اظهار سجل الخلفية",
+    "new-version-available": "متوفر تحديث جديد",
+    "download-update": "احصل على الاصدار{{latestVersion}}"
   },
   "zpetne_odkazy": {
     "relation": "العلاقة",
@@ -201,7 +203,8 @@
     "geo-map": "الخريطة الجغرافية",
     "collapse_all_notes": "طي كل الملاحظات",
     "include_archived_notes": "عرض الملاحظات المؤرشفة",
-    "expand_all_children": "توسيع جميع العناصر الفرعية"
+    "expand_all_children": "توسيع جميع العناصر الفرعية",
+    "presentation": "عرض تقديمي"
   },
   "file_properties": {
     "download": "تنزيل",
@@ -623,7 +626,8 @@
     "enable_monthly_backup": "تمكين النسخ الاحتياطي الشهري",
     "date-and-time": "التاريخ والوقت",
     "no_backup_yet": "لايوجد نسخة احتياطية لحد الان",
-    "enable_daily_backup": "تمكين النسخ الاحتياطي اليومي"
+    "enable_daily_backup": "تمكين النسخ الاحتياطي اليومي",
+    "backup_database_now": "نسخ اختياطي لقاعدة البيانات الان"
   },
   "etapi": {
     "wiki": "ويكي",
@@ -633,7 +637,8 @@
     "existing_tokens": "الرموز الموجودة",
     "token_name": "اسم الرمز",
     "default_token_name": "رمز جديد",
-    "rename_token_title": "اعادة تسمية الرمز"
+    "rename_token_title": "اعادة تسمية الرمز",
+    "rename_token": "اعادة تسمية هذا الرمز"
   },
   "password": {
     "heading": "كلمة المرور",
@@ -646,7 +651,8 @@
     "set_password": "تعيين كلمة المرور",
     "for_more_info": "لمزيد من المعلومات.",
     "protected_session_timeout_label": "انتهت مدة الجلسة المحمية:",
-    "protected_session_timeout": "انتهاء مهلة الجلسة المحمية"
+    "protected_session_timeout": "انتهاء مهلة الجلسة المحمية",
+    "new_password_confirmation": "تاكيد كلمة المرور الجديدة"
   },
   "shortcuts": {
     "shortcuts": "أختصارات",
@@ -753,7 +759,7 @@
     "collapse-subtree": "طي الشجرة الفرعية",
     "sort-by": "ترتيب بواسطة...",
     "protect-subtree": "الشجرة الفرعية المحمية",
-    "unprotect-subtree": "الشجرة لفرعية الغير محمية",
+    "unprotect-subtree": "الشجرة الفرعية الغير محمية",
     "clone-to": "‍استنساخ الى...",
     "move-to": "نقل الى...",
     "paste-into": "لصق في",
@@ -905,7 +911,8 @@
     "totp_secret_generate": "توليد TOTP السري",
     "totp_secret_regenerate": "اعادة توليد TOTP السري",
     "totp_secret_generated": "تم انشاء TOTP السري",
-    "oauth_missing_vars": "اعدادات مفقودة: {{-variables}}"
+    "oauth_missing_vars": "اعدادات مفقودة: {{-variables}}",
+    "totp_secret_title": "توليد TOTP سري"
   },
   "execute_script": {
     "execute_script": "تنفيذ السكريبت"
@@ -1246,5 +1253,9 @@
   },
   "show_highlights_list_widget_button": {
     "show_highlights_list": "عرض قائمة التضليلات"
+  },
+  "presentation_view": {
+    "start-presentation": "بدء العرض التقديمي",
+    "edit-slide": "تعديل هذه الشريحة"
   }
 }
