@@ -243,6 +243,11 @@ export default function buildHiddenSubtreeTemplates() {
                     {
                         name: "slide",
                         type: "label"
+                    },
+                    {
+                        name: "label:slide:background",
+                        type: "label",
+                        value: `promoted,alias=${t("hidden_subtree_templates.background")},single,color`
                     }
                 ]
             },

@@ -427,7 +427,8 @@
     "presentation": "Presentation",
     "presentation_slide": "Presentation slide",
     "presentation_slide_first": "First slide",
-    "presentation_slide_second": "Second slide"
+    "presentation_slide_second": "Second slide",
+    "background": "Background"
   },
   "sql_init": {
     "db_not_initialized_desktop": "DB not initialized, please follow on-screen instructions.",
