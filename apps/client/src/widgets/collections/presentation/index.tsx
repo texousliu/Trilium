@@ -25,7 +25,8 @@ export default function PresentationView({ note, noteIds }: ViewModeProps<{}>) {
     }
 
     useTriliumEvent("entitiesReloaded", ({ loadResults }) => {
-        if (loadResults.getNoteIds().find(noteId => noteIds.includes(noteId))) {
+        if (loadResults.getNoteIds().find(noteId => noteIds.includes(noteId)) ||
+            loadResults.getAttributeRows().find(attr => attr.noteId && attr.name?.startsWith("slide:") && noteIds.includes(attr.noteId))) {
             refresh();
         }
     });
