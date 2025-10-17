@@ -69,11 +69,6 @@
     --floating-buttons-vert-offset: 20px;
 }
 
-/* Islands (main menu, toolbar, panel, sidebar) */
-
-.Island {
-    backdrop-filter: none;
-}
 
 /* Context menus */
 
