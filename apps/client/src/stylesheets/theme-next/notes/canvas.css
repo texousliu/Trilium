@@ -232,6 +232,11 @@ body[dir=rtl] .excalidraw .Island.App-menu__left {
     padding: 0;
 }
 
+/* Picker */
+body[dir=ltr] .excalidraw .App-menu__left .buttonList .picker {
+    translate: -80% 0;
+}
+
 /* Properties panel */
 
 body[dir=ltr] .excalidraw .exc-stats {
