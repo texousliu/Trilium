@@ -19,7 +19,8 @@ describe("Presentation model", () => {
                     children: [
                         {
                             id: "slide2",
-                            title: "First-sub"
+                            title: "First-sub",
+                            content: `<p>Go to&nbsp;<a class="reference-link" href="#root/other">Other note</a>.</p>`
                         }
                     ]
                 },
@@ -36,6 +37,10 @@ describe("Presentation model", () => {
                     ]
                 }
             ]
+        });
+        buildNote({
+            id: "other",
+            title: "Other note"
         });
         data = await buildPresentationModel(presentationNote);
     });
@@ -68,11 +73,11 @@ describe("Presentation model", () => {
     });
 
     it("rewrites links to other slides", () => {
-        expect(data.slides[1].content.__html).toStrictEqual(`<div class="ck-content"><p>Go to&nbsp;<a class="reference-link" href="#/slide1"><span class="bx bx-folder"></span>First slide</a>.</p></div>`);
-        expect(data.slides[1].verticalSlides![0].content.__html).toStrictEqual(`<div class="ck-content"><p>Go to&nbsp;<a class="reference-link" href="#/slide2"><span class="bx bx-note"></span>First-sub</a>.</p></div>`);
+        expect(data.slides[1].content.__html).toStrictEqual(`<div class="ck-content"><p>Go to&nbsp;<a class="reference-link" href="#/slide-slide1"><span class="bx bx-folder"></span>First slide</a>.</p></div>`);
+        expect(data.slides[1].verticalSlides![0].content.__html).toStrictEqual(`<div class="ck-content"><p>Go to&nbsp;<a class="reference-link" href="#/slide-slide2"><span class="bx bx-note"></span>First-sub</a>.</p></div>`);
     });
 
-    it("doesn't rewrite links if they are not part of the slideshow", () => {
-
+    it("rewrites links even if they are not part of the slideshow", () => {
+        expect(data.slides[0].verticalSlides![0].content.__html).toStrictEqual(`<div class="ck-content"><p>Go to&nbsp;<a class="reference-link" href="#/slide-other"><span class="bx bx-note"></span>Other note</a>.</p></div>`);
     });
 });
