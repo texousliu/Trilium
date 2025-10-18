@@ -81,7 +81,6 @@ const GET = "get",
 
 function register(app: express.Application) {
     route(GET, "/", [auth.checkAuth, csrfMiddleware], indexRoute.index);
-    route(GET, "/print/:noteId", [ auth.checkAuth ], indexRoute.printIndex);
     route(GET, "/login", [auth.checkAppInitialized, auth.checkPasswordSet], loginRoute.loginPage);
     route(GET, "/set-password", [auth.checkAppInitialized, auth.checkPasswordNotSet], loginRoute.setPasswordPage);
 

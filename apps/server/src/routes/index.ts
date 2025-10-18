@@ -20,14 +20,7 @@ type View = "desktop" | "mobile" | "print";
 
 function index(req: Request, res: Response) {
     const view = getView(req);
-    renderView(req, res, view);
-}
-
-export function printIndex(req: Request, res: Response) {
-    renderView(req, res, "print");
-}
-
-function renderView(req: Request, res: Response, view: View) {
+    console.log("Got view ", view);
     const options = optionService.getOptionMap();
 
     //'overwrite' set to false (default) => the existing token will be re-used and validated
@@ -67,14 +60,20 @@ function renderView(req: Request, res: Response, view: View) {
         isProtectedSessionAvailable: protectedSessionService.isProtectedSessionAvailable(),
         maxContentWidth: Math.max(640, parseInt(options.maxContentWidth)),
         triliumVersion: packageJson.version,
-        assetPath: view !== "print" ? assetPath : "../" + assetPath,
-        appPath: view !== "print" ? appPath : "../" + appPath,
-        baseApiUrl: view !== "print" ? 'api/' : "../api/",
+        assetPath,
+        appPath,
+        baseApiUrl: 'api/',
         currentLocale: getCurrentLocale()
     });
 }
 
-function getView(req: Request): "desktop" | "mobile" {
+function getView(req: Request): View {
+    console.log("Got ", req.query);
+    // Special override for printing.
+    if ("print" in req.query) {
+        return "print";
+    }
+
     // Electron always uses the desktop view.
     if (isElectron) {
         return "desktop";
@@ -133,6 +132,5 @@ function getAppCssNoteIds() {
 }
 
 export default {
-    index,
-    printIndex
+    index
 };
