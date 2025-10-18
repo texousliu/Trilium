@@ -177,6 +177,7 @@ function Presentation({ presentation, setApi } : { presentation: PresentationMod
 function Slide({ slide }: { slide: PresentationSlideBaseModel }) {
     return (
         <section
+            id={slide.noteId}
             data-note-id={slide.noteId}
             data-background-color={slide.backgroundColor}
             data-background-gradient={slide.backgroundGradient}
