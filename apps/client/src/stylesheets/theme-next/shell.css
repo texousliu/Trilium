@@ -639,7 +639,7 @@ body.layout-vertical.background-effects div.quick-search .dropdown-menu {
 #left-pane span.fancytree-node.fancytree-active {
     position: relative;
     background: transparent !important;
-    color: var(--left-pane-item-selected-color) !important;
+    color: var(--left-pane-item-selected-color);
 }
 
 @keyframes left-pane-item-select {

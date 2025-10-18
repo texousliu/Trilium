@@ -179,7 +179,7 @@ span.fancytree-node.fancytree-active-clone:not(.fancytree-active) .fancytree-tit
 }
 
 span.fancytree-active {
-    color: var(--active-item-text-color) !important;
+    color: var(--active-item-text-color);
     background-color: var(--active-item-background-color) !important;
     border-color: transparent; /* invisible border */
     border-radius: 5px;
