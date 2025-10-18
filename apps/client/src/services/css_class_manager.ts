@@ -48,7 +48,7 @@ function parseColor(color: string) {
         // Parse the given color in the CIELAB color space
         return Color(color);
     } catch (ex) {
-        console.error(`Failed to parse color: "${color}"`, ex);
+        console.error(ex);
     }
 }
 
