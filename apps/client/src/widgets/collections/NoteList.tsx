@@ -13,6 +13,7 @@ import { subscribeToMessages, unsubscribeToMessage as unsubscribeFromMessage } f
 import { WebSocketMessage } from "@triliumnext/commons";
 import froca from "../../services/froca";
 import PresentationView from "./presentation";
+import PresentationPrintView from "./presentation/print";
 
 interface NoteListProps {
     note: FNote | null | undefined;
@@ -110,6 +111,20 @@ function getComponentByViewType(viewType: ViewTypeOptions, props: ViewModeProps<
     }
 }
 
+export function getComponentByViewTypeForPrint(viewType: ViewTypeOptions, props: ViewModeProps<any>) {
+    switch (viewType) {
+        case "list":
+        case "grid":
+        case "geoMap":
+        case "calendar":
+        case "table":
+        case "board":
+            return null;
+        case "presentation":
+            return <PresentationPrintView {...props} />
+    }
+}
+
 function useNoteViewType(note?: FNote | null): ViewTypeOptions | undefined {
     const [ viewType ] = useNoteLabel(note, "viewType");
 
@@ -123,7 +138,7 @@ function useNoteViewType(note?: FNote | null): ViewTypeOptions | undefined {
     }
 }
 
-function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOptions | undefined, ntxId: string | null | undefined) {
+export function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOptions | undefined, ntxId: string | null | undefined) {
     const [ noteIds, setNoteIds ] = useState<string[]>([]);
     const [ includeArchived ] = useNoteLabelBoolean(note, "includeArchived");
 
@@ -187,7 +202,7 @@ function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOptions | 
     return noteIds;
 }
 
-function useViewModeConfig<T extends object>(note: FNote | null | undefined, viewType: ViewTypeOptions | undefined) {
+export function useViewModeConfig<T extends object>(note: FNote | null | undefined, viewType: ViewTypeOptions | undefined) {
     const [ viewConfig, setViewConfig ] = useState<[T | undefined, (data: T) => void]>();
 
     useEffect(() => {
