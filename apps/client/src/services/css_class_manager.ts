@@ -15,21 +15,19 @@ const darkThemeColorMinLightness = readCssVar(
                                         "tree-item-dark-theme-min-color-lightness"
                                     ).asNumber(50);
 
-function createClassForColor(color: string | null) {
-    if (!color?.trim()) {
+function createClassForColor(colorString: string | null) {
+    if (!colorString?.trim()) {
         return "";
     }
 
-    const normalizedColorName = color.replace(/[^a-z0-9]/gi, "");
-
-    if (!normalizedColorName.trim()) {
-        return "";
+    const color = parseColor(colorString);
+    if (!color) {
+        return;
     }
 
-    const className = `color-${normalizedColorName}`;
-
-    const adjustedColor = adjustColorLightness(color, lightThemeColorMaxLightness!, darkThemeColorMinLightness!);
-    if (!adjustedColor) return "";
+    const className = `color-${color.hex().substring(1)}`;
+    const adjustedColor = adjustColorLightness(color, lightThemeColorMaxLightness!,
+                                               darkThemeColorMinLightness!);
 
     if (!registeredClasses.has(className)) {
         $("head").append(`<style>
@@ -45,22 +43,23 @@ function createClassForColor(color: string | null) {
     return className;
 }
 
+function parseColor(color: string) {
+    try {
+        // Parse the given color in the CIELAB color space
+        return Color(color);
+    } catch (ex) {
+        console.error(`Failed to parse color: "${color}"`, ex);
+    }
+}
+
 /** 
  * Returns a pair of colors — one optimized for light themes and the other for dark themes, derived
  * from the specified color to maintain sufficient contrast with each theme.
  * The adjustment is performed by limiting the color’s lightness in the CIELAB color space,
  * according to the lightThemeMaxLightness and darkThemeMinLightness parameters.
  */
-function adjustColorLightness(color: string, lightThemeMaxLightness: number, darkThemeMinLightness: number) {
-    let labColor: ColorInstance | undefined = undefined;
-
-    try {
-        // Parse the given color in the CIELAB color space
-        labColor = Color(color).lab();
-    } catch (ex) {
-        console.error(`Failed to parse color: "${color}"`, ex);
-        return;
-    }
+function adjustColorLightness(color: ColorInstance, lightThemeMaxLightness: number, darkThemeMinLightness: number) {
+    let labColor = color.lab();
 
     const lightness = labColor.l();
 
