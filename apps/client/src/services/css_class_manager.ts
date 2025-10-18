@@ -62,10 +62,13 @@ function adjustColorLightness(color: string, lightThemeMaxLightness: number, dar
         return;
     }
 
+    const lightness = labColor.l();
+
     // For the light theme, limit the maximum lightness
-    const lightThemeColor = labColor.l(Math.min(labColor.l(), lightThemeMaxLightness)).hex();
-    // For the light theme, limit the minimum lightness
-    const darkThemeColor = labColor.l(Math.max(labColor.l(), darkThemeMinLightness)).hex();
+    const lightThemeColor = labColor.l(Math.min(lightness, lightThemeMaxLightness)).hex();
+    
+    // For the dark theme, limit the minimum lightness
+    const darkThemeColor = labColor.l(Math.max(lightness, darkThemeMinLightness)).hex();
 
     return {lightThemeColor, darkThemeColor};
 }

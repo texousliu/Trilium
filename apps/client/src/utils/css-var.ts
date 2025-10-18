@@ -17,7 +17,7 @@ export class CssVarReader {
         let number: Number = NaN;
 
         if (this.value) {
-            number = new Number(this.value);
+            number = parseFloat(this.value);
         }
 
         return (!isNaN(number.valueOf()) ? number.valueOf() : defaultValue)
