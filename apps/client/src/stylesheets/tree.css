@@ -40,6 +40,7 @@ span.fancytree-node.fancytree-hide {
     text-overflow: ellipsis;
     user-select: none !important;
     -webkit-user-select: none !important;
+    color: var(--custom-color, inherit);
 }
 
 .fancytree-node:not(.fancytree-loading) .fancytree-expander {
