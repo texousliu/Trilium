@@ -32,6 +32,7 @@ function handleCollection(note: FNote) {
             notePath={note.getBestNotePath().join("/")}
             ntxId="print"
             highlightedTokens={null}
+            media="print"
         />
     );
 }

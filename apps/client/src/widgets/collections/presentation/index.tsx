@@ -14,7 +14,7 @@ import { t } from "../../../services/i18n";
 import { DEFAULT_THEME, loadPresentationTheme } from "./themes";
 import FNote from "../../../entities/fnote";
 
-export default function PresentationView({ note, noteIds }: ViewModeProps<{}>) {
+export default function PresentationView({ note, noteIds, media }: ViewModeProps<{}>) {
     const [ presentation, setPresentation ] = useState<PresentationModel>();
     const containerRef = useRef<HTMLDivElement>(null);
     const [ api, setApi ] = useState<Reveal.Api>();
@@ -33,18 +33,28 @@ export default function PresentationView({ note, noteIds }: ViewModeProps<{}>) {
 
     useLayoutEffect(refresh, [ note, noteIds ]);
 
-    return presentation && stylesheets && (
+    if (!presentation || !stylesheets) return;
+    const content = (
         <>
-            <ShadowDom
-                className="presentation-container"
-                containerRef={containerRef}
-            >
-                {stylesheets.map(stylesheet => <style>{stylesheet}</style>)}
-                <Presentation presentation={presentation} setApi={setApi} />
-            </ShadowDom>
-            <ButtonOverlay containerRef={containerRef} api={api} />
+            {stylesheets.map(stylesheet => <style>{stylesheet}</style>)}
+            <Presentation presentation={presentation} setApi={setApi} />
         </>
-    )
+    );
+
+    if (media === "screen") {
+        return (
+            <>
+                <ShadowDom
+                    className="presentation-container"
+                    containerRef={containerRef}
+                >{content}</ShadowDom>
+                <ButtonOverlay containerRef={containerRef} api={api} />
+            </>
+        )
+    } else {
+        // Shadow DOM doesn't work well with Reveal.js's PDF printing mechanism.
+        return content;
+    }
 }
 
 function usePresentationStylesheets(note: FNote) {
@@ -128,6 +138,7 @@ function Presentation({ presentation, setApi } : { presentation: PresentationMod
         const api = new Reveal(containerRef.current, {
             transition: "slide",
             embedded: true,
+            pdfMaxPagesPerSlide: 1,
             keyboardCondition(event) {
                 // Full-screen requests sometimes fail, we rely on the UI button instead.
                 if (event.key === "f") {
