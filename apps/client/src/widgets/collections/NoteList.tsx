@@ -13,7 +13,6 @@ import { subscribeToMessages, unsubscribeToMessage as unsubscribeFromMessage } f
 import { WebSocketMessage } from "@triliumnext/commons";
 import froca from "../../services/froca";
 import PresentationView from "./presentation";
-import PresentationPrintView from "./presentation/print";
 
 interface NoteListProps {
     note: FNote | null | undefined;
@@ -35,7 +34,7 @@ export function SearchNoteList<T extends object>(props: Omit<NoteListProps, "isE
     return <CustomNoteList {...props} isEnabled={true} />
 }
 
-function CustomNoteList<T extends object>({ note, isEnabled: shouldEnable, notePath, highlightedTokens, displayOnlyCollections, ntxId }: NoteListProps) {
+export function CustomNoteList<T extends object>({ note, isEnabled: shouldEnable, notePath, highlightedTokens, displayOnlyCollections, ntxId }: NoteListProps) {
     const widgetRef = useRef<HTMLDivElement>(null);
     const viewType = useNoteViewType(note);
     const noteIds = useNoteIds(note, viewType, ntxId);
@@ -108,20 +107,6 @@ function getComponentByViewType(viewType: ViewTypeOptions, props: ViewModeProps<
             return <BoardView {...props} />
         case "presentation":
             return <PresentationView {...props} />
-    }
-}
-
-export function getComponentByViewTypeForPrint(viewType: ViewTypeOptions, props: ViewModeProps<any>) {
-    switch (viewType) {
-        case "list":
-        case "grid":
-        case "geoMap":
-        case "calendar":
-        case "table":
-        case "board":
-            return null;
-        case "presentation":
-            return <PresentationPrintView {...props} />
     }
 }
 
