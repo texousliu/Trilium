@@ -1,4 +1,4 @@
-import { ViewModeProps } from "../interface";
+import { ViewModeMedia, ViewModeProps } from "../interface";
 import { useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 import Reveal from "reveal.js";
 import slideBaseStylesheet from "reveal.js/dist/reveal.css?raw";
@@ -18,7 +18,7 @@ export default function PresentationView({ note, noteIds, media }: ViewModeProps
     const [ presentation, setPresentation ] = useState<PresentationModel>();
     const containerRef = useRef<HTMLDivElement>(null);
     const [ api, setApi ] = useState<Reveal.Api>();
-    const stylesheets = usePresentationStylesheets(note);
+    const stylesheets = usePresentationStylesheets(note, media);
 
     function refresh() {
         buildPresentationModel(note).then(setPresentation);
@@ -62,17 +62,22 @@ export default function PresentationView({ note, noteIds, media }: ViewModeProps
     }
 }
 
-function usePresentationStylesheets(note: FNote) {
+function usePresentationStylesheets(note: FNote, media: ViewModeMedia) {
     const [ themeName ] = useNoteLabelWithDefault(note, "presentation:theme", DEFAULT_THEME);
     const [ stylesheets, setStylesheets ] = useState<string[]>();
 
     useLayoutEffect(() => {
         loadPresentationTheme(themeName).then((themeStylesheet) => {
-            setStylesheets([
+            let stylesheets = [
                 slideBaseStylesheet,
                 themeStylesheet,
                 slideCustomStylesheet
-            ].map(stylesheet => stylesheet.replace(/:root/g, ":host")));
+            ];
+            if (media === "screen") {
+                // We are rendering in the shadow DOM, so the global variables are not set correctly.
+                stylesheets = stylesheets.map(stylesheet => stylesheet.replace(/:root/g, ":host"));
+            }
+            setStylesheets(stylesheets);
         });
     }, [ themeName ]);
 
