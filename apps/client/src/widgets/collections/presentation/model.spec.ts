@@ -2,6 +2,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { buildNote } from "../../../test/easy-froca";
 import FNote from "../../../entities/fnote";
 import { buildPresentationModel, PresentationModel } from "./model";
+import froca from "../../../services/froca";
 
 let presentationNote!: FNote;
 let data!: PresentationModel;
@@ -58,5 +59,9 @@ describe("Presentation model", () => {
                 }
             ]
         })
+    });
+
+    it("empty slides don't render children", () => {
+        expect(data.slides[0].content.__html).toStrictEqual("");
     });
 });
