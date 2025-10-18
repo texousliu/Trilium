@@ -72,6 +72,7 @@ import etapiBackupRoute from "../etapi/backup.js";
 import etapiMetricsRoute from "../etapi/metrics.js";
 import apiDocsRoute from "./api_docs.js";
 import { apiResultHandler, apiRoute, asyncApiRoute, asyncRoute, route, router, uploadMiddlewareWithErrorHandling } from "./route_api.js";
+import { getPrintablePage } from "./api/print.js";
 
 const GET = "get",
     PST = "post",
@@ -378,8 +379,6 @@ function register(app: express.Application) {
     asyncApiRoute(PST, "/api/llm/chat/:chatNoteId/messages", llmRoute.sendMessage);
     asyncApiRoute(PST, "/api/llm/chat/:chatNoteId/messages/stream", llmRoute.streamMessage);
 
-
-
     // LLM provider endpoints - moved under /api/llm/providers hierarchy
     asyncApiRoute(GET, "/api/llm/providers/ollama/models", ollamaRoute.listModels);
     asyncApiRoute(GET, "/api/llm/providers/openai/models", openaiRoute.listModels);
@@ -387,6 +386,9 @@ function register(app: express.Application) {
 
     // API Documentation
     apiDocsRoute(app);
+
+    // Printing route
+    apiRoute(GET, "/print/:noteId", getPrintablePage);
 
     app.use("", router);
 }
