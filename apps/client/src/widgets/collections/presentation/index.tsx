@@ -140,6 +140,10 @@ function Presentation({ presentation, setApi } : { presentation: PresentationMod
         api.initialize().then(() => {
             setRevealApi(api);
             setApi(api);
+
+            if (containerRef.current) {
+                rewireLinks(containerRef.current, api);
+            }
         });
 
         return () => {
@@ -177,7 +181,7 @@ function Presentation({ presentation, setApi } : { presentation: PresentationMod
 function Slide({ slide }: { slide: PresentationSlideBaseModel }) {
     return (
         <section
-            id={slide.noteId}
+            id={`slide-${slide.noteId}`}
             data-note-id={slide.noteId}
             data-background-color={slide.backgroundColor}
             data-background-gradient={slide.backgroundGradient}
@@ -189,4 +193,24 @@ function Slide({ slide }: { slide: PresentationSlideBaseModel }) {
 function getNoteIdFromSlide(slide: HTMLElement | undefined) {
     if (!slide) return;
     return slide.dataset.noteId;
+}
+
+function rewireLinks(container: HTMLElement, api: Reveal.Api) {
+    const links = container.querySelectorAll<HTMLLinkElement>("a.reference-link");
+    for (const link of links) {
+        link.addEventListener("click", () => {
+            /**
+             * Reveal.js has built-in navigation by either index or ID. However, the ID-based navigation doesn't work because it tries to look
+             * outside the shadom DOM (via document.getElementById).
+             */
+            const url = new URL(link.href);
+            if (!url.hash.startsWith("#/slide-")) return;
+            const targetId = url.hash.substring(8);
+            const slide = container.querySelector<HTMLElement>(`#slide-${targetId}`);
+            if (!slide) return;
+
+            const { h, v, f } = api.getIndices(slide);
+            api.slide(h, v, f);
+        });
+    }
 }

@@ -65,7 +65,7 @@ async function processContent(note: FNote): Promise<DangerouslySetInnerHTML> {
 async function postProcessSlides(slides: (PresentationSlideModel | PresentationSlideBaseModel)[]) {
     for (const slide of slides) {
         if (slide.type !== "text") continue;
-        slide.content.__html = slide.content.__html.replaceAll(/href="[^"]*#root[a-zA-Z0-9_\/]*\/([a-zA-Z0-9_]+)[^"]*"/g, `href="#/$1"`);
+        slide.content.__html = slide.content.__html.replaceAll(/href="[^"]*#root[a-zA-Z0-9_\/]*\/([a-zA-Z0-9_]+)[^"]*"/g, `href="#/slide-$1"`);
         if ("verticalSlides" in slide && slide.verticalSlides) {
             postProcessSlides(slide.verticalSlides);
         }
