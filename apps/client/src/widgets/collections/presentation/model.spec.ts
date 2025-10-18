@@ -30,7 +30,8 @@ describe("Presentation model", () => {
                     children: [
                         {
                             id: "slide4",
-                            title: "Second-sub"
+                            title: "Second-sub",
+                            content: `<p>Go to&nbsp;<a class="reference-link" href="#root/presentation/slide2">First-sub</a>.</p>`,
                         }
                     ]
                 }
@@ -68,6 +69,7 @@ describe("Presentation model", () => {
 
     it("rewrites links to other slides", () => {
         expect(data.slides[1].content.__html).toStrictEqual(`<div class="ck-content"><p>Go to&nbsp;<a class="reference-link" href="#/slide1"><span class="bx bx-folder"></span>First slide</a>.</p></div>`);
+        expect(data.slides[1].verticalSlides![0].content.__html).toStrictEqual(`<div class="ck-content"><p>Go to&nbsp;<a class="reference-link" href="#/slide2"><span class="bx bx-note"></span>First-sub</a>.</p></div>`);
     });
 
     it("doesn't rewrite links if they are not part of the slideshow", () => {
