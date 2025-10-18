@@ -388,7 +388,7 @@ function register(app: express.Application) {
     apiDocsRoute(app);
 
     // Printing route
-    apiRoute(GET, "/print/:noteId", getPrintablePage);
+    route(GET, "/print/:noteId", [ auth.checkAuth ], getPrintablePage);
 
     app.use("", router);
 }
