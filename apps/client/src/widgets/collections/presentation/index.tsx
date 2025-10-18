@@ -51,7 +51,12 @@ export default function PresentationView({ note, noteIds, media }: ViewModeProps
                 <ButtonOverlay containerRef={containerRef} api={api} />
             </>
         )
-    } else {
+    } else if (media === "print") {
+        // Printing needs a query parameter that is read by Reveal.js.
+        const url = new URL(window.location.href);
+        url.searchParams.set("print-pdf", "");
+        window.history.replaceState({}, '', url);
+
         // Shadow DOM doesn't work well with Reveal.js's PDF printing mechanism.
         return content;
     }
