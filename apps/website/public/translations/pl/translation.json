@@ -68,7 +68,7 @@
         "calendar_title": "Kalendarze",
         "calendar_description": "Organizuj swoje prywatne i służbowe wydarzenia używając kalendarza. Miej plany pod kontrolą z tygodniowym, miesięcznym i rocznym podglądem. Twórz i edytuj wydarzenia w prosty i intuicyjny sposób.",
         "table_title": "Tabele",
-        "table_description": "Wyświetlaj i edytuj informacje o notatkach w tabelach na wiele sposobów dzięki wielu typom kolumn: Tekstowym, numerycznym, z polami wyboru, z datami i godzinami, zawierającym linki, z kolorowymi wypełnieniami i powiązaniami notatek. Możesz nawet wyświetlić całe drzewo hierarchii w tabeli!",
+        "table_description": "Wyświetlaj i edytuj informacje o notatkach w tabelach na wiele sposobów dzięki wielu typom kolumn: Tekstowym, numerycznym, z polami wyboru, z datami i godzinami, zawierającym linki, z kolorowymi wypełnieniami i powiązaniami notatek. Możesz nawet wyświetlić całe drzewo hierarchii w tabeli.",
         "board_title": "Tablice",
         "board_description": "Organizuj swoje zadania i postępy projektów w tablicach Kanban z prostym tworzeniem nowych elementów i kolumn, a możliwość graficznego ich przenoszenia ułatwi zmianę statusu i pozwoli zachować porządek.",
         "geomap_title": "Mapy",
@@ -101,7 +101,7 @@
     "download_now": {
         "text": "Pobierz teraz ",
         "platform_big": "v{{version}} dla {{platform}}",
-        "platform_small": "dla{{platform}}",
+        "platform_small": "dla {{platform}}",
         "linux_big": "v{{version}} dla Linuxa",
         "linux_small": "dla Linuxa",
         "more_platforms": "Więcej platform i konfiguracja serwera"
