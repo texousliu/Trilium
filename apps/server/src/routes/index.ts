@@ -16,9 +16,19 @@ import type { Request, Response } from "express";
 import type BNote from "../becca/entities/bnote.js";
 import { getCurrentLocale } from "../services/i18n.js";
 
+type View = "desktop" | "mobile" | "print";
+
 function index(req: Request, res: Response) {
-    const options = optionService.getOptionMap();
     const view = getView(req);
+    renderView(req, res, view);
+}
+
+export function printIndex(req: Request, res: Response) {
+    renderView(req, res, "print");
+}
+
+function renderView(req: Request, res: Response, view: View) {
+    const options = optionService.getOptionMap();
 
     //'overwrite' set to false (default) => the existing token will be re-used and validated
     //'validateOnReuse' set to false => if validation fails, generate a new token instead of throwing an error
@@ -57,8 +67,9 @@ function index(req: Request, res: Response) {
         isProtectedSessionAvailable: protectedSessionService.isProtectedSessionAvailable(),
         maxContentWidth: Math.max(640, parseInt(options.maxContentWidth)),
         triliumVersion: packageJson.version,
-        assetPath: assetPath,
-        appPath: appPath,
+        assetPath: view !== "print" ? assetPath : "../" + assetPath,
+        appPath: view !== "print" ? appPath : "../" + appPath,
+        baseApiUrl: view !== "print" ? 'api/' : "../api/",
         currentLocale: getCurrentLocale()
     });
 }
@@ -122,5 +133,6 @@ function getAppCssNoteIds() {
 }
 
 export default {
-    index
+    index,
+    printIndex
 };

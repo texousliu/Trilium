@@ -21,6 +21,8 @@
     document.getElementsByTagName("body")[0].style.display = "none";
 </script>
 
+<%- include("./partials/windowGlobal.ejs", locals) %>
+
 <!-- Required for correct loading of scripts in Electron -->
 <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 

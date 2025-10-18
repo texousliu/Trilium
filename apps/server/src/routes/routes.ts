@@ -72,7 +72,6 @@ import etapiBackupRoute from "../etapi/backup.js";
 import etapiMetricsRoute from "../etapi/metrics.js";
 import apiDocsRoute from "./api_docs.js";
 import { apiResultHandler, apiRoute, asyncApiRoute, asyncRoute, route, router, uploadMiddlewareWithErrorHandling } from "./route_api.js";
-import { getPrintablePage } from "./api/print.js";
 
 const GET = "get",
     PST = "post",
@@ -82,6 +81,7 @@ const GET = "get",
 
 function register(app: express.Application) {
     route(GET, "/", [auth.checkAuth, csrfMiddleware], indexRoute.index);
+    route(GET, "/print/:noteId", [ auth.checkAuth ], indexRoute.printIndex);
     route(GET, "/login", [auth.checkAppInitialized, auth.checkPasswordSet], loginRoute.loginPage);
     route(GET, "/set-password", [auth.checkAppInitialized, auth.checkPasswordNotSet], loginRoute.setPasswordPage);
 
@@ -386,9 +386,6 @@ function register(app: express.Application) {
 
     // API Documentation
     apiDocsRoute(app);
-
-    // Printing route
-    route(GET, "/print/:noteId", [ auth.checkAuth ], getPrintablePage);
 
     app.use("", router);
 }
