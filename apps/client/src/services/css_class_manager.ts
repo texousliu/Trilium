@@ -34,7 +34,7 @@ function createClassForColor(colorString: string | null) {
         $("head").append(`<style>
             .${className}, span.fancytree-active.${className} {
                 --light-theme-custom-color: ${adjustedColor.lightThemeColor};
-                --dark-theme-custom-color: ${adjustedColor.darkThemeColor}
+                --dark-theme-custom-color: ${adjustedColor.darkThemeColor};
             }
         </style>`);
 
