@@ -1,4 +1,6 @@
+import { JSX } from "preact/jsx-runtime";
 import FNote from "./entities/fnote";
+import { render } from "preact";
 
 async function main() {
     const noteId = window.location.pathname.split("/")[2];
@@ -7,13 +9,18 @@ async function main() {
 
     if (!note) return;
 
+    let el: JSX.Element | null = null;
     if (note.type === "book") {
-        handleCollection(note);
+        el = handleCollection(note);
     }
+
+    render(el, document.body);
 }
 
 function handleCollection(note: FNote) {
-    console.log("Rendering collection.");
+    return (
+        <h1>{note.title}</h1>
+    );
 }
 
 main();
