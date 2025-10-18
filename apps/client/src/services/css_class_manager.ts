@@ -26,10 +26,11 @@ function createClassForColor(colorString: string | null) {
     }
 
     const className = `color-${color.hex().substring(1)}`;
-    const adjustedColor = adjustColorLightness(color, lightThemeColorMaxLightness!,
-                                               darkThemeColorMinLightness!);
 
     if (!registeredClasses.has(className)) {
+        const adjustedColor = adjustColorLightness(color, lightThemeColorMaxLightness!,
+                                                   darkThemeColorMinLightness!);
+
         $("head").append(`<style>
             .${className}, span.fancytree-active.${className} {
                 --light-theme-custom-color: ${adjustedColor.lightThemeColor};
@@ -45,7 +46,6 @@ function createClassForColor(colorString: string | null) {
 
 function parseColor(color: string) {
     try {
-        // Parse the given color in the CIELAB color space
         return Color(color);
     } catch (ex) {
         console.error(ex);
