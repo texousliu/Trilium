@@ -33,6 +33,7 @@ import type { NoteType } from "../entities/fnote.js";
 import type TypeWidget from "./type_widgets/type_widget.js";
 import { MermaidTypeWidget } from "./type_widgets/mermaid.js";
 import AiChatTypeWidget from "./type_widgets/ai_chat.js";
+import toast from "../services/toast.js";
 
 const TPL = /*html*/`
 <div class="note-detail">
@@ -297,6 +298,11 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
             return;
         }
 
+        toast.showPersistent({
+            icon: "bx bx-loader-circle bx-spin",
+            message: t("note_detail.printing"),
+            id: "printing"
+        });
         const iframe = document.createElement('iframe');
         iframe.src = `?print#${this.notePath}`;
         iframe.className = "print-iframe";
@@ -304,6 +310,7 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
         iframe.onload = () => {
             if (!iframe.contentWindow) return;
             iframe.contentWindow.addEventListener("note-ready", () => {
+                toast.closePersistent("printing");
                 iframe.contentWindow?.print();
                 document.body.removeChild(iframe);
             });
