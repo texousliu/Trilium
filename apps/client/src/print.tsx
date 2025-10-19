@@ -4,7 +4,10 @@ import { CustomNoteList } from "./widgets/collections/NoteList";
 import "./print.css";
 
 async function main() {
-    const noteId = window.location.pathname.split("/")[2];
+    const notePath = window.location.hash.substring(1);
+    const noteId = notePath.split("/").at(-1);
+    if (!noteId) return;
+
     const froca = (await import("./services/froca")).default;
     const note = await froca.getNote(noteId);
 
