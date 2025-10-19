@@ -268,7 +268,7 @@
  * Dark color scheme tweaks
  */
 
-#left-pane span.fancytree-node {
+#left-pane .fancytree-node.tinted {
     --custom-color: var(--dark-theme-custom-color);
 
     /* The background color of the active item in the note tree.

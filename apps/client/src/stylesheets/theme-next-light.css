@@ -263,7 +263,7 @@
     --ck-editor-toolbar-dropdown-button-open-background: #0000000f;
 }
 
-#left-pane span.fancytree-node {
+#left-pane .fancytree-node.tinted {
     --custom-color: var(--light-theme-custom-color);
 
     /* The background color of the active item in the note tree.

@@ -82,7 +82,7 @@ body ::-webkit-calendar-picker-indicator {
     filter: invert(1);
 }
 
-#left-pane span.fancytree-node {
+#left-pane .fancytree-node.tinted {
     --custom-color: var(--dark-theme-custom-color);
 }
 

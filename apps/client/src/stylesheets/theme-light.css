@@ -82,6 +82,6 @@ html {
     --native-titlebar-background: #ffffff00;
 }
 
-#left-pane span.fancytree-node {
+#left-pane .fancytree-node.tinted {
     --custom-color: var(--light-theme-custom-color);
 }
