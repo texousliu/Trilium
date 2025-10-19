@@ -8,7 +8,7 @@ import sqlInit from "./sql_init.js";
 import cls from "./cls.js";
 import keyboardActionsService from "./keyboard_actions.js";
 import electron from "electron";
-import type { App, BrowserWindowConstructorOptions, BrowserWindow, WebContents } from "electron";
+import type { App, BrowserWindowConstructorOptions, BrowserWindow, WebContents, IpcMainEvent } from "electron";
 import { formatDownloadTitle, isDev, isMac, isWindows } from "./utils.js";
 import { t } from "i18next";
 import { RESOURCE_DIR } from "./resource_dir.js";
@@ -71,15 +71,28 @@ electron.ipcMain.on("create-extra-window", (event, arg) => {
 
 interface PrintOpts {
     notePath: string;
+    printToPdf: boolean;
 }
 
 interface ExportAsPdfOpts {
+    notePath: string;
     title: string;
     landscape: boolean;
     pageSize: "A0" | "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "Legal" | "Letter" | "Tabloid" | "Ledger";
 }
 
 electron.ipcMain.on("print-note", async (e, { notePath }: PrintOpts) => {
+    const browserWindow = await getBrowserWindowForPrinting(e, notePath);
+    browserWindow.webContents.print({}, (success, failureReason) => {
+        if (success) {
+            browserWindow.destroy();
+        } else {
+            electron.dialog.showErrorBox(t("pdf.unable-to-print"), failureReason);
+        }
+    });
+});
+
+async function getBrowserWindowForPrinting(e: IpcMainEvent, notePath: string) {
     const browserWindow = new electron.BrowserWindow({
         show: false,
         webPreferences: {
@@ -96,19 +109,14 @@ electron.ipcMain.on("print-note", async (e, { notePath }: PrintOpts) => {
             window.addEventListener("note-ready", () => resolve());
         });
     `);
-    browserWindow.webContents.print({}, () => {
-        browserWindow.destroy();
-    });
-});
+    return browserWindow;
+}
 
-electron.ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
-    const browserWindow = electron.BrowserWindow.fromWebContents(e.sender);
-    if (!browserWindow) {
-        return;
-    }
+electron.ipcMain.on("export-as-pdf", async (e, { title, notePath, landscape, pageSize }: ExportAsPdfOpts) => {
+    const browserWindow = await getBrowserWindowForPrinting(e, notePath);
 
     const filePath = electron.dialog.showSaveDialogSync(browserWindow, {
-        defaultPath: formatDownloadTitle(opts.title, "file", "application/pdf"),
+        defaultPath: formatDownloadTitle(title, "file", "application/pdf"),
         filters: [
             {
                 name: t("pdf.export_filter"),
@@ -123,8 +131,8 @@ electron.ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
     let buffer: Buffer;
     try {
         buffer = await browserWindow.webContents.printToPDF({
-            landscape: opts.landscape,
-            pageSize: opts.pageSize,
+            landscape,
+            pageSize,
             generateDocumentOutline: true,
             generateTaggedPDF: true,
             printBackground: true,

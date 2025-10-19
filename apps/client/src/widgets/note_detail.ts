@@ -326,13 +326,14 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
     }
 
     async exportAsPdfEvent() {
-        if (!this.noteContext?.isActive() || !this.note) {
+        if (!this.noteContext?.isActive() || !this.note || !this.notePath) {
             return;
         }
 
         const { ipcRenderer } = utils.dynamicRequire("electron");
         ipcRenderer.send("export-as-pdf", {
             title: this.note.title,
+            notePath: this.notePath,
             pageSize: this.note.getAttributeValue("label", "printPageSize") ?? "Letter",
             landscape: this.note.hasAttribute("label", "printLandscape")
         });
