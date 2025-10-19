@@ -81,3 +81,8 @@ html {
     --mermaid-theme: default;
     --native-titlebar-background: #ffffff00;
 }
+
+#left-pane span.fancytree-node {
+    --custom-color: var(--light-theme-custom-color);
+    --custom-bg-color: var(--light-theme-custom-bg-color);
+}

@@ -82,6 +82,20 @@
 
     /* Theme capabilities */
     --tab-note-icons: true;
+
+    /* To ensure that a tree item's custom color remains sufficiently contrasted and readable,
+     * the color is adjusted based on the current color scheme (light or dark). The lightness
+     * component of the color represented in the CIELAB color space, will be
+     * constrained to a certain percentage defined below.
+     * 
+     * Note: the tree background may vary when background effects are enabled, so it is recommended
+     * to maintain a higher contrast margin than on the usual note tree solid background. */
+
+    /* The maximum perceptual lightness for the custom color in the light theme (%): */
+    --tree-item-light-theme-max-color-lightness: 60;
+    
+    /* The minimum perceptual lightness for the custom color in the dark theme (%): */
+    --tree-item-dark-theme-min-color-lightness: 65;
 }
 
 body.backdrop-effects-disabled {

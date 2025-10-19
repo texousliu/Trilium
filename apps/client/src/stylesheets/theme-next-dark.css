@@ -268,6 +268,11 @@
  * Dark color scheme tweaks
  */
 
+#left-pane span.fancytree-node {
+    --custom-color: var(--dark-theme-custom-color);
+    --custom-bg-color: var(--dark-theme-custom-bg-color);
+}
+
 body ::-webkit-calendar-picker-indicator {
     filter: invert(1);
 }
