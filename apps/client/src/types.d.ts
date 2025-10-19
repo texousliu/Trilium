@@ -16,7 +16,7 @@ interface ElectronProcess {
 interface CustomGlobals {
     isDesktop: typeof utils.isDesktop;
     isMobile: typeof utils.isMobile;
-    device: "mobile" | "desktop";
+    device: "mobile" | "desktop" | "print";
     getComponentByEl: typeof appContext.getComponentByEl;
     getHeaders: typeof server.getHeaders;
     getReferenceLinkTitle: (href: string) => Promise<string>;
