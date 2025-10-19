@@ -2,7 +2,13 @@ import FNote from "./entities/fnote";
 import { render } from "preact";
 import { CustomNoteList } from "./widgets/collections/NoteList";
 import "./print.css";
-import { useCallback, useRef } from "preact/hooks";
+import { useCallback, useEffect, useRef } from "preact/hooks";
+import content_renderer from "./services/content_renderer";
+
+interface RendererProps {
+    note: FNote;
+    onReady: () => void;
+}
 
 async function main() {
     const notePath = window.location.hash.substring(1);
@@ -17,38 +23,51 @@ async function main() {
 }
 
 function App({ note }: { note: FNote }) {
-    return (
-        <>
-            <ContentRenderer note={note} />
-        </>
-    );
-}
-
-function ContentRenderer({ note }: { note: FNote }) {
     const sentReadyEvent = useRef(false);
     const onReady = useCallback(() => {
         if (sentReadyEvent.current) return;
         window.dispatchEvent(new Event("note-ready"));
         sentReadyEvent.current = true;
     }, []);
+    const props: RendererProps = { note, onReady };
 
-    // Collections.
-    if (note.type === "book") {
-        return <CustomNoteList
-            isEnabled
-            note={note}
-            notePath={note.getBestNotePath().join("/")}
-            ntxId="print"
-            highlightedTokens={null}
-            media="print"
-            onReady={onReady}
-        />;
-    }
+    return (
+        <>
+            {note.type === "book"
+            ? <CollectionRenderer {...props} />
+            : <SingleNoteRenderer {...props} />
+            }
+        </>
+    );
+}
 
-    // Other note types.
+function SingleNoteRenderer({ note, onReady }: RendererProps) {
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        content_renderer.getRenderedContent(note, {
+            noChildrenList: true
+        }).then(({$renderedContent}) => {
+            containerRef.current?.replaceChildren(...$renderedContent);
+        });
+    }, [ note ]);
+
     return <>
         <h1>{note.title}</h1>
+        <main ref={containerRef} />
     </>;
+}
+
+function CollectionRenderer({ note, onReady }: RendererProps) {
+    return <CustomNoteList
+        isEnabled
+        note={note}
+        notePath={note.getBestNotePath().join("/")}
+        ntxId="print"
+        highlightedTokens={null}
+        media="print"
+        onReady={onReady}
+    />;
 }
 
 main();
