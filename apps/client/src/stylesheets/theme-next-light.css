@@ -261,5 +261,13 @@
     --ck-editor-toolbar-button-on-color: black;
     --ck-editor-toolbar-button-on-shadow: none;
     --ck-editor-toolbar-dropdown-button-open-background: #0000000f;
+}
 
+#left-pane span.fancytree-node {
+    --custom-color: var(--light-theme-custom-color);
+
+    /* The background color of the active item in the note tree.
+     * The --custom-color-hue variable contains the hue of the user-selected note color.
+     * This value is unset for gray tones. */
+    --custom-bg-color: hsl(var(--custom-color-hue), 37%, 89%, 1);
 }

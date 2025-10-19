@@ -30,9 +30,8 @@ function createClassForColor(colorString: string | null) {
         $("head").append(`<style>
             .${className}, span.fancytree-active.${className} {
                 --light-theme-custom-color: ${adjustedColor.lightThemeColor};
-                --light-theme-custom-bg-color: ${adjustedColor.lightThemeBackgroundColor};
                 --dark-theme-custom-color: ${adjustedColor.darkThemeColor};
-                --dark-theme-custom-bg-color: ${adjustedColor.darkThemeBackgroundColor};
+                --custom-color-hue: ${getHue(color) ?? 'unset'};
             }
         </style>`);
 
@@ -66,18 +65,15 @@ function adjustColorLightness(color: ColorInstance, lightThemeMaxLightness: numb
     // For the dark theme, limit the minimum lightness
     const darkThemeColor = labColor.l(Math.max(lightness, darkThemeMinLightness)).hex();
 
-    let darkThemeBackgroundColor = "unset";
-    let lightThemeBackgroundColor = "unset";
+    return {lightThemeColor, darkThemeColor};
+}
 
+/** Returns the hue of the specified color, or undefined if the color is grayscale. */
+function getHue(color: ColorInstance) {
     const hslColor = color.hsl();
-    const hue = hslColor.hue();
-
-    if (color.saturationl() > 0) {
-        darkThemeBackgroundColor = Color({h: hue, s: 20, l: 33, alpha: .4}).hexa();
-        lightThemeBackgroundColor = Color({h: hue, s: 37, l: 89, alpha: 1}).hexa();
+    if (hslColor.saturationl() > 0) {
+        return hslColor.hue();
     }
-
-    return {lightThemeColor, lightThemeBackgroundColor, darkThemeColor, darkThemeBackgroundColor};
 }
 
 export default {
