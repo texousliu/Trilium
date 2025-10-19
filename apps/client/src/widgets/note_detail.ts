@@ -28,7 +28,7 @@ import ContentWidgetTypeWidget from "./type_widgets/content_widget.js";
 import AttachmentListTypeWidget from "./type_widgets/attachment_list.js";
 import AttachmentDetailTypeWidget from "./type_widgets/attachment_detail.js";
 import MindMapWidget from "./type_widgets/mind_map.js";
-import utils from "../services/utils.js";
+import utils, { isElectron } from "../services/utils.js";
 import type { NoteType } from "../entities/fnote.js";
 import type TypeWidget from "./type_widgets/type_widget.js";
 import { MermaidTypeWidget } from "./type_widgets/mermaid.js";
@@ -303,18 +303,26 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
             message: t("note_detail.printing"),
             id: "printing"
         });
-        const iframe = document.createElement('iframe');
-        iframe.src = `?print#${this.notePath}`;
-        iframe.className = "print-iframe";
-        document.body.appendChild(iframe);
-        iframe.onload = () => {
-            if (!iframe.contentWindow) return;
-            iframe.contentWindow.addEventListener("note-ready", () => {
-                toast.closePersistent("printing");
-                iframe.contentWindow?.print();
-                document.body.removeChild(iframe);
+
+        if (isElectron()) {
+            const { ipcRenderer } = utils.dynamicRequire("electron");
+            ipcRenderer.send("print-note", {
+                notePath: this.notePath
             });
-        };
+        } else {
+            const iframe = document.createElement('iframe');
+            iframe.src = `?print#${this.notePath}`;
+            iframe.className = "print-iframe";
+            document.body.appendChild(iframe);
+            iframe.onload = () => {
+                if (!iframe.contentWindow) return;
+                iframe.contentWindow.addEventListener("note-ready", () => {
+                    toast.closePersistent("printing");
+                    iframe.contentWindow?.print();
+                    document.body.removeChild(iframe);
+                });
+            };
+        }
     }
 
     async exportAsPdfEvent() {

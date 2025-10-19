@@ -12,6 +12,8 @@ import type { App, BrowserWindowConstructorOptions, BrowserWindow, WebContents }
 import { formatDownloadTitle, isDev, isMac, isWindows } from "./utils.js";
 import { t } from "i18next";
 import { RESOURCE_DIR } from "./resource_dir.js";
+import { PerformanceObserverEntryList } from "perf_hooks";
+import options from "./options.js";
 
 // Prevent the window being garbage collected
 let mainWindow: BrowserWindow | null;
@@ -67,11 +69,37 @@ electron.ipcMain.on("create-extra-window", (event, arg) => {
     createExtraWindow(arg.extraWindowHash);
 });
 
+interface PrintOpts {
+    notePath: string;
+}
+
 interface ExportAsPdfOpts {
     title: string;
     landscape: boolean;
     pageSize: "A0" | "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "Legal" | "Letter" | "Tabloid" | "Ledger";
 }
+
+electron.ipcMain.on("print-note", async (e, { notePath }: PrintOpts) => {
+    const browserWindow = new electron.BrowserWindow({
+        show: false,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+            offscreen: true,
+            session: e.sender.session
+        },
+    });
+    await browserWindow.loadURL(`http://127.0.0.1:${port}/?print#${notePath}`);
+    await browserWindow.webContents.executeJavaScript(`
+        new Promise(resolve => {
+            if (window._noteReady) return resolve();
+            window.addEventListener("note-ready", () => resolve());
+        });
+    `);
+    browserWindow.webContents.print({}, () => {
+        browserWindow.destroy();
+    });
+});
 
 electron.ipcMain.on("export-as-pdf", async (e, opts: ExportAsPdfOpts) => {
     const browserWindow = electron.BrowserWindow.fromWebContents(e.sender);
