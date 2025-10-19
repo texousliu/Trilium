@@ -16,14 +16,10 @@ const darkThemeColorMinLightness = readCssVar(
                                     ).asNumber(50);
 
 function createClassForColor(colorString: string | null) {
-    if (!colorString?.trim()) {
-        return "";
-    }
+    if (!colorString?.trim()) return "";
 
     const color = parseColor(colorString);
-    if (!color) {
-        return;
-    }
+    if (!color) return "";
 
     const className = `color-${color.hex().substring(1)}`;
 
@@ -54,7 +50,7 @@ function parseColor(color: string) {
     }
 }
 
-/** 
+/**
  * Returns a pair of colors — one optimized for light themes and the other for dark themes, derived
  * from the specified color to maintain sufficient contrast with each theme.
  * The adjustment is performed by limiting the color’s lightness in the CIELAB color space,
@@ -66,7 +62,7 @@ function adjustColorLightness(color: ColorInstance, lightThemeMaxLightness: numb
 
     // For the light theme, limit the maximum lightness
     const lightThemeColor = labColor.l(Math.min(lightness, lightThemeMaxLightness)).hex();
-    
+
     // For the dark theme, limit the minimum lightness
     const darkThemeColor = labColor.l(Math.max(lightness, darkThemeMinLightness)).hex();
 
