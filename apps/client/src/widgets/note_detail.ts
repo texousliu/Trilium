@@ -141,6 +141,13 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
     doRender() {
         this.$widget = $(TPL);
         this.contentSized();
+
+        if (utils.isElectron()) {
+            const { ipcRenderer } = utils.dynamicRequire("electron");
+            ipcRenderer.on("print-done", () => {
+                toast.closePersistent("printing");
+            });
+        }
     }
 
     async refresh() {
@@ -329,6 +336,12 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
         if (!this.noteContext?.isActive() || !this.note || !this.notePath) {
             return;
         }
+
+        toast.showPersistent({
+            icon: "bx bx-loader-circle bx-spin",
+            message: t("note_detail.printing_pdf"),
+            id: "printing"
+        });
 
         const { ipcRenderer } = utils.dynamicRequire("electron");
         ipcRenderer.send("export-as-pdf", {

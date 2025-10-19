@@ -89,7 +89,57 @@ electron.ipcMain.on("print-note", async (e, { notePath }: PrintOpts) => {
         } else {
             electron.dialog.showErrorBox(t("pdf.unable-to-print"), failureReason);
         }
+        e.sender.send("print-done");
     });
+});
+
+electron.ipcMain.on("export-as-pdf", async (e, { title, notePath, landscape, pageSize }: ExportAsPdfOpts) => {
+    async function print() {
+        const browserWindow = await getBrowserWindowForPrinting(e, notePath);
+
+        const filePath = electron.dialog.showSaveDialogSync(browserWindow, {
+            defaultPath: formatDownloadTitle(title, "file", "application/pdf"),
+            filters: [
+                {
+                    name: t("pdf.export_filter"),
+                    extensions: ["pdf"]
+                }
+            ]
+        });
+        if (!filePath) return;
+
+        let buffer: Buffer;
+        try {
+            buffer = await browserWindow.webContents.printToPDF({
+                landscape,
+                pageSize,
+                generateDocumentOutline: true,
+                generateTaggedPDF: true,
+                printBackground: true,
+                displayHeaderFooter: true,
+                headerTemplate: `<div></div>`,
+                footerTemplate: `
+                    <div class="pageNumber" style="width: 100%; text-align: center; font-size: 10pt;">
+                    </div>
+                `
+            });
+        } catch (e) {
+            electron.dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-export-message"));
+            return;
+        }
+
+        try {
+            await fs.writeFile(filePath, buffer);
+        } catch (e) {
+            electron.dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-save-message"));
+            return;
+        }
+
+        electron.shell.openPath(filePath);
+    }
+
+    await print();
+    e.sender.send("print-done");
 });
 
 async function getBrowserWindowForPrinting(e: IpcMainEvent, notePath: string) {
@@ -111,52 +161,6 @@ async function getBrowserWindowForPrinting(e: IpcMainEvent, notePath: string) {
     `);
     return browserWindow;
 }
-
-electron.ipcMain.on("export-as-pdf", async (e, { title, notePath, landscape, pageSize }: ExportAsPdfOpts) => {
-    const browserWindow = await getBrowserWindowForPrinting(e, notePath);
-
-    const filePath = electron.dialog.showSaveDialogSync(browserWindow, {
-        defaultPath: formatDownloadTitle(title, "file", "application/pdf"),
-        filters: [
-            {
-                name: t("pdf.export_filter"),
-                extensions: ["pdf"]
-            }
-        ]
-    });
-    if (!filePath) {
-        return;
-    }
-
-    let buffer: Buffer;
-    try {
-        buffer = await browserWindow.webContents.printToPDF({
-            landscape,
-            pageSize,
-            generateDocumentOutline: true,
-            generateTaggedPDF: true,
-            printBackground: true,
-            displayHeaderFooter: true,
-            headerTemplate: `<div></div>`,
-            footerTemplate: `
-                <div class="pageNumber" style="width: 100%; text-align: center; font-size: 10pt;">
-                </div>
-            `
-        });
-    } catch (e) {
-        electron.dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-export-message"));
-        return;
-    }
-
-    try {
-        await fs.writeFile(filePath, buffer);
-    } catch (e) {
-        electron.dialog.showErrorBox(t("pdf.unable-to-export-title"), t("pdf.unable-to-save-message"));
-        return;
-    }
-
-    electron.shell.openPath(filePath);
-});
 
 async function createMainWindow(app: App) {
     if ("setUserTasks" in app) {

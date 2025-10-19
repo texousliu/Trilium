@@ -1723,7 +1723,8 @@
   },
   "note_detail": {
     "could_not_find_typewidget": "Could not find typeWidget for type '{{type}}'",
-    "printing": "Printing in progress..."
+    "printing": "Printing in progress...",
+    "printing_pdf": "Exporting to PDF in progress..."
   },
   "note_title": {
     "placeholder": "type note's title here..."
