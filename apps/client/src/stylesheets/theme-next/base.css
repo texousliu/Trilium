@@ -95,7 +95,7 @@
     --tree-item-light-theme-max-color-lightness: 60;
     
     /* The minimum perceptual lightness for the custom color in the dark theme (%): */
-    --tree-item-dark-theme-min-color-lightness: 60;
+    --tree-item-dark-theme-min-color-lightness: 65;
 }
 
 body.backdrop-effects-disabled {

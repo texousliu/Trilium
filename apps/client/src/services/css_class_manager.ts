@@ -72,13 +72,13 @@ function adjustColorLightness(color: ColorInstance, lightThemeMaxLightness: numb
 
     let darkThemeBackgroundColor = "unset";
     let lightThemeBackgroundColor = "unset";
-    
+
     const hslColor = color.hsl();
     const hue = hslColor.hue();
 
     if (color.saturationl() > 0) {
         darkThemeBackgroundColor = Color({h: hue, s: 20, l: 33, alpha: .4}).hexa();
-        lightThemeBackgroundColor = Color({h: hue, s: 100, l: 25, alpha: .1}).hexa();
+        lightThemeBackgroundColor = Color({h: hue, s: 37, l: 89, alpha: 1}).hexa();
     }
 
     return {lightThemeColor, lightThemeBackgroundColor, darkThemeColor, darkThemeBackgroundColor};
