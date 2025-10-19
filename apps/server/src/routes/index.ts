@@ -20,7 +20,6 @@ type View = "desktop" | "mobile" | "print";
 
 function index(req: Request, res: Response) {
     const view = getView(req);
-    console.log("Got view ", view);
     const options = optionService.getOptionMap();
 
     //'overwrite' set to false (default) => the existing token will be re-used and validated
@@ -68,7 +67,6 @@ function index(req: Request, res: Response) {
 }
 
 function getView(req: Request): View {
-    console.log("Got ", req.query);
     // Special override for printing.
     if ("print" in req.query) {
         return "print";
