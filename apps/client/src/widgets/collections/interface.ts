@@ -16,4 +16,5 @@ export interface ViewModeProps<T extends object> {
     viewConfig: T | undefined;
     saveConfig(newConfig: T): void;
     media: ViewModeMedia;
+    onReady(): void;
 }

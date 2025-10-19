@@ -2,6 +2,7 @@ import FNote from "./entities/fnote";
 import { render } from "preact";
 import { CustomNoteList } from "./widgets/collections/NoteList";
 import "./print.css";
+import { useCallback, useRef } from "preact/hooks";
 
 async function main() {
     const notePath = window.location.hash.substring(1);
@@ -12,10 +13,25 @@ async function main() {
     const note = await froca.getNote(noteId);
 
     if (!note) return;
-    render(getElementForNote(note), document.body);
+    render(<App note={note} />, document.body);
 }
 
-function getElementForNote(note: FNote) {
+function App({ note }: { note: FNote }) {
+    return (
+        <>
+            <ContentRenderer note={note} />
+        </>
+    );
+}
+
+function ContentRenderer({ note }: { note: FNote }) {
+    const sentReadyEvent = useRef(false);
+    const onReady = useCallback(() => {
+        if (sentReadyEvent.current) return;
+        window.dispatchEvent(new Event("note-ready"));
+        sentReadyEvent.current = true;
+    }, []);
+
     // Collections.
     if (note.type === "book") {
         return <CustomNoteList
@@ -25,6 +41,7 @@ function getElementForNote(note: FNote) {
             ntxId="print"
             highlightedTokens={null}
             media="print"
+            onReady={onReady}
         />;
     }
 

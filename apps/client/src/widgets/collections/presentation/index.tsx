@@ -14,7 +14,7 @@ import { t } from "../../../services/i18n";
 import { DEFAULT_THEME, loadPresentationTheme } from "./themes";
 import FNote from "../../../entities/fnote";
 
-export default function PresentationView({ note, noteIds, media }: ViewModeProps<{}>) {
+export default function PresentationView({ note, noteIds, media, onReady }: ViewModeProps<{}>) {
     const [ presentation, setPresentation ] = useState<PresentationModel>();
     const containerRef = useRef<HTMLDivElement>(null);
     const [ api, setApi ] = useState<Reveal.Api>();
@@ -32,6 +32,14 @@ export default function PresentationView({ note, noteIds, media }: ViewModeProps
     });
 
     useLayoutEffect(refresh, [ note, noteIds ]);
+
+    useEffect(() => {
+        // We need to wait for Reveal.js to initialize (by setting api) and for the presentation to become available.
+        if (api && presentation) {
+            // Timeout is necessary because it otherwise can cause flakiness by rendering only the first slide.
+            setTimeout(onReady, 200);
+        }
+    }, [ api, presentation ]);
 
     if (!presentation || !stylesheets) return;
     const content = (

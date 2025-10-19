@@ -23,9 +23,10 @@ interface NoteListProps {
     isEnabled: boolean;
     ntxId: string | null | undefined;
     media: ViewModeMedia;
+    onReady: () => void;
 }
 
-export default function NoteList<T extends object>(props: Pick<NoteListProps, "displayOnlyCollections" | "media">) {
+export default function NoteList<T extends object>(props: Pick<NoteListProps, "displayOnlyCollections" | "media" | "onReady">) {
     const { note, noteContext, notePath, ntxId } = useNoteContext();
     const isEnabled = noteContext?.hasNoteList();
     return <CustomNoteList note={note} isEnabled={!!isEnabled} notePath={notePath} ntxId={ntxId} {...props} />

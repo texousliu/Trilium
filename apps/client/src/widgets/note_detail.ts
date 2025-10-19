@@ -297,8 +297,19 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
             return;
         }
 
-        // Trigger in timeout to dismiss the menu while printing.
-        setTimeout(window.print, 0);
+        const iframe = document.createElement('iframe');
+        iframe.src = `?print#${this.notePath}`;
+        iframe.className = "print-iframe";
+        document.body.appendChild(iframe);
+        iframe.onload = () => {
+            console.log("Got ", iframe, iframe.contentWindow);
+            if (iframe.contentWindow) {
+                iframe.contentWindow.addEventListener("note-ready", () => {
+                    iframe.contentWindow?.print();
+                    document.body.removeChild(iframe);
+                });
+            }
+        };
     }
 
     async exportAsPdfEvent() {
