@@ -84,6 +84,7 @@ body ::-webkit-calendar-picker-indicator {
 
 #left-pane span.fancytree-node {
     --custom-color: var(--dark-theme-custom-color);
+    --custom-bg-color: var(--dark-theme-custom-bg-color);
 }
 
 .excalidraw.theme--dark {

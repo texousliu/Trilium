@@ -658,7 +658,7 @@ body.layout-vertical.background-effects div.quick-search .dropdown-menu {
     inset-inline-start: var(--left-pane-item-selected-shadow-size);
     bottom: var(--left-pane-item-selected-shadow-size);
     inset-inline-end: var(--left-pane-item-selected-shadow-size);
-    background: var(--left-pane-item-selected-background) !important;
+    background: var(--custom-bg-color, var(--left-pane-item-selected-background)) !important;
     box-shadow: var(--left-pane-item-selected-shadow);
     border-radius: 6px;
     animation: left-pane-item-select 200ms ease-out;

@@ -84,4 +84,5 @@ html {
 
 #left-pane span.fancytree-node {
     --custom-color: var(--light-theme-custom-color);
+    --custom-bg-color: var(--light-theme-custom-bg-color);
 }
