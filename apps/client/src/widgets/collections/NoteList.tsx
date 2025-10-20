@@ -85,7 +85,7 @@ export function CustomNoteList<T extends object>({ note, isEnabled: shouldEnable
     }
 
     return (
-        <div ref={widgetRef} className={`note-list-widget component ${isFullHeight ? "full-height" : ""}`}>
+        <div ref={widgetRef} className={`note-list-widget component ${isFullHeight && isEnabled ? "full-height" : ""}`}>
             {props && isEnabled && (
                 <div className="note-list-widget-content">
                     {getComponentByViewType(viewType, props)}
