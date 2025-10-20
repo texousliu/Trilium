@@ -1,11 +1,11 @@
 {
   "about": {
-    "title": "O notatkach Trilium",
+    "title": "O Trilium Notes",
     "homepage": "Strona główna:",
     "app_version": "Wersja aplikacji:",
     "db_version": "Wersja bazy danych:",
     "sync_version": "Wersja synchronizacji:",
-    "build_date": "Zbudowano:",
+    "build_date": "Data kompilacji:",
     "build_revision": "Wersja:",
     "data_directory": "Katalog z danymi:"
   },
