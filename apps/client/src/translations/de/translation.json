@@ -646,7 +646,8 @@
     "about": "Über Trilium Notes",
     "logout": "Abmelden",
     "show-cheatsheet": "Cheatsheet anzeigen",
-    "toggle-zen-mode": "Zen Modus"
+    "toggle-zen-mode": "Zen Modus",
+    "new-version-available": "Neues Update verfügbar"
   },
   "sync_status": {
     "unknown": "<p>Der Synchronisations-Status wird bekannt, sobald der nächste Synchronisierungsversuch gestartet wird.</p><p>Klicke, um eine Synchronisierung jetzt auszulösen.</p>",

@@ -32,12 +32,11 @@ Trilium Notes
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
-## ⏬ Download
-- [Latest release](https://github.com/TriliumNext/Trilium/releases/latest) –
-  stable version, recommended for most users.
-- [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
-  unstable development version, updated daily with the latest features and
-  fixes.
+## ⏬ ダウンロード
+- [最新リリース](https://github.com/TriliumNext/Trilium/releases/latest) –
+  安定バージョン。ほとんどのユーザーに推奨されます。
+- [ナイトリービルド](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
+  不安定な開発バージョン。最新の機能と修正が毎日更新されます。
 
 ## 📚 ドキュメント
 
