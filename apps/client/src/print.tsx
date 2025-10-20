@@ -33,6 +33,10 @@ function App({ note, noteId }: { note: FNote | null | undefined, noteId: string 
 
     if (!note || !props) return <Error404 noteId={noteId} />
 
+    useLayoutEffect(() => {
+        document.body.dataset.noteType = note.type;
+    }, [ note ]);
+
     return (
         <>
             {note.type === "book"

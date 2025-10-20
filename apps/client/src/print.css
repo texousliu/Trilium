@@ -23,7 +23,7 @@ body {
     contain: none !important;
 }
 
-.ck-content {
+body[data-note-type="text"] .ck-content {
     font-size: var(--print-font-size);
     text-align: justify;
 }
