@@ -1,0 +1,111 @@
+<figure class="image">
+  <img style="aspect-ratio:951/432;" src="Printing & Exporting as PD.png"
+  width="951" height="432">
+  <figcaption>Screenshot of the note contextual menu indicating the “Export as PDF”
+    option.</figcaption>
+</figure>
+<h2>Printing</h2>
+<p>This feature allows printing of notes. It works on both the desktop client,
+  but also on the web.</p>
+<p>Note that not all note types are printable as of now. We do plan to increase
+  the coverage of supported note types in the future.</p>
+<p>To print a note, select the
+  <img src="1_Printing & Exporting as PD.png"
+  width="29" height="31">button to the right of the note and select <em>Print note</em>. Depending
+  on the size and type of the note, this can take up to a few seconds. Afterwards
+  you will be redirected to the system/browser printing dialog.</p>
+<aside
+class="admonition note">
+  <p>Printing and exporting as PDF are not perfect. Due to technical limitations,
+    and sometimes even browser glitches the text might appear cut off in some
+    circumstances.&nbsp;</p>
+  </aside>
+  <h2>Reporting issues with the rendering</h2>
+  <p>Should you encounter any visual issues in the resulting PDF file (e.g.
+    a table does not fit properly, there is cut off text, etc.) feel free to
+    <a
+    href="#root/_help_wy8So3yZZlH9">report the issue</a>. In this case, it's best to offer a sample note (click
+      on the
+      <img src="1_Printing & Exporting as PD.png" width="29" height="31">button, select Export note → This note and all of its descendants → HTML
+      in ZIP archive). Make sure not to accidentally leak any personal information.</p>
+  <p>Consider adjusting font sizes and using <a href="#root/pOsGYCXsbNQG/KSZ04uQ2D1St/iPIMuisry3hd/_help_CohkqWQC1iBv">page breaks</a> to
+    work around the layout.</p>
+  <h2>Exporting as PDF</h2>
+  <p>On the desktop application of Trilium it is possible to export a note
+    as PDF. On the server or PWA (mobile), the option is not available due
+    to technical constraints and it will be hidden.</p>
+  <p>To print a note, select the
+    <img src="1_Printing & Exporting as PD.png">button to the right of the note and select <em>Export as PDF</em>. Afterwards
+    you will be prompted to select where to save the PDF file.</p>
+  <h3>Automatic opening of the file</h3>
+  <p>When the PDF is exported, it is automatically opened with the system default
+    application for easy preview.</p>
+  <p>Note that if you are using Linux with the GNOME desktop environment, sometimes
+    the default application might seem incorrect (such as opening in GIMP).
+    This is because it uses Gnome's “Recommended applications” list.</p>
+  <p>To solve this, you can change the recommended application for PDFs via
+    this command line. First, list the available applications via <code>gio mime application/pdf</code> and
+    then set the desired one. For example to use GNOME's Evince:</p><pre><code class="language-text-x-trilium-auto">gio mime application/pdf</code></pre>
+  <h3>Customizing exporting as PDF</h3>
+  <p>When exporting to PDF, there are no customizable settings such as page
+    orientation, size. However, there are a few&nbsp;<a class="reference-link"
+    href="#root/pOsGYCXsbNQG/tC7s2alapj8V/_help_zEY4DaJG4YT5">Attributes</a>&nbsp;to
+    adjust some of the settings:</p>
+  <ul>
+    <li data-list-item-id="e76a765fe309058890d4f4d3e63bca578">To print in landscape mode instead of portrait (useful for big diagrams
+      or slides), add <code>#printLandscape</code>.</li>
+    <li data-list-item-id="e78123a3a12954d7c9f520f4e75ed375d">By default, the resulting PDF will be in Letter format. It is possible
+      to adjust it to another page size via the <code>#printPageSize</code> attribute,
+      with one of the following values: <code>A0</code>, <code>A1</code>, <code>A2</code>, <code>A3</code>, <code>A4</code>, <code>A5</code>, <code>A6</code>, <code>Legal</code>, <code>Letter</code>, <code>Tabloid</code>, <code>Ledger</code>.</li>
+  </ul>
+  <aside class="admonition note">
+    <p>These options have no effect when used with the printing feature, since
+      the user-defined settings are used instead.</p>
+  </aside>
+  <h2>Keyboard shortcut</h2>
+  <p>It's possible to trigger both printing and export as PDF from the keyboard
+    by going to&nbsp;<em>Keyboard shortcuts</em>&nbsp;in&nbsp;<a class="reference-link"
+    href="#root/_help_4TIF1oA4VQRO">Options</a>&nbsp;and assigning a key combination
+    for:</p>
+  <ul>
+    <li class="ck-list-marker-italic" data-list-item-id="e52b4441f2a3af7773585b19c8f796c8d"><em>Print Active Note</em>
+    </li>
+    <li class="ck-list-marker-italic" data-list-item-id="e40e1f6f480c7857100f64c2f63e062fb"><em>Export Active Note as PDF</em>
+    </li>
+  </ul>
+  <h2>Constraints &amp; limitations</h2>
+  <p>Not all&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/_help_KSZ04uQ2D1St">Note Types</a>&nbsp;are
+    supported when printing, in which case the <em>Print</em> and <em>Export as PDF</em> options
+    will be disabled.</p>
+  <ul>
+    <li data-list-item-id="e448a833da1bb1643181c72779382d1b6">For&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/KSZ04uQ2D1St/_help_6f9hih2hXXZk">Code</a>&nbsp;notes:
+      <ul>
+        <li data-list-item-id="e6b699104a21930de7c2618123d0d5750">Line numbers are not printed.</li>
+        <li data-list-item-id="e342cba939534f0989c9620520c7b87a3">Syntax highlighting is enabled, however a default theme (Visual Studio)
+          is enforced.</li>
+      </ul>
+    </li>
+    <li data-list-item-id="ea23948a21d6ad2a01d70dfbdfa9bd62f">For&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/KSZ04uQ2D1St/_help_GTwFsgaA0lCt">Collections</a>:
+      <ul>
+        <li data-list-item-id="e387ee52424d8b78fd61c3a1e0d395d3e">Only&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/KSZ04uQ2D1St/GTwFsgaA0lCt/_help_zP3PMqaG71Ct">Presentation View</a>&nbsp;is
+          currently supported.</li>
+        <li data-list-item-id="e94fa0cced6a7668c96cf7513557f2906">We plan to add support for all the collection types at some point.</li>
+      </ul>
+    </li>
+    <li data-list-item-id="e8b17c931e05f9d579767536088a108da">Using&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/pKK96zzmvBGf/_help_AlhDUqhENtH7">Custom app-wide CSS</a>&nbsp;for
+      printing is not longer supported, due to a more stable but isolated mechanism.
+      <ul>
+        <li data-list-item-id="eae91219e277cc2366d86d47291ed9cec">We plan to introduce a new mechanism specifically for a print CSS.</li>
+      </ul>
+    </li>
+  </ul>
+  <h2>Under the hood</h2>
+  <p>Both printing and exporting as PDF use the same mechanism: a note is rendered
+    individually in a separate webpage that is then sent to the browser or
+    the Electron application either for printing or exporting as PDF.</p>
+  <p>The webpage that renders a single note can actually be accessed in a web
+    browser. For example <code>http://localhost:8080/#root/WWRGzqHUfRln/RRZsE9Al8AIZ?ntxId=0o4fzk</code> becomes <code>http://localhost:8080/?print#root/WWRGzqHUfRln/RRZsE9Al8AIZ</code>.</p>
+  <p>Accessing the print note in a web browser allows for easy debugging to
+    understand why a particular note doesn't render well. The mechanism for
+    rendering is similar to the one used in&nbsp;<a class="reference-link"
+    href="#root/pOsGYCXsbNQG/gh7bpGYxajRS/BFs8mudNFgCS/_help_0ESUbbAxVnoK">Note List</a>.</p>
