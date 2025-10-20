@@ -164,6 +164,7 @@
     "importIntoNote": "Import into note",
     "chooseImportFile": "Choose import file",
     "importDescription": "Content of the selected file(s) will be imported as child note(s) into",
+    "importZipRecommendation": "Upload a .zip file to seamlessly import an entire directory hierarchy at once.",
     "options": "Options",
     "safeImportTooltip": "Trilium <code>.zip</code> export files can contain executable scripts which may contain harmful behavior. Safe import will deactivate automatic execution of all imported scripts. Uncheck \"Safe import\" only if the imported archive is supposed to contain executable scripts and you completely trust the contents of the import file.",
     "safeImport": "Safe import",
