@@ -302,7 +302,7 @@
     "showDevTools": "開発者ツールを表示",
     "showSQLConsole": "SQLコンソールを表示",
     "other": "その他",
-    "quickSearch": "クイックサーチにフォーカス",
+    "quickSearch": "クイック検索にフォーカス",
     "inPageSearch": "ページ内検索",
     "showJumpToNoteDialog": "<a class=\"external\" href=\"https://triliumnext.github.io/Docs/Wiki/note-navigation.html#jump-to-note\">「ジャンプ先」ダイアログ</a>を表示",
     "moveNoteUpDown": "ノートリストでノートを上/下に移動",
@@ -1189,7 +1189,7 @@
     "options": "オプション"
   },
   "quick-search": {
-    "placeholder": "クイックサーチ",
+    "placeholder": "クイック検索",
     "searching": "検索中...",
     "no-results": "結果は見つかりませんでした",
     "more-results": "... および {{number}} 件の他の結果。",
@@ -1882,7 +1882,9 @@
     "window-on-top": "ウィンドウを最前面に維持"
   },
   "note_detail": {
-    "could_not_find_typewidget": "タイプ {{type}} の typeWidget が見つかりませんでした"
+    "could_not_find_typewidget": "タイプ {{type}} の typeWidget が見つかりませんでした",
+    "printing": "印刷中です...",
+    "printing_pdf": "PDF へのエクスポート中です..."
   },
   "watched_file_update_status": {
     "ignore_this_change": "この変更を無視する",
