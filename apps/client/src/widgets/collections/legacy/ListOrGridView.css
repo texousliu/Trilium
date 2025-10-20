@@ -109,7 +109,7 @@
 .note-list.list-view .note-path {
     margin-left: 0.5em;
     vertical-align: middle;
-    color: var(--muted-color);
+    opacity: 0.5;
 }
 
 /* #region Grid view */
