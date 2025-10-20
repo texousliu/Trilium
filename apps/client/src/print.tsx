@@ -18,18 +18,19 @@ async function main() {
     const froca = (await import("./services/froca")).default;
     const note = await froca.getNote(noteId);
 
-    if (!note) return;
-    render(<App note={note} />, document.body);
+    render(<App note={note} noteId={noteId} />, document.body);
 }
 
-function App({ note }: { note: FNote }) {
+function App({ note, noteId }: { note: FNote | null | undefined, noteId: string }) {
     const sentReadyEvent = useRef(false);
     const onReady = useCallback(() => {
         if (sentReadyEvent.current) return;
         window.dispatchEvent(new Event("note-ready"));
         sentReadyEvent.current = true;
     }, []);
-    const props: RendererProps = { note, onReady };
+    const props: RendererProps | undefined | null = note && { note, onReady };
+
+    if (!note || !props) return <Error404 noteId={noteId} />
 
     return (
         <>
@@ -72,6 +73,15 @@ function CollectionRenderer({ note, onReady }: RendererProps) {
         media="print"
         onReady={onReady}
     />;
+}
+
+function Error404({ noteId }: { noteId: string }) {
+    return (
+        <main>
+            <p>The note you are trying to print could not be found.</p>
+            <small>{noteId}</small>
+        </main>
+    )
 }
 
 main();
