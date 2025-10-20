@@ -140,7 +140,7 @@ export function useNoteIds(note: FNote | null | undefined, viewType: ViewTypeOpt
     }
 
     async function getNoteIds(note: FNote) {
-        if (viewType === "list" || viewType === "grid") {
+        if (viewType === "list" || viewType === "grid" || viewType === "table") {
             return note.getChildNoteIds();
         } else {
             return await note.getSubtreeNoteIds(includeArchived);
