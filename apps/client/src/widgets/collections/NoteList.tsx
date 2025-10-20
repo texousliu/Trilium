@@ -39,7 +39,7 @@ export function SearchNoteList<T extends object>(props: Omit<NoteListProps, "isE
 export function CustomNoteList<T extends object>({ note, isEnabled: shouldEnable, notePath, highlightedTokens, displayOnlyCollections, ntxId, onReady, ...restProps }: NoteListProps) {
     const widgetRef = useRef<HTMLDivElement>(null);
     const viewType = useNoteViewType(note);
-    const noteIds = useNoteIds(note, viewType, ntxId);
+    const noteIds = useNoteIds(shouldEnable ? note : null, viewType, ntxId);
     const isFullHeight = (viewType && viewType !== "list" && viewType !== "grid");
     const [ isIntersecting, setIsIntersecting ] = useState(false);
     const shouldRender = (isFullHeight || isIntersecting || note?.type === "book");
