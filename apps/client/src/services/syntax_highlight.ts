@@ -101,14 +101,13 @@ export async function ensureMimeTypesForHighlighting(mimeTypeHint?: string) {
 export async function loadHighlightingTheme(themeName: string) {
     const themePrefix = "default:";
     let theme: Theme | null = null;
-    if (themeName.includes(themePrefix)) {
+    if (glob.device === "print") {
+        theme = Themes.vs;
+    } else if (themeName.includes(themePrefix)) {
         theme = Themes[themeName.substring(themePrefix.length)];
     }
-    if (!theme) {
-        theme = Themes.default;
-    }
 
-    await loadTheme(theme);
+    await loadTheme(theme ?? Themes.default);
 }
 
 /**
