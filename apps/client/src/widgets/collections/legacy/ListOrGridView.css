@@ -106,6 +106,12 @@
     text-align: center;
 }
 
+.note-list.list-view .note-path {
+    margin-left: 0.5em;
+    vertical-align: middle;
+    color: var(--muted-color);
+}
+
 /* #region Grid view */
 .note-list.grid-view .note-list-container {
     display: flex;
