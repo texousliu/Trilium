@@ -45,12 +45,15 @@ function SingleNoteRenderer({ note, onReady }: RendererProps) {
     const containerRef = useRef<HTMLDivElement>(null);
 
     useLayoutEffect(() => {
-        content_renderer.getRenderedContent(note, {
-            noChildrenList: true
-        }).then(({$renderedContent}) => {
+        async function load() {
+            if (note.type === "text") {
+                await import("@triliumnext/ckeditor5/src/theme/ck-content.css");
+            }
+            const { $renderedContent } = await content_renderer.getRenderedContent(note, { noChildrenList: true });
             containerRef.current?.replaceChildren(...$renderedContent);
-            requestAnimationFrame(onReady);
-        });
+        }
+
+        load().then(() => requestAnimationFrame(onReady))
     }, [ note ]);
 
     return <>
