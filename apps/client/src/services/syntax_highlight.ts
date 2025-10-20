@@ -76,7 +76,7 @@ export async function ensureMimeTypesForHighlighting(mimeTypeHint?: string) {
 
     // Load theme.
     const currentThemeName = String(options.get("codeBlockTheme"));
-    loadHighlightingTheme(currentThemeName);
+    await loadHighlightingTheme(currentThemeName);
 
     // Load mime types.
     let mimeTypes: MimeType[];
@@ -98,7 +98,7 @@ export async function ensureMimeTypesForHighlighting(mimeTypeHint?: string) {
     highlightingLoaded = true;
 }
 
-export function loadHighlightingTheme(themeName: string) {
+export async function loadHighlightingTheme(themeName: string) {
     const themePrefix = "default:";
     let theme: Theme | null = null;
     if (themeName.includes(themePrefix)) {
@@ -108,7 +108,7 @@ export function loadHighlightingTheme(themeName: string) {
         theme = Themes.default;
     }
 
-    loadTheme(theme);
+    await loadTheme(theme);
 }
 
 /**
