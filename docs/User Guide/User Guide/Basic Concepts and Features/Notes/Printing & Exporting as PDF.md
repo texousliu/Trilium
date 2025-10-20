@@ -24,6 +24,9 @@ On the desktop application of Trilium it is possible to export a note as PDF. On
 
 To print a note, select the ![](1_Printing%20&%20Exporting%20as%20PD.png) button to the right of the note and select _Export as PDF_. Afterwards you will be prompted to select where to save the PDF file.
 
+> [!TIP]
+> Although direct export as PDF is not available in the browser version of the application, it's still possible to generate a PDF by selecting the _Print_ option instead and selecting “Save to PDF” as the printer (depending on the browser). Generally, Mozilla Firefox has better printing capabilities.
+
 ### Automatic opening of the file
 
 When the PDF is exported, it is automatically opened with the system default application for easy preview.
