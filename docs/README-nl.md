@@ -12,9 +12,9 @@
 # Trilium Notes
 
 ![GitHub Sponsoren](https://img.shields.io/github/sponsors/eliandoran)
-![LiberaPay patrons](https://img.shields.io/liberapay/patrons/ElianDoran)\
+![LiberaPay supporters](https://img.shields.io/liberapay/patrons/ElianDoran)\
 ![Docker Pulls](https://img.shields.io/docker/pulls/triliumnext/trilium)
-![GitHub Downloads (all assets, all
+![GitHub Downloads (alle bestanden, alle
 releases)](https://img.shields.io/github/downloads/triliumnext/trilium/total)\
 [![RelativeCI](https://badges.relative-ci.com/badges/Di5q7dz9daNDZ9UXi0Bp?branch=develop)](https://app.relative-ci.com/projects/Di5q7dz9daNDZ9UXi0Bp)
 [![Vertaling
@@ -25,13 +25,21 @@ status](https://hosted.weblate.org/widget/trilium/svg-badge.svg)](https://hosted
 | [Japanese](./docs/README-ja.md) | [Italian](./docs/README-it.md) |
 [Spanish](./docs/README-es.md)
 
-Trilium Notes is a free and open-source, cross-platform hierarchical note taking
-application with focus on building large personal knowledge bases.
+Trillium Notes is een gratis en open-source, platformonafhankelijke,
+hiërarchische notitie-applicatie die zich richt op het opbouwen van grote
+persoonlijke kennisbanken.
 
-See [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour) for
-quick overview:
+Bekijk [screenshots](https://triliumnext.github.io/Docs/Wiki/screenshot-tour)
+voor een snel overzicht:
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
+
+## ⏬ Download
+- [Latest release](https://github.com/TriliumNext/Trilium/releases/latest) –
+  stable version, recommended for most users.
+- [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
+  unstable development version, updated daily with the latest features and
+  fixes.
 
 ## 📚 Documentatie
 

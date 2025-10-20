@@ -30,6 +30,13 @@ Trilium Notes 是一款免费且开源、跨平台的阶层式笔记应用程序
 
 <a href="https://triliumnext.github.io/Docs/Wiki/screenshot-tour"><img src="./docs/app.png" alt="Trilium Screenshot" width="1000"></a>
 
+## ⏬ Download
+- [Latest release](https://github.com/TriliumNext/Trilium/releases/latest) –
+  stable version, recommended for most users.
+- [Nightly build](https://github.com/TriliumNext/Trilium/releases/tag/nightly) –
+  unstable development version, updated daily with the latest features and
+  fixes.
+
 ## 📖 文件
 
 **请访问我们完整的文档：[docs.triliumnotes.org](https://docs.triliumnotes.org/)**
