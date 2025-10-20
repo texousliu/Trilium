@@ -25,7 +25,8 @@ const VIEW_TYPE_MAPPINGS: Record<ViewTypeOptions, string> = {
 
 export default function CollectionPropertiesTab({ note }: TabContext) {
   const [ viewType, setViewType ] = useNoteLabel(note, "viewType");
-  const viewTypeWithDefault = (viewType ?? "grid") as ViewTypeOptions;
+  const defaultViewType = (note?.type === "search" ? "list" : "grid");
+  const viewTypeWithDefault = (viewType ?? defaultViewType) as ViewTypeOptions;
   const properties = bookPropertiesConfig[viewTypeWithDefault].properties;
 
   return (
