@@ -61,7 +61,11 @@ export async function applySingleBlockSyntaxHighlight($codeBlock: JQuery<HTMLEle
         highlightedText = highlightAuto(text);
     } else if (normalizedMimeType) {
         await ensureMimeTypesForHighlighting(normalizedMimeType);
-        highlightedText = highlight(text, { language: normalizedMimeType });
+        try {
+            highlightedText = highlight(text, { language: normalizedMimeType });
+        } catch (e) {
+            console.warn("Unable to apply syntax highlight.", e);
+        }
     }
 
     if (highlightedText) {
