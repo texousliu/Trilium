@@ -1,1 +1,9 @@
-{}
+{
+    "get-started": {
+        "title": "Aan de slag",
+        "desktop_title": "Download de desktop applicatie (v{{version}})",
+        "architecture": "Architectuur:",
+        "older_releases": "Bekijk oudere versies",
+        "server_title": "Richt een server in voor toegang vanaf meerdere apparaten"
+    }
+}

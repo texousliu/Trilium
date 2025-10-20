@@ -268,9 +268,13 @@
  * Dark color scheme tweaks
  */
 
-#left-pane span.fancytree-node {
+#left-pane .fancytree-node.tinted {
     --custom-color: var(--dark-theme-custom-color);
-    --custom-bg-color: var(--dark-theme-custom-bg-color);
+
+    /* The background color of the active item in the note tree.
+     * The --custom-color-hue variable contains the hue of the user-selected note color.
+     * This value is unset for gray tones. */
+    --custom-bg-color: hsl(var(--custom-color-hue), 20%, 33%, 0.4);
 }
 
 body ::-webkit-calendar-picker-indicator {

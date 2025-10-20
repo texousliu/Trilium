@@ -6,7 +6,7 @@
     "db_version": "Wersja bazy danych:",
     "sync_version": "Wersja synchronizacji:",
     "build_date": "Zbudowano:",
-    "build_revision": "Rewizja zbudowania:",
+    "build_revision": "Wersja:",
     "data_directory": "Katalog z danymi:"
   },
   "toast": {

@@ -905,7 +905,7 @@ export default class NoteTreeWidget extends NoteContextAwareWidget {
         const colorClass = note.getColorClass();
 
         if (colorClass) {
-            extraClasses.push(colorClass);
+            extraClasses.push(...["tinted", colorClass]);
         }
 
         return extraClasses.join(" ");
