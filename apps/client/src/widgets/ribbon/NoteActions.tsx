@@ -47,11 +47,11 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
   const canBeConvertedToAttachment = note?.isEligibleForConversionToAttachment();
   const isSearchable = ["text", "code", "book", "mindMap", "doc"].includes(note.type);
   const isInOptions = note.noteId.startsWith("_options");
-  const isPrintable = ["text", "code"].includes(note.type);
+  const isPrintable = ["text", "code"].includes(note.type) || (note.type === "book" && note.getLabelValue("viewType") === "presentation");
   const isElectron = getIsElectron();
   const isMac = getIsMac();
   const hasSource = ["text", "code", "relationMap", "mermaid", "canvas", "mindMap"].includes(note.type);
-  const isSearchOrBook = ["search", "book"].includes(note.type);  
+  const isSearchOrBook = ["search", "book"].includes(note.type);
 
   return (
     <Dropdown
@@ -74,7 +74,7 @@ function NoteContextMenu({ note, noteContext }: { note: FNote, noteContext?: Not
       <CommandItem icon="bx bx-export" text={t("note_actions.export_note")}
         disabled={isInOptions || note.noteId === "_backendLog"}
         command={() => noteContext?.notePath && parentComponent?.triggerCommand("showExportDialog", {
-          notePath: noteContext.notePath, 
+          notePath: noteContext.notePath,
           defaultType: "single"
         })} />
       <FormDropdownDivider />

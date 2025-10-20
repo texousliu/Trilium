@@ -19,7 +19,7 @@ This section presents the most important changes by version. For a full set of c
 *   v0.92.4:
     *   macOS binaries are now signed.
     *   <a class="reference-link" href="Note%20Types/Text.md">Text</a> notes can now have adjustable <a class="reference-link" href="Note%20Types/Text/Content%20language%20%26%20Right-to-le.md">Content language &amp; Right-to-left support</a>.
-    *   <a class="reference-link" href="Basic%20Concepts%20and%20Features/Notes/Export%20as%20PDF.md">Export as PDF</a>
+    *   <a class="reference-link" href="Basic%20Concepts%20and%20Features/Notes/Printing%20%26%20Exporting%20as%20PDF.md">Export as PDF</a>
     *   <a class="reference-link" href="Basic%20Concepts%20and%20Features/Zen%20mode.md">Zen mode</a>
     *   <a class="reference-link" href="Note%20Types/Collections/Calendar%20View.md">Calendar View</a>, allowing notes to be displayed in a monthly grid based on start and end dates.
 *   v0.91.5:
