@@ -23,7 +23,7 @@ interface NoteListProps {
     isEnabled: boolean;
     ntxId: string | null | undefined;
     media: ViewModeMedia;
-    onReady: () => void;
+    onReady?: () => void;
 }
 
 export default function NoteList<T extends object>(props: Pick<NoteListProps, "displayOnlyCollections" | "media" | "onReady">) {
@@ -36,7 +36,7 @@ export function SearchNoteList<T extends object>(props: Omit<NoteListProps, "isE
     return <CustomNoteList {...props} isEnabled={true} />
 }
 
-export function CustomNoteList<T extends object>({ note, isEnabled: shouldEnable, notePath, highlightedTokens, displayOnlyCollections, ntxId, ...restProps }: NoteListProps) {
+export function CustomNoteList<T extends object>({ note, isEnabled: shouldEnable, notePath, highlightedTokens, displayOnlyCollections, ntxId, onReady, ...restProps }: NoteListProps) {
     const widgetRef = useRef<HTMLDivElement>(null);
     const viewType = useNoteViewType(note);
     const noteIds = useNoteIds(note, viewType, ntxId);
@@ -79,6 +79,7 @@ export function CustomNoteList<T extends object>({ note, isEnabled: shouldEnable
             highlightedTokens,
             viewConfig: viewModeConfig[0],
             saveConfig: viewModeConfig[1],
+            onReady: onReady ?? (() => {}),
             ...restProps
         }
     }

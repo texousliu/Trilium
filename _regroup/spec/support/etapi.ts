@@ -1,4 +1,3 @@
-import type child_process from "child_process";
 import { describe, beforeAll, afterAll } from "vitest";
 
 let etapiAuthToken: string | undefined;
@@ -12,8 +11,6 @@ type SpecDefinitionsFunc = () => void;
 
 function describeEtapi(description: string, specDefinitions: SpecDefinitionsFunc): void {
     describe(description, () => {
-        let appProcess: ReturnType<typeof child_process.spawn>;
-
         beforeAll(async () => {});
 
         afterAll(() => {});
