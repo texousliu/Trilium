@@ -373,7 +373,8 @@
     "export_filter": "PDF 文件 (*.pdf)",
     "unable-to-export-message": "目前筆記無法被匯出為 PDF 。",
     "unable-to-export-title": "無法匯出為 PDF",
-    "unable-to-save-message": "所選檔案無法被寫入。請重試或選擇其他路徑。"
+    "unable-to-save-message": "所選檔案無法被寫入。請重試或選擇其他路徑。",
+    "unable-to-print": "無法列印筆記"
   },
   "tray": {
     "tooltip": "Trilium 筆記",
