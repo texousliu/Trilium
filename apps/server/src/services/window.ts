@@ -84,19 +84,18 @@ interface ExportAsPdfOpts {
 electron.ipcMain.on("print-note", async (e, { notePath }: PrintOpts) => {
     const browserWindow = await getBrowserWindowForPrinting(e, notePath);
     browserWindow.webContents.print({}, (success, failureReason) => {
-        if (success) {
-            browserWindow.destroy();
-        } else {
+        if (!success) {
             electron.dialog.showErrorBox(t("pdf.unable-to-print"), failureReason);
         }
         e.sender.send("print-done");
+        browserWindow.destroy();
     });
 });
 
 electron.ipcMain.on("export-as-pdf", async (e, { title, notePath, landscape, pageSize }: ExportAsPdfOpts) => {
-    async function print() {
-        const browserWindow = await getBrowserWindowForPrinting(e, notePath);
+    const browserWindow = await getBrowserWindowForPrinting(e, notePath);
 
+    async function print() {
         const filePath = electron.dialog.showSaveDialogSync(browserWindow, {
             defaultPath: formatDownloadTitle(title, "file", "application/pdf"),
             filters: [
@@ -138,8 +137,12 @@ electron.ipcMain.on("export-as-pdf", async (e, { title, notePath, landscape, pag
         electron.shell.openPath(filePath);
     }
 
-    await print();
-    e.sender.send("print-done");
+    try {
+        await print();
+    } finally {
+        e.sender.send("print-done");
+        browserWindow.destroy();
+    }
 });
 
 async function getBrowserWindowForPrinting(e: IpcMainEvent, notePath: string) {

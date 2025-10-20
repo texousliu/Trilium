@@ -59,6 +59,9 @@ declare global {
         process?: ElectronProcess;
         glob?: CustomGlobals;
 
+        /** On the printing endpoint, set to true when the note has fully loaded and is ready to be printed/exported as PDF. */
+        _noteReady?: boolean;
+
         EXCALIDRAW_ASSET_PATH?: string;
     }
 

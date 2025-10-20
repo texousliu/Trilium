@@ -26,6 +26,7 @@ function App({ note, noteId }: { note: FNote | null | undefined, noteId: string 
     const onReady = useCallback(() => {
         if (sentReadyEvent.current) return;
         window.dispatchEvent(new Event("note-ready"));
+        window._noteReady = true;
         sentReadyEvent.current = true;
     }, []);
     const props: RendererProps | undefined | null = note && { note, onReady };

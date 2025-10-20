@@ -322,7 +322,12 @@ export default class NoteDetailWidget extends NoteContextAwareWidget {
             iframe.className = "print-iframe";
             document.body.appendChild(iframe);
             iframe.onload = () => {
-                if (!iframe.contentWindow) return;
+                if (!iframe.contentWindow) {
+                    toast.closePersistent("printing");
+                    document.body.removeChild(iframe);
+                    return;
+                }
+
                 iframe.contentWindow.addEventListener("note-ready", () => {
                     toast.closePersistent("printing");
                     iframe.contentWindow?.print();
