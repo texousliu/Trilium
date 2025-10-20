@@ -4,7 +4,6 @@ import Alert from "./react/Alert";
 import { useNoteContext,  useTriliumEvent } from "./react/hooks";
 import "./search_result.css";
 import { SearchNoteList } from "./collections/NoteList";
-// import NoteListRenderer from "../services/note_list_renderer";
 
 enum SearchResultState {
     NO_RESULTS,
@@ -43,7 +42,7 @@ export default function SearchResult() {
     });
 
     return (
-        <div className="search-result-widget">
+        <div className={`search-result-widget ${!state ? "hidden-ext" : ""}`}>
             {state === SearchResultState.NOT_EXECUTED && (
                 <Alert type="info" className="search-not-executed-yet">{t("search_result.search_not_executed")}</Alert>
             )}
