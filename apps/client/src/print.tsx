@@ -1,7 +1,6 @@
 import FNote from "./entities/fnote";
 import { render } from "preact";
 import { CustomNoteList } from "./widgets/collections/NoteList";
-import "./print.css";
 import { useCallback, useLayoutEffect, useRef } from "preact/hooks";
 import content_renderer from "./services/content_renderer";
 
@@ -15,6 +14,7 @@ async function main() {
     const noteId = notePath.split("/").at(-1);
     if (!noteId) return;
 
+    await import("./print.css");
     const froca = (await import("./services/froca")).default;
     const note = await froca.getNote(noteId);
 
