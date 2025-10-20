@@ -329,7 +329,10 @@
     "force_full_sync_button": "فرض مزامنة كاملة",
     "finished-successfully": "تم انتهاء المزامنة بنجاح.",
     "full_sync_triggered": "تم تشغيل المزامنة الكاملة",
-    "failed": "فشل في المزامنة: {{message}}"
+    "failed": "فشل في المزامنة: {{message}}",
+    "fill_entity_changes_button": "ملء سجلات تغييرات الكيانات",
+    "filling_entity_changes": "جار ملء صفوف تغييرات الكيانات",
+    "sync_rows_filled_successfully": "تمة تعبئة بيانات المزامنة بنجاح"
   },
   "fonts": {
     "fonts": "خطوط",
@@ -498,7 +501,8 @@
     "max_width_unit": "بكسل",
     "title": "عرض المحتوى",
     "reload_button": "اعادة تحميل الواجهة",
-    "max_width_label": "اقصى عرض للمحتوى"
+    "max_width_label": "اقصى عرض للمحتوى",
+    "reload_description": "تغييرات من خيارات المظهر"
   },
   "native_title_bar": {
     "enabled": "مفعل",
@@ -519,7 +523,8 @@
   "ui-performance": {
     "title": "أداء",
     "enable-shadows": "تفعيل الضلال",
-    "enable-smooth-scroll": "تمكين التمرير السلس"
+    "enable-smooth-scroll": "تمكين التمرير السلس",
+    "enable-motion": "تمكين الانتقالات والرسوم المتحركة"
   },
   "ai_llm": {
     "progress": "تقدم",
@@ -583,7 +588,8 @@
     "start_indexing": "بدء الفهرسة",
     "chat": {
       "root_note_title": "دردشات AI",
-      "new_chat_title": "دردشة جديدة"
+      "new_chat_title": "دردشة جديدة",
+      "create_new_ai_chat": "انشاء دردشة AI جديدة"
     },
     "selected_provider": "المزود المحدد",
     "select_model": "اختر النموذج...",
@@ -611,7 +617,21 @@
     "enable_ai": "تمكين خصائص AI/LLM",
     "reprocess_index": "اعادة بناء فهرس البحث",
     "index_rebuilding": "جار تحسين الفهرس {{percentage}}",
-    "voyage_configuration": "اعدادت Voyage AI"
+    "voyage_configuration": "اعدادت Voyage AI",
+    "openai_model_description": "الامثلة: gpt-4o, gpt-4-turbo, gpt-3.5-turbo",
+    "partial": "{{ percentage }} % مكتمل",
+    "retry_queued": "تم جدولة الملاحظة لاعادة المحاولة",
+    "max_notes_per_llm_query": "اكبر عدد للملاحظات لكل استعلام",
+    "remove_provider": "احذف المزود من البحث",
+    "restore_provider": "استعادة المزود الى البحث",
+    "reprocess_index_error": "حدث خطأ اثناء اعادة بناء فهرس البحث",
+    "auto_refresh_notice": "تحديث تلقائي كل {{seconds}} ثانية",
+    "note_queued_for_retry": "الملاحظة جاهزة لاعادة المحاولة لاحقا",
+    "failed_to_retry_note": "‎فشل في اعادة محاولة معالجة المحاولة",
+    "failed_to_retry_all": "فشل في اعادة محاولة معالجة الملاحظة",
+    "error_generating_response": "‌فشل في توليد استجابة من ال AI",
+    "create_new_ai_chat": "انشاء دردشة AI جديدة",
+    "error_fetching": "فشل في استرجاع النماذج: {{error}}"
   },
   "code_auto_read_only_size": {
     "unit": "حروف",
@@ -626,7 +646,8 @@
     "enable_image_compression": "تمكين ضغط الصورة"
   },
   "revisions_snapshot_limit": {
-    "snapshot_number_limit_unit": "لقطات"
+    "snapshot_number_limit_unit": "لقطات",
+    "note_revisions_snapshot_limit_title": "الحد الاقصى لنسخ الملاحظات الاحتياطية"
   },
   "search_engine": {
     "bing": "Bing",
@@ -1073,14 +1094,20 @@
     "unprotecting-title": "الحالة الغير محمية",
     "protecting-finished-successfully": "تم الحماية بنجاح.",
     "unprotecting-finished-successfully": "تم ازالة الحماية بنجاح.",
-    "start_session_button": "البدء بالجلسة المحمية </kbd>enter</kbd>"
+    "start_session_button": "البدء بالجلسة المحمية </kbd>enter</kbd>",
+    "protecting-in-progress": "جار الحماية: {{count}}",
+    "unprotecting-in-progress-count": "‏جار الغاء الحماية: {{count}}"
   },
   "relation_map": {
     "remove_note": "حذف الملاحظة",
     "edit_title": "تعديل العنوان",
     "rename_note": "اعادة تسمية الملاحظة",
     "remove_relation": "حذف العلاقة",
-    "default_new_note_title": "ملاحظة جديدة"
+    "default_new_note_title": "ملاحظة جديدة",
+    "open_in_new_tab": "فتح في تبويب جديد",
+    "enter_new_title": "ادخل عنوان ملاحظة جديدة:",
+    "note_not_found": "الملاحظة {{noteId}} غير موجودة!",
+    "cannot_match_transform": "تعذر مطابقة التحويل: {{transform}}"
   },
   "web_view": {
     "web_view": "عرض الويب"
@@ -1097,7 +1124,8 @@
   "vacuum_database": {
     "title": "تحرير مساحة قاعدة البيانات",
     "button_text": "تحرير مساحة قاعدة البيانات",
-    "vacuuming_database": "جار تحرير مساحة قاعدة الييانات..."
+    "vacuuming_database": "جار تحرير مساحة قاعدة الييانات...",
+    "database_vacuumed": "تم تنظيف قاعدة البيانات"
   },
   "ribbon": {
     "widgets": "ادوات الشريط"
@@ -1106,7 +1134,8 @@
     "use_vim_keybindings_in_code_notes": "اختصارات لوحة المفاتيح باسلوب Vim"
   },
   "network_connections": {
-    "network_connections_title": "اتصالات الشبكة"
+    "network_connections_title": "اتصالات الشبكة",
+    "check_for_updates": "‪التحقق من وجود تحديثات تلقائية"
   },
   "tray": {
     "title": "شريط النظام"
@@ -1303,7 +1332,8 @@
   },
   "note_erasure_timeout": {
     "note_erasure_timeout_title": "مهلة مسح الملاحظة",
-    "erase_notes_after": "مسح الملاحظات بعد:"
+    "erase_notes_after": "مسح الملاحظات بعد:",
+    "erase_deleted_notes_now": "مسح الملاحظات المحذوفة الان"
   },
   "ws": {
     "sync-check-failed": "فشل التحقق من المزامنة!"
@@ -1333,5 +1363,8 @@
   },
   "abstract_search_option": {
     "remove_this_search_option": "حذف خيار البحث هذا"
+  },
+  "revisions_snapshot_interval": {
+    "note_revisions_snapshot_interval_title": "الفاصل الزمني لنسخ الملاحظات الاحتياطية"
   }
 }
