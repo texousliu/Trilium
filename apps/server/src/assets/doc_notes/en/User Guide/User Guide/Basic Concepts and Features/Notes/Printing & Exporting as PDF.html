@@ -4,6 +4,7 @@
   <figcaption>Screenshot of the note contextual menu indicating the “Export as PDF”
     option.</figcaption>
 </figure>
+
 <h2>Printing</h2>
 <p>This feature allows printing of notes. It works on both the desktop client,
   but also on the web.</p>
@@ -28,7 +29,7 @@ class="admonition note">
       on the
       <img src="1_Printing & Exporting as PD.png" width="29" height="31">button, select Export note → This note and all of its descendants → HTML
       in ZIP archive). Make sure not to accidentally leak any personal information.</p>
-  <p>Consider adjusting font sizes and using <a href="#root/pOsGYCXsbNQG/KSZ04uQ2D1St/iPIMuisry3hd/_help_CohkqWQC1iBv">page breaks</a> to
+  <p>Consider adjusting font sizes and using <a href="#root/_help_CohkqWQC1iBv">page breaks</a> to
     work around the layout.</p>
   <h2>Exporting as PDF</h2>
   <p>On the desktop application of Trilium it is possible to export a note
@@ -49,12 +50,12 @@ class="admonition note">
   <h3>Customizing exporting as PDF</h3>
   <p>When exporting to PDF, there are no customizable settings such as page
     orientation, size. However, there are a few&nbsp;<a class="reference-link"
-    href="#root/pOsGYCXsbNQG/tC7s2alapj8V/_help_zEY4DaJG4YT5">Attributes</a>&nbsp;to
-    adjust some of the settings:</p>
+    href="#root/_help_zEY4DaJG4YT5">Attributes</a>&nbsp;to adjust some of the
+    settings:</p>
   <ul>
-    <li data-list-item-id="e76a765fe309058890d4f4d3e63bca578">To print in landscape mode instead of portrait (useful for big diagrams
+    <li>To print in landscape mode instead of portrait (useful for big diagrams
       or slides), add <code>#printLandscape</code>.</li>
-    <li data-list-item-id="e78123a3a12954d7c9f520f4e75ed375d">By default, the resulting PDF will be in Letter format. It is possible
+    <li>By default, the resulting PDF will be in Letter format. It is possible
       to adjust it to another page size via the <code>#printPageSize</code> attribute,
       with one of the following values: <code>A0</code>, <code>A1</code>, <code>A2</code>, <code>A3</code>, <code>A4</code>, <code>A5</code>, <code>A6</code>, <code>Legal</code>, <code>Letter</code>, <code>Tabloid</code>, <code>Ledger</code>.</li>
   </ul>
@@ -68,34 +69,34 @@ class="admonition note">
     href="#root/_help_4TIF1oA4VQRO">Options</a>&nbsp;and assigning a key combination
     for:</p>
   <ul>
-    <li class="ck-list-marker-italic" data-list-item-id="e52b4441f2a3af7773585b19c8f796c8d"><em>Print Active Note</em>
+    <li><em>Print Active Note</em>
     </li>
-    <li class="ck-list-marker-italic" data-list-item-id="e40e1f6f480c7857100f64c2f63e062fb"><em>Export Active Note as PDF</em>
+    <li><em>Export Active Note as PDF</em>
     </li>
   </ul>
   <h2>Constraints &amp; limitations</h2>
-  <p>Not all&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/_help_KSZ04uQ2D1St">Note Types</a>&nbsp;are
+  <p>Not all&nbsp;<a class="reference-link" href="#root/_help_KSZ04uQ2D1St">Note Types</a>&nbsp;are
     supported when printing, in which case the <em>Print</em> and <em>Export as PDF</em> options
     will be disabled.</p>
   <ul>
-    <li data-list-item-id="e448a833da1bb1643181c72779382d1b6">For&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/KSZ04uQ2D1St/_help_6f9hih2hXXZk">Code</a>&nbsp;notes:
+    <li>For&nbsp;<a class="reference-link" href="#root/_help_6f9hih2hXXZk">Code</a>&nbsp;notes:
       <ul>
-        <li data-list-item-id="e6b699104a21930de7c2618123d0d5750">Line numbers are not printed.</li>
-        <li data-list-item-id="e342cba939534f0989c9620520c7b87a3">Syntax highlighting is enabled, however a default theme (Visual Studio)
+        <li>Line numbers are not printed.</li>
+        <li>Syntax highlighting is enabled, however a default theme (Visual Studio)
           is enforced.</li>
       </ul>
     </li>
-    <li data-list-item-id="ea23948a21d6ad2a01d70dfbdfa9bd62f">For&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/KSZ04uQ2D1St/_help_GTwFsgaA0lCt">Collections</a>:
+    <li>For&nbsp;<a class="reference-link" href="#root/_help_GTwFsgaA0lCt">Collections</a>:
       <ul>
-        <li data-list-item-id="e387ee52424d8b78fd61c3a1e0d395d3e">Only&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/KSZ04uQ2D1St/GTwFsgaA0lCt/_help_zP3PMqaG71Ct">Presentation View</a>&nbsp;is
+        <li>Only&nbsp;<a class="reference-link" href="#root/_help_zP3PMqaG71Ct">Presentation View</a>&nbsp;is
           currently supported.</li>
-        <li data-list-item-id="e94fa0cced6a7668c96cf7513557f2906">We plan to add support for all the collection types at some point.</li>
+        <li>We plan to add support for all the collection types at some point.</li>
       </ul>
     </li>
-    <li data-list-item-id="e8b17c931e05f9d579767536088a108da">Using&nbsp;<a class="reference-link" href="#root/pOsGYCXsbNQG/pKK96zzmvBGf/_help_AlhDUqhENtH7">Custom app-wide CSS</a>&nbsp;for
+    <li>Using&nbsp;<a class="reference-link" href="#root/_help_AlhDUqhENtH7">Custom app-wide CSS</a>&nbsp;for
       printing is not longer supported, due to a more stable but isolated mechanism.
       <ul>
-        <li data-list-item-id="eae91219e277cc2366d86d47291ed9cec">We plan to introduce a new mechanism specifically for a print CSS.</li>
+        <li>We plan to introduce a new mechanism specifically for a print CSS.</li>
       </ul>
     </li>
   </ul>
@@ -108,4 +109,4 @@ class="admonition note">
   <p>Accessing the print note in a web browser allows for easy debugging to
     understand why a particular note doesn't render well. The mechanism for
     rendering is similar to the one used in&nbsp;<a class="reference-link"
-    href="#root/pOsGYCXsbNQG/gh7bpGYxajRS/BFs8mudNFgCS/_help_0ESUbbAxVnoK">Note List</a>.</p>
+    href="#root/_help_0ESUbbAxVnoK">Note List</a>.</p>
