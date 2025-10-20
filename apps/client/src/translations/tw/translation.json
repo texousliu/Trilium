@@ -1517,7 +1517,9 @@
     "window-on-top": "保持此視窗置頂"
   },
   "note_detail": {
-    "could_not_find_typewidget": "找不到類型為 '{{type}}' 的 typeWidget"
+    "could_not_find_typewidget": "找不到類型為 '{{type}}' 的 typeWidget",
+    "printing": "正在列印…",
+    "printing_pdf": "正在匯出為 PDF…"
   },
   "note_title": {
     "placeholder": "請輸入筆記標題..."
